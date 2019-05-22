@@ -1,1 +1,1 @@
-export const SETTINGS = 'SETTINGS';
+export const SETTINGS_SERVICE = 'SETTINGS_SERVICE';

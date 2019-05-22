@@ -1,6 +1,6 @@
 import runtime from '@akashaproject/sdk-runtime';
 import bootstrapSettings from './settings';
-import { SETTINGS } from './constants';
+import { SETTINGS_SERVICE } from './constants';
 
 // create the dependency injection container and the cache list handler
 export default function bootstrapFactory() {
@@ -12,6 +12,6 @@ export default function bootstrapFactory() {
     return settings;
   };
   // register the settings service
-  di.register(SETTINGS, settingsService);
+  di.register(SETTINGS_SERVICE, settingsService);
   return { di, stash }
 }
