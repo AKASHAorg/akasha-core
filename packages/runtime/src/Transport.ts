@@ -10,7 +10,7 @@ export default class Transport implements ITransport {
   observer: Observer<any>;
   readonly options: Object;
 
-  protected constructor (options: {channel: string, channelName: string, other?: Object}) {
+  constructor (options: {channel: string, channelName: string, other?: Object}) {
     this.channel = options.channel;
     this.channelName = options.channelName;
     this.subject = new Subject();

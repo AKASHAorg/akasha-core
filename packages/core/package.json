@@ -8,7 +8,7 @@
   ],
   "homepage": "https://github.com/AkashaProject/akasha-sdk-js#readme",
   "license": "AGPL-3.0",
-  "main": "lib/core.js",
+  "main": "lib/index.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -26,5 +26,8 @@
   },
   "bugs": {
     "url": "https://github.com/AkashaProject/akasha-sdk-js/issues"
+  },
+  "dependencies": {
+    "@akashaproject/sdk-runtime": "../runtime"
   }
 }
