@@ -10,7 +10,7 @@ export default class DIContainer implements IDIContainer {
     this._sp = new Bottle('RuntimeDIContainer');
   }
 
-  public getService (serviceName: String | Object): CallableFunction {
+  public getService (serviceName: String | Object) {
     return this._sp.service(serviceName);
   }
 
