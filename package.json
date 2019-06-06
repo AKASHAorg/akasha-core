@@ -1,16 +1,18 @@
 {
-  "name": "Monorepo for the AKASHA JavaScript SDK",
-  "author": "AKASHA <hello@akasha.world> (https://akasha.org/)",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
-    "Marius Darila <marius@akasha.world> (https://github.com/kenshyx)"
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
   ],
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap --hoist",
-    "test": "lerna run test"
+    "test": "lerna run test",
+    "tsc": "lerna run tsc"
   },
   "devDependencies": {
-    "lerna": "^3.13.1"
+    "@types/node": "10.14.6",
+    "lerna": "3.14.1",
+    "typescript": "3.5.1"
   },
   "workspaces": [
     "packages/*"

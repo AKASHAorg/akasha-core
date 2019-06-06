@@ -1,5 +1,14 @@
 {
   "files": [],
   "references": [
+    {
+      "path": "common"
+    },
+    {
+      "path": "core"
+    },
+    {
+      "path": "runtime"
+    }
   ]
 }
