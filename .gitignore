@@ -35,4 +35,6 @@ flow-typed
 release/
 .idea
 .vscode
+*.tsbuildinfo
+lib
 dist/
