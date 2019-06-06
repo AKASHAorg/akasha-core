@@ -4,20 +4,20 @@ import bootstrapSettings from './settings';
 import { CACHE_PROVIDER_FACTORY, SETTINGS_SERVICE, VALIDATOR_SERVICE_FACTORY } from './constants';
 
 //
-const validatorFactory = function () {
+const validatorFactory = function() {
   return new Validator();
 };
 
 // service for creating objects of cache container
-const cacheProviderFactory = function () {
+const cacheProviderFactory = function() {
   return new runtime.Stash();
 };
 // create the dependency injection container and the cache list handler
-export default function bootstrapFactory() {
+export default function bootstrapFactory () {
   const di = new runtime.DIContainer();
   const settings = bootstrapSettings();
 
-  const settingsService = function (){
+  const settingsService = function() {
     return settings;
   };
   // register the settings service

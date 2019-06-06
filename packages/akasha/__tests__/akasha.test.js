@@ -3,5 +3,5 @@
 const akasha = require('..');
 
 describe('akasha', () => {
-    it('needs tests');
+  it('needs tests');
 });

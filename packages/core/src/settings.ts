@@ -1,7 +1,10 @@
-export interface ISettings {
+export type ICommonSettings = [string, string][];
+
+export interface ICoreSettings {
   moduleName: string,
   values: [string, any][]
 }
+
 const init = () => {
   const settingsSymbol = Symbol('setting$');
 
@@ -10,13 +13,13 @@ const init = () => {
     [settingsSymbol]: new Map()
   };
 
-  const getSettings = function (moduleName: ISettings['moduleName']) {
+  const getSettings = function(moduleName: ICoreSettings['moduleName']) {
     return coreSettings[settingsSymbol].get(moduleName);
   };
 
-  const setSettings = function (settings: ISettings): void {
+  const setSettings = function(settings: ICoreSettings): void {
     coreSettings[settingsSymbol].set(settings.moduleName, settings.values);
   };
-  return { getSettings, setSettings }
+  return { getSettings, setSettings };
 };
-export default init
+export default init;

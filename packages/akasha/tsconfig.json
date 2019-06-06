@@ -5,7 +5,9 @@
     "rootDir": "./src"
   },
   "references": [
-    {"path":  "../runtime"}
+    {
+      "path": "../runtime"
+    }
   ],
   "include": [
     "./src"

@@ -29,6 +29,6 @@
   },
   "dependencies": {
     "@akashaproject/jsonschema-web3": "^1.0.3",
-    "@akashaproject/sdk-runtime": "../runtime"
+    "@akashaproject/sdk-runtime": "*"
   }
 }
