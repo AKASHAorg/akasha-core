@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/sdk-common",
+  "name": "@akashaproject/sdk",
   "version": "0.1.0",
   "description": "> TODO: description",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
@@ -26,11 +26,5 @@
   },
   "bugs": {
     "url": "https://github.com/AkashaProject/akasha-sdk-js/issues"
-  },
-  "dependencies": {
-    "@akashaproject/sdk-core": "*",
-    "@akashaproject/sdk-runtime": "*",
-    "ethers": "4.0.27",
-    "ipfs": "^0.36.3"
   }
 }
