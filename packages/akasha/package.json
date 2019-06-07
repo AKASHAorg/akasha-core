@@ -8,7 +8,9 @@
   ],
   "homepage": "https://github.com/AkashaProject/akasha-sdk-js#readme",
   "license": "AGPL-3.0",
-  "main": "lib/index.js",
+  "main": "lib/akasha-sdk.cjs.js",
+  "module": "lib/akasha-sdk.esm.js",
+  "browser": "lib/akasha-sdk.umd.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -22,9 +24,23 @@
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
-    "tsc": "tsc --build"
+    "tsc": "tsc --build",
+    "build": "NODE_OPTIONS='--max-old-space-size=2096' rollup -c"
   },
   "bugs": {
     "url": "https://github.com/AkashaProject/akasha-sdk-js/issues"
+  },
+  "dependencies": {
+    "@akashaproject/sdk-core": "*",
+    "@akashaproject/sdk-common": "*",
+    "@akashaproject/sdk-runtime": "*"
+  },
+  "devDependencies": {
+    "rollup": "^1.0.0",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-terser": "^5.0.0",
+    "rollup-plugin-typescript": "^1.0.0"
   }
 }
