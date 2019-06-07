@@ -1,4 +1,3 @@
-
 export default interface IStash {
   readonly cache;
 
