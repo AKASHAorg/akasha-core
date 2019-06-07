@@ -1,5 +1,5 @@
 import { Observer, Subject, Subscription } from 'rxjs';
-import ITransport  from './ITransport';
+import ITransport from './ITransport';
 
 
 export default class Transport implements ITransport {
@@ -10,12 +10,16 @@ export default class Transport implements ITransport {
   observer: Observer<any>;
   readonly options: Object;
 
-  protected constructor (options: {channel: string, channelName: string, other?: Object}) {
+  constructor (options: { channel: string, channelName: string, other?: Object }) {
     this.channel = options.channel;
     this.channelName = options.channelName;
     this.subject = new Subject();
     this.subscribers = new Map();
     this.options = options.other;
+  }
+
+  get listenerCount () {
+    return this.subject.observers.length || this.subscribers.size;
   }
 
   bind (observer: Observer<any>) {
@@ -24,10 +28,6 @@ export default class Transport implements ITransport {
 
   send (data: Object) {
     this.observer.next(data);
-  }
-
-  get listenerCount () {
-    return this.subject.observers.length || this.subscribers.size;
   }
 
   on (cb: Function) {

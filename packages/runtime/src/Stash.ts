@@ -8,6 +8,10 @@ export default class Stash implements IStash {
     this.cache = new LRU(options);
   }
 
+  get entries () {
+    return this.cache;
+  }
+
   get (key: string): Object {
     return this.cache.get(key);
   }
@@ -16,7 +20,4 @@ export default class Stash implements IStash {
     this.cache.set(key, value);
   }
 
-  get entries () {
-    return this.cache;
-  }
 }
