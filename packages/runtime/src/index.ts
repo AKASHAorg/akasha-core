@@ -3,4 +3,4 @@ import Stash from './Stash';
 import Transport from './Transport';
 
 
-export { DIContainer, Stash, Transport };
+export default { DIContainer, Stash, Transport };

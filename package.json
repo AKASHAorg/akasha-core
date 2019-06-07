@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap --hoist",
+    "build": "lerna run tsc && lerna run build --scope @akashaproject/sdk",
     "test": "lerna run test",
     "tsc": "lerna run tsc"
   },
