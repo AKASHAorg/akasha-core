@@ -1,0 +1,64 @@
+@startuml
+
+package "akasha-sdk" {
+() Transport
+() Stash
+() DIContainer
+
+note left of Stash : cache provider
+note left of Transport: used for data exchange
+note left of DIContainer: dependency injection container
+}
+
+node "akasha-core" {
+() Settings
+() "Akasha Module" as AkashaModule
+[Core] as AkashaCore
+[Settings Service] as SettingsService
+[Stash Service] as StashService
+[Validation Service] as ValidationService
+note right of ValidationService: used to validate data received
+StashService --> Stash
+SettingsService --> Settings
+note right of SettingsService: set and get application settings
+note right of StashService: set and get cache keys
+}
+cloud {
+[Registered Container] as DI
+}
+cloud {
+[Web Services] as WebServices
+}
+DI --> DIContainer
+AkashaCore --> DI : creates
+AkashaCore --> StashService: registers
+AkashaCore --> SettingsService: registers
+AkashaCore --> ValidationService: registers
+
+ValidationService --> WebServices: validates
+
+node "general-module"{
+[package] --> AkashaModule: implements
+[package] --> DI: registers services
+DI --> package: provides services
+[package] --> WebServices: accesses
+}
+cloud {
+[Transport Pipe] as TransportPipe
+}
+
+node "runtime"{
+ [channel] as AkashaChannel
+}
+
+AkashaChannel --> package : maps
+cloud {
+[external consumer] as userInterface
+}
+note left of userInterface: ex: akasha-design-system
+
+
+TransportPipe --> Transport: implements
+userInterface --> TransportPipe: uses
+TransportPipe --> AkashaChannel: i/o
+@enduml
