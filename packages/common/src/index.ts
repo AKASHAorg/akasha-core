@@ -7,7 +7,7 @@ import registerWeb3Provider from './web3-provider';
 import registerIpfsProvider from './ipfs-provider';
 import { AkashaService, IAkashaModule } from '@akashaproject/sdk-core/lib/IAkashaModule';
 
-class CommonsModule extends IAkashaModule {
+export class CommonsModule extends IAkashaModule {
   private services: AkashaService[] = [];
 
   public init (di: DIContainer): void {

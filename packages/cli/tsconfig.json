@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./lib",
+    "rootDir": "./src"
+  },
+  "references": [
+    {
+      "path": "../runtime"
+    },
+    {
+      "path": "../core"
+    },
+    {
+      "path": "../common"
+    },
+    {
+      "path": "../akasha"
+    }
+  ],
+  "include": [
+    "./src"
+  ]
+}
