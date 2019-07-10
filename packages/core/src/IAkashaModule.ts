@@ -8,22 +8,26 @@ export abstract class IAkashaModule {
   }
 
   static async wrapService (fn: Function, name: string) {
-    const payload = await fn();
+    const serviceInstance = await fn();
     return function() {
       console.log(`[info] service < ${name} > was accessed.`);
-      return { payload };
+      return serviceInstance;
     };
+  }
+
+  static getServiceName (moduleName: string, providerName: string) {
+    return `${moduleName}=>${providerName}`;
   }
 
   abstract init (di: DIContainer): void
 
-  public startServices (di: DIContainer) {
+  public async startServices (di: DIContainer) {
     const services = this._registerServices();
-
-    services.forEach(async provider => {
+    for (const provider of services) {
       const wrappedService = await IAkashaModule.wrapService(provider.service, provider.name);
-      di.register(`[${this.name}]=>${provider.name}`, wrappedService);
-    });
+      const serviceName = IAkashaModule.getServiceName(this.name, provider.name);
+      di.register(serviceName, wrappedService);
+    }
   }
 
   protected abstract _name (): string;

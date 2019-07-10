@@ -7,5 +7,12 @@ export default function init () {
   const commonModule = registerCommonModule();
   commonModule.init(di);
 
-  return { di, Channel: runtime.Transport }
+
+  const modules = { common: commonModule };
+  const start = async () => {
+    for (const moduleName of Object.values(modules)) {
+      await moduleName.startServices(di);
+    }
+  };
+  return { di, Channel: runtime.Transport, modules, start };
 }
