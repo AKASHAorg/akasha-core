@@ -14,7 +14,7 @@ export default class DIContainer implements IDIContainer {
     return this._sp;
   }
 
-  public getService (serviceName: string ) {
+  public getService (serviceName: string) {
     return this._sp.container[serviceName];
   }
 

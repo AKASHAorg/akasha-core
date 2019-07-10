@@ -15,19 +15,19 @@ export abstract class IAkashaModule {
     };
   }
 
+  static getServiceName (moduleName: string, providerName: string) {
+    return `${moduleName}=>${providerName}`;
+  }
+
   abstract init (di: DIContainer): void
 
   public async startServices (di: DIContainer) {
     const services = this._registerServices();
-    for(const provider of services) {
+    for (const provider of services) {
       const wrappedService = await IAkashaModule.wrapService(provider.service, provider.name);
       const serviceName = IAkashaModule.getServiceName(this.name, provider.name);
       di.register(serviceName, wrappedService);
     }
-  }
-
-  static getServiceName(moduleName: string, providerName: string) {
-    return `${moduleName}=>${providerName}`
   }
 
   protected abstract _name (): string;

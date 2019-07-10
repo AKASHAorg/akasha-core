@@ -10,9 +10,9 @@ export default function init () {
 
   const modules = { common: commonModule };
   const start = async () => {
-    for(const moduleName of Object.values(modules)){
+    for (const moduleName of Object.values(modules)) {
       await moduleName.startServices(di);
     }
   };
-  return { di, Channel: runtime.Transport, modules, start }
+  return { di, Channel: runtime.Transport, modules, start };
 }
