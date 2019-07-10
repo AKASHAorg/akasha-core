@@ -22,31 +22,7 @@ const IPFS_BOOTSTRAP_PEERS = [
 ];
 
 const DEFAULT_IPFS_CONFIG = {
-  Addresses: {
-    Swarm: [
-      '/dns4/akasha.cloud/tcp/443/wss/p2p-webrtc-star',
-      '/dns4/wrtc-star.discovery.libp2p.io/tcp/443/wss/p2p-webrtc-star',
-      '/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star'
-    ],
-    API: '',
-    Gateway: ''
-  },
-  Bootstrap: IPFS_BOOTSTRAP_PEERS.concat(AKASHA_BOOTSTRAP_PEERS).concat(DEFAULT_CIRCUIT_RELAYS),
-  Swarm: {
-    ConnMgr: {
-      LowWater: 200,
-      HighWater: 500
-    }
-  },
-  Discovery: {
-    MDNS: {
-      Enabled: false,
-      Interval: 10
-    },
-    webRTCStar: {
-      Enabled: true
-    }
-  }
+  Bootstrap: IPFS_BOOTSTRAP_PEERS.concat(AKASHA_BOOTSTRAP_PEERS).concat(DEFAULT_CIRCUIT_RELAYS)
 };
 export const ipfsGateway = 'https://gateway.ipfs.io/ipfs';
 export default DEFAULT_IPFS_CONFIG;

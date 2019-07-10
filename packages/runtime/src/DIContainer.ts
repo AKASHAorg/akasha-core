@@ -14,11 +14,11 @@ export default class DIContainer implements IDIContainer {
     return this._sp;
   }
 
-  public getService (serviceName: String | Object) {
-    return this._sp.service(serviceName);
+  public getService (serviceName: string) {
+    return this._sp.container[serviceName];
   }
 
-  public register (serviceName: String | Object, service: CallableFunction): void {
+  public register (serviceName: string, service: CallableFunction): void {
     this._sp.service(serviceName, service);
   }
 }
