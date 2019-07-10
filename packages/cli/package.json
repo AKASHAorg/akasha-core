@@ -33,10 +33,6 @@
   },
   "devDependencies": {
     "rollup": "^1.0.0",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^4.0.0",
-    "rollup-plugin-terser": "^5.0.0",
     "rollup-plugin-typescript": "^1.0.0"
   },
   "dependencies": {

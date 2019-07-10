@@ -26,7 +26,7 @@ export default [
     input: 'src/index.ts',
     external: [],
     plugins: [
-      typescript()
+      typescript({typescript: require('typescript')})
     ],
     output: [
       { file: pkg.main, format: 'cjs' },
