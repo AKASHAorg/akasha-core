@@ -1,20 +1,14 @@
 //remove comment after fixing shebang banner for rollup
 //#!/usr/bin/env node
 import initSdk from '@akashaproject/sdk';
-import {
-  IPFS_SERVICE,
-  WEB3_SERVICE_PROVIDER,
-  WEB3_UTILS,
-  WEB3_WALLET
-} from '@akashaproject/sdk-core/lib/constants';
-import { moduleName as commonsModule } from '@akashaproject/sdk-common/lib/constants';
-import { IAkashaModule } from '@akashaproject/sdk-core/lib/IAkashaModule';
+import { services as commonServices } from '@akashaproject/sdk-common/lib/constants';
+import { callService } from '@akashaproject/sdk-core/lib/utils';
 
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 
 (async function() {
-  const tools = initSdk();
+  const tools =  await initSdk();
   await tools.start();
   console.log(chalk.green('AKASHA-SDK cli is ready!'));
   const input = await inquirer.prompt([
@@ -27,17 +21,25 @@ const chalk = require('chalk');
 
   let ipfsNode, web3Provider, exitCli, wallet;
   if (input.startIpfs) {
-    ipfsNode = tools.di.getService(IAkashaModule.getServiceName(commonsModule, IPFS_SERVICE));
+    ipfsNode = await callService(tools.di, commonServices.IPFS_SERVICE);
     await ipfsNode.start();
-    console.log(chalk.cyan('ipfs node started! :D'));
+    console.log(chalk.cyan('ipfs node started!'));
   }
 
-  web3Provider = tools.di.getService(IAkashaModule.getServiceName(commonsModule, WEB3_SERVICE_PROVIDER));
+  web3Provider = await callService(tools.di, commonServices.WEB3_SERVICE_PROVIDER);
   const network = await web3Provider.getNetwork();
   const blockNumber = await web3Provider.getBlockNumber();
   console.log(chalk.green('connected to ethereum<<<', network.name, '>>>network on block:', blockNumber));
 
-  const walletProvider = tools.di.getService(IAkashaModule.getServiceName(commonsModule, WEB3_WALLET));
+  const consumeWeb3Provider = async function(provider) {
+    console.log('web3 accessed from channel!');
+    const gasPrice = await provider.getGasPrice();
+    console.log(chalk.blue('gas price is', gasPrice));
+  };
+  //magic here.. cons sub = commons.web3.send({}); sub.subscribe(x => console.log(x)); sub.unsub
+  tools.channel.send(commonServices.WEB3_SERVICE_PROVIDER).subscribe(consumeWeb3Provider);
+
+  const walletProvider = await callService(tools.di, commonServices.WEB3_WALLET);
   const mnemonic = 'satisfy fault total balcony danger traffic apology faint chat enemy claim equip';
   wallet = walletProvider.fromMnemonic(mnemonic);
   const ethAddress = await wallet.getAddress();
@@ -87,7 +89,7 @@ const chalk = require('chalk');
           message: 'Signature:'
         }
       ]);
-      const utilsProvider = tools.di.getService(IAkashaModule.getServiceName(commonsModule, WEB3_UTILS));
+      const utilsProvider = await callService(tools.di, commonServices.WEB3_UTILS);
       const ethAddress = await utilsProvider.verifyMessage(messageV.raw, messageV.sig);
       console.log(chalk.red('Signed by:', ethAddress));
     }
