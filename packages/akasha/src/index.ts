@@ -1,12 +1,11 @@
 import initDI from '@akashaproject/sdk-core';
-import runtime from '@akashaproject/sdk-runtime';
 import registerCommonModule from '@akashaproject/sdk-common';
+import initChannel from './channel';
+import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 
-export default function init () {
-  const di = initDI();
+export default async function init () {
+  const di: DIContainer = await initDI();
   const commonModule = registerCommonModule();
-  commonModule.init(di);
-
 
   const modules = { common: commonModule };
   const start = async () => {
@@ -14,5 +13,7 @@ export default function init () {
       await moduleName.startServices(di);
     }
   };
-  return { di, Channel: runtime.Transport, modules, start };
+
+  const channel = initChannel(di);
+  return { di, channel, modules, start };
 }

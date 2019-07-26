@@ -33,7 +33,8 @@
   "dependencies": {
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-common": "*",
-    "@akashaproject/sdk-runtime": "*"
+    "@akashaproject/sdk-runtime": "*",
+    "rxjs": "6.5.2"
   },
   "devDependencies": {
     "rollup": "^1.0.0",

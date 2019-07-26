@@ -1,8 +1,14 @@
+import { AkashaServicePath } from './IAkashaModule';
+
 export const SETTINGS_SERVICE = 'SETTINGS_SERVICE';
-export const VALIDATOR_SERVICE_FACTORY = 'VALIDATOR_SERVICE_FACTORY';
-export const CACHE_PROVIDER_FACTORY = 'CACHE_PROVIDER_FACTORY';
-export const WEB3_SERVICE_PROVIDER = 'WEB3_SERVICE_PROVIDER';
-export const WEB3_EXISTING_PROVIDER = 'WEB3_EXISTING_PROVIDER';
-export const WEB3_WALLET = 'WEB3_WALLET';
-export const WEB3_UTILS = 'WEB3_UTILS';
-export const IPFS_SERVICE = 'IPFS_SERVICE';
+export const moduleName = 'core_module';
+
+const getLocalServicePath = (serviceName: string): AkashaServicePath => [moduleName, serviceName];
+
+interface Services {
+  [serviceName: string]: AkashaServicePath;
+}
+
+export const services: Services = {
+  [SETTINGS_SERVICE]: getLocalServicePath(SETTINGS_SERVICE)
+};

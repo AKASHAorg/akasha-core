@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "bottlejs": "1.7.2",
-    "lru-cache": "5.1.1",
-    "rxjs": "6.5.2"
+    "lru-cache": "5.1.1"
   }
 }

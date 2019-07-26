@@ -1,19 +1,16 @@
 import { ICommonSettings } from '@akashaproject/sdk-core/lib/settings';
-import {
-  SETTINGS_SERVICE,
-  WEB3_EXISTING_PROVIDER,
-  WEB3_SERVICE_PROVIDER
-} from '@akashaproject/sdk-core/lib/constants';
+import { moduleName, services as commonServices, WEB3_SERVICE_PROVIDER } from './constants';
+import { services as coreServices } from '@akashaproject/sdk-core/lib/constants';
+import { callService } from '@akashaproject/sdk-core/lib/utils';
 import { CONNECT_EXISTING, ETH_NETWORK } from './settings';
 import { ethers } from 'ethers';
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
-import { moduleName } from './constants';
 
 export default function registerService (di: DIContainer) {
 
   const runService = async function() {
     let service;
-    const moduleSettings: ICommonSettings = di.getService(SETTINGS_SERVICE).getSettings(moduleName);
+    const moduleSettings: ICommonSettings = (await callService(di, coreServices.SETTINGS_SERVICE)).getSettings(moduleName);
     const networkSettings = moduleSettings.find(serviceSettings => serviceSettings[0] === ETH_NETWORK);
     if (!networkSettings) {
       throw new Error(`Must provide an ${ETH_NETWORK} value.`);
@@ -22,11 +19,11 @@ export default function registerService (di: DIContainer) {
     if (network !== CONNECT_EXISTING) {
       service = ethers.getDefaultProvider(network);
     } else {
-      const existingProvider = di.getService(WEB3_EXISTING_PROVIDER);
+      const existingProvider = await callService(di, commonServices.WEB3_EXISTING_PROVIDER);
       service = new ethers.providers.Web3Provider(existingProvider);
     }
 
-    return service;
+    return () => service;
   };
 
   return { name: WEB3_SERVICE_PROVIDER, service: runService };
