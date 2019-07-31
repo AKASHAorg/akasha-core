@@ -38,6 +38,7 @@
   "dependencies": {
     "@akashaproject/sdk": "*",
     "@akashaproject/sdk-core": "*",
+    "@akashaproject/sdk-common": "*",
     "inquirer": "^6.4.1",
     "chalk": "^2.4.2",
     "configstore": "^5.0.0"

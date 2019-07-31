@@ -15,5 +15,5 @@ export function getService (di: IDIContainer, servicePath: AkashaServicePath) {
 // execute call on service function
 export async function callService (di: IDIContainer, servicePath: AkashaServicePath, payload?: object) {
   const service = getService(di, servicePath);
-  return await service(payload);
+  return service(payload);
 }

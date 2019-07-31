@@ -1,4 +1,4 @@
-import { getService } from '@akashaproject/sdk-common/lib/utils';
+import { getService } from '@akashaproject/sdk-core/lib/utils';
 import IDIContainer from '@akashaproject/sdk-runtime/lib/IDIContainer';
 import callService from './service-caller';
 import { Observable } from 'rxjs';

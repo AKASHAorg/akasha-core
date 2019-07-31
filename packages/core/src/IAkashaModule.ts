@@ -1,13 +1,20 @@
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 import IDIContainer from '@akashaproject/sdk-runtime/lib/IDIContainer';
 
-export interface AkashaService { name: string, service: Function }
+export interface AkashaService {
+  name: string,
+  service: Function
+}
+
 export type AkashaServiceFactory = (di: IDIContainer) => AkashaService;
+
 export type AkashaServicePath = [string, string];
+
 export interface AkashaModuleServices {
   [serviceName: string]: AkashaServicePath;
 }
 
+//base class that should be extended in order to create an AKASHA sdk module
 export abstract class IAkashaModule {
   public get name () {
     return this._name();
@@ -37,10 +44,11 @@ export abstract class IAkashaModule {
     }
   }
 
+  public abstract availableServices (): AkashaModuleServices;
+
   protected abstract _getServiceFactories (): AkashaServiceFactory[];
 
   protected abstract _name (): string;
-  protected abstract availableServices(): AkashaModuleServices;
 
   // get a list with instances of each service factory
   private _registerServices (di): AkashaService[] {

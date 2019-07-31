@@ -5,16 +5,19 @@
   ],
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap --hoist",
+    "bootstrap": "lerna bootstrap",
+    "bootstrap-hoist": "lerna bootstrap --hoist",
     "build": "lerna run tsc && lerna run build --scope @akashaproject/sdk",
     "build-cli": "lerna run tsc && lerna run build --scope @akashaproject/sdk-cli",
+    "docs": "lerna run docs --scope @akashaproject/sdk --scope @akashaproject/sdk-common",
     "test": "lerna run test",
     "tsc": "lerna run tsc"
   },
   "devDependencies": {
     "@types/node": "10.14.6",
-    "lerna": "3.14.1",
-    "typescript": "3.5.1"
+    "lerna": "3.16.4",
+    "typedoc": "^0.15.0",
+    "typescript": "3.5.3"
   },
   "workspaces": [
     "packages/*"
