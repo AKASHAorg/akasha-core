@@ -9,7 +9,7 @@ const chalk = require('chalk');
 
 (async function() {
   const tools =  await initSdk();
-  await tools.start();
+  console.log(tools.modules);
   console.log(chalk.green('AKASHA-SDK cli is ready!'));
   const input = await inquirer.prompt([
     {
@@ -36,8 +36,16 @@ const chalk = require('chalk');
     const gasPrice = await provider.getGasPrice();
     console.log(chalk.blue('gas price is', gasPrice));
   };
-  //magic here.. cons sub = commons.web3.send({}); sub.subscribe(x => console.log(x)); sub.unsub
-  tools.channel.send(commonServices.WEB3_SERVICE_PROVIDER).subscribe(consumeWeb3Provider);
+
+  const errorConsumer = function(err) {
+    console.log(err);
+  };
+
+  //magic here...
+  const observable = tools.modules.commons.web3_service_provider();
+
+  observable.subscribe(consumeWeb3Provider, errorConsumer);
+
 
   const walletProvider = await callService(tools.di, commonServices.WEB3_WALLET);
   const mnemonic = 'satisfy fault total balcony danger traffic apology faint chat enemy claim equip';

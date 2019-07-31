@@ -25,6 +25,10 @@ export class CommonsModule extends IAkashaModule {
     settingsService.setSettings(settingsObj);
   }
 
+  public availableServices (): AkashaModuleServices {
+    return services;
+  }
+
   protected _getServiceFactories (): AkashaServiceFactory[] {
     return [
       registerWeb3Provider,
@@ -34,10 +38,6 @@ export class CommonsModule extends IAkashaModule {
       registerValidatorProvider,
       registerCacheProvider
     ];
-  }
-
-  protected availableServices (): AkashaModuleServices {
-    return services;
   }
 
   protected _name () {

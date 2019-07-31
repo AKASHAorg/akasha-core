@@ -1,7 +1,7 @@
 import { AkashaServicePath } from './IAkashaModule';
 
 export const SETTINGS_SERVICE = 'SETTINGS_SERVICE';
-export const moduleName = 'core_module';
+export const moduleName = 'core';
 
 const getLocalServicePath = (serviceName: string): AkashaServicePath => [moduleName, serviceName];
 

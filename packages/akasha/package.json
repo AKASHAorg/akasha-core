@@ -25,7 +25,8 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
     "tsc": "tsc --build",
-    "build": "NODE_OPTIONS='--max-old-space-size=2096' rollup -c"
+    "build": "NODE_OPTIONS='--max-old-space-size=2096' rollup -c",
+    "docs": "typedoc"
   },
   "bugs": {
     "url": "https://github.com/AkashaProject/akasha-sdk-js/issues"

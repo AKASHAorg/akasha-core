@@ -18,7 +18,7 @@ class CoreModule extends IAkashaModule {
     return moduleName;
   }
 
-  protected  availableServices (): AkashaModuleServices {
+  public availableServices (): AkashaModuleServices {
     return null;
   }
 }

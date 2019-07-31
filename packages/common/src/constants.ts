@@ -8,7 +8,7 @@ export const WEB3_WALLET = 'WEB3_WALLET';
 export const WEB3_UTILS = 'WEB3_UTILS';
 export const IPFS_SERVICE = 'IPFS_SERVICE';
 
-export const moduleName = 'commons_module';
+export const moduleName = 'commons';
 
 const getLocalServicePath = (serviceName: string): AkashaServicePath => [moduleName, serviceName];
 // for service consumers
