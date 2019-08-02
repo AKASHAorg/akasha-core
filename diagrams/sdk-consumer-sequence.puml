@@ -1,0 +1,20 @@
+@startuml
+title SDK consumer with {start: true}
+autonumber
+entity consumer
+control init
+entity SDK
+boundary AkashaModule
+boundary DIContainer
+collections ModuleServices
+
+
+consumer --> init : calls
+init --> SDK : sets modules list
+SDK --> AkashaModule: start services
+AkashaModule --> DIContainer : registers services
+DIContainer <--> ModuleServices : injects
+ModuleServices -->o SDK : provides services
+SDK --> SDK : builds channels for services
+SDK -> consumer : service channels
+@enduml

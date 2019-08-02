@@ -16,18 +16,13 @@ export interface IModuleCallableService {
  */
 const channelCaller = (servicePath: AkashaServicePath) => {
   return {
-    // tslint:disable:only-arrow-functions
-    // tslint:disable: object-literal-shorthand
-    apply: function(target, thisArg, argumentsList: [object]) {
+    apply(target, thisArg, argumentsList: [object]) {
       return target(servicePath, argumentsList[0]);
     }
   };
 };
 
-// tslint:enable:only-arrow-functions
-// tslint:enable: object-literal-shorthand
-
-// ex createCallableService(["module", "SERVICE"], {send: (path, payload)=>true})
+// ex createCallableService(["module", "SERVICE"], {send(path, payload)=>true)
 // returns callable = { service: ProxyService }
 // can be used like: callable.service(payload)
 export function createCallableService(servicePath: AkashaServicePath, channelSend: SendChannel) {
