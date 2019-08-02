@@ -1,35 +1,34 @@
-import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 import { services as coreServices } from '@akashaproject/sdk-core/lib/constants';
-import { callService } from '@akashaproject/sdk-core/lib/utils';
-import { moduleName, services } from './constants';
-import settings from './settings';
 import { ICoreSettings } from '@akashaproject/sdk-core/lib/settings';
-import registerWeb3Provider from './web3-provider';
-import registerIpfsProvider from './ipfs-provider';
-import registerWalletService from './wallet';
-import registerWeb3Utils from './web3-utils';
-import registerValidatorProvider from './validator-provider';
+import { callService } from '@akashaproject/sdk-core/lib/utils';
+import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 import registerCacheProvider from './cache-provider';
+import { moduleName, services } from './constants';
+import registerIpfsProvider from './ipfs-provider';
+import settings from './settings';
+import registerValidatorProvider from './validator-provider';
+import registerWalletService from './wallet';
+import registerWeb3Provider from './web3-provider';
+import registerWeb3Utils from './web3-utils';
 
 import {
-  AkashaModuleServices,
   AkashaServiceFactory,
-  IAkashaModule
+  IAkashaModule,
+  IAkashaModuleServices
 } from '@akashaproject/sdk-core/lib/IAkashaModule';
 
 export class CommonsModule extends IAkashaModule {
-
-  public async init (di: DIContainer) {
+  public async init(di: DIContainer) {
     const settingsObj: ICoreSettings = { moduleName, values: settings };
     const settingsService = await callService(di, coreServices.SETTINGS_SERVICE);
     settingsService.setSettings(settingsObj);
   }
 
-  public availableServices (): AkashaModuleServices {
+  public availableServices(): IAkashaModuleServices {
     return services;
   }
 
-  protected _getServiceFactories (): AkashaServiceFactory[] {
+  protected _getServiceFactories(): AkashaServiceFactory[] {
     return [
       registerWeb3Provider,
       registerIpfsProvider,
@@ -40,11 +39,11 @@ export class CommonsModule extends IAkashaModule {
     ];
   }
 
-  protected _name () {
+  protected _name() {
     return moduleName;
   }
 }
 
-export default function registerModule () {
+export default function registerModule() {
   return new CommonsModule();
 }

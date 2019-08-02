@@ -1,7 +1,7 @@
 export default interface IStash {
   readonly cache;
 
-  get (key: string): Object;
+  get(key: string): object;
 
-  set (key: string, value: Object): void;
+  set(key: string, value: object): void;
 }
