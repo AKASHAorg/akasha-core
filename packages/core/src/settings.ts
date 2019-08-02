@@ -1,5 +1,6 @@
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 import { SETTINGS_SERVICE } from './constants';
+import { AkashaService } from '../lib/IAkashaModule';
 
 export type ICommonSettings = [string, string][];
 
@@ -8,7 +9,7 @@ export interface ICoreSettings {
   values: [string, any][]
 }
 
-export default function registerService (di: DIContainer) {
+export default function registerService (di: DIContainer): AkashaService {
   const service = () => {
     const settingsSymbol = Symbol('setting$');
 

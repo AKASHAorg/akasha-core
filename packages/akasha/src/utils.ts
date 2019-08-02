@@ -2,7 +2,7 @@ import { AkashaServicePath, IAkashaModule } from '@akashaproject/sdk-core/lib/IA
 import { Observable } from 'rxjs';
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 
-type SendChannel = (servicePath: AkashaServicePath, payload: object) => Observable<any>
+export type SendChannel = (servicePath: AkashaServicePath, payload: object) => Observable<any>
 /**
  *
  * @param servicePath
