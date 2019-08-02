@@ -1,18 +1,26 @@
 import { AkashaServicePath, IAkashaModule } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import { Observable } from 'rxjs';
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
+import { CallableService } from '@akashaproject/sdk-runtime/lib/IDIContainer';
+import { Observable } from 'rxjs';
 
-export type SendChannel = (servicePath: AkashaServicePath, payload: object) => Observable<any>
+export type SendChannel = (servicePath: AkashaServicePath, payload: object) => Observable<any>;
+export interface IProxyCallableService {
+  [x: string]: CallableService;
+}
+export interface IModuleCallableService {
+  [y: string]: IProxyCallableService;
+}
 /**
  *
  * @param servicePath
  */
-const channelCaller = function (servicePath: AkashaServicePath) {
+const channelCaller = (servicePath: AkashaServicePath) => {
   return {
+    // tslint:disable-next-line:only-arrow-functions
     apply: function(target, thisArg, argumentsList: [object]) {
-      return target(servicePath, argumentsList[0]) ;
+      return target(servicePath, argumentsList[0]);
     }
-  }
+  };
 };
 
 // ex createCallableService(["module", "SERVICE"], {send: (path, payload)=>true})
@@ -28,12 +36,18 @@ export function createCallableService(servicePath: AkashaServicePath, channelSen
  * @param currentModule
  * @param channelSend
  */
-export function extractCallableServices(currentModule: IAkashaModule, channelSend: SendChannel) {
-  const exportedCommonServices = {};
+export function extractCallableServices(
+  currentModule: IAkashaModule,
+  channelSend: SendChannel
+): IModuleCallableService {
+  const exportedCommonServices: IProxyCallableService = {};
   const services = currentModule.availableServices();
-  for (const serviceName of  Object.keys(services)) {
+  for (const serviceName of Object.keys(services)) {
     const servicePath: AkashaServicePath = services[serviceName];
-    exportedCommonServices[serviceName.toLowerCase()] = createCallableService(servicePath, channelSend)
+    exportedCommonServices[serviceName.toLowerCase()] = createCallableService(
+      servicePath,
+      channelSend
+    );
   }
   return { [currentModule.name]: exportedCommonServices };
 }
@@ -43,9 +57,12 @@ export function extractCallableServices(currentModule: IAkashaModule, channelSen
  * @param modules
  * @param channelSend
  */
-export function buildModuleServiceChannels(modules: IAkashaModule[], channelSend: SendChannel) {
-  let channels = {};
-  for(const currentModule of modules) {
+export function buildModuleServiceChannels(
+  modules: IAkashaModule[],
+  channelSend: SendChannel
+): IModuleCallableService {
+  const channels: IModuleCallableService = {};
+  for (const currentModule of modules) {
     const extractedServices = extractCallableServices(currentModule, channelSend);
     Object.assign(channels, extractedServices);
   }
