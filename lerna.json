@@ -1,6 +1,7 @@
 {
   "packages": [
-    "packages/*"
+    "sdk-packages/*",
+    "ui-plugins/*"
   ],
   "npmClient": "npm",
   "useWorkspaces": false,

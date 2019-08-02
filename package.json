@@ -20,6 +20,7 @@
     "typescript": "3.5.3"
   },
   "workspaces": [
-    "packages/*"
+    "sdk-packages/*",
+    "ui-plugins/*"
   ]
 }
