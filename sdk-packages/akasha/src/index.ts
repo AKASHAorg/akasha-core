@@ -1,28 +1,38 @@
-import initDI from '@akashaproject/sdk-core';
 import registerCommonModule from '@akashaproject/sdk-common';
-import initChannel from './channel';
+import initDI from '@akashaproject/sdk-core';
+import { IAkashaModule } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
-import { buildModuleServiceChannels, startServices } from './utils';
+import initChannel from './channel';
+import {
+  buildModuleServiceChannels,
+  IModuleCallableService,
+  SendChannel,
+  startServices
+} from './utils';
 
-export default async function init (options = { start: true }) {
+const start = async (
+  mList: IAkashaModule[],
+  di: DIContainer,
+  sendChanel: SendChannel
+): Promise<IModuleCallableService> => {
+  await startServices(mList, di);
+  // build the module services for the sdk consumer
+  return buildModuleServiceChannels(mList, sendChanel);
+};
+
+export default async function init(options = { start: true }) {
   const di: DIContainer = await initDI();
   const commonModule = registerCommonModule();
-
+  let modules: IModuleCallableService;
   // list of all the registered modules for the sdk
   const modulesList = [commonModule];
   // general channel to send service calls
   const channel = initChannel(di);
-  // build the module services for the sdk consumer
-  const modules = buildModuleServiceChannels(modulesList, channel.send);
-  const start = async (): Promise<boolean> => {
-    await startServices(modulesList, di);
-    return true;
-  };
-  const baseReturnedObj = { di, channel, modules };
   if (options.start) {
-    await start();
+    modules = await start(modulesList, di, channel.send);
   }
+  const baseReturnedObj = { di, channel: channel.send };
   // for the case when options.start is false the start function is returned
-  const startFn = options.start ? {}: { start: start };
+  const startFn = options.start ? { modules } : { start, modulesList };
   return Object.assign({}, baseReturnedObj, startFn);
 }

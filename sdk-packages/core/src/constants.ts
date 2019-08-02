@@ -5,10 +5,10 @@ export const moduleName = 'core';
 
 const getLocalServicePath = (serviceName: string): AkashaServicePath => [moduleName, serviceName];
 
-interface Services {
+interface IServices {
   [serviceName: string]: AkashaServicePath;
 }
 
-export const services: Services = {
+export const services: IServices = {
   [SETTINGS_SERVICE]: getLocalServicePath(SETTINGS_SERVICE)
 };

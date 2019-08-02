@@ -1,30 +1,27 @@
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
-import registerSettingsProvider from './settings';
 import { moduleName } from './constants';
-import { AkashaServiceFactory, IAkashaModule, AkashaModuleServices } from './IAkashaModule';
+import { AkashaServiceFactory, IAkashaModule, IAkashaModuleServices } from './IAkashaModule';
+import registerSettingsProvider from './settings';
 
 class CoreModule extends IAkashaModule {
+  // tslint:disable-next-line:no-empty
+  public init(di: DIContainer): void {}
 
-  init (di: DIContainer): void {
-  }
-
-  protected _getServiceFactories (): AkashaServiceFactory[] {
-    return [
-      registerSettingsProvider
-    ];
-  }
-
-  protected _name (): string {
-    return moduleName;
-  }
-
-  public availableServices (): AkashaModuleServices {
+  public availableServices(): IAkashaModuleServices {
     return null;
+  }
+
+  protected _getServiceFactories(): AkashaServiceFactory[] {
+    return [registerSettingsProvider];
+  }
+
+  protected _name(): string {
+    return moduleName;
   }
 }
 
 // create the dependency injection container and the cache list handler
-export default async function bootstrapFactory () {
+export default async function bootstrapFactory() {
   const di = new DIContainer();
   const coreModule = new CoreModule();
   await coreModule.startServices(di);

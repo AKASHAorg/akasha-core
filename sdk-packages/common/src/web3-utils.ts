@@ -1,10 +1,10 @@
+import { IAkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
-import { WEB3_UTILS } from './constants';
 import { utils } from 'ethers';
-import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
+import { WEB3_UTILS } from './constants';
 
-export default function registerService (di: DIContainer): AkashaService {
-  const runService = async function() {
+export default function registerService(di: DIContainer): IAkashaService {
+  const runService = async () => {
     // add more utilities on top of existing ethers lib
     return () => utils;
   };

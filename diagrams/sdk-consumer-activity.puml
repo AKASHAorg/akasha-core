@@ -1,0 +1,33 @@
+@startuml
+title SDK consumer initialization
+partition SDK {
+(*)  --> "initialize sdk"
+If "start: true"
+--> [Yes] "register module services"
+else
+--> "set custom modules"
+--> "register module services"
+Endif
+--> ===Modules===
+--> [default] "inject core module and settings"
+--> [ready] ===customModules===
+===Modules=== --> [optional] "inject modules from list"
+-->[ready]===customModules===
+--> ModuleServices
+--> ===ServiceChannels==
+
+"inject core module and settings" --> [registers] ===DIContainer===
+"inject modules from list" --> [register&require] ===DIContainer===
+===DIContainer=== --> [provides] "inject modules from list"
+}
+
+partition Channel {
+ transports --> [binds] ===ServiceChannels==
+}
+
+partition Consumer {
+===ServiceChannels== -->[provides](*)
+
+}
+
+@enduml
