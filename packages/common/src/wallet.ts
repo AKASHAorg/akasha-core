@@ -5,8 +5,9 @@ import { moduleName, services as commonServices, WEB3_WALLET } from './constants
 import { ICommonSettings } from '@akashaproject/sdk-core/lib/settings';
 import { CONNECT_EXISTING, ETH_NETWORK } from './settings';
 import { ethers } from 'ethers';
+import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 
-export default function registerService (di: DIContainer) {
+export default function registerService (di: DIContainer): AkashaService {
   const runService = async function() {
     const moduleSettings: ICommonSettings = (await callService(di, coreServices.SETTINGS_SERVICE)).getSettings(moduleName);
     const networkSettings = moduleSettings.find(serviceSettings => serviceSettings[0] === ETH_NETWORK);

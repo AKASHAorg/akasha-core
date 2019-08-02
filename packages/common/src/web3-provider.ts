@@ -5,8 +5,9 @@ import { callService } from '@akashaproject/sdk-core/lib/utils';
 import { CONNECT_EXISTING, ETH_NETWORK } from './settings';
 import { ethers } from 'ethers';
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
+import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 
-export default function registerService (di: DIContainer) {
+export default function registerService (di: DIContainer): AkashaService {
 
   const runService = async function() {
     let service;
