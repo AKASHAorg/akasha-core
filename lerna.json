@@ -1,8 +1,5 @@
 {
-  "packages": [
-    "sdk-packages/*",
-    "ui-plugins/*"
-  ],
+  "packages": ["sdk-packages/*", "ui-plugins/*", "playground/*"],
   "npmClient": "npm",
   "useWorkspaces": false,
   "version": "0.0.0"

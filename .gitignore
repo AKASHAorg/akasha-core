@@ -37,4 +37,4 @@ release/
 .vscode
 *.tsbuildinfo
 lib
-dist/
+dist
