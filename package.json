@@ -7,11 +7,11 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "bootstrap-hoist": "lerna bootstrap --hoist",
-    "build": "lerna run tsc && lerna run build --scope @akashaproject/sdk",
-    "build-cli": "lerna run tsc && lerna run build --scope @akashaproject/sdk-cli",
+    "build": "lerna clean && lerna bootstrap && lerna run tsc && lerna run build",
     "docs": "lerna run docs --scope @akashaproject/sdk --scope @akashaproject/sdk-common",
     "test": "lerna run test",
-    "tsc": "lerna run tsc"
+    "tsc": "lerna run tsc --scope @akashaproject/sdk --scope @akashaproject/sdk-*",
+    "watch-plugin-events": "lerna exec --parallel --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-plugin-events -- tsc -w"
   },
   "devDependencies": {
     "@types/node": "10.14.6",
