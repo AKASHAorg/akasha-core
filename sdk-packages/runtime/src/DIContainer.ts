@@ -1,24 +1,23 @@
 import Bottle from 'bottlejs';
-import IDIContainer from './IDIContainer';
+import IDIContainer, { CallableService } from './IDIContainer';
 
 export default class DIContainer implements IDIContainer {
-
   // service provider instance
-  readonly _sp;
+  protected readonly sp;
 
-  constructor () {
-    this._sp = new Bottle('RuntimeDIContainer');
+  constructor() {
+    this.sp = new Bottle('RuntimeDIContainer');
   }
 
-  get serviceProvider () {
-    return this._sp;
+  get serviceProvider() {
+    return this.sp;
   }
 
-  public getService (serviceName: string) {
-    return this._sp.container[serviceName];
+  public getService(serviceName: string) {
+    return this.sp.container[serviceName];
   }
 
-  public register (serviceName: string, service: CallableFunction): void {
-    this._sp.service(serviceName, service);
+  public register(serviceName: string, service: CallableService): void {
+    this.sp.service(serviceName, service);
   }
 }

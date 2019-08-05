@@ -1,15 +1,15 @@
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 import { SETTINGS_SERVICE } from './constants';
-import { AkashaService } from '../lib/IAkashaModule';
+import { IAkashaService } from './IAkashaModule';
 
-export type ICommonSettings = [string, string][];
+export type ICommonSettings = Array<[string, string]>;
 
 export interface ICoreSettings {
-  moduleName: string,
-  values: [string, any][]
+  moduleName: string;
+  values: Array<[string, any]>;
 }
 
-export default function registerService (di: DIContainer): AkashaService {
+export default function registerService(di: DIContainer): IAkashaService {
   const service = () => {
     const settingsSymbol = Symbol('setting$');
 
@@ -18,11 +18,11 @@ export default function registerService (di: DIContainer): AkashaService {
       [settingsSymbol]: new Map()
     };
 
-    const getSettings = function(moduleName: ICoreSettings['moduleName']) {
+    const getSettings = (moduleName: ICoreSettings['moduleName']) => {
       return coreSettings[settingsSymbol].get(moduleName);
     };
 
-    const setSettings = function(settings: ICoreSettings): void {
+    const setSettings = (settings: ICoreSettings): void => {
       coreSettings[settingsSymbol].set(settings.moduleName, settings.values);
     };
     return () => ({ getSettings, setSettings });
@@ -30,4 +30,3 @@ export default function registerService (di: DIContainer): AkashaService {
 
   return { name: SETTINGS_SERVICE, service };
 }
-

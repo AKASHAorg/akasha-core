@@ -1,23 +1,24 @@
 import IStash from './IStash';
 
+// tslint:disable-next-line:no-var-requires
 const LRU = require('lru-cache');
 
 export default class Stash implements IStash {
-  readonly cache;
+  public readonly cache;
 
-  constructor (options?: Object) {
+  constructor(options?: object) {
     this.cache = new LRU(options);
   }
 
-  get entries () {
+  get entries() {
     return this.cache;
   }
 
-  get (key: string): Object {
+  public get(key: string): object {
     return this.cache.get(key);
   }
 
-  set (key: string, value: Object): void {
+  public set(key: string, value: object): void {
     this.cache.set(key, value);
   }
 }
