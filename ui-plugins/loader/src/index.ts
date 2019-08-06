@@ -4,19 +4,32 @@ export interface IPlugin {
   name: string;
   services: any[];
   loadingFn: () => Promise<any>;
-  activeWhen: (location: Location) => boolean;
+  activeWhen: {
+    exact?: boolean;
+    path: string;
+  };
+}
+
+export interface IPluginConfig {
+  activeWhen?: {
+    exact?: boolean;
+    path: string;
+  };
+}
+
+export interface ILoaderConfig {
+  someLoaderConfig?: boolean;
 }
 
 export default class AppLoader {
-  public config: object;
+  public config: ILoaderConfig;
   public plugins: IPlugin[];
 
-  constructor(config: object) {
+  constructor(config: ILoaderConfig) {
     this.config = config;
     this.plugins = [];
   }
-
-  public registerPlugin(plugin: IPlugin, pluginConfig?: any): void {
+  public registerPlugin(plugin: IPlugin, pluginConfig: IPluginConfig): void {
     this.plugins.push(plugin);
     if (this._validatePlugin(plugin)) {
       const pluginId = plugin.name.toLowerCase().replace(' ', '-');
@@ -27,11 +40,23 @@ export default class AppLoader {
         domEl.id = pluginId;
         rootEl.appendChild(domEl);
       }
-      singleSpa.registerApplication(plugin.name, plugin.loadingFn, plugin.activeWhen, {
-        ...this.config,
-        ...pluginConfig,
-        domElement: domEl
-      });
+      singleSpa.registerApplication(
+        plugin.name,
+        plugin.loadingFn,
+        (location: Location): boolean => {
+          let activeWhen = plugin.activeWhen;
+          if (pluginConfig.activeWhen && pluginConfig.activeWhen.path) {
+            activeWhen = pluginConfig.activeWhen;
+          }
+          return this._pathPrefix(location, activeWhen);
+          return true;
+        },
+        {
+          ...this.config,
+          ...pluginConfig,
+          domElement: domEl
+        }
+      );
       // @todo: add logger
       console.info(`[@akashaproject/ui-plugin-loader]: ${plugin.name} registered!`);
     } else {
@@ -42,6 +67,13 @@ export default class AppLoader {
   public start() {
     console.info('[@akashaproject/ui-plugin-loader]: starting single spa');
     singleSpa.start();
+  }
+
+  protected _pathPrefix(location: Location, activeWhen: IPluginConfig['activeWhen']) {
+    if (activeWhen && activeWhen.exact) {
+      return location.pathname === activeWhen.path;
+    }
+    return location.pathname.startsWith(`${activeWhen.path}`);
   }
 
   protected _validatePlugin(plugin: IPlugin): boolean {

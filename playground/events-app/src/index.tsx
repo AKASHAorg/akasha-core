@@ -3,5 +3,5 @@ import AppLoader from '@akashaproject/ui-plugin-loader';
 
 const app = new AppLoader({});
 
-app.registerPlugin(Plugin);
+app.registerPlugin(Plugin, { activeWhen: { path: '/' } });
 app.start();

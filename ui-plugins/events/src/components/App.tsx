@@ -1,5 +1,4 @@
-import { Component } from 'react';
-import React from 'react';
+import React, { PureComponent } from 'react';
 
 export interface IProps {
   removeMe: bigint;
@@ -15,7 +14,7 @@ export interface IProps {
  * @warning :: Always use default export
  */
 
-export default class App extends Component<IProps> {
+export default class App extends PureComponent<IProps> {
   public state: { hasErrors: boolean };
 
   constructor(props: IProps) {
