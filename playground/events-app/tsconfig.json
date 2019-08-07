@@ -21,10 +21,10 @@
   },
   "references": [
     {
-      "path": "../../ui-plugins/loader"
+      "path": "../../ui/plugins/loader"
     },
     {
-      "path": "../../ui-plugins/events"
+      "path": "../../ui/plugins/events"
     }
   ],
   "include": ["./src"]

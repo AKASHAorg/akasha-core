@@ -38,6 +38,7 @@ export default class AppLoader {
       if (!domEl && rootEl) {
         domEl = document.createElement('div');
         domEl.id = pluginId;
+        domEl.style.display = 'inline';
         rootEl.appendChild(domEl);
       }
       singleSpa.registerApplication(

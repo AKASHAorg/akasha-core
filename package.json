@@ -11,7 +11,8 @@
     "docs": "lerna run docs --scope @akashaproject/sdk --scope @akashaproject/sdk-common",
     "test": "lerna run test",
     "tsc": "lerna run tsc --scope @akashaproject/sdk --scope @akashaproject/sdk-*",
-    "watch-plugin-events": "lerna exec --parallel --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-plugin-events -- tsc -w"
+    "watch-plugin-events": "lerna exec --parallel --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-widget-sidebar --scope @akashaproject/ui-plugin-events -- tsc -w",
+    "start-events-app": "npm run start --prefix playground/events-app"
   },
   "devDependencies": {
     "@types/node": "10.14.6",
