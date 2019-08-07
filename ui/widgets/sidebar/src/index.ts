@@ -3,6 +3,6 @@
  */
 export default {
   name: 'ui-plugin-events',
-  widget: () => import('./components'),
-  services: []
+  services: [],
+  widget: () => import('./components')
 };
