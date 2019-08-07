@@ -1,18 +1,20 @@
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
+import R from 'ramda';
 import { moduleName } from './constants';
-import { AkashaServiceFactory, IAkashaModule, IAkashaModuleServices } from './IAkashaModule';
-import registerSettingsProvider from './settings';
+import { IAkashaModule, IAkashaModuleServices, IAkashaNamedService } from './IAkashaModule';
+import settingsService from './settings.service';
 
 class CoreModule extends IAkashaModule {
-  // tslint:disable-next-line:no-empty
-  public init(di: DIContainer): void {}
-
   public availableServices(): IAkashaModuleServices {
     return null;
   }
+  // tslint:disable-next-line:no-empty
+  protected init(di: DIContainer): void {
+    R.T();
+  }
 
-  protected _getServiceFactories(): AkashaServiceFactory[] {
-    return [registerSettingsProvider];
+  protected _registerServices(): IAkashaNamedService[] {
+    return [settingsService];
   }
 
   protected _name(): string {

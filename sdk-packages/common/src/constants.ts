@@ -1,26 +1,29 @@
-import {
-  AkashaServicePath,
-  IAkashaModuleServices
-} from '@akashaproject/sdk-core/lib/IAkashaModule';
+import { IAkashaModuleServices } from '@akashaproject/sdk-core/lib/IAkashaModule';
+import { buildServicePath } from '@akashaproject/sdk-core/lib/utils';
 
-export const VALIDATOR_SERVICE_FACTORY = 'VALIDATOR_SERVICE_FACTORY';
-export const CACHE_PROVIDER_FACTORY = 'CACHE_PROVIDER_FACTORY';
-export const WEB3_SERVICE_PROVIDER = 'WEB3_SERVICE_PROVIDER';
-export const WEB3_EXISTING_PROVIDER = 'WEB3_EXISTING_PROVIDER';
-export const WEB3_WALLET = 'WEB3_WALLET';
-export const WEB3_UTILS = 'WEB3_UTILS';
+export const VALIDATOR_SERVICE = 'VALIDATOR_SERVICE';
+export const CACHE_SERVICE = 'CACHE_SERVICE';
+export const WEB3_SERVICE = 'WEB3_SERVICE';
+export const WEB3_WALLET_SERVICE = 'WEB3_WALLET_SERVICE';
+export const WEB3_UTILS_SERVICE = 'WEB3_UTILS_SERVICE';
 export const IPFS_SERVICE = 'IPFS_SERVICE';
 
-export const moduleName = 'commons';
+// ethereum chain id
+export const ETH_NETWORK = 'eth_network';
+// used for displaying images
+export const IPFS_GATEWAY = 'ipfs_gateway';
+// value to check when the web3 connector should connect to the existing web3 provider(like Metamask)
+export const WEB3_PROVIDER = 'WEB3_PROVIDER';
 
-const getLocalServicePath = (serviceName: string): AkashaServicePath => [moduleName, serviceName];
+export const moduleName = 'commons';
+const servicePath = buildServicePath(moduleName);
+
 // for service consumers
-export const services: IAkashaModuleServices = {
-  [VALIDATOR_SERVICE_FACTORY]: getLocalServicePath(VALIDATOR_SERVICE_FACTORY),
-  [CACHE_PROVIDER_FACTORY]: getLocalServicePath(CACHE_PROVIDER_FACTORY),
-  [WEB3_SERVICE_PROVIDER]: getLocalServicePath(WEB3_SERVICE_PROVIDER),
-  [WEB3_EXISTING_PROVIDER]: getLocalServicePath(WEB3_EXISTING_PROVIDER),
-  [WEB3_WALLET]: getLocalServicePath(WEB3_WALLET),
-  [WEB3_UTILS]: getLocalServicePath(WEB3_UTILS),
-  [IPFS_SERVICE]: getLocalServicePath(IPFS_SERVICE)
+const services: IAkashaModuleServices = {
+  [VALIDATOR_SERVICE]: servicePath(VALIDATOR_SERVICE),
+  [CACHE_SERVICE]: servicePath(CACHE_SERVICE),
+  [WEB3_SERVICE]: servicePath(WEB3_SERVICE),
+  [WEB3_UTILS_SERVICE]: servicePath(WEB3_UTILS_SERVICE),
+  [IPFS_SERVICE]: servicePath(IPFS_SERVICE)
 };
+export default services;

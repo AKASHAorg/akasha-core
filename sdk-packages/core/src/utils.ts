@@ -1,24 +1,46 @@
 import IDIContainer from '@akashaproject/sdk-runtime/lib/IDIContainer';
 import { CallableService } from '@akashaproject/sdk-runtime/lib/IDIContainer';
-import { AkashaServicePath, IAkashaModule } from './IAkashaModule';
+import R from 'ramda';
+import {
+  AkashaService,
+  AkashaServicePath,
+  IAkashaModule,
+  IAkashaNamedService
+} from './IAkashaModule';
 
 // to not import explicit the module interface just for getting the serviceName
 export function getServiceName(service: { moduleName: string; providerName: string }) {
-  return IAkashaModule.getServiceName(service.moduleName, service.providerName);
+  return R.identity(IAkashaModule.getServiceName(service.moduleName, service.providerName));
 }
 
 // ex: getService(di, ["commons_module", "ipfs"])
-export function getService(di: IDIContainer, servicePath: AkashaServicePath): CallableService {
+export function getService(di: IDIContainer, servicePath: AkashaServicePath): any {
   const [moduleName, providerName] = servicePath;
-  return di.getService(getServiceName({ moduleName, providerName }));
+  return R.identity(di.getService(getServiceName({ moduleName, providerName })));
 }
 
 // execute call on service function
-export async function callService(
-  di: IDIContainer,
-  servicePath: AkashaServicePath,
-  payload?: object
-) {
+function _callService(di: IDIContainer, servicePath: AkashaServicePath) {
   const service = getService(di, servicePath);
-  return service(payload);
+  return R.identity(service);
+}
+
+export function callService(di: IDIContainer) {
+  return R.curry(_callService)(di);
+}
+
+export function toNamedService(name: string, service: AkashaService): IAkashaNamedService {
+  return R.identity(Object.freeze({ name, service }));
+}
+
+export function registerServiceMethods(methods: object): R.Variadic<object> {
+  return R.partial(R.identity, [Object.freeze(methods)]);
+}
+
+function _buildServicePath(moduleName: string, serviceName: string): AkashaServicePath {
+  return [moduleName, serviceName];
+}
+
+export function buildServicePath(moduleName: string) {
+  return R.curry(_buildServicePath)(moduleName);
 }
