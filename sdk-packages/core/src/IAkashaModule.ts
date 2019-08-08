@@ -7,9 +7,10 @@ export interface IAkashaNamedService {
   service: AkashaService;
 }
 
+export type AkashaServiceMethods = R.Variadic<object>;
 export type AkashaService = (
   serviceInvoker: R.CurriedFunction1<[string, string], any>
-) => R.Variadic<object>;
+) => AkashaServiceMethods;
 
 export type AkashaServicePath = [string, string];
 
@@ -30,7 +31,7 @@ export abstract class IAkashaModule {
     return this._name();
   }
 
-  public static async wrapService(service: R.Variadic<object>, name: string) {
+  public static wrapService(service: R.Variadic<object>, name: string) {
     const registeredMethods = service;
     // calls .bind.apply which is incompatible with ()=>
     // tslint:disable-next-line:only-arrow-functions
@@ -45,11 +46,11 @@ export abstract class IAkashaModule {
     return `${moduleName}=>${providerName}`;
   }
 
-  public async startServices(di: DIContainer) {
+  public startServices(di: DIContainer) {
     this.init(di);
     const services = this._registerServices(di);
     for (const provider of services) {
-      const wrappedService = await IAkashaModule.wrapService(
+      const wrappedService = IAkashaModule.wrapService(
         provider.service(callService(di)),
         provider.name
       );

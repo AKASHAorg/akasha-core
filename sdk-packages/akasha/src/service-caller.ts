@@ -1,11 +1,14 @@
-import { defer, Observable } from 'rxjs';
+import { AkashaServiceMethods } from '@akashaproject/sdk-core/lib/IAkashaModule';
+import { invokeServiceMethod } from '@akashaproject/sdk-core/lib/utils';
+import { asapScheduler, defer, Observable, scheduled } from 'rxjs';
 
 // service consumer
 export default function callService(
-  service: (payload?: object) => any,
-  payload?: object
+  service: AkashaServiceMethods,
+  payload: { method: string; args: object }
 ): Observable<any> {
-  return defer(async () => {
-    return service(payload);
+  return defer(() => {
+    const method = invokeServiceMethod(payload.method);
+    return scheduled([method(payload.args, service)], asapScheduler);
   });
 }

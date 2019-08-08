@@ -23,10 +23,10 @@ class CoreModule extends IAkashaModule {
 }
 
 // create the dependency injection container and the cache list handler
-export default async function bootstrapFactory() {
+export default function bootstrapFactory() {
   const di = new DIContainer();
   const coreModule = new CoreModule();
-  await coreModule.startServices(di);
+  coreModule.startServices(di);
   // these instances are required to instantiate the packages used for building the akasha-sdk
   return di;
 }

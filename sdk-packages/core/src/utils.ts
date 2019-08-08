@@ -3,6 +3,7 @@ import { CallableService } from '@akashaproject/sdk-runtime/lib/IDIContainer';
 import R from 'ramda';
 import {
   AkashaService,
+  AkashaServiceMethods,
   AkashaServicePath,
   IAkashaModule,
   IAkashaNamedService
@@ -33,7 +34,7 @@ export function toNamedService(name: string, service: AkashaService): IAkashaNam
   return R.identity(Object.freeze({ name, service }));
 }
 
-export function registerServiceMethods(methods: object): R.Variadic<object> {
+export function registerServiceMethods(methods: object): AkashaServiceMethods {
   return R.partial(R.identity, [Object.freeze(methods)]);
 }
 
@@ -43,4 +44,15 @@ function _buildServicePath(moduleName: string, serviceName: string): AkashaServi
 
 export function buildServicePath(moduleName: string) {
   return R.curry(_buildServicePath)(moduleName);
+}
+
+// create a function around an object type service
+export function createServiceMethod(method: object) {
+  return R.partial(R.identity, [method]);
+}
+
+export function invokeServiceMethod(
+  method: string
+): R.CurriedFunction2<object, AkashaServiceMethods, any> {
+  return R.curry(R.invoker(1, method));
 }

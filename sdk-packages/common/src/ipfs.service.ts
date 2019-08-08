@@ -1,5 +1,9 @@
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import { registerServiceMethods, toNamedService } from '@akashaproject/sdk-core/lib/utils';
+import {
+  createServiceMethod,
+  registerServiceMethods,
+  toNamedService
+} from '@akashaproject/sdk-core/lib/utils';
 import { IPFS_SERVICE } from './constants';
 import ipfsSettings from './ipfs.settings';
 
@@ -8,6 +12,6 @@ const IPFS = require('ipfs');
 
 const service: AkashaService = () => {
   const ipfsNode = new IPFS({ config: ipfsSettings, start: false });
-  return registerServiceMethods({ ipfsNode });
+  return registerServiceMethods({ ipfsNode: createServiceMethod(ipfsNode) });
 };
 export default toNamedService(IPFS_SERVICE, service);

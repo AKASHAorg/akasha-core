@@ -26,7 +26,7 @@ const chalk = require('chalk');
 
   let ipfsNode, web3Provider, exitCli, wallet;
   if (input.startIpfs) {
-    ipfsNode = invoke(commonServices.IPFS_SERVICE).ipfsNode;
+    ipfsNode = invoke(commonServices.IPFS_SERVICE).ipfsNode();
     await ipfsNode.start();
     console.log(chalk.cyan('ipfs node started!'));
   }
@@ -49,12 +49,9 @@ const chalk = require('chalk');
   };
 
   //magic here...
-  /*  const observable = tools.modules.commons.web3_service_provider();
+  const observable = tools.modules.commons.web3_service({ method: 'web3', args: {} });
 
-  observable.subscribe(consumeWeb3Provider, errorConsumer);*/
-  invoke(commonServices.WEB3_SERVICE).web3();
-  invoke(commonServices.WEB3_SERVICE).web3();
-  invoke(commonServices.WEB3_SERVICE).web3();
+  observable.subscribe(consumeWeb3Provider, errorConsumer);
   const mnemonic =
     'satisfy fault total balcony danger traffic apology faint chat enemy claim equip';
   wallet = invoke(commonServices.WEB3_SERVICE)
@@ -110,7 +107,7 @@ const chalk = require('chalk');
           message: 'Signature:'
         }
       ]);
-      const utilsProvider = invoke(commonServices.WEB3_UTILS_SERVICE).utils;
+      const utilsProvider = invoke(commonServices.WEB3_UTILS_SERVICE).utils();
       const ethAddressFound = await utilsProvider.verifyMessage(messageV.raw, messageV.sig);
       console.log(chalk.red('Signed by:', ethAddressFound));
     }

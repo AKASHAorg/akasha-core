@@ -1,36 +1,29 @@
 import coreServices from '@akashaproject/sdk-core/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import { registerServiceMethods, toNamedService } from '@akashaproject/sdk-core/lib/utils';
+import {
+  createServiceMethod,
+  registerServiceMethods,
+  toNamedService
+} from '@akashaproject/sdk-core/lib/utils';
 import { ethers } from 'ethers';
-import { ETH_NETWORK, moduleName, WEB3_PROVIDER, WEB3_SERVICE } from './constants';
+import { WEB3_SERVICE } from './constants';
+import getProvider from './web3.methods/provider';
 
 const service: AkashaService = invoke => {
   let web3Provider;
+
   const regen = () => {
     const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);
-    const moduleSettings = getSettings(moduleName);
-    const networkSettings = moduleSettings.find(
-      serviceSettings => serviceSettings[0] === ETH_NETWORK
-    );
-    const existingProvider = moduleSettings.find(
-      serviceSettings => serviceSettings[0] === WEB3_PROVIDER
-    );
-    if (existingProvider) {
-      web3Provider = new ethers.providers.Web3Provider(existingProvider[1]);
-    } else {
-      if (!networkSettings) {
-        throw new Error(`Must provide an ${ETH_NETWORK} value.`);
-      }
-      const network = networkSettings[1];
-      web3Provider = ethers.getDefaultProvider(String(network));
-    }
+    web3Provider = getProvider(getSettings);
     return web3Provider;
   };
 
+  // to force regen() on the next web3 call
   const destroy = () => {
     web3Provider = null;
   };
 
+  // fetch an existing instance or create web3Provider
   const web3 = () => {
     if (!web3Provider) {
       return regen();
@@ -38,11 +31,10 @@ const service: AkashaService = invoke => {
     return web3Provider;
   };
 
-  const wallet = () => {
-    return ethers.Wallet;
-  };
+  // wrapper
+  const wallet = createServiceMethod(ethers.Wallet);
 
-  return registerServiceMethods({ regen, destroy, wallet, web3 });
+  return registerServiceMethods({ action: { regen, destroy }, wallet, web3 });
 };
 
 export default toNamedService(WEB3_SERVICE, service);
