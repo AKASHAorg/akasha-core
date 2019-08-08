@@ -56,3 +56,16 @@ export function invokeServiceMethod(
 ): R.CurriedFunction2<object, AkashaServiceMethods, any> {
   return R.curry(R.invoker(1, method));
 }
+
+function _callServiceMethod(
+  di: IDIContainer,
+  servicePath: AkashaServicePath,
+  method: string,
+  args?: object
+) {
+  const service = callService(di)(servicePath);
+  const callMethod = invokeServiceMethod(method);
+  return callMethod(args, service);
+}
+
+export const callServiceMethod = R.curry(_callServiceMethod);

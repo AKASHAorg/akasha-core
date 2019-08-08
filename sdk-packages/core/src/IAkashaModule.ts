@@ -1,5 +1,5 @@
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
-import R, { Variadic } from 'ramda';
+import R from 'ramda';
 import { callService } from './utils';
 
 export interface IAkashaNamedService {
@@ -44,6 +44,10 @@ export abstract class IAkashaModule {
 
   public static getServiceName(moduleName: string, providerName: string) {
     return `${moduleName}=>${providerName}`;
+  }
+
+  public static exportToChannel(serviceNames: string[], serviceRegistry: object): any {
+    return R.pick(serviceNames, serviceRegistry);
   }
 
   public startServices(di: DIContainer) {

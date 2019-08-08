@@ -8,7 +8,12 @@ import {
 import { callService } from '@akashaproject/sdk-core/lib/utils';
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 import cacheService from './cache.service';
-import services, { moduleName } from './constants';
+import services, {
+  moduleName,
+  VALIDATOR_SERVICE,
+  WEB3_SERVICE,
+  WEB3_UTILS_SERVICE
+} from './constants';
 import ipfsService from './ipfs.service';
 import settings from './settings';
 import validatorService from './validator.service';
@@ -23,7 +28,10 @@ export class CommonsModule extends IAkashaModule {
   }
 
   public availableServices(): IAkashaModuleServices {
-    return services;
+    return IAkashaModule.exportToChannel(
+      [WEB3_UTILS_SERVICE, VALIDATOR_SERVICE, WEB3_SERVICE],
+      services
+    );
   }
 
   protected _name() {

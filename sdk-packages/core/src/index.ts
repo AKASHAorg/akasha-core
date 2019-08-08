@@ -6,7 +6,7 @@ import settingsService from './settings.service';
 
 class CoreModule extends IAkashaModule {
   public availableServices(): IAkashaModuleServices {
-    return null;
+    return {};
   }
   // tslint:disable-next-line:no-empty
   protected init(di: DIContainer): void {

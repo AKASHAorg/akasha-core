@@ -34,7 +34,7 @@ const service: AkashaService = invoke => {
   // wrapper
   const wallet = createServiceMethod(ethers.Wallet);
 
-  return registerServiceMethods({ action: { regen, destroy }, wallet, web3 });
+  return registerServiceMethods({ regen, destroy, wallet, web3 });
 };
 
 export default toNamedService(WEB3_SERVICE, service);
