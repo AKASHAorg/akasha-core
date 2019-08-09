@@ -63,7 +63,6 @@ export default class App extends PureComponent<IProps> {
         <PageLayout>
           <Page>Events Page!</Page>
         </PageLayout>
-        <div id="sidebar-slot" />
         <Parcel
           config={SidebarWidget.widget}
           appendTo={document.getElementById('root')}

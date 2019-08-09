@@ -63,6 +63,7 @@ export default class AppLoader {
         }
       );
       // @todo: add logger
+      // tslint:disable-next-line:no-console
       console.info(`[@akashaproject/ui-plugin-loader]: ${plugin.name} registered!`);
     } else {
       throw new Error(`[@akashaproject/ui-plugin-loader]: Plugin ${plugin.name} is not valid`);
@@ -70,6 +71,7 @@ export default class AppLoader {
   }
 
   public start() {
+    // tslint:disable-next-line:no-console
     console.info('[@akashaproject/ui-plugin-loader]: starting single spa');
     this._registerSpaListeners();
     singleSpa.start();
@@ -85,7 +87,7 @@ export default class AppLoader {
 
   protected _onFirstMount() {
     const mountTimeEnd = performance.now();
-
+    // tslint:disable-next-line:no-console
     console.info(
       '[AppLoader]: took',
       // @ts-ignore
