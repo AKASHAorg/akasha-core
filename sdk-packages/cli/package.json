@@ -24,7 +24,7 @@
     "url": "git+https://github.com/AkashaProject/akasha-sdk-js.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
+    "test": "jest",
     "tsc": "tsc --build",
     "build": "NODE_OPTIONS='--max-old-space-size=2096' rollup -c"
   },
