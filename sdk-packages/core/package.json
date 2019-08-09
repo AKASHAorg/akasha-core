@@ -28,6 +28,10 @@
     "url": "https://github.com/AkashaProject/akasha-sdk-js/issues"
   },
   "dependencies": {
-    "@akashaproject/sdk-runtime": "*"
+    "@akashaproject/sdk-runtime": "*",
+    "ramda": "^0.26.1"
+  },
+  "devDependencies": {
+    "@types/ramda": "github:types/npm-ramda#dist"
   }
 }

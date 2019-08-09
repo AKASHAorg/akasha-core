@@ -3,7 +3,10 @@ import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 import { CallableService } from '@akashaproject/sdk-runtime/lib/IDIContainer';
 import { Observable } from 'rxjs';
 
-export type SendChannel = (servicePath: AkashaServicePath, payload: object) => Observable<any>;
+export type SendChannel = (
+  servicePath: AkashaServicePath,
+  payload: { method: string; args: object }
+) => Observable<any>;
 export interface IProxyCallableService {
   [x: string]: CallableService;
 }
@@ -68,8 +71,8 @@ export function buildModuleServiceChannels(
   return channels;
 }
 
-export async function startServices(modules: IAkashaModule[], di: DIContainer): Promise<void> {
+export function startServices(modules: IAkashaModule[], di: DIContainer) {
   for (const moduleInstance of modules) {
-    await moduleInstance.startServices(di);
+    moduleInstance.startServices(di);
   }
 }

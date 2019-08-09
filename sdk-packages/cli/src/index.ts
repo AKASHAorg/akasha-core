@@ -1,7 +1,7 @@
 /* tslint:disable */
 // remove comment after fixing shebang banner for rollup
 // #!/usr/bin/env node
-import { services as commonServices } from '@akashaproject/sdk-common/lib/constants';
+import commonServices, { WEB3_SERVICE } from '@akashaproject/sdk-common/lib/constants';
 import { callService } from '@akashaproject/sdk-core/lib/utils';
 import initSdk from '@akashaproject/sdk/lib';
 
@@ -15,6 +15,7 @@ const chalk = require('chalk');
   // tslint:disable-next-line:no-console
   console.log(tools.modules);
   console.log(chalk.green('AKASHA-SDK cli is ready!'));
+  const invoke = callService(tools.di);
   const input = await inquirer.prompt([
     {
       type: 'confirm',
@@ -25,12 +26,12 @@ const chalk = require('chalk');
 
   let ipfsNode, web3Provider, exitCli, wallet;
   if (input.startIpfs) {
-    ipfsNode = await callService(tools.di, commonServices.IPFS_SERVICE);
+    ipfsNode = invoke(commonServices.IPFS_SERVICE).ipfsNode();
     await ipfsNode.start();
     console.log(chalk.cyan('ipfs node started!'));
   }
 
-  web3Provider = await callService(tools.di, commonServices.WEB3_SERVICE_PROVIDER);
+  web3Provider = invoke(commonServices.WEB3_SERVICE).web3();
   const network = await web3Provider.getNetwork();
   const blockNumber = await web3Provider.getBlockNumber();
   console.log(
@@ -48,14 +49,14 @@ const chalk = require('chalk');
   };
 
   //magic here...
-  const observable = tools.modules.commons.web3_service_provider();
+  const observable = tools.modules.commons.web3_service({ method: 'web3', args: {} });
 
   observable.subscribe(consumeWeb3Provider, errorConsumer);
-
-  const walletProvider = await callService(tools.di, commonServices.WEB3_WALLET);
   const mnemonic =
     'satisfy fault total balcony danger traffic apology faint chat enemy claim equip';
-  wallet = walletProvider.fromMnemonic(mnemonic);
+  wallet = invoke(commonServices.WEB3_SERVICE)
+    .wallet()
+    .fromMnemonic(mnemonic);
   const ethAddress = await wallet.getAddress();
   console.log(chalk.green('eth key loaded:', ethAddress));
   const EXIT = 'exit';
@@ -106,7 +107,7 @@ const chalk = require('chalk');
           message: 'Signature:'
         }
       ]);
-      const utilsProvider = await callService(tools.di, commonServices.WEB3_UTILS);
+      const utilsProvider = invoke(commonServices.WEB3_UTILS_SERVICE).utils();
       const ethAddressFound = await utilsProvider.verifyMessage(messageV.raw, messageV.sig);
       console.log(chalk.red('Signed by:', ethAddressFound));
     }

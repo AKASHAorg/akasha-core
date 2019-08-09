@@ -10,12 +10,12 @@ import {
   startServices
 } from './utils';
 
-const start = async (
+const start = (
   mList: IAkashaModule[],
   di: DIContainer,
   sendChanel: SendChannel
-): Promise<IModuleCallableService> => {
-  await startServices(mList, di);
+): IModuleCallableService => {
+  startServices(mList, di);
   // build the module services for the sdk consumer
   return buildModuleServiceChannels(mList, sendChanel);
 };
@@ -29,7 +29,7 @@ export default async function init(options = { start: true }) {
   // general channel to send service calls
   const channel = initChannel(di);
   if (options.start) {
-    modules = await start(modulesList, di, channel.send);
+    modules = start(modulesList, di, channel.send);
   }
   const baseReturnedObj = { di, channel: channel.send };
   // for the case when options.start is false the start function is returned
