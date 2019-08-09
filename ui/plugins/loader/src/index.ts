@@ -59,6 +59,7 @@ export default class AppLoader {
         }
       );
       // @todo: add logger
+      // tslint:disable-next-line:no-console
       console.info(`[@akashaproject/ui-plugin-loader]: ${plugin.name} registered!`);
     } else {
       throw new Error(`[@akashaproject/ui-plugin-loader]: Plugin ${plugin.name} is not valid`);
@@ -66,6 +67,7 @@ export default class AppLoader {
   }
 
   public start() {
+    // tslint:disable-next-line:no-console
     console.info('[@akashaproject/ui-plugin-loader]: starting single spa');
     singleSpa.start();
   }
