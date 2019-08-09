@@ -1,14 +1,13 @@
-import { AkashaServicePath } from './IAkashaModule';
+import { IAkashaModuleServices } from './IAkashaModule';
+import { buildServicePath } from './utils';
 
 export const SETTINGS_SERVICE = 'SETTINGS_SERVICE';
 export const moduleName = 'core';
 
-const getLocalServicePath = (serviceName: string): AkashaServicePath => [moduleName, serviceName];
+const servicePath = buildServicePath(moduleName);
 
-interface IServices {
-  [serviceName: string]: AkashaServicePath;
-}
+const services: IAkashaModuleServices = Object.freeze({
+  [SETTINGS_SERVICE]: servicePath(SETTINGS_SERVICE)
+});
 
-export const services: IServices = {
-  [SETTINGS_SERVICE]: getLocalServicePath(SETTINGS_SERVICE)
-};
+export default services;
