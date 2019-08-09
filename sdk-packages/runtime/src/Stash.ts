@@ -14,11 +14,11 @@ export default class Stash implements IStash {
     return this.cache;
   }
 
-  public get(key: string): object {
+  public get(key: string): any {
     return this.cache.get(key);
   }
 
-  public set(key: string, value: object): void {
+  public set(key: string, value: any): void {
     this.cache.set(key, value);
   }
 }
