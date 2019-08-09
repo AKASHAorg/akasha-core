@@ -1,4 +1,6 @@
 import * as singleSpa from 'single-spa';
+import fourOhFour from './404';
+import { setPageTitle } from './setPageMetadata';
 
 export interface IPlugin {
   name: string;
@@ -8,6 +10,7 @@ export interface IPlugin {
     exact?: boolean;
     path: string;
   };
+  title?: string;
 }
 
 export interface IPluginConfig {
@@ -15,26 +18,32 @@ export interface IPluginConfig {
     exact?: boolean;
     path: string;
   };
+  title?: string;
 }
 
 export interface ILoaderConfig {
-  someLoaderConfig?: boolean;
+  rootNodeId: string;
 }
 
 export default class AppLoader {
   public config: ILoaderConfig;
   public plugins: IPlugin[];
-
   constructor(config: ILoaderConfig) {
     this.config = config;
     this.plugins = [];
   }
   public registerPlugin(plugin: IPlugin, pluginConfig: IPluginConfig): void {
-    this.plugins.push(plugin);
     if (this._validatePlugin(plugin)) {
+      if (pluginConfig.activeWhen && pluginConfig.activeWhen.path) {
+        plugin.activeWhen = pluginConfig.activeWhen;
+      }
+      if (pluginConfig.title) {
+        plugin.title = pluginConfig.title;
+      }
+      this.plugins.push(plugin);
       const pluginId = plugin.name.toLowerCase().replace(' ', '-');
       let domEl = document.getElementById(`${pluginId}`);
-      const rootEl = document.getElementById('root');
+      const rootEl = document.getElementById(this.config.rootNodeId);
       if (!domEl && rootEl) {
         domEl = document.createElement('div');
         domEl.id = pluginId;
@@ -45,12 +54,7 @@ export default class AppLoader {
         plugin.name,
         plugin.loadingFn,
         (location: Location): boolean => {
-          let activeWhen = plugin.activeWhen;
-          if (pluginConfig.activeWhen && pluginConfig.activeWhen.path) {
-            activeWhen = pluginConfig.activeWhen;
-          }
-          return this._pathPrefix(location, activeWhen);
-          return true;
+          return this._pathPrefix(location, plugin.activeWhen);
         },
         {
           ...this.config,
@@ -67,7 +71,54 @@ export default class AppLoader {
 
   public start() {
     console.info('[@akashaproject/ui-plugin-loader]: starting single spa');
+    this._registerSpaListeners();
     singleSpa.start();
+  }
+
+  public getPluginsForLocation(location: Location) {
+    return singleSpa.checkActivityFunctions(location);
+  }
+
+  public getRegisteredPlugins() {
+    return this.plugins;
+  }
+
+  protected _onFirstMount() {
+    const mountTimeEnd = performance.now();
+
+    console.info(
+      '[AppLoader]: took',
+      // @ts-ignore
+      (mountTimeEnd - mountTimeStart) / 1000,
+      'seconds to load plugins:',
+      this.getPluginsForLocation(window.location)
+    );
+  }
+
+  protected _beforeRouting() {
+    const plugins = this.getPluginsForLocation(window.location);
+    if (!plugins.length) {
+      const rootEl = document.getElementById(this.config.rootNodeId);
+      const FourOhFourString: string = fourOhFour(
+        this.plugins.reduce((prev, curr): IPlugin[] => {
+          prev.push({ title: curr.title, activeWhen: curr.activeWhen });
+          return prev;
+        }, [])
+      );
+      rootEl.innerHTML = FourOhFourString;
+    } else {
+      setPageTitle(
+        this.plugins.filter(
+          plugin =>
+            this.getPluginsForLocation(window.location).includes(plugin.name) && plugin.title
+        )
+      );
+    }
+  }
+
+  protected _registerSpaListeners() {
+    window.addEventListener('single-spa:first-mount', this._onFirstMount.bind(this));
+    window.addEventListener('single-spa:before-routing-event', this._beforeRouting.bind(this));
   }
 
   protected _pathPrefix(location: Location, activeWhen: IPluginConfig['activeWhen']) {

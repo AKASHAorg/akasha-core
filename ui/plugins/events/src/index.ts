@@ -13,5 +13,6 @@ export default {
   },
   loadingFn: (): Promise<Lifecycles> => import('./components'),
   name: 'ui-plugin-events',
-  services: []
+  services: [],
+  title: 'AKASHA Events'
 };
