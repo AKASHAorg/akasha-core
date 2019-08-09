@@ -3,14 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@akashaproject/ui-plugin-events": "*",
+    "@akashaproject/ui-plugin-loader": "*",
     "@types/node": "12.6.8",
     "@types/react": "16.8.24",
     "@types/react-dom": "16.8.5",
+    "@types/styled-components": "^4.1.18",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-scripts": "^3.0.0",
-    "@akashaproject/ui-plugin-loader": "*",
-    "@akashaproject/ui-plugin-events": "*"
+    "styled-components": "^4.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
