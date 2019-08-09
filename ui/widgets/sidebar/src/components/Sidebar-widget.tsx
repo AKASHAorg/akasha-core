@@ -1,5 +1,6 @@
-import { Component } from 'react';
-import React from 'react';
+import React, { PureComponent } from 'react';
+// @ts-ignore
+import styled from 'styled-components';
 
 export interface IProps {
   removeMe: bigint;
@@ -15,7 +16,17 @@ export interface IProps {
  * @warning :: Always use default export
  */
 
-export default class App extends Component<IProps> {
+const SidebarWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 64px;
+  box-shadow: 0 0 2px 1px #dadada;
+  background-color: #0588e6;
+`;
+
+export default class SidebarWidget extends PureComponent<IProps> {
   public state: { hasErrors: boolean };
 
   constructor(props: IProps) {
@@ -35,8 +46,8 @@ export default class App extends Component<IProps> {
 
   public render() {
     if (this.state.hasErrors) {
-      return <div>Oh no, something went wrong in {'events-app'}</div>;
+      return <div>Oh no, something went wrong in sidebar-widget</div>;
     }
-    return <div>Events plugin loaded!</div>;
+    return <SidebarWrapper></SidebarWrapper>;
   }
 }
