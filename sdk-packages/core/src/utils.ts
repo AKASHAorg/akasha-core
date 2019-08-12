@@ -1,5 +1,4 @@
 import IDIContainer from '@akashaproject/sdk-runtime/lib/IDIContainer';
-import { CallableService } from '@akashaproject/sdk-runtime/lib/IDIContainer';
 import R from 'ramda';
 import {
   AkashaService,
