@@ -20,8 +20,8 @@ const start = (
   return buildModuleServiceChannels(mList, sendChanel);
 };
 
-export default async function init(options = { start: true }) {
-  const di: DIContainer = await initDI();
+export default function init(options = { start: true }) {
+  const di: DIContainer = initDI();
   const commonModule = registerCommonModule();
   let modules: IModuleCallableService;
   // list of all the registered modules for the sdk

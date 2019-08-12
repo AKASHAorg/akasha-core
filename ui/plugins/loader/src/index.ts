@@ -32,7 +32,7 @@ export default class AppLoader {
     this.config = config;
     this.plugins = [];
   }
-  public registerPlugin(plugin: IPlugin, pluginConfig: IPluginConfig): void {
+  public registerPlugin(plugin: IPlugin, pluginConfig: IPluginConfig, sdkModules?: any[] ): void {
     if (this._validatePlugin(plugin)) {
       if (pluginConfig.activeWhen && pluginConfig.activeWhen.path) {
         plugin.activeWhen = pluginConfig.activeWhen;

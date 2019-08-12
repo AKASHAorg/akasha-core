@@ -8,15 +8,16 @@
   ],
   "homepage": "https://github.com/AkashaProject/akasha-sdk-js#readme",
   "license": "AGPL-3.0",
-  "main": "lib/akasha-sdk.cjs.js",
-  "module": "lib/akasha-sdk.esm.js",
-  "browser": "lib/akasha-sdk.umd.js",
+  "main": "lib/index.js",
+  "module": "dist/sdk.esm.js",
+  "browser": "dist/sdk.umd.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
   },
   "files": [
-    "lib"
+    "lib",
+    "dist"
   ],
   "repository": {
     "type": "git",
@@ -25,7 +26,7 @@
   "scripts": {
     "test": "jest",
     "tsc": "tsc --build",
-    "build": "NODE_OPTIONS='--max-old-space-size=2096' rollup -c",
+    "build": "rimraf dist && NODE_OPTIONS='--max-old-space-size=2096' rollup -c rollup.config.js",
     "docs": "typedoc"
   },
   "bugs": {
@@ -38,11 +39,10 @@
     "rxjs": "6.5.2"
   },
   "devDependencies": {
-    "rollup": "^1.0.0",
-    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup": "^1.19.4",
+    "rollup-plugin-commonjs": "^10.0.2",
     "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^4.0.0",
-    "rollup-plugin-terser": "^5.0.0",
-    "rollup-plugin-typescript": "^1.0.0"
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.1.1"
   }
 }

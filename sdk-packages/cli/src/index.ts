@@ -11,7 +11,7 @@ const inquirer = require('inquirer');
 const chalk = require('chalk');
 
 (async () => {
-  const tools = await initSdk();
+  const tools = initSdk();
   // tslint:disable-next-line:no-console
   console.log(tools.modules);
   console.log(chalk.green('AKASHA-SDK cli is ready!'));
