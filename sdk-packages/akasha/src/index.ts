@@ -7,13 +7,13 @@ import {
   buildModuleServiceChannels,
   IModuleCallableService,
   SendChannel,
-  startServices
+  startServices,
 } from './utils';
 
 const start = (
   mList: IAkashaModule[],
   di: DIContainer,
-  sendChanel: SendChannel
+  sendChanel: SendChannel,
 ): IModuleCallableService => {
   startServices(mList, di);
   // build the module services for the sdk consumer

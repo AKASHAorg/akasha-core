@@ -32,7 +32,7 @@ export default class AppLoader {
     this.config = config;
     this.plugins = [];
   }
-  public registerPlugin(plugin: IPlugin, pluginConfig: IPluginConfig, sdkModules?: any[] ): void {
+  public registerPlugin(plugin: IPlugin, pluginConfig: IPluginConfig, sdkModules?: any[]): void {
     if (this._validatePlugin(plugin)) {
       if (pluginConfig.activeWhen && pluginConfig.activeWhen.path) {
         plugin.activeWhen = pluginConfig.activeWhen;
@@ -59,8 +59,9 @@ export default class AppLoader {
         {
           ...this.config,
           ...pluginConfig,
-          domElement: domEl
-        }
+          domElement: domEl,
+          sdkModules: Object.fromEntries(sdkModules),
+        },
       );
       // @todo: add logger
       // tslint:disable-next-line:no-console
@@ -93,7 +94,7 @@ export default class AppLoader {
       // @ts-ignore
       (mountTimeEnd - mountTimeStart) / 1000,
       'seconds to load plugins:',
-      this.getPluginsForLocation(window.location)
+      this.getPluginsForLocation(window.location),
     );
   }
 
@@ -105,15 +106,15 @@ export default class AppLoader {
         this.plugins.reduce((prev, curr): IPlugin[] => {
           prev.push({ title: curr.title, activeWhen: curr.activeWhen });
           return prev;
-        }, [])
+        }, []),
       );
       rootEl.innerHTML = FourOhFourString;
     } else {
       setPageTitle(
         this.plugins.filter(
           plugin =>
-            this.getPluginsForLocation(window.location).includes(plugin.name) && plugin.title
-        )
+            this.getPluginsForLocation(window.location).includes(plugin.name) && plugin.title,
+        ),
       );
     }
   }
