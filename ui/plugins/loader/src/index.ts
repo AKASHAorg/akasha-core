@@ -1,3 +1,4 @@
+import pino from 'pino';
 import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
 import { setPageTitle } from './setPageMetadata';
@@ -28,9 +29,11 @@ export interface ILoaderConfig {
 export default class AppLoader {
   public config: ILoaderConfig;
   public plugins: IPlugin[];
+  private appLogger;
   constructor(config: ILoaderConfig) {
     this.config = config;
     this.plugins = [];
+    this.appLogger = pino({ browser: { asObject: true } });
   }
   public registerPlugin(plugin: IPlugin, pluginConfig: IPluginConfig, sdkModules?: any[]): void {
     if (this._validatePlugin(plugin)) {
@@ -60,20 +63,18 @@ export default class AppLoader {
           ...this.config,
           ...pluginConfig,
           domElement: domEl,
+          logger: this.appLogger.child({ plugin: pluginId }),
           sdkModules: Object.fromEntries(sdkModules),
         },
       );
-      // @todo: add logger
-      // tslint:disable-next-line:no-console
-      console.info(`[@akashaproject/ui-plugin-loader]: ${plugin.name} registered!`);
+      this.appLogger.info(`[@akashaproject/ui-plugin-loader]: ${plugin.name} registered!`);
     } else {
       throw new Error(`[@akashaproject/ui-plugin-loader]: Plugin ${plugin.name} is not valid`);
     }
   }
 
   public start() {
-    // tslint:disable-next-line:no-console
-    console.info('[@akashaproject/ui-plugin-loader]: starting single spa');
+    this.appLogger.info('[@akashaproject/ui-plugin-loader]: starting single spa');
     this._registerSpaListeners();
     singleSpa.start();
   }
@@ -88,8 +89,7 @@ export default class AppLoader {
 
   protected _onFirstMount() {
     const mountTimeEnd = performance.now();
-    // tslint:disable-next-line:no-console
-    console.info(
+    this.appLogger.info(
       '[AppLoader]: took',
       // @ts-ignore
       (mountTimeEnd - mountTimeStart) / 1000,

@@ -7,6 +7,7 @@ import styled from 'styled-components';
 
 export interface IProps {
   sdkModules: any;
+  logger: any;
 }
 
 /**
@@ -56,14 +57,14 @@ export default class App extends PureComponent<IProps> {
     this.setState({
       hasErrors: true,
     });
-    // tslint:disable-next-line:no-console
-    console.error(err, info);
+    const { logger } = this.props;
+    logger.error(err, info);
   }
 
   // @TODO: remove this after having a real use-case
   public onClickSdk = () => {
-    const { sdkModules } = this.props;
-    // tslint:disable-next-line:no-console
+    const { sdkModules, logger } = this.props;
+    logger.info('sdk call');
     const callMethod = sdkModules.commons.validator_service({ method: 'validator', args: {} });
     callMethod.subscribe(subConsumer);
   };
