@@ -11,7 +11,7 @@ const inquirer = require('inquirer');
 const chalk = require('chalk');
 
 (async () => {
-  const tools = await initSdk();
+  const tools = initSdk();
   // tslint:disable-next-line:no-console
   console.log(tools.modules);
   console.log(chalk.green('AKASHA-SDK cli is ready!'));
@@ -20,8 +20,8 @@ const chalk = require('chalk');
     {
       type: 'confirm',
       name: 'startIpfs',
-      message: 'Start js-ipfs instance?'
-    }
+      message: 'Start js-ipfs instance?',
+    },
   ]);
 
   let ipfsNode, web3Provider, exitCli, wallet;
@@ -35,7 +35,7 @@ const chalk = require('chalk');
   const network = await web3Provider.getNetwork();
   const blockNumber = await web3Provider.getBlockNumber();
   console.log(
-    chalk.green('connected to ethereum<<<', network.name, '>>>network on block:', blockNumber)
+    chalk.green('connected to ethereum<<<', network.name, '>>>network on block:', blockNumber),
   );
 
   const consumeWeb3Provider = async function(provider) {
@@ -69,8 +69,8 @@ const chalk = require('chalk');
         type: 'list',
         name: 'option',
         message: 'Select an action',
-        choices: [SIGN_MESSAGE, VERIFY_MESSAGE, EXIT]
-      }
+        choices: [SIGN_MESSAGE, VERIFY_MESSAGE, EXIT],
+      },
     ]);
     exitCli = handler.option === EXIT;
     if (handler.option === EXIT && ipfsNode) {
@@ -84,13 +84,13 @@ const chalk = require('chalk');
         {
           type: 'input',
           name: 'value',
-          message: 'Message to be signed:'
-        }
+          message: 'Message to be signed:',
+        },
       ]);
       const signedMsg = await wallet.signMessage(message.value);
       console.log(
         chalk.italic('original message:', message.value),
-        chalk.yellow('signed message: ', signedMsg)
+        chalk.yellow('signed message: ', signedMsg),
       );
     }
 
@@ -99,13 +99,13 @@ const chalk = require('chalk');
         {
           type: 'input',
           name: 'raw',
-          message: 'Original message:'
+          message: 'Original message:',
         },
         {
           type: 'input',
           name: 'sig',
-          message: 'Signature:'
-        }
+          message: 'Signature:',
+        },
       ]);
       const utilsProvider = invoke(commonServices.WEB3_UTILS_SERVICE).utils();
       const ethAddressFound = await utilsProvider.verifyMessage(messageV.raw, messageV.sig);

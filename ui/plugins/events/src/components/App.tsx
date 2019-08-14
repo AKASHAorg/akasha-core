@@ -12,6 +12,8 @@ export interface IProps {
   };
   mountParcel: (config: any, props: any) => void;
   rootNodeId: string;
+  sdkModules: any;
+  logger: any;
 }
 
 /**
@@ -36,23 +38,37 @@ const Page = styled.div`
   margin-left: 64px;
   padding-left: 16px;
 `;
+
+// this example is to showcase how the consumers can be outside of component, reusable
+// maybe react hooks call inside?
+// tslint:disable-next-line:no-console
+const subConsumer = (data: any) => console.log('sdkModule call', data);
+
 export default class App extends PureComponent<IProps> {
   public state: { hasErrors: boolean };
 
   constructor(props: IProps) {
     super(props);
     this.state = {
-      hasErrors: false
+      hasErrors: false,
     };
   }
 
   public componentDidCatch(err: Error, info: React.ErrorInfo) {
     this.setState({
-      hasErrors: true
+      hasErrors: true,
     });
-    // tslint:disable-next-line:no-console
-    console.error(err, info);
+    const { logger } = this.props;
+    logger.error(err, info);
   }
+
+  // @TODO: remove this after having a real use-case
+  public onClickSdk = () => {
+    const { sdkModules, logger } = this.props;
+    logger.info('sdk call');
+    const callMethod = sdkModules.commons.validator_service({ method: 'validator', args: {} });
+    callMethod.subscribe(subConsumer);
+  };
 
   public render() {
     if (this.state.hasErrors) {
@@ -63,6 +79,9 @@ export default class App extends PureComponent<IProps> {
         <PageLayout>
           <Page>
             <Routes {...this.props} />
+            <button onClick={this.onClickSdk} type={'button'}>
+              sdk-common
+            </button>
           </Page>
         </PageLayout>
         <Parcel

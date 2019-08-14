@@ -7,21 +7,21 @@ import {
   buildModuleServiceChannels,
   IModuleCallableService,
   SendChannel,
-  startServices
+  startServices,
 } from './utils';
 
 const start = (
   mList: IAkashaModule[],
   di: DIContainer,
-  sendChanel: SendChannel
+  sendChanel: SendChannel,
 ): IModuleCallableService => {
   startServices(mList, di);
   // build the module services for the sdk consumer
   return buildModuleServiceChannels(mList, sendChanel);
 };
 
-export default async function init(options = { start: true }) {
-  const di: DIContainer = await initDI();
+export default function init(options = { start: true }) {
+  const di: DIContainer = initDI();
   const commonModule = registerCommonModule();
   let modules: IModuleCallableService;
   // list of all the registered modules for the sdk

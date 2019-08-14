@@ -21,7 +21,7 @@
     "url": "git+https://github.com/AkashaProject/akasha-sdk-js.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
+    "test": "jest",
     "tsc": "tsc --build",
     "docs": "typedoc"
   },
@@ -33,6 +33,6 @@
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-runtime": "*",
     "ethers": "4.0.27",
-    "ipfs": "^0.36.3"
+    "ipfs": "^0.37.0"
   }
 }

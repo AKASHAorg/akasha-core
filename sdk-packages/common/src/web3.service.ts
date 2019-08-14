@@ -3,7 +3,7 @@ import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import {
   createServiceMethod,
   registerServiceMethods,
-  toNamedService
+  toNamedService,
 } from '@akashaproject/sdk-core/lib/utils';
 import { ethers } from 'ethers';
 import { WEB3_SERVICE } from './constants';

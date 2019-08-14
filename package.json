@@ -6,20 +6,27 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "bootstrap-hoist": "lerna bootstrap --hoist",
+    "bootstrap:hoist": "lerna bootstrap --hoist",
     "build": "lerna clean && lerna bootstrap && lerna run tsc && lerna run build",
+    "build:sdk": "lerna run build --scope @akashaproject/sdk",
+    "clean": "lerna clean",
     "docs": "lerna run docs --scope @akashaproject/sdk --scope @akashaproject/sdk-common",
-    "test": "lerna run test",
-    "tsc": "lerna run tsc --scope @akashaproject/sdk --scope @akashaproject/sdk-*",
+    "fresh-install": "npm run clean && npm run bootstrap",
+    "test:sdk": "lerna run test --scope @akashaproject/sdk-runtime --stream",
+    "tsc:sdk": "lerna run tsc --scope @akashaproject/sdk --scope @akashaproject/sdk-*",
+    "tsc:ui": "lerna run tsc --scope @akashaproject/ui-*",
     "watch-plugin-events": "lerna exec --parallel --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-widget-sidebar --scope @akashaproject/ui-plugin-events -- tsc -w",
     "start-events-app": "npm run start --prefix playground/events-app"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.17",
     "@types/node": "10.14.6",
-    "husky": "3.0.2",
+    "husky": "^3.0.3",
+    "jest": "^24.8.0",
     "lerna": "3.16.4",
     "prettier": "1.18.2",
     "pretty-quick": "^1.11.1",
+    "ts-jest": "^24.0.2",
     "tslint": "5.18.0",
     "tslint-config-prettier": "1.18.0",
     "typedoc": "^0.15.0",
@@ -27,7 +34,7 @@
   },
   "workspaces": [
     "sdk-packages/*",
-    "ui-plugins/*"
+    "ui/*"
   ],
   "husky": {
     "hooks": {
