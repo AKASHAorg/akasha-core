@@ -8,7 +8,7 @@ export interface IEventHomePageProps {
 
 const EventHomePage: React.FC<IEventHomePageProps> = props => {
   const { rootPath } = props;
-  console.log(props, 'the props');
+
   return (
     <div>
       Events List

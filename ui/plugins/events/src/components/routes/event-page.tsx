@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
+import { match as matchType, RouteComponentProps } from 'react-router';
 
-export interface IEventPageProps {}
+export interface IEventPageProps {
+  match: matchType;
+}
 
 const EventPage: React.FC<IEventPageProps & RouteComponentProps<{ eventId: string }>> = props => {
   const { match } = props;
