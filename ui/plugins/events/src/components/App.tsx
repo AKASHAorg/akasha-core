@@ -4,9 +4,14 @@ import React, { PureComponent } from 'react';
 import Parcel from 'single-spa-react/parcel';
 // @ts-ignore
 import styled from 'styled-components';
+import Routes from './routes';
 
 export interface IProps {
-  removeMe: bigint;
+  activeWhen: {
+    path: string;
+  };
+  mountParcel: (config: any, props: any) => void;
+  rootNodeId: string;
 }
 
 /**
@@ -30,11 +35,6 @@ const Page = styled.div`
   height: 100%;
   margin-left: 64px;
   padding-left: 16px;
-  // remove this
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
 `;
 export default class App extends PureComponent<IProps> {
   public state: { hasErrors: boolean };
@@ -61,7 +61,9 @@ export default class App extends PureComponent<IProps> {
     return (
       <>
         <PageLayout>
-          <Page>Events Page!</Page>
+          <Page>
+            <Routes {...this.props} />
+          </Page>
         </PageLayout>
         <Parcel
           config={SidebarWidget.widget}
