@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Switch, match } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import EventPage from './event-page';
 import EventsHomePage from './events-home-page';
 
@@ -13,7 +13,6 @@ const Routes: React.FC<IRoutesProps> = props => {
     <>
       <Router>
         <Switch>
-          {/* tslint:disable-next-line: no-shadowed-variable */}
           <Route
             exact
             path={`${activeWhen.path}`}
