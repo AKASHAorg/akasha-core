@@ -1,12 +1,25 @@
 root = true
 [*]
-end_of_line = lf
-insert_final_newline = true
-
-[*.{js,json,ts}]
-charset = utf-8
 indent_style = space
 indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
 
+[*.{js,ts,tsx}]
+indent_style = space
+indent_size = 2
 max_line_length = 100
 
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.json]
+indent_size = 2
+
+[*.{html,js,md,ts,tsx}]
+block_comment_start = /**
+block_comment = *
+block_comment_end = */

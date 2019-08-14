@@ -7,7 +7,7 @@ const service: AkashaService = () => {
 
   // global container for settings
   const coreSettings = {
-    [settingsSymbol]: new Map()
+    [settingsSymbol]: new Map(),
   };
 
   const getSettings = (moduleName: ICoreSettings['moduleName']) => {

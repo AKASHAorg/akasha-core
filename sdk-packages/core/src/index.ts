@@ -8,6 +8,7 @@ class CoreModule extends IAkashaModule {
   public availableServices(): IAkashaModuleServices {
     return {};
   }
+
   // tslint:disable-next-line:no-empty
   protected init(di: DIContainer): void {
     R.T();

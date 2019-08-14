@@ -3,7 +3,7 @@ import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import {
   createServiceMethod,
   registerServiceMethods,
-  toNamedService
+  toNamedService,
 } from '@akashaproject/sdk-core/lib/utils';
 import Stash from '@akashaproject/sdk-runtime/lib/Stash';
 import { CACHE_SERVICE } from './constants';

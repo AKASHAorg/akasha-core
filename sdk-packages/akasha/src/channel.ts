@@ -10,7 +10,7 @@ export default function init(di: IDIContainer) {
   // call any registered service and create an Observable
   const send: SendChannel = (
     servicePath: AkashaServicePath,
-    payload: { method: string; args: object }
+    payload: { method: string; args: object },
   ): Observable<any> => {
     const service = invoke(servicePath)(payload.method);
     return callChannelService(service, payload.args);

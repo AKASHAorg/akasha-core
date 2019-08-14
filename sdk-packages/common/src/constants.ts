@@ -24,6 +24,6 @@ const services: IAkashaModuleServices = {
   [CACHE_SERVICE]: servicePath(CACHE_SERVICE),
   [WEB3_SERVICE]: servicePath(WEB3_SERVICE),
   [WEB3_UTILS_SERVICE]: servicePath(WEB3_UTILS_SERVICE),
-  [IPFS_SERVICE]: servicePath(IPFS_SERVICE)
+  [IPFS_SERVICE]: servicePath(IPFS_SERVICE),
 };
 export default services;
