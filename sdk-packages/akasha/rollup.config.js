@@ -7,23 +7,26 @@ export default [
   {
     input: 'lib/index.js',
     treeshake: true,
-    output: [{
-      file: 'dist/sdk.esm.js',
-      format: 'esm',
-      sourcemap: true,
-      dynamicImportFunction: 'importShim',
-    },{
-      file: 'dist/sdk.umd.js',
-      format: 'umd',
-      name: 'akasha-sdk',
-      sourcemap: true,
-      dynamicImportFunction: 'importShim',
-    }],
+    output: [
+      {
+        file: 'dist/sdk.esm.js',
+        format: 'esm',
+        sourcemap: true,
+        dynamicImportFunction: 'importShim',
+      },
+      {
+        file: 'dist/sdk.umd.js',
+        format: 'umd',
+        name: 'akasha-sdk',
+        sourcemap: true,
+        dynamicImportFunction: 'importShim',
+      },
+    ],
     plugins: [
-      json({preferConst: true}),
+      json({ preferConst: true }),
       resolve({ browser: true, preferBuiltins: true }),
       commonjs(),
-      terser()
-    ]
-  }
+      terser(),
+    ],
+  },
 ];

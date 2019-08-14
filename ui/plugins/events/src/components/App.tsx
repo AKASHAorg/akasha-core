@@ -4,8 +4,14 @@ import React, { PureComponent } from 'react';
 import Parcel from 'single-spa-react/parcel';
 // @ts-ignore
 import styled from 'styled-components';
+import Routes from './routes';
 
 export interface IProps {
+  activeWhen: {
+    path: string;
+  };
+  mountParcel: (config: any, props: any) => void;
+  rootNodeId: string;
   sdkModules: any;
   logger: any;
 }
@@ -31,11 +37,6 @@ const Page = styled.div`
   height: 100%;
   margin-left: 64px;
   padding-left: 16px;
-  // remove this
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
 `;
 
 // this example is to showcase how the consumers can be outside of component, reusable
@@ -77,7 +78,7 @@ export default class App extends PureComponent<IProps> {
       <>
         <PageLayout>
           <Page>
-            Events Page!
+            <Routes {...this.props} />
             <button onClick={this.onClickSdk} type={'button'}>
               sdk-common
             </button>

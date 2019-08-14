@@ -8,10 +8,10 @@ export default {
   // Make sure to change it as it fits.
   activeWhen: {
     exact: true,
-    path: '/events'
+    path: '/events',
   },
   loadingFn: (): Promise<Lifecycles> => import('./components'),
   name: 'ui-plugin-events',
   services: [],
-  title: 'AKASHA Events'
+  title: 'AKASHA Events',
 };
