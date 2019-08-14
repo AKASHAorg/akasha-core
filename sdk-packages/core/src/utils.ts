@@ -5,7 +5,7 @@ import {
   AkashaServiceMethods,
   AkashaServicePath,
   IAkashaModule,
-  IAkashaNamedService
+  IAkashaNamedService,
 } from './IAkashaModule';
 
 // to not import explicit the module interface just for getting the serviceName
@@ -51,7 +51,7 @@ export function createServiceMethod(method: object) {
 }
 
 export function invokeServiceMethod(
-  method: string
+  method: string,
 ): R.CurriedFunction2<object, AkashaServiceMethods, any> {
   return R.curry(R.invoker(1, method));
 }
@@ -60,7 +60,7 @@ function _callServiceMethod(
   di: IDIContainer,
   servicePath: AkashaServicePath,
   method: string,
-  args?: object
+  args?: object,
 ) {
   const service = callService(di)(servicePath);
   const callMethod = invokeServiceMethod(method);

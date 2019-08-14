@@ -22,7 +22,8 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "single-spa": "^4.3.7"
+    "single-spa": "^4.3.7",
+    "pino": "^5.13.2"
   },
   "devDependencies": {},
   "files": [

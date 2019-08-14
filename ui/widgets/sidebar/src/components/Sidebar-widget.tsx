@@ -32,13 +32,13 @@ export default class SidebarWidget extends PureComponent<IProps> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      hasErrors: false
+      hasErrors: false,
     };
   }
 
   public componentDidCatch(err: Error, info: React.ErrorInfo) {
     this.setState({
-      hasErrors: true
+      hasErrors: true,
     });
     // tslint:disable-next-line:no-console
     console.error(err, info);
@@ -48,6 +48,6 @@ export default class SidebarWidget extends PureComponent<IProps> {
     if (this.state.hasErrors) {
       return <div>Oh no, something went wrong in sidebar-widget</div>;
     }
-    return <SidebarWrapper></SidebarWrapper>;
+    return <SidebarWrapper />;
   }
 }

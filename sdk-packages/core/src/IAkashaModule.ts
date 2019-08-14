@@ -9,7 +9,7 @@ export interface IAkashaNamedService {
 
 export type AkashaServiceMethods = R.Variadic<object>;
 export type AkashaService = (
-  serviceInvoker: R.CurriedFunction1<[string, string], any>
+  serviceInvoker: R.CurriedFunction1<[string, string], any>,
 ) => AkashaServiceMethods;
 
 export type AkashaServicePath = [string, string];
@@ -56,7 +56,7 @@ export abstract class IAkashaModule {
     for (const provider of services) {
       const wrappedService = IAkashaModule.wrapService(
         provider.service(callService(di)),
-        provider.name
+        provider.name,
       );
       const serviceName = IAkashaModule.getServiceName(this.name, provider.name);
       di.register(serviceName, wrappedService);

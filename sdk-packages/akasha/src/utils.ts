@@ -5,14 +5,17 @@ import { Observable } from 'rxjs';
 
 export type SendChannel = (
   servicePath: AkashaServicePath,
-  payload: { method: string; args: object }
+  payload: { method: string; args: object },
 ) => Observable<any>;
+
 export interface IProxyCallableService {
   [x: string]: CallableService;
 }
+
 export interface IModuleCallableService {
   [y: string]: IProxyCallableService;
 }
+
 /**
  *
  * @param servicePath
@@ -21,7 +24,7 @@ const channelCaller = (servicePath: AkashaServicePath) => {
   return {
     apply(target, thisArg, argumentsList: [object]) {
       return target(servicePath, argumentsList[0]);
-    }
+    },
   };
 };
 
@@ -40,7 +43,7 @@ export function createCallableService(servicePath: AkashaServicePath, channelSen
  */
 export function extractCallableServices(
   currentModule: IAkashaModule,
-  channelSend: SendChannel
+  channelSend: SendChannel,
 ): IModuleCallableService {
   const exportedCommonServices: IProxyCallableService = {};
   const services = currentModule.availableServices();
@@ -48,7 +51,7 @@ export function extractCallableServices(
     const servicePath: AkashaServicePath = services[serviceName];
     exportedCommonServices[serviceName.toLowerCase()] = createCallableService(
       servicePath,
-      channelSend
+      channelSend,
     );
   }
   return { [currentModule.name]: exportedCommonServices };
@@ -61,7 +64,7 @@ export function extractCallableServices(
  */
 export function buildModuleServiceChannels(
   modules: IAkashaModule[],
-  channelSend: SendChannel
+  channelSend: SendChannel,
 ): IModuleCallableService {
   const channels: IModuleCallableService = {};
   for (const currentModule of modules) {

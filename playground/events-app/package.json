@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@akashaproject/sdk": "*",
     "@akashaproject/ui-plugin-events": "*",
     "@akashaproject/ui-plugin-loader": "*",
     "@types/node": "12.6.8",
@@ -16,7 +17,7 @@
     "styled-components": "^4.3.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "NODE_OPTIONS='--max-old-space-size=2096' react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

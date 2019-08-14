@@ -5,11 +5,11 @@ export default function getProvider(getSettings: CallableFunction) {
   const moduleSettings = getSettings(moduleName);
 
   const networkSettings = moduleSettings.find(
-    serviceSettings => serviceSettings[0] === ETH_NETWORK
+    serviceSettings => serviceSettings[0] === ETH_NETWORK,
   );
   // check if there is already a provider set(ex: Metamask)
   const existingProvider = moduleSettings.find(
-    serviceSettings => serviceSettings[0] === WEB3_PROVIDER
+    serviceSettings => serviceSettings[0] === WEB3_PROVIDER,
   );
 
   if (existingProvider) {
