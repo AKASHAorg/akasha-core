@@ -12,7 +12,7 @@
     "clean": "lerna clean",
     "docs": "lerna run docs --scope @akashaproject/sdk --scope @akashaproject/sdk-common",
     "fresh-install": "npm run clean && npm run bootstrap",
-    "test:sdk": "lerna run test --scope @akashaproject/sdk-runtime --stream",
+    "test:sdk": "lerna run test --scope @akashaproject/sdk-* --stream",
     "tsc:sdk": "lerna run tsc --scope @akashaproject/sdk --scope @akashaproject/sdk-*",
     "tsc:ui": "lerna run tsc --scope @akashaproject/ui-*",
     "watch-plugin-events": "lerna exec --parallel --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-widget-sidebar --scope @akashaproject/ui-plugin-events -- tsc -w",

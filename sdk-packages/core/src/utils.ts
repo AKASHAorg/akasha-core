@@ -60,7 +60,7 @@ function _callServiceMethod(
   di: IDIContainer,
   servicePath: AkashaServicePath,
   method: string,
-  args?: object,
+  args: any,
 ) {
   const service = callService(di)(servicePath);
   const callMethod = invokeServiceMethod(method);
