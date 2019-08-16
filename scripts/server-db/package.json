@@ -1,17 +1,15 @@
 {
-  "name": "@akashaproject/sdk-common",
-  "version": "0.1.0",
-  "description": "> TODO: description",
+  "name": "@akashaproject/script-server-db",
+  "private": true,
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
   ],
   "homepage": "https://github.com/AkashaProject/akasha-sdk-js#readme",
-  "license": "AGPL-3.0",
-  "main": "lib/index.js",
+  "license": "Apache-2.0",
+  "main": "lib/main.js",
   "directories": {
-    "lib": "lib",
-    "test": "__tests__"
+    "lib": "lib"
   },
   "files": [
     "lib"
@@ -21,20 +19,15 @@
     "url": "git+https://github.com/AkashaProject/akasha-sdk-js.git"
   },
   "scripts": {
-    "test": "jest",
-    "tsc": "tsc --build",
-    "docs": "typedoc"
+    "tsc": "tsc --project tsconfig.json",
+    "start": "npm run tsc && node lib/main.js"
   },
   "bugs": {
     "url": "https://github.com/AkashaProject/akasha-sdk-js/issues"
   },
   "dependencies": {
-    "@akashaproject/jsonschema-web3": "^1.0.3",
-    "@akashaproject/sdk-core": "*",
-    "@akashaproject/sdk-runtime": "*",
-    "ethers": "4.0.27",
-    "ipfs": "^0.37.0",
-    "pouchdb-adapter-idb": "^7.1.1",
-    "rxdb": "^8.3.0"
+    "pouchdb-adapter-memory": "^7.1.1",
+    "rxdb": "^8.3.0",
+    "rxjs": "^6.5.2"
   }
 }

@@ -7,6 +7,7 @@ export const WEB3_SERVICE = 'WEB3_SERVICE';
 export const WEB3_WALLET_SERVICE = 'WEB3_WALLET_SERVICE';
 export const WEB3_UTILS_SERVICE = 'WEB3_UTILS_SERVICE';
 export const IPFS_SERVICE = 'IPFS_SERVICE';
+export const DB_SERVICE = 'DB_SERVICE';
 
 // ethereum chain id
 export const ETH_NETWORK = 'eth_network';
@@ -14,6 +15,8 @@ export const ETH_NETWORK = 'eth_network';
 export const IPFS_GATEWAY = 'ipfs_gateway';
 // value to check when the web3 connector should connect to the existing web3 provider(like Metamask)
 export const WEB3_PROVIDER = 'WEB3_PROVIDER';
+// just for testing purpose
+export const DB_SYNC_ENDPOINT = 'http://localhost:3000/db';
 
 export const moduleName = 'commons';
 const servicePath = buildServicePath(moduleName);
