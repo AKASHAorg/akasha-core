@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "lib": ["es6", "dom", "es2017"]
+  },
+  "references": [
+    {
+      "path": "../runtime"
+    },
+    {
+      "path": "../core"
+    }
+  ],
+  "include": ["./src"]
+}
