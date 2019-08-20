@@ -4,8 +4,8 @@
   "jsRules": {},
   "rules": {
     "object-literal-sort-keys": false,
-    "interface-over-type-literal": false,
-    "object-literal-shorthand": false
+    "object-literal-shorthand": false,
+    "interface-name": false
   },
   "rulesDirectory": []
 }

@@ -1,8 +1,8 @@
 import { RxDatabase } from 'rxdb';
 import { SettingsCollection } from './settings';
 
-type AKASHAdbCollections = {
+export interface AKASHAdbCollections {
   settings: SettingsCollection;
-};
+}
 
 export type AKASHAdb = RxDatabase<AKASHAdbCollections>;

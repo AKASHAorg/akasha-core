@@ -13,12 +13,18 @@ RxDB.plugin(MemoryAdapter);
 
   // create collection
   const mySchema = {
+    title: 'settings schema',
+    description: 'contains all the application settings for each ethAddress',
     version: 0,
     type: 'object',
+
     properties: {
+      ethAddress: {
+        type: 'string',
+        index: true,
+      },
       moduleName: {
         type: 'string',
-        primary: true,
       },
       services: {
         type: 'array',
@@ -26,6 +32,7 @@ RxDB.plugin(MemoryAdapter);
         items: {
           type: 'array',
           maxItems: 2,
+          minItems: 2,
           items: {
             type: 'string',
           },

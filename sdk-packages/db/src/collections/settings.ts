@@ -1,5 +1,6 @@
 import { fromEntries } from '@akashaproject/sdk-core/lib/utils';
 import {
+  SettingsCollection,
   SettingsCollectionMethods,
   SettingsDoc,
   SettingsDocMethods,
@@ -13,7 +14,7 @@ const settingsDocMethods: SettingsDocMethods = {
 };
 
 const settingsCollectionMethods: SettingsCollectionMethods = {
-  getAllSettings: async function(this: HeroCollection) {
+  getAllSettings: async function(this: SettingsCollection) {
     return await this.find().exec();
   },
 };

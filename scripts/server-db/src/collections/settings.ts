@@ -1,5 +1,6 @@
 export default [
   {
+    ethAddress: '0x123456976271829192424242a',
     moduleName: 'module',
     services: [
       ['service', 'settingsValue'],

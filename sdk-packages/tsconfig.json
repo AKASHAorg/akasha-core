@@ -9,6 +9,9 @@
     },
     {
       "path": "runtime"
+    },
+    {
+      "path": "db-storage"
     }
   ]
 }

@@ -1,20 +1,20 @@
 import { RxCollection, RxDocument } from 'rxdb';
 
-export type SettingsDocType = {
+export interface SettingsDocType {
   ethAddress: string;
   moduleName: string;
   services: Array<[string, any]>;
-};
+}
 
-export type SettingsDocMethods = {
+export interface SettingsDocMethods {
   getSettingsObject(): object;
-};
+}
 
 export type SettingsDoc = RxDocument<SettingsDocType, SettingsDocMethods>;
 
-export type SettingsCollectionMethods = {
-  getAllSettings: () => Promise<[]>;
-};
+export interface SettingsCollectionMethods {
+  getAllSettings: () => Promise<any[]>;
+}
 
 export type SettingsCollection = RxCollection<
   SettingsDocType,
