@@ -29,6 +29,9 @@ const settingsSchema: RxJsonSchema<SettingsDocType> = {
       },
     },
   },
+  attachments: {
+    encrypted: true,
+  },
 };
 
 export default settingsSchema;

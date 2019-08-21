@@ -13,7 +13,7 @@ export interface SettingsDocMethods {
 export type SettingsDoc = RxDocument<SettingsDocType, SettingsDocMethods>;
 
 export interface SettingsCollectionMethods {
-  getAllSettings: () => Promise<any[]>;
+  getAllSettings(ethAddress: string): Promise<SettingsDoc[]>;
 }
 
 export type SettingsCollection = RxCollection<

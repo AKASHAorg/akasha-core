@@ -8,14 +8,17 @@ import {
 import settingsSchema from '../schemas/settings';
 
 const settingsDocMethods: SettingsDocMethods = {
-  getSettingsObject: function(this: SettingsDoc) {
+  getSettingsObject(this: SettingsDoc) {
     return fromEntries(this.services);
   },
 };
 
 const settingsCollectionMethods: SettingsCollectionMethods = {
-  getAllSettings: async function(this: SettingsCollection) {
-    return await this.find().exec();
+  async getAllSettings(this: SettingsCollection, ethAddress: string) {
+    return await this.find()
+      .where('ethAddress')
+      .equals(ethAddress)
+      .exec();
   },
 };
 

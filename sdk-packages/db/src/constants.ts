@@ -1,5 +1,5 @@
-import { buildServicePath } from '@akashaproject/sdk-core/lib/utils';
 import { IAkashaModuleServices } from '@akashaproject/sdk-core/lib/IAkashaModule';
+import { buildServicePath } from '@akashaproject/sdk-core/lib/utils';
 
 export const DB_SERVICE = 'DB_SERVICE';
 // just for testing purpose
