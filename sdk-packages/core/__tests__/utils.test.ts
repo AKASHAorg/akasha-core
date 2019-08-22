@@ -4,10 +4,12 @@ import {
   callService,
   callServiceMethod,
   createServiceMethod,
+  fromEntries,
   getService,
   getServiceName,
   invokeServiceMethod,
   registerServiceMethods,
+  toEntries,
   toNamedService,
 } from '../src/utils';
 
@@ -100,4 +102,16 @@ test('callServiceMethod returns', () => {
   expect(callServiceMethod(di, servicePath, method, payload)).toStrictEqual(
     serviceMethod.qq(payload),
   );
+});
+
+test('fromEntries object creation', () => {
+  const entries: Array<[string, any]> = [['a', 1], ['b', 2]];
+  const obj = fromEntries(entries);
+  expect(obj).toStrictEqual({ a: 1, b: 2 });
+});
+
+test('toEntries list creation', () => {
+  const obj = { a: 1, b: 3 };
+  const path = toEntries(obj);
+  expect(path).toStrictEqual([['a', 1], ['b', 3]]);
 });
