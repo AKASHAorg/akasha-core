@@ -72,5 +72,5 @@ export abstract class IAkashaModule {
   protected abstract _name(): string;
 
   // get a list with instances of each service factory
-  protected abstract _registerServices(di): IAkashaNamedService[];
+  protected abstract _registerServices(di: DIContainer): IAkashaNamedService[];
 }

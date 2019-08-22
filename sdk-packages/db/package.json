@@ -30,13 +30,14 @@
   },
   "dependencies": {
     "@akashaproject/sdk-core": "*",
+    "@akashaproject/sdk-runtime": "*",
     "pouchdb-adapter-http": "^7.1.1",
     "pouchdb-adapter-idb": "^7.1.1",
-    "pouchdb-adapter-memory": "^7.1.1",
     "rxdb": "^8.3.0"
   },
   "devDependencies": {
     "jest": "^24.9.0",
-    "ts-jest": "^24.0.2"
+    "ts-jest": "^24.0.2",
+    "pouchdb-adapter-memory": "^7.1.1"
   }
 }

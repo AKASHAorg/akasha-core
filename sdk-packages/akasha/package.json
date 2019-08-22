@@ -36,6 +36,7 @@
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-common": "*",
     "@akashaproject/sdk-runtime": "*",
+    "@akashaproject/sdk-db": "*",
     "rxjs": "6.5.2"
   },
   "devDependencies": {
