@@ -13,7 +13,6 @@ export default [
         format: 'esm',
         sourcemap: true,
         dynamicImportFunction: 'importShim',
-        banner: 'AKASHA SDK',
       },
       {
         file: 'dist/sdk.umd.js',
@@ -21,7 +20,6 @@ export default [
         name: 'akasha-sdk',
         sourcemap: true,
         dynamicImportFunction: 'importShim',
-        banner: 'AKASHA SDK',
       },
     ],
     plugins: [
