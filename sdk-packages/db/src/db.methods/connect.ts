@@ -1,6 +1,6 @@
 import syncHTTPAdapter from 'pouchdb-adapter-http';
 import idb from 'pouchdb-adapter-idb';
-import RxDB from 'rxdb/dist/es';
+import RxDB from 'rxdb';
 import { AKASHAdb } from '../collection.types';
 
 // load plugins
