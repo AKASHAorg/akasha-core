@@ -19,12 +19,17 @@
   },
   "scripts": {
     "build": "tsc --build",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "extract:translations": "npx i18next src/components/**/*.tsx -r -c ./i18next-parser.config.js"
   },
   "dependencies": {
     "@akashaproject/ui-widget-sidebar": "*",
+    "@types/i18next": "^12.1.0",
+    "@types/react-i18next": "^8.1.0",
     "@types/react-router": "^5.0.3",
     "@types/react-router-dom": "^4.3.4",
+    "i18next-fetch-backend": "^2.2.0",
+    "react-i18next": "^10.12.2",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
     "single-spa-react": "^2.10.2"
@@ -33,6 +38,8 @@
     "@types/react": "^16.8.0",
     "@types/react-dom": "^16.8.0",
     "@types/single-spa-react": "^2.8.3",
+    "acorn-jsx": "4.x",
+    "i18next-parser": "^1.0.0-beta34",
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },

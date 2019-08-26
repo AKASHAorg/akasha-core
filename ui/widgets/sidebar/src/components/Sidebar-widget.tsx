@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, SyntheticEvent } from 'react';
 // @ts-ignore
 import styled from 'styled-components';
 
@@ -43,11 +43,24 @@ export default class SidebarWidget extends PureComponent<IProps> {
     // tslint:disable-next-line:no-console
     console.error(err, info);
   }
-
+  public handleLangChange(lang: string) {
+    return (ev: SyntheticEvent) => {
+      const evt = new CustomEvent('change-language', {
+        detail: lang,
+      });
+      document.dispatchEvent(evt);
+      ev.preventDefault();
+    };
+  }
   public render() {
     if (this.state.hasErrors) {
       return <div>Oh no, something went wrong in sidebar-widget</div>;
     }
-    return <SidebarWrapper />;
+    return (
+      <SidebarWrapper>
+        <div onClick={this.handleLangChange('en')}>EN</div>
+        <div onClick={this.handleLangChange('ro')}>RO</div>
+      </SidebarWrapper>
+    );
   }
 }

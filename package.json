@@ -16,7 +16,8 @@
     "tsc:sdk": "lerna run tsc --scope @akashaproject/sdk --scope @akashaproject/sdk-*",
     "tsc:ui": "lerna run tsc --scope @akashaproject/ui-*",
     "watch-plugin-events": "lerna exec --parallel --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-widget-sidebar --scope @akashaproject/ui-plugin-events -- tsc -w",
-    "start-events-app": "npm run start --prefix playground/events-app"
+    "start-events-app": "npm run start --prefix playground/events-app",
+    "start-translations-server": "npm run start --prefix scripts/translations-server"
   },
   "devDependencies": {
     "@types/jest": "^24.0.17",
@@ -34,7 +35,8 @@
   },
   "workspaces": [
     "sdk-packages/*",
-    "ui/*"
+    "ui/*",
+    "scripts/*"
   ],
   "husky": {
     "hooks": {

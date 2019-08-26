@@ -1,12 +1,11 @@
 {
-  "extends": "../../../tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
-    "lib": ["es6", "dom", "es2017"],
+    "lib": ["es6", "es2017"],
     "sourceMap": true,
     "allowJs": false,
-    "jsx": "react",
     "declaration": true,
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
@@ -19,10 +18,5 @@
     "noUnusedParameters": true,
     "resolveJsonModule": true
   },
-  "references": [
-    {
-      "path": "../loader"
-    }
-  ],
   "include": ["./src/**/*"]
 }

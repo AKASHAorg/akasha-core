@@ -1,5 +1,7 @@
 import SidebarWidget from '@akashaproject/ui-widget-sidebar';
+import { i18n as I18nType } from 'i18next';
 import React, { PureComponent } from 'react';
+import { I18nextProvider } from 'react-i18next';
 // @ts-ignore
 import Parcel from 'single-spa-react/parcel';
 // @ts-ignore
@@ -14,6 +16,7 @@ export interface IProps {
   rootNodeId: string;
   sdkModules: any;
   logger: any;
+  i18n: I18nType;
 }
 
 /**
@@ -44,7 +47,7 @@ const Page = styled.div`
 // tslint:disable-next-line:no-console
 const subConsumer = (data: any) => console.log('sdkModule call', data);
 
-export default class App extends PureComponent<IProps> {
+class App extends PureComponent<IProps> {
   public state: { hasErrors: boolean };
 
   constructor(props: IProps) {
@@ -69,13 +72,12 @@ export default class App extends PureComponent<IProps> {
     const callMethod = sdkModules.commons.validator_service({ method: 'validator', args: {} });
     callMethod.subscribe(subConsumer);
   };
-
   public render() {
     if (this.state.hasErrors) {
       return <div>Oh no, something went wrong in {'events-app'}</div>;
     }
     return (
-      <>
+      <I18nextProvider i18n={this.props.i18n}>
         <PageLayout>
           <Page>
             <Routes {...this.props} />
@@ -89,7 +91,9 @@ export default class App extends PureComponent<IProps> {
           appendTo={document.getElementById('root')}
           wrapWith="div"
         />
-      </>
+      </I18nextProvider>
     );
   }
 }
+
+export default App;
