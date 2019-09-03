@@ -11,10 +11,15 @@ import App from './App';
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: App
+  rootComponent: App,
 });
 
-export const bootstrap = reactLifecycles.bootstrap;
+const loadTranslations = async (props: any) => {
+  const defaultNS = props.i18nConfig.ns || props.name;
+  return await props.i18n.loadNamespaces([...props.i18nConfig.loadNS, defaultNS]);
+};
+
+export const bootstrap = [loadTranslations, reactLifecycles.bootstrap];
 
 export const mount = reactLifecycles.mount;
 

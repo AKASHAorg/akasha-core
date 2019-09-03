@@ -23,7 +23,7 @@ const EventHomePage: React.FC<IEventHomePageProps> = props => {
         <Link to={`${rootPath}/125`}>{t('Event')} 3</Link>
       </div>
       <div>
-        <Link to={`${rootPath}/not/found/event`}>{t('Not found event')}</Link>
+        <Link to={`${rootPath}/not/found/event`}>{t('Not.found.event')}</Link>
       </div>
     </div>
   );

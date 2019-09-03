@@ -23,7 +23,7 @@ export default {
     // i18next.use(arr[0]).use(arr[1]).use(arr[n])
     use: [initReactI18next],
   },
-  loadingFn: (): Promise<Lifecycles> => import('./components'),
+  loadingFn: (): Promise<any> => import('./components'),
   name: 'ui-plugin-events',
   services: [],
   title: 'AKASHA Events',

@@ -2,8 +2,8 @@ import { i18n as i18nType } from 'i18next';
 import pino from 'pino';
 import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
-import initI18n from './i18n';
 import { setPageTitle } from './setPageMetadata';
+import TranslationManager from './i18n';
 
 export interface II18nConfig {
   use: any[];
@@ -39,13 +39,15 @@ export default class AppLoader {
   public config: ILoaderConfig;
   public plugins: IPlugin[];
   private appLogger;
+  private translationManager;
   constructor(config: ILoaderConfig) {
     this.config = config;
     this.plugins = [];
     this.appLogger = pino({ browser: { asObject: true } });
+    this.translationManager = new TranslationManager(this.appLogger);
   }
 
-  public registerPlugin(
+  public async registerPlugin(
     plugin: IPlugin,
     pluginConfig: IPluginConfig,
     sdkModules?: any[],
@@ -67,28 +69,29 @@ export default class AppLoader {
         domEl.style.display = 'inline';
         rootEl.appendChild(domEl);
       }
-      return initI18n(plugin, this.appLogger)
-        .then(i18n => {
-          singleSpa.registerApplication(
-            plugin.name,
-            plugin.loadingFn,
-            (location: Location): boolean => {
-              return this._pathPrefix(location, plugin.activeWhen);
-            },
-            {
-              ...this.config,
-              ...pluginConfig,
-              domElement: domEl,
-              i18n,
-              logger: this.appLogger.child({ plugin: pluginId }),
-              sdkModules: Object.fromEntries(sdkModules),
-            },
-          );
-        })
-        .then(() =>
-          this.appLogger.info(`[@akashaproject/ui-plugin-loader]: ${plugin.name} registered!`),
-        )
-        .catch(err => this.appLogger.console.error('Error loading I18NEXT', err));
+      const i18nInstance = this.translationManager.createInstance(plugin);
+      await i18nInstance.init();
+      try {
+        singleSpa.registerApplication(
+          plugin.name,
+          plugin.loadingFn,
+          (location: Location): boolean => {
+            return this._pathPrefix(location, plugin.activeWhen);
+          },
+          {
+            ...this.config,
+            ...pluginConfig,
+            i18nConfig: plugin.i18nConfig,
+            domElement: domEl,
+            i18n: i18nInstance,
+            logger: this.appLogger.child({ plugin: pluginId }),
+            sdkModules: Object.fromEntries(sdkModules),
+          },
+        );
+        this.appLogger.info(`[@akashaproject/ui-plugin-loader]: ${plugin.name} registered!`);
+      } catch (ex) {
+        this.appLogger.error('Error registering plugin:', plugin.name, 'error:', ex);
+      }
     } else {
       throw new Error(`[@akashaproject/ui-plugin-loader]: Plugin ${plugin.name} is not valid`);
     }

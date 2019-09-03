@@ -83,6 +83,19 @@ const langCreator = (req: Request, _: Response, next: NextFunction) => {
     .then(() => next());
 };
 
+function createObj(obj: object, keyPath: string[], value: string) {
+  const lastKeyIndex = keyPath.length - 1;
+  for (var i = 0; i < lastKeyIndex; ++i) {
+    const key = keyPath[i];
+    if (!(key in obj)) {
+      obj[key] = {};
+    }
+    obj = obj[key];
+  }
+  obj[keyPath[lastKeyIndex]] = value;
+  return obj;
+}
+
 app.use(cors);
 
 app.get('/locales/:lng/:ns', langCreator);
@@ -96,7 +109,15 @@ app.use(
 app.use(bodyParser.text());
 app.post('/locales/:lng/:ns', (req, res) => {
   const { lng, ns } = req.params;
-  const payload = JSON.parse(req.body);
+  const body = JSON.parse(req.body);
+  let payload = {};
+  Object.keys(body).forEach(key => {
+    if (key.indexOf('.') > 0) {
+      createObj(payload, key.split('.'), body[key]);
+    } else {
+      payload[key] = body[key];
+    }
+  });
   const folderPath = join(__dirname, '../../../locales', lng);
   const filePath = join(folderPath, ns);
   Promise.resolve()
