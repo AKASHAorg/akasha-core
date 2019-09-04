@@ -2,8 +2,8 @@ import { i18n as i18nType } from 'i18next';
 import pino from 'pino';
 import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
-import { setPageTitle } from './setPageMetadata';
 import TranslationManager from './i18n';
+import { setPageTitle } from './setPageMetadata';
 
 export interface II18nConfig {
   use: any[];
@@ -81,9 +81,9 @@ export default class AppLoader {
           {
             ...this.config,
             ...pluginConfig,
-            i18nConfig: plugin.i18nConfig,
             domElement: domEl,
             i18n: i18nInstance,
+            i18nConfig: plugin.i18nConfig,
             logger: this.appLogger.child({ plugin: pluginId }),
             sdkModules: Object.fromEntries(sdkModules),
           },

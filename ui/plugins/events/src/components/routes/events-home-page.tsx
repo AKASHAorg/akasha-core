@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Link, match } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Link, match } from 'react-router-dom';
 
 export interface IEventHomePageProps {
   rootPath: string;

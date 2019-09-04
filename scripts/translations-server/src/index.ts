@@ -77,15 +77,17 @@ const ensureFileExists = (path: string) =>
 const langCreator = (req: Request, _: Response, next: NextFunction) => {
   const { lng, ns } = req.params;
   ensureFolderExists(join(localesDir, lng))
+    // tslint:disable-next-line:no-console
     .catch(err => console.log('[translations-server] cannot create folder', lng, 'error: ', err))
     .then(() => ensureFileExists(join(localesDir, lng, ns)))
+    // tslint:disable-next-line:no-console
     .catch(err => console.log('[translations-server] cannot create file', ns, 'error:', err))
     .then(() => next());
 };
 
 function createObj(obj: object, keyPath: string[], value: string) {
   const lastKeyIndex = keyPath.length - 1;
-  for (var i = 0; i < lastKeyIndex; ++i) {
+  for (let i = 0; i < lastKeyIndex; ++i) {
     const key = keyPath[i];
     if (!(key in obj)) {
       obj[key] = {};
@@ -110,7 +112,7 @@ app.use(bodyParser.text());
 app.post('/locales/:lng/:ns', (req, res) => {
   const { lng, ns } = req.params;
   const body = JSON.parse(req.body);
-  let payload = {};
+  const payload = {};
   Object.keys(body).forEach(key => {
     if (key.indexOf('.') > 0) {
       createObj(payload, key.split('.'), body[key]);
@@ -138,13 +140,16 @@ app.post('/locales/:lng/:ns', (req, res) => {
         .then(() => {
           return res.send({ ok: true });
         })
+        // tslint:disable-next-line:no-console
         .catch(err => console.error('failed to write to file', err));
     })
+    // tslint:disable-next-line:no-console
     .catch(err => console.error('oh no, error', err));
 });
 
 const port = 9001;
 
 app.listen(port, () => {
+  // tslint:disable-next-line:no-console
   console.log('[translations-server] listening on port:', port);
 });
