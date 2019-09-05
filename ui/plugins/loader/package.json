@@ -19,6 +19,7 @@
   },
   "scripts": {
     "build": "tsc --build",
+    "test": "jest",
     "tsc": "tsc"
   },
   "dependencies": {
