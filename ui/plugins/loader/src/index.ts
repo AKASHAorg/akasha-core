@@ -53,10 +53,10 @@ export default class AppLoader {
     sdkModules?: any[],
   ): Promise<void> {
     if (this._validatePlugin(plugin)) {
-      if (pluginConfig.activeWhen && pluginConfig.activeWhen.path) {
+      if (pluginConfig && pluginConfig.activeWhen && pluginConfig.activeWhen.path) {
         plugin.activeWhen = pluginConfig.activeWhen;
       }
-      if (pluginConfig.title) {
+      if (pluginConfig && pluginConfig.title) {
         plugin.title = pluginConfig.title;
       }
       this.plugins.push(plugin);
@@ -69,12 +69,12 @@ export default class AppLoader {
         domEl.style.display = 'inline';
         rootEl.appendChild(domEl);
       }
-      const i18nInstance = this.translationManager.createInstance(plugin);
-      await i18nInstance.init();
+      const i18nInstance: i18nType = this.translationManager.createInstance(plugin);
       try {
         singleSpa.registerApplication(
           plugin.name,
-          plugin.loadingFn,
+          this.loadPlugin(plugin.loadingFn, plugin),
+          // plugin.loadingFn,
           (location: Location): boolean => {
             return this._pathPrefix(location, plugin.activeWhen);
           },
@@ -85,12 +85,13 @@ export default class AppLoader {
             i18n: i18nInstance,
             i18nConfig: plugin.i18nConfig,
             logger: this.appLogger.child({ plugin: pluginId }),
-            sdkModules: Object.fromEntries(sdkModules),
+            sdkModules: sdkModules ? Object.fromEntries(sdkModules) : [],
           },
         );
         this.appLogger.info(`[@akashaproject/ui-plugin-loader]: ${plugin.name} registered!`);
       } catch (ex) {
         this.appLogger.error('Error registering plugin:', plugin.name, 'error:', ex);
+        throw new Error(ex.message);
       }
     } else {
       throw new Error(`[@akashaproject/ui-plugin-loader]: Plugin ${plugin.name} is not valid`);
@@ -132,7 +133,9 @@ export default class AppLoader {
           return prev;
         }, []),
       );
-      rootEl.innerHTML = FourOhFourString;
+      if (rootEl) {
+        rootEl.innerHTML = FourOhFourString;
+      }
     } else {
       setPageTitle(
         this.plugins.filter(
@@ -161,5 +164,13 @@ export default class AppLoader {
       return true;
     }
     return true;
+  }
+  private loadPlugin(
+    loadingFn: { (): Promise<any>; (): void },
+    plugin: IPlugin,
+  ): () => Promise<any> {
+    return () => {
+      return this.translationManager.initI18nForPlugin(plugin).then(() => loadingFn());
+    };
   }
 }

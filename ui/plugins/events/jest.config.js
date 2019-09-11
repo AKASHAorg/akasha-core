@@ -1,4 +1,5 @@
 module.exports = {
+  automock: true,
   verbose: true,
   bail: true,
   preset: 'ts-jest',

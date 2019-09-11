@@ -9,7 +9,7 @@ const i18nDefaultConfig: i18n.InitOptions = {
     addPath: 'http://localhost:9001/locales/{{lng}}/{{ns}}.json',
     loadPath: 'http://localhost:9001/locales/{{lng}}/{{ns}}.json',
   },
-  debug: true,
+  // debug: true,
   fallbackLng: false,
   ns: [],
   saveMissing: true,
@@ -23,7 +23,7 @@ export default class TranslationManager {
     this.i18nInstances = {};
     this.logger = logger;
   }
-  public createInstance(plugin: IPlugin, logger) {
+  public createInstance(plugin: IPlugin, logger): i18n.i18n {
     const { i18nConfig } = plugin;
     const defaultNS = i18nConfig.ns || plugin.name;
 
@@ -35,25 +35,31 @@ export default class TranslationManager {
       .use(LanguageDetector)
       .use(Fetch);
 
-    i18nConfig.use.forEach(ext => {
-      i18nInstance.use(ext);
-    });
     this.i18nInstances[plugin.name] = i18nInstance;
     return i18nInstance;
   }
-  public initI18n(): i18n.i18n {
-    document.addEventListener('change-language', this.onLanguageChange.bind(this));
-    i18n.use(LanguageDetector).use(Fetch);
-    return i18n;
+
+  public initI18nForPlugin(plugin: IPlugin): Promise<void> {
+    const { name, i18nConfig } = plugin;
+    document.addEventListener('change-language', this.onLanguageChange(plugin.name));
+    const instance: i18n.i18n = this.i18nInstances[name];
+    i18nConfig.use.forEach(ext => {
+      instance.use(ext);
+    });
+    return instance.init().then(() => instance.loadNamespaces([...i18nConfig.loadNS, plugin.name]));
   }
+
   public getInstance(name: string) {
     return this.i18nInstances[name];
   }
-  private onLanguageChange(ev: CustomEvent) {
-    i18n.changeLanguage(ev.detail, (err, t) => {
-      if (err) {
-        return this.logger.error(err, 'error changing lang');
-      }
-    });
+
+  private onLanguageChange(pluginName) {
+    return (ev: CustomEvent) => {
+      this.getInstance(pluginName).changeLanguage(ev.detail, err => {
+        if (err) {
+          return this.logger.error('error changing language', err.message, err);
+        }
+      });
+    };
   }
 }

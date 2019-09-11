@@ -1,6 +1,5 @@
 import SidebarWidget from '@akashaproject/ui-widget-sidebar';
-import { i18n as I18nType } from 'i18next';
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 // @ts-ignore
 import Parcel from 'single-spa-react/parcel';
@@ -16,7 +15,7 @@ export interface IProps {
   rootNodeId: string;
   sdkModules: any;
   logger: any;
-  i18n: I18nType;
+  i18n?: any;
 }
 
 /**
@@ -73,25 +72,28 @@ class App extends PureComponent<IProps> {
     callMethod.subscribe(subConsumer);
   };
   public render() {
+    const { i18n } = this.props;
     if (this.state.hasErrors) {
       return <div>Oh no, something went wrong in {'events-app'}</div>;
     }
     return (
-      <I18nextProvider i18n={this.props.i18n}>
-        <PageLayout>
-          <Page>
-            <Routes {...this.props} />
-            <button onClick={this.onClickSdk} type={'button'}>
-              sdk-common
-            </button>
-          </Page>
-        </PageLayout>
-        <Parcel
-          config={SidebarWidget.widget}
-          appendTo={document.getElementById('root')}
-          wrapWith="div"
-        />
-      </I18nextProvider>
+      <Suspense fallback={() => <>Loading</>}>
+        <I18nextProvider i18n={i18n ? i18n : null}>
+          <PageLayout>
+            <Page>
+              <Routes {...this.props} />
+              <button onClick={this.onClickSdk} type={'button'}>
+                sdk-common
+              </button>
+            </Page>
+          </PageLayout>
+          <Parcel
+            config={SidebarWidget.widget}
+            appendTo={document.getElementById('root')}
+            wrapWith="div"
+          />
+        </I18nextProvider>
+      </Suspense>
     );
   }
 }

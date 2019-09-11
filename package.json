@@ -14,6 +14,7 @@
     "fresh-install": "npm run clean && npm run bootstrap",
     "test:sdk": "lerna run test --scope @akashaproject/sdk-* --stream",
     "test:ui": "lerna run test --scope @akashaproject/ui-* --stream",
+    "test:ui:watch": "lerna exec --parallel --scope @akashaproject/ui-* --stream -- jest --watch",
     "tsc:sdk": "lerna run tsc --scope @akashaproject/sdk --scope @akashaproject/sdk-*",
     "tsc:ui": "lerna run tsc --scope @akashaproject/ui-*",
     "watch-plugin-events": "lerna exec --parallel --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-widget-sidebar --scope @akashaproject/ui-plugin-events -- tsc -w",
