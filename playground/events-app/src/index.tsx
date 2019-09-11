@@ -1,4 +1,5 @@
 import Plugin from '@akashaproject/ui-plugin-events';
+import Sidebar from '@akashaproject/ui-widget-sidebar';
 import AppLoader from '@akashaproject/ui-plugin-loader';
 import initSdk from './sdk-init';
 
@@ -11,5 +12,8 @@ const app = new AppLoader({
 // ex: [['commons', obj1],['entries', obj2]] becomes at plugin level {commons: obj1, entries: obj2}
 const commonModule = ['commons', sdk.modules.commons];
 app.registerPlugin(Plugin, { activeWhen: { path: '/events' } }, [commonModule]).then(() => {
+  app.start();
+});
+app.registerPlugin(Sidebar, { activeWhen: { path: '/' } }, [commonModule]).then(() => {
   app.start();
 });

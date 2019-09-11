@@ -6,5 +6,7 @@
     "found": {
       "event": "Not.found.event"
     }
-  }
+  },
+  "Event not found!": "Event not found!",
+  "Event page with id": "Event page with id"
 }
