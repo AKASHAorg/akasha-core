@@ -1,9 +1,10 @@
-import { i18n as I18nType } from 'i18next';
+import 'jest-styled-components';
 import * as React from 'react';
 import TestRenderer from 'react-test-renderer';
 import App from '../src/components/App';
 
 test('App renders coreclty', () => {
+  /* tslint:disable */
   const renderer = TestRenderer.create(
     <App
       activeWhen={{ path: '/' }}
@@ -13,5 +14,5 @@ test('App renders coreclty', () => {
       logger={() => {}}
     />,
   );
-  console.log(renderer.toJSON());
+  expect(renderer.root).toBeDefined();
 });

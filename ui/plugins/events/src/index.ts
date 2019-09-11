@@ -1,5 +1,4 @@
 import { initReactI18next } from 'react-i18next';
-import { Lifecycles } from 'single-spa-react';
 
 /**
  * All the plugins must export an object like this:

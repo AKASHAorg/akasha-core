@@ -14,11 +14,6 @@ const reactLifecycles = singleSpaReact({
   rootComponent: App,
 });
 
-// const loadTranslations = async (props: any) => {
-//   const defaultNS = props.i18nConfig.ns || props.name;
-//   return await props.i18n.loadNamespaces([...props.i18nConfig.loadNS, defaultNS]);
-// };
-
 export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
