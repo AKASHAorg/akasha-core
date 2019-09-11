@@ -1,5 +1,5 @@
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
-import R from 'ramda';
+import * as R from 'ramda';
 import { callService } from './utils';
 
 export interface IAkashaNamedService {

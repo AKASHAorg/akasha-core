@@ -13,7 +13,7 @@ import settings from './settings';
 
 export class DBModule extends IAkashaModule {
   public availableServices(): IAkashaModuleServices {
-    return undefined;
+    return {};
   }
   protected _name(): string {
     return moduleName;

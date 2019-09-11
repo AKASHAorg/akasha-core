@@ -9,7 +9,6 @@
   "homepage": "https://github.com/AkashaProject/akasha-sdk-js#readme",
   "license": "AGPL-3.0",
   "main": "lib/index.js",
-  "module": "dist/sdk.esm.js",
   "browser": "dist/sdk.umd.js",
   "directories": {
     "lib": "lib",
@@ -26,7 +25,7 @@
   "scripts": {
     "test": "jest",
     "tsc": "tsc --build",
-    "build": "rimraf dist && NODE_OPTIONS='--max-old-space-size=2096' rollup -c rollup.config.js",
+    "build": "rimraf dist && NODE_OPTIONS='--max-old-space-size=2096' webpack",
     "docs": "typedoc"
   },
   "bugs": {
@@ -37,14 +36,14 @@
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-db": "*",
     "@akashaproject/sdk-runtime": "*",
-    "rxjs": "6.5.2",
-    "rxdb": "^8.3.1"
+    "rxjs": "6.5.3",
+    "rxdb": "^8.4.0"
   },
   "devDependencies": {
-    "rollup": "^1.19.4",
-    "rollup-plugin-commonjs": "^10.0.2",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-terser": "^5.1.1"
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.8",
+    "babel-loader": "^8.0.6",
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0"
   }
 }
