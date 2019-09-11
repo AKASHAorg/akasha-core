@@ -1,6 +1,4 @@
-let webpack;
 const path = require('path');
-webpack = require('webpack');
 
 const config = {
   entry: './lib/index.js',
