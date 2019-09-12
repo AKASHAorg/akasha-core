@@ -32,7 +32,7 @@
     "@akashaproject/jsonschema-web3": "^1.0.3",
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-runtime": "*",
-    "ethers": "4.0.27",
-    "ipfs": "^0.37.0"
+    "ethers": "4.0.37",
+    "ipfs": "^0.37.1"
   }
 }
