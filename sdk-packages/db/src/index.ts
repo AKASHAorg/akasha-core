@@ -7,20 +7,21 @@ import {
 } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import { callService } from '@akashaproject/sdk-core/lib/utils';
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
-import { moduleName } from './constants';
+import services, { DB_SETTINGS_ATTACHMENT, moduleName } from './constants';
 import dbService from './db.service';
 import settings from './settings';
+import settingsAttachmentService from './settings.attachment.service';
 
 export class DBModule extends IAkashaModule {
   public availableServices(): IAkashaModuleServices {
-    return {};
+    return IAkashaModule.exportToChannel([DB_SETTINGS_ATTACHMENT], services);
   }
   protected _name(): string {
     return moduleName;
   }
 
   protected _registerServices(di: DIContainer): IAkashaNamedService[] {
-    return [dbService];
+    return [dbService, settingsAttachmentService];
   }
 
   protected init(di: DIContainer): void {
