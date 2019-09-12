@@ -1,11 +1,20 @@
+import { i18n as i18nType } from 'i18next';
 import pino from 'pino';
 import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
+import TranslationManager from './i18n';
 import { setPageTitle } from './setPageMetadata';
+
+export interface II18nConfig {
+  use: any[];
+  loadNS?: string[];
+  ns?: string;
+}
 
 export interface IPlugin {
   name: string;
   services: any[];
+  i18nConfig: II18nConfig;
   loadingFn: () => Promise<any>;
   activeWhen: {
     exact?: boolean;
@@ -30,17 +39,24 @@ export default class AppLoader {
   public config: ILoaderConfig;
   public plugins: IPlugin[];
   private appLogger;
+  private translationManager;
   constructor(config: ILoaderConfig) {
     this.config = config;
     this.plugins = [];
     this.appLogger = pino({ browser: { asObject: true } });
+    this.translationManager = new TranslationManager(this.appLogger);
   }
-  public registerPlugin(plugin: IPlugin, pluginConfig: IPluginConfig, sdkModules?: any[]): void {
+
+  public async registerPlugin(
+    plugin: IPlugin,
+    pluginConfig: IPluginConfig,
+    sdkModules?: any[],
+  ): Promise<void> {
     if (this._validatePlugin(plugin)) {
-      if (pluginConfig.activeWhen && pluginConfig.activeWhen.path) {
+      if (pluginConfig && pluginConfig.activeWhen && pluginConfig.activeWhen.path) {
         plugin.activeWhen = pluginConfig.activeWhen;
       }
-      if (pluginConfig.title) {
+      if (pluginConfig && pluginConfig.title) {
         plugin.title = pluginConfig.title;
       }
       this.plugins.push(plugin);
@@ -53,21 +69,30 @@ export default class AppLoader {
         domEl.style.display = 'inline';
         rootEl.appendChild(domEl);
       }
-      singleSpa.registerApplication(
-        plugin.name,
-        plugin.loadingFn,
-        (location: Location): boolean => {
-          return this._pathPrefix(location, plugin.activeWhen);
-        },
-        {
-          ...this.config,
-          ...pluginConfig,
-          domElement: domEl,
-          logger: this.appLogger.child({ plugin: pluginId }),
-          sdkModules: Object.fromEntries(sdkModules),
-        },
-      );
-      this.appLogger.info(`[@akashaproject/ui-plugin-loader]: ${plugin.name} registered!`);
+      const i18nInstance: i18nType = this.translationManager.createInstance(plugin);
+      try {
+        singleSpa.registerApplication(
+          plugin.name,
+          this.loadPlugin(plugin.loadingFn, plugin),
+          // plugin.loadingFn,
+          (location: Location): boolean => {
+            return this._pathPrefix(location, plugin.activeWhen);
+          },
+          {
+            ...this.config,
+            ...pluginConfig,
+            domElement: domEl,
+            i18n: i18nInstance,
+            i18nConfig: plugin.i18nConfig,
+            logger: this.appLogger.child({ plugin: pluginId }),
+            sdkModules: sdkModules ? Object.fromEntries(sdkModules) : [],
+          },
+        );
+        this.appLogger.info(`[@akashaproject/ui-plugin-loader]: ${plugin.name} registered!`);
+      } catch (ex) {
+        this.appLogger.error('Error registering plugin:', plugin.name, 'error:', ex);
+        throw new Error(ex.message);
+      }
     } else {
       throw new Error(`[@akashaproject/ui-plugin-loader]: Plugin ${plugin.name} is not valid`);
     }
@@ -108,7 +133,9 @@ export default class AppLoader {
           return prev;
         }, []),
       );
-      rootEl.innerHTML = FourOhFourString;
+      if (rootEl) {
+        rootEl.innerHTML = FourOhFourString;
+      }
     } else {
       setPageTitle(
         this.plugins.filter(
@@ -137,5 +164,13 @@ export default class AppLoader {
       return true;
     }
     return true;
+  }
+  private loadPlugin(
+    loadingFn: { (): Promise<any>; (): void },
+    plugin: IPlugin,
+  ): () => Promise<any> {
+    return () => {
+      return this.translationManager.initI18nForPlugin(plugin).then(() => loadingFn());
+    };
   }
 }

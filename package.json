@@ -13,11 +13,14 @@
     "docs": "lerna run docs --scope @akashaproject/sdk --scope @akashaproject/sdk-common",
     "fresh-install": "npm run clean && npm run bootstrap",
     "test:sdk": "lerna run test --scope @akashaproject/sdk-* --stream",
+    "test:ui": "lerna run test --scope @akashaproject/ui-* --stream",
+    "test:ui:watch": "lerna exec --parallel --scope @akashaproject/ui-* --stream -- jest --watch",
     "tsc:sdk": "lerna run tsc --scope @akashaproject/sdk --scope @akashaproject/sdk-*",
     "tsc:ui": "lerna run tsc --scope @akashaproject/ui-*",
     "tsc:scripts": "lerna run tsc --scope @akashaproject/script-*",
     "watch-plugin-events": "lerna exec --parallel --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-widget-sidebar --scope @akashaproject/ui-plugin-events -- tsc -w",
     "start-events-app": "npm run start --prefix playground/events-app",
+    "start-translations-server": "npm run start --prefix scripts/translations-server",
     "script:dev-db": "lerna run start --scope @akashaproject/script-server-db --stream"
   },
   "devDependencies": {
@@ -36,7 +39,8 @@
   },
   "workspaces": [
     "sdk-packages/*",
-    "ui/*"
+    "ui/*",
+    "scripts/*"
   ],
   "husky": {
     "hooks": {
