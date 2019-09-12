@@ -1,5 +1,6 @@
 import SidebarWidget from '@akashaproject/ui-widget-sidebar';
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Suspense } from 'react';
+import { I18nextProvider } from 'react-i18next';
 // @ts-ignore
 import Parcel from 'single-spa-react/parcel';
 // @ts-ignore
@@ -14,6 +15,7 @@ export interface IProps {
   rootNodeId: string;
   sdkModules: any;
   logger: any;
+  i18n?: any;
 }
 
 /**
@@ -44,7 +46,7 @@ const Page = styled.div`
 // tslint:disable-next-line:no-console
 const subConsumer = (data: any) => console.log('sdkModule call', data);
 
-export default class App extends PureComponent<IProps> {
+class App extends PureComponent<IProps> {
   public state: { hasErrors: boolean };
 
   constructor(props: IProps) {
@@ -69,27 +71,31 @@ export default class App extends PureComponent<IProps> {
     const callMethod = sdkModules.commons.validator_service({ method: 'validator', args: {} });
     callMethod.subscribe(subConsumer);
   };
-
   public render() {
+    const { i18n } = this.props;
     if (this.state.hasErrors) {
       return <div>Oh no, something went wrong in {'events-app'}</div>;
     }
     return (
-      <>
-        <PageLayout>
-          <Page>
-            <Routes {...this.props} />
-            <button onClick={this.onClickSdk} type={'button'}>
-              sdk-common
-            </button>
-          </Page>
-        </PageLayout>
-        <Parcel
-          config={SidebarWidget.widget}
-          appendTo={document.getElementById('root')}
-          wrapWith="div"
-        />
-      </>
+      <Suspense fallback={() => <>Loading</>}>
+        <I18nextProvider i18n={i18n ? i18n : null}>
+          <PageLayout>
+            <Page>
+              <Routes {...this.props} />
+              <button onClick={this.onClickSdk} type={'button'}>
+                sdk-common
+              </button>
+            </Page>
+          </PageLayout>
+          <Parcel
+            config={SidebarWidget.widget}
+            appendTo={document.getElementById('root')}
+            wrapWith="div"
+          />
+        </I18nextProvider>
+      </Suspense>
     );
   }
 }
+
+export default App;

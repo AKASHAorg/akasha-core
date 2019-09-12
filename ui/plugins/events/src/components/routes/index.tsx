@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import EventPage from './event-page';
 import EventsHomePage from './events-home-page';
@@ -9,6 +10,7 @@ export interface IRoutesProps {
 
 const Routes: React.FC<IRoutesProps> = props => {
   const { activeWhen } = props;
+  const [t] = useTranslation();
   return (
     <>
       <Router>
@@ -19,7 +21,7 @@ const Routes: React.FC<IRoutesProps> = props => {
             children={({ match }) => <EventsHomePage rootPath={activeWhen.path} match={match} />}
           />
           <Route exact path={`${activeWhen.path}/:eventId`} component={EventPage} />
-          <Route render={() => <div>Event not found</div>} />
+          <Route render={() => <div>{t('Event not found!')}</div>} />
         </Switch>
       </Router>
     </>

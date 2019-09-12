@@ -11,7 +11,7 @@ import App from './App';
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: App
+  rootComponent: App,
 });
 
 export const bootstrap = reactLifecycles.bootstrap;
