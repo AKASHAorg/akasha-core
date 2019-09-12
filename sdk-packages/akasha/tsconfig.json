@@ -13,9 +13,10 @@
     },
     {
       "path": "../common"
+    },
+    {
+      "path": "../db"
     }
   ],
-  "include": [
-    "./src"
-  ]
+  "include": ["./src"]
 }

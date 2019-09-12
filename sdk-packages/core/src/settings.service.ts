@@ -1,7 +1,6 @@
-import R from 'ramda';
 import { SETTINGS_SERVICE } from './constants';
 import { AkashaService, ICoreSettings } from './IAkashaModule';
-import { registerServiceMethods, toNamedService } from './utils';
+import { fromEntries, registerServiceMethods, toNamedService } from './utils';
 
 const service: AkashaService = () => {
   const settingsSymbol = Symbol('setting$');
@@ -12,7 +11,7 @@ const service: AkashaService = () => {
   };
 
   const getSettings = (moduleName: ICoreSettings['moduleName']) => {
-    return R.fromPairs(coreSettings[settingsSymbol].get(moduleName));
+    return fromEntries(coreSettings[settingsSymbol].get(moduleName));
   };
 
   const setSettings = (settings: ICoreSettings): void => {
