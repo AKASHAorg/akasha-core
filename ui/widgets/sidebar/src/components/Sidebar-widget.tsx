@@ -1,6 +1,6 @@
 import { i18n as I18nType } from 'i18next';
-import { I18nextProvider } from 'react-i18next';
 import React, { PureComponent, SyntheticEvent } from 'react';
+import { I18nextProvider } from 'react-i18next';
 // @ts-ignore
 import styled from 'styled-components';
 

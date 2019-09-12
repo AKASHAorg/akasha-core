@@ -1,6 +1,6 @@
 import Plugin from '@akashaproject/ui-plugin-events';
-import Sidebar from '@akashaproject/ui-widget-sidebar';
 import AppLoader from '@akashaproject/ui-plugin-loader';
+import Sidebar from '@akashaproject/ui-widget-sidebar';
 import initSdk from './sdk-init';
 
 const sdk: any = initSdk();
