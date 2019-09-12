@@ -1,9 +1,12 @@
+import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, SyntheticEvent } from 'react';
+import { I18nextProvider } from 'react-i18next';
 // @ts-ignore
 import styled from 'styled-components';
 
 export interface IProps {
-  removeMe: bigint;
+  i18n: I18nType;
+  sdkModules: any;
 }
 
 /**
@@ -57,10 +60,12 @@ export default class SidebarWidget extends PureComponent<IProps> {
       return <div>Oh no, something went wrong in sidebar-widget</div>;
     }
     return (
-      <SidebarWrapper>
-        <div onClick={this.handleLangChange('en')}>EN</div>
-        <div onClick={this.handleLangChange('ro')}>RO</div>
-      </SidebarWrapper>
+      <I18nextProvider i18n={this.props.i18n}>
+        <SidebarWrapper>
+          <div onClick={this.handleLangChange('en')}>EN</div>
+          <div onClick={this.handleLangChange('ro')}>RO</div>
+        </SidebarWrapper>
+      </I18nextProvider>
     );
   }
 }

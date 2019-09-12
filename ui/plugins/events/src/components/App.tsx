@@ -1,8 +1,5 @@
-import SidebarWidget from '@akashaproject/ui-widget-sidebar';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
-// @ts-ignore
-import Parcel from 'single-spa-react/parcel';
 // @ts-ignore
 import styled from 'styled-components';
 import Routes from './routes';
@@ -63,7 +60,6 @@ class App extends PureComponent<IProps> {
     const { logger } = this.props;
     logger.error(err, info);
   }
-
   // @TODO: remove this after having a real use-case
   public onClickSdk = () => {
     const { sdkModules, logger } = this.props;
@@ -87,11 +83,6 @@ class App extends PureComponent<IProps> {
               </button>
             </Page>
           </PageLayout>
-          <Parcel
-            config={SidebarWidget.widget}
-            appendTo={document.getElementById('root')}
-            wrapWith="div"
-          />
         </I18nextProvider>
       </Suspense>
     );
