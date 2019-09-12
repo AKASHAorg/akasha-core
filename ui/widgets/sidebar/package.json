@@ -22,7 +22,10 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "single-spa-react": "^2.10.2"
+    "@types/i18next": "^12.1.0",
+    "@types/react-i18next": "^8.1.0",
+    "single-spa-react": "^2.10.2",
+    "react-i18next": "^10.12.2"
   },
   "devDependencies": {
     "@types/react": "^16.8.0",
