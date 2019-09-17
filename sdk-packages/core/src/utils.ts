@@ -76,3 +76,7 @@ export function fromEntries(entries: Array<[string | number, any]>) {
 export function toEntries(obj: object) {
   return R.toPairs(obj);
 }
+
+export function toCurried(fn: any) {
+  return R.curry(fn);
+}

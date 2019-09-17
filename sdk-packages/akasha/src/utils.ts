@@ -22,8 +22,8 @@ export interface IModuleCallableService {
  */
 const channelCaller = (servicePath: AkashaServicePath) => {
   return {
-    apply(target, thisArg, argumentsList: [object]) {
-      return target(servicePath, argumentsList[0]);
+    get(target, property) {
+      return target(servicePath, property);
     },
   };
 };
