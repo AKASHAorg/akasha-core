@@ -1,5 +1,5 @@
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
-import R from 'ramda';
+import * as R from 'ramda';
 import { moduleName } from './constants';
 import { IAkashaModule, IAkashaModuleServices, IAkashaNamedService } from './IAkashaModule';
 import settingsService from './settings.service';

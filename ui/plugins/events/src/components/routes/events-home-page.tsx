@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, match } from 'react-router-dom';
-import { useEvents, useEventsState } from '../reducers/events';
+import { useEvents } from '../reducers/events';
 
 export interface IEventHomePageProps {
   rootPath: string;
@@ -13,7 +13,7 @@ const randomArr = (size: number, max: number) =>
   [...new Array(size)].map(() => Math.round(Math.random() * max));
 /* Remove this ^^^ */
 
-const EventHomePage: React.FC<IEventHomePageProps> = props => {
+const EventHomePage: React.FC<IEventHomePageProps> = () => {
   const [t] = useTranslation();
   const [eventsState, eventDispatch] = useEvents();
   const fetchMoreEvents = (ev: React.SyntheticEvent) => {

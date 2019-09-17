@@ -7,7 +7,8 @@ function setPageTitle(plugins) {
       .join('::');
     return (document.title = title);
   }
-  return (document.title = plugins[0].title);
+  document.title = plugins[0] && plugins[0].title ? plugins[0].title : '';
+  return document.title;
 }
 
 export { setPageTitle };

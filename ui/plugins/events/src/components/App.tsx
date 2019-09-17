@@ -1,8 +1,5 @@
-import SidebarWidget from '@akashaproject/ui-widget-sidebar';
 import React, { Dispatch, PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
-// @ts-ignore
-import Parcel from 'single-spa-react/parcel';
 // @ts-ignore
 import styled from 'styled-components';
 import { eventsInit, EventsProvider, eventsReducer } from './reducers/events';
@@ -73,8 +70,13 @@ class App extends PureComponent<IProps> {
     const { logger } = this.props;
     logger.error(err, info);
   }
-
   // @TODO: remove this after having a real use-case
+  public onClickSdk = () => {
+    const { sdkModules, logger } = this.props;
+    logger.info('sdk call');
+    const callMethod = sdkModules.commons.validator_service({ method: 'validator', args: {} });
+    callMethod.subscribe(subConsumer);
+  };
   public getEvents = () => {
     return {
       events: [
@@ -84,6 +86,7 @@ class App extends PureComponent<IProps> {
       ],
     };
   };
+
   public render() {
     const { i18n } = this.props;
     if (this.state.hasErrors) {
@@ -99,11 +102,6 @@ class App extends PureComponent<IProps> {
                   <Routes {...this.props} />
                 </Page>
               </PageLayout>
-              <Parcel
-                config={SidebarWidget.widget}
-                appendTo={document.getElementById('root')}
-                wrapWith="div"
-              />
             </EventsProvider>
           </ProfileProvider>
         </I18nextProvider>
