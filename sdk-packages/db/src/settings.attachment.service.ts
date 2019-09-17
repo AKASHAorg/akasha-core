@@ -24,19 +24,23 @@ const service: AkashaService = invoke => {
   };
 
   // @Todo: add initial record if there are no results
-  const get = async (id: string, ethAddress: string) => {
-    const settingsDoc = await getSettingsDoc(ethAddress);
-    return getSettingsAttachment(settingsDoc, id);
+  // idea: when you run for the first time the sdk there should be an initial migration
+  const get = async (args: { id: string; ethAddress: string }) => {
+    const settingsDoc = await getSettingsDoc(args.ethAddress);
+    if (settingsDoc) {
+      return getSettingsAttachment(settingsDoc, args.id);
+    }
+    return settingsDoc;
   };
 
-  const put = async (obj: RxAttachmentCreator, ethAddress: string) => {
-    const settingsDoc = await getSettingsDoc(ethAddress);
-    return putSettingsAttachment(settingsDoc, obj);
+  const put = async (args: { obj: RxAttachmentCreator; ethAddress: string }) => {
+    const settingsDoc = await getSettingsDoc(args.ethAddress);
+    return putSettingsAttachment(settingsDoc, args.obj);
   };
 
-  const deleteSettings = async (id: string, ethAddress: string) => {
-    const settingsDoc = await getSettingsDoc(ethAddress);
-    return removeSettingAttachment(settingsDoc, id);
+  const deleteSettings = async (args: { id: string; ethAddress: string }) => {
+    const settingsDoc = await getSettingsDoc(args.ethAddress);
+    return removeSettingAttachment(settingsDoc, args.id);
   };
   return registerServiceMethods({ get, put, deleteSettings });
 };

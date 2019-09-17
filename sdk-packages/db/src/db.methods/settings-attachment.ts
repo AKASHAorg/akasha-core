@@ -3,7 +3,10 @@ import { SettingsDoc, SettingsDocMethods, SettingsDocType } from '../collection.
 
 export async function getSettingsAttachment(doc: SettingsDoc, id: string) {
   const settings = await doc.getAttachment(id);
-  return settings.getStringData();
+  if (settings) {
+    return settings.getStringData();
+  }
+  return settings;
 }
 
 // @example obj = {id: 'myThemeIdentifier', data: JSON.stringify({colors: ['red', 'blue']}), type: 'string'}
@@ -16,5 +19,7 @@ export function putSettingsAttachment(
 
 export async function removeSettingAttachment(doc: SettingsDoc, id: string) {
   const setting = await doc.getAttachment(id);
-  return setting.remove();
+  if (setting) {
+    return setting.remove();
+  }
 }
