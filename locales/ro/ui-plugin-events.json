@@ -1,10 +1,12 @@
 {
-  "Events List": "Events List",
+  "Events List": "Lista Evenimente",
   "An Event": "An Event",
   "Not": {
     "found": {
       "event": "Acest eveniment este de negasit!"
     }
   },
-  "Event": "Event"
+  "Event": "Event",
+  "Event not found!": "Event not found!",
+  "Event page with id": "Event page with id"
 }
