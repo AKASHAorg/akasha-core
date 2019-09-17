@@ -1,10 +1,6 @@
 # Logs
 *.log
 
-# Translation files
-locales/**
-!locales/en/
-
 # Runtime data
 pids
 *.pid
