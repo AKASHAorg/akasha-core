@@ -5,9 +5,4 @@ module.exports = {
   testEnvironment: 'node',
   collectCoverage: true,
   coverageReporters: ['text-summary'],
-  globals: {
-    'ts-jest': {
-      tsConfig: './tsconfig.json',
-    },
-  },
 };
