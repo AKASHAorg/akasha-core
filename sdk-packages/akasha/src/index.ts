@@ -25,7 +25,7 @@ export default function init(options = { start: true }) {
   const di: DIContainer = initDI();
   const commonModule = registerCommonModule();
   const dbModule = registerDBModule();
-  let modules: IModuleCallableService;
+  let modules: IModuleCallableService = {};
   // list of all the registered modules for the sdk
   const modulesList = [commonModule, dbModule];
   // general channel to send service calls
