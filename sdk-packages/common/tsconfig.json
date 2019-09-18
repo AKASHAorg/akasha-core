@@ -2,7 +2,8 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./lib",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "lib": ["es7", "dom"]
   },
   "references": [
     {
@@ -12,7 +13,5 @@
       "path": "../core"
     }
   ],
-  "include": [
-    "./src"
-  ]
+  "include": ["./src"]
 }
