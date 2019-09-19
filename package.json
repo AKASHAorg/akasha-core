@@ -16,12 +16,13 @@
     "test:ui": "lerna run test --scope @akashaproject/ui-* --stream",
     "test:ui:watch": "lerna exec --parallel --scope @akashaproject/ui-* --stream -- jest --watch",
     "tsc:sdk": "lerna run tsc --scope @akashaproject/sdk --scope @akashaproject/sdk-*",
-    "tsc:ui": "lerna run tsc --scope @akashaproject/ui-*",
+    "tsc:ui": "lerna run tsc --scope @akashaproject/ui-* --scope @akashaproject/design-*",
     "tsc:scripts": "lerna run tsc --scope @akashaproject/script-*",
     "watch-plugin-events": "lerna exec --parallel --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-widget-sidebar --scope @akashaproject/ui-plugin-events -- tsc -w",
-    "start-events-app": "lerna exec --parallel --scope translations-server --scope events-app-dev -- npm run start --stream",
-    "start-translations-server": "npm run start --prefix scripts/translations-server",
-    "script:dev-db": "lerna run start --scope @akashaproject/script-server-db --stream"
+    "script:dev-db": "lerna run start --scope @akashaproject/script-server-db --stream",
+    "start:events-app": "lerna exec --parallel --scope translations-server --scope events-app-dev -- npm run start --stream",
+    "start:translations-server": "npm run start --prefix scripts/translations-server",
+    "start:design-system:storybook": "lerna run storybook --scope @akashaproject/design-system --stream"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
