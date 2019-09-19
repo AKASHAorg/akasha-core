@@ -6,15 +6,15 @@ import {
   toNamedService,
 } from '@akashaproject/sdk-core/lib/utils';
 import { ethers } from 'ethers';
-import { WEB3_SERVICE } from './constants';
+import { EthProviders, WEB3_SERVICE } from './constants';
 import getProvider from './web3.methods/provider';
 
 const service: AkashaService = invoke => {
   let web3Provider;
 
-  const regen = () => {
+  const regen = provider => {
     const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);
-    web3Provider = getProvider(getSettings);
+    web3Provider = getProvider(getSettings, provider);
     return web3Provider;
   };
 
@@ -24,9 +24,9 @@ const service: AkashaService = invoke => {
   };
 
   // fetch an existing instance or create web3Provider
-  const web3 = () => {
+  const web3 = (provider: EthProviders) => {
     if (!web3Provider) {
-      return regen();
+      return regen(provider);
     }
     return web3Provider;
   };

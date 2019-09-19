@@ -1,10 +1,6 @@
 import coreServices from '@akashaproject/sdk-core/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import {
-  fromEntries,
-  registerServiceMethods,
-  toNamedService,
-} from '@akashaproject/sdk-core/lib/utils';
+import { registerServiceMethods, toNamedService } from '@akashaproject/sdk-core/lib/utils';
 import RxDB from 'rxdb';
 import { AKASHAdb } from './collection.types';
 import initCollections from './collections';
@@ -18,7 +14,7 @@ const service: AkashaService = invoke => {
       return akashaDB;
     }
     const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);
-    const dbSettings = fromEntries(getSettings(moduleName));
+    const dbSettings = getSettings(moduleName);
     if (!dbSettings.hasOwnProperty(DB_PASSWORD)) {
       throw new Error('Set a db password before using the service.');
     }
