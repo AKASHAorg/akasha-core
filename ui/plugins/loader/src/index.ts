@@ -23,6 +23,11 @@ export interface IPlugin {
   title?: string;
 }
 
+export interface IWidget {
+  name: string;
+  loadingFn: () => Promise<any>;
+}
+
 export interface IPluginConfig {
   activeWhen?: {
     exact?: boolean;
@@ -35,9 +40,15 @@ export interface ILoaderConfig {
   rootNodeId: string;
 }
 
+interface IWidgetInfo {
+  widget: IWidget;
+  sdkModules: any[];
+}
+
 export default class AppLoader {
   public config: ILoaderConfig;
   public plugins: IPlugin[];
+  public rootWidgets: Map<string, IWidgetInfo>;
   private appLogger;
   private translationManager;
   constructor(config: ILoaderConfig) {
@@ -45,6 +56,7 @@ export default class AppLoader {
     this.plugins = [];
     this.appLogger = pino({ browser: { asObject: true } });
     this.translationManager = new TranslationManager(this.appLogger);
+    this.rootWidgets = new Map();
   }
 
   public async registerPlugin(
@@ -61,19 +73,12 @@ export default class AppLoader {
       }
       this.plugins.push(plugin);
       const pluginId = plugin.name.toLowerCase().replace(' ', '-');
-      let domEl = document.getElementById(`${pluginId}`);
-      const rootEl = document.getElementById(this.config.rootNodeId);
-      if (!domEl && rootEl) {
-        domEl = document.createElement('div');
-        domEl.id = pluginId;
-        domEl.style.display = 'inline';
-        rootEl.appendChild(domEl);
-      }
+      const domEl = await this.createRootNodes(pluginId);
       const i18nInstance: i18nType = this.translationManager.createInstance(plugin);
       try {
         singleSpa.registerApplication(
           plugin.name,
-          this.loadPlugin(plugin.loadingFn, plugin),
+          this.beforeLoading(plugin.loadingFn, plugin),
           // plugin.loadingFn,
           (location: Location): boolean => {
             return this._pathPrefix(location, plugin.activeWhen);
@@ -98,10 +103,44 @@ export default class AppLoader {
     }
   }
 
+  public async registerWidget(widget: IWidget, sdkModules: any[]) {
+    this.appLogger.info(`[@akashaproject/ui-plugin-loader] registering widget ${widget.name}`);
+    this.rootWidgets.set(widget.name, { widget, sdkModules });
+  }
+
+  public async loadRootWidgets() {
+    const promises = Array.from(this.rootWidgets.values()).map(async widgetInfo => {
+      const { widget } = widgetInfo;
+      const domEl = await this.createRootNodes(widget.name);
+      const i18nInstance = await this.translationManager.createInstance(widget);
+      try {
+        singleSpa.mountRootParcel(this.beforeLoading(widget.loadingFn, widget), {
+          ...this.config,
+          ...widgetInfo.widget,
+          domElement: domEl,
+          i18n: i18nInstance,
+        });
+        return Promise.resolve();
+      } catch (ex) {
+        return Promise.reject(
+          `[AppLoader] cannot load widget ${widgetInfo.widget.name}: ${ex.message}`,
+        );
+      }
+    });
+    return Promise.all(promises);
+  }
+
   public start() {
     this.appLogger.info('[@akashaproject/ui-plugin-loader]: starting single spa');
     this._registerSpaListeners();
-    singleSpa.start();
+    this.loadRootWidgets()
+      .then(() => {
+        singleSpa.start();
+      })
+      .catch(err => {
+        this.appLogger.error(err.message);
+        throw new Error(err.message);
+      });
   }
 
   public getPluginsForLocation(location: Location) {
@@ -165,12 +204,26 @@ export default class AppLoader {
     }
     return true;
   }
-  private loadPlugin(
+
+  private async createRootNodes(name: string) {
+    let domEl = document.getElementById(`${name}`);
+    const rootEl = document.getElementById(this.config.rootNodeId);
+    if (!domEl && rootEl) {
+      domEl = document.createElement('div');
+      domEl.id = name;
+      domEl.style.display = 'flex';
+      domEl.style.flexDirection = 'column';
+      rootEl.appendChild(domEl);
+    }
+    return Promise.resolve(domEl);
+  }
+
+  private beforeLoading(
     loadingFn: { (): Promise<any>; (): void },
-    plugin: IPlugin,
+    plugin: IPlugin | IWidget,
   ): () => Promise<any> {
     return () => {
-      return this.translationManager.initI18nForPlugin(plugin).then(() => loadingFn());
+      return this.translationManager.initI18nFor(plugin).then(() => loadingFn());
     };
   }
 }

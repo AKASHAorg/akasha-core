@@ -39,12 +39,12 @@ const PageLayout = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  margin-left: 16%;
 `;
 
 const Page = styled.div`
   width: 100%;
   height: 100%;
-  margin-left: 64px;
   padding-left: 16px;
 `;
 
