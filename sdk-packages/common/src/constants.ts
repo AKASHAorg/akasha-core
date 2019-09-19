@@ -13,6 +13,7 @@ export enum EthProviders {
   Web3Injected,
   WalletConnect,
 }
+
 // ethereum chain id
 export const ETH_NETWORK = 'eth_network';
 // used for displaying images

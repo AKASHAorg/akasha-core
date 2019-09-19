@@ -7,6 +7,7 @@ import {
   putSettingsAttachment,
   removeSettingAttachment,
 } from '../../src/db.methods/settings-attachment';
+
 RxDB.plugin(memAdapter);
 
 let db;

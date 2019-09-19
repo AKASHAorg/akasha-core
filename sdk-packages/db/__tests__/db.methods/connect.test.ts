@@ -1,6 +1,7 @@
 import memAdapter from 'pouchdb-adapter-memory';
 import RxDB from 'rxdb';
 import dbConnect from '../../src/db.methods/connect';
+
 RxDB.plugin(memAdapter);
 
 let db;
