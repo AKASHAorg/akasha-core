@@ -6,7 +6,7 @@
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
   ],
-  "homepage": "https://github.com/AkashaProject/akasha-sdk-js#readme",
+  "homepage": "https://github.com/AkashaProject/akasha-world-framework#readme",
   "license": "AGPL-3.0",
   "main": "lib/index.js",
   "directories": {
@@ -18,7 +18,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-sdk-js.git"
+    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
   },
   "scripts": {
     "test": "jest",
@@ -26,7 +26,7 @@
     "docs": "typedoc"
   },
   "bugs": {
-    "url": "https://github.com/AkashaProject/akasha-sdk-js/issues"
+    "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
   },
   "dependencies": {
     "@akashaproject/jsonschema-web3": "^1.0.3",

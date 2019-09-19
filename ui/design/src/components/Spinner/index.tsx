@@ -75,12 +75,14 @@ const StyledSpinner = styled.svg`
   width: ${props => props.width}px;
   height: ${props => props.width}px;
 `;
+
 interface SpinnerProps {
   /** the size (width, height) of the spinner. @default 50 */
   size?: number;
   /** speed (in seconds). ex: 1.2 or 2. @default 1.2 */
   speed?: number;
 }
+
 const Spinner: React.FC<SpinnerProps> = props => {
   const { size = 50 } = props; // , speed = 1.2
   return (

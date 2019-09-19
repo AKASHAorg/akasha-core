@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-sdk-js.git"
+    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
   },
   "main": "lib/index.js",
   "engines": {

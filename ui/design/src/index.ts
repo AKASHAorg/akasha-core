@@ -3,7 +3,6 @@ import Avatar from './components/Avatar';
 import Button from './components/Button';
 import Tab from './components/Tabs/tab';
 import Tabs from './components/Tabs/tabs';
-
 /* Themes and theme related utils */
 import { createTheme } from './styles/themes/create-theme';
 import darkTheme from './styles/themes/dark-theme';

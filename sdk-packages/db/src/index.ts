@@ -16,6 +16,7 @@ export class DBModule extends IAkashaModule {
   public availableServices(): IAkashaModuleServices {
     return IAkashaModule.exportToChannel([DB_SETTINGS_ATTACHMENT], services);
   }
+
   protected _name(): string {
     return moduleName;
   }
@@ -30,6 +31,7 @@ export class DBModule extends IAkashaModule {
     setSettings(settingsObj);
   }
 }
+
 export default function registerModule() {
   return new DBModule();
 }
