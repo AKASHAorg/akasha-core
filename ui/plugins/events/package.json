@@ -42,7 +42,7 @@
     "@types/react-dom": "^16.8.0",
     "@types/react-test-renderer": "^16.9.0",
     "@types/single-spa-react": "^2.8.3",
-    "acorn-jsx": "4.x",
+    "acorn-jsx": "5.x",
     "i18next-parser": "^1.0.0-beta34",
     "jest-styled-components": "^6.3.3",
     "react": "^16.8.0",
