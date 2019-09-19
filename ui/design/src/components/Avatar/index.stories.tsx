@@ -1,6 +1,6 @@
 /* eslint-disable import/first */
 import { action } from '@storybook/addon-actions';
-import { boolean, object, color } from '@storybook/addon-knobs';
+import { boolean, color, object } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import Avatar from './index';

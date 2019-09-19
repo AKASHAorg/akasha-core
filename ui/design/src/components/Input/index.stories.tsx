@@ -1,6 +1,6 @@
 /* eslint-disable import/first */
-import { boolean, text, object, color } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
+import { boolean, color, object, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import { Search } from 'grommet-icons';
 import * as React from 'react';
@@ -80,7 +80,7 @@ const InputIconComponent = () => {
             placeholder={text('Placeholder', 'Text')}
             disabled={boolean('Disabled', false)}
             icon={<Search size="18px" color="light-1" />}
-            withButton
+            withButton={true}
             leftSideButton={boolean('Button on left side', false)}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
             onButtonClick={() => action('Button click')('Button has been clicked')}
@@ -117,7 +117,7 @@ const InputButtonComponent = () => {
             placeholder={text('Placeholder', 'Text')}
             disabled={boolean('Disabled', false)}
             icon="Search"
-            withButton
+            withButton={true}
             leftSideButton={boolean('Button on left side', false)}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
             onButtonClick={() => action('Button click')('Button has been clicked')}

@@ -1,9 +1,9 @@
 /* eslint-disable import/first */
 import { action } from '@storybook/addon-actions';
-import { boolean, text, select, object, color } from '@storybook/addon-knobs';
+import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
-import * as React from 'react';
 import { Box } from 'grommet';
+import * as React from 'react';
 import Button from './index';
 
 storiesOf('Button', module).add('default', () => (

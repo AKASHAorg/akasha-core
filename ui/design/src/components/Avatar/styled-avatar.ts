@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import MarginSetter from '../../utils/marginSetter';
 import MarginInterface from '../../interfaces/margin.interface';
+import MarginSetter from '../../utils/marginSetter';
 
 /* avatar size:
  * xs = 24px;

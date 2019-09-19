@@ -6,7 +6,7 @@ const colors: IColors = {
   dark: '#2E3747', // dark
   darkGrey: '#778390', // dark-grey
   grey: '#B4BCC8', // grey
-  lightGrey: '#D8DCDF', //light-grey
+  lightGrey: '#D8DCDF', // light-grey
   darkBackground: '#EFEFF1', // dark-background
   border: '#EEEEEE', // light-border
   background: '#F8F8F8', // background

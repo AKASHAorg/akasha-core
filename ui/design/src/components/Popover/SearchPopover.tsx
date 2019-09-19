@@ -1,17 +1,17 @@
+import { Add, Search } from 'grommet-icons';
 import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components';
-import { Search, Add } from 'grommet-icons';
-import { PopoverFC, PopoverProps } from './BasePopover';
-import List, { ListProps } from '../List';
-import Input from '../Input';
 import Button from '../Button';
+import Input from '../Input';
+import List, { ListProps } from '../List';
+import { PopoverFC, PopoverProps } from './BasePopover';
 import {
-  StyledSearchPopover,
-  StyledSearchPopoverHeader,
-  StyledSearchPopoverBody,
-  StyledListContainer,
   StyledAddIconContainer,
+  StyledListContainer,
+  StyledSearchPopover,
+  StyledSearchPopoverBody,
   StyledSearchPopoverFooter,
+  StyledSearchPopoverHeader,
 } from './styled-search-popover';
 
 const Popover: PopoverFC<PopoverProps> = (props: PopoverProps) => (
@@ -51,7 +51,7 @@ const SearchPopover: React.FC<SearchPopoverProps> = ({
           value={searchValue}
           placeholder={searchPlaceholder}
           icon={<Search size={iconSize} color="light-1" />}
-          withButton
+          withButton={true}
           onChange={onSearchChange}
           onButtonClick={onSearchClick}
         />
@@ -62,7 +62,7 @@ const SearchPopover: React.FC<SearchPopoverProps> = ({
         </StyledListContainer>
       </Popover.Body>
       <Popover.Footer>
-        <Button buttonType="regular" fullWidth onClick={onAddClick}>
+        <Button buttonType="regular" fullWidth={true} onClick={onAddClick}>
           <StyledAddIconContainer>
             <Add size={iconSize} color="light-1" />
           </StyledAddIconContainer>

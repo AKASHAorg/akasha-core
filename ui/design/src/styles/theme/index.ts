@@ -1,10 +1,10 @@
-import { DefaultTheme } from 'styled-components';
 import { deepMerge } from 'grommet/utils';
+import { DefaultTheme } from 'styled-components';
 import createCustomCheckBoxTheme from './components/checkbox';
-import createCustomRadiobuttonTheme from './components/radiobutton';
-import createCustomTextInputTheme from './components/text-input';
 // import createCustomModalTheme from './components/modal';
 import createCustomIconTheme from './components/icon';
+import createCustomRadiobuttonTheme from './components/radiobutton';
+import createCustomTextInputTheme from './components/text-input';
 
 const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
   return deepMerge(styledComponentsTheme, {

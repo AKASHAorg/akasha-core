@@ -1,8 +1,8 @@
 import { TextInput } from 'grommet';
 import * as React from 'react';
-import { StyledInput, StyledIconContainer } from './styled-input';
-import Button from '../Button';
 import MarginInterface from '../../interfaces/margin.interface';
+import Button from '../Button';
+import { StyledIconContainer, StyledInput } from './styled-input';
 
 export interface InputProps {
   value: string;

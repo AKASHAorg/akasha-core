@@ -41,7 +41,7 @@ const isDescendant = (parent: HTMLElement, child: HTMLElement) => {
   let node = child.parentNode;
 
   while (node !== null) {
-    if (node === parent) return true;
+    if (node === parent) { return true; }
     node = node.parentNode;
   }
   return false;
@@ -79,7 +79,7 @@ const useOnClickAway = (ref: React.RefObject<any>, handler: Function | undefined
       handlerRef.current && handlerRef.current(ev);
     };
     supportedEvents.forEach((eventName /* : EventNames */) => {
-      //@todo check if passive event is supported and use it
+      // @todo check if passive event is supported and use it
       document.body.addEventListener(`${eventName}`, listener);
     });
 

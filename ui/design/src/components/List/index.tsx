@@ -3,8 +3,8 @@ import {
   StyledList,
   StyledRow,
   StyledRowIcon,
-  StyledRowText,
   StyledRowNumber,
+  StyledRowText,
 } from './styled-list';
 
 export interface Item {

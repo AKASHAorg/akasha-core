@@ -1,8 +1,8 @@
 /* eslint-disable */
 import * as React from 'react';
-import StyledAvatar, { AvatarSize } from './styled-avatar';
 import CommonInterface from '../../interfaces/common.interface';
 import MarginInterface from '../../interfaces/margin.interface';
+import StyledAvatar, { AvatarSize } from './styled-avatar';
 
 export interface AvatarProps extends CommonInterface<HTMLDivElement> {
   src: string;

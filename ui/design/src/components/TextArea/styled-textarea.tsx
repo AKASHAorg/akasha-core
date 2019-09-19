@@ -1,7 +1,7 @@
-import styled, { css } from 'styled-components';
 import { TextArea } from 'grommet';
-import { ITextArea } from './index';
+import styled, { css } from 'styled-components';
 import MarginSetter from '../../utils/marginSetter';
+import { ITextArea } from './index';
 
 const StyledTextAreaContainer = styled.div`
   padding: 20px;

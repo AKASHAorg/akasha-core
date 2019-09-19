@@ -3,11 +3,11 @@ import React, { FC } from 'react';
 import CommonInterface from '../../interfaces/common.interface';
 import MarginInterface from '../../interfaces/margin.interface';
 import {
+  StyledTextArea,
   StyledTextAreaContainer,
   StyledTextAreaCounterContainer,
   StyledTextAreaLabel,
   StyledTextAreaLabelContainer,
-  StyledTextArea,
 } from './styled-textarea';
 
 export interface ITextArea extends TextAreaProps, CommonInterface<HTMLTextAreaElement> {

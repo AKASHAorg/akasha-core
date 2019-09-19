@@ -49,7 +49,7 @@ const StyledButton = styled.button<ButtonProps>`
     }
 
     // change background color to the one passed in props
-    if (backgroundColor) borderColor = backgroundColor;
+    if (backgroundColor) { borderColor = backgroundColor; }
 
     return css`
       background-color: ${ghost ? 'transparent' : borderColor};

@@ -1,5 +1,5 @@
-import { DefaultTheme } from 'styled-components';
 import { normalizeColor } from 'grommet/utils';
+import { DefaultTheme } from 'styled-components';
 
 interface TextInputProps {
   theme: object;

@@ -1,17 +1,17 @@
 /* eslint-disable import/first */
-import { text, boolean } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
-import * as icons from 'grommet-icons';
+import { boolean, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import '@trendmicro/react-popover/dist/react-popover.css';
 import { Box } from 'grommet';
+import * as icons from 'grommet-icons';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { renderItem } from '../List';
+import ActionPopover from './ActionPopover';
 import BasePopover from './BasePopover';
 import ListPopover from './ListPopover';
 import SearchPopover from './SearchPopover';
-import ActionPopover from './ActionPopover';
-import { renderItem } from '../List';
 
 const HelpTip = styled.div`
   display: inline-block;

@@ -1,6 +1,6 @@
 /* eslint-disable import/first */
 import { action } from '@storybook/addon-actions';
-import { boolean, number, select, text, object, color } from '@storybook/addon-knobs';
+import { boolean, color, number, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import TextArea from './index';

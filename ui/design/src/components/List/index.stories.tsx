@@ -1,9 +1,9 @@
 /* eslint-disable import/first */
 import { array } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
+import * as icons from 'grommet-icons';
 import React from 'react';
 import styled from 'styled-components';
-import * as icons from 'grommet-icons';
 import List, { renderItem } from './';
 
 const ListContainer = styled.div`

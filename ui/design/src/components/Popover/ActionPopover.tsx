@@ -1,12 +1,12 @@
 import PopoverBase from '@trendmicro/react-popover';
 import React from 'react';
+import Button from '../Button';
 import { PopoverFC, PopoverProps } from './BasePopover';
 import {
   StyledActionPopover,
   StyledActionPopoverBody,
   StyledActionPopoverFooter,
 } from './styled-action-popover';
-import Button from '../Button';
 
 const Popover: PopoverFC<PopoverProps> = (props: PopoverProps) => (
   <StyledActionPopover {...props} />
@@ -36,7 +36,7 @@ const ListPopover: React.FC<ActionPopoverProps> = ({
     <Popover show={show} placement={placement} target={target}>
       <Popover.Body>{content}</Popover.Body>
       <Popover.Footer>
-        <Button buttonType="regular" ghost onClick={onCancelClick}>
+        <Button buttonType="regular" ghost={true} onClick={onCancelClick}>
           Cancel
         </Button>
         <Button buttonType="primary" onClick={onOkClick}>

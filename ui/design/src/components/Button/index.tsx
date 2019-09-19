@@ -1,6 +1,6 @@
 import * as React from 'react';
-import StyledButton, { ButtonType } from './styled-button';
 import MarginInterface from '../../interfaces/margin.interface';
+import StyledButton, { ButtonType } from './styled-button';
 
 export interface IButtonProps {
   buttonType?: ButtonType;

@@ -1,11 +1,11 @@
 // import { ButtonProps } from 'grommet'
 import React, { useContext } from 'react';
 import Modal from 'react-modal';
-import { ThemeContext, DefaultTheme } from 'styled-components';
+import { DefaultTheme, ThemeContext } from 'styled-components';
 import commonInterface from '../../interfaces/common.interface';
 import Button, { IButtonProps } from '../Button';
 import { ButtonType } from '../Button/styled-button';
-import { ModalHeader, ModalBody, ModalFooter } from './styled-modal';
+import { ModalBody, ModalFooter, ModalHeader } from './styled-modal';
 
 export interface ModalProps extends commonInterface<any>, React.PropsWithChildren<any> {
   isOpen: boolean;

@@ -1,9 +1,9 @@
 import PopoverBase from '@trendmicro/react-popover';
 import React, { useRef } from 'react';
-import { PopoverFC, PopoverProps } from './BasePopover';
-import List, { ListProps } from '../List';
-import { StyledListPopover, StyledListPopoverBody } from './styled-list-popover';
 import useSimpleClickAway from '../../utils/simpleClickAway';
+import List, { ListProps } from '../List';
+import { PopoverFC, PopoverProps } from './BasePopover';
+import { StyledListPopover, StyledListPopoverBody } from './styled-list-popover';
 // import { useOnClickAway } from '../../utils/clickAway'
 
 const Popover: PopoverFC<PopoverProps> = (props: PopoverProps) => <StyledListPopover {...props} />;
