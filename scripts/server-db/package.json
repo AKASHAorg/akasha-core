@@ -5,7 +5,7 @@
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
   ],
-  "homepage": "https://github.com/AkashaProject/akasha-sdk-js#readme",
+  "homepage": "https://github.com/AkashaProject/akasha-world-framework#readme",
   "license": "Apache-2.0",
   "main": "lib/main.js",
   "directories": {
@@ -16,14 +16,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-sdk-js.git"
+    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
   },
   "scripts": {
     "tsc": "tsc --project tsconfig.json",
     "start": "npm run tsc && node lib/main.js"
   },
   "bugs": {
-    "url": "https://github.com/AkashaProject/akasha-sdk-js/issues"
+    "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
   },
   "dependencies": {
     "pouchdb-adapter-memory": "^7.1.1",

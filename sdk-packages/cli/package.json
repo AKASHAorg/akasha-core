@@ -6,7 +6,7 @@
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
   ],
-  "homepage": "https://github.com/AkashaProject/akasha-sdk-js#readme",
+  "homepage": "https://github.com/AkashaProject/akasha-world-framework#readme",
   "license": "ISC",
   "main": "lib/index.js",
   "bin": {
@@ -21,7 +21,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-sdk-js.git"
+    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
   },
   "scripts": {
     "test": "jest",
@@ -29,7 +29,7 @@
     "build": "NODE_OPTIONS='--max-old-space-size=2096' rollup -c"
   },
   "bugs": {
-    "url": "https://github.com/AkashaProject/akasha-sdk-js/issues"
+    "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
   },
   "devDependencies": {
     "rollup": "^1.0.0",

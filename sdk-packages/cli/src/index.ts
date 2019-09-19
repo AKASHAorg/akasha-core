@@ -1,7 +1,7 @@
 /* tslint:disable */
 // remove comment after fixing shebang banner for rollup
 // #!/usr/bin/env node
-import commonServices, { WEB3_SERVICE } from '@akashaproject/sdk-common/lib/constants';
+import commonServices from '@akashaproject/sdk-common/lib/constants';
 import { callService } from '@akashaproject/sdk-core/lib/utils';
 import initSdk from '@akashaproject/sdk/lib';
 
