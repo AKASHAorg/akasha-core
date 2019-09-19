@@ -18,13 +18,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-sdk-js.git"
+    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
   },
   "license": "MPL-2.0",
   "bugs": {
-    "url": "https://github.com/AkashaProject/akasha-sdk-js/issues"
+    "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
   },
-  "homepage": "https://github.com/AkashaProject/akasha-sdk-js/ui/design#readme",
+  "homepage": "https://github.com/AkashaProject/akasha-world-framework/ui/design#readme",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

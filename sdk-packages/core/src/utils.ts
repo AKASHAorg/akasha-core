@@ -73,6 +73,7 @@ export const callServiceMethod = R.curry(_callServiceMethod);
 export function fromEntries(entries: Array<[string | number, any]>) {
   return R.fromPairs(entries);
 }
+
 export function toEntries(obj: object) {
   return R.toPairs(obj);
 }

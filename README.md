@@ -1,8 +1,8 @@
 # akasha-sdk-js
 
-Monorepo for the AKASHA JavaScript SDK
+Monorepo for the AKASHA World Framework
 
-[![CodeFactor](https://www.codefactor.io/repository/github/akashaproject/akasha-sdk-js/badge)](https://www.codefactor.io/repository/github/akashaproject/akasha-sdk-js)
+[![CodeFactor](https://www.codefactor.io/repository/github/akashaproject/akasha-world-framework/badge)](https://www.codefactor.io/repository/github/akashaproject/akasha-world-framework)
 
 ## Development
 
