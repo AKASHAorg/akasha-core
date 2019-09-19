@@ -14,6 +14,7 @@ const i18nDefaultConfig: i18n.InitOptions = {
   ns: [],
   saveMissing: true,
   saveMissingTo: 'all',
+  load: 'currentOnly',
 };
 
 export default class TranslationManager {
@@ -39,14 +40,15 @@ export default class TranslationManager {
     return i18nInstance;
   }
 
-  public initI18nForPlugin(plugin: IPlugin): Promise<void> {
+  public async initI18nFor(plugin: IPlugin): Promise<void> {
     const { name, i18nConfig } = plugin;
     document.addEventListener('change-language', this.onLanguageChange(plugin.name));
     const instance: i18n.i18n = this.i18nInstances[name];
     i18nConfig.use.forEach(ext => {
       instance.use(ext);
     });
-    return instance.init().then(() => instance.loadNamespaces([...i18nConfig.loadNS, plugin.name]));
+    await instance.init();
+    return await instance.loadNamespaces([...i18nConfig.loadNS, plugin.name]);
   }
 
   public getInstance(name: string) {

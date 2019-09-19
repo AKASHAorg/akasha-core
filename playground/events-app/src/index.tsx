@@ -13,6 +13,7 @@ const app = new AppLoader({
 const commonModule = ['commons', sdk.modules.commons];
 const promises = [
   app.registerPlugin(Plugin, { activeWhen: { path: '/events' } }, [commonModule]),
-  app.registerPlugin(Sidebar, { activeWhen: { path: '/' } }, [commonModule]),
+  // app.registerPlugin(Sidebar, { activeWhen: { path: '/' } }, [commonModule]),
+  app.registerWidget(Sidebar, [commonModule]),
 ];
 Promise.all(promises).then(() => app.start());

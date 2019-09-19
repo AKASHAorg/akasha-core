@@ -4,12 +4,6 @@ import { initReactI18next } from 'react-i18next';
  * All widgets must export an object like this:
  */
 export default {
-  // This is the root route in which the plugin will render.
-  // Make sure to change it as it fits.
-  activeWhen: {
-    exact: false,
-    path: '/',
-  },
   // translation config
   i18nConfig: {
     // namespaces that this plugin requires.
