@@ -22,7 +22,8 @@
   },
   "scripts": {
     "test": "jest",
-    "tsc": "tsc --build"
+    "tsc": "tsc --build",
+    "prepare": "npm run tsc"
   },
   "bugs": {
     "url": "https://github.com/AkashaProject/akasha-world-framework/issues"

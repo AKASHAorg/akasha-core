@@ -25,13 +25,15 @@
   "scripts": {
     "test": "jest",
     "tsc": "tsc --build",
-    "build": "rimraf dist && NODE_OPTIONS='--max-old-space-size=2096' webpack",
+    "prepare": "npm run tsc",
+    "build": "rimraf dist && NODE_OPTIONS='--max-old-space-size=4096' webpack",
     "docs": "typedoc"
   },
   "bugs": {
     "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
   },
   "dependencies": {
+    "@akashaproject/sdk-3box": "*",
     "@akashaproject/sdk-common": "*",
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-db": "*",
