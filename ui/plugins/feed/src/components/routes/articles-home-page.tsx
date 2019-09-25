@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, match } from 'react-router-dom';
 import { useArticles } from '../state/articles';
 
-export interface IEventHomePageProps {
+export interface IArticlesHomePageProps {
   rootPath: string;
   match: match<any> | null;
 }
@@ -13,30 +13,30 @@ const randomArr = (size: number, max: number) =>
   [...new Array(size)].map(() => Math.round(Math.random() * max));
 /* Remove this ^^^ */
 
-const EventHomePage: React.FC<IEventHomePageProps> = () => {
+const ArticlesHomePage: React.FC<IArticlesHomePageProps> = () => {
   const [t] = useTranslation();
   const [articleState, articleActions] = useArticles();
-  const fetchMoreEvents = (ev: React.SyntheticEvent) => {
-    const events = randomArr(3, 100).map(num => ({
-      name: `Random Event ${num}`,
-      href: `/events/old-event-${num}`,
+  const fetchMoreArticles = (ev: React.SyntheticEvent) => {
+    const articles = randomArr(3, 100).map(num => ({
+      title: `Random Article ${num}`,
+      href: `/article/old-event-${num}`,
     }));
-    articleActions.GET_MORE_EVENTS(events);
+    articleActions.getMoreArticles({ articles });
     ev.preventDefault();
   };
   return (
     <div>
-      {t('Events List')}
+      {t('Articles List')}
       {articleState.articles.map(article => (
         <div key={article.href}>
           <span>
-            {t('common:Name')} <Link to={{ pathname: `${article.href}` }}>{article.name}</Link>
+            {t('common:Title')} <Link to={{ pathname: `${article.href}` }}>{article.title}</Link>
           </span>
         </div>
       ))}
-      <button onClick={fetchMoreEvents}>Get more</button>
+      <button onClick={fetchMoreArticles}>Get more</button>
     </div>
   );
 };
 
-export default EventHomePage;
+export default ArticlesHomePage;

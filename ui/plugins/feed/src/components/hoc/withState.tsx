@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useProfile } from '../reducers/profiles';
+import { useArticles } from '../state/articles';
 
 export const withProfileState = (Component: React.ComponentType) => (props: any) => {
-  const [profileState, profileDispatch] = useProfile();
-  return <Component profileState={profileState} profileDispatch={profileDispatch} {...props} />;
+  const [articlesState, articlesActions] = useArticles();
+  return <Component articleState={articlesState} articleActions={articlesActions} {...props} />;
 };

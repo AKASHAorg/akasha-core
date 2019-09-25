@@ -88,6 +88,7 @@ export default class AppLoader {
           {
             ...this.config,
             ...pluginConfig,
+            activeWhen: plugin.activeWhen,
             domElement: domEl,
             i18n: i18nInstance,
             i18nConfig: plugin.i18nConfig,

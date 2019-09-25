@@ -24,7 +24,7 @@ export const articlesReducer: Reducer = handleActions<typeof actionTypes, IArtic
       return draft;
     },
     GET_MORE_ARTICLES: (draft, payload) => {
-      draft.articles = draft.articles.concat(payload);
+      draft.articles = draft.articles.concat(payload.articles);
       return draft;
     },
     CHANGE_FILTER: (draft, payload) => {
@@ -47,7 +47,7 @@ const useValue: UseValueType = ({
   init: (initial: Partial<IArticlesState>) => IArticlesState;
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState, init);
-  const actions = getArticlesActions(dispatch, actionTypes);
+  const actions = getArticlesActions(dispatch);
   return [state, actions];
 };
 

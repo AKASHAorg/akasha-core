@@ -7,8 +7,7 @@ export default {
   // This is the root route in which the plugin will render.
   // Make sure to change it as it fits.
   activeWhen: {
-    exact: true,
-    path: '/events',
+    path: '/feed',
   },
   // translation config
   i18nConfig: {
@@ -23,7 +22,7 @@ export default {
     use: [initReactI18next],
   },
   loadingFn: (): Promise<any> => import('./components'),
-  name: 'ui-plugin-events',
+  name: 'ui-plugin-feed',
   services: [],
-  title: 'AKASHA Events',
+  title: 'AKASHA Feed',
 };
