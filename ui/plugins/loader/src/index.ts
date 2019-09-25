@@ -4,6 +4,7 @@ import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
 import TranslationManager from './i18n';
 import { setPageTitle } from './setPageMetadata';
+import { validatePlugin, validateWidget } from './validations';
 
 export interface II18nConfig {
   use: any[];
@@ -13,7 +14,7 @@ export interface II18nConfig {
 
 export interface IPlugin {
   name: string;
-  services: any[];
+  services?: any[];
   i18nConfig: II18nConfig;
   loadingFn: () => Promise<any>;
   activeWhen: {
@@ -26,6 +27,7 @@ export interface IPlugin {
 export interface IWidget {
   name: string;
   loadingFn: () => Promise<any>;
+  services?: any[];
 }
 
 export interface IPluginConfig {
@@ -61,10 +63,10 @@ export default class AppLoader {
 
   public async registerPlugin(
     plugin: IPlugin,
-    pluginConfig: IPluginConfig,
+    pluginConfig: IPluginConfig | null,
     sdkModules?: any[],
   ): Promise<void> {
-    if (this._validatePlugin(plugin)) {
+    if (validatePlugin(plugin)) {
       if (pluginConfig && pluginConfig.activeWhen && pluginConfig.activeWhen.path) {
         plugin.activeWhen = pluginConfig.activeWhen;
       }
@@ -173,7 +175,10 @@ export default class AppLoader {
         }, []),
       );
       if (rootEl) {
-        rootEl.innerHTML = FourOhFourString;
+        const node = document.createElement('div');
+        node.id = 'not-found-page';
+        node.innerHTML = FourOhFourString;
+        rootEl.appendChild(node);
       }
     } else {
       setPageTitle(
@@ -195,14 +200,6 @@ export default class AppLoader {
       return location.pathname === activeWhen.path;
     }
     return location.pathname.startsWith(`${activeWhen.path}`);
-  }
-
-  protected _validatePlugin(plugin: IPlugin): boolean {
-    if (Array.isArray(plugin.services)) {
-      // check services and return false if they are not ok
-      return true;
-    }
-    return true;
   }
 
   private async createRootNodes(name: string) {
