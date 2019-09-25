@@ -1,4 +1,5 @@
 import IDIContainer from '@akashaproject/sdk-runtime/lib/IDIContainer';
+import pino from 'pino';
 import * as R from 'ramda';
 import {
   AkashaService,
@@ -7,6 +8,8 @@ import {
   IAkashaModule,
   IAkashaNamedService,
 } from './IAkashaModule';
+
+export const logger = pino({ browser: { asObject: true } });
 
 // to not import explicit the module interface just for getting the serviceName
 export function getServiceName(service: { moduleName: string; providerName: string }) {
