@@ -166,6 +166,10 @@ export default class AppLoader {
 
   protected _beforeRouting() {
     const plugins = this.getPluginsForLocation(window.location);
+    const handleNavigation = (path: string) => (ev: Event) => {
+      singleSpa.navigateToUrl(path);
+      ev.preventDefault();
+    };
     if (!plugins.length) {
       const rootEl = document.getElementById(this.config.rootNodeId);
       const FourOhFourString: string = fourOhFour(
@@ -173,10 +177,11 @@ export default class AppLoader {
           prev.push({ title: curr.title, activeWhen: curr.activeWhen });
           return prev;
         }, []),
+        handleNavigation,
       );
       if (rootEl) {
         const node = document.createElement('div');
-        node.id = 'not-found-page';
+        node.id = 'plugin-not-found';
         node.innerHTML = FourOhFourString;
         rootEl.appendChild(node);
       }
