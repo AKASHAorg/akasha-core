@@ -154,7 +154,8 @@ export default class AppLoader {
     };
     if (!plugins.length) {
       const rootEl = document.getElementById(this.config.rootNodeId);
-      const FourOhFourString: string = fourOhFour(
+      // create a 404 page and return it instead of a plugin
+      const FourOhFourNode: ChildNode = fourOhFour(
         this.plugins.reduce((prev, curr): IPlugin[] => {
           prev.push({ title: curr.title, activeWhen: curr.activeWhen });
           return prev;
@@ -162,12 +163,15 @@ export default class AppLoader {
         handleNavigation,
       );
       if (rootEl) {
-        const node = document.createElement('div');
-        node.id = 'plugin-not-found';
-        node.innerHTML = FourOhFourString;
-        rootEl.appendChild(node);
+        const template = document.createElement('template');
+        rootEl.appendChild(FourOhFourNode);
       }
     } else {
+      const fourOhFourElem = document.getElementById('four-oh-four');
+      // cleanup 404 element if exist (recovering from a 404 page)
+      if (fourOhFourElem) {
+        fourOhFourElem.parentElement.removeChild(fourOhFourElem);
+      }
       setPageTitle(
         this.plugins.filter(
           plugin =>
