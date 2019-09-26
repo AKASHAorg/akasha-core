@@ -3,32 +3,9 @@ import pino from 'pino';
 import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
 import TranslationManager from './i18n';
+import { IPlugin, IWidget } from './interfaces';
 import { setPageTitle } from './setPageMetadata';
 import { validatePlugin, validateWidget } from './validations';
-
-export interface II18nConfig {
-  use: any[];
-  loadNS?: string[];
-  ns?: string;
-}
-
-export interface IPlugin {
-  name: string;
-  services?: any[];
-  i18nConfig: II18nConfig;
-  loadingFn: () => Promise<any>;
-  activeWhen: {
-    exact?: boolean;
-    path: string;
-  };
-  title?: string;
-}
-
-export interface IWidget {
-  name: string;
-  loadingFn: () => Promise<any>;
-  services?: any[];
-}
 
 export interface IPluginConfig {
   activeWhen?: {
@@ -116,18 +93,22 @@ export default class AppLoader {
       const { widget } = widgetInfo;
       const domEl = await this.createRootNodes(widget.name);
       const i18nInstance = await this.translationManager.createInstance(widget);
-      try {
-        singleSpa.mountRootParcel(this.beforeLoading(widget.loadingFn, widget), {
-          ...this.config,
-          ...widgetInfo.widget,
-          domElement: domEl,
-          i18n: i18nInstance,
-        });
-        return Promise.resolve();
-      } catch (ex) {
-        return Promise.reject(
-          `[AppLoader] cannot load widget ${widgetInfo.widget.name}: ${ex.message}`,
-        );
+      if (validateWidget(widget)) {
+        try {
+          singleSpa.mountRootParcel(this.beforeLoading(widget.loadingFn, widget), {
+            ...this.config,
+            ...widgetInfo.widget,
+            domElement: domEl,
+            i18n: i18nInstance,
+          });
+          return Promise.resolve();
+        } catch (ex) {
+          return Promise.reject(
+            `[AppLoader] cannot load widget ${widgetInfo.widget.name}: ${ex.message}`,
+          );
+        }
+      } else {
+        throw new Error(`[@akashaproject/ui-plugin-loader]: Plugin ${widget.name} is not valid`);
       }
     });
     return Promise.all(promises);
