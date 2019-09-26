@@ -22,6 +22,7 @@ const service: AkashaService = (invoke, log) => {
     log.info('getting the ethAddress for the current signer');
     const ethersService = invoke(commonServices[WEB3_SERVICE]);
     const provider = ethersService.getWeb3Instance();
+    // @todo: issue here, not found every time
     log.info('found web3 provider', provider);
     const signer = await provider.getSigner();
     const ethAddress = await signer.getAddress();

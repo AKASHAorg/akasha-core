@@ -22,7 +22,7 @@ const start = (
   return buildModuleServiceChannels(mList, sendChanel);
 };
 
-export default function init(options = { start: true }) {
+module.exports = function init(options = { start: true }) {
   const di: DIContainer = initDI();
   const commonModule = registerCommonModule();
   const dbModule = registerDBModule();
@@ -39,4 +39,4 @@ export default function init(options = { start: true }) {
   // for the case when options.start is false the start function is returned
   const startFn = options.start ? { modules } : { start, modulesList };
   return Object.assign({}, baseReturnedObj, startFn);
-}
+};
