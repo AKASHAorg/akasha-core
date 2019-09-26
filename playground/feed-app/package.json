@@ -1,10 +1,10 @@
 {
-  "name": "events-app-dev",
+  "name": "feed-app-dev",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@akashaproject/sdk": "*",
     "@akashaproject/ui-plugin-events": "*",
+    "@akashaproject/ui-plugin-feed": "*",
     "@akashaproject/ui-plugin-loader": "*",
     "@akashaproject/ui-widget-sidebar": "*",
     "@akashaproject/design-system": "*",

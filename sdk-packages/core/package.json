@@ -31,7 +31,7 @@
   "dependencies": {
     "@akashaproject/sdk-runtime": "*",
     "pino": "^5.13.3",
-    "ramda": "^0.26.1"
+    "ramda": "https://github.com/ramda/ramda"
   },
   "devDependencies": {
     "@types/ramda": "github:types/npm-ramda#dist"

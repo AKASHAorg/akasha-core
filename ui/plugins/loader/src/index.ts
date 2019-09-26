@@ -3,30 +3,9 @@ import pino from 'pino';
 import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
 import TranslationManager from './i18n';
+import { IPlugin, IWidget } from './interfaces';
 import { setPageTitle } from './setPageMetadata';
-
-export interface II18nConfig {
-  use: any[];
-  loadNS?: string[];
-  ns?: string;
-}
-
-export interface IPlugin {
-  name: string;
-  services: any[];
-  i18nConfig: II18nConfig;
-  loadingFn: () => Promise<any>;
-  activeWhen: {
-    exact?: boolean;
-    path: string;
-  };
-  title?: string;
-}
-
-export interface IWidget {
-  name: string;
-  loadingFn: () => Promise<any>;
-}
+import { validatePlugin, validateWidget } from './validations';
 
 export interface IPluginConfig {
   activeWhen?: {
@@ -61,10 +40,10 @@ export default class AppLoader {
 
   public async registerPlugin(
     plugin: IPlugin,
-    pluginConfig: IPluginConfig,
+    pluginConfig: IPluginConfig | null,
     sdkModules?: any[],
   ): Promise<void> {
-    if (this._validatePlugin(plugin)) {
+    if (validatePlugin(plugin)) {
       if (pluginConfig && pluginConfig.activeWhen && pluginConfig.activeWhen.path) {
         plugin.activeWhen = pluginConfig.activeWhen;
       }
@@ -86,6 +65,7 @@ export default class AppLoader {
           {
             ...this.config,
             ...pluginConfig,
+            activeWhen: plugin.activeWhen,
             domElement: domEl,
             i18n: i18nInstance,
             i18nConfig: plugin.i18nConfig,
@@ -113,18 +93,22 @@ export default class AppLoader {
       const { widget } = widgetInfo;
       const domEl = await this.createRootNodes(widget.name);
       const i18nInstance = await this.translationManager.createInstance(widget);
-      try {
-        singleSpa.mountRootParcel(this.beforeLoading(widget.loadingFn, widget), {
-          ...this.config,
-          ...widgetInfo.widget,
-          domElement: domEl,
-          i18n: i18nInstance,
-        });
-        return Promise.resolve();
-      } catch (ex) {
-        return Promise.reject(
-          `[AppLoader] cannot load widget ${widgetInfo.widget.name}: ${ex.message}`,
-        );
+      if (validateWidget(widget)) {
+        try {
+          singleSpa.mountRootParcel(this.beforeLoading(widget.loadingFn, widget), {
+            ...this.config,
+            ...widgetInfo.widget,
+            domElement: domEl,
+            i18n: i18nInstance,
+          });
+          return Promise.resolve();
+        } catch (ex) {
+          return Promise.reject(
+            `[AppLoader] cannot load widget ${widgetInfo.widget.name}: ${ex.message}`,
+          );
+        }
+      } else {
+        throw new Error(`[@akashaproject/ui-plugin-loader]: Plugin ${widget.name} is not valid`);
       }
     });
     return Promise.all(promises);
@@ -164,6 +148,10 @@ export default class AppLoader {
 
   protected _beforeRouting() {
     const plugins = this.getPluginsForLocation(window.location);
+    const handleNavigation = (path: string) => (ev: Event) => {
+      singleSpa.navigateToUrl(path);
+      ev.preventDefault();
+    };
     if (!plugins.length) {
       const rootEl = document.getElementById(this.config.rootNodeId);
       const FourOhFourString: string = fourOhFour(
@@ -171,9 +159,13 @@ export default class AppLoader {
           prev.push({ title: curr.title, activeWhen: curr.activeWhen });
           return prev;
         }, []),
+        handleNavigation,
       );
       if (rootEl) {
-        rootEl.innerHTML = FourOhFourString;
+        const node = document.createElement('div');
+        node.id = 'plugin-not-found';
+        node.innerHTML = FourOhFourString;
+        rootEl.appendChild(node);
       }
     } else {
       setPageTitle(
@@ -195,14 +187,6 @@ export default class AppLoader {
       return location.pathname === activeWhen.path;
     }
     return location.pathname.startsWith(`${activeWhen.path}`);
-  }
-
-  protected _validatePlugin(plugin: IPlugin): boolean {
-    if (Array.isArray(plugin.services)) {
-      // check services and return false if they are not ok
-      return true;
-    }
-    return true;
   }
 
   private async createRootNodes(name: string) {

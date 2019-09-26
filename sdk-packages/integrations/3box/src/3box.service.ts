@@ -15,7 +15,7 @@ const service: AkashaService = (invoke, log) => {
     return Box.getProfile(ethAddress, { ipfs });
   };
 
-  const authenticate = async (refresh: boolean = false) => {
+  const authenticate = async (refresh?: boolean) => {
     if (box && !refresh) {
       return box;
     }
@@ -26,9 +26,9 @@ const service: AkashaService = (invoke, log) => {
     log.info('found web3 provider', provider);
     const signer = await provider.getSigner();
     const ethAddress = await signer.getAddress();
-    const ipfs = invoke(commonServices[IPFS_SERVICE]);
+    // const ipfs = invoke(commonServices[IPFS_SERVICE]);
     log.info('opening Box for', ethAddress);
-    box = await Box.openBox(ethAddress, provider, { ipfs });
+    box = await Box.openBox(ethAddress, provider);
     return box;
   };
   return registerServiceMethods({ getProfile, authenticate });
