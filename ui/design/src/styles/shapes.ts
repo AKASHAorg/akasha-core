@@ -1,4 +1,7 @@
 export interface IShapes {
+  avatar: {
+    borderRadius: string;
+  };
   borderRadius: string;
   fontFamily: string;
   fontWeight: {
@@ -12,6 +15,9 @@ export interface IShapes {
 }
 
 const shapes: IShapes = {
+  avatar: {
+    borderRadius: '50%',
+  },
   borderRadius: '3px',
   fontFamily: 'Content-font, Roboto, sans-serif',
   fontWeight: {

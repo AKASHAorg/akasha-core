@@ -10,6 +10,7 @@ export interface AvatarProps extends CommonInterface<HTMLDivElement> {
   alt?: string;
   margin?: MarginInterface;
   backgroundColor?: string;
+  withBorder?: boolean;
 }
 
 const Avatar: React.FC<AvatarProps & Partial<typeof defaultProps>> = props => {
@@ -17,12 +18,12 @@ const Avatar: React.FC<AvatarProps & Partial<typeof defaultProps>> = props => {
 
   return (
     <StyledAvatar
-      roundedCorners={props.roundedCorners}
       onClick={props.onClick}
       size={props.size!}
       isClickable={isClickable}
       margin={props.margin}
       backgroundColor={props.backgroundColor}
+      withBorder={props.withBorder}
     >
       <img src={props.src} alt={props.alt} />
     </StyledAvatar>
@@ -30,8 +31,8 @@ const Avatar: React.FC<AvatarProps & Partial<typeof defaultProps>> = props => {
 };
 
 const defaultProps = {
-  size: 'xs' as AvatarSize,
-  roundedCorners: true,
+  size: 'md' as AvatarSize,
+  withBorder: false,
 };
 Avatar.defaultProps = defaultProps;
 

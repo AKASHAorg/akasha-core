@@ -14,4 +14,5 @@ export default interface IColors {
   green: string;
   yellow: string;
   white: string;
+  avatarBorder: string;
 }

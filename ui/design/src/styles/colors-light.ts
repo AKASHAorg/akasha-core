@@ -17,7 +17,9 @@ const colors: IColors = {
   green: '#7ACC80', // green
   yellow: '#FFC02F', // yellow
   white: '#FFF', // white
+  avatarBorder: '#F8F8F8',
 };
+
 export default colors;
 
 /***

@@ -8,6 +8,7 @@ export interface ISpacing {
       sizes: {
         [key: string]: string;
       };
+      borderSize: string;
     };
     button: {
       padding: {
@@ -127,8 +128,9 @@ const spacing: ISpacing = {
         xs: '24px',
         sm: '32px',
         md: '40px',
-        lg: '48px',
+        lg: '84px',
       },
+      borderSize: '4px',
     },
     button: {
       padding: {
