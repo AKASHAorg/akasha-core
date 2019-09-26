@@ -1,4 +1,7 @@
-export default function fourOhFour(otherRoutes): string {
+export default function fourOhFour(
+  otherRoutes,
+  onNavigation: (path: string) => EventHandlerNonNull,
+): string {
   const htmlString = `
         <div style="display: flex; flex-direction: column; height: 100%; align-items:center; justify-content: center; color: #808080">
             <h1 style="font-size: 5em">404</h1>
@@ -7,7 +10,9 @@ export default function fourOhFour(otherRoutes): string {
             ${otherRoutes
               .map(route => {
                 if (route.title) {
-                  return `<a href="${route.activeWhen.path}">${route.title}</a>`;
+                  return `<a href="${route.activeWhen.path}" onclick="${onNavigation(
+                    route.activeWhen.path,
+                  )}">${route.title}</a>`;
                 }
                 return null;
               })
