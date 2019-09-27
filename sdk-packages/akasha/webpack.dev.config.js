@@ -11,6 +11,7 @@ const config = {
     library: 'AkashaSDK',
     libraryTarget: 'umd',
     umdNamedDefine: true,
+    publicPath: '/',
   },
   optimization: {
     minimize: false,

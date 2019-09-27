@@ -1,15 +1,15 @@
 import Box from '3box';
 import commonServices, {
+  CACHE_SERVICE,
   IPFS_SERVICE,
   WEB3_SERVICE,
   WEB3_UTILS_SERVICE,
 } from '@akashaproject/sdk-common/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import { registerServiceMethods, toNamedService } from '@akashaproject/sdk-core/lib/utils';
-import { BOX_SERVICE } from './constants';
+import boxServices, { BOX_SERVICE } from './constants';
 
 const service: AkashaService = (invoke, log) => {
-  let box: Box;
   const getProfile = async (ethAddress: string) => {
     log.info('fetching profile for', ethAddress);
     const ipfs = invoke(commonServices[IPFS_SERVICE]);
@@ -17,6 +17,10 @@ const service: AkashaService = (invoke, log) => {
   };
 
   const authenticate = async (refresh?: boolean) => {
+    let box: Box;
+    // fetch existing Box instance
+    const cacheService = invoke(commonServices[CACHE_SERVICE]);
+    box = cacheService.stash().get(boxServices[BOX_SERVICE]);
     if (box && !refresh) {
       return box;
     }
@@ -40,6 +44,8 @@ const service: AkashaService = (invoke, log) => {
         },
       },
     );
+    // update the cache
+    cacheService.stash().set(boxServices[BOX_SERVICE], box);
     return box;
   };
   return registerServiceMethods({ getProfile, authenticate });
