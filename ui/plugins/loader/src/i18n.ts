@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Fetch from 'i18next-fetch-backend';
-import { IPlugin } from '.';
+import { IPlugin } from './interfaces';
 
 const i18nDefaultConfig: i18n.InitOptions = {
   backend: {

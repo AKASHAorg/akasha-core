@@ -1,5 +1,11 @@
 {
-  "packages": ["sdk-packages/*", "ui/**", "playground/*", "scripts/*"],
+  "packages": [
+    "sdk-packages/*",
+    "ui/**",
+    "playground/*",
+    "scripts/*",
+    "sdk-packages/integrations/*"
+  ],
   "npmClient": "npm",
   "useWorkspaces": false,
   "version": "0.0.0"

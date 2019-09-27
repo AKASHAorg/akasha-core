@@ -8,7 +8,7 @@
     "bootstrap": "lerna bootstrap",
     "bootstrap:hoist": "lerna bootstrap --hoist",
     "build": "lerna clean && lerna bootstrap && lerna run tsc && lerna run build",
-    "build:sdk": "lerna run build --scope @akashaproject/sdk",
+    "build:sdk": "npm run tsc:sdk && lerna run build --scope @akashaproject/sdk --stream",
     "clean": "lerna clean",
     "docs": "lerna run docs --scope @akashaproject/sdk --scope @akashaproject/sdk-common",
     "fresh-install": "npm run clean && npm run bootstrap",
@@ -23,8 +23,7 @@
     "script:dev-db": "lerna run start --scope @akashaproject/script-server-db --stream",
     "start:feed-app": "lerna exec --parallel --scope translations-server --scope feed-app-dev -- npm run start --stream",
     "start:translations-server": "npm run start --prefix scripts/translations-server",
-    "start:design-system:storybook": "lerna run storybook --scope @akashaproject/design-system --stream",
-    "start-translations-server": "npm run start --prefix scripts/translations-server"
+    "start:design-system:storybook": "lerna run storybook --scope @akashaproject/design-system --stream"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",

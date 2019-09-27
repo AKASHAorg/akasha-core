@@ -25,7 +25,7 @@
   },
   "scripts": {
     "test": "jest",
-    "tsc": "tsc --build",
+    "tscx": "tsc --build",
     "build": "NODE_OPTIONS='--max-old-space-size=2096' rollup -c"
   },
   "bugs": {
