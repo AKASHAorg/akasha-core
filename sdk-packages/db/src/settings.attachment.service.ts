@@ -10,7 +10,7 @@ import {
   removeSettingAttachment,
 } from './db.methods/settings-attachment';
 
-const service: AkashaService = invoke => {
+const service: AkashaService = (invoke, log) => {
   const { getDB } = invoke(dbServices[DB_SERVICE]);
   // @Todo: get address from current session
   const getSettingsDoc = async (ethAddress: string) => {

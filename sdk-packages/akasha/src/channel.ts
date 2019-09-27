@@ -10,7 +10,7 @@ export default function init(di: IDIContainer): any {
   // call any registered service and create an Observable
   const send = (servicePath: AkashaServicePath, method: string, args: object): Observable<any> => {
     // @Todo: handle unresolved methods
-    const service = invoke(servicePath)(method);
+    const service: any = invoke(servicePath)(method);
     return callChannelService(service, args);
   };
   return { send: toCurried(send) };

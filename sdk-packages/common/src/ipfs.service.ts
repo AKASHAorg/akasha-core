@@ -9,7 +9,7 @@ const IPFS = require('ipfs');
 const service: AkashaService = (invoke, log) => {
   const getInstance = async (refresh: boolean) => {
     let ipfsNode;
-    const stash: any = invoke(commonServices[CACHE_SERVICE]).stash();
+    const stash: any = await invoke(commonServices[CACHE_SERVICE]).getStash();
     ipfsNode = stash.get(commonServices[IPFS_SERVICE]);
     if (ipfsNode && !refresh) {
       log.info('reusing existing ipfs instance');

@@ -8,7 +8,7 @@ export interface IAkashaNamedService {
   service: AkashaService;
 }
 
-export type AkashaServiceMethods = R.Variadic<object>;
+export type AkashaServiceMethods = R.Variadic<Promise<object>>;
 export type AkashaService = (
   serviceInvoker: R.CurriedFunction1<[string, string], any>,
   logger?: pino,
