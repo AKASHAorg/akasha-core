@@ -9,12 +9,13 @@ import { ethers } from 'ethers';
 import { EthProviders, WEB3_SERVICE } from './constants';
 import getProvider from './web3.methods/provider';
 
-const service: AkashaService = invoke => {
+const service: AkashaService = (invoke, log) => {
   let web3Provider;
 
-  const regen = provider => {
+  const regen = async provider => {
+    log.info('returning a new ethers provider instance');
     const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);
-    web3Provider = getProvider(getSettings, provider);
+    web3Provider = await getProvider(getSettings, provider);
     return web3Provider;
   };
 
@@ -24,17 +25,20 @@ const service: AkashaService = invoke => {
   };
 
   // fetch an existing instance or create web3Provider
-  const web3 = (provider: EthProviders) => {
+  const web3 = async (provider: EthProviders) => {
     if (!web3Provider) {
-      return regen(provider);
+      return await regen(provider);
     }
+    log.info('reusing an existing ethers provider instance');
     return web3Provider;
   };
+
+  const getWeb3Instance = () => web3Provider;
 
   // wrapper
   const wallet = createServiceMethod(ethers.Wallet);
 
-  return registerServiceMethods({ regen, destroy, wallet, web3 });
+  return registerServiceMethods({ regen, destroy, wallet, web3, getWeb3Instance });
 };
 
 export default toNamedService(WEB3_SERVICE, service);

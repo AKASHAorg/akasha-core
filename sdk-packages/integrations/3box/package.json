@@ -1,7 +1,7 @@
 {
-  "name": "@akashaproject/sdk-db",
+  "name": "@akashaproject/sdk-3box",
   "version": "0.1.0",
-  "description": "> TODO: description",
+  "description": "3box integration package",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
@@ -23,25 +23,15 @@
   "scripts": {
     "test": "jest",
     "tsc": "tsc --build",
-    "prepare": "npm run tsc",
-    "docs": "typedoc"
+    "prepare": "npm run tsc"
   },
   "bugs": {
     "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
   },
   "dependencies": {
     "@akashaproject/sdk-core": "*",
+    "@akashaproject/sdk-common": "*",
     "@akashaproject/sdk-runtime": "*",
-    "pouchdb-adapter-http": "^7.1.1",
-    "pouchdb-adapter-idb": "^7.1.1"
-  },
-  "devDependencies": {
-    "jest": "^24.9.0",
-    "ts-jest": "^24.0.2",
-    "pouchdb-adapter-memory": "^7.1.1",
-    "rxdb": "^8.4.0"
-  },
-  "peerDependencies": {
-    "rxdb": "^8.4.0"
+    "3box": "^1.10.10"
   }
 }
