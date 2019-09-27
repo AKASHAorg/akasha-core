@@ -7,10 +7,11 @@ import initCollections from './collections';
 import { DB_NAME, DB_PASSWORD, DB_SERVICE, moduleName } from './constants';
 import connect from './db.methods/connect';
 
-const service: AkashaService = invoke => {
+const service: AkashaService = (invoke, log) => {
   let akashaDB: AKASHAdb;
   const dbConnect = async (refresh: boolean = false) => {
     if (!refresh && RxDB.isRxDatabase(akashaDB)) {
+      log.info('reusing existing DB connection');
       return akashaDB;
     }
     const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);

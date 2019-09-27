@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@akashaproject/sdk": "*",
     "@akashaproject/ui-plugin-events": "*",
     "@akashaproject/ui-plugin-feed": "*",
     "@akashaproject/ui-plugin-loader": "*",
