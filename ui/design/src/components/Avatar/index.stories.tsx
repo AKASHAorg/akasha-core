@@ -51,6 +51,7 @@ storiesOf('Avatar', module)
         ))}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div>sm: used in app listing (from 'add app' button) modal</div>
         <div>md (default): used on cards, widgets, comments, etc.</div>
         <div>lg: used on profile page</div>
       </div>
