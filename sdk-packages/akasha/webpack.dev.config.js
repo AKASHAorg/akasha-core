@@ -36,10 +36,9 @@ const config = {
       profile: true,
     }),
     new webpack.AutomaticPrefetchPlugin(),
-    new HtmlWebpackPlugin({ filename: 'example.html' }),
     new HtmlWebpackPlugin({
+      filename: 'index.html',
       template: path.resolve(__dirname, '../../playground/feed-app/public/template-index.html'),
-      filename: path.resolve(__dirname, '../../playground/feed-app/public/index.html'),
       inject: true,
     }),
     // new WorkboxPlugin.GenerateSW()
