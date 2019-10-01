@@ -35,6 +35,6 @@
     "@akashaproject/sdk-runtime": "*",
     "@walletconnect/web3-provider": "^1.0.0-beta.36",
     "ethers": "^4.0.37",
-    "ipfs": "^0.37.1"
+    "ipfs": "^0.38.0"
   }
 }
