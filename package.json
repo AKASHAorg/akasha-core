@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
-    "@types/node": "10.14.6",
+    "@types/node": "12.7.11",
     "husky": "^3.0.5",
     "jest": "^24.9.0",
     "lerna": "3.16.4",
