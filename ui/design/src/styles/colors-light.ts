@@ -18,6 +18,7 @@ const colors: IColors = {
   yellow: '#FFC02F', // yellow
   white: '#FFF', // white
 };
+
 export default colors;
 
 /***
