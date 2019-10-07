@@ -34,7 +34,7 @@
     "react-i18next": "^10.12.2",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
-    "react-tracked": "^0.8.0",
+    "react-tracked": "^0.9.0",
     "single-spa-react": "^2.10.2"
   },
   "devDependencies": {
