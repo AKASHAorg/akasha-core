@@ -4,131 +4,43 @@ import { boolean, color, object, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import { Search } from 'grommet-icons';
 import * as React from 'react';
-import styled from 'styled-components';
-import Input from './';
+import { Box, TextInput } from 'grommet';
+import { CustomSearchInput } from './search-input';
 
-const Container = styled.div`
-  width: 600px;
-  display: flex;
-  flex-direction: column;
-`;
+const suggestionsFromSpace = {
+  users: [
+    {
+      name: 'Gilberta Carter',
+      imageUrl: 'http://placebeard.it/640/480',
+    },
+    {
+      name: 'Johana Gimli',
+      imageUrl: 'http://placebeard.it/640/480',
+    },
+  ],
+  tags: ['#gitcoin', '#gitcoinbounties'],
+  apps: [
+    {
+      name: 'GitCoin',
+      imageUrl: 'http://placebeard.it/640/480',
+    },
+  ],
+};
 
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  &:not(:last-child) {
-    margin-bottom: 10px;
-  }
-`;
-
-const Column = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-
-  &:first-of-type {
-    width: 200px;
-  }
-`;
-
-const InputComponent = () => {
-  const [value, setValue] = React.useState('');
-
+const SearchInputComponent = () => {
   return (
-    <Container>
-      <Row>
-        <Column>Basic input:</Column>
-        <Column>
-          <Input
-            value={value}
-            placeholder={text('Placeholder', 'Text')}
-            disabled={boolean('Disabled', false)}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
-            margin={object('Margin', { margin: '0px' })}
-            backgroundColor={color('Background Color', '')}
-          />
-        </Column>
-      </Row>
-    </Container>
+    <Box fill justify="center" align="center">
+      <Box width="medium" pad={{ top: 'large' }}>
+        <CustomSearchInput
+          dataSource={suggestionsFromSpace}
+          placeholder={'Search something...'}
+          appsTitle="APPS"
+          tagsTitle="TAGS"
+          usersTitle="USER PROFILES"
+        />
+      </Box>
+    </Box>
   );
 };
 
-const InputIconComponent = () => {
-  const [value, setValue] = React.useState('');
-
-  return (
-    <Container>
-      <Row>
-        <Column>Input without button:</Column>
-        <Column>
-          <Input
-            value={value}
-            placeholder={text('Placeholder', 'Text')}
-            disabled={boolean('Disabled', false)}
-            icon={<Search size="18px" color="dark-3" />}
-            leftSideButton={boolean('Button on left side', false)}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
-          />
-        </Column>
-      </Row>
-      <Row>
-        <Column>Input with button:</Column>
-        <Column>
-          <Input
-            value={value}
-            placeholder={text('Placeholder', 'Text')}
-            disabled={boolean('Disabled', false)}
-            icon={<Search size="18px" color="light-1" />}
-            withButton={true}
-            leftSideButton={boolean('Button on left side', false)}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
-            onButtonClick={() => action('Button click')('Button has been clicked')}
-          />
-        </Column>
-      </Row>
-    </Container>
-  );
-};
-
-const InputButtonComponent = () => {
-  const [value, setValue] = React.useState('');
-
-  return (
-    <Container>
-      <Row>
-        <Column>Input without button:</Column>
-        <Column>
-          <Input
-            value={value}
-            placeholder={text('Placeholder', 'Text')}
-            disabled={boolean('Disabled', false)}
-            icon="Search"
-            leftSideButton={boolean('Button on left side', false)}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
-          />
-        </Column>
-      </Row>
-      <Row>
-        <Column>Input with button:</Column>
-        <Column>
-          <Input
-            value={value}
-            placeholder={text('Placeholder', 'Text')}
-            disabled={boolean('Disabled', false)}
-            icon="Search"
-            withButton={true}
-            leftSideButton={boolean('Button on left side', false)}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
-            onButtonClick={() => action('Button click')('Button has been clicked')}
-          />
-        </Column>
-      </Row>
-    </Container>
-  );
-};
-
-storiesOf('Input', module)
-  .add('default', () => <InputComponent />)
-  .add('with icon', () => <InputIconComponent />)
-  .add('with text button', () => <InputButtonComponent />);
+storiesOf('Input', module).add('search', () => <SearchInputComponent />);

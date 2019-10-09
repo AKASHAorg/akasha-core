@@ -53,10 +53,8 @@
     ]
   },
   "dependencies": {
-    "@trendmicro/react-popover": "^0.4.0",
     "classnames": "^2.2.6",
     "grommet": "^2.7.8",
-    "react-modal": "^3.10.1",
     "styled-components": "^4.3.2"
   },
   "devDependencies": {
@@ -75,7 +73,6 @@
     "@types/node": "^12.7.5",
     "@types/react": "^16.9.2",
     "@types/react-dom": "^16.9.0",
-    "@types/react-modal": "^3.8.3",
     "@types/storybook__addon-actions": "^3.4.3",
     "@types/storybook__addon-info": "^4.1.2",
     "@types/storybook__react": "^4.0.2",
