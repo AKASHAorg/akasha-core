@@ -5,23 +5,17 @@ export interface IShapes {
     regular: number;
     bold: number;
   };
-  shadow0: string;
-  shadow1: string;
-  shadow2: string;
-  shadow3: string;
+  shadow: string;
 }
 
 const shapes: IShapes = {
   borderRadius: '8px',
   fontFamily: 'Content-font, Roboto, sans-serif',
   fontWeight: {
-    regular: 500,
+    regular: 400,
     bold: 600,
   },
-  shadow0: '0px 1px 4px 0px',
-  shadow1: '0px 1px 4px 0px',
-  shadow2: '0px 1px 4px 0px',
-  shadow3: '0px 1px 4px 0px',
+  shadow: '0 8px 24px 0 rgba(83,98,124,0.06)',
 };
 
 export default shapes;

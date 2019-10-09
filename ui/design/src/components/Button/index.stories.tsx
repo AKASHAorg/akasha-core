@@ -4,29 +4,36 @@ import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import { Box } from 'grommet';
 import * as React from 'react';
-import Button from './index';
+import AkashaButton from './index';
+import Icon from '../Icon/index';
 
-storiesOf('Button', module).add('default', () => (
-  <Box pad="large" align="center">
-    <Button
-      buttonType={select(
-        'Type',
-        {
-          Primary: 'primary',
-          Regular: 'regular',
-          Alert: 'alert',
-        },
-        'primary',
-      )}
-      ghost={boolean('Ghost', false)}
-      disabled={boolean('Disabled', false)}
-      small={boolean('Small', false)}
-      fullWidth={boolean('Full width', false)}
-      onClick={() => action('Button Clicked')('Synthetic Event')}
-      margin={object('Margin', { margin: '0px' })}
-      backgroundColor={color('Background Color', '')}
-    >
-      {text('Children', 'Click Me!')}
-    </Button>
-  </Box>
-));
+storiesOf('Button', module)
+  .add('share profile', () => (
+    <Box pad="large" align="center">
+      <AkashaButton
+        primary
+        hoverIndicator="false"
+        disabled={boolean('Disabled', false)}
+        onClick={() => action('AkashaButton Clicked')('Synthetic Event')}
+        margin={object('Margin', { bottom: '0px' })}
+        color={'#000C20'}
+        icon={<Icon type="home" />}
+        label={text('Label', 'Share Profile')}
+      />
+    </Box>
+  ))
+  .add('thumbs up', () => (
+    <Box pad="large" align="center">
+      <AkashaButton
+        primary
+        hoverIndicator="false"
+        disabled={boolean('Disabled', false)}
+        onClick={() => action('AkashaButton Clicked')('Synthetic Event')}
+        margin={object('Margin', { bottom: '0px' })}
+        color={'#EDF0F5'}
+        icon={<Icon type="wallet" />}
+        reverse
+        label={text('Label', '26')}
+      />
+    </Box>
+  ));
