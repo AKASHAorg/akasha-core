@@ -9,6 +9,13 @@ export interface ISpacing {
         [key: string]: string;
       };
     };
+    iconButton: {
+      padding: string;
+      lineHeight: string;
+      fontSize: {
+        sm: string;
+      };
+    };
     button: {
       padding: {
         normal: string;
@@ -128,6 +135,13 @@ const spacing: ISpacing = {
         sm: '32px',
         md: '40px',
         lg: '48px',
+      },
+    },
+    iconButton: {
+      padding: '0 0.8em',
+      lineHeight: '1.2em',
+      fontSize: {
+        sm: '0.867em',
       },
     },
     button: {

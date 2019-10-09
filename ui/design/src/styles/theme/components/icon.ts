@@ -4,14 +4,6 @@ interface IconProps {
   theme: object;
 }
 
-const createCustomIconTheme = (styledComponentsTheme: DefaultTheme) => ({
-  icon: {
-    extend: () => `
-    & * {
-        stroke: ${styledComponentsTheme.colors.background} !important;
-      }
-    `,
-  },
-});
+const createCustomIconTheme = (styledComponentsTheme: DefaultTheme) => ({});
 
 export default createCustomIconTheme;

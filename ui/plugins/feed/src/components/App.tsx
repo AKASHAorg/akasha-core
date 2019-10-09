@@ -4,6 +4,7 @@ import Routes from './routes';
 import { articlesInit, ArticlesProvider, articlesReducer } from './state/articles';
 
 export interface IProps {
+  singleSpa: any;
   activeWhen: {
     path: string;
   };
@@ -54,7 +55,12 @@ class App extends PureComponent<IProps> {
     const callMethod = sdkModules.commons.validator_service({ method: 'validator', args: {} });
     callMethod.subscribe(subConsumer);
   };
-
+  public handleNavigation(href: string) {
+    return (ev: React.SyntheticEvent) => {
+      this.props.singleSpa.navigateToUrl(href);
+      ev.preventDefault();
+    };
+  }
   public render() {
     const { i18n } = this.props;
 
@@ -67,6 +73,9 @@ class App extends PureComponent<IProps> {
         <I18nextProvider i18n={i18n ? i18n : null}>
           <ArticlesProvider reducer={articlesReducer} initialState={articlesInit()}>
             <Routes {...this.props} />
+            <a href="#" onClick={this.handleNavigation('/events')}>
+              Go to Events
+            </a>
           </ArticlesProvider>
         </I18nextProvider>
       </Suspense>
