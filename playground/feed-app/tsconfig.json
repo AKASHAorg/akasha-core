@@ -25,6 +25,9 @@
     },
     {
       "path": "../../ui/plugins/events"
+    },
+    {
+      "path": "../../ui/widgets/layout"
     }
   ],
   "include": ["./src"]

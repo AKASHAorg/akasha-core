@@ -17,6 +17,7 @@ export interface IPluginConfig {
 
 export interface ILoaderConfig {
   rootNodeId: string;
+  layout: IWidget;
 }
 
 interface IWidgetInfo {
@@ -30,12 +31,14 @@ export default class AppLoader {
   public rootWidgets: Map<string, IWidgetInfo>;
   private appLogger;
   private translationManager;
+  private layout;
   constructor(config: ILoaderConfig) {
     this.config = config;
     this.plugins = [];
     this.appLogger = pino({ browser: { asObject: true } });
     this.translationManager = new TranslationManager(this.appLogger);
     this.rootWidgets = new Map();
+    this.layout = config.layout;
   }
 
   public async registerPlugin(
@@ -113,11 +116,29 @@ export default class AppLoader {
     });
     return Promise.all(promises);
   }
-
+  public async delay(ms: number) {
+    return new Promise(resolve => {
+      setTimeout(resolve, ms);
+    });
+  }
+  public async loadLayout() {
+    const domEl = document.getElementById(this.config.rootNodeId);
+    if (!domEl) {
+      this.appLogger.info(
+        '[@akashaproject/ui-plugin-loader]: dom element was not found, retrying...',
+      );
+      return this.delay(250).then(() => this.loadLayout);
+    }
+    singleSpa.mountRootParcel(this.layout.loadingFn, {
+      domElement: domEl,
+    });
+    return Promise.resolve();
+  }
   public start() {
     this.appLogger.info('[@akashaproject/ui-plugin-loader]: starting single spa');
     this._registerSpaListeners();
-    this.loadRootWidgets()
+    this.loadLayout()
+      .then(() => this.loadRootWidgets())
       .then(() => {
         singleSpa.start();
       })
