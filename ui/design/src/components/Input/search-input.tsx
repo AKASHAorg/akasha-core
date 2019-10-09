@@ -1,0 +1,209 @@
+import React, { useRef, useState, useEffect } from 'react';
+import Icon from '../Icon/index';
+import styled, { css } from 'styled-components';
+import { Box, Image, Text, TextInput, Drop } from 'grommet';
+
+const StyledSelectBox = styled(Box)`
+  ${props => {
+    return css`
+      &:hover {
+        background-color: ${props.theme.colors.background};
+        cursor: pointer;
+      }
+    `;
+  }}
+`;
+
+const CustomSearchInput = (props: any) => {
+  const { dataSource, placeholder, usersTitle, tagsTitle, appsTitle } = props;
+  const [inputValue, setInputValue] = useState('');
+  const [dropOpen, setDropOpen] = useState(false);
+  const [suggestions, setSuggestions] = useState<any>({ users: [], tags: [], apps: [] });
+
+  const boxRef: React.Ref<any> = useRef();
+
+  useEffect(() => {
+    if (!inputValue.trim()) {
+      setSuggestions({ users: [], tags: [], apps: [] });
+      setDropOpen(false);
+      console.log('trimmed in if: ', inputValue.trim());
+    } else {
+      // backend call here to get new suggestions
+      setSuggestions(dataSource);
+      setDropOpen(true);
+    }
+  }, [inputValue]);
+
+  const onChange = (event: any) => {
+    setInputValue(event.target.value);
+  };
+
+  //   const onSelect = (event: any) => setInputValue(event.suggestion.inputValue);
+
+  //   const renderSuggestions = () => {
+  //     return suggestions.users
+  //       .filter(
+  //         ({ name }: { name: string }) =>
+  //           (name as string).toLowerCase().indexOf(inputValue.toLowerCase()) >= 0,
+  //       )
+  //       .map(
+  //         (
+  //           { name, imageUrl }: { name: string; imageUrl: string },
+  //           index: number,
+  //           list: Array<any>,
+  //         ) => ({
+  //           label: (
+  //             <Box direction="row" align="center" gap="small" pad="small">
+  //               <Image width="32px" src={imageUrl} style={{ borderRadius: '100%' }} />
+  //               <Text>
+  //                 {name}
+  //               </Text>
+  //             </Box>
+  //           ),
+  //           inputValue: name,
+  //         }),
+  //       );
+  //   };
+
+  const renderDropContent = () => {
+    const slicedUsers = suggestions.users.slice(0, 2);
+    const slicedTags = suggestions.tags.slice(0, 2);
+    const slicedApps = suggestions.apps.slice(0, 2);
+
+    const onClickContent = (value: string) => {
+      setInputValue(value);
+      setDropOpen(false);
+    };
+
+    const renderUsers = (
+      <Box pad={{ bottom: 'small' }}>
+        <Text color="#778390" size="11px" margin={{ bottom: 'xsmall', horizontal: '12px' }}>
+          {usersTitle}
+        </Text>
+        {slicedUsers.map(
+          ({ name, imageUrl }: { name: string; imageUrl: string }, index: number) => (
+            <StyledSelectBox
+              onClick={() => onClickContent(name)}
+              key={index}
+              round={{ size: '3px' }}
+              height="40px"
+              justify="center"
+            >
+              <Box
+                margin={{ vertical: 'xsmall', horizontal: '12px' }}
+                direction="row"
+                align="center"
+                gap="small"
+              >
+                <Image width="32px" height="32px" src={imageUrl} style={{ borderRadius: '100%' }} />
+                <Text>{name}</Text>
+              </Box>
+            </StyledSelectBox>
+          ),
+        )}
+      </Box>
+    );
+    const renderApps = (
+      <Box pad={{ bottom: 'small' }}>
+        <Text color="#778390" size="11px" margin={{ bottom: 'xsmall', horizontal: '12px' }}>
+          {appsTitle}
+        </Text>
+        {slicedApps.map(({ name, imageUrl }: { name: string; imageUrl: string }, index: number) => (
+          <StyledSelectBox
+            onClick={() => onClickContent(name)}
+            key={index}
+            round={{ size: '3px' }}
+            height="40px"
+            justify="center"
+          >
+            <Box
+              margin={{ vertical: 'xsmall', horizontal: '12px' }}
+              direction="row"
+              align="center"
+              gap="small"
+            >
+              <Image width="32px" height="32px" src={imageUrl} style={{ borderRadius: '100%' }} />
+              <Text>{name}</Text>
+            </Box>
+          </StyledSelectBox>
+        ))}
+      </Box>
+    );
+    const renderTags = (
+      <Box pad={{ bottom: 'small' }}>
+        <Text color="#778390" size="11px" margin={{ bottom: 'xsmall', horizontal: '12px' }}>
+          {tagsTitle}
+        </Text>
+        {slicedTags.map((tag: string, index: number) => (
+          <StyledSelectBox
+            onClick={() => onClickContent(tag)}
+            key={index}
+            round={{ size: '3px' }}
+            height="40px"
+            justify="center"
+          >
+            <Box
+              margin={{ vertical: 'xsmall', horizontal: '12px' }}
+              direction="row"
+              align="center"
+              gap="small"
+            >
+              <Text>{tag}</Text>
+            </Box>
+          </StyledSelectBox>
+        ))}
+      </Box>
+    );
+    return (
+      <Box pad={{ top: '16px', horizontal: '4px' }}>
+        {slicedUsers.length && renderUsers}
+        {slicedTags.length && renderTags}
+        {slicedApps.length && renderApps}
+      </Box>
+    );
+  };
+
+  return (
+    <Box
+      fill="horizontal"
+      ref={boxRef}
+      direction="row"
+      align="center"
+      pad={{ horizontal: 'small', vertical: 'xsmall' }}
+      round="small"
+      elevation="styleGuideShadow"
+      border={{
+        side: 'all',
+        color: 'border',
+      }}
+    >
+      <Icon type="search" />
+      <TextInput
+        // type="search"
+        plain
+        value={inputValue}
+        onChange={onChange}
+        placeholder={placeholder}
+        // dropTarget={boxRef.current}
+        // onSelect={onSelect}
+        // suggestions={renderSuggestions()}
+        // onSuggestionsOpen={() => setDropOpen(true)}
+        // onSuggestionsClose={() => setDropOpen(false)}
+      />
+      {boxRef.current && dropOpen && (
+        <Drop
+          elevation="styleGuideShadow"
+          overflow="hidden"
+          target={boxRef.current}
+          align={{ top: 'bottom' }}
+          onClickOutside={() => setDropOpen(false)}
+          onEsc={() => setDropOpen(false)}
+        >
+          {renderDropContent()}
+        </Drop>
+      )}
+    </Box>
+  );
+};
+
+export { CustomSearchInput };
