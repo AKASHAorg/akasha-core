@@ -7,6 +7,7 @@
     "@akashaproject/ui-plugin-feed": "*",
     "@akashaproject/ui-plugin-loader": "*",
     "@akashaproject/ui-widget-sidebar": "*",
+    "@akashaproject/ui-widget-layout": "*",
     "@akashaproject/design-system": "*",
     "@types/node": "12.7.5",
     "@types/react": "16.9.2",
@@ -15,8 +16,7 @@
     "jest": "24.9.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-scripts": "^3.1.1",
-    "styled-components": "^4.3.2"
+    "react-scripts": "^3.1.1"
   },
   "scripts": {
     "start": "NODE_OPTIONS='--max-old-space-size=4096' react-scripts start",

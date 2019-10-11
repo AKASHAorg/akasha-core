@@ -22,6 +22,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
+    "@akashaproject/design-system": "*",
     "@types/i18next": "^13.0.0",
     "@types/react-i18next": "^8.1.0",
     "single-spa-react": "^2.10.2",
@@ -33,11 +34,7 @@
     "@types/single-spa-react": "^2.8.3",
     "@types/styled-components": "^4.1.19",
     "react": "^16.8.0",
-    "react-dom": "^16.8.0",
-    "styled-components": "^4.3.2"
-  },
-  "peerDependencies": {
-    "styled-components": "^4.3.2"
+    "react-dom": "^16.8.0"
   },
   "files": [
     "lib"
