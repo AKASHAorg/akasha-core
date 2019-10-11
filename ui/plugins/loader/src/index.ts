@@ -102,18 +102,13 @@ export default class AppLoader {
     });
     return Promise.all(promises);
   }
-  public async delay(ms: number) {
-    return new Promise(resolve => {
-      setTimeout(resolve, ms);
-    });
-  }
   public async loadLayout() {
     const domEl = document.getElementById(this.config.rootNodeId);
     if (!domEl) {
       this.appLogger.info(
         '[@akashaproject/ui-plugin-loader]: dom element was not found, retrying...',
       );
-      return this.delay(250).then(() => this.loadLayout);
+      throw new Error('[@akashaproject/ui-plugin-loader]: root node element not found!');
     }
     const { loadingFn, ...otherProps } = this.layout;
     const layoutWidget = singleSpa.mountRootParcel(loadingFn, {
