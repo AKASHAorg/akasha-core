@@ -3,6 +3,7 @@ import EventsPlugin from '@akashaproject/ui-plugin-events';
 import FeedPlugin from '@akashaproject/ui-plugin-feed';
 import AppLoader from '@akashaproject/ui-plugin-loader';
 import LayoutWidget from '@akashaproject/ui-widget-layout';
+import SidebarWidget from '@akashaproject/ui-widget-sidebar';
 import initSdk from './sdk-init';
 
 const sdk: any = initSdk();
@@ -20,5 +21,6 @@ const commonModule = ['commons', sdk.modules.commons];
 const promises = [
   app.registerPlugin(FeedPlugin, null, [commonModule]),
   app.registerPlugin(EventsPlugin, { activeWhen: { path: '/events' } }, [commonModule]),
+  app.registerWidget(SidebarWidget, { slot: LayoutWidget.sidebarSlotId }, []),
 ];
 Promise.all(promises).then(() => app.start());

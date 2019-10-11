@@ -1,9 +1,9 @@
+import { styled } from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense, SyntheticEvent } from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 // @ts-ignore
 import SingleSpaReact from 'single-spa-react';
-import styled from 'styled-components';
 
 export interface IProps {
   i18n: I18nType;
@@ -21,17 +21,17 @@ export interface IProps {
  * @warning :: Always use default export
  */
 
-const SidebarWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 16%;
-  min-width: 128px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+// const SidebarWrapper = styled.div`
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   bottom: 0;
+//   width: 16%;
+//   min-width: 128px;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+// `;
 
 export default class SidebarWidget extends PureComponent<IProps> {
   public state: { hasErrors: boolean; errorMessage: string };
@@ -58,16 +58,18 @@ export default class SidebarWidget extends PureComponent<IProps> {
       return (
         <div>
           Oh no, something went wrong in sidebar-widget
-          <code>{this.state.errorMessage}</code>
+          <div>
+            <code>{this.state.errorMessage}</code>
+          </div>
         </div>
       );
     }
     return (
       <I18nextProvider i18n={this.props.i18n}>
         <Suspense fallback={<>...</>}>
-          <SidebarWrapper>
-            <Menu navigateToUrl={this.props.singleSpa.navigateToUrl} />
-          </SidebarWrapper>
+          {/* <SidebarWrapper> */}
+          <Menu navigateToUrl={this.props.singleSpa.navigateToUrl} />
+          {/* </SidebarWrapper> */}
         </Suspense>
       </I18nextProvider>
     );

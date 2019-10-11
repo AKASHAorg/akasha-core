@@ -1,7 +1,7 @@
+// @ts-ignore
+import { styled } from '@akashaproject/design-system';
 import React, { Dispatch, PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
-// @ts-ignore
-import styled from 'styled-components';
 import { eventsInit, EventsProvider, eventsReducer } from './reducers/events';
 import {
   IProfileState,
