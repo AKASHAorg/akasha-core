@@ -13,6 +13,7 @@ import {
 import Routes from './routes';
 
 export interface IProps {
+  singleSpa: any;
   activeWhen: {
     path: string;
   };
@@ -87,6 +88,13 @@ class App extends PureComponent<IProps> {
     };
   };
 
+  public handleNavigation(href: string) {
+    return (ev: React.SyntheticEvent) => {
+      this.props.singleSpa.navigateToUrl(href);
+      ev.preventDefault();
+    };
+  }
+
   public render() {
     const { i18n } = this.props;
     if (this.state.hasErrors) {
@@ -100,6 +108,9 @@ class App extends PureComponent<IProps> {
               <PageLayout>
                 <Page>
                   <Routes {...this.props} />
+                  <a href="#" onClick={this.handleNavigation('/feed')}>
+                    Go to Feed
+                  </a>
                 </Page>
               </PageLayout>
             </EventsProvider>

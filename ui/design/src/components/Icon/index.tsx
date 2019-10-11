@@ -102,9 +102,7 @@ const IconBase: React.FC<IconProps> = ({ color, className, type, ...props }) => 
 };
 
 const Icon: React.FC<IconProps> = styled(IconBase)`
-  & * {
-    stroke: ${props => props.color || props.theme.colors.darkBackground} !important;
-  }
+  stroke: ${props => props.color || props.theme.colors.darkBackground};
 `;
 
 export default Icon;

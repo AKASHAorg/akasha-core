@@ -43,7 +43,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
       },
       focus: {
         border: {
-          color: 'neutral-3',
+          color: 'transparent',
         },
       },
     },
