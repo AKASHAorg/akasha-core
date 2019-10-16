@@ -28,6 +28,12 @@
     },
     {
       "path": "../../ui/widgets/layout"
+    },
+    {
+      "path": "../../ui/widgets/sidebar"
+    },
+    {
+      "path": "../../ui/widgets/top-bar"
     }
   ],
   "include": ["./src"]
