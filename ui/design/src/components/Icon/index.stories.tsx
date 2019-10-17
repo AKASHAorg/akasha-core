@@ -108,7 +108,7 @@ const IconComponent = () => {
               height: '40px',
             }}
           >
-            <Icon type={type} color={accentColor} onClick={action('onClick')} />
+            <Icon type={type} color={accentColor} onClick={() => action('Clicked on')(type)} />
           </div>
           <div>{type}</div>
         </div>
