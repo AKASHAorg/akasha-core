@@ -10,11 +10,11 @@ const service: AkashaService = () => {
     [settingsSymbol]: new Map(),
   };
 
-  const getSettings = (moduleName: ICoreSettings['moduleName']) => {
+  const getSettings = async (moduleName: ICoreSettings['moduleName']) => {
     return fromEntries(coreSettings[settingsSymbol].get(moduleName));
   };
 
-  const setSettings = (settings: ICoreSettings): void => {
+  const setSettings = async (settings: ICoreSettings): Promise<void> => {
     coreSettings[settingsSymbol].set(settings.moduleName, settings.values);
   };
   return registerServiceMethods({ getSettings, setSettings });
