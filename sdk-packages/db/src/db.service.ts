@@ -15,7 +15,7 @@ const service: AkashaService = (invoke, log) => {
       return akashaDB;
     }
     const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);
-    const dbSettings = getSettings(moduleName);
+    const dbSettings = await getSettings(moduleName);
     if (!dbSettings.hasOwnProperty(DB_PASSWORD)) {
       throw new Error('Set a db password before using the service.');
     }
