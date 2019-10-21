@@ -12,7 +12,7 @@ export interface IShapes {
 }
 
 const shapes: IShapes = {
-  borderRadius: '3px',
+  borderRadius: '8px',
   fontFamily: 'Content-font, Roboto, sans-serif',
   fontWeight: {
     regular: 500,
