@@ -13,12 +13,12 @@ const topicsDataSource = [
   { title: '#cryptoworld', subtitle: '6576 mentions' },
 ];
 
-const appsDataSource: {
+const appsDataSource: Array<{
   title: string;
   subtitle: string;
   iconType: IconType;
   iconSize: string;
-}[] = [
+}> = [
   { title: 'GitCoin', subtitle: '123 embedded cards', iconType: 'app', iconSize: '40px' },
   { title: 'Augur', subtitle: '89 embedded cards', iconType: 'app', iconSize: '40px' },
   { title: 'Aragon', subtitle: '57 embedded cards', iconType: 'app', iconSize: '40px' },

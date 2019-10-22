@@ -12,7 +12,7 @@ export interface IAppsWidgetCardProps {
   label: string;
   labelColor?: string;
   iconType: IconType;
-  dataSource: { title: string; subtitle: string; iconType: IconType; iconSize: string }[];
+  dataSource: Array<{ title: string; subtitle: string; iconType: IconType; iconSize: string }>;
 }
 
 const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
