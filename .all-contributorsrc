@@ -56,6 +56,17 @@
         "blog",
         "talk"
       ]
+    },
+    {
+      "login": "etzm",
+      "name": "Martin Etzrodt",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/31589705?v=4",
+      "profile": "https://github.com/etzm",
+      "contributions": [
+        "userTesting",
+        "talk",
+        "fundingFinding"
+      ]
     }
   ],
   "contributorsPerLine": 7,
