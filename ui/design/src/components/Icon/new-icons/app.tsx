@@ -4,7 +4,6 @@ const App = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" {...props}>
     <g fill="none" fillRule="evenodd" transform="translate(-282 -2710)">
       <g transform="translate(282 2710)">
-        <rect width="16" height="16" />
         <circle cx="8" cy="8" r="6" stroke="#8A94A6" />
         <path
           stroke="#8A94A6"

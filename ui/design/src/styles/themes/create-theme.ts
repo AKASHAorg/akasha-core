@@ -1,5 +1,5 @@
 import { DefaultTheme } from 'styled-components';
-import colors from '../colors';
+import colors from '../colors-light';
 import shapes from '../shapes';
 import spacing from '../spacing';
 import createGrommetTheme from '../theme';

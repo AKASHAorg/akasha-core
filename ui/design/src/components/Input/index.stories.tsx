@@ -1,20 +1,18 @@
 /* eslint-disable import/first */
-import { action } from '@storybook/addon-actions';
-import { boolean, color, object, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
-import { Search } from 'grommet-icons';
+import { action } from '@storybook/addon-actions';
 import * as React from 'react';
-import { Box, TextInput } from 'grommet';
+import { Box } from 'grommet';
 import { CustomSearchInput } from './search-input';
 
 const suggestionsFromSpace = {
   users: [
     {
-      name: 'Gilberta Carter',
+      name: 'Gilbert Carter',
       imageUrl: 'http://placebeard.it/640/480',
     },
     {
-      name: 'Johana Gimli',
+      name: 'Johan Gimli',
       imageUrl: 'http://placebeard.it/640/480',
     },
   ],
@@ -32,6 +30,7 @@ const SearchInputComponent = () => {
     <Box fill justify="center" align="center">
       <Box width="medium" pad={{ top: 'large' }}>
         <CustomSearchInput
+          getData={action('Get Data')}
           dataSource={suggestionsFromSpace}
           placeholder={'Search something...'}
           appsTitle="APPS"

@@ -5,6 +5,7 @@ interface IIconButtonProps {
   label: string;
   onClick?: () => void;
   primary?: boolean;
+  share?: boolean;
 }
 
 const IconButton = (props: IIconButtonProps) => {

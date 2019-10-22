@@ -37,6 +37,11 @@ storiesOf('Buttons|IconButton', module)
         label="My Wallet"
       />
     </Box>
+  ))
+  .add('share', () => (
+    <Box pad="large" align="start">
+      <IconButton share onClick={() => {}} icon={<Icon type="share" />} label="Share Profile" />
+    </Box>
   ));
 
 storiesOf('Buttons|ProfileIconButton', module).add('default', () => (

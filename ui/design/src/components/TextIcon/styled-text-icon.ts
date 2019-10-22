@@ -10,6 +10,7 @@ const StyledTextIcon = styled.div<ITextIconProps>`
       margin,
       backgroundColor,
       spacing,
+      clickable,
     } = props;
 
     // change margins to ones passed in props
@@ -24,7 +25,16 @@ const StyledTextIcon = styled.div<ITextIconProps>`
       }
       background-color: ${backgroundColor ? backgroundColor : ''};
       color: ${color ? color : colors.dark};
-      margin: ${marginSize};
+      ${marginSize}
+      ${clickable
+        ? `&: hover {
+          cursor: pointer;
+          color: ${props.theme.colors.accent};
+          & * {
+            stroke: ${props.theme.colors.accent};
+            }
+          }`
+        : ''};
     `;
   }};
   display: flex;

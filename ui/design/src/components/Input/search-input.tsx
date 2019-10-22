@@ -1,21 +1,33 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Icon from '../Icon/index';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { Box, Image, Text, TextInput, Drop } from 'grommet';
 
 const StyledSelectBox = styled(Box)`
-  ${props => {
-    return css`
-      &:hover {
-        background-color: ${props.theme.colors.background};
+  ${props =>
+    `&:hover {
+        background-color: ${props.theme.colors.lightBackground};
         cursor: pointer;
       }
-    `;
-  }}
+    `}
 `;
 
-const CustomSearchInput = (props: any) => {
-  const { dataSource, placeholder, usersTitle, tagsTitle, appsTitle } = props;
+const StyledDrop = styled(Drop)`
+  margin-top: 5px;
+  border-radius: ${props => props.theme.shapes.largeBorderRadius};
+`;
+
+interface ICustomSearchInput {
+  getData: Function;
+  dataSource: any;
+  placeholder: string;
+  usersTitle: string;
+  tagsTitle: string;
+  appsTitle: string;
+}
+
+const CustomSearchInput: React.FC<ICustomSearchInput> = props => {
+  const { dataSource, placeholder, usersTitle, tagsTitle, appsTitle, getData } = props;
   const [inputValue, setInputValue] = useState('');
   const [dropOpen, setDropOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<any>({ users: [], tags: [], apps: [] });
@@ -26,9 +38,7 @@ const CustomSearchInput = (props: any) => {
     if (!inputValue.trim()) {
       setSuggestions({ users: [], tags: [], apps: [] });
       setDropOpen(false);
-      console.log('trimmed in if: ', inputValue.trim());
     } else {
-      // backend call here to get new suggestions
       setSuggestions(dataSource);
       setDropOpen(true);
     }
@@ -36,34 +46,33 @@ const CustomSearchInput = (props: any) => {
 
   const onChange = (event: any) => {
     setInputValue(event.target.value);
+    getData(event.target.value);
   };
 
-  //   const onSelect = (event: any) => setInputValue(event.suggestion.inputValue);
+  const onSelect = (event: any) => setInputValue(event.suggestion.inputValue);
 
-  //   const renderSuggestions = () => {
-  //     return suggestions.users
-  //       .filter(
-  //         ({ name }: { name: string }) =>
-  //           (name as string).toLowerCase().indexOf(inputValue.toLowerCase()) >= 0,
-  //       )
-  //       .map(
-  //         (
-  //           { name, imageUrl }: { name: string; imageUrl: string },
-  //           index: number,
-  //           list: Array<any>,
-  //         ) => ({
-  //           label: (
-  //             <Box direction="row" align="center" gap="small" pad="small">
-  //               <Image width="32px" src={imageUrl} style={{ borderRadius: '100%' }} />
-  //               <Text>
-  //                 {name}
-  //               </Text>
-  //             </Box>
-  //           ),
-  //           inputValue: name,
-  //         }),
-  //       );
-  //   };
+  const renderSuggestions = () => {
+    return suggestions.users
+      .filter(
+        ({ name }: { name: string }) =>
+          (name as string).toLowerCase().indexOf(inputValue.toLowerCase()) >= 0,
+      )
+      .map(
+        (
+          { name, imageUrl }: { name: string; imageUrl: string },
+          index: number,
+          list: Array<any>,
+        ) => ({
+          label: (
+            <Box direction="row" align="center" gap="small" pad="small">
+              <Image width="32px" src={imageUrl} style={{ borderRadius: '100%' }} />
+              <Text>{name}</Text>
+            </Box>
+          ),
+          inputValue: name,
+        }),
+      );
+  };
 
   const renderDropContent = () => {
     const slicedUsers = suggestions.users.slice(0, 2);
@@ -77,7 +86,7 @@ const CustomSearchInput = (props: any) => {
 
     const renderUsers = (
       <Box pad={{ bottom: 'small' }}>
-        <Text color="#778390" size="11px" margin={{ bottom: 'xsmall', horizontal: '12px' }}>
+        <Text color="secondaryText" size="small" margin={{ bottom: 'xsmall', horizontal: 'small' }}>
           {usersTitle}
         </Text>
         {slicedUsers.map(
@@ -85,18 +94,18 @@ const CustomSearchInput = (props: any) => {
             <StyledSelectBox
               onClick={() => onClickContent(name)}
               key={index}
-              round={{ size: '3px' }}
+              round={{ size: 'xxsmall' }}
               height="40px"
               justify="center"
             >
               <Box
-                margin={{ vertical: 'xsmall', horizontal: '12px' }}
+                margin={{ vertical: 'xsmall', horizontal: 'small' }}
                 direction="row"
                 align="center"
                 gap="small"
               >
                 <Image width="32px" height="32px" src={imageUrl} style={{ borderRadius: '100%' }} />
-                <Text>{name}</Text>
+                <Text size="large">{name}</Text>
               </Box>
             </StyledSelectBox>
           ),
@@ -105,25 +114,29 @@ const CustomSearchInput = (props: any) => {
     );
     const renderApps = (
       <Box pad={{ bottom: 'small' }}>
-        <Text color="#778390" size="11px" margin={{ bottom: 'xsmall', horizontal: '12px' }}>
+        <Text
+          color="#secondaryText"
+          size="small"
+          margin={{ bottom: 'xsmall', horizontal: 'small' }}
+        >
           {appsTitle}
         </Text>
         {slicedApps.map(({ name, imageUrl }: { name: string; imageUrl: string }, index: number) => (
           <StyledSelectBox
             onClick={() => onClickContent(name)}
             key={index}
-            round={{ size: '3px' }}
+            round={{ size: 'xxsmall' }}
             height="40px"
             justify="center"
           >
             <Box
-              margin={{ vertical: 'xsmall', horizontal: '12px' }}
+              margin={{ vertical: 'xsmall', horizontal: 'small' }}
               direction="row"
               align="center"
               gap="small"
             >
               <Image width="32px" height="32px" src={imageUrl} style={{ borderRadius: '100%' }} />
-              <Text>{name}</Text>
+              <Text size="large">{name}</Text>
             </Box>
           </StyledSelectBox>
         ))}
@@ -131,14 +144,14 @@ const CustomSearchInput = (props: any) => {
     );
     const renderTags = (
       <Box pad={{ bottom: 'small' }}>
-        <Text color="#778390" size="11px" margin={{ bottom: 'xsmall', horizontal: '12px' }}>
+        <Text color="secondaryText" size="small" margin={{ bottom: 'xsmall', horizontal: 'small' }}>
           {tagsTitle}
         </Text>
         {slicedTags.map((tag: string, index: number) => (
           <StyledSelectBox
             onClick={() => onClickContent(tag)}
             key={index}
-            round={{ size: '3px' }}
+            round={{ size: 'xxsmall' }}
             height="40px"
             justify="center"
           >
@@ -155,7 +168,7 @@ const CustomSearchInput = (props: any) => {
       </Box>
     );
     return (
-      <Box pad={{ top: '16px', horizontal: '4px' }}>
+      <Box pad={{ top: 'medium', horizontal: 'xxsmall' }}>
         {slicedUsers.length && renderUsers}
         {slicedTags.length && renderTags}
         {slicedApps.length && renderApps}
@@ -184,15 +197,14 @@ const CustomSearchInput = (props: any) => {
         value={inputValue}
         onChange={onChange}
         placeholder={placeholder}
-        // dropTarget={boxRef.current}
+        dropTarget={boxRef.current}
         // onSelect={onSelect}
         // suggestions={renderSuggestions()}
         // onSuggestionsOpen={() => setDropOpen(true)}
         // onSuggestionsClose={() => setDropOpen(false)}
       />
       {boxRef.current && dropOpen && (
-        <Drop
-          elevation="styleGuideShadow"
+        <StyledDrop
           overflow="hidden"
           target={boxRef.current}
           align={{ top: 'bottom' }}
@@ -200,7 +212,7 @@ const CustomSearchInput = (props: any) => {
           onEsc={() => setDropOpen(false)}
         >
           {renderDropContent()}
-        </Drop>
+        </StyledDrop>
       )}
     </Box>
   );
