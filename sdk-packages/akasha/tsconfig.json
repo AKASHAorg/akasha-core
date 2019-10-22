@@ -17,9 +17,6 @@
     },
     {
       "path": "../db"
-    },
-    {
-      "path": "../integrations/3box"
     }
   ],
   "include": ["./src"]
