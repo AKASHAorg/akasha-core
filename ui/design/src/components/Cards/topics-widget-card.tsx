@@ -12,7 +12,7 @@ export interface ITopicsCardWidgetProps {
   label: string;
   labelColor?: string;
   iconType: IconType;
-  dataSource: { title: string; subtitle: string }[];
+  dataSource: Array<{ title: string; subtitle: string }>;
 }
 
 const TopicsWidgetCard: React.FC<ITopicsCardWidgetProps> = props => {
