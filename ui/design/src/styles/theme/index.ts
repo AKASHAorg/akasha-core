@@ -1,6 +1,5 @@
 import { deepMerge } from 'grommet/utils';
 import { DefaultTheme } from 'styled-components';
-import createCustomRadiobuttonTheme from './components/radiobutton';
 
 const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
   return deepMerge(styledComponentsTheme, {
@@ -73,7 +72,6 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         height: '24px',
       },
     },
-    ...createCustomRadiobuttonTheme(styledComponentsTheme),
   });
 };
 

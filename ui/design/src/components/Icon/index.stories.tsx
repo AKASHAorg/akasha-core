@@ -4,7 +4,7 @@ import { color } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import { Box } from 'grommet';
 import * as React from 'react';
-import Icon, { iconTypes } from './';
+import { Icon, iconTypes } from './index';
 
 const IconComponent = () => {
   const accentColor = color('Accent color', '');

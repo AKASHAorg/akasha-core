@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import { Box } from 'grommet';
 import * as React from 'react';
-import { CustomSearchInput } from './search-input';
+import { SearchInput } from './index';
 
 const suggestionsFromSpace = {
   users: [
@@ -29,7 +29,7 @@ const SearchInputComponent = () => {
   return (
     <Box fill={true} justify="center" align="center">
       <Box width="medium" pad={{ top: 'large' }}>
-        <CustomSearchInput
+        <SearchInput
           getData={action('Get Data')}
           dataSource={suggestionsFromSpace}
           placeholder={'Search something...'}

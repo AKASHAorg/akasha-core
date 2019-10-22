@@ -1,9 +1,9 @@
-import { Box, Drop, Layer, Text } from 'grommet';
+import { Box, Layer, Text } from 'grommet';
 import * as React from 'react';
-import styled from 'styled-components';
-import Icon from '../Icon/index';
+import { Icon } from '../Icon/index';
 import { IconLink, ProfileAvatarButton, VoteIconButton } from '../IconButton/index';
-import TextIcon from '../TextIcon';
+import { TextIcon } from '../TextIcon';
+import { StyledDrop, StyledLayerElemDiv, StyledSelectBox } from './styled-entry-box';
 
 export interface IEntryData {
   user: string;
@@ -12,15 +12,15 @@ export interface IEntryData {
   time: string;
   upvotes: string | number;
   downvotes: string | number;
-  comments?: Array<{
+  comments?: {
     user: string;
     time: string;
     userAvatar: string;
     content: string;
     upvotes: string | number;
     downvotes: string | number;
-  }>;
-  quotes?: Array<{ user: string; time: string; userAvatar: string }>;
+  }[];
+  quotes?: { user: string; time: string; userAvatar: string }[];
 }
 
 interface IEntryBoxProps {
@@ -38,25 +38,6 @@ interface IEntryBoxProps {
   replyTitle: string;
   comment?: boolean;
 }
-
-const StyledLayerElemDiv = styled.div`
-  border-radius: ${props => props.theme.shapes.borderRadius}
-  padding: ${props => `${props.theme.spacing.baseSpacing * 3}px`}
-  border: 1px solid ${props => props.theme.colors.border}
-  margin-bottom: ${props => `${props.theme.spacing.baseSpacing * 3}px`}
-`;
-
-const StyledDrop = styled(Drop)`
-  margin-top: -10px;
-  margin-left: 25px;
-  border-radius: ${props => props.theme.shapes.smallBorderRadius};
-`;
-
-const StyledSelectBox = styled(Box)`
-  &:hover {
-    cursor: pointer;
-  }
-`;
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
   const {
