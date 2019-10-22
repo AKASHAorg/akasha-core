@@ -1,28 +1,41 @@
 import * as React from 'react';
 import MarginInterface from '../../interfaces/margin.interface';
 import { Box, Text, Image } from 'grommet';
-import Icon, { IconType } from '../Icon/index';
 import Avatar from '../Avatar/index';
 import styled from 'styled-components';
+import { BasicCardBox } from './index';
+import SubtitleTextIcon from '../TextIcon/subtitle-text-icon';
+import IconButton from '../IconButton/icon-button';
+import Icon from '../Icon';
+import TextIcon, { actionType } from '../TextIcon';
 
-interface IProfileData {
-  avatarImg: string;
-  profileImg: string;
+export interface IProfileData {
+  avatarImg?: string;
+  profileImg?: string;
   userName: string;
-  userInfo: string;
-  name: string;
-  followers: number;
-  following: number;
-  apps: number;
+  userInfo?: string;
+  name?: string;
+  followers?: string;
+  following?: string;
+  apps?: string;
+  profileType: string;
+  users?: string;
+  actions?: string;
+  mostPopularActions?: actionType[];
 }
 
-export interface ICardWidgetProps {
-  onClick: React.EventHandler<React.SyntheticEvent>;
+export interface IProfileCardProps {
+  onClickApps: React.EventHandler<React.SyntheticEvent>;
+  onClickFollowing: React.EventHandler<React.SyntheticEvent>;
   margin?: MarginInterface;
   profileData: IProfileData;
-  aboutMeTitle: string;
+  userInfoTitle: string;
+  actionsTitle: string;
   followingTitle: string;
   appsTitle: string;
+  usersTitle: string;
+  mostPopularActionsTitle: string;
+  shareProfileText: string;
 }
 
 const AvatarDiv = styled.div`
@@ -32,106 +45,129 @@ const AvatarDiv = styled.div`
   width: 84px;
   border: 4px solid #fff;
   transform: translateY(-30px);
-  background-color: darkGrey;
+  background-color: grey;
 `;
 
-const IconDiv = styled.div`
-  border-radius: 14px;
-  width: 28px;
-  height: 28px;
-  background: ${props => props.theme.colors.background};
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const ShareButtonContainer = styled.div`
+  position: relative;
+  top: 16px;
+  right: 16px;
 `;
 
-const ProfileCard: React.FC<ICardWidgetProps> = props => {
-  const { onClick, margin, profileData, aboutMeTitle, followingTitle, appsTitle } = props;
+const StyledActionText = styled(Text)`
+  cursor: pointer;
+  &:hover {
+    color: ${props => props.theme.colors.accent};
+  }
+`;
+
+const ProfileCard: React.FC<IProfileCardProps> = props => {
+  const {
+    onClickFollowing,
+    onClickApps,
+    profileData,
+    userInfoTitle,
+    actionsTitle,
+    followingTitle,
+    usersTitle,
+    mostPopularActionsTitle,
+    shareProfileText,
+    appsTitle,
+  } = props;
+
+  const leftTitle = profileData.following ? profileData.following : profileData.users;
+  const rightTitle = profileData.apps ? profileData.apps : profileData.actions;
+  const leftSubtitle = profileData.profileType === 'dapp' ? usersTitle : followingTitle;
+  const rightSubtitle = profileData.profileType === 'dapp' ? actionsTitle : appsTitle;
 
   return (
-    <Box
-      direction="column"
-      elevation="styleGuideShadow"
-      fill
-      pad="none"
-      round="8px"
-      border={{
-        color: 'border',
-        size: 'xsmall',
-        style: 'solid',
-        side: 'all',
-      }}
-    >
+    <BasicCardBox>
       <Box
-        basis="1/3"
+        height="144px"
         background={profileData.profileImg}
         pad="none"
-        round={{ corner: 'top', size: '8px' }}
-      />
+        round={{ corner: 'top', size: 'xsmall' }}
+        align="end"
+      >
+        <ShareButtonContainer>
+          <IconButton share icon={<Icon type="share" />} label={shareProfileText} />
+        </ShareButtonContainer>
+      </Box>
       <Box
-        basis="1/4"
+        height="70px"
         border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
-        margin={{ horizontal: '16px' }}
+        margin={{ horizontal: 'medium' }}
         direction="row"
         justify="between"
       >
         <Box direction="row">
           <AvatarDiv>
-            <Image
-              src={profileData.avatarImg}
-              fit="cover"
-              width="76px"
-              height="76px"
-              style={{ borderRadius: '100%' }}
-            />
+            {profileData.avatarImg && (
+              <Image
+                src={profileData.avatarImg}
+                fit="cover"
+                width="76px"
+                height="76px"
+                style={{ borderRadius: '100%' }}
+              />
+            )}
           </AvatarDiv>
-          <Box pad={{ vertical: '16px', left: '8px' }}>
-            <Text size="15px" weight="bold" color="darkGrey">
+          <Box pad={{ vertical: 'small', left: 'xsmall' }}>
+            <Text size="xlarge" weight="bold" color="primaryText">
               {profileData.name}
             </Text>
-            <Text size="13px" color="background">
+            <Text size="medium" color="secondaryText">
               {profileData.userName}
             </Text>
           </Box>
         </Box>
-
-        <Box pad={{ vertical: '16px', right: '4px' }} direction="row" alignContent="center">
-          <Box direction="row" justify="center" pad={{ right: '20px' }}>
-            <IconDiv>
-              <Icon type="person" />
-            </IconDiv>
-            <Box pad={{ left: '8px' }}>
-              <Text>{profileData.following}</Text>
-              <Text size="11px" color="background">
-                {followingTitle}
-              </Text>
-            </Box>
+        {leftTitle && rightTitle && (
+          <Box
+            pad={{ vertical: 'medium', right: 'xxsmall' }}
+            direction="row"
+            alignContent="center"
+            gap="small"
+          >
+            <SubtitleTextIcon
+              iconType="person"
+              title={leftTitle}
+              titleSize="small"
+              subtitle={leftSubtitle}
+              onClick={onClickFollowing}
+            />
+            <SubtitleTextIcon
+              iconType="app"
+              title={rightTitle}
+              titleSize="small"
+              subtitle={rightSubtitle}
+              onClick={onClickApps}
+            />
           </Box>
-          <Box direction="row" justify="center">
-            <IconDiv>
-              <Icon type="app" />
-            </IconDiv>
-            <Box pad={{ left: '8px' }}>
-              <Text>{profileData.apps}</Text>
-              <Text size="11px" color="background">
-                {appsTitle}
-              </Text>
-            </Box>
+        )}
+      </Box>
+      {profileData.profileType === 'dapp' && profileData.mostPopularActions && (
+        <Box direction="column" pad={{ horizontal: 'medium', top: 'medium' }} gap="medium">
+          <Text size="large" weight="bold" color="primaryText">
+            {mostPopularActionsTitle}
+          </Text>
+          <Box pad="none" gap="medium" direction="row">
+            {profileData.mostPopularActions.map((action, index) => (
+              // <StyledActionText color="primaryText" key={index}>
+              //   {action}
+              // </StyledActionText>
+              <TextIcon actionType={action} key={index} label={action} iconType={'app'} clickable />
+            ))}
           </Box>
         </Box>
-      </Box>
-      <Box direction="column" pad="16px" gap="16px">
-        <Text size="15px" weight="bold">
-          {aboutMeTitle}
+      )}
+      <Box direction="column" pad="medium" gap="medium">
+        <Text size="large" weight="bold" color="primaryText">
+          {userInfoTitle}
         </Text>
-        <Text>{profileData.userInfo}</Text>
+        <Text color="primaryText">{profileData.userInfo}</Text>
       </Box>
-    </Box>
+    </BasicCardBox>
   );
 };
-
-const defaultProps = {};
-
-ProfileCard.defaultProps = defaultProps;
 
 export default ProfileCard;

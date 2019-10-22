@@ -4,7 +4,6 @@ const TrendingApps = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" {...props}>
     <g fill="none" fillRule="evenodd" transform="translate(-986 -2710)">
       <g transform="translate(986 2710)">
-        <rect width="20" height="20" />
         <circle cx="10" cy="10" r="7.5" stroke="#132540" />
         <path
           stroke="#132540"

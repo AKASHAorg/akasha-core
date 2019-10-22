@@ -1,6 +1,6 @@
 /* eslint-disable import/first */
 import { action } from '@storybook/addon-actions';
-import { color, object, text, select } from '@storybook/addon-knobs';
+import { color, object, text, select, boolean } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import { Box } from 'grommet';
 import * as React from 'react';
@@ -22,9 +22,10 @@ storiesOf('TextIcon', module).add('default', () => (
       backgroundColor={color('Background Color', '')}
       color={color('Color', '#132540')}
       iconType={select('Type', iconTypeOptions, iconTypeDefaultValue)}
-      text={text('Text', 'Home')}
+      label={text('Label', 'Home')}
       spacing={text('Spacing', '10px')}
       margin={object('Margin', { margin: '0px' })}
+      clickable={boolean('Clickable', false)}
     />
   </Box>
 ));

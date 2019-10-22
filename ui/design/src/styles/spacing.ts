@@ -1,6 +1,7 @@
 // spacings and sizing here!!
 
 export interface ISpacing {
+  baseSpacing: number;
   fontSize: string;
   lineHeight: string;
   components: {
@@ -126,6 +127,7 @@ export interface ISpacing {
 const basePadding = 4;
 
 const spacing: ISpacing = {
+  baseSpacing: 4,
   fontSize: '14px',
   lineHeight: '21px',
   components: {

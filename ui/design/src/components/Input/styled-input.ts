@@ -32,7 +32,7 @@ const StyledInput = styled.label<InputProps>`
       font-weight: ${props => props.theme.shapes.fontWeight.regular};
       justify-content: space-around;
       width: 100%;
-      margin: ${marginSize};
+      ${marginSize}
     `;
   }}
 
