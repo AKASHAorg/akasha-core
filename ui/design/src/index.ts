@@ -1,9 +1,10 @@
 /* Components */
 import Avatar from './components/Avatar';
-import Button from './components/Button';
 export * from './components/IconButton';
 import Tab from './components/Tabs/tab';
 import Tabs from './components/Tabs/tabs';
+export * from './components/Cards';
+import { SearchInput } from './components/Input/index';
 
 /* Themes and theme related utils */
 import { createTheme } from './styles/themes/create-theme';
@@ -17,9 +18,9 @@ import styled, { css } from 'styled-components';
 
 export {
   Avatar,
-  Button,
   Tabs,
   Tab,
+  SearchInput,
   lightTheme,
   darkTheme,
   createTheme,

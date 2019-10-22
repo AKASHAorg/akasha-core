@@ -75,7 +75,10 @@ class App extends PureComponent<IProps> {
   public onClickSdk = () => {
     const { sdkModules, logger } = this.props;
     logger.info('sdk call');
-    const callMethod = sdkModules.commons.validator_service({ method: 'validator', args: {} });
+    const callMethod = sdkModules.commons.validator_service({
+      method: 'validator',
+      args: {},
+    });
     callMethod.subscribe(subConsumer);
   };
   public getEvents = () => {

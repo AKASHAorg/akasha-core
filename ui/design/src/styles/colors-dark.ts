@@ -1,38 +1,29 @@
-import IColors from '../interfaces/IColors';
+import { IColors } from './colors-light';
 
-const colors: IColors = {
-  disabledOpacity: '0.5',
-  dark: '#0E1012', // black
-  darkGrey: '#131517', // dark
-  grey: '#181C1F', // dark-grey
-  lightGrey: '#272B2E', // grey
-  darkBackground: '#4B555E', // medium-grey
-  border: '#8B8F94', // light-grey
-  background: '#F8F8F8', // background
-  blue: '#0598FF', // blue
-  darkBlue: '#0588E6', // dark-blue
-  red: '#F96A6A', // red
-  darkRed: '#E66363', // dark-red
-  green: '#7ACC80', // green
-  yellow: '#FFC02F', // yellow
-  white: '#FFF', // white
+interface IColorsDark extends IColors {
+  blue: string;
+  darkBlue: string;
+  grey: string;
+  mediumGrey: string;
+  lightGrey: string;
+  white: string;
+}
+
+const colors: IColorsDark = {
+  blue: '#4E71FF',
+  darkBlue: '#132540',
+  grey: '#949EB3',
+  mediumGrey: '#B6BFD1',
+  lightGrey: '#EDF0F5',
+  white: '#FFF',
+  // define use cases for colors
+  primaryText: '#132540', // darkBlue
+  secondaryText: '#949EB3', // grey
+  lightBackground: '#EDF0F5', // lightGrey
+  darkBackground: '#000C20',
+  accent: '#4E71FF', // blue
+  border: '#EDF0F5', // lightGrey
+  secondary: '#000C20', // darkGrey
+  secondaryOpacity: 'rgba(0, 12, 32, 0.5)', // darkgrey with 0.5 opacity
 };
-
 export default colors;
-
-/***
- STYLE GUIDE REFERENCE
- black: "#0E1012",
- dark: "#131517",
- darkGrey: "#181C1F",
- grey: "#272B2E",
- mediumGrey: "#4B555E",
- lightGrey: "#8B8F94",
- background: "#F8F8F8",
- blue: "#0598FF",
- darkBlue: "#0588E6",
- red: "#F96A6A",
- darkRed: "#E66363",
- green: "#7ACC80",
- yellow: "#FFC02F",
- */

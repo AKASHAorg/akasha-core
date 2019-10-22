@@ -22,12 +22,12 @@ const StyledAvatar = styled.div<AvatarProps>`
   ${props => {
     const { margin, backgroundColor, roundedCorners } = props;
 
-    const marginSize = margin ? MarginSetter(margin) : '0px';
+    const marginSize = margin ? MarginSetter(margin) : null;
     const borderRadius = roundedCorners ? props.theme.shapes.borderRadius : '';
 
     return css`
       background: ${props => backgroundColor || props.theme.colors.white}
-      margin: ${marginSize}
+      ${marginSize}
       border-radius: ${borderRadius}
     `;
   }}

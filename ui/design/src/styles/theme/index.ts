@@ -1,44 +1,51 @@
 import { deepMerge } from 'grommet/utils';
 import { DefaultTheme } from 'styled-components';
-import createCustomCheckBoxTheme from './components/checkbox';
-// import createCustomModalTheme from './components/modal';
-import createCustomIconTheme from './components/icon';
-import createCustomRadiobuttonTheme from './components/radiobutton';
-import createCustomTextInputTheme from './components/text-input';
 
 const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
   return deepMerge(styledComponentsTheme, {
     global: {
+      edgeSize: {
+        xxsmall: `${styledComponentsTheme.spacing.baseSpacing}px`,
+        xsmall: `${styledComponentsTheme.spacing.baseSpacing * 2}px`,
+        small: `${styledComponentsTheme.spacing.baseSpacing * 3}px`,
+        medium: `${styledComponentsTheme.spacing.baseSpacing * 4}px`,
+        large: `${styledComponentsTheme.spacing.baseSpacing * 5}px`,
+        xlarge: `${styledComponentsTheme.spacing.baseSpacing * 10}px`,
+      },
+      elevation: {
+        light: {
+          shadow: styledComponentsTheme.shapes.lightShadow,
+        },
+        dark: {
+          shadow: styledComponentsTheme.shapes.darkShadow,
+        },
+      },
+      drop: {
+        shadowSize: 'shadow',
+        extend: `
+          // border-radius: ${styledComponentsTheme.shapes.borderRadius};
+          // margin-top: 5px;
+          border: solid 1px ${styledComponentsTheme.colors.border};
+        `,
+      },
       input: {
-        weight: 400,
+        weight: styledComponentsTheme.shapes.fontWeight.regular,
       },
       font: {
         family: styledComponentsTheme.shapes.fontFamily,
         size: styledComponentsTheme.spacing.fontSize,
       },
       colors: {
-        border: 'light-6',
-        'light-1': styledComponentsTheme.colors.white,
-        'light-2': styledComponentsTheme.colors.background,
-        'light-6': styledComponentsTheme.colors.lightGrey,
-        'dark-1': styledComponentsTheme.colors.dark,
-        'dark-2': styledComponentsTheme.colors.darkGrey,
-        'dark-3': styledComponentsTheme.colors.grey,
-        'accent-2': styledComponentsTheme.colors.border,
-        'neutral-1': styledComponentsTheme.colors.green,
-        'neutral-3': styledComponentsTheme.colors.blue,
-        control: {
-          light: styledComponentsTheme.colors.border,
+        primaryText: styledComponentsTheme.colors.primaryText,
+        secondaryText: styledComponentsTheme.colors.secondaryText,
+        accentText: styledComponentsTheme.colors.accent,
+        border: {
           dark: styledComponentsTheme.colors.border,
+          light: styledComponentsTheme.colors.border,
         },
         text: {
-          light: styledComponentsTheme.colors.dark,
-          dark: styledComponentsTheme.colors.dark,
-        },
-      },
-      control: {
-        border: {
-          radius: styledComponentsTheme.shapes.borderRadius,
+          light: styledComponentsTheme.colors.primaryText,
+          dark: styledComponentsTheme.colors.primaryText,
         },
       },
       focus: {
@@ -48,25 +55,23 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
       },
     },
     text: {
+      small: {
+        size: '11px',
+        height: '15px',
+      },
       medium: {
         size: '13px',
-        height: '26px',
+        height: '18px',
+      },
+      large: {
+        size: '15px',
+        height: '20px',
+      },
+      xlarge: {
+        size: '17px',
+        height: '24px',
       },
     },
-    select: {
-      control: {
-        extend: 'padding: 3px 6px;',
-      },
-    },
-    grommet: {
-      extend: () => `
-        color: ${styledComponentsTheme.colors.dark}
-      `,
-    },
-    ...createCustomTextInputTheme(styledComponentsTheme),
-    ...createCustomCheckBoxTheme(styledComponentsTheme),
-    ...createCustomRadiobuttonTheme(styledComponentsTheme),
-    ...createCustomIconTheme(styledComponentsTheme),
   });
 };
 
