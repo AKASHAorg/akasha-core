@@ -1,9 +1,7 @@
 import { Button, ButtonProps } from 'grommet';
 import React from 'react';
 
-export interface IButtonProps extends ButtonProps {}
-
-const AkashaButton: React.FunctionComponent<IButtonProps> = props => {
+const AkashaButton: React.FunctionComponent<ButtonProps> = props => {
   return <Button {...props} />;
 };
 

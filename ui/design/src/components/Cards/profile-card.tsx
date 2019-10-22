@@ -5,7 +5,7 @@ import MarginInterface from '../../interfaces/margin.interface';
 import Avatar from '../Avatar/index';
 import Icon from '../Icon';
 import IconButton from '../IconButton/icon-button';
-import TextIcon, { actionType } from '../TextIcon';
+import TextIcon, { IActionType } from '../TextIcon';
 import SubtitleTextIcon from '../TextIcon/subtitle-text-icon';
 import { BasicCardBox } from './index';
 
@@ -21,7 +21,7 @@ export interface IProfileData {
   profileType: string;
   users?: string;
   actions?: string;
-  mostPopularActions?: actionType[];
+  mostPopularActions?: IActionType[];
 }
 
 export interface IProfileCardProps {
@@ -155,7 +155,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               // <StyledActionText color="primaryText" key={index}>
               //   {action}
               // </StyledActionText>
-              <TextIcon actionType={action} key={index} label={action} iconType={'app'} clickable={true} />
+              <TextIcon
+                actionType={action}
+                key={index}
+                label={action}
+                iconType={'app'}
+                clickable={true}
+              />
             ))}
           </Box>
         </Box>

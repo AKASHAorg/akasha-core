@@ -13,12 +13,12 @@ const topicsDataSource = [
   { title: '#cryptoworld', subtitle: '6576 mentions' },
 ];
 
-const appsDataSource: Array<{
+const appsDataSource: {
   title: string;
   subtitle: string;
   iconType: IconType;
   iconSize: string;
-}> = [
+}[] = [
   { title: 'GitCoin', subtitle: '123 embedded cards', iconType: 'app', iconSize: '40px' },
   { title: 'Augur', subtitle: '89 embedded cards', iconType: 'app', iconSize: '40px' },
   { title: 'Aragon', subtitle: '57 embedded cards', iconType: 'app', iconSize: '40px' },
@@ -135,8 +135,8 @@ storiesOf('Cards', module)
         onClick={() => action('TopicsWidgetCard Clicked')('Synthetic Event')}
         margin={object('Margin', { margin: '0px' })}
         iconType={'hotTopics'}
-        title={text('Text', 'Hot Topics')}
-        titleColor={color('Color', '#132540')}
+        label={text('Text', 'Hot Topics')}
+        labelColor={color('Color', '#132540')}
         dataSource={topicsDataSource}
       />
     </Box>
@@ -147,8 +147,8 @@ storiesOf('Cards', module)
         onClick={() => action('AppsWidgetCard Clicked')('Synthetic Event')}
         margin={object('Margin', { margin: '0px' })}
         iconType={'trendingApps'}
-        title={text('Text', 'Trending Apps')}
-        titleColor={color('Color', '#132540')}
+        label={text('Text', 'Trending Apps')}
+        labelColor={color('Color', '#132540')}
         dataSource={appsDataSource}
       />
     </Box>
