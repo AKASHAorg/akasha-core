@@ -1,0 +1,66 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "quininez",
+      "name": "Vali Cotea",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/13240850?v=4",
+      "profile": "https://github.com/quininez",
+      "contributions": [
+        "code",
+        "maintenance",
+        "doc",
+        "review",
+        "example"
+      ]
+    },
+    {
+      "login": "SeverS",
+      "name": "Sever Abibula",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5903809?v=4",
+      "profile": "https://github.com/SeverS",
+      "contributions": [
+        "code",
+        "maintenance",
+        "doc",
+        "review",
+        "example"
+      ]
+    },
+    {
+      "login": "kenshyx",
+      "name": "Marius Darila",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/3396463?v=4",
+      "profile": "https://github.com/kenshyx",
+      "contributions": [
+        "code",
+        "maintenance",
+        "doc",
+        "review",
+        "example",
+        "infra"
+      ]
+    },
+    {
+      "login": "MihaiAlisie",
+      "name": "Mihai Alisie",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/6831213?v=4",
+      "profile": "https://akasha.world",
+      "contributions": [
+        "ideas",
+        "financial",
+        "blog",
+        "talk"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "akasha-world-framework",
+  "projectOwner": "AkashaProject",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
