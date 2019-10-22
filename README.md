@@ -1,5 +1,5 @@
 # akasha-sdk-js
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
 
 Monorepo for the AKASHA World Framework
 
@@ -32,6 +32,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://github.com/quininez"><img src="https://avatars3.githubusercontent.com/u/13240850?v=4" width="100px;" alt="Vali Cotea"/><br /><sub><b>Vali Cotea</b></sub></a><br /><a href="https://github.com/AkashaProject/akasha-world-framework/commits?author=quininez" title="Code">💻</a> <a href="#maintenance-quininez" title="Maintenance">🚧</a> <a href="https://github.com/AkashaProject/akasha-world-framework/commits?author=quininez" title="Documentation">📖</a> <a href="#review-quininez" title="Reviewed Pull Requests">👀</a> <a href="#example-quininez" title="Examples">💡</a></td>
+    <td align="center"><a href="https://github.com/SeverS"><img src="https://avatars2.githubusercontent.com/u/5903809?v=4" width="100px;" alt="Sever Abibula"/><br /><sub><b>Sever Abibula</b></sub></a><br /><a href="https://github.com/AkashaProject/akasha-world-framework/commits?author=SeverS" title="Code">💻</a> <a href="#maintenance-SeverS" title="Maintenance">🚧</a> <a href="https://github.com/AkashaProject/akasha-world-framework/commits?author=SeverS" title="Documentation">📖</a> <a href="#review-SeverS" title="Reviewed Pull Requests">👀</a> <a href="#example-SeverS" title="Examples">💡</a></td>
   </tr>
 </table>
 
