@@ -44,6 +44,18 @@
         "example",
         "infra"
       ]
+    },
+    {
+      "login": "MihaiAlisie",
+      "name": "Mihai Alisie",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/6831213?v=4",
+      "profile": "https://akasha.world",
+      "contributions": [
+        "ideas",
+        "financial",
+        "blog",
+        "talk"
+      ]
     }
   ],
   "contributorsPerLine": 7,
