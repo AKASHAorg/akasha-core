@@ -1,5 +1,4 @@
-import { Anchor, Box } from 'grommet';
-import * as React from 'react';
+import { Anchor } from 'grommet';
 import styled from 'styled-components';
 
 interface IStyledIconLinkProps {
@@ -7,22 +6,24 @@ interface IStyledIconLinkProps {
 }
 
 const StyledIconLink = styled(Anchor)<IStyledIconLinkProps>`
-  border-radius: ${props => props.theme.shapes.borderRadius};
+  border-radius: ${props => props.theme.shapes.largeBorderRadius};
   border: none;
   padding: ${props => props.theme.spacing.components.iconButton.padding};
-  color: ${props => props.theme.colors.lightGrey};
+  color: ${props => props.theme.colors.grey};
   font-weight: 400;
-  :hover {
+  &:hover {
     text-decoration: none;
-    color: ${props => props.theme.colors.blue};
+    color: ${props => props.theme.colors.accent};
     svg {
-      stroke: ${props => props.theme.colors.blue};
+      & * {
+        stroke: ${props => props.theme.colors.accent};
+      }
     }
   }
-  /* font-size: ${props => props.theme.spacing.components.iconButton.fontSize.sm}; */
   svg {
-    height: 1em;
-    stroke: ${props => props.theme.colors.lightGrey};
+    & * {
+      stroke: ${props => props.theme.colors.grey};
+    }
   }
 `;
 

@@ -7,8 +7,8 @@ interface ProfileAvatarButtonProps {
   info: string | React.ReactElement;
   avatarImage: string;
   label: string;
-  onAvatarClick?: () => void;
-  onClick: () => void;
+  onAvatarClick?: React.EventHandler<React.SyntheticEvent>;
+  onClick: React.EventHandler<React.SyntheticEvent>;
 }
 const AvatarButtonWrapper = styled.div`
   display: flex;
