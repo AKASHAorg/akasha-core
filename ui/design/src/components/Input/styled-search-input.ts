@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import { Box, Drop } from 'grommet';
+import styled from 'styled-components';
 
 const StyledSelectBox = styled(Box)`
   ${props =>

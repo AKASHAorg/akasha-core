@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components';
 import { Box } from 'grommet';
+import styled, { css } from 'styled-components';
 
 interface IIconDiv {
   iconSize?: string;

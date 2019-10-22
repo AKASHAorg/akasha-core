@@ -1,7 +1,7 @@
 import { Box, Image, Text, TextInput } from 'grommet';
 import React, { useEffect, useRef, useState } from 'react';
 import { Icon } from '../Icon/index';
-import { StyledSelectBox, StyledDrop } from './styled-search-input';
+import { StyledDrop, StyledSelectBox } from './styled-search-input';
 
 interface ICustomSearchInput {
   getData: () => void;

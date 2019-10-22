@@ -2,7 +2,7 @@ import { Box } from 'grommet';
 import * as React from 'react';
 import MarginInterface from '../../interfaces/margin.interface';
 import { IconType } from '../Icon/icon';
-import { TextIcon, SubtitleTextIcon } from '../TextIcon/index';
+import { SubtitleTextIcon, TextIcon } from '../TextIcon/index';
 import { BasicCardBox } from './index';
 
 export interface ITopicsCardWidgetProps {
@@ -11,7 +11,12 @@ export interface ITopicsCardWidgetProps {
   label: string;
   labelColor?: string;
   iconType: IconType;
-  dataSource: { title: string; subtitle: string }[];
+  dataSource: TopicsData[];
+}
+
+interface TopicsData {
+  title: string;
+  subtitle: string;
 }
 
 const TopicsWidgetCard: React.FC<ITopicsCardWidgetProps> = props => {

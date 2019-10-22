@@ -12,15 +12,23 @@ export interface IEntryData {
   time: string;
   upvotes: string | number;
   downvotes: string | number;
-  comments?: {
-    user: string;
-    time: string;
-    userAvatar: string;
-    content: string;
-    upvotes: string | number;
-    downvotes: string | number;
-  }[];
-  quotes?: { user: string; time: string; userAvatar: string }[];
+  comments?: Comment[];
+  quotes?: Quote[];
+}
+
+interface Comment {
+  user: string;
+  time: string;
+  userAvatar: string;
+  content: string;
+  upvotes: string | number;
+  downvotes: string | number;
+}
+
+interface Quote {
+  user: string;
+  time: string;
+  userAvatar: string;
 }
 
 interface IEntryBoxProps {

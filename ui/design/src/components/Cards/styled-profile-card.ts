@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import { Text } from 'grommet';
+import styled from 'styled-components';
 
 const AvatarDiv = styled.div`
   box-sizing: border-box;

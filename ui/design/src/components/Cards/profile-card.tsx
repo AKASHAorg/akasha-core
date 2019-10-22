@@ -1,11 +1,10 @@
 import { Box, Image, Text } from 'grommet';
 import * as React from 'react';
-import styled from 'styled-components';
 import MarginInterface from '../../interfaces/margin.interface';
 import Avatar from '../Avatar/index';
 import { Icon } from '../Icon';
 import IconButton from '../IconButton/icon-button';
-import { TextIcon, SubtitleTextIcon } from '../TextIcon/index';
+import { SubtitleTextIcon, TextIcon } from '../TextIcon/index';
 import { IActionType } from '../TextIcon/text-icon';
 import { BasicCardBox } from './index';
 import { AvatarDiv, ShareButtonContainer } from './styled-profile-card';
