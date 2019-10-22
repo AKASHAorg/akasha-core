@@ -67,6 +67,15 @@
         "talk",
         "fundingFinding"
       ]
+    },
+    {
+      "login": "marianagomes",
+      "name": "Mariana Gomes",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/22957731?v=4",
+      "profile": "https://github.com/marianagomes",
+      "contributions": [
+        "design"
+      ]
     }
   ],
   "contributorsPerLine": 7,
