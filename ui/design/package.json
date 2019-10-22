@@ -78,7 +78,7 @@
     "@types/storybook__react": "^4.0.2",
     "@types/styled-components": "^4.1.19",
     "awesome-typescript-loader": "5.2.1",
-    "react": "16.9.0",
+    "react": "16.10.2",
     "react-docgen-typescript-loader": "^3.2.1",
     "react-docgen-typescript-webpack-plugin": "^1.1.0",
     "react-dom": "16.9.0",
