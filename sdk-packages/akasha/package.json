@@ -33,7 +33,6 @@
     "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
   },
   "dependencies": {
-    "@akashaproject/sdk-3box": "*",
     "@akashaproject/sdk-common": "*",
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-db": "*",
