@@ -1,11 +1,11 @@
-import * as React from 'react';
 import { Box } from 'grommet';
+import * as React from 'react';
 
 const BasicCardBox = ({ children }: any) => (
   <Box
     direction="column"
     elevation="shadow"
-    fill
+    fill={true}
     pad="none"
     round="xsmall"
     border={{

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import MarginInterface from '../../interfaces/margin.interface';
-import { StyledTextIcon, StyledText } from './styled-text-icon';
 import Icon, { IconType } from '../Icon';
+import { StyledText, StyledTextIcon } from './styled-text-icon';
 
 export interface ITextIconProps {
   onClick?: React.EventHandler<React.SyntheticEvent>;
@@ -47,7 +47,7 @@ const TextIcon: React.FC<ITextIconProps> = props => {
   } = props;
   console.log('action: ', actionType && actionTypeIcons[actionType], actionType);
 
-  if (actionType)
+  if (actionType) {
     return (
       <StyledTextIcon
         onClick={onClick}
@@ -63,6 +63,7 @@ const TextIcon: React.FC<ITextIconProps> = props => {
         <StyledText bold={bold}>{actionType}</StyledText>
       </StyledTextIcon>
     );
+  }
 
   return (
     <StyledTextIcon

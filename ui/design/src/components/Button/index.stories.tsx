@@ -4,14 +4,14 @@ import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import { Box } from 'grommet';
 import * as React from 'react';
-import AkashaButton from './index';
 import Icon from '../Icon/index';
+import AkashaButton from './index';
 
 storiesOf('Button', module)
   .add('share profile', () => (
     <Box pad="large" align="center">
       <AkashaButton
-        primary
+        primary={true}
         hoverIndicator="false"
         disabled={boolean('Disabled', false)}
         onClick={() => action('AkashaButton Clicked')('Synthetic Event')}
@@ -25,14 +25,14 @@ storiesOf('Button', module)
   .add('thumbs up', () => (
     <Box pad="large" align="center">
       <AkashaButton
-        primary
+        primary={true}
         hoverIndicator="false"
         disabled={boolean('Disabled', false)}
         onClick={() => action('AkashaButton Clicked')('Synthetic Event')}
         margin={object('Margin', { bottom: '0px' })}
         color={'#EDF0F5'}
         icon={<Icon type="wallet" />}
-        reverse
+        reverse={true}
         label={text('Label', '26')}
       />
     </Box>

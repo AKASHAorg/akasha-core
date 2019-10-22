@@ -1,7 +1,7 @@
-import React, { useRef, useState, useEffect } from 'react';
-import Icon from '../Icon/index';
+import { Box, Drop, Image, Text, TextInput } from 'grommet';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { Box, Image, Text, TextInput, Drop } from 'grommet';
+import Icon from '../Icon/index';
 
 const StyledSelectBox = styled(Box)`
   ${props =>
@@ -61,7 +61,7 @@ const CustomSearchInput: React.FC<ICustomSearchInput> = props => {
         (
           { name, imageUrl }: { name: string; imageUrl: string },
           index: number,
-          list: Array<any>,
+          list: any[],
         ) => ({
           label: (
             <Box direction="row" align="center" gap="small" pad="small">
@@ -193,7 +193,7 @@ const CustomSearchInput: React.FC<ICustomSearchInput> = props => {
       <Icon type="search" />
       <TextInput
         // type="search"
-        plain
+        plain={true}
         value={inputValue}
         onChange={onChange}
         placeholder={placeholder}

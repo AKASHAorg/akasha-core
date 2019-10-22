@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import MarginSetter from '../../utils/marginSetter';
-import { ITextIconProps, IStyledTextProps } from './index';
+import { IStyledTextProps, ITextIconProps } from './index';
 
 const StyledTextIcon = styled.div<ITextIconProps>`
   ${props => {

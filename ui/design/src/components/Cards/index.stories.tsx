@@ -1,11 +1,11 @@
 /* eslint-disable import/first */
 import { action } from '@storybook/addon-actions';
-import { color, object, text, select, boolean } from '@storybook/addon-knobs';
+import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import { Box } from 'grommet';
 import * as React from 'react';
-import { AppsWidgetCard, TopicsWidgetCard, ProfileCard, EntryCard } from './index';
 import { IconType } from '../Icon';
+import { AppsWidgetCard, EntryCard, ProfileCard, TopicsWidgetCard } from './index';
 
 const topicsDataSource = [
   { title: '#ethereumworld', subtitle: '6576 mentions' },
@@ -13,12 +13,12 @@ const topicsDataSource = [
   { title: '#cryptoworld', subtitle: '6576 mentions' },
 ];
 
-const appsDataSource: {
+const appsDataSource: Array<{
   title: string;
   subtitle: string;
   iconType: IconType;
   iconSize: string;
-}[] = [
+}> = [
   { title: 'GitCoin', subtitle: '123 embedded cards', iconType: 'app', iconSize: '40px' },
   { title: 'Augur', subtitle: '89 embedded cards', iconType: 'app', iconSize: '40px' },
   { title: 'Aragon', subtitle: '57 embedded cards', iconType: 'app', iconSize: '40px' },

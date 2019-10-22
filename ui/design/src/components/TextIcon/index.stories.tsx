@@ -1,11 +1,11 @@
 /* eslint-disable import/first */
 import { action } from '@storybook/addon-actions';
-import { color, object, text, select, boolean } from '@storybook/addon-knobs';
+import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import { Box } from 'grommet';
 import * as React from 'react';
-import TextIcon from './index';
 import { IconType } from '../Icon/index';
+import TextIcon from './index';
 
 const iconTypeOptions: { Home: IconType; HotTopics: IconType; Media: IconType } = {
   Home: 'home',
