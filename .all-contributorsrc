@@ -17,6 +17,19 @@
         "review",
         "example"
       ]
+    },
+    {
+      "login": "SeverS",
+      "name": "Sever Abibula",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5903809?v=4",
+      "profile": "https://github.com/SeverS",
+      "contributions": [
+        "code",
+        "maintenance",
+        "doc",
+        "review",
+        "example"
+      ]
     }
   ],
   "contributorsPerLine": 7,
