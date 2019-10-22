@@ -46,7 +46,7 @@ const CustomSearchInput: React.FC<ICustomSearchInput> = props => {
 
   const onChange = (event: any) => {
     setInputValue(event.target.value);
-    getData(event.target.value);
+    getData();
   };
 
   const onSelect = (event: any) => setInputValue(event.suggestion.inputValue);
