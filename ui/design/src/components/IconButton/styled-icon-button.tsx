@@ -51,8 +51,8 @@ const StyledIconButton = styled(Button)<IIconButtonProps>`
         background-color: ${props.theme.colors.secondaryOpacity};
         color: ${props.theme.colors.white};
         &:hover {
-          border: 1px solid ${props => props.theme.colors.secondaryOpacity};
-          background-color: ${props => props.theme.colors.secondaryOpacity};
+          border: 1px solid ${props.theme.colors.secondaryOpacity};
+          background-color: ${props.theme.colors.secondaryOpacity};
         }
       `;
     }

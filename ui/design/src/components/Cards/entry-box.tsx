@@ -12,15 +12,15 @@ export interface IEntryData {
   time: string;
   upvotes: string | number;
   downvotes: string | number;
-  comments?: Array<{
+  comments?: {
     user: string;
     time: string;
     userAvatar: string;
     content: string;
     upvotes: string | number;
     downvotes: string | number;
-  }>;
-  quotes?: Array<{ user: string; time: string; userAvatar: string }>;
+  }[];
+  quotes?: { user: string; time: string; userAvatar: string }[];
 }
 
 interface IEntryBoxProps {
@@ -99,15 +99,23 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const upvote = (ev: any) => {
     onClickUpvote(ev);
-    if (!upvoted) { setUpvotes(Number(upvotes) + 1); }
-    if (upvoted) { setUpvotes(Number(upvotes) - 1); }
+    if (!upvoted) {
+      setUpvotes(Number(upvotes) + 1);
+    }
+    if (upvoted) {
+      setUpvotes(Number(upvotes) - 1);
+    }
     setUpvoted(!upvoted);
   };
 
   const downvote = (ev: any) => {
     onClickDownvote(ev);
-    if (!downvoted) { setDownvotes(Number(downvotes) + 1); }
-    if (downvoted) { setDownvotes(Number(downvotes) - 1); }
+    if (!downvoted) {
+      setDownvotes(Number(downvotes) + 1);
+    }
+    if (downvoted) {
+      setDownvotes(Number(downvotes) - 1);
+    }
     setDownvoted(!downvoted);
   };
 
@@ -158,10 +166,20 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
       >
         <Box pad="small" gap="small" margin={{ right: 'small' }}>
           <StyledSelectBox>
-            <TextIcon iconType="edit" label={editTitle} onClick={onClickEditPost} clickable={true} />
+            <TextIcon
+              iconType="edit"
+              label={editTitle}
+              onClick={onClickEditPost}
+              clickable={true}
+            />
           </StyledSelectBox>
           <StyledSelectBox>
-            <TextIcon iconType="link" label={copyLinkTitle} onClick={onClickCopyLink} clickable={true} />
+            <TextIcon
+              iconType="link"
+              label={copyLinkTitle}
+              onClick={onClickCopyLink}
+              clickable={true}
+            />
           </StyledSelectBox>
         </Box>
       </StyledDrop>

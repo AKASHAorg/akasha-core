@@ -13,10 +13,10 @@ export interface ITextIconProps {
   iconType: IconType;
   bold?: boolean;
   clickable?: boolean;
-  actionType?: actionType;
+  actionType?: IActionType;
 }
 
-export type actionType = 'Assign Tokens' | 'Create a new vote' | 'Check finance';
+export type IActionType = 'Assign Tokens' | 'Create a new vote' | 'Check finance';
 
 export interface IStyledTextProps {
   bold?: boolean;
@@ -45,7 +45,6 @@ const TextIcon: React.FC<ITextIconProps> = props => {
     clickable,
     actionType,
   } = props;
-  console.log('action: ', actionType && actionTypeIcons[actionType], actionType);
 
   if (actionType) {
     return (

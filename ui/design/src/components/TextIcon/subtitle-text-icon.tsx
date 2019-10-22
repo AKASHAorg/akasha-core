@@ -25,11 +25,11 @@ const IconDiv = styled.div<IIconDiv>`
       border-radius: ${radius};
       width: ${size};
       height: ${size};
-      background: ${props => props.theme.colors.lightBackground};
+      background: ${props.theme.colors.lightBackground};
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-right: ${props => `${props.theme.spacing.baseSpacing * 2}px`};
+      margin-right: ${`${props.theme.spacing.baseSpacing * 2}px`};
     `;
   }}
 `;

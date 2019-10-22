@@ -18,7 +18,7 @@ const StyledDrop = styled(Drop)`
 `;
 
 interface ICustomSearchInput {
-  getData: Function;
+  getData: () => void;
   dataSource: any;
   placeholder: string;
   usersTitle: string;
@@ -58,11 +58,7 @@ const CustomSearchInput: React.FC<ICustomSearchInput> = props => {
           (name as string).toLowerCase().indexOf(inputValue.toLowerCase()) >= 0,
       )
       .map(
-        (
-          { name, imageUrl }: { name: string; imageUrl: string },
-          index: number,
-          list: any[],
-        ) => ({
+        ({ name, imageUrl }: { name: string; imageUrl: string }, index: number, list: any[]) => ({
           label: (
             <Box direction="row" align="center" gap="small" pad="small">
               <Image width="32px" src={imageUrl} style={{ borderRadius: '100%' }} />
