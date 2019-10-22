@@ -46,8 +46,4 @@ const TopicsWidgetCard: React.FC<ITopicsCardWidgetProps> = props => {
   );
 };
 
-TopicsWidgetCard.defaultProps = {
-  titleColor: 'primaryText',
-};
-
 export default TopicsWidgetCard;
