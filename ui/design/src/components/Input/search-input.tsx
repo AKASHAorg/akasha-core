@@ -1,21 +1,7 @@
-import { Box, Drop, Image, Text, TextInput } from 'grommet';
+import { Box, Image, Text, TextInput } from 'grommet';
 import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import Icon from '../Icon/index';
-
-const StyledSelectBox = styled(Box)`
-  ${props =>
-    `&:hover {
-        background-color: ${props.theme.colors.lightBackground};
-        cursor: pointer;
-      }
-    `}
-`;
-
-const StyledDrop = styled(Drop)`
-  margin-top: 5px;
-  border-radius: ${props => props.theme.shapes.largeBorderRadius};
-`;
+import { Icon } from '../Icon/index';
+import { StyledSelectBox, StyledDrop } from './styled-search-input';
 
 interface ICustomSearchInput {
   getData: () => void;
@@ -26,7 +12,7 @@ interface ICustomSearchInput {
   appsTitle: string;
 }
 
-const CustomSearchInput: React.FC<ICustomSearchInput> = props => {
+const SearchInput: React.FC<ICustomSearchInput> = props => {
   const { dataSource, placeholder, usersTitle, tagsTitle, appsTitle, getData } = props;
   const [inputValue, setInputValue] = useState('');
   const [dropOpen, setDropOpen] = useState(false);
@@ -214,4 +200,4 @@ const CustomSearchInput: React.FC<ICustomSearchInput> = props => {
   );
 };
 
-export { CustomSearchInput };
+export default SearchInput;

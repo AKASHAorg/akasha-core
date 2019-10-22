@@ -4,7 +4,7 @@ import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import { Box } from 'grommet';
 import * as React from 'react';
-import { IconType } from '../Icon';
+import { IconType } from '../Icon/icon';
 import { AppsWidgetCard, EntryCard, ProfileCard, TopicsWidgetCard } from './index';
 
 const topicsDataSource = [
@@ -13,12 +13,12 @@ const topicsDataSource = [
   { title: '#cryptoworld', subtitle: '6576 mentions' },
 ];
 
-const appsDataSource: Array<{
+const appsDataSource: {
   title: string;
   subtitle: string;
   iconType: IconType;
   iconSize: string;
-}> = [
+}[] = [
   { title: 'GitCoin', subtitle: '123 embedded cards', iconType: 'app', iconSize: '40px' },
   { title: 'Augur', subtitle: '89 embedded cards', iconType: 'app', iconSize: '40px' },
   { title: 'Aragon', subtitle: '57 embedded cards', iconType: 'app', iconSize: '40px' },

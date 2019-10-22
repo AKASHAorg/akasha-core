@@ -4,8 +4,8 @@ import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import { Box } from 'grommet';
 import * as React from 'react';
-import { IconType } from '../Icon/index';
-import TextIcon from './index';
+import { IconType } from '../Icon/icon';
+import { TextIcon } from './index';
 
 const iconTypeOptions: { Home: IconType; HotTopics: IconType; Media: IconType } = {
   Home: 'home',

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import MarginInterface from '../../interfaces/margin.interface';
-import Icon, { IconType } from '../Icon';
+import { Icon } from '../Icon';
+import { IconType } from '../Icon/icon';
 import { StyledText, StyledTextIcon } from './styled-text-icon';
 
 export interface ITextIconProps {

@@ -1,9 +1,8 @@
 import { Box } from 'grommet';
 import * as React from 'react';
 import MarginInterface from '../../interfaces/margin.interface';
-import { IconType } from '../Icon/index';
-import TextIcon from '../TextIcon/index';
-import SubtitleTextIcon from '../TextIcon/subtitle-text-icon';
+import { IconType } from '../Icon/icon';
+import { TextIcon, SubtitleTextIcon } from '../TextIcon/index';
 import { BasicCardBox } from './index';
 
 export interface IAppsWidgetCardProps {
@@ -12,7 +11,7 @@ export interface IAppsWidgetCardProps {
   label: string;
   labelColor?: string;
   iconType: IconType;
-  dataSource: Array<{ title: string; subtitle: string; iconType: IconType; iconSize: string }>;
+  dataSource: { title: string; subtitle: string; iconType: IconType; iconSize: string }[];
 }
 
 const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
@@ -32,9 +31,9 @@ const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
         <Box pad="none" align="start" gap="large">
           {dataSource.map(({ title, subtitle, iconType, iconSize }, index) => (
             <SubtitleTextIcon
-              title={title}
+              label={title}
               subtitle={subtitle}
-              titleSize="large"
+              labelSize="large"
               key={index}
               iconType={iconType}
               iconSize={iconSize}

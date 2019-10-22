@@ -1,50 +1,28 @@
 import { Box, Text } from 'grommet';
 import React from 'react';
-import styled, { css } from 'styled-components';
-import Icon, { IconType } from '../Icon';
+import { IconDiv, StyledBox } from './styled-subtitle-text-icon';
+import { Icon } from '../Icon';
+import { IconType } from '../Icon/icon';
 
 interface ISubtitleTextIcon {
   iconType?: IconType;
   iconSize?: string;
-  title: string;
-  titleColor?: string;
-  titleSize?: 'small' | 'large';
+  label: string;
+  labelColor?: string;
+  labelSize?: 'small' | 'large';
   subtitle: string;
   subtitleColor?: string;
   onClick?: React.EventHandler<React.SyntheticEvent<HTMLDivElement, MouseEvent>>;
   gap?: 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large';
 }
-interface IIconDiv {
-  iconSize?: string;
-}
-const IconDiv = styled.div<IIconDiv>`
-  ${props => {
-    const size = props.iconSize ? props.iconSize : '28px';
-    const radius = props.iconSize ? '100%' : '14px';
-    return css`
-      border-radius: ${radius};
-      width: ${size};
-      height: ${size};
-      background: ${props.theme.colors.lightBackground};
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-right: ${`${props.theme.spacing.baseSpacing * 2}px`};
-    `;
-  }}
-`;
-
-const StyledBox = styled(Box)`
-  cursor: pointer;
-`;
 
 const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
   const {
     iconType,
     iconSize,
-    title,
-    titleColor,
-    titleSize,
+    label,
+    labelColor,
+    labelSize,
     subtitle,
     subtitleColor,
     onClick,
@@ -59,8 +37,8 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
         </IconDiv>
       ) : null}
       <Box pad="none" gap={gap}>
-        <Text color={titleColor} size={titleSize}>
-          {title}
+        <Text color={labelColor} size={labelSize}>
+          {label}
         </Text>
         <Text size="small" color={subtitleColor}>
           {subtitle}
@@ -71,8 +49,8 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
 };
 
 SubtitleTextIcon.defaultProps = {
-  titleColor: 'primaryText',
-  titleSize: 'large',
+  labelColor: 'primaryText',
+  labelSize: 'large',
   subtitleColor: 'secondaryText',
 };
 

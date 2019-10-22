@@ -1,9 +1,8 @@
 import { Box } from 'grommet';
 import * as React from 'react';
 import MarginInterface from '../../interfaces/margin.interface';
-import { IconType } from '../Icon/index';
-import TextIcon from '../TextIcon/index';
-import SubtitleTextIcon from '../TextIcon/subtitle-text-icon';
+import { IconType } from '../Icon/icon';
+import { TextIcon, SubtitleTextIcon } from '../TextIcon/index';
 import { BasicCardBox } from './index';
 
 export interface ITopicsCardWidgetProps {
@@ -12,7 +11,7 @@ export interface ITopicsCardWidgetProps {
   label: string;
   labelColor?: string;
   iconType: IconType;
-  dataSource: Array<{ title: string; subtitle: string }>;
+  dataSource: { title: string; subtitle: string }[];
 }
 
 const TopicsWidgetCard: React.FC<ITopicsCardWidgetProps> = props => {
@@ -32,10 +31,10 @@ const TopicsWidgetCard: React.FC<ITopicsCardWidgetProps> = props => {
         <Box pad="none" align="start" gap="large">
           {dataSource.map(({ title, subtitle }, index) => (
             <SubtitleTextIcon
-              title={title}
+              label={title}
               subtitle={subtitle}
-              titleColor="accentText"
-              titleSize="large"
+              labelColor="accentText"
+              labelSize="large"
               gap="xxsmall"
               key={index}
             />
