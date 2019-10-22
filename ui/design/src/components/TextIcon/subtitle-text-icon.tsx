@@ -1,5 +1,5 @@
-import React from 'react';
 import { Box, Text } from 'grommet';
+import React from 'react';
 import styled, { css } from 'styled-components';
 import Icon, { IconType } from '../Icon';
 

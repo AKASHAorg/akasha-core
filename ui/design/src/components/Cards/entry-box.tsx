@@ -1,9 +1,9 @@
+import { Box, Drop, Layer, Text } from 'grommet';
 import * as React from 'react';
-import { Box, Text, Drop, Layer } from 'grommet';
-import { ProfileAvatarButton, VoteIconButton, IconLink } from '../IconButton/index';
-import Icon from '../Icon/index';
-import TextIcon from '../TextIcon';
 import styled from 'styled-components';
+import Icon from '../Icon/index';
+import { IconLink, ProfileAvatarButton, VoteIconButton } from '../IconButton/index';
+import TextIcon from '../TextIcon';
 
 export interface IEntryData {
   user: string;
@@ -12,15 +12,15 @@ export interface IEntryData {
   time: string;
   upvotes: string | number;
   downvotes: string | number;
-  comments?: {
+  comments?: Array<{
     user: string;
     time: string;
     userAvatar: string;
     content: string;
     upvotes: string | number;
     downvotes: string | number;
-  }[];
-  quotes?: { user: string; time: string; userAvatar: string }[];
+  }>;
+  quotes?: Array<{ user: string; time: string; userAvatar: string }>;
 }
 
 interface IEntryBoxProps {
@@ -99,15 +99,15 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const upvote = (ev: any) => {
     onClickUpvote(ev);
-    if (!upvoted) setUpvotes(Number(upvotes) + 1);
-    if (upvoted) setUpvotes(Number(upvotes) - 1);
+    if (!upvoted) { setUpvotes(Number(upvotes) + 1); }
+    if (upvoted) { setUpvotes(Number(upvotes) - 1); }
     setUpvoted(!upvoted);
   };
 
   const downvote = (ev: any) => {
     onClickDownvote(ev);
-    if (!downvoted) setDownvotes(Number(downvotes) + 1);
-    if (downvoted) setDownvotes(Number(downvotes) - 1);
+    if (!downvoted) { setDownvotes(Number(downvotes) + 1); }
+    if (downvoted) { setDownvotes(Number(downvotes) - 1); }
     setDownvoted(!downvoted);
   };
 
@@ -118,7 +118,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
       <Layer
         onEsc={() => setQuotesModalOpen(false)}
         onClickOutside={() => setQuotesModalOpen(false)}
-        modal
+        modal={true}
       >
         <Box pad="none" width="579px" height="386px">
           <Box pad="medium" justify="between" direction="row" align="center">
@@ -158,10 +158,10 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
       >
         <Box pad="small" gap="small" margin={{ right: 'small' }}>
           <StyledSelectBox>
-            <TextIcon iconType="edit" label={editTitle} onClick={onClickEditPost} clickable />
+            <TextIcon iconType="edit" label={editTitle} onClick={onClickEditPost} clickable={true} />
           </StyledSelectBox>
           <StyledSelectBox>
-            <TextIcon iconType="link" label={copyLinkTitle} onClick={onClickCopyLink} clickable />
+            <TextIcon iconType="link" label={copyLinkTitle} onClick={onClickCopyLink} clickable={true} />
           </StyledSelectBox>
         </Box>
       </StyledDrop>
@@ -208,7 +208,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           onClick={onClickAvatar}
         />
         <div ref={menuIconRef}>
-          <Icon type="moreDark" onClick={() => setMenuDropOpen(true)} clickable />
+          <Icon type="moreDark" onClick={() => setMenuDropOpen(true)} clickable={true} />
         </div>
       </Box>
       {menuIconRef.current && menuDropOpen && renderMenu()}

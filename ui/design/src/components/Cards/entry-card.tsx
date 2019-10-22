@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { EntryBox, BasicCardBox } from './index';
 import { IEntryData } from './entry-box';
+import { BasicCardBox, EntryBox } from './index';
 
 export interface IEntryCardProps {
   entryData: IEntryData;
@@ -68,7 +68,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
             quotedByTitle={quotedByTitle}
             replyTitle={replyTitle}
             key={index}
-            comment
+            comment={true}
           />
         ))}
     </BasicCardBox>

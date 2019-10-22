@@ -1,10 +1,10 @@
+import { Box } from 'grommet';
 import * as React from 'react';
 import MarginInterface from '../../interfaces/margin.interface';
-import { Box } from 'grommet';
 import { IconType } from '../Icon/index';
-import { BasicCardBox } from './index';
 import TextIcon from '../TextIcon/index';
 import SubtitleTextIcon from '../TextIcon/subtitle-text-icon';
+import { BasicCardBox } from './index';
 
 export interface IAppsWidgetCardProps {
   onClick: React.EventHandler<React.SyntheticEvent>;
@@ -12,7 +12,7 @@ export interface IAppsWidgetCardProps {
   title: string;
   titleColor?: string;
   iconType: IconType;
-  dataSource: { title: string; subtitle: string; iconType: IconType; iconSize: string }[];
+  dataSource: Array<{ title: string; subtitle: string; iconType: IconType; iconSize: string }>;
 }
 
 const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
@@ -21,7 +21,7 @@ const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
   return (
     <BasicCardBox>
       <Box pad="medium" gap="medium">
-        <TextIcon iconType={iconType} label={title} onClick={onClick} margin={margin} clickable />
+        <TextIcon iconType={iconType} label={title} onClick={onClick} margin={margin} clickable={true} />
         <Box pad="none" align="start" gap="large">
           {dataSource.map(({ title, subtitle, iconType, iconSize }, index) => (
             <SubtitleTextIcon

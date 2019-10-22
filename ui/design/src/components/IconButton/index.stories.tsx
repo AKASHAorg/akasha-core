@@ -40,7 +40,7 @@ storiesOf('Buttons|IconButton', module)
   ))
   .add('share', () => (
     <Box pad="large" align="start">
-      <IconButton share onClick={() => {}} icon={<Icon type="share" />} label="Share Profile" />
+      <IconButton share={true} onClick={() => {}} icon={<Icon type="share" />} label="Share Profile" />
     </Box>
   ));
 

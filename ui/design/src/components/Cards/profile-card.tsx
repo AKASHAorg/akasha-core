@@ -1,13 +1,13 @@
+import { Box, Image, Text } from 'grommet';
 import * as React from 'react';
-import MarginInterface from '../../interfaces/margin.interface';
-import { Box, Text, Image } from 'grommet';
-import Avatar from '../Avatar/index';
 import styled from 'styled-components';
-import { BasicCardBox } from './index';
-import SubtitleTextIcon from '../TextIcon/subtitle-text-icon';
-import IconButton from '../IconButton/icon-button';
+import MarginInterface from '../../interfaces/margin.interface';
+import Avatar from '../Avatar/index';
 import Icon from '../Icon';
+import IconButton from '../IconButton/icon-button';
 import TextIcon, { actionType } from '../TextIcon';
+import SubtitleTextIcon from '../TextIcon/subtitle-text-icon';
+import { BasicCardBox } from './index';
 
 export interface IProfileData {
   avatarImg?: string;
@@ -90,7 +90,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         align="end"
       >
         <ShareButtonContainer>
-          <IconButton share icon={<Icon type="share" />} label={shareProfileText} />
+          <IconButton share={true} icon={<Icon type="share" />} label={shareProfileText} />
         </ShareButtonContainer>
       </Box>
       <Box
@@ -155,7 +155,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               // <StyledActionText color="primaryText" key={index}>
               //   {action}
               // </StyledActionText>
-              <TextIcon actionType={action} key={index} label={action} iconType={'app'} clickable />
+              <TextIcon actionType={action} key={index} label={action} iconType={'app'} clickable={true} />
             ))}
           </Box>
         </Box>
