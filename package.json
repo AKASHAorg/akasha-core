@@ -16,7 +16,7 @@
     "test:ui": "lerna run test --scope @akashaproject/ui-* --stream",
     "test:ui:watch": "lerna exec --parallel --scope @akashaproject/ui-* --stream -- jest --watch",
     "tsc:sdk": "lerna run tsc --scope @akashaproject/sdk --scope @akashaproject/sdk-*",
-    "tsc:ui": "lerna run --parallel tsc --scope @akashaproject/design-* --scope @akashaproject/ui-*",
+    "tsc:ui": "lerna run tsc --scope @akashaproject/design-* --scope @akashaproject/ui-*",
     "tsc:scripts": "lerna run tsc --scope @akashaproject/script-*",
     "watch-plugin-events": "lerna exec --parallel --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-widget-* --scope @akashaproject/ui-plugin-events -- tsc -w",
     "watch-plugin-feed": "lerna exec --parallel --scope @akashaproject/ui-widget-* --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-plugin-feed -- tsc -w",

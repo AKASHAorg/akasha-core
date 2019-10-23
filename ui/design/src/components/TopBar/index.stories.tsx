@@ -1,20 +1,13 @@
-/* eslint-disable import/first */
-// import { action } from '@storybook/addon-actions'
-import { boolean, number } from '@storybook/addon-knobs';
+import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
-import TopBar from './index';
+import Topbar from './index';
 
-storiesOf('TopBar', module).add('TopBar', () => (
-  <TopBar
-    balance={boolean('Balance', true)}
-    cyclingStates={{}}
-    showNotificationsPanel={boolean('showNotificationsPanel', false)}
-    showTransactionsLog={boolean('showTransactionsLog', false)}
-    showSecondarySidebar={boolean('showSecondarySidebar', false)}
-    toggleAethWallet={() => ({})}
-    toggleEthWallet={() => ({})}
-    toggleGuestModal={() => ({})}
-    unreadNotifications={number('unreadNotifications', 3)}
+storiesOf('Topbar', module).add('Topbar', () => (
+  <Topbar
+    avatarImage="https://placebeard.it/360x360"
+    userName="john doe"
+    brandLabel="Ethereum.world"
+    onNavigation={(path: string) => action('Navigate to')(path)}
   />
 ));

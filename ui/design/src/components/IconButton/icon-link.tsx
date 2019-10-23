@@ -6,7 +6,7 @@ interface LinkIconButtonProps {
   iconPosition?: 'start' | 'end';
   icon: React.ReactElement;
   label: string;
-  size: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge';
+  size?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge';
 }
 
 const LinkIconButton = (props: LinkIconButtonProps) => {

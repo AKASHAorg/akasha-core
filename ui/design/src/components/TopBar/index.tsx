@@ -1,58 +1,80 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
-import { TopBarRightProps } from './TopBarRight';
+import * as React from 'react';
+import styled from 'styled-components';
+import { Icon, IconLink } from '../../index';
+import { ProfileAvatarButton } from '../IconButton';
 
-export interface TopBarProps extends TopBarRightProps {
-  fullEntry?: boolean;
-  showSecondarySidebar?: boolean;
-}
-
-const TopBarWrapper = styled.div<Pick<TopBarProps, 'fullEntry' | 'showSecondarySidebar'>>`
-  //position: fixed;
-  right: 0;
-  top: 0;
-  height: 40px;
-  transition: left 0.218s ease-in-out;
+const AvatarButton = styled(ProfileAvatarButton)`
   background-color: ${props => props.theme.colors.background};
-  border-bottom: 1px solid ${props => props.theme.colors.border};
-  font-size: ${props => props.theme.spacing.sizes.text.base};
-  font-family: ${props => props.theme.shapes.fontFamily};
-  color: ${props => props.theme.colors.dark};
-
-  ${props => {
-    const { showSecondarySidebar, fullEntry } = props;
-
-    if (!fullEntry) {
-      return css`
-        left: 64px + 200px;
-      `;
-    }
-
-    if (!showSecondarySidebar || fullEntry) {
-      return css`
-        left: 64px;
-      `;
-    }
-  }};
-  &_collapsed {
-    left: @sidebar-width;
-  }
-  &__left-side {
-    flex: 1 1 auto;
-    height: 100%;
-    margin-left: 20px;
-  }
+  border-radius: 20px;
+  padding: calc(2 * ${props => props.theme.spacing.padding.base});
 `;
 
-const TopBar: React.FC<TopBarProps> = ({ fullEntry, showSecondarySidebar, ...props }) => {
+const StyledTopbar = styled.div`
+  padding: 0 1em;
+  align-items: center;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+interface ITopbarProps {
+  avatarImage: string;
+  userName: string;
+  brandLabel: string | React.ReactElement;
+  unreadNotifications?: number;
+  onNotificationClick: (ev: React.SyntheticEvent) => void;
+  onWalletClick: (ev: React.SyntheticEvent) => void;
+  onNavigation?: (path: string) => void;
+}
+
+const StyledTopbarSection = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const Topbar = (props: ITopbarProps) => {
+  const onNavigation = (path: string) => (ev: React.SyntheticEvent) => {
+    if (props.onNavigation) {
+      props.onNavigation(path);
+    }
+  };
+
   return (
-    <TopBarWrapper fullEntry={fullEntry}>
-      {/*<div className="top-bar__left-side" />*/}
-      {/*<TopBarRight {...props} />*/}
-    </TopBarWrapper>
+    <StyledTopbar>
+      <StyledTopbarSection>{props.brandLabel}</StyledTopbarSection>
+      <StyledTopbarSection style={{}}>
+        <IconLink
+          icon={<Icon type="notifications" />}
+          label=""
+          onClick={props.onNotificationClick}
+          size="xsmall"
+        />
+        <IconLink
+          icon={<Icon type="wallet" />}
+          label=""
+          onClick={props.onWalletClick}
+          size="xsmall"
+        />
+        <div style={{ marginLeft: '0.5em' }}>
+          <AvatarButton
+            avatarImage={props.avatarImage}
+            label={props.userName}
+            size="small"
+            onClick={onNavigation('/profile/my-profile')}
+            onAvatarClick={onNavigation('/profile/my-profile')}
+          />
+        </div>
+      </StyledTopbarSection>
+    </StyledTopbar>
   );
 };
 
-TopBar.defaultProps = {};
+Topbar.defaultProps = {
+  onNotificationClick: () => {},
+  onWalletClick: () => {},
+  onNavigation: () => {},
+  unreadNotifications: 0,
+};
 
-export default TopBar;
+export default Topbar;

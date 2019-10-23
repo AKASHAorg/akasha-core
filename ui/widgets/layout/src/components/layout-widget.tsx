@@ -58,9 +58,10 @@ const getContentAreas = (columnsNum: number) => {
 };
 
 const columnGaps = {
-  small: '16px',
-  medium: '24px',
-  large: '32px',
+  small: '1em',
+  medium: '1.5em',
+  large: '2em',
+  xlarge: '2.5em',
 };
 
 export default class LayoutWidget extends PureComponent<IProps> {
@@ -131,7 +132,7 @@ export default class LayoutWidget extends PureComponent<IProps> {
                 rows={['72px', '1fr']}
                 columns={columnsVal}
                 gap={{
-                  row: '0',
+                  row: '2em',
                   column: columnGaps[size],
                 }}
                 style={{

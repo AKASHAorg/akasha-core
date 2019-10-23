@@ -1,7 +1,7 @@
-import { IconLink, Icon, Grommet, grommet, lightTheme } from '@akashaproject/design-system';
+import { lightTheme, ThemeContext, Topbar } from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense, SyntheticEvent } from 'react';
-import { I18nextProvider, useTranslation } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next';
 // @ts-ignore
 import SingleSpaReact from 'single-spa-react';
 
@@ -41,6 +41,21 @@ export default class TopbarWidget extends PureComponent<IProps> {
     console.error(err, info);
   }
 
+  public handleNavigation = (path: string) => {
+    this.props.singleSpa.navigateToUrl(path);
+  };
+
+  // public showNotificationPopover = (ev: SyntheticEvent) => {
+  //   /* tslint:disable-next-line:no-console */
+  //   console.log('show notification popover');
+  //   ev.preventDefault();
+  // }
+  // public showWalletPopover = (ev: SyntheticEvent) => {
+  //   /* tslint:disable-next-line:no-console */
+  //   console.log('show wallet popover');
+  //   ev.preventDefault();
+  // }
+
   public render() {
     if (this.state.hasErrors) {
       return (
@@ -55,21 +70,14 @@ export default class TopbarWidget extends PureComponent<IProps> {
     return (
       <I18nextProvider i18n={this.props.i18n}>
         <Suspense fallback={<>...</>}>
-          <Grommet theme={lightTheme}>
-            <div>
-              <div>Ethereum.world</div>
-              <div>
-                <IconLink
-                  icon={<Icon type="notifications" />}
-                  label=""
-                  onClick={() => {}}
-                  size="medium"
-                />
-                <div>Wallet</div>
-                <div>My Profile</div>
-              </div>
-            </div>
-          </Grommet>
+          <ThemeContext.Extend value={lightTheme}>
+            <Topbar
+              avatarImage="https://placebeard.it/360x360"
+              userName="john doe"
+              brandLabel="Ethereum.world"
+              onNavigation={this.handleNavigation}
+            />
+          </ThemeContext.Extend>
         </Suspense>
       </I18nextProvider>
     );

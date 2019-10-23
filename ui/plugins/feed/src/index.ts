@@ -7,7 +7,7 @@ export default {
   // This is the root route in which the plugin will render.
   // Make sure to change it as it fits.
   activeWhen: {
-    path: '/feed',
+    path: '/',
   },
   // translation config
   i18nConfig: {

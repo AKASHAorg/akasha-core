@@ -1,14 +1,17 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { capitalize } from '../../utils/string-utils';
 import Avatar from '../Avatar';
 import StyledIconLink from './styled-icon-link';
 
 interface ProfileAvatarButtonProps {
-  info: string | React.ReactElement;
+  info?: string | React.ReactElement;
   avatarImage: string;
   label: string;
-  onAvatarClick?: () => void;
-  onClick: () => void;
+  onAvatarClick?: (ev: React.SyntheticEvent) => void;
+  onClick?: (ev: React.SyntheticEvent) => void;
+  size?: string;
+  className?: string;
 }
 const AvatarButtonWrapper = styled.div`
   display: flex;
@@ -40,12 +43,12 @@ const ButtonInfo = styled.div`
 
 const ProfileAvatarButton = (props: ProfileAvatarButtonProps) => {
   return (
-    <AvatarButtonWrapper>
+    <AvatarButtonWrapper className={props.className}>
       <AvatarWrapper>
         <Avatar size="md" src={props.avatarImage} onClick={props.onAvatarClick} />
       </AvatarWrapper>
       <ButtonTextWrapper>
-        <StyledIconLink label={props.label} />
+        <StyledIconLink label={capitalize(props.label)} size={props.size} onClick={props.onClick} />
         <ButtonInfo>{props.info}</ButtonInfo>
       </ButtonTextWrapper>
     </AvatarButtonWrapper>

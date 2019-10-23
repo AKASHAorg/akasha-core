@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ArticlePage from './article-page';
 import ArticlesHomePage from './articles-home-page';
+import MyProfilePage from './my-profile';
+import ProfilePage from './profile-page';
 
 export interface IRoutesProps {
   activeWhen: { path: string };
@@ -10,6 +12,8 @@ export interface IRoutesProps {
 
 const Routes: React.FC<IRoutesProps> = props => {
   const { activeWhen } = props;
+  const { path } = activeWhen;
+  const activeWhenPath = path.slice(0, path.lastIndexOf('/'));
   const [t] = useTranslation();
   return (
     <>
@@ -20,7 +24,9 @@ const Routes: React.FC<IRoutesProps> = props => {
             path={`${activeWhen.path}`}
             children={({ match }) => <ArticlesHomePage rootPath={activeWhen.path} match={match} />}
           />
-          <Route exact path={`${activeWhen.path}/:articleId`} component={ArticlePage} />
+          <Route path={`${activeWhenPath}/profile/my-profile`} component={MyProfilePage} />
+          <Route path={`${activeWhenPath}/profile/:profileId`} component={ProfilePage} />
+          <Route exact path={`${activeWhenPath}/article/:articleId`} component={ArticlePage} />
           <Route render={() => <div>{t('Article not found!')}</div>} />
         </Switch>
       </Router>

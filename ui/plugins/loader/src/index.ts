@@ -196,6 +196,11 @@ export default class AppLoader {
       singleSpa.navigateToUrl(path);
       ev.preventDefault();
     };
+    const fourOhFourElem = document.getElementById('four-oh-four');
+    // cleanup 404 element if exist (recovering from a 404 page)
+    if (fourOhFourElem) {
+      fourOhFourElem.parentElement.removeChild(fourOhFourElem);
+    }
     if (!plugins.length) {
       const pluginsNode = document.getElementById(this.layout.pluginSlotId);
       // create a 404 page and return it instead of a plugin
@@ -210,11 +215,6 @@ export default class AppLoader {
         pluginsNode.appendChild(FourOhFourNode);
       }
     } else {
-      const fourOhFourElem = document.getElementById('four-oh-four');
-      // cleanup 404 element if exist (recovering from a 404 page)
-      if (fourOhFourElem) {
-        fourOhFourElem.parentElement.removeChild(fourOhFourElem);
-      }
       setPageTitle(
         this.plugins.filter(
           pluginMap =>

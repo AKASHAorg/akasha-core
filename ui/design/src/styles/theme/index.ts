@@ -1,3 +1,4 @@
+import { base } from 'grommet/themes';
 import { deepMerge } from 'grommet/utils';
 import { DefaultTheme } from 'styled-components';
 import createCustomCheckBoxTheme from './components/checkbox';
@@ -7,7 +8,8 @@ import createCustomRadiobuttonTheme from './components/radiobutton';
 import createCustomTextInputTheme from './components/text-input';
 
 const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
-  return deepMerge(styledComponentsTheme, {
+  const customTheme = deepMerge(styledComponentsTheme, base);
+  return deepMerge(customTheme, {
     global: {
       input: {
         weight: 400,
