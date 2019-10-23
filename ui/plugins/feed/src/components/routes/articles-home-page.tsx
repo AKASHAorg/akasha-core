@@ -19,7 +19,7 @@ const ArticlesHomePage: React.FC<IArticlesHomePageProps> = () => {
   const fetchMoreArticles = (ev: React.SyntheticEvent) => {
     const articles = randomArr(3, 100).map(num => ({
       title: `Random Article ${num}`,
-      href: `/article/old-event-${num}`,
+      href: `/article/old-article-${num}`,
     }));
     articleActions.getMoreArticles({ articles });
     ev.preventDefault();

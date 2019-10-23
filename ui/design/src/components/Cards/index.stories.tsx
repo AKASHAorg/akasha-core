@@ -4,7 +4,6 @@ import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import { Box } from 'grommet';
 import * as React from 'react';
-import { IconType } from '../Icon/icon';
 import { IAppsData } from './apps-widget-card';
 import { AppsWidgetCard, EntryCard, ProfileCard, TopicsWidgetCard } from './index';
 

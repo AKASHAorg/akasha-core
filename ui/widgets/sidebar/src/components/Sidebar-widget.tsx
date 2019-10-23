@@ -1,4 +1,4 @@
-import { styled } from '@akashaproject/design-system';
+import { Grommet, Icon, IconLink, lightTheme, styled } from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense, SyntheticEvent } from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
@@ -20,18 +20,6 @@ export interface IProps {
  * @warning :: Root component for a plugin should always extend React.Component
  * @warning :: Always use default export
  */
-
-// const SidebarWrapper = styled.div`
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   bottom: 0;
-//   width: 16%;
-//   min-width: 128px;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-// `;
 
 export default class SidebarWidget extends PureComponent<IProps> {
   public state: { hasErrors: boolean; errorMessage: string };
@@ -67,9 +55,7 @@ export default class SidebarWidget extends PureComponent<IProps> {
     return (
       <I18nextProvider i18n={this.props.i18n}>
         <Suspense fallback={<>...</>}>
-          {/* <SidebarWrapper> */}
           <Menu navigateToUrl={this.props.singleSpa.navigateToUrl} />
-          {/* </SidebarWrapper> */}
         </Suspense>
       </I18nextProvider>
     );
@@ -80,23 +66,24 @@ interface MenuProps {
   navigateToUrl: (url: string) => void;
 }
 
-const MenuLink = styled.a`
-  color: #ccc;
-  cursor: pointer;
-  font-size: 1.2em;
+const MenuLink = styled(IconLink)`
+  padding: 0 1em;
+  margin-left: ${props => props.theme.spacing.margin.base};
+  border-left: 2px solid ${props => props.theme.colors.blue};
+  border-radius: 0;
 `;
 
 const Menu = (props: MenuProps) => {
   const { navigateToUrl } = props;
   const [t] = useTranslation();
 
-  const handleLangChange = (lang: string) => (ev: SyntheticEvent) => {
-    const evt = new CustomEvent('change-language', {
-      detail: lang,
-    });
-    document.dispatchEvent(evt);
-    ev.preventDefault();
-  };
+  // const handleLangChange = (lang: string) => (ev: SyntheticEvent) => {
+  //   const evt = new CustomEvent('change-language', {
+  //     detail: lang,
+  //   });
+  //   document.dispatchEvent(evt);
+  //   ev.preventDefault();
+  // };
 
   const handleNavigation = (path: string) => (ev: SyntheticEvent) => {
     navigateToUrl(path);
@@ -104,11 +91,16 @@ const Menu = (props: MenuProps) => {
   };
 
   return (
-    <>
-      <MenuLink onClick={handleNavigation('/')}>Home</MenuLink>
-      <p>Language</p>
+    <Grommet theme={lightTheme}>
+      <MenuLink
+        size="small"
+        icon={<Icon type="home" />}
+        label={`${t('Home')}`}
+        onClick={handleNavigation('/')}
+      />
+      {/* <p>Language</p>
       <MenuLink onClick={handleLangChange('en')}>{t('common:English')}</MenuLink>
-      <MenuLink onClick={handleLangChange('ro')}>{t('common:Romanian')}</MenuLink>
-    </>
+      <MenuLink onClick={handleLangChange('ro')}>{t('common:Romanian')}</MenuLink> */}
+    </Grommet>
   );
 };

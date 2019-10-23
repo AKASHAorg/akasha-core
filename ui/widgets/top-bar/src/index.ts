@@ -1,14 +1,9 @@
 import { initReactI18next } from 'react-i18next';
 
 /**
- * All the plugins must export an object like this:
+ * All widgets must export an object like this:
  */
 export default {
-  // This is the root route in which the plugin will render.
-  // Make sure to change it as it fits.
-  activeWhen: {
-    path: '/',
-  },
   // translation config
   i18nConfig: {
     // namespaces that this plugin requires.
@@ -17,12 +12,12 @@ export default {
     // In this case I will preserve the old ns instead loading a possibly undefined ns.
     loadNS: ['common'],
     // translation namespace. defaults to plugin.name
-    // ns: 'ui-plugin-events',
+    // ns: 'ui-widget-topbar',
     // i18next.use(arr[0]).use(arr[1]).use(arr[n])
     use: [initReactI18next],
   },
   loadingFn: (): Promise<any> => import('./components'),
-  name: 'ui-plugin-feed',
+  name: 'ui-widget-topbar',
   services: [],
-  title: 'AKASHA Feed',
+  title: 'Topbar Widget',
 };

@@ -1,7 +1,7 @@
 {
-  "name": "@akashaproject/ui-widget-layout",
+  "name": "@akashaproject/ui-widget-topbar",
   "version": "0.1.0",
-  "description": "AKASHA specific page-layout widget",
+  "description": "AKASHA specific top bar widget",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
@@ -29,12 +29,12 @@
     "react-i18next": "^10.12.2"
   },
   "devDependencies": {
-    "@types/react": "16.9.0",
-    "@types/react-dom": "16.9.0",
+    "@types/react": "^16.8.0",
+    "@types/react-dom": "^16.8.0",
     "@types/single-spa-react": "^2.8.3",
     "@types/styled-components": "^4.1.19",
-    "react": "16.9.0",
-    "react-dom": "16.9.0"
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
   },
   "files": [
     "lib"

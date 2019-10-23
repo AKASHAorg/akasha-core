@@ -1,8 +1,10 @@
+import { base } from 'grommet/themes';
 import { deepMerge } from 'grommet/utils';
 import { DefaultTheme } from 'styled-components';
 
 const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
-  return deepMerge(styledComponentsTheme, {
+  const customTheme = deepMerge(styledComponentsTheme, base);
+  return deepMerge(customTheme, {
     global: {
       edgeSize: {
         xxsmall: `${styledComponentsTheme.spacing.baseSpacing}px`,

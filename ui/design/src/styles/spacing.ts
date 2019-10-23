@@ -14,7 +14,12 @@ export interface ISpacing {
       padding: string;
       lineHeight: string;
       fontSize: {
-        sm: string;
+        xsmall: string;
+        small: string;
+        medium: string;
+        large: string;
+        xlarge: string;
+        xxlarge: string;
       };
     };
     button: {
@@ -143,7 +148,12 @@ const spacing: ISpacing = {
       padding: '0 0.8em',
       lineHeight: '1.2em',
       fontSize: {
-        sm: '0.867em',
+        xsmall: '2.084em', // 20px @12px base
+        small: '1.786em', // 20px @14px base (default)
+        medium: '1.924em', // 20px @13px base
+        large: '1.137em', // 20px @22px base
+        xlarge: '0.962em', // 20px @26px base
+        xxlarge: '0.736em', // 20px @34px base
       },
     },
     button: {

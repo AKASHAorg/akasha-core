@@ -1,4 +1,4 @@
-/* eslint-disable import/first */
+/* eslint-disable */
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
@@ -10,7 +10,8 @@ const TabsComponent = () => {
   return (
     <Tabs
       activeTab={{ id: 0 }}
-      onChange={tab => action('TabChange event')(`tab = ${JSON.stringify(tab)}`)}
+      // tslint:disable-next-line: prefer-template
+      onChange={tab => action('TabChange event')('tab = ' + JSON.stringify(tab))}
     >
       <Tab id={0} title="Apps">
         <>Apps Tab's Content</>
@@ -41,7 +42,8 @@ const TabsEventsComponent = () => {
           })
           .then(json => {
             return Promise.resolve(
-              action('beforeRequest')(`received response: ${JSON.stringify(json)}`),
+              // tslint:disable-next-line: prefer-template
+              action('beforeRequest')('received response:' + JSON.stringify(json)),
             );
           })
           .then(() => {
@@ -59,7 +61,8 @@ const TabsEventsComponent = () => {
   return (
     <Tabs
       activeTab={{ id: 0 }}
-      onChange={tab => action('TabChange event')(`tab = ${JSON.stringify(tab)}`)}
+      // tslint:disable-next-line: prefer-template
+      onChange={tab => action('TabChange event')('tab = ' + JSON.stringify(tab))}
       beforeChange={onBeforeChange}
     >
       <Tab id={0} title="Apps">

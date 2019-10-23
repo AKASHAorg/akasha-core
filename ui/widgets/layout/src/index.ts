@@ -3,6 +3,6 @@ export default {
   name: 'ui-widget-sidebar',
   title: 'Layout Widget',
   pluginSlotId: 'plugin-slot',
-  appBarSlotId: 'appbar-slot',
+  topbarSlotId: 'topbar-slot',
   sidebarSlotId: 'sidebar-slot',
 };

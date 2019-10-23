@@ -28,15 +28,16 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
       setSuggestions(dataSource);
       setDropOpen(true);
     }
+    // eslint-disable-next-line
   }, [inputValue]);
 
   const onChange = (event: any) => {
     setInputValue(event.target.value);
     getData();
   };
-
+  // eslint-disable-next-line
   const onSelect = (event: any) => setInputValue(event.suggestion.inputValue);
-
+  // eslint-disable-next-line
   const renderSuggestions = () => {
     return suggestions.users
       .filter(
