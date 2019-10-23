@@ -1,4 +1,4 @@
-import { lightTheme, ThemeContext, Topbar } from '@akashaproject/design-system';
+import { Grommet, lightTheme, Topbar, IconButton } from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
@@ -70,14 +70,14 @@ export default class TopbarWidget extends PureComponent<IProps> {
     return (
       <I18nextProvider i18n={this.props.i18n}>
         <Suspense fallback={<>...</>}>
-          <ThemeContext.Extend value={lightTheme}>
+          <Grommet theme={lightTheme}>
             <Topbar
               avatarImage="https://placebeard.it/360x360"
               userName="john doe"
               brandLabel="Ethereum.world"
               onNavigation={this.handleNavigation}
             />
-          </ThemeContext.Extend>
+          </Grommet>
         </Suspense>
       </I18nextProvider>
     );

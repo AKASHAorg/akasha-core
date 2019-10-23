@@ -1,4 +1,4 @@
-import { Icon, IconLink, lightTheme, styled, ThemeContext } from '@akashaproject/design-system';
+import { Grommet, Icon, IconLink, lightTheme, styled } from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense, SyntheticEvent } from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
@@ -55,9 +55,7 @@ export default class SidebarWidget extends PureComponent<IProps> {
     return (
       <I18nextProvider i18n={this.props.i18n}>
         <Suspense fallback={<>...</>}>
-          <ThemeContext.Extend value={lightTheme}>
-            <Menu navigateToUrl={this.props.singleSpa.navigateToUrl} />
-          </ThemeContext.Extend>
+          <Menu navigateToUrl={this.props.singleSpa.navigateToUrl} />
         </Suspense>
       </I18nextProvider>
     );
@@ -93,7 +91,7 @@ const Menu = (props: MenuProps) => {
   };
 
   return (
-    <>
+    <Grommet theme={lightTheme}>
       <MenuLink
         size="small"
         icon={<Icon type="home" />}
@@ -103,6 +101,6 @@ const Menu = (props: MenuProps) => {
       {/* <p>Language</p>
       <MenuLink onClick={handleLangChange('en')}>{t('common:English')}</MenuLink>
       <MenuLink onClick={handleLangChange('ro')}>{t('common:Romanian')}</MenuLink> */}
-    </>
+    </Grommet>
   );
 };

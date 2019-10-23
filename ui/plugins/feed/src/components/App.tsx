@@ -73,9 +73,6 @@ class App extends PureComponent<IProps> {
         <I18nextProvider i18n={i18n ? i18n : null}>
           <ArticlesProvider reducer={articlesReducer} initialState={articlesInit()}>
             <Routes {...this.props} />
-            {/* <a href="#" onClick={this.handleNavigation('/events')}>
-              Go to Events
-            </a> */}
           </ArticlesProvider>
         </I18nextProvider>
       </Suspense>
