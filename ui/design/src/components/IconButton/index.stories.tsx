@@ -4,7 +4,7 @@ import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import { Box } from 'grommet';
 import * as React from 'react';
-import Icon from '../Icon';
+import { Icon } from '../Icon';
 import IconButton from './icon-button';
 import IconLink from './icon-link';
 import ProfileAvatarButton from './profile-avatar-button';
@@ -35,6 +35,16 @@ storiesOf('Buttons|IconButton', module)
         onClick={() => {}}
         icon={<Icon type="wallet" />}
         label="My Wallet"
+      />
+    </Box>
+  ))
+  .add('share', () => (
+    <Box pad="large" align="start">
+      <IconButton
+        share={true}
+        onClick={() => {}}
+        icon={<Icon type="share" />}
+        label="Share Profile"
       />
     </Box>
   ));

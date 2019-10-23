@@ -2,11 +2,11 @@ import * as React from 'react';
 import StyledIconLink from './styled-icon-link';
 
 interface LinkIconButtonProps {
-  onClick: (ev: React.SyntheticEvent) => void;
+  onClick: React.EventHandler<React.SyntheticEvent>;
   iconPosition?: 'start' | 'end';
   icon: React.ReactElement;
-  label: string;
-  size?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge';
+  label: string | number;
+  size: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge';
 }
 
 const LinkIconButton = (props: LinkIconButtonProps) => {

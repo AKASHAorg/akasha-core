@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled, { css } from 'styled-components';
-import Icon from '../Icon';
+import { Icon } from '../Icon';
 import StyledIconButton from './styled-icon-button';
 
 interface IVoteIconProps {
   voteType: 'upvote' | 'downvote';
-  voteCount: number;
-  onClick: () => void;
+  voteCount: number | string;
+  onClick: any;
   voted?: boolean;
 }
 
@@ -15,7 +15,7 @@ const StyledVoteIconButton = styled(StyledIconButton)`
 `;
 const VoteIconButton = (props: IVoteIconProps) => {
   const { voteType, voteCount, onClick, voted } = props;
-  const iconType = voteType === 'upvote' ? 'arrowUp' : 'arrowDown';
+  const iconType = voteType === 'upvote' ? 'thumbsUpWhite' : 'thumbsDownWhite';
 
   return (
     <StyledVoteIconButton
@@ -24,6 +24,7 @@ const VoteIconButton = (props: IVoteIconProps) => {
       icon={<Icon type={iconType} />}
       primary={voted}
       gap="xsmall"
+      onClick={onClick}
     />
   );
 };

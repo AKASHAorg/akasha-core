@@ -27,14 +27,12 @@
     "prepare": "npm run tsc",
     "build": "rimraf dist && NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.dev.config.js",
     "postbuild": "copyfiles -f ./dist/*.js ./dist/index.html ../../playground/feed-app/public",
-    "docs": "typedoc",
-    "start:serve-dist": "http-server dist -p 1337"
+    "docs": "typedoc"
   },
   "bugs": {
     "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
   },
   "dependencies": {
-    "@akashaproject/sdk-3box": "*",
     "@akashaproject/sdk-common": "*",
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-db": "*",

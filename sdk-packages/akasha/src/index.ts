@@ -1,4 +1,3 @@
-import register3BoxModule from '@akashaproject/sdk-3box';
 import registerCommonModule from '@akashaproject/sdk-common';
 import initDI from '@akashaproject/sdk-core';
 import { IAkashaModule } from '@akashaproject/sdk-core/lib/IAkashaModule';
@@ -26,10 +25,9 @@ module.exports = function init(options = { start: true }) {
   const di: DIContainer = initDI();
   const commonModule = registerCommonModule();
   const dbModule = registerDBModule();
-  const boxModule = register3BoxModule();
   let modules: IModuleCallableService = {};
   // list of all the registered modules for the sdk
-  const modulesList = [commonModule, dbModule, boxModule];
+  const modulesList = [commonModule, dbModule];
   // general channel to send service calls
   const channel = initChannel(di);
   if (options.start) {

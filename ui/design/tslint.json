@@ -7,6 +7,7 @@
   ],
   "rulesDirectory": ["tslint-plugin-prettier"],
   "rules": {
+    "ordered-imports": true,
     "import-name": [false],
     "jsx-no-lambda": false,
     "prettier": true,

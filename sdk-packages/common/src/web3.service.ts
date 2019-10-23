@@ -16,19 +16,20 @@ const service: AkashaService = (invoke, log) => {
     log.info('returning a new ethers provider instance');
     const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);
     const web3Provider = await getProvider(getSettings, provider);
-    cacheService.stash().set(commonServices[WEB3_SERVICE], web3Provider);
+    const stash = await cacheService.getStash();
+    stash.set(commonServices[WEB3_SERVICE], web3Provider);
     return web3Provider;
   };
 
   // to force regen() on the next web3 call
-  const destroy = () => {
-    const stash: any = invoke(commonServices[CACHE_SERVICE]).stash();
+  const destroy = async () => {
+    const stash: any = await invoke(commonServices[CACHE_SERVICE]).getStash();
     stash.remove(commonServices[WEB3_SERVICE]);
   };
 
   // fetch an existing instance or create web3Provider
   const web3 = async (provider: EthProviders) => {
-    const stash: any = invoke(commonServices[CACHE_SERVICE]).stash();
+    const stash: any = await invoke(commonServices[CACHE_SERVICE]).getStash();
     const web3Provider = stash.get(commonServices[WEB3_SERVICE]);
     if (!web3Provider) {
       return await regen(provider);
@@ -37,8 +38,8 @@ const service: AkashaService = (invoke, log) => {
     return web3Provider;
   };
 
-  const getWeb3Instance = () => {
-    const stash: any = invoke(commonServices[CACHE_SERVICE]).stash();
+  const getWeb3Instance = async () => {
+    const stash: any = await invoke(commonServices[CACHE_SERVICE]).getStash();
     return stash.get(commonServices[WEB3_SERVICE]);
   };
 

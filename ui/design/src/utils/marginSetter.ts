@@ -4,20 +4,20 @@ import MarginInterface from '../interfaces/margin.interface';
 export default function MarginSetter(marginObj: MarginInterface): string {
   let marginString = '';
   if (marginObj.margin) {
-    marginString = `${marginObj.margin}`;
+    marginString = `margin: ${marginObj.margin}`;
     return marginString;
   }
   if (marginObj.top) {
-    marginString += `${marginObj.top} `;
+    marginString += `margin-top: ${marginObj.top}; `;
   }
   if (marginObj.left) {
-    marginString += `${marginObj.left} `;
+    marginString += `margin-left: ${marginObj.left}; `;
   }
   if (marginObj.bottom) {
-    marginString += `${marginObj.bottom} `;
+    marginString += `margin-bottom: ${marginObj.bottom}; `;
   }
   if (marginObj.right) {
-    marginString += `${marginObj.right}`;
+    marginString += `margin-right: ${marginObj.right};`;
   }
   return marginString;
 }
