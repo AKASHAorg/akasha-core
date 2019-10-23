@@ -1,14 +1,15 @@
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 import pino from 'pino';
 import * as R from 'ramda';
-import { callService, logger } from './utils';
+import { callService, logger, registerServiceMethods, toNamedService } from './utils';
 
 export interface IAkashaNamedService {
   name: string;
   service: AkashaService;
 }
 
-export type AkashaServiceMethods = R.Variadic<Promise<object>>;
+export type AkashaServiceMethods = object;
+export type CallableServiceMethods = R.Variadic<AkashaServiceMethods>;
 export type AkashaService = (
   serviceInvoker: R.CurriedFunction1<[string, string], any>,
   logger?: pino,
@@ -61,11 +62,16 @@ export abstract class IAkashaModule {
     this.init(di);
     const services = this._registerServices(di);
     for (const provider of services) {
-      const wrappedService = this.wrapService(
-        provider.service(callService(di), this.logger.child({ service: provider.name })),
-        provider.name,
+      const providerInit = toNamedService(provider.name, provider.service);
+      const serviceMethods = providerInit.service(
+        callService(di),
+        this.logger.child({ service: providerInit.name }),
       );
-      const serviceName = IAkashaModule.getServiceName(this.name, provider.name);
+      const wrappedService = this.wrapService(
+        registerServiceMethods(serviceMethods),
+        providerInit.name,
+      );
+      const serviceName = IAkashaModule.getServiceName(this.name, providerInit.name);
       di.register(serviceName, wrappedService);
     }
   }

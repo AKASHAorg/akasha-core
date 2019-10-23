@@ -1,8 +1,5 @@
 {
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
-  "contributors": [
-    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
-  ],
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap",
@@ -26,24 +23,28 @@
     "start:design-system:storybook": "lerna run storybook --scope @akashaproject/design-system --stream"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.18",
-    "@types/node": "10.14.6",
-    "husky": "^3.0.5",
+    "@types/jest": "^24.0.19",
+    "@types/node": "12.11.5",
+    "husky": "^3.0.9",
     "jest": "^24.9.0",
-    "lerna": "3.18.1",
+    "lerna": "3.18.3",
     "prettier": "1.18.2",
-    "pretty-quick": "^1.11.1",
-    "ts-jest": "^24.0.2",
+    "pretty-quick": "^2.0.0",
+    "ts-jest": "^24.1.0",
     "tslint": "5.20.0",
     "tslint-config-prettier": "1.18.0",
     "typedoc": "^0.15.0",
-    "typescript": "3.6.3"
+    "typescript": "3.6.4"
   },
   "workspaces": [
     "sdk-packages/*",
     "ui/*",
     "scripts/*"
   ],
+  "engines": {
+    "node": ">=12.13.0",
+    "npm": ">=6.12.0"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"

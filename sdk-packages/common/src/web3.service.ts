@@ -1,10 +1,5 @@
 import coreServices from '@akashaproject/sdk-core/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import {
-  createServiceMethod,
-  registerServiceMethods,
-  toNamedService,
-} from '@akashaproject/sdk-core/lib/utils';
 import { ethers } from 'ethers';
 import { EthProviders, WEB3_SERVICE } from './constants';
 import commonServices, { CACHE_SERVICE } from './constants';
@@ -44,9 +39,9 @@ const service: AkashaService = (invoke, log) => {
   };
 
   // wrapper
-  const wallet = createServiceMethod(ethers.Wallet);
+  const wallet = async () => ethers.Wallet;
 
-  return registerServiceMethods({ regen, destroy, wallet, web3, getWeb3Instance });
+  return { regen, destroy, wallet, web3, getWeb3Instance };
 };
 
-export default toNamedService(WEB3_SERVICE, service);
+export default { name: WEB3_SERVICE, service };
