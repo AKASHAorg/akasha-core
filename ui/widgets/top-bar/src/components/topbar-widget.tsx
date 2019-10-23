@@ -1,6 +1,6 @@
 import { lightTheme, ThemeContext, Topbar } from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
-import React, { PureComponent, Suspense, SyntheticEvent } from 'react';
+import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 // @ts-ignore
 import SingleSpaReact from 'single-spa-react';

@@ -1,4 +1,4 @@
-import { lightTheme, styled, ThemeContext, IconLink, Icon } from '@akashaproject/design-system';
+import { Icon, IconLink, lightTheme, styled, ThemeContext } from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense, SyntheticEvent } from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
@@ -96,8 +96,8 @@ const Menu = (props: MenuProps) => {
     <>
       <MenuLink
         size="small"
-        icon={<Icon type="plus" />}
-        label={t('Home')}
+        icon={<Icon type="home" />}
+        label={`${t('Home')}`}
         onClick={handleNavigation('/')}
       />
       {/* <p>Language</p>

@@ -100,7 +100,7 @@ export default class LayoutWidget extends PureComponent<IProps> {
     return (
       <Grommet theme={breakpoints} plain full cssVars>
         <ResponsiveContext.Consumer>
-          {size => {
+          {(size: string) => {
             let columnsVal;
             if (columns) {
               if (columns[size]) {
