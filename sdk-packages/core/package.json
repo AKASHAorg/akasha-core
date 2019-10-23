@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@akashaproject/sdk-runtime": "*",
-    "pino": "^5.13.3",
+    "pino": "^5.13.5",
     "ramda": "https://github.com/ramda/ramda"
   },
   "devDependencies": {
