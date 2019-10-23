@@ -1,7 +1,6 @@
 import { Box, Image, Text } from 'grommet';
 import * as React from 'react';
 import MarginInterface from '../../interfaces/margin.interface';
-import Avatar from '../Avatar/index';
 import { Icon } from '../Icon';
 import IconButton from '../IconButton/icon-button';
 import { SubtitleTextIcon, TextIcon } from '../TextIcon/index';

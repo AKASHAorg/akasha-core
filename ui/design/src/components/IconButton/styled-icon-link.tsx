@@ -1,8 +1,9 @@
 import { Anchor } from 'grommet';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 interface IStyledIconLinkProps {
   iconPosition?: 'start' | 'end';
+  size?: string;
 }
 
 const StyledIconLink = styled(Anchor)<IStyledIconLinkProps>`
@@ -21,6 +22,18 @@ const StyledIconLink = styled(Anchor)<IStyledIconLinkProps>`
     }
   }
   svg {
+    height: 100%;
+    stroke: ${props => props.theme.colors.lightGrey};
+    ${props => {
+      if (props.size) {
+        return css`
+          width: ${props.theme.spacing.components.iconButton.fontSize[props.size]};
+        `;
+      }
+      return css`
+        width: ${props.theme.spacing.components.iconButton.fontSize.small};
+      `;
+    }}
     & * {
       stroke: ${props => props.theme.colors.grey};
     }

@@ -71,15 +71,20 @@ export default class AppLoader {
     }
   }
 
-  public async registerWidget(widget: IWidget, config: IWidgetConfig, sdkModules: any[]) {
+  public registerWidget(widget: IWidget, config: IWidgetConfig, sdkModules: any[]) {
     this.appLogger.info(`[@akashaproject/ui-plugin-loader] registering widget ${widget.name}`);
+    if (this.rootWidgets.has(widget.name)) {
+      this.appLogger.error(
+        `[@akashaproject/ui-plugin-loader]: there is already a widget with name ${widget.name}`,
+      );
+      return;
+    }
     this.rootWidgets.set(widget.name, { widget, config, sdkModules });
   }
 
   public async loadRootWidgets() {
     const promises = Array.from(this.rootWidgets.values()).map(async widgetInfo => {
       const { widget, config } = widgetInfo;
-      // const domEl = await this.createRootNodes(widget.name);
       const domEl = document.getElementById(config.slot);
       const i18nInstance = await this.translationManager.createInstance(widget);
       if (validateWidget(widget)) {
@@ -191,6 +196,11 @@ export default class AppLoader {
       singleSpa.navigateToUrl(path);
       ev.preventDefault();
     };
+    const fourOhFourElem = document.getElementById('four-oh-four');
+    // cleanup 404 element if exist (recovering from a 404 page)
+    if (fourOhFourElem) {
+      fourOhFourElem.parentElement.removeChild(fourOhFourElem);
+    }
     if (!plugins.length) {
       const pluginsNode = document.getElementById(this.layout.pluginSlotId);
       // create a 404 page and return it instead of a plugin
@@ -205,11 +215,6 @@ export default class AppLoader {
         pluginsNode.appendChild(FourOhFourNode);
       }
     } else {
-      const fourOhFourElem = document.getElementById('four-oh-four');
-      // cleanup 404 element if exist (recovering from a 404 page)
-      if (fourOhFourElem) {
-        fourOhFourElem.parentElement.removeChild(fourOhFourElem);
-      }
       setPageTitle(
         this.plugins.filter(
           pluginMap =>
