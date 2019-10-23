@@ -5,6 +5,7 @@ import {
   AkashaService,
   AkashaServiceMethods,
   AkashaServicePath,
+  CallableServiceMethods,
   IAkashaModule,
   IAkashaNamedService,
 } from './IAkashaModule';
@@ -33,10 +34,13 @@ export function callService(di: IDIContainer) {
 }
 
 export function toNamedService(name: string, service: AkashaService): IAkashaNamedService {
+  if (!name || !service) {
+    throw new Error(`Service ${name} must provide name and service attributes`);
+  }
   return R.identity(Object.freeze({ name, service }));
 }
 
-export function registerServiceMethods(methods: object): AkashaServiceMethods {
+export function registerServiceMethods(methods: object): CallableServiceMethods {
   return R.partial(R.identity, [Object.freeze(methods)]);
 }
 
