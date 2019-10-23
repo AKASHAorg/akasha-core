@@ -1,6 +1,5 @@
 import coreServices from '@akashaproject/sdk-core/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import { registerServiceMethods, toNamedService } from '@akashaproject/sdk-core/lib/utils';
 import RxDB from 'rxdb';
 import { AKASHAdb } from './collection.types';
 import initCollections from './collections';
@@ -26,7 +25,7 @@ const service: AkashaService = (invoke, log) => {
     akashaDB = await initCollections(db);
     return akashaDB;
   };
-  return registerServiceMethods({ getDB: dbConnect });
+  return { getDB: dbConnect };
 };
 
-export default toNamedService(DB_SERVICE, service);
+export default { name: DB_SERVICE, service };

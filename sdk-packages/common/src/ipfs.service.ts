@@ -1,5 +1,4 @@
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import { registerServiceMethods, toNamedService } from '@akashaproject/sdk-core/lib/utils';
 import commonServices, { CACHE_SERVICE, IPFS_SERVICE } from './constants';
 // import ipfsSettings from './ipfs.settings';
 
@@ -20,6 +19,6 @@ const service: AkashaService = (invoke, log) => {
     log.info('ipfs node instantiated');
     return ipfsNode;
   };
-  return registerServiceMethods({ getInstance });
+  return { getInstance };
 };
-export default toNamedService(IPFS_SERVICE, service);
+export default { name: IPFS_SERVICE, service };
