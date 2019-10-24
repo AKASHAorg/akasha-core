@@ -10,7 +10,13 @@
 
 - [Background](#background)
 - [Install](#install)
-- [Usage](#usage) - [SDK](#sdk) - [Package Components](#package-components) - [Build](#build-the-sdk-package) - [UI](#ui-workspace) - [Playground/examples](#playground-test-app) - [Server Scripts](#scripts-workspace)
+- [Usage](#usage) 
+    - [SDK](#sdk) 
+        - [Package Components](#package-components) 
+        - [Build](#build-the-sdk-package) 
+    - [UI](#ui-workspace) 
+    - [Playground/examples](#playground-test-app) 
+    - [Server Scripts](#scripts-workspace)
 - [Contributors](#contributors-)
 - [License](#license)
 
