@@ -51,11 +51,7 @@ export default class AppLoader {
     this.layout = config.layout;
   }
 
-  public async registerPlugin(
-    plugin: IPlugin,
-    pluginConfig: IPluginConfig | null,
-    sdkModules?: any[],
-  ): Promise<void> {
+  public registerPlugin(plugin: IPlugin, pluginConfig: IPluginConfig | null, sdkModules?: any[]) {
     if (validatePlugin(plugin)) {
       if (pluginConfig && pluginConfig.activeWhen && pluginConfig.activeWhen.path) {
         plugin.activeWhen = pluginConfig.activeWhen;
@@ -66,19 +62,19 @@ export default class AppLoader {
       const pluginId = plugin.name.toLowerCase().replace(' ', '-');
       this.translationManager.createInstance(plugin);
       this.plugins.push({ plugin, config: pluginConfig, pluginId, sdkModules });
-      return Promise.resolve();
+      return;
     } else {
       throw new Error(`[@akashaproject/ui-plugin-loader]: Plugin ${plugin.name} is not valid`);
     }
   }
 
-  public async registerWidget(widget: IWidget, config: IWidgetConfig, sdkModules: any[]) {
+  public registerWidget(widget: IWidget, config: IWidgetConfig, sdkModules: any[]) {
     this.appLogger.info(`[@akashaproject/ui-plugin-loader] registering widget ${widget.name}`);
     if (this.rootWidgets.has(widget.name)) {
       this.appLogger.error(
         `[@akashaproject/ui-plugin-loader]: there is already a widget with name ${widget.name}`,
       );
-      return Promise.reject();
+      return;
     }
     this.rootWidgets.set(widget.name, { widget, config, sdkModules });
     return Promise.resolve();
@@ -238,19 +234,6 @@ export default class AppLoader {
     }
     return location.pathname.startsWith(`${activeWhen.path}`);
   }
-
-  // private async createRootNodes(name: string) {
-  //   let domEl = document.getElementById(`${name}`);
-  //   const rootEl = document.getElementById(this.config.rootNodeId);
-  //   if (!domEl && rootEl) {
-  //     domEl = document.createElement('div');
-  //     domEl.id = name;
-  //     domEl.style.display = 'flex';
-  //     domEl.style.flexDirection = 'column';
-  //     rootEl.appendChild(domEl);
-  //   }
-  //   return Promise.resolve(domEl);
-  // }
 
   private beforeMount(
     loadingFn: { (): Promise<any>; (): void },
