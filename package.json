@@ -2,7 +2,7 @@
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --no-ci",
     "bootstrap:hoist": "lerna bootstrap --hoist",
     "build": "lerna clean && lerna bootstrap && lerna run tsc && lerna run build",
     "build:sdk": "npm run tsc:sdk && lerna run build --scope @akashaproject/sdk --stream",
