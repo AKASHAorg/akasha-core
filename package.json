@@ -16,7 +16,7 @@
     "tsc:ui": "lerna run tsc --scope @akashaproject/design-* --scope @akashaproject/ui-*",
     "tsc:scripts": "lerna run tsc --scope @akashaproject/script-*",
     "watch-plugin-events": "lerna exec --parallel --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-widget-* --scope @akashaproject/ui-plugin-events -- tsc -w",
-    "watch-plugin-feed": "lerna exec --parallel --scope @akashaproject/ui-widget-* --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-plugin-feed -- tsc -w",
+    "watch-plugins": "lerna exec --parallel --scope @akashaproject/ui-widget-* --scope @akashaproject/ui-plugin-* -- tsc -w",
     "script:dev-db": "lerna run start --scope @akashaproject/script-server-db --stream",
     "start:feed-app": "lerna exec --parallel --scope translations-server --scope feed-app-dev -- npm run start --stream",
     "start:translations-server": "npm run start --prefix scripts/translations-server",
