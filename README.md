@@ -1,28 +1,77 @@
-# akasha-sdk-js
-
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors)
-
-Monorepo for the AKASHA World Framework
+# AKASHA World Framework
 
 [![CodeFactor](https://www.codefactor.io/repository/github/akashaproject/akasha-world-framework/badge?s=dd16fc1e020ceeb31c86ba84abd0ce8fae004d43)](https://www.codefactor.io/repository/github/akashaproject/akasha-world-framework)
+[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors)
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square)](https://lerna.js.org/)
 
-## Development
+> Monorepo for AWF
 
-`git clone`
+## Table of contents
 
-`npm install`
+- [Background](#background)
+- [Install](#install)
+- [Usage](#usage) 
+    - [SDK](#sdk) 
+        - [Package Components](#package-components) 
+        - [Build](#build-the-sdk-package) 
+    - [UI](#ui-workspace) 
+    - [Playground/examples](#playground-test-app) 
+    - [Server Scripts](#scripts-workspace)
+- [Contributors](#contributors-)
+- [License](#license)
 
-`npm run bootstrap`
+## Background
 
-### The apps from playground require a build from the sdk
+AWF is one of the results of [initiative](https://ethereum.world/manifesto) to accelerate the adoption of Ethereum-based apps and services by transforming how they attract, engage and delight users.
 
-`npm run build:sdk`
+## Install
 
-**Available scripts**
+This project uses [node](http://nodejs.org) and [npm](https://npmjs.com).
 
-Watch events plugin and sidebar widget:
+From the root of this project:
 
-`npm run watch-plugin-events`
+```shell script
+$ npm install
+$ npm run bootstrap
+```
+
+## Usage
+
+This repository is split into four [lerna](https://github.com/lerna/lerna) workspaces:
+
+### SDK
+
+#### Package Components
+
+- [Core](./sdk-packages/core/README.md)
+- [Common](./sdk-packages/common/README.md)
+- [Runtime](./sdk-packages/runtime/README.md)
+- [DB/persistence](./sdk-packages/db/README.md)
+
+#### Build the sdk package
+
+From the root of the project:
+
+```shell script
+$ npm run build:sdk
+```
+
+This will create under the [akasha](./sdk-packages/akasha/README.md) package repo a folder `dist` that contains the built files.
+
+### UI workspace
+
+- [Design system](./ui/design/README.md)
+- [Plugins](./ui/plugins/Readme.md)
+- [Widgets](./ui/widgets/Readme.md)
+
+### Playground test-app
+
+This [workspace](./playground) contains examples of applications that showcase the usage of AWF.
+
+### Scripts workspace
+
+- [Translations server](./scripts/translations-server)
+- [Development database server](./scripts/server-db)
 
 ## Contributors ✨
 
@@ -44,3 +93,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+## License
+
+[AGPL-3.0](LICENSE) © AKASHA Foundation
