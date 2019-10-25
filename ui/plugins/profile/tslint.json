@@ -1,5 +1,5 @@
 {
   "linterOptions": {
-    "exclude": ["**/__test__"]
+    "exclude": ["**/__tests__"]
   }
 }
