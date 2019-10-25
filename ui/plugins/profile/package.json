@@ -1,0 +1,55 @@
+{
+  "name": "@akashaproject/ui-plugin-profile",
+  "version": "0.1.0",
+  "description": "Plugin for /profile url handler",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "contributors": [
+    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AkashaProject/akasha-sdk-js.git"
+  },
+  "main": "lib/index.js",
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "test": "jest",
+    "tsc": "tsc",
+    "extract:translations": "npx i18next src/components/**/*.tsx -r -c ./i18next-parser.config.js"
+  },
+  "dependencies": {
+    "@akashaproject/design-system": "*",
+    "@types/i18next": "^12.1.0",
+    "@types/react-i18next": "^8.1.0",
+    "@types/react-router": "^5.0.3",
+    "@types/react-router-dom": "^4.3.4",
+    "i18next-fetch-backend": "^2.2.0",
+    "immer": "^4.0.0",
+    "react-i18next": "^10.12.2",
+    "react-router": "^5.0.1",
+    "react-router-dom": "^5.0.1",
+    "react-tracked": "^0.8.0",
+    "single-spa-react": "^2.10.2"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.0",
+    "@types/react-dom": "^16.8.0",
+    "@types/react-test-renderer": "^16.9.0",
+    "@types/single-spa-react": "^2.8.3",
+    "acorn-jsx": "4.x",
+    "i18next-parser": "^1.0.0-beta34",
+    "jest-styled-components": "^6.3.3",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "react-test-renderer": "^16.9.0"
+  },
+  "files": [
+    "lib"
+  ]
+}

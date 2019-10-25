@@ -1,6 +1,6 @@
-import EventsPlugin from '@akashaproject/ui-plugin-events';
 import FeedPlugin from '@akashaproject/ui-plugin-feed';
 import AppLoader from '@akashaproject/ui-plugin-loader';
+import ProfilePlugin from '@akashaproject/ui-plugin-profile';
 import LayoutWidget from '@akashaproject/ui-widget-layout';
 import SidebarWidget from '@akashaproject/ui-widget-sidebar';
 import TopBarWidget from '@akashaproject/ui-widget-topbar';
@@ -16,9 +16,9 @@ const app = new AppLoader({
 // it also enables dynamic build of dependencies
 // ex: [['commons', obj1],['entries', obj2]] becomes at plugin level {commons: obj1, entries: obj2}
 const commonModule = ['commons', sdk.modules.commons];
-const promises: any[] = [
+const promises: Array<Promise<void>> = [
   app.registerPlugin(FeedPlugin, null, [commonModule]),
-  // app.registerPlugin(EventsPlugin, { activeWhen: { path: '/events' } }, [commonModule]),
+  app.registerPlugin(ProfilePlugin, null, [commonModule]),
   app.registerWidget(SidebarWidget, { slot: LayoutWidget.sidebarSlotId }, []),
   app.registerWidget(TopBarWidget, { slot: LayoutWidget.topbarSlotId }, []),
 ];
