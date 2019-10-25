@@ -1,4 +1,4 @@
-import { Grommet, lightTheme, Topbar, IconButton } from '@akashaproject/design-system';
+import { Grommet, lightTheme, Topbar } from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';

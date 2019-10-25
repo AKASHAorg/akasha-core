@@ -66,20 +66,22 @@ export default class AppLoader {
       const pluginId = plugin.name.toLowerCase().replace(' ', '-');
       this.translationManager.createInstance(plugin);
       this.plugins.push({ plugin, config: pluginConfig, pluginId, sdkModules });
+      return Promise.resolve();
     } else {
       throw new Error(`[@akashaproject/ui-plugin-loader]: Plugin ${plugin.name} is not valid`);
     }
   }
 
-  public registerWidget(widget: IWidget, config: IWidgetConfig, sdkModules: any[]) {
+  public async registerWidget(widget: IWidget, config: IWidgetConfig, sdkModules: any[]) {
     this.appLogger.info(`[@akashaproject/ui-plugin-loader] registering widget ${widget.name}`);
     if (this.rootWidgets.has(widget.name)) {
       this.appLogger.error(
         `[@akashaproject/ui-plugin-loader]: there is already a widget with name ${widget.name}`,
       );
-      return;
+      return Promise.reject();
     }
     this.rootWidgets.set(widget.name, { widget, config, sdkModules });
+    return Promise.resolve();
   }
 
   public async loadRootWidgets() {
