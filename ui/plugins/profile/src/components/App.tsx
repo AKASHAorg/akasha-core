@@ -74,7 +74,6 @@ class App extends PureComponent<IProps> {
           <ProfileProvider reducer={profileReducer} initialState={profileInit()}>
             <Routes {...this.props} />
           </ProfileProvider>
-          <div>Profile page</div>
         </I18nextProvider>
       </Suspense>
     );

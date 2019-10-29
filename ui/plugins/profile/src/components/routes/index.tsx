@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import MyProfilePage from './my-profile';
 import ProfilePage from './profile-page';
+import { Grommet, lightTheme } from '@akashaproject/design-system';
 
 export interface IRoutesProps {
   activeWhen: { path: string };
@@ -11,19 +12,18 @@ export interface IRoutesProps {
 const Routes: React.FC<IRoutesProps> = props => {
   const { activeWhen } = props;
   const { path } = activeWhen;
-  const activeWhenPath = path.slice(0, path.lastIndexOf('/'));
   const [t] = useTranslation();
   return (
     <>
       <Router>
-        <Switch>
-          <Route path={`${activeWhenPath}/profiles`} render={() => <>A list of profiles</>} />
-          <Route path={`${activeWhenPath}/p/my-profile`} component={MyProfilePage} />
-          <Route path={`${activeWhenPath}/p/:profileId`} component={ProfilePage} />
-          <Route path={`${activeWhenPath}/apps`} render={() => <>A list of apps</>} />
-          <Route path={`${activeWhenPath}/app/:appId`} render={() => <>An app's profile page</>} />
-          <Route render={() => <div>{t('Profile not found!')}</div>} />
-        </Switch>
+        <Grommet theme={lightTheme}>
+          <Switch>
+            <Route path={`${path}/list`} render={() => <>A list of profiles</>} />
+            <Route path={`${path}/my-profile`} component={MyProfilePage} />
+            <Route path={`${path}/:profileId`} component={ProfilePage} />
+            <Route render={() => <div>{t('Profile not found!')}</div>} />
+          </Switch>
+        </Grommet>
       </Router>
     </>
   );
