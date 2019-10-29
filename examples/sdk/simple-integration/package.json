@@ -1,0 +1,24 @@
+{
+  "name": "simple-integration",
+  "version": "0.1.0",
+  "private": true,
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "tsc": "tsc --build",
+    "prepare": "npm run tsc"
+  },
+  "bugs": {
+    "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
+  },
+  "devDependencies": {
+    "@akashaproject/sdk-core": "*",
+    "@akashaproject/sdk-runtime": "*",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9"
+  }
+}

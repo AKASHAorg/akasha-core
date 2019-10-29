@@ -1,6 +1,6 @@
 ## Examples
 
-- [Simple feed app](./feed-app)
+- [Simple feed app](./ui/feed-app)
 
 ## The apps from playground require a build from the sdk
 

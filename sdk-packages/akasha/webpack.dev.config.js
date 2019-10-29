@@ -39,7 +39,7 @@ const config = {
     new webpack.AutomaticPrefetchPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: path.resolve(__dirname, '../../playground/feed-app/public/template-index.html'),
+      template: path.resolve(__dirname, '../../examples/ui/feed-app/public/template-index.html'),
       inject: true,
     }),
     // new WorkboxPlugin.GenerateSW()

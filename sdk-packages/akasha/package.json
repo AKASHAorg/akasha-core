@@ -26,7 +26,7 @@
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
     "build": "rimraf dist && NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.dev.config.js",
-    "postbuild": "copyfiles -f ./dist/*.js ./dist/index.html ../../playground/feed-app/public",
+    "postbuild": "copyfiles -f ./dist/*.js ./dist/index.html ../../examples/ui/feed-app/public",
     "docs": "typedoc"
   },
   "bugs": {

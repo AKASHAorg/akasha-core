@@ -16,7 +16,7 @@ const app = new AppLoader({
 // it also enables dynamic build of dependencies
 // ex: [['commons', obj1],['entries', obj2]] becomes at plugin level {commons: obj1, entries: obj2}
 const commonModule = ['commons', sdk.modules.commons];
-const promises: Array<Promise<void>> = [
+const promises: void[] = [
   app.registerPlugin(FeedPlugin, null, [commonModule]),
   app.registerPlugin(ProfilePlugin, null, [commonModule]),
   app.registerWidget(SidebarWidget, { slot: LayoutWidget.sidebarSlotId }, []),

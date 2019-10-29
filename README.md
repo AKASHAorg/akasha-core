@@ -16,7 +16,7 @@
         - [Package Components](#package-components) 
         - [Build](#build-the-sdk-package) 
     - [UI](#ui-workspace) 
-    - [Playground/examples](#playground-test-app) 
+    - [Examples](#playground-test-app) 
     - [Server Scripts](#scripts-workspace)
 - [Contributors](#contributors-)
 - [License](#license)
@@ -67,7 +67,7 @@ This will create under the [akasha](./sdk-packages/akasha/README.md) package rep
 
 ### Playground test-app
 
-This [workspace](./playground) contains examples of applications that showcase the usage of AWF.
+This [workspace](./examples) contains examples of applications that showcase the usage of AWF.
 
 ### Scripts workspace
 
