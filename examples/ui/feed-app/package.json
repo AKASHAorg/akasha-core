@@ -12,7 +12,7 @@
     "@akashaproject/ui-widget-topbar": "*",
     "@akashaproject/design-system": "*",
     "@types/node": "12.7.5",
-    "@types/react": "16.9.2",
+    "@types/react": "16.9.11",
     "@types/react-dom": "16.9.0",
     "@types/styled-components": "^4.1.19",
     "jest": "24.9.0",

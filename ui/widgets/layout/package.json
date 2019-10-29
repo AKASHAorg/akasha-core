@@ -30,7 +30,7 @@
     "react-i18next": "^10.12.2"
   },
   "devDependencies": {
-    "@types/react": "16.9.0",
+    "@types/react": "16.9.11",
     "@types/react-dom": "16.9.0",
     "@types/single-spa-react": "^2.8.3",
     "@types/styled-components": "^4.1.19",
