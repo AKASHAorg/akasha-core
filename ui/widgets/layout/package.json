@@ -19,7 +19,8 @@
   },
   "scripts": {
     "build": "tsc --build",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "prepare": "npm run tsc"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",

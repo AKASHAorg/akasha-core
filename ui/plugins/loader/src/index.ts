@@ -74,10 +74,11 @@ export default class AppLoader {
       this.appLogger.error(
         `[@akashaproject/ui-plugin-loader]: there is already a widget with name ${widget.name}`,
       );
+      // @Todo: decide if it should throw an error like in #registerPlugin case?
       return;
     }
     this.rootWidgets.set(widget.name, { widget, config, sdkModules });
-    return Promise.resolve();
+    return;
   }
 
   public async loadRootWidgets() {

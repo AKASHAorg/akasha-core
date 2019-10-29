@@ -21,19 +21,19 @@
   },
   "references": [
     {
-      "path": "../../ui/plugins/loader"
+      "path": "../../../ui/plugins/loader"
     },
     {
-      "path": "../../ui/plugins/events"
+      "path": "../../../ui/plugins/events"
     },
     {
-      "path": "../../ui/widgets/layout"
+      "path": "../../../ui/widgets/layout"
     },
     {
-      "path": "../../ui/widgets/sidebar"
+      "path": "../../../ui/widgets/sidebar"
     },
     {
-      "path": "../../ui/widgets/top-bar"
+      "path": "../../../ui/widgets/top-bar"
     }
   ],
   "include": ["./src"]
