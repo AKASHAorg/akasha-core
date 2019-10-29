@@ -20,7 +20,8 @@
   "scripts": {
     "build": "tsc --build",
     "test": "jest",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "prepare": "npm run tsc"
   },
   "dependencies": {
     "i18next": "^17.0.11",

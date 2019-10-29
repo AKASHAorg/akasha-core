@@ -1,0 +1,40 @@
+{
+  "name": "feed-app-dev",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@akashaproject/ui-plugin-events": "*",
+    "@akashaproject/ui-plugin-profile": "*",
+    "@akashaproject/ui-plugin-feed": "*",
+    "@akashaproject/ui-plugin-loader": "*",
+    "@akashaproject/ui-widget-sidebar": "*",
+    "@akashaproject/ui-widget-layout": "*",
+    "@akashaproject/ui-widget-topbar": "*",
+    "@akashaproject/design-system": "*",
+    "@types/node": "12.7.5",
+    "@types/react": "16.9.2",
+    "@types/react-dom": "16.9.0",
+    "@types/styled-components": "^4.1.19",
+    "jest": "24.9.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-scripts": "^3.1.1"
+  },
+  "scripts": {
+    "start": "NODE_OPTIONS='--max-old-space-size=4096' react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "development": [
+    "last 1 chrome version",
+    "last 1 firefox version",
+    "last 1 safari version"
+  ]
+}
