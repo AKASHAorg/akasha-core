@@ -1,7 +1,9 @@
 import { Box, Layer, Text } from 'grommet';
 import * as React from 'react';
+import { formatDate, ILocale } from '../../utils/time';
 import { Icon } from '../Icon/index';
 import { IconLink, ProfileAvatarButton, VoteIconButton } from '../IconButton/index';
+import { CommentInput } from '../Input/index';
 import { TextIcon } from '../TextIcon';
 import { StyledDrop, StyledLayerElemDiv, StyledSelectBox } from './styled-entry-box';
 
@@ -45,6 +47,11 @@ interface IEntryBoxProps {
   quotedByTitle: string;
   replyTitle: string;
   comment?: boolean;
+  locale?: ILocale;
+  commentInputPlaceholderTitle?: any;
+  commentInputPublishTitle?: any;
+  publishComment?: any;
+  userAvatar?: string;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -62,6 +69,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     quotedByTitle,
     replyTitle,
     comment,
+    locale,
+    commentInputPlaceholderTitle,
+    commentInputPublishTitle,
+    publishComment,
+    userAvatar,
   } = props;
 
   const [downvoted, setDownvoted] = React.useState(false);
@@ -129,7 +141,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               entryData.quotes.map((quote, index) => (
                 <StyledLayerElemDiv key={index}>
                   <ProfileAvatarButton
-                    info={quote.time}
+                    info={formatDate(quote.time, locale)}
                     label={quote.user}
                     avatarImage={quote.userAvatar}
                     onClick={onClickAvatar}
@@ -210,7 +222,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
       <Box direction="row" justify="between" margin="medium" pad={pad} border={border}>
         <ProfileAvatarButton
           label={entryData.user}
-          info={entryData.time}
+          info={formatDate(entryData.time, locale)}
           avatarImage={entryData.userAvatar}
           onClick={onClickAvatar}
         />
@@ -247,6 +259,16 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           />
         </Box>
       </Box>
+      {!comment && (
+        <Box pad="medium">
+          <CommentInput
+            avatarImg={userAvatar}
+            placeholderTitle={commentInputPlaceholderTitle}
+            publishTitle={commentInputPublishTitle}
+            onPublish={publishComment}
+          />
+        </Box>
+      )}
     </div>
   );
 };

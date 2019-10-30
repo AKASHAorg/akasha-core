@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import { Box } from 'grommet';
 import * as React from 'react';
-import { SearchInput } from './index';
+import { CommentInput, SearchInput } from './index';
 
 const suggestionsFromSpace = {
   users: [
@@ -41,5 +41,21 @@ const SearchInputComponent = () => {
     </Box>
   );
 };
+const CommentInputComponent = () => {
+  return (
+    <Box justify="center" align="center">
+      <Box width="581px" pad={{ top: 'large' }}>
+        <CommentInput
+          avatarImg={'http://placebeard.it/640/480'}
+          placeholderTitle="Write a comment"
+          publishTitle="Publish"
+          onPublish={() => action('On Publish')('Synthetic Event')}
+        />
+      </Box>
+    </Box>
+  );
+};
 
-storiesOf('Input', module).add('search', () => <SearchInputComponent />);
+storiesOf('Input', module)
+  .add('search', () => <SearchInputComponent />)
+  .add('comment', () => <CommentInputComponent />);

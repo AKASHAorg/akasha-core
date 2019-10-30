@@ -17,7 +17,7 @@ const IconDiv = styled.div<IIconDiv>`
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-right: ${`${props.theme.spacing.baseSpacing * 2}px`};
+      margin-right: ${`${props.theme.shapes.baseSpacing * 2}px`};
     `;
   }}
 `;

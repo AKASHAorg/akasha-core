@@ -48,7 +48,7 @@ const entryData = {
   userAvatar: 'http://placebeard.it/640/480',
   content:
     'We’re back in action, energized after an epic retreat in #verbier 🇨🇭 🤜💥🤛Here’s to everyone keeping us in their minds and hearts 🥂You’ve been in our hearts and minds as well! 🤗Looking forward to sharing our insights and plans in the coming days! 🚀#AKASHAReloaded #AKASHAFoundation',
-  time: '22 July 2019 | 20h30',
+  time: '1572036522',
   upvotes: 26,
   downvotes: 9,
   comments: [
@@ -58,7 +58,7 @@ const entryData = {
       content: 'Great Job!',
       upvotes: 3,
       downvotes: 0,
-      time: '22 July 2019 | 20h30',
+      time: '1572036522',
     },
     {
       user: 'Gigi Patratel',
@@ -66,43 +66,43 @@ const entryData = {
       content: 'Amazing!',
       upvotes: 2,
       downvotes: 1,
-      time: '22 July 2019 | 20h30',
+      time: '1572036522',
     },
   ],
   quotes: [
     {
       user: 'Gigi Patratel',
-      time: '22 July 2019 | 20h30',
+      time: '1572036522',
       userAvatar: 'http://placebeard.it/640/480',
     },
     {
       user: 'Gigi Patratel',
-      time: '22 July 2019 | 20h30',
+      time: '1572036522',
       userAvatar: 'http://placebeard.it/640/480',
     },
     {
       user: 'Gigi Patratel',
-      time: '22 July 2019 | 20h30',
+      time: '1572036522',
       userAvatar: 'http://placebeard.it/640/480',
     },
     {
       user: 'Gigi Patratel',
-      time: '22 July 2019 | 20h30',
+      time: '1572036522',
       userAvatar: 'http://placebeard.it/640/480',
     },
     {
       user: 'Gigi Patratel',
-      time: '22 July 2019 | 20h30',
+      time: '1572036522',
       userAvatar: 'http://placebeard.it/640/480',
     },
     {
       user: 'Gigi Patratel',
-      time: '22 July 2019 | 20h30',
+      time: '1572036522',
       userAvatar: 'http://placebeard.it/640/480',
     },
     {
       user: 'Gigi Patratel',
-      time: '22 July 2019 | 20h30',
+      time: '1572036522',
       userAvatar: 'http://placebeard.it/640/480',
     },
   ],
@@ -122,6 +122,8 @@ const copyLinkTitle = 'Copy Link';
 const quotedByTitle = 'Quoted By';
 const replyTitle = 'Reply';
 const shareProfileTitle = 'Share Profile';
+const commentInputPlaceholderTitle = 'Write a comment';
+const commentInputPublishTitle = 'Publish';
 
 storiesOf('Cards', module)
   .add('topics widget card', () => (
@@ -182,6 +184,14 @@ storiesOf('Cards', module)
         quotedByTitle={text('Quoted By title', quotedByTitle)}
         replyTitle={text('Reply title', replyTitle)}
         fullEntry={boolean('Full Entry', false)}
+        locale={select('Locale', { en: 'en', ro: 'ro', es: 'es' }, 'en')}
+        commentInputPlaceholderTitle={text(
+          'Comment input placeholder',
+          commentInputPlaceholderTitle,
+        )}
+        commentInputPublishTitle={text('Comment input publish title', commentInputPublishTitle)}
+        publishComment={() => action('Comment published')('Synthetic Event')}
+        userAvatar={'https://www.stevensegallery.com/360/360'}
       />
     </Box>
   ));
