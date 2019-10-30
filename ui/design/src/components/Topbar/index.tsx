@@ -1,21 +1,15 @@
+import { Box } from 'grommet';
 import * as React from 'react';
 import styled from 'styled-components';
 import { Icon, IconLink } from '../../index';
 import { ProfileAvatarButton } from '../IconButton';
+import { NotificationsPopover } from '../Popovers/index';
 
 const AvatarButton = styled(ProfileAvatarButton)`
-  background-color: ${props => props.theme.colors.background};
+  background-color: ${props => props.theme.colors.lightBackground};
   border-radius: 20px;
-  padding: calc(2 * ${props => props.theme.spacing.padding.base});
-`;
-
-const StyledTopbar = styled.div`
-  padding: 0 1em;
-  align-items: center;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  padding: ${props => `${props.theme.shapes.baseSpacing * 2}px`};
+  height: 40px;
 `;
 
 interface ITopbarProps {
@@ -23,50 +17,73 @@ interface ITopbarProps {
   userName: string;
   brandLabel: string | React.ReactElement;
   unreadNotifications?: number;
-  onNotificationClick: (ev: React.SyntheticEvent) => void;
+  notificationsData?: any[];
+  onNotificationClick: () => void;
   onWalletClick: (ev: React.SyntheticEvent) => void;
   onNavigation?: (path: string) => void;
 }
 
-const StyledTopbarSection = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
 const Topbar = (props: ITopbarProps) => {
-  const onNavigation = (path: string) => (ev: React.SyntheticEvent) => {
-    if (props.onNavigation) {
-      props.onNavigation(path);
+  const {
+    avatarImage,
+    brandLabel,
+    userName,
+    unreadNotifications,
+    notificationsData,
+    onNotificationClick,
+    onNavigation,
+  } = props;
+  const notificationIconRef: React.Ref<any> = React.useRef();
+  const walletIconRef: React.Ref<any> = React.useRef();
+  const [notificationsOpen, setNotificationsOpen] = React.useState(false);
+  const [walletOpen, setWalletOpen] = React.useState(false);
+  const handleNavigation = (path: string) => (ev: React.SyntheticEvent) => {
+    if (onNavigation) {
+      onNavigation(path);
     }
   };
 
   return (
-    <StyledTopbar>
-      <StyledTopbarSection>{props.brandLabel}</StyledTopbarSection>
-      <StyledTopbarSection style={{}}>
-        <IconLink
-          icon={<Icon type="notifications" />}
-          label=""
-          onClick={props.onNotificationClick}
-          size="xsmall"
-        />
-        <IconLink
-          icon={<Icon type="wallet" />}
-          label=""
-          onClick={props.onWalletClick}
-          size="xsmall"
-        />
-        <div style={{ marginLeft: '0.5em' }}>
-          <AvatarButton
-            avatarImage={props.avatarImage}
-            label={props.userName}
-            size="small"
-            onClick={onNavigation('/profile/my-profile')}
-            onAvatarClick={onNavigation('/profile/my-profile')}
+    <Box direction="row" pad="small" justify="between" align="center" fill={true}>
+      <Box direction="row">{brandLabel}</Box>
+      <Box direction="row">
+        <Box
+          ref={notificationIconRef}
+          align="center"
+          justify="center"
+          margin={{ horizontal: 'xsmall' }}
+        >
+          <Icon
+            type="notifications"
+            onClick={() => setNotificationsOpen(!notificationsOpen)}
+            clickable={true}
+            default={true}
           />
-        </div>
-      </StyledTopbarSection>
-    </StyledTopbar>
+        </Box>
+
+        {notificationIconRef.current && notificationsOpen && notificationsData && (
+          <NotificationsPopover
+            target={notificationIconRef.current}
+            dataSource={notificationsData}
+            onClickNotification={onNotificationClick}
+            closePopover={() => setNotificationsOpen(false)}
+          />
+        )}
+        <Box ref={walletIconRef} align="center" justify="center" margin="xsmall">
+          <Icon type="wallet" onClick={() => setWalletOpen(!walletOpen)} clickable={true} />
+        </Box>
+
+        <Box pad={{ left: 'xsmall' }}>
+          <AvatarButton
+            avatarImage={avatarImage}
+            label={userName}
+            size="xs"
+            onClick={handleNavigation('/profile/my-profile')}
+            onAvatarClick={handleNavigation('/profile/my-profile')}
+          />
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

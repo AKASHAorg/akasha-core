@@ -202,18 +202,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const renderLeftIconLink = () => {
     return comment ? (
-      <IconLink
-        icon={<Icon type="reply" />}
-        label={replyTitle}
-        onClick={replyToComment}
-        size="medium"
-      />
+      <IconLink icon={<Icon type="reply" />} label={replyTitle} onClick={replyToComment} />
     ) : (
       <IconLink
         icon={<Icon type="comments" />}
         label={commentsLabel}
         onClick={renderCommentsModal}
-        size="medium"
       />
     );
   };
@@ -249,14 +243,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             icon={<Icon type="quoteDark" />}
             label={quotesLabel}
             onClick={() => setQuotesModalOpen(true)}
-            size="medium"
           />
-          <IconLink
-            icon={<Icon type="share" />}
-            label={shareTitle}
-            onClick={() => {}}
-            size="medium"
-          />
+          <IconLink icon={<Icon type="share" />} label={shareTitle} onClick={() => {}} />
         </Box>
       </Box>
       {!comment && (

@@ -6,7 +6,7 @@ import * as React from 'react';
 import { Icon } from '../Icon/index';
 import { NotificationsPopover } from './index';
 
-const notificationsData = [
+export const notificationsData = [
   {
     user: 'Mariana Gomes',
     userAvatar: 'http://placebeard.it/640/480',

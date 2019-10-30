@@ -9,6 +9,7 @@ const StyledDrop = styled(Drop)<IStyledDrop>`
   margin-top: ${props => (props.gap ? props.gap : '-10px')};
   margin-left: 25px;
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
+  width: 336px;
 `;
 
 const StyledListElem = styled.div`

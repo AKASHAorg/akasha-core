@@ -15,7 +15,6 @@ storiesOf('Buttons|IconLink', module).add('default', () => (
       label="Click Me"
       onClick={() => {}}
       iconPosition="start"
-      size="small"
       icon={<Icon type="wallet" />}
     />
   </Box>
@@ -55,6 +54,7 @@ storiesOf('Buttons|ProfileIconButton', module).add('default', () => (
       onClick={() => action('Avatar Button Click')()}
       label="AKASHA World"
       info="22 July 2019 | 20h30"
+      size="sm"
     />
   </Box>
 ));
