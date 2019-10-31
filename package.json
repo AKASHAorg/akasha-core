@@ -20,21 +20,27 @@
     "script:dev-db": "lerna run start --scope @akashaproject/script-server-db --stream",
     "start:feed-app": "lerna exec --parallel --scope translations-server --scope feed-app-dev -- npm run start --stream",
     "start:translations-server": "npm run start --prefix scripts/translations-server",
-    "start:design-system:storybook": "lerna run storybook --scope @akashaproject/design-system --stream"
+    "start:design-system:storybook": "lerna run storybook --scope @akashaproject/storybook --stream"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.19",
-    "@types/node": "12.11.5",
+    "@types/jest": "^24.0.21",
+    "@types/node": "12.12.3",
     "husky": "^3.0.9",
     "jest": "^24.9.0",
     "lerna": "3.18.3",
     "prettier": "1.18.2",
     "pretty-quick": "^2.0.0",
     "ts-jest": "^24.1.0",
+    "tslint-config-airbnb": "^5.11.2",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "tslint-react": "^4.1.0",
     "tslint": "5.20.0",
-    "tslint-config-prettier": "1.18.0",
     "typedoc": "^0.15.0",
-    "typescript": "3.6.4"
+    "typescript": "3.6.4",
+    "tslint-react-hooks": "^2.2.1",
+    "react": "16.11.0",
+    "react-dom": "^16.11.0"
   },
   "workspaces": [
     "sdk-packages/*",

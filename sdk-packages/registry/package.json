@@ -1,0 +1,8 @@
+{
+  "name": "@akashaproject/sdk-registry",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "truffle": "^5.0.42"
+  }
+}

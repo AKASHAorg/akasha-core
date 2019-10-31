@@ -9,6 +9,7 @@
     "lib"
   ],
   "scripts": {
+    "test": "jest",
     "tsc": "tsc --build",
     "prepare": "npm run tsc"
   },
@@ -16,8 +17,11 @@
     "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
   },
   "devDependencies": {
+    "@akashaproject/sdk": "*",
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-runtime": "*",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9"
   }
