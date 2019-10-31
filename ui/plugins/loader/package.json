@@ -24,7 +24,7 @@
     "prepare": "npm run tsc"
   },
   "dependencies": {
-    "i18next": "^17.0.11",
+    "i18next": "^19.0.0",
     "i18next-browser-languagedetector": "^4.0.1",
     "i18next-fetch-backend": "^2.2.0",
     "pino": "^5.13.5",
