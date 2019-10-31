@@ -20,7 +20,7 @@
     "script:dev-db": "lerna run start --scope @akashaproject/script-server-db --stream",
     "start:feed-app": "lerna exec --parallel --scope translations-server --scope feed-app-dev -- npm run start --stream",
     "start:translations-server": "npm run start --prefix scripts/translations-server",
-    "start:design-system:storybook": "lerna run storybook --scope @akashaproject/design-system --stream"
+    "start:design-system:storybook": "lerna run storybook --scope @akashaproject/storybook --stream"
   },
   "devDependencies": {
     "@types/jest": "^24.0.21",
