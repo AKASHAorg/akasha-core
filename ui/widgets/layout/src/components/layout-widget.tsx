@@ -1,3 +1,4 @@
+// @ts-ignore
 import { Grommet } from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent } from 'react';
@@ -64,7 +65,7 @@ export default class LayoutWidget extends PureComponent<IProps> {
     }
 
     return (
-      <Grommet theme={breakpoints} plain={true} full={true} cssVars={true}>
+      <Grommet theme={breakpoints} plain full cssVars>
         <ResponsiveGrid
           sidebarSlotId={sidebarSlotId}
           topbarSlotId={topbarSlotId}

@@ -25,6 +25,7 @@
     "prepare": "npm run tsc"
   },
   "dependencies": {
+    "@akashaproject/design-system": "*",
     "@types/i18next": "^12.1.0",
     "@types/react-i18next": "^8.1.0",
     "@types/react-router": "^5.0.3",
@@ -38,7 +39,6 @@
     "single-spa-react": "^2.10.2"
   },
   "devDependencies": {
-    "@akashaproject/design-system": "*",
     "@types/react": "^16.8.0",
     "@types/react-dom": "^16.8.0",
     "@types/react-test-renderer": "^16.9.0",
@@ -46,12 +46,9 @@
     "acorn-jsx": "4.x",
     "i18next-parser": "^1.0.0-beta34",
     "jest-styled-components": "^6.3.3",
-    "react-test-renderer": "^16.9.0"
-  },
-  "peerDependencies": {
-    "@akashaproject/design-system": "*",
     "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react-dom": "^16.8.0",
+    "react-test-renderer": "^16.9.0"
   },
   "files": [
     "lib"

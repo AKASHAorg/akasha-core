@@ -1,4 +1,3 @@
-import { Avatar, Grommet, lightTheme } from '@akashaproject/design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, match } from 'react-router-dom';
@@ -26,20 +25,17 @@ const ArticlesHomePage: React.FC<IArticlesHomePageProps> = () => {
     ev.preventDefault();
   };
   return (
-    <Grommet theme={lightTheme}>
-      <div>
-        {t('Articles List')}
-        {articleState.articles.map(article => (
-          <div key={article.href}>
-            <span>
-              {t('common:Title')} <Link to={{ pathname: `${article.href}` }}>{article.title}</Link>
-            </span>
-          </div>
-        ))}
-        <button onClick={fetchMoreArticles}>Get more</button>
-        <Avatar src={'http://placebeard.it/640/480'} />
-      </div>
-    </Grommet>
+    <div>
+      {t('Articles List')}
+      {articleState.articles.map(article => (
+        <div key={article.href}>
+          <span>
+            {t('common:Title')} <Link to={{ pathname: `${article.href}` }}>{article.title}</Link>
+          </span>
+        </div>
+      ))}
+      <button onClick={fetchMoreArticles}>Get more</button>
+    </div>
   );
 };
 
