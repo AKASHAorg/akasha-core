@@ -25,3 +25,7 @@ export class SimpleModule extends IAkashaModule {
     // fetch or set settings
   }
 }
+
+export default function simpleModuleFactory() {
+  return new SimpleModule();
+}
