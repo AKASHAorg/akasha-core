@@ -1,4 +1,4 @@
-import { Box, Grid, ResponsiveContext } from '@akashaproject/design-system';
+import { Grid, ResponsiveContext } from '@akashaproject/design-system';
 import * as React from 'react';
 
 // If the size is small, we only see 1 column
@@ -71,7 +71,7 @@ const ResponsiveGrid = (props: IResponsiveGridSystem) => {
   }
   return (
     <Grid
-      fill
+      fill={true}
       rows={['72px', '1fr']}
       columns={columns[size]}
       gap={{
@@ -91,16 +91,16 @@ const ResponsiveGrid = (props: IResponsiveGridSystem) => {
         id={pluginSlotId}
       />
 
-      <Box gridArea="header" id={topbarSlotId} />
-      <Box {...sidebarProps} id={sidebarSlotId} />
-      <Box
-        gridArea="plugin"
-        id={pluginSlotId}
-        overflow={{
-          vertical: 'auto',
-          horizontal: 'hidden',
-        }}
-      />
+      {/*<Box gridArea="header" id={topbarSlotId} />*/}
+      {/*<Box {...sidebarProps} id={sidebarSlotId} />*/}
+      {/*<Box*/}
+      {/*  gridArea="plugin"*/}
+      {/*  id={pluginSlotId}*/}
+      {/*  overflow={{*/}
+      {/*    vertical: 'auto',*/}
+      {/*    horizontal: 'hidden',*/}
+      {/*  }}*/}
+      {/*/>*/}
     </Grid>
   );
 };

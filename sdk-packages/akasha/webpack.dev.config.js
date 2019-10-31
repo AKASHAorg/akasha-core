@@ -7,6 +7,9 @@ const config = {
   entry: './lib/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
+    hashFunction: 'sha384',
+    hashDigest: 'hex',
+    hashDigestLength: 20,
     filename: 'akasha.[name].[contenthash].js',
     library: 'AkashaSDK',
     libraryTarget: 'umd',

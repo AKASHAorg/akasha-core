@@ -23,19 +23,22 @@
     "prepare": "npm run tsc"
   },
   "dependencies": {
-    "@akashaproject/design-system": "*",
     "@types/i18next": "^13.0.0",
     "@types/react-i18next": "^8.1.0",
     "single-spa-react": "^2.10.2",
     "react-i18next": "^10.12.2"
   },
   "devDependencies": {
+    "@akashaproject/design-system": "*",
     "@types/react": "16.9.0",
     "@types/react-dom": "16.9.0",
     "@types/single-spa-react": "^2.8.3",
-    "@types/styled-components": "^4.1.19",
-    "react": "16.9.0",
-    "react-dom": "16.9.0"
+    "@types/styled-components": "^4.1.19"
+  },
+  "peerDependencies": {
+    "@akashaproject/design-system": "*",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0"
   },
   "files": [
     "lib"

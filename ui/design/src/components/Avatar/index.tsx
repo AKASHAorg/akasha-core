@@ -1,5 +1,4 @@
-/* eslint-disable */
-import * as React from 'react';
+import React, { useState } from 'react';
 import CommonInterface from '../../interfaces/common.interface';
 import MarginInterface from '../../interfaces/margin.interface';
 import StyledAvatar, { AvatarSize } from './styled-avatar';
@@ -14,7 +13,9 @@ export interface AvatarProps extends CommonInterface<HTMLDivElement> {
 
 const Avatar: React.FC<AvatarProps & Partial<typeof defaultProps>> = props => {
   const isClickable = typeof props.onClick === 'function';
-
+  const [myState, setMyState] = useState('aaa');
+  // tslint:disable-next-line:no-console
+  console.log(myState, setMyState);
   return (
     <StyledAvatar
       roundedCorners={props.roundedCorners}
