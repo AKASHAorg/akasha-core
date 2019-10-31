@@ -20,11 +20,12 @@ const appsDataSource: IAppsData[] = [
 ];
 
 const profileData = {
-  avatarImg: 'http://placebeard.it/640/480',
-  profileImg: 'goldenrod',
+  ethAddress: '0x0000000000000000000000000000000000000000',
+  avatar: 'http://placebeard.it/640/480',
+  coverImage: 'goldenrod',
   name: 'Gilbert The Bearded',
   userName: '@gilbert',
-  userInfo:
+  description:
     'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   followers: '15',
   following: '1876',
@@ -32,11 +33,12 @@ const profileData = {
   profileType: 'user',
 };
 const dappData = {
-  avatarImg: '',
-  profileImg: '#CAF2F9;',
+  ethAddress: '0x0000000000000000000000000000000000000000',
+  avatarImage: '',
+  coverImage: '#CAF2F9;',
   name: 'Aragon',
   userName: '@aragonorg',
-  userInfo:
+  description:
     'Aragon is a project to empower freedom by creating tools for decentralized organizations to thrive. We believe the fate of humanity will be decided at the frontier of technological innovation.',
   users: '21896',
   actions: '12',
@@ -44,8 +46,8 @@ const dappData = {
   mostPopularActions: ['Assign Tokens', 'Create a new vote', 'Check finance'],
 };
 const entryData = {
-  user: 'AKASHA WORLD',
-  userAvatar: 'http://placebeard.it/640/480',
+  name: 'AKASHA WORLD',
+  avatar: 'http://placebeard.it/640/480',
   content:
     'We’re back in action, energized after an epic retreat in #verbier 🇨🇭 🤜💥🤛Here’s to everyone keeping us in their minds and hearts 🥂You’ve been in our hearts and minds as well! 🤗Looking forward to sharing our insights and plans in the coming days! 🚀#AKASHAReloaded #AKASHAFoundation',
   time: '1572036522',
@@ -53,16 +55,16 @@ const entryData = {
   downvotes: 9,
   comments: [
     {
-      user: 'Mariana Gomes',
-      userAvatar: 'http://placebeard.it/640/480',
+      name: 'Mariana Gomes',
+      avatar: 'http://placebeard.it/640/480',
       content: 'Great Job!',
       upvotes: 3,
       downvotes: 0,
       time: '1572036522',
     },
     {
-      user: 'Gigi Patratel',
-      userAvatar: 'http://placebeard.it/640/480',
+      name: 'Gigi Patratel',
+      avatar: 'http://placebeard.it/640/480',
       content: 'Amazing!',
       upvotes: 2,
       downvotes: 1,
@@ -71,39 +73,39 @@ const entryData = {
   ],
   quotes: [
     {
-      user: 'Gigi Patratel',
+      name: 'Gigi Patratel',
       time: '1572036522',
-      userAvatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/640/480',
     },
     {
-      user: 'Gigi Patratel',
+      name: 'Gigi Patratel',
       time: '1572036522',
-      userAvatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/640/480',
     },
     {
-      user: 'Gigi Patratel',
+      name: 'Gigi Patratel',
       time: '1572036522',
-      userAvatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/640/480',
     },
     {
-      user: 'Gigi Patratel',
+      name: 'Gigi Patratel',
       time: '1572036522',
-      userAvatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/640/480',
     },
     {
-      user: 'Gigi Patratel',
+      name: 'Gigi Patratel',
       time: '1572036522',
-      userAvatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/640/480',
     },
     {
-      user: 'Gigi Patratel',
+      name: 'Gigi Patratel',
       time: '1572036522',
-      userAvatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/640/480',
     },
     {
-      user: 'Gigi Patratel',
+      name: 'Gigi Patratel',
       time: '1572036522',
-      userAvatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/640/480',
     },
   ],
 };
@@ -191,7 +193,7 @@ storiesOf('Cards', module)
         )}
         commentInputPublishTitle={text('Comment input publish title', commentInputPublishTitle)}
         publishComment={() => action('Comment published')('Synthetic Event')}
-        userAvatar={'https://www.stevensegallery.com/360/360'}
+        loggedProfileAvatar={'https://www.stevensegallery.com/360/360'}
       />
     </Box>
   ));

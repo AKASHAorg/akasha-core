@@ -8,8 +8,8 @@ import { TextIcon } from '../TextIcon';
 import { StyledDrop, StyledLayerElemDiv, StyledSelectBox } from './styled-entry-box';
 
 export interface IEntryData {
-  user: string;
-  userAvatar: string;
+  name: string;
+  avatar: string;
   content: string;
   time: string;
   upvotes: string | number;
@@ -19,18 +19,18 @@ export interface IEntryData {
 }
 
 interface Comment {
-  user: string;
+  name: string;
   time: string;
-  userAvatar: string;
+  avatar: string;
   content: string;
   upvotes: string | number;
   downvotes: string | number;
 }
 
 interface Quote {
-  user: string;
+  name: string;
   time: string;
-  userAvatar: string;
+  avatar: string;
 }
 
 interface IEntryBoxProps {
@@ -51,7 +51,7 @@ interface IEntryBoxProps {
   commentInputPlaceholderTitle?: any;
   commentInputPublishTitle?: any;
   publishComment?: any;
-  userAvatar?: string;
+  loggedProfileAvatar?: string;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -73,7 +73,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     commentInputPlaceholderTitle,
     commentInputPublishTitle,
     publishComment,
-    userAvatar,
+    loggedProfileAvatar,
   } = props;
 
   const [downvoted, setDownvoted] = React.useState(false);
@@ -142,8 +142,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                 <StyledLayerElemDiv key={index}>
                   <ProfileAvatarButton
                     info={formatDate(quote.time, locale)}
-                    label={quote.user}
-                    avatarImage={quote.userAvatar}
+                    label={quote.name}
+                    avatarImage={quote.avatar}
                     onClick={onClickAvatar}
                   />
                 </StyledLayerElemDiv>
@@ -215,9 +215,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     <div>
       <Box direction="row" justify="between" margin="medium" pad={pad} border={border}>
         <ProfileAvatarButton
-          label={entryData.user}
+          label={entryData.name}
           info={formatDate(entryData.time, locale)}
-          avatarImage={entryData.userAvatar}
+          avatarImage={entryData.avatar}
           onClick={onClickAvatar}
         />
         <div ref={menuIconRef}>
@@ -250,7 +250,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
       {!comment && (
         <Box pad="medium">
           <CommentInput
-            avatarImg={userAvatar}
+            avatarImg={loggedProfileAvatar}
             placeholderTitle={commentInputPlaceholderTitle}
             publishTitle={commentInputPublishTitle}
             onPublish={publishComment}
