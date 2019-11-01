@@ -9,8 +9,8 @@ interface IStyledIconLinkProps {
 const StyledIconLink = styled(Anchor)<IStyledIconLinkProps>`
   border-radius: ${props => props.theme.shapes.largeBorderRadius};
   border: none;
-  padding: ${props => props.theme.spacing.components.iconButton.padding};
-  color: ${props => props.theme.colors.grey};
+  padding: 0 0.8em;
+  color: ${props => props.theme.colors.secondaryText};
   font-weight: 400;
   &:hover {
     text-decoration: none;
@@ -23,19 +23,10 @@ const StyledIconLink = styled(Anchor)<IStyledIconLinkProps>`
   }
   svg {
     height: 100%;
+    width: 20px;
     stroke: ${props => props.theme.colors.lightGrey};
-    ${props => {
-      if (props.size) {
-        return css`
-          width: ${props.theme.spacing.components.iconButton.fontSize[props.size]};
-        `;
-      }
-      return css`
-        width: ${props.theme.spacing.components.iconButton.fontSize.small};
-      `;
-    }}
     & * {
-      stroke: ${props => props.theme.colors.grey};
+      stroke: ${props => props.theme.colors.secondaryText};
     }
   }
 `;

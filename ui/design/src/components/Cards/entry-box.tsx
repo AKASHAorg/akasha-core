@@ -1,13 +1,15 @@
 import { Box, Layer, Text } from 'grommet';
 import * as React from 'react';
+import { formatDate, ILocale } from '../../utils/time';
 import { Icon } from '../Icon/index';
 import { IconLink, ProfileAvatarButton, VoteIconButton } from '../IconButton/index';
+import { CommentInput } from '../Input/index';
 import { TextIcon } from '../TextIcon';
 import { StyledDrop, StyledLayerElemDiv, StyledSelectBox } from './styled-entry-box';
 
 export interface IEntryData {
-  user: string;
-  userAvatar: string;
+  name: string;
+  avatar: string;
   content: string;
   time: string;
   upvotes: string | number;
@@ -17,18 +19,18 @@ export interface IEntryData {
 }
 
 interface Comment {
-  user: string;
+  name: string;
   time: string;
-  userAvatar: string;
+  avatar: string;
   content: string;
   upvotes: string | number;
   downvotes: string | number;
 }
 
 interface Quote {
-  user: string;
+  name: string;
   time: string;
-  userAvatar: string;
+  avatar: string;
 }
 
 interface IEntryBoxProps {
@@ -45,6 +47,11 @@ interface IEntryBoxProps {
   quotedByTitle: string;
   replyTitle: string;
   comment?: boolean;
+  locale?: ILocale;
+  commentInputPlaceholderTitle?: any;
+  commentInputPublishTitle?: any;
+  publishComment?: any;
+  loggedProfileAvatar?: string;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -62,6 +69,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     quotedByTitle,
     replyTitle,
     comment,
+    locale,
+    commentInputPlaceholderTitle,
+    commentInputPublishTitle,
+    publishComment,
+    loggedProfileAvatar,
   } = props;
 
   const [downvoted, setDownvoted] = React.useState(false);
@@ -129,9 +141,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               entryData.quotes.map((quote, index) => (
                 <StyledLayerElemDiv key={index}>
                   <ProfileAvatarButton
-                    info={quote.time}
-                    label={quote.user}
-                    avatarImage={quote.userAvatar}
+                    info={formatDate(quote.time, locale)}
+                    label={quote.name}
+                    avatarImage={quote.avatar}
                     onClick={onClickAvatar}
                   />
                 </StyledLayerElemDiv>
@@ -190,18 +202,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const renderLeftIconLink = () => {
     return comment ? (
-      <IconLink
-        icon={<Icon type="reply" />}
-        label={replyTitle}
-        onClick={replyToComment}
-        size="medium"
-      />
+      <IconLink icon={<Icon type="reply" />} label={replyTitle} onClick={replyToComment} />
     ) : (
       <IconLink
         icon={<Icon type="comments" />}
         label={commentsLabel}
         onClick={renderCommentsModal}
-        size="medium"
       />
     );
   };
@@ -209,9 +215,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     <div>
       <Box direction="row" justify="between" margin="medium" pad={pad} border={border}>
         <ProfileAvatarButton
-          label={entryData.user}
-          info={entryData.time}
-          avatarImage={entryData.userAvatar}
+          label={entryData.name}
+          info={formatDate(entryData.time, locale)}
+          avatarImage={entryData.avatar}
           onClick={onClickAvatar}
         />
         <div ref={menuIconRef}>
@@ -237,16 +243,20 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             icon={<Icon type="quoteDark" />}
             label={quotesLabel}
             onClick={() => setQuotesModalOpen(true)}
-            size="medium"
           />
-          <IconLink
-            icon={<Icon type="share" />}
-            label={shareTitle}
-            onClick={() => {}}
-            size="medium"
-          />
+          <IconLink icon={<Icon type="share" />} label={shareTitle} onClick={() => {}} />
         </Box>
       </Box>
+      {!comment && (
+        <Box pad="medium">
+          <CommentInput
+            avatarImg={loggedProfileAvatar}
+            placeholderTitle={commentInputPlaceholderTitle}
+            publishTitle={commentInputPublishTitle}
+            onPublish={publishComment}
+          />
+        </Box>
+      )}
     </div>
   );
 };

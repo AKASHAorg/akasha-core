@@ -7,12 +7,12 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
   return deepMerge(customTheme, {
     global: {
       edgeSize: {
-        xxsmall: `${styledComponentsTheme.spacing.baseSpacing}px`,
-        xsmall: `${styledComponentsTheme.spacing.baseSpacing * 2}px`,
-        small: `${styledComponentsTheme.spacing.baseSpacing * 3}px`,
-        medium: `${styledComponentsTheme.spacing.baseSpacing * 4}px`,
-        large: `${styledComponentsTheme.spacing.baseSpacing * 5}px`,
-        xlarge: `${styledComponentsTheme.spacing.baseSpacing * 10}px`,
+        xxsmall: `${styledComponentsTheme.shapes.baseSpacing}px`,
+        xsmall: `${styledComponentsTheme.shapes.baseSpacing * 2}px`,
+        small: `${styledComponentsTheme.shapes.baseSpacing * 3}px`,
+        medium: `${styledComponentsTheme.shapes.baseSpacing * 4}px`,
+        large: `${styledComponentsTheme.shapes.baseSpacing * 5}px`,
+        xlarge: `${styledComponentsTheme.shapes.baseSpacing * 10}px`,
       },
       elevation: {
         light: {
@@ -35,7 +35,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
       },
       font: {
         family: styledComponentsTheme.shapes.fontFamily,
-        size: styledComponentsTheme.spacing.fontSize,
+        size: styledComponentsTheme.shapes.defaultFontSize,
       },
       colors: {
         primaryText: styledComponentsTheme.colors.primaryText,
@@ -58,20 +58,20 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
     },
     text: {
       small: {
-        size: '11px',
-        height: '15px',
+        size: styledComponentsTheme.shapes.fontSizes.small.size,
+        height: styledComponentsTheme.shapes.fontSizes.small.height,
       },
       medium: {
-        size: '13px',
-        height: '18px',
+        size: styledComponentsTheme.shapes.fontSizes.medium.size,
+        height: styledComponentsTheme.shapes.fontSizes.medium.height,
       },
       large: {
-        size: '15px',
-        height: '20px',
+        size: styledComponentsTheme.shapes.fontSizes.large.size,
+        height: styledComponentsTheme.shapes.fontSizes.large.height,
       },
       xlarge: {
-        size: '17px',
-        height: '24px',
+        size: styledComponentsTheme.shapes.fontSizes.xlarge.size,
+        height: styledComponentsTheme.shapes.fontSizes.xlarge.height,
       },
     },
   });
