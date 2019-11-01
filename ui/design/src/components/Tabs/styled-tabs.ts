@@ -45,17 +45,17 @@ const TabTitleItem = styled.li<{ innerRef: any; key: string; id: string; isActiv
         transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
         cursor: default;
         opacity: 1;
-        background-color: ${themeProps => themeProps.theme.colors.background};
-        color: ${themeProps => themeProps.theme.colors.dark};
+        background-color: ${themeProps => themeProps.theme.colors.lightBackground};
+        color: ${themeProps => themeProps.theme.colors.secondary};
       `
     );
   }}
 `;
 
 const TabsContentContainer = styled.div`
-  background-color: ${props => props.theme.colors.background};
+  background-color: ${props => props.theme.colors.lightBackground};
   padding: 1em;
-  color: ${props => props.theme.colors.dark};
+  color: ${props => props.theme.colors.secondary};
 `;
 const TabAnchorItem = styled.div`
   user-select: none;
