@@ -5,6 +5,7 @@ import { IconType } from '../Icon/icon';
 import { StyledText, StyledTextIcon } from './styled-text-icon';
 
 export interface ITextIconProps {
+  className?: string;
   onClick?: React.EventHandler<React.SyntheticEvent>;
   margin?: MarginInterface;
   backgroundColor?: string;
@@ -35,6 +36,7 @@ const actionTypeIcons: {
 
 const TextIcon: React.FC<ITextIconProps> = props => {
   const {
+    className,
     onClick,
     margin,
     backgroundColor,
@@ -58,6 +60,7 @@ const TextIcon: React.FC<ITextIconProps> = props => {
         iconType={iconType}
         spacing={spacing}
         clickable={clickable}
+        className={className}
       >
         <Icon type={actionTypeIcons[actionType]} color={color} />
         <StyledText bold={bold}>{actionType}</StyledText>

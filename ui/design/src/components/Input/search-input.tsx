@@ -4,6 +4,7 @@ import { Icon } from '../Icon/index';
 import { StyledDrop, StyledSelectBox } from './styled-search-input';
 
 interface ICustomSearchInput {
+  className?: string;
   getData: () => void;
   dataSource: any;
   placeholder: string;
@@ -13,7 +14,7 @@ interface ICustomSearchInput {
 }
 
 const SearchInput: React.FC<ICustomSearchInput> = props => {
-  const { dataSource, placeholder, usersTitle, tagsTitle, appsTitle, getData } = props;
+  const { className, dataSource, placeholder, usersTitle, tagsTitle, appsTitle, getData } = props;
   const [inputValue, setInputValue] = useState('');
   const [dropOpen, setDropOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<any>({ users: [], tags: [], apps: [] });
@@ -172,6 +173,7 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
         side: 'all',
         color: 'border',
       }}
+      className={className}
     >
       <Icon type="search" />
       <TextInput

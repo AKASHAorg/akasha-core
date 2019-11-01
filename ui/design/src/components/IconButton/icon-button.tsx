@@ -1,6 +1,7 @@
 import * as React from 'react';
 import StyledIconButton from './styled-icon-button';
 interface IIconButtonProps {
+  className?: string;
   icon: React.ReactElement;
   label: string;
   onClick?: () => void;
@@ -9,7 +10,7 @@ interface IIconButtonProps {
 }
 
 const IconButton = (props: IIconButtonProps) => {
-  return <StyledIconButton {...props} />;
+  return <StyledIconButton className={props.className} {...props} />;
 };
 
 export default IconButton;

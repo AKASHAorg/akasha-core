@@ -4,6 +4,7 @@ import { IEntryData } from './entry-box';
 import { BasicCardBox, EntryBox } from './index';
 
 export interface IEntryCardProps {
+  className?: string;
   entryData: IEntryData;
   onClickAvatar: React.EventHandler<React.SyntheticEvent>;
   onClickUpvote: React.EventHandler<React.SyntheticEvent>;
@@ -26,6 +27,7 @@ export interface IEntryCardProps {
 
 const EntryCard: React.FC<IEntryCardProps> = props => {
   const {
+    className,
     entryData,
     onClickAvatar,
     onClickDownvote,
@@ -47,7 +49,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox>
+    <BasicCardBox className={className}>
       <EntryBox
         entryData={entryData}
         onClickAvatar={onClickAvatar}
