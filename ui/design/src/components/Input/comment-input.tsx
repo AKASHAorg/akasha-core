@@ -6,6 +6,7 @@ import { Avatar } from '../Avatar/index';
 import { Icon } from '../Icon/index';
 
 interface ICommentInput {
+  className?: string;
   avatarImg: any;
   placeholderTitle: string;
   publishTitle: string;
@@ -23,7 +24,7 @@ const StyledDiv = styled.div`
 `;
 
 const CommentInput: React.FC<ICommentInput> = props => {
-  const { avatarImg, placeholderTitle, onPublish, publishTitle } = props;
+  const { avatarImg, className, placeholderTitle, onPublish, publishTitle } = props;
   const [inputValue, setInputValue] = useState('');
   const [textAreaOpen, setTextAreaOpen] = useState(false);
 
@@ -47,6 +48,10 @@ const CommentInput: React.FC<ICommentInput> = props => {
     setTextAreaOpen(false);
   };
 
+  const handleFakeInputClick = () => {
+    setTextAreaOpen(true);
+  };
+
   const renderFakeInput = () => {
     return (
       <Box
@@ -60,7 +65,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
           side: 'all',
           color: 'border',
         }}
-        onClick={() => setTextAreaOpen(true)}
+        onClick={handleFakeInputClick}
       >
         <Text color="secondaryText">{placeholderTitle}</Text>
       </Box>
@@ -109,7 +114,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
   };
 
   return (
-    <Box direction="row" gap="xsmall" fill="horizontal" pad="none">
+    <Box direction="row" gap="xsmall" fill="horizontal" pad="none" className={className}>
       <div>
         <Avatar src={avatarImg} size="md" roundedCorners={true} />
       </div>
