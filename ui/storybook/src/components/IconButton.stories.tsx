@@ -1,9 +1,9 @@
 /* eslint-disable import/first */
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
-import { Box } from '@akashaproject/design-system';
 import * as React from 'react';
 import {
+  Box,
   Icon,
   IconButton,
   IconLink,
