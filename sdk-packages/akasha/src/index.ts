@@ -11,14 +11,12 @@ import {
   startServices,
 } from './utils';
 
-const start = (
-  mList: IAkashaModule[],
-  di: DIContainer,
-  sendChanel: SendChannel,
-): IModuleCallableService => {
-  startServices(mList, di);
-  // build the module services for the sdk consumer
-  return buildModuleServiceChannels(mList, sendChanel);
+const initDiChannel = (di: DIContainer, sendChannel: SendChannel) => {
+  return (mList: IAkashaModule[]): IModuleCallableService => {
+    startServices(mList, di);
+    // build the module services for the sdk consumer
+    return buildModuleServiceChannels(mList, sendChannel);
+  };
 };
 
 module.exports = function init(options = { start: true }) {
@@ -30,11 +28,10 @@ module.exports = function init(options = { start: true }) {
   const modulesList = [commonModule, dbModule];
   // general channel to send service calls
   const channel = initChannel(di);
+  // prepare the start function for integrations
+  const start = initDiChannel(di, channel.send);
   if (options.start) {
-    modules = start(modulesList, di, channel.send);
+    modules = start(modulesList);
   }
-  const baseReturnedObj = { di, channel: channel.send };
-  // for the case when options.start is false the start function is returned
-  const startFn = options.start ? { modules } : { start, modulesList };
-  return Object.assign({}, baseReturnedObj, startFn);
+  return Object.assign({}, modules, { start });
 };

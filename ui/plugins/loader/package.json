@@ -25,10 +25,10 @@
   },
   "dependencies": {
     "i18next": "^17.0.11",
-    "i18next-browser-languagedetector": "^4.0.0",
+    "i18next-browser-languagedetector": "^4.0.1",
     "i18next-fetch-backend": "^2.2.0",
-    "pino": "^5.13.2",
-    "single-spa": "^4.3.7"
+    "pino": "^5.13.5",
+    "single-spa": "^4.4.1"
   },
   "devDependencies": {},
   "files": [
