@@ -34,6 +34,7 @@ const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
           margin={margin}
           clickable={true}
           color={labelColor}
+          bold={true}
         />
         <Box pad="none" align="start" gap="large">
           {dataSource.map(({ title, subtitle, appIconType, iconSize }, index) => (

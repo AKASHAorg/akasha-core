@@ -44,8 +44,8 @@ storiesOf('Avatar', module)
         { size: 'sm', value: 32 },
         { size: 'md', value: 40 },
         { size: 'lg', value: 48 },
-      ].map(({ size, value }) => (
-        <div>
+      ].map(({ size, value }, index) => (
+        <div key={index}>
           {size} ({value} px)
           <Avatar
             key={size}

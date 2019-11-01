@@ -48,6 +48,12 @@ const StyledText = styled.div<IStyledTextProps>`
       font-weight: ${props.bold
         ? props.theme.shapes.fontWeight.bold
         : props.theme.shapes.fontWeight.regular};
+      font-size: ${props.bold
+        ? props.theme.shapes.fontSizes.large.size
+        : props.theme.shapes.fontSizes.medium.size};
+      line-height: ${props.bold
+        ? props.theme.shapes.fontSizes.large.height
+        : props.theme.shapes.fontSizes.medium.height};
     `}
 `;
 

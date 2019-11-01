@@ -25,7 +25,8 @@ const TabsList = styled.ul<{ center: boolean }>`
 const TabTitleItem = styled.li<{ innerRef: any; key: string; id: string; isActiveTab: boolean }>`
   display: inline-block;
   transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  padding: ${props => props.theme.spacing.padding.tabs.titleItem};
+  padding: ${props =>
+    `${props.theme.shapes.basePadding * 3}px ${props.theme.shapes.basePadding * 6}px`};
   cursor: pointer;
   opacity: 0.8;
   color: ${props => props.theme.colors.darkGrey};

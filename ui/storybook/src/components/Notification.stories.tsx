@@ -3,7 +3,10 @@ import { action } from '@storybook/addon-actions';
 import { boolean, number, radios, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
-import { Notification, notify } from './';
+import {
+  Notification,
+  notify,
+} from '@akashaproject/design-system/lib/components/Notification/index';
 
 const NotificationComponent = () => {
   const posOptions = {

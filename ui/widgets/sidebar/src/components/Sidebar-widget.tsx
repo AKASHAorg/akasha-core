@@ -93,7 +93,6 @@ const Menu = (props: MenuProps) => {
   return (
     <Grommet theme={lightTheme}>
       <MenuLink
-        size="small"
         icon={<Icon type="home" />}
         label={`${t('Home')}`}
         onClick={handleNavigation('/')}
