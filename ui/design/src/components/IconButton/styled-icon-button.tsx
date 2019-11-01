@@ -14,7 +14,7 @@ const StyledIconButton = styled(Button)<IIconButtonProps>`
   height: 22px;
   border-radius: ${props => props.theme.shapes.largeBorderRadius};
   border: none;
-  padding: ${props => props.theme.spacing.components.iconButton.padding};
+  padding: 0 0.8em;
   &:hover {
     box-shadow: none;
     border: 1px solid ${props => props.theme.colors.grey};

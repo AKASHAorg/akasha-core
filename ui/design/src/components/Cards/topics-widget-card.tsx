@@ -32,6 +32,7 @@ const TopicsWidgetCard: React.FC<ITopicsCardWidgetProps> = props => {
           margin={margin}
           color={labelColor}
           clickable={true}
+          bold={true}
         />
         <Box pad="none" align="start" gap="large">
           {dataSource.map(({ title, subtitle }, index) => (
