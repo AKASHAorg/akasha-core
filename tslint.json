@@ -15,8 +15,7 @@
     "only-arrow-functions": false,
     "prettier": true,
     "react-hooks-nesting": "error",
-    "import-name": false,
-    "jsx-no-lambda:": false
+    "import-name": false
   },
   "rulesDirectory": ["tslint-plugin-prettier"]
 }

@@ -48,6 +48,10 @@ const CommentInput: React.FC<ICommentInput> = props => {
     setTextAreaOpen(false);
   };
 
+  const handleFakeInputClick = () => {
+    setTextAreaOpen(true);
+  };
+
   const renderFakeInput = () => {
     return (
       <Box
@@ -61,7 +65,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
           side: 'all',
           color: 'border',
         }}
-        onClick={() => setTextAreaOpen(true)}
+        onClick={handleFakeInputClick}
       >
         <Text color="secondaryText">{placeholderTitle}</Text>
       </Box>

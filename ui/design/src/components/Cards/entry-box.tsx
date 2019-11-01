@@ -122,13 +122,17 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const renderCommentsModal = () => {};
 
+  const closeQuotesModal = () => {
+    setQuotesModalOpen(false);
+  };
+
+  const toggleQuotesModal = () => {
+    setQuotesModalOpen(!quotesModalOpen);
+  };
+
   const renderQuotesModal = () => {
     return (
-      <Layer
-        onEsc={() => setQuotesModalOpen(false)}
-        onClickOutside={() => setQuotesModalOpen(false)}
-        modal={true}
-      >
+      <Layer onEsc={closeQuotesModal} onClickOutside={closeQuotesModal} modal={true}>
         <Box pad="none" width="579px" height="386px">
           <Box pad="medium" justify="between" direction="row" align="center">
             <TextIcon iconType="quoteDark" label={quotedByTitle} margin={{ right: '40px' }} />
@@ -156,14 +160,22 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const onClickEditPost = () => {};
   const onClickCopyLink = () => {};
 
+  const closeMenuDrop = () => {
+    setMenuDropOpen(false);
+  };
+
+  const toggleMenuDrop = () => {
+    setMenuDropOpen(!menuDropOpen);
+  };
+
   const renderMenu = () => {
     return (
       <StyledDrop
         overflow="hidden"
         target={menuIconRef.current}
         align={{ top: 'bottom', right: 'left' }}
-        onClickOutside={() => setMenuDropOpen(false)}
-        onEsc={() => setMenuDropOpen(false)}
+        onClickOutside={closeMenuDrop}
+        onEsc={closeMenuDrop}
       >
         <Box pad="small" gap="small" margin={{ right: 'small' }}>
           <StyledSelectBox>
@@ -221,7 +233,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           onClick={onClickAvatar}
         />
         <div ref={menuIconRef}>
-          <Icon type="moreDark" onClick={() => setMenuDropOpen(true)} clickable={true} />
+          <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} />
         </div>
       </Box>
       {menuIconRef.current && menuDropOpen && renderMenu()}

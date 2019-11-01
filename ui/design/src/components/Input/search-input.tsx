@@ -76,6 +76,7 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
         {slicedUsers.map(
           ({ name, imageUrl }: { name: string; imageUrl: string }, index: number) => (
             <StyledSelectBox
+              // tslint:disable-next-line: jsx-no-lambda
               onClick={() => onClickContent(name)}
               key={index}
               round={{ size: 'xxsmall' }}
@@ -107,6 +108,7 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
         </Text>
         {slicedApps.map(({ name, imageUrl }: { name: string; imageUrl: string }, index: number) => (
           <StyledSelectBox
+            // tslint:disable-next-line: jsx-no-lambda
             onClick={() => onClickContent(name)}
             key={index}
             round={{ size: 'xxsmall' }}
@@ -133,6 +135,7 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
         </Text>
         {slicedTags.map((tag: string, index: number) => (
           <StyledSelectBox
+            // tslint:disable-next-line: jsx-no-lambda
             onClick={() => onClickContent(tag)}
             key={index}
             round={{ size: 'xxsmall' }}
@@ -158,6 +161,10 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
         {slicedApps.length && renderApps}
       </Box>
     );
+  };
+
+  const closeDrop = () => {
+    setDropOpen(false);
   };
 
   return (
@@ -186,15 +193,15 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
         // onSelect={onSelect}
         // suggestions={renderSuggestions()}
         // onSuggestionsOpen={() => setDropOpen(true)}
-        // onSuggestionsClose={() => setDropOpen(false)}
+        // onSuggestionsClose={closeDrop}
       />
       {boxRef.current && dropOpen && (
         <StyledDrop
           overflow="hidden"
           target={boxRef.current}
           align={{ top: 'bottom' }}
-          onClickOutside={() => setDropOpen(false)}
-          onEsc={() => setDropOpen(false)}
+          onClickOutside={closeDrop}
+          onEsc={closeDrop}
         >
           {renderDropContent()}
         </StyledDrop>
