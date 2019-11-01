@@ -4,6 +4,7 @@ import { Icon } from '../Icon/index';
 import { StyledDrop, StyledSelectBox } from './styled-search-input';
 
 interface ICustomSearchInput {
+  className?: string;
   getData: () => void;
   dataSource: any;
   placeholder: string;
@@ -13,7 +14,7 @@ interface ICustomSearchInput {
 }
 
 const SearchInput: React.FC<ICustomSearchInput> = props => {
-  const { dataSource, placeholder, usersTitle, tagsTitle, appsTitle, getData } = props;
+  const { className, dataSource, placeholder, usersTitle, tagsTitle, appsTitle, getData } = props;
   const [inputValue, setInputValue] = useState('');
   const [dropOpen, setDropOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<any>({ users: [], tags: [], apps: [] });
@@ -75,6 +76,7 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
         {slicedUsers.map(
           ({ name, imageUrl }: { name: string; imageUrl: string }, index: number) => (
             <StyledSelectBox
+              // tslint:disable-next-line: jsx-no-lambda
               onClick={() => onClickContent(name)}
               key={index}
               round={{ size: 'xxsmall' }}
@@ -106,6 +108,7 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
         </Text>
         {slicedApps.map(({ name, imageUrl }: { name: string; imageUrl: string }, index: number) => (
           <StyledSelectBox
+            // tslint:disable-next-line: jsx-no-lambda
             onClick={() => onClickContent(name)}
             key={index}
             round={{ size: 'xxsmall' }}
@@ -132,6 +135,7 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
         </Text>
         {slicedTags.map((tag: string, index: number) => (
           <StyledSelectBox
+            // tslint:disable-next-line: jsx-no-lambda
             onClick={() => onClickContent(tag)}
             key={index}
             round={{ size: 'xxsmall' }}
@@ -159,6 +163,10 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
     );
   };
 
+  const closeDrop = () => {
+    setDropOpen(false);
+  };
+
   return (
     <Box
       fill="horizontal"
@@ -172,6 +180,7 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
         side: 'all',
         color: 'border',
       }}
+      className={className}
     >
       <Icon type="search" />
       <TextInput
@@ -184,15 +193,15 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
         // onSelect={onSelect}
         // suggestions={renderSuggestions()}
         // onSuggestionsOpen={() => setDropOpen(true)}
-        // onSuggestionsClose={() => setDropOpen(false)}
+        // onSuggestionsClose={closeDrop}
       />
       {boxRef.current && dropOpen && (
         <StyledDrop
           overflow="hidden"
           target={boxRef.current}
           align={{ top: 'bottom' }}
-          onClickOutside={() => setDropOpen(false)}
-          onEsc={() => setDropOpen(false)}
+          onClickOutside={closeDrop}
+          onEsc={closeDrop}
         >
           {renderDropContent()}
         </StyledDrop>

@@ -4,6 +4,7 @@ import { Icon } from '../Icon';
 import StyledIconButton from './styled-icon-button';
 
 interface IVoteIconProps {
+  className?: string;
   voteType: 'upvote' | 'downvote';
   voteCount: number | string;
   onClick: any;
@@ -14,11 +15,12 @@ const StyledVoteIconButton = styled(StyledIconButton)`
   box-sizing: border-box;
 `;
 const VoteIconButton = (props: IVoteIconProps) => {
-  const { voteType, voteCount, onClick, voted } = props;
+  const { className, voteType, voteCount, onClick, voted } = props;
   const iconType = voteType === 'upvote' ? 'thumbsUpWhite' : 'thumbsDownWhite';
 
   return (
     <StyledVoteIconButton
+      className={className}
       reverse={true}
       label={`${voteCount}`}
       icon={<Icon type={iconType} />}

@@ -5,6 +5,7 @@ import { IconType } from '../Icon/icon';
 import { IconDiv, StyledBox } from './styled-subtitle-text-icon';
 
 interface ISubtitleTextIcon {
+  className?: string;
   iconType?: IconType;
   iconSize?: string;
   label: string;
@@ -18,6 +19,7 @@ interface ISubtitleTextIcon {
 
 const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
   const {
+    className,
     iconType,
     iconSize,
     label,
@@ -30,7 +32,7 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
   } = props;
 
   return (
-    <StyledBox direction="row" justify="center" onClick={onClick}>
+    <StyledBox direction="row" justify="center" onClick={onClick} className={className}>
       {iconType ? (
         <IconDiv iconSize={iconSize}>
           <Icon type={iconType} />
