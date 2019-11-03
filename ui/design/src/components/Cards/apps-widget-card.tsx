@@ -13,6 +13,7 @@ export interface IAppsWidgetCardProps {
   labelColor?: string;
   iconType: IconType;
   dataSource: IAppsData[];
+  onClickApp: () => void;
 }
 
 export interface IAppsData {
@@ -23,7 +24,7 @@ export interface IAppsData {
 }
 
 const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
-  const { className, onClick, margin, iconType, label, labelColor, dataSource } = props;
+  const { className, onClick, margin, iconType, label, labelColor, dataSource, onClickApp } = props;
 
   return (
     <BasicCardBox className={className}>
@@ -40,6 +41,7 @@ const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
         <Box pad="none" align="start" gap="large">
           {dataSource.map(({ title, subtitle, appIconType, iconSize }, index) => (
             <SubtitleTextIcon
+              onClick={onClickApp}
               label={title}
               subtitle={subtitle}
               labelSize="large"

@@ -1,9 +1,4 @@
 /* eslint-disable import/first */
-import { action } from '@storybook/addon-actions';
-import { boolean, color, object, select, text } from '@storybook/addon-knobs';
-import { storiesOf } from '@storybook/react';
-import * as React from 'react';
-import { IAppsData } from '@akashaproject/design-system/lib/components/Cards/apps-widget-card';
 import {
   AppsWidgetCard,
   Box,
@@ -11,6 +6,11 @@ import {
   ProfileCard,
   TopicsWidgetCard,
 } from '@akashaproject/design-system';
+import { IAppsData } from '@akashaproject/design-system/lib/components/Cards/apps-widget-card';
+import { action } from '@storybook/addon-actions';
+import { boolean, color, object, select, text } from '@storybook/addon-knobs';
+import { storiesOf } from '@storybook/react';
+import * as React from 'react';
 
 const topicsDataSource = [
   { title: '#ethereumworld', subtitle: '6576 mentions' },
@@ -137,6 +137,7 @@ storiesOf('Cards', module)
     <Box pad="none" align="center" height="224px" width="336px">
       <TopicsWidgetCard
         onClick={() => action('TopicsWidgetCard Clicked')('Synthetic Event')}
+        onClickTopic={() => action('Topic Clicked')('Synthetic Event')}
         margin={object('Margin', { margin: '0px' })}
         iconType={'hotTopics'}
         label={text('Text', 'Hot Topics')}
@@ -149,6 +150,7 @@ storiesOf('Cards', module)
     <Box pad="none" align="center" height="224px" width="336px">
       <AppsWidgetCard
         onClick={() => action('AppsWidgetCard Clicked')('Synthetic Event')}
+        onClickApp={() => action('App Clicked')('Synthetic Event')}
         margin={object('Margin', { margin: '0px' })}
         iconType={'trendingApps'}
         label={text('Text', 'Trending Apps')}

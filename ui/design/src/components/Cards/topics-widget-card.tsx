@@ -7,6 +7,7 @@ import { BasicCardBox } from './index';
 
 export interface ITopicsCardWidgetProps {
   onClick: React.EventHandler<React.SyntheticEvent>;
+  onClickTopic: React.EventHandler<React.SyntheticEvent>;
   margin?: MarginInterface;
   label: string;
   labelColor?: string;
@@ -20,7 +21,7 @@ interface TopicsData {
 }
 
 const TopicsWidgetCard: React.FC<ITopicsCardWidgetProps> = props => {
-  const { onClick, margin, iconType, label, labelColor, dataSource } = props;
+  const { onClick, onClickTopic, margin, iconType, label, labelColor, dataSource } = props;
 
   return (
     <BasicCardBox>
@@ -37,6 +38,7 @@ const TopicsWidgetCard: React.FC<ITopicsCardWidgetProps> = props => {
         <Box pad="none" align="start" gap="large">
           {dataSource.map(({ title, subtitle }, index) => (
             <SubtitleTextIcon
+              onClick={onClickTopic}
               label={title}
               subtitle={subtitle}
               labelColor="accentText"
