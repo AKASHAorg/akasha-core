@@ -1,27 +1,9 @@
 // @ts-ignore
-import { Grommet } from '@akashaproject/design-system';
+import { Grommet, responsiveBreakpoints } from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent } from 'react';
 import ResponsiveGrid from './responsive-grid';
 
-const breakpoints = {
-  global: {
-    breakpoints: {
-      small: {
-        value: 550,
-      },
-      medium: {
-        value: 1024,
-      },
-      large: {
-        value: 1224,
-      },
-      xlarge: {
-        value: 1920,
-      },
-    },
-  },
-};
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;
@@ -53,6 +35,7 @@ export default class LayoutWidget extends PureComponent<IProps> {
 
   public render() {
     const { sidebarSlotId, topbarSlotId, pluginSlotId } = this.props;
+
     if (this.state.hasErrors) {
       return (
         <div>
@@ -65,7 +48,7 @@ export default class LayoutWidget extends PureComponent<IProps> {
     }
 
     return (
-      <Grommet theme={breakpoints} plain full cssVars>
+      <Grommet theme={responsiveBreakpoints} plain={true} full={true} cssVars={true}>
         <ResponsiveGrid
           sidebarSlotId={sidebarSlotId}
           topbarSlotId={topbarSlotId}

@@ -12,10 +12,15 @@ import {
   IGetMoreProfilesPayload,
   IGetProfilesPayload,
   IProfileState,
+  IGetLoggedProfilePayload,
+  IGetProfileFollowersPayload,
+  IGetProfileFollowingsPayload,
 } from './interfaces';
 
 export const profileState: IProfileState = {
   profiles: [],
+  followers: [],
+  followings: [],
   apps: [],
 };
 
@@ -30,8 +35,20 @@ type ProfileReducer = Reducer<IProfileState, IAction<any, keyof typeof actionTyp
 
 export const profileReducer: ProfileReducer = handleActions<typeof actionTypes, IProfileState, any>(
   {
+    GET_LOGGED_PROFILE: (draft, payload: IGetLoggedProfilePayload) => {
+      draft.loggedProfile = payload.loggedProfile;
+      return draft;
+    },
     GET_PROFILES: (draft, payload: IGetProfilesPayload) => {
       draft.profiles = payload.profiles;
+      return draft;
+    },
+    GET_PROFILE_FOLLOWERS: (draft, payload: IGetProfileFollowersPayload) => {
+      draft.followers = draft.followers.concat(payload);
+      return draft;
+    },
+    GET_PROFILE_FOLLOWINGS: (draft, payload: IGetProfileFollowingsPayload) => {
+      draft.followings = draft.followings.concat(payload);
       return draft;
     },
     GET_MORE_PROFILES: (draft, payload: IGetMoreProfilesPayload) => {

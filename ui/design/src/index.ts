@@ -9,6 +9,7 @@ import Topbar from './components/Topbar';
 import { createTheme } from './styles/themes/create-theme';
 import darkTheme from './styles/themes/dark-theme';
 import lightTheme from './styles/themes/light-theme';
+import responsiveBreakpoints from './styles/responsive-breakpoints';
 
 /* Grommet utils */
 
@@ -30,6 +31,7 @@ export {
   Box,
   Grid,
   ResponsiveContext,
+  responsiveBreakpoints,
   ThemeContext,
   grommet,
   Grommet,
