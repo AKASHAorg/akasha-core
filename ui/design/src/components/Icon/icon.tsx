@@ -87,6 +87,7 @@ export interface IconProps extends CommonInterface<any> {
   className?: string;
   type: IconType;
   clickable?: boolean;
+  default?: boolean;
 }
 
 const IconBase: React.FC<IconProps> = ({ color, className, type, clickable, ...props }) => {
@@ -101,6 +102,12 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
     `
       & * {
         stroke: ${props.color};
+      }`}
+  ${props =>
+    props.default &&
+    `
+      & * {
+        stroke: ${props.theme.colors.primaryText};
       }`}
   ${props => props.clickable && `cursor: pointer`}
 `;

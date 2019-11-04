@@ -2,9 +2,8 @@
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
-import Tab from './tab';
-import Tabs from './tabs';
-import { ITab } from './tabs-context';
+import { Tab, Tabs } from '@akashaproject/design-system';
+import { ITab } from '@akashaproject/design-system/lib/components/Tabs/tabs-context';
 
 const TabsComponent = () => {
   return (

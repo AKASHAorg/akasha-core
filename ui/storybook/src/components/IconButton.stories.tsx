@@ -1,13 +1,15 @@
 /* eslint-disable import/first */
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
-import { Box } from 'grommet';
 import * as React from 'react';
-import { Icon } from '../Icon';
-import IconButton from './icon-button';
-import IconLink from './icon-link';
-import ProfileAvatarButton from './profile-avatar-button';
-import VoteIconButton from './vote-icon-button';
+import {
+  Box,
+  Icon,
+  IconButton,
+  IconLink,
+  ProfileAvatarButton,
+  VoteIconButton,
+} from '@akashaproject/design-system';
 
 storiesOf('Buttons|IconLink', module).add('default', () => (
   <Box pad="large" align="start">
@@ -15,7 +17,6 @@ storiesOf('Buttons|IconLink', module).add('default', () => (
       label="Click Me"
       onClick={() => {}}
       iconPosition="start"
-      size="small"
       icon={<Icon type="wallet" />}
     />
   </Box>
@@ -55,6 +56,7 @@ storiesOf('Buttons|ProfileIconButton', module).add('default', () => (
       onClick={() => action('Avatar Button Click')()}
       label="AKASHA World"
       info="22 July 2019 | 20h30"
+      size="sm"
     />
   </Box>
 ));

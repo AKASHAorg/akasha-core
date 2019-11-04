@@ -6,6 +6,7 @@ import { SubtitleTextIcon, TextIcon } from '../TextIcon/index';
 import { BasicCardBox } from './index';
 
 export interface IAppsWidgetCardProps {
+  className?: string;
   onClick: React.EventHandler<React.SyntheticEvent>;
   margin?: MarginInterface;
   label: string;
@@ -22,10 +23,10 @@ export interface IAppsData {
 }
 
 const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
-  const { onClick, margin, iconType, label, labelColor, dataSource } = props;
+  const { className, onClick, margin, iconType, label, labelColor, dataSource } = props;
 
   return (
-    <BasicCardBox>
+    <BasicCardBox className={className}>
       <Box pad="medium" gap="medium">
         <TextIcon
           iconType={iconType}
@@ -34,6 +35,7 @@ const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
           margin={margin}
           clickable={true}
           color={labelColor}
+          bold={true}
         />
         <Box pad="none" align="start" gap="large">
           {dataSource.map(({ title, subtitle, appIconType, iconSize }, index) => (

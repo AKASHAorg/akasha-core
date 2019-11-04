@@ -1,8 +1,10 @@
 import * as React from 'react';
+import { ILocale } from '../../utils/time';
 import { IEntryData } from './entry-box';
 import { BasicCardBox, EntryBox } from './index';
 
 export interface IEntryCardProps {
+  className?: string;
   entryData: IEntryData;
   onClickAvatar: React.EventHandler<React.SyntheticEvent>;
   onClickUpvote: React.EventHandler<React.SyntheticEvent>;
@@ -16,10 +18,16 @@ export interface IEntryCardProps {
   quotedByTitle: string;
   replyTitle: string;
   fullEntry?: boolean;
+  locale?: ILocale;
+  commentInputPlaceholderTitle: string;
+  commentInputPublishTitle: string;
+  publishComment: any;
+  loggedProfileAvatar: string;
 }
 
 const EntryCard: React.FC<IEntryCardProps> = props => {
   const {
+    className,
     entryData,
     onClickAvatar,
     onClickDownvote,
@@ -33,10 +41,15 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     quotedByTitle,
     replyTitle,
     fullEntry,
+    locale,
+    commentInputPlaceholderTitle,
+    commentInputPublishTitle,
+    publishComment,
+    loggedProfileAvatar,
   } = props;
 
   return (
-    <BasicCardBox>
+    <BasicCardBox className={className}>
       <EntryBox
         entryData={entryData}
         onClickAvatar={onClickAvatar}
@@ -50,6 +63,11 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         copyLinkTitle={copyLinkTitle}
         quotedByTitle={quotedByTitle}
         replyTitle={replyTitle}
+        locale={locale}
+        commentInputPlaceholderTitle={commentInputPlaceholderTitle}
+        commentInputPublishTitle={commentInputPublishTitle}
+        loggedProfileAvatar={loggedProfileAvatar}
+        publishComment={publishComment}
       />
       {fullEntry &&
         entryData.comments &&
@@ -69,6 +87,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
             replyTitle={replyTitle}
             key={index}
             comment={true}
+            locale={locale}
           />
         ))}
     </BasicCardBox>

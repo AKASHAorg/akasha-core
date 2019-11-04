@@ -9,11 +9,16 @@ import { BasicCardBox } from './index';
 import { AvatarDiv, ShareButtonContainer } from './styled-profile-card';
 
 export interface IProfileData {
-  avatarImg?: string;
-  profileImg?: string;
-  userName: string;
-  userInfo?: string;
+  avatar?: string;
+  coverImage?: string;
+  userName?: string;
+  description?: string;
   name?: string;
+  email?: string;
+  url?: string;
+  address?: string;
+  ethAddress: string;
+  // app specific
   followers?: string;
   following?: string;
   apps?: string;
@@ -21,9 +26,11 @@ export interface IProfileData {
   users?: string;
   actions?: string;
   mostPopularActions?: IActionType[];
+  vnd: { [key: string]: string };
 }
 
 export interface IProfileCardProps {
+  className?: string;
   onClickApps: React.EventHandler<React.SyntheticEvent>;
   onClickFollowing: React.EventHandler<React.SyntheticEvent>;
   margin?: MarginInterface;
@@ -39,6 +46,7 @@ export interface IProfileCardProps {
 
 const ProfileCard: React.FC<IProfileCardProps> = props => {
   const {
+    className,
     onClickFollowing,
     onClickApps,
     profileData,
@@ -57,10 +65,10 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const rightSubtitle = profileData.profileType === 'dapp' ? actionsTitle : appsTitle;
 
   return (
-    <BasicCardBox>
+    <BasicCardBox className={className}>
       <Box
         height="144px"
-        background={profileData.profileImg}
+        background={profileData.coverImage}
         pad="none"
         round={{ corner: 'top', size: 'xsmall' }}
         align="end"
@@ -78,9 +86,9 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
       >
         <Box direction="row">
           <AvatarDiv>
-            {profileData.avatarImg && (
+            {profileData.avatar && (
               <Image
-                src={profileData.avatarImg}
+                src={profileData.avatar}
                 fit="cover"
                 width="76px"
                 height="76px"
@@ -93,7 +101,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               {profileData.name}
             </Text>
             <Text size="medium" color="secondaryText">
-              {profileData.userName}
+              {profileData.userName ? profileData.userName : profileData.ethAddress}
             </Text>
           </Box>
         </Box>
@@ -143,7 +151,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         <Text size="large" weight="bold" color="primaryText">
           {userInfoTitle}
         </Text>
-        <Text color="primaryText">{profileData.userInfo}</Text>
+        <Text color="primaryText">{profileData.description}</Text>
       </Box>
     </BasicCardBox>
   );
