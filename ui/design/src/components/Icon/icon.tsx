@@ -5,17 +5,26 @@ import CommonInterface from '../../interfaces/common.interface';
 import * as icons from './new-icons';
 
 export type IconType =
+  | 'activity'
   | 'addAppDark'
   | 'addAppGrey'
+  | 'addCard'
+  | 'announcement'
   | 'app'
   | 'arrowDown'
   | 'arrowLeft'
   | 'arrowRight'
   | 'bookmark'
+  | 'calendar'
   | 'comments'
   | 'close'
+  | 'code'
+  | 'coins'
+  | 'document'
   | 'edit'
   | 'emoji'
+  | 'eye'
+  | 'ethereumWorldLogo'
   | 'heart'
   | 'home'
   | 'hotTopics'
@@ -24,15 +33,20 @@ export type IconType =
   | 'moreDark'
   | 'moreGrey'
   | 'notifications'
+  | 'payment'
   | 'person'
+  | 'pin'
   | 'plusDark'
   | 'plusGrey'
   | 'quoteDark'
   | 'quoteGrey'
+  | 'reload'
   | 'reply'
   | 'report'
   | 'search'
+  | 'settings'
   | 'share'
+  | 'stopwatch'
   | 'shareSmallBlue'
   | 'shareSmallDark'
   | 'shareSmallGrey'
@@ -40,21 +54,31 @@ export type IconType =
   | 'thumbsDownWhite'
   | 'thumbsUpGrey'
   | 'thumbsUpWhite'
+  | 'transfer'
   | 'trendingApps'
   | 'wallet';
 
 export const iconTypes: IconType[] = [
+  'activity',
   'addAppGrey',
   'addAppDark',
+  'addCard',
+  'announcement',
   'app',
   'arrowDown',
   'arrowLeft',
   'arrowRight',
   'bookmark',
+  'calendar',
   'comments',
   'close',
+  'code',
+  'coins',
+  'document',
   'edit',
   'emoji',
+  'eye',
+  'ethereumWorldLogo',
   'heart',
   'home',
   'hotTopics',
@@ -63,14 +87,19 @@ export const iconTypes: IconType[] = [
   'moreDark',
   'moreGrey',
   'notifications',
+  'payment',
   'person',
+  'pin',
   'plusDark',
   'quoteDark',
   'quoteGrey',
+  'reload',
   'reply',
   'report',
   'search',
+  'settings',
   'share',
+  'stopwatch',
   'shareSmallBlue',
   'shareSmallDark',
   'shareSmallGrey',
@@ -78,6 +107,7 @@ export const iconTypes: IconType[] = [
   'thumbsDownWhite',
   'thumbsUpGrey',
   'thumbsUpWhite',
+  'transfer',
   'trendingApps',
   'wallet',
 ];
