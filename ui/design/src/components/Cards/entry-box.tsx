@@ -254,7 +254,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           <IconLink
             icon={<Icon type="quoteDark" />}
             label={quotesLabel}
-            onClick={() => setQuotesModalOpen(true)}
+            onClick={toggleQuotesModal}
           />
           <IconLink icon={<Icon type="share" />} label={shareTitle} onClick={() => {}} />
         </Box>
