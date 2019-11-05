@@ -29,4 +29,9 @@ const ProfileAvatarButton = (props: ProfileAvatarButtonProps) => {
   );
 };
 
+const defaultProps = {
+  size: 'sm',
+};
+ProfileAvatarButton.defaultProps = defaultProps;
+
 export default ProfileAvatarButton;
