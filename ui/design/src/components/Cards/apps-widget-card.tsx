@@ -7,16 +7,16 @@ import { BasicCardBox } from './index';
 
 export interface IAppsWidgetCardProps {
   className?: string;
-  onClick: React.EventHandler<React.SyntheticEvent>;
+  onClick: () => void;
   margin?: MarginInterface;
   label: string;
   labelColor?: string;
   iconType: IconType;
-  dataSource: IAppsData[];
-  onClickApp: () => void;
+  dataSource: IAppData[];
+  onAppClick: (appData: IAppData) => void;
 }
 
-export interface IAppsData {
+export interface IAppData {
   title: string;
   subtitle: string;
   appIconType: IconType;
@@ -24,7 +24,11 @@ export interface IAppsData {
 }
 
 const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
-  const { className, onClick, margin, iconType, label, labelColor, dataSource, onClickApp } = props;
+  const { className, onClick, margin, iconType, label, labelColor, dataSource, onAppClick } = props;
+
+  const appClickHandler = (appData: IAppData) => () => {
+    onAppClick(appData);
+  };
 
   return (
     <BasicCardBox className={className}>
@@ -39,15 +43,15 @@ const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
           bold={true}
         />
         <Box pad="none" align="start" gap="large">
-          {dataSource.map(({ title, subtitle, appIconType, iconSize }, index) => (
+          {dataSource.map((appData, index) => (
             <SubtitleTextIcon
-              onClick={onClickApp}
-              label={title}
-              subtitle={subtitle}
+              onClick={appClickHandler(appData)}
+              label={appData.title}
+              subtitle={appData.subtitle}
               labelSize="large"
               key={index}
-              iconType={appIconType}
-              iconSize={iconSize}
+              iconType={appData.appIconType}
+              iconSize={appData.iconSize}
               gap="xxsmall"
             />
           ))}

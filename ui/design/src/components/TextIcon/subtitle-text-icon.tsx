@@ -13,7 +13,7 @@ interface ISubtitleTextIcon {
   labelSize?: 'small' | 'large';
   subtitle: string;
   subtitleColor?: string;
-  onClick?: React.EventHandler<React.SyntheticEvent<HTMLDivElement, MouseEvent>>;
+  onClick?: any;
   gap?: 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large';
 }
 

@@ -6,7 +6,7 @@ import {
   ProfileCard,
   TopicsWidgetCard,
 } from '@akashaproject/design-system';
-import { IAppsData } from '@akashaproject/design-system/lib/components/Cards/apps-widget-card';
+import { IAppData } from '@akashaproject/design-system/lib/components/Cards/apps-widget-card';
 import { action } from '@storybook/addon-actions';
 import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
@@ -18,7 +18,7 @@ const topicsDataSource = [
   { title: '#cryptoworld', subtitle: '6576 mentions' },
 ];
 
-const appsDataSource: IAppsData[] = [
+const appsDataSource: IAppData[] = [
   { title: 'GitCoin', subtitle: '123 embedded cards', appIconType: 'app', iconSize: '40px' },
   { title: 'Augur', subtitle: '89 embedded cards', appIconType: 'app', iconSize: '40px' },
   { title: 'Aragon', subtitle: '57 embedded cards', appIconType: 'app', iconSize: '40px' },
@@ -137,7 +137,7 @@ storiesOf('Cards', module)
     <Box pad="none" align="center" height="224px" width="336px">
       <TopicsWidgetCard
         onClick={() => action('TopicsWidgetCard Clicked')('Synthetic Event')}
-        onClickTopic={() => action('Topic Clicked')('Synthetic Event')}
+        onTopicClick={topicData => action('Topic Clicked')(topicData)}
         margin={object('Margin', { margin: '0px' })}
         iconType={'hotTopics'}
         label={text('Text', 'Hot Topics')}
@@ -150,7 +150,7 @@ storiesOf('Cards', module)
     <Box pad="none" align="center" height="224px" width="336px">
       <AppsWidgetCard
         onClick={() => action('AppsWidgetCard Clicked')('Synthetic Event')}
-        onClickApp={() => action('App Clicked')('Synthetic Event')}
+        onAppClick={appData => action('App Clicked')(appData)}
         margin={object('Margin', { margin: '0px' })}
         iconType={'trendingApps'}
         label={text('Text', 'Trending Apps')}

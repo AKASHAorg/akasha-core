@@ -6,22 +6,26 @@ import { SubtitleTextIcon, TextIcon } from '../TextIcon/index';
 import { BasicCardBox } from './index';
 
 export interface ITopicsCardWidgetProps {
-  onClick: React.EventHandler<React.SyntheticEvent>;
-  onClickTopic: React.EventHandler<React.SyntheticEvent>;
+  onClick: () => void;
+  onTopicClick: (topic: ITopicData) => void;
   margin?: MarginInterface;
   label: string;
   labelColor?: string;
   iconType: IconType;
-  dataSource: TopicsData[];
+  dataSource: ITopicData[];
 }
 
-interface TopicsData {
+interface ITopicData {
   title: string;
   subtitle: string;
 }
 
 const TopicsWidgetCard: React.FC<ITopicsCardWidgetProps> = props => {
-  const { onClick, onClickTopic, margin, iconType, label, labelColor, dataSource } = props;
+  const { onClick, onTopicClick, margin, iconType, label, labelColor, dataSource } = props;
+
+  const topicClickHandler = (topicData: ITopicData) => () => {
+    onTopicClick(topicData);
+  };
 
   return (
     <BasicCardBox>
@@ -36,11 +40,11 @@ const TopicsWidgetCard: React.FC<ITopicsCardWidgetProps> = props => {
           bold={true}
         />
         <Box pad="none" align="start" gap="large">
-          {dataSource.map(({ title, subtitle }, index) => (
+          {dataSource.map((topicData, index) => (
             <SubtitleTextIcon
-              onClick={onClickTopic}
-              label={title}
-              subtitle={subtitle}
+              onClick={topicClickHandler(topicData)}
+              label={topicData.title}
+              subtitle={topicData.subtitle}
               labelColor="accentText"
               labelSize="large"
               gap="xxsmall"
