@@ -57,7 +57,7 @@ const StyledTextIcon = styled.div<ITextIconProps>`
             stroke: ${props.theme.colors.accent};
             }`
             : ''
-        } 
+        }
       }
     `;
   }};
