@@ -37,7 +37,7 @@
     "tslint-react": "^4.1.0",
     "tslint": "5.20.0",
     "typedoc": "^0.15.0",
-    "typescript": "3.6.4",
+    "typescript": "3.7.2",
     "tslint-react-hooks": "^2.2.1",
     "react": "16.11.0",
     "react-dom": "^16.11.0"
