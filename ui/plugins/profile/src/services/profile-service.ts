@@ -42,16 +42,16 @@ export const fetchProfileFollowings = (
 ): Promise<IGetProfileFollowingsPayload> => {
   if (Array.isArray(profileIds)) {
     // fetch multi profiles followings
-    return Promise.resolve([{ profileId: '0x011', followings: 123 }]);
+    return Promise.resolve([{ profileId: '0x011', followings: '123' }]);
   }
-  return Promise.resolve([{ profileId: '0x011', followings: 123 }]);
+  return Promise.resolve([{ profileId: '0x011', followings: '123' }]);
 };
 
 export const fetchProfileFollowers = (
   profileIds: string | string[],
 ): Promise<IGetProfileFollowersPayload> => {
   if (Array.isArray(profileIds)) {
-    return Promise.resolve([{ profileId: '0x011', followers: 100 }]);
+    return Promise.resolve([{ profileId: '0x011', followers: '100' }]);
   }
-  return Promise.resolve([{ profileId: '0x011', followers: 100 }]);
+  return Promise.resolve([{ profileId: '0x011', followers: '100' }]);
 };

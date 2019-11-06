@@ -14,7 +14,7 @@ const topicsDataSource = [
   { title: '#cryptoworld', subtitle: '6576 mentions' },
 ];
 
-interface IWidgetListProps {}
+// interface IWidgetListProps {}
 const AppsWidget = styled.div`
   padding: 0 1em;
   margin-top: 0.5em;
@@ -24,7 +24,7 @@ const TopicsWidget = styled.div`
   padding: 0 1em;
 `;
 
-const WidgetList = (props: IWidgetListProps) => {
+const WidgetList = (/* props: IWidgetListProps */) => {
   const [t] = useTranslation();
   const handleAppClick = (ev: any) => {
     console.log('app clicked', ev);

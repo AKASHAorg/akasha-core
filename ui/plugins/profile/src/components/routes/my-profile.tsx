@@ -8,11 +8,9 @@ import {
   fetchProfileFollowings,
 } from '../../services/profile-service';
 
-// interface IMyProfileProps {
+interface IMyProfileProps {}
 
-// }
-
-const MyProfilePage = (/* props: IMyProfileProps */) => {
+const MyProfilePage = (props: IMyProfileProps) => {
   const [profileState, profileActions] = useProfile();
   useLoggedProfile(profileState.loggedProfile, profileActions);
 
@@ -29,18 +27,35 @@ const MyProfilePage = (/* props: IMyProfileProps */) => {
       });
     }
   }, [profileState.loggedProfile]);
-  console.log(profileState, 'the profile state');
+
   const loggedProfileData = profileState.profiles.find(
     profile => profile.ethAddress === profileState.loggedProfile,
   );
+
+  const profileFollowers = profileState.followers.find(
+    profile => profile.profileId === profileState.loggedProfile,
+  );
+
+  const profileFollowings = profileState.followings.find(
+    profile => profile.profileId === profileState.loggedProfile,
+  );
+
+  const profileData = {
+    followers: profileFollowers ? profileFollowers.followers : null,
+    following: profileFollowings ? profileFollowings.followings : null,
+    profileType: 'user',
+    apps: '10',
+    ...loggedProfileData,
+  };
+
   return (
     <div>
-      {loggedProfileData && (
+      {loggedProfileData && profileFollowers && profileFollowings && (
         <ProfileCard
           onClickApps={() => {}}
           onClickFollowing={() => {}}
           // @ts-ignore
-          profileData={loggedProfileData}
+          profileData={profileData}
           userInfoTitle={'About me'}
           actionsTitle={'Actions'}
           mostPopularActionsTitle={'Most popular actions'}

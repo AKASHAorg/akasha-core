@@ -35,8 +35,14 @@ const Routes: React.FC<IRoutesProps> = props => {
                   <Box gridArea={gridConfig.gridAreas.pluginContent}>
                     <Switch>
                       <Route path={`${path}/list`} render={() => <>A list of profiles</>} />
-                      <Route path={`${path}/my-profile`} component={MyProfilePage} />
-                      <Route path={`${path}/:profileId`} component={ProfilePage} />
+                      <Route
+                        path={`${path}/my-profile`}
+                        render={routeProps => <MyProfilePage {...routeProps} {...props} />}
+                      />
+                      <Route
+                        path={`${path}/:profileId`}
+                        render={routeProps => <ProfilePage {...routeProps} {...props} />}
+                      />
                       <Route render={() => <div>{t('Profile not found!')}</div>} />
                     </Switch>
                   </Box>

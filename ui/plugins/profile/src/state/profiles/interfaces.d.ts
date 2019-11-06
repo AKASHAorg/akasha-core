@@ -21,11 +21,11 @@ export interface IProfile {
 
 export interface IProfileFollowers {
   profileId: string;
-  followers: number;
+  followers: string;
 }
 export interface IProfileFollowings {
   profileId: string;
-  followings: number;
+  followings: string;
 }
 export interface IApp {}
 

@@ -1,4 +1,4 @@
-import { Grommet, Icon, IconLink, lightTheme, styled } from '@akashaproject/design-system';
+import { Grommet, Icon, IconLink, lightTheme } from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense, SyntheticEvent } from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
@@ -66,13 +66,6 @@ interface MenuProps {
   navigateToUrl: (url: string) => void;
 }
 
-const MenuLink = styled(IconLink)`
-  padding: 0 1em;
-  margin-left: ${props => props.theme.spacing.margin.base};
-  border-left: 2px solid ${props => props.theme.colors.blue};
-  border-radius: 0;
-`;
-
 const Menu = (props: MenuProps) => {
   const { navigateToUrl } = props;
   const [t] = useTranslation();
@@ -92,7 +85,7 @@ const Menu = (props: MenuProps) => {
 
   return (
     <Grommet theme={lightTheme}>
-      <MenuLink
+      <IconLink
         icon={<Icon type="home" />}
         label={`${t('Home')}`}
         onClick={handleNavigation('/')}
