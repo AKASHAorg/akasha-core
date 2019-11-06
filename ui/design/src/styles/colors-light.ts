@@ -1,6 +1,7 @@
 export interface IColors {
   primaryText: string;
   secondaryText: string;
+  background: string;
   lightBackground: string;
   darkBackground: string;
   accent: string;
@@ -30,6 +31,7 @@ const colors: IColorsLight = {
   // define use cases for colors
   primaryText: '#132540', // darkBlue
   secondaryText: '#949EB3', // grey
+  background: '#FFF', // white
   lightBackground: '#EDF0F5', // lightGrey
   darkBackground: '#000C20',
   accent: '#4E71FF', // blue
