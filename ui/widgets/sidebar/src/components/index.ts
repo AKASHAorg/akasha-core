@@ -11,7 +11,7 @@ import Widget from './Sidebar-widget';
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Widget
+  rootComponent: Widget,
 });
 
 export const bootstrap = reactLifecycles.bootstrap;

@@ -1,15 +1,18 @@
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
+import pino from 'pino';
 import * as R from 'ramda';
-import { callService } from './utils';
+import { callService, logger, registerServiceMethods, toNamedService } from './utils';
 
 export interface IAkashaNamedService {
   name: string;
   service: AkashaService;
 }
 
-export type AkashaServiceMethods = R.Variadic<object>;
+export type AkashaServiceMethods = object;
+export type CallableServiceMethods = R.Variadic<AkashaServiceMethods>;
 export type AkashaService = (
   serviceInvoker: R.CurriedFunction1<[string, string], any>,
+  logger?: pino,
 ) => AkashaServiceMethods;
 
 export type AkashaServicePath = [string, string];
@@ -31,17 +34,6 @@ export abstract class IAkashaModule {
     return this._name();
   }
 
-  public static wrapService(service: R.Variadic<object>, name: string) {
-    const registeredMethods = service;
-    // calls .bind.apply which is incompatible with ()=>
-    // tslint:disable-next-line:only-arrow-functions
-    return function() {
-      // tslint:disable-next-line:no-console
-      console.log(`[info] service < ${name} > was accessed.`);
-      return registeredMethods();
-    };
-  }
-
   public static getServiceName(moduleName: string, providerName: string) {
     return `${moduleName}=>${providerName}`;
   }
@@ -49,16 +41,37 @@ export abstract class IAkashaModule {
   public static exportToChannel(serviceNames: string[], serviceRegistry: object): any {
     return R.pick(serviceNames, serviceRegistry);
   }
+  protected logger: pino;
+
+  constructor() {
+    this.logger = logger.child({ sdkModule: this.name });
+  }
+
+  public wrapService(service: R.Variadic<object>, name: string) {
+    const registeredMethods = service;
+    const log = this.logger;
+    // calls .bind.apply which is incompatible with ()=>
+    // tslint:disable-next-line:only-arrow-functions
+    return function() {
+      log.info(`service < ${name} > was initialized.`);
+      return registeredMethods();
+    };
+  }
 
   public startServices(di: DIContainer) {
     this.init(di);
     const services = this._registerServices(di);
     for (const provider of services) {
-      const wrappedService = IAkashaModule.wrapService(
-        provider.service(callService(di)),
-        provider.name,
+      const providerInit = toNamedService(provider.name, provider.service);
+      const serviceMethods = providerInit.service(
+        callService(di),
+        this.logger.child({ service: providerInit.name }),
       );
-      const serviceName = IAkashaModule.getServiceName(this.name, provider.name);
+      const wrappedService = this.wrapService(
+        registerServiceMethods(serviceMethods),
+        providerInit.name,
+      );
+      const serviceName = IAkashaModule.getServiceName(this.name, providerInit.name);
       di.register(serviceName, wrappedService);
     }
   }

@@ -1,16 +1,12 @@
 // service for creating objects of cache container
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import {
-  createServiceMethod,
-  registerServiceMethods,
-  toNamedService,
-} from '@akashaproject/sdk-core/lib/utils';
 import Stash from '@akashaproject/sdk-runtime/lib/Stash';
 import { CACHE_SERVICE } from './constants';
 
-const service: AkashaService = () => {
-  const stash = new Stash({ max: 500, maxAge: 1000 * 60 * 60 });
-  return registerServiceMethods({ stash: createServiceMethod(stash) });
+const service: AkashaService = (invoke, log) => {
+  const stash = new Stash({ max: 512, maxAge: 1000 * 60 * 60 });
+  const getStash = async () => stash;
+  return { getStash };
 };
 
-export default toNamedService(CACHE_SERVICE, service);
+export default { name: CACHE_SERVICE, service };

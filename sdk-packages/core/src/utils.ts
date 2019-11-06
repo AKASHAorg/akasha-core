@@ -1,12 +1,16 @@
 import IDIContainer from '@akashaproject/sdk-runtime/lib/IDIContainer';
+import pino from 'pino';
 import * as R from 'ramda';
 import {
   AkashaService,
   AkashaServiceMethods,
   AkashaServicePath,
+  CallableServiceMethods,
   IAkashaModule,
   IAkashaNamedService,
 } from './IAkashaModule';
+
+export const logger = pino({ browser: { asObject: true } });
 
 // to not import explicit the module interface just for getting the serviceName
 export function getServiceName(service: { moduleName: string; providerName: string }) {
@@ -30,10 +34,13 @@ export function callService(di: IDIContainer) {
 }
 
 export function toNamedService(name: string, service: AkashaService): IAkashaNamedService {
+  if (!name || !service) {
+    throw new Error(`Service ${name} must provide name and service attributes`);
+  }
   return R.identity(Object.freeze({ name, service }));
 }
 
-export function registerServiceMethods(methods: object): AkashaServiceMethods {
+export function registerServiceMethods(methods: object): CallableServiceMethods {
   return R.partial(R.identity, [Object.freeze(methods)]);
 }
 

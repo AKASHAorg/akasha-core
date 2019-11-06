@@ -1,5 +1,4 @@
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import { registerServiceMethods, toNamedService } from '@akashaproject/sdk-core/lib/utils';
 import { RxAttachmentCreator } from 'rxdb';
 import { SettingsDoc } from './collection.types/settings';
 import settings from './collections/settings';
@@ -10,7 +9,7 @@ import {
   removeSettingAttachment,
 } from './db.methods/settings-attachment';
 
-const service: AkashaService = invoke => {
+const service: AkashaService = (invoke, log) => {
   const { getDB } = invoke(dbServices[DB_SERVICE]);
   // @Todo: get address from current session
   const getSettingsDoc = async (ethAddress: string) => {
@@ -42,7 +41,7 @@ const service: AkashaService = invoke => {
     const settingsDoc = await getSettingsDoc(args.ethAddress);
     return removeSettingAttachment(settingsDoc, args.id);
   };
-  return registerServiceMethods({ get, put, deleteSettings });
+  return { get, put, deleteSettings };
 };
 
-export default toNamedService(DB_SETTINGS_ATTACHMENT, service);
+export default { name: DB_SETTINGS_ATTACHMENT, service };

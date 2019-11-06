@@ -1,11 +1,21 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:recommended", "tslint-config-prettier"],
+  "extends": [
+    "tslint-config-airbnb",
+    "tslint:recommended",
+    "tslint-react",
+    "tslint-config-prettier",
+    "tslint-react-hooks"
+  ],
   "jsRules": {},
   "rules": {
     "object-literal-sort-keys": false,
     "object-literal-shorthand": false,
-    "interface-name": false
+    "interface-name": false,
+    "only-arrow-functions": false,
+    "prettier": true,
+    "react-hooks-nesting": "error",
+    "import-name": false
   },
-  "rulesDirectory": []
+  "rulesDirectory": ["tslint-plugin-prettier"]
 }

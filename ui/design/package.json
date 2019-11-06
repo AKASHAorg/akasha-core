@@ -26,15 +26,10 @@
   },
   "homepage": "https://github.com/AkashaProject/akasha-world-framework/ui/design#readme",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "storybook": "start-storybook",
-    "build-storybook": "build-storybook -c .storybook -o .out",
     "lint": "tslint -c tslint.json src/**/*.{ts,tsx} --fix --format verbose",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
-    "tsc": "tsc -p tsconfig.prepare.json",
+    "build": "tsc --build",
+    "tsc": "tsc",
     "prepare": "npm run tsc"
   },
   "eslintConfig": {
@@ -53,52 +48,22 @@
     ]
   },
   "dependencies": {
-    "@trendmicro/react-popover": "^0.4.0",
     "classnames": "^2.2.6",
-    "grommet": "^2.7.8",
-    "react-modal": "^3.10.1"
+    "grommet": "2.7.11",
+    "styled-components": "^4.4.1"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.9",
-    "@types/jest": "^24.0.18",
-    "@types/node": "^12.7.5",
-    "@types/react": "^16.9.2",
-    "@types/react-dom": "^16.9.0",
-    "@types/react-modal": "^3.8.3",
-    "@types/storybook__addon-actions": "^3.4.3",
-    "@types/storybook__addon-info": "^4.1.2",
-    "@types/storybook__addon-knobs": "^5.0.4",
-    "@types/storybook__react": "^4.0.2",
-    "@types/styled-components": "^4.1.19",
-    "awesome-typescript-loader": "^5.2.1",
-    "@storybook/addon-a11y": "^5.2.1",
-    "@storybook/addon-actions": "^5.2.1",
-    "@storybook/addon-info": "^5.2.1",
-    "@storybook/addon-knobs": "^5.2.1",
-    "@storybook/addon-links": "^5.2.1",
-    "@storybook/addon-storysource": "5.1.11",
-    "@storybook/addons": "^5.2.1",
-    "@storybook/core-events": "^5.2.1",
-    "@storybook/react": "^5.2.1",
-    "@storybook/theming": "^5.2.1",
-    "react-docgen-typescript-loader": "^3.2.1",
-    "react-docgen-typescript-webpack-plugin": "^1.1.0",
-    "storybook-addon-styled-component-theme": "^1.2.4",
-    "tslint": "^5.20.0",
-    "tslint-config-airbnb": "^5.11.2",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-plugin-prettier": "^2.0.1",
-    "tslint-react": "^4.1.0",
-    "react": "16.9.0",
-    "react-dom": "16.9.0",
-    "react-scripts": "3.1.2",
-    "react-toastify": "^5.3.2",
-    "styled-components": "^4.3.2",
-    "typescript": "^3.6.3"
+    "@types/jest": "^24.0.21",
+    "@types/node": "^12.12.3",
+    "@types/react": "^16.9.11",
+    "@types/react-dom": "^16.9.3",
+    "@types/styled-components": "^4.1.20",
+    "react-toastify": "^5.4.0",
+    "dayjs": "^1.8.16"
   },
   "peerDependencies": {
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "styled-components": "^4.3.2"
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0"
   }
 }

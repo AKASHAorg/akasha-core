@@ -1,33 +1,67 @@
 export interface IShapes {
-  avatar: {
-    borderRadius: string;
-  };
+  baseSpacing: number;
+  smallBorderRadius: string;
   borderRadius: string;
+  largeBorderRadius: string;
   fontFamily: string;
+  defaultFontSize: string;
+  fontSizes: {
+    small: {
+      size: string;
+      height: string;
+    };
+    medium: {
+      size: string;
+      height: string;
+    };
+    large: {
+      size: string;
+      height: string;
+    };
+    xlarge: {
+      size: string;
+      height: string;
+    };
+  };
   fontWeight: {
     regular: number;
     bold: number;
   };
-  shadow0: string;
-  shadow1: string;
-  shadow2: string;
-  shadow3: string;
+  lightShadow: string;
+  darkShadow: string;
 }
 
 const shapes: IShapes = {
-  avatar: {
-    borderRadius: '50%',
-  },
-  borderRadius: '3px',
+  baseSpacing: 4,
+  smallBorderRadius: '4px',
+  borderRadius: '8px',
+  largeBorderRadius: '11px',
   fontFamily: 'Content-font, Roboto, sans-serif',
-  fontWeight: {
-    regular: 500,
-    bold: 600,
+  defaultFontSize: '13px',
+  fontSizes: {
+    small: {
+      size: '11px',
+      height: '15px',
+    },
+    medium: {
+      size: '13px',
+      height: '18px',
+    },
+    large: {
+      size: '15px',
+      height: '22px',
+    },
+    xlarge: {
+      size: '17px',
+      height: '24px',
+    },
   },
-  shadow0: '0px 1px 4px 0px',
-  shadow1: '0px 1px 4px 0px',
-  shadow2: '0px 1px 4px 0px',
-  shadow3: '0px 1px 4px 0px',
+  fontWeight: {
+    regular: 400,
+    bold: 500,
+  },
+  lightShadow: '0 8px 24px 0 rgba(83,98,124,0.06)',
+  darkShadow: '0 8px 24px 0 rgba(83,98,124,0.06)',
 };
 
 export default shapes;

@@ -9,7 +9,6 @@
   "homepage": "https://github.com/AkashaProject/akasha-world-framework#readme",
   "license": "AGPL-3.0",
   "main": "lib/index.js",
-  "browser": "dist/sdk.umd.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -25,7 +24,9 @@
   "scripts": {
     "test": "jest",
     "tsc": "tsc --build",
-    "build": "rimraf dist && NODE_OPTIONS='--max-old-space-size=2096' webpack",
+    "prepare": "npm run tsc",
+    "build": "rimraf dist && NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.dev.config.js",
+    "postbuild": "copyfiles -f ./dist/*.js ./dist/index.html ../../examples/ui/feed-app/public",
     "docs": "typedoc"
   },
   "bugs": {
@@ -37,13 +38,16 @@
     "@akashaproject/sdk-db": "*",
     "@akashaproject/sdk-runtime": "*",
     "rxjs": "6.5.3",
-    "rxdb": "^8.4.0"
+    "rxdb": "^8.7.1"
   },
   "devDependencies": {
-    "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.8",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9",
+    "workbox-webpack-plugin": "^4.3.1",
     "babel-loader": "^8.0.6",
-    "@babel/core": "^7.6.0",
-    "@babel/preset-env": "^7.6.0"
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "html-webpack-plugin": "^3.2.0",
+    "copyfiles": "^2.1.1"
   }
 }

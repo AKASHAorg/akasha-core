@@ -1,14 +1,11 @@
 {
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
-  "contributors": [
-    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
-  ],
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --no-ci",
     "bootstrap:hoist": "lerna bootstrap --hoist",
     "build": "lerna clean && lerna bootstrap && lerna run tsc && lerna run build",
-    "build:sdk": "lerna run build --scope @akashaproject/sdk",
+    "build:sdk": "npm run tsc:sdk && lerna run build --scope @akashaproject/sdk --stream",
     "clean": "lerna clean",
     "docs": "lerna run docs --scope @akashaproject/sdk --scope @akashaproject/sdk-common",
     "fresh-install": "npm run clean && npm run bootstrap",
@@ -16,35 +13,44 @@
     "test:ui": "lerna run test --scope @akashaproject/ui-* --stream",
     "test:ui:watch": "lerna exec --parallel --scope @akashaproject/ui-* --stream -- jest --watch",
     "tsc:sdk": "lerna run tsc --scope @akashaproject/sdk --scope @akashaproject/sdk-*",
-    "tsc:ui": "lerna run tsc --scope @akashaproject/ui-* --scope @akashaproject/design-*",
+    "tsc:ui": "lerna run tsc --scope @akashaproject/design-* --scope @akashaproject/ui-*",
     "tsc:scripts": "lerna run tsc --scope @akashaproject/script-*",
-    "watch-plugin-events": "lerna exec --parallel --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-widget-sidebar --scope @akashaproject/ui-plugin-events -- tsc -w",
-    "watch-plugin-feed": "lerna exec --parallel --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-plugin-feed -- tsc -w",
+    "watch-plugin-events": "lerna exec --parallel --scope @akashaproject/ui-plugin-loader --scope @akashaproject/ui-widget-* --scope @akashaproject/ui-plugin-events -- tsc -w",
+    "watch-plugins": "lerna exec --parallel --scope @akashaproject/ui-widget-* --scope @akashaproject/ui-plugin-* -- tsc -w",
     "script:dev-db": "lerna run start --scope @akashaproject/script-server-db --stream",
     "start:feed-app": "lerna exec --parallel --scope translations-server --scope feed-app-dev -- npm run start --stream",
     "start:translations-server": "npm run start --prefix scripts/translations-server",
-    "start:design-system:storybook": "lerna run storybook --scope @akashaproject/design-system --stream",
-    "start-translations-server": "npm run start --prefix scripts/translations-server"
+    "start:design-system:storybook": "lerna run storybook --scope @akashaproject/storybook --stream"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.18",
-    "@types/node": "10.14.6",
-    "husky": "^3.0.5",
+    "@types/jest": "^24.0.21",
+    "@types/node": "12.12.6",
+    "husky": "^3.0.9",
     "jest": "^24.9.0",
-    "lerna": "3.16.4",
+    "lerna": "3.18.3",
     "prettier": "1.18.2",
-    "pretty-quick": "^1.11.1",
-    "ts-jest": "^24.0.2",
+    "pretty-quick": "^2.0.0",
+    "ts-jest": "^24.1.0",
+    "tslint-config-airbnb": "^5.11.2",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "tslint-react": "^4.1.0",
     "tslint": "5.20.0",
-    "tslint-config-prettier": "1.18.0",
     "typedoc": "^0.15.0",
-    "typescript": "3.6.3"
+    "typescript": "3.6.4",
+    "tslint-react-hooks": "^2.2.1",
+    "react": "16.11.0",
+    "react-dom": "^16.11.0"
   },
   "workspaces": [
     "sdk-packages/*",
     "ui/*",
     "scripts/*"
   ],
+  "engines": {
+    "node": ">=12.13.0",
+    "npm": ">=6.12.0"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"

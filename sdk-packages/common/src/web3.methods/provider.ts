@@ -8,7 +8,7 @@ export default async function getProvider(
   provider: EthProviders = EthProviders.None,
 ) {
   let ethProvider;
-  const moduleSettings = getSettings(moduleName);
+  const moduleSettings = await getSettings(moduleName);
 
   const networkSettings = moduleSettings.hasOwnProperty(ETH_NETWORK);
 

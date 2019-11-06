@@ -22,14 +22,16 @@
   },
   "scripts": {
     "test": "jest",
-    "tsc": "tsc --build"
+    "tsc": "tsc --build",
+    "prepare": "npm run tsc"
   },
   "bugs": {
     "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
   },
   "dependencies": {
     "@akashaproject/sdk-runtime": "*",
-    "ramda": "^0.26.1"
+    "pino": "^5.13.5",
+    "ramda": "https://github.com/ramda/ramda"
   },
   "devDependencies": {
     "@types/ramda": "github:types/npm-ramda#dist"
