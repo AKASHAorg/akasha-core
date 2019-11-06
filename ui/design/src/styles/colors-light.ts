@@ -8,6 +8,7 @@ export interface IColors {
   border: string;
   secondary: string;
   secondaryOpacity: string;
+  shadow: string;
 }
 
 interface IColorsLight extends IColors {
@@ -38,5 +39,6 @@ const colors: IColorsLight = {
   border: '#EDF0F5', // lightGrey
   secondary: '#000C20', // darkgrey
   secondaryOpacity: 'rgba(0, 12, 32, 0.5)', // darkgrey with 0.5 opacity
+  shadow: '0 8px 24px 0 rgba(83,98,124,0.06)',
 };
 export default colors;

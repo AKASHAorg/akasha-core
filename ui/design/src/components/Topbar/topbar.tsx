@@ -11,6 +11,7 @@ const AvatarButton = styled(ProfileAvatarButton)`
   border-radius: 20px;
   padding: ${props => `${props.theme.shapes.baseSpacing * 2}px`};
   height: 40px;
+  box-shadow: ${props => props.theme.colors.shadow}
 `;
 
 interface ITopbarProps {
