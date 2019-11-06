@@ -1,12 +1,14 @@
 export interface IColors {
   primaryText: string;
   secondaryText: string;
+  background: string;
   lightBackground: string;
   darkBackground: string;
   accent: string;
   border: string;
   secondary: string;
   secondaryOpacity: string;
+  shadow: string;
 }
 
 interface IColorsLight extends IColors {
@@ -30,11 +32,13 @@ const colors: IColorsLight = {
   // define use cases for colors
   primaryText: '#132540', // darkBlue
   secondaryText: '#949EB3', // grey
+  background: '#FFF', // white
   lightBackground: '#EDF0F5', // lightGrey
   darkBackground: '#000C20',
   accent: '#4E71FF', // blue
   border: '#EDF0F5', // lightGrey
   secondary: '#000C20', // darkgrey
   secondaryOpacity: 'rgba(0, 12, 32, 0.5)', // darkgrey with 0.5 opacity
+  shadow: '0 8px 24px 0 rgba(83,98,124,0.06)',
 };
 export default colors;
