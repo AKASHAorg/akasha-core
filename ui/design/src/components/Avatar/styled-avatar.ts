@@ -7,7 +7,7 @@ const sizes = {
   sm: '32px',
   md: '40px',
   lg: '48px',
-  xl: '72px',
+  xl: '84px',
 };
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
@@ -16,8 +16,7 @@ interface AvatarProps {
   isClickable: boolean;
   margin?: MarginInterface;
   backgroundColor?: string;
-  borderSize?: string;
-  borderColor?: string;
+  withBorder?: boolean;
 }
 
 const StyledAvatar = styled.div<AvatarProps>`
@@ -30,10 +29,10 @@ const StyledAvatar = styled.div<AvatarProps>`
     `;
   }};
   ${props => {
-    const { borderSize, borderColor } = props;
-    if (borderSize) {
+    const { withBorder } = props;
+    if (withBorder) {
       return css`
-        border: ${borderSize} solid ${borderColor || props.theme.colors.white};
+        border: ${props.theme.shapes.baseSpacing}px solid ${props.theme.colors.white};
       `;
     }
   }}

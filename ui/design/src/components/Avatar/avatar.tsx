@@ -11,8 +11,7 @@ export interface AvatarProps extends CommonInterface<HTMLDivElement> {
   alt?: string;
   margin?: MarginInterface;
   backgroundColor?: string;
-  borderSize?: string;
-  borderColor?: string;
+  withBorder?: boolean;
   guest?: boolean;
   seed?: string;
 }
@@ -37,7 +36,7 @@ const getAvatarFromSeed = (seed: string) => {
  */
 
 const Avatar: React.FC<AvatarProps & Partial<typeof defaultProps>> = props => {
-  const { onClick, guest, src, seed, className, size, margin, borderSize, borderColor } = props;
+  const { onClick, guest, src, seed, className, size, margin, withBorder } = props;
   const isClickable = typeof onClick === 'function';
   let avatarImage;
   if (guest || !src) {
@@ -53,8 +52,7 @@ const Avatar: React.FC<AvatarProps & Partial<typeof defaultProps>> = props => {
       className={className}
       isClickable={isClickable}
       margin={margin}
-      borderSize={borderSize}
-      borderColor={borderColor}
+      withBorder={withBorder}
     >
       <React.Suspense fallback={<>...</>}>
         <AvatarImage image={avatarImage} />

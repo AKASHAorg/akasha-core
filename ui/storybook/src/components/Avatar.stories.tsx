@@ -15,6 +15,7 @@ storiesOf('Avatar', module)
       src="https://placebeard.it/360x360"
       margin={object('Margin', { margin: '0px' })}
       backgroundColor={color('Background Color', '')}
+      withBorder={boolean('withBorder', true)}
     />
   ))
   .add('with click handler', () => (
@@ -23,6 +24,7 @@ storiesOf('Avatar', module)
       size="md"
       /* tslint:disable-next-line:jsx-no-lambda */
       onClick={(ev: any) => action('Avatar Clicked!')(ev.type)}
+      withBorder={boolean('withBorder', true)}
     />
   ))
   .add('size: (default sm)', () => (
@@ -39,20 +41,29 @@ storiesOf('Avatar', module)
         { size: 'sm', value: 32 },
         { size: 'md', value: 40 },
         { size: 'lg', value: 48 },
-        { size: 'xl', value: 72 },
+        { size: 'xl', value: 84 },
       ].map(({ size, value }, index) => (
         <div key={index}>
           {size} ({value} px)
-          <Avatar key={size} size={size as AvatarSize} src="https://placebeard.it/360x480" />
+          <Avatar
+            key={size}
+            size={size as AvatarSize}
+            src="https://placebeard.it/360x480"
+            withBorder={boolean('withBorder', true)}
+          />
         </div>
       ))}
     </div>
   ))
   .add('Guest mode', () => {
-    return <Avatar withBorder={false} guest={true} size="xl" />;
+    return <Avatar guest={true} size="xl" withBorder={boolean('withBorder', true)} />;
   })
   .add('Avatar not set', () => {
     return (
-      <Avatar size="xl" seed={text('eth address', '0xbe0eb53f46cd790cd13851d5eff43d12404d33e8')} />
+      <Avatar
+        withBorder={boolean('withBorder', true)}
+        size="xl"
+        seed={text('eth address', '0xbe0eb53f46cd790cd13851d5eff43d12404d33e8')}
+      />
     );
   });
