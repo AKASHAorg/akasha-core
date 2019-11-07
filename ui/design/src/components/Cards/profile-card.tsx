@@ -40,7 +40,7 @@ export interface IProfileCardProps {
   onChangeProfileData: (newProfileData: IProfileData) => void;
   margin?: MarginInterface;
   profileData: IProfileData;
-  userInfoTitle: string;
+  descriptionTitle: string;
   actionsTitle: string;
   followingTitle: string;
   appsTitle: string;
@@ -57,7 +57,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     onClickApps,
     onChangeProfileData,
     profileData,
-    userInfoTitle,
+    descriptionTitle,
     actionsTitle,
     followingTitle,
     usersTitle,
@@ -149,7 +149,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
       )}
       <Box direction="column" pad="medium" gap="medium">
         <Text size="large" weight="bold" color="primaryText">
-          {userInfoTitle}
+          {descriptionTitle}
         </Text>
 
         <ProfileCardDescription

@@ -4,7 +4,8 @@ import { formatDate, ILocale } from '../../utils/time';
 import { Icon } from '../Icon/index';
 import { IconLink, ProfileAvatarButton, VoteIconButton } from '../IconButton/index';
 import { CommentInput } from '../Input/index';
-import { TextIcon } from '../TextIcon';
+import { ListModal } from '../Modals/index';
+import { TextIcon } from '../TextIcon/index';
 import { StyledDrop, StyledLayerElemDiv, StyledSelectBox } from './styled-entry-box';
 
 export interface IEntryData {
@@ -132,29 +133,14 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const renderQuotesModal = () => {
     return (
-      <Layer onEsc={closeQuotesModal} onClickOutside={closeQuotesModal} modal={true}>
-        <Box pad="none" width="579px" height="386px">
-          <Box pad="medium" justify="between" direction="row" align="center">
-            <TextIcon iconType="quoteDark" label={quotedByTitle} margin={{ right: '40px' }} />
-            <Text size="large" color="secondaryText">
-              {quotesLabel}
-            </Text>
-          </Box>
-          <Box pad={{ horizontal: 'medium' }} overflow="scroll">
-            {entryData.quotes &&
-              entryData.quotes.map((quote, index) => (
-                <StyledLayerElemDiv key={index}>
-                  <ProfileAvatarButton
-                    info={formatDate(quote.time, locale)}
-                    label={quote.name}
-                    avatarImage={quote.avatar}
-                    onClick={onClickAvatar}
-                  />
-                </StyledLayerElemDiv>
-              ))}
-          </Box>
-        </Box>
-      </Layer>
+      <ListModal
+        closeModal={closeQuotesModal}
+        label={quotedByTitle}
+        secondaryLabel={quotesTitle}
+        list={entryData.quotes}
+        onClickAvatar={onClickAvatar}
+        locale={locale}
+      />
     );
   };
   const onClickEditPost = () => {};

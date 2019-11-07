@@ -4,6 +4,7 @@ import {
   Box,
   EntryCard,
   ProfileCard,
+  ProfileWidgetCard,
   TopicsWidgetCard,
 } from '@akashaproject/design-system';
 import { IAppData } from '@akashaproject/design-system/lib/components/Cards/apps-widget-card';
@@ -171,7 +172,25 @@ storiesOf('Cards', module)
         margin={object('Margin', { margin: '0px' })}
         // @ts-ignore
         profileData={select('Profile Data', { dapp: dappData, user: profileData }, profileData)}
-        userInfoTitle={text('About me', aboutMeTitle)}
+        descriptionTitle={text('About me', aboutMeTitle)}
+        actionsTitle={text('Actions', actionsTitle)}
+        mostPopularActionsTitle={text('Most popular actions', mostPopularActionsTitle)}
+        followingTitle={text('Following', followingTitle)}
+        appsTitle={text('Apps', appsTitle)}
+        usersTitle={text('Users', usersTitle)}
+        shareProfileText={text('Share Profile', shareProfileTitle)}
+      />
+    </Box>
+  ))
+  .add('profile widget card', () => (
+    <Box pad="none" align="center" width="336px">
+      <ProfileWidgetCard
+        onClickApps={() => action('Apps Box Clicked')('Synthetic Event')}
+        onClickFollowing={() => action('Following Box Clicked')('Synthetic Event')}
+        margin={object('Margin', { margin: '0px' })}
+        // @ts-ignore
+        profileData={select('Profile Data', { dapp: dappData, user: profileData }, profileData)}
+        descriptionTitle={text('About me', aboutMeTitle)}
         actionsTitle={text('Actions', actionsTitle)}
         mostPopularActionsTitle={text('Most popular actions', mostPopularActionsTitle)}
         followingTitle={text('Following', followingTitle)}
