@@ -14,7 +14,7 @@ interface ICommentInput {
 }
 
 const StyledDiv = styled.div`
-  padding-right: ${props => `${props.theme.shapes.baseSpacing}px`}
+  padding-right: ${props => `${props.theme.shapes.baseSpacing}px`};
   color: ${props => props.theme.colors.accent};
   opacity: 0.4;
   &:hover {
@@ -116,7 +116,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
   return (
     <Box direction="row" gap="xsmall" fill="horizontal" pad="none" className={className}>
       <div>
-        <Avatar src={avatarImg} size="md" roundedCorners={true} />
+        <Avatar src={avatarImg} size="md" />
       </div>
 
       {!textAreaOpen && renderFakeInput()}
