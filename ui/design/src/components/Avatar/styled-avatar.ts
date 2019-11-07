@@ -7,29 +7,36 @@ const sizes = {
   sm: '32px',
   md: '40px',
   lg: '48px',
+  xl: '72px',
 };
-export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg';
+export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 interface AvatarProps {
   size: AvatarSize;
   isClickable: boolean;
   margin?: MarginInterface;
   backgroundColor?: string;
-  withBorder?: boolean;
-  roundedCorners?: boolean;
+  borderSize?: string;
+  borderColor?: string;
 }
 
 const StyledAvatar = styled.div<AvatarProps>`
   ${props => {
-    const { margin, backgroundColor, roundedCorners } = props;
+    const { margin, backgroundColor } = props;
     const marginSize = margin ? MarginSetter(margin) : null;
-    const borderRadius = roundedCorners ? props.theme.shapes.borderRadius : '';
     return css`
-      background: ${backgroundColor || props.theme.colors.white}
-      ${marginSize}
-      border-radius: ${borderRadius}
+      background: ${backgroundColor || props.theme.colors.white};
+      ${marginSize};
     `;
   }};
+  ${props => {
+    const { borderSize, borderColor } = props;
+    if (borderSize) {
+      return css`
+        border: ${borderSize} solid ${borderColor || props.theme.colors.white};
+      `;
+    }
+  }}
   box-sizing: border-box;
   cursor: ${props => (props.isClickable ? 'pointer' : 'default')};
   user-select: none;
@@ -37,6 +44,7 @@ const StyledAvatar = styled.div<AvatarProps>`
   overflow: hidden;
   width: ${props => (sizes[props.size] ? sizes[props.size] : '100%')};
   height: ${props => (sizes[props.size] ? sizes[props.size] : '100%')};
+  border-radius: 100%;
   img {
     display: block;
     width: 100%;
