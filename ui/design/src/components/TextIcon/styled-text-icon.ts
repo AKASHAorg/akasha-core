@@ -11,6 +11,8 @@ const StyledTextIcon = styled.div<ITextIconProps>`
       backgroundColor,
       spacing,
       clickable,
+      menuActive,
+      menuIcon,
     } = props;
 
     // change margins to ones passed in props
@@ -25,16 +27,38 @@ const StyledTextIcon = styled.div<ITextIconProps>`
       }
       background-color: ${backgroundColor ? backgroundColor : ''};
       color: ${color ? color : colors.dark};
-      ${marginSize}
-      ${clickable
-        ? `&: hover {
-          cursor: pointer;
+      ${
+        menuIcon
+          ? `padding-left: ${props.theme.shapes.baseSpacing * 8 + 2}px
           color: ${props.theme.colors.accent};
           & * {
             stroke: ${props.theme.colors.accent};
-            }
-          }`
-        : ''};
+            }`
+          : ''
+      }
+      ${
+        menuActive
+          ? `padding-left: ${props.theme.shapes.baseSpacing * 8}px
+          border-left: 2px solid ${props.theme.colors.accent};
+          color: ${props.theme.colors.accent};
+          & * {
+            stroke: ${props.theme.colors.accent};
+            }`
+          : ''
+      }
+      ${marginSize}
+      
+      &:hover {
+        ${
+          clickable
+            ? `cursor: pointer;
+          color: ${props.theme.colors.accent};
+          & * {
+            stroke: ${props.theme.colors.accent};
+            }`
+            : ''
+        }
+      }
     `;
   }};
   display: flex;

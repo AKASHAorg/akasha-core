@@ -16,17 +16,15 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
       },
       elevation: {
         light: {
-          shadow: styledComponentsTheme.shapes.lightShadow,
+          shadow: styledComponentsTheme.colors.shadow,
         },
         dark: {
-          shadow: styledComponentsTheme.shapes.darkShadow,
+          shadow: styledComponentsTheme.colors.shadow,
         },
       },
       drop: {
         shadowSize: 'shadow',
         extend: `
-          // border-radius: ${styledComponentsTheme.shapes.borderRadius};
-          // margin-top: 5px;
           border: solid 1px ${styledComponentsTheme.colors.border};
         `,
       },
