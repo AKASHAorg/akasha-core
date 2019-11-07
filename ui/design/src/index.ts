@@ -2,11 +2,11 @@
 import { Avatar } from './components/Avatar/index';
 import {
   AppsWidgetCard,
-  TopicsWidgetCard,
-  ProfileCard,
-  EntryCard,
   BasicCardBox,
   EntryBox,
+  EntryCard,
+  ProfileCard,
+  TopicsWidgetCard,
 } from './components/Cards/index';
 import { Icon, iconTypes } from './components/Icon/index';
 import {
@@ -17,8 +17,7 @@ import {
 } from './components/IconButton/index';
 import { CommentInput, SearchInput } from './components/Input/index';
 import { NotificationsPopover } from './components/Popovers/index';
-import { Tab, Tabs, TabsContext } from './components/Tabs/index';
-import { TextIcon, SubtitleTextIcon } from './components/TextIcon/index';
+import { SubtitleTextIcon, TextIcon } from './components/TextIcon/index';
 import { Topbar } from './components/Topbar/index';
 
 /* Themes and theme related utils */
@@ -49,9 +48,6 @@ export {
   CommentInput,
   SearchInput,
   NotificationsPopover,
-  Tab,
-  Tabs,
-  TabsContext,
   TextIcon,
   SubtitleTextIcon,
   Topbar,

@@ -1,4 +1,4 @@
-import { Grommet, Icon, IconLink, lightTheme } from '@akashaproject/design-system';
+import { Box, Grommet, lightTheme, TextIcon } from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense, SyntheticEvent } from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
@@ -85,14 +85,19 @@ const Menu = (props: MenuProps) => {
 
   return (
     <Grommet theme={lightTheme}>
-      <IconLink
-        icon={<Icon type="home" />}
-        label={`${t('Home')}`}
-        onClick={handleNavigation('/')}
-      />
-      {/* <p>Language</p>
+      <Box pad={{ left: '2px' }}>
+        <TextIcon
+          iconType="home"
+          label={`${t('Home')}`}
+          onClick={handleNavigation('/')}
+          clickable={true}
+          menuIcon={true}
+          menuActive={true}
+        />
+        {/* <p>Language</p>
       <MenuLink onClick={handleLangChange('en')}>{t('common:English')}</MenuLink>
       <MenuLink onClick={handleLangChange('ro')}>{t('common:Romanian')}</MenuLink> */}
+      </Box>
     </Grommet>
   );
 };
