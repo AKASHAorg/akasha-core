@@ -41,4 +41,5 @@ const colors: IColorsLight = {
   secondaryOpacity: 'rgba(0, 12, 32, 0.5)', // darkgrey with 0.5 opacity
   shadow: '0 8px 24px 0 rgba(83,98,124,0.06)',
 };
+
 export default colors;
