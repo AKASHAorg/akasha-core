@@ -6,5 +6,5 @@ export interface IAction<P, T> {
 }
 
 export interface UseValueType<P, S, A, L> {
-  (props: P): [S, { [key in keyof typeof A]: (payload: L) => void }];
+  (props: P): [S, { [key in keyof typeof A]: (payload?: L) => any }];
 }

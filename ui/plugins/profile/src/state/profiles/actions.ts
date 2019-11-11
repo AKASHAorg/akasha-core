@@ -6,9 +6,9 @@ import {
   IGetMoreAppsPayload,
   IGetMoreProfilesPayload,
   IGetProfilesPayload,
-  IGetLoggedProfilePayload,
   IGetProfileFollowersPayload,
   IGetProfileFollowingsPayload,
+  IGetLoggedProfilePayload,
 } from './interfaces';
 
 export const getProfilesActions = (
@@ -16,7 +16,7 @@ export const getProfilesActions = (
 ) => ({
   getLoggedProfile: (payload: IGetLoggedProfilePayload) =>
     dispatch({ type: actionTypes.GET_LOGGED_PROFILE, payload }),
-  getProfiles: (payload: IGetProfilesPayload) =>
+  getProfilesData: (payload: IGetProfilesPayload) =>
     dispatch({ type: actionTypes.GET_PROFILES, payload }),
   getProfileFollowers: (payload: IGetProfileFollowersPayload) =>
     dispatch({ type: actionTypes.GET_PROFILE_FOLLOWERS, payload }),

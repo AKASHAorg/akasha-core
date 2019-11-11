@@ -6,6 +6,8 @@ import MyProfilePage from './my-profile';
 import ProfilePage from './profile-page';
 import WidgetList from '../widgets';
 import Grid from '../grid';
+import { useProfile } from '../../state/profiles';
+import { fetchLoggedProfile } from '../../services/profile-service';
 
 export interface IRoutesProps {
   activeWhen: { path: string };
@@ -13,8 +15,15 @@ export interface IRoutesProps {
 
 const Routes: React.FC<IRoutesProps> = props => {
   const { activeWhen } = props;
+  const [, profileActions] = useProfile();
   const { path } = activeWhen;
   const [t] = useTranslation();
+  React.useEffect(() => {
+    fetchLoggedProfile().then(result => {
+      profileActions.getLoggedProfile(result);
+    });
+  });
+
   return (
     <>
       <Router>
@@ -37,7 +46,11 @@ const Routes: React.FC<IRoutesProps> = props => {
                       <Route path={`${path}/list`} render={() => <>A list of profiles</>} />
                       <Route
                         path={`${path}/my-profile`}
-                        render={routeProps => <MyProfilePage {...routeProps} {...props} />}
+                        render={routeProps => (
+                          <React.Suspense fallback={<>Loading Profile</>}>
+                            <MyProfilePage {...routeProps} {...props} />
+                          </React.Suspense>
+                        )}
                       />
                       <Route
                         path={`${path}/:profileId`}

@@ -15,7 +15,7 @@ export interface ITopicsCardWidgetProps {
   dataSource: ITopicData[];
 }
 
-interface ITopicData {
+export interface ITopicData {
   title: string;
   subtitle: string;
 }

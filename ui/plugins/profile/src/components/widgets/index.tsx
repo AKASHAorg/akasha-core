@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { AppsWidgetCard, styled, TopicsWidgetCard } from '@akashaproject/design-system';
-import { IAppsData } from '@akashaproject/design-system/lib/components/Cards/apps-widget-card';
+import { IAppData } from '@akashaproject/design-system/lib/components/Cards/apps-widget-card';
+import { ITopicData } from '@akashaproject/design-system/lib/components/Cards/topics-widget-card';
 import { useTranslation } from 'react-i18next';
 
-const appsDataSource: IAppsData[] = [
+const appsDataSource: IAppData[] = [
   { title: 'GitCoin', subtitle: '123 embedded cards', appIconType: 'app', iconSize: '40px' },
   { title: 'Augur', subtitle: '89 embedded cards', appIconType: 'app', iconSize: '40px' },
   { title: 'Aragon', subtitle: '57 embedded cards', appIconType: 'app', iconSize: '40px' },
@@ -26,28 +27,36 @@ const TopicsWidget = styled.div`
 
 const WidgetList = (/* props: IWidgetListProps */) => {
   const [t] = useTranslation();
-  const handleAppClick = (ev: any) => {
-    console.log('app clicked', ev);
+  const handleAppTitleClick = () => {
+    console.log('app title clicked');
   };
-  const handleTopicsClick = (ev: any) => {
-    console.log('topics clicked', ev);
+  const handleTopicsTitleClick = () => {
+    console.log('topics title clicked');
+  };
+  const handleTopicClick = (topic: ITopicData) => {
+    console.log('topic:', topic, 'was clicked');
+  };
+  const handleAppClick = (app: IAppData) => {
+    console.log('app:', app, 'was clicked');
   };
   return (
     <>
       <TopicsWidget>
         <TopicsWidgetCard
-          onClick={handleTopicsClick}
+          onClick={handleTopicsTitleClick}
           label={t('Hot Topics')}
           iconType="hotTopics"
           dataSource={topicsDataSource}
+          onTopicClick={handleTopicClick}
         />
       </TopicsWidget>
       <AppsWidget>
         <AppsWidgetCard
           dataSource={appsDataSource}
           label={t('Trending Apps')}
-          onClick={handleAppClick}
+          onClick={handleAppTitleClick}
           iconType="app"
+          onAppClick={handleAppClick}
         />
       </AppsWidget>
     </>

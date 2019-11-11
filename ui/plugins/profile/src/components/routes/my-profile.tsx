@@ -1,23 +1,26 @@
 import * as React from 'react';
 import { ProfileCard } from '@akashaproject/design-system';
-import { useProfile } from '../../state/profiles';
-import { useLoggedProfile } from '../hooks/use-logged-profile';
+import { useProfile, useProfileState } from '../../state/profiles';
+// import { useLoggedProfile } from '../hooks/use-logged-profile';
+import { History } from 'history';
 import {
   fetchProfileData,
   fetchProfileFollowers,
   fetchProfileFollowings,
 } from '../../services/profile-service';
+// import { autoDispatch } from '../../state/fetcher';
 
-interface IMyProfileProps {}
+interface IMyProfileProps {
+  history: History;
+}
 
 const MyProfilePage = (props: IMyProfileProps) => {
   const [profileState, profileActions] = useProfile();
-  useLoggedProfile(profileState.loggedProfile, profileActions);
 
   React.useEffect(() => {
     if (profileState.loggedProfile) {
       fetchProfileData(profileState.loggedProfile).then(result => {
-        profileActions.getProfiles(result);
+        profileActions.getProfilesData(result);
       });
       fetchProfileFollowers(profileState.loggedProfile).then(result => {
         profileActions.getProfileFollowers(result);
@@ -28,44 +31,47 @@ const MyProfilePage = (props: IMyProfileProps) => {
     }
   }, [profileState.loggedProfile]);
 
-  const loggedProfileData = profileState.profiles.find(
-    profile => profile.ethAddress === profileState.loggedProfile,
+  return (
+    <div>
+      <React.Suspense fallback={<>Loading Profile</>}>
+        <ProfilePageHeader />
+      </React.Suspense>
+      <React.Suspense fallback={<>Loading Profile Feed</>}>
+        <ProfilePageFeed />
+      </React.Suspense>
+    </div>
   );
+};
 
-  const profileFollowers = profileState.followers.find(
-    profile => profile.profileId === profileState.loggedProfile,
-  );
+const ProfilePageFeed = () => {
+  return <div>The feed</div>;
+};
+interface IProfilePageHeaderProps {
+  // profileDataFetcher: any;
+}
 
-  const profileFollowings = profileState.followings.find(
-    profile => profile.profileId === profileState.loggedProfile,
-  );
-
+const ProfilePageHeader = (props: IProfilePageHeaderProps) => {
+  const profileState = useProfileState();
+  // const { profileDataFetcher } = props;
+  // profileDataFetcher.run();
   const profileData = {
-    followers: profileFollowers ? profileFollowers.followers : null,
-    following: profileFollowings ? profileFollowings.followings : null,
-    profileType: 'user',
-    apps: '10',
-    ...loggedProfileData,
+    ...profileState.profiles.find(prof => prof.ethAddress === profileState.loggedProfile),
   };
 
   return (
-    <div>
-      {loggedProfileData && profileFollowers && profileFollowings && (
-        <ProfileCard
-          onClickApps={() => {}}
-          onClickFollowing={() => {}}
-          // @ts-ignore
-          profileData={profileData}
-          userInfoTitle={'About me'}
-          actionsTitle={'Actions'}
-          mostPopularActionsTitle={'Most popular actions'}
-          followingTitle={'Following'}
-          appsTitle={'Apps'}
-          usersTitle={'Users'}
-          shareProfileText={'Share Profile'}
-        />
-      )}
-    </div>
+    <ProfileCard
+      onClickApps={() => {}}
+      onClickFollowing={() => {}}
+      // @ts-ignore
+      profileData={profileData}
+      userInfoTitle={'About me'}
+      actionsTitle={'Actions'}
+      mostPopularActionsTitle={'Most popular actions'}
+      followingTitle={'Following'}
+      appsTitle={'Apps'}
+      usersTitle={'Users'}
+      shareProfileText={'Share Profile'}
+    />
   );
 };
 

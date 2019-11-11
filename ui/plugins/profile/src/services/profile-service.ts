@@ -1,13 +1,11 @@
 import {
   IProfile,
   IGetLoggedProfilePayload,
-  IGetProfilesPayload,
   IGetProfileFollowingsPayload,
   IGetProfileFollowersPayload,
 } from '../state/profiles/interfaces';
 
 const profileData: IProfile = {
-  avatar: 'http://placebeard.it/640/480',
   coverImage: 'goldenrod',
   name: 'Gilbert The Bearded',
   // userName: '@gilbert',
@@ -24,7 +22,7 @@ export const fetchLoggedProfile = (): Promise<IGetLoggedProfilePayload> => {
   return Promise.resolve({ loggedProfile: '0x011' });
 };
 
-export const fetchProfileData = (profile: string[] | string): Promise<IGetProfilesPayload> => {
+export const fetchProfileData = (profile: string[] | string): Promise<{ profiles: IProfile[] }> => {
   if (Array.isArray(profile)) {
     // send the array direcly
     return Promise.resolve({
