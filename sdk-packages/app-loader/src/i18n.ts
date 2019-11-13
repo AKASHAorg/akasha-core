@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Fetch from 'i18next-fetch-backend';
-import { IPlugin } from './interfaces';
+import { IPlugin, IWidget } from './interfaces';
 
 const i18nDefaultConfig: i18n.InitOptions = {
   backend: {
@@ -15,16 +15,17 @@ const i18nDefaultConfig: i18n.InitOptions = {
   saveMissing: true,
   saveMissingTo: 'all',
   load: 'currentOnly',
+  debug: true,
 };
 
 export default class TranslationManager {
-  private i18nInstances: any;
+  private readonly i18nInstances: any;
   private logger;
   constructor(logger) {
     this.i18nInstances = {};
     this.logger = logger;
   }
-  public createInstance(plugin: IPlugin, logger): i18n.i18n {
+  public createInstance(plugin: IPlugin | IWidget, logger): i18n.i18n {
     const { i18nConfig } = plugin;
     const defaultNS = i18nConfig.ns || plugin.name;
 
@@ -40,7 +41,7 @@ export default class TranslationManager {
     return i18nInstance;
   }
 
-  public async initI18nFor(plugin: IPlugin): Promise<void> {
+  public async initI18nFor(plugin: IPlugin | IWidget): Promise<void> {
     const { name, i18nConfig } = plugin;
     document.addEventListener('change-language', this.onLanguageChange(plugin.name));
     const instance: i18n.i18n = this.i18nInstances[name];

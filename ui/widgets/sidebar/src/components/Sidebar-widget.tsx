@@ -68,7 +68,7 @@ interface MenuProps {
 
 const MenuLink = styled(IconLink)`
   padding: 0 1em;
-  margin-left: ${props => props.theme.spacing.margin.base};
+  margin-left: ${() => '12px'};
   border-left: 2px solid ${props => props.theme.colors.blue};
   border-radius: 0;
 `;

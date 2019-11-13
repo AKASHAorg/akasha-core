@@ -7,4 +7,4 @@ const service: AkashaService = (invoke, log) => {
   return { getUtils };
 };
 
-export default { name: WEB3_UTILS_SERVICE, service };
+export default { service, name: WEB3_UTILS_SERVICE };

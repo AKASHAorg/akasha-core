@@ -18,6 +18,10 @@ export interface IPlugin {
 
 export interface IWidget {
   name: string;
+  i18nConfig?: II18nConfig;
   loadingFn: () => Promise<any>;
+  pluginSlotId?: string;
+  topbarSlotId?: string;
+  sidebarSlotId?: string;
   services?: any[];
 }

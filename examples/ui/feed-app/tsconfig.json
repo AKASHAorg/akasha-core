@@ -21,9 +21,6 @@
   },
   "references": [
     {
-      "path": "../../../ui/plugins/loader"
-    },
-    {
       "path": "../../../ui/plugins/events"
     },
     {

@@ -6,7 +6,6 @@
     "@akashaproject/ui-plugin-events": "*",
     "@akashaproject/ui-plugin-profile": "*",
     "@akashaproject/ui-plugin-feed": "*",
-    "@akashaproject/ui-plugin-loader": "*",
     "@akashaproject/ui-widget-sidebar": "*",
     "@akashaproject/ui-widget-layout": "*",
     "@akashaproject/ui-widget-topbar": "*",

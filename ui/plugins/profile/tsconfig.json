@@ -20,10 +20,6 @@
     "resolveJsonModule": true,
     "skipLibCheck": true
   },
-  "references": [
-    {
-      "path": "../loader"
-    }
-  ],
+  "references": [],
   "include": ["./src/**/*"]
 }

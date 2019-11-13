@@ -84,13 +84,6 @@ const ResponsiveGrid = (props: IResponsiveGridSystem) => {
       }}
       areas={areas[size]}
     >
-      <div style={{ gridArea: 'header' }} id={topbarSlotId} />
-      <div style={{ gridArea: sidebarProps.gridArea, ...sidebarProps.style }} id={sidebarSlotId} />
-      <div
-        style={{ gridArea: 'plugin', overflowX: 'hidden', overflowY: 'auto' }}
-        id={pluginSlotId}
-      />
-
       <Box gridArea="header" id={topbarSlotId} />
       <Box {...sidebarProps} id={sidebarSlotId} />
       <Box
