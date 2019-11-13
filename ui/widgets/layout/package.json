@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@types/react": "16.9.11",
-    "@types/react-dom": "16.9.3",
+    "@types/react-dom": "16.9.4",
     "@types/single-spa-react": "^2.8.3",
     "@types/styled-components": "^4.1.20"
   },

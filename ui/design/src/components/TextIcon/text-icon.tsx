@@ -5,6 +5,7 @@ import { IconType } from '../Icon/icon';
 import { StyledText, StyledTextIcon } from './styled-text-icon';
 
 export interface ITextIconProps {
+  className?: string;
   onClick?: React.EventHandler<React.SyntheticEvent>;
   margin?: MarginInterface;
   backgroundColor?: string;
@@ -15,6 +16,8 @@ export interface ITextIconProps {
   bold?: boolean;
   clickable?: boolean;
   actionType?: IActionType;
+  menuActive?: boolean;
+  menuIcon?: boolean;
 }
 
 export type IActionType = 'Assign Tokens' | 'Create a new vote' | 'Check finance';
@@ -35,6 +38,7 @@ const actionTypeIcons: {
 
 const TextIcon: React.FC<ITextIconProps> = props => {
   const {
+    className,
     onClick,
     margin,
     backgroundColor,
@@ -45,25 +49,9 @@ const TextIcon: React.FC<ITextIconProps> = props => {
     bold,
     clickable,
     actionType,
+    menuActive,
+    menuIcon,
   } = props;
-
-  if (actionType) {
-    return (
-      <StyledTextIcon
-        onClick={onClick}
-        margin={margin}
-        backgroundColor={backgroundColor}
-        color={color}
-        label={actionType}
-        iconType={iconType}
-        spacing={spacing}
-        clickable={clickable}
-      >
-        <Icon type={actionTypeIcons[actionType]} color={color} />
-        <StyledText bold={bold}>{actionType}</StyledText>
-      </StyledTextIcon>
-    );
-  }
 
   return (
     <StyledTextIcon
@@ -75,8 +63,16 @@ const TextIcon: React.FC<ITextIconProps> = props => {
       iconType={iconType}
       spacing={spacing}
       clickable={clickable}
+      className={className}
+      menuActive={menuActive}
+      menuIcon={menuIcon}
     >
-      <Icon type={iconType} color={color} />
+      {actionType ? (
+        <Icon type={actionTypeIcons[actionType]} color={color} />
+      ) : (
+        <Icon type={iconType} color={color} />
+      )}
+
       <StyledText bold={bold}>{label}</StyledText>
     </StyledTextIcon>
   );

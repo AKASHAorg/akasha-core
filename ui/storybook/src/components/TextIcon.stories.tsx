@@ -1,10 +1,10 @@
 /* eslint-disable import/first */
+import { Box, TextIcon } from '@akashaproject/design-system';
+import { IconType } from '@akashaproject/design-system/lib/components/Icon/icon';
 import { action } from '@storybook/addon-actions';
 import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
-import { Box, TextIcon } from '@akashaproject/design-system';
 import * as React from 'react';
-import { IconType } from '@akashaproject/design-system/lib/components/Icon/icon';
 
 const iconTypeOptions: { Home: IconType; HotTopics: IconType; Media: IconType } = {
   Home: 'home',
@@ -25,6 +25,8 @@ storiesOf('TextIcon', module).add('default', () => (
       spacing={text('Spacing', '10px')}
       margin={object('Margin', { margin: '0px' })}
       clickable={boolean('Clickable', false)}
+      menuActive={boolean('Menu Active', false)}
+      menuIcon={boolean('Menu Icon', false)}
     />
   </Box>
 ));

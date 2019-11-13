@@ -1,8 +1,17 @@
 import { Box } from 'grommet';
 import * as React from 'react';
+import styled from 'styled-components';
 
-const BasicCardBox = ({ children }: any) => (
-  <Box
+const StyledBox = styled(Box)`
+  background-color: ${props => props.theme.colors.background};
+`;
+
+interface IBasicCardBox {
+  className?: string;
+}
+
+const BasicCardBox: React.FC<IBasicCardBox> = ({ children, className }) => (
+  <StyledBox
     direction="column"
     elevation="shadow"
     fill={true}
@@ -14,9 +23,10 @@ const BasicCardBox = ({ children }: any) => (
       style: 'solid',
       side: 'all',
     }}
+    className={className}
   >
     {children}
-  </Box>
+  </StyledBox>
 );
 
 export default BasicCardBox;
