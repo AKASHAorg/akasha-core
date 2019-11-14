@@ -14,18 +14,15 @@
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
     "@types/styled-components": "^4.1.20",
-    "jest": "24.9.0",
-    "react-scripts": "^3.2.0"
+    "jest": "24.9.0"
   },
   "peerDependencies": {
     "react": "16.11.0",
     "react-dom": "16.11.0"
   },
   "scripts": {
-    "start": "NODE_OPTIONS='--max-old-space-size=4096' react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "webpack-dev-server --config ./webpack.config.js --port 8131",
+    "prepare": "tsc --build"
   },
   "browserslist": [
     ">0.2%",

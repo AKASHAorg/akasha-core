@@ -2,12 +2,15 @@ const webpack = require('webpack');
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { name } = require('./lib/index');
 
 module.exports = {
   entry: './lib/index.js',
   output: {
     libraryTarget: 'system',
+    library: name,
     path: path.resolve(__dirname, 'dist'),
+    filename: 'feed.js',
   },
   mode: 'production',
   module: {
