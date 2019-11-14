@@ -164,6 +164,12 @@ storiesOf('Cards', module)
       <ProfileCard
         onClickApps={() => action('Apps Box Clicked')('Synthetic Event')}
         onClickFollowing={() => action('Following Box Clicked')('Synthetic Event')}
+        onChangeUserInfoTitle={(newUserInfoTitle: string) =>
+          action('User Info Title Changed')(newUserInfoTitle)
+        }
+        onChangeDescription={(newDescription: string) =>
+          action('Description Changed')(newDescription)
+        }
         margin={object('Margin', { margin: '0px' })}
         // @ts-ignore
         profileData={select('Profile Data', { dapp: dappData, user: profileData }, profileData)}

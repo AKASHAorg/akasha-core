@@ -1,4 +1,4 @@
-import { Box, Image, Text } from 'grommet';
+import { Box, Image, Text, TextArea, TextInput } from 'grommet';
 import * as React from 'react';
 import MarginInterface from '../../interfaces/margin.interface';
 import { Icon } from '../Icon';
@@ -33,6 +33,8 @@ export interface IProfileCardProps {
   className?: string;
   onClickApps: React.EventHandler<React.SyntheticEvent>;
   onClickFollowing: React.EventHandler<React.SyntheticEvent>;
+  onChangeUserInfoTitle: (newUserInfoTitle: string) => void;
+  onChangeDescription: (newDescription: string) => void;
   margin?: MarginInterface;
   profileData: IProfileData;
   userInfoTitle: string;
@@ -49,6 +51,8 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     className,
     onClickFollowing,
     onClickApps,
+    onChangeUserInfoTitle,
+    onChangeDescription,
     profileData,
     userInfoTitle,
     actionsTitle,
@@ -63,6 +67,30 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const rightTitle = profileData.apps ? profileData.apps : profileData.actions;
   const leftSubtitle = profileData.profileType === 'dapp' ? usersTitle : followingTitle;
   const rightSubtitle = profileData.profileType === 'dapp' ? actionsTitle : appsTitle;
+
+  const [editUserInfoTitle, setEditUserInfoTitle] = React.useState(false);
+  const [newUserInfoTitle, setNewUserInfoTitle] = React.useState(userInfoTitle);
+
+  const handleUserInfoTitleClick = () => setEditUserInfoTitle(true);
+  const handleUserInfoTitleBlur = () => {
+    setEditUserInfoTitle(false);
+    onChangeUserInfoTitle(newUserInfoTitle);
+  };
+  const handleUserInfoTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewUserInfoTitle(e.target.value);
+  };
+
+  const [editDescription, setEditDescription] = React.useState(false);
+  const [newDescription, setNewDescription] = React.useState(profileData.description);
+
+  const handleDescriptionClick = () => setEditDescription(true);
+  const handleDescriptionBlur = () => {
+    setEditDescription(false);
+    onChangeDescription(newDescription);
+  };
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewDescription(e.target.value);
+  };
 
   return (
     <BasicCardBox className={className}>
@@ -149,9 +177,31 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
       )}
       <Box direction="column" pad="medium" gap="medium">
         <Text size="large" weight="bold" color="primaryText">
-          {userInfoTitle}
+          {!editUserInfoTitle && (
+            <Text color="primaryText" onClick={handleUserInfoTitleClick}>
+              {newUserInfoTitle}
+            </Text>
+          )}
+          {editUserInfoTitle && (
+            <TextInput
+              plain={true}
+              onBlur={handleUserInfoTitleBlur}
+              onChange={handleUserInfoTitleChange}
+              value={newUserInfoTitle}
+            />
+          )}
         </Text>
-        <Text color="primaryText">{profileData.description}</Text>
+
+        {!editDescription && (
+          <Text color="primaryText" onClick={handleDescriptionClick}>
+            {newDescription}
+          </Text>
+        )}
+        {editDescription && (
+          <TextArea plain={true} onBlur={handleDescriptionBlur} onChange={handleDescriptionChange}>
+            {newDescription}
+          </TextArea>
+        )}
       </Box>
     </BasicCardBox>
   );
