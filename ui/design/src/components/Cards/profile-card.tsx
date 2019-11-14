@@ -30,6 +30,7 @@ export interface IProfileData {
 }
 
 export interface IProfileCardProps {
+  className?: string;
   onClickApps: React.EventHandler<React.SyntheticEvent>;
   onClickFollowing: React.EventHandler<React.SyntheticEvent>;
   margin?: MarginInterface;
@@ -45,6 +46,7 @@ export interface IProfileCardProps {
 
 const ProfileCard: React.FC<IProfileCardProps> = props => {
   const {
+    className,
     onClickFollowing,
     onClickApps,
     profileData,
@@ -63,7 +65,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const rightSubtitle = profileData.profileType === 'dapp' ? actionsTitle : appsTitle;
 
   return (
-    <BasicCardBox>
+    <BasicCardBox className={className}>
       <Box
         height="144px"
         background={profileData.coverImage}

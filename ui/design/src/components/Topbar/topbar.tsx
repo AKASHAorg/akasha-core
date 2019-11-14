@@ -1,18 +1,21 @@
 import { Box } from 'grommet';
 import * as React from 'react';
 import styled from 'styled-components';
-import { Icon, IconLink } from '../../index';
+import { Icon } from '../../index';
 import { ProfileAvatarButton } from '../IconButton';
 import { NotificationsPopover } from '../Popovers/index';
 
 const AvatarButton = styled(ProfileAvatarButton)`
-  background-color: ${props => props.theme.colors.lightBackground};
+  background-color: ${props => props.theme.colors.background};
+  border: 1px solid ${props => props.theme.colors.border}
   border-radius: 20px;
   padding: ${props => `${props.theme.shapes.baseSpacing * 2}px`};
   height: 40px;
+  box-shadow: ${props => props.theme.colors.shadow}
 `;
 
 interface ITopbarProps {
+  className?: string;
   avatarImage: string;
   userName: string;
   brandLabel: string | React.ReactElement;
@@ -27,6 +30,7 @@ const Topbar = (props: ITopbarProps) => {
   const {
     avatarImage,
     brandLabel,
+    className,
     userName,
     unreadNotifications,
     notificationsData,
@@ -35,16 +39,37 @@ const Topbar = (props: ITopbarProps) => {
   } = props;
   const notificationIconRef: React.Ref<any> = React.useRef();
   const walletIconRef: React.Ref<any> = React.useRef();
+
   const [notificationsOpen, setNotificationsOpen] = React.useState(false);
   const [walletOpen, setWalletOpen] = React.useState(false);
+
   const handleNavigation = (path: string) => (ev: React.SyntheticEvent) => {
     if (onNavigation) {
       onNavigation(path);
     }
   };
 
+  const handleNotifClick = () => {
+    setNotificationsOpen(!notificationsOpen);
+  };
+
+  const handleWalletClick = () => {
+    setWalletOpen(!walletOpen);
+  };
+
+  const closePopover = () => {
+    setNotificationsOpen(false);
+  };
+
   return (
-    <Box direction="row" pad="small" justify="between" align="center" fill={true}>
+    <Box
+      direction="row"
+      pad="small"
+      justify="between"
+      align="center"
+      fill={true}
+      className={className}
+    >
       <Box direction="row">{brandLabel}</Box>
       <Box direction="row">
         <Box
@@ -53,12 +78,7 @@ const Topbar = (props: ITopbarProps) => {
           justify="center"
           margin={{ horizontal: 'xsmall' }}
         >
-          <Icon
-            type="notifications"
-            onClick={() => setNotificationsOpen(!notificationsOpen)}
-            clickable={true}
-            default={true}
-          />
+          <Icon type="notifications" onClick={handleNotifClick} clickable={true} default={true} />
         </Box>
 
         {notificationIconRef.current && notificationsOpen && notificationsData && (
@@ -66,11 +86,11 @@ const Topbar = (props: ITopbarProps) => {
             target={notificationIconRef.current}
             dataSource={notificationsData}
             onClickNotification={onNotificationClick}
-            closePopover={() => setNotificationsOpen(false)}
+            closePopover={closePopover}
           />
         )}
         <Box ref={walletIconRef} align="center" justify="center" margin="xsmall">
-          <Icon type="wallet" onClick={() => setWalletOpen(!walletOpen)} clickable={true} />
+          <Icon type="wallet" onClick={handleWalletClick} clickable={true} />
         </Box>
 
         <Box pad={{ left: 'xsmall' }}>
