@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: './lib/index.js',
   output: {
-    libraryTarget: 'umd',
+    libraryTarget: 'system',
     path: path.resolve(__dirname, 'dist'),
   },
   mode: 'production',

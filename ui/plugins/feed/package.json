@@ -22,7 +22,9 @@
     "test": "jest",
     "tsc": "tsc",
     "extract:translations": "npx i18next src/components/**/*.tsx -r -c ./i18next-parser.config.js",
-    "prepare": "npm run tsc"
+    "prepare": "npm run tsc",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",
