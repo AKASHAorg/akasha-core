@@ -9,6 +9,7 @@ import { BasicCardBox } from './index';
 import { AvatarDiv, ShareButtonContainer } from './styled-profile-card';
 
 export interface IProfileData {
+  userInfoTitle?: string;
   avatar?: string;
   coverImage?: string;
   userName?: string;
@@ -33,17 +34,16 @@ export interface IProfileCardProps {
   className?: string;
   onClickApps: React.EventHandler<React.SyntheticEvent>;
   onClickFollowing: React.EventHandler<React.SyntheticEvent>;
-  onChangeUserInfoTitle: (newUserInfoTitle: string) => void;
-  onChangeDescription: (newDescription: string) => void;
+  onChangeProfileData: (newProfileData: IProfileData) => void;
   margin?: MarginInterface;
   profileData: IProfileData;
-  userInfoTitle: string;
   actionsTitle: string;
   followingTitle: string;
   appsTitle: string;
   usersTitle: string;
   mostPopularActionsTitle: string;
   shareProfileText: string;
+  editable: boolean;
 }
 
 const ProfileCard: React.FC<IProfileCardProps> = props => {
@@ -51,16 +51,15 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     className,
     onClickFollowing,
     onClickApps,
-    onChangeUserInfoTitle,
-    onChangeDescription,
+    onChangeProfileData,
     profileData,
-    userInfoTitle,
     actionsTitle,
     followingTitle,
     usersTitle,
     mostPopularActionsTitle,
     shareProfileText,
     appsTitle,
+    editable,
   } = props;
 
   const leftTitle = profileData.following ? profileData.following : profileData.users;
@@ -69,12 +68,17 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const rightSubtitle = profileData.profileType === 'dapp' ? actionsTitle : appsTitle;
 
   const [editUserInfoTitle, setEditUserInfoTitle] = React.useState(false);
-  const [newUserInfoTitle, setNewUserInfoTitle] = React.useState(userInfoTitle);
+  const [newUserInfoTitle, setNewUserInfoTitle] = React.useState(profileData.userInfoTitle);
 
-  const handleUserInfoTitleClick = () => setEditUserInfoTitle(true);
+  const handleUserInfoTitleClick = () => editable && setEditUserInfoTitle(true);
   const handleUserInfoTitleBlur = () => {
-    setEditUserInfoTitle(false);
-    onChangeUserInfoTitle(newUserInfoTitle);
+    if (editable) {
+      setEditUserInfoTitle(false);
+      onChangeProfileData({
+        ...profileData,
+        userInfoTitle: newUserInfoTitle,
+      });
+    }
   };
   const handleUserInfoTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewUserInfoTitle(e.target.value);
@@ -83,10 +87,15 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const [editDescription, setEditDescription] = React.useState(false);
   const [newDescription, setNewDescription] = React.useState(profileData.description);
 
-  const handleDescriptionClick = () => setEditDescription(true);
+  const handleDescriptionClick = () => editable && setEditDescription(true);
   const handleDescriptionBlur = () => {
-    setEditDescription(false);
-    onChangeDescription(newDescription);
+    if (editable) {
+      setEditDescription(false);
+      onChangeProfileData({
+        ...profileData,
+        description: newDescription,
+      });
+    }
   };
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewDescription(e.target.value);

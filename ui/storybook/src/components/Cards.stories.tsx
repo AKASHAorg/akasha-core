@@ -11,6 +11,7 @@ import { action } from '@storybook/addon-actions';
 import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
+import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-card';
 
 const topicsDataSource = [
   { title: '#ethereumworld', subtitle: '6576 mentions' },
@@ -36,6 +37,7 @@ const profileData = {
   following: '1876',
   apps: '12',
   profileType: 'user',
+  userInfoTitle: 'About',
 };
 const dappData = {
   ethAddress: '0x0000000000000000000000000000000000000000',
@@ -49,6 +51,7 @@ const dappData = {
   actions: '12',
   profileType: 'dapp',
   mostPopularActions: ['Assign Tokens', 'Create a new vote', 'Check finance'],
+  userInfoTitle: 'About',
 };
 const entryData = {
   name: 'AKASHA WORLD',
@@ -116,7 +119,6 @@ const entryData = {
 };
 const followingTitle = 'Following';
 const appsTitle = 'Apps';
-const aboutMeTitle = 'About';
 const actionsTitle = 'Actions';
 const mostPopularActionsTitle = 'Most Popular Actions';
 const usersTitle = 'Users';
@@ -164,22 +166,19 @@ storiesOf('Cards', module)
       <ProfileCard
         onClickApps={() => action('Apps Box Clicked')('Synthetic Event')}
         onClickFollowing={() => action('Following Box Clicked')('Synthetic Event')}
-        onChangeUserInfoTitle={(newUserInfoTitle: string) =>
-          action('User Info Title Changed')(newUserInfoTitle)
-        }
-        onChangeDescription={(newDescription: string) =>
-          action('Description Changed')(newDescription)
+        onChangeProfileData={(newProfileData: IProfileData) =>
+          action('ProfileData Changed')(newProfileData)
         }
         margin={object('Margin', { margin: '0px' })}
         // @ts-ignore
         profileData={select('Profile Data', { dapp: dappData, user: profileData }, profileData)}
-        userInfoTitle={text('About me', aboutMeTitle)}
         actionsTitle={text('Actions', actionsTitle)}
         mostPopularActionsTitle={text('Most popular actions', mostPopularActionsTitle)}
         followingTitle={text('Following', followingTitle)}
         appsTitle={text('Apps', appsTitle)}
         usersTitle={text('Users', usersTitle)}
         shareProfileText={text('Share Profile', shareProfileTitle)}
+        editable={boolean('Editable', true)}
       />
     </Box>
   ))
