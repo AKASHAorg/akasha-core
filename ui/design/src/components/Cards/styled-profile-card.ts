@@ -24,4 +24,8 @@ const StyledActionText = styled(Text)`
   }
 `;
 
-export { AvatarDiv, ShareButtonContainer, StyledActionText };
+const StyledImageInput = styled.input`
+  display: none;
+`;
+
+export { AvatarDiv, ShareButtonContainer, StyledActionText, StyledImageInput };

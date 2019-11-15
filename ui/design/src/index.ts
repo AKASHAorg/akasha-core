@@ -1,5 +1,5 @@
 /* Components */
-import { Avatar } from './components/Avatar/index';
+import { Avatar, EditableAvatar } from './components/Avatar/index';
 import {
   AppsWidgetCard,
   BasicCardBox,
@@ -32,6 +32,7 @@ import styled, { css } from 'styled-components';
 
 export {
   Avatar,
+  EditableAvatar,
   AppsWidgetCard,
   TopicsWidgetCard,
   ProfileCard,

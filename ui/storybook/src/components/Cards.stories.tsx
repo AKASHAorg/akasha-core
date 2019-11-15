@@ -37,7 +37,6 @@ const profileData = {
   following: '1876',
   apps: '12',
   profileType: 'user',
-  userInfoTitle: 'About',
 };
 const dappData = {
   ethAddress: '0x0000000000000000000000000000000000000000',
@@ -51,7 +50,6 @@ const dappData = {
   actions: '12',
   profileType: 'dapp',
   mostPopularActions: ['Assign Tokens', 'Create a new vote', 'Check finance'],
-  userInfoTitle: 'About',
 };
 const entryData = {
   name: 'AKASHA WORLD',
@@ -119,6 +117,7 @@ const entryData = {
 };
 const followingTitle = 'Following';
 const appsTitle = 'Apps';
+const aboutMeTitle = 'About';
 const actionsTitle = 'Actions';
 const mostPopularActionsTitle = 'Most Popular Actions';
 const usersTitle = 'Users';
@@ -172,6 +171,7 @@ storiesOf('Cards', module)
         margin={object('Margin', { margin: '0px' })}
         // @ts-ignore
         profileData={select('Profile Data', { dapp: dappData, user: profileData }, profileData)}
+        userInfoTitle={text('About me', aboutMeTitle)}
         actionsTitle={text('Actions', actionsTitle)}
         mostPopularActionsTitle={text('Most popular actions', mostPopularActionsTitle)}
         followingTitle={text('Following', followingTitle)}
