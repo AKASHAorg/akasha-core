@@ -11,7 +11,7 @@
     "@akashaproject/ui-widget-layout": "*",
     "@akashaproject/ui-widget-topbar": "*",
     "@akashaproject/design-system": "*",
-    "@types/node": "12.12.6",
+    "@types/node": "12.12.8",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
     "@types/styled-components": "^4.1.20",
