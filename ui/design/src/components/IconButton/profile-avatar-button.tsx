@@ -2,6 +2,7 @@ import { Box } from 'grommet';
 import * as React from 'react';
 import { capitalize } from '../../utils/string-utils';
 import { Avatar } from '../Avatar/index';
+import { AvatarSize } from '../Avatar/styled-avatar';
 import StyledIconLink from './styled-icon-link';
 import { ButtonInfo, ButtonTextWrapper } from './styled-profile-avatar-button';
 
@@ -9,28 +10,31 @@ interface ProfileAvatarButtonProps {
   info?: string | React.ReactElement;
   avatarImage: string;
   label: string;
-  size?: 'xs' | 'sm' | 'md' | 'lg';
+  size?: AvatarSize;
   className?: string;
   onAvatarClick?: React.EventHandler<React.SyntheticEvent>;
   onClick: React.EventHandler<React.SyntheticEvent>;
+  guest?: boolean;
+  seed?: string;
 }
 
 const ProfileAvatarButton = (props: ProfileAvatarButtonProps) => {
+  const { className, size, avatarImage, label, info, onClick, onAvatarClick, guest, seed } = props;
   return (
-    <Box className={props.className} direction="row" align="center">
+    <Box className={className} direction="row" align="center">
       <Box>
-        <Avatar size={props.size} src={props.avatarImage} onClick={props.onAvatarClick} />
+        <Avatar size={size} src={avatarImage} onClick={onAvatarClick} guest={guest} seed={seed} />
       </Box>
       <ButtonTextWrapper>
-        <StyledIconLink label={capitalize(props.label)} onClick={props.onClick} />
-        <ButtonInfo>{props.info}</ButtonInfo>
+        <StyledIconLink label={capitalize(label)} onClick={onClick} />
+        <ButtonInfo>{info}</ButtonInfo>
       </ButtonTextWrapper>
     </Box>
   );
 };
 
 const defaultProps = {
-  size: 'sm',
+  size: 'md',
 };
 ProfileAvatarButton.defaultProps = defaultProps;
 

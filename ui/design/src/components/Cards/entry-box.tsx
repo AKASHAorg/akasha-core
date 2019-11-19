@@ -1,15 +1,22 @@
-import { Box, Layer, Text } from 'grommet';
+import { Box, Text, TextArea } from 'grommet';
 import * as React from 'react';
+import useSimpleClickAway from '../../utils/simpleClickAway';
 import { formatDate, ILocale } from '../../utils/time';
+import { Avatar } from '../Avatar/index';
 import { Icon } from '../Icon/index';
 import { IconLink, ProfileAvatarButton, VoteIconButton } from '../IconButton/index';
-import { CommentInput } from '../Input/index';
-import { TextIcon } from '../TextIcon';
-import { StyledDrop, StyledLayerElemDiv, StyledSelectBox } from './styled-entry-box';
+import { CommentInput, StyledDiv } from '../Input/index';
+import { ListModal } from '../Modals/index';
+import { TextIcon } from '../TextIcon/index';
+import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 
-export interface IEntryData {
-  name: string;
-  avatar: string;
+interface IUser {
+  name?: string;
+  avatar?: string;
+  ethAddress: string;
+}
+
+export interface IEntryData extends IUser {
   content: string;
   time: string;
   upvotes: string | number;
@@ -18,19 +25,15 @@ export interface IEntryData {
   quotes?: Quote[];
 }
 
-interface Comment {
-  name: string;
-  time: string;
-  avatar: string;
+interface Comment extends IUser {
   content: string;
+  time: string;
   upvotes: string | number;
   downvotes: string | number;
 }
 
-interface Quote {
-  name: string;
+interface Quote extends IUser {
   time: string;
-  avatar: string;
 }
 
 interface IEntryBoxProps {
@@ -52,6 +55,7 @@ interface IEntryBoxProps {
   commentInputPublishTitle?: any;
   publishComment?: any;
   loggedProfileAvatar?: string;
+  loggedProfileEthAddress?: string;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -74,6 +78,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     commentInputPublishTitle,
     publishComment,
     loggedProfileAvatar,
+    loggedProfileEthAddress,
   } = props;
 
   const [downvoted, setDownvoted] = React.useState(false);
@@ -132,29 +137,14 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const renderQuotesModal = () => {
     return (
-      <Layer onEsc={closeQuotesModal} onClickOutside={closeQuotesModal} modal={true}>
-        <Box pad="none" width="579px" height="386px">
-          <Box pad="medium" justify="between" direction="row" align="center">
-            <TextIcon iconType="quoteDark" label={quotedByTitle} margin={{ right: '40px' }} />
-            <Text size="large" color="secondaryText">
-              {quotesLabel}
-            </Text>
-          </Box>
-          <Box pad={{ horizontal: 'medium' }} overflow="scroll">
-            {entryData.quotes &&
-              entryData.quotes.map((quote, index) => (
-                <StyledLayerElemDiv key={index}>
-                  <ProfileAvatarButton
-                    info={formatDate(quote.time, locale)}
-                    label={quote.name}
-                    avatarImage={quote.avatar}
-                    onClick={onClickAvatar}
-                  />
-                </StyledLayerElemDiv>
-              ))}
-          </Box>
-        </Box>
-      </Layer>
+      <ListModal
+        closeModal={closeQuotesModal}
+        label={quotedByTitle}
+        secondaryLabel={quotesTitle}
+        list={entryData.quotes}
+        onClickAvatar={onClickAvatar}
+        locale={locale}
+      />
     );
   };
   const onClickEditPost = () => {};
@@ -210,7 +200,74 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const pad: any = comment ? { top: 'medium' } : 'none';
 
-  const replyToComment = () => {};
+  const [replyCommentOpen, setReplyCommentOpen] = React.useState(false);
+  const [inputValue, setInputValue] = React.useState('');
+
+  const wrapperRef: React.RefObject<any> = React.useRef();
+
+  const handleClickAway = () => {
+    if (!inputValue && replyCommentOpen) {
+      setReplyCommentOpen(false);
+    }
+  };
+
+  useSimpleClickAway(wrapperRef, handleClickAway);
+
+  const onChange = (event: any) => {
+    setInputValue(event.target.value);
+  };
+
+  const handlePublish = () => {
+    publishComment(inputValue, loggedProfileEthAddress);
+    setInputValue('');
+    setReplyCommentOpen(false);
+  };
+
+  const replyToComment = () => {
+    setReplyCommentOpen(true);
+  };
+
+  const renderReplyComment = () => (
+    <Box direction="row" gap="xsmall" fill="horizontal" pad={{ horizontal: 'medium' }}>
+      <Avatar src={loggedProfileAvatar} size="md" seed={loggedProfileEthAddress} />
+      <Box
+        ref={wrapperRef}
+        fill="horizontal"
+        direction="column"
+        align="center"
+        round="small"
+        border={{
+          side: 'all',
+          color: 'border',
+        }}
+      >
+        <TextArea
+          plain={true}
+          value={inputValue}
+          onChange={onChange}
+          placeholder={commentInputPlaceholderTitle}
+          resize={false}
+          autoFocus={true}
+        />
+        <Box
+          direction="row"
+          justify="between"
+          fill="horizontal"
+          pad={{ horizontal: 'xsmall', vertical: 'xsmall' }}
+        >
+          <Box direction="row" gap="xsmall" align="center">
+            <Icon type="addAppDark" clickable={true} />
+            <Icon type="quoteDark" clickable={true} />
+            <Icon type="media" clickable={true} />
+            <Icon type="emoji" clickable={true} />
+          </Box>
+          <StyledDiv onClick={handlePublish}>
+            <Text size="large">{commentInputPublishTitle}</Text>
+          </StyledDiv>
+        </Box>
+      </Box>
+    </Box>
+  );
 
   const renderLeftIconLink = () => {
     return comment ? (
@@ -231,6 +288,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           info={formatDate(entryData.time, locale)}
           avatarImage={entryData.avatar}
           onClick={onClickAvatar}
+          seed={entryData.ethAddress}
         />
         <div ref={menuIconRef}>
           <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} />
@@ -259,10 +317,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           <IconLink icon={<Icon type="share" />} label={shareTitle} onClick={() => {}} />
         </Box>
       </Box>
+      {comment && replyCommentOpen && renderReplyComment()}
       {!comment && (
         <Box pad="medium">
           <CommentInput
             avatarImg={loggedProfileAvatar}
+            ethAddress={loggedProfileEthAddress}
             placeholderTitle={commentInputPlaceholderTitle}
             publishTitle={commentInputPublishTitle}
             onPublish={publishComment}
