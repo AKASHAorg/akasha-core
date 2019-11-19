@@ -52,4 +52,8 @@ const StyledAvatar = styled.div<AvatarProps>`
   }
 `;
 
+export const StyleFileInput = styled.input`
+  display: none;
+`;
+
 export default StyledAvatar;
