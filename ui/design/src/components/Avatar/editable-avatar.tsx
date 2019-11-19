@@ -1,16 +1,16 @@
 import * as React from 'react';
-
 import Avatar, { AvatarProps } from './avatar';
 import { AvatarSize, StyleFileInput } from './styled-avatar';
 
 export interface EditableAvatarProps extends Omit<AvatarProps, 'onClick'> {
-  name?: string;
   onChange: (newSrc: string) => void;
 }
 
 const EditableAvatar: React.FC<EditableAvatarProps & Partial<typeof defaultProps>> = props => {
-  const { src, name, onChange } = props;
+  const { src, onChange } = props;
   const inputRef: React.MutableRefObject<HTMLInputElement> = React.useRef();
+
+  const [avatarImg, setNewAvatarImg] = React.useState(src);
 
   const clickHandler: React.EventHandler<React.SyntheticEvent<HTMLDivElement, MouseEvent>> = e => {
     if (inputRef.current) {
@@ -28,7 +28,9 @@ const EditableAvatar: React.FC<EditableAvatarProps & Partial<typeof defaultProps
     const file = e.target.files[0];
     const fileReader = new FileReader();
     fileReader.addEventListener('load', () => {
-      onChange(fileReader.result as string);
+      const result = fileReader.result as string;
+      setNewAvatarImg(result);
+      onChange(result);
     });
 
     fileReader.readAsDataURL(file);
@@ -36,8 +38,8 @@ const EditableAvatar: React.FC<EditableAvatarProps & Partial<typeof defaultProps
 
   return (
     <>
-      <Avatar {...props} onClick={clickHandler} />
-      <StyleFileInput type="file" ref={inputRef} onChange={changeHandler} name={name} value={src} />
+      <Avatar {...props} onClick={clickHandler} src={avatarImg} />
+      <StyleFileInput type="file" ref={inputRef} onChange={changeHandler} />
     </>
   );
 };

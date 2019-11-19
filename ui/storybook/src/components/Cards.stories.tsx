@@ -2,8 +2,10 @@
 import {
   AppsWidgetCard,
   Box,
+  EditorCard,
   EntryCard,
   ProfileCard,
+  ProfileWidgetCard,
   TopicsWidgetCard,
 } from '@akashaproject/design-system';
 import { IAppData } from '@akashaproject/design-system/lib/components/Cards/apps-widget-card';
@@ -26,8 +28,8 @@ const appsDataSource: IAppData[] = [
 ];
 
 const profileData = {
-  ethAddress: '0x0000000000000000000000000000000000000000',
-  avatar: 'http://placebeard.it/640/480',
+  ethAddress: '0x003410490050000320006570034567114572000',
+  avatar: 'http://placebeard.it/480/480',
   coverImage: 'goldenrod',
   name: 'Gilbert The Bearded',
   userName: '@gilbert',
@@ -39,7 +41,7 @@ const profileData = {
   profileType: 'user',
 };
 const dappData = {
-  ethAddress: '0x0000000000000000000000000000000000000000',
+  ethAddress: '0x003410490050000320006570047391024572000',
   avatarImage: '',
   coverImage: '#CAF2F9;',
   name: 'Aragon',
@@ -52,8 +54,9 @@ const dappData = {
   mostPopularActions: ['Assign Tokens', 'Create a new vote', 'Check finance'],
 };
 const entryData = {
+  ethAddress: '0x003410490059837320006570047391024572000',
   name: 'AKASHA WORLD',
-  avatar: 'http://placebeard.it/640/480',
+  avatar: 'http://placebeard.it/480/480',
   content:
     'We’re back in action, energized after an epic retreat in #verbier 🇨🇭 🤜💥🤛Here’s to everyone keeping us in their minds and hearts 🥂You’ve been in our hearts and minds as well! 🤗Looking forward to sharing our insights and plans in the coming days! 🚀#AKASHAReloaded #AKASHAFoundation',
   time: '1572036522',
@@ -61,16 +64,18 @@ const entryData = {
   downvotes: 9,
   comments: [
     {
+      ethAddress: '0x003410490050000320006570047391024572000',
       name: 'Mariana Gomes',
-      avatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/480/480',
       content: 'Great Job!',
       upvotes: 3,
       downvotes: 0,
       time: '1572036522',
     },
     {
+      ethAddress: '0x003410490050000320006570047391024572000',
       name: 'Gigi Patratel',
-      avatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/480/480',
       content: 'Amazing!',
       upvotes: 2,
       downvotes: 1,
@@ -79,39 +84,46 @@ const entryData = {
   ],
   quotes: [
     {
+      ethAddress: '0x003410490050000320006570047391024572000',
       name: 'Gigi Patratel',
       time: '1572036522',
-      avatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/480/480',
     },
     {
+      ethAddress: '0x003410490050000320006570047391024572000',
       name: 'Gigi Patratel',
       time: '1572036522',
-      avatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/480/480',
     },
     {
+      ethAddress: '0x003410490050000320006570047391024572000',
       name: 'Gigi Patratel',
       time: '1572036522',
-      avatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/480/480',
     },
     {
+      ethAddress: '0x003410490050000320006570047391024572000',
       name: 'Gigi Patratel',
       time: '1572036522',
-      avatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/480/480',
     },
     {
+      ethAddress: '0x003410490050000320006570047391024572000',
       name: 'Gigi Patratel',
       time: '1572036522',
-      avatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/480/480',
     },
     {
+      ethAddress: '0x003410490050000320006570047391024572000',
       name: 'Gigi Patratel',
       time: '1572036522',
-      avatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/480/480',
     },
     {
+      ethAddress: '0x003410490050000320006570047391024572000',
       name: 'Gigi Patratel',
       time: '1572036522',
-      avatar: 'http://placebeard.it/640/480',
+      avatar: 'http://placebeard.it/480/480',
     },
   ],
 };
@@ -131,7 +143,8 @@ const quotedByTitle = 'Quoted By';
 const replyTitle = 'Reply';
 const shareProfileTitle = 'Share Profile';
 const commentInputPlaceholderTitle = 'Write a comment';
-const commentInputPublishTitle = 'Publish';
+const publishTitle = 'Publish';
+const placeholderTitle = 'Share your thoughts';
 
 storiesOf('Cards', module)
   .add('topics widget card', () => (
@@ -160,6 +173,22 @@ storiesOf('Cards', module)
       />
     </Box>
   ))
+  .add('editor card', () => (
+    <Box align="center" pad={{ top: '40px' }}>
+      <Box pad="none" align="center" width="581px">
+        <EditorCard
+          avatar={text('Logged Profile Avatar', 'https://www.stevensegallery.com/360/360')}
+          ethAddress={text(
+            'Logged Profile EthAddress',
+            '0x003410499401674320006570047391024572000',
+          )}
+          publishTitle={text('Publish Title', publishTitle)}
+          placeholderTitle={text('PlaceholderTitle', placeholderTitle)}
+          onPublish={action('Publish clicked')}
+        />
+      </Box>
+    </Box>
+  ))
   .add('profile card', () => (
     <Box pad="none" align="center" width="581px">
       <ProfileCard
@@ -171,14 +200,31 @@ storiesOf('Cards', module)
         margin={object('Margin', { margin: '0px' })}
         // @ts-ignore
         profileData={select('Profile Data', { dapp: dappData, user: profileData }, profileData)}
-        userInfoTitle={text('About me', aboutMeTitle)}
+        descriptionTitle={text('About me', aboutMeTitle)}
         actionsTitle={text('Actions', actionsTitle)}
         mostPopularActionsTitle={text('Most popular actions', mostPopularActionsTitle)}
         followingTitle={text('Following', followingTitle)}
         appsTitle={text('Apps', appsTitle)}
         usersTitle={text('Users', usersTitle)}
         shareProfileText={text('Share Profile', shareProfileTitle)}
-        editable={boolean('Editable', true)}
+      />
+    </Box>
+  ))
+  .add('profile widget card', () => (
+    <Box pad="none" align="center" width="336px">
+      <ProfileWidgetCard
+        onClickApps={() => action('Apps Box Clicked')('Synthetic Event')}
+        onClickFollowing={() => action('Following Box Clicked')('Synthetic Event')}
+        margin={object('Margin', { margin: '0px' })}
+        // @ts-ignore
+        profileData={select('Profile Data', { dapp: dappData, user: profileData }, profileData)}
+        descriptionTitle={text('About me', aboutMeTitle)}
+        actionsTitle={text('Actions', actionsTitle)}
+        mostPopularActionsTitle={text('Most popular actions', mostPopularActionsTitle)}
+        followingTitle={text('Following', followingTitle)}
+        appsTitle={text('Apps', appsTitle)}
+        usersTitle={text('Users', usersTitle)}
+        shareProfileText={text('Share Profile', shareProfileTitle)}
       />
     </Box>
   ))
@@ -203,9 +249,16 @@ storiesOf('Cards', module)
           'Comment input placeholder',
           commentInputPlaceholderTitle,
         )}
-        commentInputPublishTitle={text('Comment input publish title', commentInputPublishTitle)}
+        commentInputPublishTitle={text('Comment input publish title', publishTitle)}
         publishComment={() => action('Comment published')('Synthetic Event')}
-        loggedProfileAvatar={'https://www.stevensegallery.com/360/360'}
+        loggedProfileAvatar={text(
+          'Logged Profile Avatar',
+          'https://www.stevensegallery.com/360/360',
+        )}
+        loggedProfileEthAddress={text(
+          'Logged Profile EthAddress',
+          '0x003410499401674320006570047391024572000',
+        )}
       />
     </Box>
   ));

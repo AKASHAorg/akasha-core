@@ -1,16 +1,16 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-
 import MarginInterface from '../../interfaces/margin.interface';
+import { EditableAvatar } from '../Avatar/index';
 import { SubtitleTextIcon, TextIcon } from '../TextIcon/index';
 import { IActionType } from '../TextIcon/text-icon';
 import { BasicCardBox } from './index';
 import {
-  ProfileCardAvatar,
   ProfileCardCoverImage,
   ProfileCardDescription,
   ProfileCardName,
 } from './profile-card-fields';
+import { AvatarDiv } from './styled-profile-card';
 
 export interface IProfileData {
   avatar?: string;
@@ -40,14 +40,13 @@ export interface IProfileCardProps {
   onChangeProfileData: (newProfileData: IProfileData) => void;
   margin?: MarginInterface;
   profileData: IProfileData;
-  userInfoTitle: string;
+  descriptionTitle: string;
   actionsTitle: string;
   followingTitle: string;
   appsTitle: string;
   usersTitle: string;
   mostPopularActionsTitle: string;
   shareProfileText: string;
-  editable: boolean;
 }
 
 const ProfileCard: React.FC<IProfileCardProps> = props => {
@@ -57,20 +56,27 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     onClickApps,
     onChangeProfileData,
     profileData,
-    userInfoTitle,
+    descriptionTitle,
     actionsTitle,
     followingTitle,
     usersTitle,
     mostPopularActionsTitle,
     shareProfileText,
     appsTitle,
-    editable,
   } = props;
 
   const leftTitle = profileData.following ? profileData.following : profileData.users;
   const rightTitle = profileData.apps ? profileData.apps : profileData.actions;
   const leftSubtitle = profileData.profileType === 'dapp' ? usersTitle : followingTitle;
   const rightSubtitle = profileData.profileType === 'dapp' ? actionsTitle : appsTitle;
+
+  const [editable, setEditable] = React.useState();
+
+  const handleAvatarChange = (newValue: string) =>
+    onChangeProfileData({
+      ...profileData,
+      avatar: newValue,
+    });
 
   return (
     <BasicCardBox className={className}>
@@ -88,11 +94,16 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         justify="between"
       >
         <Box direction="row">
-          <ProfileCardAvatar
-            profileData={profileData}
-            editable={editable}
-            onChangeProfileData={onChangeProfileData}
-          />
+          <AvatarDiv>
+            <EditableAvatar
+              size="xl"
+              withBorder={true}
+              src={profileData.avatar}
+              seed={profileData.ethAddress}
+              onChange={handleAvatarChange}
+            />
+          </AvatarDiv>
+
           <Box pad={{ vertical: 'small', left: 'xsmall' }}>
             <ProfileCardName
               profileData={profileData}
@@ -149,7 +160,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
       )}
       <Box direction="column" pad="medium" gap="medium">
         <Text size="large" weight="bold" color="primaryText">
-          {userInfoTitle}
+          {descriptionTitle}
         </Text>
 
         <ProfileCardDescription
