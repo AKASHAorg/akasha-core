@@ -22,9 +22,6 @@ module.exports = {
           {
             loader: 'ts-loader',
           },
-          {
-            loader: 'source-map-loader',
-          },
         ],
         exclude: {
           test: [/\*d.ts(x?)$/, /\.map$/],

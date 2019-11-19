@@ -8,7 +8,7 @@ const REJECTED = 'REJECTED';
 
 export const loadPlaceholder = (placeholderName: string) => {
   let status = PENDING;
-  let result;
+  let result: any;
   const promise = import(`./${placeholderName}`);
   const suspender = promise
     .then(r => {

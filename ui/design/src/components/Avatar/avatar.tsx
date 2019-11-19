@@ -13,11 +13,13 @@ export interface AvatarProps extends CommonInterface<HTMLDivElement> {
   backgroundColor?: string;
   withBorder?: boolean;
   guest?: boolean;
-  seed?: string;
+  seed: string;
 }
 
 const getAvatarFromSeed = (seed: string) => {
+  // @Todo: fix this to be more reliable
   const avatarOption = Array.from(seed.replace('0x', '')).reduce(
+    // @ts-ignore
     (sum: number, letter: string) => sum + letter.codePointAt(0),
     0,
   );

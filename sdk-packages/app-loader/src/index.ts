@@ -70,7 +70,7 @@ export default class AppLoader implements IAppLoader {
         initialApps.widgets.forEach(widget => this.registerWidget(widget));
       }
 
-      this.appLogger.info('[@akashaproject/ui-plugin-loader]: starting single spa');
+      this.appLogger.info('[@akashaproject/sdk-ui-plugin-loader]: starting single spa');
       // call on next tick
       setTimeout(singleSpa.start, 0);
     });
@@ -81,7 +81,9 @@ export default class AppLoader implements IAppLoader {
   }
 
   public registerPlugin(plugin: IPluginEntry): void {
-    this.appLogger.info(`[@akashaproject/ui-plugin-loader] registering plugin ${plugin.app.name}`);
+    this.appLogger.info(
+      `[@akashaproject/sdk-ui-plugin-loader] registering plugin ${plugin.app.name}`,
+    );
     if (plugin.config && plugin.config.activeWhen && plugin.config.activeWhen.path) {
       plugin.app.activeWhen = plugin.config.activeWhen;
     }
@@ -120,11 +122,13 @@ export default class AppLoader implements IAppLoader {
         sdkModules: plugin.sdkModules,
       },
     );
-    this.appLogger.info(`[@akashaproject/ui-plugin-loader]: ${plugin.app.name} registered!`);
+    this.appLogger.info(`[@akashaproject/sdk-ui-plugin-loader]: ${plugin.app.name} registered!`);
   }
 
   public registerWidget(widget: IWidgetEntry): void {
-    this.appLogger.info(`[@akashaproject/ui-plugin-loader] registering widget ${widget.app.name}`);
+    this.appLogger.info(
+      `[@akashaproject/sdk-ui-plugin-loader] registering widget ${widget.app.name}`,
+    );
     const widgetId = widget.app.name.toLowerCase().replace(' ', '-');
     widget.app.name = widgetId;
     if (this.registeredWidgets.has(widgetId)) {
@@ -150,9 +154,9 @@ export default class AppLoader implements IAppLoader {
     const domEl = document.getElementById(this.config.rootNodeId);
     if (!domEl) {
       this.appLogger.error(
-        '[@akashaproject/ui-plugin-loader]: dom element was not found, retrying...',
+        '[@akashaproject/sdk-ui-plugin-loader]: dom element was not found, retrying...',
       );
-      throw new Error('[@akashaproject/ui-plugin-loader]: root node element not found!');
+      throw new Error('[@akashaproject/sdk-ui-plugin-loader]: root node element not found!');
     }
     const { loadingFn, ...otherProps } = this.config.layout;
     // this is very important to wait on for dom
@@ -162,19 +166,33 @@ export default class AppLoader implements IAppLoader {
     }).mountPromise;
   }
 
+  public async uninstallApp(appName: string, packageLoader: any, packageId: string) {
+    if (this.registeredPlugins.has(appName)) {
+      await singleSpa.unloadApplication(appName, { waitForUnmount: true });
+      this.registeredPlugins.delete(appName);
+      this.appLogger.info(`removed ${appName} from registeredPlugins`);
+    }
+    if (this.registeredWidgets.has(appName)) {
+      this.appLogger.warn(`trying to unmount root widget ${appName}, which is not supported`);
+    }
+    const removedPackage = packageLoader.delete(packageId);
+    this.appLogger.info(`package ${packageId} removed ${removedPackage}`);
+    return;
+  }
+
   protected onFirstMount() {
     // tslint:disable-next-line:no-console
     console.timeEnd('AppLoader:firstMount');
   }
 
   protected beforeRouting() {
-    const plugins = this.getPluginsForLocation(window.location);
+    const currentPlugins = this.getPluginsForLocation(window.location);
     const fourOhFourElem = document.getElementById('four-oh-four');
     // cleanup 404 element if exist (recovering from a 404 page)
     if (fourOhFourElem) {
       fourOhFourElem.parentElement.removeChild(fourOhFourElem);
     }
-    if (!plugins.length) {
+    if (!currentPlugins.length) {
       const pluginsNode = document.getElementById(this.config.layout.pluginSlotId);
       // create a 404 page and return it instead of a plugin
       const FourOhFourNode: ChildNode = fourOhFour();
@@ -183,10 +201,17 @@ export default class AppLoader implements IAppLoader {
       }
       return;
     }
-    const currentPlugins = this.getPluginsForLocation(window.location);
+
     this.appLogger.info(`active plugin`, currentPlugins);
     const firstPlugin = currentPlugins.find(plugin => this.registeredPlugins.has(plugin));
-    setPageTitle(this.registeredPlugins.get(firstPlugin).title);
+    if (firstPlugin) {
+      setPageTitle(this.registeredPlugins.get(firstPlugin).title);
+    } else {
+      this.appLogger.warn(
+        `could not find a registered active app from active plugins list`,
+        currentPlugins,
+      );
+    }
   }
 
   private beforeMount(

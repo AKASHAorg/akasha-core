@@ -1,4 +1,4 @@
-import FeedPlugin from '@akashaproject/ui-plugin-feed';
+// import FeedPlugin from '@akashaproject/ui-plugin-feed';
 import ProfilePlugin from '@akashaproject/ui-plugin-profile';
 import LayoutWidget from '@akashaproject/ui-widget-layout';
 import SidebarWidget from '@akashaproject/ui-widget-sidebar';
@@ -6,10 +6,6 @@ import TopBarWidget from '@akashaproject/ui-widget-topbar';
 import initSdk from './sdk-init';
 
 const plugins = [
-  {
-    app: FeedPlugin,
-    sdkModules: [],
-  },
   {
     app: ProfilePlugin,
     sdkModules: [],
