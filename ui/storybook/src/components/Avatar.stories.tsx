@@ -1,5 +1,5 @@
 /* eslint-disable import/first */
-import { Avatar } from '@akashaproject/design-system';
+import { Avatar, EditableAvatar } from '@akashaproject/design-system';
 import { AvatarSize } from '@akashaproject/design-system/lib/components/Avatar/styled-avatar';
 import { action } from '@storybook/addon-actions';
 import { boolean, color, object, text } from '@storybook/addon-knobs';
@@ -64,6 +64,18 @@ storiesOf('Avatar', module)
         withBorder={boolean('withBorder', true)}
         size="xl"
         seed={text('eth address', '0xbe0eb53f46cd790cd13851d5eff43d12404d33e8')}
+      />
+    );
+  })
+  .add('Editable avatar', () => {
+    return (
+      <EditableAvatar
+        withBorder={boolean('withBorder', true)}
+        size="xl"
+        seed={text('eth address', '0xbe0eb53f46cd790cd13851d5eff43d12404d33e8')}
+        onChange={() => {
+          action('Change avatar')('Avatar changed');
+        }}
       />
     );
   });
