@@ -1,5 +1,6 @@
 import { Box, Image, Text } from 'grommet';
 import * as React from 'react';
+import { Avatar } from '../Avatar/index';
 import { SubtitleTextIcon } from '../TextIcon/index';
 import { BasicCardBox } from './index';
 import { IProfileCardProps } from './profile-card';
@@ -23,6 +24,7 @@ const ProfileWidgetCard: React.FC<IProfileCardProps> = props => {
   const leftSubtitle = profileData.profileType === 'dapp' ? usersTitle : followingTitle;
   const rightSubtitle = profileData.profileType === 'dapp' ? actionsTitle : appsTitle;
 
+  const isGuest = !profileData.ethAddress;
   return (
     <BasicCardBox className={className}>
       <Box
@@ -33,16 +35,15 @@ const ProfileWidgetCard: React.FC<IProfileCardProps> = props => {
       />
       <Box height="56px" direction="row" pad={{ left: '14px', right: 'medium' }}>
         <AvatarDiv>
-          {profileData.avatar && (
-            <Image
-              src={profileData.avatar}
-              fit="cover"
-              width="76px"
-              height="76px"
-              style={{ borderRadius: '100%' }}
-            />
-          )}
+          <Avatar
+            withBorder={true}
+            guest={isGuest}
+            size="xl"
+            seed={profileData.ethAddress}
+            src={profileData.avatar}
+          />
         </AvatarDiv>
+
         <Box pad={{ vertical: 'small', left: 'xsmall' }}>
           <Text size="xlarge" weight="bold" color="primaryText">
             {profileData.name}

@@ -1,3 +1,4 @@
+import EditorModal from './editor-modal';
 import ListModal from './list-modal';
 
-export { ListModal };
+export { EditorModal, ListModal };

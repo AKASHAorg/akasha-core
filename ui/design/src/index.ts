@@ -3,6 +3,7 @@ import { Avatar, EditableAvatar } from './components/Avatar/index';
 import {
   AppsWidgetCard,
   BasicCardBox,
+  EditorCard,
   EntryBox,
   EntryCard,
   ProfileCard,
@@ -38,6 +39,7 @@ export {
   TopicsWidgetCard,
   ProfileCard,
   ProfileWidgetCard,
+  EditorCard,
   EntryCard,
   BasicCardBox,
   EntryBox,

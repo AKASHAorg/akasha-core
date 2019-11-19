@@ -1,6 +1,5 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-
 import MarginInterface from '../../interfaces/margin.interface';
 import { SubtitleTextIcon, TextIcon } from '../TextIcon/index';
 import { IActionType } from '../TextIcon/text-icon';
