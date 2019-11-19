@@ -225,7 +225,6 @@ storiesOf('Cards', module)
         appsTitle={text('Apps', appsTitle)}
         usersTitle={text('Users', usersTitle)}
         shareProfileText={text('Share Profile', shareProfileTitle)}
-        editable={boolean('Editable', true)}
       />
     </Box>
   ))
