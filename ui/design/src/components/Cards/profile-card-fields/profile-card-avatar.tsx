@@ -1,6 +1,5 @@
 import { Image } from 'grommet';
 import * as React from 'react';
-
 import { getEditableImageFieldHandlers } from '../../../utils/get-editable-field-handlers';
 import { IProfileData } from '../profile-card';
 import { AvatarDiv, StyledImageInput } from '../styled-profile-card';
@@ -11,7 +10,7 @@ export interface IProfileCardAvatarProps {
   onChangeProfileData: (newProfileData: IProfileData) => void;
 }
 
-const ProfileCardCoverImage: React.FC<IProfileCardAvatarProps> = props => {
+const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
   const { profileData, editable, onChangeProfileData } = props;
 
   const [newAvatar, setNewAvatar] = React.useState(profileData.avatar);
@@ -45,4 +44,4 @@ const ProfileCardCoverImage: React.FC<IProfileCardAvatarProps> = props => {
   );
 };
 
-export default ProfileCardCoverImage;
+export default ProfileCardAvatar;

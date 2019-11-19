@@ -47,7 +47,7 @@ const StyledAvatar = styled.div<AvatarProps>`
   img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
     position: absolute;
   }
 `;

@@ -10,7 +10,7 @@ export interface IProfileCardDescriptionProps {
   onChangeProfileData: (newProfileData: IProfileData) => void;
 }
 
-const ProfileCardName: React.FC<IProfileCardDescriptionProps> = props => {
+const ProfileCardDescription: React.FC<IProfileCardDescriptionProps> = props => {
   const { profileData, editable, onChangeProfileData } = props;
 
   const [editDescription, setEditDescription] = React.useState(false);
@@ -48,4 +48,4 @@ const ProfileCardName: React.FC<IProfileCardDescriptionProps> = props => {
   );
 };
 
-export default ProfileCardName;
+export default ProfileCardDescription;

@@ -22,7 +22,8 @@ export interface IEntryCardProps {
   commentInputPlaceholderTitle: string;
   commentInputPublishTitle: string;
   publishComment: any;
-  loggedProfileAvatar: string;
+  loggedProfileAvatar?: string;
+  loggedProfileEthAddress?: string;
 }
 
 const EntryCard: React.FC<IEntryCardProps> = props => {
@@ -46,6 +47,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     commentInputPublishTitle,
     publishComment,
     loggedProfileAvatar,
+    loggedProfileEthAddress,
   } = props;
 
   return (
@@ -67,6 +69,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         commentInputPlaceholderTitle={commentInputPlaceholderTitle}
         commentInputPublishTitle={commentInputPublishTitle}
         loggedProfileAvatar={loggedProfileAvatar}
+        loggedProfileEthAddress={loggedProfileEthAddress}
         publishComment={publishComment}
       />
       {fullEntry &&
@@ -86,6 +89,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
             quotedByTitle={quotedByTitle}
             replyTitle={replyTitle}
             key={index}
+            loggedProfileAvatar={loggedProfileAvatar}
+            loggedProfileEthAddress={loggedProfileEthAddress}
             comment={true}
             locale={locale}
           />

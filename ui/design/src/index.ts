@@ -3,9 +3,11 @@ import { Avatar, EditableAvatar } from './components/Avatar/index';
 import {
   AppsWidgetCard,
   BasicCardBox,
+  EditorCard,
   EntryBox,
   EntryCard,
   ProfileCard,
+  ProfileWidgetCard,
   TopicsWidgetCard,
 } from './components/Cards/index';
 import { Icon, iconTypes } from './components/Icon/index';
@@ -36,6 +38,8 @@ export {
   AppsWidgetCard,
   TopicsWidgetCard,
   ProfileCard,
+  ProfileWidgetCard,
+  EditorCard,
   EntryCard,
   BasicCardBox,
   EntryBox,
