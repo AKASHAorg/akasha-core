@@ -1,12 +1,16 @@
-import { Box, Image, Text } from 'grommet';
+import { Box, Text } from 'grommet';
 import * as React from 'react';
+
 import MarginInterface from '../../interfaces/margin.interface';
-import { Icon } from '../Icon';
-import IconButton from '../IconButton/icon-button';
 import { SubtitleTextIcon, TextIcon } from '../TextIcon/index';
 import { IActionType } from '../TextIcon/text-icon';
 import { BasicCardBox } from './index';
-import { AvatarDiv, ShareButtonContainer } from './styled-profile-card';
+import {
+  ProfileCardAvatar,
+  ProfileCardCoverImage,
+  ProfileCardDescription,
+  ProfileCardName,
+} from './profile-card-fields';
 
 export interface IProfileData {
   avatar?: string;
@@ -33,6 +37,7 @@ export interface IProfileCardProps {
   className?: string;
   onClickApps: React.EventHandler<React.SyntheticEvent>;
   onClickFollowing: React.EventHandler<React.SyntheticEvent>;
+  onChangeProfileData: (newProfileData: IProfileData) => void;
   margin?: MarginInterface;
   profileData: IProfileData;
   userInfoTitle: string;
@@ -42,6 +47,7 @@ export interface IProfileCardProps {
   usersTitle: string;
   mostPopularActionsTitle: string;
   shareProfileText: string;
+  editable: boolean;
 }
 
 const ProfileCard: React.FC<IProfileCardProps> = props => {
@@ -49,6 +55,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     className,
     onClickFollowing,
     onClickApps,
+    onChangeProfileData,
     profileData,
     userInfoTitle,
     actionsTitle,
@@ -57,6 +64,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     mostPopularActionsTitle,
     shareProfileText,
     appsTitle,
+    editable,
   } = props;
 
   const leftTitle = profileData.following ? profileData.following : profileData.users;
@@ -66,17 +74,12 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
 
   return (
     <BasicCardBox className={className}>
-      <Box
-        height="144px"
-        background={profileData.coverImage}
-        pad="none"
-        round={{ corner: 'top', size: 'xsmall' }}
-        align="end"
-      >
-        <ShareButtonContainer>
-          <IconButton share={true} icon={<Icon type="share" />} label={shareProfileText} />
-        </ShareButtonContainer>
-      </Box>
+      <ProfileCardCoverImage
+        shareProfileText={shareProfileText}
+        profileData={profileData}
+        editable={editable}
+        onChangeProfileData={onChangeProfileData}
+      />
       <Box
         height="70px"
         border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
@@ -85,21 +88,18 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         justify="between"
       >
         <Box direction="row">
-          <AvatarDiv>
-            {profileData.avatar && (
-              <Image
-                src={profileData.avatar}
-                fit="cover"
-                width="76px"
-                height="76px"
-                style={{ borderRadius: '100%' }}
-              />
-            )}
-          </AvatarDiv>
+          <ProfileCardAvatar
+            profileData={profileData}
+            editable={editable}
+            onChangeProfileData={onChangeProfileData}
+          />
           <Box pad={{ vertical: 'small', left: 'xsmall' }}>
-            <Text size="xlarge" weight="bold" color="primaryText">
-              {profileData.name}
-            </Text>
+            <ProfileCardName
+              profileData={profileData}
+              editable={editable}
+              onChangeProfileData={onChangeProfileData}
+            />
+
             <Text size="medium" color="secondaryText">
               {profileData.userName ? profileData.userName : profileData.ethAddress}
             </Text>
@@ -151,7 +151,12 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         <Text size="large" weight="bold" color="primaryText">
           {userInfoTitle}
         </Text>
-        <Text color="primaryText">{profileData.description}</Text>
+
+        <ProfileCardDescription
+          profileData={profileData}
+          editable={editable}
+          onChangeProfileData={onChangeProfileData}
+        />
       </Box>
     </BasicCardBox>
   );

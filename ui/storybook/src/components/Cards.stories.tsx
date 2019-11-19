@@ -11,6 +11,7 @@ import { action } from '@storybook/addon-actions';
 import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
+import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-card';
 
 const topicsDataSource = [
   { title: '#ethereumworld', subtitle: '6576 mentions' },
@@ -164,6 +165,9 @@ storiesOf('Cards', module)
       <ProfileCard
         onClickApps={() => action('Apps Box Clicked')('Synthetic Event')}
         onClickFollowing={() => action('Following Box Clicked')('Synthetic Event')}
+        onChangeProfileData={(newProfileData: IProfileData) =>
+          action('ProfileData Changed')(newProfileData)
+        }
         margin={object('Margin', { margin: '0px' })}
         // @ts-ignore
         profileData={select('Profile Data', { dapp: dappData, user: profileData }, profileData)}
@@ -174,6 +178,7 @@ storiesOf('Cards', module)
         appsTitle={text('Apps', appsTitle)}
         usersTitle={text('Users', usersTitle)}
         shareProfileText={text('Share Profile', shareProfileTitle)}
+        editable={boolean('Editable', true)}
       />
     </Box>
   ))
