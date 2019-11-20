@@ -7,13 +7,15 @@ import StyledAvatar, { AvatarSize } from './styled-avatar';
 
 export interface AvatarProps extends CommonInterface<HTMLDivElement> {
   src?: string;
-  onClick?: React.EventHandler<React.SyntheticEvent<HTMLDivElement, MouseEvent>>;
+  // @Todo: fix this
+  onClick?: React.MouseEventHandler<any>;
   alt?: string;
   margin?: MarginInterface;
   backgroundColor?: string;
   withBorder?: boolean;
   guest?: boolean;
   seed: string;
+  size?: AvatarSize;
 }
 
 const getAvatarFromSeed = (seed: string) => {
@@ -27,6 +29,12 @@ const getAvatarFromSeed = (seed: string) => {
   return (avatarOption % 7) + 1;
 };
 
+const defaultProps: Partial<AvatarProps> = {
+  size: 'md' as AvatarSize,
+  withBorder: false,
+  seed: '0x0000000000000000000000000000000',
+};
+
 /*
  * if guest is true, render avatar in guestMode (same avatar image for all guests)
  * if guest is false and src is missing or empty string, it means
@@ -37,7 +45,7 @@ const getAvatarFromSeed = (seed: string) => {
  * in loading state.
  */
 
-const Avatar: React.FC<AvatarProps & Partial<typeof defaultProps>> = props => {
+const Avatar: React.FC<AvatarProps & typeof defaultProps> = props => {
   const { onClick, guest, src, seed, className, size, margin, withBorder } = props;
   const isClickable = typeof onClick === 'function';
   let avatarImage;
@@ -63,6 +71,8 @@ const Avatar: React.FC<AvatarProps & Partial<typeof defaultProps>> = props => {
   );
 };
 
+Avatar.defaultProps = defaultProps;
+
 const AvatarImage = (props: any) => {
   const { image } = props;
   let avatar;
@@ -77,12 +87,5 @@ const AvatarImage = (props: any) => {
 
   return <img src={avatar} />;
 };
-
-const defaultProps = {
-  size: 'md' as AvatarSize,
-  withBorder: false,
-  seed: '0x0000000000000000000000000000000',
-};
-Avatar.defaultProps = defaultProps;
 
 export default Avatar;

@@ -57,6 +57,7 @@ storiesOf('Buttons|ProfileIconButton', module).add('default', () => (
       label="AKASHA World"
       info="22 July 2019 | 20h30"
       size="sm"
+      seed={'0x000000'}
     />
   </Box>
 ));

@@ -7,11 +7,12 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
 const DEFAULT_AVATAR_SIZE = 'md';
-
+const seed = '0x00000000000000';
 storiesOf('Avatar', module)
-  .add('minimal', () => <Avatar src="https://placebeard.it/360x360" />)
+  .add('minimal', () => <Avatar seed={seed} src="https://placebeard.it/360x360" />)
   .add('margin and background color', () => (
     <Avatar
+      seed={seed}
       src="https://placebeard.it/360x360"
       margin={object('Margin', { margin: '0px' })}
       backgroundColor={color('Background Color', '')}
@@ -20,6 +21,7 @@ storiesOf('Avatar', module)
   ))
   .add('with click handler', () => (
     <Avatar
+      seed={seed}
       src="https://placebeard.it/360x360"
       size="md"
       /* tslint:disable-next-line:jsx-no-lambda */
@@ -46,6 +48,7 @@ storiesOf('Avatar', module)
         <div key={index}>
           {size} ({value} px)
           <Avatar
+            seed={seed}
             key={size}
             size={size as AvatarSize}
             src="https://placebeard.it/360x480"
@@ -56,7 +59,7 @@ storiesOf('Avatar', module)
     </div>
   ))
   .add('Guest mode', () => {
-    return <Avatar guest={true} size="xl" withBorder={boolean('withBorder', true)} />;
+    return <Avatar seed={seed} guest={true} size="xl" withBorder={boolean('withBorder', true)} />;
   })
   .add('Avatar not set', () => {
     return (
@@ -73,9 +76,12 @@ storiesOf('Avatar', module)
         withBorder={boolean('withBorder', true)}
         size="xl"
         seed={text('eth address', '0xbe0eb53f46cd790cd13851d5eff43d12404d33e8')}
-        onChange={() => {
-          action('Change avatar')('Avatar changed');
-        }}
+        onChange={
+          // tslint:disable-next-line:jsx-no-lambda
+          () => {
+            action('Change avatar')('Avatar changed');
+          }
+        }
       />
     );
   });

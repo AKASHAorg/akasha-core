@@ -32,7 +32,6 @@ const Topbar = (props: ITopbarProps) => {
     brandLabel,
     className,
     userName,
-    unreadNotifications,
     notificationsData,
     onNotificationClick,
     onNavigation,
@@ -43,7 +42,7 @@ const Topbar = (props: ITopbarProps) => {
   const [notificationsOpen, setNotificationsOpen] = React.useState(false);
   const [walletOpen, setWalletOpen] = React.useState(false);
 
-  const handleNavigation = (path: string) => (ev: React.SyntheticEvent) => {
+  const handleNavigation = (path: string) => () => {
     if (onNavigation) {
       onNavigation(path);
     }
@@ -100,6 +99,8 @@ const Topbar = (props: ITopbarProps) => {
             size="xs"
             onClick={handleNavigation('/profile/my-profile')}
             onAvatarClick={handleNavigation('/profile/my-profile')}
+            // @Todo: fix this
+            seed={''}
           />
         </Box>
       </Box>
@@ -108,9 +109,15 @@ const Topbar = (props: ITopbarProps) => {
 };
 
 Topbar.defaultProps = {
-  onNotificationClick: () => {},
-  onWalletClick: () => {},
-  onNavigation: () => {},
+  onNotificationClick: () => {
+    return;
+  },
+  onWalletClick: () => {
+    return;
+  },
+  onNavigation: () => {
+    return;
+  },
   unreadNotifications: 0,
 };
 

@@ -11,7 +11,8 @@ interface IlistModal {
   label: string;
   secondaryLabel: string;
   closeModal: () => void;
-  onClickAvatar: React.EventHandler<React.SyntheticEvent>;
+  // @Todo: fix this :D
+  onClickAvatar: any;
   locale: ILocale;
 }
 
@@ -25,7 +26,7 @@ const StyledLayerElemDiv = styled.div`
 const ListModal: React.FC<IlistModal> = props => {
   const { closeModal, label, list, className, secondaryLabel, onClickAvatar, locale } = props;
   const listNumberLabel = `${list.length} ${secondaryLabel}`;
-  const handleClickAvatar = ethAddress => () => {
+  const handleClickAvatar = (ethAddress: string) => () => {
     onClickAvatar(ethAddress);
   };
   return (
@@ -45,6 +46,8 @@ const ListModal: React.FC<IlistModal> = props => {
                 label={elem.name}
                 avatarImage={elem.avatar}
                 onClick={handleClickAvatar(elem.ethAddress)}
+                // @Todo: fix this :D
+                seed={''}
               />
             </StyledLayerElemDiv>
           ))}

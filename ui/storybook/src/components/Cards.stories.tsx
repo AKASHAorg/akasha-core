@@ -9,11 +9,11 @@ import {
   TopicsWidgetCard,
 } from '@akashaproject/design-system';
 import { IAppData } from '@akashaproject/design-system/lib/components/Cards/apps-widget-card';
+import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-card';
 import { action } from '@storybook/addon-actions';
 import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
-import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-card';
 
 const topicsDataSource = [
   { title: '#ethereumworld', subtitle: '6576 mentions' },
@@ -71,6 +71,7 @@ const entryData = {
       upvotes: 3,
       downvotes: 0,
       time: '1572036522',
+      quotes: [],
     },
     {
       ethAddress: '0x003410490050000320006570047391024572000',
@@ -80,6 +81,7 @@ const entryData = {
       upvotes: 2,
       downvotes: 1,
       time: '1572036522',
+      quotes: [],
     },
   ],
   quotes: [

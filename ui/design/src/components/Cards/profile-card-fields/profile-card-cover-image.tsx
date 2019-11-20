@@ -18,7 +18,7 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
   const { shareProfileText, profileData, editable, onChangeProfileData } = props;
 
   const [newCoverImage, setNewCoverImage] = React.useState(profileData.coverImage);
-  const coverImageRef: React.MutableRefObject<HTMLInputElement> = React.useRef();
+  const coverImageRef = React.useRef(null);
   const { handleClick, handleChange } = getEditableImageFieldHandlers(
     editable,
     coverImageRef,
@@ -33,7 +33,7 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
   return (
     <Box
       height="144px"
-      background={newCoverImage.startsWith('data:') ? `url(${newCoverImage})` : newCoverImage}
+      background={newCoverImage!.startsWith('data:') ? `url(${newCoverImage})` : newCoverImage}
       pad="none"
       round={{ corner: 'top', size: 'xsmall' }}
       align="end"
