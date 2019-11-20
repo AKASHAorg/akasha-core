@@ -8,4 +8,4 @@ const service: AkashaService = (invoke, log) => {
   return { getValidator };
 };
 
-export default { name: VALIDATOR_SERVICE, service };
+export default { service, name: VALIDATOR_SERVICE };

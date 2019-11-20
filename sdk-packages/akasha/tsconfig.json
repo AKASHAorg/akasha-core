@@ -17,6 +17,9 @@
     },
     {
       "path": "../db"
+    },
+    {
+      "path": "../app-loader"
     }
   ],
   "include": ["./src"]

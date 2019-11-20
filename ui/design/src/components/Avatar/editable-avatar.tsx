@@ -8,13 +8,14 @@ export interface EditableAvatarProps extends Omit<AvatarProps, 'onClick'> {
 
 const EditableAvatar: React.FC<EditableAvatarProps & Partial<typeof defaultProps>> = props => {
   const { src, onChange } = props;
-  const inputRef: React.MutableRefObject<HTMLInputElement> = React.useRef();
+  // @Todo: needs a better type declaration
+  const inputRef: any = React.useRef();
 
   const [avatarImg, setNewAvatarImg] = React.useState(src);
 
-  const clickHandler: React.EventHandler<React.SyntheticEvent<HTMLDivElement, MouseEvent>> = e => {
-    if (inputRef.current) {
-      inputRef.current.click();
+  const clickHandler: React.EventHandler<React.SyntheticEvent<HTMLDivElement, MouseEvent>> = () => {
+    if (inputRef) {
+      inputRef!.current!.click();
     }
   };
 

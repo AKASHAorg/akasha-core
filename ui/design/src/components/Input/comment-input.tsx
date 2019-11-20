@@ -8,7 +8,7 @@ import { Icon } from '../Icon/index';
 interface ICommentInput {
   className?: string;
   avatarImg?: string;
-  ethAddress?: string;
+  ethAddress: string;
   placeholderTitle: string;
   publishTitle: string;
   onPublish: (inputValue: string, ethAddress: string) => void;

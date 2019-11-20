@@ -14,7 +14,7 @@ const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
   const { profileData, editable, onChangeProfileData } = props;
 
   const [newAvatar, setNewAvatar] = React.useState(profileData.avatar);
-  const avatarRef: React.MutableRefObject<HTMLInputElement> = React.useRef();
+  const avatarRef = React.useRef(null);
   const { handleClick, handleChange } = getEditableImageFieldHandlers(
     editable,
     avatarRef,

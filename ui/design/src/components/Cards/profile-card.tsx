@@ -70,7 +70,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const leftSubtitle = profileData.profileType === 'dapp' ? usersTitle : followingTitle;
   const rightSubtitle = profileData.profileType === 'dapp' ? actionsTitle : appsTitle;
 
-  const [editable, setEditable] = React.useState();
+  const [editable] = React.useState(false);
 
   const handleAvatarChange = (newValue: string) =>
     onChangeProfileData({
