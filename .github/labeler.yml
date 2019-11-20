@@ -1,0 +1,9 @@
+sdk:
+  - sdk-packages/**/*
+plugin/widget:
+  - ui/**/*
+design-system:
+  - ui/design/**/*
+  - ui/storybook/**/*
+examples:
+  - examples/**/*

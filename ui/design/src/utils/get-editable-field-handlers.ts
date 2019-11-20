@@ -26,7 +26,7 @@ export const getEditableTextFieldHandlers = (
 
 export const getEditableImageFieldHandlers = (
   editable: boolean,
-  imageRef: React.MutableRefObject<HTMLInputElement>,
+  imageRef: React.MutableRefObject<any>,
   setNewValue: React.Dispatch<React.SetStateAction<string>>,
   onChange: (newValue: string) => void,
 ) => {

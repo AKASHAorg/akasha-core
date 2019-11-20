@@ -5,10 +5,10 @@ const REJECTED = 'REJECTED';
 // only load the required image
 // note that the size of the library is still affected
 // if the tree shaking/chunking does not work!
-
 export const loadPlaceholder = (placeholderName: string) => {
   let status = PENDING;
-  let result;
+  let result: any;
+  // @ts-ignore
   const promise = import(`./${placeholderName}`);
   const suspender = promise
     .then(r => {

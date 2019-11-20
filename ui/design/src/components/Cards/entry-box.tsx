@@ -22,7 +22,7 @@ export interface IEntryData extends IUser {
   upvotes: string | number;
   downvotes: string | number;
   comments?: Comment[];
-  quotes?: Quote[];
+  quotes: Quote[];
 }
 
 interface Comment extends IUser {
@@ -30,15 +30,16 @@ interface Comment extends IUser {
   time: string;
   upvotes: string | number;
   downvotes: string | number;
+  quotes: Quote[];
 }
 
 interface Quote extends IUser {
   time: string;
 }
-
+export type ethAddress = string;
 interface IEntryBoxProps {
   entryData: IEntryData;
-  onClickAvatar: React.EventHandler<React.SyntheticEvent>;
+  onClickAvatar: React.MouseEventHandler<ethAddress>;
   onClickUpvote: React.EventHandler<React.SyntheticEvent>;
   onClickDownvote: React.EventHandler<React.SyntheticEvent>;
   commentsTitle: string;
@@ -50,12 +51,12 @@ interface IEntryBoxProps {
   quotedByTitle: string;
   replyTitle: string;
   comment?: boolean;
-  locale?: ILocale;
+  locale: ILocale;
   commentInputPlaceholderTitle?: any;
   commentInputPublishTitle?: any;
   publishComment?: any;
   loggedProfileAvatar?: string;
-  loggedProfileEthAddress?: string;
+  loggedProfileEthAddress: string;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -125,7 +126,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     setDownvoted(!downvoted);
   };
 
-  const renderCommentsModal = () => {};
+  const renderCommentsModal = () => {
+    return;
+  };
 
   const closeQuotesModal = () => {
     setQuotesModalOpen(false);
@@ -147,8 +150,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
       />
     );
   };
-  const onClickEditPost = () => {};
-  const onClickCopyLink = () => {};
+  const onClickEditPost = () => {
+    return;
+  };
+  const onClickCopyLink = () => {
+    return;
+  };
 
   const closeMenuDrop = () => {
     setMenuDropOpen(false);
@@ -295,7 +302,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         </div>
       </Box>
       {menuIconRef.current && menuDropOpen && renderMenu()}
-      {quotesModalOpen && renderQuotesModal()}
+      {quotesModalOpen && entryData.quotes!.length && locale && renderQuotesModal()}
       <Box pad="medium">{entryData.content}</Box>
       <Box pad="medium" direction="row" justify="between">
         <Box gap="medium" direction="row">
@@ -314,7 +321,16 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             label={quotesLabel}
             onClick={toggleQuotesModal}
           />
-          <IconLink icon={<Icon type="share" />} label={shareTitle} onClick={() => {}} />
+          <IconLink
+            icon={<Icon type="share" />}
+            label={shareTitle}
+            onClick={
+              // tslint:disable-next-line:jsx-no-lambda
+              () => {
+                return;
+              }
+            }
+          />
         </Box>
       </Box>
       {comment && replyCommentOpen && renderReplyComment()}

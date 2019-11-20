@@ -57,6 +57,7 @@ const StyledIconButton = styled(Button)<IIconButtonProps>`
         }
       `;
     }
+    return;
   }}
 `;
 
