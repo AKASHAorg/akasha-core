@@ -44,4 +44,4 @@ const service: AkashaService = (invoke, log) => {
   return { regen, destroy, wallet, web3, getWeb3Instance };
 };
 
-export default { name: WEB3_SERVICE, service };
+export default { service, name: WEB3_SERVICE };

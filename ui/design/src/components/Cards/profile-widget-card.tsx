@@ -1,4 +1,4 @@
-import { Box, Image, Text } from 'grommet';
+import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { Avatar } from '../Avatar/index';
 import { SubtitleTextIcon } from '../TextIcon/index';

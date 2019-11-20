@@ -46,6 +46,13 @@ const EditorCard: React.FC<IEditorCard> = props => {
           onPublish={onPublish}
           publishTitle={publishTitle}
           placeholderTitle={placeholderTitle}
+          // @Todo: fix this :D
+          onClickAvatar={
+            // tslint:disable-next-line:jsx-no-lambda
+            () => {
+              return;
+            }
+          }
         />
       )}
       <Box direction="row" pad="medium" gap="medium" align="center" onClick={openModal}>

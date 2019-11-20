@@ -2,7 +2,13 @@
   "name": "@akashaproject/sdk-registry",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "test": "truffle test"
+  },
   "devDependencies": {
     "truffle": "^5.0.42"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^2.4.0"
   }
 }

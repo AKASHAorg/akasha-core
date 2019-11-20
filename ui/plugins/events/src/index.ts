@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next';
 /**
  * All the plugins must export an object like this:
  */
-export default {
+const app = {
   // This is the root route in which the plugin will render.
   // Make sure to change it as it fits.
   activeWhen: {
@@ -24,6 +24,11 @@ export default {
   },
   loadingFn: (): Promise<any> => import('./components'),
   name: 'ui-plugin-events',
-  services: [],
   title: 'AKASHA Events',
+  sdkModules: [],
 };
+export default app;
+
+export function registerPlugin(load: any) {
+  load({ app });
+}

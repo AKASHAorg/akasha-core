@@ -3,6 +3,8 @@ import initDI from '@akashaproject/sdk-core';
 import { IAkashaModule } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import registerDBModule from '@akashaproject/sdk-db';
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
+import AppLoader from '@akashaproject/sdk-ui-plugin-loader';
+import { ILoaderConfig, IPluginEntry, IWidgetEntry } from '@akashaproject/sdk-ui-plugin-loader/lib';
 import initChannel from './channel';
 import {
   buildModuleServiceChannels,
@@ -19,7 +21,13 @@ const initDiChannel = (di: DIContainer, sendChannel: SendChannel) => {
   };
 };
 
-module.exports = function init(options = { start: true }) {
+module.exports = function init(
+  appLoaderOptions: {
+    config: ILoaderConfig;
+    initialApps: { plugins?: IPluginEntry[]; widgets?: IWidgetEntry[] };
+  },
+  options = { start: true },
+) {
   const di: DIContainer = initDI();
   const commonModule = registerCommonModule();
   const dbModule = registerDBModule();
@@ -33,5 +41,6 @@ module.exports = function init(options = { start: true }) {
   if (options.start) {
     modules = start(modulesList);
   }
-  return Object.assign({}, modules, { start });
+  const appLoader = new AppLoader(appLoaderOptions.config, appLoaderOptions.initialApps);
+  return Object.assign({}, modules, { start, appLoader });
 };

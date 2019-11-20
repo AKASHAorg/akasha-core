@@ -33,7 +33,8 @@ const NotificationsPopover: React.FC<INotificationsPopover> = props => {
                 align="center"
                 gap="small"
               >
-                <Avatar size="sm" src={notification.userAvatar} />
+                // @Todo: fix this :D
+                <Avatar size="sm" src={notification.userAvatar} seed={''} />
                 <Box direction="column">
                   <Text size="medium" weight="bold">
                     {notification.action}

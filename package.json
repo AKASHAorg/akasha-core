@@ -20,7 +20,8 @@
     "script:dev-db": "lerna run start --scope @akashaproject/script-server-db --stream",
     "start:feed-app": "lerna exec --parallel --scope translations-server --scope feed-app-dev -- npm run start --stream",
     "start:translations-server": "npm run start --prefix scripts/translations-server",
-    "start:design-system:storybook": "lerna run storybook --scope @akashaproject/storybook --stream"
+    "start:design-system:storybook": "lerna run storybook --scope @akashaproject/storybook --stream",
+    "pack:plugins": "lerna run pack --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream"
   },
   "devDependencies": {
     "@types/jest": "^24.0.21",
@@ -40,7 +41,19 @@
     "typescript": "3.7.2",
     "tslint-react-hooks": "^2.2.1",
     "react": "16.11.0",
-    "react-dom": "^16.11.0"
+    "react-dom": "^16.11.0",
+    "@babel/core": "^7.7.2",
+    "babel-loader": "^8.0.6",
+    "ts-loader": "^6.2.1",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/preset-react": "^7.7.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.9.0",
+    "html-webpack-plugin": "^3.2.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copyfiles": "^2.1.1"
   },
   "workspaces": [
     "sdk-packages/*",

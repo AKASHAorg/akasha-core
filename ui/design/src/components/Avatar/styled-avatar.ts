@@ -35,6 +35,7 @@ const StyledAvatar = styled.div<AvatarProps>`
         border: ${props.theme.shapes.baseSpacing}px solid ${props.theme.colors.white};
       `;
     }
+    return;
   }}
   box-sizing: border-box;
   cursor: ${props => (props.isClickable ? 'pointer' : 'default')};

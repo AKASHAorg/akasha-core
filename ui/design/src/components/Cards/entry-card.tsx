@@ -6,7 +6,7 @@ import { BasicCardBox, EntryBox } from './index';
 export interface IEntryCardProps {
   className?: string;
   entryData: IEntryData;
-  onClickAvatar: React.EventHandler<React.SyntheticEvent>;
+  onClickAvatar: React.MouseEventHandler<any>;
   onClickUpvote: React.EventHandler<React.SyntheticEvent>;
   onClickDownvote: React.EventHandler<React.SyntheticEvent>;
   commentsTitle: string;
@@ -18,12 +18,12 @@ export interface IEntryCardProps {
   quotedByTitle: string;
   replyTitle: string;
   fullEntry?: boolean;
-  locale?: ILocale;
+  locale: ILocale;
   commentInputPlaceholderTitle: string;
   commentInputPublishTitle: string;
   publishComment: any;
   loggedProfileAvatar?: string;
-  loggedProfileEthAddress?: string;
+  loggedProfileEthAddress: string;
 }
 
 const EntryCard: React.FC<IEntryCardProps> = props => {

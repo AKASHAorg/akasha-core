@@ -21,4 +21,4 @@ const service: AkashaService = (invoke, log) => {
   };
   return { getInstance };
 };
-export default { name: IPFS_SERVICE, service };
+export default { service, name: IPFS_SERVICE };
