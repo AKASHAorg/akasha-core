@@ -18,21 +18,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "downlevelIteration": false
   },
-  "references": [
-    {
-      "path": "../../../ui/plugins/events"
-    },
-    {
-      "path": "../../../ui/widgets/layout"
-    },
-    {
-      "path": "../../../ui/widgets/sidebar"
-    },
-    {
-      "path": "../../../ui/widgets/top-bar"
-    }
-  ],
+  "references": [],
   "include": ["./src"]
 }

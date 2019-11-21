@@ -1,4 +1,4 @@
-export default {
+export const application = {
   loadingFn: (): Promise<any> => import('./components'),
   name: 'ui-widget-sidebar',
   title: 'Layout Widget',
