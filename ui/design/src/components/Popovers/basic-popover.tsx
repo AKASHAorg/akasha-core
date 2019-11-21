@@ -4,7 +4,7 @@ import { StyledDrop } from './styled-drop';
 interface IBasicPopover {
   className?: string;
   children: any;
-  closePopover: () => {};
+  closePopover: () => void;
   target: React.RefObject<any>;
   gap?: string;
 }

@@ -9,10 +9,11 @@ interface INotificationsPopover {
   onClickNotification: () => void;
   dataSource: INotification[];
   target: React.RefObject<any>;
-  closePopover: any;
+  closePopover: () => void;
 }
 
 interface INotification {
+  ethAddress: string;
   user: string;
   userAvatar: string;
   time: string;
@@ -33,8 +34,7 @@ const NotificationsPopover: React.FC<INotificationsPopover> = props => {
                 align="center"
                 gap="small"
               >
-                // @Todo: fix this :D
-                <Avatar size="sm" src={notification.userAvatar} seed={''} />
+                <Avatar size="sm" src={notification.userAvatar} seed={notification.ethAddress} />
                 <Box direction="column">
                   <Text size="medium" weight="bold">
                     {notification.action}

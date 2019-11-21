@@ -11,7 +11,6 @@ interface IEditorModal {
   avatar?: string;
   ethAddress: string;
   closeModal: () => void;
-  onClickAvatar: (ethAddress: string) => void;
   publishTitle: string;
   placeholderTitle: string;
   onPublish: any;
@@ -38,7 +37,6 @@ const EditorModal: React.FC<IEditorModal> = props => {
     avatar,
     ethAddress,
     className,
-    onClickAvatar,
     publishTitle,
     // placeholderTitle,
     onPublish,
@@ -48,10 +46,6 @@ const EditorModal: React.FC<IEditorModal> = props => {
     editorState,
     // setEditorState
   ] = React.useState('');
-
-  const handleClickAvatar = () => {
-    onClickAvatar(ethAddress);
-  };
 
   const handlePublish = () => {
     onPublish(ethAddress, avatar, editorState);
@@ -73,7 +67,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
     <Layer onEsc={closeModal} onClickOutside={closeModal} modal={true} className={className}>
       <StyledBox pad="none" width="581px" justify="between">
         <Box direction="row" pad="medium" align="start" overflow="auto" className="scrollBox">
-          <Avatar seed={ethAddress} src={avatar} onClick={handleClickAvatar} />
+          <Avatar seed={ethAddress} src={avatar} />
           <Box width="480px">
             {/*<ReactQuill*/}
             {/*  value={editorState}*/}

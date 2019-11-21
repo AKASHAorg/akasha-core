@@ -7,13 +7,20 @@ import { TextIcon } from '../TextIcon/index';
 
 interface IlistModal {
   className?: string;
-  list: any[];
+  list: IListElem[];
   label: string;
   secondaryLabel: string;
   closeModal: () => void;
   // @Todo: fix this :D
-  onClickAvatar: any;
+  onClickAvatar: React.EventHandler<any>;
   locale: ILocale;
+}
+
+interface IListElem {
+  name?: string;
+  time: string;
+  ethAddress: string;
+  avatar?: string;
 }
 
 const StyledLayerElemDiv = styled.div`
@@ -46,8 +53,7 @@ const ListModal: React.FC<IlistModal> = props => {
                 label={elem.name}
                 avatarImage={elem.avatar}
                 onClick={handleClickAvatar(elem.ethAddress)}
-                // @Todo: fix this :D
-                seed={''}
+                seed={elem.ethAddress}
               />
             </StyledLayerElemDiv>
           ))}

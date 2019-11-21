@@ -3,7 +3,6 @@ import * as React from 'react';
 import { capitalize } from '../../utils/string-utils';
 import { Avatar } from '../Avatar/index';
 import { AvatarSize } from '../Avatar/styled-avatar';
-import { ethAddress } from '../Cards/entry-box';
 import StyledIconLink from './styled-icon-link';
 import { ButtonInfo, ButtonTextWrapper } from './styled-profile-avatar-button';
 
@@ -13,9 +12,9 @@ interface ProfileAvatarButtonProps {
   label?: string;
   size?: AvatarSize;
   className?: string;
-  onAvatarClick?: React.MouseEventHandler<ethAddress>;
+  onAvatarClick?: React.EventHandler<React.SyntheticEvent>;
   // @todo: fix this
-  onClick: React.MouseEventHandler<any>;
+  onClick: React.EventHandler<React.SyntheticEvent>;
   guest?: boolean;
   seed: string;
 }
