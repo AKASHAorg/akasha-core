@@ -33,9 +33,13 @@ const SearchInputComponent = () => {
           getData={action('Get Data')}
           dataSource={suggestionsFromSpace}
           placeholder={'Search something...'}
-          appsTitle="APPS"
-          tagsTitle="TAGS"
-          usersTitle="USER PROFILES"
+          resultsTitle="See all results"
+          appsTitle="Apps"
+          tagsTitle="Tags"
+          usersTitle="Users"
+          onClickUser={(name: string) => action('Click user')(name)}
+          onClickTag={(tag: string) => action('Click tag')(tag)}
+          onClickApp={(name: string) => action('Click app')(name)}
         />
       </Box>
     </Box>
