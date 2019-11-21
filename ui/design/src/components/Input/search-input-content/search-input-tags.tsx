@@ -14,9 +14,9 @@ const SearchInputTags: React.FC<ISearchInputTagsProps> = props => {
   return (
     <Box
       pad={{
-        horizontal: '4px',
-        top: '12px',
-        bottom: '4px',
+        horizontal: 'xxsmall',
+        top: 'small',
+        bottom: 'xxsmall',
       }}
     >
       {tags.map((tag: string, index: number) => (
@@ -29,13 +29,13 @@ const SearchInputTags: React.FC<ISearchInputTagsProps> = props => {
           justify="center"
         >
           <Box
-            margin={{ vertical: '8px' }}
+            margin={{ vertical: 'xsmall' }}
             direction="row"
             align="center"
-            gap="8px"
+            gap="xsmall"
             pad={{
-              vertical: '4px',
-              horizontal: '12px',
+              vertical: 'xxsmall',
+              horizontal: 'small',
             }}
           >
             <Text>{tag}</Text>

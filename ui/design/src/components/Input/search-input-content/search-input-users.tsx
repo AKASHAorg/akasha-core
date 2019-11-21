@@ -14,9 +14,9 @@ const SearchInputUsers: React.FC<ISearchInputUsersProps> = props => {
   return (
     <Box
       pad={{
-        horizontal: '4px',
-        top: '12px',
-        bottom: '4px',
+        horizontal: 'xxsmall',
+        top: 'small',
+        bottom: 'xxsmall',
       }}
     >
       {users.map(({ name, imageUrl }: { name: string; imageUrl: string }, index: number) => (
@@ -29,13 +29,13 @@ const SearchInputUsers: React.FC<ISearchInputUsersProps> = props => {
           justify="center"
         >
           <Box
-            margin={{ vertical: '8px' }}
+            margin={{ vertical: 'xsmall' }}
             direction="row"
             align="center"
-            gap="8px"
+            gap="xsmall"
             pad={{
-              vertical: '4px',
-              horizontal: '12px',
+              vertical: 'xxsmall',
+              horizontal: 'small',
             }}
           >
             <Image width="32px" height="32px" src={imageUrl} style={{ borderRadius: '100%' }} />

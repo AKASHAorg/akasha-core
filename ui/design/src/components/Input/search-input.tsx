@@ -112,7 +112,7 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
         ref={boxRef}
         direction="row"
         align="center"
-        pad={{ horizontal: '16px', vertical: '12px' }}
+        pad={{ horizontal: 'medium', vertical: 'small' }}
         round="small"
         elevation="styleGuideShadow"
         border={{
@@ -120,7 +120,7 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
           color: 'border',
         }}
         className={className}
-        gap="8px"
+        gap="xsmall"
       >
         <Icon type="search" />
         <StyledTextInput
