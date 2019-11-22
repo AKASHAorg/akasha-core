@@ -28,7 +28,7 @@
     "@types/node": "12.12.11",
     "husky": "^3.0.9",
     "jest": "^24.9.0",
-    "lerna": "3.18.4",
+    "lerna": "3.19.0",
     "prettier": "1.19.1",
     "pretty-quick": "^2.0.0",
     "ts-jest": "^24.1.0",
