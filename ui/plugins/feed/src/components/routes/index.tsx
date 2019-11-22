@@ -20,13 +20,17 @@ const Routes: React.FC<IRoutesProps> = props => {
       <Router>
         <Switch>
           <Route
-            exact
+            exact={true}
             path={`${activeWhen.path}`}
             children={({ match }) => <ArticlesHomePage rootPath={activeWhen.path} match={match} />}
           />
           <Route path={`${activeWhenPath}/profile/my-profile`} component={MyProfilePage} />
           <Route path={`${activeWhenPath}/profile/:profileId`} component={ProfilePage} />
-          <Route exact path={`${activeWhenPath}/article/:articleId`} component={ArticlePage} />
+          <Route
+            exact={true}
+            path={`${activeWhenPath}/article/:articleId`}
+            component={ArticlePage}
+          />
           <Route render={() => <div>{t('Article not found!')}</div>} />
         </Switch>
       </Router>
