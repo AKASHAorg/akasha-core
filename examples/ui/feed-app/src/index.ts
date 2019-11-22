@@ -8,9 +8,9 @@ const resourcePath = (pkg: string) => {
 (async function bootstrap(System) {
   // tslint:disable-next-line:no-console
   console.time('loadApps');
+  // example for loading from import map
+  const sidebarWidget = await System.import('@widget/sidebar');
   const layout = await System.import('/widgets/layout.js');
-  // example for loading from absolute path
-  const sidebarWidget = await System.import(resourcePath('/widgets/sidebar.js'));
 
   const topbarWidget = await System.import('/widgets/topbar.js');
   const profilePlugin = await System.import('/plugins/profile.js');
@@ -44,7 +44,7 @@ const resourcePath = (pkg: string) => {
     },
   ];
   const world = initSdk(appConfig, { plugins: registeredPlugins, widgets: registeredWidgets });
-  const eventsPlugin = await System.import('/plugins/events.js');
+  const eventsPlugin = await System.import(resourcePath('/plugins/events.js'));
   // example loading an extra plugin after start
   world.appLoader.registerPlugin({ app: eventsPlugin.application, sdkModules: [] });
   // @ts-ignore

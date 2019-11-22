@@ -9,7 +9,7 @@ config.devServer = {
     'Access-Control-Allow-Origin': '*',
   },
 };
-
+config.externals = [];
 config.mode = 'development';
 
 module.exports = config;

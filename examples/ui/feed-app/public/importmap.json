@@ -1,0 +1,12 @@
+{
+  "imports": {
+    "@akashaproject/design-system": "/design-system.js",
+    "react": "https://cdnjs.cloudflare.com/ajax/libs/react/16.11.0/umd/react.development.js",
+    "react-dom/server": "https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.11.0/umd/react-dom-server.browser.development.js",
+    "react-dom": "https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.11.0/umd/react-dom.development.js",
+    "react-router-dom": "https://unpkg.com/react-router-dom@5.1.2/umd/react-router-dom.js",
+    "react-i18next": "https://unpkg.com/react-i18next@11.0.1/dist/umd/react-i18next.js",
+    "immer": "https://unpkg.com/immer@5.0.0/dist/immer.umd.js",
+    "@widget/sidebar": "/widgets/sidebar.js"
+  }
+}
