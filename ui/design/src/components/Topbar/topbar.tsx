@@ -17,8 +17,8 @@ const AvatarButton = styled(ProfileAvatarButton)`
 interface ITopbarProps {
   className?: string;
   ethAddress: string;
-  avatarImage: string;
-  userName: string;
+  avatarImage?: string;
+  userName?: string;
   brandLabel: string | React.ReactElement;
   unreadNotifications?: number;
   notificationsData?: any[];

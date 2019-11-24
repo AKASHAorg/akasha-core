@@ -39,7 +39,7 @@ interface Quote extends IUser {
 export type ethAddress = string;
 interface IEntryBoxProps {
   entryData: IEntryData;
-  onClickAvatar: React.MouseEventHandler<ethAddress>;
+  onClickAvatar: React.EventHandler<any>;
   onClickUpvote: React.EventHandler<React.SyntheticEvent>;
   onClickDownvote: React.EventHandler<React.SyntheticEvent>;
   commentsTitle: string;

@@ -7,6 +7,7 @@ import { notificationsData } from './Popovers.stories';
 
 storiesOf('Topbar', module).add('Topbar', () => (
   <Topbar
+    ethAddress="0x003410490050000320006570034567114572000"
     avatarImage="https://placebeard.it/360x360"
     userName="john doe"
     brandLabel={<TextIcon iconType="ethereumWorldLogo" label="Ethereum.world" bold={true} />}

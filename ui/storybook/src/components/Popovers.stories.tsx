@@ -1,65 +1,75 @@
 /* eslint-disable import/first */
+import { Box, Icon, NotificationsPopover } from '@akashaproject/design-system';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
-import { Box, Icon, NotificationsPopover } from '@akashaproject/design-system';
 
 export const notificationsData = [
   {
+    ethAddress: '0x003410490050000320006570034567114572000',
     user: 'Mariana Gomes',
     userAvatar: 'http://placebeard.it/640/480',
     action: 'Comment',
     time: '22 July 2019 | 20h30',
   },
   {
+    ethAddress: '0x003420490050000320006570034567114572000',
     user: 'Gigi Patratel',
     userAvatar: 'http://placebeard.it/640/480',
     action: 'Upvote',
     time: '22 July 2019 | 20h30',
   },
   {
+    ethAddress: '0x003410490050000320006570034567114572000',
     user: 'Mariana Gomes',
     userAvatar: 'http://placebeard.it/640/480',
     action: 'Comment',
     time: '22 July 2019 | 20h30',
   },
   {
+    ethAddress: '0x003420490050000320006570034567114572000',
     user: 'Gigi Patratel',
     userAvatar: 'http://placebeard.it/640/480',
     action: 'Upvote',
     time: '22 July 2019 | 20h30',
   },
   {
+    ethAddress: '0x003410490050000320006570034567114572000',
     user: 'Mariana Gomes',
     userAvatar: 'http://placebeard.it/640/480',
     action: 'Comment',
     time: '22 July 2019 | 20h30',
   },
   {
+    ethAddress: '0x003420490050000320006570034567114572000',
     user: 'Gigi Patratel',
     userAvatar: 'http://placebeard.it/640/480',
     action: 'Upvote',
     time: '22 July 2019 | 20h30',
   },
   {
+    ethAddress: '0x003410490050000320006570034567114572000',
     user: 'Mariana Gomes',
     userAvatar: 'http://placebeard.it/640/480',
     action: 'Comment',
     time: '22 July 2019 | 20h30',
   },
   {
+    ethAddress: '0x003420490050000320006570034567114572000',
     user: 'Gigi Patratel',
     userAvatar: 'http://placebeard.it/640/480',
     action: 'Upvote',
     time: '22 July 2019 | 20h30',
   },
   {
+    ethAddress: '0x003410490050000320006570034567114572000',
     user: 'Mariana Gomes',
     userAvatar: 'http://placebeard.it/640/480',
     action: 'Comment',
     time: '22 July 2019 | 20h30',
   },
   {
+    ethAddress: '0x003420490050000320006570034567114572000',
     user: 'Gigi Patratel',
     userAvatar: 'http://placebeard.it/640/480',
     action: 'Upvote',

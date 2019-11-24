@@ -1,10 +1,6 @@
-import { Box, Layer, Text } from 'grommet';
+import { Layer } from 'grommet';
 import * as React from 'react';
-// import ReactQuill from 'react-quill';
-import styled from 'styled-components';
-// import '../../../node_modules/react-quill/dist/quill.bubble.css';
-import { Avatar } from '../Avatar/index';
-import { Icon } from '../Icon/index';
+import { EditorBox } from '../Editor/index';
 
 interface IEditorModal {
   className?: string;
@@ -16,21 +12,6 @@ interface IEditorModal {
   onPublish: any;
 }
 
-const StyledDiv = styled.div`
-  padding-right: ${props => `${props.theme.shapes.baseSpacing}px`};
-  color: ${props => props.theme.colors.accent};
-  opacity: 0.4;
-  &:hover {
-    cursor: pointer;
-    opacity: 1;
-  }
-`;
-
-const StyledBox = styled(Box)`
-  min-height: 200px;
-  max-height: 612px;
-`;
-
 const EditorModal: React.FC<IEditorModal> = props => {
   const {
     closeModal,
@@ -38,64 +19,19 @@ const EditorModal: React.FC<IEditorModal> = props => {
     ethAddress,
     className,
     publishTitle,
-    // placeholderTitle,
+    placeholderTitle,
     onPublish,
   } = props;
 
-  const [
-    editorState,
-    // setEditorState
-  ] = React.useState('');
-
-  const handlePublish = () => {
-    onPublish(ethAddress, avatar, editorState);
-  };
-
-  // const handleChange = (value: any) => {
-  //   setEditorState(value);
-  // };
-  //
-  // const modules = {
-  //   toolbar: [
-  //     [{ header: [1, 2, false] }],
-  //     ['bold', 'italic', 'underline'],
-  //     ['image', 'code-block'],
-  //   ],
-  // };
-
   return (
     <Layer onEsc={closeModal} onClickOutside={closeModal} modal={true} className={className}>
-      <StyledBox pad="none" width="581px" justify="between">
-        <Box direction="row" pad="medium" align="start" overflow="auto" className="scrollBox">
-          <Avatar seed={ethAddress} src={avatar} />
-          <Box width="480px">
-            {/*<ReactQuill*/}
-            {/*  value={editorState}*/}
-            {/*  onChange={handleChange}*/}
-            {/*  theme="bubble"*/}
-            {/*  modules={modules}*/}
-            {/*  placeholder={placeholderTitle}*/}
-            {/*  scrollingContainer=".scrollBox"*/}
-            {/*/>*/}
-          </Box>
-        </Box>
-        <Box
-          direction="row"
-          justify="between"
-          fill="horizontal"
-          pad={{ horizontal: 'medium', vertical: 'xsmall' }}
-        >
-          <Box direction="row" gap="xsmall" align="center">
-            <Icon type="addAppDark" clickable={true} />
-            <Icon type="quoteDark" clickable={true} />
-            <Icon type="media" clickable={true} />
-            <Icon type="emoji" clickable={true} />
-          </Box>
-          <StyledDiv onClick={handlePublish}>
-            <Text size="large">{publishTitle}</Text>
-          </StyledDiv>
-        </Box>
-      </StyledBox>
+      <EditorBox
+        ethAddress={ethAddress}
+        publishTitle={publishTitle}
+        placeholderTitle={placeholderTitle}
+        onPublish={onPublish}
+        avatar={avatar}
+      />
     </Layer>
   );
 };

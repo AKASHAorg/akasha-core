@@ -64,28 +64,6 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
     setDropOpen(false);
   };
 
-  // // eslint-disable-next-line
-  // const onSelect = (event: any) => setInputValue(event.suggestion.inputValue);
-  // // eslint-disable-next-line
-  // const renderSuggestions = () => {
-  //   return suggestions.users
-  //     .filter(
-  //       ({ name }: { name: string }) =>
-  //         (name as string).toLowerCase().indexOf(inputValue.toLowerCase()) >= 0,
-  //     )
-  //     .map(
-  //       ({ name, imageUrl }: { name: string; imageUrl: string }, index: number, list: any[]) => ({
-  //         label: (
-  //           <Box direction="row" align="center" gap="small" pad="small">
-  //             <Image width="32px" src={imageUrl} style={{ borderRadius: '100%' }} />
-  //             <Text>{name}</Text>
-  //           </Box>
-  //         ),
-  //         inputValue: name,
-  //       }),
-  //     );
-  // };
-
   const handleClickUser = (name: string) => {
     handleClick(name);
     onClickUser(name);
