@@ -59,7 +59,8 @@
   "workspaces": [
     "sdk-packages/*",
     "ui/*",
-    "scripts/*"
+    "scripts/*",
+    "examples/*"
   ],
   "engines": {
     "node": ">=12.13.0",
