@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { getEditableImageFieldHandlers } from '../../utils/get-editable-field-handlers';
 import Avatar, { AvatarProps } from './avatar';
 import { AvatarSize, StyleFileInput } from './styled-avatar';
 
@@ -8,39 +9,20 @@ export interface EditableAvatarProps extends Omit<AvatarProps, 'onClick'> {
 
 const EditableAvatar: React.FC<EditableAvatarProps & Partial<typeof defaultProps>> = props => {
   const { src, onChange } = props;
-  // @Todo: needs a better type declaration
-  const inputRef: any = React.useRef();
+  const inputRef = React.useRef(null);
+  const [newAvatar, setNewAvatar] = React.useState(src);
 
-  const [avatarImg, setNewAvatarImg] = React.useState(src);
-
-  const clickHandler: React.EventHandler<React.SyntheticEvent<HTMLDivElement, MouseEvent>> = () => {
-    if (inputRef) {
-      inputRef!.current!.click();
-    }
-  };
-
-  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!(e.target.files && e.target.files[0])) {
-      onChange('');
-
-      return;
-    }
-
-    const file = e.target.files[0];
-    const fileReader = new FileReader();
-    fileReader.addEventListener('load', () => {
-      const result = fileReader.result as string;
-      setNewAvatarImg(result);
-      onChange(result);
-    });
-
-    fileReader.readAsDataURL(file);
-  };
+  const { handleClick, handleChange } = getEditableImageFieldHandlers(
+    true,
+    inputRef,
+    setNewAvatar,
+    onChange,
+  );
 
   return (
     <>
-      <Avatar {...props} onClick={clickHandler} src={avatarImg} />
-      <StyleFileInput type="file" ref={inputRef} onChange={changeHandler} />
+      <Avatar {...props} src={newAvatar} onClick={handleClick} />
+      <StyleFileInput type="file" ref={inputRef} onChange={handleChange} />
     </>
   );
 };

@@ -1,6 +1,5 @@
 import { Text, TextArea } from 'grommet';
 import * as React from 'react';
-
 import { getEditableTextFieldHandlers } from '../../../utils/get-editable-field-handlers';
 import { IProfileData } from '../profile-card';
 

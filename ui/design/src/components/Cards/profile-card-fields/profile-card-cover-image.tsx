@@ -1,6 +1,5 @@
 import { Box } from 'grommet';
 import * as React from 'react';
-
 import { getEditableImageFieldHandlers } from '../../../utils/get-editable-field-handlers';
 import { Icon } from '../../Icon';
 import IconButton from '../../IconButton/icon-button';

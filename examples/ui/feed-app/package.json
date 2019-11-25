@@ -3,11 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "jest": "24.9.0"
   },
   "peerDependencies": {
-    "react": "16.11.0",
-    "react-dom": "16.11.0"
   },
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --port 8131",

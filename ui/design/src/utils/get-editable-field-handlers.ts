@@ -35,6 +35,7 @@ export const getEditableImageFieldHandlers = (
       imageRef.current.click();
     }
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!editable) {
       return;
