@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
-    "lib": ["dom"]
+    "lib": ["dom", "es2017"]
   },
   "references": [
     {
