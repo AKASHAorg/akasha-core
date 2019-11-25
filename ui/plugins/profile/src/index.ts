@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next';
 /**
  * All the plugins must export an object like this:
  */
-const app = {
+export const application = {
   // This is the root route in which the plugin will render.
   // Make sure to change it as it fits.
   activeWhen: {
@@ -26,9 +26,3 @@ const app = {
   sdkModules: [],
   title: 'AKASHA Profile',
 };
-
-export default app;
-
-export function registerPlugin(load: any) {
-  load({ app });
-}

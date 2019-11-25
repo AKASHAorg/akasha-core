@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next';
 /**
  * All widgets must export an object like this:
  */
-export default {
+export const application = {
   // translation config
   i18nConfig: {
     // namespaces that this plugin requires.

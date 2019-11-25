@@ -2,17 +2,17 @@ const webpack = require('webpack');
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { name } = require('./lib/index');
-
+const commons = require('../../app.pack.conf');
 module.exports = {
   entry: './lib/index.js',
   output: {
     libraryTarget: 'system',
-    library: name,
+    // library: 'ui-widget-sidebar',
     path: path.resolve(__dirname, 'dist'),
     filename: 'layout.js',
+    publicPath: '/widgets/',
   },
-  mode: 'production',
+  mode: 'development',
   module: {
     rules: [
       { parser: { System: false } },
@@ -34,8 +34,9 @@ module.exports = {
       profile: true,
     }),
     new CleanWebpackPlugin({ verbose: true }),
-    new webpack.AutomaticPrefetchPlugin(),
     new HtmlWebpackPlugin(),
   ],
   devtool: 'source-map',
+  externals: commons.externals,
+  optimization: commons.optimization,
 };

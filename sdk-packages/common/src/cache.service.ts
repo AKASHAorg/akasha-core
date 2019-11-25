@@ -9,4 +9,4 @@ const service: AkashaService = (invoke, log) => {
   return { getStash };
 };
 
-export default { name: CACHE_SERVICE, service };
+export default { service, name: CACHE_SERVICE };

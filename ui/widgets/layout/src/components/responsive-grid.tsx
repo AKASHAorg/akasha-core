@@ -71,7 +71,7 @@ const ResponsiveGrid = (props: IResponsiveGridSystem) => {
   }
   return (
     <Grid
-      fill
+      fill={true}
       rows={['72px', '1fr']}
       columns={columns[size]}
       gap={{
