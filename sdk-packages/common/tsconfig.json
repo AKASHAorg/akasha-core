@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
-    "lib": ["es7", "dom"]
+    "lib": ["dom"]
   },
   "references": [
     {
