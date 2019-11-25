@@ -22,7 +22,7 @@
     "tsc": "tsc",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/sidebar.* ../../build/widgets"
+    "postpack": "copyfiles -f ./dist/*sidebar.* ../../build/widgets"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",

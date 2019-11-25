@@ -16,11 +16,11 @@ const Routes: React.FC<IRoutesProps> = props => {
       <Router>
         <Switch>
           <Route
-            exact
+            exact={true}
             path={`${activeWhen.path}`}
             children={({ match }) => <EventsHomePage rootPath={activeWhen.path} match={match} />}
           />
-          <Route exact path={`${activeWhen.path}/:eventId`} component={EventPage} />
+          <Route exact={true} path={`${activeWhen.path}/:eventId`} component={EventPage} />
           <Route render={() => <div>{t('Event not found!')}</div>} />
         </Switch>
       </Router>

@@ -1,8 +1,7 @@
 {
-  "extends": "../../../tsconfig.json",
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib",
-    "rootDir": "./src",
+    "module": "commonjs",
     "lib": ["es6", "dom", "es2017"],
     "sourceMap": true,
     "allowJs": false,
@@ -17,10 +16,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "downlevelIteration": false
-  },
-  "references": [],
-  "include": ["./src"]
+    "resolveJsonModule": false,
+    "skipLibCheck": true
+  }
 }

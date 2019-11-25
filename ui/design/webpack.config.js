@@ -2,15 +2,15 @@ const webpack = require('webpack');
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { name } = require('./lib/index');
-
+const commons = require('../app.pack.conf');
 module.exports = {
   entry: './lib/index.js',
   output: {
     libraryTarget: 'system',
-    library: name,
+    //library: 'design-system',
     path: path.resolve(__dirname, 'dist'),
     filename: 'design-system.js',
+    publicPath: '/',
   },
   mode: 'production',
   module: {
@@ -38,5 +38,6 @@ module.exports = {
     new HtmlWebpackPlugin(),
   ],
   devtool: 'source-map',
-  externals: [{}],
+  externals: commons.externals,
+  optimization: commons.optimization,
 };
