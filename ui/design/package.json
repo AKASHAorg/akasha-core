@@ -29,7 +29,7 @@
     "lint": "tslint -c tslint.json src/**/*.{ts,tsx} --fix --format verbose",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "build": "tsc --build",
-    "tsc": "tsc",
+    "tsc": "tsc --build",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/*design-system.* ../build/"

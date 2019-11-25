@@ -9,11 +9,5 @@ module.exports = {
     ///^single-spa-react$/,
     /// ^react-tracked$/,
   ],
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-      minChunks: 10,
-      minSize: 328000,
-    },
-  },
+  optimization: {},
 };

@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const commons = require('../../app.pack.conf');
 
 module.exports = {
-  entry: './lib/index.js',
+  entry: './src/index.ts',
   output: {
     libraryTarget: 'system',
     //library: 'ui-plugin-profile',
@@ -15,17 +15,10 @@ module.exports = {
   },
   mode: 'development',
   module: {
-    rules: [
-      { parser: { System: false } },
-      {
-        test: /\.js?$/,
-        exclude: [path.resolve(__dirname, 'node_modules')],
-        loader: 'babel-loader',
-      },
-    ],
+    rules: [{ parser: { System: false } }, { test: /\.ts(x)?$/, use: 'ts-loader' }],
   },
   resolve: {
-    modules: [__dirname, 'node_modules'],
+    extensions: ['.ts', '.tsx', '.js'],
   },
   plugins: [
     new webpack.ProgressPlugin({
