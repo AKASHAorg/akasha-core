@@ -16,7 +16,7 @@ interface IMyProfileProps {
 
 const MyProfilePage = (props: IMyProfileProps) => {
   const [profileState, profileActions] = useProfile();
-
+  console.log(props, 'my profile page props');
   React.useEffect(() => {
     if (profileState.loggedProfile) {
       fetchProfileData(profileState.loggedProfile).then(result => {
@@ -54,6 +54,7 @@ const ProfilePageHeader = (props: IProfilePageHeaderProps) => {
   const profileState = useProfileState();
   // const { profileDataFetcher } = props;
   // profileDataFetcher.run();
+  console.log(props, 'profile page header props');
   const profileData = {
     ...profileState.profiles.find(prof => prof.ethAddress === profileState.loggedProfile),
   };

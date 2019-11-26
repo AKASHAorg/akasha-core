@@ -9,25 +9,26 @@ const ServiceStatus = {
   REJECTED: 2,
 };
 
-const dispatchWhenResolved = (service: any, dispatch: any) => {
-  let status = ServiceStatus.PENDING;
-  let error;
-  const suspender = service().then(
-    (resp: any) => {
-      status = ServiceStatus.RESOLVED;
-      dispatch({ ...resp });
-    },
-    (err: Error) => {
-      status = ServiceStatus.REJECTED;
-      error = err;
-    },
-  );
+// const dispatchWhenResolved = (service: any, dispatch: any) => {
+//   let status = ServiceStatus.PENDING;
+// //   let error;
+//   const suspender = service().then(
+//     (resp: any) => {
+//       status = ServiceStatus.RESOLVED;
+//       dispatch({ ...resp });
+//     },
+//     (err: Error) => {
+//       status = ServiceStatus.REJECTED;
+//     //   error = err;
+//       throw err;
+//     },
+//   );
 
-  return {
-    status,
-    value: suspender,
-  };
-};
+//   return {
+//     status,
+//     value: suspender,
+//   };
+// };
 
 /**
  * a fetcher that works with React.Suspense
