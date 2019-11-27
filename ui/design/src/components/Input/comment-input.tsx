@@ -7,13 +7,14 @@ import { Icon } from '../Icon/index';
 
 interface ICommentInput {
   className?: string;
-  avatarImg: any;
+  avatarImg?: string;
+  ethAddress: string;
   placeholderTitle: string;
   publishTitle: string;
-  onPublish: any;
+  onPublish: (inputValue: string, ethAddress: string) => void;
 }
 
-const StyledDiv = styled.div`
+export const StyledDiv = styled.div`
   padding-right: ${props => `${props.theme.shapes.baseSpacing}px`};
   color: ${props => props.theme.colors.accent};
   opacity: 0.4;
@@ -24,7 +25,7 @@ const StyledDiv = styled.div`
 `;
 
 const CommentInput: React.FC<ICommentInput> = props => {
-  const { avatarImg, className, placeholderTitle, onPublish, publishTitle } = props;
+  const { avatarImg, ethAddress, className, placeholderTitle, onPublish, publishTitle } = props;
   const [inputValue, setInputValue] = useState('');
   const [textAreaOpen, setTextAreaOpen] = useState(false);
 
@@ -43,7 +44,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
   };
 
   const handlePublish = () => {
-    onPublish(inputValue);
+    onPublish(inputValue, ethAddress);
     setInputValue('');
     setTextAreaOpen(false);
   };
@@ -115,10 +116,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
 
   return (
     <Box direction="row" gap="xsmall" fill="horizontal" pad="none" className={className}>
-      <div>
-        <Avatar src={avatarImg} size="md" />
-      </div>
-
+      <Avatar src={avatarImg} size="md" seed={ethAddress} />
       {!textAreaOpen && renderFakeInput()}
       {textAreaOpen && renderTextArea()}
     </Box>

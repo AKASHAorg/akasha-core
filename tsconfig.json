@@ -4,8 +4,6 @@
     "moduleResolution": "node",
     "alwaysStrict": true,
     "declaration": true,
-    "downlevelIteration": true,
-    "declarationMap": true,
     "noImplicitAny": false,
     "removeComments": false,
     "noLib": false,

@@ -6,7 +6,7 @@ import { BasicCardBox, EntryBox } from './index';
 export interface IEntryCardProps {
   className?: string;
   entryData: IEntryData;
-  onClickAvatar: React.EventHandler<React.SyntheticEvent>;
+  onClickAvatar: React.MouseEventHandler<any>;
   onClickUpvote: React.EventHandler<React.SyntheticEvent>;
   onClickDownvote: React.EventHandler<React.SyntheticEvent>;
   commentsTitle: string;
@@ -18,11 +18,12 @@ export interface IEntryCardProps {
   quotedByTitle: string;
   replyTitle: string;
   fullEntry?: boolean;
-  locale?: ILocale;
+  locale: ILocale;
   commentInputPlaceholderTitle: string;
   commentInputPublishTitle: string;
   publishComment: any;
-  loggedProfileAvatar: string;
+  loggedProfileAvatar?: string;
+  loggedProfileEthAddress: string;
 }
 
 const EntryCard: React.FC<IEntryCardProps> = props => {
@@ -46,6 +47,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     commentInputPublishTitle,
     publishComment,
     loggedProfileAvatar,
+    loggedProfileEthAddress,
   } = props;
 
   return (
@@ -67,6 +69,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         commentInputPlaceholderTitle={commentInputPlaceholderTitle}
         commentInputPublishTitle={commentInputPublishTitle}
         loggedProfileAvatar={loggedProfileAvatar}
+        loggedProfileEthAddress={loggedProfileEthAddress}
         publishComment={publishComment}
       />
       {fullEntry &&
@@ -86,6 +89,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
             quotedByTitle={quotedByTitle}
             replyTitle={replyTitle}
             key={index}
+            loggedProfileAvatar={loggedProfileAvatar}
+            loggedProfileEthAddress={loggedProfileEthAddress}
             comment={true}
             locale={locale}
           />

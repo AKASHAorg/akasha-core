@@ -12,7 +12,7 @@ const config = {
     hashDigestLength: 20,
     filename: 'akasha.[name].[contenthash].js',
     library: 'AkashaSDK',
-    libraryTarget: 'umd',
+    libraryTarget: 'window',
     umdNamedDefine: true,
     publicPath: '/',
   },
@@ -56,9 +56,8 @@ const config = {
       },
     ],
   },
-  target: 'web',
   devtool: 'source-map',
-  mode: 'production',
+  mode: 'development',
 };
 
 module.exports = config;

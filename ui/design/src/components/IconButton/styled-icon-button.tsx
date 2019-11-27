@@ -48,6 +48,7 @@ const StyledIconButton = styled(Button)<IIconButtonProps>`
     }
     if (props.share) {
       return css`
+        border-radius: ${props.theme.shapes.smallBorderRadius};
         background-color: ${props.theme.colors.secondaryOpacity};
         color: ${props.theme.colors.white};
         &:hover {
@@ -56,6 +57,7 @@ const StyledIconButton = styled(Button)<IIconButtonProps>`
         }
       `;
     }
+    return;
   }}
 `;
 

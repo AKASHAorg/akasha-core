@@ -2,13 +2,8 @@ import { Text } from 'grommet';
 import styled from 'styled-components';
 
 const AvatarDiv = styled.div`
-  box-sizing: border-box;
-  border-radius: 100%;
-  height: 84px;
-  width: 84px;
-  border: 4px solid #fff;
-  transform: translateY(-30px);
-  background-color: grey;
+  position: relative;
+  top: -30px;
 `;
 
 const ShareButtonContainer = styled.div`
@@ -24,4 +19,8 @@ const StyledActionText = styled(Text)`
   }
 `;
 
-export { AvatarDiv, ShareButtonContainer, StyledActionText };
+const StyledImageInput = styled.input`
+  display: none;
+`;
+
+export { AvatarDiv, ShareButtonContainer, StyledActionText, StyledImageInput };

@@ -1,4 +1,3 @@
-// @ts-ignore
 import { Grommet, responsiveBreakpoints } from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent } from 'react';

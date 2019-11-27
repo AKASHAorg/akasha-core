@@ -35,6 +35,7 @@ const StyledAvatar = styled.div<AvatarProps>`
         border: ${props.theme.shapes.baseSpacing}px solid ${props.theme.colors.white};
       `;
     }
+    return;
   }}
   box-sizing: border-box;
   cursor: ${props => (props.isClickable ? 'pointer' : 'default')};
@@ -47,9 +48,13 @@ const StyledAvatar = styled.div<AvatarProps>`
   img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
     position: absolute;
   }
+`;
+
+export const StyleFileInput = styled.input`
+  display: none;
 `;
 
 export default StyledAvatar;

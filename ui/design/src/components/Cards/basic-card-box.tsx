@@ -6,7 +6,7 @@ const StyledBox = styled(Box)`
   background-color: ${props => props.theme.colors.background};
 `;
 
-interface IBasicCardBox {
+export interface IBasicCardBox {
   className?: string;
 }
 

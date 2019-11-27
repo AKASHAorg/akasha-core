@@ -1,0 +1,39 @@
+{
+  "name": "@akashaproject/sdk-ui-plugin-loader",
+  "version": "0.1.0",
+  "description": "Plugin loader for AKASHA web",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "contributors": [
+    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AkashaProject/akasha-sdk-js.git"
+  },
+  "main": "lib/index.js",
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
+  "scripts": {
+    "build": "tsc --build && npm run pack",
+    "test": "jest",
+    "tsc": "tsc",
+    "prepare": "npm run tsc",
+    "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333"
+  },
+  "dependencies": {
+    "i18next": "^17.0.11",
+    "i18next-browser-languagedetector": "^4.0.1",
+    "i18next-fetch-backend": "^2.2.0",
+    "pino": "^5.13.5",
+    "single-spa": "^4.4.1"
+  },
+  "devDependencies": {},
+  "files": [
+    "lib",
+    "dist"
+  ]
+}

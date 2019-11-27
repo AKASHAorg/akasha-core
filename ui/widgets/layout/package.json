@@ -20,7 +20,9 @@
   "scripts": {
     "build": "tsc --build",
     "tsc": "tsc",
-    "prepare": "npm run tsc"
+    "prepare": "npm run tsc",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "postpack": "copyfiles -f ./dist/*layout.* ../../build/widgets"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",
@@ -30,8 +32,8 @@
     "react-i18next": "^11.0.1"
   },
   "devDependencies": {
-    "@types/react": "16.9.11",
-    "@types/react-dom": "16.9.3",
+    "@types/react": "16.9.13",
+    "@types/react-dom": "16.9.4",
     "@types/single-spa-react": "^2.8.3",
     "@types/styled-components": "^4.1.20"
   },
