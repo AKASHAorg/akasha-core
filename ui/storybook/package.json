@@ -19,7 +19,7 @@
     "@storybook/core-events": "5.2.6",
     "@storybook/react": "5.2.6",
     "@storybook/theming": "5.2.6",
-    "@types/storybook__addon-info": "^4.1.2",
+    "@types/storybook__addon-info": "^5.2.1",
     "@types/storybook__react": "^4.0.2",
     "storybook-addon-styled-component-theme": "^1.2.5",
     "react-docgen-typescript-loader": "^3.3.0",
