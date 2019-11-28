@@ -1,6 +1,6 @@
 import { IColors } from './colors-light';
 
-interface IColorsDark extends IColors {
+export interface IColorsDark extends IColors {
   blue: string;
   darkBlue: string;
   grey: string;

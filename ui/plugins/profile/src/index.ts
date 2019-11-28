@@ -21,7 +21,12 @@ export const application = {
     // i18next.use(arr[0]).use(arr[1]).use(arr[n])
     use: [initReactI18next],
   },
-  loadingFn: (): Promise<any> => import('./components'),
+  loadingFn: (): Promise<any> =>
+    import(
+      /* webpackChunkName: "profile" */
+      /* webpackMode: "lazy" */
+      './components'
+    ),
   name: 'ui-plugin-profile',
   sdkModules: [],
   title: 'AKASHA Profile',

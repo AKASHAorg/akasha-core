@@ -1,7 +1,7 @@
 import * as React from 'react';
 import StyledIconLink from './styled-icon-link';
 
-interface LinkIconButtonProps {
+export interface LinkIconButtonProps {
   className?: string;
   onClick: React.EventHandler<React.SyntheticEvent>;
   iconPosition?: 'start' | 'end';
