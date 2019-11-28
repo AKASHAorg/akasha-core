@@ -1,7 +1,7 @@
 import { Box } from 'grommet';
 import styled, { css } from 'styled-components';
 
-interface IIconDiv {
+export interface IIconDiv {
   iconSize?: string;
 }
 

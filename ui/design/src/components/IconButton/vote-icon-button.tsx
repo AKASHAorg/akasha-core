@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Icon } from '../Icon';
 import StyledIconButton from './styled-icon-button';
 
-interface IVoteIconProps {
+export interface IVoteIconProps {
   className?: string;
   voteType: 'upvote' | 'downvote';
   voteCount: number | string;

@@ -4,7 +4,7 @@ import { Avatar } from '../Avatar/index';
 import BasicPopover from './basic-popover';
 import { StyledListContainer, StyledListElem } from './styled-drop';
 
-interface INotificationsPopover {
+export interface INotificationsPopover {
   className?: string;
   onClickNotification: () => void;
   dataSource: INotification[];
@@ -12,7 +12,7 @@ interface INotificationsPopover {
   closePopover: any;
 }
 
-interface INotification {
+export interface INotification {
   user: string;
   userAvatar: string;
   time: string;

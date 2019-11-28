@@ -21,7 +21,9 @@
     "start:feed-app": "lerna exec --parallel --scope translations-server --scope feed-app-dev -- npm run start --stream",
     "start:translations-server": "npm run start --prefix scripts/translations-server",
     "start:design-system:storybook": "lerna run storybook --scope @akashaproject/storybook --stream",
-    "pack:plugins": "lerna run pack --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream"
+    "pack:ui-apps": "lerna run pack --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream",
+    "pack:only": "lerna run pack --scope $AWF_PACKAGE --stream",
+    "start:only": "lerna run start --scope $AWF_PACKAGE --stream"
   },
   "devDependencies": {
     "@types/jest": "24.0.23",
@@ -54,7 +56,8 @@
     "html-webpack-plugin": "3.2.0",
     "clean-webpack-plugin": "3.0.0",
     "copyfiles": "2.1.1",
-    "copy-webpack-plugin": "5.0.5"
+    "copy-webpack-plugin": "5.0.5",
+    "source-map-loader": "^0.2.4"
   },
   "workspaces": [
     "sdk-packages/*",

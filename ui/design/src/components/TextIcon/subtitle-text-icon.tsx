@@ -4,7 +4,7 @@ import { Icon } from '../Icon';
 import { IconType } from '../Icon/icon';
 import { IconDiv, StyledBox } from './styled-subtitle-text-icon';
 
-interface ISubtitleTextIcon {
+export interface ISubtitleTextIcon {
   className?: string;
   iconType?: IconType;
   iconSize?: string;

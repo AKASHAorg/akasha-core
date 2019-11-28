@@ -1,7 +1,7 @@
 import { Box, Drop } from 'grommet';
 import styled from 'styled-components';
 
-interface IStyledDrop {
+export interface IStyledDrop {
   gap?: string;
 }
 

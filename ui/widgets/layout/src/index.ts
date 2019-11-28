@@ -1,5 +1,10 @@
 export const application = {
-  loadingFn: (): Promise<any> => import('./components'),
+  loadingFn: (): Promise<any> =>
+    import(
+      /* webpackChunkName: "layout" */
+      /* webpackMode: "lazy" */
+      './components'
+    ),
   name: 'ui-widget-sidebar',
   title: 'Layout Widget',
   pluginSlotId: 'plugin-slot',

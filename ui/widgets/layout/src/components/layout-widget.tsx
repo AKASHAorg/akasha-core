@@ -1,8 +1,9 @@
-import { Grommet } from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent } from 'react';
 import ResponsiveGrid from './responsive-grid';
 
+const { Grommet } = DS;
 const breakpoints = {
   global: {
     breakpoints: {
