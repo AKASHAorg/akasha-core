@@ -10,7 +10,7 @@ import {
   StyledTextInput,
 } from './styled-search-input';
 
-interface ICustomSearchInput {
+export interface ICustomSearchInput {
   className?: string;
   getData: () => void;
   dataSource: any;

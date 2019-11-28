@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsc --build",
     "test": "jest",
-    "tsc": "tsc",
+    "tsc": "tsc --build",
     "extract:translations": "npx i18next src/components/**/*.tsx -r -c ./i18next-parser.config.js",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
@@ -28,7 +28,6 @@
     "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333"
   },
   "dependencies": {
-    "@akashaproject/design-system": "*",
     "@types/i18next": "^13.0.0",
     "@types/react-i18next": "^8.1.0",
     "@types/react-router": "^5.1.2",

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import StyledIconButton from './styled-icon-button';
-interface IIconButtonProps {
+export interface IIconButtonProps {
   className?: string;
   icon: React.ReactElement;
   label: string;

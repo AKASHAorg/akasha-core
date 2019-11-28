@@ -1,5 +1,4 @@
-// @ts-ignore
-import { styled } from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
 import React, { Dispatch, PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { eventsInit, EventsProvider, eventsReducer } from './reducers/events';
@@ -12,6 +11,7 @@ import {
 } from './reducers/profiles';
 import Routes from './routes';
 
+const { styled } = DS;
 export interface IProps {
   singleSpa: any;
   activeWhen: {

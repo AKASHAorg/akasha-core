@@ -21,7 +21,7 @@ const initDiChannel = (di: DIContainer, sendChannel: SendChannel) => {
   };
 };
 
-module.exports = function init(
+export function init(
   appLoaderOptions: {
     config: ILoaderConfig;
     initialApps: { plugins?: IPluginEntry[]; widgets?: IWidgetEntry[] };
@@ -43,4 +43,4 @@ module.exports = function init(
   }
   const appLoader = new AppLoader(appLoaderOptions.config, appLoaderOptions.initialApps);
   return Object.assign({}, modules, { start, appLoader });
-};
+}

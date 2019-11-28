@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Avatar } from '../Avatar/index';
 import { Icon } from '../Icon/index';
 
-interface IEditorModal {
+export interface IEditorModal {
   className?: string;
   avatar?: string;
   ethAddress: string;
