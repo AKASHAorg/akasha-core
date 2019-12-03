@@ -10,7 +10,7 @@
   "devDependencies": {
     "@akashaproject/design-system": "*",
     "@storybook/addon-a11y": "5.2.6",
-    "@storybook/addon-actions": "5.2.6",
+    "@storybook/addon-actions": "5.2.8",
     "@storybook/addon-info": "5.2.8",
     "@storybook/addon-knobs": "5.2.6",
     "@storybook/addon-links": "5.2.6",
@@ -18,7 +18,7 @@
     "@storybook/addons": "5.2.8",
     "@storybook/core-events": "5.2.6",
     "@storybook/react": "5.2.6",
-    "@storybook/theming": "5.2.6",
+    "@storybook/theming": "5.2.8",
     "@types/storybook__addon-info": "^4.1.2",
     "@types/storybook__react": "^4.0.2",
     "storybook-addon-styled-component-theme": "^1.2.5",
