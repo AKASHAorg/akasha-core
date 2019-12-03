@@ -16,3 +16,11 @@ export const initialValue = Value.fromJSON({
     ],
   },
 });
+
+export const schema = {
+  blocks: {
+    image: {
+      isVoid: true,
+    },
+  },
+};

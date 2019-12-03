@@ -1,8 +1,15 @@
 import * as React from 'react';
 import { Editor } from 'slate';
 import { RenderBlockProps, RenderMarkProps } from 'slate-react';
+import styled from 'styled-components';
 
-const renderBlock = (props: RenderBlockProps, _editor: Editor, next: () => any) => {
+const StyledImg = styled.img`
+  display: block;
+  max-width: 100%;
+  max-height: 20em;
+`;
+
+const renderBlock = (props: RenderBlockProps, _editor: Editor, next: () => void) => {
   switch (props.node.type) {
     case 'code':
       return (
@@ -18,12 +25,15 @@ const renderBlock = (props: RenderBlockProps, _editor: Editor, next: () => any) 
       );
     case 'quote':
       return <blockquote {...props.attributes}>{props.children}</blockquote>;
+    case 'image':
+      const src = props.node.data.get('src');
+      return <StyledImg {...props.attributes} src={src} />;
     default:
       return next();
   }
 };
 
-const renderMark = (props: RenderMarkProps, _editor: Editor, next: () => any) => {
+const renderMark = (props: RenderMarkProps, _editor: Editor, next: () => void) => {
   switch (props.mark.type) {
     case 'bold':
       return <strong>{props.children}</strong>;

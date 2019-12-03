@@ -1,20 +1,25 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { Editor } from 'slate-react';
+import { Editor as SlateEditor } from 'slate';
+import { Editor, EditorProps } from 'slate-react';
 import styled from 'styled-components';
 import { Avatar } from '../Avatar/index';
+import { IEntryData } from '../Cards/entry-box';
 import { Icon } from '../Icon/index';
+import EmbedBox from './embed-box';
+import { FormatToolbar } from './format-toolbar';
 import { html } from './html-serialize';
-import { initialValue } from './initialValue';
-import { boldPlugin, codePlugin, italicPlugin, underlinePlugin } from './plugins';
-import HoveringMenu from './format-toolbar';
+import { initialValue, schema } from './initialValue';
+import { boldPlugin, codePlugin, commands, italicPlugin, underlinePlugin } from './plugins';
+import { renderBlock, renderMark } from './renderers';
 
-interface IEditorBox {
+export interface IEditorBox {
   avatar?: string;
   ethAddress: string;
   publishTitle: string;
   placeholderTitle: string;
   onPublish: any;
+  embedEntryData?: IEntryData;
 }
 
 const StyledDiv = styled.div`
@@ -32,12 +37,66 @@ const StyledBox = styled(Box)`
   max-height: 612px;
 `;
 
-const plugins = [boldPlugin, codePlugin, italicPlugin, underlinePlugin];
+const plugins = [boldPlugin, codePlugin, italicPlugin, underlinePlugin, commands];
 
 const EditorBox: React.FC<IEditorBox> = props => {
-  const { avatar, ethAddress, publishTitle, placeholderTitle, onPublish } = props;
+  const { avatar, ethAddress, publishTitle, placeholderTitle, onPublish, embedEntryData } = props;
 
   const [editorState, setEditorState] = React.useState(initialValue);
+
+  const menuRef: React.RefObject<HTMLElement> = React.useRef(null);
+
+  const editorRef: React.RefObject<any> = React.useRef(null);
+
+  const handleMediaClick = (event: React.SyntheticEvent<any, MouseEvent>) => {
+    event.preventDefault();
+    const src = window.prompt('Enter the URL of the image:');
+    if (!src) {
+      return;
+    }
+    if (editorRef && editorRef.current) {
+      editorRef.current.insertImage(src);
+    }
+  };
+
+  const updateMenu = () => {
+    const menu = menuRef.current;
+    if (!menu) {
+      return;
+    }
+
+    const { fragment, selection } = editorState;
+
+    if (selection.isBlurred || selection.isCollapsed || fragment.text === '') {
+      menu.removeAttribute('style');
+      return;
+    }
+
+    const native = window.getSelection();
+    if (native) {
+      const range = native.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
+      // menu.style.opacity = 1;
+      menu.style.top = `${rect.top + window.pageYOffset - menu.offsetHeight}px`;
+
+      menu.style.left = `${rect.left +
+        window.pageXOffset -
+        menu.offsetWidth / 2 +
+        rect.width / 2}px`;
+    }
+  };
+
+  React.useEffect(() => updateMenu());
+
+  const renderEditor = (_props: EditorProps, editor: SlateEditor, next: () => any) => {
+    const children = next();
+    return (
+      <React.Fragment>
+        {children}
+        <FormatToolbar ref={menuRef} editor={editor} />
+      </React.Fragment>
+    );
+  };
 
   const handlePublish = () => {
     const content = html.serialize(editorState);
@@ -45,7 +104,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
     onPublish(ethAddress, editorState);
   };
 
-  const handleChange = ({ value }: any) => {
+  const handleChange = ({ value }: SlateEditor) => {
     setEditorState(value);
   };
 
@@ -53,16 +112,22 @@ const EditorBox: React.FC<IEditorBox> = props => {
     <StyledBox pad="none" width="581px" justify="between">
       <Box direction="row" pad="medium" align="start" overflow="auto" className="scrollBox">
         <Avatar seed={ethAddress} src={avatar} />
-        <Box width="480px" pad="small">
+        <Box width="480px" pad={{ horizontal: 'small' }}>
           <Editor
+            ref={editorRef}
             value={editorState}
             onChange={handleChange}
             plugins={plugins}
             placeholder={placeholderTitle}
+            renderEditor={renderEditor}
+            renderBlock={renderBlock}
+            renderMark={renderMark}
+            spellCheck={false}
+            autoCorrect={false}
+            autoFocus={true}
+            schema={schema}
           />
-        </Box>
-        <Box width="480px" pad="small">
-          <HoveringMenu />
+          {embedEntryData && <EmbedBox embedEntryData={embedEntryData} />}
         </Box>
       </Box>
       <Box
@@ -73,8 +138,8 @@ const EditorBox: React.FC<IEditorBox> = props => {
       >
         <Box direction="row" gap="xsmall" align="center">
           <Icon type="addAppDark" clickable={true} />
-          <Icon type="quoteDark" clickable={true} />
-          <Icon type="media" clickable={true} />
+          <Icon type="quote" clickable={true} />
+          <Icon type="media" clickable={true} onClick={handleMediaClick} />
           <Icon type="emoji" clickable={true} />
         </Box>
         <StyledDiv onClick={handlePublish}>

@@ -7,7 +7,6 @@ const BLOCK_TAGS = {
   pre: 'code',
 };
 
-// Add a dictionary of mark tags.
 const MARK_TAGS = {
   em: 'italic',
   strong: 'bold',
@@ -48,7 +47,7 @@ const rules = [
       return;
     },
   },
-  // Add a new rule that handles marks...
+
   {
     deserialize(el: Element, next: (el: NodeListOf<ChildNode>) => void) {
       const type = MARK_TAGS[el.tagName.toLowerCase()];
@@ -77,7 +76,6 @@ const rules = [
   },
 ];
 
-// Create a new serializer instance with our `rules` from above.
 const html = new Html({ rules });
 
 export { html };

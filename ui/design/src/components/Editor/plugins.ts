@@ -1,3 +1,4 @@
+import { Editor } from 'slate';
 import { EventHook } from 'slate-react';
 
 interface MarkHotkeyOptions {
@@ -27,6 +28,21 @@ const MarkHotkey: (options: MarkHotkeyOptions) => any = options => {
   };
 };
 
+const commands = {
+  commands: {
+    insertParagraph(editor: Editor) {
+      editor.insertBlock('paragraph');
+    },
+
+    insertImage(editor: Editor, src: string) {
+      editor.insertBlock({
+        type: 'image',
+        data: { src },
+      });
+    },
+  },
+};
+
 const boldPlugin = MarkHotkey({
   type: 'bold',
   key: 'b',
@@ -47,4 +63,4 @@ const underlinePlugin = MarkHotkey({
   key: 'u',
 });
 
-export { boldPlugin, codePlugin, italicPlugin, underlinePlugin };
+export { boldPlugin, codePlugin, italicPlugin, underlinePlugin, commands };

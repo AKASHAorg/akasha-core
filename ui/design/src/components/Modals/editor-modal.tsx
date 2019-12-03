@@ -1,5 +1,6 @@
 import { Layer } from 'grommet';
 import * as React from 'react';
+import { IEntryData } from '../Cards/entry-box';
 import { EditorBox } from '../Editor/index';
 
 interface IEditorModal {
@@ -10,6 +11,7 @@ interface IEditorModal {
   publishTitle: string;
   placeholderTitle: string;
   onPublish: any;
+  embedEntryData?: IEntryData;
 }
 
 const EditorModal: React.FC<IEditorModal> = props => {
@@ -21,6 +23,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
     publishTitle,
     placeholderTitle,
     onPublish,
+    embedEntryData,
   } = props;
 
   return (
@@ -31,6 +34,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
         placeholderTitle={placeholderTitle}
         onPublish={onPublish}
         avatar={avatar}
+        embedEntryData={embedEntryData}
       />
     </Layer>
   );

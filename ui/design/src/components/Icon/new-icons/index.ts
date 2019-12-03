@@ -7,6 +7,7 @@ import app from './app';
 import arrowDown from './arrow-down';
 import arrowLeft from './arrow-left';
 import arrowRight from './arrow-right';
+import bold from './bold';
 import bookmark from './bookmark';
 import calendar from './calendar';
 import close from './close';
@@ -16,11 +17,12 @@ import comments from './comments';
 import document from './document';
 import edit from './edit';
 import emoji from './emoji';
-import eye from './eye';
 import ethereumWorldLogo from './ethereum-world-logo';
+import eye from './eye';
 import heart from './heart';
 import home from './home';
 import hotTopics from './hot-topics';
+import italic from './italic';
 import link from './link';
 import media from './media';
 import moreDark from './more-dark';
@@ -31,8 +33,7 @@ import person from './person';
 import pin from './pin';
 import plusDark from './plus-dark';
 import plusGrey from './plus-grey';
-import quoteDark from './quote-dark';
-import quoteGrey from './quote-grey';
+import quote from './quote';
 import reload from './reload';
 import reply from './reply';
 import report from './report';
@@ -49,6 +50,7 @@ import thumbsUpGrey from './thumbs-up-grey';
 import thumbsUpWhite from './thumbs-up-white';
 import transfer from './transfer';
 import trendingApps from './trending-apps';
+import underline from './underline';
 import wallet from './wallet';
 
 export {
@@ -74,6 +76,7 @@ export {
   arrowLeft,
   arrowRight,
   bookmark,
+  bold,
   comments,
   close,
   edit,
@@ -81,6 +84,7 @@ export {
   heart,
   home,
   hotTopics,
+  italic,
   link,
   media,
   moreDark,
@@ -89,8 +93,7 @@ export {
   person,
   plusDark,
   plusGrey,
-  quoteDark,
-  quoteGrey,
+  quote,
   reply,
   report,
   search,
@@ -103,5 +106,6 @@ export {
   thumbsUpWhite,
   thumbsUpGrey,
   trendingApps,
+  underline,
   wallet,
 };

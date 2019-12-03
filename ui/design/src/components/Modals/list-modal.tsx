@@ -40,7 +40,7 @@ const ListModal: React.FC<IlistModal> = props => {
     <Layer onEsc={closeModal} onClickOutside={closeModal} modal={true} className={className}>
       <Box pad="none" width="579px" height="386px">
         <Box pad="medium" justify="between" direction="row" align="center">
-          <TextIcon iconType="quoteDark" label={label} margin={{ right: '40px' }} />
+          <TextIcon iconType="quote" label={label} margin={{ right: '40px' }} />
           <Text size="large" color="secondaryText">
             {listNumberLabel}
           </Text>
