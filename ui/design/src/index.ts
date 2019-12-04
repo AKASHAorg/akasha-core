@@ -21,7 +21,7 @@ export { Topbar } from './components/Topbar/index';
 export { createTheme } from './styles/themes/create-theme';
 export { default as darkTheme } from './styles/themes/dark-theme';
 export { default as lightTheme } from './styles/themes/light-theme';
-
+export { default as responsiveBreakpoints } from './styles/responsive-breakpoints';
 /* Grommet utils */
 
 export { Box, Grid, Grommet, grommet, ResponsiveContext, ThemeContext } from 'grommet';

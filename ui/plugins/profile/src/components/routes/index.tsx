@@ -2,12 +2,10 @@ import { Grommet, responsiveBreakpoints, Box } from '@akashaproject/design-syste
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import MyProfilePage from './my-profile';
+import MyProfilePage from './my-profile-page';
 import ProfilePage from './profile-page';
 import WidgetList from '../widgets';
 import Grid from '../grid';
-import { useProfile } from '../../state/profiles';
-import { fetchLoggedProfile } from '../../services/profile-service';
 
 export interface IRoutesProps {
   activeWhen: { path: string };
@@ -15,14 +13,8 @@ export interface IRoutesProps {
 
 const Routes: React.FC<IRoutesProps> = props => {
   const { activeWhen } = props;
-  const [, profileActions] = useProfile();
   const { path } = activeWhen;
   const [t] = useTranslation();
-  React.useEffect(() => {
-    fetchLoggedProfile().then(result => {
-      profileActions.getLoggedProfile(result);
-    });
-  });
 
   return (
     <>
@@ -44,11 +36,12 @@ const Routes: React.FC<IRoutesProps> = props => {
                   <Box gridArea={gridConfig.gridAreas.pluginContent}>
                     <Switch>
                       <Route path={`${path}/list`} render={() => <>A list of profiles</>} />
+
                       <Route
                         path={`${path}/my-profile`}
-                        render={routeProps => (
-                          <React.Suspense fallback={<>Loading Profile</>}>
-                            <MyProfilePage {...routeProps} {...props} />
+                        render={() => (
+                          <React.Suspense fallback={<>Loading My Profile</>}>
+                            <MyProfilePage />
                           </React.Suspense>
                         )}
                       />

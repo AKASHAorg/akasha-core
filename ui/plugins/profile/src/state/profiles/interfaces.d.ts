@@ -1,3 +1,5 @@
+import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-box';
+
 export type activeProfilesFilterType = 'followers' | 'following';
 export type activeAppsFilterType = 'installed' | 'available';
 
@@ -29,14 +31,33 @@ export interface IProfileFollowings {
 }
 export interface IApp {}
 
+export interface IFeedItem {
+  id: string;
+}
+
+/**
+ * a feed
+ * a list that contains only a reference to a feed item and author
+ */
+export interface IFeed {
+  profileId: string;
+  items: IFeedItem[];
+}
+
+/**
+ * a feed item is an actual entry
+ */
+
 export interface IProfileState {
   profiles: IProfile[];
   followers: IProfileFollowers[];
   followings: IProfileFollowings[];
   apps: IApp[];
+  feeds: IFeed[];
   activeProfilesFilter?: activeProfilesFilterType;
   activeAppsFilter?: activeAppsFilterType;
   loggedProfile?: string;
+  feedItems: (IEntryData & { entryId: string })[];
 }
 
 export interface IReducer<S, A> {

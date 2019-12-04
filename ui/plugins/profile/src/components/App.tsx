@@ -1,4 +1,4 @@
-import React, { PureComponent, Suspense } from 'react';
+import React, { PureComponent } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { profileInit, ProfileProvider, profileReducer } from '../state/profiles';
 import Routes from './routes';
@@ -69,13 +69,13 @@ class App extends PureComponent<IProps> {
     }
 
     return (
-      <Suspense fallback={() => <>Loading</>}>
-        <I18nextProvider i18n={i18n ? i18n : null}>
+      <I18nextProvider i18n={i18n ? i18n : null}>
+        <React.Suspense fallback={<>Loading Profile</>}>
           <ProfileProvider reducer={profileReducer} initialState={profileInit()}>
             <Routes {...this.props} />
           </ProfileProvider>
-        </I18nextProvider>
-      </Suspense>
+        </React.Suspense>
+      </I18nextProvider>
     );
   }
 }

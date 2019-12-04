@@ -10,12 +10,12 @@ import {
   IGetAppsPayload,
   IGetMoreAppsPayload,
   IGetMoreProfilesPayload,
-  // IGetProfilesPayload,
   IProfileState,
   IGetLoggedProfilePayload,
   IGetProfileFollowersPayload,
   IGetProfileFollowingsPayload,
   IProfile,
+  IFeed,
 } from './interfaces';
 
 export const profileState: IProfileState = {
@@ -23,6 +23,8 @@ export const profileState: IProfileState = {
   followers: [],
   followings: [],
   apps: [],
+  feeds: [],
+  feedItems: [],
 };
 
 export function profileInit(initialValues?: Partial<IProfileState>): IProfileState {
@@ -41,7 +43,7 @@ export const profileReducer: ProfileReducer = handleActions<typeof actionTypes, 
       return draft;
     },
     GET_PROFILES: (draft, payload: { profiles: IProfile[] }) => {
-      draft.profiles = payload.profiles;
+      draft.profiles = draft.profiles.concat(payload.profiles);
       return draft;
     },
     GET_PROFILE_FOLLOWERS: (draft, payload: IGetProfileFollowersPayload) => {
@@ -56,8 +58,21 @@ export const profileReducer: ProfileReducer = handleActions<typeof actionTypes, 
       draft.profiles = draft.profiles.concat(payload.profiles);
       return draft;
     },
+    GET_PROFILE_FEED: (draft, payload: { feed: IFeed }) => {
+      const feedIdx = draft.feeds.findIndex(f => f.profileId === payload.feed.profileId);
+      if (feedIdx < 0) {
+        draft.feeds.push(payload.feed);
+      } else {
+        draft.feeds[feedIdx].items = draft.feeds[feedIdx].items.concat(payload.feed.items);
+      }
+      return draft;
+    },
+    GET_FEED_ITEM_DATA: (draft, payload: any) => {
+      draft.feedItems = draft.feedItems.concat(payload);
+      return draft;
+    },
     GET_APPS: (draft, payload: IGetAppsPayload) => {
-      draft.apps = payload.apps;
+      draft.apps = draft.apps.concat(payload.apps);
       return draft;
     },
     GET_MORE_APPS: (draft, payload: IGetMoreAppsPayload) => {
@@ -78,16 +93,8 @@ export const profileReducer: ProfileReducer = handleActions<typeof actionTypes, 
   profileState,
 );
 
-const useValue: UseValueType<any, IProfileState, typeof actionTypes, any> = ({
-  reducer,
-  initialState,
-  init,
-}: {
-  reducer: Reducer<IProfileState, IAction<any, keyof typeof actionTypes>>;
-  initialState: IProfileState;
-  init: (initial: Partial<IProfileState>) => IProfileState;
-}) => {
-  const [state, dispatch] = useReducer(reducer, initialState, init);
+const useValue: UseValueType<any, IProfileState, typeof actionTypes, any> = () => {
+  const [state, dispatch] = useReducer(profileReducer, profileState);
   const actions = getProfilesActions(dispatch);
   return [state, actions];
 };
