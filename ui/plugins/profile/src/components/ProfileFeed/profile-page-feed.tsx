@@ -1,7 +1,9 @@
 import { useProfile } from '../../state/profiles';
 import { FeedList } from './feed-list';
 import * as React from 'react';
-import { IconButton, Icon } from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
+
+const { IconButton, Icon } = DS;
 
 export interface IProfilePageFeed {
   profileId: string;

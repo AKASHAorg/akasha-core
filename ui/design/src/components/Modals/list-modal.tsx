@@ -5,7 +5,7 @@ import { formatDate, ILocale } from '../../utils/time';
 import { ProfileAvatarButton } from '../IconButton/index';
 import { TextIcon } from '../TextIcon/index';
 
-interface IlistModal {
+export interface IlistModal {
   className?: string;
   list: any[];
   label: string;

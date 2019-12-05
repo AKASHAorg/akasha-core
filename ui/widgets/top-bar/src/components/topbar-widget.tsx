@@ -1,10 +1,11 @@
-import { Grommet, lightTheme, Topbar } from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 // @ts-ignore
 import SingleSpaReact from 'single-spa-react';
 
+const { Grommet, lightTheme, Topbar } = DS;
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;

@@ -1,6 +1,7 @@
-import { Box, Grid, ResponsiveContext } from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
 import * as React from 'react';
 
+const { Box, Grid, ResponsiveContext } = DS;
 // If the size is small, we only see 1 column
 // If the size is medium, we only see 2 columns
 // If the size is either large or xlarge, we see 3 columns

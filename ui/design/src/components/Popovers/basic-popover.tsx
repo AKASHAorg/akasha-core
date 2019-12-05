@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyledDrop } from './styled-drop';
 
-interface IBasicPopover {
+export interface IBasicPopover {
   className?: string;
   children: any;
   closePopover: () => {};

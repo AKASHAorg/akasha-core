@@ -1,4 +1,4 @@
-import { Grommet, responsiveBreakpoints, Box } from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
@@ -6,6 +6,8 @@ import MyProfilePage from './my-profile-page';
 import ProfilePage from './profile-page';
 import WidgetList from '../widgets';
 import Grid from '../grid';
+
+const { Grommet, responsiveBreakpoints, Box } = DS;
 
 export interface IRoutesProps {
   activeWhen: { path: string };

@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { AppsWidgetCard, styled, TopicsWidgetCard } from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
 import { IAppData } from '@akashaproject/design-system/lib/components/Cards/apps-widget-card';
 import { ITopicData } from '@akashaproject/design-system/lib/components/Cards/topics-widget-card';
 import { useTranslation } from 'react-i18next';
+
+const { AppsWidgetCard, styled, TopicsWidgetCard } = DS;
 
 const appsDataSource: IAppData[] = [
   { title: 'GitCoin', subtitle: '123 embedded cards', appIconType: 'app', iconSize: '40px' },

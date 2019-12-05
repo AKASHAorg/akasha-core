@@ -11,7 +11,7 @@ const sizes = {
 };
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
-interface AvatarProps {
+export interface AvatarProps {
   size: AvatarSize;
   isClickable: boolean;
   margin?: MarginInterface;

@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { ResponsiveContext, Grid, Grommet, lightTheme } from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
+
+const { ResponsiveContext, Grid, Grommet, lightTheme } = DS;
 
 const columns = {
   small: Array(4).fill('1fr'),

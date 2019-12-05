@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { EntryCard } from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
 import { useProfile } from '../../state/profiles';
+
+const { EntryCard } = DS;
 
 export interface FeedItemProps {
   item: any;

@@ -1,7 +1,7 @@
 import { Box } from 'grommet';
 import * as React from 'react';
 import styled from 'styled-components';
-import { Icon } from '../../index';
+import { Icon } from '../../components/Icon';
 import { ProfileAvatarButton } from '../IconButton';
 import { NotificationsPopover } from '../Popovers/index';
 
@@ -14,7 +14,7 @@ const AvatarButton = styled(ProfileAvatarButton)`
   box-shadow: ${props => props.theme.colors.shadow};
 `;
 
-interface ITopbarProps {
+export interface ITopbarProps {
   className?: string;
   avatarImage: string;
   userName: string;

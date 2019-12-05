@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "tsc --build",
-    "tsc": "tsc",
+    "tsc": "tsc --build",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/*sidebar.* ../../build/widgets"

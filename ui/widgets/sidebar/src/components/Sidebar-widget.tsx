@@ -1,10 +1,11 @@
-import { Box, Grommet, lightTheme, TextIcon } from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense, SyntheticEvent } from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 // @ts-ignore
 import SingleSpaReact from 'single-spa-react';
 
+const { Box, Grommet, lightTheme, TextIcon } = DS;
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;

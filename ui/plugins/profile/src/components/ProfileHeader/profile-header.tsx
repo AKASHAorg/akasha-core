@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { styled, ProfileCard } from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
 import { useProfile } from '../../state/profiles';
+
+const { styled, ProfileCard } = DS;
 
 const StyledProfileCard = styled(ProfileCard)`
   height: auto;
