@@ -36,7 +36,7 @@
     "immer": "^5.0.0",
     "react-i18next": "^11.0.1",
     "react-router-dom": "^5.1.2",
-    "react-tracked": "^0.11.0",
+    "react-tracked": "^1.0.0",
     "single-spa-react": "^2.10.3"
   },
   "devDependencies": {
