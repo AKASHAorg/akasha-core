@@ -6,8 +6,9 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { withThemesProvider } from 'storybook-addon-styled-component-theme';
 // import prepared themes from theme-sync-addon
 // themes already have name prop.
-import { lightTheme, darkTheme, Grommet } from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
 
+const { lightTheme, darkTheme, Grommet } = DS;
 addDecorator(withInfo);
 addDecorator(withA11y);
 addDecorator(withKnobs);

@@ -1,10 +1,11 @@
 /* eslint-disable import/first */
-import { Box, CommentInput, SearchInput } from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
 import { action } from '@storybook/addon-actions';
 import { text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
+const { Box, CommentInput, SearchInput } = DS;
 const suggestionsFromSpace = {
   users: [
     {

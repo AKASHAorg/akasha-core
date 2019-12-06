@@ -1,11 +1,12 @@
 /* eslint-disable import/first */
-import { Avatar, EditableAvatar } from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
 import { AvatarSize } from '@akashaproject/design-system/lib/components/Avatar/styled-avatar';
 import { action } from '@storybook/addon-actions';
 import { boolean, color, object, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
+const { Avatar, EditableAvatar } = DS;
 const DEFAULT_AVATAR_SIZE = 'md';
 const seed = '0x00000000000000';
 storiesOf('Avatar', module)
