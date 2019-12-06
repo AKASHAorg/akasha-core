@@ -9,7 +9,6 @@ const config = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'sidebar.js',
     publicPath: '/widgets/',
-    chunkFilename: '[id].sidebar-chunk.js',
   },
 };
 
