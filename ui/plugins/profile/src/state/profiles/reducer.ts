@@ -3,7 +3,7 @@ import { createContainer } from 'react-tracked';
 import { handleActions } from '../handle-actions';
 import { IAction, UseValueType } from '../interfaces';
 import { actionTypes } from './action-types';
-import { getProfilesActions } from './actions';
+import { getProfilesActions, IProfileActions } from './actions';
 import {
   IChangeAppsFilter,
   IChangeProfilesFilter,
@@ -93,7 +93,7 @@ export const profileReducer: ProfileReducer = handleActions<typeof actionTypes, 
   profileState,
 );
 
-const useValue: UseValueType<any, IProfileState, typeof actionTypes, any> = () => {
+const useValue: UseValueType<any, IProfileState, IProfileActions> = () => {
   const [state, dispatch] = useReducer(profileReducer, profileState);
   const actions = getProfilesActions(dispatch);
   return [state, actions];
