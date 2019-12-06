@@ -2,37 +2,43 @@
 import * as React from 'react';
 import CommonInterface from '../../interfaces/common.interface';
 import MarginInterface from '../../interfaces/margin.interface';
+import AvatarImage from './avatar-image';
 import { loadPlaceholder } from './placeholders';
 import StyledAvatar, { AvatarSize } from './styled-avatar';
 
 export interface AvatarProps extends CommonInterface<HTMLDivElement> {
-  src?: string;
-  // @Todo: fix this
+  src: string;
   onClick?: React.MouseEventHandler<any>;
   alt?: string;
   margin?: MarginInterface;
   backgroundColor?: string;
   withBorder?: boolean;
   guest?: boolean;
-  seed: string;
   size?: AvatarSize;
 }
 
-const getAvatarFromSeed = (seed: string) => {
-  // @Todo: fix this to be more reliable
-  const avatarOption = Array.from(seed.replace('0x', '')).reduce(
-    // @ts-ignore
-    (sum: number, letter: string) => sum + letter.codePointAt(0),
-    0,
-  );
-
-  return (avatarOption % 7) + 1;
+export const getAvatarFromSeed = (seed: string) => {
+  let str = seed;
+  if (seed.startsWith('0x')) {
+    str = seed.replace('0x', '');
+  }
+  if (str && str.length) {
+    const avatarOption = Array.from(str).reduce((sum: number, letter: string) => {
+      if (letter.codePointAt(0)) {
+        return sum + letter.codePointAt(0)!;
+      }
+      return sum;
+    }, 0);
+    return (avatarOption % 7) + 1;
+  }
+  // load the first placeholder, just to not throw and error
+  return 1;
 };
 
 const defaultProps: Partial<AvatarProps> = {
   size: 'md' as AvatarSize,
   withBorder: false,
-  seed: '0x0000000000000000000000000000000',
+  src: '0x0000000000000000000000000000000',
 };
 
 /*
@@ -46,11 +52,11 @@ const defaultProps: Partial<AvatarProps> = {
  */
 
 const Avatar: React.FC<AvatarProps & typeof defaultProps> = props => {
-  const { onClick, guest, src, seed, className, size, margin, withBorder } = props;
+  const { onClick, guest, src, className, size, margin, withBorder } = props;
   const isClickable = typeof onClick === 'function';
   let avatarImage;
-  if (guest || !src) {
-    avatarImage = loadPlaceholder(`placeholder_${getAvatarFromSeed(seed)}`);
+  if (guest) {
+    avatarImage = loadPlaceholder(`placeholder_${getAvatarFromSeed(src)}`);
   } else if (src) {
     avatarImage = src;
   }
@@ -72,20 +78,5 @@ const Avatar: React.FC<AvatarProps & typeof defaultProps> = props => {
 };
 
 Avatar.defaultProps = defaultProps;
-
-const AvatarImage = (props: any) => {
-  const { image } = props;
-  let avatar;
-  if (image.hasOwnProperty('read') && typeof image.read === 'function') {
-    const img = image.read();
-    if (img) {
-      avatar = img;
-    }
-  } else if (typeof image === 'string') {
-    avatar = image;
-  }
-
-  return <img src={avatar} />;
-};
 
 export default Avatar;

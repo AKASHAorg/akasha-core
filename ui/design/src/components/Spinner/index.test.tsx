@@ -1,9 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Spinner from './index';
+import * as React from 'react';
+import { create } from 'react-test-renderer';
+import { wrapWithTheme } from '../../test-utils';
+import Spinner from './';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<Spinner size={30} />, div);
-  ReactDOM.unmountComponentAtNode(div);
+describe('Spinner component', () => {
+  test('Matches the snapshot', () => {
+    const spinner = create(wrapWithTheme(<Spinner />));
+    expect(spinner.toJSON()).toMatchSnapshot('spinner-snapshot');
+  });
 });
