@@ -23,7 +23,9 @@
     "start:design-system:storybook": "lerna run storybook --scope @akashaproject/storybook --stream",
     "pack:ui-apps": "lerna run pack --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream",
     "pack:only": "lerna run pack --scope $AWF_PACKAGE --stream",
-    "start:only": "lerna run start --scope $AWF_PACKAGE --stream"
+    "start:only": "lerna run start --scope $AWF_PACKAGE --stream",
+    "compile:sc": "lerna run compile:sc",
+    "deploy:sc": "lerna run deploy:sc"
   },
   "devDependencies": {
     "@types/jest": "24.0.23",
@@ -44,11 +46,11 @@
     "tslint-react-hooks": "2.2.1",
     "react": "16.12.0",
     "react-dom": "16.12.0",
-    "@babel/core": "7.7.4",
+    "@babel/core": "7.7.5",
     "babel-loader": "8.0.6",
     "ts-loader": "6.2.1",
     "@babel/plugin-syntax-dynamic-import": "7.7.4",
-    "@babel/preset-env": "7.7.4",
+    "@babel/preset-env": "7.7.5",
     "@babel/preset-react": "7.7.4",
     "webpack": "4.41.2",
     "webpack-cli": "3.3.10",

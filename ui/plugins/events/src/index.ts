@@ -24,7 +24,7 @@ export const application = {
   },
   loadingFn: (): Promise<any> =>
     import(
-      /* webpackChunkName: "events" */
+      /* webpackChunkName: "eventsChunk" */
       /* webpackMode: "lazy" */
       './components'
     ),
