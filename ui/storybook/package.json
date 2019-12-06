@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "storybook": "start-storybook",
-    "build-storybook": "build-storybook -c .storybook -o .out"
+    "build:storybook": "build-storybook -c .storybook -o dist"
   },
   "dependencies": {},
   "devDependencies": {

@@ -2,10 +2,18 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/akashaorg/akasha-world-framework/badge?s=f8ece81f969d68335b9237eb53298bc87e860388)](https://www.codefactor.io/repository/github/akashaorg/akasha-world-framework)
 [![CircleCI](https://circleci.com/gh/AKASHAorg/akasha-world-framework.svg?style=svg&circle-token=8e833337dd8ddbc8332abfb5961164630a7dbd92)](https://circleci.com/gh/AKASHAorg/akasha-world-framework)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/f2a5bca3-3853-406e-8cb0-105719cabb00/deploy-status)](https://app.netlify.com/sites/ethereum-world/deploys)
 [![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors)
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square)](https://lerna.js.org/)
 
+
+| App        | Status           |
+| ------------- |:-------------:|
+| [Feed-app](https://ethereum-world.netlify.com/)      | [![Netlify Status](https://api.netlify.com/api/v1/badges/f2a5bca3-3853-406e-8cb0-105719cabb00/deploy-status)](https://app.netlify.com/sites/ethereum-world/deploys) |
+| [Storybook](https://storybook-awf.netlify.com/)      | [![Netlify Status](https://api.netlify.com/api/v1/badges/04915c36-eff6-4bbe-945b-e9255cae6fb1/deploy-status)](https://app.netlify.com/sites/storybook-awf/deploys)      |
+
+
+ 
+ 
 > Monorepo for AWF
 
 ## Table of contents
