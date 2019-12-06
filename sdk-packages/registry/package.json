@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "truffle test"
+    "test": "truffle test",
+    "compile:sc": "truffle compile",
+    "deploy:sc": "truffle deploy"
   },
   "devDependencies": {
     "truffle": "^5.0.42"

@@ -1,7 +1,7 @@
 pragma solidity >=0.5.10 <0.6.0;
 
 import "@openzeppelin/contracts/ownership/Ownable.sol";
-import "./PackageRegistryInterface.sol"'
+import "./PackageRegistryInterface.sol";
 
 contract PackageRegistry is PackageRegistryInterface, Ownable {
     struct Package {
