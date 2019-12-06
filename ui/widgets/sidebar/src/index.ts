@@ -18,7 +18,7 @@ export const application = {
   },
   loadingFn: (): Promise<any> =>
     import(
-      /* webpackChunkName: "sidebar" */
+      /* webpackChunkName: "sideBarChunk" */
       /* webpackMode: "lazy" */
       './components'
     ),

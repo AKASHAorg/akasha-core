@@ -7,7 +7,8 @@
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --port 8131",
     "prepare": "tsc --build",
-    "prestart": "tsc --build"
+    "prestart": "tsc --build",
+    "build:staging": "webpack --config ./webpack.config.js"
   },
   "browserslist": [
     ">0.2%",

@@ -64,7 +64,7 @@ contract PackageRegistryInterface {
   // @param version Version string (ex: '1.0.0')
   function generateReleaseId(string memory packageName, string memory version)
   public
-  view
+  pure
   returns (bytes32 releaseId);
 
   /// @dev Returns the release id for a given name and version pair if present on registry.
