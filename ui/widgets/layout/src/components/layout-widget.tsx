@@ -53,6 +53,7 @@ export default class LayoutWidget extends PureComponent<IProps> {
 
   public render() {
     const { sidebarSlotId, topbarSlotId, pluginSlotId } = this.props;
+
     if (this.state.hasErrors) {
       return (
         <div>
@@ -65,7 +66,7 @@ export default class LayoutWidget extends PureComponent<IProps> {
     }
 
     return (
-      <Grommet theme={breakpoints} plain full cssVars>
+      <Grommet theme={breakpoints} plain={true} full={true} cssVars={true}>
         <ResponsiveGrid
           sidebarSlotId={sidebarSlotId}
           topbarSlotId={topbarSlotId}
