@@ -23,7 +23,9 @@
     "start:design-system:storybook": "lerna run storybook --scope @akashaproject/storybook --stream",
     "pack:ui-apps": "lerna run pack --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream",
     "pack:only": "lerna run pack --scope $AWF_PACKAGE --stream",
-    "start:only": "lerna run start --scope $AWF_PACKAGE --stream"
+    "start:only": "lerna run start --scope $AWF_PACKAGE --stream",
+    "compile:sc": "lerna run compile:sc",
+    "deploy:sc": "lerna run deploy:sc"
   },
   "devDependencies": {
     "@types/jest": "24.0.23",
