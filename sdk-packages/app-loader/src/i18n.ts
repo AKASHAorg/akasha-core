@@ -14,7 +14,7 @@ const i18nDefaultConfig: i18n.InitOptions = {
   ns: [],
   saveMissing: true,
   saveMissingTo: 'all',
-  load: 'currentOnly',
+  load: 'languageOnly',
   debug: true,
 };
 

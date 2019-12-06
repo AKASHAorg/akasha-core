@@ -6,25 +6,25 @@ const { Box, Grid, ResponsiveContext } = DS;
 // If the size is medium, we only see 2 columns
 // If the size is either large or xlarge, we see 3 columns
 const columns = {
-  small: new Array(4).fill('1fr'),
-  medium: new Array(8).fill('1fr'),
-  large: new Array(12).fill('1fr'),
-  xlarge: new Array(12).fill('1fr'),
+  small: Array(4).fill('1fr'),
+  medium: Array(10).fill('1fr'),
+  large: Array(12).fill('1fr'),
+  xlarge: Array(12).fill('1fr'),
 };
 const getContentAreas = (columnsNum: number) => {
   return {
-    small: [new Array(columnsNum).fill('header'), new Array(columnsNum).fill('plugin')],
+    small: [Array(columnsNum).fill('header'), Array(columnsNum).fill('plugin')],
     medium: [
-      new Array(columnsNum).fill('header'),
-      ['sidebar', 'sidebar'].concat(new Array(columnsNum - 2).fill('plugin')),
+      Array(columnsNum).fill('header'),
+      ['sidebar', 'sidebar'].concat(Array(columnsNum - 2).fill('plugin')),
     ],
     large: [
-      new Array(columnsNum).fill('header'),
-      ['sidebar', 'sidebar'].concat(new Array(columnsNum - 2).fill('plugin')),
+      Array(columnsNum).fill('header'),
+      ['sidebar', 'sidebar'].concat(Array(columnsNum - 2).fill('plugin')),
     ],
     xlarge: [
-      new Array(columnsNum).fill('header'),
-      ['sidebar', 'sidebar'].concat(new Array(columnsNum - 2).fill('plugin')),
+      Array(columnsNum).fill('header'),
+      ['sidebar', 'sidebar'].concat(Array(columnsNum - 2).fill('plugin')),
     ],
   };
 };
@@ -80,7 +80,7 @@ const ResponsiveGrid = (props: IResponsiveGridSystem) => {
         column: columnGaps[size],
       }}
       style={{
-        background: '#EDF0F5',
+        background: '#FBFCFD',
         overflow: 'hidden',
       }}
       areas={areas[size]}
