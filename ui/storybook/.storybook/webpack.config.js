@@ -10,6 +10,9 @@ module.exports = ({ config }) => {
         loader: require.resolve('react-docgen-typescript-loader'),
       },
     ],
+    exclude: {
+      test: [/\*d.ts(x?)$/, /\.map$/],
+    }
   });
   config.module.rules.push({
     test: /\.stories\.tsx?$/,
@@ -21,6 +24,6 @@ module.exports = ({ config }) => {
     ],
     enforce: 'pre',
   });
-  config.resolve.extensions.push('.ts', '.tsx');
+  config.resolve.extensions.push('.ts', '.tsx', '.js');
   return config;
 };

@@ -10,7 +10,7 @@ export interface IArticlesHomePageProps {
 
 /* Remove this */
 const randomArr = (size: number, max: number) =>
-  [...new Array(size)].map(() => Math.round(Math.random() * max));
+  [...Array(size)].map(() => Math.round(Math.random() * max));
 /* Remove this ^^^ */
 
 const ArticlesHomePage: React.FC<IArticlesHomePageProps> = () => {

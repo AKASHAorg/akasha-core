@@ -19,3 +19,6 @@ install:
 build.staging.feed:
 	./node_modules/.bin/lerna run build:staging
 build.staging.feed.static: build build.staging.feed
+build.staging.storybook:
+	./node_modules/.bin/lerna run build:storybook
+build.staging.storybook.static: install build.tsc.ui build.staging.storybook

@@ -1,10 +1,11 @@
 /* eslint-disable import/first */
+import DS from '@akashaproject/design-system';
 import { action } from '@storybook/addon-actions';
 import { color } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
-import { Box } from '@akashaproject/design-system';
 import * as React from 'react';
-import { Icon, iconTypes } from '@akashaproject/design-system/lib/components/Icon/index';
+
+const { Box, Icon, iconTypes } = DS;
 
 const IconComponent = () => {
   const accentColor = color('Accent color', '');

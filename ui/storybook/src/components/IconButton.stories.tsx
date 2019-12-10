@@ -1,16 +1,17 @@
 /* eslint-disable import/first */
+import DS from '@akashaproject/design-system';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
-import {
+
+const {
   Box,
   Icon,
   IconButton,
   IconLink,
   ProfileAvatarButton,
   VoteIconButton,
-} from '@akashaproject/design-system';
-
+} = DS;
 storiesOf('Buttons|IconLink', module).add('default', () => (
   <Box pad="large" align="start">
     <IconLink
