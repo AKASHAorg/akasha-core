@@ -1,6 +1,6 @@
 build:	install build.all
 build.tsc: build.tsc.sdk build.tsc.ui
-build.all: build.tsc build.sdk build.translations build.ui
+build.all: build.tsc build.translations
 build.tsc.sdk:
 	npm run tsc:sdk
 build.tsc.ui:
