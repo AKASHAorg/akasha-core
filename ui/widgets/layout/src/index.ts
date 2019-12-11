@@ -6,7 +6,7 @@ export const application = {
       /* webpackMode: "lazy" */
       './components'
     ),
-  name: 'ui-widget-sidebar',
+  name: 'ui-widget-layout',
   title: 'Layout Widget',
   pluginSlotId: 'plugin-slot',
   topbarSlotId: 'topbar-slot',

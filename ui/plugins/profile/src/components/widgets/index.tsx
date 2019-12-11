@@ -28,7 +28,7 @@ const TopicsWidget = styled.div`
 `;
 
 const WidgetList = (/* props: IWidgetListProps */) => {
-  const [t] = useTranslation();
+  const { t } = useTranslation();
   const handleAppTitleClick = () => {
     console.log('app title clicked');
   };

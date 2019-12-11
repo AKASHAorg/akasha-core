@@ -14,7 +14,7 @@ const randomArr = (size: number, max: number) =>
 /* Remove this ^^^ */
 
 const ArticlesHomePage: React.FC<IArticlesHomePageProps> = () => {
-  const [t] = useTranslation();
+  const { t } = useTranslation();
   const [articleState, articleActions] = useArticles();
   const fetchMoreArticles = (ev: React.SyntheticEvent) => {
     const articles = randomArr(3, 100).map(num => ({

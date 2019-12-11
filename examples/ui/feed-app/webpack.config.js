@@ -33,7 +33,10 @@ module.exports = {
     ],
   },
   plugins: [
-    new CopyPlugin([{ from: path.resolve(__dirname, '../../../ui/build') }]),
+    new CopyPlugin([{ from: path.resolve(__dirname, '../../../ui/build') }, {
+      from: path.resolve(__dirname, '../../../locales'),
+      to: 'locales',
+    }]),
     new HtmlWebpackPlugin({ template: path.resolve(__dirname, './public/index.html') }),
     new webpack.HotModuleReplacementPlugin(),
   ],
