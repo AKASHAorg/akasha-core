@@ -21,7 +21,7 @@
     "build": "tsc --build",
     "test": "jest",
     "tsc": "tsc --build",
-    "extract:translations": "i18next --config i18next-parser.config.js",
+    "extract:translations": "i18next -c './i18next-parser.config.js'",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/*profile.* ../../build/plugins",
