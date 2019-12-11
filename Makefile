@@ -23,4 +23,4 @@ build.staging.storybook:
 	./node_modules/.bin/lerna run build:storybook
 build.staging.storybook.static: install build.tsc.ui build.staging.storybook
 build.translations:
-	npm run extract:translations
+	./node_modules/.bin/lerna run extract:translations
