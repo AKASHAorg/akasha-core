@@ -50,7 +50,7 @@
     "babel-loader": "8.0.6",
     "ts-loader": "6.2.1",
     "@babel/plugin-syntax-dynamic-import": "7.7.4",
-    "@babel/preset-env": "7.7.5",
+    "@babel/preset-env": "7.7.6",
     "@babel/preset-react": "7.7.4",
     "webpack": "4.41.2",
     "webpack-cli": "3.3.10",
