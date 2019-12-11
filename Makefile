@@ -1,6 +1,6 @@
 build:	install build.all
 build.tsc: build.tsc.sdk build.tsc.ui
-build.all: build.tsc build.translations
+build.all: build.translations
 build.tsc.sdk:
 	npm run tsc:sdk
 build.tsc.ui:
@@ -18,9 +18,9 @@ install:
 	npm run bootstrap
 build.staging.feed:
 	./node_modules/.bin/lerna run build:staging
-build.staging.feed.static: build build.staging.feed
+build.staging.feed.static: build
 build.staging.storybook:
 	./node_modules/.bin/lerna run build:storybook
 build.staging.storybook.static: install build.tsc.ui build.staging.storybook
 build.translations:
-	./node_modules/.bin/lerna run extract:translations
+	npm run extract:translations
