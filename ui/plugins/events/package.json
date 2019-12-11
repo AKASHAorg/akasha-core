@@ -21,7 +21,7 @@
     "build": "tsc --build",
     "test": "jest",
     "tsc": "tsc --build",
-    "extract:translations": "npx i18next src/components/**/*.tsx -r -c ./i18next-parser.config.js",
+    "extract:translations": "i18next --config ./i18next-parser.config.js",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/*events.* ../../build/plugins",
@@ -46,7 +46,6 @@
     "@types/react-test-renderer": "^16.9.1",
     "@types/single-spa-react": "^2.8.3",
     "acorn-jsx": "5.x",
-    "i18next-parser": "^1.0.0-beta34",
     "jest-styled-components": "^6.3.3",
     "react-test-renderer": "^16.11.0"
   },

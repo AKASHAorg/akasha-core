@@ -1,6 +1,4 @@
-// must specify this
-// can't use import from lib/ because it breaks the parser
-const ns = 'ui-plugin-profile';
+const ns = 'ui-widget-topbar';
 
 module.exports = {
   locales: ['en', 'ro'],
