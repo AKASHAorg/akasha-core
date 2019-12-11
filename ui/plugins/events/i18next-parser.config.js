@@ -1,8 +1,8 @@
-const pluginConf = require('./lib/index').default;
-const ns = pluginConf.i18nConfig.ns || pluginConf.name;
+const ns = 'ui-plugin-events';
 
 module.exports = {
   locales: ['en', 'ro'],
+  input: ['./src/components/**/*.tsx'],
   output: '../../../locales/$LOCALE/$NAMESPACE.json',
   saveMissingTo: 'all',
   defaultNamespace: ns,

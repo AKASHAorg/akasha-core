@@ -11,7 +11,7 @@ export interface FeedItemProps {
 
 export const FeedItem = (props: FeedItemProps) => {
   const [profileState, profileActions] = useProfile();
-  const [t] = useTranslation();
+  const { t } = useTranslation();
   profileActions.getFeedItemData({ entryId: props.item.id });
 
   const itemData = profileState.feedItems.find(item => item.entryId === props.item.id);

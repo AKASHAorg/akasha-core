@@ -8,7 +8,7 @@ export interface IRoutesProps {
 }
 
 const ArticleNotFound = () => {
-  const [t] = useTranslation();
+  const { t } = useTranslation();
   return <div>{t('Article not found!')}</div>;
 };
 
