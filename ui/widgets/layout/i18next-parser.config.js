@@ -1,4 +1,3 @@
-const path = require('path');
 const ns =  'ui-widget-layout';
 
 module.exports = {
