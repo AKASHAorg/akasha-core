@@ -8,7 +8,7 @@ import {
   StyledSearchBox,
   StyledTab,
   StyledTextInput,
-} from './styled-search-input';
+} from './styled-input';
 
 interface ICustomSearchInput {
   className?: string;

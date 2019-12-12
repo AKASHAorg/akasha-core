@@ -1,26 +1,11 @@
-import { Value } from 'slate';
-
-export const initialValue = Value.fromJSON({
-  document: {
-    nodes: [
+export const defaultValue = [
+  {
+    type: 'paragraph',
+    children: [
       {
-        object: 'block',
-        type: 'paragraph',
-        nodes: [
-          {
-            object: 'text',
-            text: '',
-          },
-        ],
+        text: '',
+        marks: [],
       },
     ],
   },
-});
-
-export const schema = {
-  blocks: {
-    image: {
-      isVoid: true,
-    },
-  },
-};
+];

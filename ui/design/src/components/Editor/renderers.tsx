@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Editor } from 'slate';
-import { RenderBlockProps, RenderMarkProps } from 'slate-react';
+import { RenderElementProps, RenderMarkProps } from 'slate-react';
 import styled from 'styled-components';
 
 const StyledImg = styled.img`
@@ -9,43 +8,48 @@ const StyledImg = styled.img`
   max-height: 20em;
 `;
 
-const renderBlock = (props: RenderBlockProps, _editor: Editor, next: () => void) => {
-  switch (props.node.type) {
+const renderMark = (props: RenderMarkProps) => {
+  switch (props.mark.type) {
+    case 'bold':
+      return <strong {...props.attributes}>{props.children}</strong>;
+    case 'code':
+      return <code {...props.attributes}>{props.children}</code>;
+    case 'italic':
+      return <em {...props.attributes}>{props.children}</em>;
+    case 'underline':
+      return <u {...props.attributes}>{props.children}</u>;
+    default:
+      return <div {...props.attributes}>{props.children}</div>;
+  }
+};
+
+const ImageElement = ({ attributes, children, element }: any) => {
+  return (
+    <div {...attributes}>
+      <div contentEditable={false}>
+        <StyledImg src={element.url} />
+      </div>
+      {children}
+    </div>
+  );
+};
+
+const renderElement = (props: RenderElementProps) => {
+  switch (props.element.type) {
     case 'code':
       return (
         <pre {...props.attributes}>
           <code>{props.children}</code>
         </pre>
       );
-    case 'paragraph':
-      return (
-        <p {...props.attributes} className={props.node.data.get('className')}>
-          {props.children}
-        </p>
-      );
     case 'quote':
       return <blockquote {...props.attributes}>{props.children}</blockquote>;
     case 'image':
-      const src = props.node.data.get('src');
-      return <StyledImg {...props.attributes} src={src} />;
+      return <ImageElement {...props} />;
+
     default:
-      return next();
+      return <p {...props.attributes}>{props.children}</p>;
   }
 };
 
-const renderMark = (props: RenderMarkProps, _editor: Editor, next: () => void) => {
-  switch (props.mark.type) {
-    case 'bold':
-      return <strong>{props.children}</strong>;
-    case 'code':
-      return <code>{props.children}</code>;
-    case 'italic':
-      return <em>{props.children}</em>;
-    case 'underline':
-      return <u>{props.children}</u>;
-    default:
-      return next();
-  }
-};
-
-export { renderBlock, renderMark };
+export { renderMark, renderElement };
