@@ -37,3 +37,9 @@ jobs:
       - run: # build sdk
           name: build-sdk
           command: npm run build:sdk
+      - run: # pack ui-apps
+          name: pack-ui-apps
+          command: npm run pack:ui-apps
+      - run: # extract-translations
+          name: extract-translations
+          command: npm run extract:translations
