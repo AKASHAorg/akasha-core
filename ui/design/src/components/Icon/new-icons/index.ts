@@ -51,6 +51,7 @@ import thumbsUpWhite from './thumbs-up-white';
 import transfer from './transfer';
 import trendingApps from './trending-apps';
 import underline from './underline';
+import upload from './upload';
 import wallet from './wallet';
 
 export {
@@ -107,5 +108,6 @@ export {
   thumbsUpGrey,
   trendingApps,
   underline,
+  upload,
   wallet,
 };

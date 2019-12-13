@@ -14,7 +14,7 @@ interface ProfileAvatarButtonProps {
   className?: string;
   onAvatarClick?: React.EventHandler<React.SyntheticEvent>;
   // @todo: fix this
-  onClick: React.EventHandler<React.SyntheticEvent>;
+  onClick?: React.EventHandler<React.SyntheticEvent>;
   guest?: boolean;
   seed: string;
 }

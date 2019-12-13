@@ -58,6 +58,7 @@ export type IconType =
   | 'transfer'
   | 'trendingApps'
   | 'underline'
+  | 'upload'
   | 'wallet';
 
 export const iconTypes: IconType[] = [
@@ -113,6 +114,7 @@ export const iconTypes: IconType[] = [
   'transfer',
   'trendingApps',
   'underline',
+  'upload',
   'wallet',
 ];
 

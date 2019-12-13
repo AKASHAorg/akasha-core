@@ -1174,7 +1174,6 @@ export const emojis = {
     { n: ['kissing face', 'kissing'], u: '1f617' },
     { n: ['kissing face with smiling eyes', 'kissing_smiling_eyes'], u: '1f619' },
     { n: ['kissing face with closed eyes', 'kissing_closed_eyes'], u: '1f61a' },
-    { n: ['white smiling face', 'relaxed'], u: '263a-fe0f' },
     { n: ['slightly smiling face', 'slightly_smiling_face'], u: '1f642' },
     { n: ['hugging face', 'hugging_face'], u: '1f917' },
     {
@@ -1221,7 +1220,6 @@ export const emojis = {
     { n: ['upside-down face', 'upside_down_face'], u: '1f643' },
     { n: ['money-mouth face', 'money_mouth_face'], u: '1f911' },
     { n: ['astonished face', 'astonished'], u: '1f632' },
-    { n: ['white_frowning_face'], u: '2639-fe0f' },
     { n: ['slightly frowning face', 'slightly_frowning_face'], u: '1f641' },
     { n: ['confounded face', 'confounded'], u: '1f616' },
     { n: ['disappointed face', 'disappointed'], u: '1f61e' },

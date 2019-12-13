@@ -8,8 +8,8 @@ import Icon, { IconType } from '../Icon/icon';
 const StyledDiv = styled.div`
   margin: 0 ${props => props.theme.shapes.baseSpacing}px;
 `;
-export interface IMarkButton {
-  type: string;
+export interface IFormatButton {
+  format: string;
   icon: IconType;
 }
 
@@ -34,13 +34,13 @@ export const Portal = ({ children }: any) => {
   return ReactDOM.createPortal(children, document.body);
 };
 
-const MarkButton: React.FC<IMarkButton> = ({ type, icon }) => {
+const FormatButton: React.FC<IFormatButton> = ({ format, icon }) => {
   const editor = useSlate();
   const handleClick = (event: React.MouseEvent) => {
     event.preventDefault();
-    editor.exec({ type: 'toggle_mark', mark: { type } });
+    editor.exec({ type: 'toggle_format', format });
   };
-  const isActive = isMarkActive(editor, type);
+  const isActive = isFormatActive(editor, format);
   let color = '#132540';
   if (isActive) {
     color = '#4E71FF';
@@ -53,9 +53,12 @@ const MarkButton: React.FC<IMarkButton> = ({ type, icon }) => {
   );
 };
 
-const isMarkActive = (editor: Editor, type: string) => {
-  const [mark] = Editor.marks(editor, { match: { type }, mode: 'universal' });
-  return !!mark;
+const isFormatActive = (editor: Editor, format: string) => {
+  const [match] = Editor.nodes(editor, {
+    match: { [format]: true },
+    mode: 'all',
+  });
+  return !!match;
 };
 
 export const FormatToolbar = () => {
@@ -94,10 +97,10 @@ export const FormatToolbar = () => {
   return (
     <Portal>
       <StyledToolbar ref={ref}>
-        <MarkButton type="bold" icon="bold" />
-        <MarkButton type="italic" icon="italic" />
-        <MarkButton type="underline" icon="underline" />
-        <MarkButton type="code" icon="code" />
+        <FormatButton format="bold" icon="bold" />
+        <FormatButton format="italic" icon="italic" />
+        <FormatButton format="underlined" icon="underline" />
+        <FormatButton format="code" icon="code" />
       </StyledToolbar>
     </Portal>
   );

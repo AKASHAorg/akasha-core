@@ -30,6 +30,15 @@ const StyledButton = styled(Button)`
   color: ${props => props.theme.colors.white};
 `;
 
+const StyledImageInput = styled.input`
+  display: none;
+`;
+
+const StyledImg = styled.img`
+  height: 48px;
+  width: 48px;
+`;
+
 const StyledTab = styled(Tab)`
   ${props => css`
     flex-grow: 1;
@@ -70,4 +79,12 @@ const StyledTab = styled(Tab)`
   `}
 `;
 
-export { StyledButton, StyledDrop, StyledInputDiv, StyledTab, StyledText };
+export {
+  StyledButton,
+  StyledDrop,
+  StyledImageInput,
+  StyledImg,
+  StyledInputDiv,
+  StyledTab,
+  StyledText,
+};

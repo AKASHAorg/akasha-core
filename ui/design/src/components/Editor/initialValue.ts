@@ -4,7 +4,6 @@ export const defaultValue = [
     children: [
       {
         text: '',
-        marks: [],
       },
     ],
   },

@@ -29,7 +29,6 @@ const EmbedBox: React.FC<IEmbedEntryBox> = props => (
       label={props.embedEntryData.name}
       info={formatDate(props.embedEntryData.time)}
       avatarImage={props.embedEntryData.avatar}
-      onClick={() => {}}
       seed={props.embedEntryData.ethAddress}
     />
 

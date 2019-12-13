@@ -1,19 +1,18 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { createEditor } from 'slate';
-import { Editable, Slate, withReact } from 'slate-react';
-// import { withHistory } from 'slate-history'
-import styled from 'styled-components';
+import { createEditor, Editor } from 'slate';
+import { withHistory } from 'slate-history';
+import { Slate, withReact } from 'slate-react';
 import { Avatar } from '../Avatar/index';
 import { IEntryData } from '../Cards/entry-box';
 import { Icon } from '../Icon/index';
 import { EmojiPopover, ImagePopover } from '../Popovers/index';
 import EmbedBox from './embed-box';
 import { FormatToolbar } from './format-toolbar';
-// import { html } from './html-serialize';
 import { defaultValue } from './initialValue';
-import { withMarks, withImages } from './plugins';
-import { renderElement, renderMark } from './renderers';
+import { withFormatting, withImages } from './plugins';
+import { renderElement, renderLeaf } from './renderers';
+import { StyledBox, StyledDiv, StyledEditable, StyledIconDiv } from './styled-editor-box';
 
 export interface IEditorBox {
   avatar?: string;
@@ -24,50 +23,28 @@ export interface IEditorBox {
   embedEntryData?: IEntryData;
 }
 
-const StyledDiv = styled.div`
-  padding-right: ${props => `${props.theme.shapes.baseSpacing}px`};
-  color: ${props => props.theme.colors.accent};
-  opacity: 0.4;
-  &:hover {
-    cursor: pointer;
-    opacity: 1;
-  }
-`;
-
-const StyledIconDiv = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const StyledBox = styled(Box)`
-  min-height: 200px;
-  max-height: 612px;
-`;
-
-const StyledEditable = styled(Editable)`
-  ::selection {
-    background-color: ${props => props.theme.colors.accent};
-  }
-`;
-
 const EditorBox: React.FC<IEditorBox> = props => {
   const { avatar, ethAddress, publishTitle, placeholderTitle, onPublish, embedEntryData } = props;
 
-  const [editorState, setEditorState] = React.useState(defaultValue);
+  const [editorValue, setEditorValue] = React.useState(defaultValue);
+  const [editorSelection, setEditorSelection] = React.useState(null);
 
   const [imagePopoverOpen, setImagePopoverOpen] = React.useState(false);
   const [emojiPopoverOpen, setEmojiPopoverOpen] = React.useState(false);
 
-  const editor = React.useMemo(() => withImages(withMarks(withReact(createEditor()))), []);
+  const editor = React.useMemo(
+    () => withImages(withFormatting(withHistory(withReact(createEditor())))),
+    [],
+  );
 
   const handlePublish = () => {
-    const content = editorState;
-    console.log(content);
-    onPublish(ethAddress, editorState);
+    const content = editorValue;
+    onPublish(ethAddress, content);
   };
 
-  const handleChange = ({ value }: any) => {
-    setEditorState(value);
+  const handleChange = (value: any, selection: any) => {
+    setEditorValue(value);
+    setEditorSelection(selection);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<any>) => {
@@ -78,26 +55,28 @@ const EditorBox: React.FC<IEditorBox> = props => {
     switch (event.key) {
       case '`': {
         event.preventDefault();
-        editor.exec({ type: 'toggle_code_block' });
+        const [match] = Editor.nodes(editor, { match: { type: 'code' } });
+        Editor.setNodes(editor, { type: match ? null : 'code' }, { match: 'block' });
         break;
       }
 
       case 'b': {
         event.preventDefault();
-        editor.exec({ type: 'toggle_bold_mark' });
+        Editor.setNodes(editor, { bold: true }, { match: 'text', split: true });
         break;
       }
     }
   };
 
-  const renderMarkMemo = React.useCallback(renderMark, []);
+  const renderLeafMemo = React.useCallback(renderLeaf, []);
 
   const renderElementMemo = React.useCallback(renderElement, []);
 
-  const mediaIconRef: React.RefObject<any> = React.useRef(null);
+  const mediaIconRef: React.RefObject<HTMLDivElement> = React.useRef(null);
+  const emojiIconRef: React.RefObject<HTMLDivElement> = React.useRef(null);
 
   const handleMediaClick = () => {
-    setImagePopoverOpen(true);
+    setImagePopoverOpen(!imagePopoverOpen);
   };
 
   const closeImagePopover = () => {
@@ -105,7 +84,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
   };
 
   const openEmojiPicker = () => {
-    setEmojiPopoverOpen(true);
+    setEmojiPopoverOpen(!emojiPopoverOpen);
   };
 
   const closeEmojiPicker = () => {
@@ -113,7 +92,6 @@ const EditorBox: React.FC<IEditorBox> = props => {
   };
 
   const handleInsertImageLink = (url: string) => {
-    console.log('URL: ', url);
     if (!url) {
       return;
     }
@@ -121,7 +99,6 @@ const EditorBox: React.FC<IEditorBox> = props => {
   };
 
   const handleInsertEmoji = (emojiCode: string) => {
-    console.log('Emoji: ', emojiCode);
     editor.exec({ type: 'insert_text', text: emojiCode });
   };
 
@@ -130,15 +107,19 @@ const EditorBox: React.FC<IEditorBox> = props => {
       <Box direction="row" pad="medium" align="start" overflow="auto" className="scrollBox">
         <Avatar seed={ethAddress} src={avatar} />
         <Box width="480px" pad={{ horizontal: 'small' }}>
-          <Slate editor={editor} defaultValue={defaultValue}>
+          <Slate
+            editor={editor}
+            value={editorValue}
+            selection={editorSelection}
+            onChange={handleChange}
+          >
             <FormatToolbar />
             <StyledEditable
               placeholder={placeholderTitle}
               spellCheck={false}
               autoFocus={true}
               renderElement={renderElementMemo}
-              renderMark={renderMarkMemo}
-              onChange={handleChange}
+              renderLeaf={renderLeafMemo}
               onKeyDown={handleKeyDown}
             />
           </Slate>
@@ -157,7 +138,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
           <StyledIconDiv ref={mediaIconRef}>
             <Icon type="media" clickable={true} onClick={handleMediaClick} />
           </StyledIconDiv>
-          <StyledIconDiv ref={mediaIconRef}>
+          <StyledIconDiv ref={emojiIconRef}>
             <Icon type="emoji" clickable={true} onClick={openEmojiPicker} />
           </StyledIconDiv>
         </Box>
@@ -165,16 +146,16 @@ const EditorBox: React.FC<IEditorBox> = props => {
           <Text size="large">{publishTitle}</Text>
         </StyledDiv>
       </Box>
-      {imagePopoverOpen && (
+      {imagePopoverOpen && mediaIconRef.current && (
         <ImagePopover
           target={mediaIconRef.current}
           closePopover={closeImagePopover}
-          insertImageLink={handleInsertImageLink}
+          insertImage={handleInsertImageLink}
         />
       )}
-      {emojiPopoverOpen && (
+      {emojiPopoverOpen && emojiIconRef.current && (
         <EmojiPopover
-          target={mediaIconRef.current}
+          target={emojiIconRef.current}
           closePopover={closeEmojiPicker}
           onClickEmoji={handleInsertEmoji}
         />

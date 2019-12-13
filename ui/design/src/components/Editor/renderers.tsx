@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RenderElementProps, RenderMarkProps } from 'slate-react';
+import { RenderElementProps, RenderLeafProps } from 'slate-react';
 import styled from 'styled-components';
 
 const StyledImg = styled.img`
@@ -7,21 +7,6 @@ const StyledImg = styled.img`
   max-width: 100%;
   max-height: 20em;
 `;
-
-const renderMark = (props: RenderMarkProps) => {
-  switch (props.mark.type) {
-    case 'bold':
-      return <strong {...props.attributes}>{props.children}</strong>;
-    case 'code':
-      return <code {...props.attributes}>{props.children}</code>;
-    case 'italic':
-      return <em {...props.attributes}>{props.children}</em>;
-    case 'underline':
-      return <u {...props.attributes}>{props.children}</u>;
-    default:
-      return <div {...props.attributes}>{props.children}</div>;
-  }
-};
 
 const ImageElement = ({ attributes, children, element }: any) => {
   return (
@@ -52,4 +37,41 @@ const renderElement = (props: RenderElementProps) => {
   }
 };
 
-export { renderMark, renderElement };
+const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
+  if (leaf.bold) {
+    return (
+      <span {...attributes}>
+        <strong>{children}</strong>
+      </span>
+    );
+  }
+
+  if (leaf.italic) {
+    return (
+      <span {...attributes}>
+        <em>{children}</em>
+      </span>
+    );
+  }
+
+  if (leaf.underlined) {
+    return (
+      <span {...attributes}>
+        <u>{children}</u>
+      </span>
+    );
+  }
+  if (leaf.code) {
+    return (
+      <span {...attributes}>
+        <code>{children}</code>
+      </span>
+    );
+  }
+
+  return <span {...attributes}>{children}</span>;
+};
+
+const renderLeaf = (props: RenderLeafProps) => <Leaf {...props} />;
+
+export { renderElement, renderLeaf };

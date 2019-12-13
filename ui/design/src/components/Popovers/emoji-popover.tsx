@@ -1,57 +1,42 @@
-import { Box, Text } from 'grommet';
 import * as React from 'react';
-import styled from 'styled-components';
 import { Icon } from '../Icon/index';
 import { StyledSearchBox, StyledTextInput } from '../Input/styled-input';
-import BasicPopover from './basic-popover';
 import { emojis } from './emojis';
 import { groups } from './groups';
+import {
+  StyledCategoryContainer,
+  StyledCategoryText,
+  StyledContentDiv,
+  StyledEmojiDrop,
+  StyledFooter,
+  StyledHoveredEmoji,
+  StyledHoveredEmojiName,
+  StyledList,
+  StyledListElem,
+  StyledSearchContainer,
+} from './styled-emoji-popover';
 
-interface IEmojiPopover {
+export interface IEmojiPopover {
   className?: string;
   onClickEmoji: (emojiCode: string) => void;
-  target: React.RefObject<any>;
+  target: HTMLElement;
   closePopover: () => void;
 }
 
-const StyledContentDiv = styled.div`
-  height: 300px;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledList = styled.div`
-  clear: both;
-  margin: 0;
-  list-style: none;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-`;
-
-const StyledListElem = styled.span`
-  position: relative;
-  cursor: pointer;
-`;
-
-const StyledFooter = styled.div`
-  background-color: ${props => props.theme.colors.lightBackground};
-  height: 56px;
-`;
-
-const StyledCategoryContainer = styled.div`
-  margin: ${props => `${props.theme.shapes.baseSpacing * 3}px`};
-`;
+export interface IEmojiData {
+  n: string[];
+  u: string;
+  v?: string[];
+}
 
 const EmojiPopover: React.FC<IEmojiPopover> = props => {
   const { className, closePopover, target, onClickEmoji } = props;
 
-  const [inputValue, setInputValue] = React.useState('');
+  const [searchValue, setSearchValue] = React.useState('');
   const [hoveredEmoji, setHoveredEmoji] = React.useState({ emojiCode: '', emojiName: '' });
 
-  const onChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(ev.target.value);
+  const handleSearchChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(ev.target.value);
   };
 
   const handleEmojiMouseEnter = (emojiCode: string, emojiName: string) => () => {
@@ -67,7 +52,7 @@ const EmojiPopover: React.FC<IEmojiPopover> = props => {
     closePopover();
   };
 
-  const renderEmoji = (elem: { n: string[]; u: string }, index: number) => {
+  const renderEmoji = (elem: IEmojiData, index: number) => {
     const emojiCode = elem.u
       .split('-')
       .map(hex => parseInt(hex, 16))
@@ -88,20 +73,45 @@ const EmojiPopover: React.FC<IEmojiPopover> = props => {
 
   const renderCategory = (categoryName: string) => {
     return (
-      <StyledCategoryContainer>
-        <Text size="large">{categoryName}</Text>
+      <StyledCategoryContainer key={categoryName}>
+        <StyledCategoryText size="large">{categoryName}</StyledCategoryText>
         <StyledList>
-          {emojis[categoryName].map((elem: { n: string[]; u: string }, index: number) =>
-            renderEmoji(elem, index),
-          )}
+          {emojis[categoryName].map((elem: IEmojiData, index: number) => renderEmoji(elem, index))}
         </StyledList>
       </StyledCategoryContainer>
     );
   };
 
+  const renderSearchContent = () => (
+    <StyledCategoryContainer>
+      <StyledList>
+        {Object.values(emojis).map((group: any) =>
+          group
+            .filter(
+              (elem: IEmojiData) => elem.n[0].toLowerCase().indexOf(searchValue.toLowerCase()) >= 0,
+            )
+            .map((elem: IEmojiData, index: number) => renderEmoji(elem, index)),
+        )}
+      </StyledList>
+    </StyledCategoryContainer>
+  );
+
+  const renderContent = () => {
+    if (searchValue) {
+      return renderSearchContent();
+    }
+    return groups.map((categoryName: string) => renderCategory(categoryName));
+  };
+
   return (
-    <BasicPopover closePopover={closePopover} target={target} gap={'-5px'} className={className}>
-      <Box pad="xsmall">
+    <StyledEmojiDrop
+      target={target}
+      overflow="hidden"
+      align={{ top: 'bottom', left: 'left' }}
+      onClickOutside={closePopover}
+      onEsc={closePopover}
+    >
+      <StyledSearchContainer>
         <StyledSearchBox
           fill="horizontal"
           direction="row"
@@ -118,20 +128,18 @@ const EmojiPopover: React.FC<IEmojiPopover> = props => {
           <Icon type="search" />
           <StyledTextInput
             plain={true}
-            value={inputValue}
-            onChange={onChange}
+            value={searchValue}
+            onChange={handleSearchChange}
             placeholder={'Search'}
           />
         </StyledSearchBox>
-      </Box>
-      <StyledContentDiv>
-        {groups.map((categoryName: string) => renderCategory(categoryName))}
-      </StyledContentDiv>
-      <StyledFooter>
-        <Box>{hoveredEmoji.emojiCode}</Box>
-        <Box>{hoveredEmoji.emojiName}</Box>
+      </StyledSearchContainer>
+      <StyledContentDiv>{renderContent()}</StyledContentDiv>
+      <StyledFooter direction="row" align="center">
+        <StyledHoveredEmoji>{hoveredEmoji.emojiCode}</StyledHoveredEmoji>
+        <StyledHoveredEmojiName>{hoveredEmoji.emojiName}</StyledHoveredEmojiName>
       </StyledFooter>
-    </BasicPopover>
+    </StyledEmojiDrop>
   );
 };
 

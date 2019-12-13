@@ -1,7 +1,7 @@
-import { Layer } from 'grommet';
 import * as React from 'react';
 import { IEntryData } from '../Cards/entry-box';
 import { EditorBox } from '../Editor/index';
+import { StyledLayer } from './styled-modal';
 
 interface IEditorModal {
   className?: string;
@@ -27,7 +27,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
   } = props;
 
   return (
-    <Layer onEsc={closeModal} onClickOutside={closeModal} modal={true} className={className}>
+    <StyledLayer onEsc={closeModal} onClickOutside={closeModal} modal={true} className={className}>
       <EditorBox
         ethAddress={ethAddress}
         publishTitle={publishTitle}
@@ -36,7 +36,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
         avatar={avatar}
         embedEntryData={embedEntryData}
       />
-    </Layer>
+    </StyledLayer>
   );
 };
 
