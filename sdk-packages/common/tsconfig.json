@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
-    "lib": ["es7", "dom"]
+    "lib": ["esnext", "dom"]
   },
   "references": [
     {
@@ -13,5 +13,6 @@
       "path": "../core"
     }
   ],
-  "include": ["./src"]
+  "include": ["./src"],
+  "exclude": ["./node_modules"]
 }

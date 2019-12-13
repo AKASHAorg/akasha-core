@@ -1,7 +1,7 @@
 import { Anchor } from 'grommet';
 import styled from 'styled-components';
 
-interface IStyledIconLinkProps {
+export interface IStyledIconLinkProps {
   iconPosition?: 'start' | 'end';
   size?: string;
 }

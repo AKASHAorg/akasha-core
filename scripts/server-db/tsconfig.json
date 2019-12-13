@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
-    "lib": ["dom", "es2019", "es2017"]
+    "lib": ["dom", "es2019", "es2017"],
+    "module": "commonjs"
   },
   "include": ["./src"]
 }

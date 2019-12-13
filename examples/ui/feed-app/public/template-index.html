@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="shortcut icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="theme-color" content="#000000" />
     <!--
@@ -19,7 +18,27 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>events-app</title>
-    <script type="text/javascript" src="/system.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.1.2/system.js"
+      integrity="sha256-Ky0in5r9kMai3LjnxR1WkyDC+UFnEhBGVUD+1dt/thE="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.1.2/extras/amd.js"
+      integrity="sha256-erhNFrvwT/3yD8ochDsyEDzuo5/BvtXdcI+wcZhvWNA="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.1.2/extras/named-exports.js"
+      integrity="sha256-f1lqmyL5C1fL32XRBiEWQH1lNSbzu5uy+SNKkurTvOw="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.1.2/extras/use-default.js"
+      integrity="sha256-WracZJpIkr2jAAHIhlAurxHIbcFP1HUXqMOww460Z40="
+      crossorigin="anonymous"
+    ></script>
+    <script type="systemjs-importmap" src="/importmap.json"></script>
     <style>
       html,
       body,
@@ -37,12 +56,12 @@
     </noscript>
     <div id="root"></div>
     <!--
-  This HTML file is a template.
-  If you open it directly in the browser, you will see an empty page.
-  You can add webfonts, meta tags, or analytics to this file.
-  The build step will place the bundled scripts into the <body> tag.
-  To begin the development, run `npm start` or `yarn start`.
-  To create a production bundle, use `npm run build` or `yarn build`.
+This HTML file is a template.
+If you open it directly in the browser, you will see an empty page.
+You can add webfonts, meta tags, or analytics to this file.
+The build step will place the bundled scripts into the <body> tag.
+To begin the development, run `npm start` or `yarn start`.
+To create a production bundle, use `npm run build` or `yarn build`.
 -->
   </body>
 </html>

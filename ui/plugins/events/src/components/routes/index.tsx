@@ -10,17 +10,17 @@ export interface IRoutesProps {
 
 const Routes: React.FC<IRoutesProps> = props => {
   const { activeWhen } = props;
-  const [t] = useTranslation();
+  const { t } = useTranslation();
   return (
     <>
       <Router>
         <Switch>
           <Route
-            exact
+            exact={true}
             path={`${activeWhen.path}`}
             children={({ match }) => <EventsHomePage rootPath={activeWhen.path} match={match} />}
           />
-          <Route exact path={`${activeWhen.path}/:eventId`} component={EventPage} />
+          <Route exact={true} path={`${activeWhen.path}/:eventId`} component={EventPage} />
           <Route render={() => <div>{t('Event not found!')}</div>} />
         </Switch>
       </Router>

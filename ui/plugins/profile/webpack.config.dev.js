@@ -1,15 +1,8 @@
-const config = require('./webpack.config.js');
-const webpack = require('webpack');
+const baseConfig = require('../../webpack.config.dev');
+const path = require('path');
 
-config.plugins.push(new webpack.HotModuleReplacementPlugin());
-config.devServer = {
-  contentBase: './dist',
-  historyApiFallback: true,
-  headers: {
-    'Access-Control-Allow-Origin': '*',
-  },
+const config = {
+  context: path.resolve(__dirname),
 };
 
-config.mode = 'development';
-
-module.exports = config;
+module.exports = Object.assign({}, baseConfig, config);

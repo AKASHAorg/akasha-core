@@ -6,7 +6,7 @@ import { BasicCardBox } from './index';
 import { IProfileCardProps } from './profile-card';
 import { AvatarDiv } from './styled-profile-card';
 
-type IProfileWidgetCard = Omit<IProfileCardProps, 'onChangeProfileData'>;
+export type IProfileWidgetCard = Omit<IProfileCardProps, 'onChangeProfileData'>;
 
 const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
   const {

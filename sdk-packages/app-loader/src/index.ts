@@ -148,6 +148,7 @@ export default class AppLoader implements IAppLoader {
       domElement: domEl,
       i18n: i18nInstance,
     });
+    this.appLogger.info(`[@akashaproject/sdk-ui-plugin-loader]: ${widget.app.name} registered!`);
   }
 
   public async loadLayout() {

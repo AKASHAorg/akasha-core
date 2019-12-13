@@ -1,41 +1,15 @@
-const webpack = require('webpack');
 const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { name } = require('./lib/index');
+const baseConfig = require('../../webpack.config');
 
-module.exports = {
-  entry: './lib/index.js',
+const config = {
+  context: path.resolve(__dirname),
   output: {
-    libraryTarget: 'system',
-    library: name,
+    libraryTarget: baseConfig.output.libraryTarget,
+    // library: 'ui-widget-sidebar',
     path: path.resolve(__dirname, 'dist'),
     filename: 'layout.js',
+    publicPath: '/widgets/',
   },
-  mode: 'production',
-  module: {
-    rules: [
-      { parser: { System: false } },
-      {
-        test: /\.js?$/,
-        exclude: [path.resolve(__dirname, 'node_modules')],
-        loader: 'babel-loader',
-      },
-    ],
-  },
-  resolve: {
-    modules: [__dirname, 'node_modules'],
-  },
-  plugins: [
-    new webpack.ProgressPlugin({
-      entries: true,
-      modules: true,
-      modulesCount: 100,
-      profile: true,
-    }),
-    new CleanWebpackPlugin({ verbose: true }),
-    new webpack.AutomaticPrefetchPlugin(),
-    new HtmlWebpackPlugin(),
-  ],
-  devtool: 'source-map',
 };
+
+module.exports = Object.assign({}, baseConfig, config);

@@ -1,10 +1,9 @@
-const pluginConf = require('./lib/index').default;
-const ns = pluginConf.i18nConfig.ns || pluginConf.name;
+// must specify this
+// can't use import from lib/ because it breaks the parser
+const ns = 'ui-plugin-profile';
 
 module.exports = {
   locales: ['en', 'ro'],
-  output: '../../../locales/$LOCALE/$NAMESPACE.json',
   saveMissingTo: 'all',
   defaultNamespace: ns,
-  useKeysAsDefaultValue: true,
 };

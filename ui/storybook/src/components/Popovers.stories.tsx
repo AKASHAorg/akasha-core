@@ -1,9 +1,10 @@
 /* eslint-disable import/first */
-import { Box, Icon, NotificationsPopover } from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
+const { Box, Icon, NotificationsPopover } = DS;
 export const notificationsData = [
   {
     ethAddress: '0x003410490050000320006570034567114572000',

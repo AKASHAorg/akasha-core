@@ -6,7 +6,7 @@ import { AvatarSize } from '../Avatar/styled-avatar';
 import StyledIconLink from './styled-icon-link';
 import { ButtonInfo, ButtonTextWrapper } from './styled-profile-avatar-button';
 
-interface ProfileAvatarButtonProps {
+export interface ProfileAvatarButtonProps {
   info?: string | React.ReactElement;
   avatarImage?: string;
   label?: string;

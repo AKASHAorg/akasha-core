@@ -6,7 +6,7 @@ import { ProfileAvatarButton } from '../IconButton/index';
 import { TextIcon } from '../TextIcon/index';
 import { StyledLayer } from './styled-modal';
 
-interface IlistModal {
+export interface IlistModal {
   className?: string;
   list: IListElem[];
   label: string;

@@ -1,20 +1,20 @@
 import { Box } from 'grommet';
 import * as React from 'react';
 import styled from 'styled-components';
-import { Icon } from '../../index';
+import { Icon } from '../../components/Icon';
 import { ProfileAvatarButton } from '../IconButton';
 import { NotificationsPopover } from '../Popovers/index';
 
 const AvatarButton = styled(ProfileAvatarButton)`
   background-color: ${props => props.theme.colors.background};
-  border: 1px solid ${props => props.theme.colors.border}
+  border: 1px solid ${props => props.theme.colors.border};
   border-radius: 20px;
   padding: ${props => `${props.theme.shapes.baseSpacing * 2}px`};
   height: 40px;
-  box-shadow: ${props => props.theme.colors.shadow}
+  box-shadow: ${props => props.theme.colors.shadow};
 `;
 
-interface ITopbarProps {
+export interface ITopbarProps {
   className?: string;
   ethAddress: string;
   avatarImage?: string;

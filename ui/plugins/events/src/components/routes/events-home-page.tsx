@@ -14,7 +14,7 @@ const randomArr = (size: number, max: number) =>
 /* Remove this ^^^ */
 
 const EventHomePage: React.FC<IEventHomePageProps> = () => {
-  const [t] = useTranslation();
+  const { t } = useTranslation();
   const [eventsState, eventDispatch] = useEvents();
   const fetchMoreEvents = (ev: React.SyntheticEvent) => {
     const events = randomArr(3, 100).map(num => ({

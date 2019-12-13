@@ -1,13 +1,5 @@
 /* eslint-disable import/first */
-import {
-  AppsWidgetCard,
-  Box,
-  EditorCard,
-  EntryCard,
-  ProfileCard,
-  ProfileWidgetCard,
-  TopicsWidgetCard,
-} from '@akashaproject/design-system';
+import DS from '@akashaproject/design-system';
 import { IAppData } from '@akashaproject/design-system/lib/components/Cards/apps-widget-card';
 import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-card';
 import { action } from '@storybook/addon-actions';
@@ -15,6 +7,15 @@ import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
+const {
+  AppsWidgetCard,
+  Box,
+  EditorCard,
+  EntryCard,
+  ProfileCard,
+  ProfileWidgetCard,
+  TopicsWidgetCard,
+} = DS;
 const topicsDataSource = [
   { title: '#ethereumworld', subtitle: '6576 mentions' },
   { title: '#akashaworld', subtitle: '3204 mentions' },

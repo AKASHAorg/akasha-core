@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next';
 /**
  * All widgets must export an object like this:
  */
-export default {
+export const application = {
   // translation config
   i18nConfig: {
     // namespaces that this plugin requires.
@@ -16,7 +16,12 @@ export default {
     // i18next.use(arr[0]).use(arr[1]).use(arr[n])
     use: [initReactI18next],
   },
-  loadingFn: (): Promise<any> => import('./components'),
+  loadingFn: (): Promise<any> =>
+    import(
+      /* webpackChunkName: "topBarChunk" */
+      /* webpackMode: "lazy" */
+      './components'
+    ),
   name: 'ui-widget-topbar',
   services: [],
   title: 'Topbar Widget',

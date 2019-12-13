@@ -2,7 +2,7 @@ import { Button } from 'grommet';
 import * as React from 'react';
 import styled, { css } from 'styled-components';
 
-interface IIconButtonProps {
+export interface IIconButtonProps {
   label: string;
   icon: React.ReactNode;
   onClick?: () => void;

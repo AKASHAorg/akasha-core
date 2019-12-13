@@ -10,7 +10,7 @@ import { EditorModal, ListModal } from '../Modals/index';
 import { TextIcon } from '../TextIcon/index';
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 
-interface IUser {
+export interface IUser {
   name?: string;
   avatar?: string;
   ethAddress: string;
@@ -25,7 +25,7 @@ export interface IEntryData extends IUser {
   quotes: Quote[];
 }
 
-interface Comment extends IUser {
+export interface Comment extends IUser {
   content: string;
   time: string;
   upvotes: string | number;
@@ -33,11 +33,11 @@ interface Comment extends IUser {
   quotes: Quote[];
 }
 
-interface Quote extends IUser {
+export interface Quote extends IUser {
   time: string;
 }
 export type ethAddress = string;
-interface IEntryBoxProps {
+export interface IEntryBoxProps {
   entryData: IEntryData;
   onClickAvatar: React.EventHandler<any>;
   onClickUpvote: React.EventHandler<React.SyntheticEvent>;

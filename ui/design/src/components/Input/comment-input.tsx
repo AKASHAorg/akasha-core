@@ -5,7 +5,7 @@ import useSimpleClickAway from '../../utils/simpleClickAway';
 import { Avatar } from '../Avatar/index';
 import { Icon } from '../Icon/index';
 
-interface ICommentInput {
+export interface ICommentInput {
   className?: string;
   avatarImg?: string;
   ethAddress: string;

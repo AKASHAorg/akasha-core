@@ -1,41 +1,57 @@
-import i18n from 'i18next';
+import i18n, { i18n as i18nType, InitOptions, LoggerModule } from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
+import LocalStorageBackend from 'i18next-localstorage-backend';
 import { IPlugin, IWidget } from './interfaces';
 
-const i18nDefaultConfig: i18n.InitOptions = {
-  backend: {
-    // @todo: pass the hostname through app-loader.
-    addPath: 'http://localhost:9001/locales/{{lng}}/{{ns}}.json',
-    loadPath: 'http://localhost:9001/locales/{{lng}}/{{ns}}.json',
-  },
-  // debug: true,
-  fallbackLng: false,
+const i18nDefaultConfig: InitOptions = {
+  fallbackLng: 'en',
   ns: [],
   saveMissing: true,
   saveMissingTo: 'all',
-  load: 'currentOnly',
+  load: 'languageOnly',
   debug: true,
+  cleanCode: true,
+};
+const backends = {
+  backends: [
+    LocalStorageBackend,
+    Fetch,
+  ],
+  backendOptions: [
+    {
+      prefix: 'i18next_res_v0',
+      expirationTime: 24 * 60 * 60 * 1000,
+    },
+    {
+      addPath: 'http://localhost:9001/locales/{{lng}}/{{ns}}.json',
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
+    },
+  ],
 };
 
 export default class TranslationManager {
   private readonly i18nInstances: any;
   private logger;
+
   constructor(logger) {
     this.i18nInstances = {};
     this.logger = logger;
   }
-  public createInstance(plugin: IPlugin | IWidget, logger): i18n.i18n {
-    const { i18nConfig } = plugin;
-    const defaultNS = i18nConfig.ns || plugin.name;
 
+  public createInstance(plugin: IPlugin | IWidget, logger): i18nType {
+    const logPlugin: LoggerModule = {
+      type: 'logger',
+      log: logger.info,
+      warn: logger.warn,
+      error: logger.error,
+    };
     const i18nInstance = i18n
-      .createInstance({
-        ...i18nDefaultConfig,
-        defaultNS,
-      })
+      .createInstance()
+      .use(Backend)
       .use(LanguageDetector)
-      .use(Fetch);
+      .use(logPlugin);
 
     this.i18nInstances[plugin.name] = i18nInstance;
     return i18nInstance;
@@ -43,13 +59,18 @@ export default class TranslationManager {
 
   public async initI18nFor(plugin: IPlugin | IWidget): Promise<void> {
     const { name, i18nConfig } = plugin;
-    document.addEventListener('change-language', this.onLanguageChange(plugin.name));
-    const instance: i18n.i18n = this.i18nInstances[name];
+    const instance: i18nType = this.i18nInstances[name];
+    // binds react-i18next instance to current i18next instance
     i18nConfig.use.forEach(ext => {
       instance.use(ext);
     });
-    await instance.init();
-    return await instance.loadNamespaces([...i18nConfig.loadNS, plugin.name]);
+    await instance.init({
+      ...i18nDefaultConfig,
+      defaultNS: plugin.name,
+      ns: i18nConfig.loadNS,
+      backend: backends,
+    });
+    document.addEventListener('change-language', this.onLanguageChange(plugin.name));
   }
 
   public getInstance(name: string) {

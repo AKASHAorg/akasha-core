@@ -1,5 +1,7 @@
 /* Components */
-import { Avatar, EditableAvatar } from './components/Avatar/index';
+import { Box, Grid, Grommet, grommet, ResponsiveContext, ThemeContext } from 'grommet';
+import styled, { css } from 'styled-components';
+import { Avatar, EditableAvatar } from './components/Avatar';
 import {
   AppsWidgetCard,
   BasicCardBox,
@@ -9,40 +11,31 @@ import {
   ProfileCard,
   ProfileWidgetCard,
   TopicsWidgetCard,
-} from './components/Cards/index';
-import { Icon, iconTypes } from './components/Icon/index';
-import {
-  IconButton,
-  IconLink,
-  ProfileAvatarButton,
-  VoteIconButton,
-} from './components/IconButton/index';
-import { CommentInput, SearchInput } from './components/Input/index';
-import { NotificationsPopover } from './components/Popovers/index';
-import { SubtitleTextIcon, TextIcon } from './components/TextIcon/index';
+} from './components/Cards';
+import { Icon, iconTypes } from './components/Icon';
+import { IconButton, IconLink, ProfileAvatarButton, VoteIconButton } from './components/IconButton';
+import { CommentInput, SearchInput } from './components/Input';
+import { NotificationsPopover } from './components/Popovers';
+import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
 import { Topbar } from './components/Topbar/index';
-
+import responsiveBreakpoints from './styles/responsive-breakpoints';
 /* Themes and theme related utils */
 import { createTheme } from './styles/themes/create-theme';
 import darkTheme from './styles/themes/dark-theme';
 import lightTheme from './styles/themes/light-theme';
-
 /* Grommet utils */
 
-import { Box, Grid, Grommet, grommet, ResponsiveContext, ThemeContext } from 'grommet';
-import styled, { css } from 'styled-components';
-
-export {
+const exported = {
   Avatar,
   EditableAvatar,
   AppsWidgetCard,
-  TopicsWidgetCard,
+  BasicCardBox,
+  EditorCard,
+  EntryBox,
+  EntryCard,
   ProfileCard,
   ProfileWidgetCard,
-  EditorCard,
-  EntryCard,
-  BasicCardBox,
-  EntryBox,
+  TopicsWidgetCard,
   Icon,
   iconTypes,
   IconButton,
@@ -52,18 +45,21 @@ export {
   CommentInput,
   SearchInput,
   NotificationsPopover,
-  TextIcon,
   SubtitleTextIcon,
+  TextIcon,
   Topbar,
-  lightTheme,
-  darkTheme,
   createTheme,
+  darkTheme,
+  lightTheme,
   Box,
   Grid,
-  ResponsiveContext,
-  ThemeContext,
-  grommet,
   Grommet,
-  styled,
+  grommet,
+  ResponsiveContext,
+  responsiveBreakpoints,
+  ThemeContext,
   css,
+  styled,
 };
+
+export default exported;

@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next';
 /**
  * All the plugins must export an object like this:
  */
-const app = {
+export const application = {
   // This is the root route in which the plugin will render.
   // Make sure to change it as it fits.
   activeWhen: {
@@ -22,13 +22,13 @@ const app = {
     // i18next.use(arr[0]).use(arr[1]).use(arr[n])
     use: [initReactI18next],
   },
-  loadingFn: (): Promise<any> => import('./components'),
+  loadingFn: (): Promise<any> =>
+    import(
+      /* webpackChunkName: "feedChunk" */
+      /* webpackMode: "lazy" */
+      './components'
+    ),
   name: 'ui-plugin-feed',
   sdkModules: [],
   title: 'AKASHA Feed',
 };
-export default app;
-
-export function registerPlugin(load: any) {
-  load({ app });
-}

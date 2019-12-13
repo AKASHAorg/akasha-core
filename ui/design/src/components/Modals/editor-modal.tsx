@@ -3,7 +3,7 @@ import { IEntryData } from '../Cards/entry-box';
 import { EditorBox } from '../Editor/index';
 import { StyledLayer } from './styled-modal';
 
-interface IEditorModal {
+export interface IEditorModal {
   className?: string;
   avatar?: string;
   ethAddress: string;
