@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 
-import { StyledSelectBox } from '../styled-search-input';
+import { StyledSelectBox } from '../styled-input';
 
 export interface ISearchInputTagsProps {
   tags: any[];

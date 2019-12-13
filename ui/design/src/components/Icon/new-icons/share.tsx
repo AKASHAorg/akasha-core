@@ -1,15 +1,20 @@
 import React from 'react';
 
 const Share = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" {...props}>
-    <g fill="none" fillRule="evenodd" transform="translate(-144 -2758)">
-      <path
-        stroke="#FFF"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M6.81818182,4.18181818 L6.81818182,2 L11.1818182,5.63636364 L6.81818182,9.27272727 L6.81818182,7.09090909 C6.81818182,7.09090909 1,7.09090909 1,10 C1,4.18181818 6.81818182,4.18181818 6.81818182,4.18181818 Z"
-        transform="translate(144 2758)"
-      />
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" {...props}>
+    <g
+      fill="none"
+      fillRule="evenodd"
+      stroke="#132540"
+      strokeLinecap="round"
+      transform="translate(2 1)"
+    >
+      <polyline strokeLinejoin="round" points="12 7 12 13 0 13 0 7" />
+      <g transform="rotate(-90 5.5 3.5)">
+        <line x1="6" x2="9" y1=".833" y2="3.833" />
+        <line x1="6" x2="9" y1="3.833" y2="6.833" transform="matrix(1 0 0 -1 0 10.667)" />
+        <line x2="8" y1="3.833" y2="3.833" />
+      </g>
     </g>
   </svg>
 );
