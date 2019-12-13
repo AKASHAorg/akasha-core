@@ -47,6 +47,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
           light: styledComponentsTheme.colors.primaryText,
           dark: styledComponentsTheme.colors.primaryText,
         },
+        accent: styledComponentsTheme.colors.accent,
       },
       focus: {
         border: {

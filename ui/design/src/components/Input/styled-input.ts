@@ -1,6 +1,16 @@
 import { Box, BoxProps, Drop, DropProps, Tab, TabProps, TextInput, TextInputProps } from 'grommet';
 import styled, { css } from 'styled-components';
 
+const StyledLinkIconDiv = styled.div`
+  height: 32px;
+  width: 32px;
+  background-color: ${props => props.theme.colors.lightBackground};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: ${props => props.theme.shapes.smallBorderRadius};
+`;
+
 const StyledSearchBox = styled(Box)<BoxProps>`
   > div:nth-child(3) {
     width: auto;
@@ -97,4 +107,5 @@ export {
   StyledTextInput,
   StyledResultsLink,
   StyledTab,
+  StyledLinkIconDiv,
 };

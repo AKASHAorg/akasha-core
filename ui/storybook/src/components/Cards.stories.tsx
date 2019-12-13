@@ -193,24 +193,26 @@ storiesOf('Cards', module)
     </Box>
   ))
   .add('profile card', () => (
-    <Box pad="none" align="center" width="581px">
-      <ProfileCard
-        onClickApps={() => action('Apps Box Clicked')('Synthetic Event')}
-        onClickFollowing={() => action('Following Box Clicked')('Synthetic Event')}
-        onChangeProfileData={(newProfileData: IProfileData) =>
-          action('ProfileData Changed')(newProfileData)
-        }
-        margin={object('Margin', { margin: '0px' })}
-        // @ts-ignore
-        profileData={select('Profile Data', { dapp: dappData, user: profileData }, profileData)}
-        descriptionTitle={text('About me', aboutMeTitle)}
-        actionsTitle={text('Actions', actionsTitle)}
-        mostPopularActionsTitle={text('Most popular actions', mostPopularActionsTitle)}
-        followingTitle={text('Following', followingTitle)}
-        appsTitle={text('Apps', appsTitle)}
-        usersTitle={text('Users', usersTitle)}
-        shareProfileText={text('Share Profile', shareProfileTitle)}
-      />
+    <Box align="center" pad={{ top: '40px' }}>
+      <Box pad="none" align="center" width="581px">
+        <ProfileCard
+          onClickApps={() => action('Apps Box Clicked')('Synthetic Event')}
+          onClickFollowing={() => action('Following Box Clicked')('Synthetic Event')}
+          onChangeProfileData={(newProfileData: IProfileData) =>
+            action('ProfileData Changed')(newProfileData)
+          }
+          margin={object('Margin', { margin: '0px' })}
+          // @ts-ignore
+          profileData={select('Profile Data', { dapp: dappData, user: profileData }, profileData)}
+          descriptionTitle={text('About me', aboutMeTitle)}
+          actionsTitle={text('Actions', actionsTitle)}
+          mostPopularActionsTitle={text('Most popular actions', mostPopularActionsTitle)}
+          followingTitle={text('Following', followingTitle)}
+          appsTitle={text('Apps', appsTitle)}
+          usersTitle={text('Users', usersTitle)}
+          shareProfileText={text('Share Profile', shareProfileTitle)}
+        />
+      </Box>
     </Box>
   ))
   .add('profile widget card', () => (
@@ -232,36 +234,38 @@ storiesOf('Cards', module)
     </Box>
   ))
   .add('entry card', () => (
-    <Box pad="none" align="center" width="581px">
-      <EntryCard
-        entryData={object('Entry Data', entryData)}
-        onClickAvatar={() => action('Avatar Clicked')('Synthetic Event')}
-        onClickDownvote={() => action('Downvote Clicked')('Synthetic Event')}
-        onClickUpvote={() => action('Upvote Clicked')('Synthetic Event')}
-        commentsTitle={text('Comments title', commentsTitle)}
-        quotesTitle={text('Quotes title', quotesTitle)}
-        shareTitle={text('Share title', shareTitle)}
-        editPostTitle={text('Edit post title', editPostTitle)}
-        editCommentTitle={text('Edit comment title', editCommentTitle)}
-        copyLinkTitle={text('Copy link title', copyLinkTitle)}
-        quotedByTitle={text('Quoted By title', quotedByTitle)}
-        replyTitle={text('Reply title', replyTitle)}
-        fullEntry={boolean('Full Entry', false)}
-        locale={select('Locale', { en: 'en', ro: 'ro', es: 'es' }, 'en')}
-        commentInputPlaceholderTitle={text(
-          'Comment input placeholder',
-          commentInputPlaceholderTitle,
-        )}
-        commentInputPublishTitle={text('Comment input publish title', publishTitle)}
-        publishComment={() => action('Comment published')('Synthetic Event')}
-        loggedProfileAvatar={text(
-          'Logged Profile Avatar',
-          'https://www.stevensegallery.com/360/360',
-        )}
-        loggedProfileEthAddress={text(
-          'Logged Profile EthAddress',
-          '0x003410499401674320006570047391024572000',
-        )}
-      />
+    <Box align="center" pad={{ top: '40px' }}>
+      <Box pad="none" align="center" width="581px">
+        <EntryCard
+          entryData={object('Entry Data', entryData)}
+          onClickAvatar={() => action('Avatar Clicked')('Synthetic Event')}
+          onClickDownvote={() => action('Downvote Clicked')('Synthetic Event')}
+          onClickUpvote={() => action('Upvote Clicked')('Synthetic Event')}
+          commentsTitle={text('Comments title', commentsTitle)}
+          quotesTitle={text('Quotes title', quotesTitle)}
+          shareTitle={text('Share title', shareTitle)}
+          editPostTitle={text('Edit post title', editPostTitle)}
+          editCommentTitle={text('Edit comment title', editCommentTitle)}
+          copyLinkTitle={text('Copy link title', copyLinkTitle)}
+          quotedByTitle={text('Quoted By title', quotedByTitle)}
+          replyTitle={text('Reply title', replyTitle)}
+          fullEntry={boolean('Full Entry', false)}
+          locale={select('Locale', { en: 'en', ro: 'ro', es: 'es' }, 'en')}
+          commentInputPlaceholderTitle={text(
+            'Comment input placeholder',
+            commentInputPlaceholderTitle,
+          )}
+          commentInputPublishTitle={text('Comment input publish title', publishTitle)}
+          publishComment={() => action('Comment published')('Synthetic Event')}
+          loggedProfileAvatar={text(
+            'Logged Profile Avatar',
+            'https://www.stevensegallery.com/360/360',
+          )}
+          loggedProfileEthAddress={text(
+            'Logged Profile EthAddress',
+            '0x003410499401674320006570047391024572000',
+          )}
+        />
+      </Box>
     </Box>
   ));
