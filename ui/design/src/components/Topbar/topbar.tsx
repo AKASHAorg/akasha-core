@@ -16,8 +16,9 @@ const AvatarButton = styled(ProfileAvatarButton)`
 
 export interface ITopbarProps {
   className?: string;
-  avatarImage: string;
-  userName: string;
+  ethAddress: string;
+  avatarImage?: string;
+  userName?: string;
   brandLabel: string | React.ReactElement;
   unreadNotifications?: number;
   notificationsData?: any[];
@@ -31,13 +32,14 @@ const Topbar = (props: ITopbarProps) => {
     avatarImage,
     brandLabel,
     className,
+    ethAddress,
     userName,
     notificationsData,
     onNotificationClick,
     onNavigation,
   } = props;
-  const notificationIconRef: React.Ref<any> = React.useRef();
-  const walletIconRef: React.Ref<any> = React.useRef();
+  const notificationIconRef: React.Ref<any> = React.useRef(null);
+  const walletIconRef: React.Ref<any> = React.useRef(null);
 
   const [notificationsOpen, setNotificationsOpen] = React.useState(false);
   const [walletOpen, setWalletOpen] = React.useState(false);
@@ -99,8 +101,7 @@ const Topbar = (props: ITopbarProps) => {
             size="xs"
             onClick={handleNavigation('/profile/my-profile')}
             onAvatarClick={handleNavigation('/profile/my-profile')}
-            // @Todo: fix this
-            seed={''}
+            seed={ethAddress}
           />
         </Box>
       </Box>
