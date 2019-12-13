@@ -14,6 +14,7 @@ export type IconType =
   | 'arrowDown'
   | 'arrowLeft'
   | 'arrowRight'
+  | 'bold'
   | 'bookmark'
   | 'calendar'
   | 'comments'
@@ -28,6 +29,7 @@ export type IconType =
   | 'heart'
   | 'home'
   | 'hotTopics'
+  | 'italic'
   | 'link'
   | 'media'
   | 'moreDark'
@@ -38,8 +40,7 @@ export type IconType =
   | 'pin'
   | 'plusDark'
   | 'plusGrey'
-  | 'quoteDark'
-  | 'quoteGrey'
+  | 'quote'
   | 'reload'
   | 'reply'
   | 'report'
@@ -56,6 +57,8 @@ export type IconType =
   | 'thumbsUpWhite'
   | 'transfer'
   | 'trendingApps'
+  | 'underline'
+  | 'upload'
   | 'wallet';
 
 export const iconTypes: IconType[] = [
@@ -68,6 +71,7 @@ export const iconTypes: IconType[] = [
   'arrowDown',
   'arrowLeft',
   'arrowRight',
+  'bold',
   'bookmark',
   'calendar',
   'comments',
@@ -82,6 +86,7 @@ export const iconTypes: IconType[] = [
   'heart',
   'home',
   'hotTopics',
+  'italic',
   'link',
   'media',
   'moreDark',
@@ -91,8 +96,7 @@ export const iconTypes: IconType[] = [
   'person',
   'pin',
   'plusDark',
-  'quoteDark',
-  'quoteGrey',
+  'quote',
   'reload',
   'reply',
   'report',
@@ -109,6 +113,8 @@ export const iconTypes: IconType[] = [
   'thumbsUpWhite',
   'transfer',
   'trendingApps',
+  'underline',
+  'upload',
   'wallet',
 ];
 
@@ -139,7 +145,16 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
       & * {
         stroke: ${props.theme.colors.primaryText};
       }`}
-  ${props => props.clickable && `cursor: pointer`}
+  ${props =>
+    props.clickable &&
+    `
+      cursor: pointer;
+      &: hover {
+        & * {
+          stroke: ${props.theme.colors.accent};
+        }
+      }
+    `}
 `;
 
 export default Icon;

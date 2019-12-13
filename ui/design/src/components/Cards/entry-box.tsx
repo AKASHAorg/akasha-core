@@ -6,7 +6,7 @@ import { Avatar } from '../Avatar/index';
 import { Icon } from '../Icon/index';
 import { IconLink, ProfileAvatarButton, VoteIconButton } from '../IconButton/index';
 import { CommentInput, StyledDiv } from '../Input/index';
-import { ListModal } from '../Modals/index';
+import { EditorModal, ListModal } from '../Modals/index';
 import { TextIcon } from '../TextIcon/index';
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 
@@ -39,7 +39,7 @@ export interface Quote extends IUser {
 export type ethAddress = string;
 export interface IEntryBoxProps {
   entryData: IEntryData;
-  onClickAvatar: React.MouseEventHandler<ethAddress>;
+  onClickAvatar: React.EventHandler<any>;
   onClickUpvote: React.EventHandler<React.SyntheticEvent>;
   onClickDownvote: React.EventHandler<React.SyntheticEvent>;
   commentsTitle: string;
@@ -264,7 +264,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         >
           <Box direction="row" gap="xsmall" align="center">
             <Icon type="addAppDark" clickable={true} />
-            <Icon type="quoteDark" clickable={true} />
+            <Icon type="quote" clickable={true} />
             <Icon type="media" clickable={true} />
             <Icon type="emoji" clickable={true} />
           </Box>
@@ -287,6 +287,15 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
       />
     );
   };
+
+  const [editorModalOpen, setEditorModalOpen] = React.useState(false);
+  const openEditorModal = () => {
+    setEditorModalOpen(true);
+  };
+  const closeEditorModal = () => {
+    setEditorModalOpen(false);
+  };
+
   return (
     <div>
       <Box direction="row" justify="between" margin="medium" pad={pad} border={border}>
@@ -316,11 +325,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         </Box>
         <Box gap="medium" direction="row">
           {renderLeftIconLink()}
-          <IconLink
-            icon={<Icon type="quoteDark" />}
-            label={quotesLabel}
-            onClick={toggleQuotesModal}
-          />
+          <Icon type="quote" onClick={openEditorModal} clickable={true} />
+          <Text onClick={toggleQuotesModal}>{quotesLabel}</Text>
+
           <IconLink
             icon={<Icon type="share" />}
             label={shareTitle}
@@ -333,6 +340,17 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           />
         </Box>
       </Box>
+      {editorModalOpen && (
+        <EditorModal
+          closeModal={closeEditorModal}
+          avatar={loggedProfileAvatar}
+          ethAddress={loggedProfileEthAddress}
+          onPublish={publishComment}
+          publishTitle={commentInputPublishTitle}
+          placeholderTitle={commentInputPlaceholderTitle}
+          embedEntryData={entryData}
+        />
+      )}
       {comment && replyCommentOpen && renderReplyComment()}
       {!comment && (
         <Box pad="medium">

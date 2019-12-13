@@ -16,7 +16,7 @@ const StyledTextIcon = styled.div<ITextIconProps>`
     } = props;
 
     // change margins to ones passed in props
-    let marginSize = '0px';
+    let marginSize = 'margin: 0px;';
     if (margin) {
       marginSize = MarginSetter(margin);
     }

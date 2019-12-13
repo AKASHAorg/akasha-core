@@ -8,7 +8,7 @@ import StyledAvatar, { AvatarSize } from './styled-avatar';
 export interface AvatarProps extends CommonInterface<HTMLDivElement> {
   src?: string;
   // @Todo: fix this
-  onClick?: React.MouseEventHandler<any>;
+  onClick?: React.EventHandler<React.SyntheticEvent>;
   alt?: string;
   margin?: MarginInterface;
   backgroundColor?: string;
