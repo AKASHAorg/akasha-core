@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { createEditor, Editor } from 'slate';
+import { createEditor, Editor, Node } from 'slate';
 import { withHistory } from 'slate-history';
 import { Slate, withReact } from 'slate-react';
 import { Avatar } from '../Avatar/index';
@@ -27,7 +27,6 @@ const EditorBox: React.FC<IEditorBox> = props => {
   const { avatar, ethAddress, publishTitle, placeholderTitle, onPublish, embedEntryData } = props;
 
   const [editorValue, setEditorValue] = React.useState(defaultValue);
-  const [editorSelection, setEditorSelection] = React.useState(null);
 
   const [imagePopoverOpen, setImagePopoverOpen] = React.useState(false);
   const [emojiPopoverOpen, setEmojiPopoverOpen] = React.useState(false);
@@ -42,9 +41,8 @@ const EditorBox: React.FC<IEditorBox> = props => {
     onPublish(ethAddress, content);
   };
 
-  const handleChange = (value: any, selection: any) => {
+  const handleChange = (value: Node[]) => {
     setEditorValue(value);
-    setEditorSelection(selection);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<any>) => {
@@ -107,12 +105,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
       <Box direction="row" pad="medium" align="start" overflow="auto" className="scrollBox">
         <Avatar seed={ethAddress} src={avatar} />
         <Box width="480px" pad={{ horizontal: 'small' }}>
-          <Slate
-            editor={editor}
-            value={editorValue}
-            selection={editorSelection}
-            onChange={handleChange}
-          >
+          <Slate editor={editor} value={editorValue} onChange={handleChange}>
             <FormatToolbar />
             <StyledEditable
               placeholder={placeholderTitle}
