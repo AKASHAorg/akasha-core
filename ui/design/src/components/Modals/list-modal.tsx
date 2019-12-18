@@ -1,19 +1,27 @@
-import { Box, Layer, Text } from 'grommet';
+import { Box, Text } from 'grommet';
 import * as React from 'react';
 import styled from 'styled-components';
 import { formatDate, ILocale } from '../../utils/time';
 import { ProfileAvatarButton } from '../IconButton/index';
 import { TextIcon } from '../TextIcon/index';
+import { StyledLayer } from './styled-modal';
 
 export interface IlistModal {
   className?: string;
-  list: any[];
+  list: IListElem[];
   label: string;
   secondaryLabel: string;
   closeModal: () => void;
   // @Todo: fix this :D
-  onClickAvatar: any;
+  onClickAvatar: React.EventHandler<any>;
   locale: ILocale;
+}
+
+interface IListElem {
+  name?: string;
+  time: string;
+  ethAddress: string;
+  avatar?: string;
 }
 
 const StyledLayerElemDiv = styled.div`
@@ -30,10 +38,10 @@ const ListModal: React.FC<IlistModal> = props => {
     onClickAvatar(ethAddress);
   };
   return (
-    <Layer onEsc={closeModal} onClickOutside={closeModal} modal={true} className={className}>
+    <StyledLayer onEsc={closeModal} onClickOutside={closeModal} modal={true} className={className}>
       <Box pad="none" width="579px" height="386px">
         <Box pad="medium" justify="between" direction="row" align="center">
-          <TextIcon iconType="quoteDark" label={label} margin={{ right: '40px' }} />
+          <TextIcon iconType="quote" label={label} margin={{ right: '40px' }} />
           <Text size="large" color="secondaryText">
             {listNumberLabel}
           </Text>
@@ -52,7 +60,7 @@ const ListModal: React.FC<IlistModal> = props => {
           ))}
         </Box>
       </Box>
-    </Layer>
+    </StyledLayer>
   );
 };
 

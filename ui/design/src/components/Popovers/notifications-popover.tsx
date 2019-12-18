@@ -9,10 +9,11 @@ export interface INotificationsPopover {
   onClickNotification: () => void;
   dataSource: INotification[];
   target: React.RefObject<any>;
-  closePopover: any;
+  closePopover: () => void;
 }
 
 export interface INotification {
+  ethAddress: string;
   user: string;
   userAvatar: string;
   time: string;

@@ -1,8 +1,13 @@
+import DS from '@akashaproject/design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import MyProfilePage from './my-profile';
+import MyProfilePage from './my-profile-page';
 import ProfilePage from './profile-page';
+import WidgetList from '../widgets';
+import Grid from '../grid';
+
+const { Grommet, responsiveBreakpoints, Box } = DS;
 
 export interface IRoutesProps {
   activeWhen: { path: string };
@@ -11,19 +16,52 @@ export interface IRoutesProps {
 const Routes: React.FC<IRoutesProps> = props => {
   const { activeWhen } = props;
   const { path } = activeWhen;
-  const activeWhenPath = path.slice(0, path.lastIndexOf('/'));
-  const [t] = useTranslation();
+  const { t } = useTranslation();
+
   return (
     <>
       <Router>
-        <Switch>
-          <Route path={`${activeWhenPath}/profiles`} render={() => <>A list of profiles</>} />
-          <Route path={`${activeWhenPath}/p/my-profile`} component={MyProfilePage} />
-          <Route path={`${activeWhenPath}/p/:profileId`} component={ProfilePage} />
-          <Route path={`${activeWhenPath}/apps`} render={() => <>A list of apps</>} />
-          <Route path={`${activeWhenPath}/app/:appId`} render={() => <>An app's profile page</>} />
-          <Route render={() => <div>{t('Profile not found!')}</div>} />
-        </Switch>
+        <Grommet theme={responsiveBreakpoints} style={{ height: '100%' }}>
+          <Grid>
+            {(gridConfig: any) => {
+              const widgetAreaProps = {
+                gridArea: gridConfig.gridAreas.widgetList,
+                style: {},
+              };
+              if (gridConfig.size === 'small') {
+                widgetAreaProps.style = {
+                  display: 'none',
+                };
+              }
+              return (
+                <>
+                  <Box gridArea={gridConfig.gridAreas.pluginContent}>
+                    <Switch>
+                      <Route path={`${path}/list`} render={() => <>A list of profiles</>} />
+
+                      <Route
+                        path={`${path}/my-profile`}
+                        render={() => (
+                          <React.Suspense fallback={<>Loading My Profile</>}>
+                            <MyProfilePage />
+                          </React.Suspense>
+                        )}
+                      />
+                      <Route
+                        path={`${path}/:profileId`}
+                        render={routeProps => <ProfilePage {...routeProps} {...props} />}
+                      />
+                      <Route render={() => <div>{t('Profile not found!')}</div>} />
+                    </Switch>
+                  </Box>
+                  <Box {...widgetAreaProps}>
+                    <WidgetList />
+                  </Box>
+                </>
+              );
+            }}
+          </Grid>
+        </Grommet>
       </Router>
     </>
   );

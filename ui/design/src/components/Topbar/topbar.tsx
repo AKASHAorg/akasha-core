@@ -38,8 +38,8 @@ const Topbar = (props: ITopbarProps) => {
     onNavigation,
     ethAddress,
   } = props;
-  const notificationIconRef: React.Ref<any> = React.useRef();
-  const walletIconRef: React.Ref<any> = React.useRef();
+  const notificationIconRef: React.Ref<any> = React.useRef(null);
+  const walletIconRef: React.Ref<any> = React.useRef(null);
 
   const [notificationsOpen, setNotificationsOpen] = React.useState(false);
   const [walletOpen, setWalletOpen] = React.useState(false);

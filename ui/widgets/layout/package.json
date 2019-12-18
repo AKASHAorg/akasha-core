@@ -21,6 +21,7 @@
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
+    "extract:translations": "i18next './src/components/**/*.{ts,tsx}' --config ./i18next-parser.config.js --output '../../../'",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/*layout.* ../../build/widgets"
   },

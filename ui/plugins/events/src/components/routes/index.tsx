@@ -10,7 +10,7 @@ export interface IRoutesProps {
 
 const Routes: React.FC<IRoutesProps> = props => {
   const { activeWhen } = props;
-  const [t] = useTranslation();
+  const { t } = useTranslation();
   return (
     <>
       <Router>

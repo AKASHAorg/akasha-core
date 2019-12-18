@@ -23,7 +23,7 @@ export const application = {
   },
   loadingFn: (): Promise<any> =>
     import(
-      /* webpackChunkName: "profile" */
+      /* webpackChunkName: "profileChunk" */
       /* webpackMode: "lazy" */
       './components'
     ),

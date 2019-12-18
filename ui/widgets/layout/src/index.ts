@@ -1,11 +1,12 @@
+// chunkName must be unique among packages
 export const application = {
   loadingFn: (): Promise<any> =>
     import(
-      /* webpackChunkName: "layout" */
+      /* webpackChunkName: "layoutChunk" */
       /* webpackMode: "lazy" */
       './components'
     ),
-  name: 'ui-widget-sidebar',
+  name: 'ui-widget-layout',
   title: 'Layout Widget',
   pluginSlotId: 'plugin-slot',
   topbarSlotId: 'topbar-slot',

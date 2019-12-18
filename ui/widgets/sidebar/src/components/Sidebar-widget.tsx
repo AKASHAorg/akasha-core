@@ -69,7 +69,7 @@ interface MenuProps {
 
 const Menu = (props: MenuProps) => {
   const { navigateToUrl } = props;
-  const [t] = useTranslation();
+  const { t } = useTranslation();
 
   // const handleLangChange = (lang: string) => (ev: SyntheticEvent) => {
   //   const evt = new CustomEvent('change-language', {
