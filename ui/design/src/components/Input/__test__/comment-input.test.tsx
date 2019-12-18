@@ -75,8 +75,8 @@ describe('<CommentInput> Component', () => {
     const { findByTestId } = customRender(createDefaultComponent(), {});
     const fakeInputBtn = await findByTestId('fake-input-wrapper');
     fireEvent.click(fakeInputBtn);
-    const commentTextarea = await waitForElement<Promise<any>>(
-      async () => await findByTestId('comment-textarea'),
+    const commentTextarea = await waitForElement<Promise<any>>(() =>
+      findByTestId('comment-textarea'),
     );
     const publishButton = await waitForElement(() => findByTestId('comment-publish-button'));
     fireEvent.change(commentTextarea, { target: { value: mockString } });

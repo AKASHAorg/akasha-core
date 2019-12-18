@@ -2,9 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRouteMatch } from 'react-router-dom';
 
-export interface IArticlePageProps {}
-
-const ArticlePage: React.FC<IArticlePageProps> = () => {
+const ArticlePage: React.FC = () => {
   const [t] = useTranslation();
   const match = useRouteMatch<{ articleId: string }>();
   const { params } = match;
