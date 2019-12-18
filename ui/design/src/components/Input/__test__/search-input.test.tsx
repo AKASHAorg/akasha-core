@@ -121,7 +121,13 @@ describe('<SearchInput /> Component', () => {
     expect(appsTitle).toBeDefined();
     expect(tagsTitle).toBeDefined();
   });
-  it.skip('should call onClickAppHandler', () => {});
-  it.skip('should call onClickTagHandler', () => {});
-  it.skip('should call onClickUserhandler', () => {});
+  it.skip('should call onClickAppHandler', () => {
+    return;
+  });
+  it.skip('should call onClickTagHandler', () => {
+    return;
+  });
+  it.skip('should call onClickUserhandler', () => {
+    return;
+  });
 });
