@@ -14,7 +14,7 @@ export interface ProfileAvatarButtonProps {
   size?: AvatarSize;
   className?: string;
   onAvatarClick?: React.MouseEventHandler<ethAddressType>;
-  onClick: React.MouseEventHandler<HTMLAnchorElement>;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
   guest?: boolean;
   ethAddress: string;
 }
