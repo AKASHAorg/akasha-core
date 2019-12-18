@@ -3,10 +3,7 @@ import * as React from 'react';
 import { capitalize } from '../../utils/string-utils';
 import { Avatar } from '../Avatar/index';
 import { AvatarSize } from '../Avatar/styled-avatar';
-<<<<<<< HEAD
 import { ethAddress as ethAddressType } from '../Cards/entry-box';
-=======
->>>>>>> master
 import StyledIconLink from './styled-icon-link';
 import { ButtonInfo, ButtonTextWrapper } from './styled-profile-avatar-button';
 
