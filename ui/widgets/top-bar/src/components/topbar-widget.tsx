@@ -73,7 +73,6 @@ export default class TopbarWidget extends PureComponent<IProps> {
         <Suspense fallback={<>...</>}>
           <Grommet theme={lightTheme}>
             <Topbar
-              ethAddress="0x0"
               avatarImage="https://placebeard.it/360x360"
               userName="john doe"
               brandLabel="Ethereum.world"
