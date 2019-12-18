@@ -38,6 +38,7 @@ export const getAvatarFromSeed = (seed: string) => {
 const defaultProps: Partial<AvatarProps> = {
   size: 'md' as AvatarSize,
   withBorder: false,
+  guest: false,
   src: '0x0000000000000000000000000000000',
 };
 

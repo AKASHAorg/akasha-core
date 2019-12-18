@@ -1,15 +1,12 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { match as matchType, RouteComponentProps } from 'react-router-dom';
+import { useRouteMatch } from 'react-router-dom';
 
-export interface IArticlePageProps {
-  match: matchType;
-}
+export interface IArticlePageProps {}
 
-const ArticlePage: React.FC<IArticlePageProps &
-  RouteComponentProps<{ articleId: string }>> = props => {
+const ArticlePage: React.FC<IArticlePageProps> = () => {
   const [t] = useTranslation();
-  const { match } = props;
+  const match = useRouteMatch<{ articleId: string }>();
   const { params } = match;
   return (
     <div>

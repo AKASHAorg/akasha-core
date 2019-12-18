@@ -56,7 +56,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
         />
       )}
       <Box direction="row" pad="medium" gap="medium" align="center" onClick={openModal}>
-        <Avatar seed={ethAddress} src={avatar} />
+        <Avatar src={avatar || ethAddress} />
         <Text color="secondaryText" size="large">
           {placeholderTitle}
         </Text>

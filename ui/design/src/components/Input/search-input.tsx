@@ -129,6 +129,7 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
           onChange={onChange}
           placeholder={placeholder}
           dropTarget={boxRef.current}
+          data-testid="search-input"
         />
         {inputValue.trim() && <StyledResultsLink href="#">{resultsTitle}</StyledResultsLink>}
       </StyledSearchBox>
@@ -140,6 +141,7 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
           align={{ top: 'bottom' }}
           onClickOutside={closeDrop}
           onEsc={closeDrop}
+          data-testid="search-results-dropdown"
         >
           <Tabs>
             <StyledTab title={usersTitle}>

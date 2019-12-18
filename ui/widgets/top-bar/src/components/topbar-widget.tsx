@@ -77,6 +77,7 @@ export default class TopbarWidget extends PureComponent<IProps> {
               userName="john doe"
               brandLabel="Ethereum.world"
               onNavigation={this.handleNavigation}
+              ethAddress="0x1ad35f55220234DF32A"
             />
           </Grommet>
         </Suspense>

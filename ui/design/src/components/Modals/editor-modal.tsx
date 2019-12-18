@@ -73,7 +73,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
     <Layer onEsc={closeModal} onClickOutside={closeModal} modal={true} className={className}>
       <StyledBox pad="none" width="581px" justify="between">
         <Box direction="row" pad="medium" align="start" overflow="auto" className="scrollBox">
-          <Avatar seed={ethAddress} src={avatar} onClick={handleClickAvatar} />
+          <Avatar src={avatar || ethAddress} onClick={handleClickAvatar} />
           <Box width="480px">
             {/*<ReactQuill*/}
             {/*  value={editorState}*/}

@@ -17,10 +17,10 @@ export interface IlistModal {
 }
 
 const StyledLayerElemDiv = styled.div`
-  border-radius: ${props => props.theme.shapes.borderRadius}
-  padding: ${props => `${props.theme.shapes.baseSpacing * 3}px`}
-  border: 1px solid ${props => props.theme.colors.border}
-  margin-bottom: ${props => `${props.theme.shapes.baseSpacing * 3}px`}
+  border-radius: ${props => props.theme.shapes.borderRadius};
+  padding: ${props => `${props.theme.shapes.baseSpacing * 3}px`};
+  border: 1px solid ${props => props.theme.colors.border};
+  margin-bottom: ${props => `${props.theme.shapes.baseSpacing * 3}px`};
 `;
 
 const ListModal: React.FC<IlistModal> = props => {
@@ -46,8 +46,7 @@ const ListModal: React.FC<IlistModal> = props => {
                 label={elem.name}
                 avatarImage={elem.avatar}
                 onClick={handleClickAvatar(elem.ethAddress)}
-                // @Todo: fix this :D
-                seed={''}
+                ethAddress={elem.ethAddress}
               />
             </StyledLayerElemDiv>
           ))}

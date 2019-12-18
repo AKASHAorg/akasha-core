@@ -7,16 +7,17 @@ import { NotificationsPopover } from '../Popovers/index';
 
 const AvatarButton = styled(ProfileAvatarButton)`
   background-color: ${props => props.theme.colors.background};
-  border: 1px solid ${props => props.theme.colors.border}
+  border: 1px solid ${props => props.theme.colors.border};
   border-radius: 20px;
   padding: ${props => `${props.theme.shapes.baseSpacing * 2}px`};
   height: 40px;
-  box-shadow: ${props => props.theme.colors.shadow}
+  box-shadow: ${props => props.theme.colors.shadow};
 `;
 
 export interface ITopbarProps {
   className?: string;
-  avatarImage: string;
+  avatarImage?: string;
+  ethAddress: string;
   userName: string;
   brandLabel: string | React.ReactElement;
   unreadNotifications?: number;
@@ -35,6 +36,7 @@ const Topbar = (props: ITopbarProps) => {
     notificationsData,
     onNotificationClick,
     onNavigation,
+    ethAddress,
   } = props;
   const notificationIconRef: React.Ref<any> = React.useRef();
   const walletIconRef: React.Ref<any> = React.useRef();
@@ -95,12 +97,11 @@ const Topbar = (props: ITopbarProps) => {
         <Box pad={{ left: 'xsmall' }}>
           <AvatarButton
             avatarImage={avatarImage}
+            ethAddress={ethAddress}
             label={userName}
             size="xs"
             onClick={handleNavigation('/profile/my-profile')}
             onAvatarClick={handleNavigation('/profile/my-profile')}
-            // @Todo: fix this
-            seed={''}
           />
         </Box>
       </Box>

@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import MarginInterface from '../../interfaces/margin.interface';
-import { EditableAvatar } from '../Avatar/index';
+import { Avatar, EditableAvatar } from '../Avatar/index';
 import { SubtitleTextIcon, TextIcon } from '../TextIcon/index';
 import { IActionType } from '../TextIcon/text-icon';
 import { BasicCardBox } from './index';
@@ -47,6 +47,7 @@ export interface IProfileCardProps {
   usersTitle: string;
   mostPopularActionsTitle: string;
   shareProfileText: string;
+  canEdit?: boolean;
 }
 
 const ProfileCard: React.FC<IProfileCardProps> = props => {
@@ -95,13 +96,23 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
       >
         <Box direction="row">
           <AvatarDiv>
-            <EditableAvatar
-              size="xl"
-              withBorder={true}
-              src={profileData.avatar}
-              seed={profileData.ethAddress}
-              onChange={handleAvatarChange}
-            />
+            {props.canEdit && (
+              <EditableAvatar
+                size="xl"
+                withBorder={true}
+                src={profileData.avatar || profileData.ethAddress}
+                guest={!!profileData.avatar}
+                onChange={handleAvatarChange}
+              />
+            )}
+            {!props.canEdit && (
+              <Avatar
+                size="xl"
+                withBorder={true}
+                src={profileData.avatar || profileData.ethAddress}
+                guest={!!profileData.avatar}
+              />
+            )}
           </AvatarDiv>
 
           <Box pad={{ vertical: 'small', left: 'xsmall' }}>
@@ -129,6 +140,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               labelSize="small"
               subtitle={leftSubtitle}
               onClick={onClickFollowing}
+              data-testid="following-button"
             />
             <SubtitleTextIcon
               iconType="app"
@@ -136,6 +148,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               labelSize="small"
               subtitle={rightSubtitle}
               onClick={onClickApps}
+              data-testid="apps-button"
             />
           </Box>
         )}
