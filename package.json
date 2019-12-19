@@ -29,7 +29,7 @@
     "extract:translations": "lerna run extract:translations --stream"
   },
   "devDependencies": {
-    "@babel/core": "7.7.5",
+    "@babel/core": "7.7.7",
     "@babel/plugin-syntax-dynamic-import": "7.7.4",
     "@babel/preset-env": "7.7.6",
     "@babel/preset-react": "7.7.4",
