@@ -14,7 +14,7 @@ import settingsAttachmentService from './settings.attachment.service';
 
 export class DBModule extends IAkashaModule {
   public availableServices(): IAkashaModuleServices {
-    return IAkashaModule.exportToChannel([DB_SETTINGS_ATTACHMENT], services);
+    return IAkashaModule.EXPORT_TO_CHANNEL([DB_SETTINGS_ATTACHMENT], services);
   }
 
   protected _name(): string {
