@@ -37,7 +37,10 @@ test('inserts a new settings document', async () => {
   db[settings.name].insert({
     ethAddress: '0xbc98e878fa680557ec0088151b74699173bb5782',
     moduleName: 'testModule',
-    services: [['serviceN', 'optionN'], ['vendorS', '{json}']],
+    services: [
+      ['serviceN', 'optionN'],
+      ['vendorS', '{json}'],
+    ],
   });
   const doc = await db[settings.name]
     .findOne({
@@ -55,7 +58,10 @@ test('calls collection methods', async () => {
   db[settings.name].insert({
     ethAddress: '0xbc98e878fa680557ec0088151b74699173bb5711',
     moduleName: 'collectionModule',
-    services: [['insert', '1'], ['collect', '{a: 2}']],
+    services: [
+      ['insert', '1'],
+      ['collect', '{a: 2}'],
+    ],
   });
   const docs = await db[settings.name].getAllSettings('0xbc98e878fa680557ec0088151b74699173bb5711');
   expect(docs[0].getSettingsObject()).toHaveProperty('insert');

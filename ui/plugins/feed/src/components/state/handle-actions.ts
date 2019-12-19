@@ -11,9 +11,8 @@ export function handleActions<T, S, P>(
       const action = actionsMap[type];
       if (action) {
         return action(draft, payload);
-      } else {
-        throw new Error('Looks like the action is not found!');
       }
+      throw new Error('Looks like the action is not found!');
     });
   };
 }

@@ -21,6 +21,7 @@ export interface IAkashaModuleServices {
   [serviceName: string]: AkashaServicePath;
 }
 
+// tslint:disable-next-line:prefer-array-literal
 export type IGeneralSettings = Array<[string, string | object]>;
 
 export interface ICoreSettings {
@@ -34,11 +35,11 @@ export abstract class IAkashaModule {
     return this._name();
   }
 
-  public static getServiceName(moduleName: string, providerName: string) {
+  public static GET_SERVICE_NAME(moduleName: string, providerName: string) {
     return `${moduleName}=>${providerName}`;
   }
 
-  public static exportToChannel(serviceNames: string[], serviceRegistry: object): any {
+  public static EXPORT_TO_CHANNEL(serviceNames: string[], serviceRegistry: object): any {
     return R.pick(serviceNames, serviceRegistry);
   }
   protected logger: pino;
@@ -71,7 +72,7 @@ export abstract class IAkashaModule {
         registerServiceMethods(serviceMethods),
         providerInit.name,
       );
-      const serviceName = IAkashaModule.getServiceName(this.name, providerInit.name);
+      const serviceName = IAkashaModule.GET_SERVICE_NAME(this.name, providerInit.name);
       di.register(serviceName, wrappedService);
     }
   }

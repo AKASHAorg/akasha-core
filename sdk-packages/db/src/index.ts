@@ -21,6 +21,7 @@ export class DBModule extends IAkashaModule {
     return moduleName;
   }
 
+  // tslint:disable-next-line:function-name
   protected _registerServices(di: DIContainer): IAkashaNamedService[] {
     return [dbService, settingsAttachmentService];
   }

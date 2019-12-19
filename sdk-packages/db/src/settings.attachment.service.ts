@@ -44,4 +44,4 @@ const service: AkashaService = (invoke, log) => {
   return { get, put, deleteSettings };
 };
 
-export default { name: DB_SETTINGS_ATTACHMENT, service };
+export default { name: DB_SETTINGS_ATTACHMENT, service: service };
