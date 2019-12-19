@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "grommet": "2.8.1",
+    "grommet": "2.9.0",
     "styled-components": "^4.4.1"
   },
   "devDependencies": {
