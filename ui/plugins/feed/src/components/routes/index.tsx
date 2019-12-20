@@ -2,7 +2,6 @@ import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ArticlePage from './article-page';
 import ArticlesHomePage from './articles-home-page';
-import NotFoundPage from './not-found-page';
 
 export interface IRoutesProps {
   activeWhen: { path: string };
@@ -26,7 +25,6 @@ const Routes: React.FC<IRoutesProps> = props => {
             path={`${activeWhenPath}/article/:articleId`}
             component={ArticlePage}
           />
-          <Route component={NotFoundPage} />
         </Switch>
       </Router>
     </>

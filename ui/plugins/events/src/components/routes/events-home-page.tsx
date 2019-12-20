@@ -10,6 +10,7 @@ export interface IEventHomePageProps {
 
 /* Remove this */
 const randomArr = (size: number, max: number) =>
+  // tslint:disable-next-line:prefer-array-literal
   [...new Array(size)].map(() => Math.round(Math.random() * max));
 /* Remove this ^^^ */
 
@@ -33,7 +34,7 @@ const EventHomePage: React.FC<IEventHomePageProps> = () => {
       {eventsState.events.map(event => (
         <div key={event.href}>
           <span>
-            {t('common:Name')} <Link to={{ pathname: `${event.href}` }}>{event.name}</Link>
+            {t('Name')} <Link to={{ pathname: `${event.href}` }}>{event.name}</Link>
           </span>
         </div>
       ))}

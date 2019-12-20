@@ -20,4 +20,4 @@ const service: AkashaService = (invoke, log) => {
   return { getSettings, setSettings };
 };
 
-export default { name: SETTINGS_SERVICE, service };
+export default { name: SETTINGS_SERVICE, service: service };

@@ -15,10 +15,7 @@ const i18nDefaultConfig: InitOptions = {
   cleanCode: true,
 };
 const backends = {
-  backends: [
-    LocalStorageBackend,
-    Fetch,
-  ],
+  backends: [LocalStorageBackend, Fetch],
   backendOptions: [
     {
       prefix: 'i18next_res_v0',

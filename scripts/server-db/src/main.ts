@@ -53,8 +53,8 @@ RxDB.plugin(MemoryAdapter);
   const path = '/db';
   const serverState = db.server({
     cors: true,
-    path,
-    port,
+    path: path,
+    port: port,
   });
   // tslint:disable-next-line:no-console
   console.info(`visit http://localhost:${port}${path} to explore db collections`);
