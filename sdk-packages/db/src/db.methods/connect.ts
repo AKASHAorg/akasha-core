@@ -17,8 +17,8 @@ export default function dbConnect(name: string, password: string, adapter: strin
   return RxDB.create<AKASHAdb>({
     adapter,
     multiInstance: true,
-    name,
-    password,
+    name: name,
+    password: password,
     queryChangeDetection: true,
   });
 }

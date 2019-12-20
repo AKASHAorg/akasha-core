@@ -58,7 +58,7 @@ const isDescendant = (parent: HTMLElement, child: HTMLElement) => {
  * @params handler <Function> Click handler
  * @params options <Object> Not used yet
  */
-const useOnClickAway = (ref: React.RefObject<any>, handler: Function | undefined) => {
+const useOnClickAway = (ref: React.RefObject<any>, handler: (e: any) => void | undefined) => {
   const handlerRef = React.useRef(handler);
 
   // React.useEffect(() => {
@@ -78,7 +78,9 @@ const useOnClickAway = (ref: React.RefObject<any>, handler: Function | undefined
       ) {
         return;
       }
-      handlerRef.current && handlerRef.current(ev);
+      if (handlerRef.current) {
+        handlerRef.current(ev);
+      }
     };
     supportedEvents.forEach((eventName /* : EventNames */) => {
       // @todo check if passive event is supported and use it
@@ -116,6 +118,7 @@ const useTogglerWithClickAway = (
   });
   React.useEffect(() => {
     const listener = (ev: Event) => {
+      // tslint:disable-next-line:no-console
       console.log('clicked away');
       const targetIsToggler = ev.target === togglerElemRef.current;
       const targetIsClickAway = ev.target === clickAwayElemRef.current;

@@ -105,7 +105,11 @@ test('callServiceMethod returns', () => {
 });
 
 test('fromEntries object creation', () => {
-  const entries: Array<[string, any]> = [['a', 1], ['b', 2]];
+  // tslint:disable-next-line:prefer-array-literal
+  const entries: Array<[string, any]> = [
+    ['a', 1],
+    ['b', 2],
+  ];
   const obj = fromEntries(entries);
   expect(obj).toStrictEqual({ a: 1, b: 2 });
 });
@@ -113,5 +117,8 @@ test('fromEntries object creation', () => {
 test('toEntries list creation', () => {
   const obj = { a: 1, b: 3 };
   const path = toEntries(obj);
-  expect(path).toStrictEqual([['a', 1], ['b', 3]]);
+  expect(path).toStrictEqual([
+    ['a', 1],
+    ['b', 3],
+  ]);
 });

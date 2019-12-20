@@ -1,7 +1,10 @@
 const ns = 'ui-plugin-feed';
 
 module.exports = {
-  locales: ['en', 'ro'],
+  useKeysAsDefaultValue: true,
   defaultNamespace: ns,
-  keepRemoved: true
+  output: '../../../locales/$LOCALE/$NAMESPACE.json',
+  input: './src/components/**/*.{ts,tsx}',
+  locales: ['en'],
+  verbose: true,
 };
