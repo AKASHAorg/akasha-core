@@ -1,7 +1,7 @@
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
+import { feedInit, FeedProvider, feedReducer } from '../state/feed';
 import Routes from './routes';
-import { articlesInit, ArticlesProvider, articlesReducer } from './state/articles';
 
 export interface IProps {
   singleSpa: any;
@@ -69,11 +69,11 @@ class App extends PureComponent<IProps> {
     }
 
     return (
-      <Suspense fallback={() => <>Loading</>}>
+      <Suspense fallback={<div>Loading Feed</div>}>
         <I18nextProvider i18n={i18n ? i18n : null}>
-          <ArticlesProvider reducer={articlesReducer} initialState={articlesInit()}>
+          <FeedProvider reducer={feedReducer} initialState={feedInit()}>
             <Routes {...this.props} />
-          </ArticlesProvider>
+          </FeedProvider>
         </I18nextProvider>
       </Suspense>
     );

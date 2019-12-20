@@ -28,6 +28,7 @@
     "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333"
   },
   "dependencies": {
+    "@akashaproject/design-system": "*",
     "@types/i18next": "^13.0.0",
     "@types/react-i18next": "^8.1.0",
     "@types/react-router": "^5.1.2",
