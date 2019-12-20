@@ -14,7 +14,7 @@ export const logger = pino({ browser: { asObject: true } });
 
 // to not import explicit the module interface just for getting the serviceName
 export function getServiceName(service: { moduleName: string; providerName: string }) {
-  return R.identity(IAkashaModule.getServiceName(service.moduleName, service.providerName));
+  return R.identity(IAkashaModule.GET_SERVICE_NAME(service.moduleName, service.providerName));
 }
 
 // ex: getService(di, ["commons_module", "ipfs"])
@@ -24,13 +24,13 @@ export function getService(di: IDIContainer, servicePath: AkashaServicePath): an
 }
 
 // execute call on service function
-function _callService(di: IDIContainer, servicePath: AkashaServicePath) {
+function cService(di: IDIContainer, servicePath: AkashaServicePath) {
   const service = getService(di, servicePath);
   return R.identity(service);
 }
 
 export function callService(di: IDIContainer) {
-  return R.curry(_callService)(di);
+  return R.curry(cService)(di);
 }
 
 export function toNamedService(name: string, service: AkashaService): IAkashaNamedService {
@@ -44,12 +44,12 @@ export function registerServiceMethods(methods: object): CallableServiceMethods 
   return R.partial(R.identity, [Object.freeze(methods)]);
 }
 
-function _buildServicePath(moduleName: string, serviceName: string): AkashaServicePath {
+function bServicePath(moduleName: string, serviceName: string): AkashaServicePath {
   return [moduleName, serviceName];
 }
 
 export function buildServicePath(moduleName: string) {
-  return R.curry(_buildServicePath)(moduleName);
+  return R.curry(bServicePath)(moduleName);
 }
 
 // create a function around an object type service
@@ -63,7 +63,7 @@ export function invokeServiceMethod(
   return R.curry(R.invoker(1, method));
 }
 
-function _callServiceMethod(
+function cServiceMethod(
   di: IDIContainer,
   servicePath: AkashaServicePath,
   method: string,
@@ -74,9 +74,10 @@ function _callServiceMethod(
   return callMethod(args, service);
 }
 
-export const callServiceMethod = R.curry(_callServiceMethod);
+export const callServiceMethod = R.curry(cServiceMethod);
 
 // es2019
+// tslint:disable-next-line:prefer-array-literal
 export function fromEntries(entries: Array<[string | number, any]>) {
   return R.fromPairs(entries);
 }

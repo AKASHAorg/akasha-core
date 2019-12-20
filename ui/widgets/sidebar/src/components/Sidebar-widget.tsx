@@ -96,8 +96,8 @@ const Menu = (props: MenuProps) => {
           menuActive={true}
         />
         {/* <p>Language</p>
-      <MenuLink onClick={handleLangChange('en')}>{t('common:English')}</MenuLink>
-      <MenuLink onClick={handleLangChange('ro')}>{t('common:Romanian')}</MenuLink> */}
+      <MenuLink onClick={handleLangChange('en')}>{t('English')}</MenuLink>
+      <MenuLink onClick={handleLangChange('ro')}>{t('Romanian')}</MenuLink> */}
       </Box>
     </Grommet>
   );
