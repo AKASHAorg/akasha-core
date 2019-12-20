@@ -24,7 +24,7 @@ const strTrans = ({ filePath, data }: { filePath: string; data: any }) => {
       const json = Object.assign(JSON.parse(fileContent), data);
       return resolve({
         data: json,
-        filePath,
+        filePath: filePath,
       });
     });
   });
@@ -92,6 +92,7 @@ function createObj(obj: object, keyPath: string[], value: string) {
     if (!(key in obj)) {
       obj[key] = {};
     }
+    // tslint:disable-next-line:no-parameter-reassignment
     obj = obj[key];
   }
   obj[keyPath[lastKeyIndex]] = value;

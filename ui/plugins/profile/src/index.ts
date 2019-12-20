@@ -15,7 +15,7 @@ export const application = {
     // The ns is loaded automatically, you need to specify it only if changed
     // Example: i have changed the name of this plugin and the created ns was the old plugin name,
     // In this case I will preserve the old ns instead loading a possibly undefined ns.
-    loadNS: ['common'],
+    loadNS: [],
     // translation namespace. defaults to plugin.name
     // ns: 'ui-plugin-events',
     // i18next.use(arr[0]).use(arr[1]).use(arr[n])

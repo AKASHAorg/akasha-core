@@ -20,7 +20,7 @@ const ArticlesHomePage: React.FC<IArticlesHomePageProps> = () => {
       {articleState.articles.map(article => (
         <div key={article.href}>
           <span>
-            {t('common:Title')} <Link to={{ pathname: `${article.href}` }}>{article.title}</Link>
+            {t('Title')} <Link to={{ pathname: `${article.href}` }}>{article.title}</Link>
           </span>
         </div>
       ))}
