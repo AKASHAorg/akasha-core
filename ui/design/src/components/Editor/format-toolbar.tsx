@@ -38,7 +38,7 @@ const FormatButton: React.FC<IFormatButton> = ({ format, icon }) => {
   const editor = useSlate();
   const handleClick = (event: React.MouseEvent) => {
     event.preventDefault();
-    editor.exec({ type: 'toggle_format', format });
+    editor.exec({ type: 'toggle_format', format: format });
   };
   const isActive = isFormatActive(editor, format);
   let color = '#132540';

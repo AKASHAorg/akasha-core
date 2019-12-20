@@ -11,4 +11,4 @@ const service: AkashaService = (invoke, log) => {
   return { logMore };
 };
 
-export default { name: serviceName, service };
+export default { name: serviceName, service: service };

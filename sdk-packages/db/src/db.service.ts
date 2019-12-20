@@ -18,14 +18,11 @@ const service: AkashaService = (invoke, log) => {
     if (!dbSettings.hasOwnProperty(DB_PASSWORD)) {
       throw new Error('Set a db password before using the service.');
     }
-    const db = await connect(
-      dbSettings[DB_NAME],
-      dbSettings[DB_PASSWORD],
-    );
+    const db = await connect(dbSettings[DB_NAME], dbSettings[DB_PASSWORD]);
     akashaDB = await initCollections(db);
     return akashaDB;
   };
   return { getDB: dbConnect };
 };
 
-export default { name: DB_SERVICE, service };
+export default { name: DB_SERVICE, service: service };
