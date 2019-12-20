@@ -67,7 +67,7 @@
     "dayjs": "^1.8.16",
     "slate": "^0.53.0",
     "slate-react": "^0.53.0",
-    "slate-history": "0.54.2"
+    "slate-history": "0.57.0"
   },
   "peerDependencies": {
     "react": "^16.11.0",
