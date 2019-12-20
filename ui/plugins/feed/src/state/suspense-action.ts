@@ -51,7 +51,7 @@ export const useSuspenseAction = (
         .then((res: any) => {
           // @TODO check if the response contains an error key.
           // In this case we must call onFinish with an error param
-          /* 
+          /*
           if (res.error) {
             onFinish(new Error(res.error.message), null);
           } else {
