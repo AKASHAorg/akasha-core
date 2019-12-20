@@ -4,7 +4,6 @@ import { /* Link,*/ match } from 'react-router-dom';
 import { useFeed } from '../../state/feed';
 import FeedItem from '../FeedItem/feed-item';
 
-
 export interface IFeedHomePageProps {
   rootPath: string;
   match: match<any> | null;

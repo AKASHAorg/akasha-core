@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 export default function useSimpleClickAway(
   wrapperRef: React.RefObject<any>,
-  handler: Function | undefined,
+  handler: (e: any) => void | undefined,
 ) {
   useEffect(() => {
     if (wrapperRef.current) {
@@ -11,7 +11,9 @@ export default function useSimpleClickAway(
     return () => document.removeEventListener('click', handleClick);
 
     function handleClick(ev: Event) {
-      wrapperRef.current && !wrapperRef.current.contains(ev.target) && handler && handler(ev);
+      if (wrapperRef.current && !wrapperRef.current.contains(ev.target) && handler) {
+        handler(ev);
+      }
     }
   }, [handler, wrapperRef]);
 }

@@ -97,7 +97,7 @@ export const genEntryData = (entryId: string) => ({
       avatar: 'http://placebeard.it/480/480',
     },
   ],
-})
+});
 
 export const genEthAddress = () => {
   const arr = new Uint8Array(20);
