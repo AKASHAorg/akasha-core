@@ -38,6 +38,6 @@
     "ipfs": "^0.40.0"
   },
   "devDependencies": {
-    "@types/node": "12.12.14"
+    "@types/node": "13.1.0"
   }
 }
