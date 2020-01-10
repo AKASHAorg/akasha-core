@@ -65,7 +65,7 @@
     "@types/slate-react": "^0.22.8",
     "react-toastify": "^5.4.0",
     "dayjs": "^1.8.16",
-    "slate": "^0.53.0",
+    "slate": "^0.57.1",
     "slate-react": "^0.53.0",
     "slate-history": "0.54.2"
   },
