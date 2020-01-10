@@ -38,7 +38,7 @@
     "@akashaproject/sdk-db": "*",
     "@akashaproject/sdk-runtime": "*",
     "@akashaproject/sdk-ui-plugin-loader": "*",
-    "rxjs": "6.5.3",
+    "rxjs": "6.5.4",
     "rxdb": "^8.7.1"
   },
   "devDependencies": {
