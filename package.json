@@ -35,7 +35,7 @@
     "@babel/plugin-syntax-dynamic-import": "7.7.4",
     "@babel/preset-env": "7.7.7",
     "@babel/preset-react": "7.7.4",
-    "@types/jest": "24.0.24",
+    "@types/jest": "24.0.25",
     "@types/node": "12.12.21",
     "babel-loader": "8.0.6",
     "babel-plugin-i18next-extract": "0.4.2",
