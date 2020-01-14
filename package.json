@@ -43,7 +43,7 @@
     "copyfiles": "2.1.1",
     "html-webpack-plugin": "3.2.0",
     "husky": "3.1.0",
-    "i18next-parser": "1.0.0-beta37",
+    "i18next-parser": "1.0.0-beta38",
     "jest": "24.9.0",
     "lerna": "3.19.0",
     "prettier": "1.19.1",
