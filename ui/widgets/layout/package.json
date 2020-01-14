@@ -21,7 +21,7 @@
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
-    "extract:translations": "i18next './src/components/**/*.{ts,tsx}' --config ./i18next-parser.config.js --output '../../../'",
+    "extract:translations": "i18next --config ./i18next-parser.config.js",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/*layout.* ../../build/widgets"
   },
@@ -29,18 +29,18 @@
     "@akashaproject/design-system": "*",
     "@types/i18next": "^13.0.0",
     "@types/react-i18next": "^8.1.0",
-    "single-spa-react": "^2.10.3",
-    "react-i18next": "^11.0.1"
+    "single-spa-react": "^2.11.0",
+    "react-i18next": "^11.2.7"
   },
   "devDependencies": {
-    "@types/react": "16.9.14",
+    "@types/react": "16.9.17",
     "@types/react-dom": "16.9.4",
     "@types/single-spa-react": "^2.8.3",
-    "@types/styled-components": "^4.1.20"
+    "@types/styled-components": "^4.4.1"
   },
   "peerDependencies": {
-    "react": "16.11.0",
-    "react-dom": "16.11.0"
+    "react": "16.12.0",
+    "react-dom": "16.12.0"
   },
   "files": [
     "lib"

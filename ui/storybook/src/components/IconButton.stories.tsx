@@ -4,19 +4,14 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
-const {
-  Box,
-  Icon,
-  IconButton,
-  IconLink,
-  ProfileAvatarButton,
-  VoteIconButton,
-} = DS;
+const { Box, Icon, IconButton, IconLink, ProfileAvatarButton, VoteIconButton } = DS;
 storiesOf('Buttons|IconLink', module).add('default', () => (
   <Box pad="large" align="start">
     <IconLink
       label="Click Me"
-      onClick={() => {}}
+      onClick={() => {
+        /*placeholder*/
+      }}
       iconPosition="start"
       icon={<Icon type="wallet" />}
     />
@@ -26,14 +21,22 @@ storiesOf('Buttons|IconLink', module).add('default', () => (
 storiesOf('Buttons|IconButton', module)
   .add('secondary (default)', () => (
     <Box pad="large" align="start">
-      <IconButton onClick={() => {}} icon={<Icon type="wallet" />} label="My Wallet" />
+      <IconButton
+        onClick={() => {
+          /*placeholder*/
+        }}
+        icon={<Icon type="wallet" />}
+        label="My Wallet"
+      />
     </Box>
   ))
   .add('primary', () => (
     <Box pad="large" align="start">
       <IconButton
         primary={true}
-        onClick={() => {}}
+        onClick={() => {
+          /*placeholder*/
+        }}
         icon={<Icon type="wallet" />}
         label="My Wallet"
       />
@@ -43,7 +46,9 @@ storiesOf('Buttons|IconButton', module)
     <Box pad="large" align="start">
       <IconButton
         share={true}
-        onClick={() => {}}
+        onClick={() => {
+          /*placeholder*/
+        }}
         icon={<Icon type="share" />}
         label="Share Profile"
       />
@@ -65,24 +70,50 @@ storiesOf('Buttons|ProfileIconButton', module).add('default', () => (
 
 storiesOf('Buttons|VoteIconButton', module).add('upvote -default', () => (
   <Box pad="large" align="start">
-    <VoteIconButton voteType="upvote" voteCount={24} onClick={() => {}} />
+    <VoteIconButton
+      voteType="upvote"
+      voteCount={24}
+      onClick={() => {
+        /*placeholder*/
+      }}
+    />
   </Box>
 ));
 
 storiesOf('Buttons|VoteIconButton', module).add('upvote -voted', () => (
   <Box pad="large" align="start">
-    <VoteIconButton voteType="upvote" voteCount={24} onClick={() => {}} voted={true} />
+    <VoteIconButton
+      voteType="upvote"
+      voteCount={24}
+      onClick={() => {
+        /*placeholder*/
+      }}
+      voted={true}
+    />
   </Box>
 ));
 
 storiesOf('Buttons|VoteIconButton', module).add('downvote -default', () => (
   <Box pad="large" align="start">
-    <VoteIconButton voteType="downvote" voteCount={24} onClick={() => {}} />
+    <VoteIconButton
+      voteType="downvote"
+      voteCount={24}
+      onClick={() => {
+        /*placeholder*/
+      }}
+    />
   </Box>
 ));
 
 storiesOf('Buttons|VoteIconButton', module).add('downvote -voted', () => (
   <Box pad="large" align="start">
-    <VoteIconButton voteType="downvote" voteCount={24} onClick={() => {}} voted={true} />
+    <VoteIconButton
+      voteType="downvote"
+      voteCount={24}
+      onClick={() => {
+        /*placeholder*/
+      }}
+      voted={true}
+    />
   </Box>
 ));
