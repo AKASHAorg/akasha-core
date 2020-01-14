@@ -105,7 +105,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
   return (
     <StyledBox pad="none" width="581px" justify="between">
       <Box direction="row" pad="medium" align="start" overflow="auto" className="scrollBox">
-        <Avatar seed={ethAddress} src={avatar} />
+        <Avatar src={avatar || ethAddress} guest={typeof avatar === 'undefined'} />
         <Box width="480px" pad={{ horizontal: 'small' }}>
           <Slate
             editor={editor}
