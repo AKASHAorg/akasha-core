@@ -62,7 +62,7 @@ export interface IFetchProfileFeed {
 }
 
 export const fetchProfileFeed = (payload: IFetchProfileFeed) => {
-  return delay(randomMs(1000, 3000)).then(() =>
+  return delay(randomMs(1000, 1000)).then(() =>
     Promise.resolve({
       feed: {
         profileId: payload.profileId,
@@ -75,7 +75,7 @@ export const fetchProfileFeed = (payload: IFetchProfileFeed) => {
 };
 
 export const fetchFeedItemData = (payload: { entryId: string }) => {
-  return delay(randomMs(100, 4000)).then(() =>
+  return delay(randomMs(100, 1000)).then(() =>
     Promise.resolve({
       entryId: payload.entryId,
       ethAddress: '0x003410490059837320006570047391024572000',
