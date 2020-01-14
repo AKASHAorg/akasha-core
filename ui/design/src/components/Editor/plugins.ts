@@ -12,7 +12,7 @@ const withImages = (editor: Editor) => {
       case 'insert_image': {
         const { url } = command;
         const text = { text: '', marks: [] };
-        const image = { type: 'image', url, children: [text] };
+        const image = { url, type: 'image', children: [text] };
         Editor.insertNodes(editor, image);
         break;
       }

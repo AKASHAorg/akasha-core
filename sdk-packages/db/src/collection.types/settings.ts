@@ -3,6 +3,7 @@ import { RxCollection, RxDocument } from 'rxdb';
 export interface SettingsDocType {
   ethAddress: string;
   moduleName: string;
+  // tslint:disable-next-line:prefer-array-literal
   services: Array<[string, any]>;
 }
 

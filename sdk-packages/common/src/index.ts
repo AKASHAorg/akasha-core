@@ -28,7 +28,7 @@ export class CommonsModule extends IAkashaModule {
   }
 
   public availableServices(): IAkashaModuleServices {
-    return IAkashaModule.exportToChannel(
+    return IAkashaModule.EXPORT_TO_CHANNEL(
       [WEB3_UTILS_SERVICE, VALIDATOR_SERVICE, WEB3_SERVICE],
       services,
     );
