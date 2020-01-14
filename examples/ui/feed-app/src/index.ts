@@ -11,9 +11,8 @@ import initSdk from './sdk-init';
   // example for loading from import map
   const sidebarWidget = await System.import('@widget/sidebar');
   const layout = await System.import('@widget/layout');
-
   const topbarWidget = await System.import('@widget/topbar');
-  const profilePlugin = await System.import('@plugins/profile');
+
   const feedPlugin = await System.import('@plugins/feed');
   // tslint:disable-next-line:no-console
   console.timeEnd('loadApps');
@@ -23,10 +22,6 @@ import initSdk from './sdk-init';
   };
 
   const registeredPlugins = [
-    {
-      app: profilePlugin.application,
-      sdkModules: [],
-    },
     {
       app: feedPlugin.application,
       sdkModules: [],
@@ -44,8 +39,11 @@ import initSdk from './sdk-init';
     },
   ];
   const world = initSdk(appConfig, { plugins: registeredPlugins, widgets: registeredWidgets });
-  const eventsPlugin = await System.import('@plugins/events');
+  const profilePlugin = await System.import('@plugins/profile');
   // example loading an extra plugin after start
-  world.appLoader.registerPlugin({ app: eventsPlugin.application, sdkModules: [] });
+  world.appLoader.registerPlugin({
+    app: profilePlugin.application,
+    sdkModules: [],
+  });
   // @ts-ignore
 })(window.System);
