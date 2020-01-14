@@ -1,5 +1,5 @@
-import * as React from 'react';
 import DS from '@akashaproject/design-system';
+import * as React from 'react';
 
 const { ResponsiveContext, Grid, Grommet, lightTheme } = DS;
 
@@ -50,11 +50,11 @@ const PluginGrid = (props: IPluginGridProps) => {
     }
   }, [context]);
   const gridConfig = {
+    size,
     gridAreas: {
       pluginContent: 'plugin-content',
       widgetList: 'widget-list',
     },
-    size,
   };
   const columnsVal = columns[size || 'small'];
   const areas = getContentAreas(columnsVal.length);
