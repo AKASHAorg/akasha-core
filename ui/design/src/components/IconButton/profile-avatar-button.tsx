@@ -3,6 +3,7 @@ import * as React from 'react';
 import { capitalize } from '../../utils/string-utils';
 import { Avatar } from '../Avatar/index';
 import { AvatarSize } from '../Avatar/styled-avatar';
+import { ethAddress as ethAddressType } from '../Cards/entry-box';
 import StyledIconLink from './styled-icon-link';
 import { ButtonInfo, ButtonTextWrapper } from './styled-profile-avatar-button';
 
@@ -12,19 +13,28 @@ export interface ProfileAvatarButtonProps {
   label?: string;
   size?: AvatarSize;
   className?: string;
-  onAvatarClick?: React.EventHandler<React.SyntheticEvent>;
-  // @todo: fix this
-  onClick?: React.EventHandler<React.SyntheticEvent>;
+  onAvatarClick?: React.MouseEventHandler<ethAddressType>;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
   guest?: boolean;
-  seed: string;
+  ethAddress: string;
 }
 
 const ProfileAvatarButton = (props: ProfileAvatarButtonProps) => {
-  const { className, size, avatarImage, label, info, onClick, onAvatarClick, guest, seed } = props;
+  const {
+    className,
+    size,
+    avatarImage,
+    label,
+    info,
+    onClick,
+    onAvatarClick,
+    guest,
+    ethAddress,
+  } = props;
   return (
     <Box className={className} direction="row" align="center">
       <Box>
-        <Avatar size={size} src={avatarImage} onClick={onAvatarClick} guest={guest} seed={seed} />
+        <Avatar size={size} src={avatarImage || ethAddress} onClick={onAvatarClick} guest={guest} />
       </Box>
       <ButtonTextWrapper>
         <StyledIconLink label={capitalize(label)} onClick={onClick} />
@@ -37,6 +47,7 @@ const ProfileAvatarButton = (props: ProfileAvatarButtonProps) => {
 const defaultProps = {
   size: 'md',
 };
+
 ProfileAvatarButton.defaultProps = defaultProps;
 
 export default ProfileAvatarButton;

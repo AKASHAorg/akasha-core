@@ -42,7 +42,13 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
         <IconButton share={true} icon={<Icon type="share" />} label={shareProfileText} />
       </ShareButtonContainer>
 
-      <StyledImageInput ref={coverImageRef} name="coverImage" type="file" onChange={handleChange} />
+      <StyledImageInput
+        data-testid="profile-card-cover-image"
+        ref={coverImageRef}
+        name="coverImage"
+        type="file"
+        onChange={handleChange}
+      />
     </Box>
   );
 };

@@ -30,9 +30,14 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
     onClick,
     gap,
   } = props;
-
   return (
-    <StyledBox direction="row" justify="center" onClick={onClick} className={className}>
+    <StyledBox
+      data-testid={`${props['data-testid']}`}
+      direction="row"
+      justify="center"
+      onClick={onClick}
+      className={className}
+    >
       {iconType ? (
         <IconDiv iconSize={iconSize}>
           <Icon type={iconType} />

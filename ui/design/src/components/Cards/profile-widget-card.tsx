@@ -41,8 +41,7 @@ const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
             withBorder={true}
             guest={isGuest}
             size="xl"
-            seed={profileData.ethAddress}
-            src={profileData.avatar}
+            src={profileData.avatar || profileData.ethAddress}
           />
         </AvatarDiv>
 

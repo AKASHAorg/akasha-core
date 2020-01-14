@@ -8,8 +8,29 @@ const REJECTED = 'REJECTED';
 export const loadPlaceholder = (placeholderName: string) => {
   let status = PENDING;
   let result: any;
-  // @ts-ignore
-  const promise = import(`./${placeholderName}`);
+  let promise;
+  switch (placeholderName) {
+    case 'placeholder_1':
+      promise = import('./placeholder_1');
+      return;
+    case 'placeholder_2':
+      promise = import('./placeholder_2');
+      return;
+    case 'placeholder_3':
+      promise = import('./placeholder_3');
+      return;
+    case 'placeholder_4':
+      promise = import('./placeholder_4');
+    case 'placeholder_5':
+      promise = import('./placeholder_5');
+    case 'placeholder_6':
+      promise = import('./placeholder_6');
+    case 'placeholder_7':
+      promise = import('./placeholder_7');
+    default:
+      promise = import('./placeholder_1');
+  }
+
   const suspender = promise
     .then(r => {
       status = RESOLVED;
