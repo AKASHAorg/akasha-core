@@ -2,7 +2,7 @@ import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { Avatar } from '../Avatar/index';
 import BasicPopover from './basic-popover';
-import { StyledListContainer, StyledListElem } from './styled-drop';
+import { StyledListContainer, StyledListElem } from './styled-notifications-popover';
 
 export interface INotificationsPopover {
   className?: string;
@@ -34,7 +34,7 @@ const NotificationsPopover: React.FC<INotificationsPopover> = props => {
                 align="center"
                 gap="small"
               >
-                <Avatar size="sm" src={notification.userAvatar || notification.user} />
+                <Avatar size="sm" src={notification.userAvatar} ethAddress={notification.user} />
                 <Box direction="column">
                   <Text size="medium" weight="bold">
                     {notification.action}

@@ -42,18 +42,18 @@ export interface IEntryBoxProps {
   onClickAvatar: React.MouseEventHandler<HTMLAnchorElement>;
   onClickUpvote: React.EventHandler<React.SyntheticEvent>;
   onClickDownvote: React.EventHandler<React.SyntheticEvent>;
-  commentsTitle: string;
-  quotesTitle: string;
-  shareTitle: string;
-  editPostTitle: string;
-  editCommentTitle: string;
-  copyLinkTitle: string;
-  quotedByTitle: string;
-  replyTitle: string;
+  commentsLabel: string;
+  quotesLabel: string;
+  shareLabel: string;
+  editPostLabel: string;
+  editCommentLabel: string;
+  copyLinkLabel: string;
+  quotedByLabel: string;
+  replyLabel: string;
   comment?: boolean;
   locale: ILocale;
-  commentInputPlaceholderTitle?: any;
-  commentInputPublishTitle?: any;
+  commentInputPlaceholderLabel?: any;
+  commentInputPublishLabel?: any;
   publishComment?: any;
   loggedProfileAvatar?: string;
   loggedProfileEthAddress: string;
@@ -65,18 +65,18 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onClickAvatar,
     onClickDownvote,
     onClickUpvote,
-    commentsTitle,
-    quotesTitle,
-    shareTitle,
-    editPostTitle,
-    editCommentTitle,
-    copyLinkTitle,
-    quotedByTitle,
-    replyTitle,
+    commentsLabel,
+    quotesLabel,
+    shareLabel,
+    editPostLabel,
+    editCommentLabel,
+    copyLinkLabel,
+    quotedByLabel,
+    replyLabel,
     comment,
     locale,
-    commentInputPlaceholderTitle,
-    commentInputPublishTitle,
+    commentInputPlaceholderLabel,
+    commentInputPublishLabel,
     publishComment,
     loggedProfileAvatar,
     loggedProfileEthAddress,
@@ -99,10 +99,10 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const commentsNumber = entryData.comments ? entryData.comments.length : 0;
   const quotesNumber = entryData.quotes ? entryData.quotes.length : 0;
 
-  const commentsLabel = `${commentsNumber} ${commentsTitle}`;
-  const quotesLabel = `${quotesNumber} ${quotesTitle}`;
+  const commentsTitle = `${commentsNumber} ${commentsLabel}`;
+  const quotesTitle = `${quotesNumber} ${quotesLabel}`;
 
-  const editTitle = comment ? editCommentTitle : editPostTitle;
+  const editLabel = comment ? editCommentLabel : editPostLabel;
 
   const upvote = (ev: any) => {
     onClickUpvote(ev);
@@ -142,7 +142,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     return (
       <ListModal
         closeModal={closeQuotesModal}
-        label={quotedByTitle}
+        label={quotedByLabel}
         secondaryLabel={quotesTitle}
         list={entryData.quotes}
         onClickAvatar={onClickAvatar}
@@ -178,7 +178,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           <StyledSelectBox>
             <TextIcon
               iconType="edit"
-              label={editTitle}
+              label={editLabel}
               onClick={onClickEditPost}
               clickable={true}
             />
@@ -186,7 +186,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           <StyledSelectBox>
             <TextIcon
               iconType="link"
-              label={copyLinkTitle}
+              label={copyLinkLabel}
               onClick={onClickCopyLink}
               clickable={true}
             />
@@ -236,7 +236,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const renderReplyComment = () => (
     <Box direction="row" gap="xsmall" fill="horizontal" pad={{ horizontal: 'medium' }}>
-      <Avatar src={loggedProfileAvatar || loggedProfileEthAddress} size="md" />
+      <Avatar src={loggedProfileAvatar} ethAddress={loggedProfileEthAddress} size="md" />
       <Box
         ref={wrapperRef}
         fill="horizontal"
@@ -252,7 +252,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           plain={true}
           value={inputValue}
           onChange={onChange}
-          placeholder={commentInputPlaceholderTitle}
+          placeholder={commentInputPlaceholderLabel}
           resize={false}
           autoFocus={true}
         />
@@ -269,7 +269,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             <Icon type="emoji" clickable={true} />
           </Box>
           <StyledDiv onClick={handlePublish}>
-            <Text size="large">{commentInputPublishTitle}</Text>
+            <Text size="large">{commentInputPublishLabel}</Text>
           </StyledDiv>
         </Box>
       </Box>
@@ -278,11 +278,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const renderLeftIconLink = () => {
     return comment ? (
-      <IconLink icon={<Icon type="reply" />} label={replyTitle} onClick={replyToComment} />
+      <IconLink icon={<Icon type="reply" />} label={replyLabel} onClick={replyToComment} />
     ) : (
       <IconLink
         icon={<Icon type="comments" />}
-        label={commentsLabel}
+        label={commentsTitle}
         onClick={renderCommentsModal}
       />
     );
@@ -330,7 +330,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
           <IconLink
             icon={<Icon type="share" />}
-            label={shareTitle}
+            label={shareLabel}
             onClick={
               // tslint:disable-next-line:jsx-no-lambda
               () => {
@@ -346,8 +346,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           avatar={loggedProfileAvatar}
           ethAddress={loggedProfileEthAddress}
           onPublish={publishComment}
-          publishTitle={commentInputPublishTitle}
-          placeholderTitle={commentInputPlaceholderTitle}
+          publishLabel={commentInputPublishLabel}
+          placeholderLabel={commentInputPlaceholderLabel}
           embedEntryData={entryData}
         />
       )}
@@ -357,8 +357,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           <CommentInput
             avatarImg={loggedProfileAvatar}
             ethAddress={loggedProfileEthAddress}
-            placeholderTitle={commentInputPlaceholderTitle}
-            publishTitle={commentInputPublishTitle}
+            placeholderLabel={commentInputPlaceholderLabel}
+            publishLabel={commentInputPublishLabel}
             onPublish={publishComment}
           />
         </Box>

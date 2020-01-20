@@ -45,11 +45,11 @@ storiesOf('Buttons|IconButton', module)
   .add('share', () => (
     <Box pad="large" align="start">
       <IconButton
-        share={true}
+        secondary={true}
         onClick={() => {
           /*placeholder*/
         }}
-        icon={<Icon type="share" />}
+        icon={<Icon type="reply" color="white" />}
         label="Share Profile"
       />
     </Box>
@@ -63,7 +63,7 @@ storiesOf('Buttons|ProfileIconButton', module).add('default', () => (
       label="AKASHA World"
       info="22 July 2019 | 20h30"
       size="sm"
-      seed={'0x000000'}
+      ethAddress={'0x000000'}
     />
   </Box>
 ));

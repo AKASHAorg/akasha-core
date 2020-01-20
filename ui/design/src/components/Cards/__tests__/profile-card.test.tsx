@@ -25,13 +25,17 @@ const createBaseComponent = (props: any) => (
     onClickApps={props.onClickApps}
     onClickFollowing={props.onClickFollowing}
     onChangeProfileData={props.onChangeProfileData}
-    descriptionTitle="Description"
-    actionsTitle="Popular Actions"
-    followingTitle="Followings"
-    appsTitle="Apps"
-    usersTitle="Users"
-    mostPopularActionsTitle="Most Popular Actions"
-    shareProfileText="Share"
+    descriptionLabel="Description"
+    actionsLabel="Popular Actions"
+    followingLabel="Followings"
+    appsLabel="Apps"
+    usersLabel="Users"
+    shareProfileLabel="Share"
+    editProfileLabel="Edit"
+    cancelLabel="Cancel"
+    saveChangesLabel="Save Changes"
+    changeCoverImageLabel="Change Cover Image"
+    getProfileProvidersData={props.getProfileProvidersData}
   />
 );
 

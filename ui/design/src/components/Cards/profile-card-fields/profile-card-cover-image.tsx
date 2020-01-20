@@ -3,18 +3,19 @@ import * as React from 'react';
 import { getEditableImageFieldHandlers } from '../../../utils/get-editable-field-handlers';
 import { Icon } from '../../Icon';
 import IconButton from '../../IconButton/icon-button';
-import { IProfileData } from '../profile-card';
+import { IProfileData } from '../profile-widget-card';
 import { ShareButtonContainer, StyledImageInput } from '../styled-profile-card';
 
 export interface IProfileCardCoverImageProps {
   shareProfileText: string;
+  editProfileText: string;
   profileData: IProfileData;
   editable: boolean;
   onChangeProfileData: (newProfileData: IProfileData) => void;
 }
 
 const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
-  const { shareProfileText, profileData, editable, onChangeProfileData } = props;
+  const { shareProfileText, editProfileText, profileData, editable, onChangeProfileData } = props;
 
   const [newCoverImage, setNewCoverImage] = React.useState(profileData.coverImage);
   const coverImageRef = React.useRef(null);
@@ -38,8 +39,17 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
       align="end"
       onClick={handleClick}
     >
-      <ShareButtonContainer>
-        <IconButton share={true} icon={<Icon type="share" />} label={shareProfileText} />
+      <ShareButtonContainer gap="xsmall" direction="row">
+        <IconButton
+          secondary={true}
+          icon={<Icon type="editSimple" color="white" />}
+          label={editProfileText}
+        />
+        <IconButton
+          secondary={true}
+          icon={<Icon type="reply" color="white" />}
+          label={shareProfileText}
+        />
       </ShareButtonContainer>
 
       <StyledImageInput

@@ -9,8 +9,8 @@ export interface ICommentInput {
   className?: string;
   avatarImg?: string;
   ethAddress: string;
-  placeholderTitle: string;
-  publishTitle: string;
+  placeholderLabel: string;
+  publishLabel: string;
   onPublish: (inputValue: string, ethAddress: string) => void;
 }
 
@@ -25,7 +25,7 @@ export const StyledDiv = styled.div`
 `;
 
 const CommentInput: React.FC<ICommentInput> = props => {
-  const { avatarImg, ethAddress, className, placeholderTitle, onPublish, publishTitle } = props;
+  const { avatarImg, ethAddress, className, placeholderLabel, onPublish, publishLabel } = props;
   const [inputValue, setInputValue] = useState('');
   const [textAreaOpen, setTextAreaOpen] = useState(false);
 
@@ -69,7 +69,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
         onClick={handleFakeInputClick}
         data-testid="fake-input-wrapper"
       >
-        <Text color="secondaryText">{placeholderTitle}</Text>
+        <Text color="secondaryText">{placeholderLabel}</Text>
       </Box>
     );
   };
@@ -92,7 +92,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
           plain={true}
           value={inputValue}
           onChange={onChange}
-          placeholder={placeholderTitle}
+          placeholder={placeholderLabel}
           resize={false}
           autoFocus={true}
           data-testid="comment-textarea"
@@ -106,11 +106,11 @@ const CommentInput: React.FC<ICommentInput> = props => {
           <Box direction="row" gap="xsmall" align="center">
             <Icon type="addAppDark" clickable={true} />
             <Icon type="quote" clickable={true} />
-            <Icon type="media" clickable={true} />
+            <Icon type="image" clickable={true} />
             <Icon type="emoji" clickable={true} />
           </Box>
           <StyledDiv onClick={handlePublish} data-testid="comment-publish-button">
-            <Text size="large">{publishTitle}</Text>
+            <Text size="large">{publishLabel}</Text>
           </StyledDiv>
         </Box>
       </Box>
@@ -119,7 +119,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
 
   return (
     <Box direction="row" gap="xsmall" fill="horizontal" pad="none" className={className}>
-      <Avatar src={avatarImg || ethAddress} size="md" />
+      <Avatar src={avatarImg} ethAddress={ethAddress} size="md" />
       {!textAreaOpen && renderFakeInput()}
       {textAreaOpen && renderTextArea()}
     </Box>

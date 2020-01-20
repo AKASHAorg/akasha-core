@@ -1,11 +1,40 @@
 /* eslint-disable import/first */
 import DS from '@akashaproject/design-system';
-import { IAppData } from '@akashaproject/design-system/lib/components/Cards/apps-widget-card';
-import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-card';
+import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-widget-card';
+// import { IFullProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-card';
 import { action } from '@storybook/addon-actions';
 import { boolean, color, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
+import {
+  aboutMeLabel,
+  actionsLabel,
+  appData,
+  appsDataSource,
+  appsLabel,
+  cancelLabel,
+  changeCoverImageLabel,
+  commentInputPlaceholderLabel,
+  commentsLabel,
+  copyLinkLabel,
+  editCommentLabel,
+  editPostLabel,
+  editProfileLabel,
+  entryData,
+  followingLabel,
+  placeholderLabel,
+  profileData,
+  profileProvidersData,
+  publishLabel,
+  quotedByLabel,
+  quotesLabel,
+  replyLabel,
+  saveChangesLabel,
+  shareLabel,
+  shareProfileLabel,
+  topicsDataSource,
+  usersLabel,
+} from './cards-data';
 
 const {
   AppsWidgetCard,
@@ -16,138 +45,6 @@ const {
   ProfileWidgetCard,
   TopicsWidgetCard,
 } = DS;
-const topicsDataSource = [
-  { title: '#ethereumworld', subtitle: '6576 mentions' },
-  { title: '#akashaworld', subtitle: '3204 mentions' },
-  { title: '#cryptoworld', subtitle: '6576 mentions' },
-];
-
-const appsDataSource: IAppData[] = [
-  { title: 'GitCoin', subtitle: '123 embedded cards', appIconType: 'app', iconSize: '40px' },
-  { title: 'Augur', subtitle: '89 embedded cards', appIconType: 'app', iconSize: '40px' },
-  { title: 'Aragon', subtitle: '57 embedded cards', appIconType: 'app', iconSize: '40px' },
-];
-
-const profileData = {
-  ethAddress: '0x003410490050000320006570034567114572000',
-  avatar: 'http://placebeard.it/480/480',
-  coverImage: 'goldenrod',
-  name: 'Gilbert The Bearded',
-  userName: '@gilbert',
-  description:
-    'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
-  followers: '15',
-  following: '1876',
-  apps: '12',
-  profileType: 'user',
-};
-const dappData = {
-  ethAddress: '0x003410490050000320006570047391024572000',
-  avatarImage: '',
-  coverImage: '#CAF2F9;',
-  name: 'Aragon',
-  userName: '@aragonorg',
-  description:
-    'Aragon is a project to empower freedom by creating tools for decentralized organizations to thrive. We believe the fate of humanity will be decided at the frontier of technological innovation.',
-  users: '21896',
-  actions: '12',
-  profileType: 'dapp',
-  mostPopularActions: ['Assign Tokens', 'Create a new vote', 'Check finance'],
-};
-const entryData = {
-  ethAddress: '0x003410490059837320006570047391024572000',
-  name: 'AKASHA WORLD',
-  avatar: 'http://placebeard.it/480/480',
-  content:
-    'We’re back in action, energized after an epic retreat in #verbier 🇨🇭 🤜💥🤛Here’s to everyone keeping us in their minds and hearts 🥂You’ve been in our hearts and minds as well! 🤗Looking forward to sharing our insights and plans in the coming days! 🚀#AKASHAReloaded #AKASHAFoundation',
-  time: '1572036522',
-  upvotes: 26,
-  downvotes: 9,
-  comments: [
-    {
-      ethAddress: '0x003410490050000320006570047391024572000',
-      name: 'Mariana Gomes',
-      avatar: 'http://placebeard.it/480/480',
-      content: 'Great Job!',
-      upvotes: 3,
-      downvotes: 0,
-      time: '1572036522',
-      quotes: [],
-    },
-    {
-      ethAddress: '0x003410490050000320006570047391024572000',
-      name: 'Gigi Patratel',
-      avatar: 'http://placebeard.it/480/480',
-      content: 'Amazing!',
-      upvotes: 2,
-      downvotes: 1,
-      time: '1572036522',
-      quotes: [],
-    },
-  ],
-  quotes: [
-    {
-      ethAddress: '0x003410490050000320006570047391024572000',
-      name: 'Gigi Patratel',
-      time: '1572036522',
-      avatar: 'http://placebeard.it/480/480',
-    },
-    {
-      ethAddress: '0x003410490050000320006570047391024572000',
-      name: 'Gigi Patratel',
-      time: '1572036522',
-      avatar: 'http://placebeard.it/480/480',
-    },
-    {
-      ethAddress: '0x003410490050000320006570047391024572000',
-      name: 'Gigi Patratel',
-      time: '1572036522',
-      avatar: 'http://placebeard.it/480/480',
-    },
-    {
-      ethAddress: '0x003410490050000320006570047391024572000',
-      name: 'Gigi Patratel',
-      time: '1572036522',
-      avatar: 'http://placebeard.it/480/480',
-    },
-    {
-      ethAddress: '0x003410490050000320006570047391024572000',
-      name: 'Gigi Patratel',
-      time: '1572036522',
-      avatar: 'http://placebeard.it/480/480',
-    },
-    {
-      ethAddress: '0x003410490050000320006570047391024572000',
-      name: 'Gigi Patratel',
-      time: '1572036522',
-      avatar: 'http://placebeard.it/480/480',
-    },
-    {
-      ethAddress: '0x003410490050000320006570047391024572000',
-      name: 'Gigi Patratel',
-      time: '1572036522',
-      avatar: 'http://placebeard.it/480/480',
-    },
-  ],
-};
-const followingTitle = 'Following';
-const appsTitle = 'Apps';
-const aboutMeTitle = 'About';
-const actionsTitle = 'Actions';
-const mostPopularActionsTitle = 'Most Popular Actions';
-const usersTitle = 'Users';
-const commentsTitle = 'Comments';
-const quotesTitle = 'Quotes';
-const shareTitle = 'Share';
-const editPostTitle = 'Edit Post';
-const editCommentTitle = 'Edit Comment';
-const copyLinkTitle = 'Copy Link';
-const quotedByTitle = 'Quoted By';
-const replyTitle = 'Reply';
-const shareProfileTitle = 'Share Profile';
-const commentInputPlaceholderTitle = 'Write a comment';
-const publishTitle = 'Publish';
-const placeholderTitle = 'Share your thoughts';
 
 storiesOf('Cards', module)
   .add('topics widget card', () => (
@@ -185,8 +82,8 @@ storiesOf('Cards', module)
             'Logged Profile EthAddress',
             '0x003410499401674320006570047391024572000',
           )}
-          publishTitle={text('Publish Title', publishTitle)}
-          placeholderTitle={text('PlaceholderTitle', placeholderTitle)}
+          publishLabel={text('Publish Label', publishLabel)}
+          placeholderLabel={text('PlaceholderLabel', placeholderLabel)}
           onPublish={action('Publish clicked')}
         />
       </Box>
@@ -201,16 +98,21 @@ storiesOf('Cards', module)
           onChangeProfileData={(newProfileData: IProfileData) =>
             action('ProfileData Changed')(newProfileData)
           }
-          margin={object('Margin', { margin: '0px' })}
           // @ts-ignore
-          profileData={select('Profile Data', { dapp: dappData, user: profileData }, profileData)}
-          descriptionTitle={text('About me', aboutMeTitle)}
-          actionsTitle={text('Actions', actionsTitle)}
-          mostPopularActionsTitle={text('Most popular actions', mostPopularActionsTitle)}
-          followingTitle={text('Following', followingTitle)}
-          appsTitle={text('Apps', appsTitle)}
-          usersTitle={text('Users', usersTitle)}
-          shareProfileText={text('Share Profile', shareProfileTitle)}
+          profileData={select('Profile Data', { dapp: appData, user: profileData }, profileData)}
+          descriptionLabel={text('About me', aboutMeLabel)}
+          actionsLabel={text('Actions', actionsLabel)}
+          followingLabel={text('Following', followingLabel)}
+          appsLabel={text('Apps', appsLabel)}
+          usersLabel={text('Users', usersLabel)}
+          shareProfileLabel={text('Share Profile', shareProfileLabel)}
+          // edit profile related
+          editProfileLabel={text('Edit Profile', editProfileLabel)}
+          profileProvidersData={profileProvidersData}
+          changeCoverImageLabel={text('Change Cover Image', changeCoverImageLabel)}
+          cancelLabel={text('Cancel Edit', cancelLabel)}
+          saveChangesLabel={text('Save Edit', saveChangesLabel)}
+          getProfileProvidersData={() => action('Gettting full Profile Data')('Synthetic Event')}
         />
       </Box>
     </Box>
@@ -220,16 +122,14 @@ storiesOf('Cards', module)
       <ProfileWidgetCard
         onClickApps={() => action('Apps Box Clicked')('Synthetic Event')}
         onClickFollowing={() => action('Following Box Clicked')('Synthetic Event')}
-        margin={object('Margin', { margin: '0px' })}
         // @ts-ignore
         profileData={select('Profile Data', { dapp: dappData, user: profileData }, profileData)}
-        descriptionTitle={text('About me', aboutMeTitle)}
-        actionsTitle={text('Actions', actionsTitle)}
-        mostPopularActionsTitle={text('Most popular actions', mostPopularActionsTitle)}
-        followingTitle={text('Following', followingTitle)}
-        appsTitle={text('Apps', appsTitle)}
-        usersTitle={text('Users', usersTitle)}
-        shareProfileText={text('Share Profile', shareProfileTitle)}
+        descriptionLabel={text('About me', aboutMeLabel)}
+        actionsLabel={text('Actions', actionsLabel)}
+        followingLabel={text('Following', followingLabel)}
+        appsLabel={text('Apps', appsLabel)}
+        usersLabel={text('Users', usersLabel)}
+        shareProfileLabel={text('Share Profile', shareProfileLabel)}
       />
     </Box>
   ))
@@ -241,21 +141,21 @@ storiesOf('Cards', module)
           onClickAvatar={() => action('Avatar Clicked')('Synthetic Event')}
           onClickDownvote={() => action('Downvote Clicked')('Synthetic Event')}
           onClickUpvote={() => action('Upvote Clicked')('Synthetic Event')}
-          commentsTitle={text('Comments title', commentsTitle)}
-          quotesTitle={text('Quotes title', quotesTitle)}
-          shareTitle={text('Share title', shareTitle)}
-          editPostTitle={text('Edit post title', editPostTitle)}
-          editCommentTitle={text('Edit comment title', editCommentTitle)}
-          copyLinkTitle={text('Copy link title', copyLinkTitle)}
-          quotedByTitle={text('Quoted By title', quotedByTitle)}
-          replyTitle={text('Reply title', replyTitle)}
+          commentsLabel={text('Comments Label', commentsLabel)}
+          quotesLabel={text('Quotes Label', quotesLabel)}
+          shareLabel={text('Share Label', shareLabel)}
+          editPostLabel={text('Edit post Label', editPostLabel)}
+          editCommentLabel={text('Edit comment Label', editCommentLabel)}
+          copyLinkLabel={text('Copy link Label', copyLinkLabel)}
+          quotedByLabel={text('Quoted By Label', quotedByLabel)}
+          replyLabel={text('Reply Label', replyLabel)}
           fullEntry={boolean('Full Entry', false)}
           locale={select('Locale', { en: 'en', ro: 'ro', es: 'es' }, 'en')}
-          commentInputPlaceholderTitle={text(
+          commentInputPlaceholderLabel={text(
             'Comment input placeholder',
-            commentInputPlaceholderTitle,
+            commentInputPlaceholderLabel,
           )}
-          commentInputPublishTitle={text('Comment input publish title', publishTitle)}
+          commentInputPublishLabel={text('Comment input publish Label', publishLabel)}
           publishComment={() => action('Comment published')('Synthetic Event')}
           loggedProfileAvatar={text(
             'Logged Profile Avatar',

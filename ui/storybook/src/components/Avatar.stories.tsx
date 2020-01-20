@@ -7,13 +7,13 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
 const { Avatar, EditableAvatar } = DS;
-const DEFAULT_AVATAR_SIZE = 'md';
-const seed = '0x00000000000000';
+const ethAddress = '0x003410490050000320006570034567114572000';
+const guestEthAddress = '0x00000000000000';
 storiesOf('Avatar', module)
-  .add('minimal', () => <Avatar seed={seed} src="https://placebeard.it/360x360" />)
+  .add('minimal', () => <Avatar ethAddress={ethAddress} src="https://placebeard.it/360x360" />)
   .add('margin and background color', () => (
     <Avatar
-      seed={seed}
+      ethAddress={ethAddress}
       src="https://placebeard.it/360x360"
       margin={object('Margin', { margin: '0px' })}
       backgroundColor={color('Background Color', '')}
@@ -22,7 +22,7 @@ storiesOf('Avatar', module)
   ))
   .add('with click handler', () => (
     <Avatar
-      seed={seed}
+      ethAddress={ethAddress}
       src="https://placebeard.it/360x360"
       size="md"
       /* tslint:disable-next-line:jsx-no-lambda */
@@ -49,7 +49,7 @@ storiesOf('Avatar', module)
         <div key={index}>
           {size} ({value} px)
           <Avatar
-            seed={seed}
+            ethAddress={ethAddress}
             key={size}
             size={size as AvatarSize}
             src="https://placebeard.it/360x480"
@@ -60,23 +60,19 @@ storiesOf('Avatar', module)
     </div>
   ))
   .add('Guest mode', () => {
-    return <Avatar seed={seed} guest={true} size="xl" withBorder={boolean('withBorder', true)} />;
+    return (
+      <Avatar ethAddress={guestEthAddress} size="xl" withBorder={boolean('withBorder', true)} />
+    );
   })
   .add('Avatar not set', () => {
-    return (
-      <Avatar
-        withBorder={boolean('withBorder', true)}
-        size="xl"
-        seed={text('eth address', '0xbe0eb53f46cd790cd13851d5eff43d12404d33e8')}
-      />
-    );
+    return <Avatar ethAddress={ethAddress} withBorder={boolean('withBorder', true)} size="xl" />;
   })
   .add('Editable avatar', () => {
     return (
       <EditableAvatar
+        ethAddress={ethAddress}
         withBorder={boolean('withBorder', true)}
         size="xl"
-        seed={text('eth address', '0xbe0eb53f46cd790cd13851d5eff43d12404d33e8')}
         onChange={
           // tslint:disable-next-line:jsx-no-lambda
           () => {

@@ -7,7 +7,7 @@ export interface IIconButtonProps {
   icon: React.ReactNode;
   onClick?: () => void;
   primary?: boolean;
-  share?: boolean;
+  secondary?: boolean;
 }
 
 const StyledIconButton = styled(Button)<IIconButtonProps>`
@@ -46,7 +46,7 @@ const StyledIconButton = styled(Button)<IIconButtonProps>`
         }
       `;
     }
-    if (props.share) {
+    if (props.secondary) {
       return css`
         border-radius: ${props.theme.shapes.smallBorderRadius};
         background-color: ${props.theme.colors.secondaryOpacity};

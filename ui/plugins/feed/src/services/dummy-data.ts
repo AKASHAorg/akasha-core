@@ -1,4 +1,4 @@
-import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-card';
+import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-widget-card';
 
 export const delay = (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -15,9 +15,6 @@ export const generateProfileData = (ethAddress: string): IProfileData => {
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
     apps: '12',
     profileType: 'user',
-    vnd: {
-      twitter: '@gilbeard',
-    },
   };
 };
 

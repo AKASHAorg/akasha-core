@@ -4,7 +4,7 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
-const { Box, Icon, NotificationsPopover } = DS;
+const { Box, Icon, NotificationsPopover, SelectPopover } = DS;
 export const notificationsData = [
   {
     ethAddress: '0x003410490050000320006570034567114572000',
@@ -78,6 +78,15 @@ export const notificationsData = [
   },
 ];
 
+export const providerData = [
+  { providerName: '3box', value: 'Some short text' },
+  {
+    providerName: 'ENS',
+    value:
+      'A very long and uninspiring text, duplicated.A very long and uninspiring text, duplicated.A very long and uninspiring text, duplicated.',
+  },
+];
+
 const NotificationsComponent = () => {
   const iconRef: React.Ref<any> = React.useRef();
   const [notifcationsOpen, setNotificationsOpen] = React.useState(false);
@@ -100,4 +109,28 @@ const NotificationsComponent = () => {
   );
 };
 
-storiesOf('Popover', module).add('notification', () => <NotificationsComponent />);
+const SelectComponent = () => {
+  const iconRef: React.Ref<any> = React.useRef();
+  const [selectOpen, setSelectOpen] = React.useState(false);
+  return (
+    <Box fill={true} justify="center" align="center">
+      <Box width="medium" pad={{ top: 'large' }}>
+        <div ref={iconRef}>
+          <Icon type="eye" onClick={() => setSelectOpen(true)} />
+        </div>
+        {iconRef.current && selectOpen && (
+          <SelectPopover
+            target={iconRef.current}
+            dataSource={providerData}
+            onClickElem={() => action('Elem Clicked')('Synthetic Event')}
+            closePopover={() => setSelectOpen(false)}
+          />
+        )}
+      </Box>
+    </Box>
+  );
+};
+
+storiesOf('Popover', module)
+  .add('notification', () => <NotificationsComponent />)
+  .add('select', () => <SelectComponent />);

@@ -1,8 +1,7 @@
 import { Text, TextInput } from 'grommet';
 import * as React from 'react';
-
 import { getEditableTextFieldHandlers } from '../../../utils/get-editable-field-handlers';
-import { IProfileData } from '../profile-card';
+import { IProfileData } from '../profile-widget-card';
 
 export interface IProfileCardNameProps {
   profileData: IProfileData;

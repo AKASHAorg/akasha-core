@@ -9,18 +9,18 @@ export interface IEntryCardProps {
   onClickAvatar: React.MouseEventHandler<any>;
   onClickUpvote: React.EventHandler<React.SyntheticEvent>;
   onClickDownvote: React.EventHandler<React.SyntheticEvent>;
-  commentsTitle: string;
-  quotesTitle: string;
-  shareTitle: string;
-  editPostTitle: string;
-  editCommentTitle: string;
-  copyLinkTitle: string;
-  quotedByTitle: string;
-  replyTitle: string;
+  commentsLabel: string;
+  quotesLabel: string;
+  shareLabel: string;
+  editPostLabel: string;
+  editCommentLabel: string;
+  copyLinkLabel: string;
+  quotedByLabel: string;
+  replyLabel: string;
   fullEntry?: boolean;
   locale: ILocale;
-  commentInputPlaceholderTitle: string;
-  commentInputPublishTitle: string;
+  commentInputPlaceholderLabel: string;
+  commentInputPublishLabel: string;
   publishComment: any;
   loggedProfileAvatar?: string;
   loggedProfileEthAddress: string;
@@ -33,18 +33,18 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     onClickAvatar,
     onClickDownvote,
     onClickUpvote,
-    commentsTitle,
-    quotesTitle,
-    shareTitle,
-    editPostTitle,
-    editCommentTitle,
-    copyLinkTitle,
-    quotedByTitle,
-    replyTitle,
+    commentsLabel,
+    quotesLabel,
+    shareLabel,
+    editPostLabel,
+    editCommentLabel,
+    copyLinkLabel,
+    quotedByLabel,
+    replyLabel,
     fullEntry,
     locale,
-    commentInputPlaceholderTitle,
-    commentInputPublishTitle,
+    commentInputPlaceholderLabel,
+    commentInputPublishLabel,
     publishComment,
     loggedProfileAvatar,
     loggedProfileEthAddress,
@@ -57,17 +57,17 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         onClickAvatar={onClickAvatar}
         onClickDownvote={onClickDownvote}
         onClickUpvote={onClickUpvote}
-        commentsTitle={commentsTitle}
-        quotesTitle={quotesTitle}
-        shareTitle={shareTitle}
-        editPostTitle={editPostTitle}
-        editCommentTitle={editCommentTitle}
-        copyLinkTitle={copyLinkTitle}
-        quotedByTitle={quotedByTitle}
-        replyTitle={replyTitle}
+        commentsLabel={commentsLabel}
+        quotesLabel={quotesLabel}
+        shareLabel={shareLabel}
+        editPostLabel={editPostLabel}
+        editCommentLabel={editCommentLabel}
+        copyLinkLabel={copyLinkLabel}
+        quotedByLabel={quotedByLabel}
+        replyLabel={replyLabel}
         locale={locale}
-        commentInputPlaceholderTitle={commentInputPlaceholderTitle}
-        commentInputPublishTitle={commentInputPublishTitle}
+        commentInputPlaceholderLabel={commentInputPlaceholderLabel}
+        commentInputPublishLabel={commentInputPublishLabel}
         loggedProfileAvatar={loggedProfileAvatar}
         loggedProfileEthAddress={loggedProfileEthAddress}
         publishComment={publishComment}
@@ -80,14 +80,14 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
             onClickAvatar={onClickAvatar}
             onClickDownvote={onClickDownvote}
             onClickUpvote={onClickUpvote}
-            commentsTitle={commentsTitle}
-            quotesTitle={quotesTitle}
-            shareTitle={shareTitle}
-            editPostTitle={editPostTitle}
-            editCommentTitle={editCommentTitle}
-            copyLinkTitle={copyLinkTitle}
-            quotedByTitle={quotedByTitle}
-            replyTitle={replyTitle}
+            commentsLabel={commentsLabel}
+            quotesLabel={quotesLabel}
+            shareLabel={shareLabel}
+            editPostLabel={editPostLabel}
+            editCommentLabel={editCommentLabel}
+            copyLinkLabel={copyLinkLabel}
+            quotedByLabel={quotedByLabel}
+            replyLabel={replyLabel}
             key={index}
             loggedProfileAvatar={loggedProfileAvatar}
             loggedProfileEthAddress={loggedProfileEthAddress}

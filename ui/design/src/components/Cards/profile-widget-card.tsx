@@ -3,10 +3,37 @@ import * as React from 'react';
 import { Avatar } from '../Avatar/index';
 import { SubtitleTextIcon } from '../TextIcon/index';
 import { BasicCardBox } from './index';
-import { IProfileCardProps } from './profile-card';
 import { AvatarDiv } from './styled-profile-card';
 
-export type IProfileWidgetCard = Omit<IProfileCardProps, 'onChangeProfileData'>;
+export interface IProfileData {
+  avatar?: string;
+  coverImage?: string;
+  userName?: string;
+  description?: string;
+  name?: string;
+  url?: string;
+  ethAddress: string;
+  // app specific
+  followers?: string;
+  following?: string;
+  apps?: string;
+  profileType: string;
+  users?: string;
+  actions?: string;
+}
+
+export interface IProfileWidgetCard {
+  className?: string;
+  onClickApps: React.EventHandler<React.SyntheticEvent>;
+  onClickFollowing: React.EventHandler<React.SyntheticEvent>;
+  profileData: IProfileData;
+  descriptionLabel: string;
+  actionsLabel: string;
+  followingLabel: string;
+  appsLabel: string;
+  usersLabel: string;
+  shareProfileLabel: string;
+}
 
 const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
   const {
@@ -14,19 +41,18 @@ const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
     onClickFollowing,
     onClickApps,
     profileData,
-    descriptionTitle,
-    actionsTitle,
-    followingTitle,
-    usersTitle,
-    appsTitle,
+    descriptionLabel,
+    actionsLabel,
+    followingLabel,
+    usersLabel,
+    appsLabel,
   } = props;
 
-  const leftTitle = profileData.following ? profileData.following : profileData.users;
-  const rightTitle = profileData.apps ? profileData.apps : profileData.actions;
-  const leftSubtitle = profileData.profileType === 'dapp' ? usersTitle : followingTitle;
-  const rightSubtitle = profileData.profileType === 'dapp' ? actionsTitle : appsTitle;
+  const leftLabel = profileData.following ? profileData.following : profileData.users;
+  const rightLabel = profileData.apps ? profileData.apps : profileData.actions;
+  const leftSubLabel = profileData.profileType === 'dapp' ? usersLabel : followingLabel;
+  const rightSubLabel = profileData.profileType === 'dapp' ? actionsLabel : appsLabel;
 
-  const isGuest = !profileData.ethAddress;
   return (
     <BasicCardBox className={className}>
       <Box
@@ -39,9 +65,9 @@ const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
         <AvatarDiv>
           <Avatar
             withBorder={true}
-            guest={isGuest}
             size="xl"
-            src={profileData.avatar || profileData.ethAddress}
+            src={profileData.avatar}
+            ethAddress={profileData.ethAddress}
           />
         </AvatarDiv>
 
@@ -61,20 +87,20 @@ const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
         direction="row"
         justify="between"
       >
-        {leftTitle && rightTitle && (
+        {leftLabel && rightLabel && (
           <Box pad={{ vertical: 'medium' }} direction="row" alignContent="center" gap="small">
             <SubtitleTextIcon
               iconType="person"
-              label={leftTitle}
+              label={leftLabel}
               labelSize="small"
-              subtitle={leftSubtitle}
+              subtitle={leftSubLabel}
               onClick={onClickFollowing}
             />
             <SubtitleTextIcon
               iconType="app"
-              label={rightTitle}
+              label={rightLabel}
               labelSize="small"
-              subtitle={rightSubtitle}
+              subtitle={rightSubLabel}
               onClick={onClickApps}
             />
           </Box>
@@ -82,7 +108,7 @@ const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
       </Box>
       <Box direction="column" pad="medium" gap="medium">
         <Text size="large" weight="bold" color="primaryText">
-          {descriptionTitle}
+          {descriptionLabel}
         </Text>
         <Text color="primaryText">{profileData.description}</Text>
       </Box>

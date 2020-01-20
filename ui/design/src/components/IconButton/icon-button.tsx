@@ -6,7 +6,7 @@ export interface IIconButtonProps {
   label: string;
   onClick?: () => void;
   primary?: boolean;
-  share?: boolean;
+  secondary?: boolean;
 }
 
 const IconButton = (props: IIconButtonProps) => {

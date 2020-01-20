@@ -15,7 +15,7 @@ import {
 import { Icon, iconTypes } from './components/Icon';
 import { IconButton, IconLink, ProfileAvatarButton, VoteIconButton } from './components/IconButton';
 import { CommentInput, SearchInput } from './components/Input';
-import { NotificationsPopover } from './components/Popovers';
+import { NotificationsPopover, SelectPopover } from './components/Popovers';
 import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
 import { Topbar } from './components/Topbar/index';
 import responsiveBreakpoints from './styles/responsive-breakpoints';
@@ -45,6 +45,7 @@ const exported = {
   CommentInput,
   SearchInput,
   NotificationsPopover,
+  SelectPopover,
   SubtitleTextIcon,
   TextIcon,
   Topbar,

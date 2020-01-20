@@ -10,8 +10,8 @@ export interface IEditorCard {
   className?: string;
   avatar?: string;
   ethAddress: string;
-  publishTitle: string;
-  placeholderTitle: string;
+  publishLabel: string;
+  placeholderLabel: string;
   onPublish: any;
 }
 
@@ -26,7 +26,7 @@ const StyledDiv = styled.div`
 `;
 
 const EditorCard: React.FC<IEditorCard> = props => {
-  const { className, avatar, ethAddress, publishTitle, placeholderTitle, onPublish } = props;
+  const { className, avatar, ethAddress, publishLabel, placeholderLabel, onPublish } = props;
 
   const [modalOpen, setModalOpen] = React.useState(false);
   const openModal = () => {
@@ -44,14 +44,14 @@ const EditorCard: React.FC<IEditorCard> = props => {
           avatar={avatar}
           ethAddress={ethAddress}
           onPublish={onPublish}
-          publishTitle={publishTitle}
-          placeholderTitle={placeholderTitle}
+          publishLabel={publishLabel}
+          placeholderLabel={placeholderLabel}
         />
       )}
       <Box direction="row" pad="medium" gap="medium" align="center" onClick={openModal}>
-        <Avatar src={avatar || ethAddress} />
+        <Avatar src={avatar} ethAddress={ethAddress} />
         <Text color="secondaryText" size="large">
-          {placeholderTitle}
+          {placeholderLabel}
         </Text>
       </Box>
       <Box
@@ -63,11 +63,11 @@ const EditorCard: React.FC<IEditorCard> = props => {
         <Box direction="row" gap="xsmall" align="center">
           <Icon type="addAppDark" clickable={true} />
           <Icon type="quote" clickable={true} />
-          <Icon type="media" clickable={true} />
+          <Icon type="image" clickable={true} />
           <Icon type="emoji" clickable={true} />
         </Box>
         <StyledDiv>
-          <Text size="large">{publishTitle}</Text>
+          <Text size="large">{publishLabel}</Text>
         </StyledDiv>
       </Box>
     </BasicCardBox>

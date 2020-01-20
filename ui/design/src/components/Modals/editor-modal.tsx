@@ -8,8 +8,8 @@ export interface IEditorModal {
   avatar?: string;
   ethAddress: string;
   closeModal: () => void;
-  publishTitle: string;
-  placeholderTitle: string;
+  publishLabel: string;
+  placeholderLabel: string;
   onPublish: any;
   embedEntryData?: IEntryData;
 }
@@ -20,8 +20,8 @@ const EditorModal: React.FC<IEditorModal> = props => {
     avatar,
     ethAddress,
     className,
-    publishTitle,
-    placeholderTitle,
+    publishLabel,
+    placeholderLabel,
     onPublish,
     embedEntryData,
   } = props;
@@ -30,8 +30,8 @@ const EditorModal: React.FC<IEditorModal> = props => {
     <StyledLayer onEsc={closeModal} onClickOutside={closeModal} modal={true} className={className}>
       <EditorBox
         ethAddress={ethAddress}
-        publishTitle={publishTitle}
-        placeholderTitle={placeholderTitle}
+        publishLabel={publishLabel}
+        placeholderLabel={placeholderLabel}
         onPublish={onPublish}
         avatar={avatar}
         embedEntryData={embedEntryData}

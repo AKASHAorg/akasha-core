@@ -27,10 +27,10 @@ const mockDataSource = {
 const mockClassName = 'search-input-test-class';
 const mockPlaceholderStrings = {
   placeholder: 'Search',
-  resultsTitle: 'Search results',
-  usersTitle: 'Users',
-  tagsTitle: 'Tags',
-  appsTitle: 'Apps',
+  resultsLabel: 'Search results',
+  usersLabel: 'Users',
+  tagsLabel: 'Tags',
+  appsLabel: 'Apps',
 };
 const testSearchStr = 'Gi';
 
@@ -102,7 +102,7 @@ describe('<SearchInput /> Component', () => {
     const resultsDropdown = await findByTestId('search-results-dropdown');
     expect(resultsDropdown).toBeDefined();
   });
-  it('should show placeholder, resultsTitle, usersTitle, tagsTitle, appsTitle, props when passed', async () => {
+  it('should show placeholder, resultsLabel, usersLabel, tagsLabel, appsLabel, props when passed', async () => {
     const { findByPlaceholderText, findByText, findByTestId } = customRender(
       createBaseComponent(),
       {},
@@ -110,16 +110,16 @@ describe('<SearchInput /> Component', () => {
     const searchInputNode = await findByTestId('search-input');
     const placeholder = await findByPlaceholderText(mockPlaceholderStrings.placeholder);
     fireEvent.change(searchInputNode, { target: { value: testSearchStr } });
-    const resultsTitle = await findByText(mockPlaceholderStrings.resultsTitle);
-    const usersTitle = await findByText(mockPlaceholderStrings.usersTitle);
-    const appsTitle = await findByText(mockPlaceholderStrings.appsTitle);
-    const tagsTitle = await findByText(mockPlaceholderStrings.tagsTitle);
+    const resultsLabel = await findByText(mockPlaceholderStrings.resultsLabel);
+    const usersLabel = await findByText(mockPlaceholderStrings.usersLabel);
+    const appsLabel = await findByText(mockPlaceholderStrings.appsLabel);
+    const tagsLabel = await findByText(mockPlaceholderStrings.tagsLabel);
     expect(placeholder).toBeDefined();
     expect(placeholder.nodeName === 'INPUT').toBe(true);
-    expect(resultsTitle).toBeDefined();
-    expect(usersTitle).toBeDefined();
-    expect(appsTitle).toBeDefined();
-    expect(tagsTitle).toBeDefined();
+    expect(resultsLabel).toBeDefined();
+    expect(usersLabel).toBeDefined();
+    expect(appsLabel).toBeDefined();
+    expect(tagsLabel).toBeDefined();
   });
   it.skip('should call onClickAppHandler', () => {
     return;

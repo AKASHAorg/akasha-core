@@ -15,26 +15,15 @@ export interface ProfileAvatarButtonProps {
   className?: string;
   onAvatarClick?: React.MouseEventHandler<ethAddressType>;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
-  guest?: boolean;
   ethAddress: string;
 }
 
 const ProfileAvatarButton = (props: ProfileAvatarButtonProps) => {
-  const {
-    className,
-    size,
-    avatarImage,
-    label,
-    info,
-    onClick,
-    onAvatarClick,
-    guest,
-    ethAddress,
-  } = props;
+  const { className, size, avatarImage, label, info, onClick, onAvatarClick, ethAddress } = props;
   return (
     <Box className={className} direction="row" align="center">
       <Box>
-        <Avatar size={size} src={avatarImage || ethAddress} onClick={onAvatarClick} guest={guest} />
+        <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onAvatarClick} />
       </Box>
       <ButtonTextWrapper>
         <StyledIconLink label={capitalize(label)} onClick={onClick} />

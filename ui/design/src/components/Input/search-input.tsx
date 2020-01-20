@@ -15,10 +15,10 @@ export interface ICustomSearchInput {
   getData: () => void;
   dataSource: any;
   placeholder: string;
-  resultsTitle: string;
-  usersTitle: string;
-  tagsTitle: string;
-  appsTitle: string;
+  resultsLabel: string;
+  usersLabel: string;
+  tagsLabel: string;
+  appsLabel: string;
   onClickUser: (name: string) => void;
   onClickTag: (tag: string) => void;
   onClickApp: (name: string) => void;
@@ -29,10 +29,10 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
     className,
     dataSource,
     placeholder,
-    resultsTitle,
-    usersTitle,
-    tagsTitle,
-    appsTitle,
+    resultsLabel,
+    usersLabel,
+    tagsLabel,
+    appsLabel,
     getData,
     onClickUser,
     onClickTag,
@@ -109,7 +109,7 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
           dropTarget={boxRef.current}
           data-testid="search-input"
         />
-        {inputValue.trim() && <StyledResultsLink href="#">{resultsTitle}</StyledResultsLink>}
+        {inputValue.trim() && <StyledResultsLink href="#">{resultsLabel}</StyledResultsLink>}
       </StyledSearchBox>
 
       {boxRef.current && dropOpen && (
@@ -122,13 +122,13 @@ const SearchInput: React.FC<ICustomSearchInput> = props => {
           data-testid="search-results-dropdown"
         >
           <Tabs>
-            <StyledTab title={usersTitle}>
+            <StyledTab title={usersLabel}>
               <SearchInputUsers users={suggestions.users} onClickUser={handleClickUser} />
             </StyledTab>
-            <StyledTab title={tagsTitle}>
+            <StyledTab title={tagsLabel}>
               <SearchInputTags tags={suggestions.tags} onClickTag={handleClickTag} />
             </StyledTab>
-            <StyledTab title={appsTitle}>
+            <StyledTab title={appsLabel}>
               <SearchInputApps apps={suggestions.apps} onClickApp={handleClickApp} />
             </StyledTab>
           </Tabs>
