@@ -25,10 +25,10 @@ interface IListElem {
 }
 
 const StyledLayerElemDiv = styled.div`
-  border-radius: ${props => props.theme.shapes.borderRadius}
-  padding: ${props => `${props.theme.shapes.baseSpacing * 3}px`}
-  border: 1px solid ${props => props.theme.colors.border}
-  margin-bottom: ${props => `${props.theme.shapes.baseSpacing * 3}px`}
+  border-radius: ${props => props.theme.shapes.borderRadius};
+  padding: ${props => `${props.theme.shapes.baseSpacing * 3}px`};
+  border: 1px solid ${props => props.theme.colors.border};
+  margin-bottom: ${props => `${props.theme.shapes.baseSpacing * 3}px`};
 `;
 
 const ListModal: React.FC<IlistModal> = props => {
@@ -39,9 +39,9 @@ const ListModal: React.FC<IlistModal> = props => {
   };
   return (
     <StyledLayer onEsc={closeModal} onClickOutside={closeModal} modal={true} className={className}>
-      <Box pad="none" width="579px" height="386px">
+      <Box pad="none" width="36em" height="24em">
         <Box pad="medium" justify="between" direction="row" align="center">
-          <TextIcon iconType="quote" label={label} margin={{ right: '40px' }} />
+          <TextIcon iconType="quote" label={label} margin={{ right: '2.5em' }} />
           <Text size="large" color="secondaryText">
             {listNumberLabel}
           </Text>

@@ -5,13 +5,15 @@ import { useProfile } from '../../state/profiles';
 
 const { EntryCard } = DS;
 
-export interface FeedItemProps {
+export interface IFeedItemProps {
   item: any;
+  className?: string;
 }
 
-export const FeedItem = (props: FeedItemProps) => {
+export const FeedItem: React.FC<IFeedItemProps> = (props) => {
   const [profileState, profileActions] = useProfile();
   const { t } = useTranslation();
+
   profileActions.getFeedItemData({ entryId: props.item.id });
 
   const itemData = profileState.feedItems.find(item => item.entryId === props.item.id);
@@ -21,7 +23,6 @@ export const FeedItem = (props: FeedItemProps) => {
   }
 
   return (
-    <div>
       <EntryCard
         entryData={itemData}
         onClickAvatar={() => {}}
@@ -41,7 +42,7 @@ export const FeedItem = (props: FeedItemProps) => {
         loggedProfileAvatar={itemData.avatar}
         loggedProfileEthAddress={itemData.ethAddress}
         locale={'en'}
+        className={props.className}
       />
-    </div>
   );
 };

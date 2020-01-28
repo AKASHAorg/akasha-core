@@ -59,7 +59,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
         fill="horizontal"
         direction="row"
         align="center"
-        height="40px"
+        height="2.5em"
         pad={{ horizontal: 'small', vertical: 'xsmall' }}
         round="small"
         border={{

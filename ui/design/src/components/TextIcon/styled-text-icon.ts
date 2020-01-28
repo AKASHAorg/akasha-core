@@ -23,7 +23,7 @@ const StyledTextIcon = styled.div<ITextIconProps>`
 
     return css`
       & > *:first-child {
-        margin-right: ${spacing ? spacing : '10px'};
+        margin-right: ${spacing ? spacing : '0.625em'};
       }
       background-color: ${backgroundColor ? backgroundColor : ''};
       color: ${color ? color : colors.dark};

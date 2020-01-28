@@ -10,7 +10,7 @@ const AvatarButton = styled(ProfileAvatarButton)`
   border: 1px solid ${props => props.theme.colors.border};
   border-radius: 20px;
   padding: ${props => `${props.theme.shapes.baseSpacing * 2}px`};
-  height: 40px;
+  height: 2.5em;
   box-shadow: ${props => props.theme.colors.shadow};
 `;
 
@@ -26,6 +26,10 @@ export interface ITopbarProps {
   onWalletClick: (ev: React.SyntheticEvent) => void;
   onNavigation?: (path: string) => void;
 }
+
+const TopbarWrapper = styled(Box)`
+  background-color: ${props => props.theme.colors.background};
+`;
 
 const Topbar = (props: ITopbarProps) => {
   const {
@@ -63,7 +67,7 @@ const Topbar = (props: ITopbarProps) => {
   };
 
   return (
-    <Box
+    <TopbarWrapper
       direction="row"
       pad="small"
       justify="between"
@@ -105,7 +109,7 @@ const Topbar = (props: ITopbarProps) => {
           />
         </Box>
       </Box>
-    </Box>
+    </TopbarWrapper>
   );
 };
 

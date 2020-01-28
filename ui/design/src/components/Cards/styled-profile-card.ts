@@ -3,13 +3,13 @@ import styled from 'styled-components';
 
 const AvatarDiv = styled.div`
   position: relative;
-  top: -30px;
+  top: -1.875em;
 `;
 
 const ShareButtonContainer = styled.div`
   position: relative;
-  top: 16px;
-  right: 16px;
+  top: 1em;
+  right: 1em;
 `;
 
 const StyledActionText = styled(Text)`

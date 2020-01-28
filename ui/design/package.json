@@ -32,7 +32,13 @@
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/*design-system.* ../build/"
+    "postpack": "copyfiles -f ./dist/*design-system.* ../build/",
+    "pack:watch": "nodemon"
+  },
+  "nodemonConfig": {
+    "ignore": ["lib/*", "dist/*", "build/*"],
+    "exec": "npm run pack",
+    "ext": "ts,tsx"
   },
   "eslintConfig": {
     "extends": "react-app"

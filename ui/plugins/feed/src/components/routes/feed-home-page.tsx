@@ -1,16 +1,24 @@
+import DS from '@akashaproject/design-system';
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import { /* Link,*/ match } from 'react-router-dom';
 import { useFeed } from '../../state/feed';
 import FeedItem from '../FeedItem/feed-item';
+
+const { Box, styled } = DS;
 
 export interface IFeedHomePageProps {
   rootPath: string;
   match: match<any> | null;
 }
 
+const EntryCard = styled(FeedItem)`
+  margin-bottom: 0.5em;
+  height: auto;
+`;
+
 const FeedHomePage: React.FC<IFeedHomePageProps> = () => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const [feedState, feedActions] = useFeed();
 
   const [state, setState] = React.useState<{
@@ -44,19 +52,18 @@ const FeedHomePage: React.FC<IFeedHomePageProps> = () => {
   };
 
   return (
-    <div>
-      {t('Articles List')}
-      {feedState.items.map(item => (
-        <div key={item.entryId}>
-          <React.Suspense fallback={<div>Loading entry</div>}>
-            <div style={{ marginBottom: 8 }}>
-              <FeedItem entryId={item.entryId} />
-            </div>
-          </React.Suspense>
-        </div>
-      ))}
-      <button onClick={fetchMoreArticles}>Get more</button>
-    </div>
+    <Box>
+      <React.Suspense fallback={<div>Loading feed</div>}>
+        {feedState.items.map(item => (
+          <div key={item.entryId}>
+            <React.Suspense fallback={<div>Loading entry</div>}>
+              <EntryCard entryId={item.entryId} />
+            </React.Suspense>
+          </div>
+        ))}
+        <button onClick={fetchMoreArticles}>Get more</button>
+      </React.Suspense>
+    </Box>
   );
 };
 

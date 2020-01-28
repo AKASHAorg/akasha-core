@@ -23,7 +23,12 @@ export interface INotification {
 const NotificationsPopover: React.FC<INotificationsPopover> = props => {
   const { className, closePopover, dataSource, onClickNotification, target } = props;
   return (
-    <BasicPopover closePopover={closePopover} target={target} gap={'-5px'} className={className}>
+    <BasicPopover
+      closePopover={closePopover}
+      target={target}
+      gap={'-0.313em'}
+      className={className}
+    >
       <StyledListContainer pad={{ vertical: 'small', horizontal: 'xxsmall' }} overflow="scroll">
         {dataSource &&
           dataSource.map((notification, index) => (

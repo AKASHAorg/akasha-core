@@ -1,27 +1,89 @@
 import DS from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent } from 'react';
-import ResponsiveGrid from './responsive-grid';
 
-const { Grommet } = DS;
-const breakpoints = {
-  global: {
-    breakpoints: {
-      small: {
-        value: 550,
-      },
-      medium: {
-        value: 1024,
-      },
-      large: {
-        value: 1224,
-      },
-      xlarge: {
-        value: 1920,
-      },
-    },
-  },
-};
+const { createGlobalStyle, css, Box, styled, lightTheme, Grommet } = DS;
+
+const LayoutWrapper = styled(Box)`
+  flex-direction: row;
+`;
+
+const MainArea = styled(Box)``;
+
+const SidebarSlot = styled(Box)<{ visible: boolean }>`
+  z-index: 110;
+  position: relative;
+  top: 0;
+  @media only screen and (max-width: ${props => props.theme.breakpoints.xlarge.value}px) {
+    min-width: 4.5em;
+  }
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    position: sticky;
+    top: 0;
+    min-width: 3em;
+  }
+  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
+    position: fixed;
+    left: -999px;
+    top: 0;
+    bottom: 0;
+    &.visible {
+      left: 0;
+    }
+  }
+`;
+const TopbarSlot = styled(Box)`
+  z-index: 100;
+  position: sticky;
+  top: 0;
+  @media screen and (min-width: ${props => props.theme.breakpoints.small.value}px) {
+    display: none;
+  }
+`;
+const PluginSlot = styled(Box)``;
+
+const GlobalStyle = createGlobalStyle<{
+  theme: any;
+}>`
+  :root,
+  body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  };
+  ${({ theme }) => css`
+    // 1920-
+    @media only screen and (max-width: ${theme.breakpoints.xlarge.value}px) {
+      :root {
+        font-size: 16px;
+      }
+    }
+    // 1224-
+    @media only screen and (max-width: ${theme.breakpoints.large.value}px) {
+      :root {
+        font-size: 16px;
+      }
+    }
+    // 1024-
+    @media only screen and (max-width: ${theme.breakpoints.medium.value}px) {
+      :root {
+        font-size: 15px;
+      }
+      ${PluginSlot} {
+        margin: 0 0.5em 0 0.5em;
+      }
+    }
+    // 550-
+    @media only screen and (max-width: ${theme.breakpoints.small.value}px) {
+      :root {
+        font-size: 14px;
+        line-height: 1.312;
+      }
+    }
+  `}
+`;
+
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;
@@ -31,8 +93,12 @@ export interface IProps {
   pluginSlotId: string;
 }
 
-export default class LayoutWidget extends PureComponent<IProps> {
-  public state: { hasErrors: boolean; errorMessage: string };
+class LayoutWidget extends PureComponent<IProps> {
+  public state: {
+    hasErrors: boolean;
+    errorMessage: string;
+    showSidebar?: boolean;
+  };
 
   constructor(props: IProps) {
     super(props);
@@ -51,9 +117,27 @@ export default class LayoutWidget extends PureComponent<IProps> {
     console.error(err, info);
   }
 
+  public showSidebar = () => {
+    this.setState({ showSidebar: true });
+  };
+
+  public hideSidebar = () => {
+    this.setState({ showSidebar: false });
+  };
+
+  public componentDidMount() {
+    window.addEventListener('layout:showSidebar', this.showSidebar);
+    window.addEventListener('layout:hideSidebar', this.hideSidebar);
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener('layout:showSidebar', this.showSidebar);
+    window.removeEventListener('layout:hideSidebar', this.hideSidebar);
+  }
+
   public render() {
     const { sidebarSlotId, topbarSlotId, pluginSlotId } = this.props;
-
+    const { showSidebar } = this.state;
     if (this.state.hasErrors) {
       return (
         <div>
@@ -64,15 +148,23 @@ export default class LayoutWidget extends PureComponent<IProps> {
         </div>
       );
     }
+    const sidebarVisible = typeof showSidebar === 'boolean' && showSidebar;
 
     return (
-      <Grommet theme={breakpoints} plain={true} full={true} cssVars={true}>
-        <ResponsiveGrid
-          sidebarSlotId={sidebarSlotId}
-          topbarSlotId={topbarSlotId}
-          pluginSlotId={pluginSlotId}
-        />
-      </Grommet>
+      <>
+        <GlobalStyle theme={lightTheme} />
+        <Grommet theme={lightTheme}>
+          <LayoutWrapper>
+            <SidebarSlot id={sidebarSlotId} visible={sidebarVisible} />
+            <MainArea>
+              <TopbarSlot id={topbarSlotId} />
+              <PluginSlot id={pluginSlotId} />
+            </MainArea>
+          </LayoutWrapper>
+        </Grommet>
+      </>
     );
   }
 }
+
+export default LayoutWidget;

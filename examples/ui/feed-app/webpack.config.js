@@ -33,13 +33,20 @@ module.exports = {
     ],
   },
   plugins: [
-    new CopyPlugin([{ from: path.resolve(__dirname, '../../../ui/build') }, {
+    new CopyPlugin([{ from: path.resolve(__dirname, '../../../ui/build') },
+    {
       from: path.resolve(__dirname, '../../../locales'),
       to: 'locales',
-    }]),
+    }
+    ]),
     new HtmlWebpackPlugin({ template: path.resolve(__dirname, './public/index.html') }),
     new webpack.HotModuleReplacementPlugin(),
   ],
+  // fix infinite loop of compilation when
+  // a new string is added to translations
+  watchOptions: {
+    ignored: [path.resolve(__dirname, '../../../locales'), 'node_modules'],
+  },
   devServer: {
     contentBase: './public',
     historyApiFallback: true,

@@ -33,8 +33,8 @@ const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
           src={newAvatar}
           alt="Avatar"
           fit="cover"
-          width="76px"
-          height="76px"
+          width="4.75em"
+          height="4.75em"
           style={{ borderRadius: '100%' }}
         />
       )}

@@ -23,7 +23,7 @@ const StyledIconLink = styled(Anchor)<IStyledIconLinkProps>`
   }
   svg {
     height: 100%;
-    width: 20px;
+    width: 1.25em;
     stroke: ${props => props.theme.colors.lightGrey};
     & * {
       stroke: ${props => props.theme.colors.secondaryText};

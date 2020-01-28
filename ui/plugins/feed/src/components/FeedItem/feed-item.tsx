@@ -6,6 +6,7 @@ const { EntryCard } = DS;
 
 export interface IFeedItemProps {
   entryId: string;
+  className?: string;
 }
 
 const noop = () => {
@@ -29,8 +30,8 @@ const FeedItem: React.FC<IFeedItemProps> = props => {
       onClickAvatar={noop}
       onClickDownvote={noop}
       onClickUpvote={noop}
-      commentsTitle="Comments"
-      quotesTitle="Quotes"
+      commentsTitle=""
+      quotesTitle=""
       quotedByTitle="Quoted by"
       shareTitle="Share"
       editPostTitle="Edit Post"
@@ -42,6 +43,7 @@ const FeedItem: React.FC<IFeedItemProps> = props => {
       commentInputPlaceholderTitle="Comment"
       commentInputPublishTitle="Publish Comment"
       publishComment={noop}
+      className={props.className}
     />
   );
 };

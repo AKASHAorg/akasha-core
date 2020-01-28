@@ -87,7 +87,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         onChangeProfileData={onChangeProfileData}
       />
       <Box
-        height="70px"
+        height="4.375em"
         border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
         margin={{ horizontal: 'medium' }}
         direction="row"
@@ -111,7 +111,11 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               onChangeProfileData={onChangeProfileData}
             />
 
-            <Text size="medium" color="secondaryText">
+            <Text
+              size="medium"
+              color="secondaryText"
+              style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+            >
               {profileData.userName ? profileData.userName : profileData.ethAddress}
             </Text>
           </Box>
