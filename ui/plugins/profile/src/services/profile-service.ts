@@ -3,7 +3,7 @@ import {
   IGetProfileFollowingsPayload,
   IGetProfileFollowersPayload,
 } from '../state/profiles/interfaces';
-import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-widget-card';
+import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
 import {
   generateProfileData,
   genEthAddress,

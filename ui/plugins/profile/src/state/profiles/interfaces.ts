@@ -1,4 +1,4 @@
-import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-box';
+import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
 
 export type activeProfilesFilterType = 'followers' | 'following';
 export type activeAppsFilterType = 'installed' | 'available';
