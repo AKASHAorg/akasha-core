@@ -26,13 +26,13 @@ const FeedBox = styled(Box)`
 const WidgetBox = styled(Box)`
   padding: 0.5em 0;
   padding-left: 0.5em;
-  @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px){
+  @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     max-width: 40%;
   }
 `;
 
 const Feed = styled(Box)`
-  @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px){
+  @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     flex-direction: row;
     justify-content: center;
   }

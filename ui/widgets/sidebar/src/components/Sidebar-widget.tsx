@@ -1,9 +1,7 @@
 import DS from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense } from 'react';
-import { I18nextProvider/* , useTranslation */ } from 'react-i18next';
-// @ts-ignore
-import SingleSpaReact from 'single-spa-react';
+import { I18nextProvider } from 'react-i18next';
 
 const { Box, Grommet, lightTheme, Icon, styled } = DS;
 export interface IProps {
@@ -71,17 +69,8 @@ const Menu = (props: MenuProps) => {
   const { navigateToUrl } = props;
   // const { t } = useTranslation();
 
-  // const handleLangChange = (lang: string) => (ev: SyntheticEvent) => {
-  //   const evt = new CustomEvent('change-language', {
-  //     detail: lang,
-  //   });
-  //   document.dispatchEvent(evt);
-  //   ev.preventDefault();
-  // };
-
   const handleNavigation = (path: string) => (/* ev: SyntheticEvent */) => {
     navigateToUrl(path);
-    // ev.preventDefault();
   };
 
   return (
@@ -96,18 +85,6 @@ const Menu = (props: MenuProps) => {
       <SidebarWrapper>
         <Box pad={{ left: '2px' }} style={{ justifyContent: 'space-between', height: '100%' }}>
           <Icon type="home" onClick={handleNavigation('/')} />
-          {/* <Icon type="wallet" /> */}
-          {/* <TextIcon
-            iconType="home"
-            label={`${t('Home')}`}
-            onClick={handleNavigation('/')}
-            clickable={true}
-            menuIcon={true}
-            menuActive={true}
-          /> */}
-          {/* <p>Language</p>
-          <MenuLink onClick={handleLangChange('en')}>{t('English')}</MenuLink>
-          <MenuLink onClick={handleLangChange('ro')}>{t('Romanian')}</MenuLink> */}
         </Box>
       </SidebarWrapper>
     </Grommet>

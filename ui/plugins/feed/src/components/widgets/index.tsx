@@ -27,15 +27,19 @@ const TopicsWidget = styled.div``;
 const WidgetList = (/* props: IWidgetListProps */) => {
   const { t } = useTranslation();
   const handleAppTitleClick = () => {
+    // tslint:disable-next-line no-console
     console.log('app title clicked');
   };
   const handleTopicsTitleClick = () => {
+    // tslint:disable-next-line no-console
     console.log('topics title clicked');
   };
   const handleTopicClick = (topic: ITopicData) => {
+    // tslint:disable-next-line no-console
     console.log('topic:', topic, 'was clicked');
   };
   const handleAppClick = (app: IAppData) => {
+    // tslint:disable-next-line no-console
     console.log('app:', app, 'was clicked');
   };
   return (
