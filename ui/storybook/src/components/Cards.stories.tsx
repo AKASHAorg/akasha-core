@@ -64,7 +64,7 @@ storiesOf('Cards|Widget Cards', module)
     <Box pad="none" align="center" height="224px" width="336px">
       <AppsWidgetCard
         onClick={() => action('AppsWidgetCard Clicked')('Synthetic Event')}
-        onAppClick={appData => action('App Clicked')(appData)}
+        onAppClick={dappData => action('App Clicked')(dappData)}
         margin={object('Margin', { margin: '0px' })}
         iconType={'trendingApps'}
         label={text('Text', 'Trending Apps')}

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Avatar } from '../../Avatar/index';
 import { SubtitleTextIcon } from '../../TextIcon/index';
 import { BasicCardBox } from '../index';
-import { AvatarDiv } from '../profile-cards/styled-profile-card';
+import { AvatarDiv } from './styled-profile-card';
 
 export interface IProfileData {
   avatar?: string;

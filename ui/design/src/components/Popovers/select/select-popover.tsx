@@ -7,7 +7,7 @@ export interface ISelectPopover {
   className?: string;
   onClickElem: (provider: IProfileDataProvider) => void;
   dataSource: IProfileDataProvider[];
-  target: React.RefObject<any>;
+  target: HTMLElement;
   closePopover: () => void;
   currentValue?: string;
 }

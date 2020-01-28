@@ -1,4 +1,4 @@
-import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-widget-card';
+import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
 
 export const delay = (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms));

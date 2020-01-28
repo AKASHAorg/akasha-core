@@ -6,7 +6,7 @@ import { Icon } from '../../Icon';
 import { SelectPopover } from '../../Popovers/index';
 import { SubtitleTextIcon } from '../../TextIcon/index';
 import { BasicCardBox } from '../index';
-import { IProfileWidgetCard } from '../widget-cards/profile-widget-card';
+import { IProfileWidgetCard } from './profile-widget-card';
 import {
   AvatarDiv,
   ShareButtonContainer,
@@ -31,8 +31,8 @@ export interface IProfileDataProvider {
 
 export interface IProfileCardProps extends IProfileWidgetCard {
   // edit profile related
-  // @TODO fix this
   profileProvidersData?: IProfileProvidersData;
+  // @TODO fix this
   onChangeProfileData: (newProfileData: any) => void;
   editProfileLabel: string;
   changeCoverImageLabel: string;
@@ -77,20 +77,17 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const [avatar, setAvatar] = useState(profileData.avatar);
   const [coverImage, setCoverImage] = useState(profileData.coverImage);
   const [description, setDescription] = useState(profileData.description);
-  const [userName, setUserName] = useState(profileData.userName);
   const [name, setName] = useState(profileData.name);
 
   const [avatarPopoverOpen, setAvatarPopoverOpen] = useState(false);
   const [coverImagePopoverOpen, setCoverImagePopoverOpen] = useState(false);
   const [descriptionPopoverOpen, setDescriptionPopoverOpen] = useState(false);
-  const [userNamePopoverOpen, setUserNamePopoverOpen] = useState(false);
   const [namePopoverOpen, setNamePopoverOpen] = useState(false);
 
-  const editAvatarRef: React.Ref<any> = useRef(null);
-  const editCoverImageRef: React.Ref<any> = useRef(null);
-  const editDescriptionRef: React.Ref<any> = useRef(null);
-  const editUserNameRef: React.Ref<any> = useRef(null);
-  const editNameRef: React.Ref<any> = useRef(null);
+  const editAvatarRef: React.RefObject<HTMLDivElement> = useRef(null);
+  const editCoverImageRef: React.RefObject<HTMLDivElement> = useRef(null);
+  const editDescriptionRef: React.RefObject<HTMLDivElement> = useRef(null);
+  const editNameRef: React.RefObject<HTMLDivElement> = useRef(null);
 
   const handleChangeAvatar = (provider: IProfileDataProvider) => {
     setAvatar(provider.value);
@@ -107,11 +104,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     setDescriptionPopoverOpen(false);
   };
 
-  const handleChangeUserName = (provider: IProfileDataProvider) => {
-    setUserName(provider.value);
-    setUserNamePopoverOpen(false);
-  };
-
   const handleChangeName = (provider: IProfileDataProvider) => {
     setName(provider.value);
     setNamePopoverOpen(false);
@@ -121,7 +113,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     setAvatar(profileData.avatar);
     setCoverImage(profileData.coverImage);
     setDescription(profileData.description);
-    setUserName(profileData.userName);
     setName(profileData.name);
 
     setEditable(false);
@@ -233,20 +224,8 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
 
             <Box direction="row" gap="xsmall">
               <Text size="medium" color="secondaryText">
-                {userName ? userName : profileData.ethAddress}
+                {profileData.userName ? profileData.userName : profileData.ethAddress}
               </Text>
-              {editable && (
-                <StyledCenterDiv ref={editUserNameRef}>
-                  <Icon
-                    clickable={true}
-                    type="editSimple"
-                    default={true}
-                    onClick={() => {
-                      setUserNamePopoverOpen(true);
-                    }}
-                  />
-                </StyledCenterDiv>
-              )}
             </Box>
           </Box>
           {editAvatarRef.current &&
@@ -276,21 +255,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
                 onClickElem={handleChangeName}
                 closePopover={() => {
                   setNamePopoverOpen(false);
-                }}
-              />
-            )}
-          {editUserNameRef.current &&
-            userNamePopoverOpen &&
-            profileProvidersData &&
-            profileProvidersData.userNameProviders &&
-            profileProvidersData.userNameProviders.length !== 0 && (
-              <SelectPopover
-                currentValue={userName}
-                target={editUserNameRef.current}
-                dataSource={profileProvidersData.userNameProviders}
-                onClickElem={handleChangeUserName}
-                closePopover={() => {
-                  setUserNamePopoverOpen(false);
                 }}
               />
             )}

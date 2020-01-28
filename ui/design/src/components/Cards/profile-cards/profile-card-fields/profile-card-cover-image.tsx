@@ -3,7 +3,7 @@ import * as React from 'react';
 import { getEditableImageFieldHandlers } from '../../../../utils/get-editable-field-handlers';
 import { IconButton } from '../../../Buttons/index';
 import { Icon } from '../../../Icon';
-import { IProfileData } from '../../widget-cards/profile-widget-card';
+import { IProfileData } from '../profile-widget-card';
 import { ShareButtonContainer, StyledImageInput } from '../styled-profile-card';
 
 export interface IProfileCardCoverImageProps {

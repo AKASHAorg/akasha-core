@@ -1,7 +1,7 @@
 import { Image } from 'grommet';
 import * as React from 'react';
 import { getEditableImageFieldHandlers } from '../../../../utils/get-editable-field-handlers';
-import { IProfileData } from '../../widget-cards/profile-widget-card';
+import { IProfileData } from '../profile-widget-card';
 import { AvatarDiv, StyledImageInput } from '../styled-profile-card';
 
 export interface IProfileCardAvatarProps {
