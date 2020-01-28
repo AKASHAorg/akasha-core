@@ -27,31 +27,39 @@ const profileData = {
 };
 
 const profileProvidersData = {
+  currentProviders: {
+    avatar: '3Box',
+    coverImage: '3Box',
+    userName: 'ENS',
+    name: '3Box',
+    description: '3Box',
+  },
   avatarProviders: [
-    { providerName: '3Box', value: 'http://placebeard.it/480/480' },
-    { providerName: 'ENS', value: '' },
+    { providerName: '3Box', value: 'http://placebeard.it/480/480', providerIcon: '' },
+    { providerName: 'ENS', value: '', providerIcon: '' },
   ],
   coverImageProviders: [
-    { providerName: '3Box', value: 'goldenrod' },
-    { providerName: 'ENS', value: 'red' },
+    { providerName: '3Box', value: 'goldenrod', providerIcon: '' },
+    { providerName: 'ENS', value: 'red', providerIcon: '' },
   ],
-  userNameProviders: [{ providerName: 'ENS', value: 'gilbert' }],
+  userNameProviders: [{ providerName: 'ENS', value: '@gilbert', providerIcon: '' }],
   nameProviders: [
-    { providerName: '3Box', value: 'Gilbert The Bearded' },
-    { providerName: 'ENS', value: 'Gilbert Bronson' },
+    { providerName: '3Box', value: 'Gilbert The Bearded', providerIcon: '' },
+    { providerName: 'ENS', value: 'Gilbert Bronson', providerIcon: '' },
   ],
   descriptionProviders: [
     {
       providerName: '3Box',
+      providerIcon: '',
       value:
-        'A long and boring personal description x3. A Very long and boring personal description x3. A Very long and boring personal description x3.',
+        'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
     },
-    { providerName: 'ENS', value: '"Nothing at all" - Stupid Sexy Flanders' },
+    { providerName: 'ENS', providerIcon: '', value: '"Nothing at all" - Stupid Sexy Flanders' },
   ],
 };
 
 const appData = {
-  ethAddress: '0x003410490050000320006570047391021232000',
+  ethAddress: '0x003410490050000320006570047391021232334',
   avatarImage: '',
   coverImage: '#CAF2F9;',
   name: 'Aragon',

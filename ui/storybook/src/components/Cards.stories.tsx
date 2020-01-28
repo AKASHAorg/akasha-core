@@ -46,7 +46,7 @@ const {
   TopicsWidgetCard,
 } = DS;
 
-storiesOf('Cards', module)
+storiesOf('Cards|Widget Cards', module)
   .add('topics widget card', () => (
     <Box pad="none" align="center" height="224px" width="336px">
       <TopicsWidgetCard
@@ -72,23 +72,23 @@ storiesOf('Cards', module)
         dataSource={appsDataSource}
       />
     </Box>
-  ))
-  .add('editor card', () => (
-    <Box align="center" pad={{ top: '40px' }}>
-      <Box pad="none" align="center" width="581px">
-        <EditorCard
-          avatar={text('Logged Profile Avatar', 'https://www.stevensegallery.com/360/360')}
-          ethAddress={text(
-            'Logged Profile EthAddress',
-            '0x003410499401674320006570047391024572000',
-          )}
-          publishLabel={text('Publish Label', publishLabel)}
-          placeholderLabel={text('PlaceholderLabel', placeholderLabel)}
-          onPublish={action('Publish clicked')}
-        />
-      </Box>
+  ));
+
+storiesOf('Cards|Editor Cards', module).add('editor card', () => (
+  <Box align="center" pad={{ top: '40px' }}>
+    <Box pad="none" align="center" width="581px">
+      <EditorCard
+        avatar={text('Logged Profile Avatar', 'https://www.stevensegallery.com/360/360')}
+        ethAddress={text('Logged Profile EthAddress', '0x003410499401674320006570047391024572000')}
+        publishLabel={text('Publish Label', publishLabel)}
+        placeholderLabel={text('PlaceholderLabel', placeholderLabel)}
+        onPublish={action('Publish clicked')}
+      />
     </Box>
-  ))
+  </Box>
+));
+
+storiesOf('Cards|Profile Cards', module)
   .add('profile card', () => (
     <Box align="center" pad={{ top: '40px' }}>
       <Box pad="none" align="center" width="581px">
@@ -123,7 +123,7 @@ storiesOf('Cards', module)
         onClickApps={() => action('Apps Box Clicked')('Synthetic Event')}
         onClickFollowing={() => action('Following Box Clicked')('Synthetic Event')}
         // @ts-ignore
-        profileData={select('Profile Data', { dapp: dappData, user: profileData }, profileData)}
+        profileData={select('Profile Data', { dapp: appData, user: profileData }, profileData)}
         descriptionLabel={text('About me', aboutMeLabel)}
         actionsLabel={text('Actions', actionsLabel)}
         followingLabel={text('Following', followingLabel)}
@@ -132,40 +132,41 @@ storiesOf('Cards', module)
         shareProfileLabel={text('Share Profile', shareProfileLabel)}
       />
     </Box>
-  ))
-  .add('entry card', () => (
-    <Box align="center" pad={{ top: '40px' }}>
-      <Box pad="none" align="center" width="581px">
-        <EntryCard
-          entryData={object('Entry Data', entryData)}
-          onClickAvatar={() => action('Avatar Clicked')('Synthetic Event')}
-          onClickDownvote={() => action('Downvote Clicked')('Synthetic Event')}
-          onClickUpvote={() => action('Upvote Clicked')('Synthetic Event')}
-          commentsLabel={text('Comments Label', commentsLabel)}
-          quotesLabel={text('Quotes Label', quotesLabel)}
-          shareLabel={text('Share Label', shareLabel)}
-          editPostLabel={text('Edit post Label', editPostLabel)}
-          editCommentLabel={text('Edit comment Label', editCommentLabel)}
-          copyLinkLabel={text('Copy link Label', copyLinkLabel)}
-          quotedByLabel={text('Quoted By Label', quotedByLabel)}
-          replyLabel={text('Reply Label', replyLabel)}
-          fullEntry={boolean('Full Entry', false)}
-          locale={select('Locale', { en: 'en', ro: 'ro', es: 'es' }, 'en')}
-          commentInputPlaceholderLabel={text(
-            'Comment input placeholder',
-            commentInputPlaceholderLabel,
-          )}
-          commentInputPublishLabel={text('Comment input publish Label', publishLabel)}
-          publishComment={() => action('Comment published')('Synthetic Event')}
-          loggedProfileAvatar={text(
-            'Logged Profile Avatar',
-            'https://www.stevensegallery.com/360/360',
-          )}
-          loggedProfileEthAddress={text(
-            'Logged Profile EthAddress',
-            '0x003410499401674320006570047391024572000',
-          )}
-        />
-      </Box>
-    </Box>
   ));
+
+storiesOf('Cards|Entry Cards', module).add('entry card', () => (
+  <Box align="center" pad={{ top: '40px' }}>
+    <Box pad="none" align="center" width="581px">
+      <EntryCard
+        entryData={object('Entry Data', entryData)}
+        onClickAvatar={() => action('Avatar Clicked')('Synthetic Event')}
+        onClickDownvote={() => action('Downvote Clicked')('Synthetic Event')}
+        onClickUpvote={() => action('Upvote Clicked')('Synthetic Event')}
+        commentsLabel={text('Comments Label', commentsLabel)}
+        quotesLabel={text('Quotes Label', quotesLabel)}
+        shareLabel={text('Share Label', shareLabel)}
+        editPostLabel={text('Edit post Label', editPostLabel)}
+        editCommentLabel={text('Edit comment Label', editCommentLabel)}
+        copyLinkLabel={text('Copy link Label', copyLinkLabel)}
+        quotedByLabel={text('Quoted By Label', quotedByLabel)}
+        replyLabel={text('Reply Label', replyLabel)}
+        fullEntry={boolean('Full Entry', false)}
+        locale={select('Locale', { en: 'en', ro: 'ro', es: 'es' }, 'en')}
+        commentInputPlaceholderLabel={text(
+          'Comment input placeholder',
+          commentInputPlaceholderLabel,
+        )}
+        commentInputPublishLabel={text('Comment input publish Label', publishLabel)}
+        publishComment={() => action('Comment published')('Synthetic Event')}
+        loggedProfileAvatar={text(
+          'Logged Profile Avatar',
+          'https://www.stevensegallery.com/360/360',
+        )}
+        loggedProfileEthAddress={text(
+          'Logged Profile EthAddress',
+          '0x003410499401674320006570047391024572000',
+        )}
+      />
+    </Box>
+  </Box>
+));

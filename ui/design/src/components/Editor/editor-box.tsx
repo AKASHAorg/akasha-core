@@ -4,7 +4,7 @@ import { createEditor, Editor } from 'slate';
 import { withHistory } from 'slate-history';
 import { Slate, withReact } from 'slate-react';
 import { Avatar } from '../Avatar/index';
-import { IEntryData } from '../Cards/entry-box';
+import { IEntryData } from '../Cards/entry-cards/entry-box';
 import { Icon } from '../Icon/index';
 import { EmojiPopover, ImagePopover } from '../Popovers/index';
 import EmbedBox from './embed-box';

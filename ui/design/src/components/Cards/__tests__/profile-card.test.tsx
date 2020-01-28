@@ -2,7 +2,7 @@ import { cleanup, fireEvent, waitForElement } from '@testing-library/react';
 import * as React from 'react';
 import { act, create } from 'react-test-renderer';
 import { customRender, wrapWithTheme } from '../../../test-utils';
-import ProfileCard from '../profile-card';
+import ProfileCard from '../profile-cards/profile-card';
 
 const mockProfileData = {
   ethAddress: '0x003410490050000320006570034567114572000',
