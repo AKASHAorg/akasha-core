@@ -1,49 +1,61 @@
-import { Text, TextInput } from 'grommet';
+import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { getEditableTextFieldHandlers } from '../../../../utils/get-editable-field-handlers';
-import { IProfileData } from '../profile-widget-card';
+import { SelectPopover } from '../../../Popovers/index';
+import { IProfileDataProvider, IProfileProvidersData } from '../profile-card';
+import { EditFieldIcon } from './ edit-field-icon';
 
 export interface IProfileCardNameProps {
-  profileData: IProfileData;
   editable: boolean;
-  onChangeProfileData: (newProfileData: IProfileData) => void;
+  name?: string;
+  nameIcon?: string;
+  namePopoverOpen: boolean;
+  setNamePopoverOpen: (value: boolean) => void;
+  handleChangeName: (provider: IProfileDataProvider) => void;
+  profileProvidersData?: IProfileProvidersData;
 }
 
 const ProfileCardName: React.FC<IProfileCardNameProps> = props => {
-  const { profileData, editable, onChangeProfileData } = props;
-
-  const [editName, setEditName] = React.useState(false);
-  const [newName, setNewName] = React.useState(profileData.name);
-  const { handleClick, handleBlur, handleChange } = getEditableTextFieldHandlers(
+  const {
     editable,
-    setEditName,
-    setNewName,
-    () =>
-      onChangeProfileData({
-        ...profileData,
-        name: newName,
-      }),
-  );
+    name,
+    nameIcon,
+    namePopoverOpen,
+    setNamePopoverOpen,
+    profileProvidersData,
+    handleChangeName,
+  } = props;
+
+  const editNameRef: React.RefObject<HTMLDivElement> = React.useRef(null);
 
   return (
     <>
-      {!editName && (
-        <Text size="xlarge" weight="bold" color="primaryText" onClick={handleClick}>
-          {newName}
+      <Box direction="row" gap="xsmall">
+        <Text size="xlarge" weight="bold" color="primaryText">
+          {name}
         </Text>
-      )}
-
-      {editName && (
-        <TextInput
-          plain={true}
-          name="name"
-          size="xlarge"
-          color="primaryText"
-          value={newName}
-          onBlur={handleBlur}
-          onChange={handleChange}
-        />
-      )}
+        {editable && (
+          <EditFieldIcon
+            ref={editNameRef}
+            popoverHandler={() => setNamePopoverOpen(true)}
+            providerIcon={nameIcon}
+          />
+        )}
+      </Box>
+      {editNameRef.current &&
+        namePopoverOpen &&
+        profileProvidersData &&
+        profileProvidersData.nameProviders &&
+        profileProvidersData.nameProviders.length !== 0 && (
+          <SelectPopover
+            currentValue={name}
+            target={editNameRef.current}
+            dataSource={profileProvidersData.nameProviders}
+            onClickElem={handleChangeName}
+            closePopover={() => {
+              setNamePopoverOpen(false);
+            }}
+          />
+        )}
     </>
   );
 };

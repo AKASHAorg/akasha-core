@@ -1,48 +1,67 @@
-import { Text, TextArea } from 'grommet';
+import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { getEditableTextFieldHandlers } from '../../../../utils/get-editable-field-handlers';
-import { IProfileData } from '../profile-widget-card';
+import { SelectPopover } from '../../../Popovers/index';
+import { IProfileDataProvider, IProfileProvidersData } from '../profile-card';
+import { EditFieldIcon } from './ edit-field-icon';
 
 export interface IProfileCardDescriptionProps {
-  profileData: IProfileData;
+  descriptionLabel: string;
   editable: boolean;
-  onChangeProfileData: (newProfileData: IProfileData) => void;
+  description?: string;
+  descriptionIcon?: string;
+  descriptionPopoverOpen: boolean;
+  setDescriptionPopoverOpen: (value: boolean) => void;
+  handleChangeDescription: (provider: IProfileDataProvider) => void;
+  profileProvidersData?: IProfileProvidersData;
 }
 
 const ProfileCardDescription: React.FC<IProfileCardDescriptionProps> = props => {
-  const { profileData, editable, onChangeProfileData } = props;
-
-  const [editDescription, setEditDescription] = React.useState(false);
-  const [newDescription, setNewDescription] = React.useState(profileData.description);
-  const { handleClick, handleBlur, handleChange } = getEditableTextFieldHandlers(
+  const {
     editable,
-    setEditDescription,
-    setNewDescription,
-    () =>
-      onChangeProfileData({
-        ...profileData,
-        description: newDescription,
-      }),
-  );
+    description,
+    descriptionIcon,
+    descriptionPopoverOpen,
+    setDescriptionPopoverOpen,
+    profileProvidersData,
+    handleChangeDescription,
+    descriptionLabel,
+  } = props;
+
+  const editDescriptionRef: React.RefObject<HTMLDivElement> = React.useRef(null);
 
   return (
     <>
-      {!editDescription && (
-        <Text color="primaryText" onClick={handleClick}>
-          {newDescription}
-        </Text>
-      )}
-      {editDescription && (
-        <TextArea
-          plain={true}
-          name="description"
-          color="primaryText"
-          onBlur={handleBlur}
-          onChange={handleChange}
-        >
-          {newDescription}
-        </TextArea>
-      )}
+      <Box direction="column" pad="medium" gap="medium">
+        <Box direction="row" gap="xsmall" align="center">
+          <Text size="large" weight="bold" color="primaryText">
+            {descriptionLabel}
+          </Text>
+          {editable && (
+            <EditFieldIcon
+              ref={editDescriptionRef}
+              popoverHandler={() => setDescriptionPopoverOpen(true)}
+              providerIcon={descriptionIcon}
+            />
+          )}
+        </Box>
+
+        <Text color="primaryText">{description}</Text>
+      </Box>
+      {editDescriptionRef.current &&
+        descriptionPopoverOpen &&
+        profileProvidersData &&
+        profileProvidersData.descriptionProviders &&
+        profileProvidersData.descriptionProviders.length && (
+          <SelectPopover
+            currentValue={description}
+            target={editDescriptionRef.current}
+            dataSource={profileProvidersData.descriptionProviders}
+            onClickElem={handleChangeDescription}
+            closePopover={() => {
+              setDescriptionPopoverOpen(false);
+            }}
+          />
+        )}
     </>
   );
 };

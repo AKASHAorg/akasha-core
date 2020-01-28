@@ -1,4 +1,4 @@
-import { Box, Text } from 'grommet';
+import { Box, Image } from 'grommet';
 import styled from 'styled-components';
 
 const AvatarDiv = styled.div`
@@ -10,17 +10,6 @@ const ShareButtonContainer = styled(Box)`
   position: relative;
   top: 16px;
   right: 16px;
-`;
-
-const StyledActionText = styled(Text)`
-  cursor: pointer;
-  &:hover {
-    color: ${props => props.theme.colors.accent};
-  }
-`;
-
-const StyledImageInput = styled.input`
-  display: none;
 `;
 
 const StyledEditCoverImageBox = styled(Box)`
@@ -36,10 +25,14 @@ const StyledEditButtonsDiv = styled.div`
 const StyledCenterDiv = styled.div`
   display: flex;
   align-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
 `;
 
 const StyledAvatarEditDiv = styled.div`
-  border-radius: 100%;
+  border-radius: 50%;
   position: relative;
   left: 56px;
   bottom: 37px;
@@ -52,13 +45,18 @@ const StyledAvatarEditDiv = styled.div`
   background-color: ${props => props.theme.colors.border};
 `;
 
+const StyledImage = styled(Image)`
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+`;
+
 export {
   AvatarDiv,
   ShareButtonContainer,
-  StyledActionText,
-  StyledImageInput,
   StyledEditCoverImageBox,
   StyledEditButtonsDiv,
   StyledCenterDiv,
   StyledAvatarEditDiv,
+  StyledImage,
 };

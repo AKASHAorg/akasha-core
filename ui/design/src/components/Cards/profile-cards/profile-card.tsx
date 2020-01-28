@@ -1,21 +1,23 @@
 import { Box, Text } from 'grommet';
-import React, { useRef, useState } from 'react';
-import { Avatar } from '../../Avatar/index';
-import { Button, IconButton } from '../../Buttons/index';
-import { Icon } from '../../Icon';
-import { SelectPopover } from '../../Popovers/index';
+import React, { useState } from 'react';
+import { Button } from '../../Buttons/index';
 import { SubtitleTextIcon } from '../../TextIcon/index';
 import { BasicCardBox } from '../index';
-import { IProfileWidgetCard } from './profile-widget-card';
 import {
-  AvatarDiv,
-  ShareButtonContainer,
-  StyledAvatarEditDiv,
-  StyledCenterDiv,
-  StyledEditCoverImageBox,
-} from './styled-profile-card';
+  ProfileCardAvatar,
+  ProfileCardCoverImage,
+  ProfileCardDescription,
+  ProfileCardName,
+} from './profile-card-fields/index';
+import { IProfileWidgetCard } from './profile-widget-card';
 
 export interface IProfileProvidersData {
+  currentProviders: {
+    avatar?: IProfileDataProvider;
+    coverImage?: IProfileDataProvider;
+    name?: IProfileDataProvider;
+    description?: IProfileDataProvider;
+  };
   avatarProviders?: IProfileDataProvider[];
   coverImageProviders?: IProfileDataProvider[];
   userNameProviders?: IProfileDataProvider[];
@@ -72,6 +74,11 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     setEditable(true);
   };
 
+  const handleShareClick = () => {
+    // to be implemented
+    return;
+  };
+
   const [editable, setEditable] = useState(false);
 
   const [avatar, setAvatar] = useState(profileData.avatar);
@@ -79,42 +86,59 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const [description, setDescription] = useState(profileData.description);
   const [name, setName] = useState(profileData.name);
 
+  const [avatarIcon, setAvatarIcon] = useState(
+    profileProvidersData?.currentProviders.avatar?.providerIcon,
+  );
+  const [coverImageIcon, setCoverImageIcon] = useState(
+    profileProvidersData?.currentProviders.coverImage?.providerIcon,
+  );
+  const [descriptionIcon, setDescriptionIcon] = useState(
+    profileProvidersData?.currentProviders.description?.providerIcon,
+  );
+  const [nameIcon, setNameIcon] = useState(
+    profileProvidersData?.currentProviders.name?.providerIcon,
+  );
+
   const [avatarPopoverOpen, setAvatarPopoverOpen] = useState(false);
   const [coverImagePopoverOpen, setCoverImagePopoverOpen] = useState(false);
   const [descriptionPopoverOpen, setDescriptionPopoverOpen] = useState(false);
   const [namePopoverOpen, setNamePopoverOpen] = useState(false);
 
-  const editAvatarRef: React.RefObject<HTMLDivElement> = useRef(null);
-  const editCoverImageRef: React.RefObject<HTMLDivElement> = useRef(null);
-  const editDescriptionRef: React.RefObject<HTMLDivElement> = useRef(null);
-  const editNameRef: React.RefObject<HTMLDivElement> = useRef(null);
-
   const handleChangeAvatar = (provider: IProfileDataProvider) => {
     setAvatar(provider.value);
+    setAvatarIcon(provider.providerIcon);
     setAvatarPopoverOpen(false);
   };
 
   const handleChangeCoverImage = (provider: IProfileDataProvider) => {
     setCoverImage(provider.value);
+    setCoverImageIcon(provider.providerIcon);
     setCoverImagePopoverOpen(false);
   };
 
   const handleChangeDescription = (provider: IProfileDataProvider) => {
     setDescription(provider.value);
+    setDescriptionIcon(provider.providerIcon);
     setDescriptionPopoverOpen(false);
   };
 
   const handleChangeName = (provider: IProfileDataProvider) => {
     setName(provider.value);
+    setNameIcon(provider.providerIcon);
     setNamePopoverOpen(false);
   };
 
   const handleCancelEdit = () => {
+    // reset to initial state
     setAvatar(profileData.avatar);
     setCoverImage(profileData.coverImage);
     setDescription(profileData.description);
     setName(profileData.name);
-
+    setAvatarIcon(profileProvidersData?.currentProviders.avatar?.providerIcon);
+    setCoverImageIcon(profileProvidersData?.currentProviders.coverImage?.providerIcon);
+    setDescriptionIcon(profileProvidersData?.currentProviders.description?.providerIcon);
+    setNameIcon(profileProvidersData?.currentProviders.name?.providerIcon);
+    // turn off editing
     setEditable(false);
   };
 
@@ -126,60 +150,20 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   };
   return (
     <BasicCardBox className={className}>
-      <Box
-        height="144px"
-        background={coverImage!.startsWith('data:') ? `url(${coverImage})` : coverImage}
-        pad="none"
-        round={{ corner: 'top', size: 'xsmall' }}
-      >
-        {!editable && (
-          <Box align="end" pad="none">
-            <ShareButtonContainer gap="xsmall" direction="row">
-              <IconButton
-                secondary={true}
-                icon={<Icon type="editSimple" color="white" />}
-                label={editProfileLabel}
-                onClick={handleEditClick}
-              />
-              <IconButton
-                secondary={true}
-                icon={<Icon type="reply" color="white" />}
-                label={shareProfileLabel}
-              />
-            </ShareButtonContainer>
-          </Box>
-        )}
-        {editable && (
-          <Box justify="center" fill="vertical">
-            <StyledEditCoverImageBox
-              direction="row"
-              gap="xsmall"
-              justify="center"
-              onClick={() => setCoverImagePopoverOpen(true)}
-            >
-              <Text size="medium" color="white">
-                {changeCoverImageLabel}
-              </Text>
-              <StyledCenterDiv ref={editCoverImageRef}>
-                <Icon type="editSimple" />
-              </StyledCenterDiv>
-            </StyledEditCoverImageBox>
-          </Box>
-        )}
-        {editCoverImageRef.current &&
-          coverImagePopoverOpen &&
-          profileProvidersData?.coverImageProviders?.length && (
-            <SelectPopover
-              currentValue={coverImage}
-              target={editCoverImageRef.current}
-              dataSource={profileProvidersData.coverImageProviders}
-              onClickElem={handleChangeCoverImage}
-              closePopover={() => {
-                setCoverImagePopoverOpen(false);
-              }}
-            />
-          )}
-      </Box>
+      <ProfileCardCoverImage
+        shareProfileLabel={shareProfileLabel}
+        editProfileLabel={editProfileLabel}
+        changeCoverImageLabel={changeCoverImageLabel}
+        editable={editable}
+        coverImage={coverImage}
+        coverImageIcon={coverImageIcon}
+        handleChangeCoverImage={handleChangeCoverImage}
+        coverImagePopoverOpen={coverImagePopoverOpen}
+        setCoverImagePopoverOpen={setCoverImagePopoverOpen}
+        handleEditClick={handleEditClick}
+        handleShareClick={handleShareClick}
+        profileProvidersData={profileProvidersData}
+      />
       <Box
         height="70px"
         border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
@@ -188,39 +172,26 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         justify="between"
       >
         <Box direction="row">
-          <AvatarDiv>
-            <Avatar size="xl" withBorder={true} ethAddress={profileData.ethAddress} src={avatar} />
-            {editable && (
-              <StyledAvatarEditDiv ref={editAvatarRef}>
-                <Icon
-                  clickable={true}
-                  type="editSimple"
-                  default={true}
-                  onClick={() => {
-                    setAvatarPopoverOpen(true);
-                  }}
-                />
-              </StyledAvatarEditDiv>
-            )}
-          </AvatarDiv>
+          <ProfileCardAvatar
+            ethAddress={profileData.ethAddress}
+            editable={editable}
+            avatar={avatar}
+            avatarIcon={avatarIcon}
+            handleChangeAvatar={handleChangeAvatar}
+            avatarPopoverOpen={avatarPopoverOpen}
+            setAvatarPopoverOpen={setAvatarPopoverOpen}
+            profileProvidersData={profileProvidersData}
+          />
           <Box pad={{ vertical: 'small', left: 'xsmall' }}>
-            <Box direction="row" gap="xsmall">
-              <Text size="xlarge" weight="bold" color="primaryText">
-                {name}
-              </Text>
-              {editable && (
-                <StyledCenterDiv ref={editNameRef}>
-                  <Icon
-                    clickable={true}
-                    type="editSimple"
-                    default={true}
-                    onClick={() => {
-                      setNamePopoverOpen(true);
-                    }}
-                  />
-                </StyledCenterDiv>
-              )}
-            </Box>
+            <ProfileCardName
+              editable={editable}
+              name={name}
+              nameIcon={nameIcon}
+              handleChangeName={handleChangeName}
+              namePopoverOpen={namePopoverOpen}
+              setNamePopoverOpen={setNamePopoverOpen}
+              profileProvidersData={profileProvidersData}
+            />
 
             <Box direction="row" gap="xsmall">
               <Text size="medium" color="secondaryText">
@@ -228,36 +199,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               </Text>
             </Box>
           </Box>
-          {editAvatarRef.current &&
-            avatarPopoverOpen &&
-            profileProvidersData &&
-            profileProvidersData.avatarProviders &&
-            profileProvidersData.avatarProviders.length !== 0 && (
-              <SelectPopover
-                currentValue={avatar}
-                target={editAvatarRef.current}
-                dataSource={profileProvidersData.avatarProviders}
-                onClickElem={handleChangeAvatar}
-                closePopover={() => {
-                  setAvatarPopoverOpen(false);
-                }}
-              />
-            )}
-          {editNameRef.current &&
-            namePopoverOpen &&
-            profileProvidersData &&
-            profileProvidersData.nameProviders &&
-            profileProvidersData.nameProviders.length !== 0 && (
-              <SelectPopover
-                currentValue={name}
-                target={editNameRef.current}
-                dataSource={profileProvidersData.nameProviders}
-                onClickElem={handleChangeName}
-                closePopover={() => {
-                  setNamePopoverOpen(false);
-                }}
-              />
-            )}
         </Box>
         {leftTitle && rightTitle && (
           <Box
@@ -285,42 +226,16 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           </Box>
         )}
       </Box>
-      <Box direction="column" pad="medium" gap="medium">
-        <Box direction="row" gap="xsmall" align="center">
-          <Text size="large" weight="bold" color="primaryText">
-            {descriptionLabel}
-          </Text>
-          {editable && (
-            <StyledCenterDiv ref={editDescriptionRef}>
-              <Icon
-                clickable={true}
-                type="editSimple"
-                default={true}
-                onClick={() => {
-                  setDescriptionPopoverOpen(true);
-                }}
-              />
-            </StyledCenterDiv>
-          )}
-        </Box>
-
-        <Text color="primaryText">{description}</Text>
-      </Box>
-      {editDescriptionRef.current &&
-        descriptionPopoverOpen &&
-        profileProvidersData &&
-        profileProvidersData.descriptionProviders &&
-        profileProvidersData.descriptionProviders.length && (
-          <SelectPopover
-            currentValue={description}
-            target={editDescriptionRef.current}
-            dataSource={profileProvidersData.descriptionProviders}
-            onClickElem={handleChangeDescription}
-            closePopover={() => {
-              setDescriptionPopoverOpen(false);
-            }}
-          />
-        )}
+      <ProfileCardDescription
+        editable={editable}
+        description={description}
+        descriptionIcon={descriptionIcon}
+        handleChangeDescription={handleChangeDescription}
+        descriptionPopoverOpen={descriptionPopoverOpen}
+        setDescriptionPopoverOpen={setDescriptionPopoverOpen}
+        profileProvidersData={profileProvidersData}
+        descriptionLabel={descriptionLabel}
+      />
       <Box height="40px">
         {editable && (
           <div>

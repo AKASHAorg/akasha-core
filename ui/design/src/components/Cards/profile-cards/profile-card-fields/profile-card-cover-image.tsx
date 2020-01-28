@@ -1,64 +1,102 @@
-import { Box } from 'grommet';
+import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { getEditableImageFieldHandlers } from '../../../../utils/get-editable-field-handlers';
 import { IconButton } from '../../../Buttons/index';
 import { Icon } from '../../../Icon';
-import { IProfileData } from '../profile-widget-card';
-import { ShareButtonContainer, StyledImageInput } from '../styled-profile-card';
+import { SelectPopover } from '../../../Popovers/index';
+import { IProfileDataProvider, IProfileProvidersData } from '../profile-card';
+import { ShareButtonContainer, StyledEditCoverImageBox } from '../styled-profile-card';
+import { EditFieldIcon } from './ edit-field-icon';
 
 export interface IProfileCardCoverImageProps {
-  shareProfileText: string;
-  editProfileText: string;
-  profileData: IProfileData;
+  shareProfileLabel: string;
+  editProfileLabel: string;
+  changeCoverImageLabel: string;
   editable: boolean;
-  onChangeProfileData: (newProfileData: IProfileData) => void;
+  coverImage?: string;
+  coverImageIcon?: string;
+  handleChangeCoverImage: (provider: IProfileDataProvider) => void;
+  coverImagePopoverOpen: boolean;
+  setCoverImagePopoverOpen: (value: boolean) => void;
+  handleEditClick: () => void;
+  handleShareClick: () => void;
+  profileProvidersData?: IProfileProvidersData;
 }
 
 const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
-  const { shareProfileText, editProfileText, profileData, editable, onChangeProfileData } = props;
-
-  const [newCoverImage, setNewCoverImage] = React.useState(profileData.coverImage);
-  const coverImageRef = React.useRef(null);
-  const { handleClick, handleChange } = getEditableImageFieldHandlers(
+  const {
+    shareProfileLabel,
+    editProfileLabel,
+    changeCoverImageLabel,
     editable,
-    coverImageRef,
-    setNewCoverImage,
-    (newValue: string) =>
-      onChangeProfileData({
-        ...profileData,
-        coverImage: newValue,
-      }),
-  );
+    coverImage,
+    coverImageIcon,
+    handleChangeCoverImage,
+    handleEditClick,
+    handleShareClick,
+    coverImagePopoverOpen,
+    setCoverImagePopoverOpen,
+    profileProvidersData,
+  } = props;
+
+  const editCoverImageRef: React.RefObject<HTMLDivElement> = React.useRef(null);
 
   return (
     <Box
       height="144px"
-      background={newCoverImage!.startsWith('data:') ? `url(${newCoverImage})` : newCoverImage}
+      background={coverImage!.startsWith('data:') ? `url(${coverImage})` : coverImage}
       pad="none"
       round={{ corner: 'top', size: 'xsmall' }}
-      align="end"
-      onClick={handleClick}
     >
-      <ShareButtonContainer gap="xsmall" direction="row">
-        <IconButton
-          secondary={true}
-          icon={<Icon type="editSimple" color="white" />}
-          label={editProfileText}
-        />
-        <IconButton
-          secondary={true}
-          icon={<Icon type="reply" color="white" />}
-          label={shareProfileText}
-        />
-      </ShareButtonContainer>
-
-      <StyledImageInput
-        data-testid="profile-card-cover-image"
-        ref={coverImageRef}
-        name="coverImage"
-        type="file"
-        onChange={handleChange}
-      />
+      {!editable && (
+        <Box align="end" pad="none">
+          <ShareButtonContainer gap="xsmall" direction="row">
+            <IconButton
+              secondary={true}
+              icon={<Icon type="editSimple" color="white" />}
+              label={editProfileLabel}
+              onClick={handleEditClick}
+            />
+            <IconButton
+              secondary={true}
+              icon={<Icon type="reply" color="white" />}
+              label={shareProfileLabel}
+              onClick={handleShareClick}
+            />
+          </ShareButtonContainer>
+        </Box>
+      )}
+      {editable && (
+        <Box justify="center" fill="vertical">
+          <StyledEditCoverImageBox
+            direction="row"
+            gap="xsmall"
+            justify="center"
+            onClick={() => setCoverImagePopoverOpen(true)}
+          >
+            <Text size="medium" color="white">
+              {changeCoverImageLabel}
+            </Text>
+            <EditFieldIcon
+              ref={editCoverImageRef}
+              popoverHandler={() => setCoverImagePopoverOpen(true)}
+              providerIcon={coverImageIcon}
+            />
+          </StyledEditCoverImageBox>
+        </Box>
+      )}
+      {editCoverImageRef.current &&
+        coverImagePopoverOpen &&
+        profileProvidersData?.coverImageProviders?.length && (
+          <SelectPopover
+            currentValue={coverImage}
+            target={editCoverImageRef.current}
+            dataSource={profileProvidersData.coverImageProviders}
+            onClickElem={handleChangeCoverImage}
+            closePopover={() => {
+              setCoverImagePopoverOpen(false);
+            }}
+          />
+        )}
     </Box>
   );
 };

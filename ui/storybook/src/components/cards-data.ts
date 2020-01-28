@@ -28,33 +28,77 @@ const profileData = {
 
 const profileProvidersData = {
   currentProviders: {
-    avatar: '3Box',
-    coverImage: '3Box',
+    avatar: {
+      providerName: '3Box',
+      value: 'http://placebeard.it/480/480',
+      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+    },
+    coverImage: {
+      providerName: '3Box',
+      value: 'goldenrod',
+      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+    },
     userName: 'ENS',
-    name: '3Box',
-    description: '3Box',
+    name: {
+      providerName: '3Box',
+      value: 'Gilbert The Bearded',
+      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+    },
+    description: {
+      providerName: '3Box',
+      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      value:
+        'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
+    },
   },
   avatarProviders: [
-    { providerName: '3Box', value: 'http://placebeard.it/480/480', providerIcon: '' },
-    { providerName: 'ENS', value: '', providerIcon: '' },
+    {
+      providerName: '3Box',
+      value: 'http://placebeard.it/480/480',
+      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+    },
+    {
+      providerName: 'ENS',
+      value: '',
+      providerIcon: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+    },
   ],
   coverImageProviders: [
-    { providerName: '3Box', value: 'goldenrod', providerIcon: '' },
-    { providerName: 'ENS', value: 'red', providerIcon: '' },
+    {
+      providerName: '3Box',
+      value: 'goldenrod',
+      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+    },
+    {
+      providerName: 'ENS',
+      value: 'red',
+      providerIcon: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+    },
   ],
-  userNameProviders: [{ providerName: 'ENS', value: '@gilbert', providerIcon: '' }],
   nameProviders: [
-    { providerName: '3Box', value: 'Gilbert The Bearded', providerIcon: '' },
-    { providerName: 'ENS', value: 'Gilbert Bronson', providerIcon: '' },
+    {
+      providerName: '3Box',
+      value: 'Gilbert The Bearded',
+      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+    },
+    {
+      providerName: 'ENS',
+      value: 'Gilbert Bronson',
+      providerIcon: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+    },
   ],
   descriptionProviders: [
     {
       providerName: '3Box',
-      providerIcon: '',
+      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
       value:
         'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
     },
-    { providerName: 'ENS', providerIcon: '', value: '"Nothing at all" - Stupid Sexy Flanders' },
+    {
+      providerName: 'ENS',
+      providerIcon: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+      value: '"Nothing at all" - Stupid Sexy Flanders',
+    },
   ],
 };
 
