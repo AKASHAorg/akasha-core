@@ -54,7 +54,7 @@ const ListModal: React.FC<IlistModal> = props => {
                 label={elem.name}
                 avatarImage={elem.avatar}
                 onClick={handleClickAvatar(elem.ethAddress)}
-                seed={elem.ethAddress}
+                ethAddress={elem.ethAddress}
               />
             </StyledLayerElemDiv>
           ))}

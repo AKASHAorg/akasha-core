@@ -56,7 +56,6 @@ export const getEditableImageFieldHandlers = (
       setNewValue(result);
       onChange(result);
     });
-
     fileReader.readAsDataURL(file);
   };
 

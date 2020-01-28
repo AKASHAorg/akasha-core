@@ -67,6 +67,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
           color: 'border',
         }}
         onClick={handleFakeInputClick}
+        data-testid="fake-input-wrapper"
       >
         <Text color="secondaryText">{placeholderTitle}</Text>
       </Box>
@@ -85,6 +86,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
           side: 'all',
           color: 'border',
         }}
+        data-testid="textarea-wrapper-ref"
       >
         <TextArea
           plain={true}
@@ -93,6 +95,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
           placeholder={placeholderTitle}
           resize={false}
           autoFocus={true}
+          data-testid="comment-textarea"
         />
         <Box
           direction="row"
@@ -106,7 +109,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
             <Icon type="media" clickable={true} />
             <Icon type="emoji" clickable={true} />
           </Box>
-          <StyledDiv onClick={handlePublish}>
+          <StyledDiv onClick={handlePublish} data-testid="comment-publish-button">
             <Text size="large">{publishTitle}</Text>
           </StyledDiv>
         </Box>
@@ -116,7 +119,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
 
   return (
     <Box direction="row" gap="xsmall" fill="horizontal" pad="none" className={className}>
-      <Avatar src={avatarImg} size="md" seed={ethAddress} />
+      <Avatar src={avatarImg || ethAddress} size="md" />
       {!textAreaOpen && renderFakeInput()}
       {textAreaOpen && renderTextArea()}
     </Box>
