@@ -40,6 +40,7 @@ const TopbarSlot = styled(Box)`
 const PluginSlot = styled(Box)``;
 
 const GlobalStyle = createGlobalStyle<{
+  // @TODO: replace any with design-system's exported theme type
   theme: any;
 }>`
   :root,
@@ -146,7 +147,7 @@ class LayoutWidget extends PureComponent<IProps> {
         </div>
       );
     }
-    const sidebarVisible = typeof showSidebar === 'boolean' && showSidebar;
+    const sidebarVisible = Boolean(showSidebar);
     return (
       <>
         <GlobalStyle theme={lightTheme} />

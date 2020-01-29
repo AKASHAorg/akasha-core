@@ -70,15 +70,11 @@ const Topbar = (props: ITopbarProps) => {
   };
 
   const handleSidebarVisibility = () => {
-    if (!sidebarOpen) {
-      if (typeof onSidebarToggle === 'function') {
-        onSidebarToggle(true);
-      }
+    if (!sidebarOpen && onSidebarToggle) {
+      onSidebarToggle(true);
       setSidebarOpen(true);
-    } else {
-      if (typeof onSidebarToggle === 'function') {
-        onSidebarToggle(false);
-      }
+    } else if (sidebarOpen && onSidebarToggle) {
+      onSidebarToggle(false);
       setSidebarOpen(false);
     }
   };

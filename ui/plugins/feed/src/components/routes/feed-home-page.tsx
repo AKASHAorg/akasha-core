@@ -1,7 +1,7 @@
 import DS from '@akashaproject/design-system';
 import * as React from 'react';
-// import { useTranslation } from 'react-i18next';
-import { /* Link,*/ match } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { match } from 'react-router-dom';
 import { useFeed } from '../../state/feed';
 import FeedItem from '../FeedItem/feed-item';
 
@@ -18,7 +18,7 @@ const EntryCard = styled(FeedItem)`
 `;
 
 const FeedHomePage: React.FC<IFeedHomePageProps> = () => {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
   const [feedState, feedActions] = useFeed();
 
   const [state, setState] = React.useState<{
@@ -53,15 +53,15 @@ const FeedHomePage: React.FC<IFeedHomePageProps> = () => {
 
   return (
     <Box>
-      <React.Suspense fallback={<div>Loading feed</div>}>
+      <React.Suspense fallback={<div>{t('Loading feed')}</div>}>
         {feedState.items.map(item => (
           <div key={item.entryId}>
-            <React.Suspense fallback={<div>Loading entry</div>}>
+            <React.Suspense fallback={<div>{t('Loading entry')}</div>}>
               <EntryCard entryId={item.entryId} />
             </React.Suspense>
           </div>
         ))}
-        <button onClick={fetchMoreArticles}>Get more</button>
+        <button onClick={fetchMoreArticles}>{t('Get more')}</button>
       </React.Suspense>
     </Box>
   );
