@@ -7,13 +7,13 @@ import { loadPlaceholder } from './placeholders';
 import StyledAvatar, { AvatarSize } from './styled-avatar';
 
 export interface AvatarProps extends CommonInterface<HTMLDivElement> {
-  src: string;
+  ethAddress: string;
+  src?: string;
   onClick?: React.MouseEventHandler<any>;
   alt?: string;
   margin?: MarginInterface;
   backgroundColor?: string;
   withBorder?: boolean;
-  guest?: boolean;
   size?: AvatarSize;
 }
 
@@ -24,43 +24,32 @@ export const getAvatarFromSeed = (seed: string) => {
   }
   if (str && str.length) {
     const avatarOption = Array.from(str).reduce((sum: number, letter: string) => {
-      if (letter.codePointAt(0)) {
-        return sum + letter.codePointAt(0)!;
+      if (parseInt(letter, 10)) {
+        return sum + parseInt(letter, 10);
       }
       return sum;
     }, 0);
-    return (avatarOption % 7) + 1;
+    // if user is a visitor his address is 0x0000... so sum is 0
+    // so you can give him a specific placeholder (for now placeholder_7)
+    if (avatarOption === 0) {
+      return 7;
+    }
+    return (avatarOption % 6) + 1;
   }
   // load the first placeholder, just to not throw and error
-  return 1;
+  return 7;
 };
 
 const defaultProps: Partial<AvatarProps> = {
   size: 'md' as AvatarSize,
   withBorder: false,
-  guest: false,
-  src: '0x0000000000000000000000000000000',
+  ethAddress: '0x0000000000000000000000000000000',
 };
 
-/*
- * if guest is true, render avatar in guestMode (same avatar image for all guests)
- * if guest is false and src is missing or empty string, it means
- * that a user (possibly registered) does not set his avatar (determine which avatar to show
- * based on his eth address).
- * There is one more possible case when the guest is false and src is not yet loader
- * (aka. the profile data is not loaded yet), in that case, the avatar should be
- * in loading state.
- */
-
 const Avatar: React.FC<AvatarProps & typeof defaultProps> = props => {
-  const { onClick, guest, src, className, size, margin, withBorder } = props;
+  const { onClick, src, className, size, margin, withBorder, ethAddress } = props;
   const isClickable = typeof onClick === 'function';
-  let avatarImage;
-  if (guest) {
-    avatarImage = loadPlaceholder(`placeholder_${getAvatarFromSeed(src)}`);
-  } else if (src) {
-    avatarImage = src;
-  }
+  const avatarImage = src ? src : loadPlaceholder(`placeholder_${getAvatarFromSeed(ethAddress)}`);
 
   return (
     <StyledAvatar

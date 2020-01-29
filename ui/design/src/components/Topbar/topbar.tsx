@@ -2,7 +2,7 @@ import { Box } from 'grommet';
 import * as React from 'react';
 import styled from 'styled-components';
 import { Icon } from '../../components/Icon';
-import { ProfileAvatarButton } from '../IconButton';
+import { ProfileAvatarButton } from '../Buttons/index';
 import { NotificationsPopover } from '../Popovers/index';
 
 const AvatarButton = styled(ProfileAvatarButton)`

@@ -34,4 +34,4 @@ const IconComponent = () => {
   );
 };
 
-storiesOf('Icon', module).add('default', () => <IconComponent />);
+storiesOf('Icon|Icons', module).add('default', () => <IconComponent />);

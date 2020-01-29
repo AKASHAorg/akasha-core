@@ -12,8 +12,8 @@ const mockClassName = 'test-classname-comment-input';
 const createDefaultComponent = (onPublish?: any) => {
   return (
     <CommentInput
-      placeholderTitle="Write a comment"
-      publishTitle="Publish"
+      placeholderLabel="Write a comment"
+      publishLabel="Publish"
       ethAddress={testEthAddr}
       onPublish={onPublish || jest.fn()}
       className={mockClassName}

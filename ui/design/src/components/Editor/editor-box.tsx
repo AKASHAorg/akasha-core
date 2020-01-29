@@ -4,7 +4,7 @@ import { createEditor, Editor } from 'slate';
 import { withHistory } from 'slate-history';
 import { Slate, withReact } from 'slate-react';
 import { Avatar } from '../Avatar/index';
-import { IEntryData } from '../Cards/entry-box';
+import { IEntryData } from '../Cards/entry-cards/entry-box';
 import { Icon } from '../Icon/index';
 import { EmojiPopover, ImagePopover } from '../Popovers/index';
 import EmbedBox from './embed-box';
@@ -17,14 +17,14 @@ import { StyledBox, StyledDiv, StyledEditable, StyledIconDiv } from './styled-ed
 export interface IEditorBox {
   avatar?: string;
   ethAddress: string;
-  publishTitle: string;
-  placeholderTitle: string;
+  publishLabel: string;
+  placeholderLabel: string;
   onPublish: any;
   embedEntryData?: IEntryData;
 }
 
 const EditorBox: React.FC<IEditorBox> = props => {
-  const { avatar, ethAddress, publishTitle, placeholderTitle, onPublish, embedEntryData } = props;
+  const { avatar, ethAddress, publishLabel, placeholderLabel, onPublish, embedEntryData } = props;
 
   const [editorValue, setEditorValue] = React.useState(defaultValue);
   const [editorSelection, setEditorSelection] = React.useState(null);
@@ -105,7 +105,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
   return (
     <StyledBox pad="none" width="581px" justify="between">
       <Box direction="row" pad="medium" align="start" overflow="auto" className="scrollBox">
-        <Avatar src={avatar || ethAddress} guest={typeof avatar === 'undefined'} />
+        <Avatar src={avatar} ethAddress={ethAddress} />
         <Box width="480px" pad={{ horizontal: 'small' }}>
           <Slate
             editor={editor}
@@ -115,7 +115,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
           >
             <FormatToolbar />
             <StyledEditable
-              placeholder={placeholderTitle}
+              placeholder={placeholderLabel}
               spellCheck={false}
               autoFocus={true}
               renderElement={renderElementMemo}
@@ -136,14 +136,14 @@ const EditorBox: React.FC<IEditorBox> = props => {
           <Icon type="addAppDark" clickable={true} />
           <Icon type="quote" clickable={true} />
           <StyledIconDiv ref={mediaIconRef}>
-            <Icon type="media" clickable={true} onClick={handleMediaClick} />
+            <Icon type="image" clickable={true} onClick={handleMediaClick} />
           </StyledIconDiv>
           <StyledIconDiv ref={emojiIconRef}>
             <Icon type="emoji" clickable={true} onClick={openEmojiPicker} />
           </StyledIconDiv>
         </Box>
         <StyledDiv onClick={handlePublish}>
-          <Text size="large">{publishTitle}</Text>
+          <Text size="large">{publishLabel}</Text>
         </StyledDiv>
       </Box>
       {imagePopoverOpen && mediaIconRef.current && (

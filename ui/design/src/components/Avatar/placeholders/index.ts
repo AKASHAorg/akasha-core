@@ -7,38 +7,42 @@ const REJECTED = 'REJECTED';
 // if the tree shaking/chunking does not work!
 export const loadPlaceholder = (placeholderName: string) => {
   let status = PENDING;
-  let result: any;
-  let promise;
+  let result: string;
+  let promise: Promise<any>;
   switch (placeholderName) {
     case 'placeholder_1':
       promise = import('./placeholder_1');
-      return;
+      break;
     case 'placeholder_2':
       promise = import('./placeholder_2');
-      return;
+      break;
     case 'placeholder_3':
       promise = import('./placeholder_3');
-      return;
+      break;
     case 'placeholder_4':
       promise = import('./placeholder_4');
+      break;
     case 'placeholder_5':
       promise = import('./placeholder_5');
+      break;
     case 'placeholder_6':
       promise = import('./placeholder_6');
+      break;
     case 'placeholder_7':
       promise = import('./placeholder_7');
+      break;
     default:
       promise = import('./placeholder_1');
   }
 
   const suspender = promise
-    .then(r => {
+    .then(res => {
       status = RESOLVED;
-      result = r.default;
+      result = res.default;
     })
-    .catch(e => {
+    .catch(err => {
       status = REJECTED;
-      result = e;
+      result = err;
     });
 
   return {

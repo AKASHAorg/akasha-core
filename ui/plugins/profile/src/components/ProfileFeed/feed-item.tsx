@@ -28,16 +28,16 @@ export const FeedItem: React.FC<IFeedItemProps> = (props) => {
         onClickAvatar={() => {}}
         onClickDownvote={() => {}}
         onClickUpvote={() => {}}
-        commentsTitle={t('Comments')}
-        quotesTitle={t('Quotes')}
-        shareTitle={t('Share')}
-        editPostTitle={t('Edit Post')}
-        editCommentTitle={t('Edit Comment')}
-        copyLinkTitle={t('Copy link')}
-        quotedByTitle={t('Quoted By')}
-        replyTitle={t('Reply')}
-        commentInputPlaceholderTitle={t('Write a comment')}
-        commentInputPublishTitle={t('Publish')}
+        commentsLabel={t('Comments')}
+        quotesLabel={t('Quotes')}
+        shareLabel={t('Share')}
+        editPostLabel={t('Edit Post')}
+        editCommentLabel={t('Edit Comment')}
+        copyLinkLabel={t('Copy link')}
+        quotedByLabel={t('Quoted By')}
+        replyLabel={t('Reply')}
+        commentInputPlaceholderLabel={t('Write a comment')}
+        commentInputPublishLabel={t('Publish')}
         publishComment={() => {}}
         loggedProfileAvatar={itemData.avatar}
         loggedProfileEthAddress={itemData.ethAddress}

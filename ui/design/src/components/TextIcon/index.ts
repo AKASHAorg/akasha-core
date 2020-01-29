@@ -1,4 +1,4 @@
-import SubtitleTextIcon from './subtitle-text-icon';
-import TextIcon from './text-icon';
+import SubtitleTextIcon from './subtitle-text/subtitle-text-icon';
+import TextIcon from './title-text/text-icon';
 
 export { TextIcon, SubtitleTextIcon };
