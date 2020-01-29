@@ -8,8 +8,8 @@ const AvatarDiv = styled.div`
 
 const ShareButtonContainer = styled(Box)`
   position: relative;
-  top: 16px;
-  right: 16px;
+  top: 1em;
+  right: 1em;
 `;
 
 const StyledEditCoverImageBox = styled(Box)`

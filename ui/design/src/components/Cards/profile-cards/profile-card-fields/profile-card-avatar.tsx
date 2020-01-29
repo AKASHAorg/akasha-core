@@ -34,15 +34,18 @@ const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
     <>
       <AvatarDiv>
         <Avatar size="xl" withBorder={true} ethAddress={ethAddress} src={avatar} />
-        {editable && (
-          <StyledAvatarEditDiv>
-            <EditFieldIcon
-              ref={editAvatarRef}
-              popoverHandler={() => setAvatarPopoverOpen(true)}
-              providerIcon={avatarIcon}
-            />
-          </StyledAvatarEditDiv>
-        )}
+        {editable &&
+          profileProvidersData &&
+          profileProvidersData.avatarProviders &&
+          profileProvidersData.avatarProviders.length !== 0 && (
+            <StyledAvatarEditDiv>
+              <EditFieldIcon
+                ref={editAvatarRef}
+                popoverHandler={() => setAvatarPopoverOpen(true)}
+                providerIcon={avatarIcon}
+              />
+            </StyledAvatarEditDiv>
+          )}
       </AvatarDiv>
       {editAvatarRef.current &&
         avatarPopoverOpen &&

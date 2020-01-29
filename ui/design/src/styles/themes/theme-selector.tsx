@@ -4,7 +4,7 @@ import darkTheme from './dark-theme';
 import lightTheme from './light-theme';
 
 export interface IThemeSelector extends GrommetProps {
-  settings: { activeTheme: any };
+  settings: { activeTheme: string };
   availableThemes: string[];
   children: React.ReactNode;
 }

@@ -42,7 +42,7 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
 
   return (
     <Box
-      height="144px"
+      height="9em"
       background={coverImage!.startsWith('data:') ? `url(${coverImage})` : coverImage}
       pad="none"
       round={{ corner: 'top', size: 'xsmall' }}
@@ -65,28 +65,33 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
           </ShareButtonContainer>
         </Box>
       )}
-      {editable && (
-        <Box justify="center" fill="vertical">
-          <StyledEditCoverImageBox
-            direction="row"
-            gap="xsmall"
-            justify="center"
-            onClick={() => setCoverImagePopoverOpen(true)}
-          >
-            <Text size="medium" color="white">
-              {changeCoverImageLabel}
-            </Text>
-            <EditFieldIcon
-              ref={editCoverImageRef}
-              popoverHandler={() => setCoverImagePopoverOpen(true)}
-              providerIcon={coverImageIcon}
-            />
-          </StyledEditCoverImageBox>
-        </Box>
-      )}
+      {editable &&
+        profileProvidersData &&
+        profileProvidersData.coverImageProviders &&
+        profileProvidersData.coverImageProviders.length !== 0 && (
+          <Box justify="center" fill="vertical">
+            <StyledEditCoverImageBox
+              direction="row"
+              gap="xsmall"
+              justify="center"
+              onClick={() => setCoverImagePopoverOpen(true)}
+            >
+              <Text size="medium" color="white">
+                {changeCoverImageLabel}
+              </Text>
+              <EditFieldIcon
+                ref={editCoverImageRef}
+                popoverHandler={() => setCoverImagePopoverOpen(true)}
+                providerIcon={coverImageIcon}
+              />
+            </StyledEditCoverImageBox>
+          </Box>
+        )}
       {editCoverImageRef.current &&
         coverImagePopoverOpen &&
-        profileProvidersData?.coverImageProviders?.length && (
+        profileProvidersData &&
+        profileProvidersData.coverImageProviders &&
+        profileProvidersData.coverImageProviders.length !== 0 && (
           <SelectPopover
             currentValue={coverImage}
             target={editCoverImageRef.current}

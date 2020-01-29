@@ -36,13 +36,16 @@ const ProfileCardDescription: React.FC<IProfileCardDescriptionProps> = props => 
           <Text size="large" weight="bold" color="primaryText">
             {descriptionLabel}
           </Text>
-          {editable && (
-            <EditFieldIcon
-              ref={editDescriptionRef}
-              popoverHandler={() => setDescriptionPopoverOpen(true)}
-              providerIcon={descriptionIcon}
-            />
-          )}
+          {editable &&
+            profileProvidersData &&
+            profileProvidersData.descriptionProviders &&
+            profileProvidersData.descriptionProviders.length && (
+              <EditFieldIcon
+                ref={editDescriptionRef}
+                popoverHandler={() => setDescriptionPopoverOpen(true)}
+                providerIcon={descriptionIcon}
+              />
+            )}
         </Box>
 
         <Text color="primaryText">{description}</Text>

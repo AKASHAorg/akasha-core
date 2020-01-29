@@ -33,19 +33,22 @@ const ProfileCardName: React.FC<IProfileCardNameProps> = props => {
         <Text size="xlarge" weight="bold" color="primaryText">
           {name}
         </Text>
-        {editable && (
-          <EditFieldIcon
-            ref={editNameRef}
-            popoverHandler={() => setNamePopoverOpen(true)}
-            providerIcon={nameIcon}
-          />
-        )}
+        {editable &&
+          profileProvidersData &&
+          profileProvidersData.nameProviders &&
+          profileProvidersData.nameProviders.length !== 0 && (
+            <EditFieldIcon
+              ref={editNameRef}
+              popoverHandler={() => setNamePopoverOpen(true)}
+              providerIcon={nameIcon}
+            />
+          )}
       </Box>
       {editNameRef.current &&
-        namePopoverOpen &&
         profileProvidersData &&
         profileProvidersData.nameProviders &&
-        profileProvidersData.nameProviders.length !== 0 && (
+        profileProvidersData.nameProviders.length !== 0 &&
+        namePopoverOpen && (
           <SelectPopover
             currentValue={name}
             target={editNameRef.current}

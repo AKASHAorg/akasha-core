@@ -25,7 +25,6 @@ const SelectPopover: React.FC<ISelectPopover> = props => {
   return (
     <StyledDrop
       target={target}
-      gap={'-5px'}
       align={{ top: 'bottom', left: 'left' }}
       onClickOutside={closePopover}
       onEsc={closePopover}
