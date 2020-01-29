@@ -39,7 +39,7 @@ export interface Quote extends IUser {
 export type ethAddress = string;
 export interface IEntryBoxProps {
   entryData: IEntryData;
-  onClickAvatar: React.EventHandler<any>;
+  onClickAvatar: React.MouseEventHandler<HTMLAnchorElement>;
   onClickUpvote: React.EventHandler<React.SyntheticEvent>;
   onClickDownvote: React.EventHandler<React.SyntheticEvent>;
   commentsTitle: string;
@@ -236,7 +236,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const renderReplyComment = () => (
     <Box direction="row" gap="xsmall" fill="horizontal" pad={{ horizontal: 'medium' }}>
-      <Avatar src={loggedProfileAvatar} size="md" seed={loggedProfileEthAddress} />
+      <Avatar src={loggedProfileAvatar || loggedProfileEthAddress} size="md" />
       <Box
         ref={wrapperRef}
         fill="horizontal"
@@ -304,7 +304,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           info={formatDate(entryData.time, locale)}
           avatarImage={entryData.avatar}
           onClick={onClickAvatar}
-          seed={entryData.ethAddress}
+          ethAddress={entryData.ethAddress}
         />
         <div ref={menuIconRef}>
           <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} />

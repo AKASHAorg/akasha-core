@@ -22,7 +22,12 @@ const EditableAvatar: React.FC<EditableAvatarProps & Partial<typeof defaultProps
   return (
     <>
       <Avatar {...props} src={newAvatar} onClick={handleClick} />
-      <StyleFileInput type="file" ref={inputRef} onChange={handleChange} />
+      <StyleFileInput
+        data-testid="avatar-file-input"
+        type="file"
+        ref={inputRef}
+        onChange={handleChange}
+      />
     </>
   );
 };

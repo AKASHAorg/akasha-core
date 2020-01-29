@@ -29,7 +29,7 @@ const EmbedBox: React.FC<IEmbedEntryBox> = props => (
       label={props.embedEntryData.name}
       info={formatDate(props.embedEntryData.time)}
       avatarImage={props.embedEntryData.avatar}
-      seed={props.embedEntryData.ethAddress}
+      ethAddress={props.embedEntryData.ethAddress}
     />
 
     <div>{props.embedEntryData.content}</div>

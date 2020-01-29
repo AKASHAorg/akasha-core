@@ -82,12 +82,12 @@ export default class TopbarWidget extends PureComponent<IProps> {
         <Suspense fallback={<>...</>}>
           <Grommet theme={lightTheme}>
             <Topbar
-              ethAddress="0x0"
               avatarImage="https://placebeard.it/360x360"
               userName="john doe"
               brandLabel=""
               onNavigation={this.handleNavigation}
               onSidebarToggle={this.toggleSidebar}
+              ethAddress="0x1ad35f55220234DF32A"
             />
           </Grommet>
         </Suspense>
