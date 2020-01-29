@@ -24,7 +24,7 @@ const SearchInputUsers: React.FC<ISearchInputUsersProps> = props => {
           onClick={() => onClickUser(name)}
           key={index}
           round={{ size: 'xxsmall' }}
-          height="40px"
+          height="2.5em"
           justify="center"
         >
           <Box
@@ -37,7 +37,7 @@ const SearchInputUsers: React.FC<ISearchInputUsersProps> = props => {
               horizontal: 'small',
             }}
           >
-            <Image width="32px" height="32px" src={imageUrl} style={{ borderRadius: '100%' }} />
+            <Image width="2em" height="2em" src={imageUrl} style={{ borderRadius: '100%' }} />
             <Text size="large">{name}</Text>
           </Box>
         </StyledSelectBox>

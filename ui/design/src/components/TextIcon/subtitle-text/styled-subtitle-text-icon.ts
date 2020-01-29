@@ -7,8 +7,8 @@ export interface IIconDiv {
 
 const IconDiv = styled.div<IIconDiv>`
   ${props => {
-    const size = props.iconSize ? props.iconSize : '28px';
-    const radius = props.iconSize ? '100%' : '14px';
+    const size = props.iconSize ? props.iconSize : '1.75em';
+    const radius = props.iconSize ? '100%' : '0.875em';
     return css`
       border-radius: ${radius};
       width: ${size};

@@ -10,7 +10,7 @@ const AvatarButton = styled(ProfileAvatarButton)`
   border: 1px solid ${props => props.theme.colors.border};
   border-radius: 20px;
   padding: ${props => `${props.theme.shapes.baseSpacing * 2}px`};
-  height: 40px;
+  height: 2.5em;
   box-shadow: ${props => props.theme.colors.shadow};
 `;
 
@@ -25,7 +25,12 @@ export interface ITopbarProps {
   onNotificationClick: () => void;
   onWalletClick: (ev: React.SyntheticEvent) => void;
   onNavigation?: (path: string) => void;
+  onSidebarToggle?: (visibility: boolean) => void;
 }
+
+const TopbarWrapper = styled(Box)`
+  background-color: ${props => props.theme.colors.background};
+`;
 
 const Topbar = (props: ITopbarProps) => {
   const {
@@ -36,6 +41,7 @@ const Topbar = (props: ITopbarProps) => {
     notificationsData,
     onNotificationClick,
     onNavigation,
+    onSidebarToggle,
     ethAddress,
   } = props;
   const notificationIconRef: React.Ref<any> = React.useRef(null);
@@ -43,6 +49,7 @@ const Topbar = (props: ITopbarProps) => {
 
   const [notificationsOpen, setNotificationsOpen] = React.useState(false);
   const [walletOpen, setWalletOpen] = React.useState(false);
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   const handleNavigation = (path: string) => () => {
     if (onNavigation) {
@@ -62,8 +69,18 @@ const Topbar = (props: ITopbarProps) => {
     setNotificationsOpen(false);
   };
 
+  const handleSidebarVisibility = () => {
+    if (!sidebarOpen && onSidebarToggle) {
+      onSidebarToggle(true);
+      setSidebarOpen(true);
+    } else if (sidebarOpen && onSidebarToggle) {
+      onSidebarToggle(false);
+      setSidebarOpen(false);
+    }
+  };
+
   return (
-    <Box
+    <TopbarWrapper
       direction="row"
       pad="small"
       justify="between"
@@ -71,7 +88,10 @@ const Topbar = (props: ITopbarProps) => {
       fill={true}
       className={className}
     >
-      <Box direction="row">{brandLabel}</Box>
+      <Box direction="row">
+        <Icon type="plusGrey" onClick={handleSidebarVisibility} />
+        {brandLabel}
+      </Box>
       <Box direction="row">
         <Box
           ref={notificationIconRef}
@@ -105,7 +125,7 @@ const Topbar = (props: ITopbarProps) => {
           />
         </Box>
       </Box>
-    </Box>
+    </TopbarWrapper>
   );
 };
 

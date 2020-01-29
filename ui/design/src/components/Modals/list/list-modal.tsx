@@ -49,9 +49,9 @@ const ListModal: React.FC<IlistModal> = props => {
   };
   return (
     <StyledLayer onEsc={closeModal} onClickOutside={closeModal} modal={true} className={className}>
-      <Box pad="none" width="579px" height="386px">
+      <Box pad="none" width="36em" height="24em">
         <Box pad="medium" justify="between" direction="row" align="center">
-          <TextIcon iconType={iconType} label={label} margin={{ right: '40px' }} />
+          <TextIcon iconType={iconType} label={label} margin={{ right: '2.5em' }} />
           <Text size="large" color="secondaryText">
             {secondaryLabel}
           </Text>

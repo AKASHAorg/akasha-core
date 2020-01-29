@@ -6,6 +6,7 @@ const { styled, ProfileCard } = DS;
 
 const StyledProfileCard = styled(ProfileCard)`
   height: auto;
+  margin-bottom: 0.5em;
 `;
 
 export const MyProfilePageHeader = () => {

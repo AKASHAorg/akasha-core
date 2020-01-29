@@ -24,6 +24,8 @@ export interface IProps {
 
 export default class TopbarWidget extends PureComponent<IProps> {
   public state: { hasErrors: boolean; errorMessage: string };
+  public showSidebarEvent = new CustomEvent('layout:showSidebar');
+  public hideSidebarEvent = new CustomEvent('layout:hideSidebar');
 
   constructor(props: IProps) {
     super(props);
@@ -56,6 +58,13 @@ export default class TopbarWidget extends PureComponent<IProps> {
   //   console.log('show wallet popover');
   //   ev.preventDefault();
   // }
+  public toggleSidebar = (visible: boolean) => {
+    if (visible) {
+      window.dispatchEvent(this.showSidebarEvent);
+    } else {
+      window.dispatchEvent(this.hideSidebarEvent);
+    }
+  };
 
   public render() {
     if (this.state.hasErrors) {
@@ -75,8 +84,9 @@ export default class TopbarWidget extends PureComponent<IProps> {
             <Topbar
               avatarImage="https://placebeard.it/360x360"
               userName="john doe"
-              brandLabel="Ethereum.world"
+              brandLabel=""
               onNavigation={this.handleNavigation}
+              onSidebarToggle={this.toggleSidebar}
               ethAddress="0x1ad35f55220234DF32A"
             />
           </Grommet>

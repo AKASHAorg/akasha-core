@@ -6,7 +6,7 @@ const Wrapper = styled.div<{ minHeight: number }>`
   display: flex;
   min-height: ${props => props.minHeight}px;
   justify-content: center;
-  padding: 10px 0 0 0;
+  padding: 0.625em 0 0 0;
 `;
 
 const rotator = keyframes`
