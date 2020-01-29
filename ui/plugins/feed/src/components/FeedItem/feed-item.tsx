@@ -29,18 +29,18 @@ const FeedItem: React.FC<IFeedItemProps> = props => {
       onClickAvatar={noop}
       onClickDownvote={noop}
       onClickUpvote={noop}
-      commentsTitle="Comments"
-      quotesTitle="Quotes"
-      quotedByTitle="Quoted by"
-      shareTitle="Share"
-      editPostTitle="Edit Post"
-      editCommentTitle="Edit Comment"
-      copyLinkTitle="Copy Link"
-      replyTitle="Reply"
+      commentsLabel="Comments"
+      quotesLabel="Quotes"
+      quotedByLabel="Quoted by"
+      shareLabel="Share"
+      editPostLabel="Edit Post"
+      editCommentLabel="Edit Comment"
+      copyLinkLabel="Copy Link"
+      replyLabel="Reply"
       loggedProfileEthAddress="0x00123"
       locale="en"
-      commentInputPlaceholderTitle="Comment"
-      commentInputPublishTitle="Publish Comment"
+      commentInputPlaceholderLabel="Comment"
+      commentInputPublishLabel="Publish Comment"
       publishComment={noop}
     />
   );

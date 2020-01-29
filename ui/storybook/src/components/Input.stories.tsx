@@ -34,10 +34,10 @@ const SearchInputComponent = () => {
           getData={action('Get Data')}
           dataSource={suggestionsFromSpace}
           placeholder={'Search something...'}
-          resultsTitle="See all results"
-          appsTitle="Apps"
-          tagsTitle="Tags"
-          usersTitle="Users"
+          resultsLabel="See all results"
+          appsLabel="Apps"
+          tagsLabel="Tags"
+          usersLabel="Users"
           onClickUser={(name: string) => action('Click user')(name)}
           onClickTag={(tag: string) => action('Click tag')(tag)}
           onClickApp={(name: string) => action('Click app')(name)}
@@ -53,8 +53,8 @@ const CommentInputComponent = () => {
         <CommentInput
           avatarImg={text('Avatar', 'http://placebeard.it/640/480')}
           ethAddress={text('EthAddress', '0x003410490050000320006570047391024572000')}
-          placeholderTitle="Write a comment"
-          publishTitle="Publish"
+          placeholderLabel="Write a comment"
+          publishLabel="Publish"
           onPublish={() => action('On Publish')('Synthetic Event')}
         />
       </Box>
@@ -62,6 +62,5 @@ const CommentInputComponent = () => {
   );
 };
 
-storiesOf('Input', module)
-  .add('search', () => <SearchInputComponent />)
-  .add('comment', () => <CommentInputComponent />);
+storiesOf('Input|Seach Input', module).add('search', () => <SearchInputComponent />);
+storiesOf('Input|Comment Input', module).add('comment', () => <CommentInputComponent />);

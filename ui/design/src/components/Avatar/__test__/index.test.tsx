@@ -12,7 +12,7 @@ describe('<Avatar /> component', () => {
   let componentWrapper: ReactTestRenderer = create(<></>);
   beforeEach(() => {
     act(() => {
-      componentWrapper = create(wrapWithTheme(<Avatar guest={true} src={'0x01230123450012312'} />));
+      componentWrapper = create(wrapWithTheme(<Avatar ethAddress={'0x01230123450012312'} />));
     });
   });
 
@@ -55,7 +55,10 @@ describe('<Avatar /> component', () => {
   });
   it('when not in guest mode, should load src prop', async () => {
     const src = 'http://placebeard.it/640/480';
-    const { findByTestId } = customRender(<Avatar src={src} />, {});
+    const { findByTestId } = customRender(
+      <Avatar src={src} ethAddress={'0x01230123450012312'} />,
+      {},
+    );
     const image = await waitForElement(() => findByTestId('avatar-image'));
     expect(image.getAttribute('src')).toEqual(src);
   });
@@ -70,7 +73,7 @@ describe('<EditableAvatar /> Component', () => {
     act(() => {
       componentWrapper = create(
         wrapWithTheme(
-          <EditableAvatar guest={true} onChange={jest.fn()} src="0x1230am3421h3i14cvv21n4" />,
+          <EditableAvatar onChange={jest.fn()} ethAddress={'0x1230am3421h3i14cvv21n4'} />,
         ),
       );
     });
@@ -89,7 +92,7 @@ describe('<EditableAvatar /> Component', () => {
   });
   it('should have 1 input type file', async () => {
     const { getAllByTestId } = customRender(
-      <EditableAvatar onChange={jest.fn()} src="0x1230am3421h3i14cvv21n4" />,
+      <EditableAvatar onChange={jest.fn()} ethAddress={'0x1230am3421h3i14cvv21n4'} />,
       {},
     );
     const fileInput = await waitForElement(() => getAllByTestId('avatar-file-input'));
@@ -99,7 +102,7 @@ describe('<EditableAvatar /> Component', () => {
   it('should trigger onChange event when input is changed', async () => {
     const onChange = jest.fn();
     const { findByTestId } = customRender(
-      <EditableAvatar onChange={onChange} src="0x1230am3421h3i14cvv21n4" />,
+      <EditableAvatar onChange={onChange} ethAddress={'0x1230am3421h3i14cvv21n4'} />,
       {},
     );
     const fileInput = await waitForElement(() => findByTestId('avatar-file-input'));
