@@ -24,7 +24,7 @@ const SearchInputTags: React.FC<ISearchInputTagsProps> = props => {
           onClick={() => onClickTag(tag)}
           key={index}
           round={{ size: 'xxsmall' }}
-          height="40px"
+          height="2.5em"
           justify="center"
         >
           <Box

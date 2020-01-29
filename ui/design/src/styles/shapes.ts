@@ -35,23 +35,23 @@ const shapes: IShapes = {
   borderRadius: '8px',
   largeBorderRadius: '11px',
   fontFamily: 'Content-font, Roboto, sans-serif',
-  defaultFontSize: '13px',
+  defaultFontSize: '1em',
   fontSizes: {
     small: {
-      size: '11px',
-      height: '15px',
+      size: '0.5em',
+      height: '1.4',
     },
     medium: {
-      size: '13px',
-      height: '18px',
+      size: '0.813em', // ~13px @16px base
+      height: '1.5',
     },
     large: {
-      size: '15px',
-      height: '22px',
+      size: '0.938em', // ~15px @16px base
+      height: '1.3',
     },
     xlarge: {
-      size: '17px',
-      height: '24px',
+      size: '1.125em', // ~18px @16px base
+      height: '1.5',
     },
   },
   fontWeight: {

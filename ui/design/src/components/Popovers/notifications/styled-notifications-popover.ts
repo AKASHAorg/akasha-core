@@ -19,7 +19,7 @@ const StyledListElem = styled.div`
         cursor: pointer;
       }
       border-radius: ${props.theme.shapes.borderRadius}
-      height: 49px;
+      height: 3em;
       display: flex;
       align-items: center;
     `}

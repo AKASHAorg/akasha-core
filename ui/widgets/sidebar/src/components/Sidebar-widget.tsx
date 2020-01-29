@@ -1,11 +1,9 @@
 import DS from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
-import React, { PureComponent, Suspense, SyntheticEvent } from 'react';
-import { I18nextProvider, useTranslation } from 'react-i18next';
-// @ts-ignore
-import SingleSpaReact from 'single-spa-react';
+import React, { PureComponent, Suspense } from 'react';
+import { I18nextProvider } from 'react-i18next';
 
-const { Box, Grommet, lightTheme, TextIcon } = DS;
+const { Box, Grommet, lightTheme, Icon, styled } = DS;
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;
@@ -69,36 +67,32 @@ interface MenuProps {
 
 const Menu = (props: MenuProps) => {
   const { navigateToUrl } = props;
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
-  // const handleLangChange = (lang: string) => (ev: SyntheticEvent) => {
-  //   const evt = new CustomEvent('change-language', {
-  //     detail: lang,
-  //   });
-  //   document.dispatchEvent(evt);
-  //   ev.preventDefault();
-  // };
-
-  const handleNavigation = (path: string) => (ev: SyntheticEvent) => {
+  const handleNavigation = (path: string) => (/* ev: SyntheticEvent */) => {
     navigateToUrl(path);
-    ev.preventDefault();
   };
 
   return (
-    <Grommet theme={lightTheme}>
-      <Box pad={{ left: '2px' }}>
-        <TextIcon
-          iconType="home"
-          label={`${t('Home')}`}
-          onClick={handleNavigation('/')}
-          clickable={true}
-          menuIcon={true}
-          menuActive={true}
-        />
-        {/* <p>Language</p>
-      <MenuLink onClick={handleLangChange('en')}>{t('English')}</MenuLink>
-      <MenuLink onClick={handleLangChange('ro')}>{t('Romanian')}</MenuLink> */}
-      </Box>
+    <Grommet
+      theme={lightTheme}
+      style={{
+        height: '100vh',
+        position: 'sticky',
+        top: 0,
+      }}
+    >
+      <SidebarWrapper>
+        <Box pad={{ left: '2px' }} style={{ justifyContent: 'space-between', height: '100%' }}>
+          <Icon type="home" onClick={handleNavigation('/')} />
+        </Box>
+      </SidebarWrapper>
     </Grommet>
   );
 };
+
+const SidebarWrapper = styled.div`
+  height: 100%;
+  background: ${props => props.theme.colors.lightBackground};
+  padding: 0.75em 0;
+`;

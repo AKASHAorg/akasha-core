@@ -1,3 +1,19 @@
+export interface IBreakpoint {
+  value: number;
+}
+
+export interface IBreakpoints {
+  small: IBreakpoint;
+  medium: IBreakpoint;
+  large: IBreakpoint;
+  xlarge: IBreakpoint;
+}
+export interface IResponsiveBreakpoints {
+  global: {
+    breakpoints: IBreakpoints;
+  };
+}
+
 export default {
   global: {
     breakpoints: {

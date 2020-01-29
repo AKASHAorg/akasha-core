@@ -24,7 +24,13 @@
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/*profile.* ../../build/plugins",
-    "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8332"
+    "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8332",
+    "pack:watch": "nodemon"
+  },
+  "nodemonConfig": {
+    "ignore": ["lib/*", "dist/*", "build/*"],
+    "exec": "npm run pack",
+    "ext": "ts,tsx"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",

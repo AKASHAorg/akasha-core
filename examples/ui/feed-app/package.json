@@ -5,7 +5,7 @@
   "dependencies": {},
   "peerDependencies": {},
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.config.js --port 8131",
+    "start": "webpack-dev-server --config ./webpack.config.js --port 8131 --host 0.0.0.0",
     "prepare": "tsc --build",
     "prestart": "tsc --build",
     "build:staging": "webpack --config ./webpack.config.js"

@@ -18,13 +18,13 @@ const StyledSelectBox = styled(Box)<BoxProps>`
 `;
 
 const StyledDrop = styled(Drop)<DropProps>`
-  margin-top: 5px;
+  margin-top: 0.313em;
   border-radius: ${props => props.theme.shapes.largeBorderRadius};
 `;
 
 const StyledTextInput = styled(TextInput)<TextInputProps>`
   padding: 0;
-  height: 23px;
+  height: 1.438em;
 
   ${props => css`
     font-family: ${props.theme.shapes.fontFamily};
@@ -58,7 +58,7 @@ const StyledTab = styled(Tab)<TabProps>`
       margin: 0;
       border-bottom: 1px solid ${props.theme.colors.lightGrey};
       text-align: center;
-      padding: 12px 0;
+      padding: 0.75em 0;
 
       > span {
         font-family: ${props.theme.shapes.fontFamily};

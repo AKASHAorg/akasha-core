@@ -6,6 +6,7 @@ const { EntryCard } = DS;
 
 export interface IFeedItemProps {
   entryId: string;
+  className?: string;
 }
 
 const noop = () => {
@@ -42,6 +43,7 @@ const FeedItem: React.FC<IFeedItemProps> = props => {
       commentInputPlaceholderLabel="Comment"
       commentInputPublishLabel="Publish Comment"
       publishComment={noop}
+      className={props.className}
     />
   );
 };

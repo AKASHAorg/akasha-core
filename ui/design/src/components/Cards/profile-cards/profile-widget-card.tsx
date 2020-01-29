@@ -56,12 +56,12 @@ const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
   return (
     <BasicCardBox className={className}>
       <Box
-        height="88px"
+        height="5.5em"
         background={profileData.coverImage}
         pad="none"
         round={{ corner: 'top', size: 'xsmall' }}
       />
-      <Box height="56px" direction="row" pad={{ left: '14px', right: 'medium' }}>
+      <Box height="3.5em" direction="row" pad={{ left: '.875em', right: 'medium' }}>
         <AvatarDiv>
           <Avatar
             withBorder={true}
@@ -81,7 +81,7 @@ const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
         </Box>
       </Box>
       <Box
-        height="72px"
+        height="4.5em"
         border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
         margin={{ horizontal: 'medium' }}
         direction="row"
