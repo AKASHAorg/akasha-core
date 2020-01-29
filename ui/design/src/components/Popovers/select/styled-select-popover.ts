@@ -6,9 +6,9 @@ export interface IStyledDrop {
 }
 
 const StyledDrop = styled(Drop)<IStyledDrop>`
-  margin-top: ${props => (props.gap ? props.gap : '5px')};
+  margin-top: ${props => (props.gap ? props.gap : '0.313em')};
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
-  width: 223px !important;
+  width: 13.938em !important;
 `;
 
 const StyledListElem = styled.div`
@@ -18,7 +18,7 @@ const StyledListElem = styled.div`
         cursor: pointer;
       }
       border-bottom: 1px solid ${props.theme.colors.border}
-      height: 49px;
+      height: 3em;
       display: flex;
       align-items: center;
       

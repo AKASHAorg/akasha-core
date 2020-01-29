@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const AvatarDiv = styled.div`
   position: relative;
-  top: -30px;
+  top: -1.875em;
 `;
 
 const ShareButtonContainer = styled(Box)`
@@ -25,8 +25,8 @@ const StyledEditButtonsDiv = styled.div`
 const StyledCenterDiv = styled.div`
   display: flex;
   align-items: center;
-  width: 24px;
-  height: 24px;
+  width: 1.5em;
+  height: 1.5em;
   border-radius: 50%;
   cursor: pointer;
 `;
@@ -34,11 +34,11 @@ const StyledCenterDiv = styled.div`
 const StyledAvatarEditDiv = styled.div`
   border-radius: 50%;
   position: relative;
-  left: 56px;
-  bottom: 37px;
+  left: 4.5em;
+  bottom: 2.313em;
   border: 3px solid ${props => props.theme.colors.border};
-  height: 24px;
-  width: 24px;
+  height: 1.5em;
+  width: 1.5em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,8 +46,8 @@ const StyledAvatarEditDiv = styled.div`
 `;
 
 const StyledImage = styled(Image)`
-  width: 24px;
-  height: 24px;
+  width: 1.5em;
+  height: 1.5em;
   border-radius: 50%;
 `;
 
