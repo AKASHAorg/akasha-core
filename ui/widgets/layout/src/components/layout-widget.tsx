@@ -24,12 +24,9 @@ const SidebarSlot = styled(Box)<{ visible: boolean }>`
   }
   @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
     position: fixed;
-    left: -999px;
+    left: ${props => (props.visible ? 0 : -999)}px;
     top: 0;
     bottom: 0;
-    &.visible {
-      left: 0;
-    }
   }
 `;
 const TopbarSlot = styled(Box)`
@@ -138,6 +135,7 @@ class LayoutWidget extends PureComponent<IProps> {
   public render() {
     const { sidebarSlotId, topbarSlotId, pluginSlotId } = this.props;
     const { showSidebar } = this.state;
+
     if (this.state.hasErrors) {
       return (
         <div>
@@ -149,7 +147,6 @@ class LayoutWidget extends PureComponent<IProps> {
       );
     }
     const sidebarVisible = typeof showSidebar === 'boolean' && showSidebar;
-
     return (
       <>
         <GlobalStyle theme={lightTheme} />

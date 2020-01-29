@@ -25,6 +25,7 @@ export interface ITopbarProps {
   onNotificationClick: () => void;
   onWalletClick: (ev: React.SyntheticEvent) => void;
   onNavigation?: (path: string) => void;
+  onSidebarToggle?: (visibility: boolean) => void;
 }
 
 const TopbarWrapper = styled(Box)`
@@ -41,12 +42,14 @@ const Topbar = (props: ITopbarProps) => {
     notificationsData,
     onNotificationClick,
     onNavigation,
+    onSidebarToggle,
   } = props;
   const notificationIconRef: React.Ref<any> = React.useRef(null);
   const walletIconRef: React.Ref<any> = React.useRef(null);
 
   const [notificationsOpen, setNotificationsOpen] = React.useState(false);
   const [walletOpen, setWalletOpen] = React.useState(false);
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   const handleNavigation = (path: string) => () => {
     if (onNavigation) {
@@ -66,6 +69,20 @@ const Topbar = (props: ITopbarProps) => {
     setNotificationsOpen(false);
   };
 
+  const handleSidebarVisibility = () => {
+    if (!sidebarOpen) {
+      if (typeof onSidebarToggle === 'function') {
+        onSidebarToggle(true);
+      }
+      setSidebarOpen(true);
+    } else {
+      if (typeof onSidebarToggle === 'function') {
+        onSidebarToggle(false);
+      }
+      setSidebarOpen(false);
+    }
+  };
+
   return (
     <TopbarWrapper
       direction="row"
@@ -75,7 +92,10 @@ const Topbar = (props: ITopbarProps) => {
       fill={true}
       className={className}
     >
-      <Box direction="row">{brandLabel}</Box>
+      <Box direction="row">
+        <Icon type="plusGrey" onClick={handleSidebarVisibility} />
+        {brandLabel}
+      </Box>
       <Box direction="row">
         <Box
           ref={notificationIconRef}

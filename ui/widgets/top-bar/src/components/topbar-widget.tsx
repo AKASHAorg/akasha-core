@@ -24,6 +24,8 @@ export interface IProps {
 
 export default class TopbarWidget extends PureComponent<IProps> {
   public state: { hasErrors: boolean; errorMessage: string };
+  public showSidebarEvent = new CustomEvent('layout:showSidebar');
+  public hideSidebarEvent = new CustomEvent('layout:hideSidebar');
 
   constructor(props: IProps) {
     super(props);
@@ -56,6 +58,13 @@ export default class TopbarWidget extends PureComponent<IProps> {
   //   console.log('show wallet popover');
   //   ev.preventDefault();
   // }
+  public toggleSidebar = (visible: boolean) => {
+    if (visible) {
+      window.dispatchEvent(this.showSidebarEvent);
+    } else {
+      window.dispatchEvent(this.hideSidebarEvent);
+    }
+  };
 
   public render() {
     if (this.state.hasErrors) {
@@ -78,6 +87,7 @@ export default class TopbarWidget extends PureComponent<IProps> {
               userName="john doe"
               brandLabel=""
               onNavigation={this.handleNavigation}
+              onSidebarToggle={this.toggleSidebar}
             />
           </Grommet>
         </Suspense>
