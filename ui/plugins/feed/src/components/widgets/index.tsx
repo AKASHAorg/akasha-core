@@ -1,6 +1,6 @@
 import DS from '@akashaproject/design-system';
-import { IAppData } from '@akashaproject/design-system/lib/components/Cards/apps-widget-card';
-import { ITopicData } from '@akashaproject/design-system/lib/components/Cards/topics-widget-card';
+import { IAppData } from '@akashaproject/design-system/lib/components/Cards/widget-cards/apps-widget-card';
+import { ITopicData } from '@akashaproject/design-system/lib/components/Cards/widget-cards/topics-widget-card';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
