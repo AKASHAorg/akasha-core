@@ -22,6 +22,7 @@ export type IconType =
   | 'code'
   | 'coins'
   | 'document'
+  | 'editSimple'
   | 'edit'
   | 'emoji'
   | 'eye'
@@ -29,6 +30,7 @@ export type IconType =
   | 'heart'
   | 'home'
   | 'hotTopics'
+  | 'image'
   | 'italic'
   | 'link'
   | 'media'
@@ -79,6 +81,7 @@ export const iconTypes: IconType[] = [
   'code',
   'coins',
   'document',
+  'editSimple',
   'edit',
   'emoji',
   'eye',
@@ -86,6 +89,7 @@ export const iconTypes: IconType[] = [
   'heart',
   'home',
   'hotTopics',
+  'image',
   'italic',
   'link',
   'media',

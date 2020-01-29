@@ -11,7 +11,7 @@ export interface IColors {
   shadow: string;
 }
 
-interface IColorsLight extends IColors {
+export interface IColorsLight extends IColors {
   blue: string;
   darkBlue: string;
   darkGrey: string;

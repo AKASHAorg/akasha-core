@@ -2,8 +2,8 @@ import { Box } from 'grommet';
 import * as React from 'react';
 import styled from 'styled-components';
 import { formatDate } from '../../utils/time';
-import { IEntryData } from '../Cards/entry-box';
-import { ProfileAvatarButton } from '../IconButton/index';
+import { ProfileAvatarButton } from '../Buttons/index';
+import { IEntryData } from '../Cards/entry-cards/entry-box';
 
 const StyledBox = styled(Box)`
   background-color: #fbfcfd;

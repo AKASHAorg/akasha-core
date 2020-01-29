@@ -16,12 +16,14 @@ import coins from './coins';
 import comments from './comments';
 import document from './document';
 import edit from './edit';
+import editSimple from './edit-simple';
 import emoji from './emoji';
 import ethereumWorldLogo from './ethereum-world-logo';
 import eye from './eye';
 import heart from './heart';
 import home from './home';
 import hotTopics from './hot-topics';
+import image from './image';
 import italic from './italic';
 import link from './link';
 import media from './media';
@@ -80,11 +82,13 @@ export {
   bold,
   comments,
   close,
+  editSimple,
   edit,
   emoji,
   heart,
   home,
   hotTopics,
+  image,
   italic,
   link,
   media,

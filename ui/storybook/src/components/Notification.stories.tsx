@@ -54,4 +54,4 @@ const NotificationComponent = () => {
   );
 };
 
-storiesOf('Notification', module).add('default', () => <NotificationComponent />);
+storiesOf('Notification| Notifications', module).add('default', () => <NotificationComponent />);
