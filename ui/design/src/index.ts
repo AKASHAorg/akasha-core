@@ -22,9 +22,11 @@ import {
 import { Icon, iconTypes } from './components/Icon';
 import { CommentInput, SearchInput } from './components/Input';
 import { NotificationsPopover, SelectPopover } from './components/Popovers';
+import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
 import { Topbar } from './components/Topbar/index';
 import responsiveBreakpoints from './styles/responsive-breakpoints';
+
 /* Themes and theme related utils */
 import { createTheme } from './styles/themes/create-theme';
 import darkTheme from './styles/themes/dark-theme';
@@ -71,6 +73,8 @@ const exported = {
   css,
   styled,
   createGlobalStyle,
+  ViewportSizeProvider,
+  useViewportSize,
 };
 
 export default exported;
