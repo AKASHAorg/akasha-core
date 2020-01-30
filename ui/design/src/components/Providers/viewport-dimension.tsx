@@ -3,7 +3,10 @@ import responsiveBreakpoints from '../../styles/responsive-breakpoints';
 
 const breakpoints = responsiveBreakpoints.global.breakpoints;
 
-const ViewportSizeCtx = React.createContext({});
+const ViewportSizeCtx = React.createContext({
+  dimensions: { width: 0, height: 0 },
+  size: '',
+});
 const getSizeByWidth = (width: number) => {
   const size = Object.keys(breakpoints).reduce((prev, curr) => {
     if (breakpoints[prev].value - width <= 0) {
