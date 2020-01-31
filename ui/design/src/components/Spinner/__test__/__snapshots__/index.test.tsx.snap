@@ -2,10 +2,10 @@
 
 exports[`Spinner component should match the snapshot: spinner-snapshot 1`] = `
 <div
-  className="StyledGrommet-sc-19lkkz7-0 kheDnz"
+  className="StyledGrommet-sc-19lkkz7-0 fPtJnA"
 >
   <div
-    className="sc-bdVaJa cvdPUx"
+    className="sc-bdVaJa kRSGDk"
   >
     <svg
       className="sc-htpNat bUCXzc"

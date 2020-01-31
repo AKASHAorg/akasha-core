@@ -37,7 +37,11 @@
     "pack:watch": "nodemon"
   },
   "nodemonConfig": {
-    "ignore": ["lib/*", "dist/*", "build/*"],
+    "ignore": [
+      "lib/*",
+      "dist/*",
+      "build/*"
+    ],
     "exec": "npm run pack",
     "ext": "ts,tsx"
   },
@@ -63,20 +67,22 @@
   },
   "devDependencies": {
     "@testing-library/react": "^9.3.2",
+    "@testing-library/react-hooks": "^3.2.1",
     "@types/classnames": "^2.2.9",
     "@types/jest": "^24.0.21",
     "@types/node": "^12.12.3",
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.9.3",
     "@types/react-test-renderer": "^16.9.1",
-    "@types/styled-components": "^4.1.20",
     "@types/slate": "0.47.4",
     "@types/slate-react": "^0.22.8",
-    "react-toastify": "^5.4.0",
+    "@types/styled-components": "^4.1.20",
     "dayjs": "^1.8.16",
+    "react-test-renderer": "^16.12.0",
+    "react-toastify": "^5.4.0",
     "slate": "^0.53.0",
-    "slate-react": "^0.53.0",
-    "slate-history": "0.54.2"
+    "slate-history": "0.54.2",
+    "slate-react": "^0.53.0"
   },
   "peerDependencies": {
     "react": "^16.11.0",
