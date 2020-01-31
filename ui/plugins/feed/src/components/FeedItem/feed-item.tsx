@@ -16,7 +16,6 @@ const noop = () => {
 
 const FeedItem: React.FC<IFeedItemProps> = props => {
   const [feedState, feedActions] = useFeed();
-
   const entryData = feedState.itemData[props.entryId];
 
   feedActions.getFeedItemData({ entryId: props.entryId });
