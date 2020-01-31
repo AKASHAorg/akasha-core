@@ -62,30 +62,30 @@
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "grommet": "2.9.0",
-    "styled-components": "^4.4.1"
+    "grommet": "2.10.0",
+    "styled-components": "^5.0.0"
   },
   "devDependencies": {
-    "@testing-library/react": "^9.3.2",
+    "@testing-library/react": "^9.4.0",
     "@testing-library/react-hooks": "^3.2.1",
     "@types/classnames": "^2.2.9",
-    "@types/jest": "^24.0.21",
-    "@types/node": "^12.12.3",
-    "@types/react": "^16.9.11",
-    "@types/react-dom": "^16.9.3",
-    "@types/react-test-renderer": "^16.9.1",
+    "@types/jest": "^25.1.1",
+    "@types/node": "^13.5.3",
+    "@types/react": "^16.9.19",
+    "@types/react-dom": "^16.9.5",
+    "@types/react-test-renderer": "^16.9.2",
     "@types/slate": "0.47.4",
-    "@types/slate-react": "^0.22.8",
-    "@types/styled-components": "^4.1.20",
-    "dayjs": "^1.8.16",
+    "@types/slate-react": "0.22.8",
+    "@types/styled-components": "^4.4.2",
+    "dayjs": "^1.8.19",
     "react-test-renderer": "^16.12.0",
-    "react-toastify": "^5.4.0",
-    "slate": "^0.53.0",
+    "react-toastify": "^5.5.0",
+    "slate": "0.53.0",
     "slate-history": "0.54.2",
-    "slate-react": "^0.53.0"
+    "slate-react": "0.53.0"
   },
   "peerDependencies": {
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0"
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
   }
 }
