@@ -78,7 +78,7 @@ export const callServiceMethod = R.curry(cServiceMethod);
 
 // es2019
 // tslint:disable-next-line:prefer-array-literal
-export function fromEntries(entries: Array<[string | number, any]>) {
+export function fromEntries(entries: [string | number, any][]) {
   return R.fromPairs(entries);
 }
 
