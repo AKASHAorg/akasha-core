@@ -36,12 +36,12 @@
     "pouchdb-adapter-idb": "^7.1.1"
   },
   "devDependencies": {
-    "jest": "^24.9.0",
-    "ts-jest": "^24.1.0",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.1.0",
     "pouchdb-adapter-memory": "^7.1.1",
-    "rxdb": "^8.7.1"
+    "rxdb": "^8.7.5"
   },
   "peerDependencies": {
-    "rxdb": "^8.7.1"
+    "rxdb": "^8.7.5"
   }
 }
