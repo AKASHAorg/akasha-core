@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
-    "lib": ["dom"]
+    "lib": ["esnext", "dom"]
   },
   "references": [
     {
@@ -14,16 +14,8 @@
     },
     {
       "path": "../common"
-    },
-    {
-      "path": "../db"
-    },
-    {
-      "path": "../app-loader"
-    },
-    {
-      "path": "../auth"
     }
   ],
-  "include": ["./src"]
+  "include": ["./src"],
+  "exclude": ["./node_modules"]
 }

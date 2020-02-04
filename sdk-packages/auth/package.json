@@ -1,12 +1,12 @@
 {
-  "name": "@akashaproject/sdk-common",
+  "name": "@akashaproject/sdk-auth",
   "version": "0.1.0",
   "description": "> TODO: description",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
   ],
-  "homepage": "https://github.com/AkashaProject/akasha-world-framework#readme",
+  "homepage": "https://github.com/AKASHAorg/akasha-world-framework#readme",
   "license": "AGPL-3.0",
   "main": "lib/index.js",
   "directories": {
@@ -18,26 +18,20 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-world-framework.git"
   },
   "scripts": {
     "test": "jest",
     "tsc": "tsc --build",
-    "prepare": "npm run tsc",
-    "docs": "typedoc"
+    "prepare": "npm run tsc"
   },
   "bugs": {
-    "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
+    "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"
   },
   "dependencies": {
-    "@akashaproject/jsonschema-web3": "^1.0.3",
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-runtime": "*",
-    "@walletconnect/web3-provider": "^1.0.0-beta.36",
-    "ethers": "^4.0.44",
-    "ipfs": "^0.40.0"
-  },
-  "devDependencies": {
-    "@types/node": "13.7.0"
+    "@akashaproject/sdk-common": "*",
+    "superagent": "^5.2.1"
   }
 }
