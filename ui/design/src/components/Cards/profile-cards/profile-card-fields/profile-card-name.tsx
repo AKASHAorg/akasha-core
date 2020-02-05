@@ -1,8 +1,8 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
+import { AppIcon } from '../../../Icon/index';
 import { SelectPopover } from '../../../Popovers/index';
 import { IProfileDataProvider, IProfileProvidersData } from '../profile-card';
-import { EditFieldIcon } from './ edit-field-icon';
 
 export interface IProfileCardNameProps {
   editable: boolean;
@@ -37,10 +37,11 @@ const ProfileCardName: React.FC<IProfileCardNameProps> = props => {
           profileProvidersData &&
           profileProvidersData.nameProviders &&
           profileProvidersData.nameProviders.length !== 0 && (
-            <EditFieldIcon
+            <AppIcon
               ref={editNameRef}
-              popoverHandler={() => setNamePopoverOpen(true)}
-              providerIcon={nameIcon}
+              onClick={() => setNamePopoverOpen(true)}
+              appImg={nameIcon}
+              placeholderIconType="editSimple"
             />
           )}
       </Box>

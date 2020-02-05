@@ -161,4 +161,4 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
     `}
 `;
 
-export default Icon;
+export { Icon };

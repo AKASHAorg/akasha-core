@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Editor, Range } from 'slate';
 import { ReactEditor, useSlate } from 'slate-react';
 import styled from 'styled-components';
-import Icon, { IconType } from '../Icon/icon';
+import { Icon, IconType } from '../Icon/icon';
 
 const StyledDiv = styled.div`
   margin: 0 ${props => props.theme.shapes.baseSpacing}px;

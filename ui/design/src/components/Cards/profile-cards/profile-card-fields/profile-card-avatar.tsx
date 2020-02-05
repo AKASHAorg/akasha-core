@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Avatar } from '../../../Avatar/index';
+import { AppIcon } from '../../../Icon/index';
 import { SelectPopover } from '../../../Popovers/index';
 import { IProfileDataProvider, IProfileProvidersData } from '../profile-card';
 import { AvatarDiv, StyledAvatarEditDiv } from '../styled-profile-card';
-import { EditFieldIcon } from './ edit-field-icon';
 
 export interface IProfileCardAvatarProps {
   editable: boolean;
@@ -39,10 +39,11 @@ const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
           profileProvidersData.avatarProviders &&
           profileProvidersData.avatarProviders.length !== 0 && (
             <StyledAvatarEditDiv>
-              <EditFieldIcon
+              <AppIcon
                 ref={editAvatarRef}
-                popoverHandler={() => setAvatarPopoverOpen(true)}
-                providerIcon={avatarIcon}
+                onClick={() => setAvatarPopoverOpen(true)}
+                appImg={avatarIcon}
+                placeholderIconType="editSimple"
               />
             </StyledAvatarEditDiv>
           )}
