@@ -75,7 +75,6 @@ const ThemeSelector = (props: IThemeSelector) => {
     }
   }, [props.settings.activeTheme]);
   if (loadedTheme && props.themeReadyEvent) {
-    console.log('the ready in selector', loadedTheme);
     props.themeReadyEvent();
   }
   return (
