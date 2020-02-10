@@ -3,19 +3,19 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { match } from 'react-router-dom';
 import { useFeed } from '../../state/feed';
-import FeedItem from '../FeedItem/feed-item';
+// import FeedItem from '../FeedItem/feed-item';
 
-const { Box, styled } = DS;
+const { Box, VirtualList } = DS;
 
 export interface IFeedHomePageProps {
   rootPath: string;
   match: match<any> | null;
 }
 
-const EntryCard = styled(FeedItem)`
-  margin-bottom: 0.5em;
-  height: auto;
-`;
+// const EntryCard = styled(FeedItem)`
+//   margin-bottom: 0.5em;
+//   height: auto;
+// `;
 
 const FeedHomePage: React.FC<IFeedHomePageProps> = () => {
   const { t } = useTranslation();
@@ -42,26 +42,27 @@ const FeedHomePage: React.FC<IFeedHomePageProps> = () => {
     }
   }, [feedState.items.length]);
 
-  const fetchMoreArticles = (ev: React.SyntheticEvent) => {
+  const fetchMoreArticles = () => {
+    console.log(feedState.items, 'the items');
     setState({
       prevItemIdx: feedState.items[feedState.items.length - 1].entryId,
       limit: state.limit,
       showLoadingSpinner: true,
     });
-    ev.preventDefault();
   };
 
   return (
     <Box>
       <React.Suspense fallback={<div>{t('Loading feed')}</div>}>
-        {feedState.items.map(item => (
+        <VirtualList items={feedState.items} loadMore={fetchMoreArticles} />
+        {/* {feedState.items.map(item => (
           <div key={item.entryId}>
             <React.Suspense fallback={<div>{t('Loading entry')}</div>}>
               <EntryCard entryId={item.entryId} />
             </React.Suspense>
           </div>
         ))}
-        <button onClick={fetchMoreArticles}>{t('Get more')}</button>
+        <button onClick={fetchMoreArticles}>{t('Get more')}</button> */}
       </React.Suspense>
     </Box>
   );

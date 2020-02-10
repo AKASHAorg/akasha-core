@@ -26,6 +26,7 @@ import ViewportSizeProvider, { useViewportSize } from './components/Providers/vi
 import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
 import { Topbar } from './components/Topbar/index';
 import responsiveBreakpoints from './styles/responsive-breakpoints';
+import VirtualList from './components/VirtualList';
 
 /* Themes and theme related utils */
 import { createTheme } from './styles/themes/create-theme';
@@ -75,6 +76,7 @@ const exported = {
   createGlobalStyle,
   ViewportSizeProvider,
   useViewportSize,
+  VirtualList,
 };
 
 export default exported;
