@@ -16,7 +16,7 @@
     "@storybook/addon-links": "5.3.9",
     "@storybook/addon-storysource": "5.3.9",
     "@storybook/addons": "5.3.9",
-    "@storybook/core-events": "5.3.9",
+    "@storybook/core-events": "5.3.13",
     "@storybook/react": "5.3.9",
     "@storybook/theming": "5.3.9",
     "@types/storybook__addon-info": "^5.2.1",
