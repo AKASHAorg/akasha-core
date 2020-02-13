@@ -9,7 +9,7 @@ import dbServices, {
   DB_SERVICE,
   DB_SETTINGS_ATTACHMENT,
   moduleName as DB_MODULE,
-} from '../../db/lib/constants';
+} from '@akashaproject/sdk-db/lib/constants';
 import { AUTH_ENDPOINT, AUTH_MESSAGE, AUTH_SERVICE, moduleName } from './constants';
 import * as superagent from 'superagent';
 

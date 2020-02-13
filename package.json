@@ -4,39 +4,30 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --no-ci",
     "bootstrap:hoist": "lerna bootstrap --hoist",
-
     "build:all": "lerna bootstrap --no-ci && lerna run tsc && npm run build:sdk && npm run pack:ui-apps && npm run extract:translations",
     "build:sdk": "npm run tsc:sdk && lerna run build --scope @akashaproject/sdk --stream",
-
     "clean": "lerna clean",
     "docs": "lerna run docs --scope @akashaproject/sdk --scope @akashaproject/sdk-common",
     "install:clean": "npm run clean && npm run build:all",
-
     "compile:sc": "lerna run compile:sc",
     "deploy:sc": "lerna run deploy:sc",
     "extract:translations": "lerna run extract:translations --stream",
-
     "linter:check": "tslint --project tsconfig.json",
     "linter:fix": "tslint --project tsconfig.json --fix",
-
     "pack:ui-apps": "lerna run pack --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream",
     "pack:only": "lerna run pack --scope $AWF_PACKAGE --stream",
     "pack:watch": "lerna run pack:watch --scope $AWF_PACKAGE --stream",
-
     "tsc:sdk": "lerna run tsc --scope @akashaproject/sdk --scope @akashaproject/sdk-*",
     "tsc:ui": "lerna run tsc --scope @akashaproject/design-* --scope @akashaproject/ui-*",
     "tsc:scripts": "lerna run tsc --scope @akashaproject/script-*",
     "script:dev-db": "lerna run start --scope @akashaproject/script-server-db --stream",
-
     "start:feed-app": "lerna exec --parallel --scope translations-server --scope feed-app-dev -- npm run start --stream",
     "start:translations-server": "npm run start --prefix scripts/translations-server",
     "start:design-system:storybook": "lerna run storybook --scope @akashaproject/storybook --stream",
     "start:only": "lerna run start --scope $AWF_PACKAGE --stream",
     "start:api": "docker-compose up -d",
     "stop:api": "docker-compose stop awf-api couchbase",
-
     "watch-plugins": "lerna exec --parallel --scope @akashaproject/ui-widget-* --scope @akashaproject/ui-plugin-* -- tsc -w",
-
     "test:sdk": "lerna run test --scope @akashaproject/sdk-* --stream",
     "test:ui": "lerna run test --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream",
     "test:ui:watch": "lerna exec --parallel --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream -- jest --watch"
@@ -46,15 +37,15 @@
     "@babel/plugin-syntax-dynamic-import": "7.8.3",
     "@babel/preset-env": "7.8.4",
     "@babel/preset-react": "7.8.3",
-    "@types/jest": "25.1.1",
-    "@types/node": "13.7.0",
+    "@types/jest": "25.1.2",
+    "@types/node": "13.7.1",
     "babel-loader": "8.0.6",
     "babel-plugin-i18next-extract": "0.6.1",
     "clean-webpack-plugin": "3.0.0",
     "copy-webpack-plugin": "5.1.1",
     "copyfiles": "2.2.0",
     "html-webpack-plugin": "3.2.0",
-    "husky": "4.2.1",
+    "husky": "4.2.3",
     "i18next-parser": "1.0.2",
     "jest": "25.1.0",
     "lerna": "3.20.2",
@@ -74,8 +65,8 @@
     "tslint-react-hooks": "2.2.1",
     "typedoc": "0.16.9",
     "typescript": "3.7.5",
-    "webpack": "4.41.5",
-    "webpack-cli": "3.3.10",
+    "webpack": "4.41.6",
+    "webpack-cli": "3.3.11",
     "webpack-dev-server": "3.10.3"
   },
   "workspaces": [
