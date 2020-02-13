@@ -33,7 +33,15 @@ const service: AkashaService = (invoke, log) => {
   };
 
   const put = async (args: { obj: RxAttachmentCreator; ethAddress: string }) => {
-    const settingsDoc = await getSettingsDoc(args.ethAddress);
+    let settingsDoc = await getSettingsDoc(args.ethAddress);
+    if (!settingsDoc) {
+      const akashaDB = await getDB();
+      settingsDoc = await akashaDB[settings.name].insert({
+        ethAddress: args.ethAddress,
+        moduleName: moduleName,
+        services: [],
+      });
+    }
     return putSettingsAttachment(settingsDoc, args.obj);
   };
 
