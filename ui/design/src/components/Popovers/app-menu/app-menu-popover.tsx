@@ -1,20 +1,25 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { IApp } from '../../Bars/sidebar/sidebar';
+import { IconLink } from '../../Buttons';
 import { Icon } from '../../Icon/index';
 import { StyledDrop } from './styled-app-menu-popover';
 
 export interface IAppMenuPopover {
   appData: IApp;
-  aboutLabel: string;
-  feedLabel: string;
-  collectionsLabel: string;
   target: HTMLDivElement;
   closePopover: () => void;
+  onClickOption: (option: string) => void;
 }
 
 const AppMenuPopover: React.FC<IAppMenuPopover> = props => {
-  const { appData, aboutLabel, feedLabel, collectionsLabel, target, closePopover } = props;
+  const { appData, target, closePopover, onClickOption } = props;
+  console.log(appData);
+
+  const handleOptionClick = (option: string) => () => {
+    onClickOption(option);
+    closePopover();
+  };
   return (
     <StyledDrop
       target={target}
@@ -31,18 +36,9 @@ const AppMenuPopover: React.FC<IAppMenuPopover> = props => {
           </Box>
         </Box>
         <Box direction="column" gap="xsmall">
-          <Box gap="xsmall" direction="row" align="center">
-            <Icon type="app" />
-            <Text>{aboutLabel}</Text>
-          </Box>
-          <Box gap="xsmall" direction="row" align="center">
-            <Icon type="quote" />
-            <Text>{feedLabel}</Text>
-          </Box>
-          <Box gap="xsmall" direction="row" align="center">
-            <Icon type="bookmark" />
-            <Text>{collectionsLabel}</Text>
-          </Box>
+          {appData.options.map((option, index) => (
+            <IconLink key={index} label={option} onClick={handleOptionClick(option)} />
+          ))}
         </Box>
       </Box>
     </StyledDrop>

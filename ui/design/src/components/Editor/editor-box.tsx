@@ -1,8 +1,8 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { createEditor } from 'slate';
-import { withHistory, HistoryEditor } from 'slate-history';
-import { Slate, withReact, ReactEditor } from 'slate-react';
+import { withHistory } from 'slate-history';
+import { Slate, withReact } from 'slate-react';
 import { Avatar } from '../Avatar/index';
 import { IEntryData } from '../Cards/entry-cards/entry-box';
 import { Icon } from '../Icon/index';

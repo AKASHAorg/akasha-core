@@ -27,7 +27,6 @@ const UserSection: React.FC<IUserSectionProps> = props => {
       <Avatar ethAddress={ethAddress} src={avatarImage} />
       <Icon type="notifications" clickable={true} />
       <Icon type="search" clickable={true} />
-      <Icon type="activity" clickable={true} />
     </StyledUserSectionBox>
   );
 };

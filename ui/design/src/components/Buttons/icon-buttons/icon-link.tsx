@@ -7,6 +7,8 @@ export interface ILinkIconButtonProps {
   iconPosition?: 'start' | 'end';
   icon?: React.ReactElement;
   label: string | number;
+  active?: boolean;
+  padded?: boolean;
 }
 
 const LinkIconButton = (props: ILinkIconButtonProps) => {
