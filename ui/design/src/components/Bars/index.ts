@@ -1,5 +1,6 @@
+import { ResponsiveSidebar } from './sidebar/responsive-sidebar';
 import { Sidebar } from './sidebar/sidebar';
-import { SidebarWithPopover } from './sidebar/sidebar-with-popover';
+import { SidebarMobile } from './sidebar/sidebar-mobile';
 import Topbar from './topbar';
 
-export { Sidebar, Topbar, SidebarWithPopover };
+export { Sidebar, Topbar, SidebarMobile, ResponsiveSidebar };

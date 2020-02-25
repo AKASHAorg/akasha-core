@@ -18,6 +18,7 @@ export interface ITextIconProps {
   actionType?: IActionType;
   menuActive?: boolean;
   menuIcon?: boolean;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export type IActionType = 'Assign Tokens' | 'Create a new vote' | 'Check finance';
@@ -51,6 +52,7 @@ const TextIcon: React.FC<ITextIconProps> = props => {
     actionType,
     menuActive,
     menuIcon,
+    size,
   } = props;
 
   return (
@@ -68,9 +70,9 @@ const TextIcon: React.FC<ITextIconProps> = props => {
       menuIcon={menuIcon}
     >
       {actionType ? (
-        <Icon type={actionTypeIcons[actionType]} color={color} />
+        <Icon type={actionTypeIcons[actionType]} color={color} size={size} />
       ) : (
-        <Icon type={iconType} color={color} />
+        <Icon type={iconType} color={color} size={size} />
       )}
 
       <StyledText bold={bold}>{label}</StyledText>

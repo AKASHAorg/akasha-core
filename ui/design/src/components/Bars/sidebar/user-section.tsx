@@ -7,10 +7,11 @@ export interface IUserSectionProps {
   avatarImage?: string;
   ethAddress: string;
   notifications?: any;
+  onClickSearch: () => void;
 }
 
 const UserSection: React.FC<IUserSectionProps> = props => {
-  const { avatarImage, ethAddress } = props;
+  const { avatarImage, ethAddress, onClickSearch } = props;
   return (
     <StyledUserSectionBox
       pad="xsmall"
@@ -26,7 +27,7 @@ const UserSection: React.FC<IUserSectionProps> = props => {
     >
       <Avatar ethAddress={ethAddress} src={avatarImage} />
       <Icon type="notifications" clickable={true} />
-      <Icon type="search" clickable={true} />
+      <Icon type="search" clickable={true} onClick={onClickSearch} />
     </StyledUserSectionBox>
   );
 };

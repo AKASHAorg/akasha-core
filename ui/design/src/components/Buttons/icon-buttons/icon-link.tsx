@@ -1,7 +1,8 @@
+import { AnchorProps } from 'grommet';
 import * as React from 'react';
 import StyledIconLink from './styled-icon-link';
 
-export interface ILinkIconButtonProps {
+export interface ILinkIconButtonProps extends AnchorProps {
   className?: string;
   onClick?: React.EventHandler<React.SyntheticEvent>;
   iconPosition?: 'start' | 'end';

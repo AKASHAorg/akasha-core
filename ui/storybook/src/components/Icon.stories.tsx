@@ -34,7 +34,16 @@ const IconComponent = () => {
   );
 };
 
-storiesOf('Icon|Icons', module).add('default', () => <IconComponent />);
+storiesOf('Icon|Icons', module)
+  .add('list view', () => <IconComponent />)
+  .add('sizes', () => (
+    <Box align="center" gap="medium">
+      <Icon type={select('Icons', iconTypes, 'activity')} size="sm" />
+      <Icon type={select('Icons', iconTypes, 'activity')} size="md" />
+      <Icon type={select('Icons', iconTypes, 'activity')} size="lg" />
+    </Box>
+  ));
+
 storiesOf('Icon|AppIcon', module)
   .add('with placeholder', () => (
     <Box align="center">

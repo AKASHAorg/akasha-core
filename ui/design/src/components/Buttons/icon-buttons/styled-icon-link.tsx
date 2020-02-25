@@ -19,7 +19,7 @@ const StyledIconLink = styled(Anchor)<ILinkIconButtonProps>`
   ${props => {
     if (props.padded) {
       return css`
-        padding: 0 0.8em;
+        padding: 0 0.8rem;
       `;
     }
     return;
@@ -35,7 +35,7 @@ const StyledIconLink = styled(Anchor)<ILinkIconButtonProps>`
   }
   svg {
     height: 100%;
-    width: 1.25em;
+    width: 1.25rem;
     stroke: ${props => props.theme.colors.lightGrey};
     & * {
       stroke: ${props => props.theme.colors.secondaryText};

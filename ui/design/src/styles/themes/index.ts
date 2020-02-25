@@ -22,11 +22,9 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
           shadow: styledComponentsTheme.colors.shadow,
         },
       },
+
       drop: {
         shadowSize: 'shadow',
-        extend: `
-          border: solid 1px ${styledComponentsTheme.colors.border};
-        `,
       },
       input: {
         weight: styledComponentsTheme.shapes.fontWeight.regular,
@@ -56,6 +54,12 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
           color: 'transparent',
         },
       },
+    },
+    accordion: {
+      icons: {
+        color: `${styledComponentsTheme.colors.border}`,
+      },
+      border: undefined,
     },
     text: {
       small: {

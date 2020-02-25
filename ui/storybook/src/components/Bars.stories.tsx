@@ -10,65 +10,53 @@ const installedAppsData = [
     name: '3Box',
     ethAddress: '0x003410490050000327496570034567114572111',
     image: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
-    options: ['Discover', 'About', 'Settings', 'Notifications'],
+    options: ['Discover', 'About', 'Settings', 'Notifications', 'Feed'],
   },
   {
     name: 'ENS',
     ethAddress: '0x003410490050000327496570034567114572231',
     image: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
-    options: ['Discover', 'About', 'Settings', 'Notifications'],
+    options: ['About', 'Settings', 'Notifications'],
   },
   {
     name: '3Box',
     ethAddress: '0x003410490050000327496570034567114572111',
     image: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
-    options: ['Discover', 'About', 'Settings', 'Notifications'],
+    options: ['Discover', 'About', 'Settings', 'Notifications', 'Feed'],
   },
   {
     name: 'ENS',
     ethAddress: '0x003410490050000327496570034567114572231',
     image: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
-    options: ['Discover', 'About', 'Settings', 'Notifications'],
+    options: ['About', 'Settings', 'Notifications'],
   },
   {
     name: '3Box',
     ethAddress: '0x003410490050000327496570034567114572111',
     image: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
-    options: ['Discover', 'About', 'Settings', 'Notifications'],
+    options: ['Discover', 'About', 'Settings', 'Notifications', 'Feed'],
   },
   {
     name: 'ENS',
     ethAddress: '0x003410490050000327496570034567114572231',
     image: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
-    options: ['Discover', 'About', 'Settings', 'Notifications'],
-  },
-  {
-    name: '3Box',
-    ethAddress: '0x003410490050000327496570034567114572111',
-    image: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
-    options: ['Discover', 'About', 'Settings', 'Notifications'],
-  },
-  {
-    name: 'ENS',
-    ethAddress: '0x003410490050000327496570034567114572231',
-    image: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
-    options: ['Discover', 'About', 'Settings', 'Notifications'],
+    options: ['About', 'Settings', 'Notifications'],
   },
   {
     name: 'GitCoin',
     ethAddress: '0x003410490050000327496570034567114572111',
     image: '',
-    options: ['Discover', 'About', 'Settings', 'Notifications'],
+    options: ['Bounties', 'About', 'Settings', 'Notifications'],
   },
   {
     name: 'Augur',
     ethAddress: '0x003410490050000327496570034567114572231',
     image: '',
-    options: ['Discover', 'About', 'Settings', 'Notifications'],
+    options: ['Markets', 'About', 'Settings', 'Notifications'],
   },
 ];
 
-const { Sidebar, TextIcon, Topbar, SidebarWithPopover } = DS;
+const { Sidebar, TextIcon, Topbar, SidebarMobile } = DS;
 storiesOf('Bars|Topbar', module).add('Topbar', () => (
   <Topbar
     ethAddress="0x003410490050000320006570034567114572000"
@@ -87,20 +75,28 @@ storiesOf('Bars|Sidebar', module)
         avatarImage="https://placebeard.it/360x360"
         notifications={notificationsData}
         installedApps={installedAppsData}
-        onClickAddApp={action('Add App Clicked')}
-        onClickOption={action('Option Clicked')}
+        onClickAddApp={() => action('Add app Clicked')('Synthetic Event')}
+        onClickOption={() => action('Option Clicked')('Synthetic Event')}
+        searchLabel="Search"
+        appCenterLabel="App Center"
+        onClickCloseSidebar={() => action('Close Sidebar Clicked')('Synthetic Event')}
+        onClickSearch={() => action('Search Clicked')('Synthetic Event')}
       />
     </div>
   ))
-  .add('Sidebar With Popover', () => (
-    <div style={{ height: '450px', border: '2px solid black' }}>
-      <SidebarWithPopover
+  .add('Sidebar for Mobile', () => (
+    <div style={{ height: '400px', width: '180px', border: '2px solid black' }}>
+      <SidebarMobile
         ethAddress="0x003410490050000320006570034567114572000"
         avatarImage="https://placebeard.it/360x360"
         notifications={notificationsData}
         installedApps={installedAppsData}
-        onClickAddApp={action('Add App Clicked')}
-        onClickOption={action('Option Clicked')}
+        onClickAddApp={() => action('App center Clicked')('Synthetic Event')}
+        onClickOption={() => action('Option Clicked')('Synthetic Event')}
+        searchLabel="Search"
+        appCenterLabel="App Center"
+        onClickCloseSidebar={() => action('Close Sidebar Clicked')('Synthetic Event')}
+        onClickSearch={() => action('Search Clicked')('Synthetic Event')}
       />
     </div>
   ));
