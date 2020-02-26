@@ -46,3 +46,6 @@ jobs:
       - run: # extract-translations
           name: extract-translations
           command: npm run extract:translations
+      - run: # build-storybook
+          name: build-storybook
+          command: make build.staging.storybook
