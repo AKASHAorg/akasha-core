@@ -1,0 +1,37 @@
+{
+  "name": "@akashaproject/sdk-profiles",
+  "version": "0.1.0",
+  "description": "> TODO: description",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "contributors": [
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
+  ],
+  "homepage": "https://github.com/AkashaProject/akasha-world-framework#readme",
+  "license": "AGPL-3.0",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+  },
+  "scripts": {
+    "test": "jest",
+    "tsc": "tsc --build",
+    "prepare": "npm run tsc"
+  },
+  "bugs": {
+    "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
+  },
+  "dependencies": {
+    "@akashaproject/sdk-core": "*",
+    "@akashaproject/sdk-runtime": "*",
+    "@akashaproject/sdk-common": "*",
+    "@akashaproject/sdk-db": "*"
+  }
+}
