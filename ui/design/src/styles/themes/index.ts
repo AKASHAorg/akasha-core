@@ -22,11 +22,9 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
           shadow: styledComponentsTheme.colors.shadow,
         },
       },
+
       drop: {
         shadowSize: 'shadow',
-        extend: `
-          border: solid 1px ${styledComponentsTheme.colors.border};
-        `,
       },
       input: {
         weight: styledComponentsTheme.shapes.fontWeight.regular,
@@ -49,12 +47,19 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         },
         accent: styledComponentsTheme.colors.accent,
         brand: styledComponentsTheme.colors.accent,
+        background: styledComponentsTheme.colors.background,
       },
       focus: {
         border: {
           color: 'transparent',
         },
       },
+    },
+    accordion: {
+      icons: {
+        color: `${styledComponentsTheme.colors.border}`,
+      },
+      border: undefined,
     },
     text: {
       small: {

@@ -52,4 +52,4 @@ const SelectPopover: React.FC<ISelectPopover> = props => {
   );
 };
 
-export default SelectPopover;
+export { SelectPopover };

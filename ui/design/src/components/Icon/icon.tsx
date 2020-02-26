@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import CommonInterface from '../../interfaces/common.interface';
 import * as icons from './new-icons';
 
@@ -27,13 +27,16 @@ export type IconType =
   | 'emoji'
   | 'eye'
   | 'ethereumWorldLogo'
+  | 'facebook'
   | 'heart'
   | 'home'
   | 'hotTopics'
   | 'image'
   | 'italic'
+  | 'info'
   | 'link'
   | 'media'
+  | 'menu'
   | 'moreDark'
   | 'moreGrey'
   | 'notifications'
@@ -43,6 +46,7 @@ export type IconType =
   | 'plusDark'
   | 'plusGrey'
   | 'quote'
+  | 'reddit'
   | 'reload'
   | 'reply'
   | 'report'
@@ -59,6 +63,7 @@ export type IconType =
   | 'thumbsUpWhite'
   | 'transfer'
   | 'trendingApps'
+  | 'twitter'
   | 'underline'
   | 'upload'
   | 'wallet';
@@ -86,13 +91,16 @@ export const iconTypes: IconType[] = [
   'emoji',
   'eye',
   'ethereumWorldLogo',
+  'facebook',
   'heart',
   'home',
   'hotTopics',
   'image',
+  'info',
   'italic',
   'link',
   'media',
+  'menu',
   'moreDark',
   'moreGrey',
   'notifications',
@@ -101,6 +109,7 @@ export const iconTypes: IconType[] = [
   'pin',
   'plusDark',
   'quote',
+  'reddit',
   'reload',
   'reply',
   'report',
@@ -117,6 +126,7 @@ export const iconTypes: IconType[] = [
   'thumbsUpWhite',
   'transfer',
   'trendingApps',
+  'twitter',
   'underline',
   'upload',
   'wallet',
@@ -125,9 +135,10 @@ export const iconTypes: IconType[] = [
 export interface IconProps extends CommonInterface<any> {
   color?: string;
   className?: string;
-  type: IconType;
+  type: IconType | string;
   clickable?: boolean;
   default?: boolean;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 const IconBase: React.FC<IconProps> = ({ color, className, type, clickable, ...props }) => {
@@ -159,6 +170,33 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
         }
       }
     `}
+    ${props => {
+      if (props.size) {
+        switch (props.size) {
+          case 'sm':
+            return css`
+              width: 1.5em;
+              height: 1.5em;
+            `;
+          case 'md':
+            return css`
+              width: 2em;
+              height: 2em;
+            `;
+          case 'lg':
+            return css`
+              width: 2.5em;
+              height: 2.5em;
+            `;
+          default:
+            return css`
+              width: 1.5em;
+              height: 1.5em;
+            `;
+        }
+      }
+      return;
+    }}
 `;
 
-export default Icon;
+export { Icon };

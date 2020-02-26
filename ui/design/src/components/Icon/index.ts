@@ -1,3 +1,4 @@
-import Icon, { iconTypes } from './icon';
+import { AppIcon } from './app-icon';
+import { Icon, iconTypes } from './icon';
 
-export { Icon, iconTypes };
+export { AppIcon, Icon, iconTypes };

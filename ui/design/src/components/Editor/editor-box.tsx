@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { createEditor, Editor } from 'slate';
+import { createEditor } from 'slate';
 import { withHistory } from 'slate-history';
 import { Slate, withReact } from 'slate-react';
 import { Avatar } from '../Avatar/index';
@@ -9,8 +9,9 @@ import { Icon } from '../Icon/index';
 import { EmojiPopover, ImagePopover } from '../Popovers/index';
 import EmbedBox from './embed-box';
 import { FormatToolbar } from './format-toolbar';
+import { CustomEditor } from './helpers';
 import { defaultValue } from './initialValue';
-import { withFormatting, withImages } from './plugins';
+import { withImages } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
 import { StyledBox, StyledDiv, StyledEditable, StyledIconDiv } from './styled-editor-box';
 
@@ -27,24 +28,19 @@ const EditorBox: React.FC<IEditorBox> = props => {
   const { avatar, ethAddress, publishLabel, placeholderLabel, onPublish, embedEntryData } = props;
 
   const [editorValue, setEditorValue] = React.useState(defaultValue);
-  const [editorSelection, setEditorSelection] = React.useState(null);
 
   const [imagePopoverOpen, setImagePopoverOpen] = React.useState(false);
   const [emojiPopoverOpen, setEmojiPopoverOpen] = React.useState(false);
 
-  const editor = React.useMemo(
-    () => withImages(withFormatting(withHistory(withReact(createEditor())))),
-    [],
-  );
+  const editor = React.useMemo(() => withHistory(withReact(withImages(createEditor()))), []);
 
   const handlePublish = () => {
     const content = editorValue;
     onPublish(ethAddress, content);
   };
 
-  const handleChange = (value: any, selection: any) => {
+  const handleChange = (value: any) => {
     setEditorValue(value);
-    setEditorSelection(selection);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<any>) => {
@@ -55,14 +51,13 @@ const EditorBox: React.FC<IEditorBox> = props => {
     switch (event.key) {
       case '`': {
         event.preventDefault();
-        const [match] = Editor.nodes(editor, { match: { type: 'code' } });
-        Editor.setNodes(editor, { type: match ? null : 'code' }, { match: 'block' });
+        CustomEditor.toggleCodeBlock(editor);
         break;
       }
 
       case 'b': {
         event.preventDefault();
-        Editor.setNodes(editor, { bold: true }, { match: 'text', split: true });
+        CustomEditor.toggleBoldMark(editor);
         break;
       }
     }
@@ -95,11 +90,11 @@ const EditorBox: React.FC<IEditorBox> = props => {
     if (!url) {
       return;
     }
-    editor.exec({ type: 'insert_image', url: url });
+    CustomEditor.insertImage(editor, url);
   };
 
   const handleInsertEmoji = (emojiCode: string) => {
-    editor.exec({ type: 'insert_text', text: emojiCode });
+    CustomEditor.insertText(editor, emojiCode);
   };
 
   return (
@@ -107,12 +102,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
       <Box direction="row" pad="medium" align="start" overflow="auto" className="scrollBox">
         <Avatar src={avatar} ethAddress={ethAddress} />
         <Box width="480px" pad={{ horizontal: 'small' }}>
-          <Slate
-            editor={editor}
-            value={editorValue}
-            selection={editorSelection}
-            onChange={handleChange}
-          >
+          <Slate editor={editor} value={editorValue} onChange={handleChange}>
             <FormatToolbar />
             <StyledEditable
               placeholder={placeholderLabel}

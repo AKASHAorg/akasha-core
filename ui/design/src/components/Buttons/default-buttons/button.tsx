@@ -4,7 +4,7 @@ import StyledButton from './styled-button';
 export interface IButtonProps {
   className?: string;
   label: string;
-  onClick?: () => void;
+  onClick?: any;
   primary?: boolean;
   secondary?: boolean;
 }
