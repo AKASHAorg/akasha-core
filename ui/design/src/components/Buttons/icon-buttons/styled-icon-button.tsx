@@ -11,7 +11,7 @@ export interface IIconButtonProps {
 }
 
 const StyledIconButton = styled(Button)<IIconButtonProps>`
-  height: 1.375em;
+  height: 1.375rem;
   border-radius: ${props => props.theme.shapes.largeBorderRadius};
   border: none;
   padding: 0 0.8em;

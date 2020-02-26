@@ -1,13 +1,29 @@
 import { Anchor } from 'grommet';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { ILinkIconButtonProps } from './icon-link';
 
 const StyledIconLink = styled(Anchor)<ILinkIconButtonProps>`
   border-radius: ${props => props.theme.shapes.largeBorderRadius};
   border: none;
-  padding: 0 0.8em;
-  color: ${props => props.theme.colors.secondaryText};
   font-weight: 400;
+  ${props => {
+    if (props.active) {
+      return css`
+        color: ${props.theme.colors.accent};
+      `;
+    }
+    return css`
+      color: ${props.theme.colors.secondaryText};
+    `;
+  }}
+  ${props => {
+    if (props.padded) {
+      return css`
+        padding: 0 0.8rem;
+      `;
+    }
+    return;
+  }}
   &:hover {
     text-decoration: none;
     color: ${props => props.theme.colors.accent};
@@ -19,7 +35,7 @@ const StyledIconLink = styled(Anchor)<ILinkIconButtonProps>`
   }
   svg {
     height: 100%;
-    width: 1.25em;
+    width: 1.25rem;
     stroke: ${props => props.theme.colors.lightGrey};
     & * {
       stroke: ${props => props.theme.colors.secondaryText};

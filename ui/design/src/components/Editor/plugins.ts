@@ -1,64 +1,27 @@
 import { Editor } from 'slate';
+import { CustomEditor } from './helpers';
 
 const withImages = (editor: Editor) => {
-  const { exec, isVoid } = editor;
+  const { isVoid } = editor;
 
   editor.isVoid = element => {
     return element.type === 'image' ? true : isVoid(element);
   };
 
-  editor.exec = command => {
-    switch (command.type) {
-      case 'insert_image': {
-        const { url } = command;
-        const text = { text: '', marks: [] };
-        const image = { url, type: 'image', children: [text] };
-        Editor.insertNodes(editor, image);
-        break;
-      }
+  editor.insertData = (data: any) => {
+    const text = data.getData('text/plain');
 
-      default: {
-        exec(command);
-        break;
-      }
+    if (isImageUrl(text)) {
+      CustomEditor.insertImage(editor, text);
     }
   };
 
   return editor;
 };
 
-const withFormatting = (editor: Editor) => {
-  const { exec } = editor;
-
-  editor.exec = command => {
-    switch (command.type) {
-      case 'toggle_format': {
-        const { format } = command;
-        const isActive = isFormatActive(editor, format);
-        Editor.setNodes(
-          editor,
-          { [format]: isActive ? null : true },
-          { match: 'text', split: true },
-        );
-        break;
-      }
-
-      default: {
-        exec(command);
-        break;
-      }
-    }
-  };
-
-  return editor;
+const isImageUrl = (url: string) => {
+  if (!url) return false;
+  return true;
 };
 
-const isFormatActive = (editor: Editor, format: string) => {
-  const [match] = Editor.nodes(editor, {
-    match: { [format]: true },
-    mode: 'all',
-  });
-  return !!match;
-};
-
-export { withFormatting, withImages };
+export { withImages };
