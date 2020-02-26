@@ -142,4 +142,4 @@ const ImagePopover: React.FC<IImagePopover> = props => {
   );
 };
 
-export default ImagePopover;
+export { ImagePopover };

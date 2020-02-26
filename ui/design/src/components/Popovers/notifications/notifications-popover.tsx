@@ -56,4 +56,4 @@ const NotificationsPopover: React.FC<INotificationsPopover> = props => {
   );
 };
 
-export default NotificationsPopover;
+export { NotificationsPopover };

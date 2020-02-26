@@ -2,6 +2,7 @@
 import { Box, Grid, Grommet, grommet, ResponsiveContext, ThemeContext } from 'grommet';
 import styled, { createGlobalStyle, css } from 'styled-components';
 import { Avatar, EditableAvatar } from './components/Avatar';
+import { ResponsiveSidebar, Sidebar, SidebarMobile, Topbar } from './components/Bars/index';
 import {
   Button,
   IconButton,
@@ -19,12 +20,12 @@ import {
   ProfileWidgetCard,
   TopicsWidgetCard,
 } from './components/Cards';
-import { Icon, iconTypes } from './components/Icon';
+import { AppIcon, Icon, iconTypes } from './components/Icon';
 import { CommentInput, SearchInput } from './components/Input';
+import { ShareModal } from './components/Modals';
 import { NotificationsPopover, SelectPopover } from './components/Popovers';
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
-import { Topbar } from './components/Topbar/index';
 import responsiveBreakpoints from './styles/responsive-breakpoints';
 
 /* Themes and theme related utils */
@@ -36,6 +37,7 @@ import { ThemeSelector } from './styles/themes/theme-selector';
 
 const exported = {
   Avatar,
+  AppIcon,
   Button,
   EditableAvatar,
   AppsWidgetCard,
@@ -55,8 +57,12 @@ const exported = {
   CommentInput,
   SearchInput,
   NotificationsPopover,
+  ResponsiveSidebar,
+  ShareModal,
   SelectPopover,
   SubtitleTextIcon,
+  Sidebar,
+  SidebarMobile,
   TextIcon,
   Topbar,
   createTheme,
