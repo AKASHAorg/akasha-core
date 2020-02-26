@@ -34,7 +34,7 @@ const StyledCenterDiv = styled.div`
 const StyledAvatarEditDiv = styled.div`
   border-radius: 50%;
   position: relative;
-  left: 4.5em;
+  left: 3.5em;
   bottom: 2.313em;
   border: 3px solid ${props => props.theme.colors.border};
   height: 1.5em;

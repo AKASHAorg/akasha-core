@@ -1,4 +1,4 @@
-import { IAppData } from '@akashaproject/design-system/lib/components/Cards/apps-widget-card';
+import { IAppData } from '@akashaproject/design-system/lib/components/Cards/widget-cards/apps-widget-card';
 
 const topicsDataSource = [
   { title: '#ethereumworld', subtitle: '6576 mentions' },

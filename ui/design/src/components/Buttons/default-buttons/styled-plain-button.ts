@@ -6,7 +6,7 @@ const StyledPlainButton = styled(Box)`
   color: ${props => props.theme.colors.secondaryText};
   svg {
     height: 100%;
-    width: 1.25em;
+    width: 1.25rem;
     stroke: ${props => props.theme.colors.lightGrey};
     & * {
       stroke: ${props => props.theme.colors.secondaryText};

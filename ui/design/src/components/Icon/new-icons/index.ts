@@ -20,13 +20,16 @@ import editSimple from './edit-simple';
 import emoji from './emoji';
 import ethereumWorldLogo from './ethereum-world-logo';
 import eye from './eye';
+import facebook from './facebook';
 import heart from './heart';
 import home from './home';
 import hotTopics from './hot-topics';
 import image from './image';
+import info from './info';
 import italic from './italic';
 import link from './link';
 import media from './media';
+import menu from './menu';
 import moreDark from './more-dark';
 import moreGrey from './more-grey';
 import notifications from './notifications';
@@ -36,6 +39,7 @@ import pin from './pin';
 import plusDark from './plus-dark';
 import plusGrey from './plus-grey';
 import quote from './quote';
+import reddit from './reddit';
 import reload from './reload';
 import reply from './reply';
 import report from './report';
@@ -52,6 +56,7 @@ import thumbsUpGrey from './thumbs-up-grey';
 import thumbsUpWhite from './thumbs-up-white';
 import transfer from './transfer';
 import trendingApps from './trending-apps';
+import twitter from './twitter';
 import underline from './underline';
 import upload from './upload';
 import wallet from './wallet';
@@ -70,6 +75,7 @@ export {
   coins,
   payment,
   eye,
+  facebook,
   document,
   ethereumWorldLogo,
   addAppDark,
@@ -89,9 +95,11 @@ export {
   home,
   hotTopics,
   image,
+  info,
   italic,
   link,
   media,
+  menu,
   moreDark,
   moreGrey,
   notifications,
@@ -99,6 +107,7 @@ export {
   plusDark,
   plusGrey,
   quote,
+  reddit,
   reply,
   report,
   search,
@@ -111,6 +120,7 @@ export {
   thumbsUpWhite,
   thumbsUpGrey,
   trendingApps,
+  twitter,
   underline,
   upload,
   wallet,
