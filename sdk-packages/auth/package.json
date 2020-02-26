@@ -1,12 +1,12 @@
 {
-  "name": "@akashaproject/sdk-db",
+  "name": "@akashaproject/sdk-auth",
   "version": "0.1.0",
   "description": "> TODO: description",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
   ],
-  "homepage": "https://github.com/AkashaProject/akasha-world-framework#readme",
+  "homepage": "https://github.com/AKASHAorg/akasha-world-framework#readme",
   "license": "AGPL-3.0",
   "main": "lib/index.js",
   "directories": {
@@ -18,30 +18,21 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-world-framework.git"
   },
   "scripts": {
     "test": "jest",
     "tsc": "tsc --build",
-    "prepare": "npm run tsc",
-    "docs": "typedoc"
+    "prepare": "npm run tsc"
   },
   "bugs": {
-    "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
+    "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"
   },
   "dependencies": {
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-runtime": "*",
-    "pouchdb-adapter-http": "^7.1.1",
-    "pouchdb-adapter-idb": "^7.1.1"
-  },
-  "devDependencies": {
-    "jest": "^25.1.0",
-    "ts-jest": "^25.2.0",
-    "pouchdb-adapter-memory": "^7.1.1",
-    "rxdb": "^8.7.5"
-  },
-  "peerDependencies": {
-    "rxdb": "^8.7.5"
+    "@akashaproject/sdk-common": "*",
+    "@akashaproject/sdk-db": "*",
+    "superagent": "^5.2.1"
   }
 }

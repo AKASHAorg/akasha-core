@@ -9,7 +9,7 @@ export const WEB3_UTILS_SERVICE = 'WEB3_UTILS_SERVICE';
 export const IPFS_SERVICE = 'IPFS_SERVICE';
 
 export enum EthProviders {
-  None,
+  None = 1,
   Web3Injected,
   WalletConnect,
 }

@@ -1,22 +1,27 @@
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import commonServices, { CACHE_SERVICE, IPFS_SERVICE } from './constants';
+import { IPFS_SERVICE } from './constants';
 // import ipfsSettings from './ipfs.settings';
 
-// tslint:disable-next-line:no-var-requires
-const IPFS = require('ipfs');
-
 const service: AkashaService = (invoke, log) => {
-  const getInstance = async (refresh: boolean) => {
-    let ipfsNode;
-    const stash: any = await invoke(commonServices[CACHE_SERVICE]).getStash();
-    ipfsNode = stash.get(commonServices[IPFS_SERVICE]);
+  let ipfsNode;
+  const getInstance = async (refresh: boolean = false, ipfsInstance: any) => {
     if (ipfsNode && !refresh) {
       log.info('reusing existing ipfs instance');
       return ipfsNode;
     }
-    ipfsNode = await IPFS.create({ start: false });
-    stash.set(commonServices[IPFS_SERVICE], ipfsNode);
-    log.info('ipfs node instantiated');
+
+    if (!ipfsInstance && window.hasOwnProperty('Ipfs')) {
+      // @ts-ignore
+      const { Ipfs } = window;
+      ipfsNode = await Ipfs.create();
+      log.info('ipfs node instantiated');
+    }
+
+    if (!ipfsNode && ipfsInstance) {
+      log.info('using provided ipfs instance');
+      ipfsNode = ipfsInstance;
+    }
+
     return ipfsNode;
   };
   return { getInstance };
