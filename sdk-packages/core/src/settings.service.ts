@@ -1,6 +1,6 @@
 import { SETTINGS_SERVICE } from './constants';
-import { AkashaService, ICoreSettings } from './IAkashaModule';
-import { fromEntries } from './utils';
+import { AkashaService, ICoreSettings, IGeneralSettings } from './IAkashaModule';
+import { fromEntries, toEntries } from './utils';
 
 const service: AkashaService = (invoke, log) => {
   const settingsSymbol = Symbol('setting$');
@@ -17,7 +17,15 @@ const service: AkashaService = (invoke, log) => {
   const setSettings = async (settings: ICoreSettings): Promise<void> => {
     coreSettings[settingsSymbol].set(settings.moduleName, settings.values);
   };
-  return { getSettings, setSettings };
+
+  const setServiceSettings = async (moduleName: string, options: IGeneralSettings) => {
+    const currentSettings = await getSettings(moduleName);
+    const newSettings = fromEntries(options);
+    const patchedSettings = Object.assign({}, currentSettings, newSettings);
+    await setSettings({ moduleName, values: toEntries(patchedSettings) });
+  };
+
+  return { getSettings, setSettings, setServiceSettings };
 };
 
 export default { name: SETTINGS_SERVICE, service: service };
