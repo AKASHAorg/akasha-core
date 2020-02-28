@@ -23,7 +23,7 @@
   },
   "scripts": {
     "test": "jest",
-    "tsc": "tsc --build",
+    "tsc": "tsc --build && tsc -p tsconfig.sw.json",
     "prepare": "npm run tsc",
     "build": "rimraf dist && NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.dev.config.js",
     "postbuild": "copyfiles -f ./dist/*.js ./dist/index.html ../../examples/ui/feed-app/public",
@@ -43,12 +43,19 @@
     "rxdb": "^8.7.5"
   },
   "devDependencies": {
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "workbox-core": "^5.0.0",
+    "workbox-background-sync": "^5.0.0",
+    "workbox-precaching": "^5.0.0",
+    "workbox-navigation-preload": "^5.0.0",
+    "workbox-cacheable-response": "^5.0.0",
+    "workbox-routing": "^5.0.0",
+    "workbox-strategies": "^5.0.0",
     "workbox-webpack-plugin": "^5.0.0",
     "babel-loader": "^8.0.6",
-    "@babel/core": "^7.8.4",
-    "@babel/preset-env": "^7.8.4",
+    "@babel/core": "^7.8.6",
+    "@babel/preset-env": "^7.8.6",
     "html-webpack-plugin": "^3.2.0"
   }
 }
