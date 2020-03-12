@@ -2,16 +2,16 @@ import { Button, Drop, Tab, Text } from 'grommet';
 import styled, { css } from 'styled-components';
 
 const StyledDrop = styled(Drop)`
-  height: 13.75em;
-  width: 21.875em;
-  margin-top: 0.313em;
+  height: 13.75rem;
+  width: 21.875rem;
+  margin-top: 0.313rem;
   border: 1px solid ${props => props.theme.colors.border}
   border-radius: ${props => props.theme.shapes.largeBorderRadius};
 `;
 
 const StyledInputDiv = styled.div`
-  height: 8.125em;
-  width: 19.875em;
+  height: 8.125rem;
+  width: 19.875rem;
   background-color: ${props => props.theme.colors.lightBackground};
   border: 1px dashed ${props => props.theme.colors.mediumGrey};
   border-radius: ${props => props.theme.shapes.borderRadius};
@@ -22,7 +22,7 @@ const StyledInputDiv = styled.div`
 `;
 
 const StyledText = styled(Text)`
-  padding: 0 3.125em;
+  padding: 0 3.125rem;
   text-align: center;
 `;
 
@@ -36,8 +36,8 @@ const StyledImageInput = styled.input`
 `;
 
 const StyledImg = styled.img`
-  height: 3em;
-  width: 3em;
+  height: 3rem;
+  width: 3rem;
 `;
 
 const StyledTab = styled(Tab)`
@@ -48,7 +48,7 @@ const StyledTab = styled(Tab)`
       margin: 0;
       border-bottom: 1px solid ${props.theme.colors.border};
       text-align: center;
-      padding: 0.75em 0;
+      padding: 0.75rem 0;
 
       > span {
         font-family: ${props.theme.shapes.fontFamily};

@@ -17,4 +17,17 @@ const formatDate = (date: any, locale?: ILocale) => {
   return '';
 };
 
-export { formatDate };
+const formatDateShort = (date: any, locale?: ILocale) => {
+  if (dayjs(date).isValid()) {
+    if (locale) {
+      return dayjs
+        .unix(date)
+        .locale(locale)
+        .format('D MMMM YYYY');
+    }
+    return dayjs.unix(date).format('D MMMM YYYY');
+  }
+  return '';
+};
+
+export { formatDate, formatDateShort };

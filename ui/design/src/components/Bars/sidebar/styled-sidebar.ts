@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 const StyledHiddenScrollContainer = styled.div`
   overflow: auto;
   height: 100%;
-  width: 100%
+  width: 100%;
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
   ::-webkit-scrollbar {
