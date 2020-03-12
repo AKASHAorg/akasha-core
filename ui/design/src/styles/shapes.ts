@@ -38,19 +38,19 @@ const shapes: IShapes = {
   defaultFontSize: '1em',
   fontSizes: {
     small: {
-      size: '0.5em',
+      size: '0.688rem',
       height: '1.4',
     },
     medium: {
-      size: '0.813em', // ~13px @16px base
+      size: '0.813rem', // ~13px @16px base
       height: '1.5',
     },
     large: {
-      size: '0.938em', // ~15px @16px base
+      size: '0.938rem', // ~15px @16px base
       height: '1.3',
     },
     xlarge: {
-      size: '1.125em', // ~18px @16px base
+      size: '1.125rem', // ~18px @16px base
       height: '1.5',
     },
   },

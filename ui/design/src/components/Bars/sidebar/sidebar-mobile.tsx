@@ -75,7 +75,7 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
         }}
       >
         <Box align="end" pad={{ vertical: 'xsmall' }}>
-          <Icon type="close" default={true} onClick={onClickCloseSidebar} clickable={true} />
+          <Icon type="close" primaryColor={true} onClick={onClickCloseSidebar} clickable={true} />
         </Box>
         <Box align="start" pad={{ bottom: 'xsmall' }}>
           <TextIcon

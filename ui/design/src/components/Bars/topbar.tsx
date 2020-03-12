@@ -99,7 +99,12 @@ const Topbar = (props: ITopbarProps) => {
           justify="center"
           margin={{ horizontal: 'xsmall' }}
         >
-          <Icon type="notifications" onClick={handleNotifClick} clickable={true} default={true} />
+          <Icon
+            type="notifications"
+            onClick={handleNotifClick}
+            clickable={true}
+            primaryColor={true}
+          />
         </Box>
 
         {notificationIconRef.current && notificationsOpen && notificationsData && (
