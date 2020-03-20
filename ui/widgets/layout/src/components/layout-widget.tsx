@@ -6,9 +6,12 @@ const { createGlobalStyle, css, Box, styled, lightTheme, Grommet } = DS;
 
 const LayoutWrapper = styled(Box)`
   flex-direction: row;
+  width: 100%;
 `;
 
-const MainArea = styled(Box)``;
+const MainArea = styled(Box)`
+  width: 100%;
+`;
 
 const SidebarSlot = styled(Box)<{ visible: boolean }>`
   z-index: 110;
@@ -43,13 +46,26 @@ const GlobalStyle = createGlobalStyle<{
   // @TODO: replace any with design-system's exported theme type
   theme: any;
 }>`
+  html {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  *, *:before, *:after {
+    -webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    box-sizing: inherit;
+  }
   :root,
   body {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     margin: 0;
     padding: 0;
   };
+  body {
+    overflow-y: auto;
+  }
   ${({ theme }) => css`
     // 1920-
     @media only screen and (max-width: ${theme.breakpoints.xlarge.value}px) {
@@ -156,7 +172,7 @@ class LayoutWidget extends PureComponent<IProps> {
             <SidebarSlot id={sidebarSlotId} visible={sidebarVisible} />
             <MainArea>
               <TopbarSlot id={topbarSlotId} />
-              <PluginSlot id={pluginSlotId} />
+              <PluginSlot id={pluginSlotId} flex={true} fill={true} />
             </MainArea>
           </LayoutWrapper>
         </Grommet>

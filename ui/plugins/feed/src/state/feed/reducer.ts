@@ -20,16 +20,30 @@ export function feedInit(initialValues?: Partial<IFeedState>): IFeedState {
 }
 
 type FeedReducer = Reducer<IFeedState, IAction<any, keyof typeof actionTypes>>;
-
-export const feedReducer: FeedReducer = handleActions<typeof actionTypes, IFeedState, any>(
+// @ts-ignore
+export const feedReducer: FeedReducer = handleActions<typeof actionTypes, Draft<IFeedState>, any>(
   {
     GET_FEED_ITEMS: (draft, payload) => {
-      draft.items = draft.items.concat(payload.items);
-      return draft;
+      const { items, reverse } = payload;
+      if (reverse) {
+        draft.items.unshift(...items);
+      } else {
+        draft.items.push(...items);
+      }
     },
+
+    // {
+    //   const { items, reverse } = payload;
+    //   console.log(draft, 'the new draft');
+    //   if (reverse) {
+    //     draft.items.unshift(items);
+    //   } else {
+    //     draft.items.concat(items);
+    //   }
+    //   // return draft;
+    // },
     GET_FEED_ITEM_DATA: (draft, payload) => {
       draft.itemData[payload.entryId] = payload;
-      return draft;
     },
   },
   feedState,

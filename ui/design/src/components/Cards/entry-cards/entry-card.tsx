@@ -24,6 +24,8 @@ export interface IEntryCardProps {
   publishComment: any;
   loggedProfileAvatar?: string;
   loggedProfileEthAddress: string;
+  style?: React.CSSProperties;
+  rootNodeRef?: React.Ref<HTMLDivElement>;
 }
 
 const EntryCard: React.FC<IEntryCardProps> = props => {
@@ -48,10 +50,12 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     publishComment,
     loggedProfileAvatar,
     loggedProfileEthAddress,
+    style,
+    rootNodeRef,
   } = props;
 
   return (
-    <BasicCardBox className={className}>
+    <BasicCardBox className={className} style={style} rootNodeRef={rootNodeRef}>
       <EntryBox
         entryData={entryData}
         onClickAvatar={onClickAvatar}

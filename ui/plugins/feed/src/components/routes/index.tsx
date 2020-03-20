@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import WidgetList from '../widgets';
 import FeedHomePage from './feed-home-page';
 
-const { Grommet, lightTheme, Box, styled } = DS;
+const { Box, styled } = DS;
 
 export interface IRoutesProps {
   activeWhen: { path: string };
@@ -20,14 +20,16 @@ const FeedBox = styled(Box)`
   padding: 0.5em 0;
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     max-width: 60%;
+    width: 100%;
   }
 `;
 
 const WidgetBox = styled(Box)`
   padding: 0.5em 0;
-  padding-left: 0.5em;
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     max-width: 40%;
+    width: 100%;
+    margin: 0 1em;
   }
 `;
 
@@ -44,19 +46,17 @@ const Routes: React.FC<IRoutesProps> = props => {
   const activeWhenPath = path.slice(0, path.lastIndexOf('/'));
   return (
     <Router>
-      <Grommet theme={lightTheme}>
-        <Feed>
-          <FeedBox>
-            <Switch>
-              <Route exact={true} path={`${activeWhenPath}`} component={FeedHomePage} />
-              <Route component={ArticleNotFound} />
-            </Switch>
-          </FeedBox>
-          <WidgetBox>
-            <WidgetList />
-          </WidgetBox>
-        </Feed>
-      </Grommet>
+      <Feed fill={true}>
+        <FeedBox fill={true}>
+          <Switch>
+            <Route exact={true} path={`${activeWhenPath}`} component={FeedHomePage} />
+            <Route component={ArticleNotFound} />
+          </Switch>
+        </FeedBox>
+        <WidgetBox fill={true}>
+          <WidgetList />
+        </WidgetBox>
+      </Feed>
     </Router>
   );
 };

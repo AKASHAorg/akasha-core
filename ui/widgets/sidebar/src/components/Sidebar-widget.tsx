@@ -83,7 +83,10 @@ const Menu = (props: MenuProps) => {
       }}
     >
       <SidebarWrapper>
-        <Box pad={{ left: '2px' }} style={{ justifyContent: 'space-between', height: '100%' }}>
+        <Box pad={{ top: '1em', bottom: '1em' }} align="center">
+          <Icon type="home" onClick={handleNavigation('/')} />
+        </Box>
+        <Box pad={{ top: '1em', bottom: '1em' }} align="center">
           <Icon type="home" onClick={handleNavigation('/')} />
         </Box>
       </SidebarWrapper>
@@ -94,5 +97,8 @@ const Menu = (props: MenuProps) => {
 const SidebarWrapper = styled.div`
   height: 100%;
   background: ${props => props.theme.colors.lightBackground};
-  padding: 0.75em 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
 `;

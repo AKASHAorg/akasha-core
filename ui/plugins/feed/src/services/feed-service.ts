@@ -1,21 +1,30 @@
-import { delay, genEntryData, genEthAddress, randomMs } from '../services/dummy-data';
+import { genEntryData, genEthAddress } from '../services/dummy-data';
 
-export const fetchFeedItems = (payload: { start: string; limit: number }) => {
+export const fetchFeedItems = (payload: {
+  start: string | null;
+  limit: number | null;
+  reverse: boolean | null;
+}) => {
   const { limit } = payload;
-  const items = Array(limit)
-    .fill({ entryId: '' })
-    .map(() => ({
-      entryId: genEthAddress(),
-    }));
-  return delay(randomMs(100, 1000)).then(() =>
-    Promise.resolve({
-      items,
-    }),
-  );
+  let items: {}[] = [];
+  if (limit) {
+    items = Array(limit)
+      .fill({ entryId: '' })
+      .map(() => ({
+        entryId: genEthAddress(),
+      }));
+  }
+  return Promise.resolve({
+    items,
+    reverse: payload.reverse,
+    start: payload.start,
+  });
 };
 
 export const fetchFeedItemData = (payload: { entryId: string }) => {
   const { entryId } = payload;
-
-  return delay(randomMs(100, 2000)).then(() => Promise.resolve(genEntryData(entryId)));
+  if (entryId) {
+    return Promise.resolve(genEntryData(entryId));
+  }
+  return Promise.resolve(null);
 };

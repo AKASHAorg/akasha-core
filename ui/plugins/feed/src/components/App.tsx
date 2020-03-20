@@ -4,7 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import { feedInit, FeedProvider, feedReducer } from '../state/feed';
 import Routes from './routes';
 
-const { ViewportSizeProvider } = DS;
+const { ViewportSizeProvider, Box, styled, Grommet, lightTheme } = DS;
 
 export interface IProps {
   singleSpa: any;
@@ -34,6 +34,11 @@ export interface IProps {
 // tslint:disable-next-line:no-console
 const subConsumer = (data: any) => console.log('sdkModule call', data);
 
+const FeedPlaceholder = styled(Box)`
+  @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
+    max-width: 60%;
+  }
+`;
 class App extends PureComponent<IProps> {
   public state: { hasErrors: boolean };
 
@@ -73,13 +78,15 @@ class App extends PureComponent<IProps> {
 
     return (
       <ViewportSizeProvider>
-        <Suspense fallback={<div>Loading Feed</div>}>
-          <I18nextProvider i18n={i18n ? i18n : null}>
-            <FeedProvider reducer={feedReducer} initialState={feedInit()}>
-              <Routes {...this.props} />
-            </FeedProvider>
-          </I18nextProvider>
-        </Suspense>
+        <Grommet theme={lightTheme} style={{ height: '100%' }}>
+          <Suspense fallback={<FeedPlaceholder>Loading resources...</FeedPlaceholder>}>
+            <I18nextProvider i18n={i18n ? i18n : null}>
+              <FeedProvider reducer={feedReducer} initialState={feedInit()}>
+                <Routes {...this.props} />
+              </FeedProvider>
+            </I18nextProvider>
+          </Suspense>
+        </Grommet>
       </ViewportSizeProvider>
     );
   }

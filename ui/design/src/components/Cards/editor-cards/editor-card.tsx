@@ -13,6 +13,7 @@ export interface IEditorCard {
   publishLabel: string;
   placeholderLabel: string;
   onPublish: any;
+  style: any;
 }
 
 const StyledDiv = styled.div`
@@ -37,7 +38,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
   };
 
   return (
-    <BasicCardBox className={className}>
+    <BasicCardBox className={className} style={props.style}>
       {modalOpen && (
         <EditorModal
           closeModal={closeModal}

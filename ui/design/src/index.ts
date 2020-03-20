@@ -1,6 +1,6 @@
 /* Components */
 import { Box, Grid, Grommet, grommet, ResponsiveContext, ThemeContext } from 'grommet';
-import styled, { createGlobalStyle, css } from 'styled-components';
+import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
 import { Avatar, EditableAvatar } from './components/Avatar';
 import {
   Button,
@@ -73,6 +73,7 @@ const exported = {
   ThemeSelector,
   css,
   styled,
+  withTheme,
   createGlobalStyle,
   ViewportSizeProvider,
   useViewportSize,

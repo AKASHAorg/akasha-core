@@ -8,13 +8,16 @@ const StyledBox = styled(Box)`
 
 export interface IBasicCardBox {
   className?: string;
+  style?: React.CSSProperties;
+  rootNodeRef?: React.Ref<HTMLDivElement>;
 }
 
-const BasicCardBox: React.FC<IBasicCardBox> = ({ children, className }) => (
+const BasicCardBox: React.FC<IBasicCardBox> = ({ children, className, style, rootNodeRef }) => (
   <StyledBox
+    style={style}
     direction="column"
     elevation="shadow"
-    fill={true}
+    fill="horizontal"
     pad="none"
     round="xsmall"
     border={{
@@ -24,6 +27,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({ children, className }) => (
       side: 'all',
     }}
     className={className}
+    ref={rootNodeRef}
   >
     {children}
   </StyledBox>
