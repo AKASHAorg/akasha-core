@@ -18,7 +18,8 @@ export interface IListCustomEntity {
   getComponent: React.FC<any>;
 }
 export interface IListInitialState {
-  scrollState: IScrollState;
+  hasNewerEntries: boolean;
+  startId: string | null;
 }
 
 export type GetItemCardFn = (props: { itemId: string; itemData: any }) => React.ReactElement;
@@ -26,9 +27,9 @@ export type GetItemCardFn = (props: { itemId: string; itemData: any }) => React.
 export interface IVirtualListProps {
   items: any[];
   itemsData: {};
-  loadMoreAction: (payload: {}, deps?: any[]) => void;
-  loadItemDataAction: (payload: {}, deps?: any[]) => void;
-  loadInitialFeedAction: (payload: {}, deps?: any[]) => void;
+  loadMore: (payload: {}) => void;
+  loadItemData: (payload: {}) => void;
+  loadInitialFeed: (payload: {}) => void;
   itemCard?: React.FC<{ item: any }>;
   /* spacing between items (bottom) */
   itemSpacing?: number;
@@ -90,15 +91,20 @@ export interface IListContentProps {
   // topBoundryLoader: React.ReactElement;
   // bottomBoundryLoader: React.ReactElement;
   loadLimit: number;
-  onLoadMore: IVirtualListProps['loadMoreAction'];
+  onLoadMore: IVirtualListProps['loadMore'];
   customEntities: IListCustomEntity[];
   getItemCard: GetItemCardFn;
+  listState: {
+    startId: string | null;
+    hasNewerEntries: boolean;
+  };
+  setListState: any;
 }
 
 export interface IRenderItemProps {
   item: { entryId: string };
   itemData?: any;
-  loadItemDataAction: IListContentProps['loadItemDataAction'];
+  loadItemDataAction: IVirtualListProps['loadItemData'];
   index: number;
   onDimensionChange: (itemId: string, dimension: any) => void;
   itemSpacing?: IListContentProps['itemSpacing'];
@@ -108,7 +114,7 @@ export interface IRenderItemProps {
 export type SetSliceOperationType = React.Dispatch<React.SetStateAction<ISliceOperation>>;
 export type SetFetchOperationType = React.Dispatch<IFetchOperation | null>;
 
-export interface IQueueOperatorProps {
+export interface ISliceOperatorProps {
   fetchOperation: IFetchOperation | null;
   setFetchOperation: SetFetchOperationType;
   sliceOperation: ISliceOperation | null;
@@ -117,9 +123,11 @@ export interface IQueueOperatorProps {
   items: any[];
   loadLimit: number;
   offsetItems: number;
-  onLoadMore: IVirtualListProps['loadMoreAction'];
+  onLoadMore: IVirtualListProps['loadMore'];
   initialPaddingTop: number;
   itemSpacing: number;
+  listState: IListContentProps['listState'];
+  setListState: IListContentProps['setListState'];
 }
 
 export interface IListOperatorProps {

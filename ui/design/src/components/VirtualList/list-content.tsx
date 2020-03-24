@@ -32,6 +32,8 @@ const ListContent = (props: IListContentProps) => {
     onLoadMore,
     customEntities,
     getItemCard,
+    listState,
+    setListState,
   } = props;
   const [fetchOperation, setFetchOperation] = React.useState<IFetchOperation | null>(null);
   const [sliceOperation, setSliceOperation] = React.useState<ISliceOperation | null>(null);
@@ -116,7 +118,7 @@ const ListContent = (props: IListContentProps) => {
       );
     }
   };
-  const containerScrollThrottle = React.useRef(throttle(updateScroll, 250, { trailing: true }))
+  const containerScrollThrottle = React.useRef(throttle(updateScroll, 150, { trailing: true }))
     .current;
 
   // throttled scrolling
@@ -159,6 +161,8 @@ const ListContent = (props: IListContentProps) => {
         onLoadMore={onLoadMore}
         initialPaddingTop={initialPaddingTop}
         itemSpacing={itemSpacing}
+        listState={listState}
+        setListState={setListState}
       />
       {infiniteScrollState.items.map((viewableItem, idx) => (
         <CardRenderer

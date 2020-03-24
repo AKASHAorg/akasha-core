@@ -31,17 +31,6 @@ export const feedReducer: FeedReducer = handleActions<typeof actionTypes, Draft<
         draft.items.push(...items);
       }
     },
-
-    // {
-    //   const { items, reverse } = payload;
-    //   console.log(draft, 'the new draft');
-    //   if (reverse) {
-    //     draft.items.unshift(items);
-    //   } else {
-    //     draft.items.concat(items);
-    //   }
-    //   // return draft;
-    // },
     GET_FEED_ITEM_DATA: (draft, payload) => {
       draft.itemData[payload.entryId] = payload;
     },

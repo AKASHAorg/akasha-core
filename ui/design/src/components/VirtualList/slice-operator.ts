@@ -1,20 +1,20 @@
 import * as React from 'react';
-import { IQueueOperatorProps, IScrollState, IInfiniteScrollState } from './interfaces';
+import { ISliceOperatorProps, IScrollState, IInfiniteScrollState } from './interfaces';
 import { markCompletedFetchRequests, loadMoreItems, handleSlicingOperations } from './utils';
 
-export interface IQueueOperatorInterface {
+export interface ISliceOperatorInterface {
   handleContainerScroll: (
     scrollState: React.MutableRefObject<IScrollState>,
     infiniteScrollState: IInfiniteScrollState,
-    items: IQueueOperatorProps['items'],
-    itemDimensions: IQueueOperatorProps['itemDimensions'],
+    items: ISliceOperatorProps['items'],
+    itemDimensions: ISliceOperatorProps['itemDimensions'],
   ) => void;
 }
 
 /*
  * Component that creates or updates fetch operations and slice operations
  */
-const SliceOperator = (props: IQueueOperatorProps, ref: React.RefObject<any>) => {
+const SliceOperator = (props: ISliceOperatorProps, ref: React.RefObject<any>) => {
   const {
     fetchOperation,
     setFetchOperation,
@@ -24,13 +24,23 @@ const SliceOperator = (props: IQueueOperatorProps, ref: React.RefObject<any>) =>
     offsetItems,
     initialPaddingTop,
     itemSpacing,
+    listState,
+    setListState,
   } = props;
 
   React.useImperativeHandle(
     ref,
-    (): IQueueOperatorInterface => ({
+    (): ISliceOperatorInterface => ({
       handleContainerScroll: (scrollStateRef, infiniteScrollState, items, itemDimensions) => {
-        markCompletedFetchRequests(fetchOperation, setFetchOperation, items, itemDimensions);
+        markCompletedFetchRequests(
+          fetchOperation,
+          setFetchOperation,
+          items,
+          itemDimensions,
+          loadLimit,
+          listState,
+          setListState,
+        );
         loadMoreItems(
           fetchOperation,
           setFetchOperation,

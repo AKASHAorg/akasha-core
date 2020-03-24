@@ -44,18 +44,35 @@ const VirtualList = (props: IVirtualListProps) => {
     initialPaddingTop = 0,
     itemSpacing = 8,
     loadLimit = 8,
-    loadInitialFeedAction,
-    loadItemDataAction,
+    loadInitialFeed,
+    loadItemData,
     itemsData,
     offsetItems = 4,
-    loadMoreAction,
+    loadMore,
     customEntities = [],
     getItemCard,
+    initialState = {
+      startId: null,
+      hasNewerEntries: false,
+    },
   } = props;
+  const [listState, setListState] = React.useState(initialState);
 
   // load initial feed items
   // when resuming session, this must also pass `startId` prop!!
-  loadInitialFeedAction({ limit: loadLimit }, []);
+  React.useEffect(() => {
+    const payload: {
+      limit: number;
+      startId: string | null;
+    } = {
+      limit: loadLimit,
+      startId: null,
+    };
+    if (listState && listState.startId) {
+      payload.startId = listState.startId;
+    }
+    loadInitialFeed(payload);
+  }, []);
 
   return (
     <Box height="100%" flex={true}>
@@ -67,15 +84,17 @@ const VirtualList = (props: IVirtualListProps) => {
               initialPaddingTop={initialPaddingTop}
               items={items}
               itemCard={itemCard}
-              loadItemDataAction={loadItemDataAction}
+              loadItemDataAction={loadItemData}
               loadLimit={loadLimit}
               itemsData={itemsData}
               height={height}
               width={width}
               itemSpacing={itemSpacing}
-              onLoadMore={loadMoreAction}
+              onLoadMore={loadMore}
               customEntities={customEntities}
               getItemCard={getItemCard}
+              listState={listState}
+              setListState={setListState}
             />
           )}
         </AutoSizer>

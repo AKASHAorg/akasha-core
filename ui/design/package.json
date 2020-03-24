@@ -64,10 +64,7 @@
     "classnames": "^2.2.6",
     "grommet": "2.10.0",
     "lodash.throttle": "^4.1.1",
-    "react-intersection-observer": "^8.25.3",
     "react-virtualized-auto-sizer": "^1.0.2",
-    "react-window": "^1.8.5",
-    "react-window-infinite-loader": "^1.0.5",
     "styled-components": "^5.0.0"
   },
   "devDependencies": {
@@ -81,8 +78,6 @@
     "@types/react-dom": "^16.9.5",
     "@types/react-test-renderer": "^16.9.2",
     "@types/react-virtualized-auto-sizer": "^1.0.0",
-    "@types/react-window": "^1.8.1",
-    "@types/react-window-infinite-loader": "^1.0.2",
     "@types/slate": "0.47.4",
     "@types/slate-react": "0.22.8",
     "@types/styled-components": "^4.4.2",

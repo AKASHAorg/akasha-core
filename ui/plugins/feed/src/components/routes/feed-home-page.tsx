@@ -1,35 +1,62 @@
 import DS from '@akashaproject/design-system';
 import * as React from 'react';
 import { match } from 'react-router-dom';
-import { useFeed } from '../../state/feed';
-import EntryCard from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-card';
+import { useFeedState, useFeedUpdate } from '../../state/feed';
 
-const { Box, VirtualList, EditorCard } = DS;
+const { Box, VirtualList, EditorCard, EntryCard } = DS;
 
 export interface IFeedHomePageProps {
   rootPath: string;
   match: match<any> | null;
+  singleSpa: any;
 }
 const noop = () => {
   // tslint:disable-next-line: no-console
   console.log('not implemented!');
 };
-const FeedHomePage: React.FC<IFeedHomePageProps> = () => {
-  const [feedState, feedActions] = useFeed();
+const FeedHomePage: React.FC<IFeedHomePageProps> = props => {
+  const feedState = useFeedState();
+  const feedActions = useFeedUpdate();
+  const [listState, setListState] = React.useState({
+    scrollState: {},
+    initialPayload: {},
+    initialState: {
+      startId: null,
+      hasNewerEntries: true,
+    },
+  });
+  const loadInitialFeed = (payload: any) => {
+    setListState({
+      ...listState,
+      initialPayload: payload,
+    });
+  };
 
+  const loadMore = (payload: any) => {
+    feedActions.getFeedItems(payload);
+  };
+  const loadItemData = (payload: any) => {
+    feedActions.getFeedItemData(payload);
+  };
+
+  feedActions.getFeedItems(listState.initialPayload, [listState.initialPayload]);
+  const handleAvatarClick = () => {
+    props.singleSpa.navigateToUrl('/profile/0x00123123123');
+  };
   return (
     <Box fill={true}>
       <VirtualList
         items={feedState.items}
         itemsData={feedState.itemData}
-        loadInitialFeedAction={feedActions.getFeedItems}
-        loadMoreAction={feedActions.getFeedItems}
-        loadItemDataAction={feedActions.getFeedItemData}
+        loadInitialFeed={loadInitialFeed}
+        loadMore={loadMore}
+        loadItemData={loadItemData}
         initialPaddingTop={250}
+        initialState={listState.initialState}
         getItemCard={({ itemData }) => (
           <EntryCard
             entryData={itemData}
-            onClickAvatar={noop}
+            onClickAvatar={handleAvatarClick}
             onClickDownvote={noop}
             onClickUpvote={noop}
             commentsLabel="Comments"

@@ -84,7 +84,7 @@ const Menu = (props: MenuProps) => {
     >
       <SidebarWrapper>
         <Box pad={{ top: '1em', bottom: '1em' }} align="center">
-          <Icon type="home" onClick={handleNavigation('/')} />
+          <Icon type="home" onClick={handleNavigation('/profile')} />
         </Box>
         <Box pad={{ top: '1em', bottom: '1em' }} align="center">
           <Icon type="home" onClick={handleNavigation('/')} />

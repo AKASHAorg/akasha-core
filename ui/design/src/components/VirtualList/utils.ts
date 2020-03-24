@@ -3,9 +3,9 @@ import {
   IListContentProps,
   ItemDimensionsRef,
   IInfiniteScrollState,
-  IQueueOperatorProps,
   IScrollState,
   SetSliceOperationType,
+  ISliceOperatorProps,
 } from './interfaces';
 
 const computeSliceEnd = (
@@ -87,10 +87,13 @@ export const getInfiniteScrollState = (
 };
 
 export const markCompletedFetchRequests = (
-  fetchOperation: IQueueOperatorProps['fetchOperation'],
-  setFetchOperation: IQueueOperatorProps['setFetchOperation'],
-  items: IQueueOperatorProps['items'],
+  fetchOperation: ISliceOperatorProps['fetchOperation'],
+  setFetchOperation: ISliceOperatorProps['setFetchOperation'],
+  items: ISliceOperatorProps['items'],
   itemDimensions: ItemDimensionsRef,
+  loadLimit: number,
+  listState: ISliceOperatorProps['listState'],
+  setListState: ISliceOperatorProps['setListState'],
 ) => {
   if (!fetchOperation) {
     return;
@@ -98,14 +101,19 @@ export const markCompletedFetchRequests = (
   const { startId, position } = fetchOperation;
   const startIdIdx = items.findIndex(item => item.entryId === startId);
   // expect to have new items added in front of the old list
-  if (position === 'start' && items[startIdIdx - 1]) {
-    const firstNewItemRendered =
-      itemDimensions.current.dimensions[items[startIdIdx - 1].entryId] &&
-      itemDimensions.current.dimensions[items[startIdIdx - 1].entryId].height;
-    if (firstNewItemRendered) {
+  if (position === 'start' && items[startIdIdx - 1] && listState.hasNewerEntries) {
+    // we've started the fetch at index = 0 and now the index should be
+    // previousIndex + loadLimit (0 + loadLimit)
+    const newerItemsReceived = startIdIdx >= loadLimit;
+    if (newerItemsReceived) {
       setFetchOperation({
         ...fetchOperation,
         status: 'completed',
+      });
+      setListState({
+        ...listState,
+        startId: items[0].entryId,
+        hasNewerEntries: true,
       });
     }
   }
@@ -125,9 +133,9 @@ export const markCompletedFetchRequests = (
 };
 
 export const loadMoreItems = (
-  fetchOperation: IQueueOperatorProps['fetchOperation'],
-  setFetchOperation: IQueueOperatorProps['setFetchOperation'],
-  items: IQueueOperatorProps['items'],
+  fetchOperation: ISliceOperatorProps['fetchOperation'],
+  setFetchOperation: ISliceOperatorProps['setFetchOperation'],
+  items: ISliceOperatorProps['items'],
   itemDimensions: ItemDimensionsRef,
   scrollState: IScrollState,
   offsetItems: number,
@@ -154,7 +162,6 @@ export const loadMoreItems = (
   const loadMoreTopTrigger =
     direction === 0 &&
     infiniteScrollState.paddingTop - initialPaddingTop < avgItemHeight &&
-    items.length === itemDimensions.current.count &&
     scrollTop <= (offsetItems + 1) * avgItemHeight;
 
   if (loadMoreBottomTrigger && !queueHasOpType) {
@@ -197,7 +204,7 @@ export const loadMoreItems = (
 // this is wrong! do not relay on averages!
 export const updateTopSlice = (
   items: { entryId: string }[],
-  sliceOperation: IQueueOperatorProps['sliceOperation'],
+  sliceOperation: ISliceOperatorProps['sliceOperation'],
   setSliceOperation: SetSliceOperationType,
   scrollState: IScrollState,
   _: IInfiniteScrollState,
@@ -240,9 +247,9 @@ export const updateTopSlice = (
 };
 
 export const handleSlicingOperations = (
-  sliceOperation: IQueueOperatorProps['sliceOperation'],
-  setSliceOperation: IQueueOperatorProps['setSliceOperation'],
-  items: IQueueOperatorProps['items'],
+  sliceOperation: ISliceOperatorProps['sliceOperation'],
+  setSliceOperation: ISliceOperatorProps['setSliceOperation'],
+  items: ISliceOperatorProps['items'],
   scrollState: IScrollState,
   offsetItems: number,
   infiniteScrollState: IInfiniteScrollState,
