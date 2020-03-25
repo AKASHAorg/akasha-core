@@ -4,7 +4,7 @@ import { DefaultTheme } from 'styled-components';
 
 export interface ITheme {
   name: string;
-  theme: Promise<{ default: { name: string; theme: DefaultTheme } }>;
+  theme: Promise<{ default: DefaultTheme }>;
 }
 
 export interface IThemeSelector extends GrommetProps {
@@ -39,14 +39,16 @@ const setFallbackTheme = (
   availableThemes: ITheme[],
   themeSetter: React.Dispatch<{ name: string; theme: DefaultTheme }>,
 ) => {
-  availableThemes[0].theme.then(themeData => themeSetter(themeData.default));
+  availableThemes[0].theme.then(themeData =>
+    themeSetter({ name: availableThemes[0].name, theme: themeData.default }),
+  );
 };
 
 const setTheme = (
   theme: ITheme,
   themeSetter: React.Dispatch<{ name: string; theme: DefaultTheme }>,
 ) => {
-  theme.theme.then(themeData => themeSetter(themeData.default));
+  theme.theme.then(themeData => themeSetter({ name: theme.name, theme: themeData.default }));
 };
 
 const ThemeSelector = (props: IThemeSelector) => {
