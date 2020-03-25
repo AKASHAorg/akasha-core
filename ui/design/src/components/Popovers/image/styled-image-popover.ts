@@ -5,7 +5,7 @@ const StyledDrop = styled(Drop)`
   height: 13.75rem;
   width: 21.875rem;
   margin-top: 0.313rem;
-  border: 1px solid ${props => props.theme.colors.border}
+  border: 1px solid ${props => props.theme.colors.border};
   border-radius: ${props => props.theme.shapes.largeBorderRadius};
 `;
 

@@ -5,7 +5,6 @@ const StyledDrop = styled(Drop)`
   border-bottom-right-radius: ${props => props.theme.shapes.smallBorderRadius};
   border-top-right-radius: ${props => props.theme.shapes.smallBorderRadius};
   min-width: 10em;
-  // background-color: ${props => props.theme.colors.mediumGrey};
 `;
 
 const StyledTitleBox = styled(Box)`

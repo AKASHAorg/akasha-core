@@ -69,7 +69,7 @@ storiesOf('Bars|Topbar', module).add('Topbar', () => (
 ));
 storiesOf('Bars|Sidebar', module)
   .add('Sidebar', () => (
-    <div style={{ height: '450px', border: '2px solid black' }}>
+    <div style={{ height: '700px', border: '2px solid black' }}>
       <Sidebar
         ethAddress="0x003410490050000320006570034567114572000"
         avatarImage="https://placebeard.it/360x360"

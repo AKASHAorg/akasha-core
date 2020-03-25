@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Button } from '../../Buttons/index';
 import { Icon } from '../../Icon/index';
 import { FormImagePopover } from '../../Popovers/index';
+import { MainAreaCardBox } from '../common/basic-card-box';
 import {
   StyledAvatarDiv,
   StyledAvatarOverlay,
@@ -10,7 +11,6 @@ import {
   StyledCoverImageDiv,
   StyledCoverImageOverlay,
   StyledCoverImagePlaceholderDiv,
-  StyledFormBox,
   StyledImage,
   StyledText,
 } from './styled-form-card';
@@ -113,7 +113,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   };
 
   return (
-    <StyledFormBox className={className}>
+    <MainAreaCardBox className={className}>
       <Box direction="column" pad="medium">
         <Box direction="column" pad="xsmall">
           <Text weight="bold"> {titleLabel}</Text>
@@ -235,7 +235,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           }}
         />
       )}
-    </StyledFormBox>
+    </MainAreaCardBox>
   );
 };
 

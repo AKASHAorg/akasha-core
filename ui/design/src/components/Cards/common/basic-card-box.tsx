@@ -39,4 +39,12 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({ children, className, callToActi
   </StyledBox>
 );
 
-export { BasicCardBox };
+const MainAreaCardBox = styled(BasicCardBox)`
+  max-width: 36.313rem;
+`;
+
+const WidgetAreaCardBox = styled(BasicCardBox)`
+  width: 21rem;
+`;
+
+export { BasicCardBox, MainAreaCardBox, WidgetAreaCardBox };

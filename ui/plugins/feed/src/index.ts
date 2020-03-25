@@ -8,7 +8,6 @@ export const application = {
   // Make sure to change it as it fits.
   activeWhen: {
     path: '/',
-    exact: true,
   },
   // translation config
   i18nConfig: {

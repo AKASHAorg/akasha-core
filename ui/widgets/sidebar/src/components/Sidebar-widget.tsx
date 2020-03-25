@@ -3,7 +3,7 @@ import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 
-const { Box, lightTheme, Icon, styled, ThemeSelector } = DS;
+const { lightTheme, ThemeSelector, ResponsiveSidebar } = DS;
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;
@@ -41,6 +41,7 @@ export default class SidebarWidget extends PureComponent<IProps> {
   }
 
   public render() {
+    console.log(this.props);
     if (this.state.hasErrors) {
       return (
         <div>
@@ -69,8 +70,20 @@ const Menu = (props: MenuProps) => {
   const { navigateToUrl } = props;
   // const { t } = useTranslation();
 
-  const handleNavigation = (path: string) => (/* ev: SyntheticEvent */) => {
-    navigateToUrl(path);
+  const handleNavigation = (path: { appName: string; appSubroute: string }) => {
+    navigateToUrl(`/${path.appName}/${path.appSubroute}`);
+  };
+
+  const handleClickAddApp = () => {
+    return;
+  };
+
+  const handleClickSearch = () => {
+    return;
+  };
+
+  const handleCloseSidebar = () => {
+    return;
   };
 
   return (
@@ -83,17 +96,29 @@ const Menu = (props: MenuProps) => {
         top: 0,
       }}
     >
-      <SidebarWrapper>
-        <Box pad={{ left: '2px' }} style={{ justifyContent: 'space-between', height: '100%' }}>
-          <Icon type="home" onClick={handleNavigation('/')} />
-        </Box>
-      </SidebarWrapper>
+      <ResponsiveSidebar
+        ethAddress={'0x000000000000000000000'}
+        onClickAddApp={handleClickAddApp}
+        onClickCloseSidebar={handleCloseSidebar}
+        onClickSearch={handleClickSearch}
+        searchLabel={'Search'}
+        appCenterLabel={'App Center'}
+        onClickOption={handleNavigation}
+        installedApps={[
+          {
+            name: '3Box',
+            ethAddress: '0x003410490050000327496570034567114572111',
+            image: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+            options: ['Discover', 'About', 'Settings', 'Notifications', 'Feed'],
+          },
+          {
+            name: 'ENS',
+            ethAddress: '0x003410490050000327496570034567114572231',
+            image: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+            options: ['About', 'Settings', 'Notifications'],
+          },
+        ]}
+      />
     </ThemeSelector>
   );
 };
-
-const SidebarWrapper = styled.div`
-  height: 100%;
-  background: ${props => props.theme.colors.lightBackground};
-  padding: 0.75em 0;
-`;

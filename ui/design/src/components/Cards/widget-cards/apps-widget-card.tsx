@@ -3,7 +3,7 @@ import * as React from 'react';
 import MarginInterface from '../../../interfaces/margin.interface';
 import { IconType } from '../../Icon/icon';
 import { SubtitleTextIcon, TextIcon } from '../../TextIcon/index';
-import { StyledWidgetCard } from './styled-widget-cards';
+import { WidgetAreaCardBox } from '../common/basic-card-box';
 
 export interface IAppsWidgetCardProps {
   className?: string;
@@ -31,7 +31,7 @@ const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
   };
 
   return (
-    <StyledWidgetCard className={className}>
+    <WidgetAreaCardBox className={className}>
       <Box pad="medium" gap="medium">
         <TextIcon
           iconType={iconType}
@@ -57,7 +57,7 @@ const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
           ))}
         </Box>
       </Box>
-    </StyledWidgetCard>
+    </WidgetAreaCardBox>
   );
 };
 

@@ -3,7 +3,8 @@ import * as React from 'react';
 import { formatDateShort } from '../../../utils/time';
 import { Button, IconLink } from '../../Buttons';
 import { Icon } from '../../Icon/index';
-import { StyledText, StyledWidgetCard } from './styled-widget-cards';
+import { WidgetAreaCardBox } from '../common/basic-card-box';
+import { StyledText } from './styled-widget-cards';
 
 export interface IAppsWidgetCardProps {
   className?: string;
@@ -52,7 +53,7 @@ const AppInfoWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
   } = props;
 
   return (
-    <StyledWidgetCard className={className}>
+    <WidgetAreaCardBox className={className}>
       <Box
         margin={{ horizontal: 'medium' }}
         border={{
@@ -118,7 +119,7 @@ const AppInfoWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
           size="medium"
         />
       </Box>
-    </StyledWidgetCard>
+    </WidgetAreaCardBox>
   );
 };
 
