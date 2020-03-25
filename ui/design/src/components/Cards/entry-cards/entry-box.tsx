@@ -197,17 +197,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     );
   };
 
-  const border: any = comment
-    ? {
-        color: 'border',
-        size: 'xsmall',
-        style: 'solid',
-        side: 'top',
-      }
-    : false;
-
-  const pad: any = comment ? { top: 'medium' } : 'none';
-
   const [replyCommentOpen, setReplyCommentOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState('');
 
@@ -299,7 +288,22 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   return (
     <div>
-      <Box direction="row" justify="between" margin="medium" pad={pad} border={border}>
+      <Box
+        direction="row"
+        justify="between"
+        margin="medium"
+        pad={comment ? { top: 'medium' } : 'none'}
+        border={
+          comment
+            ? {
+                color: 'border',
+                size: 'xsmall',
+                style: 'solid',
+                side: 'top',
+              }
+            : false
+        }
+      >
         <ProfileAvatarButton
           label={entryData.name}
           info={formatDate(entryData.time, locale)}
