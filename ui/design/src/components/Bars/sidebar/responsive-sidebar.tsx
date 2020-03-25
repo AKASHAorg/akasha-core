@@ -5,10 +5,10 @@ import { ISidebarProps } from './sidebar';
 
 const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
   const {
-    ethAddress,
-    installedApps,
+    loggedEthAddress,
+    menuItems,
     onClickAddApp,
-    onClickOption,
+    onClickMenuItem,
     onClickSearch,
     onClickCloseSidebar,
     searchLabel,
@@ -21,24 +21,24 @@ const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
       {size === 'small' ? (
         <SidebarMobile
           onClickAddApp={onClickAddApp}
-          onClickOption={onClickOption}
+          onClickMenuItem={onClickMenuItem}
           onClickSearch={onClickSearch}
           onClickCloseSidebar={onClickCloseSidebar}
           searchLabel={searchLabel}
           appCenterLabel={appCenterLabel}
-          installedApps={installedApps}
-          ethAddress={ethAddress}
+          menuItems={menuItems}
+          loggedEthAddress={loggedEthAddress}
         />
       ) : (
         <Sidebar
           onClickAddApp={onClickAddApp}
-          onClickOption={onClickOption}
+          onClickMenuItem={onClickMenuItem}
           onClickSearch={onClickSearch}
           onClickCloseSidebar={onClickCloseSidebar}
           searchLabel={searchLabel}
           appCenterLabel={appCenterLabel}
-          installedApps={installedApps}
-          ethAddress={ethAddress}
+          menuItems={menuItems}
+          loggedEthAddress={loggedEthAddress}
         />
       )}
     </>

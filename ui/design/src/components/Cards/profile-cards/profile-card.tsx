@@ -2,7 +2,7 @@ import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
 import { Button } from '../../Buttons/index';
 import { SubtitleTextIcon } from '../../TextIcon/index';
-import { BasicCardBox } from '../index';
+import { MainAreaCardBox } from '../common/basic-card-box';
 import {
   ProfileCardAvatar,
   ProfileCardCoverImage,
@@ -149,7 +149,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     setEditable(false);
   };
   return (
-    <BasicCardBox className={className}>
+    <MainAreaCardBox className={className}>
       <ProfileCardCoverImage
         shareProfileLabel={shareProfileLabel}
         editProfileLabel={editProfileLabel}
@@ -246,7 +246,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           </div>
         )}
       </Box>
-    </BasicCardBox>
+    </MainAreaCardBox>
   );
 };
 
