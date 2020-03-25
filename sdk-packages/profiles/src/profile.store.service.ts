@@ -60,11 +60,10 @@ const service: AkashaService = (invoke, log) => {
       const cid = await ipfs.dag.put(profileData[k]);
       Object.assign(doc, { [k]: cid });
     }
-    const docCid = await ipfs.dag.put(doc);
-    return
+    return await ipfs.dag.put(doc);
   };
 
-  return { registerSchema };
+  return { registerSchema, store };
 };
 
 export default { service, name: PROFILE_STORE };

@@ -9,6 +9,7 @@ import { callService } from '@akashaproject/sdk-core/lib/utils';
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 import cacheService from './cache.service';
 import services, {
+  CACHE_SERVICE,
   moduleName,
   VALIDATOR_SERVICE,
   WEB3_SERVICE,
@@ -29,7 +30,7 @@ export class CommonsModule extends IAkashaModule {
 
   public availableServices(): IAkashaModuleServices {
     return IAkashaModule.EXPORT_TO_CHANNEL(
-      [WEB3_UTILS_SERVICE, VALIDATOR_SERVICE, WEB3_SERVICE],
+      [WEB3_UTILS_SERVICE, VALIDATOR_SERVICE, WEB3_SERVICE, CACHE_SERVICE],
       services,
     );
   }

@@ -2,6 +2,7 @@ import DS from '@akashaproject/design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import menuRoute, { MY_PROFILE, PROFILE_LIST } from '../../routes';
 import MyProfilePage from './my-profile-page';
 import ProfilePage from './profile-page';
 import WidgetList from '../widgets';
@@ -22,9 +23,9 @@ const Routes: React.FC<IRoutesProps> = props => {
       <Grommet theme={lightTheme}>
         <Box>
           <Switch>
-            <Route path={`${path}/list`} render={() => <>A list of profiles</>} />
+            <Route path={menuRoute[PROFILE_LIST]} render={() => <>A list of profiles</>} />
             <Route
-              path={`${path}/my-profile`}
+              path={menuRoute[MY_PROFILE]}
               component={MyProfilePage}
             />
             <Route

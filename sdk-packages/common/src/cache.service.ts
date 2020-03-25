@@ -4,7 +4,7 @@ import Stash from '@akashaproject/sdk-runtime/lib/Stash';
 import { CACHE_SERVICE } from './constants';
 
 const service: AkashaService = (invoke, log) => {
-  const stash = new Stash({ max: 512, maxAge: 1000 * 60 * 60 });
+  const stash = new Stash({ max: 512, maxAge: 0 });
   const getStash = async () => stash;
   return { getStash };
 };
