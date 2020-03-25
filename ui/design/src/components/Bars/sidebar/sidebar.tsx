@@ -1,5 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
+import { Avatar } from '../../Avatar/index';
 import { IconLink } from '../../Buttons';
 import { AppIcon, Icon } from '../../Icon/index';
 import { AppMenuPopover } from '../../Popovers/index';
@@ -11,21 +12,33 @@ import {
   StyledBorderBox,
   StyledBottomDiv,
   StyledHiddenScrollContainer,
+  StyledHRDiv,
+  StyledUserSectionBox,
   StyledVerticalPad,
 } from './styled-sidebar';
-import { UserSection } from './user-section';
 
 export interface ISidebarProps {
-  ethAddress: string;
+  loggedEthAddress: string;
   avatarImage?: string;
   notifications?: INotification[];
-  installedApps: IApp[];
-  onClickOption: (option: string) => void;
+  menuItems: IMenuItem[];
+  currentRoute?: string;
+  onClickMenuItem: (route: string) => void;
   onClickAddApp: () => void;
   onClickSearch: () => void;
   onClickCloseSidebar: () => void;
   searchLabel: string;
   appCenterLabel: string;
+}
+
+export type MenuItemType = 'plugin' | 'app' | 'internal';
+export interface IMenuItem {
+  index: number;
+  label: string;
+  route: string;
+  type: MenuItemType;
+  logo?: string;
+  subRoutes?: IMenuItem[];
 }
 
 export interface IApp {
@@ -46,76 +59,117 @@ export interface INotification {
 const Sidebar: React.FC<ISidebarProps> = props => {
   const {
     avatarImage,
-    ethAddress,
-    notifications,
-    installedApps,
+    loggedEthAddress,
+    // notifications,
+    menuItems,
     onClickAddApp,
-    onClickOption,
+    onClickMenuItem,
     onClickSearch,
   } = props;
 
-  const popoversRef: React.Ref<any> = React.useRef(installedApps?.map(() => React.createRef()));
+  // filter out default plugins like profile and feed
+  const installedApps = menuItems.filter(menuItem => menuItem.type === 'app');
 
-  const initialAppData = {
-    name: '',
-    ethAddress: '',
-    image: '',
-    options: [],
-    index: -1,
-  };
+  const popoversRef: React.Ref<any> = React.useRef(installedApps?.map(() => React.createRef()));
+  const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
+  const feedRef: React.Ref<HTMLDivElement> = React.useRef(null);
+
+  // return the plugins from list of apps
+  const profileDefaultData = menuItems.find(menuItem => menuItem.index === 2)!;
+  const feedDefaultData = menuItems.find(menuItem => menuItem.index === 1)!;
 
   const [appPopoverOpen, setAppPopoverOpen] = React.useState(false);
-  const [hoveredAppData, setHoveredAppData] = React.useState<{
-    name: string;
-    ethAddress: string;
-    image?: string;
-    options: string[];
-    index: number;
-  }>(initialAppData);
 
-  const [currentAppData, setCurrentAppData] = React.useState<{
-    name: string;
-    ethAddress: string;
-    image?: string;
-    options: string[];
-    index: number;
-  }>(initialAppData);
+  const [hoveredAppData, setHoveredAppData] = React.useState<IMenuItem | null>(null);
+  const [currentAppData, setCurrentAppData] = React.useState<IMenuItem | null>(null);
 
-  const [activeOption, setActiveOption] = React.useState(currentAppData.options[0]);
+  const handleMouseEnterProfile = () => {
+    setHoveredAppData(profileDefaultData);
+    setAppPopoverOpen(true);
+  };
+
+  const handleMouseEnterFeed = () => {
+    setHoveredAppData(feedDefaultData);
+    setAppPopoverOpen(true);
+  };
+
+  const [activeOption, setActiveOption] = React.useState('');
 
   // @TODO: use route params to determine active app/option
   React.useEffect(() => {
-    const firstAppData = { ...installedApps[0], index: 0 };
+    const firstAppData = menuItems[0];
     setCurrentAppData(firstAppData);
-    setActiveOption(firstAppData.options[0]);
   }, []);
 
-  const handleAppIconClick = (app: IApp, index: number) => () => {
-    const appData = { ...app, index };
-    setCurrentAppData(appData);
-    setHoveredAppData(appData);
+  const handleAppIconClick = (menuItem: IMenuItem) => () => {
+    setCurrentAppData(menuItem);
+    setHoveredAppData(menuItem);
+    if (menuItem.subRoutes && menuItem.subRoutes.length > 0) {
+      setActiveOption(menuItem.subRoutes[0].label);
+    }
+    onClickMenuItem(menuItem.route);
   };
 
-  const handleOptionClick = (option: string) => () => {
-    setActiveOption(option);
-    onClickOption(option);
+  const handleClickProfile = handleAppIconClick(profileDefaultData);
+
+  const handleClickFeed = handleAppIconClick(feedDefaultData);
+
+  const handleOptionClick = (menuItem: IMenuItem) => () => {
+    setActiveOption(menuItem.label);
+    onClickMenuItem(menuItem.route);
   };
 
-  const handlePopoverOptionClick = (option: string) => {
+  const handlePopoverOptionClick = (subRoute: string) => {
     setCurrentAppData(hoveredAppData);
-    setHoveredAppData(initialAppData);
-    setActiveOption(option);
+    setHoveredAppData(null);
+    setActiveOption(subRoute);
+    onClickMenuItem(subRoute);
   };
 
-  const handleMouseEnter = (app: IApp, index: number) => () => {
-    const appData = { ...app, index };
-    setHoveredAppData(appData);
+  const handleMouseEnter = (menuItem: IMenuItem) => () => {
+    setHoveredAppData(menuItem);
     setAppPopoverOpen(true);
   };
 
   const handleClosePopover = () => {
     setAppPopoverOpen(false);
-    setHoveredAppData(initialAppData);
+    setHoveredAppData(null);
+  };
+
+  const renderPopover = () => {
+    if (appPopoverOpen && hoveredAppData) {
+      if (profileRef.current && hoveredAppData.index === profileDefaultData.index) {
+        return (
+          <AppMenuPopover
+            target={profileRef.current}
+            closePopover={handleClosePopover}
+            menuItem={hoveredAppData}
+            onClickMenuItem={handlePopoverOptionClick}
+          />
+        );
+      }
+      if (feedRef.current && hoveredAppData.index === feedDefaultData.index) {
+        return (
+          <AppMenuPopover
+            target={feedRef.current}
+            closePopover={handleClosePopover}
+            menuItem={hoveredAppData}
+            onClickMenuItem={handlePopoverOptionClick}
+          />
+        );
+      }
+      if (popoversRef.current) {
+        return (
+          <AppMenuPopover
+            target={popoversRef.current[hoveredAppData.index].current}
+            closePopover={handleClosePopover}
+            menuItem={hoveredAppData}
+            onClickMenuItem={handlePopoverOptionClick}
+          />
+        );
+      }
+    }
+    return;
   };
 
   return (
@@ -130,12 +184,66 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           side: 'right',
         }}
       >
-        <UserSection
-          avatarImage={avatarImage}
-          ethAddress={ethAddress}
-          notifications={notifications}
-          onClickSearch={onClickSearch}
-        />
+        <StyledUserSectionBox
+          align="center"
+          direction="column"
+          fill={true}
+          pad={{ top: 'xxsmall' }}
+        >
+          <StyledVerticalPad>
+            <StyledBorderBox
+              fill="horizontal"
+              align="center"
+              userSection={true}
+              active={currentAppData?.index === profileDefaultData.index}
+              hovered={hoveredAppData?.index === profileDefaultData.index}
+              ref={profileRef}
+            >
+              <StyledAppIconWrapper
+                active={currentAppData?.index === profileDefaultData.index}
+                hovered={hoveredAppData?.index === profileDefaultData.index}
+                onMouseEnter={handleMouseEnterProfile}
+              >
+                <Avatar
+                  ethAddress={loggedEthAddress}
+                  src={avatarImage}
+                  size="sm"
+                  onClick={handleClickProfile}
+                />
+              </StyledAppIconWrapper>
+            </StyledBorderBox>
+          </StyledVerticalPad>
+          <StyledVerticalPad>
+            <StyledBorderBox
+              fill="horizontal"
+              align="center"
+              userSection={true}
+              active={currentAppData?.index === feedDefaultData.index}
+              hovered={hoveredAppData?.index === feedDefaultData.index}
+              ref={feedRef}
+            >
+              <StyledAppIconWrapper
+                active={currentAppData?.index === feedDefaultData.index}
+                hovered={hoveredAppData?.index === feedDefaultData.index}
+                onMouseEnter={handleMouseEnterFeed}
+              >
+                <AppIcon
+                  placeholderIconType="ethereumWorldLogo"
+                  onClick={handleClickFeed}
+                  size="md"
+                />
+              </StyledAppIconWrapper>
+            </StyledBorderBox>
+          </StyledVerticalPad>
+
+          <StyledVerticalPad>
+            <Icon type="notifications" clickable={true} />
+          </StyledVerticalPad>
+          <StyledVerticalPad>
+            <Icon type="search" clickable={true} onClick={onClickSearch} />
+          </StyledVerticalPad>
+        </StyledUserSectionBox>
+        <StyledHRDiv />
         <Box align="center" justify="between" fill={true}>
           <StyledHiddenScrollContainer>
             {installedApps.map((app, index) => (
@@ -143,19 +251,19 @@ const Sidebar: React.FC<ISidebarProps> = props => {
                 <StyledBorderBox
                   fill="horizontal"
                   align="center"
-                  active={index === currentAppData.index}
-                  hovered={index === hoveredAppData.index}
+                  active={index === currentAppData?.index}
+                  hovered={index === hoveredAppData?.index}
                   ref={popoversRef.current[index]}
                 >
                   <StyledAppIconWrapper
-                    active={index === currentAppData.index}
-                    hovered={index === hoveredAppData.index}
-                    onMouseEnter={handleMouseEnter(app, index)}
+                    active={index === currentAppData?.index}
+                    hovered={index === hoveredAppData?.index}
+                    onMouseEnter={handleMouseEnter({ ...app, index })}
                   >
                     <AppIcon
                       placeholderIconType="app"
-                      appImg={app.image}
-                      onClick={handleAppIconClick(app, index)}
+                      appImg={app.logo}
+                      onClick={handleAppIconClick({ ...app, index })}
                       size="md"
                     />
                   </StyledAppIconWrapper>
@@ -163,14 +271,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
               </StyledVerticalPad>
             ))}
           </StyledHiddenScrollContainer>
-          {appPopoverOpen && popoversRef.current && hoveredAppData && (
-            <AppMenuPopover
-              target={popoversRef.current[hoveredAppData.index].current}
-              closePopover={handleClosePopover}
-              appData={hoveredAppData}
-              onClickOption={handlePopoverOptionClick}
-            />
-          )}
+          {renderPopover()}
           <StyledBottomDiv>
             <Icon type="plusGrey" onClick={onClickAddApp} clickable={true} size="md" />
           </StyledBottomDiv>
@@ -196,16 +297,16 @@ const Sidebar: React.FC<ISidebarProps> = props => {
             direction="row"
             align="center"
           >
-            <AppIcon placeholderIconType="app" size="md" appImg={currentAppData.image} />
-            <Text size="large">{currentAppData.name}</Text>
+            <AppIcon placeholderIconType="app" size="md" appImg={currentAppData?.logo} />
+            <Text size="large">{currentAppData?.label}</Text>
           </Box>
           <Box pad="none">
-            {currentAppData.options?.map((option, index) => (
+            {currentAppData?.subRoutes?.map((subRoute: IMenuItem, index: number) => (
               <Box pad={{ vertical: 'xsmall' }} key={index}>
                 <IconLink
-                  label={option}
-                  onClick={handleOptionClick(option)}
-                  active={option === activeOption}
+                  label={subRoute.label}
+                  onClick={handleOptionClick(subRoute)}
+                  active={subRoute.label === activeOption}
                 />
               </Box>
             ))}

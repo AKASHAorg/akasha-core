@@ -3,7 +3,7 @@ import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 
-const { Box, lightTheme, Icon, styled, ThemeSelector } = DS;
+const { lightTheme, ThemeSelector, ResponsiveSidebar } = DS;
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;
@@ -69,8 +69,20 @@ const Menu = (props: MenuProps) => {
   const { navigateToUrl } = props;
   // const { t } = useTranslation();
 
-  const handleNavigation = (path: string) => (/* ev: SyntheticEvent */) => {
+  const handleNavigation = (path: string) => {
     navigateToUrl(path);
+  };
+
+  const handleClickAddApp = () => {
+    return;
+  };
+
+  const handleClickSearch = () => {
+    return;
+  };
+
+  const handleCloseSidebar = () => {
+    return;
   };
 
   return (
@@ -83,17 +95,43 @@ const Menu = (props: MenuProps) => {
         top: 0,
       }}
     >
-      <SidebarWrapper>
-        <Box pad={{ left: '2px' }} style={{ justifyContent: 'space-between', height: '100%' }}>
-          <Icon type="home" onClick={handleNavigation('/')} />
-        </Box>
-      </SidebarWrapper>
+      <ResponsiveSidebar
+        loggedEthAddress={'0x000000000000000000000'}
+        onClickAddApp={handleClickAddApp}
+        onClickCloseSidebar={handleCloseSidebar}
+        onClickSearch={handleClickSearch}
+        searchLabel={'Search'}
+        appCenterLabel={'App Center'}
+        onClickMenuItem={handleNavigation}
+        // replace with data from API
+        menuItems={[
+          {
+            label: 'AKASHA Feed',
+            index: 1,
+            route: '/',
+            type: 'plugin',
+            logo: undefined,
+          },
+          {
+            label: 'AKASHA Profile',
+            index: 2,
+            route: '/profile',
+            type: 'plugin',
+            logo: undefined,
+            subRoutes: [
+              { index: 0, label: 'Profile list', route: '/profile/list', type: 'internal' },
+              { index: 1, label: 'My profile', route: '/profile/my-profile', type: 'internal' },
+            ],
+          },
+          {
+            label: '3box integration',
+            index: 3,
+            route: '/3box-app',
+            type: 'plugin',
+            logo: undefined,
+          },
+        ]}
+      />
     </ThemeSelector>
   );
 };
-
-const SidebarWrapper = styled.div`
-  height: 100%;
-  background: ${props => props.theme.colors.lightBackground};
-  padding: 0.75em 0;
-`;

@@ -102,6 +102,19 @@ const profileProvidersData = {
   ],
 };
 
+const boxProviderData = {
+  providerName: '3Box',
+  avatar: '',
+  coverImage: '',
+  name: '',
+  description: '',
+};
+
+const ensProviderData = {
+  providerName: 'ENS',
+  name: '',
+};
+
 const appData = {
   ethAddress: '0x003410490050000320006570047391021232334',
   avatarImage: '',
@@ -113,6 +126,16 @@ const appData = {
   users: '21896',
   actions: '12',
   profileType: 'dapp',
+};
+
+const appInfo = {
+  name: '3Box',
+  version: '0.1.2',
+  status: 'Live',
+  lastUpdateDate: '1578671422',
+  registryDate: '1563810622',
+  admin: '@anadoe',
+  category: 'Development',
 };
 
 const entryData = {
@@ -215,6 +238,7 @@ const publishLabel = 'Publish';
 const placeholderLabel = 'Share your thoughts';
 
 export {
+  appInfo,
   aboutMeLabel,
   actionsLabel,
   appData,
@@ -242,4 +266,6 @@ export {
   shareProfileLabel,
   topicsDataSource,
   usersLabel,
+  boxProviderData,
+  ensProviderData,
 };

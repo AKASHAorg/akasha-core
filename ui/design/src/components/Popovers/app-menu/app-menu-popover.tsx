@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { IApp } from '../../Bars/sidebar/sidebar';
+import { IMenuItem } from '../../Bars/sidebar/sidebar';
 import { IconLink } from '../../Buttons';
 import { Icon } from '../../Icon/index';
 import {
@@ -11,38 +11,40 @@ import {
 } from './styled-app-menu-popover';
 
 export interface IAppMenuPopover {
-  appData: IApp;
+  menuItem: IMenuItem;
   target: HTMLDivElement;
   closePopover: () => void;
-  onClickOption: (option: string) => void;
+  onClickMenuItem: (subRoute: string) => void;
 }
 
 const AppMenuPopover: React.FC<IAppMenuPopover> = props => {
-  const { appData, target, closePopover, onClickOption } = props;
+  const { menuItem, target, closePopover, onClickMenuItem } = props;
 
   let aboutFlag = false;
   let settingsFlag = false;
   let notificationsFlag = false;
 
-  const filteredAppData = appData.options.filter(option => {
-    if (option.toLowerCase() === 'about') {
-      aboutFlag = true;
-      return false;
-    }
-    if (option.toLowerCase() === 'settings') {
-      settingsFlag = true;
-      return false;
-    }
-    if (option.toLowerCase() === 'notifications') {
-      notificationsFlag = true;
-      return false;
-    }
+  const filteredAppData =
+    menuItem.subRoutes &&
+    menuItem.subRoutes.filter(subRoute => {
+      if (subRoute.label.toLowerCase() === 'about') {
+        aboutFlag = true;
+        return false;
+      }
+      if (subRoute.label.toLowerCase() === 'settings') {
+        settingsFlag = true;
+        return false;
+      }
+      if (subRoute.label.toLowerCase() === 'notifications') {
+        notificationsFlag = true;
+        return false;
+      }
 
-    return true;
-  });
+      return true;
+    });
 
-  const handleOptionClick = (option: string) => () => {
-    onClickOption(option);
+  const handleClickSubroute = (subRoute: string) => () => {
+    onClickMenuItem(subRoute);
     closePopover();
   };
   return (
@@ -58,28 +60,31 @@ const AppMenuPopover: React.FC<IAppMenuPopover> = props => {
         align="center"
         pad={{ horizontal: 'xsmall' }}
       >
-        <Text weight="bold" truncate={true} title={appData.name}>
-          {appData.name}
+        <Text weight="bold" truncate={true} title={menuItem.label}>
+          {menuItem.label}
         </Text>
         <Box direction="row" gap="xsmall" align="center">
-          {aboutFlag && <Icon type="info" clickable={true} onClick={handleOptionClick('About')} />}
+          {aboutFlag && (
+            <Icon type="info" clickable={true} onClick={handleClickSubroute('About')} />
+          )}
           {settingsFlag && (
-            <Icon type="settings" clickable={true} onClick={handleOptionClick('Settings')} />
+            <Icon type="settings" clickable={true} onClick={handleClickSubroute('Settings')} />
           )}
           {notificationsFlag && (
             <Icon
               type="notifications"
               clickable={true}
-              onClick={handleOptionClick('Notifications')}
+              onClick={handleClickSubroute('Notifications')}
             />
           )}
         </Box>
       </StyledTitleBox>
       <StyledOptionsBox direction="column" pad={{ horizontal: 'xsmall' }}>
-        {filteredAppData.length > 0 &&
-          filteredAppData.map((option, index) => (
+        {filteredAppData &&
+          filteredAppData.length > 0 &&
+          filteredAppData.map((subRoute, index) => (
             <StyledOptionDiv key={index}>
-              <IconLink label={option} onClick={handleOptionClick(option)} />
+              <IconLink label={subRoute.label} onClick={handleClickSubroute(subRoute.route)} />
             </StyledOptionDiv>
           ))}
       </StyledOptionsBox>
