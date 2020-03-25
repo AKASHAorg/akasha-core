@@ -34,7 +34,6 @@ const profileStore = {
 };
 
 const service: AkashaService = (invoke, log) => {
-
   let registeredSchema = false;
   const registerSchema = async () => {
     if (registeredSchema) return;
