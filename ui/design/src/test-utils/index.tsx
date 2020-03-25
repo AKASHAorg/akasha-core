@@ -1,7 +1,7 @@
 import { fireEvent, queries, render } from '@testing-library/react';
 import { Grommet, ThemeType } from 'grommet';
 import React, { ReactElement } from 'react';
-import lightTheme from '../styles/themes/light-theme';
+import lightTheme from '../styles/themes/light/light-theme';
 
 export const wrapWithTheme = (children: any) => {
   return <Grommet theme={lightTheme as ThemeType}>{children}</Grommet>;
