@@ -1,7 +1,8 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { Icon } from '../../Icon/index';
-import { StyledButton, StyledWidgetCard } from './styled-widget-cards';
+import { WidgetAreaCardBox } from '../common/basic-card-box';
+import { StyledButton } from './styled-widget-cards';
 
 export interface IMiniInfoCardProps {
   className?: string;
@@ -27,7 +28,7 @@ const MiniInfoWidgetCard: React.FC<IMiniInfoCardProps> = props => {
   } = props;
 
   return (
-    <StyledWidgetCard className={className} callToAction={true}>
+    <WidgetAreaCardBox className={className} callToAction={true}>
       {handleDismiss && (
         <Box justify="end" pad={{ top: 'xxsmall', right: 'xxsmall' }} direction="row">
           <Icon type="close" onClick={handleDismiss} primaryColor={true} />
@@ -46,7 +47,7 @@ const MiniInfoWidgetCard: React.FC<IMiniInfoCardProps> = props => {
           />
         </Box>
       </Box>
-    </StyledWidgetCard>
+    </WidgetAreaCardBox>
   );
 };
 

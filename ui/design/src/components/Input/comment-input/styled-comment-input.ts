@@ -1,3 +1,4 @@
+import { Box } from 'grommet';
 import styled from 'styled-components';
 
 const StyledDiv = styled.div`
@@ -10,4 +11,8 @@ const StyledDiv = styled.div`
   }
 `;
 
-export { StyledDiv };
+const StyledCommentWrapper = styled(Box)`
+  flex: 1 1 auto;
+`;
+
+export { StyledDiv, StyledCommentWrapper };

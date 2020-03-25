@@ -2,7 +2,8 @@ import { Box, FormField, Text } from 'grommet';
 import * as React from 'react';
 import { Button } from '../../Buttons/index';
 import { Icon } from '../../Icon/index';
-import { HiddenSpan, StyledFormBox, StyledText, StyledTextInput } from './styled-form-card';
+import { MainAreaCardBox } from '../common/basic-card-box';
+import { HiddenSpan, StyledText, StyledTextInput } from './styled-form-card';
 
 export interface IEnsFormCardProps {
   className?: string;
@@ -68,6 +69,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
 
   const handleCancel = () => {
     setName('');
+    setTextInputComputedWidth(initialInputWidth);
     setLoading(false);
     setError(false);
     setSuccess(false);
@@ -136,7 +138,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   };
 
   return (
-    <StyledFormBox className={className}>
+    <MainAreaCardBox className={className}>
       <Box direction="column" pad="medium">
         <Box direction="column" pad="xsmall">
           <Text weight="bold"> {titleLabel}</Text>
@@ -198,7 +200,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
           </Box>
         )}
       </Box>
-    </StyledFormBox>
+    </MainAreaCardBox>
   );
 };
 

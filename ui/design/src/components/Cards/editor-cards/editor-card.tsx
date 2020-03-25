@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Avatar } from '../../Avatar/index';
 import { Icon } from '../../Icon/index';
 import { EditorModal } from '../../Modals/index';
-import { BasicCardBox } from '../index';
+import { MainAreaCardBox } from '../common/basic-card-box';
 
 export interface IEditorCard {
   className?: string;
@@ -37,7 +37,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
   };
 
   return (
-    <BasicCardBox className={className}>
+    <MainAreaCardBox className={className}>
       {modalOpen && (
         <EditorModal
           closeModal={closeModal}
@@ -70,7 +70,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
           <Text size="large">{publishLabel}</Text>
         </StyledDiv>
       </Box>
-    </BasicCardBox>
+    </MainAreaCardBox>
   );
 };
 

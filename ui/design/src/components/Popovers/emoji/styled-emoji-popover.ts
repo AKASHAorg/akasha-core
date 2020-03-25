@@ -48,7 +48,7 @@ const StyledEmojiDrop = styled(Drop)`
   width: 21.875em;
   margin-top: 0.313em;
   margin-left: -1.563em;
-  border: 1px solid ${props => props.theme.colors.border}
+  border: 1px solid ${props => props.theme.colors.border};
   border-radius: ${props => props.theme.shapes.largeBorderRadius};
 `;
 

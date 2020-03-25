@@ -2,7 +2,7 @@ import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { Avatar } from '../../Avatar/index';
 import { SubtitleTextIcon } from '../../TextIcon/index';
-import { BasicCardBox } from '../index';
+import { WidgetAreaCardBox } from '../common/basic-card-box';
 import { AvatarDiv } from './styled-profile-card';
 
 export interface IProfileData {
@@ -54,7 +54,7 @@ const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
   const rightSubLabel = profileData.profileType === 'dapp' ? actionsLabel : appsLabel;
 
   return (
-    <BasicCardBox className={className}>
+    <WidgetAreaCardBox className={className}>
       <Box
         height="5.5em"
         background={profileData.coverImage}
@@ -112,7 +112,7 @@ const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
         </Text>
         <Text color="primaryText">{profileData.description}</Text>
       </Box>
-    </BasicCardBox>
+    </WidgetAreaCardBox>
   );
 };
 

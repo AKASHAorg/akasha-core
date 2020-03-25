@@ -1,10 +1,5 @@
 import { Image, Text } from 'grommet';
 import styled, { css } from 'styled-components';
-import { BasicCardBox } from '../common/basic-card-box';
-
-const StyledFormBox = styled(BasicCardBox)`
-  width: 36.313rem;
-`;
 
 const StyledText = styled(Text)`
   text-transform: uppercase;
@@ -15,11 +10,10 @@ export interface IStyledTextInput {
 }
 
 const StyledTextInput = styled.input<IStyledTextInput>`
-  max-width: 30rem;
+  max-width: 20rem;
   outline: none;
   background: transparent;
   border: none;
-  // padding-right: 0px;
   box-sizing: content-box;
   ${props => css`
     width: ${props.computedWidth};
@@ -141,7 +135,6 @@ const StyledCoverImageOverlay = styled.div`
 `;
 
 export {
-  StyledFormBox,
   StyledText,
   StyledAvatarPlaceholderDiv,
   StyledCoverImagePlaceholderDiv,

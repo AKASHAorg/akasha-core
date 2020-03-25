@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ILocale } from '../../../utils/time';
-import { BasicCardBox, EntryBox } from '../index';
+import { MainAreaCardBox } from '../common/basic-card-box';
+import { EntryBox } from '../index';
 import { IEntryData } from './entry-box';
 
 export interface IEntryCardProps {
@@ -51,7 +52,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox className={className}>
+    <MainAreaCardBox className={className}>
       <EntryBox
         entryData={entryData}
         onClickAvatar={onClickAvatar}
@@ -95,7 +96,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
             locale={locale}
           />
         ))}
-    </BasicCardBox>
+    </MainAreaCardBox>
   );
 };
 

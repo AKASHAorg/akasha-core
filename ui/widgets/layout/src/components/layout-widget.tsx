@@ -11,16 +11,15 @@ const LayoutWrapper = styled(Box)`
 const MainArea = styled(Box)``;
 
 const SidebarSlot = styled(Box)<{ visible: boolean }>`
-  z-index: 110;
   position: relative;
   top: 0;
   @media only screen and (max-width: ${props => props.theme.breakpoints.xlarge.value}px) {
-    min-width: 4.5em;
+    min-width: 15rem;
   }
   @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
     position: sticky;
     top: 0;
-    min-width: 3em;
+    min-width: 15rem;
   }
   @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
     position: fixed;
@@ -154,9 +153,9 @@ class LayoutWidget extends PureComponent<IProps> {
         <Grommet theme={lightTheme}>
           <LayoutWrapper>
             <SidebarSlot id={sidebarSlotId} visible={sidebarVisible} />
-            <MainArea>
+            <MainArea fill={true}>
               <TopbarSlot id={topbarSlotId} />
-              <PluginSlot id={pluginSlotId} />
+              <PluginSlot id={pluginSlotId} fill={true} />
             </MainArea>
           </LayoutWrapper>
         </Grommet>

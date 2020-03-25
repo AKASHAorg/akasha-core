@@ -58,9 +58,9 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
     return { color: 'background', size: '2px', side: 'left' };
   };
 
-  const handleOptionClick = (option: string) => () => {
+  const handleOptionClick = (name: string, option: string) => () => {
     setActiveOption(option);
-    onClickOption(option);
+    onClickOption({ appName: name, appSubroute: option });
   };
 
   return (
@@ -114,7 +114,7 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
                     <IconLink
                       label={option}
                       key={idx}
-                      onClick={handleOptionClick(option)}
+                      onClick={handleOptionClick(app.name, option)}
                       size="medium"
                       margin={{ vertical: 'xsmall' }}
                       active={option === activeOption}
