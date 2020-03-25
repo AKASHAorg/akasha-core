@@ -3,7 +3,7 @@ import * as React from 'react';
 import { IconLink } from '../../Buttons';
 import { AppIcon, Icon } from '../../Icon/index';
 import { TextIcon } from '../../TextIcon/index';
-import { IApp, ISidebarProps } from './sidebar';
+import { IMenuItem, ISidebarProps } from './sidebar';
 import {
   StyledAppIconWrapper,
   StyledAppOptionBox,
@@ -14,53 +14,42 @@ import {
 
 const SidebarMobile: React.FC<ISidebarProps> = props => {
   const {
-    installedApps,
+    menuItems,
     onClickAddApp,
-    onClickOption,
+    onClickMenuItem,
     onClickSearch,
     onClickCloseSidebar,
     searchLabel,
     appCenterLabel,
   } = props;
 
-  const [currentAppData, setCurrentAppData] = React.useState<{
-    name: string;
-    ethAddress: string;
-    image?: string;
-    options: string[];
-    index: number;
-  }>({
-    name: '',
-    ethAddress: '',
-    image: '',
-    options: [],
-    index: 0,
-  });
+  // filter out default plugins like profile and feed
+  const installedApps = menuItems.filter(menuItem => menuItem.type === 'app');
+
+  const [currentAppData, setCurrentAppData] = React.useState<IMenuItem | null>(null);
 
   // @TODO: use route params to determine active app/option
   React.useEffect(() => {
-    const firstAppData = { ...installedApps[0], index: 0 };
+    const firstAppData = menuItems[0];
     setCurrentAppData(firstAppData);
-    setActiveOption(firstAppData.options[0]);
   }, []);
 
-  const [activeOption, setActiveOption] = React.useState(currentAppData.options[0]);
+  const [activeOption, setActiveOption] = React.useState('');
 
-  const handleAppIconClick = (app: IApp, index: number) => () => {
-    const appData = { ...app, index };
-    setCurrentAppData(appData);
+  const handleAppIconClick = (menuItem: IMenuItem) => () => {
+    setCurrentAppData(menuItem);
   };
 
   const handleActiveBorder: any = (index: number) => {
-    if (index === currentAppData.index) {
+    if (index === currentAppData?.index) {
       return { color: 'accent', size: '2px', side: 'left' };
     }
     return { color: 'background', size: '2px', side: 'left' };
   };
 
-  const handleOptionClick = (name: string, option: string) => () => {
-    setActiveOption(option);
-    onClickOption({ appName: name, appSubroute: option });
+  const handleOptionClick = (menuItem: IMenuItem) => () => {
+    setActiveOption(menuItem.label);
+    onClickMenuItem(menuItem.route);
   };
 
   return (
@@ -89,9 +78,9 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
       <Box align="center" fill={true}>
         <StyledHiddenScrollContainer>
           <Accordion>
-            {installedApps.map((app, index) => (
+            {installedApps.map((menuItem, index) => (
               <AccordionPanel
-                onClick={handleAppIconClick(app, index)}
+                onClick={handleAppIconClick(menuItem)}
                 label={
                   <Box
                     pad={{ horizontal: 'small' }}
@@ -101,23 +90,23 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
                     direction="row"
                     align="center"
                   >
-                    <StyledAppIconWrapper active={index === currentAppData.index}>
-                      <AppIcon placeholderIconType="app" appImg={app.image} size="md" />
+                    <StyledAppIconWrapper active={index === currentAppData?.index}>
+                      <AppIcon placeholderIconType="app" appImg={menuItem.logo} size="md" />
                     </StyledAppIconWrapper>
-                    <Text>{app.name}</Text>
+                    <Text>{menuItem.label}</Text>
                   </Box>
                 }
                 key={index}
               >
                 <StyledAppOptionBox direction="column" pad={{ vertical: 'small', left: '1.75em' }}>
-                  {app.options.map((option, idx) => (
+                  {menuItem.subRoutes?.map(subRouteMenuItem => (
                     <IconLink
-                      label={option}
-                      key={idx}
-                      onClick={handleOptionClick(app.name, option)}
+                      label={subRouteMenuItem.label}
+                      key={subRouteMenuItem.index}
+                      onClick={handleOptionClick(subRouteMenuItem)}
                       size="medium"
                       margin={{ vertical: 'xsmall' }}
-                      active={option === activeOption}
+                      active={subRouteMenuItem.label === activeOption}
                     />
                   ))}
                 </StyledAppOptionBox>

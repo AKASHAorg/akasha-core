@@ -70,8 +70,8 @@ const Menu = (props: MenuProps) => {
   const { navigateToUrl } = props;
   // const { t } = useTranslation();
 
-  const handleNavigation = (path: { appName: string; appSubroute: string }) => {
-    navigateToUrl(`/${path.appName}/${path.appSubroute}`);
+  const handleNavigation = (path: string) => {
+    navigateToUrl(path);
   };
 
   const handleClickAddApp = () => {
@@ -97,25 +97,39 @@ const Menu = (props: MenuProps) => {
       }}
     >
       <ResponsiveSidebar
-        ethAddress={'0x000000000000000000000'}
+        loggedEthAddress={'0x000000000000000000000'}
         onClickAddApp={handleClickAddApp}
         onClickCloseSidebar={handleCloseSidebar}
         onClickSearch={handleClickSearch}
         searchLabel={'Search'}
         appCenterLabel={'App Center'}
-        onClickOption={handleNavigation}
-        installedApps={[
+        onClickMenuItem={handleNavigation}
+        // replace with data from API
+        menuItems={[
           {
-            name: '3Box',
-            ethAddress: '0x003410490050000327496570034567114572111',
-            image: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
-            options: ['Discover', 'About', 'Settings', 'Notifications', 'Feed'],
+            label: 'AKASHA Feed',
+            index: 1,
+            route: '/',
+            type: 'plugin',
+            logo: undefined,
           },
           {
-            name: 'ENS',
-            ethAddress: '0x003410490050000327496570034567114572231',
-            image: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
-            options: ['About', 'Settings', 'Notifications'],
+            label: 'AKASHA Profile',
+            index: 2,
+            route: '/profile',
+            type: 'plugin',
+            logo: undefined,
+            subRoutes: [
+              { index: 0, label: 'Profile list', route: '/profile/list', type: 'internal' },
+              { index: 1, label: 'My profile', route: '/profile/my-profile', type: 'internal' },
+            ],
+          },
+          {
+            label: '3box integration',
+            index: 3,
+            route: '/3box-app',
+            type: 'plugin',
+            logo: undefined,
           },
         ]}
       />
