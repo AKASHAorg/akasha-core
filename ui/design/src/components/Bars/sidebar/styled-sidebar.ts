@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 const StyledHiddenScrollContainer = styled.div`
   overflow: auto;
   height: 100%;
-  width: 100%
+  width: 100%;
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
   ::-webkit-scrollbar {
@@ -12,36 +12,41 @@ const StyledHiddenScrollContainer = styled.div`
   }
 `;
 
+const StyledHRDiv = styled.div`
+  width: 2.25rem;
+  border-top: 1px solid ${props => props.theme.colors.border};
+`;
+
 const StyledUserSectionBox = styled(Box)`
-  height: 11em;
+  height: 16rem;
 `;
 
 const StyledBottomDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 4em;
+  height: 4rem;
 `;
 
 const SidebarBox = styled(Box)`
-  width: 4em;
+  width: 4rem;
 `;
 
 const SecondarySidebarBox = styled(Box)`
-  width: 10.8em;
+  width: 10.8rem;
   background-color: ${props => props.theme.colors.lightestGrey};
 `;
 
 const SecondarySidebarContentWrapper = styled.div`
-  width: 8.75em;
+  width: 8.75rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 `;
 
 const StyledAppIconWrapper = styled.div<{ active: boolean; hovered?: boolean }>`
-  width: 2.25em;
-  height: 2.25em;
+  width: 2.25rem;
+  height: 2.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,20 +65,21 @@ const StyledAppIconWrapper = styled.div<{ active: boolean; hovered?: boolean }>`
 const StyledVerticalPad = styled.div`
   display: flex;
   align-items: center;
-  height: 3.063em;
+  justify-content: center;
+  height: 3.063rem;
   width: 100%;
 `;
 
-const StyledBorderBox = styled(Box)<{ active: boolean; hovered?: boolean }>`
-  height: 2.25em;
+const StyledBorderBox = styled(Box)<{ active: boolean; hovered?: boolean; userSection?: boolean }>`
+  height: 2.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
   ${props => {
     if (props.hovered) {
       return css`
-        margin-left: 0.3em;
-        height: 3.063em;
+        margin-left: 0.3rem;
+        height: 3.063rem;
         box-shadow: ${props.theme.colors.shadow};
         border-top-left-radius: ${props.theme.shapes.borderRadius};
         border-bottom-left-radius: ${props.theme.shapes.borderRadius};
@@ -88,7 +94,7 @@ const StyledBorderBox = styled(Box)<{ active: boolean; hovered?: boolean }>`
       `;
     }
     return css`
-      opacity: 0.4;
+      opacity: ${props.userSection ? 1 : 0.4};
       border-left: 2px solid ${props.theme.colors.background};
     `;
   }}
@@ -99,11 +105,11 @@ const StyledAppOptionBox = styled(Box)`
 `;
 
 const StyledMobileHeaderBox = styled(Box)`
-  height: 6em;
+  height: 6rem;
 `;
 
 const StyledMobileFooterBox = styled(Box)`
-  height: 5em;
+  height: 5rem;
 `;
 
 export {
@@ -119,4 +125,5 @@ export {
   StyledMobileFooterBox,
   StyledVerticalPad,
   StyledBorderBox,
+  StyledHRDiv,
 };

@@ -1,9 +1,10 @@
 import { TextInput } from 'grommet';
 import styled from 'styled-components';
+// import { Button } from '../../Buttons/index';
 
 const StyledLinkIconDiv = styled.div`
-  height: 32px;
-  width: 32px;
+  height: 2rem;
+  width: 2rem;
   background-color: ${props => props.theme.colors.lightBackground};
   display: flex;
   justify-content: center;
@@ -13,12 +14,23 @@ const StyledLinkIconDiv = styled.div`
 
 const StyledTextInput = styled(TextInput)`
   padding: 0;
-  height: 23px;
-
   font-family: ${props => props.theme.shapes.fontFamily};
   font-size: ${props => props.theme.shapes.fontSizes.large.size};
   line-height: ${props => props.theme.shapes.fontSizes.large.height};
   color: ${props => props.theme.colors.primaryText};
 `;
+const StyledInputWrapper = styled.div`
+  width 77%;
+`;
+const StyledButton = styled.div`
+  border-radius: 50%;
+  height: 1.25rem;
+  width: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${props => props.theme.colors.accent};
+  cursor: pointer;
+`;
 
-export { StyledLinkIconDiv, StyledTextInput };
+export { StyledLinkIconDiv, StyledTextInput, StyledButton, StyledInputWrapper };

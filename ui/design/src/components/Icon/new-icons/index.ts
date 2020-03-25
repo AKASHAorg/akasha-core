@@ -7,17 +7,21 @@ import app from './app';
 import arrowDown from './arrow-down';
 import arrowLeft from './arrow-left';
 import arrowRight from './arrow-right';
+import available from './available';
 import bold from './bold';
 import bookmark from './bookmark';
 import calendar from './calendar';
+import check from './check';
 import close from './close';
 import code from './code';
 import coins from './coins';
 import comments from './comments';
+import copy from './copy';
 import document from './document';
 import edit from './edit';
 import editSimple from './edit-simple';
 import emoji from './emoji';
+import error from './error';
 import ethereumWorldLogo from './ethereum-world-logo';
 import eye from './eye';
 import facebook from './facebook';
@@ -28,6 +32,7 @@ import image from './image';
 import info from './info';
 import italic from './italic';
 import link from './link';
+import loading from './loading';
 import media from './media';
 import menu from './menu';
 import moreDark from './more-dark';
@@ -55,6 +60,7 @@ import thumbsDownWhite from './thumbs-down-white';
 import thumbsUpGrey from './thumbs-up-grey';
 import thumbsUpWhite from './thumbs-up-white';
 import transfer from './transfer';
+import trash from './trash';
 import trendingApps from './trending-apps';
 import twitter from './twitter';
 import underline from './underline';
@@ -65,6 +71,7 @@ export {
   activity,
   addCard,
   announcement,
+  available,
   reload,
   pin,
   settings,
@@ -73,8 +80,11 @@ export {
   calendar,
   code,
   coins,
+  copy,
+  check,
   payment,
   eye,
+  error,
   facebook,
   document,
   ethereumWorldLogo,
@@ -88,6 +98,7 @@ export {
   bold,
   comments,
   close,
+  trash,
   editSimple,
   edit,
   emoji,
@@ -124,4 +135,5 @@ export {
   underline,
   upload,
   wallet,
+  loading,
 };
