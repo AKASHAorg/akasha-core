@@ -161,10 +161,15 @@ export default class AppLoader implements IAppLoader {
     }
     const { loadingFn, ...otherProps } = this.config.layout;
     // this is very important to wait on for dom
-    await singleSpa.mountRootParcel(loadingFn, {
-      domElement: domEl,
-      ...otherProps,
-    }).mountPromise;
+    await new Promise(resolve => {
+      singleSpa.mountRootParcel(loadingFn, {
+        domElement: domEl,
+        ...otherProps,
+        themeReadyEvent: () => {
+          resolve();
+        },
+      });
+    });
   }
 
   public async uninstallApp(appName: string, packageLoader: any, packageId: string) {
