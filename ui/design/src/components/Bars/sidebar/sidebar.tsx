@@ -93,16 +93,6 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     setAppPopoverOpen(true);
   };
 
-  const handleClickProfile = () => {
-    setCurrentAppData(profileDefaultData);
-    setHoveredAppData(profileDefaultData);
-  };
-
-  const handleClickFeed = () => {
-    setCurrentAppData(feedDefaultData);
-    setHoveredAppData(feedDefaultData);
-  };
-
   const [activeOption, setActiveOption] = React.useState('');
 
   // @TODO: use route params to determine active app/option
@@ -119,6 +109,10 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     }
     onClickMenuItem(menuItem.route);
   };
+
+  const handleClickProfile = handleAppIconClick(profileDefaultData);
+
+  const handleClickFeed = handleAppIconClick(feedDefaultData);
 
   const handleOptionClick = (menuItem: IMenuItem) => () => {
     setActiveOption(menuItem.label);
