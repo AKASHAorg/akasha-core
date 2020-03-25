@@ -18,12 +18,12 @@ import {
 } from './styled-sidebar';
 
 export interface ISidebarProps {
-  ethAddress: string;
+  loggedEthAddress: string;
   avatarImage?: string;
   notifications?: INotification[];
-  installedApps: IApp[];
+  menuItems: IMenuItem[];
   currentRoute?: string;
-  onClickOption: (route: IRouteParams) => void;
+  onClickMenuItem: (route: string) => void;
   onClickAddApp: () => void;
   onClickSearch: () => void;
   onClickCloseSidebar: () => void;
@@ -31,9 +31,14 @@ export interface ISidebarProps {
   appCenterLabel: string;
 }
 
-export interface IRouteParams {
-  appName: string;
-  appSubroute: string;
+export type MenuItemType = 'plugin' | 'app' | 'internal';
+export interface IMenuItem {
+  index: number;
+  label: string;
+  route: string;
+  type: MenuItemType;
+  logo?: string;
+  subRoutes?: IMenuItem[];
 }
 
 export interface IApp {
@@ -41,14 +46,6 @@ export interface IApp {
   image?: string;
   ethAddress: string;
   options: string[];
-}
-
-export interface IAppIndexed {
-  name: string;
-  image?: string;
-  ethAddress: string;
-  options: string[];
-  index: number | string;
 }
 
 export interface INotification {
@@ -62,44 +59,29 @@ export interface INotification {
 const Sidebar: React.FC<ISidebarProps> = props => {
   const {
     avatarImage,
-    ethAddress,
+    loggedEthAddress,
     // notifications,
-    installedApps,
+    menuItems,
     onClickAddApp,
-    onClickOption,
+    onClickMenuItem,
     onClickSearch,
   } = props;
 
+  // filter out default plugins like profile and feed
+  const installedApps = menuItems.filter(menuItem => menuItem.type === 'app');
+
   const popoversRef: React.Ref<any> = React.useRef(installedApps?.map(() => React.createRef()));
-  const profileRef: React.Ref<any> = React.useRef(null);
-  const feedRef: React.Ref<any> = React.useRef(null);
+  const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
+  const feedRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
-  const initialAppData = {
-    name: '',
-    ethAddress: '',
-    image: '',
-    options: [],
-    index: -1,
-  };
-
-  const profileDefaultData = {
-    name: 'My World',
-    ethAddress: ethAddress,
-    options: ['My Profile', 'My Apps', 'Settings'],
-    index: 'profile',
-  };
-
-  const feedDefaultData = {
-    name: 'Feed',
-    ethAddress: ethAddress,
-    options: ['My Feed', 'Settings'],
-    index: 'feed',
-  };
+  // return the plugins from list of apps
+  const profileDefaultData = menuItems.find(menuItem => menuItem.index === 2)!;
+  const feedDefaultData = menuItems.find(menuItem => menuItem.index === 1)!;
 
   const [appPopoverOpen, setAppPopoverOpen] = React.useState(false);
 
-  const [hoveredAppData, setHoveredAppData] = React.useState<IAppIndexed>(initialAppData);
-  const [currentAppData, setCurrentAppData] = React.useState<IAppIndexed>(initialAppData);
+  const [hoveredAppData, setHoveredAppData] = React.useState<IMenuItem | null>(null);
+  const [currentAppData, setCurrentAppData] = React.useState<IMenuItem | null>(null);
 
   const handleMouseEnterProfile = () => {
     setHoveredAppData(profileDefaultData);
@@ -121,42 +103,43 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     setHoveredAppData(feedDefaultData);
   };
 
-  const [activeOption, setActiveOption] = React.useState(currentAppData.options[0]);
+  const [activeOption, setActiveOption] = React.useState('');
 
   // @TODO: use route params to determine active app/option
   React.useEffect(() => {
-    const firstAppData = { ...installedApps[0], index: 0 };
+    const firstAppData = menuItems[0];
     setCurrentAppData(firstAppData);
-    setActiveOption(firstAppData.options[0]);
   }, []);
 
-  const handleAppIconClick = (appData: IAppIndexed) => () => {
-    setCurrentAppData(appData);
-    setHoveredAppData(appData);
-    setActiveOption(appData.options[0]);
-    onClickOption({ appName: appData.name, appSubroute: appData.options[0] });
+  const handleAppIconClick = (menuItem: IMenuItem) => () => {
+    setCurrentAppData(menuItem);
+    setHoveredAppData(menuItem);
+    if (menuItem.subRoutes && menuItem.subRoutes.length > 0) {
+      setActiveOption(menuItem.subRoutes[0].label);
+    }
+    onClickMenuItem(menuItem.route);
   };
 
-  const handleOptionClick = (name: string, option: string) => () => {
-    setActiveOption(option);
-    onClickOption({ appName: name, appSubroute: option });
+  const handleOptionClick = (menuItem: IMenuItem) => () => {
+    setActiveOption(menuItem.label);
+    onClickMenuItem(menuItem.route);
   };
 
-  const handlePopoverOptionClick = (option: string) => {
+  const handlePopoverOptionClick = (subRoute: string) => {
     setCurrentAppData(hoveredAppData);
-    setHoveredAppData(initialAppData);
-    setActiveOption(option);
-    onClickOption({ appName: hoveredAppData.name, appSubroute: option });
+    setHoveredAppData(null);
+    setActiveOption(subRoute);
+    onClickMenuItem(subRoute);
   };
 
-  const handleMouseEnter = (appData: IAppIndexed) => () => {
-    setHoveredAppData(appData);
+  const handleMouseEnter = (menuItem: IMenuItem) => () => {
+    setHoveredAppData(menuItem);
     setAppPopoverOpen(true);
   };
 
   const handleClosePopover = () => {
     setAppPopoverOpen(false);
-    setHoveredAppData(initialAppData);
+    setHoveredAppData(null);
   };
 
   const renderPopover = () => {
@@ -166,8 +149,8 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           <AppMenuPopover
             target={profileRef.current}
             closePopover={handleClosePopover}
-            appData={hoveredAppData}
-            onClickOption={handlePopoverOptionClick}
+            menuItem={hoveredAppData}
+            onClickMenuItem={handlePopoverOptionClick}
           />
         );
       }
@@ -176,8 +159,8 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           <AppMenuPopover
             target={feedRef.current}
             closePopover={handleClosePopover}
-            appData={hoveredAppData}
-            onClickOption={handlePopoverOptionClick}
+            menuItem={hoveredAppData}
+            onClickMenuItem={handlePopoverOptionClick}
           />
         );
       }
@@ -186,8 +169,8 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           <AppMenuPopover
             target={popoversRef.current[hoveredAppData.index].current}
             closePopover={handleClosePopover}
-            appData={hoveredAppData}
-            onClickOption={handlePopoverOptionClick}
+            menuItem={hoveredAppData}
+            onClickMenuItem={handlePopoverOptionClick}
           />
         );
       }
@@ -218,17 +201,17 @@ const Sidebar: React.FC<ISidebarProps> = props => {
               fill="horizontal"
               align="center"
               userSection={true}
-              active={currentAppData.index === profileDefaultData.index}
-              hovered={hoveredAppData.index === profileDefaultData.index}
+              active={currentAppData?.index === profileDefaultData.index}
+              hovered={hoveredAppData?.index === profileDefaultData.index}
               ref={profileRef}
             >
               <StyledAppIconWrapper
-                active={currentAppData.index === profileDefaultData.index}
-                hovered={hoveredAppData.index === profileDefaultData.index}
+                active={currentAppData?.index === profileDefaultData.index}
+                hovered={hoveredAppData?.index === profileDefaultData.index}
                 onMouseEnter={handleMouseEnterProfile}
               >
                 <Avatar
-                  ethAddress={ethAddress}
+                  ethAddress={loggedEthAddress}
                   src={avatarImage}
                   size="sm"
                   onClick={handleClickProfile}
@@ -241,13 +224,13 @@ const Sidebar: React.FC<ISidebarProps> = props => {
               fill="horizontal"
               align="center"
               userSection={true}
-              active={currentAppData.index === feedDefaultData.index}
-              hovered={hoveredAppData.index === feedDefaultData.index}
+              active={currentAppData?.index === feedDefaultData.index}
+              hovered={hoveredAppData?.index === feedDefaultData.index}
               ref={feedRef}
             >
               <StyledAppIconWrapper
-                active={currentAppData.index === feedDefaultData.index}
-                hovered={hoveredAppData.index === feedDefaultData.index}
+                active={currentAppData?.index === feedDefaultData.index}
+                hovered={hoveredAppData?.index === feedDefaultData.index}
                 onMouseEnter={handleMouseEnterFeed}
               >
                 <AppIcon
@@ -274,18 +257,18 @@ const Sidebar: React.FC<ISidebarProps> = props => {
                 <StyledBorderBox
                   fill="horizontal"
                   align="center"
-                  active={index === currentAppData.index}
-                  hovered={index === hoveredAppData.index}
+                  active={index === currentAppData?.index}
+                  hovered={index === hoveredAppData?.index}
                   ref={popoversRef.current[index]}
                 >
                   <StyledAppIconWrapper
-                    active={index === currentAppData.index}
-                    hovered={index === hoveredAppData.index}
+                    active={index === currentAppData?.index}
+                    hovered={index === hoveredAppData?.index}
                     onMouseEnter={handleMouseEnter({ ...app, index })}
                   >
                     <AppIcon
                       placeholderIconType="app"
-                      appImg={app.image}
+                      appImg={app.logo}
                       onClick={handleAppIconClick({ ...app, index })}
                       size="md"
                     />
@@ -320,16 +303,16 @@ const Sidebar: React.FC<ISidebarProps> = props => {
             direction="row"
             align="center"
           >
-            <AppIcon placeholderIconType="app" size="md" appImg={currentAppData.image} />
-            <Text size="large">{currentAppData.name}</Text>
+            <AppIcon placeholderIconType="app" size="md" appImg={currentAppData?.logo} />
+            <Text size="large">{currentAppData?.label}</Text>
           </Box>
           <Box pad="none">
-            {currentAppData.options?.map((option, index) => (
+            {currentAppData?.subRoutes?.map((subRoute: IMenuItem, index: number) => (
               <Box pad={{ vertical: 'xsmall' }} key={index}>
                 <IconLink
-                  label={option}
-                  onClick={handleOptionClick(currentAppData.name, option)}
-                  active={option === activeOption}
+                  label={subRoute.label}
+                  onClick={handleOptionClick(subRoute)}
+                  active={subRoute.label === activeOption}
                 />
               </Box>
             ))}
