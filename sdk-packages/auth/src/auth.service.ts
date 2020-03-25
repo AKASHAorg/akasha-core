@@ -1,17 +1,26 @@
-import coreServices from '@akashaproject/sdk-core/lib/constants';
-import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import commonServices, {
+  CACHE_SERVICE,
   WEB3_SERVICE,
   WEB3_UTILS_SERVICE,
 } from '@akashaproject/sdk-common/lib/constants';
+import coreServices from '@akashaproject/sdk-core/lib/constants';
+import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import dbServices, {
   DB_PASSWORD,
   DB_SERVICE,
   DB_SETTINGS_ATTACHMENT,
   moduleName as DB_MODULE,
 } from '@akashaproject/sdk-db/lib/constants';
-import { AUTH_ENDPOINT, AUTH_MESSAGE, AUTH_SERVICE, moduleName } from './constants';
 import * as superagent from 'superagent';
+import {
+  AUTH_CACHE,
+  AUTH_ENDPOINT,
+  AUTH_MESSAGE,
+  AUTH_SERVICE,
+  ethAddressCache,
+  moduleName,
+  tokenCache,
+} from './constants';
 
 const service: AkashaService = (invoke, log) => {
   const getJWT = async (args: { eth_address: string; signature: string }) => {
@@ -28,6 +37,7 @@ const service: AkashaService = (invoke, log) => {
 
   const signIn = async () => {
     const { setServiceSettings } = invoke(coreServices.SETTINGS_SERVICE);
+    const cache = await invoke(coreServices[CACHE_SERVICE]).getStash();
     const web3 = await invoke(commonServices[WEB3_SERVICE]).web3();
     const web3Utils = await invoke(commonServices[WEB3_UTILS_SERVICE]).getUtils();
     const signer = web3.getSigner();
@@ -36,6 +46,7 @@ const service: AkashaService = (invoke, log) => {
     const attachment = await invoke(dbServices[DB_SETTINGS_ATTACHMENT]);
     const authAttachmentToken = await attachment.get({ id: 'auth_token', ethAddress: address });
     if (authAttachmentToken) {
+      cache.set(AUTH_CACHE, { [ethAddressCache]: address, [tokenCache]: authAttachmentToken });
       return authAttachmentToken;
     }
     const sig = await signer.signMessage(AUTH_MESSAGE);
@@ -46,6 +57,7 @@ const service: AkashaService = (invoke, log) => {
       obj: { id: 'auth_token', type: 'string', data: token },
       ethAddress: address,
     });
+    cache.set(AUTH_CACHE, { [ethAddressCache]: address, [tokenCache]: token });
     return token;
   };
 
