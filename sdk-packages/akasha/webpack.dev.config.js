@@ -14,24 +14,11 @@ const config = {
     filename: 'akasha.[name].[contenthash].js',
     library: 'AkashaSDK',
     libraryTarget: 'window',
-    umdNamedDefine: true,
     publicPath: '/',
   },
   optimization: {
     minimize: false,
     moduleIds: 'hashed',
-    occurrenceOrder: true,
-    runtimeChunk: 'single',
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-          reuseExistingChunk: true,
-        },
-      },
-    },
   },
   plugins: [
     new webpack.ProgressPlugin({

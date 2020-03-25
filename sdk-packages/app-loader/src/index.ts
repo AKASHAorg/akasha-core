@@ -2,7 +2,7 @@ import pino from 'pino';
 import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
 import TranslationManager from './i18n';
-import { IPlugin, IWidget } from './interfaces';
+import { IMenuItem, IMenuList, IPlugin, IWidget, MenuItemType } from './interfaces';
 import { setPageTitle } from './setPageMetadata';
 
 export interface IPluginConfig {
@@ -21,11 +21,14 @@ export interface ILoaderConfig {
 interface IWidgetConfig {
   slot: string;
 }
-
+export interface SDKdependency {
+  module: string;
+  services?: string[];
+}
 export interface IPluginEntry {
   app: IPlugin;
   config?: IPluginConfig;
-  sdkModules?: any[];
+  sdkModules?: SDKdependency[];
 }
 
 export interface IWidgetEntry {
@@ -47,13 +50,21 @@ export default class AppLoader implements IAppLoader {
   public readonly registeredWidgets: Map<string, IWidgetConfig>;
   private readonly config: ILoaderConfig;
   private readonly appLogger;
+  private readonly channels;
+  private readonly channelUtils;
+  private readonly menuItems: IMenuList;
   private readonly translationManager: TranslationManager;
 
   public constructor(
     config: ILoaderConfig,
     initialApps: { plugins?: IPluginEntry[]; widgets?: IWidgetEntry[] },
+    channels?: any,
+    channelUtils?: any,
   ) {
     this.config = config;
+    this.channels = channels;
+    this.channelUtils = channelUtils;
+    this.menuItems = { nextIndex: 1, items: [] };
     this.appLogger = pino({ browser: { asObject: true } });
     this.translationManager = new TranslationManager(this.appLogger);
     this.registeredPlugins = new Map<string, IPluginConfig>();
@@ -103,7 +114,17 @@ export default class AppLoader implements IAppLoader {
     );
     plugin.app.name = pluginId;
     this.registeredPlugins.set(pluginId, { title: plugin.app.title || pluginId });
-
+    const dependencies = {};
+    // @Todo: refactor this
+    if (plugin.app.sdkModules.length) {
+      for (const dep of plugin.app.sdkModules) {
+        if (this.channels.hasOwnProperty(dep.module)) {
+          Object.assign(dependencies, { [dep.module]: this.channels[dep.module] });
+          this.appLogger.info(`${pluginId} has access to ${dep.module} -> channel`);
+        }
+      }
+    }
+    this.appLogger.info(`plugin ${pluginId} `);
     const domEl = document.getElementById(this.config.layout.pluginSlotId);
     singleSpa.registerApplication(
       plugin.app.name,
@@ -119,12 +140,43 @@ export default class AppLoader implements IAppLoader {
         i18n: this.translationManager.getInstance(pluginId),
         i18nConfig: plugin.app.i18nConfig,
         logger: this.appLogger.child({ plugin: pluginId }),
-        sdkModules: plugin.sdkModules,
+        sdkModules: dependencies,
+        channelUtils: this.channelUtils,
       },
     );
+    this.menuItems.items.push({
+      label: plugin.app.title,
+      index: this.menuItems.nextIndex,
+      route: plugin.app.activeWhen.path,
+      type: MenuItemType.Plugin,
+      logo: plugin.app.logo,
+      subRoutes: this.createSubroutes(plugin.app.menuItems),
+    });
+    this.menuItems.nextIndex += 1;
     this.appLogger.info(`[@akashaproject/sdk-ui-plugin-loader]: ${plugin.app.name} registered!`);
   }
 
+  private createSubroutes(subRoutes: IPlugin['menuItems']): IMenuItem[] {
+    const routes = [];
+    let currentIndex = 0;
+    if (!subRoutes) {
+      return routes;
+    }
+    for (const [label, route] of Object.entries(subRoutes)) {
+      routes.push({
+        index: currentIndex,
+        label: label,
+        route: route,
+        type: MenuItemType.Internal,
+      });
+      currentIndex += 1;
+    }
+    return routes;
+  }
+
+  public getMenuItems() {
+    return this.menuItems.items.slice(0);
+  }
   public registerWidget(widget: IWidgetEntry): void {
     this.appLogger.info(
       `[@akashaproject/sdk-ui-plugin-loader] registering widget ${widget.app.name}`,

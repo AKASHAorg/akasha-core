@@ -7,6 +7,9 @@ import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 import AppLoader from '@akashaproject/sdk-ui-plugin-loader';
 import { ILoaderConfig, IPluginEntry, IWidgetEntry } from '@akashaproject/sdk-ui-plugin-loader/lib';
 import initChannel from './channel';
+import * as operators from 'rxjs/operators';
+import { forkJoin, from, zip, of, concat } from 'rxjs';
+
 import {
   buildModuleServiceChannels,
   IModuleCallableService,
@@ -22,27 +25,30 @@ const initDiChannel = (di: DIContainer, sendChannel: SendChannel) => {
   };
 };
 
-export function init(
-  appLoaderOptions: {
-    config: ILoaderConfig;
-    initialApps: { plugins?: IPluginEntry[]; widgets?: IWidgetEntry[] };
-  },
-  options = { start: true },
-) {
+export function init(appLoaderOptions: {
+  config: ILoaderConfig;
+  initialApps: { plugins?: IPluginEntry[]; widgets?: IWidgetEntry[] };
+}) {
   const di: DIContainer = initDI();
   const commonModule = registerCommonModule();
   const dbModule = registerDBModule();
   const authModule = registerAuthModule();
-  let modules: IModuleCallableService = {};
   // list of all the registered modules for the sdk
   const modulesList = [commonModule, dbModule, authModule];
   // general channel to send service calls
   const channel = initChannel(di);
   // prepare the start function for integrations
   const start = initDiChannel(di, channel.send);
-  if (options.start) {
-    modules = start(modulesList);
-  }
-  const appLoader = new AppLoader(appLoaderOptions.config, appLoaderOptions.initialApps);
-  return Object.assign({}, modules, { start, appLoader });
+  const modules: IModuleCallableService = start(modulesList);
+  const channelUtils = { operators: operators, observable: { forkJoin, from, zip, of, concat } };
+  const appLoader = new AppLoader(
+    appLoaderOptions.config,
+    appLoaderOptions.initialApps,
+    modules,
+    channelUtils,
+  );
+  return Object.assign({}, modules, {
+    appLoader,
+    channelUtils,
+  });
 }

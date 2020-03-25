@@ -1,3 +1,5 @@
+import { SDKdependency } from './index';
+
 export interface II18nConfig {
   use: any[];
   loadNS?: string[];
@@ -14,6 +16,9 @@ export interface IPlugin {
     path: string;
   };
   title?: string;
+  sdkModules?: SDKdependency[];
+  logo?: string;
+  menuItems?: { [p: string]: string };
 }
 
 export interface IWidget {
@@ -24,4 +29,24 @@ export interface IWidget {
   topbarSlotId?: string;
   sidebarSlotId?: string;
   services?: any[];
+}
+
+export enum MenuItemType {
+  Plugin = 'plugin',
+  App = 'app',
+  Internal = 'internal',
+}
+
+export interface IMenuItem {
+  index: number;
+  label: string;
+  route: string;
+  type: MenuItemType;
+  logo?: string;
+  subRoutes?: IMenuItem[];
+}
+
+export interface IMenuList {
+  nextIndex: number;
+  items: IMenuItem[];
 }
