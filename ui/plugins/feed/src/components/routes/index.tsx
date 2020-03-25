@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import WidgetList from '../widgets';
 import FeedHomePage from './feed-home-page';
 
-const { Grommet, lightTheme, Box, styled } = DS;
+const { ThemeSelector, Box, styled, lightTheme, darkTheme } = DS;
 
 export interface IRoutesProps {
   activeWhen: { path: string };
@@ -44,7 +44,10 @@ const Routes: React.FC<IRoutesProps> = props => {
   const activeWhenPath = path.slice(0, path.lastIndexOf('/'));
   return (
     <Router>
-      <Grommet theme={lightTheme}>
+      <ThemeSelector
+        settings={{ activeTheme: 'Dark-Theme' }}
+        availableThemes={[lightTheme, darkTheme]}
+      >
         <Feed>
           <FeedBox>
             <Switch>
@@ -56,7 +59,7 @@ const Routes: React.FC<IRoutesProps> = props => {
             <WidgetList />
           </WidgetBox>
         </Feed>
-      </Grommet>
+      </ThemeSelector>
     </Router>
   );
 };

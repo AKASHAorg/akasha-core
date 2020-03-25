@@ -3,7 +3,7 @@ import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 
-const { Box, Grommet, lightTheme, Icon, styled } = DS;
+const { Box, lightTheme, Icon, styled, ThemeSelector } = DS;
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;
@@ -74,8 +74,9 @@ const Menu = (props: MenuProps) => {
   };
 
   return (
-    <Grommet
-      theme={lightTheme}
+    <ThemeSelector
+      availableThemes={[lightTheme]}
+      settings={{ activeTheme: 'Light-Theme' }}
       style={{
         height: '100vh',
         position: 'sticky',
@@ -87,7 +88,7 @@ const Menu = (props: MenuProps) => {
           <Icon type="home" onClick={handleNavigation('/')} />
         </Box>
       </SidebarWrapper>
-    </Grommet>
+    </ThemeSelector>
   );
 };
 

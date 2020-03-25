@@ -2,7 +2,16 @@ import DS from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent } from 'react';
 
-const { createGlobalStyle, css, Box, styled, lightTheme, Grommet } = DS;
+const {
+  createGlobalStyle,
+  css,
+  Box,
+  styled,
+  lightTheme,
+  // darkTheme,
+  ThemeSelector,
+  responsiveBreakpoints,
+} = DS;
 
 const LayoutWrapper = styled(Box)`
   flex-direction: row;
@@ -89,6 +98,7 @@ export interface IProps {
   sidebarSlotId: string;
   topbarSlotId: string;
   pluginSlotId: string;
+  themeReadyEvent: () => void;
 }
 
 class LayoutWidget extends PureComponent<IProps> {
@@ -150,8 +160,12 @@ class LayoutWidget extends PureComponent<IProps> {
     const sidebarVisible = Boolean(showSidebar);
     return (
       <>
-        <GlobalStyle theme={lightTheme} />
-        <Grommet theme={lightTheme}>
+        <GlobalStyle theme={{ breakpoints: responsiveBreakpoints.global.breakpoints }} />
+        <ThemeSelector
+          availableThemes={[lightTheme]}
+          settings={{ activeTheme: 'Light-Theme' }}
+          themeReadyEvent={this.props.themeReadyEvent}
+        >
           <LayoutWrapper>
             <SidebarSlot id={sidebarSlotId} visible={sidebarVisible} />
             <MainArea>
@@ -159,7 +173,7 @@ class LayoutWidget extends PureComponent<IProps> {
               <PluginSlot id={pluginSlotId} />
             </MainArea>
           </LayoutWrapper>
-        </Grommet>
+        </ThemeSelector>
       </>
     );
   }

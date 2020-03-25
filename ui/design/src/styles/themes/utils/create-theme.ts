@@ -1,9 +1,10 @@
 import { DefaultTheme } from 'styled-components';
-import colors from '../colors-light';
-import breakpoints from '../responsive-breakpoints';
-import shapes from '../shapes';
-import createGrommetTheme from './index';
+import breakpoints from '../../responsive-breakpoints';
+import shapes from '../../shapes';
+import colors from '../light/colors-light';
+import createGrommetTheme from './create-grommet-theme';
 
+// defaults to 'light theme' if no override is passed
 export function createTheme(overrides?: object): DefaultTheme {
   const styles = {
     colors,
