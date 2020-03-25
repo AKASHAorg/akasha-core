@@ -41,7 +41,6 @@ export default class SidebarWidget extends PureComponent<IProps> {
   }
 
   public render() {
-    console.log(this.props);
     if (this.state.hasErrors) {
       return (
         <div>
