@@ -20,7 +20,11 @@
     },
     {
       "path": "../app-loader"
+    },
+    {
+      "path": "../auth"
     }
   ],
-  "include": ["./src"]
+  "include": ["./src"],
+  "exclude": ["./src/sw.ts"]
 }

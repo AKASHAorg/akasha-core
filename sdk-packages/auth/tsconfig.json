@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "lib": ["esnext", "dom"]
+  },
+  "references": [
+    {
+      "path": "../runtime"
+    },
+    {
+      "path": "../core"
+    },
+    {
+      "path": "../common"
+    },
+    {
+      "path": "../db"
+    }
+  ],
+  "include": ["./src"],
+  "exclude": ["./node_modules"]
+}

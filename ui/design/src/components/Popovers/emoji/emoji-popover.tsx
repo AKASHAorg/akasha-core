@@ -143,4 +143,4 @@ const EmojiPopover: React.FC<IEmojiPopover> = props => {
   );
 };
 
-export default EmojiPopover;
+export { EmojiPopover };

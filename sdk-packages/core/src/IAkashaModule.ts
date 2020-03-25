@@ -22,7 +22,7 @@ export interface IAkashaModuleServices {
 }
 
 // tslint:disable-next-line:prefer-array-literal
-export type IGeneralSettings = Array<[string, string | object]>;
+export type IGeneralSettings = [string, string | object][];
 
 export interface ICoreSettings {
   moduleName: string;

@@ -106,7 +106,7 @@ test('callServiceMethod returns', () => {
 
 test('fromEntries object creation', () => {
   // tslint:disable-next-line:prefer-array-literal
-  const entries: Array<[string, any]> = [
+  const entries: [string, any][] = [
     ['a', 1],
     ['b', 2],
   ];

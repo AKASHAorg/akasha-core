@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  awf-api:
+    depends_on:
+      - couchbase
+    networks:
+      - intranet
+    environment:
+      - COUCH_USER=Administrator
+      - COUCH_PASSWORD=test123
+    ports:
+      - "8778:8778"
+    image: kenshyx/awf-api:latest
+  couchbase:
+    image: couchbase:community-6.0.0
+    ports:
+      - "8091-8094:8091-8094"
+      - "11210:11210"
+    networks:
+      - intranet
+    volumes:
+      - dbData:/opt/couchbase/var
+
+networks:
+  intranet:
+
+volumes:
+  dbData:
