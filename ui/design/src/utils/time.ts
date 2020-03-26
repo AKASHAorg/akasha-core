@@ -7,10 +7,7 @@ export type ILocale = 'es' | 'ro' | 'en';
 const formatDate = (date: any, locale?: ILocale) => {
   if (dayjs(date).isValid()) {
     if (locale) {
-      return dayjs
-        .unix(date)
-        .locale(locale)
-        .format('D MMMM YYYY  H[h]mm');
+      return dayjs.unix(date).locale(locale).format('D MMMM YYYY  H[h]mm');
     }
     return dayjs.unix(date).format('D MMMM YYYY  H[h]mm');
   }
@@ -20,10 +17,7 @@ const formatDate = (date: any, locale?: ILocale) => {
 const formatDateShort = (date: any, locale?: ILocale) => {
   if (dayjs(date).isValid()) {
     if (locale) {
-      return dayjs
-        .unix(date)
-        .locale(locale)
-        .format('D MMMM YYYY');
+      return dayjs.unix(date).locale(locale).format('D MMMM YYYY');
     }
     return dayjs.unix(date).format('D MMMM YYYY');
   }

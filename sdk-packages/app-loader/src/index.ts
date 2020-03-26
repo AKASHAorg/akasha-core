@@ -199,6 +199,7 @@ export default class AppLoader implements IAppLoader {
       ...widget.app,
       domElement: domEl,
       i18n: i18nInstance,
+      getMenuItems: () => this.getMenuItems(),
     });
     this.appLogger.info(`[@akashaproject/sdk-ui-plugin-loader]: ${widget.app.name} registered!`);
   }

@@ -1,13 +1,24 @@
 import { initReactI18next } from 'react-i18next';
+import routes, { rootRoute } from './routes';
 
+export interface Application {
+  activeWhen: { path: string; exact?: boolean };
+  i18nConfig: { use: any[]; loadNS: any[] };
+  loadingFn: () => Promise<any>;
+  name: string;
+  sdkModules: any[];
+  title: string;
+  menuItems?: { [p: string]: string };
+}
 /**
  * All the plugins must export an object like this:
  */
-export const application = {
+export const application: Application = {
   // This is the root route in which the plugin will render.
   // Make sure to change it as it fits.
   activeWhen: {
-    path: '/',
+    path: rootRoute,
+    exact: true,
   },
   // translation config
   i18nConfig: {
@@ -30,4 +41,5 @@ export const application = {
   name: 'ui-plugin-feed',
   sdkModules: [],
   title: 'AKASHA Feed',
+  menuItems: routes,
 };

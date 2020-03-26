@@ -8,6 +8,7 @@ export interface IProps {
   i18n: I18nType;
   sdkModules: any;
   singleSpa: any;
+  getMenuItems: () => any[];
 }
 
 /**
@@ -54,7 +55,10 @@ export default class SidebarWidget extends PureComponent<IProps> {
     return (
       <I18nextProvider i18n={this.props.i18n}>
         <Suspense fallback={<>...</>}>
-          <Menu navigateToUrl={this.props.singleSpa.navigateToUrl} />
+          <Menu
+            navigateToUrl={this.props.singleSpa.navigateToUrl}
+            getMenuItems={this.props.getMenuItems}
+          />
         </Suspense>
       </I18nextProvider>
     );
@@ -63,10 +67,12 @@ export default class SidebarWidget extends PureComponent<IProps> {
 
 interface MenuProps {
   navigateToUrl: (url: string) => void;
+  getMenuItems: () => any[];
 }
 
 const Menu = (props: MenuProps) => {
-  const { navigateToUrl } = props;
+  const { navigateToUrl, getMenuItems } = props;
+  const menuItems = getMenuItems();
   // const { t } = useTranslation();
 
   const handleNavigation = (path: string) => {
@@ -84,7 +90,9 @@ const Menu = (props: MenuProps) => {
   const handleCloseSidebar = () => {
     return;
   };
-
+  if (!menuItems.length) {
+    return <></>;
+  }
   return (
     <ThemeSelector
       availableThemes={[lightTheme]}
@@ -103,34 +111,7 @@ const Menu = (props: MenuProps) => {
         searchLabel={'Search'}
         appCenterLabel={'App Center'}
         onClickMenuItem={handleNavigation}
-        // replace with data from API
-        menuItems={[
-          {
-            label: 'AKASHA Feed',
-            index: 1,
-            route: '/',
-            type: 'plugin',
-            logo: undefined,
-          },
-          {
-            label: 'AKASHA Profile',
-            index: 2,
-            route: '/profile',
-            type: 'plugin',
-            logo: undefined,
-            subRoutes: [
-              { index: 0, label: 'Profile list', route: '/profile/list', type: 'internal' },
-              { index: 1, label: 'My profile', route: '/profile/my-profile', type: 'internal' },
-            ],
-          },
-          {
-            label: '3box integration',
-            index: 3,
-            route: '/3box-app',
-            type: 'plugin',
-            logo: undefined,
-          },
-        ]}
+        menuItems={menuItems}
       />
     </ThemeSelector>
   );

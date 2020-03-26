@@ -53,7 +53,7 @@ export abstract class IAkashaModule {
     const log = this.logger;
     // calls .bind.apply which is incompatible with ()=>
     // tslint:disable-next-line:only-arrow-functions
-    return function() {
+    return function () {
       log.info(`service < ${name} > was initialized.`);
       return registeredMethods();
     };
