@@ -13,7 +13,7 @@ export interface IEditorCard {
   publishLabel: string;
   placeholderLabel: string;
   onPublish: any;
-  style: any;
+  style?: React.CSSProperties;
 }
 
 const StyledDiv = styled.div`
