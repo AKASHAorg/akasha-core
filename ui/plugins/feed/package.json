@@ -28,7 +28,11 @@
     "pack:watch": "nodemon"
   },
   "nodemonConfig": {
-    "ignore": ["lib/*", "dist/*", "build/*"],
+    "ignore": [
+      "lib/*",
+      "dist/*",
+      "build/*"
+    ],
     "exec": "npm run pack",
     "ext": "ts,tsx"
   },
@@ -41,7 +45,7 @@
     "immer": "^5.3.2",
     "react-i18next": "^11.3.1",
     "react-router-dom": "^5.1.2",
-    "react-tracked": "^1.0.2",
+    "react-tracked": "1.2.0",
     "single-spa-react": "^2.11.0"
   },
   "devDependencies": {
