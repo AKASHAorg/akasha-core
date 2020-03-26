@@ -5,7 +5,7 @@ import { I18nextProvider } from 'react-i18next';
 // @ts-ignore
 import SingleSpaReact from 'single-spa-react';
 
-const { Grommet, lightTheme, Topbar } = DS;
+const { lightTheme, Topbar, ThemeSelector } = DS;
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;
@@ -80,7 +80,7 @@ export default class TopbarWidget extends PureComponent<IProps> {
     return (
       <I18nextProvider i18n={this.props.i18n}>
         <Suspense fallback={<>...</>}>
-          <Grommet theme={lightTheme}>
+          <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
             <Topbar
               avatarImage="https://placebeard.it/360x360"
               userName="john doe"
@@ -89,7 +89,7 @@ export default class TopbarWidget extends PureComponent<IProps> {
               onSidebarToggle={this.toggleSidebar}
               ethAddress="0x1ad35f55220234DF32A"
             />
-          </Grommet>
+          </ThemeSelector>
         </Suspense>
       </I18nextProvider>
     );

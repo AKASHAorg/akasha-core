@@ -6,11 +6,13 @@
     "react-dom": "https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js",
     "react-router-dom": "https://unpkg.com/react-router-dom@5.1.2/umd/react-router-dom.js",
     "react-i18next": "https://unpkg.com/react-i18next@11.3.1/dist/umd/react-i18next.js",
-    "immer": "https://unpkg.com/immer@5.3.2/dist/immer.umd.js",
+    "immer": "https://unpkg.com/immer@5.3.6/dist/immer.umd.js",
     "@widget/sidebar": "/widgets/sidebar.js",
     "@widget/layout": "/widgets/layout.js",
     "@widget/topbar": "/widgets/topbar.js",
     "@plugins/profile": "/plugins/profile.js",
-    "@plugins/feed": "/plugins/feed.js"
+    "@plugins/feed": "/plugins/feed.js",
+    "@app/3box": "/apps/3box-app.js",
+    "ipfs": "https://unpkg.com/ipfs@0.41.0/dist/index.js"
   }
 }

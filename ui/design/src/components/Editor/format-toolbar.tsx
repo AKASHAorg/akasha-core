@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import { Editor, Range } from 'slate';
 import { ReactEditor, useSlate } from 'slate-react';
 import styled from 'styled-components';
-import Icon, { IconType } from '../Icon/icon';
+import { Icon, IconType } from '../Icon/icon';
+import { CustomEditor } from './helpers';
 
 const StyledDiv = styled.div`
   margin: 0 ${props => props.theme.shapes.baseSpacing}px;
@@ -38,9 +39,9 @@ const FormatButton: React.FC<IFormatButton> = ({ format, icon }) => {
   const editor = useSlate();
   const handleClick = (event: React.MouseEvent) => {
     event.preventDefault();
-    editor.exec({ type: 'toggle_format', format: format });
+    CustomEditor.toggleFormat(editor, format);
   };
-  const isActive = isFormatActive(editor, format);
+  const isActive = CustomEditor.isFormatActive(editor, format);
   let color = '#132540';
   if (isActive) {
     color = '#4E71FF';
@@ -51,14 +52,6 @@ const FormatButton: React.FC<IFormatButton> = ({ format, icon }) => {
       <Icon type={icon} clickable={true} color={color} />
     </StyledDiv>
   );
-};
-
-const isFormatActive = (editor: Editor, format: string) => {
-  const [match] = Editor.nodes(editor, {
-    match: { [format]: true },
-    mode: 'all',
-  });
-  return !!match;
 };
 
 export const FormatToolbar = () => {
@@ -77,7 +70,7 @@ export const FormatToolbar = () => {
       !selection ||
       !ReactEditor.isFocused(editor) ||
       Range.isCollapsed(selection) ||
-      Editor.text(editor, selection) === ''
+      Editor.string(editor, selection) === ''
     ) {
       el.removeAttribute('style');
       return;

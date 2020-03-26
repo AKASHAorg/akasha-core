@@ -8,6 +8,7 @@ export interface IStyledDrop {
 const StyledDrop = styled(Drop)<IStyledDrop>`
   margin-top: ${props => (props.gap ? props.gap : '-10px')};
   margin-left: 25px;
+  border: 1px solid ${props => props.theme.colors.border}
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
   width: 336px;
 `;

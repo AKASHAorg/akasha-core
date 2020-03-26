@@ -2,10 +2,10 @@ import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { IconButton } from '../../../Buttons/index';
 import { Icon } from '../../../Icon';
+import { AppIcon } from '../../../Icon/index';
 import { SelectPopover } from '../../../Popovers/index';
 import { IProfileDataProvider, IProfileProvidersData } from '../profile-card';
 import { ShareButtonContainer, StyledEditCoverImageBox } from '../styled-profile-card';
-import { EditFieldIcon } from './ edit-field-icon';
 
 export interface IProfileCardCoverImageProps {
   shareProfileLabel: string;
@@ -79,10 +79,11 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
               <Text size="medium" color="white">
                 {changeCoverImageLabel}
               </Text>
-              <EditFieldIcon
+              <AppIcon
                 ref={editCoverImageRef}
-                popoverHandler={() => setCoverImagePopoverOpen(true)}
-                providerIcon={coverImageIcon}
+                onClick={() => setCoverImagePopoverOpen(true)}
+                appImg={coverImageIcon}
+                placeholderIconType="editSimple"
               />
             </StyledEditCoverImageBox>
           </Box>

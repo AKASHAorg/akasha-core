@@ -40,10 +40,22 @@ import initSdk from './sdk-init';
   ];
   const world = initSdk(appConfig, { plugins: registeredPlugins, widgets: registeredWidgets });
   const profilePlugin = await System.import('@plugins/profile');
+  const boxApp = await System.import('@app/3box');
+  const ipfs = await System.import('ipfs');
+
+  Object.defineProperty(window, 'Ipfs', {
+    value: ipfs,
+    writable: false,
+  });
+
   // example loading an extra plugin after start
   world.appLoader.registerPlugin({
     app: profilePlugin.application,
     sdkModules: [],
+  });
+
+  world.appLoader.registerPlugin({
+    app: boxApp.application,
   });
   // @ts-ignore
 })(window.System);

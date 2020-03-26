@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import WidgetList from '../widgets';
 import FeedHomePage from './feed-home-page';
 
-const { Box, styled } = DS;
+const { ThemeSelector, Box, styled, lightTheme, darkTheme } = DS;
 
 export interface IRoutesProps {
   activeWhen: { path: string };
@@ -47,17 +47,22 @@ const Routes: React.FC<IRoutesProps> = props => {
   const activeWhenPath = path.slice(0, path.lastIndexOf('/'));
   return (
     <Router>
-      <Feed fill={true}>
-        <FeedBox fill={true}>
-          <Switch>
-            <Route exact={true} path={`${activeWhenPath}`} component={FeedHomePage} />
-            <Route component={ArticleNotFound} />
-          </Switch>
-        </FeedBox>
-        <WidgetBox fill={true}>
-          <WidgetList />
-        </WidgetBox>
-      </Feed>
+      <ThemeSelector
+        settings={{ activeTheme: 'Dark-Theme' }}
+        availableThemes={[lightTheme, darkTheme]}
+      >
+        <Feed>
+          <FeedBox>
+            <Switch>
+              <Route exact={true} path={`${activeWhenPath}`} component={FeedHomePage} />
+              <Route component={ArticleNotFound} />
+            </Switch>
+          </FeedBox>
+          <WidgetBox>
+            <WidgetList />
+          </WidgetBox>
+        </Feed>
+      </ThemeSelector>
     </Router>
   );
 };

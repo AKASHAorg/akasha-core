@@ -2,11 +2,12 @@ import DS from '@akashaproject/design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import menuRoute, { MY_PROFILE, PROFILE_LIST } from '../../routes';
 import MyProfilePage from './my-profile-page';
 import ProfilePage from './profile-page';
 import WidgetList from '../widgets';
 
-const { Box, lightTheme, Grommet } = DS;
+const { Box, lightTheme, ThemeSelector } = DS;
 
 export interface IRoutesProps {
   activeWhen: { path: string };
@@ -19,12 +20,12 @@ const Routes: React.FC<IRoutesProps> = props => {
 
   return (
     <Router>
-      <Grommet theme={lightTheme}>
+      <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
         <Box>
           <Switch>
-            <Route path={`${path}/list`} render={() => <>A list of profiles</>} />
+            <Route path={menuRoute[PROFILE_LIST]} render={() => <>A list of profiles</>} />
             <Route
-              path={`${path}/my-profile`}
+              path={menuRoute[MY_PROFILE]}
               component={MyProfilePage}
             />
             <Route
@@ -37,7 +38,7 @@ const Routes: React.FC<IRoutesProps> = props => {
         <Box>
           <WidgetList />
         </Box>
-      </Grommet>
+      </ThemeSelector>
     </Router>
   );
 };
