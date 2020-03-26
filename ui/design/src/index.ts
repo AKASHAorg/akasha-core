@@ -1,6 +1,6 @@
 /* Components */
 import { Box, Grid, Grommet, grommet, ResponsiveContext, ThemeContext } from 'grommet';
-import styled, { createGlobalStyle, css } from 'styled-components';
+import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
 import { Avatar, EditableAvatar } from './components/Avatar';
 import { ResponsiveSidebar, Sidebar, SidebarMobile, Topbar } from './components/Bars/index';
 import {
@@ -31,6 +31,7 @@ import { NotificationsPopover, SelectPopover } from './components/Popovers';
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
 import responsiveBreakpoints from './styles/responsive-breakpoints';
+import VirtualList from './components/VirtualList';
 
 /* Themes and theme related utils */
 import darkTheme from './styles/themes/dark';
@@ -86,9 +87,11 @@ const exported = {
   ThemeSelector,
   css,
   styled,
+  withTheme,
   createGlobalStyle,
   ViewportSizeProvider,
   useViewportSize,
+  VirtualList,
 };
 
 export default exported;
