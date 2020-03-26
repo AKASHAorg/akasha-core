@@ -1,49 +1,51 @@
-import DS from '@akashaproject/design-system';
+// import DS from '@akashaproject/design-system';
 import * as React from 'react';
-import { useFeed } from '../../state/feed';
+import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
 
-const { EntryCard } = DS;
+// const { EntryCard } = DS;
 
 export interface IFeedItemProps {
-  entryId: string;
+  item: { entryId: string };
   className?: string;
+  itemData: IEntryData;
+  loadData: ({ entryId }: { entryId: string }) => void;
 }
 
-const noop = () => {
-  // tslint:disable-next-line: no-console
-  console.log('not implemented!');
-};
+// const noop = () => {
+//   // tslint:disable-next-line: no-console
+//   console.log('not implemented!');
+// };
 
 const FeedItem: React.FC<IFeedItemProps> = props => {
-  const [feedState, feedActions] = useFeed();
-  const entryData = feedState.itemData[props.entryId];
-
-  feedActions.getFeedItemData({ entryId: props.entryId });
+  // props.loadData({ entryId: props.item.entryId });
+  const entryData = props.itemData;
 
   if (!entryData) {
     return null;
   }
+
   return (
-    <EntryCard
-      entryData={entryData}
-      onClickAvatar={noop}
-      onClickDownvote={noop}
-      onClickUpvote={noop}
-      commentsLabel="Comments"
-      quotesLabel="Quotes"
-      quotedByLabel="Quoted by"
-      shareLabel="Share"
-      editPostLabel="Edit Post"
-      editCommentLabel="Edit Comment"
-      copyLinkLabel="Copy Link"
-      replyLabel="Reply"
-      loggedProfileEthAddress="0x00123"
-      locale="en"
-      commentInputPlaceholderLabel="Comment"
-      commentInputPublishLabel="Publish Comment"
-      publishComment={noop}
-      className={props.className}
-    />
+    <></>
+    // <EntryCard
+    //   entryData={entryData}
+    //   onClickAvatar={noop}
+    //   onClickDownvote={noop}
+    //   onClickUpvote={noop}
+    //   commentsLabel="Comments"
+    //   quotesLabel="Quotes"
+    //   quotedByLabel="Quoted by"
+    //   shareLabel="Share"
+    //   editPostLabel="Edit Post"
+    //   editCommentLabel="Edit Comment"
+    //   copyLinkLabel="Copy Link"
+    //   replyLabel="Reply"
+    //   loggedProfileEthAddress="0x00123"
+    //   locale="en"
+    //   commentInputPlaceholderLabel="Comment"
+    //   commentInputPublishLabel="Publish Comment"
+    //   publishComment={noop}
+    //   className={props.className}
+    // />
   );
 };
 

@@ -42,7 +42,7 @@
       "dist/*",
       "build/*"
     ],
-    "exec": "npm run pack",
+    "exec": "npm run pack || exit 1",
     "ext": "ts,tsx"
   },
   "eslintConfig": {
@@ -62,17 +62,22 @@
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "grommet": "2.10.0"
+    "grommet": "2.10.0",
+    "lodash.throttle": "^4.1.1",
+    "react-virtualized-auto-sizer": "^1.0.2",
+    "styled-components": "^5.0.0"
   },
   "devDependencies": {
     "@testing-library/react": "^9.4.0",
     "@testing-library/react-hooks": "^3.2.1",
     "@types/classnames": "^2.2.9",
     "@types/jest": "^25.1.1",
+    "@types/lodash.throttle": "^4.1.6",
     "@types/node": "^13.5.3",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
     "@types/react-test-renderer": "^16.9.2",
+    "@types/react-virtualized-auto-sizer": "^1.0.0",
     "@types/slate": "0.47.4",
     "@types/slate-react": "0.22.8",
     "@types/styled-components": "^4.4.2",

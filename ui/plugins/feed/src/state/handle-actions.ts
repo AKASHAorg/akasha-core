@@ -1,19 +1,17 @@
-import { produce } from 'immer';
+import { produce, Draft } from 'immer';
 import { IAction } from './interfaces';
 
 export function handleActions<T, S, P>(
   actionsMap: {
-    [key in keyof T]: (state: S, payload: P) => S;
+    [key in keyof T]: (draft: Draft<S>, payload: P) => S | void;
   },
   defaultState: S,
 ) {
   return function rev(state = defaultState, dispatchedAction: IAction<P, keyof typeof actionsMap>) {
-    return produce(state, (draft: S) => {
-      const action = actionsMap[dispatchedAction.type];
-      if (action) {
-        return action(draft, dispatchedAction.payload);
-      }
-      throw new Error('Looks like the action is not found!');
-    });
+    const action = actionsMap[dispatchedAction.type];
+    if (action) {
+      return produce(state, draft => action(draft, dispatchedAction.payload));
+    }
+    throw new Error('Looks like the action is not found!');
   };
 }

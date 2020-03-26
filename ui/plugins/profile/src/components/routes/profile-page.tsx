@@ -15,8 +15,8 @@ interface ProfilePageProps {
 
 const ProfilePage = (props: ProfilePageProps) => {
   const { params } = props.match;
-  const [profileState, profileActions] = useProfile();
-  profileActions.getLoggedProfile();
+  const [profileState, /* profileActions */] = useProfile();
+  // profileActions.getLoggedProfile();
   React.useEffect(() => {
     if (profileState.loggedProfile === params.profileId) {
       props.history.replace('/profile/my-profile');

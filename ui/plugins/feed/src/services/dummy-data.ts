@@ -17,14 +17,27 @@ export const generateProfileData = (ethAddress: string): IProfileData => {
     profileType: 'user',
   };
 };
+const contentStrings = [
+  'We’re back in action, energized after an epic retreat in #verbier 🇨🇭 🤜💥🤛',
+  'Here’s to everyone keeping us in their minds and hearts 🥂',
+  'You’ve been in our hearts and minds as well! 🤗',
+  'Looking forward to sharing our insights and plans in the coming days!',
+  '#AKASHAReloaded #AKASHAFoundation',
+  '第十章 第八章 第二章 第六章 第九章.',
+  '第十六章 第十一章 第十四章 第十二章',
+  '關雎 ，可 耳 曰： 覽. 出 事 矣 誨 耳 去. 也懊悔不了 此是後話 饒爾去罷」 ，愈聽愈惱. 矣 事 」 覽 出 ，可 關雎',
+  'Тя Аз Ах изобразуют бессмертие геройством насытиться со ль',
+  'Кто меч там Ходя душу есть идет Вам.',
+];
 
 export const genEntryData = (entryId: string) => ({
   entryId,
   ethAddress: '0x003410490059837320006570047391024572000',
   name: 'AKASHA WORLD',
   avatar: 'http://placebeard.it/480/480',
-  content:
-    'We’re back in action, energized after an epic retreat in #verbier 🇨🇭 🤜💥🤛Here’s to everyone keeping us in their minds and hearts 🥂You’ve been in our hearts and minds as well! 🤗Looking forward to sharing our insights and plans in the coming days! 🚀#AKASHAReloaded #AKASHAFoundation',
+  content: contentStrings
+    .slice(Math.floor(Math.random() * Math.floor(3)), Math.floor(Math.random() * Math.floor(9)))
+    .join('. '),
   time: '1572036522',
   upvotes: 26,
   downvotes: 9,
