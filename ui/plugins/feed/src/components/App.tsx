@@ -78,13 +78,13 @@ class App extends PureComponent<IProps> {
 
     return (
       <ViewportSizeProvider>
-          <Suspense fallback={<FeedPlaceholder>Loading resources...</FeedPlaceholder>}>
-            <I18nextProvider i18n={i18n ? i18n : null}>
-              <FeedProvider reducer={feedReducer} initialState={feedInit()}>
-                <Routes {...this.props} />
-              </FeedProvider>
-            </I18nextProvider>
-          </Suspense>
+        <Suspense fallback={<FeedPlaceholder>Loading resources...</FeedPlaceholder>}>
+          <I18nextProvider i18n={i18n ? i18n : null}>
+            <FeedProvider reducer={feedReducer} initialState={feedInit()}>
+              <Routes {...this.props} />
+            </FeedProvider>
+          </I18nextProvider>
+        </Suspense>
       </ViewportSizeProvider>
     );
   }
