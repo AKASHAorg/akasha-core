@@ -4,7 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import { feedInit, FeedProvider, feedReducer } from '../state/feed';
 import Routes from './routes';
 
-const { ViewportSizeProvider, Box, styled, Grommet, lightTheme } = DS;
+const { ViewportSizeProvider, Box, styled } = DS;
 
 export interface IProps {
   singleSpa: any;
@@ -78,7 +78,6 @@ class App extends PureComponent<IProps> {
 
     return (
       <ViewportSizeProvider>
-        <Grommet theme={lightTheme} style={{ height: '100%' }}>
           <Suspense fallback={<FeedPlaceholder>Loading resources...</FeedPlaceholder>}>
             <I18nextProvider i18n={i18n ? i18n : null}>
               <FeedProvider reducer={feedReducer} initialState={feedInit()}>
@@ -86,7 +85,6 @@ class App extends PureComponent<IProps> {
               </FeedProvider>
             </I18nextProvider>
           </Suspense>
-        </Grommet>
       </ViewportSizeProvider>
     );
   }

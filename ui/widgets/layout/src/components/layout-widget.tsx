@@ -74,21 +74,21 @@ const GlobalStyle = createGlobalStyle<{
   body {
     overflow-y: auto;
   }
-  ${({ theme }) => css`
-    // 1920-
-    @media only screen and (max-width: ${theme.breakpoints.xlarge.value}px) {
+  ${props => css`
+    // 1920 and lower
+    @media only screen and (max-width: ${props.theme.breakpoints.xlarge.value}px) {
       :root {
         font-size: 16px;
       }
     }
-    // 1224-
-    @media only screen and (max-width: ${theme.breakpoints.large.value}px) {
+    // 1224 and lower
+    @media only screen and (max-width: ${props.theme.breakpoints.large.value}px) {
       :root {
         font-size: 16px;
       }
     }
-    // 1024-
-    @media only screen and (max-width: ${theme.breakpoints.medium.value}px) {
+    // 1024 and lower
+    @media only screen and (max-width: ${props.theme.breakpoints.medium.value}px) {
       :root {
         font-size: 15px;
       }
@@ -96,8 +96,8 @@ const GlobalStyle = createGlobalStyle<{
         margin: 0 0.5em 0 0.5em;
       }
     }
-    // 550-
-    @media only screen and (max-width: ${theme.breakpoints.small.value}px) {
+    // 550 and lower
+    @media only screen and (max-width: ${props.theme.breakpoints.small.value}px) {
       :root {
         font-size: 14px;
         line-height: 1.312;
