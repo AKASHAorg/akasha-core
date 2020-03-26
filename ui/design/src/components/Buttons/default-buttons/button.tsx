@@ -1,9 +1,9 @@
+import { ButtonProps } from 'grommet';
 import * as React from 'react';
 import StyledButton from './styled-button';
 
-export interface IButtonProps {
+export interface IButtonProps extends ButtonProps {
   className?: string;
-  label: string;
   onClick?: any;
   primary?: boolean;
   secondary?: boolean;

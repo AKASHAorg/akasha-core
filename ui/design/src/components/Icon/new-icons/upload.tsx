@@ -5,7 +5,7 @@ const Upload = (props: React.SVGProps<SVGSVGElement>) => (
     <g
       fill="none"
       fillRule="evenodd"
-      stroke="#4E71FF"
+      stroke="#132540"
       strokeLinecap="round"
       strokeLinejoin="round"
       transform="translate(0 1)"

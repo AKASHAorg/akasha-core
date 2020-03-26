@@ -7,12 +7,12 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
   return deepMerge(customTheme, {
     global: {
       edgeSize: {
-        xxsmall: `${styledComponentsTheme.shapes.baseSpacing / 16}em`,
-        xsmall: `${(styledComponentsTheme.shapes.baseSpacing * 2) / 16}em`,
-        small: `${(styledComponentsTheme.shapes.baseSpacing * 3) / 16}em`,
-        medium: `${(styledComponentsTheme.shapes.baseSpacing * 4) / 16}em`,
-        large: `${(styledComponentsTheme.shapes.baseSpacing * 5) / 16}em`,
-        xlarge: `${(styledComponentsTheme.shapes.baseSpacing * 10) / 16}em`,
+        xxsmall: `${styledComponentsTheme.shapes.baseSpacing / 16}rem`,
+        xsmall: `${(styledComponentsTheme.shapes.baseSpacing * 2) / 16}rem`,
+        small: `${(styledComponentsTheme.shapes.baseSpacing * 3) / 16}rem`,
+        medium: `${(styledComponentsTheme.shapes.baseSpacing * 4) / 16}rem`,
+        large: `${(styledComponentsTheme.shapes.baseSpacing * 5) / 16}rem`,
+        xlarge: `${(styledComponentsTheme.shapes.baseSpacing * 10) / 16}rem`,
       },
       elevation: {
         light: {
@@ -22,7 +22,6 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
           shadow: styledComponentsTheme.colors.shadow,
         },
       },
-
       drop: {
         shadowSize: 'shadow',
       },
@@ -48,6 +47,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         accent: styledComponentsTheme.colors.accent,
         brand: styledComponentsTheme.colors.accent,
         background: styledComponentsTheme.colors.background,
+        focus: styledComponentsTheme.colors.accent,
       },
       focus: {
         border: {

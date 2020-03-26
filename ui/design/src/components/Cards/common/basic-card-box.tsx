@@ -8,11 +8,18 @@ const StyledBox = styled(Box)`
 
 export interface IBasicCardBox {
   className?: string;
+  callToAction?: boolean;
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
 }
 
-const BasicCardBox: React.FC<IBasicCardBox> = ({ children, className, style, rootNodeRef }) => (
+const BasicCardBox: React.FC<IBasicCardBox> = ({
+  children,
+  className,
+  callToAction,
+  style,
+  rootNodeRef,
+}) => (
   <StyledBox
     style={style}
     direction="column"
@@ -20,12 +27,21 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({ children, className, style, roo
     fill="horizontal"
     pad="none"
     round="xsmall"
-    border={{
-      color: 'border',
-      size: 'xsmall',
-      style: 'solid',
-      side: 'all',
-    }}
+    border={
+      callToAction
+        ? {
+            color: 'accent',
+            size: 'xsmall',
+            style: 'solid',
+            side: 'all',
+          }
+        : {
+            color: 'border',
+            size: 'xsmall',
+            style: 'solid',
+            side: 'all',
+          }
+    }
     className={className}
     ref={rootNodeRef}
   >
@@ -33,4 +49,12 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({ children, className, style, roo
   </StyledBox>
 );
 
-export default BasicCardBox;
+const MainAreaCardBox = styled(BasicCardBox)`
+  max-width: 36.313rem;
+`;
+
+const WidgetAreaCardBox = styled(BasicCardBox)`
+  width: 21rem;
+`;
+
+export { BasicCardBox, MainAreaCardBox, WidgetAreaCardBox };

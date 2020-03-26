@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 import useSimpleClickAway from '../../../utils/simpleClickAway';
 import { Avatar } from '../../Avatar/index';
 import { Icon } from '../../Icon/index';
-import { StyledDiv } from './styled-comment-input';
+import { StyledDiv, StyledCommentWrapper } from './styled-comment-input';
 
 export interface ICommentInput {
   className?: string;
@@ -45,8 +45,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
 
   const renderFakeInput = () => {
     return (
-      <Box
-        fill="horizontal"
+      <StyledCommentWrapper
         direction="row"
         align="center"
         height="2.5em"
@@ -60,15 +59,14 @@ const CommentInput: React.FC<ICommentInput> = props => {
         data-testid="fake-input-wrapper"
       >
         <Text color="secondaryText">{placeholderLabel}</Text>
-      </Box>
+      </StyledCommentWrapper>
     );
   };
 
   const renderTextArea = () => {
     return (
-      <Box
+      <StyledCommentWrapper
         ref={wrapperRef}
-        fill="horizontal"
         direction="column"
         align="center"
         round="small"
@@ -103,7 +101,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
             <Text size="large">{publishLabel}</Text>
           </StyledDiv>
         </Box>
-      </Box>
+      </StyledCommentWrapper>
     );
   };
 

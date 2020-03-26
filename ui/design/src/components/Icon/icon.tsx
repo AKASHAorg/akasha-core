@@ -14,6 +14,7 @@ export type IconType =
   | 'arrowDown'
   | 'arrowLeft'
   | 'arrowRight'
+  | 'available'
   | 'bold'
   | 'bookmark'
   | 'calendar'
@@ -21,12 +22,15 @@ export type IconType =
   | 'close'
   | 'code'
   | 'coins'
+  | 'copy'
+  | 'check'
   | 'document'
   | 'editSimple'
   | 'edit'
   | 'emoji'
   | 'eye'
   | 'ethereumWorldLogo'
+  | 'error'
   | 'facebook'
   | 'heart'
   | 'home'
@@ -35,6 +39,7 @@ export type IconType =
   | 'italic'
   | 'info'
   | 'link'
+  | 'loading'
   | 'media'
   | 'menu'
   | 'moreDark'
@@ -62,6 +67,7 @@ export type IconType =
   | 'thumbsUpGrey'
   | 'thumbsUpWhite'
   | 'transfer'
+  | 'trash'
   | 'trendingApps'
   | 'twitter'
   | 'underline'
@@ -78,12 +84,15 @@ export const iconTypes: IconType[] = [
   'arrowDown',
   'arrowLeft',
   'arrowRight',
+  'available',
   'bold',
   'bookmark',
   'calendar',
   'comments',
   'close',
   'code',
+  'copy',
+  'check',
   'coins',
   'document',
   'editSimple',
@@ -91,6 +100,7 @@ export const iconTypes: IconType[] = [
   'emoji',
   'eye',
   'ethereumWorldLogo',
+  'error',
   'facebook',
   'heart',
   'home',
@@ -99,6 +109,7 @@ export const iconTypes: IconType[] = [
   'info',
   'italic',
   'link',
+  'loading',
   'media',
   'menu',
   'moreDark',
@@ -125,6 +136,7 @@ export const iconTypes: IconType[] = [
   'thumbsUpGrey',
   'thumbsUpWhite',
   'transfer',
+  'trash',
   'trendingApps',
   'twitter',
   'underline',
@@ -134,18 +146,31 @@ export const iconTypes: IconType[] = [
 
 export interface IconProps extends CommonInterface<any> {
   color?: string;
+  ref?: React.Ref<HTMLDivElement>;
   className?: string;
   type: IconType | string;
   clickable?: boolean;
-  default?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  primaryColor?: boolean;
+  accentColor?: boolean;
+  size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg';
 }
 
-const IconBase: React.FC<IconProps> = ({ color, className, type, clickable, ...props }) => {
-  const Component = (icons as any)[type];
-  const iconClass = classNames('icon', className);
-  return <Component className={iconClass} {...props} />;
-};
+const StyledRefDiv = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const IconBase: React.FC<IconProps> = React.forwardRef(
+  ({ color, size, clickable, type, primaryColor, accentColor, ...props }, ref) => {
+    const Component = (icons as any)[type];
+    const iconClass = classNames('icon', props.className);
+    return (
+      <StyledRefDiv ref={ref}>
+        <Component className={iconClass} {...props} />
+      </StyledRefDiv>
+    );
+  },
+);
 
 const Icon: React.FC<IconProps> = styled(IconBase)`
   ${props =>
@@ -155,11 +180,17 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
         stroke: ${props.color};
       }`}
   ${props =>
-    props.default &&
+    props.primaryColor &&
     `
       & * {
         stroke: ${props.theme.colors.primaryText};
       }`}
+      ${props =>
+        props.accentColor &&
+        `
+          & * {
+            stroke: ${props.theme.colors.accent};
+          }`}
   ${props =>
     props.clickable &&
     `
@@ -173,6 +204,16 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
     ${props => {
       if (props.size) {
         switch (props.size) {
+          case 'xxs':
+            return css`
+              width: 0.75em;
+              height: 0.75em;
+            `;
+          case 'xs':
+            return css`
+              width: 1em;
+              height: 1em;
+            `;
           case 'sm':
             return css`
               width: 1.5em;
