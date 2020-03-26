@@ -7,7 +7,7 @@ import MyProfilePage from './my-profile-page';
 import ProfilePage from './profile-page';
 import WidgetList from '../widgets';
 
-const { Box, lightTheme, ThemeSelector } = DS;
+const { Box } = DS;
 
 export interface IRoutesProps {
   activeWhen: { path: string };
@@ -20,7 +20,6 @@ const Routes: React.FC<IRoutesProps> = props => {
 
   return (
     <Router>
-      <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
         <Box>
           <Switch>
             <Route path={menuRoute[PROFILE_LIST]} render={() => <>A list of profiles</>} />
@@ -38,7 +37,6 @@ const Routes: React.FC<IRoutesProps> = props => {
         <Box>
           <WidgetList />
         </Box>
-      </ThemeSelector>
     </Router>
   );
 };
