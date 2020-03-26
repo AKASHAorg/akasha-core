@@ -9,6 +9,7 @@ const { ThemeSelector, Box, styled, lightTheme, darkTheme } = DS;
 
 export interface IRoutesProps {
   activeWhen: { path: string };
+  singleSpa: any;
 }
 
 const ArticleNotFound = () => {
@@ -20,14 +21,16 @@ const FeedBox = styled(Box)`
   padding: 0.5em 0;
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     max-width: 60%;
+    width: 100%;
   }
 `;
 
 const WidgetBox = styled(Box)`
   padding: 0.5em 0;
-  padding-left: 0.5em;
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     max-width: 40%;
+    width: 100%;
+    margin: 0 1em;
   }
 `;
 

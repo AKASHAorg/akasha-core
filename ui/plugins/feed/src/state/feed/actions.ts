@@ -15,15 +15,25 @@ export interface IFeedActions {
 export const getFeedActions = (
   dispatch: Dispatch<IAction<any, ValueOf<typeof actionTypes>>>,
 ): IFeedActions => ({
-  getFeedItems: payload =>
-    useSuspenseAction(dispatch, fetchFeedItems, {
-      payload,
-      type: actionTypes.GET_FEED_ITEMS,
-    }),
+  getFeedItems: (payload, deps) =>
+    useSuspenseAction(
+      dispatch,
+      fetchFeedItems,
+      {
+        payload,
+        type: actionTypes.GET_FEED_ITEMS,
+      },
+      deps,
+    ),
 
-  getFeedItemData: payload =>
-    useSuspenseAction(dispatch, fetchFeedItemData, {
-      payload,
-      type: actionTypes.GET_FEED_ITEM_DATA,
-    }),
+  getFeedItemData: (payload, deps) =>
+    useSuspenseAction(
+      dispatch,
+      fetchFeedItemData,
+      {
+        payload,
+        type: actionTypes.GET_FEED_ITEM_DATA,
+      },
+      deps,
+    ),
 });
