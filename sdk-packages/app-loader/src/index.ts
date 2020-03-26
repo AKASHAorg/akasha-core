@@ -2,42 +2,22 @@ import pino from 'pino';
 import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
 import TranslationManager from './i18n';
-import { IMenuItem, IMenuList, IPlugin, IWidget, MenuItemType } from './interfaces';
+
 import { setPageTitle } from './setPageMetadata';
+import {
+  IPluginEntry,
+  IWidgetEntry,
+  IPluginConfig,
+  IWidgetConfig,
+  IMenuItem,
+  IMenuList,
+  IPlugin,
+  IWidget,
+  ILoaderConfig,
+  MenuItemType,
+} from '@akashaproject/ui-awf-typings/app-loader';
 
-export interface IPluginConfig {
-  activeWhen?: {
-    exact?: boolean;
-    path: string;
-  };
-  title?: string;
-}
-
-export interface ILoaderConfig {
-  rootNodeId: string;
-  layout: IWidget;
-}
-
-interface IWidgetConfig {
-  slot: string;
-}
-export interface SDKdependency {
-  module: string;
-  services?: string[];
-}
-export interface IPluginEntry {
-  app: IPlugin;
-  config?: IPluginConfig;
-  sdkModules?: SDKdependency[];
-}
-
-export interface IWidgetEntry {
-  app: IWidget;
-  config?: IWidgetConfig;
-  sdkModules?: any[];
-}
-
-interface IAppLoader {
+export interface IAppLoader {
   registerPlugin(plugin: IPluginEntry): void;
 
   registerWidget(widget: IWidgetEntry): void;
