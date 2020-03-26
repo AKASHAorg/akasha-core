@@ -25,7 +25,7 @@ export const authenticateBox = async (
     return box.public.all();
   }
   box = await Box.create({
-    sendAsync: function(data: any, cb: any) {
+    sendAsync: function (data: any, cb: any) {
       signer
         .signMessage(web3Utils.toUtf8String(data.params[0]))
         .then((result: any) => cb(null, { result: web3Utils.joinSignature(result) }));

@@ -26,7 +26,9 @@
     "react-docgen-typescript-loader": "^3.6.0",
     "react-docgen-typescript-webpack-plugin": "^1.1.0",
     "awesome-typescript-loader": "5.2.1",
-    "react-scripts": "^3.4.0",
+    "react-scripts": "^3.4.0"
+  },
+  "peerDependencies": {
     "styled-components": "^5.0.1"
   }
 }

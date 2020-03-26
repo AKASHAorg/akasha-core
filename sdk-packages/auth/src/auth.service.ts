@@ -28,10 +28,7 @@ const service: AkashaService = (invoke, log) => {
     const authSettings = await getSettings(moduleName);
     const endPoint = authSettings[AUTH_ENDPOINT];
     log.info(`getting a new JWT from ${endPoint}`);
-    const res = await superagent
-      .post(endPoint)
-      .send(args)
-      .set('accept', 'json');
+    const res = await superagent.post(endPoint).send(args).set('accept', 'json');
     return res.text;
   };
 
