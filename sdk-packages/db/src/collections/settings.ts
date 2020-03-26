@@ -15,10 +15,7 @@ const settingsDocMethods: SettingsDocMethods = {
 
 const settingsCollectionMethods: SettingsCollectionMethods = {
   async getAllSettings(this: SettingsCollection, ethAddress: string) {
-    return await this.find()
-      .where('ethAddress')
-      .equals(ethAddress)
-      .exec();
+    return await this.find().where('ethAddress').equals(ethAddress).exec();
   },
 };
 

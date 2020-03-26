@@ -44,11 +44,7 @@ export default class TranslationManager {
       warn: logger.warn,
       error: logger.error,
     };
-    const i18nInstance = i18n
-      .createInstance()
-      .use(Backend)
-      .use(LanguageDetector)
-      .use(logPlugin);
+    const i18nInstance = i18n.createInstance().use(Backend).use(LanguageDetector).use(logPlugin);
 
     this.i18nInstances[plugin.name] = i18nInstance;
     return i18nInstance;
