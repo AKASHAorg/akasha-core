@@ -4,6 +4,10 @@
     "outDir": "./lib",
     "rootDir": "./src"
   },
-  "references": [],
+  "references": [
+    {
+      "path": "../../typings"
+    }
+  ],
   "include": ["./src/**/*"]
 }
