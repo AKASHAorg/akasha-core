@@ -15,7 +15,7 @@ import {
   IWidget,
   ILoaderConfig,
   MenuItemType,
-} from '@akashaproject/ui-awf-typings/app-loader';
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 export interface IAppLoader {
   registerPlugin(plugin: IPluginEntry): void;

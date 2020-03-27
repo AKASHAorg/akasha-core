@@ -9,7 +9,7 @@ import {
   ILoaderConfig,
   IPluginEntry,
   IWidgetEntry,
-} from '@akashaproject/ui-awf-typings/app-loader';
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
 import initChannel from './channel';
 import * as operators from 'rxjs/operators';
 import { forkJoin, from, zip, of, concat } from 'rxjs';

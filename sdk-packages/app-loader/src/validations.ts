@@ -1,4 +1,4 @@
-import { IPlugin, IWidget } from '@akashaproject/ui-awf-typings/app-loader';
+import { IPlugin, IWidget } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const validateServices = (services: any) => {
   return true;
