@@ -33,5 +33,9 @@ export const authenticateBox = async (
   });
   await box.auth(['akasha-ewa'], { address: ethAddress });
   await box.syncDone;
-  return box.public.all();
+  const profileData = await box.public.all();
+  return {
+    ethAddress,
+    profileData,
+  };
 };

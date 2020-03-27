@@ -13,10 +13,7 @@ const {
   responsiveBreakpoints,
 } = DS;
 
-const LayoutWrapper = styled(Box)`
-  flex-direction: row;
-  width: 100%;
-`;
+const LayoutWrapper = styled(Box)``;
 
 const MainArea = styled(Box)`
   width: 100%;
@@ -50,10 +47,7 @@ const TopbarSlot = styled(Box)`
 `;
 const PluginSlot = styled(Box)``;
 
-const GlobalStyle = createGlobalStyle<{
-  // @TODO: replace any with design-system's exported theme type
-  theme: any;
-}>`
+const GlobalStyle = createGlobalStyle<{ theme: any }>`
   html {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -74,7 +68,7 @@ const GlobalStyle = createGlobalStyle<{
   body {
     overflow-y: auto;
   }
-  ${props => css`
+  ${props => css<any>`
     // 1920 and lower
     @media only screen and (max-width: ${props.theme.breakpoints.xlarge.value}px) {
       :root {
@@ -93,7 +87,7 @@ const GlobalStyle = createGlobalStyle<{
         font-size: 15px;
       }
       ${PluginSlot} {
-        margin: 0 0.5em 0 0.5em;
+        padding: 0 0.5em 0 0.5em;
       }
     }
     // 550 and lower
@@ -181,11 +175,11 @@ class LayoutWidget extends PureComponent<IProps> {
           settings={{ activeTheme: 'Light-Theme' }}
           themeReadyEvent={this.props.themeReadyEvent}
         >
-          <LayoutWrapper>
+          <LayoutWrapper direction="row" fill={true} flex={true}>
             <SidebarSlot id={sidebarSlotId} visible={sidebarVisible} />
-            <MainArea fill={true}>
+            <MainArea flex={true}>
               <TopbarSlot id={topbarSlotId} />
-              <PluginSlot id={pluginSlotId} flex={true} fill={true} />
+              <PluginSlot id={pluginSlotId} flex={true} fill="vertical" />
             </MainArea>
           </LayoutWrapper>
         </ThemeSelector>
