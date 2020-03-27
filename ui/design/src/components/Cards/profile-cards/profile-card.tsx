@@ -10,6 +10,7 @@ import {
   ProfileCardName,
 } from './profile-card-fields/index';
 import { IProfileWidgetCard } from './profile-widget-card';
+import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -27,7 +28,7 @@ export interface IProfileProvidersData {
 
 export interface IProfileDataProvider {
   providerName: string;
-  providerIcon?: string;
+  providerIcon?: LogoSourceType;
   value: string;
 }
 

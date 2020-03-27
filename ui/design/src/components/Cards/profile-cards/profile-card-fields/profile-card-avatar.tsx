@@ -4,11 +4,12 @@ import { AppIcon } from '../../../Icon/index';
 import { SelectPopover } from '../../../Popovers/index';
 import { IProfileDataProvider, IProfileProvidersData } from '../profile-card';
 import { AvatarDiv, StyledAvatarEditDiv } from '../styled-profile-card';
+import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 
 export interface IProfileCardAvatarProps {
   editable: boolean;
   avatar?: string;
-  avatarIcon?: string;
+  avatarIcon?: LogoSourceType;
   avatarPopoverOpen: boolean;
   setAvatarPopoverOpen: (value: boolean) => void;
   handleChangeAvatar: (provider: IProfileDataProvider) => void;

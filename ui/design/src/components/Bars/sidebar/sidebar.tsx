@@ -16,6 +16,7 @@ import {
   StyledUserSectionBox,
   StyledVerticalPad,
 } from './styled-sidebar';
+import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 export interface ISidebarProps {
   loggedEthAddress: string;
@@ -30,16 +31,6 @@ export interface ISidebarProps {
   onClickCloseSidebar: () => void;
   searchLabel: string;
   appCenterLabel: string;
-}
-
-export type MenuItemType = 'plugin' | 'app' | 'internal';
-export interface IMenuItem {
-  index: number;
-  label: string;
-  route: string;
-  type: MenuItemType;
-  logo?: string;
-  subRoutes?: IMenuItem[];
 }
 
 export interface InternalMenuItem extends IMenuItem {
@@ -260,12 +251,12 @@ const Sidebar: React.FC<ISidebarProps> = props => {
                   <StyledAppIconWrapper
                     active={index === currentAppData?.internalIndex}
                     hovered={index === hoveredAppData?.internalIndex}
-                    onMouseEnter={handleMouseEnter({ ...app, index })}
+                    onMouseEnter={handleMouseEnter(app)}
                   >
                     <AppIcon
                       placeholderIconType="app"
                       appImg={app.logo}
-                      onClick={handleAppIconClick({ ...app, index })}
+                      onClick={handleAppIconClick(app)}
                       size="md"
                     />
                   </StyledAppIconWrapper>
