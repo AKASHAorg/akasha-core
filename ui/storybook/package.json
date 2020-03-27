@@ -8,6 +8,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@akashaproject/ui-awf-typings": "*",
     "@akashaproject/design-system": "*",
     "@storybook/addon-a11y": "5.3.14",
     "@storybook/addon-actions": "5.3.14",

@@ -3,7 +3,8 @@ import * as React from 'react';
 import { IconLink } from '../../Buttons';
 import { AppIcon, Icon } from '../../Icon/index';
 import { TextIcon } from '../../TextIcon/index';
-import { IMenuItem, ISidebarProps } from './sidebar';
+import { ISidebarProps } from './sidebar';
+import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   StyledAppIconWrapper,
   StyledAppOptionBox,
@@ -15,7 +16,6 @@ import {
 const SidebarMobile: React.FC<ISidebarProps> = props => {
   const {
     installedApps,
-    // feedPluginData,
     onClickAddApp,
     onClickMenuItem,
     onClickSearch,
