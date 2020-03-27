@@ -21,7 +21,9 @@ export interface ISidebarProps {
   loggedEthAddress: string;
   avatarImage?: string;
   notifications?: INotification[];
-  menuItems: IMenuItem[];
+  installedApps?: IMenuItem[];
+  profilePluginData?: IMenuItem;
+  feedPluginData?: IMenuItem;
   currentRoute?: string;
   onClickMenuItem: (route: string) => void;
   onClickAddApp: () => void;
@@ -61,44 +63,30 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     avatarImage,
     loggedEthAddress,
     // notifications,
-    menuItems,
+    installedApps,
+    profilePluginData,
+    feedPluginData,
     onClickAddApp,
     onClickMenuItem,
     onClickSearch,
   } = props;
 
-  // filter out default plugins like profile and feed
-  const installedApps = menuItems.filter(menuItem => menuItem.type === 'app');
-
   const popoversRef: React.Ref<any> = React.useRef(installedApps?.map(() => React.createRef()));
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
   const feedRef: React.Ref<HTMLDivElement> = React.useRef(null);
-
-  // return the plugins from list of apps
-  const profileDefaultData = menuItems.find(menuItem => menuItem.index === 2)!;
-  const feedDefaultData = menuItems.find(menuItem => menuItem.index === 1)!;
 
   const [appPopoverOpen, setAppPopoverOpen] = React.useState(false);
 
   const [hoveredAppData, setHoveredAppData] = React.useState<IMenuItem | null>(null);
   const [currentAppData, setCurrentAppData] = React.useState<IMenuItem | null>(null);
 
-  const handleMouseEnterProfile = () => {
-    setHoveredAppData(profileDefaultData);
-    setAppPopoverOpen(true);
-  };
-
-  const handleMouseEnterFeed = () => {
-    setHoveredAppData(feedDefaultData);
-    setAppPopoverOpen(true);
-  };
-
   const [activeOption, setActiveOption] = React.useState('');
 
   // @TODO: use route params to determine active app/option
   React.useEffect(() => {
-    const firstAppData = menuItems[0];
-    setCurrentAppData(firstAppData);
+    if (installedApps) {
+      setCurrentAppData(installedApps[0]);
+    }
   }, []);
 
   const handleAppIconClick = (menuItem: IMenuItem) => () => {
@@ -109,10 +97,6 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     }
     onClickMenuItem(menuItem.route);
   };
-
-  const handleClickProfile = handleAppIconClick(profileDefaultData);
-
-  const handleClickFeed = handleAppIconClick(feedDefaultData);
 
   const handleOptionClick = (menuItem: IMenuItem) => () => {
     setActiveOption(menuItem.label);
@@ -138,7 +122,11 @@ const Sidebar: React.FC<ISidebarProps> = props => {
 
   const renderPopover = () => {
     if (appPopoverOpen && hoveredAppData) {
-      if (profileRef.current && hoveredAppData.index === profileDefaultData.index) {
+      if (
+        profileRef.current &&
+        profilePluginData &&
+        hoveredAppData.index === profilePluginData.index
+      ) {
         return (
           <AppMenuPopover
             target={profileRef.current}
@@ -148,7 +136,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           />
         );
       }
-      if (feedRef.current && hoveredAppData.index === feedDefaultData.index) {
+      if (feedRef.current && feedPluginData && hoveredAppData.index === feedPluginData.index) {
         return (
           <AppMenuPopover
             target={feedRef.current}
@@ -169,6 +157,10 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         );
       }
     }
+    return;
+  };
+
+  const noop = () => {
     return;
   };
 
@@ -195,20 +187,26 @@ const Sidebar: React.FC<ISidebarProps> = props => {
               fill="horizontal"
               align="center"
               userSection={true}
-              active={currentAppData?.index === profileDefaultData.index}
-              hovered={hoveredAppData?.index === profileDefaultData.index}
+              active={profilePluginData ? currentAppData?.index === profilePluginData.index : false}
+              hovered={
+                profilePluginData ? hoveredAppData?.index === profilePluginData.index : false
+              }
               ref={profileRef}
             >
               <StyledAppIconWrapper
-                active={currentAppData?.index === profileDefaultData.index}
-                hovered={hoveredAppData?.index === profileDefaultData.index}
-                onMouseEnter={handleMouseEnterProfile}
+                active={
+                  profilePluginData ? currentAppData?.index === profilePluginData.index : false
+                }
+                hovered={
+                  profilePluginData ? hoveredAppData?.index === profilePluginData.index : false
+                }
+                onMouseEnter={profilePluginData ? handleMouseEnter(profilePluginData) : noop}
               >
                 <Avatar
                   ethAddress={loggedEthAddress}
                   src={avatarImage}
                   size="sm"
-                  onClick={handleClickProfile}
+                  onClick={profilePluginData ? handleAppIconClick(profilePluginData) : noop}
                 />
               </StyledAppIconWrapper>
             </StyledBorderBox>
@@ -218,18 +216,18 @@ const Sidebar: React.FC<ISidebarProps> = props => {
               fill="horizontal"
               align="center"
               userSection={true}
-              active={currentAppData?.index === feedDefaultData.index}
-              hovered={hoveredAppData?.index === feedDefaultData.index}
+              active={feedPluginData ? currentAppData?.index === feedPluginData.index : false}
+              hovered={feedPluginData ? hoveredAppData?.index === feedPluginData.index : false}
               ref={feedRef}
             >
               <StyledAppIconWrapper
-                active={currentAppData?.index === feedDefaultData.index}
-                hovered={hoveredAppData?.index === feedDefaultData.index}
-                onMouseEnter={handleMouseEnterFeed}
+                active={feedPluginData ? currentAppData?.index === feedPluginData.index : false}
+                hovered={feedPluginData ? hoveredAppData?.index === feedPluginData.index : false}
+                onMouseEnter={feedPluginData ? handleMouseEnter(feedPluginData) : noop}
               >
                 <AppIcon
                   placeholderIconType="ethereumWorldLogo"
-                  onClick={handleClickFeed}
+                  onClick={feedPluginData ? handleAppIconClick(feedPluginData) : noop}
                   size="md"
                 />
               </StyledAppIconWrapper>
@@ -246,7 +244,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         <StyledHRDiv />
         <Box align="center" justify="between" fill={true}>
           <StyledHiddenScrollContainer>
-            {installedApps.map((app, index) => (
+            {installedApps?.map((app, index) => (
               <StyledVerticalPad key={index}>
                 <StyledBorderBox
                   fill="horizontal"

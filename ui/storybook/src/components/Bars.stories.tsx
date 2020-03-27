@@ -11,14 +11,14 @@ const installedAppsData: IMenuItem[] = [
     label: 'AKASHA Feed',
     index: 1,
     route: '/',
-    type: 'plugin',
+    type: 'app',
     logo: undefined,
   },
   {
     label: 'AKASHA Profile',
     index: 2,
     route: '/profile',
-    type: 'plugin',
+    type: 'app',
     logo: undefined,
     subRoutes: [
       { index: 0, label: 'Profile list', route: '/profile/list', type: 'internal' },
@@ -29,10 +29,30 @@ const installedAppsData: IMenuItem[] = [
     label: '3box integration',
     index: 3,
     route: '/3box-app',
-    type: 'plugin',
+    type: 'app',
     logo: undefined,
   },
 ];
+
+const profilePluginData: IMenuItem = {
+  label: 'AKASHA Profile',
+  index: 2,
+  route: '/profile',
+  type: 'plugin',
+  logo: undefined,
+  subRoutes: [
+    { index: 0, label: 'Profile list', route: '/profile/list', type: 'internal' },
+    { index: 1, label: 'My profile', route: '/profile/my-profile', type: 'internal' },
+  ],
+};
+
+const feedPluginData: IMenuItem = {
+  label: 'AKASHA Feed',
+  index: 1,
+  route: '/',
+  type: 'plugin',
+  logo: undefined,
+};
 
 const { Sidebar, TextIcon, Topbar, SidebarMobile } = DS;
 storiesOf('Bars|Topbar', module).add('Topbar', () => (
@@ -52,7 +72,9 @@ storiesOf('Bars|Sidebar', module)
         loggedEthAddress="0x003410490050000320006570034567114572000"
         avatarImage="https://placebeard.it/360x360"
         notifications={notificationsData}
-        menuItems={installedAppsData}
+        installedApps={installedAppsData}
+        profilePluginData={profilePluginData}
+        feedPluginData={feedPluginData}
         onClickAddApp={() => action('Add app Clicked')('Synthetic Event')}
         onClickMenuItem={() => action('Option Clicked')('Synthetic Event')}
         searchLabel="Search"
@@ -68,7 +90,8 @@ storiesOf('Bars|Sidebar', module)
         loggedEthAddress="0x003410490050000320006570034567114572000"
         avatarImage="https://placebeard.it/360x360"
         notifications={notificationsData}
-        menuItems={installedAppsData}
+        installedApps={installedAppsData}
+        feedPluginData={feedPluginData}
         onClickAddApp={() => action('App center Clicked')('Synthetic Event')}
         onClickMenuItem={() => action('Option Clicked')('Synthetic Event')}
         searchLabel="Search"

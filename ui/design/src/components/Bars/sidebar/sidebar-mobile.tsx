@@ -14,7 +14,8 @@ import {
 
 const SidebarMobile: React.FC<ISidebarProps> = props => {
   const {
-    menuItems,
+    installedApps,
+    // feedPluginData,
     onClickAddApp,
     onClickMenuItem,
     onClickSearch,
@@ -23,15 +24,13 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
     appCenterLabel,
   } = props;
 
-  // filter out default plugins like profile and feed
-  const installedApps = menuItems.filter(menuItem => menuItem.type === 'app');
-
   const [currentAppData, setCurrentAppData] = React.useState<IMenuItem | null>(null);
 
   // @TODO: use route params to determine active app/option
   React.useEffect(() => {
-    const firstAppData = menuItems[0];
-    setCurrentAppData(firstAppData);
+    if (installedApps) {
+      setCurrentAppData(installedApps[0]);
+    }
   }, []);
 
   const [activeOption, setActiveOption] = React.useState('');
@@ -78,7 +77,7 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
       <Box align="center" fill={true}>
         <StyledHiddenScrollContainer>
           <Accordion>
-            {installedApps.map((menuItem, index) => (
+            {installedApps?.map((menuItem, index) => (
               <AccordionPanel
                 onClick={handleAppIconClick(menuItem)}
                 label={
