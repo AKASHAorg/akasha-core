@@ -7,27 +7,17 @@ import * as React from 'react';
 import { notificationsData } from './Popovers.stories';
 
 const installedAppsData: IMenuItem[] = [
+  { label: 'AKASHA Feed', index: 1, route: '/', type: 'plugin', logo: 'ethereumWorldLogo' },
   {
-    label: 'AKASHA Feed',
-    index: 1,
-    route: '/',
+    label: 'ENS',
+    index: 3,
+    route: '/ens-app',
     type: 'app',
     logo: undefined,
-  },
-  {
-    label: 'AKASHA Profile',
-    index: 2,
-    route: '/profile',
-    type: 'app',
-    logo: undefined,
-    subRoutes: [
-      { index: 0, label: 'Profile list', route: '/profile/list', type: 'internal' },
-      { index: 1, label: 'My profile', route: '/profile/my-profile', type: 'internal' },
-    ],
   },
   {
     label: '3box integration',
-    index: 3,
+    index: 4,
     route: '/3box-app',
     type: 'app',
     logo: undefined,
@@ -44,14 +34,6 @@ const profilePluginData: IMenuItem = {
     { index: 0, label: 'Profile list', route: '/profile/list', type: 'internal' },
     { index: 1, label: 'My profile', route: '/profile/my-profile', type: 'internal' },
   ],
-};
-
-const feedPluginData: IMenuItem = {
-  label: 'AKASHA Feed',
-  index: 1,
-  route: '/',
-  type: 'plugin',
-  logo: undefined,
 };
 
 const { Sidebar, TextIcon, Topbar, SidebarMobile } = DS;
@@ -74,7 +56,6 @@ storiesOf('Bars|Sidebar', module)
         notifications={notificationsData}
         installedApps={installedAppsData}
         profilePluginData={profilePluginData}
-        feedPluginData={feedPluginData}
         onClickAddApp={() => action('Add app Clicked')('Synthetic Event')}
         onClickMenuItem={() => action('Option Clicked')('Synthetic Event')}
         searchLabel="Search"
@@ -91,7 +72,6 @@ storiesOf('Bars|Sidebar', module)
         avatarImage="https://placebeard.it/360x360"
         notifications={notificationsData}
         installedApps={installedAppsData}
-        feedPluginData={feedPluginData}
         onClickAddApp={() => action('App center Clicked')('Synthetic Event')}
         onClickMenuItem={() => action('Option Clicked')('Synthetic Event')}
         searchLabel="Search"

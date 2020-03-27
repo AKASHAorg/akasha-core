@@ -102,6 +102,9 @@ const Menu = (props: MenuProps) => {
   // return the plugins from list of apps
   const profileDefaultData = currentMenu?.find(menuItem => menuItem.index === 2);
   const feedDefaultData = currentMenu?.find(menuItem => menuItem.index === 1);
+  if (feedDefaultData) {
+    installedApps?.unshift(feedDefaultData);
+  }
 
   const handleNavigation = (path: string) => {
     navigateToUrl(path);
@@ -138,7 +141,6 @@ const Menu = (props: MenuProps) => {
         appCenterLabel={'App Center'}
         onClickMenuItem={handleNavigation}
         installedApps={installedApps}
-        feedPluginData={feedDefaultData}
         profilePluginData={profileDefaultData}
       />
     </ThemeSelector>

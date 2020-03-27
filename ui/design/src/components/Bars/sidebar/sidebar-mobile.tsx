@@ -15,7 +15,6 @@ import {
 const SidebarMobile: React.FC<ISidebarProps> = props => {
   const {
     installedApps,
-    // feedPluginData,
     onClickAddApp,
     onClickMenuItem,
     onClickSearch,
