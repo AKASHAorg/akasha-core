@@ -1,4 +1,4 @@
-import { II18nConfig, SDKdependency } from './app-loader';
+import * as AppLoaderTypes from './app-loader';
 
 export interface LogoSourceType {
   type: LogoTypeSource;
@@ -6,10 +6,10 @@ export interface LogoSourceType {
 }
 export interface Application {
   activeWhen: { path: string; exact?: boolean };
-  i18nConfig: II18nConfig;
+  i18nConfig: AppLoaderTypes.II18nConfig;
   loadingFn: () => Promise<any>;
   name: string;
-  sdkModules?: SDKdependency[];
+  sdkModules?: AppLoaderTypes.SDKdependency[];
   title: string;
   menuItems?: { [p: string]: string };
   logo?: LogoSourceType;
@@ -20,3 +20,5 @@ export enum LogoTypeSource {
   String = 'string',
   IPFS = 'ipfs',
 }
+
+export const AppLoader = AppLoaderTypes;

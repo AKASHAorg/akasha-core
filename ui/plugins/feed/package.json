@@ -37,6 +37,7 @@
     "ext": "ts,tsx"
   },
   "dependencies": {
+    "@akashaproject/ui-awf-typings": "*",
     "@akashaproject/design-system": "*",
     "@types/i18next": "^13.0.0",
     "@types/react-i18next": "^8.1.0",
@@ -49,7 +50,6 @@
     "single-spa-react": "^2.11.0"
   },
   "devDependencies": {
-    "@akashaproject/ui-awf-typings": "*",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
     "@types/react-test-renderer": "^16.9.2",
