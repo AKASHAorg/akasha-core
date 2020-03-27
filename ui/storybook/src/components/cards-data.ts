@@ -1,5 +1,5 @@
 import { IAppData } from '@akashaproject/design-system/lib/components/Cards/widget-cards/apps-widget-card';
-import { LogoTypeSource } from '@akashaproject/ui-awf-typings/lib/index';
+import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 
 const topicsDataSource = [
   { title: '#ethereumworld', subtitle: '6576 mentions' },

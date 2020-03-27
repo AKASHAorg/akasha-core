@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Icon, IconType } from './icon';
 import { StyledIconDiv, StyledImage } from './styled-icon';
-import { LogoSourceType, LogoTypeSource } from '@akashaproject/ui-awf-typings/lib/index';
+import { LogoSourceType, LogoTypeSource } from '@akashaproject/ui-awf-typings';
 
 export interface IAppIcon extends IconSize {
   ref?: React.Ref<HTMLDivElement>;

@@ -1,7 +1,7 @@
 /* eslint-disable import/first */
 import DS from '@akashaproject/design-system';
 import { IMenuItem, MenuItemType } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { LogoTypeSource } from '@akashaproject/ui-awf-typings/lib/index';
+import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';

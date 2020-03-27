@@ -4,7 +4,7 @@ import { action } from '@storybook/addon-actions';
 import { color, select } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
-import { LogoTypeSource } from '@akashaproject/ui-awf-typings/lib/index';
+import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 
 const { Box, Icon, iconTypes, AppIcon } = DS;
 
