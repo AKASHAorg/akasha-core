@@ -72,7 +72,8 @@ export type IconType =
   | 'twitter'
   | 'underline'
   | 'upload'
-  | 'wallet';
+  | 'wallet'
+  | 'iconGeneralFeed';
 
 export const iconTypes: IconType[] = [
   'activity',
@@ -142,6 +143,7 @@ export const iconTypes: IconType[] = [
   'underline',
   'upload',
   'wallet',
+  'iconGeneralFeed',
 ];
 
 export interface IconProps extends CommonInterface<any> {

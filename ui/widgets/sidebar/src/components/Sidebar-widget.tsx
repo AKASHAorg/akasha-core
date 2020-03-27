@@ -1,9 +1,8 @@
 import DS from '@akashaproject/design-system';
-import { IMenuItem } from '@akashaproject/design-system/src/components/Bars/sidebar/sidebar';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IMenuItem, EventTypes, MenuItemType } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { lightTheme, ThemeSelector, ResponsiveSidebar } = DS;
 export interface IProps {
@@ -97,11 +96,14 @@ const Menu = (props: MenuProps) => {
   }, []);
 
   // filter out default plugins like profile and feed
-  const installedApps = currentMenu?.filter(menuItem => menuItem.type === 'app');
+  const installedApps = currentMenu?.filter(menuItem => menuItem.type === MenuItemType.App);
 
   // return the plugins from list of apps
   const profileDefaultData = currentMenu?.find(menuItem => menuItem.index === 2);
   const feedDefaultData = currentMenu?.find(menuItem => menuItem.index === 1);
+  if (feedDefaultData) {
+    installedApps?.unshift(feedDefaultData);
+  }
 
   const handleNavigation = (path: string) => {
     navigateToUrl(path);
@@ -138,7 +140,6 @@ const Menu = (props: MenuProps) => {
         appCenterLabel={'App Center'}
         onClickMenuItem={handleNavigation}
         installedApps={installedApps}
-        feedPluginData={feedDefaultData}
         profilePluginData={profileDefaultData}
       />
     </ThemeSelector>

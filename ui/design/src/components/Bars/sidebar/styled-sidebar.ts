@@ -18,7 +18,7 @@ const StyledHRDiv = styled.div`
 `;
 
 const StyledUserSectionBox = styled(Box)`
-  height: 16rem;
+  height: 11rem;
 `;
 
 const StyledBottomDiv = styled.div`

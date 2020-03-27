@@ -8,7 +8,6 @@ const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
     loggedEthAddress,
     installedApps,
     profilePluginData,
-    feedPluginData,
     onClickAddApp,
     onClickMenuItem,
     onClickSearch,
@@ -29,7 +28,6 @@ const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
           searchLabel={searchLabel}
           appCenterLabel={appCenterLabel}
           installedApps={installedApps}
-          feedPluginData={feedPluginData}
           loggedEthAddress={loggedEthAddress}
         />
       ) : (
@@ -42,7 +40,6 @@ const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
           appCenterLabel={appCenterLabel}
           installedApps={installedApps}
           profilePluginData={profilePluginData}
-          feedPluginData={feedPluginData}
           loggedEthAddress={loggedEthAddress}
         />
       )}

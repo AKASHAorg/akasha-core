@@ -3,11 +3,12 @@ import * as React from 'react';
 import { AppIcon } from '../../../Icon/index';
 import { SelectPopover } from '../../../Popovers/index';
 import { IProfileDataProvider, IProfileProvidersData } from '../profile-card';
+import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 
 export interface IProfileCardNameProps {
   editable: boolean;
   name?: string;
-  nameIcon?: string;
+  nameIcon?: LogoSourceType;
   namePopoverOpen: boolean;
   setNamePopoverOpen: (value: boolean) => void;
   handleChangeName: (provider: IProfileDataProvider) => void;
