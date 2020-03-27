@@ -3,6 +3,7 @@ import { IMenuItem } from '@akashaproject/design-system/src/components/Bars/side
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
+import { EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { lightTheme, ThemeSelector, ResponsiveSidebar } = DS;
 export interface IProps {
@@ -10,6 +11,7 @@ export interface IProps {
   sdkModules: any;
   singleSpa: any;
   getMenuItems: () => any[];
+  events: any;
 }
 
 /**
@@ -59,6 +61,7 @@ export default class SidebarWidget extends PureComponent<IProps> {
           <Menu
             navigateToUrl={this.props.singleSpa.navigateToUrl}
             getMenuItems={this.props.getMenuItems}
+            loaderEvents={this.props.events}
           />
         </Suspense>
       </I18nextProvider>
@@ -69,16 +72,28 @@ export default class SidebarWidget extends PureComponent<IProps> {
 interface MenuProps {
   navigateToUrl: (url: string) => void;
   getMenuItems: () => IMenuItem[];
+  loaderEvents: any;
 }
 
 const Menu = (props: MenuProps) => {
-  const { navigateToUrl, getMenuItems } = props;
+  const { navigateToUrl, getMenuItems, loaderEvents } = props;
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[] | null>(null);
   // const { t } = useTranslation();
   React.useEffect(() => {
-    const menuItems = getMenuItems();
-    setCurrentMenu(menuItems);
+    const updateMenu = () => {
+      const menuItems = getMenuItems();
+      setCurrentMenu(menuItems);
+    };
+    updateMenu();
+    loaderEvents.subscribe((evMsg: EventTypes) => {
+      if (evMsg === EventTypes.AppInstall || evMsg === EventTypes.PluginInstall) {
+        updateMenu();
+      }
+    });
+    return function cleanup() {
+      loaderEvents.unsubscribe();
+    };
   }, []);
 
   // filter out default plugins like profile and feed

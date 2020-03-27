@@ -36,6 +36,9 @@
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*"
   },
+  "peerDependencies": {
+    "rxjs": "^6.5.4"
+  },
   "files": [
     "lib",
     "dist"

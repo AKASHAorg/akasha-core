@@ -70,3 +70,11 @@ export interface IMenuList {
   nextIndex: number;
   items: IMenuItem[];
 }
+
+export enum EventTypes {
+  Instantiated = 'instantiated',
+  AppInstall = 'app-install',
+  PluginInstall = 'plugin-install',
+  WidgetInstall = 'widget-install',
+  AppOrPluginUninstall = 'app-plugin-uninstall',
+}
