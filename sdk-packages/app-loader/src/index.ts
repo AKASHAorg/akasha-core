@@ -2,6 +2,7 @@ import pino from 'pino';
 import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
 import TranslationManager from './i18n';
+import { BehaviorSubject } from 'rxjs';
 
 import { setPageTitle } from './setPageMetadata';
 import {
@@ -15,6 +16,7 @@ import {
   IWidget,
   ILoaderConfig,
   MenuItemType,
+  EventTypes,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 export interface IAppLoader {
@@ -28,6 +30,7 @@ export interface IAppLoader {
 export default class AppLoader implements IAppLoader {
   public readonly registeredPlugins: Map<string, IPluginConfig>;
   public readonly registeredWidgets: Map<string, IWidgetConfig>;
+  public readonly events: BehaviorSubject<EventTypes>;
   private readonly config: ILoaderConfig;
   private readonly appLogger;
   private readonly channels;
@@ -44,6 +47,7 @@ export default class AppLoader implements IAppLoader {
     this.config = config;
     this.channels = channels;
     this.channelUtils = channelUtils;
+    this.events = new BehaviorSubject(EventTypes.Instantiated);
     this.menuItems = { nextIndex: 1, items: [] };
     this.appLogger = pino({ browser: { asObject: true } });
     this.translationManager = new TranslationManager(this.appLogger);
@@ -122,6 +126,7 @@ export default class AppLoader implements IAppLoader {
         logger: this.appLogger.child({ plugin: pluginId }),
         sdkModules: dependencies,
         channelUtils: this.channelUtils,
+        events: this.events,
       },
     );
     this.menuItems.items.push({
@@ -133,6 +138,7 @@ export default class AppLoader implements IAppLoader {
       subRoutes: this.createSubroutes(plugin.app.menuItems),
     });
     this.menuItems.nextIndex += 1;
+    this.events.next(EventTypes.PluginInstall);
     this.appLogger.info(`[@akashaproject/sdk-ui-plugin-loader]: ${plugin.app.name} registered!`);
   }
 
@@ -180,7 +186,9 @@ export default class AppLoader implements IAppLoader {
       domElement: domEl,
       i18n: i18nInstance,
       getMenuItems: () => this.getMenuItems(),
+      events: this.events,
     });
+    this.events.next(EventTypes.WidgetInstall);
     this.appLogger.info(`[@akashaproject/sdk-ui-plugin-loader]: ${widget.app.name} registered!`);
   }
 
@@ -215,6 +223,7 @@ export default class AppLoader implements IAppLoader {
       this.appLogger.warn(`trying to unmount root widget ${appName}, which is not supported`);
     }
     const removedPackage = packageLoader.delete(packageId);
+    this.events.next(EventTypes.AppOrPluginUninstall);
     this.appLogger.info(`package ${packageId} removed ${removedPackage}`);
     return;
   }
