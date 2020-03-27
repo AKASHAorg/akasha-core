@@ -1,15 +1,7 @@
 import { initReactI18next } from 'react-i18next';
 import routes, { rootRoute } from './routes';
+import { Application, LogoTypeSource } from '@akashaproject/ui-awf-typings';
 
-export interface Application {
-  activeWhen: { path: string; exact?: boolean };
-  i18nConfig: { use: any[]; loadNS: any[] };
-  loadingFn: () => Promise<any>;
-  name: string;
-  sdkModules: any[];
-  title: string;
-  menuItems?: { [p: string]: string };
-}
 /**
  * All the plugins must export an object like this:
  */
@@ -42,4 +34,5 @@ export const application: Application = {
   sdkModules: [],
   title: 'AKASHA Feed',
   menuItems: routes,
+  logo: { type: LogoTypeSource.ICON, value: 'icon-general-feed' },
 };

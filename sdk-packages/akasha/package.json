@@ -43,6 +43,7 @@
     "rxdb": "^8.7.5"
   },
   "devDependencies": {
+    "@akashaproject/ui-awf-typings": "*",
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11",
     "workbox-core": "^5.0.0",
