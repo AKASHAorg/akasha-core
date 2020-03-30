@@ -82,7 +82,11 @@ export default class AppLoader implements IAppLoader {
     return singleSpa.checkActivityFunctions(location);
   }
 
-  private _registerIntegration(integration: IPluginEntry, integrationId: string, menuItemType?: MenuItemType): void {
+  private _registerIntegration(
+    integration: IPluginEntry,
+    integrationId: string,
+    menuItemType?: MenuItemType,
+  ): void {
     if (integration.config && integration.config.activeWhen && integration.config.activeWhen.path) {
       integration.app.activeWhen = integration.config.activeWhen;
     }
