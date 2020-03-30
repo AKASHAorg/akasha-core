@@ -149,7 +149,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           />
         );
       }
-      if (popoversRef.current) {
+      if (popoversRef.current && popoversRef.current[hoveredAppData.internalIndex]) {
         return (
           <AppMenuPopover
             target={popoversRef.current[hoveredAppData.internalIndex].current}

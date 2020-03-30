@@ -1,23 +1,24 @@
-import pino from 'pino';
-import * as singleSpa from 'single-spa';
-import fourOhFour from './404';
-import TranslationManager from './i18n';
-import { BehaviorSubject } from 'rxjs';
-
-import { setPageTitle } from './setPageMetadata';
 import {
-  IPluginEntry,
-  IWidgetEntry,
-  IPluginConfig,
-  IWidgetConfig,
+  EventTypes,
+  IAppEntry,
+  ILoaderConfig,
   IMenuItem,
   IMenuList,
   IPlugin,
+  IPluginConfig,
+  IPluginEntry,
   IWidget,
-  ILoaderConfig,
+  IWidgetConfig,
+  IWidgetEntry,
   MenuItemType,
-  EventTypes,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import pino from 'pino';
+import { BehaviorSubject } from 'rxjs';
+import * as singleSpa from 'single-spa';
+import fourOhFour from './404';
+import TranslationManager from './i18n';
+
+import { setPageTitle } from './setPageMetadata';
 
 export interface IAppLoader {
   registerPlugin(plugin: IPluginEntry): void;
@@ -30,6 +31,7 @@ export interface IAppLoader {
 export default class AppLoader implements IAppLoader {
   public readonly registeredPlugins: Map<string, IPluginConfig>;
   public readonly registeredWidgets: Map<string, IWidgetConfig>;
+  public readonly registeredApps: Map<string, IPluginConfig>;
   public readonly events: BehaviorSubject<EventTypes>;
   private readonly config: ILoaderConfig;
   private readonly appLogger;
@@ -40,7 +42,7 @@ export default class AppLoader implements IAppLoader {
 
   public constructor(
     config: ILoaderConfig,
-    initialApps: { plugins?: IPluginEntry[]; widgets?: IWidgetEntry[] },
+    initialApps: { plugins?: IPluginEntry[]; widgets?: IWidgetEntry[]; apps?: IAppEntry[] },
     channels?: any,
     channelUtils?: any,
   ) {
@@ -53,6 +55,7 @@ export default class AppLoader implements IAppLoader {
     this.translationManager = new TranslationManager(this.appLogger);
     this.registeredPlugins = new Map<string, IPluginConfig>();
     this.registeredWidgets = new Map<string, IWidgetConfig>();
+    this.registeredApps = new Map<string, IPluginConfig>();
     // tslint:disable-next-line:no-console
     console.time('AppLoader:firstMount');
     window.addEventListener('single-spa:first-mount', this.onFirstMount.bind(this));
@@ -65,6 +68,10 @@ export default class AppLoader implements IAppLoader {
         initialApps.widgets.forEach(widget => this.registerWidget(widget));
       }
 
+      if (initialApps.apps) {
+        initialApps.apps.forEach(app => this.registerApp(app));
+      }
+
       this.appLogger.info('[@akashaproject/sdk-ui-plugin-loader]: starting single spa');
       // call on next tick
       setTimeout(singleSpa.start, 0);
@@ -75,71 +82,96 @@ export default class AppLoader implements IAppLoader {
     return singleSpa.checkActivityFunctions(location);
   }
 
-  public registerPlugin(plugin: IPluginEntry): void {
-    this.appLogger.info(
-      `[@akashaproject/sdk-ui-plugin-loader] registering plugin ${plugin.app.name}`,
-    );
-    if (plugin.config && plugin.config.activeWhen && plugin.config.activeWhen.path) {
-      plugin.app.activeWhen = plugin.config.activeWhen;
+  private _registerIntegration(
+    integration: IPluginEntry,
+    integrationId: string,
+    menuItemType?: MenuItemType,
+  ): void {
+    if (integration.config && integration.config.activeWhen && integration.config.activeWhen.path) {
+      integration.app.activeWhen = integration.config.activeWhen;
     }
 
-    if (plugin.config && plugin.config.title) {
-      plugin.app.title = plugin.config.title;
-    }
-
-    const pluginId = plugin.app.name.toLowerCase().replace(' ', '-');
-    if (this.registeredPlugins.has(pluginId)) {
-      this.appLogger.error(`Plugin ${pluginId} already registered`);
-      return;
+    if (integration.config && integration.config.title) {
+      integration.app.title = integration.config.title;
     }
     this.translationManager.createInstance(
-      plugin.app,
-      this.appLogger.child({ i18nPlugin: pluginId }),
+      integration.app,
+      this.appLogger.child({ i18nPlugin: integrationId }),
     );
-    plugin.app.name = pluginId;
-    this.registeredPlugins.set(pluginId, { title: plugin.app.title || pluginId });
+
     const dependencies = {};
     // @Todo: refactor this
-    if (plugin.app.sdkModules.length) {
-      for (const dep of plugin.app.sdkModules) {
+    if (integration.app.sdkModules.length) {
+      for (const dep of integration.app.sdkModules) {
         if (this.channels.hasOwnProperty(dep.module)) {
           Object.assign(dependencies, { [dep.module]: this.channels[dep.module] });
-          this.appLogger.info(`${pluginId} has access to ${dep.module} -> channel`);
+          this.appLogger.info(`${integrationId} has access to ${dep.module} -> channel`);
         }
       }
     }
-    this.appLogger.info(`plugin ${pluginId} `);
+
     const domEl = document.getElementById(this.config.layout.pluginSlotId);
     singleSpa.registerApplication(
-      plugin.app.name,
-      this.beforeMount(plugin.app.loadingFn, plugin.app),
+      integrationId,
+      this.beforeMount(integration.app.loadingFn, integration.app),
       (location: Location): boolean => {
-        return this.pathPrefix(location, plugin.app.activeWhen);
+        return this.pathPrefix(location, integration.app.activeWhen);
       },
       {
         ...this.config,
-        ...plugin.config,
-        activeWhen: plugin.app.activeWhen,
+        ...integration.config,
+        activeWhen: integration.app.activeWhen,
         domElement: domEl,
-        i18n: this.translationManager.getInstance(pluginId),
-        i18nConfig: plugin.app.i18nConfig,
-        logger: this.appLogger.child({ plugin: pluginId }),
+        i18n: this.translationManager.getInstance(integrationId),
+        i18nConfig: integration.app.i18nConfig,
+        logger: this.appLogger.child({ plugin: integrationId }),
         sdkModules: dependencies,
         channelUtils: this.channelUtils,
         events: this.events,
       },
     );
     this.menuItems.items.push({
-      label: plugin.app.title,
+      label: integration.app.title,
       index: this.menuItems.nextIndex,
-      route: plugin.app.activeWhen.path,
-      type: MenuItemType.Plugin,
-      logo: plugin.app.logo,
-      subRoutes: this.createSubroutes(plugin.app.menuItems),
+      route: integration.app.activeWhen.path,
+      type: menuItemType,
+      logo: integration.app.logo,
+      subRoutes: this.createSubroutes(integration.app.menuItems),
     });
     this.menuItems.nextIndex += 1;
+  }
+  public registerApp(appEntry: IAppEntry): void {
+    this.appLogger.info(
+      `[@akashaproject/sdk-ui-plugin-loader] registering app ${appEntry.app.name}`,
+    );
+    const appId = appEntry.app.name.toLowerCase().replace(' ', '-');
+    if (this.registeredApps.has(appId)) {
+      this.appLogger.error(`App ${appId} already registered`);
+      return;
+    }
+    this.registeredApps.set(appId, { title: appEntry.app.title || appId });
+    this._registerIntegration(appEntry, appId, MenuItemType.App);
+    this.events.next(EventTypes.AppInstall);
+    this.appLogger.info(
+      `[@akashaproject/sdk-ui-plugin-loader]: *app* ${appEntry.app.name} registered!`,
+    );
+  }
+
+  public registerPlugin(plugin: IPluginEntry): void {
+    this.appLogger.info(
+      `[@akashaproject/sdk-ui-plugin-loader] registering plugin ${plugin.app.name}`,
+    );
+    const pluginId = plugin.app.name.toLowerCase().replace(' ', '-');
+    if (this.registeredPlugins.has(pluginId)) {
+      this.appLogger.error(`Plugin ${pluginId} already registered`);
+      return;
+    }
+    this.registeredPlugins.set(pluginId, { title: plugin.app.title || pluginId });
+    this._registerIntegration(plugin, pluginId, MenuItemType.Plugin);
     this.events.next(EventTypes.PluginInstall);
-    this.appLogger.info(`[@akashaproject/sdk-ui-plugin-loader]: ${plugin.app.name} registered!`);
+    this.appLogger.info(
+      `[@akashaproject/sdk-ui-plugin-loader]: *plugin* ${plugin.app.name} registered!`,
+    );
   }
 
   private createSubroutes(subRoutes: IPlugin['menuItems']): IMenuItem[] {

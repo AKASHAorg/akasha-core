@@ -23,13 +23,14 @@ export interface SDKdependency {
 export interface IPluginEntry {
   app: IPlugin;
   config?: IPluginConfig;
-  sdkModules?: SDKdependency[];
 }
+
+// tslint:disable-next-line:no-empty-interface
+export interface IAppEntry extends IPluginEntry {}
 
 export interface IWidgetEntry {
   app: IWidget;
   config?: IWidgetConfig;
-  sdkModules?: SDKdependency[];
 }
 
 export interface II18nConfig {

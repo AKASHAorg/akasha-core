@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon, IconType } from './icon';
+import { Icon, IconType, iconTypes } from './icon';
 import { StyledIconDiv, StyledImage } from './styled-icon';
 import { LogoSourceType, LogoTypeSource } from '@akashaproject/ui-awf-typings';
 
@@ -17,7 +17,7 @@ export interface IconSize {
 const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
   const { appImg, onClick, placeholderIconType, size } = props;
   const renderAppImg = () => {
-    if (appImg?.type === LogoTypeSource.ICON) {
+    if (appImg?.type === LogoTypeSource.ICON && iconTypes.includes(appImg?.value as IconType)) {
       return <Icon type={appImg?.value} />;
     }
     if (appImg?.type === (LogoTypeSource.String || LogoTypeSource.IPFS)) {
