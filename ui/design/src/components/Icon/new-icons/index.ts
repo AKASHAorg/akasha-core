@@ -66,6 +66,7 @@ import twitter from './twitter';
 import underline from './underline';
 import upload from './upload';
 import wallet from './wallet';
+import iconGeneralFeed from './icon-general-feed';
 
 export {
   activity,
@@ -136,4 +137,5 @@ export {
   upload,
   wallet,
   loading,
+  iconGeneralFeed,
 };

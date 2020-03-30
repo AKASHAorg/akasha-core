@@ -1,6 +1,7 @@
 /* eslint-disable import/first */
 import DS from '@akashaproject/design-system';
-import { IMenuItem } from '@akashaproject/design-system/lib/components/Bars/sidebar/sidebar';
+import { IMenuItem, MenuItemType } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
@@ -11,25 +12,21 @@ const installedAppsData: IMenuItem[] = [
     label: 'AKASHA Feed',
     index: 1,
     route: '/',
-    type: 'app',
-    logo: undefined,
+    type: MenuItemType.Plugin,
+    logo: { type: LogoTypeSource.ICON, value: 'iconGeneralFeed' },
   },
   {
-    label: 'AKASHA Profile',
-    index: 2,
-    route: '/profile',
-    type: 'app',
+    label: 'ENS',
+    index: 3,
+    route: '/ens-app',
+    type: MenuItemType.App,
     logo: undefined,
-    subRoutes: [
-      { index: 0, label: 'Profile list', route: '/profile/list', type: 'internal' },
-      { index: 1, label: 'My profile', route: '/profile/my-profile', type: 'internal' },
-    ],
   },
   {
     label: '3box integration',
-    index: 3,
+    index: 4,
     route: '/3box-app',
-    type: 'app',
+    type: MenuItemType.App,
     logo: undefined,
   },
 ];
@@ -38,20 +35,12 @@ const profilePluginData: IMenuItem = {
   label: 'AKASHA Profile',
   index: 2,
   route: '/profile',
-  type: 'plugin',
+  type: MenuItemType.Plugin,
   logo: undefined,
   subRoutes: [
-    { index: 0, label: 'Profile list', route: '/profile/list', type: 'internal' },
-    { index: 1, label: 'My profile', route: '/profile/my-profile', type: 'internal' },
+    { index: 0, label: 'Profile list', route: '/profile/list', type: MenuItemType.Internal },
+    { index: 1, label: 'My profile', route: '/profile/my-profile', type: MenuItemType.Internal },
   ],
-};
-
-const feedPluginData: IMenuItem = {
-  label: 'AKASHA Feed',
-  index: 1,
-  route: '/',
-  type: 'plugin',
-  logo: undefined,
 };
 
 const { Sidebar, TextIcon, Topbar, SidebarMobile } = DS;
@@ -74,7 +63,6 @@ storiesOf('Bars|Sidebar', module)
         notifications={notificationsData}
         installedApps={installedAppsData}
         profilePluginData={profilePluginData}
-        feedPluginData={feedPluginData}
         onClickAddApp={() => action('Add app Clicked')('Synthetic Event')}
         onClickMenuItem={() => action('Option Clicked')('Synthetic Event')}
         searchLabel="Search"
@@ -91,7 +79,6 @@ storiesOf('Bars|Sidebar', module)
         avatarImage="https://placebeard.it/360x360"
         notifications={notificationsData}
         installedApps={installedAppsData}
-        feedPluginData={feedPluginData}
         onClickAddApp={() => action('App center Clicked')('Synthetic Event')}
         onClickMenuItem={() => action('Option Clicked')('Synthetic Event')}
         searchLabel="Search"
