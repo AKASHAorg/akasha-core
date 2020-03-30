@@ -54,7 +54,7 @@ import initSdk from './sdk-init';
     sdkModules: [],
   });
 
-  world.appLoader.registerPlugin({
+  world.appLoader.registerApp({
     app: boxApp.application,
   });
   // @ts-ignore

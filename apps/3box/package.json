@@ -45,6 +45,7 @@
     "rxjs": "^6.5.4"
   },
   "devDependencies": {
+    "@akashaproject/ui-awf-typings": "*",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
     "@types/react-test-renderer": "^16.9.2",
