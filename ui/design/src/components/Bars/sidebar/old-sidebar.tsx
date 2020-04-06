@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Avatar } from '../../Avatar/index';
 import { IconLink } from '../../Buttons';
 import { AppIcon, Icon } from '../../Icon/index';
+import { AppMenuPopover } from '../../Popovers/index';
 import {
   SecondarySidebarBox,
   SecondarySidebarContentWrapper,
@@ -32,6 +33,10 @@ export interface ISidebarProps {
   appCenterLabel: string;
 }
 
+export interface InternalMenuItem extends IMenuItem {
+  internalIndex: number;
+}
+
 export interface IApp {
   name: string;
   image?: string;
@@ -57,46 +62,105 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     onClickAddApp,
     onClickMenuItem,
     onClickSearch,
-    currentRoute,
   } = props;
 
-  const [currentAppData, setCurrentAppData] = React.useState<IMenuItem | null>(null);
+  // keep profile plugin data consitent with the rest of the menu items and assign it an internal index
+  // -1 since it will be outside the list of dynamic refs
+  const internalProfilePluginData = profilePluginData
+    ? { ...profilePluginData, internalIndex: -1 }
+    : undefined;
+
+  /*
+  assign internal indexes to menu items, in order to reference the specific popovers
+  we need a consistency betweeen the index of the dynamic ref of an installed app
+  and its internalIndex so the compononet can keep track of what element
+  is currently hovered and where should the popover appear
+  */
+  const internalMappedApps = installedApps?.map((app, index) => {
+    return { ...app, internalIndex: index };
+  });
+
+  // iterate over the installed apps to create a ref for each one
+  // this will be used to display the specific popover for a menu item
+  const popoversRef: React.Ref<any> = React.useRef(
+    internalMappedApps?.map(() => React.createRef()),
+  );
+  const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
+
+  const [appPopoverOpen, setAppPopoverOpen] = React.useState(false);
+
+  const [hoveredAppData, setHoveredAppData] = React.useState<InternalMenuItem | null>(null);
+  const [currentAppData, setCurrentAppData] = React.useState<InternalMenuItem | null>(null);
 
   const [activeOption, setActiveOption] = React.useState('');
 
   // @TODO: use route params to determine active app/option
   React.useEffect(() => {
-    if (installedApps && currentRoute) {
-      const splitUrl = currentRoute.split('/');
-      const route = splitUrl[1] ? `/${splitUrl[1]}` : '/';
-      if (
-        profilePluginData &&
-        `/${splitUrl[1]}` === profilePluginData.route &&
-        currentAppData?.index !== profilePluginData.index
-      ) {
-        setCurrentAppData(profilePluginData);
-      }
-      const activeApp = installedApps.find(menuItem => menuItem.route === route);
-      if (activeApp && activeApp.index !== currentAppData?.index) {
-        setCurrentAppData(activeApp);
-      }
-      if (splitUrl[2] && `/${splitUrl[2]}` !== activeOption) {
-        setActiveOption(`/${splitUrl[2]}`);
-      }
+    if (internalMappedApps) {
+      setCurrentAppData(internalMappedApps[0]);
     }
-  }, [currentRoute, profilePluginData]);
+  }, []);
 
-  const handleAppIconClick = (menuItem: IMenuItem) => () => {
+  const handleAppIconClick = (menuItem: InternalMenuItem) => () => {
     setCurrentAppData(menuItem);
+    setHoveredAppData(null);
+    setAppPopoverOpen(false);
     if (menuItem.subRoutes && menuItem.subRoutes.length > 0) {
       setActiveOption(menuItem.subRoutes[0].label);
     }
     onClickMenuItem(menuItem.route);
   };
-  // @TODO handle this with entire object
+
   const handleOptionClick = (menuItem: IMenuItem) => () => {
     setActiveOption(menuItem.label);
     onClickMenuItem(menuItem.route);
+  };
+
+  const handlePopoverOptionClick = (subRoute: string) => {
+    setCurrentAppData(hoveredAppData);
+    setHoveredAppData(null);
+    setActiveOption(subRoute);
+    onClickMenuItem(subRoute);
+  };
+
+  const handleMouseEnter = (menuItem: InternalMenuItem) => () => {
+    setHoveredAppData(menuItem);
+    setAppPopoverOpen(true);
+  };
+
+  const handleClosePopover = () => {
+    setAppPopoverOpen(false);
+    setHoveredAppData(null);
+  };
+
+  const renderPopover = () => {
+    if (appPopoverOpen && hoveredAppData) {
+      if (
+        profileRef.current &&
+        internalProfilePluginData &&
+        hoveredAppData.label === internalProfilePluginData.label
+      ) {
+        return (
+          <AppMenuPopover
+            target={profileRef.current}
+            closePopover={handleClosePopover}
+            menuItem={hoveredAppData}
+            onClickMenuItem={handlePopoverOptionClick}
+          />
+        );
+      }
+      if (popoversRef.current && popoversRef.current[hoveredAppData.internalIndex]) {
+        return (
+          <AppMenuPopover
+            target={popoversRef.current[hoveredAppData.internalIndex].current}
+            closePopover={handleClosePopover}
+            menuItem={hoveredAppData}
+            onClickMenuItem={handlePopoverOptionClick}
+          />
+        );
+      }
+    }
+    return;
   };
 
   const noop = () => {
@@ -126,18 +190,40 @@ const Sidebar: React.FC<ISidebarProps> = props => {
               fill="horizontal"
               align="center"
               userSection={true}
-              active={profilePluginData ? currentAppData?.label === profilePluginData.label : false}
+              active={
+                internalProfilePluginData
+                  ? currentAppData?.label === internalProfilePluginData.label
+                  : false
+              }
+              hovered={
+                internalProfilePluginData
+                  ? hoveredAppData?.label === internalProfilePluginData.label
+                  : false
+              }
+              ref={profileRef}
             >
               <StyledAppIconWrapper
                 active={
-                  profilePluginData ? currentAppData?.label === profilePluginData.label : false
+                  internalProfilePluginData
+                    ? currentAppData?.label === internalProfilePluginData.label
+                    : false
+                }
+                hovered={
+                  internalProfilePluginData
+                    ? hoveredAppData?.label === internalProfilePluginData.label
+                    : false
+                }
+                onMouseEnter={
+                  internalProfilePluginData ? handleMouseEnter(internalProfilePluginData) : noop
                 }
               >
                 <Avatar
                   ethAddress={loggedEthAddress}
                   src={avatarImage}
                   size="sm"
-                  onClick={profilePluginData ? handleAppIconClick(profilePluginData) : noop}
+                  onClick={
+                    internalProfilePluginData ? handleAppIconClick(internalProfilePluginData) : noop
+                  }
                 />
               </StyledAppIconWrapper>
             </StyledBorderBox>
@@ -153,14 +239,20 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         <StyledHRDiv />
         <Box align="center" justify="between" fill={true}>
           <StyledHiddenScrollContainer>
-            {installedApps?.map((app, index) => (
+            {internalMappedApps?.map((app, index) => (
               <StyledVerticalPad key={index}>
                 <StyledBorderBox
                   fill="horizontal"
                   align="center"
-                  active={app.index === currentAppData?.index}
+                  active={index === currentAppData?.internalIndex}
+                  hovered={index === hoveredAppData?.internalIndex}
+                  ref={popoversRef.current[index]}
                 >
-                  <StyledAppIconWrapper active={app.index === currentAppData?.index}>
+                  <StyledAppIconWrapper
+                    active={index === currentAppData?.internalIndex}
+                    hovered={index === hoveredAppData?.internalIndex}
+                    onMouseEnter={handleMouseEnter(app)}
+                  >
                     <AppIcon
                       placeholderIconType="app"
                       appImg={app.logo}
@@ -172,7 +264,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
               </StyledVerticalPad>
             ))}
           </StyledHiddenScrollContainer>
-
+          {renderPopover()}
           <StyledBottomDiv>
             <Icon type="plusGrey" onClick={onClickAddApp} clickable={true} size="md" />
           </StyledBottomDiv>

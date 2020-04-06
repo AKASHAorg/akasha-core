@@ -14,6 +14,7 @@ const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
     onClickCloseSidebar,
     searchLabel,
     appCenterLabel,
+    currentRoute,
   } = props;
   const { size } = useViewportSize();
 
@@ -29,6 +30,7 @@ const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
           appCenterLabel={appCenterLabel}
           installedApps={installedApps}
           loggedEthAddress={loggedEthAddress}
+          currentRoute={currentRoute}
         />
       ) : (
         <Sidebar
@@ -41,6 +43,7 @@ const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
           installedApps={installedApps}
           profilePluginData={profilePluginData}
           loggedEthAddress={loggedEthAddress}
+          currentRoute={currentRoute}
         />
       )}
     </>

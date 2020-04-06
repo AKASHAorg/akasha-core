@@ -37,13 +37,12 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
 
   const handleAppIconClick = (menuItem: IMenuItem) => () => {
     setCurrentAppData(menuItem);
-  };
-
-  const handleActiveBorder: any = (index: number) => {
-    if (index === currentAppData?.index) {
-      return { color: 'accent', size: '2px', side: 'left' };
+    if (menuItem.subRoutes && menuItem.subRoutes.length > 0) {
+      setActiveOption(menuItem.subRoutes[0].label);
+      onClickMenuItem(menuItem.subRoutes[0].route);
+    } else {
+      onClickMenuItem(menuItem.route);
     }
-    return { color: 'background', size: '2px', side: 'left' };
   };
 
   const handleOptionClick = (menuItem: IMenuItem) => () => {
@@ -77,38 +76,47 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
       <Box align="center" fill={true}>
         <StyledHiddenScrollContainer>
           <Accordion>
-            {installedApps?.map((menuItem, index) => (
+            {installedApps?.map(menuItem => (
               <AccordionPanel
                 onClick={handleAppIconClick(menuItem)}
                 label={
                   <Box
                     pad={{ horizontal: 'small' }}
                     margin={{ vertical: 'xsmall' }}
-                    border={handleActiveBorder(index)}
+                    border={{
+                      color: menuItem.index === currentAppData?.index ? 'accent' : 'background',
+                      size: '2px',
+                      side: 'left',
+                    }}
                     gap="xsmall"
                     direction="row"
                     align="center"
                   >
-                    <StyledAppIconWrapper active={index === currentAppData?.index}>
+                    <StyledAppIconWrapper active={menuItem.index === currentAppData?.index}>
                       <AppIcon placeholderIconType="app" appImg={menuItem.logo} size="md" />
                     </StyledAppIconWrapper>
                     <Text>{menuItem.label}</Text>
                   </Box>
                 }
-                key={index}
+                key={menuItem.index}
               >
-                <StyledAppOptionBox direction="column" pad={{ vertical: 'small', left: '1.75em' }}>
-                  {menuItem.subRoutes?.map(subRouteMenuItem => (
-                    <IconLink
-                      label={subRouteMenuItem.label}
-                      key={subRouteMenuItem.index}
-                      onClick={handleOptionClick(subRouteMenuItem)}
-                      size="medium"
-                      margin={{ vertical: 'xsmall' }}
-                      active={subRouteMenuItem.label === activeOption}
-                    />
-                  ))}
-                </StyledAppOptionBox>
+                {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
+                  <StyledAppOptionBox
+                    direction="column"
+                    pad={{ vertical: 'small', left: '1.75em' }}
+                  >
+                    {menuItem.subRoutes.map(subRouteMenuItem => (
+                      <IconLink
+                        label={subRouteMenuItem.label}
+                        key={subRouteMenuItem.index}
+                        onClick={handleOptionClick(subRouteMenuItem)}
+                        size="medium"
+                        margin={{ vertical: 'xsmall' }}
+                        active={subRouteMenuItem.label === activeOption}
+                      />
+                    ))}
+                  </StyledAppOptionBox>
+                )}
               </AccordionPanel>
             ))}
           </Accordion>
