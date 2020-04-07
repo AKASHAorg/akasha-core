@@ -37,7 +37,7 @@
       "dist/*",
       "build/*"
     ],
-    "exec": "npm run pack",
+    "exec": "npm run pack || exit 1",
     "ext": "ts,tsx"
   },
   "bugs": {

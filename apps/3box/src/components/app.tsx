@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import MyBoxProfile from './profile';
+import { BrowserRouter as Router, Route, Switch, RouteComponentProps } from 'react-router-dom';
+import MyBoxProfile from './my-box-profile';
+import BoxSettings from './box-settings';
 import DS from '@akashaproject/design-system';
-import { default as subRoutes, rootRoute, EDIT_PAGE } from '../routes';
+import { default as subRoutes, rootRoute, EDIT_PAGE, SETTINGS_PAGE } from '../routes';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
@@ -56,6 +57,16 @@ export default class App extends PureComponent<any> {
                   path={subRoutes[EDIT_PAGE]}
                   render={routeProps => (
                     <MyBoxProfile
+                      {...routeProps}
+                      sdkModules={sdkModules}
+                      channelUtils={channelUtils}
+                    />
+                  )}
+                />
+                <Route
+                  path={subRoutes[SETTINGS_PAGE]}
+                  render={(routeProps: RouteComponentProps) => (
+                    <BoxSettings
                       {...routeProps}
                       sdkModules={sdkModules}
                       channelUtils={channelUtils}

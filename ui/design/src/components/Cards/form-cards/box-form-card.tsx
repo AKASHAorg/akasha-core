@@ -14,20 +14,21 @@ import {
   StyledImage,
   StyledText,
 } from './styled-form-card';
+import { isBase64 } from '../../../utils/string-utils';
 
 export interface IBoxFormCardProps {
   className?: string;
-  titleLabel: string;
-  avatarLabel: string;
-  coverImageLabel: string;
-  nameLabel: string;
-  descriptionLabel: string;
-  cancelLabel: string;
-  saveLabel: string;
+  titleLabel?: string;
+  avatarLabel?: string;
+  coverImageLabel?: string;
+  nameLabel?: string;
+  descriptionLabel?: string;
+  cancelLabel?: string;
+  saveLabel?: string;
   // popover labels
-  uploadLabel: string;
-  urlLabel: string;
-  deleteLabel: string;
+  uploadLabel?: string;
+  urlLabel?: string;
+  deleteLabel?: string;
   // props
   nameFieldPlaceholder: string;
   descriptionFieldPlaceholder: string;
@@ -43,6 +44,28 @@ export interface IBoxData {
   name?: string;
   description?: string;
 }
+const getImageSrc = (src?: string) => {
+  // assume that the src is either base64 or ipfs CID
+  if (src) {
+    if (!isBase64(src)) {
+      // is probably ipfs CID
+      return {
+        src,
+        prefix: 'https://ipfs.io/ipfs/',
+      };
+    }
+    // maybe return an imageObject?
+    // first we must decide on an encoding standard.
+    return {
+      src,
+      prefix: '',
+    };
+  }
+  return {
+    src: '',
+    prefix: '',
+  };
+};
 
 const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const {
@@ -66,25 +89,40 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
 
   const [avatarPopoverOpen, setAvatarPopoverOpen] = React.useState(false);
   const [coverImagePopoverOpen, setCoverImagePopoverOpen] = React.useState(false);
-
-  const [avatar, setAvatar] = React.useState(providerData.avatar);
-  const [coverImage, setCoverImage] = React.useState(providerData.coverImage);
-  const [name, setName] = React.useState(providerData.name);
-  const [description, setDescription] = React.useState(providerData.description);
+  const [formChanged, setFormChanged] = React.useState(false);
 
   const avatarRef: React.RefObject<HTMLDivElement> = React.useRef(null);
   const coverImageRef: React.RefObject<HTMLDivElement> = React.useRef(null);
+  const [avatarSrc, setAvatarSrc] = React.useState(getImageSrc(providerData.avatar));
+  const [coverImageSrc, setCoverImageSrc] = React.useState(getImageSrc(providerData.coverImage));
+
+  // clashing definitions between react's TextInput and grommet's TextInput
+  // leave it as 'any' for now
+  const nameInputRef: React.RefObject<any> = React.useRef(null);
+  const descriptionInputRef: React.RefObject<any> = React.useRef(null);
+
+  React.useEffect(() => {
+    // set the src's only if needed
+    if (providerData.avatar) {
+      setAvatarSrc(getImageSrc(providerData.avatar));
+    }
+    if (providerData.coverImage) {
+      setCoverImageSrc(getImageSrc(providerData.coverImage));
+    }
+  }, [providerData.avatar, providerData.coverImage]);
 
   const handleCopyEthAddress = () => {
     navigator.clipboard.writeText(ethAddress);
   };
 
   const handleInsertAvatar = (url: string) => {
-    setAvatar(url);
+    setAvatarSrc(getImageSrc(url));
+    setFormChanged(true);
   };
 
   const handleInsertCoverImage = (url: string) => {
-    setCoverImage(url);
+    setCoverImageSrc(getImageSrc(url));
+    setFormChanged(true);
   };
 
   const handleAvatarClick = () => {
@@ -96,22 +134,44 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   };
 
   const handleCancel = () => {
-    setAvatar(providerData.avatar);
-    setCoverImage(providerData.coverImage);
-    setName(providerData.name);
-    setDescription(providerData.description);
+    // setAvatar(providerData.avatar);
+    // setCoverImage(providerData.coverImage);
+    // setName(providerData.name);
+    // setDescription(providerData.description);
   };
 
   const handleSave = () => {
-    handleSubmit({
-      avatar,
-      coverImage,
-      name,
-      description,
-      providerName: providerData.providerName,
-    });
-  };
+    const { name, description, avatar, coverImage, providerName } = props.providerData;
+    // make sure we pass the correct 3box schema
+    // initially the payload is empty
+    const payload: IBoxData = {
+      providerName,
+    };
 
+    if (nameInputRef.current && nameInputRef.current.value !== name) {
+      payload.name = nameInputRef.current.value;
+    }
+
+    if (descriptionInputRef.current && descriptionInputRef.current.value !== description) {
+      payload.description = descriptionInputRef.current.value;
+    }
+
+    if (avatarSrc.src !== avatar) {
+      payload.avatar = avatarSrc.src;
+    }
+
+    if (coverImageSrc.src !== coverImage) {
+      payload.coverImage = coverImageSrc.src;
+    }
+    console.log(payload, 'payload to save');
+    handleSubmit(payload);
+  };
+  const handleNameChange = () => {
+    setFormChanged(true);
+  };
+  const handleDescriptionChange = () => {
+    setFormChanged(true);
+  };
   return (
     <MainAreaCardBox className={className}>
       <Box direction="column" pad="medium">
@@ -126,14 +186,14 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           <StyledText color="secondaryText" size="small">
             {avatarLabel}
           </StyledText>
-          {!avatar && (
+          {!avatarSrc.src && (
             <StyledAvatarPlaceholderDiv onClick={handleAvatarClick} active={avatarPopoverOpen}>
               <Icon type="image" ref={avatarRef} />
             </StyledAvatarPlaceholderDiv>
           )}
-          {avatar && (
+          {avatarSrc.src && (
             <StyledAvatarDiv onClick={handleAvatarClick}>
-              <StyledImage src={avatar} fit="contain" />
+              <StyledImage src={`${avatarSrc.prefix}${avatarSrc.src}`} fit="contain" />
               <StyledAvatarOverlay>
                 <Icon type="editSimple" ref={avatarRef} />
               </StyledAvatarOverlay>
@@ -143,7 +203,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           <StyledText color="secondaryText" size="small">
             {coverImageLabel}
           </StyledText>
-          {!coverImage && (
+          {!coverImageSrc.src && (
             <StyledCoverImagePlaceholderDiv
               onClick={handleCoverImageClick}
               active={coverImagePopoverOpen}
@@ -151,18 +211,18 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
               <Icon type="image" ref={coverImageRef} />
             </StyledCoverImagePlaceholderDiv>
           )}
-          {coverImage && (
+          {coverImageSrc.src && (
             <StyledCoverImageDiv onClick={handleCoverImageClick}>
               <StyledCoverImageOverlay>
                 <Icon type="editSimple" ref={coverImageRef} />
               </StyledCoverImageOverlay>
-              <StyledImage src={coverImage} fit="contain" />
+              <StyledImage src={`${coverImageSrc.prefix}${coverImageSrc.src}`} fit="contain" />
             </StyledCoverImageDiv>
           )}
 
           <FormField
             name="name"
-            htmlFor="text-input"
+            htmlFor="3box-form-name-input"
             label={
               <StyledText color="secondaryText" size="small">
                 {nameLabel}
@@ -170,17 +230,16 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             }
           >
             <TextInput
-              id="text-input"
-              value={name}
-              onChange={ev => {
-                setName(ev.target.value);
-              }}
+              id="3box-form-name-input"
+              defaultValue={providerData.name}
               placeholder={nameFieldPlaceholder}
+              onChange={handleNameChange}
+              ref={nameInputRef}
             />
           </FormField>
           <FormField
             name="description"
-            htmlFor="text-area"
+            htmlFor="3box-form-description-textarea"
             label={
               <StyledText color="secondaryText" size="small">
                 {descriptionLabel}
@@ -188,18 +247,17 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             }
           >
             <TextArea
-              id="text-area"
-              value={description}
-              onChange={ev => {
-                setDescription(ev.target.value);
-              }}
+              id="3box-form-description-textarea"
+              defaultValue={providerData.description}
               placeholder={descriptionFieldPlaceholder}
+              ref={descriptionInputRef}
+              onChange={handleDescriptionChange}
             />
           </FormField>
 
           <Box direction="row" gap="xsmall" justify="end">
             <Button label={cancelLabel} onClick={handleCancel} />
-            <Button label={saveLabel} onClick={handleSave} primary={true} />
+            <Button label={saveLabel} onClick={handleSave} primary={true} disabled={!formChanged} />
           </Box>
         </Box>
       </Box>
@@ -213,9 +271,10 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             setAvatarPopoverOpen(false);
           }}
           insertImage={handleInsertAvatar}
-          currentImage={!!avatar}
+          currentImage={!!avatarSrc.src}
           handleDeleteImage={() => {
-            setAvatar('');
+            setAvatarSrc({ prefix: '', src: '' });
+            setFormChanged(true);
           }}
         />
       )}
@@ -229,14 +288,24 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             setCoverImagePopoverOpen(false);
           }}
           insertImage={handleInsertCoverImage}
-          currentImage={!!coverImage}
+          currentImage={!!coverImageSrc.src}
           handleDeleteImage={() => {
-            setCoverImage('');
+            setCoverImageSrc({ prefix: '', src: '' });
+            setFormChanged(true);
           }}
         />
       )}
     </MainAreaCardBox>
   );
+};
+
+BoxFormCard.defaultProps = {
+  nameLabel: 'Name',
+  descriptionLabel: 'About',
+  titleLabel: 'Ethereum Address',
+  avatarLabel: 'Avatar',
+  coverImageLabel: 'Cover Image',
+  saveLabel: 'Save',
 };
 
 export default BoxFormCard;

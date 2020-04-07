@@ -12,3 +12,20 @@ export const truncateMiddle = (str: string, startChars: number, endChars: number
   truncated += str.substring(str.length - endChars, str.length);
   return truncated;
 };
+
+/**
+ * Check if is base64 encoded...
+ * Simple check
+ */
+export const isBase64 = (str: string) => {
+  if (str.length > 0 && typeof str === 'string') {
+    if (str.startsWith('data:') && /;base64/.test(str)) {
+      return true;
+    }
+    return false;
+  }  if (typeof str !== 'string') {
+    console.error('cannot check', typeof str, 'type');
+    return false;
+  }
+  return false;
+};

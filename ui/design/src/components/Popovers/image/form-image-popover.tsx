@@ -10,14 +10,14 @@ import {
 } from './styled-form-image-popover';
 
 export interface IFormImagePopover {
-  uploadLabel: string;
-  urlLabel: string;
-  deleteLabel: string;
+  uploadLabel?: string;
+  urlLabel?: string;
+  deleteLabel?: string;
   target: HTMLElement;
   closePopover: () => void;
-  insertImage: (url: string) => void;
+  insertImage?: (url: string) => void;
   currentImage?: boolean;
-  handleDeleteImage: () => void;
+  handleDeleteImage?: () => void;
 }
 
 const FormImagePopover: React.FC<IFormImagePopover> = props => {
@@ -39,12 +39,14 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
 
   const handleLinkInputSave = () => {
     // @Todo check if isUrl and isImage
-    insertImage(linkInputValue);
+    if (insertImage) {
+      insertImage(linkInputValue);
+    }
     closePopover();
   };
 
   const handleDeleteClick = () => {
-    handleDeleteImage();
+    if (handleDeleteImage) handleDeleteImage();
     closePopover();
   };
 
@@ -67,7 +69,9 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
     const fileReader = new FileReader();
     fileReader.addEventListener('load', () => {
       const result = fileReader.result as string;
-      insertImage(result);
+      if (insertImage) {
+        insertImage(result);
+      }
       closePopover();
     });
     fileReader.readAsDataURL(file);
@@ -129,5 +133,9 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
     </StyledDrop>
   );
 };
-
+FormImagePopover.defaultProps = {
+  uploadLabel: 'Upload',
+  urlLabel: 'By URL',
+  deleteLabel: 'Delete',
+};
 export { FormImagePopover };

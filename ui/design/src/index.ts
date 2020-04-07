@@ -24,6 +24,7 @@ import {
   ProfileWidgetCard,
   TopicsWidgetCard,
 } from './components/Cards';
+import TextInputField from './components/Forms/text-input-field';
 import { AppIcon, Icon, iconTypes } from './components/Icon';
 import { CommentInput, SearchInput } from './components/Input';
 import { ShareModal } from './components/Modals';
@@ -56,6 +57,7 @@ const exported = {
   MiniInfoWidgetCard,
   ProfileCard,
   ProfileWidgetCard,
+  TextInputField,
   TopicsWidgetCard,
   Icon,
   iconTypes,
