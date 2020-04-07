@@ -1,5 +1,7 @@
 // @ts-ignore
 import Box from '3box';
+// @ts-ignore
+import boxConfig from '3box/lib/config';
 
 export const getProfile = async (ethAddress: string) => {
   return Box.getProfile(ethAddress);
@@ -18,7 +20,11 @@ export const getEthAddress = async (
     }
   }
   if (!ethAddress) {
-    ethAddress = await signer.getAddress();
+    try {
+      ethAddress = await signer.getAddress();
+    } catch (err) {
+      throw new Error('Cannot get ethereum address!');
+    }
   }
   return ethAddress;
 };
@@ -50,7 +56,6 @@ export const authenticateBox = async (
       profileData,
     };
   } catch (err) {
-    console.error(err, 'some errors');
     throw new Error(err);
   }
 };
@@ -64,13 +69,18 @@ export const updateBoxData = async (profileData: any) => {
     await box.syncDone;
   }
   // update profile data
+  // Keys with values are updated
+  // Keys with null values are removed
+  // keys with undefined values.. well.. remains undefined (not stored)
   await box.syncDone;
   try {
     const fieldsToUpdate = Object.keys(newProfileData).filter(
-      (key: string) => newProfileData[key] !== undefined,
+      (key: string) => newProfileData[key] !== undefined || newProfileData[key] !== null,
     );
+    // if we receive a key with null value we'll remove it
+    // from profile store
     const fieldsToRemove = Object.keys(newProfileData)
-      .filter((key: string) => newProfileData[key] === undefined || newProfileData[key] === null)
+      .filter((key: string) => newProfileData[key] === null)
       .map(keyToRm => box.public.remove(keyToRm));
 
     const rmSuccess = await Promise.all(fieldsToRemove);
@@ -107,6 +117,41 @@ export const updateBoxData = async (profileData: any) => {
   }
 };
 
-export const getBoxSettings = async (ethAddress: string) => {
-  return Box.getConfig(ethAddress);
+export const getBoxSettings = (ethAddress: string) => {
+  const localBoxSettings = localStorage.getItem(`3box.settings.${ethAddress}`);
+  if (localBoxSettings) {
+    return JSON.parse(localBoxSettings);
+  }
+  return {
+    pinningNode: boxConfig.pinning_node,
+    addressServer: boxConfig.address_server_url,
+  };
+};
+
+export const saveBoxSettings = (payload: {
+  ethAddress: string;
+  pinningNode: string;
+  addressServer: string;
+}) => {
+  const { ethAddress, pinningNode, addressServer } = payload;
+  try {
+    localStorage.setItem(
+      `3box.settings.${ethAddress}`,
+      JSON.stringify({ pinningNode, addressServer }),
+    );
+  } catch (err) {
+    throw new Error(err.message);
+  }
+};
+
+export const resetBoxSettings = (ethAddress: string) => {
+  try {
+    localStorage.removeItem(`3box.settings.${ethAddress}`);
+    return {
+      pinningNode: boxConfig.pinning_node,
+      addressServer: boxConfig.address_server_url,
+    };
+  } catch (ex) {
+    throw new Error(ex.message);
+  }
 };

@@ -5,6 +5,7 @@ import MyBoxProfile from './my-box-profile';
 import BoxSettings from './box-settings';
 import DS from '@akashaproject/design-system';
 import { default as subRoutes, rootRoute, EDIT_PAGE, SETTINGS_PAGE } from '../routes';
+import ErrorInfoCard from './error-info-card';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
@@ -17,31 +18,40 @@ const PageNotFound = () => {
 };
 
 export default class App extends PureComponent<any> {
-  public state: { error: Error | null; errorInfo: { componentStack: string } } = {
-    error: null,
-    errorInfo: { componentStack: '' },
+  public state: { errors: any } = {
+    errors: {},
   };
   public componentDidCatch(error: Error, errorInfo: any) {
     this.setState({
-      error,
-      errorInfo,
+      errors: {
+        'caught.critical': {
+          error: new Error(`${error} \n Additional info: \n ${errorInfo}`),
+          critical: true,
+        },
+      },
     });
+  }
+  public componentDidMount() {
+    // catch all errors (in case of uncaught errors occures)
+    // if an error bubbles up till here, it's generally uncaught one.
+    // treat it as critical because we don't know about it
+    window.onerror = (message, source, col, line, _error) => {
+      this.setState({
+        errors: {
+          'uncaught.critical': {
+            error: {
+              message,
+              stack: `Line: ${line} \nColumn: ${col} \nSource: ${source}`,
+            },
+            critical: true,
+          },
+        },
+      });
+    };
   }
   public render() {
     const { i18n, sdkModules, channelUtils } = this.props;
-    if (this.state.error) {
-      return (
-        <div>
-          <div>An error occured in 3box app.</div>
-          <div>Error:</div>
-          <code style={{ whiteSpace: 'pre-wrap' }}>
-            {this.state.error && this.state.error.message}
-          </code>
-          <div>Stack:</div>
-          <code style={{ whiteSpace: 'pre-wrap' }}>{this.state.errorInfo.componentStack}</code>
-        </div>
-      );
-    }
+
     return (
       <React.Suspense fallback={<>Loading</>}>
         <I18nextProvider i18n={i18n ? i18n : null}>
@@ -51,31 +61,33 @@ export default class App extends PureComponent<any> {
             style={{ height: '100%' }}
             plain={true}
           >
-            <Router>
-              <Switch>
-                <Route
-                  path={subRoutes[EDIT_PAGE]}
-                  render={routeProps => (
-                    <MyBoxProfile
-                      {...routeProps}
-                      sdkModules={sdkModules}
-                      channelUtils={channelUtils}
-                    />
-                  )}
-                />
-                <Route
-                  path={subRoutes[SETTINGS_PAGE]}
-                  render={(routeProps: RouteComponentProps) => (
-                    <BoxSettings
-                      {...routeProps}
-                      sdkModules={sdkModules}
-                      channelUtils={channelUtils}
-                    />
-                  )}
-                />
-                <Route path={rootRoute} component={PageNotFound} />
-              </Switch>
-            </Router>
+            <ErrorInfoCard errors={this.state.errors}>
+              <Router>
+                <Switch>
+                  <Route
+                    path={subRoutes[EDIT_PAGE]}
+                    render={routeProps => (
+                      <MyBoxProfile
+                        {...routeProps}
+                        sdkModules={sdkModules}
+                        channelUtils={channelUtils}
+                      />
+                    )}
+                  />
+                  <Route
+                    path={subRoutes[SETTINGS_PAGE]}
+                    render={(routeProps: RouteComponentProps) => (
+                      <BoxSettings
+                        {...routeProps}
+                        sdkModules={sdkModules}
+                        channelUtils={channelUtils}
+                      />
+                    )}
+                  />
+                  <Route path={rootRoute} component={PageNotFound} />
+                </Switch>
+              </Router>
+            </ErrorInfoCard>
           </ThemeSelector>
         </I18nextProvider>
       </React.Suspense>

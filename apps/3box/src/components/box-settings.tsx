@@ -5,7 +5,6 @@ import DS from '@akashaproject/design-system';
 import ErrorInfoCard from './error-info-card';
 import { useBoxProfile } from '../state';
 import { useTranslation } from 'react-i18next';
-import TextIcon from '@akashaproject/design-system/lib/components/TextIcon/title-text/text-icon';
 
 const { Box, TextInputField, BasicCardBox, styled, Button } = DS;
 const FormArea = styled(Box)`
@@ -13,6 +12,12 @@ const FormArea = styled(Box)`
 `;
 const SettingsFormCard = styled(BasicCardBox)`
   padding: 1em;
+`;
+
+const SettingsCardTitle = styled.h3`
+  font-size: 1.5em;
+  user-select: none;
+  margin: 0.75rem;
 `;
 
 export interface IBoxSettingsProps {
@@ -26,25 +31,37 @@ export interface IBoxSettingsProps {
 const BoxSettings: React.FC<IBoxSettingsProps> = props => {
   const [state, actions] = useBoxProfile(props.sdkModules, props.channelUtils);
   const { t } = useTranslation();
-  const pinningNodeInput = React.createRef();
-  const addressServerInput = React.createRef();
+  const pinningNodeInput = React.createRef<HTMLInputElement>();
+  const addressServerInput = React.createRef<HTMLInputElement>();
+
   React.useEffect(() => {
     if (!state.data.ethAddress) {
       actions.getLoggedEthAddress();
     }
   }, [state.data.ethAddress]);
+
   React.useEffect(() => {
     if (state.data.ethAddress) {
-      actions.getSettings(state.data.ethAddress);
+      actions.getBoxSettings(state.data.ethAddress);
     }
   }, [state.data.ethAddress]);
 
   const handleReset = () => {
-    console.log('reset to default values');
+    // reset to default values
+    if (state.data.ethAddress) {
+      actions.resetBoxSettings(state.data.ethAddress);
+    }
   };
 
   const handleSubmit = () => {
-    console.log('save settings');
+    // save new settings
+    if (state.data.ethAddress && pinningNodeInput.current && addressServerInput.current) {
+      actions.saveBoxSettings({
+        ethAddress: state.data.ethAddress,
+        pinningNode: pinningNodeInput.current.value,
+        addressServer: addressServerInput.current.value,
+      });
+    }
   };
 
   return (
@@ -52,16 +69,18 @@ const BoxSettings: React.FC<IBoxSettingsProps> = props => {
       <FormArea>
         <ErrorInfoCard errors={state.data.errors}>
           <SettingsFormCard>
-            <TextIcon iconType="settings" label="3Box Settings" size="md" clickable={false} />
+            <SettingsCardTitle>{t('3Box Settings')}</SettingsCardTitle>
             <TextInputField
               label={t('Pinning Node')}
               id="3box-settings-pinning-node"
               ref={pinningNodeInput}
+              defaultValue={state.data.settings.pinningNode}
             />
             <TextInputField
               label={t('Address Server')}
               id="3box-settings-address-server"
               ref={addressServerInput}
+              defaultValue={state.data.settings.addressServer}
             />
             <Box direction="row" alignSelf="end">
               <Button label="Reset" onClick={handleReset} margin={{ right: '.5em' }} />

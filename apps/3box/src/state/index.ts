@@ -5,6 +5,8 @@ import {
   updateBoxData,
   getBoxSettings,
   getEthAddress,
+  saveBoxSettings,
+  resetBoxSettings,
 } from '../services/box';
 
 export interface DataBox {
@@ -13,7 +15,10 @@ export interface DataBox {
   coverPhoto?: string;
   description?: string;
 }
-export interface BoxSettings {}
+export interface BoxSettings {
+  pinningNode: string;
+  addressServer: string;
+}
 export interface ProfileState {
   profileData: DataBox;
   ethAddress: string | null;
@@ -27,7 +32,7 @@ export interface ProfileState {
       critical: boolean;
     };
   };
-  settings?: BoxSettings;
+  settings: BoxSettings;
 }
 
 export interface ProfileStateModel {
@@ -36,7 +41,12 @@ export interface ProfileStateModel {
   getProfile: Thunk<ProfileStateModel, string>;
   fetchCurrent: Thunk<ProfileStateModel>;
   updateProfileData: Thunk<ProfileStateModel, {}>;
-  getSettings: Thunk<ProfileStateModel, string>;
+  getBoxSettings: Thunk<ProfileStateModel, string>;
+  saveBoxSettings: Thunk<
+    ProfileStateModel,
+    { ethAddress: string; pinningNode: string; addressServer: string }
+  >;
+  resetBoxSettings: Thunk<ProfileStateModel, string>;
   getLoggedEthAddress: Thunk<ProfileStateModel>;
 }
 const getImageProperty = (image: string | { contentUrl: { '/': string } }[]) => {
@@ -51,6 +61,10 @@ export const profileStateModel: ProfileStateModel = {
     profileData: { name: '', image: '', coverPhoto: '', description: '' },
     openBoxConsent: false,
     errors: {},
+    settings: {
+      pinningNode: '',
+      addressServer: '',
+    },
   }),
   updateData: action((state, payload) => {
     state.data = Object.assign({}, state.data, payload);
@@ -64,11 +78,22 @@ export const profileStateModel: ProfileStateModel = {
       web3Instance: $web3Instance,
     });
     return call.subscribe(async (deps: { stash: any; web3Instance: any }) => {
-      const ethAddress = await getEthAddress(deps.stash, deps.web3Instance);
-      console.log(ethAddress, 'the eth address');
-      actions.updateData({
-        ethAddress,
-      });
+      try {
+        const ethAddress = await getEthAddress(deps.stash, deps.web3Instance);
+        actions.updateData({
+          ethAddress,
+        });
+      } catch (err) {
+        // having the eth address is mandatory in this case
+        actions.updateData({
+          errors: {
+            'actions.getLoggedEthAddress': {
+              error: new Error(err.message),
+              critical: true,
+            },
+          },
+        });
+      }
     });
   }),
   fetchCurrent: thunk(async (actions, _ethAddress, { injections }) => {
@@ -91,6 +116,7 @@ export const profileStateModel: ProfileStateModel = {
             openBoxConsent: true,
           });
         });
+        // tslint:disable-next-line: prefer-const
         let { image, coverPhoto, ...others } = result.profileData;
         image = getImageProperty(image);
         coverPhoto = getImageProperty(coverPhoto);
@@ -114,9 +140,9 @@ export const profileStateModel: ProfileStateModel = {
       }
     });
   }),
-  getProfile: thunk(async (actions, _ethAddress, { injections }) => {
+  getProfile: thunk(async (actions, ethAddress, { injections }) => {
     const { getProfileData, channelUtils } = injections;
-    const call = channelUtils.operators.from(getProfileData(_ethAddress));
+    const call = channelUtils.operators.from(getProfileData(ethAddress));
     return call.subscribe((data: any) => actions.updateData(data));
   }),
   updateProfileData: thunk(async (actions, profileData, { getState }) => {
@@ -140,11 +166,45 @@ export const profileStateModel: ProfileStateModel = {
       profileData: updatedProfile,
     });
   }),
-  getSettings: thunk(async (actions, ethAddress) => {
+  getBoxSettings: thunk(async (actions, ethAddress) => {
     const settings = await getBoxSettings(ethAddress);
     actions.updateData({
       settings,
     });
+  }),
+  saveBoxSettings: thunk(async (actions, payload) => {
+    try {
+      saveBoxSettings(payload);
+      actions.updateData({
+        settings: { pinningNode: payload.pinningNode, addressServer: payload.addressServer },
+      });
+    } catch (ex) {
+      actions.updateData({
+        errors: {
+          'actions.saveBoxSettings': {
+            error: new Error(ex.message),
+            critical: false,
+          },
+        },
+      });
+    }
+  }),
+  resetBoxSettings: thunk(async (actions, ethAddress) => {
+    try {
+      const settings = resetBoxSettings(ethAddress);
+      actions.updateData({
+        settings,
+      });
+    } catch (ex) {
+      actions.updateData({
+        errors: {
+          'actions.resetBoxSettings': {
+            error: new Error(ex.message),
+            critical: false,
+          },
+        },
+      });
+    }
   }),
 };
 

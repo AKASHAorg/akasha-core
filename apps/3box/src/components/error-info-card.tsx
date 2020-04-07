@@ -1,7 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 
-const { Box } = DS;
+const { Box, BasicCardBox } = DS;
 
 const ErrorInfoCard = ({
   errors,
@@ -19,31 +19,25 @@ const ErrorInfoCard = ({
     };
   });
   const hasCriticalErrors = errorArr.some(err => err.isCritical);
-  if (hasCriticalErrors) {
+  if (errorArr.length) {
     return (
-      <>
-        <div>Some critical errors occured!</div>
-        {errorArr.map((err, idx) => (
-          <Box key={idx}>
-            <code>{err.message}</code>
-            <code>{err.stackTrace}</code>
-          </Box>
-        ))}
-      </>
+      <Box align="center" justify="center" fill={true}>
+        <BasicCardBox style={{ maxWidth: '50%', padding: '0.75em' }}>
+          <h3 style={{ textAlign: 'center' }}>Errors .. :((</h3>
+          {errorArr.map((err, idx) => (
+            <Box key={idx}>
+              <code style={{ whiteSpace: 'pre-line', wordBreak: 'break-all' }}>{err.message}</code>
+              <code style={{ whiteSpace: 'pre-line', wordBreak: 'break-all' }}>
+                {err.stackTrace}
+              </code>
+            </Box>
+          ))}
+        </BasicCardBox>
+        {!hasCriticalErrors && children}
+      </Box>
     );
   }
-
-  return (
-    <>
-      {errorArr.map((err, idx) => (
-        <Box key={idx}>
-          <code>{err.message}</code>
-          <code>{err.stackTrace}</code>
-        </Box>
-      ))}
-      {children}
-    </>
-  );
+  return <>{children}</>;
 };
 
 export default ErrorInfoCard;
