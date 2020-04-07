@@ -6,7 +6,8 @@ import { ISidebarProps } from './sidebar';
 const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
   const {
     loggedEthAddress,
-    menuItems,
+    installedApps,
+    profilePluginData,
     onClickAddApp,
     onClickMenuItem,
     onClickSearch,
@@ -26,7 +27,7 @@ const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
           onClickCloseSidebar={onClickCloseSidebar}
           searchLabel={searchLabel}
           appCenterLabel={appCenterLabel}
-          menuItems={menuItems}
+          installedApps={installedApps}
           loggedEthAddress={loggedEthAddress}
         />
       ) : (
@@ -37,7 +38,8 @@ const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
           onClickCloseSidebar={onClickCloseSidebar}
           searchLabel={searchLabel}
           appCenterLabel={appCenterLabel}
-          menuItems={menuItems}
+          installedApps={installedApps}
+          profilePluginData={profilePluginData}
           loggedEthAddress={loggedEthAddress}
         />
       )}

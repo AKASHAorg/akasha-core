@@ -33,7 +33,12 @@
     "pino": "^5.16.0",
     "single-spa": "^4.4.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@akashaproject/ui-awf-typings": "*"
+  },
+  "peerDependencies": {
+    "rxjs": "^6.5.4"
+  },
   "files": [
     "lib",
     "dist"

@@ -5,7 +5,11 @@ import registerDBModule from '@akashaproject/sdk-db';
 import registerAuthModule from '@akashaproject/sdk-auth';
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 import AppLoader from '@akashaproject/sdk-ui-plugin-loader';
-import { ILoaderConfig, IPluginEntry, IWidgetEntry } from '@akashaproject/sdk-ui-plugin-loader/lib';
+import {
+  ILoaderConfig,
+  IPluginEntry,
+  IWidgetEntry,
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
 import initChannel from './channel';
 import * as operators from 'rxjs/operators';
 import { forkJoin, from, zip, of, concat } from 'rxjs';

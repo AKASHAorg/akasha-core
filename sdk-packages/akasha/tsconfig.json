@@ -23,6 +23,9 @@
     },
     {
       "path": "../auth"
+    },
+    {
+      "path": "../../ui/typings"
     }
   ],
   "include": ["./src"],

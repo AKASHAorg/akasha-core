@@ -1,4 +1,4 @@
-import { IPlugin, IWidget } from './interfaces';
+import { IPlugin, IWidget } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const validateServices = (services: any) => {
   return true;
@@ -6,16 +6,16 @@ const validateServices = (services: any) => {
 
 export const validatePlugin = (plugin: IPlugin) => {
   let isValid = true;
-  if (Array.isArray(plugin.services)) {
-    isValid = validateServices(plugin.services);
+  if (Array.isArray(plugin.sdkModules)) {
+    isValid = validateServices(plugin.sdkModules);
   }
   return isValid;
 };
 
 export const validateWidget = (widget: IWidget) => {
   let isValid = true;
-  if (Array.isArray(widget.services)) {
-    isValid = validateServices(widget.services);
+  if (Array.isArray(widget.sdkModules)) {
+    isValid = validateServices(widget.sdkModules);
   }
   return isValid;
 };

@@ -27,7 +27,11 @@
     "pack:watch": "nodemon"
   },
   "nodemonConfig": {
-    "ignore": ["lib/*", "dist/*", "build/*"],
+    "ignore": [
+      "lib/*",
+      "dist/*",
+      "build/*"
+    ],
     "exec": "npm run pack",
     "ext": "ts,tsx"
   },
@@ -39,6 +43,7 @@
     "react-i18next": "^11.3.1"
   },
   "devDependencies": {
+    "@akashaproject/ui-awf-typings": "*",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
     "@types/single-spa-react": "^2.8.3",

@@ -1,0 +1,30 @@
+{
+  "name": "@akashaproject/ui-awf-typings",
+  "version": "0.1.0",
+  "description": "AWF typings for development purpose",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "main": "lib/index.js",
+  "contributors": [
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+  },
+  "engines": {
+    "node": ">=10",
+    "npm": ">=5"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "tsc": "tsc --build",
+    "prepare": "npm run tsc"
+  },
+  "peerDependencies": {
+    "typescript": "^3.8.3"
+  },
+  "files": [
+    "lib"
+  ]
+}

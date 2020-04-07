@@ -2,12 +2,15 @@ import DS from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
+import { IMenuItem, EventTypes, MenuItemType } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { lightTheme, ThemeSelector, ResponsiveSidebar } = DS;
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;
   singleSpa: any;
+  getMenuItems: () => any[];
+  events: any;
 }
 
 /**
@@ -54,7 +57,11 @@ export default class SidebarWidget extends PureComponent<IProps> {
     return (
       <I18nextProvider i18n={this.props.i18n}>
         <Suspense fallback={<>...</>}>
-          <Menu navigateToUrl={this.props.singleSpa.navigateToUrl} />
+          <Menu
+            navigateToUrl={this.props.singleSpa.navigateToUrl}
+            getMenuItems={this.props.getMenuItems}
+            loaderEvents={this.props.events}
+          />
         </Suspense>
       </I18nextProvider>
     );
@@ -63,11 +70,40 @@ export default class SidebarWidget extends PureComponent<IProps> {
 
 interface MenuProps {
   navigateToUrl: (url: string) => void;
+  getMenuItems: () => IMenuItem[];
+  loaderEvents: any;
 }
 
 const Menu = (props: MenuProps) => {
-  const { navigateToUrl } = props;
+  const { navigateToUrl, getMenuItems, loaderEvents } = props;
+
+  const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[] | null>(null);
   // const { t } = useTranslation();
+  React.useEffect(() => {
+    const updateMenu = () => {
+      const menuItems = getMenuItems();
+      setCurrentMenu(menuItems);
+    };
+    updateMenu();
+    loaderEvents.subscribe((evMsg: EventTypes) => {
+      if (evMsg === EventTypes.AppInstall || evMsg === EventTypes.PluginInstall) {
+        updateMenu();
+      }
+    });
+    return function cleanup() {
+      loaderEvents.unsubscribe();
+    };
+  }, []);
+
+  // filter out default plugins like profile and feed
+  const installedApps = currentMenu?.filter(menuItem => menuItem.type === MenuItemType.App);
+
+  // return the plugins from list of apps
+  const profileDefaultData = currentMenu?.find(menuItem => menuItem.index === 2);
+  const feedDefaultData = currentMenu?.find(menuItem => menuItem.index === 1);
+  if (feedDefaultData) {
+    installedApps?.unshift(feedDefaultData);
+  }
 
   const handleNavigation = (path: string) => {
     navigateToUrl(path);
@@ -103,34 +139,8 @@ const Menu = (props: MenuProps) => {
         searchLabel={'Search'}
         appCenterLabel={'App Center'}
         onClickMenuItem={handleNavigation}
-        // replace with data from API
-        menuItems={[
-          {
-            label: 'AKASHA Feed',
-            index: 1,
-            route: '/',
-            type: 'plugin',
-            logo: undefined,
-          },
-          {
-            label: 'AKASHA Profile',
-            index: 2,
-            route: '/profile',
-            type: 'plugin',
-            logo: undefined,
-            subRoutes: [
-              { index: 0, label: 'Profile list', route: '/profile/list', type: 'internal' },
-              { index: 1, label: 'My profile', route: '/profile/my-profile', type: 'internal' },
-            ],
-          },
-          {
-            label: '3box integration',
-            index: 3,
-            route: '/3box-app',
-            type: 'plugin',
-            logo: undefined,
-          },
-        ]}
+        installedApps={installedApps}
+        profilePluginData={profileDefaultData}
       />
     </ThemeSelector>
   );

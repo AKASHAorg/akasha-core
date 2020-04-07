@@ -3,7 +3,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
-import { IPlugin, IWidget } from './interfaces';
+import { IPlugin, IWidget } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const i18nDefaultConfig: InitOptions = {
   fallbackLng: 'en',
@@ -44,11 +44,7 @@ export default class TranslationManager {
       warn: logger.warn,
       error: logger.error,
     };
-    const i18nInstance = i18n
-      .createInstance()
-      .use(Backend)
-      .use(LanguageDetector)
-      .use(logPlugin);
+    const i18nInstance = i18n.createInstance().use(Backend).use(LanguageDetector).use(logPlugin);
 
     this.i18nInstances[plugin.name] = i18nInstance;
     return i18nInstance;

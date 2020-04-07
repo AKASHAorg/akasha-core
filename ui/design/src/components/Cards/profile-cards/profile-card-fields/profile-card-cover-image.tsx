@@ -6,6 +6,7 @@ import { AppIcon } from '../../../Icon/index';
 import { SelectPopover } from '../../../Popovers/index';
 import { IProfileDataProvider, IProfileProvidersData } from '../profile-card';
 import { ShareButtonContainer, StyledEditCoverImageBox } from '../styled-profile-card';
+import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 
 export interface IProfileCardCoverImageProps {
   shareProfileLabel: string;
@@ -13,7 +14,7 @@ export interface IProfileCardCoverImageProps {
   changeCoverImageLabel: string;
   editable: boolean;
   coverImage?: string;
-  coverImageIcon?: string;
+  coverImageIcon?: LogoSourceType;
   handleChangeCoverImage: (provider: IProfileDataProvider) => void;
   coverImagePopoverOpen: boolean;
   setCoverImagePopoverOpen: (value: boolean) => void;

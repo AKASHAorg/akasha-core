@@ -1,4 +1,5 @@
 import { IAppData } from '@akashaproject/design-system/lib/components/Cards/widget-cards/apps-widget-card';
+import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 
 const topicsDataSource = [
   { title: '#ethereumworld', subtitle: '6576 mentions' },
@@ -31,22 +32,34 @@ const profileProvidersData = {
     avatar: {
       providerName: '3Box',
       value: 'http://placebeard.it/480/480',
-      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      providerIcon: {
+        type: LogoTypeSource.String,
+        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      },
     },
     coverImage: {
       providerName: '3Box',
       value: 'goldenrod',
-      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      providerIcon: {
+        type: LogoTypeSource.String,
+        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      },
     },
     userName: 'ENS',
     name: {
       providerName: '3Box',
       value: 'Gilbert The Bearded',
-      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      providerIcon: {
+        type: LogoTypeSource.String,
+        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      },
     },
     description: {
       providerName: '3Box',
-      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      providerIcon: {
+        type: LogoTypeSource.String,
+        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      },
       value:
         'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
     },
@@ -55,48 +68,72 @@ const profileProvidersData = {
     {
       providerName: '3Box',
       value: 'http://placebeard.it/480/480',
-      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      providerIcon: {
+        type: LogoTypeSource.String,
+        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      },
     },
     {
       providerName: 'ENS',
       value: '',
-      providerIcon: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+      providerIcon: {
+        type: LogoTypeSource.String,
+        value: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+      },
     },
   ],
   coverImageProviders: [
     {
       providerName: '3Box',
       value: 'goldenrod',
-      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      providerIcon: {
+        type: LogoTypeSource.String,
+        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      },
     },
     {
       providerName: 'ENS',
       value: 'red',
-      providerIcon: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+      providerIcon: {
+        type: LogoTypeSource.String,
+        value: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+      },
     },
   ],
   nameProviders: [
     {
       providerName: '3Box',
       value: 'Gilbert The Bearded',
-      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      providerIcon: {
+        type: LogoTypeSource.String,
+        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      },
     },
     {
       providerName: 'ENS',
       value: 'Gilbert Bronson',
-      providerIcon: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+      providerIcon: {
+        type: LogoTypeSource.String,
+        value: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+      },
     },
   ],
   descriptionProviders: [
     {
       providerName: '3Box',
-      providerIcon: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      providerIcon: {
+        type: LogoTypeSource.String,
+        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+      },
       value:
         'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
     },
     {
       providerName: 'ENS',
-      providerIcon: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+      providerIcon: {
+        type: LogoTypeSource.String,
+        value: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+      },
       value: '"Nothing at all" - Stupid Sexy Flanders',
     },
   ],

@@ -20,5 +20,15 @@
     "function-name": [ true, { "method-regex": "^[a-z][\\w\\d]+$", "private-method-regex": "^[a-z_][\\w\\d]+$", "protected-method-regex": "^[a-z_][\\w\\d]+$", "static-method-regex": "^[A-Z_\\d]+$", "function-regex": "^[a-z][\\w\\d]+$" } ],
     "no-increment-decrement": false
   },
-  "rulesDirectory": ["tslint-plugin-prettier"]
+  "rulesDirectory": ["tslint-plugin-prettier"],
+  "linterOptions": {
+    "exclude": [
+      "bin",
+      "**/__test__/**",
+      "*.d.ts",
+      "node_modules",
+      "build",
+      "dist"
+    ]
+  }
 }
