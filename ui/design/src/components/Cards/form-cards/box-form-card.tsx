@@ -163,7 +163,6 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     if (coverImageSrc.src !== coverImage) {
       payload.coverImage = coverImageSrc.src;
     }
-    console.log(payload, 'payload to save');
     handleSubmit(payload);
   };
   const handleNameChange = () => {

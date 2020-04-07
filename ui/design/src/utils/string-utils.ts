@@ -23,8 +23,8 @@ export const isBase64 = (str: string) => {
       return true;
     }
     return false;
-  }  if (typeof str !== 'string') {
-    console.error('cannot check', typeof str, 'type');
+  }
+  if (typeof str !== 'string') {
     return false;
   }
   return false;
