@@ -100,7 +100,6 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   // leave it as 'any' for now
   const nameInputRef: React.RefObject<any> = React.useRef(null);
   const descriptionInputRef: React.RefObject<any> = React.useRef(null);
-
   React.useEffect(() => {
     // set the src's only if needed
     if (providerData.avatar) {

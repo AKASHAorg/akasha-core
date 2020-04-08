@@ -24,6 +24,12 @@ export interface ProfileState {
   ethAddress: string | null;
   // when user agrees to open the box (signature)
   openBoxConsent: boolean;
+  // when user agrees to open the space (signature)
+  openSpaceConsent: boolean;
+  // when we are loading the profile data
+  isLoading?: boolean;
+  // when we are saving (general flag)
+  isSaving?: boolean;
   errors: {
     // key is the context of the error
     // example {'form.username': new Error('username is taken')}
@@ -35,9 +41,16 @@ export interface ProfileState {
   settings: BoxSettings;
 }
 
+export interface IStateErrorPayload {
+  errorKey: string;
+  error: Error;
+  critical: boolean;
+}
+
 export interface ProfileStateModel {
   data: ProfileState;
   updateData: Action<ProfileStateModel, Partial<ProfileState>>;
+  createError: Action<ProfileStateModel, IStateErrorPayload>;
   getProfile: Thunk<ProfileStateModel, string>;
   fetchCurrent: Thunk<ProfileStateModel>;
   updateProfileData: Thunk<ProfileStateModel, {}>;
@@ -56,20 +69,39 @@ const getImageProperty = (image: string | { contentUrl: { '/': string } }[]) => 
   return image;
 };
 export const profileStateModel: ProfileStateModel = {
-  data: persist({
-    ethAddress: null,
-    profileData: { name: '', image: '', coverPhoto: '', description: '' },
-    openBoxConsent: false,
-    errors: {},
-    settings: {
-      pinningNode: '',
-      addressServer: '',
+  data: persist(
+    {
+      ethAddress: null,
+      profileData: { name: '', image: '', coverPhoto: '', description: '' },
+      openBoxConsent: false,
+      openSpaceConsent: false,
+      isLoading: undefined,
+      isSaving: undefined,
+      errors: {},
+      settings: {
+        pinningNode: '',
+        addressServer: '',
+      },
     },
-  }),
+    {
+      blacklist: ['errors', 'isLoading', 'isSaving'],
+    },
+  ),
   updateData: action((state, payload) => {
     state.data = Object.assign({}, state.data, payload);
   }),
-  getLoggedEthAddress: thunk(async (actions, _notPassed, { injections }) => {
+  createError: action((state, payload) => {
+    state.data = Object.assign({}, state.data, {
+      errors: {
+        ...state.data.errors,
+        [payload.errorKey]: {
+          error: payload.error,
+          critical: payload.critical,
+        },
+      },
+    });
+  }),
+  getLoggedEthAddress: thunk(async (actions, _notPassed, { injections, getState }) => {
     const { channels, channelUtils } = injections;
     const $stash = channels.commons.cache_service.getStash(null);
     const $web3Instance = channels.commons.web3_service.web3(null);
@@ -80,18 +112,23 @@ export const profileStateModel: ProfileStateModel = {
     return call.subscribe(async (deps: { stash: any; web3Instance: any }) => {
       try {
         const ethAddress = await getEthAddress(deps.stash, deps.web3Instance);
+        // reset consents if the payload has an eth address that it's not the
+        // same as in the state
+        if (getState().data.ethAddress && getState().data.ethAddress !== ethAddress) {
+          actions.updateData({
+            openBoxConsent: false,
+            openSpaceConsent: false,
+          });
+        }
         actions.updateData({
           ethAddress,
         });
       } catch (err) {
         // having the eth address is mandatory in this case
-        actions.updateData({
-          errors: {
-            'actions.getLoggedEthAddress': {
-              error: new Error(err.message),
-              critical: true,
-            },
-          },
+        actions.createError({
+          errorKey: 'actions.getLoggedEthAddress',
+          error: err,
+          critical: true,
         });
       }
     });
@@ -108,63 +145,100 @@ export const profileStateModel: ProfileStateModel = {
       web3Utils: $web3Utils,
     });
 
-    return call.subscribe(async (deps: any) => {
-      try {
-        const result = await authenticateBox(deps.stash, deps.web3Instance, deps.web3Utils, () => {
-          // when user consented to open the box
-          actions.updateData({
-            openBoxConsent: true,
-          });
-        });
-        // tslint:disable-next-line: prefer-const
-        let { image, coverPhoto, ...others } = result.profileData;
-        image = getImageProperty(image);
-        coverPhoto = getImageProperty(coverPhoto);
-        actions.updateData({
-          ethAddress: result.ethAddress,
-          profileData: {
-            ...others,
-            image,
-            coverPhoto,
-          },
-        });
-      } catch (err) {
-        actions.updateData({
-          errors: {
-            'action.fetchCurrent': {
-              error: new Error(err),
-              critical: true,
+    return call.subscribe(
+      async (deps: any) => {
+        try {
+          const result = await authenticateBox(
+            deps.stash,
+            deps.web3Instance,
+            deps.web3Utils,
+            () => {
+              // when user consented to open the box
+              actions.updateData({
+                openBoxConsent: true,
+              });
             },
-          },
+            () => {
+              // when user consented to open the space
+              // it's obvious that after this step we are
+              // fetching the profile data, so switch isLoading
+              // to true
+              actions.updateData({
+                openSpaceConsent: true,
+                isLoading: true,
+              });
+            },
+          );
+          // tslint:disable-next-line: prefer-const
+          let { image, coverPhoto, ...others } = result.profileData;
+          image = getImageProperty(image);
+          coverPhoto = getImageProperty(coverPhoto);
+          actions.updateData({
+            ethAddress: result.ethAddress,
+            isLoading: false,
+            profileData: {
+              ...others,
+              image,
+              coverPhoto,
+            },
+          });
+        } catch (err) {
+          actions.updateData({
+            isLoading: false,
+          });
+          actions.createError({
+            errorKey: 'action.fetchCurrent',
+            error: err,
+            critical: true,
+          });
+        }
+      },
+      (err: Error) => {
+        actions.updateData({
+          isLoading: false,
         });
-      }
-    });
+        actions.createError({
+          errorKey: 'actions.fetchCurrent',
+          error: err,
+          critical: false,
+        });
+      },
+    );
   }),
   getProfile: thunk(async (actions, ethAddress, { injections }) => {
     const { getProfileData, channelUtils } = injections;
     const call = channelUtils.operators.from(getProfileData(ethAddress));
-    return call.subscribe((data: any) => actions.updateData(data));
+    return call.subscribe(
+      (data: any) => actions.updateData(data),
+      (err: Error) =>
+        actions.createError({ errorKey: 'actions.getProfile', error: err, critical: false }),
+    );
   }),
   updateProfileData: thunk(async (actions, profileData, { getState }) => {
-    const resp = await updateBoxData(profileData);
-    if (resp.error) {
-      return actions.updateData({
-        errors: {
-          'action.updateProfileData': {
-            error: new Error(resp.error),
-            critical: false,
-          },
-        },
+    actions.updateData({
+      isSaving: true,
+    });
+    try {
+      const resp = await updateBoxData(profileData);
+      const updatedProfile = {
+        ...getState().data.profileData,
+        ...resp.profileData,
+      };
+      actions.updateData({
+        ethAddress: resp.ethAddress,
+        profileData: updatedProfile,
+        isSaving: false,
+      });
+    } catch (ex) {
+      actions.updateData({
+        isSaving: false,
+      });
+      actions.createError({
+        errorKey: 'action.updateProfileData',
+        error: ex,
+        critical: false,
       });
     }
-    const updatedProfile = {
-      ...getState().data.profileData,
-      ...resp.profileData,
-    };
-    actions.updateData({
-      ethAddress: resp.ethAddress,
-      profileData: updatedProfile,
-    });
   }),
   getBoxSettings: thunk(async (actions, ethAddress) => {
     const settings = await getBoxSettings(ethAddress);
@@ -179,13 +253,10 @@ export const profileStateModel: ProfileStateModel = {
         settings: { pinningNode: payload.pinningNode, addressServer: payload.addressServer },
       });
     } catch (ex) {
-      actions.updateData({
-        errors: {
-          'actions.saveBoxSettings': {
-            error: new Error(ex.message),
-            critical: false,
-          },
-        },
+      actions.createError({
+        errorKey: 'actions.saveBoxSettings',
+        error: ex,
+        critical: false,
       });
     }
   }),
@@ -196,13 +267,10 @@ export const profileStateModel: ProfileStateModel = {
         settings,
       });
     } catch (ex) {
-      actions.updateData({
-        errors: {
-          'actions.resetBoxSettings': {
-            error: new Error(ex.message),
-            critical: false,
-          },
-        },
+      actions.createError({
+        errorKey: 'actions.resetBoxSettings',
+        error: ex,
+        critical: false,
       });
     }
   }),

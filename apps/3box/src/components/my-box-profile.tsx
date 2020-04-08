@@ -20,16 +20,18 @@ export interface IMyBoxProfileProps {
 const MyBoxProfile: React.FC<any> = ({ sdkModules, channelUtils }) => {
   const [state, actions] = useBoxProfile(sdkModules, channelUtils);
   const { t } = useTranslation();
+  const { openBoxConsent, openSpaceConsent, isLoading, isSaving } = state.data;
 
   React.useEffect(() => {
-    let subs: any;
+    const subs: any[] = [];
     const onMount = async () => {
-      subs = await actions.fetchCurrent();
+      subs.push(await actions.getLoggedEthAddress());
+      subs.push(await actions.fetchCurrent());
     };
     onMount();
     return () => {
-      if (subs) {
-        subs.unsubscribe();
+      if (subs.length) {
+        subs.forEach(sub => sub.unsubscribe());
       }
     };
   }, []);
@@ -48,7 +50,10 @@ const MyBoxProfile: React.FC<any> = ({ sdkModules, channelUtils }) => {
     <Box fill={true} flex={true} pad={{ top: '1em' }} align="center">
       <ErrorInfoCard errors={state.data.errors}>
         <>
-          {!state.data.openBoxConsent && <Box>waiting for signatures</Box>}
+          {!openBoxConsent && <Box>waiting for box signature</Box>}
+          {openBoxConsent && !openSpaceConsent && <Box>waiting for space signature</Box>}
+          {isLoading && openBoxConsent && openSpaceConsent && <Box>Loading profile data</Box>}
+          {isSaving && <Box>Saving profile.. Please wait!</Box>}
           <BoxFormCard
             titleLabel={t('Ethereum Address')}
             avatarLabel={t('Avatar')}

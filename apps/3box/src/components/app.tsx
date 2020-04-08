@@ -1,6 +1,12 @@
 import React, { PureComponent } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter as Router, Route, Switch, RouteComponentProps } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  RouteComponentProps,
+  Redirect,
+} from 'react-router-dom';
 import MyBoxProfile from './my-box-profile';
 import BoxSettings from './box-settings';
 import DS from '@akashaproject/design-system';
@@ -63,6 +69,8 @@ export default class App extends PureComponent<any> {
           >
             <ErrorInfoCard errors={this.state.errors}>
               <Router>
+                {/* Make the edit page default landing page for this app */}
+                <Redirect from={rootRoute} to={subRoutes[EDIT_PAGE]} exact={true} />
                 <Switch>
                   <Route
                     path={subRoutes[EDIT_PAGE]}

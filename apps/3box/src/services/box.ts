@@ -33,35 +33,56 @@ export const authenticateBox = async (
   cache: { entries: { has: (arg0: string) => any }; get: (arg0: string) => any },
   web3Instance: { getSigner: () => any },
   web3Utils: { toUtf8String: (arg0: any) => any; joinSignature: (arg0: any) => any },
-  consentCallback: () => void,
+  onBoxOpenConsent: () => void,
+  onOpenSpaceConsent: () => void,
 ) => {
   try {
     const ethAddress = await getEthAddress(cache, web3Instance);
     const signer = await web3Instance.getSigner();
     if (Box.isLoggedIn(ethAddress) && box) {
-      return box.public.all();
+      await box.syncDone;
+      const profile = await box.public.all();
+      return {
+        ethAddress,
+        profile,
+      };
     }
-    box = await Box.create({
-      sendAsync: function(data: any, cb: any) {
-        signer
-          .signMessage(web3Utils.toUtf8String(data.params[0]))
-          .then((result: any) => cb(null, { result: web3Utils.joinSignature(result) }));
+
+    const settings = getBoxSettings(ethAddress);
+
+    box = await Box.create(
+      {
+        sendAsync: function sendAsync(data: any, cb: any) {
+          signer
+            .signMessage(web3Utils.toUtf8String(data.params[0]))
+            .then((result: any) => cb(null, { result: web3Utils.joinSignature(result) }));
+        },
       },
-    });
-    await box.auth(['akasha-ewa'], { consentCallback, address: ethAddress });
+      {
+        pinningNode: settings.pinningNode,
+        addressServer: settings.addressServer,
+      },
+    );
+    await box.auth([], { consentCallback: onBoxOpenConsent, address: ethAddress });
+    const space = await box.openSpace('akasha-ewa', { consentCallback: onOpenSpaceConsent });
     await box.syncDone;
+    await space.syncDone;
     const profileData = await box.public.all();
     return {
       ethAddress,
       profileData,
     };
   } catch (err) {
-    throw new Error(err);
+    throw new Error(err.message);
   }
 };
 
 export const updateBoxData = async (profileData: any) => {
   const { ethAddress, avatar, ...newProfileData } = profileData;
+  if (!ethAddress) {
+    // tslint:disable-next-line:no-console
+    console.error('ethereum address not address provided!');
+  }
   const isLoggedIn = Box.isLoggedIn(ethAddress);
   // auth user if it's not logged in
   if (!isLoggedIn && box) {
@@ -75,7 +96,8 @@ export const updateBoxData = async (profileData: any) => {
   await box.syncDone;
   try {
     const fieldsToUpdate = Object.keys(newProfileData).filter(
-      (key: string) => newProfileData[key] !== undefined || newProfileData[key] !== null,
+      (key: string) =>
+        newProfileData[key] && (newProfileData[key] !== undefined || newProfileData[key] !== null),
     );
     // if we receive a key with null value we'll remove it
     // from profile store
@@ -92,28 +114,17 @@ export const updateBoxData = async (profileData: any) => {
     }
     const updateSuccess = await box.public.setMultiple(fieldsToUpdate, values);
     if (updateSuccess && rmSuccess) {
-      // update was successfull, return new data. don't wait for syncDone
+      // get fresh data
+      await box.syncDone;
+      const fetchedProfileData = await box.public.all();
       return {
         ethAddress,
-        profileData: {
-          ...newProfileData,
-          image: avatar,
-        },
+        profileData: fetchedProfileData,
       };
     }
-    return {
-      ethAddress,
-      profileData: {
-        ...newProfileData,
-        image: avatar,
-      },
-      error: 'Cannot update profile data!',
-    };
+    throw new Error('Cannot update your profile data. This is a 3Box response!');
   } catch (err) {
-    return {
-      ethAddress,
-      error: err,
-    };
+    throw new Error(err.message);
   }
 };
 

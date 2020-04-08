@@ -30,6 +30,7 @@ export interface IBoxSettingsProps {
 
 const BoxSettings: React.FC<IBoxSettingsProps> = props => {
   const [state, actions] = useBoxProfile(props.sdkModules, props.channelUtils);
+  const { isSaving } = state.data;
   const { t } = useTranslation();
   const pinningNodeInput = React.createRef<HTMLInputElement>();
   const addressServerInput = React.createRef<HTMLInputElement>();
@@ -66,6 +67,7 @@ const BoxSettings: React.FC<IBoxSettingsProps> = props => {
 
   return (
     <Box fill={true} flex={true} pad={{ top: '1em' }} align="center">
+      {isSaving && <Box>Saving Settings</Box>}
       <FormArea>
         <ErrorInfoCard errors={state.data.errors}>
           <SettingsFormCard>
