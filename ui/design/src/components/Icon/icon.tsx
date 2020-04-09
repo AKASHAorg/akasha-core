@@ -37,6 +37,7 @@ export type IconType =
   | 'ethereumWorldLogo'
   | 'error'
   | 'facebook'
+  | 'following'
   | 'heart'
   | 'home'
   | 'hotTopics'
@@ -65,6 +66,7 @@ export type IconType =
   | 'search'
   | 'settings'
   | 'share'
+  | 'subscribe'
   | 'stopwatch'
   | 'shareSmallBlue'
   | 'shareSmallDark'
@@ -79,6 +81,7 @@ export type IconType =
   | 'twitter'
   | 'underline'
   | 'upload'
+  | 'video'
   | 'wallet'
   | 'walletconnect';
 
@@ -115,6 +118,7 @@ export const iconTypes: IconType[] = [
   'ethereumWorldLogo',
   'error',
   'facebook',
+  'following',
   'heart',
   'home',
   'hotTopics',
@@ -142,6 +146,7 @@ export const iconTypes: IconType[] = [
   'search',
   'settings',
   'share',
+  'subscribe',
   'stopwatch',
   'shareSmallBlue',
   'shareSmallDark',
@@ -156,6 +161,7 @@ export const iconTypes: IconType[] = [
   'twitter',
   'underline',
   'upload',
+  'video',
   'wallet',
   'walletconnect',
 ];
@@ -168,7 +174,7 @@ export interface IconProps extends CommonInterface<any> {
   clickable?: boolean;
   primaryColor?: boolean;
   accentColor?: boolean;
-  size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xxl';
+  size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
 const StyledRefDiv = styled.div`
@@ -238,20 +244,25 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
             `;
           case 'sm':
             return css`
+              width: 1.25em;
+              height: 1.25em;
+            `;
+          case 'md':
+            return css`
               width: 1.5em;
               height: 1.5em;
             `;
-          case 'md':
+          case 'lg':
             return css`
               width: 2em;
               height: 2em;
             `;
-          case 'lg':
+          case 'xl':
             return css`
               width: 2.5em;
               height: 2.5em;
             `;
-          case 'xxl':
+          case 'xl':
             return css`
               width: 4em;
               height: 4em;

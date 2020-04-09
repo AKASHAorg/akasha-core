@@ -1,6 +1,46 @@
 import { IAppData } from '@akashaproject/design-system/lib/components/Cards/widget-cards/apps-widget-card';
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 
+const trendingTagsData = [
+  { tagName: '#AKASHA', numberOfPosts: 176 },
+  { tagName: '#AKASHAWorld', numberOfPosts: 94 },
+  { tagName: '#Ethereum', numberOfPosts: 27 },
+  { tagName: '#EthereumWorld', numberOfPosts: 17 },
+  { tagName: '#Crypto', numberOfPosts: 6 },
+];
+
+const trendingProfilesData = [
+  {
+    ethAddress: '0x003410490050000320006570034567114572000',
+    userName: 'Jon Gilbert',
+    avatar: 'http://placebeard.it/480/480',
+    followers: 312,
+  },
+  {
+    ethAddress: '0x003410490050778032325657003456711457212',
+    userName: 'Alexei Gilbertovich',
+    followers: 7585,
+  },
+  {
+    ethAddress: '0x003410490050000320006570034567114572000',
+    userName: 'Jon Gilbert',
+    avatar: 'http://placebeard.it/480/480',
+    followers: 312,
+  },
+  {
+    ethAddress: '0x003410490050000320006570034567114572000',
+    userName: 'Jon Gilbert',
+    avatar: 'http://placebeard.it/480/480',
+    followers: 312,
+  },
+  {
+    ethAddress: '0x003410490050000320006570034567114572000',
+    userName: 'Jon Gilbert',
+    avatar: 'http://placebeard.it/480/480',
+    followers: 312,
+  },
+];
+
 const topicsDataSource = [
   { title: '#ethereumworld', subtitle: '6576 mentions' },
   { title: '#akashaworld', subtitle: '3204 mentions' },
@@ -317,4 +357,6 @@ export {
   bookmarkedLabel,
   repliesLabel,
   repostsLabel,
+  trendingProfilesData,
+  trendingTagsData,
 };

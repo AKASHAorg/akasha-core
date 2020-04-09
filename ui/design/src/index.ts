@@ -43,6 +43,9 @@ import {
   WidgetAreaCardBox,
   ModalCard,
   LoginCTAWidgetCard,
+  TrendingWidgetCard,
+  SourcesWidgetCard,
+  TutorialWidegtCard,
 } from './components/Cards';
 
 import TextInputField from './components/Forms/text-input-field';
@@ -144,6 +147,9 @@ const exported = {
   ModalRenderer,
   HorizontalDivider,
   LoginCTAWidgetCard,
+  TrendingWidgetCard,
+  SourcesWidgetCard,
+  TutorialWidegtCard,
 };
 
 export default exported;

@@ -30,6 +30,7 @@ import error from './error';
 import ethereumWorldLogo from './ethereum-world-logo';
 import eye from './eye';
 import facebook from './facebook';
+import following from './following';
 import heart from './heart';
 import home from './home';
 import hotTopics from './hot-topics';
@@ -61,6 +62,7 @@ import share from './share';
 import shareSmallBlue from './share-small-blue';
 import shareSmallDark from './share-small-dark';
 import shareSmallGrey from './share-small-grey';
+import subscribe from './subscribe';
 import stopwatch from './stopwatch';
 import thumbsDownGrey from './thumbs-down-grey';
 import thumbsDownWhite from './thumbs-down-white';
@@ -72,6 +74,7 @@ import trendingApps from './trending-apps';
 import twitter from './twitter';
 import underline from './underline';
 import upload from './upload';
+import video from './video';
 import wallet from './wallet';
 import walletconnect from './walletconnect';
 
@@ -99,6 +102,7 @@ export {
   eye,
   error,
   facebook,
+  following,
   document,
   ethereumWorldLogo,
   akasha,
@@ -141,6 +145,7 @@ export {
   shareSmallBlue,
   shareSmallDark,
   shareSmallGrey,
+  subscribe,
   thumbsDownWhite,
   thumbsDownGrey,
   thumbsUpWhite,
@@ -149,6 +154,7 @@ export {
   twitter,
   underline,
   upload,
+  video,
   wallet,
   walletconnect,
   loading,

@@ -16,6 +16,9 @@ import AppsWidgetCard from './widget-cards/apps-widget-card';
 import MiniInfoWidgetCard from './widget-cards/mini-info-widget-card';
 import TopicsWidgetCard from './widget-cards/topics-widget-card';
 import LoginCTAWidgetCard from './widget-cards/login-cta-widget-card';
+import TrendingWidgetCard from './widget-cards/trending-widget-card';
+import SourcesWidgetCard from './widget-cards/sources-widget-card';
+import TutorialWidegtCard from './widget-cards/tutorial-widget/tutorial-widget-card';
 
 export {
   AppInfoWidgetCard,
@@ -34,4 +37,7 @@ export {
   WidgetAreaCardBox,
   ModalCard,
   LoginCTAWidgetCard,
+  TrendingWidgetCard,
+  SourcesWidgetCard,
+  TutorialWidegtCard,
 };

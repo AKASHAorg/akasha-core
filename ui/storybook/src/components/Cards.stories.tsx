@@ -2,7 +2,7 @@
 import DS from '@akashaproject/design-system';
 import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
 import { action } from '@storybook/addon-actions';
-import { boolean, color, object, select, text } from '@storybook/addon-knobs';
+import { boolean, color, object, select, text, number } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import {
@@ -35,6 +35,8 @@ import {
   bookmarkedLabel,
   repliesLabel,
   repostsLabel,
+  trendingProfilesData,
+  trendingTagsData,
 } from './cards-data';
 
 const {
@@ -49,6 +51,9 @@ const {
   ProfileCard,
   ProfileWidgetCard,
   TopicsWidgetCard,
+  TrendingWidgetCard,
+  SourcesWidgetCard,
+  TutorialWidgetCard,
 } = DS;
 
 storiesOf('Cards|Widget Cards', module)
@@ -75,6 +80,53 @@ storiesOf('Cards|Widget Cards', module)
         label={text('Text', 'Trending Apps')}
         labelColor={color('Color', '#132540')}
         dataSource={appsDataSource}
+      />
+    </Box>
+  ))
+  .add('tutorial widget card', () => (
+    <Box pad="none" align="center">
+      <TutorialWidgetCard
+        titleLabel={text('Title label', 'Pick your ethereum name')}
+        subtitleLabel={text('Subtitle label', 'Take your address to the next level')}
+        infoLabel={text(
+          'Text',
+          'Your human-friendly Ethereum name can be used also in wallets instead of your address',
+        )}
+        subtitleIcon={text('Subtitle icon', 'iconEns')}
+        seeVideoTutorialLabel={text('See video label', 'See video tutorial')}
+        callToActionLabel={text('Call to action label', 'Go to app')}
+        learnMoreLabel={text('Learn more label', 'Learn more')}
+        handleSeeVideoTutorial={() => action('see video tutorial clicked')('Synthetic Event')}
+        handleDismiss={() => action('Dismiss Clicked')('Synthetic Event')}
+      />
+    </Box>
+  ))
+  .add('sources widget card', () => (
+    <Box pad="none" align="center">
+      <SourcesWidgetCard
+        titleLabel={text('Title label', 'My feed sources')}
+        hashtagsLabel={text('Hashtags label', 'Hashtags')}
+        profilesLabel={text('Profiles label', 'Profiles')}
+        seeAllLabel={text('See all label', 'See All')}
+        totalLabel={text('Total label', 'Total')}
+        tagsNumber={number('Tags number', 15)}
+        profilesNumber={number('Profiles number', 35)}
+        totalNumber={number('Total number', 50)}
+        onClickSeeAll={() => action('See All Clicked')('Synthetic Event')}
+      />
+    </Box>
+  ))
+  .add('trending widget card', () => (
+    <Box pad="none" align="center">
+      <TrendingWidgetCard
+        titleLabel={text('Title', 'Trending Right Now')}
+        topicsLabel={text('Topics label', 'Topics')}
+        profilesLabel={text('Profiles label', 'Profiles')}
+        showMoreLabel={text('Show more label', 'Show More')}
+        onClickProfile={ethAddress => action('profile Clicked')(ethAddress)}
+        onClickTag={tagName => action('tag clicked')(tagName)}
+        tags={trendingTagsData}
+        profiles={trendingProfilesData}
       />
     </Box>
   ))
