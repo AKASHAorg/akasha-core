@@ -30,6 +30,11 @@
   },
   "dependencies": {
     "bottlejs": "1.7.2",
-    "lru-cache": "5.1.1"
+    "lru-cache": "5.1.1",
+    "graphql-tag": "^2.10.3",
+    "apollo-link-http": "^1.5.16",
+    "apollo-link": "^1.2.13",
+    "graphql": "14.6.0",
+    "object-hash": "^2.0.3"
   }
 }

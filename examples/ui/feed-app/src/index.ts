@@ -1,5 +1,3 @@
-import initSdk from './sdk-init';
-
 // const publicPath = 'http://localhost:8131';
 // const resourcePath = (pkg: string) => {
 //   return `${publicPath}${pkg}`;
@@ -38,10 +36,17 @@ import initSdk from './sdk-init';
       config: { slot: layout.application.topbarSlotId },
     },
   ];
-  const world = initSdk(appConfig, { plugins: registeredPlugins, widgets: registeredWidgets });
   const profilePlugin = await System.import('@plugins/profile');
   const boxApp = await System.import('@app/3box');
   const ipfs = await System.import('ipfs');
+  const sdk = await System.import('@akashaproject/sdk');
+  const world = sdk.init({
+    config: appConfig,
+    initialApps: { plugins: registeredPlugins, widgets: registeredWidgets },
+  });
+
+  // tslint:disable-next-line:no-console
+  console.log('initial sdk instance', world);
 
   Object.defineProperty(window, 'Ipfs', {
     value: ipfs,

@@ -39,26 +39,30 @@
     "@akashaproject/sdk-runtime": "*",
     "@akashaproject/sdk-auth": "*",
     "@akashaproject/sdk-ui-plugin-loader": "*",
-    "rxdb": "^8.7.5"
+    "@akashaproject/sdk-profiles": "*",
+    "rxdb": "^8.8.0"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
-    "webpack": "^4.41.6",
+    "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
-    "workbox-core": "^5.0.0",
-    "workbox-background-sync": "^5.0.0",
-    "workbox-precaching": "^5.0.0",
-    "workbox-navigation-preload": "^5.0.0",
-    "workbox-cacheable-response": "^5.0.0",
-    "workbox-routing": "^5.0.0",
-    "workbox-strategies": "^5.0.0",
-    "workbox-webpack-plugin": "^5.0.0",
-    "babel-loader": "^8.0.6",
-    "@babel/core": "^7.8.6",
-    "@babel/preset-env": "^7.8.6",
+    "workbox-core": "^5.1.2",
+    "workbox-expiration": "^5.1.2",
+    "workbox-background-sync": "^5.1.2",
+    "workbox-precaching": "^5.1.2",
+    "workbox-navigation-preload": "^5.1.2",
+    "workbox-cacheable-response": "^5.1.2",
+    "workbox-routing": "^5.1.2",
+    "workbox-strategies": "^5.1.2",
+    "workbox-webpack-plugin": "^5.1.2",
+    "babel-loader": "^8.1.0",
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "babel-plugin-relay": "^9.0.0",
+    "graphql": "^15.0.0",
     "html-webpack-plugin": "^3.2.0"
   },
   "peerDependencies": {
-    "rxjs": "^6.5.4"
+    "rxjs": "^6.5.5"
   }
 }

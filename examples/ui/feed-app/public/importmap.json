@@ -1,5 +1,6 @@
 {
   "imports": {
+    "@akashaproject/sdk": "/akasha.sdk.js",
     "@akashaproject/design-system": "/design-system.js",
     "react": "https://unpkg.com/react@16.12.0/umd/react.development.js",
     "react-dom/server": "https://unpkg.com/react-dom@16.12.0/umd/react-dom-server.browser.development.js",

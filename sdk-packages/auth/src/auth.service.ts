@@ -34,7 +34,7 @@ const service: AkashaService = (invoke, log) => {
 
   const signIn = async () => {
     const { setServiceSettings } = invoke(coreServices.SETTINGS_SERVICE);
-    const cache = await invoke(coreServices[CACHE_SERVICE]).getStash();
+    const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
     const web3 = await invoke(commonServices[WEB3_SERVICE]).web3();
     const web3Utils = await invoke(commonServices[WEB3_UTILS_SERVICE]).getUtils();
     const signer = web3.getSigner();

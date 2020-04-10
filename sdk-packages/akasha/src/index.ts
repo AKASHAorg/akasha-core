@@ -13,6 +13,7 @@ import {
 import initChannel from './channel';
 import * as operators from 'rxjs/operators';
 import { forkJoin, from, zip, of, concat } from 'rxjs';
+import * as oo from '@akashaproject/sdk-profiles/lib/profile.fetch.service';
 
 import {
   buildModuleServiceChannels,
@@ -33,6 +34,8 @@ export function init(appLoaderOptions: {
   config: ILoaderConfig;
   initialApps: { plugins?: IPluginEntry[]; widgets?: IWidgetEntry[] };
 }) {
+  // tslint:disable-next-line:no-console
+  console.log(oo.getProfile(['name', 'description'], '0xe13d4abee4b304b67c52a56871141cad1b833aa7'));
   const di: DIContainer = initDI();
   const commonModule = registerCommonModule();
   const dbModule = registerDBModule();

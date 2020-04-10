@@ -7,12 +7,12 @@ services:
       - intranet
     environment:
       - COUCH_USER=Administrator
-      - COUCH_PASSWORD=test123
+      - COUCH_PASSWORD=password
     ports:
       - "8778:8778"
-    image: kenshyx/awf-api:latest
+    image: akashafoundation/awf-api:latest
   couchbase:
-    image: couchbase:community-6.0.0
+    image: couchbase/server-sandbox:6.5.0
     ports:
       - "8091-8094:8091-8094"
       - "11210:11210"
@@ -20,6 +20,26 @@ services:
       - intranet
     volumes:
       - dbData:/opt/couchbase/var
+  sync-gateway:
+    image: couchbase/sync-gateway:2.7.2-community
+    volumes:
+      - ./scripts/sync-gateway-config.json:/etc/sync_gateway/sync_gateway.json
+    command: ["-adminInterface", ":4985", "/etc/sync_gateway/sync_gateway.json"]
+    networks:
+      - intranet
+    ports:
+      - "4984-4985:4984-4985"
+    depends_on:
+      - awf-api
+#  feed-app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile-dev
+#      cache_from:
+#        - node:lts
+#    ports:
+#      - "9001:9001"
+#      - "8131:8131"
 
 networks:
   intranet:
