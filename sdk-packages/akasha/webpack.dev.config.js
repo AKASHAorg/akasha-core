@@ -25,6 +25,9 @@ const config = {
     moduleIds: 'hashed',
   },
   plugins: [
+    new webpack.EnvironmentPlugin({
+      GRAPHQL_URI: 'http://localhost:8778/query'
+    }),
     new webpack.ProgressPlugin({
       entries: true,
       modules: true,

@@ -3,6 +3,7 @@ import initDI from '@akashaproject/sdk-core';
 import { IAkashaModule } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import registerDBModule from '@akashaproject/sdk-db';
 import registerAuthModule from '@akashaproject/sdk-auth';
+import registerProfilesModule from '@akashaproject/sdk-profiles';
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 import AppLoader from '@akashaproject/sdk-ui-plugin-loader';
 import {
@@ -35,13 +36,13 @@ export function init(appLoaderOptions: {
   initialApps: { plugins?: IPluginEntry[]; widgets?: IWidgetEntry[] };
 }) {
   // tslint:disable-next-line:no-console
-  console.log(oo.getProfile(['name', 'description'], '0xe13d4abee4b304b67c52a56871141cad1b833aa7'));
   const di: DIContainer = initDI();
   const commonModule = registerCommonModule();
   const dbModule = registerDBModule();
   const authModule = registerAuthModule();
+  const profilesModule = registerProfilesModule();
   // list of all the registered modules for the sdk
-  const modulesList = [commonModule, dbModule, authModule];
+  const modulesList = [commonModule, dbModule, authModule, profilesModule];
   // general channel to send service calls
   const channel = initChannel(di);
   // prepare the start function for integrations

@@ -11,7 +11,7 @@ export interface GqlOperation {
   context?: object;
   extensions?: object;
 }
-export const link = new HttpLink({ uri: process.env.GRAPHQL_URI || 'http://localhost:8778/query' });
+export const link = new HttpLink({ uri: process.env.GRAPHQL_URI || '/graphql' });
 
 export const makeOperation = (operation: GqlOperation) => {
   const { query, ...other } = operation;
