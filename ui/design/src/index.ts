@@ -1,5 +1,5 @@
 /* Components */
-import { Box, Grid, Grommet, grommet, ResponsiveContext, ThemeContext } from 'grommet';
+import { Box, Grid, Grommet, grommet, ResponsiveContext, ThemeContext, Text } from 'grommet';
 import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
 import { Avatar, EditableAvatar } from './components/Avatar';
 import { ResponsiveSidebar, Sidebar, SidebarMobile, Topbar } from './components/Bars/index';
@@ -14,6 +14,7 @@ import {
   AppInfoWidgetCard,
   AppsWidgetCard,
   BasicCardBox,
+  MainAreaCardBox,
   BoxFormCard,
   EditorCard,
   EnsFormCard,
@@ -33,6 +34,7 @@ import ViewportSizeProvider, { useViewportSize } from './components/Providers/vi
 import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
 import responsiveBreakpoints from './styles/responsive-breakpoints';
 import VirtualList from './components/VirtualList';
+import { isBase64 } from './utils/string-utils';
 
 /* Themes and theme related utils */
 import darkTheme from './styles/themes/dark';
@@ -67,6 +69,7 @@ const exported = {
   VoteIconButton,
   CommentInput,
   SearchInput,
+  MainAreaCardBox,
   NotificationsPopover,
   ResponsiveSidebar,
   ShareModal,
@@ -74,6 +77,7 @@ const exported = {
   SubtitleTextIcon,
   Sidebar,
   SidebarMobile,
+  Text,
   TextIcon,
   Topbar,
   createTheme,
@@ -94,6 +98,7 @@ const exported = {
   ViewportSizeProvider,
   useViewportSize,
   VirtualList,
+  isBase64,
 };
 
 export default exported;

@@ -5,12 +5,19 @@ import {
   Route,
   Switch,
   RouteComponentProps,
-  Redirect,
+  /* Redirect, */
 } from 'react-router-dom';
 import MyBoxProfile from './my-box-profile';
 import BoxSettings from './box-settings';
+import BoxProfile from './3box-profile';
 import DS from '@akashaproject/design-system';
-import { default as subRoutes, rootRoute, EDIT_PAGE, SETTINGS_PAGE } from '../routes';
+import {
+  default as subRoutes,
+  rootRoute,
+  EDIT_PAGE,
+  SETTINGS_PAGE,
+  MY_PROFILE_PAGE,
+} from '../routes';
 import ErrorInfoCard from './error-info-card';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
@@ -70,7 +77,7 @@ export default class App extends PureComponent<any> {
             <ErrorInfoCard errors={this.state.errors}>
               <Router>
                 {/* Make the edit page default landing page for this app */}
-                <Redirect from={rootRoute} to={subRoutes[EDIT_PAGE]} exact={true} />
+                {/* <Redirect from={rootRoute} to={subRoutes[EDIT_PAGE]} exact={true} /> */}
                 <Switch>
                   <Route
                     path={subRoutes[EDIT_PAGE]}
@@ -86,6 +93,16 @@ export default class App extends PureComponent<any> {
                     path={subRoutes[SETTINGS_PAGE]}
                     render={(routeProps: RouteComponentProps) => (
                       <BoxSettings
+                        {...routeProps}
+                        sdkModules={sdkModules}
+                        channelUtils={channelUtils}
+                      />
+                    )}
+                  />
+                  <Route
+                    path={subRoutes[MY_PROFILE_PAGE]}
+                    render={(routeProps: RouteComponentProps) => (
+                      <BoxProfile
                         {...routeProps}
                         sdkModules={sdkModules}
                         channelUtils={channelUtils}

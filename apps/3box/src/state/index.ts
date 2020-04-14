@@ -9,6 +9,8 @@ import {
   resetBoxSettings,
 } from '../services/box';
 
+import { getImageProperty } from '../utils/get-image-src';
+
 export interface DataBox {
   name?: string;
   image?: string;
@@ -39,6 +41,7 @@ export interface ProfileState {
     };
   };
   settings: BoxSettings;
+  visitingProfile: DataBox & { emoji?: string };
 }
 
 export interface IStateErrorPayload {
@@ -62,12 +65,7 @@ export interface ProfileStateModel {
   resetBoxSettings: Thunk<ProfileStateModel, string>;
   getLoggedEthAddress: Thunk<ProfileStateModel>;
 }
-const getImageProperty = (image: string | { contentUrl: { '/': string } }[]) => {
-  if (Array.isArray(image) && image[0].hasOwnProperty('contentUrl')) {
-    return image[0].contentUrl['/'];
-  }
-  return image;
-};
+
 export const profileStateModel: ProfileStateModel = {
   data: persist(
     {
@@ -82,6 +80,7 @@ export const profileStateModel: ProfileStateModel = {
         pinningNode: '',
         addressServer: '',
       },
+      visitingProfile: {},
     },
     {
       blacklist: ['errors', 'isLoading', 'isSaving'],
@@ -207,9 +206,25 @@ export const profileStateModel: ProfileStateModel = {
   }),
   getProfile: thunk(async (actions, ethAddress, { injections }) => {
     const { getProfileData, channelUtils } = injections;
-    const call = channelUtils.operators.from(getProfileData(ethAddress));
+    const call = channelUtils.observable.from(getProfileData(ethAddress));
     return call.subscribe(
-      (data: any) => actions.updateData(data),
+      (data: any) => {
+        let imagesrc;
+        let coverImageSrc;
+        if (data.image) {
+          imagesrc = getImageProperty(data.image);
+        }
+        if (data.coverPhoto) {
+          coverImageSrc = getImageProperty(data.coverPhoto);
+        }
+        actions.updateData({
+          visitingProfile: {
+            ...data,
+            image: imagesrc,
+            coverPhoto: coverImageSrc,
+          },
+        });
+      },
       (err: Error) =>
         actions.createError({ errorKey: 'actions.getProfile', error: err, critical: false }),
     );
