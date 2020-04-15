@@ -47,6 +47,7 @@
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-common": "*",
     "@akashaproject/sdk-runtime": "*",
+    "@akashaproject/sdk-db": "*",
     "@akashaproject/design-system": "*",
     "3box": "^1.17.1",
     "react-i18next": "^11.3.3",

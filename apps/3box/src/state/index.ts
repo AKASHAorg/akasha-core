@@ -3,10 +3,8 @@ import {
   authenticateBox,
   getProfile,
   updateBoxData,
-  getBoxSettings,
   getEthAddress,
-  saveBoxSettings,
-  resetBoxSettings,
+  getDefaultBoxSettings,
 } from '../services/box';
 
 import { getImageProperty } from '../utils/get-image-src';
@@ -256,44 +254,61 @@ export const profileStateModel: ProfileStateModel = {
       });
     }
   }),
-  getBoxSettings: thunk(async (actions, ethAddress) => {
-    const settings = await getBoxSettings(ethAddress);
-    actions.updateData({
-      settings,
+  getBoxSettings: thunk(async (actions, ethAddress, { injections }) => {
+    let settings = getDefaultBoxSettings();
+    const { channels } = injections;
+
+    const call = channels.db.settings_attachment.get({
+      ethAddress,
+      id: `3box-settings-ID`,
+    });
+
+    call.subscribe((data: any) => {
+      if (data) {
+        const boxSettings = JSON.parse(data);
+        settings = {
+          pinningNode: boxSettings.pinningNode,
+          addressServer: boxSettings.addressServer,
+        };
+      }
+      actions.updateData({ settings });
     });
   }),
-  saveBoxSettings: thunk(async (actions, payload) => {
-    try {
-      saveBoxSettings(payload);
+  saveBoxSettings: thunk(async (actions, payload, { injections }) => {
+    const { ethAddress, ...data } = payload;
+    const { channels } = injections;
+    const call = channels.db.settings_attachment.put({
+      ethAddress: payload.ethAddress,
+      obj: { data: JSON.stringify(data), type: 'string', id: '3box-settings-ID' },
+    });
+    call.subscribe(async ({ doc }: any) => {
+      const attachment = await doc.getAttachment('3box-settings-ID');
+      const text = await attachment.getStringData();
       actions.updateData({
-        settings: { pinningNode: payload.pinningNode, addressServer: payload.addressServer },
+        settings: {
+          pinningNode: JSON.parse(text).pinningNode,
+          addressServer: JSON.parse(text).addressServer,
+        },
       });
-    } catch (ex) {
-      actions.createError({
-        errorKey: 'actions.saveBoxSettings',
-        error: ex,
-        critical: false,
-      });
-    }
+    });
   }),
-  resetBoxSettings: thunk(async (actions, ethAddress) => {
-    try {
-      const settings = resetBoxSettings(ethAddress);
+  resetBoxSettings: thunk(async (actions, ethAddress, { injections }) => {
+    const { channels } = injections;
+    const defaultSettings = getDefaultBoxSettings();
+    const call = channels.db.settings_attachment.deleteSettings({
+      ethAddress,
+      id: '3box-settings-ID',
+    });
+    call.subscribe(() => {
       actions.updateData({
-        settings,
+        settings: defaultSettings,
       });
-    } catch (ex) {
-      actions.createError({
-        errorKey: 'actions.resetBoxSettings',
-        error: ex,
-        critical: false,
-      });
-    }
+    });
   }),
 };
 
 export const useBoxProfile = (channels?: any, channelUtils?: any) =>
   createComponentStore(profileStateModel, {
-    name: 'ProfileState',
+    name: '3box-ProfileState',
     injections: { channels, channelUtils, getProfileData: getProfile },
   })();

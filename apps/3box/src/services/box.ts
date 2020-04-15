@@ -39,7 +39,7 @@ export const authenticateBox = async (
   try {
     const ethAddress = await getEthAddress(cache, web3Instance);
     const signer = await web3Instance.getSigner();
-    const settings = getBoxSettings(ethAddress);
+    const settings = getDefaultBoxSettings();
 
     if (Box.isLoggedIn(ethAddress)) {
       box = await Box.openBox(
@@ -147,41 +147,9 @@ export const updateBoxData = async (profileData: any) => {
   }
 };
 
-export const getBoxSettings = (ethAddress: string) => {
-  const localBoxSettings = localStorage.getItem(`3box.settings.${ethAddress}`);
-  if (localBoxSettings) {
-    return JSON.parse(localBoxSettings);
-  }
+export const getDefaultBoxSettings = () => {
   return {
     pinningNode: boxConfig.pinning_node,
     addressServer: boxConfig.address_server_url,
   };
-};
-
-export const saveBoxSettings = (payload: {
-  ethAddress: string;
-  pinningNode: string;
-  addressServer: string;
-}) => {
-  const { ethAddress, pinningNode, addressServer } = payload;
-  try {
-    localStorage.setItem(
-      `3box.settings.${ethAddress}`,
-      JSON.stringify({ pinningNode, addressServer }),
-    );
-  } catch (err) {
-    throw new Error(err.message);
-  }
-};
-
-export const resetBoxSettings = (ethAddress: string) => {
-  try {
-    localStorage.removeItem(`3box.settings.${ethAddress}`);
-    return {
-      pinningNode: boxConfig.pinning_node,
-      addressServer: boxConfig.address_server_url,
-    };
-  } catch (ex) {
-    throw new Error(ex.message);
-  }
 };
