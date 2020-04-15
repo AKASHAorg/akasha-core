@@ -53,8 +53,8 @@ const service: AkashaService = (invoke, log) => {
     if (!registeredSchema) {
       await registerSchema();
     }
-    const validator = await invoke(commonServices[VALIDATOR_SERVICE]).getValidator();
-    validator.validate(profileData, profileStoreId, { throwError: true });
+    // const validator = await invoke(commonServices[VALIDATOR_SERVICE]).getValidator();
+    // validator.validate(profileData, profileStore, { throwError: true });
 
     const ipfs = await invoke(commonServices[IPFS_SERVICE]).getInstance();
     const doc = {};
