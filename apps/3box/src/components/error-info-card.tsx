@@ -20,6 +20,8 @@ const ErrorInfoCard = ({
   });
   const hasCriticalErrors = errorArr.some(err => err.isCritical);
   if (errorArr.length) {
+    // tslint:disable-next-line: no-console
+    console.error(errorArr, 'we have errors');
     return (
       <Box align="center" justify="center" fill={true}>
         <BasicCardBox style={{ maxWidth: '50%', padding: '0.75em' }}>

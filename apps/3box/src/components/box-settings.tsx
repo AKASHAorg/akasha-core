@@ -67,7 +67,7 @@ const BoxSettings: React.FC<IBoxSettingsProps> = props => {
 
   return (
     <Box fill={true} flex={true} pad={{ top: '1em' }} align="center">
-      {isSaving && <Box>Saving Settings</Box>}
+      {isSaving && <Box>{t('Saving Settings')}</Box>}
       <FormArea>
         <ErrorInfoCard errors={state.data.errors}>
           <SettingsFormCard>

@@ -50,10 +50,17 @@ const MyBoxProfile: React.FC<any> = ({ sdkModules, channelUtils }) => {
     <Box fill={true} flex={true} pad={{ top: '1em' }} align="center">
       <ErrorInfoCard errors={state.data.errors}>
         <>
-          {!openBoxConsent && <Box>waiting for box signature</Box>}
-          {openBoxConsent && !openSpaceConsent && <Box>waiting for space signature</Box>}
-          {isLoading && openBoxConsent && openSpaceConsent && <Box>Loading profile data</Box>}
-          {isSaving && <Box>Saving profile.. Please wait!</Box>}
+          {!openBoxConsent && <Box>{t('waiting for box signature')}</Box>}
+          {openBoxConsent && !openSpaceConsent && <Box>{t('waiting for space signature')}</Box>}
+          {isLoading && openBoxConsent && openSpaceConsent && (
+            <Box>{t('Loading profile data')}</Box>
+          )}
+          {isSaving && (
+            <Box>
+              {t('Saving profile..')}
+              {t('Please wait!')}
+            </Box>
+          )}
           <BoxFormCard
             titleLabel={t('Ethereum Address')}
             avatarLabel={t('Avatar')}

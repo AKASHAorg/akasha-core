@@ -5,19 +5,13 @@ import {
   Route,
   Switch,
   RouteComponentProps,
-  /* Redirect, */
+  Redirect,
 } from 'react-router-dom';
 import MyBoxProfile from './my-box-profile';
 import BoxSettings from './box-settings';
 import BoxProfile from './3box-profile';
 import DS from '@akashaproject/design-system';
-import {
-  default as subRoutes,
-  rootRoute,
-  EDIT_PAGE,
-  SETTINGS_PAGE,
-  MY_PROFILE_PAGE,
-} from '../routes';
+import { default as subRoutes, rootRoute, EDIT_PAGE, SETTINGS_PAGE } from '../routes';
 import ErrorInfoCard from './error-info-card';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
@@ -35,7 +29,6 @@ export default class App extends PureComponent<any> {
     errors: {},
   };
   public componentDidCatch(error: Error, errorInfo: any) {
-    console.error(error, errorInfo, 'critical error');
     this.setState({
       errors: {
         'caught.critical': {
@@ -77,8 +70,6 @@ export default class App extends PureComponent<any> {
           >
             <ErrorInfoCard errors={this.state.errors}>
               <Router>
-                {/* Make the edit page default landing page for this app */}
-                {/* <Redirect from={rootRoute} to={subRoutes[EDIT_PAGE]} exact={true} /> */}
                 <Switch>
                   <Route
                     path={subRoutes[EDIT_PAGE]}
@@ -100,8 +91,9 @@ export default class App extends PureComponent<any> {
                       />
                     )}
                   />
+                  {/* this route is not in menuItems because we don't have a explore functionality for 3box yet */}
                   <Route
-                    path={subRoutes[MY_PROFILE_PAGE]}
+                    path={`${rootRoute}/profile/:profileId`}
                     render={(routeProps: RouteComponentProps) => (
                       <BoxProfile
                         {...routeProps}
@@ -110,7 +102,9 @@ export default class App extends PureComponent<any> {
                       />
                     )}
                   />
-                  <Route path={rootRoute} component={PageNotFound} />
+                  {/* Make the edit page default landing page for this app */}
+                  <Redirect push={true} from={rootRoute} to={subRoutes[EDIT_PAGE]} exact={true} />
+                  <Route component={PageNotFound} />
                 </Switch>
               </Router>
             </ErrorInfoCard>

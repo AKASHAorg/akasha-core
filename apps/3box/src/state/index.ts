@@ -168,13 +168,13 @@ export const profileStateModel: ProfileStateModel = {
               });
             },
           );
+          const { profileData, ethAddress } = result;
           // tslint:disable-next-line: prefer-const
-          let { image, coverPhoto, ...others } = result.profileData;
+          let { image, coverPhoto, ...others } = profileData;
           image = getImageProperty(image);
           coverPhoto = getImageProperty(coverPhoto);
-          console.log(others, 'the others');
           actions.updateData({
-            ethAddress: result.ethAddress,
+            ethAddress: ethAddress,
             isLoading: false,
             profileData: {
               ...others,

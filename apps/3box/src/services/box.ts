@@ -39,16 +39,34 @@ export const authenticateBox = async (
   try {
     const ethAddress = await getEthAddress(cache, web3Instance);
     const signer = await web3Instance.getSigner();
-    if (Box.isLoggedIn(ethAddress) && box) {
+    const settings = getBoxSettings(ethAddress);
+
+    if (Box.isLoggedIn(ethAddress)) {
+      box = await Box.openBox(
+        ethAddress,
+        {
+          sendAsync: function sendAsync(data: any, cb: any) {
+            signer
+              .signMessage(web3Utils.toUtf8String(data.params[0]))
+              .then((result: any) => cb(null, { result: web3Utils.joinSignature(result) }));
+          },
+        },
+        {
+          pinningNode: settings.pinningNode,
+          addressServer: settings.addressServer,
+        },
+      );
+      onBoxOpenConsent();
+      onOpenSpaceConsent();
       await box.syncDone;
       const profile = await box.public.all();
       return {
         ethAddress,
-        profile,
+        profileData: profile,
+        openBoxConsent: true,
+        onOpenSpaceConsent: true,
       };
     }
-
-    const settings = getBoxSettings(ethAddress);
 
     box = await Box.create(
       {

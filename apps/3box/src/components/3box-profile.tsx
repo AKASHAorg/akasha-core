@@ -19,7 +19,6 @@ const BoxAvatar = styled(Avatar)`
 `;
 
 const getImageSrc = (boxImage: any) => {
-  console.log(boxImage);
   if (!boxImage) {
     return '';
   }
@@ -39,11 +38,11 @@ const BoxProfile: React.FC<IMyProfileProps> = props => {
       actions.getProfile(profileId);
     }
   }, [profileId]);
-  console.log(state.data.visitingProfile, 'profile');
+
   return (
     <>
-      {!Object.keys(state.data.visitingProfile).length && <>Loading Profile</>}
       <Box fill={true} pad={{ top: '2em' }} align="center">
+        {!Object.keys(state.data.visitingProfile).length && <Box>{t('Loading Profile')}</Box>}
         <MainAreaCardBox>
           <Box
             height="9em"
