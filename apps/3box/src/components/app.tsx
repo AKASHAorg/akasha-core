@@ -35,6 +35,7 @@ export default class App extends PureComponent<any> {
     errors: {},
   };
   public componentDidCatch(error: Error, errorInfo: any) {
+    console.error(error, errorInfo, 'critical error');
     this.setState({
       errors: {
         'caught.critical': {

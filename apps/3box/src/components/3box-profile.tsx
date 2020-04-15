@@ -19,6 +19,10 @@ const BoxAvatar = styled(Avatar)`
 `;
 
 const getImageSrc = (boxImage: any) => {
+  console.log(boxImage);
+  if (!boxImage) {
+    return '';
+  }
   if (isBase64(boxImage)) {
     return boxImage;
   }
@@ -35,7 +39,7 @@ const BoxProfile: React.FC<IMyProfileProps> = props => {
       actions.getProfile(profileId);
     }
   }, [profileId]);
-
+  console.log(state.data.visitingProfile, 'profile');
   return (
     <>
       {!Object.keys(state.data.visitingProfile).length && <>Loading Profile</>}
@@ -43,11 +47,10 @@ const BoxProfile: React.FC<IMyProfileProps> = props => {
         <MainAreaCardBox>
           <Box
             height="9em"
-            background={
-              state.data.visitingProfile.coverPhoto
-                ? { image: getImageSrc(state.data.visitingProfile.coverPhoto) }
-                : { color: '#c5d7f2' }
-            }
+            background={{
+              image: getImageSrc(state.data.visitingProfile.coverPhoto),
+              color: '#c5d7f2',
+            }}
             pad="none"
             round={{ corner: 'top', size: 'xsmall' }}
           />

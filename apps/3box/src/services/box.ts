@@ -63,7 +63,8 @@ export const authenticateBox = async (
         addressServer: settings.addressServer,
       },
     );
-    await box.auth([], { consentCallback: onBoxOpenConsent, address: ethAddress });
+
+    await box.auth([], { consentCallback: onBoxOpenConsent, address: ethAddress.toLowerCase() });
     const space = await box.openSpace('akasha-ewa', { consentCallback: onOpenSpaceConsent });
     await box.syncDone;
     await space.syncDone;
@@ -81,7 +82,7 @@ export const updateBoxData = async (profileData: any) => {
   const { ethAddress, avatar, ...newProfileData } = profileData;
   if (!ethAddress) {
     // tslint:disable-next-line:no-console
-    console.error('ethereum address not address provided!');
+    console.error('ethereum address not provided!');
   }
   const isLoggedIn = Box.isLoggedIn(ethAddress);
   // auth user if it's not logged in

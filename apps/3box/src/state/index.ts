@@ -67,25 +67,25 @@ export interface ProfileStateModel {
 }
 
 export const profileStateModel: ProfileStateModel = {
-  data: persist(
-    {
-      ethAddress: null,
-      profileData: { name: '', image: '', coverPhoto: '', description: '' },
-      openBoxConsent: false,
-      openSpaceConsent: false,
-      isLoading: undefined,
-      isSaving: undefined,
-      errors: {},
-      settings: {
-        pinningNode: '',
-        addressServer: '',
-      },
-      visitingProfile: {},
+  data: {
+    ethAddress: null,
+    profileData: {
+      name: '',
+      image: '',
+      coverPhoto: '',
+      description: '',
     },
-    {
-      blacklist: ['errors', 'isLoading', 'isSaving'],
-    },
-  ),
+    openBoxConsent: false,
+    openSpaceConsent: false,
+    isLoading: undefined,
+    isSaving: undefined,
+    errors: {},
+    settings: persist({
+      pinningNode: '',
+      addressServer: '',
+    }),
+    visitingProfile: persist({}),
+  },
   updateData: action((state, payload) => {
     state.data = Object.assign({}, state.data, payload);
   }),
@@ -172,6 +172,7 @@ export const profileStateModel: ProfileStateModel = {
           let { image, coverPhoto, ...others } = result.profileData;
           image = getImageProperty(image);
           coverPhoto = getImageProperty(coverPhoto);
+          console.log(others, 'the others');
           actions.updateData({
             ethAddress: result.ethAddress,
             isLoading: false,
