@@ -61,41 +61,49 @@ const Sidebar: React.FC<ISidebarProps> = props => {
   } = props;
 
   const [currentAppData, setCurrentAppData] = React.useState<IMenuItem | null>(null);
+  const [activeOption, setActiveOption] = React.useState<IMenuItem | null>(null);
 
-  const [activeOption, setActiveOption] = React.useState('');
-
-  // @TODO: use route params to determine active app/option
   React.useEffect(() => {
     if (installedApps && currentRoute) {
       const splitUrl = currentRoute.split('/');
       const route = splitUrl[1] ? `/${splitUrl[1]}` : '/';
+      // check if route corresponds to profile app or one of the installed apps
       if (
         profilePluginData &&
         `/${splitUrl[1]}` === profilePluginData.route &&
         currentAppData?.index !== profilePluginData.index
       ) {
         setCurrentAppData(profilePluginData);
+      } else {
+        const activeApp = installedApps.find(menuItem => menuItem.route === route);
+        if (activeApp && activeApp.index !== currentAppData?.index) {
+          setCurrentAppData(activeApp);
+        }
       }
-      const activeApp = installedApps.find(menuItem => menuItem.route === route);
-      if (activeApp && activeApp.index !== currentAppData?.index) {
-        setCurrentAppData(activeApp);
-      }
-      if (splitUrl[2] && `/${splitUrl[2]}` !== activeOption) {
-        setActiveOption(`/${splitUrl[2]}`);
+      // set the subroute
+      if (splitUrl[2] && currentRoute !== activeOption?.route && currentAppData) {
+        const currentOption = currentAppData?.subRoutes?.find(
+          menuItem => menuItem.route === currentRoute,
+        );
+        if (currentOption) {
+          setActiveOption(currentOption);
+        }
       }
     }
-  }, [currentRoute, profilePluginData]);
+  }, [currentRoute, profilePluginData, installedApps]);
 
   const handleAppIconClick = (menuItem: IMenuItem) => () => {
     setCurrentAppData(menuItem);
     if (menuItem.subRoutes && menuItem.subRoutes.length > 0) {
-      setActiveOption(menuItem.subRoutes[0].label);
+      // if the current app has subroutes, redirect to the first subroute
+      setActiveOption(menuItem.subRoutes[0]);
+      onClickMenuItem(menuItem.subRoutes[0].route);
+    } else {
+      onClickMenuItem(menuItem.route);
     }
-    onClickMenuItem(menuItem.route);
   };
-  // @TODO handle this with entire object
   const handleOptionClick = (menuItem: IMenuItem) => () => {
-    setActiveOption(menuItem.label);
+    setActiveOption(menuItem);
     onClickMenuItem(menuItem.route);
   };
 
@@ -207,7 +215,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
                 <IconLink
                   label={subRoute.label}
                   onClick={handleOptionClick(subRoute)}
-                  active={subRoute.label === activeOption}
+                  active={subRoute.route === activeOption?.route}
                 />
               </Box>
             ))}
