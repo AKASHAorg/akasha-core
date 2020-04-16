@@ -11,6 +11,7 @@ const {
   // darkTheme,
   ThemeSelector,
   responsiveBreakpoints,
+  ViewportSizeProvider,
 } = DS;
 
 const LayoutWrapper = styled(Box)``;
@@ -35,6 +36,9 @@ const SidebarSlot = styled(Box)<{ visible: boolean }>`
     left: ${props => (props.visible ? 0 : -999)}px;
     top: 0;
     bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
   }
 `;
 const TopbarSlot = styled(Box)`
@@ -175,13 +179,15 @@ class LayoutWidget extends PureComponent<IProps> {
           settings={{ activeTheme: 'Light-Theme' }}
           themeReadyEvent={this.props.themeReadyEvent}
         >
-          <LayoutWrapper direction="row" fill={true} flex={true}>
-            <SidebarSlot id={sidebarSlotId} visible={sidebarVisible} />
-            <MainArea flex={true}>
-              <TopbarSlot id={topbarSlotId} />
-              <PluginSlot id={pluginSlotId} flex={true} fill="vertical" />
-            </MainArea>
-          </LayoutWrapper>
+          <ViewportSizeProvider>
+            <LayoutWrapper>
+              <SidebarSlot id={sidebarSlotId} visible={sidebarVisible} />
+              <MainArea fill={true}>
+                <TopbarSlot id={topbarSlotId} />
+                <PluginSlot id={pluginSlotId} flex={true} fill={true} />
+              </MainArea>
+            </LayoutWrapper>
+          </ViewportSizeProvider>
         </ThemeSelector>
       </>
     );
