@@ -14,7 +14,6 @@ import {
 import initChannel from './channel';
 import * as operators from 'rxjs/operators';
 import { forkJoin, from, zip, of, concat } from 'rxjs';
-import * as oo from '@akashaproject/sdk-profiles/lib/profile.fetch.service';
 
 import {
   buildModuleServiceChannels,
