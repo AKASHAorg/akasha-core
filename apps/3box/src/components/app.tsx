@@ -16,14 +16,6 @@ import ErrorInfoCard from './error-info-card';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
-const PageNotFound = () => {
-  return (
-    <div>
-      This page is unknown to <code>3Box app</code>
-    </div>
-  );
-};
-
 export default class App extends PureComponent<any> {
   public state: { errors: any } = {
     errors: {},
@@ -102,9 +94,9 @@ export default class App extends PureComponent<any> {
                       />
                     )}
                   />
-                  {/* Make the edit page default landing page for this app */}
+                  {/* Make the edit page default landing page for this app
+                      404 routes gets redirected to this page also */}
                   <Redirect push={true} from={rootRoute} to={subRoutes[EDIT_PAGE]} exact={true} />
-                  <Route component={PageNotFound} />
                 </Switch>
               </Router>
             </ErrorInfoCard>

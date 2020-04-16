@@ -4,17 +4,26 @@ import { StyledText } from '../Cards/form-cards/styled-form-card';
 export interface ITextInputFieldProps {
   label: string;
   id: string;
+  name: string;
   labelColor?: string;
-  defaultValue?: string;
+  value?: string;
   placeholder?: string;
   onChange?: React.EventHandler<React.ChangeEvent<HTMLInputElement>>;
 }
 const TextInputField = React.forwardRef(
   (props: ITextInputFieldProps, ref: React.RefObject<any>) => {
-    const { id, label, labelColor = 'secondaryText', defaultValue, placeholder, onChange } = props;
+    const {
+      id,
+      label,
+      name,
+      labelColor = 'secondaryText',
+      value = '',
+      placeholder,
+      onChange,
+    } = props;
     return (
       <FormField
-        name="name"
+        name={name}
         htmlFor={id}
         label={
           <StyledText color={labelColor} size="small">
@@ -22,13 +31,7 @@ const TextInputField = React.forwardRef(
           </StyledText>
         }
       >
-        <TextInput
-          id={id}
-          defaultValue={defaultValue}
-          placeholder={placeholder}
-          onChange={onChange}
-          ref={ref}
-        />
+        <TextInput id={id} value={value} placeholder={placeholder} onChange={onChange} ref={ref} />
       </FormField>
     );
   },

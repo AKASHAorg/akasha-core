@@ -26,7 +26,6 @@ const MyBoxProfile: React.FC<any> = ({ sdkModules, channelUtils }) => {
     const subs: any[] = [];
     const onMount = async () => {
       subs.push(await actions.getLoggedEthAddress());
-      subs.push(await actions.fetchCurrent());
     };
     onMount();
     return () => {
@@ -35,6 +34,21 @@ const MyBoxProfile: React.FC<any> = ({ sdkModules, channelUtils }) => {
       }
     };
   }, []);
+
+  React.useEffect(() => {
+    const subs: any[] = [];
+    const onUpdate = async () => {
+      if (state.data.ethAddress) {
+        subs.push(await actions.fetchCurrent(state.data.ethAddress));
+      }
+    };
+    onUpdate();
+    return () => {
+      if (subs.length) {
+        subs.forEach(sub => sub.unsubscribe());
+      }
+    };
+  }, [state.data.ethAddress]);
 
   const onFormSubmit = (data: IBoxData) => {
     const { /* providerName, */ avatar, coverImage, name, description } = data;

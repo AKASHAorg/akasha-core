@@ -6,10 +6,8 @@ import ErrorInfoCard from './error-info-card';
 import { useBoxProfile } from '../state';
 import { useTranslation } from 'react-i18next';
 
-const { Box, TextInputField, BasicCardBox, styled, Button } = DS;
-const FormArea = styled(Box)`
-  width: 50%;
-`;
+const { Box, TextInputField, BasicCardBox, styled, Button, MainAreaCardBox } = DS;
+
 const SettingsFormCard = styled(BasicCardBox)`
   padding: 1em;
 `;
@@ -31,6 +29,7 @@ export interface IBoxSettingsProps {
 const BoxSettings: React.FC<IBoxSettingsProps> = props => {
   const [state, actions] = useBoxProfile(props.sdkModules, props.channelUtils);
   const { isSaving } = state.data;
+  const [formValues, setFormValues] = React.useState(state.data.settings);
   const { t } = useTranslation();
   const pinningNodeInput = React.createRef<HTMLInputElement>();
   const addressServerInput = React.createRef<HTMLInputElement>();
@@ -47,13 +46,28 @@ const BoxSettings: React.FC<IBoxSettingsProps> = props => {
     }
   }, [state.data.ethAddress]);
 
+  // when settings are changed in global state, update it
+  React.useEffect(() => {
+    if (state.data.settings.pinningNode !== formValues.pinningNode) {
+      handleChange({ pinningNode: state.data.settings.pinningNode });
+    }
+    if (state.data.settings.addressServer !== formValues.pinningNode) {
+      handleChange({ addressServer: state.data.settings.addressServer });
+    }
+  }, [JSON.stringify(state.data.settings)]);
+
   const handleReset = () => {
     // reset to default values
     if (state.data.ethAddress) {
       actions.resetBoxSettings(state.data.ethAddress);
     }
   };
-
+  const handleChange = (newValues: { [key: string]: string }) => {
+    setFormValues(prevValues => ({
+      ...prevValues,
+      ...newValues,
+    }));
+  };
   const handleSubmit = () => {
     // save new settings
     if (state.data.ethAddress && pinningNodeInput.current && addressServerInput.current) {
@@ -67,30 +81,45 @@ const BoxSettings: React.FC<IBoxSettingsProps> = props => {
 
   return (
     <Box fill={true} flex={true} pad={{ top: '1em' }} align="center">
-      {isSaving && <Box>{t('Saving Settings')}</Box>}
-      <FormArea>
+      <MainAreaCardBox>
         <ErrorInfoCard errors={state.data.errors}>
           <SettingsFormCard>
             <SettingsCardTitle>{t('3Box Settings')}</SettingsCardTitle>
             <TextInputField
               label={t('Pinning Node')}
+              name="pinningNode"
               id="3box-settings-pinning-node"
               ref={pinningNodeInput}
-              defaultValue={state.data.settings.pinningNode}
+              value={formValues.pinningNode}
+              onChange={ev => handleChange({ pinningNode: ev.target.value })}
             />
             <TextInputField
               label={t('Address Server')}
+              name="addressServer"
               id="3box-settings-address-server"
               ref={addressServerInput}
-              defaultValue={state.data.settings.addressServer}
+              value={formValues.addressServer}
+              onChange={ev => handleChange({ addressServer: ev.target.value })}
             />
-            <Box direction="row" alignSelf="end">
-              <Button label="Reset" onClick={handleReset} margin={{ right: '.5em' }} />
-              <Button label="Save" primary={true} onClick={handleSubmit} />
+            <Box direction="row" justify="between">
+              <Box direction="row" alignSelf="start">
+                <Box
+                  style={{
+                    opacity: isSaving ? '1' : '0',
+                    transition: 'opacity 2s cubic-bezier(0, 1, 0.5, 0)',
+                  }}
+                >
+                  {t('Saving Settings')}
+                </Box>
+              </Box>
+              <Box direction="row" alignSelf="end">
+                <Button label={t('Reset')} onClick={handleReset} margin={{ right: '.5em' }} />
+                <Button label={t('Save')} primary={true} onClick={handleSubmit} />
+              </Box>
             </Box>
           </SettingsFormCard>
         </ErrorInfoCard>
-      </FormArea>
+      </MainAreaCardBox>
     </Box>
   );
 };
