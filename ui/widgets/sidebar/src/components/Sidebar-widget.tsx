@@ -1,7 +1,7 @@
 import DS from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense } from 'react';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 import { useLocation, BrowserRouter as Router } from 'react-router-dom';
 import { IMenuItem, EventTypes, MenuItemType } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
@@ -12,6 +12,7 @@ export interface IProps {
   singleSpa: any;
   getMenuItems: () => any[];
   events: any;
+  logger: any;
 }
 
 /**
@@ -41,8 +42,8 @@ export default class SidebarWidget extends PureComponent<IProps> {
       hasErrors: true,
       errorMessage: `${err.message} :: ${info.componentStack}`,
     });
-    // tslint:disable-next-line:no-console
-    console.error(err, info);
+    const { logger } = this.props;
+    logger.error(err, info);
   }
 
   public handleCloseSidebar = () => {
@@ -90,7 +91,7 @@ const Menu = (props: MenuProps) => {
   const currentLocation = useLocation();
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[] | null>(null);
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
   React.useEffect(() => {
     const updateMenu = () => {
       const menuItems = getMenuItems();
@@ -145,8 +146,8 @@ const Menu = (props: MenuProps) => {
           onClickAddApp={handleClickAddApp}
           onClickCloseSidebar={handleCloseSidebar}
           onClickSearch={handleClickSearch}
-          searchLabel={'Search'}
-          appCenterLabel={'App Center'}
+          searchLabel={t('Search')}
+          appCenterLabel={t('App Center')}
           onClickMenuItem={handleNavigation}
           installedApps={installedApps}
           profilePluginData={profileDefaultData}
