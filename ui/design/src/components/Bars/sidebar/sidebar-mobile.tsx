@@ -22,31 +22,46 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
     onClickCloseSidebar,
     searchLabel,
     appCenterLabel,
+    currentRoute,
   } = props;
 
   const [currentAppData, setCurrentAppData] = React.useState<IMenuItem | null>(null);
+  const [activeOption, setActiveOption] = React.useState<IMenuItem | null>(null);
 
-  // @TODO: use route params to determine active app/option
   React.useEffect(() => {
-    if (installedApps) {
-      setCurrentAppData(installedApps[0]);
-    }
-  }, []);
+    if (installedApps && currentRoute) {
+      const splitUrl = currentRoute.split('/');
+      const route = splitUrl[1] ? `/${splitUrl[1]}` : '/';
 
-  const [activeOption, setActiveOption] = React.useState('');
+      const activeApp = installedApps.find(menuItem => menuItem.route === route);
+      if (activeApp && activeApp.index !== currentAppData?.index) {
+        setCurrentAppData(activeApp);
+      }
+
+      // set the subroute
+      if (splitUrl[2] && currentRoute !== activeOption?.route && currentAppData) {
+        const currentOption = currentAppData?.subRoutes?.find(
+          menuItem => menuItem.route === currentRoute,
+        );
+        if (currentOption) {
+          setActiveOption(currentOption);
+        }
+      }
+    }
+  }, [currentRoute, installedApps]);
 
   const handleAppIconClick = (menuItem: IMenuItem) => () => {
     setCurrentAppData(menuItem);
     if (menuItem.subRoutes && menuItem.subRoutes.length > 0) {
-      setActiveOption(menuItem.subRoutes[0].label);
+      // if the current app has subroutes, redirect to the first subroute
+      setActiveOption(menuItem.subRoutes[0]);
       onClickMenuItem(menuItem.subRoutes[0].route);
     } else {
       onClickMenuItem(menuItem.route);
     }
   };
-
   const handleOptionClick = (menuItem: IMenuItem) => () => {
-    setActiveOption(menuItem.label);
+    setActiveOption(menuItem);
     onClickMenuItem(menuItem.route);
   };
 
@@ -112,7 +127,7 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
                         onClick={handleOptionClick(subRouteMenuItem)}
                         size="medium"
                         margin={{ vertical: 'xsmall' }}
-                        active={subRouteMenuItem.label === activeOption}
+                        active={subRouteMenuItem.route === activeOption?.route}
                       />
                     ))}
                   </StyledAppOptionBox>
