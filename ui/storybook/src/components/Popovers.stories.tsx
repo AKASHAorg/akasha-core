@@ -131,7 +131,7 @@ const SelectComponent = () => {
   );
 };
 
-storiesOf('Popover| Notifications Popover', module).add('notification', () => (
+storiesOf('Popover/Notifications Popover', module).add('notification', () => (
   <NotificationsComponent />
 ));
-storiesOf('Popover| Select Popover', module).add('select', () => <SelectComponent />);
+storiesOf('Popover/Select Popover', module).add('select', () => <SelectComponent />);

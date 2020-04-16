@@ -62,5 +62,5 @@ const CommentInputComponent = () => {
   );
 };
 
-storiesOf('Input|Seach Input', module).add('search', () => <SearchInputComponent />);
-storiesOf('Input|Comment Input', module).add('comment', () => <CommentInputComponent />);
+storiesOf('Input/Seach Input', module).add('search', () => <SearchInputComponent />);
+storiesOf('Input/Comment Input', module).add('comment', () => <CommentInputComponent />);

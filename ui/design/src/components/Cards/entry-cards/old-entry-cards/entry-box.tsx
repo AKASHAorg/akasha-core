@@ -1,10 +1,10 @@
 import { Box } from 'grommet';
 import * as React from 'react';
-import { formatDate, ILocale } from '../../../utils/time';
-import { ProfileAvatarButton } from '../../Buttons/index';
-import { Icon } from '../../Icon/index';
-import CardActions, { ServiceNames } from './card-actions';
-import CardHeaderMenuDropdown from './card-header-menu';
+import { formatDate, ILocale } from '../../../../utils/time';
+import { ProfileAvatarButton } from '../../../Buttons/index';
+import { Icon } from '../../../Icon/index';
+import CardActions, { ServiceNames } from './../card-actions';
+import CardHeaderMenuDropdown from './../card-header-menu';
 
 export interface IUser {
   name?: string;

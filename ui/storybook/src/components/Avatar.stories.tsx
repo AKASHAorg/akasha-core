@@ -9,7 +9,7 @@ import * as React from 'react';
 const { Avatar, EditableAvatar } = DS;
 const ethAddress = '0x003410490050000320006570034567114572000';
 const guestEthAddress = '0x00000000000000';
-storiesOf('Avatar|Avatar', module)
+storiesOf('Avatar/Avatar', module)
   .add('minimal', () => <Avatar ethAddress={ethAddress} src="https://placebeard.it/360x360" />)
   .add('margin and background color', () => (
     <Avatar

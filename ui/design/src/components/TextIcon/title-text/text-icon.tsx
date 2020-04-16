@@ -11,7 +11,7 @@ export interface ITextIconProps {
   backgroundColor?: string;
   color?: string;
   spacing?: string;
-  label: string;
+  label?: string;
   iconType: IconType;
   bold?: boolean;
   clickable?: boolean;

@@ -56,7 +56,7 @@ const {
   TutorialWidgetCard,
 } = DS;
 
-storiesOf('Cards|Widget Cards', module)
+storiesOf('Cards/Widget Cards', module)
   .add('topics widget card', () => (
     <Box pad="none" align="center">
       <TopicsWidgetCard
@@ -166,7 +166,7 @@ storiesOf('Cards|Widget Cards', module)
     </Box>
   ));
 
-storiesOf('Cards|Editor Cards', module).add('editor card', () => (
+storiesOf('Cards/Editor Cards', module).add('editor card', () => (
   <Box align="center" pad={{ top: '40px' }}>
     <EditorCard
       avatar={text('Logged Profile Avatar', 'https://www.stevensegallery.com/360/360')}
@@ -178,7 +178,7 @@ storiesOf('Cards|Editor Cards', module).add('editor card', () => (
   </Box>
 ));
 
-storiesOf('Cards|Profile Cards', module)
+storiesOf('Cards/Profile Cards', module)
   .add('profile card', () => (
     <Box align="center" pad={{ top: '40px' }}>
       <ProfileCard
@@ -222,7 +222,7 @@ storiesOf('Cards|Profile Cards', module)
     </Box>
   ));
 
-storiesOf('Cards|Entry Cards', module).add('entry card', () => (
+storiesOf('Cards/Entry Cards', module).add('entry card', () => (
   <Box align="center" pad={{ top: '40px' }}>
     <EntryCard
       copyIPFSLinkLabel={text('Copy IPFS link Label', copyIPFSLinkLabel)}
@@ -252,7 +252,7 @@ storiesOf('Cards|Entry Cards', module).add('entry card', () => (
   </Box>
 ));
 
-storiesOf('Cards|Form Cards', module)
+storiesOf('Cards/Form Cards', module)
   .add('3Box form card', () => (
     <Box align="center" pad={{ top: '40px' }}>
       <BoxFormCard

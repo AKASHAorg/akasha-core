@@ -6,7 +6,7 @@ import * as React from 'react';
 
 const { Box, Icon, IconButton, IconLink, ProfileAvatarButton, VoteIconButton, Button } = DS;
 
-storiesOf('Buttons|Default Button', module)
+storiesOf('Buttons/Default Button', module)
   .add('default', () => (
     <Box pad="large" align="start">
       <Button label="Default button" />
@@ -17,7 +17,7 @@ storiesOf('Buttons|Default Button', module)
       <Button label="Default primary button" primary={true} />
     </Box>
   ));
-storiesOf('Buttons|IconLink', module).add('default', () => (
+storiesOf('Buttons/IconLink', module).add('default', () => (
   <Box pad="large" align="start">
     <IconLink
       label="Click Me"
@@ -30,7 +30,7 @@ storiesOf('Buttons|IconLink', module).add('default', () => (
   </Box>
 ));
 
-storiesOf('Buttons|IconButton', module)
+storiesOf('Buttons/IconButton', module)
   .add('secondary (default)', () => (
     <Box pad="large" align="start">
       <IconButton
@@ -67,7 +67,7 @@ storiesOf('Buttons|IconButton', module)
     </Box>
   ));
 
-storiesOf('Buttons|ProfileIconButton', module).add('default', () => (
+storiesOf('Buttons/ProfileIconButton', module).add('default', () => (
   <Box pad="large" align="start">
     <ProfileAvatarButton
       avatarImage="https://placebeard.it/360x360"
@@ -80,7 +80,7 @@ storiesOf('Buttons|ProfileIconButton', module).add('default', () => (
   </Box>
 ));
 
-storiesOf('Buttons|VoteIconButton', module).add('upvote -default', () => (
+storiesOf('Buttons/VoteIconButton', module).add('upvote -default', () => (
   <Box pad="large" align="start">
     <VoteIconButton
       voteType="upvote"
@@ -92,7 +92,7 @@ storiesOf('Buttons|VoteIconButton', module).add('upvote -default', () => (
   </Box>
 ));
 
-storiesOf('Buttons|VoteIconButton', module).add('upvote -voted', () => (
+storiesOf('Buttons/VoteIconButton', module).add('upvote -voted', () => (
   <Box pad="large" align="start">
     <VoteIconButton
       voteType="upvote"
@@ -105,7 +105,7 @@ storiesOf('Buttons|VoteIconButton', module).add('upvote -voted', () => (
   </Box>
 ));
 
-storiesOf('Buttons|VoteIconButton', module).add('downvote -default', () => (
+storiesOf('Buttons/VoteIconButton', module).add('downvote -default', () => (
   <Box pad="large" align="start">
     <VoteIconButton
       voteType="downvote"
@@ -117,7 +117,7 @@ storiesOf('Buttons|VoteIconButton', module).add('downvote -default', () => (
   </Box>
 ));
 
-storiesOf('Buttons|VoteIconButton', module).add('downvote -voted', () => (
+storiesOf('Buttons/VoteIconButton', module).add('downvote -voted', () => (
   <Box pad="large" align="start">
     <VoteIconButton
       voteType="downvote"

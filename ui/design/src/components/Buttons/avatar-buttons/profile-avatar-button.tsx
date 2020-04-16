@@ -3,7 +3,6 @@ import * as React from 'react';
 import { capitalize } from '../../../utils/string-utils';
 import { Avatar } from '../../Avatar/index';
 import { AvatarSize } from '../../Avatar/styled-avatar';
-import { ethAddress as ethAddressType } from '../../Cards/entry-cards/entry-box';
 import StyledIconLink from '../icon-buttons/styled-icon-link';
 import { ButtonInfo, ButtonTextWrapper } from './styled-profile-avatar-button';
 
@@ -13,7 +12,7 @@ export interface ProfileAvatarButtonProps {
   label?: string;
   size?: AvatarSize;
   className?: string;
-  onAvatarClick?: React.MouseEventHandler<ethAddressType>;
+  onAvatarClick?: React.MouseEventHandler<string>;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
   ethAddress: string;
 }
