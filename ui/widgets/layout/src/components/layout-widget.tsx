@@ -39,7 +39,8 @@ const SidebarSlot = styled(Box)<{ visible: boolean }>`
     left: ${props => (props.visible ? 0 : -999)}px;
     top: 0;
     bottom: 0;
-    min-width: 100%;
+    width: 100vw;
+    height: 100vh;
     z-index: 999;
   }
 `;
