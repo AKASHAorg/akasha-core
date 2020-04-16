@@ -13,6 +13,6 @@
     "@plugins/profile": "/plugins/profile.js",
     "@plugins/feed": "/plugins/feed.js",
     "@app/3box": "/apps/3box-app.js",
-    "ipfs": "https://unpkg.com/ipfs@0.41.0/dist/index.js"
+    "ipfs": "https://unpkg.com/ipfs@0.42.1/dist/index.js"
   }
 }
