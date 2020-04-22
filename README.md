@@ -8,8 +8,8 @@
 
 | App        | Status           |
 | ------------- |:-------------:|
-| [Feed-app](https://ethereum-world.netlify.com/)      | [![Netlify Status](https://api.netlify.com/api/v1/badges/f2a5bca3-3853-406e-8cb0-105719cabb00/deploy-status)](https://app.netlify.com/sites/ethereum-world/deploys) |
-| [Storybook](https://storybook-awf.netlify.com/)      | [![Netlify Status](https://api.netlify.com/api/v1/badges/04915c36-eff6-4bbe-945b-e9255cae6fb1/deploy-status)](https://app.netlify.com/sites/storybook-awf/deploys)      |
+| [Feed-app](https://ethereum-world.netlify.app/)      | [![Netlify Status](https://api.netlify.com/api/v1/badges/f2a5bca3-3853-406e-8cb0-105719cabb00/deploy-status)](https://app.netlify.com/sites/ethereum-world/deploys) |
+| [Storybook](https://storybook-awf.netlify.app/)      | [![Netlify Status](https://api.netlify.com/api/v1/badges/04915c36-eff6-4bbe-945b-e9255cae6fb1/deploy-status)](https://app.netlify.com/sites/storybook-awf/deploys)      |
 
 
  
