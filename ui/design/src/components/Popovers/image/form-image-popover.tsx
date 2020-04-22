@@ -66,19 +66,10 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
       return;
     }
     const file = ev.target.files[0];
-    const fileReader = new FileReader();
-    fileReader.addEventListener('loadend', event => {
-      let arr = new Uint8Array();
-      if (event.target?.readyState === FileReader.DONE) {
-        const arrayBuffer = event.target.result as ArrayBuffer;
-        arr = new Uint8Array(arrayBuffer);
-      }
-      if (insertImage) {
-        insertImage(arr.buffer, false);
-      }
-      closePopover();
-    });
-    fileReader.readAsArrayBuffer(file);
+    if (insertImage) {
+      insertImage(URL.createObjectURL(file), true);
+    }
+    closePopover();
   };
 
   return (

@@ -98,8 +98,8 @@ export const authenticateBox = async (
 
 export const updateBoxData = async (
   profileData: Omit<IUpdateProfilePayload, 'avatar' | 'coverImage'> & {
-    image: IBoxImage[] | null;
-    coverImage: IBoxImage[] | null;
+    image?: IBoxImage[] | null;
+    coverImage?: IBoxImage[] | null;
   },
 ) => {
   const { ethAddress, image, coverImage, ...newProfileData } = profileData;
@@ -134,7 +134,7 @@ export const updateBoxData = async (
       values.push(image);
     }
     if (coverImage) {
-      fieldsToUpdate.push('coverImage');
+      fieldsToUpdate.push('coverPhoto');
       values.push(coverImage);
     }
     const updateSuccess = await box.public.setMultiple(fieldsToUpdate, values);

@@ -38,7 +38,7 @@ export interface IBoxFormCardProps {
 }
 
 export interface IImageSrc {
-  src: string | ArrayBuffer;
+  src: string;
   prefix: string;
   isUrl: boolean;
 }
@@ -216,7 +216,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             handleFormFieldChange({ avatar: { src, isUrl } })
           }
           currentImage={!!formValues.avatar}
-          handleDeleteImage={() => handleFormFieldChange({ avatar: undefined })}
+          handleDeleteImage={() => handleFormFieldChange({ avatar: null })}
         />
       )}
       {coverImagePopoverOpen && coverImageRef.current && (
@@ -232,7 +232,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             handleFormFieldChange({ coverImage: { src, isUrl } })
           }
           currentImage={!!formValues.coverImage}
-          handleDeleteImage={() => handleFormFieldChange({ coverImage: undefined })}
+          handleDeleteImage={() => handleFormFieldChange({ coverImage: null })}
         />
       )}
     </MainAreaCardBox>

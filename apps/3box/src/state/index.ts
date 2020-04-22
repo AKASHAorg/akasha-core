@@ -191,15 +191,15 @@ export const profileStateModel: ProfileStateModel = {
           const { profileData } = result;
           // tslint:disable-next-line: prefer-const
           let { image, coverPhoto, ...others } = profileData;
-          image = formatImageSrc(getImageProperty(image), false);
-          coverPhoto = formatImageSrc(getImageProperty(coverPhoto), false);
+          image = formatImageSrc(getImageProperty(image), false, '//ipfs.io/ipfs/');
+          coverPhoto = formatImageSrc(getImageProperty(coverPhoto), false, '//ipfs.io/ipfs/');
           actions.updateData({
             ethAddress: _ethAddress,
             isLoading: false,
             profileData: {
               ...others,
-              image,
-              coverPhoto,
+              avatar: image,
+              coverImage: coverPhoto,
             },
           });
         } catch (err) {
@@ -254,40 +254,53 @@ export const profileStateModel: ProfileStateModel = {
     actions.updateData({
       isSaving: true,
     });
-    const { channels } = injections;
+    const { channels, channelUtils } = injections;
     const imagesToUpload = [];
     try {
       if (profileData.avatar && profileData.avatar.src) {
         imagesToUpload.push({
-          name: 'avatar',
           content: profileData.avatar.src,
           isUrl: profileData.avatar.isUrl,
         });
       }
       if (profileData.coverImage && profileData.coverImage.src) {
         imagesToUpload.push({
-          name: 'coverImage',
           content: profileData.coverImage.src,
           isUrl: profileData.coverImage.isUrl,
         });
       }
-      const call = channels.commons.ipfs_service.upload(imagesToUpload);
 
-      call.subscribe(async ([avatarIpfsImage, coverIpfsImage]: any) => {
+      let ipfsCall = channelUtils.observable.from([]);
+      if (imagesToUpload.length) {
+        ipfsCall = channels.commons.ipfs_service.upload(imagesToUpload);
+      }
+      console.log(imagesToUpload, 'images to upload');
+      ipfsCall.subscribe(async (images: any) => {
+        let avatarIpfsImage;
+        let coverIpfsImage;
+        if (profileData.avatar && profileData.avatar.src) {
+          avatarIpfsImage = images[0];
+          coverIpfsImage = images[1];
+        } else {
+          coverIpfsImage = images[0];
+        }
+        console.log('uploaded', avatarIpfsImage, coverIpfsImage);
         const { avatar, coverImage, ...other } = profileData;
-
         const pData = {
           ...other,
-          image: avatarIpfsImage ? create3BoxImage(avatarIpfsImage) : null,
-          coverImage: coverIpfsImage ? create3BoxImage(coverIpfsImage) : null,
+          image: avatarIpfsImage ? create3BoxImage(avatarIpfsImage) : undefined,
+          coverImage: coverIpfsImage ? create3BoxImage(coverIpfsImage) : undefined,
         };
-
         const resp = await updateBoxData(pData);
+        const { image, coverPhoto, ...otherAttrs } = resp.profileData;
+        const currentProfileData = getState().data.profileData;
         const updatedProfile = {
-          ...getState().data.profileData,
-          ...resp.profileData,
-          avatar: resp.profileData.image,
+          ...currentProfileData,
+          ...otherAttrs,
+          avatar: avatarIpfsImage ? image : currentProfileData.avatar,
+          coverImage: coverIpfsImage ? coverPhoto : currentProfileData.coverImage,
         };
+        console.log('updated profile', updatedProfile);
         actions.updateData({
           ethAddress: resp.ethAddress,
           profileData: updatedProfile,
@@ -295,6 +308,7 @@ export const profileStateModel: ProfileStateModel = {
         });
       });
     } catch (ex) {
+      console.error(ex, 'an error occured!');
       actions.updateData({
         isSaving: false,
       });

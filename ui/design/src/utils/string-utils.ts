@@ -24,7 +24,14 @@ export const isBase64 = (str: string) => {
     }
     return false;
   }
-  if (typeof str !== 'string') {
+  return false;
+};
+
+export const isBlob = (str: string) => {
+  if (str.length && typeof str === 'string') {
+    if (str.startsWith('blob:http')) {
+      return true;
+    }
     return false;
   }
   return false;
