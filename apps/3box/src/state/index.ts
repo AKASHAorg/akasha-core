@@ -274,7 +274,7 @@ export const profileStateModel: ProfileStateModel = {
       if (imagesToUpload.length) {
         ipfsCall = channels.commons.ipfs_service.upload(imagesToUpload);
       }
-      console.log(imagesToUpload, 'images to upload');
+
       ipfsCall.subscribe(async (images: any) => {
         let avatarIpfsImage;
         let coverIpfsImage;

@@ -45,7 +45,7 @@ export const formatImageSrc = (src?: string, isUrl?: boolean, ipfsUrlPrefix?: st
 
 export const getImageSrc = (image: { src: string; isUrl: boolean; prefix: string }) => {
   const { src, isUrl, prefix } = image;
-  console.log('image src:', src, isUrl);
+
   if (isUrl) {
     if (src.startsWith('blob:http')) {
       return src;
