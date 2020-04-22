@@ -284,7 +284,6 @@ export const profileStateModel: ProfileStateModel = {
         } else {
           coverIpfsImage = images[0];
         }
-        console.log('uploaded', avatarIpfsImage, coverIpfsImage);
         const { avatar, coverImage, ...other } = profileData;
         const pData = {
           ...other,
@@ -300,7 +299,6 @@ export const profileStateModel: ProfileStateModel = {
           avatar: avatarIpfsImage ? image : currentProfileData.avatar,
           coverImage: coverIpfsImage ? coverPhoto : currentProfileData.coverImage,
         };
-        console.log('updated profile', updatedProfile);
         actions.updateData({
           ethAddress: resp.ethAddress,
           profileData: updatedProfile,
@@ -308,7 +306,6 @@ export const profileStateModel: ProfileStateModel = {
         });
       });
     } catch (ex) {
-      console.error(ex, 'an error occured!');
       actions.updateData({
         isSaving: false,
       });

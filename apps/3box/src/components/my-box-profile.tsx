@@ -51,12 +51,26 @@ const MyBoxProfile: React.FC<any> = ({ sdkModules, channelUtils }) => {
 
   const onFormSubmit = (data: IUpdateProfilePayload) => {
     const { providerName, avatar, coverImage, name, description } = data;
+    let updatedAvatar;
+    let updatedCoverImage;
+    if (
+      !state.data.profileData.avatar ||
+      (avatar && avatar.src !== state.data.profileData.avatar?.src)
+    ) {
+      updatedAvatar = avatar;
+    }
+    if (
+      !state.data.profileData.coverImage ||
+      (coverImage && coverImage.src !== state.data.profileData.coverImage.src)
+    ) {
+      updatedCoverImage = coverImage;
+    }
     actions.updateProfileData({
       providerName,
       name,
       description,
-      avatar,
-      coverImage: coverImage,
+      avatar: updatedAvatar,
+      coverImage: updatedCoverImage,
       ethAddress: state.data.ethAddress || '',
     });
   };
