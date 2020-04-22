@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { useBoxProfile } from '../state';
+import { useBoxProfile, IUpdateProfilePayload } from '../state';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { IBoxData } from '@akashaproject/design-system/lib/components/Cards/form-cards/box-form-card';
 import ErrorInfoCard from './error-info-card';
 import * as H from 'history';
 import { match } from 'react-router-dom';
@@ -50,14 +49,15 @@ const MyBoxProfile: React.FC<any> = ({ sdkModules, channelUtils }) => {
     };
   }, [state.data.ethAddress]);
 
-  const onFormSubmit = (data: IBoxData) => {
-    const { /* providerName, */ avatar, coverImage, name, description } = data;
+  const onFormSubmit = (data: IUpdateProfilePayload) => {
+    const { providerName, avatar, coverImage, name, description } = data;
     actions.updateProfileData({
+      providerName,
       name,
       description,
-      image: avatar,
-      coverPhoto: coverImage,
-      ethAddress: state.data.ethAddress,
+      avatar,
+      coverImage: coverImage,
+      ethAddress: state.data.ethAddress || '',
     });
   };
   return (
@@ -71,8 +71,8 @@ const MyBoxProfile: React.FC<any> = ({ sdkModules, channelUtils }) => {
           )}
           {isSaving && (
             <Box>
-              {t('Saving profile..')}
-              {t('Please wait!')}
+              {'Saving profile'}
+              {/* {t('Please wait!')} */}
             </Box>
           )}
           <BoxFormCard
@@ -90,11 +90,8 @@ const MyBoxProfile: React.FC<any> = ({ sdkModules, channelUtils }) => {
             descriptionFieldPlaceholder={t('Add a description about you here')}
             ethAddress={state.data.ethAddress || ''}
             providerData={{
+              ...state.data.profileData,
               providerName: '3Box',
-              avatar: state.data.profileData.image,
-              coverImage: state.data.profileData.coverPhoto,
-              name: state.data.profileData.name,
-              description: state.data.profileData.description,
             }}
             handleSubmit={onFormSubmit}
           />

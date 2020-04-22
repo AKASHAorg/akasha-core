@@ -2,6 +2,8 @@
 import Box from '3box';
 // @ts-ignore
 import boxConfig from '3box/lib/config';
+import { IUpdateProfilePayload } from '../state';
+import { IBoxImage } from '../utils/box-image-utils';
 
 export interface IBoxSettings {
   pinningNode: string;
@@ -94,8 +96,13 @@ export const authenticateBox = async (
   }
 };
 
-export const updateBoxData = async (profileData: any) => {
-  const { ethAddress, avatar, ...newProfileData } = profileData;
+export const updateBoxData = async (
+  profileData: Omit<IUpdateProfilePayload, 'avatar' | 'coverImage'> & {
+    image: IBoxImage[] | null;
+    coverImage: IBoxImage[] | null;
+  },
+) => {
+  const { ethAddress, image, coverImage, ...newProfileData } = profileData;
   if (!ethAddress) {
     // tslint:disable-next-line:no-console
     console.error('ethereum address not provided!');
@@ -122,9 +129,13 @@ export const updateBoxData = async (profileData: any) => {
     const rmSuccess = await Promise.all(fieldsToRemove);
 
     const values = fieldsToUpdate.map((fieldKey: string) => newProfileData[fieldKey]);
-    if (avatar) {
+    if (image) {
       fieldsToUpdate.push('image');
-      values.push(avatar);
+      values.push(image);
+    }
+    if (coverImage) {
+      fieldsToUpdate.push('coverImage');
+      values.push(coverImage);
     }
     const updateSuccess = await box.public.setMultiple(fieldsToUpdate, values);
     if (updateSuccess && rmSuccess) {

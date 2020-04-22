@@ -14,7 +14,7 @@ import {
   StyledImage,
   StyledText,
 } from './styled-form-card';
-import { isBase64 } from '../../../utils/string-utils';
+import { getImageSrc } from '../../../utils/image-utils';
 
 export interface IBoxFormCardProps {
   className?: string;
@@ -37,35 +37,18 @@ export interface IBoxFormCardProps {
   handleSubmit: (data: IBoxData) => void;
 }
 
+export interface IImageSrc {
+  src: string | ArrayBuffer;
+  prefix: string;
+  isUrl: boolean;
+}
 export interface IBoxData {
   providerName: string;
-  avatar?: string;
-  coverImage?: string;
+  avatar?: IImageSrc;
+  coverImage?: IImageSrc;
   name?: string;
   description?: string;
 }
-const getImageSrc = (src?: string) => {
-  // assume that the src is either base64 or ipfs CID
-  if (src) {
-    if (!isBase64(src)) {
-      // is probably ipfs CID
-      return {
-        src,
-        prefix: 'https://ipfs.io/ipfs/',
-      };
-    }
-    // maybe return an imageObject?
-    // first we must decide on an encoding standard.
-    return {
-      src,
-      prefix: '',
-    };
-  }
-  return {
-    src: '',
-    prefix: '',
-  };
-};
 
 const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const {
@@ -145,19 +128,14 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           <StyledText color="secondaryText" size="small">
             {avatarLabel}
           </StyledText>
-          {!formValues.avatar && (
+          {(!formValues.avatar || !formValues.avatar.src) && (
             <StyledAvatarPlaceholderDiv onClick={handleAvatarClick} active={avatarPopoverOpen}>
               <Icon type="image" ref={avatarRef} />
             </StyledAvatarPlaceholderDiv>
           )}
-          {formValues.avatar && (
+          {formValues.avatar && formValues.avatar.src && (
             <StyledAvatarDiv onClick={handleAvatarClick}>
-              <StyledImage
-                src={`${getImageSrc(formValues.avatar).prefix}${
-                  getImageSrc(formValues.avatar).src
-                }`}
-                fit="contain"
-              />
+              <StyledImage src={getImageSrc(formValues.avatar)} fit="contain" />
               <StyledAvatarOverlay>
                 <Icon type="editSimple" ref={avatarRef} />
               </StyledAvatarOverlay>
@@ -167,7 +145,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           <StyledText color="secondaryText" size="small">
             {coverImageLabel}
           </StyledText>
-          {!formValues.coverImage && (
+          {(!formValues.coverImage || !formValues.coverImage.src) && (
             <StyledCoverImagePlaceholderDiv
               onClick={handleCoverImageClick}
               active={coverImagePopoverOpen}
@@ -175,17 +153,12 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
               <Icon type="image" ref={coverImageRef} />
             </StyledCoverImagePlaceholderDiv>
           )}
-          {formValues.coverImage && (
+          {formValues.coverImage && formValues.coverImage.src && (
             <StyledCoverImageDiv onClick={handleCoverImageClick}>
               <StyledCoverImageOverlay>
                 <Icon type="editSimple" ref={coverImageRef} />
               </StyledCoverImageOverlay>
-              <StyledImage
-                src={`${getImageSrc(formValues.coverImage).prefix}${
-                  getImageSrc(formValues.coverImage).src
-                }`}
-                fit="contain"
-              />
+              <StyledImage src={getImageSrc(formValues.coverImage)} fit="contain" />
             </StyledCoverImageDiv>
           )}
 
@@ -239,7 +212,9 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           closePopover={() => {
             setAvatarPopoverOpen(false);
           }}
-          insertImage={(url: string) => handleFormFieldChange({ avatar: url })}
+          insertImage={(src: string, isUrl?: boolean) =>
+            handleFormFieldChange({ avatar: { src, isUrl } })
+          }
           currentImage={!!formValues.avatar}
           handleDeleteImage={() => handleFormFieldChange({ avatar: undefined })}
         />
@@ -253,7 +228,9 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           closePopover={() => {
             setCoverImagePopoverOpen(false);
           }}
-          insertImage={(url: string) => handleFormFieldChange({ coverImage: url })}
+          insertImage={(src: string, isUrl: boolean) =>
+            handleFormFieldChange({ coverImage: { src, isUrl } })
+          }
           currentImage={!!formValues.coverImage}
           handleDeleteImage={() => handleFormFieldChange({ coverImage: undefined })}
         />

@@ -6,21 +6,36 @@ import {
   getEthAddress,
   getDefaultBoxSettings,
 } from '../services/box';
+import DS from '@akashaproject/design-system';
+import { getImageProperty, create3BoxImage } from '../utils/box-image-utils';
+import { IImageSrc } from '@akashaproject/design-system/lib/components/Cards/form-cards/box-form-card';
 
-import { getImageProperty } from '../utils/get-image-src';
+const { formatImageSrc } = DS;
 
-export interface DataBox {
+export interface IRawProfileData {
   name?: string;
   image?: string;
   coverPhoto?: string;
+  description?: string;
+}
+export interface IFormattedProfileData {
+  name?: string;
+  avatar?: IImageSrc;
+  coverImage?: IImageSrc;
   description?: string;
 }
 export interface BoxSettings {
   pinningNode: string;
   addressServer: string;
 }
+
+export interface IUpdateProfilePayload extends IFormattedProfileData {
+  ethAddress: string;
+  providerName: string;
+}
+
 export interface ProfileState {
-  profileData: DataBox;
+  profileData: IFormattedProfileData;
   ethAddress: string | null;
   // when user agrees to open the box (signature)
   openBoxConsent: boolean;
@@ -39,7 +54,7 @@ export interface ProfileState {
     };
   };
   settings: BoxSettings;
-  visitingProfile: DataBox & { emoji?: string };
+  visitingProfile: IRawProfileData & { emoji?: string };
 }
 
 export interface IStateErrorPayload {
@@ -54,7 +69,7 @@ export interface ProfileStateModel {
   createError: Action<ProfileStateModel, IStateErrorPayload>;
   getProfile: Thunk<ProfileStateModel, string>;
   fetchCurrent: Thunk<ProfileStateModel, string>;
-  updateProfileData: Thunk<ProfileStateModel, {}>;
+  updateProfileData: Thunk<ProfileStateModel, IUpdateProfilePayload>;
   getBoxSettings: Thunk<ProfileStateModel, string>;
   saveBoxSettings: Thunk<
     ProfileStateModel,
@@ -70,8 +85,8 @@ export const profileStateModel: ProfileStateModel = {
     ethAddress: null,
     profileData: {
       name: '',
-      image: '',
-      coverPhoto: '',
+      avatar: { src: '', prefix: '', isUrl: false },
+      coverImage: { src: '', prefix: '', isUrl: false },
       description: '',
     },
     openBoxConsent: false,
@@ -176,8 +191,8 @@ export const profileStateModel: ProfileStateModel = {
           const { profileData } = result;
           // tslint:disable-next-line: prefer-const
           let { image, coverPhoto, ...others } = profileData;
-          image = getImageProperty(image);
-          coverPhoto = getImageProperty(coverPhoto);
+          image = formatImageSrc(getImageProperty(image), false);
+          coverPhoto = formatImageSrc(getImageProperty(coverPhoto), false);
           actions.updateData({
             ethAddress: _ethAddress,
             isLoading: false,
@@ -235,20 +250,49 @@ export const profileStateModel: ProfileStateModel = {
         actions.createError({ errorKey: 'actions.getProfile', error: err, critical: false }),
     );
   }),
-  updateProfileData: thunk(async (actions, profileData, { getState }) => {
+  updateProfileData: thunk(async (actions, profileData, { getState, injections }) => {
     actions.updateData({
       isSaving: true,
     });
+    const { channels } = injections;
+    const imagesToUpload = [];
     try {
-      const resp = await updateBoxData(profileData);
-      const updatedProfile = {
-        ...getState().data.profileData,
-        ...resp.profileData,
-      };
-      actions.updateData({
-        ethAddress: resp.ethAddress,
-        profileData: updatedProfile,
-        isSaving: false,
+      if (profileData.avatar && profileData.avatar.src) {
+        imagesToUpload.push({
+          name: 'avatar',
+          content: profileData.avatar.src,
+          isUrl: profileData.avatar.isUrl,
+        });
+      }
+      if (profileData.coverImage && profileData.coverImage.src) {
+        imagesToUpload.push({
+          name: 'coverImage',
+          content: profileData.coverImage.src,
+          isUrl: profileData.coverImage.isUrl,
+        });
+      }
+      const call = channels.commons.ipfs_service.upload(imagesToUpload);
+
+      call.subscribe(async ([avatarIpfsImage, coverIpfsImage]: any) => {
+        const { avatar, coverImage, ...other } = profileData;
+
+        const pData = {
+          ...other,
+          image: avatarIpfsImage ? create3BoxImage(avatarIpfsImage) : null,
+          coverImage: coverIpfsImage ? create3BoxImage(coverIpfsImage) : null,
+        };
+
+        const resp = await updateBoxData(pData);
+        const updatedProfile = {
+          ...getState().data.profileData,
+          ...resp.profileData,
+          avatar: resp.profileData.image,
+        };
+        actions.updateData({
+          ethAddress: resp.ethAddress,
+          profileData: updatedProfile,
+          isSaving: false,
+        });
       });
     } catch (ex) {
       actions.updateData({

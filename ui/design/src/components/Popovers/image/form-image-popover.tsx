@@ -15,7 +15,7 @@ export interface IFormImagePopover {
   deleteLabel?: string;
   target: HTMLElement;
   closePopover: () => void;
-  insertImage?: (url: string) => void;
+  insertImage?: (src: ArrayBuffer | string, isUrl: boolean) => void;
   currentImage?: boolean;
   handleDeleteImage?: () => void;
 }
@@ -40,7 +40,7 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
   const handleLinkInputSave = () => {
     // @Todo check if isUrl and isImage
     if (insertImage) {
-      insertImage(linkInputValue);
+      insertImage(linkInputValue, true);
     }
     closePopover();
   };
@@ -67,14 +67,18 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
     }
     const file = ev.target.files[0];
     const fileReader = new FileReader();
-    fileReader.addEventListener('load', () => {
-      const result = fileReader.result as string;
+    fileReader.addEventListener('loadend', event => {
+      let arr = new Uint8Array();
+      if (event.target?.readyState === FileReader.DONE) {
+        const arrayBuffer = event.target.result as ArrayBuffer;
+        arr = new Uint8Array(arrayBuffer);
+      }
       if (insertImage) {
-        insertImage(result);
+        insertImage(arr.buffer, false);
       }
       closePopover();
     });
-    fileReader.readAsDataURL(file);
+    fileReader.readAsArrayBuffer(file);
   };
 
   return (

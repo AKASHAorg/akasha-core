@@ -14,8 +14,6 @@ const {
   ViewportSizeProvider,
 } = DS;
 
-const LayoutWrapper = styled(Box)``;
-
 const MainArea = styled(Box)`
   width: 100%;
 `;
@@ -180,13 +178,13 @@ class LayoutWidget extends PureComponent<IProps> {
           themeReadyEvent={this.props.themeReadyEvent}
         >
           <ViewportSizeProvider>
-            <LayoutWrapper>
+            <Box direction="row">
               <SidebarSlot id={sidebarSlotId} visible={sidebarVisible} />
               <MainArea fill={true}>
                 <TopbarSlot id={topbarSlotId} />
                 <PluginSlot id={pluginSlotId} flex={true} fill={true} />
               </MainArea>
-            </LayoutWrapper>
+            </Box>
           </ViewportSizeProvider>
         </ThemeSelector>
       </>
