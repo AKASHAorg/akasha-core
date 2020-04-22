@@ -1,21 +1,28 @@
 export default async function upload(
-  content: Buffer | ArrayBuffer | string,
+  data: {
+    content: Buffer | ArrayBuffer | string | any;
+    isUrl?: boolean;
+  }[],
   ipfs: { getUtils: any; getInstance: any },
-  isUrl: boolean = false,
   log: any,
 ) {
-  let source;
-  let result;
+  const source = [];
+  const result = [];
   const instance = await ipfs.getInstance();
-  if (isUrl && typeof content === 'string') {
-    const { urlSource } = await ipfs.getUtils();
-    source = urlSource(content);
-  } else {
-    source = content;
+  const { urlSource } = await ipfs.getUtils();
+  for (const entryData of data) {
+    if (entryData.isUrl && typeof entryData.content === 'string') {
+      for await (const content of urlSource(entryData.content)) {
+        source.push(content);
+      }
+    } else {
+      source.push(entryData.content);
+    }
   }
+
   for await (const entry of instance.add(source)) {
     log.info({ entry, msg: 'uploaded on ipfs' });
-    result = entry.cid.toBaseEncodedString();
+    result.push(entry.cid.toBaseEncodedString());
   }
   return result;
 }
