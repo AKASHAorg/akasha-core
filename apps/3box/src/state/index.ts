@@ -295,6 +295,17 @@ export const profileStateModel: ProfileStateModel = {
         let avatarIpfsImage: string | null | undefined = profileData.avatar as undefined | null;
         let coverIpfsImage: string | null | undefined = profileData.coverImage as undefined | null;
 
+        if (profileData.avatar && profileData.avatar.src) {
+          // src should be a blob
+          // @TODO: make sure it is blob
+          window.URL.revokeObjectURL(profileData.avatar.src);
+        }
+
+        if (profileData.coverImage && profileData.coverImage.src) {
+          // src should be a file blob
+          window.URL.revokeObjectURL(profileData.coverImage.src);
+        }
+
         // if they are not undefined or null
         // then we should have ipfs hashes for them
 
