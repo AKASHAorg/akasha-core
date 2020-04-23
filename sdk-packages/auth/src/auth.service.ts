@@ -6,6 +6,7 @@ import commonServices, {
 import coreServices from '@akashaproject/sdk-core/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import dbServices, {
+  DB_NAME,
   DB_PASSWORD,
   DB_SERVICE,
   DB_SETTINGS_ATTACHMENT,
@@ -39,7 +40,10 @@ const service: AkashaService = (invoke, log) => {
     const web3Utils = await invoke(commonServices[WEB3_UTILS_SERVICE]).getUtils();
     const signer = web3.getSigner();
     const address = await signer.getAddress();
-    await setServiceSettings(DB_MODULE, [[DB_PASSWORD, web3Utils.id(address)]]);
+    await setServiceSettings(DB_MODULE, [
+      [DB_PASSWORD, web3Utils.id(address)],
+      [DB_NAME, `ewa-db${address}-v01`], // so it doesn't crash for multiple auth users using the same browser
+    ]);
     const attachment = await invoke(dbServices[DB_SETTINGS_ATTACHMENT]);
     const authAttachmentToken = await attachment.get({ id: 'auth_token', ethAddress: address });
     if (authAttachmentToken) {

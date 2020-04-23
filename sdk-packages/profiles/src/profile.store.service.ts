@@ -4,33 +4,19 @@ import commonServices, {
 } from '@akashaproject/sdk-common/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import { runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
-import { PROFILE_STORE } from './constants';
+import { LinkedProfileProp, PROFILE_STORE } from './constants';
 
 export const linkedPropId = '/linkedProp';
 export const linkedProp = {
   id: linkedPropId,
   type: 'object',
   properties: {
-    provider: 'string',
-    property: 'string',
-    value: 'string',
+    provider: 'string', // app:3box
+    property: 'string', // name
+    value: 'string', // john doe
   },
   dependencies: {
     value: ['provider', 'property'],
-  },
-};
-
-const profileStoreId = '/profileStore';
-const profileStore = {
-  id: profileStoreId,
-  type: 'object',
-  properties: {
-    avatar: { $ref: linkedPropId },
-    name: { $ref: linkedPropId },
-    description: { $ref: linkedPropId },
-    coverImage: { $ref: linkedPropId },
-    userName: { $ref: linkedPropId },
-    url: { $ref: linkedPropId },
   },
 };
 export const cidFormat = { format: 'dag-cbor', hashAlg: 'sha3-512', pin: true };
@@ -43,26 +29,25 @@ const service: AkashaService = (invoke, log) => {
     log.info('registering Profile json-schema for validation');
     const validator = await invoke(commonServices[VALIDATOR_SERVICE]).getValidator();
     validator.addSchema(linkedProp, linkedPropId);
-    validator.addSchema(profileStore, profileStoreId);
     registeredSchema = true;
     return;
   };
 
-  const store = async profileData => {
+  const store = async (profileData: LinkedProfileProp[]) => {
     log.info('storing linked Profile data');
     if (!registeredSchema) {
       await registerSchema();
     }
-    // const validator = await invoke(commonServices[VALIDATOR_SERVICE]).getValidator();
-    // validator.validate(profileData, profileStore, { throwError: true });
-
+    const validator = await invoke(commonServices[VALIDATOR_SERVICE]).getValidator();
     const ipfs = await invoke(commonServices[IPFS_SERVICE]).getInstance();
     const doc = {};
-    for (const k of Object.keys(profileData)) {
-      const cid = await ipfs.dag.put(profileData[k], cidFormat);
-      Object.assign(doc, { [k]: cid });
+    for (const record of profileData) {
+      validator.validate(record.data, linkedPropId, { throwError: true });
+      const cidLinkedData = await ipfs.dag.put(record.data, cidFormat);
+      Object.assign(doc, { [record.field]: cidLinkedData });
     }
-    return ipfs.dag.put(doc, cidFormat);
+    const profileCID = await ipfs.dag.put(doc, cidFormat);
+    return profileCID.toBaseEncodedString();
   };
 
   const getProfile = async (opt: { fields: string[]; ethAddress: string }) => {
