@@ -77,42 +77,44 @@ const MyBoxProfile: React.FC<any> = ({ sdkModules, channelUtils }) => {
     });
   };
   return (
-    <Box fill={true} flex={true} pad={{ top: '1em' }} align="center">
-      <ErrorInfoCard errors={state.data.errors}>
-        <>
-          {!openBoxConsent && <Box>{t('waiting for box signature')}</Box>}
-          {openBoxConsent && !openSpaceConsent && <Box>{t('waiting for space signature')}</Box>}
-          {isLoading && openBoxConsent && openSpaceConsent && (
-            <Box>{t('Loading profile data')}</Box>
-          )}
-          {isSaving && (
-            <Box>
-              {'Saving profile'}
-              {/* {t('Please wait!')} */}
-            </Box>
-          )}
-          <BoxFormCard
-            titleLabel={t('Ethereum Address')}
-            avatarLabel={t('Avatar')}
-            nameLabel={t('Name')}
-            coverImageLabel={t('Cover Image')}
-            descriptionLabel={t('Description')}
-            uploadLabel={t('Upload')}
-            urlLabel={t('By url')}
-            cancelLabel={t('Cancel')}
-            saveLabel={t('Save')}
-            deleteLabel={t('Delete')}
-            nameFieldPlaceholder={t('Type your name here')}
-            descriptionFieldPlaceholder={t('Add a description about you here')}
-            ethAddress={state.data.ethAddress || ''}
-            providerData={{
-              ...state.data.profileData,
-              providerName: '3Box',
-            }}
-            handleSubmit={onFormSubmit}
-          />
-        </>
-      </ErrorInfoCard>
+    <Box fill={true}>
+      <Box fill={true} pad={{ top: '1em' }} flex={true} align="center">
+        <ErrorInfoCard errors={state.data.errors}>
+          <>
+            {!openBoxConsent && <Box>{t('waiting for box signature')}</Box>}
+            {openBoxConsent && !openSpaceConsent && <Box>{t('waiting for space signature')}</Box>}
+            {isLoading && openBoxConsent && openSpaceConsent && (
+              <Box>{t('Loading profile data')}</Box>
+            )}
+            {isSaving && (
+              <Box>
+                {t('Saving profile')}
+                {t('Please wait!')}
+              </Box>
+            )}
+            <BoxFormCard
+              titleLabel={t('Ethereum Address')}
+              avatarLabel={t('Avatar')}
+              nameLabel={t('Name')}
+              coverImageLabel={t('Cover Image')}
+              descriptionLabel={t('Description')}
+              uploadLabel={t('Upload')}
+              urlLabel={t('By url')}
+              cancelLabel={t('Cancel')}
+              saveLabel={t('Save')}
+              deleteLabel={t('Delete')}
+              nameFieldPlaceholder={t('Type your name here')}
+              descriptionFieldPlaceholder={t('Add a description about you here')}
+              ethAddress={state.data.ethAddress || ''}
+              providerData={{
+                ...state.data.profileData,
+                providerName: '3Box',
+              }}
+              handleSubmit={onFormSubmit}
+            />
+          </>
+        </ErrorInfoCard>
+      </Box>
     </Box>
   );
 };

@@ -35,6 +35,7 @@ const WidgetBox = styled(Box)`
 `;
 
 const Feed = styled(Box)`
+  height: 100%;
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     flex-direction: row;
     justify-content: center;

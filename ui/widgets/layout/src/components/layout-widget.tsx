@@ -47,7 +47,9 @@ const TopbarSlot = styled(Box)`
     display: none;
   }
 `;
-const PluginSlot = styled(Box)``;
+const PluginSlot = styled(Box)`
+  height: 100vh;
+`;
 
 const GlobalStyle = createGlobalStyle<{ theme: any }>`
   html {
@@ -66,6 +68,7 @@ const GlobalStyle = createGlobalStyle<{ theme: any }>`
     height: 100vh;
     margin: 0;
     padding: 0;
+    display: flex;
   };
   body {
     overflow-y: auto;

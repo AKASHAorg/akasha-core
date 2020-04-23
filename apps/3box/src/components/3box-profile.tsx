@@ -40,7 +40,7 @@ const BoxProfile: React.FC<IMyProfileProps> = props => {
   }, [profileId]);
 
   return (
-    <>
+    <Box fill={true}>
       <Box fill={true} pad={{ top: '2em' }} align="center">
         {!Object.keys(state.data.visitingProfile).length && <Box>{t('Loading Profile')}</Box>}
         <MainAreaCardBox>
@@ -85,7 +85,7 @@ const BoxProfile: React.FC<IMyProfileProps> = props => {
           </Box>
         </MainAreaCardBox>
       </Box>
-    </>
+    </Box>
   );
 };
 
