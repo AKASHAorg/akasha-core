@@ -276,12 +276,14 @@ export const profileStateModel: ProfileStateModel = {
       if (profileData.avatar && profileData.avatar.src) {
         imagesToUpload.push({
           content: profileData.avatar.src,
+          path: 'avatar',
           isUrl: profileData.avatar.isUrl,
         });
       }
       if (profileData.coverImage && profileData.coverImage.src) {
         imagesToUpload.push({
           content: profileData.coverImage.src,
+          path: 'coverImage',
           isUrl: profileData.coverImage.isUrl,
         });
       }
