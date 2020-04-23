@@ -28,7 +28,7 @@ export const formatImageSrc = (src?: string, isUrl?: boolean, ipfsUrlPrefix?: st
         };
       default:
         // tslint:disable-next-line: no-console
-        console.error('Unknown image type');
+        console.error('Unknown image type', src);
         return {
           src,
           isUrl,
@@ -37,15 +37,14 @@ export const formatImageSrc = (src?: string, isUrl?: boolean, ipfsUrlPrefix?: st
     }
   }
   return {
-    src: '',
+    src: null,
     isUrl: false,
-    prefix: '',
+    prefix: null,
   };
 };
 
 export const getImageSrc = (image: { src: string; isUrl: boolean; prefix: string }) => {
   const { src, isUrl, prefix } = image;
-
   if (isUrl) {
     if (src.startsWith('blob:http')) {
       return src;

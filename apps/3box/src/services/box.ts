@@ -126,18 +126,21 @@ export const updateBoxData = async (
       .filter((key: string) => newProfileData[key] === null)
       .map(keyToRm => box.public.remove(keyToRm));
 
-    const rmSuccess = await Promise.all(fieldsToRemove);
-
     const values = fieldsToUpdate.map((fieldKey: string) => newProfileData[fieldKey]);
     if (image) {
       fieldsToUpdate.push('image');
       values.push(image);
+    } else if (image === null) {
+      fieldsToRemove.push(box.public.remove('image'));
     }
     if (coverImage) {
       fieldsToUpdate.push('coverPhoto');
       values.push(coverImage);
+    } else if (coverImage === null) {
+      fieldsToRemove.push(box.public.remove('coverPhoto'));
     }
     const updateSuccess = await box.public.setMultiple(fieldsToUpdate, values);
+    const rmSuccess = await Promise.all(fieldsToRemove);
     if (updateSuccess && rmSuccess) {
       // get fresh data
       await box.syncDone;

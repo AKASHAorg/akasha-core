@@ -55,13 +55,15 @@ const MyBoxProfile: React.FC<any> = ({ sdkModules, channelUtils }) => {
     let updatedCoverImage;
     if (
       !state.data.profileData.avatar ||
-      (avatar && avatar.src !== state.data.profileData.avatar?.src)
+      (avatar && avatar.src !== state.data.profileData.avatar?.src) ||
+      avatar === null
     ) {
       updatedAvatar = avatar;
     }
     if (
       !state.data.profileData.coverImage ||
-      (coverImage && coverImage.src !== state.data.profileData.coverImage.src)
+      (coverImage && coverImage.src !== state.data.profileData.coverImage.src) ||
+      coverImage === null
     ) {
       updatedCoverImage = coverImage;
     }

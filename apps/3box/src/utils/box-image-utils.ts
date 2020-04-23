@@ -16,7 +16,11 @@ export const getImageProperty = (image: string | IBoxImage[]): string => {
   return '';
 };
 
-export const create3BoxImage = (ipfsHash: string) => {
+export const create3BoxImage = (ipfsHash?: string | null) => {
+  // for deleted images or unchanged images we can get null or undefined
+  if (!ipfsHash) {
+    return ipfsHash as undefined | null;
+  }
   const image: IBoxImage[] = [];
   if (ipfsHash) {
     image.push({ contentUrl: { '/': ipfsHash }, '@type': 'ImageObject' });

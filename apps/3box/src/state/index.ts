@@ -103,6 +103,8 @@ export const profileStateModel: ProfileStateModel = {
   updateData: action((state, payload) => {
     state.data = Object.assign({}, state.data, payload);
   }),
+  // add errors to store, merging them with old ones
+  // @TODO: pipe the logger into this method
   createError: action((state, payload) => {
     state.data = Object.assign({}, state.data, {
       errors: {
@@ -146,6 +148,9 @@ export const profileStateModel: ProfileStateModel = {
       }
     });
   }),
+  /**
+   * fetch current logged in profile
+   */
   fetchCurrent: thunk(async (actions, _ethAddress, { injections }) => {
     const { channels, channelUtils } = injections;
     const { commons, db } = channels;
@@ -225,6 +230,9 @@ export const profileStateModel: ProfileStateModel = {
       },
     );
   }),
+  /**
+   * get a 3box profile given an eth address
+   */
   getProfile: thunk(async (actions, ethAddress, { injections }) => {
     const { getProfileData, channelUtils } = injections;
     const call = channelUtils.observable.from(getProfileData(ethAddress));
@@ -233,6 +241,7 @@ export const profileStateModel: ProfileStateModel = {
         let imagesrc;
         let coverImageSrc;
         if (data.image) {
+          // flatten 3box image object
           imagesrc = getImageProperty(data.image);
         }
         if (data.coverPhoto) {
@@ -250,11 +259,18 @@ export const profileStateModel: ProfileStateModel = {
         actions.createError({ errorKey: 'actions.getProfile', error: err, critical: false }),
     );
   }),
-  updateProfileData: thunk(async (actions, profileData, { getState, injections }) => {
+  /**
+   * Update profile data on 3Box
+   *  - check if there are any images (avatar or coverImage) to update
+   *    - if yes => upload them to ipfs and wait for hashes
+   *  - update data on 3box, wait for syncdone
+   *  - update newly fetched data into store (the service returns full profile data)
+   */
+  updateProfileData: thunk(async (actions, profileData, { injections }) => {
     actions.updateData({
       isSaving: true,
     });
-    const { channels, channelUtils } = injections;
+    const { channels } = injections;
     const imagesToUpload = [];
     try {
       if (profileData.avatar && profileData.avatar.src) {
@@ -270,42 +286,71 @@ export const profileStateModel: ProfileStateModel = {
         });
       }
 
-      let ipfsCall = channelUtils.observable.from([]);
-      if (imagesToUpload.length) {
-        ipfsCall = channels.commons.ipfs_service.upload(imagesToUpload);
-      }
+      const onObservableComplete = async (images: string[]) => {
+        // handle the case when avatar = null (marked for deletion)
+        // handle the case when coverImage = null (marked for deletion)
+        // if they are undefined, they will remain unchanged
+        let avatarIpfsImage: string | null | undefined = profileData.avatar as undefined | null;
+        let coverIpfsImage: string | null | undefined = profileData.coverImage as undefined | null;
 
-      ipfsCall.subscribe(async (images: any) => {
-        let avatarIpfsImage;
-        let coverIpfsImage;
-        if (profileData.avatar && profileData.avatar.src) {
+        // if they are not undefined or null
+        // then we should have ipfs hashes for them
+
+        // @TODO: treat the edge case when somehow we don't get the ipfs
+        // hash and still we don't have errors
+        // the order is preserved but we must treat the case when only one image is uploaded
+        // we are declaring the order as [0 => avatar, 1 => coverImage], so in the case when only coverImage
+        // is updated, the order is [0 => coverImage]
+        if (profileData.avatar) {
           avatarIpfsImage = images[0];
           coverIpfsImage = images[1];
-        } else {
+        } else if (!profileData.avatar && profileData.coverImage) {
           coverIpfsImage = images[0];
         }
         const { avatar, coverImage, ...other } = profileData;
+        // convert images to 3box supported format
+        // before updating them
         const pData = {
           ...other,
-          image: avatarIpfsImage ? create3BoxImage(avatarIpfsImage) : undefined,
-          coverImage: coverIpfsImage ? create3BoxImage(coverIpfsImage) : undefined,
+          image: create3BoxImage(avatarIpfsImage),
+          coverImage: create3BoxImage(coverIpfsImage),
         };
         const resp = await updateBoxData(pData);
         const { image, coverPhoto, ...otherAttrs } = resp.profileData;
-        const currentProfileData = getState().data.profileData;
+        // do not update images if they are undefined
+        // also convert them from 3box format to box-form-card
+        // component supported format
+        // merge profile state
         const updatedProfile = {
-          ...currentProfileData,
           ...otherAttrs,
-          avatar: avatarIpfsImage ? image : currentProfileData.avatar,
-          coverImage: coverIpfsImage ? coverPhoto : currentProfileData.coverImage,
+          avatar: formatImageSrc(getImageProperty(image), false, '//ipfs.io/ipfs/'),
+          coverImage: formatImageSrc(getImageProperty(coverPhoto), false, '//ipfs.io/ipfs/'),
         };
+        // deleted images... no need to store them
+        if (avatarIpfsImage === null) {
+          delete updatedProfile.avatar;
+        }
+        if (coverIpfsImage === null) {
+          delete updatedProfile.coverImage;
+        }
+        // finally update the store with the latest changes
         actions.updateData({
           ethAddress: resp.ethAddress,
           profileData: updatedProfile,
           isSaving: false,
         });
-      });
+      };
+      // if we don't have images continue
+      // else, upload them to ipfs
+      if (!imagesToUpload.length) {
+        return onObservableComplete([]);
+      }
+      const ipfsCall = channels.commons.ipfs_service.upload(imagesToUpload);
+      // get image hashes
+      ipfsCall.subscribe(onObservableComplete);
     } catch (ex) {
+      // catch all handler
+      // @TODO: create more granular errors
       actions.updateData({
         isSaving: false,
       });
@@ -316,6 +361,11 @@ export const profileStateModel: ProfileStateModel = {
       });
     }
   }),
+  /*
+   * Get settings for 3box app
+   * if there are no settings in db, get default settings
+   * from 3box library
+   */
   getBoxSettings: thunk(async (actions, ethAddress, { injections }) => {
     let settings = getDefaultBoxSettings();
     const { channels } = injections;
@@ -335,6 +385,9 @@ export const profileStateModel: ProfileStateModel = {
       actions.updateData({ settings });
     });
   }),
+  /**
+   * Save new 3box settings overriding default ones
+   */
   saveBoxSettings: thunk(async (actions, payload, { injections }) => {
     const { ethAddress, ...data } = payload;
     const { channels } = injections;
@@ -357,6 +410,10 @@ export const profileStateModel: ProfileStateModel = {
       });
     });
   }),
+  /**
+   * Add the ability to reset the settings to default ones
+   * from the 3box lib
+   */
   resetBoxSettings: thunk(async (actions, ethAddress, { injections }) => {
     const { channels } = injections;
     const defaultSettings = getDefaultBoxSettings();
