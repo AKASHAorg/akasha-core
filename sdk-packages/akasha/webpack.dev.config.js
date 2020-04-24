@@ -5,15 +5,19 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { InjectManifest } = require('workbox-webpack-plugin');
 
 const config = {
-  entry: './lib/index.js',
+  entry: './src/index.ts',
+  target: 'web',
+  context: path.resolve(__dirname),
+  module: {
+    rules: [{ parser: { System: false } }, { test: /\.ts(x)?$/, use: 'ts-loader' }],
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js'],
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    hashFunction: 'sha384',
-    hashDigest: 'hex',
-    hashDigestLength: 20,
-    filename: 'akasha.[name].[contenthash].js',
-    library: 'AkashaSDK',
-    libraryTarget: 'window',
+    filename: 'akasha.sdk.js',
+    libraryTarget: 'umd',
     publicPath: '/',
   },
   optimization: {
@@ -21,6 +25,9 @@ const config = {
     moduleIds: 'hashed',
   },
   plugins: [
+    new webpack.EnvironmentPlugin({
+      GRAPHQL_URI: 'http://localhost:8778/query'
+    }),
     new webpack.ProgressPlugin({
       entries: true,
       modules: true,
@@ -35,18 +42,10 @@ const config = {
     }),
     new InjectManifest({
       swSrc: './lib/sw.js',
-      swDest: 'sw.js'
+      swDest: 'sw.js',
+      exclude: [/.*?/]
     })
   ],
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        use: 'babel-loader',
-        exclude: /node_modules/,
-      },
-    ],
-  },
   devtool: 'source-map',
   mode: 'development',
 };

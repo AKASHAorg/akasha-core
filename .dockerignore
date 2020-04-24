@@ -1,0 +1,17 @@
+node_modules
+*.log
+
+pids
+*.pid
+*.seed
+
+flow-typed
+
+.DS_Store
+
+release/
+.idea
+.vscode
+*.tsbuildinfo
+lib
+dist

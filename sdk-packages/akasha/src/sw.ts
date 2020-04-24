@@ -57,7 +57,7 @@ registerRoute(
         statuses: [0, 200],
       }),
       new ExpirationPlugin({
-        maxEntries: 120,
+        maxEntries: 420,
         maxAgeSeconds: 30 * 24 * 60 * 60,
       }),
     ],

@@ -33,10 +33,10 @@
     "@akashaproject/jsonschema-web3": "^1.0.3",
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-runtime": "*",
-    "@walletconnect/web3-provider": "^1.0.0-beta.36",
-    "ethers": "^4.0.44"
+    "@walletconnect/web3-provider": "^1.0.0-beta.47",
+    "ethers": "^4.0.47"
   },
   "devDependencies": {
-    "@types/node": "13.7.0"
+    "@types/node": "13.13.2"
   }
 }

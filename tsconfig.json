@@ -13,10 +13,10 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "target": "es2017",
+    "target": "es2018",
     "sourceMap": true,
     "pretty": true,
-    "lib": ["es2017"]
+    "lib": ["es2018", "dom"]
   },
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

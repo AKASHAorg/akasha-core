@@ -25,3 +25,7 @@ build.staging.storybook:
 build.staging.storybook.static: install build.tsc.ui build.staging.storybook
 build.translations:
 	npm run extract:translations
+start.awf-api:
+	docker-compose up -d
+stop.awf-api:
+	docker-compose stop awf-api couchbase sync-gateway
