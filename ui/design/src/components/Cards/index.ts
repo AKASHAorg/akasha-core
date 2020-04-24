@@ -1,4 +1,4 @@
-import { BasicCardBox } from './common/basic-card-box';
+import { BasicCardBox, MainAreaCardBox } from './common/basic-card-box';
 import EditorCard from './editor-cards/editor-card';
 import EntryBox from './entry-cards/entry-box';
 import EntryCard from './entry-cards/entry-card';
@@ -21,6 +21,7 @@ export {
   EditorCard,
   EntryCard,
   BasicCardBox,
+  MainAreaCardBox,
   EntryBox,
   BoxFormCard,
   EnsFormCard,

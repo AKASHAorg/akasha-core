@@ -46,6 +46,7 @@ const service: AkashaService = (invoke, log) => {
     data: {
       content: Buffer | ArrayBuffer | string | any;
       isUrl?: boolean;
+      path?: string;
     }[],
   ) => {
     return ipfsMethods.add(data, { getInstance, getUtils }, log);
