@@ -10,6 +10,7 @@
   const sidebarWidget = await System.import('@widget/sidebar');
   const layout = await System.import('@widget/layout');
   const topbarWidget = await System.import('@widget/topbar');
+  const loginWidget = await System.import('@widget/login');
 
   const feedPlugin = await System.import('@plugins/feed');
   // tslint:disable-next-line:no-console
@@ -35,6 +36,10 @@
       app: topbarWidget.application,
       config: { slot: layout.application.topbarSlotId },
     },
+    {
+      app: loginWidget.application,
+      config: {}
+    }
   ];
   const profilePlugin = await System.import('@plugins/profile');
   const boxApp = await System.import('@app/3box');
