@@ -1,6 +1,8 @@
+export const folderPrefix = 'ewa/';
 export default async function upload(
   data: {
     content: Buffer | ArrayBuffer | string | any;
+    path?: string;
     isUrl?: boolean;
   }[],
   ipfs: { getUtils: any; getInstance: any },
@@ -13,10 +15,13 @@ export default async function upload(
   for (const entryData of data) {
     if (entryData.isUrl && typeof entryData.content === 'string') {
       for await (const content of urlSource(entryData.content)) {
+        if (entryData.path) {
+          content.path = folderPrefix + entryData.path;
+        }
         source.push(content);
       }
     } else {
-      source.push(entryData.content);
+      source.push({ path: folderPrefix + entryData.path, content: entryData.content });
     }
   }
 
@@ -24,5 +29,7 @@ export default async function upload(
     log.info({ entry, msg: 'uploaded on ipfs' });
     result.push(entry.cid.toBaseEncodedString());
   }
+  // ignore folder path atm
+  result.pop();
   return result;
 }
