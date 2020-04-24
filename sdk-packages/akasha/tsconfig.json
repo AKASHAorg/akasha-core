@@ -26,6 +26,9 @@
     },
     {
       "path": "../../ui/typings"
+    },
+    {
+      "path": "../profiles"
     }
   ],
   "include": ["./src"],

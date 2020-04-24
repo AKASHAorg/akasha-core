@@ -33,6 +33,6 @@
     "@akashaproject/sdk-runtime": "*",
     "@akashaproject/sdk-common": "*",
     "@akashaproject/sdk-db": "*",
-    "superagent": "^5.2.1"
+    "superagent": "^5.2.2"
   }
 }

@@ -8,9 +8,9 @@
     "deploy:sc": "truffle deploy"
   },
   "devDependencies": {
-    "truffle": "^5.1.11"
+    "truffle": "^5.1.23"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^2.4.0"
+    "@openzeppelin/contracts": "^3.0.0"
   }
 }

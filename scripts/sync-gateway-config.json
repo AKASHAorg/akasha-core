@@ -1,0 +1,33 @@
+{
+  "logging": {
+    "console": {
+      "enabled": true,
+      "log_level": "info",
+      "log_keys": ["*"]
+    }
+  },
+  "databases": {
+    "db": {
+      "server": "http://couchbase:8091",
+      "bucket": "default",
+      "enable_shared_bucket_access":true,
+      "import_docs": true,
+      "username": "Administrator",
+      "password": "password",
+      "users": { "GUEST": { "disabled": false, "admin_channels": ["*"] } },
+      "num_index_replicas":0,
+      "allow_conflicts": false,
+      "revs_limit": 20,
+      "delta_sync": {
+        "enabled": true,
+        "rev_max_age_seconds": 86400
+      }
+    }
+  },
+  "CORS": {
+    "Origin": ["http://localhost:8131"],
+    "LoginOrigin": ["http://localhost:8131"],
+    "Headers": ["Content-Type"],
+    "MaxAge": 17280000
+  }
+}

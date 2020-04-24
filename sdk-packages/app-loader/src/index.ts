@@ -211,15 +211,15 @@ export default class AppLoader implements IAppLoader {
       widget.app,
       this.appLogger.child({ i18nWidget: widgetId }),
     );
-
-    singleSpa.mountRootParcel(this.beforeMount(widget.app.loadingFn, widget.app), {
+    const pProps = {
       ...this.config,
       ...widget.app,
       domElement: domEl,
       i18n: i18nInstance,
       getMenuItems: () => this.getMenuItems(),
       events: this.events,
-    });
+    };
+    singleSpa.mountRootParcel(this.beforeMount(widget.app.loadingFn, widget.app), pProps);
     this.events.next(EventTypes.WidgetInstall);
     this.appLogger.info(`[@akashaproject/sdk-ui-plugin-loader]: ${widget.app.name} registered!`);
   }
@@ -235,13 +235,14 @@ export default class AppLoader implements IAppLoader {
     const { loadingFn, ...otherProps } = this.config.layout;
     // this is very important to wait on for dom
     await new Promise(resolve => {
-      singleSpa.mountRootParcel(loadingFn, {
+      const pProps = {
         domElement: domEl,
         ...otherProps,
         themeReadyEvent: () => {
           resolve();
         },
-      });
+      };
+      singleSpa.mountRootParcel(loadingFn, pProps);
     });
   }
 
