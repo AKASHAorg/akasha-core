@@ -81,6 +81,8 @@ class App extends PureComponent<IProps> {
         <ThemeSelector
           settings={{ activeTheme: 'Dark-Theme' }}
           availableThemes={[lightTheme, darkTheme]}
+          style={{ height: '100%' }}
+          plain={true}
         >
           <Suspense fallback={<FeedPlaceholder>Loading resources...</FeedPlaceholder>}>
             <I18nextProvider i18n={i18n ? i18n : null}>

@@ -141,8 +141,8 @@ const profileProvidersData = {
 
 const boxProviderData = {
   providerName: '3Box',
-  avatar: '',
-  coverImage: '',
+  avatar: undefined,
+  coverImage: undefined,
   name: '',
   description: '',
 };

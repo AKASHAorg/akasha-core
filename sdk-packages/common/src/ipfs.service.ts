@@ -42,12 +42,14 @@ const service: AkashaService = (invoke, log) => {
     return ipfsNode;
   };
   //
-  const upload = async (data: {
-    content: Buffer | ArrayBuffer | string | any;
-    isUrl?: boolean;
-  }) => {
-    const { content, isUrl } = data;
-    return ipfsMethods.add(content, { getInstance, getUtils }, isUrl, log);
+  const upload = async (
+    data: {
+      content: Buffer | ArrayBuffer | string | any;
+      isUrl?: boolean;
+      path?: string;
+    }[],
+  ) => {
+    return ipfsMethods.add(data, { getInstance, getUtils }, log);
   };
   return { getInstance, getUtils, upload };
 };
