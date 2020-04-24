@@ -21,6 +21,9 @@ export default class App extends PureComponent<any> {
     errors: {},
   };
   public componentDidCatch(error: Error, errorInfo: any) {
+    if (this.props.logger) {
+      this.props.logger.error(error, errorInfo);
+    }
     this.setState({
       errors: {
         'caught.critical': {
@@ -35,6 +38,9 @@ export default class App extends PureComponent<any> {
     // if an error bubbles up till here, it's generally uncaught one.
     // treat it as critical because we don't know about it
     window.onerror = (message, source, col, line, _error) => {
+      if (this.props.logger) {
+        this.props.logger.error(_error, message);
+      }
       this.setState({
         errors: {
           'uncaught.critical': {
@@ -49,8 +55,7 @@ export default class App extends PureComponent<any> {
     };
   }
   public render() {
-    const { i18n, sdkModules, channelUtils } = this.props;
-
+    const { i18n, sdkModules, channelUtils, logger } = this.props;
     return (
       <React.Suspense fallback={<>Loading</>}>
         <I18nextProvider i18n={i18n ? i18n : null}>
@@ -70,6 +75,7 @@ export default class App extends PureComponent<any> {
                         {...routeProps}
                         sdkModules={sdkModules}
                         channelUtils={channelUtils}
+                        logger={logger}
                       />
                     )}
                   />
@@ -80,6 +86,7 @@ export default class App extends PureComponent<any> {
                         {...routeProps}
                         sdkModules={sdkModules}
                         channelUtils={channelUtils}
+                        logger={logger}
                       />
                     )}
                   />
@@ -91,6 +98,7 @@ export default class App extends PureComponent<any> {
                         {...routeProps}
                         sdkModules={sdkModules}
                         channelUtils={channelUtils}
+                        logger={logger}
                       />
                     )}
                   />

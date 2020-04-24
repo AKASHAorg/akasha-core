@@ -14,10 +14,11 @@ export interface IMyBoxProfileProps {
   match: match;
   channelUtils: any;
   sdkModules: any;
+  logger: any;
 }
 
-const MyBoxProfile: React.FC<any> = ({ sdkModules, channelUtils }) => {
-  const [state, actions] = useBoxProfile(sdkModules, channelUtils);
+const MyBoxProfile: React.FC<any> = ({ sdkModules, channelUtils, logger }) => {
+  const [state, actions] = useBoxProfile(sdkModules, channelUtils, logger);
   const { t } = useTranslation();
   const { openBoxConsent, openSpaceConsent, isLoading, isSaving } = state.data;
 

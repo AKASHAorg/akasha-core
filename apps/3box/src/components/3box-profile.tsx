@@ -12,6 +12,7 @@ export interface IMyProfileProps {
   location: H.Location;
   sdkModules: any;
   channelUtils: any;
+  logger: any;
 }
 
 const BoxAvatar = styled(Avatar)`
@@ -29,7 +30,7 @@ const getImageSrc = (boxImage: any) => {
 };
 
 const BoxProfile: React.FC<IMyProfileProps> = props => {
-  const [state, actions] = useBoxProfile(props.sdkModules, props.channelUtils);
+  const [state, actions] = useBoxProfile(props.sdkModules, props.channelUtils, props.logger);
   const { profileId } = useParams();
   const { t } = useTranslation();
 

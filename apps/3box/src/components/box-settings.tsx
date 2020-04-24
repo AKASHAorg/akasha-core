@@ -24,10 +24,11 @@ export interface IBoxSettingsProps {
   match: match;
   channelUtils: any;
   sdkModules: any;
+  logger: any;
 }
 
 const BoxSettings: React.FC<IBoxSettingsProps> = props => {
-  const [state, actions] = useBoxProfile(props.sdkModules, props.channelUtils);
+  const [state, actions] = useBoxProfile(props.sdkModules, props.channelUtils, props.logger);
   const { isSaving } = state.data;
   const [formValues, setFormValues] = React.useState(state.data.settings);
   const { t } = useTranslation();
