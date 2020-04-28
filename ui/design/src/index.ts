@@ -36,6 +36,7 @@ import responsiveBreakpoints from './styles/responsive-breakpoints';
 import VirtualList from './components/VirtualList';
 import { isBase64 } from './utils/string-utils';
 import { formatImageSrc } from './utils/image-utils';
+import { Helmet } from 'react-helmet';
 
 /* Themes and theme related utils */
 import darkTheme from './styles/themes/dark';
@@ -101,6 +102,7 @@ const exported = {
   VirtualList,
   isBase64,
   formatImageSrc,
+  Helmet,
 };
 
 export default exported;
