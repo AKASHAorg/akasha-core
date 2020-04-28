@@ -1,4 +1,5 @@
 import * as React from 'react';
+import DS from '@akashaproject/design-system';
 import { useProfile } from '../../state/profiles';
 import { ProfilePageFeed } from '../ProfileFeed/profile-page-feed';
 import { MyProfilePageHeader } from '../ProfileHeader/my-profile-header';
@@ -12,6 +13,9 @@ const MyProfilePage = () => {
 
   return (
     <div>
+      <DS.Helmet>
+        <title>Profile | My Page</title>
+      </DS.Helmet>
       <React.Suspense fallback={<div>Loading Profile Header</div>}>
         <MyProfilePageHeader />
       </React.Suspense>
