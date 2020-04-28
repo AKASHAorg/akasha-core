@@ -132,6 +132,7 @@ export default class AppLoader implements IAppLoader {
     );
     this.menuItems.items.push({
       label: integration.app.title,
+      name: integrationId,
       index: this.menuItems.nextIndex,
       route: integration.app.activeWhen.path,
       type: menuItemType,

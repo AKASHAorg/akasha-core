@@ -3,6 +3,7 @@ import { useProfile } from '../../state/profiles';
 import { History } from 'history';
 import { ProfilePageFeed } from '../ProfileFeed/profile-page-feed';
 import { ProfilePageHeader } from '../ProfileHeader/profile-header';
+import DS from '@akashaproject/design-system';
 
 interface ProfilePageProps {
   match: {
@@ -15,7 +16,7 @@ interface ProfilePageProps {
 
 const ProfilePage = (props: ProfilePageProps) => {
   const { params } = props.match;
-  const [profileState, /* profileActions */] = useProfile();
+  const [profileState /* profileActions */] = useProfile();
   // profileActions.getLoggedProfile();
   React.useEffect(() => {
     if (profileState.loggedProfile === params.profileId) {
@@ -25,6 +26,9 @@ const ProfilePage = (props: ProfilePageProps) => {
 
   return (
     <div>
+      <DS.Helmet>
+        <title>Profile | {params.profileId} Page</title>
+      </DS.Helmet>
       <React.Suspense fallback={<div>Loading Profile Header</div>}>
         <ProfilePageHeader profileId={params.profileId} />
       </React.Suspense>

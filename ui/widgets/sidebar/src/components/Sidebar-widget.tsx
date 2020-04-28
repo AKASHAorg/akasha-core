@@ -112,8 +112,8 @@ const Menu = (props: MenuProps) => {
   const installedApps = currentMenu?.filter(menuItem => menuItem.type === MenuItemType.App);
 
   // return the plugins from list of apps
-  const profileDefaultData = currentMenu?.find(menuItem => menuItem.index === 2);
-  const feedDefaultData = currentMenu?.find(menuItem => menuItem.index === 1);
+  const profileDefaultData = currentMenu?.find(menuItem => menuItem.name === 'ui-plugin-profile');
+  const feedDefaultData = currentMenu?.find(menuItem => menuItem.name === 'ui-plugin-feed');
   if (feedDefaultData) {
     installedApps?.unshift(feedDefaultData);
   }

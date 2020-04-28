@@ -64,6 +64,7 @@ export interface IMenuItem {
   route: string;
   type: MenuItemType;
   logo?: LogoSourceType;
+  name?: string;
   subRoutes?: IMenuItem[];
 }
 
