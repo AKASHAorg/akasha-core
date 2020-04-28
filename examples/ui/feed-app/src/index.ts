@@ -1,7 +1,4 @@
-// const publicPath = 'http://localhost:8131';
-// const resourcePath = (pkg: string) => {
-//   return `${publicPath}${pkg}`;
-// };
+import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 (async function bootstrap(System) {
   // tslint:disable-next-line:no-console
@@ -19,10 +16,12 @@
     layout: layout.application,
   };
 
-  const registeredPlugins = [
+  const registeredPlugins: IAppEntry[] = [
     {
       app: feedPlugin.application,
-      sdkModules: [],
+      config: {
+        area: MenuItemAreaType.AppArea,
+      },
     },
   ];
 
@@ -37,6 +36,9 @@
     },
   ];
   const profilePlugin = await System.import('@plugins/profile');
+  const searchPlugin = await System.import('@plugins/search');
+  const appCenterPlugin = await System.import('@plugins/app-center');
+  const notificationsPlugin = await System.import('@plugins/notifications');
   const boxApp = await System.import('@app/3box');
   const ipfs = await System.import('ipfs');
   const sdk = await System.import('@akashaproject/sdk');
@@ -56,11 +58,33 @@
   // example loading an extra plugin after start
   world.appLoader.registerPlugin({
     app: profilePlugin.application,
-    sdkModules: [],
+    config: {
+      area: MenuItemAreaType.QuickAccessArea,
+    },
   });
-
+  world.appLoader.registerPlugin({
+    app: searchPlugin.application,
+    config: {
+      area: MenuItemAreaType.QuickAccessArea,
+    },
+  });
+  world.appLoader.registerPlugin({
+    app: appCenterPlugin.application,
+    config: {
+      area: MenuItemAreaType.BottomArea,
+    },
+  });
+  world.appLoader.registerPlugin({
+    app: notificationsPlugin.application,
+    config: {
+      area: MenuItemAreaType.QuickAccessArea,
+    },
+  });
   world.appLoader.registerApp({
     app: boxApp.application,
+    config: {
+      area: MenuItemAreaType.AppArea,
+    },
   });
   // @ts-ignore
 })(window.System);

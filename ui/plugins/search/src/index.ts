@@ -1,6 +1,6 @@
 import { Application, LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { initReactI18next } from 'react-i18next';
-import routes, { rootRoute } from './routes';
+import { rootRoute } from './routes';
 
 /**
  * All the plugins must export an object like this:
@@ -25,13 +25,12 @@ export const application: Application = {
   },
   loadingFn: (): Promise<any> =>
     import(
-      /* webpackChunkName: "profileChunk" */
+      /* webpackChunkName: "searchChunk" */
       /* webpackMode: "lazy" */
       './components'
     ),
-  name: 'ui-plugin-profile',
+  name: 'ui-plugin-search',
   sdkModules: [],
-  title: 'AKASHA Profile',
-  menuItems: routes,
-  logo: { type: LogoTypeSource.ICON, value: 'iconApp' },
+  title: 'Search',
+  logo: { type: LogoTypeSource.ICON, value: 'iconSearch' },
 };

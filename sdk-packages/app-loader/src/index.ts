@@ -10,6 +10,7 @@ import {
   IWidget,
   IWidgetConfig,
   IWidgetEntry,
+  MenuItemAreaType,
   MenuItemType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import pino from 'pino';
@@ -133,6 +134,7 @@ export default class AppLoader implements IAppLoader {
     this.menuItems.items.push({
       label: integration.app.title,
       name: integrationId,
+      area: integration?.config?.area || MenuItemAreaType.OtherArea,
       index: this.menuItems.nextIndex,
       route: integration.app.activeWhen.path,
       type: menuItemType,
