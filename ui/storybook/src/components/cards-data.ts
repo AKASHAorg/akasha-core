@@ -215,7 +215,7 @@ const appInfo = {
   category: 'Development',
 };
 
-const entryData = {
+const oldEntryData = {
   ethAddress: '0x003410490059837320006570047391024572000',
   name: 'AKASHA WORLD',
   avatar: 'http://placebeard.it/480/480',
@@ -292,6 +292,75 @@ const entryData = {
   ],
 };
 
+const entryData = {
+  entryId: '412412',
+  ipfsLink: 'ipfs.io/placeholder',
+  permalink: 'ethereum.world/akasha/johngilbert/412412',
+  ethAddress: '0x003410490059837320006570047391024572000',
+  userName: '@johngilbert',
+  ensName: 'johngilbert.world.eth',
+  avatar: 'http://placebeard.it/480/480',
+  content:
+    'We’re back in action, energized after an epic retreat in #verbier 🇨🇭 🤜💥🤛Here’s to everyone keeping us in their minds and hearts 🥂You’ve been in our hearts and minds as well! 🤗Looking forward to sharing our insights and plans in the coming days! 🚀#AKASHAReloaded #AKASHAFoundation',
+  time: '1572036522',
+  replies: [
+    {
+      entryId: '412413',
+      ipfsLink: 'ipfs.io/placeholder',
+      permalink: 'ethereum.world/akasha/marianagomes/412413',
+      ethAddress: '0x003410490050000320006570047391024572000',
+      userName: '@marianagomes',
+      ensName: 'marianagomes.world.eth',
+      avatar: 'http://placebeard.it/480/480',
+      content: 'Great Job!',
+
+      time: '1572036522',
+    },
+    {
+      entryId: '412414',
+      ipfsLink: 'ipfs.io/placeholder',
+      permalink: 'ethereum.world/akasha/gigipatratel/412414',
+      ethAddress: '0x003410490050000320006570047391024572000',
+      userName: '@gigipatratel',
+      ensName: 'gigipatratel.world.eth',
+      avatar: 'http://placebeard.it/480/480',
+      content: 'Amazing!',
+
+      time: '1572036522',
+    },
+  ],
+  reposts: 11,
+};
+
+const entrySocialData = {
+  users: [
+    {
+      ethAddress: '0x003410490059837320006570047391024572000',
+      userName: '@someguy',
+      ensName: 'someguy.world.eth',
+      avatar: 'http://placebeard.it/480/480',
+    },
+    {
+      ethAddress: '0x003410490059837320006570047391024572111',
+      userName: '@alexac',
+      ensName: 'alexac.world.eth',
+      avatar: 'https://placeimg.com/640/480/any',
+    },
+    {
+      ethAddress: '0x003410490059837320006570047391024572222',
+      userName: '@maochair',
+      ensName: 'maochair.world.eth',
+      avatar: 'https://placeimg.com/640/480/arch',
+    },
+    {
+      ethAddress: '0x003410490059837320006570047391024572223',
+      userName: '@mrnobody',
+      ensName: 'mrnobody.world.eth',
+      avatar: 'https://placeimg.com/640/480/nature',
+    },
+  ],
+};
+
 const changeCoverImageLabel = 'Change Cover Image';
 const cancelLabel = 'Cancel';
 const saveChangesLabel = 'Save Changes';
@@ -335,7 +404,9 @@ export {
   editCommentLabel,
   editPostLabel,
   editProfileLabel,
+  oldEntryData,
   entryData,
+  entrySocialData,
   followingLabel,
   profileProvidersData,
   placeholderLabel,

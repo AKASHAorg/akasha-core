@@ -5,9 +5,12 @@ import { WidgetAreaCardBox } from '../../common/basic-card-box';
 import { StyledButton, StyledImageBox } from './styled-tutorial';
 import { IconType, iconTypes } from '../../../Icon/icon';
 import { Button } from '../../../Buttons/index';
+import { ProgressBar } from './progress-bar/progress-bar';
 
 export interface ITutorialWidgetCardProps {
-  className?: string;
+  // data
+  currentProgress: number;
+  // labels
   titleLabel: string;
   subtitleLabel: string;
   subtitleIcon?: string;
@@ -15,15 +18,19 @@ export interface ITutorialWidgetCardProps {
   learnMoreLabel: string;
   callToActionLabel: string;
   seeVideoTutorialLabel: string;
+  // handlers
   handleLearnMore?: () => void;
   handleCallToAction?: () => void;
   handleSeeVideoTutorial?: () => void;
   handleDismiss?: () => void;
+  // css
+  className?: string;
 }
 
 const TutorialWidgetCard: React.FC<ITutorialWidgetCardProps> = props => {
   const {
     className,
+    currentProgress,
     titleLabel,
     subtitleLabel,
     subtitleIcon,
@@ -41,10 +48,12 @@ const TutorialWidgetCard: React.FC<ITutorialWidgetCardProps> = props => {
     <WidgetAreaCardBox className={className} callToAction={true}>
       {handleDismiss && (
         <Box justify="end" pad={{ top: 'small', horizontal: 'small' }} direction="row">
-          <Icon type="close" onClick={handleDismiss} primaryColor={true} />
+          <Icon type="close" onClick={handleDismiss} primaryColor={true} clickable={true} />
         </Box>
       )}
-      <Box align="center">{'timeline placeholder'}</Box>
+      <Box align="center">
+        <ProgressBar currentState={currentProgress} />
+      </Box>
       <Box
         border={{ side: 'bottom', color: 'border', size: 'xxxsmall' }}
         pad="medium"

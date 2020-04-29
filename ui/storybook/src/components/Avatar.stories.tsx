@@ -2,7 +2,7 @@
 import DS from '@akashaproject/design-system';
 import { AvatarSize } from '@akashaproject/design-system/lib/components/Avatar/styled-avatar';
 import { action } from '@storybook/addon-actions';
-import { boolean, color, object, text } from '@storybook/addon-knobs';
+import { select, color, object, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
@@ -17,7 +17,7 @@ storiesOf('Avatar/Avatar', module)
       src="https://placebeard.it/360x360"
       margin={object('Margin', { margin: '0px' })}
       backgroundColor={color('Background Color', '')}
-      withBorder={boolean('withBorder', true)}
+      border={select('border', ['sm', 'md', 'lg'], undefined)}
     />
   ))
   .add('with click handler', () => (
@@ -27,7 +27,7 @@ storiesOf('Avatar/Avatar', module)
       size="md"
       /* tslint:disable-next-line:jsx-no-lambda */
       onClick={(ev: any) => action('Avatar Clicked!')(ev.type)}
-      withBorder={boolean('withBorder', true)}
+      border={select('border', ['sm', 'md', 'lg'], undefined)}
     />
   ))
   .add('size: (default sm)', () => (
@@ -53,7 +53,7 @@ storiesOf('Avatar/Avatar', module)
             key={size}
             size={size as AvatarSize}
             src="https://placebeard.it/360x480"
-            withBorder={boolean('withBorder', true)}
+            border={select('border', ['sm', 'md', 'lg'], undefined)}
           />
         </div>
       ))}
@@ -61,17 +61,27 @@ storiesOf('Avatar/Avatar', module)
   ))
   .add('Guest mode', () => {
     return (
-      <Avatar ethAddress={guestEthAddress} size="xl" withBorder={boolean('withBorder', true)} />
+      <Avatar
+        ethAddress={guestEthAddress}
+        size="xl"
+        border={select('border', ['sm', 'md', 'lg'], undefined)}
+      />
     );
   })
   .add('Avatar not set', () => {
-    return <Avatar ethAddress={ethAddress} withBorder={boolean('withBorder', true)} size="xl" />;
+    return (
+      <Avatar
+        ethAddress={ethAddress}
+        border={select('border', ['sm', 'md', 'lg'], undefined)}
+        size="xl"
+      />
+    );
   })
   .add('Editable avatar', () => {
     return (
       <EditableAvatar
         ethAddress={ethAddress}
-        withBorder={boolean('withBorder', true)}
+        border={select('border', ['sm', 'md', 'lg'], undefined)}
         size="xl"
         onChange={
           // tslint:disable-next-line:jsx-no-lambda

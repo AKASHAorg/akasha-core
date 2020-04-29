@@ -17,6 +17,7 @@ import bold from './bold';
 import bookmark from './bookmark';
 import calendar from './calendar';
 import check from './check';
+import checkSimple from './checkSimple';
 import close from './close';
 import code from './code';
 import coins from './coins';
@@ -31,6 +32,7 @@ import ethereumWorldLogo from './ethereum-world-logo';
 import eye from './eye';
 import facebook from './facebook';
 import following from './following';
+import hashtag from './hashtag';
 import heart from './heart';
 import home from './home';
 import hotTopics from './hot-topics';
@@ -98,6 +100,7 @@ export {
   coins,
   copy,
   check,
+  checkSimple,
   payment,
   eye,
   error,
@@ -119,6 +122,7 @@ export {
   editSimple,
   edit,
   emoji,
+  hashtag,
   heart,
   home,
   hotTopics,

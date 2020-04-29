@@ -15,27 +15,15 @@ export interface ITextIconProps {
   iconType: IconType;
   bold?: boolean;
   clickable?: boolean;
-  actionType?: IActionType;
   menuActive?: boolean;
   menuIcon?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  primaryColor?: boolean;
 }
-
-export type IActionType = 'Assign Tokens' | 'Create a new vote' | 'Check finance';
 
 export interface IStyledTextProps {
   bold?: boolean;
 }
-
-const actionTypeIcons: {
-  'Assign Tokens': IconType;
-  'Create a new vote': IconType;
-  'Check finance': IconType;
-} = {
-  'Assign Tokens': 'person',
-  'Create a new vote': 'thumbsUpGrey',
-  'Check finance': 'app',
-};
 
 const TextIcon: React.FC<ITextIconProps> = props => {
   const {
@@ -49,10 +37,10 @@ const TextIcon: React.FC<ITextIconProps> = props => {
     spacing,
     bold,
     clickable,
-    actionType,
     menuActive,
     menuIcon,
     size,
+    primaryColor,
   } = props;
 
   return (
@@ -69,11 +57,7 @@ const TextIcon: React.FC<ITextIconProps> = props => {
       menuActive={menuActive}
       menuIcon={menuIcon}
     >
-      {actionType ? (
-        <Icon type={actionTypeIcons[actionType]} color={color} size={size} />
-      ) : (
-        <Icon type={iconType} color={color} size={size} />
-      )}
+      <Icon type={iconType} color={color} size={size} primaryColor={primaryColor} />
 
       <StyledText bold={bold}>{label}</StyledText>
     </StyledTextIcon>

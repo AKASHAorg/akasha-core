@@ -1,25 +1,35 @@
 /* eslint-disable */
 import * as React from 'react';
-import { Stack } from 'grommet';
 import { Avatar } from './index';
+import { StyledStackBox, StyledContainer } from './styled-stacked-avatar';
 
 export interface IStackedAvatarProps {
   userData: { ethAddress: string; avatar?: string }[];
+  maxAvatars?: number;
 }
 
 const StackedAvatar: React.FC<IStackedAvatarProps> = props => {
-  const { userData } = props;
+  const { userData, maxAvatars } = props;
+  let data = userData;
+  if (maxAvatars) {
+    data = userData.slice(0, maxAvatars);
+  }
 
   const renderStack = (level: number) => {
     return (
-      <Stack anchor="right">
-        <Avatar ethAddress={userData[level].ethAddress} src={userData[level].avatar} size="xs" />
-        {level + 1 < userData.length && renderStack(level + 1)}
-      </Stack>
+      <StyledStackBox zIndex={level + 1}>
+        <Avatar
+          ethAddress={data[level].ethAddress}
+          src={data[level].avatar}
+          size="xs"
+          border="sm"
+        />
+        {level + 1 < data.length && renderStack(level + 1)}
+      </StyledStackBox>
     );
   };
 
-  return <>{renderStack(0)}</>;
+  return <StyledContainer>{renderStack(0)}</StyledContainer>;
 };
 
 export default StackedAvatar;

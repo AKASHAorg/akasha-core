@@ -7,15 +7,24 @@ import { WidgetAreaCardBox } from '../common/basic-card-box';
 import { StyledTab } from './styled-widget-cards';
 
 export interface ITrendingWidgetCardProps {
-  className?: string;
-  titleLabel: string;
+  // data
   tags: ITag[];
   profiles: IProfile[];
+  userSubscribtions?: { profileEthAddresses: string[]; tagNames: string[] };
+  // labels
+  titleLabel: string;
   topicsLabel: string;
   profilesLabel: string;
   showMoreLabel: string;
+  // handlers
   onClickTag: (tagName: string) => void;
   onClickProfile: (ethAddress: string) => void;
+  onClickSubscribeTag: (tagName: string) => void;
+  onClickSubscribeProfile: (ethAddress: string) => void;
+  onClickMoreTags: React.EventHandler<React.SyntheticEvent>;
+  onClickMoreProfiles: React.EventHandler<React.SyntheticEvent>;
+  // css
+  className?: string;
 }
 
 export interface ITag {
@@ -35,9 +44,14 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
     className,
     onClickTag,
     onClickProfile,
+    onClickSubscribeTag,
+    onClickSubscribeProfile,
+    onClickMoreTags,
+    onClickMoreProfiles,
     titleLabel,
     tags,
     profiles,
+    userSubscribtions,
     topicsLabel,
     profilesLabel,
     showMoreLabel,
@@ -62,11 +76,16 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                   iconSize={'2.5rem'}
                   gap="xxsmall"
                 />
-                <Icon type="subscribe" onClick={() => onClickTag(tag.tagName)} clickable={true} />
+                <Icon
+                  type="subscribe"
+                  onClick={() => onClickSubscribeTag(tag.tagName)}
+                  clickable={true}
+                  primaryColor={userSubscribtions?.tagNames.includes(tag.tagName)}
+                />
               </Box>
             ))}
             <Box align="center">
-              <IconLink label={showMoreLabel} />
+              <IconLink label={showMoreLabel} onClick={onClickMoreTags} size="medium" />
             </Box>
           </Box>
         </StyledTab>
@@ -84,19 +103,27 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                 />
                 <Icon
                   type="following"
-                  onClick={() => onClickProfile(profile.ethAddress)}
+                  onClick={() => onClickSubscribeProfile(profile.ethAddress)}
                   clickable={true}
+                  primaryColor={userSubscribtions?.profileEthAddresses.includes(profile.ethAddress)}
                 />
               </Box>
             ))}
             <Box align="center">
-              <IconLink label={showMoreLabel} />
+              <IconLink label={showMoreLabel} onClick={onClickMoreProfiles} size="medium" />
             </Box>
           </Box>
         </StyledTab>
       </Tabs>
     </WidgetAreaCardBox>
   );
+};
+
+TrendingWidgetCard.defaultProps = {
+  titleLabel: 'Trending Right Now',
+  topicsLabel: 'Topics',
+  profilesLabel: 'Profiles',
+  showMoreLabel: 'Show more',
 };
 
 export default TrendingWidgetCard;

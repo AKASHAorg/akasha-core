@@ -18,7 +18,9 @@ import {
   copyLinkLabel,
   editProfileLabel,
   ensProviderData,
+  oldEntryData,
   entryData,
+  entrySocialData,
   followingLabel,
   placeholderLabel,
   profileData,
@@ -44,7 +46,9 @@ const {
   AppsWidgetCard,
   Box,
   EditorCard,
+  OldEntryCard,
   EntryCard,
+  FullEntryCard,
   BoxFormCard,
   EnsFormCard,
   MiniInfoWidgetCard,
@@ -86,6 +90,7 @@ storiesOf('Cards/Widget Cards', module)
   .add('tutorial widget card', () => (
     <Box pad="none" align="center">
       <TutorialWidgetCard
+        currentProgress={number('Current progress', 0)}
         titleLabel={text('Title label', 'Pick your ethereum name')}
         subtitleLabel={text('Subtitle label', 'Take your address to the next level')}
         infoLabel={text(
@@ -125,6 +130,10 @@ storiesOf('Cards/Widget Cards', module)
         showMoreLabel={text('Show more label', 'Show More')}
         onClickProfile={ethAddress => action('profile Clicked')(ethAddress)}
         onClickTag={tagName => action('tag clicked')(tagName)}
+        onClickSubscribeProfile={ethAddress => action('subscribe profile clicked')(ethAddress)}
+        onClickSubscribeTag={tagName => action('subscribe tag clicked')(tagName)}
+        onClickMoreTags={() => action('Show more Clicked')('Synthetic Event')}
+        onClickMoreProfiles={() => action('Show more Clicked')('Synthetic Event')}
         tags={trendingTagsData}
         profiles={trendingProfilesData}
       />

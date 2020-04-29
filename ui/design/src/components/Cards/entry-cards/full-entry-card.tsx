@@ -1,34 +1,23 @@
 import * as React from 'react';
 import { MainAreaCardBox } from '../common/basic-card-box';
-import { ISocialData, SocialBox } from './social-box';
 import { IEntryBoxProps, EntryBox } from './entry-box';
 import { Box } from 'grommet';
 
-export interface IEntryCardProps extends IEntryBoxProps {
-  // data
-  socialData?: ISocialData;
-  // labels
-  repostedThisLabel?: string;
-  andLabel?: string;
-  othersLabel?: string;
+export interface IFullEntryCardProps extends IEntryBoxProps {
   // external css
   className?: string;
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
 }
 
-const EntryCard: React.FC<IEntryCardProps> = props => {
+const FullEntryCard: React.FC<IFullEntryCardProps> = props => {
   const {
     entryData,
-    socialData,
     locale,
     onClickAvatar,
     onClickReplies,
     toggleBookmark,
     reportEntry,
-    repostedThisLabel,
-    andLabel,
-    othersLabel,
     repostLabel,
     repostWithCommentLabel,
     copyLinkLabel,
@@ -41,14 +30,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
 
   return (
     <MainAreaCardBox className={className} style={style} rootNodeRef={rootNodeRef}>
-      {socialData && socialData.users.length > 0 && (
-        <SocialBox
-          socialData={socialData}
-          repostedThisLabel={repostedThisLabel}
-          andLabel={andLabel}
-          othersLabel={othersLabel}
-        />
-      )}
       <Box pad={{ horizontal: 'medium' }}>
         <EntryBox
           entryData={entryData}
@@ -64,11 +45,32 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           shareOnLabel={shareOnLabel}
         />
       </Box>
+      {entryData.replies?.map((reply, index) => (
+        <Box
+          key={index}
+          margin={{ horizontal: 'medium' }}
+          border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'top' }}
+        >
+          <EntryBox
+            entryData={reply}
+            locale={locale}
+            onClickAvatar={onClickAvatar}
+            onClickReplies={onClickReplies}
+            toggleBookmark={toggleBookmark}
+            reportEntry={reportEntry}
+            repostLabel={repostLabel}
+            repostWithCommentLabel={repostWithCommentLabel}
+            copyLinkLabel={copyLinkLabel}
+            reportLabel={reportLabel}
+            shareOnLabel={shareOnLabel}
+          />
+        </Box>
+      ))}
     </MainAreaCardBox>
   );
 };
 
-EntryCard.defaultProps = {
+FullEntryCard.defaultProps = {
   repostLabel: 'Repost',
   repostWithCommentLabel: 'Repost With Comment',
   copyLinkLabel: 'Copy Link',
@@ -76,4 +78,4 @@ EntryCard.defaultProps = {
   shareOnLabel: 'Share On',
 };
 
-export { EntryCard };
+export { FullEntryCard };

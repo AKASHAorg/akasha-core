@@ -34,8 +34,10 @@ import {
   BoxFormCard,
   EditorCard,
   EnsFormCard,
-  EntryBox,
+  OldEntryBox,
+  OldEntryCard,
   EntryCard,
+  FullEntryCard,
   MiniInfoWidgetCard,
   ProfileCard,
   ProfileWidgetCard,
@@ -45,7 +47,7 @@ import {
   LoginCTAWidgetCard,
   TrendingWidgetCard,
   SourcesWidgetCard,
-  TutorialWidegtCard,
+  TutorialWidgetCard,
 } from './components/Cards';
 
 import TextInputField from './components/Forms/text-input-field';
@@ -91,9 +93,11 @@ const exported = {
   AppsWidgetCard,
   BasicCardBox,
   EditorCard,
-  EntryBox,
+  OldEntryBox,
+  OldEntryCard,
   EntryCard,
   EntryCardLoading,
+  FullEntryCard,
   BoxFormCard,
   EnsFormCard,
   MiniInfoWidgetCard,
@@ -149,7 +153,7 @@ const exported = {
   LoginCTAWidgetCard,
   TrendingWidgetCard,
   SourcesWidgetCard,
-  TutorialWidegtCard,
+  TutorialWidgetCard,
 };
 
 export default exported;

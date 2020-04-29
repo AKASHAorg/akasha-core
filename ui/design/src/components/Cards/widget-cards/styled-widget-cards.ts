@@ -47,7 +47,7 @@ const StyledTab = styled(Tab)<TabProps>`
         }
       }
     }
-  `}
+  `};
 `;
 
 export { StyledText, StyledButton, StyledTab };

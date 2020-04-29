@@ -1,4 +1,4 @@
-import { IEntryData } from '../Cards/entry-cards/entry-card';
+import { IEntryData } from '../Cards/entry-cards/entry-box';
 
 export interface IFetchOperation {
   startId: string;

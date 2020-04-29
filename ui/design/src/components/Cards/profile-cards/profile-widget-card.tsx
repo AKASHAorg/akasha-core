@@ -64,7 +64,7 @@ const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
       <Box height="3.5em" direction="row" pad={{ left: '.875em', right: 'medium' }}>
         <AvatarDiv>
           <Avatar
-            withBorder={true}
+            border="lg"
             size="xl"
             src={profileData.avatar}
             ethAddress={profileData.ethAddress}

@@ -34,28 +34,29 @@ const SourcesWidgetCard: React.FC<ISourceWidgetCardProps> = props => {
     <WidgetAreaCardBox className={className}>
       <Box justify="between" pad="medium" direction="row" align="center">
         <Text weight="bold">{titleLabel}</Text>
-        <IconLink label={seeAllLabel} onClick={onClickSeeAll} />
+        <IconLink label={seeAllLabel} onClick={onClickSeeAll} size="medium" />
       </Box>
 
-      <Box pad="medium" justify="evenly" align="center" direction="row">
-        <Box align="start" gap="xsmall">
-          <Text weight="bold" color="accentText" size="xxlarge">
-            {tagsNumber}
-          </Text>
-          <Text> {hashtagsLabel}</Text>
-        </Box>
-        <Box align="start" gap="xsmall">
-          <Text weight="bold" color="accentText" size="xxlarge">
-            {profilesNumber}
-          </Text>
-          <Text> {profilesLabel}</Text>
-        </Box>
-
-        <Box align="start" gap="xsmall">
-          <Text weight="bold" color="accentText" size="xxlarge">
-            {totalNumber}
-          </Text>
-          <Text> {totalLabel}</Text>
+      <Box justify="start" direction="row">
+        <Box pad="medium" justify="between" align="center" direction="row" width={'80%'}>
+          <Box align="start" gap="xsmall">
+            <Text weight="bold" color="accentText" size="xxlarge">
+              {tagsNumber}
+            </Text>
+            <Text> {hashtagsLabel}</Text>
+          </Box>
+          <Box align="start" gap="xsmall">
+            <Text weight="bold" color="accentText" size="xxlarge">
+              {profilesNumber}
+            </Text>
+            <Text> {profilesLabel}</Text>
+          </Box>
+          <Box align="start" gap="xsmall">
+            <Text weight="bold" color="accentText" size="xxlarge">
+              {totalNumber}
+            </Text>
+            <Text> {totalLabel}</Text>
+          </Box>
         </Box>
       </Box>
     </WidgetAreaCardBox>
