@@ -40,11 +40,11 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
       }
 
       // set the subroute
-      if (splitUrl[2] && currentRoute !== activeOption?.route && currentAppData) {
-        const currentOption = currentAppData?.subRoutes?.find(
+      if (splitUrl[2] && currentRoute !== activeOption?.route) {
+        const currentOption = activeApp?.subRoutes?.find(
           menuItem => menuItem.route === currentRoute,
         );
-        if (currentOption) {
+        if (currentOption && currentOption.index !== activeOption?.index) {
           setActiveOption(currentOption);
         }
       }
