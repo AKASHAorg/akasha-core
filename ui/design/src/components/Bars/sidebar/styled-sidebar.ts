@@ -17,11 +17,11 @@ const StyledHRDiv = styled.div`
   border-top: 1px solid ${props => props.theme.colors.border};
 `;
 
-const StyledUserSectionBox = styled(Box)`
+const StyledHeader = styled(Box)`
   height: 11rem;
 `;
 
-const StyledBottomDiv = styled.div`
+const StyledFooter = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -116,8 +116,8 @@ export {
   StyledHiddenScrollContainer,
   SidebarBox,
   SecondarySidebarBox,
-  StyledUserSectionBox,
-  StyledBottomDiv,
+  StyledHeader,
+  StyledFooter,
   SecondarySidebarContentWrapper,
   StyledAppIconWrapper,
   StyledAppOptionBox,

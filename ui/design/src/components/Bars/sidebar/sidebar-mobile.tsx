@@ -15,12 +15,9 @@ import {
 
 const SidebarMobile: React.FC<ISidebarProps> = props => {
   const {
-    installedApps,
-    onClickAddApp,
+    allMenuItems,
     onClickMenuItem,
-    onClickSearch,
     onClickCloseSidebar,
-    searchLabel,
     appCenterLabel,
     currentRoute,
   } = props;
@@ -29,11 +26,11 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
   const [activeOption, setActiveOption] = React.useState<IMenuItem | null>(null);
 
   React.useEffect(() => {
-    if (installedApps && currentRoute) {
+    if (allMenuItems && currentRoute) {
       const splitUrl = currentRoute.split('/');
       const route = splitUrl[1] ? `/${splitUrl[1]}` : '/';
 
-      const activeApp = installedApps.find(menuItem => menuItem.route === route);
+      const activeApp = allMenuItems.find(menuItem => menuItem.route === route);
       if (activeApp && activeApp.index !== currentAppData?.index) {
         setCurrentAppData(activeApp);
       }
@@ -48,7 +45,7 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
         }
       }
     }
-  }, [currentRoute, installedApps]);
+  }, [currentRoute, allMenuItems]);
 
   const handleAppIconClick = (menuItem: IMenuItem) => () => {
     setCurrentAppData(menuItem);
@@ -79,19 +76,19 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
         <Box align="end" pad={{ vertical: 'xsmall' }}>
           <Icon type="close" primaryColor={true} onClick={onClickCloseSidebar} clickable={true} />
         </Box>
-        <Box align="start" pad={{ bottom: 'xsmall' }}>
+        {/* <Box align="start" pad={{ bottom: 'xsmall' }}>
           <TextIcon
             label={searchLabel}
             iconType="search"
             clickable={true}
             onClick={onClickSearch}
           />
-        </Box>
+        </Box> */}
       </StyledMobileHeaderBox>
       <Box align="center" fill={true}>
         <StyledHiddenScrollContainer>
           <Accordion>
-            {installedApps?.map(menuItem => (
+            {allMenuItems?.map(menuItem => (
               <AccordionPanel
                 onClick={handleAppIconClick(menuItem)}
                 label={
@@ -148,7 +145,7 @@ const SidebarMobile: React.FC<ISidebarProps> = props => {
         justify="center"
       >
         <Box justify="start" pad={{ vertical: 'small' }}>
-          <TextIcon label={appCenterLabel} iconType="plusGrey" onClick={onClickAddApp} size="md" />
+          <TextIcon label={appCenterLabel} iconType="plusGrey" size="md" />
         </Box>
       </StyledMobileFooterBox>
     </Box>

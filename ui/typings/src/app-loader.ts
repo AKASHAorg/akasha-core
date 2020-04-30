@@ -71,7 +71,7 @@ export interface IMenuItem {
   label: string;
   route: string;
   type: MenuItemType;
-  area: MenuItemAreaType;
+  area?: MenuItemAreaType; // area is optional because subroutes dont have an area to be mounted
   logo?: LogoSourceType;
   name?: string;
   subRoutes?: IMenuItem[];
