@@ -12,6 +12,11 @@ const StyledHiddenScrollContainer = styled.div`
   }
 `;
 
+const StyledMobileHRDiv = styled.div`
+  margin: 0 ${props => (props.theme.shapes.baseSpacing * 3) / 16}rem;
+  border-top: 1px solid ${props => props.theme.colors.border};
+`;
+
 const StyledHRDiv = styled.div`
   width: 2.25rem;
   border-top: 1px solid ${props => props.theme.colors.border};
@@ -105,7 +110,7 @@ const StyledAppOptionBox = styled(Box)`
 `;
 
 const StyledMobileHeaderBox = styled(Box)`
-  height: 6rem;
+  height: 18rem;
 `;
 
 const StyledMobileFooterBox = styled(Box)`
@@ -126,4 +131,5 @@ export {
   StyledVerticalPad,
   StyledBorderBox,
   StyledHRDiv,
+  StyledMobileHRDiv,
 };

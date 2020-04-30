@@ -1,7 +1,7 @@
 import DS from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense } from 'react';
-import { I18nextProvider, useTranslation } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next';
 import { useLocation, BrowserRouter as Router } from 'react-router-dom';
 import {
   IMenuItem,
@@ -95,7 +95,7 @@ const Menu = (props: MenuProps) => {
   const currentLocation = useLocation();
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
-  const { t } = useTranslation();
+
   React.useEffect(() => {
     const updateMenu = () => {
       const menuItems = getMenuItems();
@@ -137,8 +137,6 @@ const Menu = (props: MenuProps) => {
         <ResponsiveSidebar
           loggedEthAddress={'0x000000000000000000000'}
           onClickCloseSidebar={handleCloseSidebar}
-          searchLabel={t('Search')}
-          appCenterLabel={t('App Center')}
           onClickMenuItem={handleNavigation}
           allMenuItems={currentMenu}
           headerMenuItems={header}

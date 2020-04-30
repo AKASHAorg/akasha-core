@@ -32,5 +32,5 @@ export const application: Application = {
   name: 'ui-plugin-search',
   sdkModules: [],
   title: 'Search',
-  logo: { type: LogoTypeSource.ICON, value: 'iconSearch' },
+  logo: { type: LogoTypeSource.ICON, value: 'search' },
 };

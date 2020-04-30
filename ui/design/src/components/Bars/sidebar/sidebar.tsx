@@ -6,6 +6,8 @@ import {
   StyledHiddenScrollContainer,
   StyledHRDiv,
   StyledHeader,
+  StyledBorderBox,
+  StyledVerticalPad,
 } from './styled-sidebar';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { MenuAppButton } from './menu-app-button';
@@ -21,8 +23,6 @@ export interface ISidebarProps {
   currentRoute?: string;
   onClickMenuItem: (route: string) => void;
   onClickCloseSidebar: () => void;
-  searchLabel: string;
-  appCenterLabel: string;
 }
 
 const Sidebar: React.FC<ISidebarProps> = props => {
@@ -77,16 +77,22 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     onClickMenuItem(menuItem.route);
   };
 
-  const renderMenuItem = (menuItem: IMenuItem, index: number) => (
-    <MenuAppButton
-      key={index}
-      menuItem={menuItem}
-      active={menuItem.label === currentAppData?.label}
-      loggedEthAddress={loggedEthAddress}
-      avatarImage={avatarImage}
-      onClick={handleAppIconClick(menuItem)}
-    />
-  );
+  const renderMenuItem = (menuItem: IMenuItem, index: number) => {
+    const active = menuItem.label === currentAppData?.label;
+    return (
+      <StyledVerticalPad key={index}>
+        <StyledBorderBox fill="horizontal" align="center" userSection={true} active={active}>
+          <MenuAppButton
+            menuItem={menuItem}
+            active={active}
+            loggedEthAddress={loggedEthAddress}
+            avatarImage={avatarImage}
+            onClick={handleAppIconClick(menuItem)}
+          />
+        </StyledBorderBox>
+      </StyledVerticalPad>
+    );
+  };
 
   return (
     <Box fill="vertical" direction="row">

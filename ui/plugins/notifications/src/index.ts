@@ -32,5 +32,5 @@ export const application: Application = {
   name: 'ui-plugin-notifications',
   sdkModules: [],
   title: 'Notifications',
-  logo: { type: LogoTypeSource.ICON, value: 'iconNotifications' },
+  logo: { type: LogoTypeSource.ICON, value: 'notifications' },
 };

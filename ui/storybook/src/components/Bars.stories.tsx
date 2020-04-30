@@ -102,14 +102,12 @@ storiesOf('Bars|Sidebar', module)
         bodyMenuItems={body}
         footerMenuItems={footer}
         onClickMenuItem={() => action('Option Clicked')('Synthetic Event')}
-        searchLabel="Search"
-        appCenterLabel="App Center"
         onClickCloseSidebar={() => action('Close Sidebar Clicked')('Synthetic Event')}
       />
     </div>
   ))
   .add('Sidebar for Mobile', () => (
-    <div style={{ height: '400px', width: '180px', border: '2px solid black' }}>
+    <div style={{ height: '812px', width: '375px', border: '2px solid black' }}>
       <SidebarMobile
         loggedEthAddress="0x003410490050000320006570034567114572000"
         avatarImage="https://placebeard.it/360x360"
@@ -118,8 +116,6 @@ storiesOf('Bars|Sidebar', module)
         bodyMenuItems={body}
         footerMenuItems={footer}
         onClickMenuItem={() => action('Option Clicked')('Synthetic Event')}
-        searchLabel="Search"
-        appCenterLabel="App Center"
         onClickCloseSidebar={() => action('Close Sidebar Clicked')('Synthetic Event')}
       />
     </div>

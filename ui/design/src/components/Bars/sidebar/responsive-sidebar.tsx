@@ -12,8 +12,7 @@ const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
     footerMenuItems,
     onClickMenuItem,
     onClickCloseSidebar,
-    searchLabel,
-    appCenterLabel,
+
     currentRoute,
   } = props;
   const { size } = useViewportSize();
@@ -24,8 +23,6 @@ const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
         <SidebarMobile
           onClickMenuItem={onClickMenuItem}
           onClickCloseSidebar={onClickCloseSidebar}
-          searchLabel={searchLabel}
-          appCenterLabel={appCenterLabel}
           allMenuItems={allMenuItems}
           headerMenuItems={headerMenuItems}
           bodyMenuItems={bodyMenuItems}
@@ -37,8 +34,6 @@ const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
         <Sidebar
           onClickMenuItem={onClickMenuItem}
           onClickCloseSidebar={onClickCloseSidebar}
-          searchLabel={searchLabel}
-          appCenterLabel={appCenterLabel}
           allMenuItems={allMenuItems}
           headerMenuItems={headerMenuItems}
           bodyMenuItems={bodyMenuItems}

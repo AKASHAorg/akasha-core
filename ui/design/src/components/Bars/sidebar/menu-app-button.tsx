@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyledAppIconWrapper, StyledBorderBox, StyledVerticalPad } from './styled-sidebar';
+import { StyledAppIconWrapper } from './styled-sidebar';
 import { Avatar } from '../../Avatar/index';
 import { AppIcon } from '../../Icon/index';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -21,13 +21,7 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
     }
     return <AppIcon placeholderIconType="app" appImg={menuItem.logo} onClick={onClick} size="md" />;
   };
-  return (
-    <StyledVerticalPad>
-      <StyledBorderBox fill="horizontal" align="center" userSection={true} active={active}>
-        <StyledAppIconWrapper active={active}>{renderItem()}</StyledAppIconWrapper>
-      </StyledBorderBox>
-    </StyledVerticalPad>
-  );
+  return <StyledAppIconWrapper active={active}>{renderItem()}</StyledAppIconWrapper>;
 };
 
 export { MenuAppButton };
