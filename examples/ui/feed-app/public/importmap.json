@@ -1,12 +1,16 @@
 {
   "imports": {
+    "single-spa": "https://unpkg.com/single-spa@5.3.4/lib/umd/single-spa.dev.js",
+    "single-spa-react": "https://unpkg.com/single-spa-react@2.14.0/lib/single-spa-react.js",
+    "rxjs": "https://cdn.jsdelivr.net/npm/@esm-bundle/rxjs@6.5.5/system/rxjs.min.js",
+    "rxjs/operators": "https://cdn.jsdelivr.net/npm/@esm-bundle/rxjs@6.5.5/system/rxjs-operators.min.js",
     "@akashaproject/sdk": "/akasha.sdk.js",
     "@akashaproject/design-system": "/design-system.js",
-    "react": "https://unpkg.com/react@16.12.0/umd/react.development.js",
-    "react-dom/server": "https://unpkg.com/react-dom@16.12.0/umd/react-dom-server.browser.development.js",
-    "react-dom": "https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js",
+    "react": "https://unpkg.com/react@16.13.1/umd/react.development.js",
+    "react-dom/server": "https://unpkg.com/react-dom@16.13.1/umd/react-dom-server.browser.development.js",
+    "react-dom": "https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js",
     "react-router-dom": "https://unpkg.com/react-router-dom@5.1.2/umd/react-router-dom.js",
-    "react-i18next": "https://unpkg.com/react-i18next@11.3.1/dist/umd/react-i18next.js",
+    "react-i18next": "https://unpkg.com/react-i18next@11.4.0/dist/umd/react-i18next.js",
     "immer": "https://unpkg.com/immer@5.3.6/dist/immer.umd.js",
     "@widget/sidebar": "/widgets/sidebar.js",
     "@widget/layout": "/widgets/layout.js",
@@ -17,6 +21,6 @@
     "@plugins/app-center": "/plugins/app-center.js",
     "@plugins/search": "/plugins/search.js",
     "@app/3box": "/apps/3box-app.js",
-    "ipfs": "https://unpkg.com/ipfs@0.43.0/dist/index.js"
+    "ipfs": "https://unpkg.com/ipfs@0.43.1/dist/index.js"
   }
 }

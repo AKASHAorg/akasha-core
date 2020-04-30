@@ -49,7 +49,7 @@ registerRoute(
 );
 
 registerRoute(
-  /^(https:\/\/unpkg.com|https:\/\/cdnjs.cloudflare.com\/ajax)/,
+  /^(https:\/\/unpkg.com|https:\/\/cdnjs.cloudflare.com\/ajax|https:\/\/cdn.jsdelivr.net\/npm|)/,
   new CacheFirst({
     cacheName: 'vendor-cache',
     plugins: [
