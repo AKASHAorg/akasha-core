@@ -48,6 +48,11 @@ const config = {
   ],
   devtool: 'source-map',
   mode: 'development',
+  externals: [
+    /^single-spa$/,
+    /^rxjs$/,
+    /^rxjs\/operators$/,
+  ],
 };
 
 module.exports = config;
