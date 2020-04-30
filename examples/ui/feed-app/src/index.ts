@@ -6,6 +6,9 @@
 (async function bootstrap(System) {
   // tslint:disable-next-line:no-console
   console.time('loadApps');
+  await System.import('single-spa');
+  await System.import('single-spa-react');
+  await System.import('rxjs');
   // example for loading from import map
   const sidebarWidget = await System.import('@widget/sidebar');
   const layout = await System.import('@widget/layout');
