@@ -59,7 +59,7 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
     },
   ];
 
-  const registeredApps = [
+  const registeredApps: IAppEntry[] = [
     {
       app: boxApp.application,
       config: {
