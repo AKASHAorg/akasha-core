@@ -1,4 +1,4 @@
-const ns = 'ui-plugin-feed';
+const ns = 'ui-plugin-notifications';
 
 module.exports = {
   useKeysAsDefaultValue: true,

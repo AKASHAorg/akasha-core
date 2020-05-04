@@ -1,4 +1,4 @@
-const ns = 'ui-plugin-feed';
+const ns = 'ui-plugin-search';
 
 module.exports = {
   useKeysAsDefaultValue: true,
