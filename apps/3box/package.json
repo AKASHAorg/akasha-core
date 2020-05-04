@@ -52,7 +52,7 @@
     "3box": "^1.17.1",
     "react-i18next": "^11.3.3",
     "react-router-dom": "^5.1.2",
-    "single-spa-react": "^2.11.0",
+    "single-spa-react": "^2.14.0",
     "easy-peasy": "^3.3.0",
     "rxjs": "^6.5.4"
   },

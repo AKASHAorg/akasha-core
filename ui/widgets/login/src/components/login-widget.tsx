@@ -25,7 +25,7 @@ export default class LoginWidget extends PureComponent<ILoginWidgetProps> {
       },
     });
   }
-  public render () {
+  public render() {
     return (
       <ThemeSelector
         settings={{ activeTheme: 'Light-Theme' }}
@@ -34,9 +34,9 @@ export default class LoginWidget extends PureComponent<ILoginWidgetProps> {
         plain={true}
       >
         <WidgetErrorCard errors={this.state.errors}>
-          Please Login here...
+          <div>Please Login here...</div>
         </WidgetErrorCard>
       </ThemeSelector>
-      )
-    }
+    );
   }
+}

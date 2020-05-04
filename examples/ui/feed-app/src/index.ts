@@ -11,8 +11,9 @@
   const layout = await System.import('@widget/layout');
   const topbarWidget = await System.import('@widget/topbar');
   const loginWidget = await System.import('@widget/login');
-
   const feedPlugin = await System.import('@plugins/feed');
+  const profilePlugin = await System.import('@plugins/profile');
+  const boxApp = await System.import('@app/3box');
   // tslint:disable-next-line:no-console
   console.timeEnd('loadApps');
   const appConfig = {
@@ -24,6 +25,16 @@
     {
       app: feedPlugin.application,
       sdkModules: [],
+    },
+    {
+      app: profilePlugin.application,
+      sdkModules: [],
+    },
+  ];
+
+  const registeredApps = [
+    {
+      app: boxApp.application,
     },
   ];
 
@@ -38,16 +49,14 @@
     },
     {
       app: loginWidget.application,
-      config: {}
-    }
+      config: { slot: layout.application.widgetSlotId },
+    },
   ];
-  const profilePlugin = await System.import('@plugins/profile');
-  const boxApp = await System.import('@app/3box');
   const ipfs = await System.import('ipfs');
   const sdk = await System.import('@akashaproject/sdk');
   const world = sdk.init({
     config: appConfig,
-    initialApps: { plugins: registeredPlugins, widgets: registeredWidgets },
+    initialApps: { plugins: registeredPlugins, widgets: registeredWidgets, apps: registeredApps },
   });
 
   // tslint:disable-next-line:no-console
@@ -58,14 +67,5 @@
     writable: false,
   });
 
-  // example loading an extra plugin after start
-  world.appLoader.registerPlugin({
-    app: profilePlugin.application,
-    sdkModules: [],
-  });
-
-  world.appLoader.registerApp({
-    app: boxApp.application,
-  });
   // @ts-ignore
 })(window.System);

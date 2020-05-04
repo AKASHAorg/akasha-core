@@ -29,7 +29,7 @@
     "@akashaproject/design-system": "*",
     "@types/i18next": "^13.0.0",
     "@types/react-i18next": "^8.1.0",
-    "single-spa-react": "^2.11.0",
+    "single-spa-react": "^2.14.0",
     "react-i18next": "^11.3.1"
   },
   "devDependencies": {

@@ -5,7 +5,7 @@ const { Box } = DS;
 
 export interface IErrorCardProps {
   errors: {
-    [key:string]: {
+    [key: string]: {
       error: Error;
       critical: boolean;
     };
@@ -41,6 +41,6 @@ const WidgetErrorCard: React.FC<IErrorCardProps> = ({ errors, children }) => {
     );
   }
   return <>{children}</>;
-}
+};
 
 export default WidgetErrorCard;

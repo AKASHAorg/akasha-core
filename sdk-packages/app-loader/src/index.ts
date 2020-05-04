@@ -60,7 +60,7 @@ export default class AppLoader implements IAppLoader {
     console.time('AppLoader:firstMount');
     window.addEventListener('single-spa:first-mount', this.onFirstMount.bind(this));
     window.addEventListener('single-spa:before-routing-event', this.beforeRouting.bind(this));
-    this.loadLayout().then(async () => {
+    this.loadLayout().then(() => {
       if (initialApps.plugins) {
         initialApps.plugins.forEach(plugin => this.registerPlugin(plugin));
       }
@@ -111,6 +111,14 @@ export default class AppLoader implements IAppLoader {
     }
 
     const domEl = document.getElementById(this.config.layout.pluginSlotId);
+    if (!domEl) {
+      this.appLogger.error(
+        `The dom element you are attempting to mount %s, is not in dom yet!
+         Are you sure the layout is rendered?
+         It will fallback to document.body`,
+        integrationId,
+      );
+    }
     singleSpa.registerApplication(
       integrationId,
       this.beforeMount(integration.app.loadingFn, integration.app),
@@ -195,22 +203,27 @@ export default class AppLoader implements IAppLoader {
   public getMenuItems() {
     return this.menuItems.items.slice(0);
   }
+
   public registerWidget(widget: IWidgetEntry): void {
     this.appLogger.info(
       `[@akashaproject/sdk-ui-plugin-loader] registering widget ${widget.app.name}`,
     );
     const widgetId = widget.app.name.toLowerCase().replace(' ', '-');
     widget.app.name = widgetId;
+
     if (this.registeredWidgets.has(widgetId)) {
       this.appLogger.error(`Widget ${widgetId} already registered`);
       return;
     }
+
     this.registeredWidgets.set(widgetId, { slot: widget.config.slot });
     const domEl = document.getElementById(widget.config.slot);
+
     const i18nInstance = this.translationManager.createInstance(
       widget.app,
       this.appLogger.child({ i18nWidget: widgetId }),
     );
+
     const pProps = {
       ...this.config,
       ...widget.app,
@@ -224,7 +237,7 @@ export default class AppLoader implements IAppLoader {
     this.appLogger.info(`[@akashaproject/sdk-ui-plugin-loader]: ${widget.app.name} registered!`);
   }
 
-  public async loadLayout() {
+  public loadLayout() {
     const domEl = document.getElementById(this.config.rootNodeId);
     if (!domEl) {
       this.appLogger.error(
@@ -234,7 +247,7 @@ export default class AppLoader implements IAppLoader {
     }
     const { loadingFn, ...otherProps } = this.config.layout;
     // this is very important to wait on for dom
-    await new Promise(resolve => {
+    return new Promise(resolve => {
       const pProps = {
         domElement: domEl,
         ...otherProps,

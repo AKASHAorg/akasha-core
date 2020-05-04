@@ -51,6 +51,8 @@ const PluginSlot = styled(Box)`
   height: 100vh;
 `;
 
+const WidgetSlot = styled(Box)``;
+
 const GlobalStyle = createGlobalStyle<{ theme: any }>`
   html {
     -webkit-box-sizing: border-box;
@@ -112,6 +114,7 @@ export interface IProps {
   sidebarSlotId: string;
   topbarSlotId: string;
   pluginSlotId: string;
+  widgetSlotId: string;
   themeReadyEvent: () => void;
 }
 
@@ -158,7 +161,7 @@ class LayoutWidget extends PureComponent<IProps> {
   }
 
   public render() {
-    const { sidebarSlotId, topbarSlotId, pluginSlotId } = this.props;
+    const { sidebarSlotId, topbarSlotId, pluginSlotId, widgetSlotId } = this.props;
     const { showSidebar } = this.state;
 
     if (this.state.hasErrors) {
@@ -187,6 +190,7 @@ class LayoutWidget extends PureComponent<IProps> {
                 <TopbarSlot id={topbarSlotId} />
                 <PluginSlot id={pluginSlotId} flex={true} fill={true} />
               </MainArea>
+              <WidgetSlot id={widgetSlotId} />
             </Box>
           </ViewportSizeProvider>
         </ThemeSelector>

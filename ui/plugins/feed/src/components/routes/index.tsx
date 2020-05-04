@@ -9,7 +9,7 @@ const { Box, styled } = DS;
 
 export interface IRoutesProps {
   activeWhen: { path: string };
-  singleSpa: any;
+  mountParcel: any;
 }
 
 const ArticleNotFound = () => {
