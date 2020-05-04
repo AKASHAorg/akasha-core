@@ -6,14 +6,13 @@ import { ISidebarProps } from './sidebar';
 const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
   const {
     loggedEthAddress,
-    installedApps,
-    profilePluginData,
-    onClickAddApp,
+    allMenuItems,
+    headerMenuItems,
+    bodyMenuItems,
+    footerMenuItems,
     onClickMenuItem,
-    onClickSearch,
     onClickCloseSidebar,
-    searchLabel,
-    appCenterLabel,
+
     currentRoute,
   } = props;
   const { size } = useViewportSize();
@@ -22,26 +21,23 @@ const ResponsiveSidebar: React.FC<ISidebarProps> = props => {
     <>
       {size === 'small' ? (
         <SidebarMobile
-          onClickAddApp={onClickAddApp}
           onClickMenuItem={onClickMenuItem}
-          onClickSearch={onClickSearch}
           onClickCloseSidebar={onClickCloseSidebar}
-          searchLabel={searchLabel}
-          appCenterLabel={appCenterLabel}
-          installedApps={installedApps}
+          allMenuItems={allMenuItems}
+          headerMenuItems={headerMenuItems}
+          bodyMenuItems={bodyMenuItems}
+          footerMenuItems={footerMenuItems}
           loggedEthAddress={loggedEthAddress}
           currentRoute={currentRoute}
         />
       ) : (
         <Sidebar
-          onClickAddApp={onClickAddApp}
           onClickMenuItem={onClickMenuItem}
-          onClickSearch={onClickSearch}
           onClickCloseSidebar={onClickCloseSidebar}
-          searchLabel={searchLabel}
-          appCenterLabel={appCenterLabel}
-          installedApps={installedApps}
-          profilePluginData={profilePluginData}
+          allMenuItems={allMenuItems}
+          headerMenuItems={headerMenuItems}
+          bodyMenuItems={bodyMenuItems}
+          footerMenuItems={footerMenuItems}
           loggedEthAddress={loggedEthAddress}
           currentRoute={currentRoute}
         />

@@ -12,16 +12,21 @@ const StyledHiddenScrollContainer = styled.div`
   }
 `;
 
+const StyledMobileHRDiv = styled.div`
+  margin: 0 ${props => (props.theme.shapes.baseSpacing * 3) / 16}rem;
+  border-top: 1px solid ${props => props.theme.colors.border};
+`;
+
 const StyledHRDiv = styled.div`
   width: 2.25rem;
   border-top: 1px solid ${props => props.theme.colors.border};
 `;
 
-const StyledUserSectionBox = styled(Box)`
+const StyledHeader = styled(Box)`
   height: 11rem;
 `;
 
-const StyledBottomDiv = styled.div`
+const StyledFooter = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,7 +110,7 @@ const StyledAppOptionBox = styled(Box)`
 `;
 
 const StyledMobileHeaderBox = styled(Box)`
-  height: 6rem;
+  height: 18rem;
 `;
 
 const StyledMobileFooterBox = styled(Box)`
@@ -116,8 +121,8 @@ export {
   StyledHiddenScrollContainer,
   SidebarBox,
   SecondarySidebarBox,
-  StyledUserSectionBox,
-  StyledBottomDiv,
+  StyledHeader,
+  StyledFooter,
   SecondarySidebarContentWrapper,
   StyledAppIconWrapper,
   StyledAppOptionBox,
@@ -126,4 +131,5 @@ export {
   StyledVerticalPad,
   StyledBorderBox,
   StyledHRDiv,
+  StyledMobileHRDiv,
 };

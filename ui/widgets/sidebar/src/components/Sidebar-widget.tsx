@@ -1,9 +1,13 @@
 import DS from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense } from 'react';
-import { I18nextProvider, useTranslation } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next';
 import { useLocation, BrowserRouter as Router } from 'react-router-dom';
-import { IMenuItem, EventTypes, MenuItemType } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import {
+  IMenuItem,
+  EventTypes,
+  MenuItemAreaType,
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { lightTheme, ThemeSelector, ResponsiveSidebar, ViewportSizeProvider } = DS;
 export interface IProps {
@@ -90,8 +94,8 @@ const Menu = (props: MenuProps) => {
 
   const currentLocation = useLocation();
 
-  const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[] | null>(null);
-  const { t } = useTranslation();
+  const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
+
   React.useEffect(() => {
     const updateMenu = () => {
       const menuItems = getMenuItems();
@@ -108,26 +112,15 @@ const Menu = (props: MenuProps) => {
     };
   }, []);
 
-  // filter out default plugins like profile and feed
-  const installedApps = currentMenu?.filter(menuItem => menuItem.type === MenuItemType.App);
-
-  // return the plugins from list of apps
-  const profileDefaultData = currentMenu?.find(menuItem => menuItem.name === 'ui-plugin-profile');
-  const feedDefaultData = currentMenu?.find(menuItem => menuItem.name === 'ui-plugin-feed');
-  if (feedDefaultData) {
-    installedApps?.unshift(feedDefaultData);
-  }
+  // *how to obtain different sidebar menu sections8
+  const header = currentMenu?.filter(
+    menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,
+  );
+  const body = currentMenu?.filter(menuItem => menuItem.area === MenuItemAreaType.AppArea);
+  const footer = currentMenu?.filter(menuItem => menuItem.area === MenuItemAreaType.BottomArea);
 
   const handleNavigation = (path: string) => {
     navigateToUrl(path);
-  };
-
-  const handleClickAddApp = () => {
-    return;
-  };
-
-  const handleClickSearch = () => {
-    return;
   };
 
   return (
@@ -143,14 +136,12 @@ const Menu = (props: MenuProps) => {
       <ViewportSizeProvider>
         <ResponsiveSidebar
           loggedEthAddress={'0x000000000000000000000'}
-          onClickAddApp={handleClickAddApp}
           onClickCloseSidebar={handleCloseSidebar}
-          onClickSearch={handleClickSearch}
-          searchLabel={t('Search')}
-          appCenterLabel={t('App Center')}
           onClickMenuItem={handleNavigation}
-          installedApps={installedApps}
-          profilePluginData={profileDefaultData}
+          allMenuItems={currentMenu}
+          headerMenuItems={header}
+          bodyMenuItems={body}
+          footerMenuItems={footer}
           currentRoute={currentLocation.pathname}
         />
       </ViewportSizeProvider>

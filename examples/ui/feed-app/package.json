@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {},
+  "devDependencies": {
+    "@akashaproject/ui-awf-typings": "*"
+  },
   "peerDependencies": {},
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --port 8131",
