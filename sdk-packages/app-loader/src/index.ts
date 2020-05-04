@@ -57,6 +57,10 @@ export default class AppLoader implements IAppLoader {
     this.registeredPlugins = new Map<string, IPluginConfig>();
     this.registeredWidgets = new Map<string, IWidgetConfig>();
     this.registeredApps = new Map<string, IPluginConfig>();
+    // call as fast as possible https://github.com/single-spa/single-spa/issues/484
+    singleSpa.start({
+      urlRerouteOnly: true,
+    });
     // tslint:disable-next-line:no-console
     console.time('AppLoader:firstMount');
     window.addEventListener('single-spa:first-mount', this.onFirstMount.bind(this));
@@ -77,8 +81,6 @@ export default class AppLoader implements IAppLoader {
       }
 
       this.appLogger.info('[@akashaproject/sdk-ui-plugin-loader]: starting single spa');
-      // call on next tick
-      setTimeout(singleSpa.start, 0);
     });
   }
 
@@ -114,7 +116,6 @@ export default class AppLoader implements IAppLoader {
       }
     }
 
-    const domEl = document.getElementById(this.config.layout.pluginSlotId);
     singleSpa.registerApplication(
       integrationId,
       this.beforeMount(integration.app.loadingFn, integration.app),
@@ -125,7 +126,7 @@ export default class AppLoader implements IAppLoader {
         ...this.config,
         ...integration.config,
         activeWhen: integration.app.activeWhen,
-        domElement: domEl,
+        domElementGetter: () => document.getElementById(this.config.layout.pluginSlotId),
         i18n: this.translationManager.getInstance(integrationId),
         i18nConfig: integration.app.i18nConfig,
         logger: this.appLogger.child({ plugin: integrationId }),
