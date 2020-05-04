@@ -6,6 +6,7 @@ export interface IPluginConfig {
     path: string;
   };
   title?: string;
+  area?: MenuItemAreaType;
 }
 
 export interface ILoaderConfig {
@@ -58,12 +59,21 @@ export enum MenuItemType {
   Internal = 'internal',
 }
 
+export enum MenuItemAreaType {
+  AppArea = 'app-area', // body
+  QuickAccessArea = 'quick-access-area', // top
+  BottomArea = 'bottom-area', // footer
+  OtherArea = 'other-area', // not displayed
+}
+
 export interface IMenuItem {
   index: number;
   label: string;
   route: string;
   type: MenuItemType;
+  area?: MenuItemAreaType; // area is optional because subroutes dont have an area to be mounted
   logo?: LogoSourceType;
+  name?: string;
   subRoutes?: IMenuItem[];
 }
 

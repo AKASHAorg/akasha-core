@@ -49,24 +49,24 @@
     "@akashaproject/sdk-runtime": "*",
     "@akashaproject/sdk-db": "*",
     "@akashaproject/design-system": "*",
-    "3box": "^1.17.1",
-    "react-i18next": "^11.3.3",
+    "3box": "^1.18.1",
+    "react-i18next": "^11.4.0",
     "react-router-dom": "^5.1.2",
     "single-spa-react": "^2.14.0",
     "easy-peasy": "^3.3.0",
-    "rxjs": "^6.5.4"
+    "rxjs": "^6.5.5"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
-    "@types/react": "^16.9.19",
-    "@types/react-dom": "^16.9.5",
-    "@types/react-router-dom": "^5.1.3",
+    "@types/react": "^16.9.34",
+    "@types/react-dom": "^16.9.7",
+    "@types/react-router-dom": "^5.1.5",
     "@types/react-test-renderer": "^16.9.2",
-    "@types/single-spa-react": "^2.8.3",
-    "nodemon": "^2.0.2"
+    "@types/single-spa-react": "^2.12.0",
+    "nodemon": "^2.0.3"
   },
   "peerDependencies": {
-    "react": "16.12.0",
-    "react-dom": "16.12.0"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   }
 }

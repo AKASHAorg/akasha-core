@@ -10,6 +10,7 @@ import {
   IWidget,
   IWidgetConfig,
   IWidgetEntry,
+  MenuItemAreaType,
   MenuItemType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import pino from 'pino';
@@ -60,7 +61,10 @@ export default class AppLoader implements IAppLoader {
     console.time('AppLoader:firstMount');
     window.addEventListener('single-spa:first-mount', this.onFirstMount.bind(this));
     window.addEventListener('single-spa:before-routing-event', this.beforeRouting.bind(this));
-    this.loadLayout().then(() => {
+    window.addEventListener('single-spa:app-change', (evt: any) => {
+      this.appLogger.info(`single-spa:app-change %j`, evt.detail);
+    });
+    this.loadLayout().then(async () => {
       if (initialApps.plugins) {
         initialApps.plugins.forEach(plugin => this.registerPlugin(plugin));
       }
@@ -140,6 +144,8 @@ export default class AppLoader implements IAppLoader {
     );
     this.menuItems.items.push({
       label: integration.app.title,
+      name: integrationId,
+      area: integration?.config?.area || MenuItemAreaType.OtherArea,
       index: this.menuItems.nextIndex,
       route: integration.app.activeWhen.path,
       type: menuItemType,
@@ -295,14 +301,13 @@ export default class AppLoader implements IAppLoader {
       }
       return;
     }
-
-    this.appLogger.info(`active plugin`, currentPlugins);
+    this.appLogger.info(`active plugin %j`, currentPlugins);
     const firstPlugin = currentPlugins.find(plugin => this.registeredPlugins.has(plugin));
     if (firstPlugin) {
       setPageTitle(this.registeredPlugins.get(firstPlugin).title);
     } else {
       this.appLogger.warn(
-        `could not find a registered active app from active plugins list`,
+        `could not find a registered active app from active plugins list %j`,
         currentPlugins,
       );
     }

@@ -33,5 +33,5 @@ export const application: Application = {
   sdkModules: [],
   title: 'AKASHA Profile',
   menuItems: routes,
-  logo: { type: LogoTypeSource.ICON, value: 'app' },
+  logo: { type: LogoTypeSource.AVATAR, value: '' },
 };

@@ -6,8 +6,12 @@ module.exports = {
     /^react-i18next$/,
     /^react-router-dom$/,
     /^immer$/,
-    ///^single-spa-react$/,
-    /// ^react-tracked$/,
+    /^rxjs$/,
+    /^rxjs\/operators$/,
+    {
+      'single-spa-react': 'single-spa-react'
+    }
+
   ],
   optimization: {},
 };

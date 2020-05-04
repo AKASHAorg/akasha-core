@@ -19,6 +19,7 @@ export enum LogoTypeSource {
   ICON = 'icon',
   String = 'string',
   IPFS = 'ipfs',
+  AVATAR = 'avatar',
 }
 
 export const AppLoader = AppLoaderTypes;

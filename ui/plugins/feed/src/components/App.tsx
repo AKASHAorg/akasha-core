@@ -39,6 +39,7 @@ const FeedPlaceholder = styled(Box)`
     max-width: 60%;
   }
 `;
+
 class App extends PureComponent<IProps> {
   public state: { hasErrors: boolean };
 
@@ -56,6 +57,7 @@ class App extends PureComponent<IProps> {
     const { logger } = this.props;
     logger.error(err, info);
   }
+
   // @TODO: remove this after having a real use-case
   public onClickSdk = () => {
     const { sdkModules, logger } = this.props;
@@ -63,12 +65,14 @@ class App extends PureComponent<IProps> {
     const callMethod = sdkModules.commons.validator_service({ method: 'validator', args: {} });
     callMethod.subscribe(subConsumer);
   };
+
   public handleNavigation(href: string) {
     return (ev: React.SyntheticEvent) => {
       this.props.singleSpa.navigateToUrl(href);
       ev.preventDefault();
     };
   }
+
   public render() {
     const { i18n } = this.props;
 
@@ -77,22 +81,27 @@ class App extends PureComponent<IProps> {
     }
 
     return (
-      <ViewportSizeProvider>
-        <ThemeSelector
-          settings={{ activeTheme: 'Dark-Theme' }}
-          availableThemes={[lightTheme, darkTheme]}
-          style={{ height: '100%' }}
-          plain={true}
-        >
-          <Suspense fallback={<FeedPlaceholder>Loading resources...</FeedPlaceholder>}>
-            <I18nextProvider i18n={i18n ? i18n : null}>
-              <FeedProvider reducer={feedReducer} initialState={feedInit()}>
-                <Routes {...this.props} />
-              </FeedProvider>
-            </I18nextProvider>
-          </Suspense>
-        </ThemeSelector>
-      </ViewportSizeProvider>
+      <>
+        <DS.Helmet>
+          <title>My Feed Page</title>
+        </DS.Helmet>
+        <ViewportSizeProvider>
+          <ThemeSelector
+            settings={{ activeTheme: 'Dark-Theme' }}
+            availableThemes={[lightTheme, darkTheme]}
+            style={{ height: '100%' }}
+            plain={true}
+          >
+            <Suspense fallback={<FeedPlaceholder>Loading resources...</FeedPlaceholder>}>
+              <I18nextProvider i18n={i18n ? i18n : null}>
+                <FeedProvider reducer={feedReducer} initialState={feedInit()}>
+                  <Routes {...this.props} />
+                </FeedProvider>
+              </I18nextProvider>
+            </Suspense>
+          </ThemeSelector>
+        </ViewportSizeProvider>
+      </>
     );
   }
 }

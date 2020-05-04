@@ -10,10 +10,10 @@ import {
   SidebarBox,
   StyledAppIconWrapper,
   StyledBorderBox,
-  StyledBottomDiv,
+  StyledFooter,
   StyledHiddenScrollContainer,
   StyledHRDiv,
-  StyledUserSectionBox,
+  StyledHeader,
   StyledVerticalPad,
 } from './styled-sidebar';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -179,12 +179,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           side: 'right',
         }}
       >
-        <StyledUserSectionBox
-          align="center"
-          direction="column"
-          fill={true}
-          pad={{ top: 'xxsmall' }}
-        >
+        <StyledHeader align="center" direction="column" fill={true} pad={{ top: 'xxsmall' }}>
           <StyledVerticalPad>
             <StyledBorderBox
               fill="horizontal"
@@ -235,7 +230,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           <StyledVerticalPad>
             <Icon type="search" clickable={true} onClick={onClickSearch} />
           </StyledVerticalPad>
-        </StyledUserSectionBox>
+        </StyledHeader>
         <StyledHRDiv />
         <Box align="center" justify="between" fill={true}>
           <StyledHiddenScrollContainer>
@@ -265,9 +260,9 @@ const Sidebar: React.FC<ISidebarProps> = props => {
             ))}
           </StyledHiddenScrollContainer>
           {renderPopover()}
-          <StyledBottomDiv>
+          <StyledFooter>
             <Icon type="plusGrey" onClick={onClickAddApp} clickable={true} size="md" />
-          </StyledBottomDiv>
+          </StyledFooter>
         </Box>
       </SidebarBox>
       <SecondarySidebarBox
