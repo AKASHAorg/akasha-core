@@ -12,7 +12,7 @@ commands:
     steps:
       - run:
           name: Combine package-lock.json files to single file
-          command: npx lerna list -p -a | awk '{printf "\"%s/package-lock.json\" ", $1}' | xargs -n 100 cat > << parameters.filename >> 2>/dev/null
+          command: npx lerna list -p -a | awk '{printf "\"%s/package-lock.json\" ", $1}' | xargs -n 100 cat > << parameters.filename >> 2>/dev/null || exit 0
 jobs:
   build:
     docker:
