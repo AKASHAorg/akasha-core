@@ -22,7 +22,7 @@
     "prepare": "npm run tsc"
   },
   "peerDependencies": {
-    "typescript": "^3.8.3"
+    "typescript": "3.8.3"
   },
   "files": [
     "lib"

@@ -26,8 +26,8 @@
     "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
   },
   "dependencies": {
-    "pouchdb-adapter-memory": "^7.1.1",
-    "rxdb": "^8.4.0",
-    "express-pouchdb": "^4.1.0"
+    "pouchdb-adapter-memory": "7.1.1",
+    "rxdb": "8.7.1",
+    "express-pouchdb": "4.2.0"
   }
 }

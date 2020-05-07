@@ -1,4 +1,3 @@
 lib
 build
-package-lock.json
 *.tsbuildinfo
