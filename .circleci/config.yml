@@ -15,6 +15,7 @@ commands:
           command: npx lerna list -p -a | awk '{printf "\"%s/package-lock.json\" ", $1}' | xargs cat > << parameters.filename >> 2>/dev/null
 jobs:
   build:
+    shell: /bin/sh -leo pipefail
     docker:
       # specify the version you desire here
       - image: circleci/node:12.13.0
