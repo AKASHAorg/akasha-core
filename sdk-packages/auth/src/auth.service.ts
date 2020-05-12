@@ -3,6 +3,7 @@ import commonServices, {
   WEB3_SERVICE,
   WEB3_UTILS_SERVICE,
 } from '@akashaproject/sdk-common/lib/constants';
+import { EthProviders } from '@akashaproject/ui-awf-typings';
 import coreServices from '@akashaproject/sdk-core/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import dbServices, {
@@ -33,11 +34,14 @@ const service: AkashaService = (invoke, log) => {
     return res.text;
   };
 
-  const signIn = async () => {
+  const signIn = async (provider: EthProviders = EthProviders.Web3Injected) => {
     const { setServiceSettings } = invoke(coreServices.SETTINGS_SERVICE);
     const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
-    const web3 = await invoke(commonServices[WEB3_SERVICE]).web3();
+    const web3 = await invoke(commonServices[WEB3_SERVICE]).web3(provider);
     const web3Utils = await invoke(commonServices[WEB3_UTILS_SERVICE]).getUtils();
+    if (provider === EthProviders.None) {
+      throw new Error('The provider must have a wallet/key in order to authenticate.');
+    }
     const signer = web3.getSigner();
     const address = await signer.getAddress();
     await setServiceSettings(DB_MODULE, [
