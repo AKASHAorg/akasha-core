@@ -1,7 +1,8 @@
 import coreServices from '@akashaproject/sdk-core/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
+import { EthProviders } from '@akashaproject/ui-awf-typings';
 import { ethers } from 'ethers';
-import commonServices, { CACHE_SERVICE, EthProviders, WEB3_SERVICE } from './constants';
+import commonServices, { CACHE_SERVICE, WEB3_SERVICE } from './constants';
 import getProvider from './web3.methods/provider';
 
 const service: AkashaService = (invoke, log) => {

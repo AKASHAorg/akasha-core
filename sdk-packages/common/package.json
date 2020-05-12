@@ -30,11 +30,12 @@
     "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
   },
   "dependencies": {
-    "@akashaproject/jsonschema-web3": "^1.0.4",
+    "@akashaproject/jsonschema-web3": "1.0.4",
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-runtime": "*",
-    "@walletconnect/web3-provider": "^1.0.0-beta.47",
-    "ethers": "^4.0.47"
+    "@walletconnect/web3-provider": "1.0.0-beta.47",
+    "@akashaproject/ui-awf-typings": "*",
+    "ethers": "4.0.47"
   },
   "devDependencies": {
     "@types/node": "13.13.4"

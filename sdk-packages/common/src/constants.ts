@@ -8,12 +8,6 @@ export const WEB3_WALLET_SERVICE = 'WEB3_WALLET_SERVICE';
 export const WEB3_UTILS_SERVICE = 'WEB3_UTILS_SERVICE';
 export const IPFS_SERVICE = 'IPFS_SERVICE';
 
-export enum EthProviders {
-  None = 1,
-  Web3Injected,
-  WalletConnect,
-}
-
 // ethereum chain id
 export const ETH_NETWORK = 'eth_network';
 // used for displaying images

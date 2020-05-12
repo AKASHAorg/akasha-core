@@ -20,9 +20,9 @@
     "@akashaproject/sdk": "*",
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-runtime": "*",
-    "jest": "^24.9.0",
-    "ts-jest": "^24.1.0",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.9"
+    "jest": "24.9.0",
+    "ts-jest": "24.1.0",
+    "webpack": "4.41.2",
+    "webpack-cli": "3.3.9"
   }
 }

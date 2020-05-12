@@ -40,7 +40,12 @@ export default class AppLoader implements IAppLoader {
   private readonly channelUtils;
   private readonly menuItems: IMenuList;
   private readonly translationManager: TranslationManager;
-
+  private readonly deferredIntegrations: {
+    integration: IPluginEntry;
+    integrationId: string;
+    menuItemType?: MenuItemType;
+  }[];
+  private isRegisteringLayout: boolean;
   public constructor(
     config: ILoaderConfig,
     initialApps: { plugins?: IPluginEntry[]; widgets?: IWidgetEntry[]; apps?: IAppEntry[] },
@@ -57,6 +62,8 @@ export default class AppLoader implements IAppLoader {
     this.registeredPlugins = new Map<string, IPluginConfig>();
     this.registeredWidgets = new Map<string, IWidgetConfig>();
     this.registeredApps = new Map<string, IPluginConfig>();
+    this.isRegisteringLayout = true;
+    this.deferredIntegrations = [];
     // tslint:disable-next-line:no-console
     console.time('AppLoader:firstMount');
     window.addEventListener('single-spa:first-mount', this.onFirstMount.bind(this));
@@ -64,21 +71,33 @@ export default class AppLoader implements IAppLoader {
     window.addEventListener('single-spa:app-change', (evt: any) => {
       this.appLogger.info(`single-spa:app-change %j`, evt.detail);
     });
+    // call as fast as possible https://github.com/single-spa/single-spa/issues/484
+    singleSpa.start({
+      urlRerouteOnly: true,
+    });
     this.loadLayout().then(async () => {
+      for (const widget of initialApps.widgets) {
+        await this.registerWidget(widget);
+      }
+      // after mounting all the root widgets
+      this.isRegisteringLayout = false;
       if (initialApps.plugins) {
         initialApps.plugins.forEach(plugin => this.registerPlugin(plugin));
-      }
-      if (initialApps.widgets) {
-        initialApps.widgets.forEach(widget => this.registerWidget(widget));
       }
 
       if (initialApps.apps) {
         initialApps.apps.forEach(app => this.registerApp(app));
       }
 
+      if (this.deferredIntegrations.length) {
+        this.deferredIntegrations.forEach(entry =>
+          this._registerIntegration(entry.integration, entry.integrationId, entry?.menuItemType),
+        );
+        // clear it
+        this.deferredIntegrations.length = 0;
+      }
+
       this.appLogger.info('[@akashaproject/sdk-ui-plugin-loader]: starting single spa');
-      // call on next tick
-      singleSpa.start();
     });
   }
 
@@ -91,6 +110,10 @@ export default class AppLoader implements IAppLoader {
     integrationId: string,
     menuItemType?: MenuItemType,
   ): void {
+    if (this.isRegisteringLayout) {
+      this.deferredIntegrations.push({ integration, integrationId, menuItemType });
+      return;
+    }
     if (integration.config && integration.config.activeWhen && integration.config.activeWhen.path) {
       integration.app.activeWhen = integration.config.activeWhen;
     }
@@ -114,15 +137,6 @@ export default class AppLoader implements IAppLoader {
       }
     }
 
-    const domEl = document.getElementById(this.config.layout.pluginSlotId);
-    if (!domEl) {
-      this.appLogger.error(
-        `The dom element you are attempting to mount %s, is not in dom yet!
-         Are you sure the layout is rendered?
-         It will fallback to document.body`,
-        integrationId,
-      );
-    }
     singleSpa.registerApplication(
       integrationId,
       this.beforeMount(integration.app.loadingFn, integration.app),
@@ -153,6 +167,11 @@ export default class AppLoader implements IAppLoader {
       subRoutes: this.createSubroutes(integration.app.menuItems),
     });
     this.menuItems.nextIndex += 1;
+    if (menuItemType === MenuItemType.Plugin) {
+      this.events.next(EventTypes.PluginInstall);
+    } else if (menuItemType === MenuItemType.App) {
+      this.events.next(EventTypes.AppInstall);
+    }
   }
   public registerApp(appEntry: IAppEntry): void {
     this.appLogger.info(
@@ -182,7 +201,6 @@ export default class AppLoader implements IAppLoader {
     }
     this.registeredPlugins.set(pluginId, { title: plugin.app.title || pluginId });
     this._registerIntegration(plugin, pluginId, MenuItemType.Plugin);
-    this.events.next(EventTypes.PluginInstall);
     this.appLogger.info(
       `[@akashaproject/sdk-ui-plugin-loader]: *plugin* ${plugin.app.name} registered!`,
     );
@@ -209,8 +227,7 @@ export default class AppLoader implements IAppLoader {
   public getMenuItems() {
     return this.menuItems.items.slice(0);
   }
-
-  public registerWidget(widget: IWidgetEntry): void {
+  public async registerWidget(widget: IWidgetEntry) {
     this.appLogger.info(
       `[@akashaproject/sdk-ui-plugin-loader] registering widget ${widget.app.name}`,
     );
@@ -249,12 +266,16 @@ export default class AppLoader implements IAppLoader {
       events: this.events,
       logger: this.appLogger.child({ widget: widgetId }),
     };
-    singleSpa.mountRootParcel(this.beforeMount(widget.app.loadingFn, widget.app), pProps);
+    const widgetS = singleSpa.mountRootParcel(
+      this.beforeMount(widget.app.loadingFn, widget.app),
+      pProps,
+    );
+    await widgetS.mountPromise;
     this.events.next(EventTypes.WidgetInstall);
     this.appLogger.info(`[@akashaproject/sdk-ui-plugin-loader]: ${widget.app.name} registered!`);
   }
 
-  public loadLayout() {
+  public async loadLayout() {
     const domEl = document.getElementById(this.config.rootNodeId);
     if (!domEl) {
       this.appLogger.error(
@@ -263,8 +284,7 @@ export default class AppLoader implements IAppLoader {
       throw new Error('[@akashaproject/sdk-ui-plugin-loader]: root node element not found!');
     }
     const { loadingFn, ...otherProps } = this.config.layout;
-    // this is very important to wait on for dom
-    return new Promise(resolve => {
+    await new Promise(async resolve => {
       const pProps = {
         domElement: domEl,
         ...otherProps,
@@ -272,8 +292,10 @@ export default class AppLoader implements IAppLoader {
           resolve();
         },
       };
-      singleSpa.mountRootParcel(loadingFn, pProps);
+      const layout = singleSpa.mountRootParcel(loadingFn, pProps);
+      await layout.mountPromise;
     });
+    return;
   }
 
   public async uninstallApp(appName: string, packageLoader: any, packageId: string) {
