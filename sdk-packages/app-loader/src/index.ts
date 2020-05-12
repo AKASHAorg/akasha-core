@@ -78,7 +78,7 @@ export default class AppLoader implements IAppLoader {
 
       this.appLogger.info('[@akashaproject/sdk-ui-plugin-loader]: starting single spa');
       // call on next tick
-      setTimeout(singleSpa.start, 0);
+      singleSpa.start();
     });
   }
 
@@ -133,7 +133,7 @@ export default class AppLoader implements IAppLoader {
         ...this.config,
         ...integration.config,
         activeWhen: integration.app.activeWhen,
-        domElement: domEl,
+        domElementGetter: () => document.getElementById(this.config.layout.pluginSlotId),
         i18n: this.translationManager.getInstance(integrationId),
         i18nConfig: integration.app.i18nConfig,
         logger: this.appLogger.child({ plugin: integrationId }),
@@ -221,7 +221,16 @@ export default class AppLoader implements IAppLoader {
       this.appLogger.error(`Widget ${widgetId} already registered`);
       return;
     }
-
+    const dependencies = {};
+    // @Todo: refactor this
+    if (widget.app.sdkModules.length) {
+      for (const dep of widget.app.sdkModules) {
+        if (this.channels.hasOwnProperty(dep.module)) {
+          Object.assign(dependencies, { [dep.module]: this.channels[dep.module] });
+          this.appLogger.info(`${widget.app.name} has access to ${dep.module} -> channel`);
+        }
+      }
+    }
     this.registeredWidgets.set(widgetId, { slot: widget.config.slot });
     const domEl = document.getElementById(widget.config.slot);
 
@@ -235,8 +244,10 @@ export default class AppLoader implements IAppLoader {
       ...widget.app,
       domElement: domEl,
       i18n: i18nInstance,
+      sdkModules: dependencies,
       getMenuItems: () => this.getMenuItems(),
       events: this.events,
+      logger: this.appLogger.child({ widget: widgetId }),
     };
     singleSpa.mountRootParcel(this.beforeMount(widget.app.loadingFn, widget.app), pProps);
     this.events.next(EventTypes.WidgetInstall);

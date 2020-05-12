@@ -4,7 +4,7 @@ import singleSpaReact from 'single-spa-react';
 import Widget from './Sidebar-widget';
 
 /**
- * This is the plugin's lifecycle logic
+ * This is the sidebar widget's lifecycle logic
  * @todo add more docs!!
  */
 

@@ -54,6 +54,8 @@ export const loadPlaceholder = (placeholderName: string) => {
           throw result;
         case RESOLVED:
           return result;
+        default:
+          return undefined;
       }
     },
   };

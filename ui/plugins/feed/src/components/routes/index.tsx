@@ -2,7 +2,7 @@ import DS from '@akashaproject/design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import WidgetList from '../widgets';
+// import WidgetList from '../widgets';
 import FeedHomePage from './feed-home-page';
 
 const { Box, styled } = DS;
@@ -25,14 +25,14 @@ const FeedBox = styled(Box)`
   }
 `;
 
-const WidgetBox = styled(Box)`
-  padding: 0.5em 0;
-  @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
-    max-width: 40%;
-    width: 100%;
-    margin: 0 1em;
-  }
-`;
+// const WidgetBox = styled(Box)`
+//   padding: 0.5em 0;
+//   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
+//     max-width: 40%;
+//     width: 100%;
+//     margin: 0 1em;
+//   }
+// `;
 
 const Feed = styled(Box)`
   height: 100%;
@@ -55,9 +55,9 @@ const Routes: React.FC<IRoutesProps> = props => {
             <Route component={ArticleNotFound} />
           </Switch>
         </FeedBox>
-        <WidgetBox>
+        {/* <WidgetBox>
           <WidgetList />
-        </WidgetBox>
+        </WidgetBox> */}
       </Feed>
     </Router>
   );

@@ -13,12 +13,6 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   const loginWidget = await System.import('@widget/login');
 
   const feedPlugin = await System.import('@plugins/feed');
-  const profilePlugin = await System.import('@plugins/profile');
-  const searchPlugin = await System.import('@plugins/search');
-  const appCenterPlugin = await System.import('@plugins/app-center');
-  const notificationsPlugin = await System.import('@plugins/notifications');
-
-  const boxApp = await System.import('@app/3box');
   // tslint:disable-next-line:no-console
   console.timeEnd('loadApps');
   const appConfig = {
@@ -29,39 +23,6 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   const registeredPlugins: IAppEntry[] = [
     {
       app: feedPlugin.application,
-      config: {
-        area: MenuItemAreaType.AppArea,
-      },
-    },
-    {
-      app: profilePlugin.application,
-      config: {
-        area: MenuItemAreaType.QuickAccessArea,
-      },
-    },
-    {
-      app: searchPlugin.application,
-      config: {
-        area: MenuItemAreaType.QuickAccessArea,
-      },
-    },
-    {
-      app: notificationsPlugin.application,
-      config: {
-        area: MenuItemAreaType.QuickAccessArea,
-      },
-    },
-    {
-      app: appCenterPlugin.application,
-      config: {
-        area: MenuItemAreaType.BottomArea,
-      },
-    },
-  ];
-
-  const registeredApps: IAppEntry[] = [
-    {
-      app: boxApp.application,
       config: {
         area: MenuItemAreaType.AppArea,
       },
@@ -82,12 +43,16 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
       config: { slot: layout.application.widgetSlotId },
     },
   ];
+  const profilePlugin = await System.import('@plugins/profile');
+  const searchPlugin = await System.import('@plugins/search');
+  const appCenterPlugin = await System.import('@plugins/app-center');
+  const notificationsPlugin = await System.import('@plugins/notifications');
+  const boxApp = await System.import('@app/3box');
   const ipfs = await System.import('ipfs');
   const sdk = await System.import('@akashaproject/sdk');
-
   const world = sdk.init({
     config: appConfig,
-    initialApps: { plugins: registeredPlugins, widgets: registeredWidgets, apps: registeredApps },
+    initialApps: { plugins: registeredPlugins, widgets: registeredWidgets },
   });
 
   // tslint:disable-next-line:no-console
@@ -99,7 +64,35 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   });
 
   // example loading an extra plugin after start
-  // coming soon
-
+  world.appLoader.registerPlugin({
+    app: profilePlugin.application,
+    config: {
+      area: MenuItemAreaType.QuickAccessArea,
+    },
+  });
+  world.appLoader.registerPlugin({
+    app: searchPlugin.application,
+    config: {
+      area: MenuItemAreaType.QuickAccessArea,
+    },
+  });
+  world.appLoader.registerPlugin({
+    app: appCenterPlugin.application,
+    config: {
+      area: MenuItemAreaType.BottomArea,
+    },
+  });
+  world.appLoader.registerPlugin({
+    app: notificationsPlugin.application,
+    config: {
+      area: MenuItemAreaType.QuickAccessArea,
+    },
+  });
+  world.appLoader.registerApp({
+    app: boxApp.application,
+    config: {
+      area: MenuItemAreaType.AppArea,
+    },
+  });
   // @ts-ignore
 })(window.System);

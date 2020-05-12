@@ -12,4 +12,5 @@ export const application = {
   topbarSlotId: 'topbar-slot',
   sidebarSlotId: 'sidebar-slot',
   widgetSlotId: 'widget-slot',
+  modalSlotId: 'modal-slot',
 };

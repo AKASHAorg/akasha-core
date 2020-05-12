@@ -165,6 +165,10 @@ const StyledRefDiv = styled.div`
 const IconBase: React.FC<IconProps> = React.forwardRef(
   ({ color, size, clickable, type, primaryColor, accentColor, ...props }, ref) => {
     const Component = (icons as any)[type];
+    if (!Component) {
+      console.error('There is no such in icon', type);
+      return null;
+    }
     const iconClass = classNames('icon', props.className);
     return (
       <StyledRefDiv ref={ref}>

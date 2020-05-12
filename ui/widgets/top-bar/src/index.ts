@@ -23,6 +23,6 @@ export const application = {
       './components'
     ),
   name: 'ui-widget-topbar',
-  services: [],
+  sdkModules: [],
   title: 'Topbar Widget',
 };

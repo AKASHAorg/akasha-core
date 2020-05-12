@@ -1,5 +1,14 @@
 /* Components */
-import { Box, Grid, Grommet, grommet, ResponsiveContext, ThemeContext, Text } from 'grommet';
+import {
+  Box,
+  Grid,
+  Grommet,
+  grommet,
+  ResponsiveContext,
+  ThemeContext,
+  Text,
+  Carousel,
+} from 'grommet';
 import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
 import { Avatar, EditableAvatar } from './components/Avatar';
 import { ResponsiveSidebar, Sidebar, SidebarMobile, Topbar } from './components/Bars/index';
@@ -24,6 +33,8 @@ import {
   ProfileCard,
   ProfileWidgetCard,
   TopicsWidgetCard,
+  WidgetAreaCardBox,
+  ModalCard,
 } from './components/Cards';
 import TextInputField from './components/Forms/text-input-field';
 import { AppIcon, Icon, iconTypes } from './components/Icon';
@@ -49,6 +60,7 @@ const exported = {
   Avatar,
   AppIcon,
   Button,
+  Carousel,
   EditableAvatar,
   AppInfoWidgetCard,
   AppsWidgetCard,
@@ -103,6 +115,8 @@ const exported = {
   isBase64,
   formatImageSrc,
   Helmet,
+  WidgetAreaCardBox,
+  ModalCard,
 };
 
 export default exported;

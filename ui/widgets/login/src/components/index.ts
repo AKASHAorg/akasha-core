@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
-import Widget from './login-widget';
+import App from './App';
 
 /**
  * This is the plugin's lifecycle logic
@@ -11,7 +11,7 @@ import Widget from './login-widget';
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Widget,
+  rootComponent: App,
 });
 
 export const bootstrap = reactLifecycles.bootstrap;
