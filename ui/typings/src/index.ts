@@ -21,5 +21,9 @@ export enum LogoTypeSource {
   IPFS = 'ipfs',
   AVATAR = 'avatar',
 }
-
+export enum EthProviders {
+  None = 1,
+  Web3Injected,
+  WalletConnect,
+}
 export const AppLoader = AppLoaderTypes;
