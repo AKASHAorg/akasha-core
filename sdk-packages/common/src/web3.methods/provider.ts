@@ -1,6 +1,7 @@
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { ethers } from 'ethers';
-import { ETH_NETWORK, EthProviders, moduleName } from '../constants';
+import { ETH_NETWORK, moduleName } from '../constants';
+import { EthProviders } from '@akashaproject/ui-awf-typings';
 import { ConnectToInjected, ConnectToWalletConnect } from './provider-utils';
 
 export default async function getProvider(
@@ -21,7 +22,7 @@ export default async function getProvider(
     return ethers.getDefaultProvider(network);
   }
 
-  if (provider === EthProviders.Web3Injected) {
+  if (provider === EthProviders.Web3Injected || !provider) {
     ethProvider = await ConnectToInjected();
   }
 
