@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
-import { authorize, getEthAddress } from '../services/login-service';
 import { LearnMoreTutorial } from './tutorial-modal';
 import LoginWidgetIllustration from './icons/login-widget-illustration';
 import EthereumIcon from './icons/ethereum-icon';
+import { useLoginState } from '../state';
 
 const {
   IconLink,
@@ -16,6 +16,7 @@ const {
   LoginCTAWidgetCard,
   EthProviderListModal,
   EthProviderModal,
+  createGlobalStyle,
 } = DS;
 
 const METAMASK_PROVIDER = 'metamask';
@@ -72,59 +73,43 @@ const EthProviderModalIllustration: React.FC<IEthProviderIllustrationProps> = pr
 
 const LoginWidget: React.FC<ILoginWidgetProps> = props => {
   const { t } = useTranslation();
-  const [, setEthAddress] = React.useState<string | null>(null);
-  const [jwtToken, setJwtToken] = React.useState<string | null>(null);
-  const [providerListVisibility, setProviderListVisibility] = React.useState(false);
-  const [learnMoreVisibility, setLearnMoreVisibility] = React.useState(false);
-  const [selectedProvider, setSelectedProvider] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    getEthAddress({ setEthAddress, commonModule: props.sdkModules.commons, logger: props.logger });
-  }, []);
+  const [state, actions] = useLoginState(props.sdkModules, props.logger);
 
   const handleLearnMore = () => {
-    setLearnMoreVisibility(true);
+    actions.setLearnMoreVisibility({ isVisible: true });
   };
 
   const handleLoginSelect = () => {
-    setProviderListVisibility(true);
+    actions.setProviderListVisibility({ isVisible: true });
   };
 
   const handleMetamaskLogin = () => {
-    authorize({
-      setJwtToken,
-      ethProvider: ETH_PROVIDERS[METAMASK_PROVIDER],
-      authModule: props.sdkModules.auth,
-      logger: props.logger,
-    });
+    actions.authorize(ETH_PROVIDERS[METAMASK_PROVIDER]);
   };
 
   const handleWalletConnectLogin = () => {
-    authorize({
-      setJwtToken,
-      ethProvider: ETH_PROVIDERS[WALLETCONNECT_PROVIDER],
-      authModule: props.sdkModules.auth,
-      logger: props.logger,
-    });
+    actions.authorize(ETH_PROVIDERS[WALLETCONNECT_PROVIDER]);
   };
 
   const handleProvidersModalClose = () => {
-    setProviderListVisibility(false);
+    actions.setProviderListVisibility({ isVisible: false });
   };
 
   const handleTutorialModalClose = () => {
-    setLearnMoreVisibility(false);
+    actions.setLearnMoreVisibility({ isVisible: false });
   };
 
-  const handleProviderClick = (providerId: string) => {
-    setProviderListVisibility(false);
-    setSelectedProvider(providerId);
+  const handleProviderClick = (
+    providerId: typeof METAMASK_PROVIDER | typeof WALLETCONNECT_PROVIDER,
+  ) => {
+    actions.setProviderListVisibility({ isVisible: false });
+    actions.setSelectedProvider({ selectedProvider: providerId });
   };
   const handleProviderModalClose = () => {
-    setSelectedProvider(null);
+    actions.setSelectedProvider({ selectedProvider: null });
   };
 
-  if (jwtToken) {
+  if (state.data.jwtToken) {
     return null;
   }
 
@@ -148,7 +133,7 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
         onLoginClick={handleLoginSelect}
       />
       <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
-        {providerListVisibility && (
+        {state.data.providerListVisibility && (
           <EthProviderListModal
             onProviderClick={handleProviderClick}
             onModalClose={handleProvidersModalClose}
@@ -170,7 +155,9 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
               <Text textAlign="center" margin={{ top: '1em' }} style={{ userSelect: 'none' }}>
                 <>{t('What is a wallet? How do i get an Ethereum address?')}</>
                 <VideoTutorialLink
-                  onClick={() => {}}
+                  onClick={() => {
+                    /* @TODO: do something! */
+                  }}
                   icon={<Icon type="media" />}
                   label={t('See Video Tutorial') as string}
                   padded={true}
@@ -179,7 +166,7 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
             }
           />
         )}
-        {learnMoreVisibility && (
+        {state.data.learnMoreVisibility && (
           <LearnMoreTutorial
             onModalClose={handleTutorialModalClose}
             slides={[
@@ -193,7 +180,7 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
             ]}
           />
         )}
-        {selectedProvider === METAMASK_PROVIDER && (
+        {state.data.selectedProvider === METAMASK_PROVIDER && (
           <EthProviderModal
             illustration={
               <EthProviderModalIllustration providerIcon={<Icon type="metamask" size="lg" />} />
@@ -204,22 +191,33 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
             onModalClose={handleProviderModalClose}
           />
         )}
-        {selectedProvider === WALLETCONNECT_PROVIDER && (
-          <EthProviderModal
-            illustration={
-              <EthProviderModalIllustration
-                providerIcon={<Icon type="walletconnect" size="lg" />}
-              />
-            }
-            headLine={t('Just a few more steps! We are almost there…')}
-            message={t('Scan QR code with a WalletConnect compatible wallet')}
-            onModalClose={handleProviderModalClose}
-            onLogin={handleWalletConnectLogin}
-          />
+        {state.data.selectedProvider === WALLETCONNECT_PROVIDER && (
+          <WalletConnectModalTrigger onLogin={handleWalletConnectLogin} />
         )}
       </ModalRenderer>
     </>
   );
 };
+export interface IWalletConnectModalProps {
+  onLogin: () => void;
+}
 
+const GlobalStyle = createGlobalStyle`
+  #walletconnect-wrapper {
+    position: absolute;
+    .walletconnect-modal__base {
+      top: 0;
+      transform: none;
+      margin-top: 2em;
+    }
+  }
+`;
+
+const WalletConnectModalTrigger: React.FC<IWalletConnectModalProps> = props => {
+  React.useEffect(() => {
+    props.onLogin();
+  }, []);
+
+  return <GlobalStyle />;
+};
 export default LoginWidget;

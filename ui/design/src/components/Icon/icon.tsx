@@ -170,6 +170,7 @@ const IconBase: React.FC<IconProps> = React.forwardRef(
   ({ color, size, clickable, type, primaryColor, accentColor, ...props }, ref) => {
     const Component = (icons as any)[type];
     if (!Component) {
+      // tslint:disable-next-line no-console
       console.error('There is no such icon', type);
       return null;
     }
