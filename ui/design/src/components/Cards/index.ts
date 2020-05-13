@@ -15,6 +15,7 @@ import AppInfoWidgetCard from './widget-cards/app-info-widget-card';
 import AppsWidgetCard from './widget-cards/apps-widget-card';
 import MiniInfoWidgetCard from './widget-cards/mini-info-widget-card';
 import TopicsWidgetCard from './widget-cards/topics-widget-card';
+import LoginCTAWidgetCard from './widget-cards/login-cta-widget-card';
 
 export {
   AppInfoWidgetCard,
@@ -32,4 +33,5 @@ export {
   EnsFormCard,
   WidgetAreaCardBox,
   ModalCard,
+  LoginCTAWidgetCard,
 };

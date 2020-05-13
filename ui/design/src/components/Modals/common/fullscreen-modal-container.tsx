@@ -1,27 +1,20 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
-import ReactDOM from 'react-dom';
-
-const { Box } = DS;
+import { Box } from 'grommet';
+import styled from 'styled-components';
 
 export interface IModalContainerProps {
   onModalClose: () => void;
 }
-
+const StyledModalWrapper = styled(Box)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+`;
 export const ModalContainer: React.FC<IModalContainerProps> = props => {
   return (
-    <Box
-      fill={true}
-      pad={{ top: '2em' }}
-      align="center"
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-      }}
-    >
+    <StyledModalWrapper fill={true} pad={{ top: '2em' }} align="center">
       <Box
         style={{ zIndex: 10 }}
         animation={{
@@ -49,20 +42,6 @@ export const ModalContainer: React.FC<IModalContainerProps> = props => {
         }}
         onClick={props.onModalClose}
       />
-    </Box>
+    </StyledModalWrapper>
   );
 };
-
-export const Modal: React.FC<{ slotId?: string }> = props => {
-  const { children, slotId } = props;
-  if (!slotId) {
-    return null;
-  }
-  const modalRootEl = document.getElementById(slotId);
-  if (modalRootEl) {
-    return ReactDOM.createPortal(children, modalRootEl);
-  }
-  // TODO: handle this more seriously!
-  return null;
-};
-

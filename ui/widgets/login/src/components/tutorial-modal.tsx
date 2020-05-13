@@ -1,9 +1,17 @@
 import * as React from 'react';
-import { ModalContainer } from './modal-container';
 import DS from '@akashaproject/design-system';
-import { HorizontalDivider } from './dividers';
 
-const { Box, ModalCard, IconLink, IconButton, Icon, Text, Carousel } = DS;
+const {
+  Box,
+  ModalCard,
+  IconLink,
+  IconButton,
+  Icon,
+  Text,
+  Carousel,
+  ModalContainer,
+  HorizontalDivider,
+} = DS;
 export interface ITutorialSlide {
   title: string;
   content: string;
@@ -31,7 +39,7 @@ export const LearnMoreTutorial = (props: ILearnMoreModalProps) => {
           <IconLink label="Skip tutorial" onClick={props.onModalClose} />
           <IconButton
             label="Next"
-            icon={<Icon type="arrowRight" />}
+            icon={<Icon type="arrowRight" primaryColor={true} />}
             reverse={true}
             primary={true}
           />

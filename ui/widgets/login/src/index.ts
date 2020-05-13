@@ -1,5 +1,6 @@
 import { initReactI18next } from 'react-i18next';
 import { moduleName as auth } from '@akashaproject/sdk-auth/lib/constants';
+import { moduleName as common } from '@akashaproject/sdk-common/lib/constants';
 
 /**
  * All widgets must export an object like this:
@@ -24,6 +25,6 @@ export const application = {
       './components'
     ),
   name: 'ui-widget-login',
-  sdkModules: [{ module: auth }],
+  sdkModules: [{ module: auth }, { module: common }],
   title: 'Login Widget',
 };

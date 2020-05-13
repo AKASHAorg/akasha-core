@@ -1,7 +1,8 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
-
-const { Box, Button, WidgetAreaCardBox, Text, styled } = DS;
+import { Box, Text } from 'grommet';
+import styled from 'styled-components';
+import { WidgetAreaCardBox } from '../common/basic-card-box';
+import { Button } from '../../Buttons';
 
 const LearnMoreButton = styled(Button)`
   flex: 1;
@@ -24,6 +25,8 @@ export interface ILoginWidgetCardProps {
   title: string;
   textContent: string;
   image: React.ReactElement;
+  learnMoreLabel: string;
+  connectLabel: string;
 }
 const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
   return (
@@ -34,8 +37,8 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
       </Text>
       <Text margin={{ top: '.25em', bottom: '1em' }}>{props.textContent}</Text>
       <Box direction="row" justify="between">
-        <LearnMoreButton onClick={props.onLearnMoreClick} label="Learn More" />
-        <ConnectButton primary={true} onClick={props.onLoginClick} label="Connect Address" />
+        <LearnMoreButton onClick={props.onLearnMoreClick} label={props.learnMoreLabel} />
+        <ConnectButton primary={true} onClick={props.onLoginClick} label={props.connectLabel} />
       </Box>
     </LoginWidgetBox>
   );

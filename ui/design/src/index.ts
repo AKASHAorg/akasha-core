@@ -19,6 +19,7 @@ import {
   ProfileAvatarButton,
   VoteIconButton,
 } from './components/Buttons';
+
 import {
   AppInfoWidgetCard,
   AppsWidgetCard,
@@ -35,11 +36,18 @@ import {
   TopicsWidgetCard,
   WidgetAreaCardBox,
   ModalCard,
+  LoginCTAWidgetCard,
 } from './components/Cards';
 import TextInputField from './components/Forms/text-input-field';
 import { AppIcon, Icon, iconTypes } from './components/Icon';
 import { CommentInput, SearchInput } from './components/Input';
-import { ShareModal } from './components/Modals';
+import {
+  ShareModal,
+  ModalContainer,
+  ModalRenderer,
+  EthProviderListModal,
+  EthProviderModal,
+} from './components/Modals';
 import { NotificationsPopover, SelectPopover } from './components/Popovers';
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
@@ -48,6 +56,7 @@ import VirtualList from './components/VirtualList';
 import { isBase64 } from './utils/string-utils';
 import { formatImageSrc } from './utils/image-utils';
 import { Helmet } from 'react-helmet';
+import { HorizontalDivider } from './components/Dividers';
 
 /* Themes and theme related utils */
 import darkTheme from './styles/themes/dark';
@@ -117,6 +126,12 @@ const exported = {
   Helmet,
   WidgetAreaCardBox,
   ModalCard,
+  EthProviderListModal,
+  EthProviderModal,
+  ModalContainer,
+  ModalRenderer,
+  HorizontalDivider,
+  LoginCTAWidgetCard,
 };
 
 export default exported;

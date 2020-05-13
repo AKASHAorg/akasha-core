@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { ModalContainer } from './modal-container';
-import { HorizontalDivider } from './dividers';
-import DS from '@akashaproject/design-system';
-
-const { Box, styled, ModalCard, Text } = DS;
+import { ModalContainer } from '../common/fullscreen-modal-container';
+import { HorizontalDivider } from '../../Dividers';
+import { Box, Text } from 'grommet';
+import { ModalCard } from '../../Cards';
+import styled from 'styled-components';
 
 const WalletProviderButton = styled(Box)`
   padding: 1.75em;
@@ -12,6 +12,7 @@ const WalletProviderButton = styled(Box)`
   cursor: pointer;
   user-select: none;
 `;
+
 // @ts-ignore-next-line
 const StyledWalletList = styled(Box)`
   ${WalletProviderButton}:nth-child(2) {
@@ -24,7 +25,7 @@ export interface IProviderInfo {
   title: string;
   description: string;
 }
-export const ProvidersListModal = (props: {
+const ProvidersListModal = (props: {
   onModalClose: () => void;
   onProviderClick: (providerId: string) => void;
   providers: IProviderInfo[];
@@ -58,3 +59,5 @@ export const ProvidersListModal = (props: {
     </ModalContainer>
   );
 };
+
+export default ProvidersListModal;

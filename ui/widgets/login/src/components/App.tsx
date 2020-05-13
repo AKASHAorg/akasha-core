@@ -32,7 +32,6 @@ export default class App extends PureComponent<ILoginWidgetProps> {
   }
 
   public render() {
-    console.log(this.props, 'the props');
     return (
       <I18nextProvider i18n={this.props.i18n}>
         <Suspense fallback={<>...</>}>

@@ -42,6 +42,7 @@ export type IconType =
   | 'loading'
   | 'media'
   | 'menu'
+  | 'metamask'
   | 'moreDark'
   | 'moreGrey'
   | 'notifications'
@@ -73,6 +74,7 @@ export type IconType =
   | 'underline'
   | 'upload'
   | 'wallet'
+  | 'walletconnect'
   | 'iconGeneralFeed';
 
 export const iconTypes: IconType[] = [
@@ -113,6 +115,7 @@ export const iconTypes: IconType[] = [
   'loading',
   'media',
   'menu',
+  'metamask',
   'moreDark',
   'moreGrey',
   'notifications',
@@ -143,6 +146,7 @@ export const iconTypes: IconType[] = [
   'underline',
   'upload',
   'wallet',
+  'walletconnect',
   'iconGeneralFeed',
 ];
 
@@ -154,7 +158,7 @@ export interface IconProps extends CommonInterface<any> {
   clickable?: boolean;
   primaryColor?: boolean;
   accentColor?: boolean;
-  size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg';
+  size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xxl';
 }
 
 const StyledRefDiv = styled.div`
@@ -166,7 +170,7 @@ const IconBase: React.FC<IconProps> = React.forwardRef(
   ({ color, size, clickable, type, primaryColor, accentColor, ...props }, ref) => {
     const Component = (icons as any)[type];
     if (!Component) {
-      console.error('There is no such in icon', type);
+      console.error('There is no such icon', type);
       return null;
     }
     const iconClass = classNames('icon', props.className);
@@ -234,6 +238,11 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
             return css`
               width: 2.5em;
               height: 2.5em;
+            `;
+          case 'xxl':
+            return css`
+              width: 4em;
+              height: 4em;
             `;
           default:
             return css`

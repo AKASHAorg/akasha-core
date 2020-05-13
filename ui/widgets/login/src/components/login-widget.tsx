@@ -1,22 +1,30 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
-import LoginCTACard from './login-cta-card';
-import { Modal } from './modal-container';
-import { ProvidersListModal } from './providers-list-modal';
-import { authorize, getJWT } from '../services/login-service';
-import { MetamaskAuthModal } from './metamask-auth-modal';
-import { WalletConnectAuthModal } from './walletconnect-auth-modal';
+import { authorize, getEthAddress } from '../services/login-service';
 import { LearnMoreTutorial } from './tutorial-modal';
-import MetamaskIcon from './icons/metamask-icon';
-import WalletConnectIcon from './icons/walletconnect-icon';
 import LoginWidgetIllustration from './icons/login-widget-illustration';
 import EthereumIcon from './icons/ethereum-icon';
 
-const { IconLink, Icon, Text, styled, Box } = DS;
+const {
+  IconLink,
+  Icon,
+  Text,
+  styled,
+  Box,
+  ModalRenderer,
+  LoginCTAWidgetCard,
+  EthProviderListModal,
+  EthProviderModal,
+} = DS;
 
 const METAMASK_PROVIDER = 'metamask';
 const WALLETCONNECT_PROVIDER = 'walletconnect';
+
+const ETH_PROVIDERS = {
+  [METAMASK_PROVIDER]: 2,
+  [WALLETCONNECT_PROVIDER]: 3,
+};
 
 const VideoTutorialLink = styled(IconLink)`
   vertical-align: top;
@@ -42,7 +50,12 @@ const HorizontalDashedLine = styled.div`
   height: 1px;
   flex: 1;
 `;
-const MetamaskAuthModalIllustration: React.FC = () => (
+
+export interface IEthProviderIllustrationProps {
+  providerIcon: React.ReactElement;
+}
+
+const EthProviderModalIllustration: React.FC<IEthProviderIllustrationProps> = props => (
   <Box direction="row" align="center" justify="center" margin="1.5em 0">
     <Box
       alignContent="between"
@@ -50,9 +63,7 @@ const MetamaskAuthModalIllustration: React.FC = () => (
       style={{ maxWidth: '67%', width: '100%', alignItems: 'center' }}
       direction="row"
     >
-      <IconCircleBg>
-        <MetamaskIcon width="40" height="36" />
-      </IconCircleBg>
+      <IconCircleBg>{props.providerIcon}</IconCircleBg>
       <HorizontalDashedLine />
       <EthereumIcon />
     </Box>
@@ -61,13 +72,14 @@ const MetamaskAuthModalIllustration: React.FC = () => (
 
 const LoginWidget: React.FC<ILoginWidgetProps> = props => {
   const { t } = useTranslation();
-  const [jwtToken, setJwtToken] = React.useState(null);
+  const [, setEthAddress] = React.useState<string | null>(null);
+  const [jwtToken, setJwtToken] = React.useState<string | null>(null);
   const [providerListVisibility, setProviderListVisibility] = React.useState(false);
   const [learnMoreVisibility, setLearnMoreVisibility] = React.useState(false);
   const [selectedProvider, setSelectedProvider] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    getJWT({ setJwtToken, authModule: props.sdkModules.auth, logger: props.logger });
+    getEthAddress({ setEthAddress, commonModule: props.sdkModules.commons, logger: props.logger });
   }, []);
 
   const handleLearnMore = () => {
@@ -79,7 +91,21 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
   };
 
   const handleMetamaskLogin = () => {
-    authorize({ setJwtToken, authModule: props.sdkModules.auth, logger: props.logger });
+    authorize({
+      setJwtToken,
+      ethProvider: ETH_PROVIDERS[METAMASK_PROVIDER],
+      authModule: props.sdkModules.auth,
+      logger: props.logger,
+    });
+  };
+
+  const handleWalletConnectLogin = () => {
+    authorize({
+      setJwtToken,
+      ethProvider: ETH_PROVIDERS[WALLETCONNECT_PROVIDER],
+      authModule: props.sdkModules.auth,
+      logger: props.logger,
+    });
   };
 
   const handleProvidersModalClose = () => {
@@ -94,7 +120,7 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
     setProviderListVisibility(false);
     setSelectedProvider(providerId);
   };
-  const handleMetamaskLoginClose = () => {
+  const handleProviderModalClose = () => {
     setSelectedProvider(null);
   };
 
@@ -104,7 +130,7 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
 
   return (
     <>
-      <LoginCTACard
+      <LoginCTAWidgetCard
         image={
           <img
             src={LoginWidgetIllustration}
@@ -116,24 +142,26 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
         textContent={t(
           'Connect an Ethereum address from your wallet to open a new world of interactions!',
         )}
+        learnMoreLabel={t('Learn More')}
+        connectLabel={t('Connect Address')}
         onLearnMoreClick={handleLearnMore}
         onLoginClick={handleLoginSelect}
       />
-      <Modal slotId={props.layoutConfig.modalSlotId}>
+      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
         {providerListVisibility && (
-          <ProvidersListModal
+          <EthProviderListModal
             onProviderClick={handleProviderClick}
             onModalClose={handleProvidersModalClose}
             providers={[
               {
                 id: METAMASK_PROVIDER,
-                logo: <MetamaskIcon />,
+                logo: <Icon type="metamask" size="xxl" />,
                 title: t('MetaMask'),
                 description: t('Connect to your MetaMask wallet'),
               },
               {
                 id: WALLETCONNECT_PROVIDER,
-                logo: <WalletConnectIcon />,
+                logo: <Icon type="walletconnect" size="xxl" />,
                 title: t('WalletConnect'),
                 description: t('Scan with WalletConnect'),
               },
@@ -156,7 +184,7 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
             onModalClose={handleTutorialModalClose}
             slides={[
               {
-                title: `👨‍🚀👩‍🚀 ${t('Create your own profile on ethereum.world')}`,
+                title: `👨‍🚀👩‍🚀 ${t('Create your own profile on ethereum' + '.' + 'world')}`,
                 content: t(
                   'Customize your appearance with 3Box and Ethereum Name Service Integrations',
                 ),
@@ -166,16 +194,30 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
           />
         )}
         {selectedProvider === METAMASK_PROVIDER && (
-          <MetamaskAuthModal
-            illustration={<MetamaskAuthModalIllustration />}
+          <EthProviderModal
+            illustration={
+              <EthProviderModalIllustration providerIcon={<Icon type="metamask" size="lg" />} />
+            }
             headLine={t('Just a few more steps! We are almost there…')}
-            message={t('Approve the message in your Web3 wallet to continue.')}
+            message={t('Approve the message in your Web3 wallet to continue')}
             onLogin={handleMetamaskLogin}
-            onModalClose={handleMetamaskLoginClose}
+            onModalClose={handleProviderModalClose}
           />
         )}
-        {selectedProvider === WALLETCONNECT_PROVIDER && <WalletConnectAuthModal />}
-      </Modal>
+        {selectedProvider === WALLETCONNECT_PROVIDER && (
+          <EthProviderModal
+            illustration={
+              <EthProviderModalIllustration
+                providerIcon={<Icon type="walletconnect" size="lg" />}
+              />
+            }
+            headLine={t('Just a few more steps! We are almost there…')}
+            message={t('Scan QR code with a WalletConnect compatible wallet')}
+            onModalClose={handleProviderModalClose}
+            onLogin={handleWalletConnectLogin}
+          />
+        )}
+      </ModalRenderer>
     </>
   );
 };

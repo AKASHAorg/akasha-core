@@ -1,26 +1,24 @@
 import * as React from 'react';
-import { ModalContainer } from './modal-container';
-import DS from '@akashaproject/design-system';
+import { ModalContainer } from '../common/fullscreen-modal-container';
+import { ModalCard } from '../../Cards';
+import { Text } from 'grommet';
 
-const { ModalCard, Text } = DS;
-
-export interface IMetamaskAuthModalProps {
-  onLogin?: () => void;
+export interface IProviderModalProps {
   onModalClose: () => void;
+  onLogin: () => void;
   headLine: string;
   message: string;
   illustration: React.ReactElement;
 }
 
-export const MetamaskAuthModal: React.FC<IMetamaskAuthModalProps> = props => {
+const ProviderAuthModal: React.FC<IProviderModalProps> = props => {
   React.useEffect(() => {
-    if (props.onLogin) {
-      props.onLogin();
-    }
+    props.onLogin();
   }, []);
+
   return (
     <ModalContainer onModalClose={props.onModalClose}>
-      <ModalCard style={{ padding: '1em 4em' }}>
+      <ModalCard style={{ padding: '2em 4em' }}>
         {props.illustration}
         <Text weight="bold" size="large">
           {props.headLine}
@@ -30,3 +28,5 @@ export const MetamaskAuthModal: React.FC<IMetamaskAuthModalProps> = props => {
     </ModalContainer>
   );
 };
+
+export default ProviderAuthModal;
