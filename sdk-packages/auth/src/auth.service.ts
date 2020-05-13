@@ -46,7 +46,7 @@ const service: AkashaService = (invoke, log) => {
     const address = await signer.getAddress();
     await setServiceSettings(DB_MODULE, [
       [DB_PASSWORD, web3Utils.id(address)],
-      [DB_NAME, `ewa-db${address}-v01`], // so it doesn't crash for multiple auth users using the same browser
+      [DB_NAME, `ewa01${address.toLowerCase()}`], // so it doesn't crash for multiple auth users using the same browser
     ]);
     const attachment = await invoke(dbServices[DB_SETTINGS_ATTACHMENT]);
     const authAttachmentToken = await attachment.get({ id: 'auth_token', ethAddress: address });
