@@ -5,7 +5,7 @@ import { text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
-const { Box, CommentInput, SearchInput } = DS;
+const { Box, CommentInput, DropSearchInput, SearchInput } = DS;
 const suggestionsFromSpace = {
   users: [
     {
@@ -26,11 +26,11 @@ const suggestionsFromSpace = {
   ],
 };
 
-const SearchInputComponent = () => {
+const DropSearchInputComponent = () => {
   return (
     <Box fill={true} justify="center" align="center">
       <Box width="medium" pad={{ top: 'large' }}>
-        <SearchInput
+        <DropSearchInput
           getData={action('Get Data')}
           dataSource={suggestionsFromSpace}
           placeholder={'Search something...'}
@@ -46,6 +46,29 @@ const SearchInputComponent = () => {
     </Box>
   );
 };
+
+const SearchInputComponent = () => {
+  const [inputValue, setInputValue] = React.useState('');
+  const handleInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(ev.target.value);
+  };
+  const handleCancel = () => {
+    setInputValue('');
+  };
+
+  return (
+    <Box fill={true} justify="center" align="center">
+      <Box width="medium" pad={{ top: 'large' }}>
+        <SearchInput
+          inputValue={inputValue}
+          onChange={handleInputChange}
+          handleCancel={handleCancel}
+        />
+      </Box>
+    </Box>
+  );
+};
+
 const CommentInputComponent = () => {
   return (
     <Box justify="center" align="center">
@@ -62,5 +85,7 @@ const CommentInputComponent = () => {
   );
 };
 
-storiesOf('Input/Seach Input', module).add('search', () => <SearchInputComponent />);
+storiesOf('Input/Search Inputs', module)
+  .add('drop search', () => <DropSearchInputComponent />)
+  .add('drop search', () => <SearchInputComponent />);
 storiesOf('Input/Comment Input', module).add('comment', () => <CommentInputComponent />);

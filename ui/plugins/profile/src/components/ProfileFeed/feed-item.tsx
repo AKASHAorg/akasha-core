@@ -10,7 +10,7 @@ export interface IFeedItemProps {
   className?: string;
 }
 
-export const FeedItem: React.FC<IFeedItemProps> = (props) => {
+export const FeedItem: React.FC<IFeedItemProps> = props => {
   const [profileState, profileActions] = useProfile();
   const { t } = useTranslation();
 
@@ -23,25 +23,25 @@ export const FeedItem: React.FC<IFeedItemProps> = (props) => {
   }
 
   return (
-      <EntryCard
-        isBookmarked={false}
-        entryData={itemData}
-        onClickAvatar={() => {}}
-        repliesLabel={t('Replies', { count: 1 })}
-        repostsLabel={t('Reposts', { count: 0 })}
-        shareLabel={t('Share')}
-        copyLinkLabel={t('Copy Link')}
-        copyIPFSLinkLabel={t('Copy IPFS Link')}
-        flagAsLabel={t('Flag as inappropiate')}
-        loggedProfileEthAddress={'0x00123'}
-        locale={'en'}
-        style={{ height: 'auto' }}
-        bookmarkLabel={t('Save')}
-        bookmarkedLabel={t('Saved')}
-        onRepost={() => {}}
-        onEntryShare={() => {}}
-        onEntryFlag={() => {}}
-        onLinkCopy={() => {}}
-      />
+    <EntryCard
+      isBookmarked={false}
+      entryData={itemData}
+      onClickAvatar={() => {}}
+      repliesLabel={t('Replies', { count: 1 })}
+      repostsLabel={t('Reposts', { count: 0 })}
+      shareLabel={t('Share')}
+      copyLinkLabel={t('Copy Link')}
+      copyIPFSLinkLabel={t('Copy IPFS Link')}
+      flagAsLabel={t('Flag as inappropiate')}
+      loggedProfileEthAddress={'0x00123'}
+      locale={'en'}
+      style={{ height: 'auto' }}
+      bookmarkLabel={t('Save')}
+      bookmarkedLabel={t('Saved')}
+      onRepost={() => {}}
+      onEntryShare={() => {}}
+      onEntryFlag={() => {}}
+      onLinkCopy={() => {}}
+    />
   );
 };

@@ -51,6 +51,10 @@ const StyledImage = styled(Image)`
   border-radius: 50%;
 `;
 
+const StyledMiniCardBox = styled(Box)`
+  background-color: ${props => props.theme.colors.background};
+`;
+
 export {
   AvatarDiv,
   ShareButtonContainer,
@@ -59,4 +63,5 @@ export {
   StyledCenterDiv,
   StyledAvatarEditDiv,
   StyledImage,
+  StyledMiniCardBox,
 };

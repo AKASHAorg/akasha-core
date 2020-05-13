@@ -45,6 +45,7 @@ const {
   AppInfoWidgetCard,
   AppsWidgetCard,
   Box,
+  CustomizeFeedCard,
   EditorCard,
   OldEntryCard,
   EntryCard,
@@ -54,6 +55,7 @@ const {
   MiniInfoWidgetCard,
   ProfileCard,
   ProfileWidgetCard,
+  ProfileMiniCard,
   TopicsWidgetCard,
   TrendingWidgetCard,
   SourcesWidgetCard,
@@ -229,6 +231,15 @@ storiesOf('Cards/Profile Cards', module)
         shareProfileLabel={text('Share Profile', shareProfileLabel)}
       />
     </Box>
+  ))
+  .add('profile mini card', () => (
+    <Box pad="none" align="center" width="500px">
+      <ProfileMiniCard
+        onClickFollow={() => action('Following Box Clicked')('Synthetic Event')}
+        // @ts-ignore
+        profileData={select('Profile Data', { dapp: appData, user: profileData }, profileData)}
+      />
+    </Box>
   ));
 
 storiesOf('Cards/Entry Cards', module).add('entry card', () => (
@@ -307,3 +318,15 @@ storiesOf('Cards/Form Cards', module)
       />
     </Box>
   ));
+
+storiesOf('Cards/Onboarding Cards', module).add('customize feed card', () => (
+  <Box align="center" pad={{ top: '40px' }}>
+    <CustomizeFeedCard
+      profiles={trendingProfilesData}
+      tags={trendingTagsData}
+      handleFollow={ethAddress => action('Create feed')(ethAddress)}
+      handleSubscribe={tagName => action('Create feed')(tagName)}
+      handleCreateFeed={() => action('Create feed')('Synthetic Event')}
+    />
+  </Box>
+));

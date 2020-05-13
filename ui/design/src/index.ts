@@ -20,6 +20,7 @@ import EntryCardLoading from './components/VirtualList/placeholders/entry-card-p
 
 import {
   Button,
+  DuplexButton,
   IconButton,
   IconLink,
   ProfileAvatarButton,
@@ -41,6 +42,7 @@ import {
   MiniInfoWidgetCard,
   ProfileCard,
   ProfileWidgetCard,
+  ProfileMiniCard,
   TopicsWidgetCard,
   WidgetAreaCardBox,
   ModalCard,
@@ -48,13 +50,14 @@ import {
   TrendingWidgetCard,
   SourcesWidgetCard,
   TutorialWidgetCard,
+  CustomizeFeedCard,
 } from './components/Cards';
 
 import TextInputField from './components/Forms/text-input-field';
 import { AppIcon, Icon, iconTypes } from './components/Icon';
-import { CommentInput, SearchInput } from './components/Input';
 import ErrorInfoCard from './components/Errors/error-info-card';
 
+import { CommentInput, SearchInput, DropSearchInput } from './components/Input';
 import {
   ShareModal,
   ModalContainer,
@@ -87,11 +90,14 @@ const exported = {
   AppIcon,
   Button,
   Carousel,
+  DuplexButton,
   EditableAvatar,
   ErrorInfoCard,
   AppInfoWidgetCard,
   AppsWidgetCard,
   BasicCardBox,
+  CustomizeFeedCard,
+  DropSearchInput,
   EditorCard,
   OldEntryBox,
   OldEntryCard,
@@ -103,6 +109,7 @@ const exported = {
   MiniInfoWidgetCard,
   ProfileCard,
   ProfileWidgetCard,
+  ProfileMiniCard,
   TextInputField,
   TopicsWidgetCard,
   Icon,

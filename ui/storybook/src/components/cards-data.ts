@@ -2,42 +2,67 @@ import { IAppData } from '@akashaproject/design-system/lib/components/Cards/widg
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 
 const trendingTagsData = [
-  { tagName: '#AKASHA', numberOfPosts: 176 },
-  { tagName: '#AKASHAWorld', numberOfPosts: 94 },
-  { tagName: '#Ethereum', numberOfPosts: 27 },
-  { tagName: '#EthereumWorld', numberOfPosts: 17 },
-  { tagName: '#Crypto', numberOfPosts: 6 },
+  { tagName: '#AKASHA', postsNumber: 176 },
+  { tagName: '#AKASHAWorld', postsNumber: 94 },
+  { tagName: '#Ethereum', postsNumber: 27 },
+  { tagName: '#EthereumWorld', postsNumber: 17 },
+  { tagName: '#Crypto', postsNumber: 6 },
 ];
 
 const trendingProfilesData = [
   {
     ethAddress: '0x003410490050000320006570034567114572000',
-    userName: 'Jon Gilbert',
+    name: 'Jon Gilbert',
+    userName: '@jongilbert',
     avatar: 'http://placebeard.it/480/480',
+    coverImage: 'goldenrod',
     followers: 312,
+    postsNumber: 235,
+    description:
+      'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
   {
     ethAddress: '0x003410490050778032325657003456711457212',
-    userName: 'Alexei Gilbertovich',
+    name: 'Alexei Gilbertovich',
+    userName: '@alexeigilbertovich',
+    coverImage: 'blue',
     followers: 7585,
+    postsNumber: 235,
+    description:
+      'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
   {
     ethAddress: '0x003410490050000320006570034567114572000',
-    userName: 'Jon Gilbert',
+    name: 'Jon Gilbert',
+    userName: '@jongilbert',
     avatar: 'http://placebeard.it/480/480',
+    coverImage: 'goldenrod',
     followers: 312,
+    postsNumber: 235,
+    description:
+      'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
   {
     ethAddress: '0x003410490050000320006570034567114572000',
-    userName: 'Jon Gilbert',
+    name: 'Jon Gilbert',
+    userName: '@jongilbert',
     avatar: 'http://placebeard.it/480/480',
+    coverImage: 'goldenrod',
     followers: 312,
+    postsNumber: 235,
+    description:
+      'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
   {
     ethAddress: '0x003410490050000320006570034567114572000',
-    userName: 'Jon Gilbert',
+    name: 'Jon Gilbert',
+    userName: '@jongilbert',
     avatar: 'http://placebeard.it/480/480',
+    coverImage: 'goldenrod',
     followers: 312,
+    postsNumber: 235,
+    description:
+      'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
 ];
 

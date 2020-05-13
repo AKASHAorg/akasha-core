@@ -19,6 +19,7 @@ export interface ITextIconProps {
   menuIcon?: boolean;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   primaryColor?: boolean;
+  reverse?: boolean;
 }
 
 export interface IStyledTextProps {
@@ -41,6 +42,7 @@ const TextIcon: React.FC<ITextIconProps> = props => {
     menuIcon,
     size,
     primaryColor,
+    reverse,
   } = props;
 
   return (
@@ -57,9 +59,9 @@ const TextIcon: React.FC<ITextIconProps> = props => {
       menuActive={menuActive}
       menuIcon={menuIcon}
     >
-      <Icon type={iconType} color={color} size={size} primaryColor={primaryColor} />
-
+      {!reverse && <Icon type={iconType} color={color} size={size} primaryColor={primaryColor} />}
       <StyledText bold={bold}>{label}</StyledText>
+      {reverse && <Icon type={iconType} color={color} size={size} primaryColor={primaryColor} />}
     </StyledTextIcon>
   );
 };

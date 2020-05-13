@@ -7,7 +7,7 @@ export interface ILinkIconButtonProps extends AnchorProps {
   onClick?: React.EventHandler<React.SyntheticEvent>;
   iconPosition?: 'start' | 'end';
   icon?: React.ReactElement;
-  label: string | number;
+  label?: string | number;
   active?: boolean;
   padded?: boolean;
 }
