@@ -1,4 +1,5 @@
 import { action, thunk, createComponentStore, persist, Action, Thunk } from 'easy-peasy';
+import { EthProviders } from '@akashaproject/ui-awf-typings';
 
 export interface LoginState {
   jwtToken: string | null;
@@ -18,7 +19,7 @@ export interface LoginStateModel {
   data: LoginState;
   updateData: Action<LoginStateModel, Partial<LoginState>>;
   createError: Action<LoginStateModel, IStateErrorPayload>;
-  authorize: Thunk<LoginStateModel, number>;
+  authorize: Thunk<LoginStateModel, EthProviders>;
   setProviderListVisibility: Action<LoginStateModel, { isVisible: boolean }>;
   setSelectedProvider: Action<
     LoginStateModel,

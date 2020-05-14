@@ -5,6 +5,7 @@ import { LearnMoreTutorial } from './tutorial-modal';
 import LoginWidgetIllustration from './icons/login-widget-illustration';
 import EthereumIcon from './icons/ethereum-icon';
 import { useLoginState } from '../state';
+import { EthProviders } from '@akashaproject/ui-awf-typings';
 
 const {
   IconLink,
@@ -84,11 +85,13 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
   };
 
   const handleMetamaskLogin = () => {
-    actions.authorize(ETH_PROVIDERS[METAMASK_PROVIDER]);
+    const provider: EthProviders = ETH_PROVIDERS[METAMASK_PROVIDER];
+    actions.authorize(provider);
   };
 
   const handleWalletConnectLogin = () => {
-    actions.authorize(ETH_PROVIDERS[WALLETCONNECT_PROVIDER]);
+    const provider: EthProviders = ETH_PROVIDERS[WALLETCONNECT_PROVIDER];
+    actions.authorize(provider);
   };
 
   const handleProvidersModalClose = () => {
