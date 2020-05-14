@@ -49,6 +49,13 @@ const TopbarSlot = styled(Box)`
 `;
 const PluginSlot = styled(Box)`
   height: 100vh;
+  flex: 2;
+`;
+
+const WidgetSlot = styled(Box)`
+  height: 100vh;
+  flex: 1;
+  align-items: center;
 `;
 
 const GlobalStyle = createGlobalStyle<{ theme: any }>`
@@ -112,6 +119,8 @@ export interface IProps {
   sidebarSlotId: string;
   topbarSlotId: string;
   pluginSlotId: string;
+  widgetSlotId: string;
+  modalSlotId: string;
   themeReadyEvent: () => void;
 }
 
@@ -158,7 +167,7 @@ class LayoutWidget extends PureComponent<IProps> {
   }
 
   public render() {
-    const { sidebarSlotId, topbarSlotId, pluginSlotId } = this.props;
+    const { sidebarSlotId, topbarSlotId, pluginSlotId, widgetSlotId, modalSlotId } = this.props;
     const { showSidebar } = this.state;
 
     if (this.state.hasErrors) {
@@ -185,10 +194,14 @@ class LayoutWidget extends PureComponent<IProps> {
               <SidebarSlot id={sidebarSlotId} visible={sidebarVisible} />
               <MainArea fill={true}>
                 <TopbarSlot id={topbarSlotId} />
-                <PluginSlot id={pluginSlotId} flex={true} fill={true} />
+                <Box fill={true} flex={true} direction="row">
+                  <PluginSlot id={pluginSlotId} fill={true} />
+                  <WidgetSlot id={widgetSlotId} fill={true} />
+                </Box>
               </MainArea>
             </Box>
           </ViewportSizeProvider>
+          <div id={modalSlotId} />
         </ThemeSelector>
       </>
     );

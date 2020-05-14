@@ -1,4 +1,9 @@
-import { BasicCardBox, MainAreaCardBox } from './common/basic-card-box';
+import {
+  BasicCardBox,
+  MainAreaCardBox,
+  WidgetAreaCardBox,
+  ModalCard,
+} from './common/basic-card-box';
 import EditorCard from './editor-cards/editor-card';
 import EntryBox from './entry-cards/entry-box';
 import EntryCard from './entry-cards/entry-card';
@@ -10,6 +15,7 @@ import AppInfoWidgetCard from './widget-cards/app-info-widget-card';
 import AppsWidgetCard from './widget-cards/apps-widget-card';
 import MiniInfoWidgetCard from './widget-cards/mini-info-widget-card';
 import TopicsWidgetCard from './widget-cards/topics-widget-card';
+import LoginCTAWidgetCard from './widget-cards/login-cta-widget-card';
 
 export {
   AppInfoWidgetCard,
@@ -25,4 +31,7 @@ export {
   EntryBox,
   BoxFormCard,
   EnsFormCard,
+  WidgetAreaCardBox,
+  ModalCard,
+  LoginCTAWidgetCard,
 };

@@ -10,6 +10,7 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   const sidebarWidget = await System.import('@widget/sidebar');
   const layout = await System.import('@widget/layout');
   const topbarWidget = await System.import('@widget/topbar');
+  const loginWidget = await System.import('@widget/login');
 
   const feedPlugin = await System.import('@plugins/feed');
   // tslint:disable-next-line:no-console
@@ -36,6 +37,10 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
     {
       app: topbarWidget.application,
       config: { slot: layout.application.topbarSlotId },
+    },
+    {
+      app: loginWidget.application,
+      config: { slot: layout.application.widgetSlotId },
     },
   ];
   const profilePlugin = await System.import('@plugins/profile');

@@ -23,6 +23,6 @@ export const application = {
       './components'
     ),
   name: 'ui-widget-sidebar',
-  services: [],
+  sdkModules: [],
   title: 'Sidebar-Widget',
 };
