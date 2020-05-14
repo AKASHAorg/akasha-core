@@ -35,6 +35,7 @@ import link from './link';
 import loading from './loading';
 import media from './media';
 import menu from './menu';
+import metamask from './metamask';
 import moreDark from './more-dark';
 import moreGrey from './more-grey';
 import notifications from './notifications';
@@ -66,6 +67,7 @@ import twitter from './twitter';
 import underline from './underline';
 import upload from './upload';
 import wallet from './wallet';
+import walletconnect from './walletconnect';
 import iconGeneralFeed from './icon-general-feed';
 
 export {
@@ -112,6 +114,7 @@ export {
   link,
   media,
   menu,
+  metamask,
   moreDark,
   moreGrey,
   notifications,
@@ -136,6 +139,7 @@ export {
   underline,
   upload,
   wallet,
+  walletconnect,
   loading,
   iconGeneralFeed,
 };

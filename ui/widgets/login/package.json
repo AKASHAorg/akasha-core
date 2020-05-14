@@ -1,0 +1,61 @@
+{
+  "name": "@akashaproject/ui-widget-login",
+  "version": "0.1.0",
+  "description": "AKASHA specific login widget",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "contributors": [
+    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+  },
+  "main": "lib/index.js",
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "tsc": "tsc --build",
+    "prepare": "npm run tsc",
+    "extract:translations": "i18next --config ./i18next-parser.config.js",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "postpack": "copyfiles -f ./dist/*login.* ../../build/widgets",
+    "pack:watch": "nodemon"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "lib/*",
+      "dist/*",
+      "build/*"
+    ],
+    "exec": "npm run pack",
+    "ext": "ts,tsx"
+  },
+  "dependencies": {
+    "@akashaproject/design-system": "*",
+    "@akashaproject/sdk-auth": "*",
+    "@akashaproject/sdk-common": "*",
+    "@types/i18next": "^13.0.0",
+    "@types/react-i18next": "^8.1.0",
+    "single-spa-react": "^2.14.0",
+    "react-i18next": "^11.3.1",
+    "easy-peasy": "3.3.0"
+  },
+  "devDependencies": {
+    "@akashaproject/ui-awf-typings": "*",
+    "@types/react": "^16.9.19",
+    "@types/react-dom": "^16.9.5",
+    "@types/single-spa-react": "^2.8.3",
+    "@types/styled-components": "^4.4.2"
+  },
+  "peerDependencies": {
+    "react": "16.12.0",
+    "react-dom": "16.12.0"
+  },
+  "files": [
+    "lib"
+  ]
+}

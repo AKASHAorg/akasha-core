@@ -1,17 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
-import Widget from './Sidebar-widget';
+import App from './App';
 
 /**
- * This is the sidebar widget's lifecycle logic
+ * This is the plugin's lifecycle logic
  * @todo add more docs!!
  */
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Widget,
+  rootComponent: App,
 });
 
 export const bootstrap = reactLifecycles.bootstrap;

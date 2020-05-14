@@ -233,23 +233,38 @@ export default class AppLoader implements IAppLoader {
     );
     const widgetId = widget.app.name.toLowerCase().replace(' ', '-');
     widget.app.name = widgetId;
+
     if (this.registeredWidgets.has(widgetId)) {
       this.appLogger.error(`Widget ${widgetId} already registered`);
       return;
     }
+    const dependencies = {};
+    // @Todo: refactor this
+    if (widget.app.sdkModules.length) {
+      for (const dep of widget.app.sdkModules) {
+        if (this.channels.hasOwnProperty(dep.module)) {
+          Object.assign(dependencies, { [dep.module]: this.channels[dep.module] });
+          this.appLogger.info(`${widget.app.name} has access to ${dep.module} -> channel`);
+        }
+      }
+    }
     this.registeredWidgets.set(widgetId, { slot: widget.config.slot });
     const domEl = document.getElementById(widget.config.slot);
+
     const i18nInstance = this.translationManager.createInstance(
       widget.app,
       this.appLogger.child({ i18nWidget: widgetId }),
     );
+
     const pProps = {
       ...this.config,
       ...widget.app,
       domElement: domEl,
       i18n: i18nInstance,
+      sdkModules: dependencies,
       getMenuItems: () => this.getMenuItems(),
       events: this.events,
+      logger: this.appLogger.child({ widget: widgetId }),
     };
     const widgetS = singleSpa.mountRootParcel(
       this.beforeMount(widget.app.loadingFn, widget.app),

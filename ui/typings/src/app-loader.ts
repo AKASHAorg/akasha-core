@@ -43,10 +43,17 @@ export interface II18nConfig {
 // tslint:disable-next-line:no-empty-interface
 export interface IPlugin extends Application {}
 
+export interface ISingleSpaLifecycle {
+  bootstrap: (props: any) => Promise<void>;
+  mount: (props: any) => Promise<void>;
+  unmount: (props: any) => Promise<void>;
+  update?: (props: any) => Promise<void>;
+}
+
 export interface IWidget {
   name: string;
   i18nConfig?: II18nConfig;
-  loadingFn: () => Promise<any>;
+  loadingFn: () => Promise<ISingleSpaLifecycle>;
   pluginSlotId?: string;
   topbarSlotId?: string;
   sidebarSlotId?: string;
