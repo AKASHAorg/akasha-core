@@ -4,14 +4,22 @@ import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 // @ts-ignore
 import SingleSpaReact from 'single-spa-react';
+import {
+  IMenuItem,
+  EventTypes,
+  MenuItemAreaType,
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { filter } from 'rxjs/operators';
 
-const { lightTheme, Topbar, ThemeSelector } = DS;
+const { lightTheme, Topbar, ThemeSelector, ViewportSizeProvider, useViewportSize } = DS;
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;
   globalChannel?: any;
   singleSpa: any;
+  getMenuItems: () => any[];
+  events: any;
+  logger: any;
 }
 
 /**
@@ -52,24 +60,10 @@ export default class TopbarWidget extends PureComponent<IProps> {
       hasErrors: true,
       errorMessage: `${err.message} :: ${info.componentStack}`,
     });
-    // tslint:disable-next-line:no-console
-    console.error(err, info);
+    const { logger } = this.props;
+    logger.error('an error has occurred %j %j', err, info);
   }
 
-  public handleNavigation = (path: string) => {
-    this.props.singleSpa.navigateToUrl(path);
-  };
-
-  // public showNotificationPopover = (ev: SyntheticEvent) => {
-  //   /* tslint:disable-next-line:no-console */
-  //   console.log('show notification popover');
-  //   ev.preventDefault();
-  // }
-  // public showWalletPopover = (ev: SyntheticEvent) => {
-  //   /* tslint:disable-next-line:no-console */
-  //   console.log('show wallet popover');
-  //   ev.preventDefault();
-  // }
   public toggleSidebar = (visible: boolean) => {
     if (visible) {
       window.dispatchEvent(this.showSidebarEvent);
@@ -82,7 +76,7 @@ export default class TopbarWidget extends PureComponent<IProps> {
     if (this.state.hasErrors) {
       return (
         <div>
-          Oh no, something went wrong in sidebar-widget
+          Oh no, something went wrong in topbar-widget
           <div>
             <code>{this.state.errorMessage}</code>
           </div>
@@ -93,17 +87,85 @@ export default class TopbarWidget extends PureComponent<IProps> {
       <I18nextProvider i18n={this.props.i18n}>
         <Suspense fallback={<>...</>}>
           <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
-            <Topbar
-              avatarImage="https://placebeard.it/360x360"
-              userName="john doe"
-              brandLabel=""
-              onNavigation={this.handleNavigation}
-              onSidebarToggle={this.toggleSidebar}
-              ethAddress={this.state.ethAddress}
-            />
+            <ViewportSizeProvider>
+              <TopbarComponent
+                navigateToUrl={this.props.singleSpa.navigateToUrl}
+                toggleSidebar={this.toggleSidebar}
+                getMenuItems={this.props.getMenuItems}
+                loaderEvents={this.props.events}
+              />
+            </ViewportSizeProvider>
           </ThemeSelector>
         </Suspense>
       </I18nextProvider>
     );
   }
 }
+
+interface TopBarProps {
+  navigateToUrl: (url: string) => void;
+  toggleSidebar: (visible: boolean) => void;
+  getMenuItems: () => IMenuItem[];
+  loaderEvents: any;
+}
+
+const TopbarComponent = (props: TopBarProps) => {
+  const { navigateToUrl, getMenuItems, loaderEvents, toggleSidebar } = props;
+
+  const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
+
+  React.useEffect(() => {
+    const updateMenu = () => {
+      const menuItems = getMenuItems();
+      setCurrentMenu(menuItems);
+    };
+    updateMenu();
+    loaderEvents.subscribe((evMsg: EventTypes) => {
+      if (evMsg === EventTypes.AppInstall || evMsg === EventTypes.PluginInstall) {
+        updateMenu();
+      }
+    });
+    return function cleanup() {
+      loaderEvents.unsubscribe();
+    };
+  }, []);
+
+  // *how to obtain different topbar menu sections
+  const quickAccessItems = currentMenu?.filter(
+    menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,
+  );
+  const searchAreaItem = currentMenu?.filter(
+    menuItem => menuItem.area === MenuItemAreaType.SearchArea,
+  )[0];
+
+  const handleNavigation = (path: string) => {
+    navigateToUrl(path);
+  };
+
+  const handleSearchBarKeyDown = (
+    ev: React.KeyboardEvent<HTMLInputElement>,
+    inputValue: string,
+  ) => {
+    if (ev.key === 'Enter' && searchAreaItem) {
+      handleNavigation(`${searchAreaItem.route}/${inputValue}`);
+    }
+  };
+
+  const { size } = useViewportSize();
+
+  return (
+    <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
+      <Topbar
+        avatarImage="https://placebeard.it/360x360"
+        brandLabel="Ethereum World"
+        onNavigation={handleNavigation}
+        onSearch={handleSearchBarKeyDown}
+        onSidebarToggle={toggleSidebar}
+        ethAddress="0x1ad35f55220234DF32A"
+        quickAccessItems={quickAccessItems}
+        searchAreaItem={searchAreaItem}
+        size={size}
+      />
+    </ThemeSelector>
+  );
+};

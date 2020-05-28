@@ -1,4 +1,4 @@
-import { Box } from 'grommet';
+import { AccordionPanel, Box, Text } from 'grommet';
 import styled, { css } from 'styled-components';
 
 const StyledHiddenScrollContainer = styled.div`
@@ -17,36 +17,11 @@ const StyledMobileHRDiv = styled.div`
   border-top: 1px solid ${props => props.theme.colors.border};
 `;
 
-const StyledHRDiv = styled.div`
-  width: 2.25rem;
-  border-top: 1px solid ${props => props.theme.colors.border};
-`;
-
-const StyledHeader = styled(Box)`
-  height: 11rem;
-`;
-
 const StyledFooter = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   height: 4rem;
-`;
-
-const SidebarBox = styled(Box)`
-  width: 4rem;
-`;
-
-const SecondarySidebarBox = styled(Box)`
-  width: 10.8rem;
-  background-color: ${props => props.theme.colors.lightestGrey};
-`;
-
-const SecondarySidebarContentWrapper = styled.div`
-  width: 8.75rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
 `;
 
 const StyledAppIconWrapper = styled.div<{ active: boolean; hovered?: boolean }>`
@@ -67,69 +42,57 @@ const StyledAppIconWrapper = styled.div<{ active: boolean; hovered?: boolean }>`
   }}
 `;
 
-const StyledVerticalPad = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 3.063rem;
-  width: 100%;
-`;
-
-const StyledBorderBox = styled(Box)<{ active: boolean; hovered?: boolean; userSection?: boolean }>`
-  height: 2.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const StyledAppOptionBox = styled(Box)<{ active: boolean }>`
+  background-color: ${props => props.theme.colors.background};
   ${props => {
-    if (props.hovered) {
-      return css`
-        margin-left: 0.3rem;
-        height: 3.063rem;
-        box-shadow: ${props.theme.colors.shadow};
-        border-top-left-radius: ${props.theme.shapes.borderRadius};
-        border-bottom-left-radius: ${props.theme.shapes.borderRadius};
-        // background-color: ${props.theme.colors.mediumGrey}
-        border: 1px solid ${props.theme.colors.border};
-        border-right-color: ${props.theme.colors.background};
-      `;
-    }
     if (props.active) {
       return css`
         border-left: 2px solid ${props.theme.colors.accent};
       `;
     }
     return css`
-      opacity: ${props.userSection ? 1 : 0.4};
-      border-left: 2px solid ${props.theme.colors.background};
+      border-left: 1px solid ${props.theme.colors.border};
     `;
   }}
-`;
-
-const StyledAppOptionBox = styled(Box)`
-  background-color: ${props => props.theme.colors.lightBackground};
-`;
-
-const StyledMobileHeaderBox = styled(Box)`
-  height: 18rem;
 `;
 
 const StyledMobileFooterBox = styled(Box)`
   height: 5rem;
 `;
 
+const StyledText = styled(Text)`
+  cursor: pointer;
+`;
+
+const StyledAccordionPanel = styled(AccordionPanel)<{ size?: string }>`
+  ${props => {
+    if (props.size === 'small') {
+      return;
+    }
+    return css`
+      div:nth-child(2) {
+        svg {
+          stroke: ${props.theme.colors.background};
+        }
+      }
+      &:hover {
+        div:nth-child(2) {
+          svg {
+            stroke: ${props.theme.colors.border};
+          }
+        }
+      }
+    `;
+  }}
+`;
+
 export {
   StyledHiddenScrollContainer,
-  SidebarBox,
-  SecondarySidebarBox,
-  StyledHeader,
   StyledFooter,
-  SecondarySidebarContentWrapper,
   StyledAppIconWrapper,
   StyledAppOptionBox,
-  StyledMobileHeaderBox,
   StyledMobileFooterBox,
-  StyledVerticalPad,
-  StyledBorderBox,
-  StyledHRDiv,
   StyledMobileHRDiv,
+  StyledText,
+  StyledAccordionPanel,
 };

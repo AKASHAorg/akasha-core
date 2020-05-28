@@ -22,5 +22,5 @@ export const application: Application = {
   sdkModules: [{ module: commons }, { module: dbModule }],
   menuItems: routes,
   title: '3box integration',
-  logo: { type: LogoTypeSource.ICON, value: 'icon3Box' },
+  logo: { type: LogoTypeSource.ICON, value: 'app3Box' },
 };
