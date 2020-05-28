@@ -9,7 +9,7 @@ import {
 import DS from '@akashaproject/design-system';
 import { getImageProperty, create3BoxImage } from '../utils/box-image-utils';
 import { IImageSrc } from '@akashaproject/design-system/lib/components/Cards/form-cards/box-form-card';
-
+import { forkJoin, from } from 'rxjs';
 const { formatImageSrc } = DS;
 
 export interface IRawProfileData {
@@ -116,17 +116,17 @@ export const profileStateModel: ProfileStateModel = {
     });
   }),
   getLoggedEthAddress: thunk(async (actions, _notPassed, { injections, getState }) => {
-    const { channels, channelUtils, logger } = injections;
-    const $stash = channels.commons.cache_service.getStash(null);
-    const $web3Instance = channels.commons.web3_service.web3(null);
+    const { channels, logger } = injections;
+    const $stash = channels.commons.cacheService.getStash(null);
+    const $web3Instance = channels.commons.web3Service.web3(null);
     try {
-      const call = channelUtils.observable.forkJoin({
+      const call = forkJoin({
         stash: $stash,
         web3Instance: $web3Instance,
       });
       return call.subscribe(async (deps: { stash: any; web3Instance: any }) => {
         try {
-          const ethAddress = await getEthAddress(deps.stash, deps.web3Instance);
+          const ethAddress = await getEthAddress(deps.stash.data, deps.web3Instance.data);
           // reset consents if the payload has an eth address that it's not the
           // same as in the state
           if (getState().data.ethAddress && getState().data.ethAddress !== ethAddress) {
@@ -150,7 +150,7 @@ export const profileStateModel: ProfileStateModel = {
       });
     } catch (ex) {
       logger.error(ex);
-      actions.createError({
+      return actions.createError({
         errorKey: 'actions.getLoggedEthAddress',
         error: ex,
         critical: true,
@@ -161,17 +161,17 @@ export const profileStateModel: ProfileStateModel = {
    * fetch current logged in profile
    */
   fetchCurrent: thunk(async (actions, _ethAddress, { injections }) => {
-    const { channels, channelUtils, logger } = injections;
+    const { channels, logger } = injections;
     const { commons, db } = channels;
-    const $stash = commons.cache_service.getStash(null);
-    const $web3Instance = commons.web3_service.web3(null);
-    const $web3Utils = commons.web3_utils_service.getUtils(null);
-    const $settingsAttachment = db.settings_attachment.get({
+    const $stash = commons.cacheService.getStash(null);
+    const $web3Instance = commons.web3Service.web3(null);
+    const $web3Utils = commons.web3UtilsService.getUtils(null);
+    const $settingsAttachment = db.settingsAttachment.get({
       id: BOX_SETTINGS_ID,
       ethAddress: _ethAddress,
     });
     try {
-      const call = channelUtils.observable.forkJoin({
+      const call = forkJoin({
         stash: $stash,
         web3Instance: $web3Instance,
         web3Utils: $web3Utils,
@@ -182,9 +182,9 @@ export const profileStateModel: ProfileStateModel = {
         async (deps: any) => {
           try {
             const result = await authenticateBox(
-              deps.web3Instance,
-              deps.web3Utils,
-              JSON.parse(deps.settingsAttachment),
+              deps.web3Instance.data,
+              deps.web3Utils.data,
+              JSON.parse(deps.settingsAttachment.data),
               _ethAddress,
               () => {
                 // when user consented to open the box
@@ -244,7 +244,7 @@ export const profileStateModel: ProfileStateModel = {
     } catch (ex) {
       actions.updateData({ isLoading: false });
       logger.error(ex);
-      actions.createError({
+      return actions.createError({
         errorKey: 'action.fetchCurrent',
         error: ex,
         critical: false,
@@ -255,9 +255,9 @@ export const profileStateModel: ProfileStateModel = {
    * get a 3box profile given an eth address
    */
   getProfile: thunk(async (actions, ethAddress, { injections }) => {
-    const { getProfileData, channelUtils, logger } = injections;
+    const { getProfileData, logger } = injections;
     try {
-      const call = channelUtils.observable.from(getProfileData(ethAddress));
+      const call = from(getProfileData(ethAddress));
       return call.subscribe(
         (data: any) => {
           let imagesrc;
@@ -288,7 +288,7 @@ export const profileStateModel: ProfileStateModel = {
       );
     } catch (ex) {
       logger.error(ex);
-      actions.createError({
+      return actions.createError({
         errorKey: 'actions.getProfile',
         error: ex,
         critical: false,
@@ -394,7 +394,7 @@ export const profileStateModel: ProfileStateModel = {
       if (!imagesToUpload.length) {
         return onObservableComplete([]);
       }
-      const ipfsCall = channels.commons.ipfs_service.upload(imagesToUpload);
+      const ipfsCall = channels.commons.ipfsService.upload(imagesToUpload);
       // get image hashes
       ipfsCall.subscribe(onObservableComplete, (err: Error) => {
         actions.updateData({
@@ -430,17 +430,17 @@ export const profileStateModel: ProfileStateModel = {
     let settings = getDefaultBoxSettings();
     const { channels, logger } = injections;
     try {
-      const call = channels.db.settings_attachment.get({
+      const call = channels.db.settingsAttachment.get({
         ethAddress,
         id: BOX_SETTINGS_ID,
       });
       call.subscribe(
-        (data: any) => {
-          if (data) {
-            const boxSettings = JSON.parse(data);
+        (response: any) => {
+          if (response.data) {
+            const boxSettings = JSON.parse(response?.data);
             settings = {
-              pinningNode: boxSettings.pinningNode,
-              addressServer: boxSettings.addressServer,
+              pinningNode: boxSettings?.pinningNode,
+              addressServer: boxSettings?.addressServer,
             };
           }
           actions.updateData({ settings });
@@ -473,13 +473,13 @@ export const profileStateModel: ProfileStateModel = {
       isSaving: true,
     });
     try {
-      const call = channels.db.settings_attachment.put({
+      const call = channels.db.settingsAttachment.put({
         ethAddress: payload.ethAddress,
         obj: { data: JSON.stringify(data), type: 'string', id: '3box-settings-ID' },
       });
       call.subscribe(
-        async ({ doc }: any) => {
-          const attachment = await doc.getAttachment('3box-settings-ID');
+        async (response: any) => {
+          const attachment = await response.data.doc.getAttachment('3box-settings-ID');
           const text = await attachment.getStringData();
           actions.updateData({
             settings: {
@@ -519,7 +519,7 @@ export const profileStateModel: ProfileStateModel = {
       isSaving: true,
     });
     try {
-      const call = channels.db.settings_attachment.deleteSettings({
+      const call = channels.db.settingsAttachment.deleteSettings({
         ethAddress,
         id: '3box-settings-ID',
       });
@@ -556,8 +556,8 @@ export const profileStateModel: ProfileStateModel = {
   }),
 };
 
-export const useBoxProfile = (channels?: any, channelUtils?: any, logger?: any) =>
+export const useBoxProfile = (channels?: any, globalChannel?: any, logger?: any) =>
   createComponentStore(profileStateModel, {
     name: '3box-ProfileState',
-    injections: { channels, channelUtils, logger, getProfileData: getProfile },
+    injections: { channels, globalChannel, logger, getProfileData: getProfile },
   })();
