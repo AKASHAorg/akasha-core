@@ -9,6 +9,7 @@ import {
   EventTypes,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { filter } from 'rxjs/operators';
 
 const { lightTheme, Topbar, ThemeSelector, ViewportSizeProvider, useViewportSize } = DS;
 export interface IProps {

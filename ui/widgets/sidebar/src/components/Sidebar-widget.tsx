@@ -56,9 +56,14 @@ export default class SidebarWidget extends PureComponent<IProps> {
     this.subscription = this.props.globalChannel
       .pipe(filter((response: any) => response.channelInfo.method === 'signIn'))
       .subscribe((response: any) => this.setState({ ethAddress: response.data.ethAddress }));
+
+    window.addEventListener('layout:showSidebar', this.showSidebar);
+    window.addEventListener('layout:hideSidebar', this.hideSidebar);
   }
   componentWillUnmount() {
     this.subscription.unsubscribe();
+    window.removeEventListener('layout:showSidebar', this.showSidebar);
+    window.removeEventListener('layout:hideSidebar', this.hideSidebar);
   }
 
   public showSidebar = () => {
@@ -68,16 +73,6 @@ export default class SidebarWidget extends PureComponent<IProps> {
   public hideSidebar = () => {
     this.setState({ showSidebar: false });
   };
-
-  public componentDidMount() {
-    window.addEventListener('layout:showSidebar', this.showSidebar);
-    window.addEventListener('layout:hideSidebar', this.hideSidebar);
-  }
-
-  public componentWillUnmount() {
-    window.removeEventListener('layout:showSidebar', this.showSidebar);
-    window.removeEventListener('layout:hideSidebar', this.hideSidebar);
-  }
 
   public render() {
     if (this.state.hasErrors) {
@@ -95,7 +90,6 @@ export default class SidebarWidget extends PureComponent<IProps> {
       <Router>
         <I18nextProvider i18n={this.props.i18n}>
           <Suspense fallback={<>...</>}>
-
             <ViewportSizeProvider>
               <Menu
                 navigateToUrl={this.props.singleSpa.navigateToUrl}
