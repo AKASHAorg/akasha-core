@@ -262,6 +262,7 @@ export default class AppLoader implements IAppLoader {
       domElement: domEl,
       i18n: i18nInstance,
       sdkModules: dependencies,
+      globalChannel: this.globalChannel,
       getMenuItems: () => this.getMenuItems(),
       events: this.events,
       logger: this.appLogger.child({ widget: widgetId }),
