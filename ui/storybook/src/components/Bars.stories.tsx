@@ -9,7 +9,7 @@ import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
-import { notificationsData } from './Popovers.stories';
+import { text } from '@storybook/addon-knobs';
 
 const installedAppsData: IMenuItem[] = [
   {
@@ -17,7 +17,7 @@ const installedAppsData: IMenuItem[] = [
     index: 1,
     route: '/',
     type: MenuItemType.Plugin,
-    logo: { type: LogoTypeSource.ICON, value: 'iconGeneralFeed' },
+    logo: { type: LogoTypeSource.ICON, value: 'appFeed' },
     area: MenuItemAreaType.AppArea,
   },
   {
@@ -25,7 +25,11 @@ const installedAppsData: IMenuItem[] = [
     index: 3,
     route: '/ens-app',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'iconEns' },
+    logo: { type: LogoTypeSource.ICON, value: 'appEns' },
+    subRoutes: [
+      { index: 0, label: 'Edit', route: '/ens-app/edit', type: MenuItemType.Internal },
+      { index: 1, label: 'Settings', route: '/ens-app/settings', type: MenuItemType.Internal },
+    ],
     area: MenuItemAreaType.AppArea,
   },
   {
@@ -33,7 +37,11 @@ const installedAppsData: IMenuItem[] = [
     index: 4,
     route: '/3box-app',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'icon3Box' },
+    logo: { type: LogoTypeSource.ICON, value: 'app3Box' },
+    subRoutes: [
+      { index: 0, label: 'Edit', route: '/3box-app/edit', type: MenuItemType.Internal },
+      { index: 1, label: 'Settings', route: '/3box-app/settings', type: MenuItemType.Internal },
+    ],
     area: MenuItemAreaType.AppArea,
   },
   {
@@ -53,8 +61,8 @@ const installedAppsData: IMenuItem[] = [
     index: 5,
     route: '/search',
     type: MenuItemType.Plugin,
-    logo: { type: LogoTypeSource.ICON, value: 'search' },
-    area: MenuItemAreaType.QuickAccessArea,
+    logo: { type: LogoTypeSource.ICON, value: 'searchApp' },
+    area: MenuItemAreaType.SearchArea,
   },
   {
     label: 'Notifications',
@@ -69,54 +77,67 @@ const installedAppsData: IMenuItem[] = [
     index: 7,
     route: '/appcenter',
     type: MenuItemType.Plugin,
-    logo: { type: LogoTypeSource.ICON, value: 'plusDark' },
+    logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
     area: MenuItemAreaType.BottomArea,
   },
 ];
 
-const header = installedAppsData?.filter(
+const quickAccessItems = installedAppsData?.filter(
   menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,
 );
+const searchAreaItem = installedAppsData?.filter(
+  menuItem => menuItem.area === MenuItemAreaType.SearchArea,
+)[0];
 const body = installedAppsData?.filter(menuItem => menuItem.area === MenuItemAreaType.AppArea);
 const footer = installedAppsData?.filter(menuItem => menuItem.area === MenuItemAreaType.BottomArea);
 
-const { Sidebar, TextIcon, Topbar, SidebarMobile } = DS;
+const { Sidebar, Topbar, ViewportSizeProvider, useViewportSize } = DS;
+
+const TopbarComponent = () => {
+  const { size } = useViewportSize();
+
+  return (
+    <Topbar
+      ethAddress="0x003410490050000320006570034567114572000"
+      avatarImage="https://placebeard.it/360x360"
+      onSidebarToggle={() => action('Sidebar toggle')('Synthetic Event')}
+      quickAccessItems={quickAccessItems}
+      searchAreaItem={searchAreaItem}
+      brandLabel={text('Brand Label', 'Ethereum.world')}
+      onNavigation={(path: string) => action('Navigate to')(path)}
+      onSearch={(ev: any, inputValue: string) => action('Navigate to')(ev, inputValue)}
+      size={size}
+    />
+  );
+};
+
+const SidebarComponent = () => {
+  const { size } = useViewportSize();
+
+  return (
+    <Sidebar
+      allMenuItems={installedAppsData}
+      bodyMenuItems={body}
+      footerMenuItems={footer}
+      onClickMenuItem={() => action('Option Clicked')('Synthetic Event')}
+      size={size}
+    />
+  );
+};
+
 storiesOf('Bars|Topbar', module).add('Topbar', () => (
-  <Topbar
-    ethAddress="0x003410490050000320006570034567114572000"
-    avatarImage="https://placebeard.it/360x360"
-    userName="john doe"
-    brandLabel={<TextIcon iconType="ethereumWorldLogo" label="Ethereum.world" bold={true} />}
-    onNavigation={(path: string) => action('Navigate to')(path)}
-    notificationsData={notificationsData}
-  />
+  <ViewportSizeProvider>
+    <TopbarComponent />
+  </ViewportSizeProvider>
 ));
-storiesOf('Bars|Sidebar', module)
-  .add('Sidebar', () => (
-    <div style={{ height: '700px', border: '2px solid black' }}>
-      <Sidebar
-        loggedEthAddress="0x003410490050000320006570034567114572000"
-        avatarImage="https://placebeard.it/360x360"
-        allMenuItems={installedAppsData}
-        headerMenuItems={header}
-        bodyMenuItems={body}
-        footerMenuItems={footer}
-        onClickMenuItem={() => action('Option Clicked')('Synthetic Event')}
-        onClickCloseSidebar={() => action('Close Sidebar Clicked')('Synthetic Event')}
-      />
+
+storiesOf('Bars|Sidebar', module).add('Sidebar', () => (
+  <div style={{ height: '700px', border: '2px solid black', display: 'flex' }}>
+    <div style={{ height: '100%', width: '14rem' }}>
+      <ViewportSizeProvider>
+        <SidebarComponent />
+      </ViewportSizeProvider>
     </div>
-  ))
-  .add('Sidebar for Mobile', () => (
-    <div style={{ height: '812px', width: '375px', border: '2px solid black' }}>
-      <SidebarMobile
-        loggedEthAddress="0x003410490050000320006570034567114572000"
-        avatarImage="https://placebeard.it/360x360"
-        allMenuItems={installedAppsData}
-        headerMenuItems={header}
-        bodyMenuItems={body}
-        footerMenuItems={footer}
-        onClickMenuItem={() => action('Option Clicked')('Synthetic Event')}
-        onClickCloseSidebar={() => action('Close Sidebar Clicked')('Synthetic Event')}
-      />
-    </div>
-  ));
+    <div style={{ backgroundColor: '#EDF0F5', width: '100%', height: '100%' }} />
+  </div>
+));

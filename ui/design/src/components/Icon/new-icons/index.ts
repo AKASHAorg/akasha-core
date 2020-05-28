@@ -1,7 +1,12 @@
 import activity from './activity';
-import addAppDark from './add-app-dark';
+import akasha from './akasha';
 import addAppGrey from './add-app-grey';
 import addCard from './add-card';
+import app3Box from './app-3box';
+import appAkasha from './app-akasha';
+import appCenter from './app-center';
+import appEns from './app-ens';
+import appFeed from './app-feed';
 import announcement from './announcement';
 import app from './app';
 import arrowDown from './arrow-down';
@@ -34,6 +39,7 @@ import italic from './italic';
 import link from './link';
 import loading from './loading';
 import media from './media';
+import menuCollapsed from './menu-collapsed';
 import menu from './menu';
 import metamask from './metamask';
 import moreDark from './more-dark';
@@ -68,11 +74,15 @@ import underline from './underline';
 import upload from './upload';
 import wallet from './wallet';
 import walletconnect from './walletconnect';
-import iconGeneralFeed from './icon-general-feed';
 
 export {
   activity,
   addCard,
+  app3Box,
+  appAkasha,
+  appCenter,
+  appEns,
+  appFeed,
   announcement,
   available,
   reload,
@@ -91,7 +101,7 @@ export {
   facebook,
   document,
   ethereumWorldLogo,
-  addAppDark,
+  akasha,
   addAppGrey,
   app,
   arrowDown,
@@ -113,6 +123,7 @@ export {
   italic,
   link,
   media,
+  menuCollapsed,
   menu,
   metamask,
   moreDark,
@@ -141,5 +152,4 @@ export {
   wallet,
   walletconnect,
   loading,
-  iconGeneralFeed,
 };

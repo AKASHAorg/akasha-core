@@ -65,6 +65,12 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
 
   // example loading an extra plugin after start
   world.appLoader.registerPlugin({
+    app: notificationsPlugin.application,
+    config: {
+      area: MenuItemAreaType.QuickAccessArea,
+    },
+  });
+  world.appLoader.registerPlugin({
     app: profilePlugin.application,
     config: {
       area: MenuItemAreaType.QuickAccessArea,
@@ -73,19 +79,13 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   world.appLoader.registerPlugin({
     app: searchPlugin.application,
     config: {
-      area: MenuItemAreaType.QuickAccessArea,
+      area: MenuItemAreaType.SearchArea,
     },
   });
   world.appLoader.registerPlugin({
     app: appCenterPlugin.application,
     config: {
       area: MenuItemAreaType.BottomArea,
-    },
-  });
-  world.appLoader.registerPlugin({
-    app: notificationsPlugin.application,
-    config: {
-      area: MenuItemAreaType.QuickAccessArea,
     },
   });
   world.appLoader.registerApp({

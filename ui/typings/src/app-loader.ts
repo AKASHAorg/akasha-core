@@ -68,9 +68,10 @@ export enum MenuItemType {
 }
 
 export enum MenuItemAreaType {
-  AppArea = 'app-area', // body
-  QuickAccessArea = 'quick-access-area', // top
-  BottomArea = 'bottom-area', // footer
+  AppArea = 'app-area', // body of sideabr
+  QuickAccessArea = 'quick-access-area', // right of topbar
+  BottomArea = 'bottom-area', // footer of sidebar
+  SearchArea = 'search-area', // middle of topbar
   OtherArea = 'other-area', // not displayed
 }
 
