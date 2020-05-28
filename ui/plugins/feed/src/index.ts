@@ -34,5 +34,5 @@ export const application: Application = {
   sdkModules: [],
   title: 'AKASHA Feed',
   menuItems: routes,
-  logo: { type: LogoTypeSource.ICON, value: 'iconGeneralFeed' },
+  logo: { type: LogoTypeSource.ICON, value: 'appFeed' },
 };

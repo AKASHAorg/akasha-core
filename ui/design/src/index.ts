@@ -11,7 +11,7 @@ import {
 } from 'grommet';
 import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
 import { Avatar, EditableAvatar } from './components/Avatar';
-import { ResponsiveSidebar, Sidebar, SidebarMobile, Topbar } from './components/Bars/index';
+import { Sidebar, Topbar } from './components/Bars/index';
 import {
   Button,
   IconButton,
@@ -94,12 +94,10 @@ const exported = {
   SearchInput,
   MainAreaCardBox,
   NotificationsPopover,
-  ResponsiveSidebar,
   ShareModal,
   SelectPopover,
   SubtitleTextIcon,
   Sidebar,
-  SidebarMobile,
   Text,
   TextIcon,
   Topbar,

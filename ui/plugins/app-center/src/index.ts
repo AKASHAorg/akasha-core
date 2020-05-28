@@ -32,5 +32,5 @@ export const application: Application = {
   name: 'ui-plugin-app-center',
   sdkModules: [],
   title: 'App center',
-  logo: { type: LogoTypeSource.ICON, value: 'plusDark' },
+  logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
 };

@@ -26,7 +26,12 @@ const IconComponent = () => {
               margin: '2px 0',
             }}
           >
-            <Icon type={type} color={accentColor} onClick={() => action('Clicked on')(type)} />
+            <Icon
+              type={type}
+              color={accentColor}
+              onClick={() => action('Clicked on')(type)}
+              size="md"
+            />
           </div>
           <div>{type}</div>
         </Box>
