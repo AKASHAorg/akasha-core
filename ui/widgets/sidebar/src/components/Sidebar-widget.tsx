@@ -48,7 +48,7 @@ export default class SidebarWidget extends PureComponent<IProps> {
       errorMessage: `${err.message} :: ${info.componentStack}`,
     });
     const { logger } = this.props;
-    logger.error(err, info);
+    logger.error('an error has occurred %j %j', err, info);
   }
 
   public showSidebar = () => {
