@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AddAppDark = (props: React.SVGProps<SVGSVGElement>) => (
+const Akasha = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" {...props}>
     <g fill="none" fillRule="evenodd" transform="translate(-602 -2710)">
       <path
@@ -15,4 +15,4 @@ const AddAppDark = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default AddAppDark;
+export default Akasha;

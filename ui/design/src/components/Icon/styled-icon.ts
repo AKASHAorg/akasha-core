@@ -38,7 +38,7 @@ const StyledIconDiv = styled.div<IconSize>`
   }}
   border-radius: 50%;
   cursor: pointer;
-  background-color: ${props => props.theme.colors.lightBackground};
+  background-color: ${props => props.theme.colors.background};
 `;
 
 const StyledImage = styled(Image)<IconSize>`
