@@ -37,7 +37,7 @@ export default class AppLoader implements IAppLoader {
   private readonly config: ILoaderConfig;
   private readonly appLogger;
   private readonly channels;
-  private readonly channelUtils;
+  private readonly globalChannel;
   private readonly menuItems: IMenuList;
   private readonly translationManager: TranslationManager;
   private readonly deferredIntegrations: {
@@ -50,11 +50,11 @@ export default class AppLoader implements IAppLoader {
     config: ILoaderConfig,
     initialApps: { plugins?: IPluginEntry[]; widgets?: IWidgetEntry[]; apps?: IAppEntry[] },
     channels?: any,
-    channelUtils?: any,
+    globalChannel?: any,
   ) {
     this.config = config;
     this.channels = channels;
-    this.channelUtils = channelUtils;
+    this.globalChannel = globalChannel;
     this.events = new BehaviorSubject(EventTypes.Instantiated);
     this.menuItems = { nextIndex: 1, items: [] };
     this.appLogger = pino({ browser: { asObject: true } });
@@ -152,7 +152,7 @@ export default class AppLoader implements IAppLoader {
         i18nConfig: integration.app.i18nConfig,
         logger: this.appLogger.child({ plugin: integrationId }),
         sdkModules: dependencies,
-        channelUtils: this.channelUtils,
+        globalChannel: this.globalChannel,
         events: this.events,
       },
     );
