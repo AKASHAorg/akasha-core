@@ -70,7 +70,7 @@ export const loginStateModel: LoginStateModel = {
       race(call, globalCall).subscribe(
         (response: any) => {
           actions.updateData({
-            jwtToken: response.data,
+            jwtToken: response.data.token,
             selectedProvider: null,
           });
         },
