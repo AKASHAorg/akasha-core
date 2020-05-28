@@ -14,6 +14,7 @@ const { lightTheme, Topbar, ThemeSelector, ViewportSizeProvider, useViewportSize
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;
+  globalChannel?: any;
   singleSpa: any;
   getMenuItems: () => any[];
   events: any;
@@ -31,16 +32,26 @@ export interface IProps {
  */
 
 export default class TopbarWidget extends PureComponent<IProps> {
-  public state: { hasErrors: boolean; errorMessage: string };
+  public state: { hasErrors: boolean; errorMessage: string; ethAddress: string };
   public showSidebarEvent = new CustomEvent('layout:showSidebar');
   public hideSidebarEvent = new CustomEvent('layout:hideSidebar');
-
+  private subscription: any;
   constructor(props: IProps) {
     super(props);
     this.state = {
       hasErrors: false,
       errorMessage: '',
+      ethAddress: '0x0000000000000000000000000000000000000000',
     };
+  }
+
+  componentDidMount() {
+    this.subscription = this.props.globalChannel
+      .pipe(filter((response: any) => response.channelInfo.method === 'signIn'))
+      .subscribe((response: any) => this.setState({ ethAddress: response.data.ethAddress }));
+  }
+  componentWillUnmount() {
+    this.subscription.unsubscribe();
   }
 
   public componentDidCatch(err: Error, info: React.ErrorInfo) {

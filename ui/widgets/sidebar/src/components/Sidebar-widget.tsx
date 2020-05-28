@@ -8,12 +8,14 @@ import {
   EventTypes,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { filter } from 'rxjs/operators';
 
 const { lightTheme, ThemeSelector, Sidebar, ViewportSizeProvider, useViewportSize } = DS;
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;
   singleSpa: any;
+  globalChannel: any;
   getMenuItems: () => any[];
   events: any;
   logger: any;
@@ -32,7 +34,7 @@ export interface IProps {
 export default class SidebarWidget extends PureComponent<IProps> {
   public state: { hasErrors: boolean; errorMessage: string; showSidebar: boolean };
   public hideSidebarEvent = new CustomEvent('layout:hideSidebar');
-
+  private subscription: any;
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -49,6 +51,14 @@ export default class SidebarWidget extends PureComponent<IProps> {
     });
     const { logger } = this.props;
     logger.error('an error has occurred %j %j', err, info);
+  }
+  componentDidMount() {
+    this.subscription = this.props.globalChannel
+      .pipe(filter((response: any) => response.channelInfo.method === 'signIn'))
+      .subscribe((response: any) => this.setState({ ethAddress: response.data.ethAddress }));
+  }
+  componentWillUnmount() {
+    this.subscription.unsubscribe();
   }
 
   public showSidebar = () => {
@@ -85,6 +95,7 @@ export default class SidebarWidget extends PureComponent<IProps> {
       <Router>
         <I18nextProvider i18n={this.props.i18n}>
           <Suspense fallback={<>...</>}>
+
             <ViewportSizeProvider>
               <Menu
                 navigateToUrl={this.props.singleSpa.navigateToUrl}
@@ -104,6 +115,7 @@ interface MenuProps {
   navigateToUrl: (url: string) => void;
   getMenuItems: () => IMenuItem[];
   loaderEvents: any;
+
   sidebarVisible: boolean;
 }
 

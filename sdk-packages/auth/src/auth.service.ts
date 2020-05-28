@@ -63,7 +63,7 @@ const service: AkashaService = (invoke, log) => {
       ethAddress: address,
     });
     cache.set(AUTH_CACHE, { [ethAddressCache]: address, [tokenCache]: token });
-    return token;
+    return { token, ethAddress: address };
   };
 
   return { getJWT, signIn };
