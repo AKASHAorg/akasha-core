@@ -20,10 +20,6 @@ export function init(appLoaderOptions: {
   // general channel to send service calls
   const channel = initChannel(di);
   const apiChannels = startApi(channel, di);
-  // tslint:disable-next-line:no-console
-  console.log(apiChannels, 'api channels!!!!!!!');
-  // tslint:disable-next-line:no-console
-  console.log(globalChannel, 'global replay channel!!!!');
   const appLoader = new AppLoader(
     appLoaderOptions.config,
     appLoaderOptions.initialApps,
