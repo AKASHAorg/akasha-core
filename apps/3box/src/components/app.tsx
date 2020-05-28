@@ -22,13 +22,13 @@ export default class App extends PureComponent<any> {
   };
   public componentDidCatch(error: Error, errorInfo: any) {
     if (this.props.logger) {
-      this.props.logger.error(error, errorInfo);
+      this.props.logger.error('catched %j %j', error, errorInfo);
     }
     this.setState({
       errors: {
         'caught.critical': {
           error: new Error(`${error} \n Additional info: \n ${errorInfo}`),
-          critical: true,
+          critical: false,
         },
       },
     });
@@ -39,7 +39,7 @@ export default class App extends PureComponent<any> {
     // treat it as critical because we don't know about it
     window.onerror = (message, source, col, line, _error) => {
       if (this.props.logger) {
-        this.props.logger.error(_error, message);
+        this.props.logger.error('window error %j %j', _error, message);
       }
       this.setState({
         errors: {
@@ -55,7 +55,7 @@ export default class App extends PureComponent<any> {
     };
   }
   public render() {
-    const { i18n, sdkModules, channelUtils, logger } = this.props;
+    const { i18n, sdkModules, globalChannel, logger } = this.props;
     return (
       <React.Suspense fallback={<>Loading</>}>
         <I18nextProvider i18n={i18n ? i18n : null}>
@@ -78,7 +78,7 @@ export default class App extends PureComponent<any> {
                         <MyBoxProfile
                           {...routeProps}
                           sdkModules={sdkModules}
-                          channelUtils={channelUtils}
+                          globalChannel={globalChannel}
                           logger={logger}
                         />
                       </>
@@ -94,7 +94,7 @@ export default class App extends PureComponent<any> {
                         <BoxSettings
                           {...routeProps}
                           sdkModules={sdkModules}
-                          channelUtils={channelUtils}
+                          globalChannel={globalChannel}
                           logger={logger}
                         />
                       </>
@@ -107,7 +107,7 @@ export default class App extends PureComponent<any> {
                       <BoxProfile
                         {...routeProps}
                         sdkModules={sdkModules}
-                        channelUtils={channelUtils}
+                        globalChannel={globalChannel}
                         logger={logger}
                       />
                     )}

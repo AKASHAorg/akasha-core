@@ -8,12 +8,14 @@ import {
   EventTypes,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { filter } from 'rxjs/operators';
 
 const { lightTheme, ThemeSelector, ResponsiveSidebar, ViewportSizeProvider } = DS;
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;
   singleSpa: any;
+  globalChannel: any;
   getMenuItems: () => any[];
   events: any;
   logger: any;
@@ -30,14 +32,15 @@ export interface IProps {
  */
 
 export default class SidebarWidget extends PureComponent<IProps> {
-  public state: { hasErrors: boolean; errorMessage: string };
+  public state: { hasErrors: boolean; errorMessage: string; ethAddress: string };
   public hideSidebarEvent = new CustomEvent('layout:hideSidebar');
-
+  private subscription: any;
   constructor(props: IProps) {
     super(props);
     this.state = {
       hasErrors: false,
       errorMessage: '',
+      ethAddress: '0x0000000000000000000000000000000000000000',
     };
   }
 
@@ -48,6 +51,14 @@ export default class SidebarWidget extends PureComponent<IProps> {
     });
     const { logger } = this.props;
     logger.error(err, info);
+  }
+  componentDidMount() {
+    this.subscription = this.props.globalChannel
+      .pipe(filter((response: any) => response.channelInfo.method === 'signIn'))
+      .subscribe((response: any) => this.setState({ ethAddress: response.data.ethAddress }));
+  }
+  componentWillUnmount() {
+    this.subscription.unsubscribe();
   }
 
   public handleCloseSidebar = () => {
@@ -74,6 +85,7 @@ export default class SidebarWidget extends PureComponent<IProps> {
               getMenuItems={this.props.getMenuItems}
               loaderEvents={this.props.events}
               handleCloseSidebar={this.handleCloseSidebar}
+              ethAddress={this.state.ethAddress}
             />
           </Suspense>
         </I18nextProvider>
@@ -86,11 +98,12 @@ interface MenuProps {
   navigateToUrl: (url: string) => void;
   getMenuItems: () => IMenuItem[];
   loaderEvents: any;
+  ethAddress: string;
   handleCloseSidebar: () => void;
 }
 
 const Menu = (props: MenuProps) => {
-  const { navigateToUrl, getMenuItems, loaderEvents, handleCloseSidebar } = props;
+  const { navigateToUrl, getMenuItems, loaderEvents, handleCloseSidebar, ethAddress } = props;
 
   const currentLocation = useLocation();
 
@@ -135,7 +148,7 @@ const Menu = (props: MenuProps) => {
     >
       <ViewportSizeProvider>
         <ResponsiveSidebar
-          loggedEthAddress={'0x000000000000000000000'}
+          loggedEthAddress={ethAddress}
           onClickCloseSidebar={handleCloseSidebar}
           onClickMenuItem={handleNavigation}
           allMenuItems={currentMenu}

@@ -10,7 +10,7 @@ RxDB.plugin(syncHTTPAdapter);
 /**
  *
  * @param name
- * @param password, must be at least 8 characters long
+ * @param password, must be at least 12 characters long
  * @param adapter, can be one of 'idb' or 'memory'
  */
 export default function dbConnect(name: string, password: string, adapter: string = 'idb') {

@@ -35,6 +35,7 @@ const VideoTutorialLink = styled(IconLink)`
 export interface ILoginWidgetProps {
   sdkModules: any;
   logger: any;
+  globalChannel?: any;
   layoutConfig: {
     modalSlotId?: string;
   };
@@ -74,7 +75,7 @@ const EthProviderModalIllustration: React.FC<IEthProviderIllustrationProps> = pr
 
 const LoginWidget: React.FC<ILoginWidgetProps> = props => {
   const { t } = useTranslation();
-  const [state, actions] = useLoginState(props.sdkModules, props.logger);
+  const [state, actions] = useLoginState(props.sdkModules, props.globalChannel, props.logger);
 
   const handleLearnMore = () => {
     actions.setLearnMoreVisibility({ isVisible: true });
