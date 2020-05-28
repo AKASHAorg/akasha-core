@@ -57,4 +57,8 @@ const WidgetAreaCardBox = styled(BasicCardBox)`
   width: 21rem;
 `;
 
-export { BasicCardBox, MainAreaCardBox, WidgetAreaCardBox };
+const ModalCard = styled(BasicCardBox)`
+  padding: 1em;
+`;
+
+export { BasicCardBox, MainAreaCardBox, WidgetAreaCardBox, ModalCard };

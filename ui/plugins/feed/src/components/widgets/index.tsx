@@ -24,7 +24,11 @@ const AppsWidget = styled.div`
 
 const TopicsWidget = styled.div``;
 
-const WidgetList = (/* props: IWidgetListProps */) => {
+// export interface IWidgetListProps {
+//   mountParcel: any;
+// }
+
+const WidgetList = () => {
   const { t } = useTranslation();
   const handleAppTitleClick = () => {
     // tslint:disable-next-line no-console

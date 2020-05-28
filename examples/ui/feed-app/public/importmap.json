@@ -15,6 +15,7 @@
     "@widget/sidebar": "/widgets/sidebar.js",
     "@widget/layout": "/widgets/layout.js",
     "@widget/topbar": "/widgets/topbar.js",
+    "@widget/login": "/widgets/login.js",
     "@plugins/profile": "/plugins/profile.js",
     "@plugins/feed": "/plugins/feed.js",
     "@plugins/notifications": "/plugins/notifications.js",

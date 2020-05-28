@@ -1,9 +1,12 @@
 import { initReactI18next } from 'react-i18next';
+import { moduleName as auth } from '@akashaproject/sdk-auth/lib/constants';
+import { moduleName as common } from '@akashaproject/sdk-common/lib/constants';
+import { IWidget } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 /**
  * All widgets must export an object like this:
  */
-export const application = {
+export const application: IWidget = {
   // translation config
   i18nConfig: {
     // namespaces that this plugin requires.
@@ -12,17 +15,16 @@ export const application = {
     // In this case I will preserve the old ns instead loading a possibly undefined ns.
     loadNS: [],
     // translation namespace. defaults to plugin.name
-    // ns: 'ui-widget-topbar',
+    // ns: 'ui-widget-sidebar',
     // i18next.use(arr[0]).use(arr[1]).use(arr[n])
     use: [initReactI18next],
   },
-  loadingFn: (): Promise<any> =>
+  loadingFn: () =>
     import(
-      /* webpackChunkName: "topBarChunk" */
+      /* webpackChunkName: "loginChunk" */
       /* webpackMode: "lazy" */
       './components'
     ),
-  name: 'ui-widget-topbar',
-  sdkModules: [],
-  title: 'Topbar Widget',
+  name: 'ui-widget-login',
+  sdkModules: [{ module: auth }, { module: common }],
 };

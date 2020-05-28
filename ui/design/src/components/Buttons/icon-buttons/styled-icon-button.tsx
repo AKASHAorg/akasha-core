@@ -35,6 +35,7 @@ const StyledIconButton = styled(Button)<IIconButtonProps>`
         background-color: ${props.theme.colors.accent};
         color: ${props.theme.colors.white};
         border: 1px solid ${props.theme.colors.accent};
+        min-height: 2rem;
         svg {
           stroke: ${props.theme.colors.white};
         }

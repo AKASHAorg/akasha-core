@@ -1,6 +1,7 @@
 import * as React from 'react';
 import StyledIconButton from './styled-icon-button';
-export interface IIconButtonProps {
+import { ButtonProps } from 'grommet';
+export interface IIconButtonProps extends ButtonProps {
   className?: string;
   icon: React.ReactElement;
   label: string;

@@ -1,5 +1,14 @@
 /* Components */
-import { Box, Grid, Grommet, grommet, ResponsiveContext, ThemeContext, Text } from 'grommet';
+import {
+  Box,
+  Grid,
+  Grommet,
+  grommet,
+  ResponsiveContext,
+  ThemeContext,
+  Text,
+  Carousel,
+} from 'grommet';
 import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
 import { Avatar, EditableAvatar } from './components/Avatar';
 import { ResponsiveSidebar, Sidebar, SidebarMobile, Topbar } from './components/Bars/index';
@@ -10,6 +19,7 @@ import {
   ProfileAvatarButton,
   VoteIconButton,
 } from './components/Buttons';
+
 import {
   AppInfoWidgetCard,
   AppsWidgetCard,
@@ -24,11 +34,20 @@ import {
   ProfileCard,
   ProfileWidgetCard,
   TopicsWidgetCard,
+  WidgetAreaCardBox,
+  ModalCard,
+  LoginCTAWidgetCard,
 } from './components/Cards';
 import TextInputField from './components/Forms/text-input-field';
 import { AppIcon, Icon, iconTypes } from './components/Icon';
 import { CommentInput, SearchInput } from './components/Input';
-import { ShareModal } from './components/Modals';
+import {
+  ShareModal,
+  ModalContainer,
+  ModalRenderer,
+  EthProviderListModal,
+  EthProviderModal,
+} from './components/Modals';
 import { NotificationsPopover, SelectPopover } from './components/Popovers';
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
@@ -37,6 +56,7 @@ import VirtualList from './components/VirtualList';
 import { isBase64 } from './utils/string-utils';
 import { formatImageSrc } from './utils/image-utils';
 import { Helmet } from 'react-helmet';
+import { HorizontalDivider } from './components/Dividers';
 
 /* Themes and theme related utils */
 import darkTheme from './styles/themes/dark';
@@ -49,6 +69,7 @@ const exported = {
   Avatar,
   AppIcon,
   Button,
+  Carousel,
   EditableAvatar,
   AppInfoWidgetCard,
   AppsWidgetCard,
@@ -103,6 +124,14 @@ const exported = {
   isBase64,
   formatImageSrc,
   Helmet,
+  WidgetAreaCardBox,
+  ModalCard,
+  EthProviderListModal,
+  EthProviderModal,
+  ModalContainer,
+  ModalRenderer,
+  HorizontalDivider,
+  LoginCTAWidgetCard,
 };
 
 export default exported;
