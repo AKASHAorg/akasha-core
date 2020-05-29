@@ -92,6 +92,7 @@ export default class TopbarWidget extends PureComponent<IProps> {
                 navigateToUrl={this.props.singleSpa.navigateToUrl}
                 toggleSidebar={this.toggleSidebar}
                 getMenuItems={this.props.getMenuItems}
+                ethAddress={this.state.ethAddress}
                 loaderEvents={this.props.events}
               />
             </ViewportSizeProvider>
@@ -106,11 +107,12 @@ interface TopBarProps {
   navigateToUrl: (url: string) => void;
   toggleSidebar: (visible: boolean) => void;
   getMenuItems: () => IMenuItem[];
+  ethAddress: string;
   loaderEvents: any;
 }
 
 const TopbarComponent = (props: TopBarProps) => {
-  const { navigateToUrl, getMenuItems, loaderEvents, toggleSidebar } = props;
+  const { navigateToUrl, getMenuItems, loaderEvents, toggleSidebar, ethAddress } = props;
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
 
@@ -161,7 +163,7 @@ const TopbarComponent = (props: TopBarProps) => {
         onNavigation={handleNavigation}
         onSearch={handleSearchBarKeyDown}
         onSidebarToggle={toggleSidebar}
-        ethAddress="0x1ad35f55220234DF32A"
+        ethAddress={ethAddress}
         quickAccessItems={quickAccessItems}
         searchAreaItem={searchAreaItem}
         size={size}
