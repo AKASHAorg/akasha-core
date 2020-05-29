@@ -40,7 +40,14 @@ export const loginStateModel: LoginStateModel = {
       errors: {},
     },
     {
-      blacklist: ['errors', 'providerListVisibility', 'learnMoreVisibility', 'selectedProvider'],
+      blacklist: [
+        'errors',
+        'providerListVisibility',
+        'learnMoreVisibility',
+        'selectedProvider',
+        // this doesn't play ok with global channels, will require a session api before enabling persist
+        'jwtToken',
+      ],
     },
   ),
   updateData: action((state, payload) => {
