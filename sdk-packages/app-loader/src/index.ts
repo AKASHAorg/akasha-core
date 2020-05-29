@@ -18,6 +18,7 @@ import { BehaviorSubject } from 'rxjs';
 import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
 import TranslationManager from './i18n';
+import detectMobile from 'ismobilejs';
 
 import { setPageTitle } from './setPageMetadata';
 
@@ -40,6 +41,7 @@ export default class AppLoader implements IAppLoader {
   private readonly globalChannel;
   private readonly menuItems: IMenuList;
   private readonly translationManager: TranslationManager;
+  private readonly isMobile: boolean;
   private readonly deferredIntegrations: {
     integration: IPluginEntry;
     integrationId: string;
@@ -54,6 +56,7 @@ export default class AppLoader implements IAppLoader {
   ) {
     this.config = config;
     this.channels = channels;
+    this.isMobile = detectMobile().phone || detectMobile().tablet;
     this.globalChannel = globalChannel;
     this.events = new BehaviorSubject(EventTypes.Instantiated);
     this.menuItems = { nextIndex: 1, items: [] };
@@ -154,6 +157,7 @@ export default class AppLoader implements IAppLoader {
         sdkModules: dependencies,
         globalChannel: this.globalChannel,
         events: this.events,
+        isMobile: this.isMobile,
       },
     );
     this.menuItems.items.push({
@@ -228,6 +232,10 @@ export default class AppLoader implements IAppLoader {
     return this.menuItems.items.slice(0);
   }
   public async registerWidget(widget: IWidgetEntry) {
+    if (this.isMobile && widget.config.notOnMobile) {
+      this.appLogger.info(`will not display widget ** ${widget.app.name} ** on mobile`);
+      return;
+    }
     this.appLogger.info(
       `[@akashaproject/sdk-ui-plugin-loader] registering widget ${widget.app.name}`,
     );
@@ -265,6 +273,7 @@ export default class AppLoader implements IAppLoader {
       globalChannel: this.globalChannel,
       getMenuItems: () => this.getMenuItems(),
       events: this.events,
+      isMobile: this.isMobile,
       logger: this.appLogger.child({ widget: widgetId }),
     };
     const widgetS = singleSpa.mountRootParcel(

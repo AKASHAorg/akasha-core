@@ -40,7 +40,7 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
     },
     {
       app: loginWidget.application,
-      config: { slot: layout.application.widgetSlotId },
+      config: { slot: layout.application.widgetSlotId, notOnMobile: true },
     },
   ];
   const profilePlugin = await System.import('@plugins/profile');

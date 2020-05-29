@@ -16,6 +16,7 @@ export interface ILoaderConfig {
 
 export interface IWidgetConfig {
   slot: string;
+  notOnMobile?: boolean;
 }
 export interface SDKdependency {
   module: string;
