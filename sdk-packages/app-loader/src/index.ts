@@ -18,6 +18,7 @@ import { BehaviorSubject } from 'rxjs';
 import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
 import TranslationManager from './i18n';
+import detectMobile from 'ismobilejs';
 
 import { setPageTitle } from './setPageMetadata';
 
@@ -37,9 +38,10 @@ export default class AppLoader implements IAppLoader {
   private readonly config: ILoaderConfig;
   private readonly appLogger;
   private readonly channels;
-  private readonly channelUtils;
+  private readonly globalChannel;
   private readonly menuItems: IMenuList;
   private readonly translationManager: TranslationManager;
+  private readonly isMobile: boolean;
   private readonly deferredIntegrations: {
     integration: IPluginEntry;
     integrationId: string;
@@ -50,11 +52,12 @@ export default class AppLoader implements IAppLoader {
     config: ILoaderConfig,
     initialApps: { plugins?: IPluginEntry[]; widgets?: IWidgetEntry[]; apps?: IAppEntry[] },
     channels?: any,
-    channelUtils?: any,
+    globalChannel?: any,
   ) {
     this.config = config;
     this.channels = channels;
-    this.channelUtils = channelUtils;
+    this.isMobile = detectMobile().phone || detectMobile().tablet;
+    this.globalChannel = globalChannel;
     this.events = new BehaviorSubject(EventTypes.Instantiated);
     this.menuItems = { nextIndex: 1, items: [] };
     this.appLogger = pino({ browser: { asObject: true } });
@@ -152,8 +155,9 @@ export default class AppLoader implements IAppLoader {
         i18nConfig: integration.app.i18nConfig,
         logger: this.appLogger.child({ plugin: integrationId }),
         sdkModules: dependencies,
-        channelUtils: this.channelUtils,
+        globalChannel: this.globalChannel,
         events: this.events,
+        isMobile: this.isMobile,
       },
     );
     this.menuItems.items.push({
@@ -228,6 +232,10 @@ export default class AppLoader implements IAppLoader {
     return this.menuItems.items.slice(0);
   }
   public async registerWidget(widget: IWidgetEntry) {
+    if (this.isMobile && widget.config.notOnMobile) {
+      this.appLogger.info(`will not display widget ** ${widget.app.name} ** on mobile`);
+      return;
+    }
     this.appLogger.info(
       `[@akashaproject/sdk-ui-plugin-loader] registering widget ${widget.app.name}`,
     );
@@ -262,8 +270,10 @@ export default class AppLoader implements IAppLoader {
       domElement: domEl,
       i18n: i18nInstance,
       sdkModules: dependencies,
+      globalChannel: this.globalChannel,
       getMenuItems: () => this.getMenuItems(),
       events: this.events,
+      isMobile: this.isMobile,
       logger: this.appLogger.child({ widget: widgetId }),
     };
     const widgetS = singleSpa.mountRootParcel(

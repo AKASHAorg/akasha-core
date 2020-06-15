@@ -52,7 +52,7 @@ const service: AkashaService = (invoke, log) => {
     const authAttachmentToken = await attachment.get({ id: 'auth_token', ethAddress: address });
     if (authAttachmentToken) {
       cache.set(AUTH_CACHE, { [ethAddressCache]: address, [tokenCache]: authAttachmentToken });
-      return authAttachmentToken;
+      return { token: authAttachmentToken, ethAddress: address };
     }
     const sig = await signer.signMessage(AUTH_MESSAGE);
     const token = await getJWT({ eth_address: address, signature: sig });
@@ -63,7 +63,7 @@ const service: AkashaService = (invoke, log) => {
       ethAddress: address,
     });
     cache.set(AUTH_CACHE, { [ethAddressCache]: address, [tokenCache]: token });
-    return token;
+    return { token, ethAddress: address };
   };
 
   return { getJWT, signIn };

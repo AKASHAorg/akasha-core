@@ -35,5 +35,5 @@ export const application: Application = {
   sdkModules: [{ module: commons }, { module: dbModule }],
   title: 'AKASHA Feed',
   menuItems: routes,
-  logo: { type: LogoTypeSource.ICON, value: 'iconGeneralFeed' },
+  logo: { type: LogoTypeSource.ICON, value: 'appFeed' },
 };

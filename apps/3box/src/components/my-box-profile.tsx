@@ -12,13 +12,13 @@ export interface IMyBoxProfileProps {
   history: H.History;
   location: H.Location;
   match: match;
-  channelUtils: any;
+  globalChannel?: any;
   sdkModules: any;
   logger: any;
 }
 
-const MyBoxProfile: React.FC<any> = ({ sdkModules, channelUtils, logger }) => {
-  const [state, actions] = useBoxProfile(sdkModules, channelUtils, logger);
+const MyBoxProfile: React.FC<any> = ({ sdkModules, globalChannel, logger }) => {
+  const [state, actions] = useBoxProfile(sdkModules, globalChannel, logger);
   const { t } = useTranslation();
   const { openBoxConsent, openSpaceConsent, isLoading, isSaving } = state.data;
 

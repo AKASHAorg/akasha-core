@@ -8,12 +8,14 @@ import {
   EventTypes,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { filter } from 'rxjs/operators';
 
-const { lightTheme, ThemeSelector, ResponsiveSidebar, ViewportSizeProvider } = DS;
+const { lightTheme, ThemeSelector, Sidebar, ViewportSizeProvider, useViewportSize } = DS;
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;
   singleSpa: any;
+  globalChannel: any;
   getMenuItems: () => any[];
   events: any;
   logger: any;
@@ -30,14 +32,15 @@ export interface IProps {
  */
 
 export default class SidebarWidget extends PureComponent<IProps> {
-  public state: { hasErrors: boolean; errorMessage: string };
+  public state: { hasErrors: boolean; errorMessage: string; showSidebar: boolean };
   public hideSidebarEvent = new CustomEvent('layout:hideSidebar');
-
+  private subscription: any;
   constructor(props: IProps) {
     super(props);
     this.state = {
       hasErrors: false,
       errorMessage: '',
+      showSidebar: false,
     };
   }
 
@@ -47,11 +50,28 @@ export default class SidebarWidget extends PureComponent<IProps> {
       errorMessage: `${err.message} :: ${info.componentStack}`,
     });
     const { logger } = this.props;
-    logger.error(err, info);
+    logger.error('an error has occurred %j %j', err, info);
+  }
+  componentDidMount() {
+    this.subscription = this.props.globalChannel
+      .pipe(filter((response: any) => response.channelInfo.method === 'signIn'))
+      .subscribe((response: any) => this.setState({ ethAddress: response.data.ethAddress }));
+
+    window.addEventListener('layout:showSidebar', this.showSidebar);
+    window.addEventListener('layout:hideSidebar', this.hideSidebar);
+  }
+  componentWillUnmount() {
+    this.subscription.unsubscribe();
+    window.removeEventListener('layout:showSidebar', this.showSidebar);
+    window.removeEventListener('layout:hideSidebar', this.hideSidebar);
   }
 
-  public handleCloseSidebar = () => {
-    window.dispatchEvent(this.hideSidebarEvent);
+  public showSidebar = () => {
+    this.setState({ showSidebar: true });
+  };
+
+  public hideSidebar = () => {
+    this.setState({ showSidebar: false });
   };
 
   public render() {
@@ -65,16 +85,19 @@ export default class SidebarWidget extends PureComponent<IProps> {
         </div>
       );
     }
+
     return (
       <Router>
         <I18nextProvider i18n={this.props.i18n}>
           <Suspense fallback={<>...</>}>
-            <Menu
-              navigateToUrl={this.props.singleSpa.navigateToUrl}
-              getMenuItems={this.props.getMenuItems}
-              loaderEvents={this.props.events}
-              handleCloseSidebar={this.handleCloseSidebar}
-            />
+            <ViewportSizeProvider>
+              <Menu
+                navigateToUrl={this.props.singleSpa.navigateToUrl}
+                getMenuItems={this.props.getMenuItems}
+                loaderEvents={this.props.events}
+                sidebarVisible={this.state.showSidebar}
+              />
+            </ViewportSizeProvider>
           </Suspense>
         </I18nextProvider>
       </Router>
@@ -86,13 +109,16 @@ interface MenuProps {
   navigateToUrl: (url: string) => void;
   getMenuItems: () => IMenuItem[];
   loaderEvents: any;
-  handleCloseSidebar: () => void;
+
+  sidebarVisible: boolean;
 }
 
 const Menu = (props: MenuProps) => {
-  const { navigateToUrl, getMenuItems, loaderEvents, handleCloseSidebar } = props;
+  const { navigateToUrl, getMenuItems, loaderEvents, sidebarVisible } = props;
 
   const currentLocation = useLocation();
+
+  const { size } = useViewportSize();
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
 
@@ -112,10 +138,7 @@ const Menu = (props: MenuProps) => {
     };
   }, []);
 
-  // *how to obtain different sidebar menu sections8
-  const header = currentMenu?.filter(
-    menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,
-  );
+  // *how to obtain different sidebar menu sections
   const body = currentMenu?.filter(menuItem => menuItem.area === MenuItemAreaType.AppArea);
   const footer = currentMenu?.filter(menuItem => menuItem.area === MenuItemAreaType.BottomArea);
 
@@ -127,24 +150,18 @@ const Menu = (props: MenuProps) => {
     <ThemeSelector
       availableThemes={[lightTheme]}
       settings={{ activeTheme: 'Light-Theme' }}
-      style={{
-        height: '100vh',
-        position: 'sticky',
-        top: 0,
-      }}
+      style={{ height: '100%' }}
     >
-      <ViewportSizeProvider>
-        <ResponsiveSidebar
-          loggedEthAddress={'0x000000000000000000000'}
-          onClickCloseSidebar={handleCloseSidebar}
+      {sidebarVisible && (
+        <Sidebar
           onClickMenuItem={handleNavigation}
           allMenuItems={currentMenu}
-          headerMenuItems={header}
           bodyMenuItems={body}
           footerMenuItems={footer}
           currentRoute={currentLocation.pathname}
+          size={size}
         />
-      </ViewportSizeProvider>
+      )}
     </ThemeSelector>
   );
 };

@@ -11,7 +11,7 @@ export interface IMyProfileProps {
   history: H.History;
   location: H.Location;
   sdkModules: any;
-  channelUtils: any;
+  globalChannel?: any;
   logger: any;
 }
 
@@ -30,7 +30,7 @@ const getImageSrc = (boxImage: any) => {
 };
 
 const BoxProfile: React.FC<IMyProfileProps> = props => {
-  const [state, actions] = useBoxProfile(props.sdkModules, props.channelUtils, props.logger);
+  const [state, actions] = useBoxProfile(props.sdkModules, props.globalChannel, props.logger);
   const { profileId } = useParams();
   const { t } = useTranslation();
 

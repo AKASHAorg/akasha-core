@@ -5,8 +5,13 @@ import CommonInterface from '../../interfaces/common.interface';
 import * as icons from './new-icons';
 
 export type IconType =
+  | 'app3Box'
+  | 'appCenter'
+  | 'appAkasha'
+  | 'appEns'
+  | 'appFeed'
   | 'activity'
-  | 'addAppDark'
+  | 'akasha'
   | 'addAppGrey'
   | 'addCard'
   | 'announcement'
@@ -41,6 +46,7 @@ export type IconType =
   | 'link'
   | 'loading'
   | 'media'
+  | 'menuCollapsed'
   | 'menu'
   | 'metamask'
   | 'moreDark'
@@ -74,13 +80,17 @@ export type IconType =
   | 'underline'
   | 'upload'
   | 'wallet'
-  | 'walletconnect'
-  | 'iconGeneralFeed';
+  | 'walletconnect';
 
 export const iconTypes: IconType[] = [
+  'app3Box',
+  'appAkasha',
+  'appCenter',
+  'appEns',
+  'appFeed',
   'activity',
   'addAppGrey',
-  'addAppDark',
+  'akasha',
   'addCard',
   'announcement',
   'app',
@@ -114,6 +124,7 @@ export const iconTypes: IconType[] = [
   'link',
   'loading',
   'media',
+  'menuCollapsed',
   'menu',
   'metamask',
   'moreDark',
@@ -147,7 +158,6 @@ export const iconTypes: IconType[] = [
   'upload',
   'wallet',
   'walletconnect',
-  'iconGeneralFeed',
 ];
 
 export interface IconProps extends CommonInterface<any> {

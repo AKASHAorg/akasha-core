@@ -14,48 +14,49 @@ const {
   ViewportSizeProvider,
 } = DS;
 
-const MainArea = styled(Box)`
+const MainArea = styled(Box)<{ sidebarVisible: boolean }>`
   width: 100%;
 `;
 
 const SidebarSlot = styled(Box)<{ visible: boolean }>`
-  position: relative;
-  top: 0;
-  @media only screen and (max-width: ${props => props.theme.breakpoints.xlarge.value}px) {
-    min-width: 15rem;
-  }
-  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
-    position: sticky;
-    top: 0;
-    min-width: 15rem;
-  }
+  width: 16rem;
+  height: 100%;
   @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
-    position: fixed;
-    left: ${props => (props.visible ? 0 : -999)}px;
-    top: 0;
-    bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 999;
+    ${props => {
+      if (props.visible) {
+        return css`
+          position: absolute;
+          top: 3rem;
+          width: 100vw;
+          height: calc(100% - 3rem);
+          z-index: 999;
+        `;
+      }
+      return css`
+        display: none;
+      `;
+    }}
   }
 `;
+
 const TopbarSlot = styled(Box)`
   z-index: 100;
-  position: sticky;
-  top: 0;
-  @media screen and (min-width: ${props => props.theme.breakpoints.small.value}px) {
-    display: none;
-  }
+  width: 100%;
+  height: 3rem;
 `;
+
 const PluginSlot = styled(Box)`
-  height: 100vh;
+  height: 100%;
   flex: 2;
 `;
 
 const WidgetSlot = styled(Box)`
-  height: 100vh;
+  height: 100%;
   flex: 1;
   align-items: center;
+  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
+    display: none;
+  }
 `;
 
 const GlobalStyle = createGlobalStyle<{ theme: any }>`
@@ -188,17 +189,20 @@ class LayoutWidget extends PureComponent<IProps> {
           availableThemes={[lightTheme]}
           settings={{ activeTheme: 'Light-Theme' }}
           themeReadyEvent={this.props.themeReadyEvent}
+          style={{ height: '100%' }}
         >
           <ViewportSizeProvider>
-            <Box direction="row">
-              <SidebarSlot id={sidebarSlotId} visible={sidebarVisible} />
-              <MainArea fill={true}>
-                <TopbarSlot id={topbarSlotId} />
-                <Box fill={true} flex={true} direction="row">
-                  <PluginSlot id={pluginSlotId} fill={true} />
-                  <WidgetSlot id={widgetSlotId} fill={true} />
-                </Box>
-              </MainArea>
+            <Box fill={true}>
+              <TopbarSlot id={topbarSlotId} />
+              <Box direction="row" fill={true}>
+                <SidebarSlot id={sidebarSlotId} visible={sidebarVisible} />
+                <MainArea fill={true} align="center" sidebarVisible={sidebarVisible}>
+                  <Box fill={true} flex={true} direction="row">
+                    <PluginSlot id={pluginSlotId} fill={true} />
+                    <WidgetSlot id={widgetSlotId} fill={true} />
+                  </Box>
+                </MainArea>
+              </Box>
             </Box>
           </ViewportSizeProvider>
           <div id={modalSlotId} />

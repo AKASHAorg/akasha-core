@@ -9,6 +9,7 @@ const { ThemeSelector, lightTheme, darkTheme } = DS;
 export interface ILoginWidgetProps {
   logger: any;
   i18n: any;
+  globalChannel?: any;
   sdkModules: any;
   layout: any;
 }
@@ -19,13 +20,13 @@ export default class LoginWidgetRoot extends PureComponent<ILoginWidgetProps> {
   };
   public componentDidCatch(error: Error, errorInfo: any) {
     if (this.props.logger) {
-      this.props.logger.error(error, errorInfo);
+      this.props.logger.error('auth-widget error %j %j', error, errorInfo);
     }
     this.setState({
       errors: {
         'caught.critical': {
           error: new Error(`${error} \n Additional info: \n ${errorInfo}`),
-          critical: true,
+          critical: false,
         },
       },
     });
@@ -44,6 +45,7 @@ export default class LoginWidgetRoot extends PureComponent<ILoginWidgetProps> {
             <WidgetErrorCard errors={this.state.errors}>
               <LoginWidget
                 sdkModules={this.props.sdkModules}
+                globalChannel={this.props.globalChannel}
                 logger={this.props.logger}
                 layoutConfig={this.props.layout}
               />

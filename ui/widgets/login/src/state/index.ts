@@ -1,5 +1,7 @@
 import { action, thunk, createComponentStore, persist, Action, Thunk } from 'easy-peasy';
 import { EthProviders } from '@akashaproject/ui-awf-typings';
+import { race } from 'rxjs';
+import { filter, takeLast } from 'rxjs/operators';
 
 export interface LoginState {
   jwtToken: string | null;
@@ -38,7 +40,14 @@ export const loginStateModel: LoginStateModel = {
       errors: {},
     },
     {
-      blacklist: ['errors', 'providerListVisibility', 'learnMoreVisibility', 'selectedProvider'],
+      blacklist: [
+        'errors',
+        'providerListVisibility',
+        'learnMoreVisibility',
+        'selectedProvider',
+        // this doesn't play ok with global channels, will require a session api before enabling persist
+        'jwtToken',
+      ],
     },
   ),
   updateData: action((state, payload) => {
@@ -59,11 +68,16 @@ export const loginStateModel: LoginStateModel = {
   authorize: thunk(async (actions, ethProvider, { injections }) => {
     const { auth } = injections.channels;
     try {
-      const call = auth.auth_service.signIn(ethProvider);
-      call.subscribe(
-        (data: any) => {
+      const call = auth.authService.signIn(ethProvider);
+      // handle the case where signIn was triggered from another place
+      const globalCall = injections.globalChannel.pipe(
+        filter((response: any) => response.channelInfo.method === 'signIn'),
+        takeLast(1),
+      );
+      race(call, globalCall).subscribe(
+        (response: any) => {
           actions.updateData({
-            jwtToken: data,
+            jwtToken: response.data.token,
             selectedProvider: null,
           });
         },
@@ -100,8 +114,8 @@ export const loginStateModel: LoginStateModel = {
   }),
 };
 
-export const useLoginState = (channels?: any, logger?: any) =>
+export const useLoginState = (channels?: any, globalChannel?: any, logger?: any) =>
   createComponentStore(loginStateModel, {
     name: 'login-widget_LoginState',
-    injections: { channels, logger },
+    injections: { channels, logger, globalChannel },
   })();
