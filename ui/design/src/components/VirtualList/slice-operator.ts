@@ -26,8 +26,8 @@ const SliceOperator = (props: ISliceOperatorProps, ref: React.RefObject<any>) =>
     itemSpacing,
     listState,
     setListState,
+    hasMoreItems,
   } = props;
-
   React.useImperativeHandle(
     ref,
     (): ISliceOperatorInterface => ({
@@ -51,6 +51,7 @@ const SliceOperator = (props: ISliceOperatorProps, ref: React.RefObject<any>) =>
           loadLimit,
           initialPaddingTop,
           infiniteScrollState,
+          hasMoreItems,
         );
         handleSlicingOperations(
           sliceOperation,

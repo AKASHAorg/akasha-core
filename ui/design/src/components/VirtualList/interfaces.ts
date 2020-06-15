@@ -22,14 +22,27 @@ export interface IListInitialState {
   startId: string | null;
 }
 
-export type GetItemCardFn = (props: { itemId: string; itemData: any }) => React.ReactElement;
+export type GetItemCardFn = (props: {
+  itemId: string;
+  itemData: any;
+  isBookmarked: boolean | null;
+}) => React.ReactElement;
 
+export interface ILoadItemsPayload {
+  start?: string;
+  limit: number;
+  reverse?: boolean;
+}
+
+export interface ILoadItemDataPayload {
+  itemId: string;
+}
 export interface IVirtualListProps {
-  items: any[];
+  items: string[];
   itemsData: {};
-  loadMore: (payload: {}) => void;
-  loadItemData: (payload: {}) => void;
-  loadInitialFeed: (payload: {}) => void;
+  loadMore: (payload: ILoadItemsPayload) => void;
+  loadItemData: (payload: ILoadItemDataPayload) => void;
+  loadInitialFeed: (payload: ILoadItemsPayload) => void;
   itemCard?: React.FC<{ item: any }>;
   /* spacing between items (bottom) */
   itemSpacing?: number;
@@ -44,6 +57,8 @@ export interface IVirtualListProps {
   customEntities?: IListCustomEntity[];
   initialState?: IListInitialState;
   getItemCard: GetItemCardFn;
+  hasMoreItems: boolean;
+  bookmarkedItems?: Set<string>;
 }
 
 export interface IListItemProps {
@@ -78,18 +93,16 @@ export type ItemDimensionsRef = React.MutableRefObject<ItemDimensions>;
 
 export interface IListContentProps {
   itemCard?: React.FC<{ item: any }>;
-  items: any[];
+  items: IVirtualListProps['items'];
   offsetItems: number;
   initialPaddingTop: number;
-  loadItemDataAction: (payload: any, deps?: any[]) => void;
+  loadItemData: IVirtualListProps['loadItemData'];
   itemsData: {};
   // the available height (scrolling parent height)
   height: number;
   // the available width of the list
   width: number;
   itemSpacing: number;
-  // topBoundryLoader: React.ReactElement;
-  // bottomBoundryLoader: React.ReactElement;
   loadLimit: number;
   onLoadMore: IVirtualListProps['loadMore'];
   customEntities: IListCustomEntity[];
@@ -99,17 +112,20 @@ export interface IListContentProps {
     hasNewerEntries: boolean;
   };
   setListState: any;
+  hasMoreItems: boolean;
+  bookmarkedItems?: IVirtualListProps['bookmarkedItems'];
 }
 
 export interface IRenderItemProps {
-  item: { entryId: string };
+  itemId: string;
   itemData?: any;
-  loadItemDataAction: IVirtualListProps['loadItemData'];
+  loadItemData: IVirtualListProps['loadItemData'];
   index: number;
   onDimensionChange: (itemId: string, dimension: any) => void;
   itemSpacing?: IListContentProps['itemSpacing'];
   customEntities: IListCustomEntity[];
   getItemCard: GetItemCardFn;
+  isBookmarked: boolean | null;
 }
 export type SetSliceOperationType = React.Dispatch<React.SetStateAction<ISliceOperation>>;
 export type SetFetchOperationType = React.Dispatch<IFetchOperation | null>;
@@ -120,14 +136,14 @@ export interface ISliceOperatorProps {
   sliceOperation: ISliceOperation | null;
   setSliceOperation: SetSliceOperationType;
   itemDimensions: ItemDimensionsRef;
-  items: any[];
+  items: IVirtualListProps['items'];
   loadLimit: number;
   offsetItems: number;
-  onLoadMore: IVirtualListProps['loadMore'];
   initialPaddingTop: number;
   itemSpacing: number;
   listState: IListContentProps['listState'];
   setListState: IListContentProps['setListState'];
+  hasMoreItems: boolean;
 }
 
 export interface IListOperatorProps {
@@ -142,7 +158,7 @@ export interface IListOperatorProps {
 
 export interface IFetchProcessorProps {
   fetchOperation: IFetchOperation | null;
-  items: { entryId: string }[];
+  items: IVirtualListProps['items'];
   setFetchOperation: SetFetchOperationType;
   itemDimensions: ItemDimensionsRef;
   scrollState: IScrollState;
@@ -153,15 +169,16 @@ export interface IFetchProcessorProps {
 export interface IInfiniteScrollState {
   paddingTop: number;
   paddingBottom: number;
-  items: IListContentProps['items'];
+  items: IVirtualListProps['items'];
 }
 
 export interface IListItemContainerProps {
   itemData: IEntryData | null;
   itemId: string;
-  dataLoadAction: (payload: any, deps: any[]) => void;
+  loadItemData: IVirtualListProps['loadItemData'];
   className?: string;
   onDimensionChange: (itemId: string, newDimensions: any) => void;
   itemSpacing?: number;
   getItemCard: GetItemCardFn;
+  isBookmarked: IRenderItemProps['isBookmarked'];
 }

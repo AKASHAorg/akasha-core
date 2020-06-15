@@ -9,8 +9,8 @@ const StyledLayerElemDiv = styled.div`
 `;
 
 const StyledDrop = styled(Drop)`
-  margin-top: -0.625em;
-  margin-left: 1.563em;
+  /* margin-top: -0.625em; */
+  /* margin-left: 1.563em; */
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
 `;
 

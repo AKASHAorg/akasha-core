@@ -164,6 +164,7 @@ export interface IconProps extends CommonInterface<any> {
 const StyledRefDiv = styled.div`
   display: flex;
   align-items: center;
+  user-select: none;
 `;
 
 const IconBase: React.FC<IconProps> = React.forwardRef(

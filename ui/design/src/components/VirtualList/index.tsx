@@ -55,6 +55,8 @@ const VirtualList = (props: IVirtualListProps) => {
       startId: null,
       hasNewerEntries: false,
     },
+    hasMoreItems,
+    bookmarkedItems,
   } = props;
   const [listState, setListState] = React.useState(initialState);
 
@@ -73,32 +75,31 @@ const VirtualList = (props: IVirtualListProps) => {
     }
     loadInitialFeed(payload);
   }, []);
-
   return (
-    <Box height="100%" flex={true}>
-      <div style={{ height: '100%', width: '100%' }}>
-        <AutoSizer>
-          {({ width, height }) => (
-            <ListContent
-              offsetItems={offsetItems}
-              initialPaddingTop={initialPaddingTop}
-              items={items}
-              itemCard={itemCard}
-              loadItemDataAction={loadItemData}
-              loadLimit={loadLimit}
-              itemsData={itemsData}
-              height={height}
-              width={width}
-              itemSpacing={itemSpacing}
-              onLoadMore={loadMore}
-              customEntities={customEntities}
-              getItemCard={getItemCard}
-              listState={listState}
-              setListState={setListState}
-            />
-          )}
-        </AutoSizer>
-      </div>
+    <Box fill="vertical" flex={true}>
+      <AutoSizer>
+        {({ width, height }) => (
+          <ListContent
+            offsetItems={offsetItems}
+            initialPaddingTop={initialPaddingTop}
+            items={items}
+            itemCard={itemCard}
+            loadItemData={loadItemData}
+            loadLimit={loadLimit}
+            itemsData={itemsData}
+            height={height}
+            width={width}
+            itemSpacing={itemSpacing}
+            onLoadMore={loadMore}
+            customEntities={customEntities}
+            getItemCard={getItemCard}
+            listState={listState}
+            setListState={setListState}
+            hasMoreItems={hasMoreItems}
+            bookmarkedItems={bookmarkedItems}
+          />
+        )}
+      </AutoSizer>
     </Box>
   );
 };

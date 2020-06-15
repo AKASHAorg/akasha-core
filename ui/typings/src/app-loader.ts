@@ -12,6 +12,7 @@ export interface IPluginConfig {
 export interface ILoaderConfig {
   rootNodeId: string;
   layout: IWidget;
+  rootLoadedApp: IAppEntry['app'];
 }
 
 export interface IWidgetConfig {

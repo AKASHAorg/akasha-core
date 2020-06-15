@@ -23,7 +23,7 @@ const ListContent = (props: IListContentProps) => {
     items,
     itemsData,
     initialPaddingTop,
-    loadItemDataAction,
+    loadItemData,
     height,
     width,
     itemSpacing,
@@ -34,6 +34,8 @@ const ListContent = (props: IListContentProps) => {
     getItemCard,
     listState,
     setListState,
+    hasMoreItems,
+    bookmarkedItems,
   } = props;
   const [fetchOperation, setFetchOperation] = React.useState<IFetchOperation | null>(null);
   const [sliceOperation, setSliceOperation] = React.useState<ISliceOperation | null>(null);
@@ -86,11 +88,9 @@ const ListContent = (props: IListContentProps) => {
       ),
     [JSON.stringify(sliceOperation), items.length, JSON.stringify(itemDimensions.current)],
   );
-
   const updateScroll = (
     scrollTop: number,
     scrollHeight: number,
-    scrollStateRef: React.MutableRefObject<IScrollState>,
     operatorRef: any,
     infScrollState: IInfiniteScrollState,
     availableItems: IListContentProps['items'],
@@ -98,11 +98,11 @@ const ListContent = (props: IListContentProps) => {
   ) => {
     const clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
     let scrollDirection: 0 | 1 = 0;
-    if (scrollTop > 0 && scrollStateRef.current.scrollTop <= scrollTop) {
+    if (scrollTop > 0 && scrollState.current.scrollTop <= scrollTop) {
       scrollDirection = 1;
     }
 
-    scrollStateRef.current = {
+    scrollState.current = {
       scrollHeight,
       direction: scrollDirection,
       scrollTop: scrollTop,
@@ -111,7 +111,7 @@ const ListContent = (props: IListContentProps) => {
 
     if (operatorRef) {
       operatorRef.handleContainerScroll(
-        scrollStateRef,
+        scrollState,
         infScrollState,
         availableItems,
         itemMeasurements,
@@ -126,7 +126,6 @@ const ListContent = (props: IListContentProps) => {
     containerScrollThrottle(
       ev.currentTarget.scrollTop,
       ev.currentTarget.scrollHeight,
-      scrollState,
       queueOperatorRef.current,
       infiniteScrollState,
       items,
@@ -134,20 +133,19 @@ const ListContent = (props: IListContentProps) => {
     );
     ev.persist();
   };
+
   return (
     <div
       style={{ height, width, position: 'relative', overflowY: 'auto', padding: '0 1em' }}
       onScroll={throttledScroll}
     >
-      <React.Suspense fallback={<>Loading newer entries</>}>
-        <BoundryLoader
-          chrono="upper"
-          onLoadMore={onLoadMore}
-          fetchOperation={fetchOperation}
-          setFetchOperation={setFetchOperation}
-          height={infiniteScrollState.paddingTop}
-        />
-      </React.Suspense>
+      <BoundryLoader
+        chrono="upper"
+        onLoadMore={onLoadMore}
+        fetchOperation={fetchOperation}
+        setFetchOperation={setFetchOperation}
+        height={infiniteScrollState.paddingTop}
+      />
       <SliceOperator
         fetchOperation={fetchOperation}
         setFetchOperation={setFetchOperation}
@@ -158,36 +156,35 @@ const ListContent = (props: IListContentProps) => {
         loadLimit={loadLimit}
         offsetItems={offsetItems}
         ref={queueOperatorRef}
-        onLoadMore={onLoadMore}
         initialPaddingTop={initialPaddingTop}
         itemSpacing={itemSpacing}
         listState={listState}
         setListState={setListState}
+        hasMoreItems={hasMoreItems}
       />
-      {infiniteScrollState.items.map((viewableItem, idx) => (
+      {infiniteScrollState.items.map((viewableItemId, idx) => (
         <CardRenderer
-          key={viewableItem.entryId}
-          loadItemDataAction={loadItemDataAction}
+          key={`${viewableItemId}`}
+          loadItemData={loadItemData}
           onDimensionChange={onDimensionChange}
           itemSpacing={itemSpacing}
-          item={viewableItem}
+          itemId={viewableItemId}
           index={idx}
-          itemData={itemsData[viewableItem.entryId]}
+          itemData={itemsData[viewableItemId]}
           customEntities={customEntities.filter(
-            ent => ent.itemId === viewableItem.entryId || ent.itemIndex === idx,
+            ent => ent.itemId === viewableItemId || ent.itemIndex === idx,
           )}
           getItemCard={getItemCard}
+          isBookmarked={bookmarkedItems ? bookmarkedItems.has(viewableItemId) : null}
         />
       ))}
-      <React.Suspense fallback={<>Loading older entries</>}>
-        <BoundryLoader
-          chrono="lower"
-          onLoadMore={onLoadMore}
-          fetchOperation={fetchOperation}
-          setFetchOperation={setFetchOperation}
-          height={infiniteScrollState.paddingBottom}
-        />
-      </React.Suspense>
+      <BoundryLoader
+        chrono="lower"
+        onLoadMore={onLoadMore}
+        fetchOperation={fetchOperation}
+        setFetchOperation={setFetchOperation}
+        height={infiniteScrollState.paddingBottom}
+      />
     </div>
   );
 };

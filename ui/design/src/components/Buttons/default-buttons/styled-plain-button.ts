@@ -3,7 +3,8 @@ import styled from 'styled-components';
 
 const StyledPlainButton = styled(Box)`
   padding: 0 0.8em;
-  color: ${props => props.theme.colors.secondaryText};
+  color: ${props =>
+    props.color ? props.theme.colors[props.color] : props.theme.colors.secondaryText};
   svg {
     height: 100%;
     width: 1.25rem;

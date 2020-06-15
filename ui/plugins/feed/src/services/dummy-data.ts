@@ -3,7 +3,7 @@ import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/
 export const delay = (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
-export const randomMs = (min: number, max: number) =>
+const randomNumber = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
 export const generateProfileData = (ethAddress: string): IProfileData => {
@@ -30,6 +30,14 @@ const contentStrings = [
   'Кто меч там Ходя душу есть идет Вам.',
 ];
 
+const genTime = () => {
+  const startDate = new Date('Mon Jun 03 2019 12:12:58 GMT+0300');
+  const end = Date.now() / 1000;
+  const start = startDate.getTime() / 1000;
+  const date = new Date(start + Math.max(0, Math.random() * (end - start)));
+  return date.getTime();
+};
+
 export const genEntryData = (entryId: string) => ({
   entryId,
   ethAddress: '0x003410490059837320006570047391024572000',
@@ -38,29 +46,9 @@ export const genEntryData = (entryId: string) => ({
   content: contentStrings
     .slice(Math.floor(Math.random() * Math.floor(3)), Math.floor(Math.random() * Math.floor(9)))
     .join('. '),
-  time: '1572036522',
-  upvotes: 26,
-  downvotes: 9,
-  comments: [
-    {
-      ethAddress: '0x003410490050000320006570047391024572000',
-      name: 'Mariana Gomes',
-      avatar: 'http://placebeard.it/480/480',
-      content: 'Great Job!',
-      upvotes: 3,
-      downvotes: 0,
-      time: '1572036522',
-      quotes: [],
-    },
-  ],
-  quotes: [
-    {
-      ethAddress: '0x003410490050000320006570047391024572000',
-      name: 'Gigi Patratel',
-      time: '1572036522',
-      avatar: 'http://placebeard.it/480/480',
-    },
-  ],
+  time: genTime(),
+  repliesCount: randomNumber(0, 1000),
+  repostsCount: randomNumber(0, 1210),
 });
 
 export const genEthAddress = () => {

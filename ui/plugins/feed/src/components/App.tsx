@@ -1,7 +1,6 @@
 import DS from '@akashaproject/design-system';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { feedInit, FeedProvider, feedReducer } from '../state/feed';
 import Routes from './routes';
 
 const { ViewportSizeProvider, Box, styled, lightTheme, darkTheme, ThemeSelector } = DS;
@@ -11,7 +10,6 @@ export interface IProps {
   activeWhen: {
     path: string;
   };
-
   mountParcel: (config: any, props: any) => void;
   rootNodeId: string;
   sdkModules: any;
@@ -29,18 +27,13 @@ export interface IProps {
  * @warning :: Always use default export
  */
 
-// this example is to showcase how the consumers can be outside of component, reusable
-// maybe react hooks call inside?
-// tslint:disable-next-line:no-console
-const subConsumer = (data: any) => console.log('sdkModule call', data);
-
 const FeedPlaceholder = styled(Box)`
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     max-width: 60%;
   }
 `;
 
-class App extends PureComponent<IProps> {
+class FeedPluginRoot extends PureComponent<IProps> {
   public state: { hasErrors: boolean };
 
   constructor(props: IProps) {
@@ -57,14 +50,6 @@ class App extends PureComponent<IProps> {
     const { logger } = this.props;
     logger.error(err, info);
   }
-
-  // @TODO: remove this after having a real use-case
-  public onClickSdk = () => {
-    const { sdkModules, logger } = this.props;
-    logger.info('sdk call');
-    const callMethod = sdkModules.commons.validator_service({ method: 'validator', args: {} });
-    callMethod.subscribe(subConsumer);
-  };
 
   public handleNavigation(href: string) {
     return (ev: React.SyntheticEvent) => {
@@ -94,9 +79,7 @@ class App extends PureComponent<IProps> {
           >
             <Suspense fallback={<FeedPlaceholder>Loading resources...</FeedPlaceholder>}>
               <I18nextProvider i18n={i18n ? i18n : null}>
-                <FeedProvider reducer={feedReducer} initialState={feedInit()}>
-                  <Routes {...this.props} />
-                </FeedProvider>
+                <Routes {...this.props} />
               </I18nextProvider>
             </Suspense>
           </ThemeSelector>
@@ -106,4 +89,4 @@ class App extends PureComponent<IProps> {
   }
 }
 
-export default App;
+export default FeedPluginRoot;

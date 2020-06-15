@@ -316,6 +316,14 @@ export default class AppLoader implements IAppLoader {
   protected onFirstMount() {
     // tslint:disable-next-line:no-console
     console.timeEnd('AppLoader:firstMount');
+    const matchedPlugins = this.getPluginsForLocation(window.location);
+    if (window.location.pathname === '/' && matchedPlugins.length === 0) {
+      if (this.config.rootLoadedApp) {
+        singleSpa.navigateToUrl(this.config.rootLoadedApp.activeWhen.path);
+      } else {
+        this.appLogger.error('There is no rootLoadedApp set. Nothing to render!');
+      }
+    }
   }
 
   protected beforeRouting() {

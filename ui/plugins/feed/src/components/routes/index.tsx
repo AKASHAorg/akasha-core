@@ -1,15 +1,22 @@
 import DS from '@akashaproject/design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 // import WidgetList from '../widgets';
 import FeedHomePage from './feed-home-page';
+import routes, { MY_FEED_PAGE, SAVED_PAGE, rootRoute, SETTINGS_PAGE } from '../../routes';
+import SavedEntriesPage from './saved-entries-page';
+import SettingsPage from './settings-page';
 
 const { Box, styled } = DS;
 
 export interface IRoutesProps {
   activeWhen: { path: string };
   mountParcel: any;
+  i18n?: any;
+  singleSpa: any;
+  sdkModules: any;
+  logger: any;
 }
 
 const ArticleNotFound = () => {
@@ -20,7 +27,6 @@ const ArticleNotFound = () => {
 const FeedBox = styled(Box)`
   padding: 0.5em 0;
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
-    max-width: 60%;
     width: 100%;
   }
 `;
@@ -43,21 +49,34 @@ const Feed = styled(Box)`
 `;
 
 const Routes: React.FC<IRoutesProps> = props => {
-  const { activeWhen } = props;
-  const { path } = activeWhen;
-  const activeWhenPath = path.slice(0, path.lastIndexOf('/'));
   return (
     <Router>
       <Feed>
         <FeedBox>
-          <Switch>
-            <Route exact={true} path={`${activeWhenPath}`} component={FeedHomePage} />
-            <Route component={ArticleNotFound} />
-          </Switch>
+          <Route
+            path={`${rootRoute}`}
+            component={() => (
+              <>
+                <Switch>
+                  <Route
+                    path={`${routes[MY_FEED_PAGE]}`}
+                    render={routeProps => <FeedHomePage {...props} {...routeProps} />}
+                  />
+                  <Route
+                    path={routes[SAVED_PAGE]}
+                    render={routeProps => <SavedEntriesPage {...props} {...routeProps} />}
+                  />
+                  <Route
+                    path={`${routes[SETTINGS_PAGE]}`}
+                    render={routeProps => <SettingsPage {...props} {...routeProps} />}
+                  />
+                  <Redirect from={`${rootRoute}`} to={`${routes[MY_FEED_PAGE]}`} />
+                  <Route component={ArticleNotFound} />
+                </Switch>
+              </>
+            )}
+          />
         </FeedBox>
-        {/* <WidgetBox>
-          <WidgetList />
-        </WidgetBox> */}
       </Feed>
     </Router>
   );
