@@ -26,23 +26,23 @@ export const FeedItem: React.FC<IFeedItemProps> = (props) => {
       <EntryCard
         entryData={itemData}
         onClickAvatar={() => {}}
-        onClickDownvote={() => {}}
-        onClickUpvote={() => {}}
-        commentsLabel={t('Comments')}
-        quotesLabel={t('Quotes')}
+        repostsLabel={t('Quotes')}
         shareLabel={t('Share')}
         editPostLabel={t('Edit Post')}
-        editCommentLabel={t('Edit Comment')}
         copyLinkLabel={t('Copy link')}
-        quotedByLabel={t('Quoted By')}
-        replyLabel={t('Reply')}
-        commentInputPlaceholderLabel={t('Write a comment')}
-        commentInputPublishLabel={t('Publish')}
-        publishComment={() => {}}
+        repliesLabel={t('Replies', { count: 10 })}
         loggedProfileAvatar={itemData.avatar}
         loggedProfileEthAddress={itemData.ethAddress}
         locale={'en'}
         className={props.className}
+        isBookmarked={false}
+        onEntryBookmark={() => {}}
+        onEntryFlag={() => {}}
+        onEntryShare={() => {}}
+        bookmarkLabel={t('Save')}
+        bookmarkedLabel={t('Saved')}
+        onRepost={() => {}}
+        onLinkCopy={() => {}}
       />
   );
 };

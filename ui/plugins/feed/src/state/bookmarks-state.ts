@@ -68,8 +68,8 @@ export interface BookmarksStateModel {
   addBookmarkedItems: Action<BookmarksStateModel, IAddFeedItemsPayload>;
   getBookmarkedItems: Thunk<BookmarksStateModel, IGetBookmarkedItemsOptions>;
   getItemData: Thunk<BookmarksStateModel, { entryId: string }>;
-  bookmarkEntry: Thunk<BookmarksStateModel, { entryId: string }>;
-  unbookmarkEntry: Thunk<BookmarksStateModel, { entryId: string }>;
+  bookmarkEntry: Thunk<BookmarksStateModel, { entryId: string; ethAddress: string }>;
+  unbookmarkEntry: Thunk<BookmarksStateModel, { entryId: string; ethAddress: string }>;
   updateEntryStatus: Action<
     BookmarksStateModel,
     { entryId: string; status: { viewed?: boolean; fetching?: boolean } }
@@ -137,35 +137,76 @@ export const bookmarksStateModel: BookmarksStateModel = {
       },
     });
   }),
-  bookmarkEntry: thunk(async (actions, payload, { getState }) => {
+  bookmarkEntry: thunk(async (actions, payload, { getState, injections }) => {
+    const { entryId, ethAddress } = payload;
+    const { channels /* , logger */ } = injections;
+
     const bmEntries = new Set(getState().data.bookmarkedIds as Set<string>);
-    bmEntries.add(payload.entryId);
-    actions.updateData({
-      bookmarkedIds: bmEntries,
+    bmEntries.add(entryId);
+
+    const call = channels.db.settingsAttachment.put({
+      ethAddress: ethAddress,
+      obj: {
+        data: JSON.stringify(Array.from(bmEntries)),
+        type: 'string',
+        id: BOOKMARKED_ENTRIES_KEY,
+      },
+    });
+    call.subscribe(async (response: any) => {
+      const attachment = await response.data.doc.getAttachment(BOOKMARKED_ENTRIES_KEY);
+      const textArr = await attachment.getStringData();
+
+      actions.updateData({
+        bookmarkedIds: new Set(JSON.parse(textArr)),
+      });
     });
   }),
-  unbookmarkEntry: thunk(async (actions, payload, { getState }) => {
+  unbookmarkEntry: thunk(async (actions, payload, { getState, injections }) => {
+    const { entryId, ethAddress } = payload;
+    const { channels } = injections;
+
     const bmEntries = new Set(getState().data.bookmarkedIds as Set<string>);
-    bmEntries.delete(payload.entryId);
+    bmEntries.delete(entryId);
+
+    const call = channels.db.settingsAttachment.put({
+      ethAddress: ethAddress,
+      obj: {
+        // store an array instead of Set. Sets can be tricky to stringify.
+        data: JSON.stringify(Array.from(bmEntries)),
+        type: 'string',
+        id: BOOKMARKED_ENTRIES_KEY,
+      },
+    });
+    call.subscribe(async (response: any) => {
+      const attachment = await response.data.doc.getAttachment(BOOKMARKED_ENTRIES_KEY);
+      const textArr = await attachment.getStringData();
+
+      actions.updateData({
+        bookmarkedIds: new Set(JSON.parse(textArr)),
+      });
+    });
     actions.updateData({ bookmarkedIds: bmEntries });
   }),
+
   getBookmarkedItems: thunk(async (actions, payload, { injections }) => {
     const { ethAddress } = payload;
     const { channels, logger } = injections;
     try {
-      const call = channels.db.settings_attachment.get({
+      actions.updateData({ fetching: true });
+      const call = channels.db.settingsAttachment.get({
         ethAddress,
         id: BOOKMARKED_ENTRIES_KEY,
       });
       call.subscribe(
-        (data: any) => {
+        (resp: any) => {
+          const { data } = resp;
           if (data) {
-            const savedEntries = JSON.parse(data);
-            actions.updateData({ bookmarkedIds: new Set(savedEntries) });
+            actions.updateData({ bookmarkedIds: new Set(JSON.parse(data)) });
           }
+          actions.updateData({ fetching: false });
         },
         (err: Error) => {
-          logger.error(err);
+          logger.error('Error in getBoxSettings: %d', err.message);
           actions.createError({
             errorKey: 'action[subscription].getBoxSettings',
             error: err,
@@ -174,7 +215,7 @@ export const bookmarksStateModel: BookmarksStateModel = {
         },
       );
     } catch (ex) {
-      logger.error(ex);
+      logger.error('Error in getBoxSettings: %s', ex.message);
       actions.createError({
         errorKey: 'action.getBoxSettings',
         error: ex,

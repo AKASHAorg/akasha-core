@@ -1,10 +1,7 @@
 import { action, createComponentStore, Action, thunk, Thunk } from 'easy-peasy';
 import { fetchFeedItems, fetchFeedItemData, IFeedItem } from '../services/feed-service';
-import { forkJoin } from 'rxjs';
-import { getEthAddress } from '../services/profile-service';
 
 const FEED_FETCH_LIMIT = 5;
-const SAVED_ENTRIES_ID = 'SAVED_ENTRIES';
 
 export interface IStateErrorPayload {
   errorKey: string;
@@ -82,16 +79,12 @@ export interface FeedStateModel {
   addFeedItems: Action<FeedStateModel, IAddFeedItemsPayload>;
   getFeedItems: Thunk<FeedStateModel, IGetFeedOptions>;
   getItemData: Thunk<FeedStateModel, { entryId: string }>;
-  bookmarkEntry: Thunk<FeedStateModel, { entryId: string }>;
-  unbookmarkEntry: Thunk<FeedStateModel, { entryId: string }>;
   changeActiveFilters: Thunk<FeedStateModel, FeedState['filters']>;
   resetFeed: Action<FeedStateModel>;
   updateEntryStatus: Action<
     FeedStateModel,
     { entryId: string; status: { viewed?: boolean; fetching?: boolean } }
   >;
-  getLoggedEthAddress: Thunk<FeedStateModel>;
-  getBookmarkedEntries: Thunk<FeedStateModel, { ethAddress: string }>;
 }
 
 export const feedStateModel: FeedStateModel = {
@@ -189,18 +182,6 @@ export const feedStateModel: FeedStateModel = {
       },
     });
   }),
-  bookmarkEntry: thunk(async (actions, payload, { getState }) => {
-    const bmEntries = new Set(getState().data.bookmarkedIds as Set<string>);
-    bmEntries.add(payload.entryId);
-    actions.updateData({
-      bookmarkedIds: bmEntries,
-    });
-  }),
-  unbookmarkEntry: thunk(async (actions, payload, { getState }) => {
-    const bmEntries = new Set(getState().data.bookmarkedIds as Set<string>);
-    bmEntries.delete(payload.entryId);
-    actions.updateData({ bookmarkedIds: bmEntries });
-  }),
   changeActiveFilters: thunk(async (actions, payload) => {
     actions.updateData({
       filters: payload,
@@ -212,75 +193,6 @@ export const feedStateModel: FeedStateModel = {
       entryIds: [],
       entriesData: {},
     };
-  }),
-  getLoggedEthAddress: thunk(async (actions, _payload, { injections }) => {
-    const { channels, logger } = injections;
-    const $stash = channels.commons.cache_service.getStash(null);
-    try {
-      const call = forkJoin({
-        stash: $stash,
-      });
-      return call.subscribe(async (deps: { stash: any }) => {
-        try {
-          const ethAddress = await getEthAddress(deps.stash);
-          actions.updateData({
-            loggedEthAddress: ethAddress,
-          });
-        } catch (err) {
-          logger.error(err);
-          return;
-          // // having the eth address is mandatory in this case
-          // actions.createError({
-          //   errorKey: 'action.getLoggedEthAddress',
-          //   error: err,
-          //   critical: true,
-          // });
-        }
-      });
-    } catch (ex) {
-      logger.error(ex);
-      return;
-      // actions.createError({
-      //   errorKey: 'actions.getLoggedEthAddress',
-      //   error: ex,
-      //   critical: true,
-      // });
-    }
-  }),
-  getBookmarkedEntries: thunk(async (actions, payload, { injections }) => {
-    const { ethAddress } = payload;
-    const { channels, logger } = injections;
-    try {
-      const call = channels.db.settings_attachment.get({
-        ethAddress,
-        id: SAVED_ENTRIES_ID,
-      });
-      call.subscribe(
-        (data: any) => {
-          if (data) {
-            const savedEntries = JSON.parse(data);
-            actions.updateData({ bookmarkedIds: new Set(savedEntries) });
-          }
-        },
-        (err: Error) => {
-          logger.error(err);
-          actions.createError({
-            errorKey: 'action[subscription].getBoxSettings',
-            error: err,
-            critical: false,
-          });
-        },
-      );
-    } catch (ex) {
-      logger.error(ex);
-      actions.createError({
-        errorKey: 'action.getBoxSettings',
-        error: ex,
-        critical: false,
-      });
-    }
-
-    return;
   }),
 };
 

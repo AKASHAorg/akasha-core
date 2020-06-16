@@ -1,15 +1,17 @@
 import { action, createComponentStore, Action, thunk, Thunk } from 'easy-peasy';
 
+const FEED_APP_SETTINGS_ID = 'FEEDAPP_SETTINGS_ID';
+
 export interface IStateErrorPayload {
   errorKey: string;
   error: Error;
   critical: boolean;
 }
 export interface IFeedAppSettings {
-  ipfsGateway: string | null;
+  ipfsGateway: string;
 }
 export interface SettingsState {
-  settings: IFeedAppSettings | {};
+  settings: IFeedAppSettings;
   /**
    * whether we are fetching the profile or not
    */
@@ -28,12 +30,14 @@ export interface SettingsStateModel {
   data: SettingsState;
   updateData: Action<SettingsStateModel, Partial<SettingsState>>;
   createError: Action<SettingsStateModel, IStateErrorPayload>;
-  getSettings: Thunk<SettingsStateModel>;
+  getSettings: Thunk<SettingsStateModel, { ethAddress: string }>;
 }
 
 export const settingsStateModel: SettingsStateModel = {
   data: {
-    settings: {},
+    settings: {
+      ipfsGateway: '//cloudflare-ipfs.com/ipfs/',
+    },
     fetching: false,
     errors: {},
   },
@@ -52,8 +56,20 @@ export const settingsStateModel: SettingsStateModel = {
       },
     });
   }),
-  getSettings: thunk(async (_actions, _payload, { injections }) => {
-    console.log(injections, 'injections');
+  getSettings: thunk(async (actions, payload, { injections }) => {
+    const { ethAddress } = payload;
+    const { channels } = injections;
+    const call = channels.db.settingsAttachment.get({
+      ethAddress,
+      id: FEED_APP_SETTINGS_ID,
+    });
+    call.subscribe((resp: { channelInfo: any; data: string }) => {
+      const { data } = resp;
+      if (data) {
+        actions.updateData({ settings: JSON.parse(data) });
+      }
+      actions.updateData({ fetching: false });
+    });
   }),
 };
 

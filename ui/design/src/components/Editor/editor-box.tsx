@@ -123,7 +123,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
         pad={{ horizontal: 'medium', vertical: 'xsmall' }}
       >
         <Box direction="row" gap="xsmall" align="center">
-          <Icon type="addAppDark" clickable={true} />
+          <Icon type="addAppGrey" clickable={true} />
           <Icon type="quote" clickable={true} />
           <StyledIconDiv ref={mediaIconRef}>
             <Icon type="image" clickable={true} onClick={handleMediaClick} />

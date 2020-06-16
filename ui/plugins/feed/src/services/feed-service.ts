@@ -6,6 +6,8 @@ export interface IFeedItem {
   [key: string]: any;
 }
 
+const ethGenerator = genEthAddress();
+
 export const fetchFeedItems = (
   payload: IGetFeedOptions['options'],
   filters: FeedState['filters'],
@@ -17,7 +19,7 @@ export const fetchFeedItems = (
     items = Array(limit)
       .fill({ entryId: '' })
       .map(() => ({
-        entryId: genEthAddress(),
+        entryId: ethGenerator(),
       }));
     switch (filter) {
       case 'top_commented':

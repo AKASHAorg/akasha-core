@@ -7,6 +7,8 @@ import FeedHomePage from './feed-home-page';
 import routes, { MY_FEED_PAGE, SAVED_PAGE, rootRoute, SETTINGS_PAGE } from '../../routes';
 import SavedEntriesPage from './saved-entries-page';
 import SettingsPage from './settings-page';
+import { useGlobalLogin } from '../hooks/use-global-login';
+import { useProfileState } from '../../state/profile-state';
 
 const { Box, styled } = DS;
 
@@ -17,6 +19,7 @@ export interface IRoutesProps {
   singleSpa: any;
   sdkModules: any;
   logger: any;
+  globalChannel: any;
 }
 
 const ArticleNotFound = () => {
@@ -49,6 +52,14 @@ const Feed = styled(Box)`
 `;
 
 const Routes: React.FC<IRoutesProps> = props => {
+  const [, profileStateActions] = useProfileState(props.sdkModules, props.logger);
+
+  useGlobalLogin(
+    props.globalChannel,
+    profileStateActions.handleLoginSuccess,
+    profileStateActions.handleLoginError,
+  );
+
   return (
     <Router>
       <Feed>

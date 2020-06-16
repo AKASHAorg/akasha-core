@@ -62,7 +62,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
         pad={{ horizontal: 'medium', vertical: 'xsmall' }}
       >
         <Box direction="row" gap="xsmall" align="center">
-          <Icon type="addAppDark" clickable={true} />
+          <Icon type="addAppGrey" clickable={true} />
           <Icon type="quote" clickable={true} />
           <Icon type="image" clickable={true} />
           <Icon type="emoji" clickable={true} />

@@ -92,7 +92,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
           pad={{ horizontal: 'xsmall', vertical: 'xsmall' }}
         >
           <Box direction="row" gap="xsmall" align="center">
-            <Icon type="addAppDark" clickable={true} />
+            <Icon type="addAppGrey" clickable={true} />
             <Icon type="quote" clickable={true} />
             <Icon type="image" clickable={true} />
             <Icon type="emoji" clickable={true} />

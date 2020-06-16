@@ -1,4 +1,4 @@
-import { action, createComponentStore, Action, thunk, Thunk } from 'easy-peasy';
+import { action, createComponentStore, Action, thunk, Thunk, persist } from 'easy-peasy';
 import { forkJoin } from 'rxjs';
 import { getEthAddress } from '../services/profile-service';
 
@@ -10,6 +10,7 @@ export interface IStateErrorPayload {
 
 export interface ProfileState {
   loggedEthAddress: string | null;
+  token: string | null;
   /**
    * whether we are fetching the profile or not
    */
@@ -29,14 +30,20 @@ export interface ProfileStateModel {
   updateData: Action<ProfileStateModel, Partial<ProfileState>>;
   createError: Action<ProfileStateModel, IStateErrorPayload>;
   getLoggedEthAddress: Thunk<ProfileStateModel>;
+  handleLoginSuccess: Action<ProfileStateModel, { ethAddress: string; token: string }>;
+  handleLoginError: Action<ProfileStateModel, { error: string }>;
 }
 
 export const profileStateModel: ProfileStateModel = {
-  data: {
-    loggedEthAddress: null,
-    fetching: false,
-    errors: {},
-  },
+  data: persist(
+    {
+      loggedEthAddress: null,
+      token: null,
+      fetching: false,
+      errors: {},
+    },
+    { blacklist: ['fetching', 'errors'] },
+  ),
   updateData: action((state, payload) => {
     state.data = Object.assign({}, state.data, payload);
   }),
@@ -48,6 +55,25 @@ export const profileStateModel: ProfileStateModel = {
         [payload.errorKey]: {
           error: payload.error,
           critical: payload.critical,
+        },
+      },
+    });
+  }),
+  // called when a login is successfull
+  // payload should contain ethAddress and token
+  handleLoginSuccess: action((state, payload) => {
+    state.data.loggedEthAddress = payload.ethAddress;
+    state.data.token = payload.token;
+    state.data.fetching = false;
+  }),
+  handleLoginError: action((state, payload) => {
+    const { error } = payload;
+    state.data = Object.assign(state.data, {
+      errors: {
+        ...state.data.errors,
+        Login_Error: {
+          error: error,
+          critical: false,
         },
       },
     });

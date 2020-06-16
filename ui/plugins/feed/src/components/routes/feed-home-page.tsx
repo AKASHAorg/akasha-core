@@ -4,6 +4,8 @@ import { match, RouteComponentProps } from 'react-router-dom';
 import { useFeedState, IGetFeedOptions /* FeedState */ } from '../../state/entry-state';
 import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { useTranslation } from 'react-i18next';
+import { useBookmarksState } from '../../state/bookmarks-state';
+import { useProfileState } from '../../state/profile-state';
 
 const { Box, VirtualList, EditorCard, EntryCard /* MainAreaCardBox */ } = DS;
 
@@ -18,18 +20,21 @@ export interface IFeedHomePageProps {
 const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props => {
   const { i18n, sdkModules, logger } = props;
   const [feedState, feedStateActions] = useFeedState(sdkModules, logger);
+  const [bookmarkState, bookmarkActions] = useBookmarksState(sdkModules, logger);
+  const [profileState] = useProfileState(sdkModules, logger);
+
   const { t } = useTranslation();
   // const feedSourcesCount = 38;
+  // console.log(profileInfo, 'profile info in feed page');
 
   React.useEffect(() => {
-    feedStateActions.getLoggedEthAddress();
-  }, []);
-
-  React.useEffect(() => {
-    if (feedState.data.loggedEthAddress) {
-      feedStateActions.getBookmarkedEntries({ ethAddress: feedState.data.loggedEthAddress });
+    if (profileState.data.loggedEthAddress) {
+      bookmarkActions.getBookmarkedItems({
+        ethAddress: profileState.data.loggedEthAddress,
+        options: { limit: Infinity },
+      });
     }
-  }, [feedState.data.loggedEthAddress]);
+  }, [profileState.data.loggedEthAddress]);
 
   const locale = i18n.languages[0] || 'en';
   const loadInitialFeed = (payload: IGetFeedOptions['options']) => {
@@ -63,11 +68,17 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
   //     filters: { ...feedState.data.filters, ...payload },
   //   });
   // };
+
   const handleEntryBookmark = (entryId: string, isSaved?: boolean) => {
-    if (isSaved) {
-      return feedStateActions.unbookmarkEntry({ entryId });
+    if (profileState.data.loggedEthAddress) {
+      if (isSaved) {
+        return bookmarkActions.unbookmarkEntry({
+          entryId,
+          ethAddress: profileState.data.loggedEthAddress,
+        });
+      }
+      bookmarkActions.bookmarkEntry({ entryId, ethAddress: profileState.data.loggedEthAddress });
     }
-    feedStateActions.bookmarkEntry({ entryId });
   };
 
   const handleEntryRepost = (withComment: boolean, entryId?: string) => {
@@ -109,7 +120,7 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
         loadMore={loadMore}
         loadItemData={loadItemData}
         hasMoreItems={feedState.data.hasMoreItems}
-        bookmarkedItems={feedState.data.bookmarkedIds as Set<string>}
+        bookmarkedItems={bookmarkState.data.bookmarkedIds as Set<string>}
         // initialState={listState.initialState}
         getItemCard={({ itemData, isBookmarked }) => (
           <EntryCard

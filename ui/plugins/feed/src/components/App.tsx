@@ -15,6 +15,7 @@ export interface IProps {
   sdkModules: any;
   logger: any;
   i18n?: any;
+  globalChannel: any;
 }
 
 /**
@@ -72,7 +73,7 @@ class FeedPluginRoot extends PureComponent<IProps> {
         </DS.Helmet>
         <ViewportSizeProvider>
           <ThemeSelector
-            settings={{ activeTheme: 'Dark-Theme' }}
+            settings={{ activeTheme: 'Light-Theme' }}
             availableThemes={[lightTheme, darkTheme]}
             style={{ height: '100%' }}
             plain={true}
