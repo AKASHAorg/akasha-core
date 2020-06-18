@@ -3,7 +3,7 @@ import { RouteProps } from 'react-router';
 import DS from '@akashaproject/design-system';
 import { useBookmarksState } from '../../state/bookmarks-state';
 import { useProfileState } from '../../state/profile-state';
-import { IGetFeedOptions } from '../../state/entry-state';
+import { IGetFeedOptions } from '../../state/feed-state';
 import { useTranslation } from 'react-i18next';
 
 const { Box, VirtualList, EntryCard } = DS;
@@ -99,9 +99,10 @@ const SavedEntriesPage: React.FC<ISavedEntriesPageProps & RouteProps> = props =>
               repliesLabel={t('Replies', { count: itemData.repliesCount })}
               repostsLabel={t('Reposts', { count: itemData.repostsCount })}
               shareLabel={t('Share')}
-              editPostLabel={t('Edit Post')}
+              copyIPFSLinkLabel={t('Copy IPFS Link')}
+              flagAsLabel={t('Flag as inappropiate')}
               copyLinkLabel={t('Copy Link')}
-              loggedProfileEthAddress="0x00123"
+              loggedProfileEthAddress={loggedEthAddress}
               locale={locale}
               style={{ height: 'auto' }}
               bookmarkLabel={t('Save')}

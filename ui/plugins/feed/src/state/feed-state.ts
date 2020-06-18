@@ -1,4 +1,4 @@
-import { action, createComponentStore, Action, thunk, Thunk } from 'easy-peasy';
+import { action, createComponentStore, Action, thunk, Thunk, persist } from 'easy-peasy';
 import { fetchFeedItems, fetchFeedItemData, IFeedItem } from '../services/feed-service';
 
 const FEED_FETCH_LIMIT = 5;
@@ -7,6 +7,14 @@ export interface IStateErrorPayload {
   errorKey: string;
   error: Error;
   critical: boolean;
+}
+// when a new entry data is received, we may want to show some info about the author
+// or about the entry. All are optional except entryId
+export interface INewEntryInfo {
+  entryId: string;
+  // already resolved infos about the author
+  author?: { name?: string; avatar: string };
+  publishDate?: Date;
 }
 
 export interface IEntryData {
@@ -21,6 +29,10 @@ export interface FeedState {
    */
   entryIds: string[];
   bookmarkedIds: Set<string>;
+  feedViewState: {
+    startId: string | null;
+    newerEntries: INewEntryInfo[];
+  };
   /**
    * a map with all entries data
    * {
@@ -85,6 +97,8 @@ export interface FeedStateModel {
     FeedStateModel,
     { entryId: string; status: { viewed?: boolean; fetching?: boolean } }
   >;
+  getFeedViewState: Thunk<FeedStateModel, { ethAddress: string }>;
+  checkForNewEntries: Thunk<FeedStateModel, { startId: string | null }>;
 }
 
 export const feedStateModel: FeedStateModel = {
@@ -92,6 +106,10 @@ export const feedStateModel: FeedStateModel = {
     loggedEthAddress: null,
     entryIds: [],
     bookmarkedIds: new Set(),
+    feedViewState: persist({
+      startId: null,
+      newerEntries: [],
+    }),
     entriesData: {},
     entryStatus: {},
     filters: {
@@ -148,7 +166,22 @@ export const feedStateModel: FeedStateModel = {
       },
     });
   }),
-  getFeedItems: thunk(async (actions, payload, _injections) => {
+
+  getFeedViewState: thunk(async (actions, payload) => {
+    console.log('get view feed state', payload);
+    actions.updateData({});
+  }),
+
+  checkForNewEntries: thunk(async (actions, payload) => {
+    console.log('check for new entries', payload);
+    actions.updateData({
+      feedViewState: {
+        startId: payload.startId,
+        newerEntries: [{ entryId: '0x112233' }],
+      },
+    });
+  }),
+  getFeedItems: thunk(async (actions, payload) => {
     const { options, filters } = payload;
     const { limit = FEED_FETCH_LIMIT } = options;
     let hasMoreItems = true;

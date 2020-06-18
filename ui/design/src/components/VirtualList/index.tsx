@@ -53,10 +53,12 @@ const VirtualList = (props: IVirtualListProps) => {
     getItemCard,
     initialState = {
       startId: null,
-      hasNewerEntries: false,
+      newerEntries: [],
     },
     hasMoreItems,
     bookmarkedItems,
+    getNewItemsNotification,
+    onItemRead,
   } = props;
   const [listState, setListState] = React.useState(initialState);
 
@@ -75,6 +77,7 @@ const VirtualList = (props: IVirtualListProps) => {
     }
     loadInitialFeed(payload);
   }, []);
+
   return (
     <Box fill="vertical" flex={true}>
       <AutoSizer>
@@ -97,6 +100,8 @@ const VirtualList = (props: IVirtualListProps) => {
             setListState={setListState}
             hasMoreItems={hasMoreItems}
             bookmarkedItems={bookmarkedItems}
+            getNewItemsNotification={getNewItemsNotification}
+            onItemRead={onItemRead}
           />
         )}
       </AutoSizer>

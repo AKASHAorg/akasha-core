@@ -1,4 +1,5 @@
 import { action, createComponentStore, Action, thunk, Thunk } from 'easy-peasy';
+import { getDefaultSettings } from '../services/settings-service';
 
 const FEED_APP_SETTINGS_ID = 'FEEDAPP_SETTINGS_ID';
 
@@ -31,6 +32,11 @@ export interface SettingsStateModel {
   updateData: Action<SettingsStateModel, Partial<SettingsState>>;
   createError: Action<SettingsStateModel, IStateErrorPayload>;
   getSettings: Thunk<SettingsStateModel, { ethAddress: string }>;
+  saveSettings: Thunk<
+    SettingsStateModel,
+    { ethAddress: string; settings: { ipfsGateway: string } }
+  >;
+  resetToDefaults: Thunk<SettingsStateModel, { ethAddress: string }>;
 }
 
 export const settingsStateModel: SettingsStateModel = {
@@ -59,6 +65,9 @@ export const settingsStateModel: SettingsStateModel = {
   getSettings: thunk(async (actions, payload, { injections }) => {
     const { ethAddress } = payload;
     const { channels } = injections;
+    actions.updateData({
+      fetching: true,
+    });
     const call = channels.db.settingsAttachment.get({
       ethAddress,
       id: FEED_APP_SETTINGS_ID,
@@ -66,9 +75,43 @@ export const settingsStateModel: SettingsStateModel = {
     call.subscribe((resp: { channelInfo: any; data: string }) => {
       const { data } = resp;
       if (data) {
-        actions.updateData({ settings: JSON.parse(data) });
+        return actions.updateData({ settings: JSON.parse(data), fetching: false });
       }
-      actions.updateData({ fetching: false });
+      return actions.updateData({ fetching: false });
+    });
+  }),
+  saveSettings: thunk(async (actions, payload, { injections }) => {
+    const { ethAddress, settings } = payload;
+    const { channels } = injections;
+    const call = channels.db.settingsAttachment.put({
+      ethAddress,
+      obj: {
+        data: JSON.stringify(settings),
+        type: 'string',
+        id: FEED_APP_SETTINGS_ID,
+      },
+    });
+    call.subscribe(async (resp: any) => {
+      const attachment = await resp.data.doc.getAttachment(FEED_APP_SETTINGS_ID);
+      const textObj = await attachment.getStringData();
+      console.log(textObj, 'the text obj');
+      actions.updateData({
+        settings: JSON.parse(textObj),
+      });
+    });
+  }),
+  resetToDefaults: thunk(async (actions, payload, { injections }) => {
+    const { ethAddress } = payload;
+    const { channels } = injections;
+    const call = channels.db.settingsAttachment.deleteSettings({
+      ethAddress,
+      id: FEED_APP_SETTINGS_ID,
+    });
+    call.subscribe(async () => {
+      const defaultSettings = await getDefaultSettings();
+      actions.updateData({
+        settings: defaultSettings,
+      });
     });
   }),
 };

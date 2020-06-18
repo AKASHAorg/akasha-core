@@ -10,6 +10,7 @@ export interface CardActionProps {
   repostsLabel: string;
   repliesLabel: string;
   isBookmarked: boolean | null;
+  copyLinkLabel: string;
   bookmarkLabel: string;
   bookmarkedLabel: string;
   handleEntryBookmark: () => void;
@@ -18,6 +19,7 @@ export interface CardActionProps {
   onRepostWithComment: () => void;
   onShare: (service: ServiceNames) => void;
   onLinkCopy: () => void;
+  loggedProfileEthAddress: string | null;
 }
 
 const CardActions: React.FC<CardActionProps> = props => {
@@ -33,6 +35,8 @@ const CardActions: React.FC<CardActionProps> = props => {
     onRepostWithComment,
     onShare,
     onLinkCopy,
+    copyLinkLabel,
+    loggedProfileEthAddress,
   } = props;
 
   const [replyDropOpen, setReplyDropOpen] = React.useState(false);
@@ -97,6 +101,7 @@ const CardActions: React.FC<CardActionProps> = props => {
           label={isBookmarked ? bookmarkedLabel : bookmarkLabel}
           onClick={handleEntryBookmark}
           color={isBookmarked ? 'accent' : 'secondaryText'}
+          disabled={!!loggedProfileEthAddress}
         >
           <Icon
             type="bookmark"
@@ -119,7 +124,12 @@ const CardActions: React.FC<CardActionProps> = props => {
         >
           <Box pad="small" width={{ min: '3em' }}>
             <StyledSelectBox>
-              <TextIcon iconType="link" label={'Copy Link'} onClick={onLinkCopy} clickable={true} />
+              <TextIcon
+                iconType="link"
+                label={copyLinkLabel}
+                onClick={onLinkCopy}
+                clickable={true}
+              />
             </StyledSelectBox>
             <StyledSelectBox>
               <TextIcon

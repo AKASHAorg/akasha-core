@@ -13,6 +13,7 @@ import CardRenderer from './card-renderer';
 import BoundryLoader from './boundry-loader';
 import throttle from 'lodash.throttle';
 import { getInfiniteScrollState } from './utils';
+import { useIntersectionObserver } from './use-intersection-observer';
 
 /* - Keeps track of loaded items and loadMore schedules
  * - renders cards
@@ -36,9 +37,13 @@ const ListContent = (props: IListContentProps) => {
     setListState,
     hasMoreItems,
     bookmarkedItems,
+    getNewItemsNotification,
+    onItemRead,
   } = props;
   const [fetchOperation, setFetchOperation] = React.useState<IFetchOperation | null>(null);
   const [sliceOperation, setSliceOperation] = React.useState<ISliceOperation | null>(null);
+
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
 
   const itemDimensions = React.useRef<ItemDimensions>({
     dimensions: {},
@@ -53,25 +58,6 @@ const ListContent = (props: IListContentProps) => {
     scrollHeight: 0,
     clientHeight: 0,
   });
-
-  const onDimensionChange = (itemId: string, dimension: { height: number; top: number }) => {
-    const itemDimension = itemDimensions.current.dimensions[itemId];
-    if (!itemDimension) {
-      // add item dimension and compute total items height and average item height
-      itemDimensions.current.count += 1;
-      itemDimensions.current.dimensions[itemId] = dimension;
-      itemDimensions.current.totalItemsHeight += dimension.height;
-      itemDimensions.current.avgItemHeight =
-        itemDimensions.current.totalItemsHeight / itemDimensions.current.count;
-    } else if (itemDimension.height !== dimension.height) {
-      // update item dimensions and totals
-      itemDimensions.current.dimensions[itemId] = dimension;
-      itemDimensions.current.totalItemsHeight =
-        itemDimensions.current.totalItemsHeight - itemDimension.height + dimension.height;
-      itemDimensions.current.avgItemHeight =
-        itemDimensions.current.totalItemsHeight / itemDimensions.current.count;
-    }
-  };
 
   const queueOperatorRef = React.createRef<{ handleContainerScroll: any }>();
 
@@ -88,6 +74,18 @@ const ListContent = (props: IListContentProps) => {
       ),
     [JSON.stringify(sliceOperation), items.length, JSON.stringify(itemDimensions.current)],
   );
+
+  const [intersectingId] = useIntersectionObserver(
+    containerRef.current,
+    document.querySelectorAll('.virtual-list-card-item'),
+  );
+
+  React.useEffect(() => {
+    if (intersectingId && onItemRead) {
+      onItemRead(intersectingId);
+    }
+  }, [intersectingId]);
+
   const updateScroll = (
     scrollTop: number,
     scrollHeight: number,
@@ -118,8 +116,28 @@ const ListContent = (props: IListContentProps) => {
       );
     }
   };
+
   const containerScrollThrottle = React.useRef(throttle(updateScroll, 150, { trailing: true }))
     .current;
+
+  const onDimensionChange = (itemId: string, dimension: { height: number; top: number }) => {
+    const itemDimension = itemDimensions.current.dimensions[itemId];
+    if (!itemDimension) {
+      // add item dimension and compute total items height and average item height
+      itemDimensions.current.count += 1;
+      itemDimensions.current.dimensions[itemId] = dimension;
+      itemDimensions.current.totalItemsHeight += dimension.height;
+      itemDimensions.current.avgItemHeight =
+        itemDimensions.current.totalItemsHeight / itemDimensions.current.count;
+    } else if (itemDimension.height !== dimension.height) {
+      // update item dimensions and totals
+      itemDimensions.current.dimensions[itemId] = dimension;
+      itemDimensions.current.totalItemsHeight =
+        itemDimensions.current.totalItemsHeight - itemDimension.height + dimension.height;
+      itemDimensions.current.avgItemHeight =
+        itemDimensions.current.totalItemsHeight / itemDimensions.current.count;
+    }
+  };
 
   // throttled scrolling
   const throttledScroll = (ev: React.SyntheticEvent<HTMLDivElement>) => {
@@ -138,7 +156,12 @@ const ListContent = (props: IListContentProps) => {
     <div
       style={{ height, width, position: 'relative', overflowY: 'auto', padding: '0 1em' }}
       onScroll={throttledScroll}
+      ref={containerRef}
     >
+      {getNewItemsNotification &&
+        listState.newerEntries.length > 0 &&
+        (scrollState.current.scrollTop > 10 || infiniteScrollState.paddingTop > 0) &&
+        getNewItemsNotification()}
       <BoundryLoader
         chrono="upper"
         onLoadMore={onLoadMore}

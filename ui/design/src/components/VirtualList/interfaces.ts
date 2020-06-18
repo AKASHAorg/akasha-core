@@ -18,7 +18,7 @@ export interface IListCustomEntity {
   getComponent: React.FC<any>;
 }
 export interface IListInitialState {
-  hasNewerEntries: boolean;
+  newerEntries: any[];
   startId: string | null;
 }
 
@@ -57,8 +57,10 @@ export interface IVirtualListProps {
   customEntities?: IListCustomEntity[];
   initialState?: IListInitialState;
   getItemCard: GetItemCardFn;
-  hasMoreItems: boolean;
+  hasMoreItems?: boolean;
   bookmarkedItems?: Set<string>;
+  getNewItemsNotification?: () => React.ReactElement;
+  onItemRead?: (itemId: string) => void;
 }
 
 export interface IListItemProps {
@@ -107,13 +109,12 @@ export interface IListContentProps {
   onLoadMore: IVirtualListProps['loadMore'];
   customEntities: IListCustomEntity[];
   getItemCard: GetItemCardFn;
-  listState: {
-    startId: string | null;
-    hasNewerEntries: boolean;
-  };
+  listState: IListInitialState;
   setListState: any;
-  hasMoreItems: boolean;
+  hasMoreItems?: boolean;
   bookmarkedItems?: IVirtualListProps['bookmarkedItems'];
+  getNewItemsNotification: IVirtualListProps['getNewItemsNotification'];
+  onItemRead: IVirtualListProps['onItemRead'];
 }
 
 export interface IRenderItemProps {
@@ -143,7 +144,7 @@ export interface ISliceOperatorProps {
   itemSpacing: number;
   listState: IListContentProps['listState'];
   setListState: IListContentProps['setListState'];
-  hasMoreItems: boolean;
+  hasMoreItems?: boolean;
 }
 
 export interface IListOperatorProps {

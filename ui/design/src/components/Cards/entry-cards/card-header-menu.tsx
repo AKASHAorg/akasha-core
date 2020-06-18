@@ -6,14 +6,14 @@ import { Box } from 'grommet';
 export interface ICardHeaderMenuProps {
   target: {};
   onMenuClose: () => void;
-  editPostLabel: string;
+  flagAsLabel: string;
   onFlag: () => void;
-  copyLinkLabel: string;
-  onLinkCopy: () => void;
+  copyIPFSLinkLabel: string;
+  onLinkCopy: (linkType: 'ipfs' | 'shareable') => () => void;
 }
 
 const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
-  const { target, onMenuClose, editPostLabel, onFlag, copyLinkLabel, onLinkCopy } = props;
+  const { target, onMenuClose, flagAsLabel, onFlag, copyIPFSLinkLabel, onLinkCopy } = props;
   return (
     <StyledDrop
       overflow="hidden"
@@ -24,10 +24,15 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
     >
       <Box pad="small" gap="small" margin={{ right: 'small' }}>
         <StyledSelectBox>
-          <TextIcon iconType="app" label={editPostLabel} onClick={onFlag} clickable={true} />
+          <TextIcon
+            iconType="link"
+            label={copyIPFSLinkLabel}
+            onClick={onLinkCopy('ipfs')}
+            clickable={true}
+          />
         </StyledSelectBox>
         <StyledSelectBox>
-          <TextIcon iconType="link" label={copyLinkLabel} onClick={onLinkCopy} clickable={true} />
+          <TextIcon iconType="app" label={flagAsLabel} onClick={onFlag} clickable={true} />
         </StyledSelectBox>
       </Box>
     </StyledDrop>

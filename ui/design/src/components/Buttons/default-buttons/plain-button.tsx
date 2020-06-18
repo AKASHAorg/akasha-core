@@ -7,6 +7,7 @@ export interface IPlainButtonProps {
   label: string | number;
   children: React.ReactNode;
   color?: string;
+  disabled?: boolean;
 }
 
 const PlainButton = React.forwardRef(
@@ -20,6 +21,7 @@ const PlainButton = React.forwardRef(
         align="center"
         style={{ userSelect: 'none' }}
         ref={ref}
+        disabled={props.disabled}
       >
         {props.children}
         <StyledText onClick={props.onClick}>{props.label}</StyledText>

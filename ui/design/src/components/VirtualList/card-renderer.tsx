@@ -1,7 +1,6 @@
 import React from 'react';
 import ListItemContainer from './list-item-container';
 import { IRenderItemProps } from './interfaces';
-// import EntryLoadingPlaceholder from './placeholders/entry-card-placeholder';
 
 const CardRenderer = React.memo((props: IRenderItemProps) => {
   const {
@@ -35,7 +34,12 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
   }, [JSON.stringify(itemData)]);
 
   return (
-    <div ref={setRefs} style={{ marginBottom: itemSpacing }}>
+    <div
+      ref={setRefs}
+      style={{ marginBottom: itemSpacing }}
+      className="virtual-list-card-item"
+      data-item-id={itemId}
+    >
       {customEntities
         .filter(entityObj => entityObj.position === 'before')
         .map((entityObj, idx) => {

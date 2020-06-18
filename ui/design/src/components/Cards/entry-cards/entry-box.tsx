@@ -36,12 +36,13 @@ export interface IEntryBoxProps {
   repliesLabel: string;
   repostsLabel: string;
   shareLabel: string;
-  editPostLabel: string;
+  flagAsLabel: string;
   copyLinkLabel: string;
+  copyIPFSLinkLabel: string;
   comment?: boolean;
   locale: ILocale;
   loggedProfileAvatar?: string;
-  loggedProfileEthAddress: string;
+  loggedProfileEthAddress: string | null;
   onEntryBookmark?: (entryId: string, isBookmarked: boolean | null) => void;
   isBookmarked: boolean | null;
   bookmarkLabel: string;
@@ -59,8 +60,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     repliesLabel,
     repostsLabel,
     shareLabel,
-    editPostLabel,
+    flagAsLabel,
     copyLinkLabel,
+    copyIPFSLinkLabel,
     locale,
     onEntryBookmark,
     isBookmarked,
@@ -70,14 +72,20 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onLinkCopy,
     onRepost,
     onEntryFlag,
+    loggedProfileEthAddress,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
 
   const menuIconRef: React.Ref<any> = React.useRef();
 
-  const handleLinkCopy = () => {
-    onLinkCopy('LinkOfTheEntryHere!');
+  const handleLinkCopy = (linkType: 'ipfs' | 'shareable') => () => {
+    switch (linkType) {
+      case 'ipfs':
+        return onLinkCopy('dummiIPFScid');
+      case 'shareable':
+        return onLinkCopy('http://dummy.link');
+    }
   };
 
   const closeMenuDrop = () => {
@@ -126,8 +134,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           onMenuClose={closeMenuDrop}
           onLinkCopy={handleLinkCopy}
           onFlag={handleEntryFlag}
-          editPostLabel={editPostLabel}
-          copyLinkLabel={copyLinkLabel}
+          flagAsLabel={flagAsLabel}
+          copyIPFSLinkLabel={copyIPFSLinkLabel}
         />
       )}
       <Box pad="medium">{entryData.content}</Box>
@@ -139,10 +147,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         bookmarkLabel={bookmarkLabel}
         bookmarkedLabel={bookmarkedLabel}
         shareLabel={shareLabel}
+        copyLinkLabel={copyLinkLabel}
         onRepost={handleRepost(false)}
         onRepostWithComment={handleRepost(true)}
         onShare={handleEntryShare}
-        onLinkCopy={handleLinkCopy}
+        onLinkCopy={handleLinkCopy('shareable')}
+        loggedProfileEthAddress={loggedProfileEthAddress}
       />
     </div>
   );

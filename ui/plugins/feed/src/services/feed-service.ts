@@ -1,5 +1,5 @@
 import { genEntryData, genEthAddress } from '../services/dummy-data';
-import { IGetFeedOptions, FeedState } from '../state/entry-state';
+import { IGetFeedOptions, FeedState } from '../state/feed-state';
 
 export interface IFeedItem {
   entryId: string;

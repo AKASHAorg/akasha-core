@@ -1,13 +1,14 @@
 import DS from '@akashaproject/design-system';
 import * as React from 'react';
 import { match, RouteComponentProps } from 'react-router-dom';
-import { useFeedState, IGetFeedOptions /* FeedState */ } from '../../state/entry-state';
+import { useFeedState, IGetFeedOptions /* FeedState */ } from '../../state/feed-state';
 import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { useTranslation } from 'react-i18next';
 import { useBookmarksState } from '../../state/bookmarks-state';
 import { useProfileState } from '../../state/profile-state';
+import { useInterval } from '../hooks/use-interval';
 
-const { Box, VirtualList, EditorCard, EntryCard /* MainAreaCardBox */ } = DS;
+const { Box, VirtualList, EditorCard, EntryCard, styled /* MainAreaCardBox */ } = DS;
 
 export interface IFeedHomePageProps {
   match: match<any> | null;
@@ -16,6 +17,18 @@ export interface IFeedHomePageProps {
   sdkModules: any;
   logger: any;
 }
+const NewEntriesPopover = styled.div`
+  position: fixed;
+  top: 3.5em;
+  z-index: 10;
+  background: #89c9ff;
+  padding: 1em;
+  box-shadow: 0px 1px 4px 0px #ddd;
+  border-radius: 9px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  cursor: pointer;
+`;
 
 const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props => {
   const { i18n, sdkModules, logger } = props;
@@ -37,6 +50,11 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
   }, [profileState.data.loggedEthAddress]);
 
   const locale = i18n.languages[0] || 'en';
+  useInterval(ticks => {
+    if (ticks && ticks === 10) {
+      feedStateActions.checkForNewEntries({ startId: feedState.data.feedViewState.startId });
+    }
+  }, 2000);
   const loadInitialFeed = (payload: IGetFeedOptions['options']) => {
     feedStateActions.getFeedItems({ options: payload, filters: feedState.data.filters });
   };
@@ -97,6 +115,14 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
     console.log('link copy', link);
   };
 
+  const handleNewerEntriesLoad = () => {
+    console.log('load newer entries');
+  };
+
+  const handleItemRead = (itemId: string) => {
+    console.log('item', itemId, 'was read');
+  };
+
   return (
     <Box fill={true}>
       {/* <MainAreaCardBox style={{ margin: '0 1em' }}>
@@ -121,7 +147,13 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
         loadItemData={loadItemData}
         hasMoreItems={feedState.data.hasMoreItems}
         bookmarkedItems={bookmarkState.data.bookmarkedIds as Set<string>}
-        // initialState={listState.initialState}
+        getNewItemsNotification={() => (
+          <NewEntriesPopover onClick={handleNewerEntriesLoad}>
+            <b>{feedState.data.feedViewState.newerEntries.length}</b> {t('new entries')}
+          </NewEntriesPopover>
+        )}
+        onItemRead={handleItemRead}
+        initialState={feedState.data.feedViewState}
         getItemCard={({ itemData, isBookmarked }) => (
           <EntryCard
             isBookmarked={isBookmarked}
@@ -131,9 +163,10 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
             repliesLabel={t('Replies', { count: itemData.repliesCount })}
             repostsLabel={t('Reposts', { count: itemData.repostsCount })}
             shareLabel={t('Share')}
-            editPostLabel={t('Edit Post')}
             copyLinkLabel={t('Copy Link')}
-            loggedProfileEthAddress="0x00123"
+            copyIPFSLinkLabel={t('Copy IPFS Link')}
+            flagAsLabel={t('Flag as inappropiate')}
+            loggedProfileEthAddress={profileState.data.loggedEthAddress}
             locale={locale}
             style={{ height: 'auto' }}
             bookmarkLabel={t('Save')}

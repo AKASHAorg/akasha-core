@@ -29,6 +29,15 @@ const SettingsPage: React.FC<ISettingsPageProps & RouteProps> = props => {
     }
   }, [loggedEthAddress]);
 
+  React.useEffect(() => {
+    if (settingsState.data.settings.ipfsGateway !== formValues.ipfsGateway) {
+      setFormValues(prev => ({
+        ...prev,
+        ipfsGateway: settingsState.data.settings.ipfsGateway,
+      }));
+    }
+  }, [settingsState.data.settings]);
+
   const changeIpfsGateway = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues(prev => ({
       ...prev,
@@ -36,21 +45,40 @@ const SettingsPage: React.FC<ISettingsPageProps & RouteProps> = props => {
     }));
     ev.persist();
   };
-
+  const handleSettingsSave = () => {
+    if (loggedEthAddress) {
+      settingsActions.saveSettings({ ethAddress: loggedEthAddress, settings: formValues });
+    }
+  };
+  const handleSettingsReset = () => {
+    if (loggedEthAddress) {
+      settingsActions.resetToDefaults({ ethAddress: loggedEthAddress });
+    }
+  };
   return (
     <Box fill={true} flex={true}>
       <BasicCardBox style={{ padding: '1em' }}>
-        <TextInputField
-          label={t('IPFS Gateway')}
-          id="feedApp-ipfs-gateway"
-          name="feddApp-ipfs-gateway"
-          value={formValues.ipfsGateway}
-          onChange={changeIpfsGateway}
-        />
-        <Box flex={true} direction="row" justify="end">
-          <Button secondary={true} label={t('Reset to defaults')} margin={{ right: '.5em' }} />
-          <Button primary={true} label={t('Save')} />
-        </Box>
+        {settingsState.data.fetching && <Box>Loading settings, please wait</Box>}
+        {!settingsState.data.fetching && (
+          <>
+            <TextInputField
+              label={t('IPFS Gateway')}
+              id="feedApp-ipfs-gateway"
+              name="feddApp-ipfs-gateway"
+              value={formValues.ipfsGateway}
+              onChange={changeIpfsGateway}
+            />
+            <Box flex={true} direction="row" justify="end">
+              <Button
+                secondary={true}
+                label={t('Reset to defaults')}
+                margin={{ right: '.5em' }}
+                onClick={handleSettingsReset}
+              />
+              <Button primary={true} label={t('Save')} onClick={handleSettingsSave} />
+            </Box>
+          </>
+        )}
       </BasicCardBox>
     </Box>
   );

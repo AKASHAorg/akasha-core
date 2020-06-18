@@ -103,7 +103,7 @@ export const markCompletedFetchRequests = (
   const { startId, position } = fetchOperation;
   const startIdIdx = items.findIndex(itemId => itemId === startId);
   // expect to have new items added in front of the old list
-  if (position === 'start' && items[startIdIdx - 1] && listState.hasNewerEntries) {
+  if (position === 'start' && items[startIdIdx - 1] && listState.newerEntries.length) {
     // we've started the fetch at index = 0 and now the index should be
     // previousIndex + loadLimit (0 + loadLimit)
     const newerItemsReceived = startIdIdx >= loadLimit;
@@ -142,9 +142,9 @@ export const loadMoreItems = (
   scrollState: IScrollState,
   offsetItems: number,
   loadLimit: number,
-  initialPaddingTop: number,
+  // initialPaddingTop: number,
   infiniteScrollState: IInfiniteScrollState,
-  hasMoreItems: boolean,
+  hasMoreItems?: boolean,
 ) => {
   const { direction, scrollTop, clientHeight, scrollHeight } = scrollState;
   const queueHasOpType =
@@ -162,22 +162,10 @@ export const loadMoreItems = (
     items.length === itemDimensions.current.count &&
     scrollTop + clientHeight >= scrollHeight - offsetItems * avgItemHeight;
 
-  const loadMoreTopTrigger =
-    direction === 0 &&
-    infiniteScrollState.paddingTop - initialPaddingTop < avgItemHeight &&
-    scrollTop <= (offsetItems + 1) * avgItemHeight;
-
   if (loadMoreBottomTrigger && !queueHasOpType && hasMoreItems) {
     setFetchOperation({
       startId: items[items.length - 1],
       position: 'end',
-      size: loadLimit,
-      status: 'pending',
-    });
-  } else if (loadMoreTopTrigger && !queueHasOpType && hasMoreItems) {
-    setFetchOperation({
-      startId: items[0],
-      position: 'start',
       size: loadLimit,
       status: 'pending',
     });

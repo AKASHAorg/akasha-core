@@ -12,11 +12,12 @@ export interface IEntryCardProps {
   repliesLabel: string;
   repostsLabel: string;
   shareLabel: string;
-  editPostLabel: string;
+  flagAsLabel: string;
   copyLinkLabel: string;
+  copyIPFSLinkLabel: string;
   locale: ILocale;
   loggedProfileAvatar?: string;
-  loggedProfileEthAddress: string;
+  loggedProfileEthAddress: string | null;
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
   onEntryBookmark?: (entryId: string) => void;
@@ -37,7 +38,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     repliesLabel,
     repostsLabel,
     shareLabel,
-    editPostLabel,
     copyLinkLabel,
     locale,
     loggedProfileAvatar,
@@ -52,6 +52,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     onEntryShare,
     onEntryFlag,
     onLinkCopy,
+    flagAsLabel,
+    copyIPFSLinkLabel,
   } = props;
 
   return (
@@ -62,7 +64,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         repostsLabel={repostsLabel}
         repliesLabel={repliesLabel}
         shareLabel={shareLabel}
-        editPostLabel={editPostLabel}
+        flagAsLabel={flagAsLabel}
         copyLinkLabel={copyLinkLabel}
         locale={locale}
         loggedProfileAvatar={loggedProfileAvatar}
@@ -75,6 +77,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         onEntryShare={onEntryShare}
         onEntryFlag={onEntryFlag}
         onLinkCopy={onLinkCopy}
+        copyIPFSLinkLabel={copyIPFSLinkLabel}
       />
     </MainAreaCardBox>
   );
