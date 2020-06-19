@@ -79,6 +79,10 @@ const ListContent = (props: IListContentProps) => {
     containerRef.current,
     document.querySelectorAll('.virtual-list-card-item'),
   );
+  const newEntryNotificationShown =
+    (scrollState.current.scrollTop > itemDimensions.current.avgItemHeight ||
+      infiniteScrollState.paddingTop > itemDimensions.current.avgItemHeight) &&
+    listState.newerEntries.length > 0;
 
   React.useEffect(() => {
     if (intersectingId && onItemRead) {
@@ -159,9 +163,14 @@ const ListContent = (props: IListContentProps) => {
       ref={containerRef}
     >
       {getNewItemsNotification &&
-        listState.newerEntries.length > 0 &&
-        (scrollState.current.scrollTop > 10 || infiniteScrollState.paddingTop > 0) &&
-        getNewItemsNotification()}
+        getNewItemsNotification({
+          styles: {
+            transform: newEntryNotificationShown ? 'translate(-50%, 0)' : 'translate(-50%, -110%)',
+            position: newEntryNotificationShown ? 'sticky' : 'sticky',
+            willChange: 'transform',
+            transition: 'transform 0.214s ease-in-out',
+          },
+        })}
       <BoundryLoader
         chrono="upper"
         onLoadMore={onLoadMore}

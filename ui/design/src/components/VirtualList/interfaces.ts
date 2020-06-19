@@ -59,7 +59,7 @@ export interface IVirtualListProps {
   getItemCard: GetItemCardFn;
   hasMoreItems?: boolean;
   bookmarkedItems?: Set<string>;
-  getNewItemsNotification?: () => React.ReactElement;
+  getNewItemsNotification?: (props: { styles: React.CSSProperties }) => React.ReactElement;
   onItemRead?: (itemId: string) => void;
 }
 
