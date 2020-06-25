@@ -9,7 +9,7 @@ import { MainAreaCardBox } from '../common/basic-card-box';
 export interface IEditorCard {
   className?: string;
   avatar?: string;
-  ethAddress: string;
+  ethAddress?: string;
   publishLabel: string;
   placeholderLabel: string;
   onPublish: any;

@@ -16,6 +16,7 @@ export interface IProps {
   logger: any;
   i18n?: any;
   globalChannel: any;
+  isMobile: boolean;
 }
 
 /**

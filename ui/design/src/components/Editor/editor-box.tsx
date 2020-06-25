@@ -17,7 +17,7 @@ import { StyledBox, StyledDiv, StyledEditable, StyledIconDiv } from './styled-ed
 
 export interface IEditorBox {
   avatar?: string;
-  ethAddress: string;
+  ethAddress?: string;
   publishLabel: string;
   placeholderLabel: string;
   onPublish: any;

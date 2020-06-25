@@ -64,55 +64,81 @@ export const settingsStateModel: SettingsStateModel = {
   }),
   getSettings: thunk(async (actions, payload, { injections }) => {
     const { ethAddress } = payload;
-    const { channels } = injections;
+    const { channels, logger } = injections;
     actions.updateData({
       fetching: true,
     });
-    const call = channels.db.settingsAttachment.get({
-      ethAddress,
-      id: FEED_APP_SETTINGS_ID,
-    });
-    call.subscribe((resp: { channelInfo: any; data: string }) => {
-      const { data } = resp;
-      if (data) {
-        return actions.updateData({ settings: JSON.parse(data), fetching: false });
-      }
-      return actions.updateData({ fetching: false });
-    });
+    try {
+      const call = channels.db.settingsAttachment.get({
+        ethAddress,
+        id: FEED_APP_SETTINGS_ID,
+      });
+      call.subscribe((resp: { channelInfo: any; data: string }) => {
+        const { data } = resp;
+        if (data) {
+          return actions.updateData({ settings: JSON.parse(data), fetching: false });
+        }
+        return actions.updateData({ fetching: false });
+      });
+    } catch (ex) {
+      logger.error('Error in settings-state.ts/getSettings: %j', ex);
+      actions.createError({
+        errorKey: 'actions_getSettings',
+        error: ex,
+        critical: true,
+      });
+    }
   }),
   saveSettings: thunk(async (actions, payload, { injections }) => {
     const { ethAddress, settings } = payload;
-    const { channels } = injections;
-    const call = channels.db.settingsAttachment.put({
-      ethAddress,
-      obj: {
-        data: JSON.stringify(settings),
-        type: 'string',
-        id: FEED_APP_SETTINGS_ID,
-      },
-    });
-    call.subscribe(async (resp: any) => {
-      const attachment = await resp.data.doc.getAttachment(FEED_APP_SETTINGS_ID);
-      const textObj = await attachment.getStringData();
-      console.log(textObj, 'the text obj');
-      actions.updateData({
-        settings: JSON.parse(textObj),
+    const { channels, logger } = injections;
+    try {
+      const call = channels.db.settingsAttachment.put({
+        ethAddress,
+        obj: {
+          data: JSON.stringify(settings),
+          type: 'string',
+          id: FEED_APP_SETTINGS_ID,
+        },
       });
-    });
+      call.subscribe(async (resp: any) => {
+        const attachment = await resp.data.doc.getAttachment(FEED_APP_SETTINGS_ID);
+        const textObj = await attachment.getStringData();
+        actions.updateData({
+          settings: JSON.parse(textObj),
+        });
+      });
+    } catch (ex) {
+      logger.error('Error in settings-state.ts/saveSettings: %j', ex);
+      actions.createError({
+        errorKey: 'actions.saveSettings',
+        error: ex,
+        critical: false,
+      });
+    }
   }),
   resetToDefaults: thunk(async (actions, payload, { injections }) => {
     const { ethAddress } = payload;
-    const { channels } = injections;
-    const call = channels.db.settingsAttachment.deleteSettings({
-      ethAddress,
-      id: FEED_APP_SETTINGS_ID,
-    });
-    call.subscribe(async () => {
-      const defaultSettings = await getDefaultSettings();
-      actions.updateData({
-        settings: defaultSettings,
+    const { channels, logger } = injections;
+    try {
+      const call = channels.db.settingsAttachment.deleteSettings({
+        ethAddress,
+        id: FEED_APP_SETTINGS_ID,
       });
-    });
+      call.subscribe(async () => {
+        const defaultSettings = await getDefaultSettings();
+        actions.updateData({
+          settings: defaultSettings,
+        });
+      });
+    } catch (ex) {
+      logger.error('Error in settings-state.ts/resetToDefaults: %j', ex);
+      actions.createError({
+        errorKey: 'actions.resetToDefaults',
+        error: ex,
+        critical: false,
+      });
+    }
   }),
 };
 

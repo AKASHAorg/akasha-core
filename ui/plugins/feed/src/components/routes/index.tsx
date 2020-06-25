@@ -20,6 +20,7 @@ export interface IRoutesProps {
   sdkModules: any;
   logger: any;
   globalChannel: any;
+  isMobile: boolean;
 }
 
 const ArticleNotFound = () => {
@@ -51,6 +52,11 @@ const Feed = styled(Box)`
   }
 `;
 
+/**
+ *
+ * @TODO: Add a new route loading only one card! static-like
+ */
+
 const Routes: React.FC<IRoutesProps> = props => {
   const [, profileStateActions] = useProfileState(props.sdkModules, props.logger);
 
@@ -63,7 +69,7 @@ const Routes: React.FC<IRoutesProps> = props => {
   return (
     <Router>
       <Feed>
-        <FeedBox>
+        <FeedBox fill="vertical">
           <Route
             path={`${rootRoute}`}
             component={() => (

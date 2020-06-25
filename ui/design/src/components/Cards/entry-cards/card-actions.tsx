@@ -19,7 +19,7 @@ export interface CardActionProps {
   onRepostWithComment: () => void;
   onShare: (service: ServiceNames) => void;
   onLinkCopy: () => void;
-  loggedProfileEthAddress: string | null;
+  loggedProfileEthAddress?: string;
 }
 
 const CardActions: React.FC<CardActionProps> = props => {

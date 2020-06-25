@@ -9,7 +9,7 @@ export interface IStateErrorPayload {
 }
 
 export interface ProfileState {
-  loggedEthAddress: string | null;
+  loggedEthAddress?: string;
   token: string | null;
   /**
    * whether we are fetching the profile or not
@@ -37,7 +37,6 @@ export interface ProfileStateModel {
 export const profileStateModel: ProfileStateModel = {
   data: persist(
     {
-      loggedEthAddress: null,
       token: null,
       fetching: false,
       errors: {},
@@ -93,23 +92,22 @@ export const profileStateModel: ProfileStateModel = {
           });
         } catch (err) {
           logger.error(err);
+          actions.createError({
+            errorKey: 'actions_getLoggedEthAddress',
+            error: err,
+            critical: false,
+          });
           return;
-          // // having the eth address is mandatory in this case
-          // actions.createError({
-          //   errorKey: 'action.getLoggedEthAddress',
-          //   error: err,
-          //   critical: true,
-          // });
         }
       });
     } catch (ex) {
       logger.error(ex);
+      actions.createError({
+        errorKey: 'actions.getLoggedEthAddress',
+        error: ex,
+        critical: true,
+      });
       return;
-      // actions.createError({
-      //   errorKey: 'actions.getLoggedEthAddress',
-      //   error: ex,
-      //   critical: true,
-      // });
     }
   }),
 };

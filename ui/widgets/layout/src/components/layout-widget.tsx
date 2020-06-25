@@ -101,6 +101,7 @@ const GlobalStyle = createGlobalStyle<{ theme: any }>`
       }
       ${PluginSlot} {
         padding: 0 0.5em 0 0.5em;
+        flex: auto;
       }
     }
     // 550 and lower

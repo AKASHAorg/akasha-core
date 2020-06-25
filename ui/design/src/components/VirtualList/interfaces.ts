@@ -19,7 +19,7 @@ export interface IListCustomEntity {
 }
 export interface IListInitialState {
   newerEntries: any[];
-  startId: string | null;
+  startId?: string;
 }
 
 export type GetItemCardFn = (props: {
@@ -61,6 +61,7 @@ export interface IVirtualListProps {
   bookmarkedItems?: Set<string>;
   getNewItemsNotification?: (props: { styles: React.CSSProperties }) => React.ReactElement;
   onItemRead?: (itemId: string) => void;
+  ref?: React.Ref<any>;
 }
 
 export interface IListItemProps {

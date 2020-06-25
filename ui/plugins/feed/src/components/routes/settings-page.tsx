@@ -5,7 +5,7 @@ import { useProfileState } from '../../state/profile-state';
 import { useSettingsState } from '../../state/settings-state';
 import { useTranslation } from 'react-i18next';
 
-const { Box, TextInputField, Button, BasicCardBox } = DS;
+const { Box, TextInputField, Button, BasicCardBox, ErrorInfoCard } = DS;
 
 export interface ISettingsPageProps {
   sdkModules: any;
@@ -57,29 +57,31 @@ const SettingsPage: React.FC<ISettingsPageProps & RouteProps> = props => {
   };
   return (
     <Box fill={true} flex={true}>
-      <BasicCardBox style={{ padding: '1em' }}>
-        {settingsState.data.fetching && <Box>Loading settings, please wait</Box>}
-        {!settingsState.data.fetching && (
-          <>
-            <TextInputField
-              label={t('IPFS Gateway')}
-              id="feedApp-ipfs-gateway"
-              name="feddApp-ipfs-gateway"
-              value={formValues.ipfsGateway}
-              onChange={changeIpfsGateway}
-            />
-            <Box flex={true} direction="row" justify="end">
-              <Button
-                secondary={true}
-                label={t('Reset to defaults')}
-                margin={{ right: '.5em' }}
-                onClick={handleSettingsReset}
+      <ErrorInfoCard title={t('Error')} errors={settingsState.data.errors}>
+        <BasicCardBox style={{ padding: '1em' }}>
+          {settingsState.data.fetching && <Box>Loading settings, please wait</Box>}
+          {!settingsState.data.fetching && (
+            <>
+              <TextInputField
+                label={t('IPFS Gateway')}
+                id="feedApp-ipfs-gateway"
+                name="feddApp-ipfs-gateway"
+                value={formValues.ipfsGateway}
+                onChange={changeIpfsGateway}
               />
-              <Button primary={true} label={t('Save')} onClick={handleSettingsSave} />
-            </Box>
-          </>
-        )}
-      </BasicCardBox>
+              <Box flex={true} direction="row" justify="end">
+                <Button
+                  secondary={true}
+                  label={t('Reset to defaults')}
+                  margin={{ right: '.5em' }}
+                  onClick={handleSettingsReset}
+                />
+                <Button primary={true} label={t('Save')} onClick={handleSettingsSave} />
+              </Box>
+            </>
+          )}
+        </BasicCardBox>
+      </ErrorInfoCard>
     </Box>
   );
 };

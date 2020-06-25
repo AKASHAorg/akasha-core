@@ -37,7 +37,7 @@ import { IVirtualListProps } from './interfaces';
  *
  * ************************/
 
-const VirtualList = (props: IVirtualListProps) => {
+const VirtualList = (props: IVirtualListProps, ref?: React.Ref<any>) => {
   const {
     items,
     itemCard,
@@ -52,7 +52,7 @@ const VirtualList = (props: IVirtualListProps) => {
     customEntities = [],
     getItemCard,
     initialState = {
-      startId: null,
+      startId: undefined,
       newerEntries: [],
     },
     hasMoreItems,
@@ -62,6 +62,14 @@ const VirtualList = (props: IVirtualListProps) => {
   } = props;
   const [listState, setListState] = React.useState(initialState);
 
+  React.useEffect(() => {
+    if (
+      initialState.newerEntries &&
+      initialState.newerEntries.length > listState.newerEntries.length
+    ) {
+      setListState(initialState);
+    }
+  }, [initialState.newerEntries]);
   // load initial feed items
   // when resuming session, this must also pass `startId` prop!!
   React.useEffect(() => {
@@ -83,6 +91,7 @@ const VirtualList = (props: IVirtualListProps) => {
       <AutoSizer>
         {({ width, height }) => (
           <ListContent
+            ref={ref}
             offsetItems={offsetItems}
             initialPaddingTop={initialPaddingTop}
             items={items}
@@ -109,4 +118,4 @@ const VirtualList = (props: IVirtualListProps) => {
   );
 };
 
-export default VirtualList;
+export default React.forwardRef(VirtualList);

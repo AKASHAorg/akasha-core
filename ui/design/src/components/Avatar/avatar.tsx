@@ -7,7 +7,7 @@ import { loadPlaceholder } from './placeholders';
 import StyledAvatar, { AvatarSize } from './styled-avatar';
 
 export interface AvatarProps extends CommonInterface<HTMLDivElement> {
-  ethAddress: string;
+  ethAddress?: string;
   src?: string;
   onClick?: React.MouseEventHandler<any>;
   alt?: string;
@@ -40,16 +40,20 @@ export const getAvatarFromSeed = (seed: string) => {
   return 7;
 };
 
-const defaultProps: Partial<AvatarProps> = {
-  size: 'md' as AvatarSize,
-  withBorder: false,
-  ethAddress: '0x0000000000000000000000000000000',
-};
-
-const Avatar: React.FC<AvatarProps & typeof defaultProps> = props => {
-  const { onClick, src, className, size, margin, withBorder, ethAddress } = props;
+const Avatar: React.FC<AvatarProps> = props => {
+  const {
+    onClick,
+    src,
+    className,
+    margin,
+    size = 'md',
+    withBorder = false,
+    ethAddress = '0x0000000000000000000000000000000',
+  } = props;
   const isClickable = typeof onClick === 'function';
-  const avatarImage = src ? src : loadPlaceholder(`placeholder_${getAvatarFromSeed(ethAddress)}`);
+  const avatarImage = src
+    ? src
+    : loadPlaceholder(`placeholder_${getAvatarFromSeed(ethAddress as string)}`);
 
   return (
     <StyledAvatar
@@ -66,7 +70,5 @@ const Avatar: React.FC<AvatarProps & typeof defaultProps> = props => {
     </StyledAvatar>
   );
 };
-
-Avatar.defaultProps = defaultProps;
 
 export default Avatar;

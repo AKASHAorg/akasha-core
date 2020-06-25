@@ -42,7 +42,7 @@ export interface IEntryBoxProps {
   comment?: boolean;
   locale: ILocale;
   loggedProfileAvatar?: string;
-  loggedProfileEthAddress: string | null;
+  loggedProfileEthAddress?: string;
   onEntryBookmark?: (entryId: string, isBookmarked: boolean | null) => void;
   isBookmarked: boolean | null;
   bookmarkLabel: string;

@@ -50,5 +50,5 @@ export const fetchFeedItemData = (payload: { entryId: string }) => {
   if (entryId) {
     return Promise.resolve(genEntryData(entryId));
   }
-  return Promise.resolve(null);
+  return Promise.resolve({ entryId });
 };

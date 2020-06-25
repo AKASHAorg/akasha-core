@@ -21,6 +21,12 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
     },
     [itemRef],
   );
+  const beforeEntities = customEntities.filter(
+    entityObj => entityObj.position === 'before' && entityObj.itemId === itemId,
+  );
+  const afterEntities = customEntities.filter(
+    entityObj => entityObj.position === 'after' && entityObj.itemId === itemId,
+  );
   React.useEffect(() => {
     if (itemRef.current && itemData) {
       const itemRect = itemRef.current.getBoundingClientRect();
@@ -40,11 +46,14 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
       className="virtual-list-card-item"
       data-item-id={itemId}
     >
-      {customEntities
-        .filter(entityObj => entityObj.position === 'before')
-        .map((entityObj, idx) => {
-          return entityObj.getComponent({ key: idx, style: { marginBottom: itemSpacing } });
-        })}
+      {beforeEntities.map(
+        React.useCallback(
+          (entityObj, idx) => {
+            return entityObj.getComponent({ key: idx, style: { marginBottom: itemSpacing } });
+          },
+          [beforeEntities.length],
+        ),
+      )}
       <ListItemContainer
         loadItemData={loadItemData}
         itemData={itemData}
@@ -54,11 +63,14 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
         getItemCard={getItemCard}
         isBookmarked={isBookmarked}
       />
-      {customEntities
-        .filter(entityObj => entityObj.position === 'after')
-        .map((entityObj, idx) => {
-          return entityObj.getComponent({ key: idx, style: { marginTop: itemSpacing } });
-        })}
+      {afterEntities.map(
+        React.useCallback(
+          (entityObj, idx) => {
+            return entityObj.getComponent({ key: idx, style: { marginTop: itemSpacing } });
+          },
+          [afterEntities.length],
+        ),
+      )}
     </div>
   );
 });

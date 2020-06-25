@@ -6,9 +6,17 @@ import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/component
 import { useTranslation } from 'react-i18next';
 import { useBookmarksState } from '../../state/bookmarks-state';
 import { useProfileState } from '../../state/profile-state';
-import { useInterval } from '../hooks/use-interval';
 
-const { Box, VirtualList, EditorCard, EntryCard, styled /* MainAreaCardBox */ } = DS;
+const {
+  Box,
+  VirtualList,
+  EditorCard,
+  EntryCard,
+  styled,
+  ErrorInfoCard,
+  EntryCardLoading,
+  MainAreaCardBox,
+} = DS;
 
 export interface IFeedHomePageProps {
   match: match<any> | null;
@@ -16,6 +24,7 @@ export interface IFeedHomePageProps {
   i18n?: any;
   sdkModules: any;
   logger: any;
+  isMobile: boolean;
 }
 const NewEntriesPopover = styled.div`
   position: sticky;
@@ -32,15 +41,14 @@ const NewEntriesPopover = styled.div`
 `;
 
 const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props => {
-  const { i18n, sdkModules, logger } = props;
+  const { i18n, sdkModules, logger, isMobile } = props;
   const [feedState, feedStateActions] = useFeedState(sdkModules, logger);
   const [bookmarkState, bookmarkActions] = useBookmarksState(sdkModules, logger);
   const [profileState] = useProfileState(sdkModules, logger);
 
   const { t } = useTranslation();
-  // const feedSourcesCount = 38;
-  // console.log(profileInfo, 'profile info in feed page');
-
+  const locale = i18n.languages[0] || 'en';
+  const vlInstance = React.createRef<any>();
   React.useEffect(() => {
     if (profileState.data.loggedEthAddress) {
       bookmarkActions.getBookmarkedItems({
@@ -50,14 +58,9 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
     }
   }, [profileState.data.loggedEthAddress]);
 
-  const locale = i18n.languages[0] || 'en';
-  useInterval(ticks => {
-    if (ticks && ticks === 10) {
-      feedStateActions.checkForNewEntries({ startId: feedState.data.feedViewState.startId });
-    }
-  }, 2000);
   const loadInitialFeed = (payload: IGetFeedOptions['options']) => {
     feedStateActions.getFeedItems({ options: payload, filters: feedState.data.filters });
+    feedStateActions.checkForNewEntries({ startId: payload.start });
   };
 
   const loadMore = (payload: IGetFeedOptions['options']) => {
@@ -101,27 +104,38 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
   };
 
   const handleEntryRepost = (withComment: boolean, entryId?: string) => {
-    console.log('repost entry', entryId, withComment ? 'with comment' : 'without comment');
+    logger.info(
+      'reposting is not implemented. entryId => %s, postWithComment => %j',
+      entryId,
+      withComment,
+    );
   };
-
+  // https://ethereum.world/app/:appName/post/:postId
+  // -> explore apps => https://ethereum.world/apps/:appName
+  // -> comments => https://ethereum.world/app/:appName/post/:commentId
   const handleEntryShare = (service: string, entryId?: string) => {
-    console.log('share entry on', service, 'entry:', entryId);
+    logger.info('share entry %s on %s', entryId, service);
   };
 
   const handleEntryFlag = (entryId?: string) => {
-    console.log('flag entry', entryId);
+    logger.info('flag entry: %s', entryId);
   };
 
   const handleLinkCopy = (link: string) => {
-    console.log('link copy', link);
+    logger.info('copy link: %s', link);
   };
 
   const handleNewerEntriesLoad = () => {
-    console.log('load newer entries');
+    feedStateActions.loadNewerEntries({ newerEntries: feedState.data.feedViewState.newerEntries });
+    vlInstance.current.scrollTo({
+      top: 0,
+    });
   };
 
   const handleItemRead = (itemId: string) => {
-    console.log('item', itemId, 'was read');
+    if (profileState.data.loggedEthAddress) {
+      feedStateActions.markAsRead({ itemId, ethAddress: profileState.data.loggedEthAddress });
+    }
   };
 
   return (
@@ -141,62 +155,82 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
         </Box>
       </MainAreaCardBox> */}
       <Box fill={true} width={{ max: '36.313rem' }}>
-        <VirtualList
-          items={feedState.data.entryIds}
-          itemsData={feedState.data.entriesData}
-          loadInitialFeed={loadInitialFeed}
-          loadMore={loadMore}
-          loadItemData={loadItemData}
-          hasMoreItems={feedState.data.hasMoreItems}
-          bookmarkedItems={bookmarkState.data.bookmarkedIds as Set<string>}
-          getNewItemsNotification={({ styles }) => (
-            <NewEntriesPopover onClick={handleNewerEntriesLoad} style={styles}>
-              <b>{feedState.data.feedViewState.newerEntries.length}</b> {t('new entries')}
-            </NewEntriesPopover>
-          )}
-          onItemRead={handleItemRead}
-          initialState={feedState.data.feedViewState}
-          getItemCard={({ itemData, isBookmarked }) => (
-            <EntryCard
-              isBookmarked={isBookmarked}
-              entryData={itemData}
-              onClickAvatar={handleAvatarClick}
-              onEntryBookmark={handleEntryBookmark}
-              repliesLabel={t('Replies', { count: itemData.repliesCount })}
-              repostsLabel={t('Reposts', { count: itemData.repostsCount })}
-              shareLabel={t('Share')}
-              copyLinkLabel={t('Copy Link')}
-              copyIPFSLinkLabel={t('Copy IPFS Link')}
-              flagAsLabel={t('Flag as inappropiate')}
-              loggedProfileEthAddress={profileState.data.loggedEthAddress}
-              locale={locale}
-              style={{ height: 'auto' }}
-              bookmarkLabel={t('Save')}
-              bookmarkedLabel={t('Saved')}
-              onRepost={handleEntryRepost}
-              onEntryShare={handleEntryShare}
-              onEntryFlag={handleEntryFlag}
-              onLinkCopy={handleLinkCopy}
-            />
-          )}
-          customEntities={[
-            {
-              position: 'before',
-              // itemIndex: 0,
-              itemId: feedState.data.entryIds.length ? feedState.data.entryIds[0] : null,
-              getComponent: ({ key, style }: { key: string; style: any }) => (
-                <EditorCard
-                  ethAddress={'0x123'}
-                  publishLabel="Publish"
-                  placeholderLabel="Write something"
-                  onPublish={() => null}
-                  style={style}
-                  key={key}
-                />
-              ),
-            },
-          ]}
-        />
+        <ErrorInfoCard title={t('Error')} errors={feedState.data.errors}>
+          <VirtualList
+            ref={vlInstance}
+            items={feedState.data.entryIds}
+            itemsData={feedState.data.entriesData}
+            loadInitialFeed={loadInitialFeed}
+            loadMore={loadMore}
+            loadItemData={loadItemData}
+            bookmarkedItems={bookmarkState.data.bookmarkedIds as Set<string>}
+            getNewItemsNotification={({ styles }) => (
+              <NewEntriesPopover onClick={handleNewerEntriesLoad} style={styles}>
+                <b>{feedState.data.feedViewState.newerEntries.length}</b> {t('new entries')}
+              </NewEntriesPopover>
+            )}
+            hasMoreItems={true}
+            onItemRead={handleItemRead}
+            initialState={feedState.data.feedViewState}
+            getItemCard={({ itemData, isBookmarked }) => {
+              return (
+                <ErrorInfoCard title={t('An error occured')} errors={itemData.status.errors}>
+                  <>
+                    {!itemData.ethAddress && (
+                      <MainAreaCardBox>
+                        <EntryCardLoading />
+                      </MainAreaCardBox>
+                    )}
+                    {itemData.ethAddress && (
+                      <EntryCard
+                        isBookmarked={isBookmarked}
+                        entryData={itemData}
+                        onClickAvatar={handleAvatarClick}
+                        onEntryBookmark={handleEntryBookmark}
+                        repliesLabel={t('Replies', { count: itemData.repliesCount })}
+                        repostsLabel={t('Reposts', { count: itemData.repostsCount })}
+                        shareLabel={t('Share')}
+                        copyLinkLabel={t('Copy Link')}
+                        copyIPFSLinkLabel={t('Copy IPFS Link')}
+                        flagAsLabel={t('Flag as inappropiate')}
+                        loggedProfileEthAddress={profileState.data.loggedEthAddress}
+                        locale={locale}
+                        style={{ height: 'auto' }}
+                        bookmarkLabel={t('Save')}
+                        bookmarkedLabel={t('Saved')}
+                        onRepost={handleEntryRepost}
+                        onEntryShare={handleEntryShare}
+                        onEntryFlag={handleEntryFlag}
+                        onLinkCopy={handleLinkCopy}
+                      />
+                    )}
+                  </>
+                </ErrorInfoCard>
+              );
+            }}
+            customEntities={
+              !isMobile
+                ? [
+                    {
+                      position: 'before',
+                      // itemIndex: 0,
+                      itemId: feedState.data.entryIds.length ? feedState.data.entryIds[0] : null,
+                      getComponent: ({ key, style }: { key: string; style: any }) => (
+                        <EditorCard
+                          ethAddress={profileState.data.loggedEthAddress}
+                          publishLabel="Publish"
+                          placeholderLabel="Write something"
+                          onPublish={() => null}
+                          style={style}
+                          key={key}
+                        />
+                      ),
+                    },
+                  ]
+                : undefined
+            }
+          />
+        </ErrorInfoCard>
       </Box>
     </Box>
   );

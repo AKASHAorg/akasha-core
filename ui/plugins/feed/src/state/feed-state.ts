@@ -1,5 +1,6 @@
 import { action, createComponentStore, Action, thunk, Thunk, persist } from 'easy-peasy';
 import { fetchFeedItems, fetchFeedItemData, IFeedItem } from '../services/feed-service';
+import { delay } from '../services/dummy-data';
 
 const FEED_FETCH_LIMIT = 5;
 
@@ -17,20 +18,33 @@ export interface INewEntryInfo {
   publishDate?: Date;
 }
 
-export interface IEntryData {
-  entryId: string;
+export interface IEntryData extends IFeedItem {
+  status: {
+    /**
+     * when an entry was viewed by the user
+     */
+    viewed?: boolean;
+    /**
+     * when a request was made and waiting for response
+     */
+    fetching?: boolean;
+    errors?: {
+      [type: string]: {
+        error: Error;
+        critical: boolean;
+      };
+    };
+  };
 }
 
 export interface FeedState {
-  loggedEthAddress: string | null;
   /**
    * an ordered list with entryIds fetched
    * the order in this list is the order we display in feed
    */
   entryIds: string[];
-  bookmarkedIds: Set<string>;
   feedViewState: {
-    startId: string | null;
+    startId?: string;
     newerEntries: INewEntryInfo[];
   };
   /**
@@ -40,18 +54,6 @@ export interface FeedState {
    * }
    */
   entriesData: { [key: string]: IEntryData };
-  entryStatus: {
-    [key: string]: {
-      /**
-       * when an entry was viewed by the user
-       */
-      viewed?: boolean;
-      /**
-       * when a request was made and waiting for response
-       */
-      fetching?: boolean;
-    };
-  };
   filters: {
     filter: 'all' | 'top_reposted' | 'top_commented';
     sort: 'latest' | 'oldest';
@@ -60,7 +62,6 @@ export interface FeedState {
    * whether we are fetching entries or not
    */
   fetching: boolean;
-  hasMoreItems: boolean;
   errors: {
     // key is the context of the error
     // example {'form.username': new Error('username is taken')}
@@ -81,78 +82,99 @@ export interface IGetFeedOptions {
 export interface IAddFeedItemsPayload {
   feedItems: IFeedItem[];
   reverse?: boolean;
-  hasMoreItems: boolean;
 }
+export interface IUpdateEntryStatusPayload {
+  entryId: string;
+  status: {
+    viewed?: boolean;
+    fetching?: boolean;
+    errors?: {
+      [type: string]: {
+        error: Error;
+        critical: boolean;
+      };
+    };
+  };
+}
+export interface IEntryErrorPayload {
+  entryId: string;
+  errorObj: {
+    key: string;
+    details: {
+      critical: boolean;
+      error: Error;
+    };
+  };
+}
+
 export interface FeedStateModel {
   data: FeedState;
   updateData: Action<FeedStateModel, Partial<FeedState>>;
-  updateEntryData: Action<FeedStateModel, IFeedItem | null>;
+  updateEntryData: Action<FeedStateModel, { entryData: IFeedItem; status: IEntryData['status'] }>;
   createError: Action<FeedStateModel, IStateErrorPayload>;
   addFeedItems: Action<FeedStateModel, IAddFeedItemsPayload>;
   getFeedItems: Thunk<FeedStateModel, IGetFeedOptions>;
   getItemData: Thunk<FeedStateModel, { entryId: string }>;
   changeActiveFilters: Thunk<FeedStateModel, FeedState['filters']>;
   resetFeed: Action<FeedStateModel>;
-  updateEntryStatus: Action<
-    FeedStateModel,
-    { entryId: string; status: { viewed?: boolean; fetching?: boolean } }
-  >;
   getFeedViewState: Thunk<FeedStateModel, { ethAddress: string }>;
-  checkForNewEntries: Thunk<FeedStateModel, { startId: string | null }>;
+  checkForNewEntries: Thunk<FeedStateModel, { startId?: string }>;
+  markAsRead: Thunk<FeedStateModel, { itemId: string; ethAddress: string }>;
+  loadNewerEntries: Thunk<FeedStateModel, { newerEntries: INewEntryInfo[] }>;
 }
 
 export const feedStateModel: FeedStateModel = {
   data: {
-    loggedEthAddress: null,
     entryIds: [],
-    bookmarkedIds: new Set(),
     feedViewState: persist({
-      startId: null,
+      startId: undefined,
       newerEntries: [],
     }),
     entriesData: {},
-    entryStatus: {},
     filters: {
       filter: 'all',
       sort: 'latest',
     },
     fetching: false,
-    hasMoreItems: true,
     errors: {},
   },
+
   updateData: action((state, payload) => {
     state.data = Object.assign({}, state.data, payload);
   }),
+
   updateEntryData: action((state, payload) => {
     if (payload) {
-      state.data.entriesData[payload.entryId] = payload;
+      state.data.entriesData[payload.entryData.entryId] = {
+        ...payload.entryData,
+        status: payload.status,
+      };
     }
   }),
-  updateEntryStatus: action((state, payload) => {
-    state.data.entryStatus[payload.entryId] = payload.status;
-  }),
+
   addFeedItems: action((state, payload) => {
-    const { feedItems, reverse, hasMoreItems } = payload;
+    const { feedItems, reverse } = payload;
     if (reverse) {
       payload.feedItems.forEach(item => {
         state.data.entryIds = [item.entryId, ...state.data.entryIds];
-        state.data.entryStatus[item.entryId] = {
-          fetching: false,
-          viewed: false,
+        state.data.entriesData[item.entryId] = {
+          entryId: item.entryId,
+          status: {
+            fetching: false,
+          },
         };
       });
     } else {
       state.data.entryIds = state.data.entryIds.concat(feedItems.map(item => item.entryId));
-      state.data.entryStatus = Object.assign(
-        {},
-        state.data.entryStatus,
-        feedItems.reduce(
-          (prev, curr) => ({ ...prev, [curr.entryId]: { viewed: false, fetching: false } }),
-          {},
-        ),
-      );
+      feedItems.forEach(item => {
+        state.data.entriesData[item.entryId] = {
+          entryId: item.entryId,
+          status: {
+            fetching: false,
+          },
+        };
+      });
     }
-    state.data.hasMoreItems = hasMoreItems;
   }),
   // add errors to store, merging them with old ones
   createError: action((state, payload) => {
@@ -167,59 +189,112 @@ export const feedStateModel: FeedStateModel = {
     });
   }),
 
-  getFeedViewState: thunk(async (actions, payload) => {
-    console.log('get view feed state', payload);
+  getFeedViewState: thunk(async (actions, _payload) => {
+    // get feed view state from db
     actions.updateData({});
   }),
 
   checkForNewEntries: thunk(async (actions, payload) => {
-    console.log('check for new entries', payload);
-    actions.updateData({
-      feedViewState: {
-        startId: payload.startId,
-        newerEntries: [{ entryId: '0x112233' }],
-      },
+    delay(10000).then(() => {
+      actions.updateData({
+        feedViewState: {
+          startId: payload.startId,
+          newerEntries: [{ entryId: '0x112233' }],
+        },
+      });
     });
   }),
-  getFeedItems: thunk(async (actions, payload) => {
+
+  getFeedItems: thunk(async (actions, payload, { injections }) => {
+    const { logger } = injections;
     const { options, filters } = payload;
     const { limit = FEED_FETCH_LIMIT } = options;
-    let hasMoreItems = true;
     actions.updateData({
       fetching: true,
     });
-    const resp = await fetchFeedItems({ ...options, limit: limit + 3 }, filters);
-    if (resp.items.length < limit + 3) {
-      hasMoreItems = false;
+    try {
+      const resp = await fetchFeedItems({ ...options, limit: limit + 3 }, filters);
+      actions.addFeedItems({ feedItems: resp.items, reverse: options.reverse });
+      actions.updateData({
+        fetching: false,
+      });
+    } catch (ex) {
+      logger.error('Error in feed-state.ts/getFeedItems: %j', ex);
+      actions.createError({
+        errorKey: 'actions_getFeedItems',
+        error: ex,
+        critical: true,
+      });
     }
-    actions.addFeedItems({ hasMoreItems, feedItems: resp.items, reverse: options.reverse });
-    actions.updateData({
-      fetching: false,
-    });
   }),
-  getItemData: thunk(async (actions, payload, _injections) => {
+
+  getItemData: thunk(async (actions, payload, { injections }) => {
+    const { logger } = injections;
     const { entryId } = payload;
-    actions.updateEntryStatus({
-      entryId,
+    actions.updateEntryData({
+      entryData: {
+        entryId,
+      },
       status: {
         fetching: true,
         viewed: false,
       },
     });
-    const resp = await fetchFeedItemData({ entryId });
-    actions.updateEntryData(resp);
-    actions.updateEntryStatus({
-      entryId,
-      status: {
-        fetching: false,
+    try {
+      const resp = await fetchFeedItemData({ entryId });
+      actions.updateEntryData({
+        entryData: resp,
+        status: {
+          fetching: false,
+        },
+      });
+    } catch (ex) {
+      logger.error('Error in feed-state.ts/getItemData: %j', ex);
+      actions.updateEntryData({
+        entryData: { entryId },
+        status: {
+          fetching: false,
+          errors: {
+            [`action_getItemData`]: {
+              critical: true,
+              error: ex,
+            },
+          },
+        },
+      });
+    }
+  }),
+
+  loadNewerEntries: thunk(async (actions, payload) => {
+    const { newerEntries } = payload;
+    actions.addFeedItems({
+      feedItems: newerEntries.map(entry => ({ entryId: entry.entryId })),
+      reverse: true,
+    });
+    actions.updateData({
+      feedViewState: {
+        startId: newerEntries[0].entryId,
+        newerEntries: [],
       },
     });
   }),
+
+  markAsRead: thunk(async (actions, payload, { getState }) => {
+    const { itemId } = payload;
+    actions.updateData({
+      feedViewState: {
+        startId: itemId,
+        newerEntries: getState().data.feedViewState.newerEntries,
+      },
+    });
+  }),
+
   changeActiveFilters: thunk(async (actions, payload) => {
     actions.updateData({
       filters: payload,
     });
   }),
+
   resetFeed: action(state => {
     state.data = {
       ...state.data,

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import isEqual from 'react-fast-compare';
-import EntryLoadingPlaceholder from './placeholders/entry-card-placeholder';
 import { IListItemContainerProps } from './interfaces';
 
 const ListItemContainer = (props: IListItemContainerProps) => {
@@ -10,9 +9,6 @@ const ListItemContainer = (props: IListItemContainerProps) => {
       loadItemData({ itemId });
     }
   }, [itemId]);
-  if (!itemData) {
-    return <EntryLoadingPlaceholder />;
-  }
 
   return getItemCard({ itemId, itemData, isBookmarked });
 };

@@ -17,7 +17,7 @@ export interface IEntryCardProps {
   copyIPFSLinkLabel: string;
   locale: ILocale;
   loggedProfileAvatar?: string;
-  loggedProfileEthAddress: string | null;
+  loggedProfileEthAddress?: string;
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
   onEntryBookmark?: (entryId: string) => void;

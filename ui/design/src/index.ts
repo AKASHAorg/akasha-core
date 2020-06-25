@@ -9,9 +9,15 @@ import {
   Text,
   Carousel,
 } from 'grommet';
+
 import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
+
 import { Avatar, EditableAvatar } from './components/Avatar';
+
 import { Sidebar, Topbar } from './components/Bars/index';
+
+import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
+
 import {
   Button,
   IconButton,
@@ -38,9 +44,12 @@ import {
   ModalCard,
   LoginCTAWidgetCard,
 } from './components/Cards';
+
 import TextInputField from './components/Forms/text-input-field';
 import { AppIcon, Icon, iconTypes } from './components/Icon';
 import { CommentInput, SearchInput } from './components/Input';
+import ErrorInfoCard from './components/Errors/error-info-card';
+
 import {
   ShareModal,
   ModalContainer,
@@ -48,15 +57,18 @@ import {
   EthProviderListModal,
   EthProviderModal,
 } from './components/Modals';
+
 import { NotificationsPopover, SelectPopover } from './components/Popovers';
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
-import responsiveBreakpoints from './styles/responsive-breakpoints';
 import VirtualList from './components/VirtualList';
-import { isBase64 } from './utils/string-utils';
-import { formatImageSrc } from './utils/image-utils';
 import { Helmet } from 'react-helmet';
 import { HorizontalDivider } from './components/Dividers';
+
+/* Utilities (these are not components) */
+import responsiveBreakpoints from './styles/responsive-breakpoints';
+import { formatImageSrc } from './utils/image-utils';
+import { isBase64 } from './utils/string-utils';
 
 /* Themes and theme related utils */
 import darkTheme from './styles/themes/dark';
@@ -71,12 +83,14 @@ const exported = {
   Button,
   Carousel,
   EditableAvatar,
+  ErrorInfoCard,
   AppInfoWidgetCard,
   AppsWidgetCard,
   BasicCardBox,
   EditorCard,
   EntryBox,
   EntryCard,
+  EntryCardLoading,
   BoxFormCard,
   EnsFormCard,
   MiniInfoWidgetCard,

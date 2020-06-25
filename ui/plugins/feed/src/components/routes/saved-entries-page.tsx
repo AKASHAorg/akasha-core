@@ -6,7 +6,7 @@ import { useProfileState } from '../../state/profile-state';
 import { IGetFeedOptions } from '../../state/feed-state';
 import { useTranslation } from 'react-i18next';
 
-const { Box, VirtualList, EntryCard } = DS;
+const { Box, VirtualList, EntryCard, ErrorInfoCard } = DS;
 
 const noop = () => null;
 
@@ -54,20 +54,20 @@ const SavedEntriesPage: React.FC<ISavedEntriesPageProps & RouteProps> = props =>
     }
   };
 
-  const handleEntryRepost = (withComment: boolean, entryId?: string) => {
-    console.log('repost entry', entryId, withComment ? 'with comment' : 'without comment');
+  const handleEntryRepost = (_withComment: boolean, _entryId?: string) => {
+    // not implemented
   };
 
-  const handleEntryShare = (service: string, entryId?: string) => {
-    console.log('share entry on', service, 'entry:', entryId);
+  const handleEntryShare = (_service: string, _entryId?: string) => {
+    // not implemented
   };
 
-  const handleEntryFlag = (entryId?: string) => {
-    console.log('flag entry', entryId);
+  const handleEntryFlag = (_entryId?: string) => {
+    // not implemented
   };
 
-  const handleLinkCopy = (link: string) => {
-    console.log('link copy', link);
+  const handleLinkCopy = (_link: string) => {
+    // not implemented
   };
 
   return (
@@ -82,39 +82,41 @@ const SavedEntriesPage: React.FC<ISavedEntriesPageProps & RouteProps> = props =>
         <Box>There are no bookmarks. Start saving entries to have them here!</Box>
       )}
       {loggedEthAddress && fetching && <Box>Loading Saved entries, please wait!</Box>}
-      <VirtualList
-        items={Array.from(bookmarkState.data.bookmarkedIds as Set<string>)}
-        itemsData={bookmarkState.data.entriesData}
-        loadItemData={loadItemData}
-        loadMore={noop}
-        loadInitialFeed={loadInitialFeed}
-        hasMoreItems={false}
-        getItemCard={({ itemData }) => {
-          return (
-            <EntryCard
-              isBookmarked={true}
-              entryData={itemData}
-              onClickAvatar={handleAvatarClick}
-              onEntryBookmark={handleEntryBookmark}
-              repliesLabel={t('Replies', { count: itemData.repliesCount })}
-              repostsLabel={t('Reposts', { count: itemData.repostsCount })}
-              shareLabel={t('Share')}
-              copyIPFSLinkLabel={t('Copy IPFS Link')}
-              flagAsLabel={t('Flag as inappropiate')}
-              copyLinkLabel={t('Copy Link')}
-              loggedProfileEthAddress={loggedEthAddress}
-              locale={locale}
-              style={{ height: 'auto' }}
-              bookmarkLabel={t('Save')}
-              bookmarkedLabel={t('Saved')}
-              onRepost={handleEntryRepost}
-              onEntryShare={handleEntryShare}
-              onEntryFlag={handleEntryFlag}
-              onLinkCopy={handleLinkCopy}
-            />
-          );
-        }}
-      />
+      <ErrorInfoCard errors={bookmarkState.data.errors} title={t('Error')}>
+        <VirtualList
+          items={Array.from(bookmarkState.data.bookmarkedIds as Set<string>)}
+          itemsData={bookmarkState.data.entriesData}
+          loadItemData={loadItemData}
+          loadMore={noop}
+          loadInitialFeed={loadInitialFeed}
+          hasMoreItems={false}
+          getItemCard={({ itemData }) => {
+            return (
+              <EntryCard
+                isBookmarked={true}
+                entryData={itemData}
+                onClickAvatar={handleAvatarClick}
+                onEntryBookmark={handleEntryBookmark}
+                repliesLabel={t('Replies', { count: itemData.repliesCount })}
+                repostsLabel={t('Reposts', { count: itemData.repostsCount })}
+                shareLabel={t('Share')}
+                copyIPFSLinkLabel={t('Copy IPFS Link')}
+                flagAsLabel={t('Flag as inappropiate')}
+                copyLinkLabel={t('Copy Link')}
+                loggedProfileEthAddress={loggedEthAddress}
+                locale={locale}
+                style={{ height: 'auto' }}
+                bookmarkLabel={t('Save')}
+                bookmarkedLabel={t('Saved')}
+                onRepost={handleEntryRepost}
+                onEntryShare={handleEntryShare}
+                onEntryFlag={handleEntryFlag}
+                onLinkCopy={handleLinkCopy}
+              />
+            );
+          }}
+        />
+      </ErrorInfoCard>
     </Box>
   );
 };

@@ -19,7 +19,18 @@ import { useIntersectionObserver } from './use-intersection-observer';
  * - renders cards
  */
 
-const ListContent = (props: IListContentProps) => {
+export interface IListAPI {
+  scrollTo: (scrollPos: ScrollToOptions) => void;
+}
+
+const initialScrollState: IScrollState = {
+  direction: 1,
+  scrollTop: 0,
+  scrollHeight: 0,
+  clientHeight: 0,
+};
+
+const ListContent = (props: IListContentProps, ref?: React.Ref<IListAPI>) => {
   const {
     items,
     itemsData,
@@ -52,12 +63,7 @@ const ListContent = (props: IListContentProps) => {
     totalItemsHeight: 0,
   });
 
-  const scrollState = React.useRef<IScrollState>({
-    direction: 1,
-    scrollTop: 0,
-    scrollHeight: 0,
-    clientHeight: 0,
-  });
+  const scrollState = React.useRef<IScrollState>(initialScrollState);
 
   const queueOperatorRef = React.createRef<{ handleContainerScroll: any }>();
 
@@ -79,6 +85,7 @@ const ListContent = (props: IListContentProps) => {
     containerRef.current,
     document.querySelectorAll('.virtual-list-card-item'),
   );
+
   const newEntryNotificationShown =
     (scrollState.current.scrollTop > itemDimensions.current.avgItemHeight ||
       infiniteScrollState.paddingTop > itemDimensions.current.avgItemHeight) &&
@@ -89,6 +96,16 @@ const ListContent = (props: IListContentProps) => {
       onItemRead(intersectingId);
     }
   }, [intersectingId]);
+
+  React.useImperativeHandle(ref, () => ({
+    scrollTo: (scrollPos: ScrollToOptions) => {
+      requestAnimationFrame(() => {
+        if (containerRef.current) {
+          containerRef.current.scrollTo(scrollPos);
+        }
+      });
+    },
+  }));
 
   const updateScroll = (
     scrollTop: number,
@@ -166,9 +183,9 @@ const ListContent = (props: IListContentProps) => {
         getNewItemsNotification({
           styles: {
             transform: newEntryNotificationShown ? 'translate(-50%, 0)' : 'translate(-50%, -110%)',
-            position: newEntryNotificationShown ? 'sticky' : 'sticky',
+            position: 'sticky',
             willChange: 'transform',
-            transition: 'transform 0.214s ease-in-out',
+            transition: 'transform 0.314s ease-in-out',
           },
         })}
       <BoundryLoader
@@ -221,4 +238,4 @@ const ListContent = (props: IListContentProps) => {
   );
 };
 
-export default ListContent;
+export default React.forwardRef(ListContent);

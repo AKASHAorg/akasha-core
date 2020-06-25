@@ -8,6 +8,7 @@ export interface IBoundryLoaderProps {
   fetchOperation: IFetchOperation | null;
   setFetchOperation: React.Dispatch<IFetchOperation | null>;
   height: number;
+  onSizeChange?: (rect: DOMRect) => void;
 }
 
 /*
@@ -24,6 +25,7 @@ const BoundryLoader = (props: IBoundryLoaderProps) => {
     limit: 5,
     reverse: false,
   };
+
   React.useEffect(() => {
     if (fetchOperation && fetchOperation.status === 'pending') {
       reqPayload.start = fetchOperation.startId;
