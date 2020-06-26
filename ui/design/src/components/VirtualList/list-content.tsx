@@ -13,17 +13,29 @@ import CardRenderer from './card-renderer';
 import BoundryLoader from './boundry-loader';
 import throttle from 'lodash.throttle';
 import { getInfiniteScrollState } from './utils';
+import { useIntersectionObserver } from './use-intersection-observer';
 
 /* - Keeps track of loaded items and loadMore schedules
  * - renders cards
  */
 
-const ListContent = (props: IListContentProps) => {
+export interface IListAPI {
+  scrollTo: (scrollPos: ScrollToOptions) => void;
+}
+
+const initialScrollState: IScrollState = {
+  direction: 1,
+  scrollTop: 0,
+  scrollHeight: 0,
+  clientHeight: 0,
+};
+
+const ListContent = (props: IListContentProps, ref?: React.Ref<IListAPI>) => {
   const {
     items,
     itemsData,
     initialPaddingTop,
-    loadItemDataAction,
+    loadItemData,
     height,
     width,
     itemSpacing,
@@ -34,9 +46,15 @@ const ListContent = (props: IListContentProps) => {
     getItemCard,
     listState,
     setListState,
+    hasMoreItems,
+    bookmarkedItems,
+    getNewItemsNotification,
+    onItemRead,
   } = props;
   const [fetchOperation, setFetchOperation] = React.useState<IFetchOperation | null>(null);
   const [sliceOperation, setSliceOperation] = React.useState<ISliceOperation | null>(null);
+
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
 
   const itemDimensions = React.useRef<ItemDimensions>({
     dimensions: {},
@@ -45,12 +63,83 @@ const ListContent = (props: IListContentProps) => {
     totalItemsHeight: 0,
   });
 
-  const scrollState = React.useRef<IScrollState>({
-    direction: 1,
-    scrollTop: 0,
-    scrollHeight: 0,
-    clientHeight: 0,
-  });
+  const scrollState = React.useRef<IScrollState>(initialScrollState);
+
+  const queueOperatorRef = React.createRef<{ handleContainerScroll: any }>();
+
+  const infiniteScrollState = React.useMemo(
+    () =>
+      getInfiniteScrollState(
+        sliceOperation,
+        items,
+        itemDimensions,
+        itemSpacing,
+        initialPaddingTop,
+        scrollState,
+        offsetItems,
+      ),
+    [JSON.stringify(sliceOperation), items.length, JSON.stringify(itemDimensions.current)],
+  );
+
+  const [intersectingId] = useIntersectionObserver(
+    containerRef.current,
+    document.querySelectorAll('.virtual-list-card-item'),
+  );
+
+  const newEntryNotificationShown =
+    (scrollState.current.scrollTop > itemDimensions.current.avgItemHeight ||
+      infiniteScrollState.paddingTop > itemDimensions.current.avgItemHeight) &&
+    listState.newerEntries.length > 0;
+
+  React.useEffect(() => {
+    if (intersectingId && onItemRead) {
+      onItemRead(intersectingId);
+    }
+  }, [intersectingId]);
+
+  React.useImperativeHandle(ref, () => ({
+    scrollTo: (scrollPos: ScrollToOptions) => {
+      requestAnimationFrame(() => {
+        if (containerRef.current) {
+          containerRef.current.scrollTo(scrollPos);
+        }
+      });
+    },
+  }));
+
+  const updateScroll = (
+    scrollTop: number,
+    scrollHeight: number,
+    operatorRef: any,
+    infScrollState: IInfiniteScrollState,
+    availableItems: IListContentProps['items'],
+    itemMeasurements: ItemDimensionsRef,
+  ) => {
+    const clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+    let scrollDirection: 0 | 1 = 0;
+    if (scrollTop > 0 && scrollState.current.scrollTop <= scrollTop) {
+      scrollDirection = 1;
+    }
+
+    scrollState.current = {
+      scrollHeight,
+      direction: scrollDirection,
+      scrollTop: scrollTop,
+      clientHeight: clientHeight,
+    };
+
+    if (operatorRef) {
+      operatorRef.handleContainerScroll(
+        scrollState,
+        infScrollState,
+        availableItems,
+        itemMeasurements,
+      );
+    }
+  };
+
+  const containerScrollThrottle = React.useRef(throttle(updateScroll, 150, { trailing: true }))
+    .current;
 
   const onDimensionChange = (itemId: string, dimension: { height: number; top: number }) => {
     const itemDimension = itemDimensions.current.dimensions[itemId];
@@ -71,62 +160,11 @@ const ListContent = (props: IListContentProps) => {
     }
   };
 
-  const queueOperatorRef = React.createRef<{ handleContainerScroll: any }>();
-
-  const infiniteScrollState = React.useMemo(
-    () =>
-      getInfiniteScrollState(
-        sliceOperation,
-        items,
-        itemDimensions,
-        itemSpacing,
-        initialPaddingTop,
-        scrollState,
-        offsetItems,
-      ),
-    [JSON.stringify(sliceOperation), items.length, JSON.stringify(itemDimensions.current)],
-  );
-
-  const updateScroll = (
-    scrollTop: number,
-    scrollHeight: number,
-    scrollStateRef: React.MutableRefObject<IScrollState>,
-    operatorRef: any,
-    infScrollState: IInfiniteScrollState,
-    availableItems: IListContentProps['items'],
-    itemMeasurements: ItemDimensionsRef,
-  ) => {
-    const clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-    let scrollDirection: 0 | 1 = 0;
-    if (scrollTop > 0 && scrollStateRef.current.scrollTop <= scrollTop) {
-      scrollDirection = 1;
-    }
-
-    scrollStateRef.current = {
-      scrollHeight,
-      direction: scrollDirection,
-      scrollTop: scrollTop,
-      clientHeight: clientHeight,
-    };
-
-    if (operatorRef) {
-      operatorRef.handleContainerScroll(
-        scrollStateRef,
-        infScrollState,
-        availableItems,
-        itemMeasurements,
-      );
-    }
-  };
-  const containerScrollThrottle = React.useRef(throttle(updateScroll, 150, { trailing: true }))
-    .current;
-
   // throttled scrolling
   const throttledScroll = (ev: React.SyntheticEvent<HTMLDivElement>) => {
     containerScrollThrottle(
       ev.currentTarget.scrollTop,
       ev.currentTarget.scrollHeight,
-      scrollState,
       queueOperatorRef.current,
       infiniteScrollState,
       items,
@@ -134,20 +172,29 @@ const ListContent = (props: IListContentProps) => {
     );
     ev.persist();
   };
+
   return (
     <div
       style={{ height, width, position: 'relative', overflowY: 'auto', padding: '0 1em' }}
       onScroll={throttledScroll}
+      ref={containerRef}
     >
-      <React.Suspense fallback={<>Loading newer entries</>}>
-        <BoundryLoader
-          chrono="upper"
-          onLoadMore={onLoadMore}
-          fetchOperation={fetchOperation}
-          setFetchOperation={setFetchOperation}
-          height={infiniteScrollState.paddingTop}
-        />
-      </React.Suspense>
+      {getNewItemsNotification &&
+        getNewItemsNotification({
+          styles: {
+            transform: newEntryNotificationShown ? 'translate(-50%, 0)' : 'translate(-50%, -110%)',
+            position: 'sticky',
+            willChange: 'transform',
+            transition: 'transform 0.314s ease-in-out',
+          },
+        })}
+      <BoundryLoader
+        chrono="upper"
+        onLoadMore={onLoadMore}
+        fetchOperation={fetchOperation}
+        setFetchOperation={setFetchOperation}
+        height={infiniteScrollState.paddingTop}
+      />
       <SliceOperator
         fetchOperation={fetchOperation}
         setFetchOperation={setFetchOperation}
@@ -158,38 +205,37 @@ const ListContent = (props: IListContentProps) => {
         loadLimit={loadLimit}
         offsetItems={offsetItems}
         ref={queueOperatorRef}
-        onLoadMore={onLoadMore}
         initialPaddingTop={initialPaddingTop}
         itemSpacing={itemSpacing}
         listState={listState}
         setListState={setListState}
+        hasMoreItems={hasMoreItems}
       />
-      {infiniteScrollState.items.map((viewableItem, idx) => (
+      {infiniteScrollState.items.map((viewableItemId, idx) => (
         <CardRenderer
-          key={viewableItem.entryId}
-          loadItemDataAction={loadItemDataAction}
+          key={`${viewableItemId}`}
+          loadItemData={loadItemData}
           onDimensionChange={onDimensionChange}
           itemSpacing={itemSpacing}
-          item={viewableItem}
+          itemId={viewableItemId}
           index={idx}
-          itemData={itemsData[viewableItem.entryId]}
+          itemData={itemsData[viewableItemId]}
           customEntities={customEntities.filter(
-            ent => ent.itemId === viewableItem.entryId || ent.itemIndex === idx,
+            ent => ent.itemId === viewableItemId || ent.itemIndex === idx,
           )}
           getItemCard={getItemCard}
+          isBookmarked={bookmarkedItems ? bookmarkedItems.has(viewableItemId) : null}
         />
       ))}
-      <React.Suspense fallback={<>Loading older entries</>}>
-        <BoundryLoader
-          chrono="lower"
-          onLoadMore={onLoadMore}
-          fetchOperation={fetchOperation}
-          setFetchOperation={setFetchOperation}
-          height={infiniteScrollState.paddingBottom}
-        />
-      </React.Suspense>
+      <BoundryLoader
+        chrono="lower"
+        onLoadMore={onLoadMore}
+        fetchOperation={fetchOperation}
+        setFetchOperation={setFetchOperation}
+        height={infiniteScrollState.paddingBottom}
+      />
     </div>
   );
 };
 
-export default ListContent;
+export default React.forwardRef(ListContent);

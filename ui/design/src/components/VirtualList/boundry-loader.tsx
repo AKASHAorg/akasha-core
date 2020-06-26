@@ -1,12 +1,14 @@
 import * as React from 'react';
+import isEqual from 'react-fast-compare';
 import { IFetchOperation } from './interfaces';
 
 export interface IBoundryLoaderProps {
   chrono: 'upper' | 'lower';
-  onLoadMore: (payload: any, deps: any) => void;
+  onLoadMore: (payload: { start?: string; limit: number; reverse: boolean }) => void;
   fetchOperation: IFetchOperation | null;
   setFetchOperation: React.Dispatch<IFetchOperation | null>;
   height: number;
+  onSizeChange?: (rect: DOMRect) => void;
 }
 
 /*
@@ -18,22 +20,24 @@ export interface IBoundryLoaderProps {
 const BoundryLoader = (props: IBoundryLoaderProps) => {
   const { fetchOperation, setFetchOperation, height, onLoadMore } = props;
 
-  const reqPayload: { start: string | null; limit: number | null; reverse: boolean | null } = {
-    start: null,
-    limit: null,
-    reverse: null,
+  const reqPayload: { start?: string; limit: number; reverse: boolean } = {
+    start: undefined,
+    limit: 5,
+    reverse: false,
   };
 
-  if (fetchOperation && fetchOperation.status === 'pending') {
-    reqPayload.start = fetchOperation.startId;
-    reqPayload.limit = fetchOperation.size;
-    reqPayload.reverse = fetchOperation.position === 'start' ? true : false;
-    setFetchOperation({
-      ...fetchOperation,
-      status: 'requested',
-    });
-  }
-  onLoadMore(reqPayload, [JSON.stringify(reqPayload)]);
+  React.useEffect(() => {
+    if (fetchOperation && fetchOperation.status === 'pending') {
+      reqPayload.start = fetchOperation.startId;
+      reqPayload.limit = fetchOperation.size;
+      reqPayload.reverse = fetchOperation.position === 'start' ? true : false;
+      setFetchOperation({
+        ...fetchOperation,
+        status: 'requested',
+      });
+      onLoadMore(reqPayload);
+    }
+  }, [fetchOperation ? fetchOperation.status : fetchOperation]);
 
   return <div style={{ height }} />;
 };
@@ -42,7 +46,7 @@ export default React.memo(BoundryLoader, (prevProps, props) => {
   if (prevProps.height !== props.height) {
     return false;
   }
-  if (JSON.stringify(prevProps.fetchOperation) === JSON.stringify(props.fetchOperation)) {
+  if (isEqual(prevProps.fetchOperation, props.fetchOperation)) {
     return true;
   }
 

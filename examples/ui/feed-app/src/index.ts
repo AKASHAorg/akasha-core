@@ -16,8 +16,12 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   // tslint:disable-next-line:no-console
   console.timeEnd('loadApps');
   const appConfig = {
+    // where to mount the ui
     rootNodeId: 'root',
+    // main layout (shell)
     layout: layout.application,
+    // define an app that will load at root '/' path
+    rootLoadedApp: feedPlugin.application,
   };
 
   const registeredPlugins: IAppEntry[] = [

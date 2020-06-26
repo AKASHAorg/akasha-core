@@ -3,30 +3,31 @@ import { ILocale } from '../../../utils/time';
 import { MainAreaCardBox } from '../common/basic-card-box';
 import { EntryBox } from '../index';
 import { IEntryData } from './entry-box';
+import { ServiceNames } from './card-actions';
 
 export interface IEntryCardProps {
   className?: string;
   entryData: IEntryData;
   onClickAvatar: React.MouseEventHandler<any>;
-  onClickUpvote: React.EventHandler<React.SyntheticEvent>;
-  onClickDownvote: React.EventHandler<React.SyntheticEvent>;
-  commentsLabel: string;
-  quotesLabel: string;
+  repliesLabel: string;
+  repostsLabel: string;
   shareLabel: string;
-  editPostLabel: string;
-  editCommentLabel: string;
+  flagAsLabel: string;
   copyLinkLabel: string;
-  quotedByLabel: string;
-  replyLabel: string;
-  fullEntry?: boolean;
+  copyIPFSLinkLabel: string;
   locale: ILocale;
-  commentInputPlaceholderLabel: string;
-  commentInputPublishLabel: string;
-  publishComment: any;
   loggedProfileAvatar?: string;
-  loggedProfileEthAddress: string;
+  loggedProfileEthAddress?: string;
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
+  onEntryBookmark?: (entryId: string) => void;
+  isBookmarked: boolean | null;
+  bookmarkLabel: string;
+  bookmarkedLabel: string;
+  onRepost: (withComment: boolean, entryId?: string) => void;
+  onEntryShare: (service: ServiceNames, entryId?: string) => void;
+  onEntryFlag: (entryId?: string) => void;
+  onLinkCopy: (link: string) => void;
 }
 
 const EntryCard: React.FC<IEntryCardProps> = props => {
@@ -34,25 +35,25 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     className,
     entryData,
     onClickAvatar,
-    onClickDownvote,
-    onClickUpvote,
-    commentsLabel,
-    quotesLabel,
+    repliesLabel,
+    repostsLabel,
     shareLabel,
-    editPostLabel,
-    editCommentLabel,
     copyLinkLabel,
-    quotedByLabel,
-    replyLabel,
-    fullEntry,
     locale,
-    commentInputPlaceholderLabel,
-    commentInputPublishLabel,
-    publishComment,
     loggedProfileAvatar,
     loggedProfileEthAddress,
     style,
     rootNodeRef,
+    onEntryBookmark,
+    isBookmarked,
+    bookmarkLabel,
+    bookmarkedLabel,
+    onRepost,
+    onEntryShare,
+    onEntryFlag,
+    onLinkCopy,
+    flagAsLabel,
+    copyIPFSLinkLabel,
   } = props;
 
   return (
@@ -60,46 +61,24 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
       <EntryBox
         entryData={entryData}
         onClickAvatar={onClickAvatar}
-        onClickDownvote={onClickDownvote}
-        onClickUpvote={onClickUpvote}
-        commentsLabel={commentsLabel}
-        quotesLabel={quotesLabel}
+        repostsLabel={repostsLabel}
+        repliesLabel={repliesLabel}
         shareLabel={shareLabel}
-        editPostLabel={editPostLabel}
-        editCommentLabel={editCommentLabel}
+        flagAsLabel={flagAsLabel}
         copyLinkLabel={copyLinkLabel}
-        quotedByLabel={quotedByLabel}
-        replyLabel={replyLabel}
         locale={locale}
-        commentInputPlaceholderLabel={commentInputPlaceholderLabel}
-        commentInputPublishLabel={commentInputPublishLabel}
         loggedProfileAvatar={loggedProfileAvatar}
         loggedProfileEthAddress={loggedProfileEthAddress}
-        publishComment={publishComment}
+        onEntryBookmark={onEntryBookmark}
+        isBookmarked={isBookmarked}
+        bookmarkLabel={bookmarkLabel}
+        bookmarkedLabel={bookmarkedLabel}
+        onRepost={onRepost}
+        onEntryShare={onEntryShare}
+        onEntryFlag={onEntryFlag}
+        onLinkCopy={onLinkCopy}
+        copyIPFSLinkLabel={copyIPFSLinkLabel}
       />
-      {fullEntry &&
-        entryData.comments &&
-        entryData.comments.map((comment, index) => (
-          <EntryBox
-            entryData={comment}
-            onClickAvatar={onClickAvatar}
-            onClickDownvote={onClickDownvote}
-            onClickUpvote={onClickUpvote}
-            commentsLabel={commentsLabel}
-            quotesLabel={quotesLabel}
-            shareLabel={shareLabel}
-            editPostLabel={editPostLabel}
-            editCommentLabel={editCommentLabel}
-            copyLinkLabel={copyLinkLabel}
-            quotedByLabel={quotedByLabel}
-            replyLabel={replyLabel}
-            key={index}
-            loggedProfileAvatar={loggedProfileAvatar}
-            loggedProfileEthAddress={loggedProfileEthAddress}
-            comment={true}
-            locale={locale}
-          />
-        ))}
     </MainAreaCardBox>
   );
 };

@@ -1,5 +1,7 @@
 import { initReactI18next } from 'react-i18next';
 import routes, { rootRoute } from './routes';
+import { moduleName as commons } from '@akashaproject/sdk-common/lib/constants';
+import { moduleName as dbModule } from '@akashaproject/sdk-db/lib/constants';
 import { Application, LogoTypeSource } from '@akashaproject/ui-awf-typings';
 
 /**
@@ -10,7 +12,6 @@ export const application: Application = {
   // Make sure to change it as it fits.
   activeWhen: {
     path: rootRoute,
-    exact: true,
   },
   // translation config
   i18nConfig: {
@@ -31,7 +32,7 @@ export const application: Application = {
       './components'
     ),
   name: 'ui-plugin-feed',
-  sdkModules: [],
+  sdkModules: [{ module: commons }, { module: dbModule }],
   title: 'AKASHA Feed',
   menuItems: routes,
   logo: { type: LogoTypeSource.ICON, value: 'appFeed' },

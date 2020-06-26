@@ -9,5 +9,5 @@
       "path": "../../typings"
     }
   ],
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*", "./typings/*"]
 }

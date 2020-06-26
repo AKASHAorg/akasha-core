@@ -22,10 +22,10 @@ const computeSliceEnd = (
   let accHeight = 0;
   let sliceEndIdx = items.length - 1;
   for (let i = startIdx; i < items.length; i++) {
-    const item = items[i];
+    const itemId = items[i];
     let itemHeight = itemDimensionsRef.current.avgItemHeight;
-    if (itemDimensionsRef.current.dimensions[item.entryId]) {
-      itemHeight = itemDimensionsRef.current.dimensions[item.entryId].height;
+    if (itemDimensionsRef.current.dimensions[itemId]) {
+      itemHeight = itemDimensionsRef.current.dimensions[itemId].height;
     }
     if (itemHeight + itemSpacing + accHeight >= requiredHeight) {
       sliceEndIdx = i;
@@ -66,17 +66,19 @@ export const getInfiniteScrollState = (
   }
 
   viewableItems = viewableItems.slice(sliceRange.start, sliceRange.end + 1);
-  paddingTop = items
-    .slice(0, sliceRange.start)
-    .reduce(
-      (prev, curr) => prev + itemDimensions.current.dimensions[curr.entryId].height + itemSpacing,
-      initialPaddingTop,
-    );
-  paddingBottom = items.slice(sliceRange.end, items.length - 1).reduce((prev, curr) => {
-    if (itemDimensions.current.dimensions[curr.entryId]) {
-      return prev + itemDimensions.current.dimensions[curr.entryId].height + itemSpacing;
+  // calculate top padding
+  paddingTop = items.slice(0, sliceRange.start).reduce((total, itemId) => {
+    if (itemDimensions.current.dimensions[itemId]) {
+      return total + itemDimensions.current.dimensions[itemId].height + itemSpacing;
     }
-    return prev + itemDimensions.current.avgItemHeight + itemSpacing;
+    return total + itemDimensions.current.avgItemHeight + itemSpacing;
+  }, initialPaddingTop);
+  // calculate bottom padding
+  paddingBottom = items.slice(sliceRange.end, items.length - 1).reduce((total, itemId) => {
+    if (itemDimensions.current.dimensions[itemId]) {
+      return total + itemDimensions.current.dimensions[itemId].height + itemSpacing;
+    }
+    return total + itemDimensions.current.avgItemHeight + itemSpacing;
   }, 0);
 
   return {
@@ -99,9 +101,9 @@ export const markCompletedFetchRequests = (
     return;
   }
   const { startId, position } = fetchOperation;
-  const startIdIdx = items.findIndex(item => item.entryId === startId);
+  const startIdIdx = items.findIndex(itemId => itemId === startId);
   // expect to have new items added in front of the old list
-  if (position === 'start' && items[startIdIdx - 1] && listState.hasNewerEntries) {
+  if (position === 'start' && items[startIdIdx - 1] && listState.newerEntries.length) {
     // we've started the fetch at index = 0 and now the index should be
     // previousIndex + loadLimit (0 + loadLimit)
     const newerItemsReceived = startIdIdx >= loadLimit;
@@ -112,7 +114,7 @@ export const markCompletedFetchRequests = (
       });
       setListState({
         ...listState,
-        startId: items[0].entryId,
+        startId: items[0],
         hasNewerEntries: true,
       });
     }
@@ -121,8 +123,8 @@ export const markCompletedFetchRequests = (
   // aka list.push()
   if (position === 'end' && items[startIdIdx + 1]) {
     const firstNewItemRendered =
-      itemDimensions.current.dimensions[items[startIdIdx + 1].entryId] &&
-      itemDimensions.current.dimensions[items[startIdIdx + 1].entryId].height;
+      itemDimensions.current.dimensions[items[startIdIdx + 1]] &&
+      itemDimensions.current.dimensions[items[startIdIdx + 1]].height;
     if (firstNewItemRendered) {
       setFetchOperation({
         ...fetchOperation,
@@ -140,8 +142,9 @@ export const loadMoreItems = (
   scrollState: IScrollState,
   offsetItems: number,
   loadLimit: number,
-  initialPaddingTop: number,
+  // initialPaddingTop: number,
   infiniteScrollState: IInfiniteScrollState,
+  hasMoreItems?: boolean,
 ) => {
   const { direction, scrollTop, clientHeight, scrollHeight } = scrollState;
   const queueHasOpType =
@@ -159,22 +162,10 @@ export const loadMoreItems = (
     items.length === itemDimensions.current.count &&
     scrollTop + clientHeight >= scrollHeight - offsetItems * avgItemHeight;
 
-  const loadMoreTopTrigger =
-    direction === 0 &&
-    infiniteScrollState.paddingTop - initialPaddingTop < avgItemHeight &&
-    scrollTop <= (offsetItems + 1) * avgItemHeight;
-
-  if (loadMoreBottomTrigger && !queueHasOpType) {
+  if (loadMoreBottomTrigger && !queueHasOpType && hasMoreItems) {
     setFetchOperation({
-      startId: items[items.length - 1].entryId,
+      startId: items[items.length - 1],
       position: 'end',
-      size: loadLimit,
-      status: 'pending',
-    });
-  } else if (loadMoreTopTrigger && !queueHasOpType) {
-    setFetchOperation({
-      startId: items[0].entryId,
-      position: 'start',
       size: loadLimit,
       status: 'pending',
     });
@@ -201,9 +192,8 @@ export const loadMoreItems = (
  *
  */
 
-// this is wrong! do not relay on averages!
 export const updateTopSlice = (
-  items: { entryId: string }[],
+  items: ISliceOperatorProps['items'],
   sliceOperation: ISliceOperatorProps['sliceOperation'],
   setSliceOperation: SetSliceOperationType,
   scrollState: IScrollState,
@@ -217,18 +207,15 @@ export const updateTopSlice = (
   let sliceSize = 0;
   let tempHeight = 0;
   for (let i = 0; i < items.length; i++) {
-    const item = items[i];
+    const itemId = items[i];
     const itemDimensions =
-      itemDimensionsRef.current.dimensions[item.entryId] || itemDimensionsRef.current.avgItemHeight;
+      itemDimensionsRef.current.dimensions[itemId] || itemDimensionsRef.current.avgItemHeight;
     if (tempHeight + itemDimensions.height > sliceHeight) {
       sliceSize = i;
       break;
     }
     tempHeight += itemDimensions.height + itemSpacing;
   }
-  // const { paddingTop } = infiniteScrollState;
-  //   const sliceHeight = scrollTop - offsetItemsHeight;
-  //   const sliceSize = Math.max(0, Math.floor(sliceHeight / itemDimensionsRef.current.avgItemHeight));
   if (sliceOperation) {
     // update operation if it's needed
     if (sliceOperation.size !== sliceSize) {
