@@ -273,6 +273,12 @@ const editProfileLabel = 'Edit';
 const commentInputPlaceholderLabel = 'Write a comment';
 const publishLabel = 'Publish';
 const placeholderLabel = 'Share your thoughts';
+const copyIPFSLinkLabel = 'Copy IPFS Link';
+const flagAsLabel = 'Flag as inappropriate';
+const bookmarkLabel = 'Save';
+const bookmarkedLabel = 'Saved';
+const repliesLabel = 'Replies';
+const repostsLabel = 'Reposts';
 
 export {
   appInfo,
@@ -305,4 +311,10 @@ export {
   usersLabel,
   boxProviderData,
   ensProviderData,
+  copyIPFSLinkLabel,
+  flagAsLabel,
+  bookmarkLabel,
+  bookmarkedLabel,
+  repliesLabel,
+  repostsLabel,
 };

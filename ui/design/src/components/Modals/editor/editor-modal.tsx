@@ -6,7 +6,7 @@ import { StyledLayer } from '../common/styled-modal';
 export interface IEditorModal {
   className?: string;
   avatar?: string;
-  ethAddress: string;
+  ethAddress?: string;
   closeModal: () => void;
   publishLabel: string;
   placeholderLabel: string;

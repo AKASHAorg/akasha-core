@@ -24,25 +24,24 @@ export const FeedItem: React.FC<IFeedItemProps> = (props) => {
 
   return (
       <EntryCard
+        isBookmarked={false}
         entryData={itemData}
         onClickAvatar={() => {}}
-        onClickDownvote={() => {}}
-        onClickUpvote={() => {}}
-        commentsLabel={t('Comments')}
-        quotesLabel={t('Quotes')}
+        repliesLabel={t('Replies', { count: 1 })}
+        repostsLabel={t('Reposts', { count: 0 })}
         shareLabel={t('Share')}
-        editPostLabel={t('Edit Post')}
-        editCommentLabel={t('Edit Comment')}
-        copyLinkLabel={t('Copy link')}
-        quotedByLabel={t('Quoted By')}
-        replyLabel={t('Reply')}
-        commentInputPlaceholderLabel={t('Write a comment')}
-        commentInputPublishLabel={t('Publish')}
-        publishComment={() => {}}
-        loggedProfileAvatar={itemData.avatar}
-        loggedProfileEthAddress={itemData.ethAddress}
+        copyLinkLabel={t('Copy Link')}
+        copyIPFSLinkLabel={t('Copy IPFS Link')}
+        flagAsLabel={t('Flag as inappropiate')}
+        loggedProfileEthAddress={'0x00123'}
         locale={'en'}
-        className={props.className}
+        style={{ height: 'auto' }}
+        bookmarkLabel={t('Save')}
+        bookmarkedLabel={t('Saved')}
+        onRepost={() => {}}
+        onEntryShare={() => {}}
+        onEntryFlag={() => {}}
+        onLinkCopy={() => {}}
       />
   );
 };

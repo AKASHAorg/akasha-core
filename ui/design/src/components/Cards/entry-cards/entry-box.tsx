@@ -1,14 +1,10 @@
-import { Box, Text, TextArea } from 'grommet';
+import { Box } from 'grommet';
 import * as React from 'react';
-import useSimpleClickAway from '../../../utils/simpleClickAway';
 import { formatDate, ILocale } from '../../../utils/time';
-import { Avatar } from '../../Avatar/index';
-import { PlainButton, ProfileAvatarButton, VoteIconButton } from '../../Buttons/index';
+import { ProfileAvatarButton } from '../../Buttons/index';
 import { Icon } from '../../Icon/index';
-import { CommentInput, StyledDiv } from '../../Input/index';
-import { EditorModal, ListModal } from '../../Modals/index';
-import { TextIcon } from '../../TextIcon/index';
-import { StyledDrop, StyledSelectBox } from './styled-entry-box';
+import CardActions, { ServiceNames } from './card-actions';
+import CardHeaderMenuDropdown from './card-header-menu';
 
 export interface IUser {
   name?: string;
@@ -17,10 +13,9 @@ export interface IUser {
 }
 
 export interface IEntryData extends IUser {
+  entryId?: string;
   content: string;
   time: string;
-  upvotes: string | number;
-  downvotes: string | number;
   comments?: Comment[];
   quotes: Quote[];
 }
@@ -28,8 +23,6 @@ export interface IEntryData extends IUser {
 export interface Comment extends IUser {
   content: string;
   time: string;
-  upvotes: string | number;
-  downvotes: string | number;
   quotes: Quote[];
 }
 
@@ -40,122 +33,59 @@ export type ethAddress = string;
 export interface IEntryBoxProps {
   entryData: IEntryData;
   onClickAvatar: React.MouseEventHandler<HTMLAnchorElement>;
-  onClickUpvote: React.EventHandler<React.SyntheticEvent>;
-  onClickDownvote: React.EventHandler<React.SyntheticEvent>;
-  commentsLabel: string;
-  quotesLabel: string;
+  repliesLabel: string;
+  repostsLabel: string;
   shareLabel: string;
-  editPostLabel: string;
-  editCommentLabel: string;
+  flagAsLabel: string;
   copyLinkLabel: string;
-  quotedByLabel: string;
-  replyLabel: string;
+  copyIPFSLinkLabel: string;
   comment?: boolean;
   locale: ILocale;
-  commentInputPlaceholderLabel?: any;
-  commentInputPublishLabel?: any;
-  publishComment?: any;
   loggedProfileAvatar?: string;
-  loggedProfileEthAddress: string;
+  loggedProfileEthAddress?: string;
+  onEntryBookmark?: (entryId: string, isBookmarked: boolean | null) => void;
+  isBookmarked: boolean | null;
+  bookmarkLabel: string;
+  bookmarkedLabel: string;
+  onEntryShare: (service: ServiceNames, entryId?: string) => void;
+  onLinkCopy: (link: string) => void;
+  onRepost: (withComment: boolean, entryId?: string) => void;
+  onEntryFlag: (entryId?: string) => void;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
   const {
     entryData,
     onClickAvatar,
-    onClickDownvote,
-    onClickUpvote,
-    commentsLabel,
-    quotesLabel,
+    repliesLabel,
+    repostsLabel,
     shareLabel,
-    editPostLabel,
-    editCommentLabel,
+    flagAsLabel,
     copyLinkLabel,
-    quotedByLabel,
-    replyLabel,
-    comment,
+    copyIPFSLinkLabel,
     locale,
-    commentInputPlaceholderLabel,
-    commentInputPublishLabel,
-    publishComment,
-    loggedProfileAvatar,
+    onEntryBookmark,
+    isBookmarked,
+    bookmarkLabel,
+    bookmarkedLabel,
+    onEntryShare,
+    onLinkCopy,
+    onRepost,
+    onEntryFlag,
     loggedProfileEthAddress,
   } = props;
 
-  const [downvoted, setDownvoted] = React.useState(false);
-  const [upvoted, setUpvoted] = React.useState(false);
-  const [upvotes, setUpvotes] = React.useState(entryData.upvotes);
-  const [downvotes, setDownvotes] = React.useState(entryData.downvotes);
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
-  const [quotesModalOpen, setQuotesModalOpen] = React.useState(false);
-
-  React.useEffect(() => {
-    setUpvotes(entryData.upvotes);
-    setDownvotes(entryData.downvotes);
-  }, [entryData]);
 
   const menuIconRef: React.Ref<any> = React.useRef();
 
-  const commentsNumber = entryData.comments ? entryData.comments.length : 0;
-  const quotesNumber = entryData.quotes ? entryData.quotes.length : 0;
-
-  const commentsTitle = `${commentsNumber} ${commentsLabel}`;
-  const quotesTitle = `${quotesNumber} ${quotesLabel}`;
-
-  const editLabel = comment ? editCommentLabel : editPostLabel;
-
-  const upvote = (ev: any) => {
-    onClickUpvote(ev);
-    if (!upvoted) {
-      setUpvotes(Number(upvotes) + 1);
+  const handleLinkCopy = (linkType: 'ipfs' | 'shareable') => () => {
+    switch (linkType) {
+      case 'ipfs':
+        return onLinkCopy('dummiIPFScid');
+      case 'shareable':
+        return onLinkCopy('http://dummy.link');
     }
-    if (upvoted) {
-      setUpvotes(Number(upvotes) - 1);
-    }
-    setUpvoted(!upvoted);
-  };
-
-  const downvote = (ev: any) => {
-    onClickDownvote(ev);
-    if (!downvoted) {
-      setDownvotes(Number(downvotes) + 1);
-    }
-    if (downvoted) {
-      setDownvotes(Number(downvotes) - 1);
-    }
-    setDownvoted(!downvoted);
-  };
-
-  const renderCommentsModal = () => {
-    return;
-  };
-
-  const closeQuotesModal = () => {
-    setQuotesModalOpen(false);
-  };
-
-  const toggleQuotesModal = () => {
-    setQuotesModalOpen(!quotesModalOpen);
-  };
-
-  const renderQuotesModal = () => {
-    return (
-      <ListModal
-        closeModal={closeQuotesModal}
-        label={quotedByLabel}
-        secondaryLabel={quotesTitle}
-        list={entryData.quotes}
-        onClickAvatar={onClickAvatar}
-        locale={locale}
-        iconType="quote"
-      />
-    );
-  };
-  const onClickEditPost = () => {
-    return;
-  };
-  const onClickCopyLink = () => {
-    return;
   };
 
   const closeMenuDrop = () => {
@@ -166,144 +96,27 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     setMenuDropOpen(!menuDropOpen);
   };
 
-  const renderMenu = () => {
-    return (
-      <StyledDrop
-        overflow="hidden"
-        target={menuIconRef.current}
-        align={{ top: 'bottom', right: 'left' }}
-        onClickOutside={closeMenuDrop}
-        onEsc={closeMenuDrop}
-      >
-        <Box pad="small" gap="small" margin={{ right: 'small' }}>
-          <StyledSelectBox>
-            <TextIcon
-              iconType="edit"
-              label={editLabel}
-              onClick={onClickEditPost}
-              clickable={true}
-            />
-          </StyledSelectBox>
-          <StyledSelectBox>
-            <TextIcon
-              iconType="link"
-              label={copyLinkLabel}
-              onClick={onClickCopyLink}
-              clickable={true}
-            />
-          </StyledSelectBox>
-        </Box>
-      </StyledDrop>
-    );
-  };
-
-  const [replyCommentOpen, setReplyCommentOpen] = React.useState(false);
-  const [inputValue, setInputValue] = React.useState('');
-
-  const wrapperRef: React.RefObject<any> = React.useRef();
-
-  const handleClickAway = () => {
-    if (!inputValue && replyCommentOpen) {
-      setReplyCommentOpen(false);
+  const handleEntryBookmark = () => {
+    if (onEntryBookmark && entryData.entryId) {
+      onEntryBookmark(entryData.entryId, isBookmarked);
     }
   };
 
-  useSimpleClickAway(wrapperRef, handleClickAway);
-
-  const onChange = (event: any) => {
-    setInputValue(event.target.value);
+  const handleRepost = (withComment: boolean) => () => {
+    onRepost(withComment, entryData.entryId);
   };
 
-  const handlePublish = () => {
-    publishComment(inputValue, loggedProfileEthAddress);
-    setInputValue('');
-    setReplyCommentOpen(false);
+  const handleEntryShare = (service: ServiceNames) => {
+    onEntryShare(service, entryData.entryId);
   };
 
-  const replyToComment = () => {
-    setReplyCommentOpen(true);
-  };
-
-  const renderReplyComment = () => (
-    <Box direction="row" gap="xsmall" fill="horizontal" pad={{ horizontal: 'medium' }}>
-      <Avatar src={loggedProfileAvatar} ethAddress={loggedProfileEthAddress} size="md" />
-      <Box
-        ref={wrapperRef}
-        fill="horizontal"
-        direction="column"
-        align="center"
-        round="small"
-        border={{
-          side: 'all',
-          color: 'border',
-        }}
-      >
-        <TextArea
-          plain={true}
-          value={inputValue}
-          onChange={onChange}
-          placeholder={commentInputPlaceholderLabel}
-          resize={false}
-          autoFocus={true}
-        />
-        <Box
-          direction="row"
-          justify="between"
-          fill="horizontal"
-          pad={{ horizontal: 'xsmall', vertical: 'xsmall' }}
-        >
-          <Box direction="row" gap="xsmall" align="center">
-            <Icon type="addAppDark" clickable={true} />
-            <Icon type="quote" clickable={true} />
-            <Icon type="media" clickable={true} />
-            <Icon type="emoji" clickable={true} />
-          </Box>
-          <StyledDiv onClick={handlePublish}>
-            <Text size="large">{commentInputPublishLabel}</Text>
-          </StyledDiv>
-        </Box>
-      </Box>
-    </Box>
-  );
-
-  const renderLeftIconLink = () => {
-    return comment ? (
-      <PlainButton label={replyLabel} onClick={replyToComment}>
-        <Icon type="reply" />
-      </PlainButton>
-    ) : (
-      <PlainButton label={commentsTitle} onClick={renderCommentsModal}>
-        <Icon type="comments" />
-      </PlainButton>
-    );
-  };
-
-  const [editorModalOpen, setEditorModalOpen] = React.useState(false);
-  const openEditorModal = () => {
-    setEditorModalOpen(true);
-  };
-  const closeEditorModal = () => {
-    setEditorModalOpen(false);
+  const handleEntryFlag = () => {
+    onEntryFlag(entryData.entryId);
   };
 
   return (
     <div>
-      <Box
-        direction="row"
-        justify="between"
-        margin="medium"
-        pad={comment ? { top: 'medium' } : 'none'}
-        border={
-          comment
-            ? {
-                color: 'border',
-                size: 'xsmall',
-                style: 'solid',
-                side: 'top',
-              }
-            : false
-        }
-      >
+      <Box direction="row" justify="between" margin="medium" align="center">
         <ProfileAvatarButton
           label={entryData.name}
           info={formatDate(entryData.time, locale)}
@@ -315,62 +128,32 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} />
         </div>
       </Box>
-      {menuIconRef.current && menuDropOpen && renderMenu()}
-      {quotesModalOpen && entryData.quotes!.length && locale && renderQuotesModal()}
-      <Box pad="medium">{entryData.content}</Box>
-      <Box pad="medium" direction="row" justify="between">
-        <Box gap="medium" direction="row">
-          <VoteIconButton voteCount={upvotes} onClick={upvote} voteType="upvote" voted={upvoted} />
-          <VoteIconButton
-            voteCount={downvotes}
-            onClick={downvote}
-            voteType="downvote"
-            voted={downvoted}
-          />
-        </Box>
-        <Box gap="medium" direction="row">
-          {renderLeftIconLink()}
-
-          <PlainButton label={quotesLabel} onClick={toggleQuotesModal}>
-            <Icon type="quote" onClick={openEditorModal} clickable={true} />
-          </PlainButton>
-
-          <PlainButton
-            label={shareLabel}
-            onClick={
-              // tslint:disable-next-line:jsx-no-lambda
-              () => {
-                return;
-              }
-            }
-          >
-            <Icon type="share" />
-          </PlainButton>
-        </Box>
-      </Box>
-      {editorModalOpen && (
-        <EditorModal
-          closeModal={closeEditorModal}
-          avatar={loggedProfileAvatar}
-          ethAddress={loggedProfileEthAddress}
-          onPublish={publishComment}
-          publishLabel={commentInputPublishLabel}
-          placeholderLabel={commentInputPlaceholderLabel}
-          embedEntryData={entryData}
+      {menuIconRef.current && menuDropOpen && (
+        <CardHeaderMenuDropdown
+          target={menuIconRef.current}
+          onMenuClose={closeMenuDrop}
+          onLinkCopy={handleLinkCopy}
+          onFlag={handleEntryFlag}
+          flagAsLabel={flagAsLabel}
+          copyIPFSLinkLabel={copyIPFSLinkLabel}
         />
       )}
-      {comment && replyCommentOpen && renderReplyComment()}
-      {!comment && (
-        <Box pad="medium">
-          <CommentInput
-            avatarImg={loggedProfileAvatar}
-            ethAddress={loggedProfileEthAddress}
-            placeholderLabel={commentInputPlaceholderLabel}
-            publishLabel={commentInputPublishLabel}
-            onPublish={publishComment}
-          />
-        </Box>
-      )}
+      <Box pad="medium">{entryData.content}</Box>
+      <CardActions
+        repliesLabel={repliesLabel}
+        repostsLabel={repostsLabel}
+        handleEntryBookmark={handleEntryBookmark}
+        isBookmarked={isBookmarked}
+        bookmarkLabel={bookmarkLabel}
+        bookmarkedLabel={bookmarkedLabel}
+        shareLabel={shareLabel}
+        copyLinkLabel={copyLinkLabel}
+        onRepost={handleRepost(false)}
+        onRepostWithComment={handleRepost(true)}
+        onShare={handleEntryShare}
+        onLinkCopy={handleLinkCopy('shareable')}
+        loggedProfileEthAddress={loggedProfileEthAddress}
+      />
     </div>
   );
 };

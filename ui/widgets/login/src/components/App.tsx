@@ -14,7 +14,7 @@ export interface ILoginWidgetProps {
   layout: any;
 }
 
-export default class App extends PureComponent<ILoginWidgetProps> {
+export default class LoginWidgetRoot extends PureComponent<ILoginWidgetProps> {
   public state: { errors: any } = {
     errors: {},
   };

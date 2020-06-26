@@ -9,7 +9,7 @@ import { MainAreaCardBox } from '../common/basic-card-box';
 export interface IEditorCard {
   className?: string;
   avatar?: string;
-  ethAddress: string;
+  ethAddress?: string;
   publishLabel: string;
   placeholderLabel: string;
   onPublish: any;
@@ -62,7 +62,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
         pad={{ horizontal: 'medium', vertical: 'xsmall' }}
       >
         <Box direction="row" gap="xsmall" align="center">
-          <Icon type="addAppDark" clickable={true} />
+          <Icon type="addAppGrey" clickable={true} />
           <Icon type="quote" clickable={true} />
           <Icon type="image" clickable={true} />
           <Icon type="emoji" clickable={true} />

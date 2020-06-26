@@ -15,11 +15,7 @@ import {
   boxProviderData,
   cancelLabel,
   changeCoverImageLabel,
-  commentInputPlaceholderLabel,
-  commentsLabel,
   copyLinkLabel,
-  editCommentLabel,
-  editPostLabel,
   editProfileLabel,
   ensProviderData,
   entryData,
@@ -28,14 +24,17 @@ import {
   profileData,
   profileProvidersData,
   publishLabel,
-  quotedByLabel,
-  quotesLabel,
-  replyLabel,
   saveChangesLabel,
   shareLabel,
   shareProfileLabel,
   topicsDataSource,
   usersLabel,
+  copyIPFSLinkLabel,
+  flagAsLabel,
+  bookmarkLabel,
+  bookmarkedLabel,
+  repliesLabel,
+  repostsLabel,
 } from './cards-data';
 
 const {
@@ -174,23 +173,24 @@ storiesOf('Cards|Profile Cards', module)
 storiesOf('Cards|Entry Cards', module).add('entry card', () => (
   <Box align="center" pad={{ top: '40px' }}>
     <EntryCard
+      copyIPFSLinkLabel={text('Copy IPFS link Label', copyIPFSLinkLabel)}
+      flagAsLabel={text('Flag as label', flagAsLabel)}
+      style={{ height: 'auto' }}
+      bookmarkLabel={text('Bookmark Label', bookmarkLabel)}
+      bookmarkedLabel={text('Bookmarked Label', bookmarkedLabel)}
+      onRepost={() => action('Repost Clicked')('Synthetic Event')}
+      onEntryShare={() => action('Share entry Clicked')('Synthetic Event')}
+      onEntryFlag={() => action('Flag Entry Clicked')('Synthetic Event')}
+      onLinkCopy={() => action('Link Copied')('Synthetic Event')}
+      onEntryBookmark={() => action('Bookmark Clicked')('Synthetic Event')}
       entryData={object('Entry Data', entryData)}
+      isBookmarked={false}
+      repliesLabel={text('Replies Label', repliesLabel)}
+      repostsLabel={text('Reposts Label', repostsLabel)}
       onClickAvatar={() => action('Avatar Clicked')('Synthetic Event')}
-      onClickDownvote={() => action('Downvote Clicked')('Synthetic Event')}
-      onClickUpvote={() => action('Upvote Clicked')('Synthetic Event')}
-      commentsLabel={text('Comments Label', commentsLabel)}
-      quotesLabel={text('Quotes Label', quotesLabel)}
       shareLabel={text('Share Label', shareLabel)}
-      editPostLabel={text('Edit post Label', editPostLabel)}
-      editCommentLabel={text('Edit comment Label', editCommentLabel)}
       copyLinkLabel={text('Copy link Label', copyLinkLabel)}
-      quotedByLabel={text('Quoted By Label', quotedByLabel)}
-      replyLabel={text('Reply Label', replyLabel)}
-      fullEntry={boolean('Full Entry', false)}
       locale={select('Locale', { en: 'en', ro: 'ro', es: 'es' }, 'en')}
-      commentInputPlaceholderLabel={text('Comment input placeholder', commentInputPlaceholderLabel)}
-      commentInputPublishLabel={text('Comment input publish Label', publishLabel)}
-      publishComment={() => action('Comment published')('Synthetic Event')}
       loggedProfileAvatar={text('Logged Profile Avatar', 'https://www.stevensegallery.com/360/360')}
       loggedProfileEthAddress={text(
         'Logged Profile EthAddress',

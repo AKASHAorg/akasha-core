@@ -1,22 +1,24 @@
 import * as React from 'react';
-import EntryLoadingPlaceholder from './placeholders/entry-card-placeholder';
+import isEqual from 'react-fast-compare';
 import { IListItemContainerProps } from './interfaces';
 
 const ListItemContainer = (props: IListItemContainerProps) => {
-  const { itemData, itemId, dataLoadAction, getItemCard } = props;
+  const { itemData, itemId, loadItemData, getItemCard, isBookmarked } = props;
+  React.useEffect(() => {
+    if (itemId) {
+      loadItemData({ itemId });
+    }
+  }, [itemId]);
 
-  dataLoadAction({ entryId: itemId }, [!itemData]);
-
-  if (!itemData) {
-    return <EntryLoadingPlaceholder />;
-  }
-
-  return getItemCard({ itemId, itemData });
+  return getItemCard({ itemId, itemData, isBookmarked });
 };
 
 export default React.memo(ListItemContainer, (prevProps, props) => {
   // we only need to update if the itemData prop changes
-  if (prevProps.itemData === props.itemData) {
+  if (
+    isEqual(prevProps.itemData, props.itemData) &&
+    isEqual(prevProps.isBookmarked, props.isBookmarked)
+  ) {
     return true;
   }
   return false;
