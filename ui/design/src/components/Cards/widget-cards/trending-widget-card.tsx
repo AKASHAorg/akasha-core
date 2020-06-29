@@ -29,7 +29,7 @@ export interface ITrendingWidgetCardProps {
 
 export interface ITag {
   tagName: string;
-  postsNumber: number;
+  mentions: number;
 }
 
 export interface IProfile {
@@ -70,10 +70,8 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                 <SubtitleTextIcon
                   onClick={() => onClickTag(tag.tagName)}
                   label={tag.tagName}
-                  subtitle={`Used in ${tag.postsNumber} posts`}
+                  subtitle={`Used in ${tag.mentions} posts`}
                   labelSize="large"
-                  iconType={'app'}
-                  iconSize={'2.5rem'}
                   gap="xxsmall"
                 />
                 <Icon

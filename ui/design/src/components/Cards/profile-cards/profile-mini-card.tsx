@@ -1,8 +1,8 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { Avatar } from '../../Avatar/index';
-import { AvatarDiv, StyledMiniCardBox } from './styled-profile-card';
-import { Button } from '../../Buttons';
+import { MiniProfileAvatarDiv } from './styled-profile-card';
+import { DuplexButton } from '../../Buttons';
 import { Icon } from '../../Icon';
 
 export interface IProfileData {
@@ -13,38 +13,67 @@ export interface IProfileData {
   ensName?: string;
   ethAddress: string;
   postsNumber: number;
+  following?: boolean;
 }
 
 export interface IProfileMiniCard {
-  onClickFollow: (profileEthAddress: string) => void;
+  // data
   profileData: IProfileData;
+  // labels
   followLabel?: string;
+  followinglabel?: string;
+  unfollowLabel?: string;
   postsLabel?: string;
+  // handlers
+  handleFollow: (profileEthAddress: string) => void;
+  handleUnfollow: (profileEthAddress: string) => void;
 }
 
 const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
-  const { onClickFollow, profileData, followLabel, postsLabel } = props;
+  const {
+    profileData,
+    followLabel,
+    followinglabel,
+    unfollowLabel,
+    postsLabel,
+    handleFollow,
+    handleUnfollow,
+  } = props;
+
+  const onFollow = () => {
+    handleFollow(profileData.ethAddress);
+  };
+
+  const onUnfollow = () => {
+    handleUnfollow(profileData.ethAddress);
+  };
 
   return (
-    <StyledMiniCardBox round="xsmall" direction="column">
+    <Box
+      round="xsmall"
+      direction="column"
+      background="ultraLightBackground"
+      border={{ side: 'all', color: 'border', size: 'xsmall', style: 'solid' }}
+    >
       <Box
         height="4rem"
         background={profileData.coverImage}
         pad="none"
         round={{ corner: 'top', size: 'xsmall' }}
-      />
-      <Box height="3.5rem" direction="row" align="center" justify="center">
-        <AvatarDiv>
+        align="center"
+      >
+        <MiniProfileAvatarDiv>
           <Avatar
             border="lg"
             size="xl"
             src={profileData.avatar}
             ethAddress={profileData.ethAddress}
           />
-        </AvatarDiv>
-
-        <Box pad={{ vertical: 'small', left: 'xsmall' }}>
-          <Text size="xlarge" weight="bold" color="primaryText">
+        </MiniProfileAvatarDiv>
+      </Box>
+      <Box direction="column" align="center" justify="center">
+        <Box pad={{ top: 'large', bottom: 'small' }} margin={{ top: 'medium' }} align="center">
+          <Text size="large" weight="bold" color="primaryText">
             {profileData.userName ? profileData.userName : profileData.ethAddress}
           </Text>
           <Box direction="row" gap="xsmall">
@@ -60,18 +89,25 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
 
       <Box direction="column" pad="medium" gap="medium">
         <Text color="primaryText">{profileData.description}</Text>
+        <DuplexButton
+          inactiveLabel={followLabel}
+          activeLabel={followinglabel}
+          activeHoverLabel={unfollowLabel}
+          onClickInactive={onFollow}
+          onClickActive={onUnfollow}
+          active={profileData.following}
+          icon={<Icon type="following" />}
+        />
       </Box>
-      <Button
-        label={followLabel}
-        onClick={onClickFollow}
-        icon={<Icon type="person" clickable={true} primaryColor={true} />}
-      />
-    </StyledMiniCardBox>
+    </Box>
   );
 };
 
 ProfileMiniCard.defaultProps = {
   followLabel: 'Follow',
+  followinglabel: 'Following',
+  unfollowLabel: 'Unfollow',
+  postsLabel: 'Posts',
 };
 
 export { ProfileMiniCard };

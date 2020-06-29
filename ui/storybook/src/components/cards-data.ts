@@ -1,12 +1,13 @@
 import { IAppData } from '@akashaproject/design-system/lib/components/Cards/widget-cards/apps-widget-card';
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
+import { chartData } from './Charts.stories';
 
 const trendingTagsData = [
-  { tagName: '#AKASHA', postsNumber: 176 },
-  { tagName: '#AKASHAWorld', postsNumber: 94 },
-  { tagName: '#Ethereum', postsNumber: 27 },
-  { tagName: '#EthereumWorld', postsNumber: 17 },
-  { tagName: '#Crypto', postsNumber: 6 },
+  { tagName: '#AKASHA', mentions: 176, tagHistoricData: chartData, subscribed: true },
+  { tagName: '#AKASHAWorld', mentions: 94, tagHistoricData: chartData, subscribed: false },
+  { tagName: '#Ethereum', mentions: 27, tagHistoricData: chartData, subscribed: false },
+  { tagName: '#EthereumWorld', mentions: 17, tagHistoricData: chartData, subscribed: true },
+  { tagName: '#Crypto', mentions: 6, tagHistoricData: chartData, subscribed: false },
 ];
 
 const trendingProfilesData = [
@@ -30,6 +31,7 @@ const trendingProfilesData = [
     postsNumber: 235,
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
+    following: true,
   },
   {
     ethAddress: '0x003410490050000320006570034567114572000',

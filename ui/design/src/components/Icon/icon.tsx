@@ -10,6 +10,7 @@ export type IconType =
   | 'appAkasha'
   | 'appEns'
   | 'appFeed'
+  | 'appIpfs'
   | 'activity'
   | 'akasha'
   | 'addAppGrey'
@@ -35,6 +36,7 @@ export type IconType =
   | 'edit'
   | 'emoji'
   | 'eye'
+  | 'ethereum'
   | 'ethereumWorldLogo'
   | 'error'
   | 'facebook'
@@ -93,6 +95,7 @@ export const iconTypes: IconType[] = [
   'appCenter',
   'appEns',
   'appFeed',
+  'appIpfs',
   'activity',
   'addAppGrey',
   'akasha',
@@ -118,6 +121,7 @@ export const iconTypes: IconType[] = [
   'edit',
   'emoji',
   'eye',
+  'ethereum',
   'ethereumWorldLogo',
   'error',
   'facebook',
@@ -155,7 +159,6 @@ export const iconTypes: IconType[] = [
   'shareSmallBlue',
   'shareSmallDark',
   'shareSmallGrey',
-
   'thumbsDownGrey',
   'thumbsDownWhite',
   'thumbsUpGrey',

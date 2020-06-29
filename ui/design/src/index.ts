@@ -26,6 +26,7 @@ import {
   ProfileAvatarButton,
   VoteIconButton,
 } from './components/Buttons';
+import { AreaChart, LineChart, ResponsiveChart } from './components/Charts';
 
 import {
   AppInfoWidgetCard,
@@ -51,6 +52,8 @@ import {
   SourcesWidgetCard,
   TutorialWidgetCard,
   CustomizeFeedCard,
+  TagCard,
+  TagDetailCard,
 } from './components/Cards';
 
 import TextInputField from './components/Forms/text-input-field';
@@ -88,6 +91,9 @@ import { ThemeSelector } from './styles/themes/utils/theme-selector';
 const exported = {
   Avatar,
   AppIcon,
+  AreaChart,
+  LineChart,
+  ResponsiveChart,
   Button,
   Carousel,
   DuplexButton,
@@ -112,6 +118,8 @@ const exported = {
   ProfileMiniCard,
   TextInputField,
   TopicsWidgetCard,
+  TagCard,
+  TagDetailCard,
   Icon,
   iconTypes,
   IconButton,

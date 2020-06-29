@@ -22,7 +22,9 @@ import LoginCTAWidgetCard from './widget-cards/login-cta-widget-card';
 import TrendingWidgetCard from './widget-cards/trending-widget-card';
 import SourcesWidgetCard from './widget-cards/sources-widget-card';
 import TutorialWidgetCard from './widget-cards/tutorial-widget/tutorial-widget-card';
-import CustomizeFeedCard from './onboarding-cards/customize-feed-card';
+import { CustomizeFeedCard } from './onboarding-cards/customize-feed-card';
+import { TagCard } from './onboarding-cards/tag-card';
+import { TagDetailCard } from './onboarding-cards/tag-detail-card';
 
 export {
   AppInfoWidgetCard,
@@ -48,4 +50,6 @@ export {
   SourcesWidgetCard,
   TutorialWidgetCard,
   CustomizeFeedCard,
+  TagCard,
+  TagDetailCard,
 };

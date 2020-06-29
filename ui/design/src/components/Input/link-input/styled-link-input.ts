@@ -1,4 +1,4 @@
-import { TextInput } from 'grommet';
+import { TextInput, FormField } from 'grommet';
 import styled from 'styled-components';
 // import { Button } from '../../Buttons/index';
 
@@ -33,4 +33,9 @@ const StyledButton = styled.div`
   cursor: pointer;
 `;
 
-export { StyledLinkIconDiv, StyledTextInput, StyledButton, StyledInputWrapper };
+const StyledFormField = styled(FormField)`
+  width: 100%;
+  margin-bottom: 0;
+`;
+
+export { StyledLinkIconDiv, StyledTextInput, StyledButton, StyledInputWrapper, StyledFormField };

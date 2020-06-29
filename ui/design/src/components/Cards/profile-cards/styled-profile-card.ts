@@ -6,6 +6,11 @@ const AvatarDiv = styled.div`
   top: -1.875em;
 `;
 
+const MiniProfileAvatarDiv = styled.div`
+  position: relative;
+  top: 1rem;
+`;
+
 const ShareButtonContainer = styled(Box)`
   position: relative;
   top: 1em;
@@ -51,10 +56,6 @@ const StyledImage = styled(Image)`
   border-radius: 50%;
 `;
 
-const StyledMiniCardBox = styled(Box)`
-  background-color: ${props => props.theme.colors.background};
-`;
-
 export {
   AvatarDiv,
   ShareButtonContainer,
@@ -63,5 +64,5 @@ export {
   StyledCenterDiv,
   StyledAvatarEditDiv,
   StyledImage,
-  StyledMiniCardBox,
+  MiniProfileAvatarDiv,
 };

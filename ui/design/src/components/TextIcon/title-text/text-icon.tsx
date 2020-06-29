@@ -3,6 +3,7 @@ import MarginInterface from '../../../interfaces/margin.interface';
 import { Icon } from '../../Icon';
 import { IconType } from '../../Icon/icon';
 import { StyledText, StyledTextIcon } from './styled-text-icon';
+import { TextProps } from 'grommet';
 
 export interface ITextIconProps {
   className?: string;
@@ -13,17 +14,20 @@ export interface ITextIconProps {
   spacing?: string;
   label?: string;
   iconType: IconType;
-  bold?: boolean;
   clickable?: boolean;
   menuActive?: boolean;
   menuIcon?: boolean;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  iconSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  fontSize?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge' | string;
+  fontWeight?: 'normal' | 'bold' | number;
   primaryColor?: boolean;
+  accentColor?: boolean;
   reverse?: boolean;
 }
 
-export interface IStyledTextProps {
+export interface IStyledTextProps extends TextProps {
   bold?: boolean;
+  accentColor?: boolean;
 }
 
 const TextIcon: React.FC<ITextIconProps> = props => {
@@ -36,12 +40,14 @@ const TextIcon: React.FC<ITextIconProps> = props => {
     iconType,
     label,
     spacing,
-    bold,
     clickable,
     menuActive,
     menuIcon,
-    size,
+    iconSize,
+    fontSize,
+    fontWeight,
     primaryColor,
+    accentColor,
     reverse,
   } = props;
 
@@ -59,9 +65,27 @@ const TextIcon: React.FC<ITextIconProps> = props => {
       menuActive={menuActive}
       menuIcon={menuIcon}
     >
-      {!reverse && <Icon type={iconType} color={color} size={size} primaryColor={primaryColor} />}
-      <StyledText bold={bold}>{label}</StyledText>
-      {reverse && <Icon type={iconType} color={color} size={size} primaryColor={primaryColor} />}
+      {!reverse && (
+        <Icon
+          type={iconType}
+          color={color}
+          size={iconSize}
+          primaryColor={primaryColor}
+          accentColor={accentColor}
+        />
+      )}
+      <StyledText weight={fontWeight} size={fontSize} accentColor={accentColor}>
+        {label}
+      </StyledText>
+      {reverse && (
+        <Icon
+          type={iconType}
+          color={color}
+          size={iconSize}
+          primaryColor={primaryColor}
+          accentColor={accentColor}
+        />
+      )}
     </StyledTextIcon>
   );
 };

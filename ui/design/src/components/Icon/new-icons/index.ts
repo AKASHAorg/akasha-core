@@ -7,6 +7,7 @@ import appAkasha from './app-akasha';
 import appCenter from './app-center';
 import appEns from './app-ens';
 import appFeed from './app-feed';
+import appIpfs from './app-ipfs';
 import announcement from './announcement';
 import app from './app';
 import arrowDown from './arrow-down';
@@ -29,6 +30,7 @@ import editSimple from './edit-simple';
 import emoji from './emoji';
 import error from './error';
 import ethereumWorldLogo from './ethereum-world-logo';
+import ethereum from './ethereum';
 import eye from './eye';
 import facebook from './facebook';
 import following from './following';
@@ -88,6 +90,7 @@ export {
   appCenter,
   appEns,
   appFeed,
+  appIpfs,
   announcement,
   available,
   reload,
@@ -107,6 +110,7 @@ export {
   facebook,
   following,
   document,
+  ethereum,
   ethereumWorldLogo,
   akasha,
   addAppGrey,

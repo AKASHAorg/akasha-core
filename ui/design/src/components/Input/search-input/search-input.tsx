@@ -1,7 +1,7 @@
-import { Box, FormField } from 'grommet';
+import { Box } from 'grommet';
 import * as React from 'react';
 import { Icon } from '../../Icon/index';
-import { StyledTextInput } from '../link-input/styled-link-input';
+import { StyledTextInput, StyledFormField } from '../link-input/styled-link-input';
 import { IconLink } from '../../Buttons';
 
 export interface ISearchInput {
@@ -16,20 +16,33 @@ const SearchInput: React.FC<ISearchInput> = props => {
   const { onChange, handleCancel, inputValue, cancelLabel, placeholderLabel } = props;
 
   return (
-    <FormField name="search" htmlFor="text-input">
-      <Box fill="horizontal" direction="row" align="center" pad={{ vertical: 'xsmall' }}>
-        <Box direction="row" gap="xsmall">
+    <StyledFormField name="search" htmlFor="text-input">
+      <Box
+        fill="horizontal"
+        direction="row"
+        align="center"
+        pad={{ bottom: 'xsmall' }}
+        justify="between"
+      >
+        <Box direction="row" gap="xsmall" fill="horizontal">
           <Icon type="search" />
           <StyledTextInput
             plain={true}
             value={inputValue}
             onChange={onChange}
             placeholder={placeholderLabel}
+            autoFocus={true}
+            onKeyDown={ev => {
+              if (ev.key === 'Escape') {
+                handleCancel(ev);
+              }
+              return;
+            }}
           />
         </Box>
         <IconLink label={cancelLabel} onClick={handleCancel} />
       </Box>
-    </FormField>
+    </StyledFormField>
   );
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Ipfs = (props: React.SVGProps<SVGSVGElement>) => (
+const AppIpfs = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" viewBox="0 0 444 512" {...props}>
     <g fill="none" transform="translate(-1 -1)">
       <g transform="translate(.983 .49)">
@@ -22,4 +22,4 @@ const Ipfs = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default Ipfs;
+export default AppIpfs;

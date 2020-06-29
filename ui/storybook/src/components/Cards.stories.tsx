@@ -42,6 +42,7 @@ import {
 } from './cards-data';
 
 const {
+  ViewportSizeProvider,
   AppInfoWidgetCard,
   AppsWidgetCard,
   Box,
@@ -60,6 +61,8 @@ const {
   TrendingWidgetCard,
   SourcesWidgetCard,
   TutorialWidgetCard,
+  TagCard,
+  TagDetailCard,
 } = DS;
 
 storiesOf('Cards/Widget Cards', module)
@@ -235,7 +238,8 @@ storiesOf('Cards/Profile Cards', module)
   .add('profile mini card', () => (
     <Box pad="none" align="center" width="500px">
       <ProfileMiniCard
-        onClickFollow={() => action('Following Box Clicked')('Synthetic Event')}
+        handleFollow={() => action('Following Box Clicked')('Synthetic Event')}
+        handleUnfollow={() => action('Following Box Clicked')('Synthetic Event')}
         // @ts-ignore
         profileData={select('Profile Data', { dapp: appData, user: profileData }, profileData)}
       />
@@ -319,14 +323,41 @@ storiesOf('Cards/Form Cards', module)
     </Box>
   ));
 
-storiesOf('Cards/Onboarding Cards', module).add('customize feed card', () => (
-  <Box align="center" pad={{ top: '40px' }}>
-    <CustomizeFeedCard
-      profiles={trendingProfilesData}
-      tags={trendingTagsData}
-      handleFollow={ethAddress => action('Create feed')(ethAddress)}
-      handleSubscribe={tagName => action('Create feed')(tagName)}
-      handleCreateFeed={() => action('Create feed')('Synthetic Event')}
-    />
-  </Box>
-));
+storiesOf('Cards/Onboarding Cards', module)
+  .add('customize feed card', () => (
+    <Box align="center" pad={{ top: '40px' }} height="600px">
+      <ViewportSizeProvider>
+        <CustomizeFeedCard
+          profiles={trendingProfilesData}
+          tags={trendingTagsData}
+          handleFollow={ethAddress => action('Follow')(ethAddress)}
+          handleUnfollow={ethAddress => action('Unfollow')(ethAddress)}
+          handleSubscribe={tagName => action('Subscribe')(tagName)}
+          handleUnsubscribe={tagName => action('Unsubscribe from tag')(tagName)}
+          handleCreateFeed={() => action('Create feed')('Synthetic Event')}
+        />
+      </ViewportSizeProvider>
+    </Box>
+  ))
+  .add('tag card', () => (
+    <Box align="center" pad={{ top: '40px' }}>
+      <ViewportSizeProvider>
+        <TagCard
+          tag={trendingTagsData[0]}
+          handleSubscribe={tagName => action('Subscribe to tag')(tagName)}
+          handleUnsubscribe={tagName => action('Unsubscribe from tag')(tagName)}
+        />
+      </ViewportSizeProvider>
+    </Box>
+  ))
+  .add('tag detail card', () => (
+    <Box align="center" pad={{ top: '40px' }}>
+      <ViewportSizeProvider>
+        <TagDetailCard
+          tag={trendingTagsData[0]}
+          handleSubscribe={tagName => action('Subscribe to tag')(tagName)}
+          handleUnsubscribe={tagName => action('Unsubscribe from tag')(tagName)}
+        />
+      </ViewportSizeProvider>
+    </Box>
+  ));

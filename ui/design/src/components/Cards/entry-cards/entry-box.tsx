@@ -126,7 +126,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const handleShareFacebook = () => {
     return;
   };
-
+  // @TODO extract as separate component
   const renderMenuDrop = () => {
     return (
       <StyledDrop
@@ -139,11 +139,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         <Box pad="small" gap="small" margin={{ right: 'small' }}>
           <StyledSelectBox>
             <TextIcon
-              iconType="iconIpfs"
+              iconType="appIpfs"
               label={copyLinkLabel}
               onClick={handleCopyIpfsLink}
               clickable={true}
-              size="xs"
+              iconSize="xs"
             />
           </StyledSelectBox>
           <StyledSelectBox>
@@ -153,7 +153,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               onClick={handleReport}
               clickable={true}
               color={'red'}
-              size="xs"
+              iconSize="xs"
             />
           </StyledSelectBox>
         </Box>
@@ -176,7 +176,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               label={repostLabel}
               onClick={handleRepost}
               clickable={true}
-              size="xs"
+              iconSize="xs"
             />
           </StyledSelectBox>
           <StyledSelectBox>
@@ -185,7 +185,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               label={repostWithCommentLabel}
               onClick={handleRepostWithComment}
               clickable={true}
-              size="xs"
+              iconSize="xs"
             />
           </StyledSelectBox>
         </Box>
@@ -209,7 +209,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               onClick={handleCopyLink}
               clickable={true}
               primaryColor={true}
-              size="xs"
+              iconSize="xs"
             />
           </StyledSelectBox>
           <StyledSelectBox>
@@ -219,7 +219,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               onClick={handleShareTwitter}
               clickable={true}
               primaryColor={true}
-              size="xs"
+              iconSize="xs"
             />
           </StyledSelectBox>
           <StyledSelectBox>
@@ -229,7 +229,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               onClick={handleShareReddit}
               clickable={true}
               primaryColor={true}
-              size="xs"
+              iconSize="xs"
             />
           </StyledSelectBox>
           <StyledSelectBox>
@@ -239,7 +239,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               onClick={handleShareFacebook}
               clickable={true}
               primaryColor={true}
-              size="xs"
+              iconSize="xs"
             />
           </StyledSelectBox>
         </Box>

@@ -20,18 +20,25 @@ const DuplexButton = (props: IDuplexButtonProps) => {
     onClickInactive,
     inactiveLabel,
     activeLabel,
-    // activeHoverLabel,
+    activeHoverLabel,
     active,
     className,
     style,
+    icon,
   } = props;
+
+  const [hovered, setHovered] = React.useState(false);
+
   return (
     <StyledButton
       active={active}
       className={className}
       style={style}
-      label={active ? activeLabel : inactiveLabel}
+      label={active ? (hovered ? activeHoverLabel : activeLabel) : inactiveLabel}
       onClick={active ? onClickActive : onClickInactive}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      icon={icon}
     />
   );
 };

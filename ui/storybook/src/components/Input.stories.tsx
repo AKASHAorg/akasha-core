@@ -87,5 +87,5 @@ const CommentInputComponent = () => {
 
 storiesOf('Input/Search Inputs', module)
   .add('drop search', () => <DropSearchInputComponent />)
-  .add('drop search', () => <SearchInputComponent />);
+  .add('search', () => <SearchInputComponent />);
 storiesOf('Input/Comment Input', module).add('comment', () => <CommentInputComponent />);
