@@ -63,7 +63,7 @@ export default class App extends PureComponent<any> {
             style={{ height: '100%' }}
             plain={true}
           >
-            <ErrorInfoCard errors={this.state.errors}>
+            <ErrorInfoCard title={'Error:'} errors={this.state.errors}>
               <Router>
                 <Switch>
                   <Route
