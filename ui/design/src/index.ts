@@ -69,7 +69,8 @@ import { HorizontalDivider } from './components/Dividers';
 import responsiveBreakpoints from './styles/responsive-breakpoints';
 import { formatImageSrc } from './utils/image-utils';
 import { isBase64 } from './utils/string-utils';
-
+/* Hooks */
+import { useGlobalLogin } from './hooks/use-global-login';
 /* Themes and theme related utils */
 import darkTheme from './styles/themes/dark';
 import lightTheme from './styles/themes/light';
@@ -144,6 +145,8 @@ const exported = {
   ModalRenderer,
   HorizontalDivider,
   LoginCTAWidgetCard,
+  /* hooks */
+  useGlobalLogin,
 };
 
 export default exported;

@@ -21,6 +21,6 @@ export const application: Application = {
   name: 'ens-app',
   sdkModules: [{ module: commons }, { module: dbModule }],
   menuItems: routes,
-  title: 'ENS integration',
+  title: 'ENS',
   logo: { type: LogoTypeSource.ICON, value: 'appEns' },
 };

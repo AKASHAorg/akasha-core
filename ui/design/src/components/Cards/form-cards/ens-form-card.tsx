@@ -17,7 +17,7 @@ export interface IEnsFormCardProps {
   ethAddress: string;
   providerData: IEnsData;
   validateEns: (name: string) => void;
-  validEns?: string;
+  validEns?: boolean;
   handleSubmit: (data: IEnsData) => void;
 }
 
@@ -86,10 +86,10 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     if (validEns !== undefined) {
       setLoading(false);
     }
-    if (validEns === 'invalid') {
+    if (!validEns) {
       setError(true);
     }
-    if (validEns === 'valid') {
+    if (validEns) {
       setSuccess(true);
     }
   }, [validEns]);

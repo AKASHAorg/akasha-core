@@ -1,20 +1,19 @@
 import React, { PureComponent } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  RouteComponentProps,
-  Redirect,
-} from 'react-router-dom';
-import EnsEditPage from './ens-edit-page';
-import EnsSettings from './ens-settings-page';
+
 import DS from '@akashaproject/design-system';
-import { default as subRoutes, rootRoute, ENS_EDIT_PAGE, SETTINGS_PAGE } from '../routes';
+import Pages from './pages';
 
-const { ThemeSelector, lightTheme, darkTheme, ErrorInfoCard } = DS;
+const { ThemeSelector, lightTheme, darkTheme } = DS;
 
-export default class App extends PureComponent<any> {
+export interface IAppProps {
+  sdkModules: any;
+  globalChannel: any;
+  logger: any;
+  i18n: any;
+}
+
+export default class App extends PureComponent<IAppProps> {
   public state: { errors: any } = {
     errors: {},
   };
@@ -22,38 +21,40 @@ export default class App extends PureComponent<any> {
     if (this.props.logger) {
       this.props.logger.error('caught %j %j', error, errorInfo);
     }
-    this.setState({
+    if (!this.state.errors[error.name]) {
+      this.setState({
+        errors: {
+          [error.name]: {
+            error: new Error(`${error} \n Additional info: \n ${errorInfo}`),
+            critical: false,
+          },
+        },
+      });
+    }
+  }
+  static getDerivedStateFromError = (err: Error) => {
+    return {
       errors: {
-        'caught.critical': {
-          error: new Error(`${error} \n Additional info: \n ${errorInfo}`),
+        [err.name]: {
+          error: new Error(`${err.name} \n Additional info: \n ${err.message}`),
           critical: false,
         },
       },
-    });
-  }
+    };
+  };
+
   public componentDidMount() {
     // catch all errors (in case of uncaught errors occures)
     // if an error bubbles up till here, it's generally uncaught one.
     // treat it as critical because we don't know about it
-    window.onerror = (message, source, col, line, _error) => {
+    window.onerror = (message, _source, _col, _line, error) => {
       if (this.props.logger) {
-        this.props.logger.error('window error %j %j', _error, message);
+        this.props.logger.error('window error %j %j', error, message);
       }
-      this.setState({
-        errors: {
-          'uncaught.critical': {
-            error: {
-              message,
-              stack: `Line: ${line} \nColumn: ${col} \nSource: ${source}`,
-            },
-            critical: true,
-          },
-        },
-      });
     };
   }
   public render() {
-    const { i18n, sdkModules, globalChannel, logger } = this.props;
+    const { i18n } = this.props;
     return (
       <React.Suspense fallback={<>Loading</>}>
         <I18nextProvider i18n={i18n ? i18n : null}>
@@ -63,52 +64,7 @@ export default class App extends PureComponent<any> {
             style={{ height: '100%' }}
             plain={true}
           >
-            <ErrorInfoCard title={'Error:'} errors={this.state.errors}>
-              <Router>
-                <Switch>
-                  <Route
-                    path={subRoutes[ENS_EDIT_PAGE]}
-                    render={routeProps => (
-                      <>
-                        <DS.Helmet>
-                          <title>ENS | {ENS_EDIT_PAGE}</title>
-                        </DS.Helmet>
-                        <EnsEditPage
-                          {...routeProps}
-                          sdkModules={sdkModules}
-                          globalChannel={globalChannel}
-                          logger={logger}
-                        />
-                      </>
-                    )}
-                  />
-                  <Route
-                    path={subRoutes[SETTINGS_PAGE]}
-                    render={(routeProps: RouteComponentProps) => (
-                      <>
-                        <DS.Helmet>
-                          <title>ENS | {SETTINGS_PAGE}</title>
-                        </DS.Helmet>
-                        <EnsSettings
-                          {...routeProps}
-                          sdkModules={sdkModules}
-                          globalChannel={globalChannel}
-                          logger={logger}
-                        />
-                      </>
-                    )}
-                  />
-                  {/* Make the edit page default landing page for this app
-                      404 routes gets redirected to this page also */}
-                  <Redirect
-                    push={true}
-                    from={rootRoute}
-                    to={subRoutes[ENS_EDIT_PAGE]}
-                    exact={true}
-                  />
-                </Switch>
-              </Router>
-            </ErrorInfoCard>
+            <Pages {...this.props} errors={this.state.errors} />
           </ThemeSelector>
         </I18nextProvider>
       </React.Suspense>
