@@ -3,7 +3,7 @@ import DS from '@akashaproject/design-system';
 import { useProfileState } from '../../state/profile-state';
 import { useTranslation } from 'react-i18next';
 
-const { EnsFormCard } = DS;
+const { EnsFormCard, Box } = DS;
 export interface EnsEditPageProps {
   sdkModules: any;
   globalChannel: any;
@@ -14,20 +14,20 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
   const [ensIsValid, setEnsIsValid] = React.useState<boolean | undefined>();
   const [profileState, profileStateActions] = useProfileState(props.sdkModules, props.logger);
   const { t } = useTranslation();
-  const [, setValidatingEns] = React.useState(false);
+  const [validatingEns, setValidatingEns] = React.useState(false);
 
   /**
    * Check if the ethAddress has already an ens
    */
   React.useEffect(() => {
-    if (profileState.data.loggedEthAddress) {
-      profileStateActions.checkENSAddress({ ethAddress: profileState.data.loggedEthAddress });
+    if (profileState.loggedEthAddress) {
+      profileStateActions.checkENSAddress({ ethAddress: profileState.loggedEthAddress });
     }
-  }, [profileState.data.loggedEthAddress]);
+  }, [profileState.loggedEthAddress]);
 
   const onSubmit = (payload: { name: string; providerName: string }) => {
     const { name, providerName } = payload;
-    const ethAddress = profileState.data.loggedEthAddress;
+    const ethAddress = profileState.loggedEthAddress;
     if (ethAddress) {
       profileStateActions.registerENSAddress({
         name,
@@ -40,16 +40,19 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
   const validateEns = (name: string) => {
     setValidatingEns(true);
     // validate ens on the remote?
-    Promise.resolve(name).then(() => {
+    const delay = new Promise(resolve => {
+      setTimeout(() => resolve(name), 1000);
+    });
+    delay.then(() => {
       setValidatingEns(false);
       setEnsIsValid(true);
     });
   };
 
   return (
-    <div>
-      {!profileState.data.loggedEthAddress && <>You must sign in!</>}
-      {profileState.data.loggedEthAddress && (
+    <Box align="center" pad={{ top: '1em' }}>
+      {!profileState.loggedEthAddress && <>You must sign in!</>}
+      {profileState.loggedEthAddress && (
         <EnsFormCard
           titleLabel={t('Ethereum Address')}
           secondaryTitleLabel={t('ENS name')}
@@ -57,17 +60,16 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
           errorLabel={'Sorry, this name is unavailable. Please choose another one.'}
           cancelLabel={t('Cancel')}
           saveLabel={t('Save')}
-          nameFieldPlaceholder={'yourname'}
-          ethAddress={profileState.data.loggedEthAddress}
-          providerData={{
-            providerName: 'ENS',
-          }}
+          nameFieldPlaceholder={t('yourname')}
+          ethAddress={profileState.loggedEthAddress}
+          providerData={profileState.ensInfo}
           handleSubmit={onSubmit}
           validateEns={validateEns}
           validEns={ensIsValid}
+          isValidating={validatingEns}
         />
       )}
-    </div>
+    </Box>
   );
 };
 

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { I18nextProvider } from 'react-i18next';
-
 import DS from '@akashaproject/design-system';
 import Pages from './pages';
 
@@ -32,16 +31,16 @@ export default class App extends PureComponent<IAppProps> {
       });
     }
   }
-  static getDerivedStateFromError = (err: Error) => {
-    return {
-      errors: {
-        [err.name]: {
-          error: new Error(`${err.name} \n Additional info: \n ${err.message}`),
-          critical: false,
-        },
-      },
-    };
-  };
+  // static getDerivedStateFromError = (err: Error) => {
+  //   return {
+  //     errors: {
+  //       [err.name]: {
+  //         error: new Error(`${err.name} \n Additional info: \n ${err.message}`),
+  //         critical: false,
+  //       },
+  //     },
+  //   };
+  // };
 
   public componentDidMount() {
     // catch all errors (in case of uncaught errors occures)

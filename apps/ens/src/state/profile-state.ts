@@ -11,7 +11,7 @@ export interface IStateErrorPayload {
 export interface ProfileState {
   loggedEthAddress?: string;
   token: string | null;
-  ensAddress: string | null;
+  ensInfo: { name?: string; providerName?: string };
   ensChecked: boolean;
   registeringENS: boolean;
   /**
@@ -28,8 +28,7 @@ export interface ProfileState {
   };
 }
 
-export interface ProfileStateModel {
-  data: ProfileState;
+export interface ProfileStateModel extends ProfileState {
   updateData: Action<ProfileStateModel, Partial<ProfileState>>;
   createError: Action<ProfileStateModel, IStateErrorPayload>;
   getLoggedEthAddress: Thunk<ProfileStateModel>;
@@ -42,122 +41,120 @@ export interface ProfileStateModel {
   >;
 }
 
-export const profileStateModel: ProfileStateModel = {
-  data: persist(
-    {
-      loggedEthAddress: undefined,
-      token: null,
-      ensAddress: null,
-      ensChecked: false,
-      registeringENS: false,
-      fetching: false,
-      errors: {},
-    },
-    { blacklist: ['fetching', 'errors'] },
-  ),
-  updateData: action((state, payload) => {
-    state.data = Object.assign({}, state.data, payload);
-  }),
-  // add errors to store, merging them with old ones
-  createError: action((state, payload) => {
-    state.data = Object.assign({}, state.data, {
-      errors: {
-        ...state.data.errors,
+export const profileStateModel: ProfileStateModel = persist(
+  {
+    loggedEthAddress: undefined,
+    token: null,
+    ensInfo: {},
+    ensChecked: false,
+    registeringENS: false,
+    fetching: false,
+    errors: {},
+    updateData: action((state, payload) => {
+      Object.keys(payload).forEach(key => {
+        state[key] = payload[key];
+      });
+    }),
+    // add errors to store, merging them with old ones
+    createError: action((state, payload) => {
+      state.errors = {
+        ...state.errors,
         [payload.errorKey]: {
           error: payload.error,
           critical: payload.critical,
         },
-      },
-    });
-  }),
-  // called when a login is successfull
-  // payload should contain ethAddress and token
-  handleLoginSuccess: action((state, payload) => {
-    state.data = Object.assign(state.data, {
-      loggedEthAddress: payload.ethAddress,
-      token: payload.token,
-      fetching: false,
-    });
-  }),
-  handleLoginError: action((state, payload) => {
-    const { error } = payload;
-    state.data = Object.assign(state.data, {
-      errors: {
-        ...state.data.errors,
+      };
+    }),
+    // called when a login is successfull
+    // payload should contain ethAddress and token
+    handleLoginSuccess: action((state, payload) => {
+      state.loggedEthAddress = payload.ethAddress;
+      state.token = payload.token;
+      state.fetching = false;
+    }),
+    handleLoginError: action((state, payload) => {
+      const { error } = payload;
+      state.errors = {
+        ...state.errors,
         Login_Error: {
           error: error,
           critical: false,
         },
-      },
-    });
-  }),
-  getLoggedEthAddress: thunk(async (actions, _payload, { injections }) => {
-    const { channels, logger } = injections;
-    const $stash = channels.commons.cache_service.getStash(null);
-    try {
-      const call = forkJoin({
-        stash: $stash,
-      });
-      return call.subscribe(async (deps: { stash: any }) => {
-        try {
-          const ethAddress = await getEthAddress(deps.stash);
-          actions.updateData({
-            loggedEthAddress: ethAddress,
-          });
-        } catch (err) {
-          logger.error(err);
-          actions.createError({
-            errorKey: 'actions_getLoggedEthAddress',
-            error: err,
-            critical: false,
-          });
-          return;
-        }
-      });
-    } catch (ex) {
-      logger.error(ex);
-      actions.createError({
-        errorKey: 'actions.getLoggedEthAddress',
-        error: ex,
-        critical: true,
-      });
-      return;
-    }
-  }),
-  checkENSAddress: thunk(async (actions, payload, { injections }) => {
-    const { ethAddress } = payload;
-    const { logger } = injections;
-    logger.info('Checking ENS for ethAddress: %s', ethAddress);
-    actions.updateData({
-      ensChecked: true,
-      ensAddress: null,
-    });
-  }),
-  registerENSAddress: thunk(async (actions, payload, { injections }) => {
-    const { name, providerName, ethAddress } = payload;
-    const { logger } = injections;
-    actions.updateData({
-      registeringENS: true,
-    });
-    // @TODO: call the actual observable
-    Promise.resolve({
-      name,
-      providerName,
-      ethAddress,
-    }).then(() => {
+      };
+    }),
+    getLoggedEthAddress: thunk(async (actions, _payload, { injections }) => {
+      const { channels, logger } = injections;
+      const $stash = channels.commons.cache_service.getStash(null);
+      try {
+        const call = forkJoin({
+          stash: $stash,
+        });
+        return call.subscribe(async (deps: { stash: any }) => {
+          try {
+            const ethAddress = await getEthAddress(deps.stash);
+            actions.updateData({
+              loggedEthAddress: ethAddress,
+            });
+          } catch (err) {
+            logger.error(err);
+            actions.createError({
+              errorKey: 'actions_getLoggedEthAddress',
+              error: err,
+              critical: false,
+            });
+            return;
+          }
+        });
+      } catch (ex) {
+        logger.error(ex);
+        actions.createError({
+          errorKey: 'actions.getLoggedEthAddress',
+          error: ex,
+          critical: true,
+        });
+        return;
+      }
+    }),
+    checkENSAddress: thunk(async (actions, payload, { injections }) => {
+      const { ethAddress } = payload;
+      const { logger } = injections;
+      logger.info('Checking ENS for ethAddress: %s', ethAddress);
       actions.updateData({
-        registeringENS: false,
+        ensChecked: true,
+        ensInfo: {},
       });
-      logger.info('ENS Name: %s, registered', name);
-      // if there is an error
-      actions.createError({
-        errorKey: 'ens.registerError',
-        error: new Error('There was an error registering your ens name'),
-        critical: false,
+    }),
+    registerENSAddress: thunk(async (actions, payload, { injections }) => {
+      const { name, providerName, ethAddress } = payload;
+      const { logger } = injections;
+      actions.updateData({
+        registeringENS: true,
       });
-    });
-  }),
-};
+      // @TODO: call the actual observable
+      Promise.resolve({
+        name,
+        providerName,
+        ethAddress,
+      }).then(() => {
+        actions.updateData({
+          registeringENS: false,
+          ensInfo: {
+            name: 'testName',
+            providerName: 'AKASHA ENS',
+          },
+        });
+        logger.info('ENS Name: %s, registered', name);
+        // if there is an error
+        actions.createError({
+          errorKey: 'ens.registerError',
+          error: new Error('There was an error registering your ens name'),
+          critical: false,
+        });
+      });
+    }),
+  },
+  { blacklist: ['fetching', 'errors', 'ensInfo', 'ensChecked', 'registeringENS'] },
+);
 
 export const useProfileState = (channels?: any, logger?: any) =>
   createComponentStore(profileStateModel, {
