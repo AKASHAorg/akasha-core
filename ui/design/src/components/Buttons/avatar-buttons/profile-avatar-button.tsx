@@ -4,7 +4,7 @@ import { capitalize } from '../../../utils/string-utils';
 import { Avatar } from '../../Avatar/index';
 import { AvatarSize } from '../../Avatar/styled-avatar';
 import StyledIconLink from '../icon-buttons/styled-icon-link';
-import { ButtonInfo, ButtonTextWrapper } from './styled-profile-avatar-button';
+import { ButtonInfo } from './styled-profile-avatar-button';
 
 export interface ProfileAvatarButtonProps {
   info?: string | React.ReactElement;
@@ -12,28 +12,33 @@ export interface ProfileAvatarButtonProps {
   label?: string;
   size?: AvatarSize;
   className?: string;
-  onAvatarClick?: React.MouseEventHandler<string>;
+  onClickAvatar?: React.MouseEventHandler<HTMLDivElement>;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
   ethAddress: string;
 }
 
-const ProfileAvatarButton = (props: ProfileAvatarButtonProps) => {
-  const { className, size, avatarImage, label, info, onClick, onAvatarClick, ethAddress } = props;
+const ProfileAvatarButton = React.forwardRef((props: ProfileAvatarButtonProps, ref: any) => {
+  const { className, size, avatarImage, label, info, onClick, onClickAvatar, ethAddress } = props;
   return (
     <Box className={className} direction="row" align="center">
       <Box>
-        <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onAvatarClick} />
+        <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onClickAvatar} />
       </Box>
-      <ButtonTextWrapper>
-        <StyledIconLink label={capitalize(label)} onClick={onClick} />
+      <Box pad={{ horizontal: 'small' }} justify="center" align="start">
+        <StyledIconLink
+          primaryColor={true}
+          label={label ? capitalize(label) : label}
+          onClick={onClick}
+          ref={ref}
+        />
         <ButtonInfo>{info}</ButtonInfo>
-      </ButtonTextWrapper>
+      </Box>
     </Box>
   );
-};
+});
 
 const defaultProps = {
-  size: 'md',
+  size: 'md' as AvatarSize,
 };
 
 ProfileAvatarButton.defaultProps = defaultProps;

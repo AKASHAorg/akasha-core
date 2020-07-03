@@ -3,17 +3,15 @@ import * as React from 'react';
 import { formatDate, ILocale } from '../../../utils/time';
 import { ProfileAvatarButton } from '../../Buttons/index';
 import { Icon } from '../../Icon/index';
-import { TextIcon } from '../../TextIcon/index';
-import { StyledDrop, StyledSelectBox } from './styled-entry-card';
+import CardActions, { ServiceNames } from './card-actions';
+import CardHeaderMenuDropdown from './card-header-menu';
+import { StyledProfileDrop } from './styled-entry-box';
+import { ProfileMiniCard } from '../profile-cards/profile-mini-card';
+import { IProfileData } from '../profile-cards/profile-widget-card';
+import { ISocialData } from './social-box';
+import { useViewportSize } from '../../Providers/viewport-dimension';
 
-export interface IUser {
-  userName?: string;
-  ensName?: string;
-  avatar?: string;
-  ethAddress: string;
-}
-
-export interface IEntryData extends IUser {
+export interface IEntryData {
   content: string;
   time: string;
   replies?: IEntryData[];
@@ -21,294 +19,183 @@ export interface IEntryData extends IUser {
   ipfsLink: string;
   permalink: string;
   entryId: string;
-  bookmarked?: boolean;
+  author: IProfileData;
+  socialData?: ISocialData;
 }
 
 export interface IEntryBoxProps {
   // data
   entryData: IEntryData;
   locale: ILocale;
-  // handlers
-  onClickAvatar: React.MouseEventHandler<HTMLAnchorElement>;
-  onClickReplies: () => void;
-  toggleBookmark: (entryId: string) => void;
-  reportEntry: (entryId: string) => void;
+  loggedProfileAvatar?: string;
+  loggedProfileEthAddress?: string;
   // labels
-
-  repostLabel?: string;
-  repostWithCommentLabel?: string;
-  copyLinkLabel?: string;
-  reportLabel?: string;
-  shareOnLabel?: string;
+  repliesLabel: string;
+  repostsLabel: string;
+  repostLabel: string;
+  repostWithCommentLabel: string;
+  shareLabel: string;
+  flagAsLabel: string;
+  copyLinkLabel: string;
+  copyIPFSLinkLabel: string;
+  comment?: boolean;
+  bookmarkLabel: string;
+  bookmarkedLabel: string;
+  isBookmarked: boolean | null;
+  // handlers
+  onEntryBookmark?: (entryId: string, isBookmarked: boolean | null) => void;
+  onClickAvatar: React.MouseEventHandler<HTMLDivElement>;
+  onClickReplies: (entryId: string) => void;
+  onEntryShare: (service: ServiceNames, entryId?: string) => void;
+  onLinkCopy: (link: string) => void;
+  onRepost: (withComment: boolean, entryId?: string) => void;
+  onEntryFlag: (entryId?: string) => void;
+  handleFollow: (profileEthAddress: string) => void;
+  handleUnfollow: (profileEthAddress: string) => void;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
   const {
     entryData,
-    locale,
-    onClickAvatar,
-    onClickReplies,
-    toggleBookmark,
-    reportEntry,
+    loggedProfileEthAddress,
+    repliesLabel,
+    repostsLabel,
     repostLabel,
     repostWithCommentLabel,
+    shareLabel,
+    flagAsLabel,
     copyLinkLabel,
-    reportLabel,
-    shareOnLabel,
+    copyIPFSLinkLabel,
+    locale,
+    isBookmarked,
+    bookmarkLabel,
+    bookmarkedLabel,
+    onEntryBookmark,
+    onClickAvatar,
+    onClickReplies,
+    onEntryShare,
+    onLinkCopy,
+    onRepost,
+    onEntryFlag,
+    handleFollow,
+    handleUnfollow,
   } = props;
 
-  const menuIconRef: React.Ref<any> = React.useRef(null);
-  const repostIconRef: React.Ref<any> = React.useRef(null);
-  const shareIconRef: React.Ref<any> = React.useRef(null);
+  const size = useViewportSize().size;
 
-  const [bookmarked, setBookmarked] = React.useState(false);
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
-  const [repostDropOpen, setRepostDropOpen] = React.useState(false);
-  const [shareDropOpen, setShareDropOpen] = React.useState(false);
+  const [profileDropOpen, setProfileDropOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    if (entryData.bookmarked) {
-      setBookmarked(true);
+  const menuIconRef: React.Ref<any> = React.useRef(null);
+  const profileRef: React.Ref<any> = React.useRef(null);
+
+  const handleLinkCopy = (linkType: 'ipfs' | 'shareable') => () => {
+    switch (linkType) {
+      case 'ipfs':
+        return onLinkCopy('dummiIPFScid');
+      case 'shareable':
+        return onLinkCopy('http://dummy.link');
     }
-  }, []);
+  };
 
   const closeMenuDrop = () => {
     setMenuDropOpen(false);
-  };
-
-  const closeRepostDrop = () => {
-    setRepostDropOpen(false);
-  };
-
-  const closeShareDrop = () => {
-    setShareDropOpen(false);
   };
 
   const toggleMenuDrop = () => {
     setMenuDropOpen(!menuDropOpen);
   };
 
-  const handleCopyIpfsLink = () => {
-    navigator.clipboard.writeText(entryData.ipfsLink);
+  const handleEntryBookmark = () => {
+    if (onEntryBookmark && entryData.entryId) {
+      onEntryBookmark(entryData.entryId, isBookmarked);
+    }
   };
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(entryData.permalink);
+  const handleRepost = (withComment: boolean) => () => {
+    onRepost(withComment, entryData.entryId);
   };
 
-  const handleReport = () => {
-    reportEntry(entryData.entryId);
+  const handleEntryShare = (service: ServiceNames) => {
+    onEntryShare(service, entryData.entryId);
   };
 
-  const handleToggleBookmark = () => {
-    setBookmarked(!bookmarked);
-    toggleBookmark(entryData.entryId);
+  const handleEntryFlag = () => {
+    onEntryFlag(entryData.entryId);
   };
 
   const handleRepliesClick = () => {
-    onClickReplies();
-  };
-
-  const handleRepost = () => {
-    return;
-  };
-
-  const handleRepostWithComment = () => {
-    return;
-  };
-
-  const handleShareTwitter = () => {
-    return;
-  };
-  const handleShareReddit = () => {
-    return;
-  };
-  const handleShareFacebook = () => {
-    return;
-  };
-  // @TODO extract as separate component
-  const renderMenuDrop = () => {
-    return (
-      <StyledDrop
-        overflow="hidden"
-        target={menuIconRef.current}
-        align={{ top: 'bottom', right: 'right' }}
-        onClickOutside={closeMenuDrop}
-        onEsc={closeMenuDrop}
-      >
-        <Box pad="small" gap="small" margin={{ right: 'small' }}>
-          <StyledSelectBox>
-            <TextIcon
-              iconType="appIpfs"
-              label={copyLinkLabel}
-              onClick={handleCopyIpfsLink}
-              clickable={true}
-              iconSize="xs"
-            />
-          </StyledSelectBox>
-          <StyledSelectBox>
-            <TextIcon
-              iconType="report"
-              label={reportLabel}
-              onClick={handleReport}
-              clickable={true}
-              color={'red'}
-              iconSize="xs"
-            />
-          </StyledSelectBox>
-        </Box>
-      </StyledDrop>
-    );
-  };
-  const renderRepostDrop = () => {
-    return (
-      <StyledDrop
-        overflow="hidden"
-        target={repostIconRef.current}
-        align={{ top: 'bottom', left: 'left' }}
-        onClickOutside={closeRepostDrop}
-        onEsc={closeRepostDrop}
-      >
-        <Box pad="small" gap="small" margin={{ right: 'small' }}>
-          <StyledSelectBox>
-            <TextIcon
-              iconType="transfer"
-              label={repostLabel}
-              onClick={handleRepost}
-              clickable={true}
-              iconSize="xs"
-            />
-          </StyledSelectBox>
-          <StyledSelectBox>
-            <TextIcon
-              iconType="edit"
-              label={repostWithCommentLabel}
-              onClick={handleRepostWithComment}
-              clickable={true}
-              iconSize="xs"
-            />
-          </StyledSelectBox>
-        </Box>
-      </StyledDrop>
-    );
-  };
-  const renderShareDrop = () => {
-    return (
-      <StyledDrop
-        overflow="hidden"
-        target={shareIconRef.current}
-        align={{ top: 'bottom', right: 'right' }}
-        onClickOutside={closeShareDrop}
-        onEsc={closeShareDrop}
-      >
-        <Box pad="small" gap="small" margin={{ right: 'small' }}>
-          <StyledSelectBox>
-            <TextIcon
-              iconType="link"
-              label={copyLinkLabel}
-              onClick={handleCopyLink}
-              clickable={true}
-              primaryColor={true}
-              iconSize="xs"
-            />
-          </StyledSelectBox>
-          <StyledSelectBox>
-            <TextIcon
-              iconType="twitter"
-              label={`${shareOnLabel} Twitter`}
-              onClick={handleShareTwitter}
-              clickable={true}
-              primaryColor={true}
-              iconSize="xs"
-            />
-          </StyledSelectBox>
-          <StyledSelectBox>
-            <TextIcon
-              iconType="reddit"
-              label={`${shareOnLabel} Reddit`}
-              onClick={handleShareReddit}
-              clickable={true}
-              primaryColor={true}
-              iconSize="xs"
-            />
-          </StyledSelectBox>
-          <StyledSelectBox>
-            <TextIcon
-              iconType="facebook"
-              label={`${shareOnLabel} Facebook`}
-              onClick={handleShareFacebook}
-              clickable={true}
-              primaryColor={true}
-              iconSize="xs"
-            />
-          </StyledSelectBox>
-        </Box>
-      </StyledDrop>
-    );
+    onClickReplies(entryData.entryId);
   };
 
   return (
     <>
       <Box direction="row" justify="between" pad={{ vertical: 'medium' }}>
         <ProfileAvatarButton
-          label={entryData.userName}
-          info={entryData.ensName}
-          avatarImage={entryData.avatar}
-          onClick={onClickAvatar}
-          ethAddress={entryData.ethAddress}
+          label={entryData.author?.userName}
+          info={entryData.author?.ensName}
+          avatarImage={entryData.author?.avatar}
+          onClickAvatar={onClickAvatar}
+          onClick={() => setProfileDropOpen(!profileDropOpen)}
+          ethAddress={entryData.author?.ethAddress}
+          ref={profileRef}
         />
+        {profileRef.current && profileDropOpen && (
+          <StyledProfileDrop
+            overflow="hidden"
+            target={profileRef.current}
+            align={{ top: 'bottom', left: 'left' }}
+            onClickOutside={() => setProfileDropOpen(false)}
+            onEsc={() => setProfileDropOpen(false)}
+          >
+            <Box width="20rem" round="small">
+              <ProfileMiniCard
+                profileData={entryData.author}
+                handleFollow={handleFollow}
+                handleUnfollow={handleUnfollow}
+              />
+            </Box>
+          </StyledProfileDrop>
+        )}
         <Box direction="row" gap="xsmall" align="center">
           <Text>{formatDate(entryData.time, locale)}</Text>
-          <Icon
-            type="bookmark"
-            onClick={handleToggleBookmark}
-            clickable={true}
-            accentColor={bookmarked}
-          />
+
           <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
         </Box>
       </Box>
-      {menuIconRef.current && menuDropOpen && renderMenuDrop()}
-
-      <Box pad={{ vertical: 'medium' }}>{entryData.content}</Box>
-
-      <Box pad={{ vertical: 'medium' }} direction="row" justify="between">
-        <Box gap="medium" direction="row">
-          <Box direction="row" gap="xxsmall" align="center">
-            <Icon
-              type="transfer"
-              size="md"
-              clickable={true}
-              ref={repostIconRef}
-              onClick={() => setRepostDropOpen(!repostDropOpen)}
-            />
-            <Text>{entryData.reposts || 0}</Text>
-          </Box>
-          <Box direction="row" gap="xxsmall" align="center">
-            <Icon type="comments" clickable={true} onClick={handleRepliesClick} size="md" />
-            <Text>{entryData.replies?.length || 0}</Text>
-          </Box>
-        </Box>
-        <Icon
-          type="shareSmallDark"
-          size="md"
-          ref={shareIconRef}
-          clickable={true}
-          onClick={() => setShareDropOpen(!shareDropOpen)}
+      {menuIconRef.current && menuDropOpen && (
+        <CardHeaderMenuDropdown
+          target={menuIconRef.current}
+          onMenuClose={closeMenuDrop}
+          onLinkCopy={handleLinkCopy}
+          onFlag={handleEntryFlag}
+          flagAsLabel={flagAsLabel}
+          copyIPFSLinkLabel={copyIPFSLinkLabel}
         />
-      </Box>
-      {repostIconRef.current && repostDropOpen && renderRepostDrop()}
-      {shareIconRef.current && shareDropOpen && renderShareDrop()}
+      )}
+      <Box pad={{ vertical: 'medium' }}>{entryData.content}</Box>
+      <CardActions
+        entryData={entryData}
+        loggedProfileEthAddress={loggedProfileEthAddress}
+        repliesLabel={repliesLabel}
+        repostsLabel={repostsLabel}
+        repostLabel={repostLabel}
+        repostWithCommentLabel={repostWithCommentLabel}
+        isBookmarked={isBookmarked}
+        bookmarkLabel={bookmarkLabel}
+        bookmarkedLabel={bookmarkedLabel}
+        shareLabel={shareLabel}
+        copyLinkLabel={copyLinkLabel}
+        handleEntryBookmark={handleEntryBookmark}
+        onRepost={handleRepost(false)}
+        onRepostWithComment={handleRepost(true)}
+        onShare={handleEntryShare}
+        handleRepliesClick={handleRepliesClick}
+        onLinkCopy={handleLinkCopy('shareable')}
+        size={size}
+      />
     </>
   );
-};
-
-EntryBox.defaultProps = {
-  repostLabel: 'Repost',
-  repostWithCommentLabel: 'Repost With Comment',
-  copyLinkLabel: 'Copy Link',
-  reportLabel: 'Report',
-  shareOnLabel: 'Share On',
 };
 
 export { EntryBox };

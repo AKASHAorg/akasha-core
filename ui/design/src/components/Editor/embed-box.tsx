@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { formatDate } from '../../utils/time';
 import { ProfileAvatarButton } from '../Buttons/index';
-import { IEntryData } from '../Cards/entry-cards/old-entry-cards/entry-box';
+import { IEntryData } from '../Cards/entry-cards/entry-box';
 
 const StyledBox = styled(Box)`
   background-color: #fbfcfd;
@@ -26,10 +26,10 @@ const EmbedBox: React.FC<IEmbedEntryBox> = props => (
     }}
   >
     <ProfileAvatarButton
-      label={props.embedEntryData.name}
+      label={props.embedEntryData.author.userName}
       info={formatDate(props.embedEntryData.time)}
-      avatarImage={props.embedEntryData.avatar}
-      ethAddress={props.embedEntryData.ethAddress}
+      avatarImage={props.embedEntryData.author.avatar}
+      ethAddress={props.embedEntryData.author.ethAddress}
     />
 
     <div>{props.embedEntryData.content}</div>

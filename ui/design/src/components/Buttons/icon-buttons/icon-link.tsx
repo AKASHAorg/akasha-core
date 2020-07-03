@@ -10,12 +10,13 @@ export interface ILinkIconButtonProps extends AnchorProps {
   label?: string | number;
   active?: boolean;
   padded?: boolean;
+  primaryColor?: boolean;
 }
 
-const LinkIconButton = (props: ILinkIconButtonProps) => {
+const LinkIconButton = React.forwardRef((props: ILinkIconButtonProps, ref) => {
   const { iconPosition = 'start', ...other } = props;
   const reversed = iconPosition && iconPosition === 'end';
-  return <StyledIconLink className={props.className} reverse={reversed} {...other} />;
-};
+  return <StyledIconLink className={props.className} reverse={reversed} {...other} ref={ref} />;
+});
 
 export default LinkIconButton;

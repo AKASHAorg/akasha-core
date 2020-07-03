@@ -5,10 +5,7 @@ import {
   ModalCard,
 } from './common/basic-card-box';
 import EditorCard from './editor-cards/editor-card';
-import OldEntryBox from './entry-cards/old-entry-cards/entry-box';
-import OldEntryCard from './entry-cards/old-entry-cards/entry-card';
 import { EntryCard } from './entry-cards/entry-card';
-import { FullEntryCard } from './entry-cards/full-entry-card';
 import BoxFormCard from './form-cards/box-form-card';
 import EnsFormCard from './form-cards/ens-form-card';
 import ProfileCard from './profile-cards/profile-card';
@@ -35,11 +32,8 @@ export {
   ProfileWidgetCard,
   ProfileMiniCard,
   EditorCard,
-  OldEntryCard,
-  FullEntryCard,
   BasicCardBox,
   MainAreaCardBox,
-  OldEntryBox,
   BoxFormCard,
   EntryCard,
   EnsFormCard,

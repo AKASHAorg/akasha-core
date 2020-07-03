@@ -19,7 +19,7 @@ export interface AvatarProps extends CommonInterface<HTMLDivElement> {
 
 export const getAvatarFromSeed = (seed: string) => {
   let str = seed;
-  if (seed.startsWith('0x')) {
+  if (seed && seed.startsWith('0x')) {
     str = seed.replace('0x', '');
   }
   if (str && str.length) {

@@ -70,6 +70,21 @@ const SavedEntriesPage: React.FC<ISavedEntriesPageProps & RouteProps> = props =>
     // not implemented
   };
 
+  const handleClickReplies = () => {
+    // this should redirect to the full entry view?
+    return;
+  };
+
+  const handleFollow = () => {
+    // to be implemented when we have this functionality
+    return;
+  };
+
+  const handleUnfollow = () => {
+    // to be implemented when we have this functionality
+    return;
+  };
+
   return (
     <Box fill={true}>
       {!loggedEthAddress && !fetching && (
@@ -97,8 +112,10 @@ const SavedEntriesPage: React.FC<ISavedEntriesPageProps & RouteProps> = props =>
                 entryData={itemData}
                 onClickAvatar={handleAvatarClick}
                 onEntryBookmark={handleEntryBookmark}
-                repliesLabel={t('Replies', { count: itemData.repliesCount })}
-                repostsLabel={t('Reposts', { count: itemData.repostsCount })}
+                repliesLabel={t('Replies')}
+                repostsLabel={t('Reposts')}
+                repostLabel={t('Repost')}
+                repostWithCommentLabel={t('Repost with comment')}
                 shareLabel={t('Share')}
                 copyIPFSLinkLabel={t('Copy IPFS Link')}
                 flagAsLabel={t('Flag as inappropiate')}
@@ -112,6 +129,9 @@ const SavedEntriesPage: React.FC<ISavedEntriesPageProps & RouteProps> = props =>
                 onEntryShare={handleEntryShare}
                 onEntryFlag={handleEntryFlag}
                 onLinkCopy={handleLinkCopy}
+                onClickReplies={handleClickReplies}
+                handleFollow={handleFollow}
+                handleUnfollow={handleUnfollow}
               />
             );
           }}

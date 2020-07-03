@@ -1,59 +1,77 @@
 import * as React from 'react';
 import { Box } from 'grommet';
-import { PlainButton } from '../../Buttons';
-import { Icon } from '../../Icon';
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { TextIcon } from '../../TextIcon';
+import { IEntryData } from './entry-box';
+
 export type ServiceNames = 'twitter' | 'reddit' | 'facebook';
 
 export interface CardActionProps {
+  // data
+  entryData: IEntryData;
+  loggedProfileEthAddress?: string;
+  // labels
   repostsLabel: string;
+  repostLabel: string;
+  repostWithCommentLabel: string;
   repliesLabel: string;
   isBookmarked: boolean | null;
   copyLinkLabel: string;
   bookmarkLabel: string;
   bookmarkedLabel: string;
-  handleEntryBookmark: () => void;
   shareLabel: string;
+  // handlers
+  handleEntryBookmark: () => void;
   onRepost: () => void;
+  handleRepliesClick: () => void;
   onRepostWithComment: () => void;
   onShare: (service: ServiceNames) => void;
   onLinkCopy: () => void;
-  loggedProfileEthAddress?: string;
+  // screen size passed by viewport provider
+  size?: string;
 }
 
 const CardActions: React.FC<CardActionProps> = props => {
   const {
+    // data
+    entryData,
+    loggedProfileEthAddress,
+    // labels
     repostsLabel,
+    repostLabel,
+    repostWithCommentLabel,
     repliesLabel,
     isBookmarked,
     bookmarkLabel,
     bookmarkedLabel,
-    handleEntryBookmark,
     shareLabel,
+    copyLinkLabel,
+    // handlers
+    handleEntryBookmark,
     onRepost,
+    handleRepliesClick,
     onRepostWithComment,
     onShare,
     onLinkCopy,
-    copyLinkLabel,
-    loggedProfileEthAddress,
+    // screen size
+    size,
   } = props;
 
-  const [replyDropOpen, setReplyDropOpen] = React.useState(false);
+  const [repostDropOpen, setReplyDropOpen] = React.useState(false);
   const [shareDropOpen, setShareDropOpen] = React.useState(false);
 
-  const replyNodeRef: React.MutableRefObject<HTMLDivElement | null> = React.useRef(null);
-  const shareNodeRef: React.MutableRefObject<HTMLDivElement | null> = React.useRef(null);
+  const repostNodeRef: React.Ref<any> = React.useRef(null);
+  const shareNodeRef: React.Ref<any> = React.useRef(null);
 
   const handleRepostsOpen = () => {
-    setReplyDropOpen(true);
+    setReplyDropOpen(!repostDropOpen);
   };
   const handleRepostsClose = () => {
     setReplyDropOpen(false);
   };
 
   const handleShareOpen = () => {
-    setShareDropOpen(true);
+    setShareDropOpen(!shareDropOpen);
   };
 
   const handleShareClose = () => {
@@ -62,108 +80,150 @@ const CardActions: React.FC<CardActionProps> = props => {
   const handleShare = (service: ServiceNames) => () => {
     onShare(service);
   };
+
+  const renderRepostDrop = () => {
+    return (
+      <StyledDrop
+        target={repostNodeRef.current}
+        align={{ top: 'bottom', left: 'left' }}
+        onClickOutside={handleRepostsClose}
+        onEsc={handleRepostsClose}
+        overflow="hidden"
+      >
+        <Box pad="xxsmall" width={{ min: '13rem' }}>
+          <StyledSelectBox>
+            <TextIcon
+              iconType="transfer"
+              label={repostLabel}
+              onClick={onRepost}
+              clickable={true}
+              iconSize="xs"
+              fontSize="small"
+            />
+          </StyledSelectBox>
+          <StyledSelectBox>
+            <TextIcon
+              iconType="edit"
+              label={repostWithCommentLabel}
+              onClick={onRepostWithComment}
+              clickable={true}
+              iconSize="xs"
+              fontSize="small"
+            />
+          </StyledSelectBox>
+        </Box>
+      </StyledDrop>
+    );
+  };
+  const renderShareDrop = () => {
+    return (
+      <StyledDrop
+        target={shareNodeRef.current}
+        align={{ top: 'bottom', right: 'right' }}
+        onClickOutside={handleShareClose}
+        onEsc={handleShareClose}
+        overflow="hidden"
+        style={{
+          minWidth: '11em',
+        }}
+      >
+        <Box pad="xxsmall">
+          <StyledSelectBox>
+            <TextIcon
+              iconType="link"
+              label={copyLinkLabel}
+              onClick={onLinkCopy}
+              clickable={true}
+              primaryColor={true}
+              iconSize="xs"
+              fontSize="small"
+            />
+          </StyledSelectBox>
+          <StyledSelectBox>
+            <TextIcon
+              iconType="twitter"
+              label={`${shareLabel} Twitter`}
+              onClick={handleShare('twitter')}
+              clickable={true}
+              primaryColor={true}
+              iconSize="xs"
+              fontSize="small"
+            />
+          </StyledSelectBox>
+          <StyledSelectBox>
+            <TextIcon
+              iconType="reddit"
+              label={`${shareLabel} Reddit`}
+              onClick={handleShare('reddit')}
+              clickable={true}
+              primaryColor={true}
+              iconSize="xs"
+              fontSize="small"
+            />
+          </StyledSelectBox>
+          <StyledSelectBox>
+            <TextIcon
+              iconType="facebook"
+              label={`${shareLabel} Facebook`}
+              onClick={handleShare('facebook')}
+              clickable={true}
+              primaryColor={true}
+              iconSize="xs"
+              fontSize="small"
+            />
+          </StyledSelectBox>
+        </Box>
+      </StyledDrop>
+    );
+  };
+
+  const repostsBtnText =
+    size === 'small' ? `${entryData.reposts || 0}` : `${entryData.reposts || 0} ${repostsLabel}`;
+  const repliesBtnText =
+    size === 'small'
+      ? `${entryData.replies?.length || 0}`
+      : `${entryData.replies?.length || 0} ${repliesLabel}`;
+  const bookmarkBtnText =
+    size === 'small' ? undefined : isBookmarked ? bookmarkedLabel : bookmarkLabel;
+  const shareBtnText = size === 'small' ? undefined : shareLabel;
+
   return (
-    <Box pad="medium" direction="row" justify="between">
-      {replyNodeRef.current && replyDropOpen && (
-        <StyledDrop
-          target={replyNodeRef.current}
-          align={{ top: 'bottom', left: 'left' }}
-          onClickOutside={handleRepostsClose}
-          onEsc={handleRepostsClose}
-          overflow="hidden"
-          style={{
-            minWidth: '11em',
-          }}
-        >
-          <Box pad="small" width={{ min: '3em' }}>
-            <StyledSelectBox>
-              <TextIcon iconType="reply" label={'Repost'} onClick={onRepost} clickable={true} />
-            </StyledSelectBox>
-            <StyledSelectBox>
-              <TextIcon
-                iconType="link"
-                label={'Repost with comment'}
-                onClick={onRepostWithComment}
-                clickable={true}
-              />
-            </StyledSelectBox>
-          </Box>
-        </StyledDrop>
-      )}
-      <PlainButton label={repostsLabel} ref={replyNodeRef} onClick={handleRepostsOpen}>
-        <Icon type="reply" />
-      </PlainButton>
-      <PlainButton label={repliesLabel}>
-        <Icon type="comments" />
-      </PlainButton>
+    <Box pad={{ vertical: 'medium' }} direction="row" justify="between">
+      {repostNodeRef.current && repostDropOpen && renderRepostDrop()}
+      <TextIcon
+        label={repostsBtnText}
+        iconType="transfer"
+        iconSize="md"
+        clickable={true}
+        ref={repostNodeRef}
+        onClick={handleRepostsOpen}
+      />
+      <TextIcon
+        label={repliesBtnText}
+        iconType="comments"
+        iconSize="md"
+        clickable={true}
+        onClick={handleRepliesClick}
+      />
+
       {isBookmarked !== null && (
-        <PlainButton
-          label={isBookmarked ? bookmarkedLabel : bookmarkLabel}
+        <TextIcon
+          label={bookmarkBtnText}
+          iconType="bookmark"
+          iconSize="md"
+          clickable={!!loggedProfileEthAddress}
           onClick={handleEntryBookmark}
-          color={isBookmarked ? 'accent' : 'secondaryText'}
-          disabled={!!loggedProfileEthAddress}
-        >
-          <Icon
-            type="bookmark"
-            accentColor={isBookmarked}
-            clickable={true}
-            onClick={handleEntryBookmark}
-          />
-        </PlainButton>
+        />
       )}
-      {shareNodeRef.current && shareDropOpen && (
-        <StyledDrop
-          target={shareNodeRef.current}
-          align={{ top: 'bottom', left: 'left' }}
-          onClickOutside={handleShareClose}
-          onEsc={handleShareClose}
-          overflow="hidden"
-          style={{
-            minWidth: '11em',
-          }}
-        >
-          <Box pad="small" width={{ min: '3em' }}>
-            <StyledSelectBox>
-              <TextIcon
-                iconType="link"
-                label={copyLinkLabel}
-                onClick={onLinkCopy}
-                clickable={true}
-              />
-            </StyledSelectBox>
-            <StyledSelectBox>
-              <TextIcon
-                iconType="twitter"
-                label={'Share on Twitter'}
-                onClick={handleShare('twitter')}
-                clickable={true}
-                size="sm"
-              />
-            </StyledSelectBox>
-            <StyledSelectBox>
-              <TextIcon
-                iconType="reddit"
-                label={'Share on Reddit'}
-                onClick={handleShare('reddit')}
-                clickable={true}
-                size="sm"
-              />
-            </StyledSelectBox>
-            <StyledSelectBox>
-              <TextIcon
-                iconType="facebook"
-                label={'Share on Facebook'}
-                onClick={handleShare('facebook')}
-                clickable={true}
-                size="sm"
-              />
-            </StyledSelectBox>
-          </Box>
-        </StyledDrop>
-      )}
-      <PlainButton label={shareLabel} ref={shareNodeRef} onClick={handleShareOpen}>
-        <Icon type="share" />
-      </PlainButton>
+      {shareNodeRef.current && shareDropOpen && renderShareDrop()}
+      <TextIcon
+        label={shareBtnText}
+        iconType="shareSmallDark"
+        iconSize="md"
+        ref={shareNodeRef}
+        clickable={true}
+        onClick={handleShareOpen}
+      />
     </Box>
   );
 };

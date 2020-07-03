@@ -27,8 +27,10 @@ export const FeedItem: React.FC<IFeedItemProps> = props => {
       isBookmarked={false}
       entryData={itemData}
       onClickAvatar={() => {}}
-      repliesLabel={t('Replies', { count: 1 })}
-      repostsLabel={t('Reposts', { count: 0 })}
+      repliesLabel={t('Replies')}
+      repostsLabel={t('Reposts')}
+      repostLabel={t('Repost')}
+      repostWithCommentLabel={t('Repost with comment')}
       shareLabel={t('Share')}
       copyLinkLabel={t('Copy Link')}
       copyIPFSLinkLabel={t('Copy IPFS Link')}
@@ -42,6 +44,9 @@ export const FeedItem: React.FC<IFeedItemProps> = props => {
       onEntryShare={() => {}}
       onEntryFlag={() => {}}
       onLinkCopy={() => {}}
+      onClickReplies={() => {}}
+      handleFollow={() => {}}
+      handleUnfollow={() => {}}
     />
   );
 };

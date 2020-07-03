@@ -12,13 +12,16 @@ export interface IProfileData {
   description?: string;
   name?: string;
   url?: string;
+  ensName?: string;
   ethAddress: string;
+  postsNumber?: number;
+  isFollowed?: boolean;
   // app specific
-  followers?: string;
-  following?: string;
-  apps?: string;
-  profileType: string;
-  users?: string;
+  followers?: string | number;
+  following?: string | number;
+  apps?: string | number;
+  profileType?: string;
+  users?: string | number;
   actions?: string;
 }
 

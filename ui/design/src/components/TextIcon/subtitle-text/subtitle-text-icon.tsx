@@ -8,7 +8,7 @@ export interface ISubtitleTextIcon {
   className?: string;
   iconType?: IconType;
   iconSize?: string;
-  label: string;
+  label: string | number;
   labelColor?: string;
   labelSize?: 'small' | 'large';
   subtitle: string;

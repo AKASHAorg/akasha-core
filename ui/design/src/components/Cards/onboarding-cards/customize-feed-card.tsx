@@ -5,7 +5,8 @@ import { IconLink } from '../../Buttons';
 import { TextIcon } from '../../TextIcon';
 import { SearchInput } from '../../Input';
 import { TagCard, ITagData } from './tag-card';
-import { IProfileData, ProfileMiniCard } from '../profile-cards/profile-mini-card';
+import { IProfileData } from '../profile-cards/profile-widget-card';
+import { ProfileMiniCard } from '../profile-cards/profile-mini-card';
 import { Icon } from '../../Icon';
 
 export interface ICustomizeFeedCardProps {

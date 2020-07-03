@@ -4,17 +4,7 @@ import { Avatar } from '../../Avatar/index';
 import { MiniProfileAvatarDiv } from './styled-profile-card';
 import { DuplexButton } from '../../Buttons';
 import { Icon } from '../../Icon';
-
-export interface IProfileData {
-  avatar?: string;
-  coverImage?: string;
-  userName?: string;
-  description?: string;
-  ensName?: string;
-  ethAddress: string;
-  postsNumber: number;
-  following?: boolean;
-}
+import { IProfileData } from './profile-widget-card';
 
 export interface IProfileMiniCard {
   // data
@@ -82,7 +72,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
                 {profileData.ensName}
               </Text>
             )}
-            <Text>{`${profileData.postsNumber} ${postsLabel}`}</Text>
+            <Text>{`${profileData.postsNumber || 0} ${postsLabel}`}</Text>
           </Box>
         </Box>
       </Box>
@@ -95,7 +85,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
           activeHoverLabel={unfollowLabel}
           onClickInactive={onFollow}
           onClickActive={onUnfollow}
-          active={profileData.following}
+          active={profileData.isFollowed}
           icon={<Icon type="following" />}
         />
       </Box>

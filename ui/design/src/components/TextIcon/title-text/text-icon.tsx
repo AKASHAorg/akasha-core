@@ -23,6 +23,7 @@ export interface ITextIconProps {
   primaryColor?: boolean;
   accentColor?: boolean;
   reverse?: boolean;
+  ref?: React.Ref<HTMLDivElement>;
 }
 
 export interface IStyledTextProps extends TextProps {
@@ -30,7 +31,7 @@ export interface IStyledTextProps extends TextProps {
   accentColor?: boolean;
 }
 
-const TextIcon: React.FC<ITextIconProps> = props => {
+const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
   const {
     className,
     onClick,
@@ -64,6 +65,7 @@ const TextIcon: React.FC<ITextIconProps> = props => {
       className={className}
       menuActive={menuActive}
       menuIcon={menuIcon}
+      ref={ref}
     >
       {!reverse && (
         <Icon
@@ -88,6 +90,6 @@ const TextIcon: React.FC<ITextIconProps> = props => {
       )}
     </StyledTextIcon>
   );
-};
+});
 
 export default TextIcon;

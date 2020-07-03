@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IEntryData } from '../../Cards/entry-cards/old-entry-cards/entry-box';
+import { IEntryData } from '../../Cards/entry-cards/entry-box';
 import { EditorBox } from '../../Editor/index';
 import { StyledLayer } from '../common/styled-modal';
 
