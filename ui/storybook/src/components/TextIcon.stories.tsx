@@ -15,7 +15,7 @@ const iconTypeOptions: { Home: IconType; HotTopics: IconType; Media: IconType } 
 
 const iconTypeDefaultValue = 'home';
 
-storiesOf('TextIcon|TextIcon', module).add('default', () => (
+storiesOf('TextIcon/TextIcon', module).add('default', () => (
   <Box pad="large" align="center">
     <TextIcon
       onClick={() => action('TextIcon Clicked')('Synthetic Event')}
@@ -32,7 +32,7 @@ storiesOf('TextIcon|TextIcon', module).add('default', () => (
   </Box>
 ));
 
-storiesOf('TextIcon|SubtitleTextIcon', module).add('default', () => (
+storiesOf('TextIcon/SubtitleTextIcon', module).add('default', () => (
   <Box pad="large" align="center">
     <SubtitleTextIcon
       onClick={() => action('SubtitleTextIcon Clicked')('Synthetic Event')}

@@ -8,13 +8,16 @@ export const randomMs = (min: number, max: number) =>
 
 export const generateProfileData = (ethAddress: string): IProfileData => {
   return {
+    ethAddress,
     coverImage: 'goldenrod',
+    avatar: 'http://placebeard.it/480/480',
     name: 'AKASHA WORLD',
+    userName: '@akashaworld',
+    ensName: 'akashaworld.akasha.eth',
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
     apps: '12',
     profileType: 'user',
-    ethAddress,
   };
 };
 

@@ -13,13 +13,13 @@ export interface AvatarProps extends CommonInterface<HTMLDivElement> {
   alt?: string;
   margin?: MarginInterface;
   backgroundColor?: string;
-  withBorder?: boolean;
+  border?: 'sm' | 'md' | 'lg';
   size?: AvatarSize;
 }
 
 export const getAvatarFromSeed = (seed: string) => {
   let str = seed;
-  if (seed.startsWith('0x')) {
+  if (seed && seed.startsWith('0x')) {
     str = seed.replace('0x', '');
   }
   if (str && str.length) {
@@ -40,16 +40,13 @@ export const getAvatarFromSeed = (seed: string) => {
   return 7;
 };
 
-const Avatar: React.FC<AvatarProps> = props => {
-  const {
-    onClick,
-    src,
-    className,
-    margin,
-    size = 'md',
-    withBorder = false,
-    ethAddress = '0x0000000000000000000000000000000',
-  } = props;
+const defaultProps: Partial<AvatarProps> = {
+  size: 'md' as AvatarSize,
+  ethAddress: '0x0000000000000000000000000000000',
+};
+
+const Avatar: React.FC<AvatarProps & typeof defaultProps> = props => {
+  const { onClick, src, className, size, margin, border, ethAddress } = props;
   const isClickable = typeof onClick === 'function';
   const avatarImage = src
     ? src
@@ -62,7 +59,7 @@ const Avatar: React.FC<AvatarProps> = props => {
       className={className}
       isClickable={isClickable}
       margin={margin}
-      withBorder={withBorder}
+      border={border}
     >
       <React.Suspense fallback={<>...</>}>
         <AvatarImage image={avatarImage} />

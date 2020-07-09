@@ -12,6 +12,11 @@ const StyledIconLink = styled(Anchor)<ILinkIconButtonProps>`
         color: ${props.theme.colors.accent};
       `;
     }
+    if (props.primaryColor) {
+      return css`
+        color: ${props.theme.colors.primaryText};
+      `;
+    }
     return css`
       color: ${props.theme.colors.secondaryText};
     `;

@@ -20,11 +20,13 @@ import EntryCardLoading from './components/VirtualList/placeholders/entry-card-p
 
 import {
   Button,
+  DuplexButton,
   IconButton,
   IconLink,
   ProfileAvatarButton,
   VoteIconButton,
 } from './components/Buttons';
+import { AreaChart, LineChart, ResponsiveChart } from './components/Charts';
 
 import {
   AppInfoWidgetCard,
@@ -34,22 +36,28 @@ import {
   BoxFormCard,
   EditorCard,
   EnsFormCard,
-  EntryBox,
   EntryCard,
   MiniInfoWidgetCard,
   ProfileCard,
   ProfileWidgetCard,
+  ProfileMiniCard,
   TopicsWidgetCard,
   WidgetAreaCardBox,
   ModalCard,
   LoginCTAWidgetCard,
+  TrendingWidgetCard,
+  SourcesWidgetCard,
+  TutorialWidgetCard,
+  CustomizeFeedCard,
+  TagCard,
+  TagDetailCard,
 } from './components/Cards';
 
 import TextInputField from './components/Forms/text-input-field';
 import { AppIcon, Icon, iconTypes } from './components/Icon';
-import { CommentInput, SearchInput } from './components/Input';
 import ErrorInfoCard from './components/Errors/error-info-card';
 
+import { CommentInput, SearchInput, DropSearchInput } from './components/Input';
 import {
   ShareModal,
   ModalContainer,
@@ -80,15 +88,20 @@ import { ThemeSelector } from './styles/themes/utils/theme-selector';
 const exported = {
   Avatar,
   AppIcon,
+  AreaChart,
+  LineChart,
+  ResponsiveChart,
   Button,
   Carousel,
+  DuplexButton,
   EditableAvatar,
   ErrorInfoCard,
   AppInfoWidgetCard,
   AppsWidgetCard,
   BasicCardBox,
+  CustomizeFeedCard,
+  DropSearchInput,
   EditorCard,
-  EntryBox,
   EntryCard,
   EntryCardLoading,
   BoxFormCard,
@@ -96,8 +109,11 @@ const exported = {
   MiniInfoWidgetCard,
   ProfileCard,
   ProfileWidgetCard,
+  ProfileMiniCard,
   TextInputField,
   TopicsWidgetCard,
+  TagCard,
+  TagDetailCard,
   Icon,
   iconTypes,
   IconButton,
@@ -144,6 +160,9 @@ const exported = {
   ModalRenderer,
   HorizontalDivider,
   LoginCTAWidgetCard,
+  TrendingWidgetCard,
+  SourcesWidgetCard,
+  TutorialWidgetCard,
 };
 
 export default exported;

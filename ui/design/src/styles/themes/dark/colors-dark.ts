@@ -20,6 +20,7 @@ const colors: IColorsDark = {
   primaryText: '#132540', // darkBlue
   secondaryText: '#949EB3', // grey
   background: '#FFF', // white
+  ultraLightBackground: '#FBFCFD', // ultralightGrey
   lightBackground: '#EDF0F5', // lightGrey
   darkBackground: '#000C20',
   accent: '#4E71FF', // blue
