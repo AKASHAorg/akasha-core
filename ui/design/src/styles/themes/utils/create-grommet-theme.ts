@@ -47,6 +47,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         accent: styledComponentsTheme.colors.accent,
         brand: styledComponentsTheme.colors.accent,
         background: styledComponentsTheme.colors.background,
+        ultraLightBackground: styledComponentsTheme.colors.ultraLightBackground,
         focus: styledComponentsTheme.colors.accent,
       },
       focus: {

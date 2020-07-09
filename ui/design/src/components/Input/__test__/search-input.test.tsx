@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { cleanup, fireEvent } from '@testing-library/react';
 import * as React from 'react';
 import { act, create } from 'react-test-renderer';
-import { SearchInput } from '../';
+import { DropSearchInput } from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 const mockDataSource = {
   users: [
@@ -36,7 +36,7 @@ const testSearchStr = 'Gi';
 
 const createBaseComponent = (props: any = {}) => {
   return (
-    <SearchInput
+    <DropSearchInput
       getData={props.getDataHandler || jest.fn()}
       className={mockClassName}
       dataSource={mockDataSource}
@@ -48,7 +48,7 @@ const createBaseComponent = (props: any = {}) => {
   );
 };
 
-describe('<SearchInput /> Component', () => {
+describe('<DropSearchInput /> Component', () => {
   let componentWrapper = create(<></>);
   beforeEach(() => {
     act(() => {
@@ -62,7 +62,7 @@ describe('<SearchInput /> Component', () => {
     cleanup();
   });
   it('should mount without errors', () => {
-    const component = componentWrapper.root.findByType(SearchInput);
+    const component = componentWrapper.root.findByType(DropSearchInput);
     expect(component).toBeDefined();
   });
   it.skip('should match snapshot', () => {

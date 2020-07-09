@@ -91,9 +91,9 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
   //   });
   // };
 
-  const handleEntryBookmark = (entryId: string, isSaved?: boolean) => {
+  const handleEntryBookmark = (entryId: string, isBookmarked: boolean | null) => {
     if (profileState.data.loggedEthAddress) {
-      if (isSaved) {
+      if (isBookmarked) {
         return bookmarkActions.unbookmarkEntry({
           entryId,
           ethAddress: profileState.data.loggedEthAddress,
@@ -123,6 +123,21 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
 
   const handleLinkCopy = (link: string) => {
     logger.info('copy link: %s', link);
+  };
+
+  const handleClickReplies = () => {
+    // this should redirect to the full entry view?
+    return;
+  };
+
+  const handleFollow = () => {
+    // to be implemented when we have this functionality
+    return;
+  };
+
+  const handleUnfollow = () => {
+    // to be implemented when we have this functionality
+    return;
   };
 
   const handleNewerEntriesLoad = () => {
@@ -176,19 +191,21 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
               return (
                 <ErrorInfoCard title={t('An error occured')} errors={itemData.status.errors}>
                   <>
-                    {!itemData.ethAddress && (
+                    {!itemData.author?.ethAddress && (
                       <MainAreaCardBox>
                         <EntryCardLoading />
                       </MainAreaCardBox>
                     )}
-                    {itemData.ethAddress && (
+                    {itemData.author?.ethAddress && (
                       <EntryCard
                         isBookmarked={isBookmarked}
                         entryData={itemData}
                         onClickAvatar={handleAvatarClick}
                         onEntryBookmark={handleEntryBookmark}
-                        repliesLabel={t('Replies', { count: itemData.repliesCount })}
-                        repostsLabel={t('Reposts', { count: itemData.repostsCount })}
+                        repliesLabel={t('Replies')}
+                        repostsLabel={t('Reposts')}
+                        repostLabel={t('Repost')}
+                        repostWithCommentLabel={t('Repost with comment')}
                         shareLabel={t('Share')}
                         copyLinkLabel={t('Copy Link')}
                         copyIPFSLinkLabel={t('Copy IPFS Link')}
@@ -202,6 +219,9 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
                         onEntryShare={handleEntryShare}
                         onEntryFlag={handleEntryFlag}
                         onLinkCopy={handleLinkCopy}
+                        onClickReplies={handleClickReplies}
+                        handleFollow={handleFollow}
+                        handleUnfollow={handleUnfollow}
                       />
                     )}
                   </>

@@ -10,6 +10,7 @@ export type IconType =
   | 'appAkasha'
   | 'appEns'
   | 'appFeed'
+  | 'appIpfs'
   | 'activity'
   | 'akasha'
   | 'addAppGrey'
@@ -29,14 +30,18 @@ export type IconType =
   | 'coins'
   | 'copy'
   | 'check'
+  | 'checkSimple'
   | 'document'
   | 'editSimple'
   | 'edit'
   | 'emoji'
   | 'eye'
+  | 'ethereum'
   | 'ethereumWorldLogo'
   | 'error'
   | 'facebook'
+  | 'following'
+  | 'hashtag'
   | 'heart'
   | 'home'
   | 'hotTopics'
@@ -65,6 +70,7 @@ export type IconType =
   | 'search'
   | 'settings'
   | 'share'
+  | 'subscribe'
   | 'stopwatch'
   | 'shareSmallBlue'
   | 'shareSmallDark'
@@ -79,6 +85,7 @@ export type IconType =
   | 'twitter'
   | 'underline'
   | 'upload'
+  | 'video'
   | 'wallet'
   | 'walletconnect';
 
@@ -88,6 +95,7 @@ export const iconTypes: IconType[] = [
   'appCenter',
   'appEns',
   'appFeed',
+  'appIpfs',
   'activity',
   'addAppGrey',
   'akasha',
@@ -106,15 +114,19 @@ export const iconTypes: IconType[] = [
   'code',
   'copy',
   'check',
+  'checkSimple',
   'coins',
   'document',
   'editSimple',
   'edit',
   'emoji',
   'eye',
+  'ethereum',
   'ethereumWorldLogo',
   'error',
   'facebook',
+  'following',
+  'hashtag',
   'heart',
   'home',
   'hotTopics',
@@ -142,6 +154,7 @@ export const iconTypes: IconType[] = [
   'search',
   'settings',
   'share',
+  'subscribe',
   'stopwatch',
   'shareSmallBlue',
   'shareSmallDark',
@@ -156,6 +169,7 @@ export const iconTypes: IconType[] = [
   'twitter',
   'underline',
   'upload',
+  'video',
   'wallet',
   'walletconnect',
 ];
@@ -168,7 +182,7 @@ export interface IconProps extends CommonInterface<any> {
   clickable?: boolean;
   primaryColor?: boolean;
   accentColor?: boolean;
-  size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xxl';
+  size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
 const StyledRefDiv = styled.div`
@@ -200,19 +214,19 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
     `
       & * {
         stroke: ${props.color};
-      }`}
+      }`};
   ${props =>
     props.primaryColor &&
     `
       & * {
         stroke: ${props.theme.colors.primaryText};
-      }`}
-      ${props =>
-        props.accentColor &&
-        `
-          & * {
-            stroke: ${props.theme.colors.accent};
-          }`}
+      }`};
+  ${props =>
+    props.accentColor &&
+    `
+      & * {
+        stroke: ${props.theme.colors.accent};
+      }`};
   ${props =>
     props.clickable &&
     `
@@ -222,49 +236,49 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
           stroke: ${props.theme.colors.accent};
         }
       }
-    `}
-    ${props => {
-      if (props.size) {
-        switch (props.size) {
-          case 'xxs':
-            return css`
-              width: 0.75em;
-              height: 0.75em;
-            `;
-          case 'xs':
-            return css`
-              width: 1em;
-              height: 1em;
-            `;
-          case 'sm':
-            return css`
-              width: 1.5em;
-              height: 1.5em;
-            `;
-          case 'md':
-            return css`
-              width: 2em;
-              height: 2em;
-            `;
-          case 'lg':
-            return css`
-              width: 2.5em;
-              height: 2.5em;
-            `;
-          case 'xxl':
-            return css`
-              width: 4em;
-              height: 4em;
-            `;
-          default:
-            return css`
-              width: 1.5em;
-              height: 1.5em;
-            `;
-        }
+    `};
+  ${props => {
+    if (props.size) {
+      switch (props.size) {
+        case 'xxs':
+          return css`
+            width: 0.75rem;
+            height: 0.75rem;
+          `;
+        case 'xs':
+          return css`
+            width: 1rem;
+            height: 1rem;
+          `;
+        case 'sm':
+          return css`
+            width: 1.25rem;
+            height: 1.25rem;
+          `;
+        case 'md':
+          return css`
+            width: 1.5rem;
+            height: 1.5rem;
+          `;
+        case 'lg':
+          return css`
+            width: 2rem;
+            height: 2rem;
+          `;
+        case 'xl':
+          return css`
+            width: 2.5rem;
+            height: 2.5rem;
+          `;
+        default:
+          return css`
+            width: 1.5rem;
+            height: 1.5rem;
+          `;
       }
-      return;
-    }}
+    }
+    return;
+  }};
 `;
 
 export { Icon };

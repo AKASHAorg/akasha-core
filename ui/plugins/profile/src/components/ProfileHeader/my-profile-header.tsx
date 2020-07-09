@@ -36,13 +36,18 @@ export const MyProfilePageHeader = () => {
       onClickFollowing={() => {}}
       // @ts-ignore
       profileData={cardData}
-      userInfoTitle={'About me'}
-      actionsTitle={'Actions'}
-      mostPopularActionsTitle={'Most popular actions'}
-      followingTitle={'Following'}
-      appsTitle={'Apps'}
-      usersTitle={'Users'}
-      shareProfileText={'Share Profile'}
+      onChangeProfileData={() => {}}
+      getProfileProvidersData={() => {}}
+      descriptionLabel={'About me'}
+      actionsLabel={'Actions'}
+      editProfileLabel={'Edit profile'}
+      changeCoverImageLabel={'Change cover image'}
+      cancelLabel={'Cancel'}
+      saveChangesLabel={'Save changes'}
+      followingLabel={'Following'}
+      appsLabel={'Apps'}
+      usersLabel={'Users'}
+      shareProfileLabel={'Share Profile'}
     />
   );
 };

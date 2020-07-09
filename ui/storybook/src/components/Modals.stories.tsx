@@ -31,4 +31,4 @@ const ShareModalComponent = () => {
   );
 };
 
-storiesOf('Modals|Share Modal', module).add('Share', () => <ShareModalComponent />);
+storiesOf('Modals/Share Modal', module).add('Share', () => <ShareModalComponent />);
