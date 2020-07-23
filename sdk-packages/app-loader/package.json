@@ -35,7 +35,8 @@
     "single-spa": "5.3.4"
   },
   "devDependencies": {
-    "@akashaproject/ui-awf-typings": "*"
+    "@akashaproject/ui-awf-typings": "*",
+    "path-to-regexp": "^6.1.0"
   },
   "peerDependencies": {
     "rxjs": "^6.5.5"
