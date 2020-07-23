@@ -121,6 +121,7 @@ export interface IProps {
   sidebarSlotId: string;
   topbarSlotId: string;
   pluginSlotId: string;
+  rootWidgetSlotId: string;
   widgetSlotId: string;
   modalSlotId: string;
   themeReadyEvent: () => void;
@@ -169,7 +170,14 @@ class LayoutWidget extends PureComponent<IProps> {
   }
 
   public render() {
-    const { sidebarSlotId, topbarSlotId, pluginSlotId, widgetSlotId, modalSlotId } = this.props;
+    const {
+      sidebarSlotId,
+      topbarSlotId,
+      pluginSlotId,
+      rootWidgetSlotId,
+      widgetSlotId,
+      modalSlotId,
+    } = this.props;
     const { showSidebar } = this.state;
 
     if (this.state.hasErrors) {
@@ -200,7 +208,10 @@ class LayoutWidget extends PureComponent<IProps> {
                 <MainArea fill={true} align="center" sidebarVisible={sidebarVisible}>
                   <Box fill={true} flex={true} direction="row">
                     <PluginSlot id={pluginSlotId} fill={true} />
-                    <WidgetSlot id={widgetSlotId} fill={true} />
+                    <WidgetSlot fill={true}>
+                      <Box id={rootWidgetSlotId} />
+                      <Box id={widgetSlotId} />
+                    </WidgetSlot>
                   </Box>
                 </MainArea>
               </Box>

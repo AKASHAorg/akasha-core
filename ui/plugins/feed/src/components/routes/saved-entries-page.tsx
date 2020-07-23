@@ -6,7 +6,7 @@ import { useProfileState } from '../../state/profile-state';
 import { IGetFeedOptions } from '../../state/feed-state';
 import { useTranslation } from 'react-i18next';
 
-const { Box, VirtualList, EntryCard, ErrorInfoCard } = DS;
+const { Box, VirtualList, EntryCard, ErrorInfoCard, ErrorLoader, Button } = DS;
 
 const noop = () => null;
 
@@ -85,16 +85,29 @@ const SavedEntriesPage: React.FC<ISavedEntriesPageProps & RouteProps> = props =>
     return;
   };
 
+  const handleLogin = () => {
+    return;
+  };
+
   return (
     <Box fill={true}>
       {!loggedEthAddress && !fetching && (
         <>
-          <Box>You must login to view your saved entries!</Box>
-          <Box>Login Now!</Box>
+          <ErrorLoader
+            type="no-login"
+            title="No Ethereum address detected"
+            details="You need to login or allow access to your current Ethereum address in your Web3 Ethereum client like MetaMask, and then reload, please."
+          >
+            <Button label="Connect Wallet" primary={true} onClick={handleLogin} />
+          </ErrorLoader>
         </>
       )}
       {loggedEthAddress && !fetching && bookmarkState.data.bookmarkedIds.size === 0 && (
-        <Box>There are no bookmarks. Start saving entries to have them here!</Box>
+        <ErrorLoader
+          type="missing-saved-items"
+          title="Save your inspiration"
+          details="You have not yet added any post to your saved items. Once you add them, they will be displayed here."
+        />
       )}
       {loggedEthAddress && fetching && <Box>Loading Saved entries, please wait!</Box>}
       <ErrorInfoCard errors={bookmarkState.data.errors} title={t('Error')}>
