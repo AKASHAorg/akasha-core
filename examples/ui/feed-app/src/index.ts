@@ -22,6 +22,7 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
     layout: layout.application,
     // define an app that will load at root '/' path
     rootLoadedApp: feedPlugin.application,
+    System: System,
   };
 
   const registeredPlugins: IAppEntry[] = [
@@ -44,7 +45,7 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
     },
     {
       app: loginWidget.application,
-      config: { slot: layout.application.widgetSlotId, notOnMobile: true },
+      config: { slot: layout.application.rootWidgetSlotId, notOnMobile: true },
     },
   ];
   const profilePlugin = await System.import('@plugins/profile');

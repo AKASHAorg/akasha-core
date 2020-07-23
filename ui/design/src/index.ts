@@ -56,6 +56,7 @@ import {
 import TextInputField from './components/Forms/text-input-field';
 import { AppIcon, Icon, iconTypes } from './components/Icon';
 import ErrorInfoCard from './components/Errors/error-info-card';
+import ErrorLoader from './components/Errors/error-loader';
 
 import { CommentInput, SearchInput, DropSearchInput } from './components/Input';
 import {
@@ -96,6 +97,7 @@ const exported = {
   DuplexButton,
   EditableAvatar,
   ErrorInfoCard,
+  ErrorLoader,
   AppInfoWidgetCard,
   AppsWidgetCard,
   BasicCardBox,

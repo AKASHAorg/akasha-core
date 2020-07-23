@@ -13,6 +13,7 @@ export interface ILoaderConfig {
   rootNodeId: string;
   layout: IWidget;
   rootLoadedApp: IAppEntry['app'];
+  System: any;
 }
 
 export interface IWidgetConfig {
@@ -59,6 +60,8 @@ export interface IWidget {
   pluginSlotId?: string;
   topbarSlotId?: string;
   sidebarSlotId?: string;
+  widgetSlotId?: string;
+  rootWidgetSlotId?: string;
   sdkModules?: SDKdependency[];
 }
 
