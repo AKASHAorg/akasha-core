@@ -34,7 +34,7 @@ export const application: Application = {
     ),
   name: 'ui-plugin-feed',
   sdkModules: [{ module: commons }, { module: dbModule }],
-  title: 'AKASHA Feed',
+  title: 'Home',
   menuItems: routes,
   logo: { type: LogoTypeSource.ICON, value: 'appFeed' },
   widgets: {

@@ -4,8 +4,8 @@
   "description": "Plugin loader for AKASHA web",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
-    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
-    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
+    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)"
   ],
   "license": "MIT",
   "repository": {
