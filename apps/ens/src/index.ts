@@ -1,8 +1,8 @@
 import { moduleName as commons } from '@akashaproject/sdk-common/lib/constants';
 import { moduleName as dbModule } from '@akashaproject/sdk-db/lib/constants';
 import { initReactI18next } from 'react-i18next';
-import routes, { rootRoute } from './routes';
 import { Application, LogoTypeSource } from '@akashaproject/ui-awf-typings';
+import routes, { rootRoute } from './routes';
 
 export const application: Application = {
   activeWhen: {
@@ -14,13 +14,13 @@ export const application: Application = {
   },
   loadingFn: (): Promise<any> =>
     import(
-      /* webpackChunkName: "3boxChunk" */
+      /* webpackChunkName: "ensChunk" */
       /* webpackMode: "lazy" */
       './components'
     ),
-  name: '3box-app',
+  name: 'ens-app',
   sdkModules: [{ module: commons }, { module: dbModule }],
   menuItems: routes,
-  title: '3box',
-  logo: { type: LogoTypeSource.ICON, value: 'app3Box' },
+  title: 'ENS',
+  logo: { type: LogoTypeSource.ICON, value: 'appEns' },
 };

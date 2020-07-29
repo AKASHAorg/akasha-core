@@ -53,6 +53,7 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   const appCenterPlugin = await System.import('@plugins/app-center');
   const notificationsPlugin = await System.import('@plugins/notifications');
   const boxApp = await System.import('@app/3box');
+  const ensApp = await System.import('@app/ens');
   const ipfs = await System.import('ipfs');
   const sdk = await System.import('@akashaproject/sdk');
   const world = sdk.init({
@@ -95,6 +96,12 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   });
   world.appLoader.registerApp({
     app: boxApp.application,
+    config: {
+      area: MenuItemAreaType.AppArea,
+    },
+  });
+  world.appLoader.registerApp({
+    app: ensApp.application,
     config: {
       area: MenuItemAreaType.AppArea,
     },
