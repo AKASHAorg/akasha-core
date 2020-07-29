@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { Icon } from '../../Icon/index';
-import { StyledSearchBox, StyledTextInput } from '../../Input/search-input/styled-search-input';
+import {
+  StyledSearchBox,
+  StyledTextInput,
+} from '../../Input/drop-search-input/drop-styled-search-input';
 import { emojis } from './emojis';
 import { groups } from './groups';
 import {

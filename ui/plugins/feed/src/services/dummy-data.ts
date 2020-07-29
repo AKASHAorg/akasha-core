@@ -10,7 +10,10 @@ export const generateProfileData = (ethAddress: string): IProfileData => {
   return {
     ethAddress,
     coverImage: 'goldenrod',
+    avatar: 'http://placebeard.it/480/480',
     name: 'AKASHA WORLD',
+    userName: '@akashaworld',
+    ensName: 'akashaworld.akasha.eth',
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
     apps: '12',
@@ -40,15 +43,13 @@ const genTime = () => {
 
 export const genEntryData = (entryId: string) => ({
   entryId,
-  ethAddress: '0x003410490059837320006570047391024572000',
-  name: 'AKASHA WORLD',
-  avatar: 'http://placebeard.it/480/480',
+  author: generateProfileData(genEthAddress()()),
   content: contentStrings
     .slice(Math.floor(Math.random() * Math.floor(3)), Math.floor(Math.random() * Math.floor(9)))
     .join('. '),
   time: genTime(),
-  repliesCount: randomNumber(0, 1000),
-  repostsCount: randomNumber(0, 1210),
+  replies: randomNumber(0, 1000),
+  reposts: randomNumber(0, 1210),
 });
 
 export const genEthAddress = () => {

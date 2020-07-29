@@ -18,21 +18,30 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
     <StyledDrop
       overflow="hidden"
       target={target}
-      align={{ top: 'bottom', right: 'left' }}
+      align={{ top: 'bottom', right: 'right' }}
       onClickOutside={onMenuClose}
       onEsc={onMenuClose}
     >
-      <Box pad="small" gap="small" margin={{ right: 'small' }}>
+      <Box pad="xxsmall" width={{ min: '13rem' }}>
         <StyledSelectBox>
           <TextIcon
-            iconType="link"
+            iconType="appIpfs"
             label={copyIPFSLinkLabel}
             onClick={onLinkCopy('ipfs')}
             clickable={true}
+            iconSize="xs"
+            fontSize="small"
           />
         </StyledSelectBox>
         <StyledSelectBox>
-          <TextIcon iconType="app" label={flagAsLabel} onClick={onFlag} clickable={true} />
+          <TextIcon
+            iconType="report"
+            label={flagAsLabel}
+            onClick={onFlag}
+            color={'red'}
+            iconSize="xs"
+            fontSize="small"
+          />
         </StyledSelectBox>
       </Box>
     </StyledDrop>

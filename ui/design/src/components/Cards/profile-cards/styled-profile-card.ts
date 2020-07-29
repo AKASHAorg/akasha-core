@@ -6,6 +6,11 @@ const AvatarDiv = styled.div`
   top: -1.875em;
 `;
 
+const MiniProfileAvatarDiv = styled.div`
+  position: relative;
+  top: 1rem;
+`;
+
 const ShareButtonContainer = styled(Box)`
   position: relative;
   top: 1em;
@@ -59,4 +64,5 @@ export {
   StyledCenterDiv,
   StyledAvatarEditDiv,
   StyledImage,
+  MiniProfileAvatarDiv,
 };

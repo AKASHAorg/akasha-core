@@ -40,7 +40,7 @@ const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
           margin={margin}
           clickable={true}
           color={labelColor}
-          bold={true}
+          fontWeight={'bold'}
         />
         <Box pad="none" align="start" gap="large">
           {dataSource.map((appData, index) => (

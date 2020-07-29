@@ -65,7 +65,7 @@ const BoxProfile: React.FC<IMyProfileProps> = props => {
             >
               <BoxAvatar
                 ethAddress={profileId || ''}
-                withBorder={true}
+                border="lg"
                 size="xl"
                 src={getImageSrc(state.data.visitingProfile.image)}
               />

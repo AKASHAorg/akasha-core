@@ -22,6 +22,10 @@ export interface IShapes {
       size: string;
       height: string;
     };
+    xxlarge: {
+      size: string;
+      height: string;
+    };
   };
   fontWeight: {
     regular: number;
@@ -51,6 +55,10 @@ const shapes: IShapes = {
     },
     xlarge: {
       size: '1.125rem', // ~18px @16px base
+      height: '1.5',
+    },
+    xxlarge: {
+      size: '1.5rem', // ~24px @16px base
       height: '1.5',
     },
   },

@@ -1,8 +1,9 @@
 import { initReactI18next } from 'react-i18next';
-import routes, { rootRoute } from './routes';
+import routes, { MY_FEED_PAGE, rootRoute } from './routes';
 import { moduleName as commons } from '@akashaproject/sdk-common/lib/constants';
 import { moduleName as dbModule } from '@akashaproject/sdk-db/lib/constants';
 import { Application, LogoTypeSource } from '@akashaproject/ui-awf-typings';
+import { Widget as FeedSourcesWidget } from './feed-source-widget';
 
 /**
  * All the plugins must export an object like this:
@@ -36,4 +37,8 @@ export const application: Application = {
   title: 'AKASHA Feed',
   menuItems: routes,
   logo: { type: LogoTypeSource.ICON, value: 'appFeed' },
+  widgets: {
+    // use path-to-regexp style paths
+    [`${routes[MY_FEED_PAGE]}`]: [FeedSourcesWidget],
+  },
 };

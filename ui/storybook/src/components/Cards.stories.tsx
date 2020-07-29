@@ -2,7 +2,7 @@
 import DS from '@akashaproject/design-system';
 import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
 import { action } from '@storybook/addon-actions';
-import { boolean, color, object, select, text } from '@storybook/addon-knobs';
+import { boolean, color, object, select, text, number } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import {
@@ -19,6 +19,7 @@ import {
   editProfileLabel,
   ensProviderData,
   entryData,
+  entrySocialData,
   followingLabel,
   placeholderLabel,
   profileData,
@@ -35,12 +36,16 @@ import {
   bookmarkedLabel,
   repliesLabel,
   repostsLabel,
+  trendingProfilesData,
+  trendingTagsData,
 } from './cards-data';
 
 const {
+  ViewportSizeProvider,
   AppInfoWidgetCard,
   AppsWidgetCard,
   Box,
+  CustomizeFeedCard,
   EditorCard,
   EntryCard,
   BoxFormCard,
@@ -48,10 +53,16 @@ const {
   MiniInfoWidgetCard,
   ProfileCard,
   ProfileWidgetCard,
+  ProfileMiniCard,
   TopicsWidgetCard,
+  TrendingWidgetCard,
+  SourcesWidgetCard,
+  TutorialWidgetCard,
+  TagCard,
+  TagDetailCard,
 } = DS;
 
-storiesOf('Cards|Widget Cards', module)
+storiesOf('Cards/Widget Cards', module)
   .add('topics widget card', () => (
     <Box pad="none" align="center">
       <TopicsWidgetCard
@@ -75,6 +86,58 @@ storiesOf('Cards|Widget Cards', module)
         label={text('Text', 'Trending Apps')}
         labelColor={color('Color', '#132540')}
         dataSource={appsDataSource}
+      />
+    </Box>
+  ))
+  .add('tutorial widget card', () => (
+    <Box pad="none" align="center">
+      <TutorialWidgetCard
+        currentProgress={number('Current progress', 0)}
+        titleLabel={text('Title label', 'Pick your ethereum name')}
+        subtitleLabel={text('Subtitle label', 'Take your address to the next level')}
+        infoLabel={text(
+          'Text',
+          'Your human-friendly Ethereum name can be used also in wallets instead of your address',
+        )}
+        subtitleIcon={text('Subtitle icon', 'iconEns')}
+        seeVideoTutorialLabel={text('See video label', 'See video tutorial')}
+        callToActionLabel={text('Call to action label', 'Go to app')}
+        learnMoreLabel={text('Learn more label', 'Learn more')}
+        handleSeeVideoTutorial={() => action('see video tutorial clicked')('Synthetic Event')}
+        handleDismiss={() => action('Dismiss Clicked')('Synthetic Event')}
+      />
+    </Box>
+  ))
+  .add('sources widget card', () => (
+    <Box pad="none" align="center">
+      <SourcesWidgetCard
+        titleLabel={text('Title label', 'My feed sources')}
+        hashtagsLabel={text('Hashtags label', 'Hashtags')}
+        profilesLabel={text('Profiles label', 'Profiles')}
+        seeAllLabel={text('See all label', 'See All')}
+        totalLabel={text('Total label', 'Total')}
+        tagsNumber={number('Tags number', 15)}
+        profilesNumber={number('Profiles number', 35)}
+        totalNumber={number('Total number', 50)}
+        onClickSeeAll={() => action('See All Clicked')('Synthetic Event')}
+      />
+    </Box>
+  ))
+  .add('trending widget card', () => (
+    <Box pad="none" align="center">
+      <TrendingWidgetCard
+        titleLabel={text('Title', 'Trending Right Now')}
+        topicsLabel={text('Topics label', 'Topics')}
+        profilesLabel={text('Profiles label', 'Profiles')}
+        showMoreLabel={text('Show more label', 'Show More')}
+        onClickProfile={ethAddress => action('profile Clicked')(ethAddress)}
+        onClickTag={tagName => action('tag clicked')(tagName)}
+        onClickSubscribeProfile={ethAddress => action('subscribe profile clicked')(ethAddress)}
+        onClickSubscribeTag={tagName => action('subscribe tag clicked')(tagName)}
+        onClickMoreTags={() => action('Show more Clicked')('Synthetic Event')}
+        onClickMoreProfiles={() => action('Show more Clicked')('Synthetic Event')}
+        tags={trendingTagsData}
+        profiles={trendingProfilesData}
       />
     </Box>
   ))
@@ -114,7 +177,7 @@ storiesOf('Cards|Widget Cards', module)
     </Box>
   ));
 
-storiesOf('Cards|Editor Cards', module).add('editor card', () => (
+storiesOf('Cards/Editor Cards', module).add('editor card', () => (
   <Box align="center" pad={{ top: '40px' }}>
     <EditorCard
       avatar={text('Logged Profile Avatar', 'https://www.stevensegallery.com/360/360')}
@@ -126,7 +189,7 @@ storiesOf('Cards|Editor Cards', module).add('editor card', () => (
   </Box>
 ));
 
-storiesOf('Cards|Profile Cards', module)
+storiesOf('Cards/Profile Cards', module)
   .add('profile card', () => (
     <Box align="center" pad={{ top: '40px' }}>
       <ProfileCard
@@ -168,9 +231,19 @@ storiesOf('Cards|Profile Cards', module)
         shareProfileLabel={text('Share Profile', shareProfileLabel)}
       />
     </Box>
+  ))
+  .add('profile mini card', () => (
+    <Box pad="none" align="center" width="500px">
+      <ProfileMiniCard
+        handleFollow={() => action('Following Box Clicked')('Synthetic Event')}
+        handleUnfollow={() => action('Following Box Clicked')('Synthetic Event')}
+        // @ts-ignore
+        profileData={select('Profile Data', { dapp: appData, user: profileData }, profileData)}
+      />
+    </Box>
   ));
 
-storiesOf('Cards|Entry Cards', module).add('entry card', () => (
+storiesOf('Cards/Entry Cards', module).add('entry card', () => (
   <Box align="center" pad={{ top: '40px' }}>
     <EntryCard
       copyIPFSLinkLabel={text('Copy IPFS link Label', copyIPFSLinkLabel)}
@@ -181,15 +254,20 @@ storiesOf('Cards|Entry Cards', module).add('entry card', () => (
       onRepost={() => action('Repost Clicked')('Synthetic Event')}
       onEntryShare={() => action('Share entry Clicked')('Synthetic Event')}
       onEntryFlag={() => action('Flag Entry Clicked')('Synthetic Event')}
+      onClickReplies={() => action('Replies Clicked')('Synthetic Event')}
       onLinkCopy={() => action('Link Copied')('Synthetic Event')}
       onEntryBookmark={() => action('Bookmark Clicked')('Synthetic Event')}
       entryData={object('Entry Data', entryData)}
       isBookmarked={false}
       repliesLabel={text('Replies Label', repliesLabel)}
       repostsLabel={text('Reposts Label', repostsLabel)}
+      repostLabel={text('Repost Label', 'Repost')}
+      repostWithCommentLabel={text('Repost with comment Label', 'Repost with comment')}
       onClickAvatar={() => action('Avatar Clicked')('Synthetic Event')}
       shareLabel={text('Share Label', shareLabel)}
       copyLinkLabel={text('Copy link Label', copyLinkLabel)}
+      handleFollow={() => action('Following Box Clicked')('Synthetic Event')}
+      handleUnfollow={() => action('Following Box Clicked')('Synthetic Event')}
       locale={select('Locale', { en: 'en', ro: 'ro', es: 'es' }, 'en')}
       loggedProfileAvatar={text('Logged Profile Avatar', 'https://www.stevensegallery.com/360/360')}
       loggedProfileEthAddress={text(
@@ -200,7 +278,7 @@ storiesOf('Cards|Entry Cards', module).add('entry card', () => (
   </Box>
 ));
 
-storiesOf('Cards|Form Cards', module)
+storiesOf('Cards/Form Cards', module)
   .add('3Box form card', () => (
     <Box align="center" pad={{ top: '40px' }}>
       <BoxFormCard
@@ -244,5 +322,44 @@ storiesOf('Cards|Form Cards', module)
         validateEns={() => action('validating ens')('Synthetic Event')}
         validEns={boolean('valid ens', true)}
       />
+    </Box>
+  ));
+
+storiesOf('Cards/Onboarding Cards', module)
+  .add('customize feed card', () => (
+    <Box align="center" pad={{ top: '40px' }} height="600px">
+      <ViewportSizeProvider>
+        <CustomizeFeedCard
+          profiles={trendingProfilesData}
+          tags={trendingTagsData}
+          handleFollow={ethAddress => action('Follow')(ethAddress)}
+          handleUnfollow={ethAddress => action('Unfollow')(ethAddress)}
+          handleSubscribe={tagName => action('Subscribe')(tagName)}
+          handleUnsubscribe={tagName => action('Unsubscribe from tag')(tagName)}
+          handleCreateFeed={() => action('Create feed')('Synthetic Event')}
+        />
+      </ViewportSizeProvider>
+    </Box>
+  ))
+  .add('tag card', () => (
+    <Box align="center" pad={{ top: '40px' }}>
+      <ViewportSizeProvider>
+        <TagCard
+          tag={trendingTagsData[0]}
+          handleSubscribe={tagName => action('Subscribe to tag')(tagName)}
+          handleUnsubscribe={tagName => action('Unsubscribe from tag')(tagName)}
+        />
+      </ViewportSizeProvider>
+    </Box>
+  ))
+  .add('tag detail card', () => (
+    <Box align="center" pad={{ top: '40px' }}>
+      <ViewportSizeProvider>
+        <TagDetailCard
+          tag={trendingTagsData[0]}
+          handleSubscribe={tagName => action('Subscribe to tag')(tagName)}
+          handleUnsubscribe={tagName => action('Unsubscribe from tag')(tagName)}
+        />
+      </ViewportSizeProvider>
     </Box>
   ));

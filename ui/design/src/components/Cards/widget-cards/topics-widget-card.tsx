@@ -37,7 +37,7 @@ const TopicsWidgetCard: React.FC<ITopicsCardWidgetProps> = props => {
           margin={margin}
           color={labelColor}
           clickable={true}
-          bold={true}
+          fontWeight={'bold'}
         />
         <Box pad="none" align="start" gap="large">
           {dataSource.map((topicData, index) => (

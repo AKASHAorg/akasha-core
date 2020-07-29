@@ -3,6 +3,7 @@ import MarginInterface from '../../../interfaces/margin.interface';
 import { Icon } from '../../Icon';
 import { IconType } from '../../Icon/icon';
 import { StyledText, StyledTextIcon } from './styled-text-icon';
+import { TextProps } from 'grommet';
 
 export interface ITextIconProps {
   className?: string;
@@ -11,33 +12,26 @@ export interface ITextIconProps {
   backgroundColor?: string;
   color?: string;
   spacing?: string;
-  label: string;
+  label?: string;
   iconType: IconType;
-  bold?: boolean;
   clickable?: boolean;
-  actionType?: IActionType;
   menuActive?: boolean;
   menuIcon?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  iconSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  fontSize?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge' | string;
+  fontWeight?: 'normal' | 'bold' | number;
+  primaryColor?: boolean;
+  accentColor?: boolean;
+  reverse?: boolean;
+  ref?: React.Ref<HTMLDivElement>;
 }
 
-export type IActionType = 'Assign Tokens' | 'Create a new vote' | 'Check finance';
-
-export interface IStyledTextProps {
+export interface IStyledTextProps extends TextProps {
   bold?: boolean;
+  accentColor?: boolean;
 }
 
-const actionTypeIcons: {
-  'Assign Tokens': IconType;
-  'Create a new vote': IconType;
-  'Check finance': IconType;
-} = {
-  'Assign Tokens': 'person',
-  'Create a new vote': 'thumbsUpGrey',
-  'Check finance': 'app',
-};
-
-const TextIcon: React.FC<ITextIconProps> = props => {
+const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
   const {
     className,
     onClick,
@@ -47,12 +41,15 @@ const TextIcon: React.FC<ITextIconProps> = props => {
     iconType,
     label,
     spacing,
-    bold,
     clickable,
-    actionType,
     menuActive,
     menuIcon,
-    size,
+    iconSize,
+    fontSize,
+    fontWeight,
+    primaryColor,
+    accentColor,
+    reverse,
   } = props;
 
   return (
@@ -68,16 +65,31 @@ const TextIcon: React.FC<ITextIconProps> = props => {
       className={className}
       menuActive={menuActive}
       menuIcon={menuIcon}
+      ref={ref}
     >
-      {actionType ? (
-        <Icon type={actionTypeIcons[actionType]} color={color} size={size} />
-      ) : (
-        <Icon type={iconType} color={color} size={size} />
+      {!reverse && (
+        <Icon
+          type={iconType}
+          color={color}
+          size={iconSize}
+          primaryColor={primaryColor}
+          accentColor={accentColor}
+        />
       )}
-
-      <StyledText bold={bold}>{label}</StyledText>
+      <StyledText weight={fontWeight} size={fontSize} accentColor={accentColor}>
+        {label}
+      </StyledText>
+      {reverse && (
+        <Icon
+          type={iconType}
+          color={color}
+          size={iconSize}
+          primaryColor={primaryColor}
+          accentColor={accentColor}
+        />
+      )}
     </StyledTextIcon>
   );
-};
+});
 
 export default TextIcon;
