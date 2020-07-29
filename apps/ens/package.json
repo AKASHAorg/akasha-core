@@ -1,8 +1,8 @@
 {
-  "name": "@akashaproject/app-3box-integration",
+  "name": "@akashaproject/app-ens-integration",
   "private": true,
   "version": "0.1.0",
-  "description": "3box integration package",
+  "description": "ENS integration package",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
@@ -29,7 +29,7 @@
     "extract:translations": "i18next --config ./i18next-parser.config.js",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/*3box* ../../ui/build/apps",
+    "postpack": "copyfiles -f ./dist/*ens* ../../ui/build/apps",
     "pack:watch": "nodemon"
   },
   "nodemonConfig": {
@@ -50,7 +50,6 @@
     "@akashaproject/sdk-runtime": "*",
     "@akashaproject/sdk-db": "*",
     "@akashaproject/design-system": "*",
-    "3box": "1.18.1",
     "react-i18next": "11.4.0",
     "react-router-dom": "5.1.2",
     "single-spa-react": "2.14.0",

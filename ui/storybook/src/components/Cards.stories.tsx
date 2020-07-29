@@ -320,7 +320,7 @@ storiesOf('Cards/Form Cards', module)
         providerData={object('Provider Data', ensProviderData)}
         handleSubmit={() => action('Form submitted')('Synthetic Event')}
         validateEns={() => action('validating ens')('Synthetic Event')}
-        validEns={select('valid ens', ['valid', 'invalid'], undefined)}
+        validEns={boolean('valid ens', true)}
       />
     </Box>
   ));
