@@ -1,6 +1,5 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { RouteComponentProps } from 'react-router-dom';
 
 const { Helmet } = DS;
 
@@ -10,7 +9,7 @@ export interface SettingsPageProps {
   logger: any;
 }
 
-const SettingsPage: React.FC<SettingsPageProps & RouteComponentProps> = () => {
+const SettingsPage: React.FC<SettingsPageProps> = () => {
   return (
     <>
       <Helmet>

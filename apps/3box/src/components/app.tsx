@@ -71,33 +71,23 @@ export default class App extends PureComponent<any> {
                   <Route
                     path={subRoutes[EDIT_PAGE]}
                     render={routeProps => (
-                      <>
-                        <DS.Helmet>
-                          <title>3Box | Edit Page</title>
-                        </DS.Helmet>
-                        <MyBoxProfile
-                          {...routeProps}
-                          sdkModules={sdkModules}
-                          globalChannel={globalChannel}
-                          logger={logger}
-                        />
-                      </>
+                      <MyBoxProfile
+                        {...routeProps}
+                        sdkModules={sdkModules}
+                        globalChannel={globalChannel}
+                        logger={logger}
+                      />
                     )}
                   />
                   <Route
                     path={subRoutes[SETTINGS_PAGE]}
                     render={(routeProps: RouteComponentProps) => (
-                      <>
-                        <DS.Helmet>
-                          <title>3Box | Settings Page</title>
-                        </DS.Helmet>
-                        <BoxSettings
-                          {...routeProps}
-                          sdkModules={sdkModules}
-                          globalChannel={globalChannel}
-                          logger={logger}
-                        />
-                      </>
+                      <BoxSettings
+                        {...routeProps}
+                        sdkModules={sdkModules}
+                        globalChannel={globalChannel}
+                        logger={logger}
+                      />
                     )}
                   />
                   {/* this route is not in menuItems because we don't have a explore functionality for 3box yet */}

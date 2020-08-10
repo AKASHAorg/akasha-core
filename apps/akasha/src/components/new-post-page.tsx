@@ -1,6 +1,5 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { RouteComponentProps } from 'react-router-dom';
 
 const { Helmet } = DS;
 
@@ -10,7 +9,7 @@ interface NewPostPageProps {
   logger: any;
 }
 
-const NewPostPage: React.FC<NewPostPageProps & RouteComponentProps> = () => {
+const NewPostPage: React.FC<NewPostPageProps> = () => {
   return (
     <>
       <Helmet>

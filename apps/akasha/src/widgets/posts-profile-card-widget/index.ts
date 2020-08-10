@@ -14,16 +14,16 @@ export const Widget: IWidget = {
     // In this case I will preserve the old ns instead loading a possibly undefined ns.
     loadNS: [],
     // translation namespace. defaults to plugin.name
-    // ns: 'ui-widget-sidebar',
+    ns: 'akasha-app',
     // i18next.use(arr[0]).use(arr[1]).use(arr[n])
     use: [initReactI18next],
   },
   loadingFn: () =>
     import(
-      /* webpackChunkName: "profile-card-widget" */
+      /* webpackChunkName: "posts-profile-card-widget" */
       /* webpackMode: "lazy" */
-      './profile-card-widget'
+      './posts-profile-card-widget'
     ),
-  name: 'ui-widget-profile-card',
+  name: 'ui-widget-posts-profile-card',
   sdkModules: [{ module: common }],
 };

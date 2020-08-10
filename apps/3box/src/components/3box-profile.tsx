@@ -31,7 +31,7 @@ const getImageSrc = (boxImage: any) => {
 
 const BoxProfile: React.FC<IMyProfileProps> = props => {
   const [state, actions] = useBoxProfile(props.sdkModules, props.globalChannel, props.logger);
-  const { profileId } = useParams();
+  const { profileId } = useParams<{ profileId: string }>();
   const { t } = useTranslation();
 
   React.useEffect(() => {

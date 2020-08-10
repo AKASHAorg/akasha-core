@@ -62,7 +62,7 @@ const MainAreaCardBox = styled(BasicCardBox)<{ verticalFill?: boolean }>`
 `;
 
 const WidgetAreaCardBox = styled(BasicCardBox)`
-  width: 21rem;
+  width: 100%;
 `;
 
 const ModalCard = styled(BasicCardBox)`

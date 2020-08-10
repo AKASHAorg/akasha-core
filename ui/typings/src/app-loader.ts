@@ -63,6 +63,10 @@ export interface IWidget {
   widgetSlotId?: string;
   rootWidgetSlotId?: string;
   sdkModules?: SDKdependency[];
+  /**
+   * the path on which the widget will load
+   */
+  basePath?: string;
 }
 
 export enum MenuItemType {

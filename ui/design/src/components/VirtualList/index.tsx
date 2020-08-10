@@ -61,7 +61,6 @@ const VirtualList = (props: IVirtualListProps, ref?: React.Ref<any>) => {
     onItemRead,
   } = props;
   const [listState, setListState] = React.useState(initialState);
-
   React.useEffect(() => {
     if (
       initialState.newerEntries &&

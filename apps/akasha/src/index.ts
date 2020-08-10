@@ -9,6 +9,9 @@ import { Widget as NewPostCommunityGuidelines } from './widgets/new-post-communi
 import { Widget as TrendingWidget } from './widgets/trending-widget';
 import { Widget as ProfileCardWidget } from './widgets/posts-profile-card-widget';
 
+const myPostsRoute = `${routes[POSTS]}/my-posts`;
+const userPostsRoute = `${routes[POSTS]}/:userId`;
+
 export const application: Application = {
   activeWhen: {
     path: rootRoute,
@@ -31,6 +34,7 @@ export const application: Application = {
   widgets: {
     [routes[NEW_POST]]: [NewPostWohoo, NewPostTerms, NewPostCommunityGuidelines],
     [routes[FEED]]: [TrendingWidget],
-    [routes[POSTS]]: [ProfileCardWidget],
+    [myPostsRoute]: [ProfileCardWidget],
+    [userPostsRoute]: [ProfileCardWidget],
   },
 };

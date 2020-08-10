@@ -19,22 +19,27 @@ const MainArea = styled(Box)<{ sidebarVisible: boolean }>`
 `;
 
 const SidebarSlot = styled(Box)<{ visible: boolean }>`
-  width: 16rem;
-  height: 100%;
+  top: 3rem;
+  z-index: 999;
+  ${props => {
+    if (props.visible) {
+      return css`
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        min-width: 13.375em;
+      `;
+    }
+    return css``;
+  }}
   @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
     ${props => {
       if (props.visible) {
         return css`
-          position: absolute;
-          top: 3rem;
-          width: 100vw;
-          height: calc(100% - 3rem);
-          z-index: 999;
+          min-width: 90%;
         `;
       }
-      return css`
-        display: none;
-      `;
+      return '';
     }}
   }
 `;
@@ -47,15 +52,32 @@ const TopbarSlot = styled(Box)`
 
 const PluginSlot = styled(Box)`
   height: 100%;
-  flex: 2;
+  flex: 1 1;
+  flex-basis: 40em;
+  margin-right: 2em;
+  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
+    flex-basis: 40em;
+    margin-right: 0;
+    flex: 0.8 0;
+    margin: 0 auto;
+  }
 `;
 
 const WidgetSlot = styled(Box)`
   height: 100%;
-  flex: 1;
   align-items: center;
-  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
+  flex: 2 2;
+  flex-basis: 20em;
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    flex: 1 0.8;
+    flex-basis: 25em;
+  }
+  @media screen and (max-width: 670px) {
     display: none;
+  }
+  > div {
+    flex-shrink: 0;
+    width: 100%;
   }
 `;
 
@@ -97,17 +119,13 @@ const GlobalStyle = createGlobalStyle<{ theme: any }>`
     // 1024 and lower
     @media only screen and (max-width: ${props.theme.breakpoints.medium.value}px) {
       :root {
-        font-size: 15px;
-      }
-      ${PluginSlot} {
-        padding: 0 0.5em 0 0.5em;
-        flex: auto;
+        font-size: 16px;
       }
     }
     // 550 and lower
     @media only screen and (max-width: ${props.theme.breakpoints.small.value}px) {
       :root {
-        font-size: 14px;
+        font-size: 18px;
         line-height: 1.312;
       }
     }
@@ -204,9 +222,17 @@ class LayoutWidget extends PureComponent<IProps> {
             <Box fill={true}>
               <TopbarSlot id={topbarSlotId} />
               <Box direction="row" fill={true}>
-                <SidebarSlot id={sidebarSlotId} visible={sidebarVisible} />
+                <SidebarSlot animation="fadeIn" id={sidebarSlotId} visible={sidebarVisible} />
                 <MainArea fill={true} align="center" sidebarVisible={sidebarVisible}>
-                  <Box fill={true} flex={true} direction="row">
+                  <Box
+                    fill="vertical"
+                    flex={true}
+                    responsive={true}
+                    direction="row"
+                    width="60em"
+                    margin={{ top: '1em' }}
+                    pad="0 0.5em"
+                  >
                     <PluginSlot id={pluginSlotId} fill={true} />
                     <WidgetSlot fill={true}>
                       <Box id={rootWidgetSlotId} />

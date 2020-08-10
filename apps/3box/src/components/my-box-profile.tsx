@@ -79,6 +79,9 @@ const MyBoxProfile: React.FC<any> = ({ sdkModules, globalChannel, logger }) => {
   };
   return (
     <Box fill={true}>
+      <DS.Helmet>
+        <title>3Box | {t('Edit 3Box profile')}</title>
+      </DS.Helmet>
       <Box fill={true} pad={{ top: '1em' }} flex={true} align="center">
         <ErrorInfoCard errors={state.data.errors}>
           <>

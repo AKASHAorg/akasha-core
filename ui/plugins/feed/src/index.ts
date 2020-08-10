@@ -39,6 +39,6 @@ export const application: Application = {
   logo: { type: LogoTypeSource.ICON, value: 'appFeed' },
   widgets: {
     // use path-to-regexp style paths
-    [`${routes[MY_FEED_PAGE]}`]: [FeedSourcesWidget],
+    [routes[MY_FEED_PAGE]]: [FeedSourcesWidget],
   },
 };

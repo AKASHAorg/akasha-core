@@ -16,6 +16,7 @@ const {
   ErrorInfoCard,
   EntryCardLoading,
   MainAreaCardBox,
+  ErrorLoader,
 } = DS;
 
 export interface IFeedHomePageProps {
@@ -169,87 +170,116 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
           </Box>
         </Box>
       </MainAreaCardBox> */}
-      <Box fill={true} width={{ max: '36.313rem' }}>
-        <ErrorInfoCard title={t('Error')} errors={feedState.data.errors}>
-          <VirtualList
-            ref={vlInstance}
-            items={feedState.data.entryIds}
-            itemsData={feedState.data.entriesData}
-            loadInitialFeed={loadInitialFeed}
-            loadMore={loadMore}
-            loadItemData={loadItemData}
-            bookmarkedItems={bookmarkState.data.bookmarkedIds as Set<string>}
-            getNewItemsNotification={({ styles }) => (
-              <NewEntriesPopover onClick={handleNewerEntriesLoad} style={styles}>
-                <b>{feedState.data.feedViewState.newerEntries.length}</b> {t('new entries')}
-              </NewEntriesPopover>
-            )}
-            hasMoreItems={true}
-            onItemRead={handleItemRead}
-            initialState={feedState.data.feedViewState}
-            getItemCard={({ itemData, isBookmarked }) => {
-              return (
-                <ErrorInfoCard title={t('An error occured')} errors={itemData.status.errors}>
-                  <>
-                    {!itemData.author?.ethAddress && (
-                      <MainAreaCardBox>
-                        <EntryCardLoading />
-                      </MainAreaCardBox>
-                    )}
-                    {itemData.author?.ethAddress && (
-                      <EntryCard
-                        isBookmarked={isBookmarked}
-                        entryData={itemData}
-                        onClickAvatar={handleAvatarClick}
-                        onEntryBookmark={handleEntryBookmark}
-                        repliesLabel={t('Replies')}
-                        repostsLabel={t('Reposts')}
-                        repostLabel={t('Repost')}
-                        repostWithCommentLabel={t('Repost with comment')}
-                        shareLabel={t('Share')}
-                        copyLinkLabel={t('Copy Link')}
-                        copyIPFSLinkLabel={t('Copy IPFS Link')}
-                        flagAsLabel={t('Flag as inappropiate')}
-                        loggedProfileEthAddress={profileState.data.loggedEthAddress}
-                        locale={locale}
-                        style={{ height: 'auto' }}
-                        bookmarkLabel={t('Save')}
-                        bookmarkedLabel={t('Saved')}
-                        onRepost={handleEntryRepost}
-                        onEntryShare={handleEntryShare}
-                        onEntryFlag={handleEntryFlag}
-                        onLinkCopy={handleLinkCopy}
-                        onClickReplies={handleClickReplies}
-                        handleFollow={handleFollow}
-                        handleUnfollow={handleUnfollow}
-                      />
-                    )}
-                  </>
-                </ErrorInfoCard>
-              );
-            }}
-            customEntities={
-              !isMobile
-                ? [
-                    {
-                      position: 'before',
-                      // itemIndex: 0,
-                      itemId: feedState.data.entryIds.length ? feedState.data.entryIds[0] : null,
-                      getComponent: ({ key, style }: { key: string; style: any }) => (
-                        <EditorCard
-                          ethAddress={profileState.data.loggedEthAddress}
-                          publishLabel="Publish"
-                          placeholderLabel="Write something"
-                          onPublish={() => null}
-                          style={style}
-                          key={key}
-                        />
-                      ),
-                    },
-                  ]
-                : undefined
-            }
-          />
+      <Box fill={true}>
+        <ErrorInfoCard errors={feedState.data.errors}>
+          {(messages, isCritical) => (
+            <>
+              {messages && (
+                <ErrorLoader
+                  type="script-error"
+                  title={t('There was an error loading the feed')}
+                  details={messages}
+                />
+              )}
+              {!isCritical && (
+                <VirtualList
+                  ref={vlInstance}
+                  items={feedState.data.entryIds}
+                  itemsData={feedState.data.entriesData}
+                  loadInitialFeed={loadInitialFeed}
+                  loadMore={loadMore}
+                  loadItemData={loadItemData}
+                  bookmarkedItems={bookmarkState.data.bookmarkedIds as Set<string>}
+                  getNewItemsNotification={({ styles }) => (
+                    <NewEntriesPopover onClick={handleNewerEntriesLoad} style={styles}>
+                      <b>{feedState.data.feedViewState.newerEntries.length}</b> {t('new entries')}
+                    </NewEntriesPopover>
+                  )}
+                  hasMoreItems={true}
+                  onItemRead={handleItemRead}
+                  initialState={feedState.data.feedViewState}
+                  getItemCard={({ itemData, isBookmarked }) => {
+                    return (
+                      <ErrorInfoCard errors={itemData.status.errors}>
+                        {(errorMessages, hasCriticalErrors) => (
+                          <>
+                            {errorMessages && (
+                              <ErrorLoader
+                                type="script-error"
+                                title={t('There was an error loading the entry')}
+                                details={t('We cannot show this entry right now')}
+                                devDetails={errorMessages}
+                              />
+                            )}
+                            {!hasCriticalErrors && (
+                              <>
+                                {!itemData.author?.ethAddress && (
+                                  <MainAreaCardBox>
+                                    <EntryCardLoading />
+                                  </MainAreaCardBox>
+                                )}
+                                {itemData.author?.ethAddress && (
+                                  <EntryCard
+                                    isBookmarked={isBookmarked}
+                                    entryData={itemData}
+                                    onClickAvatar={handleAvatarClick}
+                                    onEntryBookmark={handleEntryBookmark}
+                                    repliesLabel={t('Replies')}
+                                    repostsLabel={t('Reposts')}
+                                    repostLabel={t('Repost')}
+                                    repostWithCommentLabel={t('Repost with comment')}
+                                    shareLabel={t('Share')}
+                                    copyLinkLabel={t('Copy Link')}
+                                    copyIPFSLinkLabel={t('Copy IPFS Link')}
+                                    flagAsLabel={t('Flag as inappropiate')}
+                                    loggedProfileEthAddress={profileState.data.loggedEthAddress}
+                                    locale={locale}
+                                    style={{ height: 'auto' }}
+                                    bookmarkLabel={t('Save')}
+                                    bookmarkedLabel={t('Saved')}
+                                    onRepost={handleEntryRepost}
+                                    onEntryShare={handleEntryShare}
+                                    onEntryFlag={handleEntryFlag}
+                                    onLinkCopy={handleLinkCopy}
+                                    onClickReplies={handleClickReplies}
+                                    handleFollow={handleFollow}
+                                    handleUnfollow={handleUnfollow}
+                                  />
+                                )}
+                              </>
+                            )}
+                          </>
+                        )}
+                      </ErrorInfoCard>
+                    );
+                  }}
+                  customEntities={
+                    !isMobile
+                      ? [
+                          {
+                            position: 'before',
+                            // itemIndex: 0,
+                            itemId: feedState.data.entryIds.length
+                              ? feedState.data.entryIds[0]
+                              : null,
+                            getComponent: ({ key, style }: { key: string; style: any }) => (
+                              <EditorCard
+                                ethAddress={profileState.data.loggedEthAddress}
+                                publishLabel="Publish"
+                                placeholderLabel="Write something"
+                                onPublish={() => null}
+                                style={style}
+                                key={key}
+                              />
+                            ),
+                          },
+                        ]
+                      : undefined
+                  }
+                />
+              )}
+            </>
+          )}
         </ErrorInfoCard>
       </Box>
     </Box>
