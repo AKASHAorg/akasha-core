@@ -1,61 +1,44 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { WidgetAreaCardBox } from '../common/basic-card-box';
-import { IconLink } from '../../Buttons';
+import { Icon } from '../../Icon';
 
 export interface ISourceWidgetCardProps {
   className?: string;
   titleLabel: string;
-  seeAllLabel: string;
-  hashtagsLabel: string;
-  profilesLabel: string;
-  totalLabel: string;
   tagsNumber: number;
   profilesNumber: number;
-  totalNumber: number;
-  onClickSeeAll: React.EventHandler<React.SyntheticEvent>;
+  appsNumber: number;
 }
 
 const SourcesWidgetCard: React.FC<ISourceWidgetCardProps> = props => {
-  const {
-    className,
-    titleLabel,
-    seeAllLabel,
-    hashtagsLabel,
-    profilesLabel,
-    totalLabel,
-    onClickSeeAll,
-    tagsNumber,
-    profilesNumber,
-    totalNumber,
-  } = props;
+  const { className, titleLabel, tagsNumber, profilesNumber, appsNumber } = props;
 
   return (
     <WidgetAreaCardBox className={className}>
       <Box justify="between" pad="medium" direction="row" align="center">
-        <Text weight="bold">{titleLabel}</Text>
-        <IconLink label={seeAllLabel} onClick={onClickSeeAll} size="medium" />
-      </Box>
+        <Text size="large" weight="bold">
+          {titleLabel}
+        </Text>
 
-      <Box justify="start" direction="row">
-        <Box pad="medium" justify="between" align="center" direction="row" width={'80%'}>
-          <Box align="start" gap="xsmall">
-            <Text weight="bold" color="accentText" size="xxlarge">
+        <Box justify="between" align="center" direction="row" gap="small">
+          <Box gap="xxsmall" direction="row">
+            <Icon type="hashtag" primaryColor={true} size="xs" />
+            <Text color="accentText" size="medium">
               {tagsNumber}
             </Text>
-            <Text> {hashtagsLabel}</Text>
           </Box>
-          <Box align="start" gap="xsmall">
-            <Text weight="bold" color="accentText" size="xxlarge">
+          <Box gap="xxsmall" direction="row">
+            <Icon type="following" primaryColor={true} size="xs" />
+            <Text color="accentText" size="medium">
               {profilesNumber}
             </Text>
-            <Text> {profilesLabel}</Text>
           </Box>
-          <Box align="start" gap="xsmall">
-            <Text weight="bold" color="accentText" size="xxlarge">
-              {totalNumber}
+          <Box gap="xxsmall" direction="row">
+            <Icon type="ethereum" primaryColor={true} size="xs" />
+            <Text color="accentText" size="medium">
+              {appsNumber}
             </Text>
-            <Text> {totalLabel}</Text>
           </Box>
         </Box>
       </Box>

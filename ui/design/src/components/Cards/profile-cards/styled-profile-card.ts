@@ -41,13 +41,13 @@ const StyledAvatarEditDiv = styled.div`
   position: relative;
   left: 3.5em;
   bottom: 2.313em;
-  border: 3px solid ${props => props.theme.colors.border};
+  border: 2px solid ${props => props.theme.colors.white};
   height: 1.5em;
   width: 1.5em;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${props => props.theme.colors.border};
+  background-color: ${props => props.theme.colors.white};
 `;
 
 const StyledImage = styled(Image)`

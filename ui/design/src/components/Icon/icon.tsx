@@ -53,6 +53,7 @@ export type IconType =
   | 'media'
   | 'menuCollapsed'
   | 'menu'
+  | 'menuPyramid'
   | 'metamask'
   | 'moreDark'
   | 'moreGrey'
@@ -68,6 +69,7 @@ export type IconType =
   | 'reply'
   | 'report'
   | 'search'
+  | 'send'
   | 'settings'
   | 'share'
   | 'subscribe'
@@ -138,6 +140,7 @@ export const iconTypes: IconType[] = [
   'media',
   'menuCollapsed',
   'menu',
+  'menuPyramid',
   'metamask',
   'moreDark',
   'moreGrey',
@@ -152,6 +155,7 @@ export const iconTypes: IconType[] = [
   'reply',
   'report',
   'search',
+  'send',
   'settings',
   'share',
   'subscribe',
@@ -177,7 +181,6 @@ export const iconTypes: IconType[] = [
 export interface IconProps extends CommonInterface<any> {
   color?: string;
   ref?: React.Ref<HTMLDivElement>;
-  className?: string;
   type: IconType | string;
   clickable?: boolean;
   primaryColor?: boolean;

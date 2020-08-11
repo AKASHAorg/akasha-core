@@ -108,16 +108,16 @@ const profileProvidersData = {
       providerName: '3Box',
       value: 'http://placebeard.it/480/480',
       providerIcon: {
-        type: LogoTypeSource.String,
-        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+        type: LogoTypeSource.ICON,
+        value: 'app3Box',
       },
     },
     coverImage: {
       providerName: '3Box',
       value: 'goldenrod',
       providerIcon: {
-        type: LogoTypeSource.String,
-        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+        type: LogoTypeSource.ICON,
+        value: 'app3Box',
       },
     },
     userName: 'ENS',
@@ -125,15 +125,15 @@ const profileProvidersData = {
       providerName: '3Box',
       value: 'Gilbert The Bearded',
       providerIcon: {
-        type: LogoTypeSource.String,
-        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+        type: LogoTypeSource.ICON,
+        value: 'app3Box',
       },
     },
     description: {
       providerName: '3Box',
       providerIcon: {
-        type: LogoTypeSource.String,
-        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+        type: LogoTypeSource.ICON,
+        value: 'app3Box',
       },
       value:
         'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
@@ -144,16 +144,16 @@ const profileProvidersData = {
       providerName: '3Box',
       value: 'http://placebeard.it/480/480',
       providerIcon: {
-        type: LogoTypeSource.String,
-        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+        type: LogoTypeSource.ICON,
+        value: 'app3Box',
       },
     },
     {
       providerName: 'ENS',
       value: '',
       providerIcon: {
-        type: LogoTypeSource.String,
-        value: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+        type: LogoTypeSource.ICON,
+        value: 'appEns',
       },
     },
   ],
@@ -162,16 +162,16 @@ const profileProvidersData = {
       providerName: '3Box',
       value: 'goldenrod',
       providerIcon: {
-        type: LogoTypeSource.String,
-        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+        type: LogoTypeSource.ICON,
+        value: 'app3Box',
       },
     },
     {
       providerName: 'ENS',
       value: 'red',
       providerIcon: {
-        type: LogoTypeSource.String,
-        value: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+        type: LogoTypeSource.ICON,
+        value: 'appEns',
       },
     },
   ],
@@ -180,16 +180,16 @@ const profileProvidersData = {
       providerName: '3Box',
       value: 'Gilbert The Bearded',
       providerIcon: {
-        type: LogoTypeSource.String,
-        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+        type: LogoTypeSource.ICON,
+        value: 'app3Box',
       },
     },
     {
       providerName: 'ENS',
       value: 'Gilbert Bronson',
       providerIcon: {
-        type: LogoTypeSource.String,
-        value: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+        type: LogoTypeSource.ICON,
+        value: 'appEns',
       },
     },
   ],
@@ -197,8 +197,8 @@ const profileProvidersData = {
     {
       providerName: '3Box',
       providerIcon: {
-        type: LogoTypeSource.String,
-        value: 'https://pbs.twimg.com/profile_images/1125210143484985344/6Kae1Al3_400x400.png',
+        type: LogoTypeSource.ICON,
+        value: 'app3Box',
       },
       value:
         'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
@@ -206,8 +206,8 @@ const profileProvidersData = {
     {
       providerName: 'ENS',
       providerIcon: {
-        type: LogoTypeSource.String,
-        value: 'https://pbs.twimg.com/profile_images/1011937615619215360/r64kbrPi_400x400.jpg',
+        type: LogoTypeSource.ICON,
+        value: 'appEns',
       },
       value: '"Nothing at all" - Stupid Sexy Flanders',
     },

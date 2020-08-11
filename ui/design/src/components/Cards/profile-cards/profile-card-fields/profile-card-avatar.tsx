@@ -42,9 +42,10 @@ const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
             <StyledAvatarEditDiv>
               <AppIcon
                 ref={editAvatarRef}
-                onClick={() => setAvatarPopoverOpen(true)}
+                onClick={() => setAvatarPopoverOpen(!avatarPopoverOpen)}
                 appImg={avatarIcon}
                 placeholderIconType="editSimple"
+                size="xs"
               />
             </StyledAvatarEditDiv>
           )}

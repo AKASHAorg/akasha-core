@@ -11,14 +11,14 @@ export interface IAppIcon extends IconSize {
 }
 
 export interface IconSize {
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
 const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
   const { appImg, onClick, placeholderIconType, size } = props;
   const renderAppImg = () => {
     if (appImg?.type === LogoTypeSource.ICON && iconTypes.includes(appImg?.value as IconType)) {
-      return <Icon type={appImg?.value} />;
+      return <Icon type={appImg?.value} size={size} />;
     }
     if (appImg?.type === (LogoTypeSource.String || LogoTypeSource.IPFS)) {
       return <StyledImage src={appImg?.value} fit="contain" size={size} />;

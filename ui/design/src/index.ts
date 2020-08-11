@@ -51,6 +51,7 @@ import {
   CustomizeFeedCard,
   TagCard,
   TagDetailCard,
+  FilterCard,
 } from './components/Cards';
 
 import TextInputField from './components/Forms/text-input-field';
@@ -65,6 +66,7 @@ import {
   ModalRenderer,
   EthProviderListModal,
   EthProviderModal,
+  MobileListModal,
 } from './components/Modals';
 
 import { NotificationsPopover, SelectPopover } from './components/Popovers';
@@ -159,6 +161,7 @@ const exported = {
   ModalCard,
   EthProviderListModal,
   EthProviderModal,
+  MobileListModal,
   ModalContainer,
   ModalRenderer,
   HorizontalDivider,
@@ -166,6 +169,7 @@ const exported = {
   TrendingWidgetCard,
   SourcesWidgetCard,
   TutorialWidgetCard,
+  FilterCard,
   /* hooks */
   useGlobalLogin,
 };
