@@ -30,7 +30,7 @@ const ProfileCardName: React.FC<IProfileCardNameProps> = props => {
 
   return (
     <>
-      <Box direction="row" gap="xsmall">
+      <Box direction="row" gap="xsmall" align="center">
         <Text size="xlarge" weight="bold" color="primaryText">
           {name}
         </Text>
@@ -40,9 +40,10 @@ const ProfileCardName: React.FC<IProfileCardNameProps> = props => {
           profileProvidersData.nameProviders.length !== 0 && (
             <AppIcon
               ref={editNameRef}
-              onClick={() => setNamePopoverOpen(true)}
+              onClick={() => setNamePopoverOpen(!namePopoverOpen)}
               appImg={nameIcon}
               placeholderIconType="editSimple"
+              size="xs"
             />
           )}
       </Box>

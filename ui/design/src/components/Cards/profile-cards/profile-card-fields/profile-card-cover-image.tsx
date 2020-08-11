@@ -75,16 +75,18 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
               direction="row"
               gap="xsmall"
               justify="center"
-              onClick={() => setCoverImagePopoverOpen(true)}
+              align="center"
+              onClick={() => setCoverImagePopoverOpen(!coverImagePopoverOpen)}
             >
               <Text size="medium" color="white">
                 {changeCoverImageLabel}
               </Text>
               <AppIcon
                 ref={editCoverImageRef}
-                onClick={() => setCoverImagePopoverOpen(true)}
+                onClick={() => setCoverImagePopoverOpen(!coverImagePopoverOpen)}
                 appImg={coverImageIcon}
                 placeholderIconType="editSimple"
+                size="xs"
               />
             </StyledEditCoverImageBox>
           </Box>

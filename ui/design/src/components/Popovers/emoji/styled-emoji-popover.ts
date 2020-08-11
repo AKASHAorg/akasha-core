@@ -31,7 +31,7 @@ const StyledListElem = styled.span`
 
 const StyledFooter = styled(Box)`
   background-color: ${props => props.theme.colors.lightBackground};
-  height: 3.5em;
+  height: 3rem;
 `;
 
 const StyledCategoryContainer = styled.div`
@@ -40,8 +40,11 @@ const StyledCategoryContainer = styled.div`
 `;
 
 const StyledSearchContainer = styled.div`
-  margin: ${props => `${props.theme.shapes.baseSpacing}px ${props.theme.shapes.baseSpacing * 3}px`};
-  height: 3em;
+  margin: ${props =>
+    `${props.theme.shapes.baseSpacing * 2}px ${props.theme.shapes.baseSpacing * 3}px ${
+      props.theme.shapes.baseSpacing
+    }px`};
+  height: 3rem;
 `;
 
 const StyledEmojiDrop = styled(Drop)`

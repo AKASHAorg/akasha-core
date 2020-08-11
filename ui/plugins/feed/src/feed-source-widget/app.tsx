@@ -18,14 +18,9 @@ export default class FeedSourceWidget extends React.Component<RootComponentProps
       >
         <SourcesWidgetCard
           titleLabel={'My feed sources'}
-          hashtagsLabel={'Hashtags'}
-          profilesLabel={'Profiles'}
-          seeAllLabel={'See All'}
-          totalLabel={'Total'}
           tagsNumber={15}
           profilesNumber={35}
-          totalNumber={50}
-          onClickSeeAll={this.handleSeeAllClick}
+          appsNumber={50}
         />
       </ThemeSelector>
     );

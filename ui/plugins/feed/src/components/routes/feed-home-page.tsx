@@ -238,11 +238,12 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
                       getComponent: ({ key, style }: { key: string; style: any }) => (
                         <EditorCard
                           ethAddress={profileState.data.loggedEthAddress}
-                          publishLabel="Publish"
+                          postLabel="Post"
                           placeholderLabel="Write something"
                           onPublish={() => null}
                           style={style}
                           key={key}
+                          handleNavigateBack={() => null}
                         />
                       ),
                     },

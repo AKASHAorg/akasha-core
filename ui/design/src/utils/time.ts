@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import 'dayjs/locale/ro';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 export type ILocale = 'es' | 'ro' | 'en';
 
@@ -24,4 +26,14 @@ const formatDateShort = (date: any, locale?: ILocale) => {
   return '';
 };
 
-export { formatDate, formatDateShort };
+const formatRelativeTime = (date: any, locale?: ILocale) => {
+  if (dayjs(date).isValid()) {
+    if (locale) {
+      return dayjs.unix(date).locale(locale).fromNow();
+    }
+    return dayjs.unix(date).fromNow();
+  }
+  return '';
+};
+
+export { formatDate, formatDateShort, formatRelativeTime };

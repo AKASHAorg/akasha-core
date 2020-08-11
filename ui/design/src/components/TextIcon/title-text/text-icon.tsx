@@ -27,7 +27,6 @@ export interface ITextIconProps {
 }
 
 export interface IStyledTextProps extends TextProps {
-  bold?: boolean;
   accentColor?: boolean;
 }
 

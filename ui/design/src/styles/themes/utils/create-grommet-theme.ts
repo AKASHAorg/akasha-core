@@ -25,6 +25,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
       drop: {
         shadowSize: 'shadow',
       },
+
       input: {
         weight: styledComponentsTheme.shapes.fontWeight.regular,
       },
@@ -47,12 +48,33 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         accent: styledComponentsTheme.colors.accent,
         brand: styledComponentsTheme.colors.accent,
         background: styledComponentsTheme.colors.background,
+        lightBackground: styledComponentsTheme.colors.lightBackground,
         ultraLightBackground: styledComponentsTheme.colors.ultraLightBackground,
         focus: styledComponentsTheme.colors.accent,
       },
       focus: {
         border: {
           color: 'transparent',
+        },
+      },
+    },
+    radioButton: {
+      size: '14px',
+      border: {
+        width: '2px',
+      },
+      check: {
+        color: styledComponentsTheme.colors.white,
+        background: {
+          color: styledComponentsTheme.colors.accent,
+        },
+      },
+      hover: {
+        border: {
+          color: styledComponentsTheme.colors.accent,
+        },
+        background: {
+          color: styledComponentsTheme.colors.accent,
         },
       },
     },

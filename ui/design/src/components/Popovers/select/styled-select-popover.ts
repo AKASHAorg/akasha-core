@@ -14,11 +14,11 @@ const StyledDrop = styled(Drop)<IStyledDrop>`
 const StyledListElem = styled.div`
   ${props =>
     `&:hover {
-        background-color: ${props.theme.colors.lightBackground};
+        // background-color: ${props.theme.colors.lightBackground};
         cursor: pointer;
       }
-      border-bottom: 1px solid ${props.theme.colors.border}
-      height: 3em;
+      border-bottom: 1px solid ${props.theme.colors.border};
+      height: 3rem;
       display: flex;
       align-items: center;
       
