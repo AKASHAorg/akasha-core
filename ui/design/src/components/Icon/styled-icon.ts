@@ -9,67 +9,77 @@ const StyledIconDiv = styled.div<IconSize>`
   ${props => {
     if (props.size) {
       switch (props.size) {
+        case 'xs':
+          return css`
+            width: 1rem;
+            height: 1rem;
+          `;
         case 'sm':
           return css`
-            width: 1.5em;
-            height: 1.5em;
+            width: 1.5rem;
+            height: 1.5rem;
           `;
         case 'md':
           return css`
-            width: 2em;
-            height: 2em;
+            width: 2rem;
+            height: 2rem;
           `;
         case 'lg':
           return css`
-            width: 2.5em;
-            height: 2.5em;
+            width: 2.5rem;
+            height: 2.5rem;
           `;
         default:
           return css`
-            width: 1.5em;
-            height: 1.5em;
+            width: 1.5rem;
+            height: 1.5rem;
           `;
       }
     }
     return css`
-      width: 1.5em;
-      height: 1.5em;
+      width: 1.5rem;
+      height: 1.5rem;
     `;
   }}
   border-radius: 50%;
   cursor: pointer;
-  background-color: ${props => props.theme.colors.background};
+  background-color: ${props => props.theme.colors.white};
 `;
 
 const StyledImage = styled(Image)<IconSize>`
   ${props => {
     if (props.size) {
       switch (props.size) {
+        case 'xs':
+          return css`
+            width: 1rem;
+            height: 1rem;
+          `;
         case 'sm':
           return css`
-            width: 1.5em;
-            height: 1.5em;
+            width: 1.5rem;
+            height: 1.5rem;
           `;
         case 'md':
           return css`
-            width: 2em;
-            height: 2em;
+            width: 2rem;
+            height: 2rem;
           `;
         case 'lg':
           return css`
-            width: 2.5em;
-            height: 2.5em;
+            width: 2.5rem;
+            height: 2.5rem;
           `;
         default:
           return css`
-            width: 1.5em;
-            height: 1.5em;
+            width: 1.5rem;
+            height: 1.5rem;
           `;
       }
     }
     return css`
-      width: 1.5em;
-      height: 1.5em;
+      width: 1.5rem;
+      height: 1.5rem;
     `;
   }}
   border-radius: 50%;

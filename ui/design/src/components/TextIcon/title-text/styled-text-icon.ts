@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import MarginSetter from '../../../utils/marginSetter';
 import { IStyledTextProps, ITextIconProps } from './text-icon';
+import { Text } from 'grommet';
 
 const StyledTextIcon = styled.div<ITextIconProps>`
   ${props => {
@@ -66,7 +67,7 @@ const StyledTextIcon = styled.div<ITextIconProps>`
   flex-direction: row;
 `;
 
-const StyledText = styled.div<IStyledTextProps>`
+const StyledText = styled(Text)<IStyledTextProps>`
   ${props => {
     if (props.accentColor) {
       return css`

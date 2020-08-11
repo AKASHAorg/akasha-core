@@ -8,6 +8,7 @@ import {
   ProfileCardCoverImage,
   ProfileCardDescription,
   ProfileCardName,
+  ProfileCardEthereumId,
 } from './profile-card-fields/index';
 import { IProfileWidgetCard } from './profile-widget-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
@@ -196,7 +197,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
 
             <Box direction="row" gap="xsmall">
               <Text size="medium" color="secondaryText">
-                {profileData.userName ? profileData.userName : profileData.ethAddress}
+                {profileData.userName ? profileData.userName : null}
               </Text>
             </Box>
           </Box>
@@ -227,6 +228,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           </Box>
         )}
       </Box>
+      <ProfileCardEthereumId profileData={profileData} />
       <ProfileCardDescription
         editable={editable}
         description={description}

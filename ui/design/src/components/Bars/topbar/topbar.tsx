@@ -80,7 +80,7 @@ const Topbar = (props: ITopbarProps) => {
       onNavigation(menuItem.route);
     }
   };
-  // @TODO extract into separate components
+
   const renderDrop = () => (
     <StyledDrop
       target={currentDropItem && menuItemRefs.current[currentDropItem?.index]}

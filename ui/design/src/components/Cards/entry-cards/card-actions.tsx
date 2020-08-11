@@ -60,8 +60,8 @@ const CardActions: React.FC<CardActionProps> = props => {
   const [repostDropOpen, setReplyDropOpen] = React.useState(false);
   const [shareDropOpen, setShareDropOpen] = React.useState(false);
 
-  const repostNodeRef: React.Ref<any> = React.useRef(null);
-  const shareNodeRef: React.Ref<any> = React.useRef(null);
+  const repostNodeRef: React.RefObject<any> = React.useRef(null);
+  const shareNodeRef: React.RefObject<any> = React.useRef(null);
 
   const handleRepostsOpen = () => {
     setReplyDropOpen(!repostDropOpen);

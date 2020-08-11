@@ -1,4 +1,4 @@
-import { Box, Text } from 'grommet';
+import { Box, Text, Meter } from 'grommet';
 import * as React from 'react';
 import { createEditor } from 'slate';
 import { withHistory } from 'slate-history';
@@ -13,21 +13,35 @@ import { CustomEditor } from './helpers';
 import { defaultValue } from './initialValue';
 import { withImages } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
-import { StyledBox, StyledDiv, StyledEditable, StyledIconDiv } from './styled-editor-box';
+import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
+import { Button } from '../Buttons';
 
 export interface IEditorBox {
   avatar?: string;
   ethAddress?: string;
-  publishLabel: string;
-  placeholderLabel: string;
+  postLabel?: string;
+  newPostLabel?: string;
+  placeholderLabel?: string;
   onPublish: any;
   embedEntryData?: IEntryData;
+  handleNavigateBack: () => void;
 }
 
 const EditorBox: React.FC<IEditorBox> = props => {
-  const { avatar, ethAddress, publishLabel, placeholderLabel, onPublish, embedEntryData } = props;
+  const {
+    avatar,
+    ethAddress,
+    postLabel,
+    newPostLabel,
+    placeholderLabel,
+    onPublish,
+    embedEntryData,
+    handleNavigateBack,
+  } = props;
 
   const [editorValue, setEditorValue] = React.useState(defaultValue);
+  const [letterCount, setLetterCount] = React.useState(0);
+  const [publishDisabled, setPublishDisabled] = React.useState(true);
 
   const [imagePopoverOpen, setImagePopoverOpen] = React.useState(false);
   const [emojiPopoverOpen, setEmojiPopoverOpen] = React.useState(false);
@@ -40,7 +54,21 @@ const EditorBox: React.FC<IEditorBox> = props => {
   };
 
   const handleChange = (value: any) => {
+    const reducer = (acc: number, val: number) => acc + val;
+    const textLength = value
+      .map(({ children }: any) => {
+        return children.map((child: any) => child.text.length).reduce(reducer);
+      })
+      .reduce(reducer);
+
+    if (textLength > 0) {
+      setPublishDisabled(false);
+    } else if (textLength === 0) {
+      setPublishDisabled(true);
+    }
+
     setEditorValue(value);
+    setLetterCount(textLength);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<any>) => {
@@ -99,8 +127,34 @@ const EditorBox: React.FC<IEditorBox> = props => {
 
   return (
     <StyledBox pad="none" width="581px" justify="between">
-      <Box direction="row" pad="medium" align="start" overflow="auto" className="scrollBox">
-        <Avatar src={avatar} ethAddress={ethAddress} />
+      <Box direction="row" justify="between" pad="medium" align="center" flex={false}>
+        <Icon
+          type="arrowLeft"
+          onClick={handleNavigateBack}
+          clickable={true}
+          primaryColor={true}
+          size="xs"
+        />
+        <Text size="large">{newPostLabel}</Text>
+        <Meter
+          max={300}
+          size="20px"
+          thickness="medium"
+          background="#C6D1FF"
+          type="circle"
+          values={[{ value: letterCount, color: 'accent' }]}
+        />
+      </Box>
+
+      <Box
+        direction="row"
+        pad={{ horizontal: 'medium' }}
+        align="start"
+        overflow="auto"
+        className="scrollBox"
+        height={{ min: '192px' }}
+      >
+        <Avatar src={avatar} ethAddress={ethAddress} margin={{ top: '0.5rem' }} />
         <Box width="480px" pad={{ horizontal: 'small' }}>
           <Slate editor={editor} value={editorValue} onChange={handleChange}>
             <FormatToolbar />
@@ -121,20 +175,26 @@ const EditorBox: React.FC<IEditorBox> = props => {
         justify="between"
         fill="horizontal"
         pad={{ horizontal: 'medium', vertical: 'xsmall' }}
+        flex={false}
       >
         <Box direction="row" gap="xsmall" align="center">
-          <Icon type="addAppGrey" clickable={true} />
-          <Icon type="quote" clickable={true} />
-          <StyledIconDiv ref={mediaIconRef}>
-            <Icon type="image" clickable={true} onClick={handleMediaClick} />
-          </StyledIconDiv>
           <StyledIconDiv ref={emojiIconRef}>
-            <Icon type="emoji" clickable={true} onClick={openEmojiPicker} />
+            <Icon type="emoji" clickable={true} onClick={openEmojiPicker} size="md" />
+          </StyledIconDiv>
+          <StyledIconDiv ref={mediaIconRef}>
+            <Icon type="image" clickable={true} onClick={handleMediaClick} size="md" />
           </StyledIconDiv>
         </Box>
-        <StyledDiv onClick={handlePublish}>
-          <Text size="large">{publishLabel}</Text>
-        </StyledDiv>
+
+        <Icon type="akasha" clickable={true} style={{ marginLeft: '2rem' }} />
+
+        <Button
+          primary={true}
+          icon={<Icon type="send" color="white" />}
+          label={postLabel}
+          onClick={handlePublish}
+          disabled={publishDisabled}
+        />
       </Box>
       {imagePopoverOpen && mediaIconRef.current && (
         <ImagePopover
@@ -152,6 +212,12 @@ const EditorBox: React.FC<IEditorBox> = props => {
       )}
     </StyledBox>
   );
+};
+
+EditorBox.defaultProps = {
+  postLabel: 'Post',
+  newPostLabel: 'New Post',
+  placeholderLabel: 'Share your thoughts',
 };
 
 export default EditorBox;
