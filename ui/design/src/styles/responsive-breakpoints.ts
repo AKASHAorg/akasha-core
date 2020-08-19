@@ -21,13 +21,13 @@ export default {
         value: 550,
       },
       medium: {
-        value: 1024,
+        value: 768,
       },
       large: {
-        value: 1224,
+        value: 992,
       },
       xlarge: {
-        value: 1920,
+        value: 1200,
       },
     },
   },

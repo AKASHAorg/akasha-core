@@ -18,12 +18,11 @@ export default class Application extends React.Component<RootComponentProps> {
       <ThemeSelector
         settings={{ activeTheme: 'Light-Theme' }}
         availableThemes={[lightTheme, darkTheme]}
-        style={{ height: '100%' }}
       >
         <React.Suspense fallback={<>Loading</>}>
           <I18nextProvider i18n={i18n ? i18n : null}>
             <Router>
-              <Box fill="vertical">
+              <Box>
                 <Switch>
                   <Route path={routes[NEW_POST]}>
                     <NewPostPage

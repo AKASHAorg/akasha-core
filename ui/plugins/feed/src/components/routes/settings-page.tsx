@@ -56,7 +56,7 @@ const SettingsPage: React.FC<ISettingsPageProps & RouteProps> = props => {
     }
   };
   return (
-    <Box fill={true} flex={true}>
+    <Box fill="horizontal" flex={true}>
       <ErrorInfoCard errors={settingsState.data.errors}>
         {(messages, isCritical) => (
           <>

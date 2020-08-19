@@ -45,8 +45,8 @@ const BoxProfile: React.FC<IMyProfileProps> = props => {
       <DS.Helmet>
         <title>3Box | {profileId} Profile Page</title>
       </DS.Helmet>
-      <Box fill={true}>
-        <Box fill={true} pad={{ top: '2em' }} align="center">
+      <Box fill="horizontal">
+        <Box fill="horizontal" pad={{ top: '2em' }} align="center">
           {!Object.keys(state.data.visitingProfile).length && <Box>{t('Loading Profile')}</Box>}
           <MainAreaCardBox>
             <Box

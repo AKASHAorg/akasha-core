@@ -90,7 +90,7 @@ const SavedEntriesPage: React.FC<ISavedEntriesPageProps & RouteProps> = props =>
   };
 
   return (
-    <Box fill={true}>
+    <Box fill="horizontal">
       {!loggedEthAddress && !fetching && (
         <>
           <ErrorLoader

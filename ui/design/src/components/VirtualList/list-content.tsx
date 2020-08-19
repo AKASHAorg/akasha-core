@@ -14,6 +14,7 @@ import BoundryLoader from './boundry-loader';
 import throttle from 'lodash.throttle';
 import { getInfiniteScrollState } from './utils';
 import { useIntersectionObserver } from './use-intersection-observer';
+import { Box } from 'grommet';
 
 /* - Keeps track of loaded items and loadMore schedules
  * - renders cards
@@ -36,8 +37,6 @@ const ListContent = (props: IListContentProps, ref?: React.Ref<IListAPI>) => {
     itemsData,
     initialPaddingTop,
     loadItemData,
-    height,
-    width,
     itemSpacing,
     loadLimit,
     offsetItems,
@@ -55,7 +54,6 @@ const ListContent = (props: IListContentProps, ref?: React.Ref<IListAPI>) => {
   const [sliceOperation, setSliceOperation] = React.useState<ISliceOperation | null>(null);
 
   const containerRef = React.useRef<HTMLDivElement | null>(null);
-
   const itemDimensions = React.useRef<ItemDimensions>({
     dimensions: {},
     count: 0,
@@ -161,7 +159,7 @@ const ListContent = (props: IListContentProps, ref?: React.Ref<IListAPI>) => {
   };
 
   // throttled scrolling
-  const throttledScroll = (ev: React.SyntheticEvent<HTMLDivElement>) => {
+  const throttledScroll = (ev: any) => {
     containerScrollThrottle(
       ev.currentTarget.scrollTop,
       ev.currentTarget.scrollHeight,
@@ -170,22 +168,29 @@ const ListContent = (props: IListContentProps, ref?: React.Ref<IListAPI>) => {
       items,
       itemDimensions,
     );
-    ev.persist();
   };
 
+  React.useEffect(() => {
+    document.addEventListener('scroll', throttledScroll);
+    return () => document.removeEventListener('scroll', throttledScroll);
+  }, []);
+
   return (
-    <div
-      style={{ height, width, position: 'relative', overflowY: 'auto', padding: '0 1em' }}
-      onScroll={throttledScroll}
+    <Box
+      flex={{
+        grow: 1,
+        shrink: 0,
+      }}
       ref={containerRef}
     >
       {getNewItemsNotification &&
         getNewItemsNotification({
           styles: {
-            transform: newEntryNotificationShown ? 'translate(-50%, 0)' : 'translate(-50%, -110%)',
+            transform: newEntryNotificationShown ? 'translateY(0)' : 'translateY(-8em)',
             position: 'sticky',
             willChange: 'transform',
             transition: 'transform 0.314s ease-in-out',
+            margin: '0 auto',
           },
         })}
       <BoundryLoader
@@ -234,7 +239,7 @@ const ListContent = (props: IListContentProps, ref?: React.Ref<IListAPI>) => {
         setFetchOperation={setFetchOperation}
         height={infiniteScrollState.paddingBottom}
       />
-    </div>
+    </Box>
   );
 };
 

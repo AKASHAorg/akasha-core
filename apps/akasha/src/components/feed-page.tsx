@@ -114,7 +114,7 @@ const FeedPage: React.FC<FeedPageProps> = _props => {
   };
 
   return (
-    <Box fill={true}>
+    <Box fill="horizontal">
       <Helmet>
         <title>AKASHA Feed | Ethereum.world</title>
       </Helmet>

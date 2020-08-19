@@ -232,7 +232,6 @@ export default class AppLoader implements IAppLoader {
       widget.app,
       this.appLogger.child({ i18nWidget: widgetId }),
     );
-    console.log(widget.app);
     const pProps = {
       ...this.config,
       ...widget.app,

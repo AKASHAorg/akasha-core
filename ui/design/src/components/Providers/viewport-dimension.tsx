@@ -22,24 +22,26 @@ export interface IViewportDimProps {
 }
 const ViewportSizeProvider = ({ children }: IViewportDimProps) => {
   const [dimensions, setDimensions] = React.useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: 0,
+    height: 0,
   });
   const [size, setSize] = React.useState(getSizeByWidth(dimensions.width));
 
   React.useEffect(() => {
-    const handleResize = () => {
+    const onResize = () => {
       setDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: document.body.getClientRects()[0].width,
+        height: document.body.getClientRects()[0].height,
       });
-      setSize(getSizeByWidth(window.innerWidth));
+      setSize(getSizeByWidth(document.body.getClientRects()[0].width));
     };
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', onResize);
+    onResize();
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', onResize);
     };
   }, []);
+
   return (
     <ViewportSizeCtx.Provider value={{ dimensions, size }}>{children}</ViewportSizeCtx.Provider>
   );

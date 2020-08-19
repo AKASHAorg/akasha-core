@@ -56,9 +56,7 @@ const StyledAppOptionBox = styled(Box)<{ active: boolean }>`
   }}
 `;
 
-const StyledMobileFooterBox = styled(Box)`
-  height: 5rem;
-`;
+const StyledMobileFooterBox = styled(Box)``;
 
 const StyledText = styled(Text)`
   cursor: pointer;

@@ -10,7 +10,15 @@ import {
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { filter } from 'rxjs/operators';
 
-const { lightTheme, ThemeSelector, Sidebar, ViewportSizeProvider, useViewportSize } = DS;
+const {
+  responsiveBreakpoints,
+  styled,
+  lightTheme,
+  ThemeSelector,
+  Sidebar,
+  ViewportSizeProvider,
+  useViewportSize,
+} = DS;
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;
@@ -104,6 +112,16 @@ export default class SidebarWidget extends PureComponent<IProps> {
     );
   }
 }
+const { breakpoints } = responsiveBreakpoints.global;
+const AppSidebar = styled(Sidebar)`
+  min-width: 15em;
+  @media screen and (min-width: ${breakpoints.medium.value}px) {
+    min-width: 13em;
+  }
+  @media screen and (min-width: ${breakpoints.large.value}px) {
+    max-width: 13em;
+  }
+`;
 
 interface MenuProps {
   navigateToUrl: (url: string) => void;
@@ -153,7 +171,7 @@ const Menu = (props: MenuProps) => {
       style={{ height: '100%' }}
     >
       {sidebarVisible && (
-        <Sidebar
+        <AppSidebar
           onClickMenuItem={handleNavigation}
           allMenuItems={currentMenu}
           bodyMenuItems={body}

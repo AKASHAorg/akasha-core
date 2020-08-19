@@ -62,7 +62,6 @@ export default class App extends PureComponent<any> {
           <ThemeSelector
             settings={{ activeTheme: 'Light-Theme' }}
             availableThemes={[lightTheme, darkTheme]}
-            style={{ height: '100%' }}
             plain={true}
           >
             <ErrorInfoCard errors={this.state.errors}>

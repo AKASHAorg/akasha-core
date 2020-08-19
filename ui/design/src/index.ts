@@ -12,6 +12,8 @@ import {
 
 import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
 
+import Autosizer from 'react-virtualized-auto-sizer';
+
 import { Avatar, EditableAvatar } from './components/Avatar';
 
 import { Sidebar, Topbar } from './components/Bars/index';
@@ -87,6 +89,7 @@ import { ThemeSelector } from './styles/themes/utils/theme-selector';
 /* Grommet utils */
 
 const exported = {
+  Autosizer,
   Avatar,
   AppIcon,
   AreaChart,

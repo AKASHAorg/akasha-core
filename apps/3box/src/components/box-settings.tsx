@@ -81,7 +81,7 @@ const BoxSettings: React.FC<IBoxSettingsProps> = props => {
   };
 
   return (
-    <Box fill={true} flex={true} pad={{ top: '1em' }} align="center">
+    <Box fill="horizontal" flex={true} pad={{ top: '1em' }} align="center">
       <DS.Helmet>
         <title>3Box | {t('Settings')}</title>
       </DS.Helmet>
