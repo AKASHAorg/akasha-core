@@ -21,10 +21,8 @@ import {
   entryData,
   entrySocialData,
   followingLabel,
-  placeholderLabel,
   profileData,
   profileProvidersData,
-  publishLabel,
   saveChangesLabel,
   shareLabel,
   shareProfileLabel,
@@ -60,6 +58,8 @@ const {
   TutorialWidgetCard,
   TagCard,
   TagDetailCard,
+  FilterCard,
+  ProfileAvatarButton,
 } = DS;
 
 storiesOf('Cards/Widget Cards', module)
@@ -112,14 +112,9 @@ storiesOf('Cards/Widget Cards', module)
     <Box pad="none" align="center">
       <SourcesWidgetCard
         titleLabel={text('Title label', 'My feed sources')}
-        hashtagsLabel={text('Hashtags label', 'Hashtags')}
-        profilesLabel={text('Profiles label', 'Profiles')}
-        seeAllLabel={text('See all label', 'See All')}
-        totalLabel={text('Total label', 'Total')}
         tagsNumber={number('Tags number', 15)}
         profilesNumber={number('Profiles number', 35)}
-        totalNumber={number('Total number', 50)}
-        onClickSeeAll={() => action('See All Clicked')('Synthetic Event')}
+        appsNumber={number('Total number', 50)}
       />
     </Box>
   ))
@@ -182,9 +177,8 @@ storiesOf('Cards/Editor Cards', module).add('editor card', () => (
     <EditorCard
       avatar={text('Logged Profile Avatar', 'https://www.stevensegallery.com/360/360')}
       ethAddress={text('Logged Profile EthAddress', '0x003410499401674320006570047391024572000')}
-      publishLabel={text('Publish Label', publishLabel)}
-      placeholderLabel={text('PlaceholderLabel', placeholderLabel)}
       onPublish={action('Publish clicked')}
+      handleNavigateBack={action('Navigate back')}
     />
   </Box>
 ));
@@ -320,7 +314,7 @@ storiesOf('Cards/Form Cards', module)
         providerData={object('Provider Data', ensProviderData)}
         handleSubmit={() => action('Form submitted')('Synthetic Event')}
         validateEns={() => action('validating ens')('Synthetic Event')}
-        validEns={select('valid ens', ['valid', 'invalid'], undefined)}
+        validEns={boolean('valid ens', true)}
       />
     </Box>
   ));
@@ -363,3 +357,26 @@ storiesOf('Cards/Onboarding Cards', module)
       </ViewportSizeProvider>
     </Box>
   ));
+
+storiesOf('Cards/Utility Cards', module).add('filter card', () => (
+  <Box align="center" pad={{ top: '40px' }} height="600px">
+    <ViewportSizeProvider>
+      <FilterCard
+        titleElement={
+          <ProfileAvatarButton
+            avatarImage="https://placebeard.it/360x360"
+            onClick={() => action('Avatar Button Click')()}
+            label="@ivacarter"
+            info="ivacarter.akasha.eth"
+            size="sm"
+            ethAddress={'0x000000'}
+          />
+        }
+        handleClickAll={() => action('click all')('Synthetic Event')}
+        handleClickFollowing={() => action('click following')('Synthetic Event')}
+        handleClickLatest={() => action('click latest')('Synthetic Event')}
+        handleClickOldest={() => action('click oldest')('Synthetic Event')}
+      />
+    </ViewportSizeProvider>
+  </Box>
+));

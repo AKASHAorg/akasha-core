@@ -138,7 +138,7 @@ const EmojiPopover: React.FC<IEmojiPopover> = props => {
         </StyledSearchBox>
       </StyledSearchContainer>
       <StyledContentDiv>{renderContent()}</StyledContentDiv>
-      <StyledFooter direction="row" align="center">
+      <StyledFooter direction="row" align="center" border={{ side: 'top', color: 'border' }}>
         <StyledHoveredEmoji>{hoveredEmoji.emojiCode}</StyledHoveredEmoji>
         <StyledHoveredEmojiName>{hoveredEmoji.emojiName}</StyledHoveredEmojiName>
       </StyledFooter>

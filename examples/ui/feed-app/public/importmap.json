@@ -23,6 +23,7 @@
     "@plugins/search": "/plugins/search.js",
     "@app/3box": "/apps/3box-app.js",
     "@app/AKASHA": "/apps/akasha-app.js",
+    "@app/ens": "/apps/ens-app.js",
     "ipfs": "https://unpkg.com/ipfs@0.43.1/dist/index.js"
   }
 }

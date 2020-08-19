@@ -15,10 +15,11 @@ export interface IEnsFormCardProps {
   saveLabel: string;
   nameFieldPlaceholder: string;
   ethAddress: string;
-  providerData: IEnsData;
+  providerData: Partial<IEnsData>;
   validateEns: (name: string) => void;
-  validEns?: string;
-  handleSubmit: (data: IEnsData) => void;
+  validEns?: boolean;
+  handleSubmit: (data: IEnsData | { name: string }) => void;
+  isValidating?: boolean;
 }
 
 export interface IEnsData {
@@ -41,11 +42,11 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     handleSubmit,
     validateEns,
     validEns,
+    isValidating,
   } = props;
 
   const [name, setName] = React.useState('');
 
-  const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
 
@@ -70,7 +71,6 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   const handleCancel = () => {
     setName('');
     setTextInputComputedWidth(initialInputWidth);
-    setLoading(false);
     setError(false);
     setSuccess(false);
   };
@@ -83,13 +83,10 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   }, []);
 
   React.useEffect(() => {
-    if (validEns !== undefined) {
-      setLoading(false);
-    }
-    if (validEns === 'invalid') {
+    if (!validEns) {
       setError(true);
     }
-    if (validEns === 'valid') {
+    if (validEns) {
       setSuccess(true);
     }
   }, [validEns]);
@@ -104,12 +101,10 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     setError(false);
     setSuccess(false);
     if (value) {
-      setLoading(true);
       if (hiddenSpanRef.current) {
         setTextInputComputedWidth(`${(hiddenSpanRef.current.offsetWidth + 2) / 16}rem`);
       }
     } else if (!value) {
-      setLoading(false);
       if (hiddenSpanRef.current) {
         setTextInputComputedWidth(initialInputWidth);
       }
@@ -125,7 +120,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   };
 
   const renderIcon = () => {
-    if (loading) {
+    if (isValidating) {
       return <Icon type="loading" />;
     }
     if (error) {

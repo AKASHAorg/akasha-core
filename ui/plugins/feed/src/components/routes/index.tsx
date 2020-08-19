@@ -7,10 +7,9 @@ import FeedHomePage from './feed-home-page';
 import routes, { MY_FEED_PAGE, SAVED_PAGE, rootRoute, SETTINGS_PAGE } from '../../routes';
 import SavedEntriesPage from './saved-entries-page';
 import SettingsPage from './settings-page';
-import { useGlobalLogin } from '../hooks/use-global-login';
 import { useProfileState } from '../../state/profile-state';
 
-const { Box, styled } = DS;
+const { Box, styled, useGlobalLogin } = DS;
 
 export interface IRoutesProps {
   activeWhen: { path: string };

@@ -46,6 +46,7 @@ import loading from './loading';
 import media from './media';
 import menuCollapsed from './menu-collapsed';
 import menu from './menu';
+import menuPyramid from './menu-pyramid';
 import metamask from './metamask';
 import moreDark from './more-dark';
 import moreGrey from './more-grey';
@@ -61,6 +62,7 @@ import reload from './reload';
 import reply from './reply';
 import report from './report';
 import search from './search';
+import send from './send';
 import settings from './settings';
 import share from './share';
 import shareSmallBlue from './share-small-blue';
@@ -137,6 +139,7 @@ export {
   media,
   menuCollapsed,
   menu,
+  menuPyramid,
   metamask,
   moreDark,
   moreGrey,
@@ -149,6 +152,7 @@ export {
   reply,
   report,
   search,
+  send,
   share,
   shareSmallBlue,
   shareSmallDark,

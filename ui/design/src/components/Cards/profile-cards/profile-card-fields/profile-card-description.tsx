@@ -43,9 +43,10 @@ const ProfileCardDescription: React.FC<IProfileCardDescriptionProps> = props => 
             profileProvidersData.descriptionProviders.length && (
               <AppIcon
                 ref={editDescriptionRef}
-                onClick={() => setDescriptionPopoverOpen(true)}
+                onClick={() => setDescriptionPopoverOpen(!descriptionPopoverOpen)}
                 appImg={descriptionIcon}
                 placeholderIconType="editSimple"
+                size="xs"
               />
             )}
         </Box>

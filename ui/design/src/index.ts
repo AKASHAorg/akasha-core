@@ -53,6 +53,7 @@ import {
   CustomizeFeedCard,
   TagCard,
   TagDetailCard,
+  FilterCard,
 } from './components/Cards';
 
 import TextInputField from './components/Forms/text-input-field';
@@ -67,6 +68,7 @@ import {
   ModalRenderer,
   EthProviderListModal,
   EthProviderModal,
+  MobileListModal,
 } from './components/Modals';
 
 import { NotificationsPopover, SelectPopover } from './components/Popovers';
@@ -80,7 +82,8 @@ import { HorizontalDivider } from './components/Dividers';
 import responsiveBreakpoints from './styles/responsive-breakpoints';
 import { formatImageSrc } from './utils/image-utils';
 import { isBase64 } from './utils/string-utils';
-
+/* Hooks */
+import { useGlobalLogin } from './hooks/use-global-login';
 /* Themes and theme related utils */
 import darkTheme from './styles/themes/dark';
 import lightTheme from './styles/themes/light';
@@ -161,6 +164,7 @@ const exported = {
   ModalCard,
   EthProviderListModal,
   EthProviderModal,
+  MobileListModal,
   ModalContainer,
   ModalRenderer,
   HorizontalDivider,
@@ -168,6 +172,9 @@ const exported = {
   TrendingWidgetCard,
   SourcesWidgetCard,
   TutorialWidgetCard,
+  FilterCard,
+  /* hooks */
+  useGlobalLogin,
 };
 
 export default exported;

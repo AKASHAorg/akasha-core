@@ -22,6 +22,7 @@ import TutorialWidgetCard from './widget-cards/tutorial-widget/tutorial-widget-c
 import { CustomizeFeedCard } from './onboarding-cards/customize-feed-card';
 import { TagCard } from './onboarding-cards/tag-card';
 import { TagDetailCard } from './onboarding-cards/tag-detail-card';
+import { FilterCard } from './utility-cards/filter-card';
 
 export {
   AppInfoWidgetCard,
@@ -46,4 +47,5 @@ export {
   CustomizeFeedCard,
   TagCard,
   TagDetailCard,
+  FilterCard,
 };

@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { formatDate, ILocale } from '../../../utils/time';
+import { formatRelativeTime, ILocale } from '../../../utils/time';
 import { ProfileAvatarButton } from '../../Buttons/index';
 import { Icon } from '../../Icon/index';
 import CardActions, { ServiceNames } from './card-actions';
@@ -86,8 +86,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
   const [profileDropOpen, setProfileDropOpen] = React.useState(false);
 
-  const menuIconRef: React.Ref<any> = React.useRef(null);
-  const profileRef: React.Ref<any> = React.useRef(null);
+  const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
+  const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
   const handleLinkCopy = (linkType: 'ipfs' | 'shareable') => () => {
     switch (linkType) {
@@ -158,8 +158,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           </StyledProfileDrop>
         )}
         <Box direction="row" gap="xsmall" align="center">
-          <Text>{formatDate(entryData.time, locale)}</Text>
-
+          <Text> {formatRelativeTime(entryData.time, locale)} </Text>
+          <Icon type="akasha" size="sm" />
           <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
         </Box>
       </Box>

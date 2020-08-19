@@ -31,7 +31,7 @@ export interface ProfileStateModel {
   createError: Action<ProfileStateModel, IStateErrorPayload>;
   getLoggedEthAddress: Thunk<ProfileStateModel>;
   handleLoginSuccess: Action<ProfileStateModel, { ethAddress: string; token: string }>;
-  handleLoginError: Action<ProfileStateModel, { error: string }>;
+  handleLoginError: Action<ProfileStateModel, { error: Error }>;
 }
 
 export const profileStateModel: ProfileStateModel = {
