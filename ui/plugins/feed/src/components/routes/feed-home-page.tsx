@@ -154,7 +154,7 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
   return (
     <Box flex={{ grow: 1 }} fill="horizontal" align="center">
       <ErrorInfoCard errors={feedState.data.errors}>
-        {(messages, isCritical) => (
+        {(messages: any, isCritical?: boolean) => (
           <>
             {messages && (
               <ErrorLoader
@@ -172,7 +172,7 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
                 loadMore={loadMore}
                 loadItemData={loadItemData}
                 bookmarkedItems={bookmarkState.data.bookmarkedIds as Set<string>}
-                getNewItemsNotification={({ styles }) => (
+                getNewItemsNotification={({ styles }: { styles: React.CSSProperties }) => (
                   <NewEntriesPopover onClick={handleNewerEntriesLoad} style={styles}>
                     <b>{feedState.data.feedViewState.newerEntries.length}</b> {t('new entries')}
                   </NewEntriesPopover>
@@ -180,10 +180,16 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
                 hasMoreItems={true}
                 onItemRead={handleItemRead}
                 initialState={feedState.data.feedViewState}
-                getItemCard={({ itemData, isBookmarked }) => {
+                getItemCard={({
+                  itemData,
+                  isBookmarked,
+                }: {
+                  itemData: any;
+                  isBookmarked: boolean | null;
+                }) => {
                   return (
                     <ErrorInfoCard errors={itemData.status.errors}>
-                      {(errorMessages, hasCriticalErrors) => (
+                      {(errorMessages: any, hasCriticalErrors?: boolean) => (
                         <>
                           {errorMessages && (
                             <ErrorLoader
@@ -247,11 +253,12 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
                           getComponent: ({ key, style }: { key: string; style: any }) => (
                             <EditorCard
                               ethAddress={profileState.data.loggedEthAddress}
-                              publishLabel="Publish"
+                              postLabel="Publish"
                               placeholderLabel="Write something"
                               onPublish={() => null}
                               style={style}
                               key={key}
+                              handleNavigateBack={() => {}}
                             />
                           ),
                         },
