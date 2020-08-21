@@ -22,7 +22,14 @@ export interface IEntryData {
   author: IProfileData;
   socialData?: ISocialData;
 }
-
+export interface IContentClickDetails {
+  authorEthAddress: string;
+  entryId: string;
+  replyTo: {
+    authorEthAddress: string;
+    entryId: string;
+  } | null;
+}
 export interface IEntryBoxProps {
   // data
   entryData: IEntryData;
@@ -52,6 +59,7 @@ export interface IEntryBoxProps {
   onEntryFlag: (entryId?: string) => void;
   handleFollow: (profileEthAddress: string) => void;
   handleUnfollow: (profileEthAddress: string) => void;
+  onContentClick?: (details: IContentClickDetails) => void;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -79,6 +87,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onEntryFlag,
     handleFollow,
     handleUnfollow,
+    onContentClick,
   } = props;
 
   const size = useViewportSize().size;
@@ -128,6 +137,16 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onClickReplies(entryData.entryId);
   };
 
+  const handleContentClick = () => {
+    if (onContentClick && typeof onContentClick === 'function') {
+      onContentClick({
+        authorEthAddress: entryData.author.ethAddress,
+        entryId: entryData.entryId,
+        replyTo: null,
+      });
+    }
+  };
+
   return (
     <>
       <Box direction="row" justify="between" pad={{ vertical: 'medium' }}>
@@ -173,7 +192,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           copyIPFSLinkLabel={copyIPFSLinkLabel}
         />
       )}
-      <Box pad={{ vertical: 'medium' }}>{entryData.content}</Box>
+      <Box pad={{ vertical: 'medium' }} onClick={handleContentClick}>
+        {entryData.content}
+      </Box>
       <CardActions
         entryData={entryData}
         loggedProfileEthAddress={loggedProfileEthAddress}

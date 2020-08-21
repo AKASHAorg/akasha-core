@@ -7,11 +7,11 @@ import { StyledButton } from './styled-widget-cards';
 export interface IMiniInfoCardProps {
   className?: string;
   titleLabel: string;
-  subtitleLabel: string;
-  learnMoreLabel: string;
-  callToActionLabel: string;
+  subtitleLabel: React.ReactNode;
+  learnMoreLabel?: string;
+  callToActionLabel?: string;
   handleLearnMore?: () => void;
-  handleCallToAction: () => void;
+  handleCallToAction?: () => void;
   handleDismiss?: () => void;
 }
 
@@ -36,15 +36,17 @@ const MiniInfoWidgetCard: React.FC<IMiniInfoCardProps> = props => {
       )}
       <Box pad={{ horizontal: 'medium' }} gap="xsmall">
         <Text weight="bold"> {titleLabel}</Text>
-        <Text> {subtitleLabel}</Text>
+        <Text>{subtitleLabel}</Text>
         <Box direction="row" pad={{ bottom: 'xsmall' }} gap="xsmall">
           {handleLearnMore && <StyledButton label={learnMoreLabel} onClick={handleLearnMore} />}
-          <StyledButton
-            label={callToActionLabel}
-            onClick={handleCallToAction}
-            primary={true}
-            fill={!handleLearnMore}
-          />
+          {handleCallToAction && (
+            <StyledButton
+              label={callToActionLabel}
+              onClick={handleCallToAction}
+              primary={true}
+              fill={!handleLearnMore}
+            />
+          )}
         </Box>
       </Box>
     </WidgetAreaCardBox>

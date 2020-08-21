@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box } from 'grommet';
-import AutoSizer from 'react-virtualized-auto-sizer';
 import ListContent from './list-content';
 import { IVirtualListProps } from './interfaces';
 
@@ -61,7 +60,6 @@ const VirtualList = (props: IVirtualListProps, ref?: React.Ref<any>) => {
     onItemRead,
   } = props;
   const [listState, setListState] = React.useState(initialState);
-
   React.useEffect(() => {
     if (
       initialState.newerEntries &&
@@ -87,33 +85,27 @@ const VirtualList = (props: IVirtualListProps, ref?: React.Ref<any>) => {
   }, []);
 
   return (
-    <Box fill="vertical" flex={true}>
-      <AutoSizer>
-        {({ width, height }) => (
-          <ListContent
-            ref={ref}
-            offsetItems={offsetItems}
-            initialPaddingTop={initialPaddingTop}
-            items={items}
-            itemCard={itemCard}
-            loadItemData={loadItemData}
-            loadLimit={loadLimit}
-            itemsData={itemsData}
-            height={height}
-            width={width}
-            itemSpacing={itemSpacing}
-            onLoadMore={loadMore}
-            customEntities={customEntities}
-            getItemCard={getItemCard}
-            listState={listState}
-            setListState={setListState}
-            hasMoreItems={hasMoreItems}
-            bookmarkedItems={bookmarkedItems}
-            getNewItemsNotification={getNewItemsNotification}
-            onItemRead={onItemRead}
-          />
-        )}
-      </AutoSizer>
+    <Box flex={{ grow: 1 }} align="stretch" direction="column">
+      <ListContent
+        ref={ref}
+        offsetItems={offsetItems}
+        initialPaddingTop={initialPaddingTop}
+        items={items}
+        itemCard={itemCard}
+        loadItemData={loadItemData}
+        loadLimit={loadLimit}
+        itemsData={itemsData}
+        itemSpacing={itemSpacing}
+        onLoadMore={loadMore}
+        customEntities={customEntities}
+        getItemCard={getItemCard}
+        listState={listState}
+        setListState={setListState}
+        hasMoreItems={hasMoreItems}
+        bookmarkedItems={bookmarkedItems}
+        getNewItemsNotification={getNewItemsNotification}
+        onItemRead={onItemRead}
+      />
     </Box>
   );
 };

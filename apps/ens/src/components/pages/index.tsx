@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { IAppProps } from '../app';
 import { useProfileState } from '../../state/profile-state';
 
-const { ErrorInfoCard, useGlobalLogin } = DS;
+const { ErrorInfoCard, useGlobalLogin, ErrorLoader } = DS;
 
 export interface IPagesProps extends IAppProps {
   errors: any;
@@ -32,46 +32,60 @@ const Pages: React.FC<IPagesProps> = props => {
     profileStateActions.handleLoginError,
   );
   return (
-    <ErrorInfoCard title={t('Error occured!')} errors={errors}>
-      <Router>
-        <Switch>
-          <Route
-            path={subRoutes[ENS_EDIT_PAGE]}
-            render={routeProps => (
-              <>
-                <DS.Helmet>
-                  <title>ENS | {ENS_EDIT_PAGE}</title>
-                </DS.Helmet>
-                <EnsEditPage
-                  {...routeProps}
-                  sdkModules={sdkModules}
-                  globalChannel={globalChannel}
-                  logger={logger}
+    <ErrorInfoCard errors={errors}>
+      {(messages, isCritical) => (
+        <>
+          {messages && (
+            <ErrorLoader
+              type="script-error"
+              title={t('There was an error loading the entry')}
+              details={t('We cannot show this entry right now')}
+              devDetails={messages}
+            />
+          )}
+          {!isCritical && (
+            <Router>
+              <Switch>
+                <Route
+                  path={subRoutes[ENS_EDIT_PAGE]}
+                  render={routeProps => (
+                    <>
+                      <DS.Helmet>
+                        <title>ENS | {ENS_EDIT_PAGE}</title>
+                      </DS.Helmet>
+                      <EnsEditPage
+                        {...routeProps}
+                        sdkModules={sdkModules}
+                        globalChannel={globalChannel}
+                        logger={logger}
+                      />
+                    </>
+                  )}
                 />
-              </>
-            )}
-          />
-          <Route
-            path={subRoutes[SETTINGS_PAGE]}
-            render={(routeProps: RouteComponentProps) => (
-              <>
-                <DS.Helmet>
-                  <title>ENS | {SETTINGS_PAGE}</title>
-                </DS.Helmet>
-                <EnsSettingsPage
-                  {...routeProps}
-                  sdkModules={sdkModules}
-                  globalChannel={globalChannel}
-                  logger={logger}
+                <Route
+                  path={subRoutes[SETTINGS_PAGE]}
+                  render={(routeProps: RouteComponentProps) => (
+                    <>
+                      <DS.Helmet>
+                        <title>ENS | {SETTINGS_PAGE}</title>
+                      </DS.Helmet>
+                      <EnsSettingsPage
+                        {...routeProps}
+                        sdkModules={sdkModules}
+                        globalChannel={globalChannel}
+                        logger={logger}
+                      />
+                    </>
+                  )}
                 />
-              </>
-            )}
-          />
-          {/* Make the edit page default landing page for this app
-                      404 routes gets redirected to this page also */}
-          <Redirect push={true} from={rootRoute} to={subRoutes[ENS_EDIT_PAGE]} exact={true} />
-        </Switch>
-      </Router>
+                {/* Make the edit page default landing page for this app
+                          404 routes gets redirected to this page also */}
+                <Redirect push={true} from={rootRoute} to={subRoutes[ENS_EDIT_PAGE]} exact={true} />
+              </Switch>
+            </Router>
+          )}
+        </>
+      )}
     </ErrorInfoCard>
   );
 };

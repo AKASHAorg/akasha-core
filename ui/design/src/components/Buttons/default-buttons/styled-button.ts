@@ -5,6 +5,7 @@ const StyledButton = styled(Button)`
   height: 2rem;
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
   color: ${props => props.theme.colors.accent};
+  white-space: nowrap;
   &:hover {
     box-shadow: none;
   }

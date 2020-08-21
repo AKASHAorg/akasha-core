@@ -3,7 +3,44 @@ import * as React from 'react';
 import type { ErrorLoaderProps } from './interfaces';
 import { StyledErrorCard, StyledImage } from './styled-elements';
 
-const FeedCustomizationError: React.FC<ErrorLoaderProps & { imageSrc: string }> = props => {
+interface ErrorRendererProps {
+  colorProp: any;
+  size: any;
+  textAlign: any;
+  style: any;
+  level: any;
+  theme: any;
+  className: any;
+}
+
+const ErrorRenderer: React.FC<ErrorRendererProps> = props => {
+  return (
+    <details>
+      <summary>Expand to see error details</summary>
+      <div
+        style={{
+          background: '#FFF',
+          position: 'absolute',
+          right: 0,
+          border: '1px solid red',
+          fontSize: '.8em',
+        }}
+      >
+        {props.children}
+      </div>
+    </details>
+  );
+};
+
+const ErrorCard: React.FC<ErrorLoaderProps & { imageSrc: string }> = props => {
+  const { details, devDetails } = props;
+  let message;
+  let isDevMode = false;
+  if (process.env.NODE_ENV !== 'production') {
+    isDevMode = true;
+    message = devDetails || details;
+  }
+
   return (
     <StyledErrorCard>
       <Box>
@@ -20,8 +57,9 @@ const FeedCustomizationError: React.FC<ErrorLoaderProps & { imageSrc: string }> 
           color="secondaryText"
           textAlign="center"
           style={{ paddingTop: '1em', maxWidth: '70%' }}
+          as={isDevMode && props.devDetails ? ErrorRenderer : 'span'}
         >
-          {props.details}
+          {message}
         </Text>
       </Box>
       <Box pad={{ top: '1.5em', bottom: '1em' }}>{props.children}</Box>
@@ -29,4 +67,4 @@ const FeedCustomizationError: React.FC<ErrorLoaderProps & { imageSrc: string }> 
   );
 };
 
-export default FeedCustomizationError;
+export default ErrorCard;

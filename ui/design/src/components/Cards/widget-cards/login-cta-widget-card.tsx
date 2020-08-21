@@ -16,7 +16,6 @@ const ConnectButton = styled(Button)`
 // @ts-ignore-next-line
 const LoginWidgetBox = styled(WidgetAreaCardBox)`
   padding: 1em;
-  margin-top: 2em;
   margin-bottom: 0.5em;
 `;
 export interface ILoginWidgetCardProps {

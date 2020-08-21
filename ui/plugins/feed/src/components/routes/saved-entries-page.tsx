@@ -90,7 +90,7 @@ const SavedEntriesPage: React.FC<ISavedEntriesPageProps & RouteProps> = props =>
   };
 
   return (
-    <Box fill={true}>
+    <Box fill="horizontal">
       {!loggedEthAddress && !fetching && (
         <>
           <ErrorLoader
@@ -110,45 +110,58 @@ const SavedEntriesPage: React.FC<ISavedEntriesPageProps & RouteProps> = props =>
         />
       )}
       {loggedEthAddress && fetching && <Box>Loading Saved entries, please wait!</Box>}
-      <ErrorInfoCard errors={bookmarkState.data.errors} title={t('Error')}>
-        <VirtualList
-          items={Array.from(bookmarkState.data.bookmarkedIds as Set<string>)}
-          itemsData={bookmarkState.data.entriesData}
-          loadItemData={loadItemData}
-          loadMore={noop}
-          loadInitialFeed={loadInitialFeed}
-          hasMoreItems={false}
-          getItemCard={({ itemData }) => {
-            return (
-              <EntryCard
-                isBookmarked={true}
-                entryData={itemData}
-                onClickAvatar={handleAvatarClick}
-                onEntryBookmark={handleEntryBookmark}
-                repliesLabel={t('Replies')}
-                repostsLabel={t('Reposts')}
-                repostLabel={t('Repost')}
-                repostWithCommentLabel={t('Repost with comment')}
-                shareLabel={t('Share')}
-                copyIPFSLinkLabel={t('Copy IPFS Link')}
-                flagAsLabel={t('Flag as inappropiate')}
-                copyLinkLabel={t('Copy Link')}
-                loggedProfileEthAddress={loggedEthAddress}
-                locale={locale}
-                style={{ height: 'auto' }}
-                bookmarkLabel={t('Save')}
-                bookmarkedLabel={t('Saved')}
-                onRepost={handleEntryRepost}
-                onEntryShare={handleEntryShare}
-                onEntryFlag={handleEntryFlag}
-                onLinkCopy={handleLinkCopy}
-                onClickReplies={handleClickReplies}
-                handleFollow={handleFollow}
-                handleUnfollow={handleUnfollow}
+      <ErrorInfoCard errors={bookmarkState.data.errors}>
+        {(messages, isCritical) => (
+          <>
+            {messages && (
+              <ErrorLoader
+                type="script-error"
+                title={t('There was an error loading the list')}
+                details={messages}
               />
-            );
-          }}
-        />
+            )}
+            {!isCritical && (
+              <VirtualList
+                items={Array.from(bookmarkState.data.bookmarkedIds as Set<string>)}
+                itemsData={bookmarkState.data.entriesData}
+                loadItemData={loadItemData}
+                loadMore={noop}
+                loadInitialFeed={loadInitialFeed}
+                hasMoreItems={false}
+                getItemCard={({ itemData }) => {
+                  return (
+                    <EntryCard
+                      isBookmarked={true}
+                      entryData={itemData}
+                      onClickAvatar={handleAvatarClick}
+                      onEntryBookmark={handleEntryBookmark}
+                      repliesLabel={t('Replies')}
+                      repostsLabel={t('Reposts')}
+                      repostLabel={t('Repost')}
+                      repostWithCommentLabel={t('Repost with comment')}
+                      shareLabel={t('Share')}
+                      copyIPFSLinkLabel={t('Copy IPFS Link')}
+                      flagAsLabel={t('Flag as inappropiate')}
+                      copyLinkLabel={t('Copy Link')}
+                      loggedProfileEthAddress={loggedEthAddress}
+                      locale={locale}
+                      style={{ height: 'auto' }}
+                      bookmarkLabel={t('Save')}
+                      bookmarkedLabel={t('Saved')}
+                      onRepost={handleEntryRepost}
+                      onEntryShare={handleEntryShare}
+                      onEntryFlag={handleEntryFlag}
+                      onLinkCopy={handleLinkCopy}
+                      onClickReplies={handleClickReplies}
+                      handleFollow={handleFollow}
+                      handleUnfollow={handleUnfollow}
+                    />
+                  );
+                }}
+              />
+            )}
+          </>
+        )}
       </ErrorInfoCard>
     </Box>
   );

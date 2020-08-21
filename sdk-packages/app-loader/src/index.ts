@@ -45,7 +45,8 @@ interface SingleSpaEventDetail {
   };
   totalAppChanges: number;
 }
-
+/* tslint:disable */
+/* eslint-disable */
 export default class AppLoader implements IAppLoader {
   public readonly registeredWidgets: Map<string, IWidgetConfig>;
   public readonly registeredIntegrations: Map<string, IPluginConfig>;
@@ -165,7 +166,7 @@ export default class AppLoader implements IAppLoader {
     this.appLogger.info(`[@akashaproject/sdk-ui-plugin-loader] registering app ${app.name}`);
     const appId = this.getIdFromName(app.name);
     if (this.registeredIntegrations.has(appId)) {
-      this.appLogger.error(`App ${appId} already registered`);
+      this.appLogger.info(`App ${appId} already registered... skipping...`);
       return;
     }
     if (!this.apps.find(a => a.app.name === appEntry.app.name)) {
@@ -186,7 +187,7 @@ export default class AppLoader implements IAppLoader {
     this.appLogger.info(`[@akashaproject/sdk-ui-plugin-loader] registering app ${app.name}`);
     const appId = this.getIdFromName(app.name);
     if (this.registeredIntegrations.has(appId)) {
-      this.appLogger.error(`App ${appId} already registered`);
+      this.appLogger.info(`App ${appId} already registered... skipping...`);
       return;
     }
     if (!this.plugins.find(p => p.app.name === pluginEntry.app.name)) {
@@ -219,7 +220,7 @@ export default class AppLoader implements IAppLoader {
     widget.app.name = widgetId;
 
     if (this.registeredWidgets.has(widgetId)) {
-      this.appLogger.error(`Widget ${widgetId} already registered`);
+      this.appLogger.info(`Widget ${widgetId} already registered... skipping...`);
       return;
     }
 
@@ -232,7 +233,6 @@ export default class AppLoader implements IAppLoader {
       widget.app,
       this.appLogger.child({ i18nWidget: widgetId }),
     );
-
     const pProps = {
       ...this.config,
       ...widget.app,
@@ -244,6 +244,7 @@ export default class AppLoader implements IAppLoader {
       events: this.events,
       isMobile: this.isMobile,
       logger: this.appLogger.child({ widget: widgetId }),
+      basePath: widget.app.basePath,
     };
     const widgetS = singleSpa.mountRootParcel(this.createSingleSpaApp(widget.app), pProps);
     await widgetS.mountPromise;
@@ -323,6 +324,7 @@ export default class AppLoader implements IAppLoader {
       title: integration.app.title || integrationId,
     });
   }
+  /* eslint-enable complexity */
   private getDependencies(app: any, id) {
     const dependencies = {};
     if (app.sdkModules.length) {
@@ -355,7 +357,6 @@ export default class AppLoader implements IAppLoader {
    */
   private onRouting(ev: CustomEvent<SingleSpaEventDetail>) {
     const { pathname } = window.location;
-
     const mountedApps = this.getPluginsForLocation(window.location).map(appName => {
       const app = this.apps.find(appEntry => this.getIdFromName(appEntry.app.name) === appName);
       const plugin = this.plugins.find(
@@ -422,7 +423,21 @@ export default class AppLoader implements IAppLoader {
       if (plugin) return plugin;
     });
   }
-
+  private createHtmlElement(elementId, elementType, parentNode?: string) {
+    const alreadyCreated = document.getElementById(elementId);
+    if (alreadyCreated) {
+      return elementId;
+    }
+    const elem: HTMLElement = document.createElement(elementType);
+    elem.id = elementId;
+    if (parentNode) {
+      const parentElem = document.getElementById(parentNode);
+      if (parentElem && elem) {
+        parentElem.appendChild(elem);
+      }
+    }
+    return elementId;
+  }
   private mountWidgetsOfApps(apps) {
     apps.forEach(integration => {
       const widgets = integration.app.widgets;
@@ -440,7 +455,19 @@ export default class AppLoader implements IAppLoader {
                 route: route,
                 widgetId: this.getIdFromName(widget.name),
                 widget: await this.registerWidget(
-                  { app: widget, config: { slot: this.config.layout.widgetSlotId } },
+                  {
+                    app: {
+                      ...widget,
+                      basePath: route,
+                    },
+                    config: {
+                      slot: this.createHtmlElement(
+                        this.getIdFromName(widget.name),
+                        'div',
+                        this.config.layout.widgetSlotId,
+                      ),
+                    },
+                  },
                   'integration',
                 ),
               });
@@ -463,12 +490,16 @@ export default class AppLoader implements IAppLoader {
 
     appsWidgetRoutes.forEach(route => {
       const cmw = this.currentlyMountedWidgets.find(w => w.route === route);
-      if (cmw && cmw.widget.getStatus() === 'MOUNTED') {
+      if (cmw && cmw.widget && cmw.widget.getStatus() === 'MOUNTED') {
         cmw.widget.unmount();
         this.currentlyMountedWidgets = this.currentlyMountedWidgets.filter(
           w => w.route !== cmw.route,
         );
         this.registeredWidgets.delete(cmw.widgetId);
+        const htmlElem: HTMLElement | null = document.getElementById(cmw.widgetId);
+        if (htmlElem) {
+          htmlElem.remove();
+        }
       }
     });
   }
@@ -630,3 +661,5 @@ export default class AppLoader implements IAppLoader {
     return location.pathname.startsWith(`${activeWhen.path}`);
   }
 }
+/* eslint-enable */
+/* tslint:enable */

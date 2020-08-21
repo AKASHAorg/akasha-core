@@ -126,7 +126,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
   };
 
   return (
-    <StyledBox pad="none" width="581px" justify="between">
+    <StyledBox pad="none" justify="between">
       <Box direction="row" justify="between" pad="medium" align="center" flex={false}>
         <Icon
           type="arrowLeft"
@@ -155,7 +155,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
         height={{ min: '192px' }}
       >
         <Avatar src={avatar} ethAddress={ethAddress} margin={{ top: '0.5rem' }} />
-        <Box width="480px" pad={{ horizontal: 'small' }}>
+        <Box width="100%" pad={{ horizontal: 'small' }}>
           <Slate editor={editor} value={editorValue} onChange={handleChange}>
             <FormatToolbar />
             <StyledEditable
@@ -185,9 +185,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
             <Icon type="image" clickable={true} onClick={handleMediaClick} size="md" />
           </StyledIconDiv>
         </Box>
-
         <Icon type="akasha" clickable={true} style={{ marginLeft: '2rem' }} />
-
         <Button
           primary={true}
           icon={<Icon type="send" color="white" />}

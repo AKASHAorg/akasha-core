@@ -34,11 +34,11 @@ export const application: Application = {
     ),
   name: 'ui-plugin-feed',
   sdkModules: [{ module: commons }, { module: dbModule }],
-  title: 'AKASHA Feed',
+  title: 'Home',
   menuItems: routes,
   logo: { type: LogoTypeSource.ICON, value: 'appFeed' },
   widgets: {
     // use path-to-regexp style paths
-    [`${routes[MY_FEED_PAGE]}`]: [FeedSourcesWidget],
+    [routes[MY_FEED_PAGE]]: [FeedSourcesWidget],
   },
 };
