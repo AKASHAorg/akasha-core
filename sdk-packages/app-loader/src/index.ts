@@ -45,7 +45,7 @@ interface SingleSpaEventDetail {
   };
   totalAppChanges: number;
 }
-
+/* eslint-disable */
 export default class AppLoader implements IAppLoader {
   public readonly registeredWidgets: Map<string, IWidgetConfig>;
   public readonly registeredIntegrations: Map<string, IPluginConfig>;
@@ -323,6 +323,7 @@ export default class AppLoader implements IAppLoader {
       title: integration.app.title || integrationId,
     });
   }
+  /* eslint-enable complexity */
   private getDependencies(app: any, id) {
     const dependencies = {};
     if (app.sdkModules.length) {
@@ -659,3 +660,4 @@ export default class AppLoader implements IAppLoader {
     return location.pathname.startsWith(`${activeWhen.path}`);
   }
 }
+/* eslint-enable */
