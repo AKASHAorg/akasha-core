@@ -18,6 +18,7 @@ const {
   EthProviderListModal,
   EthProviderModal,
   createGlobalStyle,
+  useGlobalLogin,
 } = DS;
 
 const METAMASK_PROVIDER = 'metamask';
@@ -76,6 +77,20 @@ const EthProviderModalIllustration: React.FC<IEthProviderIllustrationProps> = pr
 const LoginWidget: React.FC<ILoginWidgetProps> = props => {
   const { t } = useTranslation();
   const [state, actions] = useLoginState(props.sdkModules, props.globalChannel, props.logger);
+
+  useGlobalLogin(
+    props.globalChannel,
+    data => {
+      actions.updateData({
+        ethAddress: data.ethAddress,
+        jwtToken: data.token,
+      });
+    },
+    err => {
+      props.logger.error('[login-widget.tsx]: useGlobalLogin err: %j', err);
+      // @TODO: handle this error!
+    },
+  );
 
   const handleLearnMore = () => {
     actions.setLearnMoreVisibility({ isVisible: true });

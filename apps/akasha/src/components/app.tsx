@@ -1,63 +1,51 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import AKASHASettings from './settings-page';
-import NewPostPage from './new-post-page';
-import FeedPage from './feed-page';
-import PostsPage from './posts-page';
 import { I18nextProvider } from 'react-i18next';
-import routes, { FEED, NEW_POST, POSTS, SETTINGS_PAGE } from '../routes';
+import AppRoutes from './app-routes';
+import { getLoggedProfileStore } from '../state/logged-profile-state';
 
 const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
 
 export default class Application extends React.Component<RootComponentProps> {
+  public state: { errors: any } = {
+    errors: {},
+  };
+  public componentDidCatch(error: Error, errorInfo: any) {
+    if (this.props.logger) {
+      this.props.logger.error('auth-widget error %j %j', error, errorInfo);
+    }
+    this.setState({
+      errors: {
+        'caught.critical': {
+          error: new Error(`${error} \n Additional info: \n ${errorInfo}`),
+          critical: false,
+        },
+      },
+    });
+  }
   render() {
-    const { i18n, sdkModules, globalChannel, logger } = this.props;
+    const { i18n } = this.props;
+    const Login = getLoggedProfileStore(
+      this.props.sdkModules,
+      this.props.globalChannel,
+      this.props.logger,
+    );
     return (
-      <ThemeSelector
-        settings={{ activeTheme: 'Light-Theme' }}
-        availableThemes={[lightTheme, darkTheme]}
-      >
+      <Box width="100vw">
         <React.Suspense fallback={<>Loading</>}>
-          <I18nextProvider i18n={i18n ? i18n : null}>
-            <Router>
-              <Box>
-                <Switch>
-                  <Route path={routes[NEW_POST]}>
-                    <NewPostPage
-                      sdkModules={sdkModules}
-                      globalChannel={globalChannel}
-                      logger={logger}
-                    />
-                  </Route>
-                  <Route path={routes[SETTINGS_PAGE]}>
-                    <AKASHASettings
-                      sdkModules={sdkModules}
-                      globalChannel={globalChannel}
-                      logger={logger}
-                    />
-                  </Route>
-                  <Route path={routes[FEED]}>
-                    <FeedPage
-                      sdkModules={sdkModules}
-                      globalChannel={globalChannel}
-                      logger={logger}
-                    />
-                  </Route>
-                  <Route path={routes[POSTS]}>
-                    <PostsPage
-                      sdkModules={sdkModules}
-                      globalChannel={globalChannel}
-                      logger={logger}
-                    />
-                  </Route>
-                </Switch>
-              </Box>
-            </Router>
-          </I18nextProvider>
+          <ThemeSelector
+            settings={{ activeTheme: 'Light-Theme' }}
+            availableThemes={[lightTheme, darkTheme]}
+          >
+            <I18nextProvider i18n={i18n ? i18n : null}>
+              <Login.Provider>
+                <AppRoutes {...this.props} />
+              </Login.Provider>
+            </I18nextProvider>
+          </ThemeSelector>
         </React.Suspense>
-      </ThemeSelector>
+      </Box>
     );
   }
 }

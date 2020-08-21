@@ -5,6 +5,7 @@ import { filter, takeLast } from 'rxjs/operators';
 
 export interface LoginState {
   jwtToken: string | null;
+  ethAddress: string | null;
   providerListVisibility: boolean;
   learnMoreVisibility: boolean;
   selectedProvider: string | null;
@@ -33,6 +34,7 @@ export interface LoginStateModel {
 export const loginStateModel: LoginStateModel = {
   data: persist(
     {
+      ethAddress: null,
       jwtToken: null,
       providerListVisibility: false,
       learnMoreVisibility: false,
@@ -78,6 +80,7 @@ export const loginStateModel: LoginStateModel = {
         (response: any) => {
           actions.updateData({
             jwtToken: response.data.token,
+            ethAddress: response.data.ethAddress,
             selectedProvider: null,
           });
         },

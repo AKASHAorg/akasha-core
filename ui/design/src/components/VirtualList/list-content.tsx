@@ -187,7 +187,7 @@ const ListContent = (props: IListContentProps, ref?: React.Ref<IListAPI>) => {
         getNewItemsNotification({
           styles: {
             transform: newEntryNotificationShown ? 'translateY(0)' : 'translateY(-8em)',
-            position: 'sticky',
+            position: newEntryNotificationShown ? 'sticky' : 'absolute',
             willChange: 'transform',
             transition: 'transform 0.314s ease-in-out',
             margin: '0 auto',

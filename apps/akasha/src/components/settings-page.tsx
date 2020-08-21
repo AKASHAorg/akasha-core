@@ -7,6 +7,7 @@ export interface SettingsPageProps {
   globalChannel: any;
   sdkModules: any;
   logger: any;
+  onLoginModalShow: () => void;
 }
 
 const SettingsPage: React.FC<SettingsPageProps> = () => {

@@ -50,7 +50,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
 );
 
 const MainAreaCardBox = styled(BasicCardBox)<{ verticalFill?: boolean }>`
-  max-width: 36.313rem;
+  /* max-width: 36.313rem; */
   ${props => {
     if (props.verticalFill) {
       return css`

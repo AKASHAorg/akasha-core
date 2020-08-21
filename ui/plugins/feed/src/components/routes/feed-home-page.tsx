@@ -77,18 +77,6 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
     props.singleSpa.navigateToUrl('/profile/0x00123123123');
   };
 
-  // const handleFiltersChange = (payload: {
-  //   filter?: FeedState['filters']['filter'];
-  //   sort?: FeedState['filters']['sort'];
-  // }) => () => {
-  //   feedStateActions.resetFeed();
-  //   feedStateActions.changeActiveFilters({ ...feedState.data.filters, ...payload });
-  //   feedStateActions.getFeedItems({
-  //     options: { limit: 5, reverse: false },
-  //     filters: { ...feedState.data.filters, ...payload },
-  //   });
-  // };
-
   const handleEntryBookmark = (entryId: string, isBookmarked: boolean | null) => {
     if (profileState.data.loggedEthAddress) {
       if (isBookmarked) {
@@ -258,7 +246,9 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
                               onPublish={() => null}
                               style={style}
                               key={key}
-                              handleNavigateBack={() => {}}
+                              handleNavigateBack={() => {
+                                //  todo
+                              }}
                             />
                           ),
                         },

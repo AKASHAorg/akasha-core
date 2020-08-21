@@ -1,13 +1,13 @@
-import { action, thunk, createComponentStore, Action, Thunk } from 'easy-peasy';
+import { action, thunk, Action, Thunk, createContextStore } from 'easy-peasy';
 import { getEthAddress } from '../services/profile-service';
-import { forkJoin } from 'rxjs';
+import { race, forkJoin } from 'rxjs';
+import { filter, takeLast } from 'rxjs/operators';
 import { generateProfileData } from '../services/dummy-data';
 
-export interface IProfileData {}
-
 export interface LoggedProfileState {
-  profileData: IProfileData;
+  profileData: {};
   ethAddress: string | null;
+  jwtToken: string | null;
   // when we are loading the profile data
   isLoading?: boolean;
   errors: {
@@ -26,16 +26,18 @@ export interface IStateErrorPayload {
   critical: boolean;
 }
 
-export interface PostsStateModel {
+export interface LoggedProfileStateModel {
   data: LoggedProfileState;
-  updateData: Action<PostsStateModel, Partial<LoggedProfileState>>;
-  createError: Action<PostsStateModel, IStateErrorPayload>;
-  getProfileData: Thunk<PostsStateModel, string>;
-  getEthAddress: Thunk<PostsStateModel>;
+  updateData: Action<LoggedProfileStateModel, Partial<LoggedProfileState>>;
+  createError: Action<LoggedProfileStateModel, IStateErrorPayload>;
+  getProfileData: Thunk<LoggedProfileStateModel, string>;
+  getEthAddress: Thunk<LoggedProfileStateModel>;
+  authorize: Thunk<LoggedProfileStateModel, number>;
 }
 
-export const postsState: PostsStateModel = {
+export const loggedProfileStateModel: LoggedProfileStateModel = {
   data: {
+    jwtToken: null,
     ethAddress: null,
     profileData: {
       name: '',
@@ -61,7 +63,39 @@ export const postsState: PostsStateModel = {
       },
     });
   }),
-
+  authorize: thunk(async (actions, ethProvider, { injections }) => {
+    const { auth } = injections.channels;
+    try {
+      const call = auth.authService.signIn(ethProvider);
+      // handle the case where signIn was triggered from another place
+      const globalCall = injections.globalChannel.pipe(
+        filter((response: any) => response.channelInfo.method === 'signIn'),
+        takeLast(1),
+      );
+      race(call, globalCall).subscribe(
+        (response: any) => {
+          actions.updateData({
+            jwtToken: response.data.token,
+            ethAddress: response.data.ethAddress,
+          });
+        },
+        (err: Error) => {
+          // console.error('action[subscription].authorize', err);
+          actions.createError({
+            errorKey: 'action[subscription].authorize',
+            error: err,
+            critical: false,
+          });
+        },
+      );
+    } catch (ex) {
+      actions.createError({
+        errorKey: 'action.authorize',
+        error: ex,
+        critical: false,
+      });
+    }
+  }),
   getProfileData: thunk(async (actions, ethAddress) => {
     try {
       const profileData = await generateProfileData(ethAddress);
@@ -110,9 +144,12 @@ export const postsState: PostsStateModel = {
     }
   }),
 };
-
-export const useLoggedProfileState = (channels?: any, globalChannel?: any, logger?: any) =>
-  createComponentStore(postsState, {
-    name: 'AKASHA-LoggedProfileState',
+let loginState: ReturnType<typeof createContextStore>;
+export const getLoggedProfileStore = (channels?: any, globalChannel?: any, logger?: any) => {
+  if (loginState) return loginState;
+  loginState = createContextStore(loggedProfileStateModel, {
+    name: 'AKASHA-app-LoggedProfileState',
     injections: { channels, globalChannel, logger },
-  })();
+  });
+  return loginState;
+};

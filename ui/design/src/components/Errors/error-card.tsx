@@ -14,7 +14,6 @@ interface ErrorRendererProps {
 }
 
 const ErrorRenderer: React.FC<ErrorRendererProps> = props => {
-  console.log(props, 'error renderer props');
   return (
     <details>
       <summary>Expand to see error details</summary>
@@ -33,7 +32,7 @@ const ErrorRenderer: React.FC<ErrorRendererProps> = props => {
   );
 };
 
-const FeedCustomizationError: React.FC<ErrorLoaderProps & { imageSrc: string }> = props => {
+const ErrorCard: React.FC<ErrorLoaderProps & { imageSrc: string }> = props => {
   const { details, devDetails } = props;
   let message;
   let isDevMode = false;
@@ -68,4 +67,4 @@ const FeedCustomizationError: React.FC<ErrorLoaderProps & { imageSrc: string }> 
   );
 };
 
-export default FeedCustomizationError;
+export default ErrorCard;

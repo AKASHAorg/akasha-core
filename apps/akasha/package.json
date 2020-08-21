@@ -45,6 +45,7 @@
     "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"
   },
   "dependencies": {
+    "@akashaproject/sdk-auth": "*",
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-common": "*",
     "@akashaproject/sdk-runtime": "*",

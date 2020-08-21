@@ -2,7 +2,6 @@ import DS from '@akashaproject/design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-// import WidgetList from '../widgets';
 import FeedHomePage from './feed-home-page';
 import routes, { MY_FEED_PAGE, SAVED_PAGE, rootRoute, SETTINGS_PAGE } from '../../routes';
 import SavedEntriesPage from './saved-entries-page';
@@ -28,13 +27,9 @@ const ArticleNotFound = () => {
 };
 
 const FeedBox = styled(Box)`
-  padding: 0.5em 0;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  /* @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
-    width: 100%;
-  } */
 `;
 
 /**

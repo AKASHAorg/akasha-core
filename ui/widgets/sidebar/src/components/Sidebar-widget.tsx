@@ -127,7 +127,6 @@ interface MenuProps {
   navigateToUrl: (url: string) => void;
   getMenuItems: () => IMenuItem[];
   loaderEvents: any;
-
   sidebarVisible: boolean;
 }
 

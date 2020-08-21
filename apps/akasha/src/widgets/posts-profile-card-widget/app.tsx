@@ -68,4 +68,3 @@ class Widget extends React.Component<RootComponentProps> {
 }
 
 export default Widget;
-

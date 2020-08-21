@@ -1,5 +1,7 @@
 import { moduleName as commons } from '@akashaproject/sdk-common/lib/constants';
 import { moduleName as dbModule } from '@akashaproject/sdk-db/lib/constants';
+import { moduleName as auth } from '@akashaproject/sdk-auth/lib/constants';
+
 import { initReactI18next } from 'react-i18next';
 import routes, { FEED, NEW_POST, POSTS, rootRoute } from './routes';
 import { Application, LogoTypeSource } from '@akashaproject/ui-awf-typings';
@@ -27,7 +29,7 @@ export const application: Application = {
       './components'
     ),
   name: 'AKASHA-app',
-  sdkModules: [{ module: commons }, { module: dbModule }],
+  sdkModules: [{ module: commons }, { module: dbModule }, { module: auth }],
   menuItems: routes,
   title: 'AKASHA',
   logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },

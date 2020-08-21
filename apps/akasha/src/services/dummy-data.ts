@@ -38,7 +38,7 @@ const genTime = () => {
   const end = Date.now() / 1000;
   const start = startDate.getTime() / 1000;
   const date = new Date(start + Math.max(0, Math.random() * (end - start)));
-  return date.getTime();
+  return date.getTime().toLocaleString();
 };
 
 export const genEntryData = (entryId: string) => ({
@@ -48,8 +48,10 @@ export const genEntryData = (entryId: string) => ({
     .slice(Math.floor(Math.random() * Math.floor(3)), Math.floor(Math.random() * Math.floor(9)))
     .join('. '),
   time: genTime(),
-  replies: randomNumber(0, 1000),
+  replies: randomNumber(0, 1000) as any,
   reposts: randomNumber(0, 1210),
+  ipfsLink: 'Qmsdefas12331213',
+  permalink: 'some-perma-link',
 });
 
 export const genEthAddress = () => {

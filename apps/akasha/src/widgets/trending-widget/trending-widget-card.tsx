@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 const { TrendingWidgetCard } = DS;
 
-export interface TrendingWidgetCardProps {}
+// export interface TrendingWidgetCardProps {}
 
-const TrendingWidget: React.FC<TrendingWidgetCardProps> = () => {
+const TrendingWidget: React.FC<{}> = () => {
   const { t } = useTranslation();
   const handleTagClick = () => {
     // todo

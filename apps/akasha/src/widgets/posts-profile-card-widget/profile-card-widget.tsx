@@ -49,8 +49,12 @@ const ProfileCardWidget: React.FC<RootComponentProps> = _props => {
       {profile.ethAddress && !profile.loading && profile.profileData && (
         <ProfileMiniCard
           profileData={profile.profileData}
-          handleFollow={() => {}}
-          handleUnfollow={() => {}}
+          handleFollow={() => {
+            // todo
+          }}
+          handleUnfollow={() => {
+            // todo
+          }}
         />
       )}
     </>

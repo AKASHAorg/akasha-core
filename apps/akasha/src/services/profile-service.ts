@@ -1,4 +1,6 @@
-export const fetchProfileData = () => {};
+export const fetchProfileData = () => {
+  // todo
+};
 
 export const getEthAddress = async (
   cache: { entries: { has: (arg0: string) => any }; get: (arg0: string) => any },

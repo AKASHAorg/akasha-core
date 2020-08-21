@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-export interface TermsWidgetProps {}
+// export interface TermsWidgetProps {}
 
-const TermsWidget: React.FC<TermsWidgetProps> = () => {
+const TermsWidget: React.FC<{}> = () => {
   return <>Terms and Conditions</>;
 };
 
