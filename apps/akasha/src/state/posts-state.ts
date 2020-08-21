@@ -1,13 +1,6 @@
 import { action, thunk, createComponentStore, Action, Thunk } from 'easy-peasy';
 import { IProfileData } from './logged-profile-state';
 
-export interface IRawProfileData {
-  name?: string;
-  image?: string;
-  coverPhoto?: string;
-  description?: string;
-}
-
 export interface PostsState {
   profileData: IProfileData;
   ethAddress: string | null;
@@ -41,6 +34,7 @@ export const postsState: PostsStateModel = {
   data: {
     ethAddress: null,
     profileData: {
+      ethAddress: '',
       name: '',
       avatar: { src: '', prefix: '', isUrl: false },
       coverImage: { src: '', prefix: '', isUrl: false },

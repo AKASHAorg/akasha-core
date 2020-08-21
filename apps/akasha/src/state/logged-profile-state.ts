@@ -4,6 +4,24 @@ import { race, forkJoin } from 'rxjs';
 import { filter, takeLast } from 'rxjs/operators';
 import { generateProfileData } from '../services/dummy-data';
 
+export interface IPostalAddress {
+  addressLocality: string;
+  addressRegion: string;
+  postalCode: string;
+  streetAddress: string;
+}
+
+export interface IProfileData {
+  avatar?: any;
+  name: string;
+  description?: string;
+  coverImage?: any;
+  email?: string;
+  url?: string;
+  address?: IPostalAddress;
+  ethAddress: string;
+}
+
 export interface LoggedProfileState {
   profileData: {};
   ethAddress: string | null;
