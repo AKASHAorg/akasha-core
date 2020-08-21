@@ -45,6 +45,7 @@ interface SingleSpaEventDetail {
   };
   totalAppChanges: number;
 }
+/* tslint:disable */
 /* eslint-disable */
 export default class AppLoader implements IAppLoader {
   public readonly registeredWidgets: Map<string, IWidgetConfig>;
@@ -661,3 +662,4 @@ export default class AppLoader implements IAppLoader {
   }
 }
 /* eslint-enable */
+/* tslint:enable */
