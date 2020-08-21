@@ -4,7 +4,7 @@ import { text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
-const { Box, ShareModal, Icon } = DS;
+const { Box, ShareModal, Icon, MobileListModal } = DS;
 
 const ShareModalComponent = () => {
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -31,4 +31,37 @@ const ShareModalComponent = () => {
   );
 };
 
-storiesOf('Modals|Share Modal', module).add('Share', () => <ShareModalComponent />);
+const MobileListModalComponent = () => {
+  const [modalOpen, setModalOpen] = React.useState(false);
+
+  const menuItems = ['All', 'Most reposted', 'Oldest', 'Latest'];
+
+  return (
+    <Box fill={true} justify="center" align="center">
+      <Icon
+        type="eye"
+        onClick={() => {
+          setModalOpen(true);
+        }}
+      />
+      {modalOpen && (
+        <MobileListModal
+          menuItems={menuItems.map(item => {
+            return {
+              label: item,
+              handler: () => {
+                return;
+              },
+            };
+          })}
+          closeModal={() => {
+            setModalOpen(false);
+          }}
+        />
+      )}
+    </Box>
+  );
+};
+
+storiesOf('Modals/Share Modal', module).add('Share modal', () => <ShareModalComponent />);
+storiesOf('Modals/List Modal', module).add('Mobile list modal', () => <MobileListModalComponent />);

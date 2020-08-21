@@ -4,7 +4,7 @@ import { ButtonProps } from 'grommet';
 export interface IIconButtonProps extends ButtonProps {
   className?: string;
   icon: React.ReactElement;
-  label: string;
+  label?: string;
   onClick?: () => void;
   primary?: boolean;
   secondary?: boolean;

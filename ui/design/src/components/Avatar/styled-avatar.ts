@@ -16,7 +16,7 @@ export interface AvatarProps {
   isClickable: boolean;
   margin?: MarginInterface;
   backgroundColor?: string;
-  withBorder?: boolean;
+  border?: 'sm' | 'md' | 'lg';
 }
 
 const StyledAvatar = styled.div<AvatarProps>`
@@ -29,13 +29,26 @@ const StyledAvatar = styled.div<AvatarProps>`
     `;
   }};
   ${props => {
-    const { withBorder } = props;
-    if (withBorder) {
-      return css`
-        border: ${props.theme.shapes.baseSpacing}px solid ${props.theme.colors.white};
-      `;
+    const { border } = props;
+    switch (border) {
+      case 'sm':
+        return css`
+          border: 1px solid ${props.theme.colors.white};
+        `;
+
+      case 'md':
+        return css`
+          border: 2px solid ${props.theme.colors.white};
+        `;
+
+      case 'lg':
+        return css`
+          border: 4px solid ${props.theme.colors.white};
+        `;
+
+      default:
+        return;
     }
-    return;
   }}
   box-sizing: border-box;
   cursor: ${props => (props.isClickable ? 'pointer' : 'default')};

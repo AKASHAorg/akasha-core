@@ -13,9 +13,31 @@ const iconTypeOptions: { Home: IconType; HotTopics: IconType; Media: IconType } 
   Media: 'media',
 };
 
+const fontSizes = {
+  xsmall: 'xsmall',
+  small: 'small',
+  medium: 'medium',
+  large: 'large',
+  xlarge: 'xlarge',
+  xxlarge: 'xxlarge',
+};
+
+const fontWeights = {
+  normal: 'normal',
+  bold: 'bold',
+};
+
+const iconSizes = {
+  xsmall: 'xs',
+  small: 'sm',
+  medium: 'md',
+  large: 'ld',
+  xlarge: 'xl',
+};
+
 const iconTypeDefaultValue = 'home';
 
-storiesOf('TextIcon|TextIcon', module).add('default', () => (
+storiesOf('TextIcon/TextIcon', module).add('default', () => (
   <Box pad="large" align="center">
     <TextIcon
       onClick={() => action('TextIcon Clicked')('Synthetic Event')}
@@ -28,11 +50,14 @@ storiesOf('TextIcon|TextIcon', module).add('default', () => (
       clickable={boolean('Clickable', false)}
       menuActive={boolean('Menu Active', false)}
       menuIcon={boolean('Menu Icon', false)}
+      fontSize={select('Font Size', fontSizes, 'medium')}
+      fontWeight={select('Font Weight', fontWeights, 'normal' as any)}
+      iconSize={select('Icon Size', iconSizes, 'md' as any)}
     />
   </Box>
 ));
 
-storiesOf('TextIcon|SubtitleTextIcon', module).add('default', () => (
+storiesOf('TextIcon/SubtitleTextIcon', module).add('default', () => (
   <Box pad="large" align="center">
     <SubtitleTextIcon
       onClick={() => action('SubtitleTextIcon Clicked')('Synthetic Event')}

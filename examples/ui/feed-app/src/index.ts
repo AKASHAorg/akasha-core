@@ -16,8 +16,13 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   // tslint:disable-next-line:no-console
   console.timeEnd('loadApps');
   const appConfig = {
+    // where to mount the ui
     rootNodeId: 'root',
+    // main layout (shell)
     layout: layout.application,
+    // define an app that will load at root '/' path
+    rootLoadedApp: feedPlugin.application,
+    System: System,
   };
 
   const registeredPlugins: IAppEntry[] = [
@@ -40,14 +45,16 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
     },
     {
       app: loginWidget.application,
-      config: { slot: layout.application.widgetSlotId, notOnMobile: true },
+      config: { slot: layout.application.rootWidgetSlotId, notOnMobile: true },
     },
   ];
   const profilePlugin = await System.import('@plugins/profile');
   const searchPlugin = await System.import('@plugins/search');
   const appCenterPlugin = await System.import('@plugins/app-center');
   const notificationsPlugin = await System.import('@plugins/notifications');
+  const AKASHAApp = await System.import('@app/AKASHA');
   const boxApp = await System.import('@app/3box');
+  const ensApp = await System.import('@app/ens');
   const ipfs = await System.import('ipfs');
   const sdk = await System.import('@akashaproject/sdk');
   const world = sdk.init({
@@ -89,7 +96,19 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
     },
   });
   world.appLoader.registerApp({
+    app: AKASHAApp.application,
+    config: {
+      area: MenuItemAreaType.AppArea,
+    },
+  });
+  world.appLoader.registerApp({
     app: boxApp.application,
+    config: {
+      area: MenuItemAreaType.AppArea,
+    },
+  });
+  world.appLoader.registerApp({
+    app: ensApp.application,
     config: {
       area: MenuItemAreaType.AppArea,
     },

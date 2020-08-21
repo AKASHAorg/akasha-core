@@ -5,7 +5,7 @@ const Image = (props: React.SVGProps<SVGSVGElement>) => (
     <g fill="none" fillRule="evenodd" transform="translate(-1398 -2686)">
       <rect width="1440" height="4112" fill="#FBFCFD" />
       <g
-        stroke="#132540"
+        stroke="#949EB3"
         strokeLinecap="round"
         strokeLinejoin="round"
         transform="translate(1400 2688)"

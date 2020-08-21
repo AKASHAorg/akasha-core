@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box } from 'grommet';
-import AutoSizer from 'react-virtualized-auto-sizer';
 import ListContent from './list-content';
 import { IVirtualListProps } from './interfaces';
 
@@ -37,7 +36,7 @@ import { IVirtualListProps } from './interfaces';
  *
  * ************************/
 
-const VirtualList = (props: IVirtualListProps) => {
+const VirtualList = (props: IVirtualListProps, ref?: React.Ref<any>) => {
   const {
     items,
     itemCard,
@@ -52,12 +51,23 @@ const VirtualList = (props: IVirtualListProps) => {
     customEntities = [],
     getItemCard,
     initialState = {
-      startId: null,
-      hasNewerEntries: false,
+      startId: undefined,
+      newerEntries: [],
     },
+    hasMoreItems,
+    bookmarkedItems,
+    getNewItemsNotification,
+    onItemRead,
   } = props;
   const [listState, setListState] = React.useState(initialState);
-
+  React.useEffect(() => {
+    if (
+      initialState.newerEntries &&
+      initialState.newerEntries.length > listState.newerEntries.length
+    ) {
+      setListState(initialState);
+    }
+  }, [initialState.newerEntries]);
   // load initial feed items
   // when resuming session, this must also pass `startId` prop!!
   React.useEffect(() => {
@@ -75,32 +85,29 @@ const VirtualList = (props: IVirtualListProps) => {
   }, []);
 
   return (
-    <Box height="100%" flex={true}>
-      <div style={{ height: '100%', width: '100%' }}>
-        <AutoSizer>
-          {({ width, height }) => (
-            <ListContent
-              offsetItems={offsetItems}
-              initialPaddingTop={initialPaddingTop}
-              items={items}
-              itemCard={itemCard}
-              loadItemDataAction={loadItemData}
-              loadLimit={loadLimit}
-              itemsData={itemsData}
-              height={height}
-              width={width}
-              itemSpacing={itemSpacing}
-              onLoadMore={loadMore}
-              customEntities={customEntities}
-              getItemCard={getItemCard}
-              listState={listState}
-              setListState={setListState}
-            />
-          )}
-        </AutoSizer>
-      </div>
+    <Box flex={{ grow: 1 }} align="stretch" direction="column">
+      <ListContent
+        ref={ref}
+        offsetItems={offsetItems}
+        initialPaddingTop={initialPaddingTop}
+        items={items}
+        itemCard={itemCard}
+        loadItemData={loadItemData}
+        loadLimit={loadLimit}
+        itemsData={itemsData}
+        itemSpacing={itemSpacing}
+        onLoadMore={loadMore}
+        customEntities={customEntities}
+        getItemCard={getItemCard}
+        listState={listState}
+        setListState={setListState}
+        hasMoreItems={hasMoreItems}
+        bookmarkedItems={bookmarkedItems}
+        getNewItemsNotification={getNewItemsNotification}
+        onItemRead={onItemRead}
+      />
     </Box>
   );
 };
 
-export default VirtualList;
+export default React.forwardRef(VirtualList);

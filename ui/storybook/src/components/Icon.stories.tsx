@@ -40,7 +40,7 @@ const IconComponent = () => {
   );
 };
 
-storiesOf('Icon|Icons', module)
+storiesOf('Icon/Icons', module)
   .add('list view', () => <IconComponent />)
   .add('sizes', () => (
     <Box align="center" gap="medium">
@@ -50,7 +50,7 @@ storiesOf('Icon|Icons', module)
     </Box>
   ));
 
-storiesOf('Icon|AppIcon', module)
+storiesOf('Icon/AppIcon', module)
   .add('with placeholder', () => (
     <Box align="center">
       <AppIcon placeholderIconType={select('Icons', iconTypes, 'activity')} />

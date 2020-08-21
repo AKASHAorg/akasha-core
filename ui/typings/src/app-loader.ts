@@ -12,6 +12,8 @@ export interface IPluginConfig {
 export interface ILoaderConfig {
   rootNodeId: string;
   layout: IWidget;
+  rootLoadedApp: IAppEntry['app'];
+  System: any;
 }
 
 export interface IWidgetConfig {
@@ -58,7 +60,13 @@ export interface IWidget {
   pluginSlotId?: string;
   topbarSlotId?: string;
   sidebarSlotId?: string;
+  widgetSlotId?: string;
+  rootWidgetSlotId?: string;
   sdkModules?: SDKdependency[];
+  /**
+   * the path on which the widget will load
+   */
+  basePath?: string;
 }
 
 export enum MenuItemType {

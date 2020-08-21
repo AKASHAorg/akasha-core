@@ -31,7 +31,7 @@ const getImageSrc = (boxImage: any) => {
 
 const BoxProfile: React.FC<IMyProfileProps> = props => {
   const [state, actions] = useBoxProfile(props.sdkModules, props.globalChannel, props.logger);
-  const { profileId } = useParams();
+  const { profileId } = useParams<{ profileId: string }>();
   const { t } = useTranslation();
 
   React.useEffect(() => {
@@ -45,8 +45,8 @@ const BoxProfile: React.FC<IMyProfileProps> = props => {
       <DS.Helmet>
         <title>3Box | {profileId} Profile Page</title>
       </DS.Helmet>
-      <Box fill={true}>
-        <Box fill={true} pad={{ top: '2em' }} align="center">
+      <Box fill="horizontal">
+        <Box fill="horizontal" pad={{ top: '2em' }} align="center">
           {!Object.keys(state.data.visitingProfile).length && <Box>{t('Loading Profile')}</Box>}
           <MainAreaCardBox>
             <Box
@@ -65,7 +65,7 @@ const BoxProfile: React.FC<IMyProfileProps> = props => {
             >
               <BoxAvatar
                 ethAddress={profileId || ''}
-                withBorder={true}
+                border="lg"
                 size="xl"
                 src={getImageSrc(state.data.visitingProfile.image)}
               />

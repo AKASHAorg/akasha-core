@@ -1,107 +1,109 @@
 import * as React from 'react';
-import { ILocale } from '../../../utils/time';
 import { MainAreaCardBox } from '../common/basic-card-box';
-import { EntryBox } from '../index';
-import { IEntryData } from './entry-box';
+import { SocialBox } from './social-box';
+import { IEntryBoxProps, EntryBox } from './entry-box';
+import { Box } from 'grommet';
+import ViewportSizeProvider from '../../Providers/viewport-dimension';
 
-export interface IEntryCardProps {
+export interface IEntryCardProps extends IEntryBoxProps {
+  // labels
+  repostedThisLabel?: string;
+  andLabel?: string;
+  othersLabel?: string;
+  // external css
   className?: string;
-  entryData: IEntryData;
-  onClickAvatar: React.MouseEventHandler<any>;
-  onClickUpvote: React.EventHandler<React.SyntheticEvent>;
-  onClickDownvote: React.EventHandler<React.SyntheticEvent>;
-  commentsLabel: string;
-  quotesLabel: string;
-  shareLabel: string;
-  editPostLabel: string;
-  editCommentLabel: string;
-  copyLinkLabel: string;
-  quotedByLabel: string;
-  replyLabel: string;
-  fullEntry?: boolean;
-  locale: ILocale;
-  commentInputPlaceholderLabel: string;
-  commentInputPublishLabel: string;
-  publishComment: any;
-  loggedProfileAvatar?: string;
-  loggedProfileEthAddress: string;
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
 }
 
 const EntryCard: React.FC<IEntryCardProps> = props => {
   const {
-    className,
     entryData,
+    repostedThisLabel,
+    andLabel,
+    othersLabel,
     onClickAvatar,
-    onClickDownvote,
-    onClickUpvote,
-    commentsLabel,
-    quotesLabel,
+    repliesLabel,
+    repostsLabel,
+    repostLabel,
+    repostWithCommentLabel,
     shareLabel,
-    editPostLabel,
-    editCommentLabel,
     copyLinkLabel,
-    quotedByLabel,
-    replyLabel,
-    fullEntry,
     locale,
-    commentInputPlaceholderLabel,
-    commentInputPublishLabel,
-    publishComment,
     loggedProfileAvatar,
     loggedProfileEthAddress,
     style,
+    className,
     rootNodeRef,
+    onEntryBookmark,
+    isBookmarked,
+    bookmarkLabel,
+    bookmarkedLabel,
+    onRepost,
+    onClickReplies,
+    onEntryShare,
+    onEntryFlag,
+    onLinkCopy,
+    onContentClick,
+    handleFollow,
+    handleUnfollow,
+    flagAsLabel,
+    copyIPFSLinkLabel,
   } = props;
 
   return (
-    <MainAreaCardBox className={className} style={style} rootNodeRef={rootNodeRef}>
-      <EntryBox
-        entryData={entryData}
-        onClickAvatar={onClickAvatar}
-        onClickDownvote={onClickDownvote}
-        onClickUpvote={onClickUpvote}
-        commentsLabel={commentsLabel}
-        quotesLabel={quotesLabel}
-        shareLabel={shareLabel}
-        editPostLabel={editPostLabel}
-        editCommentLabel={editCommentLabel}
-        copyLinkLabel={copyLinkLabel}
-        quotedByLabel={quotedByLabel}
-        replyLabel={replyLabel}
-        locale={locale}
-        commentInputPlaceholderLabel={commentInputPlaceholderLabel}
-        commentInputPublishLabel={commentInputPublishLabel}
-        loggedProfileAvatar={loggedProfileAvatar}
-        loggedProfileEthAddress={loggedProfileEthAddress}
-        publishComment={publishComment}
-      />
-      {fullEntry &&
-        entryData.comments &&
-        entryData.comments.map((comment, index) => (
+    <ViewportSizeProvider>
+      <MainAreaCardBox className={className} style={style} rootNodeRef={rootNodeRef}>
+        {entryData.socialData && entryData.socialData.users.length > 0 && (
+          <SocialBox
+            socialData={entryData.socialData}
+            repostedThisLabel={repostedThisLabel}
+            andLabel={andLabel}
+            othersLabel={othersLabel}
+          />
+        )}
+        <Box pad={{ horizontal: 'medium' }}>
           <EntryBox
-            entryData={comment}
+            entryData={entryData}
             onClickAvatar={onClickAvatar}
-            onClickDownvote={onClickDownvote}
-            onClickUpvote={onClickUpvote}
-            commentsLabel={commentsLabel}
-            quotesLabel={quotesLabel}
+            repostsLabel={repostsLabel}
+            repostLabel={repostLabel}
+            repostWithCommentLabel={repostWithCommentLabel}
+            repliesLabel={repliesLabel}
             shareLabel={shareLabel}
-            editPostLabel={editPostLabel}
-            editCommentLabel={editCommentLabel}
+            flagAsLabel={flagAsLabel}
             copyLinkLabel={copyLinkLabel}
-            quotedByLabel={quotedByLabel}
-            replyLabel={replyLabel}
-            key={index}
+            locale={locale}
             loggedProfileAvatar={loggedProfileAvatar}
             loggedProfileEthAddress={loggedProfileEthAddress}
-            comment={true}
-            locale={locale}
+            onEntryBookmark={onEntryBookmark}
+            isBookmarked={isBookmarked}
+            bookmarkLabel={bookmarkLabel}
+            bookmarkedLabel={bookmarkedLabel}
+            onRepost={onRepost}
+            onClickReplies={onClickReplies}
+            onEntryShare={onEntryShare}
+            onEntryFlag={onEntryFlag}
+            onLinkCopy={onLinkCopy}
+            copyIPFSLinkLabel={copyIPFSLinkLabel}
+            handleFollow={handleFollow}
+            handleUnfollow={handleUnfollow}
+            onContentClick={onContentClick}
           />
-        ))}
-    </MainAreaCardBox>
+        </Box>
+      </MainAreaCardBox>
+    </ViewportSizeProvider>
   );
 };
 
-export default EntryCard;
+EntryCard.defaultProps = {
+  repostsLabel: 'Reposts',
+  repostLabel: 'Repost',
+  repostWithCommentLabel: 'Repost With Comment',
+  copyLinkLabel: 'Copy Link',
+  copyIPFSLinkLabel: 'Copy IPFS link',
+  flagAsLabel: 'Report',
+  shareLabel: 'Share',
+};
+
+export { EntryCard };

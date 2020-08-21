@@ -7,6 +7,7 @@ import appAkasha from './app-akasha';
 import appCenter from './app-center';
 import appEns from './app-ens';
 import appFeed from './app-feed';
+import appIpfs from './app-ipfs';
 import announcement from './announcement';
 import app from './app';
 import arrowDown from './arrow-down';
@@ -17,6 +18,7 @@ import bold from './bold';
 import bookmark from './bookmark';
 import calendar from './calendar';
 import check from './check';
+import checkSimple from './checkSimple';
 import close from './close';
 import code from './code';
 import coins from './coins';
@@ -28,8 +30,11 @@ import editSimple from './edit-simple';
 import emoji from './emoji';
 import error from './error';
 import ethereumWorldLogo from './ethereum-world-logo';
+import ethereum from './ethereum';
 import eye from './eye';
 import facebook from './facebook';
+import following from './following';
+import hashtag from './hashtag';
 import heart from './heart';
 import home from './home';
 import hotTopics from './hot-topics';
@@ -41,6 +46,7 @@ import loading from './loading';
 import media from './media';
 import menuCollapsed from './menu-collapsed';
 import menu from './menu';
+import menuPyramid from './menu-pyramid';
 import metamask from './metamask';
 import moreDark from './more-dark';
 import moreGrey from './more-grey';
@@ -56,11 +62,13 @@ import reload from './reload';
 import reply from './reply';
 import report from './report';
 import search from './search';
+import send from './send';
 import settings from './settings';
 import share from './share';
 import shareSmallBlue from './share-small-blue';
 import shareSmallDark from './share-small-dark';
 import shareSmallGrey from './share-small-grey';
+import subscribe from './subscribe';
 import stopwatch from './stopwatch';
 import thumbsDownGrey from './thumbs-down-grey';
 import thumbsDownWhite from './thumbs-down-white';
@@ -72,6 +80,7 @@ import trendingApps from './trending-apps';
 import twitter from './twitter';
 import underline from './underline';
 import upload from './upload';
+import video from './video';
 import wallet from './wallet';
 import walletconnect from './walletconnect';
 
@@ -83,6 +92,7 @@ export {
   appCenter,
   appEns,
   appFeed,
+  appIpfs,
   announcement,
   available,
   reload,
@@ -95,11 +105,14 @@ export {
   coins,
   copy,
   check,
+  checkSimple,
   payment,
   eye,
   error,
   facebook,
+  following,
   document,
+  ethereum,
   ethereumWorldLogo,
   akasha,
   addAppGrey,
@@ -115,6 +128,7 @@ export {
   editSimple,
   edit,
   emoji,
+  hashtag,
   heart,
   home,
   hotTopics,
@@ -125,6 +139,7 @@ export {
   media,
   menuCollapsed,
   menu,
+  menuPyramid,
   metamask,
   moreDark,
   moreGrey,
@@ -137,10 +152,12 @@ export {
   reply,
   report,
   search,
+  send,
   share,
   shareSmallBlue,
   shareSmallDark,
   shareSmallGrey,
+  subscribe,
   thumbsDownWhite,
   thumbsDownGrey,
   thumbsUpWhite,
@@ -149,6 +166,7 @@ export {
   twitter,
   underline,
   upload,
+  video,
   wallet,
   walletconnect,
   loading,

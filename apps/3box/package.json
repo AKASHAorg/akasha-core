@@ -5,7 +5,8 @@
   "description": "3box integration package",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
-    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
+    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)"
   ],
   "homepage": "https://github.com/AkashaProject/akasha-world-framework#readme",
   "license": "AGPL-3.0",

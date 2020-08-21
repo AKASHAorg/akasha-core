@@ -59,7 +59,7 @@ export default class TranslationManager {
     });
     await instance.init({
       ...i18nDefaultConfig,
-      defaultNS: plugin.name,
+      defaultNS: i18nConfig.ns || plugin.name,
       ns: i18nConfig.loadNS,
       backend: backends,
     });

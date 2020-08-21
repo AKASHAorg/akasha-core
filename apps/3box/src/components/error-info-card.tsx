@@ -21,7 +21,7 @@ const ErrorInfoCard = ({
   const hasCriticalErrors = errorArr.some(err => err.isCritical);
   if (errorArr.length) {
     return (
-      <Box align="center" justify="center" fill={true}>
+      <Box align="center" justify="center" fill="horizontal">
         <BasicCardBox style={{ maxWidth: '50%', padding: '0.75em' }}>
           <h3 style={{ textAlign: 'center' }}>Errors .. :((</h3>
           {errorArr.map((err, idx) => (

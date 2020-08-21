@@ -10,7 +10,7 @@ export interface IFeedItemProps {
   className?: string;
 }
 
-export const FeedItem: React.FC<IFeedItemProps> = (props) => {
+export const FeedItem: React.FC<IFeedItemProps> = props => {
   const [profileState, profileActions] = useProfile();
   const { t } = useTranslation();
 
@@ -23,26 +23,30 @@ export const FeedItem: React.FC<IFeedItemProps> = (props) => {
   }
 
   return (
-      <EntryCard
-        entryData={itemData}
-        onClickAvatar={() => {}}
-        onClickDownvote={() => {}}
-        onClickUpvote={() => {}}
-        commentsLabel={t('Comments')}
-        quotesLabel={t('Quotes')}
-        shareLabel={t('Share')}
-        editPostLabel={t('Edit Post')}
-        editCommentLabel={t('Edit Comment')}
-        copyLinkLabel={t('Copy link')}
-        quotedByLabel={t('Quoted By')}
-        replyLabel={t('Reply')}
-        commentInputPlaceholderLabel={t('Write a comment')}
-        commentInputPublishLabel={t('Publish')}
-        publishComment={() => {}}
-        loggedProfileAvatar={itemData.avatar}
-        loggedProfileEthAddress={itemData.ethAddress}
-        locale={'en'}
-        className={props.className}
-      />
+    <EntryCard
+      isBookmarked={false}
+      entryData={itemData}
+      onClickAvatar={() => {}}
+      repliesLabel={t('Replies')}
+      repostsLabel={t('Reposts')}
+      repostLabel={t('Repost')}
+      repostWithCommentLabel={t('Repost with comment')}
+      shareLabel={t('Share')}
+      copyLinkLabel={t('Copy Link')}
+      copyIPFSLinkLabel={t('Copy IPFS Link')}
+      flagAsLabel={t('Flag as inappropiate')}
+      loggedProfileEthAddress={'0x00123'}
+      locale={'en'}
+      style={{ height: 'auto' }}
+      bookmarkLabel={t('Save')}
+      bookmarkedLabel={t('Saved')}
+      onRepost={() => {}}
+      onEntryShare={() => {}}
+      onEntryFlag={() => {}}
+      onLinkCopy={() => {}}
+      onClickReplies={() => {}}
+      handleFollow={() => {}}
+      handleUnfollow={() => {}}
+    />
   );
 };

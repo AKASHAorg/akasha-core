@@ -6,6 +6,11 @@ const AvatarDiv = styled.div`
   top: -1.875em;
 `;
 
+const MiniProfileAvatarDiv = styled.div`
+  position: relative;
+  top: 1rem;
+`;
+
 const ShareButtonContainer = styled(Box)`
   position: relative;
   top: 1em;
@@ -36,13 +41,13 @@ const StyledAvatarEditDiv = styled.div`
   position: relative;
   left: 3.5em;
   bottom: 2.313em;
-  border: 3px solid ${props => props.theme.colors.border};
+  border: 2px solid ${props => props.theme.colors.white};
   height: 1.5em;
   width: 1.5em;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${props => props.theme.colors.border};
+  background-color: ${props => props.theme.colors.white};
 `;
 
 const StyledImage = styled(Image)`
@@ -59,4 +64,5 @@ export {
   StyledCenterDiv,
   StyledAvatarEditDiv,
   StyledImage,
+  MiniProfileAvatarDiv,
 };

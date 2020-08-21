@@ -9,15 +9,21 @@ const StyledLayerElemDiv = styled.div`
 `;
 
 const StyledDrop = styled(Drop)`
-  margin-top: -0.625em;
-  margin-left: 1.563em;
+  border: 1px solid ${props => props.theme.colors.border};
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
 `;
 
+const StyledProfileDrop = styled(Drop)`
+  border-radius: ${props => props.theme.shapes.borderRadius};
+`;
+
 const StyledSelectBox = styled(Box)`
+  padding: ${props => `${props.theme.shapes.baseSpacing}px`};
+  border-radius: ${props => props.theme.shapes.smallBorderRadius};
   &:hover {
+    background-color: ${props => props.theme.colors.lightBackground};
     cursor: pointer;
   }
 `;
 
-export { StyledLayerElemDiv, StyledDrop, StyledSelectBox };
+export { StyledLayerElemDiv, StyledDrop, StyledProfileDrop, StyledSelectBox };

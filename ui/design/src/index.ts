@@ -9,16 +9,26 @@ import {
   Text,
   Carousel,
 } from 'grommet';
+
 import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
+
+import Autosizer from 'react-virtualized-auto-sizer';
+
 import { Avatar, EditableAvatar } from './components/Avatar';
+
 import { Sidebar, Topbar } from './components/Bars/index';
+
+import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
+
 import {
   Button,
+  DuplexButton,
   IconButton,
   IconLink,
   ProfileAvatarButton,
   VoteIconButton,
 } from './components/Buttons';
+import { AreaChart, LineChart, ResponsiveChart } from './components/Charts';
 
 import {
   AppInfoWidgetCard,
@@ -28,36 +38,52 @@ import {
   BoxFormCard,
   EditorCard,
   EnsFormCard,
-  EntryBox,
   EntryCard,
   MiniInfoWidgetCard,
   ProfileCard,
   ProfileWidgetCard,
+  ProfileMiniCard,
   TopicsWidgetCard,
   WidgetAreaCardBox,
   ModalCard,
   LoginCTAWidgetCard,
+  TrendingWidgetCard,
+  SourcesWidgetCard,
+  TutorialWidgetCard,
+  CustomizeFeedCard,
+  TagCard,
+  TagDetailCard,
+  FilterCard,
 } from './components/Cards';
+
 import TextInputField from './components/Forms/text-input-field';
 import { AppIcon, Icon, iconTypes } from './components/Icon';
-import { CommentInput, SearchInput } from './components/Input';
+import ErrorInfoCard from './components/Errors/error-info-card';
+import ErrorLoader from './components/Errors/error-loader';
+
+import { CommentInput, SearchInput, DropSearchInput } from './components/Input';
 import {
   ShareModal,
   ModalContainer,
   ModalRenderer,
   EthProviderListModal,
   EthProviderModal,
+  MobileListModal,
 } from './components/Modals';
+
 import { NotificationsPopover, SelectPopover } from './components/Popovers';
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
-import responsiveBreakpoints from './styles/responsive-breakpoints';
 import VirtualList from './components/VirtualList';
-import { isBase64 } from './utils/string-utils';
-import { formatImageSrc } from './utils/image-utils';
 import { Helmet } from 'react-helmet';
 import { HorizontalDivider } from './components/Dividers';
 
+/* Utilities (these are not components) */
+import responsiveBreakpoints from './styles/responsive-breakpoints';
+import { formatImageSrc } from './utils/image-utils';
+import { isBase64 } from './utils/string-utils';
+/* Hooks */
+import { useGlobalLogin } from './hooks/use-global-login';
 /* Themes and theme related utils */
 import darkTheme from './styles/themes/dark';
 import lightTheme from './styles/themes/light';
@@ -66,24 +92,36 @@ import { ThemeSelector } from './styles/themes/utils/theme-selector';
 /* Grommet utils */
 
 const exported = {
+  Autosizer,
   Avatar,
   AppIcon,
+  AreaChart,
+  LineChart,
+  ResponsiveChart,
   Button,
   Carousel,
+  DuplexButton,
   EditableAvatar,
+  ErrorInfoCard,
+  ErrorLoader,
   AppInfoWidgetCard,
   AppsWidgetCard,
   BasicCardBox,
+  CustomizeFeedCard,
+  DropSearchInput,
   EditorCard,
-  EntryBox,
   EntryCard,
+  EntryCardLoading,
   BoxFormCard,
   EnsFormCard,
   MiniInfoWidgetCard,
   ProfileCard,
   ProfileWidgetCard,
+  ProfileMiniCard,
   TextInputField,
   TopicsWidgetCard,
+  TagCard,
+  TagDetailCard,
   Icon,
   iconTypes,
   IconButton,
@@ -126,10 +164,17 @@ const exported = {
   ModalCard,
   EthProviderListModal,
   EthProviderModal,
+  MobileListModal,
   ModalContainer,
   ModalRenderer,
   HorizontalDivider,
   LoginCTAWidgetCard,
+  TrendingWidgetCard,
+  SourcesWidgetCard,
+  TutorialWidgetCard,
+  FilterCard,
+  /* hooks */
+  useGlobalLogin,
 };
 
 export default exported;

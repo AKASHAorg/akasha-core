@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { Icon } from '../../Icon/index';
-import { StyledSearchBox, StyledTextInput } from '../../Input/search-input/styled-search-input';
+import {
+  StyledSearchBox,
+  StyledTextInput,
+} from '../../Input/drop-search-input/drop-styled-search-input';
 import { emojis } from './emojis';
 import { groups } from './groups';
 import {
@@ -135,7 +138,7 @@ const EmojiPopover: React.FC<IEmojiPopover> = props => {
         </StyledSearchBox>
       </StyledSearchContainer>
       <StyledContentDiv>{renderContent()}</StyledContentDiv>
-      <StyledFooter direction="row" align="center">
+      <StyledFooter direction="row" align="center" border={{ side: 'top', color: 'border' }}>
         <StyledHoveredEmoji>{hoveredEmoji.emojiCode}</StyledHoveredEmoji>
         <StyledHoveredEmojiName>{hoveredEmoji.emojiName}</StyledHoveredEmojiName>
       </StyledFooter>

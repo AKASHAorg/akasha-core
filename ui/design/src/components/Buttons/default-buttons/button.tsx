@@ -10,7 +10,8 @@ export interface IButtonProps extends ButtonProps {
 }
 
 const Button = (props: IButtonProps) => {
-  return <StyledButton className={props.className} {...props} />;
+  const { className, ...other } = props;
+  return <StyledButton className={className} {...other} />;
 };
 
 export default Button;

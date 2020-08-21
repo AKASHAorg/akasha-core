@@ -1,6 +1,6 @@
 import { Box } from 'grommet';
 import * as React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const StyledBox = styled(Box)`
   background-color: ${props => props.theme.colors.background};
@@ -49,12 +49,20 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
   </StyledBox>
 );
 
-const MainAreaCardBox = styled(BasicCardBox)`
-  max-width: 36.313rem;
+const MainAreaCardBox = styled(BasicCardBox)<{ verticalFill?: boolean }>`
+  /* max-width: 36.313rem; */
+  ${props => {
+    if (props.verticalFill) {
+      return css`
+        height: 100%;
+      `;
+    }
+    return;
+  }}
 `;
 
 const WidgetAreaCardBox = styled(BasicCardBox)`
-  width: 21rem;
+  width: 100%;
 `;
 
 const ModalCard = styled(BasicCardBox)`

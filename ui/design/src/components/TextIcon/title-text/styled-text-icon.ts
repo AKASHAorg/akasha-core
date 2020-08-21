@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import MarginSetter from '../../../utils/marginSetter';
 import { IStyledTextProps, ITextIconProps } from './text-icon';
+import { Text } from 'grommet';
 
 const StyledTextIcon = styled.div<ITextIconProps>`
   ${props => {
@@ -66,19 +67,15 @@ const StyledTextIcon = styled.div<ITextIconProps>`
   flex-direction: row;
 `;
 
-const StyledText = styled.div<IStyledTextProps>`
-  ${props =>
-    css`
-      font-weight: ${props.bold
-        ? props.theme.shapes.fontWeight.bold
-        : props.theme.shapes.fontWeight.regular};
-      font-size: ${props.bold
-        ? props.theme.shapes.fontSizes.large.size
-        : props.theme.shapes.fontSizes.medium.size};
-      line-height: ${props.bold
-        ? props.theme.shapes.fontSizes.large.height
-        : props.theme.shapes.fontSizes.medium.height};
-    `}
+const StyledText = styled(Text)<IStyledTextProps>`
+  ${props => {
+    if (props.accentColor) {
+      return css`
+        color: ${props.theme.colors.accent};
+      `;
+    }
+    return;
+  }}
 `;
 
 export { StyledTextIcon, StyledText };
