@@ -20,6 +20,7 @@ export interface ISidebarProps {
   onClickMenuItem: (route: string) => void;
   // viewport size
   size?: string;
+  className?: string;
 }
 
 const Sidebar: React.FC<ISidebarProps> = props => {
@@ -30,6 +31,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     onClickMenuItem,
     currentRoute,
     size,
+    className,
   } = props;
 
   const [currentAppData, setCurrentAppData] = React.useState<IMenuItem | null>(null);
@@ -134,6 +136,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       direction="column"
       elevation="shadow"
       border={{ size: '1px', style: 'solid', color: 'border', side: 'right' }}
+      className={className}
     >
       <Box align="center" fill={true}>
         <StyledHiddenScrollContainer>

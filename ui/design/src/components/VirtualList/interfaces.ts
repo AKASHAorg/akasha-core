@@ -101,10 +101,10 @@ export interface IListContentProps {
   initialPaddingTop: number;
   loadItemData: IVirtualListProps['loadItemData'];
   itemsData: {};
-  // the available height (scrolling parent height)
-  height: number;
-  // the available width of the list
-  width: number;
+  // // the available width of the list
+  // width: number;
+  // // the available height of the list
+  // height: number;
   itemSpacing: number;
   loadLimit: number;
   onLoadMore: IVirtualListProps['loadMore'];

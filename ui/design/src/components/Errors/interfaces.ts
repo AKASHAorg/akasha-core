@@ -11,9 +11,13 @@ export interface ErrorLoaderProps {
   /**
    * The error title
    */
-  title: string;
+  title: React.ReactNode;
   /**
    * Additional details about the error
    */
-  details: string;
+  details: string | React.ReactNode;
+  /**
+   *  Message to be shown when in deveolopment mode
+   */
+  devDetails?: string | React.ReactNode;
 }
