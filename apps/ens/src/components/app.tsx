@@ -3,7 +3,7 @@ import { I18nextProvider } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import Pages from './pages';
 
-const { ThemeSelector, lightTheme, darkTheme } = DS;
+const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
 
 export interface IAppProps {
   sdkModules: any;
@@ -55,18 +55,20 @@ export default class App extends PureComponent<IAppProps> {
   public render() {
     const { i18n } = this.props;
     return (
-      <React.Suspense fallback={<>Loading</>}>
-        <I18nextProvider i18n={i18n ? i18n : null}>
-          <ThemeSelector
-            settings={{ activeTheme: 'Light-Theme' }}
-            availableThemes={[lightTheme, darkTheme]}
-            style={{ height: '100%' }}
-            plain={true}
-          >
-            <Pages {...this.props} errors={this.state.errors} />
-          </ThemeSelector>
-        </I18nextProvider>
-      </React.Suspense>
+      <Box width="100vw">
+        <React.Suspense fallback={<>Loading</>}>
+          <I18nextProvider i18n={i18n ? i18n : null}>
+            <ThemeSelector
+              settings={{ activeTheme: 'Light-Theme' }}
+              availableThemes={[lightTheme, darkTheme]}
+              style={{ height: '100%' }}
+              plain={true}
+            >
+              <Pages {...this.props} errors={this.state.errors} />
+            </ThemeSelector>
+          </I18nextProvider>
+        </React.Suspense>
+      </Box>
     );
   }
 }
