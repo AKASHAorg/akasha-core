@@ -80,7 +80,7 @@ export const fetchFeedItemData = (payload: { entryId: string }) => {
       entryId: payload.entryId,
       ethAddress: '0x003410490059837320006570047391024572000',
       name: 'AKASHA WORLD',
-      avatar: 'http://placebeard.it/480/480',
+      avatar: 'https://placebeard.it/480/480',
       content:
         'We’re back in action, energized after an epic retreat in #verbier 🇨🇭 🤜💥🤛Here’s to everyone keeping us in their minds and hearts 🥂You’ve been in our hearts and minds as well! 🤗Looking forward to sharing our insights and plans in the coming days! 🚀#AKASHAReloaded #AKASHAFoundation',
       time: '1572036522',

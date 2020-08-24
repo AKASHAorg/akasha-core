@@ -10,18 +10,18 @@ const suggestionsFromSpace = {
   users: [
     {
       name: 'Gilbert Carter',
-      imageUrl: 'http://placebeard.it/640/480',
+      imageUrl: 'https://placebeard.it/640/480',
     },
     {
       name: 'Johan Gimli',
-      imageUrl: 'http://placebeard.it/640/480',
+      imageUrl: 'https://placebeard.it/640/480',
     },
   ],
   tags: ['#gitcoin', '#gitcoinbounties'],
   apps: [
     {
       name: 'GitCoin',
-      imageUrl: 'http://placebeard.it/640/480',
+      imageUrl: 'https://placebeard.it/640/480',
     },
   ],
 };
@@ -74,7 +74,7 @@ const CommentInputComponent = () => {
     <Box justify="center" align="center">
       <Box width="581px" pad={{ top: 'large' }}>
         <CommentInput
-          avatarImg={text('Avatar', 'http://placebeard.it/640/480')}
+          avatarImg={text('Avatar', 'https://placebeard.it/640/480')}
           ethAddress={text('EthAddress', '0x003410490050000320006570047391024572000')}
           placeholderLabel="Write a comment"
           publishLabel="Publish"

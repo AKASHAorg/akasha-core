@@ -6,7 +6,7 @@ import ProfileCard from '../profile-cards/profile-card';
 
 const mockProfileData = {
   ethAddress: '0x003410490050000320006570034567114572000',
-  avatar: 'http://placebeard.it/480/480',
+  avatar: 'https://placebeard.it/480/480',
   coverImage: 'goldenrod',
   name: 'Gilbert The Bearded',
   userName: '@gilbert',

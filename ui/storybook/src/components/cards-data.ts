@@ -16,7 +16,7 @@ const trendingProfilesData = [
     name: 'Jon Gilbert',
     userName: '@jongilbert',
     ensName: 'jongilbert.akasha.eth',
-    avatar: 'http://placebeard.it/480/480',
+    avatar: 'https://placebeard.it/480/480',
     coverImage: 'goldenrod',
     followers: 312,
     postsNumber: 235,
@@ -40,7 +40,7 @@ const trendingProfilesData = [
     name: 'Jon Gilbert',
     userName: '@jongilbert',
     ensName: 'jongilbert.akasha.eth',
-    avatar: 'http://placebeard.it/480/480',
+    avatar: 'https://placebeard.it/480/480',
     coverImage: 'goldenrod',
     followers: 312,
     postsNumber: 235,
@@ -52,7 +52,7 @@ const trendingProfilesData = [
     name: 'Jon Gilbert',
     userName: '@jongilbert',
     ensName: 'jongilbert.akasha.eth',
-    avatar: 'http://placebeard.it/480/480',
+    avatar: 'https://placebeard.it/480/480',
     coverImage: 'goldenrod',
     followers: 312,
     postsNumber: 235,
@@ -64,7 +64,7 @@ const trendingProfilesData = [
     name: 'Jon Gilbert',
     userName: '@jongilbert',
     ensName: 'jongilbert.akasha.eth',
-    avatar: 'http://placebeard.it/480/480',
+    avatar: 'https://placebeard.it/480/480',
     coverImage: 'goldenrod',
     followers: 312,
     postsNumber: 235,
@@ -87,7 +87,7 @@ const appsDataSource: IAppData[] = [
 
 const profileData = {
   ethAddress: '0x003410490050000320006570034567114572000',
-  avatar: 'http://placebeard.it/480/480',
+  avatar: 'https://placebeard.it/480/480',
   coverImage: 'goldenrod',
   name: 'Gilbert The Bearded',
   userName: '@gilbert',
@@ -106,7 +106,7 @@ const profileProvidersData = {
   currentProviders: {
     avatar: {
       providerName: '3Box',
-      value: 'http://placebeard.it/480/480',
+      value: 'https://placebeard.it/480/480',
       providerIcon: {
         type: LogoTypeSource.ICON,
         value: 'app3Box',
@@ -142,7 +142,7 @@ const profileProvidersData = {
   avatarProviders: [
     {
       providerName: '3Box',
-      value: 'http://placebeard.it/480/480',
+      value: 'https://placebeard.it/480/480',
       providerIcon: {
         type: LogoTypeSource.ICON,
         value: 'app3Box',
@@ -267,7 +267,7 @@ const entryData = {
         ethAddress: '0x003410490050000320006570047391024572000',
         userName: '@marianagomes',
         ensName: 'marianagomes.world.eth',
-        avatar: 'http://placebeard.it/480/480',
+        avatar: 'https://placebeard.it/480/480',
         coverImage: 'teal',
         postsNumber: 12,
       },
@@ -284,7 +284,7 @@ const entryData = {
         ethAddress: '0x003410490050000320006570047391024572000',
         userName: '@gigipatratel',
         ensName: 'gigipatratel.world.eth',
-        avatar: 'http://placebeard.it/480/480',
+        avatar: 'https://placebeard.it/480/480',
         coverImage: 'brown',
         postsNumber: 123,
       },
@@ -302,7 +302,7 @@ const entrySocialData = {
       ethAddress: '0x003410490059837320006570047391024572000',
       userName: '@someguy',
       ensName: 'someguy.world.eth',
-      avatar: 'http://placebeard.it/480/480',
+      avatar: 'https://placebeard.it/480/480',
     },
     {
       ethAddress: '0x003410490059837320006570047391024572111',
