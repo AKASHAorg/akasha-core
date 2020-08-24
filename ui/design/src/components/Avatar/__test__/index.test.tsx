@@ -54,7 +54,7 @@ describe('<Avatar /> component', () => {
     }
   });
   it('when not in guest mode, should load src prop', async () => {
-    const src = 'http://placebeard.it/640/480';
+    const src = 'https://placebeard.it/640/480';
     const { findByTestId } = customRender(
       <Avatar src={src} ethAddress={'0x01230123450012312'} />,
       {},
