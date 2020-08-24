@@ -1,7 +1,9 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useProfileState } from '../../state/profile-state';
 import { useTranslation } from 'react-i18next';
+import { getProfileStore, ProfileState, ProfileStateModel } from '../../state/profile-state';
+import { ActionMapper, StateMapper } from 'easy-peasy';
+import { ENS_EDIT_PAGE } from '../../routes';
 
 const { EnsFormCard, Box } = DS;
 export interface EnsEditPageProps {
@@ -10,26 +12,34 @@ export interface EnsEditPageProps {
   logger: any;
 }
 
-const EnsEditPage: React.FC<EnsEditPageProps> = props => {
+const EnsEditPage: React.FC<EnsEditPageProps> = () => {
   const [ensIsValid, setEnsIsValid] = React.useState<boolean | undefined>();
-  const [profileState, profileStateActions] = useProfileState(props.sdkModules, props.logger);
+  const Profile = getProfileStore();
+  const loggedEthAddress = Profile.useStoreState(
+    (state: StateMapper<ProfileState, ''>) => state.loggedEthAddress,
+  );
+  // const checkENSAddress = Profile.useStoreActions((actions: ActionMapper<ProfileStateModel, "">) => actions.checkENSAddress);
+  const registerENSAddress = Profile.useStoreActions(
+    (actions: ActionMapper<ProfileStateModel, ''>) => actions.registerENSAddress,
+  );
+  const ensInfo = Profile.useStoreState((state: StateMapper<ProfileState, ''>) => state.ensInfo);
   const { t } = useTranslation();
   const [validatingEns, setValidatingEns] = React.useState(false);
 
   /**
    * Check if the ethAddress has already an ens
    */
-  React.useEffect(() => {
-    if (profileState.loggedEthAddress) {
-      profileStateActions.checkENSAddress({ ethAddress: profileState.loggedEthAddress });
-    }
-  }, [profileState.loggedEthAddress]);
+  // React.useEffect(() => {
+  //   if (loggedEthAddress) {
+  //     checkENSAddress({ ethAddress: loggedEthAddress });
+  //   }
+  // }, [loggedEthAddress]);
 
   const onSubmit = (payload: { name: string; providerName: string }) => {
     const { name, providerName } = payload;
-    const ethAddress = profileState.loggedEthAddress;
+    const ethAddress = loggedEthAddress;
     if (ethAddress) {
-      profileStateActions.registerENSAddress({
+      registerENSAddress({
         name,
         providerName,
         ethAddress,
@@ -51,8 +61,11 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
 
   return (
     <Box align="center" pad={{ top: '1em' }}>
-      {!profileState.loggedEthAddress && <>You must sign in!</>}
-      {profileState.loggedEthAddress && (
+      <DS.Helmet>
+        <title>ENS | {ENS_EDIT_PAGE}</title>
+      </DS.Helmet>
+      {!loggedEthAddress && <>You must sign in!</>}
+      {loggedEthAddress && (
         <EnsFormCard
           titleLabel={t('Ethereum Address')}
           secondaryTitleLabel={t('ENS name')}
@@ -61,8 +74,8 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
           cancelLabel={t('Cancel')}
           saveLabel={t('Save')}
           nameFieldPlaceholder={t('yourname')}
-          ethAddress={profileState.loggedEthAddress}
-          providerData={profileState.ensInfo}
+          ethAddress={loggedEthAddress}
+          providerData={ensInfo}
           handleSubmit={onSubmit}
           validateEns={validateEns}
           validEns={ensIsValid}

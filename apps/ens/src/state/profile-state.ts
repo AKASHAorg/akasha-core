@@ -1,4 +1,4 @@
-import { action, Action, createComponentStore, persist, Thunk, thunk } from 'easy-peasy';
+import { action, Action, createContextStore, persist, Thunk, thunk } from 'easy-peasy';
 import { forkJoin } from 'rxjs';
 import { getEthAddress } from '../services/profile-service';
 
@@ -127,10 +127,12 @@ export const profileStateModel: ProfileStateModel = persist(
     registerENSAddress: thunk(async (actions, payload, { injections }) => {
       const { name } = payload;
       const { logger, channels } = injections;
+
       actions.updateData({
         registeringENS: true,
       });
-      const register = channels.registry.registerName({ name });
+
+      const register = channels.registry.ens.registerName({ name });
 
       register.subscribe(() => {
         actions.updateData({
@@ -147,8 +149,12 @@ export const profileStateModel: ProfileStateModel = persist(
   { blacklist: ['fetching', 'errors', 'ensInfo', 'ensChecked', 'registeringENS'] },
 );
 
-export const useProfileState = (channels?: any, logger?: any) =>
-  createComponentStore(profileStateModel, {
-    name: 'FeedApp-ProfileState',
-    injections: { channels, logger },
-  })();
+let profileState: ReturnType<typeof createContextStore>;
+export const getProfileStore = (channels?: any, globalChannel?: any, logger?: any) => {
+  if (profileState) return profileState;
+  profileState = createContextStore(profileStateModel, {
+    name: 'ENSApp-ProfileState',
+    injections: { channels, globalChannel, logger },
+  });
+  return profileState;
+};
