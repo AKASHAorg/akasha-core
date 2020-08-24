@@ -29,6 +29,9 @@
     },
     {
       "path": "../profiles"
+    },
+    {
+      "path": "../registry"
     }
   ],
   "include": ["./src"],

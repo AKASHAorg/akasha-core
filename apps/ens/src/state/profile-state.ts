@@ -1,4 +1,4 @@
-import { action, createComponentStore, Action, thunk, Thunk, persist } from 'easy-peasy';
+import { action, Action, createComponentStore, persist, Thunk, thunk } from 'easy-peasy';
 import { forkJoin } from 'rxjs';
 import { getEthAddress } from '../services/profile-service';
 
@@ -125,31 +125,22 @@ export const profileStateModel: ProfileStateModel = persist(
       });
     }),
     registerENSAddress: thunk(async (actions, payload, { injections }) => {
-      const { name, providerName, ethAddress } = payload;
-      const { logger } = injections;
+      const { name } = payload;
+      const { logger, channels } = injections;
       actions.updateData({
         registeringENS: true,
       });
-      // @TODO: call the actual observable
-      Promise.resolve({
-        name,
-        providerName,
-        ethAddress,
-      }).then(() => {
+      const register = channels.registry.registerName({ name });
+
+      register.subscribe(() => {
         actions.updateData({
           registeringENS: false,
           ensInfo: {
-            name: 'testName',
+            name: name,
             providerName: 'AKASHA ENS',
           },
         });
         logger.info('ENS Name: %s, registered', name);
-        // if there is an error
-        actions.createError({
-          errorKey: 'ens.registerError',
-          error: new Error('There was an error registering your ens name'),
-          critical: false,
-        });
       });
     }),
   },

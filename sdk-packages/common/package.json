@@ -35,7 +35,7 @@
     "@akashaproject/sdk-runtime": "*",
     "@walletconnect/web3-provider": "1.0.0-beta.47",
     "@akashaproject/ui-awf-typings": "*",
-    "ethers": "4.0.47"
+    "ethers": "5.0.8"
   },
   "devDependencies": {
     "@types/node": "13.13.4"
