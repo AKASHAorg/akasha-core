@@ -13,7 +13,7 @@ export interface EnsEditPageProps {
 }
 
 const EnsEditPage: React.FC<EnsEditPageProps> = () => {
-  const [ensIsValid, setEnsIsValid] = React.useState<boolean | undefined>();
+  const [ensIsValid, setEnsIsValid] = React.useState<boolean | undefined>(true);
   const Profile = getProfileStore();
   const loggedEthAddress = Profile.useStoreState(
     (state: StateMapper<ProfileState, ''>) => state.loggedEthAddress,
@@ -70,7 +70,7 @@ const EnsEditPage: React.FC<EnsEditPageProps> = () => {
           titleLabel={t('Ethereum Address')}
           secondaryTitleLabel={t('ENS name')}
           nameLabel={t('Add an ethereum name to your address')}
-          errorLabel={'Sorry, this name is unavailable. Please choose another one.'}
+          errorLabel={t('Sorry, this name is unavailable. Please choose another one.')}
           cancelLabel={t('Cancel')}
           saveLabel={t('Save')}
           nameFieldPlaceholder={t('yourname')}
