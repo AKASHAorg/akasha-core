@@ -1,15 +1,15 @@
 import React from 'react';
 import {
-  PositionOptions,
   toast as notify,
   ToastContainer,
   ToastContainerProps,
+  ToastPosition,
 } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
 
 export interface NotificationProps extends ToastContainerProps {
-  position: PositionOptions | any;
+  position: ToastPosition | any;
   pauseOnVisibilityChange: boolean;
 }
 

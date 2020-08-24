@@ -125,13 +125,13 @@ const SidebarComponent = () => {
   );
 };
 
-storiesOf('Bars|Topbar', module).add('Topbar', () => (
+storiesOf('Bars/Topbar', module).add('Topbar', () => (
   <ViewportSizeProvider>
     <TopbarComponent />
   </ViewportSizeProvider>
 ));
 
-storiesOf('Bars|Sidebar', module).add('Sidebar', () => (
+storiesOf('Bars/Sidebar', module).add('Sidebar', () => (
   <div style={{ height: '700px', border: '2px solid black', display: 'flex' }}>
     <div style={{ height: '100%', width: '14rem' }}>
       <ViewportSizeProvider>
