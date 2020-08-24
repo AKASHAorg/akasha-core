@@ -6,7 +6,6 @@ const { InjectManifest } = require('workbox-webpack-plugin');
 
 const config = {
   entry: './src/index.ts',
-  target: 'web',
   context: path.resolve(__dirname),
   module: {
     rules: [{ parser: { System: false } }, { test: /\.ts(x)?$/, use: 'ts-loader' }],
@@ -52,6 +51,7 @@ const config = {
     /^single-spa$/,
     /^rxjs$/,
     /^rxjs\/operators$/,
+    /^@truffle\/contract$/,
   ],
 };
 

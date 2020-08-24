@@ -40,7 +40,9 @@ const service: AkashaService = (invoke, log) => {
   // wrapper
   const wallet = async () => ethers.Wallet;
 
-  return { regen, destroy, wallet, web3, getWeb3Instance };
+  const getContractFactory = async () => ethers.ContractFactory;
+
+  return { regen, destroy, wallet, web3, getWeb3Instance, getContractFactory };
 };
 
 export default { service, name: WEB3_SERVICE };
