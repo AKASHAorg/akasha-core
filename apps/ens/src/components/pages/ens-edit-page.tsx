@@ -50,7 +50,7 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
   };
 
   return (
-    <Box align="center" pad={{ top: '1em' }}>
+    <Box align="center">
       {!profileState.loggedEthAddress && <>You must sign in!</>}
       {profileState.loggedEthAddress && (
         <EnsFormCard

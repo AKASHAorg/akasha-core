@@ -14,7 +14,7 @@ import DS from '@akashaproject/design-system';
 import { default as subRoutes, rootRoute, EDIT_PAGE, SETTINGS_PAGE } from '../routes';
 import ErrorInfoCard from './error-info-card';
 
-const { ThemeSelector, lightTheme, darkTheme } = DS;
+const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
 
 export default class App extends PureComponent<any> {
   public state: { errors: any } = {
@@ -57,59 +57,61 @@ export default class App extends PureComponent<any> {
   public render() {
     const { i18n, sdkModules, globalChannel, logger } = this.props;
     return (
-      <React.Suspense fallback={<>Loading</>}>
-        <I18nextProvider i18n={i18n ? i18n : null}>
-          <ThemeSelector
-            settings={{ activeTheme: 'Light-Theme' }}
-            availableThemes={[lightTheme, darkTheme]}
-            plain={true}
-          >
-            <ErrorInfoCard errors={this.state.errors}>
-              <Router>
-                <Switch>
-                  <Route
-                    path={subRoutes[EDIT_PAGE]}
-                    render={routeProps => (
-                      <MyBoxProfile
-                        {...routeProps}
-                        sdkModules={sdkModules}
-                        globalChannel={globalChannel}
-                        logger={logger}
-                      />
-                    )}
-                  />
-                  <Route
-                    path={subRoutes[SETTINGS_PAGE]}
-                    render={(routeProps: RouteComponentProps) => (
-                      <BoxSettings
-                        {...routeProps}
-                        sdkModules={sdkModules}
-                        globalChannel={globalChannel}
-                        logger={logger}
-                      />
-                    )}
-                  />
-                  {/* this route is not in menuItems because we don't have a explore functionality for 3box yet */}
-                  <Route
-                    path={`${rootRoute}/profile/:profileId`}
-                    render={(routeProps: RouteComponentProps) => (
-                      <BoxProfile
-                        {...routeProps}
-                        sdkModules={sdkModules}
-                        globalChannel={globalChannel}
-                        logger={logger}
-                      />
-                    )}
-                  />
-                  {/* Make the edit page default landing page for this app
+      <Box width="100vw">
+        <React.Suspense fallback={<>Loading</>}>
+          <I18nextProvider i18n={i18n ? i18n : null}>
+            <ThemeSelector
+              settings={{ activeTheme: 'Light-Theme' }}
+              availableThemes={[lightTheme, darkTheme]}
+              plain={true}
+            >
+              <ErrorInfoCard errors={this.state.errors}>
+                <Router>
+                  <Switch>
+                    <Route
+                      path={subRoutes[EDIT_PAGE]}
+                      render={routeProps => (
+                        <MyBoxProfile
+                          {...routeProps}
+                          sdkModules={sdkModules}
+                          globalChannel={globalChannel}
+                          logger={logger}
+                        />
+                      )}
+                    />
+                    <Route
+                      path={subRoutes[SETTINGS_PAGE]}
+                      render={(routeProps: RouteComponentProps) => (
+                        <BoxSettings
+                          {...routeProps}
+                          sdkModules={sdkModules}
+                          globalChannel={globalChannel}
+                          logger={logger}
+                        />
+                      )}
+                    />
+                    {/* this route is not in menuItems because we don't have a explore functionality for 3box yet */}
+                    <Route
+                      path={`${rootRoute}/profile/:profileId`}
+                      render={(routeProps: RouteComponentProps) => (
+                        <BoxProfile
+                          {...routeProps}
+                          sdkModules={sdkModules}
+                          globalChannel={globalChannel}
+                          logger={logger}
+                        />
+                      )}
+                    />
+                    {/* Make the edit page default landing page for this app
                       404 routes gets redirected to this page also */}
-                  <Redirect push={true} from={rootRoute} to={subRoutes[EDIT_PAGE]} exact={true} />
-                </Switch>
-              </Router>
-            </ErrorInfoCard>
-          </ThemeSelector>
-        </I18nextProvider>
-      </React.Suspense>
+                    <Redirect push={true} from={rootRoute} to={subRoutes[EDIT_PAGE]} exact={true} />
+                  </Switch>
+                </Router>
+              </ErrorInfoCard>
+            </ThemeSelector>
+          </I18nextProvider>
+        </React.Suspense>
+      </Box>
     );
   }
 }

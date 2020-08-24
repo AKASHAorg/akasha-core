@@ -59,6 +59,7 @@ const Topbar = (props: ITopbarProps) => {
     if (onNavigation) {
       onNavigation(menuItem.route);
     }
+    setDropOpen(false);
   };
 
   const handleSidebarVisibility = () => {

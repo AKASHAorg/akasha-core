@@ -82,7 +82,7 @@ const MyBoxProfile: React.FC<any> = ({ sdkModules, globalChannel, logger }) => {
       <DS.Helmet>
         <title>3Box | {t('Edit 3Box profile')}</title>
       </DS.Helmet>
-      <Box fill="horizontal" pad={{ top: '1em' }} flex={true} align="center">
+      <Box fill="horizontal" flex={true} align="center">
         <ErrorInfoCard errors={state.data.errors}>
           <>
             {!openBoxConsent && <Box>{t('waiting for box signature')}</Box>}
