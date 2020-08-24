@@ -25,7 +25,7 @@ const config = {
   },
   plugins: [
     new webpack.EnvironmentPlugin({
-      GRAPHQL_URI: 'http://localhost:8778/query'
+      GRAPHQL_URI: 'http://api.akasha.network/query'
     }),
     new webpack.ProgressPlugin({
       entries: true,
