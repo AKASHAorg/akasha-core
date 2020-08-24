@@ -60,7 +60,7 @@ const EnsEditPage: React.FC<EnsEditPageProps> = () => {
   };
 
   return (
-    <Box align="center" pad={{ top: '1em' }}>
+    <Box align="center" pad={{ top: '1em' }} width="100vw">
       <DS.Helmet>
         <title>ENS | {ENS_EDIT_PAGE}</title>
       </DS.Helmet>
