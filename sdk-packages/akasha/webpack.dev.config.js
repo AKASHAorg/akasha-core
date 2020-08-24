@@ -51,6 +51,7 @@ const config = {
     /^single-spa$/,
     /^rxjs$/,
     /^rxjs\/operators$/,
+    /^@truffle\/contract$/,
   ],
 };
 

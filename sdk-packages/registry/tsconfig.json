@@ -18,7 +18,7 @@
     }
   ],
   // this must be explicit for json files ...
-  "files": ["./src/abi/ENS.json", "./src/abi/AkashaRegistrar.json", "./src/abi/ReverseRegistrar.json"],
+  "files": ["./src/artifacts/ENS.json", "./src/artifacts/AkashaRegistrar.json", "./src/artifacts/ReverseRegistrar.json"],
   "include": ["./src/**/*"],
   "exclude": ["./node_modules"]
 }

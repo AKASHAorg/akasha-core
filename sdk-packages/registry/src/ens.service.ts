@@ -1,12 +1,16 @@
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import { ENS_SERVICE, REGISTRAR_ADDRESS, REVERSE_STRING, RESOLVER_ADDRESS } from './constants';
-import AkashaRegistrarABI from './abi/AkashaRegistrar.json';
-import ReverseRegistrarABI from './abi/ReverseRegistrar.json';
-import EnsABI from './abi/ENS.json';
+import {
+  ENS_SERVICE,
+  REGISTRAR_ADDRESS,
+  REVERSE_STRING,
+  RESOLVER_ADDRESS,
+  ENS_ADDRESS,
+} from './constants';
+import AkashaRegistrarABI from './artifacts/AkashaRegistrar.json';
+import ReverseRegistrarABI from './artifacts/ReverseRegistrar.json';
+import EnsABI from './artifacts/ENS.json';
 
 import commonServices, { WEB3_SERVICE } from '@akashaproject/sdk-common/lib/constants';
-// tslint:disable-next-line:no-var-requires
-const contract = require('@truffle/contract');
 
 const service: AkashaService = (invoke, log) => {
   let AkashaRegistrarInstance;
@@ -34,29 +38,31 @@ const service: AkashaService = (invoke, log) => {
     if (!AkashaRegistrarInstance) {
       await setupContracts();
     }
-    return AkashaRegistrarInstance.isAvailable.call(args.name);
+    return AkashaRegistrarInstance.isAvailable(args.name);
+  };
+
+  const resolveAddress = async (args: { ethAddress: string }) => {
+    if (!AkashaRegistrarInstance) {
+      await setupContracts();
+    }
+    return ReverseRegistrarInstance.node(args.ethAddress);
   };
 
   // boilerplate for smart contracts
   const setupContracts = async () => {
-    // @ts-ignore
-    const AkashaRegistrar = contract(AkashaRegistrarABI);
-    // @ts-ignore
-    const ReverseRegistrar = contract(ReverseRegistrarABI);
-    // @ts-ignore
-    const ENS = contract(EnsABI);
-
     const web3Provider = await invoke(commonServices[WEB3_SERVICE]).getWeb3Instance();
-    AkashaRegistrar.setProvider(web3Provider);
-    ReverseRegistrar.setProvider(web3Provider);
-    ENS.setProvider(web3Provider);
-    AkashaRegistrarInstance = await AkashaRegistrar.at(REGISTRAR_ADDRESS);
+    const contractFactory = await invoke(commonServices[WEB3_SERVICE]).getContractFactory();
+    const AkashaRegistrar = contractFactory.fromSolidity(AkashaRegistrarABI);
+    const ReverseRegistrar = contractFactory.fromSolidity(ReverseRegistrarABI);
+    const ENS = contractFactory.fromSolidity(EnsABI);
+    const signer = web3Provider.getSigner();
+    AkashaRegistrarInstance = await AkashaRegistrar.connect(signer).attach(REGISTRAR_ADDRESS);
     // get the ens address from subdomain registrar
-    const ensAddress = await AkashaRegistrarInstance.ens.call();
-    ENSinstance = await ENS.at(ensAddress);
+    const ensAddress = await AkashaRegistrarInstance.ens();
+    ENSinstance = await ENS.attach(ENS_ADDRESS);
     // getting the actual reverse address from registry
     const reverseAddress = await ENSinstance.owner(REVERSE_STRING);
-    ReverseRegistrarInstance = await ReverseRegistrar.at(reverseAddress);
+    ReverseRegistrarInstance = await ReverseRegistrar.connect(signer).attach(reverseAddress);
   };
 
   // interact with contracts from ui
