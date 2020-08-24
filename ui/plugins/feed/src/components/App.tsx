@@ -68,7 +68,7 @@ class FeedPluginRoot extends PureComponent<IProps> {
     }
 
     return (
-      <>
+      <Box width="100vw">
         <DS.Helmet>
           <title>My Feed Page</title>
         </DS.Helmet>
@@ -86,7 +86,7 @@ class FeedPluginRoot extends PureComponent<IProps> {
             </Suspense>
           </ThemeSelector>
         </ViewportSizeProvider>
-      </>
+      </Box>
     );
   }
 }
