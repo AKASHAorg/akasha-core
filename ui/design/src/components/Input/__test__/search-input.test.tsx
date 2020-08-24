@@ -8,18 +8,18 @@ const mockDataSource = {
   users: [
     {
       name: 'Gilbert Carter',
-      imageUrl: 'http://placebeard.it/640/480',
+      imageUrl: 'https://placebeard.it/640/480',
     },
     {
       name: 'Johan Gimli',
-      imageUrl: 'http://placebeard.it/640/480',
+      imageUrl: 'https://placebeard.it/640/480',
     },
   ],
   tags: ['#gitcoin', '#gitcoinbounties'],
   apps: [
     {
       name: 'GitCoin',
-      imageUrl: 'http://placebeard.it/640/480',
+      imageUrl: 'https://placebeard.it/640/480',
     },
   ],
 };

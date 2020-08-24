@@ -10,7 +10,7 @@ export const generateProfileData = (ethAddress: string): IProfileData => {
   return {
     ethAddress,
     coverImage: 'goldenrod',
-    avatar: 'http://placebeard.it/480/480',
+    avatar: 'https://placebeard.it/480/480',
     name: 'AKASHA WORLD',
     userName: '@akashaworld',
     ensName: 'akashaworld.akasha.eth',
