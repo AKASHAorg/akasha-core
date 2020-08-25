@@ -324,7 +324,7 @@ export const profileStateModel: ProfileStateModel = {
         });
       }
 
-      const onObservableComplete = async (images: string[]) => {
+      const onObservableComplete = async (images: { data: string[]; channelInfo?: any }) => {
         // handle the case when avatar = null (marked for deletion)
         // handle the case when coverImage = null (marked for deletion)
         // if they are undefined, they will remain unchanged
@@ -351,10 +351,10 @@ export const profileStateModel: ProfileStateModel = {
         // we are declaring the order as [0 => avatar, 1 => coverImage], so in the case when only coverImage
         // is updated, the order is [0 => coverImage]
         if (profileData.avatar) {
-          avatarIpfsImage = images[0];
-          coverIpfsImage = images[1];
+          avatarIpfsImage = images.data[0];
+          coverIpfsImage = images.data[1];
         } else if (!profileData.avatar && profileData.coverImage) {
-          coverIpfsImage = images[0];
+          coverIpfsImage = images.data[0];
         }
         const { avatar, coverImage, ...other } = profileData;
         // convert images to 3box supported format
@@ -372,8 +372,12 @@ export const profileStateModel: ProfileStateModel = {
         // merge profile state
         const updatedProfile = {
           ...otherAttrs,
-          avatar: formatImageSrc(getImageProperty(image), false, '//ipfs.io/ipfs/'),
-          coverImage: formatImageSrc(getImageProperty(coverPhoto), false, '//ipfs.io/ipfs/'),
+          avatar: formatImageSrc(getImageProperty(image), false, '//gateway.ipfs.io/ipfs/'),
+          coverImage: formatImageSrc(
+            getImageProperty(coverPhoto),
+            false,
+            '//gateway.ipfs.io/ipfs/',
+          ),
         };
         // deleted images... no need to store them
         if (avatarIpfsImage === null) {
@@ -392,7 +396,7 @@ export const profileStateModel: ProfileStateModel = {
       // if we don't have images continue
       // else, upload them to ipfs
       if (!imagesToUpload.length) {
-        return onObservableComplete([]);
+        return onObservableComplete({ data: [] });
       }
       const ipfsCall = channels.commons.ipfsService.upload(imagesToUpload);
       // get image hashes

@@ -25,7 +25,7 @@ export default async function upload(
     }
   }
 
-  for await (const entry of instance.add(source)) {
+  for await (const entry of instance.addAll(source)) {
     log.info({ entry, msg: 'uploaded on ipfs' });
     result.push(entry.cid.toBaseEncodedString());
   }
