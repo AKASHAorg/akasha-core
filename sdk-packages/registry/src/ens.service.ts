@@ -23,7 +23,8 @@ const service: AkashaService = (invoke, log) => {
     if (!available) {
       throw new Error('Subdomain already taken!');
     }
-    await AkashaRegistrarInstance.register(args.name, RESOLVER_ADDRESS);
+    const registerTx = await AkashaRegistrarInstance.register(args.name, RESOLVER_ADDRESS);
+    await registerTx.wait();
     await claimName(args);
   };
 
