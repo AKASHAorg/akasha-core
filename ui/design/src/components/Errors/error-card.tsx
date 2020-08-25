@@ -15,12 +15,12 @@ interface ErrorRendererProps {
 
 const ErrorRenderer: React.FC<ErrorRendererProps> = props => {
   return (
-    <details>
+    <details style={{ width: '100%' }}>
       <summary>Expand to see error details</summary>
       <div
         style={{
+          width: '100%',
           background: '#FFF',
-          position: 'absolute',
           right: 0,
           border: '1px solid red',
           fontSize: '.8em',

@@ -61,8 +61,6 @@ export const authenticateBox = async (
   web3Utils: { toUtf8String: (arg0: any) => any; joinSignature: (arg0: any) => any },
   settings: IBoxSettings,
   ethAddress: string,
-  onBoxOpenConsent: () => void,
-  onSpaceOpenConsent: () => void,
 ) => {
   try {
     const signer = await web3Instance.getSigner();
@@ -70,9 +68,8 @@ export const authenticateBox = async (
     if (settings) {
       currentSettings = settings;
     }
+
     if (Box.isLoggedIn(ethAddress)) {
-      onSpaceOpenConsent();
-      onBoxOpenConsent();
       box = await Box.openBox(ethAddress, getEthProvider(signer, web3Utils), {
         pinningNode: currentSettings.pinningNode,
         addressServer: currentSettings.addressServer,
@@ -80,14 +77,12 @@ export const authenticateBox = async (
       await box.syncDone;
       return getPublicProfileData(ethAddress);
     }
-
     box = await Box.create(getEthProvider(signer, web3Utils), {
       pinningNode: currentSettings.pinningNode,
       addressServer: currentSettings.addressServer,
     });
-
-    await box.auth([], { consentCallback: onBoxOpenConsent, address: ethAddress.toLowerCase() });
-    const space = await box.openSpace('akasha-ewa', { consentCallback: onSpaceOpenConsent });
+    await box.auth([], { address: ethAddress.toLowerCase() });
+    const space = await box.openSpace('akasha-ewa');
     await box.syncDone;
     await space.syncDone;
     return getPublicProfileData(ethAddress);
