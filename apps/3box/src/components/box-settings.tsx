@@ -6,11 +6,7 @@ import ErrorInfoCard from './error-info-card';
 import { useBoxProfile } from '../state';
 import { useTranslation } from 'react-i18next';
 
-const { Box, TextInputField, BasicCardBox, styled, Button, MainAreaCardBox } = DS;
-
-const SettingsFormCard = styled(BasicCardBox)`
-  padding: 1em;
-`;
+const { Box, TextInputField, styled, Button, MainAreaCardBox } = DS;
 
 const SettingsCardTitle = styled.h3`
   font-size: 1.5em;
@@ -81,13 +77,13 @@ const BoxSettings: React.FC<IBoxSettingsProps> = props => {
   };
 
   return (
-    <Box fill="horizontal" flex={true} pad={{ top: '1em' }} align="center">
+    <Box fill="horizontal" flex={true} align="center">
       <DS.Helmet>
         <title>3Box | {t('Settings')}</title>
       </DS.Helmet>
       <MainAreaCardBox>
         <ErrorInfoCard errors={state.data.errors}>
-          <SettingsFormCard>
+          <Box pad="1em">
             <SettingsCardTitle>{t('3Box Settings')}</SettingsCardTitle>
             <TextInputField
               label={t('Pinning Node')}
@@ -121,7 +117,7 @@ const BoxSettings: React.FC<IBoxSettingsProps> = props => {
                 <Button label={t('Save')} primary={true} onClick={handleSubmit} />
               </Box>
             </Box>
-          </SettingsFormCard>
+          </Box>
         </ErrorInfoCard>
       </MainAreaCardBox>
     </Box>

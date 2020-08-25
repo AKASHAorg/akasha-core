@@ -30,7 +30,14 @@ const service: AkashaService = (invoke, log) => {
     if (!ipfsInstance && window.hasOwnProperty('Ipfs')) {
       // @ts-ignore
       const { Ipfs } = window;
-      ipfsNode = await Ipfs.create();
+      ipfsNode = await Ipfs.create({
+        repo: 'ewaAlpha',
+        config: {
+          Addresses: {
+            Swarm: ['/dns4/akasha.cloud/tcp/443/wss/p2p-webrtc-star/'],
+          },
+        },
+      });
       log.info('ipfs node instantiated');
     }
 

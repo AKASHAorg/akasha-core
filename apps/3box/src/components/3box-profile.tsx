@@ -26,7 +26,7 @@ const getImageSrc = (boxImage: any) => {
   if (isBase64(boxImage)) {
     return boxImage;
   }
-  return `//ipfs.io/ipfs/${boxImage}`;
+  return `//gateway.ipfs.io/ipfs/${boxImage}`;
 };
 
 const BoxProfile: React.FC<IMyProfileProps> = props => {
@@ -46,7 +46,7 @@ const BoxProfile: React.FC<IMyProfileProps> = props => {
         <title>3Box | {profileId} Profile Page</title>
       </DS.Helmet>
       <Box fill="horizontal">
-        <Box fill="horizontal" pad={{ top: '2em' }} align="center">
+        <Box fill="horizontal" align="center">
           {!Object.keys(state.data.visitingProfile).length && <Box>{t('Loading Profile')}</Box>}
           <MainAreaCardBox>
             <Box

@@ -8,7 +8,7 @@ import { IPlugin, IWidget } from '@akashaproject/ui-awf-typings/lib/app-loader';
 const i18nDefaultConfig: InitOptions = {
   fallbackLng: 'en',
   ns: [],
-  saveMissing: true,
+  saveMissing: false,
   saveMissingTo: 'all',
   load: 'languageOnly',
   debug: true,
@@ -22,7 +22,6 @@ const backends = {
       expirationTime: 24 * 60 * 60 * 1000,
     },
     {
-      addPath: 'http://localhost:9001/locales/{{lng}}/{{ns}}.json',
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
   ],
