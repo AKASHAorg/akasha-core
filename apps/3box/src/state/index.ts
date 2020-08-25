@@ -1,4 +1,4 @@
-import { action, thunk, createComponentStore, persist, Action, Thunk } from 'easy-peasy';
+import { action, thunk, persist, Action, Thunk, createContextStore } from 'easy-peasy';
 import {
   authenticateBox,
   getProfile,
@@ -37,10 +37,6 @@ export interface IUpdateProfilePayload extends IFormattedProfileData {
 export interface ProfileState {
   profileData: IFormattedProfileData;
   ethAddress: string | null;
-  // when user agrees to open the box (signature)
-  openBoxConsent: boolean;
-  // when user agrees to open the space (signature)
-  openSpaceConsent: boolean;
   // when we are loading the profile data
   isLoading?: boolean;
   // when we are saving (general flag)
@@ -89,8 +85,6 @@ export const profileStateModel: ProfileStateModel = {
       coverImage: { src: '', prefix: '', isUrl: false },
       description: '',
     },
-    openBoxConsent: false,
-    openSpaceConsent: false,
     isLoading: undefined,
     isSaving: undefined,
     errors: {},
@@ -115,7 +109,7 @@ export const profileStateModel: ProfileStateModel = {
       },
     });
   }),
-  getLoggedEthAddress: thunk(async (actions, _notPassed, { injections, getState }) => {
+  getLoggedEthAddress: thunk(async (actions, _notPassed, { injections }) => {
     const { channels, logger } = injections;
     const $stash = channels.commons.cacheService.getStash(null);
     const $web3Instance = channels.commons.web3Service.web3(null);
@@ -127,14 +121,6 @@ export const profileStateModel: ProfileStateModel = {
       return call.subscribe(async (deps: { stash: any; web3Instance: any }) => {
         try {
           const ethAddress = await getEthAddress(deps.stash.data, deps.web3Instance.data);
-          // reset consents if the payload has an eth address that it's not the
-          // same as in the state
-          if (getState().data.ethAddress && getState().data.ethAddress !== ethAddress) {
-            actions.updateData({
-              openBoxConsent: false,
-              openSpaceConsent: false,
-            });
-          }
           actions.updateData({
             ethAddress,
           });
@@ -160,7 +146,7 @@ export const profileStateModel: ProfileStateModel = {
   /**
    * fetch current logged in profile
    */
-  fetchCurrent: thunk(async (actions, _ethAddress, { injections }) => {
+  fetchCurrent: thunk(async (actions, ethAddress, { injections }) => {
     const { channels, logger } = injections;
     const { commons, db } = channels;
     const $stash = commons.cacheService.getStash(null);
@@ -168,7 +154,7 @@ export const profileStateModel: ProfileStateModel = {
     const $web3Utils = commons.web3UtilsService.getUtils(null);
     const $settingsAttachment = db.settingsAttachment.get({
       id: BOX_SETTINGS_ID,
-      ethAddress: _ethAddress,
+      ethAddress: ethAddress,
     });
     try {
       const call = forkJoin({
@@ -185,23 +171,7 @@ export const profileStateModel: ProfileStateModel = {
               deps.web3Instance.data,
               deps.web3Utils.data,
               JSON.parse(deps.settingsAttachment.data),
-              _ethAddress,
-              () => {
-                // when user consented to open the box
-                actions.updateData({
-                  openBoxConsent: true,
-                });
-              },
-              () => {
-                // when user consented to open the space.
-                // it's obvious that after this step we are
-                // fetching the profile data, so switch isLoading
-                // to true
-                actions.updateData({
-                  openSpaceConsent: true,
-                  isLoading: true,
-                });
-              },
+              ethAddress,
             );
             const { profileData } = result;
             // tslint:disable-next-line: prefer-const
@@ -209,7 +179,7 @@ export const profileStateModel: ProfileStateModel = {
             image = formatImageSrc(getImageProperty(image), false, '//ipfs.io/ipfs/');
             coverPhoto = formatImageSrc(getImageProperty(coverPhoto), false, '//ipfs.io/ipfs/');
             actions.updateData({
-              ethAddress: _ethAddress,
+              ethAddress: ethAddress,
               isLoading: false,
               profileData: {
                 ...others,
@@ -560,8 +530,12 @@ export const profileStateModel: ProfileStateModel = {
   }),
 };
 
-export const useBoxProfile = (channels?: any, globalChannel?: any, logger?: any) =>
-  createComponentStore(profileStateModel, {
+let loginState: ReturnType<typeof createContextStore>;
+export const getProfileStore = (channels?: any, globalChannel?: any, logger?: any) => {
+  if (loginState) return loginState;
+  loginState = createContextStore(profileStateModel, {
     name: '3box-ProfileState',
     injections: { channels, globalChannel, logger, getProfileData: getProfile },
-  })();
+  });
+  return loginState;
+};
