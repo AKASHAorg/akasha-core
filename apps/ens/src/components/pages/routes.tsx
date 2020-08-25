@@ -50,7 +50,7 @@ const Routes: React.FC<RootComponentProps> = props => {
     });
   };
   const handleLogin = (providerId: number) => {
-    console.log('authorizing!!', providerId);
+    // console.log('authorizing!!', providerId);
     authorize(providerId);
   };
   const handleTutorialLinkClick = () => {
