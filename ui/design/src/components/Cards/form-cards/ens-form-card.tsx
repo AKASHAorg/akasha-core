@@ -16,10 +16,11 @@ export interface IEnsFormCardProps {
   nameFieldPlaceholder: string;
   ethAddress: string;
   providerData: Partial<IEnsData>;
-  validateEns: (name: string) => void;
+  validateEns?: (name: string) => void;
   validEns?: boolean;
   handleSubmit: (data: IEnsData | { name: string }) => void;
   isValidating?: boolean;
+  ensSubdomain?: string;
 }
 
 export interface IEnsData {
@@ -43,6 +44,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     validateEns,
     validEns,
     isValidating,
+    ensSubdomain = 'akasha.eth',
   } = props;
 
   const [name, setName] = React.useState('');
@@ -57,15 +59,12 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   // @TODO calculate from placeholder width
   const initialInputWidth = '4.25rem';
 
-  // have this passed as a prop?
-  const ensSubdomain = '.ewa.akasha.eth';
-
   const handleCopyEthAddress = () => {
     navigator.clipboard.writeText(ethAddress);
   };
 
   const handleCopyEns = () => {
-    navigator.clipboard.writeText(`${name}${ensSubdomain}`);
+    navigator.clipboard.writeText(`${name}.${ensSubdomain}`);
   };
 
   const handleCancel = () => {
@@ -83,10 +82,10 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   }, []);
 
   React.useEffect(() => {
-    if (!validEns) {
+    if (!validEns && typeof validEns === 'boolean') {
       setError(true);
     }
-    if (validEns) {
+    if (validEns && typeof validEns === 'undefined') {
       setSuccess(true);
     }
   }, [validEns]);
@@ -109,7 +108,9 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
         setTextInputComputedWidth(initialInputWidth);
       }
     }
-    validateEns(value);
+    if (validateEns && typeof validateEns === 'function') {
+      validateEns(value);
+    }
   };
 
   const handleSave = () => {
@@ -148,7 +149,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
             <Box direction="row" gap="xxsmall" pad={{ bottom: 'xsmall' }} align="center">
               <Box direction="row" align="center">
                 <Text color="secondaryText">{providerData.name}</Text>
-                <Text color="accentText">{ensSubdomain}</Text>
+                <Text color="accentText">.{ensSubdomain}</Text>
               </Box>
 
               <Icon type="copy" onClick={handleCopyEns} clickable={true} />
@@ -180,7 +181,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                     placeholder={nameFieldPlaceholder}
                   />
                   <Text color="accentText" size="large">
-                    {ensSubdomain}
+                    .{ensSubdomain}
                   </Text>
                 </Box>
 

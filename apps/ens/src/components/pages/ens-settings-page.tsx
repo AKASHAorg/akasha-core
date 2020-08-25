@@ -1,5 +1,8 @@
 import * as React from 'react';
+import DS from '@akashaproject/design-system';
+import { SETTINGS_PAGE } from '../../routes';
 
+const { Helmet } = DS;
 export interface EnsSettingsPageProps {
   sdkModules: any;
   globalChannel: any;
@@ -7,7 +10,14 @@ export interface EnsSettingsPageProps {
 }
 
 const EnsSettingsPage: React.FC<EnsSettingsPageProps> = () => {
-  return <div>ENS Settings Page</div>;
+  return (
+    <div>
+      <Helmet>
+        <title>ENS | {SETTINGS_PAGE}</title>
+      </Helmet>
+      ENS Settings Page
+    </div>
+  );
 };
 
 export default EnsSettingsPage;

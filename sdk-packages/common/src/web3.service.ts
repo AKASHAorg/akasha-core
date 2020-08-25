@@ -24,17 +24,17 @@ const service: AkashaService = (invoke, log) => {
 
   // fetch an existing instance or create web3Provider
   const web3 = async (provider?: EthProviders) => {
-    const web3Provider = await getWeb3Instance();
+    const stash: any = await invoke(commonServices[CACHE_SERVICE]).getStash();
+    const web3Provider = stash.get(commonServices[WEB3_SERVICE]);
     if (!web3Provider) {
       return await regen(provider || EthProviders.Web3Injected);
     }
     log.info('reusing an existing ethers provider instance');
     return web3Provider;
   };
-
-  const getWeb3Instance = async () => {
-    const stash: any = await invoke(commonServices[CACHE_SERVICE]).getStash();
-    return stash.get(commonServices[WEB3_SERVICE]);
+  // getter/alias for web3
+  const getWeb3Instance = async (provider?: EthProviders) => {
+    return await web3(provider);
   };
 
   // wrapper
