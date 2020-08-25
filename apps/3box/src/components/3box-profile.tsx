@@ -1,15 +1,13 @@
 import * as React from 'react';
-import * as H from 'history';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useBoxProfile } from '../state';
+import { getProfileStore, ProfileStateModel } from '../state';
 import { useTranslation } from 'react-i18next';
+import { ActionMapper, StateMapper } from 'easy-peasy';
 
 const { Avatar, Box, MainAreaCardBox, Text, isBase64, styled } = DS;
 
 export interface IMyProfileProps {
-  history: H.History;
-  location: H.Location;
   sdkModules: any;
   globalChannel?: any;
   logger: any;
@@ -29,14 +27,20 @@ const getImageSrc = (boxImage: any) => {
   return `//gateway.ipfs.io/ipfs/${boxImage}`;
 };
 
-const BoxProfile: React.FC<IMyProfileProps> = props => {
-  const [state, actions] = useBoxProfile(props.sdkModules, props.globalChannel, props.logger);
+const BoxProfile: React.FC<IMyProfileProps> = () => {
+  const Profile = getProfileStore();
+  const profileStateData = Profile.useStoreState(
+    (state: StateMapper<ProfileStateModel, ''>) => state.data,
+  );
+  const getProfile = Profile.useStoreActions(
+    (act: ActionMapper<ProfileStateModel, ''>) => act.getProfile,
+  );
   const { profileId } = useParams<{ profileId: string }>();
   const { t } = useTranslation();
 
   React.useEffect(() => {
     if (profileId) {
-      actions.getProfile(profileId);
+      getProfile(profileId);
     }
   }, [profileId]);
 
@@ -47,12 +51,14 @@ const BoxProfile: React.FC<IMyProfileProps> = props => {
       </DS.Helmet>
       <Box fill="horizontal">
         <Box fill="horizontal" align="center">
-          {!Object.keys(state.data.visitingProfile).length && <Box>{t('Loading Profile')}</Box>}
+          {!Object.keys(profileStateData.visitingProfile).length && (
+            <Box>{t('Loading Profile')}</Box>
+          )}
           <MainAreaCardBox>
             <Box
               height="9em"
               background={{
-                image: getImageSrc(state.data.visitingProfile.coverPhoto),
+                image: getImageSrc(profileStateData.visitingProfile.coverPhoto),
                 color: '#c5d7f2',
               }}
               pad="none"
@@ -67,11 +73,11 @@ const BoxProfile: React.FC<IMyProfileProps> = props => {
                 ethAddress={profileId || ''}
                 border="lg"
                 size="xl"
-                src={getImageSrc(state.data.visitingProfile.image)}
+                src={getImageSrc(profileStateData.visitingProfile.image)}
               />
               <Box pad={{ vertical: 'small', left: 'xsmall' }}>
                 <Text size="xlarge" weight="bold" color="primaryText">
-                  {state.data.visitingProfile.name} {state.data.visitingProfile.emoji}
+                  {profileStateData.visitingProfile.name} {profileStateData.visitingProfile.emoji}
                 </Text>
                 <Box direction="row" gap="xsmall">
                   <Text size="medium" color="secondaryText">
@@ -86,7 +92,7 @@ const BoxProfile: React.FC<IMyProfileProps> = props => {
                   {t('About')}
                 </Text>
               </Box>
-              <Text color="primaryText">{state.data.visitingProfile.description}</Text>
+              <Text color="primaryText">{profileStateData.visitingProfile.description}</Text>
             </Box>
           </MainAreaCardBox>
         </Box>
