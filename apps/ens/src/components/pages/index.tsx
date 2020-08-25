@@ -1,17 +1,13 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { IAppProps } from '../app';
 import { getProfileStore } from '../../state/profile-state';
 import Routes from './routes';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const { ErrorInfoCard, ErrorLoader } = DS;
 
-export interface IPagesProps extends IAppProps {
-  errors: any;
-}
-
-const Pages: React.FC<IPagesProps> = props => {
+const Pages: React.FC<RootComponentProps & { errors: {} }> = props => {
   const { errors, sdkModules, logger, globalChannel } = props;
   const { t } = useTranslation();
   const Profile = getProfileStore(sdkModules, globalChannel, logger);

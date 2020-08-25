@@ -1,6 +1,7 @@
 import { action, Action, createContextStore, persist, Thunk, thunk } from 'easy-peasy';
-import { forkJoin } from 'rxjs';
 import { getEthAddress } from '../services/profile-service';
+import { race, forkJoin } from 'rxjs';
+import { filter, takeLast } from 'rxjs/operators';
 
 export interface IStateErrorPayload {
   errorKey: string;
@@ -39,6 +40,7 @@ export interface ProfileStateModel extends ProfileState {
     ProfileStateModel,
     { name: string; providerName: string; ethAddress: string }
   >;
+  authorize: Thunk<ProfileStateModel, number>;
 }
 
 export const profileStateModel: ProfileStateModel = persist(
@@ -147,6 +149,39 @@ export const profileStateModel: ProfileStateModel = persist(
         });
         logger.info('ENS Name: %s, registered', name);
       });
+    }),
+    authorize: thunk(async (actions, ethProvider, { injections }) => {
+      const { auth } = injections.channels;
+      try {
+        const call = auth.authService.signIn(ethProvider);
+        // handle the case where signIn was triggered from another place
+        const globalCall = injections.globalChannel.pipe(
+          filter((response: any) => response.channelInfo.method === 'signIn'),
+          takeLast(1),
+        );
+        race(call, globalCall).subscribe(
+          (response: any) => {
+            actions.updateData({
+              token: response.data.token,
+              loggedEthAddress: response.data.ethAddress,
+            });
+          },
+          (err: Error) => {
+            // console.error('action[subscription].authorize', err);
+            actions.createError({
+              errorKey: 'action[subscription].authorize',
+              error: err,
+              critical: false,
+            });
+          },
+        );
+      } catch (ex) {
+        actions.createError({
+          errorKey: 'action.authorize',
+          error: ex,
+          critical: false,
+        });
+      }
     }),
   },
   { blacklist: ['fetching', 'errors', 'ensInfo', 'ensChecked', 'registeringENS'] },

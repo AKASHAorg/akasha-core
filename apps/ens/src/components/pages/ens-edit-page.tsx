@@ -5,16 +5,17 @@ import { getProfileStore, ProfileState, ProfileStateModel } from '../../state/pr
 import { ActionMapper, StateMapper } from 'easy-peasy';
 import { ENS_EDIT_PAGE } from '../../routes';
 
-const { EnsFormCard, Box } = DS;
+const { EnsFormCard, Box, ErrorLoader, Button } = DS;
 export interface EnsEditPageProps {
   sdkModules: any;
   globalChannel: any;
   logger: any;
+  onLoginModalShow: () => void;
 }
 
 const EnsEditPage: React.FC<EnsEditPageProps> = props => {
-  const [ensIsValid, setEnsIsValid] = React.useState<boolean | undefined>(true);
-  const Profile = getProfileStore(props.sdkModules, props.globalChannel, props.logger);
+  const { onLoginModalShow, sdkModules, globalChannel, logger } = props;
+  const Profile = getProfileStore(sdkModules, globalChannel, logger);
   const loggedEthAddress = Profile.useStoreState(
     (state: StateMapper<ProfileState, ''>) => state.loggedEthAddress,
   );
@@ -26,8 +27,6 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
   );
   const ensInfo = Profile.useStoreState((state: StateMapper<ProfileState, ''>) => state.ensInfo);
   const { t } = useTranslation();
-  const [validatingEns, setValidatingEns] = React.useState(false);
-
   /**
    * Check if the ethAddress has already an ens
    */
@@ -49,24 +48,25 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
     }
   };
 
-  const validateEns = (name: string) => {
-    setValidatingEns(true);
-    // validate ens on the remote?
-    const delay = new Promise(resolve => {
-      setTimeout(() => resolve(name), 1000);
-    });
-    delay.then(() => {
-      setValidatingEns(false);
-      setEnsIsValid(true);
-    });
-  };
-
   return (
     <Box align="center">
       <DS.Helmet>
         <title>ENS | {ENS_EDIT_PAGE}</title>
       </DS.Helmet>
-      {!loggedEthAddress && <>You must sign in!</>}
+      {!loggedEthAddress && (
+        <ErrorLoader
+          type="no-login"
+          title={t('No Ethereum address detected')}
+          details={t(
+            'You need to login or allow access to your current Ethereum address in your Web3 Ethereum client like MetaMask, and then reload, please.',
+          )}
+        >
+          <Box direction="row">
+            {/* <Button label={t('Cancel')} secondary={true} margin={{ right: '.5em' }} /> */}
+            <Button label={t('Connect Wallet')} primary={true} onClick={onLoginModalShow} />
+          </Box>
+        </ErrorLoader>
+      )}
       {loggedEthAddress && (
         <EnsFormCard
           titleLabel={t('Ethereum Address')}
@@ -79,9 +79,6 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
           ethAddress={loggedEthAddress}
           providerData={ensInfo}
           handleSubmit={onSubmit}
-          validateEns={validateEns}
-          validEns={ensIsValid}
-          isValidating={validatingEns}
         />
       )}
     </Box>

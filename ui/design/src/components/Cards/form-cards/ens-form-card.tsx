@@ -16,7 +16,7 @@ export interface IEnsFormCardProps {
   nameFieldPlaceholder: string;
   ethAddress: string;
   providerData: Partial<IEnsData>;
-  validateEns: (name: string) => void;
+  validateEns?: (name: string) => void;
   validEns?: boolean;
   handleSubmit: (data: IEnsData | { name: string }) => void;
   isValidating?: boolean;
@@ -82,10 +82,10 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   }, []);
 
   React.useEffect(() => {
-    if (!validEns) {
+    if (!validEns && typeof validEns === 'boolean') {
       setError(true);
     }
-    if (validEns) {
+    if (validEns && typeof validEns === 'undefined') {
       setSuccess(true);
     }
   }, [validEns]);
@@ -108,7 +108,9 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
         setTextInputComputedWidth(initialInputWidth);
       }
     }
-    validateEns(value);
+    if (validateEns && typeof validateEns === 'function') {
+      validateEns(value);
+    }
   };
 
   const handleSave = () => {

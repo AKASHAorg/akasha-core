@@ -2,17 +2,11 @@ import React, { PureComponent } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import Pages from './pages';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
 
-export interface IAppProps {
-  sdkModules: any;
-  globalChannel: any;
-  logger: any;
-  i18n: any;
-}
-
-export default class App extends PureComponent<IAppProps> {
+export default class App extends PureComponent<RootComponentProps> {
   public state: { errors: any } = {
     errors: {},
   };
