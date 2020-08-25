@@ -69,6 +69,7 @@ import {
   EthProviderListModal,
   EthProviderModal,
   MobileListModal,
+  LoginModal,
 } from './components/Modals';
 
 import { NotificationsPopover, SelectPopover } from './components/Popovers';
@@ -126,6 +127,7 @@ const exported = {
   iconTypes,
   IconButton,
   IconLink,
+  LoginModal,
   ProfileAvatarButton,
   VoteIconButton,
   CommentInput,

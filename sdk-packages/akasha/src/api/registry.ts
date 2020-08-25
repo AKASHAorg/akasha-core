@@ -17,6 +17,8 @@ export default function registryApi(channel) {
         getContracts: extractedServices[ENS_SERVICE]('getContracts'),
         claimName: extractedServices[ENS_SERVICE]('claimName'),
         registerName: extractedServices[ENS_SERVICE]('registerName'),
+        resolveAddress: extractedServices[ENS_SERVICE]('resolveAddress'),
+        resolveName: extractedServices[ENS_SERVICE]('resolveName'),
       },
     },
   };
