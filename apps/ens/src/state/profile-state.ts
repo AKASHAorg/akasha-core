@@ -1,6 +1,7 @@
-import { action, Action, createComponentStore, persist, Thunk, thunk } from 'easy-peasy';
-import { forkJoin } from 'rxjs';
+import { action, Action, createContextStore, persist, Thunk, thunk } from 'easy-peasy';
 import { getEthAddress } from '../services/profile-service';
+import { race, forkJoin } from 'rxjs';
+import { filter, takeLast } from 'rxjs/operators';
 
 export interface IStateErrorPayload {
   errorKey: string;
@@ -39,6 +40,7 @@ export interface ProfileStateModel extends ProfileState {
     ProfileStateModel,
     { name: string; providerName: string; ethAddress: string }
   >;
+  authorize: Thunk<ProfileStateModel, number>;
 }
 
 export const profileStateModel: ProfileStateModel = persist(
@@ -117,20 +119,25 @@ export const profileStateModel: ProfileStateModel = persist(
     }),
     checkENSAddress: thunk(async (actions, payload, { injections }) => {
       const { ethAddress } = payload;
-      const { logger } = injections;
+      const { logger, channels } = injections;
       logger.info('Checking ENS for ethAddress: %s', ethAddress);
-      actions.updateData({
-        ensChecked: true,
-        ensInfo: {},
+      const checkEns = channels.registry.ens.resolveAddress({ ethAddress });
+      checkEns.subscribe((response: { data: any }) => {
+        actions.updateData({
+          ensChecked: true,
+          ensInfo: response.data ? { name: response.data, providerName: 'AKASHA ENS' } : {},
+        });
       });
     }),
     registerENSAddress: thunk(async (actions, payload, { injections }) => {
       const { name } = payload;
       const { logger, channels } = injections;
+
       actions.updateData({
         registeringENS: true,
       });
-      const register = channels.registry.registerName({ name });
+
+      const register = channels.registry.ens.registerName({ name });
 
       register.subscribe(() => {
         actions.updateData({
@@ -143,12 +150,49 @@ export const profileStateModel: ProfileStateModel = persist(
         logger.info('ENS Name: %s, registered', name);
       });
     }),
+    authorize: thunk(async (actions, ethProvider, { injections }) => {
+      const { auth } = injections.channels;
+      try {
+        const call = auth.authService.signIn(ethProvider);
+        // handle the case where signIn was triggered from another place
+        const globalCall = injections.globalChannel.pipe(
+          filter((response: any) => response.channelInfo.method === 'signIn'),
+          takeLast(1),
+        );
+        race(call, globalCall).subscribe(
+          (response: any) => {
+            actions.updateData({
+              token: response.data.token,
+              loggedEthAddress: response.data.ethAddress,
+            });
+          },
+          (err: Error) => {
+            // console.error('action[subscription].authorize', err);
+            actions.createError({
+              errorKey: 'action[subscription].authorize',
+              error: err,
+              critical: false,
+            });
+          },
+        );
+      } catch (ex) {
+        actions.createError({
+          errorKey: 'action.authorize',
+          error: ex,
+          critical: false,
+        });
+      }
+    }),
   },
   { blacklist: ['fetching', 'errors', 'ensInfo', 'ensChecked', 'registeringENS'] },
 );
 
-export const useProfileState = (channels?: any, logger?: any) =>
-  createComponentStore(profileStateModel, {
-    name: 'FeedApp-ProfileState',
-    injections: { channels, logger },
-  })();
+let profileState: ReturnType<typeof createContextStore>;
+export const getProfileStore = (channels?: any, globalChannel?: any, logger?: any) => {
+  if (profileState) return profileState;
+  profileState = createContextStore(profileStateModel, {
+    name: 'ENSApp-ProfileState',
+    injections: { channels, globalChannel, logger },
+  });
+  return profileState;
+};
