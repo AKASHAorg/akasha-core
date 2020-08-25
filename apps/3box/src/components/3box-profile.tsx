@@ -26,7 +26,7 @@ const getImageSrc = (boxImage: any) => {
   if (isBase64(boxImage)) {
     return boxImage;
   }
-  return `//ipfs.io/ipfs/${boxImage}`;
+  return `//gateway.ipfs.io/ipfs/${boxImage}`;
 };
 
 const BoxProfile: React.FC<IMyProfileProps> = props => {
