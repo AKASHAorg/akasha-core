@@ -12,13 +12,15 @@ export interface EnsEditPageProps {
   logger: any;
 }
 
-const EnsEditPage: React.FC<EnsEditPageProps> = () => {
+const EnsEditPage: React.FC<EnsEditPageProps> = props => {
   const [ensIsValid, setEnsIsValid] = React.useState<boolean | undefined>(true);
-  const Profile = getProfileStore();
+  const Profile = getProfileStore(props.sdkModules, props.globalChannel, props.logger);
   const loggedEthAddress = Profile.useStoreState(
     (state: StateMapper<ProfileState, ''>) => state.loggedEthAddress,
   );
-  // const checkENSAddress = Profile.useStoreActions((actions: ActionMapper<ProfileStateModel, "">) => actions.checkENSAddress);
+  const checkENSAddress = Profile.useStoreActions(
+    (actions: ActionMapper<ProfileStateModel, ''>) => actions.checkENSAddress,
+  );
   const registerENSAddress = Profile.useStoreActions(
     (actions: ActionMapper<ProfileStateModel, ''>) => actions.registerENSAddress,
   );
@@ -29,11 +31,11 @@ const EnsEditPage: React.FC<EnsEditPageProps> = () => {
   /**
    * Check if the ethAddress has already an ens
    */
-  // React.useEffect(() => {
-  //   if (loggedEthAddress) {
-  //     checkENSAddress({ ethAddress: loggedEthAddress });
-  //   }
-  // }, [loggedEthAddress]);
+  React.useEffect(() => {
+    if (loggedEthAddress) {
+      checkENSAddress({ ethAddress: loggedEthAddress });
+    }
+  }, [loggedEthAddress]);
 
   const onSubmit = (payload: { name: string; providerName: string }) => {
     const { name, providerName } = payload;

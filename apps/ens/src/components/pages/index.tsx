@@ -12,9 +12,9 @@ export interface IPagesProps extends IAppProps {
 }
 
 const Pages: React.FC<IPagesProps> = props => {
-  const { errors, sdkModules, logger } = props;
+  const { errors, sdkModules, logger, globalChannel } = props;
   const { t } = useTranslation();
-  const Profile = getProfileStore(sdkModules, logger);
+  const Profile = getProfileStore(sdkModules, globalChannel, logger);
 
   return (
     <ErrorInfoCard errors={errors}>

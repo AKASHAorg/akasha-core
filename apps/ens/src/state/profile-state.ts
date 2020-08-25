@@ -117,11 +117,14 @@ export const profileStateModel: ProfileStateModel = persist(
     }),
     checkENSAddress: thunk(async (actions, payload, { injections }) => {
       const { ethAddress } = payload;
-      const { logger } = injections;
+      const { logger, channels } = injections;
       logger.info('Checking ENS for ethAddress: %s', ethAddress);
-      actions.updateData({
-        ensChecked: true,
-        ensInfo: {},
+      const checkEns = channels.registry.ens.resolveAddress({ ethAddress });
+      checkEns.subscribe((response: { data: any }) => {
+        actions.updateData({
+          ensChecked: true,
+          ensInfo: response.data ? { name: response.data, providerName: 'AKASHA ENS' } : {},
+        });
       });
     }),
     registerENSAddress: thunk(async (actions, payload, { injections }) => {
