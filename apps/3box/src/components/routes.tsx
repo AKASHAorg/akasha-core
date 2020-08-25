@@ -13,7 +13,7 @@ const { ErrorInfoCard, ErrorLoader } = DS;
 const Routes: React.FC<RootComponentProps & { errors: any }> = props => {
   const { errors, sdkModules, globalChannel, logger } = props;
   const { t } = useTranslation();
-  
+
   return (
     <ErrorInfoCard errors={errors}>
       {(errorMessages, hasCriticalErrors) => (
