@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { getProfileStore, ProfileState, ProfileStateModel } from '../../state/profile-state';
 import { ActionMapper, StateMapper } from 'easy-peasy';
 import { ENS_EDIT_PAGE } from '../../routes';
+import debounce from 'lodash.debounce';
 
 const { EnsFormCard, Box, ErrorLoader, Button } = DS;
 export interface EnsEditPageProps {
@@ -16,15 +17,26 @@ export interface EnsEditPageProps {
 const EnsEditPage: React.FC<EnsEditPageProps> = props => {
   const { onLoginModalShow, sdkModules, globalChannel, logger } = props;
   const Profile = getProfileStore(sdkModules, globalChannel, logger);
+  const isLoading = Profile.useStoreState((s: StateMapper<ProfileStateModel, ''>) => s.fetching);
   const loggedEthAddress = Profile.useStoreState(
     (state: StateMapper<ProfileState, ''>) => state.loggedEthAddress,
   );
-  const checkENSAddress = Profile.useStoreActions(
-    (actions: ActionMapper<ProfileStateModel, ''>) => actions.checkENSAddress,
+  const registrationStatus = Profile.useStoreState(
+    (s: StateMapper<ProfileState, ''>) => s.registrationStatus,
   );
-  const registerENSAddress = Profile.useStoreActions(
-    (actions: ActionMapper<ProfileStateModel, ''>) => actions.registerENSAddress,
+
+  const ensChecked = Profile.useStoreState((s: StateMapper<ProfileStateModel, ''>) => s.ensChecked);
+
+  const getENSByAddress = Profile.useStoreActions(
+    (actions: ActionMapper<ProfileStateModel, ''>) => actions.getENSByAddress,
   );
+  const checkENSAvailable = Profile.useStoreActions(
+    (actions: ActionMapper<ProfileStateModel, ''>) => actions.checkENSAvailable,
+  );
+  const registerENS = Profile.useStoreActions(
+    (actions: ActionMapper<ProfileStateModel, ''>) => actions.registerENS,
+  );
+  const claimENS = Profile.useStoreActions((s: ActionMapper<ProfileStateModel, ''>) => s.claimENS);
   const ensInfo = Profile.useStoreState((state: StateMapper<ProfileState, ''>) => state.ensInfo);
   const { t } = useTranslation();
   /**
@@ -32,15 +44,21 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
    */
   React.useEffect(() => {
     if (loggedEthAddress) {
-      checkENSAddress({ ethAddress: loggedEthAddress });
+      getENSByAddress({ ethAddress: loggedEthAddress });
     }
   }, [loggedEthAddress]);
+
+  React.useEffect(() => {
+    if (registrationStatus && registrationStatus.registering && ensChecked && !ensInfo.name) {
+      claimENS(registrationStatus);
+    }
+  }, [registrationStatus, ensChecked, ensInfo]);
 
   const onSubmit = (payload: { name: string; providerName: string }) => {
     const { name, providerName } = payload;
     const ethAddress = loggedEthAddress;
     if (ethAddress) {
-      registerENSAddress({
+      registerENS({
         name,
         providerName,
         ethAddress,
@@ -48,12 +66,35 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
     }
   };
 
+  const handleEnsValidation = (name: string) => {
+    if (!name.length) {
+      return;
+    }
+    if (registrationStatus) {
+      checkENSAvailable({
+        ...registrationStatus,
+        name,
+      });
+    } else {
+      checkENSAvailable({
+        name,
+        isAvailable: false,
+        checking: true,
+        registering: false,
+      });
+    }
+  };
+
+  const throttledEnsValidation = debounce(handleEnsValidation, 250, { trailing: true });
+
   return (
     <Box align="center">
       <DS.Helmet>
         <title>ENS | {ENS_EDIT_PAGE}</title>
       </DS.Helmet>
-      {!loggedEthAddress && (
+      {!loggedEthAddress && isLoading && <>Detecting eth address...</>}
+      {loggedEthAddress && isLoading && <>Looking for ENS Address</>}
+      {!loggedEthAddress && !isLoading && (
         <ErrorLoader
           type="no-login"
           title={t('No Ethereum address detected')}
@@ -67,7 +108,7 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
           </Box>
         </ErrorLoader>
       )}
-      {loggedEthAddress && (
+      {loggedEthAddress && !isLoading && (
         <EnsFormCard
           titleLabel={t('Ethereum Address')}
           secondaryTitleLabel={t('ENS name')}
@@ -79,6 +120,9 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
           ethAddress={loggedEthAddress}
           providerData={ensInfo}
           handleSubmit={onSubmit}
+          validateEns={throttledEnsValidation}
+          isValidating={registrationStatus ? registrationStatus.checking : false}
+          validEns={registrationStatus ? registrationStatus.isAvailable : undefined}
         />
       )}
     </Box>

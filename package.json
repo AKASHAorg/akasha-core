@@ -85,5 +85,8 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
+  },
+  "dependencies": {
+    "lodash.throttle": "^4.1.1"
   }
 }
