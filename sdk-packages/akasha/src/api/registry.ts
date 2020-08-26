@@ -19,6 +19,7 @@ export default function registryApi(channel) {
         registerName: extractedServices[ENS_SERVICE]('registerName'),
         resolveAddress: extractedServices[ENS_SERVICE]('resolveAddress'),
         resolveName: extractedServices[ENS_SERVICE]('resolveName'),
+        isAvailable: extractedServices[ENS_SERVICE]('isAvailable'),
       },
     },
   };
