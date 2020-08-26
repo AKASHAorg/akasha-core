@@ -85,7 +85,7 @@ const service: AkashaService = (invoke, log) => {
     };
   };
 
-  return { getContracts, claimName, registerName, resolveAddress, resolveName };
+  return { getContracts, claimName, registerName, resolveAddress, resolveName, isAvailable };
 };
 
 export default { service, name: ENS_SERVICE };
