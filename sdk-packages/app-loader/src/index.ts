@@ -357,7 +357,6 @@ export default class AppLoader implements IAppLoader {
    */
   private onRouting(ev: CustomEvent<SingleSpaEventDetail>) {
     const { pathname } = window.location;
-    console.log('routing log: ', window.location);
     const mountedApps = this.getPluginsForLocation(window.location);
     let matchedApps = [];
     if (mountedApps.length === 0 && window.location.pathname === '/') {

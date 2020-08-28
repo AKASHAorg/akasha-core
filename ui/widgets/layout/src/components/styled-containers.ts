@@ -27,6 +27,9 @@ export const MainAreaContainer: StyledComponent<any, any, any, any> = styled(Bas
     @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
       flex-direction: row;
     }
+    @media screen and (max-width: ${props.theme.breakpoints.small.value}px) {
+      padding: 0 0.25rem;
+    }
   `}
 `;
 

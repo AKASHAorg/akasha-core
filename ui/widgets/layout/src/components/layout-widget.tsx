@@ -8,6 +8,7 @@ import { ModalSlot, PluginSlot, SidebarSlot, TopbarSlot, WidgetSlot } from './st
 const {
   Box,
   styled,
+  css,
   lightTheme,
   // darkTheme,
   ThemeSelector,
@@ -35,6 +36,21 @@ const SidebarWrapper = styled(BaseContainer)<{ visible: boolean }>`
   height: calc(100vh - 3.6em);
   top: 3.6em;
   position: sticky;
+  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
+    ${props => {
+      if (props.visible) {
+        return css`
+          position: fixed;
+          top: 3rem;
+          width: 90vw;
+          height: calc(100vh - 3rem);
+        `;
+      }
+      return css`
+        display: none;
+      `;
+    }}
+  }
 `;
 
 export interface IProps {
