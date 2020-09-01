@@ -17,7 +17,6 @@ const {
   // useViewportSize,
 } = DS;
 
-// @ts-ignore
 const AppWrapper = styled(BaseContainer)`
   flex-basis: 0%;
   flex-grow: 1;
@@ -44,6 +43,9 @@ const SidebarWrapper = styled(BaseContainer)<{ visible: boolean }>`
           top: 3rem;
           width: 90vw;
           height: calc(100vh - 3rem);
+          // @media all and (device-width: 375px) and (device-height: 812px) {
+          //   height: calc(812px - 3rem);
+          // }
         `;
       }
       return css`
