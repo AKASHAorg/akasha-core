@@ -1,6 +1,6 @@
 import { action, Action, createContextStore, persist, Thunk, thunk } from 'easy-peasy';
 import { getEthAddress } from '../services/profile-service';
-import { race, forkJoin } from 'rxjs';
+import { race, forkJoin, concat } from 'rxjs';
 import { filter, takeLast } from 'rxjs/operators';
 
 export interface IStateErrorPayload {
@@ -14,6 +14,7 @@ export interface IRegistrationStatus {
   isAvailable: boolean;
   checking: boolean;
   name: string;
+  claiming: boolean;
 }
 
 export interface ProfileState {
@@ -21,6 +22,7 @@ export interface ProfileState {
   token: string | null;
   ensInfo: { name?: string; providerName?: string };
   registrationStatus: null | IRegistrationStatus;
+  statusReceived: boolean;
   ensChecked: boolean;
   /**
    * whether we are fetching the profile or not
@@ -43,11 +45,14 @@ export interface ProfileStateModel extends ProfileState {
   handleLoginSuccess: Action<ProfileStateModel, { ethAddress: string; token: string }>;
   handleLoginError: Action<ProfileStateModel, { error: Error }>;
   getENSByAddress: Thunk<ProfileStateModel, { ethAddress: string }>;
+  getEnsRegistrationStatus: Thunk<ProfileStateModel, { ethAddress: string }>;
   registerENS: Thunk<ProfileStateModel, { name: string; providerName: string; ethAddress: string }>;
   authorize: Thunk<ProfileStateModel, number>;
   checkENSAvailable: Thunk<ProfileStateModel, IRegistrationStatus>;
-  claimENS: Thunk<ProfileStateModel, IRegistrationStatus>;
+  claimENS: Thunk<ProfileStateModel, IRegistrationStatus & { ethAddress: string }>;
 }
+
+const ENS_REGISTRATION_STATUS = 'ens-registration-status';
 
 export const profileStateModel: ProfileStateModel = persist(
   {
@@ -55,6 +60,7 @@ export const profileStateModel: ProfileStateModel = persist(
     token: null,
     ensInfo: {},
     registrationStatus: null,
+    statusReceived: false,
     ensChecked: false,
     fetching: false,
     errors: {},
@@ -139,26 +145,49 @@ export const profileStateModel: ProfileStateModel = persist(
         });
       });
     }),
-
+    getEnsRegistrationStatus: thunk(async (actions, payload, { injections }) => {
+      const { channels } = injections;
+      const call = channels.db.settingsAttachment.get({
+        id: ENS_REGISTRATION_STATUS,
+        ethAddress: payload.ethAddress,
+      });
+      call.subscribe((resp: any) => {
+        actions.updateData({
+          registrationStatus: JSON.parse(resp.data),
+          statusReceived: true,
+        });
+      });
+    }),
     registerENS: thunk(async (actions, payload, { injections }) => {
-      const { name } = payload;
+      const { name, ethAddress } = payload;
       const { logger, channels } = injections;
-
+      const registrationStatus = {
+        name,
+        registering: true,
+        isAvailable: true,
+        checking: false,
+        claiming: false,
+      };
       actions.updateData({
-        registrationStatus: {
-          name,
-          registering: true,
-          isAvailable: true,
-          checking: false,
-        },
+        registrationStatus,
         ensInfo: {
-          name: payload.name,
+          name,
         },
       });
-
+      const saveToDb = channels.db.settingsAttachment.put({
+        ethAddress,
+        obj: {
+          data: JSON.stringify(registrationStatus),
+          type: 'string',
+          id: ENS_REGISTRATION_STATUS,
+        },
+      });
+      const removeFromDb = channels.db.settingsAttachment.deleteSettings({
+        ethAddress,
+        id: ENS_REGISTRATION_STATUS,
+      });
       const register = channels.registry.ens.registerName({ name });
-
-      register.subscribe(() => {
+      concat(saveToDb, register, removeFromDb).subscribe(() => {
         actions.updateData({
           registrationStatus: null,
           ensInfo: {
@@ -186,7 +215,6 @@ export const profileStateModel: ProfileStateModel = persist(
             });
           },
           (err: Error) => {
-            // console.error('action[subscription].authorize', err);
             actions.createError({
               errorKey: 'action[subscription].authorize',
               error: err,
@@ -225,12 +253,22 @@ export const profileStateModel: ProfileStateModel = persist(
     }),
     claimENS: thunk(async (actions, payload, { injections }) => {
       const { channels, logger } = injections;
-      const { name } = payload;
+      const { name, ethAddress, ...other } = payload;
 
-      const channel = channels.registry.ens.claimName({ name });
-
-      channel.subscribe((resp: any) => {
-        logger.log('Claim response successful %j', resp);
+      const claim = channels.registry.ens.claimName({ name });
+      const removeFromDb = channels.db.settingsAttachment.deleteSettings({
+        ethAddress,
+        id: ENS_REGISTRATION_STATUS,
+      });
+      actions.updateData({
+        registrationStatus: {
+          name,
+          ...other,
+          claiming: true,
+        },
+      });
+      concat(claim, removeFromDb).subscribe(() => {
+        logger.log('Claim response successful');
         actions.updateData({
           registrationStatus: null,
           ensInfo: {
@@ -241,7 +279,7 @@ export const profileStateModel: ProfileStateModel = persist(
       });
     }),
   },
-  { blacklist: ['fetching', 'errors', 'ensInfo', 'ensChecked'] },
+  { blacklist: ['fetching', 'errors', 'ensInfo', 'ensChecked', 'statusReceived'] },
 );
 
 let profileState: ReturnType<typeof createContextStore>;

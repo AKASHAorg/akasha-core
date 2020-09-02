@@ -148,7 +148,9 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
             <Text weight="bold"> {secondaryTitleLabel}</Text>
             <Box direction="row" gap="xxsmall" pad={{ bottom: 'xsmall' }} align="center">
               <Box direction="row" align="center">
-                <Text color="secondaryText">{providerData.name}</Text>
+                <Text color="secondaryText">
+                  {providerData.name.replace(`.${ensSubdomain}`, '')}
+                </Text>
                 <Text color="accentText">.{ensSubdomain}</Text>
               </Box>
 

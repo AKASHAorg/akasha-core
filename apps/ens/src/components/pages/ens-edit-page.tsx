@@ -24,11 +24,17 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
   const registrationStatus = Profile.useStoreState(
     (s: StateMapper<ProfileState, ''>) => s.registrationStatus,
   );
+  const registrationStatusReceived = Profile.useStoreState(
+    (s: StateMapper<ProfileState, ''>) => s.statusReceived,
+  );
 
   const ensChecked = Profile.useStoreState((s: StateMapper<ProfileStateModel, ''>) => s.ensChecked);
 
   const getENSByAddress = Profile.useStoreActions(
     (actions: ActionMapper<ProfileStateModel, ''>) => actions.getENSByAddress,
+  );
+  const getENSRegistrationStatus = Profile.useStoreActions(
+    (actions: ActionMapper<ProfileStateModel, ''>) => actions.getEnsRegistrationStatus,
   );
   const checkENSAvailable = Profile.useStoreActions(
     (actions: ActionMapper<ProfileStateModel, ''>) => actions.checkENSAvailable,
@@ -45,14 +51,21 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
   React.useEffect(() => {
     if (loggedEthAddress) {
       getENSByAddress({ ethAddress: loggedEthAddress });
+      getENSRegistrationStatus({ ethAddress: loggedEthAddress });
     }
   }, [loggedEthAddress]);
 
   React.useEffect(() => {
-    if (registrationStatus && registrationStatus.registering && ensChecked && !ensInfo.name) {
-      claimENS(registrationStatus);
+    if (
+      registrationStatusReceived &&
+      registrationStatus &&
+      registrationStatus.registering &&
+      !registrationStatus.claiming &&
+      loggedEthAddress
+    ) {
+      claimENS({ ...registrationStatus, ethAddress: loggedEthAddress });
     }
-  }, [registrationStatus, ensChecked, ensInfo]);
+  }, [registrationStatus, registrationStatusReceived, ensChecked, ensInfo, loggedEthAddress]);
 
   const onSubmit = (payload: { name: string; providerName: string }) => {
     const { name, providerName } = payload;
@@ -81,6 +94,7 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
         isAvailable: false,
         checking: true,
         registering: false,
+        claiming: false,
       });
     }
   };
@@ -94,20 +108,28 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
       </DS.Helmet>
       {!loggedEthAddress && isLoading && <>Detecting eth address...</>}
       {loggedEthAddress && isLoading && <>Looking for ENS Address</>}
-      {!loggedEthAddress && !isLoading && (
-        <ErrorLoader
-          type="no-login"
-          title={t('No Ethereum address detected')}
-          details={t(
-            'You need to login or allow access to your current Ethereum address in your Web3 Ethereum client like MetaMask, and then reload, please.',
-          )}
-        >
-          <Box direction="row">
-            {/* <Button label={t('Cancel')} secondary={true} margin={{ right: '.5em' }} /> */}
-            <Button label={t('Connect Wallet')} primary={true} onClick={onLoginModalShow} />
-          </Box>
-        </ErrorLoader>
-      )}
+      {loggedEthAddress &&
+        registrationStatusReceived &&
+        registrationStatus &&
+        registrationStatus.registering && <>Resuming ENS Registration</>}
+      {!loggedEthAddress &&
+        !isLoading &&
+        registrationStatusReceived &&
+        registrationStatus &&
+        !registrationStatus && (
+          <ErrorLoader
+            type="no-login"
+            title={t('No Ethereum address detected')}
+            details={t(
+              'You need to login or allow access to your current Ethereum address in your Web3 Ethereum client like MetaMask, and then reload, please.',
+            )}
+          >
+            <Box direction="row">
+              {/* <Button label={t('Cancel')} secondary={true} margin={{ right: '.5em' }} /> */}
+              <Button label={t('Connect Wallet')} primary={true} onClick={onLoginModalShow} />
+            </Box>
+          </ErrorLoader>
+        )}
       {loggedEthAddress && !isLoading && (
         <EnsFormCard
           titleLabel={t('Ethereum Address')}
