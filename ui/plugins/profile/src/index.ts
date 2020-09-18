@@ -1,6 +1,8 @@
 import { Application, LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { initReactI18next } from 'react-i18next';
-import routes, { rootRoute } from './routes';
+import routes, { rootRoute, MY_PROFILE } from './routes';
+import { Widget as TopicsWidget } from './components/widgets/topics';
+import { Widget as AppsWidget } from './components/widgets/apps';
 
 /**
  * All the plugins must export an object like this:
@@ -34,4 +36,5 @@ export const application: Application = {
   title: 'AKASHA Profile',
   menuItems: routes,
   logo: { type: LogoTypeSource.AVATAR, value: '' },
+  widgets: { [routes[MY_PROFILE]]: [TopicsWidget, AppsWidget] },
 };
