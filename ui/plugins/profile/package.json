@@ -28,12 +28,17 @@
     "pack:watch": "nodemon"
   },
   "nodemonConfig": {
-    "ignore": ["lib/*", "dist/*", "build/*"],
+    "ignore": [
+      "lib/*",
+      "dist/*",
+      "build/*"
+    ],
     "exec": "npm run pack",
     "ext": "ts,tsx"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",
+    "@akashaproject/sdk-common": "*",
     "@types/i18next": "13.0.0",
     "@types/react-i18next": "8.1.0",
     "@types/react-router": "5.1.7",
