@@ -20,7 +20,7 @@ export const Widget: IWidget = {
   },
   loadingFn: () =>
     import(
-      /* webpackChunkName: "topics-widget" */
+      /* webpackChunkName: "apps-widget" */
       /* webpackMode: "lazy" */
       './profile-apps-card-widget'
     ),

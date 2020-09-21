@@ -3,11 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { ITopicData } from '@akashaproject/design-system/lib/components/Cards/widget-cards/topics-widget-card';
 
-const { styled, TopicsWidgetCard } = DS;
-
-const Wrapper = styled.div`
-  margin-bottom: 0.5em;
-`;
+const { Box, TopicsWidgetCard } = DS;
 
 const topicsDataSource = [
   { title: '#ethereumworld', subtitle: '6576 mentions' },
@@ -24,7 +20,7 @@ const TopicsCardWidget: React.FC<{}> = () => {
     console.log('topic:', topic, 'was clicked');
   };
   return (
-    <Wrapper>
+    <Box margin={{ bottom: '0.5em' }}>
       <TopicsWidgetCard
         onClick={handleTopicsTitleClick}
         label={t('Hot Topics')}
@@ -32,7 +28,7 @@ const TopicsCardWidget: React.FC<{}> = () => {
         dataSource={topicsDataSource}
         onTopicClick={handleTopicClick}
       />
-    </Wrapper>
+    </Box>
   );
 };
 

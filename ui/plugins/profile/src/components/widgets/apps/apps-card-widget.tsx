@@ -3,11 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { IAppData } from '@akashaproject/design-system/lib/components/Cards/widget-cards/apps-widget-card';
 
-const { styled, AppsWidgetCard } = DS;
-
-const Wrapper = styled.div`
-  margin-bottom: 0.5em;
-`;
+const { Box, AppsWidgetCard } = DS;
 
 const appsDataSource: IAppData[] = [
   { title: 'GitCoin', subtitle: '123 embedded cards', appIconType: 'app', iconSize: '40px' },
@@ -25,7 +21,7 @@ const AppsCardWidget: React.FC<{}> = () => {
   };
 
   return (
-    <Wrapper>
+    <Box margin={{ bottom: '0.5em' }}>
       <AppsWidgetCard
         dataSource={appsDataSource}
         label={t('Trending Apps')}
@@ -33,7 +29,7 @@ const AppsCardWidget: React.FC<{}> = () => {
         iconType="app"
         onAppClick={handleAppClick}
       />
-    </Wrapper>
+    </Box>
   );
 };
 
