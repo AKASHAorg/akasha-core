@@ -1,5 +1,4 @@
 import { initReactI18next } from 'react-i18next';
-import { moduleName as common } from '@akashaproject/sdk-common/lib/constants';
 import { IWidget } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 /**
@@ -25,5 +24,5 @@ export const Widget: IWidget = {
       './profile-topics-card-widget'
     ),
   name: 'topics-widget',
-  sdkModules: [{ module: common }],
+  sdkModules: [],
 };
