@@ -36,16 +36,20 @@ storiesOf('Cards/Form Cards', module)
   .add('ENS form card', () => (
     <Box align="center" pad={{ top: '40px' }}>
       <EnsFormCard
-        titleLabel={text('Title Label', 'Ethereum Address')}
+        titleLabel={text('Title Label', 'Add a Username')}
         secondaryTitleLabel={text('Secondary Title Label', 'Ethereum Name')}
-        nameLabel={text('Name Label', 'Add an ethereum name to your address')}
+        nameLabel={text('Name Label', 'Select a username')}
         errorLabel={text(
           'Error Label',
           'Sorry, this name is unavailable. Please choose another one.',
         )}
+        ethAddressLabel={text('Ethereum Address Label', 'Your Ethereum Address')}
+        ethNameLabel={text('Ethereum Name Label', 'Your Ethereum Name')}
+        poweredByLabel={text('Powered by Label', 'Username powered by')}
+        iconLabel={text('Icon Label', 'ENS')}
         cancelLabel={text('Cancel Label', 'Cancel')}
         saveLabel={text('Save Label', 'Save')}
-        nameFieldPlaceholder={text('Name placeholder', 'yourname')}
+        nameFieldPlaceholder={text('Name placeholder', '@username')}
         ethAddress={text('Logged Profile EthAddress', '0x003410499401674320006570047391024572456')}
         providerData={object('Provider Data', ensProviderData)}
         handleSubmit={() => action('Form submitted')('Synthetic Event')}
