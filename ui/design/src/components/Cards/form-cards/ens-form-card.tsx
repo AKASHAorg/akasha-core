@@ -11,6 +11,10 @@ export interface IEnsFormCardProps {
   secondaryTitleLabel: string;
   nameLabel: string;
   errorLabel: string;
+  ethAddressLabel: string;
+  ethNameLabel: string;
+  poweredByLabel: string;
+  iconLabel: string;
   cancelLabel: string;
   saveLabel: string;
   nameFieldPlaceholder: string;
@@ -32,9 +36,12 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   const {
     className,
     titleLabel,
-    secondaryTitleLabel,
     nameLabel,
     errorLabel,
+    ethAddressLabel,
+    ethNameLabel,
+    poweredByLabel,
+    iconLabel,
     cancelLabel,
     saveLabel,
     nameFieldPlaceholder,
@@ -51,13 +58,14 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
 
   const [error, setError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
+  const [clicked, setClicked] = React.useState(false);
 
   const [textInputComputedWidth, setTextInputComputedWidth] = React.useState('');
 
   const hiddenSpanRef: React.Ref<HTMLSpanElement> = React.useRef(null);
 
   // @TODO calculate from placeholder width
-  const initialInputWidth = '4.25rem';
+  const initialInputWidth = '6rem';
 
   const handleCopyEthAddress = () => {
     navigator.clipboard.writeText(ethAddress);
@@ -72,6 +80,10 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     setTextInputComputedWidth(initialInputWidth);
     setError(false);
     setSuccess(false);
+  };
+
+  const handleChangeEns = () => {
+    setClicked(true);
   };
 
   React.useEffect(() => {
@@ -135,66 +147,115 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
 
   return (
     <MainAreaCardBox className={className}>
-      <Box direction="column" pad="medium">
-        <Box direction="column" pad="xsmall">
-          <Text weight="bold"> {titleLabel}</Text>
-          <Box direction="row" gap="xxsmall" pad={{ bottom: 'xsmall' }} align="center">
-            <Text color="secondaryText">{ethAddress}</Text>
-            <Icon type="copy" onClick={handleCopyEthAddress} clickable={true} />
-          </Box>
+      <Box direction="column" pad="large">
+        <Box direction="row" margin={{ top: 'xsmall', bottom: 'medium' }} align="start">
+          <Text weight="bold" margin="0 auto 2rem" size="xlarge">
+            {titleLabel}
+          </Text>
+          <Icon type="close" color="secondaryText" primaryColor={true} clickable={true} />
         </Box>
-        {providerData.name && (
-          <Box direction="column" pad="xsmall">
-            <Text weight="bold"> {secondaryTitleLabel}</Text>
-            <Box direction="row" gap="xxsmall" pad={{ bottom: 'xsmall' }} align="center">
-              <Box direction="row" align="center">
-                <Text color="secondaryText">{providerData.name}</Text>
-                <Text color="accentText">.{ensSubdomain}</Text>
-              </Box>
-
-              <Icon type="copy" onClick={handleCopyEns} clickable={true} />
+        <Box direction="row" align="center">
+          <StyledText color="secondaryText" size="small">
+            {nameLabel}
+          </StyledText>
+        </Box>
+        <FormField name="name" error={error ? errorLabel : null} htmlFor="text-input">
+          <Box justify="between" direction="row" pad={{ top: 'small', bottom: '11px' }}>
+            <Box justify="start" direction="row" align="center">
+              <HiddenSpan ref={hiddenSpanRef} />
+              <StyledTextInput
+                spellCheck={false}
+                autoFocus={true}
+                computedWidth={textInputComputedWidth}
+                id="text-input"
+                value={name}
+                onChange={handleChange}
+                placeholder={nameFieldPlaceholder}
+              />
             </Box>
+            {renderIcon()}
           </Box>
-        )}
-        {!providerData.name && (
-          <Box direction="column">
-            <FormField
-              name="name"
-              error={error ? errorLabel : null}
-              htmlFor="text-input"
-              label={
-                <StyledText color="secondaryText" size="small">
-                  {nameLabel}
-                </StyledText>
-              }
-            >
-              <Box justify="between" direction="row" pad={{ bottom: '11px', left: '11px' }}>
-                <Box justify="start" direction="row" align="center">
-                  <HiddenSpan ref={hiddenSpanRef} />
-                  <StyledTextInput
-                    spellCheck={false}
-                    autoFocus={true}
-                    computedWidth={textInputComputedWidth}
-                    id="text-input"
-                    value={name}
-                    onChange={handleChange}
-                    placeholder={nameFieldPlaceholder}
-                  />
-                  <Text color="accentText" size="large">
-                    .{ensSubdomain}
-                  </Text>
+        </FormField>
+        <Box direction="column">
+          {providerData.name && (
+            <>
+              <Box direction="column" pad={{ top: 'large', bottom: 'medium' }}>
+                <Box direction="row" align="center">
+                  <StyledText color="secondaryText" size="small" margin={{ right: 'xsmall' }}>
+                    {ethNameLabel}
+                  </StyledText>
                 </Box>
-
-                {renderIcon()}
+                {!clicked && (
+                  <Box
+                    direction="row"
+                    gap="xxsmall"
+                    pad={{ top: 'small', bottom: 'small' }}
+                    align="center"
+                  >
+                    <Text size="large">
+                      {providerData.name}
+                      <Text color="accentText" size="large" margin={{ right: 'xxsmall' }}>
+                        .{ensSubdomain}
+                      </Text>
+                    </Text>
+                    <Icon type="copy" onClick={handleCopyEns} clickable={true} />
+                    <Text
+                      color="accentText"
+                      margin={{ left: 'xsmall' }}
+                      style={{ cursor: 'pointer' }}
+                      onClick={handleChangeEns}
+                    >
+                      Change
+                    </Text>
+                  </Box>
+                )}
               </Box>
-            </FormField>
-
-            <Box direction="row" gap="xsmall" justify="end">
-              <Button label={cancelLabel} onClick={handleCancel} />
+            </>
+          )}
+          {!providerData.name && (
+            <>
+              <Box direction="column" pad={{ top: 'large', bottom: 'medium' }}>
+                <Box direction="row" align="center">
+                  <StyledText color="secondaryText" size="small" margin={{ right: 'xsmall' }}>
+                    {ethAddressLabel}
+                  </StyledText>
+                  <Icon type="questionMark" size="xxs" clickable={true} />
+                </Box>
+                <Box
+                  direction="row"
+                  gap="xxsmall"
+                  pad={{ top: 'small', bottom: 'small' }}
+                  align="center"
+                >
+                  <Text size="large" margin={{ right: 'xxsmall' }}>
+                    {ethAddress}
+                  </Text>
+                  <Icon type="copy" onClick={handleCopyEthAddress} clickable={true} />
+                </Box>
+              </Box>
+            </>
+          )}
+          <Box direction="row" gap="xsmall" justify="between" align="center">
+            <Box direction="row" align="center">
+              <Text color="secondaryText" size="10px" margin={{ right: 'xxsmall' }}>
+                {poweredByLabel}
+              </Text>
+              <Icon type="appEns" size="xs" />
+              <Text
+                style={{ opacity: 0.75 }}
+                size="xsmall"
+                margin={{ left: '0.05rem', right: 'xsmall' }}
+              >
+                {iconLabel}
+              </Text>
+              <Icon type="questionMark" size="xxs" clickable={true} />
+            </Box>
+            <Box direction="row">
+              <Button margin={{ right: '0.5rem' }} label={cancelLabel} onClick={handleCancel} />
               <Button label={saveLabel} onClick={handleSave} primary={true} />
             </Box>
           </Box>
-        )}
+        </Box>
       </Box>
     </MainAreaCardBox>
   );
