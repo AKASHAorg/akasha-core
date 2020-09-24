@@ -41,12 +41,14 @@ storiesOf('Cards/Form Cards', module)
         nameLabel={text('Name Label', 'Select a username')}
         errorLabel={text(
           'Error Label',
-          'Sorry, this name is unavailable. Please choose another one.',
+          'Sorry, this username has already been taken. Please choose another one.',
         )}
         ethAddressLabel={text('Ethereum Address Label', 'Your Ethereum Address')}
         ethNameLabel={text('Ethereum Name Label', 'Your Ethereum Name')}
+        optionSpecify={text('Option Specify', 'Specify an Ethereum name')}
+        optionUseEthereumAddress={text('Option Use Address', 'Use my Ethereum address')}
         poweredByLabel={text('Powered by Label', 'Username powered by')}
-        iconLabel={text('Icon Label', 'ENS')}
+        iconLabel={text('Icon Label', ensProviderData.providerName)}
         cancelLabel={text('Cancel Label', 'Cancel')}
         saveLabel={text('Save Label', 'Save')}
         nameFieldPlaceholder={text('Name placeholder', '@username')}
