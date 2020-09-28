@@ -22,7 +22,7 @@ const EditorMeter: React.FC<IEditorMeter> = props => {
 };
 
 EditorMeter.defaultProps = {
-  maxValue: 300,
+  maxValue: 280,
 };
 
 export { EditorMeter };

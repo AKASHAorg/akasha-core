@@ -51,6 +51,12 @@ const CustomEditor = {
     Transforms.insertNodes(editor, mention);
     Transforms.move(editor);
   },
+
+  insertTag(editor: Editor, value: string) {
+    const tag = { value, type: 'tag', children: [{ text: '' }] };
+    Transforms.insertNodes(editor, tag);
+    Transforms.move(editor);
+  },
 };
 
 export const Portal = ({ children }: any) => {

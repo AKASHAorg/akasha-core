@@ -76,7 +76,7 @@ const LineChart: React.FC<ILineChart> = props => {
       }
       showTooltip({
         tooltipData: d,
-        tooltipLeft: x,
+        tooltipLeft: xScale(getX(d)),
         tooltipTop: yScale(getY(d)),
       });
     },

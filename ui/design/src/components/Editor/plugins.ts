@@ -35,9 +35,23 @@ const withMentions = (editor: Editor & ReactEditor) => {
   return editor;
 };
 
+const withTags = (editor: Editor & ReactEditor) => {
+  const { isInline, isVoid } = editor;
+
+  editor.isInline = element => {
+    return element.type === 'tag' ? true : isInline(element);
+  };
+
+  editor.isVoid = element => {
+    return element.type === 'tag' ? true : isVoid(element);
+  };
+
+  return editor;
+};
+
 const isImageUrl = (url: string) => {
   if (!url) return false;
   return true;
 };
 
-export { withImages, withMentions };
+export { withImages, withMentions, withTags };

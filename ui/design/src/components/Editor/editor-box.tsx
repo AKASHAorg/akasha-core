@@ -11,7 +11,7 @@ import EmbedBox from './embed-box';
 import { FormatToolbar } from './format-toolbar';
 import { CustomEditor } from './helpers';
 import { defaultValue } from './initialValue';
-import { withMentions, withImages } from './plugins';
+import { withMentions, withImages, withTags } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
 import { StyledBox, StyledEditable, StyledIconDiv, StyledMeterDiv } from './styled-editor-box';
 import { Button } from '../Buttons';
@@ -29,6 +29,7 @@ export interface IEditorBox {
   minHeight?: string;
   withMeter?: any;
   mentions?: string[];
+  tags?: string[];
 }
 
 const HOTKEYS = {
@@ -50,6 +51,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
     minHeight,
     withMeter,
     mentions = [],
+    tags = [],
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -57,9 +59,16 @@ const EditorBox: React.FC<IEditorBox> = props => {
   const emojiIconRef: React.RefObject<HTMLDivElement> = useRef(null);
 
   const [editorValue, setEditorValue] = useState(defaultValue);
-  const [targetRange, setTargetRange] = useState<Range | null>(null);
+  const [mentionTargetRange, setMentionTargetRange] = useState<Range | null>(null);
+  const [tagTargetRange, setTagTargetRange] = useState<Range | null>(null);
   const [index, setIndex] = useState(0);
   const [search, setSearch] = useState('');
+
+  const point = { path: [0, 0], offset: 0 };
+  const [currentSelection, setCurrentSelection] = useState<Range | null>({
+    anchor: point,
+    focus: point,
+  });
 
   const [publishDisabled, setPublishDisabled] = useState(true);
 
@@ -67,7 +76,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
   const [emojiPopoverOpen, setEmojiPopoverOpen] = useState(false);
 
   const editor = useMemo(
-    () => withMentions(withHistory(withReact(withImages(createEditor())))),
+    () => withTags(withMentions(withHistory(withReact(withImages(createEditor()))))),
     [],
   );
 
@@ -75,18 +84,40 @@ const EditorBox: React.FC<IEditorBox> = props => {
     .filter((c: string) => c.toLowerCase().startsWith(search.toLowerCase()))
     .slice(0, 10);
 
+  const tagsAvailable = tags
+    .filter((c: string) => c.toLowerCase().startsWith(search.toLowerCase()))
+    .slice(0, 10);
+
   useEffect(() => {
     countLetters();
-    if (targetRange && mentionables && mentionables.length > 0) {
+    if (mentionTargetRange && mentionables && mentionables.length > 0) {
       const el = mentionPopoverRef.current;
-      const domRange = ReactEditor.toDOMRange(editor, targetRange);
+      const domRange = ReactEditor.toDOMRange(editor, mentionTargetRange);
       const rect = domRange.getBoundingClientRect();
       if (el) {
         el.style.top = `${rect.top + window.pageYOffset + 20}px`;
         el.style.left = `${rect.left + window.pageXOffset}px`;
       }
     }
-  }, [mentionables.length, editor, index, search, targetRange, editorValue]);
+    if (tagTargetRange && tagsAvailable && tagsAvailable.length > 0) {
+      const el = mentionPopoverRef.current;
+      const domRange = ReactEditor.toDOMRange(editor, tagTargetRange);
+      const rect = domRange.getBoundingClientRect();
+      if (el) {
+        el.style.top = `${rect.top + window.pageYOffset + 20}px`;
+        el.style.left = `${rect.left + window.pageXOffset}px`;
+      }
+    }
+  }, [
+    mentionables.length,
+    tagsAvailable.length,
+    editor,
+    index,
+    search,
+    mentionTargetRange,
+    tagTargetRange,
+    editorValue,
+  ]);
 
   const handlePublish = () => {
     const content = editorValue;
@@ -121,6 +152,27 @@ const EditorBox: React.FC<IEditorBox> = props => {
   };
 
   const handleChange = (value: Node[]) => {
+    const textLength = value
+      .map((node: Node) => {
+        if (SlateText.isText(node)) return node.text.length;
+        if (node.children) {
+          return node.children
+            .map(child => {
+              if (SlateText.isText(child)) return child.text.length;
+              return 0;
+            })
+            .reduce(reducer);
+        }
+        return 0;
+      })
+      .reduce(reducer);
+    console.log('editor: ', editor);
+
+    if (textLength > 280) {
+      editor.selection = currentSelection;
+      return;
+    }
+    setCurrentSelection(editor.selection);
     setEditorValue(value);
 
     const { selection } = editor;
@@ -131,21 +183,29 @@ const EditorBox: React.FC<IEditorBox> = props => {
       const before = wordBefore && Editor.before(editor, wordBefore);
       const beforeRange = before && Editor.range(editor, before, start);
       const beforeText = beforeRange && Editor.string(editor, beforeRange);
-      const beforeMatch = beforeText && beforeText.match(/^@(\w+)$/);
+      const beforeMentionMatch = beforeText && beforeText.match(/^@(\w+)$/);
+      const beforeTagMatch = beforeText && beforeText.match(/^#(\w+)$/);
       const after = Editor.after(editor, start);
       const afterRange = Editor.range(editor, start, after);
       const afterText = Editor.string(editor, afterRange);
       const afterMatch = afterText.match(/^(\s|$)/);
 
-      if (beforeMatch && afterMatch && beforeRange) {
-        setTargetRange(beforeRange);
-        setSearch(beforeMatch[1]);
+      if (beforeMentionMatch && afterMatch && beforeRange) {
+        setMentionTargetRange(beforeRange);
+        setSearch(beforeMentionMatch[1]);
+        setIndex(0);
+        return;
+      }
+      if (beforeTagMatch && afterMatch && beforeRange) {
+        setTagTargetRange(beforeRange);
+        setSearch(beforeTagMatch[1]);
         setIndex(0);
         return;
       }
     }
 
-    setTargetRange(null);
+    setMentionTargetRange(null);
+    setTagTargetRange(null);
   };
 
   const onKeyDown = useCallback(
@@ -157,7 +217,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
           CustomEditor.toggleFormat(editor, mark);
         }
       }
-      if (targetRange) {
+      if (mentionTargetRange) {
         switch (event.key) {
           case 'ArrowDown':
             event.preventDefault();
@@ -172,18 +232,43 @@ const EditorBox: React.FC<IEditorBox> = props => {
           case 'Tab':
           case 'Enter':
             event.preventDefault();
-            Transforms.select(editor, targetRange);
+            Transforms.select(editor, mentionTargetRange);
             CustomEditor.insertMention(editor, mentionables[index]);
-            setTargetRange(null);
+            setMentionTargetRange(null);
             break;
           case 'Escape':
             event.preventDefault();
-            setTargetRange(null);
+            setMentionTargetRange(null);
+            break;
+        }
+      }
+      if (tagTargetRange) {
+        switch (event.key) {
+          case 'ArrowDown':
+            event.preventDefault();
+            const prevIndex = index >= tagsAvailable.length - 1 ? 0 : index + 1;
+            setIndex(prevIndex);
+            break;
+          case 'ArrowUp':
+            event.preventDefault();
+            const nextIndex = index <= 0 ? tagsAvailable.length - 1 : index - 1;
+            setIndex(nextIndex);
+            break;
+          case 'Tab':
+          case 'Enter':
+            event.preventDefault();
+            Transforms.select(editor, tagTargetRange);
+            CustomEditor.insertTag(editor, tagsAvailable[index]);
+            setTagTargetRange(null);
+            break;
+          case 'Escape':
+            event.preventDefault();
+            setTagTargetRange(null);
             break;
         }
       }
     },
-    [index, search, targetRange],
+    [index, search, mentionTargetRange, tagTargetRange],
   );
 
   const handleMediaClick = () => {
@@ -236,10 +321,17 @@ const EditorBox: React.FC<IEditorBox> = props => {
                 renderLeaf={renderLeaf}
                 onKeyDown={onKeyDown}
               />
-              {targetRange && mentionables.length > 0 && (
+              {mentionTargetRange && mentionables.length > 0 && (
                 <MentionPopover
                   ref={mentionPopoverRef}
                   values={mentionables}
+                  currentIndex={index}
+                />
+              )}
+              {tagTargetRange && tagsAvailable.length > 0 && (
+                <MentionPopover
+                  ref={mentionPopoverRef}
+                  values={tagsAvailable}
                   currentIndex={index}
                 />
               )}

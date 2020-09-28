@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { text } from '@storybook/addon-knobs';
 import * as React from 'react';
-import { CHARACTERS } from './editor-data';
+import { CHARACTERS, TAGS } from './editor-data';
 
 const { EditorBox, Box, EditorMeter } = DS;
 
@@ -19,6 +19,7 @@ const EditorComponent = () => {
       setLetterCount={setCount}
       withMeter={<EditorMeter counter={count} />}
       mentions={CHARACTERS}
+      tags={TAGS}
     />
   );
 };

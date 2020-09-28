@@ -37,6 +37,17 @@ const MentionElement = ({ attributes, children, element }: any) => {
   );
 };
 
+const TagElement = ({ attributes, children, element }: any) => {
+  const selected = useSelected();
+  const focused = useFocused();
+  return (
+    <StyledMention {...attributes} contentEditable={false} focused={selected && focused}>
+      #{element.value}
+      {children}
+    </StyledMention>
+  );
+};
+
 const renderElement = (props: RenderElementProps) => {
   switch (props.element.type) {
     case 'quote':
@@ -45,6 +56,8 @@ const renderElement = (props: RenderElementProps) => {
       return <ImageElement {...props} />;
     case 'mention':
       return <MentionElement {...props} />;
+    case 'tag':
+      return <TagElement {...props} />;
 
     default:
       return <p {...props.attributes}>{props.children}</p>;
