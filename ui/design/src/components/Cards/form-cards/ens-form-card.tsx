@@ -13,6 +13,7 @@ export interface IEnsFormCardProps {
   errorLabel: string;
   ethAddressLabel: string;
   ethNameLabel: string;
+  optionUsername: string;
   optionSpecify: string;
   optionUseEthereumAddress: string;
   consentText: string;
@@ -44,6 +45,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     errorLabel,
     ethAddressLabel,
     ethNameLabel,
+    optionUsername,
     optionSpecify,
     optionUseEthereumAddress,
     consentText,
@@ -119,11 +121,11 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   };
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    // disable starting with '@' in username field
-    if (ev.target.value === '@') return;
+    // disable starting with a special character | space in username field
+    if (ev.target.value.match(/[^\w]/)) return;
     const value = ev.target.value;
-    // sanitize value to remove any spaces and '@'
-    const sanitizedValue = value.replace(/\s/g, '').replace('@', '');
+    // sanitize value to remove any spaces and special characters
+    const sanitizedValue = value.replace(/[^\w]/g, '');
     setName(sanitizedValue);
     if (hiddenSpanRef.current) {
       hiddenSpanRef.current.textContent = sanitizedValue;
@@ -242,7 +244,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                 {clicked && (
                   <Box direction="column">
                     {[
-                      `${name === '' ? 'username' : name}.${ensSubdomain}`,
+                      `${name === '' ? optionUsername : name}.${ensSubdomain}`,
                       optionSpecify,
                       `${optionUseEthereumAddress} (${ethAddress.slice(0, 6)}...${ethAddress.slice(
                         -4,

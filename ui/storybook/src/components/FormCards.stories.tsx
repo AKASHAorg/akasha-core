@@ -45,6 +45,7 @@ storiesOf('Cards/Form Cards', module)
         )}
         ethAddressLabel={text('Ethereum Address Label', 'Your Ethereum Address')}
         ethNameLabel={text('Ethereum Name Label', 'Your Ethereum Name')}
+        optionUsername={text('Option Username', 'username')}
         optionSpecify={text('Option Specify', 'Specify an Ethereum name')}
         optionUseEthereumAddress={text('Option Use Address', 'Use my Ethereum address')}
         consentText={text('Consent Text', 'By creating an account you agree to the ')}
@@ -54,7 +55,7 @@ storiesOf('Cards/Form Cards', module)
         iconLabel={text('Icon Label', 'ENS')}
         cancelLabel={text('Cancel Label', 'Cancel')}
         saveLabel={text('Save Label', 'Save')}
-        nameFieldPlaceholder={text('Name placeholder', '@username')}
+        nameFieldPlaceholder={text('Name Placeholder', '@username')}
         ethAddress={text('Logged Profile EthAddress', '0x003410499401674320006570047391024572456')}
         providerData={object('Provider Data', ensProviderData)}
         handleSubmit={() => action('Form submitted')('Synthetic Event')}
