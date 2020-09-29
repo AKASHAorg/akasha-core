@@ -15,6 +15,9 @@ export interface IEnsFormCardProps {
   ethNameLabel: string;
   optionSpecify: string;
   optionUseEthereumAddress: string;
+  consentText: string;
+  consentUrl: string;
+  consentLabel: string;
   poweredByLabel: string;
   iconLabel: string;
   cancelLabel: string;
@@ -30,7 +33,6 @@ export interface IEnsFormCardProps {
 }
 
 export interface IEnsData {
-  providerName: string;
   name?: string;
 }
 
@@ -44,6 +46,9 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     ethNameLabel,
     optionSpecify,
     optionUseEthereumAddress,
+    consentText,
+    consentUrl,
+    consentLabel,
     poweredByLabel,
     iconLabel,
     cancelLabel,
@@ -105,9 +110,8 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     setClicked(true);
   };
 
-  const handleSelectEns = (value: string) => {
-    setValue(value);
-    setClicked(false);
+  const handleSelectEns = (option: string) => {
+    setValue(option);
   };
 
   const handleCopyEthAddress = () => {
@@ -115,8 +119,11 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   };
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    // disable starting with '@' in username field
+    if (ev.target.value === '@') return;
     const value = ev.target.value;
-    const sanitizedValue = value.replace(/\s/g, '');
+    // sanitize value to remove any spaces and '@'
+    const sanitizedValue = value.replace(/\s/g, '').replace('@', '');
     setName(sanitizedValue);
     if (hiddenSpanRef.current) {
       hiddenSpanRef.current.textContent = sanitizedValue;
@@ -147,7 +154,6 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   const handleSave = () => {
     handleSubmit({
       name,
-      providerName: providerData.providerName,
     });
   };
 
@@ -162,7 +168,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
         </Box>
         <Box direction="row" align="center">
           <StyledText color={error ? 'errorText' : 'secondaryText'} size="small">
-            {nameLabel}
+            {value === optionSpecify ? optionSpecify : nameLabel}
           </StyledText>
         </Box>
         <FormField name="name" error={error ? errorLabel : null} htmlFor="text-input">
@@ -280,6 +286,19 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
               </Box>
             </>
           )}
+          <Box>
+            <Text color="secondaryText" size="medium" margin={{ bottom: 'medium' }}>
+              {consentText}
+              <Text
+                color="accentText"
+                size="medium"
+                style={{ cursor: 'pointer' }}
+                onClick={() => window.open(consentUrl, '_blank')}
+              >
+                {consentLabel}
+              </Text>
+            </Text>
+          </Box>
           <Box direction="row" gap="xsmall" justify="between" align="center">
             <Box direction="row" align="center">
               <Text color="secondaryText" size="10px" margin={{ right: 'xxsmall' }}>
