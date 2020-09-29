@@ -36,13 +36,12 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
     }
   }, [loggedEthAddress]);
 
-  const onSubmit = (payload: { name: string; providerName: string }) => {
-    const { name, providerName } = payload;
+  const onSubmit = (payload: { name: string }) => {
+    const { name } = payload;
     const ethAddress = loggedEthAddress;
     if (ethAddress) {
       registerENSAddress({
         name,
-        providerName,
         ethAddress,
       });
     }
@@ -69,13 +68,22 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
       )}
       {loggedEthAddress && (
         <EnsFormCard
-          titleLabel={t('Ethereum Address')}
-          secondaryTitleLabel={t('ENS name')}
-          nameLabel={t('Add an ethereum name to your address')}
-          errorLabel={t('Sorry, this name is unavailable. Please choose another one.')}
+          titleLabel={t('Add a Username')}
+          secondaryTitleLabel={t('Ethereum Name')}
+          nameLabel={t('Select a username')}
+          errorLabel={t('Sorry, this username has already been taken. Please choose another one.')}
+          ethAddressLabel={t('Your Ethereum Address')}
+          ethNameLabel={t('Your Ethereum Name')}
+          optionSpecify={t('Specify an Ethereum name')}
+          optionUseEthereumAddress={t('Use my Ethereum address')}
+          consentText={t('By creating an account you agree to the ')}
+          consentUrl={t('https://ethereum.world/community-agreement')}
+          consentLabel={t('Community Agreement')}
+          poweredByLabel={t('Username powered by')}
+          iconLabel={t('ENS')}
           cancelLabel={t('Cancel')}
           saveLabel={t('Save')}
-          nameFieldPlaceholder={t('yourname')}
+          nameFieldPlaceholder={t('@username')}
           ethAddress={loggedEthAddress}
           providerData={ensInfo}
           handleSubmit={onSubmit}
