@@ -47,8 +47,11 @@ storiesOf('Cards/Form Cards', module)
         ethNameLabel={text('Ethereum Name Label', 'Your Ethereum Name')}
         optionSpecify={text('Option Specify', 'Specify an Ethereum name')}
         optionUseEthereumAddress={text('Option Use Address', 'Use my Ethereum address')}
+        consentText={text('Consent Text', 'By creating an account you agree to the ')}
+        consentUrl={text('Consent Url', 'https://ethereum.world/community-agreement')}
+        consentLabel={text('Consent Label', 'Community Agreement')}
         poweredByLabel={text('Powered by Label', 'Username powered by')}
-        iconLabel={text('Icon Label', ensProviderData.providerName)}
+        iconLabel={text('Icon Label', 'ENS')}
         cancelLabel={text('Cancel Label', 'Cancel')}
         saveLabel={text('Save Label', 'Save')}
         nameFieldPlaceholder={text('Name placeholder', '@username')}
