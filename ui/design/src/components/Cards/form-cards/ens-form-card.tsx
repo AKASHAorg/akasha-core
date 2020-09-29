@@ -68,7 +68,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   const [error, setError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const [clicked, setClicked] = React.useState(false);
-  const [value, setValue] = React.useState('');
+  const [option, setOption] = React.useState('');
 
   const [textInputComputedWidth, setTextInputComputedWidth] = React.useState('');
 
@@ -110,8 +110,8 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     setClicked(true);
   };
 
-  const handleSelectEns = (option: string) => {
-    setValue(option);
+  const handleSelectEns = (selected: string) => {
+    setOption(selected);
   };
 
   const handleCopyEthAddress = () => {
@@ -168,7 +168,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
         </Box>
         <Box direction="row" align="center">
           <StyledText color={error ? 'errorText' : 'secondaryText'} size="small">
-            {value === optionSpecify ? optionSpecify : nameLabel}
+            {option === optionSpecify ? optionSpecify : nameLabel}
           </StyledText>
         </Box>
         <FormField name="name" error={error ? errorLabel : null} htmlFor="text-input">
@@ -205,7 +205,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                     align="baseline"
                   >
                     {/* render selected Ens accordingly */}
-                    {(value === '' || value.includes(`${ensSubdomain}`)) && (
+                    {(option === '' || option.includes(`${ensSubdomain}`)) && (
                       <Text size="large">
                         {name}
                         <Text color="accentText" size="large" margin={{ right: 'xxsmall' }}>
@@ -213,7 +213,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                         </Text>
                       </Text>
                     )}
-                    {value.includes(optionSpecify) && (
+                    {option.includes(optionSpecify) && (
                       <Text size="large">
                         {name}
                         <Text color="accentText" size="large" margin={{ right: 'xxsmall' }}>
@@ -221,7 +221,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                         </Text>
                       </Text>
                     )}
-                    {value.includes(optionUseEthereumAddress) && (
+                    {option.includes(optionUseEthereumAddress) && (
                       <>
                         <Text size="large" margin={{ right: 'xxsmall' }}>
                           {ethAddress}
@@ -251,7 +251,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                       <Box key={label} margin={{ vertical: 'xsmall' }}>
                         <RadioButton
                           name="prop"
-                          checked={value === label}
+                          checked={option === label}
                           label={label}
                           onClick={() => setClicked(false)}
                           onChange={() => handleSelectEns(label)}
