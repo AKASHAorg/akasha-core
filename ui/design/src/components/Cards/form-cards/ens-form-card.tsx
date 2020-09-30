@@ -121,11 +121,13 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   };
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    // disable starting with a special character | space in username field
-    if (ev.target.value.match(/[^\w]/)) return;
+    // when first character is typed, sanitize and append '@' accordingly
+    if (name === '') {
+      return setName(`@${ev.target.value.replace(/[^\w]/g, '')}`);
+    }
     const value = ev.target.value;
-    // sanitize value to remove any spaces and special characters
-    const sanitizedValue = value.replace(/[^\w]/g, '');
+    // sanitize remaining characters to remove any spaces and special characters
+    const sanitizedValue = `@${value.substring(1).replace(/[^\w]/g, '')}`;
     setName(sanitizedValue);
     if (hiddenSpanRef.current) {
       hiddenSpanRef.current.textContent = sanitizedValue;
@@ -170,7 +172,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
         </Box>
         <Box direction="row" align="center">
           <StyledText color={error ? 'errorText' : 'secondaryText'} size="small">
-            {option === optionSpecify ? optionSpecify : nameLabel}
+            {nameLabel}
           </StyledText>
         </Box>
         <FormField name="name" error={error ? errorLabel : null} htmlFor="text-input">
@@ -191,7 +193,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
           </Box>
         </FormField>
         <Box direction="column">
-          {(name !== '' || clicked) && (
+          {name.length > 1 && (
             <>
               <Box direction="column" pad={{ top: 'large', bottom: 'medium' }}>
                 <Box direction="row" align="baseline">
@@ -209,7 +211,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                     {/* render selected Ens accordingly */}
                     {(option === '' || option.includes(`${ensSubdomain}`)) && (
                       <Text size="large">
-                        {name}
+                        {name.replace('@', '')}
                         <Text color="accentText" size="large" margin={{ right: 'xxsmall' }}>
                           .{ensSubdomain}
                         </Text>
@@ -217,7 +219,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                     )}
                     {option.includes(optionSpecify) && (
                       <Text size="large">
-                        {name}
+                        {name.replace('@', '')}
                         <Text color="accentText" size="large" margin={{ right: 'xxsmall' }}>
                           .eth
                         </Text>
@@ -241,10 +243,10 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                     </Text>
                   </Box>
                 )}
-                {clicked && (
+                {clicked && name.length > 1 && (
                   <Box direction="column">
                     {[
-                      `${name === '' ? optionUsername : name}.${ensSubdomain}`,
+                      `${name === '' ? optionUsername : name}.${ensSubdomain}`.replace('@', ''),
                       optionSpecify,
                       `${optionUseEthereumAddress} (${ethAddress.slice(0, 6)}...${ethAddress.slice(
                         -4,
@@ -265,7 +267,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
               </Box>
             </>
           )}
-          {name === '' && (
+          {name.length <= 1 && (
             <>
               <Box direction="column" pad={{ top: 'large', bottom: 'medium' }}>
                 <Box direction="row" align="center">
