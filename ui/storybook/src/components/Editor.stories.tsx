@@ -2,24 +2,41 @@
 import DS from '@akashaproject/design-system';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { text } from '@storybook/addon-knobs';
+import { boolean, text } from '@storybook/addon-knobs';
 import * as React from 'react';
-import { CHARACTERS, TAGS } from './editor-data';
+import { USERNAMES, TAGS } from './editor-data';
 
-const { EditorBox, Box, EditorMeter } = DS;
+const { EditorBox, Box } = DS;
 
 const EditorComponent = () => {
-  const [count, setCount] = React.useState(0);
+  const [mentionsState, setMentionsState] = React.useState('');
+  const [tagsState, setTagsState] = React.useState('');
+
+  const getMentions = query => {
+    setMentionsState(query);
+  };
+  const getTags = query => {
+    setTagsState(query);
+  };
+
+  const mentionables = USERNAMES.filter((c: string) =>
+    c.toLowerCase().startsWith(mentionsState.toLowerCase()),
+  ).slice(0, 10);
+
+  const tags = TAGS.filter((c: string) =>
+    c.toLowerCase().startsWith(tagsState.toLowerCase()),
+  ).slice(0, 10);
 
   return (
     <EditorBox
       onPublish={() => action('Clicked on')('Synthetic Event')}
       avatar={text('Logged Profile Avatar', 'https://www.stevensegallery.com/360/360')}
       ethAddress={text('Logged Profile EthAddress', '0x003410499401674320006570047391024572000')}
-      setLetterCount={setCount}
-      withMeter={<EditorMeter counter={count} />}
-      mentions={CHARACTERS}
-      tags={TAGS}
+      withMeter={boolean('Meter', true)}
+      getMentions={getMentions}
+      getTags={getTags}
+      mentions={mentionables}
+      tags={tags}
     />
   );
 };

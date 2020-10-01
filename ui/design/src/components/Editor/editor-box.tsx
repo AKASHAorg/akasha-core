@@ -13,21 +13,23 @@ import { CustomEditor } from './helpers';
 import { defaultValue } from './initialValue';
 import { withMentions, withImages, withTags } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
-import { StyledBox, StyledEditable, StyledIconDiv, StyledMeterDiv } from './styled-editor-box';
+import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
 import { Button } from '../Buttons';
 import isHotkey from 'is-hotkey';
 import { MentionPopover } from './mention-popover';
+import { EditorMeter } from './editor-meter';
 
 export interface IEditorBox {
   avatar?: string;
   ethAddress?: string;
   postLabel?: string;
-  setLetterCount?: React.Dispatch<React.SetStateAction<number>>;
   placeholderLabel?: string;
   onPublish: any;
   embedEntryData?: IEntryData;
   minHeight?: string;
-  withMeter?: any;
+  withMeter?: boolean;
+  getMentions: (query: string) => void;
+  getTags: (query: string) => void;
   mentions?: string[];
   tags?: string[];
 }
@@ -47,9 +49,10 @@ const EditorBox: React.FC<IEditorBox> = props => {
     placeholderLabel,
     onPublish,
     embedEntryData,
-    setLetterCount,
     minHeight,
     withMeter,
+    getMentions,
+    getTags,
     mentions = [],
     tags = [],
   } = props;
@@ -62,13 +65,10 @@ const EditorBox: React.FC<IEditorBox> = props => {
   const [mentionTargetRange, setMentionTargetRange] = useState<Range | null>(null);
   const [tagTargetRange, setTagTargetRange] = useState<Range | null>(null);
   const [index, setIndex] = useState(0);
-  const [search, setSearch] = useState('');
 
-  const point = { path: [0, 0], offset: 0 };
-  const [currentSelection, setCurrentSelection] = useState<Range | null>({
-    anchor: point,
-    focus: point,
-  });
+  const [letterCount, setLetterCount] = useState(0);
+
+  const [currentSelection, setCurrentSelection] = useState<Range | null>(null);
 
   const [publishDisabled, setPublishDisabled] = useState(true);
 
@@ -80,17 +80,9 @@ const EditorBox: React.FC<IEditorBox> = props => {
     [],
   );
 
-  const mentionables = mentions
-    .filter((c: string) => c.toLowerCase().startsWith(search.toLowerCase()))
-    .slice(0, 10);
-
-  const tagsAvailable = tags
-    .filter((c: string) => c.toLowerCase().startsWith(search.toLowerCase()))
-    .slice(0, 10);
-
   useEffect(() => {
     countLetters();
-    if (mentionTargetRange && mentionables && mentionables.length > 0) {
+    if (mentionTargetRange && mentions && mentions.length > 0) {
       const el = mentionPopoverRef.current;
       const domRange = ReactEditor.toDOMRange(editor, mentionTargetRange);
       const rect = domRange.getBoundingClientRect();
@@ -99,7 +91,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
         el.style.left = `${rect.left + window.pageXOffset}px`;
       }
     }
-    if (tagTargetRange && tagsAvailable && tagsAvailable.length > 0) {
+    if (tagTargetRange && tags && tags.length > 0) {
       const el = mentionPopoverRef.current;
       const domRange = ReactEditor.toDOMRange(editor, tagTargetRange);
       const rect = domRange.getBoundingClientRect();
@@ -109,11 +101,10 @@ const EditorBox: React.FC<IEditorBox> = props => {
       }
     }
   }, [
-    mentionables.length,
-    tagsAvailable.length,
+    mentions.length,
+    tags.length,
     editor,
     index,
-    search,
     mentionTargetRange,
     tagTargetRange,
     editorValue,
@@ -166,7 +157,6 @@ const EditorBox: React.FC<IEditorBox> = props => {
         return 0;
       })
       .reduce(reducer);
-    console.log('editor: ', editor);
 
     if (textLength > 280) {
       editor.selection = currentSelection;
@@ -192,13 +182,13 @@ const EditorBox: React.FC<IEditorBox> = props => {
 
       if (beforeMentionMatch && afterMatch && beforeRange) {
         setMentionTargetRange(beforeRange);
-        setSearch(beforeMentionMatch[1]);
+        getMentions(beforeMentionMatch[1]);
         setIndex(0);
         return;
       }
       if (beforeTagMatch && afterMatch && beforeRange) {
         setTagTargetRange(beforeRange);
-        setSearch(beforeTagMatch[1]);
+        getTags(beforeTagMatch[1]);
         setIndex(0);
         return;
       }
@@ -221,19 +211,19 @@ const EditorBox: React.FC<IEditorBox> = props => {
         switch (event.key) {
           case 'ArrowDown':
             event.preventDefault();
-            const prevIndex = index >= mentionables.length - 1 ? 0 : index + 1;
+            const prevIndex = index >= mentions.length - 1 ? 0 : index + 1;
             setIndex(prevIndex);
             break;
           case 'ArrowUp':
             event.preventDefault();
-            const nextIndex = index <= 0 ? mentionables.length - 1 : index - 1;
+            const nextIndex = index <= 0 ? mentions.length - 1 : index - 1;
             setIndex(nextIndex);
             break;
           case 'Tab':
           case 'Enter':
             event.preventDefault();
             Transforms.select(editor, mentionTargetRange);
-            CustomEditor.insertMention(editor, mentionables[index]);
+            CustomEditor.insertMention(editor, mentions[index]);
             setMentionTargetRange(null);
             break;
           case 'Escape':
@@ -246,19 +236,19 @@ const EditorBox: React.FC<IEditorBox> = props => {
         switch (event.key) {
           case 'ArrowDown':
             event.preventDefault();
-            const prevIndex = index >= tagsAvailable.length - 1 ? 0 : index + 1;
+            const prevIndex = index >= tags.length - 1 ? 0 : index + 1;
             setIndex(prevIndex);
             break;
           case 'ArrowUp':
             event.preventDefault();
-            const nextIndex = index <= 0 ? tagsAvailable.length - 1 : index - 1;
+            const nextIndex = index <= 0 ? tags.length - 1 : index - 1;
             setIndex(nextIndex);
             break;
           case 'Tab':
           case 'Enter':
             event.preventDefault();
             Transforms.select(editor, tagTargetRange);
-            CustomEditor.insertTag(editor, tagsAvailable[index]);
+            CustomEditor.insertTag(editor, tags[index]);
             setTagTargetRange(null);
             break;
           case 'Escape':
@@ -268,7 +258,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
         }
       }
     },
-    [index, search, mentionTargetRange, tagTargetRange],
+    [index, mentionTargetRange, tagTargetRange],
   );
 
   const handleMediaClick = () => {
@@ -321,24 +311,15 @@ const EditorBox: React.FC<IEditorBox> = props => {
                 renderLeaf={renderLeaf}
                 onKeyDown={onKeyDown}
               />
-              {mentionTargetRange && mentionables.length > 0 && (
-                <MentionPopover
-                  ref={mentionPopoverRef}
-                  values={mentionables}
-                  currentIndex={index}
-                />
+              {mentionTargetRange && mentions.length > 0 && (
+                <MentionPopover ref={mentionPopoverRef} values={mentions} currentIndex={index} />
               )}
-              {tagTargetRange && tagsAvailable.length > 0 && (
-                <MentionPopover
-                  ref={mentionPopoverRef}
-                  values={tagsAvailable}
-                  currentIndex={index}
-                />
+              {tagTargetRange && tags.length > 0 && (
+                <MentionPopover ref={mentionPopoverRef} values={tags} currentIndex={index} />
               )}
             </Slate>
             {embedEntryData && <EmbedBox embedEntryData={embedEntryData} />}
           </Box>
-          <StyledMeterDiv>{withMeter}</StyledMeterDiv>
         </Box>
       </Box>
       <Box
@@ -356,14 +337,17 @@ const EditorBox: React.FC<IEditorBox> = props => {
             <Icon type="image" clickable={true} onClick={handleMediaClick} size="md" />
           </StyledIconDiv>
         </Box>
-        <Icon type="akasha" clickable={true} style={{ marginLeft: '2rem' }} />
-        <Button
-          primary={true}
-          icon={<Icon type="send" color="white" />}
-          label={postLabel}
-          onClick={handlePublish}
-          disabled={publishDisabled}
-        />
+
+        <Box direction="row" gap="small" align="center">
+          {withMeter && <EditorMeter counter={letterCount} />}
+          <Button
+            primary={true}
+            icon={<Icon type="send" color="white" />}
+            label={postLabel}
+            onClick={handlePublish}
+            disabled={publishDisabled}
+          />
+        </Box>
       </Box>
       {imagePopoverOpen && mediaIconRef.current && (
         <ImagePopover

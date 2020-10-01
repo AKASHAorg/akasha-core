@@ -1,17 +1,13 @@
 import * as React from 'react';
 import { MainAreaCardBox } from '../common/basic-card-box';
-import { EditorBox, EditorMeter } from '../../Editor/index';
+import { EditorBox } from '../../Editor/index';
 import { Box, Text } from 'grommet';
 import { Icon } from '../../Icon/index';
+import { IEditorBox } from '../../Editor/editor-box';
 
-export interface IEditorCard {
+export interface IEditorCard extends IEditorBox {
   className?: string;
-  avatar?: string;
-  ethAddress?: string;
-  postLabel?: string;
   newPostLabel?: string;
-  placeholderLabel?: string;
-  onPublish: any;
   style?: React.CSSProperties;
   handleNavigateBack: () => void;
 }
@@ -26,9 +22,11 @@ const EditorCard: React.FC<IEditorCard> = props => {
     placeholderLabel,
     onPublish,
     handleNavigateBack,
+    getMentions,
+    getTags,
+    mentions,
+    tags,
   } = props;
-
-  const [letterCount, setLetterCount] = React.useState(0);
 
   return (
     <MainAreaCardBox className={className} style={props.style}>
@@ -41,16 +39,20 @@ const EditorCard: React.FC<IEditorCard> = props => {
           size="xs"
         />
         <Text size="large">{newPostLabel}</Text>
-        <EditorMeter counter={letterCount} />
+        <Icon type="akasha" clickable={true} style={{ marginLeft: '2rem' }} />
       </Box>
       <EditorBox
         avatar={avatar}
         ethAddress={ethAddress}
         onPublish={onPublish}
         postLabel={postLabel}
+        withMeter={true}
         placeholderLabel={placeholderLabel}
-        setLetterCount={setLetterCount}
         minHeight={'192px'}
+        getMentions={getMentions}
+        getTags={getTags}
+        mentions={mentions}
+        tags={tags}
       />
     </MainAreaCardBox>
   );
