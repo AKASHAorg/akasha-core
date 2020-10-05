@@ -48,7 +48,6 @@ const MobileListModalComponent = ({
       icon: 'transfer',
       handler: (e: any) => {
         e.stopPropagation();
-        console.log('reposted with comment...');
       },
     },
     {
@@ -56,7 +55,6 @@ const MobileListModalComponent = ({
       icon: 'edit',
       handler: (e: any) => {
         e.stopPropagation();
-        console.log('reposted with comment...');
       },
     },
   ];

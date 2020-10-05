@@ -34,7 +34,7 @@ interface IMenuItem {
 }
 
 const MobileListModal: React.FC<IMobileListModal> = props => {
-  let { closeModal, menuItems, cancelLabel } = props;
+  const { closeModal, menuItems, cancelLabel } = props;
 
   return (
     <ModalWrapper onClick={closeModal}>
