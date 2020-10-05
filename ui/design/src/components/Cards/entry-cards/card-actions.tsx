@@ -3,6 +3,7 @@ import { Box } from 'grommet';
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { TextIcon } from '../../TextIcon';
 import { IEntryData } from './entry-box';
+import { MobileListModal } from '../../Modals';
 
 export type ServiceNames = 'twitter' | 'reddit' | 'facebook';
 
@@ -82,38 +83,61 @@ const CardActions: React.FC<CardActionProps> = props => {
   };
 
   const renderRepostDrop = () => {
-    return (
-      <StyledDrop
-        target={repostNodeRef.current}
-        align={{ top: 'bottom', left: 'left' }}
-        onClickOutside={handleRepostsClose}
-        onEsc={handleRepostsClose}
-        overflow="hidden"
-      >
-        <Box pad="xxsmall" width={{ min: '13rem' }}>
-          <StyledSelectBox>
-            <TextIcon
-              iconType="transfer"
-              label={repostLabel}
-              onClick={onRepost}
-              clickable={true}
-              iconSize="xs"
-              fontSize="small"
-            />
-          </StyledSelectBox>
-          <StyledSelectBox>
-            <TextIcon
-              iconType="edit"
-              label={repostWithCommentLabel}
-              onClick={onRepostWithComment}
-              clickable={true}
-              iconSize="xs"
-              fontSize="small"
-            />
-          </StyledSelectBox>
-        </Box>
-      </StyledDrop>
-    );
+    const menuItems = [
+      {
+        label: repostLabel,
+        icon: 'transfer',
+        handler: (e: any) => {
+          // block event bubbling to parent
+          e.stopPropagation();
+          console.log('reposted...');
+        },
+      },
+      {
+        label: repostWithCommentLabel,
+        icon: 'edit',
+        handler: (e: any) => {
+          e.stopPropagation();
+          console.log('reposted with comment...');
+        },
+      },
+    ];
+
+    if (size === 'small') {
+      return <MobileListModal menuItems={menuItems} closeModal={handleRepostsClose} />;
+    } else
+      return (
+        <StyledDrop
+          target={repostNodeRef.current}
+          align={{ top: 'bottom', left: 'left' }}
+          onClickOutside={handleRepostsClose}
+          onEsc={handleRepostsClose}
+          overflow="hidden"
+        >
+          <Box pad="xxsmall" width={{ min: '13rem' }}>
+            <StyledSelectBox>
+              <TextIcon
+                iconType="transfer"
+                label={repostLabel}
+                onClick={onRepost}
+                clickable={true}
+                iconSize="xs"
+                fontSize="small"
+              />
+            </StyledSelectBox>
+            <StyledSelectBox>
+              <TextIcon
+                iconType="edit"
+                label={repostWithCommentLabel}
+                onClick={onRepostWithComment}
+                clickable={true}
+                iconSize="xs"
+                fontSize="small"
+              />
+            </StyledSelectBox>
+          </Box>
+        </StyledDrop>
+      );
   };
   const renderShareDrop = () => {
     return (
