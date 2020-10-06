@@ -1,6 +1,7 @@
 export interface IColors {
   primaryText: string;
   secondaryText: string;
+  errorText: string;
   background: string;
   ultraLightBackground: string;
   lightBackground: string;
