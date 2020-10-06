@@ -7,6 +7,7 @@ export interface IColorsDark extends IColors {
   mediumGrey: string;
   lightGrey: string;
   white: string;
+  red: string;
 }
 
 const colors: IColorsDark = {
@@ -16,9 +17,11 @@ const colors: IColorsDark = {
   mediumGrey: '#B6BFD1',
   lightGrey: '#EDF0F5',
   white: '#FFF',
+  red: '#FF4040',
   // define use cases for colors
   primaryText: '#132540', // darkBlue
   secondaryText: '#949EB3', // grey
+  errorText: '#FF4040', // red
   background: '#FFF', // white
   ultraLightBackground: '#FBFCFD', // ultralightGrey
   lightBackground: '#EDF0F5', // lightGrey
