@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Box } from 'grommet';
+
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { TextIcon } from '../../TextIcon';
 import { IEntryData } from './entry-box';
@@ -64,6 +65,13 @@ const CardActions: React.FC<CardActionProps> = props => {
   const repostNodeRef: React.RefObject<any> = React.useRef(null);
   const shareNodeRef: React.RefObject<any> = React.useRef(null);
 
+  const shareData = {
+    // @TODO: replace with appropriate title, text and url of the post to be shared
+    title: 'Share Post',
+    text: 'Share this post with your friends',
+    url: 'https://ethereum.world',
+  };
+
   const handleRepostsOpen = () => {
     setReplyDropOpen(!repostDropOpen);
   };
@@ -72,6 +80,12 @@ const CardActions: React.FC<CardActionProps> = props => {
   };
 
   const handleShareOpen = () => {
+    let winNavigator: any;
+    winNavigator = window.navigator;
+
+    if (size === 'small' && winNavigator.canShare && winNavigator.canShare(shareData)) {
+      return winNavigator.share(shareData);
+    }
     setShareDropOpen(!shareDropOpen);
   };
 
