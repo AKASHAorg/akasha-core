@@ -90,7 +90,7 @@ const CardActions: React.FC<CardActionProps> = props => {
         handler: (e: any) => {
           // block event bubbling to parent
           e.stopPropagation();
-          return;
+          return onRepost();
         },
       },
       {
@@ -98,7 +98,7 @@ const CardActions: React.FC<CardActionProps> = props => {
         icon: 'edit',
         handler: (e: any) => {
           e.stopPropagation();
-          return;
+          return onRepostWithComment();
         },
       },
     ];
