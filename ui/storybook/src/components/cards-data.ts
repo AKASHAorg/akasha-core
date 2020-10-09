@@ -223,7 +223,6 @@ const boxProviderData = {
 };
 
 const ensProviderData = {
-  providerName: 'ENS',
   name: '',
 };
 
