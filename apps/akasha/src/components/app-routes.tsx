@@ -3,7 +3,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import routes, { NEW_POST, SETTINGS_PAGE, FEED, POSTS } from '../routes';
-import FeedPage from './feed-page';
+import FeedPage from './feed-page/feed-page';
 import LoginModal from './login-modal';
 import NewPostPage from './new-post-page';
 import PostsPage from './posts-page';
@@ -79,7 +79,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             />
           </Route>
           <Route path={routes[FEED]}>
-            <FeedPage sdkModules={sdkModules} globalChannel={globalChannel} logger={logger} />
+            <FeedPage {...props} />
           </Route>
           <Route path={routes[POSTS]}>
             <PostsPage

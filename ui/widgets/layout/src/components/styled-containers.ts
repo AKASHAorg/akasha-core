@@ -20,12 +20,12 @@ export const BaseContainer: StyledComponent<'div', {}> = styled.div`
 
 export const MainAreaContainer: StyledComponent<any, any, any, any> = styled(BaseContainer)`
   flex-grow: 1;
-  flex-direction: column-reverse;
+  flex-direction: column-reverse !important;
   max-width: 100%;
   margin-bottom: 0.5em;
   ${props => css<any>`
     @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
-      flex-direction: row;
+      flex-direction: row !important;
     }
   `}
 `;

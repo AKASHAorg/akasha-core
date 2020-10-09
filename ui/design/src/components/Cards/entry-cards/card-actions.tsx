@@ -15,7 +15,7 @@ export interface CardActionProps {
   repostLabel: string;
   repostWithCommentLabel: string;
   repliesLabel: string;
-  isBookmarked: boolean | null;
+  isBookmarked?: boolean;
   copyLinkLabel: string;
   bookmarkLabel: string;
   bookmarkedLabel: string;

@@ -16,16 +16,31 @@ export const GlobalStyle: GlobalStyleComponent<{}, any> = createGlobalStyle<{ th
   }
   html,
   body {
-    height: 100%;
     font-size: 15px;
+    height: 100%;
   }
   body {
     margin: 0;
     overscroll-behavior-y: none;
+    overflow-y: scroll;
   }
   #root {
     display: flex;
     height: 100%;
+  }
+  .container {
+    border: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-basis: auto;
+    flex-direction: column;
+    flex-shrink: 0;
+    margin: 0px;
+    min-height: 0px;
+    min-width: 0px;
+    padding: 0px;
+    position: relative;
+    z-index: 0;
   }
   ${props => css<any>`
     // 1920 and lower

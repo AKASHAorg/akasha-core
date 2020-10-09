@@ -6,7 +6,12 @@ import {
   ILoadItemsPayload,
 } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { fetchFeedItemData, fetchFeedItems } from '../services/feed-service';
+import { fetchFeedItemData, fetchFeedItems } from '../../services/feed-service';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import useFeedReducer from '../../hooks/use-feed-reducer';
+import { addToIPFS, getPending, publishEntry } from '../../services/posting-service';
+import { getFeedCustomEntities } from './feed-page-custom-entities';
+import useEntryPublisher from '../../hooks/use-entry-publisher';
 
 const { Helmet, VirtualList, Box, ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard } = DS;
 
@@ -15,59 +20,36 @@ export interface FeedPageProps {
   sdkModules: any;
   logger: any;
 }
-interface IFeedState {
-  isFeedLoading: boolean;
-  feedItems: string[];
-  feedItemData: {
-    [key: string]: any;
-  };
-}
 
-const feedStateReducer = (state: IFeedState, action: { type: string; payload: any }) => {
-  switch (action.type) {
-    case 'FEED_LOAD_SUCCESS':
-      return { ...state, isFeedLoading: false };
-    case 'LOAD_FEED_ITEMS':
-      return { ...state, isFeedLoading: true };
-    case 'LOAD_FEED_ITEMS_SUCCESS':
-      return { ...state, feedItems: state.feedItems.concat(action.payload), isFeedLoading: false };
-    case 'LOAD_FEED_ITEM_DATA_SUCCESS':
-      return {
-        ...state,
-        feedItemData: { ...state.feedItemData, [action.payload.entryId]: action.payload },
-      };
-    default:
-      throw new Error(`Could not find action with type: ${action.type}`);
-  }
-};
-
-const FeedPage: React.FC<FeedPageProps> = _props => {
-  const [feedState, dispatch] = React.useReducer(feedStateReducer, {
-    isFeedLoading: true,
-    feedItems: [],
-    feedItemData: {},
-  });
+const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
+  const { isMobile } = props;
+  const [feedState, feedStateActions] = useFeedReducer({});
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
+  const [pendingEntries, pendingActions] = useEntryPublisher({
+    publishEntry: publishEntry,
+    onPublishComplete: localId => {
+      /* TODO: merge the entry with all entries... */
+      /* should consider publishing date? */
+    },
+    ethAddress: '0x123someethaddress',
+    addToIPFS: addToIPFS,
+    getPendingEntries: getPending,
+  });
+
   const handleLoadMore = async (payload: ILoadItemsPayload) => {
     const resp = await fetchFeedItems(payload);
-    if (resp) {
-      dispatch({
-        type: 'LOAD_FEED_ITEMS_SUCCESS',
-        payload: resp.items.map(i => i.entryId),
-      });
+    if (resp.items.length) {
+      feedStateActions.setFeedItems(resp);
     }
   };
 
   const loadItemData = async (payload: ILoadItemDataPayload) => {
     const resp = await fetchFeedItemData({ entryId: payload.itemId });
     if (resp) {
-      dispatch({
-        type: 'LOAD_FEED_ITEM_DATA_SUCCESS',
-        payload: resp,
-      });
+      feedStateActions.setFeedItemData(resp);
     }
   };
 
@@ -78,11 +60,12 @@ const FeedPage: React.FC<FeedPageProps> = _props => {
       reverse: payload.reverse,
     });
     if (response.items.length) {
-      dispatch({
-        type: 'LOAD_FEED_ITEMS_SUCCESS',
-        payload: response.items.map(i => i.entryId),
-      });
+      feedStateActions.setFeedItems(response);
     }
+  };
+
+  const handleBackNavigation = () => {
+    /* back navigation logic here */
   };
 
   const handleAvatarClick = () => {
@@ -113,6 +96,27 @@ const FeedPage: React.FC<FeedPageProps> = _props => {
     /* todo */
   };
 
+  const handleEntryPublish = async (ethAddress: string, _content: any) => {
+    const localId = `${ethAddress}-${pendingEntries.length + 1}`;
+    try {
+      const entry = {
+        content: 'this is a test published content',
+        author: {
+          ethAddress,
+        },
+      };
+      // await savePublished(ethAddress, pendingEntries);
+      pendingActions.addEntry({
+        entry,
+        localId,
+        ethAddress: 'asddsa',
+        step: 'PUBLISH_START',
+      });
+      // feedStateActions.publishEntry(ethAddress, localId, entry);
+    } catch (err) {
+      props.logger.error('Error publishing entry');
+    }
+  };
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -174,6 +178,17 @@ const FeedPage: React.FC<FeedPageProps> = _props => {
             )}
           </ErrorInfoCard>
         )}
+        customEntities={getFeedCustomEntities({
+          t,
+          locale,
+          isMobile,
+          handleBackNavigation,
+          feedItems: feedState.feedItems,
+          loggedEthAddress: '0x123123123123',
+          handlePublish: handleEntryPublish,
+          pendingEntries: pendingEntries,
+          onAvatarClick: handleAvatarClick,
+        })}
       />
     </Box>
   );

@@ -1,7 +1,7 @@
-import React from 'react';
-import { Box } from 'grommet';
-import ListContent from './list-content';
-import { IVirtualListProps } from './interfaces';
+// import { Box } from 'grommet';
+// import ListContent from './list-content';
+// import { IVirtualListProps } from './interfaces';
+import VirtualList from './virtual-list';
 
 /* ************************
  *
@@ -36,78 +36,4 @@ import { IVirtualListProps } from './interfaces';
  *
  * ************************/
 
-const VirtualList = (props: IVirtualListProps, ref?: React.Ref<any>) => {
-  const {
-    items,
-    itemCard,
-    initialPaddingTop = 0,
-    itemSpacing = 8,
-    loadLimit = 8,
-    loadInitialFeed,
-    loadItemData,
-    itemsData,
-    offsetItems = 4,
-    loadMore,
-    customEntities = [],
-    getItemCard,
-    initialState = {
-      startId: undefined,
-      newerEntries: [],
-    },
-    hasMoreItems,
-    bookmarkedItems,
-    getNewItemsNotification,
-    onItemRead,
-  } = props;
-  const [listState, setListState] = React.useState(initialState);
-  React.useEffect(() => {
-    if (
-      initialState.newerEntries &&
-      initialState.newerEntries.length > listState.newerEntries.length
-    ) {
-      setListState(initialState);
-    }
-  }, [initialState.newerEntries]);
-  // load initial feed items
-  // when resuming session, this must also pass `startId` prop!!
-  React.useEffect(() => {
-    const payload: {
-      limit: number;
-      startId: string | null;
-    } = {
-      limit: loadLimit,
-      startId: null,
-    };
-    if (listState && listState.startId) {
-      payload.startId = listState.startId;
-    }
-    loadInitialFeed(payload);
-  }, []);
-
-  return (
-    <Box flex={{ grow: 1 }} align="stretch" direction="column">
-      <ListContent
-        ref={ref}
-        offsetItems={offsetItems}
-        initialPaddingTop={initialPaddingTop}
-        items={items}
-        itemCard={itemCard}
-        loadItemData={loadItemData}
-        loadLimit={loadLimit}
-        itemsData={itemsData}
-        itemSpacing={itemSpacing}
-        onLoadMore={loadMore}
-        customEntities={customEntities}
-        getItemCard={getItemCard}
-        listState={listState}
-        setListState={setListState}
-        hasMoreItems={hasMoreItems}
-        bookmarkedItems={bookmarkedItems}
-        getNewItemsNotification={getNewItemsNotification}
-        onItemRead={onItemRead}
-      />
-    </Box>
-  );
-};
-
-export default React.forwardRef(VirtualList);
+export default VirtualList;

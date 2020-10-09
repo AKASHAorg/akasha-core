@@ -13,28 +13,46 @@ const {
   ThemeSelector,
   responsiveBreakpoints,
   ViewportSizeProvider,
+  css,
   // useViewportSize,
 } = DS;
 
-// @ts-ignore
-const AppWrapper = styled(BaseContainer)`
-  flex-basis: 0%;
-  flex-grow: 1;
-  flex-shrink: 1;
-`;
-
-const ResponsivePage = styled(BaseContainer)`
-  flex-grow: 1;
-  flex-direction: row;
-  justify-content: stretch;
-`;
+const TOPBAR_HEIGHT = 4;
 
 const SidebarWrapper = styled(BaseContainer)<{ visible: boolean }>`
   z-index: 999;
   flex-grow: 1;
-  height: calc(100vh - 3.6em);
-  top: 3.6em;
+  height: calc(100vh - ${TOPBAR_HEIGHT}em);
+  top: ${TOPBAR_HEIGHT}em;
   position: sticky;
+  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
+    ${props => {
+      if (props.visible) {
+        return css`
+          position: fixed;
+          top: ${TOPBAR_HEIGHT}rem;
+          width: 90vw;
+          height: calc(100vh - ${TOPBAR_HEIGHT}rem);
+        `;
+      }
+      return css`
+        display: none;
+      `;
+    }}
+  }
+`;
+
+const ScrollableWidgetArea = styled.div`
+  ${props => css`
+    &::-webkit-scrollbar {
+      width: 0 !important;
+    }
+    @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: calc(100vh - ${TOPBAR_HEIGHT}em);
+    }
+  `}
 `;
 
 export interface IProps {
@@ -115,40 +133,44 @@ class LayoutWidget extends PureComponent<IProps> {
     }
     const sidebarVisible = Boolean(showSidebar);
     return (
-      <AppWrapper>
+      <Box className="container" fill="horizontal">
         <GlobalStyle theme={{ breakpoints: responsiveBreakpoints.global.breakpoints }} />
-        <ThemeSelector
-          availableThemes={[lightTheme]}
-          settings={{ activeTheme: 'Light-Theme' }}
-          themeReadyEvent={this.props.themeReadyEvent}
-          style={{ display: 'flex' }}
-        >
-          <AppWrapper>
+        <Box className="container">
+          <ThemeSelector
+            availableThemes={[lightTheme]}
+            settings={{ activeTheme: 'Light-Theme' }}
+            themeReadyEvent={this.props.themeReadyEvent}
+            style={{ display: 'flex' }}
+          >
             <ViewportSizeProvider>
-              <BaseContainer>
+              <Box className="container" fill="horizontal">
                 <TopbarSlot id={topbarSlotId} />
-                <AppWrapper>
-                  <ResponsivePage>
-                    <SidebarWrapper visible={sidebarVisible}>
-                      <SidebarSlot id={sidebarSlotId} visible={sidebarVisible} />
-                    </SidebarWrapper>
-                    <MainAreaContainer sidebarVisible={sidebarVisible}>
-                      <PluginSlot id={pluginSlotId} />
-                      <WidgetSlot>
-                        <WidgetContainer>
+                <Box className="container" style={{ flexDirection: 'row' }}>
+                  <SidebarWrapper>
+                    <SidebarSlot
+                      id={sidebarSlotId}
+                      visible={sidebarVisible}
+                      className="container"
+                    />
+                  </SidebarWrapper>
+                  <MainAreaContainer sidebarVisible={sidebarVisible} className="container">
+                    <PluginSlot id={pluginSlotId} className="container" />
+                    <WidgetSlot>
+                      <WidgetContainer>
+                        <ScrollableWidgetArea>
                           <Box id={rootWidgetSlotId} />
                           <Box id={widgetSlotId} />
-                        </WidgetContainer>
-                      </WidgetSlot>
-                    </MainAreaContainer>
-                  </ResponsivePage>
-                </AppWrapper>
+                        </ScrollableWidgetArea>
+                      </WidgetContainer>
+                    </WidgetSlot>
+                  </MainAreaContainer>
+                </Box>
                 <ModalSlot id={modalSlotId} />
-              </BaseContainer>
+              </Box>
             </ViewportSizeProvider>
-          </AppWrapper>
-        </ThemeSelector>
-      </AppWrapper>
+          </ThemeSelector>
+        </Box>
+      </Box>
     );
   }
 }

@@ -46,7 +46,7 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
 
   const { t } = useTranslation();
   const locale = i18n.languages[0] || 'en';
-  const vlInstance = React.createRef<any>();
+  // const vlInstance = React.createRef<any>();
   React.useEffect(() => {
     if (profileState.data.loggedEthAddress) {
       bookmarkActions.getBookmarkedItems({
@@ -77,7 +77,7 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
     props.singleSpa.navigateToUrl('/profile/0x00123123123');
   };
 
-  const handleEntryBookmark = (entryId: string, isBookmarked: boolean | null) => {
+  const handleEntryBookmark = (entryId: string, isBookmarked?: boolean) => {
     if (profileState.data.loggedEthAddress) {
       if (isBookmarked) {
         return bookmarkActions.unbookmarkEntry({
@@ -127,10 +127,11 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
   };
 
   const handleNewerEntriesLoad = () => {
-    feedStateActions.loadNewerEntries({ newerEntries: feedState.data.feedViewState.newerEntries });
-    vlInstance.current.scrollTo({
-      top: 0,
-    });
+    if (feedState.data.feedViewState.newerEntries) {
+      feedStateActions.loadNewerEntries({
+        newerEntries: feedState.data.feedViewState.newerEntries,
+      });
+    }
   };
 
   const handleItemRead = (itemId: string) => {
@@ -140,7 +141,7 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
   };
 
   return (
-    <Box flex={{ grow: 1 }} fill="horizontal" align="center">
+    <Box fill="horizontal">
       <ErrorInfoCard errors={feedState.data.errors}>
         {(messages: any, isCritical?: boolean) => (
           <>
@@ -153,18 +154,22 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
             )}
             {!isCritical && (
               <VirtualList
-                ref={vlInstance}
                 items={feedState.data.entryIds}
                 itemsData={feedState.data.entriesData}
                 loadInitialFeed={loadInitialFeed}
                 loadMore={loadMore}
                 loadItemData={loadItemData}
                 bookmarkedItems={bookmarkState.data.bookmarkedIds as Set<string>}
-                getNewItemsNotification={({ styles }: { styles: React.CSSProperties }) => (
-                  <NewEntriesPopover onClick={handleNewerEntriesLoad} style={styles}>
-                    <b>{feedState.data.feedViewState.newerEntries.length}</b> {t('new entries')}
-                  </NewEntriesPopover>
-                )}
+                getNotificationPill={({ styles }: { styles: React.CSSProperties }) => {
+                  if (feedState.data.feedViewState.newerEntries) {
+                    return (
+                      <NewEntriesPopover onClick={handleNewerEntriesLoad} style={styles}>
+                        <b>{feedState.data.feedViewState.newerEntries.length}</b> {t('new entries')}
+                      </NewEntriesPopover>
+                    );
+                  }
+                  return <></>;
+                }}
                 hasMoreItems={true}
                 onItemRead={handleItemRead}
                 initialState={feedState.data.feedViewState}
@@ -173,7 +178,7 @@ const FeedHomePage: React.FC<IFeedHomePageProps & RouteComponentProps> = props =
                   isBookmarked,
                 }: {
                   itemData: any;
-                  isBookmarked: boolean | null;
+                  isBookmarked?: boolean;
                 }) => {
                   return (
                     <ErrorInfoCard errors={itemData.status.errors}>

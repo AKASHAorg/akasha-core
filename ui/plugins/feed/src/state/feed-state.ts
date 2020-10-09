@@ -45,7 +45,9 @@ export interface FeedState {
   entryIds: string[];
   feedViewState: {
     startId?: string;
-    newerEntries: INewEntryInfo[];
+    startTop?: number;
+    slice?: [number, number];
+    newerEntries?: INewEntryInfo[];
   };
   /**
    * a map with all entries data
