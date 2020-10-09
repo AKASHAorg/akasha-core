@@ -30,7 +30,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [pendingEntries, pendingActions] = useEntryPublisher({
     publishEntry: publishEntry,
-    onPublishComplete: localId => {
+    onPublishComplete: _localId => {
       /* TODO: merge the entry with all entries... */
       /* should consider publishing date? */
     },
