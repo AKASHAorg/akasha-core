@@ -1,6 +1,6 @@
 import { action, Action, createContextStore, persist, Thunk, thunk } from 'easy-peasy';
 import { getEthAddress } from '../services/profile-service';
-import { race, forkJoin, concat } from 'rxjs';
+import { race, forkJoin } from 'rxjs';
 import { filter, takeLast } from 'rxjs/operators';
 
 export interface IStateErrorPayload {
@@ -9,21 +9,12 @@ export interface IStateErrorPayload {
   critical: boolean;
 }
 
-export interface IRegistrationStatus {
-  registering: boolean;
-  isAvailable: boolean;
-  checking: boolean;
-  name: string;
-  claiming: boolean;
-}
-
 export interface ProfileState {
   loggedEthAddress?: string;
   token: string | null;
   ensInfo: { name?: string; providerName?: string };
-  registrationStatus: null | IRegistrationStatus;
-  statusReceived: boolean;
   ensChecked: boolean;
+  registeringENS: boolean;
   /**
    * whether we are fetching the profile or not
    */
@@ -44,24 +35,18 @@ export interface ProfileStateModel extends ProfileState {
   getLoggedEthAddress: Thunk<ProfileStateModel>;
   handleLoginSuccess: Action<ProfileStateModel, { ethAddress: string; token: string }>;
   handleLoginError: Action<ProfileStateModel, { error: Error }>;
-  getENSByAddress: Thunk<ProfileStateModel, { ethAddress: string }>;
-  getEnsRegistrationStatus: Thunk<ProfileStateModel, { ethAddress: string }>;
-  registerENS: Thunk<ProfileStateModel, { name: string; providerName: string; ethAddress: string }>;
+  checkENSAddress: Thunk<ProfileStateModel, { ethAddress: string }>;
+  registerENSAddress: Thunk<ProfileStateModel, { name: string; ethAddress: string }>;
   authorize: Thunk<ProfileStateModel, number>;
-  checkENSAvailable: Thunk<ProfileStateModel, IRegistrationStatus>;
-  claimENS: Thunk<ProfileStateModel, IRegistrationStatus & { ethAddress: string }>;
 }
-
-const ENS_REGISTRATION_STATUS = 'ens-registration-status';
 
 export const profileStateModel: ProfileStateModel = persist(
   {
     loggedEthAddress: undefined,
     token: null,
     ensInfo: {},
-    registrationStatus: null,
-    statusReceived: false,
     ensChecked: false,
+    registeringENS: false,
     fetching: false,
     errors: {},
     updateData: action((state, payload) => {
@@ -129,67 +114,31 @@ export const profileStateModel: ProfileStateModel = persist(
         return;
       }
     }),
-    getENSByAddress: thunk(async (actions, payload, { injections }) => {
+    checkENSAddress: thunk(async (actions, payload, { injections }) => {
       const { ethAddress } = payload;
-      const { channels, logger } = injections;
+      const { logger, channels } = injections;
+      logger.info('Checking ENS for ethAddress: %s', ethAddress);
       const checkEns = channels.registry.ens.resolveAddress({ ethAddress });
-      actions.updateData({
-        fetching: true,
-      });
       checkEns.subscribe((response: { data: any }) => {
-        logger.info('getENSByAddress response: %j', response.data);
         actions.updateData({
           ensChecked: true,
           ensInfo: response.data ? { name: response.data, providerName: 'AKASHA ENS' } : {},
-          fetching: false,
         });
       });
     }),
-    getEnsRegistrationStatus: thunk(async (actions, payload, { injections }) => {
-      const { channels } = injections;
-      const call = channels.db.settingsAttachment.get({
-        id: ENS_REGISTRATION_STATUS,
-        ethAddress: payload.ethAddress,
-      });
-      call.subscribe((resp: any) => {
-        actions.updateData({
-          registrationStatus: JSON.parse(resp.data),
-          statusReceived: true,
-        });
-      });
-    }),
-    registerENS: thunk(async (actions, payload, { injections }) => {
-      const { name, ethAddress } = payload;
+    registerENSAddress: thunk(async (actions, payload, { injections }) => {
+      const { name } = payload;
       const { logger, channels } = injections;
-      const registrationStatus = {
-        name,
-        registering: true,
-        isAvailable: true,
-        checking: false,
-        claiming: false,
-      };
+
       actions.updateData({
-        registrationStatus,
-        ensInfo: {
-          name,
-        },
+        registeringENS: true,
       });
-      const saveToDb = channels.db.settingsAttachment.put({
-        ethAddress,
-        obj: {
-          data: JSON.stringify(registrationStatus),
-          type: 'string',
-          id: ENS_REGISTRATION_STATUS,
-        },
-      });
-      const removeFromDb = channels.db.settingsAttachment.deleteSettings({
-        ethAddress,
-        id: ENS_REGISTRATION_STATUS,
-      });
+
       const register = channels.registry.ens.registerName({ name });
-      concat(saveToDb, register, removeFromDb).subscribe(() => {
+
+      register.subscribe(() => {
         actions.updateData({
-          registrationStatus: null,
+          registeringENS: false,
           ensInfo: {
             name: name,
             providerName: 'AKASHA ENS',
@@ -215,6 +164,7 @@ export const profileStateModel: ProfileStateModel = persist(
             });
           },
           (err: Error) => {
+            // console.error('action[subscription].authorize', err);
             actions.createError({
               errorKey: 'action[subscription].authorize',
               error: err,
@@ -230,56 +180,8 @@ export const profileStateModel: ProfileStateModel = persist(
         });
       }
     }),
-    checkENSAvailable: thunk((actions, payload, { injections }) => {
-      const { channels, logger } = injections;
-      actions.updateData({
-        registrationStatus: {
-          ...payload,
-          checking: true,
-        },
-      });
-      const channel = channels.registry.ens.isAvailable({ name: payload.name });
-
-      channel.subscribe((response: any) => {
-        logger.info('Name: %s is available: %s', payload.name, response.data);
-        actions.updateData({
-          registrationStatus: {
-            ...payload,
-            checking: false,
-            isAvailable: response.data,
-          },
-        });
-      });
-    }),
-    claimENS: thunk(async (actions, payload, { injections }) => {
-      const { channels, logger } = injections;
-      const { name, ethAddress, ...other } = payload;
-
-      const claim = channels.registry.ens.claimName({ name });
-      const removeFromDb = channels.db.settingsAttachment.deleteSettings({
-        ethAddress,
-        id: ENS_REGISTRATION_STATUS,
-      });
-      actions.updateData({
-        registrationStatus: {
-          name,
-          ...other,
-          claiming: true,
-        },
-      });
-      concat(claim, removeFromDb).subscribe(() => {
-        logger.log('Claim response successful');
-        actions.updateData({
-          registrationStatus: null,
-          ensInfo: {
-            name: name,
-            providerName: 'AKASHA ENS',
-          },
-        });
-      });
-    }),
   },
-  { blacklist: ['fetching', 'errors', 'ensInfo', 'ensChecked', 'statusReceived'] },
+  { blacklist: ['fetching', 'errors', 'ensInfo', 'ensChecked', 'registeringENS'] },
 );
 
 let profileState: ReturnType<typeof createContextStore>;

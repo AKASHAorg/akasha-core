@@ -8,12 +8,12 @@ import { ModalSlot, PluginSlot, SidebarSlot, TopbarSlot, WidgetSlot } from './st
 const {
   Box,
   styled,
+  css,
   lightTheme,
   // darkTheme,
   ThemeSelector,
   responsiveBreakpoints,
   ViewportSizeProvider,
-  css,
   // useViewportSize,
 } = DS;
 

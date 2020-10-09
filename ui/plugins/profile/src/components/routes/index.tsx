@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import menuRoute, { MY_PROFILE, PROFILE_LIST } from '../../routes';
 import MyProfilePage from './my-profile-page';
 import ProfilePage from './profile-page';
-import WidgetList from '../widgets';
 
 const { Box } = DS;
 
@@ -20,23 +19,17 @@ const Routes: React.FC<IRoutesProps> = props => {
 
   return (
     <Router>
-        <Box>
-          <Switch>
-            <Route path={menuRoute[PROFILE_LIST]} render={() => <>A list of profiles</>} />
-            <Route
-              path={menuRoute[MY_PROFILE]}
-              component={MyProfilePage}
-            />
-            <Route
-              path={`${path}/:profileId`}
-              render={routeProps => <ProfilePage {...routeProps} {...props} />}
-            />
-            <Route render={() => <div>{t('Profile not found!')}</div>} />
-          </Switch>
-        </Box>
-        <Box>
-          <WidgetList />
-        </Box>
+      <Box>
+        <Switch>
+          <Route path={menuRoute[PROFILE_LIST]} render={() => <>A list of profiles</>} />
+          <Route path={menuRoute[MY_PROFILE]} component={MyProfilePage} />
+          <Route
+            path={`${path}/:profileId`}
+            render={routeProps => <ProfilePage {...routeProps} {...props} />}
+          />
+          <Route render={() => <div>{t('Oops, Profile not found!')}</div>} />
+        </Switch>
+      </Box>
     </Router>
   );
 };

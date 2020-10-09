@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider } from 'react-i18next';
 
+const { Box, Helmet } = DS;
+
 export interface IProps {
   singleSpa: any;
   activeWhen: {
@@ -40,12 +42,14 @@ class App extends PureComponent<IProps> {
     }
 
     return (
-      <I18nextProvider i18n={i18n ? i18n : null}>
-        <DS.Helmet>
-          <title>App Center</title>
-        </DS.Helmet>
-        <h1>App Center Plugin</h1>
-      </I18nextProvider>
+      <Box width="100vw">
+        <I18nextProvider i18n={i18n ? i18n : null}>
+          <Helmet>
+            <title>App Center</title>
+          </Helmet>
+          <h1>App Center Plugin</h1>
+        </I18nextProvider>
+      </Box>
     );
   }
 }
