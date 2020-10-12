@@ -11,7 +11,7 @@ const ModalWrapper = styled(Box)`
   left: 0;
   top: 0;
   z-index: 199;
-  background: rgba(127, 127, 127, 1);
+  background: ${props => props.theme.colors.modalBackground};
 `;
 
 const StyledBox = styled(Box)`
