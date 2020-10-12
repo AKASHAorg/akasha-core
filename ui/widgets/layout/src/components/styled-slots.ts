@@ -4,7 +4,7 @@ import { BaseContainer } from './styled-containers';
 
 const { styled } = DS;
 
-export const SidebarSlot: StyledComponent<any, any, any, any> = styled(BaseContainer) <{
+export const SidebarSlot: StyledComponent<any, any, any, any> = styled(BaseContainer)<{
   visible: boolean;
 }>`
   flex-grow: 1;
