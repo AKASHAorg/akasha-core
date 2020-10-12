@@ -146,7 +146,7 @@ class LayoutWidget extends PureComponent<IProps> {
               <Box className="container" fill="horizontal">
                 <TopbarSlot id={topbarSlotId} />
                 <Box className="container" style={{ flexDirection: 'row' }}>
-                  <SidebarWrapper>
+                  <SidebarWrapper visible={sidebarVisible}>
                     <SidebarSlot
                       id={sidebarSlotId}
                       visible={sidebarVisible}
