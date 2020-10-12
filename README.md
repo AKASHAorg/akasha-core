@@ -7,7 +7,7 @@
 
 
 | App        | Status           |
-| ------------- |:-------------:|
+| ------------- |-------------|
 | [Feed-app](https://ethereum-world.netlify.app/)      | [![Netlify Status](https://api.netlify.com/api/v1/badges/f2a5bca3-3853-406e-8cb0-105719cabb00/deploy-status)](https://app.netlify.com/sites/ethereum-world/deploys) |
 | [Storybook](https://storybook-awf.netlify.app/)      | [![Netlify Status](https://api.netlify.com/api/v1/badges/04915c36-eff6-4bbe-945b-e9255cae6fb1/deploy-status)](https://app.netlify.com/sites/storybook-awf/deploys)      |
 
@@ -45,8 +45,11 @@ $ npm install
 $ npm run bootstrap
 ```
 
+
 ## Usage
 
+For a definitive guide on all available scripts, check out [Scripts-Guide](./SCRIPTS-GUIDE.md)
+          
 This repository is split into four [lerna](https://github.com/lerna/lerna) workspaces:
 
 ### SDK
