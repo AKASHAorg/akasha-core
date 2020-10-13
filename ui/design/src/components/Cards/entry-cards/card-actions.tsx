@@ -3,6 +3,7 @@ import { Box } from 'grommet';
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { TextIcon } from '../../TextIcon';
 import { IEntryData } from './entry-box';
+import { MobileListModal } from '../../Modals';
 
 export type ServiceNames = 'twitter' | 'reddit' | 'facebook';
 
@@ -82,6 +83,30 @@ const CardActions: React.FC<CardActionProps> = props => {
   };
 
   const renderRepostDrop = () => {
+    const menuItems = [
+      {
+        label: repostLabel,
+        icon: 'transfer',
+        handler: (e: any) => {
+          // block event bubbling to parent
+          e.stopPropagation();
+          return onRepost();
+        },
+      },
+      {
+        label: repostWithCommentLabel,
+        icon: 'edit',
+        handler: (e: any) => {
+          e.stopPropagation();
+          return onRepostWithComment();
+        },
+      },
+    ];
+
+    if (size === 'small') {
+      return <MobileListModal menuItems={menuItems} closeModal={handleRepostsClose} />;
+    }
+
     return (
       <StyledDrop
         target={repostNodeRef.current}
