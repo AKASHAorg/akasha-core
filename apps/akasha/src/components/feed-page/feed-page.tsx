@@ -68,7 +68,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     sdkModules: props.sdkModules,
     logger: props.logger,
   });
-  console.log(bookmarks, 'the bookmarks');
+
   const handleLoadMore = async (payload: ILoadItemsPayload) => {
     const resp = await fetchFeedItems(payload);
     if (resp.items.length) {
@@ -102,8 +102,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     /* todo */
   };
   const handleEntryBookmark = (entryId: string) => {
-    /* todo */
-    console.log(ethAddress, 'the eth address');
     if (!ethAddress) {
       return showLoginModal();
     }
