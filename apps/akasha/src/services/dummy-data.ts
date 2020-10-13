@@ -33,12 +33,12 @@ const contentStrings = [
   'Кто меч там Ходя душу есть идет Вам.',
 ];
 
-const genTime = () => {
+export const genTime = () => {
   const startDate = new Date('Mon Jun 03 2019 12:12:58 GMT+0300');
   const end = Date.now() / 1000;
   const start = startDate.getTime() / 1000;
   const date = new Date(start + Math.max(0, Math.random() * (end - start)));
-  return date.getTime().toLocaleString();
+  return date.getTime().toString();
 };
 
 export const genEntryData = (entryId: string) => ({
@@ -56,8 +56,8 @@ export const genEntryData = (entryId: string) => ({
 
 export const genEthAddress = () => {
   let currIdx = 0;
-  return () => {
-    if (currIdx <= dummyEntryIds.length - 1) {
+  return (rnd?: boolean) => {
+    if (currIdx <= dummyEntryIds.length - 1 && !rnd) {
       // return predefined eth addresses
       const ethAddr = dummyEntryIds[currIdx];
       currIdx += 1;

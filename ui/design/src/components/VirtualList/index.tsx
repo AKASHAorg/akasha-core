@@ -1,6 +1,3 @@
-// import { Box } from 'grommet';
-// import ListContent from './list-content';
-// import { IVirtualListProps } from './interfaces';
 import VirtualList from './virtual-list';
 
 /* ************************

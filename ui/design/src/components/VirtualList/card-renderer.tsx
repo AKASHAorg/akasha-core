@@ -63,7 +63,7 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
       style={{
         position: 'absolute',
         transform: `translateY(${yPos}px)`,
-        transition: 'transform 0.24s ease-out',
+        transition: 'opacity 0.24s ease-out',
         width: '100%',
       }}
     >

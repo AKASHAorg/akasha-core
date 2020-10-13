@@ -8,7 +8,8 @@ export interface PostsPageProps {
   sdkModules: any;
   logger: any;
   navigateToUrl: (url: string) => void;
-  onLoginModalShow: () => void;
+  showLoginModal: () => void;
+  onError: (err: Error) => void;
 }
 
 const PostsPage: React.FC<PostsPageProps> = props => {

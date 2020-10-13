@@ -8,7 +8,7 @@ const { EditorCard, EntryCard, styled, css } = DS;
 export interface IGetCustomEntitiesProps {
   isMobile: boolean;
   feedItems: string[];
-  loggedEthAddress: string;
+  loggedEthAddress: string | null;
   handlePublish: (ethAddress: string, content: any) => void;
   handleBackNavigation: () => void;
   pendingEntries: any[];
@@ -38,7 +38,7 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
     onAvatarClick,
   } = props;
   let customEntities = [];
-  if (!isMobile) {
+  if (!isMobile && loggedEthAddress) {
     customEntities.push({
       position: 'before',
       // itemIndex: 0,
@@ -56,7 +56,7 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
       ),
     });
   }
-  if (pendingEntries.length) {
+  if (pendingEntries.length && loggedEthAddress) {
     const entriesToPrepend = pendingEntries.map(pendingEntry => ({
       position: 'before',
       itemId: feedItems.length ? feedItems[0] : null,

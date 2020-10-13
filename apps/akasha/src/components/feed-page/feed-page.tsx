@@ -9,9 +9,17 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { fetchFeedItemData, fetchFeedItems } from '../../services/feed-service';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import useFeedReducer from '../../hooks/use-feed-reducer';
-import { addToIPFS, getPending, publishEntry } from '../../services/posting-service';
+import {
+  addToIPFS,
+  getPending,
+  publishEntry,
+  removePending,
+  savePending,
+  updatePending,
+} from '../../services/posting-service';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import useEntryPublisher from '../../hooks/use-entry-publisher';
+import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
 
 const { Helmet, VirtualList, Box, ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard } = DS;
 
@@ -19,10 +27,14 @@ export interface FeedPageProps {
   globalChannel: any;
   sdkModules: any;
   logger: any;
+  showLoginModal: () => void;
+  ethAddress: string | null;
+  jwtToken: string | null;
+  onError: (err: Error) => void;
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const { isMobile } = props;
+  const { isMobile, showLoginModal, ethAddress, jwtToken, onError } = props;
   const [feedState, feedStateActions] = useFeedReducer({});
 
   const { t, i18n } = useTranslation();
@@ -30,13 +42,23 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [pendingEntries, pendingActions] = useEntryPublisher({
     publishEntry: publishEntry,
-    onPublishComplete: _localId => {
-      /* TODO: merge the entry with all entries... */
-      /* should consider publishing date? */
+    onPublishComplete: (ethAddr, publishedEntry) => {
+      removePending(ethAddr, publishedEntry.localId);
+      pendingActions.removeEntry(publishedEntry.localId);
+      if (publishedEntry.entry.entryId) {
+        // @TODO: this call (setFeedItemData) should be removed when we have real data
+        // aka we should only `setFeedItems` and let the list to load fresh data from server/ipfs
+        feedStateActions.setFeedItemData(publishedEntry.entry as IEntryData);
+        feedStateActions.setFeedItems({
+          reverse: true,
+          items: [publishedEntry.entry as IEntryData],
+        });
+      }
     },
-    ethAddress: '0x123someethaddress',
+    ethAddress: ethAddress,
     addToIPFS: addToIPFS,
     getPendingEntries: getPending,
+    onStep: (ethAddr, localId) => updatePending(ethAddr, localId).catch(err => onError(err)),
   });
 
   const handleLoadMore = async (payload: ILoadItemsPayload) => {
@@ -96,23 +118,31 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     /* todo */
   };
 
-  const handleEntryPublish = async (ethAddress: string, _content: any) => {
-    const localId = `${ethAddress}-${pendingEntries.length + 1}`;
+  const handleEntryPublish = async (authorEthAddr: string, _content: any) => {
+    if (!ethAddress && !jwtToken) {
+      showLoginModal();
+      return;
+    }
+    const localId = `${authorEthAddr}-${pendingEntries.length + 1}`;
     try {
       const entry = {
         content: 'this is a test published content',
         author: {
-          ethAddress,
+          ethAddress: authorEthAddr,
         },
+        time: new Date().getTime() / 1000,
       };
-      // await savePublished(ethAddress, pendingEntries);
       pendingActions.addEntry({
         entry,
         localId,
-        ethAddress: 'asddsa',
         step: 'PUBLISH_START',
       });
-      // feedStateActions.publishEntry(ethAddress, localId, entry);
+      if (ethAddress) {
+        await savePending(
+          ethAddress,
+          pendingEntries.concat([{ entry, localId, step: 'PUBLISH_START' }]),
+        );
+      }
     } catch (err) {
       props.logger.error('Error publishing entry');
     }
@@ -184,7 +214,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           isMobile,
           handleBackNavigation,
           feedItems: feedState.feedItems,
-          loggedEthAddress: '0x123123123123',
+          loggedEthAddress: ethAddress,
           handlePublish: handleEntryPublish,
           pendingEntries: pendingEntries,
           onAvatarClick: handleAvatarClick,
