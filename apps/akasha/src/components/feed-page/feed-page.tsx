@@ -20,6 +20,7 @@ import {
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import useEntryPublisher from '../../hooks/use-entry-publisher';
 import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
+import useEntryBookmark from '../../hooks/use-entry-bookmark';
 
 const { Helmet, VirtualList, Box, ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard } = DS;
 
@@ -61,6 +62,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     onStep: (ethAddr, localId) => updatePending(ethAddr, localId).catch(err => onError(err)),
   });
 
+  const [bookmarks, bookmarkActions] = useEntryBookmark({
+    ethAddress,
+    onError,
+    sdkModules: props.sdkModules,
+    logger: props.logger,
+  });
+  console.log(bookmarks, 'the bookmarks');
   const handleLoadMore = async (payload: ILoadItemsPayload) => {
     const resp = await fetchFeedItems(payload);
     if (resp.items.length) {
@@ -93,8 +101,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleAvatarClick = () => {
     /* todo */
   };
-  const handleEntryBookmark = () => {
+  const handleEntryBookmark = (entryId: string) => {
     /* todo */
+    console.log(ethAddress, 'the eth address');
+    if (!ethAddress) {
+      return showLoginModal();
+    }
+    bookmarkActions.addBookmark(entryId);
   };
   const handleEntryRepost = () => {
     /* todo */
@@ -159,6 +172,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         loadItemData={loadItemData}
         loadInitialFeed={onInitialLoad}
         hasMoreItems={true}
+        bookmarkedItems={bookmarks}
         getItemCard={({ itemData, isBookmarked }) => (
           <ErrorInfoCard errors={{}}>
             {(errorMessages, hasCriticalErrors) => (
