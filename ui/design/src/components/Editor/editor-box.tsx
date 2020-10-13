@@ -32,6 +32,7 @@ export interface IEditorBox {
   getTags: (query: string) => void;
   mentions?: string[];
   tags?: string[];
+  ipfsService?: any;
 }
 
 const HOTKEYS = {
@@ -55,6 +56,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
     getTags,
     mentions = [],
     tags = [],
+    ipfsService,
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -354,6 +356,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
           target={mediaIconRef.current}
           closePopover={closeImagePopover}
           insertImage={handleInsertImageLink}
+          ipfsService={ipfsService}
         />
       )}
       {emojiPopoverOpen && emojiIconRef.current && (

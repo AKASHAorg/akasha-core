@@ -14,9 +14,10 @@ interface NewPostPageProps {
 }
 
 const NewPostPage: React.FC<NewPostPageProps> = props => {
-  const { showLoginModal } = props;
+  const { showLoginModal, sdkModules } = props;
   const Login = getLoggedProfileStore();
   const loginEthAddr = Login.useStoreState((state: any) => state.data.ethAddress);
+  const ipfsService = sdkModules.commons.ipfsService;
 
   const { t } = useTranslation();
 
@@ -25,6 +26,14 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
   };
 
   const handleBackNavigation = () => {
+    // todo
+  };
+
+  const handleGetMentions = () => {
+    // todo
+  };
+
+  const handleGetTags = () => {
     // todo
   };
 
@@ -56,6 +65,11 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
             handleNavigateBack={handleBackNavigation}
             postLabel={t('Publish')}
             placeholderLabel={t('Share your thoughts')}
+            getMentions={handleGetMentions}
+            getTags={handleGetTags}
+            // mentions={mentions}
+            // tags={tags}
+            ipfsService={ipfsService}
           />
         </Box>
       )}

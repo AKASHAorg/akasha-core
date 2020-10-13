@@ -1,7 +1,7 @@
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import { IPFS_SERVICE } from './constants';
 import ipfsMethods from './ipfs.methods';
-// import ipfsSettings from './ipfs.settings';
+import { ipfsGateway } from './ipfs.settings';
 
 const service: AkashaService = (invoke, log) => {
   let ipfsNode;
@@ -58,6 +58,11 @@ const service: AkashaService = (invoke, log) => {
   ) => {
     return ipfsMethods.add(data, { getInstance, getUtils }, log);
   };
-  return { getInstance, getUtils, upload };
+
+  const getSettings = async () => {
+    return ipfsGateway;
+  };
+
+  return { getInstance, getUtils, upload, getSettings };
 };
 export default { service, name: IPFS_SERVICE };

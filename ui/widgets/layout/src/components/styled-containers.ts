@@ -1,9 +1,8 @@
 import DS from '@akashaproject/design-system';
-import { css, StyledComponent } from 'styled-components';
 
-const { styled } = DS;
+const { css, styled } = DS;
 
-export const BaseContainer: StyledComponent<'div', {}> = styled.div`
+export const BaseContainer: any = styled.div`
   border: 0;
   box-sizing: border-box;
   display: flex;
@@ -18,9 +17,10 @@ export const BaseContainer: StyledComponent<'div', {}> = styled.div`
   z-index: 0;
 `;
 
-export const MainAreaContainer: StyledComponent<any, any, any, any> = styled(BaseContainer)`
+export const MainAreaContainer: any = styled(BaseContainer)`
   flex-grow: 1;
   flex-direction: column-reverse !important;
+  justify-content: center;
   max-width: 100%;
   margin-bottom: 0.5em;
   ${props => css<any>`
@@ -33,7 +33,7 @@ export const MainAreaContainer: StyledComponent<any, any, any, any> = styled(Bas
   `}
 `;
 
-export const WidgetContainer: StyledComponent<any, any, any, any> = styled(BaseContainer)`
+export const WidgetContainer: any = styled(BaseContainer)`
   position: sticky;
   top: 4em;
 `;

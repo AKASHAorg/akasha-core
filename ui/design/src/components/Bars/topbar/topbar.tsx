@@ -23,7 +23,7 @@ export interface ITopbarProps {
   searchAreaItem?: IMenuItem;
   // handlers
   onNavigation: (path: string) => void;
-  onSidebarToggle: (visibility: boolean) => void;
+  // onSidebarToggle: (visibility: boolean) => void;
   onSearch: (ev: React.KeyboardEvent<HTMLInputElement>, inputValue: string) => void;
   // external css
   className?: string;
@@ -40,13 +40,11 @@ const Topbar = (props: ITopbarProps) => {
     searchAreaItem,
     onSearch,
     onNavigation,
-    onSidebarToggle,
     ethAddress,
     size,
   } = props;
 
   const [inputValue, setInputValue] = React.useState('');
-  const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   const [dropOpen, setDropOpen] = React.useState(false);
   const [dropItems, setDropItems] = React.useState<IMenuItem[]>([]);
@@ -60,16 +58,6 @@ const Topbar = (props: ITopbarProps) => {
       onNavigation(menuItem.route);
     }
     setDropOpen(false);
-  };
-
-  const handleSidebarVisibility = () => {
-    if (!sidebarOpen && onSidebarToggle) {
-      onSidebarToggle(true);
-      setSidebarOpen(true);
-    } else if (sidebarOpen && onSidebarToggle) {
-      onSidebarToggle(false);
-      setSidebarOpen(false);
-    }
   };
 
   const onClickPluginButton = (menuItem: IMenuItem) => () => {
@@ -132,24 +120,27 @@ const Topbar = (props: ITopbarProps) => {
   );
 
   const renderContent = () => {
-    if (size === 'small') {
-      return (
-        <>
-          <Box direction="row" gap="small" align="center" pad={{ right: 'medium' }}>
-            <Icon type="menu" onClick={handleSidebarVisibility} clickable={true} />
-            {sidebarOpen && (
-              <StyledText
-                size="large"
-                weight="bold"
-                onClick={() => {
-                  onNavigation('/');
-                }}
-              >
-                {brandLabel}
-              </StyledText>
-            )}
-          </Box>
-          {searchAreaItem && !sidebarOpen && (
+    return (
+      <>
+        <Box
+          direction="row"
+          gap="small"
+          align="center"
+          pad={{ right: 'medium' }}
+          onClick={() => {
+            onNavigation('/');
+          }}
+        >
+          <Icon type="ethereumWorldLogo" clickable={true} />
+          {size !== 'small' && (
+            <StyledText size="large" weight="bold">
+              {brandLabel}
+            </StyledText>
+          )}
+        </Box>
+
+        <Box direction="row" align="center" gap="small" pad={{ horizontal: 'medium' }}>
+          {searchAreaItem && (
             <StyledSearchContainer>
               <SearchBar
                 inputValue={inputValue}
@@ -158,38 +149,6 @@ const Topbar = (props: ITopbarProps) => {
               />
             </StyledSearchContainer>
           )}
-          {!sidebarOpen && (
-            <Box direction="row" align="center" gap="small" pad={{ left: 'medium' }}>
-              {quickAccessItems.map(renderPluginButton)}
-            </Box>
-          )}
-        </>
-      );
-    }
-    return (
-      <>
-        <Box direction="row" gap="small" align="center" pad={{ right: 'medium' }}>
-          <Icon type="menu" onClick={handleSidebarVisibility} clickable={true} />
-          <StyledText
-            size="large"
-            weight="bold"
-            onClick={() => {
-              onNavigation('/');
-            }}
-          >
-            {brandLabel}
-          </StyledText>
-        </Box>
-        {searchAreaItem && (
-          <StyledSearchContainer>
-            <SearchBar
-              inputValue={inputValue}
-              onInputChange={event => setInputValue(event.target.value)}
-              handleKeyDown={ev => onSearch(ev, inputValue)}
-            />
-          </StyledSearchContainer>
-        )}
-        <Box direction="row" align="center" gap="small" pad={{ horizontal: 'medium' }}>
           {quickAccessItems.map(renderPluginButton)}
         </Box>
       </>
@@ -206,11 +165,7 @@ const Topbar = (props: ITopbarProps) => {
       className={className}
       elevation="shadow"
       height="3rem"
-      border={
-        size === 'small' && sidebarOpen
-          ? undefined
-          : { side: 'bottom', size: '1px', style: 'solid', color: 'border' }
-      }
+      border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
     >
       {renderContent()}
       {dropOpen && renderDrop()}

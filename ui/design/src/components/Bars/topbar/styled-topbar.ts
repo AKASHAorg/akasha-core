@@ -11,7 +11,7 @@ const StyledText = styled(Text)`
 
 const StyledSearchContainer = styled(Box)`
   flex-grow: 1;
-  max-width: 36rem;
+  max-width: 15rem;
 `;
 
 const StyledDrop = styled(Drop)`

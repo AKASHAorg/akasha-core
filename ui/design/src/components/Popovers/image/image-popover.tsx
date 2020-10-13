@@ -16,10 +16,11 @@ export interface IImagePopover {
   target: HTMLElement;
   closePopover: () => void;
   insertImage: (url: string) => void;
+  ipfsService?: any;
 }
 
 const ImagePopover: React.FC<IImagePopover> = props => {
-  const { target, closePopover, insertImage } = props;
+  const { target, closePopover, insertImage, ipfsService } = props;
 
   const [linkInputValue, setLinkInputValue] = React.useState('');
   const [uploadValue, setUploadValue] = React.useState('');
@@ -28,7 +29,17 @@ const ImagePopover: React.FC<IImagePopover> = props => {
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 
   const handleLinkInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setLinkInputValue(ev.target.value);
+    if (ipfsService) {
+      const call = ipfsService.upload([{ content: ev.target.value, isUrl: true }]);
+      const settingsCall = ipfsService.getSettings({});
+      call.subscribe((response: any) => {
+        settingsCall.subscribe((settingsResp: any) => {
+          setLinkInputValue(`${settingsResp.data}/${response.data[0]}`);
+        });
+      });
+    } else {
+      setLinkInputValue(ev.target.value);
+    }
   };
 
   const handleUploadInputClick = () => {
@@ -46,12 +57,25 @@ const ImagePopover: React.FC<IImagePopover> = props => {
     const file = e.target.files[0];
     const fileName = file.name;
     const fileReader = new FileReader();
-    fileReader.addEventListener('load', () => {
-      const result = fileReader.result as string;
-      setUploadValue(result);
-      setUploadValueName(fileName);
-    });
+
     fileReader.readAsDataURL(file);
+
+    fileReader.addEventListener('load', () => {
+      const result = fileReader.result as any;
+      if (ipfsService) {
+        const call = ipfsService.upload([{ content: file }]);
+        const settingsCall = ipfsService.getSettings({});
+        call.subscribe((response: any) => {
+          settingsCall.subscribe((settingsResp: any) => {
+            setUploadValue(`${settingsResp.data}/${response.data[0]}`);
+            setUploadValueName(`${settingsResp.data}/${response.data[0]}`);
+          });
+        });
+      } else {
+        setUploadValue(result);
+        setUploadValueName(fileName);
+      }
+    });
   };
 
   const handleInsertImage = () => {
@@ -96,7 +120,7 @@ const ImagePopover: React.FC<IImagePopover> = props => {
                 align="center"
               >
                 <StyledImg src={uploadValue} />
-                <Text>{uploadValueName}</Text>
+                <Text wordBreak="break-all">{uploadValueName}</Text>
               </Box>
 
               <Box align="end" pad={{ vertical: 'medium' }}>

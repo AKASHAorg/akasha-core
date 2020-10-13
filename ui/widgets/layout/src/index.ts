@@ -10,7 +10,6 @@ export const application = {
   title: 'Layout Widget',
   pluginSlotId: 'plugin-slot',
   topbarSlotId: 'topbar-slot',
-  sidebarSlotId: 'sidebar-slot',
   rootWidgetSlotId: 'root-widget-slot',
   widgetSlotId: 'widget-slot',
   modalSlotId: 'modal-slot',
