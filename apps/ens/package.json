@@ -45,20 +45,22 @@
     "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"
   },
   "dependencies": {
+    "@akashaproject/design-system": "*",
     "@akashaproject/sdk-auth": "*",
-    "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-common": "*",
-    "@akashaproject/sdk-runtime": "*",
+    "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-db": "*",
     "@akashaproject/sdk-registry": "*",
-    "@akashaproject/design-system": "*",
+    "@akashaproject/sdk-runtime": "*",
+    "easy-peasy": "3.3.0",
+    "lodash.debounce": "^4.0.8",
     "react-i18next": "11.4.0",
     "react-router-dom": "5.1.2",
-    "single-spa-react": "2.14.0",
-    "easy-peasy": "3.3.0"
+    "single-spa-react": "2.14.0"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
+    "@types/lodash.debounce": "4.0.6",
     "@types/react": "16.9.34",
     "@types/react-dom": "16.9.7",
     "@types/react-router-dom": "5.1.5",

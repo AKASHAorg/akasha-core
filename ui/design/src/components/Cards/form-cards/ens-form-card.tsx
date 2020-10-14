@@ -87,10 +87,11 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   }, []);
 
   React.useEffect(() => {
-    if (!validEns && typeof validEns === 'boolean') {
-      setError(true);
+    if (typeof validEns === 'boolean') {
+      setError(!validEns);
+      setSuccess(validEns);
     }
-    if (validEns && typeof validEns === 'undefined') {
+    if (typeof validEns === 'undefined') {
       setSuccess(true);
     }
   }, [validEns]);
@@ -133,7 +134,6 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
       hiddenSpanRef.current.textContent = sanitizedValue;
     }
     setError(false);
-    setSuccess(false);
     if (value) {
       if (hiddenSpanRef.current) {
         setTextInputComputedWidth(`${(hiddenSpanRef.current.offsetWidth + 2) / 16}rem`);

@@ -1,11 +1,12 @@
 import * as React from 'react';
 
 export interface IConfig {
-  attributes: boolean;
+  attributes?: boolean;
   /**
    * Trigger callback only for these attributes
    */
   attributesFilter?: string[];
+  childList?: boolean;
 }
 
 export const useMutationObserver = (
@@ -13,12 +14,12 @@ export const useMutationObserver = (
   callback: MutationCallback,
   config?: IConfig,
 ) => {
-  const observer = React.useMemo(() => new MutationObserver(callback), [callback]);
+  const observer = React.useRef(new MutationObserver(callback));
 
   React.useEffect(() => {
     if (domEl) {
-      observer.observe(domEl, config);
-      return () => observer.disconnect();
+      observer.current.observe(domEl, { attributes: true, ...config });
+      return () => observer.current.disconnect();
     }
     return () => undefined;
   }, [domEl, config]);

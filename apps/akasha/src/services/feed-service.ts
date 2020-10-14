@@ -1,4 +1,5 @@
-import { genEntryData, genEthAddress } from './dummy-data';
+import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
+import { genEntryData, genEthAddress, delay } from './dummy-data';
 
 interface IGetFeedOptions {
   start?: string;
@@ -52,10 +53,9 @@ export const fetchFeedItems = (
   });
 };
 
-export const fetchFeedItemData = (payload: { entryId: string }) => {
+export const fetchFeedItemData = (payload: { entryId: string }): Promise<IEntryData> => {
   const { entryId } = payload;
-  if (entryId) {
-    return Promise.resolve(genEntryData(entryId));
-  }
-  return Promise.resolve({ entryId });
+  return delay(100).then(() => {
+    return genEntryData(entryId);
+  });
 };

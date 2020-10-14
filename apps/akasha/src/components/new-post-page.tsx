@@ -9,11 +9,12 @@ interface NewPostPageProps {
   globalChannel: any;
   sdkModules: any;
   logger: any;
-  onLoginModalShow: () => void;
+  showLoginModal: () => void;
+  onError: (err: Error) => void;
 }
 
 const NewPostPage: React.FC<NewPostPageProps> = props => {
-  const { onLoginModalShow } = props;
+  const { showLoginModal } = props;
   const Login = getLoggedProfileStore();
   const loginEthAddr = Login.useStoreState((state: any) => state.data.ethAddress);
 
@@ -42,7 +43,7 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
         >
           <Box direction="row">
             <Button label={t('Cancel')} secondary={true} margin={{ right: '.5em' }} />
-            <Button label={t('Connect Wallet')} primary={true} onClick={onLoginModalShow} />
+            <Button label={t('Connect Wallet')} primary={true} onClick={showLoginModal} />
           </Box>
         </ErrorLoader>
       )}

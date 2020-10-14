@@ -6,7 +6,21 @@ import {
   ILoadItemsPayload,
 } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { fetchFeedItemData, fetchFeedItems } from '../services/feed-service';
+import { fetchFeedItemData, fetchFeedItems } from '../../services/feed-service';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import useFeedReducer from '../../hooks/use-feed-reducer';
+import {
+  addToIPFS,
+  getPending,
+  publishEntry,
+  removePending,
+  savePending,
+  updatePending,
+} from '../../services/posting-service';
+import { getFeedCustomEntities } from './feed-page-custom-entities';
+import useEntryPublisher from '../../hooks/use-entry-publisher';
+import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
+import useEntryBookmark from '../../hooks/use-entry-bookmark';
 
 const { Helmet, VirtualList, Box, ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard } = DS;
 
@@ -14,60 +28,58 @@ export interface FeedPageProps {
   globalChannel: any;
   sdkModules: any;
   logger: any;
-}
-interface IFeedState {
-  isFeedLoading: boolean;
-  feedItems: string[];
-  feedItemData: {
-    [key: string]: any;
-  };
+  showLoginModal: () => void;
+  ethAddress: string | null;
+  jwtToken: string | null;
+  onError: (err: Error) => void;
 }
 
-const feedStateReducer = (state: IFeedState, action: { type: string; payload: any }) => {
-  switch (action.type) {
-    case 'FEED_LOAD_SUCCESS':
-      return { ...state, isFeedLoading: false };
-    case 'LOAD_FEED_ITEMS':
-      return { ...state, isFeedLoading: true };
-    case 'LOAD_FEED_ITEMS_SUCCESS':
-      return { ...state, feedItems: state.feedItems.concat(action.payload), isFeedLoading: false };
-    case 'LOAD_FEED_ITEM_DATA_SUCCESS':
-      return {
-        ...state,
-        feedItemData: { ...state.feedItemData, [action.payload.entryId]: action.payload },
-      };
-    default:
-      throw new Error(`Could not find action with type: ${action.type}`);
-  }
-};
-
-const FeedPage: React.FC<FeedPageProps> = _props => {
-  const [feedState, dispatch] = React.useReducer(feedStateReducer, {
-    isFeedLoading: true,
-    feedItems: [],
-    feedItemData: {},
-  });
+const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
+  const { isMobile, showLoginModal, ethAddress, jwtToken, onError } = props;
+  const [feedState, feedStateActions] = useFeedReducer({});
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
+  const [pendingEntries, pendingActions] = useEntryPublisher({
+    publishEntry: publishEntry,
+    onPublishComplete: (ethAddr, publishedEntry) => {
+      removePending(ethAddr, publishedEntry.localId);
+      pendingActions.removeEntry(publishedEntry.localId);
+      if (publishedEntry.entry.entryId) {
+        // @TODO: this call (setFeedItemData) should be removed when we have real data
+        // aka we should only `setFeedItems` and let the list to load fresh data from server/ipfs
+        feedStateActions.setFeedItemData(publishedEntry.entry as IEntryData);
+        feedStateActions.setFeedItems({
+          reverse: true,
+          items: [publishedEntry.entry as IEntryData],
+        });
+      }
+    },
+    ethAddress: ethAddress,
+    addToIPFS: addToIPFS,
+    getPendingEntries: getPending,
+    onStep: (ethAddr, localId) => updatePending(ethAddr, localId).catch(err => onError(err)),
+  });
+
+  const [bookmarks, bookmarkActions] = useEntryBookmark({
+    ethAddress,
+    onError,
+    sdkModules: props.sdkModules,
+    logger: props.logger,
+  });
+
   const handleLoadMore = async (payload: ILoadItemsPayload) => {
     const resp = await fetchFeedItems(payload);
-    if (resp) {
-      dispatch({
-        type: 'LOAD_FEED_ITEMS_SUCCESS',
-        payload: resp.items.map(i => i.entryId),
-      });
+    if (resp.items.length) {
+      feedStateActions.setFeedItems(resp);
     }
   };
 
   const loadItemData = async (payload: ILoadItemDataPayload) => {
     const resp = await fetchFeedItemData({ entryId: payload.itemId });
     if (resp) {
-      dispatch({
-        type: 'LOAD_FEED_ITEM_DATA_SUCCESS',
-        payload: resp,
-      });
+      feedStateActions.setFeedItemData(resp);
     }
   };
 
@@ -78,18 +90,22 @@ const FeedPage: React.FC<FeedPageProps> = _props => {
       reverse: payload.reverse,
     });
     if (response.items.length) {
-      dispatch({
-        type: 'LOAD_FEED_ITEMS_SUCCESS',
-        payload: response.items.map(i => i.entryId),
-      });
+      feedStateActions.setFeedItems(response);
     }
+  };
+
+  const handleBackNavigation = () => {
+    /* back navigation logic here */
   };
 
   const handleAvatarClick = () => {
     /* todo */
   };
-  const handleEntryBookmark = () => {
-    /* todo */
+  const handleEntryBookmark = (entryId: string) => {
+    if (!ethAddress) {
+      return showLoginModal();
+    }
+    bookmarkActions.addBookmark(entryId);
   };
   const handleEntryRepost = () => {
     /* todo */
@@ -113,6 +129,35 @@ const FeedPage: React.FC<FeedPageProps> = _props => {
     /* todo */
   };
 
+  const handleEntryPublish = async (authorEthAddr: string, _content: any) => {
+    if (!ethAddress && !jwtToken) {
+      showLoginModal();
+      return;
+    }
+    const localId = `${authorEthAddr}-${pendingEntries.length + 1}`;
+    try {
+      const entry = {
+        content: 'this is a test published content',
+        author: {
+          ethAddress: authorEthAddr,
+        },
+        time: new Date().getTime() / 1000,
+      };
+      pendingActions.addEntry({
+        entry,
+        localId,
+        step: 'PUBLISH_START',
+      });
+      if (ethAddress) {
+        await savePending(
+          ethAddress,
+          pendingEntries.concat([{ entry, localId, step: 'PUBLISH_START' }]),
+        );
+      }
+    } catch (err) {
+      props.logger.error('Error publishing entry');
+    }
+  };
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -125,6 +170,7 @@ const FeedPage: React.FC<FeedPageProps> = _props => {
         loadItemData={loadItemData}
         loadInitialFeed={onInitialLoad}
         hasMoreItems={true}
+        bookmarkedItems={bookmarks}
         getItemCard={({ itemData, isBookmarked }) => (
           <ErrorInfoCard errors={{}}>
             {(errorMessages, hasCriticalErrors) => (
@@ -174,6 +220,17 @@ const FeedPage: React.FC<FeedPageProps> = _props => {
             )}
           </ErrorInfoCard>
         )}
+        customEntities={getFeedCustomEntities({
+          t,
+          locale,
+          isMobile,
+          handleBackNavigation,
+          feedItems: feedState.feedItems,
+          loggedEthAddress: ethAddress,
+          handlePublish: handleEntryPublish,
+          pendingEntries: pendingEntries,
+          onAvatarClick: handleAvatarClick,
+        })}
       />
     </Box>
   );

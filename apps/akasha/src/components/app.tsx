@@ -13,16 +13,33 @@ export default class Application extends React.Component<RootComponentProps> {
   };
   public componentDidCatch(error: Error, errorInfo: any) {
     if (this.props.logger) {
-      this.props.logger.error('auth-widget error %j %j', error, errorInfo);
+      this.props.logger.error('akasha-app error %j %j', error, errorInfo);
     }
-    this.setState({
-      errors: {
-        'caught.critical': {
-          error: new Error(`${error} \n Additional info: \n ${errorInfo}`),
-          critical: false,
+    if (!this.state.errors['caught.critical']) {
+      this.setState({
+        errors: {
+          'caught.critical': {
+            error: new Error(`${error} \n Additional info: \n ${errorInfo}`),
+            critical: false,
+          },
         },
-      },
-    });
+      });
+    }
+  }
+  public handleError(err: Error) {
+    if (this.props.logger) {
+      this.props.logger.error('akasha-app error %j', err);
+    }
+    if (!this.state.errors[err.name]) {
+      this.setState({
+        errors: {
+          [err.name]: {
+            error: err,
+            critical: false,
+          },
+        },
+      });
+    }
   }
   render() {
     const { i18n } = this.props;
@@ -40,7 +57,7 @@ export default class Application extends React.Component<RootComponentProps> {
           >
             <I18nextProvider i18n={i18n ? i18n : null}>
               <Login.Provider>
-                <AppRoutes {...this.props} />
+                <AppRoutes {...this.props} profileStore={Login} onError={this.handleError} />
               </Login.Provider>
             </I18nextProvider>
           </ThemeSelector>
