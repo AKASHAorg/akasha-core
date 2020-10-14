@@ -1,1 +1,1 @@
-# App center
+# App center plugin
