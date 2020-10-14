@@ -53,7 +53,7 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [Set<string>, IBookmark
   const actions: IBookmarkActions = {
     addBookmark: entryId => {
       const newBmks = new Set(bookmarks).add(entryId);
-      const call = sdkModules.fb.settingsAttachment.put({
+      const call = sdkModules.db.settingsAttachment.put({
         ethAddress,
         obj: {
           data: JSON.stringify(Array.from(newBmks)),
@@ -61,7 +61,7 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [Set<string>, IBookmark
           id: bmKey,
         },
       });
-      call.subsribe(
+      call.subscribe(
         async (resp: any) => {
           const attachment = await resp.data.doc.getAttachment(bmKey);
           const textArr = await attachment.getStringData();
