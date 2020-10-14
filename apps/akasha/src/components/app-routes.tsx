@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import routes, { NEW_POST, FEED, POSTS } from '../routes';
+import routes, { NEW_POST, FEED, POSTS, rootRoute } from '../routes';
 import FeedPage from './feed-page/feed-page';
 import LoginModal from './login-modal';
 import NewPostPage from './new-post-page';
@@ -83,14 +83,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               onError={onError}
             />
           </Route>
-          {/* <Route path={routes[SETTINGS_PAGE]}>
-            <AKASHASettings
-              sdkModules={sdkModules}
-              globalChannel={globalChannel}
-              logger={logger}
-              showLoginModal={showLoginModal}
-            />
-          </Route> */}
           <Route path={routes[FEED]}>
             <FeedPage
               {...props}
@@ -110,6 +102,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               onError={onError}
             />
           </Route>
+          <Redirect exact={true} from={rootRoute} to={routes[FEED]} />
         </Switch>
       </Router>
       <LoginModal
