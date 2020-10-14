@@ -233,20 +233,30 @@ class ListEngine {
   onNearEnd() {
     /* load more items if needed */
     if (this.scrollDir === 'down') {
-      if (this.hasMoreItems) {
-        this.update('SET_FETCH_OP', {
-          req: {
-            startId: this.items[this.items.length - 1],
-            reverse: false,
-            limit: this.config.offsetItems,
-          },
-          status: 'pending',
-        });
-      }
+      this.createFetchOp({
+        startId: this.items[this.items.length - 1],
+        reverse: false,
+        limit: this.config.offsetItems,
+      });
     }
   }
   onAtEnd() {
     /* show a loading spinner or inform that there are no more entries */
+    if (this.scrollDir === 'down') {
+      this.createFetchOp({
+        startId: this.items[this.items.length - 1],
+        reverse: false,
+        limit: this.config.offsetItems,
+      });
+    }
+  }
+  createFetchOp(req: { startId: string; reverse: boolean; limit: number }) {
+    if (this.hasMoreItems) {
+      this.update('SET_FETCH_OP', {
+        req,
+        status: 'pending',
+      });
+    }
   }
   onScroll(ev: Event) {
     const target = ev.target as Document;
