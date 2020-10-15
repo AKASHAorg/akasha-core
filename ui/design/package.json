@@ -94,7 +94,7 @@
     "@types/react-virtualized-auto-sizer": "1.0.0",
     "@types/slate": "0.47.4",
     "@types/slate-react": "0.22.8",
-    "@types/styled-components": "4.4.3",
+    "@types/styled-components": "5.1.2",
     "dayjs": "1.8.25",
     "react-helmet": "6.0.0",
     "react-test-renderer": "16.13.1",

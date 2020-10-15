@@ -20,7 +20,7 @@ export interface IRegistrationStatus {
 export interface ProfileState {
   loggedEthAddress?: string;
   token: string | null;
-  ensInfo: { name?: string; providerName?: string };
+  ensInfo: { name?: string };
   registrationStatus: null | IRegistrationStatus;
   statusReceived: boolean;
   ensChecked: boolean;
@@ -46,7 +46,7 @@ export interface ProfileStateModel extends ProfileState {
   handleLoginError: Action<ProfileStateModel, { error: Error }>;
   getENSByAddress: Thunk<ProfileStateModel, { ethAddress: string }>;
   getEnsRegistrationStatus: Thunk<ProfileStateModel, { ethAddress: string }>;
-  registerENS: Thunk<ProfileStateModel, { name: string; providerName: string; ethAddress: string }>;
+  registerENS: Thunk<ProfileStateModel, { name: string; ethAddress: string }>;
   authorize: Thunk<ProfileStateModel, number>;
   checkENSAvailable: Thunk<ProfileStateModel, IRegistrationStatus>;
   claimENS: Thunk<ProfileStateModel, IRegistrationStatus & { ethAddress: string }>;
@@ -140,7 +140,7 @@ export const profileStateModel: ProfileStateModel = persist(
         logger.info('getENSByAddress response: %j', response.data);
         actions.updateData({
           ensChecked: true,
-          ensInfo: response.data ? { name: response.data, providerName: 'AKASHA ENS' } : {},
+          ensInfo: response.data ? { name: response.data } : {},
           fetching: false,
         });
       });
@@ -192,7 +192,6 @@ export const profileStateModel: ProfileStateModel = persist(
           registrationStatus: null,
           ensInfo: {
             name: name,
-            providerName: 'AKASHA ENS',
           },
         });
         logger.info('ENS Name: %s, registered', name);
@@ -273,7 +272,6 @@ export const profileStateModel: ProfileStateModel = persist(
           registrationStatus: null,
           ensInfo: {
             name: name,
-            providerName: 'AKASHA ENS',
           },
         });
       });

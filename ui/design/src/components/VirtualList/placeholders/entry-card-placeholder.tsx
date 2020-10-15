@@ -2,9 +2,12 @@ import * as React from 'react';
 import { Box } from 'grommet';
 import { BasicCardBox } from '../../Cards';
 
-const EntryLoadingPlaceholder = () => {
+export interface IPlaceholderProps {
+  style?: React.CSSProperties;
+}
+const EntryLoadingPlaceholder: React.FC<IPlaceholderProps> = props => {
   return (
-    <BasicCardBox style={{ minHeight: 200, padding: '1em' }}>
+    <BasicCardBox style={{ minHeight: 200, padding: '1em', marginTop: 16, ...props.style }}>
       <Box direction="row">
         <Box direction="row" align="center">
           <Box>

@@ -17,7 +17,6 @@
     "@widget/topbar": "/widgets/topbar.js",
     "@widget/login": "/widgets/login.js",
     "@plugins/profile": "/plugins/profile.js",
-    "@plugins/feed": "/plugins/feed.js",
     "@plugins/notifications": "/plugins/notifications.js",
     "@plugins/app-center": "/plugins/app-center.js",
     "@plugins/search": "/plugins/search.js",

@@ -48,9 +48,9 @@ export interface IEntryBoxProps {
   comment?: boolean;
   bookmarkLabel: string;
   bookmarkedLabel: string;
-  isBookmarked: boolean | null;
+  isBookmarked?: boolean;
   // handlers
-  onEntryBookmark?: (entryId: string, isBookmarked: boolean | null) => void;
+  onEntryBookmark?: (entryId: string, isBookmarked?: boolean) => void;
   onClickAvatar: React.MouseEventHandler<HTMLDivElement>;
   onClickReplies: (entryId: string) => void;
   onEntryShare: (service: ServiceNames, entryId?: string) => void;
