@@ -15,8 +15,8 @@ export interface EnsEditPageProps {
   profileStore: ReturnType<typeof createContextStore>;
 }
 
+// tslint:disable:cyclomatic-complexity
 /* eslint-disable complexity */
-
 const EnsEditPage: React.FC<EnsEditPageProps> = props => {
   const { onLoginModalShow, profileStore } = props;
 
@@ -165,7 +165,7 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
     </Box>
   );
 };
-
 /* eslint-enable complexity */
+// tslint:enable:cyclomatic-complexity
 
 export default EnsEditPage;
