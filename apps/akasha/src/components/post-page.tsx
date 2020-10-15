@@ -55,6 +55,9 @@ const PostPage: React.FC<IPostPage> = _props => {
       <EntryCard
         isBookmarked={isBookmarked}
         entryData={itemData}
+        shareDataTitle={t('Share Post')}
+        shareDataText={t('Share this post with your friends')}
+        shareDataUrl={'https://ethereum.world'}
         onClickAvatar={handleAvatarClick}
         onEntryBookmark={handleEntryBookmark}
         repliesLabel={t('Replies')}

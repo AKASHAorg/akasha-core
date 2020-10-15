@@ -8,10 +8,20 @@ import { MobileListModal } from '../../Modals';
 
 export type ServiceNames = 'twitter' | 'reddit' | 'facebook';
 
+export type ShareData = {
+  title?: string;
+  text: string;
+  url: string;
+};
+
 export interface CardActionProps {
   // data
   entryData: IEntryData;
   loggedProfileEthAddress?: string;
+  // share data
+  shareDataTitle?: string;
+  shareDataText: string;
+  shareDataUrl: string;
   // labels
   repostsLabel: string;
   repostLabel: string;
@@ -38,6 +48,10 @@ const CardActions: React.FC<CardActionProps> = props => {
     // data
     entryData,
     loggedProfileEthAddress,
+    // share data
+    shareDataTitle,
+    shareDataText,
+    shareDataUrl,
     // labels
     repostsLabel,
     repostLabel,
@@ -65,11 +79,11 @@ const CardActions: React.FC<CardActionProps> = props => {
   const repostNodeRef: React.RefObject<any> = React.useRef(null);
   const shareNodeRef: React.RefObject<any> = React.useRef(null);
 
-  const shareData = {
+  const shareData: ShareData = {
     // @TODO: replace with appropriate title, text and url of the post to be shared
-    title: 'Share Post',
-    text: 'Share this post with your friends',
-    url: 'https://ethereum.world',
+    title: shareDataTitle,
+    text: shareDataText,
+    url: shareDataUrl,
   };
 
   const handleRepostsOpen = () => {

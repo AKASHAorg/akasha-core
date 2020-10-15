@@ -244,6 +244,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                       <EntryCard
                         isBookmarked={isBookmarked}
                         entryData={itemData}
+                        shareDataTitle={t('Share Post')}
+                        shareDataText={t('Share this post with your friends')}
+                        shareDataUrl={'https://ethereum.world'}
                         onClickAvatar={ev => handleAvatarClick(ev, itemData.author.ethAddress)}
                         onEntryBookmark={handleEntryBookmark}
                         repliesLabel={t('Replies')}
