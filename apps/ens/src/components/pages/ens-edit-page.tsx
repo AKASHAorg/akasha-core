@@ -15,6 +15,7 @@ export interface EnsEditPageProps {
   profileStore: ReturnType<typeof createContextStore>;
 }
 
+// tslint:disable:complexity
 const EnsEditPage: React.FC<EnsEditPageProps> = props => {
   const { onLoginModalShow, profileStore } = props;
 
@@ -119,7 +120,7 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
         !isLoading &&
         registrationStatusReceived &&
         registrationStatus &&
-        !registrationStatus && (
+        registrationStatus.registering && (
           <ErrorLoader
             type="no-login"
             title={t('No Ethereum address detected')}

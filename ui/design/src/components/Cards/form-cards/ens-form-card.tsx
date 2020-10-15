@@ -170,20 +170,6 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
           </Text>
           <Icon type="close" color="secondaryText" primaryColor={true} clickable={true} />
         </Box>
-<<<<<<< HEAD
-        {providerData.name && (
-          <Box direction="column" pad="xsmall">
-            <Text weight="bold"> {secondaryTitleLabel}</Text>
-            <Box direction="row" gap="xxsmall" pad={{ bottom: 'xsmall' }} align="center">
-              <Box direction="row" align="center">
-                <Text color="secondaryText">
-                  {providerData.name.replace(`.${ensSubdomain}`, '')}
-                </Text>
-                <Text color="accentText">.{ensSubdomain}</Text>
-              </Box>
-
-              <Icon type="copy" onClick={handleCopyEns} clickable={true} />
-=======
         <Box direction="row" align="center">
           <StyledText color={error ? 'errorText' : 'secondaryText'} size="small">
             {nameLabel}
@@ -202,7 +188,6 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                 onChange={handleChange}
                 placeholder={nameFieldPlaceholder}
               />
->>>>>>> master
             </Box>
             {renderIcon()}
           </Box>
