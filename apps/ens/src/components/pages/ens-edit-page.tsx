@@ -1,8 +1,8 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { getProfileStore, ProfileState, ProfileStateModel } from '../../state/profile-state';
-import { ActionMapper, StateMapper } from 'easy-peasy';
+import { ProfileStateModel } from '../../state/profile-state';
+import { ActionMapper, StateMapper, createContextStore } from 'easy-peasy';
 import { ENS_EDIT_PAGE } from '../../routes';
 import debounce from 'lodash.debounce';
 
@@ -12,38 +12,42 @@ export interface EnsEditPageProps {
   globalChannel: any;
   logger: any;
   onLoginModalShow: () => void;
+  profileStore: ReturnType<typeof createContextStore>;
 }
 
 const EnsEditPage: React.FC<EnsEditPageProps> = props => {
-  const { onLoginModalShow, sdkModules, globalChannel, logger } = props;
-  const Profile = getProfileStore(sdkModules, globalChannel, logger);
-  const isLoading = Profile.useStoreState((s: StateMapper<ProfileStateModel, ''>) => s.fetching);
-  const loggedEthAddress = Profile.useStoreState(
-    (state: StateMapper<ProfileState, ''>) => state.loggedEthAddress,
-  );
-  const registrationStatus = Profile.useStoreState(
-    (s: StateMapper<ProfileState, ''>) => s.registrationStatus,
-  );
-  const registrationStatusReceived = Profile.useStoreState(
-    (s: StateMapper<ProfileState, ''>) => s.statusReceived,
-  );
+  const { onLoginModalShow, profileStore } = props;
 
-  const ensChecked = Profile.useStoreState((s: StateMapper<ProfileStateModel, ''>) => s.ensChecked);
+  const [
+    isLoading,
+    loggedEthAddress,
+    registrationStatus,
+    registrationStatusReceived,
+    ensChecked,
+    ensInfo,
+  ] = profileStore.useStoreState((s: StateMapper<ProfileStateModel, ''>) => [
+    s.fetching,
+    s.loggedEthAddress,
+    s.registrationStatus,
+    s.statusReceived,
+    s.ensChecked,
+    s.ensInfo,
+  ]);
 
-  const getENSByAddress = Profile.useStoreActions(
-    (actions: ActionMapper<ProfileStateModel, ''>) => actions.getENSByAddress,
-  );
-  const getENSRegistrationStatus = Profile.useStoreActions(
-    (actions: ActionMapper<ProfileStateModel, ''>) => actions.getEnsRegistrationStatus,
-  );
-  const checkENSAvailable = Profile.useStoreActions(
-    (actions: ActionMapper<ProfileStateModel, ''>) => actions.checkENSAvailable,
-  );
-  const registerENS = Profile.useStoreActions(
-    (actions: ActionMapper<ProfileStateModel, ''>) => actions.registerENS,
-  );
-  const claimENS = Profile.useStoreActions((s: ActionMapper<ProfileStateModel, ''>) => s.claimENS);
-  const ensInfo = Profile.useStoreState((state: StateMapper<ProfileState, ''>) => state.ensInfo);
+  const [
+    getENSByAddress,
+    getENSRegistrationStatus,
+    checkENSAvailable,
+    registerENS,
+    claimENS,
+  ] = profileStore.useStoreActions((act: ActionMapper<ProfileStateModel, ''>) => [
+    act.getENSByAddress,
+    act.getEnsRegistrationStatus,
+    act.checkENSAvailable,
+    act.registerENS,
+    act.claimENS,
+  ]);
+
   const { t } = useTranslation();
   /**
    * Check if the ethAddress has already an ens

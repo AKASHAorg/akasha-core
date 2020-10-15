@@ -26,7 +26,7 @@ const Pages: React.FC<RootComponentProps & { errors: {} }> = props => {
           )}
           {!isCritical && (
             <Profile.Provider>
-              <Routes {...props} />
+              <Routes {...props} profileStore={Profile} />
             </Profile.Provider>
           )}
         </>
