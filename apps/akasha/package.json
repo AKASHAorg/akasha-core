@@ -54,7 +54,7 @@
     "react-i18next": "11.4.0",
     "react-router-dom": "5.1.2",
     "single-spa-react": "2.14.0",
-    "easy-peasy": "^3.3.1"
+    "easy-peasy": "3.3.1"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",

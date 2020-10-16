@@ -100,7 +100,6 @@ const TopbarComponent = () => {
     <Topbar
       ethAddress="0x003410490050000320006570034567114572000"
       avatarImage="https://placebeard.it/360x360"
-      onSidebarToggle={() => action('Sidebar toggle')('Synthetic Event')}
       quickAccessItems={quickAccessItems}
       searchAreaItem={searchAreaItem}
       brandLabel={text('Brand Label', 'Ethereum.world')}

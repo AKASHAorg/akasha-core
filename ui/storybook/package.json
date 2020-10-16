@@ -28,6 +28,6 @@
     "react-scripts": "3.4.3"
   },
   "peerDependencies": {
-    "styled-components": "^5.1.1"
+    "styled-components": "5.1.1"
   }
 }
