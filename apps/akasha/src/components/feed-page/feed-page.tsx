@@ -128,6 +128,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleUnfollow = () => {
     /* todo */
   };
+  const handleGetMentions = () => {
+    /* todo */
+  };
+  const handleGetTags = () => {
+    /* todo */
+  };
 
   const handleEntryPublish = async (authorEthAddr: string, _content: any) => {
     if (!ethAddress && !jwtToken) {
@@ -137,7 +143,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     const localId = `${authorEthAddr}-${pendingEntries.length + 1}`;
     try {
       const entry = {
-        content: 'this is a test published content',
+        content: _content,
         author: {
           ethAddress: authorEthAddr,
         },
@@ -230,6 +236,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           handlePublish: handleEntryPublish,
           pendingEntries: pendingEntries,
           onAvatarClick: handleAvatarClick,
+          handleGetMentions: handleGetMentions,
+          handleGetTags: handleGetTags,
+          ipfsService: props.sdkModules.commons.ipfsService,
         })}
       />
     </Box>

@@ -11,6 +11,9 @@ export interface IGetCustomEntitiesProps {
   loggedEthAddress: string | null;
   handlePublish: (ethAddress: string, content: any) => void;
   handleBackNavigation: () => void;
+  handleGetTags: (query: string) => void;
+  handleGetMentions: (query: string) => void;
+  ipfsService?: any;
   pendingEntries: any[];
   t: TFunction;
   locale: ILocale;
@@ -32,6 +35,9 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
     loggedEthAddress,
     handlePublish,
     handleBackNavigation,
+    handleGetTags,
+    handleGetMentions,
+    ipfsService,
     pendingEntries,
     t,
     locale,
@@ -46,12 +52,15 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
       getComponent: ({ key, style }: { key: string; style: any }) => (
         <EditorCard
           ethAddress={loggedEthAddress}
-          postLabel="Publish"
-          placeholderLabel="Write something"
+          postLabel={t('Publish')}
+          placeholderLabel={t('Write something')}
           onPublish={handlePublish}
           style={style}
           key={key}
           handleNavigateBack={handleBackNavigation}
+          getMentions={handleGetMentions}
+          getTags={handleGetTags}
+          ipfsService={ipfsService}
         />
       ),
     });

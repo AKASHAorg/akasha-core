@@ -11,8 +11,13 @@ import { IProfileData } from '../profile-cards/profile-widget-card';
 import { ISocialData } from './social-box';
 import { useViewportSize } from '../../Providers/viewport-dimension';
 
+import { Slate, withReact, Editable } from 'slate-react';
+import { createEditor } from 'slate';
+import { withMentions, withImages, withTags } from '../../Editor/plugins';
+import { renderElement, renderLeaf } from '../../Editor/renderers';
+
 export interface IEntryData {
-  content: string;
+  content: any;
   time: string;
   replies?: IEntryData[];
   reposts?: number;
@@ -97,6 +102,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
+
+  const editor = React.useMemo(
+    () => withTags(withMentions(withReact(withImages(createEditor())))),
+    [],
+  );
 
   const handleLinkCopy = (linkType: 'ipfs' | 'shareable') => () => {
     switch (linkType) {
@@ -193,7 +203,15 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         />
       )}
       <Box pad={{ vertical: 'medium' }} onClick={handleContentClick}>
-        {entryData.content}
+        <Slate
+          editor={editor}
+          value={entryData.content}
+          onChange={() => {
+            return;
+          }}
+        >
+          <Editable readOnly={true} renderElement={renderElement} renderLeaf={renderLeaf} />
+        </Slate>
       </Box>
       <CardActions
         entryData={entryData}
