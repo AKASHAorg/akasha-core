@@ -94,11 +94,19 @@ const CardActions: React.FC<CardActionProps> = props => {
   };
 
   const handleShareOpen = () => {
-    let winNavigator: any;
-    winNavigator = window.navigator;
+    const winNavigator: Navigator & {
+      canShare?: (param: ShareData) => void;
+      share?: (data: ShareData) => Promise<void>;
+    } = window.navigator;
 
-    if (size === 'small' && winNavigator.canShare && winNavigator.canShare(shareData)) {
-      return winNavigator.share(shareData);
+    if (
+      size === 'small' &&
+      winNavigator.share &&
+      winNavigator.canShare &&
+      winNavigator.canShare(shareData)
+    ) {
+      winNavigator.share(shareData);
+      return;
     }
     setShareDropOpen(!shareDropOpen);
   };
