@@ -28,7 +28,7 @@ npm install --save @akashaproject/sdk
 see sample usage in [feed-app](../../examples/ui/feed-app/src/index.ts)
 
 ``` typescript
-const sdk = await System.import('@akashaproject/sdk');
+import sdk from '@akashaproject/sdk';
   const world = sdk.init({
     config: appConfig,
     initialApps: { plugins: registeredPlugins, widgets: registeredWidgets },
