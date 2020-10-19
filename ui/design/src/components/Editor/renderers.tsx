@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RenderElementProps, RenderLeafProps, useSelected, useFocused } from 'slate-react';
+import { RenderElementProps, RenderLeafProps } from 'slate-react';
 import styled from 'styled-components';
 
 const StyledImg = styled.img`
@@ -8,11 +8,8 @@ const StyledImg = styled.img`
   max-height: 20em;
 `;
 
-const StyledMention = styled.span<{ focused?: boolean }>`
+const StyledMention = styled.span`
   color: ${props => props.theme.colors.accent};
-  // margin: 1px;
-  // border-radius: ${props => `${props.theme.shapes.smallBorderRadius}px`};
-  // box-shadow: ${props => (props.focused ? '0 0 0 2px #B4D5FF' : 'none')};
 `;
 
 const ImageElement = ({ attributes, children, element }: any) => {
@@ -27,10 +24,8 @@ const ImageElement = ({ attributes, children, element }: any) => {
 };
 
 const MentionElement = ({ attributes, children, element }: any) => {
-  const selected = useSelected();
-  const focused = useFocused();
   return (
-    <StyledMention {...attributes} contentEditable={false} focused={selected && focused}>
+    <StyledMention {...attributes} contentEditable={false}>
       @{element.value}
       {children}
     </StyledMention>
@@ -38,10 +33,8 @@ const MentionElement = ({ attributes, children, element }: any) => {
 };
 
 const TagElement = ({ attributes, children, element }: any) => {
-  const selected = useSelected();
-  const focused = useFocused();
   return (
-    <StyledMention {...attributes} contentEditable={false} focused={selected && focused}>
+    <StyledMention {...attributes} contentEditable={false}>
       #{element.value}
       {children}
     </StyledMention>
