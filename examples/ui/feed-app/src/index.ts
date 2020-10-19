@@ -55,7 +55,7 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   const AKASHAApp = await System.import('@app/AKASHA');
   const boxApp = await System.import('@app/3box');
   const ensApp = await System.import('@app/ens');
-  const ipfs = await System.import('ipfs');
+  //  const ipfs = await System.import('ipfs');
   const sdk = await System.import('@akashaproject/sdk');
   const world = sdk.init({
     config: appConfig,
@@ -65,10 +65,10 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   // tslint:disable-next-line:no-console
   console.log('initial sdk instance', world);
 
-  Object.defineProperty(window, 'Ipfs', {
-    value: ipfs,
-    writable: false,
-  });
+  // Object.defineProperty(window, 'Ipfs', {
+  //   value: ipfs,
+  //   writable: false,
+  // });
 
   // example loading an extra plugin after start
   world.appLoader.registerPlugin({
