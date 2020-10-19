@@ -1,3 +1,5 @@
+# Sidebar widget
+
 ## Usage
 
 ```tsx
