@@ -1,26 +1,36 @@
 # akasha-design-system
 
-### Run tests
+## Available Scripts
 
-`npm run tests`
+> Run tests
 
-### Start the storybook dev
+``` shell script
+$ npm run tests
+```
 
-`npm run storybook`
+> Start the storybook dev
 
-### Package the storybook
+``` shell script
+$ npm run storybook
+```
 
-`npm run build-storybook`
+> Package the storybook
 
-### Package the library
+``` shell script
+$ npm run build-storybook
+```
 
-`npm run build`
+> Package the library
+
+``` shell script
+npm run build
+```
 
 <small><em>This library is based on create-react-app and storybook</em></small>
 
 ## Usage
 
-### Themes
+### `Themes`
 
 **Simple usage**
 

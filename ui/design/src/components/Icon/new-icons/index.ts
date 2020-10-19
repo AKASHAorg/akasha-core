@@ -56,6 +56,7 @@ import person from './person';
 import pin from './pin';
 import plusDark from './plus-dark';
 import plusGrey from './plus-grey';
+import questionMark from './question-mark';
 import quote from './quote';
 import reddit from './reddit';
 import reload from './reload';
@@ -147,6 +148,7 @@ export {
   person,
   plusDark,
   plusGrey,
+  questionMark,
   quote,
   reddit,
   reply,

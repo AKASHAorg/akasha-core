@@ -1,23 +1,34 @@
 import * as React from 'react';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import routes, { NEW_POST, SETTINGS_PAGE, FEED, POSTS } from '../routes';
-import FeedPage from './feed-page';
+import routes, { NEW_POST, FEED, POSTS, rootRoute } from '../routes';
+import FeedPage from './feed-page/feed-page';
 import LoginModal from './login-modal';
 import NewPostPage from './new-post-page';
 import PostsPage from './posts-page';
-import AKASHASettings from './settings-page';
-import { getLoggedProfileStore } from '../state/logged-profile-state';
+import { createContextStore, ActionMapper } from 'easy-peasy';
+import { LoggedProfileStateModel } from '../state/logged-profile-state';
 
 const { Box, useGlobalLogin } = DS;
-
-const AppRoutes: React.FC<RootComponentProps> = props => {
-  const { sdkModules, globalChannel, logger, singleSpa, layout } = props;
-  const Login = getLoggedProfileStore();
-  const jwtToken = Login.useStoreState((state: any) => state.data.jwtToken);
-  const updateData = Login.useStoreActions((act: any) => act.updateData);
-  const authorize = Login.useStoreActions((act: any) => act.authorize);
+interface AppRoutesProps {
+  profileStore: ReturnType<typeof createContextStore>;
+  onError: (err: Error) => void;
+}
+const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
+  const { sdkModules, globalChannel, logger, singleSpa, layout, profileStore, onError } = props;
+  const jwtToken = profileStore.useStoreState(
+    (state: LoggedProfileStateModel) => state.data.jwtToken,
+  );
+  const ethAddress = profileStore.useStoreState(
+    (state: LoggedProfileStateModel) => state.data.ethAddress,
+  );
+  const updateData = profileStore.useStoreActions(
+    (act: ActionMapper<LoggedProfileStateModel, '1'>) => act.updateData,
+  );
+  const authorize = profileStore.useStoreActions(
+    (act: ActionMapper<LoggedProfileStateModel, '1'>) => act.authorize,
+  );
   const [loginModalState, setLoginModalState] = React.useState({
     showLoginModal: false,
   });
@@ -52,7 +63,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
       });
     },
     err => {
-      logger.error('[app-routes.tsx]: useGlobalState err %j', err);
+      logger.error('[app-routes.tsx]: useGlobalState err %j', err.error);
+      onError(err.error);
       setLoginModalState({
         showLoginModal: false,
       });
@@ -67,19 +79,18 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               sdkModules={sdkModules}
               globalChannel={globalChannel}
               logger={logger}
-              onLoginModalShow={showLoginModal}
-            />
-          </Route>
-          <Route path={routes[SETTINGS_PAGE]}>
-            <AKASHASettings
-              sdkModules={sdkModules}
-              globalChannel={globalChannel}
-              logger={logger}
-              onLoginModalShow={showLoginModal}
+              showLoginModal={showLoginModal}
+              onError={onError}
             />
           </Route>
           <Route path={routes[FEED]}>
-            <FeedPage sdkModules={sdkModules} globalChannel={globalChannel} logger={logger} />
+            <FeedPage
+              {...props}
+              showLoginModal={showLoginModal}
+              ethAddress={ethAddress}
+              jwtToken={jwtToken}
+              onError={onError}
+            />
           </Route>
           <Route path={routes[POSTS]}>
             <PostsPage
@@ -87,9 +98,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               globalChannel={globalChannel}
               logger={logger}
               navigateToUrl={singleSpa.navigateToUrl}
-              onLoginModalShow={showLoginModal}
+              showLoginModal={showLoginModal}
+              onError={onError}
             />
           </Route>
+          <Redirect exact={true} from={rootRoute} to={routes[FEED]} />
         </Switch>
       </Router>
       <LoginModal

@@ -357,14 +357,25 @@ export default class AppLoader implements IAppLoader {
    */
   private onRouting(ev: CustomEvent<SingleSpaEventDetail>) {
     const { pathname } = window.location;
-    const mountedApps = this.getPluginsForLocation(window.location).map(appName => {
-      const app = this.apps.find(appEntry => this.getIdFromName(appEntry.app.name) === appName);
-      const plugin = this.plugins.find(
-        plugEntry => this.getIdFromName(plugEntry.app.name) === appName,
-      );
-      if (app) return app;
-      return plugin;
-    });
+    const mountedApps = this.getPluginsForLocation(window.location);
+    let matchedApps = [];
+    if (mountedApps.length === 0 && window.location.pathname === '/') {
+      if (this.config.rootLoadedApp) {
+        singleSpa.navigateToUrl(this.config.rootLoadedApp.activeWhen.path);
+      } else {
+        this.appLogger.error('There is no rootLoadedApp set. Nothing to render!');
+      }
+      return;
+    } else if (mountedApps.length) {
+      matchedApps = mountedApps.map(appName => {
+        const app = this.apps.find(appEntry => this.getIdFromName(appEntry.app.name) === appName);
+        const plugin = this.plugins.find(
+          plugEntry => this.getIdFromName(plugEntry.app.name) === appName,
+        );
+        if (app) return app;
+        return plugin;
+      });
+    }
 
     this.currentlyMountedWidgets.forEach(widget => {
       const routeRegex = pathToRegexp(widget.route);
@@ -378,7 +389,7 @@ export default class AppLoader implements IAppLoader {
         }
       }
     });
-    this.mountWidgetsOfApps(mountedApps);
+    this.mountWidgetsOfApps(matchedApps);
   }
   private beforeRouting(_ev: CustomEvent<SingleSpaEventDetail>) {
     /**

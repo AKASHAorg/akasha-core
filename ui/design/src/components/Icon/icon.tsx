@@ -63,6 +63,7 @@ export type IconType =
   | 'pin'
   | 'plusDark'
   | 'plusGrey'
+  | 'questionMark'
   | 'quote'
   | 'reddit'
   | 'reload'
@@ -149,6 +150,7 @@ export const iconTypes: IconType[] = [
   'person',
   'pin',
   'plusDark',
+  'questionMark',
   'quote',
   'reddit',
   'reload',
