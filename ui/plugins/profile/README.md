@@ -1,3 +1,5 @@
+# Profile plugin
+
 ## Usage
 
 ```tsx

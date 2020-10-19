@@ -1,4 +1,5 @@
 import { IEntryData } from '../Cards/entry-cards/entry-box';
+import Rect from './v2/rect-obj';
 
 export interface IFetchOperation {
   startId: string;
@@ -12,20 +13,21 @@ export interface ISliceOperation {
   size: number;
 }
 export interface IListCustomEntity {
-  position: 'before' | 'after';
+  position: string | 'before' | 'after';
   itemIndex?: number;
   itemId?: string | null;
-  getComponent: React.FC<any>;
+  getComponent: React.FC<any> | ((props: any) => React.FC<any>);
 }
 export interface IListInitialState {
-  newerEntries: any[];
   startId?: string;
+  startTop?: number;
+  slice?: [number, number];
 }
 
 export type GetItemCardFn = (props: {
   itemId: string;
   itemData: any;
-  isBookmarked: boolean | null;
+  isBookmarked?: boolean;
 }) => React.ReactElement;
 
 export interface ILoadItemsPayload {
@@ -59,7 +61,8 @@ export interface IVirtualListProps {
   getItemCard: GetItemCardFn;
   hasMoreItems?: boolean;
   bookmarkedItems?: Set<string>;
-  getNewItemsNotification?: (props: { styles: React.CSSProperties }) => React.ReactElement;
+  getNotificationPill?: (props: { styles: React.CSSProperties }) => React.ReactElement;
+  showNotificationPill?: boolean;
   onItemRead?: (itemId: string) => void;
   ref?: React.Ref<any>;
 }
@@ -75,8 +78,8 @@ export interface IScrollState {
   /** scroll direction: 0 = upwards, 1 = downwards */
   direction: 0 | 1;
   scrollTop: number;
-  scrollHeight: number;
-  clientHeight: number;
+  topPad: number;
+  bottomPad: number;
 }
 
 export interface IUseScrollStateOptions {
@@ -85,7 +88,7 @@ export interface IUseScrollStateOptions {
 
 export type ItemDimensions = {
   dimensions: {
-    [key: string]: { height: number; top: number };
+    [key: string]: { height: number };
   };
   count: number;
   avgItemHeight: number;
@@ -114,7 +117,6 @@ export interface IListContentProps {
   setListState: any;
   hasMoreItems?: boolean;
   bookmarkedItems?: IVirtualListProps['bookmarkedItems'];
-  getNewItemsNotification: IVirtualListProps['getNewItemsNotification'];
   onItemRead: IVirtualListProps['onItemRead'];
 }
 
@@ -122,12 +124,14 @@ export interface IRenderItemProps {
   itemId: string;
   itemData?: any;
   loadItemData: IVirtualListProps['loadItemData'];
-  index: number;
-  onDimensionChange: (itemId: string, dimension: any) => void;
-  itemSpacing?: IListContentProps['itemSpacing'];
+  onSizeChange: (itemId: string, dimension: any) => void;
+  itemSpacing: IListContentProps['itemSpacing'];
   customEntities: IListCustomEntity[];
   getItemCard: GetItemCardFn;
-  isBookmarked: boolean | null;
+  isBookmarked?: boolean;
+  prevItemId?: string;
+  coordinates: Map<string, Rect>;
+  index: number;
 }
 export type SetSliceOperationType = React.Dispatch<React.SetStateAction<ISliceOperation>>;
 export type SetFetchOperationType = React.Dispatch<IFetchOperation | null>;
@@ -179,7 +183,6 @@ export interface IListItemContainerProps {
   itemId: string;
   loadItemData: IVirtualListProps['loadItemData'];
   className?: string;
-  onDimensionChange: (itemId: string, newDimensions: any) => void;
   itemSpacing?: number;
   getItemCard: GetItemCardFn;
   isBookmarked: IRenderItemProps['isBookmarked'];

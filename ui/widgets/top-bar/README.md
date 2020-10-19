@@ -1,3 +1,5 @@
+# Top Bar widget
+
 ## Usage
 
 ```tsx

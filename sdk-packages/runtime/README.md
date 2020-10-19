@@ -1,11 +1,19 @@
-# `runtime`
+# @akashaproject/sdk-runtime
 
-> TODO: description
+## `Description`
+This package exports the [DIContainer](./src/DIContainer.ts) && [Stash](./src/Stash.ts) classes.
 
-## Usage
+## `Available services`
+None
+
+
+## `Install`
+``` shell script
+npm install --save @akashaproject/sdk-runtime
+```
+
+## `Usage`
 
 ```
-const runtime = require('runtime');
-
-// TODO: DEMONSTRATE API
+const {DIContainer, Stash } = require('@akashaproject/sdk-runtime');
 ```

@@ -31,10 +31,33 @@ const ShareModalComponent = () => {
   );
 };
 
-const MobileListModalComponent = () => {
+interface IMobileListModalProps {
+  repostLabel: string;
+  repostWithCommentLabel: string;
+}
+
+const MobileListModalComponent = ({
+  repostLabel,
+  repostWithCommentLabel,
+}: IMobileListModalProps) => {
   const [modalOpen, setModalOpen] = React.useState(false);
 
-  const menuItems = ['All', 'Most reposted', 'Oldest', 'Latest'];
+  const menuItems = [
+    {
+      label: repostLabel,
+      icon: 'transfer',
+      handler: (e: any) => {
+        e.stopPropagation();
+      },
+    },
+    {
+      label: repostWithCommentLabel,
+      icon: 'edit',
+      handler: (e: any) => {
+        e.stopPropagation();
+      },
+    },
+  ];
 
   return (
     <Box fill={true} justify="center" align="center">
@@ -46,14 +69,7 @@ const MobileListModalComponent = () => {
       />
       {modalOpen && (
         <MobileListModal
-          menuItems={menuItems.map(item => {
-            return {
-              label: item,
-              handler: () => {
-                return;
-              },
-            };
-          })}
+          menuItems={menuItems}
           closeModal={() => {
             setModalOpen(false);
           }}
@@ -64,4 +80,9 @@ const MobileListModalComponent = () => {
 };
 
 storiesOf('Modals/Share Modal', module).add('Share modal', () => <ShareModalComponent />);
-storiesOf('Modals/List Modal', module).add('Mobile list modal', () => <MobileListModalComponent />);
+storiesOf('Modals/List Modal', module).add('Mobile list modal', () => (
+  <MobileListModalComponent
+    repostLabel={text('Repost Label', 'Repost')}
+    repostWithCommentLabel={text('Repost With Comment Label', 'Repost with comment')}
+  />
+));

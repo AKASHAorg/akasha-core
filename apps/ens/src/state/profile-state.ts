@@ -36,10 +36,7 @@ export interface ProfileStateModel extends ProfileState {
   handleLoginSuccess: Action<ProfileStateModel, { ethAddress: string; token: string }>;
   handleLoginError: Action<ProfileStateModel, { error: Error }>;
   checkENSAddress: Thunk<ProfileStateModel, { ethAddress: string }>;
-  registerENSAddress: Thunk<
-    ProfileStateModel,
-    { name: string; providerName: string; ethAddress: string }
-  >;
+  registerENSAddress: Thunk<ProfileStateModel, { name: string; ethAddress: string }>;
   authorize: Thunk<ProfileStateModel, number>;
 }
 

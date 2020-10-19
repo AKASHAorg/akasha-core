@@ -193,7 +193,6 @@ const PostsList: React.FC<IPostsListProps> = props => {
           )}
         />
       )}
-      {!isMyPosts && <>{userId} Posts list</>}
     </>
   );
 };

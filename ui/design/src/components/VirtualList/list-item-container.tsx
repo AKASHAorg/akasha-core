@@ -3,9 +3,9 @@ import isEqual from 'react-fast-compare';
 import { IListItemContainerProps } from './interfaces';
 
 const ListItemContainer = (props: IListItemContainerProps) => {
-  const { itemData, itemId, loadItemData, getItemCard, isBookmarked } = props;
+  const { itemData, itemId, loadItemData, getItemCard, isBookmarked = false } = props;
   React.useEffect(() => {
-    if (itemId) {
+    if (itemId && !itemData) {
       loadItemData({ itemId });
     }
   }, [itemId]);
