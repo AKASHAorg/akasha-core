@@ -42,9 +42,9 @@ export interface IEntryBoxProps {
   loggedProfileAvatar?: string;
   loggedProfileEthAddress?: string;
   // share data
-  shareDataTitle?: string;
-  shareDataText: string;
-  shareDataUrl: string;
+  sharePostLabel?: string;
+  shareTextLabel: string;
+  sharePostUrl: string;
   // labels
   repliesLabel: string;
   repostsLabel: string;
@@ -75,9 +75,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const {
     entryData,
     loggedProfileEthAddress,
-    shareDataTitle,
-    shareDataText,
-    shareDataUrl,
+    sharePostLabel,
+    shareTextLabel,
+    sharePostUrl,
     repliesLabel,
     repostsLabel,
     repostLabel,
@@ -223,9 +223,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
       <CardActions
         entryData={entryData}
         loggedProfileEthAddress={loggedProfileEthAddress}
-        shareDataTitle={shareDataTitle}
-        shareDataText={shareDataText}
-        shareDataUrl={shareDataUrl}
+        sharePostLabel={sharePostLabel}
+        shareTextLabel={shareTextLabel}
+        sharePostUrl={sharePostUrl}
         repliesLabel={repliesLabel}
         repostsLabel={repostsLabel}
         repostLabel={repostLabel}

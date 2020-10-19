@@ -19,9 +19,9 @@ export interface CardActionProps {
   entryData: IEntryData;
   loggedProfileEthAddress?: string;
   // share data
-  shareDataTitle?: string;
-  shareDataText: string;
-  shareDataUrl: string;
+  sharePostLabel?: string;
+  shareTextLabel: string;
+  sharePostUrl: string;
   // labels
   repostsLabel: string;
   repostLabel: string;
@@ -49,9 +49,9 @@ const CardActions: React.FC<CardActionProps> = props => {
     entryData,
     loggedProfileEthAddress,
     // share data
-    shareDataTitle,
-    shareDataText,
-    shareDataUrl,
+    sharePostLabel,
+    shareTextLabel,
+    sharePostUrl,
     // labels
     repostsLabel,
     repostLabel,
@@ -81,9 +81,9 @@ const CardActions: React.FC<CardActionProps> = props => {
 
   const shareData: ShareData = {
     // @TODO: replace with appropriate title, text and url of the post to be shared
-    title: shareDataTitle,
-    text: shareDataText,
-    url: shareDataUrl,
+    title: sharePostLabel,
+    text: shareTextLabel,
+    url: sharePostUrl,
   };
 
   const handleRepostsOpen = () => {

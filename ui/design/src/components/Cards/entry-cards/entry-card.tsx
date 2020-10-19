@@ -11,9 +11,9 @@ export interface IEntryCardProps extends IEntryBoxProps {
   andLabel?: string;
   othersLabel?: string;
   // share data
-  shareDataTitle?: string;
-  shareDataText: string;
-  shareDataUrl: string;
+  sharePostLabel?: string;
+  shareTextLabel: string;
+  sharePostUrl: string;
   // external css
   className?: string;
   style?: React.CSSProperties;
@@ -23,9 +23,9 @@ export interface IEntryCardProps extends IEntryBoxProps {
 const EntryCard: React.FC<IEntryCardProps> = props => {
   const {
     entryData,
-    shareDataTitle,
-    shareDataText,
-    shareDataUrl,
+    sharePostLabel,
+    shareTextLabel,
+    sharePostUrl,
     repostedThisLabel,
     andLabel,
     othersLabel,
@@ -72,9 +72,9 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         <Box pad={{ horizontal: 'medium' }}>
           <EntryBox
             entryData={entryData}
-            shareDataTitle={shareDataTitle}
-            shareDataText={shareDataText}
-            shareDataUrl={shareDataUrl}
+            sharePostLabel={sharePostLabel}
+            shareTextLabel={shareTextLabel}
+            sharePostUrl={sharePostUrl}
             onClickAvatar={onClickAvatar}
             repostsLabel={repostsLabel}
             repostLabel={repostLabel}

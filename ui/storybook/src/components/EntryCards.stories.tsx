@@ -33,9 +33,9 @@ storiesOf('Cards/Entry Cards', module).add('entry card', () => (
       onLinkCopy={() => action('Link Copied')('Synthetic Event')}
       onEntryBookmark={() => action('Bookmark Clicked')('Synthetic Event')}
       entryData={object('Entry Data', entryData)}
-      shareDataTitle={text('Share Data Title', 'Share Post')}
-      shareDataText={text('Share Data Text', 'Share this post with your friends')}
-      shareDataUrl={'https://ethereum.world'}
+      sharePostLabel={text('Share Data Title', 'Share Post')}
+      shareTextLabel={text('Share Data Text', 'Share this post with your friends')}
+      sharePostUrl={'https://ethereum.world'}
       isBookmarked={false}
       repliesLabel={text('Replies Label', repliesLabel)}
       repostsLabel={text('Reposts Label', repostsLabel)}

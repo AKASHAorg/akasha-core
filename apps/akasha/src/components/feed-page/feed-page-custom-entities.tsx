@@ -84,9 +84,9 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
           style={{ ...style, height: 'auto' }}
           key={pendingEntry.localId}
           entryData={pendingEntry.entry}
-          shareDataTitle={t('Share Post')}
-          shareDataText={t('Share this post with your friends')}
-          shareDataUrl={'https://ethereum.world'}
+          sharePostLabel={t('Share Post')}
+          shareTextLabel={t('Share this post with your friends')}
+          sharePostUrl={'https://ethereum.world'}
           onClickAvatar={ev => onAvatarClick(ev, pendingEntry.entry.author.ethAddress)}
           // onEntryBookmark={handleEntryBookmark}
           repliesLabel={t('Replies')}

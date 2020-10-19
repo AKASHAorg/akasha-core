@@ -26,9 +26,9 @@ export const FeedItem: React.FC<IFeedItemProps> = props => {
     <EntryCard
       isBookmarked={false}
       entryData={itemData}
-      shareDataTitle={t('Share Post')}
-      shareDataText={t('Share this post with your friends')}
-      shareDataUrl={'https://ethereum.world'}
+      sharePostLabel={t('Share Post')}
+      shareTextLabel={t('Share this post with your friends')}
+      sharePostUrl={'https://ethereum.world'}
       onClickAvatar={() => {}}
       repliesLabel={t('Replies')}
       repostsLabel={t('Reposts')}
