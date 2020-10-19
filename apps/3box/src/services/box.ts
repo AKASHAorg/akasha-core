@@ -1,7 +1,7 @@
 // @ts-ignore
 import Box from '3box';
 // @ts-ignore
-import boxConfig from '3box/lib/config';
+import * as boxConfig from '3box/src/config';
 import { IUpdateProfilePayload } from '../state';
 import { IBoxImage } from '../utils/box-image-utils';
 
@@ -61,6 +61,7 @@ export const authenticateBox = async (
   web3Utils: { toUtf8String: (arg0: any) => any; joinSignature: (arg0: any) => any },
   settings: IBoxSettings,
   ethAddress: string,
+  ipfsInstance?: any,
 ) => {
   try {
     const signer = await web3Instance.getSigner();
@@ -68,20 +69,14 @@ export const authenticateBox = async (
     if (settings) {
       currentSettings = settings;
     }
-
-    if (Box.isLoggedIn(ethAddress)) {
-      box = await Box.openBox(ethAddress, getEthProvider(signer, web3Utils), {
-        pinningNode: currentSettings.pinningNode,
-        addressServer: currentSettings.addressServer,
-      });
-      await box.syncDone;
-      return getPublicProfileData(ethAddress);
-    }
-    box = await Box.create(getEthProvider(signer, web3Utils), {
+    // tslint:disable-next-line:no-console
+    console.log(ipfsInstance);
+    box = await Box.openBox(ethAddress, getEthProvider(signer, web3Utils), {
       pinningNode: currentSettings.pinningNode,
       addressServer: currentSettings.addressServer,
+      // iframeCache: !ipfsInstance,
+      // ipfs: ipfsInstance,
     });
-    await box.auth([], { address: ethAddress.toLowerCase() });
     const space = await box.openSpace('akasha-ewa');
     await box.syncDone;
     await space.syncDone;

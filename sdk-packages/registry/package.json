@@ -12,7 +12,7 @@
   "scripts": {
     "test": "npx buidler --network development test",
     "sc:compile": "npx buidler compile",
-    "sc:deploy:local": "npx buidler run --network rinkeby scripts/registerName.js",
+    "sc:deploy:local": "npx buidler run --network rinkeby scripts/beta.akasha.js",
     "sc:migrate": "truffle migrate --reset",
     "prepare": "tsc --build",
     "tsc": "tsc --build"
@@ -23,7 +23,8 @@
     "ethers": "5.0.8",
     "@nomiclabs/buidler-waffle": "2.0.0",
     "ethereum-waffle": "3.0.2",
-    "chai": "4.2.0"
+    "chai": "4.2.0",
+    "ipfs-http-client": "47.0.1"
   },
   "dependencies": {
     "@akashaproject/sdk-core": "*",
