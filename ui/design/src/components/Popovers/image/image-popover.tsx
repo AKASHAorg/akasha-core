@@ -16,11 +16,12 @@ export interface IImagePopover {
   target: HTMLElement;
   closePopover: () => void;
   insertImage: (url: string) => void;
-  ipfsService?: any;
+  // upload an URL or a file and returns a promise that resolves to an array
+  uploadRequest?: (data: string | File, isUrl?: boolean) => Promise<any[]>;
 }
 
 const ImagePopover: React.FC<IImagePopover> = props => {
-  const { target, closePopover, insertImage, ipfsService } = props;
+  const { target, closePopover, insertImage, uploadRequest } = props;
 
   const [linkInputValue, setLinkInputValue] = React.useState('');
   const [uploadValue, setUploadValue] = React.useState('');
@@ -29,14 +30,14 @@ const ImagePopover: React.FC<IImagePopover> = props => {
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 
   const handleLinkInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    if (ipfsService) {
-      const call = ipfsService.upload([{ content: ev.target.value, isUrl: true }]);
-      const settingsCall = ipfsService.getSettings({});
-      call.subscribe((response: any) => {
-        settingsCall.subscribe((settingsResp: any) => {
-          setLinkInputValue(`${settingsResp.data}/${response.data[0]}`);
+    if (uploadRequest) {
+      uploadRequest(ev.target.value, true)
+        .then(res => {
+          setLinkInputValue(`${res[0].data}/${res[1].data[0]}`);
+        })
+        .catch(err => {
+          console.error(err);
         });
-      });
     } else {
       setLinkInputValue(ev.target.value);
     }
@@ -62,15 +63,15 @@ const ImagePopover: React.FC<IImagePopover> = props => {
 
     fileReader.addEventListener('load', () => {
       const result = fileReader.result as any;
-      if (ipfsService) {
-        const call = ipfsService.upload([{ content: file }]);
-        const settingsCall = ipfsService.getSettings({});
-        call.subscribe((response: any) => {
-          settingsCall.subscribe((settingsResp: any) => {
-            setUploadValue(`${settingsResp.data}/${response.data[0]}`);
-            setUploadValueName(`${settingsResp.data}/${response.data[0]}`);
+      if (uploadRequest) {
+        uploadRequest(file)
+          .then(res => {
+            setUploadValue(`${res[0].data}/${res[1].data[0]}`);
+            setUploadValueName(`${res[0].data}/${res[1].data[0]}`);
+          })
+          .catch(err => {
+            setUploadValueName(err);
           });
-        });
       } else {
         setUploadValue(result);
         setUploadValueName(fileName);

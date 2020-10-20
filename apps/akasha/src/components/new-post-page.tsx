@@ -2,6 +2,7 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { getLoggedProfileStore } from '../state/logged-profile-state';
 import { useTranslation } from 'react-i18next';
+import { forkJoin } from 'rxjs';
 
 const { Helmet, EditorCard, ErrorLoader, Box, Button } = DS;
 
@@ -18,6 +19,12 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
   const Login = getLoggedProfileStore();
   const loginEthAddr = Login.useStoreState((state: any) => state.data.ethAddress);
   const ipfsService = sdkModules.commons.ipfsService;
+
+  const onUploadRequest = (data: string | File, isUrl = false) => {
+    const ipfsGatewayCall = ipfsService.getSettings({});
+    const uploadCall = ipfsService.upload([{ isUrl, content: data }]);
+    return forkJoin([ipfsGatewayCall, uploadCall]).toPromise();
+  };
 
   const { t } = useTranslation();
 
@@ -69,7 +76,7 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
             getTags={handleGetTags}
             // mentions={mentions}
             // tags={tags}
-            ipfsService={ipfsService}
+            uploadRequest={onUploadRequest}
           />
         </Box>
       )}

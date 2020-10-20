@@ -2,6 +2,7 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import type { TFunction } from 'i18next';
 import type { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { forkJoin } from 'rxjs';
 
 const { EditorCard, EntryCard, styled, css } = DS;
 
@@ -43,7 +44,15 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
     locale,
     onAvatarClick,
   } = props;
+
   let customEntities = [];
+
+  const onUploadRequest = (data: string | File, isUrl = false) => {
+    const ipfsGatewayCall = ipfsService.getSettings({});
+    const uploadCall = ipfsService.upload([{ isUrl, content: data }]);
+    return forkJoin([ipfsGatewayCall, uploadCall]).toPromise();
+  };
+
   if (!isMobile && loggedEthAddress) {
     customEntities.push({
       position: 'before',
@@ -60,7 +69,7 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
           handleNavigateBack={handleBackNavigation}
           getMentions={handleGetMentions}
           getTags={handleGetTags}
-          ipfsService={ipfsService}
+          uploadRequest={onUploadRequest}
         />
       ),
     });

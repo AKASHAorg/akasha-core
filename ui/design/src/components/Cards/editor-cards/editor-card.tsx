@@ -26,7 +26,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
     getTags,
     mentions,
     tags,
-    ipfsService,
+    uploadRequest,
   } = props;
 
   return (
@@ -54,7 +54,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
         getTags={getTags}
         mentions={mentions}
         tags={tags}
-        ipfsService={ipfsService}
+        uploadRequest={uploadRequest}
       />
     </MainAreaCardBox>
   );

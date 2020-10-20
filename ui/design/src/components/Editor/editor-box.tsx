@@ -32,7 +32,8 @@ export interface IEditorBox {
   getTags: (query: string) => void;
   mentions?: string[];
   tags?: string[];
-  ipfsService?: any;
+  // upload an URL or a file and returns a promise that resolves to an array
+  uploadRequest?: (data: string | File, isUrl?: boolean) => Promise<any[]>;
 }
 
 const HOTKEYS = {
@@ -56,7 +57,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
     getTags,
     mentions = [],
     tags = [],
-    ipfsService,
+    uploadRequest,
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -356,7 +357,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
           target={mediaIconRef.current}
           closePopover={closeImagePopover}
           insertImage={handleInsertImageLink}
-          ipfsService={ipfsService}
+          uploadRequest={uploadRequest}
         />
       )}
       {emojiPopoverOpen && emojiIconRef.current && (
