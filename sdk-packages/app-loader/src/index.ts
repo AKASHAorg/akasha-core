@@ -325,9 +325,9 @@ export default class AppLoader implements IAppLoader {
     });
   }
   /* eslint-enable complexity */
-  private getDependencies(app: any, id) {
+  private getDependencies(app: Application | IWidget, id: string) {
     const dependencies = {};
-    if (app.sdkModules.length) {
+    if (app.sdkModules && app.sdkModules.length) {
       for (const dep of app.sdkModules) {
         if (this.channels.hasOwnProperty(dep.module)) {
           Object.assign(dependencies, { [dep.module]: this.channels[dep.module] });
@@ -355,7 +355,7 @@ export default class AppLoader implements IAppLoader {
    * and see if there are any that does not match the route anymore
    * otherwise the router will not work reliably.
    */
-  private onRouting(ev: CustomEvent<SingleSpaEventDetail>) {
+  private onRouting(_ev: CustomEvent<SingleSpaEventDetail>) {
     const { pathname } = window.location;
     const mountedApps = this.getPluginsForLocation(window.location);
     let matchedApps = [];
