@@ -7,8 +7,9 @@ import {
 } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import { callService } from '@akashaproject/sdk-core/lib/utils';
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
-import services, { moduleName, PROFILE_STORE } from './constants';
+import services, { moduleName, PROFILE_LEGACY, PROFILE_STORE } from './constants';
 import storeService from './profile.store.service';
+import legacyProfileService from './profile.legacy.service';
 import settings from './settings';
 
 export class ProfilesModule extends IAkashaModule {
@@ -17,11 +18,11 @@ export class ProfilesModule extends IAkashaModule {
   }
 
   protected _registerServices(di: DIContainer): IAkashaNamedService[] {
-    return [storeService];
+    return [storeService, legacyProfileService];
   }
 
   availableServices(): IAkashaModuleServices {
-    return IAkashaModule.EXPORT_TO_CHANNEL([PROFILE_STORE], services);
+    return IAkashaModule.EXPORT_TO_CHANNEL([PROFILE_STORE, PROFILE_LEGACY], services);
   }
 
   protected init(di: DIContainer): void {
