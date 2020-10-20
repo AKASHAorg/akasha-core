@@ -23,7 +23,7 @@ export interface ITopbarProps {
   searchAreaItem?: IMenuItem;
   // handlers
   onNavigation: (path: string) => void;
-  // onSidebarToggle: (visibility: boolean) => void;
+  onSidebarToggle?: (visibility: boolean) => void;
   onSearch: (ev: React.KeyboardEvent<HTMLInputElement>, inputValue: string) => void;
   // external css
   className?: string;
@@ -40,11 +40,13 @@ const Topbar = (props: ITopbarProps) => {
     searchAreaItem,
     onSearch,
     onNavigation,
+    // onSidebarToggle,
     ethAddress,
     size,
   } = props;
 
   const [inputValue, setInputValue] = React.useState('');
+  // const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   const [dropOpen, setDropOpen] = React.useState(false);
   const [dropItems, setDropItems] = React.useState<IMenuItem[]>([]);
@@ -59,6 +61,16 @@ const Topbar = (props: ITopbarProps) => {
     }
     setDropOpen(false);
   };
+
+  // const handleSidebarVisibility = () => {
+  //   if (!sidebarOpen && onSidebarToggle) {
+  //     onSidebarToggle(true);
+  //     setSidebarOpen(true);
+  //   } else if (sidebarOpen && onSidebarToggle) {
+  //     onSidebarToggle(false);
+  //     setSidebarOpen(false);
+  //   }
+  // };
 
   const onClickPluginButton = (menuItem: IMenuItem) => () => {
     setCurrentDropItem(menuItem);

@@ -36,7 +36,8 @@ const ImagePopover: React.FC<IImagePopover> = props => {
           setLinkInputValue(`${res[0].data}/${res[1].data[0]}`);
         })
         .catch(err => {
-          console.error(err);
+          // need design update for proper error display
+          setLinkInputValue(err);
         });
     } else {
       setLinkInputValue(ev.target.value);
@@ -70,6 +71,7 @@ const ImagePopover: React.FC<IImagePopover> = props => {
             setUploadValueName(`${res[0].data}/${res[1].data[0]}`);
           })
           .catch(err => {
+            // need design update for proper error display
             setUploadValueName(err);
           });
       } else {

@@ -201,6 +201,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
     setTagTargetRange(null);
   };
 
+  // tslint:disable-next-line:complexity
   const onKeyDown = useCallback(
     event => {
       for (const hotkey in HOTKEYS) {

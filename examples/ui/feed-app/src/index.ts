@@ -7,6 +7,7 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   await System.import('single-spa-react');
   await System.import('rxjs');
   // example for loading from import map
+  // const sidebarWidget = await System.import('@widget/sidebar');
   const layout = await System.import('@widget/layout');
   const topbarWidget = await System.import('@widget/topbar');
   const loginWidget = await System.import('@widget/login');
@@ -34,6 +35,10 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   ];
 
   const registeredWidgets = [
+    // {
+    //   app: sidebarWidget.application,
+    //   config: { slot: layout.application.sidebarSlotId },
+    // },
     {
       app: topbarWidget.application,
       config: { slot: layout.application.topbarSlotId },

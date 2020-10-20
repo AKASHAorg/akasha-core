@@ -41,6 +41,7 @@ export const PluginSlot: any = styled(BaseContainer)`
 
 export const WidgetSlot: any = styled(BaseContainer)`
   display: none;
+  margin-top: 1em;
   ${props => css`
     @media screen and (min-width: ${props.theme.breakpoints.small.value}px) {
       max-width: 30em;

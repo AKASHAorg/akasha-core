@@ -35,6 +35,8 @@ export interface IProps {
 
 export default class TopbarWidget extends PureComponent<IProps> {
   public state: { hasErrors: boolean; errorMessage: string; ethAddress: string };
+  public showSidebarEvent = new CustomEvent('layout:showSidebar');
+  public hideSidebarEvent = new CustomEvent('layout:hideSidebar');
 
   private subscription: any;
   constructor(props: IProps) {
@@ -64,6 +66,14 @@ export default class TopbarWidget extends PureComponent<IProps> {
     logger.error('an error has occurred %j %j', err, info);
   }
 
+  public toggleSidebar = (visible: boolean) => {
+    if (visible) {
+      window.dispatchEvent(this.showSidebarEvent);
+    } else {
+      window.dispatchEvent(this.hideSidebarEvent);
+    }
+  };
+
   public render() {
     if (this.state.hasErrors) {
       return (
@@ -82,6 +92,7 @@ export default class TopbarWidget extends PureComponent<IProps> {
             <ViewportSizeProvider>
               <TopbarComponent
                 navigateToUrl={this.props.singleSpa.navigateToUrl}
+                toggleSidebar={this.toggleSidebar}
                 getMenuItems={this.props.getMenuItems}
                 ethAddress={this.state.ethAddress}
                 loaderEvents={this.props.events}
@@ -96,13 +107,14 @@ export default class TopbarWidget extends PureComponent<IProps> {
 
 interface TopBarProps {
   navigateToUrl: (url: string) => void;
+  toggleSidebar: (visible: boolean) => void;
   getMenuItems: () => IMenuItem[];
   ethAddress: string;
   loaderEvents: any;
 }
 
 const TopbarComponent = (props: TopBarProps) => {
-  const { navigateToUrl, getMenuItems, loaderEvents, ethAddress } = props;
+  const { navigateToUrl, getMenuItems, loaderEvents, toggleSidebar, ethAddress } = props;
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
 
@@ -152,6 +164,7 @@ const TopbarComponent = (props: TopBarProps) => {
         brandLabel="Ethereum World"
         onNavigation={handleNavigation}
         onSearch={handleSearchBarKeyDown}
+        onSidebarToggle={toggleSidebar}
         ethAddress={ethAddress}
         quickAccessItems={quickAccessItems}
         searchAreaItem={searchAreaItem}

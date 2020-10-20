@@ -12,6 +12,7 @@
     "react-router-dom": "https://unpkg.com/react-router-dom@5.1.2/umd/react-router-dom.js",
     "react-i18next": "https://unpkg.com/react-i18next@11.4.0/dist/umd/react-i18next.js",
     "immer": "https://unpkg.com/immer@5.3.6/dist/immer.umd.js",
+    "@widget/sidebar": "/widgets/sidebar.js",
     "@widget/layout": "/widgets/layout.js",
     "@widget/topbar": "/widgets/topbar.js",
     "@widget/login": "/widgets/login.js",

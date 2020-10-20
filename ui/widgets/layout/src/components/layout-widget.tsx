@@ -2,8 +2,8 @@ import DS from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent } from 'react';
 import { GlobalStyle } from './global-style';
-import { MainAreaContainer, WidgetContainer } from './styled-containers';
-import { ModalSlot, PluginSlot, TopbarSlot, WidgetSlot } from './styled-slots';
+import { BaseContainer, MainAreaContainer, WidgetContainer } from './styled-containers';
+import { ModalSlot, PluginSlot, TopbarSlot, SidebarSlot, WidgetSlot } from './styled-slots';
 
 const {
   Box,
@@ -18,6 +18,29 @@ const {
 } = DS;
 
 const TOPBAR_HEIGHT = 4;
+
+const SidebarWrapper = styled(BaseContainer)<{ visible: boolean }>`
+  z-index: 999;
+  flex-grow: 1;
+  height: calc(100vh - ${TOPBAR_HEIGHT}em);
+  top: ${TOPBAR_HEIGHT}em;
+  position: sticky;
+  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
+    ${props => {
+      if (props.visible) {
+        return css`
+          position: fixed;
+          top: ${TOPBAR_HEIGHT}rem;
+          width: 90vw;
+          height: calc(100vh - ${TOPBAR_HEIGHT}rem);
+        `;
+      }
+      return css`
+        display: none;
+      `;
+    }}
+  }
+`;
 
 const ScrollableWidgetArea = styled.div`
   ${props => css`
@@ -36,6 +59,7 @@ export interface IProps {
   i18n: I18nType;
   sdkModules: any;
   singleSpa: any;
+  sidebarSlotId: string;
   topbarSlotId: string;
   pluginSlotId: string;
   rootWidgetSlotId: string;
@@ -48,6 +72,7 @@ class LayoutWidget extends PureComponent<IProps> {
   public state: {
     hasErrors: boolean;
     errorMessage: string;
+    showSidebar?: boolean;
   };
 
   constructor(props: IProps) {
@@ -67,8 +92,34 @@ class LayoutWidget extends PureComponent<IProps> {
     console.error(err, info);
   }
 
+  public showSidebar = () => {
+    this.setState({ showSidebar: true });
+  };
+
+  public hideSidebar = () => {
+    this.setState({ showSidebar: false });
+  };
+
+  public componentDidMount() {
+    window.addEventListener('layout:showSidebar', this.showSidebar);
+    window.addEventListener('layout:hideSidebar', this.hideSidebar);
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener('layout:showSidebar', this.showSidebar);
+    window.removeEventListener('layout:hideSidebar', this.hideSidebar);
+  }
+
   public render() {
-    const { topbarSlotId, pluginSlotId, rootWidgetSlotId, widgetSlotId, modalSlotId } = this.props;
+    const {
+      sidebarSlotId,
+      topbarSlotId,
+      pluginSlotId,
+      rootWidgetSlotId,
+      widgetSlotId,
+      modalSlotId,
+    } = this.props;
+    const { showSidebar } = this.state;
 
     if (this.state.hasErrors) {
       return (
@@ -80,6 +131,8 @@ class LayoutWidget extends PureComponent<IProps> {
         </div>
       );
     }
+
+    const sidebarVisible = Boolean(showSidebar);
 
     return (
       <Box className="container" fill="horizontal">
@@ -95,7 +148,14 @@ class LayoutWidget extends PureComponent<IProps> {
               <Box className="container" fill="horizontal">
                 <TopbarSlot id={topbarSlotId} />
                 <Box className="container" style={{ flexDirection: 'row' }}>
-                  <MainAreaContainer className="container">
+                  <SidebarWrapper visible={sidebarVisible}>
+                    <SidebarSlot
+                      id={sidebarSlotId}
+                      visible={sidebarVisible}
+                      className="container"
+                    />
+                  </SidebarWrapper>
+                  <MainAreaContainer sidebarVisible={sidebarVisible} className="container">
                     <PluginSlot id={pluginSlotId} className="container" />
                     <WidgetSlot>
                       <WidgetContainer>

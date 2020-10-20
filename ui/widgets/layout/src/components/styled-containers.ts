@@ -20,7 +20,6 @@ export const BaseContainer: any = styled.div`
 export const MainAreaContainer: any = styled(BaseContainer)`
   flex-grow: 1;
   flex-direction: column-reverse !important;
-  justify-content: center;
   max-width: 100%;
   margin-bottom: 0.5em;
   ${props => css<any>`
