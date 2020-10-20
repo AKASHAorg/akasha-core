@@ -98,8 +98,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     /* back navigation logic here */
   };
 
-  const handleAvatarClick = () => {
-    /* todo */
+  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
+    props.singleSpa.navigateToUrl(`/profile/${authorEth}`);
+    ev.preventDefault();
   };
   const handleEntryBookmark = (entryId: string) => {
     if (!ethAddress) {
@@ -190,7 +191,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                       <EntryCard
                         isBookmarked={isBookmarked}
                         entryData={itemData}
-                        onClickAvatar={handleAvatarClick}
+                        onClickAvatar={ev => handleAvatarClick(ev, itemData.author.ethAddress)}
                         onEntryBookmark={handleEntryBookmark}
                         repliesLabel={t('Replies')}
                         repostsLabel={t('Reposts')}
