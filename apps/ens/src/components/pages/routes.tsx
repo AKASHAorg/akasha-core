@@ -4,29 +4,30 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { default as subRoutes, ENS_EDIT_PAGE, SETTINGS_PAGE, rootRoute } from '../../routes';
 import EnsEditPage from './ens-edit-page';
 import EnsSettingsPage from './ens-settings-page';
-import { ActionMapper, StateMapper } from 'easy-peasy';
-import { getProfileStore, ProfileStateModel } from '../../state/profile-state';
+import { ActionMapper, StateMapper, createContextStore } from 'easy-peasy';
+import { ProfileStateModel } from '../../state/profile-state';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 
 const { useGlobalLogin, LoginModal } = DS;
 
-const Routes: React.FC<RootComponentProps> = props => {
-  const { sdkModules, globalChannel, logger, layout } = props;
+const Routes: React.FC<
+  RootComponentProps & { profileStore: ReturnType<typeof createContextStore> }
+> = props => {
+  const { sdkModules, globalChannel, logger, layout, profileStore } = props;
   const { t } = useTranslation();
   const [loginModalState, setLoginModalState] = React.useState({
     showLoginModal: false,
   });
-  const Profile = getProfileStore(sdkModules, globalChannel, logger);
-  const token = Profile.useStoreState((s: StateMapper<ProfileStateModel, ''>) => s.token);
-  const authorize = Profile.useStoreActions(
+  const token = profileStore.useStoreState((s: StateMapper<ProfileStateModel, ''>) => s.token);
+  const authorize = profileStore.useStoreActions(
     (act: ActionMapper<ProfileStateModel, ''>) => act.authorize,
   );
-  const onLoginSuccess = Profile.useStoreActions(
+  const onLoginSuccess = profileStore.useStoreActions(
     (act: ActionMapper<ProfileStateModel, '1'>) => act.handleLoginSuccess,
   );
 
-  const onLoginError = Profile.useStoreActions(
+  const onLoginError = profileStore.useStoreActions(
     (actions: ActionMapper<ProfileStateModel, ''>) => actions.handleLoginError,
   );
   useGlobalLogin(globalChannel, onLoginSuccess, onLoginError);
@@ -50,9 +51,9 @@ const Routes: React.FC<RootComponentProps> = props => {
     });
   };
   const handleLogin = (providerId: number) => {
-    // console.log('authorizing!!', providerId);
     authorize(providerId);
   };
+
   const handleTutorialLinkClick = () => {
     /**
      * @TODO: we should do something here
@@ -69,6 +70,7 @@ const Routes: React.FC<RootComponentProps> = props => {
               globalChannel={globalChannel}
               logger={logger}
               onLoginModalShow={handleLoginModalShow}
+              profileStore={profileStore}
             />
           </Route>
           <Route path={subRoutes[SETTINGS_PAGE]}>
@@ -80,7 +82,7 @@ const Routes: React.FC<RootComponentProps> = props => {
           </Route>
           {/* Make the edit page default landing page for this app
                           404 routes gets redirected to this page also */}
-          <Redirect push={true} from={rootRoute} to={subRoutes[ENS_EDIT_PAGE]} exact={true} />
+          <Redirect from={rootRoute} to={subRoutes[ENS_EDIT_PAGE]} exact={true} />
         </Switch>
       </Router>
       <LoginModal
