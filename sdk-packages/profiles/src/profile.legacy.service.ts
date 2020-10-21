@@ -12,6 +12,24 @@ const service: AkashaService = (invoke, log) => {
   const featuredImageI = 'featuredImage';
   const postLinks = [postExcerpt, featuredImageI];
   const fullEntryI = 'draft-part0';
+
+  const finalEntries = {
+    totalPostsCID:
+      'bafyriqer5jri6mpbidxbiyn4sydkzdz7jodgf5cfs72zrforfrz72bvnfp6ryo4nrur5ppwv2zw5jrxdqg7yhocvuwoa5kxxhbk7cxwaatyok',
+    lastEntryCID:
+      'bafyriqhufacbyvbvvpl5e2m7guxy3f25qscuejnd6lr3rgbo5cdtsg4bsplou4k33mrrv2nfgritzjm6dxd3iq6shnw56z3lseombgi4xdg2y',
+    indexEntriesCID:
+      'bafyriqgg6bguwijplfpswclsgidwijn6aquc7rhb7udmsbrbmaryup4suebu6imqowmc4bqpefmzmezmj4biahmsmennmfm2s46mo4xcstdda',
+    profileEntriesIndexCID:
+      'bafyriqhmzcqo7qj65yz37ni2nhdymh66pyseibjyievupafbjgwgohdtoik3c7p27txyr7kkurmrck4e2p5vhkywfqkr45nfcrun7q46uviq6',
+  };
+  const finalProfiles = {
+    totalProfilesCID:
+      'bafyriqhrspd6flvqcayxspsltqgip7x4pjjnbnejpikdyv2kjffvtocc4gwxwz3ektdkr3onpebemlijwwulbbhk7g2fpvev5t3ci6phb7he4',
+    indexProfilesCID:
+      'bafyriqagpl5kghrigrwbxiaqkrvxbqd5v46qkpqg4abgksmexei4v2xzycptc2tjccgdp4pds5fld7disgvlzzfigv755gaowdjtvukyjluhk',
+  };
+  const sourceData = { sourcesCID: 'bafybeicu3lcedpnbotbvgsakhjbwb62ua4rvqfegkoi77u4ilekeam5qma' };
   const totalProfilesCID =
     'bafyriqepi7gd62w7klt4bsn52ku2zw555yxb2drrr5xzyqaspsrf47xjz6dhydc3ivcraekbd6pdyiqqimw5vgchqmk4fffvokafdsif27t72';
   const totalPostsCID =
