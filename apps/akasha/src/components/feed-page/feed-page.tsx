@@ -111,7 +111,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           ipfsLink: entry.id,
           permalink: 'null',
         };
-        console.table([mappedEntry, entry]);
+        // console.table([mappedEntry, entry]);
         feedStateActions.setFeedItemData(mappedEntry);
       });
       feedStateActions.setFeedItems({ items: entryIds });
