@@ -51,6 +51,7 @@
     "@akashaproject/sdk-runtime": "*",
     "@akashaproject/sdk-db": "*",
     "@akashaproject/design-system": "*",
+    "@akashaproject/sdk-profiles": "*",
     "react-i18next": "11.4.0",
     "react-router-dom": "5.1.2",
     "single-spa-react": "2.14.0",

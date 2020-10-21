@@ -84,22 +84,55 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   const onInitialLoad = async (payload: ILoadItemsPayload) => {
-    const response = await fetchFeedItems({
-      start: payload.start,
-      limit: payload.limit,
-      reverse: payload.reverse,
-    });
-    if (response.items.length) {
-      feedStateActions.setFeedItems(response);
+    const profileService = props.sdkModules.profiles.profileService;
+    const req: { results: number; offset?: string } = {
+      results: payload.limit,
+    };
+    if (payload.start) {
+      req.offset = payload.start;
     }
+    const call = profileService.getPosts(req);
+    call.subscribe((resp: any) => {
+      const { data }: { channelInfo: any; data: { last: string; result: any[] } } = resp;
+      const { /* last, */ result } = data;
+      const entryIds: { entryId: string }[] = [];
+      result.forEach(entry => {
+        entryIds.push({ entryId: entry.id });
+        const mappedEntry = {
+          author: {
+            ensName: entry.author.username,
+            userName: `${entry.author.firstName} ${entry.author.lastName}`,
+            ethAddress: entry.author.nameHash,
+            postsNumber: entry.author.entries.length,
+          },
+          content: entry.data.excerpt,
+          entryId: entry.id,
+          time: new Date().toLocaleString(),
+          ipfsLink: entry.id,
+          permalink: 'null',
+        };
+        // console.table([mappedEntry, entry]);
+        feedStateActions.setFeedItemData(mappedEntry);
+      });
+      feedStateActions.setFeedItems({ items: entryIds });
+    });
+    // const response = await fetchFeedItems({
+    //   start: payload.start,
+    //   limit: payload.limit,
+    //   reverse: payload.reverse,
+    // });
+    // if (response.items.length) {
+    //   feedStateActions.setFeedItems(response);
+    // }
   };
 
   const handleBackNavigation = () => {
     /* back navigation logic here */
   };
 
-  const handleAvatarClick = () => {
-    /* todo */
+  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
+    props.singleSpa.navigateToUrl(`/profile/${authorEth}`);
+    ev.preventDefault();
   };
   const handleEntryBookmark = (entryId: string) => {
     if (!ethAddress) {
@@ -190,7 +223,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                       <EntryCard
                         isBookmarked={isBookmarked}
                         entryData={itemData}
-                        onClickAvatar={handleAvatarClick}
+                        onClickAvatar={ev => handleAvatarClick(ev, itemData.author.ethAddress)}
                         onEntryBookmark={handleEntryBookmark}
                         repliesLabel={t('Replies')}
                         repostsLabel={t('Reposts')}

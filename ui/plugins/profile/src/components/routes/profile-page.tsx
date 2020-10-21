@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { useProfile } from '../../state/profiles';
 import { History } from 'history';
-import { ProfilePageFeed } from '../ProfileFeed/profile-page-feed';
 import { ProfilePageHeader } from '../ProfileHeader/profile-header';
 import DS from '@akashaproject/design-system';
+import useProfile from '../hooks/use-profile';
 
 interface ProfilePageProps {
   match: {
@@ -16,25 +15,23 @@ interface ProfilePageProps {
 
 const ProfilePage = (props: ProfilePageProps) => {
   const { params } = props.match;
-  const [profileState /* profileActions */] = useProfile();
-  // profileActions.getLoggedProfile();
+  const [profileState, profileActions] = useProfile({ onError: (err) => {console.log(err)} });
+
+
   React.useEffect(() => {
-    if (profileState.loggedProfile === params.profileId) {
-      props.history.replace('/profile/my-profile');
+    if (params.profileId) {
+      profileActions.getProfileData({ ethAddress: params.profileId });
     }
-  }, [profileState.loggedProfile, params.profileId]);
+  }, [params.profileId]);
+
+  console.log(profileState, 'profile state');
 
   return (
     <div>
       <DS.Helmet>
         <title>Profile | {params.profileId} Page</title>
       </DS.Helmet>
-      <React.Suspense fallback={<div>Loading Profile Header</div>}>
-        <ProfilePageHeader profileId={params.profileId} />
-      </React.Suspense>
-      <React.Suspense fallback={<div>Loading Profile Feed</div>}>
-        <ProfilePageFeed profileId={params.profileId} />
-      </React.Suspense>
+      <ProfilePageHeader profileId={params.profileId} />
     </div>
   );
 };

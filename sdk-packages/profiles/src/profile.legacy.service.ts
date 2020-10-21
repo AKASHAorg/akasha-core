@@ -62,7 +62,7 @@ const service: AkashaService = (invoke, log) => {
         last = prev.toBaseEncodedString();
         const postData = await getPost({ record });
         const authorData = await getProfile({ address: author }, false);
-        result.push({ author: authorData, data: postData });
+        result.push({ author: authorData, data: postData, id: record.string });
       } else {
         break;
       }
