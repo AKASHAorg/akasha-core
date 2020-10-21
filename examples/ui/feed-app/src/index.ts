@@ -48,7 +48,7 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
     //   config: { slot: layout.application.rootWidgetSlotId, notOnMobile: true },
     // },
   ];
-  // const profilePlugin = await System.import('@plugins/profile');
+  const profilePlugin = await System.import('@plugins/profile');
   // const searchPlugin = await System.import('@plugins/search');
   // const appCenterPlugin = await System.import('@plugins/app-center');
   // const notificationsPlugin = await System.import('@plugins/notifications');
@@ -76,12 +76,12 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   //     area: MenuItemAreaType.QuickAccessArea,
   //   },
   // });
-  // world.appLoader.registerPlugin({
-  //   app: profilePlugin.application,
-  //   config: {
-  //     area: MenuItemAreaType.QuickAccessArea,
-  //   },
-  // });
+  world.appLoader.registerPlugin({
+    app: profilePlugin.application,
+    config: {
+      area: MenuItemAreaType.QuickAccessArea,
+    },
+  });
   // world.appLoader.registerPlugin({
   //   app: searchPlugin.application,
   //   config: {

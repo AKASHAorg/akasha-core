@@ -62,9 +62,7 @@ const service: AkashaService = (invoke, log) => {
     if (!identifier.address) {
       throw new Error('Must specify address for the profile!');
     }
-
     profile = await fetchDagNode(`${indexProfiles}/${identifier.address}`);
-
     const defaultProvider = profile?.value.providers[profileProvider].toBaseEncodedString();
     profile = await fetchDagNode(defaultProvider);
     profile = profile?.value;
