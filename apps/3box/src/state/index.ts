@@ -152,6 +152,7 @@ export const profileStateModel: ProfileStateModel = {
     const $stash = commons.cacheService.getStash(null);
     const $web3Instance = commons.web3Service.web3(null);
     const $web3Utils = commons.web3UtilsService.getUtils(null);
+    const $ipfsInstance = commons.ipfsService.getInstance(null);
     const $settingsAttachment = db.settingsAttachment.get({
       id: BOX_SETTINGS_ID,
       ethAddress: ethAddress,
@@ -162,6 +163,7 @@ export const profileStateModel: ProfileStateModel = {
         web3Instance: $web3Instance,
         web3Utils: $web3Utils,
         settingsAttachment: $settingsAttachment,
+        ipfsInstance: $ipfsInstance,
       });
 
       return call.subscribe(
@@ -172,6 +174,7 @@ export const profileStateModel: ProfileStateModel = {
               deps.web3Utils.data,
               JSON.parse(deps.settingsAttachment.data),
               ethAddress,
+              deps.ipfsInstance.data,
             );
             const { profileData } = result;
             // tslint:disable-next-line: prefer-const

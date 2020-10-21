@@ -1,17 +1,17 @@
-# awf-plugin-loader
+# @akashaproject/sdk-ui-plugin-loader
 
 > plugin loader for AWF
 
-## Install
+## `Install`
 
 ```bash
-npm install --save @akashaproject/ui-plugin-loader
+npm install --save @akashaproject/sdk-ui-plugin-loader
 ```
 
-## Usage
+## `Usage`
 
 ```tsx
-import AppLoader from '@akashaproject/ui-plugin-loader';
+import AppLoader from '@akashaproject/sdk-ui-plugin-loader';
 import SamplePlugin from 'plugin-sample';
 
 const app = AppLoader({
@@ -23,6 +23,6 @@ app.registerPlugin(SamplePlugin);
 app.start();
 ```
 
-## License
+## `License`
 
 MIT © [AKASHA Foundation](https://akasha.org/)

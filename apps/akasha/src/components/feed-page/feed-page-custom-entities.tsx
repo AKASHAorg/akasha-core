@@ -18,7 +18,7 @@ export interface IGetCustomEntitiesProps {
   pendingEntries: any[];
   t: TFunction;
   locale: ILocale;
-  onAvatarClick: () => void;
+  onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
 }
 
 const CustomEntryCard = styled(EntryCard)<{ isPending: boolean }>`
@@ -84,7 +84,7 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
           style={{ ...style, height: 'auto' }}
           key={pendingEntry.localId}
           entryData={pendingEntry.entry}
-          onClickAvatar={onAvatarClick}
+          onClickAvatar={ev => onAvatarClick(ev, pendingEntry.entry.author.ethAddress)}
           // onEntryBookmark={handleEntryBookmark}
           repliesLabel={t('Replies')}
           repostsLabel={t('Reposts')}

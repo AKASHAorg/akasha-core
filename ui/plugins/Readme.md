@@ -4,6 +4,8 @@
 
 ## Components
 
-- [Events](./events/README.md)
+- [App Center](./app-center/README.md)
 - [Feed](./feed/README.md)
-- [Loader](./loader/README.md)
+- [Notifcations](./notifications/README.md)
+- [Profile](./profile/README.md)
+- [Search](./search/README.md)
