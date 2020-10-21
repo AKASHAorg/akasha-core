@@ -16,11 +16,13 @@ import {
   removePending,
   savePending,
   updatePending,
+  serializeToSlate,
 } from '../../services/posting-service';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import useEntryPublisher from '../../hooks/use-entry-publisher';
 import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
 import useEntryBookmark from '../../hooks/use-entry-bookmark';
+import { combineLatest } from 'rxjs';
 
 const { Helmet, VirtualList, Box, ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard } = DS;
 
@@ -91,9 +93,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     if (payload.start) {
       req.offset = payload.start;
     }
-    const call = profileService.getPosts(req);
+    const getPostscall = profileService.getPosts(req);
+    const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
+    const call = combineLatest([ipfsGatewayCall, getPostscall]);
     call.subscribe((resp: any) => {
-      const { data }: { channelInfo: any; data: { last: string; result: any[] } } = resp;
+      const ipfsGateway = resp[0].data;
+      const { data }: { channelInfo: any; data: { last: string; result: any[] } } = resp[1];
       const { /* last, */ result } = data;
       const entryIds: { entryId: string }[] = [];
       result.forEach(entry => {
@@ -105,7 +110,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             ethAddress: entry.author.nameHash,
             postsNumber: entry.author.entries.length,
           },
-          content: entry.data.excerpt,
+          content: serializeToSlate(entry.data, ipfsGateway),
           entryId: entry.id,
           time: new Date().toLocaleString(),
           ipfsLink: entry.id,

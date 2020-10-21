@@ -201,7 +201,8 @@ const EditorBox: React.FC<IEditorBox> = props => {
     setTagTargetRange(null);
   };
 
-  // tslint:disable-next-line:complexity
+  // tslint:disable:cyclomatic-complexity
+  /* eslint-disable complexity */
   const onKeyDown = useCallback(
     event => {
       for (const hotkey in HOTKEYS) {
@@ -264,6 +265,8 @@ const EditorBox: React.FC<IEditorBox> = props => {
     },
     [index, mentionTargetRange, tagTargetRange],
   );
+  /* eslint-enable complexity */
+  // tslint:enable:cyclomatic-complexity
 
   const handleMediaClick = () => {
     setImagePopoverOpen(!imagePopoverOpen);

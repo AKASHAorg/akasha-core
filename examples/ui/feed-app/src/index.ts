@@ -10,7 +10,7 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   // const sidebarWidget = await System.import('@widget/sidebar');
   const layout = await System.import('@widget/layout');
   const topbarWidget = await System.import('@widget/topbar');
-  // const loginWidget = await System.import('@widget/login');
+  const loginWidget = await System.import('@widget/login');
 
   const AKASHAApp = await System.import('@app/AKASHA');
   // tslint:disable-next-line:no-console
@@ -43,13 +43,13 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
       app: topbarWidget.application,
       config: { slot: layout.application.topbarSlotId },
     },
-    // {
-    //   app: loginWidget.application,
-    //   config: { slot: layout.application.rootWidgetSlotId, notOnMobile: true },
-    // },
+    {
+      app: loginWidget.application,
+      config: { slot: layout.application.rootWidgetSlotId, notOnMobile: true },
+    },
   ];
-  // const profilePlugin = await System.import('@plugins/profile');
-  // const searchPlugin = await System.import('@plugins/search');
+  const profilePlugin = await System.import('@plugins/profile');
+  const searchPlugin = await System.import('@plugins/search');
   // const appCenterPlugin = await System.import('@plugins/app-center');
   // const notificationsPlugin = await System.import('@plugins/notifications');
   // const boxApp = await System.import('@app/3box');
@@ -76,18 +76,18 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   //     area: MenuItemAreaType.QuickAccessArea,
   //   },
   // });
-  // world.appLoader.registerPlugin({
-  //   app: profilePlugin.application,
-  //   config: {
-  //     area: MenuItemAreaType.QuickAccessArea,
-  //   },
-  // });
-  // world.appLoader.registerPlugin({
-  //   app: searchPlugin.application,
-  //   config: {
-  //     area: MenuItemAreaType.SearchArea,
-  //   },
-  // });
+  world.appLoader.registerPlugin({
+    app: profilePlugin.application,
+    config: {
+      area: MenuItemAreaType.QuickAccessArea,
+    },
+  });
+  world.appLoader.registerPlugin({
+    app: searchPlugin.application,
+    config: {
+      area: MenuItemAreaType.SearchArea,
+    },
+  });
   // world.appLoader.registerPlugin({
   //   app: appCenterPlugin.application,
   //   config: {

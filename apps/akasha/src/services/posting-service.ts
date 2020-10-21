@@ -78,3 +78,38 @@ export const publishEntry = (pendingEntry: IPendingEntry) => {
     };
   });
 };
+
+export const serializeToSlate = (
+  entryData: { excerpt: string; featuredImage: any; post: any },
+  ipfsGateway: string,
+) => {
+  const serializedContent = [];
+
+  if (entryData.excerpt) {
+    serializedContent.push({
+      type: 'paragraph',
+      children: [{ text: JSON.parse(entryData.excerpt) }],
+    });
+  }
+  if (entryData.featuredImage && JSON.parse(entryData.featuredImage).xs?.src) {
+    serializedContent.push({
+      type: 'image',
+      url: `${ipfsGateway}/${JSON.parse(entryData.featuredImage).xs?.src}`,
+      children: [{ text: '' }],
+    });
+  }
+  if (entryData.post && JSON.parse(entryData.post).tags?.length > 0) {
+    JSON.parse(entryData.post).tags.forEach((tag: string, idx: number) => {
+      if (idx > 0) {
+        serializedContent.push({ text: ' ' });
+      }
+      serializedContent.push({
+        type: 'tag',
+        value: tag,
+        children: [{ text: '' }],
+      });
+    });
+  }
+
+  return serializedContent;
+};
