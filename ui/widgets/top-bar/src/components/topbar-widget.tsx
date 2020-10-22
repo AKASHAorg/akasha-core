@@ -1,27 +1,13 @@
 import DS from '@akashaproject/design-system';
-import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 // @ts-ignore
 import SingleSpaReact from 'single-spa-react';
-import {
-  IMenuItem,
-  EventTypes,
-  MenuItemAreaType,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { filter } from 'rxjs/operators';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import TopbarComponent from './topbar-component';
 
-const { lightTheme, Topbar, ThemeSelector, ViewportSizeProvider, useViewportSize } = DS;
-
-export interface IProps {
-  i18n: I18nType;
-  sdkModules: any;
-  globalChannel?: any;
-  singleSpa: any;
-  getMenuItems: () => any[];
-  events: any;
-  logger: any;
-}
+const { lightTheme, ThemeSelector, ViewportSizeProvider } = DS;
 
 /**
  * This is the entry point of a plugin.
@@ -33,18 +19,25 @@ export interface IProps {
  * @warning :: Always use default export
  */
 
-export default class TopbarWidget extends PureComponent<IProps> {
-  public state: { hasErrors: boolean; errorMessage: string; ethAddress: string };
+export default class TopbarWidget extends PureComponent<RootComponentProps> {
+  public state: {
+    hasErrors: boolean;
+    errorMessage: string;
+    ethAddress?: string;
+    token: string | null;
+  };
   public showSidebarEvent = new CustomEvent('layout:showSidebar');
   public hideSidebarEvent = new CustomEvent('layout:hideSidebar');
 
   private subscription: any;
-  constructor(props: IProps) {
+  constructor(props: RootComponentProps) {
     super(props);
     this.state = {
       hasErrors: false,
       errorMessage: '',
-      ethAddress: '0x0000000000000000000000000000000000000000',
+      // logged eth address
+      ethAddress: undefined,
+      token: null,
     };
   }
 
@@ -73,7 +66,28 @@ export default class TopbarWidget extends PureComponent<IProps> {
       window.dispatchEvent(this.hideSidebarEvent);
     }
   };
-
+  public handleLogin = (provider: 2 | 3) => {
+    const call = this.props.sdkModules.auth.authService.signIn(provider);
+    call.subscribe(
+      (res: any) => {
+        const { ethAddress, token } = res.data;
+        this.setState({
+          ethAddress,
+          token,
+        });
+      },
+      (err: Error) => {
+        this.props.logger.error(err);
+        // @TODO: do something with this error
+      },
+    );
+  };
+  public handleGlobalLogin = (ethAddr: string, token: string) => {
+    this.setState({
+      token,
+      ethAddress: ethAddr,
+    });
+  };
   public render() {
     if (this.state.hasErrors) {
       return (
@@ -85,6 +99,7 @@ export default class TopbarWidget extends PureComponent<IProps> {
         </div>
       );
     }
+
     return (
       <I18nextProvider i18n={this.props.i18n}>
         <Suspense fallback={<>...</>}>
@@ -96,6 +111,12 @@ export default class TopbarWidget extends PureComponent<IProps> {
                 getMenuItems={this.props.getMenuItems}
                 ethAddress={this.state.ethAddress}
                 loaderEvents={this.props.events}
+                modalSlotId={this.props.layout.modalSlotId}
+                onLogin={this.handleLogin}
+                onGlobalLogin={this.handleGlobalLogin}
+                globalChannel={this.props.globalChannel}
+                logger={this.props.logger}
+                profilesChannel={this.props.sdkModules.profiles}
               />
             </ViewportSizeProvider>
           </ThemeSelector>
@@ -104,72 +125,3 @@ export default class TopbarWidget extends PureComponent<IProps> {
     );
   }
 }
-
-interface TopBarProps {
-  navigateToUrl: (url: string) => void;
-  toggleSidebar: (visible: boolean) => void;
-  getMenuItems: () => IMenuItem[];
-  ethAddress: string;
-  loaderEvents: any;
-}
-
-const TopbarComponent = (props: TopBarProps) => {
-  const { navigateToUrl, getMenuItems, loaderEvents, toggleSidebar, ethAddress } = props;
-
-  const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
-
-  React.useEffect(() => {
-    const updateMenu = () => {
-      const menuItems = getMenuItems();
-      setCurrentMenu(menuItems);
-    };
-    updateMenu();
-    loaderEvents.subscribe((evMsg: EventTypes) => {
-      if (evMsg === EventTypes.AppInstall || evMsg === EventTypes.PluginInstall) {
-        updateMenu();
-      }
-    });
-    return function cleanup() {
-      loaderEvents.unsubscribe();
-    };
-  }, []);
-
-  // *how to obtain different topbar menu sections
-  const quickAccessItems = currentMenu?.filter(
-    menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,
-  );
-  const searchAreaItem = currentMenu?.filter(
-    menuItem => menuItem.area === MenuItemAreaType.SearchArea,
-  )[0];
-
-  const handleNavigation = (path: string) => {
-    navigateToUrl(path);
-  };
-
-  const handleSearchBarKeyDown = (
-    ev: React.KeyboardEvent<HTMLInputElement>,
-    inputValue: string,
-  ) => {
-    if (ev.key === 'Enter' && searchAreaItem) {
-      handleNavigation(`${searchAreaItem.route}/${inputValue}`);
-    }
-  };
-
-  const { size } = useViewportSize();
-
-  return (
-    <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
-      <Topbar
-        avatarImage="https://placebeard.it/360x360"
-        brandLabel="Ethereum World"
-        onNavigation={handleNavigation}
-        onSearch={handleSearchBarKeyDown}
-        onSidebarToggle={toggleSidebar}
-        ethAddress={ethAddress}
-        quickAccessItems={quickAccessItems}
-        searchAreaItem={searchAreaItem}
-        size={size}
-      />
-    </ThemeSelector>
-  );
-};

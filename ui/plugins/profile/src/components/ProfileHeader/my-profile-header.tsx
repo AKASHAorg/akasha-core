@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useProfile } from '../../state/profiles';
+import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
 
 const { styled, ProfileCard } = DS;
 
@@ -9,14 +9,8 @@ const StyledProfileCard = styled(ProfileCard)`
   margin-bottom: 0.5em;
 `;
 
-export const MyProfilePageHeader = () => {
-  const [profileState, profileActions] = useProfile();
-  profileActions.getProfilesData({ profile: profileState.loggedProfile });
-  profileActions.getProfileFollowings({ profile: profileState.loggedProfile });
-  profileActions.getProfileFollowers({ profile: profileState.loggedProfile });
-  const profileData = profileState.profiles.find(
-    prof => prof.ethAddress === profileState.loggedProfile,
-  );
+export const MyProfilePageHeader = (props: { profileData: Partial<IProfileData> }) => {
+  const {profileData} = props;
 
   if (!profileData) {
     return null;
@@ -24,10 +18,6 @@ export const MyProfilePageHeader = () => {
 
   const cardData = {
     ...profileData,
-    followers: profileState.followers.find(p => p.profileId === profileState.loggedProfile)
-      ?.followers,
-    following: profileState.followings.find(p => p.profileId === profileState.loggedProfile)
-      ?.followings,
   };
 
   return (
