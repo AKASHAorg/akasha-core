@@ -110,8 +110,6 @@ const service: AkashaService = (invoke, log) => {
       throw new Error('Must specify one id or record for the post!');
     }
     let postEntry: any;
-    let excerpt;
-    let featuredImage;
     let data;
     if (identifier.record) {
       postEntry = await fetchDagNode(identifier.record);
@@ -120,18 +118,18 @@ const service: AkashaService = (invoke, log) => {
       if (!postEntry) return null;
 
       data = JSON.parse(postEntry.data.toString());
-      if (data.hasOwnProperty(postExcerpt)) {
-        excerpt = await fetchDagNode(data[postExcerpt]);
+      if (postEntry.hasOwnProperty(postExcerpt)) {
+        postEntry[postExcerpt] = (
+          await fetchDagNode(postEntry[postExcerpt])
+        )?.value?.Data?.toString();
       }
-      if (data.hasOwnProperty(featuredImageI)) {
-        featuredImage = await fetchDagNode(data[featuredImageI]);
+      if (postEntry.hasOwnProperty(featuredImageI)) {
+        const sizes = (await fetchDagNode(postEntry[featuredImageI]))?.value;
+        postEntry[featuredImageI] = {
+          sizes,
+          hash: postEntry[featuredImageI].toBaseEncodedString(),
+        };
       }
-      Object.assign(data, {
-        [postExcerpt]: excerpt,
-        [featuredImageI]: featuredImage,
-        author: postEntry.author,
-        id: postEntry.id,
-      });
       // fullEntryHash = await fetchDagNode(`${identifier.record}/${fullEntryI}`);
     } else {
       const postsIndex = await fetchDagNode(`${entriesLog.indexEntriesCID}/${identifier.id}`);
@@ -140,8 +138,9 @@ const service: AkashaService = (invoke, log) => {
       }
       throw new Error('Invalid post data format!');
     }
-    data = await resolveCIDs(data);
-    return data;
+    postEntry = await resolveCIDs(postEntry);
+    Object.assign(postEntry, data);
+    return postEntry;
   };
 
   return { getPosts, getProfiles, getPost, getProfile };

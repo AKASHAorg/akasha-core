@@ -90,7 +90,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
   const fetchEntries = async (payload: { results: number; offset?: string }) => {
     const profileService = props.sdkModules.profiles.profileService;
-    const getPostscall = profileService.getPosts({ ...payload, offset: feedState.lastItemId });
+    const getPostscall = profileService.getPosts({
+      ...payload,
+      offset: payload.offset || feedState.lastItemId,
+    });
     const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
     const call = combineLatest([ipfsGatewayCall, getPostscall]);
     call.subscribe((resp: any) => {
@@ -124,6 +127,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const onInitialLoad = async (payload: ILoadItemsPayload) => {
     const req: { results: number; offset?: string } = {
       results: payload.limit,
+      offset:
+        'bafyriqeb6gvqikapivoqu3vfs57wkfx552lg73atm42o44gcsrj3pw4hnnlf5s63ic5p7k7poqrbjub2jgxhxjzm5lea3vxasixy52mfrygnk',
     };
     fetchEntries(req);
   };
