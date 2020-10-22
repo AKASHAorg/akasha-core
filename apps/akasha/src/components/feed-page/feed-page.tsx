@@ -135,8 +135,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const onInitialLoad = async (payload: ILoadItemsPayload) => {
     const req: { results: number; offset?: string } = {
       results: payload.limit,
-      offset:
-        'bafyriqeb6gvqikapivoqu3vfs57wkfx552lg73atm42o44gcsrj3pw4hnnlf5s63ic5p7k7poqrbjub2jgxhxjzm5lea3vxasixy52mfrygnk',
     };
     fetchEntries(req);
   };
