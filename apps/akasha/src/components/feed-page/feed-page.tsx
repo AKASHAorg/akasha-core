@@ -101,12 +101,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         const mappedEntry = {
           author: {
             ensName: entry.author.username,
-            userName: `${entry.author.firstName} ${entry.author.lastName}`,
-            ethAddress: entry.author.nameHash,
-            postsNumber: entry.author.entries.length,
+            userName: `${entry.author?.data?.firstName} ${entry.author?.data?.lastName}`,
+            ethAddress: entry.author.address,
+            postsNumber: entry.author?.entries?.length, // @todo: fix this with another api call
           },
-          content: entry.data.excerpt,
-          entryId: entry.id,
+          content: entry.post?.excerpt,
+          entryId: entry.post.id,
           time: new Date().toLocaleString(),
           ipfsLink: entry.id,
           permalink: 'null',
