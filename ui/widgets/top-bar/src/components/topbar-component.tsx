@@ -96,6 +96,9 @@ const TopbarComponent = (props: TopBarProps) => {
       handleNavigation(`${searchAreaItem.route}/${inputValue}`);
     }
   };
+  const handleTutorialLinkClick = () => {
+    /* goto tutorials */
+  };
 
   const { size } = useViewportSize();
 
@@ -121,7 +124,7 @@ const TopbarComponent = (props: TopBarProps) => {
         tutorialLinkLabel="Tutorial"
         metamaskModalHeadline="Metamask"
         metamaskModalMessage="Login with Metamask"
-        onTutorialLinkClick={() => {}}
+        onTutorialLinkClick={handleTutorialLinkClick}
         helpText="What is a wallet? How do i get an Ethereum address?"
       />
     </ThemeSelector>
