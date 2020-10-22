@@ -107,6 +107,7 @@ const ImagePopover: React.FC<IImagePopover> = props => {
   );
   return (
     <StyledDrop
+      overflow="hidden"
       target={target}
       align={{ top: 'bottom' }}
       onClickOutside={closePopover}

@@ -201,8 +201,58 @@ const EditorBox: React.FC<IEditorBox> = props => {
     setTagTargetRange(null);
   };
 
-  // tslint:disable:cyclomatic-complexity
-  /* eslint-disable complexity */
+  const selectMention = (event: KeyboardEvent, mentionRange: Range) => {
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        const prevIndex = index >= mentions.length - 1 ? 0 : index + 1;
+        setIndex(prevIndex);
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        const nextIndex = index <= 0 ? mentions.length - 1 : index - 1;
+        setIndex(nextIndex);
+        break;
+      case 'Tab':
+      case 'Enter':
+        event.preventDefault();
+        Transforms.select(editor, mentionRange);
+        CustomEditor.insertMention(editor, mentions[index]);
+        setMentionTargetRange(null);
+        break;
+      case 'Escape':
+        event.preventDefault();
+        setMentionTargetRange(null);
+        break;
+    }
+  };
+
+  const selectTag = (event: KeyboardEvent, tagRange: Range) => {
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        const prevIndex = index >= tags.length - 1 ? 0 : index + 1;
+        setIndex(prevIndex);
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        const nextIndex = index <= 0 ? tags.length - 1 : index - 1;
+        setIndex(nextIndex);
+        break;
+      case 'Tab':
+      case 'Enter':
+        event.preventDefault();
+        Transforms.select(editor, tagRange);
+        CustomEditor.insertTag(editor, tags[index]);
+        setTagTargetRange(null);
+        break;
+      case 'Escape':
+        event.preventDefault();
+        setTagTargetRange(null);
+        break;
+    }
+  };
+
   const onKeyDown = useCallback(
     event => {
       for (const hotkey in HOTKEYS) {
@@ -213,60 +263,14 @@ const EditorBox: React.FC<IEditorBox> = props => {
         }
       }
       if (mentionTargetRange) {
-        switch (event.key) {
-          case 'ArrowDown':
-            event.preventDefault();
-            const prevIndex = index >= mentions.length - 1 ? 0 : index + 1;
-            setIndex(prevIndex);
-            break;
-          case 'ArrowUp':
-            event.preventDefault();
-            const nextIndex = index <= 0 ? mentions.length - 1 : index - 1;
-            setIndex(nextIndex);
-            break;
-          case 'Tab':
-          case 'Enter':
-            event.preventDefault();
-            Transforms.select(editor, mentionTargetRange);
-            CustomEditor.insertMention(editor, mentions[index]);
-            setMentionTargetRange(null);
-            break;
-          case 'Escape':
-            event.preventDefault();
-            setMentionTargetRange(null);
-            break;
-        }
+        selectMention(event, mentionTargetRange);
       }
       if (tagTargetRange) {
-        switch (event.key) {
-          case 'ArrowDown':
-            event.preventDefault();
-            const prevIndex = index >= tags.length - 1 ? 0 : index + 1;
-            setIndex(prevIndex);
-            break;
-          case 'ArrowUp':
-            event.preventDefault();
-            const nextIndex = index <= 0 ? tags.length - 1 : index - 1;
-            setIndex(nextIndex);
-            break;
-          case 'Tab':
-          case 'Enter':
-            event.preventDefault();
-            Transforms.select(editor, tagTargetRange);
-            CustomEditor.insertTag(editor, tags[index]);
-            setTagTargetRange(null);
-            break;
-          case 'Escape':
-            event.preventDefault();
-            setTagTargetRange(null);
-            break;
-        }
+        selectTag(event, tagTargetRange);
       }
     },
     [index, mentionTargetRange, tagTargetRange],
   );
-  /* eslint-enable complexity */
-  // tslint:enable:cyclomatic-complexity
 
   const handleMediaClick = () => {
     setImagePopoverOpen(!imagePopoverOpen);

@@ -16,6 +16,7 @@ const StyledDrop = styled(Drop)`
 `;
 
 const StyledProfileDrop = styled(Drop)`
+  position: absolute;
   border-radius: ${props => props.theme.shapes.borderRadius};
 `;
 
