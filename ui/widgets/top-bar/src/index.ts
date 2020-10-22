@@ -1,4 +1,6 @@
 import { initReactI18next } from 'react-i18next';
+import { moduleName as authModule } from '@akashaproject/sdk-auth/lib/constants';
+import { moduleName as profilesModule } from '@akashaproject/sdk-profiles/lib/constants';
 
 /**
  * All widgets must export an object like this:
@@ -23,6 +25,6 @@ export const application = {
       './components'
     ),
   name: 'ui-widget-topbar',
-  sdkModules: [],
+  sdkModules: [{ module: authModule }, { module: profilesModule }],
   title: 'Topbar Widget',
 };

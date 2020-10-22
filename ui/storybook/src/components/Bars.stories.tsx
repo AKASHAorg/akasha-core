@@ -106,6 +106,7 @@ const TopbarComponent = () => {
       onNavigation={(path: string) => action('Navigate to')(path)}
       onSearch={(ev: any, inputValue: string) => action('Navigate to')(ev, inputValue)}
       size={size}
+      onLoginClick={() => action('OnLoginClick')('Synthetic Event')}
     />
   );
 };

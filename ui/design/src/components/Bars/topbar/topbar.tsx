@@ -12,14 +12,15 @@ import {
   StyledDrop,
   StyledDiv,
 } from './styled-topbar';
+import { TextIcon } from '../../TextIcon';
 
 export interface ITopbarProps {
   // data
   avatarImage?: string;
-  ethAddress: string;
+  ethAddress?: string;
   brandLabel: string;
   unreadNotifications?: number;
-  quickAccessItems: IMenuItem[];
+  quickAccessItems: IMenuItem[] | null;
   searchAreaItem?: IMenuItem;
   // handlers
   onNavigation: (path: string) => void;
@@ -29,6 +30,7 @@ export interface ITopbarProps {
   className?: string;
   // viewport size
   size?: string;
+  onLoginClick: () => void;
 }
 
 const Topbar = (props: ITopbarProps) => {
@@ -43,6 +45,7 @@ const Topbar = (props: ITopbarProps) => {
     // onSidebarToggle,
     ethAddress,
     size,
+    onLoginClick,
   } = props;
 
   const [inputValue, setInputValue] = React.useState('');
@@ -109,7 +112,6 @@ const Topbar = (props: ITopbarProps) => {
       </Box>
     </StyledDrop>
   );
-
   const renderPluginButton = (menuItem: IMenuItem, index: number) => (
     <StyledDiv
       key={index}
@@ -161,7 +163,8 @@ const Topbar = (props: ITopbarProps) => {
               />
             </StyledSearchContainer>
           )}
-          {quickAccessItems.map(renderPluginButton)}
+          {quickAccessItems && quickAccessItems.map(renderPluginButton)}
+          {!ethAddress && <TextIcon label="Sign In" iconType="hashtag" onClick={onLoginClick} />}
         </Box>
       </>
     );

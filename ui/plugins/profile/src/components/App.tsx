@@ -47,7 +47,7 @@ class App extends PureComponent<RootComponentProps> {
     if (this.state.hasErrors) {
       return <div>Oh no, something went wrong in {'profile-plugin'}</div>;
     }
-    console.log(this.props, 'proooooops');
+
     return (
       <Box width="100vw">
         <I18nextProvider i18n={i18n ? i18n : null}>
