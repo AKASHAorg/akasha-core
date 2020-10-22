@@ -18,7 +18,6 @@ const MyProfilePage = (props: RootComponentProps) => {
       const { data } = resp.stash;
       if (data.entries.has('auth')) {
         const authValue = data.cache.get('auth');
-        console.log(authValue, 'authVal');
         if (authValue.hasOwnProperty('ethAddress')) {
           setLoginState({
             ethAddress: authValue.ethAddress,

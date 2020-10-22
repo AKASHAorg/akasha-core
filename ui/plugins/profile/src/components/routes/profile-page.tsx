@@ -15,8 +15,6 @@ const ProfilePage = (props: RootComponentProps) => {
     }
   }, [params.profileId]);
 
-  console.log(profileState, 'profile state');
-
   return (
     <div>
       <DS.Helmet>
