@@ -106,7 +106,7 @@ const useVirtualScroll = (props: UseVirtualScrollProps) => {
   React.useEffect(() => {
     if (state.fetchOp && state.fetchOp.status === 'pending') {
       loadMore(state.fetchOp.req);
-      dispatch({ type: 'SET_FETCH_OP', payload: { ...state.fetchOp.req, status: 'requested' } });
+      dispatch({ type: 'SET_FETCH_OP', payload: { ...state.fetchOp, status: 'requested' } });
     }
   }, [state.fetchOp]);
 

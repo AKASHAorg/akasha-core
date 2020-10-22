@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IListInitialState, IVirtualListProps } from './interfaces';
 import ListViewport from './list-viewport';
 import useVirtualScroll from './use-virtual-scroll';
+import Spinner from '../Spinner';
 
 const DEFAULT_OFFSET_ITEMS = 4;
 const DEFAULT_ITEM_SPACING = 8;
@@ -68,6 +69,18 @@ const VirtualScroll: React.FC<IVirtualListProps> = props => {
         itemSpacing={itemSpacing}
         customEntities={customEntities}
       />
+      {listState.fetchOp.status && listState.fetchOp.status !== 'completed' && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            minHeight: '5rem',
+          }}
+        >
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 };
