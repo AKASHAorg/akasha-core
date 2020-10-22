@@ -20,12 +20,12 @@ const config = {
     publicPath: '/',
   },
   optimization: {
-    minimize: false,
     moduleIds: 'hashed',
   },
   plugins: [
     new webpack.EnvironmentPlugin({
-      GRAPHQL_URI: 'http://api.akasha.network/query'
+      GRAPHQL_URI: 'http://api.akasha.network/query',
+      NODE_ENV: process.env.NODE_ENV || 'development'
     }),
     new webpack.ProgressPlugin({
       entries: true,
@@ -46,7 +46,7 @@ const config = {
     })
   ],
   devtool: 'source-map',
-  mode: 'development',
+  mode: process.env.NODE_ENV || 'development',
   externals: [
     /^single-spa$/,
     /^rxjs$/,
