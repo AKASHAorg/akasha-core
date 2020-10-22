@@ -39,6 +39,18 @@ const service: AkashaService = (invoke, log) => {
       return null;
     }
   };
+
+  const resolveCIDs = async cidObj => {
+    const ipfsUtils = await invoke(commonServices[IPFS_SERVICE]).getUtils();
+    for (const key of Object.keys(cidObj)) {
+      if (ipfsUtils.CID.isCID(cidObj[key])) {
+        const data = await fetchDagNode(cidObj[key]);
+        const hash = cidObj[key].toBaseEncodedString();
+        cidObj[key] = { hash, data: data.value };
+      }
+    }
+    return cidObj;
+  };
   const getPosts = async (req: { results?: number; offset?: string }) => {
     let last = req.offset || entriesLog.lastEntryCID;
     const results = req.results || 5;
@@ -69,9 +81,7 @@ const service: AkashaService = (invoke, log) => {
     if (!identifier.address) {
       throw new Error('Must specify address for the profile!');
     }
-
     profile = await fetchDagNode(`${profilesLog.indexProfilesCID}/${identifier.address}`);
-
     const defaultProvider = profile?.value.providers[profileProvider].toBaseEncodedString();
     profile = await fetchDagNode(defaultProvider);
     profile = profile?.value;
@@ -91,7 +101,7 @@ const service: AkashaService = (invoke, log) => {
       const entries = await fetchDagNode(`${entriesLog.profileEntriesIndexCID}/${profile.address}`);
       Object.assign(profile, { entries });
     }
-
+    profile = await resolveCIDs(profile);
     return profile;
   };
 
@@ -119,8 +129,8 @@ const service: AkashaService = (invoke, log) => {
       Object.assign(data, {
         [postExcerpt]: excerpt,
         [featuredImageI]: featuredImage,
-        author: postEntry?.author,
-        id: postEntry?.id,
+        author: postEntry.author,
+        id: postEntry.id,
       });
       // fullEntryHash = await fetchDagNode(`${identifier.record}/${fullEntryI}`);
     } else {
@@ -130,6 +140,7 @@ const service: AkashaService = (invoke, log) => {
       }
       throw new Error('Invalid post data format!');
     }
+    data = await resolveCIDs(data);
     return data;
   };
 

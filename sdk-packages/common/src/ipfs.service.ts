@@ -7,20 +7,9 @@ const Ipfs = require('ipfs');
 
 const service: AkashaService = (invoke, log) => {
   let ipfsNode;
-  let utils;
   //
-  const getUtils = async (ipfsUtils?: any) => {
-    if (ipfsUtils && !utils) {
-      log.info('using provided ipfsUtils');
-      utils = ipfsUtils;
-    }
-
-    if (!utils && !ipfsUtils && window.hasOwnProperty('Ipfs')) {
-      // @ts-ignore
-      // const { Ipfs } = window;
-      utils = Ipfs;
-    }
-    return utils;
+  const getUtils = async () => {
+    return Ipfs;
   };
   //
   const getInstance = async (refresh: boolean = false, ipfsInstance?: any) => {
