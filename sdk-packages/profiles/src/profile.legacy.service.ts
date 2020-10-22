@@ -82,6 +82,9 @@ const service: AkashaService = (invoke, log) => {
       throw new Error('Must specify address for the profile!');
     }
     profile = await fetchDagNode(`${profilesLog.indexProfilesCID}/${identifier.address}`);
+    if (!profile) {
+      return { address: identifier.address };
+    }
     const defaultProvider = profile?.value.providers[profileProvider].toBaseEncodedString();
     profile = await fetchDagNode(defaultProvider);
     profile = profile?.value;
@@ -102,6 +105,14 @@ const service: AkashaService = (invoke, log) => {
       Object.assign(profile, { entries });
     }
     profile = await resolveCIDs(profile);
+
+    if (profile.hasOwnProperty(profileAbout)) {
+      profile[profileAbout] = profile[profileAbout]?.data?.Data?.toString();
+    }
+
+    if (profile.hasOwnProperty(profileAvatar)) {
+      profile[profileAvatar] = profile[profileAvatar]?.hash;
+    }
     return profile;
   };
 
@@ -126,7 +137,7 @@ const service: AkashaService = (invoke, log) => {
       if (postEntry.hasOwnProperty(featuredImageI)) {
         const sizes = (await fetchDagNode(postEntry[featuredImageI]))?.value;
         postEntry[featuredImageI] = {
-          sizes,
+          data: sizes,
           hash: postEntry[featuredImageI].toBaseEncodedString(),
         };
       }
