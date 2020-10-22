@@ -5,7 +5,7 @@ const commons = require('./app.pack.conf');
 
 module.exports = {
   entry: './src/index.ts',
-  mode: 'development',
+  mode: process.env.NODE_ENV || 'development',
   target: 'web',
   module: {
     rules: [{ parser: { System: false } }, { test: /\.ts(x)?$/, use: 'ts-loader' }],
