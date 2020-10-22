@@ -21,11 +21,11 @@ const ListViewport: React.FC<IListViewportProps> = props => {
   const itemsToRender = items.slice(slice[0], slice[1]);
   return (
     <>
-      {itemsToRender.map((itemId: string) => {
+      {itemsToRender.map((itemId: string, idx: number) => {
         const itemIdx = items.indexOf(itemId);
         return (
           <CardRenderer
-            key={itemId}
+            key={`${itemId}-${idx}`}
             itemId={itemId}
             getItemCard={props.getItemCard}
             loadItemData={props.loadItemData}
