@@ -29,11 +29,13 @@ export const useProfile = (props: UseProfileProps): [Partial<IProfileData>, UseP
       try {
         const obs = getProfile({ address: payload.ethAddress });
         obs.subscribe(resp => {
+          if (!resp.data) {
+            return;
+          }
           const { address, username, avatar, backgroundImage, about, data } = resp.data;
-          const { firstName, lastName } = data;
           const mappedProfileData: IProfileData = { ethAddress: address };
-          if (firstName && lastName) {
-            mappedProfileData.userName = `${firstName} ${lastName}`;
+          if (data && data.firstName && data.lastName) {
+            mappedProfileData.userName = `${data.firstName} ${data.lastName}`;
           }
           if (username) {
             mappedProfileData.ensName = username;

@@ -1,21 +1,12 @@
 import * as React from 'react';
-import { History } from 'history';
 import { ProfilePageHeader } from '../ProfileHeader/profile-header';
 import DS from '@akashaproject/design-system';
 import useProfile from '../hooks/use-profile';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
+import { useParams } from 'react-router';
 
-interface ProfilePageProps {
-  match: {
-    params: {
-      profileId: string;
-    };
-  };
-  history: History;
-}
-
-const ProfilePage = (props: ProfilePageProps & RootComponentProps) => {
-  const { params } = props.match;
+const ProfilePage = (props: RootComponentProps) => {
+  const { params } = useParams();
   const [profileState, profileActions] = useProfile({ onError: (err) => { console.log(err) }, getProfile: props.sdkModules.profiles.profileService.getProfile });
 
   React.useEffect(() => {

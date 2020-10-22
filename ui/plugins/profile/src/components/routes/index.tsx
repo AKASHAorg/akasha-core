@@ -19,11 +19,14 @@ const Routes: React.FC<RootComponentProps> = props => {
       <Box>
         <Switch>
           <Route path={`${rootRoute}/list`} render={() => <>A list of profiles</>} />
-          <Route path={menuRoute[MY_PROFILE]} component={MyProfilePage} />
+          <Route path={menuRoute[MY_PROFILE]} >
+            <MyProfilePage {...props} />
+          </Route>
           <Route
             path={`${path}/:profileId`}
-            render={routeProps => <ProfilePage {...routeProps} {...props} />}
-          />
+          >
+            <ProfilePage {...props} />
+          </Route>
           <Route render={() => <div>{t('Oops, Profile not found!')}</div>} />
         </Switch>
       </Box>

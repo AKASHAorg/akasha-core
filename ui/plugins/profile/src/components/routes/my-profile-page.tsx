@@ -10,14 +10,15 @@ const MyProfilePage = (props: RootComponentProps) => {
   const [ loginState, setLoginState ] = React.useState<{ethAddress?: string}>({});
   const [profileState, profileActions] = useProfile({ onError: (err) => { console.log(err) }, getProfile: sdkModules.profiles.profileService.getProfile });
   React.useEffect(() => {
-    const $stash = sdkModules.commons.cache_service.getStash(null);
+    const $stash = sdkModules.commons.cacheService.getStash('auth');
     const getDeps = forkJoin({
       stash: $stash
     })
-    getDeps.subscribe((deps: { stash: any }) => {
-      const { stash } = deps;
-      if (stash.entries.has('auth')) {
-        const authValue = stash.get('auth');
+    getDeps.subscribe((resp: { stash: any }) => {
+      const { data } = resp.stash;
+      if (data.entries.has('auth')) {
+        const authValue = data.cache.get('auth');
+        console.log(authValue, 'authVal');
         if (authValue.hasOwnProperty('ethAddress')) {
           setLoginState({
             ethAddress: authValue.ethAddress,
