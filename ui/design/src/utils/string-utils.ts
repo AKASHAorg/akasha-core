@@ -5,7 +5,7 @@ export const capitalize = (str?: string) => {
     .join(' ');
 };
 
-export const truncateMiddle = (str: string, startChars: number, endChars: number) => {
+export const truncateMiddle = (str: string, startChars: number = 6, endChars: number = 4) => {
   let truncated = '';
   truncated += str.substring(0, startChars);
   truncated += '...';
