@@ -7,18 +7,9 @@ const Ipfs = require('ipfs');
 
 const service: AkashaService = (invoke, log) => {
   let ipfsNode;
-  let utils;
 
-  const getUtils = async (ipfsUtils?: any) => {
-    if (ipfsUtils && !utils) {
-      log.info('using provided ipfsUtils');
-      utils = ipfsUtils;
-    }
-
-    if (!utils && !ipfsUtils && window.hasOwnProperty('Ipfs')) {
-      utils = Ipfs;
-    }
-    return utils;
+  const getUtils = async () => {
+    return Ipfs;
   };
 
   const getInstance = async (refresh: boolean = false, ipfsInstance?: any) => {
@@ -63,6 +54,7 @@ const service: AkashaService = (invoke, log) => {
   const getSettings = async () => {
     return ipfsGateway;
   };
+
   const dagGet = async (cid: string, path: string) => {
     const ipfs = await getInstance();
     const result = await ipfs.dag.get(cid, { path });

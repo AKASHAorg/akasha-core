@@ -80,17 +80,25 @@ export const publishEntry = (pendingEntry: IPendingEntry) => {
 };
 
 export const serializeToSlate = (
-  entryData: { excerpt: string; featuredImage: any; post: any },
+  entryData: { excerpt: string; featuredImage: string; tags: string[]; title: string },
   ipfsGateway: string,
 ) => {
   const serializedContent = [];
 
+  if (entryData.title) {
+    serializedContent.push({
+      type: 'paragraph',
+      children: [{ text: entryData.title, bold: true }],
+    });
+  }
+
   if (entryData.excerpt) {
     serializedContent.push({
       type: 'paragraph',
-      children: [{ text: JSON.parse(entryData.excerpt) }],
+      children: [{ text: entryData.excerpt }],
     });
   }
+
   if (entryData.featuredImage && JSON.parse(entryData.featuredImage).xs?.src) {
     serializedContent.push({
       type: 'image',
@@ -98,8 +106,9 @@ export const serializeToSlate = (
       children: [{ text: '' }],
     });
   }
-  if (entryData.post && JSON.parse(entryData.post).tags?.length > 0) {
-    JSON.parse(entryData.post).tags.forEach((tag: string, idx: number) => {
+
+  if (entryData.tags?.length > 0) {
+    entryData.tags.forEach((tag: string, idx: number) => {
       if (idx > 0) {
         serializedContent.push({ text: ' ' });
       }
