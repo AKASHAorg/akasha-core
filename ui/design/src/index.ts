@@ -73,6 +73,7 @@ import {
   EthProviderModal,
   MobileListModal,
   LoginModal,
+  ReportPostModal,
 } from './components/Modals';
 
 import { NotificationsPopover, SelectPopover } from './components/Popovers';
@@ -141,6 +142,7 @@ const exported = {
   MainAreaCardBox,
   NotificationsPopover,
   ShareModal,
+  ReportPostModal,
   SelectPopover,
   SubtitleTextIcon,
   Sidebar,
