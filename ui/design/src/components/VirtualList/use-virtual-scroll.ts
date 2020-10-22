@@ -95,9 +95,7 @@ const useVirtualScroll = (props: UseVirtualScrollProps) => {
   }, []);
   const handlers = {
     onItemSizeUpdate: (itemId: string, size: Rect) => {
-      requestAnimationFrame(() => {
-        listEngine.current.updateItemRect(itemId, size);
-      });
+      listEngine.current.updateItemRect(itemId, size);
     },
     setHasMoreItems: (hasMore: boolean) => {
       listEngine.current.setHasMoreItems(hasMore);
@@ -106,7 +104,7 @@ const useVirtualScroll = (props: UseVirtualScrollProps) => {
   React.useEffect(() => {
     if (state.fetchOp && state.fetchOp.status === 'pending') {
       loadMore(state.fetchOp.req);
-      dispatch({ type: 'SET_FETCH_OP', payload: { ...state.fetchOp.req, status: 'requested' } });
+      dispatch({ type: 'SET_FETCH_OP', payload: { ...state.fetchOp, status: 'requested' } });
     }
   }, [state.fetchOp]);
 

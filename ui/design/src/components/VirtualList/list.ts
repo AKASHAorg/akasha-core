@@ -111,7 +111,7 @@ class ListEngine {
     ids.forEach((id, idx) => {
       let rect;
       if (position !== 'top' && prevRect) {
-        rect = prevRect.translateY(prevRect.height);
+        rect = prevRect.translateY(prevRect.height + this.config.spacing);
       } else {
         rect = new Rect({
           top: idx * this.config.avgItemHeight + this.config.spacing,
@@ -214,9 +214,7 @@ class ListEngine {
       const sliceEnd = this.getBottomSlice(this.items.indexOf(firstIntersectingId));
       if (sliceStart !== this.slice[0] || sliceEnd !== this.slice[1]) {
         this.firstItemId = firstIntersectingId;
-        requestAnimationFrame(() => {
-          this.updateSlice(sliceStart, sliceEnd);
-        });
+        this.updateSlice(sliceStart, sliceEnd);
       }
     }
   }
