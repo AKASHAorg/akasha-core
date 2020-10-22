@@ -51,6 +51,7 @@ describe('<Topbar /> Component', () => {
             brandLabel={'test'}
             searchAreaItem={undefined}
             quickAccessItems={[]}
+            onLoginClick={() => {}}
           />,
         ),
       );

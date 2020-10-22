@@ -1,0 +1,131 @@
+import * as React from 'react';
+import DS from '@akashaproject/design-system';
+import {
+  IMenuItem,
+  EventTypes,
+  MenuItemAreaType,
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
+
+const { lightTheme, Topbar, ThemeSelector, useViewportSize, LoginModal, useGlobalLogin } = DS;
+
+interface TopBarProps {
+  navigateToUrl: (url: string) => void;
+  toggleSidebar: (visible: boolean) => void;
+  getMenuItems: () => IMenuItem[];
+  ethAddress: string | null;
+  loaderEvents: any;
+  modalSlotId: string;
+  onLogin: (provider: 2 | 3) => void;
+  globalChannel: any;
+  logger: any;
+  onGlobalLogin: (ethAddress: string, token: string) => void;
+}
+
+const TopbarComponent = (props: TopBarProps) => {
+  const {
+    navigateToUrl,
+    getMenuItems,
+    loaderEvents,
+    toggleSidebar,
+    ethAddress,
+    modalSlotId,
+    onLogin,
+    globalChannel,
+  } = props;
+
+  const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
+  const [showLoginModal, setShowLoginModal] = React.useState(false);
+
+  useGlobalLogin(
+    globalChannel,
+    data => {
+      const { ethAddress: ethAddr, token } = data;
+      props.onGlobalLogin(ethAddr, token);
+    },
+    ({ error }) => props.logger.error(error),
+  );
+
+  React.useEffect(() => {
+    const updateMenu = () => {
+      const menuItems = getMenuItems();
+      setCurrentMenu(menuItems);
+    };
+    updateMenu();
+    loaderEvents.subscribe((evMsg: EventTypes) => {
+      if (evMsg === EventTypes.AppInstall || evMsg === EventTypes.PluginInstall) {
+        updateMenu();
+      }
+    });
+    return function cleanup() {
+      loaderEvents.unsubscribe();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (ethAddress && showLoginModal) {
+      setTimeout(() => setShowLoginModal(false), 500);
+    }
+  }, [ethAddress, showLoginModal]);
+
+  // *how to obtain different topbar menu sections
+  const quickAccessItems = currentMenu?.filter(
+    menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,
+  );
+  const searchAreaItem = currentMenu?.filter(
+    menuItem => menuItem.area === MenuItemAreaType.SearchArea,
+  )[0];
+
+  const handleNavigation = (path: string) => {
+    navigateToUrl(path);
+  };
+
+  const handleLoginClick = () => {
+    setShowLoginModal(true);
+  };
+  const handleLogin = (provider: 2 | 3) => {
+    onLogin(provider);
+  };
+  const handleModalClose = () => {
+    setShowLoginModal(false);
+  };
+  const handleSearchBarKeyDown = (
+    ev: React.KeyboardEvent<HTMLInputElement>,
+    inputValue: string,
+  ) => {
+    if (ev.key === 'Enter' && searchAreaItem) {
+      handleNavigation(`${searchAreaItem.route}/${inputValue}`);
+    }
+  };
+
+  const { size } = useViewportSize();
+
+  return (
+    <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
+      <Topbar
+        avatarImage="https://placebeard.it/360x360"
+        brandLabel="Ethereum World"
+        onNavigation={handleNavigation}
+        onSearch={handleSearchBarKeyDown}
+        onSidebarToggle={toggleSidebar}
+        ethAddress={ethAddress}
+        quickAccessItems={ethAddress ? quickAccessItems : null}
+        searchAreaItem={searchAreaItem}
+        size={size}
+        onLoginClick={handleLoginClick}
+      />
+      <LoginModal
+        slotId={modalSlotId}
+        onLogin={handleLogin}
+        onModalClose={handleModalClose}
+        showModal={showLoginModal}
+        tutorialLinkLabel="Tutorial"
+        metamaskModalHeadline="Metamask"
+        metamaskModalMessage="Login with Metamask"
+        onTutorialLinkClick={() => {}}
+        helpText="What is a wallet? How do i get an Ethereum address?"
+      />
+    </ThemeSelector>
+  );
+};
+
+export default TopbarComponent;
