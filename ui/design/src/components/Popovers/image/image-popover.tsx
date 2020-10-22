@@ -31,14 +31,13 @@ const ImagePopover: React.FC<IImagePopover> = props => {
 
   const handleLinkInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     if (uploadRequest) {
-      uploadRequest(ev.target.value, true)
-        .then(res => {
-          setLinkInputValue(`${res[0].data}/${res[1].data[0]}`);
-        })
-        .catch(err => {
-          // need design update for proper error display
-          setLinkInputValue(err);
-        });
+      uploadRequest(ev.target.value, true).then(res => {
+        setLinkInputValue(`${res[0].data}/${res[1].data[0]}`);
+      });
+      // .catch(err => {
+      //   // need design update for proper error display
+      //   setLinkInputValue(err);
+      // });
     } else {
       setLinkInputValue(ev.target.value);
     }
