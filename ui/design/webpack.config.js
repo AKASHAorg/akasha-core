@@ -8,8 +8,7 @@ const config = {
     //library: 'design-system',
     path: path.resolve(__dirname, 'dist'),
     filename: 'design-system.js',
-    publicPath: '/',
-    chunkFilename: '[chunkhash].design-system.js',
+    publicPath: '/'
   },
 };
 
