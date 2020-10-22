@@ -12,39 +12,58 @@ const service: AkashaService = (invoke, log) => {
   const featuredImageI = 'featuredImage';
   const postLinks = [postExcerpt, featuredImageI];
   const fullEntryI = 'draft-part0';
-  const totalProfilesCID =
-    'bafyriqepi7gd62w7klt4bsn52ku2zw555yxb2drrr5xzyqaspsrf47xjz6dhydc3ivcraekbd6pdyiqqimw5vgchqmk4fffvokafdsif27t72';
-  const totalPostsCID =
-    'bafyriqho2ymjwa6d6rai2kjx6cem4z7ok2ucosejndtbdfibowwssevdvlvhnf567hd4wsnclnmqgz4myyqneclgjal6tdy4ldbxrta2gal6g';
-  const lastEntryCID =
-    'bafyriqbbb23vipb7dud3wlohzy5hr3pzxwj5wbyor5bt2xi4twllmp3ppz5b6l2o4ol3j75ib5mwdtlhvd3e542olf5nwwkuubwa23udsowcm';
-  const indexEntries =
-    'bafyriqdnqurnks7pct7qmu47tjtkeslv4qv3262ckfiqumqwnjpqszy7gxbufovbke3va46g4wfshr6fwl4oyqu4qd4azyyfzxvdwcje6p66o';
-  const indexProfiles =
-    'bafyriqga4z4nxve3ya6lvls4lf45a4xg2eoo2j4k7vai6wi674cezj773jbn36s3kizzbdvewjbrzia4odnerjjwghryebxxunxdzhypdquq6';
+
+  const entriesLog = {
+    totalPostsCID:
+      'bafyriqer5jri6mpbidxbiyn4sydkzdz7jodgf5cfs72zrforfrz72bvnfp6ryo4nrur5ppwv2zw5jrxdqg7yhocvuwoa5kxxhbk7cxwaatyok',
+    lastEntryCID:
+      'bafyriqhufacbyvbvvpl5e2m7guxy3f25qscuejnd6lr3rgbo5cdtsg4bsplou4k33mrrv2nfgritzjm6dxd3iq6shnw56z3lseombgi4xdg2y',
+    indexEntriesCID:
+      'bafyriqgg6bguwijplfpswclsgidwijn6aquc7rhb7udmsbrbmaryup4suebu6imqowmc4bqpefmzmezmj4biahmsmennmfm2s46mo4xcstdda',
+    profileEntriesIndexCID:
+      'bafyriqhmzcqo7qj65yz37ni2nhdymh66pyseibjyievupafbjgwgohdtoik3c7p27txyr7kkurmrck4e2p5vhkywfqkr45nfcrun7q46uviq6',
+  };
+  const profilesLog = {
+    totalProfilesCID:
+      'bafyriqhrspd6flvqcayxspsltqgip7x4pjjnbnejpikdyv2kjffvtocc4gwxwz3ektdkr3onpebemlijwwulbbhk7g2fpvev5t3ci6phb7he4',
+    indexProfilesCID:
+      'bafyriqagpl5kghrigrwbxiaqkrvxbqd5v46qkpqg4abgksmexei4v2xzycptc2tjccgdp4pds5fld7disgvlzzfigv755gaowdjtvukyjluhk',
+  };
+  const sourceData = { sourcesCID: 'bafybeicu3lcedpnbotbvgsakhjbwb62ua4rvqfegkoi77u4ilekeam5qma' };
 
   const fetchDagNode = async (node: string) => {
     const ipfs = await invoke(commonServices[IPFS_SERVICE]).getInstance();
     try {
-      return await ipfs.dag.get(node, { timeout: 35000 });
+      return await ipfs.dag.get(node, { timeout: 5000 });
     } catch (e) {
       return null;
     }
   };
+
+  const resolveCIDs = async cidObj => {
+    const ipfsUtils = await invoke(commonServices[IPFS_SERVICE]).getUtils();
+    for (const key of Object.keys(cidObj)) {
+      if (ipfsUtils.CID.isCID(cidObj[key])) {
+        const data = await fetchDagNode(cidObj[key]);
+        const hash = cidObj[key].toBaseEncodedString();
+        cidObj[key] = { hash, data: data.value };
+      }
+    }
+    return cidObj;
+  };
   const getPosts = async (req: { results?: number; offset?: string }) => {
-    let last = req.offset || lastEntryCID;
+    let last = req.offset || entriesLog.lastEntryCID;
     const results = req.results || 5;
     const result = [];
     while (last && result.length < results) {
       const current = await fetchDagNode(last);
       const prev = current?.value.prev;
       const record = current?.value.record;
-      const author = current?.value.author;
       if (prev && record) {
         last = prev.toBaseEncodedString();
         const postData = await getPost({ record });
-        const authorData = await getProfile({ address: author }, false);
-        result.push({ author: authorData, data: postData, id: record.string });
+        const authorData = await getProfile({ address: postData.author }, false);
+        result.push({ author: authorData, post: postData });
       } else {
         break;
       }
@@ -62,26 +81,27 @@ const service: AkashaService = (invoke, log) => {
     if (!identifier.address) {
       throw new Error('Must specify address for the profile!');
     }
-    profile = await fetchDagNode(`${indexProfiles}/${identifier.address}`);
+    profile = await fetchDagNode(`${profilesLog.indexProfilesCID}/${identifier.address}`);
     const defaultProvider = profile?.value.providers[profileProvider].toBaseEncodedString();
     profile = await fetchDagNode(defaultProvider);
     profile = profile?.value;
     const profileData = await fetchDagNode(`${defaultProvider}/profile`);
     // const profileAvatar = await fetchDagNode()
     if (!profileData) {
-      return profile?.value;
+      return profile?.value || { address: identifier.address };
     }
-    Object.assign(profile, JSON.parse(profileData?.value?.Data.toString()));
+    const tmpProfileData = profileData.value;
+    if (tmpProfileData.data) {
+      tmpProfileData.data = JSON.parse(tmpProfileData?.data.toString());
+
+      Object.assign(profile, tmpProfileData);
+    }
 
     if (resolve) {
-      for (const link of profileData.value.Links) {
-        if (profileLinks.includes(link.Name)) {
-          const linkData = await fetchDagNode(link.Hash);
-          Object.assign(profile, { [link.Name]: linkData.value.Data.toString() });
-        }
-      }
+      const entries = await fetchDagNode(`${entriesLog.profileEntriesIndexCID}/${profile.address}`);
+      Object.assign(profile, { entries });
     }
-
+    profile = await resolveCIDs(profile);
     return profile;
   };
 
@@ -92,33 +112,36 @@ const service: AkashaService = (invoke, log) => {
     let postEntry: any;
     let excerpt;
     let featuredImage;
-    // let fullEntryHash;
-    const ipfs = await invoke(commonServices[IPFS_SERVICE]).getInstance();
+    let data;
     if (identifier.record) {
       postEntry = await fetchDagNode(identifier.record);
-      for (const link of postEntry.value.Links) {
-        if (postLinks.includes(link.Name)) {
-          if (link.Name === postExcerpt) {
-            excerpt = await fetchDagNode(`${identifier.record}/${postExcerpt}`);
-          } else if (link.Name === featuredImageI) {
-            featuredImage = await fetchDagNode(`${identifier.record}/${featuredImageI}`);
-          }
-        }
+      postEntry = postEntry?.value;
+
+      if (!postEntry) return null;
+
+      data = JSON.parse(postEntry.data.toString());
+      if (data.hasOwnProperty(postExcerpt)) {
+        excerpt = await fetchDagNode(data[postExcerpt]);
       }
+      if (data.hasOwnProperty(featuredImageI)) {
+        featuredImage = await fetchDagNode(data[featuredImageI]);
+      }
+      Object.assign(data, {
+        [postExcerpt]: excerpt,
+        [featuredImageI]: featuredImage,
+        author: postEntry.author,
+        id: postEntry.id,
+      });
       // fullEntryHash = await fetchDagNode(`${identifier.record}/${fullEntryI}`);
     } else {
-      const postsIndex = await fetchDagNode(`${indexEntries}/${identifier.id}`);
+      const postsIndex = await fetchDagNode(`${entriesLog.indexEntriesCID}/${identifier.id}`);
       if (postsIndex?.value.record) {
         return getPost({ record: postsIndex.value.record.toBaseEncodedString() });
       }
       throw new Error('Invalid post data format!');
     }
-    return {
-      post: postEntry?.value.Data.toString(),
-      excerpt: excerpt?.value.Data.toString(),
-      // fullEntryHash: fullEntryHash,
-      featuredImage: featuredImage?.value.Data.toString(),
-    };
+    data = await resolveCIDs(data);
+    return data;
   };
 
   return { getPosts, getProfiles, getPost, getProfile };
