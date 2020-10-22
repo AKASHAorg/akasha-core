@@ -31,7 +31,7 @@ const ProfilePage = (props: ProfilePageProps & RootComponentProps) => {
       <DS.Helmet>
         <title>Profile | {params.profileId} Page</title>
       </DS.Helmet>
-      <ProfilePageHeader profileId={params.profileId} />
+      <ProfilePageHeader profileData={profileState} profileId={params.profileId} />
     </div>
   );
 };
