@@ -16,11 +16,13 @@ import {
   removePending,
   savePending,
   updatePending,
+  serializeToSlate,
 } from '../../services/posting-service';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import useEntryPublisher from '../../hooks/use-entry-publisher';
 import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
 import useEntryBookmark from '../../hooks/use-entry-bookmark';
+import { combineLatest } from 'rxjs';
 
 const { Helmet, VirtualList, Box, ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard } = DS;
 
@@ -88,9 +90,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
   const fetchEntries = async (payload: { results: number; offset?: string }) => {
     const profileService = props.sdkModules.profiles.profileService;
-    const call = profileService.getPosts({ ...payload, offset: feedState.lastItemId });
+    const getPostscall = profileService.getPosts({ ...payload, offset: feedState.lastItemId });
+    const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
+    const call = combineLatest([ipfsGatewayCall, getPostscall]);
     call.subscribe((resp: any) => {
-      const { data }: { channelInfo: any; data: { last: string; result: any[] } } = resp;
+      const ipfsGateway = resp[0].data;
+      const { data }: { channelInfo: any; data: { last: string; result: any[] } } = resp[1];
       const { last, result } = data;
       const entryIds: { entryId: string }[] = [];
       result.forEach(entry => {
@@ -102,7 +107,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             ethAddress: entry.author.address,
             postsNumber: entry.author?.entries?.length, // @todo: fix this with another api call
           },
-          content: entry.post?.excerpt,
+          content: serializeToSlate(entry.post, ipfsGateway),
           entryId: entry.post.id,
           time: new Date().toLocaleString(),
           ipfsLink: entry.id,
@@ -158,6 +163,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleUnfollow = () => {
     /* todo */
   };
+  const handleGetMentions = () => {
+    /* todo */
+  };
+  const handleGetTags = () => {
+    /* todo */
+  };
 
   const handleEntryPublish = async (authorEthAddr: string, _content: any) => {
     if (!ethAddress && !jwtToken) {
@@ -167,7 +178,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     const localId = `${authorEthAddr}-${pendingEntries.length + 1}`;
     try {
       const entry = {
-        content: 'this is a test published content',
+        content: _content,
         author: {
           ethAddress: authorEthAddr,
         },
@@ -260,6 +271,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           handlePublish: handleEntryPublish,
           pendingEntries: pendingEntries,
           onAvatarClick: handleAvatarClick,
+          handleGetMentions: handleGetMentions,
+          handleGetTags: handleGetTags,
+          ipfsService: props.sdkModules.commons.ipfsService,
         })}
       />
     </Box>

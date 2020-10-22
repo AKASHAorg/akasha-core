@@ -56,6 +56,8 @@ import {
   FilterCard,
 } from './components/Cards';
 
+import { EditorBox, EditorMeter } from './components/Editor';
+
 import TextInputField from './components/Forms/text-input-field';
 import { AppIcon, Icon, iconTypes } from './components/Icon';
 import ErrorInfoCard from './components/Errors/error-info-card';
@@ -110,6 +112,8 @@ const exported = {
   BasicCardBox,
   CustomizeFeedCard,
   DropSearchInput,
+  EditorBox,
+  EditorMeter,
   EditorCard,
   EntryCard,
   EntryCardLoading,

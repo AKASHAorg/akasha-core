@@ -53,7 +53,7 @@
     "@akashaproject/sdk-registry": "*",
     "@akashaproject/sdk-runtime": "*",
     "easy-peasy": "3.3.0",
-    "lodash.debounce": "^4.0.8",
+    "lodash.debounce": "4.0.8",
     "react-i18next": "11.4.0",
     "react-router-dom": "5.1.2",
     "single-spa-react": "2.14.0"

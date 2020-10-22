@@ -44,7 +44,7 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
   return (
     <Box
       height="9em"
-      background={coverImage!.startsWith('data:') ? `url(${coverImage})` : coverImage}
+      background={coverImage?.startsWith('data:') ? `url(${coverImage})` : coverImage}
       pad="none"
       round={{ corner: 'top', size: 'xsmall' }}
     >

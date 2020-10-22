@@ -21,7 +21,6 @@ const SearchBar: React.FC<ISearchBar> = props => {
       height="2rem"
       fill="horizontal"
     >
-      <Icon type="search" />
       <TextInput
         value={inputValue}
         onChange={onInputChange}
@@ -29,12 +28,13 @@ const SearchBar: React.FC<ISearchBar> = props => {
         plain={true}
         onKeyDown={handleKeyDown}
       />
+      <Icon type="search" />
     </Box>
   );
 };
 
 SearchBar.defaultProps = {
-  inputPlaceholderLabel: 'Find profiles, topics and apps',
+  inputPlaceholderLabel: 'Search profiles or topics',
 };
 
 export { SearchBar };
