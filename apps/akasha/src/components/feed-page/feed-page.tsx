@@ -17,6 +17,7 @@ import {
   savePending,
   updatePending,
   serializeToSlate,
+  getMediaUrl,
 } from '../../services/posting-service';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import useEntryPublisher from '../../hooks/use-entry-publisher';
@@ -105,6 +106,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         entryIds.push({ entryId: entry.post.id });
         const mappedEntry = {
           author: {
+            description: entry.author.about,
+            avatar: getMediaUrl(ipfsGateway, entry.author.avatar),
+            coverImage: getMediaUrl(
+              ipfsGateway,
+              entry.author.backgroundImage?.hash,
+              entry.author.backgroundImage?.data,
+            ),
             ensName: entry.author.username,
             userName: `${entry.author?.data?.firstName} ${entry.author?.data?.lastName}`,
             ethAddress: entry.author.address,

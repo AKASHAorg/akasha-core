@@ -79,8 +79,36 @@ export const publishEntry = (pendingEntry: IPendingEntry) => {
   });
 };
 
+export const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {
+  let ipfsUrl = '';
+
+  if (hash && !data) {
+    ipfsUrl = `${ipfsGateway}/${hash}`;
+  }
+
+  if (data) {
+    let imageSize = '';
+    for (const size in data) {
+      if (data.hasOwnProperty(size)) {
+        imageSize = size;
+        break;
+      }
+    }
+    if (imageSize) {
+      ipfsUrl = `${ipfsGateway}/${hash}/${imageSize}/src`;
+    }
+  }
+
+  return ipfsUrl;
+};
+
 export const serializeToSlate = (
-  entryData: { excerpt: string; featuredImage: string; tags: string[]; title: string },
+  entryData: {
+    excerpt: string;
+    featuredImage: { hash: string; data: { xs?: any; md?: any; sm?: any } };
+    tags: string[];
+    title: string;
+  },
   ipfsGateway: string,
 ) => {
   const serializedContent = [];
@@ -95,16 +123,23 @@ export const serializeToSlate = (
   if (entryData.excerpt) {
     serializedContent.push({
       type: 'paragraph',
-      children: [{ text: entryData.excerpt }],
+      children: [{ text: JSON.parse(entryData.excerpt) }],
     });
   }
 
-  if (entryData.featuredImage && JSON.parse(entryData.featuredImage).xs?.src) {
-    serializedContent.push({
-      type: 'image',
-      url: `${ipfsGateway}/${JSON.parse(entryData.featuredImage).xs?.src}`,
-      children: [{ text: '' }],
-    });
+  if (entryData.featuredImage) {
+    const mediaUrl = getMediaUrl(
+      ipfsGateway,
+      entryData.featuredImage.hash,
+      entryData.featuredImage.data,
+    );
+    if (mediaUrl) {
+      serializedContent.push({
+        type: 'image',
+        url: mediaUrl,
+        children: [{ text: '' }],
+      });
+    }
   }
 
   if (entryData.tags?.length > 0) {
