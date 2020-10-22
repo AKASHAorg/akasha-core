@@ -63,8 +63,13 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
       </Box>
       <Box direction="column" align="center" justify="center">
         <Box pad={{ top: 'large', bottom: 'small' }} margin={{ top: 'medium' }} align="center">
-          <Text size="large" weight="bold" color="primaryText">
-            {profileData.userName ? profileData.userName : profileData.ethAddress}
+          {profileData.userName && (
+            <Text size="large" weight="bold" color="primaryText">
+              {profileData.userName}
+            </Text>
+          )}
+          <Text size="medium" color="secondaryText">
+            {profileData.ethAddress}
           </Text>
           <Box direction="row" gap="xsmall">
             {profileData.ensName && (
@@ -72,8 +77,8 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
                 {profileData.ensName}
               </Text>
             )}
-            <Text>{`${profileData.postsNumber || 0} ${postsLabel}`}</Text>
           </Box>
+          <Text>{`${profileData.postsNumber || 0} ${postsLabel}`}</Text>
         </Box>
       </Box>
 
