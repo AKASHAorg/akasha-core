@@ -8,6 +8,10 @@ const StyledImg = styled.img`
   max-height: 20em;
 `;
 
+const StyledMention = styled.span`
+  color: ${props => props.theme.colors.accent};
+`;
+
 const ImageElement = ({ attributes, children, element }: any) => {
   return (
     <div {...attributes}>
@@ -19,18 +23,34 @@ const ImageElement = ({ attributes, children, element }: any) => {
   );
 };
 
+const MentionElement = ({ attributes, children, element }: any) => {
+  return (
+    <StyledMention {...attributes} contentEditable={false}>
+      @{element.value}
+      {children}
+    </StyledMention>
+  );
+};
+
+const TagElement = ({ attributes, children, element }: any) => {
+  return (
+    <StyledMention {...attributes} contentEditable={false}>
+      #{element.value}
+      {children}
+    </StyledMention>
+  );
+};
+
 const renderElement = (props: RenderElementProps) => {
   switch (props.element.type) {
-    case 'code':
-      return (
-        <pre {...props.attributes}>
-          <code>{props.children}</code>
-        </pre>
-      );
     case 'quote':
       return <blockquote {...props.attributes}>{props.children}</blockquote>;
     case 'image':
       return <ImageElement {...props} />;
+    case 'mention':
+      return <MentionElement {...props} />;
+    case 'tag':
+      return <TagElement {...props} />;
 
     default:
       return <p {...props.attributes}>{props.children}</p>;

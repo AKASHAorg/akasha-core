@@ -1,9 +1,8 @@
 import DS from '@akashaproject/design-system';
-import { GlobalStyleComponent } from 'styled-components';
 
 const { createGlobalStyle, css } = DS;
 
-export const GlobalStyle: GlobalStyleComponent<{}, any> = createGlobalStyle<{ theme: any }>`
+export const GlobalStyle: any = createGlobalStyle<{ theme: any }>`
   html {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;

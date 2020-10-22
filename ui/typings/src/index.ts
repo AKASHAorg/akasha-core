@@ -42,7 +42,7 @@ export interface LayoutConfig {
   /**
    * sidebar area slot
    */
-  sidebarSlotId: string;
+  // sidebarSlotId: string;
   title: string;
   /**
    * topbar loading node

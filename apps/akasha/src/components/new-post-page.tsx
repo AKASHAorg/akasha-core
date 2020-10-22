@@ -2,6 +2,7 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { getLoggedProfileStore } from '../state/logged-profile-state';
 import { useTranslation } from 'react-i18next';
+import { forkJoin } from 'rxjs';
 
 const { Helmet, EditorCard, ErrorLoader, Box, Button } = DS;
 
@@ -14,9 +15,16 @@ interface NewPostPageProps {
 }
 
 const NewPostPage: React.FC<NewPostPageProps> = props => {
-  const { showLoginModal } = props;
+  const { showLoginModal, sdkModules } = props;
   const Login = getLoggedProfileStore();
   const loginEthAddr = Login.useStoreState((state: any) => state.data.ethAddress);
+  const ipfsService = sdkModules.commons.ipfsService;
+
+  const onUploadRequest = (data: string | File, isUrl = false) => {
+    const ipfsGatewayCall = ipfsService.getSettings({});
+    const uploadCall = ipfsService.upload([{ isUrl, content: data }]);
+    return forkJoin([ipfsGatewayCall, uploadCall]).toPromise();
+  };
 
   const { t } = useTranslation();
 
@@ -25,6 +33,14 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
   };
 
   const handleBackNavigation = () => {
+    // todo
+  };
+
+  const handleGetMentions = () => {
+    // todo
+  };
+
+  const handleGetTags = () => {
     // todo
   };
 
@@ -56,6 +72,11 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
             handleNavigateBack={handleBackNavigation}
             postLabel={t('Publish')}
             placeholderLabel={t('Share your thoughts')}
+            getMentions={handleGetMentions}
+            getTags={handleGetTags}
+            // mentions={mentions}
+            // tags={tags}
+            uploadRequest={onUploadRequest}
           />
         </Box>
       )}

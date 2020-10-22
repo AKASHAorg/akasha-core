@@ -17,9 +17,13 @@ const StyledIconDiv = styled.div`
   align-items: center;
 `;
 
+const StyledMeterDiv = styled.div`
+  margin-top: 1.25rem;
+  transform: translateX(0.625rem);
+`;
+
 const StyledBox = styled(Box)`
-  min-height: 200px;
-  max-height: 612px;
+  max-height: 38rem;
 `;
 
 const StyledEditable = styled(Editable)`
@@ -28,4 +32,4 @@ const StyledEditable = styled(Editable)`
   }
 `;
 
-export { StyledBox, StyledDiv, StyledEditable, StyledIconDiv };
+export { StyledBox, StyledDiv, StyledEditable, StyledIconDiv, StyledMeterDiv };

@@ -32,6 +32,7 @@ export default function commonApi(channel) {
         getInstance: extractedServices[IPFS_SERVICE]('getInstance'),
         getUtils: extractedServices[IPFS_SERVICE]('getUtils'),
         upload: extractedServices[IPFS_SERVICE]('upload'),
+        getSettings: extractedServices[IPFS_SERVICE]('getSettings'),
       },
       validatorService: {
         getValidator: extractedServices[VALIDATOR_SERVICE]('getValidator'),

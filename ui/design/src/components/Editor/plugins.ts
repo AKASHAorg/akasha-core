@@ -1,5 +1,7 @@
 import { Editor } from 'slate';
+import { ReactEditor } from 'slate-react';
 import { CustomEditor } from './helpers';
+// import { isUrl } from '../../utils/is-url';
 
 const withImages = (editor: Editor) => {
   const { isVoid } = editor;
@@ -19,9 +21,37 @@ const withImages = (editor: Editor) => {
   return editor;
 };
 
+const withMentions = (editor: Editor & ReactEditor) => {
+  const { isInline, isVoid } = editor;
+
+  editor.isInline = element => {
+    return element.type === 'mention' ? true : isInline(element);
+  };
+
+  editor.isVoid = element => {
+    return element.type === 'mention' ? true : isVoid(element);
+  };
+
+  return editor;
+};
+
+const withTags = (editor: Editor & ReactEditor) => {
+  const { isInline, isVoid } = editor;
+
+  editor.isInline = element => {
+    return element.type === 'tag' ? true : isInline(element);
+  };
+
+  editor.isVoid = element => {
+    return element.type === 'tag' ? true : isVoid(element);
+  };
+
+  return editor;
+};
+
 const isImageUrl = (url: string) => {
   if (!url) return false;
   return true;
 };
 
-export { withImages };
+export { withImages, withMentions, withTags };

@@ -12,6 +12,7 @@ import {
 import { filter } from 'rxjs/operators';
 
 const { lightTheme, Topbar, ThemeSelector, ViewportSizeProvider, useViewportSize } = DS;
+
 export interface IProps {
   i18n: I18nType;
   sdkModules: any;
@@ -36,6 +37,7 @@ export default class TopbarWidget extends PureComponent<IProps> {
   public state: { hasErrors: boolean; errorMessage: string; ethAddress: string };
   public showSidebarEvent = new CustomEvent('layout:showSidebar');
   public hideSidebarEvent = new CustomEvent('layout:hideSidebar');
+
   private subscription: any;
   constructor(props: IProps) {
     super(props);

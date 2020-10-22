@@ -59,7 +59,6 @@ export interface IWidget {
   loadingFn: () => Promise<ISingleSpaLifecycle>;
   pluginSlotId?: string;
   topbarSlotId?: string;
-  sidebarSlotId?: string;
   widgetSlotId?: string;
   rootWidgetSlotId?: string;
   sdkModules?: SDKdependency[];

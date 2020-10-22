@@ -3,7 +3,7 @@ import { i18n as I18nType } from 'i18next';
 import React, { PureComponent } from 'react';
 import { GlobalStyle } from './global-style';
 import { BaseContainer, MainAreaContainer, WidgetContainer } from './styled-containers';
-import { ModalSlot, PluginSlot, SidebarSlot, TopbarSlot, WidgetSlot } from './styled-slots';
+import { ModalSlot, PluginSlot, TopbarSlot, SidebarSlot, WidgetSlot } from './styled-slots';
 
 const {
   Box,
@@ -131,7 +131,9 @@ class LayoutWidget extends PureComponent<IProps> {
         </div>
       );
     }
+
     const sidebarVisible = Boolean(showSidebar);
+
     return (
       <Box className="container" fill="horizontal">
         <GlobalStyle theme={{ breakpoints: responsiveBreakpoints.global.breakpoints }} />

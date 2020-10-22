@@ -2,6 +2,7 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import type { TFunction } from 'i18next';
 import type { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { forkJoin } from 'rxjs';
 
 const { EditorCard, EntryCard, styled, css } = DS;
 
@@ -11,6 +12,9 @@ export interface IGetCustomEntitiesProps {
   loggedEthAddress: string | null;
   handlePublish: (ethAddress: string, content: any) => void;
   handleBackNavigation: () => void;
+  handleGetTags: (query: string) => void;
+  handleGetMentions: (query: string) => void;
+  ipfsService?: any;
   pendingEntries: any[];
   t: TFunction;
   locale: ILocale;
@@ -32,12 +36,23 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
     loggedEthAddress,
     handlePublish,
     handleBackNavigation,
+    handleGetTags,
+    handleGetMentions,
+    ipfsService,
     pendingEntries,
     t,
     locale,
     onAvatarClick,
   } = props;
+
   let customEntities = [];
+
+  const onUploadRequest = (data: string | File, isUrl = false) => {
+    const ipfsGatewayCall = ipfsService.getSettings({});
+    const uploadCall = ipfsService.upload([{ isUrl, content: data }]);
+    return forkJoin([ipfsGatewayCall, uploadCall]).toPromise();
+  };
+
   if (!isMobile && loggedEthAddress) {
     customEntities.push({
       position: 'before',
@@ -46,12 +61,15 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
       getComponent: ({ key, style }: { key: string; style: any }) => (
         <EditorCard
           ethAddress={loggedEthAddress}
-          postLabel="Publish"
-          placeholderLabel="Write something"
+          postLabel={t('Publish')}
+          placeholderLabel={t('Write something')}
           onPublish={handlePublish}
           style={style}
           key={key}
           handleNavigateBack={handleBackNavigation}
+          getMentions={handleGetMentions}
+          getTags={handleGetTags}
+          uploadRequest={onUploadRequest}
         />
       ),
     });

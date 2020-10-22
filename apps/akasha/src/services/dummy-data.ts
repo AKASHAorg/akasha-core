@@ -46,7 +46,16 @@ export const genEntryData = (entryId: string) => ({
   author: generateProfileData(genEthAddress()()),
   content: contentStrings
     .slice(Math.floor(Math.random() * Math.floor(3)), Math.floor(Math.random() * Math.floor(9)))
-    .join('. '),
+    .map((contentString: any) => {
+      return {
+        type: 'paragraph',
+        children: [
+          {
+            text: contentString,
+          },
+        ],
+      };
+    }),
   time: genTime(),
   replies: randomNumber(0, 1000) as any,
   reposts: randomNumber(0, 1210),
