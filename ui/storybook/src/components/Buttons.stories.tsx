@@ -95,7 +95,7 @@ storiesOf('Buttons/ProfileIconButton', module).add('default', () => (
     <ProfileAvatarButton
       avatarImage="https://placebeard.it/360x360"
       onClick={() => action('Avatar Button Click')()}
-      label="AKASHA World"
+      label={text('Label', 'AKASHA World')}
       info="22 July 2019 | 20h30"
       size="sm"
       ethAddress={'0x000000'}
