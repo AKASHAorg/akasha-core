@@ -1,4 +1,8 @@
 
+.EXPORT_ALL_VARIABLES:
+
+NODE_ENV = production
+
 build:	install build.all
 build.tsc: build.tsc.sdk build.tsc.ui
 build.all: build.tsc build.sdk build.translations build.ui
