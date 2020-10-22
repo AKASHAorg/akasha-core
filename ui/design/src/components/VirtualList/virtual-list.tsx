@@ -73,7 +73,7 @@ const VirtualScroll: React.FC<IVirtualListProps> = props => {
         <div
           style={{
             position: 'absolute',
-            bottom: 0,
+            bottom: '-5rem',
             width: '100%',
             minHeight: '5rem',
           }}
