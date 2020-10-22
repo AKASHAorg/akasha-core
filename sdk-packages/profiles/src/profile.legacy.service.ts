@@ -12,7 +12,7 @@ const service: AkashaService = (invoke, log) => {
   const featuredImageI = 'featuredImage';
   const postLinks = [postExcerpt, featuredImageI];
   const fullEntryI = 'draft-part0';
-
+  const sourceCID = 'CID';
   const entriesLog = {
     totalPostsCID:
       'bafyriqer5jri6mpbidxbiyn4sydkzdz7jodgf5cfs72zrforfrz72bvnfp6ryo4nrur5ppwv2zw5jrxdqg7yhocvuwoa5kxxhbk7cxwaatyok',
@@ -82,6 +82,9 @@ const service: AkashaService = (invoke, log) => {
       throw new Error('Must specify address for the profile!');
     }
     profile = await fetchDagNode(`${profilesLog.indexProfilesCID}/${identifier.address}`);
+    if (!profile) {
+      return { address: identifier.address };
+    }
     const defaultProvider = profile?.value.providers[profileProvider].toBaseEncodedString();
     profile = await fetchDagNode(defaultProvider);
     profile = profile?.value;
@@ -90,6 +93,7 @@ const service: AkashaService = (invoke, log) => {
     if (!profileData) {
       return profile?.value || { address: identifier.address };
     }
+    profile[sourceCID] = defaultProvider;
     const tmpProfileData = profileData.value;
     if (tmpProfileData.data) {
       tmpProfileData.data = JSON.parse(tmpProfileData?.data.toString());
@@ -102,46 +106,53 @@ const service: AkashaService = (invoke, log) => {
       Object.assign(profile, { entries });
     }
     profile = await resolveCIDs(profile);
+
+    if (profile.hasOwnProperty(profileAbout)) {
+      profile[profileAbout] = profile[profileAbout]?.data?.Data?.toString();
+    }
+
+    if (profile.hasOwnProperty(profileAvatar)) {
+      profile[profileAvatar] = profile[profileAvatar]?.hash;
+    }
     return profile;
   };
 
-  const getPost = async (identifier: { id?: string; record?: string }) => {
+  const getPost = async (identifier: { id?: string; record?: any }) => {
     if (!identifier.id && !identifier.record) {
       throw new Error('Must specify one id or record for the post!');
     }
     let postEntry: any;
-    let excerpt;
-    let featuredImage;
     let data;
     if (identifier.record) {
       postEntry = await fetchDagNode(identifier.record);
       postEntry = postEntry?.value;
-
+      postEntry[sourceCID] = identifier?.record?.toBaseEncodedString();
       if (!postEntry) return null;
 
       data = JSON.parse(postEntry.data.toString());
-      if (data.hasOwnProperty(postExcerpt)) {
-        excerpt = await fetchDagNode(data[postExcerpt]);
+      if (postEntry.hasOwnProperty(postExcerpt)) {
+        postEntry[postExcerpt] = (
+          await fetchDagNode(postEntry[postExcerpt])
+        )?.value?.Data?.toString();
       }
-      if (data.hasOwnProperty(featuredImageI)) {
-        featuredImage = await fetchDagNode(data[featuredImageI]);
+      if (postEntry.hasOwnProperty(featuredImageI)) {
+        const sizes = (await fetchDagNode(postEntry[featuredImageI]))?.value;
+        postEntry[featuredImageI] = {
+          data: sizes,
+          hash: postEntry[featuredImageI].toBaseEncodedString(),
+        };
       }
-      Object.assign(data, {
-        [postExcerpt]: excerpt,
-        [featuredImageI]: featuredImage,
-        author: postEntry.author,
-        id: postEntry.id,
-      });
       // fullEntryHash = await fetchDagNode(`${identifier.record}/${fullEntryI}`);
     } else {
       const postsIndex = await fetchDagNode(`${entriesLog.indexEntriesCID}/${identifier.id}`);
       if (postsIndex?.value.record) {
-        return getPost({ record: postsIndex.value.record.toBaseEncodedString() });
+        return getPost({ record: postsIndex.value.record });
       }
       throw new Error('Invalid post data format!');
     }
-    data = await resolveCIDs(data);
-    return data;
+    postEntry = await resolveCIDs(postEntry);
+    Object.assign(postEntry, data);
+    return postEntry;
   };
 
   return { getPosts, getProfiles, getPost, getProfile };
