@@ -7,7 +7,7 @@ class Viewport {
   constructor(initialData: { offsetTop: number }) {
     this.offsetTop = initialData.offsetTop || 0;
     this.scrollListeners = [];
-    const thScroll = throttle(this.onScroll, 150, { leading: true });
+    const thScroll = throttle(this.onScroll, 100, { leading: true, trailing: true });
     this.addListener('scroll', thScroll.bind(this));
   }
   onScroll(ev: Event) {

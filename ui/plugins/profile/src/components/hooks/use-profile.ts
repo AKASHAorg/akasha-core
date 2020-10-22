@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { IProfile } from '@akashaproject/design-system/lib/components/Cards/widget-cards/trending-widget-card';
 import { Observable } from 'rxjs';
+import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
 
 export interface HookErrorObj {
   errorKey: string;
@@ -16,24 +16,38 @@ export interface UseProfileActions {
 
 export interface UseProfileProps {
   onError: (error: HookErrorObj) => void;
-  getProfile: (identifier: { address: string }) => Observable<IProfile>
+  getProfile: (identifier: { address: string }) => Observable<any>
 }
 
 /* A hook to be used on profile-page */
-export const useProfile = (props: UseProfileProps): [Partial<IProfile>, UseProfileActions] => {
+export const useProfile = (props: UseProfileProps): [Partial<IProfileData>, UseProfileActions] => {
   const { onError, getProfile } = props;
-  const [profile, setProfile] = React.useState<Partial<IProfile>>({});
+  const [profile, setProfile] = React.useState<Partial<IProfileData>>({});
 
   const actions = {
     getProfileData: (payload: { ethAddress: string }) => {
       try {
         const obs = getProfile({ address: payload.ethAddress });
         obs.subscribe(resp => {
-          console.log(resp, 'profile response');
-          setProfile({
-            ethAddress: payload.ethAddress,
-            userName: 'Test Name',
-          })
+          const { address, username, avatar, backgroundImage, about, data } = resp.data;
+          const { firstName, lastName } = data;
+          const mappedProfileData: IProfileData = { ethAddress: address };
+          if (firstName && lastName) {
+            mappedProfileData.userName = `${firstName} ${lastName}`;
+          }
+          if (username) {
+            mappedProfileData.ensName = username;
+          }
+          if (avatar) {
+            mappedProfileData.avatar = avatar;
+          }
+          if (backgroundImage) {
+            mappedProfileData.coverImage = backgroundImage;
+          }
+          if (about) {
+            mappedProfileData.description = about;
+          }
+          setProfile(mappedProfileData);
         }, (err) => onError({ errorKey: 'useProfile.getProfileData[subscription]', error: err, critical: false }));
       } catch (err) {
         onError({
