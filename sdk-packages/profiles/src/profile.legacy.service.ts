@@ -117,7 +117,7 @@ const service: AkashaService = (invoke, log) => {
     return profile;
   };
 
-  const getPost = async (identifier: { id?: string; record?: string }) => {
+  const getPost = async (identifier: { id?: string; record?: any }) => {
     if (!identifier.id && !identifier.record) {
       throw new Error('Must specify one id or record for the post!');
     }
@@ -126,7 +126,7 @@ const service: AkashaService = (invoke, log) => {
     if (identifier.record) {
       postEntry = await fetchDagNode(identifier.record);
       postEntry = postEntry?.value;
-      postEntry[sourceCID] = identifier.record;
+      postEntry[sourceCID] = identifier?.record?.toBaseEncodedString();
       if (!postEntry) return null;
 
       data = JSON.parse(postEntry.data.toString());
@@ -146,7 +146,7 @@ const service: AkashaService = (invoke, log) => {
     } else {
       const postsIndex = await fetchDagNode(`${entriesLog.indexEntriesCID}/${identifier.id}`);
       if (postsIndex?.value.record) {
-        return getPost({ record: postsIndex.value.record.toBaseEncodedString() });
+        return getPost({ record: postsIndex.value.record });
       }
       throw new Error('Invalid post data format!');
     }
