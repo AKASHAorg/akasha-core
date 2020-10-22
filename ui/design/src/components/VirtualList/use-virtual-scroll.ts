@@ -95,9 +95,7 @@ const useVirtualScroll = (props: UseVirtualScrollProps) => {
   }, []);
   const handlers = {
     onItemSizeUpdate: (itemId: string, size: Rect) => {
-      requestAnimationFrame(() => {
-        listEngine.current.updateItemRect(itemId, size);
-      });
+      listEngine.current.updateItemRect(itemId, size);
     },
     setHasMoreItems: (hasMore: boolean) => {
       listEngine.current.setHasMoreItems(hasMore);
