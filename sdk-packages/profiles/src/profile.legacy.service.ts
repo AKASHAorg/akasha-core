@@ -12,7 +12,7 @@ const service: AkashaService = (invoke, log) => {
   const featuredImageI = 'featuredImage';
   const postLinks = [postExcerpt, featuredImageI];
   const fullEntryI = 'draft-part0';
-
+  const sourceCID = 'CID';
   const entriesLog = {
     totalPostsCID:
       'bafyriqer5jri6mpbidxbiyn4sydkzdz7jodgf5cfs72zrforfrz72bvnfp6ryo4nrur5ppwv2zw5jrxdqg7yhocvuwoa5kxxhbk7cxwaatyok',
@@ -93,6 +93,7 @@ const service: AkashaService = (invoke, log) => {
     if (!profileData) {
       return profile?.value || { address: identifier.address };
     }
+    profile[sourceCID] = defaultProvider;
     const tmpProfileData = profileData.value;
     if (tmpProfileData.data) {
       tmpProfileData.data = JSON.parse(tmpProfileData?.data.toString());
@@ -125,7 +126,7 @@ const service: AkashaService = (invoke, log) => {
     if (identifier.record) {
       postEntry = await fetchDagNode(identifier.record);
       postEntry = postEntry?.value;
-
+      postEntry[sourceCID] = identifier.record;
       if (!postEntry) return null;
 
       data = JSON.parse(postEntry.data.toString());
