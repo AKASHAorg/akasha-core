@@ -34,6 +34,14 @@ const reducer = (state: any, action: UpdatePayload) => {
         ...state,
         slice: action.payload.slice,
       };
+    case 'CREATE_FETCH_OP':
+      if (!state.fetchOp.status || (state.fetchOp.status && state.fetchOp.status === 'completed')) {
+        return {
+          ...state,
+          fetchOp: action.payload,
+        };
+      }
+      return state;
     case 'SET_FETCH_OP':
       return {
         ...state,

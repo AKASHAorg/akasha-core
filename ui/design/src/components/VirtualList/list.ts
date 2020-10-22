@@ -37,6 +37,7 @@ export type UpdatePayload =
   | { type: 'SET_TOTAL_ITEMS_HEIGHT'; payload: number }
   | { type: 'SET_COORDINATES'; payload: Map<string, Rect> }
   | { type: 'SET_SLICE'; payload: { slice: [number, number]; paddingTop: number } }
+  | { type: 'CREATE_FETCH_OP'; payload: { req: any; status: string } }
   | { type: 'SET_FETCH_OP'; payload: { req: any; status: string } }
   | { type: 'SET_SLICE_OP'; payload: [number, number] };
 
@@ -252,7 +253,7 @@ class ListEngine {
   }
   createFetchOp(req: { startId: string; reverse: boolean; limit: number }) {
     if (this.hasMoreItems) {
-      this.update('SET_FETCH_OP', {
+      this.update('CREATE_FETCH_OP', {
         req,
         status: 'pending',
       });

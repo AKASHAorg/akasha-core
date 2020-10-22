@@ -54,6 +54,7 @@ export interface LayoutConfig {
   widgetSlotId: string;
 }
 export interface RootComponentProps {
+  activeWhen: { path: string };
   domElement: HTMLElement;
   events: any;
   getMenuItems: () => any;
