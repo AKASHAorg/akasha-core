@@ -23,13 +23,18 @@ const ListViewport: React.FC<IListViewportProps> = props => {
     <>
       {itemsToRender.map((itemId: string) => {
         const itemIdx = items.indexOf(itemId);
+        let itemKey = itemId;
+        const itemData = itemsData[itemId];
+        if (itemData && itemData.version) {
+          itemKey = `${itemId}-${itemData.version}`;
+        }
         return (
           <CardRenderer
-            key={itemId}
+            key={itemKey}
             itemId={itemId}
             getItemCard={props.getItemCard}
             loadItemData={props.loadItemData}
-            itemData={itemsData[itemId]}
+            itemData={itemData}
             isBookmarked={false}
             onSizeChange={props.onSizeChange}
             customEntities={customEntities}

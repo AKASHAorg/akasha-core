@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import routes, { rootRoute, MY_PROFILE } from './routes';
 import { Widget as TopicsWidget } from './components/widgets/topics';
 import { Widget as AppsWidget } from './components/widgets/apps';
+import { moduleName as profilesModule } from '@akashaproject/sdk-profiles/lib/constants';
 
 /**
  * All the plugins must export an object like this:
@@ -32,7 +33,7 @@ export const application: Application = {
       './components'
     ),
   name: 'ui-plugin-profile',
-  sdkModules: [],
+  sdkModules: [{ module: profilesModule }],
   title: 'AKASHA Profile',
   menuItems: routes,
   logo: { type: LogoTypeSource.AVATAR, value: '' },
