@@ -7,17 +7,21 @@ interface IFeedState {
   feedItemData: {
     [key: string]: any;
   };
-  startId?: string;
+  lastItemId?: string;
 }
 export type IFeedAction =
   | { type: 'LOAD_FEED_START'; payload: { isFeedLoading: boolean } }
-  | { type: 'SET_FEED_ITEMS'; payload: { items: any[]; reverse?: boolean; start?: string } }
+  | {
+      type: 'SET_FEED_ITEMS';
+      payload: { items: any[]; reverse?: boolean; start?: string; lastItemId?: string };
+    }
   | { type: 'SET_FEED_ITEM_DATA'; payload: IEntryData };
 
 interface SetFeedItemsPayload {
   items: { entryId: string }[];
   reverse?: boolean;
   start?: string;
+  lastItemId?: string;
 }
 
 const initialFeedState: IFeedState = {
@@ -31,22 +35,22 @@ const feedStateReducer = (state: IFeedState, action: IFeedAction) => {
     case 'LOAD_FEED_START':
       return { ...state, isFeedLoading: true };
     case 'SET_FEED_ITEMS':
-      const { reverse, items, start } = action.payload;
+      const { reverse, items, lastItemId } = action.payload;
       if (reverse) {
         const feedItems = state.feedItems.slice();
         feedItems.unshift(...items);
         return {
           ...state,
+          lastItemId,
           feedItems: feedItems,
           isFeedLoading: false,
-          startId: start,
         };
       }
       return {
         ...state,
+        lastItemId,
         feedItems: state.feedItems.concat(action.payload.items),
         isFeedLoading: false,
-        startId: start,
       };
     case 'SET_FEED_ITEM_DATA':
       return {
@@ -76,6 +80,7 @@ const useFeedReducer = (initialState: Partial<IFeedState>): [IFeedState, IFeedAc
           items: items.map(i => i.entryId),
           reverse: reverse,
           start: start,
+          lastItemId: payload.lastItemId,
         },
       });
     },

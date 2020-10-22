@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { IProfile } from '@akashaproject/design-system/lib/components/Cards/widget-cards/trending-widget-card';
+import { Observable } from 'rxjs';
 
 export interface HookErrorObj {
   errorKey: string;
@@ -15,20 +16,25 @@ export interface UseProfileActions {
 
 export interface UseProfileProps {
   onError: (error: HookErrorObj) => void;
+  getProfile: (identifier: { address: string }) => Observable<IProfile>
 }
 
 /* A hook to be used on profile-page */
 export const useProfile = (props: UseProfileProps): [Partial<IProfile>, UseProfileActions] => {
-  const { onError } = props;
+  const { onError, getProfile } = props;
   const [profile, setProfile] = React.useState<Partial<IProfile>>({});
 
   const actions = {
     getProfileData: (payload: { ethAddress: string }) => {
       try {
-        setProfile({
-          ethAddress: payload.ethAddress,
-          userName: 'Test Name',
-        })
+        const obs = getProfile({ address: payload.ethAddress });
+        obs.subscribe(resp => {
+          console.log(resp, 'profile response');
+          setProfile({
+            ethAddress: payload.ethAddress,
+            userName: 'Test Name',
+          })
+        }, (err) => onError({ errorKey: 'useProfile.getProfileData[subscription]', error: err, critical: false }));
       } catch (err) {
         onError({
           errorKey: 'useProfile.getProfileData',

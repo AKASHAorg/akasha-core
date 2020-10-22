@@ -6,7 +6,7 @@ import {
   ILoadItemsPayload,
 } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { fetchFeedItemData, fetchFeedItems } from '../../services/feed-service';
+import { fetchFeedItemData } from '../../services/feed-service';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import useFeedReducer from '../../hooks/use-feed-reducer';
 import {
@@ -39,6 +39,7 @@ export interface FeedPageProps {
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { isMobile, showLoginModal, ethAddress, jwtToken, onError } = props;
   const [feedState, feedStateActions] = useFeedReducer({});
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -72,9 +73,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   });
 
   const handleLoadMore = async (payload: ILoadItemsPayload) => {
-    const resp = await fetchFeedItems(payload);
-    if (resp.items.length) {
-      feedStateActions.setFeedItems(resp);
+    const req: { results: number; offset?: string } = {
+      results: payload.limit,
+    };
+    if (!isLoading) {
+      setIsLoading(true);
+      fetchEntries(req);
     }
   };
 
@@ -84,25 +88,18 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       feedStateActions.setFeedItemData(resp);
     }
   };
-
-  const onInitialLoad = async (payload: ILoadItemsPayload) => {
+  const fetchEntries = async (payload: { results: number; offset?: string }) => {
     const profileService = props.sdkModules.profiles.profileService;
-    const req: { results: number; offset?: string } = {
-      results: payload.limit,
-    };
-    if (payload.start) {
-      req.offset = payload.start;
-    }
-    const getPostscall = profileService.getPosts(req);
+    const getPostscall = profileService.getPosts({ ...payload, offset: feedState.lastItemId });
     const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
     const call = combineLatest([ipfsGatewayCall, getPostscall]);
     call.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
       const { data }: { channelInfo: any; data: { last: string; result: any[] } } = resp[1];
-      const { /* last, */ result } = data;
+      const { last, result } = data;
       const entryIds: { entryId: string }[] = [];
       result.forEach(entry => {
-        entryIds.push({ entryId: entry.id });
+        entryIds.push({ entryId: entry.post.id });
         const mappedEntry = {
           author: {
             ensName: entry.author.username,
@@ -119,16 +116,16 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         // console.table([mappedEntry, entry]);
         feedStateActions.setFeedItemData(mappedEntry);
       });
-      feedStateActions.setFeedItems({ items: entryIds });
+      feedStateActions.setFeedItems({ items: entryIds, lastItemId: last });
+      setIsLoading(false);
     });
-    // const response = await fetchFeedItems({
-    //   start: payload.start,
-    //   limit: payload.limit,
-    //   reverse: payload.reverse,
-    // });
-    // if (response.items.length) {
-    //   feedStateActions.setFeedItems(response);
-    // }
+  };
+
+  const onInitialLoad = async (payload: ILoadItemsPayload) => {
+    const req: { results: number; offset?: string } = {
+      results: payload.limit,
+    };
+    fetchEntries(req);
   };
 
   const handleBackNavigation = () => {

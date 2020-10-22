@@ -5,14 +5,11 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import menuRoute, { MY_PROFILE, PROFILE_LIST } from '../../routes';
 import MyProfilePage from './my-profile-page';
 import ProfilePage from './profile-page';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 
 const { Box } = DS;
 
-export interface IRoutesProps {
-  activeWhen: { path: string };
-}
-
-const Routes: React.FC<IRoutesProps> = props => {
+const Routes: React.FC<RootComponentProps> = props => {
   const { activeWhen } = props;
   const { path } = activeWhen;
   const { t } = useTranslation();
