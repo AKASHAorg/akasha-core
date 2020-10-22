@@ -114,7 +114,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               entry.author.backgroundImage?.data,
             ),
             ensName: entry.author.username,
-            userName: `${entry.author?.data?.firstName} ${entry.author?.data?.lastName}`,
+            userName:
+              entry.author?.data &&
+              `${entry.author?.data?.firstName} ${entry.author?.data?.lastName}`,
             ethAddress: entry.author.address,
             postsNumber: entry.author?.entries?.length, // @todo: fix this with another api call
           },
