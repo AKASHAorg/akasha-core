@@ -8,7 +8,7 @@ export interface HookErrorObj {
   critical: boolean;
 }
 
-type voidFunc<T = Object> = (arg?: T) => void;
+type voidFunc<T = object> = (arg?: T) => void;
 
 export interface UseProfileActions {
   getProfileData: voidFunc<{ ethAddress: string }>;

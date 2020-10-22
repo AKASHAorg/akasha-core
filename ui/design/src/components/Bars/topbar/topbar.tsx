@@ -17,7 +17,7 @@ import { TextIcon } from '../../TextIcon';
 export interface ITopbarProps {
   // data
   avatarImage?: string;
-  ethAddress: string | null;
+  ethAddress?: string;
   brandLabel: string;
   unreadNotifications?: number;
   quickAccessItems: IMenuItem[] | null;
@@ -122,7 +122,7 @@ const Topbar = (props: ITopbarProps) => {
     >
       {menuItem.logo?.type === LogoTypeSource.AVATAR ? (
         <Avatar
-          // ethAddress={ethAddress}
+          ethAddress={ethAddress}
           src={avatarImage}
           size="xs"
           onClick={onClickPluginButton(menuItem)}

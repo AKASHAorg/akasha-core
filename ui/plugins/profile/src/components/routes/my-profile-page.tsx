@@ -2,7 +2,6 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { MyProfilePageHeader } from '../ProfileHeader/my-profile-header';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
-import { forkJoin } from 'rxjs';
 import useProfile from '../hooks/use-profile';
 
 const MyProfilePage = (props: RootComponentProps) => {
@@ -10,12 +9,9 @@ const MyProfilePage = (props: RootComponentProps) => {
   const [ loginState, setLoginState ] = React.useState<{ethAddress?: string}>({});
   const [profileState, profileActions] = useProfile({ onError: (err) => { console.log(err) }, getProfile: sdkModules.profiles.profileService.getProfile });
   React.useEffect(() => {
-    const $stash = sdkModules.commons.cacheService.getStash('auth');
-    const getDeps = forkJoin({
-      stash: $stash
-    })
-    getDeps.subscribe((resp: { stash: any }) => {
-      const { data } = resp.stash;
+    const getDeps = sdkModules.commons.cacheService.getStash(null);
+    getDeps.subscribe((resp: { data: any }) => {
+      const { data } = resp;
       if (data.entries.has('auth')) {
         const authValue = data.cache.get('auth');
         if (authValue.hasOwnProperty('ethAddress')) {

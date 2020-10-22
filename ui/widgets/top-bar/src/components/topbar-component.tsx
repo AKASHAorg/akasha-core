@@ -5,6 +5,7 @@ import {
   EventTypes,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import useProfile from '../hooks/use-profile';
 
 const { lightTheme, Topbar, ThemeSelector, useViewportSize, LoginModal, useGlobalLogin } = DS;
 
@@ -12,13 +13,14 @@ interface TopBarProps {
   navigateToUrl: (url: string) => void;
   toggleSidebar: (visible: boolean) => void;
   getMenuItems: () => IMenuItem[];
-  ethAddress: string | null;
+  ethAddress?: string;
   loaderEvents: any;
   modalSlotId: string;
   onLogin: (provider: 2 | 3) => void;
   globalChannel: any;
   logger: any;
   onGlobalLogin: (ethAddress: string, token: string) => void;
+  profilesChannel: any;
 }
 
 const TopbarComponent = (props: TopBarProps) => {
@@ -31,10 +33,18 @@ const TopbarComponent = (props: TopBarProps) => {
     modalSlotId,
     onLogin,
     globalChannel,
+    profilesChannel,
+    logger,
   } = props;
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
   const [showLoginModal, setShowLoginModal] = React.useState(false);
+  const [profileState, profileActions] = useProfile({
+    onError: err => {
+      logger.error(err);
+    },
+    getProfile: profilesChannel.profileService.getProfile,
+  });
 
   useGlobalLogin(
     globalChannel,
@@ -44,6 +54,12 @@ const TopbarComponent = (props: TopBarProps) => {
     },
     ({ error }) => props.logger.error(error),
   );
+
+  React.useEffect(() => {
+    if (ethAddress) {
+      profileActions.getProfileData({ ethAddress });
+    }
+  }, [ethAddress]);
 
   React.useEffect(() => {
     const updateMenu = () => {
@@ -105,7 +121,7 @@ const TopbarComponent = (props: TopBarProps) => {
   return (
     <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
       <Topbar
-        avatarImage="https://placebeard.it/360x360"
+        avatarImage={profileState.avatar}
         brandLabel="Ethereum World"
         onNavigation={handleNavigation}
         onSearch={handleSearchBarKeyDown}

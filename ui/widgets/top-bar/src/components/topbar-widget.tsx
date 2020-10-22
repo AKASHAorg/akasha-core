@@ -23,7 +23,7 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
   public state: {
     hasErrors: boolean;
     errorMessage: string;
-    ethAddress: string | null;
+    ethAddress?: string;
     token: string | null;
   };
   public showSidebarEvent = new CustomEvent('layout:showSidebar');
@@ -36,7 +36,7 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
       hasErrors: false,
       errorMessage: '',
       // logged eth address
-      ethAddress: null,
+      ethAddress: undefined,
       token: null,
     };
   }
@@ -99,6 +99,7 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
         </div>
       );
     }
+
     return (
       <I18nextProvider i18n={this.props.i18n}>
         <Suspense fallback={<>...</>}>
@@ -115,6 +116,7 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
                 onGlobalLogin={this.handleGlobalLogin}
                 globalChannel={this.props.globalChannel}
                 logger={this.props.logger}
+                profilesChannel={this.props.sdkModules.profiles}
               />
             </ViewportSizeProvider>
           </ThemeSelector>
