@@ -15,6 +15,8 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   const loginWidget = await System.import('@widget/login');
 
   const AKASHAApp = await System.import('@app/AKASHA');
+  const profilePlugin = await System.import('@plugins/profile');
+  const searchPlugin = await System.import('@plugins/search');
   // tslint:disable-next-line:no-console
   console.timeEnd('loadApps');
   const appConfig = {
@@ -50,8 +52,7 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
       config: { slot: layout.application.rootWidgetSlotId, notOnMobile: true },
     },
   ];
-  const profilePlugin = await System.import('@plugins/profile');
-  const searchPlugin = await System.import('@plugins/search');
+
   // const appCenterPlugin = await System.import('@plugins/app-center');
   // const notificationsPlugin = await System.import('@plugins/notifications');
   // const boxApp = await System.import('@app/3box');
