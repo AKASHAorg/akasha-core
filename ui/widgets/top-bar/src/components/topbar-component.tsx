@@ -20,7 +20,7 @@ interface TopBarProps {
   globalChannel: any;
   logger: any;
   onGlobalLogin: (ethAddress: string, token: string) => void;
-  profilesChannel: any;
+  sdkModules: any;
 }
 
 const TopbarComponent = (props: TopBarProps) => {
@@ -33,7 +33,7 @@ const TopbarComponent = (props: TopBarProps) => {
     modalSlotId,
     onLogin,
     globalChannel,
-    profilesChannel,
+    sdkModules,
     logger,
   } = props;
 
@@ -43,7 +43,7 @@ const TopbarComponent = (props: TopBarProps) => {
     onError: err => {
       logger.error(err);
     },
-    getProfile: profilesChannel.profileService.getProfile,
+    sdkModules: sdkModules,
   });
 
   useGlobalLogin(

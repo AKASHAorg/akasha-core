@@ -116,7 +116,7 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
                 onGlobalLogin={this.handleGlobalLogin}
                 globalChannel={this.props.globalChannel}
                 logger={this.props.logger}
-                profilesChannel={this.props.sdkModules.profiles}
+                sdkModules={this.props.sdkModules}
               />
             </ViewportSizeProvider>
           </ThemeSelector>

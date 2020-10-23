@@ -114,13 +114,6 @@ export const serializeToSlate = (
 ) => {
   const serializedContent = [];
 
-  if (entryData.CID) {
-    serializedContent.push({
-      type: 'paragraph',
-      children: [{ text: 'CID: ', bold: true }, { text: entryData.CID }],
-    });
-  }
-
   if (entryData.title) {
     serializedContent.push({
       type: 'paragraph',

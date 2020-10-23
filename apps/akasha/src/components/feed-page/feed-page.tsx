@@ -91,12 +91,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
   const fetchEntries = async (payload: { results: number; offset?: string }) => {
     const profileService = props.sdkModules.profiles.profileService;
-    const getPostscall = profileService.getPosts({
+    const getPostsCall = profileService.getPosts({
       ...payload,
       offset: payload.offset || feedState.lastItemId,
     });
     const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
-    const call = combineLatest([ipfsGatewayCall, getPostscall]);
+    const call = combineLatest([ipfsGatewayCall, getPostsCall]);
     call.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
       const { data }: { channelInfo: any; data: { last: string; result: any[] } } = resp[1];
@@ -121,6 +121,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             ethAddress: entry.author.address,
             postsNumber: entry.author.entries && Object.keys(entry.author.entries).length, // @todo: fix this with another api call
           },
+          CID: entry.post.CID,
           content: serializeToSlate(entry.post, ipfsGateway),
           entryId: entry.post.id,
           time: new Date().toLocaleString(),
