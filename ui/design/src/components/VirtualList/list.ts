@@ -172,7 +172,9 @@ class ListEngine {
         }
       });
     }
-    this.totalItemsHeight = this.totalItemsHeight - itemRect.height + rect.height;
+    if (itemRect) {
+      this.totalItemsHeight = this.totalItemsHeight - itemRect.height + rect.height;
+    }
     this.updateAverageItemHeight(rect.height);
     this.update('SET_TOTAL_ITEMS_HEIGHT', this.totalItemsHeight);
     this.update('SET_COORDINATES', this.coords);

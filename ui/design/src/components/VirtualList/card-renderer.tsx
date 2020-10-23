@@ -27,17 +27,6 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
     entityObj => entityObj.position === 'after' && entityObj.itemId === itemId,
   );
 
-  // React.useEffect(() => {
-  //   if (itemRef.current) {
-  //     const item = itemRef.current.getBoundingClientRect();
-  //     if (item) {
-  //       onSizeChange(itemId, {
-  //         height: item.height,
-  //       });
-  //     }
-  //   }
-  // }, [JSON.stringify(itemData), prevItemId, JSON.stringify(coordinates), itemRef]);
-
   useResizeObserver(itemRef.current, entries => {
     const itemRect = entries[0].contentRect;
     onSizeChange(itemId, {
@@ -50,13 +39,6 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
       onSizeChange(itemId, { height: itemRef.current.getBoundingClientRect().height });
     }
   }, []);
-
-  // React.useEffect(() => {
-  //   if (itemRef.current) {
-  //     const itemRect = itemRef.current.getBoundingClientRect();
-  //     onSizeChange(itemId, { height: itemRect.height });
-  //   }
-  // }, [beforeEntities.length, afterEntities.length]);
 
   let yPos = 0;
   if (coordinates) {
