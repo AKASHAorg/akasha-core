@@ -7,9 +7,9 @@ import { Button } from '../../Buttons';
 import { Icon } from '../../Icon';
 
 import { StyledBox, StyledText, HiddenSpan, StyledTextArea } from './styled';
+import ReportSuccessModal, { IReportSuccessModalProps } from './report-success-modal';
 
-export interface IReportPostModalProps {
-  className?: string;
+export interface IReportPostModalProps extends IReportSuccessModalProps {
   titleLabel: string;
   optionsTitleLabel: string;
   option1Label: string;
@@ -30,10 +30,12 @@ export interface IReportPostModalProps {
   reportLabel?: string;
 }
 
-const ReportPostModal: React.FC<IReportPostModalProps> = props => {
+const ReportPostModal: React.FC<IReportPostModalProps & { closeModal: () => void }> = props => {
   const {
     className,
     titleLabel,
+    successTitleLabel,
+    successMessageLabel,
     optionsTitleLabel,
     option1Label,
     option2Label,
@@ -51,11 +53,15 @@ const ReportPostModal: React.FC<IReportPostModalProps> = props => {
     footerUrl2,
     cancelLabel,
     reportLabel,
+    blockLabel,
+    closeLabel,
+    closeModal,
   } = props;
 
   const [reason, setReason] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [rows, setRows] = React.useState(0);
+  const [success, setSuccess] = React.useState(false);
 
   const boxRef: React.Ref<HTMLDivElement> = React.useRef(null);
   const hiddenSpanRef: React.Ref<HTMLSpanElement> = React.useRef(null);
@@ -79,7 +85,7 @@ const ReportPostModal: React.FC<IReportPostModalProps> = props => {
     if (boxRef.current && hiddenSpanRef.current) {
       hiddenSpanRef.current.textContent = value;
       return setRows(
-        Math.ceil((hiddenSpanRef.current?.offsetWidth + 5) / boxRef.current?.offsetWidth),
+        Math.ceil(hiddenSpanRef.current?.offsetWidth / (boxRef.current?.offsetWidth - 10)),
       );
     }
   };
@@ -87,13 +93,25 @@ const ReportPostModal: React.FC<IReportPostModalProps> = props => {
   const handleCancel = () => {
     setReason('');
     setDescription('');
-    return;
+    return closeModal();
   };
 
   const handleReport = () => {
     //  @TODO: submit to api
-    return;
+    return setSuccess(true);
   };
+
+  if (success)
+    return (
+      <ReportSuccessModal
+        className={className}
+        successTitleLabel={successTitleLabel}
+        successMessageLabel={successMessageLabel}
+        blockLabel={blockLabel}
+        closeLabel={closeLabel}
+        closeModal={closeModal}
+      />
+    );
 
   return (
     <ModalWrapper width="100%" height="100%">
@@ -104,7 +122,13 @@ const ReportPostModal: React.FC<IReportPostModalProps> = props => {
               <Text weight={600} margin={{ bottom: '1rem', horizontal: 'auto' }} size="large">
                 {titleLabel}
               </Text>
-              <Icon type="close" color="secondaryText" primaryColor={true} clickable={true} />
+              <Icon
+                type="close"
+                color="secondaryText"
+                primaryColor={true}
+                clickable={true}
+                onClick={closeModal}
+              />
             </Box>
             <StyledText
               margin={{ top: 'medium' }}
