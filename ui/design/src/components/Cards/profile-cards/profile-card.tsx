@@ -88,6 +88,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const [description, setDescription] = useState(profileData.description);
   const [name, setName] = useState(profileData.name);
 
+  React.useEffect(() => {
+    setAvatar(profileData.avatar);
+    setCoverImage(profileData.coverImage);
+    setDescription(profileData.description);
+    setName(profileData.name);
+  }, [profileData]);
+
   const [avatarIcon, setAvatarIcon] = useState(
     profileProvidersData?.currentProviders.avatar?.providerIcon,
   );

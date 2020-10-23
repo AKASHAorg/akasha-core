@@ -6,8 +6,13 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 import { useParams } from 'react-router-dom';
 
 const ProfilePage = (props: RootComponentProps) => {
-  const { profileId } = useParams();
-  const [profileState, profileActions] = useProfile({ onError: (err) => { console.log(err) }, getProfile: props.sdkModules.profiles.profileService.getProfile });
+  const { profileId } = useParams() as any;
+  const [profileState, profileActions] = useProfile({
+    onError: err => {
+      console.log(err);
+    },
+    sdkModules: props.sdkModules,
+  });
 
   React.useEffect(() => {
     if (profileId) {
