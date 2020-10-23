@@ -101,7 +101,7 @@ const ReportPostModal: React.FC<IReportPostModalProps & { closeModal: () => void
     return setSuccess(true);
   };
 
-  if (success)
+  if (success) {
     return (
       <ReportSuccessModal
         className={className}
@@ -112,6 +112,7 @@ const ReportPostModal: React.FC<IReportPostModalProps & { closeModal: () => void
         closeModal={closeModal}
       />
     );
+  }
 
   return (
     <ModalWrapper width="100%" height="100%">
