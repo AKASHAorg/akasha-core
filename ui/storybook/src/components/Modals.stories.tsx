@@ -4,6 +4,8 @@ import { text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
+import { IReportPostModalProps } from '@akashaproject/design-system/lib/components/Modals';
+
 const { Box, ShareModal, Icon, MobileListModal, ReportPostModal } = DS;
 
 const ShareModalComponent = () => {
@@ -79,6 +81,74 @@ const MobileListModalComponent = ({
   );
 };
 
+const ReportPostModalComponent = (props: IReportPostModalProps) => {
+  const {
+    titleLabel,
+    successTitleLabel,
+    successMessageLabel,
+    optionsTitleLabel,
+    option1Label,
+    option2Label,
+    option3Label,
+    option4Label,
+    option5Label,
+    option6Label,
+    descriptionLabel,
+    descriptionPlaceholder,
+    footerText1Label,
+    footerText2Label,
+    footerLink1Label,
+    footerLink2Label,
+    footerUrl1,
+    footerUrl2,
+    cancelLabel,
+    reportLabel,
+    blockLabel,
+    closeLabel,
+  } = props;
+  const [modalOpen, setModalOpen] = React.useState(false);
+
+  return (
+    <Box fill={true} justify="center" align="center">
+      <Icon
+        type="eye"
+        onClick={() => {
+          setModalOpen(true);
+        }}
+      />
+      {modalOpen && (
+        <ReportPostModal
+          titleLabel={titleLabel}
+          successTitleLabel={successTitleLabel}
+          successMessageLabel={successMessageLabel}
+          optionsTitleLabel={optionsTitleLabel}
+          option1Label={option1Label}
+          option2Label={option2Label}
+          option3Label={option3Label}
+          option4Label={option4Label}
+          option5Label={option5Label}
+          option6Label={option6Label}
+          descriptionLabel={descriptionLabel}
+          descriptionPlaceholder={descriptionPlaceholder}
+          footerText1Label={footerText1Label}
+          footerLink1Label={footerLink1Label}
+          footerUrl1={footerUrl1}
+          footerText2Label={footerText2Label}
+          footerLink2Label={footerLink2Label}
+          footerUrl2={footerUrl2}
+          cancelLabel={cancelLabel}
+          reportLabel={reportLabel}
+          blockLabel={blockLabel}
+          closeLabel={closeLabel}
+          closeModal={() => {
+            setModalOpen(false);
+          }}
+        />
+      )}
+    </Box>
+  );
+};
+
 storiesOf('Modals/Share Modal', module).add('Share modal', () => <ShareModalComponent />);
 storiesOf('Modals/List Modal', module).add('Mobile list modal', () => (
   <MobileListModalComponent
@@ -87,8 +157,16 @@ storiesOf('Modals/List Modal', module).add('Mobile list modal', () => (
   />
 ));
 storiesOf('Modals/ Report Modal', module).add('Report post modal', () => (
-  <ReportPostModal
+  <ReportPostModalComponent
     titleLabel={text('Title Label', 'Report a Post')}
+    successTitleLabel={text(
+      'Success Title Label',
+      'Thank you for helping us keep Ethereum World Safe! 🙌',
+    )}
+    successMessageLabel={text(
+      'Success Content Label',
+      'We will investigate this post and take appropriate action',
+    )}
     optionsTitleLabel={text('Subtitle Label', 'Please select a reason')}
     option1Label={text('Option 1 Label', 'Suspicious, deceptive, or spam')}
     option2Label={text('Option 2 Label', 'Abusive or harmful to others')}
@@ -106,5 +184,7 @@ storiesOf('Modals/ Report Modal', module).add('Report post modal', () => (
     footerUrl2={text('Footer URL 2', 'https://ethereum.world/terms-of-service')}
     cancelLabel={text('Cancel Label', 'Cancel')}
     reportLabel={text('Save Label', 'Report')}
+    blockLabel={text('Block User Label', 'Block User')}
+    closeLabel={text('Close Label', 'Close')}
   />
 ));
