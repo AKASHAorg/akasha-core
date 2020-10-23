@@ -177,7 +177,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             onClickOutside={() => setProfileDropOpen(false)}
             onEsc={() => setProfileDropOpen(false)}
           >
-            <Box width="20rem" round="small">
+            <Box width="20rem" round="small" flex="grow">
               <ProfileMiniCard
                 profileData={entryData.author}
                 handleFollow={handleFollow}

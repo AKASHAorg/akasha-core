@@ -6,6 +6,7 @@ import { WidgetAreaCardBox } from '../common/basic-card-box';
 import { AvatarDiv } from './styled-profile-card';
 
 export interface IProfileData {
+  CID?: string;
   avatar?: string;
   coverImage?: string;
   userName?: string;

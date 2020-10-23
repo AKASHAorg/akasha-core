@@ -104,6 +104,7 @@ export const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {
 
 export const serializeToSlate = (
   entryData: {
+    CID: string;
     excerpt: string;
     featuredImage: { hash: string; data: { xs?: any; md?: any; sm?: any } };
     tags: string[];
@@ -112,6 +113,13 @@ export const serializeToSlate = (
   ipfsGateway: string,
 ) => {
   const serializedContent = [];
+
+  if (entryData.CID) {
+    serializedContent.push({
+      type: 'paragraph',
+      children: [{ text: 'CID: ', bold: true }, { text: entryData.CID }],
+    });
+  }
 
   if (entryData.title) {
     serializedContent.push({
