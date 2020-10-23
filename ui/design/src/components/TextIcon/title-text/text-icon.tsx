@@ -75,7 +75,12 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
           accentColor={accentColor}
         />
       )}
-      <StyledText weight={fontWeight} size={fontSize} accentColor={accentColor}>
+      <StyledText
+        weight={fontWeight}
+        size={fontSize}
+        accentColor={accentColor}
+        wordBreak="break-word"
+      >
         {label}
       </StyledText>
       {reverse && (
