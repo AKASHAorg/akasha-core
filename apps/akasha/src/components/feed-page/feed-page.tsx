@@ -119,7 +119,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               entry.author?.data &&
               `${entry.author?.data?.firstName} ${entry.author?.data?.lastName}`,
             ethAddress: entry.author.address,
-            postsNumber: entry.author?.entries?.length, // @todo: fix this with another api call
+            postsNumber: entry.author.entries && Object.keys(entry.author.entries).length, // @todo: fix this with another api call
           },
           content: serializeToSlate(entry.post, ipfsGateway),
           entryId: entry.post.id,

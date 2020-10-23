@@ -10,7 +10,7 @@ const StyledProfileCard = styled(ProfileCard)`
 `;
 
 export const MyProfilePageHeader = (props: { profileData: Partial<IProfileData> }) => {
-  const {profileData} = props;
+  const { profileData } = props;
 
   if (!profileData) {
     return null;
@@ -26,6 +26,7 @@ export const MyProfilePageHeader = (props: { profileData: Partial<IProfileData> 
       onClickFollowing={() => {}}
       // @ts-ignore
       profileData={cardData}
+      canUserEdit={true}
       onChangeProfileData={() => {}}
       getProfileProvidersData={() => {}}
       descriptionLabel={'About me'}

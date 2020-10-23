@@ -28,7 +28,16 @@
       height: 100%;
       margin: 0;
       padding: 0;
-    }</style></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div><script>if ('serviceWorker' in navigator) {
+    }
+  </style>
+</head>
+<body>
+<noscript>
+  You need to enable JavaScript to run this app.
+</noscript>
+<div id="root"></div>
+<script>
+  if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js').then(registration => {
         console.log('SW registered: ', registration);
@@ -36,4 +45,7 @@
         console.log('SW registration failed: ', registrationError);
       });
     });
-  }</script><script src="/akasha.sdk.js"></script></body></html>
+  }
+</script>
+<script src="/akasha.sdk.js"></script></body>
+</html>
