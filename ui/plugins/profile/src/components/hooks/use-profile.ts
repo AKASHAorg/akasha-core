@@ -39,7 +39,7 @@ export const useProfile = (props: UseProfileProps): [Partial<IProfileData>, UseP
               return;
             }
             const ipfsGateway = resp[0].data;
-            const { address, username, avatar, backgroundImage, about, data } = resp[1].data;
+            const { address, username, avatar, backgroundImage, about, data, CID } = resp[1].data;
             const mappedProfileData: IProfileData = { ethAddress: address };
             if (data && data.firstName && data.lastName) {
               mappedProfileData.userName = `${data.firstName} ${data.lastName}`;
@@ -59,6 +59,9 @@ export const useProfile = (props: UseProfileProps): [Partial<IProfileData>, UseP
             }
             if (about) {
               mappedProfileData.description = about;
+            }
+            if (CID) {
+              mappedProfileData.CID = CID;
             }
             setProfile(mappedProfileData);
           },

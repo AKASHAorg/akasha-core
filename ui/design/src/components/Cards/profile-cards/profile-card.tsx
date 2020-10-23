@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
 import { Button } from '../../Buttons/index';
-import { SubtitleTextIcon } from '../../TextIcon/index';
+import { SubtitleTextIcon, TextIcon } from '../../TextIcon/index';
 import { MainAreaCardBox } from '../common/basic-card-box';
 import {
   ProfileCardAvatar,
@@ -159,6 +159,12 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     onChangeProfileData(newProfileData);
     setEditable(false);
   };
+
+  const onLinkCopy = (CID?: string) => {
+    if (CID) {
+      navigator.clipboard.writeText(CID);
+    }
+  };
   return (
     <MainAreaCardBox className={className}>
       <ProfileCardCoverImage
@@ -239,16 +245,39 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         )}
       </Box>
       <ProfileCardEthereumId profileData={profileData} />
-      <ProfileCardDescription
-        editable={editable}
-        description={description}
-        descriptionIcon={descriptionIcon}
-        handleChangeDescription={handleChangeDescription}
-        descriptionPopoverOpen={descriptionPopoverOpen}
-        setDescriptionPopoverOpen={setDescriptionPopoverOpen}
-        profileProvidersData={profileProvidersData}
-        descriptionLabel={descriptionLabel}
-      />
+      {(description || canUserEdit) && (
+        <ProfileCardDescription
+          editable={editable}
+          description={description}
+          descriptionIcon={descriptionIcon}
+          handleChangeDescription={handleChangeDescription}
+          descriptionPopoverOpen={descriptionPopoverOpen}
+          setDescriptionPopoverOpen={setDescriptionPopoverOpen}
+          profileProvidersData={profileProvidersData}
+          descriptionLabel={descriptionLabel}
+        />
+      )}
+      {profileData.CID && (
+        <>
+          <Box direction="column" pad="medium" gap="medium">
+            <Box direction="row" gap="xsmall" align="center">
+              <Text size="large" weight="bold" color="primaryText">
+                {`CID`}
+              </Text>
+            </Box>
+
+            <TextIcon
+              iconType="copy"
+              label={profileData.CID}
+              onClick={() => onLinkCopy(profileData.CID)}
+              clickable={true}
+              iconSize="xs"
+              fontSize="medium"
+              reverse={true}
+            />
+          </Box>
+        </>
+      )}
       <Box height="40px">
         {editable && (
           <div>

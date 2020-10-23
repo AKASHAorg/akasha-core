@@ -5,6 +5,7 @@ import { ProfileAvatarButton } from '../../Buttons/index';
 import { Icon } from '../../Icon/index';
 import CardActions, { ServiceNames } from './card-actions';
 import CardHeaderMenuDropdown from './card-header-menu';
+import CardHeaderAkashaDropdown from './card-header-akasha';
 import { StyledProfileDrop } from './styled-entry-box';
 import { ProfileMiniCard } from '../profile-cards/profile-mini-card';
 import { IProfileData } from '../profile-cards/profile-widget-card';
@@ -17,6 +18,7 @@ import { withMentions, withImages, withTags } from '../../Editor/plugins';
 import { renderElement, renderLeaf } from '../../Editor/renderers';
 
 export interface IEntryData {
+  CID?: string;
   content: any;
   time: string;
   replies?: IEntryData[];
@@ -99,9 +101,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
   const [profileDropOpen, setProfileDropOpen] = React.useState(false);
+  const [displayCID, setDisplayCID] = React.useState(false);
 
   const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
+  const akashaRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
   const editor = React.useMemo(
     () => withTags(withMentions(withReact(withImages(createEditor())))),
@@ -157,6 +161,10 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     }
   };
 
+  const toggleDisplayCID = () => {
+    setDisplayCID(!displayCID);
+  };
+
   return (
     <>
       <Box direction="row" justify="between" pad={{ vertical: 'medium' }}>
@@ -188,10 +196,25 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         <Box direction="row" gap="xsmall" align="center">
           <Text> {formatRelativeTime(entryData.time, locale)} </Text>
-          <Icon type="akasha" size="sm" />
+          <Icon
+            type="akasha"
+            size="sm"
+            onClick={toggleDisplayCID}
+            ref={akashaRef}
+            clickable={true}
+          />
           <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
         </Box>
       </Box>
+      {entryData.CID && akashaRef.current && displayCID && (
+        <CardHeaderAkashaDropdown
+          target={akashaRef.current}
+          onMenuClose={() => {
+            setDisplayCID(false);
+          }}
+          CID={entryData.CID}
+        />
+      )}
       {menuIconRef.current && menuDropOpen && (
         <CardHeaderMenuDropdown
           target={menuIconRef.current}
