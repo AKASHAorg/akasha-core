@@ -8,14 +8,14 @@ build.tsc.ui:
 build.sdk:
 	NODE_ENV=production npm run build:sdk
 build.ui:
-  npm run pack:ui-apps
+	npm run pack:ui-apps
 clean:
 	rm -rf ./examples/ui/feed-app/public/*.js && \
 	rm -rf ./ui/build && \
 	npm run clean -- --y
 install:
 	npm install && \
-	npx lerna bootstrap
+	npm run bootstrap
 build.staging.feed:
 	./node_modules/.bin/lerna run build:staging
 build.staging.feed.static: build build.staging.feed
