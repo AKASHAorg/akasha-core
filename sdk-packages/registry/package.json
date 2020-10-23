@@ -20,11 +20,9 @@
   "devDependencies": {
     "@nomiclabs/buidler": "1.4.3",
     "@nomiclabs/buidler-ethers": "2.0.0",
-    "ethers": "5.0.8",
     "@nomiclabs/buidler-waffle": "2.0.0",
     "ethereum-waffle": "3.0.2",
-    "chai": "4.2.0",
-    "ipfs-http-client": "47.0.1"
+    "chai": "4.2.0"
   },
   "dependencies": {
     "@akashaproject/sdk-core": "*",
