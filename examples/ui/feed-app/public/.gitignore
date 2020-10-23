@@ -4,5 +4,6 @@ index.html
 !template-index.html
 !manifest.json
 !importmap.json
-!icons/*
+!icons
+!icons/*.png
 
