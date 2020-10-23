@@ -1,8 +1,3 @@
-
-.EXPORT_ALL_VARIABLES:
-
-NODE_ENV = production
-
 build:	install build.all
 build.tsc: build.tsc.sdk build.tsc.ui
 build.all: build.tsc build.sdk build.translations build.ui
@@ -20,7 +15,7 @@ clean:
 	npm run clean -- --y
 install:
 	npm install && \
-	npm run bootstrap
+	npx lerna bootstrap
 build.staging.feed:
 	./node_modules/.bin/lerna run build:staging
 build.staging.feed.static: build build.staging.feed
