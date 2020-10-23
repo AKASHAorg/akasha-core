@@ -2,7 +2,7 @@ import DS from '@akashaproject/design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import menuRoute, { MY_PROFILE, PROFILE_LIST } from '../../routes';
+import menuRoute, { MY_PROFILE, rootRoute } from '../../routes';
 import MyProfilePage from './my-profile-page';
 import ProfilePage from './profile-page';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
@@ -18,12 +18,15 @@ const Routes: React.FC<RootComponentProps> = props => {
     <Router>
       <Box>
         <Switch>
-          <Route path={menuRoute[PROFILE_LIST]} render={() => <>A list of profiles</>} />
-          <Route path={menuRoute[MY_PROFILE]} component={MyProfilePage} />
+          <Route path={`${rootRoute}/list`} render={() => <>A list of profiles</>} />
+          <Route path={menuRoute[MY_PROFILE]} >
+            <MyProfilePage {...props} />
+          </Route>
           <Route
             path={`${path}/:profileId`}
-            render={routeProps => <ProfilePage {...routeProps} {...props} />}
-          />
+          >
+            <ProfilePage {...props} />
+          </Route>
           <Route render={() => <div>{t('Oops, Profile not found!')}</div>} />
         </Switch>
       </Box>
