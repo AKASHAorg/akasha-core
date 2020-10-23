@@ -71,6 +71,11 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
           <Text size="medium" color="secondaryText">
             {profileData.ethAddress}
           </Text>
+          {profileData.CID && (
+            <Text size="large" color="primaryText" wordBreak="break-word" textAlign="center">
+              {`CID: ${profileData.CID}`}
+            </Text>
+          )}
           <Box direction="row" gap="xsmall">
             {profileData.ensName && (
               <Text size="medium" color="secondaryText">

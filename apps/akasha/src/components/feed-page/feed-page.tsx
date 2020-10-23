@@ -106,6 +106,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         entryIds.push({ entryId: entry.post.id });
         const mappedEntry = {
           author: {
+            CID: entry.author.CID,
             description: entry.author.about,
             avatar: getMediaUrl(ipfsGateway, entry.author.avatar),
             coverImage: getMediaUrl(
