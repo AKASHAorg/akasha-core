@@ -36,6 +36,7 @@ export interface IProfileDataProvider {
 export interface IProfileCardProps extends IProfileWidgetCard {
   // edit profile related
   profileProvidersData?: IProfileProvidersData;
+  canUserEdit?: boolean;
   // @TODO fix this
   onChangeProfileData: (newProfileData: any) => void;
   editProfileLabel: string;
@@ -64,6 +65,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     saveChangesLabel,
     getProfileProvidersData,
     profileProvidersData,
+    canUserEdit,
   } = props;
 
   const leftTitle = profileData.following ? profileData.following : profileData.users;
@@ -87,6 +89,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const [coverImage, setCoverImage] = useState(profileData.coverImage);
   const [description, setDescription] = useState(profileData.description);
   const [name, setName] = useState(profileData.name);
+
+  React.useEffect(() => {
+    setAvatar(profileData.avatar);
+    setCoverImage(profileData.coverImage);
+    setDescription(profileData.description);
+    setName(profileData.name);
+  }, [profileData]);
 
   const [avatarIcon, setAvatarIcon] = useState(
     profileProvidersData?.currentProviders.avatar?.providerIcon,
@@ -157,6 +166,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         editProfileLabel={editProfileLabel}
         changeCoverImageLabel={changeCoverImageLabel}
         editable={editable}
+        canUserEdit={canUserEdit}
         coverImage={coverImage}
         coverImageIcon={coverImageIcon}
         handleChangeCoverImage={handleChangeCoverImage}

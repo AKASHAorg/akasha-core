@@ -47,7 +47,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
     >
       <Box
         height="4rem"
-        background={profileData.coverImage}
+        background={`url(${profileData.coverImage})`}
         pad="none"
         round={{ corner: 'top', size: 'xsmall' }}
         align="center"
@@ -61,7 +61,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
           />
         </MiniProfileAvatarDiv>
       </Box>
-      <Box direction="column" align="center" justify="center">
+      <Box direction="column" align="center" justify="center" pad={{ horizontal: 'xsmall' }}>
         <Box pad={{ top: 'large', bottom: 'small' }} margin={{ top: 'medium' }} align="center">
           {profileData.userName && (
             <Text size="large" weight="bold" color="primaryText">
@@ -71,6 +71,11 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
           <Text size="medium" color="secondaryText">
             {profileData.ethAddress}
           </Text>
+          {profileData.CID && (
+            <Text size="small" color="primaryText" wordBreak="break-word" textAlign="center">
+              {`CID: ${profileData.CID}`}
+            </Text>
+          )}
           <Box direction="row" gap="xsmall">
             {profileData.ensName && (
               <Text size="medium" color="secondaryText">
