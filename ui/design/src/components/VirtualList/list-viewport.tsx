@@ -18,7 +18,7 @@ export interface IListViewportProps {
 
 const ListViewport: React.FC<IListViewportProps> = props => {
   const { itemsData, coordinates, items, itemSpacing, slice, customEntities = [] } = props;
-  const itemsToRender = items.slice(slice[0], slice[1]);
+  const itemsToRender = items.slice(...slice);
   return (
     <>
       {itemsToRender.map((itemId: string) => {
