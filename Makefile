@@ -15,7 +15,7 @@ clean:
 	npm run clean -- --y
 install:
 	npm install && \
-	npx lerna bootstrap
+	npm run bootstrap
 build.staging.feed:
 	./node_modules/.bin/lerna run build:staging
 build.staging.feed.static: build build.staging.feed
