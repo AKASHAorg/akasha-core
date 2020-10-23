@@ -6,7 +6,7 @@ build.tsc.sdk:
 build.tsc.ui:
 	npm run tsc:ui
 build.sdk:
-	npm run build:sdk
+	NODE_ENV=production npm run build:sdk
 build.ui:
 	npm run pack:ui-apps
 clean:
