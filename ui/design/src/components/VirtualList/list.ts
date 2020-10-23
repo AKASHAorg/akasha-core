@@ -30,7 +30,6 @@ interface ListEngineData {
    */
   firstItemId?: string;
 }
-
 export type UpdatePayload =
   | { type: 'SLICE_CHANGE'; payload: any }
   | { type: 'RECT_UPDATE'; payload: any }
@@ -142,21 +141,28 @@ class ListEngine {
     } else {
       const prevRect = this.coords.get(this.items[this.items.indexOf(itemId) - 1]);
       if (prevRect) {
-        if (itemRect.height !== rect.height) {
+        if (!itemRect) {
+          this.coords.set(
+            itemId,
+            new Rect({
+              height: rect.height,
+              top: prevRect.top + prevRect.height + this.config.spacing,
+            }),
+          );
+        }
+        if (itemRect && itemRect.height !== rect.height) {
           let newRect = new Rect({ ...rect });
           newRect = newRect.update({
             top: prevRect.top + prevRect.height + this.config.spacing,
           });
-          this.coords.set(itemId, newRect);
+          updatedDelta = itemRect.top - newRect.top + itemRect.height - newRect.height;
           updatedIdx = this.items.indexOf(itemId);
-          updatedDelta = itemRect.top - rect.top;
-          // console.log(updatedDelta, 'updated delta');
+          this.coords.set(itemId, newRect);
         }
       }
     }
-    if (updatedIdx >= 0) {
-      // console.log('update the entries lower than', updatedIdx, 'by', -1 * updatedDelta, 'pixels');
-      this.items.slice(updatedIdx + 1, this.items.length).forEach(id => {
+    if (updatedIdx >= 0 && updatedDelta !== 0) {
+      this.items.slice(updatedIdx + 1).forEach(id => {
         const itemCoord = this.coords.get(id);
         if (itemCoord) {
           const rectWithDelta = itemCoord.update({

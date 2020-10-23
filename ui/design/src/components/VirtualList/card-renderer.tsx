@@ -1,6 +1,7 @@
 import React from 'react';
 import ListItemContainer from './list-item-container';
 import { IRenderItemProps } from './interfaces';
+import { useResizeObserver } from './use-resize-observer';
 
 const CardRenderer = React.memo((props: IRenderItemProps) => {
   const {
@@ -12,7 +13,7 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
     customEntities,
     getItemCard,
     isBookmarked,
-    prevItemId,
+    // prevItemId,
     coordinates,
     // index,
   } = props;
@@ -26,23 +27,36 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
     entityObj => entityObj.position === 'after' && entityObj.itemId === itemId,
   );
 
-  React.useEffect(() => {
-    if (itemRef.current) {
-      const item = itemRef.current.getBoundingClientRect();
-      if (item) {
-        onSizeChange(itemId, {
-          height: item.height,
-        });
-      }
-    }
-  }, [JSON.stringify(itemData), prevItemId, JSON.stringify(coordinates), itemRef]);
+  // React.useEffect(() => {
+  //   if (itemRef.current) {
+  //     const item = itemRef.current.getBoundingClientRect();
+  //     if (item) {
+  //       onSizeChange(itemId, {
+  //         height: item.height,
+  //       });
+  //     }
+  //   }
+  // }, [JSON.stringify(itemData), prevItemId, JSON.stringify(coordinates), itemRef]);
+
+  useResizeObserver(itemRef.current, entries => {
+    const itemRect = entries[0].contentRect;
+    onSizeChange(itemId, {
+      height: itemRect.height,
+    });
+  });
 
   React.useEffect(() => {
     if (itemRef.current) {
-      const itemRect = itemRef.current.getBoundingClientRect();
-      onSizeChange(itemId, { height: itemRect.height });
+      onSizeChange(itemId, { height: itemRef.current.getBoundingClientRect().height });
     }
-  }, [beforeEntities.length, afterEntities.length]);
+  }, []);
+
+  // React.useEffect(() => {
+  //   if (itemRef.current) {
+  //     const itemRect = itemRef.current.getBoundingClientRect();
+  //     onSizeChange(itemId, { height: itemRect.height });
+  //   }
+  // }, [beforeEntities.length, afterEntities.length]);
 
   let yPos = 0;
   if (coordinates) {
