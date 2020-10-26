@@ -104,6 +104,7 @@ export const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {
 
 export const serializeToSlate = (
   entryData: {
+    CID: string;
     excerpt: string;
     featuredImage: { hash: string; data: { xs?: any; md?: any; sm?: any } };
     tags: string[];

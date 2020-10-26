@@ -62,7 +62,7 @@ const service: AkashaService = (invoke, log) => {
       if (prev && record) {
         last = prev.toBaseEncodedString();
         const postData = await getPost({ record });
-        const authorData = await getProfile({ address: postData.author }, false);
+        const authorData = await getProfile({ address: postData.author }, true);
         result.push({ author: authorData, post: postData });
       } else {
         break;
@@ -103,7 +103,7 @@ const service: AkashaService = (invoke, log) => {
 
     if (resolve) {
       const entries = await fetchDagNode(`${entriesLog.profileEntriesIndexCID}/${profile.address}`);
-      Object.assign(profile, { entries });
+      Object.assign(profile, { entries: entries?.value });
     }
     profile = await resolveCIDs(profile);
 

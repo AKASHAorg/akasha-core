@@ -16,7 +16,12 @@ const ImageElement = ({ attributes, children, element }: any) => {
   return (
     <div {...attributes}>
       <div contentEditable={false}>
-        <StyledImg src={element.url} />
+        <StyledImg
+          src={element.url}
+          onClick={() => {
+            window.open(element.url, '_blank');
+          }}
+        />
       </div>
       {children}
     </div>

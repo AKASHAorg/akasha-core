@@ -13,6 +13,7 @@ export interface IProfileCardCoverImageProps {
   editProfileLabel: string;
   changeCoverImageLabel: string;
   editable: boolean;
+  canUserEdit?: boolean;
   coverImage?: string;
   coverImageIcon?: LogoSourceType;
   handleChangeCoverImage: (provider: IProfileDataProvider) => void;
@@ -29,6 +30,7 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
     editProfileLabel,
     changeCoverImageLabel,
     editable,
+    canUserEdit,
     coverImage,
     coverImageIcon,
     handleChangeCoverImage,
@@ -44,19 +46,21 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
   return (
     <Box
       height="9em"
-      background={coverImage?.startsWith('data:') ? `url(${coverImage})` : coverImage}
+      background={`url(${coverImage})`}
       pad="none"
       round={{ corner: 'top', size: 'xsmall' }}
     >
       {!editable && (
         <Box align="end" pad="none">
           <ShareButtonContainer gap="xsmall" direction="row">
-            <IconButton
-              secondary={true}
-              icon={<Icon type="editSimple" color="white" />}
-              label={editProfileLabel}
-              onClick={handleEditClick}
-            />
+            {canUserEdit && (
+              <IconButton
+                secondary={true}
+                icon={<Icon type="editSimple" color="white" />}
+                label={editProfileLabel}
+                onClick={handleEditClick}
+              />
+            )}
             <IconButton
               secondary={true}
               icon={<Icon type="reply" color="white" />}

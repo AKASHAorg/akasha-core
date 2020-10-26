@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
 import { Button } from '../../Buttons/index';
-import { SubtitleTextIcon } from '../../TextIcon/index';
+import { SubtitleTextIcon, TextIcon } from '../../TextIcon/index';
 import { MainAreaCardBox } from '../common/basic-card-box';
 import {
   ProfileCardAvatar,
@@ -36,6 +36,7 @@ export interface IProfileDataProvider {
 export interface IProfileCardProps extends IProfileWidgetCard {
   // edit profile related
   profileProvidersData?: IProfileProvidersData;
+  canUserEdit?: boolean;
   // @TODO fix this
   onChangeProfileData: (newProfileData: any) => void;
   editProfileLabel: string;
@@ -64,6 +65,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     saveChangesLabel,
     getProfileProvidersData,
     profileProvidersData,
+    canUserEdit,
   } = props;
 
   const leftTitle = profileData.following ? profileData.following : profileData.users;
@@ -87,6 +89,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const [coverImage, setCoverImage] = useState(profileData.coverImage);
   const [description, setDescription] = useState(profileData.description);
   const [name, setName] = useState(profileData.name);
+
+  React.useEffect(() => {
+    setAvatar(profileData.avatar);
+    setCoverImage(profileData.coverImage);
+    setDescription(profileData.description);
+    setName(profileData.name);
+  }, [profileData]);
 
   const [avatarIcon, setAvatarIcon] = useState(
     profileProvidersData?.currentProviders.avatar?.providerIcon,
@@ -150,6 +159,12 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     onChangeProfileData(newProfileData);
     setEditable(false);
   };
+
+  const onLinkCopy = (CID?: string) => {
+    if (CID) {
+      navigator.clipboard.writeText(CID);
+    }
+  };
   return (
     <MainAreaCardBox className={className}>
       <ProfileCardCoverImage
@@ -157,6 +172,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         editProfileLabel={editProfileLabel}
         changeCoverImageLabel={changeCoverImageLabel}
         editable={editable}
+        canUserEdit={canUserEdit}
         coverImage={coverImage}
         coverImageIcon={coverImageIcon}
         handleChangeCoverImage={handleChangeCoverImage}
@@ -229,16 +245,39 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         )}
       </Box>
       <ProfileCardEthereumId profileData={profileData} />
-      <ProfileCardDescription
-        editable={editable}
-        description={description}
-        descriptionIcon={descriptionIcon}
-        handleChangeDescription={handleChangeDescription}
-        descriptionPopoverOpen={descriptionPopoverOpen}
-        setDescriptionPopoverOpen={setDescriptionPopoverOpen}
-        profileProvidersData={profileProvidersData}
-        descriptionLabel={descriptionLabel}
-      />
+      {(description || canUserEdit) && (
+        <ProfileCardDescription
+          editable={editable}
+          description={description}
+          descriptionIcon={descriptionIcon}
+          handleChangeDescription={handleChangeDescription}
+          descriptionPopoverOpen={descriptionPopoverOpen}
+          setDescriptionPopoverOpen={setDescriptionPopoverOpen}
+          profileProvidersData={profileProvidersData}
+          descriptionLabel={descriptionLabel}
+        />
+      )}
+      {profileData.CID && (
+        <>
+          <Box direction="column" pad="medium" gap="medium">
+            <Box direction="row" gap="xsmall" align="center">
+              <Text size="large" weight="bold" color="primaryText">
+                {`CID`}
+              </Text>
+            </Box>
+
+            <TextIcon
+              iconType="copy"
+              label={profileData.CID}
+              onClick={() => onLinkCopy(profileData.CID)}
+              clickable={true}
+              iconSize="xs"
+              fontSize="medium"
+              reverse={true}
+            />
+          </Box>
+        </>
+      )}
       <Box height="40px">
         {editable && (
           <div>

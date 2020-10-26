@@ -3,24 +3,29 @@ import { ProfilePageHeader } from '../ProfileHeader/profile-header';
 import DS from '@akashaproject/design-system';
 import useProfile from '../hooks/use-profile';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 
 const ProfilePage = (props: RootComponentProps) => {
-  const { params } = useParams();
-  const [profileState, profileActions] = useProfile({ onError: (err) => { console.log(err) }, getProfile: props.sdkModules.profiles.profileService.getProfile });
+  const { profileId } = useParams() as any;
+  const [profileState, profileActions] = useProfile({
+    onError: err => {
+      console.log(err);
+    },
+    sdkModules: props.sdkModules,
+  });
 
   React.useEffect(() => {
-    if (params.profileId) {
-      profileActions.getProfileData({ ethAddress: params.profileId });
+    if (profileId) {
+      profileActions.getProfileData({ ethAddress: profileId });
     }
-  }, [params.profileId]);
+  }, [profileId]);
 
   return (
     <div>
       <DS.Helmet>
-        <title>Profile | {params.profileId} Page</title>
+        <title>Profile | {profileId} Page</title>
       </DS.Helmet>
-      <ProfilePageHeader profileData={profileState} profileId={params.profileId} />
+      <ProfilePageHeader profileData={profileState} profileId={profileId} />
     </div>
   );
 };

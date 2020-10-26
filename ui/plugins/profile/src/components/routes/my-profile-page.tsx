@@ -6,8 +6,13 @@ import useProfile from '../hooks/use-profile';
 
 const MyProfilePage = (props: RootComponentProps) => {
   const { sdkModules } = props;
-  const [ loginState, setLoginState ] = React.useState<{ethAddress?: string}>({});
-  const [profileState, profileActions] = useProfile({ onError: (err) => { console.log(err) }, getProfile: sdkModules.profiles.profileService.getProfile });
+  const [loginState, setLoginState] = React.useState<{ ethAddress?: string }>({});
+  const [profileState, profileActions] = useProfile({
+    onError: err => {
+      console.log(err);
+    },
+    sdkModules: sdkModules,
+  });
   React.useEffect(() => {
     const getDeps = sdkModules.commons.cacheService.getStash(null);
     getDeps.subscribe((resp: { data: any }) => {
@@ -20,21 +25,21 @@ const MyProfilePage = (props: RootComponentProps) => {
           });
         }
       }
-    })
+    });
   }, []);
 
   React.useEffect(() => {
     if (loginState.ethAddress) {
       profileActions.getProfileData({ ethAddress: loginState.ethAddress });
     }
-  }, [loginState])
+  }, [loginState]);
 
   return (
     <div>
       <DS.Helmet>
         <title>Profile | My Page</title>
       </DS.Helmet>
-        <MyProfilePageHeader profileData={profileState} />
+      <MyProfilePageHeader profileData={profileState} />
     </div>
   );
 };
