@@ -6,7 +6,7 @@ import { ModalWrapper } from '../common/styled-modal';
 import { Button } from '../../Buttons';
 import { Icon } from '../../Icon';
 
-import { StyledBox, StyledText, HiddenSpan, StyledTextArea } from './styled';
+import { StyledBox, StyledText, StyledTextArea } from './styled';
 import ReportSuccessModal, { IReportSuccessModalProps } from './report-success-modal';
 
 export interface IReportPostModalProps extends IReportSuccessModalProps {
@@ -60,11 +60,7 @@ const ReportPostModal: React.FC<IReportPostModalProps & { closeModal: () => void
 
   const [reason, setReason] = React.useState('');
   const [description, setDescription] = React.useState('');
-  const [rows, setRows] = React.useState(0);
   const [success, setSuccess] = React.useState(false);
-
-  const boxRef: React.Ref<HTMLDivElement> = React.useRef(null);
-  const hiddenSpanRef: React.Ref<HTMLSpanElement> = React.useRef(null);
 
   const options: string[] = [
     option1Label,
@@ -80,14 +76,7 @@ const ReportPostModal: React.FC<IReportPostModalProps & { closeModal: () => void
   };
 
   const handleChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = ev.currentTarget.value;
-    setDescription(value);
-    if (boxRef.current && hiddenSpanRef.current) {
-      hiddenSpanRef.current.textContent = value;
-      return setRows(
-        Math.ceil(hiddenSpanRef.current?.offsetWidth / (boxRef.current?.offsetWidth - 10)),
-      );
-    }
+    setDescription(ev.currentTarget.value);
   };
 
   const handleCancel = () => {
@@ -154,34 +143,28 @@ const ReportPostModal: React.FC<IReportPostModalProps & { closeModal: () => void
                 </Box>
               ))}
             </Box>
-            {reason.length > 0 && (
-              <>
-                <StyledText
-                  margin={{ top: 'medium' }}
-                  weight="normal"
-                  color="secondaryText"
-                  size="medium"
-                >
-                  {descriptionLabel}
-                </StyledText>
-                <FormField name="name" htmlFor="text-input">
-                  <Box justify="between" direction="row" pad={{ top: 'small' }}>
-                    <Box ref={boxRef} width="100%" justify="start" direction="row" align="center">
-                      <HiddenSpan ref={hiddenSpanRef} />
-                      <StyledTextArea
-                        spellCheck={false}
-                        autoFocus={true}
-                        id="text-area-input"
-                        value={description}
-                        rows={rows}
-                        onChange={handleChange}
-                        placeholder={descriptionPlaceholder}
-                      />
-                    </Box>
-                  </Box>
-                </FormField>
-              </>
-            )}
+            <StyledText
+              margin={{ top: 'medium' }}
+              weight="normal"
+              color="secondaryText"
+              size="medium"
+            >
+              {descriptionLabel}
+            </StyledText>
+            <FormField name="name" htmlFor="text-input">
+              <Box justify="between" direction="row" pad={{ top: 'xxsmall' }}>
+                <StyledTextArea
+                  spellCheck={false}
+                  autoFocus={true}
+                  id="text-area-input"
+                  value={description}
+                  rows={5}
+                  maxLength={3000}
+                  onChange={handleChange}
+                  placeholder={descriptionPlaceholder}
+                />
+              </Box>
+            </FormField>
             <Box margin={{ top: 'medium' }}>
               <Text color="secondaryText" size="medium" margin={{ bottom: 'medium' }}>
                 {footerText1Label}
