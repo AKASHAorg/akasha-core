@@ -2,7 +2,6 @@ import * as React from 'react';
 import { IListInitialState, IVirtualListProps } from './interfaces';
 import ListViewport from './list-viewport';
 import useVirtualScroll from './use-virtual-scroll';
-import Spinner from '../Spinner';
 
 const DEFAULT_OFFSET_ITEMS = 4;
 const DEFAULT_ITEM_SPACING = 8;
@@ -47,13 +46,16 @@ const VirtualScroll: React.FC<IVirtualListProps> = props => {
       loadInitialFeed({
         start: firstId,
         reverse: false,
-        limit: offsetItems + 10,
+        limit: offsetItems + 3,
       });
     }
   }, []);
-
+  const isFetching = listState.fetchOp.status && listState.fetchOp.status !== 'completed';
   return (
-    <div ref={rootContainerRef} style={{ minHeight: listState.totalItemsHeight }}>
+    <div
+      ref={rootContainerRef}
+      style={{ minHeight: listState.totalItemsHeight + (isFetching ? 100 : 0) }}
+    >
       {showNotificationPill &&
         getNotificationPill &&
         getNotificationPill({ styles: { marginTop: 8 } })}
@@ -68,19 +70,8 @@ const VirtualScroll: React.FC<IVirtualListProps> = props => {
         coordinates={listState.coordinates}
         itemSpacing={itemSpacing}
         customEntities={customEntities}
+        isFetching={isFetching}
       />
-      {listState.fetchOp.status && listState.fetchOp.status !== 'completed' && (
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '-5rem',
-            width: '100%',
-            minHeight: '5rem',
-          }}
-        >
-          <Spinner />
-        </div>
-      )}
     </div>
   );
 };

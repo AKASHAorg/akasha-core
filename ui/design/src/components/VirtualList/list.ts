@@ -227,9 +227,20 @@ class ListEngine {
     }
   }
   getFirstIntersectingId() {
-    return this.items
-      .slice(this.slice[0], this.slice[1])
-      .find(id => this.coords.get(id)?.isIntersectingWith(this.viewport.getRect()));
+    let intersectingId = null;
+    if (this.scrollDir === 'up') {
+      intersectingId = this.items
+        .slice(0, this.slice[0])
+        .reverse()
+        .find(id => {
+          return this.coords.get(id)?.isIntersectingWith(this.viewport.getRect());
+        });
+    } else {
+      intersectingId = this.items.slice(this.slice[1], this.items.length).find(id => {
+        return this.coords.get(id)?.isIntersectingWith(this.viewport.getRect());
+      });
+    }
+    return intersectingId;
   }
   onAtStart() {
     /* not implemented */

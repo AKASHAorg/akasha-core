@@ -140,6 +140,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     const req: { results: number; offset?: string } = {
       results: payload.limit,
     };
+    setIsLoading(true);
     fetchEntries(req);
   };
 

@@ -2,6 +2,7 @@ import * as React from 'react';
 import CardRenderer from './card-renderer';
 import { GetItemCardFn, IRenderItemProps, IVirtualListProps } from './interfaces';
 import Rect from './v2/rect-obj';
+import Spinner from '../Spinner';
 
 export interface IListViewportProps {
   items: string[];
@@ -14,10 +15,20 @@ export interface IListViewportProps {
   itemSpacing: number;
   slice: [number, number];
   customEntities?: IVirtualListProps['customEntities'];
+  isFetching: boolean;
 }
 
 const ListViewport: React.FC<IListViewportProps> = props => {
-  const { itemsData, coordinates, items, itemSpacing, slice, customEntities = [] } = props;
+  const {
+    itemsData,
+    coordinates,
+    items,
+    itemSpacing,
+    slice,
+    customEntities = [],
+    isFetching,
+    height,
+  } = props;
   const itemsToRender = items.slice(...slice);
   return (
     <>
@@ -45,6 +56,18 @@ const ListViewport: React.FC<IListViewportProps> = props => {
           />
         );
       })}
+      {isFetching && (
+        <div
+          style={{
+            position: 'absolute',
+            top: height + itemSpacing,
+            width: '100%',
+            minHeight: '5rem',
+          }}
+        >
+          <Spinner />
+        </div>
+      )}
     </>
   );
 };
