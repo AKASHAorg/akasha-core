@@ -147,7 +147,7 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
           'Connect an Ethereum address from your wallet to open a new world of interactions!',
         )}
         learnMoreLabel={t('Learn More')}
-        connectLabel={t('Connect Address')}
+        connectLabel={t('Sign Up')}
         onLearnMoreClick={handleLearnMore}
         onLoginClick={handleLoginSelect}
       />

@@ -1,6 +1,7 @@
 import React from 'react';
+import styled from 'styled-components';
 
-const Loading = (props: React.SVGProps<SVGSVGElement>) => (
+const SimpleLoading = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" {...props}>
     <g
       fill="none"
@@ -21,5 +22,17 @@ const Loading = (props: React.SVGProps<SVGSVGElement>) => (
     </g>
   </svg>
 );
+
+const Loading = styled(SimpleLoading)`
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(359deg);
+    }
+  }
+  animation: spin 4s linear infinite;
+`;
 
 export default Loading;

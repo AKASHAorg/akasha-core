@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { ModalContainer } from '../common/fullscreen-modal-container';
 import { ModalCard } from '../../Cards';
-import { Text } from 'grommet';
+import { Box, Text } from 'grommet';
+import { Icon } from '../../Icon';
 
 export interface IProviderModalProps {
   onModalClose: () => void;
@@ -20,10 +21,13 @@ const ProviderAuthModal: React.FC<IProviderModalProps> = props => {
     <ModalContainer onModalClose={props.onModalClose}>
       <ModalCard style={{ padding: '2em 4em' }}>
         {props.illustration}
-        <Text weight="bold" size="large">
-          {props.headLine}
-        </Text>
-        <Text style={{ marginBottom: '1em' }}>{props.message}</Text>
+        <Box align="center" gap="xsmall">
+          <Text weight="bold" size="medium">
+            {props.headLine}
+          </Text>
+          <Text style={{ marginBottom: '2em' }}>{props.message}</Text>
+          <Icon type="loading" accentColor={true} size="md" />
+        </Box>
       </ModalCard>
     </ModalContainer>
   );

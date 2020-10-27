@@ -50,6 +50,7 @@ export type IconType =
   | 'info'
   | 'link'
   | 'loading'
+  | 'login'
   | 'media'
   | 'menuCollapsed'
   | 'menu'
@@ -138,6 +139,7 @@ export const iconTypes: IconType[] = [
   'italic',
   'link',
   'loading',
+  'login',
   'media',
   'menuCollapsed',
   'menu',
