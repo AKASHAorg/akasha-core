@@ -7,7 +7,7 @@ import EthProviderModalIllustration from './login/eth-provider-modal-illustratio
 import { ModalContainer } from './common/fullscreen-modal-container';
 import { ModalRenderer } from './common/modal-renderer';
 import LoginModal from './login/login-modal';
-import ReportPostModal, { IReportPostModalProps } from './report/report-post-modal';
+import ReportModal, { IReportModalProps } from './report/report-modal';
 
 export {
   ListModal,
@@ -19,6 +19,6 @@ export {
   ModalContainer,
   ModalRenderer,
   LoginModal,
-  ReportPostModal,
-  IReportPostModalProps,
+  ReportModal,
+  IReportModalProps,
 };

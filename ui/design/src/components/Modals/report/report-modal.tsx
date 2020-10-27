@@ -9,7 +9,7 @@ import { Icon } from '../../Icon';
 import { StyledBox, StyledText, StyledTextArea } from './styled';
 import ReportSuccessModal, { IReportSuccessModalProps } from './report-success-modal';
 
-export interface IReportPostModalProps extends IReportSuccessModalProps {
+export interface IReportModalProps extends IReportSuccessModalProps {
   titleLabel: string;
   optionsTitleLabel: string;
   option1Label: string;
@@ -28,9 +28,11 @@ export interface IReportPostModalProps extends IReportSuccessModalProps {
   footerUrl2: string;
   cancelLabel?: string;
   reportLabel?: string;
+  // screen size passed by viewport provider
+  size?: string;
 }
 
-const ReportPostModal: React.FC<IReportPostModalProps & { closeModal: () => void }> = props => {
+const ReportModal: React.FC<IReportModalProps & { closeModal: () => void }> = props => {
   const {
     className,
     titleLabel,
@@ -55,6 +57,7 @@ const ReportPostModal: React.FC<IReportPostModalProps & { closeModal: () => void
     reportLabel,
     blockLabel,
     closeLabel,
+    size,
     closeModal,
   } = props;
 
@@ -105,7 +108,7 @@ const ReportPostModal: React.FC<IReportPostModalProps & { closeModal: () => void
 
   return (
     <ModalWrapper width="100%" height="100%">
-      <StyledBox>
+      <StyledBox width={size === 'small' ? '100%' : '33%'}>
         <MainAreaCardBox className={className}>
           <Box direction="column" pad="large">
             <Box direction="row" margin={{ top: 'xsmall' }} align="start">
@@ -207,9 +210,9 @@ const ReportPostModal: React.FC<IReportPostModalProps & { closeModal: () => void
   );
 };
 
-ReportPostModal.defaultProps = {
+ReportModal.defaultProps = {
   cancelLabel: 'Cancel',
   reportLabel: 'Report',
 };
 
-export default ReportPostModal;
+export default ReportModal;

@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components';
 import { Box, Text } from 'grommet';
 
 export const StyledBox = styled(Box)`
-  width: 33%;
   position: absolute;
   top: 50%;
   left: 50%;
