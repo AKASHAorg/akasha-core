@@ -6,7 +6,7 @@ import { filter, takeLast } from 'rxjs/operators';
 export interface LoginState {
   jwtToken: string | null;
   ethAddress: string | null;
-  providerListVisibility: boolean;
+  showLoginModal: boolean;
   learnMoreVisibility: boolean;
   selectedProvider: string | null;
   errors: {};
@@ -23,11 +23,7 @@ export interface LoginStateModel {
   updateData: Action<LoginStateModel, Partial<LoginState>>;
   createError: Action<LoginStateModel, IStateErrorPayload>;
   authorize: Thunk<LoginStateModel, EthProviders>;
-  setProviderListVisibility: Action<LoginStateModel, { isVisible: boolean }>;
-  setSelectedProvider: Action<
-    LoginStateModel,
-    { selectedProvider: 'metamask' | 'walletconnect' | null }
-  >;
+  setShowLoginModal: Action<LoginStateModel, { isVisible: boolean }>;
   setLearnMoreVisibility: Action<LoginStateModel, { isVisible: boolean }>;
 }
 
@@ -36,7 +32,7 @@ export const loginStateModel: LoginStateModel = {
     {
       ethAddress: null,
       jwtToken: null,
-      providerListVisibility: false,
+      showLoginModal: false,
       learnMoreVisibility: false,
       selectedProvider: null,
       errors: {},
@@ -44,7 +40,7 @@ export const loginStateModel: LoginStateModel = {
     {
       blacklist: [
         'errors',
-        'providerListVisibility',
+        'showLoginModal',
         'learnMoreVisibility',
         'selectedProvider',
         // this doesn't play ok with global channels, will require a session api before enabling persist
@@ -100,16 +96,12 @@ export const loginStateModel: LoginStateModel = {
       });
     }
   }),
-  setProviderListVisibility: action((state, payload) => {
+  setShowLoginModal: action((state, payload) => {
     state.data = Object.assign({}, state.data, {
-      providerListVisibility: payload.isVisible,
+      showLoginModal: payload.isVisible,
     });
   }),
-  setSelectedProvider: action((state, payload) => {
-    state.data = Object.assign({}, state.data, {
-      selectedProvider: payload.selectedProvider,
-    });
-  }),
+
   setLearnMoreVisibility: action((state, payload) => {
     state.data = Object.assign({}, state.data, {
       learnMoreVisibility: payload.isVisible,
