@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Box } from 'grommet';
+
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { TextIcon } from '../../TextIcon';
 import { IEntryData } from './entry-box';
@@ -7,10 +8,20 @@ import { MobileListModal } from '../../Modals';
 
 export type ServiceNames = 'twitter' | 'reddit' | 'facebook';
 
+export type ShareData = {
+  title?: string;
+  text: string;
+  url: string;
+};
+
 export interface CardActionProps {
   // data
   entryData: IEntryData;
   loggedProfileEthAddress?: string;
+  // share data
+  sharePostLabel?: string;
+  shareTextLabel: string;
+  sharePostUrl: string;
   // labels
   repostsLabel: string;
   repostLabel: string;
@@ -37,6 +48,10 @@ const CardActions: React.FC<CardActionProps> = props => {
     // data
     entryData,
     loggedProfileEthAddress,
+    // share data
+    sharePostLabel,
+    shareTextLabel,
+    sharePostUrl,
     // labels
     repostsLabel,
     repostLabel,
@@ -64,6 +79,13 @@ const CardActions: React.FC<CardActionProps> = props => {
   const repostNodeRef: React.RefObject<any> = React.useRef(null);
   const shareNodeRef: React.RefObject<any> = React.useRef(null);
 
+  const shareData: ShareData = {
+    // @TODO: replace with appropriate title, text and url of the post to be shared
+    title: sharePostLabel,
+    text: shareTextLabel,
+    url: sharePostUrl,
+  };
+
   const handleRepostsOpen = () => {
     setReplyDropOpen(!repostDropOpen);
   };
@@ -72,6 +94,20 @@ const CardActions: React.FC<CardActionProps> = props => {
   };
 
   const handleShareOpen = () => {
+    const winNavigator: Navigator & {
+      canShare?: (param: ShareData) => void;
+      share?: (data: ShareData) => Promise<void>;
+    } = window.navigator;
+
+    if (
+      size === 'small' &&
+      winNavigator.share &&
+      winNavigator.canShare &&
+      winNavigator.canShare(shareData)
+    ) {
+      winNavigator.share(shareData);
+      return;
+    }
     setShareDropOpen(!shareDropOpen);
   };
 
