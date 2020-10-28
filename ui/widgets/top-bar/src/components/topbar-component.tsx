@@ -6,6 +6,7 @@ import {
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import useProfile from '../hooks/use-profile';
+import { useTranslation } from 'react-i18next';
 
 const { lightTheme, Topbar, ThemeSelector, useViewportSize, LoginModal, useGlobalLogin } = DS;
 
@@ -117,12 +118,14 @@ const TopbarComponent = (props: TopBarProps) => {
   };
 
   const { size } = useViewportSize();
+  const { t } = useTranslation();
 
   return (
     <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
       <Topbar
         avatarImage={profileState.avatar}
         brandLabel="Ethereum World"
+        signInLabel={t('Sign In')}
         onNavigation={handleNavigation}
         onSearch={handleSearchBarKeyDown}
         onSidebarToggle={toggleSidebar}
@@ -137,11 +140,11 @@ const TopbarComponent = (props: TopBarProps) => {
         onLogin={handleLogin}
         onModalClose={handleModalClose}
         showModal={showLoginModal}
-        tutorialLinkLabel="Tutorial"
-        metamaskModalHeadline="Metamask"
-        metamaskModalMessage="Login with Metamask"
+        tutorialLinkLabel={t('Tutorial')}
+        metamaskModalHeadline={t('Connecting')}
+        metamaskModalMessage={t('Please complete the process in your wallet')}
         onTutorialLinkClick={handleTutorialLinkClick}
-        helpText="What is a wallet? How do i get an Ethereum address?"
+        helpText={t('What is a wallet? How do i get an Ethereum address?')}
       />
     </ThemeSelector>
   );

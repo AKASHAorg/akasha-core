@@ -4,19 +4,22 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import DS from '@akashaproject/design-system';
 import routes, { NEW_POST, FEED, POSTS, rootRoute } from '../routes';
 import FeedPage from './feed-page/feed-page';
-import LoginModal from './login-modal';
 import NewPostPage from './new-post-page';
 import PostsPage from './posts-page';
 import { createContextStore, ActionMapper } from 'easy-peasy';
 import { LoggedProfileStateModel } from '../state/logged-profile-state';
+import { useTranslation } from 'react-i18next';
 
-const { Box, useGlobalLogin } = DS;
+const { Box, useGlobalLogin, LoginModal } = DS;
 interface AppRoutesProps {
   profileStore: ReturnType<typeof createContextStore>;
   onError: (err: Error) => void;
 }
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   const { sdkModules, globalChannel, logger, singleSpa, layout, profileStore, onError } = props;
+
+  const { t } = useTranslation();
+
   const jwtToken = profileStore.useStoreState(
     (state: LoggedProfileStateModel) => state.data.jwtToken,
   );
@@ -32,19 +35,23 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   const [loginModalState, setLoginModalState] = React.useState({
     showLoginModal: false,
   });
+
   const showLoginModal = () => {
     setLoginModalState({
       showLoginModal: true,
     });
   };
+
   const hideLoginModal = () => {
     setLoginModalState({
       showLoginModal: false,
     });
   };
+
   const handleLogin = (providerId: number) => {
     authorize(providerId);
   };
+
   React.useEffect(() => {
     if (jwtToken) {
       setTimeout(() => {
@@ -54,6 +61,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
       }, 1000);
     }
   }, [jwtToken]);
+
   useGlobalLogin(
     globalChannel,
     data => {
@@ -70,6 +78,11 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
       });
     },
   );
+
+  const handleTutorialLinkClick = () => {
+    /* goto tutorials */
+  };
+
   return (
     <Box>
       <Router>
@@ -110,9 +123,11 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
         slotId={layout.modalSlotId}
         onLogin={handleLogin}
         onModalClose={hideLoginModal}
-        channels={sdkModules}
-        globalChannel={globalChannel}
-        logger={logger}
+        tutorialLinkLabel={t('Tutorial')}
+        metamaskModalHeadline={t('Connecting')}
+        metamaskModalMessage={t('Please complete the process in your wallet')}
+        onTutorialLinkClick={handleTutorialLinkClick}
+        helpText={t('What is a wallet? How do i get an Ethereum address?')}
       />
     </Box>
   );

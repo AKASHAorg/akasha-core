@@ -43,6 +43,7 @@ import info from './info';
 import italic from './italic';
 import link from './link';
 import loading from './loading';
+import login from './login';
 import media from './media';
 import menuCollapsed from './menu-collapsed';
 import menu from './menu';
@@ -137,6 +138,8 @@ export {
   info,
   italic,
   link,
+  loading,
+  login,
   media,
   menuCollapsed,
   menu,
@@ -171,5 +174,4 @@ export {
   video,
   wallet,
   walletconnect,
-  loading,
 };

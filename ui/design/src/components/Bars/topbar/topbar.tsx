@@ -19,6 +19,7 @@ export interface ITopbarProps {
   avatarImage?: string;
   ethAddress?: string;
   brandLabel: string;
+  signInLabel?: string;
   unreadNotifications?: number;
   quickAccessItems: IMenuItem[] | null;
   searchAreaItem?: IMenuItem;
@@ -37,6 +38,7 @@ const Topbar = (props: ITopbarProps) => {
   const {
     avatarImage,
     brandLabel,
+    signInLabel,
     className,
     quickAccessItems,
     searchAreaItem,
@@ -164,7 +166,14 @@ const Topbar = (props: ITopbarProps) => {
             </StyledSearchContainer>
           )}
           {quickAccessItems && quickAccessItems.map(renderPluginButton)}
-          {!ethAddress && <TextIcon label="Sign In" iconType="hashtag" onClick={onLoginClick} />}
+          {!ethAddress && (
+            <TextIcon
+              label={signInLabel}
+              iconType="login"
+              onClick={onLoginClick}
+              clickable={true}
+            />
+          )}
         </Box>
       </>
     );
@@ -193,6 +202,7 @@ Topbar.defaultProps = {
     return;
   },
   unreadNotifications: 0,
+  signInLabel: 'Sign In',
 };
 
 export { Topbar };

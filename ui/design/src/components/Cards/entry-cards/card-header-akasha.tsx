@@ -23,7 +23,7 @@ const CardHeaderAkashaDropdown: React.FC<ICardHeaderAkashaProps> = props => {
       onClickOutside={onMenuClose}
       onEsc={onMenuClose}
     >
-      <Box pad="xxsmall" width={{ min: '13rem' }}>
+      <Box pad="xxsmall" width={{ min: '13rem', max: '15rem' }} align="center">
         <Text size="large" weight="bold" color="primaryText">
           {CIDLabel}
         </Text>

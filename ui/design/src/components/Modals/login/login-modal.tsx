@@ -1,11 +1,10 @@
 import * as React from 'react';
-
-import EthereumIcon from './eth-color-icon';
-import styled, { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 import { Box, Text } from 'grommet';
 import { ModalRenderer } from '../common/modal-renderer';
-import { EthProviderListModal, EthProviderModal } from '..';
-import { IconLink } from '../../Buttons';
+import { EthProviderListModal, EthProviderModal, EthProviderModalIllustration } from '../index';
+// import { IconLink } from '../../Buttons';
+import { TextIcon } from '../../TextIcon';
 import { Icon } from '../../Icon';
 
 export interface LoginModalProps {
@@ -43,36 +42,7 @@ const ETH_PROVIDERS = {
   [METAMASK_PROVIDER]: 2,
   [WALLETCONNECT_PROVIDER]: 3,
 };
-export interface IEthProviderIllustrationProps {
-  providerIcon: React.ReactElement;
-}
-const IconCircleBg = styled.div`
-  border-radius: 50%;
-  background: ${props => props.theme.colors.border};
-  width: 64px;
-  height: 64px;
-  text-align: center;
-  padding: 14px 12px;
-`;
-const HorizontalDashedLine = styled.div`
-  border-bottom: 1px dashed ${props => props.theme.colors.border};
-  height: 1px;
-  flex: 1;
-`;
-const EthProviderModalIllustration: React.FC<IEthProviderIllustrationProps> = props => (
-  <Box direction="row" align="center" justify="center" margin="1.5em 0">
-    <Box
-      alignContent="between"
-      justify="between"
-      style={{ maxWidth: '67%', width: '100%', alignItems: 'center' }}
-      direction="row"
-    >
-      <IconCircleBg>{props.providerIcon}</IconCircleBg>
-      <HorizontalDashedLine />
-      <EthereumIcon />
-    </Box>
-  </Box>
-);
+
 const LoginModal: React.FC<LoginModalProps> = props => {
   const {
     showModal,
@@ -133,15 +103,23 @@ const LoginModal: React.FC<LoginModalProps> = props => {
             },
           ]}
           footer={
-            <Text textAlign="center" margin={{ top: '1em' }} style={{ userSelect: 'none' }}>
-              <>{helpText}</>
-              <IconLink
+            <Box
+              direction="row"
+              align="center"
+              justify="center"
+              pad={{ top: 'xsmall' }}
+              gap="xsmall"
+            >
+              <Text textAlign="center" style={{ userSelect: 'none' }}>
+                {helpText}
+              </Text>
+              <TextIcon
                 onClick={onTutorialLinkClick}
-                icon={<Icon type="media" />}
+                iconType="media"
                 label={tutorialLinkLabel}
-                padded={true}
+                clickable={true}
               />
-            </Text>
+            </Box>
           }
         />
       )}
