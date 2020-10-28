@@ -179,7 +179,7 @@ storiesOf('Modals/ Report Modal', module)
         )}
         successMessageLabel={text(
           'Success Content Label',
-          'We will investigate this post and take appropriate action',
+          'We will investigate this post and take appropriate action.',
         )}
         optionsTitleLabel={text('Subtitle Label', 'Please select a reason')}
         option1Label={text('Option 1 Label', 'Suspicious, deceptive, or spam')}

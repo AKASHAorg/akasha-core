@@ -13,6 +13,8 @@ export interface IReportSuccessModalProps {
   successMessageLabel?: string;
   blockLabel?: string;
   closeLabel?: string;
+  // screen size passed by viewport provider
+  size?: string;
 }
 
 const ReportSuccessModal: React.FC<
@@ -24,6 +26,7 @@ const ReportSuccessModal: React.FC<
     successMessageLabel,
     blockLabel,
     closeLabel,
+    size,
     closeModal,
   } = props;
 
@@ -34,11 +37,16 @@ const ReportSuccessModal: React.FC<
 
   return (
     <ModalWrapper width="100%" height="100%">
-      <StyledBox>
+      <StyledBox width={size === 'small' ? '90%' : '33%'}>
         <MainAreaCardBox className={className}>
           <Box direction="column" pad="large">
             <Box direction="row" margin={{ top: 'xsmall' }} align="start">
-              <Text weight={600} margin={{ bottom: '1rem', horizontal: 'auto' }} size="large">
+              <Text
+                weight={600}
+                margin={{ bottom: '1rem', horizontal: 'auto' }}
+                size="large"
+                textAlign="center"
+              >
                 {successTitleLabel}
               </Text>
             </Box>
@@ -47,12 +55,13 @@ const ReportSuccessModal: React.FC<
               margin={{ top: 'xsmall' }}
               color="secondaryText"
               size="large"
+              textAlign="center"
               alignSelf="center"
             >
               {successMessageLabel}
             </Text>
             <Box direction="row" margin={{ top: 'large' }} alignSelf="center">
-              <Button margin={{ right: '0.5rem' }} label={blockLabel} onClick={handleBlockUser} />
+              <Button margin={{ right: '1rem' }} label={blockLabel} onClick={handleBlockUser} />
               <Button primary={true} label={closeLabel} onClick={closeModal} />
             </Box>
           </Box>

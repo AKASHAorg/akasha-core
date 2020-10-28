@@ -101,6 +101,7 @@ const ReportModal: React.FC<IReportModalProps & { closeModal: () => void }> = pr
         successMessageLabel={successMessageLabel}
         blockLabel={blockLabel}
         closeLabel={closeLabel}
+        size={size}
         closeModal={closeModal}
       />
     );
@@ -112,16 +113,27 @@ const ReportModal: React.FC<IReportModalProps & { closeModal: () => void }> = pr
         <MainAreaCardBox className={className}>
           <Box direction="column" pad="large">
             <Box direction="row" margin={{ top: 'xsmall' }} align="start">
+              {size === 'small' && (
+                <Icon
+                  type="arrowLeft"
+                  color="secondaryText"
+                  primaryColor={true}
+                  clickable={true}
+                  onClick={closeModal}
+                />
+              )}
               <Text weight={600} margin={{ bottom: '1rem', horizontal: 'auto' }} size="large">
                 {titleLabel}
               </Text>
-              <Icon
-                type="close"
-                color="secondaryText"
-                primaryColor={true}
-                clickable={true}
-                onClick={closeModal}
-              />
+              {size !== 'small' && (
+                <Icon
+                  type="close"
+                  color="secondaryText"
+                  primaryColor={true}
+                  clickable={true}
+                  onClick={closeModal}
+                />
+              )}
             </Box>
             <StyledText
               margin={{ top: 'medium' }}
@@ -194,11 +206,14 @@ const ReportModal: React.FC<IReportModalProps & { closeModal: () => void }> = pr
                 </Text>
               </Text>
             </Box>
-            <Box direction="row" alignSelf="end">
-              <Button margin={{ right: '0.5rem' }} label={cancelLabel} onClick={handleCancel} />
+            <Box width="100%" direction="row" justify="end">
+              {size !== 'small' && (
+                <Button margin={{ right: '0.5rem' }} label={cancelLabel} onClick={handleCancel} />
+              )}
               <Button
                 primary={true}
                 label={reportLabel}
+                fill={size === 'small' ? true : false}
                 onClick={handleReport}
                 disabled={reason.length < 1}
               />
