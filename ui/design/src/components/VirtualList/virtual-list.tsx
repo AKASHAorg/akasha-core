@@ -11,7 +11,6 @@ const VirtualScroll: React.FC<IVirtualListProps> = props => {
     items,
     itemsData,
     offsetItems = DEFAULT_OFFSET_ITEMS,
-    loadInitialFeed,
     getItemCard,
     loadItemData,
     loadMore,
@@ -40,16 +39,6 @@ const VirtualScroll: React.FC<IVirtualListProps> = props => {
     handlers.setHasMoreItems(hasMoreItems);
   }, [hasMoreItems]);
 
-  React.useEffect(() => {
-    if (!items.length) {
-      const firstId = listState.startId;
-      loadInitialFeed({
-        start: firstId,
-        reverse: false,
-        limit: offsetItems + 3,
-      });
-    }
-  }, []);
   const isFetching = listState.fetchOp.status && listState.fetchOp.status !== 'completed';
   return (
     <div

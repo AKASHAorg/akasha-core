@@ -12,9 +12,9 @@ interface IFeedState {
 export type IFeedAction =
   | { type: 'LOAD_FEED_START'; payload: { isFeedLoading: boolean } }
   | {
-    type: 'SET_FEED_ITEMS';
-    payload: { items: any[]; reverse?: boolean; start?: string; lastItemId?: string };
-  }
+      type: 'SET_FEED_ITEMS';
+      payload: { items: any[]; reverse?: boolean; start?: string; lastItemId?: string };
+    }
   | { type: 'SET_FEED_ITEM_DATA'; payload: IEntryData };
 
 interface SetFeedItemsPayload {
