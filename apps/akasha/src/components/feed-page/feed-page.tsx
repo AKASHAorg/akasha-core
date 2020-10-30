@@ -24,7 +24,19 @@ import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/en
 import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
 
-const { Helmet, VirtualList, Box, ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard } = DS;
+const {
+  Box,
+  Helmet,
+  VirtualList,
+  ErrorLoader,
+  EntryCardLoading,
+  EntryCard,
+  ReportModal,
+  ModalRenderer,
+  ErrorInfoCard,
+  useViewportSize,
+  ViewportSizeProvider,
+} = DS;
 
 export interface FeedPageProps {
   globalChannel: any;
@@ -41,6 +53,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { isMobile, showLoginModal, ethAddress, jwtToken, onError } = props;
   const [feedState, feedStateActions] = useFeedReducer({});
   const [isLoading, setIsLoading] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
+
+  const { size } = useViewportSize();
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -166,6 +181,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
   const handleEntryFlag = () => {
     /* todo */
+    setModalOpen(true);
   };
   const handleLinkCopy = () => {
     /* todo */
@@ -217,11 +233,46 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       props.logger.error('Error publishing entry');
     }
   };
+
   return (
     <Box fill="horizontal">
       <Helmet>
         <title>AKASHA Feed | Ethereum.world</title>
       </Helmet>
+      <ModalRenderer slotId={props.layout.modalSlotId}>
+        {modalOpen && (
+          <ViewportSizeProvider>
+            <ReportModal
+              titleLabel={t('Report a Post')}
+              successTitleLabel={t('Thank you for helping us keep Ethereum World Safe! 🙌')}
+              successMessageLabel={t('We will investigate this post and take appropriate action.')}
+              optionsTitleLabel={t('Please select a reason')}
+              option1Label={t('Suspicious, deceptive, or spam')}
+              option2Label={t('Abusive or harmful to others')}
+              option3Label={t('Self-harm or suicide')}
+              option4Label={t('Illegal')}
+              option5Label={t('Nudity')}
+              option6Label={t('Violence')}
+              descriptionLabel={t('Explanation')}
+              descriptionPlaceholder={t('Please explain your reason(s)')}
+              footerText1Label={t('If you are unsure, you can refer to our ')}
+              footerLink1Label={t('Code of Conduct')}
+              footerUrl1={'https://ethereum.world/code-of-conduct'}
+              footerText2Label={t('Footer Text 2 Label', ' and ')}
+              footerLink2Label={t('Terms of Service')}
+              footerUrl2={'https://ethereum.world/terms-of-service'}
+              cancelLabel={t('Cancel')}
+              reportLabel={t('Report')}
+              blockLabel={t('Block User')}
+              closeLabel={t('Close')}
+              size={size}
+              closeModal={() => {
+                setModalOpen(false);
+              }}
+            />
+          </ViewportSizeProvider>
+        )}
+      </ModalRenderer>
       <VirtualList
         items={feedState.feedItems}
         itemsData={feedState.feedItemData}
@@ -261,7 +312,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                         shareLabel={t('Share')}
                         copyLinkLabel={t('Copy Link')}
                         copyIPFSLinkLabel={t('Copy IPFS Link')}
-                        flagAsLabel={t('Flag as inappropiate')}
+                        flagAsLabel={t('Report Post')}
                         loggedProfileEthAddress={'0x00123123123123'}
                         locale={locale}
                         style={{ height: 'auto' }}
