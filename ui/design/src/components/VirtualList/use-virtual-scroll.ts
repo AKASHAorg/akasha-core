@@ -145,8 +145,18 @@ const useVirtualScroll = (props: UseVirtualScrollProps) => {
         listEngine.current.updateSlice(0, items.length);
       }
     }
-  }, [items.length]);
-
+  }, [items.length, state.fetchOp]);
+  React.useEffect(() => {
+    if (!items.length) {
+      dispatch({
+        type: 'SET_FETCH_OP',
+        payload: {
+          req: { start: state.startId, reverse: false, limit: offsetItems + 3 },
+          status: 'pending',
+        },
+      });
+    }
+  }, []);
   return [state, handlers];
 };
 
