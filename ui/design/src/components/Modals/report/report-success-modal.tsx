@@ -36,7 +36,7 @@ const ReportSuccessModal: React.FC<
   };
 
   return (
-    <ModalWrapper width="100%" height="100%">
+    <ModalWrapper>
       <StyledBox width={size === 'small' ? '90%' : '33%'}>
         <MainAreaCardBox className={className}>
           <Box direction="column" pad="large">
