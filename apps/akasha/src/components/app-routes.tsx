@@ -10,7 +10,7 @@ import { createContextStore, ActionMapper } from 'easy-peasy';
 import { LoggedProfileStateModel } from '../state/logged-profile-state';
 import { useTranslation } from 'react-i18next';
 
-const { Box, useGlobalLogin, LoginModal } = DS;
+const { Box, useGlobalLogin, LoginModal, ViewportSizeProvider } = DS;
 interface AppRoutesProps {
   profileStore: ReturnType<typeof createContextStore>;
   onError: (err: Error) => void;
@@ -84,53 +84,55 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   };
 
   return (
-    <Box>
-      <Router>
-        <Switch>
-          <Route path={routes[NEW_POST]}>
-            <NewPostPage
-              sdkModules={sdkModules}
-              globalChannel={globalChannel}
-              logger={logger}
-              showLoginModal={showLoginModal}
-              onError={onError}
-            />
-          </Route>
-          <Route path={routes[FEED]}>
-            <FeedPage
-              {...props}
-              navigateToUrl={singleSpa.navigateToUrl}
-              showLoginModal={showLoginModal}
-              ethAddress={ethAddress}
-              jwtToken={jwtToken}
-              onError={onError}
-            />
-          </Route>
-          <Route path={routes[POSTS]}>
-            <PostsPage
-              sdkModules={sdkModules}
-              globalChannel={globalChannel}
-              logger={logger}
-              navigateToUrl={singleSpa.navigateToUrl}
-              showLoginModal={showLoginModal}
-              onError={onError}
-            />
-          </Route>
-          <Redirect exact={true} from={rootRoute} to={routes[FEED]} />
-        </Switch>
-      </Router>
-      <LoginModal
-        showModal={loginModalState.showLoginModal}
-        slotId={layout.modalSlotId}
-        onLogin={handleLogin}
-        onModalClose={hideLoginModal}
-        tutorialLinkLabel={t('Tutorial')}
-        metamaskModalHeadline={t('Connecting')}
-        metamaskModalMessage={t('Please complete the process in your wallet')}
-        onTutorialLinkClick={handleTutorialLinkClick}
-        helpText={t('What is a wallet? How do i get an Ethereum address?')}
-      />
-    </Box>
+    <ViewportSizeProvider>
+      <Box>
+        <Router>
+          <Switch>
+            <Route path={routes[NEW_POST]}>
+              <NewPostPage
+                sdkModules={sdkModules}
+                globalChannel={globalChannel}
+                logger={logger}
+                showLoginModal={showLoginModal}
+                onError={onError}
+              />
+            </Route>
+            <Route path={routes[FEED]}>
+              <FeedPage
+                {...props}
+                navigateToUrl={singleSpa.navigateToUrl}
+                showLoginModal={showLoginModal}
+                ethAddress={ethAddress}
+                jwtToken={jwtToken}
+                onError={onError}
+              />
+            </Route>
+            <Route path={routes[POSTS]}>
+              <PostsPage
+                sdkModules={sdkModules}
+                globalChannel={globalChannel}
+                logger={logger}
+                navigateToUrl={singleSpa.navigateToUrl}
+                showLoginModal={showLoginModal}
+                onError={onError}
+              />
+            </Route>
+            <Redirect exact={true} from={rootRoute} to={routes[FEED]} />
+          </Switch>
+        </Router>
+        <LoginModal
+          showModal={loginModalState.showLoginModal}
+          slotId={layout.modalSlotId}
+          onLogin={handleLogin}
+          onModalClose={hideLoginModal}
+          tutorialLinkLabel={t('Tutorial')}
+          metamaskModalHeadline={t('Connecting')}
+          metamaskModalMessage={t('Please complete the process in your wallet')}
+          onTutorialLinkClick={handleTutorialLinkClick}
+          helpText={t('What is a wallet? How do i get an Ethereum address?')}
+        />
+      </Box>
+    </ViewportSizeProvider>
   );
 };
 

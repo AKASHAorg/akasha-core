@@ -35,7 +35,6 @@ const {
   ModalRenderer,
   ErrorInfoCard,
   useViewportSize,
-  ViewportSizeProvider,
 } = DS;
 
 export interface FeedPageProps {
@@ -241,36 +240,34 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       </Helmet>
       <ModalRenderer slotId={props.layout.modalSlotId}>
         {modalOpen && (
-          <ViewportSizeProvider>
-            <ReportModal
-              titleLabel={t('Report a Post')}
-              successTitleLabel={t('Thank you for helping us keep Ethereum World Safe! 🙌')}
-              successMessageLabel={t('We will investigate this post and take appropriate action.')}
-              optionsTitleLabel={t('Please select a reason')}
-              option1Label={t('Suspicious, deceptive, or spam')}
-              option2Label={t('Abusive or harmful to others')}
-              option3Label={t('Self-harm or suicide')}
-              option4Label={t('Illegal')}
-              option5Label={t('Nudity')}
-              option6Label={t('Violence')}
-              descriptionLabel={t('Explanation')}
-              descriptionPlaceholder={t('Please explain your reason(s)')}
-              footerText1Label={t('If you are unsure, you can refer to our ')}
-              footerLink1Label={t('Code of Conduct')}
-              footerUrl1={'https://ethereum.world/code-of-conduct'}
-              footerText2Label={t('Footer Text 2 Label', ' and ')}
-              footerLink2Label={t('Terms of Service')}
-              footerUrl2={'https://ethereum.world/terms-of-service'}
-              cancelLabel={t('Cancel')}
-              reportLabel={t('Report')}
-              blockLabel={t('Block User')}
-              closeLabel={t('Close')}
-              size={size}
-              closeModal={() => {
-                setModalOpen(false);
-              }}
-            />
-          </ViewportSizeProvider>
+          <ReportModal
+            titleLabel={t('Report a Post')}
+            successTitleLabel={t('Thank you for helping us keep Ethereum World Safe! 🙌')}
+            successMessageLabel={t('We will investigate this post and take appropriate action.')}
+            optionsTitleLabel={t('Please select a reason')}
+            option1Label={t('Suspicious, deceptive, or spam')}
+            option2Label={t('Abusive or harmful to others')}
+            option3Label={t('Self-harm or suicide')}
+            option4Label={t('Illegal')}
+            option5Label={t('Nudity')}
+            option6Label={t('Violence')}
+            descriptionLabel={t('Explanation')}
+            descriptionPlaceholder={t('Please explain your reason(s)')}
+            footerText1Label={t('If you are unsure, you can refer to our ')}
+            footerLink1Label={t('Code of Conduct')}
+            footerUrl1={'https://ethereum.world/code-of-conduct'}
+            footerText2Label={t('Footer Text 2 Label', ' and ')}
+            footerLink2Label={t('Terms of Service')}
+            footerUrl2={'https://ethereum.world/terms-of-service'}
+            cancelLabel={t('Cancel')}
+            reportLabel={t('Report')}
+            blockLabel={t('Block User')}
+            closeLabel={t('Close')}
+            size={size}
+            closeModal={() => {
+              setModalOpen(false);
+            }}
+          />
         )}
       </ModalRenderer>
       <VirtualList
