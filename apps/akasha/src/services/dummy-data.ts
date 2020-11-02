@@ -57,11 +57,44 @@ export const genEntryData = (entryId: string) => ({
       };
     }),
   time: genTime(),
-  replies: randomNumber(0, 1000) as any,
+  replies: genReplies(entryId),
   reposts: randomNumber(0, 1210),
   ipfsLink: 'Qmsdefas12331213',
   permalink: 'some-perma-link',
 });
+
+const genReplyData = (entryId: string) => ({
+  entryId,
+  author: generateProfileData(genEthAddress()()),
+  content: contentStrings
+    .slice(Math.floor(Math.random() * Math.floor(3)), Math.floor(Math.random() * Math.floor(9)))
+    .map((contentString: any) => {
+      return {
+        type: 'paragraph',
+        children: [
+          {
+            text: contentString,
+          },
+        ],
+      };
+    }),
+  time: genTime(),
+  replies: 1,
+  reposts: randomNumber(0, 1210),
+  ipfsLink: 'Qmsdefas12331213',
+  permalink: 'some-perma-link',
+});
+
+export const genReplies = (parentId: string) => {
+  let counter = randomNumber(1, 10);
+  const repliesArr = [];
+  while (counter > 0) {
+    counter--;
+    const reply: any = Object.assign(genReplyData(genEthAddress()(true)), { parentId: parentId });
+    repliesArr.push(reply);
+  }
+  return repliesArr;
+};
 
 export const genEthAddress = () => {
   let currIdx = 0;

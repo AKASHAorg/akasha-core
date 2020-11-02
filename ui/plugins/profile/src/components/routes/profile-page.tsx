@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ProfilePageHeader } from '../ProfileHeader/profile-header';
 import DS from '@akashaproject/design-system';
-import useProfile from '../hooks/use-profile';
+import { useProfile } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 import { useParams } from 'react-router-dom';
 
