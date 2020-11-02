@@ -6,7 +6,7 @@ import { ModalWrapper } from '../common/styled-modal';
 import { Button } from '../../Buttons';
 import { Icon } from '../../Icon';
 
-import { StyledBox, StyledText, StyledTextArea } from './styled';
+import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from './styled';
 import ReportSuccessModal, { IReportSuccessModalProps } from './report-success-modal';
 
 export interface IReportModalProps extends IReportSuccessModalProps {
@@ -64,6 +64,10 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   const [reason, setReason] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [success, setSuccess] = React.useState(false);
+  const [rows, setRows] = React.useState(1);
+
+  const hiddenSpanRef = React.useRef<HTMLSpanElement>(null);
+  const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const options: string[] = [
     option1Label,
@@ -79,6 +83,15 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   };
 
   const handleChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (textAreaRef.current && hiddenSpanRef.current) {
+      hiddenSpanRef.current.textContent = ev.currentTarget.value;
+      // calculate the number of rows adding offset value
+      const calcRows = Math.floor(
+        (hiddenSpanRef.current.offsetWidth + 30) / textAreaRef.current.offsetWidth,
+      );
+      // check if text area is empty or not and set rows accordingly
+      setRows(prevRows => (calcRows === 0 ? prevRows / prevRows : calcRows + 1));
+    }
     setDescription(ev.currentTarget.value);
   };
 
@@ -168,12 +181,14 @@ const ReportModal: React.FC<IReportModalProps> = props => {
             </StyledText>
             <FormField name="name" htmlFor="text-input">
               <Box justify="between" direction="row" pad={{ top: 'xxsmall' }}>
+                <HiddenSpan ref={hiddenSpanRef} />
                 <StyledTextArea
+                  ref={textAreaRef}
                   spellCheck={false}
                   autoFocus={true}
                   id="text-area-input"
                   value={description}
-                  rows={5}
+                  rows={rows}
                   maxLength={3000}
                   onChange={handleChange}
                   placeholder={descriptionPlaceholder}
