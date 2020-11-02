@@ -6,6 +6,7 @@ import {
 } from './common/basic-card-box';
 import EditorCard from './editor-cards/editor-card';
 import { EntryCard } from './entry-cards/entry-card';
+import { EntryBox } from './entry-cards/entry-box';
 import BoxFormCard from './form-cards/box-form-card';
 import EnsFormCard from './form-cards/ens-form-card';
 import ProfileCard from './profile-cards/profile-card';
@@ -36,6 +37,7 @@ export {
   BasicCardBox,
   MainAreaCardBox,
   BoxFormCard,
+  EntryBox,
   EntryCard,
   EnsFormCard,
   WidgetAreaCardBox,

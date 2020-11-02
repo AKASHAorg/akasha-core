@@ -13,7 +13,7 @@ class Widget extends React.Component<RootComponentProps> {
   };
   public componentDidCatch(error: Error, errorInfo: any) {
     if (this.props.logger) {
-      this.props.logger.error('community-widget error %j %j', error, errorInfo);
+      this.props.logger.error('posts-profile-widget error %j %j', error, errorInfo);
     }
     // just replace the state since we treat any error caught here
     // as critical one

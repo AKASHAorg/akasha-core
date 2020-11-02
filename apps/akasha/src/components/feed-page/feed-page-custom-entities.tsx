@@ -2,7 +2,7 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import type { TFunction } from 'i18next';
 import type { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { forkJoin } from 'rxjs';
+import { uploadMediaToIpfs } from '../../services/posting-service';
 
 const { EditorCard, EntryCard, styled, css } = DS;
 
@@ -19,6 +19,7 @@ export interface IGetCustomEntitiesProps {
   t: TFunction;
   locale: ILocale;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
+  onContentClick?: any;
 }
 
 const CustomEntryCard = styled(EntryCard)<{ isPending: boolean }>`
@@ -43,15 +44,12 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
     t,
     locale,
     onAvatarClick,
+    onContentClick,
   } = props;
 
   let customEntities = [];
 
-  const onUploadRequest = (data: string | File, isUrl = false) => {
-    const ipfsGatewayCall = ipfsService.getSettings({});
-    const uploadCall = ipfsService.upload([{ isUrl, content: data }]);
-    return forkJoin([ipfsGatewayCall, uploadCall]).toPromise();
-  };
+  const onUploadRequest = uploadMediaToIpfs(ipfsService);
 
   if (!isMobile && loggedEthAddress) {
     customEntities.push({
@@ -108,6 +106,7 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
           onClickReplies={() => null}
           handleFollow={() => null}
           handleUnfollow={() => null}
+          onContentClick={onContentClick}
         />
       ),
     }));
