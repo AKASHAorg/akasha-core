@@ -89,7 +89,7 @@ const MobileListModalComponent = ({
   );
 };
 
-const ReportModalComponent = (props: IReportModalProps) => {
+const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal'>) => {
   const {
     titleLabel,
     successTitleLabel,

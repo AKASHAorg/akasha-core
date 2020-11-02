@@ -32,7 +32,7 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   size?: string;
 }
 
-const ReportModal: React.FC<IReportModalProps & { closeModal: () => void }> = props => {
+const ReportModal: React.FC<IReportModalProps> = props => {
   const {
     className,
     titleLabel,

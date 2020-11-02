@@ -15,11 +15,10 @@ export interface IReportSuccessModalProps {
   closeLabel?: string;
   // screen size passed by viewport provider
   size?: string;
+  closeModal: () => void;
 }
 
-const ReportSuccessModal: React.FC<
-  IReportSuccessModalProps & { closeModal: () => void }
-> = props => {
+const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
   const {
     className,
     successTitleLabel,
