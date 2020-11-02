@@ -1,5 +1,6 @@
-import { IPendingEntry } from '../hooks/use-entry-publisher';
+import { IPendingEntry } from '@akashaproject/ui-awf-hooks/lib/use-entry-publisher';
 import { delay, genEthAddress } from './dummy-data';
+import { forkJoin } from 'rxjs';
 
 export const savePending = (ethAddress: string, entries: any[]): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -157,4 +158,10 @@ export const serializeToSlate = (
   }
 
   return serializedContent;
+};
+
+export const uploadMediaToIpfs = (ipfsService: any) => (data: string | File, isUrl = false) => {
+  const ipfsGatewayCall = ipfsService.getSettings({});
+  const uploadCall = ipfsService.upload([{ isUrl, content: data }]);
+  return forkJoin([ipfsGatewayCall, uploadCall]).toPromise();
 };

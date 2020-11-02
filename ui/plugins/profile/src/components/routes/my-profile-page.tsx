@@ -2,7 +2,7 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { MyProfilePageHeader } from '../ProfileHeader/my-profile-header';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
-import useProfile from '../hooks/use-profile';
+import { useProfile } from '@akashaproject/ui-awf-hooks';
 
 const MyProfilePage = (props: RootComponentProps) => {
   const { sdkModules } = props;

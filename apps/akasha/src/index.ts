@@ -14,6 +14,7 @@ import { Widget as ProfileCardWidget } from './widgets/posts-profile-card-widget
 
 const myPostsRoute = `${routes[POSTS]}/my-posts`;
 const userPostsRoute = `${routes[POSTS]}/:userId`;
+const fullPostRoute = `${routes[POSTS]}/:userId/post/:postId`;
 
 export const application: Application = {
   activeWhen: {
@@ -39,5 +40,6 @@ export const application: Application = {
     [routes[FEED]]: [TrendingWidget],
     [myPostsRoute]: [ProfileCardWidget],
     [userPostsRoute]: [ProfileCardWidget],
+    [fullPostRoute]: [ProfileCardWidget],
   },
 };

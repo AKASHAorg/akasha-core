@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box } from 'grommet';
-
+import { useViewportSize } from '../../Providers/viewport-dimension';
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { TextIcon } from '../../TextIcon';
 import { IEntryData } from './entry-box';
@@ -39,8 +39,6 @@ export interface CardActionProps {
   onRepostWithComment: () => void;
   onShare: (service: ServiceNames) => void;
   onLinkCopy: () => void;
-  // screen size passed by viewport provider
-  size?: string;
 }
 
 const CardActions: React.FC<CardActionProps> = props => {
@@ -69,9 +67,9 @@ const CardActions: React.FC<CardActionProps> = props => {
     onRepostWithComment,
     onShare,
     onLinkCopy,
-    // screen size
-    size,
   } = props;
+
+  const { size } = useViewportSize();
 
   const [repostDropOpen, setReplyDropOpen] = React.useState(false);
   const [shareDropOpen, setShareDropOpen] = React.useState(false);

@@ -99,6 +99,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           <Route path={routes[FEED]}>
             <FeedPage
               {...props}
+              navigateToUrl={singleSpa.navigateToUrl}
               showLoginModal={showLoginModal}
               ethAddress={ethAddress}
               jwtToken={jwtToken}

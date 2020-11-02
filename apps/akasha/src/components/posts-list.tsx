@@ -7,8 +7,8 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { useTranslation } from 'react-i18next';
 import { useParams, useRouteMatch } from 'react-router-dom';
 import { fetchFeedItems, fetchFeedItemData } from '../services/feed-service';
+import { redirectToPost } from '../services/routing-service';
 import DS from '@akashaproject/design-system';
-import routes, { POSTS } from '../routes';
 
 const { Helmet, VirtualList, ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard } = DS;
 
@@ -120,14 +120,6 @@ const PostsList: React.FC<IPostsListProps> = props => {
     /* todo */
   };
 
-  const handleContentClick = (details: any) => {
-    const { authorEthAddress, entryId, replyTo } = details;
-    const url = `${routes[POSTS]}/${authorEthAddress}/post/${entryId}`;
-    if (replyTo) {
-      // handle the reply
-    }
-    props.navigateToUrl(url);
-  };
   return (
     <>
       <Helmet>
@@ -185,7 +177,7 @@ const PostsList: React.FC<IPostsListProps> = props => {
                           onClickReplies={handleClickReplies}
                           handleFollow={handleFollow}
                           handleUnfollow={handleUnfollow}
-                          onContentClick={handleContentClick}
+                          onContentClick={redirectToPost(props.navigateToUrl)}
                         />
                       )}
                     </>
