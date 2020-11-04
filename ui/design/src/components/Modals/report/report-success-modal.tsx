@@ -19,20 +19,7 @@ export interface IReportSuccessModalProps {
 }
 
 const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
-  const {
-    className,
-    successTitleLabel,
-    successMessageLabel,
-    blockLabel,
-    closeLabel,
-    size,
-    closeModal,
-  } = props;
-
-  const handleBlockUser = () => {
-    //  @TODO: submit to api and show toast message
-    return closeModal();
-  };
+  const { className, successTitleLabel, successMessageLabel, closeLabel, size, closeModal } = props;
 
   return (
     <ModalWrapper>
@@ -60,7 +47,6 @@ const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
               {successMessageLabel}
             </Text>
             <Box direction="row" margin={{ top: 'large' }} alignSelf="center">
-              <Button margin={{ right: '1rem' }} label={blockLabel} onClick={handleBlockUser} />
               <Button primary={true} label={closeLabel} onClick={closeModal} />
             </Box>
           </Box>
