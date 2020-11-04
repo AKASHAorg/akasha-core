@@ -61,7 +61,14 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     closeModal,
   } = props;
 
-  const [reason, setReason] = React.useState('');
+  const [reasons, setReasons] = React.useState<boolean[]>([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
   const [description, setDescription] = React.useState('');
   const [success, setSuccess] = React.useState(false);
   const [rows, setRows] = React.useState(1);
@@ -78,8 +85,14 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     option6Label,
   ];
 
-  const handleSelectReason = (selected: string) => {
-    setReason(selected);
+  const handleSelectReason = (selected: number) => {
+    setReasons(reasons.map((reason, index) => (index === selected ? !reason : reason)));
+  };
+
+  const handleClickReason = (clicked: number) => {
+    if (reasons[clicked]) {
+      setReasons(reasons.map((reasn, id) => (id === clicked ? !reasn : reasn)));
+    }
   };
 
   const handleChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -96,7 +109,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   };
 
   const handleCancel = () => {
-    setReason('');
+    setReasons([]);
     setDescription('');
     return closeModal();
   };
@@ -160,13 +173,14 @@ const ReportModal: React.FC<IReportModalProps> = props => {
               </Text>
             </StyledText>
             <Box direction="column">
-              {options.map(label => (
+              {options.map((label, idx) => (
                 <Box key={label} margin={{ top: 'xsmall' }}>
                   <RadioButton
                     name="prop"
-                    checked={reason === label}
+                    checked={reasons[idx]}
                     label={label}
-                    onChange={() => handleSelectReason(label)}
+                    onChange={() => handleSelectReason(idx)}
+                    onClick={() => handleClickReason(idx)}
                   />
                 </Box>
               ))}
@@ -230,7 +244,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 label={reportLabel}
                 fill={size === 'small' ? true : false}
                 onClick={handleReport}
-                disabled={reason.length < 1}
+                disabled={reasons.every(rsn => !rsn)}
               />
             </Box>
           </Box>
