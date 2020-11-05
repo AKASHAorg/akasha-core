@@ -28,6 +28,9 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   footerUrl2: string;
   cancelLabel?: string;
   reportLabel?: string;
+  storybook?: boolean;
+  user?: string;
+  contentId?: string;
   // screen size passed by viewport provider
   size?: string;
 }
@@ -57,6 +60,9 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     reportLabel,
     blockLabel,
     closeLabel,
+    storybook,
+    user,
+    contentId,
     size,
     closeModal,
   } = props;
@@ -69,7 +75,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     false,
     false,
   ]);
-  const [description, setDescription] = React.useState('');
+  const [explanation, setExplanation] = React.useState('');
   const [success, setSuccess] = React.useState(false);
   const [rows, setRows] = React.useState(1);
 
@@ -105,18 +111,52 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       // check if text area is empty or not and set rows accordingly
       setRows(prevRows => (calcRows === 0 ? prevRows / prevRows : calcRows + 1));
     }
-    setDescription(ev.currentTarget.value);
+    setExplanation(ev.currentTarget.value);
   };
 
   const handleCancel = () => {
     setReasons([]);
-    setDescription('');
+    setExplanation('');
     return closeModal();
   };
 
+  const postData = async (url = '', data = {}) => {
+    const rheaders = new Headers();
+    rheaders.append('Content-Type', 'application/json');
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: rheaders,
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  };
+
   const handleReport = () => {
-    //  @TODO: submit to api
-    return setSuccess(true);
+    // bypass for storybook
+    if (storybook) {
+      return setSuccess(true);
+    }
+    const filteredReasons = options.filter((option, indx) => {
+      if (reasons[indx]) {
+        return option;
+      }
+      return;
+    });
+    const dataToPost = {
+      user: user,
+      contentId: contentId,
+      reasons: filteredReasons,
+      explanation: explanation,
+    };
+
+    postData('https://akasha-mod.herokuapp.com/flags', dataToPost)
+      .then(() => {
+        return setSuccess(true);
+      })
+      .catch(() => {
+        return closeModal();
+      });
   };
 
   if (success) {
@@ -201,7 +241,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                   spellCheck={false}
                   autoFocus={true}
                   id="text-area-input"
-                  value={description}
+                  value={explanation}
                   rows={rows}
                   maxLength={3000}
                   onChange={handleChange}
