@@ -53,6 +53,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [feedState, feedStateActions] = useFeedReducer({});
   const [isLoading, setIsLoading] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
+  const [flagged, setFlagged] = React.useState('');
 
   const { size } = useViewportSize();
 
@@ -178,8 +179,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleEntryShare = () => {
     /* todo */
   };
-  const handleEntryFlag = () => {
+  const handleEntryFlag = (entryId: string, user?: string | null) => () => {
     /* todo */
+    if (!user) {
+      return showLoginModal();
+    }
+    setFlagged(entryId);
     setModalOpen(true);
   };
   const handleLinkCopy = () => {
@@ -263,6 +268,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             reportLabel={t('Report')}
             blockLabel={t('Block User')}
             closeLabel={t('Close')}
+            user={ethAddress ? ethAddress : ''}
+            contentId={flagged}
             size={size}
             closeModal={() => {
               setModalOpen(false);
@@ -273,12 +280,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <VirtualList
         items={feedState.feedItems}
         itemsData={feedState.feedItemData}
+        visitorEthAddress={ethAddress}
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
         loadInitialFeed={onInitialLoad}
         hasMoreItems={true}
         bookmarkedItems={bookmarks}
-        getItemCard={({ itemData, isBookmarked }) => (
+        getItemCard={({ itemData, visitorEthAddress, isBookmarked }) => (
           <ErrorInfoCard errors={{}}>
             {(errorMessages, hasCriticalErrors) => (
               <>
@@ -317,7 +325,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                         bookmarkedLabel={t('Saved')}
                         onRepost={handleEntryRepost}
                         onEntryShare={handleEntryShare}
-                        onEntryFlag={handleEntryFlag}
+                        onEntryFlag={handleEntryFlag(itemData.entryId, visitorEthAddress)}
                         onLinkCopy={handleLinkCopy}
                         onClickReplies={handleClickReplies}
                         handleFollow={handleFollow}
