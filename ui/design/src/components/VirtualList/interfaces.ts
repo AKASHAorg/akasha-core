@@ -27,6 +27,7 @@ export interface IListInitialState {
 export type GetItemCardFn = (props: {
   itemId: string;
   itemData: any;
+  visitorEthAddress?: IVirtualListProps['visitorEthAddress'];
   isBookmarked?: boolean;
 }) => React.ReactElement;
 
@@ -42,6 +43,7 @@ export interface ILoadItemDataPayload {
 export interface IVirtualListProps {
   items: string[];
   itemsData: {};
+  visitorEthAddress?: string | null;
   loadMore: (payload: ILoadItemsPayload) => void;
   loadItemData: (payload: ILoadItemDataPayload) => void;
   loadInitialFeed: (payload: ILoadItemsPayload) => void;
@@ -123,6 +125,7 @@ export interface IListContentProps {
 export interface IRenderItemProps {
   itemId: string;
   itemData?: any;
+  visitorEthAddress?: IVirtualListProps['visitorEthAddress'];
   loadItemData: IVirtualListProps['loadItemData'];
   onSizeChange: (itemId: string, dimension: any) => void;
   itemSpacing: IListContentProps['itemSpacing'];
@@ -181,6 +184,7 @@ export interface IInfiniteScrollState {
 export interface IListItemContainerProps {
   itemData: IEntryData | null;
   itemId: string;
+  visitorEthAddress?: IVirtualListProps['visitorEthAddress'];
   loadItemData: IVirtualListProps['loadItemData'];
   className?: string;
   itemSpacing?: number;
