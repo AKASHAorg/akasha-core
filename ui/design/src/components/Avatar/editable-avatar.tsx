@@ -37,6 +37,6 @@ const defaultProps = {
   withBorder: false,
   seed: '0x0000000000000000000000000000000',
 };
-Avatar.defaultProps = defaultProps;
+EditableAvatar.defaultProps = defaultProps;
 
 export default EditableAvatar;

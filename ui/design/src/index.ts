@@ -36,7 +36,9 @@ import {
   BasicCardBox,
   MainAreaCardBox,
   BoxFormCard,
+  CommentEditor,
   EditorCard,
+  EditorPlaceholder,
   EnsFormCard,
   EntryBox,
   EntryCard,
@@ -73,6 +75,7 @@ import {
   EthProviderModal,
   MobileListModal,
   LoginModal,
+  EditorModal,
 } from './components/Modals';
 
 import { NotificationsPopover, SelectPopover } from './components/Popovers';
@@ -81,6 +84,7 @@ import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
 import VirtualList from './components/VirtualList';
 import { Helmet } from 'react-helmet';
 import { HorizontalDivider } from './components/Dividers';
+import { Notification, notify, BookmarkPill, NewPostsPill } from './components/Notification';
 
 /* Utilities (these are not components) */
 import responsiveBreakpoints from './styles/responsive-breakpoints';
@@ -111,11 +115,16 @@ const exported = {
   AppInfoWidgetCard,
   AppsWidgetCard,
   BasicCardBox,
+  BookmarkPill,
+  NewPostsPill,
   CustomizeFeedCard,
   DropSearchInput,
   EditorBox,
   EditorMeter,
+  CommentEditor,
   EditorCard,
+  EditorPlaceholder,
+  EditorModal,
   EntryBox,
   EntryCard,
   EntryCardLoading,
@@ -175,6 +184,8 @@ const exported = {
   MobileListModal,
   ModalContainer,
   ModalRenderer,
+  Notification,
+  notify,
   HorizontalDivider,
   LoginCTAWidgetCard,
   TrendingWidgetCard,

@@ -30,6 +30,7 @@ const PostsPage: React.FC<PostsPageProps> = props => {
             channels={props.sdkModules}
             globalChannel={props.globalChannel}
             logger={props.logger}
+            showLoginModal={props.showLoginModal}
           />
         </Route>
         <Route path={`${path}/:userId`}>

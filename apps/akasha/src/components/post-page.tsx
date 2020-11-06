@@ -7,12 +7,13 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { uploadMediaToIpfs } from '../services/posting-service';
 import { getLoggedProfileStore } from '../state/logged-profile-state';
 
-const { Box, MainAreaCardBox, EntryBox, EditorBox } = DS;
+const { Box, MainAreaCardBox, EntryBox, CommentEditor, EditorPlaceholder } = DS;
 
 interface IPostPage {
   channels: any;
   globalChannel: any;
   logger: any;
+  showLoginModal: () => void;
 }
 
 const PostPage: React.FC<IPostPage> = props => {
@@ -103,20 +104,25 @@ const PostPage: React.FC<IPostPage> = props => {
           handleFollow={handleFollow}
           handleUnfollow={handleUnfollow}
         />
-        {loggedEthAddress && (
-          <Box border={{ side: 'all', size: '1px', color: 'border' }} pad="xxsmall" round="xsmall">
-            <EditorBox
-              ethAddress={loggedEthAddress}
-              postLabel={t('Publish')}
-              placeholderLabel={t('Write something')}
-              onPublish={handlePublish}
-              getMentions={handleGetMentions}
-              getTags={handleGetTags}
-              uploadRequest={onUploadRequest}
-            />
-          </Box>
-        )}
       </Box>
+      {!loggedEthAddress && (
+        <Box margin="medium">
+          <EditorPlaceholder onClick={props.showLoginModal} />{' '}
+        </Box>
+      )}
+      {loggedEthAddress && (
+        <Box margin="medium">
+          <CommentEditor
+            ethAddress={loggedEthAddress}
+            postLabel={t('Publish')}
+            placeholderLabel={t('Write something')}
+            onPublish={handlePublish}
+            getMentions={handleGetMentions}
+            getTags={handleGetTags}
+            uploadRequest={onUploadRequest}
+          />
+        </Box>
+      )}
       {itemData.replies?.map((reply, index) => (
         <Box
           key={index}

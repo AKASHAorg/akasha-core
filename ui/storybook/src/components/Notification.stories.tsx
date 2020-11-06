@@ -1,12 +1,12 @@
 /* eslint-disable import/first */
-import {
-  Notification,
-  notify,
-} from '@akashaproject/design-system/lib/components/Notification/index';
+import DS from '@akashaproject/design-system';
 import { action } from '@storybook/addon-actions';
 import { boolean, number, radios, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
+import { entrySocialData } from './cards-data';
+
+const { Notification, notify, BookmarkPill, NewPostsPill } = DS;
 
 const NotificationComponent = () => {
   const posOptions = {
@@ -54,4 +54,18 @@ const NotificationComponent = () => {
   );
 };
 
-storiesOf('Notification/Notifications', module).add('default', () => <NotificationComponent />);
+storiesOf('Notification/Notifications', module)
+  .add('default', () => <NotificationComponent />)
+  .add('bookmark pill', () => (
+    <BookmarkPill
+      infoLabel={text('Info', 'Succesfully saved bookmark')}
+      handleDismiss={action('dismiss click')}
+    />
+  ))
+  .add('new posts pill', () => (
+    <NewPostsPill
+      infoLabel={text('Info', 'New posts recently published')}
+      handleDismiss={action('dismiss click')}
+      userData={entrySocialData.users}
+    />
+  ));

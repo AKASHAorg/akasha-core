@@ -2,24 +2,19 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import type { TFunction } from 'i18next';
 import type { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { uploadMediaToIpfs } from '../../services/posting-service';
 
-const { EditorCard, EntryCard, styled, css } = DS;
+const { EditorPlaceholder, EntryCard, styled, css } = DS;
 
 export interface IGetCustomEntitiesProps {
   isMobile: boolean;
   feedItems: string[];
   loggedEthAddress: string | null;
-  handlePublish: (ethAddress: string, content: any) => void;
-  handleBackNavigation: () => void;
-  handleGetTags: (query: string) => void;
-  handleGetMentions: (query: string) => void;
-  ipfsService?: any;
   pendingEntries: any[];
   t: TFunction;
   locale: ILocale;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onContentClick?: any;
+  handleEditorPlaceholderClick?: () => void;
 }
 
 const CustomEntryCard = styled(EntryCard)<{ isPending: boolean }>`
@@ -35,21 +30,15 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
     isMobile,
     feedItems,
     loggedEthAddress,
-    handlePublish,
-    handleBackNavigation,
-    handleGetTags,
-    handleGetMentions,
-    ipfsService,
     pendingEntries,
     t,
     locale,
     onAvatarClick,
     onContentClick,
+    handleEditorPlaceholderClick,
   } = props;
 
   let customEntities = [];
-
-  const onUploadRequest = uploadMediaToIpfs(ipfsService);
 
   if (!isMobile && loggedEthAddress) {
     customEntities.push({
@@ -57,17 +46,11 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
       // itemIndex: 0,
       itemId: feedItems.length ? feedItems[0] : null,
       getComponent: ({ key, style }: { key: string; style: any }) => (
-        <EditorCard
-          ethAddress={loggedEthAddress}
-          postLabel={t('Publish')}
-          placeholderLabel={t('Write something')}
-          onPublish={handlePublish}
-          style={style}
+        <EditorPlaceholder
           key={key}
-          handleNavigateBack={handleBackNavigation}
-          getMentions={handleGetMentions}
-          getTags={handleGetTags}
-          uploadRequest={onUploadRequest}
+          ethAddress={loggedEthAddress}
+          onClick={handleEditorPlaceholderClick}
+          style={style}
         />
       ),
     });
