@@ -5,9 +5,7 @@ import { EditorPlaceholder } from './editor-placeholder';
 import { EditorBox } from '../../Editor/index';
 import useSimpleClickAway from '../../../utils/simpleClickAway';
 
-export interface ICommentEditor extends IEditorBox {}
-
-const CommentEditor: React.FC<ICommentEditor> = props => {
+const CommentEditor: React.FC<IEditorBox> = props => {
   const {
     ethAddress,
     avatar,
