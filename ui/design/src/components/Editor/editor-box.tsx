@@ -258,6 +258,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
       for (const hotkey in HOTKEYS) {
         if (isHotkey(hotkey, event)) {
           event.preventDefault();
+          event.stopPropagation();
           const mark = HOTKEYS[hotkey];
           CustomEditor.toggleFormat(editor, mark);
         }
@@ -300,7 +301,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
   };
 
   return (
-    <StyledBox pad="none" justify="between">
+    <StyledBox pad="none" justify="between" fill={true}>
       <Box
         direction="row"
         pad={{ horizontal: 'medium' }}
