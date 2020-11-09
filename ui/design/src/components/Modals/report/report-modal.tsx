@@ -130,7 +130,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       headers: rheaders,
       body: JSON.stringify(data),
     });
-    return response.json();
+    return response.status;
   };
 
   const handleReport = () => {
@@ -154,13 +154,18 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     setRequesting(true);
 
     postData('https://akasha-mod.herokuapp.com/flags', dataToPost)
-      .then(() => {
+      .then(status => {
         setRequesting(false);
+        if (status === 409) {
+          throw new Error('This content has already been flagged by you');
+        } else if (status === 500) {
+          throw new Error('nable to process your request right now Please try again later');
+        }
         return setSuccess(true);
       })
       .catch(() => {
+        // @TODO: show error message in a toast here
         setRequesting(false);
-        return closeModal();
       });
   };
 
