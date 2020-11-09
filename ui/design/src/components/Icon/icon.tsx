@@ -18,6 +18,7 @@ export type IconType =
   | 'announcement'
   | 'app'
   | 'arrowDown'
+  | 'arrowUp'
   | 'arrowLeft'
   | 'arrowRight'
   | 'available'
@@ -107,6 +108,7 @@ export const iconTypes: IconType[] = [
   'announcement',
   'app',
   'arrowDown',
+  'arrowUp',
   'arrowLeft',
   'arrowRight',
   'available',
@@ -184,6 +186,7 @@ export const iconTypes: IconType[] = [
 
 export interface IconProps extends CommonInterface<any> {
   color?: string;
+  fill?: string;
   ref?: React.Ref<HTMLDivElement>;
   type: IconType | string;
   clickable?: boolean;
@@ -199,7 +202,7 @@ const StyledRefDiv = styled.div`
 `;
 
 const IconBase: React.FC<IconProps> = React.forwardRef(
-  ({ color, size, clickable, type, primaryColor, accentColor, ...props }, ref) => {
+  ({ color, fill, size, clickable, type, primaryColor, accentColor, ...props }, ref) => {
     const Component = (icons as any)[type];
     if (!Component) {
       // tslint:disable-next-line no-console
@@ -221,6 +224,12 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
     `
       & * {
         stroke: ${props.color};
+      }`};
+  ${props =>
+    props.fill &&
+    `
+      & * {
+        fill: ${props.fill};
       }`};
   ${props =>
     props.primaryColor &&

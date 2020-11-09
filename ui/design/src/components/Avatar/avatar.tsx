@@ -48,9 +48,11 @@ const defaultProps: Partial<AvatarProps> = {
 const Avatar: React.FC<AvatarProps & typeof defaultProps> = props => {
   const { onClick, src, className, size, margin, border, ethAddress } = props;
   const isClickable = typeof onClick === 'function';
-  const avatarImage = src
-    ? src
-    : loadPlaceholder(`placeholder_${getAvatarFromSeed(ethAddress as string)}`);
+  const placeholderImage = React.useMemo(
+    () => loadPlaceholder(`placeholder_${getAvatarFromSeed(ethAddress as string)}`),
+    [ethAddress],
+  );
+  const avatarImage = src ? src : placeholderImage;
 
   return (
     <StyledAvatar
@@ -61,11 +63,13 @@ const Avatar: React.FC<AvatarProps & typeof defaultProps> = props => {
       margin={margin}
       border={border}
     >
-      <React.Suspense fallback={<>...</>}>
+      <React.Suspense fallback={<></>}>
         <AvatarImage image={avatarImage} />
       </React.Suspense>
     </StyledAvatar>
   );
 };
+
+Avatar.defaultProps = defaultProps;
 
 export default Avatar;

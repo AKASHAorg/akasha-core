@@ -20,7 +20,7 @@ import { renderElement, renderLeaf } from '../../Editor/renderers';
 export interface IEntryData {
   CID?: string;
   content: any;
-  time: string;
+  time?: string | number | Date;
   replies?: IEntryData[];
   reposts?: number;
   ipfsLink: string;
@@ -201,7 +201,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             </StyledProfileDrop>
           )}
           <Box direction="row" gap="xsmall" align="center">
-            <Text> {formatRelativeTime(entryData.time, locale)} </Text>
+            {entryData.time && <Text>{formatRelativeTime(entryData.time, locale)}</Text>}
             <Icon
               type="akasha"
               size="sm"
