@@ -76,6 +76,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     false,
   ]);
   const [explanation, setExplanation] = React.useState('');
+  const [requesting, setRequesting] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const [rows, setRows] = React.useState(1);
 
@@ -150,11 +151,15 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       explanation: explanation,
     };
 
+    setRequesting(true);
+
     postData('https://akasha-mod.herokuapp.com/flags', dataToPost)
       .then(() => {
+        setRequesting(false);
         return setSuccess(true);
       })
       .catch(() => {
+        setRequesting(false);
         return closeModal();
       });
   };
@@ -284,7 +289,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 label={reportLabel}
                 fill={size === 'small' ? true : false}
                 onClick={handleReport}
-                disabled={reasons.every(rsn => !rsn)}
+                disabled={requesting ? true : reasons.every(rsn => !rsn) ? true : false}
               />
             </Box>
           </Box>
