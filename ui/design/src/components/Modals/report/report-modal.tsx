@@ -1,4 +1,5 @@
 import React from 'react';
+import { useToasts } from 'react-toast-notifications';
 import { Box, Text, RadioButton, FormField } from 'grommet';
 
 import { MainAreaCardBox } from '../../Cards/common/basic-card-box';
@@ -83,6 +84,8 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   const hiddenSpanRef = React.useRef<HTMLSpanElement>(null);
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
+  const { addToast } = useToasts();
+
   const options: string[] = [
     option1Label,
     option2Label,
@@ -136,6 +139,9 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   const handleReport = () => {
     // bypass for storybook
     if (storybook) {
+      addToast("Don't find fault. Find a remedy.", {
+        appearance: 'success',
+      });
       return setSuccess(true);
     }
     const filteredReasons = options.filter((option, indx) => {
@@ -159,13 +165,15 @@ const ReportModal: React.FC<IReportModalProps> = props => {
         if (status === 409) {
           throw new Error('This content has already been flagged by you');
         } else if (status === 500) {
-          throw new Error('nable to process your request right now Please try again later');
+          throw new Error('Unable to process your request right now. Please try again later');
         }
         return setSuccess(true);
       })
-      .catch(() => {
-        // @TODO: show error message in a toast here
+      .catch(error => {
         setRequesting(false);
+        return addToast(error.message, {
+          appearance: 'error',
+        });
       });
   };
 
