@@ -8,6 +8,7 @@ import { ModalContainer } from './common/fullscreen-modal-container';
 import { ModalRenderer } from './common/modal-renderer';
 import LoginModal from './login/login-modal';
 import ReportModal, { IReportModalProps } from './report/report-modal';
+import EditorModal from './editor/editor-modal';
 
 export {
   ListModal,
@@ -21,4 +22,5 @@ export {
   LoginModal,
   ReportModal,
   IReportModalProps,
+  EditorModal,
 };

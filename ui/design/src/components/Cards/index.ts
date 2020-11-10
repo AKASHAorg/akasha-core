@@ -5,6 +5,8 @@ import {
   ModalCard,
 } from './common/basic-card-box';
 import EditorCard from './editor-cards/editor-card';
+import CommentEditor from './editor-cards/comment-editor';
+import { EditorPlaceholder } from './editor-cards/editor-placeholder';
 import { EntryCard } from './entry-cards/entry-card';
 import { EntryBox } from './entry-cards/entry-box';
 import BoxFormCard from './form-cards/box-form-card';
@@ -33,7 +35,9 @@ export {
   ProfileCard,
   ProfileWidgetCard,
   ProfileMiniCard,
+  CommentEditor,
   EditorCard,
+  EditorPlaceholder,
   BasicCardBox,
   MainAreaCardBox,
   BoxFormCard,

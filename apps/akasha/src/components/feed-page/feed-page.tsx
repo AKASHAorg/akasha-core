@@ -18,6 +18,7 @@ import {
   updatePending,
   serializeToSlate,
   getMediaUrl,
+  uploadMediaToIpfs,
 } from '../../services/posting-service';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
@@ -35,6 +36,7 @@ const {
   ModalRenderer,
   ErrorInfoCard,
   useViewportSize,
+  EditorModal,
 } = DS;
 
 export interface FeedPageProps {
@@ -53,6 +55,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [feedState, feedStateActions] = useFeedReducer({});
   const [isLoading, setIsLoading] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
+  const [showEditor, setShowEditor] = React.useState(false);
   const [flagged, setFlagged] = React.useState('');
 
   const { size } = useViewportSize();
@@ -139,7 +142,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           CID: entry.post.CID,
           content: serializeToSlate(entry.post, ipfsGateway),
           entryId: entry.post.id,
-          time: new Date().toLocaleString(),
           ipfsLink: entry.id,
           permalink: 'null',
         };
@@ -157,10 +159,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     };
     setIsLoading(true);
     fetchEntries(req);
-  };
-
-  const handleBackNavigation = () => {
-    /* back navigation logic here */
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
@@ -206,6 +204,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     /* todo */
   };
 
+  const handleToggleEditor = () => {
+    setShowEditor(!showEditor);
+  };
+
+  const onUploadRequest = uploadMediaToIpfs(props.sdkModules.commons.ipfsService);
+
   const handleNavigateToPost = redirectToPost(props.navigateToUrl);
 
   const handleEntryPublish = async (authorEthAddr: string, content: any) => {
@@ -236,6 +240,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     } catch (err) {
       props.logger.error('Error publishing entry');
     }
+    setShowEditor(false);
   };
 
   return (
@@ -277,6 +282,24 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           />
         )}
       </ModalRenderer>
+      <EditorModal
+        slotId={props.layout.modalSlotId}
+        showModal={showEditor}
+        ethAddress={ethAddress as any}
+        postLabel={t('Publish')}
+        placeholderLabel={t('Write something')}
+        discardPostLabel={t('Discard Post')}
+        discardPostInfoLabel={t(
+          "You have not posted yet. If you leave now you'll discard your post.",
+        )}
+        keepEditingLabel={t('Keep Editing')}
+        onPublish={handleEntryPublish}
+        handleNavigateBack={handleToggleEditor}
+        getMentions={handleGetMentions}
+        getTags={handleGetTags}
+        uploadRequest={onUploadRequest}
+        style={{ width: '36rem' }}
+      />
       <VirtualList
         items={feedState.feedItems}
         itemsData={feedState.feedItemData}
@@ -343,16 +366,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           t,
           locale,
           isMobile,
-          handleBackNavigation,
           feedItems: feedState.feedItems,
           loggedEthAddress: ethAddress,
-          handlePublish: handleEntryPublish,
           pendingEntries: pendingEntries,
           onAvatarClick: handleAvatarClick,
-          handleGetMentions: handleGetMentions,
-          handleGetTags: handleGetTags,
-          ipfsService: props.sdkModules.commons.ipfsService,
           onContentClick: handleNavigateToPost,
+          handleEditorPlaceholderClick: handleToggleEditor,
         })}
       />
     </Box>

@@ -126,7 +126,7 @@ const Topbar = (props: ITopbarProps) => {
         <Avatar
           ethAddress={ethAddress}
           src={avatarImage}
-          size="xs"
+          size="sm"
           onClick={onClickPluginButton(menuItem)}
         />
       ) : (
