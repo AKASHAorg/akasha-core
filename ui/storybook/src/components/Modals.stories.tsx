@@ -12,6 +12,7 @@ const {
   Icon,
   MobileListModal,
   ReportModal,
+  ToastProvider,
   ViewportSizeProvider,
   useViewportSize,
 } = DS;
@@ -128,35 +129,37 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal'>) => {
         }}
       />
       {modalOpen && (
-        <ReportModal
-          titleLabel={titleLabel}
-          successTitleLabel={successTitleLabel}
-          successMessageLabel={successMessageLabel}
-          optionsTitleLabel={optionsTitleLabel}
-          option1Label={option1Label}
-          option2Label={option2Label}
-          option3Label={option3Label}
-          option4Label={option4Label}
-          option5Label={option5Label}
-          option6Label={option6Label}
-          descriptionLabel={descriptionLabel}
-          descriptionPlaceholder={descriptionPlaceholder}
-          footerText1Label={footerText1Label}
-          footerLink1Label={footerLink1Label}
-          footerUrl1={footerUrl1}
-          footerText2Label={footerText2Label}
-          footerLink2Label={footerLink2Label}
-          footerUrl2={footerUrl2}
-          cancelLabel={cancelLabel}
-          reportLabel={reportLabel}
-          blockLabel={blockLabel}
-          closeLabel={closeLabel}
-          storybook={true}
-          size={size}
-          closeModal={() => {
-            setModalOpen(false);
-          }}
-        />
+        <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
+          <ReportModal
+            titleLabel={titleLabel}
+            successTitleLabel={successTitleLabel}
+            successMessageLabel={successMessageLabel}
+            optionsTitleLabel={optionsTitleLabel}
+            option1Label={option1Label}
+            option2Label={option2Label}
+            option3Label={option3Label}
+            option4Label={option4Label}
+            option5Label={option5Label}
+            option6Label={option6Label}
+            descriptionLabel={descriptionLabel}
+            descriptionPlaceholder={descriptionPlaceholder}
+            footerText1Label={footerText1Label}
+            footerLink1Label={footerLink1Label}
+            footerUrl1={footerUrl1}
+            footerText2Label={footerText2Label}
+            footerLink2Label={footerLink2Label}
+            footerUrl2={footerUrl2}
+            cancelLabel={cancelLabel}
+            reportLabel={reportLabel}
+            blockLabel={blockLabel}
+            closeLabel={closeLabel}
+            storybook={true}
+            size={size}
+            closeModal={() => {
+              setModalOpen(false);
+            }}
+          />
+        </ToastProvider>
       )}
     </Box>
   );

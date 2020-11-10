@@ -1,3 +1,5 @@
+import { ToastProvider } from 'react-toast-notifications';
+
 import ListModal from './list/list-modal';
 import { MobileListModal } from './list/mobile-list-modal';
 import ShareModal from './share/share-modal';
@@ -22,5 +24,6 @@ export {
   LoginModal,
   ReportModal,
   IReportModalProps,
+  ToastProvider,
   EditorModal,
 };
