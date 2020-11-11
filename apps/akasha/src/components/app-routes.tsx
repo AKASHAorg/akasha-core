@@ -109,6 +109,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
             </Route>
             <Route path={routes[POSTS]}>
               <PostsPage
+                {...props}
                 sdkModules={sdkModules}
                 globalChannel={globalChannel}
                 logger={logger}
