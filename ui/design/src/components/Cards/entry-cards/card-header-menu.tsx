@@ -8,8 +8,8 @@ export interface ICardHeaderMenuProps {
   onMenuClose: () => void;
   flagAsLabel: string;
   onFlag: () => void;
-  copyIPFSLinkLabel: string;
-  onLinkCopy: (linkType: 'ipfs' | 'shareable') => () => void;
+  copyIPFSLinkLabel?: string;
+  onLinkCopy?: (linkType: 'ipfs' | 'shareable') => () => void;
 }
 
 const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
@@ -23,16 +23,18 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
       onEsc={onMenuClose}
     >
       <Box pad="xxsmall" width={{ min: '13rem' }}>
-        <StyledSelectBox>
-          <TextIcon
-            iconType="appIpfs"
-            label={copyIPFSLinkLabel}
-            onClick={onLinkCopy('ipfs')}
-            clickable={true}
-            iconSize="xs"
-            fontSize="small"
-          />
-        </StyledSelectBox>
+        {onLinkCopy && (
+          <StyledSelectBox>
+            <TextIcon
+              iconType="appIpfs"
+              label={copyIPFSLinkLabel}
+              onClick={onLinkCopy('ipfs')}
+              clickable={true}
+              iconSize="xs"
+              fontSize="small"
+            />
+          </StyledSelectBox>
+        )}
         <StyledSelectBox>
           <TextIcon
             iconType="report"
