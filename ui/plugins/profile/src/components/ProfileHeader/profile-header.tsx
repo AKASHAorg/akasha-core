@@ -43,6 +43,7 @@ export const ProfilePageHeader = (props: IProfileHeaderProps) => {
       appsLabel={'Apps'}
       usersLabel={'Users'}
       shareProfileLabel={'Share Profile'}
+      flagAsLabel={'Report Profile'}
     />
   );
 };

@@ -34,6 +34,7 @@ const createBaseComponent = (props: any) => (
     editProfileLabel="Edit"
     cancelLabel="Cancel"
     saveChangesLabel="Save Changes"
+    flagAsLabel="Report Profile"
     changeCoverImageLabel="Change Cover Image"
     getProfileProvidersData={props.getProfileProvidersData}
   />
