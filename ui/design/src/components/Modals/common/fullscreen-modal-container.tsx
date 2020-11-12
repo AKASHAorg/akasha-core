@@ -3,7 +3,8 @@ import { Box } from 'grommet';
 import styled from 'styled-components';
 
 export interface IModalContainerProps {
-  onModalClose: () => void;
+  onModalClose?: () => void;
+  style?: React.CSSProperties;
 }
 const StyledModalWrapper = styled(Box)`
   position: fixed;
@@ -14,7 +15,7 @@ const StyledModalWrapper = styled(Box)`
 `;
 export const ModalContainer: React.FC<IModalContainerProps> = props => {
   return (
-    <StyledModalWrapper fill={true} pad={{ top: '2em' }} align="center">
+    <StyledModalWrapper fill={true} pad={{ top: '2em' }} align="center" style={props.style}>
       <Box
         style={{ zIndex: 10 }}
         animation={{

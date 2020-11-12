@@ -6,7 +6,7 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { USERNAMES, TAGS } from './editor-data';
 
-const { Box, EditorCard } = DS;
+const { Box, EditorCard, EditorPlaceholder } = DS;
 
 const EditorComponent = () => {
   const [mentionsState, setMentionsState] = React.useState('');
@@ -42,8 +42,18 @@ const EditorComponent = () => {
   );
 };
 
-storiesOf('Cards/Editor Cards', module).add('editor card', () => (
-  <Box align="center" pad={{ top: '40px' }}>
-    {EditorComponent()}
-  </Box>
-));
+storiesOf('Cards/Editor Cards', module)
+  .add('editor card', () => (
+    <Box align="center" pad={{ top: '40px' }} width={{ max: '36rem' }}>
+      {EditorComponent()}
+    </Box>
+  ))
+  .add('placeholder editor card', () => (
+    <Box align="center" pad={{ top: '40px' }} width={{ max: '36rem' }}>
+      <EditorPlaceholder
+        avatar={text('Logged Profile Avatar', 'https://www.stevensegallery.com/360/360')}
+        ethAddress={text('Logged Profile EthAddress', '0x003410499401674320006570047391024572000')}
+        onClick={action('onClick')}
+      />
+    </Box>
+  ));

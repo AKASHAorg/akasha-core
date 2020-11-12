@@ -10,7 +10,7 @@ import { StyledProfileDrop } from './styled-entry-box';
 import { ProfileMiniCard } from '../profile-cards/profile-mini-card';
 import { IProfileData } from '../profile-cards/profile-widget-card';
 import { ISocialData } from './social-box';
-import { useViewportSize } from '../../Providers/viewport-dimension';
+import ViewportSizeProvider from '../../Providers/viewport-dimension';
 
 import { Slate, withReact, Editable } from 'slate-react';
 import { createEditor } from 'slate';
@@ -20,7 +20,7 @@ import { renderElement, renderLeaf } from '../../Editor/renderers';
 export interface IEntryData {
   CID?: string;
   content: any;
-  time: string;
+  time?: string | number | Date;
   replies?: IEntryData[];
   reposts?: number;
   ipfsLink: string;
@@ -104,8 +104,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onContentClick,
   } = props;
 
-  const size = useViewportSize().size;
-
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
   const [profileDropOpen, setProfileDropOpen] = React.useState(false);
   const [displayCID, setDisplayCID] = React.useState(false);
@@ -173,100 +171,101 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   };
 
   return (
-    <>
-      <Box direction="row" justify="between" pad={{ vertical: 'medium' }}>
-        <ProfileAvatarButton
-          label={entryData.author?.userName}
-          info={entryData.author?.ensName}
-          avatarImage={entryData.author?.avatar}
-          onClickAvatar={onClickAvatar}
-          onClick={() => setProfileDropOpen(!profileDropOpen)}
-          ethAddress={entryData.author?.ethAddress}
-          ref={profileRef}
-        />
-        {profileRef.current && profileDropOpen && (
-          <StyledProfileDrop
-            overflow="hidden"
-            target={profileRef.current}
-            align={{ top: 'bottom', left: 'left' }}
-            onClickOutside={() => setProfileDropOpen(false)}
-            onEsc={() => setProfileDropOpen(false)}
-          >
-            <Box width="20rem" round="small" flex="grow">
-              <ProfileMiniCard
-                profileData={entryData.author}
-                handleFollow={handleFollow}
-                handleUnfollow={handleUnfollow}
-              />
-            </Box>
-          </StyledProfileDrop>
-        )}
-        <Box direction="row" gap="xsmall" align="center">
-          <Text> {formatRelativeTime(entryData.time, locale)} </Text>
-          <Icon
-            type="akasha"
-            size="sm"
-            onClick={toggleDisplayCID}
-            ref={akashaRef}
-            clickable={true}
+    <ViewportSizeProvider>
+      <>
+        <Box direction="row" justify="between" pad={{ vertical: 'medium' }}>
+          <ProfileAvatarButton
+            label={entryData.author?.userName}
+            info={entryData.author?.ensName}
+            avatarImage={entryData.author?.avatar}
+            onClickAvatar={onClickAvatar}
+            onClick={() => setProfileDropOpen(!profileDropOpen)}
+            ethAddress={entryData.author?.ethAddress}
+            ref={profileRef}
           />
-          <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
+          {profileRef.current && profileDropOpen && (
+            <StyledProfileDrop
+              overflow="hidden"
+              target={profileRef.current}
+              align={{ top: 'bottom', left: 'left' }}
+              onClickOutside={() => setProfileDropOpen(false)}
+              onEsc={() => setProfileDropOpen(false)}
+            >
+              <Box width="20rem" round="small" flex="grow">
+                <ProfileMiniCard
+                  profileData={entryData.author}
+                  handleFollow={handleFollow}
+                  handleUnfollow={handleUnfollow}
+                />
+              </Box>
+            </StyledProfileDrop>
+          )}
+          <Box direction="row" gap="xsmall" align="center">
+            {entryData.time && <Text>{formatRelativeTime(entryData.time, locale)}</Text>}
+            <Icon
+              type="akasha"
+              size="sm"
+              onClick={toggleDisplayCID}
+              ref={akashaRef}
+              clickable={true}
+            />
+            <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
+          </Box>
         </Box>
-      </Box>
-      {entryData.CID && akashaRef.current && displayCID && (
-        <CardHeaderAkashaDropdown
-          target={akashaRef.current}
-          onMenuClose={() => {
-            setDisplayCID(false);
-          }}
-          CID={entryData.CID}
+        {entryData.CID && akashaRef.current && displayCID && (
+          <CardHeaderAkashaDropdown
+            target={akashaRef.current}
+            onMenuClose={() => {
+              setDisplayCID(false);
+            }}
+            CID={entryData.CID}
+          />
+        )}
+        {menuIconRef.current && menuDropOpen && (
+          <CardHeaderMenuDropdown
+            target={menuIconRef.current}
+            onMenuClose={closeMenuDrop}
+            onLinkCopy={handleLinkCopy}
+            onFlag={handleEntryFlag}
+            flagAsLabel={flagAsLabel}
+            copyIPFSLinkLabel={copyIPFSLinkLabel}
+          />
+        )}
+        <Box pad={{ vertical: 'medium' }} onClick={handleContentClick}>
+          <Slate
+            editor={editor}
+            value={entryData.content}
+            onChange={() => {
+              return;
+            }}
+          >
+            <Editable readOnly={true} renderElement={renderElement} renderLeaf={renderLeaf} />
+          </Slate>
+        </Box>
+        <CardActions
+          entryData={entryData}
+          loggedProfileEthAddress={loggedProfileEthAddress}
+          sharePostLabel={sharePostLabel}
+          shareTextLabel={shareTextLabel}
+          sharePostUrl={sharePostUrl}
+          repliesLabel={repliesLabel}
+          repostsLabel={repostsLabel}
+          repostLabel={repostLabel}
+          repostWithCommentLabel={repostWithCommentLabel}
+          isBookmarked={isBookmarked}
+          bookmarkLabel={bookmarkLabel}
+          bookmarkedLabel={bookmarkedLabel}
+          shareLabel={shareLabel}
+          copyLinkLabel={copyLinkLabel}
+          handleEntryBookmark={handleEntryBookmark}
+          onRepost={handleRepost(false)}
+          onRepostWithComment={handleRepost(true)}
+          onShare={handleEntryShare}
+          handleRepliesClick={handleRepliesClick}
+          onLinkCopy={handleLinkCopy('shareable')}
         />
-      )}
-      {menuIconRef.current && menuDropOpen && (
-        <CardHeaderMenuDropdown
-          target={menuIconRef.current}
-          onMenuClose={closeMenuDrop}
-          onLinkCopy={handleLinkCopy}
-          onFlag={handleEntryFlag}
-          flagAsLabel={flagAsLabel}
-          copyIPFSLinkLabel={copyIPFSLinkLabel}
-        />
-      )}
-      <Box pad={{ vertical: 'medium' }} onClick={handleContentClick}>
-        <Slate
-          editor={editor}
-          value={entryData.content}
-          onChange={() => {
-            return;
-          }}
-        >
-          <Editable readOnly={true} renderElement={renderElement} renderLeaf={renderLeaf} />
-        </Slate>
-      </Box>
-      <CardActions
-        entryData={entryData}
-        loggedProfileEthAddress={loggedProfileEthAddress}
-        sharePostLabel={sharePostLabel}
-        shareTextLabel={shareTextLabel}
-        sharePostUrl={sharePostUrl}
-        repliesLabel={repliesLabel}
-        repostsLabel={repostsLabel}
-        repostLabel={repostLabel}
-        repostWithCommentLabel={repostWithCommentLabel}
-        isBookmarked={isBookmarked}
-        bookmarkLabel={bookmarkLabel}
-        bookmarkedLabel={bookmarkedLabel}
-        shareLabel={shareLabel}
-        copyLinkLabel={copyLinkLabel}
-        handleEntryBookmark={handleEntryBookmark}
-        onRepost={handleRepost(false)}
-        onRepostWithComment={handleRepost(true)}
-        onShare={handleEntryShare}
-        handleRepliesClick={handleRepliesClick}
-        onLinkCopy={handleLinkCopy('shareable')}
-        size={size}
-      />
-    </>
+      </>
+    </ViewportSizeProvider>
   );
 };
 

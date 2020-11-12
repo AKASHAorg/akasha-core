@@ -3,17 +3,12 @@ import { MainAreaCardBox } from '../common/basic-card-box';
 import { SocialBox } from './social-box';
 import { IEntryBoxProps, EntryBox } from './entry-box';
 import { Box } from 'grommet';
-import ViewportSizeProvider from '../../Providers/viewport-dimension';
 
 export interface IEntryCardProps extends IEntryBoxProps {
   // labels
   repostedThisLabel?: string;
   andLabel?: string;
   othersLabel?: string;
-  // share data
-  sharePostLabel?: string;
-  shareTextLabel: string;
-  sharePostUrl: string;
   // external css
   className?: string;
   style?: React.CSSProperties;
@@ -59,50 +54,48 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
   } = props;
 
   return (
-    <ViewportSizeProvider>
-      <MainAreaCardBox className={className} style={style} rootNodeRef={rootNodeRef}>
-        {entryData.socialData && entryData.socialData.users.length > 0 && (
-          <SocialBox
-            socialData={entryData.socialData}
-            repostedThisLabel={repostedThisLabel}
-            andLabel={andLabel}
-            othersLabel={othersLabel}
-          />
-        )}
-        <Box pad={{ horizontal: 'medium' }}>
-          <EntryBox
-            entryData={entryData}
-            sharePostLabel={sharePostLabel}
-            shareTextLabel={shareTextLabel}
-            sharePostUrl={sharePostUrl}
-            onClickAvatar={onClickAvatar}
-            repostsLabel={repostsLabel}
-            repostLabel={repostLabel}
-            repostWithCommentLabel={repostWithCommentLabel}
-            repliesLabel={repliesLabel}
-            shareLabel={shareLabel}
-            flagAsLabel={flagAsLabel}
-            copyLinkLabel={copyLinkLabel}
-            locale={locale}
-            loggedProfileAvatar={loggedProfileAvatar}
-            loggedProfileEthAddress={loggedProfileEthAddress}
-            onEntryBookmark={onEntryBookmark}
-            isBookmarked={isBookmarked}
-            bookmarkLabel={bookmarkLabel}
-            bookmarkedLabel={bookmarkedLabel}
-            onRepost={onRepost}
-            onClickReplies={onClickReplies}
-            onEntryShare={onEntryShare}
-            onEntryFlag={onEntryFlag}
-            onLinkCopy={onLinkCopy}
-            copyIPFSLinkLabel={copyIPFSLinkLabel}
-            handleFollow={handleFollow}
-            handleUnfollow={handleUnfollow}
-            onContentClick={onContentClick}
-          />
-        </Box>
-      </MainAreaCardBox>
-    </ViewportSizeProvider>
+    <MainAreaCardBox className={className} style={style} rootNodeRef={rootNodeRef}>
+      {entryData.socialData && entryData.socialData.users.length > 0 && (
+        <SocialBox
+          socialData={entryData.socialData}
+          repostedThisLabel={repostedThisLabel}
+          andLabel={andLabel}
+          othersLabel={othersLabel}
+        />
+      )}
+      <Box pad={{ horizontal: 'medium' }}>
+        <EntryBox
+          entryData={entryData}
+          sharePostLabel={sharePostLabel}
+          shareTextLabel={shareTextLabel}
+          sharePostUrl={sharePostUrl}
+          onClickAvatar={onClickAvatar}
+          repostsLabel={repostsLabel}
+          repostLabel={repostLabel}
+          repostWithCommentLabel={repostWithCommentLabel}
+          repliesLabel={repliesLabel}
+          shareLabel={shareLabel}
+          flagAsLabel={flagAsLabel}
+          copyLinkLabel={copyLinkLabel}
+          locale={locale}
+          loggedProfileAvatar={loggedProfileAvatar}
+          loggedProfileEthAddress={loggedProfileEthAddress}
+          onEntryBookmark={onEntryBookmark}
+          isBookmarked={isBookmarked}
+          bookmarkLabel={bookmarkLabel}
+          bookmarkedLabel={bookmarkedLabel}
+          onRepost={onRepost}
+          onClickReplies={onClickReplies}
+          onEntryShare={onEntryShare}
+          onEntryFlag={onEntryFlag}
+          onLinkCopy={onLinkCopy}
+          copyIPFSLinkLabel={copyIPFSLinkLabel}
+          handleFollow={handleFollow}
+          handleUnfollow={handleUnfollow}
+          onContentClick={onContentClick}
+        />
+      </Box>
+    </MainAreaCardBox>
   );
 };
 
