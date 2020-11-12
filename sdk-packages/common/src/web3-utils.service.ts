@@ -1,9 +1,10 @@
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import { utils } from 'ethers';
+import ethers, { utils } from 'ethers';
 import { WEB3_UTILS_SERVICE } from './constants';
 
 const service: AkashaService = (invoke, log) => {
-  const getUtils = async () => utils;
+  const mergedUtils = Object.assign({}, utils, { BigNumber: ethers.BigNumber });
+  const getUtils = async () => mergedUtils;
   return { getUtils };
 };
 

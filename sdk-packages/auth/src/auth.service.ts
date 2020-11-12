@@ -6,14 +6,7 @@ import commonServices, {
 import { EthProviders } from '@akashaproject/ui-awf-typings';
 import coreServices from '@akashaproject/sdk-core/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import dbServices, {
-  DB_NAME,
-  DB_PASSWORD,
-  DB_SERVICE,
-  DB_SETTINGS_ATTACHMENT,
-  moduleName as DB_MODULE,
-} from '@akashaproject/sdk-db/lib/constants';
-import * as superagent from 'superagent';
+import { DB_NAME, DB_PASSWORD, moduleName as DB_MODULE } from '@akashaproject/sdk-db/lib/constants';
 import {
   AUTH_CACHE,
   AUTH_ENDPOINT,
@@ -23,50 +16,81 @@ import {
   moduleName,
   tokenCache,
 } from './constants';
+import { Client, PrivateKey, Users, Buckets } from '@textile/hub';
+import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 
 const service: AkashaService = (invoke, log) => {
-  const getJWT = async (args: { eth_address: string; signature: string }) => {
+  let identity: PrivateKey;
+  let hubClient: Client;
+  let hubUser: Users;
+  let buckClient: Buckets;
+  const providerKey = '@providerType';
+  const signIn = async (provider: EthProviders = EthProviders.Web3Injected) => {
+    let currentProvider;
+    const { setServiceSettings } = invoke(coreServices.SETTINGS_SERVICE);
+    const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
+
+    if (provider === EthProviders.None) {
+      if (!sessionStorage.getItem(providerKey)) {
+        throw new Error('The provider must have a wallet/key in order to authenticate.');
+      }
+      currentProvider = sessionStorage.getItem(providerKey);
+    } else {
+      currentProvider = provider;
+      sessionStorage.setItem(providerKey, currentProvider);
+    }
+
+    const web3 = await invoke(commonServices[WEB3_SERVICE]).web3(currentProvider);
+    const web3Utils = await invoke(commonServices[WEB3_UTILS_SERVICE]).getUtils();
+
     const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);
     const authSettings = await getSettings(moduleName);
     const endPoint = authSettings[AUTH_ENDPOINT];
-    log.info(`getting a new JWT from ${endPoint}`);
-    const res = await superagent.post(endPoint).send(args).set('accept', 'json');
-    return res.text;
-  };
-
-  const signIn = async (provider: EthProviders = EthProviders.Web3Injected) => {
-    const { setServiceSettings } = invoke(coreServices.SETTINGS_SERVICE);
-    const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
-    const web3 = await invoke(commonServices[WEB3_SERVICE]).web3(provider);
-    const web3Utils = await invoke(commonServices[WEB3_UTILS_SERVICE]).getUtils();
-    if (provider === EthProviders.None) {
-      throw new Error('The provider must have a wallet/key in order to authenticate.');
-    }
     const signer = web3.getSigner();
     const address = await signer.getAddress();
     await setServiceSettings(DB_MODULE, [
       [DB_PASSWORD, web3Utils.id(address)],
       [DB_NAME, `ewa01${address.toLowerCase()}`], // so it doesn't crash for multiple auth users using the same browser
     ]);
-    const attachment = await invoke(dbServices[DB_SETTINGS_ATTACHMENT]);
-    const authAttachmentToken = await attachment.get({ id: 'auth_token', ethAddress: address });
-    if (authAttachmentToken) {
-      cache.set(AUTH_CACHE, { [ethAddressCache]: address, [tokenCache]: authAttachmentToken });
-      return { token: authAttachmentToken, ethAddress: address };
+    const sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
+    if (sessionStorage.getItem(sessKey)) {
+      identity = PrivateKey.fromString(sessionStorage.getItem(sessKey));
+    } else {
+      const sig = await signer.signMessage(AUTH_MESSAGE);
+      identity = await generatePrivateKey(signer, address, sig, web3Utils);
+      sessionStorage.setItem(sessKey, identity.toString());
     }
-    const sig = await signer.signMessage(AUTH_MESSAGE);
-    const token = await getJWT({ eth_address: address, signature: sig });
 
-    await invoke(dbServices[DB_SERVICE]).getDB();
-    await attachment.put({
-      obj: { id: 'auth_token', type: 'string', data: token },
-      ethAddress: address,
+    const userAuth = loginWithChallenge(identity, signer);
+    hubClient = Client.withUserAuth(userAuth, endPoint);
+    hubUser = Users.withUserAuth(userAuth, endPoint);
+    buckClient = Buckets.withUserAuth(userAuth, endPoint);
+    const token = await hubClient.getToken(identity);
+    cache.set(AUTH_CACHE, {
+      [ethAddressCache]: address,
+      [tokenCache]: token,
     });
-    cache.set(AUTH_CACHE, { [ethAddressCache]: address, [tokenCache]: token });
-    return { token, ethAddress: address };
+    return { client: hubClient, user: hubUser, token: token, ethAddress: address };
   };
 
-  return { getJWT, signIn };
+  const getSession = async () => {
+    if (!sessionStorage.getItem(providerKey)) {
+      throw new Error('No previous session found');
+    }
+
+    if (!identity) {
+      await signIn(EthProviders.None);
+    }
+
+    return {
+      identity,
+      client: hubClient,
+      user: hubUser,
+      buck: buckClient,
+    };
+  };
+
+  return { signIn, getSession };
 };
 
 export default { service, name: AUTH_SERVICE };
