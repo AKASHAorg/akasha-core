@@ -36,7 +36,7 @@ const config = {
     new webpack.AutomaticPrefetchPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: path.resolve(__dirname, '../../examples/ui/feed-app/public/template-index.html'),
+      template: path.resolve(__dirname, '../../examples/ui/ethereum.world/public/template-index.html'),
       inject: true,
     }),
     new InjectManifest({
@@ -49,8 +49,6 @@ const config = {
   mode: process.env.NODE_ENV || 'development',
   externals: [
     /^single-spa$/,
-    /^rxjs$/,
-    /^rxjs\/operators$/,
     /^@truffle\/contract$/,
   ],
 };

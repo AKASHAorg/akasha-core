@@ -12,7 +12,8 @@
     "start:expose": "webpack-dev-server --config ./webpack.config.js --port 8131 --host 0.0.0.0",
     "prepare": "tsc --build",
     "prestart": "tsc --build",
-    "build:staging": "webpack --config ./webpack.config.js"
+    "build:staging": "webpack --config ./webpack.config.js",
+    "serve": "serve -p 30461 -c ./serve.json ./dist"
   },
   "browserslist": [
     ">0.2%",

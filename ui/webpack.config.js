@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const commons = require('./app.pack.conf');
 
 module.exports = {
@@ -8,7 +7,11 @@ module.exports = {
   mode: process.env.NODE_ENV || 'development',
   target: 'web',
   module: {
-    rules: [{ parser: { System: false } }, { test: /\.ts(x)?$/, use: 'ts-loader' }],
+    rules: [
+      { parser: { system: false } },
+      { test: /\.ts(x)?$/, use: 'ts-loader' },
+      { test: /.(js|mjs)$/, loader: 'babel-loader', resolve: { fullySpecified: false } }
+    ],
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
@@ -24,7 +27,6 @@ module.exports = {
       modulesCount: 100,
       profile: true,
     }),
-    new HtmlWebpackPlugin(),
   ],
   devtool: 'source-map',
   externals: commons.externals,

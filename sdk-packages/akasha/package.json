@@ -26,7 +26,7 @@
     "tsc": "tsc --build && tsc -p tsconfig.sw.json",
     "prepare": "npm run tsc",
     "build": "rimraf dist && NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.dev.config.js",
-    "postbuild": "copyfiles -f ./dist/*.js ./dist/index.html ../../examples/ui/feed-app/public",
+    "postbuild": "copyfiles -f ./dist/*.js ./dist/index.html ../../examples/ui/ethereum.world/public",
     "docs": "typedoc"
   },
   "bugs": {
@@ -41,7 +41,8 @@
     "@akashaproject/sdk-ui-plugin-loader": "*",
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/sdk-registry": "*",
-    "rxdb": "8.9.0"
+    "rxdb": "8.9.0",
+    "rxjs": "6.6.3"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",

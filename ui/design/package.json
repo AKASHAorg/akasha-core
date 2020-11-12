@@ -34,7 +34,8 @@
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/*design-system.* ../build/",
-    "pack:watch": "nodemon"
+    "pack:watch": "nodemon",
+    "serve": "serve -p 53219 -s ./dist"
   },
   "nodemonConfig": {
     "ignore": [

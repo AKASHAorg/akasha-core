@@ -99,8 +99,8 @@ const LineChart: React.FC<ILineChart> = props => {
         <LinePath
           curve={curveCardinal}
           data={data}
-          x={d => xScale(getX(d))}
-          y={d => yScale(getY(d))}
+          x={d => xScale(getX(d)) || 0}
+          y={d => yScale(getY(d)) || 0}
           stroke={'#4E71FF'}
           strokeWidth={1}
           pointerEvents="none"

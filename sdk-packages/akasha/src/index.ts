@@ -11,11 +11,12 @@ import * as operators from 'rxjs/operators';
 import { forkJoin, from, zip, of, concat } from 'rxjs';
 import startApi from './api';
 
-export function init(appLoaderOptions: {
+export default function init(appLoaderOptions: {
   config: ILoaderConfig;
   initialApps: { plugins?: IPluginEntry[]; widgets?: IWidgetEntry[] };
 }) {
   // tslint:disable-next-line:no-console
+  console.log('sdk init called!');
   const di: DIContainer = initDI();
   // general channel to send service calls
   const channel = initChannel(di);

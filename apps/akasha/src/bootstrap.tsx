@@ -24,12 +24,7 @@ export const application: Application = {
     loadNS: [],
     use: [initReactI18next],
   },
-  loadingFn: (): Promise<any> =>
-    import(
-      /* webpackChunkName: "AKASHAChunk" */
-      /* webpackMode: "lazy" */
-      './components'
-    ),
+  loadingFn: (): Promise<any> => import('./components'),
   name: 'AKASHA-app',
   sdkModules: [{ module: commons }, { module: dbModule }, { module: auth }, { module: profiles }],
   menuItems: routes,
