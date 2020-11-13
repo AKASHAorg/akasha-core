@@ -48,6 +48,7 @@ storiesOf('Cards/Profile Cards', module)
         saveChangesLabel={text('Save Edit', saveChangesLabel)}
         flagAsLabel={text('Report Label', 'Report Profile')}
         flaggable={true}
+        onEntryFlag={() => null}
         getProfileProvidersData={() => action('Gettting full Profile Data')('Synthetic Event')}
       />
     </Box>
