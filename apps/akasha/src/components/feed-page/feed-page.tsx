@@ -49,7 +49,7 @@ export interface FeedPageProps {
   ethAddress: string | null;
   jwtToken: string | null;
   modalOpen: boolean;
-  setModalOpen: React.Dispatch<React.SetStateAction<Boolean>>;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onError: (err: Error) => void;
 }
 

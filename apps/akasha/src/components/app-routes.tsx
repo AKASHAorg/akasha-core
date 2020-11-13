@@ -49,14 +49,13 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
 
   React.useEffect(() => {
     if (jwtToken) {
-      setTimeout(() => {
-        setLoginModalState(false);
-      }, 1000);
+      setLoginModalState(false);
     }
   }, [jwtToken]);
 
   React.useEffect(() => {
     if (ethAddress) {
+      setLoginModalState(false);
       setModalOpen(true);
     }
   }, [ethAddress]);
