@@ -14,28 +14,27 @@ const StyledProfileCard = styled(ProfileCard)`
 export interface IProfileHeaderProps {
   profileId: string;
   profileData: Partial<IProfileData>;
+  loggedUserEthAddress?: string;
+  modalOpen: boolean;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   showLoginModal: () => void;
 }
 
 export const ProfilePageHeader = (props: IProfileHeaderProps & RootComponentProps) => {
-  const { profileData, showLoginModal } = props;
+  const { profileData, loggedUserEthAddress, modalOpen, setModalOpen, showLoginModal } = props;
 
-  const [modalOpen, setModalOpen] = React.useState(false);
   const [flagged, setFlagged] = React.useState('');
 
   const { size } = useViewportSize();
 
   const { t } = useTranslation();
 
-  const handleEntryFlag = (entryId: string, user?: string | null) => () => {
+  const handleEntryFlag = (entryId: string) => () => {
     /* todo */
-    if (!user) {
+    if (!loggedUserEthAddress) {
       return showLoginModal();
     }
-
-    if (entryId) {
-      setFlagged(entryId);
-    }
+    setFlagged(entryId);
     setModalOpen(true);
   };
 
@@ -75,8 +74,8 @@ export const ProfilePageHeader = (props: IProfileHeaderProps & RootComponentProp
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
               closeLabel={t('Close')}
-              user={profileData.ethAddress ? profileData.ethAddress : ''}
-              contentId={flagged}
+              user={loggedUserEthAddress ? loggedUserEthAddress : ''}
+              contentId={profileData.ethAddress ? profileData.ethAddress : flagged}
               size={size}
               closeModal={() => {
                 setModalOpen(false);
@@ -104,11 +103,7 @@ export const ProfilePageHeader = (props: IProfileHeaderProps & RootComponentProp
         shareProfileLabel={'Share Profile'}
         flaggable={true}
         flagAsLabel={'Report Profile'}
-        // @TODO: replace with appropriate logged profile address
-        onEntryFlag={handleEntryFlag(
-          profileData.ethAddress ? profileData.ethAddress : '',
-          profileData.name,
-        )}
+        onEntryFlag={handleEntryFlag(profileData.ethAddress ? profileData.ethAddress : '')}
       />
     </>
   );

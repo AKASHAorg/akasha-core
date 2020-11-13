@@ -5,7 +5,17 @@ import { useProfile } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 import { useParams } from 'react-router-dom';
 
-const ProfilePage = (props: RootComponentProps) => {
+export interface ProfilePageProps {
+  modalOpen: boolean;
+  ethAddress?: string;
+  onLogin: (param: 1 | 2) => void;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  showLoginModal: () => void;
+}
+
+const ProfilePage = (props: RootComponentProps & ProfilePageProps) => {
+  const { modalOpen, ethAddress, setModalOpen, showLoginModal } = props;
+
   const { profileId } = useParams() as any;
   const [profileState, profileActions] = useProfile({
     onError: err => {
@@ -29,7 +39,10 @@ const ProfilePage = (props: RootComponentProps) => {
         {...props}
         profileData={profileState}
         profileId={profileId}
-        showLoginModal={() => null}
+        modalOpen={modalOpen}
+        loggedUserEthAddress={ethAddress}
+        setModalOpen={setModalOpen}
+        showLoginModal={showLoginModal}
       />
     </div>
   );
