@@ -14,6 +14,13 @@ export interface ICardHeaderMenuProps {
 
 const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
   const { target, onMenuClose, flagAsLabel, onFlag, copyIPFSLinkLabel, onLinkCopy } = props;
+
+  const handleClick = (handler: () => void) => () => {
+    // hide menu dropdown when clicked
+    handler();
+    return onMenuClose();
+  };
+
   return (
     <StyledDrop
       overflow="hidden"
@@ -28,7 +35,7 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
             <TextIcon
               iconType="appIpfs"
               label={copyIPFSLinkLabel}
-              onClick={onLinkCopy('ipfs')}
+              onClick={handleClick(onLinkCopy('ipfs'))}
               clickable={true}
               iconSize="xs"
               fontSize="small"
@@ -39,7 +46,7 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
           <TextIcon
             iconType="report"
             label={flagAsLabel}
-            onClick={onFlag}
+            onClick={handleClick(onFlag)}
             color={'red'}
             iconSize="xs"
             fontSize="small"
