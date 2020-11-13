@@ -36,6 +36,8 @@ const createBaseComponent = (props: any) => (
     saveChangesLabel="Save Changes"
     flagAsLabel="Report Profile"
     changeCoverImageLabel="Change Cover Image"
+    flaggable={true}
+    onEntryFlag={() => null}
     getProfileProvidersData={props.getProfileProvidersData}
   />
 );

@@ -46,6 +46,8 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   cancelLabel: string;
   saveChangesLabel: string;
   flagAsLabel: string;
+  flaggable: boolean;
+  onEntryFlag: () => void;
   getProfileProvidersData: () => void;
 }
 
@@ -67,6 +69,8 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     cancelLabel,
     saveChangesLabel,
     flagAsLabel,
+    flaggable,
+    onEntryFlag,
     getProfileProvidersData,
     profileProvidersData,
     canUserEdit,
@@ -127,10 +131,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
 
   const closeMenuDrop = () => {
     setMenuDropOpen(false);
-  };
-
-  const handleEntryFlag = () => {
-    // todo
   };
 
   const handleChangeAvatar = (provider: IProfileDataProvider) => {
@@ -263,12 +263,14 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               />
             </Box>
           )}
-          <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
+          {flaggable && (
+            <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
+          )}
           {menuIconRef.current && menuDropOpen && (
             <CardHeaderMenuDropdown
               target={menuIconRef.current}
               onMenuClose={closeMenuDrop}
-              onFlag={handleEntryFlag}
+              onFlag={onEntryFlag}
               flagAsLabel={flagAsLabel}
             />
           )}

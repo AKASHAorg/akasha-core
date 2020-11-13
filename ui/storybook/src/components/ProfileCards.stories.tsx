@@ -47,6 +47,7 @@ storiesOf('Cards/Profile Cards', module)
         cancelLabel={text('Cancel Edit', cancelLabel)}
         saveChangesLabel={text('Save Edit', saveChangesLabel)}
         flagAsLabel={text('Report Label', 'Report Profile')}
+        flaggable={true}
         getProfileProvidersData={() => action('Gettting full Profile Data')('Synthetic Event')}
       />
     </Box>
