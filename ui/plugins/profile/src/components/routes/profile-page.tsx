@@ -25,7 +25,12 @@ const ProfilePage = (props: RootComponentProps) => {
       <DS.Helmet>
         <title>Profile | {profileId} Page</title>
       </DS.Helmet>
-      <ProfilePageHeader profileData={profileState} profileId={profileId} />
+      <ProfilePageHeader
+        {...props}
+        profileData={profileState}
+        profileId={profileId}
+        showLoginModal={() => null}
+      />
     </div>
   );
 };
