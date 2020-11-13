@@ -32,20 +32,15 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   const authorize = profileStore.useStoreActions(
     (act: ActionMapper<LoggedProfileStateModel, '1'>) => act.authorize,
   );
-  const [loginModalState, setLoginModalState] = React.useState({
-    showLoginModal: false,
-  });
+  const [loginModalState, setLoginModalState] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
 
   const showLoginModal = () => {
-    setLoginModalState({
-      showLoginModal: true,
-    });
+    setLoginModalState(true);
   };
 
   const hideLoginModal = () => {
-    setLoginModalState({
-      showLoginModal: false,
-    });
+    setLoginModalState(false);
   };
 
   const handleLogin = (providerId: number) => {
@@ -55,12 +50,16 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   React.useEffect(() => {
     if (jwtToken) {
       setTimeout(() => {
-        setLoginModalState({
-          showLoginModal: false,
-        });
+        setLoginModalState(false);
       }, 1000);
     }
   }, [jwtToken]);
+
+  React.useEffect(() => {
+    if (ethAddress) {
+      setModalOpen(true);
+    }
+  }, [ethAddress]);
 
   useGlobalLogin(
     globalChannel,
@@ -73,9 +72,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     err => {
       logger.error('[app-routes.tsx]: useGlobalState err %j', err.error);
       onError(err.error);
-      setLoginModalState({
-        showLoginModal: false,
-      });
+      setLoginModalState(false);
     },
   );
 
@@ -104,6 +101,8 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
                 showLoginModal={showLoginModal}
                 ethAddress={ethAddress}
                 jwtToken={jwtToken}
+                modalOpen={modalOpen}
+                setModalOpen={setModalOpen}
                 onError={onError}
               />
             </Route>
@@ -122,7 +121,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           </Switch>
         </Router>
         <LoginModal
-          showModal={loginModalState.showLoginModal}
+          showModal={loginModalState}
           slotId={layout.modalSlotId}
           onLogin={handleLogin}
           onModalClose={hideLoginModal}

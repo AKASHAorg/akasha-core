@@ -48,14 +48,23 @@ export interface FeedPageProps {
   showLoginModal: () => void;
   ethAddress: string | null;
   jwtToken: string | null;
+  modalOpen: boolean;
+  setModalOpen: React.Dispatch<React.SetStateAction<Boolean>>;
   onError: (err: Error) => void;
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const { isMobile, showLoginModal, ethAddress, jwtToken, onError } = props;
+  const {
+    isMobile,
+    modalOpen,
+    setModalOpen,
+    showLoginModal,
+    ethAddress,
+    jwtToken,
+    onError,
+  } = props;
   const [feedState, feedStateActions] = useFeedReducer({});
   const [isLoading, setIsLoading] = React.useState(false);
-  const [modalOpen, setModalOpen] = React.useState(false);
   const [showEditor, setShowEditor] = React.useState(false);
   const [flagged, setFlagged] = React.useState('');
 
@@ -181,6 +190,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleEntryFlag = (entryId: string, user?: string | null) => () => {
     /* todo */
     if (!user) {
+      // setting entryId to state first, if not logged in
+      setFlagged(entryId);
       return showLoginModal();
     }
     setFlagged(entryId);
