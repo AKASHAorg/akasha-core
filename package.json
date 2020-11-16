@@ -36,7 +36,6 @@
   "devDependencies": {
     "@babel/core": "7.12.3",
     "@babel/plugin-syntax-dynamic-import": "7.8.3",
-    "@babel/plugin-transform-runtime": "7.12.1",
     "@babel/preset-env": "7.12.1",
     "@babel/preset-typescript": "7.12.1",
     "@babel/preset-react": "7.12.5",
@@ -47,6 +46,7 @@
     "clean-webpack-plugin": "3.0.0",
     "copy-webpack-plugin": "6.3.0",
     "copyfiles": "2.4.0",
+    "core-js": "3.7.0",
     "html-webpack-plugin": "4.5.0",
     "husky": "4.3.0",
     "i18next-parser": "3.3.0",
@@ -57,6 +57,7 @@
     "pretty-quick": "3.1.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "regenerator-runtime": "0.13.7",
     "rxjs": "6.6.3",
     "source-map-loader": "1.1.2",
     "styled-components": "5.2.1",
@@ -73,9 +74,6 @@
     "webpack": "5.4.0",
     "webpack-cli": "4.2.0",
     "webpack-dev-server": "3.11.0"
-  },
-  "dependencies": {
-    "@babel/runtime": "7.12.5"
   },
   "workspaces": [
     "sdk-packages/*",

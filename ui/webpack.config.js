@@ -15,15 +15,17 @@ module.exports = {
         exclude: /node_modules/,
         options: {
           presets: [
+            [
+              '@babel/preset-env', {
+                useBuiltIns: 'usage',
+                corejs: 3,
+                targets: '> 0.25%, not dead'
+              }
+            ],
             '@babel/preset-react',
             '@babel/preset-typescript'
           ],
           plugins: [
-            [
-              '@babel/plugin-transform-runtime', {
-                regenerator: true
-              }
-            ],
             '@babel/plugin-proposal-class-properties'
           ]
         },
