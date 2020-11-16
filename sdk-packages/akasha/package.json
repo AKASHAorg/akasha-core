@@ -41,6 +41,7 @@
     "@akashaproject/sdk-ui-plugin-loader": "*",
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/sdk-registry": "*",
+    "single-spa-react": "3.0.1",
     "rxdb": "8.9.0",
     "rxjs": "6.6.3"
   },

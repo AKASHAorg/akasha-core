@@ -14,8 +14,18 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
         options: {
-          presets: ['@babel/preset-react', '@babel/preset-typescript'],
-          plugins: ['@babel/plugin-proposal-class-properties']
+          presets: [
+            '@babel/preset-react',
+            '@babel/preset-typescript'
+          ],
+          plugins: [
+            [
+              '@babel/plugin-transform-runtime', {
+                regenerator: true
+              }
+            ],
+            '@babel/plugin-proposal-class-properties'
+          ]
         },
       },
       { test: /.(js|mjs)$/, loader: 'babel-loader', resolve: { fullySpecified: false } }

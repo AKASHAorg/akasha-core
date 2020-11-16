@@ -5,7 +5,6 @@ export const loadScripts = async (scripts: { src: string; type?: string }[]) => 
   return new Promise((resolve, reject) => {
     const onLoad = (ev: Event) => {
       loadedScriptsCount += 1;
-      console.log('script loaded!', loadedScriptsCount, totalScriptsCount, ev);
       if (loadedScriptsCount === totalScriptsCount) {
         return resolve();
       }

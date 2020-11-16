@@ -11,7 +11,7 @@ module.exports = Object.assign(baseConfig, {
       name: packageName.replace(/\@/g, '').replace(/\//g, '__').replace(/\-/g, '_'),
       filename: 'remoteEntry.js',
       exposes: {
-        './app': './src/index'
+        './app': './src/bootstrap'
       },
       shared: {
         react: {

@@ -6,10 +6,11 @@ const baseConfig = require('../../../ui/webpack.config');
 
 module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    port: 3001,
-  },
+  entry: './src/bootstrap',
+  // devServer: {
+  //   contentBase: path.join(__dirname, 'dist'),
+  //   port: 3001,
+  // },
   // module: {
   //   rules: baseConfig.module.rules.concat([
   //     {

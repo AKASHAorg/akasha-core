@@ -97,12 +97,14 @@ const bootstrap = async () => {
   scriptLoader.subscribe('layout', module => {
     appConfig.layout = module.application;
     if (appConfig.rootLoadedApp) {
+      console.log('about to init sdk, in layout', appConfig);
       initializeSdk(appConfig);
     }
   });
 
   scriptLoader.subscribe('rootApp', module => {
     appConfig.rootLoadedApp = module.application;
+    console.log('about to init sdk', appConfig);
     if (appConfig.layout) {
       initializeSdk(appConfig);
     }
