@@ -25,5 +25,3 @@ module.exports = Object.assign(baseConfig, {
     }),
   ])
 });
-
-module.exports = config;
