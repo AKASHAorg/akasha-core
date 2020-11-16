@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const name = require('./package.json').name;
 const { InjectManifest } = require('workbox-webpack-plugin');
 
 const config = {
@@ -16,6 +16,7 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'akasha.sdk.js',
+    library: name.replace(/@/, '').replace(/\//, '__').replace(/\-/, '_'),
     libraryTarget: 'umd',
     publicPath: '/',
   },
@@ -48,9 +49,8 @@ const config = {
   devtool: 'source-map',
   mode: process.env.NODE_ENV || 'development',
   externals: [
-    /^single-spa$/,
     /^@truffle\/contract$/,
-  ],
+  ]
 };
 
 module.exports = config;

@@ -21,6 +21,8 @@ import fourOhFour from './404';
 import TranslationManager from './i18n';
 import detectMobile from 'ismobilejs';
 
+import createTemplateElement from './create-template-element';
+
 import { setPageTitle } from './setPageMetadata';
 import { Application } from '@akashaproject/ui-awf-typings';
 
@@ -121,7 +123,6 @@ export default class AppLoader implements IAppLoader {
 
     // register event listeners
     this.addSingleSpaEventListeners();
-
     // call as fast as possible
     // https://github.com/single-spa/single-spa/issues/484
     singleSpa.start({
@@ -134,7 +135,7 @@ export default class AppLoader implements IAppLoader {
   public installApp() {
     // todo
   }
-
+  public static createTemplateElement = createTemplateElement;
   public async uninstallApp(appName: string, packageLoader: any, packageId: string) {
     if (this.registeredIntegrations.has(appName)) {
       await singleSpa.unloadApplication(appName, { waitForUnmount: true });
@@ -407,7 +408,7 @@ export default class AppLoader implements IAppLoader {
     if (!currentPlugins.length) {
       const pluginsNode = document.getElementById(this.config.layout.pluginSlotId);
       // create a 404 page and return it instead of a plugin
-      const FourOhFourNode: ChildNode = fourOhFour();
+      const FourOhFourNode: ChildNode = fourOhFour;
       if (pluginsNode) {
         pluginsNode.appendChild(FourOhFourNode);
       }

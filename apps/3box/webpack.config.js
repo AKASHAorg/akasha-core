@@ -1,15 +1,28 @@
 const path = require('path');
-const baseConfig = require('../../ui/webpack.config');
+const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+const baseConfig = require('../../webpack.config');
 
-const config = {
+module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
-  output: {
-    libraryTarget: baseConfig.output.libraryTarget,
-    //library: '3box-app-ewa',
-    path: path.resolve(__dirname, 'dist'),
-    filename: '3box-app.js',
-    publicPath: '/apps/',
-  },
-};
-
-module.exports = Object.assign({}, baseConfig, config);
+  plugins: baseConfig.plugins.concat([
+    new ModuleFederationPlugin({
+      // akashaproject__app_3box_integration
+      name: packageName.replace(/\@/g, '').replace(/\//g, '__').replace(/\-/g, '_'),
+      filename: 'remoteEntry.js',
+      exposes: {
+        './app': './src/index'
+      },
+      shared: {
+        react: {
+          singleton: true,
+        },
+        'react-dom': {
+          singleton: true,
+        },
+        rxjs: {
+          singleton: true,
+        }
+      },
+    })
+  ])
+});

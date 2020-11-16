@@ -16,7 +16,6 @@ export default function init(appLoaderOptions: {
   initialApps: { plugins?: IPluginEntry[]; widgets?: IWidgetEntry[] };
 }) {
   // tslint:disable-next-line:no-console
-  console.log('sdk init called!');
   const di: DIContainer = initDI();
   // general channel to send service calls
   const channel = initChannel(di);

@@ -24,8 +24,11 @@ export const application: Application = {
     loadNS: [],
     use: [initReactI18next],
   },
-  loadingFn: (): Promise<any> => import('./components'),
-  name: 'AKASHA-app',
+  loadingFn: (): Promise<any> => {
+    console.log('loading function called!');
+    return import('./components');
+  },
+  name: 'akasha-feed-app',
   sdkModules: [{ module: commons }, { module: dbModule }, { module: auth }, { module: profiles }],
   menuItems: routes,
   title: 'AKASHA',

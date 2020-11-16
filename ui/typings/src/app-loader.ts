@@ -12,7 +12,7 @@ export interface IPluginConfig {
 export interface ILoaderConfig {
   rootNodeId: string;
   layout: IWidget;
-  rootLoadedApp: IAppEntry['app'];
+  rootLoadedApp: IPlugin;
   System: any;
 }
 
@@ -30,7 +30,7 @@ export interface IPluginEntry {
 }
 
 // tslint:disable-next-line:no-empty-interface
-export interface IAppEntry extends IPluginEntry {}
+export interface IAppEntry extends IPluginEntry { }
 
 export interface IWidgetEntry {
   app: IWidget;
@@ -44,13 +44,19 @@ export interface II18nConfig {
 }
 
 // tslint:disable-next-line:no-empty-interface
-export interface IPlugin extends Application {}
+export interface IPlugin extends Application { }
 
 export interface ISingleSpaLifecycle {
   bootstrap: (props: any) => Promise<void>;
   mount: (props: any) => Promise<void>;
   unmount: (props: any) => Promise<void>;
   update?: (props: any) => Promise<void>;
+}
+
+export interface IScriptSrc {
+  src: string;
+  name: string;
+  moduleName: string;
 }
 
 export interface IWidget {

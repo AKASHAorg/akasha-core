@@ -1,15 +1,23 @@
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const commons = require('./app.pack.conf');
 
 module.exports = {
-  entry: './src/index.ts',
+  entry: './src/index',
   mode: process.env.NODE_ENV || 'development',
   target: 'web',
   module: {
     rules: [
-      { parser: { system: false } },
-      { test: /\.ts(x)?$/, use: 'ts-loader' },
+      {
+        test: /\.ts(x)?$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        options: {
+          presets: ['@babel/preset-react', '@babel/preset-typescript'],
+          plugins: ['@babel/plugin-proposal-class-properties']
+        },
+      },
       { test: /.(js|mjs)$/, loader: 'babel-loader', resolve: { fullySpecified: false } }
     ],
   },
@@ -17,7 +25,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js'],
   },
   output: {
-    libraryTarget: 'amd',
+    publicPath: 'auto'
   },
   plugins: [
     new CleanWebpackPlugin({ verbose: true }),
@@ -27,6 +35,11 @@ module.exports = {
       modulesCount: 100,
       profile: true,
     }),
+    new CopyPlugin({
+      patterns: [
+        { from: 'public' }
+      ]
+    })
   ],
   devtool: 'source-map',
   externals: commons.externals,
