@@ -1,5 +1,12 @@
 {
-  "packages": ["sdk-packages/*", "ui/**", "examples/ui/**", "scripts/*", "apps/akasha"],
+  "packages": [
+    "sdk-packages/*",
+    "ui/**",
+    "examples/ui/**",
+    "scripts/*",
+    "apps/akasha",
+    "apps/moderation"
+  ],
   "npmClient": "npm",
   "useWorkspaces": false,
   "version": "0.0.0"
