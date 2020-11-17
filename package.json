@@ -23,6 +23,8 @@
     "script:dev-db": "lerna run start --scope @akashaproject/script-server-db --stream",
     "start:feed-app": "lerna exec --parallel --scope translations-server --scope feed-app-dev -- npm run start --stream",
     "start:expose-feed-app": "lerna run start:expose --scope=feed-app-dev --stream",
+    "start:moderation-app": "lerna exec --parallel --scope translations-server --scope moderation-app-dev -- npm run start --stream",
+    "start:expose-moderation-app": "lerna run start:expose --scope=moderation-app-dev --stream",
     "start:translations-server": "npm run start --prefix scripts/translations-server",
     "start:design-system:storybook": "lerna run storybook --scope @akashaproject/storybook --stream",
     "start:only": "lerna run start --scope $AWF_PACKAGE --stream",
