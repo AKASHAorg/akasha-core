@@ -54,23 +54,23 @@
     "@akashaproject/sdk-runtime": "*",
     "easy-peasy": "3.3.0",
     "lodash.debounce": "4.0.8",
-    "react-i18next": "11.4.0",
-    "react-router-dom": "5.1.2",
-    "single-spa-react": "2.14.0"
+    "react-i18next": "11.7.3",
+    "react-router-dom": "5.2.0",
+    "single-spa-react": "3.2.0"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
     "@types/lodash.debounce": "4.0.6",
-    "@types/react": "16.9.34",
-    "@types/react-dom": "16.9.7",
-    "@types/react-router-dom": "5.1.5",
-    "@types/react-test-renderer": "16.9.2",
+    "@types/react": "16.9.56",
+    "@types/react-dom": "16.9.9",
+    "@types/react-router-dom": "5.1.6",
+    "@types/react-test-renderer": "16.9.3",
     "@types/single-spa-react": "2.12.0",
-    "nodemon": "2.0.3"
+    "nodemon": "2.0.6"
   },
   "peerDependencies": {
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "rxjs": "6.5.5"
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "rxjs": "6.6.3"
   }
 }

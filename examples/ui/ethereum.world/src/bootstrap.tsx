@@ -44,6 +44,8 @@ const scriptLoader = new ScriptLoader();
 const bootstrap = async () => {
   const win: Win = window;
   const splashElement = splashScreen;
+  // @ts-ignore
+  const { default: sdkInit } = await import('akasha.sdk.js');
   // define the layout we want to load
   const layoutSrc = {
     src: 'http://localhost:48404/remoteEntry.js',
@@ -78,20 +80,18 @@ const bootstrap = async () => {
   await loadScripts(dependencies);
 
   const initializeSdk = async config => {
-    if (win.akashaproject__sdk) {
-      const sdkInit = win.akashaproject__sdk.default;
-      // const defaultApps = await getDefaultApps();
+    // const defaultApps = await getDefaultApps();
 
-      const sdk = sdkInit({
-        config: config,
-        initialApps: {
-          plugins: [],
-          widgets: [],
-          // also register the default app
-          apps: [{ app: config.rootLoadedApp }],
-        },
-      });
-    }
+    const sdk = sdkInit({
+      config: config,
+      initialApps: {
+        plugins: [],
+        widgets: [],
+        // also register the default app
+        apps: [{ app: config.rootLoadedApp }],
+      },
+    });
+    console.log(sdk, 'the sdk');
   };
 
   scriptLoader.subscribe('layout', module => {

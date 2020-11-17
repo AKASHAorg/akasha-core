@@ -8,10 +8,41 @@ const config = {
   entry: './src/index.ts',
   context: path.resolve(__dirname),
   module: {
-    rules: [{ parser: { System: false } }, { test: /\.ts(x)?$/, use: 'ts-loader' }],
+    rules: [
+      {
+        test: /.(js|mjs)$/,
+        loader: 'babel-loader',
+        exclude: [/lib/],
+        resolve: { fullySpecified: false }
+      },
+      {
+        test: /\.ts(x)?$/,
+        loader: 'babel-loader',
+        options: {
+          plugins: ["@babel/plugin-syntax-dynamic-import"],
+          presets: [
+            [
+              "@babel/preset-env",
+              {
+                "targets": {
+                  "esmodules": true
+                }
+              }
+            ],
+            '@babel/preset-typescript'
+          ]
+        }
+      }],
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    fallback: {
+      "util": require.resolve("util/"),
+      "assert": require.resolve("assert/"),
+      "stream": require.resolve("stream-browserify/"),
+      "path": require.resolve("path-browserify/"),
+      "buffer": require.resolve("buffer/"),
+    }
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -21,7 +52,7 @@ const config = {
     publicPath: '/',
   },
   optimization: {
-    moduleIds: 'hashed',
+    moduleIds: 'deterministic',
   },
   plugins: [
     new webpack.EnvironmentPlugin({
@@ -39,6 +70,9 @@ const config = {
       filename: 'index.html',
       template: path.resolve(__dirname, '../../examples/ui/ethereum.world/public/template-index.html'),
       inject: true,
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer']
     }),
     new InjectManifest({
       swSrc: './lib/sw.js',

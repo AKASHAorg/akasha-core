@@ -91,11 +91,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
   const fetchEntries = async (payload: { results: number; offset?: string }) => {
     const profileService = props.sdkModules.profiles.profileService;
-    const getPostsCall = profileService.getPosts({
+    const getPostsCall = await profileService.getPosts({
       ...payload,
       offset: payload.offset || feedState.lastItemId,
     });
-    const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
+    const ipfsGatewayCall = await props.sdkModules.commons.ipfsService.getSettings({});
     const call = combineLatest([ipfsGatewayCall, getPostsCall]);
     call.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;

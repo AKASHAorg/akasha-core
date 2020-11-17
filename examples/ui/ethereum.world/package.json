@@ -1,30 +1,36 @@
 {
   "name": "@akashaproject/ethereum.world",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "@babel/core": "7.12.3",
-    "@babel/preset-react": "7.12.1",
-    "@babel/preset-typescript": "7.12.1",
-    "@types/react": "16.9.53",
-    "@types/react-dom": "16.9.8",
-    "babel-loader": "8.1.0",
-    "bundle-loader": "0.5.6",
-    "html-webpack-plugin": "4.5.0",
+    "@types/react": "16.9.56",
+    "@types/react-dom": "16.9.9",
     "serve": "11.3.2",
-    "typescript": "4.0.3",
-    "webpack": "5.2.0",
-    "webpack-cli": "4.1.0",
-    "webpack-dev-server": "3.11.0"
+    "nodemon": "2.0.6"
   },
   "scripts": {
-    "start": "webpack-cli serve",
-    "build": "webpack",
+    "build": "webpack --config ./webpack.config.js",
+    "watch": "",
+    "watch:expose": "",
     "serve": "serve -s -p 3001 dist",
     "clean": "rm -rf dist"
   },
+  "nodemon": {
+
+  },
   "dependencies": {
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
-  }
+    "react": "17.0.1",
+    "react-dom": "17.0.1"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "development": [
+    "last 1 chrome version",
+    "last 1 firefox version",
+    "last 1 safari version"
+  ]
 }
