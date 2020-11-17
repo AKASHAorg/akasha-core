@@ -2,6 +2,7 @@ import * as React from 'react';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
+import { useGlobalLogin } from '@akashaproject/ui-awf-hooks';
 import routes, { NEW_POST, FEED, POSTS, rootRoute } from '../routes';
 import FeedPage from './feed-page/feed-page';
 import NewPostPage from './new-post-page';
@@ -10,7 +11,7 @@ import { createContextStore, ActionMapper } from 'easy-peasy';
 import { LoggedProfileStateModel } from '../state/logged-profile-state';
 import { useTranslation } from 'react-i18next';
 
-const { Box, useGlobalLogin, LoginModal, ViewportSizeProvider } = DS;
+const { Box, LoginModal, ViewportSizeProvider } = DS;
 interface AppRoutesProps {
   profileStore: ReturnType<typeof createContextStore>;
   onError: (err: Error) => void;

@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@akashaproject/design-system": "*",
+    "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/sdk-auth": "*",
     "@akashaproject/sdk-common": "*",
     "@types/i18next": "13.0.0",
