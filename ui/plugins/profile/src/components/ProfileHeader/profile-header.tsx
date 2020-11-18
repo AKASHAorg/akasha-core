@@ -56,12 +56,14 @@ export const ProfilePageHeader = (props: IProfileHeaderProps & RootComponentProp
               successTitleLabel={t('Thank you for helping us keep Ethereum World Safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
-              option1Label={t('Suspicious, deceptive, or spam')}
-              option2Label={t('Abusive or harmful to others')}
-              option3Label={t('Self-harm or suicide')}
-              option4Label={t('Illegal')}
-              option5Label={t('Nudity')}
-              option6Label={t('Violence')}
+              optionsLabelArr={[
+                t('Suspicious, deceptive, or spam'),
+                t('Abusive or harmful to others'),
+                t('Self-harm or suicide'),
+                t('Illegal'),
+                t('Nudity'),
+                t('Violence'),
+              ]}
               descriptionLabel={t('Explanation')}
               descriptionPlaceholder={t('Please explain your reason(s)')}
               footerText1Label={t('If you are unsure, you can refer to our ')}

@@ -13,12 +13,7 @@ import ReportSuccessModal, { IReportSuccessModalProps } from './report-success-m
 export interface IReportModalProps extends IReportSuccessModalProps {
   titleLabel: string;
   optionsTitleLabel: string;
-  option1Label: string;
-  option2Label: string;
-  option3Label: string;
-  option4Label: string;
-  option5Label: string;
-  option6Label: string;
+  optionsLabelArr: string[];
   descriptionLabel: string;
   descriptionPlaceholder: string;
   footerText1Label: string;
@@ -43,12 +38,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     successTitleLabel,
     successMessageLabel,
     optionsTitleLabel,
-    option1Label,
-    option2Label,
-    option3Label,
-    option4Label,
-    option5Label,
-    option6Label,
+    optionsLabelArr,
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
@@ -85,15 +75,6 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const { addToast } = useToasts();
-
-  const options: string[] = [
-    option1Label,
-    option2Label,
-    option3Label,
-    option4Label,
-    option5Label,
-    option6Label,
-  ];
 
   const handleSelectReason = (selected: number) => {
     setReasons(reasons.map((reason, index) => (index === selected ? !reason : reason)));
@@ -144,7 +125,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       });
       return setSuccess(true);
     }
-    const filteredReasons = options.filter((option, indx) => {
+    const filteredReasons = optionsLabelArr.filter((option, indx) => {
       if (reasons[indx]) {
         return option;
       }
@@ -231,7 +212,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
               </Text>
             </StyledText>
             <Box direction="column">
-              {options.map((label, idx) => (
+              {optionsLabelArr.map((label, idx) => (
                 <Box key={label} margin={{ top: 'xsmall' }}>
                   <RadioButton
                     name="prop"
@@ -269,7 +250,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
             </FormField>
             <Box margin={{ top: 'medium' }}>
               <Text color="secondaryText" size="medium" margin={{ bottom: 'medium' }}>
-                {footerText1Label}
+                {footerText1Label}{' '}
                 <Text
                   color="accentText"
                   size="medium"
@@ -278,9 +259,9 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                     window.open(footerUrl1, footerLink1Label, '_blank noopener noreferrer')
                   }
                 >
-                  {footerLink1Label}
+                  {footerLink1Label}{' '}
                 </Text>
-                {footerText2Label}
+                {footerText2Label}{' '}
                 <Text
                   color="accentText"
                   size="medium"

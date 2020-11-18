@@ -96,12 +96,7 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal'>) => {
     successTitleLabel,
     successMessageLabel,
     optionsTitleLabel,
-    option1Label,
-    option2Label,
-    option3Label,
-    option4Label,
-    option5Label,
-    option6Label,
+    optionsLabelArr,
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
@@ -135,12 +130,7 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal'>) => {
             successTitleLabel={successTitleLabel}
             successMessageLabel={successMessageLabel}
             optionsTitleLabel={optionsTitleLabel}
-            option1Label={option1Label}
-            option2Label={option2Label}
-            option3Label={option3Label}
-            option4Label={option4Label}
-            option5Label={option5Label}
-            option6Label={option6Label}
+            optionsLabelArr={optionsLabelArr}
             descriptionLabel={descriptionLabel}
             descriptionPlaceholder={descriptionPlaceholder}
             footerText1Label={footerText1Label}
@@ -186,18 +176,20 @@ storiesOf('Modals/ Report Modal', module)
           'We will investigate this post and take appropriate action.',
         )}
         optionsTitleLabel={text('Subtitle Label', 'Please select a reason')}
-        option1Label={text('Option 1 Label', 'Suspicious, deceptive, or spam')}
-        option2Label={text('Option 2 Label', 'Abusive or harmful to others')}
-        option3Label={text('Option 3 Label', 'Self-harm or suicide')}
-        option4Label={text('Option 4 Label', 'Illegal')}
-        option5Label={text('Option 5 Label', 'Nudity')}
-        option6Label={text('Option 6 Label', 'Violence')}
+        optionsLabelArr={[
+          text('Option 1 Label', 'Suspicious, deceptive, or spam'),
+          text('Option 2 Label', 'Abusive or harmful to others'),
+          text('Option 3 Label', 'Self-harm or suicide'),
+          text('Option 4 Label', 'Illegal'),
+          text('Option 5 Label', 'Nudity'),
+          text('Option 6 Label', 'Violence'),
+        ]}
         descriptionLabel={text('Explanation Label', 'Explanation')}
         descriptionPlaceholder={text('Description Placeholder', 'Please explain your reason(s)')}
-        footerText1Label={text('Footer Text 1 Label', 'If you are unsure, you can refer to our ')}
+        footerText1Label={text('Footer Text 1 Label', 'If you are unsure, you can refer to our')}
         footerLink1Label={text('Footer Link 1 Label', 'Code of Conduct')}
         footerUrl1={text('Footer URL 1', 'https://ethereum.world/code-of-conduct')}
-        footerText2Label={text('Footer Text 2 Label', ' and ')}
+        footerText2Label={text('Footer Text 2 Label', 'and')}
         footerLink2Label={text('Footer Link 2 Label', 'Terms of Service')}
         footerUrl2={text('Footer URL 2', 'https://ethereum.world/terms-of-service')}
         cancelLabel={text('Cancel Label', 'Cancel')}
@@ -220,18 +212,20 @@ storiesOf('Modals/ Report Modal', module)
           'We will investigate this post and take appropriate action',
         )}
         optionsTitleLabel={text('Subtitle Label', 'Please select a reason')}
-        option1Label={text('Option 1 Label', 'Suspicious, deceptive, or spam')}
-        option2Label={text('Option 2 Label', 'Abusive or harmful to others')}
-        option3Label={text('Option 3 Label', 'Self-harm or suicide')}
-        option4Label={text('Option 4 Label', 'Illegal')}
-        option5Label={text('Option 5 Label', 'Nudity')}
-        option6Label={text('Option 6 Label', 'Violence')}
+        optionsLabelArr={[
+          text('Option 1 Label', 'Suspicious, deceptive, or spam'),
+          text('Option 2 Label', 'Abusive or harmful to others'),
+          text('Option 3 Label', 'Self-harm or suicide'),
+          text('Option 4 Label', 'Illegal'),
+          text('Option 5 Label', 'Nudity'),
+          text('Option 6 Label', 'Violence'),
+        ]}
         descriptionLabel={text('Explanation Label', 'Explanation')}
         descriptionPlaceholder={text('Description Placeholder', 'Please explain your reason(s)')}
-        footerText1Label={text('Footer Text 1 Label', 'If you are unsure, you can refer to our ')}
+        footerText1Label={text('Footer Text 1 Label', 'If you are unsure, you can refer to our')}
         footerLink1Label={text('Footer Link 1 Label', 'Code of Conduct')}
         footerUrl1={text('Footer URL 1', 'https://ethereum.world/code-of-conduct')}
-        footerText2Label={text('Footer Text 2 Label', ' and ')}
+        footerText2Label={text('Footer Text 2 Label', 'and')}
         footerLink2Label={text('Footer Link 2 Label', 'Terms of Service')}
         footerUrl2={text('Footer URL 2', 'https://ethereum.world/terms-of-service')}
         cancelLabel={text('Cancel Label', 'Cancel')}
