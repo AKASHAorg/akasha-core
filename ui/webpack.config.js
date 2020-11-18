@@ -12,7 +12,7 @@ module.exports = {
       {
         test: /\.ts(x)?$/,
         loader: 'babel-loader',
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /public/],
         options: {
           presets: [
             [
@@ -30,7 +30,12 @@ module.exports = {
           ]
         },
       },
-      { test: /.(js|mjs)$/, loader: 'babel-loader', resolve: { fullySpecified: false } }
+      {
+        test: /.(js|mjs)$/,
+        loader: 'babel-loader',
+        exclude: /public/,
+        resolve: { fullySpecified: false }
+      }
     ],
   },
   resolve: {
@@ -46,11 +51,6 @@ module.exports = {
       modules: true,
       modulesCount: 100,
       profile: true,
-    }),
-    new CopyPlugin({
-      patterns: [
-        { from: 'public' }
-      ]
     })
   ],
   devtool: 'source-map',

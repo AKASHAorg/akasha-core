@@ -48,7 +48,8 @@
     "assert": "2.0.0",
     "stream-browserify": "3.0.0",
     "path-browserify": "1.0.1",
-    "buffer": "6.0.2"
+    "buffer": "6.0.2",
+    "process": "0.11.10"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",

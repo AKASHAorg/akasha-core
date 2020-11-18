@@ -21,14 +21,7 @@ const config = {
         options: {
           plugins: ["@babel/plugin-syntax-dynamic-import"],
           presets: [
-            [
-              "@babel/preset-env",
-              {
-                "targets": {
-                  "esmodules": true
-                }
-              }
-            ],
+            "@babel/preset-env",
             '@babel/preset-typescript'
           ]
         }
@@ -37,11 +30,12 @@ const config = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
     fallback: {
-      "util": require.resolve("util/"),
       "assert": require.resolve("assert/"),
-      "stream": require.resolve("stream-browserify/"),
-      "path": require.resolve("path-browserify/"),
       "buffer": require.resolve("buffer/"),
+      "path": require.resolve("path-browserify/"),
+      "process": require.resolve("process/browser.js"),
+      "stream": require.resolve("stream-browserify/"),
+      "util": require.resolve("util/"),
     }
   },
   output: {
@@ -53,6 +47,7 @@ const config = {
   },
   optimization: {
     moduleIds: 'deterministic',
+    minimize: process.env.NODE_ENV !== 'development',
   },
   plugins: [
     new webpack.EnvironmentPlugin({
@@ -71,8 +66,13 @@ const config = {
       template: path.resolve(__dirname, '../../examples/ui/ethereum.world/public/template-index.html'),
       inject: true,
     }),
+    // these packages must be available globally (in our case in window)
+    // to avoid this we'll use webpack providePlugin which should replace all occurences
+    // with the exports provided here:
+    //    Buffer.from() => __webpack_imported_module(someModId).from()
     new webpack.ProvidePlugin({
-      Buffer: ['buffer', 'Buffer']
+      Buffer: ['buffer', 'Buffer'],
+      process: 'process'
     }),
     new InjectManifest({
       swSrc: './lib/sw.js',
@@ -80,11 +80,11 @@ const config = {
       exclude: [/.*?/]
     })
   ],
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   mode: process.env.NODE_ENV || 'development',
   externals: [
     /^@truffle\/contract$/,
-  ]
+  ],
 };
 
 module.exports = config;

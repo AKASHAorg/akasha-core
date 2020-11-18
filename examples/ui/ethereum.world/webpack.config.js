@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 const { ModuleFederationPlugin } = webpack.container;
 const path = require('path');
 const baseConfig = require('../../../ui/webpack.config');
@@ -38,6 +39,11 @@ module.exports = Object.assign(baseConfig, {
     new HtmlWebpackPlugin({
       template: './public/index.html',
       publicPath: '/'
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: 'public' }
+      ]
     })
   ]),
   externals: baseConfig.externals.concat([{ 'akasha.sdk.js': 'akashaproject__sdk' }])
