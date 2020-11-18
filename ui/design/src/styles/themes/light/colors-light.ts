@@ -36,6 +36,7 @@ const colors: IColorsLight = {
   darkBackground: '#000C20',
   modalBackground: '#7F7F7F', // deepGrey
   accent: '#4E71FF', // blue
+  accentLight: '#E9EDFD', // lightBlue
   border: '#EDF0F5', // lightGrey
   secondary: '#000C20', // darkgrey
   secondaryOpacity: 'rgba(0, 12, 32, 0.5)', // darkgrey with 0.5 opacity
