@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
-    "lib": ["dom"]
+    "lib": ["esnext", "dom"]
   },
   "references": [
     {
@@ -16,27 +16,9 @@
       "path": "../common"
     },
     {
-      "path": "../db"
-    },
-    {
-      "path": "../app-loader"
-    },
-    {
       "path": "../auth"
-    },
-    {
-      "path": "../../ui/typings"
-    },
-    {
-      "path": "../profiles"
-    },
-    {
-      "path": "../registry"
-    },
-    {
-      "path": "../posts"
     }
   ],
   "include": ["./src"],
-  "exclude": ["./src/sw.ts"]
+  "exclude": ["./node_modules"]
 }

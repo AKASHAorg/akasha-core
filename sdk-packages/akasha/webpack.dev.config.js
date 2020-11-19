@@ -24,8 +24,9 @@ const config = {
   },
   plugins: [
     new webpack.EnvironmentPlugin({
-      GRAPHQL_URI: 'http://api.akasha.network/query',
-      NODE_ENV: process.env.NODE_ENV || 'development'
+      GRAPHQL_URI: process.env.GRAPHQL_URI || 'https://api.akasha.network/graphql',
+      NODE_ENV: process.env.NODE_ENV || 'development',
+      AUTH_ENDPOINT: process.env.AUTH_ENDPOINT || 'wss://api.akasha.network/ws/userauth',
     }),
     new webpack.ProgressPlugin({
       entries: true,
