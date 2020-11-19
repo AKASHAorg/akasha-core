@@ -7,6 +7,7 @@ const schema = {
   required: ['_id', 'content', 'creationDate', 'author'],
   properties: {
     _id: { type: 'string' },
+    type: { type: 'string' },
     title: { type: 'string' },
     content: {
       type: 'array',

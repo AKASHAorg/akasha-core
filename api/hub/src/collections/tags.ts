@@ -9,13 +9,25 @@ const schema = {
     _id: { type: 'string' },
     name: { type: 'string' },
     creationDate: { type: 'number' },
+    posts: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
+    comments: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
   },
 };
 
 const writeValidator = (writer: string, event: any, instance: Tag) => {
-  if (instance.name.toLowerCase() !== instance.name) {
-    return false;
-  }
+  // if (instance.name.toLowerCase() !== instance.name) {
+  //   return false;
+  // }
   return writer === 'bbaareihqdqd3me37e3pfs6pmy72cam7viai4lbcpxlqt365wicrnsi6q7e';
 };
 
@@ -27,6 +39,10 @@ const indexes = [
   {
     path: 'name',
     unique: true,
+  },
+  {
+    path: 'creationDate',
+    unique: false,
   },
 ];
 export async function newCollection(client: Client, threadID: ThreadID) {

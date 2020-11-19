@@ -16,7 +16,7 @@ import {
   moduleName,
   tokenCache,
 } from './constants';
-import { Client, PrivateKey, Users, Buckets } from '@textile/hub';
+import { Client, PrivateKey, Users, Buckets, UserAuth } from '@textile/hub';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 
 const service: AkashaService = (invoke, log) => {
@@ -24,6 +24,8 @@ const service: AkashaService = (invoke, log) => {
   let hubClient: Client;
   let hubUser: Users;
   let buckClient: Buckets;
+  let auth: UserAuth;
+  let tokenGenerator: () => Promise<UserAuth>;
   const providerKey = '@providerType';
   const signIn = async (provider: EthProviders = EthProviders.Web3Injected) => {
     let currentProvider;
@@ -65,12 +67,13 @@ const service: AkashaService = (invoke, log) => {
     hubClient = Client.withUserAuth(userAuth, endPoint);
     hubUser = Users.withUserAuth(userAuth, endPoint);
     buckClient = Buckets.withUserAuth(userAuth, endPoint);
-    const token = await hubClient.getToken(identity);
+    tokenGenerator = loginWithChallenge(identity, signer);
+    auth = await tokenGenerator();
     cache.set(AUTH_CACHE, {
       [ethAddressCache]: address,
-      [tokenCache]: token,
+      [tokenCache]: auth.token,
     });
-    return { client: hubClient, user: hubUser, token: token, ethAddress: address };
+    return { client: hubClient, user: hubUser, token: auth.token, ethAddress: address };
   };
 
   const getSession = async () => {
@@ -83,14 +86,26 @@ const service: AkashaService = (invoke, log) => {
     }
 
     return {
-      identity,
+      tokenGenerator,
       client: hubClient,
       user: hubUser,
       buck: buckClient,
     };
   };
 
-  return { signIn, getSession };
+  const getToken = async () => {
+    const session = await getSession();
+    // the definitions for Context are not updated
+    // @ts-ignore
+    const isExpired = await session.client.context.isExpired;
+    if (!isExpired && auth) {
+      return auth.token;
+    }
+    auth = await tokenGenerator();
+    return auth.token;
+  };
+
+  return { signIn, getSession, getToken };
 };
 
 export default { service, name: AUTH_SERVICE };

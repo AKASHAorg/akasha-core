@@ -8,33 +8,34 @@ export interface Tag {
   _id: string;
   name: string;
   creationDate: number;
+  posts: string[];
+  comments: string[];
 }
 
 export interface PostItem {
   _id: string;
-  title: string;
+  title?: string;
   creationDate: number;
   author: string;
+  type: string;
   content: DataProvider[];
-  tags: string[];
-  mentions: string[];
-  quotes: string[];
-  metaData: DataProvider[];
+  tags?: string[];
+  mentions?: string[];
+  quotes?: string[];
+  metaData?: DataProvider[];
 }
 
 export interface Profile {
   _id: string;
   ethAddress: string;
   pubKey: string;
-  userName: string;
-  default: DataProvider[];
+  userName?: string;
+  default?: DataProvider[];
   creationDate: number;
-  posts: string[];
-  comments: string[];
-  following: string[];
-  followers: string[];
-  providers: DataProvider[];
-  metaData: DataProvider[];
+  following?: string[];
+  followers?: string[];
+  providers?: DataProvider[];
+  metaData?: DataProvider[];
 }
 
 export interface Comment {

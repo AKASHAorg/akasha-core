@@ -25,7 +25,7 @@ WRITE ACCESS TO THIS APPLICATION.
 `;
 
 export const generatePrivateKey = async (signer, ethAddress, sig, utils) => {
-  const secret = hashSync(sig, 10);
+  const secret = utils.keccak256(sig);
   const message = metamaskGen(ethAddress, secret, 'ethereum.world');
   const signedText = await signer.signMessage(message);
   const hash = utils.keccak256(signedText);

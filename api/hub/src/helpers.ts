@@ -47,13 +47,14 @@ export const initAppDB = async () => {
 export const setupDBCollections = async () => {
   const appDB = await initAppDB();
   const threadID = process.env.AWF_THREADdb
-    ? ThreadID.fromRandom()
-    : ThreadID.fromString(process.env.AWF_THREADdb);
+    ? ThreadID.fromString(process.env.AWF_THREADdb)
+    : ThreadID.fromRandom();
+
   if (!process.env.AWF_DBname && !process.env.AWF_THREADdb) {
-    const threadIDDB = await appDB.newDB(threadID, 'defaultDB');
-    await initCollections(appDB, threadIDDB);
-  } else {
-    await updateCollections(appDB, threadID);
+    await appDB.newDB(threadID, 'defaultDB');
   }
+
+  await initCollections(appDB, threadID);
+  await updateCollections(appDB, threadID);
   return { threadID, client: appDB };
 };

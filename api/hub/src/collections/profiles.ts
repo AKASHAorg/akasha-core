@@ -4,7 +4,7 @@ import { Profile } from './interfaces';
 const schema = {
   title: 'Profile',
   type: 'object',
-  required: ['_id', 'pubKey', 'ethAddress'],
+  required: ['_id', 'pubKey', 'ethAddress', 'creationDate'],
   properties: {
     _id: { type: 'string' },
     ethAddress: { type: 'string' },
@@ -24,18 +24,6 @@ const schema = {
       },
     },
     creationDate: { type: 'number' },
-    posts: {
-      type: 'array',
-      items: {
-        type: 'string',
-      },
-    },
-    comments: {
-      type: 'array',
-      items: {
-        type: 'string',
-      },
-    },
     following: {
       type: 'array',
       items: {
@@ -104,6 +92,10 @@ const indexes = [
   {
     path: 'ethAddress',
     unique: true,
+  },
+  {
+    path: 'creationDate',
+    unique: false,
   },
 ];
 export async function newCollection(client: Client, threadID: ThreadID) {

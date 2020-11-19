@@ -4,6 +4,7 @@ import { ThreadID, UserAuth, Where } from '@textile/hub';
 import { utils } from 'ethers';
 import { getAPISig, initAppDB, newClientDB } from './helpers';
 import { contextCache } from './storage/cache';
+import { Profile } from './collections/interfaces';
 
 const wss = route.all('/ws/userauth', ctx => {
   const emitter = new Emittery();
@@ -13,7 +14,7 @@ const wss = route.all('/ws/userauth', ctx => {
       const data = JSON.parse(msg);
       const db = await initAppDB();
       const client = await newClientDB();
-      let currentUser: any = {};
+      let currentUser: Profile = null;
       let addressChallenge;
       switch (data.type) {
         case 'token': {
@@ -29,9 +30,15 @@ const wss = route.all('/ws/userauth', ctx => {
                 data.pubkey
               } on ${new Date().toISOString()}`;
               currentUser = {
+                ethAddress: '',
                 pubKey: data.pubkey,
                 _id: '',
                 creationDate: new Date().getTime(),
+                default: [],
+                providers: [],
+                metaData: [],
+                following: [],
+                followers: [],
               };
             } else {
               currentUser = userFound[0];
@@ -76,16 +83,14 @@ const wss = route.all('/ws/userauth', ctx => {
               value: payload,
             }),
           );
-          contextCache.set(token, {
+          contextCache.set(utils.id(token), {
             pubKey: currentUser.pubKey,
             ethAddress: currentUser.ethAddress,
           });
-          // tslint:disable-next-line:no-console
-          console.log('current User', currentUser);
           if (!currentUser._id) {
             await db.create(dbId, 'Profiles', [currentUser]);
           }
-          currentUser = '';
+          currentUser = null;
           addressChallenge = '';
           break;
         }

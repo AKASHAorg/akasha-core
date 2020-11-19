@@ -20,6 +20,9 @@ import PostAPI from './datasources/post';
 import CommentAPI from './datasources/comment';
 import { ThreadID } from '@textile/hub';
 import query from './resolvers/query';
+import mutations from './resolvers/mutations';
+import { setupDBCollections } from './helpers';
+import { utils } from 'ethers';
 
 if (!process.env.USER_GROUP_API_KEY || !process.env.USER_GROUP_API_SECRET) {
   // tslint:disable-next-line:no-console
@@ -53,10 +56,14 @@ let dbID;
 if (process.env.AWF_THREADdb) {
   dbID = ThreadID.fromString(process.env.AWF_THREADdb);
 }
+
+(async () => await setupDBCollections())();
+
 const server = new ApolloServer({
   typeDefs,
   resolvers: {
     Query: query,
+    Mutation: mutations,
   },
   dataSources: () => ({
     profileAPI: new ProfileAPI({ dbID, collection: 'Profiles' }),
@@ -70,8 +77,8 @@ const server = new ApolloServer({
     let user;
     if (header) {
       const auth = header.split(' ');
-      if (auth.length === 2 && auth[0] !== 'Bearer') {
-        user = contextCache.get(auth[1]);
+      if (auth.length === 2 && auth[0] === 'Bearer') {
+        user = contextCache.get(utils.id(auth[1]));
       }
     }
     return { user };

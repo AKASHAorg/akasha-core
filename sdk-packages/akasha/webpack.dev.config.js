@@ -24,7 +24,7 @@ const config = {
   },
   plugins: [
     new webpack.EnvironmentPlugin({
-      GRAPHQL_URI: 'http://api.akasha.network/query',
+      GRAPHQL_URI: 'http://127.0.0.1:3113/graphql',
       NODE_ENV: process.env.NODE_ENV || 'development',
       AUTH_ENDPOINT: process.env.AUTH_ENDPOINT || 'ws://127.0.0.1:3113/ws/userauth',
     }),
