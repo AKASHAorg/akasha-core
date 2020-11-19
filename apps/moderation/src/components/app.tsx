@@ -3,6 +3,8 @@ import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { I18nextProvider } from 'react-i18next';
 
+import ContentList from './content-list';
+
 const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
 
 export default class Application extends React.Component<RootComponentProps> {
@@ -49,7 +51,7 @@ export default class Application extends React.Component<RootComponentProps> {
             availableThemes={[lightTheme, darkTheme]}
           >
             <I18nextProvider i18n={i18n ? i18n : null}>
-              <Box>Moderation App here...</Box>
+              <ContentList />
             </I18nextProvider>
           </ThemeSelector>
         </React.Suspense>
