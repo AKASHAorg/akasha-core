@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/sdk-auth",
+  "name": "@akashaproject/sdk-posts",
   "version": "0.1.0",
   "description": "> TODO: description",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
@@ -32,9 +32,7 @@
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-runtime": "*",
     "@akashaproject/sdk-common": "*",
-    "@akashaproject/sdk-db": "*",
-    "@akashaproject/ui-awf-typings": "*",
-    "@textile/hub": "1.0.0",
-    "bcryptjs": "2.4.3"
+    "@akashaproject/sdk-auth": "*",
+    "@akashaproject/ui-awf-typings": "*"
   }
 }

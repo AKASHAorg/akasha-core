@@ -31,7 +31,8 @@
     "watch-plugins": "lerna exec --parallel --scope @akashaproject/ui-widget-* --scope @akashaproject/ui-plugin-* -- tsc -w",
     "test:sdk": "lerna run test --scope @akashaproject/sdk-* --stream",
     "test:ui": "lerna run test --scope @akashaproject/ui-* --scope @akashaproject/design-* --scope @akashaproject/app-* --stream",
-    "test:ui:watch": "lerna exec --parallel --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream -- jest --watch"
+    "test:ui:watch": "lerna exec --parallel --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream -- jest --watch",
+    "dev:server": "lerna run dev:server --stream"
   },
   "devDependencies": {
     "@babel/core": "7.11.4",

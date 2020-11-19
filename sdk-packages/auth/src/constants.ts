@@ -3,7 +3,7 @@ import { buildServicePath } from '@akashaproject/sdk-core/lib/utils';
 
 export const AUTH_SERVICE = 'AUTH_SERVICE';
 export const AUTH_ENDPOINT = 'AUTH_ENDPOINT';
-export const AUTH_MESSAGE = 'authenticate on ethereum.world';
+export const AUTH_MESSAGE = 'generate secret phrase for ethereum.world';
 export const AUTH_CACHE = 'auth';
 
 export const ethAddressCache = 'ethAddress';
