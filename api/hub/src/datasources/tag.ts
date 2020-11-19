@@ -3,7 +3,6 @@ import { initAppDB } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { Tag } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
-import { of } from 'rxjs';
 
 class TagAPI extends DataSource {
   private readonly collection: string;
