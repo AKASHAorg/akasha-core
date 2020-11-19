@@ -30,7 +30,7 @@ export interface IPluginEntry {
 }
 
 // tslint:disable-next-line:no-empty-interface
-export interface IAppEntry extends IPluginEntry { }
+export interface IAppEntry extends IPluginEntry {}
 
 export interface IWidgetEntry {
   app: IWidget;
@@ -44,7 +44,7 @@ export interface II18nConfig {
 }
 
 // tslint:disable-next-line:no-empty-interface
-export interface IPlugin extends Application { }
+export interface IPlugin extends Application {}
 
 export interface ISingleSpaLifecycle {
   bootstrap: (props: any) => Promise<void>;

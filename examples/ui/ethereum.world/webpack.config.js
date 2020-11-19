@@ -34,6 +34,9 @@ module.exports = Object.assign(baseConfig, {
         'react-dom': {
           singleton: true,
         },
+        'styled-components': {
+          singleton: true,
+        }
       },
     }),
     new HtmlWebpackPlugin({

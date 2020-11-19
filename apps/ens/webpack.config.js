@@ -9,8 +9,8 @@ module.exports = Object.assign(baseConfig, {
   plugins: baseConfig.plugins.concat([
     new ModuleFederationPlugin({
       // akashaproject__app_ens_integration
-      name: packageName.replace(/\@/g, '').replace(/\//g, '__').replace(/\-/g, '_'),
-      filename: 'remoteEntry.js',
+      name: packageName.replace(/@/g, '').replace(/\//g, '__').replace(/-/g, '_'),
+      filename: 'index.js',
       exposes: {
         './app': './src/bootstrap'
       },
@@ -21,9 +21,10 @@ module.exports = Object.assign(baseConfig, {
         'react-dom': {
           singleton: true,
         },
+        'styled-components': {
+          singleton: true,
+        }
       },
     }),
   ])
 });
-
-module.exports = config;

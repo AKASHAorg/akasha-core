@@ -608,9 +608,9 @@ export default class AppLoader implements IAppLoader {
         });
       }
       if (this.deferredIntegrations.length) {
-        this.deferredIntegrations.forEach(entry =>
-          this.registerIntegration(entry.integration, entry.integrationId, entry?.menuItemType),
-        );
+        // this.deferredIntegrations.forEach(entry =>
+        //   this.registerIntegration(entry.integration, entry.integrationId, entry?.menuItemType),
+        // );
         // clear it
         this.deferredIntegrations.length = 0;
       }

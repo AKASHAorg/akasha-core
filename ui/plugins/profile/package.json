@@ -24,9 +24,9 @@
     "extract:translations": "i18next --config ./i18next-parser.config.js",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/*profile.* ../../build/plugins",
+    "postpack": "copyfiles -f ./dist/* ../../build/plugins/profile",
     "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8332",
-    "pack:watch": "nodemon"
+    "watch": "nodemon"
   },
   "nodemonConfig": {
     "ignore": [

@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
 const commons = require('./app.pack.conf');
 
 module.exports = {

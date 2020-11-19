@@ -140,7 +140,7 @@ export const profileStateModel: ProfileStateModel = persist(
         logger.info('getENSByAddress response: %j', response.data);
         actions.updateData({
           ensChecked: true,
-          ensInfo: response.data ? { name: response.data } : {},
+          ensInfo: response.data ? { name: response.data } : { name: null },
           fetching: false,
         });
       });

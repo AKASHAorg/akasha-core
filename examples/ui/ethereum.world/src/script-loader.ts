@@ -50,8 +50,10 @@ class ScriptLoader {
         }
       } catch (err) {
         if (err) {
+          // tslint:disable-next-line: no-console
           console.error(err);
         }
+        // tslint:disable-next-line: no-console
         console.error('failed to load module. Script loading error!', src);
       }
     });

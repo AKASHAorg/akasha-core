@@ -22,8 +22,8 @@
     "prepare": "npm run tsc",
     "extract:translations": "i18next --config ./i18next-parser.config.js",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/*login.* ../../build/widgets",
-    "pack:watch": "nodemon"
+    "postpack": "copyfiles -f ./dist/* ../../build/widgets/login",
+    "watch": "nodemon"
   },
   "nodemonConfig": {
     "ignore": [
@@ -31,7 +31,7 @@
       "dist/*",
       "build/*"
     ],
-    "exec": "npm run pack",
+    "exec": "npm run pack || exit 1",
     "ext": "ts,tsx"
   },
   "dependencies": {

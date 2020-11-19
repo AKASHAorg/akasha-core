@@ -4,24 +4,22 @@
   "private": true,
   "devDependencies": {
     "@types/react": "16.9.56",
-    "@types/react-dom": "16.9.9",
-    "serve": "11.3.2",
-    "nodemon": "2.0.6"
+    "@types/react-dom": "16.9.9"
   },
   "scripts": {
     "build": "webpack --config ./webpack.config.js",
-    "watch": "",
-    "watch:expose": "",
-    "serve": "serve -s -p 3001 dist",
+    "postbuild": "copyfiles -u 1 ./dist/* './dist/icons/*' ../../../ui/build/",
+    "watch": "nodemon",
     "clean": "rm -rf dist"
   },
-  "nodemon": {
-
+  "nodemonConfig": {
+    "ignore": [
+      "lib/*"
+    ],
+    "exec": "npm run build || exit 1",
+    "ext": "ts,tsx"
   },
-  "dependencies": {
-    "react": "17.0.1",
-    "react-dom": "17.0.1"
-  },
+  "dependencies": {},
   "browserslist": [
     ">0.2%",
     "not dead",

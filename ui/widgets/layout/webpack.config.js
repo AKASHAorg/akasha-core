@@ -8,8 +8,8 @@ module.exports = Object.assign(baseConfig, {
   plugins: baseConfig.plugins.concat([
     new ModuleFederationPlugin({
       // akashaproject__ui_widget_layout
-      name: packageName.replace(/\@/g, '').replace(/\//g, '__').replace(/\-/g, '_'),
-      filename: 'remoteEntry.js',
+      name: packageName.replace(/@/g, '').replace(/\//g, '__').replace(/-/g, '_'),
+      filename: 'index.js',
       exposes: {
         './app': './src/bootstrap'
       },
@@ -20,7 +20,7 @@ module.exports = Object.assign(baseConfig, {
         'react-dom': {
           singleton: true,
         },
-        rxjs: {
+        'styled-components': {
           singleton: true,
         }
       },

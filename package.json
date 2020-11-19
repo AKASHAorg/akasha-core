@@ -21,7 +21,7 @@
     "tsc:ui": "lerna run tsc --scope @akashaproject/design-* --scope @akashaproject/ui-* --scope @akashaproject/app-*",
     "tsc:scripts": "lerna run tsc --scope @akashaproject/script-*",
     "script:dev-db": "lerna run start --scope @akashaproject/script-server-db --stream",
-    "start:feed-app": "lerna exec --parallel --scope translations-server --scope feed-app-dev -- npm run start --stream",
+    "start:feed-app": "serve -s -p 8131 ./ui/build",
     "start:expose-feed-app": "lerna run start:expose --scope=feed-app-dev --stream",
     "start:translations-server": "npm run start --prefix scripts/translations-server",
     "start:design-system:storybook": "lerna run storybook --scope @akashaproject/storybook --stream",
@@ -59,8 +59,8 @@
     "react-dom": "17.0.1",
     "regenerator-runtime": "0.13.7",
     "rxjs": "6.6.3",
+    "serve": "11.3.2",
     "source-map-loader": "1.1.2",
-    "styled-components": "5.2.1",
     "ts-jest": "26.4.4",
     "ts-loader": "8.0.11",
     "tslint": "6.1.3",
@@ -79,7 +79,8 @@
     "sdk-packages/*",
     "ui/**",
     "scripts/*",
-    "examples/**"
+    "examples/**",
+    "apps/*"
   ],
   "engines": {
     "node": ">=12.13.0",

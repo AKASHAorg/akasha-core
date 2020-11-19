@@ -29,9 +29,8 @@
     "extract:translations": "i18next --config ./i18next-parser.config.js",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/*akasha* ../../ui/build/apps",
-    "pack:watch": "nodemon",
-    "serve": "npx serve -p 48424 -c ./serve.json -s ./dist"
+    "postpack": "copyfiles -f ./dist/* ../../ui/build/apps/akasha",
+    "watch": "nodemon"
   },
   "nodemonConfig": {
     "ignore": [
@@ -71,7 +70,6 @@
   },
   "peerDependencies": {
     "react": "17.0.1",
-    "react-dom": "17.0.1",
-    "rxjs": "6.6.3"
+    "react-dom": "17.0.1"
   }
 }

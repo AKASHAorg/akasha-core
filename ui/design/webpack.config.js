@@ -8,7 +8,7 @@ module.exports = Object.assign(baseConfig, {
   plugins: baseConfig.plugins.concat([
     new ModuleFederationPlugin({
       // akashaproject__design_system
-      name: packageName.replace(/\@/g, '').replace(/\//g, '__').replace(/\-/g, '_'),
+      name: packageName.replace(/@/g, '').replace(/\//g, '__').replace(/-/g, '_'),
       filename: 'remoteEntry.js',
       exposes: {
         './app': './src/index.ts'

@@ -12,7 +12,7 @@ const config = {
       {
         test: /.(js|mjs)$/,
         loader: 'babel-loader',
-        exclude: [/lib/],
+        exclude: [/lib/, /dist/],
         resolve: { fullySpecified: false }
       },
       {
@@ -33,15 +33,15 @@ const config = {
       "assert": require.resolve("assert/"),
       "buffer": require.resolve("buffer/"),
       "path": require.resolve("path-browserify/"),
-      "process": require.resolve("process/browser.js"),
       "stream": require.resolve("stream-browserify/"),
       "util": require.resolve("util/"),
+      "process": require.resolve("process/"),
     }
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'akasha.sdk.js',
-    library: name.replace(/@/, '').replace(/\//, '__').replace(/\-/, '_'),
+    library: name.replace(/@/, '').replace(/\//, '__').replace(/-/, '_'),
     libraryTarget: 'umd',
     publicPath: '/',
   },
@@ -50,10 +50,10 @@ const config = {
     minimize: process.env.NODE_ENV !== 'development',
   },
   plugins: [
-    new webpack.EnvironmentPlugin({
-      GRAPHQL_URI: 'http://api.akasha.network/query',
-      NODE_ENV: process.env.NODE_ENV || 'development'
-    }),
+    // new webpack.EnvironmentPlugin({
+    //   GRAPHQL_URI: 'http://api.akasha.network/query',
+    //   NODE_ENV: process.env.NODE_ENV || 'development'
+    // }),
     new webpack.ProgressPlugin({
       entries: true,
       modules: true,
@@ -72,7 +72,14 @@ const config = {
     //    Buffer.from() => __webpack_imported_module(someModId).from()
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
+      stream: 'stream',
       process: 'process'
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        GRAPHQL_URI: JSON.stringify('http://api.akasha.network/query'),
+      }
     }),
     new InjectManifest({
       swSrc: './lib/sw.js',

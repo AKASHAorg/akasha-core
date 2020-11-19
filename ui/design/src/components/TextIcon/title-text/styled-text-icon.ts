@@ -28,37 +28,31 @@ const StyledTextIcon = styled.div<ITextIconProps>`
       }
       background-color: ${backgroundColor ? backgroundColor : ''};
       color: ${color ? color : colors.dark};
-      ${
-        menuIcon
-          ? `padding-left: ${props.theme.shapes.baseSpacing * 8 + 2}px
+      ${menuIcon
+        ? `padding-left: ${props.theme.shapes.baseSpacing * 8 + 2}px
           color: ${props.theme.colors.accent};
           & * {
             stroke: ${props.theme.colors.accent};
             }`
-          : ''
-      }
-      ${
-        menuActive
-          ? `padding-left: ${props.theme.shapes.baseSpacing * 8}px
+        : ''}
+      ${menuActive
+        ? `padding-left: ${props.theme.shapes.baseSpacing * 8}px
           border-left: 2px solid ${props.theme.colors.accent};
           color: ${props.theme.colors.accent};
           & * {
             stroke: ${props.theme.colors.accent};
             }`
-          : ''
-      }
+        : ''}
       ${marginSize}
-      
+
       &:hover {
-        ${
-          clickable
-            ? `cursor: pointer;
+        ${clickable
+          ? `cursor: pointer;
           color: ${props.theme.colors.accent};
           & * {
             stroke: ${props.theme.colors.accent};
             }`
-            : ''
-        }
+          : ''}
       }
     `;
   }};
