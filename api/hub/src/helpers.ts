@@ -9,7 +9,11 @@ export const getAPISig = async (minutes: number = 30) => {
 let userDBClient;
 export const newClientDB = async () => {
   if (userDBClient) {
-    return userDBClient;
+    if (userDBClient.context.isExpired) {
+      userDBClient = undefined;
+      return newClientDB();
+    }
+    return Promise.resolve(appDBClient);
   }
   const API = process.env.API || undefined;
   const client = await Client.withKeyInfo(
@@ -28,7 +32,10 @@ let appDBClient;
 export const getAppDB = async () => {
   if (appDBClient) {
     if (appDBClient.context.isExpired) {
-      await appDBClient.getToken(identity());
+      // tslint:disable-next-line:no-console
+      console.info('==refreshing grpc session==');
+      appDBClient = undefined;
+      return getAppDB();
     }
     return Promise.resolve(appDBClient);
   }

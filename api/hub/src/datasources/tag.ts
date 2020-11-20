@@ -7,7 +7,6 @@ import { queryCache } from '../storage/cache';
 class TagAPI extends DataSource {
   private readonly collection: string;
   private context: any;
-  private db: Client;
   private readonly dbID: ThreadID;
   private format: RegExp;
   private allowedChars: RegExp;
@@ -21,13 +20,13 @@ class TagAPI extends DataSource {
 
   async initialize(config) {
     this.context = config.context;
-    this.db = await getAppDB();
   }
 
   async getTag(name: string) {
+    const db: Client = await getAppDB();
     const formattedName = name.toLowerCase();
     const query = new Where('name').eq(formattedName);
-    const tag = await this.db.find<Tag>(this.dbID, this.collection, query);
+    const tag = await db.find<Tag>(this.dbID, this.collection, query);
     if (tag.length) {
       return tag[0];
     }
@@ -38,10 +37,11 @@ class TagAPI extends DataSource {
   // https://github.com/textileio/js-threads/issues/140
   async getTags(limit: number, offset: string) {
     let tag: Tag[];
+    const db: Client = await getAppDB();
     if (queryCache.has(this.collection)) {
       tag = queryCache.get(this.collection);
     } else {
-      tag = await this.db.find<Tag>(this.dbID, this.collection, {
+      tag = await db.find<Tag>(this.dbID, this.collection, {
         sort: { desc: true, fieldPath: 'creationDate' },
       });
       queryCache.set(this.collection, tag);
@@ -57,7 +57,8 @@ class TagAPI extends DataSource {
   }
 
   async indexPost(postsCollection: string, postID: string, tagName: string) {
-    const postExists = await this.db.has(this.dbID, postsCollection, [postID]);
+    const db: Client = await getAppDB();
+    const postExists = await db.has(this.dbID, postsCollection, [postID]);
     if (!postExists) {
       return Promise.reject(`postID: ${postID} was not found`);
     }
@@ -68,10 +69,11 @@ class TagAPI extends DataSource {
       tag = await this.getTag(tagName);
     }
     tag.posts.unshift(postID);
-    return await this.db.save(this.dbID, this.collection, [tag]);
+    return await db.save(this.dbID, this.collection, [tag]);
   }
 
   async addTag(name: string) {
+    const db: Client = await getAppDB();
     const formattedName = name.toLowerCase();
     // starts with alpha-num and ends with alpha-num
     if (!this.format.test(formattedName)) {
@@ -94,7 +96,7 @@ class TagAPI extends DataSource {
       posts: [],
       comments: [],
     };
-    const tagID = await this.db.create(this.dbID, this.collection, [tag]);
+    const tagID = await db.create(this.dbID, this.collection, [tag]);
     if (!tagID || !tagID.length) {
       return;
     }
