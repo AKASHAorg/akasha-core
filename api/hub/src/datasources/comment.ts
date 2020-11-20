@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { initAppDB } from '../helpers';
+import { getAppDB } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
 
 class CommentAPI extends DataSource {
@@ -15,7 +15,7 @@ class CommentAPI extends DataSource {
 
   async initialize(config) {
     this.context = config.context;
-    this.db = await initAppDB();
+    this.db = await getAppDB();
   }
 }
 

@@ -36,7 +36,7 @@
     "apollo-server-koa": "2.19.0",
     "dotenv": "8.2.0",
     "emittery": "0.7.2",
-    "ethers": "5.0.19",
+    "ethers": "5.0.21",
     "koa": "2.13.0",
     "koa-bodyparser": "4.3.0",
     "koa-json": "2.0.2",
