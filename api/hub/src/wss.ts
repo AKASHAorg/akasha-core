@@ -2,7 +2,7 @@ import route from 'koa-route';
 import Emittery from 'emittery';
 import { ThreadID, UserAuth, Where } from '@textile/hub';
 import { utils } from 'ethers';
-import { getAPISig, initAppDB, newClientDB } from './helpers';
+import { getAPISig, getAppDB, newClientDB } from './helpers';
 import { contextCache } from './storage/cache';
 import { Profile } from './collections/interfaces';
 
@@ -12,7 +12,7 @@ const wss = route.all('/ws/userauth', ctx => {
   ctx.websocket.on('message', async msg => {
     try {
       const data = JSON.parse(msg);
-      const db = await initAppDB();
+      const db = await getAppDB();
       const client = await newClientDB();
       let currentUser: Profile = null;
       let addressChallenge;

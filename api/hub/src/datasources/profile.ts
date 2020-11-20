@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { initAppDB } from '../helpers';
+import { getAppDB } from '../helpers';
 import { ThreadID, Where, Client } from '@textile/hub';
 import { DataProvider, Profile } from '../collections/interfaces';
 
@@ -16,10 +16,16 @@ class ProfileAPI extends DataSource {
 
   async initialize(config) {
     this.context = config.context;
-    this.db = await initAppDB();
+    this.db = await getAppDB();
   }
-
+  async refreshDB() {
+    // @ts-ignore
+    if (this.db.context.isExpired) {
+      this.db = await getAppDB();
+    }
+  }
   async getProfile(ethAddress: string) {
+    await this.refreshDB();
     const query = new Where('ethAddress').eq(ethAddress);
     const profilesFound = await this.db.find<Profile>(this.dbID, this.collection, query);
     if (profilesFound.length) {
@@ -29,6 +35,7 @@ class ProfileAPI extends DataSource {
   }
 
   async resolveProfile(pubKey: string) {
+    await this.refreshDB();
     const query = new Where('pubKey').eq(pubKey);
     const profilesFound = await this.db.find<Profile>(this.dbID, this.collection, query);
     if (profilesFound.length) {
@@ -38,6 +45,7 @@ class ProfileAPI extends DataSource {
   }
 
   async addProfileProvider(pubKey: string, data: DataProvider[]) {
+    await this.refreshDB();
     const profile = await this.resolveProfile(pubKey);
     if (!profile) {
       return;
@@ -46,6 +54,7 @@ class ProfileAPI extends DataSource {
     return await this.db.save(this.dbID, this.collection, [profile]);
   }
   async makeDefaultProvider(pubKey: string, data: DataProvider) {
+    await this.refreshDB();
     const profile = await this.resolveProfile(pubKey);
     if (!profile) {
       return;
@@ -60,6 +69,7 @@ class ProfileAPI extends DataSource {
   }
 
   async registerUserName(pubKey: string, name: string) {
+    await this.refreshDB();
     const query = new Where('userName').eq(name);
     const profilesFound = await this.db.find<Profile>(this.dbID, this.collection, query);
     if (profilesFound.length) {

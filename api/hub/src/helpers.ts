@@ -25,12 +25,12 @@ export const newClientDB = async () => {
 };
 const identity = () => PrivateKey.fromString(process.env.AWF_DBkey);
 let appDBClient;
-export const initAppDB = async () => {
+export const getAppDB = async () => {
   if (appDBClient) {
     if (appDBClient.context.isExpired) {
       await appDBClient.getToken(identity());
     }
-    return appDBClient;
+    return Promise.resolve(appDBClient);
   }
   const API = process.env.API || undefined;
   const client = await Client.withKeyInfo(
@@ -48,7 +48,7 @@ export const initAppDB = async () => {
 };
 
 export const setupDBCollections = async () => {
-  const appDB = await initAppDB();
+  const appDB = await getAppDB();
   const threadID = process.env.AWF_THREADdb
     ? ThreadID.fromString(process.env.AWF_THREADdb)
     : ThreadID.fromRandom();

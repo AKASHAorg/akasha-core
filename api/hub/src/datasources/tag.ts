@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { initAppDB } from '../helpers';
+import { getAppDB } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { Tag } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -21,7 +21,7 @@ class TagAPI extends DataSource {
 
   async initialize(config) {
     this.context = config.context;
-    this.db = await initAppDB();
+    this.db = await getAppDB();
   }
 
   async getTag(name: string) {

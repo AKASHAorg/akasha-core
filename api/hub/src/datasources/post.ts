@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { initAppDB } from '../helpers';
+import { getAppDB } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
 import { DataProvider, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -18,7 +18,7 @@ class PostAPI extends DataSource {
 
   async initialize(config) {
     this.context = config.context;
-    this.db = await initAppDB();
+    this.db = await getAppDB();
   }
 
   async getPost(id: string) {
