@@ -2,7 +2,7 @@ import route from 'koa-route';
 import Emittery from 'emittery';
 import { ThreadID, UserAuth, Where } from '@textile/hub';
 import { utils } from 'ethers';
-import { getAPISig, initAppDB, newClientDB } from './helpers';
+import { getAPISig, getAppDB, newClientDB } from './helpers';
 import { contextCache } from './storage/cache';
 import { Profile } from './collections/interfaces';
 
@@ -12,8 +12,6 @@ const wss = route.all('/ws/userauth', ctx => {
   ctx.websocket.on('message', async msg => {
     try {
       const data = JSON.parse(msg);
-      const db = await initAppDB();
-      const client = await newClientDB();
       let currentUser: Profile = null;
       let addressChallenge;
       switch (data.type) {
@@ -21,6 +19,8 @@ const wss = route.all('/ws/userauth', ctx => {
           if (!data.pubkey) {
             throw new Error('missing pubkey');
           }
+          const db = await getAppDB();
+          const client = await newClientDB();
           const query = new Where('pubKey').eq(data.pubkey);
           // check if the key is already registered
           const userFound = await db.find(dbId, 'Profiles', query);

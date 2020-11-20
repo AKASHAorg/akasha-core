@@ -9,7 +9,11 @@ export const getAPISig = async (minutes: number = 30) => {
 let userDBClient;
 export const newClientDB = async () => {
   if (userDBClient) {
-    return userDBClient;
+    if (userDBClient.context.isExpired) {
+      userDBClient = undefined;
+      return newClientDB();
+    }
+    return Promise.resolve(appDBClient);
   }
   const API = process.env.API || undefined;
   const client = await Client.withKeyInfo(
@@ -23,11 +27,17 @@ export const newClientDB = async () => {
   userDBClient = client;
   return client;
 };
-
+const identity = () => PrivateKey.fromString(process.env.AWF_DBkey);
 let appDBClient;
-export const initAppDB = async () => {
+export const getAppDB = async () => {
   if (appDBClient) {
-    return appDBClient;
+    if (appDBClient.context.isExpired) {
+      // tslint:disable-next-line:no-console
+      console.info('==refreshing grpc session==');
+      appDBClient = undefined;
+      return getAppDB();
+    }
+    return Promise.resolve(appDBClient);
   }
   const API = process.env.API || undefined;
   const client = await Client.withKeyInfo(
@@ -38,14 +48,14 @@ export const initAppDB = async () => {
     API,
     process.env.NODE_ENV !== 'production',
   );
-  const identity = PrivateKey.fromString(process.env.AWF_DBkey);
-  await client.getToken(identity);
+
+  await client.getToken(identity());
   appDBClient = client;
   return client;
 };
 
 export const setupDBCollections = async () => {
-  const appDB = await initAppDB();
+  const appDB = await getAppDB();
   const threadID = process.env.AWF_THREADdb
     ? ThreadID.fromString(process.env.AWF_THREADdb)
     : ThreadID.fromRandom();
