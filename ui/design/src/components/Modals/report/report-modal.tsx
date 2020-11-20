@@ -24,7 +24,6 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   footerUrl2: string;
   cancelLabel?: string;
   reportLabel?: string;
-  storybook?: boolean;
   user?: string;
   contentId?: string;
   // screen size passed by viewport provider
@@ -51,7 +50,6 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     reportLabel,
     blockLabel,
     closeLabel,
-    storybook,
     user,
     contentId,
     size,
@@ -113,14 +111,6 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   };
 
   const handleReport = () => {
-    // bypass for storybook
-    if (storybook) {
-      addToast("Don't find fault. Find a remedy.", {
-        appearance: 'success',
-      });
-      return setSuccess(true);
-    }
-
     const dataToPost = {
       user,
       contentId,

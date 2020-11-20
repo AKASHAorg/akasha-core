@@ -143,7 +143,6 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal'>) => {
             reportLabel={reportLabel}
             blockLabel={blockLabel}
             closeLabel={closeLabel}
-            storybook={true}
             size={size}
             closeModal={() => {
               setModalOpen(false);
