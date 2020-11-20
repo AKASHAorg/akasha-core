@@ -109,7 +109,7 @@ const PostPage: React.FC<IPostPage> = props => {
                   'We will investigate this post and take appropriate action.',
                 )}
                 optionsTitleLabel={t('Please select a reason')}
-                optionsLabelArr={[
+                optionLabels={[
                   t('Suspicious, deceptive, or spam'),
                   t('Abusive or harmful to others'),
                   t('Self-harm or suicide'),

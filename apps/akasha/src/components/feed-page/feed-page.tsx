@@ -268,7 +268,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               successTitleLabel={t('Thank you for helping us keep Ethereum World Safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
-              optionsLabelArr={[
+              optionLabels={[
                 t('Suspicious, deceptive, or spam'),
                 t('Abusive or harmful to others'),
                 t('Self-harm or suicide'),

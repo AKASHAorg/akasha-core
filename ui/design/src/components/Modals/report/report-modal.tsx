@@ -13,7 +13,7 @@ import ReportSuccessModal, { IReportSuccessModalProps } from './report-success-m
 export interface IReportModalProps extends IReportSuccessModalProps {
   titleLabel: string;
   optionsTitleLabel: string;
-  optionsLabelArr: string[];
+  optionLabels: string[];
   descriptionLabel: string;
   descriptionPlaceholder: string;
   footerText1Label: string;
@@ -38,7 +38,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     successTitleLabel,
     successMessageLabel,
     optionsTitleLabel,
-    optionsLabelArr,
+    optionLabels,
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
@@ -125,7 +125,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       });
       return setSuccess(true);
     }
-    const filteredReasons = optionsLabelArr.filter((option, indx) => {
+    const filteredReasons = optionLabels.filter((option, indx) => {
       if (reasons[indx]) {
         return option;
       }
@@ -212,7 +212,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
               </Text>
             </StyledText>
             <Box direction="column">
-              {optionsLabelArr.map((label, idx) => (
+              {optionLabels.map((label, idx) => (
                 <Box key={label} margin={{ top: 'xsmall' }}>
                   <RadioButton
                     name="prop"

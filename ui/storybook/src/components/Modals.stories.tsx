@@ -96,7 +96,7 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal'>) => {
     successTitleLabel,
     successMessageLabel,
     optionsTitleLabel,
-    optionsLabelArr,
+    optionLabels,
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
@@ -130,7 +130,7 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal'>) => {
             successTitleLabel={successTitleLabel}
             successMessageLabel={successMessageLabel}
             optionsTitleLabel={optionsTitleLabel}
-            optionsLabelArr={optionsLabelArr}
+            optionLabels={optionLabels}
             descriptionLabel={descriptionLabel}
             descriptionPlaceholder={descriptionPlaceholder}
             footerText1Label={footerText1Label}
@@ -176,7 +176,7 @@ storiesOf('Modals/ Report Modal', module)
           'We will investigate this post and take appropriate action.',
         )}
         optionsTitleLabel={text('Subtitle Label', 'Please select a reason')}
-        optionsLabelArr={[
+        optionLabels={[
           text('Option 1 Label', 'Suspicious, deceptive, or spam'),
           text('Option 2 Label', 'Abusive or harmful to others'),
           text('Option 3 Label', 'Self-harm or suicide'),
@@ -212,7 +212,7 @@ storiesOf('Modals/ Report Modal', module)
           'We will investigate this post and take appropriate action',
         )}
         optionsTitleLabel={text('Subtitle Label', 'Please select a reason')}
-        optionsLabelArr={[
+        optionLabels={[
           text('Option 1 Label', 'Suspicious, deceptive, or spam'),
           text('Option 2 Label', 'Abusive or harmful to others'),
           text('Option 3 Label', 'Self-harm or suicide'),
