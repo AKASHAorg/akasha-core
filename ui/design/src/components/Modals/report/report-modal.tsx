@@ -58,14 +58,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     closeModal,
   } = props;
 
-  const [reasons, setReasons] = React.useState<boolean[]>([
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const [reasons, setReasons] = React.useState<string[]>([]);
   const [explanation, setExplanation] = React.useState('');
   const [requesting, setRequesting] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
@@ -76,13 +69,15 @@ const ReportModal: React.FC<IReportModalProps> = props => {
 
   const { addToast } = useToasts();
 
-  const handleSelectReason = (selected: number) => {
-    setReasons(reasons.map((reason, index) => (index === selected ? !reason : reason)));
+  const handleSelectReason = (selected: string) => {
+    if (!reasons.includes(selected)) {
+      setReasons(reasons.concat(selected));
+    }
   };
 
-  const handleClickReason = (clicked: number) => {
-    if (reasons[clicked]) {
-      setReasons(reasons.map((reasn, id) => (id === clicked ? !reasn : reasn)));
+  const handleClickReason = (clicked: string) => {
+    if (reasons.includes(clicked)) {
+      setReasons(reasons.filter(reasn => reasn !== clicked));
     }
   };
 
@@ -125,17 +120,12 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       });
       return setSuccess(true);
     }
-    const filteredReasons = optionLabels.filter((option, indx) => {
-      if (reasons[indx]) {
-        return option;
-      }
-      return;
-    });
+
     const dataToPost = {
-      user: user,
-      contentId: contentId,
-      reasons: filteredReasons,
-      explanation: explanation,
+      user,
+      contentId,
+      reasons,
+      explanation,
     };
 
     setRequesting(true);
@@ -212,14 +202,14 @@ const ReportModal: React.FC<IReportModalProps> = props => {
               </Text>
             </StyledText>
             <Box direction="column">
-              {optionLabels.map((label, idx) => (
+              {optionLabels.map(label => (
                 <Box key={label} margin={{ top: 'xsmall' }}>
                   <RadioButton
                     name="prop"
-                    checked={reasons[idx]}
+                    checked={reasons.some(el => el === label)}
                     label={label}
-                    onChange={() => handleSelectReason(idx)}
-                    onClick={() => handleClickReason(idx)}
+                    onChange={() => handleSelectReason(label)}
+                    onClick={() => handleClickReason(label)}
                   />
                 </Box>
               ))}
