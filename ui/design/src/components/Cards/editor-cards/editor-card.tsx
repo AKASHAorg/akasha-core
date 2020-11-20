@@ -27,6 +27,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
     mentions,
     tags,
     uploadRequest,
+    embedEntryData,
   } = props;
 
   return (
@@ -55,6 +56,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
         mentions={mentions}
         tags={tags}
         uploadRequest={uploadRequest}
+        embedEntryData={embedEntryData}
       />
     </MainAreaCardBox>
   );

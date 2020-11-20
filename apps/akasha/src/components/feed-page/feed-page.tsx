@@ -53,6 +53,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [feedState, feedStateActions] = useFeedReducer({});
   const [isLoading, setIsLoading] = React.useState(false);
   const [showEditor, setShowEditor] = React.useState(false);
+  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -165,8 +166,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
     bookmarkActions.addBookmark(entryId);
   };
-  const handleEntryRepost = () => {
-    /* todo */
+  const handleEntryRepost = (_withComment: boolean, entryData: any) => {
+    if (!ethAddress) {
+      showLoginModal();
+    } else {
+      setCurrentEmbedEntry(entryData);
+      setShowEditor(true);
+    }
   };
   const handleEntryShare = () => {
     /* todo */
@@ -195,6 +201,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const handleToggleEditor = () => {
     setShowEditor(!showEditor);
+    setCurrentEmbedEntry(undefined);
   };
 
   const onUploadRequest = uploadMediaToIpfs(props.sdkModules.commons.ipfsService);
@@ -252,6 +259,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         getMentions={handleGetMentions}
         getTags={handleGetTags}
         uploadRequest={onUploadRequest}
+        embedEntryData={currentEmbedEntry}
         style={{ width: '36rem' }}
       />
       <VirtualList
@@ -294,7 +302,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                         copyLinkLabel={t('Copy Link')}
                         copyIPFSLinkLabel={t('Copy IPFS Link')}
                         flagAsLabel={t('Flag as inappropiate')}
-                        loggedProfileEthAddress={'0x00123123123123'}
+                        loggedProfileEthAddress={ethAddress as any}
                         locale={locale}
                         style={{ height: 'auto' }}
                         bookmarkLabel={t('Save')}
