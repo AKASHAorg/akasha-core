@@ -36,9 +36,9 @@ const MyProfilePage = (props: RootComponentProps) => {
 
   return (
     <div>
-      <DS.Helmet>
+      <DS.Helmet.Helmet>
         <title>Profile | My Page</title>
-      </DS.Helmet>
+      </DS.Helmet.Helmet>
       <MyProfilePageHeader profileData={profileState} />
     </div>
   );

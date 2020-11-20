@@ -46,9 +46,9 @@ const BoxProfile: React.FC<IMyProfileProps> = () => {
 
   return (
     <>
-      <DS.Helmet>
+      <DS.Helmet.Helmet>
         <title>3Box | {profileId} Profile Page</title>
-      </DS.Helmet>
+      </DS.Helmet.Helmet>
       <Box fill="horizontal">
         <Box fill="horizontal" align="center">
           {!Object.keys(profileStateData.visitingProfile).length && (

@@ -1,19 +1,12 @@
 module.exports = {
-  externals: [
-    // /^@akashaproject\/design-system$/,
-    // /^react$/,
-    // /^react-dom$/,
-    // /^styled-components$/,
-    // /^single-spa-react$/,
-    // /^react-i18next$/,
-    // /^react-router-dom$/,
-    // /^immer$/,
-    // /^rxjs$/,
-    // /^rxjs\/operators$/,
-    // {
-    //   'single-spa-react': 'single-spa-react'
-    // }
-
-  ],
+  externals: {
+    'react': 'React',
+    'react-dom': 'ReactDOM',
+    // 'react-i18next': 'ReactI18next',
+    'styled-components': 'styled',
+    'single-spa-react': 'singleSpaReact',
+    'rxjs': 'rxjs',
+    'rxjs/operators': 'rxjs.operators',
+  },
   optimization: {}
 };

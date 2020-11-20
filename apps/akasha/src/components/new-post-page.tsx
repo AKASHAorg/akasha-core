@@ -42,9 +42,9 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
 
   return (
     <Box fill="horizontal">
-      <Helmet>
+      <Helmet.Helmet>
         <title>Write something.. | AKASHA App</title>
-      </Helmet>
+      </Helmet.Helmet>
       {!loginEthAddr && (
         <ErrorLoader
           type="no-login"

@@ -219,9 +219,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
   return (
     <Box fill="horizontal">
-      <Helmet>
+      <Helmet.Helmet>
         <title>AKASHA Feed | Ethereum.world</title>
-      </Helmet>
+      </Helmet.Helmet>
       <VirtualList
         items={feedState.feedItems}
         itemsData={feedState.feedItemData}

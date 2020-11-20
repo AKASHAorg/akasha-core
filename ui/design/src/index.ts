@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* Components */
 import {
   Box,
@@ -79,7 +80,7 @@ import { NotificationsPopover, SelectPopover } from './components/Popovers';
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
 import VirtualList from './components/VirtualList';
-import { Helmet } from 'react-helmet';
+import * as Helmet from 'react-helmet';
 import { HorizontalDivider } from './components/Dividers';
 
 /* Utilities (these are not components) */
@@ -95,6 +96,7 @@ import { createTheme } from './styles/themes/utils/create-theme';
 import { ThemeSelector } from './styles/themes/utils/theme-selector';
 /* Grommet utils */
 
+// @TODO: fix this export style...
 const exported = {
   Autosizer,
   Avatar,
@@ -167,7 +169,6 @@ const exported = {
   VirtualList,
   isBase64,
   formatImageSrc,
-  Helmet,
   WidgetAreaCardBox,
   ModalCard,
   EthProviderListModal,
@@ -183,6 +184,7 @@ const exported = {
   FilterCard,
   /* hooks */
   useGlobalLogin,
+  Helmet,
 };
 
 export default exported;

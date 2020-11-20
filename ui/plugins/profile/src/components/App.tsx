@@ -51,9 +51,9 @@ class App extends PureComponent<RootComponentProps> {
     return (
       <Box width="100vw">
         <I18nextProvider i18n={i18n ? i18n : null}>
-          <Helmet>
+          <Helmet.Helmet>
             <title>Profile</title>
-          </Helmet>
+          </Helmet.Helmet>
           <ThemeSelector
             availableThemes={[lightTheme, darkTheme]}
             settings={{ activeTheme: 'Light-Theme' }}

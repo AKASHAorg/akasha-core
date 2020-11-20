@@ -2,6 +2,8 @@ const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const commons = require('./app.pack.conf');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 module.exports = {
   entry: './src/index',
   mode: process.env.NODE_ENV || 'development',
@@ -41,7 +43,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js'],
   },
   output: {
-    publicPath: 'auto'
+    publicPath: 'auto',
   },
   plugins: [
     new CleanWebpackPlugin({ verbose: true }),
@@ -52,7 +54,7 @@ module.exports = {
       profile: true,
     })
   ],
-  devtool: 'source-map',
+  devtool: isProduction ? false : 'eval-source-map',
   externals: commons.externals,
   optimization: commons.optimization,
 };

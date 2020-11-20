@@ -1,8 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const name = require('./package.json').name;
 const { InjectManifest } = require('workbox-webpack-plugin');
+
+const isProduction = process.env.NODE_ENV === 'production'
 
 const config = {
   entry: './src/index.ts',
@@ -29,13 +30,13 @@ const config = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
-    fallback: {
-      "assert": require.resolve("assert/"),
-      "buffer": require.resolve("buffer/"),
-      "path": require.resolve("path-browserify/"),
-      "stream": require.resolve("stream-browserify/"),
-      "util": require.resolve("util/"),
-      "process": require.resolve("process/"),
+    alias: {
+      assert: require.resolve("assert/"),
+      buffer: require.resolve("buffer"),
+      path: require.resolve("path-browserify/"),
+      stream: require.resolve("stream-browserify/"),
+      util: require.resolve("util/"),
+      process: require.resolve("process/browser"),
     }
   },
   output: {
@@ -47,13 +48,9 @@ const config = {
   },
   optimization: {
     moduleIds: 'deterministic',
-    minimize: process.env.NODE_ENV !== 'development',
+    minimize: isProduction,
   },
   plugins: [
-    // new webpack.EnvironmentPlugin({
-    //   GRAPHQL_URI: 'http://api.akasha.network/query',
-    //   NODE_ENV: process.env.NODE_ENV || 'development'
-    // }),
     new webpack.ProgressPlugin({
       entries: true,
       modules: true,
@@ -61,19 +58,11 @@ const config = {
       profile: true,
     }),
     new webpack.AutomaticPrefetchPlugin(),
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: path.resolve(__dirname, '../../examples/ui/ethereum.world/public/template-index.html'),
-      inject: true,
-    }),
-    // these packages must be available globally (in our case in window)
-    // to avoid this we'll use webpack providePlugin which should replace all occurences
-    // with the exports provided here:
-    //    Buffer.from() => __webpack_imported_module(someModId).from()
+    // Makes sure the following is polyfilled in client-side bundles
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
-      stream: 'stream',
-      process: 'process'
+      stream: ['stream'],
+      process: ['process']
     }),
     new webpack.DefinePlugin({
       'process.env': {
@@ -87,7 +76,7 @@ const config = {
       exclude: [/.*?/]
     })
   ],
-  devtool: 'inline-source-map',
+  devtool: isProduction ? false : 'eval-source-map',
   mode: process.env.NODE_ENV || 'development',
   externals: [
     /^@truffle\/contract$/,

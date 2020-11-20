@@ -73,7 +73,6 @@ class ScriptLoader {
   private writeScript(src: string, onLoad, onError) {
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.async = true;
     script.src = src;
     script.addEventListener('load', onLoad.bind(this));
     script.addEventListener('error', onError(src));

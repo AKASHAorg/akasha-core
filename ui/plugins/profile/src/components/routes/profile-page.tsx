@@ -22,9 +22,9 @@ const ProfilePage = (props: RootComponentProps) => {
 
   return (
     <div>
-      <DS.Helmet>
+      <DS.Helmet.Helmet>
         <title>Profile | {profileId} Page</title>
-      </DS.Helmet>
+      </DS.Helmet.Helmet>
       <ProfilePageHeader profileData={profileState} profileId={profileId} />
     </div>
   );

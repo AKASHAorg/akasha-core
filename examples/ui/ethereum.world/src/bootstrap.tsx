@@ -1,6 +1,6 @@
-import { loadScripts } from './load-scripts';
 import ScriptLoader from './script-loader';
 import splashScreen from './splash-screen';
+import loadDependencies from './load-dependencies';
 
 const PORT = '8131';
 const HOST = 'http://localhost';
@@ -46,26 +46,6 @@ const getDefaultApps = async () => {
   };
 };
 
-const dependencies = [
-  { src: 'https://unpkg.com/react@17/umd/react.production.min.js' },
-  { src: 'https://unpkg.com/react-is@17.0.1/umd/react-is.production.min.js' },
-  { src: 'https://unpkg.com/single-spa-react@2.14.0/lib/single-spa-react.js' },
-  {
-    src: 'https://unpkg.com/single-spa-react@2.14.0/lib/single-spa-react.js.map',
-    type: 'application/json',
-  },
-  {
-    src: 'https://unpkg.com/styled-components/dist/styled-components.min.js',
-    type: 'module',
-  },
-  {
-    src: 'https://unpkg.com/styled-components/dist/styled-components.min.js.map',
-    type: 'application/json',
-  },
-  { src: 'https://unpkg.com/rxjs@6.6.3/bundles/rxjs.umd.min.js' },
-  { src: 'https://unpkg.com/rxjs@6.6.3/bundles/rxjs.umd.min.js.map', type: 'application/json' },
-];
-
 interface Win extends Window {
   akashaproject__sdk?: { default: ({ config, initialApps }) => void };
 }
@@ -75,8 +55,6 @@ const scriptLoader = new ScriptLoader();
 const bootstrap = async () => {
   const win: Win = window;
   const splashElement = splashScreen;
-  // @ts-ignore
-  const { default: sdkInit } = await import('akasha.sdk.js');
 
   const topBarSrc = {
     src: `${HOST}:${PORT}/widgets/topbar/index.js`,
@@ -114,11 +92,16 @@ const bootstrap = async () => {
     }
   }
   // start loading dependency scripts
-  await loadScripts(dependencies);
+  await loadDependencies({
+    host: HOST,
+    port: PORT,
+  });
 
   const initializeSdk = async config => {
     const defaultApps = await getDefaultApps();
     const userApps = await getUserApps({ userId: 'blablaUserId' });
+    // @ts-ignore
+    const { default: sdkInit } = win.akashaproject__sdk;
     const sdk = sdkInit({
       config: config,
       initialApps: {

@@ -17,7 +17,6 @@ module.exports = Object.assign(baseConfig, {
       shared: {
         react: {
           singleton: true,
-
         },
         'react-dom': {
           singleton: true,

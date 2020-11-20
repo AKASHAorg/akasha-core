@@ -39,15 +39,18 @@ module.exports = Object.assign(baseConfig, {
         }
       },
     }),
-    new HtmlWebpackPlugin({
-      template: './public/index.html',
-      publicPath: '/'
-    }),
+    // new HtmlWebpackPlugin({
+    //   template: './public/index.html',
+    //   publicPath: '/'
+    // }),
     new CopyPlugin({
       patterns: [
         { from: 'public' }
       ]
     })
   ]),
-  externals: baseConfig.externals.concat([{ 'akasha.sdk.js': 'akashaproject__sdk' }])
+  externals: {
+    ...baseConfig.externals,
+    'akasha.sdk.js': 'akashaproject__sdk',
+  }
 });

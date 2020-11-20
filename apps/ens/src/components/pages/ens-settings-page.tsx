@@ -12,9 +12,9 @@ export interface EnsSettingsPageProps {
 const EnsSettingsPage: React.FC<EnsSettingsPageProps> = () => {
   return (
     <div>
-      <Helmet>
+      <Helmet.Helmet>
         <title>ENS | {SETTINGS_PAGE}</title>
-      </Helmet>
+      </Helmet.Helmet>
       ENS Settings Page
     </div>
   );

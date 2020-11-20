@@ -108,9 +108,9 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
 
   return (
     <Box align="center">
-      <DS.Helmet>
+      <DS.Helmet.Helmet>
         <title>ENS | {ENS_EDIT_PAGE}</title>
-      </DS.Helmet>
+      </DS.Helmet.Helmet>
       {!loggedEthAddress && isLoading && <>Detecting eth address...</>}
       {loggedEthAddress && isLoading && <>Looking for ENS Address</>}
       {loggedEthAddress &&
