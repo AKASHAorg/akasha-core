@@ -23,10 +23,13 @@ export const newClientDB = async () => {
   userDBClient = client;
   return client;
 };
-
+const identity = () => PrivateKey.fromString(process.env.AWF_DBkey);
 let appDBClient;
 export const initAppDB = async () => {
   if (appDBClient) {
+    if (appDBClient.context.isExpired) {
+      await appDBClient.getToken(identity());
+    }
     return appDBClient;
   }
   const API = process.env.API || undefined;
@@ -38,8 +41,8 @@ export const initAppDB = async () => {
     API,
     process.env.NODE_ENV !== 'production',
   );
-  const identity = PrivateKey.fromString(process.env.AWF_DBkey);
-  await client.getToken(identity);
+
+  await client.getToken(identity());
   appDBClient = client;
   return client;
 };
