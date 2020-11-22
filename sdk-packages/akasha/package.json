@@ -41,6 +41,7 @@
     "@akashaproject/sdk-ui-plugin-loader": "*",
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/sdk-registry": "*",
+    "@akashaproject/sdk-posts": "*",
     "rxdb": "8.9.0"
   },
   "devDependencies": {
