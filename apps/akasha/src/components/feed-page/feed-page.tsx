@@ -26,14 +26,17 @@ import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
 
 const {
+  Box,
   Helmet,
   VirtualList,
-  Box,
-  ErrorInfoCard,
   ErrorLoader,
   EntryCardLoading,
   EntryCard,
-
+  ReportModal,
+  ToastProvider,
+  ModalRenderer,
+  ErrorInfoCard,
+  useViewportSize,
   EditorModal,
 } = DS;
 
@@ -45,14 +48,27 @@ export interface FeedPageProps {
   showLoginModal: () => void;
   ethAddress: string | null;
   jwtToken: string | null;
+  modalOpen: boolean;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onError: (err: Error) => void;
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const { isMobile, showLoginModal, ethAddress, jwtToken, onError } = props;
+  const {
+    isMobile,
+    modalOpen,
+    setModalOpen,
+    showLoginModal,
+    ethAddress,
+    jwtToken,
+    onError,
+  } = props;
   const [feedState, feedStateActions] = useFeedReducer({});
   const [isLoading, setIsLoading] = React.useState(false);
   const [showEditor, setShowEditor] = React.useState(false);
+  const [flagged, setFlagged] = React.useState('');
+
+  const { size } = useViewportSize();
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -171,8 +187,15 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleEntryShare = () => {
     /* todo */
   };
-  const handleEntryFlag = () => {
+  const handleEntryFlag = (entryId: string, user?: string | null) => () => {
     /* todo */
+    if (!user) {
+      // setting entryId to state first, if not logged in
+      setFlagged(entryId);
+      return showLoginModal();
+    }
+    setFlagged(entryId);
+    setModalOpen(true);
   };
   const handleLinkCopy = () => {
     /* todo */
@@ -231,11 +254,50 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
     setShowEditor(false);
   };
+
   return (
     <Box fill="horizontal">
       <Helmet>
         <title>AKASHA Feed | Ethereum.world</title>
       </Helmet>
+      <ModalRenderer slotId={props.layout.modalSlotId}>
+        {modalOpen && (
+          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
+            <ReportModal
+              titleLabel={t('Report a Post')}
+              successTitleLabel={t('Thank you for helping us keep Ethereum World Safe! 🙌')}
+              successMessageLabel={t('We will investigate this post and take appropriate action.')}
+              optionsTitleLabel={t('Please select a reason')}
+              optionLabels={[
+                t('Suspicious, deceptive, or spam'),
+                t('Abusive or harmful to others'),
+                t('Self-harm or suicide'),
+                t('Illegal'),
+                t('Nudity'),
+                t('Violence'),
+              ]}
+              descriptionLabel={t('Explanation')}
+              descriptionPlaceholder={t('Please explain your reason(s)')}
+              footerText1Label={t('If you are unsure, you can refer to our')}
+              footerLink1Label={t('Code of Conduct')}
+              footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
+              footerText2Label={t('and')}
+              footerLink2Label={t('Terms of Service')}
+              footerUrl2={'https://ethereum.world/terms-of-service'}
+              cancelLabel={t('Cancel')}
+              reportLabel={t('Report')}
+              blockLabel={t('Block User')}
+              closeLabel={t('Close')}
+              user={ethAddress ? ethAddress : ''}
+              contentId={flagged}
+              size={size}
+              closeModal={() => {
+                setModalOpen(false);
+              }}
+            />
+          </ToastProvider>
+        )}
+      </ModalRenderer>
       <EditorModal
         slotId={props.layout.modalSlotId}
         showModal={showEditor}
@@ -257,12 +319,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <VirtualList
         items={feedState.feedItems}
         itemsData={feedState.feedItemData}
+        visitorEthAddress={ethAddress}
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
         loadInitialFeed={onInitialLoad}
         hasMoreItems={true}
         bookmarkedItems={bookmarks}
-        getItemCard={({ itemData, isBookmarked }) => (
+        getItemCard={({ itemData, visitorEthAddress, isBookmarked }) => (
           <ErrorInfoCard errors={{}}>
             {(errorMessages, hasCriticalErrors) => (
               <>
@@ -293,7 +356,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                         shareLabel={t('Share')}
                         copyLinkLabel={t('Copy Link')}
                         copyIPFSLinkLabel={t('Copy IPFS Link')}
-                        flagAsLabel={t('Flag as inappropiate')}
+                        flagAsLabel={t('Report Post')}
                         loggedProfileEthAddress={'0x00123123123123'}
                         locale={locale}
                         style={{ height: 'auto' }}
@@ -301,7 +364,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                         bookmarkedLabel={t('Saved')}
                         onRepost={handleEntryRepost}
                         onEntryShare={handleEntryShare}
-                        onEntryFlag={handleEntryFlag}
+                        onEntryFlag={handleEntryFlag(itemData.CID, visitorEthAddress)}
                         onLinkCopy={handleLinkCopy}
                         onClickReplies={handleClickReplies}
                         handleFollow={handleFollow}

@@ -46,6 +46,9 @@ storiesOf('Cards/Profile Cards', module)
         changeCoverImageLabel={text('Change Cover Image', changeCoverImageLabel)}
         cancelLabel={text('Cancel Edit', cancelLabel)}
         saveChangesLabel={text('Save Edit', saveChangesLabel)}
+        flagAsLabel={text('Report Label', 'Report Profile')}
+        flaggable={true}
+        onEntryFlag={() => null}
         getProfileProvidersData={() => action('Gettting full Profile Data')('Synthetic Event')}
       />
     </Box>

@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
+import { useGlobalLogin } from '@akashaproject/ui-awf-hooks';
 import { LearnMoreTutorial } from './tutorial-modal';
 import LoginWidgetIllustration from './icons/login-widget-illustration';
 import { useLoginState } from '../state';
 
-const { ModalRenderer, LoginCTAWidgetCard, LoginModal, useGlobalLogin } = DS;
+const { ModalRenderer, LoginCTAWidgetCard, LoginModal } = DS;
 
 export interface ILoginWidgetProps {
   sdkModules: any;

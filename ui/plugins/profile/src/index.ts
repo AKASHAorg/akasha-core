@@ -5,6 +5,7 @@ import { Widget as TopicsWidget } from './components/widgets/topics';
 import { Widget as AppsWidget } from './components/widgets/apps';
 import { moduleName as profilesModule } from '@akashaproject/sdk-profiles/lib/constants';
 import { moduleName as commonsModule } from '@akashaproject/sdk-common/lib/constants';
+import { moduleName as authModule } from '@akashaproject/sdk-auth/lib/constants';
 
 /**
  * All the plugins must export an object like this:
@@ -34,7 +35,7 @@ export const application: Application = {
       './components'
     ),
   name: 'ui-plugin-profile',
-  sdkModules: [{ module: profilesModule }, { module: commonsModule }],
+  sdkModules: [{ module: profilesModule }, { module: commonsModule }, { module: authModule }],
   title: 'AKASHA Profile',
   menuItems: routes,
   logo: { type: LogoTypeSource.AVATAR, value: '' },

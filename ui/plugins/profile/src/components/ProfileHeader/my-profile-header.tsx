@@ -39,6 +39,7 @@ export const MyProfilePageHeader = (props: { profileData: Partial<IProfileData> 
       appsLabel={'Apps'}
       usersLabel={'Users'}
       shareProfileLabel={'Share Profile'}
+      flaggable={false}
     />
   );
 };
