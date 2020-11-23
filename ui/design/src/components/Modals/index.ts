@@ -1,3 +1,5 @@
+import { ToastProvider } from 'react-toast-notifications';
+
 import ListModal from './list/list-modal';
 import { MobileListModal } from './list/mobile-list-modal';
 import ShareModal from './share/share-modal';
@@ -7,6 +9,7 @@ import EthProviderModalIllustration from './login/eth-provider-modal-illustratio
 import { ModalContainer } from './common/fullscreen-modal-container';
 import { ModalRenderer } from './common/modal-renderer';
 import LoginModal from './login/login-modal';
+import ReportModal, { IReportModalProps } from './report/report-modal';
 import EditorModal from './editor/editor-modal';
 
 export {
@@ -19,5 +22,8 @@ export {
   ModalContainer,
   ModalRenderer,
   LoginModal,
+  ReportModal,
+  IReportModalProps,
+  ToastProvider,
   EditorModal,
 };

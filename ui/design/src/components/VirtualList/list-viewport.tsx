@@ -7,6 +7,7 @@ import Spinner from '../Spinner';
 export interface IListViewportProps {
   items: string[];
   itemsData: IVirtualListProps['itemsData'];
+  visitorEthAddress?: IVirtualListProps['visitorEthAddress'];
   height: number;
   getItemCard: GetItemCardFn;
   onSizeChange: IRenderItemProps['onSizeChange'];
@@ -21,6 +22,7 @@ export interface IListViewportProps {
 const ListViewport: React.FC<IListViewportProps> = props => {
   const {
     itemsData,
+    visitorEthAddress,
     coordinates,
     items,
     itemSpacing,
@@ -43,6 +45,7 @@ const ListViewport: React.FC<IListViewportProps> = props => {
           <CardRenderer
             key={itemKey}
             itemId={itemId}
+            visitorEthAddress={visitorEthAddress}
             getItemCard={props.getItemCard}
             loadItemData={props.loadItemData}
             itemData={itemData}

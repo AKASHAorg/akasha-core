@@ -7,7 +7,5 @@
     "module": "commonjs",
     "esModuleInterop": true
   },
-  "include": [
-    "./src"
-  ]
+  "include": ["./src"]
 }

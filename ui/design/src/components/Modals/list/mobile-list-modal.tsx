@@ -2,17 +2,8 @@ import { Box, Text } from 'grommet';
 import * as React from 'react';
 import styled from 'styled-components';
 
+import { ModalWrapper } from '../common/styled-modal';
 import { Icon } from '../../Icon';
-
-const ModalWrapper = styled(Box)`
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 199;
-  background: ${props => props.theme.colors.modalBackground};
-`;
 
 const StyledBox = styled(Box)`
   width: calc(100% - 1rem);

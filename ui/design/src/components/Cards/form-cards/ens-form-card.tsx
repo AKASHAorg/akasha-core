@@ -297,7 +297,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                 color="accentText"
                 size="medium"
                 style={{ cursor: 'pointer' }}
-                onClick={() => window.open(consentUrl, '_blank')}
+                onClick={() => window.open(consentUrl, consentLabel, '_blank noopener noreferrer')}
               >
                 {consentLabel}
               </Text>
