@@ -7,6 +7,7 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
   const {
     itemId,
     itemData,
+    visitorEthAddress,
     loadItemData,
     onSizeChange,
     itemSpacing,
@@ -75,6 +76,7 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
         loadItemData={loadItemData}
         itemData={itemData}
         itemId={itemId}
+        visitorEthAddress={visitorEthAddress}
         itemSpacing={itemSpacing}
         getItemCard={getItemCard}
         isBookmarked={isBookmarked}

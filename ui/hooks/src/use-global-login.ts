@@ -7,7 +7,7 @@ import { filter } from 'rxjs/operators';
 export type OnSuccessHandler = (data: { ethAddress: string; token: string }) => void;
 export type OnErrorHandler = (payload: { error: Error }) => void;
 
-export const useGlobalLogin = (
+const useGlobalLogin = (
   channel: any,
   onSuccess: OnSuccessHandler,
   onError?: OnErrorHandler,
@@ -36,3 +36,5 @@ export const useGlobalLogin = (
     return () => call.unsubscribe();
   }, []);
 };
+
+export default useGlobalLogin;
