@@ -7,7 +7,7 @@ import { ModalWrapper } from '../common/styled-modal';
 import { Button } from '../../Buttons';
 import { Icon } from '../../Icon';
 
-import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from './styled';
+import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from '../styled';
 import ReportSuccessModal, { IReportSuccessModalProps } from './report-success-modal';
 
 export interface IReportModalProps extends IReportSuccessModalProps {
