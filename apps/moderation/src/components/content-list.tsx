@@ -8,7 +8,7 @@ import { postData } from '../services/dummy-data';
 
 const { Box } = DS;
 
-export default function ContentList() {
+const ContentList: React.FC = () => {
   const { t } = useTranslation();
 
   const handleKeep = () => {
@@ -51,4 +51,6 @@ export default function ContentList() {
       ))}
     </Box>
   );
-}
+};
+
+export default ContentList;

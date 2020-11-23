@@ -6,7 +6,7 @@ import { StyledBox } from './styled';
 
 const { Box, Icon, Text, Avatar, Button, MainAreaCardBox } = DS;
 
-export interface ContentCardProps {
+export interface IContentCardProps {
   reportedLabel: string;
   contentType?: string;
   forLabel: string;
@@ -25,7 +25,7 @@ export interface ContentCardProps {
   handleDelist: () => void;
 }
 
-export default function ContentCard(props: ContentCardProps) {
+const ContentCard: React.FC<IContentCardProps> = props => {
   const {
     reportedLabel,
     contentType,
@@ -107,16 +107,13 @@ export default function ContentCard(props: ContentCardProps) {
             </Box>
             <Box direction="row" width="35%" justify="end">
               <Button margin={{ right: 'xsmall' }} label={keepContentLabel} onClick={handleKeep} />
-              <Button
-                primary={true}
-                label={delistContentLabel}
-                onClick={handleDelist}
-                // disabled={}
-              />
+              <Button primary={true} label={delistContentLabel} onClick={handleDelist} />
             </Box>
           </Box>
         </Box>
       </MainAreaCardBox>
     </Box>
   );
-}
+};
+
+export default ContentCard;
