@@ -5,7 +5,8 @@
     "examples/ui/**",
     "scripts/*",
     "apps/akasha",
-    "apps/moderation"
+    "apps/moderation",
+    "api/**"
   ],
   "npmClient": "npm",
   "useWorkspaces": false,
