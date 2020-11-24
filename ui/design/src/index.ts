@@ -76,6 +76,7 @@ import {
   MobileListModal,
   LoginModal,
   ReportModal,
+  ModerateModal,
   ToastProvider,
   EditorModal,
 } from './components/Modals';
@@ -151,6 +152,7 @@ const exported = {
   NotificationsPopover,
   ShareModal,
   ReportModal,
+  ModerateModal,
   ToastProvider,
   SelectPopover,
   SubtitleTextIcon,
