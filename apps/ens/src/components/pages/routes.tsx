@@ -86,7 +86,7 @@ const Routes: React.FC<
         </Switch>
       </Router>
       <LoginModal
-        slotId={layout.modalSlotId}
+        slotId={layout.app.modalSlotId}
         onLogin={handleLogin}
         onModalClose={handleModalClose}
         showModal={loginModalState.showLoginModal}

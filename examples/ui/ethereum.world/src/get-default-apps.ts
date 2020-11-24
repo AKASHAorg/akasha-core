@@ -7,6 +7,9 @@ export const getDefaultApps = async (appsPublicPath, pluginsPublicPath, widgetsP
       src: `${appsPublicPath}/ens/index.js`,
       name: 'akashaproject__app_ens_integration',
       moduleName: './app',
+      config: {
+        area: MenuItemAreaType.AppArea,
+      },
     },
   ];
   // plugins
@@ -25,6 +28,22 @@ export const getDefaultApps = async (appsPublicPath, pluginsPublicPath, widgetsP
       moduleName: './app',
       config: {
         area: MenuItemAreaType.SearchArea,
+      },
+    },
+    {
+      src: `${pluginsPublicPath}/notifications/index.js`,
+      name: 'akashaproject__ui_plugin_notifications',
+      moduleName: './app',
+      config: {
+        area: MenuItemAreaType.QuickAccessArea,
+      },
+    },
+    {
+      src: `${pluginsPublicPath}/app-center/index.js`,
+      name: 'akashaproject__ui_plugin_app_center',
+      moduleName: './app',
+      config: {
+        area: MenuItemAreaType.BottomArea,
       },
     },
   ];

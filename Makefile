@@ -6,7 +6,7 @@ build.tsc.sdk:
 build.tsc.ui:
 	npm run tsc:ui
 build.sdk:
-	NODE_ENV=production npm run build:sdk
+	npm run build:sdk
 build.ui:
 	npm run pack:ui-apps
 clean:
@@ -17,7 +17,7 @@ install:
 	npm install && \
 	npm run bootstrap
 build.staging.feed:
-	./node_modules/.bin/lerna run build:staging
+	./node_modules/.bin/lerna run build:all
 build.staging.feed.static: build build.staging.feed
 build.staging.storybook:
 	./node_modules/.bin/lerna run build:storybook

@@ -270,13 +270,6 @@ export default class AppLoader implements IAppLoader {
       this.deferredIntegrations.push({ integration, integrationId, menuItemType });
       return;
     }
-    if (integration.config && integration.config.activeWhen && integration.config.activeWhen.path) {
-      integration.app.activeWhen = integration.config.activeWhen;
-    }
-
-    if (integration.config && integration.config.title) {
-      integration.app.title = integration.config.title;
-    }
     this.translationManager.createInstance(
       integration.app,
       this.appLogger.child({ i18nPlugin: integrationId }),
@@ -295,7 +288,7 @@ export default class AppLoader implements IAppLoader {
         ...this.config,
         ...integration.config,
         activeWhen: integration.app.activeWhen,
-        domElementGetter: () => document.getElementById(this.config.layout.pluginSlotId),
+        domElementGetter: () => document.getElementById(this.config.layout.app.pluginSlotId),
         i18n: this.translationManager.getInstance(integrationId),
         i18nConfig: integration.app.i18nConfig,
         logger: this.appLogger.child({ plugin: integrationId }),
@@ -347,7 +340,7 @@ export default class AppLoader implements IAppLoader {
     const matchedPlugins = this.getPluginsForLocation(window.location);
     if (window.location.pathname === '/' && matchedPlugins.length === 0) {
       if (this.config.rootLoadedApp) {
-        singleSpa.navigateToUrl(this.config.rootLoadedApp.activeWhen.path);
+        singleSpa.navigateToUrl(this.config.rootLoadedApp.app.activeWhen.path);
       } else {
         this.appLogger.error('There is no rootLoadedApp set. Nothing to render!');
       }
@@ -365,7 +358,7 @@ export default class AppLoader implements IAppLoader {
     let matchedApps = [];
     if (mountedApps.length === 0 && window.location.pathname === '/') {
       if (this.config.rootLoadedApp) {
-        singleSpa.navigateToUrl(this.config.rootLoadedApp.activeWhen.path);
+        singleSpa.navigateToUrl(this.config.rootLoadedApp.app.activeWhen.path);
       } else {
         this.appLogger.error('There is no rootLoadedApp set. Nothing to render!');
       }
@@ -409,7 +402,7 @@ export default class AppLoader implements IAppLoader {
       fourOhFourElem.parentElement.removeChild(fourOhFourElem);
     }
     if (!currentPlugins.length) {
-      const pluginsNode = document.getElementById(this.config.layout.pluginSlotId);
+      const pluginsNode = document.getElementById(this.config.layout.app.pluginSlotId);
       // create a 404 page and return it instead of a plugin
       const FourOhFourNode: ChildNode = fourOhFour;
       if (pluginsNode) {
@@ -479,7 +472,7 @@ export default class AppLoader implements IAppLoader {
                       slot: this.createHtmlElement(
                         this.getIdFromName(widget.name),
                         'div',
-                        this.config.layout.widgetSlotId,
+                        this.config.layout.app.widgetSlotId,
                       ),
                     },
                   },
@@ -539,7 +532,7 @@ export default class AppLoader implements IAppLoader {
       Object.keys(widgets).forEach(widgetRoute => {
         const configuredWidgets = widgets[widgetRoute].map(wd => ({
           app: wd,
-          config: { slot: this.config.layout.widgetSlotId },
+          config: { slot: this.config.layout.app.widgetSlotId },
         }));
         this.widgets.app[integrationId] = {
           [widgetRoute]: configuredWidgets,
@@ -559,7 +552,7 @@ export default class AppLoader implements IAppLoader {
       throw new Error('[@akashaproject/sdk-ui-plugin-loader]: root node element not found!');
     }
 
-    const { loadingFn, ...otherProps } = this.config.layout;
+    const { loadingFn, ...otherProps } = this.config.layout.app;
     try {
       await new Promise(async resolve => {
         const pProps = {
@@ -610,9 +603,9 @@ export default class AppLoader implements IAppLoader {
         });
       }
       if (this.deferredIntegrations.length) {
-        // this.deferredIntegrations.forEach(entry =>
-        //   this.registerIntegration(entry.integration, entry.integrationId, entry?.menuItemType),
-        // );
+        this.deferredIntegrations.forEach(entry =>
+          this.registerIntegration(entry.integration, entry.integrationId, entry?.menuItemType),
+        );
         // clear it
         this.deferredIntegrations.length = 0;
       }

@@ -1,4 +1,8 @@
-import { MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import {
+  IAppEntry,
+  IWidgetEntry,
+  MenuItemAreaType,
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
 import ScriptLoader from './script-loader';
 import splashScreen from './splash-screen';
 import loadDependencies from './load-dependencies';
@@ -32,7 +36,6 @@ const bootstrap = async () => {
     src: `${WIDGETS_PATH}/layout/index.js`,
     name: 'akashaproject__ui_widget_layout',
     moduleName: './app',
-    config: {},
   };
   // define the app we want to load at '/' path
   const rootApp = {
@@ -44,7 +47,11 @@ const bootstrap = async () => {
     },
   };
 
-  const appConfig = {
+  const appConfig: {
+    rootNodeId: string;
+    layout: IWidgetEntry | null;
+    rootLoadedApp: IAppEntry | null;
+  } = {
     // where to mount the ui
     rootNodeId: 'root',
     // main layout (shell)
@@ -74,7 +81,7 @@ const bootstrap = async () => {
         plugins: [],
         widgets: [],
         // also register the default app
-        apps: [{ app: config.rootLoadedApp }],
+        apps: [config.rootLoadedApp],
       },
     });
 
@@ -95,7 +102,7 @@ const bootstrap = async () => {
       sdk.appLoader.registerWidget({
         app: result.module.application,
         config: Object.assign({}, result.config, {
-          slot: sdk.appLoader.config.layout.topbarSlotId,
+          slot: sdk.appLoader.config.layout.app.topbarSlotId,
         }),
       });
     });
@@ -115,7 +122,7 @@ const bootstrap = async () => {
       sdk.appLoader.registerWidget({
         app: result.module.application,
         config: Object.assign({}, result.config, {
-          slot: sdk.appLoader.config.layout.rootWidgetSlotId,
+          slot: sdk.appLoader.config.layout.app.rootWidgetSlotId,
         }),
       });
     });
@@ -130,11 +137,17 @@ const bootstrap = async () => {
   };
 
   scriptLoader.subscribe('layout', result => {
-    appConfig.layout = result.module.application;
+    appConfig.layout = {
+      app: result.module.application,
+      config: result.config,
+    };
   });
 
   scriptLoader.subscribe('rootApp', result => {
-    appConfig.rootLoadedApp = result.module.application;
+    appConfig.rootLoadedApp = {
+      app: result.module.application,
+      config: result.config,
+    };
     if (appConfig.layout) {
       initializeSdk(appConfig);
     }
