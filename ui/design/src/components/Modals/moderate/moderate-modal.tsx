@@ -15,6 +15,7 @@ export interface IModerateModalProps {
   contentType: string;
   optionsTitleLabel: string;
   optionLabels: string[];
+  preselectedReasons: string[];
   descriptionLabel: string;
   descriptionPlaceholder: string;
   footerText1Label: string;
@@ -39,6 +40,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     contentType,
     optionsTitleLabel,
     optionLabels,
+    preselectedReasons,
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
@@ -64,6 +66,13 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const { addToast } = useToasts();
+
+  // prefill reason(s) on mount if action is to 'Delist'
+  React.useEffect(() => {
+    if (reportLabel === 'Delist') {
+      setReasons(preselectedReasons);
+    }
+  }, []);
 
   const handleSelectReason = (selected: string) => {
     if (!reasons.includes(selected)) {

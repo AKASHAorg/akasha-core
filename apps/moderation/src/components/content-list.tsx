@@ -18,18 +18,25 @@ const ContentList: React.FC<IContentListProps> = props => {
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [actionType, setActionType] = React.useState<string>('Delist');
   const [contentType, setContentType] = React.useState<string>('Delist');
-  const [flagged, setFlagged] = React.useState('');
+  const [flagged, setFlagged] = React.useState<string>('');
+  const [preselectedReasons, setPreselectedReasons] = React.useState<string[]>([]);
 
   const { t } = useTranslation();
   const { size } = useViewportSize();
 
   // @TODO: Get logged ethAddress from Store state
 
-  const handleButtonClick = (entryId: string, action: string, content: string) => {
+  const handleButtonClick = (
+    entryId: string,
+    action: string,
+    content: string,
+    reasons: string[],
+  ) => {
     setFlagged(entryId);
     setModalOpen(true);
     setActionType(action);
     setContentType(content);
+    setPreselectedReasons(reasons);
   };
 
   return (
@@ -38,7 +45,11 @@ const ContentList: React.FC<IContentListProps> = props => {
         {modalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ModerateModal
-              titleLabel={t(`${actionType} a ${contentType}`)}
+              titleLabel={t(
+                `${
+                  contentType === 'profile' && actionType === 'Delist' ? 'Remove' : actionType
+                } a ${contentType}`,
+              )}
               contentType={t(contentType)}
               optionsTitleLabel={t('Please select a reason')}
               optionLabels={[
@@ -49,6 +60,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                 t('Nudity'),
                 t('Violence'),
               ]}
+              preselectedReasons={preselectedReasons}
               descriptionLabel={t('Evaluation')}
               descriptionPlaceholder={
                 actionType === 'Delist'
@@ -95,7 +107,7 @@ const ContentList: React.FC<IContentListProps> = props => {
             post.type === 'post'
               ? t('Delist Post')
               : post.type === 'profile'
-              ? t('Delist Profile')
+              ? t('Remove Profile')
               : ''
           }
           handleButtonClick={handleButtonClick}

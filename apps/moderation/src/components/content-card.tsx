@@ -21,7 +21,7 @@ export interface IContentCardProps {
   dateTime: string;
   keepContentLabel: string;
   delistContentLabel: string;
-  handleButtonClick: (param1: string, param2: string, param3: string) => void;
+  handleButtonClick: (param1: string, param2: string, param3: string, param4: string[]) => void;
 }
 
 const ContentCard: React.FC<IContentCardProps> = props => {
@@ -45,7 +45,7 @@ const ContentCard: React.FC<IContentCardProps> = props => {
 
   const handleClick = (action: string) => () => {
     if (ethAddress) {
-      handleButtonClick(ethAddress, action, contentType);
+      handleButtonClick(ethAddress, action, contentType, reasons);
     }
   };
 
