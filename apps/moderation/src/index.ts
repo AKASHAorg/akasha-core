@@ -24,7 +24,7 @@ export const application: Application = {
   name: 'MODERATION-app',
   sdkModules: [{ module: commons }, { module: dbModule }, { module: auth }, { module: profiles }],
   menuItems: routes,
-  title: 'MODERATION',
+  title: 'Moderator Dashboard',
   logo: { type: LogoTypeSource.ICON, value: 'appModeration' },
   widgets: {},
 };
