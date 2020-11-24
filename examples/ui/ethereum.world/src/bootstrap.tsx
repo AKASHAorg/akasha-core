@@ -1,50 +1,14 @@
+import { MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import ScriptLoader from './script-loader';
 import splashScreen from './splash-screen';
 import loadDependencies from './load-dependencies';
+import { getDefaultApps } from './get-default-apps';
+// import { getUserApps } from './get-user-apps';
 
-const PORT = '8131';
-const HOST = 'http://localhost';
-
-const getUserApps = async (_options: { userId: string }) => {
-  const appSources = [];
-  const widgetSources = [];
-  return {
-    apps: appSources,
-    widgets: widgetSources,
-  };
-};
-
-const getDefaultApps = async () => {
-  // get default apps and widgets from somewhere
-  const appSources = [
-    {
-      src: `${HOST}:${PORT}/apps/ens/index.js`,
-      name: 'akashaproject__app_ens_integration',
-      moduleName: './app',
-    },
-  ];
-  // plugins
-  const pluginSources = [
-    {
-      src: `${HOST}:${PORT}/plugins/profile/index.js`,
-      name: 'akashaproject__ui_plugin_profile',
-      moduleName: './app',
-    },
-  ];
-  // widgets
-  const widgetSources = [
-    {
-      src: `${HOST}:${PORT}/widgets/login/index.js`,
-      name: 'akashaproject__ui_widget_login',
-      moduleName: './app',
-    },
-  ];
-  return {
-    apps: appSources,
-    plugins: pluginSources,
-    widgets: widgetSources,
-  };
-};
+const PUBLIC_PATH = '/public';
+const APPS_PATH = `${PUBLIC_PATH}/apps`;
+const PLUGINS_PATH = `${PUBLIC_PATH}/plugins`;
+const WIDGETS_PATH = `${PUBLIC_PATH}/widgets`;
 
 interface Win extends Window {
   akashaproject__sdk?: { default: ({ config, initialApps }) => void };
@@ -53,25 +17,31 @@ interface Win extends Window {
 const scriptLoader = new ScriptLoader();
 
 const bootstrap = async () => {
+  // tslint:disable-next-line:no-console
+  console.time('AppLoader:firstMount');
   const win: Win = window;
   const splashElement = splashScreen;
 
   const topBarSrc = {
-    src: `${HOST}:${PORT}/widgets/topbar/index.js`,
+    src: `${WIDGETS_PATH}/topbar/index.js`,
     name: 'akashaproject__ui_widget_topbar',
     moduleName: './app',
   };
   // define the layout we want to load
   const layoutSrc = {
-    src: `${HOST}:${PORT}/widgets/layout/index.js`,
+    src: `${WIDGETS_PATH}/layout/index.js`,
     name: 'akashaproject__ui_widget_layout',
     moduleName: './app',
+    config: {},
   };
   // define the app we want to load at '/' path
   const rootApp = {
-    src: `${HOST}:${PORT}/apps/akasha/index.js`,
+    src: `${APPS_PATH}/akasha/index.js`,
     name: 'akashaproject__app_akasha_integration',
     moduleName: './app',
+    config: {
+      area: MenuItemAreaType.AppArea,
+    },
   };
 
   const appConfig = {
@@ -92,14 +62,10 @@ const bootstrap = async () => {
     }
   }
   // start loading dependency scripts
-  await loadDependencies({
-    host: HOST,
-    port: PORT,
-  });
+  await loadDependencies(PUBLIC_PATH);
 
   const initializeSdk = async config => {
-    const defaultApps = await getDefaultApps();
-    const userApps = await getUserApps({ userId: 'blablaUserId' });
+    const defaultApps = await getDefaultApps(APPS_PATH, PLUGINS_PATH, WIDGETS_PATH);
     // @ts-ignore
     const { default: sdkInit } = win.akashaproject__sdk;
     const sdk = sdkInit({
@@ -111,30 +77,46 @@ const bootstrap = async () => {
         apps: [{ app: config.rootLoadedApp }],
       },
     });
-    scriptLoader.subscribe('topbar', module => {
+
+    /**
+     * @TODO:
+     * We can authenticate the user here (or check if it's returning user)
+     * and get the installed apps and widgets
+     *
+     * import { getUserApps } from './get-user-apps';
+     * const userApps = await getUserApps({ userId: 'theUserID' });
+     *
+     * // => now load the modules
+     * scriptLoader.loadModules(userApps.apps, 'userApps');
+     * scriptLoader.loadModules(userApps.widgets, 'userWidgets');
+     */
+
+    scriptLoader.subscribe('topbar', result => {
       sdk.appLoader.registerWidget({
-        app: module.application,
-        config: {
+        app: result.module.application,
+        config: Object.assign({}, result.config, {
           slot: sdk.appLoader.config.layout.topbarSlotId,
-        },
+        }),
       });
     });
-    scriptLoader.subscribe('defaultApps', module => {
+    scriptLoader.subscribe('defaultApps', result => {
       sdk.appLoader.registerApp({
-        app: module.application,
+        config: result.config,
+        app: result.module.application,
       });
     });
-    scriptLoader.subscribe('defaultPlugins', module => {
+    scriptLoader.subscribe('defaultPlugins', result => {
       sdk.appLoader.registerPlugin({
-        app: module.application,
+        config: result.config,
+        app: result.module.application,
       });
     });
-    scriptLoader.subscribe('defaultWidgets', module => {
+    scriptLoader.subscribe('defaultWidgets', result => {
       sdk.appLoader.registerWidget({
-        app: module.application,
-        config: {
+        app: result.module.application,
+        config: Object.assign({}, result.config, {
           slot: sdk.appLoader.config.layout.rootWidgetSlotId,
-        },
+        }),
       });
     });
     scriptLoader.loadModules([topBarSrc], 'topbar');
@@ -143,17 +125,16 @@ const bootstrap = async () => {
     scriptLoader.loadModules(defaultApps.plugins, 'defaultPlugins');
     scriptLoader.loadModules(defaultApps.widgets, 'defaultWidgets');
 
-    scriptLoader.loadModules(userApps.apps, 'userApps');
     // tslint:disable-next-line: no-console
     console.log('initial sdk instance', sdk);
   };
 
-  scriptLoader.subscribe('layout', module => {
-    appConfig.layout = module.application;
+  scriptLoader.subscribe('layout', result => {
+    appConfig.layout = result.module.application;
   });
 
-  scriptLoader.subscribe('rootApp', module => {
-    appConfig.rootLoadedApp = module.application;
+  scriptLoader.subscribe('rootApp', result => {
+    appConfig.rootLoadedApp = result.module.application;
     if (appConfig.layout) {
       initializeSdk(appConfig);
     }

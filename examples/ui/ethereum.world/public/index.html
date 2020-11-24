@@ -17,6 +17,8 @@
   <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png" />
   <link rel="manifest" href="/manifest.json" />
   <title>Ethereum World</title>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.1/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-is/17.0.1/umd/react-is.production.min.js"></script>
   <style>
     html,
     body,
@@ -33,7 +35,7 @@
   <div id="root"></div>
   <script>if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then(registration => {
+        navigator.serviceWorker.register('/public/sw.js').then(registration => {
           console.log('SW registered: ', registration);
         }).catch(registrationError => {
           console.log('SW registration failed: ', registrationError);

@@ -2,6 +2,9 @@ export interface IModule {
   src: string;
   name: string;
   moduleName: string;
+  config?: {
+    [key: string]: any;
+  };
 }
 
 class ScriptLoader {
@@ -33,19 +36,25 @@ class ScriptLoader {
       this.subscribers[namespace] = [handler];
     }
   }
-  private onModuleLoaded(module, namespace) {
-    this.subscribers[namespace].forEach(sub => sub(module));
+  private onModuleLoaded(moduleObj: { module: any; config: any }, namespace) {
+    this.subscribers[namespace].forEach(sub => sub(moduleObj));
   }
   public async loadModules(modules: IModule[], type) {
     modules.forEach(async module => {
-      const { src, name, moduleName } = module;
+      const { src, name, moduleName, config = {} } = module;
       try {
         const isLoaded = await this.loadScript(src);
         if (isLoaded) {
           const moduleObject = await this.loadModule(name, moduleName);
           if (!this.loadedModules.includes(src)) {
             this.loadedModules.push(src);
-            this.onModuleLoaded(moduleObject, type);
+            this.onModuleLoaded(
+              {
+                config,
+                module: moduleObject,
+              },
+              type,
+            );
           }
         }
       } catch (err) {

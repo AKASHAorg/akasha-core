@@ -1,28 +1,24 @@
 import * as React from 'react';
 import type { ErrorLoaderProps } from './interfaces';
 import ErrorCard from './error-card';
-import noSavedPosts from './images/no-saved-posts';
-import noFeedCustomization from './images/no-feed-customization';
-import generalError from './images/general-error';
-import noInternetConnection from './images/no-internet-connection';
 
 const ErrorLoader: React.FC<ErrorLoaderProps> = props => {
-  const { type } = props;
+  const { type, publicImgPath = '/public/images' } = props;
 
   let imagesrc;
   switch (type) {
     case 'missing-saved-items':
-      imagesrc = noSavedPosts;
+      imagesrc = `${publicImgPath}/no-saved-posts-error.png`;
       break;
     case 'missing-feed-customization':
-      imagesrc = noFeedCustomization;
+      imagesrc = `${publicImgPath}/no-feed-customization-error.png`;
       break;
     case 'no-connection':
-      imagesrc = noInternetConnection;
+      imagesrc = `${publicImgPath}/no-internet-connection-error.png`;
       break;
     case 'no-login':
     default:
-      imagesrc = generalError;
+      imagesrc = `${publicImgPath}/general-error.png`;
       break;
   }
 

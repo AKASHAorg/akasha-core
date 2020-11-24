@@ -23,7 +23,8 @@
     "prepare": "npm run tsc",
     "extract:translations": "i18next --config ./i18next-parser.config.js",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/* ../../build/widgets/layout",
+    "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js --profile --json ../../stats/layout.json",
+    "postpack": "copyfiles -f ./dist/* ../../build/public/widgets/layout",
     "watch": "nodemon"
   },
   "nodemonConfig": {

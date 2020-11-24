@@ -25,7 +25,7 @@ export const application: Application = {
     use: [initReactI18next],
   },
   loadingFn: (): Promise<any> => import('./components'),
-  name: 'akasha-feed-app',
+  name: 'akasha-app',
   sdkModules: [{ module: commons }, { module: dbModule }, { module: auth }, { module: profiles }],
   menuItems: routes,
   title: 'AKASHA',

@@ -219,7 +219,10 @@ export default class AppLoader implements IAppLoader {
     );
     const widgetId = this.getIdFromName(widget.app.name);
     widget.app.name = widgetId;
-
+    if (this.isRegisteringLayout) {
+      this.widgets.root.push(widget);
+      return;
+    }
     if (this.registeredWidgets.has(widgetId)) {
       this.appLogger.info(`Widget ${widgetId} already registered... skipping...`);
       return;
@@ -577,12 +580,11 @@ export default class AppLoader implements IAppLoader {
   private async loadLayout() {
     try {
       await this.mountLayoutWidget();
+      // after mounting all the root widgets
+      this.isRegisteringLayout = false;
       for (const widget of this.widgets.root) {
         await this.registerWidget(widget, 'root');
       }
-      // after mounting all the root widgets
-      this.isRegisteringLayout = false;
-
       if (this.plugins) {
         this.plugins.forEach(plugin => {
           const isDeferred =

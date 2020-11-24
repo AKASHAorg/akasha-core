@@ -76,7 +76,7 @@ const config = {
       exclude: [/.*?/]
     })
   ],
-  devtool: isProduction ? false : 'eval-source-map',
+  devtool: isProduction ? false : 'source-map',
   mode: process.env.NODE_ENV || 'development',
   externals: [
     /^@truffle\/contract$/,

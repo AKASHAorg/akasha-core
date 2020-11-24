@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "@types/react": "16.9.56",
-    "@types/react-dom": "16.9.9"
+    "@akashaproject/ui-awf-typings": "*",
+    "@types/react": "17.0.0",
+    "@types/react-dom": "17.0.0"
   },
   "scripts": {
     "build": "webpack --config ./webpack.config.js",

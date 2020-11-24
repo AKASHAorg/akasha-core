@@ -16,18 +16,13 @@ module.exports = {
         exclude: [/node_modules/, /public/],
         options: {
           presets: [
-            [
-              '@babel/preset-env', {
-                useBuiltIns: 'usage',
-                corejs: 3,
-                targets: '> 0.25%, not dead'
-              }
-            ],
+            '@babel/preset-env',
             '@babel/preset-react',
             '@babel/preset-typescript'
           ],
           plugins: [
-            '@babel/plugin-proposal-class-properties'
+            '@babel/transform-runtime',
+            '@babel/plugin-proposal-class-properties',
           ]
         },
       },
@@ -35,7 +30,7 @@ module.exports = {
         test: /.(js|mjs)$/,
         loader: 'babel-loader',
         exclude: /public/,
-        resolve: { fullySpecified: false }
+        resolve: { fullySpecified: false },
       }
     ],
   },
@@ -54,7 +49,7 @@ module.exports = {
       profile: true,
     })
   ],
-  devtool: isProduction ? false : 'eval-source-map',
+  devtool: isProduction ? false : 'source-map',
   externals: commons.externals,
   optimization: commons.optimization,
 };

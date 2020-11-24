@@ -3,7 +3,7 @@ import * as React from 'react';
 import CommonInterface from '../../interfaces/common.interface';
 import MarginInterface from '../../interfaces/margin.interface';
 import AvatarImage from './avatar-image';
-import { loadPlaceholder } from './placeholders';
+// import { loadPlaceholder } from './placeholders';
 import StyledAvatar, { AvatarSize } from './styled-avatar';
 
 export interface AvatarProps extends CommonInterface<HTMLDivElement> {
@@ -15,6 +15,7 @@ export interface AvatarProps extends CommonInterface<HTMLDivElement> {
   backgroundColor?: string;
   border?: 'sm' | 'md' | 'lg';
   size?: AvatarSize;
+  publicImgPath?: string;
 }
 
 export const getAvatarFromSeed = (seed: string) => {
@@ -40,17 +41,23 @@ export const getAvatarFromSeed = (seed: string) => {
   return 7;
 };
 
-const defaultProps: Partial<AvatarProps> = {
-  size: 'md' as AvatarSize,
-  ethAddress: '0x0000000000000000000000000000000',
-};
-
-const Avatar: React.FC<AvatarProps & typeof defaultProps> = props => {
-  const { onClick, src, className, size, margin, border, ethAddress } = props;
+const Avatar: React.FC<AvatarProps> = props => {
+  const {
+    onClick,
+    src,
+    className,
+    size = 'md',
+    margin,
+    border,
+    ethAddress = '0x0000000000000000000000000000000',
+    publicImgPath = '/public/images',
+  } = props;
   const isClickable = typeof onClick === 'function';
-  const avatarImage = src
-    ? src
-    : loadPlaceholder(`placeholder_${getAvatarFromSeed(ethAddress as string)}`);
+  let avatarImage = src;
+  if (!avatarImage) {
+    const seed = getAvatarFromSeed(ethAddress);
+    avatarImage = `${publicImgPath}/avatar-placeholder-${seed}.png`;
+  }
 
   return (
     <StyledAvatar

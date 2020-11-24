@@ -33,7 +33,7 @@
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/*design-system.* ../build/",
+    "postpack": "copyfiles -f ./src/static/img/* ../build/public/images",
     "pack:watch": "nodemon",
     "serve": "serve -p 53219 -s ./dist"
   },
