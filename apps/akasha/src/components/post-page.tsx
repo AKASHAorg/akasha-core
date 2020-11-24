@@ -24,14 +24,15 @@ interface IPostPage {
   globalChannel: any;
   logger: any;
   slotId: string;
+  flagged: string;
+  modalOpen: boolean;
+  setFlagged: React.Dispatch<React.SetStateAction<string>>;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   showLoginModal: () => void;
 }
 
 const PostPage: React.FC<IPostPage> = props => {
-  const { slotId, showLoginModal } = props;
-
-  const [modalOpen, setModalOpen] = React.useState(false);
-  const [flagged, setFlagged] = React.useState('');
+  const { slotId, flagged, modalOpen, setFlagged, setModalOpen, showLoginModal } = props;
 
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
@@ -60,6 +61,7 @@ const PostPage: React.FC<IPostPage> = props => {
   const handleEntryFlag = (entryId: string, user?: string | null) => () => {
     /* todo */
     if (!user) {
+      setFlagged(entryId);
       return showLoginModal();
     }
     setFlagged(entryId);
