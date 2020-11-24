@@ -8,7 +8,7 @@ const { Box, Icon, Text, Avatar, Button, MainAreaCardBox } = DS;
 
 export interface IContentCardProps {
   reportedLabel: string;
-  contentType?: string;
+  contentType: string;
   forLabel: string;
   additionalDescLabel: string;
   additionalDescContent?: string;
@@ -21,8 +21,7 @@ export interface IContentCardProps {
   dateTime: string;
   keepContentLabel: string;
   delistContentLabel: string;
-  handleKeep: () => void;
-  handleDelist: () => void;
+  handleButtonClick: (param1: string, param2: string, param3: string) => void;
 }
 
 const ContentCard: React.FC<IContentCardProps> = props => {
@@ -41,9 +40,14 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     dateTime,
     keepContentLabel,
     delistContentLabel,
-    handleKeep,
-    handleDelist,
+    handleButtonClick,
   } = props;
+
+  const handleClick = (action: string) => () => {
+    if (ethAddress) {
+      handleButtonClick(ethAddress, action, contentType);
+    }
+  };
 
   return (
     <Box margin={{ bottom: '1rem' }}>
@@ -106,8 +110,12 @@ const ContentCard: React.FC<IContentCardProps> = props => {
               )}`}</Text>
             </Box>
             <Box direction="row" width="35%" justify="end">
-              <Button margin={{ right: 'xsmall' }} label={keepContentLabel} onClick={handleKeep} />
-              <Button primary={true} label={delistContentLabel} onClick={handleDelist} />
+              <Button
+                margin={{ right: 'xsmall' }}
+                label={keepContentLabel}
+                onClick={handleClick('Keep')}
+              />
+              <Button primary={true} label={delistContentLabel} onClick={handleClick('Delist')} />
             </Box>
           </Box>
         </Box>

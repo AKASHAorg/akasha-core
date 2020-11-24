@@ -6,20 +6,73 @@ import ContentCard from './content-card';
 
 import { postData } from '../services/dummy-data';
 
-const { Box } = DS;
+const { Box, useViewportSize, ModalRenderer, ToastProvider, ModerateModal } = DS;
 
-const ContentList: React.FC = () => {
+interface IContentListProps {
+  slotId: string;
+}
+
+const ContentList: React.FC<IContentListProps> = props => {
+  const { slotId } = props;
+
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [actionType, setActionType] = React.useState<string>('Delist');
+  const [contentType, setContentType] = React.useState<string>('Delist');
+  const [flagged, setFlagged] = React.useState('');
+
   const { t } = useTranslation();
+  const { size } = useViewportSize();
 
-  const handleKeep = () => {
-    // todo: show modal to keep content
+  // @TODO: Get logged ethAddress from Store state
+
+  const handleButtonClick = (entryId: string, action: string, content: string) => {
+    setFlagged(entryId);
+    setModalOpen(true);
+    setActionType(action);
+    setContentType(content);
   };
 
-  const handleDelist = () => {
-    // todo: show modal to delist content
-  };
   return (
     <Box>
+      <ModalRenderer slotId={slotId}>
+        {modalOpen && (
+          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
+            <ModerateModal
+              titleLabel={t(`${actionType} a ${contentType}`)}
+              contentType={t(contentType)}
+              optionsTitleLabel={t('Please select a reason')}
+              optionLabels={[
+                t('Suspicious, deceptive, or spam'),
+                t('Abusive or harmful to others'),
+                t('Self-harm or suicide'),
+                t('Illegal'),
+                t('Nudity'),
+                t('Violence'),
+              ]}
+              descriptionLabel={t('Evaluation')}
+              descriptionPlaceholder={
+                actionType === 'Delist'
+                  ? t('Please describe the issue')
+                  : t('Please explain the reason(s)')
+              }
+              footerText1Label={t('If you are unsure, you can refer to our')}
+              footerLink1Label={t('Code of Conduct')}
+              footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
+              footerText2Label={t('and')}
+              footerLink2Label={t('Terms of Service')}
+              footerUrl2={'https://ethereum.world/terms-of-service'}
+              cancelLabel={t('Cancel')}
+              reportLabel={t(actionType)}
+              user={''}
+              contentId={flagged}
+              size={size}
+              closeModal={() => {
+                setModalOpen(false);
+              }}
+            />
+          </ToastProvider>
+        )}
+      </ModalRenderer>
       {postData.map(post => (
         <ContentCard
           key={post.id}
@@ -45,8 +98,7 @@ const ContentList: React.FC = () => {
               ? t('Delist Profile')
               : ''
           }
-          handleKeep={handleKeep}
-          handleDelist={handleDelist}
+          handleButtonClick={handleButtonClick}
         />
       ))}
     </Box>
