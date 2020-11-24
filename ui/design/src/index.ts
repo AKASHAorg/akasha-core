@@ -37,7 +37,9 @@ import {
   BasicCardBox,
   MainAreaCardBox,
   BoxFormCard,
+  CommentEditor,
   EditorCard,
+  EditorPlaceholder,
   EnsFormCard,
   EntryBox,
   EntryCard,
@@ -74,6 +76,9 @@ import {
   EthProviderModal,
   MobileListModal,
   LoginModal,
+  ReportModal,
+  ToastProvider,
+  EditorModal,
 } from './components/Modals';
 
 import { NotificationsPopover, SelectPopover } from './components/Popovers';
@@ -82,13 +87,12 @@ import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
 import VirtualList from './components/VirtualList';
 import * as Helmet from 'react-helmet';
 import { HorizontalDivider } from './components/Dividers';
+import { Notification, notify, BookmarkPill, NewPostsPill } from './components/Notification';
 
 /* Utilities (these are not components) */
 import responsiveBreakpoints from './styles/responsive-breakpoints';
 import { formatImageSrc } from './utils/image-utils';
 import { isBase64 } from './utils/string-utils';
-/* Hooks */
-import { useGlobalLogin } from './hooks/use-global-login';
 /* Themes and theme related utils */
 import darkTheme from './styles/themes/dark';
 import lightTheme from './styles/themes/light';
@@ -113,11 +117,16 @@ const exported = {
   AppInfoWidgetCard,
   AppsWidgetCard,
   BasicCardBox,
+  BookmarkPill,
+  NewPostsPill,
   CustomizeFeedCard,
   DropSearchInput,
   EditorBox,
   EditorMeter,
+  CommentEditor,
   EditorCard,
+  EditorPlaceholder,
+  EditorModal,
   EntryBox,
   EntryCard,
   EntryCardLoading,
@@ -143,6 +152,8 @@ const exported = {
   MainAreaCardBox,
   NotificationsPopover,
   ShareModal,
+  ReportModal,
+  ToastProvider,
   SelectPopover,
   SubtitleTextIcon,
   Sidebar,
@@ -176,14 +187,14 @@ const exported = {
   MobileListModal,
   ModalContainer,
   ModalRenderer,
+  Notification,
+  notify,
   HorizontalDivider,
   LoginCTAWidgetCard,
   TrendingWidgetCard,
   SourcesWidgetCard,
   TutorialWidgetCard,
   FilterCard,
-  /* hooks */
-  useGlobalLogin,
   Helmet,
 };
 

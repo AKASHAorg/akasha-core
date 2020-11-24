@@ -37,7 +37,8 @@
     "watch:feed-app": "lerna run --scope=@akashaproject/ethereum.world --stream watch",
     "test:sdk": "lerna run test --scope @akashaproject/sdk-* --stream",
     "test:ui": "lerna run test --scope @akashaproject/ui-* --scope @akashaproject/design-* --scope @akashaproject/app-* --stream",
-    "test:ui:watch": "lerna exec --parallel --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream -- jest --watch"
+    "test:ui:watch": "lerna exec --parallel --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream -- jest --watch",
+    "dev:server": "lerna run dev:server --stream"
   },
   "devDependencies": {
     "@babel/core": "7.12.8",

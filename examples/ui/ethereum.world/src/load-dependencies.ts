@@ -27,6 +27,7 @@ const loadDependencies = async (publicPath: string) => {
     ...dependencies,
     {
       src: `${publicPath}/akasha.sdk.js`,
+      attributes: ['async', 'defer'],
     },
   ]);
 };

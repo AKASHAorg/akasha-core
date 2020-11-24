@@ -66,21 +66,21 @@ const config = {
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-        GRAPHQL_URI: JSON.stringify('http://api.akasha.network/query'),
+        GRAPHQL_URI: JSON.stringify(process.env.GRAPHQL_URI || 'https://api.akasha.network/graphql'),
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+        AUTH_ENDPOINT: JSON.stringify(process.env.AUTH_ENDPOINT || 'wss://api.akasha.network/ws/userauth'),
+
       }
     }),
     new InjectManifest({
       swSrc: './lib/sw.js',
       swDest: 'sw.js',
-      exclude: [/.*?/]
-    })
+      exclude: [/.*?/],
+    }),
   ],
   devtool: isProduction ? false : 'source-map',
   mode: process.env.NODE_ENV || 'development',
-  externals: [
-    /^@truffle\/contract$/,
-  ],
+  externals: [/^rxjs$/, /^rxjs\/operators$/, /^@truffle\/contract$/],
 };
 
 module.exports = config;

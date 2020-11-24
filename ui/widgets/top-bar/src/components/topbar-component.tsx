@@ -5,10 +5,10 @@ import {
   EventTypes,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useProfile } from '@akashaproject/ui-awf-hooks';
+import { useProfile, useGlobalLogin } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
-const { lightTheme, Topbar, ThemeSelector, useViewportSize, LoginModal, useGlobalLogin } = DS;
+const { lightTheme, Topbar, ThemeSelector, useViewportSize, LoginModal } = DS;
 
 interface TopBarProps {
   navigateToUrl: (url: string) => void;

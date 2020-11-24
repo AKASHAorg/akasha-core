@@ -7,17 +7,36 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { uploadMediaToIpfs } from '../services/posting-service';
 import { getLoggedProfileStore } from '../state/logged-profile-state';
 
-const { Box, MainAreaCardBox, EntryBox, EditorBox } = DS;
+const {
+  Box,
+  MainAreaCardBox,
+  EntryBox,
+  ReportModal,
+  ToastProvider,
+  ModalRenderer,
+  CommentEditor,
+  useViewportSize,
+  EditorPlaceholder,
+} = DS;
 
 interface IPostPage {
   channels: any;
   globalChannel: any;
   logger: any;
+  slotId: string;
+  showLoginModal: () => void;
 }
 
 const PostPage: React.FC<IPostPage> = props => {
+  const { slotId, showLoginModal } = props;
+
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [flagged, setFlagged] = React.useState('');
+
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
+
+  const { size } = useViewportSize();
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
@@ -38,8 +57,13 @@ const PostPage: React.FC<IPostPage> = props => {
   const handleEntryRepost = () => {
     // todo
   };
-  const handleEntryFlag = () => {
-    // todo
+  const handleEntryFlag = (entryId: string, user?: string | null) => () => {
+    /* todo */
+    if (!user) {
+      return showLoginModal();
+    }
+    setFlagged(entryId);
+    setModalOpen(true);
   };
   const handleLinkCopy = () => {
     // todo
@@ -75,6 +99,48 @@ const PostPage: React.FC<IPostPage> = props => {
         pad={{ bottom: 'small' }}
         border={{ side: 'bottom', size: '1px', color: 'border' }}
       >
+        <ModalRenderer slotId={slotId}>
+          {modalOpen && (
+            <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
+              <ReportModal
+                titleLabel={t('Report a Post')}
+                successTitleLabel={t('Thank you for helping us keep Ethereum World Safe! 🙌')}
+                successMessageLabel={t(
+                  'We will investigate this post and take appropriate action.',
+                )}
+                optionsTitleLabel={t('Please select a reason')}
+                optionLabels={[
+                  t('Suspicious, deceptive, or spam'),
+                  t('Abusive or harmful to others'),
+                  t('Self-harm or suicide'),
+                  t('Illegal'),
+                  t('Nudity'),
+                  t('Violence'),
+                ]}
+                descriptionLabel={t('Explanation')}
+                descriptionPlaceholder={t('Please explain your reason(s)')}
+                footerText1Label={t('If you are unsure, you can refer to our')}
+                footerLink1Label={t('Code of Conduct')}
+                footerUrl1={
+                  'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'
+                }
+                footerText2Label={t('and')}
+                footerLink2Label={t('Terms of Service')}
+                footerUrl2={'https://ethereum.world/terms-of-service'}
+                cancelLabel={t('Cancel')}
+                reportLabel={t('Report')}
+                blockLabel={t('Block User')}
+                closeLabel={t('Close')}
+                user={loggedEthAddress ? loggedEthAddress : ''}
+                contentId={flagged}
+                size={size}
+                closeModal={() => {
+                  setModalOpen(false);
+                }}
+              />
+            </ToastProvider>
+          )}
+        </ModalRenderer>
         <EntryBox
           isBookmarked={isBookmarked}
           entryData={itemData}
@@ -90,33 +156,38 @@ const PostPage: React.FC<IPostPage> = props => {
           shareLabel={t('Share')}
           copyLinkLabel={t('Copy Link')}
           copyIPFSLinkLabel={t('Copy IPFS Link')}
-          flagAsLabel={t('Flag as inappropiate')}
+          flagAsLabel={t('Report Post')}
           loggedProfileEthAddress={'0x00123123123123'}
           locale={locale}
           bookmarkLabel={t('Save')}
           bookmarkedLabel={t('Saved')}
           onRepost={handleEntryRepost}
           onEntryShare={handleEntryShare}
-          onEntryFlag={handleEntryFlag}
+          onEntryFlag={handleEntryFlag(itemData.entryId, loggedEthAddress)}
           onLinkCopy={handleLinkCopy}
           onClickReplies={handleClickReplies}
           handleFollow={handleFollow}
           handleUnfollow={handleUnfollow}
         />
-        {loggedEthAddress && (
-          <Box border={{ side: 'all', size: '1px', color: 'border' }} pad="xxsmall" round="xsmall">
-            <EditorBox
-              ethAddress={loggedEthAddress}
-              postLabel={t('Publish')}
-              placeholderLabel={t('Write something')}
-              onPublish={handlePublish}
-              getMentions={handleGetMentions}
-              getTags={handleGetTags}
-              uploadRequest={onUploadRequest}
-            />
-          </Box>
-        )}
       </Box>
+      {!loggedEthAddress && (
+        <Box margin="medium">
+          <EditorPlaceholder onClick={props.showLoginModal} />{' '}
+        </Box>
+      )}
+      {loggedEthAddress && (
+        <Box margin="medium">
+          <CommentEditor
+            ethAddress={loggedEthAddress}
+            postLabel={t('Publish')}
+            placeholderLabel={t('Write something')}
+            onPublish={handlePublish}
+            getMentions={handleGetMentions}
+            getTags={handleGetTags}
+            uploadRequest={onUploadRequest}
+          />
+        </Box>
+      )}
       {itemData.replies?.map((reply, index) => (
         <Box
           key={index}
@@ -138,14 +209,14 @@ const PostPage: React.FC<IPostPage> = props => {
             shareLabel={t('Share')}
             copyLinkLabel={t('Copy Link')}
             copyIPFSLinkLabel={t('Copy IPFS Link')}
-            flagAsLabel={t('Flag as inappropiate')}
+            flagAsLabel={t('Report Post')}
             loggedProfileEthAddress={'0x00123123123123'}
             locale={locale}
             bookmarkLabel={t('Save')}
             bookmarkedLabel={t('Saved')}
             onRepost={handleEntryRepost}
             onEntryShare={handleEntryShare}
-            onEntryFlag={handleEntryFlag}
+            onEntryFlag={handleEntryFlag(itemData.entryId, loggedEthAddress)}
             onLinkCopy={handleLinkCopy}
             onClickReplies={handleClickReplies}
             handleFollow={handleFollow}

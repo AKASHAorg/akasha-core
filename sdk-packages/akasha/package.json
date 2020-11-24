@@ -41,14 +41,15 @@
     "@akashaproject/sdk-ui-plugin-loader": "*",
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/sdk-registry": "*",
-    "single-spa-react": "3.0.1",
-    "rxdb": "8.9.0",
+    "@akashaproject/sdk-posts": "*",
+    "single-spa-react": "3.2.0",
+    "rxdb": "9.10.1",
     "rxjs": "6.6.3",
     "util": "0.12.3",
     "assert": "2.0.0",
     "stream-browserify": "3.0.0",
     "path-browserify": "1.0.1",
-    "buffer": "6.0.2",
+    "buffer": "6.0.3",
     "process": "0.11.10"
   },
   "devDependencies": {
@@ -74,6 +75,6 @@
     "graphql": "15.4.0"
   },
   "peerDependencies": {
-    "rxjs": "^6.6.2"
+    "rxjs": "^6.6.3"
   }
 }

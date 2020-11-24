@@ -32,6 +32,9 @@
     },
     {
       "path": "../registry"
+    },
+    {
+      "path": "../posts"
     }
   ],
   "include": ["./src"],

@@ -11,6 +11,7 @@ import appIpfs from './app-ipfs';
 import announcement from './announcement';
 import app from './app';
 import arrowDown from './arrow-down';
+import arrowUp from './arrow-up';
 import arrowLeft from './arrow-left';
 import arrowRight from './arrow-right';
 import available from './available';
@@ -120,6 +121,7 @@ export {
   addAppGrey,
   app,
   arrowDown,
+  arrowUp,
   arrowLeft,
   arrowRight,
   bookmark,
