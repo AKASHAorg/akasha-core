@@ -27,8 +27,8 @@
       "lib"
     ],
     "dependencies": {
-        "@akashaproject/design-system": "*"
-      },
+      "@akashaproject/design-system": "*"
+    },
     "devDependencies": {
       "@types/react": "16.9.56"
     },

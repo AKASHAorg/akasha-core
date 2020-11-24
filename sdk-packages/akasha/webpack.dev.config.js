@@ -80,7 +80,7 @@ const config = {
   ],
   devtool: isProduction ? false : 'source-map',
   mode: process.env.NODE_ENV || 'development',
-  externals: [/^rxjs$/, /^rxjs\/operators$/, /^@truffle\/contract$/],
+  externals: [/^@truffle\/contract$/],
 };
 
 module.exports = config;

@@ -3,11 +3,11 @@ export interface ErrorLoaderProps {
    * Error type
    */
   type:
-  | 'missing-feed-customization'
-  | 'missing-saved-items'
-  | 'no-connection'
-  | 'no-login'
-  | 'script-error';
+    | 'missing-feed-customization'
+    | 'missing-saved-items'
+    | 'no-connection'
+    | 'no-login'
+    | 'script-error';
   /* Path to public folder */
   publicImgPath?: string;
   /**

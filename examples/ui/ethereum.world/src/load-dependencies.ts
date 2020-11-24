@@ -18,7 +18,7 @@ const dependencies = [
   },
   {
     src: 'https://cdnjs.cloudflare.com/ajax/libs/rxjs/6.6.3/rxjs.umd.min.js',
-    attributes: ['crossorigin'],
+    attributes: ['crossorigin', 'async'],
   },
 ];
 
@@ -41,7 +41,7 @@ const loadScripts = async (
     const onLoad = (ev: Event) => {
       loadedScriptsCount += 1;
       if (loadedScriptsCount === totalScriptsCount) {
-        return resolve();
+        return resolve(true);
       }
     };
     const onError = (src: string) => {

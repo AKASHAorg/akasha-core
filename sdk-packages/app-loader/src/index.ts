@@ -554,12 +554,12 @@ export default class AppLoader implements IAppLoader {
 
     const { loadingFn, ...otherProps } = this.config.layout.app;
     try {
-      await new Promise(async resolve => {
+      await new Promise(async (resolve) => {
         const pProps = {
           domElement: domEl,
           ...otherProps,
           themeReadyEvent: () => {
-            resolve();
+            resolve(null);
           },
         };
         const layout = singleSpa.mountRootParcel(loadingFn, pProps);

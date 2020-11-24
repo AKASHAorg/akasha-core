@@ -29,7 +29,7 @@ const PostsPage: React.FC<PostsPageProps & RootComponentProps> = props => {
         </Route>
         <Route path={`${path}/:userId/post/:postId`}>
           <PostPage
-            slotId={props.layout.modalSlotId}
+            slotId={props.layout.app.modalSlotId}
             channels={props.sdkModules}
             globalChannel={props.globalChannel}
             logger={props.logger}

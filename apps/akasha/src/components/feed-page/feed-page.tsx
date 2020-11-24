@@ -260,7 +260,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet.Helmet>
         <title>AKASHA Feed | Ethereum.world</title>
       </Helmet.Helmet>
-      <ModalRenderer slotId={props.layout.modalSlotId}>
+      <ModalRenderer slotId={props.layout.app.modalSlotId}>
         {modalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -299,7 +299,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         )}
       </ModalRenderer>
       <EditorModal
-        slotId={props.layout.modalSlotId}
+        slotId={props.layout.app.modalSlotId}
         showModal={showEditor}
         ethAddress={ethAddress as any}
         postLabel={t('Publish')}
@@ -327,7 +327,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         bookmarkedItems={bookmarks}
         getItemCard={({ itemData, visitorEthAddress, isBookmarked }) => (
           <ErrorInfoCard errors={{}}>
-            {(errorMessages, hasCriticalErrors) => (
+            {(errorMessages: any, hasCriticalErrors: boolean) => (
               <>
                 {errorMessages && (
                   <ErrorLoader
@@ -347,7 +347,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                         sharePostLabel={t('Share Post')}
                         shareTextLabel={t('Share this post with your friends')}
                         sharePostUrl={'https://ethereum.world'}
-                        onClickAvatar={ev => handleAvatarClick(ev, itemData.author.ethAddress)}
+                        onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
+                          handleAvatarClick(ev, itemData.author.ethAddress)
+                        }
                         onEntryBookmark={handleEntryBookmark}
                         repliesLabel={t('Replies')}
                         repostsLabel={t('Reposts')}

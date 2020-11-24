@@ -72,7 +72,7 @@ const Avatar: React.FC<AvatarProps> = props => {
       border={border}
     >
       <React.Suspense fallback={<></>}>
-        <AvatarImage image={avatarImage} />
+        <AvatarImage image={avatarImage.current} />
       </React.Suspense>
     </StyledAvatar>
   );
