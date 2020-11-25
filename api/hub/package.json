@@ -32,11 +32,11 @@
   },
   "dependencies": {
     "@koa/cors": "3.1.0",
-    "@textile/hub": "1.2.0",
+    "@textile/hub": "1.2.1",
     "apollo-server-koa": "2.19.0",
     "dotenv": "8.2.0",
     "emittery": "0.7.2",
-    "ethers": "5.0.21",
+    "ethers": "5.0.22",
     "koa": "2.13.0",
     "koa-bodyparser": "4.3.0",
     "koa-json": "2.0.2",
