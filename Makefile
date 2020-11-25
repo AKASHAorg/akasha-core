@@ -1,6 +1,6 @@
 build:	install build.all
 build.tsc: build.tsc.sdk build.tsc.ui
-build.all: build.tsc build.sdk build.translations build.ui
+build.all: build.tsc build.sdk build.translations build.ui build.feed-app
 build.tsc.sdk:
 	npm run tsc:sdk
 build.tsc.ui:
@@ -9,6 +9,8 @@ build.sdk:
 	npm run build:sdk
 build.ui:
 	npm run pack:ui-apps
+build.feed-app:
+	npm run build:feed-app
 clean:
 	rm -rf ./examples/ui/feed-app/public/*.js && \
 	rm -rf ./ui/build && \
@@ -17,7 +19,7 @@ install:
 	npm install && \
 	npm run bootstrap
 build.staging.feed:
-	./node_modules/.bin/lerna run build:all
+	./node_modules/.bin/lerna run build:staging
 build.staging.feed.static: build build.staging.feed
 build.staging.storybook:
 	./node_modules/.bin/lerna run build:storybook

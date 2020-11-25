@@ -85,8 +85,8 @@ import { NotificationsPopover, SelectPopover } from './components/Popovers';
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
 import VirtualList from './components/VirtualList';
-import Helmet from 'react-helmet';
 import type { Helmet as HelmetType } from '@types/react-helmet';
+import Helmet from 'react-helmet';
 import { HorizontalDivider } from './components/Dividers';
 import { Notification, notify, BookmarkPill, NewPostsPill } from './components/Notification';
 
