@@ -35,6 +35,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   );
   const [loginModalState, setLoginModalState] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
+  const [flagged, setFlagged] = React.useState('');
 
   const showLoginModal = () => {
     setLoginModalState(true);
@@ -55,7 +56,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   }, [jwtToken]);
 
   React.useEffect(() => {
-    if (ethAddress) {
+    if (ethAddress && flagged.length) {
       setLoginModalState(false);
       setModalOpen(true);
     }
@@ -98,11 +99,13 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               <FeedPage
                 {...props}
                 navigateToUrl={singleSpa.navigateToUrl}
-                showLoginModal={showLoginModal}
                 ethAddress={ethAddress}
                 jwtToken={jwtToken}
+                flagged={flagged}
                 modalOpen={modalOpen}
+                setFlagged={setFlagged}
                 setModalOpen={setModalOpen}
+                showLoginModal={showLoginModal}
                 onError={onError}
               />
             </Route>
@@ -113,6 +116,10 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
                 globalChannel={globalChannel}
                 logger={logger}
                 navigateToUrl={singleSpa.navigateToUrl}
+                flagged={flagged}
+                modalOpen={modalOpen}
+                setFlagged={setFlagged}
+                setModalOpen={setModalOpen}
                 showLoginModal={showLoginModal}
                 onError={onError}
               />

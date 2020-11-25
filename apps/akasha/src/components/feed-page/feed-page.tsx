@@ -48,7 +48,9 @@ export interface FeedPageProps {
   showLoginModal: () => void;
   ethAddress: string | null;
   jwtToken: string | null;
+  flagged: string;
   modalOpen: boolean;
+  setFlagged: React.Dispatch<React.SetStateAction<string>>;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onError: (err: Error) => void;
 }
@@ -56,7 +58,9 @@ export interface FeedPageProps {
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const {
     isMobile,
+    flagged,
     modalOpen,
+    setFlagged,
     setModalOpen,
     showLoginModal,
     ethAddress,
@@ -66,7 +70,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [feedState, feedStateActions] = useFeedReducer({});
   const [isLoading, setIsLoading] = React.useState(false);
   const [showEditor, setShowEditor] = React.useState(false);
-  const [flagged, setFlagged] = React.useState('');
 
   const { size } = useViewportSize();
 
