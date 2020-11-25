@@ -122,9 +122,9 @@ const PostsList: React.FC<IPostsListProps> = props => {
 
   return (
     <>
-      <Helmet.Helmet>
+      <Helmet>
         <title>AKASHA Posts | Ethereum.world</title>
-      </Helmet.Helmet>
+      </Helmet>
       {isMyPosts && (
         <VirtualList
           items={postsState.postItems}

@@ -44,9 +44,9 @@ class App extends PureComponent<IProps> {
     return (
       <Box width="100vw">
         <I18nextProvider i18n={i18n ? i18n : null}>
-          <Helmet.Helmet>
+          <Helmet>
             <title>Search</title>
-          </Helmet.Helmet>
+          </Helmet>
           <h1>Search plugin</h1>
         </I18nextProvider>
       </Box>

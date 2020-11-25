@@ -67,9 +67,9 @@ const MyBoxProfile: React.FC<IMyBoxProfileProps> = () => {
   };
   return (
     <Box fill="horizontal">
-      <DS.Helmet.Helmet>
+      <DS.Helmet>
         <title>3Box | {t('Edit 3Box profile')}</title>
-      </DS.Helmet.Helmet>
+      </DS.Helmet>
       <Box fill="horizontal" flex={true} align="center">
         <ErrorInfoCard errors={stateData.errors}>
           {(messages, hasCriticalErrors) => (

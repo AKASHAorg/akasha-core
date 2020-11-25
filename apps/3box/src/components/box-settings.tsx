@@ -87,9 +87,9 @@ const BoxSettings: React.FC<IBoxSettingsProps> = () => {
 
   return (
     <Box fill="horizontal" flex={true} align="center">
-      <DS.Helmet.Helmet>
+      <DS.Helmet>
         <title>3Box | {t('Settings')}</title>
-      </DS.Helmet.Helmet>
+      </DS.Helmet>
       <MainAreaCardBox>
         <ErrorInfoCard errors={stateData.errors}>
           {(errors, hasCriticalErrors) => (

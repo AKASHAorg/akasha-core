@@ -4,7 +4,8 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "bootstrap:hoist": "lerna bootstrap --hoist",
-    "build:all": "lerna bootstrap --no-ci && lerna run tsc && npm run build:sdk && npm run build:feed-app && npm run pack:ui-apps && npm run extract:translations",
+    "build:staging": "lerna bootstrap --no-ci && lerna run tsc && npm run build:sdk && npm run build:feed-app && npm run pack:ui-apps && npm run extract:translations",
+    "build:all": "lerna run tsc && npm run build:sdk && npm run build:feed-app && npm run pack:ui-apps && npm run extract:translations",
     "build:sdk": "npm run tsc:sdk && lerna run build --scope @akashaproject/sdk --stream",
     "clean": "lerna clean",
     "docs": "lerna run docs --scope @akashaproject/sdk --scope @akashaproject/sdk-common",
