@@ -10,6 +10,10 @@ export interface PostsPageProps {
   sdkModules: any;
   logger: any;
   navigateToUrl: (url: string) => void;
+  flagged: string;
+  modalOpen: boolean;
+  setFlagged: React.Dispatch<React.SetStateAction<string>>;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   showLoginModal: () => void;
   onError: (err: Error) => void;
 }
@@ -33,6 +37,10 @@ const PostsPage: React.FC<PostsPageProps & RootComponentProps> = props => {
             channels={props.sdkModules}
             globalChannel={props.globalChannel}
             logger={props.logger}
+            flagged={props.flagged}
+            modalOpen={props.modalOpen}
+            setFlagged={props.setFlagged}
+            setModalOpen={props.setModalOpen}
             showLoginModal={props.showLoginModal}
           />
         </Route>
