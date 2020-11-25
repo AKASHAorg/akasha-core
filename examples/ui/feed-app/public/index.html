@@ -1,51 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,viewport-fit=cover,initial-scale=1,user-scalable=0,maximum-scale=1"/>
-  <meta name="theme-color" content="#000000"/>
-  <link rel="shortcut icon" href="/icons/icon-48x48.png"/>
-  <link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png"/>
-  <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png"/>
-  <link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png"/>
-  <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png"/>
-  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png"/>
-  <link rel="apple-touch-icon" sizes="256x256" href="/icons/icon-256x256.png"/>
-  <link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png"/>
-  <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png"/>
-  <link rel="manifest" href="/manifest.json"/>
-  <title>Ethereum World</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/system.min.js" integrity="sha512-R1dzyrUOrbjCRxsRK7JRUVJA5yFEHQ9Ui/qcyon6QRbcVeSzz1SfHzqVuVZh9CPGiCftiJpeHOLz+uFcVNevYQ==" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/amd.min.js" integrity="sha512-fRfysEnVm90UgqFUsB+UlgnHK5vvSnsl64hxHaJJl4wE+P1sTwDUuQGmohtg/CSK60mY5A4elesW6UWQdLQsAg==" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/named-exports.min.js" integrity="sha512-mf4/y3IroNfkl20Brygdc+tb4a38MrEmU+VTSyMaqlsZhfVHCdHniA//HEgETGlJptSSCPv72Dy6kXB+OHiGAQ==" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/use-default.min.js" integrity="sha512-Ahpc6VqzcdPS1xTuBGdnw+l64Iz6KNXAy/4/1bBzAv6nTl+NK7mnYHMDtI8wAzd2PTV9GVNURwKf87y36eWZ+g==" crossorigin="anonymous"></script>
-  <script type="systemjs-importmap" src="/importmap.json"></script>
-  <style>
-    html,
-    body,
-    #root {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
-</head>
-<body>
-<noscript>
-  You need to enable JavaScript to run this app.
-</noscript>
-<div id="root"></div>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').then(registration => {
-        console.log('SW registered: ', registration);
-      }).catch(registrationError => {
-        console.log('SW registration failed: ', registrationError);
-      });
-    });
-  }
-</script>
-<script src="/akasha.sdk.js"></script></body>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,viewport-fit=cover,initial-scale=1,user-scalable=0,maximum-scale=1"
+    />
+    <meta name="theme-color" content="#000000" />
+    <link rel="shortcut icon" href="/icons/icon-48x48.png" />
+    <link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="256x256" href="/icons/icon-256x256.png" />
+    <link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <title>Ethereum World</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/system.min.js"
+      integrity="sha512-R1dzyrUOrbjCRxsRK7JRUVJA5yFEHQ9Ui/qcyon6QRbcVeSzz1SfHzqVuVZh9CPGiCftiJpeHOLz+uFcVNevYQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/amd.min.js"
+      integrity="sha512-fRfysEnVm90UgqFUsB+UlgnHK5vvSnsl64hxHaJJl4wE+P1sTwDUuQGmohtg/CSK60mY5A4elesW6UWQdLQsAg=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/named-exports.min.js"
+      integrity="sha512-mf4/y3IroNfkl20Brygdc+tb4a38MrEmU+VTSyMaqlsZhfVHCdHniA//HEgETGlJptSSCPv72Dy6kXB+OHiGAQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/use-default.min.js"
+      integrity="sha512-Ahpc6VqzcdPS1xTuBGdnw+l64Iz6KNXAy/4/1bBzAv6nTl+NK7mnYHMDtI8wAzd2PTV9GVNURwKf87y36eWZ+g=="
+      crossorigin="anonymous"
+    ></script>
+    <script type="systemjs-importmap" src="/importmap.json"></script>
+    <style>
+      html,
+      body,
+      #root {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker
+            .register('/sw.js')
+            .then(registration => {
+              console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
+    <script src="/akasha.sdk.js"></script>
+  </body>
 </html>

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
+import { useGlobalLogin } from '@akashaproject/ui-awf-hooks';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { default as subRoutes, ENS_EDIT_PAGE, SETTINGS_PAGE, rootRoute } from '../../routes';
 import EnsEditPage from './ens-edit-page';
@@ -9,7 +10,7 @@ import { ProfileStateModel } from '../../state/profile-state';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 
-const { useGlobalLogin, LoginModal } = DS;
+const { LoginModal } = DS;
 
 const Routes: React.FC<
   RootComponentProps & { profileStore: ReturnType<typeof createContextStore> }

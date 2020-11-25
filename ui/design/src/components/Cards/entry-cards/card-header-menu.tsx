@@ -8,12 +8,19 @@ export interface ICardHeaderMenuProps {
   onMenuClose: () => void;
   flagAsLabel: string;
   onFlag: () => void;
-  copyIPFSLinkLabel: string;
-  onLinkCopy: (linkType: 'ipfs' | 'shareable') => () => void;
+  copyIPFSLinkLabel?: string;
+  onLinkCopy?: (linkType: 'ipfs' | 'shareable') => () => void;
 }
 
 const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
   const { target, onMenuClose, flagAsLabel, onFlag, copyIPFSLinkLabel, onLinkCopy } = props;
+
+  const handleClick = (handler: () => void) => () => {
+    // hide menu dropdown when clicked
+    handler();
+    return onMenuClose();
+  };
+
   return (
     <StyledDrop
       overflow="hidden"
@@ -23,21 +30,23 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
       onEsc={onMenuClose}
     >
       <Box pad="xxsmall" width={{ min: '13rem' }}>
-        <StyledSelectBox>
-          <TextIcon
-            iconType="appIpfs"
-            label={copyIPFSLinkLabel}
-            onClick={onLinkCopy('ipfs')}
-            clickable={true}
-            iconSize="xs"
-            fontSize="small"
-          />
-        </StyledSelectBox>
+        {onLinkCopy && (
+          <StyledSelectBox>
+            <TextIcon
+              iconType="appIpfs"
+              label={copyIPFSLinkLabel}
+              onClick={handleClick(onLinkCopy('ipfs'))}
+              clickable={true}
+              iconSize="xs"
+              fontSize="small"
+            />
+          </StyledSelectBox>
+        )}
         <StyledSelectBox>
           <TextIcon
             iconType="report"
             label={flagAsLabel}
-            onClick={onFlag}
+            onClick={handleClick(onFlag)}
             color={'red'}
             iconSize="xs"
             fontSize="small"
