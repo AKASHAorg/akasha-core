@@ -1,8 +1,10 @@
 import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
 import { Button } from '../../Buttons/index';
+import { Icon } from '../../Icon';
 import { SubtitleTextIcon, TextIcon } from '../../TextIcon/index';
 import { MainAreaCardBox } from '../common/basic-card-box';
+import CardHeaderMenuDropdown from '../entry-cards/card-header-menu';
 import {
   ProfileCardAvatar,
   ProfileCardCoverImage,
@@ -43,6 +45,9 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   changeCoverImageLabel: string;
   cancelLabel: string;
   saveChangesLabel: string;
+  flagAsLabel: string;
+  flaggable: boolean;
+  onEntryFlag: () => void;
   getProfileProvidersData: () => void;
 }
 
@@ -63,6 +68,9 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     changeCoverImageLabel,
     cancelLabel,
     saveChangesLabel,
+    flagAsLabel,
+    flaggable,
+    onEntryFlag,
     getProfileProvidersData,
     profileProvidersData,
     canUserEdit,
@@ -84,11 +92,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   };
 
   const [editable, setEditable] = useState(false);
-
+  const [menuDropOpen, setMenuDropOpen] = React.useState(false);
   const [avatar, setAvatar] = useState(profileData.avatar);
   const [coverImage, setCoverImage] = useState(profileData.coverImage);
   const [description, setDescription] = useState(profileData.description);
   const [name, setName] = useState(profileData.name);
+
+  const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
   React.useEffect(() => {
     setAvatar(profileData.avatar);
@@ -114,6 +124,14 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const [coverImagePopoverOpen, setCoverImagePopoverOpen] = useState(false);
   const [descriptionPopoverOpen, setDescriptionPopoverOpen] = useState(false);
   const [namePopoverOpen, setNamePopoverOpen] = useState(false);
+
+  const toggleMenuDrop = () => {
+    setMenuDropOpen(!menuDropOpen);
+  };
+
+  const closeMenuDrop = () => {
+    setMenuDropOpen(false);
+  };
 
   const handleChangeAvatar = (provider: IProfileDataProvider) => {
     setAvatar(provider.value);
@@ -218,31 +236,45 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             </Box>
           </Box>
         </Box>
-        {leftTitle && rightTitle && (
-          <Box
-            pad={{ vertical: 'medium', right: 'xxsmall' }}
-            direction="row"
-            alignContent="center"
-            gap="small"
-          >
-            <SubtitleTextIcon
-              iconType="person"
-              label={leftTitle}
-              labelSize="small"
-              subtitle={leftSubtitle}
-              onClick={onClickFollowing}
-              data-testid="following-button"
+        <Box direction="row" align="center">
+          {leftTitle && rightTitle && (
+            <Box
+              margin={{ right: 'large' }}
+              pad={{ vertical: 'medium', right: 'xxsmall' }}
+              direction="row"
+              alignContent="center"
+              gap="small"
+            >
+              <SubtitleTextIcon
+                iconType="person"
+                label={leftTitle}
+                labelSize="small"
+                subtitle={leftSubtitle}
+                onClick={onClickFollowing}
+                data-testid="following-button"
+              />
+              <SubtitleTextIcon
+                iconType="app"
+                label={rightTitle}
+                labelSize="small"
+                subtitle={rightSubtitle}
+                onClick={onClickApps}
+                data-testid="apps-button"
+              />
+            </Box>
+          )}
+          {flaggable && (
+            <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
+          )}
+          {menuIconRef.current && menuDropOpen && (
+            <CardHeaderMenuDropdown
+              target={menuIconRef.current}
+              onMenuClose={closeMenuDrop}
+              onFlag={onEntryFlag}
+              flagAsLabel={flagAsLabel}
             />
-            <SubtitleTextIcon
-              iconType="app"
-              label={rightTitle}
-              labelSize="small"
-              subtitle={rightSubtitle}
-              onClick={onClickApps}
-              data-testid="apps-button"
-            />
-          </Box>
-        )}
+          )}
+        </Box>
       </Box>
       <ProfileCardEthereumId profileData={profileData} />
       {(description || canUserEdit) && (

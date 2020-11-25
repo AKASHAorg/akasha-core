@@ -43,17 +43,12 @@ const config = {
     new InjectManifest({
       swSrc: './lib/sw.js',
       swDest: 'sw.js',
-      exclude: [/.*?/]
-    })
+      exclude: [/.*?/],
+    }),
   ],
   devtool: 'source-map',
   mode: process.env.NODE_ENV || 'development',
-  externals: [
-    /^single-spa$/,
-    /^rxjs$/,
-    /^rxjs\/operators$/,
-    /^@truffle\/contract$/,
-  ],
+  externals: [/^single-spa$/, /^rxjs$/, /^rxjs\/operators$/, /^@truffle\/contract$/],
 };
 
 module.exports = config;

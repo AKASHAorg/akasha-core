@@ -38,6 +38,7 @@
     "ext": "ts,tsx"
   },
   "dependencies": {
+    "@akashaproject/sdk-auth": "*",
     "@akashaproject/design-system": "*",
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/sdk-common": "*",

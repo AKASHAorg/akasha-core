@@ -10,6 +10,7 @@ const VirtualScroll: React.FC<IVirtualListProps> = props => {
   const {
     items,
     itemsData,
+    visitorEthAddress,
     offsetItems = DEFAULT_OFFSET_ITEMS,
     getItemCard,
     loadItemData,
@@ -52,6 +53,7 @@ const VirtualScroll: React.FC<IVirtualListProps> = props => {
         items={items}
         slice={listState.slice}
         itemsData={itemsData}
+        visitorEthAddress={visitorEthAddress}
         height={listState.totalItemsHeight}
         getItemCard={getItemCard}
         onSizeChange={handlers.onItemSizeUpdate}
