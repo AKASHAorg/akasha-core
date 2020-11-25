@@ -35,5 +35,23 @@ const mutations = {
     }
     return postID[0];
   },
+  follow: async (_, { ethAddress }, { dataSources, user }) => {
+    if (!user) {
+      return Promise.reject('Must be authenticated!');
+    }
+    return await dataSources.profileAPI.followProfile(user.pubKey, ethAddress);
+  },
+  unFollow: async (_, { ethAddress }, { dataSources, user }) => {
+    if (!user) {
+      return Promise.reject('Must be authenticated!');
+    }
+    return await dataSources.profileAPI.unFollowProfile(user.pubKey, ethAddress);
+  },
+  saveMetaData: async (_, { data }, { dataSources, user }) => {
+    if (!user) {
+      return Promise.reject('Must be authenticated!');
+    }
+    return await dataSources.profileAPI.saveMetadata(user.pubKey, data);
+  },
 };
 export default mutations;
