@@ -29,7 +29,7 @@
     "extract:translations": "i18next --config ./i18next-parser.config.js",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/* ../../ui/build/public/apps/akasha",
+    "postpack": "copyfiles -f ./dist/* ../../ui/build/apps/akasha",
     "watch": "nodemon"
   },
   "nodemonConfig": {

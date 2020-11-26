@@ -23,7 +23,7 @@ const backends = {
       expirationTime: 24 * 60 * 60 * 1000,
     },
     {
-      loadPath: '/public/locales/{{lng}}/{{ns}}.json',
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
   ],
 };

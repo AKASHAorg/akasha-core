@@ -3,7 +3,7 @@ import type { ErrorLoaderProps } from './interfaces';
 import ErrorCard from './error-card';
 
 const ErrorLoader: React.FC<ErrorLoaderProps> = props => {
-  const { type, publicImgPath = '/public/images' } = props;
+  const { type, publicImgPath = '/images' } = props;
 
   let imagesrc;
   switch (type) {

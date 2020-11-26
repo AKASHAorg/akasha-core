@@ -9,7 +9,7 @@ import loadDependencies from './load-dependencies';
 import { getDefaultApps } from './get-default-apps';
 // import { getUserApps } from './get-user-apps';
 
-const PUBLIC_PATH = '/public';
+const PUBLIC_PATH = '';
 const APPS_PATH = `${PUBLIC_PATH}/apps`;
 const PLUGINS_PATH = `${PUBLIC_PATH}/plugins`;
 const WIDGETS_PATH = `${PUBLIC_PATH}/widgets`;

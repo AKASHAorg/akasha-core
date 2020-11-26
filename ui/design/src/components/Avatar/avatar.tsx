@@ -50,7 +50,7 @@ const Avatar: React.FC<AvatarProps> = props => {
     margin,
     border,
     ethAddress = '0x0000000000000000000000000000000',
-    publicImgPath = '/public/images',
+    publicImgPath = '/images',
   } = props;
   const isClickable = typeof onClick === 'function';
   const avatarImage = React.useRef<string | undefined>();

@@ -1,4 +1,3 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 const { ModuleFederationPlugin } = webpack.container;
@@ -8,10 +7,6 @@ const baseConfig = require('../../../ui/webpack.config');
 module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
   entry: './src/bootstrap',
-  output: {
-    path: path.resolve(__dirname, 'public'),
-    publicPath: '/',
-  },
   plugins: baseConfig.plugins.concat([
     new ModuleFederationPlugin({
       name: 'ethereum.world',
@@ -29,8 +24,9 @@ module.exports = Object.assign(baseConfig, {
     }),
     new CopyPlugin({
       patterns: [
-        { from: path.join(__dirname, '../../../ui/build'), to: path.join(__dirname, 'public')},
-        { from: path.join(__dirname, '../../../locales'), to: path.join(__dirname, 'public')},
+        { from: path.join(__dirname, 'dist'), to: path.join(__dirname, 'public') },
+        { from: path.join(__dirname, '../../../ui/build'), to: path.join(__dirname, 'public') },
+        { from: path.join(__dirname, '../../../locales'), to: path.join(__dirname, 'public/locales') }
       ]
     })
   ]),
@@ -39,7 +35,8 @@ module.exports = Object.assign(baseConfig, {
     'akasha.sdk.js': 'akashaproject__sdk',
   },
   devServer: {
-    contentBase: path.join(__dirname, 'public'),
+    contentBase: 'public',
+    publicPath: '/',
     https: true,
     historyApiFallback: true,
     headers: {
