@@ -8,10 +8,13 @@
     "@types/react-dom": "17.0.0"
   },
   "scripts": {
+    "start": "webpack serve --config ./webpack.config.js --port 8131",
+    "start:expose": "webpack serve --config ./webpack.config.js --port 8131 --host 0.0.0.0",
     "build": "webpack --config ./webpack.config.js",
     "postbuild": "copyfiles -u 1 ./dist/* './dist/icons/*' ../../../ui/build/",
     "watch": "nodemon",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "build:staging": "webpack --config ./webpack.config.js"
   },
   "nodemonConfig": {
     "ignore": [

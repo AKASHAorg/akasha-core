@@ -8,6 +8,10 @@ const baseConfig = require('../../../ui/webpack.config');
 module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
   entry: './src/bootstrap',
+  output: {
+    path: path.resolve(__dirname, 'public'),
+    publicPath: '/',
+  },
   plugins: baseConfig.plugins.concat([
     new ModuleFederationPlugin({
       name: 'ethereum.world',
@@ -23,18 +27,23 @@ module.exports = Object.assign(baseConfig, {
         }
       },
     }),
-    // new HtmlWebpackPlugin({
-    //   template: './public/index.html',
-    //   publicPath: '/'
-    // }),
     new CopyPlugin({
       patterns: [
-        { from: 'public' }
+        { from: path.join(__dirname, '../../../ui/build'), to: path.join(__dirname, 'public')},
+        { from: path.join(__dirname, '../../../locales'), to: path.join(__dirname, 'public')},
       ]
     })
   ]),
   externals: {
     ...baseConfig.externals,
     'akasha.sdk.js': 'akashaproject__sdk',
+  },
+  devServer: {
+    contentBase: path.join(__dirname, 'public'),
+    https: true,
+    historyApiFallback: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
   }
 });

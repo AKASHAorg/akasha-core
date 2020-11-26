@@ -13,6 +13,7 @@ const i18nDefaultConfig: InitOptions = {
   load: 'languageOnly',
   debug: true,
   cleanCode: true,
+  keySeparator: false,
 };
 const backends = {
   backends: [LocalStorageBackend, Fetch],
