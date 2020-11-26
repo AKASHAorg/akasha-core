@@ -2,10 +2,12 @@ import React from 'react';
 import { useToasts } from 'react-toast-notifications';
 import { Box, Text, RadioButton, FormField } from 'grommet';
 
-import { MainAreaCardBox } from '../../Cards/common/basic-card-box';
-import { ModalWrapper } from '../common/styled-modal';
+import { EntryCardMod, MainAreaCardBox } from '../../Cards';
 import { Button } from '../../Buttons';
 import { Icon } from '../../Icon';
+import { ILocale } from '../../../utils/time';
+
+import { ModalWrapper } from '../common/styled-modal';
 
 import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from '../styled';
 
@@ -16,6 +18,12 @@ export interface IModerateModalProps {
   optionsTitleLabel: string;
   optionLabels: string[];
   preselectedReasons: string[];
+
+  flaggedItemData: any;
+  repostsLabel: string;
+  repliesLabel: string;
+  locale: ILocale;
+
   descriptionLabel: string;
   descriptionPlaceholder: string;
   footerText1Label: string;
@@ -41,6 +49,10 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     optionsTitleLabel,
     optionLabels,
     preselectedReasons,
+    flaggedItemData,
+    repostsLabel,
+    repliesLabel,
+    locale,
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
@@ -175,7 +187,16 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
             </Box>
             <MainAreaCardBox>
               {contentType === 'post' ? (
-                <Box height="25rem">Insert Post EntryBox here ...</Box>
+                <EntryCardMod
+                  entryData={flaggedItemData}
+                  repostsLabel={repostsLabel}
+                  repliesLabel={repliesLabel}
+                  locale={locale}
+                  style={{ height: 'auto' }}
+                  onClickAvatar={() => null}
+                  onClickReplies={() => null}
+                  onContentClick={() => null}
+                />
               ) : contentType === 'profile' ? (
                 <Box height="25rem">Insert ProfileCard here ...</Box>
               ) : null}

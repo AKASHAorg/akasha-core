@@ -2,11 +2,18 @@ import React from 'react';
 import moment from 'moment';
 import DS from '@akashaproject/design-system';
 
+import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+
 import { StyledBox } from './styled';
 
-const { Box, Icon, Text, Avatar, Button, MainAreaCardBox } = DS;
+const { Box, Icon, Text, Avatar, Button, EntryCardMod, MainAreaCardBox } = DS;
 
 export interface IContentCardProps {
+  entryData: any;
+  repliesLabel: string;
+  repostsLabel: string;
+  locale: ILocale;
+
   reportedLabel: string;
   contentType: string;
   forLabel: string;
@@ -21,11 +28,21 @@ export interface IContentCardProps {
   dateTime: string;
   keepContentLabel: string;
   delistContentLabel: string;
-  handleButtonClick: (param1: string, param2: string, param3: string, param4: string[]) => void;
+  handleButtonClick: (
+    param1: string,
+    param2: string,
+    param3: string,
+    param4: string[],
+    param5: any,
+  ) => void;
 }
 
 const ContentCard: React.FC<IContentCardProps> = props => {
   const {
+    entryData,
+    repostsLabel,
+    repliesLabel,
+    locale,
     reportedLabel,
     contentType,
     forLabel,
@@ -45,7 +62,7 @@ const ContentCard: React.FC<IContentCardProps> = props => {
 
   const handleClick = (action: string) => () => {
     if (ethAddress) {
-      handleButtonClick(ethAddress, action, contentType, reasons);
+      handleButtonClick(ethAddress, action, contentType, reasons, entryData);
     }
   };
 
@@ -55,7 +72,16 @@ const ContentCard: React.FC<IContentCardProps> = props => {
         <Box pad="1rem">
           <MainAreaCardBox>
             {contentType === 'post' ? (
-              <Box height="25rem">Insert Post EntryBox here ...</Box>
+              <EntryCardMod
+                entryData={entryData}
+                repostsLabel={repostsLabel}
+                repliesLabel={repliesLabel}
+                locale={locale}
+                style={{ height: 'auto' }}
+                onClickAvatar={() => null}
+                onClickReplies={() => null}
+                onContentClick={() => null}
+              />
             ) : contentType === 'profile' ? (
               <Box height="25rem">Insert ProfileCard here ...</Box>
             ) : null}

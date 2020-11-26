@@ -1,4 +1,45 @@
-export const postData = [
+export const samplePostData = {
+  CID:
+    'bafyriqewvgwme6hrxg3qzz7qgla256re7rrp5awoldzrdeel6cdsheceha52agmdb6s5fkwyuh6keo2u4ll7o6dgyexn4dodo6uc6l4pfd6dq',
+  author: {
+    CID:
+      'bafyriqhrcdfsqchki4sbxu4faatjfub6ffh5xcs65eetwbsnt2rjoubgx3yp4v5666qwzwanr6bfdnpexlq3btor2mcpbucsz2nb3y6aogqi2',
+    avatar: '',
+    coverImage: '',
+    description: undefined,
+    ensName: 'didnt1able',
+    ethAddress: '0x4A68039766A9D83602A67ca5113b00dBf625F7cb',
+    postsNumber: 6,
+  },
+  content: [
+    {
+      children: [{ text: 'XLM, Is Stellar underrated?', bold: true }],
+      type: 'paragraph',
+    },
+    {
+      children: [{ text: '' }],
+      type: 'tag',
+      value: 'crypto',
+    },
+    { text: ' ' },
+    {
+      children: [{ text: '' }],
+      type: 'tag',
+      value: 'stellar',
+    },
+    { text: ' ' },
+    {
+      children: [{ text: '' }],
+      type: 'tag',
+      value: 'blockchain',
+    },
+  ],
+  entryId: '0x7e536ebab63f06b1095d9e29411ea925938d12519af9ce9f6868349948ef1b58',
+  ipfsLink: 'undefined',
+  permalink: 'null',
+};
+
+export const sampleContentCardData = [
   {
     id: 0,
     type: 'post',

@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 
 import ContentCard from './content-card';
+import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
-import { postData } from '../services/dummy-data';
+import { samplePostData, sampleContentCardData } from '../services/dummy-data';
 
 const { Box, useViewportSize, ModalRenderer, ToastProvider, ModerateModal } = DS;
 
@@ -20,8 +21,10 @@ const ContentList: React.FC<IContentListProps> = props => {
   const [contentType, setContentType] = React.useState<string>('Delist');
   const [flagged, setFlagged] = React.useState<string>('');
   const [preselectedReasons, setPreselectedReasons] = React.useState<string[]>([]);
+  const [flaggedItemData, setFlaggedItemData] = React.useState<any>({});
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = (i18n.languages[0] || 'en') as ILocale;
   const { size } = useViewportSize();
 
   // @TODO: Get logged ethAddress from Store state
@@ -31,12 +34,14 @@ const ContentList: React.FC<IContentListProps> = props => {
     action: string,
     content: string,
     reasons: string[],
+    item: any,
   ) => {
     setFlagged(entryId);
     setModalOpen(true);
     setActionType(action);
     setContentType(content);
     setPreselectedReasons(reasons);
+    setFlaggedItemData(item);
   };
 
   return (
@@ -61,6 +66,10 @@ const ContentList: React.FC<IContentListProps> = props => {
                 t('Violence'),
               ]}
               preselectedReasons={preselectedReasons}
+              flaggedItemData={flaggedItemData}
+              repostsLabel={t('Repost')}
+              repliesLabel={t('Replies')}
+              locale={locale}
               descriptionLabel={t('Evaluation')}
               descriptionPlaceholder={
                 actionType === 'Delist'
@@ -85,9 +94,13 @@ const ContentList: React.FC<IContentListProps> = props => {
           </ToastProvider>
         )}
       </ModalRenderer>
-      {postData.map(post => (
+      {sampleContentCardData.map(post => (
         <ContentCard
           key={post.id}
+          entryData={samplePostData}
+          repostsLabel={t('Repost')}
+          repliesLabel={t('Replies')}
+          locale={locale}
           reportedLabel={t('Reported')}
           contentType={t(post.type)}
           forLabel={t('for')}
