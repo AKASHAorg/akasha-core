@@ -9,9 +9,9 @@ import { ShareButtonContainer, StyledEditCoverImageBox } from '../styled-profile
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 
 export interface IProfileCardCoverImageProps {
-  shareProfileLabel: string;
-  editProfileLabel: string;
-  changeCoverImageLabel: string;
+  shareProfileLabel?: string;
+  editProfileLabel?: string;
+  changeCoverImageLabel?: string;
   editable: boolean;
   canUserEdit?: boolean;
   coverImage?: string;
@@ -61,12 +61,14 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
                 onClick={handleEditClick}
               />
             )}
-            <IconButton
-              secondary={true}
-              icon={<Icon type="reply" color="white" />}
-              label={shareProfileLabel}
-              onClick={handleShareClick}
-            />
+            {shareProfileLabel && (
+              <IconButton
+                secondary={true}
+                icon={<Icon type="reply" color="white" />}
+                label={shareProfileLabel}
+                onClick={handleShareClick}
+              />
+            )}
           </ShareButtonContainer>
         </Box>
       )}
