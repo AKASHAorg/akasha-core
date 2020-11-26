@@ -86,7 +86,7 @@ const LineChart: React.FC<ILineChart> = props => {
   const chart = (
     <svg width={width} height={height} ref={svgRef}>
       <Group top={margin.top} left={margin.left}>
-        <GridRows<number>
+        <GridRows
           scale={yScale}
           width={xMax}
           strokeDasharray="3,3"
@@ -99,13 +99,13 @@ const LineChart: React.FC<ILineChart> = props => {
         <LinePath
           curve={curveCardinal}
           data={data}
-          x={d => xScale(getX(d))}
-          y={d => yScale(getY(d))}
+          x={d => xScale(getX(d)) || 0}
+          y={d => yScale(getY(d)) || 0}
           stroke={'#4E71FF'}
           strokeWidth={1}
           pointerEvents="none"
         />
-        <AxisLeft<number>
+        <AxisLeft
           scale={yScale}
           numTicks={4}
           stroke={'transparent'}

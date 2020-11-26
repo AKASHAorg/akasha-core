@@ -69,7 +69,7 @@ const Routes: React.FC<RootComponentProps> = props => {
       </Box>
       <LoginModal
         showModal={loginModalState}
-        slotId={props.layout.modalSlotId}
+        slotId={props.layout.app.modalSlotId}
         onLogin={handleLogin}
         onModalClose={hideLoginModal}
         tutorialLinkLabel={t('Tutorial')}

@@ -1,0 +1,9 @@
+*
+index.html
+!.gitignore
+!template-index.html
+!manifest.json
+!importmap.json
+!icons
+!icons/*.png
+

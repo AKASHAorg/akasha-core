@@ -129,7 +129,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
         </Router>
         <LoginModal
           showModal={loginModalState}
-          slotId={layout.modalSlotId}
+          slotId={layout.app.modalSlotId}
           onLogin={handleLogin}
           onModalClose={hideLoginModal}
           tutorialLinkLabel={t('Tutorial')}

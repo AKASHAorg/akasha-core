@@ -76,16 +76,16 @@ const AreaChart: React.FC<IAreaChart> = props => {
       <Group top={margin.top} left={margin.left}>
         <AreaClosed
           data={data}
-          x={d => xScale(getX(d))}
-          y={d => yScale(getY(d))}
+          x={d => xScale(getX(d)) || 0}
+          y={d => yScale(getY(d)) || 0}
           yScale={yScale}
           fill={'rgba(78,113,255,0.08)'}
         />
         <LinePath
           curve={curveLinear}
           data={data}
-          x={d => xScale(getX(d))}
-          y={d => yScale(getY(d))}
+          x={d => xScale(getX(d)) || 0}
+          y={d => yScale(getY(d)) || 0}
           stroke={'#4E71FF'}
           strokeWidth={1}
           shapeRendering="geometricPrecision"
