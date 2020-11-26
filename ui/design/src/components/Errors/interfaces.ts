@@ -8,6 +8,8 @@ export interface ErrorLoaderProps {
     | 'no-connection'
     | 'no-login'
     | 'script-error';
+  /* Path to public folder */
+  publicImgPath?: string;
   /**
    * The error title
    */
