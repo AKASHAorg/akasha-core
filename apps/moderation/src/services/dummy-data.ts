@@ -1,3 +1,13 @@
+export const sampleProfileData = {
+  CID:
+    'bafyriqhrcdfsqchki4sbxu4faatjfub6ffh5xcs65eetwbsnt2rjoubgx3yp4v5666qwzwanr6bfdnpexlq3btor2mcpbucsz2nb3y6aogqi2',
+  ensName: 'didnt1able',
+  ethAddress: '0x4A68039766A9D83602A67ca5113b00dBf625F7cb',
+  // optional fields?
+  apps: 2,
+  following: 53,
+};
+
 export const samplePostData = {
   CID:
     'bafyriqewvgwme6hrxg3qzz7qgla256re7rrp5awoldzrdeel6cdsheceha52agmdb6s5fkwyuh6keo2u4ll7o6dgyexn4dodo6uc6l4pfd6dq',

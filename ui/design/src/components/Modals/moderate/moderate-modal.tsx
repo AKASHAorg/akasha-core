@@ -2,7 +2,7 @@ import React from 'react';
 import { useToasts } from 'react-toast-notifications';
 import { Box, Text, RadioButton, FormField } from 'grommet';
 
-import { EntryCardMod, MainAreaCardBox } from '../../Cards';
+import { EntryCardMod, ProfileCardMod, MainAreaCardBox } from '../../Cards';
 import { Button } from '../../Buttons';
 import { Icon } from '../../Icon';
 import { ILocale } from '../../../utils/time';
@@ -198,7 +198,22 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                   onContentClick={() => null}
                 />
               ) : contentType === 'profile' ? (
-                <Box height="25rem">Insert ProfileCard here ...</Box>
+                <ProfileCardMod
+                  onClickApps={() => null}
+                  onClickFollowing={() => null}
+                  profileData={flaggedItemData}
+                  onChangeProfileData={() => null}
+                  getProfileProvidersData={() => null}
+                  descriptionLabel={'About me'}
+                  actionsLabel={'Actions'}
+                  editProfileLabel={'Edit profile'}
+                  changeCoverImageLabel={'Change cover image'}
+                  followingLabel={'Following'}
+                  appsLabel={'Apps'}
+                  usersLabel={'Users'}
+                  shareProfileLabel={'Share Profile'}
+                  onEntryFlag={() => null}
+                />
               ) : null}
             </MainAreaCardBox>
             {reportLabel === 'Delist' && (

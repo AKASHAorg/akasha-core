@@ -5,7 +5,7 @@ import DS from '@akashaproject/design-system';
 import ContentCard from './content-card';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
-import { samplePostData, sampleContentCardData } from '../services/dummy-data';
+import { samplePostData, sampleContentCardData, sampleProfileData } from '../services/dummy-data';
 
 const { Box, useViewportSize, ModalRenderer, ToastProvider, ModerateModal } = DS;
 
@@ -97,7 +97,7 @@ const ContentList: React.FC<IContentListProps> = props => {
       {sampleContentCardData.map(post => (
         <ContentCard
           key={post.id}
-          entryData={samplePostData}
+          entryData={post.type === 'post' ? samplePostData : sampleProfileData}
           repostsLabel={t('Repost')}
           repliesLabel={t('Replies')}
           locale={locale}

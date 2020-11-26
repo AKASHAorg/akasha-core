@@ -1,12 +1,13 @@
 import React from 'react';
 import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
 import { StyledBox } from './styled';
 
-const { Box, Icon, Text, Avatar, Button, EntryCardMod, MainAreaCardBox } = DS;
+const { Box, Icon, Text, Avatar, Button, EntryCardMod, ProfileCardMod, MainAreaCardBox } = DS;
 
 export interface IContentCardProps {
   entryData: any;
@@ -60,6 +61,8 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     handleButtonClick,
   } = props;
 
+  const { t } = useTranslation();
+
   const handleClick = (action: string) => () => {
     if (ethAddress) {
       handleButtonClick(ethAddress, action, contentType, reasons, entryData);
@@ -83,7 +86,22 @@ const ContentCard: React.FC<IContentCardProps> = props => {
                 onContentClick={() => null}
               />
             ) : contentType === 'profile' ? (
-              <Box height="25rem">Insert ProfileCard here ...</Box>
+              <ProfileCardMod
+                onClickApps={() => null}
+                onClickFollowing={() => null}
+                profileData={entryData}
+                onChangeProfileData={() => null}
+                getProfileProvidersData={() => null}
+                descriptionLabel={t('About me')}
+                actionsLabel={t('Actions')}
+                editProfileLabel={t('Edit profile')}
+                changeCoverImageLabel={t('Change cover image')}
+                followingLabel={t('Following')}
+                appsLabel={t('Apps')}
+                usersLabel={t('Users')}
+                shareProfileLabel={t('Share Profile')}
+                onEntryFlag={() => null}
+              />
             ) : null}
           </MainAreaCardBox>
           <Box direction="row" margin={{ top: 'large' }} wrap={true} align="center">
