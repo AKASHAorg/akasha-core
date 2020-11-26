@@ -1,5 +1,4 @@
 import { IPendingEntry } from '@akashaproject/ui-awf-hooks/lib/use-entry-publisher';
-import { delay, genEthAddress } from './dummy-data';
 import { forkJoin } from 'rxjs';
 
 export const savePending = (ethAddress: string, entries: any[]): Promise<void> => {
@@ -67,17 +66,28 @@ export const addToIPFS = (entryObj: IPendingEntry): Promise<{ data: IPendingEntr
   });
 };
 
-export const publishEntry = (pendingEntry: IPendingEntry) => {
-  const ethAddress = genEthAddress()(true);
-  return delay(2000).then(() => {
-    return {
-      data: {
-        localId: pendingEntry.localId,
-        entry: { ...pendingEntry.entry, entryId: ethAddress },
-        step: pendingEntry.step,
-      },
-    };
-  });
+export const publishEntry = (entryService: any) => (pendingEntry: IPendingEntry) => {
+  const entryObj = {
+    data: {
+      provider: 'AkashaApp',
+      property: 'slateContent',
+      value: pendingEntry.entry.content,
+    },
+    post: {
+      tags: pendingEntry.entry.metadata.tags,
+    },
+  };
+  const call = entryService.postEntry(entryObj);
+  return call;
+  // return delay(2000).then(() => {
+  //   return {
+  //     data: {
+  //       localId: pendingEntry.localId,
+  //       entry: { ...pendingEntry.entry, entryId: ethAddress },
+  //       step: pendingEntry.step,
+  //     },
+  //   };
+  // });
 };
 
 export const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {

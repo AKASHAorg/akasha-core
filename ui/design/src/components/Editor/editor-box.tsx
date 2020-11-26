@@ -44,7 +44,6 @@ export interface IMetadata {
   quote?: string;
   tags: string[];
   mentions: string[];
-  images: string[];
 }
 
 const HOTKEYS = {
@@ -69,7 +68,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
     mentions = [],
     tags = [],
     uploadRequest,
-    publishingApp = 'AKASHA',
+    publishingApp = 'AkashaApp',
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -132,8 +131,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
       quote: embedEntryData?.entryId,
       tags: [],
       mentions: [],
-      images: [],
-      version: 0,
+      version: 1,
     };
 
     (function getMetadata(node: any) {
@@ -143,14 +141,11 @@ const EditorBox: React.FC<IEditorBox> = props => {
       if (node.type === 'tag') {
         metadata.tags.push(node.value as string);
       }
-      if (node.type === 'image') {
-        metadata.images.push(node.url as string);
-      }
       if (node.children) {
         node.children.map((n: any) => getMetadata(n));
       }
     })({ children: content });
-    const textContent = serializeToPlainText({ children: content });
+    const textContent: string = serializeToPlainText({ children: content });
     const data = { metadata, content, textContent, author: ethAddress };
     onPublish(data);
   };

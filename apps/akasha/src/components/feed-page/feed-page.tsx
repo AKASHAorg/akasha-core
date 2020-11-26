@@ -21,7 +21,7 @@ import {
   uploadMediaToIpfs,
 } from '../../services/posting-service';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
-import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
+// import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
 import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
 
@@ -62,6 +62,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     ethAddress,
     jwtToken,
     onError,
+    sdkModules,
   } = props;
   const [feedState, feedStateActions] = useFeedReducer({});
   const [isLoading, setIsLoading] = React.useState(false);
@@ -75,17 +76,17 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [pendingEntries, pendingActions] = useEntryPublisher({
-    publishEntry: publishEntry,
+    publishEntry: publishEntry(sdkModules.posts.entries),
     onPublishComplete: (ethAddr, publishedEntry) => {
       removePending(ethAddr, publishedEntry.localId);
       pendingActions.removeEntry(publishedEntry.localId);
       if (publishedEntry.entry.entryId) {
         // @TODO: this call (setFeedItemData) should be removed when we have real data
         // aka we should only `setFeedItems` and let the list to load fresh data from server/ipfs
-        feedStateActions.setFeedItemData(publishedEntry.entry as IEntryData);
+        feedStateActions.setFeedItemData(publishedEntry.entry as any);
         feedStateActions.setFeedItems({
           reverse: true,
-          items: [publishedEntry.entry as IEntryData],
+          items: [publishedEntry.entry as any],
         });
       }
     },
@@ -231,18 +232,23 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const handleNavigateToPost = redirectToPost(props.navigateToUrl);
 
-  const handleEntryPublish = async (authorEthAddr: string, content: any) => {
+  const handleEntryPublish = async (data: {
+    metadata: any;
+    author: string;
+    content: any;
+    textContent: any;
+  }) => {
     if (!ethAddress && !jwtToken) {
       showLoginModal();
       return;
     }
-    const localId = `${authorEthAddr}-${pendingEntries.length + 1}`;
+    const localId = `${data.author}-${pendingEntries.length + 1}`;
     try {
       const entry = {
-        content: content,
-        author: {
-          ethAddress: authorEthAddr,
-        },
+        content: data.content,
+        author: { ethAddress: data.author },
+        textContent: data.textContent,
+        metadata: data.metadata,
         time: new Date().getTime() / 1000,
       };
       pendingActions.addEntry({
