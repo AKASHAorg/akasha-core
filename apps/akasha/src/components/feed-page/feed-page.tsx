@@ -48,7 +48,9 @@ export interface FeedPageProps {
   showLoginModal: () => void;
   ethAddress: string | null;
   jwtToken: string | null;
+  flagged: string;
   modalOpen: boolean;
+  setFlagged: React.Dispatch<React.SetStateAction<string>>;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onError: (err: Error) => void;
 }
@@ -56,7 +58,9 @@ export interface FeedPageProps {
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const {
     isMobile,
+    flagged,
     modalOpen,
+    setFlagged,
     setModalOpen,
     showLoginModal,
     ethAddress,
@@ -68,7 +72,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [showEditor, setShowEditor] = React.useState(false);
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
-  const [flagged, setFlagged] = React.useState('');
 
   const { size } = useViewportSize();
 
@@ -273,7 +276,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>AKASHA Feed | Ethereum.world</title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.modalSlotId}>
+      <ModalRenderer slotId={props.layout.app.modalSlotId}>
         {modalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -312,7 +315,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         )}
       </ModalRenderer>
       <EditorModal
-        slotId={props.layout.modalSlotId}
+        slotId={props.layout.app.modalSlotId}
         showModal={showEditor}
         ethAddress={ethAddress as any}
         postLabel={t('Publish')}
