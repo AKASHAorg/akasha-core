@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useFeedReducer, useEntryBookmark, useEntryPublisher } from '@akashaproject/ui-awf-hooks';
+import { useFeedReducer, useEntryBookmark } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import {
   ILoadItemDataPayload,
@@ -9,19 +9,8 @@ import {
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { fetchFeedItemData } from '../../services/feed-service';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import {
-  addToIPFS,
-  getPending,
-  publishEntry,
-  removePending,
-  savePending,
-  updatePending,
-  serializeToSlate,
-  getMediaUrl,
-  uploadMediaToIpfs,
-} from '../../services/posting-service';
+import { serializeToSlate, getMediaUrl, uploadMediaToIpfs } from '../../services/posting-service';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
-// import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
 import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
 
@@ -77,27 +66,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
-
-  const [pendingEntries, pendingActions] = useEntryPublisher({
-    publishEntry: publishEntry(sdkModules.posts.entries),
-    onPublishComplete: (ethAddr, publishedEntry) => {
-      removePending(ethAddr, publishedEntry.localId);
-      pendingActions.removeEntry(publishedEntry.localId);
-      if (publishedEntry.entry.entryId) {
-        // @TODO: this call (setFeedItemData) should be removed when we have real data
-        // aka we should only `setFeedItems` and let the list to load fresh data from server/ipfs
-        feedStateActions.setFeedItemData(publishedEntry.entry as any);
-        feedStateActions.setFeedItems({
-          reverse: true,
-          items: [publishedEntry.entry as any],
-        });
-      }
-    },
-    ethAddress: ethAddress,
-    addToIPFS: addToIPFS,
-    getPendingEntries: getPending,
-    onStep: (ethAddr, localId) => updatePending(ethAddr, localId).catch(err => onError(err)),
-  });
 
   const [bookmarks, bookmarkActions] = useEntryBookmark({
     ethAddress,
@@ -245,28 +213,27 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       showLoginModal();
       return;
     }
-    const localId = `${data.author}-${pendingEntries.length + 1}`;
+
     try {
-      const entry = {
-        content: data.content,
-        author: { ethAddress: data.author },
-        textContent: data.textContent,
-        metadata: data.metadata,
-        time: new Date().getTime() / 1000,
+      const entryObj = {
+        data: {
+          provider: 'AkashaApp',
+          property: 'slateContent',
+          value: JSON.stringify(data.content),
+        },
+        post: {
+          tags: data.metadata.tags,
+        },
       };
-      pendingActions.addEntry({
-        entry,
-        localId,
-        step: 'PUBLISH_START',
+      const call = sdkModules.posts.entries.postEntry(entryObj);
+      call.subscribe((resp: any) => {
+        feedStateActions.setFeedItems({
+          reverse: true,
+          items: [resp.data as any],
+        });
       });
-      if (ethAddress) {
-        await savePending(
-          ethAddress,
-          pendingEntries.concat([{ entry, localId, step: 'PUBLISH_START' }]),
-        );
-      }
     } catch (err) {
-      props.logger.error('Error publishing entry');
+      props.logger.error('Error publishing entry %j', err);
     }
     setShowEditor(false);
   };
@@ -276,7 +243,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>AKASHA Feed | Ethereum.world</title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.app.modalSlotId}>
+      <ModalRenderer slotId={props.layout.modalSlotId}>
         {modalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -315,7 +282,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         )}
       </ModalRenderer>
       <EditorModal
-        slotId={props.layout.app.modalSlotId}
+        slotId={props.layout.modalSlotId}
         showModal={showEditor}
         ethAddress={ethAddress as any}
         postLabel={t('Publish')}
@@ -401,7 +368,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           isMobile,
           feedItems: feedState.feedItems,
           loggedEthAddress: ethAddress,
-          pendingEntries: pendingEntries,
           onAvatarClick: handleAvatarClick,
           onContentClick: handleNavigateToPost,
           handleEditorPlaceholderClick: handleToggleEditor,
