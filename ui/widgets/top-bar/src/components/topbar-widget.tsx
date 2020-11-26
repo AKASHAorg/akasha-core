@@ -111,7 +111,7 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
                 getMenuItems={this.props.getMenuItems}
                 ethAddress={this.state.ethAddress}
                 loaderEvents={this.props.events}
-                modalSlotId={this.props.layout.modalSlotId}
+                modalSlotId={this.props.layout.app.modalSlotId}
                 onLogin={this.handleLogin}
                 onGlobalLogin={this.handleGlobalLogin}
                 globalChannel={this.props.globalChannel}

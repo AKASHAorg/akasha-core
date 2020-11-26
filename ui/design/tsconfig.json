@@ -7,5 +7,5 @@
     "allowSyntheticDefaultImports": true
   },
   "references": [],
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*"],
 }

@@ -83,7 +83,6 @@ const TopbarComponent = (props: TopBarProps) => {
       setTimeout(() => setShowLoginModal(false), 500);
     }
   }, [ethAddress, showLoginModal]);
-
   // *how to obtain different topbar menu sections
   const quickAccessItems = currentMenu?.filter(
     menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,

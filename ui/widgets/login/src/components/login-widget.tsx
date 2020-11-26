@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
-import { useGlobalLogin } from '@akashaproject/ui-awf-hooks';
+import useGlobalLogin from '@akashaproject/ui-awf-hooks/lib/use-global-login';
 import { LearnMoreTutorial } from './tutorial-modal';
 import LoginWidgetIllustration from './icons/login-widget-illustration';
 import { useLoginState } from '../state';

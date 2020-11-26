@@ -23,8 +23,9 @@
     "prepare": "npm run tsc",
     "extract:translations": "i18next --config ./i18next-parser.config.js",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/*sidebar.* ../../build/widgets",
-    "pack:watch": "nodemon"
+    "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js --profile --json ../../stats/sidebar.json",
+    "postpack": "copyfiles -f ./dist/* ../../build/widgets/sidebar",
+    "watch": "nodemon"
   },
   "nodemonConfig": {
     "ignore": [
@@ -32,28 +33,28 @@
       "dist/*",
       "build/*"
     ],
-    "exec": "npm run pack",
+    "exec": "npm run pack || exit 1",
     "ext": "ts,tsx"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",
     "@types/i18next": "13.0.0",
     "@types/react-i18next": "8.1.0",
-    "@types/react-router-dom": "5.1.5",
-    "single-spa-react": "2.14.0",
-    "react-i18next": "11.4.0",
-    "react-router-dom": "5.1.2"
+    "@types/react-router-dom": "5.1.6",
+    "single-spa-react": "3.2.0",
+    "react-i18next": "11.7.3",
+    "react-router-dom": "5.2.0"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
-    "@types/react": "16.9.34",
-    "@types/react-dom": "16.9.7",
+    "@types/react": "16.9.56",
+    "@types/react-dom": "16.9.9",
     "@types/single-spa-react": "2.12.0",
-    "@types/styled-components": "5.1.2"
+    "@types/styled-components": "5.1.4"
   },
   "peerDependencies": {
-    "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react": "17.0.1",
+    "react-dom": "17.0.1"
   },
   "files": [
     "lib"

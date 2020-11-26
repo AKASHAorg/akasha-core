@@ -11,8 +11,8 @@ export interface IPluginConfig {
 
 export interface ILoaderConfig {
   rootNodeId: string;
-  layout: IWidget;
-  rootLoadedApp: IAppEntry['app'];
+  layout: IWidgetEntry;
+  rootLoadedApp: IPluginEntry;
   System: any;
 }
 
@@ -51,6 +51,12 @@ export interface ISingleSpaLifecycle {
   mount: (props: any) => Promise<void>;
   unmount: (props: any) => Promise<void>;
   update?: (props: any) => Promise<void>;
+}
+
+export interface IScriptSrc {
+  src: string;
+  name: string;
+  moduleName: string;
 }
 
 export interface IWidget {
