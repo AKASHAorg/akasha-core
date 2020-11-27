@@ -1,4 +1,4 @@
-import { createAPISig, Client, ThreadID, PrivateKey } from '@textile/hub';
+import { createAPISig, Client, ThreadID, PrivateKey, createUserAuth } from '@textile/hub';
 import { updateCollections, initCollections } from './collections';
 
 export const getAPISig = async (minutes: number = 30) => {
@@ -13,14 +13,11 @@ export const newClientDB = async () => {
       userDBClient = undefined;
       return newClientDB();
     }
-    return Promise.resolve(appDBClient);
+    return Promise.resolve(userDBClient);
   }
   const API = process.env.API || undefined;
-  const client = await Client.withKeyInfo(
-    {
-      key: process.env.USER_GROUP_API_KEY,
-      secret: process.env.USER_GROUP_API_SECRET,
-    },
+  const client = await Client.withUserAuth(
+    await createUserAuth(process.env.USER_GROUP_API_KEY, process.env.USER_GROUP_API_SECRET),
     API,
     process.env.NODE_ENV !== 'production',
   );
@@ -40,11 +37,8 @@ export const getAppDB = async () => {
     return Promise.resolve(appDBClient);
   }
   const API = process.env.API || undefined;
-  const client = await Client.withKeyInfo(
-    {
-      key: process.env.APP_API_KEY,
-      secret: process.env.APP_API_SECRET,
-    },
+  const client = await Client.withUserAuth(
+    await createUserAuth(process.env.APP_API_KEY, process.env.APP_API_SECRET),
     API,
     process.env.NODE_ENV !== 'production',
   );

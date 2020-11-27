@@ -5,7 +5,7 @@ module.exports = {
     'styled-components': 'styled',
     'single-spa-react': 'singleSpaReact',
     'rxjs': 'rxjs',
-    '@akashaproject/design-system': false
+    '@akashaproject/design-system': 'akashaproject__design_system'
   }],
   optimization: {
     splitChunks: {
