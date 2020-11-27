@@ -38,7 +38,9 @@ jobs:
           keys:
             - dependency-cache-v1-{{ checksum "package-lock.json" }}-{{ checksum "combined-package-lock.txt" }}
             - dependency-cache-v1
-
+      - run:
+          command: |
+            sudo apt install -y git build-essential
       - run:
           name: install-npm-wee
           command: npm install
