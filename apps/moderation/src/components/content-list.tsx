@@ -5,7 +5,13 @@ import DS from '@akashaproject/design-system';
 import ContentCard from './content-card';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
-import { samplePostData, sampleContentCardData, sampleProfileData } from '../services/dummy-data';
+import {
+  samplePostData,
+  sampleDelistedData,
+  samplePendingData,
+  sampleProfileData,
+} from '../services/dummy-data';
+import ContentTab from './content-tab';
 
 const { Box, useViewportSize, ModalRenderer, ToastProvider, ModerateModal } = DS;
 
@@ -22,6 +28,7 @@ const ContentList: React.FC<IContentListProps> = props => {
   const [flagged, setFlagged] = React.useState<string>('');
   const [preselectedReasons, setPreselectedReasons] = React.useState<string[]>([]);
   const [flaggedItemData, setFlaggedItemData] = React.useState<any>({});
+  const [isPending, setIsPending] = React.useState<boolean>(true);
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -94,38 +101,74 @@ const ContentList: React.FC<IContentListProps> = props => {
           </ToastProvider>
         )}
       </ModalRenderer>
-      {sampleContentCardData.map(post => (
-        <ContentCard
-          key={post.id}
-          entryData={post.type === 'post' ? samplePostData : sampleProfileData}
-          repostsLabel={t('Repost')}
-          repliesLabel={t('Replies')}
-          locale={locale}
-          reportedLabel={t('Reported')}
-          contentType={t(post.type)}
-          forLabel={t('for')}
-          additionalDescLabel={t('Additional description provided by user')}
-          additionalDescContent={t(post.description)}
-          reportedByLabel={t('Reported by')}
-          ethAddress={t(post.ethAddress)}
-          reasons={post.reasons.map(el => t(el))}
-          reporterName={t(post.reporterName)}
-          reporterENSName={t(post.reporterENSName)}
-          reportedOnLabel={t('On')}
-          dateTime={post.entryDate}
-          keepContentLabel={
-            post.type === 'post' ? t('Keep Post') : post.type === 'profile' ? t('Keep Profile') : ''
-          }
-          delistContentLabel={
-            post.type === 'post'
-              ? t('Delist Post')
-              : post.type === 'profile'
-              ? t('Remove Profile')
-              : ''
-          }
-          handleButtonClick={handleButtonClick}
-        />
-      ))}
+      <ContentTab isPending={isPending} setIsPending={setIsPending} />
+      {isPending
+        ? samplePendingData.map(pendingData => (
+            <ContentCard
+              key={pendingData.id}
+              isPending={isPending}
+              entryData={pendingData.type === 'post' ? samplePostData : sampleProfileData}
+              repostsLabel={t('Repost')}
+              repliesLabel={t('Replies')}
+              locale={locale}
+              reportedLabel={t('Reported')}
+              contentType={t(pendingData.type)}
+              forLabel={t('for')}
+              additionalDescLabel={t('Additional description provided by user')}
+              additionalDescContent={t(pendingData.description)}
+              reportedByLabel={t('Reported by')}
+              ethAddress={t(pendingData.ethAddress)}
+              reasons={pendingData.reasons.map(el => t(el))}
+              reporterName={t(pendingData.reporterName)}
+              reporterENSName={t(pendingData.reporterENSName)}
+              reportedOnLabel={t('On')}
+              reportedDateTime={pendingData.entryDate}
+              keepContentLabel={
+                pendingData.type === 'post'
+                  ? t('Keep Post')
+                  : pendingData.type === 'profile'
+                  ? t('Keep Profile')
+                  : ''
+              }
+              delistContentLabel={
+                pendingData.type === 'post'
+                  ? t('Delist Post')
+                  : pendingData.type === 'profile'
+                  ? t('Remove Profile')
+                  : ''
+              }
+              handleButtonClick={handleButtonClick}
+            />
+          ))
+        : sampleDelistedData.map(pendingData => (
+            <ContentCard
+              key={pendingData.id}
+              isPending={isPending}
+              entryData={pendingData.type === 'post' ? samplePostData : sampleProfileData}
+              repostsLabel={t('Repost')}
+              repliesLabel={t('Replies')}
+              locale={locale}
+              determinationLabel={t('Final determination')}
+              reportedLabel={t('Reported')}
+              contentType={t(pendingData.type)}
+              forLabel={t('for')}
+              additionalDescLabel={t("Moderator's evaluation")}
+              additionalDescContent={t(pendingData.evaluation)}
+              reportedByLabel={t('Originally reported by')}
+              ethAddress={t(pendingData.ethAddress)}
+              reasons={pendingData.reasons.map(el => t(el))}
+              reporterName={t(pendingData.reporterName)}
+              reporterENSName={t(pendingData.reporterENSName)}
+              reportedOnLabel={t('on')}
+              reportedDateTime={pendingData.entryDate}
+              moderatorName={t(pendingData.moderatorName)}
+              moderatorENSName={t(pendingData.moderatorENSName)}
+              moderatedByLabel={t('Moderated by')}
+              moderatedOnLabel={t('On')}
+              evaluationDateTime={pendingData.evaluationDate}
+              handleButtonClick={() => null}
+            />
+          ))}
     </Box>
   );
 };
