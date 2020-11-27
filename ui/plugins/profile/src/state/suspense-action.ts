@@ -5,7 +5,7 @@ export interface UpdaterFn {
 }
 
 export interface PromiseResolver {
-  resolve: () => void;
+  resolve: (value: any) => void;
   promise: Promise<any>;
 }
 
@@ -52,7 +52,7 @@ export const createSuspenseAction = (
         .then((res: any) => {
           // @TODO check if the response contains an error key.
           // In this case we must call onFinish with an error param
-          /* 
+          /*
           if (res.error) {
             onFinish(new Error(res.error.message), null);
           } else {
@@ -62,7 +62,7 @@ export const createSuspenseAction = (
           onFinish(null, res);
         })
         .catch(err => onFinish(err, null));
-      promiseResolver.resolve();
+      promiseResolver.resolve(null);
     };
 
     runner();

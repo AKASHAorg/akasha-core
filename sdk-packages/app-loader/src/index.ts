@@ -21,6 +21,8 @@ import fourOhFour from './404';
 import TranslationManager from './i18n';
 import detectMobile from 'ismobilejs';
 
+import createTemplateElement from './create-template-element';
+
 import { setPageTitle } from './setPageMetadata';
 import { Application } from '@akashaproject/ui-awf-typings';
 
@@ -121,7 +123,6 @@ export default class AppLoader implements IAppLoader {
 
     // register event listeners
     this.addSingleSpaEventListeners();
-
     // call as fast as possible
     // https://github.com/single-spa/single-spa/issues/484
     singleSpa.start({
@@ -134,7 +135,7 @@ export default class AppLoader implements IAppLoader {
   public installApp() {
     // todo
   }
-
+  public static createTemplateElement = createTemplateElement;
   public async uninstallApp(appName: string, packageLoader: any, packageId: string) {
     if (this.registeredIntegrations.has(appName)) {
       await singleSpa.unloadApplication(appName, { waitForUnmount: true });
@@ -218,7 +219,10 @@ export default class AppLoader implements IAppLoader {
     );
     const widgetId = this.getIdFromName(widget.app.name);
     widget.app.name = widgetId;
-
+    if (this.isRegisteringLayout) {
+      this.widgets.root.push(widget);
+      return;
+    }
     if (this.registeredWidgets.has(widgetId)) {
       this.appLogger.info(`Widget ${widgetId} already registered... skipping...`);
       return;
@@ -266,13 +270,6 @@ export default class AppLoader implements IAppLoader {
       this.deferredIntegrations.push({ integration, integrationId, menuItemType });
       return;
     }
-    if (integration.config && integration.config.activeWhen && integration.config.activeWhen.path) {
-      integration.app.activeWhen = integration.config.activeWhen;
-    }
-
-    if (integration.config && integration.config.title) {
-      integration.app.title = integration.config.title;
-    }
     this.translationManager.createInstance(
       integration.app,
       this.appLogger.child({ i18nPlugin: integrationId }),
@@ -291,7 +288,7 @@ export default class AppLoader implements IAppLoader {
         ...this.config,
         ...integration.config,
         activeWhen: integration.app.activeWhen,
-        domElementGetter: () => document.getElementById(this.config.layout.pluginSlotId),
+        domElementGetter: () => document.getElementById(this.config.layout.app.pluginSlotId),
         i18n: this.translationManager.getInstance(integrationId),
         i18nConfig: integration.app.i18nConfig,
         logger: this.appLogger.child({ plugin: integrationId }),
@@ -343,7 +340,7 @@ export default class AppLoader implements IAppLoader {
     const matchedPlugins = this.getPluginsForLocation(window.location);
     if (window.location.pathname === '/' && matchedPlugins.length === 0) {
       if (this.config.rootLoadedApp) {
-        singleSpa.navigateToUrl(this.config.rootLoadedApp.activeWhen.path);
+        singleSpa.navigateToUrl(this.config.rootLoadedApp.app.activeWhen.path);
       } else {
         this.appLogger.error('There is no rootLoadedApp set. Nothing to render!');
       }
@@ -361,7 +358,7 @@ export default class AppLoader implements IAppLoader {
     let matchedApps = [];
     if (mountedApps.length === 0 && window.location.pathname === '/') {
       if (this.config.rootLoadedApp) {
-        singleSpa.navigateToUrl(this.config.rootLoadedApp.activeWhen.path);
+        singleSpa.navigateToUrl(this.config.rootLoadedApp.app.activeWhen.path);
       } else {
         this.appLogger.error('There is no rootLoadedApp set. Nothing to render!');
       }
@@ -405,9 +402,9 @@ export default class AppLoader implements IAppLoader {
       fourOhFourElem.parentElement.removeChild(fourOhFourElem);
     }
     if (!currentPlugins.length) {
-      const pluginsNode = document.getElementById(this.config.layout.pluginSlotId);
+      const pluginsNode = document.getElementById(this.config.layout.app.pluginSlotId);
       // create a 404 page and return it instead of a plugin
-      const FourOhFourNode: ChildNode = fourOhFour();
+      const FourOhFourNode: ChildNode = fourOhFour;
       if (pluginsNode) {
         pluginsNode.appendChild(FourOhFourNode);
       }
@@ -475,7 +472,7 @@ export default class AppLoader implements IAppLoader {
                       slot: this.createHtmlElement(
                         this.getIdFromName(widget.name),
                         'div',
-                        this.config.layout.widgetSlotId,
+                        this.config.layout.app.widgetSlotId,
                       ),
                     },
                   },
@@ -535,7 +532,7 @@ export default class AppLoader implements IAppLoader {
       Object.keys(widgets).forEach(widgetRoute => {
         const configuredWidgets = widgets[widgetRoute].map(wd => ({
           app: wd,
-          config: { slot: this.config.layout.widgetSlotId },
+          config: { slot: this.config.layout.app.widgetSlotId },
         }));
         this.widgets.app[integrationId] = {
           [widgetRoute]: configuredWidgets,
@@ -555,14 +552,14 @@ export default class AppLoader implements IAppLoader {
       throw new Error('[@akashaproject/sdk-ui-plugin-loader]: root node element not found!');
     }
 
-    const { loadingFn, ...otherProps } = this.config.layout;
+    const { loadingFn, ...otherProps } = this.config.layout.app;
     try {
       await new Promise(async resolve => {
         const pProps = {
           domElement: domEl,
           ...otherProps,
           themeReadyEvent: () => {
-            resolve();
+            resolve(null);
           },
         };
         const layout = singleSpa.mountRootParcel(loadingFn, pProps);
@@ -576,12 +573,11 @@ export default class AppLoader implements IAppLoader {
   private async loadLayout() {
     try {
       await this.mountLayoutWidget();
+      // after mounting all the root widgets
+      this.isRegisteringLayout = false;
       for (const widget of this.widgets.root) {
         await this.registerWidget(widget, 'root');
       }
-      // after mounting all the root widgets
-      this.isRegisteringLayout = false;
-
       if (this.plugins) {
         this.plugins.forEach(plugin => {
           const isDeferred =

@@ -48,7 +48,7 @@ const StyledTextIcon = styled.div<ITextIconProps>`
           : ''
       }
       ${marginSize}
-      
+
       &:hover {
         ${
           clickable

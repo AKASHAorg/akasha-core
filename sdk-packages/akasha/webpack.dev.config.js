@@ -1,33 +1,54 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const name = require('./package.json').name;
 const { InjectManifest } = require('workbox-webpack-plugin');
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 const config = {
   entry: './src/index.ts',
   context: path.resolve(__dirname),
   module: {
-    rules: [{ parser: { System: false } }, { test: /\.ts(x)?$/, use: 'ts-loader' }],
+    rules: [
+      {
+        test: /.(js|mjs)$/,
+        loader: 'babel-loader',
+        exclude: [/lib/, /dist/],
+        resolve: { fullySpecified: false },
+      },
+      {
+        test: /\.ts(x)?$/,
+        loader: 'babel-loader',
+        options: {
+          plugins: ['@babel/plugin-syntax-dynamic-import'],
+          presets: ['@babel/preset-env', '@babel/preset-typescript'],
+        },
+      },
+    ],
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+      assert: require.resolve('assert/'),
+      buffer: require.resolve('buffer'),
+      path: require.resolve('path-browserify/'),
+      stream: require.resolve('stream-browserify/'),
+      util: require.resolve('util/'),
+      process: require.resolve('process/browser'),
+    },
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'akasha.sdk.js',
+    library: name.replace(/@/, '').replace(/\//, '__').replace(/-/, '_'),
     libraryTarget: 'umd',
     publicPath: '/',
   },
   optimization: {
-    moduleIds: 'hashed',
+    moduleIds: 'deterministic',
+    minimize: isProduction,
   },
   plugins: [
-    new webpack.EnvironmentPlugin({
-      GRAPHQL_URI: process.env.GRAPHQL_URI || 'https://api.akasha.network/graphql',
-      NODE_ENV: process.env.NODE_ENV || 'development',
-      AUTH_ENDPOINT: process.env.AUTH_ENDPOINT || 'wss://api.akasha.network/ws/userauth',
-    }),
     new webpack.ProgressPlugin({
       entries: true,
       modules: true,
@@ -35,10 +56,22 @@ const config = {
       profile: true,
     }),
     new webpack.AutomaticPrefetchPlugin(),
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: path.resolve(__dirname, '../../examples/ui/feed-app/public/template-index.html'),
-      inject: true,
+    // Makes sure the following is polyfilled in client-side bundles
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+      stream: ['stream'],
+      process: ['process'],
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        GRAPHQL_URI: JSON.stringify(
+          process.env.GRAPHQL_URI || 'https://api.akasha.network/graphql',
+        ),
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+        AUTH_ENDPOINT: JSON.stringify(
+          process.env.AUTH_ENDPOINT || 'wss://api.akasha.network/ws/userauth',
+        ),
+      },
     }),
     new InjectManifest({
       swSrc: './lib/sw.js',
@@ -46,9 +79,9 @@ const config = {
       exclude: [/.*?/],
     }),
   ],
-  devtool: 'source-map',
+  devtool: isProduction ? false : 'source-map',
   mode: process.env.NODE_ENV || 'development',
-  externals: [/^single-spa$/, /^rxjs$/, /^rxjs\/operators$/, /^@truffle\/contract$/],
+  externals: [/^@truffle\/contract$/],
 };
 
 module.exports = config;

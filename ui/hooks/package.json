@@ -1,40 +1,39 @@
 {
-    "name": "@akashaproject/ui-awf-hooks",
-    "version": "0.1.0",
-    "description": "Reusable hooks for AWF",
-    "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
-    "main": "lib/index.js",
-    "contributors": [
-      "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
-      "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)",
-      "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)"
-    ],
-    "license": "MIT",
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
-    },
-    "engines": {
-      "node": ">=10",
-      "npm": ">=5"
-    },
-    "scripts": {
-      "build": "tsc --build",
-      "tsc": "tsc --build",
-      "prepare": "npm run tsc"
-    },
-    "files": [
-      "lib"
-    ],
-    "dependencies": {
-        "@akashaproject/design-system": "*"   
-      },
-    "devDependencies": {
-      "@types/react": "16.9.46"
-    },
-    "peerDependencies": {
-        "react": "16.13.1",
-        "rxjs": "6.5.5"
-      }
+  "name": "@akashaproject/ui-awf-hooks",
+  "version": "0.1.0",
+  "description": "Reusable hooks for AWF",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "main": "lib/index.js",
+  "contributors": [
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
+    "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)",
+    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+  },
+  "engines": {
+    "node": ">=10",
+    "npm": ">=5"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "tsc": "tsc --build",
+    "prepare": "npm run tsc"
+  },
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "@akashaproject/design-system": "*"
+  },
+  "devDependencies": {
+    "@types/react": "16.9.56"
+  },
+  "peerDependencies": {
+    "react": "17.0.1",
+    "rxjs": "6.6.3"
   }
-  
+}
