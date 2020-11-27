@@ -37,7 +37,7 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
     handleEditorPlaceholderClick,
   } = props;
 
-  let customEntities = [];
+  const customEntities = [];
 
   if (!isMobile && loggedEthAddress) {
     customEntities.push({
