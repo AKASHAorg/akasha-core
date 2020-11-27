@@ -34,7 +34,6 @@
     "@akashaproject/sdk-common": "*",
     "@akashaproject/sdk-db": "*",
     "@akashaproject/ui-awf-typings": "*",
-    "@textile/hub": "1.0.0",
-    "bcryptjs": "2.4.3"
+    "@textile/hub": "2.0.0"
   }
 }

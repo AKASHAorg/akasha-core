@@ -5,8 +5,13 @@ module.exports = {
     'styled-components': 'styled',
     'single-spa-react': 'singleSpaReact',
     'rxjs': 'rxjs',
-    'rxjs/operators': 'rxjs.operators',
     '@akashaproject/design-system': false
   }],
-  optimization: {}
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      minSize: 69000,
+      minChunks: 2,
+    }
+  }
 };

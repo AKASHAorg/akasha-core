@@ -10,27 +10,12 @@ module.exports = {
   target: 'web',
   module: {
     rules: [
+      { test: /\.ts(x)?$/, use: 'ts-loader' },
       {
-        test: /\.ts(x)?$/,
-        loader: 'babel-loader',
-        exclude: [/node_modules/, /public/],
-        options: {
-          presets: [
-            '@babel/preset-env',
-            '@babel/preset-react',
-            '@babel/preset-typescript'
-          ],
-          plugins: [
-            '@babel/transform-runtime',
-            '@babel/plugin-proposal-class-properties',
-          ]
-        },
-      },
-      {
-        test: /.(js|mjs)$/,
-        loader: 'babel-loader',
-        exclude: /public/,
-        resolve: { fullySpecified: false },
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false
+        }
       }
     ],
   },
@@ -42,6 +27,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin({ verbose: true }),
+    new webpack.AutomaticPrefetchPlugin(),
     new webpack.ProgressPlugin({
       entries: true,
       modules: true,
