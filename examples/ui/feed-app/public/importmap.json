@@ -5,7 +5,8 @@
     "rxjs": "https://cdn.jsdelivr.net/npm/@esm-bundle/rxjs@6.5.5/system/rxjs.min.js",
     "rxjs/operators": "https://cdn.jsdelivr.net/npm/@esm-bundle/rxjs@6.5.5/system/rxjs-operators.min.js",
     "@akashaproject/sdk": "/akasha.sdk.js",
-    "@akashaproject/design-system": "/design-system.js",
+    "designSystem": "http://localhost:53219/remoteEntry.js",
+    "designSystem/": "http://localhost:53219/",
     "react": "https://unpkg.com/react@16.13.1/umd/react.development.js",
     "react-dom/server": "https://unpkg.com/react-dom@16.13.1/umd/react-dom-server.browser.development.js",
     "react-dom": "https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js",
@@ -21,7 +22,8 @@
     "@plugins/app-center": "/plugins/app-center.js",
     "@plugins/search": "/plugins/search.js",
     "@app/3box": "/apps/3box-app.js",
-    "@app/AKASHA": "/apps/akasha-app.js",
+    "@app/AKASHA": "http://localhost:48424/remoteEntry.js",
+    "@app/AKASHA/": "http://localhost:48424/",
     "@app/ens": "/apps/ens-app.js"
   }
 }

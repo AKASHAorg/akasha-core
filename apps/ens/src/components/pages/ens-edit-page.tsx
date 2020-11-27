@@ -2,7 +2,7 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { ProfileStateModel } from '../../state/profile-state';
-import { ActionMapper, StateMapper, createContextStore } from 'easy-peasy';
+import { ActionMapper, StateMapper } from 'easy-peasy';
 import { ENS_EDIT_PAGE } from '../../routes';
 import debounce from 'lodash.debounce';
 
@@ -12,7 +12,7 @@ export interface EnsEditPageProps {
   globalChannel: any;
   logger: any;
   onLoginModalShow: () => void;
-  profileStore: ReturnType<typeof createContextStore>;
+  profileStore: any;
 }
 
 // tslint:disable:cyclomatic-complexity

@@ -29,8 +29,8 @@
     "extract:translations": "i18next --config ./i18next-parser.config.js",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/*akasha* ../../ui/build/apps",
-    "pack:watch": "nodemon"
+    "postpack": "copyfiles -f ./dist/* ../../ui/build/apps/akasha",
+    "watch": "nodemon"
   },
   "nodemonConfig": {
     "ignore": [
@@ -54,23 +54,23 @@
     "@akashaproject/design-system": "*",
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/ui-awf-hooks": "*",
-    "react-i18next": "11.4.0",
-    "react-router-dom": "5.1.2",
-    "single-spa-react": "2.14.0",
-    "easy-peasy": "3.3.1"
+    "react-i18next": "11.7.3",
+    "react-router-dom": "5.2.0",
+    "easy-peasy": "3.3.1",
+    "single-spa-react": "3.2.0"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
-    "@types/react": "16.9.34",
-    "@types/react-dom": "16.9.7",
-    "@types/react-router-dom": "5.1.5",
-    "@types/react-test-renderer": "16.9.2",
+    "@types/react": "16.9.56",
+    "@types/react-dom": "16.9.9",
+    "@types/react-router-dom": "5.1.6",
+    "@types/react-test-renderer": "16.9.3",
     "@types/single-spa-react": "2.12.0",
-    "nodemon": "2.0.3"
+    "nodemon": "2.0.6",
+    "@babel/core": "7.12.3"
   },
   "peerDependencies": {
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "rxjs": "6.5.5"
+    "react": "17.0.1",
+    "react-dom": "17.0.1"
   }
 }

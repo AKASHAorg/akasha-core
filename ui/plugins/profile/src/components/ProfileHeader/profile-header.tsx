@@ -48,7 +48,7 @@ export const ProfilePageHeader = (props: IProfileHeaderProps & RootComponentProp
 
   return (
     <>
-      <ModalRenderer slotId={props.layout.modalSlotId}>
+      <ModalRenderer slotId={props.layout.app.modalSlotId}>
         {modalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal

@@ -1,12 +1,8 @@
-// must specify this
-// can't use import from lib/ because it breaks the parser
+const baseConfig = require('../../i18next.parser.config');
 const ns = 'ui-plugin-profile';
 
-module.exports = {
-  useKeysAsDefaultValue: true,
+module.exports = Object.assign(baseConfig, {
   defaultNamespace: ns,
   output: '../../../locales/$LOCALE/$NAMESPACE.json',
   input: './src/components/**/*.{ts,tsx}',
-  locales: ['en'],
-  verbose: true,
-};
+});

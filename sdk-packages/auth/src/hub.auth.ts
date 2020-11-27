@@ -1,5 +1,4 @@
 import { PrivateKey, Identity, UserAuth } from '@textile/hub';
-import { hashSync } from 'bcryptjs';
 
 const metamaskGen = (ethAddress: string, secret: string, appName = 'ethereum.world') =>
   `

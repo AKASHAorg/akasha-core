@@ -6,9 +6,11 @@ build.tsc.sdk:
 build.tsc.ui:
 	npm run tsc:ui
 build.sdk:
-	NODE_ENV=production npm run build:sdk
+	npm run build:sdk
 build.ui:
-	npm run pack:ui-apps
+	npm run pack:ui
+build.feed-app:
+	npm run build:feed-app
 clean:
 	rm -rf ./examples/ui/feed-app/public/*.js && \
 	rm -rf ./ui/build && \

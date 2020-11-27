@@ -62,7 +62,9 @@ export interface RootComponentProps {
   i18n: any;
   i18nConfig: any;
   isMobile: boolean;
-  layout: LayoutConfig;
+  layout: {
+    app: LayoutConfig;
+  };
   logger: any;
   mountParcel: () => void;
   name: string;
