@@ -18,6 +18,7 @@ import { Button } from '../Buttons';
 import isHotkey from 'is-hotkey';
 import { MentionPopover } from './mention-popover';
 import { EditorMeter } from './editor-meter';
+import { serializeToPlainText } from './serialize';
 
 export interface IEditorBox {
   avatar?: string;
@@ -34,6 +35,15 @@ export interface IEditorBox {
   tags?: string[];
   // upload an URL or a file and returns a promise that resolves to an array
   uploadRequest?: (data: string | File, isUrl?: boolean) => Promise<any[]>;
+  publishingApp?: string;
+}
+
+export interface IMetadata {
+  app: string;
+  version: number;
+  quote?: string;
+  tags: string[];
+  mentions: string[];
 }
 
 const HOTKEYS = {
@@ -58,6 +68,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
     mentions = [],
     tags = [],
     uploadRequest,
+    publishingApp = 'AkashaApp',
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -115,7 +126,28 @@ const EditorBox: React.FC<IEditorBox> = props => {
 
   const handlePublish = () => {
     const content = editorValue;
-    onPublish(ethAddress, content);
+    const metadata: IMetadata = {
+      app: publishingApp,
+      quote: embedEntryData?.entryId,
+      tags: [],
+      mentions: [],
+      version: 1,
+    };
+
+    (function getMetadata(node: any) {
+      if (node.type === 'mention') {
+        metadata.mentions.push(node.value as string);
+      }
+      if (node.type === 'tag') {
+        metadata.tags.push(node.value as string);
+      }
+      if (node.children) {
+        node.children.map((n: any) => getMetadata(n));
+      }
+    })({ children: content });
+    const textContent: string = serializeToPlainText({ children: content });
+    const data = { metadata, content, textContent, author: ethAddress };
+    onPublish(data);
   };
 
   const reducer = (acc: number, val: number) => acc + val;

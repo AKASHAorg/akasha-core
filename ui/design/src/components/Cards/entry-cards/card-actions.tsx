@@ -71,7 +71,7 @@ const CardActions: React.FC<CardActionProps> = props => {
 
   const { size } = useViewportSize();
 
-  const [repostDropOpen, setReplyDropOpen] = React.useState(false);
+  const [repostDropOpen, setRepostDropOpen] = React.useState(false);
   const [shareDropOpen, setShareDropOpen] = React.useState(false);
 
   const repostNodeRef: React.RefObject<any> = React.useRef(null);
@@ -85,10 +85,10 @@ const CardActions: React.FC<CardActionProps> = props => {
   };
 
   const handleRepostsOpen = () => {
-    setReplyDropOpen(!repostDropOpen);
+    setRepostDropOpen(!repostDropOpen);
   };
   const handleRepostsClose = () => {
-    setReplyDropOpen(false);
+    setRepostDropOpen(false);
   };
 
   const handleShareOpen = () => {
@@ -124,6 +124,7 @@ const CardActions: React.FC<CardActionProps> = props => {
         handler: (e: any) => {
           // block event bubbling to parent
           e.stopPropagation();
+          handleRepostsClose();
           return onRepost();
         },
       },
@@ -132,6 +133,7 @@ const CardActions: React.FC<CardActionProps> = props => {
         icon: 'edit',
         handler: (e: any) => {
           e.stopPropagation();
+          handleRepostsClose();
           return onRepostWithComment();
         },
       },
