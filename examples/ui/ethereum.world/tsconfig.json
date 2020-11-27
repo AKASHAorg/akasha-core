@@ -3,7 +3,8 @@
   "compilerOptions": {
     "sourceMap": true,
     "strict": true,
-    "jsx": "react"
+    "jsx": "react",
+    "outDir": "./lib"
   },
   "include": ["src/**/*"]
 }

@@ -27,6 +27,11 @@ const query = {
     data.results = results;
     return data;
   },
+  isFollowing: async (_source, { follower, following }, { dataSources }) => {
+    const profile = await dataSources.profileAPI.getProfile(follower);
+    const followingProfile = await dataSources.profileAPI.getProfile(following);
+    return profile.following.indexOf(followingProfile.pubKey) !== -1;
+  },
 };
 
 export default query;

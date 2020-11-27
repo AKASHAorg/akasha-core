@@ -8,7 +8,7 @@ build.tsc.ui:
 build.sdk:
 	npm run build:sdk
 build.ui:
-	npm run pack:ui-apps
+	npm run pack:ui
 build.feed-app:
 	npm run build:feed-app
 clean:

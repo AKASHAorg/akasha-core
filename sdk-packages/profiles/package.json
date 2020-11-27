@@ -32,6 +32,8 @@
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-runtime": "*",
     "@akashaproject/sdk-common": "*",
-    "@akashaproject/sdk-db": "*"
+    "@akashaproject/sdk-db": "*",
+    "@akashaproject/sdk-auth": "*",
+    "ipfs-utils": "5.0.1"
   }
 }
