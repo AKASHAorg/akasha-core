@@ -1,5 +1,5 @@
 export const HOME = 'Home';
-export const rootRoute = '/MODERATION-app';
+export const rootRoute = '/moderation-app';
 
 export default {
   [HOME]: `${rootRoute}/home`,

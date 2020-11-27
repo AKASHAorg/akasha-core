@@ -15,13 +15,8 @@ export const application: Application = {
     loadNS: [],
     use: [initReactI18next],
   },
-  loadingFn: (): Promise<any> =>
-    import(
-      /* webpackChunkName: "MODERATIONChunk" */
-      /* webpackMode: "lazy" */
-      './components'
-    ),
-  name: 'MODERATION-app',
+  loadingFn: (): Promise<any> => import('./components'),
+  name: 'moderation-app',
   sdkModules: [{ module: commons }, { module: dbModule }, { module: auth }, { module: profiles }],
   menuItems: routes,
   title: 'Moderator Dashboard',

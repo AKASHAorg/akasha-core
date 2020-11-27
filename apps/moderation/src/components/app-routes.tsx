@@ -19,7 +19,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           <Switch>
             <Route path={routes[HOME]}>
               <ContentList
-                slotId={layout.modalSlotId}
+                slotId={layout.app.modalSlotId}
                 // sdkModules={sdkModules}
                 // globalChannel={globalChannel}
                 // logger={logger}

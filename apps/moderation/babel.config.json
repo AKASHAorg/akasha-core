@@ -1,4 +1,0 @@
-{
-  "presets": ["@babel/preset-env", "@babel/preset-react"],
-  "plugins": ["i18next-extract", "@babel/plugin-syntax-dynamic-import"]
-}
