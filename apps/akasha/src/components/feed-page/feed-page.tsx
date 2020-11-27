@@ -120,7 +120,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               entry.author?.data &&
               `${entry.author?.data?.firstName} ${entry.author?.data?.lastName}`,
             ethAddress: entry.author.address,
-            postsNumber: entry.author.entries && Object.keys(entry.author.entries).length, // @todo: fix this with another api call
+            postsNumber: entry.author.entries && Object.keys(entry.author.entries).length,
           },
           CID: entry.post.CID,
           content: serializeToSlate(entry.post, ipfsGateway),
@@ -204,7 +204,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleNavigateToPost = redirectToPost(props.navigateToUrl);
 
   const handleEntryPublish = async (data: {
-    metadata: any;
+    metadata: {
+      app: string;
+      version: number;
+      quote?: string;
+      tags: string[];
+      mentions: string[];
+    };
     author: string;
     content: any;
     textContent: any;
@@ -216,11 +222,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
     try {
       const entryObj = {
-        data: {
-          provider: 'AkashaApp',
-          property: 'slateContent',
-          value: JSON.stringify(data.content),
-        },
+        data: [
+          {
+            provider: 'AkashaApp',
+            property: 'slateContent',
+            value: btoa(JSON.stringify(data.content)),
+          },
+        ],
         post: {
           tags: data.metadata.tags,
         },
