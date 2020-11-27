@@ -10,11 +10,13 @@ import { StyledBox } from './styled';
 const { Box, Icon, Text, Avatar, Button, EntryCardMod, ProfileCardMod, MainAreaCardBox } = DS;
 
 export interface IContentCardProps {
+  isPending: boolean;
   entryData: any;
   repliesLabel: string;
   repostsLabel: string;
   locale: ILocale;
 
+  determinationLabel?: string;
   reportedLabel: string;
   contentType: string;
   forLabel: string;
@@ -25,10 +27,15 @@ export interface IContentCardProps {
   reasons: string[];
   reporterName?: string;
   reporterENSName?: string;
-  reportedOnLabel: string;
-  dateTime: string;
-  keepContentLabel: string;
-  delistContentLabel: string;
+  reportedOnLabel?: string;
+  reportedDateTime: string;
+  moderatorName?: string;
+  moderatorENSName?: string;
+  moderatedByLabel?: string;
+  moderatedOnLabel?: string;
+  evaluationDateTime?: string;
+  keepContentLabel?: string;
+  delistContentLabel?: string;
   handleButtonClick: (
     param1: string,
     param2: string,
@@ -40,10 +47,12 @@ export interface IContentCardProps {
 
 const ContentCard: React.FC<IContentCardProps> = props => {
   const {
+    isPending,
     entryData,
     repostsLabel,
     repliesLabel,
     locale,
+    determinationLabel,
     reportedLabel,
     contentType,
     forLabel,
@@ -55,7 +64,12 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     reporterName,
     reporterENSName,
     reportedOnLabel,
-    dateTime,
+    reportedDateTime,
+    moderatorName,
+    moderatorENSName,
+    moderatedByLabel,
+    moderatedOnLabel,
+    evaluationDateTime,
     keepContentLabel,
     delistContentLabel,
     handleButtonClick,
@@ -104,7 +118,22 @@ const ContentCard: React.FC<IContentCardProps> = props => {
               />
             ) : null}
           </MainAreaCardBox>
-          <Box direction="row" margin={{ top: 'large' }} wrap={true} align="center">
+          {!isPending && (
+            <Text
+              size="small"
+              margin={{ top: 'large' }}
+              color="secondaryText"
+              style={{ textTransform: 'uppercase' }}
+            >
+              {determinationLabel}
+            </Text>
+          )}
+          <Box
+            direction="row"
+            margin={{ top: isPending ? 'large' : 'medium' }}
+            wrap={true}
+            align="center"
+          >
             <Icon type="error" size="md" accentColor={true} />
             <Text
               margin={{ left: '0.2rem', bottom: '0.2rem' }}
@@ -124,6 +153,16 @@ const ContentCard: React.FC<IContentCardProps> = props => {
           </Box>
           <Text margin={{ top: 'large', bottom: 'xsmall' }}>{additionalDescLabel}:</Text>
           {additionalDescContent && <Text>{additionalDescContent}</Text>}
+          {!isPending && (
+            <>
+              <Text
+                margin={{ top: 'large' }}
+              >{`${moderatedByLabel} ${moderatorName} (${moderatorENSName})`}</Text>
+              <Text color="secondaryText">{`${moderatedOnLabel} ${moment(evaluationDateTime).format(
+                'D MMM yyyy・hh:mm',
+              )}`}</Text>
+            </>
+          )}
           <Box
             direction="row"
             margin={{ top: 'medium' }}
@@ -131,9 +170,9 @@ const ContentCard: React.FC<IContentCardProps> = props => {
             align="center"
             border={{ side: 'top', color: 'border', style: 'solid' }}
           >
-            <Box width="65%">
+            <Box width={isPending ? '65%' : '100%'}>
               <Box direction="row">
-                <Text>{reportedByLabel}</Text>
+                <Text color={!isPending ? 'secondaryText' : 'intial'}>{reportedByLabel}</Text>
                 <Avatar
                   ethAddress={ethAddress || ''}
                   src="https://placebeard.it/360x360"
@@ -147,20 +186,37 @@ const ContentCard: React.FC<IContentCardProps> = props => {
                     {reporterName}
                   </Text>
                 )}
-                {reporterENSName && <Text margin={{ left: '0.2rem' }}>({reporterENSName})</Text>}
+                {reporterENSName && (
+                  <Text
+                    margin={{ left: '0.2rem' }}
+                    color={!isPending ? 'secondaryText' : 'intiial'}
+                  >
+                    ({reporterENSName})
+                  </Text>
+                )}
+                {!isPending && (
+                  <Text
+                    margin={{ left: '0.2rem' }}
+                    color="secondaryText"
+                  >{`${reportedOnLabel} ${moment(reportedDateTime).format('D MMM yyyy')}.`}</Text>
+                )}
               </Box>
-              <Text color="secondaryText">{`${reportedOnLabel} ${moment(dateTime).format(
-                'D MMM yyyy hh:mm',
-              )}`}</Text>
+              {isPending && (
+                <Text color="secondaryText">{`${reportedOnLabel} ${moment(reportedDateTime).format(
+                  'D MMM yyyy・hh:mm',
+                )}`}</Text>
+              )}
             </Box>
-            <Box direction="row" width="35%" justify="end">
-              <Button
-                margin={{ right: 'xsmall' }}
-                label={keepContentLabel}
-                onClick={handleClick('Keep')}
-              />
-              <Button primary={true} label={delistContentLabel} onClick={handleClick('Delist')} />
-            </Box>
+            {isPending && (
+              <Box direction="row" width="35%" justify="end">
+                <Button
+                  margin={{ right: 'xsmall' }}
+                  label={keepContentLabel}
+                  onClick={handleClick('Keep')}
+                />
+                <Button primary={true} label={delistContentLabel} onClick={handleClick('Delist')} />
+              </Box>
+            )}
           </Box>
         </Box>
       </MainAreaCardBox>

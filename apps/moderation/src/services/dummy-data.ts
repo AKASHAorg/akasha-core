@@ -49,7 +49,36 @@ export const samplePostData = {
   permalink: 'null',
 };
 
-export const sampleContentCardData = [
+export const sampleDelistedData = [
+  {
+    id: 0,
+    type: 'post',
+    ethAddress: '0x3d1a5f7d03eaf1e18e7c49af072d03f94494abd',
+    reasons: ['Abusive or harmful to others', 'Violence'],
+    evaluation: 'This is a sample mandatory evaluation by the moderator',
+    reporterName: 'Estelle Collier',
+    reporterENSName: '@estellecollier',
+    moderatorName: 'EWA Moderator I',
+    moderatorENSName: '@ewamoderator1',
+    entryDate: '2020-10-20T20:21:00+0000',
+    evaluationDate: '2020-10-27T22:12:00+0000',
+  },
+  {
+    id: 1,
+    type: 'profile',
+    ethAddress: '0x4eeedfba3915e32593a2978e3eb56fd6e7849b9c',
+    reasons: ['Abusive or harmful to others', 'Self-harm or suicide'],
+    evaluation: 'This is a sample mandatory evaluation by the moderator',
+    reporterName: 'Jack Stone',
+    reporterENSName: '@jackstone99',
+    moderatorName: 'EWA Moderator II',
+    moderatorENSName: '@ewamoderator2',
+    entryDate: '2020-09-28T06:08:45+0000',
+    evaluationDate: '2020-10-03T19:28:00+0000',
+  },
+];
+
+export const samplePendingData = [
   {
     id: 0,
     type: 'post',
