@@ -33,6 +33,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
     mentions,
     tags,
     uploadRequest,
+    embedEntryData,
   } = props;
 
   const [showCancel, setShowCancel] = React.useState(false);
@@ -63,6 +64,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
               mentions={mentions}
               tags={tags}
               uploadRequest={uploadRequest}
+              embedEntryData={embedEntryData}
               style={{ width: '36rem' }}
             />
           )}

@@ -11,11 +11,7 @@ import { ProfileMiniCard } from '../profile-cards/profile-mini-card';
 import { IProfileData } from '../profile-cards/profile-widget-card';
 import { ISocialData } from './social-box';
 import ViewportSizeProvider from '../../Providers/viewport-dimension';
-
-import { Slate, withReact, Editable } from 'slate-react';
-import { createEditor } from 'slate';
-import { withMentions, withImages, withTags } from '../../Editor/plugins';
-import { renderElement, renderLeaf } from '../../Editor/renderers';
+import { ReadOnlyEditor } from '../../Editor/index';
 
 export interface IEntryData {
   CID?: string;
@@ -66,7 +62,7 @@ export interface IEntryBoxProps {
   onClickReplies: (entryId: string) => void;
   onEntryShare: (service: ServiceNames, entryId?: string) => void;
   onLinkCopy: (link: string) => void;
-  onRepost: (withComment: boolean, entryId?: string) => void;
+  onRepost: (withComment: boolean, entryData: IEntryData) => void;
   onEntryFlag: (entryId?: string) => void;
   handleFollow: (profileEthAddress: string) => void;
   handleUnfollow: (profileEthAddress: string) => void;
@@ -112,11 +108,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
   const akashaRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
-  const editor = React.useMemo(
-    () => withTags(withMentions(withReact(withImages(createEditor())))),
-    [],
-  );
-
   const handleLinkCopy = (linkType: 'ipfs' | 'shareable') => () => {
     switch (linkType) {
       case 'ipfs':
@@ -141,7 +132,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   };
 
   const handleRepost = (withComment: boolean) => () => {
-    onRepost(withComment, entryData.entryId);
+    onRepost(withComment, entryData);
   };
 
   const handleEntryShare = (service: ServiceNames) => {
@@ -232,15 +223,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           />
         )}
         <Box pad={{ vertical: 'medium' }} onClick={handleContentClick}>
-          <Slate
-            editor={editor}
-            value={entryData.content}
-            onChange={() => {
-              return;
-            }}
-          >
-            <Editable readOnly={true} renderElement={renderElement} renderLeaf={renderLeaf} />
-          </Slate>
+          <ReadOnlyEditor content={entryData.content} />
         </Box>
         <CardActions
           entryData={entryData}

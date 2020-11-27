@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { IMetadata } from '@akashaproject/design-system/lib/components/Editor/editor-box';
 
 export interface IPendingEntry {
   localId: string;
@@ -7,7 +8,9 @@ export interface IPendingEntry {
     author: {
       ethAddress: string;
     };
+    metadata: IMetadata;
     content: any;
+    textContent: string;
     ipfsHash?: string;
     entryId?: string;
   };
