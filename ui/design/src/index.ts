@@ -3,6 +3,7 @@
 import {
   Box,
   Grid,
+  Image,
   Grommet,
   grommet,
   ResponsiveContext,
@@ -175,6 +176,7 @@ const exported = {
   lightTheme,
   Box,
   Grid,
+  Image,
   Grommet,
   grommet,
   ResponsiveContext,
