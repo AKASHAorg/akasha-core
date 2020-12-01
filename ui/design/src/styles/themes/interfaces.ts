@@ -7,6 +7,7 @@ export interface IColors {
   lightBackground: string;
   darkBackground: string;
   modalBackground: string;
+  modalBackgroundAlt: string;
   accent: string;
   accentLight: string;
   border: string;
