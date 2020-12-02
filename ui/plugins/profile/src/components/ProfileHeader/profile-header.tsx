@@ -78,6 +78,7 @@ export const ProfilePageHeader = (props: IProfileHeaderProps & RootComponentProp
               closeLabel={t('Close')}
               user={loggedUserEthAddress ? loggedUserEthAddress : ''}
               contentId={profileData.ethAddress ? profileData.ethAddress : flagged}
+              contentType={t('Profile')}
               size={size}
               closeModal={() => {
                 setModalOpen(false);
