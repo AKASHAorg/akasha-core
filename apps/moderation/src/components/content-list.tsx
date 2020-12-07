@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 
 import ContentCard from './content-card';
+import postRequest from '../services/post-request';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
 import {
@@ -19,9 +20,21 @@ interface IContentListProps {
   slotId: string;
 }
 
+interface IPendingItem {
+  id: number;
+  type: string;
+  ethAddress: string;
+  reasons: string[];
+  description: string;
+  reporterName: string;
+  reporterENSName: string;
+  entryDate: string;
+}
+
 const ContentList: React.FC<IContentListProps> = props => {
   const { slotId } = props;
 
+  const [pendingItems, setPendingItems] = React.useState<IPendingItem[]>([]);
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [actionType, setActionType] = React.useState<string>('Delist');
   const [contentType, setContentType] = React.useState<string>('post');
@@ -34,7 +47,36 @@ const ContentList: React.FC<IContentListProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
   const { size } = useViewportSize();
 
+  React.useEffect(() => {
+    // fetch pending (reported) contents
+    fetchPendingContents();
+  }, []);
+
   // @TODO: Get logged ethAddress from Store state
+
+  const fetchPendingContents = async () => {
+    const response = await postRequest('https://akasha-mod.herokuapp.com/flags/list');
+    // @TODO: get content details using contentId
+    const modResponse = response.map(
+      ({ contentType, contentId, date, reasons }: any, idx: number) => {
+        // formatting data to match labels already in use
+        const randomIdx = Math.floor(Math.random() * samplePendingData.length);
+        const randomData = samplePendingData[randomIdx];
+        return {
+          id: idx,
+          type: contentType,
+          ethAddress: contentId,
+          reasons: reasons,
+          description: '',
+          // @TODO: fetch reporter's Name and ENS (if applicable) from the profile API
+          reporterName: randomData.reporterName,
+          reporterENSName: randomData.reporterENSName,
+          entryDate: date,
+        };
+      },
+    );
+    setPendingItems(modResponse);
+  };
 
   const handleButtonClick = (
     entryId: string,
@@ -102,38 +144,38 @@ const ContentList: React.FC<IContentListProps> = props => {
         )}
       </ModalRenderer>
       <ContentTab isPending={isPending} setIsPending={setIsPending} />
-      {isPending
-        ? samplePendingData.map(pendingData => (
+      {isPending && !!pendingItems.length
+        ? pendingItems.map((pendingItem: IPendingItem) => (
             <ContentCard
-              key={pendingData.id}
+              key={pendingItem.id}
               isPending={isPending}
-              entryData={pendingData.type === 'post' ? samplePostData : sampleProfileData}
+              entryData={pendingItem.type === 'post' ? samplePostData : sampleProfileData}
               repostsLabel={t('Repost')}
               repliesLabel={t('Replies')}
               locale={locale}
               reportedLabel={t('Reported')}
-              contentType={t(pendingData.type)}
+              contentType={t(pendingItem.type)}
               forLabel={t('for')}
               additionalDescLabel={t('Additional description provided by user')}
-              additionalDescContent={t(pendingData.description)}
+              additionalDescContent={t(pendingItem.description)}
               reportedByLabel={t('Reported by')}
-              ethAddress={t(pendingData.ethAddress)}
-              reasons={pendingData.reasons.map(el => t(el))}
-              reporterName={t(pendingData.reporterName)}
-              reporterENSName={t(pendingData.reporterENSName)}
+              ethAddress={t(pendingItem.ethAddress)}
+              reasons={pendingItem.reasons.map((el: string) => t(el))}
+              reporterName={t(pendingItem.reporterName)}
+              reporterENSName={t(pendingItem.reporterENSName)}
               reportedOnLabel={t('On')}
-              reportedDateTime={pendingData.entryDate}
+              reportedDateTime={pendingItem.entryDate}
               keepContentLabel={
-                pendingData.type === 'post'
+                pendingItem.type === 'post'
                   ? t('Keep Post')
-                  : pendingData.type === 'profile'
+                  : pendingItem.type === 'profile'
                   ? t('Keep Profile')
                   : ''
               }
               delistContentLabel={
-                pendingData.type === 'post'
+                pendingItem.type === 'post'
                   ? t('Delist Post')
-                  : pendingData.type === 'profile'
+                  : pendingItem.type === 'profile'
                   ? t('Remove Profile')
                   : ''
               }

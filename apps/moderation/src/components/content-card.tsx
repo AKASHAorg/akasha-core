@@ -203,7 +203,7 @@ const ContentCard: React.FC<IContentCardProps> = props => {
               </Box>
               {isPending && (
                 <Text color="secondaryText">{`${reportedOnLabel} ${moment(reportedDateTime).format(
-                  'D MMM yyyy・hh:mm',
+                  'D MMM yyyy・HH:mm',
                 )}`}</Text>
               )}
             </Box>
