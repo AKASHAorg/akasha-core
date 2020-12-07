@@ -293,7 +293,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               closeLabel={t('Close')}
               user={ethAddress ? ethAddress : ''}
               contentId={flagged}
-              contentType={t('Post')}
+              contentType={t('post')}
               size={size}
               closeModal={() => {
                 setModalOpen(false);

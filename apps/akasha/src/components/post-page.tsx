@@ -135,7 +135,7 @@ const PostPage: React.FC<IPostPage> = props => {
                 closeLabel={t('Close')}
                 user={loggedEthAddress ? loggedEthAddress : ''}
                 contentId={flagged}
-                contentType={t('Post')}
+                contentType={t('post')}
                 size={size}
                 closeModal={() => {
                   setModalOpen(false);

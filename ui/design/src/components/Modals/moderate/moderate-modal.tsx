@@ -129,12 +129,14 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     return response.status;
   };
 
-  const handleModerate = () => {
+  const handleModerate = (isDelisted: boolean = true) => () => {
     const dataToPost = {
-      user,
+      moderator: user,
       contentId,
-      reasons,
+      contentType,
       explanation,
+      reasons,
+      delisted: isDelisted,
     };
 
     setRequesting(true);
@@ -305,7 +307,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                 primary={true}
                 label={reportLabel}
                 fill={size === 'small' ? true : false}
-                onClick={handleModerate}
+                onClick={reportLabel === 'Delist' ? handleModerate() : handleModerate(false)}
                 disabled={
                   requesting || !explanation.length
                     ? true

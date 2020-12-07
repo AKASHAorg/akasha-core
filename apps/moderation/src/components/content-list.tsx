@@ -24,7 +24,7 @@ const ContentList: React.FC<IContentListProps> = props => {
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [actionType, setActionType] = React.useState<string>('Delist');
-  const [contentType, setContentType] = React.useState<string>('Delist');
+  const [contentType, setContentType] = React.useState<string>('post');
   const [flagged, setFlagged] = React.useState<string>('');
   const [preselectedReasons, setPreselectedReasons] = React.useState<string[]>([]);
   const [flaggedItemData, setFlaggedItemData] = React.useState<any>({});
