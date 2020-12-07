@@ -1,20 +1,5 @@
 import { forkJoin } from 'rxjs';
 
-export const publishEntry = (entryService: any) => (pendingEntry: any) => {
-  const entryObj = {
-    data: {
-      provider: 'AkashaApp',
-      property: 'slateContent',
-      value: pendingEntry.entry.content,
-    },
-    post: {
-      tags: pendingEntry.entry.metadata.tags,
-    },
-  };
-  const call = entryService.postEntry(entryObj);
-  return call;
-};
-
 export const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {
   let ipfsUrl = '';
 
@@ -99,4 +84,39 @@ export const uploadMediaToIpfs = (ipfsService: any) => (data: string | File, isU
   const ipfsGatewayCall = ipfsService.getSettings({});
   const uploadCall = ipfsService.upload([{ isUrl, content: data }]);
   return forkJoin([ipfsGatewayCall, uploadCall]).toPromise();
+};
+
+export const mapEntry = (entry: any, ipfsGateway: string) => {
+  let content;
+  try {
+    content = JSON.parse(atob(entry.content[0].value));
+  } catch (error) {
+    content = [
+      {
+        type: 'paragraph',
+        children: [{ text: entry.content[0].value }],
+      },
+    ];
+  }
+  return {
+    author: {
+      CID: entry.author.CID,
+      description: entry.author.description,
+      avatar: getMediaUrl(ipfsGateway, entry.author.avatar),
+      coverImage: getMediaUrl(
+        ipfsGateway,
+        entry.author.backgroundImage?.hash,
+        entry.author.backgroundImage?.data,
+      ),
+      ensName: entry.author.userName,
+      userName: entry.author.name,
+      ethAddress: entry.author.ethAddress,
+      postsNumber: entry.author.entries && Object.keys(entry.author.entries).length,
+    },
+    CID: entry.CID,
+    content,
+    entryId: entry._id,
+    ipfsLink: entry._id,
+    permalink: 'null',
+  };
 };

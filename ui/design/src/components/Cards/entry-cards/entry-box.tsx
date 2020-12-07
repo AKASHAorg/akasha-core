@@ -121,7 +121,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     setMenuDropOpen(false);
   };
 
-  const toggleMenuDrop = () => {
+  const toggleMenuDrop = (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
     setMenuDropOpen(!menuDropOpen);
   };
 

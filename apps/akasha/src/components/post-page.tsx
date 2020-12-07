@@ -3,8 +3,9 @@ import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { uploadMediaToIpfs } from '../services/posting-service';
+import { mapEntry, uploadMediaToIpfs } from '../services/posting-service';
 import { getLoggedProfileStore } from '../state/logged-profile-state';
+import { combineLatest } from 'rxjs';
 
 const {
   Box,
@@ -48,9 +49,14 @@ const PostPage: React.FC<IPostPage> = props => {
   const [itemData, setItemData] = React.useState<any>(null);
 
   React.useEffect(() => {
-    const call = props.channels.posts.entries.getEntry({ entryId: postId });
+    const entryCall = props.channels.posts.entries.getEntry({ entryId: postId });
+    const ipfsGatewayCall = props.channels.commons.ipfsService.getSettings({});
+    const call = combineLatest([ipfsGatewayCall, entryCall]);
     call.subscribe((resp: any) => {
-      setItemData(resp.data);
+      const ipfsGateway = resp[0].data;
+      const entry = resp[1].data.getPost;
+      const mappedEntry = mapEntry(entry, ipfsGateway);
+      setItemData(mappedEntry);
     });
   }, []);
 

@@ -7,9 +7,8 @@ import {
   ILoadItemsPayload,
 } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { fetchFeedItemData } from '../../services/feed-service';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { serializeToSlate, getMediaUrl, uploadMediaToIpfs } from '../../services/posting-service';
+import { mapEntry, uploadMediaToIpfs } from '../../services/posting-service';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
@@ -75,8 +74,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   });
 
   const handleLoadMore = async (payload: ILoadItemsPayload) => {
-    const req: { results: number; offset?: string } = {
-      results: payload.limit,
+    const req: { limit: number; offset?: string } = {
+      limit: payload.limit,
     };
     if (!isLoading) {
       setIsLoading(true);
@@ -85,60 +84,48 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   const loadItemData = async (payload: ILoadItemDataPayload) => {
-    const resp = await fetchFeedItemData({ entryId: payload.itemId });
-    if (resp) {
-      feedStateActions.setFeedItemData(resp);
-    }
+    const entryCall = props.sdkModules.posts.entries.getEntry({ entryId: payload.itemId });
+    const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
+    const getEntryCall = combineLatest([ipfsGatewayCall, entryCall]);
+    getEntryCall.subscribe((resp: any) => {
+      const ipfsGateway = resp[0].data;
+      const entry = resp[1].data.getPost;
+      const mappedEntry = mapEntry(entry, ipfsGateway);
+      feedStateActions.setFeedItemData(mappedEntry);
+    });
   };
-  const fetchEntries = async (payload: { results: number; offset?: string }) => {
-    const profileService = props.sdkModules.profiles.profileService;
-    const getPostsCall = profileService.getPosts({
+  const fetchEntries = async (payload: { limit: number; offset?: string }) => {
+    const getEntriesCall = props.sdkModules.posts.entries.getEntries({
       ...payload,
-      offset: payload.offset || feedState.lastItemId,
+      offset: payload.offset || feedState.nextItemId,
     });
     const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
-    const call = combineLatest(ipfsGatewayCall, getPostsCall);
+    const call = combineLatest([ipfsGatewayCall, getEntriesCall]);
     call.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
-      const { data }: { channelInfo: any; data: { last: string; result: any[] } } = resp[1];
-      const { last, result } = data;
+      const {
+        data,
+      }: { channelInfo: any; data: { posts: { nextIndex: string; results: any[] } } } = resp[1];
+      const { nextIndex, results } = data.posts;
       const entryIds: { entryId: string }[] = [];
-      result.forEach(entry => {
-        entryIds.push({ entryId: entry.post.id });
-        const mappedEntry = {
-          author: {
-            CID: entry.author.CID,
-            description: entry.author.about,
-            avatar: getMediaUrl(ipfsGateway, entry.author.avatar),
-            coverImage: getMediaUrl(
-              ipfsGateway,
-              entry.author.backgroundImage?.hash,
-              entry.author.backgroundImage?.data,
-            ),
-            ensName: entry.author.username,
-            userName:
-              entry.author?.data &&
-              `${entry.author?.data?.firstName} ${entry.author?.data?.lastName}`,
-            ethAddress: entry.author.address,
-            postsNumber: entry.author.entries && Object.keys(entry.author.entries).length,
-          },
-          CID: entry.post.CID,
-          content: serializeToSlate(entry.post, ipfsGateway),
-          entryId: entry.post.id,
-          ipfsLink: entry.id,
-          permalink: 'null',
-        };
-        // console.table([mappedEntry, entry]);
-        feedStateActions.setFeedItemData(mappedEntry);
+      results.forEach(entry => {
+        if (entry.content[0].property === 'slateContent') {
+          entryIds.push({ entryId: entry._id });
+          const mappedEntry = mapEntry(entry, ipfsGateway);
+          feedStateActions.setFeedItemData(mappedEntry);
+        }
       });
-      feedStateActions.setFeedItems({ items: entryIds, lastItemId: last });
+      feedStateActions.setFeedItems({ items: entryIds, nextItemId: nextIndex });
+      if (nextIndex === null) {
+        feedStateActions.hasMoreItems(false);
+      }
       setIsLoading(false);
     });
   };
 
   const onInitialLoad = async (payload: ILoadItemsPayload) => {
-    const req: { results: number; offset?: string } = {
-      results: payload.limit,
+    const req: { limit: number; offset?: string } = {
+      limit: payload.limit,
     };
     setIsLoading(true);
     fetchEntries(req);
@@ -228,16 +215,22 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             property: 'slateContent',
             value: btoa(JSON.stringify(data.content)),
           },
+          {
+            provider: 'AkashaApp',
+            property: 'textContent',
+            value: data.textContent,
+          },
         ],
         post: {
           tags: data.metadata.tags,
         },
       };
-      const call = sdkModules.posts.entries.postEntry(entryObj);
-      call.subscribe((resp: any) => {
+      const postEntryCall = sdkModules.posts.entries.postEntry(entryObj);
+      postEntryCall.subscribe((postingResp: any) => {
+        const publishedEntryId = postingResp.data.createPost;
         feedStateActions.setFeedItems({
           reverse: true,
-          items: [resp.data as any],
+          items: [{ entryId: publishedEntryId }],
         });
       });
     } catch (err) {
@@ -315,7 +308,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
         loadInitialFeed={onInitialLoad}
-        hasMoreItems={true}
+        hasMoreItems={feedState.hasMoreItems}
         bookmarkedItems={bookmarks}
         getItemCard={({ itemData, visitorEthAddress, isBookmarked }) => (
           <ErrorInfoCard errors={{}}>

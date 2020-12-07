@@ -70,6 +70,7 @@ const service: AkashaService = (invoke, log) => {
       'creationDate',
       'avatar',
       'userName',
+      'name',
       'coverImage',
       'ethAddress',
     ];

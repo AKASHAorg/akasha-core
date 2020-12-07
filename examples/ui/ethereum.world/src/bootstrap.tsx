@@ -18,7 +18,7 @@ interface Win extends Window {
   akashaproject__sdk?: { default: ({ config, initialApps }) => void };
 }
 
-const scriptLoader = new ScriptLoader();
+const scriptLoader: any = new ScriptLoader();
 
 const bootstrap = async () => {
   // tslint:disable-next-line:no-console

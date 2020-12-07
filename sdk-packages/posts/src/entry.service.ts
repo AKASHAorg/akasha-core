@@ -25,8 +25,10 @@ const service: AkashaService = (invoke, log) => {
           userName
           avatar
           coverImage
+          description
           ethAddress
         }
+        _id
         tags
        }
       }`;
@@ -54,8 +56,10 @@ const service: AkashaService = (invoke, log) => {
             userName
             avatar
             coverImage
+            description
             ethAddress
           }
+          _id
           creationDate
           tags
         }
