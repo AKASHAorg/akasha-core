@@ -40,7 +40,7 @@ const TopbarComponent = (props: TopBarProps) => {
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
   const [showLoginModal, setShowLoginModal] = React.useState(false);
-  const [profileState, profileActions] = useProfile({
+  const [profileState/* , profileActions */] = useProfile({
     onError: err => {
       logger.error(err);
     },
@@ -56,11 +56,11 @@ const TopbarComponent = (props: TopBarProps) => {
     ({ error }) => props.logger.error(error),
   );
 
-  React.useEffect(() => {
-    if (ethAddress) {
-      profileActions.getProfileData({ ethAddress });
-    }
-  }, [ethAddress]);
+  // React.useEffect(() => {
+  //   if (ethAddress) {
+  //     profileActions.getProfileData({ ethAddress });
+  //   }
+  // }, [ethAddress]);
 
   React.useEffect(() => {
     const updateMenu = () => {

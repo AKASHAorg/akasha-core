@@ -52,7 +52,7 @@ export const useProfile = (props: UseProfileProps): [Partial<IProfileData>, UseP
       try {
         const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
         const getProfileCall = sdkModules.profiles.profileService.getProfile({
-          address: payload.ethAddress,
+          ethAddress: payload.ethAddress,
         });
         const obs = forkJoin([ipfsGatewayCall, getProfileCall]);
         obs.subscribe(

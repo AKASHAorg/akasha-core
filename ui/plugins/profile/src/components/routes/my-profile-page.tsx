@@ -5,28 +5,14 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 import { useProfile } from '@akashaproject/ui-awf-hooks';
 
 const MyProfilePage = (props: RootComponentProps) => {
-  const { sdkModules } = props;
-  const [loginState, setLoginState] = React.useState<{ ethAddress?: string }>({});
+  const { sdkModules, logger } = props;
+  const [loginState/* , setLoginState */] = React.useState<{ ethAddress?: string }>({});
   const [profileState, profileActions] = useProfile({
     onError: err => {
-      console.log(err);
+      logger.error(err);
     },
     sdkModules: sdkModules,
   });
-  React.useEffect(() => {
-    const getDeps = sdkModules.commons.cacheService.getStash(null);
-    getDeps.subscribe((resp: { data: any }) => {
-      const { data } = resp;
-      if (data.entries.has('auth')) {
-        const authValue = data.cache.get('auth');
-        if (authValue.hasOwnProperty('ethAddress')) {
-          setLoginState({
-            ethAddress: authValue.ethAddress,
-          });
-        }
-      }
-    });
-  }, []);
 
   React.useEffect(() => {
     if (loginState.ethAddress) {

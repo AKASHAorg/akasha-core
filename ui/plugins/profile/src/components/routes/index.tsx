@@ -5,15 +5,24 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import menuRoute, { MY_PROFILE, rootRoute } from '../../routes';
 import MyProfilePage from './my-profile-page';
 import ProfilePage from './profile-page';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
+import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
+import { useLoginState } from '@akashaproject/ui-awf-hooks';
 
 const { Box, LoginModal } = DS;
 
 const Routes: React.FC<RootComponentProps> = props => {
-  const { activeWhen } = props;
+  const { activeWhen, logger } = props;
   const { path } = activeWhen;
 
-  const [loginState, setLoginState] = React.useState<{ ethAddress?: string; token?: string }>({});
+  const [ loginState, loginActions ] = useLoginState({
+    globalChannel: props.globalChannel,
+    authService: props.sdkModules.authService,
+    profileService: props.sdkModules.profiles.profileService,
+    onError: (error: IAkashaError) => {
+      logger.error(error);
+    },
+    cacheService: props.sdkModules.commons.cacheService,
+  });
   const [loginModalState, setLoginModalState] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
 
@@ -37,15 +46,7 @@ const Routes: React.FC<RootComponentProps> = props => {
   const handleTutorialLinkClick = () => {
     /* goto tutorials */
   };
-
-  const handleLogin = (providerId: number) => {
-    const call = props.sdkModules.auth.authService.signIn(providerId);
-    call.subscribe((res: any) => {
-      const { ethAddress, token } = res.data;
-      setLoginState({ ethAddress, token });
-    });
-  };
-
+  console.log(loginState, 'the login state');
   return (
     <Router>
       <Box>
@@ -59,7 +60,7 @@ const Routes: React.FC<RootComponentProps> = props => {
               {...props}
               modalOpen={modalOpen}
               ethAddress={loginState.ethAddress}
-              onLogin={handleLogin}
+              onLogin={loginActions.login}
               setModalOpen={setModalOpen}
               showLoginModal={showLoginModal}
             />
@@ -70,7 +71,7 @@ const Routes: React.FC<RootComponentProps> = props => {
       <LoginModal
         showModal={loginModalState}
         slotId={props.layout.app.modalSlotId}
-        onLogin={handleLogin}
+        onLogin={loginActions.login}
         onModalClose={hideLoginModal}
         tutorialLinkLabel={t('Tutorial')}
         metamaskModalHeadline={t('Connecting')}

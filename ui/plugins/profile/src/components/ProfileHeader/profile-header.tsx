@@ -14,7 +14,7 @@ const StyledProfileCard = styled(ProfileCard)`
 export interface IProfileHeaderProps {
   profileId: string;
   profileData: Partial<IProfileData>;
-  loggedUserEthAddress?: string;
+  loggedUserEthAddress: string | null;
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   showLoginModal: () => void;

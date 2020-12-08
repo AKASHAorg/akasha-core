@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 
 export interface ProfilePageProps {
   modalOpen: boolean;
-  ethAddress?: string;
+  ethAddress: string | null;
   onLogin: (param: 1 | 2) => void;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   showLoginModal: () => void;
