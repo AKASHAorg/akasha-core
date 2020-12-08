@@ -114,7 +114,7 @@ export const mapEntry = (entry: any, ipfsGateway: string) => {
       postsNumber: entry.author.entries && Object.keys(entry.author.entries).length,
     },
     CID: entry.CID,
-    content,
+    content: content,
     entryId: entry._id,
     ipfsLink: entry._id,
     permalink: 'null',
