@@ -34,7 +34,7 @@ export interface IModerateModalProps {
   footerUrl2: string;
   cancelLabel?: string;
   reportLabel?: string;
-  user?: string;
+  user: string | null;
   contentId?: string;
   // screen size passed by viewport provider
   size?: string;
@@ -142,14 +142,21 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     setRequesting(true);
 
     // @TODO: connect with moderation endpoint
-    postData('https://akasha-mod.herokuapp.com/', dataToPost)
+    postData('https://akasha-mod.herokuapp.com/decisions', dataToPost)
       .then(status => {
         setRequesting(false);
-        if (status === 409) {
-          throw new Error('This content has already been flagged by you');
+        if (status === 400) {
+          throw new Error('Bad request. Please try again later');
+        } else if (status === 409) {
+          throw new Error('This content has already been moderated by you');
         } else if (status === 500) {
           throw new Error('Unable to process your request right now. Please try again later');
         }
+
+        addToast('Content successfully moderated', {
+          appearance: 'success',
+        });
+        return closeModal();
       })
       .catch(error => {
         setRequesting(false);
