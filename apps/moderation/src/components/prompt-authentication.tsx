@@ -11,10 +11,27 @@ const { Box, Text, Image, Button } = DS;
 
 export interface IPromptAuthenticationProps extends IPromptAuthorizationProps {
   buttonLabel?: string;
+  ethAddress: string | null;
+  navigateToUrl: (path: string) => void;
+  showLoginModal: () => void;
 }
 
 const PromptAuthentication: React.FC<IPromptAuthenticationProps> = props => {
-  const { titleLabel, subtitleLabel, buttonLabel } = props;
+  const {
+    titleLabel,
+    subtitleLabel,
+    buttonLabel,
+    ethAddress,
+    navigateToUrl,
+    showLoginModal,
+  } = props;
+
+  React.useEffect(() => {
+    if (ethAddress) {
+      navigateToUrl('/moderation-app/home');
+    }
+  }, [ethAddress]);
+
   return (
     <PageWrapper style={{ background: 'white' }}>
       <ContentWrapper
@@ -42,7 +59,7 @@ const PromptAuthentication: React.FC<IPromptAuthenticationProps> = props => {
           {subtitleLabel}
         </Text>
         <Box width="fit-content" alignSelf="center">
-          <Button primary={true} label={buttonLabel} onClick={() => null} />
+          <Button primary={true} label={buttonLabel} onClick={showLoginModal} />
         </Box>
       </ContentWrapper>
     </PageWrapper>

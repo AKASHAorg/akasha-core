@@ -18,6 +18,8 @@ const { Box, useViewportSize, ModalRenderer, ToastProvider, ModerateModal } = DS
 
 interface IContentListProps {
   slotId: string;
+  ethAddress: string | null;
+  navigateToUrl: (path: string) => void;
 }
 
 interface IPendingItem {
@@ -32,7 +34,7 @@ interface IPendingItem {
 }
 
 const ContentList: React.FC<IContentListProps> = props => {
-  const { slotId } = props;
+  const { slotId, ethAddress } = props;
 
   const [pendingItems, setPendingItems] = React.useState<IPendingItem[]>([]);
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
@@ -77,6 +79,11 @@ const ContentList: React.FC<IContentListProps> = props => {
     );
     setPendingItems(modResponse);
   };
+  React.useEffect(() => {
+    if (!ethAddress) {
+      props.navigateToUrl('/moderation-app/unauthenticated');
+    }
+  }, [ethAddress]);
 
   const handleButtonClick = (
     entryId: string,
@@ -169,14 +176,14 @@ const ContentList: React.FC<IContentListProps> = props => {
                 pendingItem.type === 'post'
                   ? t('Keep Post')
                   : pendingItem.type === 'profile'
-                  ? t('Keep Profile')
+                  ? t('Keep User')
                   : ''
               }
               delistContentLabel={
                 pendingItem.type === 'post'
                   ? t('Delist Post')
                   : pendingItem.type === 'profile'
-                  ? t('Remove Profile')
+                  ? t('Remove User')
                   : ''
               }
               handleButtonClick={handleButtonClick}
