@@ -128,7 +128,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           tutorialLinkLabel={t('Tutorial')}
           metamaskModalHeadline={t('Connecting')}
           metamaskModalMessage={t('Please complete the process in your wallet')}
-          onTutorialLinkClick={() => {}}
+          onTutorialLinkClick={() => null}
           helpText={t('What is a wallet? How do I get an Ethereum address?')}
         />
       </Box>

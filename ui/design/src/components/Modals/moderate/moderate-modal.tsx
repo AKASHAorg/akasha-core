@@ -131,11 +131,11 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
 
   const handleModerate = (isDelisted: boolean = true) => () => {
     const dataToPost = {
-      moderator: user,
       contentId,
       contentType,
       explanation,
       reasons,
+      moderator: user,
       delisted: isDelisted,
     };
 

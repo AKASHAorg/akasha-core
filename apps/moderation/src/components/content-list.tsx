@@ -60,13 +60,13 @@ const ContentList: React.FC<IContentListProps> = props => {
     const response = await postRequest('https://akasha-mod.herokuapp.com/flags/list');
     // @TODO: get content details using contentId
     const modResponse = response.map(
-      ({ contentType, contentId, date, reasons }: any, idx: number) => {
+      ({ contentType: type, contentId, date, reasons }: any, idx: number) => {
         // formatting data to match labels already in use
         const randomIdx = Math.floor(Math.random() * samplePendingData.length);
         const randomData = samplePendingData[randomIdx];
         return {
           id: idx,
-          type: contentType,
+          type: type,
           ethAddress: contentId,
           reasons: reasons,
           description: '',
