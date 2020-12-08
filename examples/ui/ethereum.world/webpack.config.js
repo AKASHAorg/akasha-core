@@ -24,12 +24,8 @@ module.exports = Object.assign(baseConfig, {
     }),
     new CopyPlugin({
       patterns: [
-        { from: path.join(__dirname, 'dist'), to: path.join(__dirname, 'public') },
-        { from: path.join(__dirname, '../../../ui/build'), to: path.join(__dirname, 'public') },
-        {
-          from: path.join(__dirname, '../../../locales'),
-          to: path.join(__dirname, 'public/locales'),
-        },
+        { from: path.resolve(__dirname, '../../../ui/build') },
+        { from: path.resolve(__dirname, '../../../locales'), to: 'locales' },
       ],
     }),
   ]),
@@ -38,7 +34,7 @@ module.exports = Object.assign(baseConfig, {
     'akasha.sdk.js': 'akashaproject__sdk',
   },
   devServer: {
-    contentBase: 'public',
+    contentBase: path.join(__dirname, 'public'),
     publicPath: '/',
     https: true,
     historyApiFallback: true,

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useFeedReducer, useEntryBookmark, useEntryPublisher } from '@akashaproject/ui-awf-hooks';
+import { useFeedReducer, useEntryBookmark } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import {
   ILoadItemDataPayload,
@@ -9,19 +9,8 @@ import {
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { fetchFeedItemData } from '../../services/feed-service';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import {
-  addToIPFS,
-  getPending,
-  publishEntry,
-  removePending,
-  savePending,
-  updatePending,
-  serializeToSlate,
-  getMediaUrl,
-  uploadMediaToIpfs,
-} from '../../services/posting-service';
+import { serializeToSlate, getMediaUrl, uploadMediaToIpfs } from '../../services/posting-service';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
-import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
 import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
 
@@ -66,36 +55,17 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     ethAddress,
     jwtToken,
     onError,
+    sdkModules,
   } = props;
   const [feedState, feedStateActions] = useFeedReducer({});
   const [isLoading, setIsLoading] = React.useState(false);
   const [showEditor, setShowEditor] = React.useState(false);
+  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
 
   const { size } = useViewportSize();
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
-
-  const [pendingEntries, pendingActions] = useEntryPublisher({
-    publishEntry: publishEntry,
-    onPublishComplete: (ethAddr, publishedEntry) => {
-      removePending(ethAddr, publishedEntry.localId);
-      pendingActions.removeEntry(publishedEntry.localId);
-      if (publishedEntry.entry.entryId) {
-        // @TODO: this call (setFeedItemData) should be removed when we have real data
-        // aka we should only `setFeedItems` and let the list to load fresh data from server/ipfs
-        feedStateActions.setFeedItemData(publishedEntry.entry as IEntryData);
-        feedStateActions.setFeedItems({
-          reverse: true,
-          items: [publishedEntry.entry as IEntryData],
-        });
-      }
-    },
-    ethAddress: ethAddress,
-    addToIPFS: addToIPFS,
-    getPendingEntries: getPending,
-    onStep: (ethAddr, localId) => updatePending(ethAddr, localId).catch(err => onError(err)),
-  });
 
   const [bookmarks, bookmarkActions] = useEntryBookmark({
     ethAddress,
@@ -150,7 +120,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               entry.author?.data &&
               `${entry.author?.data?.firstName} ${entry.author?.data?.lastName}`,
             ethAddress: entry.author.address,
-            postsNumber: entry.author.entries && Object.keys(entry.author.entries).length, // @todo: fix this with another api call
+            postsNumber: entry.author.entries && Object.keys(entry.author.entries).length,
           },
           CID: entry.post.CID,
           content: serializeToSlate(entry.post, ipfsGateway),
@@ -184,8 +154,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
     bookmarkActions.addBookmark(entryId);
   };
-  const handleEntryRepost = () => {
-    /* todo */
+  const handleEntryRepost = (_withComment: boolean, entryData: any) => {
+    if (!ethAddress) {
+      showLoginModal();
+    } else {
+      setCurrentEmbedEntry(entryData);
+      setShowEditor(true);
+    }
   };
   const handleEntryShare = () => {
     /* todo */
@@ -221,39 +196,52 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const handleToggleEditor = () => {
     setShowEditor(!showEditor);
+    setCurrentEmbedEntry(undefined);
   };
 
   const onUploadRequest = uploadMediaToIpfs(props.sdkModules.commons.ipfsService);
 
   const handleNavigateToPost = redirectToPost(props.navigateToUrl);
 
-  const handleEntryPublish = async (authorEthAddr: string, content: any) => {
+  const handleEntryPublish = async (data: {
+    metadata: {
+      app: string;
+      version: number;
+      quote?: string;
+      tags: string[];
+      mentions: string[];
+    };
+    author: string;
+    content: any;
+    textContent: any;
+  }) => {
     if (!ethAddress && !jwtToken) {
       showLoginModal();
       return;
     }
-    const localId = `${authorEthAddr}-${pendingEntries.length + 1}`;
+
     try {
-      const entry = {
-        content: content,
-        author: {
-          ethAddress: authorEthAddr,
+      const entryObj = {
+        data: [
+          {
+            provider: 'AkashaApp',
+            property: 'slateContent',
+            value: btoa(JSON.stringify(data.content)),
+          },
+        ],
+        post: {
+          tags: data.metadata.tags,
         },
-        time: new Date().getTime() / 1000,
       };
-      pendingActions.addEntry({
-        entry,
-        localId,
-        step: 'PUBLISH_START',
+      const call = sdkModules.posts.entries.postEntry(entryObj);
+      call.subscribe((resp: any) => {
+        feedStateActions.setFeedItems({
+          reverse: true,
+          items: [resp.data as any],
+        });
       });
-      if (ethAddress) {
-        await savePending(
-          ethAddress,
-          pendingEntries.concat([{ entry, localId, step: 'PUBLISH_START' }]),
-        );
-      }
     } catch (err) {
-      props.logger.error('Error publishing entry');
+      props.logger.error('Error publishing entry %j', err);
     }
     setShowEditor(false);
   };
@@ -318,6 +306,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         getMentions={handleGetMentions}
         getTags={handleGetTags}
         uploadRequest={onUploadRequest}
+        embedEntryData={currentEmbedEntry}
         style={{ width: '36rem' }}
       />
       <VirtualList
@@ -363,7 +352,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                         copyLinkLabel={t('Copy Link')}
                         copyIPFSLinkLabel={t('Copy IPFS Link')}
                         flagAsLabel={t('Report Post')}
-                        loggedProfileEthAddress={'0x00123123123123'}
+                        loggedProfileEthAddress={ethAddress as any}
                         locale={locale}
                         style={{ height: 'auto' }}
                         bookmarkLabel={t('Save')}
@@ -390,7 +379,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           isMobile,
           feedItems: feedState.feedItems,
           loggedEthAddress: ethAddress,
-          pendingEntries: pendingEntries,
           onAvatarClick: handleAvatarClick,
           onContentClick: handleNavigateToPost,
           handleEditorPlaceholderClick: handleToggleEditor,

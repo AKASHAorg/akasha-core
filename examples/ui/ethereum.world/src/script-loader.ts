@@ -40,7 +40,7 @@ class ScriptLoader {
     this.subscribers[namespace].forEach(sub => sub(moduleObj));
   }
   public async loadModules(modules: IModule[], type) {
-    modules.forEach(async module => {
+    for (const module of modules) {
       const { src, name, moduleName, config = {} } = module;
       try {
         const isLoaded = await this.loadScript(src);
@@ -65,7 +65,7 @@ class ScriptLoader {
         // tslint:disable-next-line: no-console
         console.error('failed to load module. Script loading error!', src);
       }
-    });
+    }
   }
   private async loadScript(script: string) {
     return new Promise((resolve, reject) => {

@@ -19,10 +19,12 @@ const CommentEditor: React.FC<IEditorBox> = props => {
     uploadRequest,
   } = props;
 
+  const [showEditor, setShowEditor] = React.useState(false);
+  const wrapperRef: React.RefObject<any> = React.useRef();
+
   const handleToggleEditor = () => {
     setShowEditor(!showEditor);
   };
-  const wrapperRef: React.RefObject<any> = React.useRef();
 
   const handleClickAway = () => {
     if (showEditor) {
@@ -30,7 +32,6 @@ const CommentEditor: React.FC<IEditorBox> = props => {
     }
   };
 
-  const [showEditor, setShowEditor] = React.useState(false);
   useSimpleClickAway(wrapperRef, handleClickAway);
 
   return (

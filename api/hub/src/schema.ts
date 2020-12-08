@@ -18,6 +18,7 @@ const typeDefs = gql`
     getTag(name: String!): Tag
     tags(offset: String, limit: Int): TagsResult
     posts(offset: String, limit: Int): PostsResult
+    isFollowing(follower: String!, following: String!): Boolean
   }
   input DataProviderInput {
     provider: String
@@ -38,9 +39,12 @@ const typeDefs = gql`
   type Mutation {
     addProfileProvider(data: [DataProviderInput]): [String!]
     makeDefaultProvider(data: DataProviderInput): [String!]
+    saveMetaData(data: DataProviderInput): [String!]
     registerUserName(name: String!): [String!]
     createTag(name: String!): String
     createPost(content: [DataProviderInput!], post: PostData): String
+    follow(ethAddress: String!): Boolean
+    unFollow(ethAddress: String!): Boolean
   }
 
   type Tag {

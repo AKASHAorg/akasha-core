@@ -6,9 +6,14 @@ module.exports = {
       'styled-components': 'styled',
       'single-spa-react': 'singleSpaReact',
       rxjs: 'rxjs',
-      'rxjs/operators': 'rxjs.operators',
-      '@akashaproject/design-system': false,
+      '@akashaproject/design-system': 'akashaproject__design_system',
     },
   ],
-  optimization: {},
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      minSize: 69000,
+      minChunks: 2,
+    },
+  },
 };
