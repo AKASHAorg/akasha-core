@@ -14,7 +14,7 @@ import {
 } from '../services/dummy-data';
 import ContentTab from './content-tab';
 
-const { Box, useViewportSize, ModalRenderer, ToastProvider, ModerateModal } = DS;
+const { Box, Text, useViewportSize, ModalRenderer, ToastProvider, ModerateModal } = DS;
 
 interface IContentListProps {
   slotId: string;
@@ -44,46 +44,55 @@ const ContentList: React.FC<IContentListProps> = props => {
   const [preselectedReasons, setPreselectedReasons] = React.useState<string[]>([]);
   const [flaggedItemData, setFlaggedItemData] = React.useState<any>({});
   const [isPending, setIsPending] = React.useState<boolean>(true);
+  const [requesting, setRequesting] = React.useState<boolean>(false);
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
   const { size } = useViewportSize();
 
   React.useEffect(() => {
-    // fetch pending (reported) contents
-    fetchPendingContents();
-  }, []);
+    // if no authenticated user
+    if (!ethAddress) {
+      props.navigateToUrl('/moderation-app/unauthenticated');
+    } else {
+      // @TODO: additionally check if authenticated user is a moderator
+      fetchPendingContents();
+    }
+  }, [ethAddress]);
 
   // @TODO: Get logged ethAddress from Store state
 
   const fetchPendingContents = async () => {
-    const response = await postRequest('https://akasha-mod.herokuapp.com/flags/list');
-    // @TODO: get content details using contentId
-    const modResponse = response.map(
-      ({ contentType: type, contentId, date, reasons }: any, idx: number) => {
-        // formatting data to match labels already in use
-        const randomIdx = Math.floor(Math.random() * samplePendingData.length);
-        const randomData = samplePendingData[randomIdx];
-        return {
-          id: idx,
-          type: type,
-          ethAddress: contentId,
-          reasons: reasons,
-          description: '',
-          // @TODO: fetch reporter's Name and ENS (if applicable) from the profile API
-          reporterName: randomData.reporterName,
-          reporterENSName: randomData.reporterENSName,
-          entryDate: date,
-        };
-      },
-    );
-    setPendingItems(modResponse);
-  };
-  React.useEffect(() => {
-    if (!ethAddress) {
-      props.navigateToUrl('/moderation-app/unauthenticated');
+    // fetch pending (reported) contents
+    setRequesting(true);
+    try {
+      const response = await postRequest('https://akasha-mod.herokuapp.com/flags/list');
+      // @TODO: get content details using contentId
+      const modResponse = response.map(
+        ({ contentType: type, contentId, date, reasons }: any, idx: number) => {
+          // formatting data to match labels already in use
+          const randomIdx = Math.floor(Math.random() * samplePendingData.length);
+          const randomData = samplePendingData[randomIdx];
+          return {
+            id: idx,
+            type: type,
+            ethAddress: contentId,
+            reasons: reasons,
+            description: '',
+            // @TODO: fetch reporter's Name and ENS (if applicable) from the profile API
+            reporterName: randomData.reporterName,
+            reporterENSName: randomData.reporterENSName,
+            entryDate: date,
+          };
+        },
+      );
+      setPendingItems(modResponse);
+      setRequesting(false);
+    } catch (error) {
+      setRequesting(false);
+      console.error(error);
     }
-  }, [ethAddress]);
+  };
 
   const handleButtonClick = (
     entryId: string,
@@ -140,7 +149,7 @@ const ContentList: React.FC<IContentListProps> = props => {
               footerUrl2={'https://ethereum.world/terms-of-service'}
               cancelLabel={t('Cancel')}
               reportLabel={t(actionType)}
-              user={''}
+              user={ethAddress}
               contentId={flagged}
               size={size}
               closeModal={() => {
@@ -151,8 +160,11 @@ const ContentList: React.FC<IContentListProps> = props => {
         )}
       </ModalRenderer>
       <ContentTab isPending={isPending} setIsPending={setIsPending} />
-      {isPending && !!pendingItems.length
-        ? pendingItems.map((pendingItem: IPendingItem) => (
+      {requesting && <Text textAlign="center">Fetching items. Please wait...</Text>}
+      {!requesting &&
+        isPending &&
+        (pendingItems.length ? (
+          pendingItems.map((pendingItem: IPendingItem) => (
             <ContentCard
               key={pendingItem.id}
               isPending={isPending}
@@ -189,35 +201,40 @@ const ContentList: React.FC<IContentListProps> = props => {
               handleButtonClick={handleButtonClick}
             />
           ))
-        : sampleDelistedData.map(pendingData => (
-            <ContentCard
-              key={pendingData.id}
-              isPending={isPending}
-              entryData={pendingData.type === 'post' ? samplePostData : sampleProfileData}
-              repostsLabel={t('Repost')}
-              repliesLabel={t('Replies')}
-              locale={locale}
-              determinationLabel={t('Final determination')}
-              reportedLabel={t('Reported')}
-              contentType={t(pendingData.type)}
-              forLabel={t('for')}
-              additionalDescLabel={t("Moderator's evaluation")}
-              additionalDescContent={t(pendingData.evaluation)}
-              reportedByLabel={t('Originally reported by')}
-              ethAddress={t(pendingData.ethAddress)}
-              reasons={pendingData.reasons.map(el => t(el))}
-              reporterName={t(pendingData.reporterName)}
-              reporterENSName={t(pendingData.reporterENSName)}
-              reportedOnLabel={t('on')}
-              reportedDateTime={pendingData.entryDate}
-              moderatorName={t(pendingData.moderatorName)}
-              moderatorENSName={t(pendingData.moderatorENSName)}
-              moderatedByLabel={t('Moderated by')}
-              moderatedOnLabel={t('On')}
-              evaluationDateTime={pendingData.evaluationDate}
-              handleButtonClick={() => null}
-            />
-          ))}
+        ) : (
+          <Text textAlign="center">No pending items found. Please check again later</Text>
+        ))}
+      {!requesting &&
+        !isPending &&
+        sampleDelistedData.map(pendingData => (
+          <ContentCard
+            key={pendingData.id}
+            isPending={isPending}
+            entryData={pendingData.type === 'post' ? samplePostData : sampleProfileData}
+            repostsLabel={t('Repost')}
+            repliesLabel={t('Replies')}
+            locale={locale}
+            determinationLabel={t('Final determination')}
+            reportedLabel={t('Reported')}
+            contentType={t(pendingData.type)}
+            forLabel={t('for')}
+            additionalDescLabel={t("Moderator's evaluation")}
+            additionalDescContent={t(pendingData.evaluation)}
+            reportedByLabel={t('Originally reported by')}
+            ethAddress={t(pendingData.ethAddress)}
+            reasons={pendingData.reasons.map(el => t(el))}
+            reporterName={t(pendingData.reporterName)}
+            reporterENSName={t(pendingData.reporterENSName)}
+            reportedOnLabel={t('on')}
+            reportedDateTime={pendingData.entryDate}
+            moderatorName={t(pendingData.moderatorName)}
+            moderatorENSName={t(pendingData.moderatorENSName)}
+            moderatedByLabel={t('Moderated by')}
+            moderatedOnLabel={t('On')}
+            evaluationDateTime={pendingData.evaluationDate}
+            handleButtonClick={() => null}
+          />
+        ))}
     </Box>
   );
 };
