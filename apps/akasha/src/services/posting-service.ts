@@ -23,7 +23,7 @@ export const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {
   return ipfsUrl;
 };
 
-export const serializeToSlate = (
+export const serializeLegacyContentToSlate = (
   entryData: {
     CID: string;
     excerpt: string;
@@ -86,32 +86,89 @@ export const uploadMediaToIpfs = (ipfsService: any) => (data: string | File, isU
   return forkJoin([ipfsGatewayCall, uploadCall]).toPromise();
 };
 
-export const mapEntry = (entry: any, ipfsGateway: string) => {
-  let content;
+function toBinary(string: string) {
+  const codeUnits = new Uint16Array(string.length);
+  for (let i = 0; i < codeUnits.length; i++) {
+    codeUnits[i] = string.charCodeAt(i);
+  }
+  return String.fromCharCode(...new Uint8Array(codeUnits.buffer));
+}
+
+function fromBinary(binary: any) {
+  let result = binary;
   try {
-    content = JSON.parse(atob(entry.content[0].value));
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < bytes.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    result = String.fromCharCode(...new Uint16Array(bytes.buffer));
+  } finally {
+    return result;
+  }
+}
+
+export const serializeSlateToBase64 = (slateContent: any) => {
+  return btoa(toBinary(JSON.stringify(slateContent)));
+};
+
+export const serializeBase64ToSlate = (base64Content: string) => {
+  const stringContent = atob(base64Content);
+
+  let result;
+
+  const stringified = fromBinary(stringContent);
+  try {
+    result = JSON.parse(stringified);
+  } finally {
+    if (!Array.isArray(result)) {
+      result = JSON.parse(stringContent);
+    }
+    return result;
+  }
+};
+
+export const mapEntry = (
+  entry: {
+    content: { provider: string; property: string; value: string }[];
+    CID: string;
+    _id: string;
+    author: {
+      CID: string;
+      description: string;
+      avatar: string;
+      coverImage: string;
+      userName: string;
+      name: string;
+      ethAddress: string;
+    };
+  },
+  ipfsGateway: string,
+) => {
+  let slateContent = entry.content.find(elem => elem.property === 'slateContent');
+  let content = null;
+  try {
+    if (slateContent) {
+      content = serializeBase64ToSlate(slateContent.value);
+    }
   } catch (error) {
-    content = [
-      {
-        type: 'paragraph',
-        children: [{ text: entry.content[0].value }],
-      },
-    ];
+    if (slateContent) {
+      content = [
+        {
+          type: 'paragraph',
+          children: [{ text: slateContent.value }],
+        },
+      ];
+    }
   }
   return {
     author: {
       CID: entry.author.CID,
       description: entry.author.description,
       avatar: getMediaUrl(ipfsGateway, entry.author.avatar),
-      coverImage: getMediaUrl(
-        ipfsGateway,
-        entry.author.backgroundImage?.hash,
-        entry.author.backgroundImage?.data,
-      ),
+      coverImage: getMediaUrl(ipfsGateway, entry.author.coverImage),
       ensName: entry.author.userName,
       userName: entry.author.name,
       ethAddress: entry.author.ethAddress,
-      postsNumber: entry.author.entries && Object.keys(entry.author.entries).length,
     },
     CID: entry.CID,
     content: content,

@@ -8,7 +8,11 @@ import {
 } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { mapEntry, uploadMediaToIpfs } from '../../services/posting-service';
+import {
+  mapEntry,
+  uploadMediaToIpfs,
+  serializeSlateToBase64,
+} from '../../services/posting-service';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
@@ -109,7 +113,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       const { nextIndex, results } = data.posts;
       const entryIds: { entryId: string }[] = [];
       results.forEach(entry => {
-        if (entry.content[0].property === 'slateContent') {
+        if (entry.content.findIndex((elem: any) => elem.property === 'slateContent') > -1) {
           entryIds.push({ entryId: entry._id });
           const mappedEntry = mapEntry(entry, ipfsGateway);
           feedStateActions.setFeedItemData(mappedEntry);
@@ -213,7 +217,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           {
             provider: 'AkashaApp',
             property: 'slateContent',
-            value: btoa(JSON.stringify(data.content)),
+            value: serializeSlateToBase64(data.content),
           },
           {
             provider: 'AkashaApp',
