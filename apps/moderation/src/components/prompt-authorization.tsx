@@ -15,7 +15,7 @@ export interface IPromptAuthorizationProps {
 const PromptAuthorization: React.FC<IPromptAuthorizationProps> = props => {
   const { titleLabel, subtitleLabel } = props;
   return (
-    <PageWrapper>
+    <PageWrapper style={{ background: 'white' }}>
       <ContentWrapper pad={{ top: '0rem', horizontal: '1.4rem', bottom: '1.4rem' }}>
         <Box height="14rem" width="14rem" margin={{ bottom: 'small' }} alignSelf="center">
           <Image fit="contain" src={illustration} />

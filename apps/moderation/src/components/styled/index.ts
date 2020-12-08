@@ -7,17 +7,10 @@ const StyledBox: any = styled(Box)`
 `;
 
 const PageWrapper: any = styled(Box)`
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 199;
   background: ${props => props.theme.colors.modalBackgroundAlt};
 `;
 
 const ContentWrapper: any = styled(Box)`
-  width: 28%;
   top: 0;
   left: 0;
   bottom: 0;
