@@ -86,10 +86,10 @@ export const uploadMediaToIpfs = (ipfsService: any) => (data: string | File, isU
   return forkJoin([ipfsGatewayCall, uploadCall]).toPromise();
 };
 
-function toBinary(string: string) {
-  const codeUnits = new Uint16Array(string.length);
+function toBinary(data: string) {
+  const codeUnits = new Uint16Array(data.length);
   for (let i = 0; i < codeUnits.length; i++) {
-    codeUnits[i] = string.charCodeAt(i);
+    codeUnits[i] = data.charCodeAt(i);
   }
   return String.fromCharCode(...new Uint8Array(codeUnits.buffer));
 }
@@ -102,9 +102,10 @@ function fromBinary(binary: any) {
       bytes[i] = binary.charCodeAt(i);
     }
     result = String.fromCharCode(...new Uint16Array(bytes.buffer));
-  } finally {
-    return result;
+  } catch (err) {
+    console.log(err);
   }
+  return result;
 }
 
 export const serializeSlateToBase64 = (slateContent: any) => {
@@ -119,12 +120,11 @@ export const serializeBase64ToSlate = (base64Content: string) => {
   const stringified = fromBinary(stringContent);
   try {
     result = JSON.parse(stringified);
-  } finally {
-    if (!Array.isArray(result)) {
-      result = JSON.parse(stringContent);
-    }
-    return result;
+  } catch (err) {}
+  if (!Array.isArray(result)) {
+    result = JSON.parse(stringContent);
   }
+  return result;
 };
 
 export const mapEntry = (
@@ -144,7 +144,7 @@ export const mapEntry = (
   },
   ipfsGateway: string,
 ) => {
-  let slateContent = entry.content.find(elem => elem.property === 'slateContent');
+  const slateContent = entry.content.find(elem => elem.property === 'slateContent');
   let content = null;
   try {
     if (slateContent) {
