@@ -6,7 +6,6 @@ import commonServices, {
 import { EthProviders } from '@akashaproject/ui-awf-typings';
 import coreServices from '@akashaproject/sdk-core/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import { DB_NAME, DB_PASSWORD, moduleName as DB_MODULE } from '@akashaproject/sdk-db/lib/constants';
 import {
   AUTH_CACHE,
   AUTH_ENDPOINT,
@@ -53,10 +52,6 @@ const service: AkashaService = (invoke, log) => {
     const endPoint = authSettings[AUTH_ENDPOINT];
     const signer = web3.getSigner();
     const address = await signer.getAddress();
-    await setServiceSettings(DB_MODULE, [
-      [DB_PASSWORD, web3Utils.id(address)],
-      [DB_NAME, `ewa01${address.toLowerCase()}`], // so it doesn't crash for multiple auth users using the same browser
-    ]);
     const sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
     if (sessionStorage.getItem(sessKey)) {
       identity = PrivateKey.fromString(sessionStorage.getItem(sessKey));
