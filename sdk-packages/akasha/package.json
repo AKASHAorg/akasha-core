@@ -43,14 +43,14 @@
     "@akashaproject/sdk-registry": "*",
     "@akashaproject/sdk-posts": "*",
     "single-spa-react": "3.2.0",
-    "rxdb": "9.10.1",
     "rxjs": "6.6.3",
     "util": "0.12.3",
     "assert": "2.0.0",
     "stream-browserify": "3.0.0",
     "path-browserify": "1.0.1",
+    "process": "0.11.10",
     "buffer": "6.0.3",
-    "process": "0.11.10"
+    "safe-buffer": "5.2.1"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",

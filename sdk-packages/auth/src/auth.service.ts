@@ -6,7 +6,6 @@ import commonServices, {
 import { EthProviders } from '@akashaproject/ui-awf-typings';
 import coreServices from '@akashaproject/sdk-core/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import { DB_NAME, DB_PASSWORD, moduleName as DB_MODULE } from '@akashaproject/sdk-db/lib/constants';
 import {
   AUTH_CACHE,
   AUTH_ENDPOINT,
@@ -17,7 +16,9 @@ import {
   tokenCache,
 } from './constants';
 import { Client, PrivateKey, Users, Buckets, UserAuth } from '@textile/hub';
+import { Database } from '@textile/threaddb';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
+import { settingsSchema } from './db.schema';
 
 const service: AkashaService = (invoke, log) => {
   let identity: PrivateKey;
@@ -25,6 +26,7 @@ const service: AkashaService = (invoke, log) => {
   let hubUser: Users;
   let buckClient: Buckets;
   let auth: UserAuth;
+  let db: Database;
   let tokenGenerator: () => Promise<UserAuth>;
   const providerKey = '@providerType';
   const signIn = async (provider: EthProviders = EthProviders.Web3Injected) => {
@@ -50,10 +52,6 @@ const service: AkashaService = (invoke, log) => {
     const endPoint = authSettings[AUTH_ENDPOINT];
     const signer = web3.getSigner();
     const address = await signer.getAddress();
-    await setServiceSettings(DB_MODULE, [
-      [DB_PASSWORD, web3Utils.id(address)],
-      [DB_NAME, `ewa01${address.toLowerCase()}`], // so it doesn't crash for multiple auth users using the same browser
-    ]);
     const sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
     if (sessionStorage.getItem(sessKey)) {
       identity = PrivateKey.fromString(sessionStorage.getItem(sessKey));
@@ -69,6 +67,18 @@ const service: AkashaService = (invoke, log) => {
     buckClient = Buckets.withUserAuth(userAuth, endPoint);
     tokenGenerator = loginWithChallenge(identity, signer);
     auth = await tokenGenerator();
+
+    db = new Database(`awf-alpha-user-${identity.public.toString().slice(-8)}`, {
+      name: 'settings',
+      schema: settingsSchema,
+    });
+    await db.open(1);
+    // // not working atm
+    // const remote = await db.remote.setUserAuth(userAuth);
+    // remote.config.metadata.set('x-textile-thread-name', db.dexie.name);
+    // remote.config.metadata.set('x-textile-thread', db.id);
+    // await remote.authorize(identity);
+
     cache.set(AUTH_CACHE, {
       [ethAddressCache]: address,
       [tokenCache]: auth.token,
@@ -90,6 +100,8 @@ const service: AkashaService = (invoke, log) => {
       client: hubClient,
       user: hubUser,
       buck: buckClient,
+      db: db,
+      identity: identity,
     };
   };
 
