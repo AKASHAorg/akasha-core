@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { mapEntry, uploadMediaToIpfs } from '../services/posting-service';
+import { mapEntry, uploadMediaToTextile } from '../services/posting-service';
 import { getLoggedProfileStore } from '../state/logged-profile-state';
 import { combineLatest } from 'rxjs';
 
@@ -40,8 +40,6 @@ const PostPage: React.FC<IPostPage> = props => {
   const { size } = useViewportSize();
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
-
-  const ipfsService = props.channels.commons.ipfsService;
 
   const Login = getLoggedProfileStore();
   const loggedEthAddress = Login.useStoreState((state: any) => state.data.ethAddress);
@@ -104,7 +102,7 @@ const PostPage: React.FC<IPostPage> = props => {
     /* todo */
   };
 
-  const onUploadRequest = uploadMediaToIpfs(ipfsService);
+  const onUploadRequest = uploadMediaToTextile(props.channels.profiles.profileService);
 
   return (
     <>

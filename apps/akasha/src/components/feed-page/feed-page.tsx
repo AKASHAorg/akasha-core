@@ -10,7 +10,7 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import {
   mapEntry,
-  uploadMediaToIpfs,
+  uploadMediaToTextile,
   serializeSlateToBase64,
 } from '../../services/posting-service';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
@@ -191,7 +191,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     setCurrentEmbedEntry(undefined);
   };
 
-  const onUploadRequest = uploadMediaToIpfs(props.sdkModules.commons.ipfsService);
+  const onUploadRequest = uploadMediaToTextile(props.sdkModules.profiles.profileService);
 
   const handleNavigateToPost = redirectToPost(props.navigateToUrl);
 

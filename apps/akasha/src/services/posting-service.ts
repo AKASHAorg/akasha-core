@@ -1,4 +1,4 @@
-import { forkJoin } from 'rxjs';
+// import { forkJoin } from 'rxjs';
 
 export const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {
   let ipfsUrl = '';
@@ -80,10 +80,18 @@ export const serializeLegacyContentToSlate = (
   return serializedContent;
 };
 
-export const uploadMediaToIpfs = (ipfsService: any) => (data: string | File, isUrl = false) => {
-  const ipfsGatewayCall = ipfsService.getSettings({});
-  const uploadCall = ipfsService.upload([{ isUrl, content: data }]);
-  return forkJoin([ipfsGatewayCall, uploadCall]).toPromise();
+export const uploadMediaToTextile = (profileStore: any) => (data: any, isUrl = false) => {
+  // const gatewayCall = profileStore.getSettings({});
+  const uploadData: { isUrl: boolean; content: any; name?: string } = {
+    isUrl,
+    content: data,
+  };
+  if (data.name) {
+    uploadData.name = data.name;
+  }
+  const uploadCall = profileStore.saveMediaFile(uploadData);
+  return uploadCall.toPromise();
+  // return forkJoin([ipfsGatewayCall, uploadCall]).toPromise();
 };
 
 function toBinary(data: string) {

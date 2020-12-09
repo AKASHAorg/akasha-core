@@ -64,15 +64,14 @@ const ImagePopover: React.FC<IImagePopover> = props => {
     fileReader.addEventListener('load', () => {
       const result = fileReader.result as any;
       if (uploadRequest) {
-        uploadRequest(file)
-          .then(res => {
-            setUploadValue(`${res[0].data}/${res[1].data[0]}`);
-            setUploadValueName(`${res[0].data}/${res[1].data[0]}`);
-          })
-          .catch(err => {
-            // need design update for proper error display
-            setUploadValueName(err);
-          });
+        uploadRequest(file).then(res => {
+          setUploadValue(`${res[0].data}/${res[1].data[0]}`);
+          setUploadValueName(`${res[0].data}/${res[1].data[0]}`);
+        });
+        // .catch(err => {
+        //   // need design update for proper error display
+        //   setUploadValueName(err);
+        // });
       } else {
         setUploadValue(result);
         setUploadValueName(fileName);
