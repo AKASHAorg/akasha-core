@@ -15,9 +15,6 @@
     {
       "path": "../common"
     },
-    {
-      "path": "../db"
-    }
   ],
   "include": ["./src"],
   "exclude": ["./node_modules"]

@@ -8,31 +8,47 @@ class PostAPI extends DataSource {
   private readonly collection: string;
   private context: any;
   private readonly dbID: ThreadID;
+  private readonly allPostsCache: string;
 
   constructor({ collection, dbID }) {
     super();
     this.collection = collection;
     this.dbID = dbID;
+    this.allPostsCache = `${this.collection}:limit:offset`;
   }
 
   async initialize(config) {
     this.context = config.context;
   }
 
-  async getPost(id: string) {
+  async getPost(id: string, stopIter = false) {
     const db: Client = await getAppDB();
-    return await db.findByID<PostItem>(this.dbID, this.collection, id);
+    const cacheKey = `${this.collection}:postID${id}`;
+    if (queryCache.has(cacheKey)) {
+      return Promise.resolve(queryCache.get(cacheKey));
+    }
+    const post = await db.findByID<PostItem>(this.dbID, this.collection, id);
+    if (post?.quotes?.length && !stopIter) {
+      post.quotes = await Promise.all(post.quotes.map(postID => this.getPost(postID, true)));
+    }
+    queryCache.set(cacheKey, post);
+    return post;
   }
   async getPosts(limit: number, offset: string) {
     let posts;
     const db: Client = await getAppDB();
-    if (queryCache.has(this.collection)) {
-      posts = queryCache.get(this.collection);
+    if (queryCache.has(this.allPostsCache)) {
+      posts = queryCache.get(this.allPostsCache);
     } else {
       posts = await db.find<PostItem>(this.dbID, this.collection, {
         sort: { desc: true, fieldPath: 'creationDate' },
       });
-      queryCache.set(this.collection, posts);
+      for (const post of posts) {
+        if (post?.quotes?.length) {
+          post.quotes = await Promise.all(post.quotes.map(postID => this.getPost(postID)));
+        }
+      }
+      queryCache.set(this.allPostsCache, posts);
     }
 
     const offsetIndex = offset ? posts.findIndex(postItem => postItem._id === offset) : 0;
@@ -47,7 +63,7 @@ class PostAPI extends DataSource {
   async createPost(
     author: string,
     content: DataProvider[],
-    opt?: { title?: string; tags?: string[]; type?: string },
+    opt?: { title?: string; tags?: string[]; quotes?: string[]; type?: string },
   ) {
     const db: Client = await getAppDB();
     const post: PostItem = {
@@ -57,7 +73,8 @@ class PostAPI extends DataSource {
       type: opt.type || 'DEFAULT',
       content: Array.from(content),
       title: opt.title,
-      tags: Array.from(opt.tags),
+      tags: opt.tags ? Array.from(opt.tags) : [],
+      quotes: opt.quotes ? Array.from(opt.quotes) : [],
       metaData: [
         {
           property: 'version',
@@ -66,6 +83,7 @@ class PostAPI extends DataSource {
         },
       ],
     };
+    queryCache.del(this.allPostsCache);
     return await db.create(this.dbID, this.collection, [post]);
   }
 }
