@@ -94,7 +94,7 @@ function toBinary(data: string) {
   return String.fromCharCode(...new Uint8Array(codeUnits.buffer));
 }
 
-function fromBinary(binary: any) {
+function fromBinary(binary: any, logger?: any) {
   let result = binary;
   try {
     const bytes = new Uint8Array(binary.length);
@@ -103,7 +103,9 @@ function fromBinary(binary: any) {
     }
     result = String.fromCharCode(...new Uint16Array(bytes.buffer));
   } catch (err) {
-    console.log(err);
+    if (logger) {
+      logger.error('Error converting from binary: %j', err);
+    }
   }
   return result;
 }
