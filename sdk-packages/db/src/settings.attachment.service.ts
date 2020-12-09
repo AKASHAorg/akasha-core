@@ -1,53 +1,47 @@
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import { RxAttachmentCreator } from 'rxdb';
-import { SettingsDoc } from './collection.types/settings';
-import settings from './collections/settings';
-import dbServices, { DB_SERVICE, DB_SETTINGS_ATTACHMENT, moduleName } from './constants';
-import {
-  getSettingsAttachment,
-  putSettingsAttachment,
-  removeSettingAttachment,
-} from './db.methods/settings-attachment';
+import { DB_SETTINGS_ATTACHMENT } from './constants';
+import authServices, { AUTH_SERVICE } from '@akashaproject/sdk-auth/lib/constants';
 
 const service: AkashaService = (invoke, log) => {
-  const { getDB } = invoke(dbServices[DB_SERVICE]);
-  // @Todo: get address from current session
-  const getSettingsDoc = async (ethAddress: string) => {
-    const akashaDB = await getDB();
-    const settingsDoc: SettingsDoc = await akashaDB[settings.name]
-      .findOne({
-        $and: [{ moduleName: { $eq: moduleName } }, { ethAddress: { $eq: ethAddress } }],
-      })
-      .exec();
-    return settingsDoc;
+  const SETTINGS_COLLECTION = 'settings';
+  const get = async (obj: { moduleName: string }) => {
+    const { db, identity } = await invoke(authServices[AUTH_SERVICE]).getSession();
+    const Collection = db.collection(SETTINGS_COLLECTION);
+    return await Collection.findOne({
+      $and: [
+        {
+          pubKey: { $eq: identity.public.toString() },
+        },
+        {
+          moduleName: { $eq: obj.moduleName },
+        },
+      ],
+    });
   };
 
-  // @Todo: add initial record if there are no results
-  // idea: when you run for the first time the sdk there should be an initial migration
-  const get = async (args: { id: string; ethAddress: string }) => {
-    const settingsDoc = await getSettingsDoc(args.ethAddress);
-    if (settingsDoc) {
-      return getSettingsAttachment(settingsDoc, args.id);
+  const put = async (obj: { moduleName: string; _id?: string; services?: [] }) => {
+    const { db, identity } = await invoke(authServices[AUTH_SERVICE]).getSession();
+    const Collection = db.collection(SETTINGS_COLLECTION);
+    if (!obj._id) {
+      const exists = await get({ moduleName: obj.moduleName });
+      if (exists) {
+        Object.assign(obj, { _id: exists._id });
+      }
     }
-    return settingsDoc;
+    const doc = Object.assign({}, obj, { pubKey: identity.public.toString() });
+    return Collection.save(doc);
   };
 
-  const put = async (args: { obj: RxAttachmentCreator; ethAddress: string }) => {
-    let settingsDoc = await getSettingsDoc(args.ethAddress);
-    if (!settingsDoc) {
-      const akashaDB = await getDB();
-      settingsDoc = await akashaDB[settings.name].insert({
-        ethAddress: args.ethAddress,
-        moduleName: moduleName,
-        services: [],
-      });
+  const deleteSettings = async (args: { _id?: string; moduleName?: string }) => {
+    const { db } = await invoke(authServices[AUTH_SERVICE]).getSession();
+    const Collection = db.collection(SETTINGS_COLLECTION);
+    if (!args._id) {
+      const exists = await get({ moduleName: args.moduleName });
+      return await Collection.delete(exists._id);
     }
-    return putSettingsAttachment(settingsDoc, args.obj);
-  };
-
-  const deleteSettings = async (args: { id: string; ethAddress: string }) => {
-    const settingsDoc = await getSettingsDoc(args.ethAddress);
-    return removeSettingAttachment(settingsDoc, args.id);
+    if (args._id) {
+      return await Collection.delete(args._id);
+    }
   };
   return { get, put, deleteSettings };
 };
