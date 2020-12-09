@@ -359,7 +359,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                         bookmarkedLabel={t('Saved')}
                         onRepost={handleEntryRepost}
                         onEntryShare={handleEntryShare}
-                        onEntryFlag={handleEntryFlag(itemData.CID, visitorEthAddress)}
+                        onEntryFlag={handleEntryFlag(itemData.entryId, visitorEthAddress)}
                         onLinkCopy={handleLinkCopy}
                         onClickReplies={handleClickReplies}
                         handleFollow={handleFollow}
