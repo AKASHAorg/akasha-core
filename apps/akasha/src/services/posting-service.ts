@@ -164,6 +164,16 @@ export const mapEntry = (
       ];
     }
   }
+
+  const contentWithMediaGateways = content.map((node: any) => {
+    // in the slate content only the ipfs hash preprended with ipfs: is saved for the image urls
+    // like: ipfs:
+    if (node.type === 'image' && node.url.startsWith('ipfs:')) {
+      node.url = getMediaUrl(ipfsGateway, node.url.slice(4));
+    }
+    return node;
+  });
+
   return {
     author: {
       CID: entry.author.CID,
@@ -175,7 +185,7 @@ export const mapEntry = (
       ethAddress: entry.author.ethAddress,
     },
     CID: entry.CID,
-    content: content,
+    content: contentWithMediaGateways,
     entryId: entry._id,
     ipfsLink: entry._id,
     permalink: 'null',
