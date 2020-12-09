@@ -21,13 +21,16 @@ class PostAPI extends DataSource {
     this.context = config.context;
   }
 
-  async getPost(id: string) {
+  async getPost(id: string, stopIter = false) {
     const db: Client = await getAppDB();
     const cacheKey = `${this.collection}:postID${id}`;
     if (queryCache.has(cacheKey)) {
       return Promise.resolve(queryCache.get(cacheKey));
     }
     const post = await db.findByID<PostItem>(this.dbID, this.collection, id);
+    if (post?.quotes?.length && !stopIter) {
+      post.quotes = await Promise.all(post.quotes.map(postID => this.getPost(postID, true)));
+    }
     queryCache.set(cacheKey, post);
     return post;
   }
