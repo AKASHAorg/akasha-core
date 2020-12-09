@@ -32,7 +32,7 @@ interface IPostPage {
 }
 
 const PostPage: React.FC<IPostPage> = props => {
-  const { slotId, flagged, modalOpen, setFlagged, setModalOpen, showLoginModal } = props;
+  const { slotId, flagged, modalOpen, setFlagged, setModalOpen, showLoginModal, logger } = props;
 
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
@@ -55,7 +55,7 @@ const PostPage: React.FC<IPostPage> = props => {
     call.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
       const entry = resp[1].data.getPost;
-      const mappedEntry = mapEntry(entry, ipfsGateway);
+      const mappedEntry = mapEntry(entry, ipfsGateway, logger);
       setItemData(mappedEntry);
     });
   }, []);

@@ -112,15 +112,17 @@ export const serializeSlateToBase64 = (slateContent: any) => {
   return btoa(toBinary(JSON.stringify(slateContent)));
 };
 
-export const serializeBase64ToSlate = (base64Content: string) => {
+export const serializeBase64ToSlate = (base64Content: string, logger?: any) => {
   const stringContent = atob(base64Content);
-
   let result;
-
   const stringified = fromBinary(stringContent);
   try {
     result = JSON.parse(stringified);
-  } catch (err) {}
+  } catch (err) {
+    if (logger) {
+      logger.error('Error parsing content: %j', err);
+    }
+  }
   if (!Array.isArray(result)) {
     result = JSON.parse(stringContent);
   }
@@ -143,14 +145,18 @@ export const mapEntry = (
     };
   },
   ipfsGateway: string,
+  logger?: any,
 ) => {
   const slateContent = entry.content.find(elem => elem.property === 'slateContent');
   let content = null;
   try {
     if (slateContent) {
-      content = serializeBase64ToSlate(slateContent.value);
+      content = serializeBase64ToSlate(slateContent.value, logger);
     }
   } catch (error) {
+    if (logger) {
+      logger.error('Error serializing base64 to slateContent: %j', error);
+    }
     if (slateContent) {
       content = [
         {

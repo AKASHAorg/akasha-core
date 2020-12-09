@@ -59,6 +59,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     jwtToken,
     onError,
     sdkModules,
+    logger,
   } = props;
   const [feedState, feedStateActions] = useFeedReducer({});
   const [isLoading, setIsLoading] = React.useState(false);
@@ -74,7 +75,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     ethAddress,
     onError,
     sdkModules: props.sdkModules,
-    logger: props.logger,
+    logger: logger,
   });
 
   const handleLoadMore = async (payload: ILoadItemsPayload) => {
@@ -115,7 +116,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       results.forEach(entry => {
         if (entry.content.findIndex((elem: any) => elem.property === 'slateContent') > -1) {
           entryIds.push({ entryId: entry._id });
-          const mappedEntry = mapEntry(entry, ipfsGateway);
+          const mappedEntry = mapEntry(entry, ipfsGateway, logger);
           feedStateActions.setFeedItemData(mappedEntry);
         }
       });
@@ -238,7 +239,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         });
       });
     } catch (err) {
-      props.logger.error('Error publishing entry %j', err);
+      logger.error('Error publishing entry %j', err);
     }
     setShowEditor(false);
   };
