@@ -73,7 +73,7 @@ const service: AkashaService = (invoke, log) => {
     tokenGenerator = loginWithChallenge(identity, signer);
     auth = await tokenGenerator();
 
-    db = new Database(`awf-alpha-user-${identity.toString().slice(-6)}`, {
+    db = new Database(`awf-alpha-user-${identity.public.toString().slice(-8)}`, {
       name: 'settings',
       schema: settingsSchema,
     });
