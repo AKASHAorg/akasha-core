@@ -2,6 +2,7 @@ import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import { runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
 import { LinkedProfileProp, LinkedProperty, PROFILE_MEDIA_FILES, PROFILE_STORE } from './constants';
 import authServices, { AUTH_SERVICE } from '@akashaproject/sdk-auth/lib/constants';
+import { folderPrefix } from '@akashaproject/sdk-common/lib/ipfs.methods/upload';
 // tslint:disable-next-line:no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');
 
@@ -150,9 +151,10 @@ const service: AkashaService = (invoke, log) => {
       throw new Error('Must specify a name for the media file');
     }
     if (data.isUrl) {
-      const src = await urlSource(data.content);
-      file = src.content;
-      path = data.name ? data.name : file.path;
+      for await (const src of urlSource(data.content)) {
+        file = src.content;
+        path = data.name ? data.name : src.path;
+      }
     } else {
       file = data.content;
       path = data.name;
@@ -163,7 +165,7 @@ const service: AkashaService = (invoke, log) => {
       throw new Error('Failed to open bucket');
     }
     const buckPath = `ewa/${path}`;
-    const upload = await buck.pushPath(root, buckPath, { path: path, content: file });
+    const upload = await buck.pushPath(root.key, buckPath, { path: buckPath, content: file });
     const cid = upload.path.cid.toString();
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
     const mutation = `
