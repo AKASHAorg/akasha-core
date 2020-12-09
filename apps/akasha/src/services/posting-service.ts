@@ -94,19 +94,15 @@ function toBinary(data: string) {
   return String.fromCharCode(...new Uint8Array(codeUnits.buffer));
 }
 
-function fromBinary(binary: any, logger?: any) {
+function fromBinary(binary: any) {
   let result = binary;
-  try {
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < bytes.length; i++) {
-      bytes[i] = binary.charCodeAt(i);
-    }
-    result = String.fromCharCode(...new Uint16Array(bytes.buffer));
-  } catch (err) {
-    if (logger) {
-      logger.error('Error converting from binary: %j', err);
-    }
+
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < bytes.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
   }
+  result = String.fromCharCode(...new Uint16Array(bytes.buffer));
+
   return result;
 }
 
@@ -117,8 +113,8 @@ export const serializeSlateToBase64 = (slateContent: any) => {
 export const serializeBase64ToSlate = (base64Content: string, logger?: any) => {
   const stringContent = atob(base64Content);
   let result;
-  const stringified = fromBinary(stringContent);
   try {
+    const stringified = fromBinary(stringContent);
     result = JSON.parse(stringified);
   } catch (err) {
     if (logger) {

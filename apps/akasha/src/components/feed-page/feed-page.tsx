@@ -227,6 +227,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           },
         ],
         post: {
+          quotes: [data.metadata.quote],
           tags: data.metadata.tags,
         },
       };
