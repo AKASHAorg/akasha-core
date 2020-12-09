@@ -154,8 +154,7 @@ export const profileStateModel: ProfileStateModel = {
     const $web3Utils = commons.web3UtilsService.getUtils(null);
     const $ipfsInstance = commons.ipfsService.getInstance(null);
     const $settingsAttachment = db.settingsAttachment.get({
-      id: BOX_SETTINGS_ID,
-      ethAddress: ethAddress,
+      moduleName: BOX_SETTINGS_ID,
     });
     try {
       const call = forkJoin({
@@ -169,10 +168,14 @@ export const profileStateModel: ProfileStateModel = {
       return call.subscribe(
         async (deps: any) => {
           try {
+            let currentSettings: any;
+            if (deps.settingsAttachment.data?.services.length) {
+              currentSettings = Object.fromEntries(deps.settingsAttachment.data.services);
+            }
             const result = await authenticateBox(
               deps.web3Instance.data,
               deps.web3Utils.data,
-              JSON.parse(deps.settingsAttachment.data),
+              currentSettings,
               ethAddress,
               deps.ipfsInstance.data,
             );
@@ -403,18 +406,17 @@ export const profileStateModel: ProfileStateModel = {
    * if there are no settings in db, get default settings
    * from 3box library
    */
-  getBoxSettings: thunk(async (actions, ethAddress, { injections }) => {
+  getBoxSettings: thunk(async (actions, _ethAddress, { injections }) => {
     let settings = getDefaultBoxSettings();
     const { channels, logger } = injections;
     try {
       const call = channels.db.settingsAttachment.get({
-        ethAddress,
-        id: BOX_SETTINGS_ID,
+        moduleName: BOX_SETTINGS_ID,
       });
       call.subscribe(
         (response: any) => {
-          if (response.data) {
-            const boxSettings = JSON.parse(response?.data);
+          if (response.data?.services.length) {
+            const boxSettings = Object.fromEntries(response.data.services);
             settings = {
               pinningNode: boxSettings?.pinningNode,
               addressServer: boxSettings?.addressServer,
@@ -451,17 +453,15 @@ export const profileStateModel: ProfileStateModel = {
     });
     try {
       const call = channels.db.settingsAttachment.put({
-        ethAddress: payload.ethAddress,
-        obj: { data: JSON.stringify(data), type: 'string', id: '3box-settings-ID' },
+        moduleName: BOX_SETTINGS_ID,
+        services: Object.entries(data),
       });
       call.subscribe(
-        async (response: any) => {
-          const attachment = await response.data.doc.getAttachment('3box-settings-ID');
-          const text = await attachment.getStringData();
+        async (_response: any) => {
           actions.updateData({
             settings: {
-              pinningNode: JSON.parse(text).pinningNode,
-              addressServer: JSON.parse(text).addressServer,
+              pinningNode: data?.pinningNode,
+              addressServer: data?.addressServer,
             },
             isSaving: false,
           });
@@ -489,7 +489,7 @@ export const profileStateModel: ProfileStateModel = {
    * Add the ability to reset the settings to default ones
    * from the 3box lib
    */
-  resetBoxSettings: thunk(async (actions, ethAddress, { injections }) => {
+  resetBoxSettings: thunk(async (actions, _ethAddress, { injections }) => {
     const { channels, logger } = injections;
     const defaultSettings = getDefaultBoxSettings();
     actions.updateData({
@@ -497,8 +497,7 @@ export const profileStateModel: ProfileStateModel = {
     });
     try {
       const call = channels.db.settingsAttachment.deleteSettings({
-        ethAddress,
-        id: '3box-settings-ID',
+        moduleName: BOX_SETTINGS_ID,
       });
       call.subscribe(
         () => {

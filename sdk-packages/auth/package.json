@@ -32,8 +32,8 @@
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-runtime": "*",
     "@akashaproject/sdk-common": "*",
-    "@akashaproject/sdk-db": "*",
     "@akashaproject/ui-awf-typings": "*",
-    "@textile/hub": "2.0.2"
+    "@textile/hub": "3.0.0",
+    "@textile/threaddb": "0.0.5"
   }
 }
