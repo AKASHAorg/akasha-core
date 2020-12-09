@@ -17,7 +17,9 @@ import {
   tokenCache,
 } from './constants';
 import { Client, PrivateKey, Users, Buckets, UserAuth } from '@textile/hub';
+import { Database } from '@textile/threaddb';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
+import { settingsSchema } from './db.schema';
 
 const service: AkashaService = (invoke, log) => {
   let identity: PrivateKey;
@@ -25,6 +27,7 @@ const service: AkashaService = (invoke, log) => {
   let hubUser: Users;
   let buckClient: Buckets;
   let auth: UserAuth;
+  let db: Database;
   let tokenGenerator: () => Promise<UserAuth>;
   const providerKey = '@providerType';
   const signIn = async (provider: EthProviders = EthProviders.Web3Injected) => {
@@ -69,6 +72,18 @@ const service: AkashaService = (invoke, log) => {
     buckClient = Buckets.withUserAuth(userAuth, endPoint);
     tokenGenerator = loginWithChallenge(identity, signer);
     auth = await tokenGenerator();
+
+    db = new Database(`awf-alpha-user-${identity.toString().slice(-6)}`, {
+      name: 'settings',
+      schema: settingsSchema,
+    });
+    await db.open(1);
+    // // not working atm
+    // const remote = await db.remote.setUserAuth(userAuth);
+    // remote.config.metadata.set('x-textile-thread-name', db.dexie.name);
+    // remote.config.metadata.set('x-textile-thread', db.id);
+    // await remote.authorize(identity);
+
     cache.set(AUTH_CACHE, {
       [ethAddressCache]: address,
       [tokenCache]: auth.token,
@@ -90,6 +105,8 @@ const service: AkashaService = (invoke, log) => {
       client: hubClient,
       user: hubUser,
       buck: buckClient,
+      db: db,
+      identity: identity,
     };
   };
 
