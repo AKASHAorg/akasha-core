@@ -24,6 +24,7 @@ const service: AkashaService = (invoke, log) => {
           userName
           avatar
           coverImage
+          description
           ethAddress
         }
         title
@@ -77,6 +78,7 @@ const service: AkashaService = (invoke, log) => {
             userName
             avatar
             coverImage
+            description
             ethAddress
           }
           title

@@ -7,7 +7,7 @@ import { Avatar } from '../Avatar/index';
 import { IEntryData } from '../Cards/entry-cards/entry-box';
 import { Icon } from '../Icon/index';
 import { EmojiPopover, ImagePopover } from '../Popovers/index';
-import EmbedBox from './embed-box';
+import { EmbedBox } from './embed-box';
 import { FormatToolbar } from './format-toolbar';
 import { CustomEditor } from './helpers';
 import { defaultValue } from './initialValue';
@@ -362,7 +362,11 @@ const EditorBox: React.FC<IEditorBox> = props => {
                 <MentionPopover ref={mentionPopoverRef} values={tags} currentIndex={index} />
               )}
             </Slate>
-            {embedEntryData && <EmbedBox embedEntryData={embedEntryData} />}
+            {embedEntryData && (
+              <Box pad={{ vertical: 'medium' }}>
+                <EmbedBox embedEntryData={embedEntryData} />
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>
