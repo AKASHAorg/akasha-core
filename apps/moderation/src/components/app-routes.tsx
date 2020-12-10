@@ -89,10 +89,10 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               <ContentList
                 ethAddress={ethAddress}
                 slotId={layout.app.modalSlotId}
+                logger={logger}
                 navigateToUrl={singleSpa.navigateToUrl}
                 // sdkModules={sdkModules}
                 // globalChannel={globalChannel}
-                // logger={logger}
                 // showLoginModal={showLoginModal}
                 // onError={onError}
               />
