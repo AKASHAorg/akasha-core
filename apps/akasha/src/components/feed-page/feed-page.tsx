@@ -8,11 +8,7 @@ import {
 } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import {
-  mapEntry,
-  uploadMediaToTextile,
-  serializeSlateToBase64,
-} from '../../services/posting-service';
+import { mapEntry, uploadMediaToTextile, buildPublishObject } from '../../services/posting-service';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
@@ -74,7 +70,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [bookmarks, bookmarkActions] = useEntryBookmark({
     ethAddress,
     onError,
-    sdkModules: props.sdkModules,
+    sdkModules: sdkModules,
     logger: logger,
   });
 
@@ -89,8 +85,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   const loadItemData = async (payload: ILoadItemDataPayload) => {
-    const entryCall = props.sdkModules.posts.entries.getEntry({ entryId: payload.itemId });
-    const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
+    const entryCall = sdkModules.posts.entries.getEntry({ entryId: payload.itemId });
+    const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
     const getEntryCall = combineLatest([ipfsGatewayCall, entryCall]);
     getEntryCall.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
@@ -100,11 +96,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     });
   };
   const fetchEntries = async (payload: { limit: number; offset?: string }) => {
-    const getEntriesCall = props.sdkModules.posts.entries.getEntries({
+    const getEntriesCall = sdkModules.posts.entries.getEntries({
       ...payload,
       offset: payload.offset || feedState.nextItemId,
     });
-    const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
+    const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
     const call = combineLatest([ipfsGatewayCall, getEntriesCall]);
     call.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
@@ -114,9 +110,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       const { nextIndex, results } = data.posts;
       const entryIds: { entryId: string }[] = [];
       results.forEach(entry => {
+        // filter out entries without content in slate format
+        // currently entries can display only content in slate format
+        // this can be changed later
         if (entry.content.findIndex((elem: any) => elem.property === 'slateContent') > -1) {
           entryIds.push({ entryId: entry._id });
-          const mappedEntry = mapEntry(entry, ipfsGateway, logger);
+          const mappedEntry = mapEntry(entry, ipfsGateway);
           feedStateActions.setFeedItemData(mappedEntry);
         }
       });
@@ -191,7 +190,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     setCurrentEmbedEntry(undefined);
   };
 
-  const onUploadRequest = uploadMediaToTextile(props.sdkModules.profiles.profileService);
+  const onUploadRequest = uploadMediaToTextile(
+    sdkModules.profiles.profileService,
+    sdkModules.commons.ipfsService,
+  );
 
   const handleNavigateToPost = redirectToPost(props.navigateToUrl);
 
@@ -213,25 +215,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
 
     try {
-      const entryObj = {
-        data: [
-          {
-            provider: 'AkashaApp',
-            property: 'slateContent',
-            value: serializeSlateToBase64(data.content),
-          },
-          {
-            provider: 'AkashaApp',
-            property: 'textContent',
-            value: data.textContent,
-          },
-        ],
-        post: {
-          quotes: [data.metadata.quote],
-          tags: data.metadata.tags,
-        },
-      };
-      const postEntryCall = sdkModules.posts.entries.postEntry(entryObj);
+      const publishObj = buildPublishObject(data);
+      const postEntryCall = sdkModules.posts.entries.postEntry(publishObj);
       postEntryCall.subscribe((postingResp: any) => {
         const publishedEntryId = postingResp.data.createPost;
         feedStateActions.setFeedItems({

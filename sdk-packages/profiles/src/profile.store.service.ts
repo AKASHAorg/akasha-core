@@ -2,7 +2,6 @@ import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import { runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
 import { LinkedProfileProp, LinkedProperty, PROFILE_MEDIA_FILES, PROFILE_STORE } from './constants';
 import authServices, { AUTH_SERVICE } from '@akashaproject/sdk-auth/lib/constants';
-import { folderPrefix } from '@akashaproject/sdk-common/lib/ipfs.methods/upload';
 // tslint:disable-next-line:no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');
 

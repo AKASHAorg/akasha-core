@@ -1,4 +1,4 @@
-// import { forkJoin } from 'rxjs';
+import { forkJoin } from 'rxjs';
 
 export const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {
   let ipfsUrl = '';
@@ -80,8 +80,11 @@ export const serializeLegacyContentToSlate = (
   return serializedContent;
 };
 
-export const uploadMediaToTextile = (profileStore: any) => (data: any, isUrl = false) => {
-  // const gatewayCall = profileStore.getSettings({});
+export const uploadMediaToTextile = (profileStore: any, ipfsSettings: any) => (
+  data: any,
+  isUrl = false,
+) => {
+  const gatewayCall = ipfsSettings.getSettings({});
   const uploadData: { isUrl: boolean; content: any; name?: string } = {
     isUrl,
     content: data,
@@ -90,8 +93,7 @@ export const uploadMediaToTextile = (profileStore: any) => (data: any, isUrl = f
     uploadData.name = data.name;
   }
   const uploadCall = profileStore.saveMediaFile(uploadData);
-  return uploadCall.toPromise();
-  // return forkJoin([ipfsGatewayCall, uploadCall]).toPromise();
+  return forkJoin([gatewayCall, uploadCall]).toPromise();
 };
 
 function toBinary(data: string) {
@@ -138,10 +140,11 @@ export const serializeBase64ToSlate = (base64Content: string, logger?: any) => {
 export const mapEntry = (
   entry: {
     content: { provider: string; property: string; value: string }[];
-    CID: string;
+    CID?: string;
     _id: string;
+    quotes: any[];
     author: {
-      CID: string;
+      CID?: string;
       description: string;
       avatar: string;
       coverImage: string;
@@ -174,13 +177,19 @@ export const mapEntry = (
   }
 
   const contentWithMediaGateways = content.map((node: any) => {
-    // in the slate content only the ipfs hash preprended with ipfs: is saved for the image urls
-    // like: ipfs:
-    if (node.type === 'image' && node.url.startsWith('ipfs:')) {
-      node.url = getMediaUrl(ipfsGateway, node.url.slice(4));
+    // in the slate content only the ipfs hash prepended with CID: is saved for the image urls
+    // like: CID:bafybeidywav2f4jezkpqe7ydkvhrvqxf3mp76aqzhpvlhp2zg6xapg5nr4
+    const nodeClone = Object.assign({}, node);
+    if (node.type === 'image' && node.url.startsWith('CID:')) {
+      nodeClone.url = getMediaUrl(ipfsGateway, node.url.slice(4));
     }
-    return node;
+    return nodeClone;
   });
+
+  let quotedEntry: any;
+  if (entry.quotes && entry.quotes[0]) {
+    quotedEntry = mapEntry(entry.quotes[0], ipfsGateway, logger);
+  }
 
   return {
     author: {
@@ -194,8 +203,49 @@ export const mapEntry = (
     },
     CID: entry.CID,
     content: contentWithMediaGateways,
+    quote: quotedEntry,
     entryId: entry._id,
     ipfsLink: entry._id,
     permalink: 'null',
   };
+};
+
+export const buildPublishObject = (data: any) => {
+  // save only the ipfs CID prepended with CID: for the slate content image urls
+  const cleanedContent = data.content.map((node: any) => {
+    const nodeClone = Object.assign({}, node);
+    if (node.type === 'image' && node.url.includes('gateway.ipfs')) {
+      const hashIndex = node.url.lastIndexOf('/');
+      const hash = node.url.substr(hashIndex + 1);
+      nodeClone.url = `CID:${hash}`;
+    }
+    return nodeClone;
+  });
+
+  const quotes = [];
+  if (data.metadata.quote) {
+    quotes.push(data.metadata.quote);
+  }
+
+  const entryObj = {
+    data: [
+      {
+        provider: 'AkashaApp',
+        property: 'slateContent',
+        // perform 2 transforms on content: change unicode chars to ASCII and then convert to base64
+        value: serializeSlateToBase64(cleanedContent),
+      },
+      {
+        provider: 'AkashaApp',
+        property: 'textContent',
+        value: data.textContent,
+      },
+    ],
+    post: {
+      quotes: quotes,
+      tags: data.metadata.tags,
+    },
+  };
+
+  return entryObj;
 };

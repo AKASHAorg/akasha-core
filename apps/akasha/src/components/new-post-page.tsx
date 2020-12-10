@@ -19,7 +19,10 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
   const Login = getLoggedProfileStore();
   const loginEthAddr = Login.useStoreState((state: any) => state.data.ethAddress);
 
-  const onUploadRequest = uploadMediaToTextile(sdkModules.profiles.profileService);
+  const onUploadRequest = uploadMediaToTextile(
+    sdkModules.profiles.profileService,
+    sdkModules.commons.ipfsService,
+  );
 
   const { t } = useTranslation();
 

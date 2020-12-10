@@ -4,6 +4,7 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { mapEntry, uploadMediaToTextile } from '../services/posting-service';
+import { redirectToPost } from '../services/routing-service';
 import { getLoggedProfileStore } from '../state/logged-profile-state';
 import { combineLatest } from 'rxjs';
 
@@ -29,10 +30,20 @@ interface IPostPage {
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   showLoginModal: () => void;
+  navigateToUrl: (path: string) => void;
 }
 
 const PostPage: React.FC<IPostPage> = props => {
-  const { slotId, flagged, modalOpen, setFlagged, setModalOpen, showLoginModal, logger } = props;
+  const {
+    slotId,
+    flagged,
+    modalOpen,
+    setFlagged,
+    setModalOpen,
+    showLoginModal,
+    logger,
+    navigateToUrl,
+  } = props;
 
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
@@ -56,7 +67,7 @@ const PostPage: React.FC<IPostPage> = props => {
       const mappedEntry = mapEntry(entry, ipfsGateway, logger);
       setItemData(mappedEntry);
     });
-  }, []);
+  }, [postId]);
 
   const isBookmarked = false;
   const handleAvatarClick = () => {
@@ -102,7 +113,12 @@ const PostPage: React.FC<IPostPage> = props => {
     /* todo */
   };
 
-  const onUploadRequest = uploadMediaToTextile(props.channels.profiles.profileService);
+  const handleNavigateToPost = redirectToPost(navigateToUrl);
+
+  const onUploadRequest = uploadMediaToTextile(
+    props.channels.profiles.profileService,
+    props.channels.commons.ipfsService,
+  );
 
   return (
     <>
@@ -182,11 +198,12 @@ const PostPage: React.FC<IPostPage> = props => {
               onClickReplies={handleClickReplies}
               handleFollow={handleFollow}
               handleUnfollow={handleUnfollow}
+              onContentClick={handleNavigateToPost}
             />
           </Box>
           {!loggedEthAddress && (
             <Box margin="medium">
-              <EditorPlaceholder onClick={props.showLoginModal} />{' '}
+              <EditorPlaceholder onClick={props.showLoginModal} />
             </Box>
           )}
           {loggedEthAddress && (

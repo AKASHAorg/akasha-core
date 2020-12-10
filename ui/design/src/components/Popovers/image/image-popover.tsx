@@ -2,6 +2,7 @@ import { Box, Tabs, Text } from 'grommet';
 import * as React from 'react';
 import { Icon } from '../../Icon/index';
 import { LinkInput } from '../../Input/index';
+import Spinner from '../../Spinner';
 import {
   StyledButton,
   StyledDrop,
@@ -26,18 +27,20 @@ const ImagePopover: React.FC<IImagePopover> = props => {
   const [linkInputValue, setLinkInputValue] = React.useState('');
   const [uploadValue, setUploadValue] = React.useState('');
   const [uploadValueName, setUploadValueName] = React.useState('');
+  const [uploading, setUploading] = React.useState(false);
 
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 
   const handleLinkInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     if (uploadRequest) {
-      uploadRequest(ev.target.value, true).then(res => {
-        setLinkInputValue(`${res[0].data}/${res[1].data[0]}`);
-      });
-      // .catch(err => {
-      //   // need design update for proper error display
-      //   setLinkInputValue(err);
-      // });
+      uploadRequest(ev.target.value, true)
+        .then(res => {
+          setLinkInputValue(`${res[0].data}/${res[1].data[0]}`);
+        })
+        .catch(err => {
+          // need design update for proper error display
+          setLinkInputValue(err);
+        });
     } else {
       setLinkInputValue(ev.target.value);
     }
@@ -64,17 +67,22 @@ const ImagePopover: React.FC<IImagePopover> = props => {
     fileReader.addEventListener('load', () => {
       const result = fileReader.result as any;
       if (uploadRequest) {
-        uploadRequest(file).then(res => {
-          setUploadValue(`${res[0].data}/${res[1].data[0]}`);
-          setUploadValueName(`${res[0].data}/${res[1].data[0]}`);
-        });
-        // .catch(err => {
-        //   // need design update for proper error display
-        //   setUploadValueName(err);
-        // });
+        setUploading(true);
+        uploadRequest(file)
+          .then(res => {
+            setUploadValue(`${res[0].data}/${res[1].data}`);
+            setUploadValueName(`${res[0].data}/${res[1].data}`);
+            setUploading(false);
+          })
+          .catch(err => {
+            // need design update for proper error display
+            setUploadValueName(err);
+            setUploading(false);
+          });
       } else {
         setUploadValue(result);
         setUploadValueName(fileName);
+        setUploading(false);
       }
     });
   };
@@ -138,12 +146,15 @@ const ImagePopover: React.FC<IImagePopover> = props => {
           )}
           {!uploadValue && (
             <Box align="center" justify="center" pad={{ top: 'medium' }}>
-              <StyledInputDiv onClick={handleUploadInputClick}>
-                <StyledText size="medium" color="secondaryText">
-                  {'Drop an image or click to upload a file from your computer'}
-                </StyledText>
-                <StyledImageInput onChange={handleFileUpload} type="file" ref={uploadInputRef} />
-              </StyledInputDiv>
+              {!uploading && (
+                <StyledInputDiv onClick={handleUploadInputClick}>
+                  <StyledText size="medium" color="secondaryText">
+                    {'Drop an image or click to upload a file from your computer'}
+                  </StyledText>
+                  <StyledImageInput onChange={handleFileUpload} type="file" ref={uploadInputRef} />
+                </StyledInputDiv>
+              )}
+              {uploading && <Spinner />}
             </Box>
           )}
         </StyledTab>
