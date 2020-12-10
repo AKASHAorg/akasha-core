@@ -149,11 +149,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onClickReplies(entryData.entryId);
   };
 
-  const handleContentClick = (entryData?: IEntryData) => {
-    if (onContentClick && typeof onContentClick === 'function' && entryData) {
+  const handleContentClick = (data?: IEntryData) => {
+    if (onContentClick && typeof onContentClick === 'function' && data) {
       onContentClick({
-        authorEthAddress: entryData.author.ethAddress,
-        entryId: entryData.entryId,
+        authorEthAddress: data.author.ethAddress,
+        entryId: data.entryId,
         replyTo: null,
       });
     }
