@@ -63,9 +63,11 @@ const PostPage: React.FC<IPostPage> = props => {
     const call = combineLatest([ipfsGatewayCall, entryCall]);
     call.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
-      const entry = resp[1].data.getPost;
-      const mappedEntry = mapEntry(entry, ipfsGateway, logger);
-      setItemData(mappedEntry);
+      const entry = resp[1].data?.getPost;
+      if (entry) {
+        const mappedEntry = mapEntry(entry, ipfsGateway, logger);
+        setItemData(mappedEntry);
+      }
     });
   }, [postId]);
 

@@ -8,7 +8,12 @@ import {
 } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { mapEntry, uploadMediaToTextile, buildPublishObject } from '../../services/posting-service';
+import {
+  mapEntry,
+  uploadMediaToTextile,
+  buildPublishObject,
+  PROPERTY_SLATE_CONTENT,
+} from '../../services/posting-service';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
@@ -90,9 +95,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     const getEntryCall = combineLatest([ipfsGatewayCall, entryCall]);
     getEntryCall.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
-      const entry = resp[1].data.getPost;
-      const mappedEntry = mapEntry(entry, ipfsGateway);
-      feedStateActions.setFeedItemData(mappedEntry);
+      const entry = resp[1].data?.getPost;
+      if (entry) {
+        const mappedEntry = mapEntry(entry, ipfsGateway);
+        feedStateActions.setFeedItemData(mappedEntry);
+      }
     });
   };
   const fetchEntries = async (payload: { limit: number; offset?: string }) => {
@@ -113,7 +120,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         // filter out entries without content in slate format
         // currently entries can display only content in slate format
         // this can be changed later
-        if (entry.content.findIndex((elem: any) => elem.property === 'slateContent') > -1) {
+        if (entry.content.findIndex((elem: any) => elem.property === PROPERTY_SLATE_CONTENT) > -1) {
           entryIds.push({ entryId: entry._id });
           const mappedEntry = mapEntry(entry, ipfsGateway);
           feedStateActions.setFeedItemData(mappedEntry);

@@ -1,5 +1,10 @@
 import { forkJoin } from 'rxjs';
 
+export const MEDIA_URL_PREFIX = 'CID:';
+export const PROVIDER_AKASHA = 'AkashaApp';
+export const PROPERTY_SLATE_CONTENT = 'slateContent';
+export const PROPERTY_TEXT_CONTENT = 'textContent';
+
 export const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {
   let ipfsUrl = '';
 
@@ -156,7 +161,7 @@ export const mapEntry = (
   ipfsGateway: string,
   logger?: any,
 ) => {
-  const slateContent = entry.content.find(elem => elem.property === 'slateContent');
+  const slateContent = entry.content.find(elem => elem.property === PROPERTY_SLATE_CONTENT);
   let content = null;
   try {
     if (slateContent) {
@@ -180,7 +185,7 @@ export const mapEntry = (
     // in the slate content only the ipfs hash prepended with CID: is saved for the image urls
     // like: CID:bafybeidywav2f4jezkpqe7ydkvhrvqxf3mp76aqzhpvlhp2zg6xapg5nr4
     const nodeClone = Object.assign({}, node);
-    if (node.type === 'image' && node.url.startsWith('CID:')) {
+    if (node.type === 'image' && node.url.startsWith(MEDIA_URL_PREFIX)) {
       nodeClone.url = getMediaUrl(ipfsGateway, node.url.slice(4));
     }
     return nodeClone;
@@ -217,7 +222,7 @@ export const buildPublishObject = (data: any) => {
     if (node.type === 'image' && node.url.includes('gateway.ipfs')) {
       const hashIndex = node.url.lastIndexOf('/');
       const hash = node.url.substr(hashIndex + 1);
-      nodeClone.url = `CID:${hash}`;
+      nodeClone.url = `${MEDIA_URL_PREFIX}${hash}`;
     }
     return nodeClone;
   });
@@ -230,14 +235,14 @@ export const buildPublishObject = (data: any) => {
   const entryObj = {
     data: [
       {
-        provider: 'AkashaApp',
-        property: 'slateContent',
+        provider: PROVIDER_AKASHA,
+        property: PROPERTY_SLATE_CONTENT,
         // perform 2 transforms on content: change unicode chars to ASCII and then convert to base64
         value: serializeSlateToBase64(cleanedContent),
       },
       {
-        provider: 'AkashaApp',
-        property: 'textContent',
+        provider: PROVIDER_AKASHA,
+        property: PROPERTY_TEXT_CONTENT,
         value: data.textContent,
       },
     ],
