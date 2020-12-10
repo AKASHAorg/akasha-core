@@ -19,7 +19,7 @@ install:
 	npm install && \
 	npm run bootstrap
 build.staging.feed:
-	./node_modules/.bin/lerna run build:staging
+	./node_modules/.bin/lerna run build:staging --scope @akashaproject/ethereum.world
 build.staging.feed.static: build build.staging.feed
 build.staging.storybook:
 	./node_modules/.bin/lerna run build:storybook

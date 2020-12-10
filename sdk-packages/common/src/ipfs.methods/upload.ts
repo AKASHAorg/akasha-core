@@ -21,7 +21,7 @@ export default async function upload(
         source.push(content);
       }
     } else {
-      source.push({ path: folderPrefix + entryData.path, content: entryData.content });
+      source.push(entryData);
     }
   }
 
