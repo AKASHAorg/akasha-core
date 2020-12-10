@@ -7,27 +7,30 @@ interface IFeedState {
   feedItemData: {
     [key: string]: any;
   };
-  lastItemId?: string;
+  hasMoreItems: boolean;
+  nextItemId?: string;
 }
 export type IFeedAction =
   | { type: 'LOAD_FEED_START'; payload: { isFeedLoading: boolean } }
   | {
       type: 'SET_FEED_ITEMS';
-      payload: { items: any[]; reverse?: boolean; start?: string; lastItemId?: string };
+      payload: { items: any[]; reverse?: boolean; start?: string; nextItemId?: string };
     }
-  | { type: 'SET_FEED_ITEM_DATA'; payload: IEntryData };
+  | { type: 'SET_FEED_ITEM_DATA'; payload: IEntryData }
+  | { type: 'HAS_MORE_ITEMS'; payload: { hasMoreItems: boolean } };
 
 interface SetFeedItemsPayload {
   items: { entryId: string }[];
   reverse?: boolean;
   start?: string;
-  lastItemId?: string;
+  nextItemId?: string;
 }
 
 const initialFeedState: IFeedState = {
   isFeedLoading: false,
   feedItems: [],
   feedItemData: {},
+  hasMoreItems: true,
 };
 
 const feedStateReducer = (state: IFeedState, action: IFeedAction) => {
@@ -35,20 +38,20 @@ const feedStateReducer = (state: IFeedState, action: IFeedAction) => {
     case 'LOAD_FEED_START':
       return { ...state, isFeedLoading: true };
     case 'SET_FEED_ITEMS':
-      const { reverse, items, lastItemId } = action.payload;
+      const { reverse, items, nextItemId } = action.payload;
       if (reverse) {
         const feedItems = state.feedItems.slice();
         feedItems.unshift(...items);
         return {
           ...state,
-          lastItemId,
+          nextItemId,
           feedItems: feedItems,
           isFeedLoading: false,
         };
       }
       return {
         ...state,
-        lastItemId,
+        nextItemId,
         feedItems: state.feedItems.concat(action.payload.items),
         isFeedLoading: false,
       };
@@ -57,6 +60,11 @@ const feedStateReducer = (state: IFeedState, action: IFeedAction) => {
         ...state,
         feedItemData: { ...state.feedItemData, [action.payload.entryId]: action.payload },
       };
+    case 'HAS_MORE_ITEMS':
+      return {
+        ...state,
+        hasMoreItems: action.payload.hasMoreItems,
+      };
   }
 };
 
@@ -64,6 +72,7 @@ export interface IFeedActions {
   setFeedItems: (payload: SetFeedItemsPayload) => void;
   setFeedItemData: (itemData: IEntryData) => void;
   loadFeedStart: () => void;
+  hasMoreItems: (data: boolean) => void;
 }
 
 const useFeedReducer = (initialState: Partial<IFeedState>): [IFeedState, IFeedActions] => {
@@ -80,7 +89,7 @@ const useFeedReducer = (initialState: Partial<IFeedState>): [IFeedState, IFeedAc
           items: items.map(i => i.entryId),
           reverse: reverse,
           start: start,
-          lastItemId: payload.lastItemId,
+          nextItemId: payload.nextItemId,
         },
       });
     },
@@ -89,6 +98,9 @@ const useFeedReducer = (initialState: Partial<IFeedState>): [IFeedState, IFeedAc
     },
     loadFeedStart: () => {
       dispatch({ type: 'LOAD_FEED_START', payload: { isFeedLoading: true } });
+    },
+    hasMoreItems: (data: boolean) => {
+      dispatch({ type: 'HAS_MORE_ITEMS', payload: { hasMoreItems: data } });
     },
   };
   return [feedState, stateActions];

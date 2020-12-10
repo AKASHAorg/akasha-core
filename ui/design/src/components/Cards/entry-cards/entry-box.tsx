@@ -11,7 +11,7 @@ import { ProfileMiniCard } from '../profile-cards/profile-mini-card';
 import { IProfileData } from '../profile-cards/profile-widget-card';
 import { ISocialData } from './social-box';
 import ViewportSizeProvider from '../../Providers/viewport-dimension';
-import { ReadOnlyEditor } from '../../Editor/index';
+import { EmbedBox, ReadOnlyEditor } from '../../Editor/index';
 
 export interface IEntryData {
   CID?: string;
@@ -24,6 +24,7 @@ export interface IEntryData {
   entryId: string;
   author: IProfileData;
   socialData?: ISocialData;
+  quote?: IEntryData;
 }
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -121,7 +122,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     setMenuDropOpen(false);
   };
 
-  const toggleMenuDrop = () => {
+  const toggleMenuDrop = (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
     setMenuDropOpen(!menuDropOpen);
   };
 
@@ -147,11 +149,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onClickReplies(entryData.entryId);
   };
 
-  const handleContentClick = () => {
-    if (onContentClick && typeof onContentClick === 'function') {
+  const handleContentClick = (data?: IEntryData) => {
+    if (onContentClick && typeof onContentClick === 'function' && data) {
       onContentClick({
-        authorEthAddress: entryData.author.ethAddress,
-        entryId: entryData.entryId,
+        authorEthAddress: data.author.ethAddress,
+        entryId: data.entryId,
         replyTo: null,
       });
     }
@@ -222,9 +224,14 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             copyIPFSLinkLabel={copyIPFSLinkLabel}
           />
         )}
-        <Box pad={{ vertical: 'medium' }} onClick={handleContentClick}>
+        <Box pad={{ vertical: 'medium' }} onClick={() => handleContentClick(entryData)}>
           <ReadOnlyEditor content={entryData.content} />
         </Box>
+        {entryData.quote && (
+          <Box pad={{ vertical: 'medium' }} onClick={() => handleContentClick(entryData.quote)}>
+            <EmbedBox embedEntryData={entryData.quote} />
+          </Box>
+        )}
         <CardActions
           entryData={entryData}
           loggedProfileEthAddress={loggedProfileEthAddress}
