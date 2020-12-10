@@ -25,7 +25,7 @@
     "test": "jest",
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
-    "dev:server": "nodemon ./lib/index.js"
+    "dev:server": "tsc --build && nodemon ./lib/index.js"
   },
   "bugs": {
     "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
