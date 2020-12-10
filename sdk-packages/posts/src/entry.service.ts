@@ -32,6 +32,7 @@ const service: AkashaService = (invoke, log) => {
         _id
         creationDate
         tags
+        quotedBy
         quotes{
             content{
               provider
@@ -86,6 +87,7 @@ const service: AkashaService = (invoke, log) => {
           _id
           creationDate
           tags
+          quotedBy
           quotes{
             content{
               provider
