@@ -38,4 +38,4 @@ const EmbedBox: React.FC<IEmbedEntryBox> = props => (
   </StyledBox>
 );
 
-export default EmbedBox;
+export { EmbedBox };

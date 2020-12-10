@@ -40,7 +40,8 @@ const VirtualScroll: React.FC<IVirtualListProps> = props => {
     handlers.setHasMoreItems(hasMoreItems);
   }, [hasMoreItems]);
 
-  const isFetching = listState.fetchOp.status && listState.fetchOp.status !== 'completed';
+  const isFetching =
+    listState.fetchOp.status && listState.fetchOp.status !== 'completed' && hasMoreItems;
   return (
     <div
       ref={rootContainerRef}
