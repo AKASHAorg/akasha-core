@@ -2,7 +2,7 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { getLoggedProfileStore } from '../state/logged-profile-state';
 import { useTranslation } from 'react-i18next';
-import { uploadMediaToIpfs } from '../services/posting-service';
+import { uploadMediaToTextile } from '../services/posting-service';
 
 const { Helmet, EditorCard, ErrorLoader, Box, Button } = DS;
 
@@ -18,9 +18,11 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
   const { showLoginModal, sdkModules } = props;
   const Login = getLoggedProfileStore();
   const loginEthAddr = Login.useStoreState((state: any) => state.data.ethAddress);
-  const ipfsService = sdkModules.commons.ipfsService;
 
-  const onUploadRequest = uploadMediaToIpfs(ipfsService);
+  const onUploadRequest = uploadMediaToTextile(
+    sdkModules.profiles.profileService,
+    sdkModules.commons.ipfsService,
+  );
 
   const { t } = useTranslation();
 

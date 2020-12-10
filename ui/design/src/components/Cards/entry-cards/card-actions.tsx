@@ -116,26 +116,29 @@ const CardActions: React.FC<CardActionProps> = props => {
     onShare(service);
   };
 
+  const handleRepost = (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
+    handleRepostsClose();
+    onRepost();
+  };
+
+  const handleRepostWithComment = (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
+    handleRepostsClose();
+    onRepostWithComment();
+  };
+
   const renderRepostDrop = () => {
     const menuItems = [
       {
         label: repostLabel,
         icon: 'transfer',
-        handler: (e: any) => {
-          // block event bubbling to parent
-          e.stopPropagation();
-          handleRepostsClose();
-          return onRepost();
-        },
+        handler: handleRepost,
       },
       {
         label: repostWithCommentLabel,
         icon: 'edit',
-        handler: (e: any) => {
-          e.stopPropagation();
-          handleRepostsClose();
-          return onRepostWithComment();
-        },
+        handler: handleRepostWithComment,
       },
     ];
 
@@ -156,7 +159,7 @@ const CardActions: React.FC<CardActionProps> = props => {
             <TextIcon
               iconType="transfer"
               label={repostLabel}
-              onClick={onRepost}
+              onClick={handleRepost}
               clickable={true}
               iconSize="xs"
               fontSize="small"
@@ -166,7 +169,7 @@ const CardActions: React.FC<CardActionProps> = props => {
             <TextIcon
               iconType="edit"
               label={repostWithCommentLabel}
-              onClick={onRepostWithComment}
+              onClick={handleRepostWithComment}
               clickable={true}
               iconSize="xs"
               fontSize="small"

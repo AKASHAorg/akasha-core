@@ -22,10 +22,6 @@ const CommentEditor: React.FC<IEditorBox> = props => {
   const [showEditor, setShowEditor] = React.useState(false);
   const wrapperRef: React.RefObject<any> = React.useRef();
 
-  const handleToggleEditor = () => {
-    setShowEditor(!showEditor);
-  };
-
   const handleClickAway = () => {
     if (showEditor) {
       setShowEditor(false);
@@ -34,8 +30,13 @@ const CommentEditor: React.FC<IEditorBox> = props => {
 
   useSimpleClickAway(wrapperRef, handleClickAway);
 
+  const handleToggleEditor = (ev: any) => {
+    ev.stopPropagation();
+    setShowEditor(!showEditor);
+  };
+
   return (
-    <Box>
+    <Box ref={wrapperRef}>
       {!showEditor && (
         <EditorPlaceholder
           onClick={handleToggleEditor}
@@ -45,12 +46,7 @@ const CommentEditor: React.FC<IEditorBox> = props => {
         />
       )}
       {showEditor && (
-        <Box
-          border={{ side: 'all', size: '1px', color: 'border' }}
-          pad="xxsmall"
-          round="xsmall"
-          ref={wrapperRef}
-        >
+        <Box border={{ side: 'all', size: '1px', color: 'border' }} pad="xxsmall" round="xsmall">
           <EditorBox
             avatar={avatar}
             ethAddress={ethAddress}

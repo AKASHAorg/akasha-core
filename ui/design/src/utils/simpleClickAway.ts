@@ -11,6 +11,7 @@ export default function useSimpleClickAway(
     return () => document.removeEventListener('click', handleClick);
 
     function handleClick(ev: Event) {
+      ev.stopPropagation();
       if (wrapperRef.current && !wrapperRef.current.contains(ev.target) && handler) {
         handler(ev);
       }
