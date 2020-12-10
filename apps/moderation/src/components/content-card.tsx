@@ -20,15 +20,19 @@ export interface IContentCardProps {
   reportedLabel: string;
   contentType: string;
   forLabel: string;
+  andLabel?: string;
   additionalDescLabel: string;
   additionalDescContent?: string;
   reportedByLabel: string;
   ethAddress?: string;
   reasons: string[];
+  reporter?: string;
   reporterName?: string;
   reporterENSName?: string;
+  otherReporters?: string;
   reportedOnLabel?: string;
   reportedDateTime: string;
+  moderator?: string;
   moderatorName?: string;
   moderatorENSName?: string;
   moderatedByLabel?: string;
@@ -56,15 +60,19 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     reportedLabel,
     contentType,
     forLabel,
+    andLabel,
     additionalDescLabel,
     additionalDescContent,
     reportedByLabel,
     ethAddress,
     reasons,
+    reporter,
     reporterName,
     reporterENSName,
+    otherReporters,
     reportedOnLabel,
     reportedDateTime,
+    moderator,
     moderatorName,
     moderatorENSName,
     moderatedByLabel,
@@ -155,9 +163,14 @@ const ContentCard: React.FC<IContentCardProps> = props => {
           {additionalDescContent && <Text>{additionalDescContent}</Text>}
           {!isPending && (
             <>
-              <Text
-                margin={{ top: 'large' }}
-              >{`${moderatedByLabel} ${moderatorName} (${moderatorENSName})`}</Text>
+              <Text margin={{ top: 'large' }}>
+                {moderator
+                  ? `${moderatedByLabel} ${moderator.slice(0, 6)}...${moderator.slice(
+                      moderator.length - 5,
+                      moderator.length - 1,
+                    )}`
+                  : `${moderatedByLabel} ${moderatorName} (${moderatorENSName})`}
+              </Text>
               <Text color="secondaryText">{`${moderatedOnLabel} ${moment(evaluationDateTime).format(
                 'D MMM yyyy・hh:mm',
               )}`}</Text>
@@ -181,6 +194,14 @@ const ContentCard: React.FC<IContentCardProps> = props => {
                   backgroundColor={'lightBackground'}
                   border="sm"
                 />
+                {reporter && (
+                  <Text margin={{ left: '0.2rem' }} color="accentText">
+                    {`${reporter.slice(0, 6)}...${reporter.slice(
+                      reporter.length - 5,
+                      reporter.length - 1,
+                    )}`}
+                  </Text>
+                )}
                 {reporterName && (
                   <Text margin={{ left: '0.2rem' }} color="accentText">
                     {reporterName}
@@ -189,10 +210,18 @@ const ContentCard: React.FC<IContentCardProps> = props => {
                 {reporterENSName && (
                   <Text
                     margin={{ left: '0.2rem' }}
-                    color={!isPending ? 'secondaryText' : 'intiial'}
+                    color={!isPending ? 'secondaryText' : 'initial'}
                   >
                     ({reporterENSName})
                   </Text>
+                )}
+                {otherReporters && !!otherReporters.length && (
+                  <>
+                    <Text margin={{ left: '0.2rem' }}>{andLabel}</Text>
+                    <Text margin={{ left: '0.2rem' }} color="accentText">
+                      {otherReporters}
+                    </Text>
+                  </>
                 )}
                 {!isPending && (
                   <Text

@@ -38,6 +38,8 @@ export interface IModerateModalProps {
   contentId?: string;
   // screen size passed by viewport provider
   size?: string;
+  // fetch pending items on modalClose
+  onModalClose: () => void;
   closeModal: () => void;
 }
 
@@ -66,6 +68,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     user,
     contentId,
     size,
+    onModalClose,
     closeModal,
   } = props;
 
@@ -156,7 +159,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
         addToast('Content successfully moderated', {
           appearance: 'success',
         });
-        return closeModal();
+        return onModalClose();
       })
       .catch(error => {
         setRequesting(false);
