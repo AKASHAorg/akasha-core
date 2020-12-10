@@ -42,6 +42,7 @@ const PostsPage: React.FC<PostsPageProps & RootComponentProps> = props => {
             setFlagged={props.setFlagged}
             setModalOpen={props.setModalOpen}
             showLoginModal={props.showLoginModal}
+            navigateToUrl={props.singleSpa.navigateToUrl}
           />
         </Route>
         <Route path={`${path}/:userId`}>

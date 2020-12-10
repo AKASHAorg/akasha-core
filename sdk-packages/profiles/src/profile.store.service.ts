@@ -70,6 +70,7 @@ const service: AkashaService = (invoke, log) => {
       'creationDate',
       'avatar',
       'userName',
+      'name',
       'coverImage',
       'ethAddress',
     ];
@@ -149,9 +150,10 @@ const service: AkashaService = (invoke, log) => {
       throw new Error('Must specify a name for the media file');
     }
     if (data.isUrl) {
-      const src = await urlSource(data.content);
-      file = src.content;
-      path = data.name ? data.name : file.path;
+      for await (const src of urlSource(data.content)) {
+        file = src.content;
+        path = data.name ? data.name : src.path;
+      }
     } else {
       file = data.content;
       path = data.name;
@@ -162,7 +164,7 @@ const service: AkashaService = (invoke, log) => {
       throw new Error('Failed to open bucket');
     }
     const buckPath = `ewa/${path}`;
-    const upload = await buck.pushPath(root, buckPath, { path: path, content: file });
+    const upload = await buck.pushPath(root.key, buckPath, { path: buckPath, content: file });
     const cid = upload.path.cid.toString();
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
     const mutation = `
