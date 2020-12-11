@@ -26,7 +26,7 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   reportLabel?: string;
   user?: string;
   contentId?: string;
-  contentType: string;
+  contentType?: string;
   // screen size passed by viewport provider
   size?: string;
 }
