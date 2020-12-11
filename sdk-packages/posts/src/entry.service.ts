@@ -13,7 +13,6 @@ const service: AkashaService = (invoke, log) => {
     const query = `
   query GetEntry($id: String!) {
        getPost(id: $id) {
-        creationDate
         content{
           provider
           property
@@ -25,9 +24,34 @@ const service: AkashaService = (invoke, log) => {
           userName
           avatar
           coverImage
+          description
           ethAddress
         }
+        title
+        type
+        _id
+        creationDate
         tags
+        quotes{
+            content{
+              provider
+              property
+              value
+            }
+            author{
+              pubKey
+              name
+              userName
+              avatar
+              coverImage
+              ethAddress
+            }
+            title
+            type
+            _id
+            creationDate
+            tags
+          }
        }
       }`;
     const result = await runGQL({
@@ -54,10 +78,34 @@ const service: AkashaService = (invoke, log) => {
             userName
             avatar
             coverImage
+            description
             ethAddress
           }
+          title
+          type
+          _id
           creationDate
           tags
+          quotes{
+            content{
+              provider
+              property
+              value
+            }
+            author{
+              pubKey
+              name
+              userName
+              avatar
+              coverImage
+              ethAddress
+            }
+            title
+            type
+            _id
+            creationDate
+            tags
+          }
         }
         nextIndex
         total
@@ -73,7 +121,7 @@ const service: AkashaService = (invoke, log) => {
 
   const postEntry = async (opt: {
     data: DataProviderInput;
-    post: { title?: string; tags?: string[] };
+    post: { title?: string; tags?: string[]; quotes?: string[] };
   }) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
     const mutation = `

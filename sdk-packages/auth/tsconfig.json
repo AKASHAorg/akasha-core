@@ -14,9 +14,6 @@
     },
     {
       "path": "../common"
-    },
-    {
-      "path": "../db"
     }
   ],
   "include": ["./src"],

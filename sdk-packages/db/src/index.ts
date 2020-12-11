@@ -8,7 +8,6 @@ import {
 import { callService } from '@akashaproject/sdk-core/lib/utils';
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 import services, { DB_SETTINGS_ATTACHMENT, moduleName } from './constants';
-import dbService from './db.service';
 import settings from './settings';
 import settingsAttachmentService from './settings.attachment.service';
 
@@ -23,7 +22,7 @@ export class DBModule extends IAkashaModule {
 
   // tslint:disable-next-line:function-name
   protected _registerServices(di: DIContainer): IAkashaNamedService[] {
-    return [dbService, settingsAttachmentService];
+    return [settingsAttachmentService];
   }
 
   protected init(di: DIContainer): void {

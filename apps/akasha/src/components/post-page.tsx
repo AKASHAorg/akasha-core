@@ -3,8 +3,10 @@ import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { uploadMediaToIpfs } from '../services/posting-service';
+import { mapEntry, uploadMediaToTextile } from '../services/posting-service';
+import { redirectToPost } from '../services/routing-service';
 import { getLoggedProfileStore } from '../state/logged-profile-state';
+import { combineLatest } from 'rxjs';
 
 const {
   Box,
@@ -28,10 +30,20 @@ interface IPostPage {
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   showLoginModal: () => void;
+  navigateToUrl: (path: string) => void;
 }
 
 const PostPage: React.FC<IPostPage> = props => {
-  const { slotId, flagged, modalOpen, setFlagged, setModalOpen, showLoginModal } = props;
+  const {
+    slotId,
+    flagged,
+    modalOpen,
+    setFlagged,
+    setModalOpen,
+    showLoginModal,
+    logger,
+    navigateToUrl,
+  } = props;
 
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
@@ -40,19 +52,24 @@ const PostPage: React.FC<IPostPage> = props => {
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const ipfsService = props.channels.commons.ipfsService;
-
   const Login = getLoggedProfileStore();
   const loggedEthAddress = Login.useStoreState((state: any) => state.data.ethAddress);
 
   const [itemData, setItemData] = React.useState<any>(null);
 
   React.useEffect(() => {
-    const call = props.channels.posts.entries.getEntry({ entryId: postId });
+    const entryCall = props.channels.posts.entries.getEntry({ entryId: postId });
+    const ipfsGatewayCall = props.channels.commons.ipfsService.getSettings({});
+    const call = combineLatest([ipfsGatewayCall, entryCall]);
     call.subscribe((resp: any) => {
-      setItemData(resp.data);
+      const ipfsGateway = resp[0].data;
+      const entry = resp[1].data?.getPost;
+      if (entry) {
+        const mappedEntry = mapEntry(entry, ipfsGateway, logger);
+        setItemData(mappedEntry);
+      }
     });
-  }, []);
+  }, [postId]);
 
   const isBookmarked = false;
   const handleAvatarClick = () => {
@@ -98,7 +115,12 @@ const PostPage: React.FC<IPostPage> = props => {
     /* todo */
   };
 
-  const onUploadRequest = uploadMediaToIpfs(ipfsService);
+  const handleNavigateToPost = redirectToPost(navigateToUrl);
+
+  const onUploadRequest = uploadMediaToTextile(
+    props.channels.profiles.profileService,
+    props.channels.commons.ipfsService,
+  );
 
   return (
     <>
@@ -179,11 +201,12 @@ const PostPage: React.FC<IPostPage> = props => {
               onClickReplies={handleClickReplies}
               handleFollow={handleFollow}
               handleUnfollow={handleUnfollow}
+              onContentClick={handleNavigateToPost}
             />
           </Box>
           {!loggedEthAddress && (
             <Box margin="medium">
-              <EditorPlaceholder onClick={props.showLoginModal} />{' '}
+              <EditorPlaceholder onClick={props.showLoginModal} />
             </Box>
           )}
           {loggedEthAddress && (

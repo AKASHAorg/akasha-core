@@ -32,17 +32,10 @@
   "dependencies": {
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-runtime": "*",
-    "pouchdb-adapter-http": "7.2.1",
-    "pouchdb-adapter-idb": "7.2.1",
-    "buffer": "6.0.2"
+    "@akashaproject/sdk-auth": "*"
   },
   "devDependencies": {
     "jest": "25.5.1",
-    "ts-jest": "25.4.0",
-    "pouchdb-adapter-memory": "7.2.1",
-    "rxdb": "8.9.0"
-  },
-  "peerDependencies": {
-    "rxdb": "^8.9.0"
+    "ts-jest": "25.4.0"
   }
 }

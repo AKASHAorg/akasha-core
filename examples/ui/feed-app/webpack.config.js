@@ -32,8 +32,8 @@ module.exports = {
   plugins: [
     new CopyPlugin({
       patterns: [
-        { from: 'public', to: '.' },
-        { from: 'serve.json', to: '.' },
+        // { from: 'public', to: '.' },
+        // { from: 'serve.json', to: '.' },
       ],
     }),
     new ModuleFederationPlugin({

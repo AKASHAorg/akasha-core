@@ -21,13 +21,20 @@ const config = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '*.mjs'],
-    fallback: {
-      assert: require.resolve('assert/'),
+    alias: {
       buffer: require.resolve('buffer'),
+      process: require.resolve('process/browser'),
+    },
+    fallback: {
+      os: false,
+      crypto: false,
+      http: false,
+      https: false,
+      dns: false,
+      assert: require.resolve('assert/'),
       path: require.resolve('path-browserify/'),
       stream: require.resolve('stream-browserify/'),
       util: require.resolve('util/'),
-      process: require.resolve('process/browser'),
     },
   },
   output: {
@@ -55,7 +62,6 @@ const config = {
     new webpack.AutomaticPrefetchPlugin(),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
-      stream: ['stream'],
       process: ['process'],
     }),
     new HtmlWebpackPlugin({
