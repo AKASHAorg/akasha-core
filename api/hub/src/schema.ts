@@ -83,6 +83,7 @@ const typeDefs = gql`
     content: [DataProvider!]
     quotes: [Post!]
     tags: [String!]
+    quotedBy: [String]
   }
 `;
 
