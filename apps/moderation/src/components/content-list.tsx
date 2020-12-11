@@ -82,8 +82,6 @@ const ContentList: React.FC<IContentListProps> = props => {
         delisted: true,
       });
 
-      console.log('here are the delisted items', response);
-
       // @TODO: get content details using contentId
       const modResponse = response.map(
         (
