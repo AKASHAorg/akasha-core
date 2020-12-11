@@ -80,14 +80,13 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     evaluationDateTime,
     keepContentLabel,
     delistContentLabel,
-    handleButtonClick,
   } = props;
 
   const { t } = useTranslation();
 
   const handleClick = (action: string) => () => {
     if (ethAddress) {
-      handleButtonClick(ethAddress, action, contentType, reasons, entryData);
+      props.handleButtonClick(ethAddress, action, contentType, reasons, entryData);
     }
   };
 
@@ -96,7 +95,7 @@ const ContentCard: React.FC<IContentCardProps> = props => {
       <MainAreaCardBox>
         <Box pad="1rem">
           <MainAreaCardBox>
-            {contentType === 'post' ? (
+            {contentType === 'post' && (
               <EntryCardMod
                 entryData={entryData}
                 repostsLabel={repostsLabel}
@@ -107,7 +106,8 @@ const ContentCard: React.FC<IContentCardProps> = props => {
                 onClickReplies={() => null}
                 onContentClick={() => null}
               />
-            ) : contentType === 'profile' ? (
+            )}
+            {contentType === 'profile' && (
               <ProfileCardMod
                 onClickApps={() => null}
                 onClickFollowing={() => null}
@@ -124,7 +124,7 @@ const ContentCard: React.FC<IContentCardProps> = props => {
                 shareProfileLabel={t('Share Profile')}
                 onEntryFlag={() => null}
               />
-            ) : null}
+            )}
           </MainAreaCardBox>
           {!isPending && (
             <Text
