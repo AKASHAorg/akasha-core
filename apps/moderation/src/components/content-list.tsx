@@ -78,14 +78,22 @@ const ContentList: React.FC<IContentListProps> = props => {
     // fetch pending (reported) contents
     setRequesting(true);
     try {
-      const response = await postRequest('https://akasha-mod.herokuapp.com/decisions/list', {
+      const response = await postRequest('https://akasha-mod.herokuapp.com/decisions/moderated', {
         delisted: true,
       });
-
       // @TODO: get content details using contentId
       const modResponse = response.map(
         (
-          { contentType: type, contentId, date, explanation, moderator, reasons }: any,
+          {
+            contentType: type,
+            contentId,
+            date,
+            explanation,
+            moderator,
+            reasons,
+            reportedBy,
+            reportedDate,
+          }: any,
           idx: number,
         ) => {
           // formatting data to match labels already in use
@@ -95,9 +103,9 @@ const ContentList: React.FC<IContentListProps> = props => {
             ethAddress: contentId,
             reasons: reasons,
             description: explanation,
-            reporter: 'unspecified', // needs to receive original reporter ethAddress
+            reporter: reportedBy,
             moderator: moderator, // @TODO: fetch reporter's Name and ENS (if applicable) from the profile API
-            entryDate: Date.now(), // needs to receive original entry date
+            entryDate: reportedDate,
             evaluationDate: date,
           };
         },
@@ -114,10 +122,13 @@ const ContentList: React.FC<IContentListProps> = props => {
     // fetch pending (reported) contents
     setRequesting(true);
     try {
-      const response = await postRequest('https://akasha-mod.herokuapp.com/flags/list');
+      const response = await postRequest('https://akasha-mod.herokuapp.com/decisions/pending');
       // @TODO: get content details using contentId
       const modResponse = response.map(
-        ({ contentType: type, contentId, count, date, reasons, user }: any, idx: number) => {
+        (
+          { contentType: type, contentId, reasons, reportedBy, reportedDate, reports }: any,
+          idx: number,
+        ) => {
           // formatting data to match labels already in use
           return {
             id: idx,
@@ -125,9 +136,9 @@ const ContentList: React.FC<IContentListProps> = props => {
             ethAddress: contentId,
             reasons: reasons,
             description: '',
-            reporter: user, // @TODO: fetch reporter's Name and ENS Name (if applicable) from the profile API
-            count: count - 1, // minus reporter, to get count of other users
-            entryDate: date,
+            reporter: reportedBy, // @TODO: fetch reporter's Name and ENS Name (if applicable) from the profile API
+            count: reports - 1, // minus reporter, to get count of other users
+            entryDate: reportedDate,
           };
         },
       );
@@ -135,7 +146,7 @@ const ContentList: React.FC<IContentListProps> = props => {
       setRequesting(false);
     } catch (error) {
       setRequesting(false);
-      props.logger.error('[content-list.tsx]: fetchPendingContent err %j', error);
+      props.logger.error('[content-list.tsx]: fetchPendingContent err %j', error.message || '');
     }
   };
 
@@ -203,8 +214,9 @@ const ContentList: React.FC<IContentListProps> = props => {
               size={size}
               onModalClose={() => {
                 setModalOpen(false);
-                // on modal close, fetch pending items again
+                // on modal close, fetch pending and delisted items again
                 fetchPendingContents();
+                fetchDelistedContents();
               }}
               closeModal={() => {
                 setModalOpen(false);
@@ -283,6 +295,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                 reportedByLabel={t('Originally reported by')}
                 ethAddress={t(delistedItem.ethAddress)}
                 reasons={delistedItem.reasons.map(el => t(el))}
+                reporter={delistedItem.reporter}
                 reporterName={t(delistedItem.reporterName)}
                 reporterENSName={t(delistedItem.reporterENSName)}
                 reportedOnLabel={t('on')}
@@ -292,7 +305,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                 moderatorENSName={t(delistedItem.moderatorENSName)}
                 moderatedByLabel={t('Moderated by')}
                 moderatedOnLabel={t('On')}
-                evaluationDateTime={delistedItem.entryDate}
+                evaluationDateTime={delistedItem.evaluationDate}
                 handleButtonClick={() => null}
               />
             ))
