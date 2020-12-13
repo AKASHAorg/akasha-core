@@ -147,7 +147,9 @@ export const mapEntry = (
     content: { provider: string; property: string; value: string }[];
     CID?: string;
     _id: string;
-    quotes: any[];
+    quotes?: any[];
+    quotedBy?: string[];
+    creationDate: string;
     author: {
       CID?: string;
       description: string;
@@ -210,6 +212,8 @@ export const mapEntry = (
     content: contentWithMediaGateways,
     quote: quotedEntry,
     entryId: entry._id,
+    time: entry.creationDate,
+    reposts: entry.quotedBy?.length,
     ipfsLink: entry._id,
     permalink: 'null',
   };

@@ -26,9 +26,9 @@ interface IPostPage {
   logger: any;
   slotId: string;
   flagged: string;
-  modalOpen: boolean;
+  reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   showLoginModal: () => void;
   navigateToUrl: (path: string) => void;
 }
@@ -37,9 +37,9 @@ const PostPage: React.FC<IPostPage> = props => {
   const {
     slotId,
     flagged,
-    modalOpen,
+    reportModalOpen,
     setFlagged,
-    setModalOpen,
+    setReportModalOpen,
     showLoginModal,
     logger,
     navigateToUrl,
@@ -88,10 +88,7 @@ const PostPage: React.FC<IPostPage> = props => {
       return showLoginModal();
     }
     setFlagged(entryId);
-    setModalOpen(true);
-  };
-  const handleLinkCopy = () => {
-    // todo
+    setReportModalOpen(true);
   };
   const handleClickReplies = () => {
     // todo
@@ -103,7 +100,7 @@ const PostPage: React.FC<IPostPage> = props => {
     // todo
   };
   const handleEntryShare = () => {
-    // todo
+    return;
   };
   const handlePublish = () => {
     // todo
@@ -132,7 +129,7 @@ const PostPage: React.FC<IPostPage> = props => {
             border={{ side: 'bottom', size: '1px', color: 'border' }}
           >
             <ModalRenderer slotId={slotId}>
-              {modalOpen && (
+              {reportModalOpen && (
                 <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
                   <ReportModal
                     titleLabel={t('Report a Post')}
@@ -167,7 +164,7 @@ const PostPage: React.FC<IPostPage> = props => {
                     contentId={flagged}
                     size={size}
                     closeModal={() => {
-                      setModalOpen(false);
+                      setReportModalOpen(false);
                     }}
                   />
                 </ToastProvider>
@@ -196,7 +193,6 @@ const PostPage: React.FC<IPostPage> = props => {
               onRepost={handleEntryRepost}
               onEntryShare={handleEntryShare}
               onEntryFlag={handleEntryFlag(itemData.entryId, loggedEthAddress)}
-              onLinkCopy={handleLinkCopy}
               onClickReplies={handleClickReplies}
               handleFollow={handleFollow}
               handleUnfollow={handleUnfollow}
@@ -251,7 +247,6 @@ const PostPage: React.FC<IPostPage> = props => {
                   onRepost={handleEntryRepost}
                   onEntryShare={handleEntryShare}
                   onEntryFlag={handleEntryFlag(itemData.entryId, loggedEthAddress)}
-                  onLinkCopy={handleLinkCopy}
                   onClickReplies={handleClickReplies}
                   handleFollow={handleFollow}
                   handleUnfollow={handleUnfollow}

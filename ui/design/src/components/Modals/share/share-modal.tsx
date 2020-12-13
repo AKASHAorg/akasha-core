@@ -7,12 +7,12 @@ import { StyledIconDiv, StyledShareSocialDiv, StyledTextInput } from './styled-s
 
 export interface IShareModal {
   className?: string;
-  profileLink: string;
+  link: string;
   closeModal: () => void;
-  copyLabel: string;
-  shareTitleLabel: string;
-  shareSubtitleLabel: string;
-  shareSocialLabel: string;
+  copyLabel?: string;
+  shareTitleLabel?: string;
+  shareSubtitleLabel?: string;
+  shareSocialLabel?: string;
 }
 
 const socialApps = [
@@ -24,7 +24,7 @@ const socialApps = [
 const ShareModal: React.FC<IShareModal> = props => {
   const {
     closeModal,
-    profileLink,
+    link,
     className,
     copyLabel,
     shareTitleLabel,
@@ -52,7 +52,7 @@ const ShareModal: React.FC<IShareModal> = props => {
         <Text size="large" weight="bold">
           {shareTitleLabel}
         </Text>
-        <Text color="secondaryText">{shareSubtitleLabel}</Text>
+        {shareSubtitleLabel && <Text color="secondaryText">{shareSubtitleLabel}</Text>}
         <Box
           fill="horizontal"
           direction="row"
@@ -67,13 +67,7 @@ const ShareModal: React.FC<IShareModal> = props => {
           <StyledIconDiv>
             <Icon type="link" />
           </StyledIconDiv>
-          <StyledTextInput
-            plain={true}
-            readOnly={true}
-            ref={linkRef}
-            value={profileLink}
-            size="medium"
-          />
+          <StyledTextInput plain={true} readOnly={true} ref={linkRef} value={link} size="medium" />
           <Button label={copyLabel} onClick={handleCopyLink} primary={true} />
         </Box>
         <Text color="secondaryText">{shareSocialLabel}</Text>
@@ -87,6 +81,13 @@ const ShareModal: React.FC<IShareModal> = props => {
       </Box>
     </StyledLayer>
   );
+};
+
+ShareModal.defaultProps = {
+  copyLabel: 'Copy',
+  shareTitleLabel: 'Share',
+  shareSubtitleLabel: '',
+  shareSocialLabel: 'Or share it on',
 };
 
 export default ShareModal;

@@ -42,9 +42,9 @@ export interface FeedPageProps {
   ethAddress: string | null;
   jwtToken: string | null;
   flagged: string;
-  modalOpen: boolean;
+  reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onError: (err: Error) => void;
 }
 
@@ -52,9 +52,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const {
     isMobile,
     flagged,
-    modalOpen,
+    reportModalOpen,
     setFlagged,
-    setModalOpen,
+    setReportModalOpen,
     showLoginModal,
     ethAddress,
     jwtToken,
@@ -161,7 +161,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   };
   const handleEntryShare = () => {
-    /* todo */
+    return;
   };
   const handleEntryFlag = (entryId: string, user?: string | null) => () => {
     /* todo */
@@ -171,11 +171,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       return showLoginModal();
     }
     setFlagged(entryId);
-    setModalOpen(true);
+    setReportModalOpen(true);
   };
-  const handleLinkCopy = () => {
-    /* todo */
-  };
+
   const handleClickReplies = () => {
     /* todo */
   };
@@ -189,7 +187,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     /* todo */
   };
   const handleGetTags = () => {
-    /* todo */
+    const tagsService = sdkModules.posts.tags.getTags({ fields: ['name'], limit: 100000 });
+    return tagsService.toPromise();
   };
 
   const handleToggleEditor = () => {
@@ -243,7 +242,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         <title>AKASHA Feed | Ethereum.world</title>
       </Helmet>
       <ModalRenderer slotId={props.layout.app.modalSlotId}>
-        {modalOpen && (
+        {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
               titleLabel={t('Report a Post')}
@@ -274,7 +273,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               contentId={flagged}
               size={size}
               closeModal={() => {
-                setModalOpen(false);
+                setReportModalOpen(false);
               }}
             />
           </ToastProvider>
@@ -350,7 +349,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                         onRepost={handleEntryRepost}
                         onEntryShare={handleEntryShare}
                         onEntryFlag={handleEntryFlag(itemData.CID, visitorEthAddress)}
-                        onLinkCopy={handleLinkCopy}
                         onClickReplies={handleClickReplies}
                         handleFollow={handleFollow}
                         handleUnfollow={handleUnfollow}
