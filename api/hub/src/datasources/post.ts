@@ -9,7 +9,8 @@ class PostAPI extends DataSource {
   private context: any;
   private readonly dbID: ThreadID;
   private readonly allPostsCache: string;
-
+  private readonly quotedByPost = 'quoted.by.post';
+  private readonly graphqlPostsApi = 'graphql.posts.api';
   constructor({ collection, dbID }) {
     super();
     this.collection = collection;
@@ -21,13 +22,24 @@ class PostAPI extends DataSource {
     this.context = config.context;
   }
 
+  getPostCacheKey(id) {
+    return `${this.collection}:postID${id}`;
+  }
+
   async getPost(id: string, stopIter = false) {
     const db: Client = await getAppDB();
-    const cacheKey = `${this.collection}:postID${id}`;
+    const cacheKey = this.getPostCacheKey(id);
     if (queryCache.has(cacheKey)) {
       return Promise.resolve(queryCache.get(cacheKey));
     }
     const post = await db.findByID<PostItem>(this.dbID, this.collection, id);
+    if (!post) {
+      return;
+    }
+    const quotedBy = post?.metaData
+      ?.filter(item => item.property === this.quotedByPost)
+      ?.map(item => item.value);
+    Object.assign(post, { quotedBy });
     if (post?.quotes?.length && !stopIter) {
       post.quotes = await Promise.all(post.quotes.map(postID => this.getPost(postID, true)));
     }
@@ -47,6 +59,10 @@ class PostAPI extends DataSource {
         if (post?.quotes?.length) {
           post.quotes = await Promise.all(post.quotes.map(postID => this.getPost(postID)));
         }
+        const quotedBy = post?.metaData
+          ?.filter(item => item.property === this.quotedByPost)
+          ?.map(item => item.value);
+        Object.assign(post, { quotedBy });
       }
       queryCache.set(this.allPostsCache, posts);
     }
@@ -78,13 +94,44 @@ class PostAPI extends DataSource {
       metaData: [
         {
           property: 'version',
-          provider: 'graphql.posts.api',
+          provider: this.graphqlPostsApi,
           value: '1',
         },
       ],
     };
     queryCache.del(this.allPostsCache);
-    return await db.create(this.dbID, this.collection, [post]);
+    const postID = await db.create(this.dbID, this.collection, [post]);
+    await this.addQuotes(post.quotes, postID[0]);
+    return postID;
+  }
+
+  async addQuotes(quotedPosts: string[], postID: string) {
+    const db: Client = await getAppDB();
+    const updatePosts = [];
+    for (const quotedPost of quotedPosts) {
+      const post = await db.findByID<PostItem>(this.dbID, this.collection, quotedPost);
+      if (!post) {
+        continue;
+      }
+
+      if (!post.metaData || !post.metaData.length) {
+        post.metaData = [];
+      }
+      post.metaData.push({
+        property: this.quotedByPost,
+        provider: this.graphqlPostsApi,
+        value: postID,
+      });
+      updatePosts.push(post);
+    }
+    if (updatePosts.length) {
+      await db.save(this.dbID, this.collection, updatePosts);
+      for (const post of updatePosts) {
+        queryCache.del(this.getPostCacheKey(post._id));
+      }
+    }
+    updatePosts.length = 0;
+    return Promise.resolve();
   }
 }
 

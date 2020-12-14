@@ -7,7 +7,7 @@ const query = {
   },
   getPost: async (_source, { id }, { dataSources }) => {
     const postData = await dataSources.postsAPI.getPost(id);
-    if (typeof postData.author === 'string') {
+    if (postData && typeof postData.author === 'string') {
       const author = await dataSources.profileAPI.resolveProfile(postData.author);
       Object.assign(postData, { author });
     }
