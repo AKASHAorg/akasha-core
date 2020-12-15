@@ -44,7 +44,7 @@ export const formatImageSrc = (src?: string, isUrl?: boolean, ipfsUrlPrefix?: st
 };
 
 export const getImageSrc = (image: { src: string; isUrl: boolean; prefix: string }) => {
-  const { src, isUrl, prefix } = image;
+  const { src, isUrl, prefix = '' } = image;
   if (isUrl) {
     if (src.startsWith('blob:http')) {
       return src;
@@ -53,3 +53,14 @@ export const getImageSrc = (image: { src: string; isUrl: boolean; prefix: string
   }
   return `${prefix}${src}`;
 };
+
+export const imageToB64 = (image: File): Promise<string> => {
+  const fileReader = new FileReader();
+  return new Promise((resolve, reject) => {
+    fileReader.addEventListener('load', () => {
+      resolve(fileReader.result as string);
+    });
+    fileReader.addEventListener('error', reject);
+    fileReader.readAsDataURL(image);
+  });
+}

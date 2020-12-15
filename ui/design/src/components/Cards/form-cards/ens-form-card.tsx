@@ -13,22 +13,24 @@ export interface IEnsFormCardProps {
   errorLabel: string;
   ethAddressLabel: string;
   ethNameLabel: string;
+  changeButtonLabel: string;
   optionUsername: string;
   optionSpecify: string;
   optionUseEthereumAddress: string;
   consentText: string;
   consentUrl: string;
   consentLabel: string;
-  poweredByLabel: string;
-  iconLabel: string;
+  poweredByLabel?: string;
+  iconLabel?: string;
   cancelLabel: string;
   saveLabel: string;
   nameFieldPlaceholder: string;
   ethAddress: string;
   providerData: Partial<IEnsData>;
   validateEns?: (name: string) => void;
-  validEns?: boolean;
-  handleSubmit: (data: IEnsData | { name: string }) => void;
+  validEns: boolean | null;
+  onSave: (data: IEnsData | { name: string }) => void;
+  onCancel?: () => void;
   isValidating?: boolean;
   ensSubdomain?: string;
 }
@@ -55,10 +57,11 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     iconLabel,
     cancelLabel,
     saveLabel,
+    changeButtonLabel,
     nameFieldPlaceholder,
     ethAddress,
     providerData,
-    handleSubmit,
+    onSave,
     validateEns,
     validEns,
     isValidating,
@@ -153,10 +156,13 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     setTextInputComputedWidth(initialInputWidth);
     setError(false);
     setSuccess(false);
+    if (props.onCancel) {
+      props.onCancel();
+    }
   };
 
   const handleSave = () => {
-    handleSubmit({
+    onSave({
       name,
     });
   };
@@ -168,7 +174,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
           <Text weight="bold" margin="0 auto 2rem" size="xlarge">
             {titleLabel}
           </Text>
-          <Icon type="close" color="secondaryText" primaryColor={true} clickable={true} />
+          <Icon type="close" color="secondaryText" primaryColor={true} clickable={true} onClick={handleCancel} />
         </Box>
         <Box direction="row" align="center">
           <StyledText color={error ? 'errorText' : 'secondaryText'} size="small">
@@ -239,7 +245,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                       style={{ cursor: 'pointer' }}
                       onClick={handleChangeEns}
                     >
-                      Change
+                      {changeButtonLabel}
                     </Text>
                   </Box>
                 )}
@@ -305,17 +311,23 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
           </Box>
           <Box direction="row" gap="xsmall" justify="between" align="center">
             <Box direction="row" align="center">
-              <Text color="secondaryText" size="10px" margin={{ right: 'xxsmall' }}>
-                {poweredByLabel}
-              </Text>
-              <Icon type="appEns" size="xs" />
-              <Text
-                style={{ opacity: 0.75 }}
-                size="xsmall"
-                margin={{ left: '0.05rem', right: 'xsmall' }}
-              >
-                {iconLabel}
-              </Text>
+              {poweredByLabel &&
+                <Text color="secondaryText" size="10px" margin={{ right: 'xxsmall' }}>
+                  {poweredByLabel}
+                </Text>
+              }
+              {iconLabel &&
+                <>
+                  <Icon type="appEns" size="xs" />
+                  <Text
+                    style={{ opacity: 0.75 }}
+                    size="xsmall"
+                    margin={{ left: '0.05rem', right: 'xsmall' }}
+                  >
+                    {iconLabel}
+                  </Text>
+                </>
+              }
               <Icon type="questionMark" size="xxs" clickable={true} />
             </Box>
             <Box direction="row">

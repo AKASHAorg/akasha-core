@@ -151,12 +151,13 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
           consentLabel={t('Community Agreement')}
           poweredByLabel={t('Username powered by')}
           iconLabel={t('ENS')}
+          changeButtonLabel={t('Change')}
           cancelLabel={t('Cancel')}
           saveLabel={t('Save')}
           nameFieldPlaceholder={`@${t('username')}`}
           ethAddress={loggedEthAddress}
           providerData={ensInfo}
-          handleSubmit={onSubmit}
+          onSave={onSubmit}
           validateEns={throttledEnsValidation}
           isValidating={registrationStatus ? registrationStatus.checking : false}
           validEns={registrationStatus ? registrationStatus.isAvailable : undefined}

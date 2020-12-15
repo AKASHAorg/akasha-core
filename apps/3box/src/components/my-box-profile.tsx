@@ -109,7 +109,7 @@ const MyBoxProfile: React.FC<IMyBoxProfileProps> = () => {
                       ...stateData.profileData,
                       providerName: '3Box',
                     }}
-                    handleSubmit={onFormSubmit}
+                    onSave={onFormSubmit}
                   />
                 </>
               )}

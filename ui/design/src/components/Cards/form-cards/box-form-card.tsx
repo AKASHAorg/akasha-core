@@ -34,7 +34,8 @@ export interface IBoxFormCardProps {
   descriptionFieldPlaceholder: string;
   ethAddress: string;
   providerData: IBoxData;
-  handleSubmit: (data: IBoxData) => void;
+  onSave: (data: IBoxData) => void;
+  onCancel?: () => void;
 }
 
 export interface IImageSrc {
@@ -67,7 +68,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     descriptionFieldPlaceholder,
     ethAddress,
     providerData,
-    handleSubmit,
+    onSave,
   } = props;
 
   const [avatarPopoverOpen, setAvatarPopoverOpen] = React.useState(false);
@@ -101,10 +102,13 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const handleRevert = () => {
     setFormValues(props.providerData);
     setFormChanged(false);
+    if (props.onCancel) {
+      props.onCancel();
+    }
   };
 
   const handleSave = () => {
-    handleSubmit(formValues);
+    onSave(formValues);
   };
   const handleFormFieldChange = (newValues: {}) => {
     setFormChanged(true);
@@ -198,7 +202,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             />
           </FormField>
           <Box direction="row" gap="xsmall" justify="end">
-            <Button label={cancelLabel} onClick={handleRevert} disabled={!formChanged} />
+            <Button label={cancelLabel} onClick={handleRevert} />
             <Button label={saveLabel} onClick={handleSave} primary={true} disabled={!formChanged} />
           </Box>
         </Box>

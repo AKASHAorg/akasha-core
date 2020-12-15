@@ -1,5 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
+import { imageToB64 } from '../../../utils/image-utils';
 import { Icon } from '../../Icon/index';
 import { FormLinkInput } from '../../Input/index';
 import {
@@ -66,10 +67,12 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
       return;
     }
     const file = ev.target.files[0];
-    if (insertImage) {
-      insertImage(URL.createObjectURL(file), true);
-    }
-    closePopover();
+    imageToB64(file).then(result => {
+      if (insertImage) {
+        insertImage(result, false);
+      }
+      closePopover();
+    });
   };
 
   return (
