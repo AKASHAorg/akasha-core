@@ -50,7 +50,6 @@ const ContentList: React.FC<IContentListProps> = props => {
   const [actionType, setActionType] = React.useState<string>('Delist');
   const [contentType, setContentType] = React.useState<string>('post');
   const [flagged, setFlagged] = React.useState<string>('');
-  const [preselectedReasons, setPreselectedReasons] = React.useState<string[]>([]);
   const [flaggedItemData, setFlaggedItemData] = React.useState<any>({});
   const [isPending, setIsPending] = React.useState<boolean>(true);
   const [requesting, setRequesting] = React.useState<boolean>(false);
@@ -150,18 +149,11 @@ const ContentList: React.FC<IContentListProps> = props => {
     }
   };
 
-  const handleButtonClick = (
-    entryId: string,
-    action: string,
-    content: string,
-    reasons: string[],
-    item: any,
-  ) => {
+  const handleButtonClick = (entryId: string, action: string, content: string, item: any) => {
     setFlagged(entryId);
     setModalOpen(true);
     setActionType(action);
     setContentType(content);
-    setPreselectedReasons(reasons);
     setFlaggedItemData(item);
   };
 
@@ -181,16 +173,6 @@ const ContentList: React.FC<IContentListProps> = props => {
                 } a ${contentType}`,
               )}
               contentType={t(contentType)}
-              optionsTitleLabel={t('Please select a reason')}
-              optionLabels={[
-                t('Suspicious, deceptive, or spam'),
-                t('Abusive or harmful to others'),
-                t('Self-harm or suicide'),
-                t('Illegal'),
-                t('Nudity'),
-                t('Violence'),
-              ]}
-              preselectedReasons={preselectedReasons}
               flaggedItemData={flaggedItemData}
               repostsLabel={t('Repost')}
               repliesLabel={t('Replies')}
@@ -238,12 +220,12 @@ const ContentList: React.FC<IContentListProps> = props => {
                 repostsLabel={t('Repost')}
                 repliesLabel={t('Replies')}
                 locale={locale}
-                reportedLabel={t('Reported')}
+                reportedLabel={t('reported')}
                 contentType={t(pendingItem.type)}
                 forLabel={t('for')}
                 additionalDescLabel={t('Additional description provided by user')}
                 additionalDescContent={t(pendingItem.description)}
-                reportedByLabel={t('Reported by')}
+                reportedByLabel={t('Initially reported by')}
                 ethAddress={t(pendingItem.ethAddress)}
                 reasons={pendingItem.reasons.map((el: string) => t(el))}
                 reporter={t(pendingItem.reporter)}
@@ -287,7 +269,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                 repliesLabel={t('Replies')}
                 locale={locale}
                 determinationLabel={t('Final determination')}
-                reportedLabel={t('Reported')}
+                reportedLabel={t('reported')}
                 contentType={t(delistedItem.type)}
                 forLabel={t('for')}
                 additionalDescLabel={t("Moderator's evaluation")}

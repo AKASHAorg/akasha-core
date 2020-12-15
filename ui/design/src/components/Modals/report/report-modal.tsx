@@ -1,6 +1,6 @@
 import React from 'react';
 import { useToasts } from 'react-toast-notifications';
-import { Box, Text, RadioButton, FormField } from 'grommet';
+import { Box, Text, FormField, RadioButtonGroup } from 'grommet';
 
 import { MainAreaCardBox } from '../../Cards/common/basic-card-box';
 import { ModalWrapper } from '../common/styled-modal';
@@ -58,7 +58,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     closeModal,
   } = props;
 
-  const [reasons, setReasons] = React.useState<string[]>([]);
+  const [reason, setReason] = React.useState<string>('');
   const [explanation, setExplanation] = React.useState('');
   const [requesting, setRequesting] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
@@ -68,18 +68,6 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const { addToast } = useToasts();
-
-  const handleSelectReason = (selected: string) => {
-    if (!reasons.includes(selected)) {
-      setReasons(reasons.concat(selected));
-    }
-  };
-
-  const handleClickReason = (clicked: string) => {
-    if (reasons.includes(clicked)) {
-      setReasons(reasons.filter(reasn => reasn !== clicked));
-    }
-  };
 
   const handleChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (textAreaRef.current && hiddenSpanRef.current) {
@@ -95,7 +83,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   };
 
   const handleCancel = () => {
-    setReasons([]);
+    setReason('');
     setExplanation('');
     return closeModal();
   };
@@ -117,7 +105,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       user,
       contentId,
       contentType,
-      reasons,
+      reason,
       explanation,
     };
 
@@ -195,17 +183,12 @@ const ReportModal: React.FC<IReportModalProps> = props => {
               </Text>
             </StyledText>
             <Box direction="column">
-              {optionLabels.map(label => (
-                <Box key={label} margin={{ top: 'xsmall' }}>
-                  <RadioButton
-                    name="prop"
-                    checked={reasons.some(el => el === label)}
-                    label={label}
-                    onChange={() => handleSelectReason(label)}
-                    onClick={() => handleClickReason(label)}
-                  />
-                </Box>
-              ))}
+              <RadioButtonGroup
+                name="reasons"
+                options={optionLabels}
+                value={reason}
+                onChange={(event: any) => setReason(event.target.value)}
+              />
             </Box>
             <StyledText
               margin={{ top: 'medium' }}
@@ -266,7 +249,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 label={reportLabel}
                 fill={size === 'small' ? true : false}
                 onClick={handleReport}
-                disabled={requesting ? true : reasons.every(rsn => !rsn) ? true : false}
+                disabled={requesting || !reason.length}
               />
             </Box>
           </Box>

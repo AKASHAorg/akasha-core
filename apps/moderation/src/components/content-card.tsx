@@ -40,13 +40,7 @@ export interface IContentCardProps {
   evaluationDateTime?: string;
   keepContentLabel?: string;
   delistContentLabel?: string;
-  handleButtonClick: (
-    param1: string,
-    param2: string,
-    param3: string,
-    param4: string[],
-    param5: any,
-  ) => void;
+  handleButtonClick: (param1: string, param2: string, param3: string, param5: any) => void;
 }
 
 const ContentCard: React.FC<IContentCardProps> = props => {
@@ -86,7 +80,7 @@ const ContentCard: React.FC<IContentCardProps> = props => {
 
   const handleClick = (action: string) => () => {
     if (ethAddress) {
-      props.handleButtonClick(ethAddress, action, contentType, reasons, entryData);
+      props.handleButtonClick(ethAddress, action, contentType, entryData);
     }
   };
 
@@ -145,7 +139,9 @@ const ContentCard: React.FC<IContentCardProps> = props => {
             <Icon type="error" size="md" accentColor={true} />
             <Text
               margin={{ left: '0.2rem', bottom: '0.2rem' }}
-            >{`${reportedLabel} ${contentType} ${forLabel}`}</Text>
+            >{`${contentType[0].toUpperCase()}${contentType.slice(
+              1,
+            )} ${reportedLabel}  ${forLabel}`}</Text>
             {reasons.map((reason, idx) => (
               <StyledBox
                 key={idx}

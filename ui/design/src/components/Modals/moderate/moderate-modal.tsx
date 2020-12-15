@@ -1,6 +1,6 @@
 import React from 'react';
 import { useToasts } from 'react-toast-notifications';
-import { Box, Text, RadioButton, FormField } from 'grommet';
+import { Box, Text, FormField } from 'grommet';
 
 import { EntryCardMod, ProfileCardMod, MainAreaCardBox } from '../../Cards';
 import { Button } from '../../Buttons';
@@ -15,9 +15,6 @@ export interface IModerateModalProps {
   className?: string;
   titleLabel: string;
   contentType: string;
-  optionsTitleLabel: string;
-  optionLabels: string[];
-  preselectedReasons: string[];
 
   flaggedItemData: any;
   repostsLabel: string;
@@ -48,9 +45,6 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     className,
     titleLabel,
     contentType,
-    optionsTitleLabel,
-    optionLabels,
-    preselectedReasons,
     flaggedItemData,
     repostsLabel,
     repliesLabel,
@@ -72,7 +66,6 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     closeModal,
   } = props;
 
-  const [reasons, setReasons] = React.useState<string[]>([]);
   const [explanation, setExplanation] = React.useState('');
   const [requesting, setRequesting] = React.useState(false);
   const [rows, setRows] = React.useState(1);
@@ -81,25 +74,6 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const { addToast } = useToasts();
-
-  // prefill reason(s) on mount if action is to 'Delist'
-  React.useEffect(() => {
-    if (reportLabel === 'Delist') {
-      setReasons(preselectedReasons);
-    }
-  }, []);
-
-  const handleSelectReason = (selected: string) => {
-    if (!reasons.includes(selected)) {
-      setReasons(reasons.concat(selected));
-    }
-  };
-
-  const handleClickReason = (clicked: string) => {
-    if (reasons.includes(clicked)) {
-      setReasons(reasons.filter(reasn => reasn !== clicked));
-    }
-  };
 
   const handleChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (textAreaRef.current && hiddenSpanRef.current) {
@@ -115,7 +89,6 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
   };
 
   const handleCancel = () => {
-    setReasons([]);
     setExplanation('');
     return closeModal();
   };
@@ -137,7 +110,6 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
       contentId,
       contentType,
       explanation,
-      reasons,
       moderator: user,
       delisted: isDelisted,
     };
@@ -228,34 +200,6 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                 />
               ) : null}
             </MainAreaCardBox>
-            {reportLabel === 'Delist' && (
-              <>
-                <StyledText
-                  margin={{ top: 'medium' }}
-                  weight="normal"
-                  color="secondaryText"
-                  size="medium"
-                >
-                  {optionsTitleLabel}
-                  <Text color="accentText" margin={{ left: '0.15rem' }}>
-                    *
-                  </Text>
-                </StyledText>
-                <Box direction="column">
-                  {optionLabels.map(label => (
-                    <Box key={label} margin={{ top: 'xsmall' }}>
-                      <RadioButton
-                        name="prop"
-                        checked={reasons.some(el => el === label)}
-                        label={label}
-                        onChange={() => handleSelectReason(label)}
-                        onClick={() => handleClickReason(label)}
-                      />
-                    </Box>
-                  ))}
-                </Box>
-              </>
-            )}
             <StyledText
               margin={{ top: 'medium' }}
               weight="normal"
@@ -318,13 +262,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                 label={reportLabel}
                 fill={size === 'small' ? true : false}
                 onClick={reportLabel === 'Delist' ? handleModerate() : handleModerate(false)}
-                disabled={
-                  requesting || !explanation.length
-                    ? true
-                    : reportLabel === 'Delist' && reasons.every(rsn => !rsn)
-                    ? true
-                    : false
-                }
+                disabled={requesting || !explanation.length}
               />
             </Box>
           </Box>
