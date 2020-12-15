@@ -33,6 +33,7 @@ const typeDefs = gql`
   input PostData {
     title: String
     tags: [String]
+    quotes: [String]
     type: PostType
   }
 
@@ -74,13 +75,15 @@ const typeDefs = gql`
   }
 
   type Post {
+    _id: ID!
     type: PostType!
     creationDate: String!
     author: UserProfile!
     title: String
     content: [DataProvider!]
-    quotes: [String!]
+    quotes: [Post!]
     tags: [String!]
+    quotedBy: [String]
   }
 `;
 

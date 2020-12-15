@@ -2,6 +2,7 @@ import { DataSource } from 'apollo-datasource';
 import { getAppDB } from '../helpers';
 import { ThreadID, Where, Client } from '@textile/hub';
 import { DataProvider, Profile } from '../collections/interfaces';
+import { queryCache } from '../storage/cache';
 
 class ProfileAPI extends DataSource {
   private readonly collection: string;
@@ -26,11 +27,19 @@ class ProfileAPI extends DataSource {
     return;
   }
 
+  getCacheKey(pubKey: string) {
+    return `${this.collection}:pubKey${pubKey}`;
+  }
   async resolveProfile(pubKey: string) {
+    const cacheKey = this.getCacheKey(pubKey);
+    if (queryCache.has(cacheKey)) {
+      return Promise.resolve(queryCache.get(cacheKey));
+    }
     const db: Client = await getAppDB();
     const query = new Where('pubKey').eq(pubKey);
     const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
     if (profilesFound.length) {
+      queryCache.set(cacheKey, profilesFound[0]);
       return profilesFound[0];
     }
     return;
@@ -42,6 +51,7 @@ class ProfileAPI extends DataSource {
     if (!profile) {
       return;
     }
+    queryCache.del(this.getCacheKey(pubKey));
     for (const rec of data) {
       const existing = profile.providers.findIndex(
         d => d.provider === rec.provider && d.property === rec.property,
@@ -60,6 +70,7 @@ class ProfileAPI extends DataSource {
     if (!profile) {
       return;
     }
+    queryCache.del(this.getCacheKey(pubKey));
     const indexFound = profile.default.findIndex(provider => provider.property === data.property);
     if (indexFound !== -1) {
       profile.default[indexFound] = data;
@@ -80,6 +91,7 @@ class ProfileAPI extends DataSource {
     if (!profile) {
       return;
     }
+    queryCache.del(this.getCacheKey(pubKey));
     profile.userName = name;
     return await db.save(this.dbID, this.collection, [profile]);
   }
@@ -95,7 +107,7 @@ class ProfileAPI extends DataSource {
     if (!profile || !profile1 || exists !== -1 || exists1 !== -1) {
       return false;
     }
-
+    queryCache.del(this.getCacheKey(pubKey));
     profile1.following.unshift(profile.pubKey);
     profile.followers.unshift(profile1.pubKey);
     await db.save(this.dbID, this.collection, [profile, profile1]);
@@ -114,7 +126,7 @@ class ProfileAPI extends DataSource {
     if (!profile || !profile1 || exists === -1 || exists1 === -1) {
       return false;
     }
-
+    queryCache.del(this.getCacheKey(pubKey));
     profile1.following.splice(exists, 1);
     profile.followers.splice(exists1, 1);
     await db.save(this.dbID, this.collection, [profile, profile1]);
@@ -135,6 +147,7 @@ class ProfileAPI extends DataSource {
     } else {
       profile.metaData.push(data);
     }
+    queryCache.del(this.getCacheKey(pubKey));
     return await db.save(this.dbID, this.collection, [profile]);
   }
 }

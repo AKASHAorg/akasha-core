@@ -1,19 +1,9 @@
 import { forkJoin } from 'rxjs';
 
-export const publishEntry = (entryService: any) => (pendingEntry: any) => {
-  const entryObj = {
-    data: {
-      provider: 'AkashaApp',
-      property: 'slateContent',
-      value: pendingEntry.entry.content,
-    },
-    post: {
-      tags: pendingEntry.entry.metadata.tags,
-    },
-  };
-  const call = entryService.postEntry(entryObj);
-  return call;
-};
+export const MEDIA_URL_PREFIX = 'CID:';
+export const PROVIDER_AKASHA = 'AkashaApp';
+export const PROPERTY_SLATE_CONTENT = 'slateContent';
+export const PROPERTY_TEXT_CONTENT = 'textContent';
 
 export const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {
   let ipfsUrl = '';
@@ -38,7 +28,7 @@ export const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {
   return ipfsUrl;
 };
 
-export const serializeToSlate = (
+export const serializeLegacyContentToSlate = (
   entryData: {
     CID: string;
     excerpt: string;
@@ -95,8 +85,172 @@ export const serializeToSlate = (
   return serializedContent;
 };
 
-export const uploadMediaToIpfs = (ipfsService: any) => (data: string | File, isUrl = false) => {
-  const ipfsGatewayCall = ipfsService.getSettings({});
-  const uploadCall = ipfsService.upload([{ isUrl, content: data }]);
-  return forkJoin([ipfsGatewayCall, uploadCall]).toPromise();
+export const uploadMediaToTextile = (profileStore: any, ipfsSettings: any) => (
+  data: any,
+  isUrl = false,
+) => {
+  const gatewayCall = ipfsSettings.getSettings({});
+  const uploadData: { isUrl: boolean; content: any; name?: string } = {
+    isUrl,
+    content: data,
+  };
+  if (data.name) {
+    uploadData.name = data.name;
+  }
+  const uploadCall = profileStore.saveMediaFile(uploadData);
+  return forkJoin([gatewayCall, uploadCall]).toPromise();
+};
+
+function toBinary(data: string) {
+  const codeUnits = new Uint16Array(data.length);
+  for (let i = 0; i < codeUnits.length; i++) {
+    codeUnits[i] = data.charCodeAt(i);
+  }
+  return String.fromCharCode(...new Uint8Array(codeUnits.buffer));
+}
+
+function fromBinary(binary: any) {
+  let result = binary;
+
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < bytes.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  result = String.fromCharCode(...new Uint16Array(bytes.buffer));
+
+  return result;
+}
+
+export const serializeSlateToBase64 = (slateContent: any) => {
+  return btoa(toBinary(JSON.stringify(slateContent)));
+};
+
+export const serializeBase64ToSlate = (base64Content: string, logger?: any) => {
+  const stringContent = atob(base64Content);
+  let result;
+  try {
+    const stringified = fromBinary(stringContent);
+    result = JSON.parse(stringified);
+  } catch (err) {
+    if (logger) {
+      logger.error('Error parsing content: %j', err);
+    }
+  }
+  if (!Array.isArray(result)) {
+    result = JSON.parse(stringContent);
+  }
+  return result;
+};
+
+export const mapEntry = (
+  entry: {
+    content: { provider: string; property: string; value: string }[];
+    CID?: string;
+    _id: string;
+    quotes: any[];
+    author: {
+      CID?: string;
+      description: string;
+      avatar: string;
+      coverImage: string;
+      userName: string;
+      name: string;
+      ethAddress: string;
+    };
+  },
+  ipfsGateway: string,
+  logger?: any,
+) => {
+  const slateContent = entry.content.find(elem => elem.property === PROPERTY_SLATE_CONTENT);
+  let content = null;
+  try {
+    if (slateContent) {
+      content = serializeBase64ToSlate(slateContent.value, logger);
+    }
+  } catch (error) {
+    if (logger) {
+      logger.error('Error serializing base64 to slateContent: %j', error);
+    }
+    if (slateContent) {
+      content = [
+        {
+          type: 'paragraph',
+          children: [{ text: slateContent.value }],
+        },
+      ];
+    }
+  }
+
+  const contentWithMediaGateways = content.map((node: any) => {
+    // in the slate content only the ipfs hash prepended with CID: is saved for the image urls
+    // like: CID:bafybeidywav2f4jezkpqe7ydkvhrvqxf3mp76aqzhpvlhp2zg6xapg5nr4
+    const nodeClone = Object.assign({}, node);
+    if (node.type === 'image' && node.url.startsWith(MEDIA_URL_PREFIX)) {
+      nodeClone.url = getMediaUrl(ipfsGateway, node.url.slice(4));
+    }
+    return nodeClone;
+  });
+
+  let quotedEntry: any;
+  if (entry.quotes && entry.quotes[0]) {
+    quotedEntry = mapEntry(entry.quotes[0], ipfsGateway, logger);
+  }
+
+  return {
+    author: {
+      CID: entry.author.CID,
+      description: entry.author.description,
+      avatar: getMediaUrl(ipfsGateway, entry.author.avatar),
+      coverImage: getMediaUrl(ipfsGateway, entry.author.coverImage),
+      ensName: entry.author.userName,
+      userName: entry.author.name,
+      ethAddress: entry.author.ethAddress,
+    },
+    CID: entry.CID,
+    content: contentWithMediaGateways,
+    quote: quotedEntry,
+    entryId: entry._id,
+    ipfsLink: entry._id,
+    permalink: 'null',
+  };
+};
+
+export const buildPublishObject = (data: any) => {
+  // save only the ipfs CID prepended with CID: for the slate content image urls
+  const cleanedContent = data.content.map((node: any) => {
+    const nodeClone = Object.assign({}, node);
+    if (node.type === 'image' && node.url.includes('gateway.ipfs')) {
+      const hashIndex = node.url.lastIndexOf('/');
+      const hash = node.url.substr(hashIndex + 1);
+      nodeClone.url = `${MEDIA_URL_PREFIX}${hash}`;
+    }
+    return nodeClone;
+  });
+
+  const quotes = [];
+  if (data.metadata.quote) {
+    quotes.push(data.metadata.quote);
+  }
+
+  const entryObj = {
+    data: [
+      {
+        provider: PROVIDER_AKASHA,
+        property: PROPERTY_SLATE_CONTENT,
+        // perform 2 transforms on content: change unicode chars to ASCII and then convert to base64
+        value: serializeSlateToBase64(cleanedContent),
+      },
+      {
+        provider: PROVIDER_AKASHA,
+        property: PROPERTY_TEXT_CONTENT,
+        value: data.textContent,
+      },
+    ],
+    post: {
+      quotes: quotes,
+      tags: data.metadata.tags,
+    },
+  };
+
+  return entryObj;
 };

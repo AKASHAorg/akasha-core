@@ -16,6 +16,7 @@ export interface IBookmarkActions {
 
 const BOOKMARKED_ENTRIES_KEY = 'FEED_APP_BOOKMARK_ENTRIES';
 
+const entriesBookmarks = 'entries-bookmarks';
 const useEntryBookmark = (props: UseEntryBookmarkProps): [Set<string>, IBookmarkActions] => {
   const { ethAddress, sdkModules, bmKey = BOOKMARKED_ENTRIES_KEY, onError, logger } = props;
   const [bookmarks, setBookmarks] = React.useState<Set<string>>(new Set());
@@ -25,14 +26,18 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [Set<string>, IBookmark
     if (ethAddress) {
       if (sdkModules && sdkModules.hasOwnProperty('db')) {
         const call = sdkModules.db.settingsAttachment.get({
-          ethAddress,
-          id: bmKey,
+          moduleName: bmKey,
         });
         subs = call.subscribe(
           (resp: any) => {
             const { data } = resp;
-            if (data) {
-              setBookmarks(new Set(JSON.parse(data)));
+            if (data && data.services) {
+              const bookmarkedEntries = data.services.findIndex(
+                (e: string[]) => e[0] === entriesBookmarks,
+              );
+              if (bookmarkedEntries !== -1) {
+                setBookmarks(new Set(JSON.parse(data.services[bookmarkedEntries][1])));
+              }
             }
           },
           (err: Error) => onError(err),
@@ -54,18 +59,12 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [Set<string>, IBookmark
     addBookmark: entryId => {
       const newBmks = new Set(bookmarks).add(entryId);
       const call = sdkModules.db.settingsAttachment.put({
-        ethAddress,
-        obj: {
-          data: JSON.stringify(Array.from(newBmks)),
-          type: 'string',
-          id: bmKey,
-        },
+        moduleName: bmKey,
+        services: [[entriesBookmarks, JSON.stringify(Array.from(newBmks))]],
       });
       call.subscribe(
-        async (resp: any) => {
-          const attachment = await resp.data.doc.getAttachment(bmKey);
-          const textArr = await attachment.getStringData();
-          setBookmarks(new Set(JSON.parse(textArr)));
+        async (_resp: any) => {
+          setBookmarks(newBmks);
         },
         (err: Error) => onError(err),
       );
@@ -74,16 +73,12 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [Set<string>, IBookmark
       const newBkmks = new Set(bookmarks);
       newBkmks.delete(entryId);
       const call = sdkModules.db.settingsAttachment.put({
-        ethAddress,
-        obj: {
-          data: JSON.stringify(Array.from(newBkmks)),
-        },
+        moduleName: bmKey,
+        services: [['entries-bookmarks', JSON.stringify(Array.from(newBkmks))]],
       });
       call.subscribe(
-        async (resp: any) => {
-          const attachment = await resp.data.doc.getAttachment(bmKey);
-          const textArr = await attachment.getStringData();
-          setBookmarks(new Set(JSON.parse(textArr)));
+        async (_resp: any) => {
+          setBookmarks(newBkmks);
         },
         (err: Error) => onError(err),
       );
