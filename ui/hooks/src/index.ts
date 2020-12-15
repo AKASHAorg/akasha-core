@@ -4,6 +4,8 @@ import useFeedReducer from './use-feed-reducer';
 import useEntryBookmark from './use-entry-bookmark';
 import useGlobalLogin from './use-global-login';
 import useLoginState from './use-login-state';
+import useModalState from './use-modal-state';
+import useENSRegistration from './use-ens-registration';
 
 export {
   useProfile,
@@ -11,5 +13,7 @@ export {
   useEntryPublisher,
   useEntryBookmark,
   useGlobalLogin,
-  useLoginState
+  useLoginState,
+  useModalState,
+  useENSRegistration,
 };

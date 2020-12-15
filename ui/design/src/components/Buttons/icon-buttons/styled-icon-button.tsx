@@ -8,6 +8,7 @@ export interface IIconButtonProps {
   onClick?: () => void;
   primary?: boolean;
   secondary?: boolean;
+  ref?: React.RefObject<HTMLButtonElement>
 }
 
 const StyledIconButton = styled(Button)<IIconButtonProps>`

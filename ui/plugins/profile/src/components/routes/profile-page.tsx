@@ -1,20 +1,20 @@
 import * as React from 'react';
-import { ProfilePageHeader } from '../ProfileHeader/profile-header';
+import { ProfilePageCard } from '../profile-cards/profile-card';
 import DS from '@akashaproject/design-system';
 import { useProfile } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 import { useParams } from 'react-router-dom';
+import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
-export interface ProfilePageProps {
-  modalOpen: boolean;
+export interface ProfilePageProps extends RootComponentProps {
+  modalActions: ModalStateActions;
+  modalState: ModalState
   ethAddress: string | null;
-  onLogin: (param: 1 | 2) => void;
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  showLoginModal: () => void;
+  onLogin: any;
 }
 
-const ProfilePage = (props: RootComponentProps & ProfilePageProps) => {
-  const { modalOpen, ethAddress, setModalOpen, showLoginModal } = props;
+const ProfilePage = (props: ProfilePageProps) => {
+  const { ethAddress } = props;
 
   const { profileId } = useParams() as any;
   const [profileState, profileActions] = useProfile({
@@ -35,14 +35,13 @@ const ProfilePage = (props: RootComponentProps & ProfilePageProps) => {
       <DS.Helmet>
         <title>Profile | {profileId} Page</title>
       </DS.Helmet>
-      <ProfilePageHeader
+      <ProfilePageCard
         {...props}
         profileData={profileState}
         profileId={profileId}
-        modalOpen={modalOpen}
         loggedUserEthAddress={ethAddress}
-        setModalOpen={setModalOpen}
-        showLoginModal={showLoginModal}
+        modalActions={props.modalActions}
+        modalState={props.modalState}
       />
     </div>
   );

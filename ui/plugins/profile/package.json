@@ -42,6 +42,7 @@
     "@akashaproject/design-system": "*",
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/sdk-common": "*",
+    "@akashaproject/sdk-registry": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@types/i18next": "13.0.0",
     "@types/react-i18next": "8.1.0",

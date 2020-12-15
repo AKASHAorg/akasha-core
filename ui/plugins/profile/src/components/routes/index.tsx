@@ -6,7 +6,7 @@ import menuRoute, { MY_PROFILE, rootRoute } from '../../routes';
 import MyProfilePage from './my-profile-page';
 import ProfilePage from './profile-page';
 import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
-import { useLoginState } from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useModalState } from '@akashaproject/ui-awf-hooks';
 
 const { Box, LoginModal } = DS;
 
@@ -23,53 +23,52 @@ const Routes: React.FC<RootComponentProps> = props => {
     },
     cacheService: props.sdkModules.commons.cacheService,
   });
-  const [loginModalState, setLoginModalState] = React.useState(false);
-  const [modalOpen, setModalOpen] = React.useState(false);
+  const [modalState, modalStateActions] = useModalState({
+    initialState: {
+      updateProfile: false,
+      changeUsername: false,
+      changeENS: false
+    },
+    isLoggedIn: !!loginState.ethAddress
+  });
 
   const { t } = useTranslation();
 
-  React.useEffect(() => {
-    if (loginState.ethAddress) {
-      setLoginModalState(false);
-      setModalOpen(true);
-    }
-  }, [loginState.ethAddress]);
-
-  const showLoginModal = () => {
-    setLoginModalState(true);
-  };
-
   const hideLoginModal = () => {
-    setLoginModalState(false);
+    modalStateActions.hide('loginModal');
   };
-
   const handleTutorialLinkClick = () => {
     /* goto tutorials */
   };
-  console.log(loginState, 'the login state');
+
   return (
     <Router>
       <Box>
         <Switch>
           <Route path={`${rootRoute}/list`} render={() => <>A list of profiles</>} />
           <Route path={menuRoute[MY_PROFILE]}>
-            <MyProfilePage {...props} />
+            <MyProfilePage
+              {...props}
+              modalActions={modalStateActions}
+              modalState={modalState}
+              ethAddress={loginState.ethAddress}
+              profileData={loginState.profileData}
+            />
           </Route>
           <Route path={`${path}/:profileId`}>
             <ProfilePage
               {...props}
-              modalOpen={modalOpen}
               ethAddress={loginState.ethAddress}
               onLogin={loginActions.login}
-              setModalOpen={setModalOpen}
-              showLoginModal={showLoginModal}
+              modalActions={modalStateActions}
+              modalState={modalState}
             />
           </Route>
           <Route render={() => <div>{t('Oops, Profile not found!')}</div>} />
         </Switch>
       </Box>
       <LoginModal
-        showModal={loginModalState}
+        showModal={modalState.loginModal}
         slotId={props.layout.app.modalSlotId}
         onLogin={loginActions.login}
         onModalClose={hideLoginModal}

@@ -3,25 +3,20 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
-const { styled, ProfileCard, ModalRenderer, ToastProvider, ReportModal, useViewportSize } = DS;
-
-const StyledProfileCard = styled(ProfileCard)`
-  height: auto;
-  margin-bottom: 0.5em;
-`;
+const { ProfileCard, ModalRenderer, ToastProvider, ReportModal, useViewportSize } = DS;
 
 export interface IProfileHeaderProps {
   profileId: string;
   profileData: Partial<IProfileData>;
   loggedUserEthAddress: string | null;
-  modalOpen: boolean;
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  showLoginModal: () => void;
+  modalState: ModalState;
+  modalActions: ModalStateActions
 }
 
-export const ProfilePageHeader = (props: IProfileHeaderProps & RootComponentProps) => {
-  const { profileData, loggedUserEthAddress, modalOpen, setModalOpen, showLoginModal } = props;
+export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps) => {
+  const { profileData, loggedUserEthAddress } = props;
 
   const [flagged, setFlagged] = React.useState('');
 
@@ -30,13 +25,13 @@ export const ProfilePageHeader = (props: IProfileHeaderProps & RootComponentProp
   const { t } = useTranslation();
 
   const handleEntryFlag = (entryId: string) => () => {
-    /* todo */
-    if (!loggedUserEthAddress) {
-      return showLoginModal();
-    }
     setFlagged(entryId);
-    setModalOpen(true);
+    props.modalActions.showAfterLogin('reportModal');
   };
+
+  const closeReportModal = () => {
+    props.modalActions.hide('reportModal');
+  }
 
   if (!profileData) {
     return null;
@@ -49,7 +44,7 @@ export const ProfilePageHeader = (props: IProfileHeaderProps & RootComponentProp
   return (
     <>
       <ModalRenderer slotId={props.layout.app.modalSlotId}>
-        {modalOpen && (
+        {props.modalState.reportModal && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
               titleLabel={t('Report a Post')}
@@ -79,14 +74,12 @@ export const ProfilePageHeader = (props: IProfileHeaderProps & RootComponentProp
               user={loggedUserEthAddress ? loggedUserEthAddress : ''}
               contentId={profileData.ethAddress ? profileData.ethAddress : flagged}
               size={size}
-              closeModal={() => {
-                setModalOpen(false);
-              }}
+              closeModal={closeReportModal}
             />
           </ToastProvider>
         )}
       </ModalRenderer>
-      <StyledProfileCard
+      <ProfileCard
         onClickApps={() => {}}
         onClickFollowing={() => {}}
         // @ts-ignore

@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
-import { Button } from '../../Buttons/index';
+import { IconButton } from '../../Buttons/index';
 import { Icon } from '../../Icon';
 import { SubtitleTextIcon, TextIcon } from '../../TextIcon/index';
 import { MainAreaCardBox } from '../common/basic-card-box';
@@ -14,6 +14,7 @@ import {
 } from './profile-card-fields/index';
 import { IProfileWidgetCard } from './profile-widget-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
+import ProfileEditMenuDropdown from './profile-card-edit-dropdown';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -49,6 +50,10 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   flaggable: boolean;
   onEntryFlag: () => void;
   getProfileProvidersData: () => void;
+  onUpdateClick: () => void;
+  onENSChangeClick: () => void;
+  updateProfileLabel: string;
+  changeENSLabel: string;
 }
 
 const ProfileCard: React.FC<IProfileCardProps> = props => {
@@ -56,7 +61,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     className,
     onClickFollowing,
     onClickApps,
-    onChangeProfileData,
     profileData,
     descriptionLabel,
     actionsLabel,
@@ -66,12 +70,9 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     shareProfileLabel,
     appsLabel,
     changeCoverImageLabel,
-    cancelLabel,
-    saveChangesLabel,
     flagAsLabel,
     flaggable,
     onEntryFlag,
-    getProfileProvidersData,
     profileProvidersData,
     canUserEdit,
   } = props;
@@ -81,24 +82,21 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const leftSubtitle = profileData.profileType === 'dapp' ? usersLabel : followingLabel;
   const rightSubtitle = profileData.profileType === 'dapp' ? actionsLabel : appsLabel;
 
-  const handleEditClick = () => {
-    getProfileProvidersData();
-    setEditable(true);
-  };
-
   const handleShareClick = () => {
     // to be implemented
     return;
   };
 
-  const [editable, setEditable] = useState(false);
+  const [editable/* , setEditable */] = useState(false);
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
+  const [editMenuOpen, setEditMenuOpen] = React.useState(false);
   const [avatar, setAvatar] = useState(profileData.avatar);
   const [coverImage, setCoverImage] = useState(profileData.coverImage);
   const [description, setDescription] = useState(profileData.description);
   const [name, setName] = useState(profileData.name);
 
   const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
+  const editMenuRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
   React.useEffect(() => {
     setAvatar(profileData.avatar);
@@ -129,9 +127,17 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     setMenuDropOpen(!menuDropOpen);
   };
 
+  const toggleEditMenu = () => {
+    setEditMenuOpen(!editMenuOpen);
+  };
+
   const closeMenuDrop = () => {
     setMenuDropOpen(false);
   };
+
+  const closeEditMenu = () => {
+    setEditMenuOpen(false);
+  }
 
   const handleChangeAvatar = (provider: IProfileDataProvider) => {
     setAvatar(provider.value);
@@ -157,27 +163,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     setNamePopoverOpen(false);
   };
 
-  const handleCancelEdit = () => {
-    // reset to initial state
-    setAvatar(profileData.avatar);
-    setCoverImage(profileData.coverImage);
-    setDescription(profileData.description);
-    setName(profileData.name);
-    setAvatarIcon(profileProvidersData?.currentProviders.avatar?.providerIcon);
-    setCoverImageIcon(profileProvidersData?.currentProviders.coverImage?.providerIcon);
-    setDescriptionIcon(profileProvidersData?.currentProviders.description?.providerIcon);
-    setNameIcon(profileProvidersData?.currentProviders.name?.providerIcon);
-    // turn off editing
-    setEditable(false);
-  };
-
-  const handleSaveEdit = () => {
-    // @TODO construct object
-    const newProfileData = {};
-    onChangeProfileData(newProfileData);
-    setEditable(false);
-  };
-
   const onLinkCopy = (CID?: string) => {
     if (CID) {
       navigator.clipboard.writeText(CID);
@@ -187,7 +172,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     <MainAreaCardBox className={className}>
       <ProfileCardCoverImage
         shareProfileLabel={shareProfileLabel}
-        editProfileLabel={editProfileLabel}
         changeCoverImageLabel={changeCoverImageLabel}
         editable={editable}
         canUserEdit={canUserEdit}
@@ -196,7 +180,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         handleChangeCoverImage={handleChangeCoverImage}
         coverImagePopoverOpen={coverImagePopoverOpen}
         setCoverImagePopoverOpen={setCoverImagePopoverOpen}
-        handleEditClick={handleEditClick}
         handleShareClick={handleShareClick}
         profileProvidersData={profileProvidersData}
       />
@@ -263,6 +246,14 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               />
             </Box>
           )}
+          {canUserEdit && (
+              <IconButton
+                primary={true}
+                icon={<Icon type="editSimple" ref={editMenuRef}/>}
+                label={editProfileLabel}
+                onClick={toggleEditMenu}
+              />
+            )}
           {flaggable && (
             <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
           )}
@@ -272,6 +263,16 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               onMenuClose={closeMenuDrop}
               onFlag={onEntryFlag}
               flagAsLabel={flagAsLabel}
+            />
+          )}
+          {editMenuOpen && editMenuRef.current && (
+            <ProfileEditMenuDropdown
+              target={editMenuRef.current}
+              onClose={closeEditMenu}
+              onUpdateClick={() => { props.onUpdateClick(); closeEditMenu(); }}
+              onENSChangeClick={() => { props.onENSChangeClick(); closeEditMenu(); }}
+              changeENSLabel={props.changeENSLabel}
+              updateProfileLabel={props.updateProfileLabel}
             />
           )}
         </Box>
@@ -310,16 +311,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           </Box>
         </>
       )}
-      <Box height="40px">
-        {editable && (
-          <div>
-            <Box gap="xsmall" direction="row" justify="end" pad={{ horizontal: 'medium' }}>
-              <Button label={cancelLabel} onClick={handleCancelEdit} />
-              <Button label={saveChangesLabel} onClick={handleSaveEdit} primary={true} />
-            </Box>
-          </div>
-        )}
-      </Box>
     </MainAreaCardBox>
   );
 };
