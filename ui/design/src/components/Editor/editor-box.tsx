@@ -79,6 +79,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
   const [mentionTargetRange, setMentionTargetRange] = useState<Range | null>(null);
   const [tagTargetRange, setTagTargetRange] = useState<Range | null>(null);
   const [index, setIndex] = useState(0);
+  const [createTag, setCreateTag] = React.useState('');
 
   const [letterCount, setLetterCount] = useState(0);
 
@@ -209,7 +210,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
       const beforeRange = before && Editor.range(editor, before, start);
       const beforeText = beforeRange && Editor.string(editor, beforeRange);
       const beforeMentionMatch = beforeText && beforeText.match(/^@(\w+)$/);
-      const beforeTagMatch = beforeText && beforeText.match(/^#(\w+)$/);
+      const beforeTagMatch = beforeText && beforeText.match(/^#([a-z0-9]*)(\-?|.?)([a-z0-9]*)$/);
       const after = Editor.after(editor, start);
       const afterRange = Editor.range(editor, start, after);
       const afterText = Editor.string(editor, afterRange);
@@ -224,6 +225,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
       if (beforeTagMatch && afterMatch && beforeRange) {
         setTagTargetRange(beforeRange);
         getTags(beforeTagMatch[1]);
+        setCreateTag(beforeTagMatch[1]);
         setIndex(0);
         return;
       }
@@ -298,8 +300,12 @@ const EditorBox: React.FC<IEditorBox> = props => {
       if (mentionTargetRange) {
         selectMention(event, mentionTargetRange);
       }
-      if (tagTargetRange) {
+      if (tagTargetRange && tags.length) {
         selectTag(event, tagTargetRange);
+      } else if (tagTargetRange && [13, 32].includes(event.keyCode)) {
+        Transforms.select(editor, tagTargetRange);
+        CustomEditor.insertTag(editor, createTag);
+        setTagTargetRange(null);
       }
     },
     [index, mentionTargetRange, tagTargetRange],

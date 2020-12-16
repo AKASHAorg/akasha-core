@@ -29,7 +29,7 @@ const EditorComponent = () => {
 
   return (
     <EditorBox
-      onPublish={() => action('Clicked on')('Synthetic Event')}
+      onPublish={data => action('Clicked on')(data)}
       avatar={text('Logged Profile Avatar', 'https://www.stevensegallery.com/360/360')}
       ethAddress={text('Logged Profile EthAddress', '0x003410499401674320006570047391024572000')}
       withMeter={boolean('Meter', true)}

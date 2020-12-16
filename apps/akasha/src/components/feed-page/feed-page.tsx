@@ -160,8 +160,22 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       setShowEditor(true);
     }
   };
-  const handleEntryShare = () => {
-    return;
+  const handleEntryShare = (service: 'twitter' | 'facebook' | 'reddit', _entryId: string) => {
+    let shareUrl;
+    switch (service) {
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${window.location.href}`;
+        break;
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`;
+        break;
+      case 'reddit':
+        shareUrl = `http://www.reddit.com/submit?url=${window.location.href}`;
+        break;
+      default:
+        break;
+    }
+    window.open(shareUrl, '_blank');
   };
   const handleEntryFlag = (entryId: string, user?: string | null) => () => {
     /* todo */
@@ -186,9 +200,21 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleGetMentions = () => {
     /* todo */
   };
-  const handleGetTags = () => {
+
+  const [tags, setTags] = React.useState([]);
+
+  const handleGetTags = (query: string) => {
     const tagsService = sdkModules.posts.tags.getTags({ fields: ['name'], limit: 100000 });
-    return tagsService.toPromise();
+    tagsService.subscribe((resp: any) => {
+      if (resp.data?.tags?.results && resp.data?.tags?.results.length) {
+        const filteredTags = resp.data.tags.results
+          .map((tag: { name: string }) => tag.name)
+          .filter((c: string) => c.toLowerCase().startsWith(query.toLowerCase()))
+          .slice(0, 10);
+
+        setTags(filteredTags);
+      }
+    });
   };
 
   const handleToggleEditor = () => {
@@ -294,6 +320,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         handleNavigateBack={handleToggleEditor}
         getMentions={handleGetMentions}
         getTags={handleGetTags}
+        tags={tags}
         uploadRequest={onUploadRequest}
         embedEntryData={currentEmbedEntry}
         style={{ width: '36rem' }}
