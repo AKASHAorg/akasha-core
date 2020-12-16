@@ -10,7 +10,8 @@ import coreServices from '@akashaproject/sdk-core/lib/constants';
 import settings from './settings';
 import entryService from './entry.service';
 import tagService from './tag.service';
-import services, { moduleName, ENTRY_SERVICE, TAG_SERVICE } from './constants';
+import commentService from './comment.service';
+import services, { moduleName, ENTRY_SERVICE, TAG_SERVICE, COMMENT_SERVICE } from './constants';
 
 export class AuthModule extends IAkashaModule {
   public async init(di: DIContainer) {
@@ -20,7 +21,7 @@ export class AuthModule extends IAkashaModule {
   }
 
   public availableServices(): IAkashaModuleServices {
-    return IAkashaModule.EXPORT_TO_CHANNEL([ENTRY_SERVICE, TAG_SERVICE], services);
+    return IAkashaModule.EXPORT_TO_CHANNEL([ENTRY_SERVICE, TAG_SERVICE, COMMENT_SERVICE], services);
   }
 
   protected _name() {
@@ -28,7 +29,7 @@ export class AuthModule extends IAkashaModule {
   }
 
   protected _registerServices(di: any): IAkashaNamedService[] {
-    return [entryService, tagService];
+    return [entryService, tagService, commentService];
   }
 }
 

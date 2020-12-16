@@ -1,4 +1,12 @@
-import { createAPISig, Client, ThreadID, PrivateKey, createUserAuth } from '@textile/hub';
+import {
+  createAPISig,
+  Client,
+  ThreadID,
+  PrivateKey,
+  PublicKey,
+  createUserAuth,
+  Users,
+} from '@textile/hub';
 import { updateCollections, initCollections } from './collections';
 
 export const getAPISig = async (minutes: number = 30) => {
@@ -46,6 +54,38 @@ export const getAppDB = async () => {
   await client.getToken(identity());
   appDBClient = client;
   return client;
+};
+
+let mailSender;
+export const getMailSender = async () => {
+  if (mailSender) {
+    if (mailSender.api.context.isExpired) {
+      // tslint:disable-next-line:no-console
+      console.info('==refreshing mail sender grpc session==');
+      mailSender = undefined;
+      return getMailSender();
+    }
+    return Promise.resolve(mailSender);
+  }
+  const api = Users.withUserAuth(
+    await createUserAuth(process.env.APP_API_KEY, process.env.APP_API_SECRET),
+    { debug: process.env.NODE_ENV !== 'production' },
+  );
+  const mailSenderID = identity();
+  await api.getToken(mailSenderID);
+  await api.setupMailbox();
+  const mailID = await api.getMailboxID();
+  // if (!mailID) {
+  //   await api.setupMailbox();
+  // }
+  mailSender = {
+    sendMessage: async (to: string, message: Uint8Array) => {
+      const toPubKey = PublicKey.fromString(to);
+      return await api.sendMessage(mailSenderID, toPubKey, message);
+    },
+    api: api,
+  };
+  return mailSender;
 };
 
 export const setupDBCollections = async () => {

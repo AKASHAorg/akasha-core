@@ -11,6 +11,15 @@ const query = {
       const author = await dataSources.profileAPI.resolveProfile(postData.author);
       Object.assign(postData, { author });
     }
+    if (postData.quotes && postData.quotes.length) {
+      for (const quote of postData.quotes) {
+        if (typeof quote.author !== 'string') {
+          continue;
+        }
+        const resolvedAuthor = await dataSources.profileAPI.resolveProfile(quote.author);
+        Object.assign(quote, { author: resolvedAuthor });
+      }
+    }
     return Object.assign({}, postData);
   },
 
@@ -45,6 +54,22 @@ const query = {
     const profile = await dataSources.profileAPI.getProfile(follower);
     const followingProfile = await dataSources.profileAPI.getProfile(following);
     return profile.following.indexOf(followingProfile.pubKey) !== -1;
+  },
+  getComments: async (_source, { postID, limit, offset }, { dataSources }) => {
+    const data = await dataSources.commentsAPI.getComments(postID, limit, offset);
+    const results = [];
+    for (const comment of data.results) {
+      const author = await dataSources.profileAPI.resolveProfile(comment.author);
+      results.push(Object.assign({}, comment, { author }));
+    }
+    data.results = results;
+    return data;
+  },
+
+  getComment: async (_source, { commentID }, { dataSources }) => {
+    const commentData = await dataSources.commentsAPI.getComment(commentID);
+    const author = await dataSources.profileAPI.resolveProfile(commentData.author);
+    return Object.assign({}, commentData, { author });
   },
 };
 
