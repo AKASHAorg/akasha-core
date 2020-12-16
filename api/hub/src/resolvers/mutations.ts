@@ -1,3 +1,5 @@
+import { commentsStats, statsProvider } from './constants';
+
 const mutations = {
   addProfileProvider: async (_, { data }, { dataSources, user }) => {
     if (!user) {
@@ -64,12 +66,10 @@ const mutations = {
     if (!postData) {
       return Promise.reject('Post was not found!');
     }
-    const provider = 'awf.api.stats';
-    const property = 'totalComments';
     const commentID = await dataSources.commentsAPI.addComment(user.pubKey, content, comment);
     if (commentID?.length) {
       const totalCommentsIndex = postData.metaData.findIndex(
-        m => m.provider === provider && m.property === property,
+        m => m.provider === statsProvider && m.property === commentsStats,
       );
       if (totalCommentsIndex !== -1) {
         postData.metaData[totalCommentsIndex].value =
@@ -79,8 +79,8 @@ const mutations = {
         ].value.toString();
       } else {
         postData.metaData.push({
-          provider,
-          property,
+          provider: statsProvider,
+          property: commentsStats,
           value: '1',
         });
       }
