@@ -11,20 +11,30 @@ const typeDefs = gql`
     nextIndex: String
     total: Int
   }
+  type CommentsResult {
+    results: [Comment!]
+    nextIndex: String
+    total: Int
+  }
   type Query {
     getProfile(ethAddress: String!): UserProfile!
     resolveProfile(pubKey: String!): UserProfile!
     getPost(id: String!): Post!
     getTag(name: String!): Tag
+    searchTags(name: String!): [String]
     tags(offset: String, limit: Int): TagsResult
     posts(offset: String, limit: Int): PostsResult
     isFollowing(follower: String!, following: String!): Boolean
+    getComments(postID: String!, offset: String, limit: Int): CommentsResult
+    getComment(commentID: String!): Comment!
   }
+
   input DataProviderInput {
     provider: String
     property: String
     value: String
   }
+
   type DataProvider {
     provider: String
     property: String
@@ -34,18 +44,27 @@ const typeDefs = gql`
     title: String
     tags: [String]
     quotes: [String]
+    mentions: [String]
     type: PostType
   }
 
+  input CommentData {
+    postID: String
+    mentions: [String]
+    tags: [String]
+    replyTo: String
+  }
+
   type Mutation {
-    addProfileProvider(data: [DataProviderInput]): [String!]
-    makeDefaultProvider(data: DataProviderInput): [String!]
-    saveMetaData(data: DataProviderInput): [String!]
-    registerUserName(name: String!): [String!]
+    addProfileProvider(data: [DataProviderInput]): String!
+    makeDefaultProvider(data: [DataProviderInput]): String!
+    saveMetaData(data: DataProviderInput): String!
+    registerUserName(name: String!): String!
     createTag(name: String!): String
     createPost(content: [DataProviderInput!], post: PostData): String
     follow(ethAddress: String!): Boolean
     unFollow(ethAddress: String!): Boolean
+    addComment(content: [DataProviderInput!], comment: CommentData): String
   }
 
   type Tag {
@@ -66,6 +85,8 @@ const typeDefs = gql`
     description: String
     avatar: String
     coverImage: String
+    providers: [DataProvider]
+    default: [DataProvider]
   }
 
   enum PostType {
@@ -84,6 +105,18 @@ const typeDefs = gql`
     quotes: [Post!]
     tags: [String!]
     quotedBy: [String]
+    mentions: [String]
+    totalComments: String
+  }
+
+  type Comment {
+    _id: ID!
+    creationDate: String!
+    author: UserProfile!
+    content: [DataProvider!]
+    mentions: [String]
+    replyTo: String
+    postID: String
   }
 `;
 

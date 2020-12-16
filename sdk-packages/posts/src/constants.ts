@@ -11,6 +11,7 @@ const servicePath = buildServicePath(moduleName);
 const services: IAkashaModuleServices = {
   [ENTRY_SERVICE]: servicePath(ENTRY_SERVICE),
   [TAG_SERVICE]: servicePath(TAG_SERVICE),
+  [COMMENT_SERVICE]: servicePath(COMMENT_SERVICE),
 };
 
 export default services;

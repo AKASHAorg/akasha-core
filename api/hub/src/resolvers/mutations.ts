@@ -1,3 +1,5 @@
+import { commentsStats, statsProvider } from './constants';
+
 const mutations = {
   addProfileProvider: async (_, { data }, { dataSources, user }) => {
     if (!user) {
@@ -52,6 +54,39 @@ const mutations = {
       return Promise.reject('Must be authenticated!');
     }
     return await dataSources.profileAPI.saveMetadata(user.pubKey, data);
+  },
+  addComment: async (_, { content, comment }, { dataSources, user }) => {
+    if (!user) {
+      return Promise.reject('Must be authenticated!');
+    }
+    if (!comment.postID) {
+      return Promise.reject('Must provide a postID to the call!');
+    }
+    const postData = await dataSources.postsAPI.getRealPost(comment.postID);
+    if (!postData) {
+      return Promise.reject('Post was not found!');
+    }
+    const commentID = await dataSources.commentsAPI.addComment(user.pubKey, content, comment);
+    if (commentID?.length) {
+      const totalCommentsIndex = postData.metaData.findIndex(
+        m => m.provider === statsProvider && m.property === commentsStats,
+      );
+      if (totalCommentsIndex !== -1) {
+        postData.metaData[totalCommentsIndex].value =
+          +postData.metaData[totalCommentsIndex].value + 1;
+        postData.metaData[totalCommentsIndex].value = postData.metaData[
+          totalCommentsIndex
+        ].value.toString();
+      } else {
+        postData.metaData.push({
+          provider: statsProvider,
+          property: commentsStats,
+          value: '1',
+        });
+      }
+      await dataSources.postsAPI.updatePosts([postData]);
+    }
+    return commentID[0];
   },
 };
 export default mutations;
