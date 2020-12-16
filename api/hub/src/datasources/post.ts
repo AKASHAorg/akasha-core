@@ -1,6 +1,6 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB } from '../helpers';
-import { Client, ThreadID } from '@textile/hub';
+import { getAppDB, getMailSender } from '../helpers';
+import { Client, ThreadID, Users } from '@textile/hub';
 import { DataProvider, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 
@@ -10,7 +10,7 @@ class PostAPI extends DataSource {
   private readonly dbID: ThreadID;
   private readonly allPostsCache: string;
   private readonly quotedByPost = 'quoted.by.post';
-  private readonly graphqlPostsApi = 'graphql.posts.api';
+  private readonly graphqlPostsApi = 'awf.graphql.posts.api';
   constructor({ collection, dbID }) {
     super();
     this.collection = collection;
@@ -79,9 +79,18 @@ class PostAPI extends DataSource {
   async createPost(
     author: string,
     content: DataProvider[],
-    opt?: { title?: string; tags?: string[]; quotes?: string[]; type?: string },
+    opt?: {
+      title?: string;
+      tags?: string[];
+      quotes?: string[];
+      type?: string;
+      mentions?: string[];
+    },
   ) {
     const db: Client = await getAppDB();
+    if (!author) {
+      throw new Error('Not authorized');
+    }
     const post: PostItem = {
       _id: '',
       creationDate: new Date().getTime(),
@@ -91,6 +100,7 @@ class PostAPI extends DataSource {
       title: opt.title,
       tags: opt.tags ? Array.from(opt.tags) : [],
       quotes: opt.quotes ? Array.from(opt.quotes) : [],
+      mentions: opt.mentions ? Array.from(opt.mentions) : [],
       metaData: [
         {
           property: 'version',
@@ -102,7 +112,28 @@ class PostAPI extends DataSource {
     queryCache.del(this.allPostsCache);
     const postID = await db.create(this.dbID, this.collection, [post]);
     await this.addQuotes(post.quotes, postID[0]);
+    queryCache.del(this.allPostsCache);
+    if (post.mentions && post.mentions.length) {
+      await this.triggerMentions(post.mentions, postID, post.author);
+    }
     return postID;
+  }
+
+  async triggerMentions(mentions: string[], postID, author) {
+    const mailSender = await getMailSender();
+    const notification = {
+      property: 'POST_MENTION',
+      provider: 'awf.graphql.posts.api',
+      value: {
+        postID,
+        author,
+      },
+    };
+    const textEncoder = new TextEncoder();
+    const encodedNotification = textEncoder.encode(JSON.stringify(notification));
+    for (const mention of mentions) {
+      await mailSender.sendMessage(mention, encodedNotification);
+    }
   }
 
   async addQuotes(quotedPosts: string[], postID: string) {
@@ -132,6 +163,18 @@ class PostAPI extends DataSource {
     }
     updatePosts.length = 0;
     return Promise.resolve();
+  }
+  async updatePosts(updatePosts: any[]) {
+    const db: Client = await getAppDB();
+    return db.save(this.dbID, this.collection, updatePosts);
+  }
+  async getRealPost(postID: string) {
+    const db: Client = await getAppDB();
+    return await db.findByID<PostItem>(this.dbID, this.collection, postID);
+  }
+  async removePosts(id: string[]) {
+    const db: Client = await getAppDB();
+    await db.delete(this.dbID, this.collection, id);
   }
 }
 
