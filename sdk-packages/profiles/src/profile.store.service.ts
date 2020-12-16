@@ -81,11 +81,12 @@ const service: AkashaService = (invoke, log) => {
          ${fields.join(' ')}
        }
       }`;
-    return runGQL({
+    const result = await runGQL({
       query: query,
       variables: { ethAddress: opt.ethAddress },
       operationName: 'GetProfile',
     });
+    return result.data;
   };
 
   const follow = async (opt: { ethAddress: string }) => {

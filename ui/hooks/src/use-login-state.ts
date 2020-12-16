@@ -6,6 +6,8 @@ import useGlobalLogin from './use-global-login';
 import { IAkashaError, EthProviders } from '@akashaproject/ui-awf-typings';
 import { filter, takeLast } from 'rxjs/operators';
 import { race } from 'rxjs';
+import useProfile, { UseProfileActions } from './use-profile';
+import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
 
 export interface UseLoginProps {
   /* sdk global events observable */
@@ -16,54 +18,37 @@ export interface UseLoginProps {
   authService: any;
   cacheService: any;
   profileService: any;
+  ipfsService: any;
 }
 export interface UseLoginState {
   /* logged in user's ethAddress */
   ethAddress: string | null;
   token: string | null;
-  /* logged in user's profile data */
-  profileData: {
-    avatar: {} | null;
-    name: {} | null;
-    description: {} | null;
-    coverImage: {} | null;
-    userName: {} | null;
-    url: {} | null;
-    creationDate?: number;
-    pubKey?: string;
-  };
 }
 export interface UseLoginActions {
   /* Login */
   login: (provider: EthProviders) => void;
   /* Logout */
   logout: () => void;
-  /*  */
-  updateProfileField: (field: { provider: string; property: string; value: string }) => void;
 }
 
-const initialProfileData = {
-  avatar: null,
-  name: null,
-  description: null,
-  coverImage: null,
-  userName: null,
-  url: null,
-}
-const useLoginState = (props: UseLoginProps): [UseLoginState, UseLoginActions] => {
-  const { globalChannel, onError, authService, profileService, cacheService } = props;
+const useLoginState = (props: UseLoginProps): [UseLoginState & { profileData: Partial<IProfileData> }, UseLoginActions & UseProfileActions] => {
+  const { globalChannel, onError, authService, ipfsService, profileService, cacheService } = props;
   const [loginState, setLoginState] = React.useState<UseLoginState>({
     ethAddress: null,
     token: null,
-    profileData: initialProfileData
   });
+  const [loggedProfileData, loggedProfileActions] = useProfile({
+    ipfsService,
+    profileService,
+    onError: onError,
+  })
   // this will also reset profile data
   useGlobalLogin(
     globalChannel,
     (payload) => setLoginState({
       ethAddress: payload.ethAddress,
       token: payload.token,
-      profileData: initialProfileData
     }),
     (payload) => {
       if (onError) {
@@ -78,13 +63,7 @@ const useLoginState = (props: UseLoginProps): [UseLoginState, UseLoginActions] =
 
   React.useEffect(() => {
     if (loginState.ethAddress) {
-      const call = profileService.getProfile({ ethAddress: loginState.ethAddress });
-      call.subscribe((resp: any) => {
-        setLoginState(prevState => ({
-          ...prevState,
-          profileData: resp.data.data.getProfile
-        }));
-      });
+      loggedProfileActions.getProfileData({ ethAddress: loginState.ethAddress });
     }
   }, [loginState.ethAddress]);
 
@@ -99,7 +78,6 @@ const useLoginState = (props: UseLoginProps): [UseLoginState, UseLoginActions] =
           setLoginState({
             ethAddress: authValue.ethAddress,
             token: authValue.token,
-            profileData: initialProfileData
           });
         }
       }
@@ -129,7 +107,6 @@ const useLoginState = (props: UseLoginProps): [UseLoginState, UseLoginActions] =
             setLoginState({
               token,
               ethAddress,
-              profileData: initialProfileData
             });
           },
           (err: Error) => {
@@ -156,23 +133,11 @@ const useLoginState = (props: UseLoginProps): [UseLoginState, UseLoginActions] =
       setLoginState({
         ethAddress: null,
         token: null,
-        profileData: initialProfileData
       });
     },
-    updateProfileField(field) {
-      const call = profileService.addProfileProvider(field);
-      call.subscribe((resp: any) => {
-        setLoginState(prevState => {
-          const updated = Object.assign({}, prevState.profileData, { [resp.data.property]: resp.data });
-          return {
-            ...prevState,
-            profileData: updated
-          }
-        });
-      });
-    }
+
   };
-  return [loginState, actions];
+  return [{ ...loginState, profileData: loggedProfileData }, { ...actions, ...loggedProfileActions }];
 }
 
 export default useLoginState;

@@ -6,6 +6,7 @@ import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/u
 import { useENSRegistration } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { forkJoin } from 'rxjs';
+import { IUserNameOption } from '@akashaproject/design-system/lib/components/Cards/form-cards/ens-form-card';
 
 
 const { styled, Helmet, ModalRenderer, BoxFormCard, EnsFormCard } = DS;
@@ -63,6 +64,7 @@ const Overlay = styled.div`
   justify-content: center;
   position: fixed;
   inset: 0;
+  opacity: 1;
   background-color: ${props => props.theme.colors.modalBackground};
   animation: fadeAnimation ease 0.4s;
   animation-iteration-count: 1;
@@ -86,7 +88,9 @@ const MyProfilePage = (props: MyProfileProps) => {
 
   const onProfileUpdateSubmit = (data: any) => {
     const { avatar, coverImage, name, description } = data;
-
+    const errorHandler = (err: Error) => {
+      console.error(err, 'error!');
+    }
     setUpdatingProfile(prev => ({
       ...prev,
       isSaving: true,
@@ -100,6 +104,8 @@ const MyProfilePage = (props: MyProfileProps) => {
         content: avatar.src,
         name: 'avatar'
       }));
+    } else {
+      obs.push(Promise.resolve());
     }
 
     if (coverImage && coverImage !== profileData.coverImage) {
@@ -109,56 +115,77 @@ const MyProfilePage = (props: MyProfileProps) => {
         content: coverImage.src,
         name: 'coverImage'
       }));
+    } else {
+      obs.push(Promise.resolve());
     }
+    forkJoin(obs).subscribe((responses: any[]) => {
+      console.log('images uploaded', responses);
+      const [avatarRes, coverImageRes] = responses;
+        const providers: any[] = [];
 
-    if (obs.length) {
-      forkJoin(obs).subscribe({
-        next: (resp: any) => {
-          if (resp.data.name === 'avatar') {
-            avatar.src = resp.data.content;
-          } else if (resp.data.name === 'coverImage') {
-            coverImage.src = resp.data.content;
-          }
-          console.log('value: => ', resp);
-        },
-        complete: () => {
-          const saveObs = props.sdkModules.profiles.profileService.addProfileProvider();
-          saveObs.subscribe((_resp: any) => {
-
-          });
-        },
-        error: (err) => {
-          console.log(err);
+        if (avatarRes) {
+          providers.push({
+            provider: 'ewa.providers.basic',
+            property: 'avatar',
+            value: avatarRes.data
+          })
         }
-      });
-    }
-
-    console.log(avatar, coverImage, name, description, 'profile data');
+        if (coverImageRes) {
+          providers.push({
+            provider: 'ewa.providers.basic',
+            property: 'coverImage',
+            value: coverImageRes.data,
+          });
+        }
+        if (description) {
+          providers.push({
+            provider: 'ewa.providers.basic',
+            property: 'description',
+            value: description
+          });
+        }
+        if (name) {
+          providers.push({
+            provider: 'ewa.providers.basic',
+            property: 'name',
+            value: name,
+          });
+        }
+        const addProviders = props.sdkModules.profiles.profileService.addProfileProvider(providers);
+        addProviders.subscribe((res: any) => {
+          console.log('providers added', res);
+          const makeDefault = providers.map(p => props.sdkModules.profiles.profileService.makeDefaultProvider(p));
+          forkJoin(makeDefault).subscribe((res) => {
+            console.log('profile updated!', res);
+          }, errorHandler);
+        }, errorHandler);
+    }, errorHandler);
   };
+
   const cancelProfileUpdate = () => {
     props.modalActions.hide('updateProfile');
   }
-  const onENSSubmit = ({ name }: { name: string }) => {
-    const call = props.sdkModules.profiles.profileService.registerUserName({userName: name});
-    call.subscribe((data: any) => {
-      console.log('ens registered!', data);
-    }, (_err: Error) => {
-      console.error('cannot register ens name');
-      // console.log(err, 'error received');
-    });
+
+  const onENSSubmit = ({ name, option }: { name: string, option: IUserNameOption }) => {
+    if(option.name === 'local') {
+      return ensActions.registerLocalUsername({ userName: name });
+    }
+    if (option.name === 'ensSubdomain') {
+      return ensActions.register({ userName: name });
+    }
   }
 
   const onENSCancel = () => {
-    props.modalActions.hide('changeENS')
+    props.modalActions.hide('changeENS');
   }
-
+  console.log(props.profileData, 'profile data');
   return (
     <div>
       <Helmet>
         <title>Profile | My Page</title>
       </Helmet>
       <MyProfileCard
-        profileData={{...props.profileData, userName: ensState.userName}}
+        profileData={...props.profileData}
         modalState={props.modalState}
         modalActions={props.modalActions}
         canEdit={!!props.ethAddress}
@@ -184,7 +211,6 @@ const MyProfilePage = (props: MyProfileProps) => {
                 providerData={{
                   ...props.profileData,
                 }}
-
                 onSave={onProfileUpdateSubmit}
                 onCancel={cancelProfileUpdate}
               />
@@ -211,14 +237,25 @@ const MyProfilePage = (props: MyProfileProps) => {
                 cancelLabel={t('Cancel')}
                 changeButtonLabel={t('Change')}
                 saveLabel={t('Save')}
-                nameFieldPlaceholder={`@${t('username')}`}
+                nameFieldPlaceholder={`${t('username')}`}
                 ethAddress={props.ethAddress}
                 providerData={{ name: ensState.userName || '' }}
                 onSave={onENSSubmit}
                 onCancel={onENSCancel}
                 validateEns={ensActions.validateName}
-                validEns={ensState.isAvailable}
+                validEns={ensState.isValidating ? null : ensState.isAvailable}
                 isValidating={ensState.isValidating}
+                userNameProviderOptions={[
+                  {
+                    name: 'local',
+                    label: t('Do not use ENS'),
+                  }
+                ]}
+                disableInputOnOption={{
+                  ensSubdomain: ensState.alreadyRegistered
+                }}
+                errorMessage={ensState.errorMessage}
+                registrationStatus={ensState.status}
               />
             </Overlay>
           )}

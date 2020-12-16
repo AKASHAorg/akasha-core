@@ -40,6 +40,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   const cardData = {
     ...profileData,
   };
+  console.log(profileData);
 
   return (
     <>
@@ -82,16 +83,9 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
       <ProfileCard
         onClickApps={() => {}}
         onClickFollowing={() => {}}
-        // @ts-ignore
+        //@ts-ignore
         profileData={cardData}
-        onChangeProfileData={() => {}}
-        getProfileProvidersData={() => {}}
-        descriptionLabel={'About me'}
-        actionsLabel={'Actions'}
-        editProfileLabel={'Edit profile'}
-        changeCoverImageLabel={'Change cover image'}
-        cancelLabel={'Cancel'}
-        saveChangesLabel={'Save changes'}
+        descriptionLabel={t('About me')}
         followingLabel={'Following'}
         appsLabel={'Apps'}
         usersLabel={'Users'}
