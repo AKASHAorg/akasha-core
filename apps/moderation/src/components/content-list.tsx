@@ -1,13 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
-
-import ContentCard from './content-card';
-import postRequest from '../services/post-request';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
-import { moderatorList, samplePostData, sampleProfileData } from '../services/dummy-data';
+import ContentCard from './content-card';
 import ContentTab from './content-tab';
+
+import { getAllPending, getAllDelisted } from '../services/fetch-contents';
+import { moderatorList } from '../services/dummy-data';
 
 const { Box, Text, useViewportSize, ModalRenderer, ToastProvider, ModerateModal } = DS;
 
@@ -15,13 +15,14 @@ interface IContentListProps {
   slotId: string;
   ethAddress: string | null;
   logger: any;
+  sdkModules: any;
   navigateToUrl: (path: string) => void;
 }
 
 interface IBaseItem {
   id: number;
   type: string;
-  ethAddress: string;
+  entryId: string;
   reasons: string[];
   description: string;
   entryDate: string;
@@ -42,7 +43,7 @@ interface IDelistedItem extends Omit<IPendingItem, 'count'> {
 }
 
 const ContentList: React.FC<IContentListProps> = props => {
-  const { slotId, ethAddress } = props;
+  const { slotId, ethAddress, logger, sdkModules } = props;
 
   const [pendingItems, setPendingItems] = React.useState<IPendingItem[]>([]);
   const [delistedItems, setDelistedItems] = React.useState<IDelistedItem[]>([]);
@@ -71,81 +72,29 @@ const ContentList: React.FC<IContentListProps> = props => {
     }
   }, [ethAddress]);
 
-  // @TODO: Get logged ethAddress from Store state
-
-  const fetchDelistedContents = async () => {
-    // fetch pending (reported) contents
-    setRequesting(true);
-    try {
-      const response = await postRequest('https://akasha-mod.herokuapp.com/decisions/moderated', {
-        delisted: true,
-      });
-      // @TODO: get content details using contentId
-      const modResponse = response.map(
-        (
-          {
-            contentType: type,
-            contentId,
-            date,
-            explanation,
-            moderator,
-            reasons,
-            reportedBy,
-            reportedDate,
-          }: any,
-          idx: number,
-        ) => {
-          // formatting data to match labels already in use
-          return {
-            id: idx,
-            type: type,
-            ethAddress: contentId,
-            reasons: reasons,
-            description: explanation,
-            reporter: reportedBy,
-            moderator: moderator, // @TODO: fetch reporter's Name and ENS (if applicable) from the profile API
-            entryDate: reportedDate,
-            evaluationDate: date,
-          };
-        },
-      );
-      setDelistedItems(modResponse);
-      setRequesting(false);
-    } catch (error) {
-      setRequesting(false);
-      props.logger.error('[content-list.tsx]: fetchDelistedContent err %j', error.message || '');
-    }
-  };
-
   const fetchPendingContents = async () => {
     // fetch pending (reported) contents
     setRequesting(true);
     try {
-      const response = await postRequest('https://akasha-mod.herokuapp.com/decisions/pending');
-      // @TODO: get content details using contentId
-      const modResponse = response.map(
-        (
-          { contentType: type, contentId, reasons, reportedBy, reportedDate, reports }: any,
-          idx: number,
-        ) => {
-          // formatting data to match labels already in use
-          return {
-            id: idx,
-            type: type,
-            ethAddress: contentId,
-            reasons: reasons,
-            description: '',
-            reporter: reportedBy, // @TODO: fetch reporter's Name and ENS Name (if applicable) from the profile API
-            count: reports - 1, // minus reporter, to get count of other users
-            entryDate: reportedDate,
-          };
-        },
-      );
+      const modResponse = await getAllPending();
       setPendingItems(modResponse);
       setRequesting(false);
     } catch (error) {
       setRequesting(false);
-      props.logger.error('[content-list.tsx]: fetchPendingContent err %j', error.message || '');
+      logger.error('[content-list.tsx]: fetchPendingContents err %j', error.message || '');
+    }
+  };
+
+  const fetchDelistedContents = async () => {
+    // fetch delisted (moderated) contents
+    setRequesting(true);
+    try {
+      const modResponse = await getAllDelisted();
+      setDelistedItems(modResponse);
+      setRequesting(false);
+    } catch (error) {
+      setRequesting(false);
+      logger.error('[content-list.tsx]: fetchDelistedContents err %j', error.message || '');
     }
   };
 
@@ -216,7 +165,6 @@ const ContentList: React.FC<IContentListProps> = props => {
               <ContentCard
                 key={pendingItem.id}
                 isPending={isPending}
-                entryData={pendingItem.type === 'post' ? samplePostData : sampleProfileData}
                 repostsLabel={t('Repost')}
                 repliesLabel={t('Replies')}
                 locale={locale}
@@ -226,7 +174,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                 additionalDescLabel={t('Additional description provided by user')}
                 additionalDescContent={t(pendingItem.description)}
                 reportedByLabel={t('Initially reported by')}
-                ethAddress={t(pendingItem.ethAddress)}
+                entryId={t(pendingItem.entryId)}
                 reasons={pendingItem.reasons.map((el: string) => t(el))}
                 reporter={t(pendingItem.reporter)}
                 reporterName={t(pendingItem.reporterName)}
@@ -253,6 +201,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                     ? t('Remove User')
                     : ''
                 }
+                sdkModules={sdkModules}
                 handleButtonClick={handleButtonClick}
               />
             ))
@@ -264,7 +213,6 @@ const ContentList: React.FC<IContentListProps> = props => {
               <ContentCard
                 key={delistedItem.id}
                 isPending={isPending}
-                entryData={delistedItem.type === 'post' ? samplePostData : sampleProfileData}
                 repostsLabel={t('Repost')}
                 repliesLabel={t('Replies')}
                 locale={locale}
@@ -275,7 +223,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                 additionalDescLabel={t("Moderator's evaluation")}
                 additionalDescContent={t(delistedItem.description)}
                 reportedByLabel={t('Originally reported by')}
-                ethAddress={t(delistedItem.ethAddress)}
+                entryId={t(delistedItem.entryId)}
                 reasons={delistedItem.reasons.map(el => t(el))}
                 reporter={delistedItem.reporter}
                 reporterName={t(delistedItem.reporterName)}
@@ -288,6 +236,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                 moderatedByLabel={t('Moderated by')}
                 moderatedOnLabel={t('On')}
                 evaluationDateTime={delistedItem.evaluationDate}
+                sdkModules={sdkModules}
                 handleButtonClick={() => null}
               />
             ))

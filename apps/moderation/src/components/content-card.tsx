@@ -1,9 +1,12 @@
 import React from 'react';
 import moment from 'moment';
+import { combineLatest } from 'rxjs';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
-
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+
+import { mapEntry } from '../services/posting-service';
+import { sampleProfileData } from '../services/dummy-data';
 
 import { StyledBox } from './styled';
 
@@ -11,7 +14,6 @@ const { Box, Icon, Text, Avatar, Button, EntryCardMod, ProfileCardMod, MainAreaC
 
 export interface IContentCardProps {
   isPending: boolean;
-  entryData: any;
   repliesLabel: string;
   repostsLabel: string;
   locale: ILocale;
@@ -24,7 +26,7 @@ export interface IContentCardProps {
   additionalDescLabel: string;
   additionalDescContent?: string;
   reportedByLabel: string;
-  ethAddress?: string;
+  entryId: string;
   reasons: string[];
   reporter?: string;
   reporterName?: string;
@@ -40,13 +42,13 @@ export interface IContentCardProps {
   evaluationDateTime?: string;
   keepContentLabel?: string;
   delistContentLabel?: string;
+  sdkModules: any;
   handleButtonClick: (param1: string, param2: string, param3: string, param5: any) => void;
 }
 
 const ContentCard: React.FC<IContentCardProps> = props => {
   const {
     isPending,
-    entryData,
     repostsLabel,
     repliesLabel,
     locale,
@@ -58,7 +60,7 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     additionalDescLabel,
     additionalDescContent,
     reportedByLabel,
-    ethAddress,
+    entryId,
     reasons,
     reporter,
     reporterName,
@@ -76,11 +78,27 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     delistContentLabel,
   } = props;
 
+  const [entryData, setEntryData] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    const entryCall = props.sdkModules.posts.entries.getEntry({ entryId });
+    const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
+    const getEntryCall = combineLatest([ipfsGatewayCall, entryCall]);
+    getEntryCall.subscribe((resp: any) => {
+      const ipfsGateway = resp[0].data;
+      const entry = resp[1].data?.getPost;
+      if (entry) {
+        const mappedEntry = mapEntry(entry, ipfsGateway);
+        setEntryData(mappedEntry);
+      }
+    });
+  }, [entryId]);
+
   const { t } = useTranslation();
 
   const handleClick = (action: string) => () => {
-    if (ethAddress) {
-      props.handleButtonClick(ethAddress, action, contentType, entryData);
+    if (entryId) {
+      props.handleButtonClick(entryId, action, contentType, entryData);
     }
   };
 
@@ -89,35 +107,41 @@ const ContentCard: React.FC<IContentCardProps> = props => {
       <MainAreaCardBox>
         <Box pad="1rem">
           <MainAreaCardBox>
-            {contentType === 'post' && (
-              <EntryCardMod
-                entryData={entryData}
-                repostsLabel={repostsLabel}
-                repliesLabel={repliesLabel}
-                locale={locale}
-                style={{ height: 'auto' }}
-                onClickAvatar={() => null}
-                onClickReplies={() => null}
-                onContentClick={() => null}
-              />
-            )}
-            {contentType === 'profile' && (
-              <ProfileCardMod
-                onClickApps={() => null}
-                onClickFollowing={() => null}
-                profileData={entryData}
-                onChangeProfileData={() => null}
-                getProfileProvidersData={() => null}
-                descriptionLabel={t('About me')}
-                actionsLabel={t('Actions')}
-                editProfileLabel={t('Edit profile')}
-                changeCoverImageLabel={t('Change cover image')}
-                followingLabel={t('Following')}
-                appsLabel={t('Apps')}
-                usersLabel={t('Users')}
-                shareProfileLabel={t('Share Profile')}
-                onEntryFlag={() => null}
-              />
+            {entryData ? (
+              <>
+                {contentType === 'post' && entryData && (
+                  <EntryCardMod
+                    entryData={entryData}
+                    repostsLabel={repostsLabel}
+                    repliesLabel={repliesLabel}
+                    locale={locale}
+                    style={{ height: 'auto' }}
+                    onClickAvatar={() => null}
+                    onClickReplies={() => null}
+                    onContentClick={() => null}
+                  />
+                )}
+                {contentType === 'profile' && (
+                  <ProfileCardMod
+                    onClickApps={() => null}
+                    onClickFollowing={() => null}
+                    profileData={sampleProfileData}
+                    onChangeProfileData={() => null}
+                    getProfileProvidersData={() => null}
+                    descriptionLabel={t('About me')}
+                    actionsLabel={t('Actions')}
+                    editProfileLabel={t('Edit profile')}
+                    changeCoverImageLabel={t('Change cover image')}
+                    followingLabel={t('Following')}
+                    appsLabel={t('Apps')}
+                    usersLabel={t('Users')}
+                    shareProfileLabel={t('Share Profile')}
+                    onEntryFlag={() => null}
+                  />
+                )}
+              </>
+            ) : (
+              <Text textAlign="center">Loading EntryCard...</Text>
             )}
           </MainAreaCardBox>
           {!isPending && (
@@ -183,7 +207,7 @@ const ContentCard: React.FC<IContentCardProps> = props => {
               <Box direction="row">
                 <Text color={!isPending ? 'secondaryText' : 'intial'}>{reportedByLabel}</Text>
                 <Avatar
-                  ethAddress={ethAddress || ''}
+                  ethAddress={reporter || ''}
                   src="https://placebeard.it/360x360"
                   size="xs"
                   margin={{ left: '0.2rem' }}

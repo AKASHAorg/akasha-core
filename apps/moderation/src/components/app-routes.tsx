@@ -22,7 +22,7 @@ interface AppRoutesProps {
 }
 
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
-  const { globalChannel, logger, singleSpa, layout, profileStore, onError } = props;
+  const { sdkModules, globalChannel, logger, singleSpa, layout, profileStore, onError } = props;
 
   const [loginModalState, setLoginModalState] = React.useState(false);
 
@@ -90,8 +90,8 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
                 ethAddress={ethAddress}
                 slotId={layout.app.modalSlotId}
                 logger={logger}
+                sdkModules={sdkModules}
                 navigateToUrl={singleSpa.navigateToUrl}
-                // sdkModules={sdkModules}
                 // globalChannel={globalChannel}
                 // showLoginModal={showLoginModal}
                 // onError={onError}
