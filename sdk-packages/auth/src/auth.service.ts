@@ -69,7 +69,7 @@ const service: AkashaService = (invoke, log) => {
     auth = await tokenGenerator();
     await hubUser.getToken(identity);
 
-    //@Todo: on error try to setupMail
+    // @Todo: on error try to setupMail
     await hubUser.setupMailbox();
     const mailID = await hubUser.getMailboxID();
     // // for 1st time users
