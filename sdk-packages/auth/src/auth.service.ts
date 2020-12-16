@@ -80,8 +80,6 @@ const service: AkashaService = (invoke, log) => {
       name: 'settings',
       schema: settingsSchema,
     });
-    // tslint:disable-next-line:no-console
-    console.log('====hubUser===', hubUser);
     await db.open(1);
     // // not working atm
     // const remote = await db.remote.setUserAuth(userAuth);

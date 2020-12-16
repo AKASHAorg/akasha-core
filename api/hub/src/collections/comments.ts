@@ -20,6 +20,13 @@ const schema = {
         },
       },
     },
+    tags: {
+      type: 'array',
+      uniqueItems: true,
+      items: {
+        type: 'string',
+      },
+    },
     mentions: {
       type: 'array',
       uniqueItems: true,
