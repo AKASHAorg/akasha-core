@@ -23,7 +23,7 @@ class TagAPI extends DataSource {
     this.context = config.context;
   }
 
-  async searchTag(name: string) {
+  async searchTags(name: string) {
     const result = await searchIndex.search(name, {
       facetFilters: ['category:tag'],
       hitsPerPage: 20,

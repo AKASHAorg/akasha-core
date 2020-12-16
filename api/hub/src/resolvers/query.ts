@@ -34,7 +34,7 @@ const query = {
     return dataSources.tagsAPI.getTag(name);
   },
   searchTags: async (_source, { name }, { dataSources }) => {
-    return dataSources.tagsAPI.searchTag(name);
+    return dataSources.tagsAPI.searchTags(name);
   },
   tags: async (_source, { limit, offset }, { dataSources }) => {
     return dataSources.tagsAPI.getTags(limit, offset);
