@@ -25,10 +25,10 @@ const service: AkashaService = (invoke, log) => {
     return result.data;
   };
 
-  const makeDefaultProvider = async (opt: LinkedProperty) => {
+  const makeDefaultProvider = async (opt: LinkedProperty[]) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
     const mutation = `
-  mutation MakeDefaultProvider($data: DataProviderInput) {
+  mutation MakeDefaultProvider($data: [DataProviderInput]) {
        makeDefaultProvider(data: $data)
   }`;
     const result = await runGQL({

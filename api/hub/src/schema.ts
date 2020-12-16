@@ -56,7 +56,7 @@ const typeDefs = gql`
 
   type Mutation {
     addProfileProvider(data: [DataProviderInput]): String!
-    makeDefaultProvider(data: DataProviderInput): String!
+    makeDefaultProvider(data: [DataProviderInput]): String!
     saveMetaData(data: DataProviderInput): String!
     registerUserName(name: String!): String!
     createTag(name: String!): String

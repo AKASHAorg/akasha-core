@@ -73,7 +73,7 @@ class ProfileAPI extends DataSource {
     queryCache.del(this.getCacheKey(pubKey));
     return profile._id;
   }
-  async makeDefaultProvider(pubKey: string, data: DataProvider) {
+  async makeDefaultProvider(pubKey: string, data: DataProvider[]) {
     const db: Client = await getAppDB();
     const query = new Where('pubKey').eq(pubKey);
     const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
@@ -81,12 +81,13 @@ class ProfileAPI extends DataSource {
       return;
     }
     const profile = profilesFound[0];
-
-    const indexFound = profile.default.findIndex(provider => provider.property === data.property);
-    if (indexFound !== -1) {
-      profile.default[indexFound] = data;
-    } else {
-      profile.default.push(data);
+    for (const rec of data) {
+      const indexFound = profile.default.findIndex(provider => provider.property === rec.property);
+      if (indexFound !== -1) {
+        profile.default[indexFound] = rec;
+      } else {
+        profile.default.push(rec);
+      }
     }
     await db.save(this.dbID, this.collection, [profile]);
     queryCache.del(this.getCacheKey(pubKey));
