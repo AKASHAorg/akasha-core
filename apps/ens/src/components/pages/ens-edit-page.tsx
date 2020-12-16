@@ -161,6 +161,12 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
           validateEns={throttledEnsValidation}
           isValidating={registrationStatus ? registrationStatus.checking : false}
           validEns={registrationStatus ? registrationStatus.isAvailable : undefined}
+          userNameProviderOptions={[
+            {
+              name: 'local',
+              label: t('Do not use ENS')
+            }
+          ]}
         />
       )}
     </Box>

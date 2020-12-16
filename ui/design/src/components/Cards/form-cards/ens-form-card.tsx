@@ -2,8 +2,18 @@ import { Box, FormField, Text, RadioButton } from 'grommet';
 import * as React from 'react';
 import { Button } from '../../Buttons/index';
 import { Icon } from '../../Icon/index';
+import Spinner from '../../Spinner';
 import { MainAreaCardBox } from '../common/basic-card-box';
-import { HiddenSpan, StyledText, StyledTextInput } from './styled-form-card';
+import { StyledText, StyledTextInput } from './styled-form-card';
+
+export interface IUserNameOption {
+  /* Option identifier (ensDomain, local, ethAddress), ensSubdomain added by default */
+  name: 'ensSubdomain' | 'ensDomain' | 'local' | 'ethAddress',
+  /* Can be anything. It will be displayed in the UI */
+  label: string;
+  /* This option cannot be selected, serving just as a preview of coming soon functionality */
+  isDisabled?: boolean;
+}
 
 export interface IEnsFormCardProps {
   className?: string;
@@ -29,10 +39,14 @@ export interface IEnsFormCardProps {
   providerData: Partial<IEnsData>;
   validateEns?: (name: string) => void;
   validEns: boolean | null;
-  onSave: (data: IEnsData | { name: string }) => void;
+  onSave: (data: IEnsData | { name: string, option: IUserNameOption }) => void;
   onCancel?: () => void;
   isValidating?: boolean;
   ensSubdomain?: string;
+  userNameProviderOptions: IUserNameOption[],
+  disableInputOnOption?: {[ key: string ]: boolean};
+  errorMessage?: string | null;
+  registrationStatus?: { registering: boolean; claiming: boolean },
 }
 
 export interface IEnsData {
@@ -47,9 +61,6 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     errorLabel,
     ethAddressLabel,
     ethNameLabel,
-    optionUsername,
-    optionSpecify,
-    optionUseEthereumAddress,
     consentText,
     consentUrl,
     consentLabel,
@@ -66,27 +77,33 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     validEns,
     isValidating,
     ensSubdomain = 'akasha.eth',
+    userNameProviderOptions,
+    disableInputOnOption,
+    errorMessage,
+    registrationStatus,
   } = props;
 
   const [name, setName] = React.useState('');
 
   const [error, setError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
-  const [clicked, setClicked] = React.useState(false);
-  const [option, setOption] = React.useState('');
+  const [optionsVisible, setOptionsVisible] = React.useState(false);
 
-  const [textInputComputedWidth, setTextInputComputedWidth] = React.useState('');
-
-  const hiddenSpanRef: React.Ref<HTMLSpanElement> = React.useRef(null);
-
-  // @TODO calculate from placeholder width
-  const initialInputWidth = '6rem';
+  const userNameOptions: IUserNameOption[] = [
+    {
+    name: 'ensSubdomain',
+    // show subdomain suffix
+    label: `${name.replace(`.${ensSubdomain}`, '')}.${ensSubdomain}`,
+    },
+    ...userNameProviderOptions
+  ];
+  // make ensSubdomain option as default
+  const [selectedUsernameOption, setSelectedUsernameOption] = React.useState('ensSubdomain');
 
   React.useEffect(() => {
     if (providerData.name) {
       setName(providerData.name);
     }
-    setTextInputComputedWidth(initialInputWidth);
   }, []);
 
   React.useEffect(() => {
@@ -112,12 +129,13 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     return;
   };
 
-  const handleChangeEns = () => {
-    setClicked(true);
+  const showOptions = () => {
+    setOptionsVisible(true);
   };
 
   const handleSelectEns = (selected: string) => {
-    setOption(selected);
+    console.log('option is', selected);
+    setSelectedUsernameOption(selected);
   };
 
   const handleCopyEthAddress = () => {
@@ -125,27 +143,9 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   };
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    // when first character is typed, sanitize and append '@' accordingly
-    if (name === '') {
-      return setName(`@${ev.target.value.replace(/[^\w]/g, '')}`);
-    }
     const value = ev.target.value;
-    // sanitize remaining characters to remove any spaces and special characters
-    const sanitizedValue = `@${value.substring(1).replace(/[^\w]/g, '')}`;
-    setName(sanitizedValue);
-    if (hiddenSpanRef.current) {
-      hiddenSpanRef.current.textContent = sanitizedValue;
-    }
+    setName(value);
     setError(false);
-    if (value) {
-      if (hiddenSpanRef.current) {
-        setTextInputComputedWidth(`${(hiddenSpanRef.current.offsetWidth + 2) / 16}rem`);
-      }
-    } else if (!value) {
-      if (hiddenSpanRef.current) {
-        setTextInputComputedWidth(initialInputWidth);
-      }
-    }
     if (validateEns && typeof validateEns === 'function') {
       validateEns(value);
     }
@@ -153,7 +153,6 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
 
   const handleCancel = () => {
     setName('');
-    setTextInputComputedWidth(initialInputWidth);
     setError(false);
     setSuccess(false);
     if (props.onCancel) {
@@ -162,11 +161,12 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   };
 
   const handleSave = () => {
+    console.log(userNameOptions, selectedUsernameOption);
     onSave({
       name,
+      option: userNameOptions.find(o => o.name === selectedUsernameOption),
     });
   };
-
   return (
     <MainAreaCardBox className={className}>
       <Box direction="column" pad="large">
@@ -183,15 +183,16 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
         </Box>
         <FormField name="name" error={error ? errorLabel : null} htmlFor="text-input">
           <Box justify="between" direction="row" pad={{ top: 'small', bottom: '11px' }}>
-            <Box justify="start" direction="row" align="center">
-              <HiddenSpan ref={hiddenSpanRef} />
+            <Box fill="horizontal" direction="row" align="center">
+              {'@'}
               <StyledTextInput
                 spellCheck={false}
                 autoFocus={true}
-                computedWidth={textInputComputedWidth}
+                computedWidth={'100%'}
                 id="text-input"
                 value={name}
                 onChange={handleChange}
+                disabled={disableInputOnOption && disableInputOnOption[selectedUsernameOption]}
                 placeholder={nameFieldPlaceholder}
               />
             </Box>
@@ -207,31 +208,36 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                     {ethNameLabel}
                   </StyledText>
                 </Box>
-                {!clicked && (
+                {!optionsVisible && (
                   <Box
                     direction="row"
                     gap="xxsmall"
                     pad={{ top: 'small', bottom: 'small' }}
                     align="baseline"
                   >
-                    {/* render selected Ens accordingly */}
-                    {(option === '' || option.includes(`${ensSubdomain}`)) && (
+                    {(selectedUsernameOption === userNameOptions[0].name) && (
                       <Text size="large">
-                        {name.replace('@', '')}
-                        <Text color="accentText" size="large" margin={{ right: 'xxsmall' }}>
-                          .{ensSubdomain}
-                        </Text>
+                        {name.replace(`.${ensSubdomain}`, '')}
+                          <Text color="accentText" size="large" margin={{ right: 'xxsmall' }}>
+                            .{ensSubdomain}
+                          </Text>
                       </Text>
                     )}
-                    {option.includes(optionSpecify) && (
+                    {selectedUsernameOption === 'ensDomain' && (
                       <Text size="large">
-                        {name.replace('@', '')}
+                        {name.replace(`.${ensSubdomain}`, '')}
                         <Text color="accentText" size="large" margin={{ right: 'xxsmall' }}>
                           .eth
                         </Text>
+
                       </Text>
                     )}
-                    {option.includes(optionUseEthereumAddress) && (
+                    {selectedUsernameOption === 'local' && (
+                      <Text size="large">
+                        @{name.replace(`.${ensSubdomain}`, '').replace('.eth', '')}
+                      </Text>
+                    )}
+                    {selectedUsernameOption === 'ethAddress' && (
                       <>
                         <Text size="large" margin={{ right: 'xxsmall' }}>
                           {ethAddress}
@@ -243,28 +249,23 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                       color="accentText"
                       size="small"
                       style={{ cursor: 'pointer' }}
-                      onClick={handleChangeEns}
+                      onClick={showOptions}
                     >
                       {changeButtonLabel}
                     </Text>
                   </Box>
                 )}
-                {clicked && name.length > 1 && (
+                {optionsVisible && name.length > 1 && (
                   <Box direction="column">
-                    {[
-                      `${name === '' ? optionUsername : name}.${ensSubdomain}`.replace('@', ''),
-                      optionSpecify,
-                      `${optionUseEthereumAddress} (${ethAddress.slice(0, 6)}...${ethAddress.slice(
-                        -4,
-                      )})`,
-                    ].map(label => (
-                      <Box key={label} margin={{ vertical: 'xsmall' }}>
+                    {userNameOptions.map(provider => (
+                      <Box key={provider.name} margin={{ vertical: 'xsmall' }}>
                         <RadioButton
                           name="prop"
-                          checked={option === label}
-                          label={label}
-                          onClick={() => setClicked(false)}
-                          onChange={() => handleSelectEns(label)}
+                          disabled={!!provider.isDisabled}
+                          checked={selectedUsernameOption === provider.name}
+                          label={provider.label}
+                          onClick={() => setOptionsVisible(false)}
+                          onChange={() => handleSelectEns(provider.name)}
                         />
                       </Box>
                     ))}
@@ -273,7 +274,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
               </Box>
             </>
           )}
-          {name.length <= 1 && (
+          {!name.length && (
             <>
               <Box direction="column" pad={{ top: 'large', bottom: 'medium' }}>
                 <Box direction="row" align="center">
@@ -331,8 +332,14 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
               <Icon type="questionMark" size="xxs" clickable={true} />
             </Box>
             <Box direction="row">
+              {registrationStatus && (registrationStatus.registering || registrationStatus.claiming) &&
+                <Spinner size={35} />
+              }
+              {errorMessage && <>{errorMessage}</>}
+            </Box>
+            <Box direction="row">
               <Button margin={{ right: '0.5rem' }} label={cancelLabel} onClick={handleCancel} />
-              <Button label={saveLabel} onClick={handleSave} primary={true} />
+              <Button label={saveLabel} onClick={handleSave} disabled={registrationStatus && registrationStatus.registering} primary={true} />
             </Box>
           </Box>
         </Box>

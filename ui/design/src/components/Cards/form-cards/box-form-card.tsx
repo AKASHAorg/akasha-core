@@ -41,6 +41,7 @@ export interface IBoxFormCardProps {
 export interface IImageSrc {
   src: string;
   prefix: string;
+  preview?: string;
   isUrl: boolean;
 }
 export interface IBoxData {
@@ -117,6 +118,15 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
       ...newValues,
     }));
   };
+  const closeAvatarPopover = () => {
+    setAvatarPopoverOpen(false);
+  }
+  const closeCoverImagePopover = () => {
+    setCoverImagePopoverOpen(false);
+  }
+  const handleImageInsert = (imageKey: string) =>
+  (src: string, isUrl: boolean) =>
+    handleFormFieldChange({ [imageKey]: { src, isUrl, preview: URL.createObjectURL(src) } })
 
   return (
     <MainAreaCardBox className={className}>
@@ -139,7 +149,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           )}
           {formValues.avatar && formValues.avatar.src && (
             <StyledAvatarDiv onClick={handleAvatarClick}>
-              <StyledImage src={getImageSrc(formValues.avatar)} fit="contain" />
+              <StyledImage src={formValues.avatar.preview ? formValues.avatar.preview : getImageSrc(formValues.avatar)} fit="contain" />
               <StyledAvatarOverlay>
                 <Icon type="editSimple" ref={avatarRef} />
               </StyledAvatarOverlay>
@@ -162,7 +172,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
               <StyledCoverImageOverlay>
                 <Icon type="editSimple" ref={coverImageRef} />
               </StyledCoverImageOverlay>
-              <StyledImage src={getImageSrc(formValues.coverImage)} fit="contain" />
+              <StyledImage src={formValues.coverImage.preview ? formValues.coverImage.preview : getImageSrc(formValues.coverImage)} fit="contain" />
             </StyledCoverImageDiv>
           )}
 
@@ -213,12 +223,8 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           urlLabel={urlLabel}
           deleteLabel={deleteLabel}
           target={avatarRef.current}
-          closePopover={() => {
-            setAvatarPopoverOpen(false);
-          }}
-          insertImage={(src: string, isUrl?: boolean) =>
-            handleFormFieldChange({ avatar: { src, isUrl } })
-          }
+          closePopover={closeAvatarPopover}
+          insertImage={handleImageInsert('avatar')}
           currentImage={!!formValues.avatar}
           handleDeleteImage={() => handleFormFieldChange({ avatar: null })}
         />
@@ -229,12 +235,8 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           urlLabel={urlLabel}
           deleteLabel={deleteLabel}
           target={coverImageRef.current}
-          closePopover={() => {
-            setCoverImagePopoverOpen(false);
-          }}
-          insertImage={(src: string, isUrl: boolean) =>
-            handleFormFieldChange({ coverImage: { src, isUrl } })
-          }
+          closePopover={closeCoverImagePopover}
+          insertImage={handleImageInsert('coverImage')}
           currentImage={!!formValues.coverImage}
           handleDeleteImage={() => handleFormFieldChange({ coverImage: null })}
         />

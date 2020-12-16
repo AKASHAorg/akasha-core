@@ -21,7 +21,8 @@ const ProfilePage = (props: ProfilePageProps) => {
     onError: err => {
       console.log(err);
     },
-    sdkModules: props.sdkModules,
+    ipfsService: props.sdkModules.commons.ipfsService,
+    profileService: props.sdkModules.profiles.profileService,
   });
 
   React.useEffect(() => {
@@ -29,7 +30,7 @@ const ProfilePage = (props: ProfilePageProps) => {
       profileActions.getProfileData({ ethAddress: profileId });
     }
   }, [profileId]);
-
+  console.log(profileState, 'profile state');
   return (
     <div>
       <DS.Helmet>

@@ -18,10 +18,11 @@ const Routes: React.FC<RootComponentProps> = props => {
     globalChannel: props.globalChannel,
     authService: props.sdkModules.authService,
     profileService: props.sdkModules.profiles.profileService,
+    ipfsService: props.sdkModules.commons.ipfsService,
+    cacheService: props.sdkModules.commons.cacheService,
     onError: (error: IAkashaError) => {
       logger.error(error);
     },
-    cacheService: props.sdkModules.commons.cacheService,
   });
   const [modalState, modalStateActions] = useModalState({
     initialState: {

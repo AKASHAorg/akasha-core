@@ -15,7 +15,8 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
         props.logger.error('profile-card-widget error %j %j', err);
       }
     },
-    sdkModules: props.sdkModules,
+    ipfsService: props.sdkModules.commons.ipfsService,
+    profileService: props.sdkModules.profiles.profileService,
   });
 
   React.useEffect(() => {

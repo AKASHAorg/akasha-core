@@ -21,6 +21,7 @@ export interface UseENSRegistrationState {
   isValidating: boolean;
   /* error that must be shown in form */
   errorMessage: null | string;
+  alreadyRegistered: boolean;
 }
 
 export interface UseENSRegistrationActions {
@@ -30,6 +31,7 @@ export interface UseENSRegistrationActions {
   updateUserName: (userName: string) => void;
   validateName: (userName: string) => void;
   claim: (payload: { userName: string }) => void;
+  registerLocalUsername: (payload: { userName: string }) => void;
 };
 
 // const ENS_REGISTRATION_STATUS = 'ens-registration-status';
@@ -46,6 +48,7 @@ const useENSRegistration = (props: UseENSRegistrationProps): [UseENSRegistration
       claiming: false,
     },
     userNameChanged: false,
+    alreadyRegistered: false,
   });
 
   React.useEffect(() => {
@@ -84,14 +87,16 @@ const useENSRegistration = (props: UseENSRegistrationProps): [UseENSRegistration
         if (resp.data && resp.channelInfo.args.ethAddress === ethAddress) {
           setRegistrationState(prev => ({
             ...prev,
-            userName: resp.data
+            userName: resp.data,
+            alreadyRegistered: true,
           }));
         }
       }, (err: Error) => {
         setRegistrationState(prev => ({
           ...prev,
           errorMessage: `Failed to get ENS name. ${err.message}`,
-        }))
+          alreadyRegistered: false,
+        }));
       });
     },
     register: ({ userName }: { userName: string, ethAddress: string }) => {
@@ -121,8 +126,7 @@ const useENSRegistration = (props: UseENSRegistrationProps): [UseENSRegistration
       const channel = ensService.isAvailable({ name: userName });
       setRegistrationState(prev => ({
         ...prev,
-        isValidating: true,
-        isAvailable: false,
+        isValidating: true
       }));
       channel.subscribe((resp: any) => {
         console.log(resp, 'response');
@@ -150,6 +154,42 @@ const useENSRegistration = (props: UseENSRegistrationProps): [UseENSRegistration
             registering: false,
             claiming: false,
           }
+        }));
+      });
+    },
+    registerLocalUsername: ({ userName }: { userName: string }) => {
+      const registerLocal = profileService.registerUserName({ userName: name });
+      setRegistrationState(prev => ({
+        ...prev,
+        status: {
+          ...prev.status,
+          registering: true,
+        },
+      }));
+      registerLocal.subscribe((_resp: any) => {
+        const makeDefault = profileService.makeDefaultProvider({
+          provider: 'ewa.providers.basic',
+          property: 'userName',
+          value: userName,
+        });
+        makeDefault.subscribe((_resp: any) => {
+          setRegistrationState(prev => ({
+            ...prev,
+            status: {
+              ...prev.status,
+              registering: false,
+            }
+          }))
+        }, (err: Error) => {
+          setRegistrationState(prev => ({
+            ...prev,
+            errorMessage: `Failed to set default provider. ${err.message}`
+          }));
+        });
+      }, (err: Error) => {
+        setRegistrationState(prev => ({
+          ...prev,
+          errorMessage: `Failed to register local username. ${err.message}`,
         }));
       });
     }
