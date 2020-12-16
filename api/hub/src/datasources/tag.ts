@@ -3,6 +3,7 @@ import { getAppDB } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { Tag } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
+import { searchIndex } from './search-indexes';
 
 class TagAPI extends DataSource {
   private readonly collection: string;
@@ -20,6 +21,17 @@ class TagAPI extends DataSource {
 
   async initialize(config) {
     this.context = config.context;
+  }
+
+  async searchTag(name: string) {
+    const result = await searchIndex.search(name, {
+      facetFilters: ['category:tag'],
+      hitsPerPage: 20,
+      attributesToRetrieve: ['name'],
+    });
+    return result.hits.map((element: any) => {
+      return element.name;
+    });
   }
 
   async getTag(name: string) {
@@ -100,6 +112,12 @@ class TagAPI extends DataSource {
     if (!tagID || !tagID.length) {
       return;
     }
+    await searchIndex.saveObject({
+      objectID: tagID[0],
+      name: tag.name,
+      creationDate: tag.creationDate,
+      category: 'tag',
+    });
     return tagID[0];
   }
 }
