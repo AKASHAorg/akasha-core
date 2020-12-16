@@ -105,6 +105,7 @@ const typeDefs = gql`
     tags: [String!]
     quotedBy: [String]
     mentions: [String]
+    totalComments: String
   }
 
   type Comment {
