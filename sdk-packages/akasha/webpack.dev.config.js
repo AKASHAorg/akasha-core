@@ -31,6 +31,7 @@ const config = {
       http: false,
       https: false,
       dns: false,
+      fs: false,
       assert: require.resolve('assert/'),
       path: require.resolve('path-browserify/'),
       stream: require.resolve('stream-browserify/'),
