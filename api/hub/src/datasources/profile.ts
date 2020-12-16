@@ -47,11 +47,12 @@ class ProfileAPI extends DataSource {
 
   async addProfileProvider(pubKey: string, data: DataProvider[]) {
     const db: Client = await getAppDB();
-    const profile = await this.resolveProfile(pubKey);
-    if (!profile) {
+    const query = new Where('pubKey').eq(pubKey);
+    const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
+    if (!profilesFound?.length) {
       return;
     }
-    queryCache.del(this.getCacheKey(pubKey));
+    const profile = profilesFound[0];
     for (const rec of data) {
       const existing = profile.providers.findIndex(
         d => d.provider === rec.provider && d.property === rec.property,
@@ -62,22 +63,28 @@ class ProfileAPI extends DataSource {
         profile.providers.unshift(rec);
       }
     }
-    return await db.save(this.dbID, this.collection, [profile]);
+    await db.save(this.dbID, this.collection, [profile]);
+    queryCache.del(this.getCacheKey(pubKey));
+    return profile._id;
   }
   async makeDefaultProvider(pubKey: string, data: DataProvider) {
     const db: Client = await getAppDB();
-    const profile = await this.resolveProfile(pubKey);
-    if (!profile) {
+    const query = new Where('pubKey').eq(pubKey);
+    const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
+    if (!profilesFound?.length) {
       return;
     }
-    queryCache.del(this.getCacheKey(pubKey));
+    const profile = profilesFound[0];
+
     const indexFound = profile.default.findIndex(provider => provider.property === data.property);
     if (indexFound !== -1) {
       profile.default[indexFound] = data;
     } else {
       profile.default.push(data);
     }
-    return await db.save(this.dbID, this.collection, [profile]);
+    await db.save(this.dbID, this.collection, [profile]);
+    queryCache.del(this.getCacheKey(pubKey));
+    return profile._id;
   }
 
   async registerUserName(pubKey: string, name: string) {
@@ -87,13 +94,20 @@ class ProfileAPI extends DataSource {
     if (profilesFound.length) {
       return;
     }
-    const profile = await this.resolveProfile(pubKey);
+    const query1 = new Where('pubKey').eq(pubKey);
+    const profilesFound1 = await db.find<Profile>(this.dbID, this.collection, query1);
+    if (!profilesFound1?.length) {
+      return;
+    }
+    const profile = profilesFound1[0];
     if (!profile) {
       return;
     }
-    queryCache.del(this.getCacheKey(pubKey));
+
     profile.userName = name;
-    return await db.save(this.dbID, this.collection, [profile]);
+    await db.save(this.dbID, this.collection, [profile]);
+    queryCache.del(this.getCacheKey(pubKey));
+    return profile._id;
   }
   async followProfile(pubKey: string, ethAddress: string) {
     const db: Client = await getAppDB();
@@ -107,10 +121,11 @@ class ProfileAPI extends DataSource {
     if (!profile || !profile1 || exists !== -1 || exists1 !== -1) {
       return false;
     }
-    queryCache.del(this.getCacheKey(pubKey));
+
     profile1.following.unshift(profile.pubKey);
     profile.followers.unshift(profile1.pubKey);
     await db.save(this.dbID, this.collection, [profile, profile1]);
+    queryCache.del(this.getCacheKey(pubKey));
     return true;
   }
 
@@ -126,19 +141,21 @@ class ProfileAPI extends DataSource {
     if (!profile || !profile1 || exists === -1 || exists1 === -1) {
       return false;
     }
-    queryCache.del(this.getCacheKey(pubKey));
     profile1.following.splice(exists, 1);
     profile.followers.splice(exists1, 1);
     await db.save(this.dbID, this.collection, [profile, profile1]);
+    queryCache.del(this.getCacheKey(pubKey));
     return true;
   }
 
   async saveMetadata(pubKey: string, data: DataProvider) {
     const db: Client = await getAppDB();
-    const profile = await this.resolveProfile(pubKey);
-    if (!profile) {
+    const query = new Where('pubKey').eq(pubKey);
+    const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
+    if (!profilesFound?.length) {
       return;
     }
+    const profile = profilesFound[0];
     const indexFound = profile.metaData.findIndex(
       p => p.property === data.property && p.provider === data.provider,
     );
@@ -147,8 +164,10 @@ class ProfileAPI extends DataSource {
     } else {
       profile.metaData.push(data);
     }
+
+    await db.save(this.dbID, this.collection, [profile]);
     queryCache.del(this.getCacheKey(pubKey));
-    return await db.save(this.dbID, this.collection, [profile]);
+    return profile._id;
   }
 }
 

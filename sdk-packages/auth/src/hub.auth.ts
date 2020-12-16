@@ -41,7 +41,7 @@ export const generatePrivateKey = async (signer, ethAddress, sig, utils) => {
   }
   const identity = PrivateKey.fromRawEd25519Seed(Uint8Array.from(array));
   // tslint:disable-next-line:no-console
-  console.log(identity.toString());
+  console.log('====pub key====', identity.public.toString());
 
   return identity;
 };

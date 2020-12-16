@@ -40,7 +40,6 @@ export interface Profile {
 
 export interface Comment {
   _id: string;
-  title: string;
   creationDate: number;
   author: string;
   content: DataProvider[];

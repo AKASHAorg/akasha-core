@@ -67,11 +67,21 @@ const service: AkashaService = (invoke, log) => {
     buckClient = Buckets.withUserAuth(userAuth, endPoint);
     tokenGenerator = loginWithChallenge(identity, signer);
     auth = await tokenGenerator();
+    await hubUser.getToken(identity);
 
+    //@Todo: on error try to setupMail
+    await hubUser.setupMailbox();
+    const mailID = await hubUser.getMailboxID();
+    // // for 1st time users
+    // if (!mailID) {
+    //   await hubUser.setupMailbox();
+    // }
     db = new Database(`awf-alpha-user-${identity.public.toString().slice(-8)}`, {
       name: 'settings',
       schema: settingsSchema,
     });
+    // tslint:disable-next-line:no-console
+    console.log('====hubUser===', hubUser);
     await db.open(1);
     // // not working atm
     // const remote = await db.remote.setUserAuth(userAuth);
@@ -81,7 +91,6 @@ const service: AkashaService = (invoke, log) => {
 
     cache.set(AUTH_CACHE, {
       [ethAddressCache]: address,
-      [tokenCache]: auth.token,
     });
     return { client: hubClient, user: hubUser, token: auth.token, ethAddress: address };
   };

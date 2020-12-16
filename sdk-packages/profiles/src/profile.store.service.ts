@@ -79,13 +79,24 @@ const service: AkashaService = (invoke, log) => {
   query GetProfile($ethAddress: String!) {
        getProfile(ethAddress: $ethAddress) {
          ${fields.join(' ')}
+         providers{
+          provider
+          property
+          value
+         }
+         default{
+          provider
+          property
+          value
+         }
        }
       }`;
-    return runGQL({
+    const result = await runGQL({
       query: query,
       variables: { ethAddress: opt.ethAddress },
       operationName: 'GetProfile',
     });
+    return result.data;
   };
 
   const follow = async (opt: { ethAddress: string }) => {
