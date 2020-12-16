@@ -22,7 +22,7 @@ class ProfileAPI extends DataSource {
     const query = new Where('ethAddress').eq(ethAddress);
     const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
     if (profilesFound.length) {
-      return profilesFound[0];
+      return await this.resolveProfile(profilesFound[0].pubKey);
     }
     return;
   }
@@ -39,8 +39,14 @@ class ProfileAPI extends DataSource {
     const query = new Where('pubKey').eq(pubKey);
     const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
     if (profilesFound.length) {
-      queryCache.set(cacheKey, profilesFound[0]);
-      return profilesFound[0];
+      const extractedFields = ['name', 'description', 'avatar', 'coverImage'];
+      const q = profilesFound[0].default.filter(p => extractedFields.includes(p.property));
+      const returnedObj = Object.assign({}, profilesFound[0]);
+      for (const provider of q) {
+        Object.assign(returnedObj, { [provider.property]: provider.value });
+      }
+      queryCache.set(cacheKey, returnedObj);
+      return returnedObj;
     }
     return;
   }
