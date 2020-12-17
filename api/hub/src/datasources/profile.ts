@@ -3,6 +3,7 @@ import { getAppDB } from '../helpers';
 import { ThreadID, Where, Client } from '@textile/hub';
 import { DataProvider, Profile } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
+import { searchIndex } from './search-indexes';
 
 class ProfileAPI extends DataSource {
   private readonly collection: string;
@@ -91,6 +92,18 @@ class ProfileAPI extends DataSource {
     }
     await db.save(this.dbID, this.collection, [profile]);
     queryCache.del(this.getCacheKey(pubKey));
+    searchIndex
+      .saveObject({
+        objectID: profile._id,
+        category: 'profile',
+        userName: profile.userName,
+        pubKey: profile.pubKey,
+        name: profile.default.find(p => p.property === 'name')?.value,
+        creationDate: profile.creationDate,
+      })
+      .then(_ => _)
+      // tslint:disable-next-line:no-console
+      .catch(e => console.error(e));
     return profile._id;
   }
 
@@ -114,6 +127,17 @@ class ProfileAPI extends DataSource {
     profile.userName = name;
     await db.save(this.dbID, this.collection, [profile]);
     queryCache.del(this.getCacheKey(pubKey));
+    searchIndex
+      .saveObject({
+        objectID: profile._id,
+        category: 'profile',
+        userName: name,
+        pubKey: profile.pubKey,
+        creationDate: profile.creationDate,
+      })
+      .then(_ => _)
+      // tslint:disable-next-line:no-console
+      .catch(e => console.error(e));
     return profile._id;
   }
   async followProfile(pubKey: string, ethAddress: string) {
@@ -175,6 +199,21 @@ class ProfileAPI extends DataSource {
     await db.save(this.dbID, this.collection, [profile]);
     queryCache.del(this.getCacheKey(pubKey));
     return profile._id;
+  }
+
+  async searchProfiles(name: string) {
+    const result = await searchIndex.search(name, {
+      facetFilters: ['category:profile'],
+      hitsPerPage: 20,
+      restrictSearchableAttributes: ['name', 'userName', 'pubKey'],
+      attributesToRetrieve: ['name', 'pubKey', 'userName'],
+    });
+    const results = [];
+    for (const profile of result.hits as any) {
+      const resolvedProfile = await this.resolveProfile(profile.pubKey);
+      results.push(resolvedProfile);
+    }
+    return results;
   }
 }
 

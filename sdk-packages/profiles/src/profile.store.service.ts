@@ -63,7 +63,7 @@ const service: AkashaService = (invoke, log) => {
     return result.data;
   };
 
-  const getProfile = async (opt: { fields?: string[]; ethAddress: string }) => {
+  const getProfile = async (opt: { fields?: string[]; ethAddress?: string; pubKey?: string }) => {
     const defaultFields = [
       'pubKey',
       'description',
@@ -75,7 +75,30 @@ const service: AkashaService = (invoke, log) => {
       'ethAddress',
     ];
     const fields = opt.fields ? opt.fields : defaultFields;
-    const query = `
+    let query;
+    let variables;
+    let operationName;
+    if (opt.pubKey) {
+      query = `
+  query ResolveProfile($pubKey: String!) {
+       resolveProfile(pubKey: $pubKey) {
+         ${fields.join(' ')}
+         providers{
+          provider
+          property
+          value
+         }
+         default{
+          provider
+          property
+          value
+         }
+       }
+      }`;
+      variables = { pubKey: opt.pubKey };
+      operationName = 'ResolveProfile';
+    } else if (opt.ethAddress) {
+      query = `
   query GetProfile($ethAddress: String!) {
        getProfile(ethAddress: $ethAddress) {
          ${fields.join(' ')}
@@ -91,10 +114,15 @@ const service: AkashaService = (invoke, log) => {
          }
        }
       }`;
+      variables = { ethAddress: opt.ethAddress };
+      operationName = 'GetProfile';
+    } else {
+      return Promise.reject('Must provide ethAddress of pubKey value');
+    }
     const result = await runGQL({
       query: query,
-      variables: { ethAddress: opt.ethAddress },
-      operationName: 'GetProfile',
+      variables: variables,
+      operationName: operationName,
     });
     return result.data;
   };
@@ -200,6 +228,30 @@ const service: AkashaService = (invoke, log) => {
 
     return cid;
   };
+  const searchProfiles = async (opt: { name: string }) => {
+    const query = `
+    query SearchProfiles($name: String!) {
+         searchProfiles(name: $name) {
+             name
+             userName
+             pubKey
+             avatar
+             description
+             coverImage
+             ethAddress
+         }
+       }`;
+    const result = await runGQL({
+      query: query,
+      variables: { name: opt.name },
+      operationName: 'SearchProfiles',
+    });
+    return result.data;
+  };
+
+  const getTrending = async () => {
+    return searchProfiles({ name: '' });
+  };
   return {
     addProfileProvider,
     saveMediaFile,
@@ -209,6 +261,8 @@ const service: AkashaService = (invoke, log) => {
     follow,
     unFollow,
     isFollowing,
+    searchProfiles,
+    getTrending,
   };
 };
 

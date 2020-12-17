@@ -3,6 +3,7 @@ import { getAppDB, getMailSender } from '../helpers';
 import { Client, ThreadID, Users } from '@textile/hub';
 import { DataProvider, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
+import { searchIndex } from './search-indexes';
 
 class PostAPI extends DataSource {
   private readonly collection: string;
@@ -116,6 +117,20 @@ class PostAPI extends DataSource {
     if (post.mentions && post.mentions.length) {
       await this.triggerMentions(post.mentions, postID, post.author);
     }
+    searchIndex
+      .saveObject({
+        objectID: post._id,
+        type: post.type,
+        author: post.author,
+        tags: post.tags,
+        category: 'post',
+        creationDate: post.creationDate,
+        content: post.content.find(e => e.property === 'textContent')?.value,
+        title: post.title,
+      })
+      .then(_ => _)
+      // tslint:disable-next-line:no-console
+      .catch(e => console.error(e));
     return postID;
   }
 

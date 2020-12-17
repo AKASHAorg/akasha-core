@@ -16,12 +16,14 @@ const typeDefs = gql`
     nextIndex: String
     total: Int
   }
+
   type Query {
     getProfile(ethAddress: String!): UserProfile!
     resolveProfile(pubKey: String!): UserProfile!
     getPost(id: String!): Post!
     getTag(name: String!): Tag
     searchTags(name: String!): [String]
+    searchProfiles(name: String!): [UserProfile]
     tags(offset: String, limit: Int): TagsResult
     posts(offset: String, limit: Int): PostsResult
     isFollowing(follower: String!, following: String!): Boolean
