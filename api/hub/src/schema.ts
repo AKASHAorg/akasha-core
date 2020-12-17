@@ -87,6 +87,7 @@ const typeDefs = gql`
     description: String
     avatar: String
     coverImage: String
+    totalPosts: String
     providers: [DataProvider]
     default: [DataProvider]
   }

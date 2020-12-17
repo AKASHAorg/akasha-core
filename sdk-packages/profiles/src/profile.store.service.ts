@@ -73,6 +73,7 @@ const service: AkashaService = (invoke, log) => {
       'name',
       'coverImage',
       'ethAddress',
+      'totalPosts',
     ];
     const fields = opt.fields ? opt.fields : defaultFields;
     let query;

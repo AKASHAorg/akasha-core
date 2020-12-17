@@ -31,14 +31,17 @@ class ProfileAPI extends DataSource {
   getCacheKey(pubKey: string) {
     return `${this.collection}:pubKey${pubKey}`;
   }
-  async resolveProfile(pubKey: string) {
+  async resolveProfile(pubKey: string, noCache: boolean = false) {
     const cacheKey = this.getCacheKey(pubKey);
-    if (queryCache.has(cacheKey)) {
+    if (queryCache.has(cacheKey) && !noCache) {
       return Promise.resolve(queryCache.get(cacheKey));
     }
     const db: Client = await getAppDB();
     const query = new Where('pubKey').eq(pubKey);
     const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
+    if (noCache) {
+      return profilesFound;
+    }
     if (profilesFound.length) {
       const extractedFields = ['name', 'description', 'avatar', 'coverImage'];
       const q = profilesFound[0].default.filter(p => extractedFields.includes(p.property));
@@ -214,6 +217,11 @@ class ProfileAPI extends DataSource {
       results.push(resolvedProfile);
     }
     return results;
+  }
+
+  async updateProfile(updateProfile: any[]) {
+    const db: Client = await getAppDB();
+    return db.save(this.dbID, this.collection, updateProfile);
   }
 }
 

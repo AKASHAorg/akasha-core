@@ -1,11 +1,21 @@
-import { commentsStats, statsProvider } from './constants';
+import { commentsStats, postsStats, statsProvider } from './constants';
 
 const query = {
   getProfile: async (_source, { ethAddress }, { dataSources }) => {
-    return await dataSources.profileAPI.getProfile(ethAddress);
+    const profileData = await dataSources.profileAPI.getProfile(ethAddress);
+    const totalPostsIndex = profileData.metaData.findIndex(
+      m => m.provider === statsProvider && m.property === postsStats,
+    );
+    const totalPosts = totalPostsIndex !== -1 ? profileData.metaData[totalPostsIndex].value : '0';
+    return Object.assign({}, profileData, { totalPosts });
   },
   resolveProfile: async (_source, { pubKey }, { dataSources }) => {
-    return await dataSources.profileAPI.resolveProfile(pubKey);
+    const profileData = await dataSources.profileAPI.resolveProfile(pubKey);
+    const totalPostsIndex = profileData.metaData.findIndex(
+      m => m.provider === statsProvider && m.property === postsStats,
+    );
+    const totalPosts = totalPostsIndex !== -1 ? profileData.metaData[totalPostsIndex].value : '0';
+    return Object.assign({}, profileData, { totalPosts });
   },
   getPost: async (_source, { id }, { dataSources }) => {
     const postData = await dataSources.postsAPI.getPost(id);
