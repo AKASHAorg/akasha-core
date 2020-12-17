@@ -75,7 +75,7 @@ const bootstrap = async () => {
     const defaultApps = await getDefaultApps(APPS_PATH, PLUGINS_PATH, WIDGETS_PATH);
     // @ts-ignore
     const { default: sdkInit } = win.akashaproject__sdk;
-    const sdk = sdkInit({
+    const sdk = await sdkInit({
       config: config,
       initialApps: {
         plugins: [],

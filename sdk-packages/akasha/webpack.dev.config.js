@@ -44,7 +44,13 @@ const config = {
     publicPath: "/"
   },
   optimization: {
-    moduleIds: "deterministic"
+    moduleIds: "deterministic",
+    chunkIds: "named",
+    splitChunks: {
+      chunks: 'all',
+      minSize: 69000,
+      minChunks: 2,
+    }
   },
   plugins: [
     new webpack.EnvironmentPlugin({
@@ -74,7 +80,7 @@ const config = {
       exclude: [/.*?/]
     })
   ],
-  devtool: "source-map",
+  devtool: process.env.NODE_ENV === "production" ? 'source-map' : 'inline-source-map',
   mode: process.env.NODE_ENV || "development",
   externals: [
     {
