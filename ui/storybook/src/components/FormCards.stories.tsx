@@ -63,7 +63,7 @@ storiesOf('Cards/Form Cards', module)
         onSave={() => action('Form submitted')('Synthetic Event')}
         onCancel={() => action('Form Cancelled')('Synthetic Event')}
         validateEns={() => action('validating ens')('Synthetic Event')}
-        validEns={boolean('valid ens', true)}
+        validEns={boolean('Valid ens', true)}
         changeButtonLabel={text('Label for Change ENS Button', 'Change ENS')}
         userNameProviderOptions={[
           { name: 'local', label: text('Label for local usernames', 'Do not use ENS') },
