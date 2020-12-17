@@ -12,7 +12,7 @@ storiesOf('Cards/Form Cards', module)
   .add('3Box form card', () => (
     <Box align="center" pad={{ top: '40px' }}>
       <BoxFormCard
-        uploadLabel={text('upload Label', 'Upload an image')}
+        uploadLabel={text('Upload Label', 'Upload an image')}
         urlLabel={text('url Label', 'By url')}
         deleteLabel={text('delete Label', 'Delete Image')}
         titleLabel={text('Title Label', 'Ethereum Address')}
