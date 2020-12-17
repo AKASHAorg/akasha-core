@@ -29,9 +29,9 @@ export default function commonApi(channel) {
         getStash: extractedServices[CACHE_SERVICE]('getStash'),
       },
       ipfsService: {
-        getInstance: extractedServices[IPFS_SERVICE]('getInstance'),
-        getUtils: extractedServices[IPFS_SERVICE]('getUtils'),
-        upload: extractedServices[IPFS_SERVICE]('upload'),
+        // getInstance: extractedServices[IPFS_SERVICE]('getInstance'),
+        // getUtils: extractedServices[IPFS_SERVICE]('getUtils'),
+        // upload: extractedServices[IPFS_SERVICE]('upload'),
         getSettings: extractedServices[IPFS_SERVICE]('getSettings'),
       },
       validatorService: {
