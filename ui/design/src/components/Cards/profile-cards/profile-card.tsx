@@ -15,6 +15,7 @@ import {
 import { IProfileWidgetCard } from './profile-widget-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 import ProfileEditMenuDropdown from './profile-card-edit-dropdown';
+import styled from 'styled-components';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -54,7 +55,21 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   onENSChangeClick: () => void;
   updateProfileLabel: string;
   changeENSLabel: string;
+  hideENSButton: boolean;
 }
+
+const EditButton = styled(IconButton)`
+  border-radius: ${props => props.theme.shapes.smallBorderRadius};
+  min-height: 1.375rem;
+  svg *{
+    stroke: ${props => props.theme.colors.white};
+  }
+  &:hover {
+    svg *{
+      stroke: ${props => props.theme.colors.blue};
+    }
+  }
+`;
 
 const ProfileCard: React.FC<IProfileCardProps> = props => {
   const {
@@ -247,7 +262,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             </Box>
           )}
           {canUserEdit && (
-              <IconButton
+              <EditButton
                 primary={true}
                 icon={<Icon type="editSimple" ref={editMenuRef}/>}
                 label={editProfileLabel}
@@ -273,6 +288,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               onENSChangeClick={() => { props.onENSChangeClick(); closeEditMenu(); }}
               changeENSLabel={props.changeENSLabel}
               updateProfileLabel={props.updateProfileLabel}
+              hideENSButton={props.hideENSButton}
             />
           )}
         </Box>

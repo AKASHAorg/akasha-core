@@ -2,30 +2,31 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
 import { useTranslation } from 'react-i18next';
-import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
 const { ProfileCard } = DS;
 
 interface MPPHeaderProps {
   profileData: Partial<IProfileData>;
-  modalState: ModalState;
-  modalActions: ModalStateActions
+  onModalShow: (modalName: string) => void;
   canEdit: boolean;
+  userName: string | null;
+  profileModalName: string;
+  ensModalName: string;
 }
 
 export const MyProfileCard = (props: MPPHeaderProps) => {
-  const { profileData } = props;
+  const { profileData, profileModalName, ensModalName } = props;
   const { t } = useTranslation();
   if (!profileData) {
     return null;
   }
 
   const showUpdateProfileModal = () => {
-    props.modalActions.show('updateProfile')
+    props.onModalShow(profileModalName);
   }
 
   const showEnsModal = () => {
-    props.modalActions.show('changeENS');
+    props.onModalShow(ensModalName);
   }
 
   return (
@@ -54,6 +55,7 @@ export const MyProfileCard = (props: MPPHeaderProps) => {
       onUpdateClick={showUpdateProfileModal}
       onENSChangeClick={showEnsModal}
       changeENSLabel={t('Change Ethereum name')}
+      hideENSButton={!!props.userName}
     />
   );
 };

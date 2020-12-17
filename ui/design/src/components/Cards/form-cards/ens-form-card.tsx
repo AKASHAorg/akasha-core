@@ -134,7 +134,6 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   };
 
   const handleSelectEns = (selected: string) => {
-    console.log('option is', selected);
     setSelectedUsernameOption(selected);
   };
 
@@ -161,12 +160,17 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   };
 
   const handleSave = () => {
-    console.log(userNameOptions, selectedUsernameOption);
     onSave({
       name,
       option: userNameOptions.find(o => o.name === selectedUsernameOption),
     });
   };
+
+  let saveButtonLabel: React.ReactNode = saveLabel;
+  if (registrationStatus && (registrationStatus.registering || registrationStatus.claiming)) {
+    saveButtonLabel = <Spinner style={{ padding: 0 }} size={15} />
+  }
+
   return (
     <MainAreaCardBox className={className}>
       <Box direction="column" pad="large">
@@ -200,7 +204,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
           </Box>
         </FormField>
         <Box direction="column">
-          {name.length > 1 && (
+          {!!name.length && (
             <>
               <Box direction="column" pad={{ top: 'large', bottom: 'medium' }}>
                 <Box direction="row" align="baseline">
@@ -332,14 +336,11 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
               <Icon type="questionMark" size="xxs" clickable={true} />
             </Box>
             <Box direction="row">
-              {registrationStatus && (registrationStatus.registering || registrationStatus.claiming) &&
-                <Spinner size={35} />
-              }
               {errorMessage && <>{errorMessage}</>}
             </Box>
             <Box direction="row">
               <Button margin={{ right: '0.5rem' }} label={cancelLabel} onClick={handleCancel} />
-              <Button label={saveLabel} onClick={handleSave} disabled={registrationStatus && registrationStatus.registering} primary={true} />
+              <Button label={saveButtonLabel} onClick={handleSave} disabled={registrationStatus && registrationStatus.registering} primary={true} />
             </Box>
           </Box>
         </Box>

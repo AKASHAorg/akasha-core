@@ -6,6 +6,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 import { useParams } from 'react-router-dom';
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
+const { Box, Helmet } = DS;
 export interface ProfilePageProps extends RootComponentProps {
   modalActions: ModalStateActions;
   modalState: ModalState
@@ -32,10 +33,10 @@ const ProfilePage = (props: ProfilePageProps) => {
   }, [profileId]);
   console.log(profileState, 'profile state');
   return (
-    <div>
-      <DS.Helmet>
+    <Box fill="horizontal">
+      <Helmet>
         <title>Profile | {profileId} Page</title>
-      </DS.Helmet>
+      </Helmet>
       <ProfilePageCard
         {...props}
         profileData={profileState}
@@ -44,7 +45,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         modalActions={props.modalActions}
         modalState={props.modalState}
       />
-    </div>
+    </Box>
   );
 };
 
