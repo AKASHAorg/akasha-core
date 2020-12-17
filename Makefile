@@ -6,8 +6,10 @@ build.tsc.sdk:
 build.tsc.ui:
 	npm run tsc:ui
 build.sdk:
+	export NODE_ENV='production' && \
 	npm run build:sdk
 build.ui:
+	export NODE_ENV='production' && \
 	npm run pack:ui
 build.feed-app:
 	npm run build:feed-app
@@ -19,6 +21,7 @@ install:
 	npm install && \
 	npm run bootstrap
 build.staging.feed:
+		export NODE_ENV='production' && \
 	./node_modules/.bin/lerna run build:staging --scope @akashaproject/ethereum.world
 build.staging.feed.static: build build.staging.feed
 build.staging.storybook:
