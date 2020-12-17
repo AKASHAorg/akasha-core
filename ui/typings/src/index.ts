@@ -1,5 +1,11 @@
 import * as AppLoaderTypes from './app-loader';
 
+export interface IAkashaError {
+  errorKey: string;
+  error: Error;
+  critical: boolean;
+}
+
 export interface LogoSourceType {
   type: LogoTypeSource;
   value: string;

@@ -49,7 +49,7 @@ const SocialBox: React.FC<ISocialBox> = props => {
             pad="xxsmall"
             flex={{ shrink: 0 }}
           >
-            <Avatar src={user.avatar} size="xs" />
+            <Avatar src={user.avatar} ethAddress={user.ethAddress} size="xs" />
             <Text>{user.userName ? user.userName : truncateMiddle(user.ethAddress, 3, 3)}</Text>
           </StyledSelectBox>
         ))}

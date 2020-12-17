@@ -34,5 +34,5 @@ export const MainAreaContainer: any = styled(BaseContainer)`
 
 export const WidgetContainer: any = styled(BaseContainer)`
   position: sticky;
-  top: 4em;
+  top: 4rem;
 `;

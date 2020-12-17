@@ -13,6 +13,7 @@ export interface ITopicsCardWidgetProps {
   labelColor?: string;
   iconType: IconType;
   dataSource: ITopicData[];
+  className?: string;
 }
 
 export interface ITopicData {
@@ -21,14 +22,23 @@ export interface ITopicData {
 }
 
 const TopicsWidgetCard: React.FC<ITopicsCardWidgetProps> = props => {
-  const { onClick, onTopicClick, margin, iconType, label, labelColor, dataSource } = props;
+  const {
+    onClick,
+    onTopicClick,
+    margin,
+    iconType,
+    label,
+    labelColor,
+    dataSource,
+    className,
+  } = props;
 
   const topicClickHandler = (topicData: ITopicData) => () => {
     onTopicClick(topicData);
   };
 
   return (
-    <WidgetAreaCardBox>
+    <WidgetAreaCardBox className={className}>
       <Box pad="medium" gap="medium">
         <TextIcon
           iconType={iconType}

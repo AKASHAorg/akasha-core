@@ -15,7 +15,7 @@ export interface IFormImagePopover {
   deleteLabel?: string;
   target: HTMLElement;
   closePopover: () => void;
-  insertImage?: (src: ArrayBuffer | string, isUrl: boolean) => void;
+  insertImage?: (src: File | string, isUrl: boolean) => void;
   currentImage?: boolean;
   handleDeleteImage?: () => void;
 }
@@ -67,7 +67,7 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
     }
     const file = ev.target.files[0];
     if (insertImage) {
-      insertImage(URL.createObjectURL(file), true);
+      insertImage(file, false);
     }
     closePopover();
   };

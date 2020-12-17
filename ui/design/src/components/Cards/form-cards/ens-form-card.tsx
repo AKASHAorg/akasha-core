@@ -2,8 +2,18 @@ import { Box, FormField, Text, RadioButton } from 'grommet';
 import * as React from 'react';
 import { Button } from '../../Buttons/index';
 import { Icon } from '../../Icon/index';
+import Spinner from '../../Spinner';
 import { MainAreaCardBox } from '../common/basic-card-box';
-import { HiddenSpan, StyledText, StyledTextInput } from './styled-form-card';
+import { StyledText, StyledTextInput } from './styled-form-card';
+
+export interface IUserNameOption {
+  /* Option identifier (ensDomain, local, ethAddress), ensSubdomain added by default */
+  name: 'ensSubdomain' | 'ensDomain' | 'local' | 'ethAddress';
+  /* Can be anything. It will be displayed in the UI */
+  label: string;
+  /* This option cannot be selected, serving just as a preview of coming soon functionality */
+  isDisabled?: boolean;
+}
 
 export interface IEnsFormCardProps {
   className?: string;
@@ -13,30 +23,37 @@ export interface IEnsFormCardProps {
   errorLabel: string;
   ethAddressLabel: string;
   ethNameLabel: string;
+  changeButtonLabel: string;
   optionUsername: string;
   optionSpecify: string;
   optionUseEthereumAddress: string;
   consentText: string;
   consentUrl: string;
   consentLabel: string;
-  poweredByLabel: string;
-  iconLabel: string;
+  poweredByLabel?: string;
+  iconLabel?: string;
   cancelLabel: string;
   saveLabel: string;
   nameFieldPlaceholder: string;
   ethAddress: string;
   providerData: Partial<IEnsData>;
   validateEns?: (name: string) => void;
-  validEns?: boolean;
-  handleSubmit: (data: IEnsData | { name: string }) => void;
+  validEns: boolean | null;
+  onSave: (data: IEnsData | { name: string; option: IUserNameOption }) => void;
+  onCancel?: () => void;
   isValidating?: boolean;
   ensSubdomain?: string;
+  userNameProviderOptions: IUserNameOption[];
+  disableInputOnOption?: { [key: string]: boolean };
+  errorMessage?: string | null;
+  registrationStatus?: { registering: boolean; claiming: boolean };
 }
 
 export interface IEnsData {
   name?: string;
 }
-
+// tslint:disable:cyclomatic-complexity
+/* eslint-disable complexity */
 const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   const {
     className,
@@ -45,9 +62,6 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     errorLabel,
     ethAddressLabel,
     ethNameLabel,
-    optionUsername,
-    optionSpecify,
-    optionUseEthereumAddress,
     consentText,
     consentUrl,
     consentLabel,
@@ -55,35 +69,42 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     iconLabel,
     cancelLabel,
     saveLabel,
+    changeButtonLabel,
     nameFieldPlaceholder,
     ethAddress,
     providerData,
-    handleSubmit,
+    onSave,
     validateEns,
     validEns,
     isValidating,
     ensSubdomain = 'akasha.eth',
+    userNameProviderOptions,
+    disableInputOnOption,
+    errorMessage,
+    registrationStatus,
   } = props;
 
   const [name, setName] = React.useState('');
 
   const [error, setError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
-  const [clicked, setClicked] = React.useState(false);
-  const [option, setOption] = React.useState('');
+  const [optionsVisible, setOptionsVisible] = React.useState(false);
 
-  const [textInputComputedWidth, setTextInputComputedWidth] = React.useState('');
-
-  const hiddenSpanRef: React.Ref<HTMLSpanElement> = React.useRef(null);
-
-  // @TODO calculate from placeholder width
-  const initialInputWidth = '6rem';
+  const userNameOptions: IUserNameOption[] = [
+    {
+      name: 'ensSubdomain',
+      // show subdomain suffix
+      label: `${name.replace(`.${ensSubdomain}`, '')}.${ensSubdomain}`,
+    },
+    ...userNameProviderOptions,
+  ];
+  // make ensSubdomain option as default
+  const [selectedUsernameOption, setSelectedUsernameOption] = React.useState('ensSubdomain');
 
   React.useEffect(() => {
     if (providerData.name) {
       setName(providerData.name);
     }
-    setTextInputComputedWidth(initialInputWidth);
   }, []);
 
   React.useEffect(() => {
@@ -109,12 +130,12 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     return;
   };
 
-  const handleChangeEns = () => {
-    setClicked(true);
+  const showOptions = () => {
+    setOptionsVisible(true);
   };
 
   const handleSelectEns = (selected: string) => {
-    setOption(selected);
+    setSelectedUsernameOption(selected);
   };
 
   const handleCopyEthAddress = () => {
@@ -122,44 +143,34 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   };
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    // when first character is typed, sanitize and append '@' accordingly
-    if (name === '') {
-      return setName(`@${ev.target.value.replace(/[^\w]/g, '')}`);
-    }
     const value = ev.target.value;
-    // sanitize remaining characters to remove any spaces and special characters
-    const sanitizedValue = `@${value.substring(1).replace(/[^\w]/g, '')}`;
-    setName(sanitizedValue);
-    if (hiddenSpanRef.current) {
-      hiddenSpanRef.current.textContent = sanitizedValue;
-    }
+    setName(value);
     setError(false);
-    if (value) {
-      if (hiddenSpanRef.current) {
-        setTextInputComputedWidth(`${(hiddenSpanRef.current.offsetWidth + 2) / 16}rem`);
-      }
-    } else if (!value) {
-      if (hiddenSpanRef.current) {
-        setTextInputComputedWidth(initialInputWidth);
-      }
-    }
-    if (validateEns && typeof validateEns === 'function') {
+    if (validateEns) {
       validateEns(value);
     }
   };
 
   const handleCancel = () => {
     setName('');
-    setTextInputComputedWidth(initialInputWidth);
     setError(false);
     setSuccess(false);
+    if (props.onCancel) {
+      props.onCancel();
+    }
   };
 
   const handleSave = () => {
-    handleSubmit({
+    onSave({
       name,
+      option: userNameOptions.find(o => o.name === selectedUsernameOption),
     });
   };
+
+  let saveButtonLabel: React.ReactNode = saveLabel;
+  if (registrationStatus && (registrationStatus.registering || registrationStatus.claiming)) {
+    saveButtonLabel = <Spinner style={{ padding: 0 }} size={15} />;
+  }
 
   return (
     <MainAreaCardBox className={className}>
@@ -168,7 +179,13 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
           <Text weight="bold" margin="0 auto 2rem" size="xlarge">
             {titleLabel}
           </Text>
-          <Icon type="close" color="secondaryText" primaryColor={true} clickable={true} />
+          <Icon
+            type="close"
+            color="secondaryText"
+            primaryColor={true}
+            clickable={true}
+            onClick={handleCancel}
+          />
         </Box>
         <Box direction="row" align="center">
           <StyledText color={error ? 'errorText' : 'secondaryText'} size="small">
@@ -177,15 +194,16 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
         </Box>
         <FormField name="name" error={error ? errorLabel : null} htmlFor="text-input">
           <Box justify="between" direction="row" pad={{ top: 'small', bottom: '11px' }}>
-            <Box justify="start" direction="row" align="center">
-              <HiddenSpan ref={hiddenSpanRef} />
+            <Box fill="horizontal" direction="row" align="center">
+              {'@'}
               <StyledTextInput
                 spellCheck={false}
                 autoFocus={true}
-                computedWidth={textInputComputedWidth}
+                computedWidth={'100%'}
                 id="text-input"
                 value={name}
                 onChange={handleChange}
+                disabled={disableInputOnOption && disableInputOnOption[selectedUsernameOption]}
                 placeholder={nameFieldPlaceholder}
               />
             </Box>
@@ -193,7 +211,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
           </Box>
         </FormField>
         <Box direction="column">
-          {name.length > 1 && (
+          {!!name.length && (
             <>
               <Box direction="column" pad={{ top: 'large', bottom: 'medium' }}>
                 <Box direction="row" align="baseline">
@@ -201,31 +219,35 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                     {ethNameLabel}
                   </StyledText>
                 </Box>
-                {!clicked && (
+                {!optionsVisible && (
                   <Box
                     direction="row"
                     gap="xxsmall"
                     pad={{ top: 'small', bottom: 'small' }}
                     align="baseline"
                   >
-                    {/* render selected Ens accordingly */}
-                    {(option === '' || option.includes(`${ensSubdomain}`)) && (
+                    {selectedUsernameOption === userNameOptions[0].name && (
                       <Text size="large">
-                        {name.replace('@', '')}
+                        {name.replace(`.${ensSubdomain}`, '')}
                         <Text color="accentText" size="large" margin={{ right: 'xxsmall' }}>
                           .{ensSubdomain}
                         </Text>
                       </Text>
                     )}
-                    {option.includes(optionSpecify) && (
+                    {selectedUsernameOption === 'ensDomain' && (
                       <Text size="large">
-                        {name.replace('@', '')}
+                        {name.replace(`.${ensSubdomain}`, '')}
                         <Text color="accentText" size="large" margin={{ right: 'xxsmall' }}>
                           .eth
                         </Text>
                       </Text>
                     )}
-                    {option.includes(optionUseEthereumAddress) && (
+                    {selectedUsernameOption === 'local' && (
+                      <Text size="large">
+                        @{name.replace(`.${ensSubdomain}`, '').replace('.eth', '')}
+                      </Text>
+                    )}
+                    {selectedUsernameOption === 'ethAddress' && (
                       <>
                         <Text size="large" margin={{ right: 'xxsmall' }}>
                           {ethAddress}
@@ -237,28 +259,23 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                       color="accentText"
                       size="small"
                       style={{ cursor: 'pointer' }}
-                      onClick={handleChangeEns}
+                      onClick={showOptions}
                     >
-                      Change
+                      {changeButtonLabel}
                     </Text>
                   </Box>
                 )}
-                {clicked && name.length > 1 && (
+                {optionsVisible && name.length > 1 && (
                   <Box direction="column">
-                    {[
-                      `${name === '' ? optionUsername : name}.${ensSubdomain}`.replace('@', ''),
-                      optionSpecify,
-                      `${optionUseEthereumAddress} (${ethAddress.slice(0, 6)}...${ethAddress.slice(
-                        -4,
-                      )})`,
-                    ].map(label => (
-                      <Box key={label} margin={{ vertical: 'xsmall' }}>
+                    {userNameOptions.map(provider => (
+                      <Box key={provider.name} margin={{ vertical: 'xsmall' }}>
                         <RadioButton
                           name="prop"
-                          checked={option === label}
-                          label={label}
-                          onClick={() => setClicked(false)}
-                          onChange={() => handleSelectEns(label)}
+                          disabled={!!provider.isDisabled}
+                          checked={selectedUsernameOption === provider.name}
+                          label={provider.label}
+                          onClick={() => setOptionsVisible(false)}
+                          onChange={() => handleSelectEns(provider.name)}
                         />
                       </Box>
                     ))}
@@ -267,7 +284,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
               </Box>
             </>
           )}
-          {name.length <= 1 && (
+          {!name.length && (
             <>
               <Box direction="column" pad={{ top: 'large', bottom: 'medium' }}>
                 <Box direction="row" align="center">
@@ -305,22 +322,34 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
           </Box>
           <Box direction="row" gap="xsmall" justify="between" align="center">
             <Box direction="row" align="center">
-              <Text color="secondaryText" size="10px" margin={{ right: 'xxsmall' }}>
-                {poweredByLabel}
-              </Text>
-              <Icon type="appEns" size="xs" />
-              <Text
-                style={{ opacity: 0.75 }}
-                size="xsmall"
-                margin={{ left: '0.05rem', right: 'xsmall' }}
-              >
-                {iconLabel}
-              </Text>
+              {poweredByLabel && (
+                <Text color="secondaryText" size="10px" margin={{ right: 'xxsmall' }}>
+                  {poweredByLabel}
+                </Text>
+              )}
+              {iconLabel && (
+                <>
+                  <Icon type="appEns" size="xs" />
+                  <Text
+                    style={{ opacity: 0.75 }}
+                    size="xsmall"
+                    margin={{ left: '0.05rem', right: 'xsmall' }}
+                  >
+                    {iconLabel}
+                  </Text>
+                </>
+              )}
               <Icon type="questionMark" size="xxs" clickable={true} />
             </Box>
+            <Box direction="row">{errorMessage && <>{errorMessage}</>}</Box>
             <Box direction="row">
               <Button margin={{ right: '0.5rem' }} label={cancelLabel} onClick={handleCancel} />
-              <Button label={saveLabel} onClick={handleSave} primary={true} />
+              <Button
+                label={saveButtonLabel}
+                onClick={handleSave}
+                disabled={registrationStatus && registrationStatus.registering}
+                primary={true}
+              />
             </Box>
           </Box>
         </Box>
@@ -328,5 +357,6 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     </MainAreaCardBox>
   );
 };
-
+// tslint:enable:cyclomatic-complexity
+/* eslint-enable complexity */
 export default EnsFormCard;
