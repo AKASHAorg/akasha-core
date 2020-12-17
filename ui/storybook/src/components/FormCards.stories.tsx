@@ -12,7 +12,7 @@ storiesOf('Cards/Form Cards', module)
   .add('3Box form card', () => (
     <Box align="center" pad={{ top: '40px' }}>
       <BoxFormCard
-        uploadLabel={text('upload Label', 'Upload an image')}
+        uploadLabel={text('Upload Label', 'Upload an image')}
         urlLabel={text('url Label', 'By url')}
         deleteLabel={text('delete Label', 'Delete Image')}
         titleLabel={text('Title Label', 'Ethereum Address')}
@@ -29,7 +29,9 @@ storiesOf('Cards/Form Cards', module)
         )}
         ethAddress={text('Logged Profile EthAddress', '0x003410499401674320006570047391024572456')}
         providerData={object('Provider Data', boxProviderData)}
-        handleSubmit={() => action('Form submitted')('Synthetic Event')}
+        onSave={() => action('Form submitted')('Synthetic Event')}
+        onCancel={() => action('Form Cancelled')('Synthetic Event')}
+        updateStatus={{ saving: boolean('Is saving', false) }}
       />
     </Box>
   ))
@@ -58,9 +60,14 @@ storiesOf('Cards/Form Cards', module)
         nameFieldPlaceholder={text('Name Placeholder', '@username')}
         ethAddress={text('Logged Profile EthAddress', '0x003410499401674320006570047391024572456')}
         providerData={object('Provider Data', ensProviderData)}
-        handleSubmit={() => action('Form submitted')('Synthetic Event')}
-        validateEns={() => action('validating ens')('Synthetic Event')}
-        validEns={boolean('valid ens', true)}
+        onSave={() => action('Form submitted')('Synthetic Event')}
+        onCancel={() => action('Form Cancelled')('Synthetic Event')}
+        validateEns={() => action('Validating ens')('Synthetic Event')}
+        validEns={boolean('Valid ens', true)}
+        changeButtonLabel={text('Label for Change ENS Button', 'Change ENS')}
+        userNameProviderOptions={[
+          { name: 'local', label: text('Label for local usernames', 'Do not use ENS') },
+        ]}
       />
     </Box>
   ));
