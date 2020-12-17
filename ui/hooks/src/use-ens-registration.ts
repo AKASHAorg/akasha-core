@@ -1,5 +1,5 @@
-import * as React from "react";
-import { concat } from "rxjs";
+import * as React from 'react';
+import { concat } from 'rxjs';
 
 export interface UseENSRegistrationProps {
   profileService: any;
@@ -34,11 +34,13 @@ export interface UseENSRegistrationActions {
   claim: (payload: { userName: string }) => void;
   registerLocalUsername: (payload: { userName: string }) => void;
   resetRegistrationStatus: () => void;
-};
+}
 
 // const ENS_REGISTRATION_STATUS = 'ens-registration-status';
 
-const useENSRegistration = (props: UseENSRegistrationProps): [UseENSRegistrationState, UseENSRegistrationActions] => {
+const useENSRegistration = (
+  props: UseENSRegistrationProps,
+): [UseENSRegistrationState, UseENSRegistrationActions] => {
   const { profileService, ensService, ethAddress } = props;
   const [registrationState, setRegistrationState] = React.useState<UseENSRegistrationState>({
     isAvailable: null,
@@ -64,42 +66,47 @@ const useENSRegistration = (props: UseENSRegistrationProps): [UseENSRegistration
     if (registrationState.userName && !registrationState.status.registering) {
       actions.validateName(registrationState.userName);
     }
-  }, [registrationState.userName, registrationState.status.registering])
+  }, [registrationState.userName, registrationState.status.registering]);
 
   const actions: UseENSRegistrationActions = {
-    getENSByAddress: ({ ethAddress }: { ethAddress: string }) => {
+    getENSByAddress: (_payload: { ethAddress: string }) => {
       const call = ensService.resolveAddress({ ethAddress });
-      call.subscribe((resp: any) => {
-        if (resp.data && resp.channelInfo.args.ethAddress === ethAddress) {
+      call.subscribe(
+        (resp: any) => {
+          if (resp.data && resp.channelInfo.args.ethAddress === ethAddress) {
+            setRegistrationState(prev => ({
+              ...prev,
+              userName: resp.data,
+              alreadyRegistered: true,
+            }));
+          }
+        },
+        (err: Error) => {
           setRegistrationState(prev => ({
             ...prev,
-            userName: resp.data,
-            alreadyRegistered: true,
+            errorMessage: `Failed to get ENS name. ${err.message}`,
+            alreadyRegistered: false,
           }));
-        }
-      }, (err: Error) => {
-        setRegistrationState(prev => ({
-          ...prev,
-          errorMessage: `Failed to get ENS name. ${err.message}`,
-          alreadyRegistered: false,
-        }));
-      });
+        },
+      );
     },
-    register: ({ userName }: { userName: string, ethAddress: string }) => {
+    register: ({ userName }: { userName: string; ethAddress: string }) => {
       setRegistrationState(prev => ({
         ...prev,
         status: {
           ...prev.status,
           registering: true,
-        }
+        },
       }));
       const register = ensService.registerName({ name: `@${userName.replace('@', '')}` });
       register.subscribe((_resp: any) => {
-        const userNameCall = profileService.registerUserName({ userName: `@${userName.replace('@', '')}` });
+        const userNameCall = profileService.registerUserName({
+          userName: `@${userName.replace('@', '')}`,
+        });
         const makeDefault = profileService.makeDefaultProvider({
           provider: 'ewa.providers.ens',
           property: 'userName',
-          value: `@${userName.replace('@', '')}`
+          value: `@${userName.replace('@', '')}`,
         });
         concat(userNameCall, makeDefault).subscribe(() => {
           setRegistrationState(prev => ({
@@ -108,50 +115,53 @@ const useENSRegistration = (props: UseENSRegistrationProps): [UseENSRegistration
             status: {
               registrationComplete: true,
               registering: false,
-              claiming: false
-            }
+              claiming: false,
+            },
           }));
-        })
+        });
       });
     },
     updateUserName: (userName: string) => {
-      setRegistrationState(prev => ({ ...prev, userName }))
+      setRegistrationState(prev => ({ ...prev, userName }));
     },
     validateName: (userName: string) => {
       const channel = ensService.isAvailable({ name: userName });
       setRegistrationState(prev => ({
         ...prev,
-        isValidating: true
+        isValidating: true,
       }));
       channel.subscribe((resp: any) => {
         setRegistrationState(prev => ({
           ...prev,
           isValidating: false,
           isAvailable: resp.data,
-        }))
+        }));
       });
     },
     claim: ({ userName }: { userName: string }) => {
       const call = ensService.claimName({ name: userName });
-      call.subscribe(() => {
-        setRegistrationState(prev => ({
-          ...prev,
-          status: Object.assign({}, prev.status, {
-            claiming: false,
-            registrationComplete: true,
-          }),
-        }));
-      }, (err: Error) => {
-        setRegistrationState(prev => ({
-          ...prev,
-          errorMessage: `ENS claim failed. ${err.message}`,
-          status: {
-            registrationComplete: false,
-            registering: false,
-            claiming: false,
-          }
-        }));
-      });
+      call.subscribe(
+        () => {
+          setRegistrationState(prev => ({
+            ...prev,
+            status: Object.assign({}, prev.status, {
+              claiming: false,
+              registrationComplete: true,
+            }),
+          }));
+        },
+        (err: Error) => {
+          setRegistrationState(prev => ({
+            ...prev,
+            errorMessage: `ENS claim failed. ${err.message}`,
+            status: {
+              registrationComplete: false,
+              registering: false,
+              claiming: false,
+            },
+          }));
+        },
+      );
     },
     registerLocalUsername: ({ userName }: { userName: string }) => {
       const registerLocal = profileService.registerUserName({ userName: userName });
@@ -162,33 +172,39 @@ const useENSRegistration = (props: UseENSRegistrationProps): [UseENSRegistration
           registering: true,
         },
       }));
-      registerLocal.subscribe((_resp: any) => {
-        const makeDefault = profileService.makeDefaultProvider({
-          provider: 'ewa.providers.basic',
-          property: 'userName',
-          value: userName,
-        });
-        makeDefault.subscribe((_resp: any) => {
+      registerLocal.subscribe(
+        () => {
+          const makeDefault = profileService.makeDefaultProvider({
+            provider: 'ewa.providers.basic',
+            property: 'userName',
+            value: userName,
+          });
+          makeDefault.subscribe(
+            () => {
+              setRegistrationState(prev => ({
+                ...prev,
+                status: {
+                  ...prev.status,
+                  registering: false,
+                  registrationComplete: true,
+                },
+              }));
+            },
+            (err: Error) => {
+              setRegistrationState(prev => ({
+                ...prev,
+                errorMessage: `Failed to set default provider. ${err.message}`,
+              }));
+            },
+          );
+        },
+        (err: Error) => {
           setRegistrationState(prev => ({
             ...prev,
-            status: {
-              ...prev.status,
-              registering: false,
-              registrationComplete: true,
-            }
-          }))
-        }, (err: Error) => {
-          setRegistrationState(prev => ({
-            ...prev,
-            errorMessage: `Failed to set default provider. ${err.message}`
+            errorMessage: `Failed to register local username. ${err.message}`,
           }));
-        });
-      }, (err: Error) => {
-        setRegistrationState(prev => ({
-          ...prev,
-          errorMessage: `Failed to register local username. ${err.message}`,
-        }));
-      });
+        },
+      );
     },
     resetRegistrationStatus() {
       setRegistrationState(prev => ({
@@ -197,11 +213,11 @@ const useENSRegistration = (props: UseENSRegistrationProps): [UseENSRegistration
           registering: false,
           claiming: false,
           registrationComplete: false,
-        }
-      }))
-    }
-  }
+        },
+      }));
+    },
+  };
   return [registrationState, actions];
-}
+};
 
 export default useENSRegistration;

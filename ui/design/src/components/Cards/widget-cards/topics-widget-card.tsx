@@ -22,7 +22,16 @@ export interface ITopicData {
 }
 
 const TopicsWidgetCard: React.FC<ITopicsCardWidgetProps> = props => {
-  const { onClick, onTopicClick, margin, iconType, label, labelColor, dataSource, className } = props;
+  const {
+    onClick,
+    onTopicClick,
+    margin,
+    iconType,
+    label,
+    labelColor,
+    dataSource,
+    className,
+  } = props;
 
   const topicClickHandler = (topicData: ITopicData) => () => {
     onTopicClick(topicData);

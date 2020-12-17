@@ -61,11 +61,11 @@ export interface IProfileCardProps extends IProfileWidgetCard {
 const EditButton = styled(IconButton)`
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
   min-height: 1.375rem;
-  svg *{
+  svg * {
     stroke: ${props => props.theme.colors.white};
   }
   &:hover {
-    svg *{
+    svg * {
       stroke: ${props => props.theme.colors.blue};
     }
   }
@@ -102,7 +102,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     return;
   };
 
-  const [editable/* , setEditable */] = useState(false);
+  const [editable /* , setEditable */] = useState(false);
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
   const [editMenuOpen, setEditMenuOpen] = React.useState(false);
   const [avatar, setAvatar] = useState(profileData.avatar);
@@ -152,7 +152,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
 
   const closeEditMenu = () => {
     setEditMenuOpen(false);
-  }
+  };
 
   const handleChangeAvatar = (provider: IProfileDataProvider) => {
     setAvatar(provider.value);
@@ -262,13 +262,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             </Box>
           )}
           {canUserEdit && (
-              <EditButton
-                primary={true}
-                icon={<Icon type="editSimple" ref={editMenuRef}/>}
-                label={editProfileLabel}
-                onClick={toggleEditMenu}
-              />
-            )}
+            <EditButton
+              primary={true}
+              icon={<Icon type="editSimple" ref={editMenuRef} />}
+              label={editProfileLabel}
+              onClick={toggleEditMenu}
+            />
+          )}
           {flaggable && (
             <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
           )}
@@ -284,8 +284,14 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             <ProfileEditMenuDropdown
               target={editMenuRef.current}
               onClose={closeEditMenu}
-              onUpdateClick={() => { props.onUpdateClick(); closeEditMenu(); }}
-              onENSChangeClick={() => { props.onENSChangeClick(); closeEditMenu(); }}
+              onUpdateClick={() => {
+                props.onUpdateClick();
+                closeEditMenu();
+              }}
+              onENSChangeClick={() => {
+                props.onENSChangeClick();
+                closeEditMenu();
+              }}
               changeENSLabel={props.changeENSLabel}
               updateProfileLabel={props.updateProfileLabel}
               hideENSButton={props.hideENSButton}

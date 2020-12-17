@@ -8,7 +8,7 @@ import { StyledText, StyledTextInput } from './styled-form-card';
 
 export interface IUserNameOption {
   /* Option identifier (ensDomain, local, ethAddress), ensSubdomain added by default */
-  name: 'ensSubdomain' | 'ensDomain' | 'local' | 'ethAddress',
+  name: 'ensSubdomain' | 'ensDomain' | 'local' | 'ethAddress';
   /* Can be anything. It will be displayed in the UI */
   label: string;
   /* This option cannot be selected, serving just as a preview of coming soon functionality */
@@ -39,14 +39,14 @@ export interface IEnsFormCardProps {
   providerData: Partial<IEnsData>;
   validateEns?: (name: string) => void;
   validEns: boolean | null;
-  onSave: (data: IEnsData | { name: string, option: IUserNameOption }) => void;
+  onSave: (data: IEnsData | { name: string; option: IUserNameOption }) => void;
   onCancel?: () => void;
   isValidating?: boolean;
   ensSubdomain?: string;
-  userNameProviderOptions: IUserNameOption[],
-  disableInputOnOption?: {[ key: string ]: boolean};
+  userNameProviderOptions: IUserNameOption[];
+  disableInputOnOption?: { [key: string]: boolean };
   errorMessage?: string | null;
-  registrationStatus?: { registering: boolean; claiming: boolean },
+  registrationStatus?: { registering: boolean; claiming: boolean };
 }
 
 export interface IEnsData {
@@ -91,11 +91,11 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
 
   const userNameOptions: IUserNameOption[] = [
     {
-    name: 'ensSubdomain',
-    // show subdomain suffix
-    label: `${name.replace(`.${ensSubdomain}`, '')}.${ensSubdomain}`,
+      name: 'ensSubdomain',
+      // show subdomain suffix
+      label: `${name.replace(`.${ensSubdomain}`, '')}.${ensSubdomain}`,
     },
-    ...userNameProviderOptions
+    ...userNameProviderOptions,
   ];
   // make ensSubdomain option as default
   const [selectedUsernameOption, setSelectedUsernameOption] = React.useState('ensSubdomain');
@@ -168,7 +168,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
 
   let saveButtonLabel: React.ReactNode = saveLabel;
   if (registrationStatus && (registrationStatus.registering || registrationStatus.claiming)) {
-    saveButtonLabel = <Spinner style={{ padding: 0 }} size={15} />
+    saveButtonLabel = <Spinner style={{ padding: 0 }} size={15} />;
   }
 
   return (
@@ -178,7 +178,13 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
           <Text weight="bold" margin="0 auto 2rem" size="xlarge">
             {titleLabel}
           </Text>
-          <Icon type="close" color="secondaryText" primaryColor={true} clickable={true} onClick={handleCancel} />
+          <Icon
+            type="close"
+            color="secondaryText"
+            primaryColor={true}
+            clickable={true}
+            onClick={handleCancel}
+          />
         </Box>
         <Box direction="row" align="center">
           <StyledText color={error ? 'errorText' : 'secondaryText'} size="small">
@@ -219,12 +225,12 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                     pad={{ top: 'small', bottom: 'small' }}
                     align="baseline"
                   >
-                    {(selectedUsernameOption === userNameOptions[0].name) && (
+                    {selectedUsernameOption === userNameOptions[0].name && (
                       <Text size="large">
                         {name.replace(`.${ensSubdomain}`, '')}
-                          <Text color="accentText" size="large" margin={{ right: 'xxsmall' }}>
-                            .{ensSubdomain}
-                          </Text>
+                        <Text color="accentText" size="large" margin={{ right: 'xxsmall' }}>
+                          .{ensSubdomain}
+                        </Text>
                       </Text>
                     )}
                     {selectedUsernameOption === 'ensDomain' && (
@@ -233,7 +239,6 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                         <Text color="accentText" size="large" margin={{ right: 'xxsmall' }}>
                           .eth
                         </Text>
-
                       </Text>
                     )}
                     {selectedUsernameOption === 'local' && (
@@ -316,12 +321,12 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
           </Box>
           <Box direction="row" gap="xsmall" justify="between" align="center">
             <Box direction="row" align="center">
-              {poweredByLabel &&
+              {poweredByLabel && (
                 <Text color="secondaryText" size="10px" margin={{ right: 'xxsmall' }}>
                   {poweredByLabel}
                 </Text>
-              }
-              {iconLabel &&
+              )}
+              {iconLabel && (
                 <>
                   <Icon type="appEns" size="xs" />
                   <Text
@@ -332,15 +337,18 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
                     {iconLabel}
                   </Text>
                 </>
-              }
+              )}
               <Icon type="questionMark" size="xxs" clickable={true} />
             </Box>
-            <Box direction="row">
-              {errorMessage && <>{errorMessage}</>}
-            </Box>
+            <Box direction="row">{errorMessage && <>{errorMessage}</>}</Box>
             <Box direction="row">
               <Button margin={{ right: '0.5rem' }} label={cancelLabel} onClick={handleCancel} />
-              <Button label={saveButtonLabel} onClick={handleSave} disabled={registrationStatus && registrationStatus.registering} primary={true} />
+              <Button
+                label={saveButtonLabel}
+                onClick={handleSave}
+                disabled={registrationStatus && registrationStatus.registering}
+                primary={true}
+              />
             </Box>
           </Box>
         </Box>

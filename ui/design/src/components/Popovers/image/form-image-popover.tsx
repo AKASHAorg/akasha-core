@@ -70,7 +70,6 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
       insertImage(file, false);
     }
     closePopover();
-
   };
 
   return (

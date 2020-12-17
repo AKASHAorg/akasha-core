@@ -29,7 +29,7 @@ export interface UseLoginState {
     uploadingAvatar: boolean;
     uploadingCoverImage: boolean;
     updateComplete: boolean;
-  }
+  };
 }
 export interface UseLoginActions {
   /* Login */
@@ -42,7 +42,12 @@ export interface UseLoginActions {
   resetUpdateStatus: () => void;
 }
 
-const useLoginState = (props: UseLoginProps): [UseLoginState & { profileData: Partial<IProfileData> }, UseLoginActions & UseProfileActions] => {
+const useLoginState = (
+  props: UseLoginProps,
+): [
+  UseLoginState & { profileData: Partial<IProfileData> },
+  UseLoginActions & UseProfileActions,
+] => {
   const { globalChannel, onError, authService, ipfsService, profileService, cacheService } = props;
   const [loginState, setLoginState] = React.useState<UseLoginState>({
     ethAddress: null,
@@ -52,30 +57,31 @@ const useLoginState = (props: UseLoginProps): [UseLoginState & { profileData: Pa
       uploadingAvatar: false,
       uploadingCoverImage: false,
       updateComplete: false,
-    }
+    },
   });
   const [loggedProfileData, loggedProfileActions] = useProfile({
     ipfsService,
     profileService,
     onError: onError,
-  })
+  });
   // this will also reset profile data
   useGlobalLogin(
     globalChannel,
-    (payload) => setLoginState(prev => ({
-      ...prev,
-      ethAddress: payload.ethAddress,
-      token: payload.token,
-    })),
-    (payload) => {
+    payload =>
+      setLoginState(prev => ({
+        ...prev,
+        ethAddress: payload.ethAddress,
+        token: payload.token,
+      })),
+    payload => {
       if (onError) {
         onError({
           errorKey: 'useLoginState.globalLogin',
           error: payload.error,
-          critical: false
+          critical: false,
         });
       }
-    }
+    },
   );
 
   React.useEffect(() => {
@@ -87,27 +93,30 @@ const useLoginState = (props: UseLoginProps): [UseLoginState & { profileData: Pa
   React.useEffect(() => {
     // make an attempt to load the eth address from cache;
     const getDeps = cacheService.getStash(null);
-    getDeps.subscribe((resp: { data: any }) => {
-      const { data } = resp;
-      if (data.entries.has('auth')) {
-        const authValue = data.cache.get('auth');
-        if (authValue.hasOwnProperty('ethAddress')) {
-          setLoginState(prev => ({
-            ...prev,
-            ethAddress: authValue.ethAddress,
-            token: authValue.token,
-          }));
+    getDeps.subscribe(
+      (resp: { data: any }) => {
+        const { data } = resp;
+        if (data.entries.has('auth')) {
+          const authValue = data.cache.get('auth');
+          if (authValue.hasOwnProperty('ethAddress')) {
+            setLoginState(prev => ({
+              ...prev,
+              ethAddress: authValue.ethAddress,
+              token: authValue.token,
+            }));
+          }
         }
-      }
-    }, (err: Error) => {
-      if (onError) {
-        onError({
-          errorKey: 'useLoginState.cacheService',
-          error: err,
-          critical: false,
-        })
-      }
-    });
+      },
+      (err: Error) => {
+        if (onError) {
+          onError({
+            errorKey: 'useLoginState.cacheService',
+            error: err,
+            critical: false,
+          });
+        }
+      },
+    );
   }, []);
 
   const actions: UseLoginActions = {
@@ -118,8 +127,8 @@ const useLoginState = (props: UseLoginProps): [UseLoginState & { profileData: Pa
         updateStatus: {
           ...prev.updateStatus,
           saving: true,
-        }
-      }))
+        },
+      }));
       const errorHandler = (err: Error) => {
         if (onError) {
           onError({
@@ -132,23 +141,33 @@ const useLoginState = (props: UseLoginProps): [UseLoginState & { profileData: Pa
       const obs = [];
 
       if (avatar.src && avatar.preview !== loggedProfileData.avatar) {
-        setLoginState(prev => ({ ...prev, updateStatus: { ...prev.updateStatus, uploadingAvatar: true } }));
-        obs.push(profileService.saveMediaFile({
-          isUrl: avatar.isUrl,
-          content: avatar.src,
-          name: 'avatar'
+        setLoginState(prev => ({
+          ...prev,
+          updateStatus: { ...prev.updateStatus, uploadingAvatar: true },
         }));
+        obs.push(
+          profileService.saveMediaFile({
+            isUrl: avatar.isUrl,
+            content: avatar.src,
+            name: 'avatar',
+          }),
+        );
       } else {
         obs.push(Promise.resolve());
       }
 
       if (coverImage.src && coverImage.preview !== loggedProfileData.coverImage) {
-        setLoginState(prev => ({ ...prev, updateStatus: { ...prev.updateStatus, uploadingCoverImage: true } }));
-        obs.push(profileService.saveMediaFile({
-          isUrl: coverImage.isUrl,
-          content: coverImage.src,
-          name: 'coverImage'
+        setLoginState(prev => ({
+          ...prev,
+          updateStatus: { ...prev.updateStatus, uploadingCoverImage: true },
         }));
+        obs.push(
+          profileService.saveMediaFile({
+            isUrl: coverImage.isUrl,
+            content: coverImage.src,
+            name: 'coverImage',
+          }),
+        );
       } else {
         obs.push(Promise.resolve());
       }
@@ -160,16 +179,16 @@ const useLoginState = (props: UseLoginProps): [UseLoginState & { profileData: Pa
           updateStatus: {
             ...prev.updateStatus,
             uploadingAvatar: false,
-            uploadingCoverImage: false
-          }
+            uploadingCoverImage: false,
+          },
         }));
         const providers: any[] = [];
         if (avatarRes) {
           providers.push({
             provider: 'ewa.providers.basic',
             property: 'avatar',
-            value: avatarRes.data
-          })
+            value: avatarRes.data,
+          });
         }
         if (coverImageRes) {
           providers.push({
@@ -182,7 +201,7 @@ const useLoginState = (props: UseLoginProps): [UseLoginState & { profileData: Pa
           providers.push({
             provider: 'ewa.providers.basic',
             property: 'description',
-            value: description
+            value: description,
           });
         }
         if (name) {
@@ -194,7 +213,9 @@ const useLoginState = (props: UseLoginProps): [UseLoginState & { profileData: Pa
         }
         const makeDefault = profileService.makeDefaultProvider(providers);
         makeDefault.subscribe((_res: any) => {
-          const updatedFields = providers.map(data => ({ [data.property]: data.value })).reduce((acc, curr) => Object.assign(acc, curr), {});
+          const updatedFields = providers
+            .map(provider => ({ [provider.property]: provider.value }))
+            .reduce((acc, curr) => Object.assign(acc, curr), {});
           loggedProfileActions.updateProfile(updatedFields);
           setLoginState(prev => ({
             ...prev,
@@ -202,11 +223,10 @@ const useLoginState = (props: UseLoginProps): [UseLoginState & { profileData: Pa
               ...prev.updateStatus,
               saving: false,
               updateComplete: true,
-            }
+            },
           }));
         }, errorHandler);
       }, errorHandler);
-
     },
     login(selectedProvider: EthProviders) {
       try {
@@ -260,11 +280,14 @@ const useLoginState = (props: UseLoginProps): [UseLoginState & { profileData: Pa
           saving: false,
           uploadingAvatar: false,
           uploadingCoverImage: false,
-        }
-      }))
-    }
+        },
+      }));
+    },
   };
-  return [{ ...loginState, profileData: loggedProfileData }, { ...actions, ...loggedProfileActions }];
-}
+  return [
+    { ...loginState, profileData: loggedProfileData },
+    { ...actions, ...loggedProfileActions },
+  ];
+};
 
 export default useLoginState;

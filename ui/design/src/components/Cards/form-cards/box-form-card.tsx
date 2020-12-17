@@ -91,16 +91,16 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
 
   React.useEffect(() => {
     const { avatar, coverImage, ...rest } = providerData;
-    const images: { avatar?: IImageSrc; coverImage?: IImageSrc; } = {};
+    const images: { avatar?: IImageSrc; coverImage?: IImageSrc } = {};
     if (typeof avatar === 'string') {
       images.avatar = { preview: avatar, src: null, prefix: null, isUrl: true };
     } else if (avatar && avatar.src) {
       images.avatar = avatar;
     }
     if (typeof coverImage === 'string') {
-      images.coverImage = { preview: coverImage, src: null, prefix: null, isUrl: true }
+      images.coverImage = { preview: coverImage, src: null, prefix: null, isUrl: true };
     } else if (coverImage && coverImage.src) {
-      images.coverImage = coverImage
+      images.coverImage = coverImage;
     }
     setFormValues(prevValues => ({
       ...prevValues,
@@ -148,15 +148,13 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     setCoverImagePopoverOpen(false);
   };
 
-  const handleImageInsert = (imageKey: string) =>
-  (src: string, isUrl: boolean) => {
-    console.log('inserting image', imageKey, src, isUrl);
+  const handleImageInsert = (imageKey: string) => (src: string, isUrl: boolean) => {
     if (isUrl) {
-      handleFormFieldChange({ [imageKey]: {src, isUrl, preview: src} });
+      handleFormFieldChange({ [imageKey]: { src, isUrl, preview: src } });
     } else {
       handleFormFieldChange({ [imageKey]: { src, isUrl, preview: URL.createObjectURL(src) } });
     }
-  }
+  };
 
   return (
     <MainAreaCardBox className={className}>
@@ -242,7 +240,12 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           </FormField>
           <Box direction="row" gap="xsmall" justify="end">
             <Button label={cancelLabel} onClick={handleRevert} />
-            <Button label={updateStatus.saving ? <Spinner style={{ padding: 0 }} size={15} /> : saveLabel} onClick={handleSave} primary={true} disabled={!formChanged} />
+            <Button
+              label={updateStatus.saving ? <Spinner style={{ padding: 0 }} size={15} /> : saveLabel}
+              onClick={handleSave}
+              primary={true}
+              disabled={!formChanged}
+            />
           </Box>
         </Box>
       </Box>

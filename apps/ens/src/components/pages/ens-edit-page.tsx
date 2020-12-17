@@ -164,8 +164,8 @@ const EnsEditPage: React.FC<EnsEditPageProps> = props => {
           userNameProviderOptions={[
             {
               name: 'local',
-              label: t('Do not use ENS')
-            }
+              label: t('Do not use ENS'),
+            },
           ]}
         />
       )}

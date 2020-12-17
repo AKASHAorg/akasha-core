@@ -2,7 +2,7 @@ import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import * as React from 'react';
 
 export interface ModalState {
-  loginModal: boolean,
+  loginModal: boolean;
   [key: string]: boolean;
 }
 
@@ -27,7 +27,10 @@ export interface ModalStateActions {
 }
 
 const useModalState = (props: UseModalStateProps): [ModalState, ModalStateActions] => {
-  const [modalState, setModalState] = React.useState<ModalState>({ loginModal: false, ...props.initialState });
+  const [modalState, setModalState] = React.useState<ModalState>({
+    loginModal: false,
+    ...props.initialState,
+  });
 
   const [modalQueue, setModalQueue] = React.useState<string[]>([]);
 
@@ -47,25 +50,25 @@ const useModalState = (props: UseModalStateProps): [ModalState, ModalStateAction
     if (props.onError) {
       props.onError(err);
     }
-  }
-  const actions: ModalStateActions = ({
-    show: (modalKey) => setModalState(prevState => ({ ...prevState, [modalKey]: true })),
-    showAfterLogin: (modalKey) => {
+  };
+  const actions: ModalStateActions = {
+    show: modalKey => setModalState(prevState => ({ ...prevState, [modalKey]: true })),
+    showAfterLogin: modalKey => {
       setModalQueue(prev => {
         if (prev.indexOf(modalKey) > -1) {
           handleErrors({
             errorKey: 'useModalState.showAfterLogin',
             error: new Error(`modalKey ${modalKey} already in queue`),
-            critical: false
+            critical: false,
           });
           return prev;
         }
         return [...prev, modalKey];
-      })
+      });
     },
-    hide: (modalKey) => setModalState(prevState => ({ ...prevState, [modalKey]: false })),
-  })
+    hide: modalKey => setModalState(prevState => ({ ...prevState, [modalKey]: false })),
+  };
   return [modalState, actions];
-}
+};
 
 export default useModalState;

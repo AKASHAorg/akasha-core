@@ -35,10 +35,10 @@ const TopbarComponent = (props: TopBarProps) => {
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
   const [showLoginModal, setShowLoginModal] = React.useState(false);
   const [loginState, loginActions] = useLoginState({
-    onError: (err) => logger.error(err),
+    globalChannel,
+    onError: err => logger.error(err),
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
-    globalChannel,
     authService: props.sdkModules.auth.authService,
     cacheService: props.sdkModules.commons.cacheService,
   });
