@@ -1,6 +1,6 @@
 import throttle from 'lodash.throttle';
-import Rect from './v2/rect-obj';
-import Viewport from './v2/viewport';
+import Rect from './rect-obj';
+import Viewport from './viewport';
 
 interface ListEngineData {
   /**
@@ -117,7 +117,7 @@ class ListEngine {
           height: this.config.avgItemHeight,
         });
       }
-      this.totalItemsHeight += rect.height + this.config.spacing;
+      this.totalItemsHeight += rect.height;
       this.coords.set(id, rect);
       this.update('SET_COORDINATES', this.coords);
       prevRect = rect;

@@ -1,5 +1,4 @@
 import React from 'react';
-import ListItemContainer from './list-item-container';
 import { IRenderItemProps } from './interfaces';
 import { useResizeObserver } from './use-resize-observer';
 
@@ -7,16 +6,12 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
   const {
     itemId,
     itemData,
-    visitorEthAddress,
     loadItemData,
     onSizeChange,
     itemSpacing,
     customEntities,
-    getItemCard,
-    isBookmarked,
-    // prevItemId,
+    itemCard,
     coordinates,
-    // index,
   } = props;
 
   const itemRef = React.useRef<HTMLDivElement | null>(null);
@@ -36,10 +31,18 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
   });
 
   React.useEffect(() => {
-    if (itemRef.current) {
-      onSizeChange(itemId, { height: itemRef.current.getBoundingClientRect().height });
-    }
+    requestAnimationFrame(() => {
+      if (itemRef.current) {
+        onSizeChange(itemId, { height: itemRef.current.getBoundingClientRect().height });
+      }
+    });
   }, []);
+
+  React.useEffect(() => {
+    if (itemId && !itemData) {
+      loadItemData({ itemId });
+    }
+  }, [itemId]);
 
   let yPos = 0;
   if (coordinates) {
@@ -72,15 +75,9 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
           [beforeEntities.length],
         ),
       )}
-      <ListItemContainer
-        loadItemData={loadItemData}
-        itemData={itemData}
-        itemId={itemId}
-        visitorEthAddress={visitorEthAddress}
-        itemSpacing={itemSpacing}
-        getItemCard={getItemCard}
-        isBookmarked={isBookmarked}
-      />
+
+      {React.cloneElement(itemCard, { itemId, itemData })}
+
       {afterEntities.map(
         React.useCallback(
           (entityObj, idx) => {

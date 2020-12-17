@@ -1,5 +1,4 @@
-import { IEntryData } from '../Cards/entry-cards/entry-box';
-import Rect from './v2/rect-obj';
+import Rect from './rect-obj';
 
 export interface IFetchOperation {
   startId: string;
@@ -24,13 +23,6 @@ export interface IListInitialState {
   slice?: [number, number];
 }
 
-export type GetItemCardFn = (props: {
-  itemId: string;
-  itemData: any;
-  visitorEthAddress?: IVirtualListProps['visitorEthAddress'];
-  isBookmarked?: boolean;
-}) => React.ReactElement;
-
 export interface ILoadItemsPayload {
   start?: string;
   limit: number;
@@ -43,11 +35,9 @@ export interface ILoadItemDataPayload {
 export interface IVirtualListProps {
   items: string[];
   itemsData: {};
-  visitorEthAddress?: string | null;
   loadMore: (payload: ILoadItemsPayload) => void;
   loadItemData: (payload: ILoadItemDataPayload) => void;
-  loadInitialFeed: (payload: ILoadItemsPayload) => void;
-  itemCard?: React.FC<{ item: any }>;
+  itemCard: React.ReactElement;
   /* spacing between items (bottom) */
   itemSpacing?: number;
   /* How many items we want per request */
@@ -60,9 +50,7 @@ export interface IVirtualListProps {
   offsetItems?: number;
   customEntities?: IListCustomEntity[];
   initialState?: IListInitialState;
-  getItemCard: GetItemCardFn;
   hasMoreItems?: boolean;
-  bookmarkedItems?: Set<string>;
   getNotificationPill?: (props: { styles: React.CSSProperties }) => React.ReactElement;
   showNotificationPill?: boolean;
   onItemRead?: (itemId: string) => void;
@@ -99,95 +87,16 @@ export type ItemDimensions = {
 
 export type ItemDimensionsRef = React.MutableRefObject<ItemDimensions>;
 
-export interface IListContentProps {
-  itemCard?: React.FC<{ item: any }>;
-  items: IVirtualListProps['items'];
-  offsetItems: number;
-  initialPaddingTop: number;
-  loadItemData: IVirtualListProps['loadItemData'];
-  itemsData: {};
-  // // the available width of the list
-  // width: number;
-  // // the available height of the list
-  // height: number;
-  itemSpacing: number;
-  loadLimit: number;
-  onLoadMore: IVirtualListProps['loadMore'];
-  customEntities: IListCustomEntity[];
-  getItemCard: GetItemCardFn;
-  listState: IListInitialState;
-  setListState: any;
-  hasMoreItems?: boolean;
-  bookmarkedItems?: IVirtualListProps['bookmarkedItems'];
-  onItemRead: IVirtualListProps['onItemRead'];
-}
-
 export interface IRenderItemProps {
   itemId: string;
   itemData?: any;
-  visitorEthAddress?: IVirtualListProps['visitorEthAddress'];
   loadItemData: IVirtualListProps['loadItemData'];
   onSizeChange: (itemId: string, dimension: any) => void;
-  itemSpacing: IListContentProps['itemSpacing'];
+  itemSpacing: IVirtualListProps['itemSpacing'];
   customEntities: IListCustomEntity[];
-  getItemCard: GetItemCardFn;
-  isBookmarked?: boolean;
-  prevItemId?: string;
+  itemCard: IVirtualListProps['itemCard'];
   coordinates: Map<string, Rect>;
-  index: number;
 }
+
 export type SetSliceOperationType = React.Dispatch<React.SetStateAction<ISliceOperation>>;
 export type SetFetchOperationType = React.Dispatch<IFetchOperation | null>;
-
-export interface ISliceOperatorProps {
-  fetchOperation: IFetchOperation | null;
-  setFetchOperation: SetFetchOperationType;
-  sliceOperation: ISliceOperation | null;
-  setSliceOperation: SetSliceOperationType;
-  itemDimensions: ItemDimensionsRef;
-  items: IVirtualListProps['items'];
-  loadLimit: number;
-  offsetItems: number;
-  initialPaddingTop: number;
-  itemSpacing: number;
-  listState: IListContentProps['listState'];
-  setListState: IListContentProps['setListState'];
-  hasMoreItems?: boolean;
-}
-
-export interface IListOperatorProps {
-  list: { entryId: string }[];
-  itemDimensions: ItemDimensionsRef;
-  scrollState: IScrollState;
-  itemSpacing?: number;
-  fetchOperation: IFetchOperation | null;
-  setFetchOperation: SetFetchOperationType;
-  children: (list: { entryId: string }[]) => any;
-}
-
-export interface IFetchProcessorProps {
-  fetchOperation: IFetchOperation | null;
-  items: IVirtualListProps['items'];
-  setFetchOperation: SetFetchOperationType;
-  itemDimensions: ItemDimensionsRef;
-  scrollState: IScrollState;
-  offsetItems: number;
-  loadLimit: number;
-}
-
-export interface IInfiniteScrollState {
-  paddingTop: number;
-  paddingBottom: number;
-  items: IVirtualListProps['items'];
-}
-
-export interface IListItemContainerProps {
-  itemData: IEntryData | null;
-  itemId: string;
-  visitorEthAddress?: IVirtualListProps['visitorEthAddress'];
-  loadItemData: IVirtualListProps['loadItemData'];
-  className?: string;
-  itemSpacing?: number;
-  getItemCard: GetItemCardFn;
-  isBookmarked: IRenderItemProps['isBookmarked'];
-}

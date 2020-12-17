@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ListEngine, { UpdatePayload } from './list';
-import Rect from './v2/rect-obj';
+import Rect from './rect-obj';
 
 export interface UseVirtualScrollProps {
   avgItemHeight: number;
@@ -110,7 +110,9 @@ const useVirtualScroll = (props: UseVirtualScrollProps) => {
 
   React.useEffect(() => {
     if (items.length > listEngine.current.items.length) {
-      const isTop = listEngine.current.items.length > 0 && items[0] !== listEngine.current.items[0];
+      const isTop =
+        listEngine.current.items.length > 0 &&
+        JSON.stringify(items[0]) !== JSON.stringify(listEngine.current.items[0]);
       if (isTop) {
         listEngine.current.addItems(
           items.slice(0, items.indexOf(listEngine.current.items[0])),
@@ -145,7 +147,7 @@ const useVirtualScroll = (props: UseVirtualScrollProps) => {
         listEngine.current.updateSlice(0, items.length);
       }
     }
-  }, [items.length, state.fetchOp]);
+  }, [items.length, JSON.stringify(state.fetchOp)]);
   React.useEffect(() => {
     if (!items.length) {
       dispatch({

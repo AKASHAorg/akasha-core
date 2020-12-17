@@ -17,18 +17,19 @@ import {
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
+import EntryCardRenderer from './entry-card-renderer';
 
 const {
   Box,
   Helmet,
   VirtualList,
-  ErrorLoader,
-  EntryCardLoading,
-  EntryCard,
+  // ErrorLoader,
+  // EntryCardLoading,
+  // EntryCard,
   ReportModal,
   ToastProvider,
   ModalRenderer,
-  ErrorInfoCard,
+  // ErrorInfoCard,
   useViewportSize,
   EditorModal,
 } = DS;
@@ -132,14 +133,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       }
       setIsLoading(false);
     });
-  };
-
-  const onInitialLoad = async (payload: ILoadItemsPayload) => {
-    const req: { limit: number; offset?: string } = {
-      limit: payload.limit,
-    };
-    setIsLoading(true);
-    fetchEntries(req);
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
@@ -302,67 +295,26 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <VirtualList
         items={feedState.feedItems}
         itemsData={feedState.feedItemData}
-        visitorEthAddress={ethAddress}
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
-        loadInitialFeed={onInitialLoad}
         hasMoreItems={feedState.hasMoreItems}
-        bookmarkedItems={bookmarks}
-        getItemCard={({ itemData, visitorEthAddress, isBookmarked }) => (
-          <ErrorInfoCard errors={{}}>
-            {(errorMessages: any, hasCriticalErrors: boolean) => (
-              <>
-                {errorMessages && (
-                  <ErrorLoader
-                    type="script-error"
-                    title={t('There was an error loading the entry')}
-                    details={t('We cannot show this entry right now')}
-                    devDetails={errorMessages}
-                  />
-                )}
-                {!hasCriticalErrors && (
-                  <>
-                    {(!itemData || !itemData.author?.ethAddress) && <EntryCardLoading />}
-                    {itemData && itemData.author.ethAddress && (
-                      <EntryCard
-                        isBookmarked={isBookmarked}
-                        entryData={itemData}
-                        sharePostLabel={t('Share Post')}
-                        shareTextLabel={t('Share this post with your friends')}
-                        sharePostUrl={'https://ethereum.world'}
-                        onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                          handleAvatarClick(ev, itemData.author.ethAddress)
-                        }
-                        onEntryBookmark={handleEntryBookmark}
-                        repliesLabel={t('Replies')}
-                        repostsLabel={t('Reposts')}
-                        repostLabel={t('Repost')}
-                        repostWithCommentLabel={t('Repost with comment')}
-                        shareLabel={t('Share')}
-                        copyLinkLabel={t('Copy Link')}
-                        copyIPFSLinkLabel={t('Copy IPFS Link')}
-                        flagAsLabel={t('Report Post')}
-                        loggedProfileEthAddress={ethAddress as any}
-                        locale={locale}
-                        style={{ height: 'auto' }}
-                        bookmarkLabel={t('Save')}
-                        bookmarkedLabel={t('Saved')}
-                        onRepost={handleEntryRepost}
-                        onEntryShare={handleEntryShare}
-                        onEntryFlag={handleEntryFlag(itemData.CID, visitorEthAddress)}
-                        onLinkCopy={handleLinkCopy}
-                        onClickReplies={handleClickReplies}
-                        handleFollow={handleFollow}
-                        handleUnfollow={handleUnfollow}
-                        onContentClick={handleNavigateToPost}
-                      />
-                    )}
-                  </>
-                )}
-              </>
-            )}
-          </ErrorInfoCard>
-        )}
+        itemCard={
+          <EntryCardRenderer
+            bookmarks={bookmarks}
+            ethAddress={ethAddress}
+            locale={locale}
+            onFollow={handleFollow}
+            onUnfollow={handleUnfollow}
+            onBookmark={handleEntryBookmark}
+            onNavigate={handleNavigateToPost}
+            onLinkCopy={handleLinkCopy}
+            onRepliesClick={handleClickReplies}
+            onFlag={handleEntryFlag}
+            onRepost={handleEntryRepost}
+            onShare={handleEntryShare}
+            onAvatarClick={handleAvatarClick}
+          />
+        }
         customEntities={getFeedCustomEntities({
           t,
           locale,

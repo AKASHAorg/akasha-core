@@ -1,15 +1,14 @@
 import * as React from 'react';
 import CardRenderer from './card-renderer';
-import { GetItemCardFn, IRenderItemProps, IVirtualListProps } from './interfaces';
-import Rect from './v2/rect-obj';
+import { IRenderItemProps, IVirtualListProps } from './interfaces';
+import Rect from './rect-obj';
 import Spinner from '../Spinner';
 
 export interface IListViewportProps {
   items: string[];
   itemsData: IVirtualListProps['itemsData'];
-  visitorEthAddress?: IVirtualListProps['visitorEthAddress'];
   height: number;
-  getItemCard: GetItemCardFn;
+  itemCard: React.ReactElement;
   onSizeChange: IRenderItemProps['onSizeChange'];
   loadItemData: IVirtualListProps['loadItemData'];
   coordinates: Map<string, Rect>;
@@ -22,7 +21,6 @@ export interface IListViewportProps {
 const ListViewport: React.FC<IListViewportProps> = props => {
   const {
     itemsData,
-    visitorEthAddress,
     coordinates,
     items,
     itemSpacing,
@@ -35,7 +33,6 @@ const ListViewport: React.FC<IListViewportProps> = props => {
   return (
     <>
       {itemsToRender.map((itemId: string) => {
-        const itemIdx = items.indexOf(itemId);
         let itemKey = itemId;
         const itemData = itemsData[itemId];
         if (itemData && itemData.version) {
@@ -45,16 +42,12 @@ const ListViewport: React.FC<IListViewportProps> = props => {
           <CardRenderer
             key={itemKey}
             itemId={itemId}
-            visitorEthAddress={visitorEthAddress}
-            getItemCard={props.getItemCard}
+            itemCard={props.itemCard}
             loadItemData={props.loadItemData}
             itemData={itemData}
-            isBookmarked={false}
             onSizeChange={props.onSizeChange}
             customEntities={customEntities}
             coordinates={coordinates}
-            prevItemId={items[itemIdx - 1]}
-            index={itemIdx}
             itemSpacing={itemSpacing}
           />
         );
