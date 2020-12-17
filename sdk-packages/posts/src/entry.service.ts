@@ -32,6 +32,7 @@ const service: AkashaService = (invoke, log) => {
         _id
         creationDate
         tags
+        totalComments
         quotedBy
         quotes{
             content{
@@ -87,6 +88,7 @@ const service: AkashaService = (invoke, log) => {
           _id
           creationDate
           tags
+          totalComments
           quotedBy
           quotes{
             content{

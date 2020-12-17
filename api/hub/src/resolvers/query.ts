@@ -1,3 +1,5 @@
+import { commentsStats, statsProvider } from './constants';
+
 const query = {
   getProfile: async (_source, { ethAddress }, { dataSources }) => {
     return await dataSources.profileAPI.getProfile(ethAddress);
@@ -7,6 +9,11 @@ const query = {
   },
   getPost: async (_source, { id }, { dataSources }) => {
     const postData = await dataSources.postsAPI.getPost(id);
+    const totalCommentsIndex = postData.metaData.findIndex(
+      m => m.provider === statsProvider && m.property === commentsStats,
+    );
+    const totalComments =
+      totalCommentsIndex !== -1 ? postData.metaData[totalCommentsIndex].value : '0';
     if (postData && typeof postData.author === 'string') {
       const author = await dataSources.profileAPI.resolveProfile(postData.author);
       Object.assign(postData, { author });
@@ -20,11 +27,14 @@ const query = {
         Object.assign(quote, { author: resolvedAuthor });
       }
     }
-    return Object.assign({}, postData);
+    return Object.assign({}, postData, { totalComments });
   },
 
   getTag: async (_source, { name }, { dataSources }) => {
     return dataSources.tagsAPI.getTag(name);
+  },
+  searchTags: async (_source, { name }, { dataSources }) => {
+    return dataSources.tagsAPI.searchTags(name);
   },
   tags: async (_source, { limit, offset }, { dataSources }) => {
     return dataSources.tagsAPI.getTags(limit, offset);
@@ -35,6 +45,11 @@ const query = {
 
     for (const post of data.results) {
       const author = await dataSources.profileAPI.resolveProfile(post.author);
+      const totalCommentsIndex = post.metaData.findIndex(
+        m => m.provider === statsProvider && m.property === commentsStats,
+      );
+      const totalComments =
+        totalCommentsIndex !== -1 ? post.metaData[totalCommentsIndex].value : '0';
       if (post.quotes && post.quotes.length) {
         for (const quote of post.quotes) {
           if (typeof quote.author !== 'string') {
@@ -45,7 +60,7 @@ const query = {
         }
       }
 
-      results.push(Object.assign({}, post, { author }));
+      results.push(Object.assign({}, post, { author, totalComments }));
     }
     data.results = results;
     return data;
