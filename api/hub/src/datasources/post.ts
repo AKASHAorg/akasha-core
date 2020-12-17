@@ -119,7 +119,7 @@ class PostAPI extends DataSource {
     }
     searchIndex
       .saveObject({
-        objectID: post._id,
+        objectID: postID[0],
         type: post.type,
         author: post.author,
         tags: post.tags,
