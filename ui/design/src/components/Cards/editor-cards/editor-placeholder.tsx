@@ -5,7 +5,7 @@ import { Box, Text } from 'grommet';
 
 export interface IEditorPlaceholder {
   avatar?: string;
-  ethAddress?: string;
+  ethAddress: string | null;
   placeholderLabel?: string;
   onClick?: any;
   style?: React.CSSProperties;

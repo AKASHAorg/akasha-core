@@ -7,7 +7,7 @@ import AvatarImage from './avatar-image';
 import StyledAvatar, { AvatarSize } from './styled-avatar';
 
 export interface AvatarProps extends CommonInterface<HTMLDivElement> {
-  ethAddress?: string;
+  ethAddress: string | null;
   src?: string;
   onClick?: React.MouseEventHandler<any>;
   alt?: string;
@@ -18,7 +18,7 @@ export interface AvatarProps extends CommonInterface<HTMLDivElement> {
   publicImgPath?: string;
 }
 
-export const getAvatarFromSeed = (seed: string) => {
+export const getAvatarFromSeed = (seed: string | null) => {
   let str = seed;
   if (seed && seed.startsWith('0x')) {
     str = seed.replace('0x', '');

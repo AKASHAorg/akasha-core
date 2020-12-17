@@ -22,7 +22,7 @@ import { serializeToPlainText } from './serialize';
 
 export interface IEditorBox {
   avatar?: string;
-  ethAddress?: string;
+  ethAddress: string | null;
   postLabel?: string;
   placeholderLabel?: string;
   onPublish: any;

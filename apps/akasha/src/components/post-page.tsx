@@ -205,7 +205,7 @@ const PostPage: React.FC<IPostPage> = props => {
           </Box>
           {!loggedEthAddress && (
             <Box margin="medium">
-              <EditorPlaceholder onClick={props.showLoginModal} />
+              <EditorPlaceholder onClick={props.showLoginModal} ethAddress={loggedEthAddress} />
             </Box>
           )}
           {loggedEthAddress && (
