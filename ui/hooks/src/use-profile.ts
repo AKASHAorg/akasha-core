@@ -4,10 +4,12 @@ import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 
-type voidFunc<T = object> = (arg?: T) => void;
+type voidFunc<T = object> = (arg: T) => void;
 
 export interface UseProfileActions {
   getProfileData: voidFunc<{ ethAddress: string }>;
+  /* update profile locally */
+  updateProfile: voidFunc<Partial<IProfileData>>;
 }
 
 export interface UseProfileProps {
@@ -40,12 +42,11 @@ export const useProfile = (props: UseProfileProps): [Partial<IProfileData>, UseP
         ipfsUrl = `${ipfsGateway}/${hash}/${imageSize}/src`;
       }
     }
-
     return ipfsUrl;
   };
 
-  const actions = {
-    getProfileData: (payload: { ethAddress: string }) => {
+  const actions: UseProfileActions = {
+    getProfileData: (payload) => {
       try {
         const ipfsGatewayCall = ipfsService.getSettings({});
         const getProfileCall = profileService.getProfile({
@@ -66,8 +67,7 @@ export const useProfile = (props: UseProfileProps): [Partial<IProfileData>, UseP
             if (coverImage) {
               images.coverImage = getMediaUrl(
                 gatewayResp.data,
-                coverImage.hash,
-                coverImage.data,
+                coverImage,
               );
             }
 
@@ -93,6 +93,12 @@ export const useProfile = (props: UseProfileProps): [Partial<IProfileData>, UseP
         }
       }
     },
+    updateProfile(fields) {
+      setProfile(prev => ({
+        ...prev,
+        ...fields
+      }));
+    }
   };
 
   return [profile, actions];

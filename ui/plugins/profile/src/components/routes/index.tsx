@@ -20,8 +20,8 @@ const Routes: React.FC<RootComponentProps> = props => {
     profileService: props.sdkModules.profiles.profileService,
     ipfsService: props.sdkModules.commons.ipfsService,
     cacheService: props.sdkModules.commons.cacheService,
-    onError: (error: IAkashaError) => {
-      logger.error(error);
+    onError: (errorInfo: IAkashaError) => {
+      logger.error(errorInfo.error.message, errorInfo.errorKey);
     },
   });
   const [modalState, modalStateActions] = useModalState({
@@ -54,6 +54,8 @@ const Routes: React.FC<RootComponentProps> = props => {
               modalState={modalState}
               ethAddress={loginState.ethAddress}
               profileData={loginState.profileData}
+              loginActions={loginActions}
+              profileUpdateStatus={loginState.updateStatus}
             />
           </Route>
           <Route path={`${path}/:profileId`}>

@@ -22,8 +22,8 @@ const TOPBAR_HEIGHT = 4;
 const SidebarWrapper = styled(BaseContainer)<{ visible: boolean }>`
   z-index: 999;
   flex-grow: 1;
-  height: calc(100vh - ${TOPBAR_HEIGHT}em);
-  top: ${TOPBAR_HEIGHT}em;
+  height: calc(100vh - ${TOPBAR_HEIGHT}rem);
+  top: ${TOPBAR_HEIGHT}rem;
   position: sticky;
   @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
     ${props => {
@@ -50,7 +50,7 @@ const ScrollableWidgetArea = styled.div`
     @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
       overflow-y: auto;
       overflow-x: hidden;
-      height: calc(100vh - ${TOPBAR_HEIGHT}em);
+      height: calc(100vh - ${TOPBAR_HEIGHT}rem);
     }
   `}
 `;

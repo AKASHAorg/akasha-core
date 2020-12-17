@@ -5,17 +5,25 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { useENSRegistration } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import { forkJoin } from 'rxjs';
 import { IUserNameOption } from '@akashaproject/design-system/lib/components/Cards/form-cards/ens-form-card';
+import { UseLoginActions, UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { UseProfileActions } from '@akashaproject/ui-awf-hooks/lib/use-profile';
 
 
-const { styled, Helmet, ModalRenderer, BoxFormCard, EnsFormCard } = DS;
+const { styled, Helmet, ModalRenderer, BoxFormCard, EnsFormCard, Box } = DS;
+
+const MODAL_NAMES = {
+  PROFILE_UPDATE: 'profileUpdate',
+  CHANGE_ENS: 'changeENS',
+}
 
 export interface MyProfileProps extends RootComponentProps {
   ethAddress: string | null;
   modalState: ModalState;
   modalActions: ModalStateActions
   profileData: any;
+  loginActions: UseLoginActions & UseProfileActions;
+  profileUpdateStatus: UseLoginState['updateStatus'];
 }
 
 const ProfileForm = styled(BoxFormCard)`
@@ -72,98 +80,39 @@ const Overlay = styled.div`
 `;
 
 const MyProfilePage = (props: MyProfileProps) => {
-  const { layout, profileData } = props;
+  const { layout, profileUpdateStatus } = props;
   const { t } = useTranslation();
-  const [/* updatingProfile */, setUpdatingProfile] = React.useState({
-    isSaving: false,
-    uploadingAvatar: false,
-    uploadingCover: false
-  })
+
   const [ensState, ensActions] = useENSRegistration({
     profileService: props.sdkModules.profiles.profileService,
     ethAddress: props.ethAddress,
     ensService: props.sdkModules.registry.ens,
-    onRegisterSuccess: () => {},
   });
 
+  React.useEffect(() => {
+    if (profileUpdateStatus.updateComplete && props.modalState[MODAL_NAMES.PROFILE_UPDATE]) {
+      closeProfileUpdateModal();
+      return;
+    }
+    if (ensState.status.registrationComplete && props.modalState[MODAL_NAMES.CHANGE_ENS]) {
+      if (ensState.userName) {
+        props.loginActions.updateProfile({ userName: `@${ensState.userName.replace('@', '')}` });
+      }
+      closeEnsModal();
+      return;
+    }
+  }, [
+    profileUpdateStatus.updateComplete,
+    ensState.status.registrationComplete,
+    JSON.stringify(props.modalState)
+  ]);
+
   const onProfileUpdateSubmit = (data: any) => {
-    const { avatar, coverImage, name, description } = data;
-    const errorHandler = (err: Error) => {
-      console.error(err, 'error!');
-    }
-    setUpdatingProfile(prev => ({
-      ...prev,
-      isSaving: true,
-    }));
-    const obs = [];
-
-    if (avatar && avatar !== profileData.avatar) {
-      setUpdatingProfile(prev => ({...prev, uploadingAvatar: true}));
-      obs.push(props.sdkModules.profiles.profileService.saveMediaFile({
-        isUrl: avatar.isUrl,
-        content: avatar.src,
-        name: 'avatar'
-      }));
-    } else {
-      obs.push(Promise.resolve());
-    }
-
-    if (coverImage && coverImage !== profileData.coverImage) {
-      setUpdatingProfile(prev => ({ ...prev, uploadingCover: true }));
-      obs.push(props.sdkModules.profiles.profileService.saveMediaFile({
-        isUrl: coverImage.isUrl,
-        content: coverImage.src,
-        name: 'coverImage'
-      }));
-    } else {
-      obs.push(Promise.resolve());
-    }
-    forkJoin(obs).subscribe((responses: any[]) => {
-      console.log('images uploaded', responses);
-      const [avatarRes, coverImageRes] = responses;
-        const providers: any[] = [];
-
-        if (avatarRes) {
-          providers.push({
-            provider: 'ewa.providers.basic',
-            property: 'avatar',
-            value: avatarRes.data
-          })
-        }
-        if (coverImageRes) {
-          providers.push({
-            provider: 'ewa.providers.basic',
-            property: 'coverImage',
-            value: coverImageRes.data,
-          });
-        }
-        if (description) {
-          providers.push({
-            provider: 'ewa.providers.basic',
-            property: 'description',
-            value: description
-          });
-        }
-        if (name) {
-          providers.push({
-            provider: 'ewa.providers.basic',
-            property: 'name',
-            value: name,
-          });
-        }
-        const addProviders = props.sdkModules.profiles.profileService.addProfileProvider(providers);
-        addProviders.subscribe((res: any) => {
-          console.log('providers added', res);
-          const makeDefault = providers.map(p => props.sdkModules.profiles.profileService.makeDefaultProvider(p));
-          forkJoin(makeDefault).subscribe((res) => {
-            console.log('profile updated!', res);
-          }, errorHandler);
-        }, errorHandler);
-    }, errorHandler);
+    props.loginActions.optimisticUpdate(data);
   };
 
-  const cancelProfileUpdate = () => {
-    props.modalActions.hide('updateProfile');
+  const closeProfileUpdateModal = () => {
+    props.modalActions.hide(MODAL_NAMES.PROFILE_UPDATE);
   }
 
   const onENSSubmit = ({ name, option }: { name: string, option: IUserNameOption }) => {
@@ -175,23 +124,34 @@ const MyProfilePage = (props: MyProfileProps) => {
     }
   }
 
-  const onENSCancel = () => {
-    props.modalActions.hide('changeENS');
+  const closeEnsModal = () => {
+    props.modalActions.hide(MODAL_NAMES.CHANGE_ENS);
   }
-  console.log(props.profileData, 'profile data');
+  const handleModalShow = (name: string) => {
+    if (name === MODAL_NAMES.PROFILE_UPDATE) {
+      props.loginActions.resetUpdateStatus();
+    }
+    if (name === MODAL_NAMES.CHANGE_ENS) {
+      ensActions.resetRegistrationStatus();
+    }
+    props.modalActions.show(name);
+  }
+
   return (
-    <div>
+    <Box fill="horizontal" margin={{ top: '.5rem' }}>
       <Helmet>
         <title>Profile | My Page</title>
       </Helmet>
       <MyProfileCard
         profileData={...props.profileData}
-        modalState={props.modalState}
-        modalActions={props.modalActions}
+        onModalShow={handleModalShow}
         canEdit={!!props.ethAddress}
+        userName={props.profileData.userName}
+        profileModalName={MODAL_NAMES.PROFILE_UPDATE}
+        ensModalName={MODAL_NAMES.CHANGE_ENS}
       />
         <ModalRenderer slotId={layout.app.modalSlotId} >
-          {props.modalState.updateProfile &&
+          {props.modalState[MODAL_NAMES.PROFILE_UPDATE] &&
             props.ethAddress &&
             <Overlay>
               <ProfileForm
@@ -212,11 +172,12 @@ const MyProfilePage = (props: MyProfileProps) => {
                   ...props.profileData,
                 }}
                 onSave={onProfileUpdateSubmit}
-                onCancel={cancelProfileUpdate}
+                onCancel={closeProfileUpdateModal}
+                updateStatus={profileUpdateStatus}
               />
             </Overlay>
           }
-          {props.modalState.changeENS &&
+          {props.modalState[MODAL_NAMES.CHANGE_ENS] &&
           props.ethAddress && (
             <Overlay>
               <ENSForm
@@ -241,7 +202,7 @@ const MyProfilePage = (props: MyProfileProps) => {
                 ethAddress={props.ethAddress}
                 providerData={{ name: ensState.userName || '' }}
                 onSave={onENSSubmit}
-                onCancel={onENSCancel}
+                onCancel={closeEnsModal}
                 validateEns={ensActions.validateName}
                 validEns={ensState.isValidating ? null : ensState.isAvailable}
                 isValidating={ensState.isValidating}
@@ -260,7 +221,7 @@ const MyProfilePage = (props: MyProfileProps) => {
             </Overlay>
           )}
         </ModalRenderer>
-    </div>
+    </Box>
   );
 };
 

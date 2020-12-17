@@ -43,6 +43,7 @@ const createBaseComponent = (props: any) => (
     changeENSLabel="Update Ethereum Name"
     onENSChangeClick={() => {}}
     onUpdateClick={() => {}}
+    hideENSButton={false}
   />
 );
 

@@ -10,6 +10,7 @@ interface IProfileEditMenuProps {
   onENSChangeClick: () => void;
   updateProfileLabel: string;
   changeENSLabel: string;
+  hideENSButton: boolean;
 }
 
 const ProfileEditMenuDropdown = (props: IProfileEditMenuProps) => {
@@ -29,11 +30,13 @@ const ProfileEditMenuDropdown = (props: IProfileEditMenuProps) => {
             <StyledText>{props.updateProfileLabel}</StyledText>
           </Box>
         </StyledSelectBox>
+        {!props.hideENSButton &&
         <StyledSelectBox>
           <Box onClick={onENSChangeClick}>
             <StyledText>{props.changeENSLabel}</StyledText>
           </Box>
         </StyledSelectBox>
+        }
       </Box>
     </StyledDrop>
   );
