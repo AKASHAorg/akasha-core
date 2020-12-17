@@ -62,7 +62,7 @@ storiesOf('Cards/Form Cards', module)
         providerData={object('Provider Data', ensProviderData)}
         onSave={() => action('Form submitted')('Synthetic Event')}
         onCancel={() => action('Form Cancelled')('Synthetic Event')}
-        validateEns={() => action('validating ens')('Synthetic Event')}
+        validateEns={() => action('Validating ens')('Synthetic Event')}
         validEns={boolean('Valid ens', true)}
         changeButtonLabel={text('Label for Change ENS Button', 'Change ENS')}
         userNameProviderOptions={[
