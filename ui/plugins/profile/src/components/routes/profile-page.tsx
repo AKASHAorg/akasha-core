@@ -1,27 +1,29 @@
 import * as React from 'react';
-import { ProfilePageHeader } from '../ProfileHeader/profile-header';
+import { ProfilePageCard } from '../profile-cards/profile-card';
 import DS from '@akashaproject/design-system';
 import { useProfile } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 import { useParams } from 'react-router-dom';
+import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
-export interface ProfilePageProps {
-  modalOpen: boolean;
-  ethAddress?: string;
-  onLogin: (param: 1 | 2) => void;
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  showLoginModal: () => void;
+const { Box, Helmet } = DS;
+export interface ProfilePageProps extends RootComponentProps {
+  modalActions: ModalStateActions;
+  modalState: ModalState
+  ethAddress: string | null;
+  onLogin: any;
 }
 
-const ProfilePage = (props: RootComponentProps & ProfilePageProps) => {
-  const { modalOpen, ethAddress, setModalOpen, showLoginModal } = props;
+const ProfilePage = (props: ProfilePageProps) => {
+  const { ethAddress } = props;
 
   const { profileId } = useParams() as any;
   const [profileState, profileActions] = useProfile({
     onError: err => {
       console.log(err);
     },
-    sdkModules: props.sdkModules,
+    ipfsService: props.sdkModules.commons.ipfsService,
+    profileService: props.sdkModules.profiles.profileService,
   });
 
   React.useEffect(() => {
@@ -29,22 +31,21 @@ const ProfilePage = (props: RootComponentProps & ProfilePageProps) => {
       profileActions.getProfileData({ ethAddress: profileId });
     }
   }, [profileId]);
-
+  console.log(profileState, 'profile state');
   return (
-    <div>
-      <DS.Helmet>
+    <Box fill="horizontal">
+      <Helmet>
         <title>Profile | {profileId} Page</title>
-      </DS.Helmet>
-      <ProfilePageHeader
+      </Helmet>
+      <ProfilePageCard
         {...props}
         profileData={profileState}
         profileId={profileId}
-        modalOpen={modalOpen}
         loggedUserEthAddress={ethAddress}
-        setModalOpen={setModalOpen}
-        showLoginModal={showLoginModal}
+        modalActions={props.modalActions}
+        modalState={props.modalState}
       />
-    </div>
+    </Box>
   );
 };
 

@@ -40,7 +40,7 @@ const service: AkashaService = (invoke, log) => {
 
   const searchTags = async (opt: { tagName: string }) => {
     const query = `
-    query SearchTags($name: String) {
+    query SearchTags($name: String!) {
          searchTags(name: $name)
        }`;
     const result = await runGQL({
@@ -69,7 +69,11 @@ const service: AkashaService = (invoke, log) => {
     return result.data;
   };
 
-  return { getTag, tags, createTag, searchTags };
+  const getTrending = async () => {
+    return searchTags({ tagName: '' });
+  };
+
+  return { getTag, tags, createTag, searchTags, getTrending };
 };
 
 export default { service, name: TAG_SERVICE };

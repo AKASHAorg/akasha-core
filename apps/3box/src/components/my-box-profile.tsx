@@ -105,11 +105,9 @@ const MyBoxProfile: React.FC<IMyBoxProfileProps> = () => {
                     nameFieldPlaceholder={t('Type your name here')}
                     descriptionFieldPlaceholder={t('Add a description about you here')}
                     ethAddress={stateData.ethAddress || ''}
-                    providerData={{
-                      ...stateData.profileData,
-                      providerName: '3Box',
-                    }}
-                    handleSubmit={onFormSubmit}
+                    providerData={stateData.profileData}
+                    onSave={onFormSubmit}
+                    updateStatus={{}}
                   />
                 </>
               )}
