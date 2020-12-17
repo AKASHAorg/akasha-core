@@ -21,6 +21,7 @@ const typeDefs = gql`
     resolveProfile(pubKey: String!): UserProfile!
     getPost(id: String!): Post!
     getTag(name: String!): Tag
+    searchTags(name: String!): [String]
     tags(offset: String, limit: Int): TagsResult
     posts(offset: String, limit: Int): PostsResult
     isFollowing(follower: String!, following: String!): Boolean
@@ -105,6 +106,7 @@ const typeDefs = gql`
     tags: [String!]
     quotedBy: [String]
     mentions: [String]
+    totalComments: String
   }
 
   type Comment {
