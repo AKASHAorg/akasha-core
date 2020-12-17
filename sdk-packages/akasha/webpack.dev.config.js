@@ -1,6 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+// const HtmlWebpackPlugin = require("html-webpack-plugin");
 const name = require("./package.json").name;
 
 const { InjectManifest } = require("workbox-webpack-plugin");
@@ -68,11 +68,6 @@ const config = {
     new webpack.ProvidePlugin({
       Buffer: ["buffer", "Buffer"],
       process: ["process"]
-    }),
-    new HtmlWebpackPlugin({
-      filename: "index.html",
-      template: path.resolve(__dirname, "../../examples/ui/feed-app/public/template-index.html"),
-      inject: true
     }),
     new InjectManifest({
       swSrc: "./lib/sw.js",
