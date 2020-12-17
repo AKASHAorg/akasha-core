@@ -29,7 +29,9 @@ storiesOf('Cards/Form Cards', module)
         )}
         ethAddress={text('Logged Profile EthAddress', '0x003410499401674320006570047391024572456')}
         providerData={object('Provider Data', boxProviderData)}
-        handleSubmit={() => action('Form submitted')('Synthetic Event')}
+        onSave={() => action('Form submitted')('Synthetic Event')}
+        onCancel={() => action('Form Cancelled')('Synthetic Event')}
+        updateStatus={{ saving: boolean('Is saving', false) }}
       />
     </Box>
   ))
@@ -58,9 +60,14 @@ storiesOf('Cards/Form Cards', module)
         nameFieldPlaceholder={text('Name Placeholder', '@username')}
         ethAddress={text('Logged Profile EthAddress', '0x003410499401674320006570047391024572456')}
         providerData={object('Provider Data', ensProviderData)}
-        handleSubmit={() => action('Form submitted')('Synthetic Event')}
+        onSave={() => action('Form submitted')('Synthetic Event')}
+        onCancel={() => action('Form Cancelled')('Synthetic Event')}
         validateEns={() => action('validating ens')('Synthetic Event')}
         validEns={boolean('valid ens', true)}
+        changeButtonLabel={text('Change ENS Label', 'Change ENS')}
+        userNameProviderOptions={[
+          { name: 'local', label: text('Label for local usernames', 'Do not use ENS') },
+        ]}
       />
     </Box>
   ));
