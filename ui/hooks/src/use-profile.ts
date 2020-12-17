@@ -1,27 +1,25 @@
 import * as React from 'react';
 import { forkJoin } from 'rxjs';
 import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
-export interface HookErrorObj {
-  errorKey: string;
-  error: Error;
-  critical: boolean;
-}
-
-type voidFunc<T = object> = (arg?: T) => void;
+type voidFunc<T = object> = (arg: T) => void;
 
 export interface UseProfileActions {
   getProfileData: voidFunc<{ ethAddress: string }>;
+  /* update profile locally */
+  updateProfile: voidFunc<Partial<IProfileData>>;
 }
 
 export interface UseProfileProps {
-  onError: (error: HookErrorObj) => void;
-  sdkModules: any;
+  onError?: (error: IAkashaError) => void;
+  ipfsService: any;
+  profileService: any;
 }
 
 /* A hook to be used on profile-page */
 export const useProfile = (props: UseProfileProps): [Partial<IProfileData>, UseProfileActions] => {
-  const { onError, sdkModules } = props;
+  const { onError, ipfsService, profileService } = props;
   const [profile, setProfile] = React.useState<Partial<IProfileData>>({});
 
   const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {
@@ -43,62 +41,59 @@ export const useProfile = (props: UseProfileProps): [Partial<IProfileData>, UseP
         ipfsUrl = `${ipfsGateway}/${hash}/${imageSize}/src`;
       }
     }
-
     return ipfsUrl;
   };
 
-  const actions = {
-    getProfileData: (payload: { ethAddress: string }) => {
+  const actions: UseProfileActions = {
+    getProfileData: payload => {
       try {
-        const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
-        const getProfileCall = sdkModules.profiles.profileService.getProfile({
+        const ipfsGatewayCall = ipfsService.getSettings({});
+        const getProfileCall = profileService.getProfile({
           ethAddress: payload.ethAddress,
         });
         const obs = forkJoin([ipfsGatewayCall, getProfileCall]);
         obs.subscribe(
           (resp: any) => {
-            if (!resp) {
+            if (!resp.length) {
               return;
             }
-            const ipfsGateway = resp[0].data;
-            const { ethAddress, avatar, description, coverImage, userName, name } = resp[1].data;
-            const mappedProfileData: IProfileData = { ethAddress: ethAddress };
-            if (name) {
-              mappedProfileData.name = name;
-            }
-            if (userName) {
-              mappedProfileData.ensName = userName;
-            }
+            const [gatewayResp, profileResp] = resp;
+            const { avatar, coverImage, ...other } = profileResp.data.getProfile;
+            const images: { avatar?: string; coverImage?: string } = {};
             if (avatar) {
-              mappedProfileData.avatar = getMediaUrl(ipfsGateway, avatar);
+              images.avatar = getMediaUrl(gatewayResp.data, avatar);
             }
             if (coverImage) {
-              mappedProfileData.coverImage = getMediaUrl(
-                ipfsGateway,
-                coverImage.hash,
-                coverImage.data,
-              );
-            }
-            if (description) {
-              mappedProfileData.description = description;
+              images.coverImage = getMediaUrl(gatewayResp.data, coverImage);
             }
 
-            setProfile(mappedProfileData);
+            setProfile({ ...images, ...other });
           },
-          err =>
-            onError({
-              errorKey: 'useProfile.getProfileData[subscription]',
-              error: err,
-              critical: false,
-            }),
+          err => {
+            if (onError) {
+              onError({
+                errorKey: 'useProfile.getProfileData[subscription]',
+                error: err,
+                critical: false,
+              });
+            }
+          },
         );
       } catch (err) {
-        onError({
-          errorKey: 'useProfile.getProfileData',
-          error: err,
-          critical: false,
-        });
+        if (onError) {
+          onError({
+            errorKey: 'useProfile.getProfileData',
+            error: err,
+            critical: false,
+          });
+        }
       }
+    },
+    updateProfile(fields) {
+      setProfile(prev => ({
+        ...prev,
+        ...fields,
+      }));
     },
   };
 

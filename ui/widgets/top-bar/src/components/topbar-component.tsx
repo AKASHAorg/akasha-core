@@ -5,7 +5,7 @@ import {
   EventTypes,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useProfile, useGlobalLogin } from '@akashaproject/ui-awf-hooks';
+import { useLoginState } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
 const { lightTheme, Topbar, ThemeSelector, useViewportSize, LoginModal } = DS;
@@ -14,13 +14,10 @@ interface TopBarProps {
   navigateToUrl: (url: string) => void;
   toggleSidebar: (visible: boolean) => void;
   getMenuItems: () => IMenuItem[];
-  ethAddress?: string;
   loaderEvents: any;
   modalSlotId: string;
-  onLogin: (provider: 2 | 3) => void;
   globalChannel: any;
   logger: any;
-  onGlobalLogin: (ethAddress: string, token: string) => void;
   sdkModules: any;
 }
 
@@ -30,37 +27,27 @@ const TopbarComponent = (props: TopBarProps) => {
     getMenuItems,
     loaderEvents,
     toggleSidebar,
-    ethAddress,
     modalSlotId,
-    onLogin,
     globalChannel,
-    sdkModules,
     logger,
   } = props;
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
   const [showLoginModal, setShowLoginModal] = React.useState(false);
-  const [profileState, profileActions] = useProfile({
-    onError: err => {
-      logger.error(err);
-    },
-    sdkModules: sdkModules,
+  const [loginState, loginActions] = useLoginState({
+    globalChannel,
+    onError: err => logger.error(err),
+    ipfsService: props.sdkModules.commons.ipfsService,
+    profileService: props.sdkModules.profiles.profileService,
+    authService: props.sdkModules.auth.authService,
+    cacheService: props.sdkModules.commons.cacheService,
   });
 
-  useGlobalLogin(
-    globalChannel,
-    data => {
-      const { ethAddress: ethAddr, token } = data;
-      props.onGlobalLogin(ethAddr, token);
-    },
-    ({ error }) => props.logger.error(error),
-  );
-
-  React.useEffect(() => {
-    if (ethAddress) {
-      profileActions.getProfileData({ ethAddress });
-    }
-  }, [ethAddress]);
+  // React.useEffect(() => {
+  //   if (ethAddress) {
+  //     profileActions.getProfileData({ ethAddress });
+  //   }
+  // }, [ethAddress]);
 
   React.useEffect(() => {
     const updateMenu = () => {
@@ -79,10 +66,10 @@ const TopbarComponent = (props: TopBarProps) => {
   }, []);
 
   React.useEffect(() => {
-    if (ethAddress && showLoginModal) {
+    if (loginState.ethAddress && showLoginModal) {
       setTimeout(() => setShowLoginModal(false), 500);
     }
-  }, [ethAddress, showLoginModal]);
+  }, [loginState.ethAddress, showLoginModal]);
   // *how to obtain different topbar menu sections
   const quickAccessItems = currentMenu?.filter(
     menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,
@@ -99,7 +86,7 @@ const TopbarComponent = (props: TopBarProps) => {
     setShowLoginModal(true);
   };
   const handleLogin = (provider: 2 | 3) => {
-    onLogin(provider);
+    loginActions.login(provider);
   };
   const handleModalClose = () => {
     setShowLoginModal(false);
@@ -122,14 +109,14 @@ const TopbarComponent = (props: TopBarProps) => {
   return (
     <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
       <Topbar
-        avatarImage={profileState.avatar}
+        avatarImage={loginState.profileData.avatar}
         brandLabel="Ethereum World"
         signInLabel={t('Sign In')}
         onNavigation={handleNavigation}
         onSearch={handleSearchBarKeyDown}
         onSidebarToggle={toggleSidebar}
-        ethAddress={ethAddress}
-        quickAccessItems={ethAddress ? quickAccessItems : null}
+        ethAddress={loginState.ethAddress}
+        quickAccessItems={loginState.ethAddress ? quickAccessItems : null}
         searchAreaItem={searchAreaItem}
         size={size}
         onLoginClick={handleLoginClick}

@@ -10,7 +10,6 @@ import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 
 export interface IProfileCardCoverImageProps {
   shareProfileLabel: string;
-  editProfileLabel: string;
   changeCoverImageLabel: string;
   editable: boolean;
   canUserEdit?: boolean;
@@ -19,7 +18,6 @@ export interface IProfileCardCoverImageProps {
   handleChangeCoverImage: (provider: IProfileDataProvider) => void;
   coverImagePopoverOpen: boolean;
   setCoverImagePopoverOpen: (value: boolean) => void;
-  handleEditClick: () => void;
   handleShareClick: () => void;
   profileProvidersData?: IProfileProvidersData;
 }
@@ -27,14 +25,11 @@ export interface IProfileCardCoverImageProps {
 const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
   const {
     shareProfileLabel,
-    editProfileLabel,
     changeCoverImageLabel,
     editable,
-    canUserEdit,
     coverImage,
     coverImageIcon,
     handleChangeCoverImage,
-    handleEditClick,
     handleShareClick,
     coverImagePopoverOpen,
     setCoverImagePopoverOpen,
@@ -46,21 +41,13 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
   return (
     <Box
       height="9em"
-      background={`url(${coverImage})`}
+      background={`#DDD url(${coverImage})`}
       pad="none"
       round={{ corner: 'top', size: 'xsmall' }}
     >
       {!editable && (
         <Box align="end" pad="none">
           <ShareButtonContainer gap="xsmall" direction="row">
-            {canUserEdit && (
-              <IconButton
-                secondary={true}
-                icon={<Icon type="editSimple" color="white" />}
-                label={editProfileLabel}
-                onClick={handleEditClick}
-              />
-            )}
             <IconButton
               secondary={true}
               icon={<Icon type="reply" color="white" />}

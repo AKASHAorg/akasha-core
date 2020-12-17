@@ -17,7 +17,7 @@ import { TextIcon } from '../../TextIcon';
 export interface ITopbarProps {
   // data
   avatarImage?: string;
-  ethAddress?: string;
+  ethAddress: string | null;
   brandLabel: string;
   signInLabel?: string;
   unreadNotifications?: number;
