@@ -21,6 +21,8 @@ export default function profilesApi(channel) {
         follow: extractedServices[PROFILE_STORE]('follow'),
         unFollow: extractedServices[PROFILE_STORE]('unFollow'),
         isFollowing: extractedServices[PROFILE_STORE]('isFollowing'),
+        searchProfiles: extractedServices[PROFILE_STORE]('searchProfiles'),
+        getTrending: extractedServices[PROFILE_STORE]('getTrending'),
       },
     },
   };
