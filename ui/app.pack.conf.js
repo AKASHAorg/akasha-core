@@ -8,6 +8,8 @@ module.exports = {
     '@akashaproject/design-system': 'akashaproject__design_system'
   }],
   optimization: {
+    moduleIds: "deterministic",
+    chunkIds: "named",
     splitChunks: {
       chunks: 'all',
       minSize: 69000,
