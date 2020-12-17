@@ -71,6 +71,8 @@ const EditButton = styled(IconButton)`
   }
 `;
 
+// tslint:disable:cyclomatic-complexity
+/* eslint-disable complexity */
 const ProfileCard: React.FC<IProfileCardProps> = props => {
   const {
     className,
@@ -336,5 +338,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     </MainAreaCardBox>
   );
 };
-
+// tslint:disable:cyclomatic-complexity
+/* eslint-disable complexity */
 export default ProfileCard;

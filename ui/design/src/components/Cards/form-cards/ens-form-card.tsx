@@ -52,7 +52,8 @@ export interface IEnsFormCardProps {
 export interface IEnsData {
   name?: string;
 }
-
+// tslint:disable:cyclomatic-complexity
+/* eslint-disable complexity */
 const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   const {
     className,
@@ -145,7 +146,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     const value = ev.target.value;
     setName(value);
     setError(false);
-    if (validateEns && typeof validateEns === 'function') {
+    if (validateEns) {
       validateEns(value);
     }
   };
@@ -356,5 +357,6 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     </MainAreaCardBox>
   );
 };
-
+// tslint:enable:cyclomatic-complexity
+/* eslint-enable complexity */
 export default EnsFormCard;
