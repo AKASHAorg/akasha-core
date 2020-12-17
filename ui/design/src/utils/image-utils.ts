@@ -63,4 +63,4 @@ export const imageToB64 = (image: File): Promise<string> => {
     fileReader.addEventListener('error', reject);
     fileReader.readAsDataURL(image);
   });
-}
+};

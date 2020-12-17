@@ -41,8 +41,12 @@ const createBaseComponent = (props: any) => (
     getProfileProvidersData={props.getProfileProvidersData}
     updateProfileLabel="Update Profile"
     changeENSLabel="Update Ethereum Name"
-    onENSChangeClick={() => {}}
-    onUpdateClick={() => {}}
+    onENSChangeClick={() => {
+      /* not empty block */
+    }}
+    onUpdateClick={() => {
+      /* not an empty block */
+    }}
     hideENSButton={false}
   />
 );

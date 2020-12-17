@@ -1,7 +1,7 @@
-import { Box } from "grommet";
-import React from "react";
-import { StyledText } from "../../Buttons/default-buttons/styled-plain-button";
-import { StyledDrop, StyledSelectBox } from "../entry-cards/styled-entry-box";
+import { Box } from 'grommet';
+import React from 'react';
+import { StyledText } from '../../Buttons/default-buttons/styled-plain-button';
+import { StyledDrop, StyledSelectBox } from '../entry-cards/styled-entry-box';
 
 interface IProfileEditMenuProps {
   target: {};
@@ -14,7 +14,7 @@ interface IProfileEditMenuProps {
 }
 
 const ProfileEditMenuDropdown = (props: IProfileEditMenuProps) => {
-  const { onClose, onENSChangeClick,  onUpdateClick } = props;
+  const { onClose, onENSChangeClick, onUpdateClick } = props;
   return (
     <StyledDrop
       overflow="hidden"
@@ -30,16 +30,16 @@ const ProfileEditMenuDropdown = (props: IProfileEditMenuProps) => {
             <StyledText>{props.updateProfileLabel}</StyledText>
           </Box>
         </StyledSelectBox>
-        {!props.hideENSButton &&
-        <StyledSelectBox>
-          <Box onClick={onENSChangeClick}>
-            <StyledText>{props.changeENSLabel}</StyledText>
-          </Box>
-        </StyledSelectBox>
-        }
+        {!props.hideENSButton && (
+          <StyledSelectBox>
+            <Box onClick={onENSChangeClick}>
+              <StyledText>{props.changeENSLabel}</StyledText>
+            </Box>
+          </StyledSelectBox>
+        )}
       </Box>
     </StyledDrop>
   );
-}
+};
 
 export default ProfileEditMenuDropdown;

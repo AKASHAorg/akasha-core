@@ -3,7 +3,6 @@ import { forkJoin } from 'rxjs';
 import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
-
 type voidFunc<T = object> = (arg: T) => void;
 
 export interface UseProfileActions {
@@ -46,7 +45,7 @@ export const useProfile = (props: UseProfileProps): [Partial<IProfileData>, UseP
   };
 
   const actions: UseProfileActions = {
-    getProfileData: (payload) => {
+    getProfileData: payload => {
       try {
         const ipfsGatewayCall = ipfsService.getSettings({});
         const getProfileCall = profileService.getProfile({
@@ -65,10 +64,7 @@ export const useProfile = (props: UseProfileProps): [Partial<IProfileData>, UseP
               images.avatar = getMediaUrl(gatewayResp.data, avatar);
             }
             if (coverImage) {
-              images.coverImage = getMediaUrl(
-                gatewayResp.data,
-                coverImage,
-              );
+              images.coverImage = getMediaUrl(gatewayResp.data, coverImage);
             }
 
             setProfile({ ...images, ...other });
@@ -96,9 +92,9 @@ export const useProfile = (props: UseProfileProps): [Partial<IProfileData>, UseP
     updateProfile(fields) {
       setProfile(prev => ({
         ...prev,
-        ...fields
+        ...fields,
       }));
-    }
+    },
   };
 
   return [profile, actions];
