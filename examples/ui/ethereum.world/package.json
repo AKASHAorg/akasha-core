@@ -2,10 +2,13 @@
   "name": "@akashaproject/ethereum.world",
   "version": "0.1.0",
   "private": true,
-  "devDependencies": {
-    "@akashaproject/ui-awf-typings": "*",
-    "@types/react": "17.0.0",
-    "@types/react-dom": "17.0.0"
+  "dependencies": {
+    "@akashaproject/ui-awf-typings": "*"
+  },
+  "peerDependencies": {
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "styled-components": "5.2.1"
   },
   "scripts": {
     "start": "webpack serve --config ./webpack.config.js --port 8131",
@@ -23,7 +26,7 @@
     "exec": "npm run build || exit 1",
     "ext": "ts,tsx"
   },
-  "dependencies": {},
+  "devDependencies": {},
   "browserslist": [
     ">0.2%",
     "not dead",

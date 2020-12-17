@@ -2,8 +2,8 @@
   "name": "feed-app-dev",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {},
-  "devDependencies": {
+  "devDependencies": {},
+  "dependencies": {
     "@akashaproject/ui-awf-typings": "*"
   },
   "peerDependencies": {},

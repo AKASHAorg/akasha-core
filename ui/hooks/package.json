@@ -27,11 +27,11 @@
       "lib"
     ],
     "dependencies": {
-      "@akashaproject/design-system": "*"
-    },
-    "devDependencies": {
+      "@akashaproject/design-system": "*",
       "@akashaproject/ui-awf-typings": "*",
       "@types/react": "16.9.56"
+    },
+    "devDependencies": {
     },
     "peerDependencies": {
         "react": "17.0.1",

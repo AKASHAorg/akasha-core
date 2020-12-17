@@ -52,14 +52,14 @@
     "react-i18next": "11.7.3",
     "react-router-dom": "5.2.0",
     "react-tracked": "1.4.2",
-    "single-spa-react": "3.2.0"
-  },
-  "devDependencies": {
+    "single-spa-react": "3.2.0",
     "@akashaproject/ui-awf-typings": "*",
     "@types/react": "16.9.56",
     "@types/react-dom": "16.9.9",
     "@types/react-test-renderer": "16.9.3",
-    "@types/single-spa-react": "2.12.0",
+    "@types/single-spa-react": "2.12.0"
+  },
+  "devDependencies": {
     "acorn-jsx": "5.3.1",
     "jest-styled-components": "7.0.3",
     "react-test-renderer": "17.0.1"

@@ -6,8 +6,8 @@
     "storybook": "start-storybook",
     "build:storybook": "build-storybook -c .storybook -o dist"
   },
-  "dependencies": {},
-  "devDependencies": {
+  "devDependencies": {},
+  "dependencies": {
     "@akashaproject/ui-awf-typings": "*",
     "@akashaproject/design-system": "*",
     "@storybook/addon-a11y": "6.1.10",

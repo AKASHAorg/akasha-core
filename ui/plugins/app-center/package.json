@@ -37,6 +37,10 @@
     "ext": "ts,tsx"
   },
   "dependencies": {
+    "@types/react": "16.9.56",
+    "@types/react-dom": "16.9.9",
+    "@types/react-test-renderer": "16.9.3",
+    "@types/single-spa-react": "2.12.0",
     "@akashaproject/ui-awf-typings": "*",
     "@akashaproject/design-system": "*",
     "@types/i18next": "13.0.0",
@@ -48,10 +52,6 @@
     "single-spa-react": "3.2.0"
   },
   "devDependencies": {
-    "@types/react": "16.9.56",
-    "@types/react-dom": "16.9.9",
-    "@types/react-test-renderer": "16.9.3",
-    "@types/single-spa-react": "2.12.0",
     "acorn-jsx": "5.3.1",
     "jest-styled-components": "7.0.3",
     "react-test-renderer": "17.0.1"

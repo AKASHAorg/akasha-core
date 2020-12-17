@@ -36,6 +36,11 @@
     "ext": "ts,tsx"
   },
   "dependencies": {
+    "@akashaproject/ui-awf-typings": "*",
+    "@types/react": "16.9.56",
+    "@types/react-dom": "16.9.9",
+    "@types/single-spa-react": "2.12.0",
+    "@types/styled-components": "5.1.4",
     "@akashaproject/design-system": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/sdk-auth": "*",
@@ -47,11 +52,6 @@
     "easy-peasy": "3.3.0"
   },
   "devDependencies": {
-    "@akashaproject/ui-awf-typings": "*",
-    "@types/react": "16.9.56",
-    "@types/react-dom": "16.9.9",
-    "@types/single-spa-react": "2.12.0",
-    "@types/styled-components": "5.1.4"
   },
   "peerDependencies": {
     "react": "17.0.1",
