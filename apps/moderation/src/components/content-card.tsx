@@ -1,31 +1,31 @@
 import React from 'react';
 import moment from 'moment';
 import { combineLatest } from 'rxjs';
-import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
 import { mapEntry } from '../services/posting-service';
-import { sampleProfileData } from '../services/dummy-data';
+
+import EntryDataCard from './entry-data-card';
+import ExplanationsCard from './explanations-box';
 
 import { StyledBox } from './styled';
 
-const { Box, Icon, Text, Avatar, Button, EntryCardMod, ProfileCardMod, MainAreaCardBox } = DS;
+const { Box, Icon, Text, Avatar, Button, MainAreaCardBox } = DS;
 
 export interface IContentCardProps {
   isPending: boolean;
-  repliesLabel: string;
-  repostsLabel: string;
   locale: ILocale;
 
+  showExplanationsLabel: string;
+  hideExplanationsLabel: string;
   determinationLabel?: string;
   reportedLabel: string;
   contentType: string;
   forLabel: string;
   andLabel?: string;
-  additionalDescLabel: string;
-  additionalDescContent?: string;
   reportedByLabel: string;
+  originallyReportedByLabel: string;
   entryId: string;
   reasons: string[];
   reporter?: string;
@@ -42,6 +42,7 @@ export interface IContentCardProps {
   evaluationDateTime?: string;
   keepContentLabel?: string;
   delistContentLabel?: string;
+  logger: any;
   sdkModules: any;
   handleButtonClick: (param1: string, param2: string, param3: string, param5: any) => void;
 }
@@ -49,17 +50,16 @@ export interface IContentCardProps {
 const ContentCard: React.FC<IContentCardProps> = props => {
   const {
     isPending,
-    repostsLabel,
-    repliesLabel,
     locale,
+    showExplanationsLabel,
+    hideExplanationsLabel,
     determinationLabel,
     reportedLabel,
     contentType,
     forLabel,
     andLabel,
-    additionalDescLabel,
-    additionalDescContent,
     reportedByLabel,
+    originallyReportedByLabel,
     entryId,
     reasons,
     reporter,
@@ -80,6 +80,8 @@ const ContentCard: React.FC<IContentCardProps> = props => {
 
   const [entryData, setEntryData] = React.useState<any>(null);
 
+  const [showExplanations, setShowExplanations] = React.useState<boolean>(false);
+
   React.useEffect(() => {
     const entryCall = props.sdkModules.posts.entries.getEntry({ entryId });
     const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
@@ -94,8 +96,6 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     });
   }, [entryId]);
 
-  const { t } = useTranslation();
-
   const handleClick = (action: string) => () => {
     if (entryId) {
       props.handleButtonClick(entryId, action, contentType, entryData);
@@ -106,44 +106,7 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     <Box margin={{ bottom: '1rem' }}>
       <MainAreaCardBox>
         <Box pad="1rem">
-          <MainAreaCardBox>
-            {entryData ? (
-              <>
-                {contentType === 'post' && entryData && (
-                  <EntryCardMod
-                    entryData={entryData}
-                    repostsLabel={repostsLabel}
-                    repliesLabel={repliesLabel}
-                    locale={locale}
-                    style={{ height: 'auto' }}
-                    onClickAvatar={() => null}
-                    onClickReplies={() => null}
-                    onContentClick={() => null}
-                  />
-                )}
-                {contentType === 'profile' && (
-                  <ProfileCardMod
-                    onClickApps={() => null}
-                    onClickFollowing={() => null}
-                    profileData={sampleProfileData}
-                    onChangeProfileData={() => null}
-                    getProfileProvidersData={() => null}
-                    descriptionLabel={t('About me')}
-                    actionsLabel={t('Actions')}
-                    editProfileLabel={t('Edit profile')}
-                    changeCoverImageLabel={t('Change cover image')}
-                    followingLabel={t('Following')}
-                    appsLabel={t('Apps')}
-                    usersLabel={t('Users')}
-                    shareProfileLabel={t('Share Profile')}
-                    onEntryFlag={() => null}
-                  />
-                )}
-              </>
-            ) : (
-              <Text textAlign="center">Loading EntryCard...</Text>
-            )}
-          </MainAreaCardBox>
+          <EntryDataCard entryData={entryData} contentType={contentType} locale={locale} />
           {!isPending && (
             <Text
               size="small"
@@ -163,24 +126,53 @@ const ContentCard: React.FC<IContentCardProps> = props => {
             <Icon type="error" size="md" accentColor={true} />
             <Text
               margin={{ left: '0.2rem', bottom: '0.2rem' }}
+              style={{ fontWeight: 'bold' }}
             >{`${contentType[0].toUpperCase()}${contentType.slice(
               1,
             )} ${reportedLabel}  ${forLabel}`}</Text>
+
             {reasons.map((reason, idx) => (
-              <StyledBox
-                key={idx}
-                margin={{ left: '0.2rem', bottom: '0.2rem' }}
-                pad={{ horizontal: '0.2rem' }}
-                round={'0.125rem'}
-              >
-                <Text as="span" color="accentText">
-                  {reason}
-                </Text>
-              </StyledBox>
+              <>
+                {/* show 'and' at the appropriate position, if more than one reason */}
+                {reasons.length > 1 && idx === reasons.length - 1 && (
+                  <Text
+                    margin={{ left: '0.2rem', bottom: '0.2rem' }}
+                    style={{ fontWeight: 'bold' }}
+                  >
+                    {andLabel}
+                  </Text>
+                )}
+                <StyledBox
+                  key={idx}
+                  margin={{ left: '0.2rem', bottom: '0.2rem' }}
+                  pad={{ horizontal: '0.2rem' }}
+                  round={'0.125rem'}
+                >
+                  <Text as="span" color="accentText" style={{ fontWeight: 'bold' }}>
+                    {reason}
+                  </Text>
+                </StyledBox>
+              </>
             ))}
           </Box>
-          <Text margin={{ top: 'large', bottom: 'xsmall' }}>{additionalDescLabel}:</Text>
-          {additionalDescContent && <Text>{additionalDescContent}</Text>}
+
+          <Text
+            as="a"
+            color="accentText"
+            margin={{ top: 'large' }}
+            style={{ cursor: 'pointer' }}
+            onClick={() => setShowExplanations(!showExplanations)}
+          >
+            {showExplanations ? hideExplanationsLabel : showExplanationsLabel}
+          </Text>
+          {showExplanations && (
+            <ExplanationsCard
+              entryId={entryId}
+              reportedByLabel={reportedByLabel}
+              forLabel={forLabel}
+              logger={props.logger}
+            />
+          )}
           {!isPending && (
             <>
               <Text margin={{ top: 'large' }}>
@@ -205,7 +197,9 @@ const ContentCard: React.FC<IContentCardProps> = props => {
           >
             <Box width={isPending ? '65%' : '100%'}>
               <Box direction="row">
-                <Text color={!isPending ? 'secondaryText' : 'intial'}>{reportedByLabel}</Text>
+                <Text color={!isPending ? 'secondaryText' : 'initial'}>
+                  {originallyReportedByLabel}
+                </Text>
                 <Avatar
                   ethAddress={reporter || ''}
                   src="https://placebeard.it/360x360"
@@ -216,10 +210,7 @@ const ContentCard: React.FC<IContentCardProps> = props => {
                 />
                 {reporter && (
                   <Text margin={{ left: '0.2rem' }} color="accentText">
-                    {`${reporter.slice(0, 6)}...${reporter.slice(
-                      reporter.length - 5,
-                      reporter.length - 1,
-                    )}`}
+                    {`${reporter.slice(0, 6)}...${reporter.slice(reporter.length - 4)}`}
                   </Text>
                 )}
                 {reporterName && (

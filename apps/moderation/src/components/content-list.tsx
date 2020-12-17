@@ -24,7 +24,7 @@ interface IBaseItem {
   type: string;
   entryId: string;
   reasons: string[];
-  description: string;
+  description?: string;
   entryDate: string;
 }
 
@@ -165,15 +165,14 @@ const ContentList: React.FC<IContentListProps> = props => {
               <ContentCard
                 key={pendingItem.id}
                 isPending={isPending}
-                repostsLabel={t('Repost')}
-                repliesLabel={t('Replies')}
                 locale={locale}
+                showExplanationsLabel={t('Show explanations')}
+                hideExplanationsLabel={t('Hide explanations')}
                 reportedLabel={t('reported')}
                 contentType={t(pendingItem.type)}
                 forLabel={t('for')}
-                additionalDescLabel={t('Additional description provided by user')}
-                additionalDescContent={t(pendingItem.description)}
-                reportedByLabel={t('Initially reported by')}
+                reportedByLabel={t('Reported by')}
+                originallyReportedByLabel={t('Initially reported by')}
                 entryId={t(pendingItem.entryId)}
                 reasons={pendingItem.reasons.map((el: string) => t(el))}
                 reporter={t(pendingItem.reporter)}
@@ -201,6 +200,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                     ? t('Remove User')
                     : ''
                 }
+                logger={logger}
                 sdkModules={sdkModules}
                 handleButtonClick={handleButtonClick}
               />
@@ -213,16 +213,15 @@ const ContentList: React.FC<IContentListProps> = props => {
               <ContentCard
                 key={delistedItem.id}
                 isPending={isPending}
-                repostsLabel={t('Repost')}
-                repliesLabel={t('Replies')}
                 locale={locale}
+                showExplanationsLabel={t('Show explanations')}
+                hideExplanationsLabel={t('Hide explanations')}
                 determinationLabel={t('Final determination')}
                 reportedLabel={t('reported')}
                 contentType={t(delistedItem.type)}
                 forLabel={t('for')}
-                additionalDescLabel={t("Moderator's evaluation")}
-                additionalDescContent={t(delistedItem.description)}
-                reportedByLabel={t('Originally reported by')}
+                reportedByLabel={t('Reported by')}
+                originallyReportedByLabel={t('Originally reported by')}
                 entryId={t(delistedItem.entryId)}
                 reasons={delistedItem.reasons.map(el => t(el))}
                 reporter={delistedItem.reporter}
@@ -236,6 +235,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                 moderatedByLabel={t('Moderated by')}
                 moderatedOnLabel={t('On')}
                 evaluationDateTime={delistedItem.evaluationDate}
+                logger={logger}
                 sdkModules={sdkModules}
                 handleButtonClick={() => null}
               />

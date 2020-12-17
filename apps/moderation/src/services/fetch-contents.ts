@@ -1,9 +1,18 @@
-import { BASE_URL } from './constants';
+import { BASE_DECISION_URL, BASE_FLAG_URL } from './constants';
 import postRequest from './post-request';
+
+export const getFlags = async (entryId: string) => {
+  try {
+    const response = await postRequest(`${BASE_FLAG_URL}/list/${entryId}`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
 
 export const getAllPending = async () => {
   try {
-    const response = await postRequest(`${BASE_URL}/pending`);
+    const response = await postRequest(`${BASE_DECISION_URL}/pending`);
 
     const modResponse = response.map(
       (
@@ -16,7 +25,6 @@ export const getAllPending = async () => {
           type: type,
           entryId: contentId,
           reasons: reasons,
-          description: '',
           reporter: reportedBy, // @TODO: fetch reporter's Name and ENS Name (if applicable) from the profile API
           count: reports - 1, // minus reporter, to get count of other users
           entryDate: reportedDate,
@@ -31,7 +39,7 @@ export const getAllPending = async () => {
 
 export const getAllDelisted = async () => {
   try {
-    const response = await postRequest(`${BASE_URL}/moderated`, {
+    const response = await postRequest(`${BASE_DECISION_URL}/moderated`, {
       delisted: true,
     });
 
