@@ -62,7 +62,6 @@ export interface IEntryBoxProps {
   onClickAvatar: React.MouseEventHandler<HTMLDivElement>;
   onClickReplies: (entryId: string) => void;
   onEntryShare: (service: ServiceNames, entryId?: string) => void;
-  onLinkCopy: (link: string) => void;
   onRepost: (withComment: boolean, entryData: IEntryData) => void;
   onEntryFlag: (entryId?: string) => void;
   handleFollow: (profileEthAddress: string) => void;
@@ -93,7 +92,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onClickAvatar,
     onClickReplies,
     onEntryShare,
-    onLinkCopy,
     onRepost,
     onEntryFlag,
     handleFollow,
@@ -112,9 +110,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const handleLinkCopy = (linkType: 'ipfs' | 'shareable') => () => {
     switch (linkType) {
       case 'ipfs':
-        return onLinkCopy('dummiIPFScid');
+        return navigator.clipboard.writeText(entryData.ipfsLink);
       case 'shareable':
-        return onLinkCopy('http://dummy.link');
+        return navigator.clipboard.writeText(window.location.href);
     }
   };
 

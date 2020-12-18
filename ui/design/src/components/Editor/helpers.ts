@@ -46,8 +46,17 @@ const CustomEditor = {
     Transforms.insertNodes(editor, { text, type: 'text' });
   },
 
-  insertMention(editor: Editor, value: string) {
-    const mention = { value, type: 'mention', children: [{ text: '' }] };
+  insertMention(
+    editor: Editor,
+    mentionData: {
+      name: string;
+      userName: string;
+      pubKey: string;
+      avatar: string;
+      ethAddress: string;
+    },
+  ) {
+    const mention = Object.assign({ type: 'mention', children: [{ text: '' }] }, mentionData);
     Transforms.insertNodes(editor, mention);
     Transforms.move(editor);
   },
