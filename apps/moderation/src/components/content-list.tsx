@@ -72,6 +72,13 @@ const ContentList: React.FC<IContentListProps> = props => {
     }
   }, [ethAddress]);
 
+  React.useEffect(() => {
+    // checks for new content if pending tab is active
+    if (isPending) {
+      fetchPendingContents();
+    }
+  }, [isPending]);
+
   const fetchPendingContents = async () => {
     // fetch pending (reported) contents
     setRequesting(true);
