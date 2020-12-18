@@ -35,7 +35,7 @@ module.exports = {
       profile: true,
     }),
   ],
-  devtool: isProduction ? false : 'source-map',
+  devtool: isProduction ? 'source-map' : 'inline-source-map',
   externals: commons.externals,
   optimization: commons.optimization,
 };

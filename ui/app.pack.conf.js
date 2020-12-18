@@ -10,6 +10,8 @@ module.exports = {
     },
   ],
   optimization: {
+    moduleIds: 'deterministic',
+    chunkIds: 'named',
     splitChunks: {
       chunks: 'all',
       minSize: 69000,

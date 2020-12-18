@@ -3,6 +3,7 @@ import { getAppDB } from '../helpers';
 import { ThreadID, Where, Client } from '@textile/hub';
 import { DataProvider, Profile } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
+import { searchIndex } from './search-indexes';
 
 class ProfileAPI extends DataSource {
   private readonly collection: string;
@@ -30,14 +31,17 @@ class ProfileAPI extends DataSource {
   getCacheKey(pubKey: string) {
     return `${this.collection}:pubKey${pubKey}`;
   }
-  async resolveProfile(pubKey: string) {
+  async resolveProfile(pubKey: string, noCache: boolean = false) {
     const cacheKey = this.getCacheKey(pubKey);
-    if (queryCache.has(cacheKey)) {
+    if (queryCache.has(cacheKey) && !noCache) {
       return Promise.resolve(queryCache.get(cacheKey));
     }
     const db: Client = await getAppDB();
     const query = new Where('pubKey').eq(pubKey);
     const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
+    if (noCache) {
+      return profilesFound;
+    }
     if (profilesFound.length) {
       const extractedFields = ['name', 'description', 'avatar', 'coverImage'];
       const q = profilesFound[0].default.filter(p => extractedFields.includes(p.property));
@@ -91,6 +95,18 @@ class ProfileAPI extends DataSource {
     }
     await db.save(this.dbID, this.collection, [profile]);
     queryCache.del(this.getCacheKey(pubKey));
+    searchIndex
+      .saveObject({
+        objectID: profile._id,
+        category: 'profile',
+        userName: profile.userName,
+        pubKey: profile.pubKey,
+        name: profile.default.find(p => p.property === 'name')?.value,
+        creationDate: profile.creationDate,
+      })
+      .then(_ => _)
+      // tslint:disable-next-line:no-console
+      .catch(e => console.error(e));
     return profile._id;
   }
 
@@ -114,6 +130,17 @@ class ProfileAPI extends DataSource {
     profile.userName = name;
     await db.save(this.dbID, this.collection, [profile]);
     queryCache.del(this.getCacheKey(pubKey));
+    searchIndex
+      .saveObject({
+        objectID: profile._id,
+        category: 'profile',
+        userName: name,
+        pubKey: profile.pubKey,
+        creationDate: profile.creationDate,
+      })
+      .then(_ => _)
+      // tslint:disable-next-line:no-console
+      .catch(e => console.error(e));
     return profile._id;
   }
   async followProfile(pubKey: string, ethAddress: string) {
@@ -175,6 +202,26 @@ class ProfileAPI extends DataSource {
     await db.save(this.dbID, this.collection, [profile]);
     queryCache.del(this.getCacheKey(pubKey));
     return profile._id;
+  }
+
+  async searchProfiles(name: string) {
+    const result = await searchIndex.search(name, {
+      facetFilters: ['category:profile'],
+      hitsPerPage: 20,
+      restrictSearchableAttributes: ['name', 'userName', 'pubKey'],
+      attributesToRetrieve: ['name', 'pubKey', 'userName'],
+    });
+    const results = [];
+    for (const profile of result.hits as any) {
+      const resolvedProfile = await this.resolveProfile(profile.pubKey);
+      results.push(resolvedProfile);
+    }
+    return results;
+  }
+
+  async updateProfile(updateProfile: any[]) {
+    const db: Client = await getAppDB();
+    return db.save(this.dbID, this.collection, updateProfile);
   }
 }
 

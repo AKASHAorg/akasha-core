@@ -38,6 +38,18 @@ const service: AkashaService = (invoke, log) => {
     return result.data;
   };
 
+  const searchTags = async (opt: { tagName: string }) => {
+    const query = `
+    query SearchTags($name: String!) {
+         searchTags(name: $name)
+       }`;
+    const result = await runGQL({
+      query: query,
+      variables: { name: opt.tagName },
+      operationName: 'SearchTags',
+    });
+    return result.data;
+  };
   const createTag = async (tagName: string) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
     const mutation = `
@@ -57,7 +69,11 @@ const service: AkashaService = (invoke, log) => {
     return result.data;
   };
 
-  return { getTag, tags, createTag };
+  const getTrending = async () => {
+    return searchTags({ tagName: '' });
+  };
+
+  return { getTag, tags, createTag, searchTags, getTrending };
 };
 
 export default { service, name: TAG_SERVICE };

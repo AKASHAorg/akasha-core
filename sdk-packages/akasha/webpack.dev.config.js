@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const HtmlWebpackPlugin = require("html-webpack-plugin");
 const name = require('./package.json').name;
 
 const { InjectManifest } = require('workbox-webpack-plugin');
@@ -47,6 +47,12 @@ const config = {
   },
   optimization: {
     moduleIds: 'deterministic',
+    chunkIds: 'named',
+    splitChunks: {
+      chunks: 'all',
+      minSize: 69000,
+      minChunks: 2,
+    },
   },
   plugins: [
     new webpack.EnvironmentPlugin({
@@ -65,18 +71,13 @@ const config = {
       Buffer: ['buffer', 'Buffer'],
       process: ['process'],
     }),
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: path.resolve(__dirname, '../../examples/ui/feed-app/public/template-index.html'),
-      inject: true,
-    }),
     new InjectManifest({
       swSrc: './lib/sw.js',
       swDest: 'sw.js',
       exclude: [/.*?/],
     }),
   ],
-  devtool: 'source-map',
+  devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'inline-source-map',
   mode: process.env.NODE_ENV || 'development',
   externals: [
     {

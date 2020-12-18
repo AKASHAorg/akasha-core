@@ -5,45 +5,41 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import menuRoute, { MY_PROFILE, rootRoute } from '../../routes';
 import MyProfilePage from './my-profile-page';
 import ProfilePage from './profile-page';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
+import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
+import { useLoginState, useModalState } from '@akashaproject/ui-awf-hooks';
 
 const { Box, LoginModal } = DS;
 
 const Routes: React.FC<RootComponentProps> = props => {
-  const { activeWhen } = props;
+  const { activeWhen, logger } = props;
   const { path } = activeWhen;
 
-  const [loginState, setLoginState] = React.useState<{ ethAddress?: string; token?: string }>({});
-  const [loginModalState, setLoginModalState] = React.useState(false);
-  const [modalOpen, setModalOpen] = React.useState(false);
+  const [loginState, loginActions] = useLoginState({
+    globalChannel: props.globalChannel,
+    authService: props.sdkModules.authService,
+    profileService: props.sdkModules.profiles.profileService,
+    ipfsService: props.sdkModules.commons.ipfsService,
+    cacheService: props.sdkModules.commons.cacheService,
+    onError: (errorInfo: IAkashaError) => {
+      logger.error(errorInfo.error.message, errorInfo.errorKey);
+    },
+  });
+  const [modalState, modalStateActions] = useModalState({
+    initialState: {
+      updateProfile: false,
+      changeUsername: false,
+      changeENS: false,
+    },
+    isLoggedIn: !!loginState.ethAddress,
+  });
 
   const { t } = useTranslation();
 
-  React.useEffect(() => {
-    if (loginState.ethAddress) {
-      setLoginModalState(false);
-      setModalOpen(true);
-    }
-  }, [loginState.ethAddress]);
-
-  const showLoginModal = () => {
-    setLoginModalState(true);
-  };
-
   const hideLoginModal = () => {
-    setLoginModalState(false);
+    modalStateActions.hide('loginModal');
   };
-
   const handleTutorialLinkClick = () => {
     /* goto tutorials */
-  };
-
-  const handleLogin = (providerId: number) => {
-    const call = props.sdkModules.auth.authService.signIn(providerId);
-    call.subscribe((res: any) => {
-      const { ethAddress, token } = res.data;
-      setLoginState({ ethAddress, token });
-    });
   };
 
   return (
@@ -52,25 +48,32 @@ const Routes: React.FC<RootComponentProps> = props => {
         <Switch>
           <Route path={`${rootRoute}/list`} render={() => <>A list of profiles</>} />
           <Route path={menuRoute[MY_PROFILE]}>
-            <MyProfilePage {...props} />
+            <MyProfilePage
+              {...props}
+              modalActions={modalStateActions}
+              modalState={modalState}
+              ethAddress={loginState.ethAddress}
+              profileData={loginState.profileData}
+              loginActions={loginActions}
+              profileUpdateStatus={loginState.updateStatus}
+            />
           </Route>
           <Route path={`${path}/:profileId`}>
             <ProfilePage
               {...props}
-              modalOpen={modalOpen}
               ethAddress={loginState.ethAddress}
-              onLogin={handleLogin}
-              setModalOpen={setModalOpen}
-              showLoginModal={showLoginModal}
+              onLogin={loginActions.login}
+              modalActions={modalStateActions}
+              modalState={modalState}
             />
           </Route>
           <Route render={() => <div>{t('Oops, Profile not found!')}</div>} />
         </Switch>
       </Box>
       <LoginModal
-        showModal={loginModalState}
+        showModal={modalState.loginModal}
         slotId={props.layout.app.modalSlotId}
-        onLogin={handleLogin}
+        onLogin={loginActions.login}
         onModalClose={hideLoginModal}
         tutorialLinkLabel={t('Tutorial')}
         metamaskModalHeadline={t('Connecting')}

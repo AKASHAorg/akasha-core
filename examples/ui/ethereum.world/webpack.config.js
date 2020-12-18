@@ -25,6 +25,7 @@ module.exports = Object.assign(baseConfig, {
     new CopyPlugin({
       patterns: [
         { from: path.resolve(__dirname, '../../../ui/build') },
+        { from: path.resolve(__dirname, '../../../sdk-packages/akasha/dist') },
         { from: path.resolve(__dirname, '../../../locales'), to: 'locales' },
       ],
     }),

@@ -1,12 +1,29 @@
+import { commentsStats, postsStats, statsProvider } from './constants';
+
 const query = {
   getProfile: async (_source, { ethAddress }, { dataSources }) => {
-    return await dataSources.profileAPI.getProfile(ethAddress);
+    const profileData = await dataSources.profileAPI.getProfile(ethAddress);
+    const totalPostsIndex = profileData.metaData.findIndex(
+      m => m.provider === statsProvider && m.property === postsStats,
+    );
+    const totalPosts = totalPostsIndex !== -1 ? profileData.metaData[totalPostsIndex].value : '0';
+    return Object.assign({}, profileData, { totalPosts });
   },
   resolveProfile: async (_source, { pubKey }, { dataSources }) => {
-    return await dataSources.profileAPI.resolveProfile(pubKey);
+    const profileData = await dataSources.profileAPI.resolveProfile(pubKey);
+    const totalPostsIndex = profileData.metaData.findIndex(
+      m => m.provider === statsProvider && m.property === postsStats,
+    );
+    const totalPosts = totalPostsIndex !== -1 ? profileData.metaData[totalPostsIndex].value : '0';
+    return Object.assign({}, profileData, { totalPosts });
   },
   getPost: async (_source, { id }, { dataSources }) => {
     const postData = await dataSources.postsAPI.getPost(id);
+    const totalCommentsIndex = postData.metaData.findIndex(
+      m => m.provider === statsProvider && m.property === commentsStats,
+    );
+    const totalComments =
+      totalCommentsIndex !== -1 ? postData.metaData[totalCommentsIndex].value : '0';
     if (postData && typeof postData.author === 'string') {
       const author = await dataSources.profileAPI.resolveProfile(postData.author);
       Object.assign(postData, { author });
@@ -20,11 +37,17 @@ const query = {
         Object.assign(quote, { author: resolvedAuthor });
       }
     }
-    return Object.assign({}, postData);
+    return Object.assign({}, postData, { totalComments });
   },
 
   getTag: async (_source, { name }, { dataSources }) => {
     return dataSources.tagsAPI.getTag(name);
+  },
+  searchTags: async (_source, { name }, { dataSources }) => {
+    return dataSources.tagsAPI.searchTags(name);
+  },
+  searchProfiles: async (_source, { name }, { dataSources }) => {
+    return dataSources.profileAPI.searchProfiles(name);
   },
   tags: async (_source, { limit, offset }, { dataSources }) => {
     return dataSources.tagsAPI.getTags(limit, offset);
@@ -35,6 +58,11 @@ const query = {
 
     for (const post of data.results) {
       const author = await dataSources.profileAPI.resolveProfile(post.author);
+      const totalCommentsIndex = post.metaData.findIndex(
+        m => m.provider === statsProvider && m.property === commentsStats,
+      );
+      const totalComments =
+        totalCommentsIndex !== -1 ? post.metaData[totalCommentsIndex].value : '0';
       if (post.quotes && post.quotes.length) {
         for (const quote of post.quotes) {
           if (typeof quote.author !== 'string') {
@@ -45,7 +73,7 @@ const query = {
         }
       }
 
-      results.push(Object.assign({}, post, { author }));
+      results.push(Object.assign({}, post, { author, totalComments }));
     }
     data.results = results;
     return data;
