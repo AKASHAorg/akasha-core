@@ -29,9 +29,10 @@ const ImageElement = ({ attributes, children, element }: any) => {
 };
 
 const MentionElement = ({ attributes, children, element }: any) => {
+  const mention = element.userName || element.ethAddress;
   return (
     <StyledMention {...attributes} contentEditable={false}>
-      @{element.value}
+      @{mention}
       {children}
     </StyledMention>
   );

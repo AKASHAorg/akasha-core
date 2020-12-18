@@ -30,7 +30,7 @@ const ShareModalComponent = () => {
       />
       {modalOpen && (
         <ShareModal
-          profileLink={text('Link', 'ethereum.world/gilbert')}
+          link={text('Link', 'ethereum.world/gilbert')}
           closeModal={() => setModalOpen(false)}
           copyLabel="Copy"
           shareTitleLabel="Share the profile"
