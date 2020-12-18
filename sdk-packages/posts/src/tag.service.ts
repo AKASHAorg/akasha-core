@@ -69,7 +69,11 @@ const service: AkashaService = (invoke, log) => {
     return result.data;
   };
 
-  return { getTag, tags, createTag, searchTags };
+  const getTrending = async () => {
+    return searchTags({ tagName: '' });
+  };
+
+  return { getTag, tags, createTag, searchTags, getTrending };
 };
 
 export default { service, name: TAG_SERVICE };

@@ -23,8 +23,6 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
   public state: {
     hasErrors: boolean;
     errorMessage: string;
-    ethAddress?: string;
-    token: string | null;
   };
   public showSidebarEvent = new CustomEvent('layout:showSidebar');
   public hideSidebarEvent = new CustomEvent('layout:hideSidebar');
@@ -35,9 +33,6 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
     this.state = {
       hasErrors: false,
       errorMessage: '',
-      // logged eth address
-      ethAddress: undefined,
-      token: null,
     };
   }
 
@@ -66,28 +61,6 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
       window.dispatchEvent(this.hideSidebarEvent);
     }
   };
-  public handleLogin = (provider: 2 | 3) => {
-    const call = this.props.sdkModules.auth.authService.signIn(provider);
-    call.subscribe(
-      (res: any) => {
-        const { ethAddress, token } = res.data;
-        this.setState({
-          ethAddress,
-          token,
-        });
-      },
-      (err: Error) => {
-        this.props.logger.error(err);
-        // @TODO: do something with this error
-      },
-    );
-  };
-  public handleGlobalLogin = (ethAddr: string, token: string) => {
-    this.setState({
-      token,
-      ethAddress: ethAddr,
-    });
-  };
   public render() {
     if (this.state.hasErrors) {
       return (
@@ -109,11 +82,8 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
                 navigateToUrl={this.props.singleSpa.navigateToUrl}
                 toggleSidebar={this.toggleSidebar}
                 getMenuItems={this.props.getMenuItems}
-                ethAddress={this.state.ethAddress}
                 loaderEvents={this.props.events}
                 modalSlotId={this.props.layout.app.modalSlotId}
-                onLogin={this.handleLogin}
-                onGlobalLogin={this.handleGlobalLogin}
                 globalChannel={this.props.globalChannel}
                 logger={this.props.logger}
                 sdkModules={this.props.sdkModules}

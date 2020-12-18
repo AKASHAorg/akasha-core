@@ -39,6 +39,15 @@ const createBaseComponent = (props: any) => (
     flaggable={true}
     onEntryFlag={() => null}
     getProfileProvidersData={props.getProfileProvidersData}
+    updateProfileLabel="Update Profile"
+    changeENSLabel="Update Ethereum Name"
+    onENSChangeClick={() => {
+      /* not empty block */
+    }}
+    onUpdateClick={() => {
+      /* not an empty block */
+    }}
+    hideENSButton={false}
   />
 );
 

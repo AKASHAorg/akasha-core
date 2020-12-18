@@ -112,12 +112,16 @@ class TagAPI extends DataSource {
     if (!tagID || !tagID.length) {
       return;
     }
-    await searchIndex.saveObject({
-      objectID: tagID[0],
-      name: tag.name,
-      creationDate: tag.creationDate,
-      category: 'tag',
-    });
+    searchIndex
+      .saveObject({
+        objectID: tagID[0],
+        name: tag.name,
+        creationDate: tag.creationDate,
+        category: 'tag',
+      })
+      .then(_ => _)
+      // tslint:disable-next-line:no-console
+      .catch(e => console.error(e));
     return tagID[0];
   }
 }

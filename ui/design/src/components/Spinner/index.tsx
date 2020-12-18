@@ -81,12 +81,13 @@ interface SpinnerProps {
   size?: number;
   /** speed (in seconds). ex: 1.2 or 2. @default 1.2 */
   speed?: number;
+  style?: React.CSSProperties;
 }
 
 const Spinner: React.FC<SpinnerProps> = props => {
   const { size = 50 } = props; // , speed = 1.2
   return (
-    <Wrapper minHeight={size}>
+    <Wrapper minHeight={size} style={props.style}>
       <StyledSpinner width={size} height={size} viewBox="0 0 66 66">
         <StyledCircle />
       </StyledSpinner>

@@ -1,4 +1,4 @@
-import { commentsStats, statsProvider } from './constants';
+import { commentsStats, postsStats, statsProvider } from './constants';
 
 const mutations = {
   addProfileProvider: async (_, { data }, { dataSources, user }) => {
@@ -29,7 +29,31 @@ const mutations = {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
+    const profile = await dataSources.profileAPI.resolveProfile(user.pubKey, true);
+    if (!profile.length) {
+      return Promise.reject('[Must be authenticated! Profile not found!]');
+    }
+    const profileData = profile[0];
     const postID = await dataSources.postsAPI.createPost(user.pubKey, content, post);
+    if (postID?.length) {
+      const totalPostsIndex = profileData.metaData.findIndex(
+        m => m.provider === statsProvider && m.property === postsStats,
+      );
+      if (totalPostsIndex !== -1) {
+        profileData.metaData[totalPostsIndex].value =
+          +profileData.metaData[totalPostsIndex].value + 1;
+        profileData.metaData[totalPostsIndex].value = profileData.metaData[
+          totalPostsIndex
+        ].value.toString();
+      } else {
+        profileData.metaData.push({
+          provider: statsProvider,
+          property: postsStats,
+          value: '1',
+        });
+      }
+      await dataSources.profileAPI.updateProfile([profileData]);
+    }
     if (post.tags && post.tags.length) {
       for (const tag of post.tags) {
         await dataSources.tagsAPI.indexPost('Posts', postID[0], tag);

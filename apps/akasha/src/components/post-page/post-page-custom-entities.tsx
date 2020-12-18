@@ -103,7 +103,7 @@ export const getPostPageCustomEntities = (props: IGetCustomEntitiesProps) => {
         </Box>
         {!loggedEthAddress && (
           <Box margin="medium">
-            <EditorPlaceholder onClick={showLoginModal} />
+            <EditorPlaceholder onClick={showLoginModal} ethAddress={null} />
           </Box>
         )}
         {loggedEthAddress && (
