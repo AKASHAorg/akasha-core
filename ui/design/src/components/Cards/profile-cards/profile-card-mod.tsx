@@ -16,7 +16,7 @@ export interface IProfileCardModProps extends IProfileWidgetCard {
   canUserEdit?: boolean;
   onChangeProfileData: (newProfileData: any) => void;
   editProfileLabel?: string;
-  changeCoverImageLabel?: string;
+  changeCoverImageLabel: string;
   onEntryFlag: () => void;
   getProfileProvidersData: () => void;
 }
@@ -31,7 +31,9 @@ const ProfileCardMod: React.FC<IProfileCardModProps> = props => {
     actionsLabel,
     followingLabel,
     usersLabel,
+    shareProfileLabel,
     appsLabel,
+    changeCoverImageLabel,
   } = props;
 
   const leftTitle = profileData.following ? profileData.following : profileData.users;
@@ -59,12 +61,13 @@ const ProfileCardMod: React.FC<IProfileCardModProps> = props => {
   return (
     <MainAreaCardBox className={className}>
       <ProfileCardCoverImage
+        shareProfileLabel={shareProfileLabel}
+        changeCoverImageLabel={changeCoverImageLabel}
         editable={false}
         coverImage={coverImage}
         handleChangeCoverImage={() => null}
         coverImagePopoverOpen={false}
         setCoverImagePopoverOpen={() => null}
-        handleEditClick={() => null}
         handleShareClick={() => null}
       />
       <Box

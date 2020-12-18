@@ -31,7 +31,7 @@ const ProfilePage = (props: ProfilePageProps) => {
       profileActions.getProfileData({ ethAddress: profileId });
     }
   }, [profileId]);
-  console.log(profileState, 'profile state');
+
   return (
     <Box fill="horizontal">
       <Helmet>

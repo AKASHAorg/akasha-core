@@ -16,7 +16,7 @@ const Routes: React.FC<RootComponentProps> = props => {
 
   const [loginState, loginActions] = useLoginState({
     globalChannel: props.globalChannel,
-    authService: props.sdkModules.authService,
+    authService: props.sdkModules.auth.authService,
     profileService: props.sdkModules.profiles.profileService,
     ipfsService: props.sdkModules.commons.ipfsService,
     cacheService: props.sdkModules.commons.cacheService,
@@ -29,6 +29,7 @@ const Routes: React.FC<RootComponentProps> = props => {
       updateProfile: false,
       changeUsername: false,
       changeENS: false,
+      reportModal: false,
     },
     isLoggedIn: !!loginState.ethAddress,
   });

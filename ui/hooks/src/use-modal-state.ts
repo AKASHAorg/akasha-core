@@ -54,17 +54,22 @@ const useModalState = (props: UseModalStateProps): [ModalState, ModalStateAction
   const actions: ModalStateActions = {
     show: modalKey => setModalState(prevState => ({ ...prevState, [modalKey]: true })),
     showAfterLogin: modalKey => {
-      setModalQueue(prev => {
-        if (prev.indexOf(modalKey) > -1) {
-          handleErrors({
-            errorKey: 'useModalState.showAfterLogin',
-            error: new Error(`modalKey ${modalKey} already in queue`),
-            critical: false,
-          });
-          return prev;
-        }
-        return [...prev, modalKey];
-      });
+      if (props.isLoggedIn) {
+        setModalState(prevState => ({ ...prevState, [modalKey]: true }));
+      } else {
+        setModalQueue(prev => {
+          if (prev.indexOf(modalKey) > -1) {
+            handleErrors({
+              errorKey: 'useModalState.showAfterLogin',
+              error: new Error(`modalKey ${modalKey} already in queue`),
+              critical: false,
+            });
+            return prev;
+          }
+          return [...prev, modalKey];
+        });
+        setModalState(prevState => ({ ...prevState, loginModal: true }));
+      }
     },
     hide: modalKey => setModalState(prevState => ({ ...prevState, [modalKey]: false })),
   };
