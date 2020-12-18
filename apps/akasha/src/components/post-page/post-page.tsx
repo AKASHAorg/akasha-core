@@ -169,7 +169,7 @@ const PostPage: React.FC<IPostPage> = props => {
     });
   }, [postId]);
 
-  const isBookmarked = false;
+  const bookmarked = false;
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
     navigateToUrl(`/profile/${authorEth}`);
     ev.preventDefault();
@@ -329,7 +329,7 @@ const PostPage: React.FC<IPostPage> = props => {
             border={{ side: 'bottom', size: '1px', color: 'border' }}
           >
             <EntryBox
-              isBookmarked={isBookmarked}
+              isBookmarked={bookmarked}
               entryData={entryData}
               sharePostLabel={t('Share Post')}
               shareTextLabel={t('Share this post with your friends')}

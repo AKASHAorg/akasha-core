@@ -40,9 +40,9 @@ const ShareModal: React.FC<IShareModal> = props => {
     closeModal();
   };
 
-  const handleShareSocial = (link: string) => () => {
+  const handleShareSocial = (url: string) => () => {
     // @TODO: add logic for social sharing
-    window.open(link, '_blank');
+    window.open(url, '_blank');
     closeModal();
   };
 
