@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
-import PostPage from './post-page';
+import PostPage from './post-page/post-page';
 import PostsList from './posts-list';
 
 export interface PostsPageProps {

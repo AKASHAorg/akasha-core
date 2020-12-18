@@ -210,6 +210,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
       const beforeRange = before && Editor.range(editor, before, start);
       const beforeText = beforeRange && Editor.string(editor, beforeRange);
       const beforeMentionMatch = beforeText && beforeText.match(/^@(\w+)$/);
+      // todo: proper matching
       const beforeTagMatch = beforeText && beforeText.match(/^#([a-z0-9]*)(\-?|.?)([a-z0-9]*)$/);
       const after = Editor.after(editor, start);
       const afterRange = Editor.range(editor, start, after);
@@ -223,9 +224,10 @@ const EditorBox: React.FC<IEditorBox> = props => {
         return;
       }
       if (beforeTagMatch && afterMatch && beforeRange) {
+        const tagName = beforeTagMatch[1].concat(beforeTagMatch[2], beforeTagMatch[3]);
         setTagTargetRange(beforeRange);
-        getTags(beforeTagMatch[1]);
-        setCreateTag(beforeTagMatch[1]);
+        getTags(tagName);
+        setCreateTag(tagName);
         setIndex(0);
         return;
       }
@@ -292,7 +294,6 @@ const EditorBox: React.FC<IEditorBox> = props => {
       for (const hotkey in HOTKEYS) {
         if (isHotkey(hotkey, event)) {
           event.preventDefault();
-          event.stopPropagation();
           const mark = HOTKEYS[hotkey];
           CustomEditor.toggleFormat(editor, mark);
         }

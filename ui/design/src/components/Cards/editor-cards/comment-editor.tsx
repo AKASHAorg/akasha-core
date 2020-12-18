@@ -27,6 +27,10 @@ const CommentEditor: React.FC<IEditorBox> = props => {
       setShowEditor(false);
     }
   };
+  const handlePublish = (data: any) => {
+    onPublish(data);
+    setShowEditor(false);
+  };
 
   useSimpleClickAway(wrapperRef, handleClickAway);
 
@@ -52,7 +56,7 @@ const CommentEditor: React.FC<IEditorBox> = props => {
             ethAddress={ethAddress}
             postLabel={postLabel}
             placeholderLabel={placeholderLabel}
-            onPublish={onPublish}
+            onPublish={handlePublish}
             getMentions={getMentions}
             getTags={getTags}
             mentions={mentions}

@@ -52,6 +52,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const {
     isMobile,
     flagged,
+    navigateToUrl,
     reportModalOpen,
     setFlagged,
     setReportModalOpen,
@@ -143,7 +144,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
-    props.singleSpa.navigateToUrl(`/profile/${authorEth}`);
+    navigateToUrl(`/profile/${authorEth}`);
     ev.preventDefault();
   };
   const handleEntryBookmark = (entryId: string) => {
@@ -204,14 +205,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [tags, setTags] = React.useState([]);
 
   const handleGetTags = (query: string) => {
-    const tagsService = sdkModules.posts.tags.getTags({ fields: ['name'], limit: 100000 });
+    const tagsService = sdkModules.posts.tags.searchTags({ tagName: query });
     tagsService.subscribe((resp: any) => {
-      if (resp.data?.tags?.results && resp.data?.tags?.results.length) {
-        const filteredTags = resp.data.tags.results
-          .map((tag: { name: string }) => tag.name)
-          .filter((c: string) => c.toLowerCase().startsWith(query.toLowerCase()))
-          .slice(0, 10);
-
+      if (resp.data?.searchTags) {
+        const filteredTags = resp.data.searchTags;
         setTags(filteredTags);
       }
     });
@@ -389,13 +386,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           </ErrorInfoCard>
         )}
         customEntities={getFeedCustomEntities({
-          t,
-          locale,
           isMobile,
           feedItems: feedState.feedItems,
           loggedEthAddress: ethAddress,
-          onAvatarClick: handleAvatarClick,
-          onContentClick: handleNavigateToPost,
           handleEditorPlaceholderClick: handleToggleEditor,
         })}
       />

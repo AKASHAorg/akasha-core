@@ -40,7 +40,7 @@ const service: AkashaService = (invoke, log) => {
 
   const searchTags = async (opt: { tagName: string }) => {
     const query = `
-    query SearchTags($name: String) {
+    query SearchTags($name: String!) {
          searchTags(name: $name)
        }`;
     const result = await runGQL({
