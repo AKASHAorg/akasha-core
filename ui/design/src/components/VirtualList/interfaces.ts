@@ -91,7 +91,7 @@ export interface IRenderItemProps {
   itemId: string;
   itemData?: any;
   loadItemData: IVirtualListProps['loadItemData'];
-  onSizeChange: (itemId: string, rect: Rect) => void;
+  onSizeChange: (itemId: string, rect: { top: number; height: number }) => void;
   itemSpacing: IVirtualListProps['itemSpacing'];
   customEntities: IListCustomEntity[];
   itemCard: IVirtualListProps['itemCard'];

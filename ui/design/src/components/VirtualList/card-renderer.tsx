@@ -48,8 +48,7 @@ const CardRenderer = (props: IRenderItemProps) => {
         const height = itemRef.current.getBoundingClientRect().height;
         if (height !== itemRect.height) {
           const clientRect = itemRef.current.getBoundingClientRect();
-          const { top, height } = clientRect;
-          onSizeChange(itemId, new Rect({ height, top }));
+          onSizeChange(itemId, { height: clientRect.height, top: clientRect.top });
         }
       }
     }

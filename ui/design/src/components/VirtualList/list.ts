@@ -113,7 +113,7 @@ class ListEngine {
   initCoordinatesFor(ids: string[], startAtIdx: number, position?: 'top') {
     const slice = ids.slice(startAtIdx, ids.length);
     // const coords = {};
-    for (let [idx, id] of slice.entries()) {
+    for (const [idx, id] of slice.entries()) {
       const prevRect = this.coords[this.items[idx - 1]];
       let rect;
       if (position !== 'top' && prevRect) {
@@ -343,7 +343,7 @@ class ListEngine {
       Object.entries(data.coords).forEach(([key, rect]) => {
         this.totalItemsHeight += rect.height /* + this.config.spacing */;
         this.updateCoords(key, rect);
-        this.update('UPDATE_COORDINATE', { id: key, rect });
+        this.update('UPDATE_COORDINATE', { rect, id: key });
       });
     }
 
