@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { isIntersecting } from '../../utils/virtual-list';
 import ListEngine, { UpdatePayload } from './list';
-import Rect from './rect-obj';
 
 export interface UseVirtualScrollProps {
   avgItemHeight: number;
   spacing: number;
   items: string[];
   slice: [number, number];
-  coords?: { [key: string]: Rect };
+  coords?: { [key: string]: { top: number; height: number } };
   startId?: string;
   offsetItems: number;
   loadMore: (payload: any) => void;
@@ -71,8 +70,6 @@ const useVirtualScroll = (props: UseVirtualScrollProps) => {
     slice,
     totalItemsHeight: 0,
     coordinates: {},
-    // scheduled operations
-    // make fetch operations ASAP
     fetchOp: {},
   });
 

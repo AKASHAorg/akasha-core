@@ -1,5 +1,3 @@
-import Rect from './rect-obj';
-
 export interface IFetchOperation {
   startId: string;
   size: number;
@@ -95,7 +93,7 @@ export interface IRenderItemProps {
   itemSpacing: IVirtualListProps['itemSpacing'];
   customEntities: IListCustomEntity[];
   itemCard: IVirtualListProps['itemCard'];
-  coordinates: Map<string, Rect>;
+  coordinates: { [key: string]: { top: number; height: number } };
 }
 
 export type SetSliceOperationType = React.Dispatch<React.SetStateAction<ISliceOperation>>;

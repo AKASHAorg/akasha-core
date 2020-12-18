@@ -1,6 +1,5 @@
 import React from 'react';
 import { IRenderItemProps } from './interfaces';
-import Rect from './rect-obj';
 import { useResizeObserver } from './use-resize-observer';
 
 const CardRenderer = (props: IRenderItemProps) => {
@@ -16,9 +15,7 @@ const CardRenderer = (props: IRenderItemProps) => {
   } = props;
 
   const itemRef = React.useRef<HTMLDivElement | null>(null);
-
-  const itemRect: Rect = coordinates[itemId];
-  // itemRect.addResizeListener(() => {});
+  const itemRect: { top: number; height: number } = coordinates[itemId];
 
   const beforeEntities = customEntities.filter(
     entityObj => entityObj.position === 'before' && entityObj.itemId === itemId,
@@ -31,13 +28,7 @@ const CardRenderer = (props: IRenderItemProps) => {
     const contentRect = entries[0].contentRect;
     if (itemRect && itemRef.current) {
       if (contentRect.height !== itemRect.height) {
-        onSizeChange(
-          itemId,
-          new Rect({
-            height: contentRect.height,
-            top: contentRect.top,
-          }),
-        );
+        onSizeChange(itemId, { height: contentRect.height, top: contentRect.top });
       }
     }
   });
@@ -45,9 +36,8 @@ const CardRenderer = (props: IRenderItemProps) => {
   React.useEffect(() => {
     if (itemRef.current) {
       if (itemRect) {
-        const height = itemRef.current.getBoundingClientRect().height;
-        if (height !== itemRect.height) {
-          const clientRect = itemRef.current.getBoundingClientRect();
+        const clientRect = itemRef.current.getBoundingClientRect();
+        if (clientRect.height !== itemRect.height) {
           onSizeChange(itemId, { height: clientRect.height, top: clientRect.top });
         }
       }
@@ -66,6 +56,7 @@ const CardRenderer = (props: IRenderItemProps) => {
 
   return (
     <div
+      key={itemId}
       ref={itemRef}
       className={`entry-${itemId}`}
       data-item-id={itemId}

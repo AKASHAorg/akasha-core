@@ -1,5 +1,4 @@
 import throttle from 'lodash.throttle';
-import Rect from './rect-obj';
 import Viewport from './viewport';
 import { isIntersecting } from '../../utils/virtual-list';
 
@@ -35,8 +34,8 @@ export type UpdatePayload =
   | { type: 'SLICE_CHANGE'; payload: any }
   | { type: 'RECT_UPDATE'; payload: any }
   | { type: 'SET_TOTAL_ITEMS_HEIGHT'; payload: number }
-  | { type: 'SET_COORDINATES'; payload: { [key: string]: Rect } }
-  | { type: 'UPDATE_COORDINATE'; payload: { id: string; rect: Rect } }
+  | { type: 'SET_COORDINATES'; payload: { [key: string]: { top: number; height: number } } }
+  | { type: 'UPDATE_COORDINATE'; payload: { id: string; rect: { top: number; height: number } } }
   | { type: 'SET_SLICE'; payload: { slice: [number, number]; paddingTop: number } }
   | { type: 'CREATE_FETCH_OP'; payload: { req: any; status: string } }
   | { type: 'SET_FETCH_OP'; payload: { req: any; status: string } }
@@ -135,7 +134,7 @@ class ListEngine {
     }
   }
   /**
-   * logic when an item rect changes it's dimensions
+   * logic when an item changes it's dimensions
    *
    */
   updateItemRect(itemId: string, rect: { top: number; height: number }) {
@@ -144,6 +143,7 @@ class ListEngine {
     let updatedIdx = -1;
     // update first item
     if (isFirstItem) {
+      console.log('first item is updating to', rect, 'from', itemRect);
       if (itemRect.height !== rect.height) {
         const newRect = Object.assign({}, itemRect, {
           top: this.config.spacing,
@@ -172,14 +172,17 @@ class ListEngine {
     // update all elements below the currently updated item
     // warning: do not block these updates!
     if (updatedIdx >= 0) {
-      this.items.slice(updatedIdx + 1).forEach(id => {
-        const prevCoords = this.coords[this.items[this.items.indexOf(id) - 1]];
-        const itemCoord = this.coords[id];
-        const rectWithDelta = Object.assign({}, itemCoord, {
-          top: prevCoords.top + prevCoords.height + this.config.spacing,
-        });
-        this.coords = Object.assign({}, this.coords, { [id]: rectWithDelta });
-        this.update('UPDATE_COORDINATE', { id, rect: rectWithDelta });
+      this.items.slice(updatedIdx).forEach(id => {
+        const isFirst = id === this.items[0];
+        if (!isFirst) {
+          const prevCoords = this.coords[this.items[this.items.indexOf(id) - 1]];
+          const itemCoord = this.coords[id];
+          const rectWithDelta = Object.assign({}, itemCoord, {
+            top: prevCoords.top + prevCoords.height + this.config.spacing,
+          });
+          this.coords = Object.assign({}, this.coords, { [id]: rectWithDelta });
+          this.update('UPDATE_COORDINATE', { id, rect: rectWithDelta });
+        }
       });
     }
 
@@ -189,6 +192,7 @@ class ListEngine {
 
     this.updateAverageItemHeight(rect.height);
     this.update('SET_TOTAL_ITEMS_HEIGHT', this.totalItemsHeight);
+    this.computeSlice(this.getFirstIntersectingId());
   }
   update(type: string, payload: any) {
     if (this.updateCb) {
@@ -251,6 +255,9 @@ class ListEngine {
         return isIntersecting(this.coords[id], this.viewport.getRect());
       });
     }
+    if (!intersectingId) {
+      return this.items[this.slice[0]];
+    }
     return intersectingId;
   }
   onAtStart() {
@@ -299,6 +306,7 @@ class ListEngine {
     this.scrollDir = this.lastScrollTop > scrollTop ? 'up' : 'down';
     const scrollingPosition = this.getScrollingPosition(clientHeight, scrollTop);
     this.firstItemId = this.getFirstIntersectingId() || this.firstItemId;
+
     if (scrollingPosition.atStart) {
       this.onAtStart();
     }

@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import {
-  ILoadItemDataPayload,
-  ILoadItemsPayload,
-} from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
+import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { useFeedReducer, useEntryBookmark } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';

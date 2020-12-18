@@ -1,7 +1,6 @@
 import * as React from 'react';
 import CardRenderer from './card-renderer';
 import { IRenderItemProps, IVirtualListProps } from './interfaces';
-import Rect from './rect-obj';
 import Spinner from '../Spinner';
 
 export interface IListViewportProps {
@@ -11,7 +10,7 @@ export interface IListViewportProps {
   itemCard: React.ReactElement;
   onSizeChange: IRenderItemProps['onSizeChange'];
   loadItemData: IVirtualListProps['loadItemData'];
-  coordinates: Map<string, Rect>;
+  coordinates: { [key: string]: { top: number; height: number } };
   itemSpacing: number;
   slice: [number, number];
   customEntities?: IVirtualListProps['customEntities'];

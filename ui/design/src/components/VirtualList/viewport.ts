@@ -1,5 +1,4 @@
 import throttle from 'lodash.throttle';
-import Rect from './rect-obj';
 
 class Viewport {
   public offsetTop: number;
@@ -61,7 +60,7 @@ class Viewport {
   }
 
   getRect() {
-    return new Rect({ height: this.getHeight(), top: this.getScrollTop() });
+    return { height: this.getHeight(), top: this.getScrollTop() };
   }
 
   scrollBy(y: number) {
