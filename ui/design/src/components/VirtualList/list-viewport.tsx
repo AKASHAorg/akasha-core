@@ -32,7 +32,7 @@ const ListViewport: React.FC<IListViewportProps> = props => {
   const itemsToRender = items.slice(...slice);
   return (
     <>
-      {itemsToRender.map((itemId: string) => {
+      {itemsToRender.map(itemId => {
         let itemKey = itemId;
         const itemData = itemsData[itemId];
         if (itemData && itemData.version) {

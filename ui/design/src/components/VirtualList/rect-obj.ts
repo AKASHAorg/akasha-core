@@ -2,10 +2,10 @@ class Rect {
   public top: number;
   public height: number;
   public resizeListeners: (() => void)[];
-  constructor({ top, height }: { top: number; height: number }) {
+  constructor({ top, height }: { top: number; height: number }, listeners?: any[]) {
     this.top = top;
     this.height = height;
-    this.resizeListeners = [];
+    this.resizeListeners = listeners || [];
   }
   addResizeListener(listener: () => void) {
     if (this.resizeListeners.indexOf(listener) < 0) {
@@ -49,7 +49,7 @@ class Rect {
     if (height) {
       this.height = height;
     }
-    return new Rect({ top: this.top, height: this.height });
+    return new Rect({ top: this.top, height: this.height }, this.resizeListeners);
   }
 }
 

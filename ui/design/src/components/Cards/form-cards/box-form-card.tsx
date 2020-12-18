@@ -46,7 +46,6 @@ export interface IImageSrc {
   isUrl: boolean;
 }
 export interface IBoxData {
-  // providerName: string;
   avatar?: string | IImageSrc;
   coverImage?: string | IImageSrc;
   name?: string;

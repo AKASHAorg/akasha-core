@@ -1,6 +1,7 @@
 import throttle from 'lodash.throttle';
 import Rect from './rect-obj';
 import Viewport from './viewport';
+import { isIntersecting } from '../../utils/virtual-list';
 
 interface ListEngineData {
   /**
@@ -18,7 +19,7 @@ interface ListEngineData {
    * @key K => itemId
    * @value V => { top: number, height: number }
    */
-  coords: Map<string, Rect>;
+  coords: { [key: string]: { top: number; height: number } };
   onUpdate?: (type: string, payload: UpdatePayload) => void;
   /**
    * padding top
@@ -34,7 +35,8 @@ export type UpdatePayload =
   | { type: 'SLICE_CHANGE'; payload: any }
   | { type: 'RECT_UPDATE'; payload: any }
   | { type: 'SET_TOTAL_ITEMS_HEIGHT'; payload: number }
-  | { type: 'SET_COORDINATES'; payload: Map<string, Rect> }
+  | { type: 'SET_COORDINATES'; payload: { [key: string]: Rect } }
+  | { type: 'UPDATE_COORDINATE'; payload: { id: string; rect: Rect } }
   | { type: 'SET_SLICE'; payload: { slice: [number, number]; paddingTop: number } }
   | { type: 'CREATE_FETCH_OP'; payload: { req: any; status: string } }
   | { type: 'SET_FETCH_OP'; payload: { req: any; status: string } }
@@ -77,7 +79,7 @@ class ListEngine {
     const { avgItemHeight = 200, spacing = 8, offsetItems, startId, slice, hasMoreItems } = config;
     this.items = [];
     this.slice = slice;
-    this.coords = new Map();
+    this.coords = {};
     this.totalItemsHeight = 0;
     this.config = {
       avgItemHeight,
@@ -100,84 +102,93 @@ class ListEngine {
       startIdx = 0;
       this.items.unshift(...items);
     } else {
-      startIdx = this.items.length - 1;
+      startIdx = this.items.length;
       this.items = this.items.concat(items);
     }
-    this.initCoordinatesFor(items, startIdx, position);
+    this.initCoordinatesFor(this.items, startIdx, position);
+  }
+  updateCoords(key: string, rect: { top: number; height: number }) {
+    this.coords = { ...this.coords, ...{ [key]: rect } };
   }
   initCoordinatesFor(ids: string[], startAtIdx: number, position?: 'top') {
-    let prevRect = this.coords.get(this.items[startAtIdx]);
-    ids.forEach((id, idx) => {
+    const slice = ids.slice(startAtIdx, ids.length);
+    // const coords = {};
+    for (let [idx, id] of slice.entries()) {
+      const prevRect = this.coords[this.items[idx - 1]];
       let rect;
       if (position !== 'top' && prevRect) {
-        rect = prevRect.translateY(prevRect.height + this.config.spacing);
+        if (prevRect) {
+          rect = Object.assign({}, prevRect, { top: prevRect.top + prevRect.height });
+        } else {
+          rect = { top: idx * this.config.avgItemHeight, height: this.config.avgItemHeight };
+        }
       } else {
-        rect = new Rect({
-          top: idx * this.config.avgItemHeight + this.config.spacing,
+        rect = {
+          top: idx * this.config.avgItemHeight,
           height: this.config.avgItemHeight,
-        });
+        };
       }
       this.totalItemsHeight += rect.height;
-      this.coords.set(id, rect);
+      this.coords = Object.assign({}, this.coords, { [id]: rect });
+      this.update('SET_TOTAL_ITEMS_HEIGHT', this.totalItemsHeight);
       this.update('SET_COORDINATES', this.coords);
-      prevRect = rect;
-    });
+    }
   }
-  updateItemRect(itemId: string, rect: Rect) {
-    const itemRect = this.coords.get(itemId) as Rect;
+  /**
+   * logic when an item rect changes it's dimensions
+   *
+   */
+  updateItemRect(itemId: string, rect: { top: number; height: number }) {
+    const itemRect = this.coords[itemId] as { top: number; height: number };
     const isFirstItem = this.items.indexOf(itemId) === 0;
     let updatedIdx = -1;
-    let updatedDelta = 0;
+    // update first item
     if (isFirstItem) {
       if (itemRect.height !== rect.height) {
-        const newRect = new Rect({
-          height: rect.height,
+        const newRect = Object.assign({}, itemRect, {
           top: this.config.spacing,
+          height: rect.height,
         });
-        this.coords.set(itemId, newRect);
+        // this.updateCoords(itemId, newRect);
+        this.coords = Object.assign({}, this.coords, { [itemId]: newRect });
+        this.update('SET_COORDINATES', this.coords);
         updatedIdx = 0;
-        updatedDelta = itemRect.height - rect.height;
-      }
-    } else {
-      const prevRect = this.coords.get(this.items[this.items.indexOf(itemId) - 1]);
-      if (prevRect) {
-        if (!itemRect) {
-          this.coords.set(
-            itemId,
-            new Rect({
-              height: rect.height,
-              top: prevRect.top + prevRect.height + this.config.spacing,
-            }),
-          );
-        }
-        if (itemRect && itemRect.height !== rect.height) {
-          let newRect = new Rect({ ...rect });
-          newRect = newRect.update({
-            top: prevRect.top + prevRect.height + this.config.spacing,
-          });
-          updatedDelta = itemRect.top - newRect.top + itemRect.height - newRect.height;
-          updatedIdx = this.items.indexOf(itemId);
-          this.coords.set(itemId, newRect);
-        }
       }
     }
-    if (updatedIdx >= 0 && updatedDelta !== 0) {
+    // update the element
+    if (!isFirstItem) {
+      if (itemRect.height !== rect.height) {
+        const prevCoords = this.coords[this.items[this.items.indexOf(itemId) - 1]];
+        const newTop = prevCoords.top + prevCoords.height + this.config.spacing;
+        const newRect = Object.assign({}, itemRect, {
+          height: rect.height,
+          top: newTop,
+        });
+        this.coords = Object.assign({}, this.coords, { [itemId]: newRect });
+        this.update('SET_COORDINATES', this.coords);
+        updatedIdx = this.items.indexOf(itemId);
+      }
+    }
+    // update all elements below the currently updated item
+    // warning: do not block these updates!
+    if (updatedIdx >= 0) {
       this.items.slice(updatedIdx + 1).forEach(id => {
-        const itemCoord = this.coords.get(id);
-        if (itemCoord) {
-          const rectWithDelta = itemCoord.update({
-            top: itemCoord.top + -1 * updatedDelta,
-          });
-          this.coords.set(id, rectWithDelta);
-        }
+        const prevCoords = this.coords[this.items[this.items.indexOf(id) - 1]];
+        const itemCoord = this.coords[id];
+        const rectWithDelta = Object.assign({}, itemCoord, {
+          top: prevCoords.top + prevCoords.height + this.config.spacing,
+        });
+        this.coords = Object.assign({}, this.coords, { [id]: rectWithDelta });
+        this.update('UPDATE_COORDINATE', { id, rect: rectWithDelta });
       });
     }
+
     if (itemRect) {
       this.totalItemsHeight = this.totalItemsHeight - itemRect.height + rect.height;
     }
+
     this.updateAverageItemHeight(rect.height);
     this.update('SET_TOTAL_ITEMS_HEIGHT', this.totalItemsHeight);
-    this.update('SET_COORDINATES', this.coords);
   }
   update(type: string, payload: any) {
     if (this.updateCb) {
@@ -202,9 +213,9 @@ class ListEngine {
   }
   getBottomSlice(startIdx: number) {
     const id = this.items.slice(startIdx).find(itemId => {
-      const coord = this.coords.get(itemId);
+      const coord = this.coords[itemId];
       if (coord) {
-        return coord.getBottom() >= this.viewport.getBottom();
+        return coord.top + coord.height >= this.viewport.getBottom();
       }
       return false;
     });
@@ -233,11 +244,11 @@ class ListEngine {
         .slice(0, this.slice[0])
         .reverse()
         .find(id => {
-          return this.coords.get(id)?.isIntersectingWith(this.viewport.getRect());
+          return isIntersecting(this.coords[id], this.viewport.getRect());
         });
     } else {
       intersectingId = this.items.slice(this.slice[1], this.items.length).find(id => {
-        return this.coords.get(id)?.isIntersectingWith(this.viewport.getRect());
+        return isIntersecting(this.coords[id], this.viewport.getRect());
       });
     }
     return intersectingId;
@@ -328,11 +339,11 @@ class ListEngine {
     const tScroll = throttle(this.onScroll, 100, { leading: true, trailing: false });
     const scrollUnlistener = this.viewport.addScrollListener(tScroll.bind(this));
 
-    if (data.coords) {
-      data.coords.forEach((rect, key) => {
-        const itemRect = new Rect(rect);
-        this.totalItemsHeight += itemRect.height + this.config.spacing;
-        this.coords.set(key, itemRect);
+    if (data.coords.size) {
+      Object.entries(data.coords).forEach(([key, rect]) => {
+        this.totalItemsHeight += rect.height /* + this.config.spacing */;
+        this.updateCoords(key, rect);
+        this.update('UPDATE_COORDINATE', { id: key, rect });
       });
     }
 

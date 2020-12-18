@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { isIntersecting } from '../../utils/virtual-list';
 import ListEngine, { UpdatePayload } from './list';
 import Rect from './rect-obj';
 
@@ -7,7 +8,7 @@ export interface UseVirtualScrollProps {
   spacing: number;
   items: string[];
   slice: [number, number];
-  coords?: Map<string, Rect>;
+  coords?: { [key: string]: Rect };
   startId?: string;
   offsetItems: number;
   loadMore: (payload: any) => void;
@@ -28,6 +29,11 @@ const reducer = (state: any, action: UpdatePayload) => {
       return {
         ...state,
         coordinates: action.payload,
+      };
+    case 'UPDATE_COORDINATE':
+      return {
+        ...state,
+        coordinates: { ...state.coordinates, ...{ [action.payload.id]: action.payload.rect } },
       };
     case 'SET_SLICE':
       return {
@@ -64,7 +70,7 @@ const useVirtualScroll = (props: UseVirtualScrollProps) => {
   const [state, dispatch] = React.useReducer(reducer, {
     slice,
     totalItemsHeight: 0,
-    coordinates: new Map(),
+    coordinates: {},
     // scheduled operations
     // make fetch operations ASAP
     fetchOp: {},
@@ -84,8 +90,10 @@ const useVirtualScroll = (props: UseVirtualScrollProps) => {
     const unlisteners = listEngine.current.init({
       items,
       slice: props.slice || [0, Math.max(0, props.items.length - 1)],
-      coords: props.coords || new Map(),
-      onUpdate: (type: any, payload) => dispatch({ type, payload }),
+      coords: props.coords || {},
+      onUpdate: (type: any, payload) => {
+        dispatch({ type, payload });
+      },
     });
     return () => {
       unlisteners.forEach(unlistener => {
@@ -94,7 +102,7 @@ const useVirtualScroll = (props: UseVirtualScrollProps) => {
     };
   }, []);
   const handlers = {
-    onItemSizeUpdate: (itemId: string, size: Rect) => {
+    onItemSizeUpdate: (itemId: string, size: { top: number; height: number }) => {
       listEngine.current.updateItemRect(itemId, size);
     },
     setHasMoreItems: (hasMore: boolean) => {
@@ -136,9 +144,9 @@ const useVirtualScroll = (props: UseVirtualScrollProps) => {
         }
       }
       const intersectingCoord = listEngine.current.items.slice(slice[0]).find(id => {
-        const coord = listEngine.current.coords.get(id);
+        const coord = listEngine.current.coords[id];
         if (coord) {
-          return coord.isIntersectingWith(listEngine.current.viewport.getRect());
+          return isIntersecting(coord, listEngine.current.viewport.getRect());
         }
         return false;
       });

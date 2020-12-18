@@ -1,8 +1,9 @@
 import React from 'react';
 import { IRenderItemProps } from './interfaces';
+import Rect from './rect-obj';
 import { useResizeObserver } from './use-resize-observer';
 
-const CardRenderer = React.memo((props: IRenderItemProps) => {
+const CardRenderer = (props: IRenderItemProps) => {
   const {
     itemId,
     itemData,
@@ -16,6 +17,9 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
 
   const itemRef = React.useRef<HTMLDivElement | null>(null);
 
+  const itemRect: Rect = coordinates[itemId];
+  // itemRect.addResizeListener(() => {});
+
   const beforeEntities = customEntities.filter(
     entityObj => entityObj.position === 'before' && entityObj.itemId === itemId,
   );
@@ -24,37 +28,43 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
   );
 
   useResizeObserver(itemRef.current, entries => {
-    const itemRect = entries[0].contentRect;
-    onSizeChange(itemId, {
-      height: itemRect.height,
-    });
+    const contentRect = entries[0].contentRect;
+    if (itemRect && itemRef.current) {
+      if (contentRect.height !== itemRect.height) {
+        onSizeChange(
+          itemId,
+          new Rect({
+            height: contentRect.height,
+            top: contentRect.top,
+          }),
+        );
+      }
+    }
   });
 
   React.useEffect(() => {
-    requestAnimationFrame(() => {
-      if (itemRef.current) {
-        onSizeChange(itemId, { height: itemRef.current.getBoundingClientRect().height });
+    if (itemRef.current) {
+      if (itemRect) {
+        const height = itemRef.current.getBoundingClientRect().height;
+        if (height !== itemRect.height) {
+          const clientRect = itemRef.current.getBoundingClientRect();
+          const { top, height } = clientRect;
+          onSizeChange(itemId, new Rect({ height, top }));
+        }
       }
-    });
-  }, []);
-
+    }
+  });
   React.useEffect(() => {
     if (itemId && !itemData) {
       loadItemData({ itemId });
     }
   }, [itemId]);
 
-  let yPos = 0;
-  if (coordinates) {
-    const itemRect = coordinates.get(itemId);
-    if (itemRect) {
-      yPos = itemRect.top;
-    }
-  } else {
-    // just in case we cannot measure the entry size,
-    // do not let a gap betweed other entries
-    return null;
+  let yPos;
+  if (itemRect) {
+    yPos = itemRect.top;
   }
+
   return (
     <div
       ref={itemRef}
@@ -88,6 +98,6 @@ const CardRenderer = React.memo((props: IRenderItemProps) => {
       )}
     </div>
   );
-});
+};
 
 export default CardRenderer;

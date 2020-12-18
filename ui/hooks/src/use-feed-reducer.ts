@@ -9,7 +9,7 @@ interface IFeedState {
   };
   hasMoreItems: boolean;
   nextItemId?: string;
-  optimisticEntries: IEntryData[];
+  pendingEntries: string[];
 }
 export type IFeedAction =
   | { type: 'LOAD_FEED_START'; payload: { isFeedLoading: boolean } }
@@ -18,9 +18,7 @@ export type IFeedAction =
       payload: { items: any[]; reverse?: boolean; start?: string; nextItemId?: string };
     }
   | { type: 'SET_FEED_ITEM_DATA'; payload: IEntryData }
-  | { type: 'HAS_MORE_ITEMS'; payload: { hasMoreItems: boolean } }
-  | { type: 'ADD_OPTIMISTIC_ENTRY'; payload: IEntryData }
-  | { type: 'UPDATE_OPTIMISTIC_ENTRY'; payload: { entryId: string; data: Partial<IEntryData> } };
+  | { type: 'HAS_MORE_ITEMS'; payload: { hasMoreItems: boolean } };
 
 interface SetFeedItemsPayload {
   items: { entryId: string }[];
@@ -34,11 +32,10 @@ const initialFeedState: IFeedState = {
   feedItems: [],
   feedItemData: {},
   hasMoreItems: true,
-  /* entries that are published
-   * optimistically (aka without waiting for the publishing to complete)
+  /* entries that are in a publishing state
    * they will be prepended to the feed using the customEntities
    */
-  optimisticEntries: [],
+  pendingEntries: [],
 };
 
 const feedStateReducer = (state: IFeedState, action: IFeedAction) => {
@@ -73,22 +70,6 @@ const feedStateReducer = (state: IFeedState, action: IFeedAction) => {
         ...state,
         hasMoreItems: action.payload.hasMoreItems,
       };
-    case 'ADD_OPTIMISTIC_ENTRY':
-      return {
-        ...state,
-        optimisticEntries: state.optimisticEntries.concat(action.payload),
-      };
-    case 'UPDATE_OPTIMISTIC_ENTRY':
-      const entry = state.optimisticEntries.find(e => e.entryId === action.payload.entryId);
-      if (entry) {
-        return {
-          ...state,
-          optimisticEntries: state.optimisticEntries
-            .filter(e => e.entryId !== action.payload.entryId)
-            .concat({ ...entry, ...action.payload.data }),
-        };
-      }
-      return state;
     default:
       throw new Error('[UseFeedReducer] action is not defined!');
   }
@@ -99,8 +80,6 @@ export interface IFeedActions {
   setFeedItemData: (itemData: IEntryData) => void;
   loadFeedStart: () => void;
   hasMoreItems: (data: boolean) => void;
-  addOptimisticEntry: (data: IEntryData) => void;
-  updateOptimisticEntry: (entryId: string, data: Partial<IEntryData>) => void;
 }
 
 const useFeedReducer = (initialState: Partial<IFeedState>): [IFeedState, IFeedActions] => {
@@ -130,9 +109,6 @@ const useFeedReducer = (initialState: Partial<IFeedState>): [IFeedState, IFeedAc
     hasMoreItems: (data: boolean) => {
       dispatch({ type: 'HAS_MORE_ITEMS', payload: { hasMoreItems: data } });
     },
-    addOptimisticEntry: data => dispatch({ type: 'ADD_OPTIMISTIC_ENTRY', payload: data }),
-    updateOptimisticEntry: (entryId, data) =>
-      dispatch({ type: 'UPDATE_OPTIMISTIC_ENTRY', payload: { entryId, data } }),
   };
   return [feedState, stateActions];
 };

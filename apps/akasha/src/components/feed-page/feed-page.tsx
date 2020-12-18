@@ -23,13 +23,9 @@ const {
   Box,
   Helmet,
   VirtualList,
-  // ErrorLoader,
-  // EntryCardLoading,
-  // EntryCard,
   ReportModal,
   ToastProvider,
   ModalRenderer,
-  // ErrorInfoCard,
   useViewportSize,
   EditorModal,
 } = DS;
@@ -67,6 +63,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [showEditor, setShowEditor] = React.useState(false);
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
+  const [pendingEntries, setPendingEntries] = React.useState<string[]>([]);
 
   const { size } = useViewportSize();
 
@@ -213,12 +210,14 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       showLoginModal();
       return;
     }
-
+    const tempEntryId = `pending-${feedState.pendingEntries.length}`;
+    setPendingEntries(prev => prev.concat(tempEntryId));
     try {
       const publishObj = buildPublishObject(data);
       const postEntryCall = sdkModules.posts.entries.postEntry(publishObj);
       postEntryCall.subscribe((postingResp: any) => {
         const publishedEntryId = postingResp.data.createPost;
+        setPendingEntries(prev => prev.filter(e => e === tempEntryId));
         feedStateActions.setFeedItems({
           reverse: true,
           items: [{ entryId: publishedEntryId }],
@@ -324,6 +323,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           onAvatarClick: handleAvatarClick,
           onContentClick: handleNavigateToPost,
           handleEditorPlaceholderClick: handleToggleEditor,
+          pendingEntries: pendingEntries,
         })}
       />
     </Box>

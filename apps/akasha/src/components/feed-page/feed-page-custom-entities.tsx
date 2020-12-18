@@ -3,7 +3,7 @@ import DS from '@akashaproject/design-system';
 import type { TFunction } from 'i18next';
 import type { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
-const { EditorPlaceholder } = DS;
+const { EditorPlaceholder, EntryCardLoading } = DS;
 
 export interface IGetCustomEntitiesProps {
   isMobile: boolean;
@@ -14,10 +14,17 @@ export interface IGetCustomEntitiesProps {
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onContentClick?: any;
   handleEditorPlaceholderClick?: () => void;
+  pendingEntries?: string[];
 }
 
 export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
-  const { isMobile, feedItems, loggedEthAddress, handleEditorPlaceholderClick } = props;
+  const {
+    isMobile,
+    feedItems,
+    loggedEthAddress,
+    handleEditorPlaceholderClick,
+    pendingEntries = [],
+  } = props;
 
   const customEntities = [];
 
@@ -35,6 +42,17 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
         />
       ),
     });
+  }
+  if (pendingEntries.length) {
+    customEntities.concat(
+      pendingEntries.map(id => ({
+        position: 'before',
+        itemId: feedItems.length ? feedItems[0] : null,
+        getComponent: ({ key, style }: { key: string; style: React.CSSProperties }) => (
+          <EntryCardLoading key={`${id}-${key}`} style={style} />
+        ),
+      })),
+    );
   }
   if (customEntities.length) {
     return customEntities;

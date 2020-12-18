@@ -25,13 +25,13 @@ export interface IEntryCardRendererProps {
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   const { itemData, ethAddress, locale, bookmarks, itemId } = props;
+
   let isBookmarked = false;
   if (bookmarks && itemId && bookmarks.has(itemId)) {
     isBookmarked = true;
   }
 
   const { t } = useTranslation();
-  const handleAvatarClick = (_ev: React.MouseEvent<HTMLDivElement>, _authorEth: string) => {};
 
   return (
     <ErrorInfoCard errors={{}}>
@@ -56,7 +56,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   shareTextLabel={t('Share this post with your friends')}
                   sharePostUrl={'https://ethereum.world'}
                   onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                    handleAvatarClick(ev, itemData.author.ethAddress)
+                    props.onAvatarClick(ev, itemData.author.ethAddress)
                   }
                   onEntryBookmark={props.onBookmark}
                   repliesLabel={t('Replies')}
