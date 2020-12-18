@@ -34,6 +34,7 @@ export interface IContentCardProps {
   otherReporters?: string;
   reportedOnLabel?: string;
   reportedDateTime: string;
+  moderatorDecision?: string;
   moderator?: string;
   moderatorName?: string;
   moderatorENSName?: string;
@@ -42,6 +43,7 @@ export interface IContentCardProps {
   evaluationDateTime?: string;
   keepContentLabel?: string;
   delistContentLabel?: string;
+  reviewDecisionLabel?: string;
   logger: any;
   sdkModules: any;
   handleButtonClick: (param1: string, param2: string, param3: string, param5: any) => void;
@@ -68,6 +70,7 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     otherReporters,
     reportedOnLabel,
     reportedDateTime,
+    moderatorDecision,
     moderator,
     moderatorName,
     moderatorENSName,
@@ -76,6 +79,7 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     evaluationDateTime,
     keepContentLabel,
     delistContentLabel,
+    reviewDecisionLabel,
   } = props;
 
   const [entryData, setEntryData] = React.useState<any>(null);
@@ -107,16 +111,6 @@ const ContentCard: React.FC<IContentCardProps> = props => {
       <MainAreaCardBox>
         <Box pad="1rem">
           <EntryDataCard entryData={entryData} contentType={contentType} locale={locale} />
-          {!isPending && (
-            <Text
-              size="small"
-              margin={{ top: 'large' }}
-              color="secondaryText"
-              style={{ textTransform: 'uppercase' }}
-            >
-              {determinationLabel}
-            </Text>
-          )}
           <Box
             direction="row"
             margin={{ top: isPending ? 'large' : 'medium' }}
@@ -173,33 +167,16 @@ const ContentCard: React.FC<IContentCardProps> = props => {
               logger={props.logger}
             />
           )}
-          {!isPending && (
-            <>
-              <Text margin={{ top: 'large' }}>
-                {moderator
-                  ? `${moderatedByLabel} ${moderator.slice(0, 6)}...${moderator.slice(
-                      moderator.length - 5,
-                      moderator.length - 1,
-                    )}`
-                  : `${moderatedByLabel} ${moderatorName} (${moderatorENSName})`}
-              </Text>
-              <Text color="secondaryText">{`${moderatedOnLabel} ${moment(evaluationDateTime).format(
-                'D MMM yyyy・hh:mm',
-              )}`}</Text>
-            </>
-          )}
           <Box
             direction="row"
             margin={{ top: 'medium' }}
-            pad={{ top: 'medium' }}
+            pad={{ top: isPending ? 'medium' : '0rem' }}
             align="center"
-            border={{ side: 'top', color: 'border', style: 'solid' }}
+            border={isPending ? { side: 'top', color: 'border', style: 'solid' } : { size: '0rem' }}
           >
             <Box width={isPending ? '65%' : '100%'}>
               <Box direction="row">
-                <Text color={!isPending ? 'secondaryText' : 'initial'}>
-                  {originallyReportedByLabel}
-                </Text>
+                <Text>{originallyReportedByLabel}</Text>
                 <Avatar
                   ethAddress={reporter || ''}
                   src="https://placebeard.it/360x360"
@@ -234,18 +211,10 @@ const ContentCard: React.FC<IContentCardProps> = props => {
                     </Text>
                   </>
                 )}
-                {!isPending && (
-                  <Text
-                    margin={{ left: '0.2rem' }}
-                    color="secondaryText"
-                  >{`${reportedOnLabel} ${moment(reportedDateTime).format('D MMM yyyy')}.`}</Text>
-                )}
               </Box>
-              {isPending && (
-                <Text color="secondaryText">{`${reportedOnLabel} ${moment(reportedDateTime).format(
-                  'D MMM yyyy・HH:mm',
-                )}`}</Text>
-              )}
+              <Text color="secondaryText">{`${reportedOnLabel} ${moment(reportedDateTime).format(
+                'D MMM yyyy・h:mm a',
+              )}`}</Text>
             </Box>
             {isPending && (
               <Box direction="row" width="35%" justify="end">
@@ -258,6 +227,39 @@ const ContentCard: React.FC<IContentCardProps> = props => {
               </Box>
             )}
           </Box>
+          {!isPending && (
+            <Box
+              margin={{ top: 'medium' }}
+              border={{ side: 'top', color: 'border', style: 'solid' }}
+            >
+              {!isPending && (
+                <>
+                  <Text margin={{ top: 'large' }} style={{ fontWeight: 'bold' }}>
+                    {determinationLabel}
+                  </Text>
+                  <Text margin={{ top: 'xsmall' }}>{moderatorDecision}</Text>
+                </>
+              )}
+              <Box direction="row" margin={{ top: 'large' }} justify="between" align="end">
+                <Box>
+                  <Text>
+                    {moderator
+                      ? `${moderatedByLabel} ${moderator.slice(0, 6)}...${moderator.slice(
+                          moderator.length - 5,
+                          moderator.length - 1,
+                        )}`
+                      : `${moderatedByLabel} ${moderatorName} (${moderatorENSName})`}
+                  </Text>
+                  <Text color="secondaryText">{`${moderatedOnLabel} ${moment(
+                    evaluationDateTime,
+                  ).format('D MMM yyyy・h:mm a')}`}</Text>
+                </Box>
+                <Box direction="row" width="35%" justify="end">
+                  <Button label={reviewDecisionLabel} onClick={() => null} />
+                </Box>
+              </Box>
+            </Box>
+          )}
         </Box>
       </MainAreaCardBox>
     </Box>

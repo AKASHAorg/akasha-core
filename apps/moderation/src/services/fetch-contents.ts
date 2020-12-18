@@ -54,6 +54,7 @@ export const getAllDelisted = async () => {
           reasons,
           reportedBy,
           reportedDate,
+          reports,
         }: any,
         idx: number,
       ) => {
@@ -64,8 +65,9 @@ export const getAllDelisted = async () => {
           entryId: contentId,
           reasons: reasons,
           description: explanation,
-          reporter: reportedBy,
-          moderator: moderator, // @TODO: fetch reporter's Name and ENS (if applicable) from the profile API
+          reporter: reportedBy, // @TODO: fetch reporter's Name and ENS (if applicable) from the profile API
+          count: reports - 1,
+          moderator: moderator, // @TODO: fetch moderator's Name and ENS (if applicable) from the profile API
           entryDate: reportedDate,
           evaluationDate: date,
         };

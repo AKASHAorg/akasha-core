@@ -25,6 +25,7 @@ interface IBaseItem {
   entryId: string;
   reasons: string[];
   description?: string;
+  count: number;
   entryDate: string;
 }
 
@@ -32,10 +33,9 @@ interface IPendingItem extends IBaseItem {
   reporter: string;
   reporterName: string;
   reporterENSName: string;
-  count: number;
 }
 
-interface IDelistedItem extends Omit<IPendingItem, 'count'> {
+interface IDelistedItem extends IPendingItem {
   moderator: string;
   moderatorName: string;
   moderatorENSName: string;
@@ -156,7 +156,12 @@ const ContentList: React.FC<IContentListProps> = props => {
           </ToastProvider>
         )}
       </ModalRenderer>
-      <ContentTab isPending={isPending} setIsPending={setIsPending} />
+      <ContentTab
+        isPending={isPending}
+        pendingLabel={t('Pending')}
+        moderatedLabel={t('Moderated')}
+        setIsPending={setIsPending}
+      />
       {requesting && <Text textAlign="center">Fetching items. Please wait...</Text>}
       {!requesting &&
         isPending &&
@@ -216,25 +221,33 @@ const ContentList: React.FC<IContentListProps> = props => {
                 locale={locale}
                 showExplanationsLabel={t('Show explanations')}
                 hideExplanationsLabel={t('Hide explanations')}
-                determinationLabel={t('Final determination')}
+                determinationLabel={t('Determination')}
                 reportedLabel={t('reported')}
                 contentType={t(delistedItem.type)}
                 forLabel={t('for')}
                 reportedByLabel={t('Reported by')}
-                originallyReportedByLabel={t('Originally reported by')}
+                originallyReportedByLabel={t('Initially reported by')}
                 entryId={t(delistedItem.entryId)}
                 reasons={delistedItem.reasons.map(el => t(el))}
                 reporter={delistedItem.reporter}
                 reporterName={t(delistedItem.reporterName)}
                 reporterENSName={t(delistedItem.reporterENSName)}
-                reportedOnLabel={t('on')}
+                andLabel={t('and')}
+                otherReporters={
+                  delistedItem.count
+                    ? t(`${delistedItem.count} ${delistedItem.count === 1 ? 'other' : 'others'}`)
+                    : ''
+                }
+                reportedOnLabel={t('On')}
                 reportedDateTime={delistedItem.entryDate}
+                moderatorDecision={delistedItem.description}
                 moderator={delistedItem.moderator}
                 moderatorName={t(delistedItem.moderatorName)}
                 moderatorENSName={t(delistedItem.moderatorENSName)}
                 moderatedByLabel={t('Moderated by')}
                 moderatedOnLabel={t('On')}
                 evaluationDateTime={delistedItem.evaluationDate}
+                reviewDecisionLabel={t('Review decision')}
                 logger={logger}
                 sdkModules={sdkModules}
                 handleButtonClick={() => null}

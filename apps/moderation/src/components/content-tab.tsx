@@ -5,11 +5,13 @@ const { Box, Text, MainAreaCardBox } = DS;
 
 export interface IContentTabProps {
   isPending: boolean;
+  pendingLabel: string;
+  moderatedLabel: string;
   setIsPending: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ContentTab: React.FC<IContentTabProps> = props => {
-  const { isPending, setIsPending } = props;
+  const { isPending, pendingLabel, moderatedLabel, setIsPending } = props;
 
   const handleTabClick = () => {
     setIsPending(!isPending);
@@ -31,7 +33,7 @@ const ContentTab: React.FC<IContentTabProps> = props => {
             onClick={handleTabClick}
           >
             <Text textAlign="center" color={isPending ? 'accentText' : 'secondaryText'}>
-              Pending
+              {pendingLabel}
             </Text>
           </Box>
           <Box
@@ -46,7 +48,7 @@ const ContentTab: React.FC<IContentTabProps> = props => {
             onClick={handleTabClick}
           >
             <Text textAlign="center" color={isPending ? 'secondaryText' : 'accentText'}>
-              Delisted
+              {moderatedLabel}
             </Text>
           </Box>
         </Box>
