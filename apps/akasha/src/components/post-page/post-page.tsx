@@ -251,7 +251,6 @@ const PostPage: React.FC<IPostPage> = props => {
   };
 
   const [tags, setTags] = React.useState([]);
-
   const handleGetTags = (query: string) => {
     const tagsService = channels.posts.tags.searchTags({ tagName: query });
     tagsService.subscribe((resp: any) => {
@@ -261,17 +260,17 @@ const PostPage: React.FC<IPostPage> = props => {
       }
     });
   };
+
+  const [mentions, setMentions] = React.useState([]);
   const handleGetMentions = (query: string) => {
-    const tagsService = channels.posts.tags.searchTags({ tagName: query });
-    tagsService.subscribe((resp: any) => {
-      if (resp.data?.searchTags) {
-        const filteredTags = resp.data.searchTags;
-        setMentions(filteredTags);
+    const mentionsService = channels.profiles.profileService.searchProfiles({ name: query });
+    mentionsService.subscribe((resp: any) => {
+      if (resp.data?.searchProfiles) {
+        const filteredMentions = resp.data.searchProfiles;
+        setMentions(filteredMentions);
       }
     });
   };
-
-  const [mentions, setMentions] = React.useState([]);
 
   const handleNavigateToPost = redirectToPost(navigateToUrl);
 

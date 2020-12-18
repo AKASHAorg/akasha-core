@@ -31,7 +31,15 @@ export interface IEditorBox {
   withMeter?: boolean;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
-  mentions?: string[];
+  mentions?: {
+    name: string;
+    userName: string;
+    pubKey: string;
+    avatar: string;
+    ethAddress: string;
+    description: string;
+    coverImage: string;
+  }[];
   tags?: string[];
   // upload an URL or a file and returns a promise that resolves to an array
   uploadRequest?: (data: string | File, isUrl?: boolean) => Promise<any[]>;
@@ -115,15 +123,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
         el.style.left = `${rect.left + window.pageXOffset}px`;
       }
     }
-  }, [
-    mentions.length,
-    tags.length,
-    editor,
-    index,
-    mentionTargetRange,
-    tagTargetRange,
-    editorValue,
-  ]);
+  }, [mentions, tags, editor, index, mentionTargetRange, tagTargetRange, editorValue]);
 
   const handlePublish = () => {
     const content = editorValue;
@@ -137,7 +137,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
 
     (function getMetadata(node: any) {
       if (node.type === 'mention') {
-        metadata.mentions.push(node.value as string);
+        metadata.mentions.push(node.pubKey as string);
       }
       if (node.type === 'tag') {
         metadata.tags.push(node.value as string);
@@ -298,18 +298,18 @@ const EditorBox: React.FC<IEditorBox> = props => {
           CustomEditor.toggleFormat(editor, mark);
         }
       }
-      if (mentionTargetRange) {
+      if (mentionTargetRange && mentions.length > 0) {
         selectMention(event, mentionTargetRange);
       }
-      if (tagTargetRange && tags.length) {
+      if (tagTargetRange && tags.length > 0) {
         selectTag(event, tagTargetRange);
-      } else if (tagTargetRange && [13, 32].includes(event.keyCode)) {
+      } else if (tagTargetRange && [13, 32].includes(event.keyCode) && createTag.length > 1) {
         Transforms.select(editor, tagTargetRange);
         CustomEditor.insertTag(editor, createTag);
         setTagTargetRange(null);
       }
     },
-    [index, mentionTargetRange, tagTargetRange],
+    [index, mentionTargetRange, tagTargetRange, mentions, tags],
   );
 
   const handleMediaClick = () => {
@@ -339,6 +339,10 @@ const EditorBox: React.FC<IEditorBox> = props => {
     CustomEditor.insertText(editor, emojiCode);
   };
 
+  const mentionsNames = mentions.map(mention => {
+    return mention.userName || mention.ethAddress;
+  });
+
   return (
     <StyledBox pad="none" justify="between" fill={true}>
       <Box
@@ -362,8 +366,12 @@ const EditorBox: React.FC<IEditorBox> = props => {
                 renderLeaf={renderLeaf}
                 onKeyDown={onKeyDown}
               />
-              {mentionTargetRange && mentions.length > 0 && (
-                <MentionPopover ref={mentionPopoverRef} values={mentions} currentIndex={index} />
+              {mentionTargetRange && mentionsNames.length > 0 && (
+                <MentionPopover
+                  ref={mentionPopoverRef}
+                  values={mentionsNames}
+                  currentIndex={index}
+                />
               )}
               {tagTargetRange && tags.length > 0 && (
                 <MentionPopover ref={mentionPopoverRef} values={tags} currentIndex={index} />

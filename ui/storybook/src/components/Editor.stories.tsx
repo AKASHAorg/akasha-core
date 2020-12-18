@@ -19,8 +19,8 @@ const EditorComponent = () => {
     setTagsState(query);
   };
 
-  const mentionables = USERNAMES.filter((c: string) =>
-    c.toLowerCase().startsWith(mentionsState.toLowerCase()),
+  const mentionables = USERNAMES.filter((c: any) =>
+    c.name.toLowerCase().startsWith(mentionsState.toLowerCase()),
   ).slice(0, 10);
 
   const tags = TAGS.filter((c: string) =>

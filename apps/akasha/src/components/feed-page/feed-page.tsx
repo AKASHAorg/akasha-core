@@ -198,9 +198,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleUnfollow = () => {
     /* todo */
   };
-  const handleGetMentions = () => {
-    /* todo */
-  };
 
   const [tags, setTags] = React.useState([]);
 
@@ -210,6 +207,17 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       if (resp.data?.searchTags) {
         const filteredTags = resp.data.searchTags;
         setTags(filteredTags);
+      }
+    });
+  };
+
+  const [mentions, setMentions] = React.useState([]);
+  const handleGetMentions = (query: string) => {
+    const mentionsService = sdkModules.profiles.profileService.searchProfiles({ name: query });
+    mentionsService.subscribe((resp: any) => {
+      if (resp.data?.searchProfiles) {
+        const filteredMentions = resp.data.searchProfiles;
+        setMentions(filteredMentions);
       }
     });
   };
@@ -318,6 +326,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         getMentions={handleGetMentions}
         getTags={handleGetTags}
         tags={tags}
+        mentions={mentions}
         uploadRequest={onUploadRequest}
         embedEntryData={currentEmbedEntry}
         style={{ width: '36rem' }}
