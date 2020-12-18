@@ -39,9 +39,9 @@ export interface FeedPageProps {
   ethAddress: string | null;
   jwtToken: string | null;
   flagged: string;
-  modalOpen: boolean;
+  reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onError: (err: Error) => void;
 }
 
@@ -49,9 +49,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const {
     isMobile,
     flagged,
-    modalOpen,
+    navigateToUrl,
+    reportModalOpen,
     setFlagged,
-    setModalOpen,
+    setReportModalOpen,
     showLoginModal,
     ethAddress,
     jwtToken,
@@ -133,7 +134,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
-    props.singleSpa.navigateToUrl(`/profile/${authorEth}`);
+    navigateToUrl(`/profile/${authorEth}`);
     ev.preventDefault();
   };
   const handleEntryBookmark = (entryId: string) => {
@@ -150,8 +151,22 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       setShowEditor(true);
     }
   };
-  const handleEntryShare = () => {
-    /* todo */
+  const handleEntryShare = (service: 'twitter' | 'facebook' | 'reddit', _entryId: string) => {
+    let shareUrl;
+    switch (service) {
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${window.location.href}`;
+        break;
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`;
+        break;
+      case 'reddit':
+        shareUrl = `http://www.reddit.com/submit?url=${window.location.href}`;
+        break;
+      default:
+        break;
+    }
+    window.open(shareUrl, '_blank');
   };
   const handleEntryFlag = (entryId: string, user?: string | null) => () => {
     /* todo */
@@ -161,11 +176,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       return showLoginModal();
     }
     setFlagged(entryId);
-    setModalOpen(true);
+    setReportModalOpen(true);
   };
-  const handleLinkCopy = () => {
-    /* todo */
-  };
+
   const handleClickReplies = () => {
     /* todo */
   };
@@ -175,11 +188,28 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleUnfollow = () => {
     /* todo */
   };
-  const handleGetMentions = () => {
-    /* todo */
+
+  const [tags, setTags] = React.useState([]);
+
+  const handleGetTags = (query: string) => {
+    const tagsService = sdkModules.posts.tags.searchTags({ tagName: query });
+    tagsService.subscribe((resp: any) => {
+      if (resp.data?.searchTags) {
+        const filteredTags = resp.data.searchTags;
+        setTags(filteredTags);
+      }
+    });
   };
-  const handleGetTags = () => {
-    /* todo */
+
+  const [mentions, setMentions] = React.useState([]);
+  const handleGetMentions = (query: string) => {
+    const mentionsService = sdkModules.profiles.profileService.searchProfiles({ name: query });
+    mentionsService.subscribe((resp: any) => {
+      if (resp.data?.searchProfiles) {
+        const filteredMentions = resp.data.searchProfiles;
+        setMentions(filteredMentions);
+      }
+    });
   };
 
   const handleToggleEditor = () => {
@@ -235,7 +265,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         <title>AKASHA Feed | Ethereum.world</title>
       </Helmet>
       <ModalRenderer slotId={props.layout.app.modalSlotId}>
-        {modalOpen && (
+        {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
               titleLabel={t('Report a Post')}
@@ -266,7 +296,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               contentId={flagged}
               size={size}
               closeModal={() => {
-                setModalOpen(false);
+                setReportModalOpen(false);
               }}
             />
           </ToastProvider>
@@ -287,6 +317,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         handleNavigateBack={handleToggleEditor}
         getMentions={handleGetMentions}
         getTags={handleGetTags}
+        tags={tags}
+        mentions={mentions}
         uploadRequest={onUploadRequest}
         embedEntryData={currentEmbedEntry}
         style={{ width: '36rem' }}
@@ -306,7 +338,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             onUnfollow={handleUnfollow}
             onBookmark={handleEntryBookmark}
             onNavigate={handleNavigateToPost}
-            onLinkCopy={handleLinkCopy}
             onRepliesClick={handleClickReplies}
             onFlag={handleEntryFlag}
             onRepost={handleEntryRepost}
@@ -315,13 +346,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           />
         }
         customEntities={getFeedCustomEntities({
-          t,
-          locale,
           isMobile,
           feedItems: feedState.feedItems,
           loggedEthAddress: ethAddress,
-          onAvatarClick: handleAvatarClick,
-          onContentClick: handleNavigateToPost,
           handleEditorPlaceholderClick: handleToggleEditor,
           pendingEntries: pendingEntries,
         })}

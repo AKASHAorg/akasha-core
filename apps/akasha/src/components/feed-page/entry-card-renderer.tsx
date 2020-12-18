@@ -14,11 +14,11 @@ export interface IEntryCardRendererProps {
   onUnfollow: () => void;
   onBookmark: (entryId: string) => void;
   onNavigate: (details: any) => void;
-  onLinkCopy: () => void;
+  onLinkCopy?: () => void;
   onRepliesClick: () => void;
   onFlag: (entryId: string, user: string | null) => () => void;
   onRepost: (withComment: boolean, entryData: any) => void;
-  onShare: () => void;
+  onShare: (service: string, entryId: string) => void;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   bookmarks?: Set<string>;
 }
@@ -75,7 +75,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   onRepost={props.onRepost}
                   onEntryShare={props.onShare}
                   onEntryFlag={props.onFlag(itemData.CID, null)}
-                  onLinkCopy={props.onLinkCopy}
                   onClickReplies={props.onRepliesClick}
                   handleFollow={props.onFollow}
                   handleUnfollow={props.onUnfollow}

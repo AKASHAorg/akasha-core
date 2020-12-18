@@ -1,7 +1,5 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import type { TFunction } from 'i18next';
-import type { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
 const { EditorPlaceholder, EntryCardLoading } = DS;
 
@@ -9,10 +7,6 @@ export interface IGetCustomEntitiesProps {
   isMobile: boolean;
   feedItems: string[];
   loggedEthAddress: string | null;
-  t: TFunction;
-  locale: ILocale;
-  onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
-  onContentClick?: any;
   handleEditorPlaceholderClick?: () => void;
   pendingEntries?: string[];
 }

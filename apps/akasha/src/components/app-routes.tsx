@@ -34,7 +34,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     (act: ActionMapper<LoggedProfileStateModel, '1'>) => act.authorize,
   );
   const [loginModalState, setLoginModalState] = React.useState(false);
-  const [modalOpen, setModalOpen] = React.useState(false);
+  const [reportModalOpen, setReportModalOpen] = React.useState(false);
   const [flagged, setFlagged] = React.useState('');
 
   const showLoginModal = () => {
@@ -58,7 +58,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   React.useEffect(() => {
     if (ethAddress && flagged.length) {
       setLoginModalState(false);
-      setModalOpen(true);
+      setReportModalOpen(true);
     }
   }, [ethAddress]);
 
@@ -102,9 +102,9 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
                 ethAddress={ethAddress}
                 jwtToken={jwtToken}
                 flagged={flagged}
-                modalOpen={modalOpen}
+                reportModalOpen={reportModalOpen}
                 setFlagged={setFlagged}
-                setModalOpen={setModalOpen}
+                setReportModalOpen={setReportModalOpen}
                 showLoginModal={showLoginModal}
                 onError={onError}
               />
@@ -117,9 +117,9 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
                 logger={logger}
                 navigateToUrl={singleSpa.navigateToUrl}
                 flagged={flagged}
-                modalOpen={modalOpen}
+                reportModalOpen={reportModalOpen}
                 setFlagged={setFlagged}
-                setModalOpen={setModalOpen}
+                setReportModalOpen={setReportModalOpen}
                 showLoginModal={showLoginModal}
                 onError={onError}
               />

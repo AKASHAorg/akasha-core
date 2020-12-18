@@ -129,6 +129,12 @@ const CardActions: React.FC<CardActionProps> = props => {
   };
   const handleShare = (service: ServiceNames) => () => {
     onShare(service);
+    setShareDropOpen(false);
+  };
+
+  const handleCopyLink = () => {
+    onLinkCopy();
+    setShareDropOpen(false);
   };
 
   const handleRepost = (ev: React.SyntheticEvent) => {
@@ -211,7 +217,7 @@ const CardActions: React.FC<CardActionProps> = props => {
             <TextIcon
               iconType="link"
               label={copyLinkLabel}
-              onClick={onLinkCopy}
+              onClick={handleCopyLink}
               clickable={true}
               primaryColor={true}
               iconSize="xs"

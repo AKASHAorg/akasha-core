@@ -46,7 +46,6 @@ export const FeedItem: React.FC<IFeedItemProps> = props => {
       onRepost={() => {}}
       onEntryShare={() => {}}
       onEntryFlag={() => {}}
-      onLinkCopy={() => {}}
       onClickReplies={() => {}}
       handleFollow={() => {}}
       handleUnfollow={() => {}}
