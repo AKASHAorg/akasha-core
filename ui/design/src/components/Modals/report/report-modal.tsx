@@ -184,6 +184,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
             </StyledText>
             <Box direction="column">
               <RadioButtonGroup
+                gap="xxsmall"
                 name="reasons"
                 options={optionLabels}
                 value={reason}

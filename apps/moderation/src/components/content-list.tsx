@@ -6,7 +6,7 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import ContentCard from './content-card';
 import ContentTab from './content-tab';
 
-import { getAllPending, getAllDelisted } from '../services/fetch-contents';
+import { getAllPending, getAllModerated } from '../services/fetch-contents';
 import { moderatorList } from '../services/dummy-data';
 
 const { Box, Text, useViewportSize, ModalRenderer, ToastProvider, ModerateModal } = DS;
@@ -35,7 +35,8 @@ interface IPendingItem extends IBaseItem {
   reporterENSName: string;
 }
 
-interface IDelistedItem extends IPendingItem {
+interface IModeratedItem extends IPendingItem {
+  delisted: boolean;
   moderator: string;
   moderatorName: string;
   moderatorENSName: string;
@@ -46,13 +47,12 @@ const ContentList: React.FC<IContentListProps> = props => {
   const { slotId, ethAddress, logger, sdkModules } = props;
 
   const [pendingItems, setPendingItems] = React.useState<IPendingItem[]>([]);
-  const [delistedItems, setDelistedItems] = React.useState<IDelistedItem[]>([]);
+  const [moderatedItems, setModeratedItems] = React.useState<IModeratedItem[]>([]);
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-  const [actionType, setActionType] = React.useState<string>('Delist');
   const [contentType, setContentType] = React.useState<string>('post');
   const [flagged, setFlagged] = React.useState<string>('');
-  const [flaggedItemData, setFlaggedItemData] = React.useState<any>({});
   const [isPending, setIsPending] = React.useState<boolean>(true);
+  const [isDelisted, setIsDelisted] = React.useState<boolean>(true);
   const [requesting, setRequesting] = React.useState<boolean>(false);
 
   const { t, i18n } = useTranslation();
@@ -68,7 +68,7 @@ const ContentList: React.FC<IContentListProps> = props => {
       props.navigateToUrl('/moderation-app/restricted');
     } else {
       fetchPendingContents();
-      fetchDelistedContents();
+      fetchModeratedContents();
     }
   }, [ethAddress]);
 
@@ -92,25 +92,23 @@ const ContentList: React.FC<IContentListProps> = props => {
     }
   };
 
-  const fetchDelistedContents = async () => {
+  const fetchModeratedContents = async () => {
     // fetch delisted (moderated) contents
     setRequesting(true);
     try {
-      const modResponse = await getAllDelisted();
-      setDelistedItems(modResponse);
+      const modResponse = await getAllModerated();
+      setModeratedItems(modResponse);
       setRequesting(false);
     } catch (error) {
       setRequesting(false);
-      logger.error('[content-list.tsx]: fetchDelistedContents err %j', error.message || '');
+      logger.error('[content-list.tsx]: fetchModeratedContents err %j', error.message || '');
     }
   };
 
-  const handleButtonClick = (entryId: string, action: string, content: string, item: any) => {
+  const handleButtonClick = (entryId: string, content: string) => {
     setFlagged(entryId);
     setModalOpen(true);
-    setActionType(action);
     setContentType(content);
-    setFlaggedItemData(item);
   };
 
   const renderNotFound = (type: string) => {
@@ -123,22 +121,12 @@ const ContentList: React.FC<IContentListProps> = props => {
         {modalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ModerateModal
-              titleLabel={t(
-                `${
-                  contentType === 'profile' && actionType === 'Delist' ? 'Remove' : actionType
-                } a ${contentType}`,
-              )}
+              titleLabel={t('Make a Decision')}
               contentType={t(contentType)}
-              flaggedItemData={flaggedItemData}
-              repostsLabel={t('Repost')}
-              repliesLabel={t('Replies')}
-              locale={locale}
+              decisionLabel={t('Decision')}
+              optionLabels={[t('Keep'), t('Delist')]}
               descriptionLabel={t('Evaluation')}
-              descriptionPlaceholder={
-                actionType === 'Delist'
-                  ? t('Please describe the issue')
-                  : t('Please explain the reason(s)')
-              }
+              descriptionPlaceholder={t('Please explain the reason(s)')}
               footerText1Label={t('If you are unsure, you can refer to our')}
               footerLink1Label={t('Code of Conduct')}
               footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
@@ -146,7 +134,6 @@ const ContentList: React.FC<IContentListProps> = props => {
               footerLink2Label={t('Terms of Service')}
               footerUrl2={'https://ethereum.world/terms-of-service'}
               cancelLabel={t('Cancel')}
-              reportLabel={t(actionType)}
               user={ethAddress}
               contentId={flagged}
               size={size}
@@ -154,7 +141,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                 setModalOpen(false);
                 // on modal close, fetch pending and delisted items again
                 fetchPendingContents();
-                fetchDelistedContents();
+                fetchModeratedContents();
               }}
               closeModal={() => {
                 setModalOpen(false);
@@ -165,9 +152,15 @@ const ContentList: React.FC<IContentListProps> = props => {
       </ModalRenderer>
       <ContentTab
         isPending={isPending}
+        isDelisted={isDelisted}
         pendingLabel={t('Pending')}
         moderatedLabel={t('Moderated')}
+        count={moderatedItems.length}
+        countLabel={t('Moderated items')}
+        keptLabel={t('Kept')}
+        delistedLabel={t('Delisted')}
         setIsPending={setIsPending}
+        setIsDelisted={setIsDelisted}
       />
       {requesting && <Text textAlign="center">Fetching items. Please wait...</Text>}
       {!requesting &&
@@ -198,20 +191,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                 }
                 reportedOnLabel={t('On')}
                 reportedDateTime={pendingItem.entryDate}
-                keepContentLabel={
-                  pendingItem.type === 'post'
-                    ? t('Keep Post')
-                    : pendingItem.type === 'profile'
-                    ? t('Keep User')
-                    : ''
-                }
-                delistContentLabel={
-                  pendingItem.type === 'post'
-                    ? t('Delist Post')
-                    : pendingItem.type === 'profile'
-                    ? t('Remove User')
-                    : ''
-                }
+                makeADecisionLabel={t('Make a Decision')}
                 logger={logger}
                 sdkModules={sdkModules}
                 handleButtonClick={handleButtonClick}
@@ -220,46 +200,53 @@ const ContentList: React.FC<IContentListProps> = props => {
           : renderNotFound('pending'))}
       {!requesting &&
         !isPending &&
-        (delistedItems.length
-          ? delistedItems.map(delistedItem => (
-              <ContentCard
-                key={delistedItem.id}
-                isPending={isPending}
-                locale={locale}
-                showExplanationsLabel={t('Show explanations')}
-                hideExplanationsLabel={t('Hide explanations')}
-                determinationLabel={t('Determination')}
-                reportedLabel={t('reported')}
-                contentType={t(delistedItem.type)}
-                forLabel={t('for')}
-                reportedByLabel={t('Reported by')}
-                originallyReportedByLabel={t('Initially reported by')}
-                entryId={t(delistedItem.entryId)}
-                reasons={delistedItem.reasons.map(el => t(el))}
-                reporter={delistedItem.reporter}
-                reporterName={t(delistedItem.reporterName)}
-                reporterENSName={t(delistedItem.reporterENSName)}
-                andLabel={t('and')}
-                otherReporters={
-                  delistedItem.count
-                    ? t(`${delistedItem.count} ${delistedItem.count === 1 ? 'other' : 'others'}`)
-                    : ''
-                }
-                reportedOnLabel={t('On')}
-                reportedDateTime={delistedItem.entryDate}
-                moderatorDecision={delistedItem.description}
-                moderator={delistedItem.moderator}
-                moderatorName={t(delistedItem.moderatorName)}
-                moderatorENSName={t(delistedItem.moderatorENSName)}
-                moderatedByLabel={t('Moderated by')}
-                moderatedOnLabel={t('On')}
-                evaluationDateTime={delistedItem.evaluationDate}
-                reviewDecisionLabel={t('Review decision')}
-                logger={logger}
-                sdkModules={sdkModules}
-                handleButtonClick={() => null}
-              />
-            ))
+        (moderatedItems.length
+          ? moderatedItems
+              .filter(item => item.delisted === isDelisted)
+              .map(moderatedItem => (
+                <ContentCard
+                  key={moderatedItem.id}
+                  isPending={isPending}
+                  locale={locale}
+                  showExplanationsLabel={t('Show explanations')}
+                  hideExplanationsLabel={t('Hide explanations')}
+                  determinationLabel={t('Determination')}
+                  determination={moderatedItem.delisted ? t('Delisted') : t('Kept')}
+                  reportedLabel={t('reported')}
+                  contentType={t(moderatedItem.type)}
+                  forLabel={t('for')}
+                  reportedByLabel={t('Reported by')}
+                  originallyReportedByLabel={t('Initially reported by')}
+                  entryId={t(moderatedItem.entryId)}
+                  reasons={moderatedItem.reasons.map(el => t(el))}
+                  reporter={moderatedItem.reporter}
+                  reporterName={t(moderatedItem.reporterName)}
+                  reporterENSName={t(moderatedItem.reporterENSName)}
+                  andLabel={t('and')}
+                  otherReporters={
+                    moderatedItem.count
+                      ? t(
+                          `${moderatedItem.count} ${
+                            moderatedItem.count === 1 ? 'other' : 'others'
+                          }`,
+                        )
+                      : ''
+                  }
+                  reportedOnLabel={t('On')}
+                  reportedDateTime={moderatedItem.entryDate}
+                  moderatorDecision={moderatedItem.description}
+                  moderator={moderatedItem.moderator}
+                  moderatorName={t(moderatedItem.moderatorName)}
+                  moderatorENSName={t(moderatedItem.moderatorENSName)}
+                  moderatedByLabel={t('Moderated by')}
+                  moderatedOnLabel={t('On')}
+                  evaluationDateTime={moderatedItem.evaluationDate}
+                  reviewDecisionLabel={t('Review decision')}
+                  logger={logger}
+                  sdkModules={sdkModules}
+                  handleButtonClick={() => null}
+                />
+              ))
           : renderNotFound('delisted'))}
     </Box>
   );

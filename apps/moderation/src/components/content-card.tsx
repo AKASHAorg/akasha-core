@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { combineLatest } from 'rxjs';
 import DS from '@akashaproject/design-system';
+import { useProfile } from '@akashaproject/ui-awf-hooks';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
 import { mapEntry } from '../services/posting-service';
@@ -20,6 +21,7 @@ export interface IContentCardProps {
   showExplanationsLabel: string;
   hideExplanationsLabel: string;
   determinationLabel?: string;
+  determination?: string;
   reportedLabel: string;
   contentType: string;
   forLabel: string;
@@ -41,12 +43,11 @@ export interface IContentCardProps {
   moderatedByLabel?: string;
   moderatedOnLabel?: string;
   evaluationDateTime?: string;
-  keepContentLabel?: string;
-  delistContentLabel?: string;
+  makeADecisionLabel?: string;
   reviewDecisionLabel?: string;
   logger: any;
   sdkModules: any;
-  handleButtonClick: (param1: string, param2: string, param3: string, param5: any) => void;
+  handleButtonClick: (param1: string, param2: string) => void;
 }
 
 const ContentCard: React.FC<IContentCardProps> = props => {
@@ -56,6 +57,7 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     showExplanationsLabel,
     hideExplanationsLabel,
     determinationLabel,
+    determination,
     reportedLabel,
     contentType,
     forLabel,
@@ -77,32 +79,45 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     moderatedByLabel,
     moderatedOnLabel,
     evaluationDateTime,
-    keepContentLabel,
-    delistContentLabel,
+    makeADecisionLabel,
     reviewDecisionLabel,
   } = props;
 
   const [entryData, setEntryData] = React.useState<any>(null);
+  const [profileState, profileActions] = useProfile({
+    onError: err => {
+      console.error(err);
+    },
+    ipfsService: props.sdkModules.commons.ipfsService,
+    profileService: props.sdkModules.profiles.profileService,
+  });
 
   const [showExplanations, setShowExplanations] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    const entryCall = props.sdkModules.posts.entries.getEntry({ entryId });
-    const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
-    const getEntryCall = combineLatest([ipfsGatewayCall, entryCall]);
-    getEntryCall.subscribe((resp: any) => {
-      const ipfsGateway = resp[0].data;
-      const entry = resp[1].data?.getPost;
-      if (entry) {
-        const mappedEntry = mapEntry(entry, ipfsGateway);
-        setEntryData(mappedEntry);
-      }
-    });
+    if (contentType === 'post') {
+      const entryCall = props.sdkModules.posts.entries.getEntry({ entryId });
+      const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
+      const getEntryCall = combineLatest([ipfsGatewayCall, entryCall]);
+      getEntryCall.subscribe((resp: any) => {
+        const ipfsGateway = resp[0].data;
+        const entry = resp[1].data?.getPost;
+        if (entry) {
+          const mappedEntry = mapEntry(entry, ipfsGateway);
+          setEntryData(mappedEntry);
+        }
+      });
+    }
+    if (contentType === 'profile') {
+      profileActions.getProfileData({ ethAddress: entryId });
+    }
   }, [entryId]);
 
-  const handleClick = (action: string) => () => {
+  console.log('state: ', profileState);
+
+  const handleClick = () => () => {
     if (entryId) {
-      props.handleButtonClick(entryId, action, contentType, entryData);
+      props.handleButtonClick(entryId, contentType);
     }
   };
 
@@ -174,7 +189,7 @@ const ContentCard: React.FC<IContentCardProps> = props => {
             align="center"
             border={isPending ? { side: 'top', color: 'border', style: 'solid' } : { size: '0rem' }}
           >
-            <Box width={isPending ? '65%' : '100%'}>
+            <Box width={isPending ? '75%' : '100%'}>
               <Box direction="row">
                 <Text>{originallyReportedByLabel}</Text>
                 <Avatar
@@ -217,13 +232,8 @@ const ContentCard: React.FC<IContentCardProps> = props => {
               )}`}</Text>
             </Box>
             {isPending && (
-              <Box direction="row" width="35%" justify="end">
-                <Button
-                  margin={{ right: 'xsmall' }}
-                  label={keepContentLabel}
-                  onClick={handleClick('Keep')}
-                />
-                <Button primary={true} label={delistContentLabel} onClick={handleClick('Delist')} />
+              <Box direction="row" width="25%" justify="end">
+                <Button primary={true} label={makeADecisionLabel} onClick={handleClick()} />
               </Box>
             )}
           </Box>
@@ -236,6 +246,10 @@ const ContentCard: React.FC<IContentCardProps> = props => {
                 <>
                   <Text margin={{ top: 'large' }} style={{ fontWeight: 'bold' }}>
                     {determinationLabel}
+                    {': '}
+                    <Text as="span" color="accentText">
+                      {determination}
+                    </Text>
                   </Text>
                   <Text margin={{ top: 'xsmall' }}>{moderatorDecision}</Text>
                 </>

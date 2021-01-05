@@ -1,11 +1,10 @@
 import React from 'react';
 import { useToasts } from 'react-toast-notifications';
-import { Box, Text, FormField } from 'grommet';
+import { Box, Text, FormField, RadioButtonGroup } from 'grommet';
 
-import { EntryCardMod, ProfileCardMod, MainAreaCardBox } from '../../Cards';
+import { MainAreaCardBox } from '../../Cards';
 import { Button } from '../../Buttons';
 import { Icon } from '../../Icon';
-import { ILocale } from '../../../utils/time';
 
 import { ModalWrapper } from '../common/styled-modal';
 
@@ -16,10 +15,8 @@ export interface IModerateModalProps {
   titleLabel: string;
   contentType: string;
 
-  flaggedItemData: any;
-  repostsLabel: string;
-  repliesLabel: string;
-  locale: ILocale;
+  decisionLabel: string;
+  optionLabels: string[];
 
   descriptionLabel: string;
   descriptionPlaceholder: string;
@@ -30,7 +27,6 @@ export interface IModerateModalProps {
   footerLink2Label: string;
   footerUrl2: string;
   cancelLabel?: string;
-  reportLabel?: string;
   user: string | null;
   contentId?: string;
   // screen size passed by viewport provider
@@ -45,10 +41,8 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     className,
     titleLabel,
     contentType,
-    flaggedItemData,
-    repostsLabel,
-    repliesLabel,
-    locale,
+    decisionLabel,
+    optionLabels,
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
@@ -58,7 +52,6 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     footerUrl1,
     footerUrl2,
     cancelLabel,
-    reportLabel,
     user,
     contentId,
     size,
@@ -68,6 +61,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
 
   const [explanation, setExplanation] = React.useState('');
   const [requesting, setRequesting] = React.useState(false);
+  const [action, setAction] = React.useState('');
   const [rows, setRows] = React.useState(1);
 
   const hiddenSpanRef = React.useRef<HTMLSpanElement>(null);
@@ -89,6 +83,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
   };
 
   const handleCancel = () => {
+    setAction('');
     setExplanation('');
     return closeModal();
   };
@@ -169,37 +164,26 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                 />
               )}
             </Box>
-            <MainAreaCardBox>
-              {contentType === 'post' ? (
-                <EntryCardMod
-                  entryData={flaggedItemData}
-                  repostsLabel={repostsLabel}
-                  repliesLabel={repliesLabel}
-                  locale={locale}
-                  style={{ height: 'auto' }}
-                  onClickAvatar={() => null}
-                  onClickReplies={() => null}
-                  onContentClick={() => null}
-                />
-              ) : contentType === 'profile' ? (
-                <ProfileCardMod
-                  onClickApps={() => null}
-                  onClickFollowing={() => null}
-                  profileData={flaggedItemData}
-                  onChangeProfileData={() => null}
-                  getProfileProvidersData={() => null}
-                  descriptionLabel={'About me'}
-                  actionsLabel={'Actions'}
-                  editProfileLabel={'Edit profile'}
-                  changeCoverImageLabel={'Change cover image'}
-                  followingLabel={'Following'}
-                  appsLabel={'Apps'}
-                  usersLabel={'Users'}
-                  shareProfileLabel={'Share Profile'}
-                  onEntryFlag={() => null}
-                />
-              ) : null}
-            </MainAreaCardBox>
+            <StyledText
+              margin={{ vertical: 'xsmall' }}
+              weight="normal"
+              color="secondaryText"
+              size="medium"
+            >
+              {decisionLabel}
+              <Text color="accentText" margin={{ left: '0.15rem' }}>
+                *
+              </Text>
+            </StyledText>
+            <Box direction="column">
+              <RadioButtonGroup
+                gap="xxsmall"
+                name="action"
+                options={optionLabels}
+                value={action}
+                onChange={(event: any) => setAction(event.target.value)}
+              />
+            </Box>
             <StyledText
               margin={{ top: 'medium' }}
               weight="normal"
@@ -253,18 +237,20 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                 </Text>
               </Text>
             </Box>
-            <Box width="100%" direction="row" justify="end">
-              {size !== 'small' && (
-                <Button margin={{ right: '0.5rem' }} label={cancelLabel} onClick={handleCancel} />
-              )}
-              <Button
-                primary={true}
-                label={reportLabel}
-                fill={size === 'small' ? true : false}
-                onClick={reportLabel === 'Delist' ? handleModerate() : handleModerate(false)}
-                disabled={requesting || !explanation.length}
-              />
-            </Box>
+            {!!action.length && (
+              <Box width="100%" direction="row" justify="end">
+                {size !== 'small' && (
+                  <Button margin={{ right: '0.5rem' }} label={cancelLabel} onClick={handleCancel} />
+                )}
+                <Button
+                  primary={true}
+                  label={action}
+                  fill={size === 'small' ? true : false}
+                  onClick={action === 'Delist' ? handleModerate() : handleModerate(false)}
+                  disabled={requesting || !explanation.length || !action.length}
+                />
+              </Box>
+            )}
           </Box>
         </MainAreaCardBox>
       </StyledBox>
@@ -274,7 +260,6 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
 
 ModerateModal.defaultProps = {
   cancelLabel: 'Cancel',
-  reportLabel: 'Delist',
 };
 
 export default ModerateModal;

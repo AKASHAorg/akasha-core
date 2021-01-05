@@ -37,13 +37,19 @@ export const getAllPending = async () => {
   }
 };
 
-export const getAllDelisted = async () => {
+export const getAllModerated = async () => {
   try {
-    const response = await postRequest(`${BASE_DECISION_URL}/moderated`, {
+    // fetch delisted items
+    const delisted = await postRequest(`${BASE_DECISION_URL}/moderated`, {
       delisted: true,
     });
 
-    const modResponse = response.map(
+    // fetch kept items
+    const kept = await postRequest(`${BASE_DECISION_URL}/moderated`, {
+      delisted: false,
+    });
+
+    const modResponse = [...delisted, ...kept].map(
       (
         {
           contentType: type,
@@ -55,6 +61,7 @@ export const getAllDelisted = async () => {
           reportedBy,
           reportedDate,
           reports,
+          delisted,
         }: any,
         idx: number,
       ) => {
@@ -70,6 +77,7 @@ export const getAllDelisted = async () => {
           moderator: moderator, // @TODO: fetch moderator's Name and ENS (if applicable) from the profile API
           entryDate: reportedDate,
           evaluationDate: date,
+          delisted: delisted,
         };
       },
     );
