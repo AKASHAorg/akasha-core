@@ -25,4 +25,7 @@ export default class Stash implements IStash {
   public remove(key: string): void {
     this.cache.del(key);
   }
+  public clear(): void {
+    this.cache.reset();
+  }
 }

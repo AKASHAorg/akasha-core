@@ -21,9 +21,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
 
   const { t } = useTranslation();
 
-  const jwtToken = profileStore.useStoreState(
-    (state: LoggedProfileStateModel) => state.data.jwtToken,
-  );
+  const pubKey = profileStore.useStoreState((state: LoggedProfileStateModel) => state.data.pubKey);
   const ethAddress = profileStore.useStoreState(
     (state: LoggedProfileStateModel) => state.data.ethAddress,
   );
@@ -50,10 +48,10 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   };
 
   React.useEffect(() => {
-    if (jwtToken) {
+    if (pubKey) {
       setLoginModalState(false);
     }
-  }, [jwtToken]);
+  }, [pubKey]);
 
   React.useEffect(() => {
     if (ethAddress && flagged.length) {
@@ -67,7 +65,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     data => {
       updateData({
         ethAddress: data.ethAddress,
-        jwtToken: data.token,
+        pubKey: data.pubKey,
       });
     },
     err => {
@@ -100,7 +98,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
                 {...props}
                 navigateToUrl={singleSpa.navigateToUrl}
                 ethAddress={ethAddress}
-                jwtToken={jwtToken}
+                pubKey={pubKey}
                 flagged={flagged}
                 modalOpen={modalOpen}
                 setFlagged={setFlagged}

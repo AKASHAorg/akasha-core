@@ -27,8 +27,13 @@ const service: AkashaService = (invoke, log) => {
   let buckClient: Buckets;
   let auth: UserAuth;
   let db: Database;
+  let channel;
+  let currentUser: { pubKey: string; ethAddress: string };
   let tokenGenerator: () => Promise<UserAuth>;
   const providerKey = '@providerType';
+  if ('BroadcastChannel' in self) {
+    channel = new BroadcastChannel('sync_data');
+  }
   const signIn = async (provider: EthProviders = EthProviders.Web3Injected) => {
     let currentProvider;
     const { setServiceSettings } = invoke(coreServices.SETTINGS_SERVICE);
@@ -38,7 +43,7 @@ const service: AkashaService = (invoke, log) => {
       if (!sessionStorage.getItem(providerKey)) {
         throw new Error('The provider must have a wallet/key in order to authenticate.');
       }
-      currentProvider = sessionStorage.getItem(providerKey);
+      currentProvider = +sessionStorage.getItem(providerKey); // cast to int
     } else {
       currentProvider = provider;
       sessionStorage.setItem(providerKey, currentProvider);
@@ -71,12 +76,13 @@ const service: AkashaService = (invoke, log) => {
 
     // @Todo: on error try to setupMail
     await hubUser.setupMailbox();
-    const mailID = await hubUser.getMailboxID();
+    // const mailID = await hubUser.getMailboxID();
+    const pubKey = identity.public.toString();
     // // for 1st time users
     // if (!mailID) {
     //   await hubUser.setupMailbox();
     // }
-    db = new Database(`awf-alpha-user-${identity.public.toString().slice(-8)}`, {
+    db = new Database(`awf-alpha-user-${pubKey.slice(-8)}`, {
       name: 'settings',
       schema: settingsSchema,
     });
@@ -90,7 +96,8 @@ const service: AkashaService = (invoke, log) => {
     cache.set(AUTH_CACHE, {
       [ethAddressCache]: address,
     });
-    return { client: hubClient, user: hubUser, token: auth.token, ethAddress: address };
+    currentUser = { pubKey, ethAddress: address };
+    return currentUser;
   };
 
   const getSession = async () => {
@@ -116,7 +123,7 @@ const service: AkashaService = (invoke, log) => {
     const session = await getSession();
     // the definitions for Context are not updated
     // @ts-ignore
-    const isExpired = await session.client.context.isExpired;
+    const isExpired = session.client.context.isExpired;
     if (!isExpired && auth) {
       return auth.token;
     }
@@ -124,7 +131,30 @@ const service: AkashaService = (invoke, log) => {
     return auth.token;
   };
 
-  return { signIn, getSession, getToken };
+  const getCurrentUser = async () => {
+    if (currentUser) {
+      return Promise.resolve(currentUser);
+    }
+    if (!sessionStorage.getItem(providerKey)) {
+      return Promise.resolve(null);
+    }
+    return signIn(EthProviders.None);
+  };
+
+  const signOut = async () => {
+    const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
+    await cache.clear();
+    sessionStorage.clear();
+    identity = null;
+    hubClient = null;
+    hubUser = null;
+    buckClient = null;
+    auth = null;
+    db = null;
+    currentUser = null;
+    return;
+  };
+  return { signIn, signOut, getSession, getToken, getCurrentUser };
 };
 
 export default { service, name: AUTH_SERVICE };

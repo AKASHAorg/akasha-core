@@ -26,7 +26,7 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
     data => {
       actions.updateData({
         ethAddress: data.ethAddress,
-        jwtToken: data.token,
+        pubKey: data.pubKey,
       });
     },
     err => {
@@ -58,7 +58,7 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
     /* goto tutorials */
   };
 
-  if (state.data.jwtToken) {
+  if (state.data.ethAddress) {
     return null;
   }
 

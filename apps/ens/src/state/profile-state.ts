@@ -19,7 +19,7 @@ export interface IRegistrationStatus {
 
 export interface ProfileState {
   loggedEthAddress?: string;
-  token: string | null;
+  pubKey: string | null;
   ensInfo: { name?: string };
   registrationStatus: null | IRegistrationStatus;
   statusReceived: boolean;
@@ -42,7 +42,7 @@ export interface ProfileStateModel extends ProfileState {
   updateData: Action<ProfileStateModel, Partial<ProfileState>>;
   createError: Action<ProfileStateModel, IStateErrorPayload>;
   getLoggedEthAddress: Thunk<ProfileStateModel>;
-  handleLoginSuccess: Action<ProfileStateModel, { ethAddress: string; token: string }>;
+  handleLoginSuccess: Action<ProfileStateModel, { ethAddress: string; pubKey: string }>;
   handleLoginError: Action<ProfileStateModel, { error: Error }>;
   getENSByAddress: Thunk<ProfileStateModel, { ethAddress: string }>;
   getEnsRegistrationStatus: Thunk<ProfileStateModel, { ethAddress: string }>;
@@ -57,7 +57,7 @@ const ENS_REGISTRATION_STATUS = 'ens-registration-status';
 export const profileStateModel: ProfileStateModel = persist(
   {
     loggedEthAddress: undefined,
-    token: null,
+    pubKey: null,
     ensInfo: {},
     registrationStatus: null,
     statusReceived: false,
@@ -83,7 +83,7 @@ export const profileStateModel: ProfileStateModel = persist(
     // payload should contain ethAddress and token
     handleLoginSuccess: action((state, payload) => {
       state.loggedEthAddress = payload.ethAddress;
-      state.token = payload.token;
+      state.pubKey = payload.pubKey;
       state.fetching = false;
     }),
     handleLoginError: action((state, payload) => {
@@ -209,7 +209,7 @@ export const profileStateModel: ProfileStateModel = persist(
         race(call, globalCall).subscribe(
           (response: any) => {
             actions.updateData({
-              token: response.data.token,
+              pubKey: response.data.pubKey,
               loggedEthAddress: response.data.ethAddress,
             });
           },

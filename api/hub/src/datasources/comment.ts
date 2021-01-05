@@ -3,6 +3,7 @@ import { getAppDB } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { DataProvider, Comment } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
+import { searchIndex } from './search-indexes';
 
 class CommentAPI extends DataSource {
   private readonly collection: string;
@@ -55,6 +56,15 @@ class CommentAPI extends DataSource {
       ],
     };
     const commentID = await db.create(this.dbID, this.collection, [comment]);
+    searchIndex.saveObject({
+      objectID: commentID[0],
+      author: comment.author,
+      tags: comment.tags,
+      category: 'comment',
+      creationDate: comment.creationDate,
+      postId: comment.postId,
+      content: comment.content.find(e => e.property === 'textContent')?.value,
+    });
     queryCache.del(this.getAllCommentsCacheKey(commentData.postID));
     return commentID;
   }

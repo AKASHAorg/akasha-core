@@ -74,7 +74,7 @@ export const getMailSender = async () => {
   const mailSenderID = identity();
   await api.getToken(mailSenderID);
   await api.setupMailbox();
-  const mailID = await api.getMailboxID();
+  // const mailID = await api.getMailboxID();
   // if (!mailID) {
   //   await api.setupMailbox();
   // }
