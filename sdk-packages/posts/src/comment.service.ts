@@ -20,6 +20,7 @@ const service: AkashaService = (invoke, log) => {
         }
         author{
           pubKey
+          ethAddress
           userName
           name
           avatar
@@ -39,7 +40,7 @@ const service: AkashaService = (invoke, log) => {
 
   const getComments = async (opt: { offset?: string; limit: number; postID: string }) => {
     const query = `
-  query GetComments($offset: String, $limit: Int, $postID: String) {
+  query GetComments($offset: String, $limit: Int, $postID: String!) {
     getComments(postID:$postID, offset: $offset, limit: $limit){
       total
       nextIndex
@@ -51,6 +52,7 @@ const service: AkashaService = (invoke, log) => {
         }
         author{
           pubKey
+          ethAddress
           userName
           name
           avatar

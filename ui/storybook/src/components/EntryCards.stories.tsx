@@ -30,7 +30,6 @@ storiesOf('Cards/Entry Cards', module).add('entry card', () => (
       onEntryShare={() => action('Share entry Clicked')('Synthetic Event')}
       onEntryFlag={() => action('Flag Entry Clicked')('Synthetic Event')}
       onClickReplies={() => action('Replies Clicked')('Synthetic Event')}
-      onLinkCopy={() => action('Link Copied')('Synthetic Event')}
       onEntryBookmark={() => action('Bookmark Clicked')('Synthetic Event')}
       entryData={object('Entry Data', entryData)}
       sharePostLabel={text('Share Data Title', 'Share Post')}

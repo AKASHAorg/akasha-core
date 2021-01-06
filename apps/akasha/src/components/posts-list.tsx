@@ -107,9 +107,6 @@ const PostsList: React.FC<IPostsListProps> = props => {
   const handleEntryFlag = () => {
     /* todo */
   };
-  const handleLinkCopy = () => {
-    /* todo */
-  };
   const handleClickReplies = () => {
     /* todo */
   };
@@ -173,7 +170,6 @@ const PostsList: React.FC<IPostsListProps> = props => {
                           onRepost={handleEntryRepost}
                           onEntryShare={handleEntryShare}
                           onEntryFlag={handleEntryFlag}
-                          onLinkCopy={handleLinkCopy}
                           onClickReplies={handleClickReplies}
                           handleFollow={handleFollow}
                           handleUnfollow={handleUnfollow}

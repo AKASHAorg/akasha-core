@@ -45,7 +45,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     onClickReplies,
     onEntryShare,
     onEntryFlag,
-    onLinkCopy,
+
     onContentClick,
     handleFollow,
     handleUnfollow,
@@ -88,7 +88,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           onClickReplies={onClickReplies}
           onEntryShare={onEntryShare}
           onEntryFlag={onEntryFlag}
-          onLinkCopy={onLinkCopy}
           copyIPFSLinkLabel={copyIPFSLinkLabel}
           handleFollow={handleFollow}
           handleUnfollow={handleUnfollow}
