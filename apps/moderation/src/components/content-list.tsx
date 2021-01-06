@@ -124,7 +124,7 @@ const ContentList: React.FC<IContentListProps> = props => {
               titleLabel={t('Make a Decision')}
               contentType={t(contentType)}
               decisionLabel={t('Decision')}
-              optionLabels={[t('Keep'), t('Delist')]}
+              optionLabels={[t('Delist'), t('Keep')]}
               descriptionLabel={t('Evaluation')}
               descriptionPlaceholder={t('Please explain the reason(s)')}
               footerText1Label={t('If you are unsure, you can refer to our')}

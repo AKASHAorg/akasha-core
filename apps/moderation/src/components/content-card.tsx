@@ -85,8 +85,8 @@ const ContentCard: React.FC<IContentCardProps> = props => {
 
   const [entryData, setEntryData] = React.useState<any>(null);
   const [profileState, profileActions] = useProfile({
-    onError: err => {
-      console.error(err);
+    onError: error => {
+      props.logger.error('[content-card.tsx]: useProfile err %j', error.error || '');
     },
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
@@ -113,7 +113,7 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     }
   }, [entryId]);
 
-  console.log('state: ', profileState);
+  props.logger.error('state: ', profileState);
 
   const handleClick = () => () => {
     if (entryId) {

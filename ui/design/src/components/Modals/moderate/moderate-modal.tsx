@@ -61,7 +61,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
 
   const [explanation, setExplanation] = React.useState('');
   const [requesting, setRequesting] = React.useState(false);
-  const [action, setAction] = React.useState('');
+  const [action, setAction] = React.useState('Delist');
   const [rows, setRows] = React.useState(1);
 
   const hiddenSpanRef = React.useRef<HTMLSpanElement>(null);
