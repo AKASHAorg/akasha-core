@@ -28,11 +28,36 @@ const service: AkashaService = (invoke, log) => {
   let auth: UserAuth;
   let db: Database;
   let channel;
+  let sessKey;
   let currentUser: { pubKey: string; ethAddress: string };
   let tokenGenerator: () => Promise<UserAuth>;
   const providerKey = '@providerType';
+  const SYNC_REQUEST = '@sync_request';
+  const SYNC_RESPONSE = '@sync_response';
+  const SYNC_CHANNEL = '@sync_data';
+  const SIGN_OUT_EVENT = '@sign_out';
   if ('BroadcastChannel' in self) {
-    channel = new BroadcastChannel('sync_data');
+    channel = new BroadcastChannel(SYNC_CHANNEL);
+    channel.postMessage({ type: SYNC_REQUEST });
+    channel.onmessage = function (event) {
+      const { type } = event.data;
+      if (type === SYNC_REQUEST) {
+        const response = {
+          [providerKey]: sessionStorage.getItem(providerKey),
+          identity: { key: sessKey, value: identity?.toString() },
+        };
+        channel.postMessage({ response, type: SYNC_RESPONSE });
+      } else if (type === SYNC_RESPONSE) {
+        const { response } = event.data;
+        if (response && response.identity.key !== sessKey) {
+          log.info('syncing session');
+          sessionStorage.setItem(providerKey, response[providerKey]);
+          sessionStorage.setItem(response?.identity?.key, response?.identity?.value);
+        }
+      } else if (type === SIGN_OUT_EVENT && currentUser) {
+        signOut().then(e => log.info('signed-out'));
+      }
+    };
   }
   const signIn = async (provider: EthProviders = EthProviders.Web3Injected) => {
     let currentProvider;
@@ -57,7 +82,7 @@ const service: AkashaService = (invoke, log) => {
     const endPoint = authSettings[AUTH_ENDPOINT];
     const signer = web3.getSigner();
     const address = await signer.getAddress();
-    const sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
+    sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
     if (sessionStorage.getItem(sessKey)) {
       identity = PrivateKey.fromString(sessionStorage.getItem(sessKey));
     } else {
@@ -97,6 +122,13 @@ const service: AkashaService = (invoke, log) => {
       [ethAddressCache]: address,
     });
     currentUser = { pubKey, ethAddress: address };
+    if (channel) {
+      const response = {
+        [providerKey]: sessionStorage.getItem(providerKey),
+        identity: { key: sessKey, value: identity?.toString() },
+      };
+      channel.postMessage({ response, type: SYNC_RESPONSE });
+    }
     return currentUser;
   };
 
@@ -152,6 +184,9 @@ const service: AkashaService = (invoke, log) => {
     auth = null;
     db = null;
     currentUser = null;
+    if (channel) {
+      channel.postMessage({ type: SIGN_OUT_EVENT });
+    }
     return;
   };
   return { signIn, signOut, getSession, getToken, getCurrentUser };
