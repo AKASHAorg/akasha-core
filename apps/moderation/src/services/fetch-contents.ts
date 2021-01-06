@@ -40,16 +40,16 @@ export const getAllPending = async () => {
 export const getAllModerated = async () => {
   try {
     // fetch delisted items
-    const delisted = await postRequest(`${BASE_DECISION_URL}/moderated`, {
+    const delistedItems = await postRequest(`${BASE_DECISION_URL}/moderated`, {
       delisted: true,
     });
 
     // fetch kept items
-    const kept = await postRequest(`${BASE_DECISION_URL}/moderated`, {
+    const keptItems = await postRequest(`${BASE_DECISION_URL}/moderated`, {
       delisted: false,
     });
 
-    const modResponse = [...delisted, ...kept].map(
+    const modResponse = [...delistedItems, ...keptItems].map(
       (
         {
           contentType: type,

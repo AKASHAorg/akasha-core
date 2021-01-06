@@ -90,7 +90,7 @@ const ContentTab: React.FC<IContentTabProps> = props => {
               </Text>
               <Box direction="row">
                 <StyledButton
-                  right
+                  right={true}
                   primary={!isDelisted}
                   label={keptLabel}
                   onClick={() => setIsDelisted(false)}
