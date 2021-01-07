@@ -70,7 +70,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     data => {
       updateData({
         ethAddress: data.ethAddress,
-        jwtToken: data.token,
+        jwtToken: data.pubKey,
       });
     },
     err => {
