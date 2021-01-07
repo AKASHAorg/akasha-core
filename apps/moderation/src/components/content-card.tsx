@@ -113,7 +113,11 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     }
   }, [entryId]);
 
-  props.logger.error('state: ', profileState);
+  React.useEffect(() => {
+    if (profileState) {
+      setEntryData(profileState);
+    }
+  }, [profileState]);
 
   const handleClick = () => () => {
     if (entryId) {

@@ -3,9 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
-import { sampleProfileData } from '../services/dummy-data';
-
-const { Text, EntryCardMod, ProfileCardMod, MainAreaCardBox } = DS;
+const { Text, EntryCardMod, ProfileCard, MainAreaCardBox } = DS;
 
 export interface IEntryDataCardProps {
   entryData: any;
@@ -35,21 +33,23 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
             />
           )}
           {contentType === 'profile' && (
-            <ProfileCardMod
-              onClickApps={() => null}
-              onClickFollowing={() => null}
-              profileData={sampleProfileData}
-              onChangeProfileData={() => null}
-              getProfileProvidersData={() => null}
-              descriptionLabel={t('About me')}
-              actionsLabel={t('Actions')}
-              editProfileLabel={t('Edit profile')}
-              changeCoverImageLabel={t('Change cover image')}
-              followingLabel={t('Following')}
+            <ProfileCard
+              flaggable={true}
+              canUserEdit={false}
+              profileData={entryData}
               appsLabel={t('Apps')}
               usersLabel={t('Users')}
+              actionsLabel={''}
+              followingLabel={t('Following')}
+              descriptionLabel={t('About me')}
               shareProfileLabel={t('Share Profile')}
+              flagAsLabel={t('Report Profile')}
+              onClickApps={() => {}}
+              onClickFollowing={() => {}}
               onEntryFlag={() => null}
+              onUpdateClick={() => null}
+              onENSChangeClick={() => null}
+              hideENSButton={true}
             />
           )}
         </>
