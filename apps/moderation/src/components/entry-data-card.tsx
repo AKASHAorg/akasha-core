@@ -44,8 +44,8 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               descriptionLabel={t('About me')}
               shareProfileLabel={t('Share Profile')}
               flagAsLabel={t('Report Profile')}
-              onClickApps={() => {}}
-              onClickFollowing={() => {}}
+              onClickApps={() => null}
+              onClickFollowing={() => null}
               onEntryFlag={() => null}
               onUpdateClick={() => null}
               onENSChangeClick={() => null}
