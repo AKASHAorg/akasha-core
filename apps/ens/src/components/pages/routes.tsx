@@ -20,7 +20,7 @@ const Routes: React.FC<
   const [loginModalState, setLoginModalState] = React.useState({
     showLoginModal: false,
   });
-  const token = profileStore.useStoreState((s: StateMapper<ProfileStateModel, ''>) => s.token);
+  const pubKey = profileStore.useStoreState((s: StateMapper<ProfileStateModel, ''>) => s.pubKey);
   const authorize = profileStore.useStoreActions(
     (act: ActionMapper<ProfileStateModel, ''>) => act.authorize,
   );
@@ -33,14 +33,14 @@ const Routes: React.FC<
   );
   useGlobalLogin(globalChannel, onLoginSuccess, onLoginError);
   React.useEffect(() => {
-    if (token) {
+    if (pubKey) {
       setTimeout(() => {
         setLoginModalState({
           showLoginModal: false,
         });
       }, 500);
     }
-  }, [token]);
+  }, [pubKey]);
   const handleLoginModalShow = () => {
     setLoginModalState({
       showLoginModal: true,

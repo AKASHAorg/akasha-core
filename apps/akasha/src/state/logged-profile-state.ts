@@ -25,7 +25,7 @@ export interface IProfileData {
 export interface LoggedProfileState {
   profileData: {};
   ethAddress: string | null;
-  jwtToken: string | null;
+  pubKey: string | null;
   // when we are loading the profile data
   isLoading?: boolean;
   errors: {
@@ -55,7 +55,7 @@ export interface LoggedProfileStateModel {
 
 export const loggedProfileStateModel: LoggedProfileStateModel = {
   data: {
-    jwtToken: null,
+    pubKey: null,
     ethAddress: null,
     profileData: {
       name: '',
@@ -93,7 +93,7 @@ export const loggedProfileStateModel: LoggedProfileStateModel = {
       race(call, globalCall).subscribe(
         (response: any) => {
           actions.updateData({
-            jwtToken: response.data.token,
+            pubKey: response.data.pubKey,
             ethAddress: response.data.ethAddress,
           });
         },
