@@ -5,7 +5,8 @@
     "rootDir": "./src",
     "lib": ["dom"],
     "module": "commonjs",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": ["./src"]
 }

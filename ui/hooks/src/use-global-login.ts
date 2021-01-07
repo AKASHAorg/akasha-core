@@ -4,7 +4,7 @@ import { filter } from 'rxjs/operators';
 /**
  * a hook that will fire an action when the signIn is called
  */
-export type OnSuccessHandler = (data: { ethAddress: string; token: string }) => void;
+export type OnSuccessHandler = (data: { ethAddress: string; pubKey: string }) => void;
 export type OnErrorHandler = (payload: { error: Error }) => void;
 
 const useGlobalLogin = (
