@@ -84,6 +84,22 @@ class TagAPI extends DataSource {
     return await db.save(this.dbID, this.collection, [tag]);
   }
 
+  async indexComment(commentsCollection: string, commentID: string, tagName: string) {
+    const db: Client = await getAppDB();
+    const postExists = await db.has(this.dbID, commentsCollection, [commentID]);
+    if (!postExists) {
+      return Promise.reject(`commentID: ${commentID} was not found`);
+    }
+    let tag = await this.getTag(tagName);
+
+    if (!tag) {
+      await this.addTag(tagName);
+      tag = await this.getTag(tagName);
+    }
+    tag.comments.unshift(commentID);
+    return await db.save(this.dbID, this.collection, [tag]);
+  }
+
   async addTag(name: string) {
     const db: Client = await getAppDB();
     const formattedName = name.toLowerCase();
@@ -122,6 +138,7 @@ class TagAPI extends DataSource {
       .then(_ => _)
       // tslint:disable-next-line:no-console
       .catch(e => console.error(e));
+    queryCache.del(this.collection);
     return tagID[0];
   }
 }

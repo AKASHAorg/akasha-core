@@ -4,7 +4,7 @@ import { race } from 'rxjs';
 import { filter, takeLast } from 'rxjs/operators';
 
 export interface LoginState {
-  jwtToken: string | null;
+  pubKey: string | null;
   ethAddress: string | null;
   showLoginModal: boolean;
   learnMoreVisibility: boolean;
@@ -31,7 +31,7 @@ export const loginStateModel: LoginStateModel = {
   data: persist(
     {
       ethAddress: null,
-      jwtToken: null,
+      pubKey: null,
       showLoginModal: false,
       learnMoreVisibility: false,
       selectedProvider: null,
@@ -44,7 +44,7 @@ export const loginStateModel: LoginStateModel = {
         'learnMoreVisibility',
         'selectedProvider',
         // this doesn't play ok with global channels, will require a session api before enabling persist
-        'jwtToken',
+        'pubKey',
       ],
     },
   ),
@@ -75,7 +75,7 @@ export const loginStateModel: LoginStateModel = {
       race(call, globalCall).subscribe(
         (response: any) => {
           actions.updateData({
-            jwtToken: response.data.token,
+            pubKey: response.data.pubKey,
             ethAddress: response.data.ethAddress,
             selectedProvider: null,
           });

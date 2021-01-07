@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@koa/cors": "3.1.0",
-    "@textile/hub": "4.1.0",
+    "@textile/hub": "5.1.0",
     "algoliasearch": "4.8.3",
     "apollo-server-koa": "2.19.0",
     "dotenv": "8.2.0",
