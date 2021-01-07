@@ -8,30 +8,33 @@ export type ILocale = 'es' | 'ro' | 'en';
 
 const formatDate = (date: any, locale?: ILocale) => {
   if (dayjs(date).isValid()) {
+    const time = date.length > 10 ? dayjs(+date) : dayjs.unix(+date);
     if (locale) {
-      return dayjs.unix(date).locale(locale).format('D MMMM YYYY  H[h]mm');
+      return time.locale(locale).format('D MMMM YYYY  H[h]mm');
     }
-    return dayjs.unix(date).format('D MMMM YYYY  H[h]mm');
+    return time.format('D MMMM YYYY  H[h]mm');
   }
   return '';
 };
 
 const formatDateShort = (date: any, locale?: ILocale) => {
   if (dayjs(date).isValid()) {
+    const time = date.length > 10 ? dayjs(+date) : dayjs.unix(+date);
     if (locale) {
-      return dayjs.unix(date).locale(locale).format('D MMMM YYYY');
+      return time.locale(locale).format('D MMMM YYYY');
     }
-    return dayjs.unix(date).format('D MMMM YYYY');
+    return time.format('D MMMM YYYY');
   }
   return '';
 };
 
 const formatRelativeTime = (date: any, locale?: ILocale) => {
   if (dayjs(date).isValid()) {
+    const time = date.length > 10 ? dayjs(+date) : dayjs.unix(+date);
     if (locale) {
-      return dayjs.unix(date).locale(locale).fromNow();
+      return time.locale(locale).fromNow();
     }
-    return dayjs.unix(date).fromNow();
+    return time.fromNow();
   }
   return '';
 };

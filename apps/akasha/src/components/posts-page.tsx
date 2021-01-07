@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
-import PostPage from './post-page';
+import PostPage from './post-page/post-page';
 import PostsList from './posts-list';
 
 export interface PostsPageProps {
@@ -11,9 +11,9 @@ export interface PostsPageProps {
   logger: any;
   navigateToUrl: (url: string) => void;
   flagged: string;
-  modalOpen: boolean;
+  reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   showLoginModal: () => void;
   onError: (err: Error) => void;
 }
@@ -38,9 +38,9 @@ const PostsPage: React.FC<PostsPageProps & RootComponentProps> = props => {
             globalChannel={props.globalChannel}
             logger={props.logger}
             flagged={props.flagged}
-            modalOpen={props.modalOpen}
+            reportModalOpen={props.reportModalOpen}
             setFlagged={props.setFlagged}
-            setModalOpen={props.setModalOpen}
+            setReportModalOpen={props.setReportModalOpen}
             showLoginModal={props.showLoginModal}
             navigateToUrl={props.singleSpa.navigateToUrl}
           />

@@ -19,8 +19,8 @@ const EditorComponent = () => {
     setTagsState(query);
   };
 
-  const mentionables = USERNAMES.filter((c: string) =>
-    c.toLowerCase().startsWith(mentionsState.toLowerCase()),
+  const mentionables = USERNAMES.filter((c: any) =>
+    c.name.toLowerCase().startsWith(mentionsState.toLowerCase()),
   ).slice(0, 10);
 
   const tags = TAGS.filter((c: string) =>
@@ -29,7 +29,7 @@ const EditorComponent = () => {
 
   return (
     <EditorBox
-      onPublish={() => action('Clicked on')('Synthetic Event')}
+      onPublish={data => action('Clicked on')(data)}
       avatar={text('Logged Profile Avatar', 'https://www.stevensegallery.com/360/360')}
       ethAddress={text('Logged Profile EthAddress', '0x003410499401674320006570047391024572000')}
       withMeter={boolean('Meter', true)}

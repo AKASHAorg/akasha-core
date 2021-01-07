@@ -147,7 +147,9 @@ export const mapEntry = (
     content: { provider: string; property: string; value: string }[];
     CID?: string;
     _id: string;
-    quotes: any[];
+    quotes?: any[];
+    quotedBy?: string[];
+    creationDate: string;
     author: {
       CID?: string;
       description: string;
@@ -210,12 +212,14 @@ export const mapEntry = (
     content: contentWithMediaGateways,
     quote: quotedEntry,
     entryId: entry._id,
+    time: entry.creationDate,
+    reposts: entry.quotedBy?.length,
     ipfsLink: entry._id,
     permalink: 'null',
   };
 };
 
-export const buildPublishObject = (data: any) => {
+export const buildPublishObject = (data: any, parentEntryId?: string) => {
   // save only the ipfs CID prepended with CID: for the slate content image urls
   const cleanedContent = data.content.map((node: any) => {
     const nodeClone = Object.assign({}, node);
@@ -232,7 +236,18 @@ export const buildPublishObject = (data: any) => {
     quotes.push(data.metadata.quote);
   }
 
-  const entryObj = {
+  const postObj: any = {
+    tags: data.metadata.tags,
+    mentions: data.metadata.mentions,
+  };
+  // logic specific to comments
+  if (parentEntryId) {
+    postObj.postID = parentEntryId;
+  } else {
+    postObj.quotes = quotes;
+  }
+
+  const entryObj: any = {
     data: [
       {
         provider: PROVIDER_AKASHA,
@@ -246,11 +261,13 @@ export const buildPublishObject = (data: any) => {
         value: data.textContent,
       },
     ],
-    post: {
-      quotes: quotes,
-      tags: data.metadata.tags,
-    },
   };
+  // logic specific to comments
+  if (parentEntryId) {
+    entryObj.comment = postObj;
+  } else {
+    entryObj.post = postObj;
+  }
 
   return entryObj;
 };
