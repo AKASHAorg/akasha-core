@@ -18,6 +18,8 @@ export default function authApi(channel) {
         signIn: extractedServices[AUTH_SERVICE]('signIn'),
         getCurrentUser: extractedServices[AUTH_SERVICE]('getCurrentUser'),
         signOut: extractedServices[AUTH_SERVICE]('signOut'),
+        signData: extractedServices[AUTH_SERVICE]('signData'),
+        verifySignature: extractedServices[AUTH_SERVICE]('verifySignature'),
       },
     },
   };
