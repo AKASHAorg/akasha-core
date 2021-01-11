@@ -15,7 +15,7 @@ import {
   moduleName,
   tokenCache,
 } from './constants';
-import { Client, PrivateKey, Users, Buckets, UserAuth } from '@textile/hub';
+import { Client, PrivateKey, Users, Buckets, UserAuth, PublicKey } from '@textile/hub';
 import { Database } from '@textile/threaddb';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { settingsSchema } from './db.schema';
@@ -189,7 +189,35 @@ const service: AkashaService = (invoke, log) => {
     }
     return;
   };
-  return { signIn, signOut, getSession, getToken, getCurrentUser };
+
+  const signData = async (data: object | string) => {
+    const session = await getSession();
+    let serializedData;
+    if (typeof data === 'object') {
+      serializedData = JSON.stringify(data);
+    }
+    serializedData = new TextEncoder().encode(serializedData);
+    const sig = await session.identity.sign(serializedData);
+    return { serializedData, signature: sig, pubKey: identity.public.toString() };
+  };
+
+  const verifySignature = async (args: {
+    pubKey: string;
+    data: Uint8Array | string | object;
+    signature: Uint8Array;
+  }) => {
+    const pub = PublicKey.fromString(args.pubKey);
+    let serializedData;
+    if (args.data instanceof Uint8Array) {
+      return pub.verify(args.data, args.signature);
+    }
+    if (typeof args.data === 'object') {
+      serializedData = JSON.stringify(args.data);
+    }
+    serializedData = new TextEncoder().encode(serializedData);
+    return pub.verify(serializedData, args.signature);
+  };
+  return { signIn, signData, verifySignature, signOut, getSession, getToken, getCurrentUser };
 };
 
 export default { service, name: AUTH_SERVICE };
