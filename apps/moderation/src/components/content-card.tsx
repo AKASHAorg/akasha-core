@@ -110,14 +110,11 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     }
     if (contentType === 'profile') {
       profileActions.getProfileData({ ethAddress: entryId });
+      if (profileState) {
+        setEntryData(profileState);
+      }
     }
-  }, [entryId]);
-
-  React.useEffect(() => {
-    if (profileState) {
-      setEntryData(profileState);
-    }
-  }, [profileState]);
+  }, [entryId, profileState]);
 
   const handleClick = () => () => {
     if (entryId) {
@@ -129,7 +126,9 @@ const ContentCard: React.FC<IContentCardProps> = props => {
     <Box margin={{ bottom: '1rem' }}>
       <MainAreaCardBox>
         <Box pad="1rem">
-          <EntryDataCard entryData={entryData} contentType={contentType} locale={locale} />
+          {entryData && (
+            <EntryDataCard entryData={entryData} contentType={contentType} locale={locale} />
+          )}
           <Box
             direction="row"
             margin={{ top: isPending ? 'large' : 'medium' }}
