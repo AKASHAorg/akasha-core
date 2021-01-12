@@ -187,14 +187,14 @@ const useLoginState = (
           providers.push({
             provider: 'ewa.providers.basic',
             property: 'avatar',
-            value: avatarRes.data,
+            value: avatarRes.data?.CID,
           });
         }
         if (coverImageRes) {
           providers.push({
             provider: 'ewa.providers.basic',
             property: 'coverImage',
-            value: coverImageRes.data,
+            value: coverImageRes.data?.CID,
           });
         }
         if (description) {
