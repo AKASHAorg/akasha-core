@@ -20,6 +20,8 @@ export default function authApi(channel) {
         signOut: extractedServices[AUTH_SERVICE]('signOut'),
         signData: extractedServices[AUTH_SERVICE]('signData'),
         verifySignature: extractedServices[AUTH_SERVICE]('verifySignature'),
+        getMessages: extractedServices[AUTH_SERVICE]('getMessages'),
+        markMessageAsRead: extractedServices[AUTH_SERVICE]('markMessageAsRead'),
       },
     },
   };

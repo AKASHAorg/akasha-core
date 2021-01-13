@@ -70,8 +70,9 @@ const ImagePopover: React.FC<IImagePopover> = props => {
         setUploading(true);
         uploadRequest(file)
           .then(res => {
-            setUploadValue(`${res[0].data}/${res[1].data}`);
-            setUploadValueName(`${res[0].data}/${res[1].data}`);
+            // @Todo: it should be changed, this should be handled somewhere else
+            setUploadValue(`${res[0].data}/${res[1].data?.CID}`);
+            setUploadValueName(`${res[0].data}/${res[1].data?.CID}`);
             setUploading(false);
           })
           .catch(err => {
