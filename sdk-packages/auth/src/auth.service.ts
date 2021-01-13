@@ -15,7 +15,16 @@ import {
   moduleName,
   tokenCache,
 } from './constants';
-import { Client, PrivateKey, Users, Buckets, UserAuth, PublicKey } from '@textile/hub';
+import {
+  Client,
+  PrivateKey,
+  Users,
+  Buckets,
+  UserAuth,
+  PublicKey,
+  InboxListOptions,
+  Status,
+} from '@textile/hub';
 import { Database } from '@textile/threaddb';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { settingsSchema } from './db.schema';
@@ -217,7 +226,37 @@ const service: AkashaService = (invoke, log) => {
     serializedData = new TextEncoder().encode(serializedData);
     return pub.verify(serializedData, args.signature);
   };
-  return { signIn, signData, verifySignature, signOut, getSession, getToken, getCurrentUser };
+  const decryptMessage = async message => {
+    const decryptedBody = await identity.decrypt(message.body);
+    const body = new TextDecoder().decode(decryptedBody);
+    const { from, readAt, createdAt, id } = message;
+    return { body, from, readAt, createdAt, id };
+  };
+  const getMessages = async (args: InboxListOptions) => {
+    const messages = await hubUser.listInboxMessages(
+      Object.assign({}, args, { status: Status.UNREAD }),
+    );
+    const inbox = [];
+    for (const message of messages) {
+      inbox.push(await decryptMessage(message));
+    }
+    return inbox.slice();
+  };
+  const markMessageAsRead = async (messageId: string) => {
+    await hubUser.deleteInboxMessage(messageId);
+    return true;
+  };
+  return {
+    signIn,
+    signData,
+    verifySignature,
+    signOut,
+    getSession,
+    getToken,
+    getCurrentUser,
+    getMessages,
+    markMessageAsRead,
+  };
 };
 
 export default { service, name: AUTH_SERVICE };

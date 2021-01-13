@@ -2,6 +2,7 @@ import registerCommonModule from '@akashaproject/sdk-common';
 import { extractCallableServices } from '../utils';
 import {
   CACHE_SERVICE,
+  IMAGE_UTILS_SERVICE,
   IPFS_SERVICE,
   VALIDATOR_SERVICE,
   WEB3_SERVICE,
@@ -44,6 +45,10 @@ export default function commonApi(channel) {
       },
       web3UtilsService: {
         getUtils: extractedServices[WEB3_UTILS_SERVICE]('getUtils'),
+      },
+      imageUtilsService: {
+        resizeImage: extractedServices[IMAGE_UTILS_SERVICE]('resizeImage'),
+        getImageSize: extractedServices[IMAGE_UTILS_SERVICE]('getImageSize'),
       },
     },
   };
