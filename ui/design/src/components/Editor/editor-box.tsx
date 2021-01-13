@@ -10,7 +10,6 @@ import { EmojiPopover, ImagePopover } from '../Popovers/index';
 import { EmbedBox } from './embed-box';
 import { FormatToolbar } from './format-toolbar';
 import { CustomEditor } from './helpers';
-import { defaultValue } from './initialValue';
 import { withMentions, withImages, withTags } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
 import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
@@ -44,8 +43,8 @@ export interface IEditorBox {
   // upload an URL or a file and returns a promise that resolves to an array
   uploadRequest?: (data: string | File, isUrl?: boolean) => any;
   publishingApp?: string;
-  editorState?: any;
-  setEditorState?: any;
+  editorState: any;
+  setEditorState: any;
 }
 
 export interface IMetadata {
@@ -87,7 +86,6 @@ const EditorBox: React.FC<IEditorBox> = props => {
   const mediaIconRef: React.RefObject<HTMLDivElement> = useRef(null);
   const emojiIconRef: React.RefObject<HTMLDivElement> = useRef(null);
 
-  const [editorValue, setEditorValue] = useState(defaultValue);
   const [mentionTargetRange, setMentionTargetRange] = useState<Range | null>(null);
   const [tagTargetRange, setTagTargetRange] = useState<Range | null>(null);
   const [index, setIndex] = useState(0);
@@ -127,10 +125,10 @@ const EditorBox: React.FC<IEditorBox> = props => {
         el.style.left = `${rect.left + window.pageXOffset}px`;
       }
     }
-  }, [mentions, tags, editor, index, mentionTargetRange, tagTargetRange, editorValue, editorState]);
+  }, [mentions, tags, editor, index, mentionTargetRange, tagTargetRange, editor]);
 
   const handlePublish = () => {
-    const content = editorState ? editorState : editorValue;
+    const content: any = editor;
     const metadata: IMetadata = {
       app: publishingApp,
       quote: embedEntryData?.entryId,
@@ -203,11 +201,8 @@ const EditorBox: React.FC<IEditorBox> = props => {
       return;
     }
     setCurrentSelection(editor.selection);
-    if (editorState) {
-      setEditorState(value);
-    } else {
-      setEditorValue(value);
-    }
+
+    setEditorState(value);
 
     const { selection } = editor;
 
@@ -365,11 +360,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
         <Avatar src={avatar} ethAddress={ethAddress} margin={{ top: '0.5rem' }} />
         <Box width="100%" pad={{ horizontal: 'small' }} direction="row" justify="between">
           <Box fill={true}>
-            <Slate
-              editor={editor}
-              value={editorState ? editorState : editorValue}
-              onChange={handleChange}
-            >
+            <Slate editor={editor} value={editorState} onChange={handleChange}>
               <FormatToolbar />
               <StyledEditable
                 placeholder={placeholderLabel}

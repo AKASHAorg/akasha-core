@@ -38,11 +38,7 @@ const MentionElement = (props: any) => {
       {...attributes}
       contentEditable={false}
       onClick={() => {
-        if (typeof handleMentionClick === 'function') {
-          handleMentionClick(element.ethAddress);
-        } else {
-          console.log(handleMentionClick);
-        }
+        handleMentionClick(element.ethAddress);
       }}
     >
       {displayedMention}
