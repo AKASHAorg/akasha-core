@@ -40,7 +40,7 @@ export interface FeedPageProps {
   logger: any;
   showLoginModal: () => void;
   ethAddress: string | null;
-  jwtToken: string | null;
+  pubKey: string | null;
   flagged: string;
   reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
@@ -58,7 +58,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     setReportModalOpen,
     showLoginModal,
     ethAddress,
-    jwtToken,
+    pubKey,
     onError,
     sdkModules,
     logger,
@@ -250,7 +250,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     content: any;
     textContent: any;
   }) => {
-    if (!ethAddress && !jwtToken) {
+    if (!ethAddress && !pubKey) {
       showLoginModal();
       return;
     }

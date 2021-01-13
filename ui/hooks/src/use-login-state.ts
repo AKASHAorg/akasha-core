@@ -23,7 +23,7 @@ export interface UseLoginProps {
 export interface UseLoginState {
   /* logged in user's ethAddress */
   ethAddress: string | null;
-  token: string | null;
+  pubKey: string | null;
   updateStatus: {
     saving: boolean;
     uploadingAvatar: boolean;
@@ -51,7 +51,7 @@ const useLoginState = (
   const { globalChannel, onError, authService, ipfsService, profileService, cacheService } = props;
   const [loginState, setLoginState] = React.useState<UseLoginState>({
     ethAddress: null,
-    token: null,
+    pubKey: null,
     updateStatus: {
       saving: false,
       uploadingAvatar: false,
@@ -71,7 +71,7 @@ const useLoginState = (
       setLoginState(prev => ({
         ...prev,
         ethAddress: payload.ethAddress,
-        token: payload.token,
+        pubKey: payload.pubKey,
       })),
     payload => {
       if (onError) {
@@ -187,14 +187,14 @@ const useLoginState = (
           providers.push({
             provider: 'ewa.providers.basic',
             property: 'avatar',
-            value: avatarRes.data,
+            value: avatarRes.data?.CID,
           });
         }
         if (coverImageRes) {
           providers.push({
             provider: 'ewa.providers.basic',
             property: 'coverImage',
-            value: coverImageRes.data,
+            value: coverImageRes.data?.CID,
           });
         }
         if (description) {
