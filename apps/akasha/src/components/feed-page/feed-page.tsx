@@ -143,6 +143,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     fetchEntries(req);
   };
 
+  const handleMentionClick = (profileEthAddress: string) => {
+    navigateToUrl(`/profile/${profileEthAddress}`);
+  };
+
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
     navigateToUrl(`/profile/${authorEth}`);
     ev.preventDefault();
@@ -386,6 +390,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                         handleFollow={handleFollow}
                         handleUnfollow={handleUnfollow}
                         onContentClick={handleNavigateToPost}
+                        onMentionClick={handleMentionClick}
                       />
                     )}
                   </>

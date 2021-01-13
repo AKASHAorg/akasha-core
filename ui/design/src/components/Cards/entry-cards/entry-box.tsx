@@ -17,7 +17,7 @@ export interface IEntryData {
   CID?: string;
   content: any;
   time?: string | number | Date;
-  replies?: IEntryData[];
+  replies?: number;
   reposts?: number;
   ipfsLink: string;
   permalink: string;
@@ -67,6 +67,7 @@ export interface IEntryBoxProps {
   handleFollow: (profileEthAddress: string) => void;
   handleUnfollow: (profileEthAddress: string) => void;
   onContentClick?: (details: IContentClickDetails) => void;
+  onMentionClick?: any;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -90,13 +91,13 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     bookmarkedLabel,
     onEntryBookmark,
     onClickAvatar,
-    onClickReplies,
     onEntryShare,
     onRepost,
     onEntryFlag,
     handleFollow,
     handleUnfollow,
     onContentClick,
+    onMentionClick,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -143,9 +144,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onEntryFlag(entryData.entryId);
   };
 
-  const handleRepliesClick = () => {
-    onClickReplies(entryData.entryId);
-  };
+  const handleRepliesClick = () => handleContentClick(entryData);
 
   const handleContentClick = (data?: IEntryData) => {
     if (onContentClick && typeof onContentClick === 'function' && data) {
@@ -222,8 +221,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             copyIPFSLinkLabel={copyIPFSLinkLabel}
           />
         )}
-        <Box pad={{ vertical: 'medium' }} onClick={() => handleContentClick(entryData)}>
-          <ReadOnlyEditor content={entryData.content} />
+        <Box pad={{ vertical: 'medium' }}>
+          <ReadOnlyEditor content={entryData.content} handleMentionClick={onMentionClick} />
         </Box>
         {entryData.quote && (
           <Box pad={{ vertical: 'medium' }} onClick={() => handleContentClick(entryData.quote)}>

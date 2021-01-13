@@ -6,6 +6,7 @@ export const defaultValue: Node[] = [
     children: [
       {
         text: '',
+        type: 'text',
       },
     ],
   },

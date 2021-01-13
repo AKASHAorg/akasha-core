@@ -85,7 +85,7 @@ export const serializeLegacyContentToSlate = (
   return serializedContent;
 };
 
-export const uploadMediaToTextile = (profileStore: any, ipfsSettings: any) => (
+export const uploadMediaToTextile = (profileStore: any, ipfsSettings: any) => async (
   data: any,
   isUrl = false,
 ) => {
@@ -98,7 +98,16 @@ export const uploadMediaToTextile = (profileStore: any, ipfsSettings: any) => (
     uploadData.name = data.name;
   }
   const uploadCall = profileStore.saveMediaFile(uploadData);
-  return forkJoin([gatewayCall, uploadCall]).toPromise();
+  try {
+    const res: any = await forkJoin([gatewayCall, uploadCall]).toPromise();
+    return {
+      data: `${res[0].data}/${res[1].data}`,
+    };
+  } catch (error) {
+    return {
+      error: error,
+    };
+  }
 };
 
 function toBinary(data: string) {
@@ -150,6 +159,7 @@ export const mapEntry = (
     quotes?: any[];
     quotedBy?: string[];
     creationDate: string;
+    totalComments: string;
     author: {
       CID?: string;
       description: string;
@@ -216,6 +226,7 @@ export const mapEntry = (
     reposts: entry.quotedBy?.length,
     ipfsLink: entry._id,
     permalink: 'null',
+    replies: +entry.totalComments,
   };
 };
 

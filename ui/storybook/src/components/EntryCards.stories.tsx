@@ -51,6 +51,7 @@ storiesOf('Cards/Entry Cards', module).add('entry card', () => (
         'Logged Profile EthAddress',
         '0x003410499401674320006570047391024572000',
       )}
+      onMentionClick={ethAddress => action('Mention Clicked')(ethAddress)}
     />
   </Box>
 ));

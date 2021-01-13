@@ -10,6 +10,7 @@ const StyledImg = styled.img`
 
 const StyledMention = styled.span`
   color: ${props => props.theme.colors.accent};
+  cursor: pointer;
 `;
 
 const ImageElement = ({ attributes, children, element }: any) => {
@@ -28,11 +29,23 @@ const ImageElement = ({ attributes, children, element }: any) => {
   );
 };
 
-const MentionElement = ({ attributes, children, element }: any) => {
+const MentionElement = (props: any) => {
+  const { handleMentionClick, attributes, element, children } = props;
   const mention = element.userName || element.ethAddress;
+  const displayedMention = mention && mention.startsWith('@') ? mention : `@${mention}`;
   return (
-    <StyledMention {...attributes} contentEditable={false}>
-      @{mention}
+    <StyledMention
+      {...attributes}
+      contentEditable={false}
+      onClick={() => {
+        if (typeof handleMentionClick === 'function') {
+          handleMentionClick(element.ethAddress);
+        } else {
+          console.log(handleMentionClick);
+        }
+      }}
+    >
+      {displayedMention}
       {children}
     </StyledMention>
   );
@@ -47,14 +60,14 @@ const TagElement = ({ attributes, children, element }: any) => {
   );
 };
 
-const renderElement = (props: RenderElementProps) => {
+const renderElement = (props: RenderElementProps, handleMentionClick?: any) => {
   switch (props.element.type) {
     case 'quote':
       return <blockquote {...props.attributes}>{props.children}</blockquote>;
     case 'image':
       return <ImageElement {...props} />;
     case 'mention':
-      return <MentionElement {...props} />;
+      return <MentionElement handleMentionClick={handleMentionClick} {...props} />;
     case 'tag':
       return <TagElement {...props} />;
 

@@ -86,6 +86,7 @@
     "@types/slate": "0.47.8",
     "@types/slate-react": "0.22.9",
     "@types/styled-components": "5.1.4",
+    "@types/lodash.isequal": "4.5.5",
     "@vx/axis": "0.0.199",
     "@vx/curve": "0.0.199",
     "@vx/event": "0.0.199",
@@ -103,7 +104,8 @@
     "react-toastify": "6.1.0",
     "slate": "0.59.0",
     "slate-history": "0.59.0",
-    "slate-react": "0.59.0"
+    "slate-react": "0.59.0",
+    "lodash.isequal": "4.5.0"
   },
   "peerDependencies": {
     "react": "17.0.1",

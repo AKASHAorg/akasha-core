@@ -42,8 +42,10 @@ export interface IEditorBox {
   }[];
   tags?: string[];
   // upload an URL or a file and returns a promise that resolves to an array
-  uploadRequest?: (data: string | File, isUrl?: boolean) => Promise<any[]>;
+  uploadRequest?: (data: string | File, isUrl?: boolean) => any;
   publishingApp?: string;
+  editorState?: any;
+  setEditorState?: any;
 }
 
 export interface IMetadata {
@@ -77,6 +79,8 @@ const EditorBox: React.FC<IEditorBox> = props => {
     tags = [],
     uploadRequest,
     publishingApp = 'AkashaApp',
+    editorState,
+    setEditorState,
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -123,10 +127,10 @@ const EditorBox: React.FC<IEditorBox> = props => {
         el.style.left = `${rect.left + window.pageXOffset}px`;
       }
     }
-  }, [mentions, tags, editor, index, mentionTargetRange, tagTargetRange, editorValue]);
+  }, [mentions, tags, editor, index, mentionTargetRange, tagTargetRange, editorValue, editorState]);
 
   const handlePublish = () => {
-    const content = editorValue;
+    const content = editorState ? editorState : editorValue;
     const metadata: IMetadata = {
       app: publishingApp,
       quote: embedEntryData?.entryId,
@@ -199,7 +203,11 @@ const EditorBox: React.FC<IEditorBox> = props => {
       return;
     }
     setCurrentSelection(editor.selection);
-    setEditorValue(value);
+    if (editorState) {
+      setEditorState(value);
+    } else {
+      setEditorValue(value);
+    }
 
     const { selection } = editor;
 
@@ -210,8 +218,8 @@ const EditorBox: React.FC<IEditorBox> = props => {
       const beforeRange = before && Editor.range(editor, before, start);
       const beforeText = beforeRange && Editor.string(editor, beforeRange);
       const beforeMentionMatch = beforeText && beforeText.match(/^@(\w+)$/);
-      // todo: proper matching
-      const beforeTagMatch = beforeText && beforeText.match(/^#([a-z0-9]*)(\-?|.?)([a-z0-9]*)$/);
+      // todo: proper matching /^#([a-z0-9]*)(\-?|.?)([a-z0-9]*)$/
+      const beforeTagMatch = beforeText && beforeText.match(/^#(\w+)$/);
       const after = Editor.after(editor, start);
       const afterRange = Editor.range(editor, start, after);
       const afterText = Editor.string(editor, afterRange);
@@ -224,7 +232,8 @@ const EditorBox: React.FC<IEditorBox> = props => {
         return;
       }
       if (beforeTagMatch && afterMatch && beforeRange) {
-        const tagName = beforeTagMatch[1].concat(beforeTagMatch[2], beforeTagMatch[3]);
+        const tagName = beforeTagMatch[1];
+        // .concat(beforeTagMatch[2], beforeTagMatch[3]);
         setTagTargetRange(beforeRange);
         getTags(tagName);
         setCreateTag(tagName);
@@ -303,7 +312,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
       }
       if (tagTargetRange && tags.length > 0) {
         selectTag(event, tagTargetRange);
-      } else if (tagTargetRange && [13, 32].includes(event.keyCode) && createTag.length > 1) {
+      } else if (tagTargetRange && [9, 13, 32].includes(event.keyCode) && createTag.length > 1) {
         Transforms.select(editor, tagTargetRange);
         CustomEditor.insertTag(editor, createTag);
         setTagTargetRange(null);
@@ -356,7 +365,11 @@ const EditorBox: React.FC<IEditorBox> = props => {
         <Avatar src={avatar} ethAddress={ethAddress} margin={{ top: '0.5rem' }} />
         <Box width="100%" pad={{ horizontal: 'small' }} direction="row" justify="between">
           <Box fill={true}>
-            <Slate editor={editor} value={editorValue} onChange={handleChange}>
+            <Slate
+              editor={editor}
+              value={editorState ? editorState : editorValue}
+              onChange={handleChange}
+            >
               <FormatToolbar />
               <StyledEditable
                 placeholder={placeholderLabel}
