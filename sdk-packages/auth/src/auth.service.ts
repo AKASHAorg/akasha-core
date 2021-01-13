@@ -116,10 +116,14 @@ const service: AkashaService = (invoke, log) => {
     // if (!mailID) {
     //   await hubUser.setupMailbox();
     // }
-    db = new Database(`awf-alpha-user-${pubKey.slice(-8)}`, {
-      name: 'settings',
-      schema: settingsSchema,
-    });
+    db = new Database(
+      `awf-alpha-user-${pubKey.slice(-8)}`,
+      {
+        name: 'settings',
+        schema: settingsSchema,
+      },
+      { name: 'apps' },
+    );
     await db.open(1);
     // // not working atm
     // const remote = await db.remote.setUserAuth(userAuth);
