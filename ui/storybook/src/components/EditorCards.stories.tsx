@@ -6,11 +6,12 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { USERNAMES, TAGS } from './editor-data';
 
-const { Box, EditorCard, EditorPlaceholder } = DS;
+const { Box, EditorCard, EditorPlaceholder, editorDefaultValue } = DS;
 
 const EditorComponent = () => {
   const [mentionsState, setMentionsState] = React.useState('');
   const [tagsState, setTagsState] = React.useState('');
+  const [editorState, setEditorState] = React.useState(editorDefaultValue);
 
   const getMentions = query => {
     setMentionsState(query);
@@ -38,6 +39,8 @@ const EditorComponent = () => {
       mentions={mentionables}
       tags={tags}
       handleNavigateBack={action('Navigate back')}
+      editorState={editorState}
+      setEditorState={setEditorState}
     />
   );
 };

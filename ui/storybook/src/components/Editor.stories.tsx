@@ -6,11 +6,12 @@ import { boolean, text } from '@storybook/addon-knobs';
 import * as React from 'react';
 import { USERNAMES, TAGS } from './editor-data';
 
-const { EditorBox, Box } = DS;
+const { EditorBox, Box, editorDefaultValue } = DS;
 
 const EditorComponent = () => {
   const [mentionsState, setMentionsState] = React.useState('');
   const [tagsState, setTagsState] = React.useState('');
+  const [editorState, setEditorState] = React.useState(editorDefaultValue);
 
   const getMentions = query => {
     setMentionsState(query);
@@ -37,6 +38,8 @@ const EditorComponent = () => {
       getTags={getTags}
       mentions={mentionables}
       tags={tags}
+      editorState={editorState}
+      setEditorState={setEditorState}
     />
   );
 };

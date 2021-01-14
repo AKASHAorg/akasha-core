@@ -28,6 +28,8 @@ const EditorCard: React.FC<IEditorCard> = props => {
     tags,
     uploadRequest,
     embedEntryData,
+    editorState,
+    setEditorState,
   } = props;
 
   return (
@@ -57,6 +59,8 @@ const EditorCard: React.FC<IEditorCard> = props => {
         tags={tags}
         uploadRequest={uploadRequest}
         embedEntryData={embedEntryData}
+        editorState={editorState}
+        setEditorState={setEditorState}
       />
     </MainAreaCardBox>
   );

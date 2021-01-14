@@ -5,11 +5,11 @@ import styled from 'styled-components';
 const StyledImg = styled.img`
   display: block;
   max-width: 100%;
-  max-height: 20em;
 `;
 
 const StyledMention = styled.span`
   color: ${props => props.theme.colors.accent};
+  cursor: pointer;
 `;
 
 const ImageElement = ({ attributes, children, element }: any) => {
@@ -21,6 +21,9 @@ const ImageElement = ({ attributes, children, element }: any) => {
           onClick={() => {
             window.open(element.url, '_blank');
           }}
+          loading="lazy"
+          height={element.size?.naturalHeight}
+          width={element.size?.naturalWidth}
         />
       </div>
       {children}
@@ -28,11 +31,19 @@ const ImageElement = ({ attributes, children, element }: any) => {
   );
 };
 
-const MentionElement = ({ attributes, children, element }: any) => {
+const MentionElement = (props: any) => {
+  const { handleMentionClick, attributes, element, children } = props;
   const mention = element.userName || element.ethAddress;
+  const displayedMention = mention && mention.startsWith('@') ? mention : `@${mention}`;
   return (
-    <StyledMention {...attributes} contentEditable={false}>
-      @{mention}
+    <StyledMention
+      {...attributes}
+      contentEditable={false}
+      onClick={() => {
+        handleMentionClick(element.ethAddress);
+      }}
+    >
+      {displayedMention}
       {children}
     </StyledMention>
   );
@@ -47,14 +58,14 @@ const TagElement = ({ attributes, children, element }: any) => {
   );
 };
 
-const renderElement = (props: RenderElementProps) => {
+const renderElement = (props: RenderElementProps, handleMentionClick?: any) => {
   switch (props.element.type) {
     case 'quote':
       return <blockquote {...props.attributes}>{props.children}</blockquote>;
     case 'image':
       return <ImageElement {...props} />;
     case 'mention':
-      return <MentionElement {...props} />;
+      return <MentionElement handleMentionClick={handleMentionClick} {...props} />;
     case 'tag':
       return <TagElement {...props} />;
 
