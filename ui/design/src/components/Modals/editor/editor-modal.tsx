@@ -3,10 +3,11 @@ import * as React from 'react';
 import { Button } from '../../Buttons';
 import { BasicCardBox } from '../../Cards';
 import EditorCard, { IEditorCard } from '../../Cards/editor-cards/editor-card';
+import { editorDefaultValue } from '../../Editor';
 import { ModalContainer } from '../common/fullscreen-modal-container';
 import { ModalRenderer } from '../common/modal-renderer';
 
-export interface IEditorModal extends IEditorCard {
+export interface IEditorModal extends Omit<IEditorCard, 'editorState' | 'setEditorState'> {
   slotId: string;
   showModal: boolean;
   // labels
@@ -37,6 +38,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
   } = props;
 
   const [showCancel, setShowCancel] = React.useState(false);
+  const [editorState, setEditorState] = React.useState(editorDefaultValue);
 
   const handleToggleShowCancel = () => {
     setShowCancel(!showCancel);
@@ -44,6 +46,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
 
   const handleCloseModal = () => {
     setShowCancel(false);
+    setEditorState(editorDefaultValue);
     handleNavigateBack();
   };
 
@@ -66,6 +69,8 @@ const EditorModal: React.FC<IEditorModal> = props => {
               uploadRequest={uploadRequest}
               embedEntryData={embedEntryData}
               style={{ width: '36rem' }}
+              editorState={editorState}
+              setEditorState={setEditorState}
             />
           )}
           {showCancel && (
