@@ -332,11 +332,19 @@ const EditorBox: React.FC<IEditorBox> = props => {
     setEmojiPopoverOpen(false);
   };
 
-  const handleInsertImageLink = (url: string) => {
-    if (!url) {
+  const handleInsertImageLink = (data: {
+    src: string;
+    size: {
+      width: string;
+      height: string;
+      naturalWidth: string;
+      naturalHeight: string;
+    };
+  }) => {
+    if (!data.src || !data.size) {
       return;
     }
-    CustomEditor.insertImage(editor, url);
+    CustomEditor.insertImage(editor, data.src, data.size);
   };
 
   const handleInsertEmoji = (emojiCode: string) => {

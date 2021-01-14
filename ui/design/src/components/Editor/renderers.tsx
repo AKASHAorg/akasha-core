@@ -5,7 +5,6 @@ import styled from 'styled-components';
 const StyledImg = styled.img`
   display: block;
   max-width: 100%;
-  max-height: 20em;
 `;
 
 const StyledMention = styled.span`
@@ -22,6 +21,9 @@ const ImageElement = ({ attributes, children, element }: any) => {
           onClick={() => {
             window.open(element.url, '_blank');
           }}
+          loading="lazy"
+          height={element.size?.naturalHeight}
+          width={element.size?.naturalWidth}
         />
       </div>
       {children}

@@ -28,7 +28,15 @@ export interface IImagePopover {
   tryAgainLabel?: string;
   target: HTMLElement;
   closePopover: () => void;
-  insertImage: (url: string) => void;
+  insertImage: (data: {
+    src: string;
+    size: {
+      width: string;
+      height: string;
+      naturalWidth: string;
+      naturalHeight: string;
+    };
+  }) => void;
   // upload an URL or a file and returns a promise that resolves to an array
   uploadRequest?: (data: string | File, isUrl?: boolean) => any;
 }
@@ -50,8 +58,24 @@ const ImagePopover: React.FC<IImagePopover> = props => {
   } = props;
 
   const [linkInputValue, setLinkInputValue] = useState('');
-  const [uploadFileValue, setUploadFileValue] = useState('');
-  const [uploadLinkValue, setUploadLinkValue] = useState('');
+  const [uploadFileValue, setUploadFileValue] = useState<{
+    src: string;
+    size: {
+      width: string;
+      height: string;
+      naturalWidth: string;
+      naturalHeight: string;
+    };
+  } | null>(null);
+  const [uploadLinkValue, setUploadLinkValue] = useState<{
+    src: string;
+    size: {
+      width: string;
+      height: string;
+      naturalWidth: string;
+      naturalHeight: string;
+    };
+  } | null>(null);
   const [uploadValueName, setUploadValueName] = useState('');
   const [uploading, setUploading] = useState(false);
   const [uploadErrorState, setUploadErrorState] = useState(false);
@@ -70,14 +94,13 @@ const ImagePopover: React.FC<IImagePopover> = props => {
         setUploadErrorState(false);
       }
     } else {
-      setUploadErrorState(false);
-      setUploadLinkValue(ev.target.value);
+      setUploadErrorState(true);
     }
   };
 
   const handleFileUpload = (acceptedFiles: any) => {
     if (acceptedFiles.length < 1) {
-      setUploadFileValue('');
+      setUploadFileValue(null);
       setUploadErrorState(true);
       return;
     }
@@ -123,10 +146,10 @@ const ImagePopover: React.FC<IImagePopover> = props => {
       setLinkInputValue('');
     }
     if (uploadFileValue) {
-      setUploadFileValue('');
+      setUploadFileValue(null);
     }
     if (uploadLinkValue) {
-      setUploadLinkValue('');
+      setUploadLinkValue(null);
     }
     setUploadErrorState(false);
     setUploadValueName('');
@@ -165,7 +188,7 @@ const ImagePopover: React.FC<IImagePopover> = props => {
               justify="between"
             >
               <Box direction="row" align="center" gap="small">
-                <StyledImg src={uploadFileValue} />
+                <StyledImg src={uploadFileValue.src} />
                 <StyledValueText>{uploadValueName}</StyledValueText>
               </Box>
               <Box gap="small" align="center" direction="row">
@@ -184,16 +207,6 @@ const ImagePopover: React.FC<IImagePopover> = props => {
             <StyledUploadValueBox align="start" justify="center" pad="medium">
               {!uploading && (
                 <>
-                  {/* <StyledInputDiv onClick={handleUploadInputClick}>
-                    <StyledText size="medium" color="secondaryText">
-                      {dropzoneLabel}
-                    </StyledText>
-                    <StyledImageInput
-                      onChange={handleFileUpload}
-                      type="file"
-                      ref={uploadInputRef}
-                    />
-                  </StyledInputDiv> */}
                   <Dropzone
                     onDrop={handleFileUpload}
                     accept={'image/*'}

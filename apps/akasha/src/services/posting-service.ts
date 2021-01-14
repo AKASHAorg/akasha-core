@@ -101,7 +101,7 @@ export const uploadMediaToTextile = (profileStore: any, ipfsSettings: any) => as
   try {
     const res: any = await forkJoin([gatewayCall, uploadCall]).toPromise();
     return {
-      data: `${res[0].data}/${res[1].data?.CID}}`,
+      data: { src: `${res[0].data}/${res[1].data?.CID}}`, size: res[1].data?.size },
     };
   } catch (error) {
     return {
