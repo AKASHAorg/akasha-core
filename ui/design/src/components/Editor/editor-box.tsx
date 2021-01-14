@@ -125,10 +125,10 @@ const EditorBox: React.FC<IEditorBox> = props => {
         el.style.left = `${rect.left + window.pageXOffset}px`;
       }
     }
-  }, [mentions, tags, editor, index, mentionTargetRange, tagTargetRange, editor]);
+  }, [mentions, tags, editor, index, mentionTargetRange, tagTargetRange, editorState]);
 
   const handlePublish = () => {
-    const content: any = editor;
+    const content: any = editorState;
     const metadata: IMetadata = {
       app: publishingApp,
       quote: embedEntryData?.entryId,
