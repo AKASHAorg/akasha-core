@@ -111,15 +111,11 @@ export const uploadMediaToTextile = (profileStore: any, ipfsSettings: any) => as
       maxWidth: 640,
       maxHeight: 640,
       autoRotate: true,
-      mimeType: data.type,
     },
   };
-  // if link is png or jpeg change the mimeType in config
-  if (isUrl && data.match(/\.png$/) !== null) {
-    uploadData.config.mimeType = 'image/png';
-  }
-  if (isUrl && data.match(/\.jpg$/) !== null) {
-    uploadData.config.mimeType = 'image/jpeg';
+
+  if (data.type) {
+    uploadData.config.mimeType = data.type;
   }
 
   if (data.name) {
