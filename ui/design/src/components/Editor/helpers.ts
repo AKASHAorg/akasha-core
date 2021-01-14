@@ -36,9 +36,18 @@ const CustomEditor = {
     );
   },
 
-  insertImage(editor: Editor, url: string) {
+  insertImage(
+    editor: Editor,
+    url: string,
+    size: {
+      width: string;
+      height: string;
+      naturalWidth: string;
+      naturalHeight: string;
+    },
+  ) {
     const text = { text: '' };
-    const image = { url, type: 'image', children: [text] };
+    const image = { url, size, type: 'image', children: [text] };
     Transforms.insertNodes(editor, image);
   },
 

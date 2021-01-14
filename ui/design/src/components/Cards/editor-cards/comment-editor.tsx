@@ -2,10 +2,11 @@ import * as React from 'react';
 import { IEditorBox } from '../../Editor/editor-box';
 import { Box } from 'grommet';
 import { EditorPlaceholder } from './editor-placeholder';
-import { EditorBox } from '../../Editor/index';
+import { EditorBox, editorDefaultValue } from '../../Editor/index';
 import useSimpleClickAway from '../../../utils/simpleClickAway';
+import isEqual from 'lodash.isequal';
 
-const CommentEditor: React.FC<IEditorBox> = props => {
+const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>> = props => {
   const {
     ethAddress,
     avatar,
@@ -20,10 +21,11 @@ const CommentEditor: React.FC<IEditorBox> = props => {
   } = props;
 
   const [showEditor, setShowEditor] = React.useState(false);
+  const [editorState, setEditorState] = React.useState(editorDefaultValue);
   const wrapperRef: React.RefObject<any> = React.useRef();
 
   const handleClickAway = () => {
-    if (showEditor) {
+    if (showEditor && isEqual(editorState, editorDefaultValue)) {
       setShowEditor(false);
     }
   };
@@ -63,6 +65,8 @@ const CommentEditor: React.FC<IEditorBox> = props => {
             tags={tags}
             uploadRequest={uploadRequest}
             withMeter={true}
+            editorState={editorState}
+            setEditorState={setEditorState}
           />
         </Box>
       )}

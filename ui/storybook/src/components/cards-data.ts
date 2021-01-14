@@ -261,7 +261,15 @@ const entryData = {
         {
           text: 'Hello ',
         },
-        { value: 'Arnulfo', type: 'mention', children: [{ text: '' }] },
+        {
+          name: 'Arnulfo Madrain',
+          userName: '@arnulfo',
+          pubKey: '4m1242mb42m4b',
+          avatar: '',
+          ethAddress: '0x03131',
+          type: 'mention',
+          children: [{ text: '' }],
+        },
         { text: ' how is ' },
         { value: 'ethereum', type: 'tag', children: [{ text: '' }] },
         { text: ' working out for you?' },
@@ -317,7 +325,8 @@ const entryData = {
   ],
 
   time: '1572036522',
-  replies: [
+  replies: 2,
+  repliesContent: [
     {
       entryId: '412413',
       ipfsLink: 'ipfs.io/placeholder',
