@@ -128,7 +128,7 @@ const bootstrap = async () => {
     });
     await scriptLoader.loadModules([topBarSrc], 'topbar');
     // load default installed apps/plugins and widgets
-    // await scriptLoader.loadModules(defaultApps.apps, 'defaultApps');
+    await scriptLoader.loadModules(defaultApps.apps, 'defaultApps');
     await scriptLoader.loadModules(defaultApps.plugins, 'defaultPlugins');
     await scriptLoader.loadModules(defaultApps.widgets, 'defaultWidgets');
 
