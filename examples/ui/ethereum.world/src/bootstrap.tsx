@@ -126,11 +126,11 @@ const bootstrap = async () => {
         }),
       });
     });
-    scriptLoader.loadModules([topBarSrc], 'topbar');
+    await scriptLoader.loadModules([topBarSrc], 'topbar');
     // load default installed apps/plugins and widgets
-    scriptLoader.loadModules(defaultApps.apps, 'defaultApps');
-    scriptLoader.loadModules(defaultApps.plugins, 'defaultPlugins');
-    scriptLoader.loadModules(defaultApps.widgets, 'defaultWidgets');
+    // await scriptLoader.loadModules(defaultApps.apps, 'defaultApps');
+    await scriptLoader.loadModules(defaultApps.plugins, 'defaultPlugins');
+    await scriptLoader.loadModules(defaultApps.widgets, 'defaultWidgets');
 
     // tslint:disable-next-line: no-console
     console.log('initial sdk instance', sdk);
@@ -153,8 +153,9 @@ const bootstrap = async () => {
     }
   });
 
-  scriptLoader.loadModules([layoutSrc], 'layout');
-  scriptLoader.loadModules([rootApp], 'rootApp');
+  await scriptLoader.loadModules([layoutSrc], 'layout');
+  await scriptLoader.loadModules([rootApp], 'rootApp');
 };
 
-bootstrap();
+// tslint:disable-next-line:no-console
+bootstrap().then(() => console.log('ui apps loaded'));
