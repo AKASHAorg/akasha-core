@@ -1,6 +1,9 @@
 import registerDBModule from '@akashaproject/sdk-db';
 import { extractCallableServices } from '../utils';
-import { DB_SETTINGS_ATTACHMENT } from '@akashaproject/sdk-db/lib/constants';
+import {
+  DB_INSTALLED_APPS_SERVICE,
+  DB_SETTINGS_ATTACHMENT,
+} from '@akashaproject/sdk-db/lib/constants';
 
 export const dbModule = registerDBModule();
 
@@ -17,6 +20,11 @@ export default function dbApi(channel) {
         get: extractedServices[DB_SETTINGS_ATTACHMENT]('get'),
         put: extractedServices[DB_SETTINGS_ATTACHMENT]('put'),
         deleteSettings: extractedServices[DB_SETTINGS_ATTACHMENT]('deleteSettings'),
+      },
+      apps: {
+        getInstalled: extractedServices[DB_INSTALLED_APPS_SERVICE]('getInstalledApps'),
+        install: extractedServices[DB_INSTALLED_APPS_SERVICE]('saveApp'),
+        remove: extractedServices[DB_INSTALLED_APPS_SERVICE]('removeApp'),
       },
     },
   };

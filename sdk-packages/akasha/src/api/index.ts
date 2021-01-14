@@ -6,8 +6,9 @@
 // import postsAPI, { postsModule } from './posts';
 import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 import { startServices } from '../utils';
+import { Observable } from 'rxjs';
 
-export default async function startApi(channel, di: DIContainer) {
+export default async function startApi(channel, di: DIContainer, globalChannel: Observable<any>) {
   const authModule = import(/* webpackChunkName: "authModule" */ './auth');
   const commonModule = import(/* webpackChunkName: "commonModule" */ './common');
   const dbModule = import(/* webpackChunkName: "dbModule" */ './db');
@@ -33,6 +34,7 @@ export default async function startApi(channel, di: DIContainer) {
       posts.postsModule,
     ],
     di,
+    globalChannel,
   );
   // assemble the api object
   const apiMap = [
