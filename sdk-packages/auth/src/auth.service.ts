@@ -62,6 +62,8 @@ const service: AkashaService = (invoke, log, globalChannel) => {
           log.info('syncing session');
           sessionStorage.setItem(providerKey, response[providerKey]);
           sessionStorage.setItem(response?.identity?.key, response?.identity?.value);
+          currentUser = null;
+          getCurrentUser().then(data => log.info('logged in', data));
         }
       } else if (type === SIGN_OUT_EVENT && currentUser) {
         signOut().then(e => {
