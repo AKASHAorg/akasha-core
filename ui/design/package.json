@@ -87,6 +87,7 @@
     "@types/slate-react": "0.22.9",
     "@types/styled-components": "5.1.4",
     "@types/lodash.isequal": "4.5.5",
+    "@types/react-dropzone": "5.1.0",
     "@vx/axis": "0.0.199",
     "@vx/curve": "0.0.199",
     "@vx/event": "0.0.199",
@@ -105,7 +106,8 @@
     "slate": "0.59.0",
     "slate-history": "0.59.0",
     "slate-react": "0.59.0",
-    "lodash.isequal": "4.5.0"
+    "lodash.isequal": "4.5.0",
+    "react-dropzone": "11.2.4"
   },
   "peerDependencies": {
     "react": "17.0.1",

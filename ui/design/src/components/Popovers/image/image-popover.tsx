@@ -1,14 +1,15 @@
 import { Box, Tabs, Text } from 'grommet';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Icon } from '../../Icon/index';
 import { LinkInput } from '../../Input/index';
+import { Dropzone } from './dropzone';
 import {
   StyledButton,
   StyledDrop,
-  StyledImageInput,
+  // StyledImageInput,
   StyledImg,
   StyledImageDiv,
-  StyledInputDiv,
+  // StyledInputDiv,
   StyledTab,
   StyledText,
   StyledUploadingDiv,
@@ -55,8 +56,6 @@ const ImagePopover: React.FC<IImagePopover> = props => {
   const [uploading, setUploading] = useState(false);
   const [uploadErrorState, setUploadErrorState] = useState(false);
 
-  const uploadInputRef: React.RefObject<HTMLInputElement> = useRef(null);
-
   const handleLinkInputChange = async (ev: React.ChangeEvent<HTMLInputElement>) => {
     setLinkInputValue(ev.target.value);
     if (uploadRequest) {
@@ -76,19 +75,13 @@ const ImagePopover: React.FC<IImagePopover> = props => {
     }
   };
 
-  const handleUploadInputClick = () => {
-    if (uploadInputRef.current) {
-      uploadInputRef.current.click();
-    }
-    return;
-  };
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!(e.target.files && e.target.files[0])) {
+  const handleFileUpload = (acceptedFiles: any) => {
+    if (acceptedFiles.length < 1) {
       setUploadFileValue('');
+      setUploadErrorState(true);
       return;
     }
-    const file = e.target.files[0];
+    const file = acceptedFiles[0];
     const fileName = file.name;
     const fileReader = new FileReader();
 
@@ -97,6 +90,7 @@ const ImagePopover: React.FC<IImagePopover> = props => {
     fileReader.addEventListener('load', async () => {
       const result = fileReader.result as any;
       setUploadValueName(fileName);
+      setUploadErrorState(false);
       if (uploadRequest) {
         setUploading(true);
         const resp = await uploadRequest(file);
@@ -106,10 +100,8 @@ const ImagePopover: React.FC<IImagePopover> = props => {
         } else if (resp.data) {
           setUploadFileValue(resp.data);
           setUploading(false);
-          setUploadErrorState(false);
         }
       } else {
-        setUploadErrorState(false);
         setUploadFileValue(result);
       }
     });
@@ -192,7 +184,7 @@ const ImagePopover: React.FC<IImagePopover> = props => {
             <StyledUploadValueBox align="start" justify="center" pad="medium">
               {!uploading && (
                 <>
-                  <StyledInputDiv onClick={handleUploadInputClick}>
+                  {/* <StyledInputDiv onClick={handleUploadInputClick}>
                     <StyledText size="medium" color="secondaryText">
                       {dropzoneLabel}
                     </StyledText>
@@ -201,7 +193,12 @@ const ImagePopover: React.FC<IImagePopover> = props => {
                       type="file"
                       ref={uploadInputRef}
                     />
-                  </StyledInputDiv>
+                  </StyledInputDiv> */}
+                  <Dropzone
+                    onDrop={handleFileUpload}
+                    accept={'image/*'}
+                    dropzoneLabel={dropzoneLabel}
+                  />
                   {uploadErrorState && (
                     <Box
                       direction="row"
