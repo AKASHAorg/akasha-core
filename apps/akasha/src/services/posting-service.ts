@@ -85,15 +85,43 @@ export const serializeLegacyContentToSlate = (
   return serializedContent;
 };
 
+export interface IConfig {
+  quality?: number;
+  maxWidth: number;
+  maxHeight: number;
+  autoRotate?: boolean;
+  mimeType?: string;
+}
+
 export const uploadMediaToTextile = (profileStore: any, ipfsSettings: any) => async (
   data: any,
   isUrl = false,
 ) => {
   const gatewayCall = ipfsSettings.getSettings({});
-  const uploadData: { isUrl: boolean; content: any; name?: string } = {
+  const uploadData: {
+    isUrl: boolean;
+    content: any;
+    name?: string;
+    config: IConfig;
+  } = {
     isUrl,
     content: data,
+    config: {
+      quality: 0.8,
+      maxWidth: 640,
+      maxHeight: 640,
+      autoRotate: true,
+      mimeType: data.type,
+    },
   };
+  // if link is png or jpeg change the mimeType in config
+  if (isUrl && data.match(/\.png$/) !== null) {
+    uploadData.config.mimeType = 'image/png';
+  }
+  if (isUrl && data.match(/\.jpg$/) !== null) {
+    uploadData.config.mimeType = 'image/jpeg';
+  }
+
   if (data.name) {
     uploadData.name = data.name;
   }
@@ -101,7 +129,7 @@ export const uploadMediaToTextile = (profileStore: any, ipfsSettings: any) => as
   try {
     const res: any = await forkJoin([gatewayCall, uploadCall]).toPromise();
     return {
-      data: { src: `${res[0].data}/${res[1].data?.CID}}`, size: res[1].data?.size },
+      data: { src: `${res[0].data}/${res[1].data?.CID}`, size: res[1].data?.size },
     };
   } catch (error) {
     return {

@@ -80,9 +80,14 @@ const ImagePopover: React.FC<IImagePopover> = props => {
   const [uploading, setUploading] = useState(false);
   const [uploadErrorState, setUploadErrorState] = useState(false);
 
+  const validateImageUrl = (url: string) => {
+    // should allow base64? url.match(/^data:image\/(jpeg|jpg|png)*/)
+    return url.match(/\.(jpeg|jpg|png)$/) != null;
+  };
+
   const handleLinkInputChange = async (ev: React.ChangeEvent<HTMLInputElement>) => {
     setLinkInputValue(ev.target.value);
-    if (uploadRequest) {
+    if (uploadRequest && validateImageUrl(ev.target.value)) {
       setUploading(true);
       const resp = await uploadRequest(ev.target.value, true);
       if (resp.error) {
@@ -131,7 +136,6 @@ const ImagePopover: React.FC<IImagePopover> = props => {
   };
 
   const handleInsertImage = (type: 'file' | 'url') => {
-    // @Todo check if isUrl and isImage
     if (uploadFileValue && type === 'file') {
       insertImage(uploadFileValue);
     }
@@ -209,7 +213,7 @@ const ImagePopover: React.FC<IImagePopover> = props => {
                 <>
                   <Dropzone
                     onDrop={handleFileUpload}
-                    accept={'image/*'}
+                    accept={'image/jpeg, image/png'}
                     dropzoneLabel={dropzoneLabel}
                   />
                   {uploadErrorState && (
