@@ -2,6 +2,7 @@ import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import { runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
 import { LinkedProfileProp, LinkedProperty, PROFILE_MEDIA_FILES, PROFILE_STORE } from './constants';
 import authServices, { AUTH_SERVICE } from '@akashaproject/sdk-auth/lib/constants';
+import commonServices, { IMAGE_UTILS_SERVICE } from '@akashaproject/sdk-common/lib/constants';
 // tslint:disable-next-line:no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');
 
@@ -183,6 +184,13 @@ const service: AkashaService = (invoke, log) => {
     content: Buffer | ArrayBuffer | string | any;
     isUrl?: boolean;
     name?: string;
+    config?: {
+      quality?: number;
+      maxWidth: number;
+      maxHeight: number;
+      autoRotate?: boolean;
+      mimeType?: string;
+    };
   }) => {
     let file;
     let path;
@@ -203,8 +211,21 @@ const service: AkashaService = (invoke, log) => {
     if (!root) {
       throw new Error('Failed to open bucket');
     }
-    const buckPath = `ewa/${path}`;
-    const upload = await buck.pushPath(root.key, buckPath, { path: buckPath, content: file });
+    if (!data.config) {
+      data.config = {
+        maxWidth: 640,
+        maxHeight: 640,
+      };
+    }
+    const resized = await invoke(commonServices[IMAGE_UTILS_SERVICE]).resizeImage({
+      file,
+      config: data.config,
+    });
+    const buckPath = `ewa/${path}/${resized.size.width}x${resized.size.height}`;
+    const upload = await buck.pushPath(root.key, buckPath, {
+      path: buckPath,
+      content: resized.image,
+    });
     const cid = upload.path.cid.toString();
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
     const mutation = `
@@ -227,7 +248,7 @@ const service: AkashaService = (invoke, log) => {
       },
     });
 
-    return cid;
+    return { CID: cid, size: resized.size };
   };
   const searchProfiles = async (opt: { name: string }) => {
     const query = `
