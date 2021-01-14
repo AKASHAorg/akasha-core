@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
-import ContentCard from './content-card';
+import ContentCard from './content-card/content-card';
 import ContentTab from './content-tab';
 
 import { getAllPending, getAllModerated } from '../services/fetch-contents';
