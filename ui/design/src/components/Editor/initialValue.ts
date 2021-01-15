@@ -1,11 +1,12 @@
 import { Node } from 'slate';
 
-export const defaultValue: Node[] = [
+export const editorDefaultValue: Node[] = [
   {
     type: 'paragraph',
     children: [
       {
         text: '',
+        type: 'text',
       },
     ],
   },

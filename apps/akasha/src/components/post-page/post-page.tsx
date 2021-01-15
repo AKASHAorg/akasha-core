@@ -156,10 +156,16 @@ const PostPage: React.FC<IPostPage> = props => {
   }, [postId]);
 
   const bookmarked = false;
+
+  const handleMentionClick = (profileEthAddress: string) => {
+    navigateToUrl(`/profile/${profileEthAddress}`);
+  };
+
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
     navigateToUrl(`/profile/${authorEth}`);
     ev.preventDefault();
   };
+
   const handleEntryBookmark = (entryId: string) => {
     if (!loggedEthAddress) {
       return showLoginModal();
@@ -345,6 +351,7 @@ const PostPage: React.FC<IPostPage> = props => {
               handleFollow={handleFollow}
               handleUnfollow={handleUnfollow}
               onContentClick={handleNavigateToPost}
+              onMentionClick={handleMentionClick}
             />
           </Box>
           {!loggedEthAddress && (
@@ -356,7 +363,7 @@ const PostPage: React.FC<IPostPage> = props => {
             <Box margin="medium">
               <CommentEditor
                 ethAddress={loggedEthAddress}
-                postLabel={t('Publish')}
+                postLabel={t('Reply')}
                 placeholderLabel={t('Write something')}
                 onPublish={handlePublish}
                 getMentions={handleGetMentions}

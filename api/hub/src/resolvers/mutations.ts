@@ -91,24 +91,30 @@ const mutations = {
       return Promise.reject('Post was not found!');
     }
     const commentID = await dataSources.commentsAPI.addComment(user.pubKey, content, comment);
-    if (commentID?.length) {
-      const totalCommentsIndex = postData.metaData.findIndex(
-        m => m.provider === statsProvider && m.property === commentsStats,
-      );
-      if (totalCommentsIndex !== -1) {
-        postData.metaData[totalCommentsIndex].value =
-          +postData.metaData[totalCommentsIndex].value + 1;
-        postData.metaData[totalCommentsIndex].value = postData.metaData[
-          totalCommentsIndex
-        ].value.toString();
-      } else {
-        postData.metaData.push({
-          provider: statsProvider,
-          property: commentsStats,
-          value: '1',
-        });
+    if (!commentID?.length) {
+      return Promise.reject('Could not save the comment!');
+    }
+    const totalCommentsIndex = postData.metaData.findIndex(
+      m => m.provider === statsProvider && m.property === commentsStats,
+    );
+    if (totalCommentsIndex !== -1) {
+      postData.metaData[totalCommentsIndex].value =
+        +postData.metaData[totalCommentsIndex].value + 1;
+      postData.metaData[totalCommentsIndex].value = postData.metaData[
+        totalCommentsIndex
+      ].value.toString();
+    } else {
+      postData.metaData.push({
+        provider: statsProvider,
+        property: commentsStats,
+        value: '1',
+      });
+    }
+    await dataSources.postsAPI.updatePosts([postData]);
+    if (comment.tags && comment.tags.length) {
+      for (const tag of comment.tags) {
+        await dataSources.tagsAPI.indexComment('Comments', commentID[0], tag);
       }
-      await dataSources.postsAPI.updatePosts([postData]);
     }
     return commentID[0];
   },

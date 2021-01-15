@@ -14,7 +14,7 @@ export interface ErrorObj {
 
 export interface ILoggedProfile {
   ethAddress?: string;
-  token?: string;
+  pubKey?: string;
   profileData?: IProfileData;
 }
 
@@ -46,7 +46,7 @@ const useLoggedProfile = (props: UseLoggedProfileProps) => {
     data => {
       setLoggedProfile({
         ethAddress: data.ethAddress,
-        token: data.token,
+        pubKey: data.pubKey,
       });
     },
     ex => {
@@ -72,9 +72,9 @@ const useLoggedProfile = (props: UseLoggedProfileProps) => {
         );
         race(call, globalCall).subscribe(
           (response: any) => {
-            const { token, ethAddress } = response.data;
+            const { pubKey, ethAddress } = response.data;
             setLoggedProfile({
-              token,
+              pubKey,
               ethAddress,
             });
           },

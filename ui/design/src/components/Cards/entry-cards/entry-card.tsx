@@ -45,7 +45,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     onClickReplies,
     onEntryShare,
     onEntryFlag,
-
+    onMentionClick,
     onContentClick,
     handleFollow,
     handleUnfollow,
@@ -92,6 +92,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           handleFollow={handleFollow}
           handleUnfollow={handleUnfollow}
           onContentClick={onContentClick}
+          onMentionClick={onMentionClick}
         />
       </Box>
     </MainAreaCardBox>

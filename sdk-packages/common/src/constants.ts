@@ -7,6 +7,7 @@ export const WEB3_SERVICE = 'WEB3_SERVICE';
 export const WEB3_WALLET_SERVICE = 'WEB3_WALLET_SERVICE';
 export const WEB3_UTILS_SERVICE = 'WEB3_UTILS_SERVICE';
 export const IPFS_SERVICE = 'IPFS_SERVICE';
+export const IMAGE_UTILS_SERVICE = 'IMAGE_UTILS_SERVICE';
 
 // ethereum chain id
 export const ETH_NETWORK = 'eth_network';
@@ -25,5 +26,6 @@ const services: IAkashaModuleServices = {
   [WEB3_SERVICE]: servicePath(WEB3_SERVICE),
   [WEB3_UTILS_SERVICE]: servicePath(WEB3_UTILS_SERVICE),
   [IPFS_SERVICE]: servicePath(IPFS_SERVICE),
+  [IMAGE_UTILS_SERVICE]: servicePath(IMAGE_UTILS_SERVICE),
 };
 export default services;

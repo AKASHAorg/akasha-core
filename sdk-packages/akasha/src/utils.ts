@@ -69,8 +69,12 @@ export function extractCallableServices(
 //   return channels;
 // }
 
-export function startServices(modules: IAkashaModule[], di: DIContainer) {
+export function startServices(
+  modules: IAkashaModule[],
+  di: DIContainer,
+  globalChannel: Observable<any>,
+) {
   for (const moduleInstance of modules) {
-    moduleInstance.startServices(di);
+    moduleInstance.startServices(di, globalChannel);
   }
 }

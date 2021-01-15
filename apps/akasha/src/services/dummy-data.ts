@@ -57,7 +57,7 @@ export const genEntryData = (entryId: string) => ({
       };
     }),
   time: genTime(),
-  replies: genReplies(entryId),
+  replies: randomNumber(0, 1210),
   reposts: randomNumber(0, 1210),
   ipfsLink: 'Qmsdefas12331213',
   permalink: 'some-perma-link',

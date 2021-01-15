@@ -68,13 +68,13 @@ export const getMailSender = async () => {
     return Promise.resolve(mailSender);
   }
   const api = Users.withUserAuth(
-    await createUserAuth(process.env.APP_API_KEY, process.env.APP_API_SECRET),
+    await createUserAuth(process.env.USER_GROUP_API_KEY, process.env.USER_GROUP_API_SECRET),
     { debug: process.env.NODE_ENV !== 'production' },
   );
   const mailSenderID = identity();
   await api.getToken(mailSenderID);
   await api.setupMailbox();
-  const mailID = await api.getMailboxID();
+  // const mailID = await api.getMailboxID();
   // if (!mailID) {
   //   await api.setupMailbox();
   // }

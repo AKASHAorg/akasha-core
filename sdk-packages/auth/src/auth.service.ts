@@ -6,7 +6,7 @@ import commonServices, {
 import { EthProviders } from '@akashaproject/ui-awf-typings';
 import coreServices from '@akashaproject/sdk-core/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import {
+import services, {
   AUTH_CACHE,
   AUTH_ENDPOINT,
   AUTH_MESSAGE,
@@ -15,20 +15,72 @@ import {
   moduleName,
   tokenCache,
 } from './constants';
-import { Client, PrivateKey, Users, Buckets, UserAuth } from '@textile/hub';
+import {
+  Client,
+  PrivateKey,
+  Users,
+  Buckets,
+  UserAuth,
+  PublicKey,
+  InboxListOptions,
+  Status,
+} from '@textile/hub';
 import { Database } from '@textile/threaddb';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { settingsSchema } from './db.schema';
 
-const service: AkashaService = (invoke, log) => {
+const service: AkashaService = (invoke, log, globalChannel) => {
   let identity: PrivateKey;
   let hubClient: Client;
   let hubUser: Users;
   let buckClient: Buckets;
   let auth: UserAuth;
   let db: Database;
+  let channel;
+  let sessKey;
+  let currentUser: { pubKey: string; ethAddress: string };
   let tokenGenerator: () => Promise<UserAuth>;
   const providerKey = '@providerType';
+  const SYNC_REQUEST = '@sync_request';
+  const SYNC_RESPONSE = '@sync_response';
+  const SYNC_CHANNEL = '@sync_data';
+  const SIGN_OUT_EVENT = '@sign_out';
+  if ('BroadcastChannel' in self) {
+    channel = new BroadcastChannel(SYNC_CHANNEL);
+    channel.postMessage({ type: SYNC_REQUEST });
+    channel.onmessage = function (event) {
+      const { type } = event.data;
+      if (type === SYNC_REQUEST) {
+        const response = {
+          [providerKey]: sessionStorage.getItem(providerKey),
+          identity: { key: sessKey, value: identity?.toString() },
+        };
+        channel.postMessage({ response, type: SYNC_RESPONSE });
+      } else if (type === SYNC_RESPONSE) {
+        const { response } = event.data;
+        if (response && response.identity.key !== sessKey) {
+          log.info('syncing session');
+          sessionStorage.setItem(providerKey, response[providerKey]);
+          sessionStorage.setItem(response?.identity?.key, response?.identity?.value);
+          currentUser = null;
+          getCurrentUser().then(data => log.info('logged in', data));
+        }
+      } else if (type === SIGN_OUT_EVENT && currentUser) {
+        signOut().then(e => {
+          const response = {
+            data: null,
+            channelInfo: {
+              servicePath: services[AUTH_SERVICE],
+              method: 'signOut',
+              args: null,
+            },
+          };
+          globalChannel.next(response);
+          log.info('signed-out');
+        });
+      }
+    };
+  }
   const signIn = async (provider: EthProviders = EthProviders.Web3Injected) => {
     let currentProvider;
     const { setServiceSettings } = invoke(coreServices.SETTINGS_SERVICE);
@@ -38,7 +90,7 @@ const service: AkashaService = (invoke, log) => {
       if (!sessionStorage.getItem(providerKey)) {
         throw new Error('The provider must have a wallet/key in order to authenticate.');
       }
-      currentProvider = sessionStorage.getItem(providerKey);
+      currentProvider = +sessionStorage.getItem(providerKey); // cast to int
     } else {
       currentProvider = provider;
       sessionStorage.setItem(providerKey, currentProvider);
@@ -52,7 +104,7 @@ const service: AkashaService = (invoke, log) => {
     const endPoint = authSettings[AUTH_ENDPOINT];
     const signer = web3.getSigner();
     const address = await signer.getAddress();
-    const sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
+    sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
     if (sessionStorage.getItem(sessKey)) {
       identity = PrivateKey.fromString(sessionStorage.getItem(sessKey));
     } else {
@@ -71,15 +123,20 @@ const service: AkashaService = (invoke, log) => {
 
     // @Todo: on error try to setupMail
     await hubUser.setupMailbox();
-    const mailID = await hubUser.getMailboxID();
+    // const mailID = await hubUser.getMailboxID();
+    const pubKey = identity.public.toString();
     // // for 1st time users
     // if (!mailID) {
     //   await hubUser.setupMailbox();
     // }
-    db = new Database(`awf-alpha-user-${identity.public.toString().slice(-8)}`, {
-      name: 'settings',
-      schema: settingsSchema,
-    });
+    db = new Database(
+      `awf-alpha-user-${pubKey.slice(-8)}`,
+      {
+        name: 'settings',
+        schema: settingsSchema,
+      },
+      { name: 'apps' },
+    );
     await db.open(1);
     // // not working atm
     // const remote = await db.remote.setUserAuth(userAuth);
@@ -90,7 +147,15 @@ const service: AkashaService = (invoke, log) => {
     cache.set(AUTH_CACHE, {
       [ethAddressCache]: address,
     });
-    return { client: hubClient, user: hubUser, token: auth.token, ethAddress: address };
+    currentUser = { pubKey, ethAddress: address };
+    if (channel) {
+      const response = {
+        [providerKey]: sessionStorage.getItem(providerKey),
+        identity: { key: sessKey, value: identity?.toString() },
+      };
+      channel.postMessage({ response, type: SYNC_RESPONSE });
+    }
+    return currentUser;
   };
 
   const getSession = async () => {
@@ -116,7 +181,7 @@ const service: AkashaService = (invoke, log) => {
     const session = await getSession();
     // the definitions for Context are not updated
     // @ts-ignore
-    const isExpired = await session.client.context.isExpired;
+    const isExpired = session.client.context.isExpired;
     if (!isExpired && auth) {
       return auth.token;
     }
@@ -124,7 +189,101 @@ const service: AkashaService = (invoke, log) => {
     return auth.token;
   };
 
-  return { signIn, getSession, getToken };
+  const getCurrentUser = async () => {
+    if (currentUser) {
+      return Promise.resolve(currentUser);
+    }
+    if (!sessionStorage.getItem(providerKey)) {
+      return Promise.resolve(null);
+    }
+    const data = await signIn(EthProviders.None);
+    const response = {
+      data: data,
+      channelInfo: {
+        servicePath: services[AUTH_SERVICE],
+        method: 'signIn',
+        args: null,
+      },
+    };
+    globalChannel.next(response);
+    return data;
+  };
+
+  const signOut = async () => {
+    const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
+    await cache.clear();
+    sessionStorage.clear();
+    identity = null;
+    hubClient = null;
+    hubUser = null;
+    buckClient = null;
+    auth = null;
+    db = null;
+    currentUser = null;
+    if (channel) {
+      channel.postMessage({ type: SIGN_OUT_EVENT });
+    }
+    return;
+  };
+
+  const signData = async (data: object | string) => {
+    const session = await getSession();
+    let serializedData;
+    if (typeof data === 'object') {
+      serializedData = JSON.stringify(data);
+    }
+    serializedData = new TextEncoder().encode(serializedData);
+    const sig = await session.identity.sign(serializedData);
+    return { serializedData, signature: sig, pubKey: identity.public.toString() };
+  };
+
+  const verifySignature = async (args: {
+    pubKey: string;
+    data: Uint8Array | string | object;
+    signature: Uint8Array;
+  }) => {
+    const pub = PublicKey.fromString(args.pubKey);
+    let serializedData;
+    if (args.data instanceof Uint8Array) {
+      return pub.verify(args.data, args.signature);
+    }
+    if (typeof args.data === 'object') {
+      serializedData = JSON.stringify(args.data);
+    }
+    serializedData = new TextEncoder().encode(serializedData);
+    return pub.verify(serializedData, args.signature);
+  };
+  const decryptMessage = async message => {
+    const decryptedBody = await identity.decrypt(message.body);
+    const body = new TextDecoder().decode(decryptedBody);
+    const { from, readAt, createdAt, id } = message;
+    return { body, from, readAt, createdAt, id };
+  };
+  const getMessages = async (args: InboxListOptions) => {
+    const messages = await hubUser.listInboxMessages(
+      Object.assign({}, args, { status: Status.UNREAD }),
+    );
+    const inbox = [];
+    for (const message of messages) {
+      inbox.push(await decryptMessage(message));
+    }
+    return inbox.slice();
+  };
+  const markMessageAsRead = async (messageId: string) => {
+    await hubUser.deleteInboxMessage(messageId);
+    return true;
+  };
+  return {
+    signIn,
+    signData,
+    verifySignature,
+    signOut,
+    getSession,
+    getToken,
+    getCurrentUser,
+    getMessages,
+    markMessageAsRead,
+  };
 };
 
 export default { service, name: AUTH_SERVICE };
