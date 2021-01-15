@@ -190,6 +190,7 @@ export interface IconProps extends CommonInterface<any> {
   ref?: React.Ref<HTMLDivElement>;
   type: IconType | string;
   clickable?: boolean;
+  clickableRed?: boolean;
   primaryColor?: boolean;
   accentColor?: boolean;
   size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -202,7 +203,10 @@ const StyledRefDiv = styled.div`
 `;
 
 const IconBase: React.FC<IconProps> = React.forwardRef(
-  ({ color, fill, size, clickable, type, primaryColor, accentColor, ...props }, ref) => {
+  (
+    { color, fill, size, clickable, clickableRed, type, primaryColor, accentColor, ...props },
+    ref,
+  ) => {
     const Component = (icons as any)[type];
     if (!Component) {
       // tslint:disable-next-line no-console
@@ -253,6 +257,16 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
         }
       }
     `};
+  ${props =>
+    props.clickableRed &&
+    `
+        cursor: pointer;
+        &: hover {
+          & * {
+            stroke: ${props.theme.colors.red};
+          }
+        }
+      `};
   ${props => {
     if (props.size) {
       switch (props.size) {

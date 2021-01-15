@@ -12,6 +12,16 @@ const StyledLinkIconDiv = styled.div`
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
 `;
 
+const StyledCloseIconDiv = styled.div`
+  height: 1rem;
+  width: 1rem;
+  background-color: ${props => props.theme.colors.lightBackground};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+`;
+
 const StyledTextInput = styled(TextInput)`
   padding: 0;
   font-family: ${props => props.theme.shapes.fontFamily};
@@ -38,4 +48,11 @@ const StyledFormField = styled(FormField)`
   margin-bottom: 0;
 `;
 
-export { StyledLinkIconDiv, StyledTextInput, StyledButton, StyledInputWrapper, StyledFormField };
+export {
+  StyledLinkIconDiv,
+  StyledTextInput,
+  StyledButton,
+  StyledInputWrapper,
+  StyledFormField,
+  StyledCloseIconDiv,
+};

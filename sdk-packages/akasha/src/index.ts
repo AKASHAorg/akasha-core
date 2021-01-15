@@ -19,7 +19,7 @@ export default async function init(appLoaderOptions: {
   const di: DIContainer = initDI();
   // general channel to send service calls
   const channel = initChannel(di);
-  const apiChannels = await startApi(channel, di);
+  const apiChannels = await startApi(channel, di, globalChannel);
   const appLoader = new AppLoader(
     appLoaderOptions.config,
     appLoaderOptions.initialApps,

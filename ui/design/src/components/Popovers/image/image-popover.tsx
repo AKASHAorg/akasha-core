@@ -1,183 +1,302 @@
 import { Box, Tabs, Text } from 'grommet';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Icon } from '../../Icon/index';
 import { LinkInput } from '../../Input/index';
-import Spinner from '../../Spinner';
+import { Dropzone } from './dropzone';
 import {
   StyledButton,
   StyledDrop,
-  StyledImageInput,
+  // StyledImageInput,
   StyledImg,
-  StyledInputDiv,
+  StyledImageDiv,
+  // StyledInputDiv,
   StyledTab,
   StyledText,
+  StyledUploadingDiv,
+  StyledUploadValueBox,
+  StyledValueText,
 } from './styled-image-popover';
 
 export interface IImagePopover {
+  dropzoneLabel?: string;
+  uploadImageLabel?: string;
+  uploadingImageLabel?: string;
+  byUrlLabel?: string;
+  insertLabel?: string;
+  uploadFailedLabel?: string;
+  fetchImageFailedLabel?: string;
+  tryAgainLabel?: string;
   target: HTMLElement;
   closePopover: () => void;
-  insertImage: (url: string) => void;
+  insertImage: (data: {
+    src: string;
+    size: {
+      width: string;
+      height: string;
+      naturalWidth: string;
+      naturalHeight: string;
+    };
+  }) => void;
   // upload an URL or a file and returns a promise that resolves to an array
-  uploadRequest?: (data: string | File, isUrl?: boolean) => Promise<any[]>;
+  uploadRequest?: (data: string | File, isUrl?: boolean) => any;
 }
 
 const ImagePopover: React.FC<IImagePopover> = props => {
-  const { target, closePopover, insertImage, uploadRequest } = props;
+  const {
+    target,
+    closePopover,
+    insertImage,
+    uploadRequest,
+    dropzoneLabel,
+    uploadImageLabel,
+    uploadingImageLabel,
+    byUrlLabel,
+    insertLabel,
+    uploadFailedLabel,
+    fetchImageFailedLabel,
+    tryAgainLabel,
+  } = props;
 
-  const [linkInputValue, setLinkInputValue] = React.useState('');
-  const [uploadValue, setUploadValue] = React.useState('');
-  const [uploadValueName, setUploadValueName] = React.useState('');
-  const [uploading, setUploading] = React.useState(false);
+  const [linkInputValue, setLinkInputValue] = useState('');
+  const [uploadFileValue, setUploadFileValue] = useState<{
+    src: string;
+    size: {
+      width: string;
+      height: string;
+      naturalWidth: string;
+      naturalHeight: string;
+    };
+  } | null>(null);
+  const [uploadLinkValue, setUploadLinkValue] = useState<{
+    src: string;
+    size: {
+      width: string;
+      height: string;
+      naturalWidth: string;
+      naturalHeight: string;
+    };
+  } | null>(null);
+  const [uploadValueName, setUploadValueName] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const [uploadErrorState, setUploadErrorState] = useState(false);
 
-  const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
-
-  const handleLinkInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLinkInputChange = async (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setLinkInputValue(ev.target.value);
     if (uploadRequest) {
-      uploadRequest(ev.target.value, true)
-        .then(res => {
-          setLinkInputValue(`${res[0].data}/${res[1].data[0]}`);
-        })
-        .catch(err => {
-          // need design update for proper error display
-          setLinkInputValue(err);
-        });
+      setUploading(true);
+      const resp = await uploadRequest(ev.target.value, true);
+      if (resp.error) {
+        setUploading(false);
+        setUploadErrorState(true);
+      } else if (resp.data) {
+        setUploadLinkValue(resp.data);
+        setUploading(false);
+        setUploadErrorState(false);
+      }
     } else {
-      setLinkInputValue(ev.target.value);
+      setUploadErrorState(true);
     }
   };
 
-  const handleUploadInputClick = () => {
-    if (uploadInputRef.current) {
-      uploadInputRef.current.click();
-    }
-    return;
-  };
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!(e.target.files && e.target.files[0])) {
-      setUploadValue('');
+  const handleFileUpload = (acceptedFiles: any) => {
+    if (acceptedFiles.length < 1) {
+      setUploadFileValue(null);
+      setUploadErrorState(true);
       return;
     }
-    const file = e.target.files[0];
+    const file = acceptedFiles[0];
     const fileName = file.name;
     const fileReader = new FileReader();
 
     fileReader.readAsDataURL(file);
 
-    fileReader.addEventListener('load', () => {
+    fileReader.addEventListener('load', async () => {
       const result = fileReader.result as any;
+      setUploadValueName(fileName);
+      setUploadErrorState(false);
       if (uploadRequest) {
         setUploading(true);
-        uploadRequest(file)
-          .then(res => {
-            // @Todo: it should be changed, this should be handled somewhere else
-            setUploadValue(`${res[0].data}/${res[1].data?.CID}`);
-            setUploadValueName(`${res[0].data}/${res[1].data?.CID}`);
-            setUploading(false);
-          })
-          .catch(err => {
-            // need design update for proper error display
-            setUploadValueName(err);
-            setUploading(false);
-          });
+        const resp = await uploadRequest(file);
+        if (resp.error) {
+          setUploadErrorState(true);
+          setUploading(false);
+        } else if (resp.data) {
+          setUploadFileValue(resp.data);
+          setUploading(false);
+        }
       } else {
-        setUploadValue(result);
-        setUploadValueName(fileName);
-        setUploading(false);
+        setUploadFileValue(result);
       }
     });
   };
 
-  const handleInsertImage = () => {
-    // @Todo check if isUrl and isImage
-    if (linkInputValue) {
-      insertImage(linkInputValue);
+  const handleInsertImage = (type: 'file' | 'url') => {
+    if (uploadFileValue && type === 'file') {
+      insertImage(uploadFileValue);
     }
-    if (uploadValue) {
-      insertImage(uploadValue);
+    if (uploadLinkValue && type === 'url') {
+      insertImage(uploadLinkValue);
     }
     closePopover();
   };
 
+  const handleDeleteUpload = () => {
+    if (linkInputValue) {
+      setLinkInputValue('');
+    }
+    if (uploadFileValue) {
+      setUploadFileValue(null);
+    }
+    if (uploadLinkValue) {
+      setUploadLinkValue(null);
+    }
+    setUploadErrorState(false);
+    setUploadValueName('');
+  };
+
   const renderUploadTabTitle = () => (
-    <Box direction="row" gap="xsmall" justify="center">
+    <Box direction="row" gap="xsmall" justify="center" align="center">
       <Icon type="upload" />
-      <Text>{'Upload image'}</Text>
+      <Text size="large">{uploadImageLabel}</Text>
     </Box>
   );
 
   const renderUrlTabTitle = () => (
-    <Box direction="row" gap="xsmall" justify="center">
+    <Box direction="row" gap="xsmall" justify="center" align="center">
       <Icon type="link" />
-      <Text>{'By url'}</Text>
+      <Text size="large">{byUrlLabel}</Text>
     </Box>
   );
+
   return (
     <StyledDrop
       overflow="hidden"
       target={target}
-      align={{ top: 'bottom' }}
+      align={{ top: 'bottom', left: 'left' }}
       onClickOutside={closePopover}
       onEsc={closePopover}
     >
       <Tabs>
         <StyledTab title={renderUploadTabTitle()}>
-          {uploadValue && (
-            <Box pad="large">
-              <Box
-                pad={{ bottom: 'large' }}
-                margin={{ bottom: 'xsmall' }}
-                direction="row"
-                align="center"
-              >
-                <StyledImg src={uploadValue} />
-                <Text wordBreak="break-all">{uploadValueName}</Text>
+          {uploadFileValue && (
+            <StyledUploadValueBox
+              pad="medium"
+              direction="row"
+              align="center"
+              gap="small"
+              justify="between"
+            >
+              <Box direction="row" align="center" gap="small">
+                <StyledImg src={uploadFileValue.src} />
+                <StyledValueText>{uploadValueName}</StyledValueText>
               </Box>
-
-              <Box align="end" pad={{ vertical: 'medium' }}>
+              <Box gap="small" align="center" direction="row">
+                <Icon type="trash" clickableRed={true} size="xs" onClick={handleDeleteUpload} />
                 <StyledButton
-                  label={'Insert Image'}
-                  onClick={handleInsertImage}
-                  disabled={!uploadValue}
+                  label={insertLabel}
+                  onClick={() => handleInsertImage('file')}
+                  disabled={!uploadFileValue}
+                  primary={true}
+                  color="accent"
+                />
+              </Box>
+            </StyledUploadValueBox>
+          )}
+          {!uploadFileValue && (
+            <StyledUploadValueBox align="start" justify="center" pad="medium">
+              {!uploading && (
+                <>
+                  <Dropzone
+                    onDrop={handleFileUpload}
+                    accept={'image/jpeg, image/png ,image/webp'}
+                    dropzoneLabel={dropzoneLabel}
+                  />
+                  {uploadErrorState && (
+                    <Box
+                      direction="row"
+                      gap="small"
+                      align="center"
+                      justify="start"
+                      pad={{ top: 'medium' }}
+                    >
+                      <StyledImageDiv>
+                        <Icon type="image" />
+                      </StyledImageDiv>
+                      <Box direction="column" gap="small">
+                        <Box direction="row" gap="xsmall" align="center" justify="start">
+                          <StyledValueText>{uploadValueName}</StyledValueText>
+                          <Icon
+                            type="trash"
+                            clickableRed={true}
+                            size="xs"
+                            onClick={handleDeleteUpload}
+                          />
+                        </Box>
+                        <Box direction="row" gap="xsmall" align="center">
+                          <Text color="errorText">{uploadFailedLabel}</Text>
+                          <Text color="accentText">{tryAgainLabel}</Text>
+                        </Box>
+                      </Box>
+                    </Box>
+                  )}
+                </>
+              )}
+              {uploading && (
+                <StyledUploadingDiv>
+                  <Box direction="column" gap="medium" align="center" justify="center">
+                    <Icon type="loading" />
+                    <StyledText size="medium" color="accentText">
+                      {uploadingImageLabel}
+                    </StyledText>
+                  </Box>
+                </StyledUploadingDiv>
+              )}
+            </StyledUploadValueBox>
+          )}
+        </StyledTab>
+        <StyledTab title={renderUrlTabTitle()}>
+          <StyledUploadValueBox pad="medium" gap="small">
+            <Box gap="xsmall">
+              <LinkInput
+                inputValue={linkInputValue}
+                onChange={handleLinkInputChange}
+                handleClearInput={handleDeleteUpload}
+              />
+              {uploadErrorState && (
+                <Box direction="column" gap="xsmall" align="start" justify="center">
+                  <Text color="errorText">{fetchImageFailedLabel}</Text>
+                  <Text color="accentText">{tryAgainLabel}</Text>
+                </Box>
+              )}
+            </Box>
+            <Box align="end">
+              <Box direction="row" gap="xsmall" align="center">
+                {uploading && <Icon type="loading" />}
+                <StyledButton
+                  label={insertLabel}
+                  onClick={() => handleInsertImage('url')}
+                  disabled={!uploadLinkValue}
                   primary={true}
                   color="accent"
                 />
               </Box>
             </Box>
-          )}
-          {!uploadValue && (
-            <Box align="center" justify="center" pad={{ top: 'medium' }}>
-              {!uploading && (
-                <StyledInputDiv onClick={handleUploadInputClick}>
-                  <StyledText size="medium" color="secondaryText">
-                    {'Drop an image or click to upload a file from your computer'}
-                  </StyledText>
-                  <StyledImageInput onChange={handleFileUpload} type="file" ref={uploadInputRef} />
-                </StyledInputDiv>
-              )}
-              {uploading && <Spinner />}
-            </Box>
-          )}
-        </StyledTab>
-        <StyledTab title={renderUrlTabTitle()}>
-          <Box pad={{ vertical: 'medium' }}>
-            <Box pad="medium">
-              <LinkInput inputValue={linkInputValue} onChange={handleLinkInputChange} />
-            </Box>
-            <Box align="end" pad="medium">
-              <StyledButton
-                label={'Insert Image'}
-                onClick={handleInsertImage}
-                disabled={!linkInputValue}
-                primary={true}
-                color="accent"
-              />
-            </Box>
-          </Box>
+          </StyledUploadValueBox>
         </StyledTab>
       </Tabs>
     </StyledDrop>
   );
+};
+
+ImagePopover.defaultProps = {
+  dropzoneLabel: 'Drop an image or click to upload an image from your computer',
+  uploadImageLabel: 'Upload Image',
+  byUrlLabel: 'By Url',
+  uploadingImageLabel: 'Uploading Image',
+  insertLabel: 'Insert',
+  uploadFailedLabel: 'Upload failed.',
+  fetchImageFailedLabel: 'Sorry, we could not fetch the image.',
+  tryAgainLabel: 'Try again.',
 };
 
 export { ImagePopover };

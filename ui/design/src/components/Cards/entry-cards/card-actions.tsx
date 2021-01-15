@@ -250,9 +250,7 @@ const CardActions: React.FC<CardActionProps> = props => {
   const repostsBtnText =
     size === 'small' ? `${entryData.reposts || 0}` : `${entryData.reposts || 0} ${repostsLabel}`;
   const repliesBtnText =
-    size === 'small'
-      ? `${entryData.replies?.length || 0}`
-      : `${entryData.replies?.length || 0} ${repliesLabel}`;
+    size === 'small' ? `${entryData.replies || 0}` : `${entryData.replies || 0} ${repliesLabel}`;
   const bookmarkBtnText =
     size === 'small' ? undefined : isBookmarked ? bookmarkedLabel : bookmarkLabel;
   const shareBtnText = size === 'small' ? undefined : shareLabel;

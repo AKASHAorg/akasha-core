@@ -16,6 +16,7 @@ import {
 
 import pino from 'pino';
 import { BehaviorSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
 import TranslationManager from './i18n';
@@ -128,12 +129,29 @@ export default class AppLoader implements IAppLoader {
     singleSpa.start({
       urlRerouteOnly: true,
     });
+    if (this.globalChannel) {
+      const loginEvent = this.globalChannel.pipe(
+        filter((ev: { channelInfo: any; data: any }) => ev?.channelInfo?.method === 'signIn'),
+      );
+      loginEvent.subscribe(e => {
+        const doc = this.channels.db.apps.getInstalled({});
+        this.appLogger.info('registering apps installed by user');
+        doc.subscribe(record => {
+          this.appLogger.info('currently installed apps', record.apps);
+          if (record?.apps?.length) {
+            record.apps.forEach(this.registerApp);
+          }
+        });
+      });
+    }
 
     this.loadLayout();
   }
 
-  public installApp() {
-    // todo
+  public async installApp(appEntry: IAppEntry) {
+    this.registerApp(appEntry);
+    const doc = this.channels.db.apps.install(appEntry);
+    return await doc.toPromise();
   }
   public static createTemplateElement = createTemplateElement;
   public async uninstallApp(appName: string, packageLoader: any, packageId: string) {
@@ -148,7 +166,8 @@ export default class AppLoader implements IAppLoader {
     const removedPackage = packageLoader.delete(packageId);
     this.events.next(EventTypes.AppOrPluginUninstall);
     this.appLogger.info(`package ${packageId} removed ${removedPackage}`);
-    return;
+    const doc = this.channels.db.apps.remove({ name: appName });
+    return await doc.toPromise();
   }
 
   private addSingleSpaEventListeners() {

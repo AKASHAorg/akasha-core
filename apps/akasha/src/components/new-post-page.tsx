@@ -4,7 +4,7 @@ import { getLoggedProfileStore } from '../state/logged-profile-state';
 import { useTranslation } from 'react-i18next';
 import { uploadMediaToTextile } from '../services/posting-service';
 
-const { Helmet, EditorCard, ErrorLoader, Box, Button } = DS;
+const { Helmet, EditorCard, ErrorLoader, Box, Button, editorDefaultValue } = DS;
 
 interface NewPostPageProps {
   globalChannel: any;
@@ -18,6 +18,7 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
   const { showLoginModal, sdkModules } = props;
   const Login = getLoggedProfileStore();
   const loginEthAddr = Login.useStoreState((state: any) => state.data.ethAddress);
+  const [editorState, setEditorState] = React.useState(editorDefaultValue);
 
   const onUploadRequest = uploadMediaToTextile(
     sdkModules.profiles.profileService,
@@ -75,6 +76,8 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
             // mentions={mentions}
             // tags={tags}
             uploadRequest={onUploadRequest}
+            editorState={editorState}
+            setEditorState={setEditorState}
           />
         </Box>
       )}

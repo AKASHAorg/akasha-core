@@ -64,7 +64,7 @@ import {
   FilterCard,
 } from './components/Cards';
 
-import { EditorBox, EditorMeter } from './components/Editor';
+import { EditorBox, EditorMeter, editorDefaultValue } from './components/Editor';
 
 import TextInputField from './components/Forms/text-input-field';
 import { AppIcon, Icon, iconTypes } from './components/Icon';
@@ -130,6 +130,7 @@ const exported = {
   DropSearchInput,
   EditorBox,
   EditorMeter,
+  editorDefaultValue,
   CommentEditor,
   EditorCard,
   EditorPlaceholder,
