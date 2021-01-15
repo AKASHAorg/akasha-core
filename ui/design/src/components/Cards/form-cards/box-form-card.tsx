@@ -157,7 +157,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
 
   return (
     <MainAreaCardBox className={className}>
-      <Box direction="column" pad="medium">
+      <Box direction="column" pad="medium" height={{ min: 'fit-content' }}>
         <Box direction="column" pad="xsmall">
           <Text weight="bold"> {titleLabel}</Text>
           <Box direction="row" gap="xxsmall" pad={{ bottom: 'xsmall' }} align="center">

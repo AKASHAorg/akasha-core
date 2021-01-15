@@ -1,41 +1,34 @@
-export interface IFetchOperation {
-  startId: string;
-  size: number;
-  position: 'start' | 'end';
-  status: 'pending' | 'requested' | 'completed' | 'error';
+import { Rect } from './rect';
+
+export interface ViewportRect {
+  bottom: number;
+  height: number;
+  width: number;
+  top: number;
+  left: number;
+  right: number;
 }
 
-export interface ISliceOperation {
-  position: 'start' | 'end';
-  size: number;
-}
-export interface IListCustomEntity {
-  position: string | 'before' | 'after';
-  itemIndex?: number;
-  itemId?: string | null;
-  getComponent: React.FC<any> | ((props: any) => React.FC<any>);
-}
-export interface IListInitialState {
-  startId?: string;
-  startTop?: number;
-  slice?: [number, number];
+export interface Anchor {
+  index: number;
+  offset: number;
 }
 
-export interface ILoadItemsPayload {
-  start?: string;
-  limit: number;
-  reverse?: boolean;
-}
+export type ItemRects = Map<string, { rect: Rect; index: number }>;
 
-export interface ILoadItemDataPayload {
-  itemId: string;
+export interface AnchorData {
+  anchor: Anchor;
+  scrollTop: number;
 }
 export interface IVirtualListProps {
   items: string[];
   itemsData: {};
+  /* Boolean to load item data in a second call (loadItemData) - default: false */
+  useItemDataLoader?: boolean;
   loadMore: (payload: ILoadItemsPayload) => void;
-  loadItemData: (payload: ILoadItemDataPayload) => void;
+  loadItemData?: (payload: ILoadItemDataPayload) => void;
   itemCard: React.ReactElement;
+  listHeader?: React.ReactElement;
   /* spacing between items (bottom) */
   itemSpacing?: number;
   /* How many items we want per request */
@@ -45,56 +38,87 @@ export interface IVirtualListProps {
   /* The id from which we want to start fetching entries */
   startId?: string;
   /* Items to keep in view on top and bottom of visible ones */
-  offsetItems?: number;
+  overscan?: number;
   customEntities?: IListCustomEntity[];
   initialState?: IListInitialState;
   hasMoreItems?: boolean;
   getNotificationPill?: (props: { styles: React.CSSProperties }) => React.ReactElement;
   showNotificationPill?: boolean;
   onItemRead?: (itemId: string) => void;
+  averageItemHeight?: number;
   ref?: React.Ref<any>;
 }
 
-export interface IListItemProps {
-  item: {
-    entryId: string;
-  };
-  itemData: {};
+export interface ILoadItemsPayload {
+  start?: string;
+  limit: number;
+  reverse?: boolean;
+}
+export interface ILoadItemDataPayload {
+  itemId: string;
 }
 
-export interface IScrollState {
-  /** scroll direction: 0 = upwards, 1 = downwards */
-  direction: 0 | 1;
-  scrollTop: number;
-  topPad: number;
-  bottomPad: number;
+export interface IListCustomEntity {
+  position: string | 'before' | 'after';
+  itemIndex?: number;
+  itemId?: string | null;
+  getComponent: React.FC<any> | ((props: any) => React.FC<any>);
 }
 
-export interface IUseScrollStateOptions {
-  node: HTMLElement | null;
+export interface IListInitialState {
+  /* starting id */
+  startId: string;
+  /* total list height */
+  totalHeight: number;
+  /* top position of the first item (startId) */
+  startTop: number;
 }
 
-export type ItemDimensions = {
-  dimensions: {
-    [key: string]: { height: number };
-  };
-  count: number;
-  avgItemHeight: number;
-  totalItemsHeight: number;
+export type UseVirtualScrollProps = Pick<
+  IVirtualListProps,
+  | 'averageItemHeight'
+  | 'itemSpacing'
+  | 'overscan'
+  | 'items'
+  | 'initialState'
+  | 'loadMore'
+  | 'hasMoreItems'
+> & {
+  averageItemHeight: number;
+  itemSpacing: number;
+  overscan: number;
 };
 
-export type ItemDimensionsRef = React.MutableRefObject<ItemDimensions>;
-
+export interface IListViewportProps {
+  itemsData: Map<string, any>;
+  itemRects: Map<string, { index: number; rect: Rect }>;
+  itemCard: React.ReactElement;
+  loadItemData: IVirtualListProps['loadItemData'];
+  itemSpacing: number;
+  customEntities?: IVirtualListProps['customEntities'];
+  isFetching: boolean;
+  useItemDataLoader: IVirtualListProps['useItemDataLoader'];
+  listHeight: number;
+  updateRef?: (itemId: string, ref: React.ElementRef<'div'> | null) => void;
+  onItemSizeChange: (itemId: string, rect: DOMRect) => void;
+  renderSlice: string[];
+  onItemInitialLoad: (itemId: string) => void;
+  onUnload?: (itemId: string) => void;
+  loadedIds: string[];
+  itemIds: string[];
+}
 export interface IRenderItemProps {
   itemId: string;
   itemData?: any;
   loadItemData: IVirtualListProps['loadItemData'];
-  onSizeChange: (itemId: string, rect: { top: number; height: number }) => void;
   itemSpacing: IVirtualListProps['itemSpacing'];
   customEntities: IListCustomEntity[];
   itemCard: IVirtualListProps['itemCard'];
-  coordinates: { [key: string]: { top: number; height: number } };
+  updateRef?: IListViewportProps['updateRef'];
+  itemRect?: { index: number; rect: Rect };
+  onItemSizeChange: IListViewportProps['onItemSizeChange'];
+  onItemInitialLoad: IListViewportProps['onItemInitialLoad'];
+  onUnload?: IListViewportProps['onUnload'];
+  isLoaded: boolean;
+  prevRect?: { index: number; rect: Rect } | null;
 }
-
-export type SetSliceOperationType = React.Dispatch<React.SetStateAction<ISliceOperation>>;
-export type SetFetchOperationType = React.Dispatch<IFetchOperation | null>;

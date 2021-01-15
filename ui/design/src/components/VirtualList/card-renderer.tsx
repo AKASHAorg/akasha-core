@@ -1,21 +1,22 @@
 import React from 'react';
 import { IRenderItemProps } from './interfaces';
-import { useResizeObserver } from './use-resize-observer';
+import EntryLoadingPlaceholder from './placeholders/entry-card-placeholder';
 
 const CardRenderer = (props: IRenderItemProps) => {
   const {
     itemId,
     itemData,
     loadItemData,
-    onSizeChange,
     itemSpacing,
     customEntities,
     itemCard,
-    coordinates,
+    itemRect,
+    updateRef,
+    onItemInitialLoad,
+    onUnload,
+    isLoaded,
+    prevRect,
   } = props;
-
-  const itemRef = React.useRef<HTMLDivElement | null>(null);
-  const itemRect: { top: number; height: number } = coordinates[itemId];
 
   const beforeEntities = customEntities.filter(
     entityObj => entityObj.position === 'before' && entityObj.itemId === itemId,
@@ -24,68 +25,116 @@ const CardRenderer = (props: IRenderItemProps) => {
     entityObj => entityObj.position === 'after' && entityObj.itemId === itemId,
   );
 
-  useResizeObserver(itemRef.current, entries => {
-    const contentRect = entries[0].contentRect;
-    if (itemRect && itemRef.current) {
-      if (contentRect.height !== itemRect.height) {
-        onSizeChange(itemId, { height: contentRect.height, top: contentRect.top });
-      }
-    }
-  });
+  const wasLoaded = React.useRef<boolean>();
 
   React.useEffect(() => {
-    if (itemRef.current) {
-      if (itemRect) {
-        const clientRect = itemRef.current.getBoundingClientRect();
-        if (clientRect.height !== itemRect.height) {
-          onSizeChange(itemId, { height: clientRect.height, top: clientRect.top });
-        }
-      }
-    }
-  });
-  React.useEffect(() => {
-    if (itemId && !itemData) {
+    if (itemId && !itemData && loadItemData) {
       loadItemData({ itemId });
     }
   }, [itemId]);
 
-  let yPos;
-  if (itemRect) {
-    yPos = itemRect.top;
+  const savedRef = React.useRef<HTMLDivElement>();
+  const prevDOMRect = React.useRef<DOMRect>();
+  let prevBottom;
+  if (prevRect) {
+    prevBottom = prevRect.rect.getBottom() + 8;
   }
+  const notifyChange = () => {
+    if (savedRef.current) {
+      const domRect = savedRef.current.getBoundingClientRect();
+      if (!itemRect || (itemRect && itemRect.rect.getHeight() !== domRect.height)) {
+        props.onItemSizeChange(itemId, domRect);
+        prevDOMRect.current = domRect;
+      }
+    }
+  };
 
+  const measurementInterval = React.useRef<number | null>(null);
+
+  React.useLayoutEffect(() => {
+    if (!measurementInterval.current && savedRef.current && isLoaded) {
+      measurementInterval.current = setInterval(notifyChange, 500);
+    }
+    if (!isLoaded && wasLoaded) {
+      if (measurementInterval.current) {
+        clearInterval(measurementInterval.current);
+        measurementInterval.current = null;
+      }
+    }
+    return () => {
+      if (measurementInterval.current) {
+        clearInterval(measurementInterval.current);
+        measurementInterval.current = null;
+      }
+    };
+  }, [savedRef.current, prevDOMRect.current, measurementInterval, isLoaded, wasLoaded]);
+
+  React.useEffect(() => {
+    wasLoaded.current = isLoaded;
+  }, [isLoaded]);
+
+  React.useEffect(() => {
+    if (isLoaded) {
+      notifyChange();
+    }
+  }, [itemData, isLoaded, beforeEntities.length, afterEntities.length]);
+
+  React.useEffect(() => {
+    return () => {
+      if (onUnload) {
+        onUnload(itemId);
+      }
+    };
+  }, []);
+
+  const handleRootLoad = () => {
+    if (!itemData) {
+      onItemInitialLoad(itemId);
+    }
+  };
+
+  React.useEffect(() => {
+    if (savedRef.current) {
+      handleRootLoad();
+    }
+  }, [savedRef.current]);
+
+  const onRef = (r: HTMLDivElement) => {
+    if (updateRef) {
+      updateRef(itemId, r);
+    }
+    savedRef.current = r;
+  };
+  let yPos;
+  if (prevBottom) {
+    yPos = prevBottom + (itemSpacing || 0);
+  } else if (itemRect) {
+    yPos = itemRect.rect.getTop();
+  }
   return (
     <div
       key={itemId}
-      ref={itemRef}
-      className={`entry-${itemId}`}
-      data-item-id={itemId}
+      // id={`${itemId}`}
+      ref={onRef}
       style={{
         position: 'absolute',
-        transform: `translateY(${yPos}px)`,
+        transform: `translateY(${yPos || 0}px)`,
+        opacity: `${!yPos ? 0.01 : !itemData ? 0.6 : 1}`,
         transition: 'opacity 0.24s ease-out',
         width: '100%',
+        minHeight: `${itemRect ? itemRect.rect.getHeight() : 200}px`,
       }}
     >
-      {beforeEntities.map(
-        React.useCallback(
-          (entityObj, idx) => {
-            return entityObj.getComponent({ key: idx, style: { marginBottom: itemSpacing } });
-          },
-          [beforeEntities.length],
-        ),
-      )}
+      {beforeEntities.map((entityObj, idx) => {
+        return entityObj.getComponent({ key: idx, style: { marginBottom: itemSpacing } });
+      })}
 
-      {React.cloneElement(itemCard, { itemId, itemData })}
+      {!itemData && <EntryLoadingPlaceholder />}
+      {itemData && React.cloneElement(itemCard, { itemId, itemData })}
 
-      {afterEntities.map(
-        React.useCallback(
-          (entityObj, idx) => {
-            return entityObj.getComponent({ key: idx, style: { marginTop: itemSpacing } });
-          },
-          [afterEntities.length],
-        ),
-      )}
+      {afterEntities.map((entityObj, idx) => {
+        return entityObj.getComponent({ key: idx, style: { marginTop: itemSpacing } });
+      })}
     </div>
   );
 };

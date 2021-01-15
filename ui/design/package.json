@@ -70,6 +70,7 @@
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
+    "@rooks/use-mutation-observer-ref": "4.5.0",
     "@testing-library/react": "11.2.2",
     "@testing-library/react-hooks": "3.4.2",
     "@types/classnames": "2.2.11",

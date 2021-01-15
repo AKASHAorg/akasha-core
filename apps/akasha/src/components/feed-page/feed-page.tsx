@@ -102,6 +102,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     });
   };
   const fetchEntries = async (payload: { limit: number; offset?: string }) => {
+    console.log('fetchEntries called');
     const getEntriesCall = sdkModules.posts.entries.getEntries({
       ...payload,
       offset: payload.offset || feedState.nextItemId,
