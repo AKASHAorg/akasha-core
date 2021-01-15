@@ -1,0 +1,16 @@
+{
+  "name": "@akashaproject/sdk-typings",
+  "version": "1.0.0",
+  "private": true,
+  "main": "lib/index.js",
+  "dependencies": {
+    "rxjs": "6.6.3"
+  },
+  "peerDependencies": {
+    "typescript": "4.1.3"
+  },
+  "scripts": {
+    "tsc": "tsc --build",
+    "prepare": "npm run tsc"
+  }
+}
