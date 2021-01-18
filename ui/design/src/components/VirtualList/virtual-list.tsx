@@ -14,7 +14,7 @@ export interface ScrollData {
 
 const DEFAULT_LOAD_LIMIT = 5;
 const DEFAULT_ITEM_SPACING = 8;
-const DEFAULT_OVERSCAN_SIZE = 4;
+const DEFAULT_OVERSCAN_SIZE = 8;
 
 const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   const {
@@ -25,7 +25,7 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
     loadItemData,
     loadMore,
     itemSpacing = DEFAULT_ITEM_SPACING,
-    // hasMoreItems = true,
+    hasMoreItems = true,
     customEntities,
     // initialState,
     showNotificationPill = false,
@@ -100,15 +100,15 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   }, [scrollData.current.loadedIds.length, scrollData.current.items.length, isLoading]);
 
   React.useEffect(() => {
-    if (isLoading) {
+    if (isLoading || !hasMoreItems) {
       return;
     }
     const isRequired = slice.end - scrollData.current.loadedIds.length > 0;
     if (!isRequired) {
       return;
     }
-    loadMore({ start: items[items.length - 1], limit: loadLimit });
     setIsLoading(true);
+    loadMore({ start: items[items.length - 1], limit: loadLimit });
   }, [slice.start, slice.end]);
 
   // compute initial anchor
@@ -116,11 +116,11 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
     setAnchorData(prev =>
       getAnchor({
         itemSpacing,
-        scrollTop: viewportActions.getScrollTop(),
         anchorData: prev,
         items: scrollData.current.items,
         rects: itemPositions.rects,
         averageItemHeight: scrollData.current.averageItemHeight,
+        getScrollTop: viewportActions.getScrollTop,
       }),
     );
   }, []);
@@ -154,11 +154,11 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
     setAnchorData(prev =>
       getAnchor({
         itemSpacing,
-        scrollTop: viewportActions.getScrollTop(),
         anchorData: prev,
         averageItemHeight: scrollData.current.averageItemHeight,
         rects: itemPositions.rects,
         items: scrollData.current.loadedIds,
+        getScrollTop: viewportActions.getScrollTop,
       }),
     );
   };
@@ -186,6 +186,16 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
       const diff = diffArr(scrollData.current.items, items);
       if (diff.insertPoint === 'before') {
         scrollData.current.items.unshift(...diff.diffItems);
+        setAnchorData(prev =>
+          getAnchor({
+            itemSpacing,
+            anchorData: prev,
+            items: scrollData.current.items,
+            rects: itemPositions.rects,
+            averageItemHeight: scrollData.current.averageItemHeight,
+            getScrollTop: viewportActions.getScrollTop,
+          }),
+        );
       } else if (diff.insertPoint === 'after') {
         scrollData.current.items.push(...diff.diffItems);
       } else {
@@ -238,6 +248,7 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   const getRenderSlice = () => {
     return items.slice(slice.start, slice.end);
   };
+
   return (
     <div
       ref={rootContainerRef}
