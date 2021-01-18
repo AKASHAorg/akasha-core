@@ -1,4 +1,4 @@
-import { ObservableCallResult } from './basic';
+import { ObservableCallResult } from './responses';
 
 export interface ILogger {
   info(msg: string): void;

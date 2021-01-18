@@ -1,4 +1,4 @@
-import { ObservableCallResult } from './basic';
+import { ObservableCallResult } from './responses';
 
 // compatible with apollo-link gql request
 export interface IGqlOperation {

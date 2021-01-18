@@ -7,7 +7,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 module.exports = {
   entry: './src/index',
   mode: process.env.NODE_ENV || 'development',
-  target: 'web',
+  target: ['web', 'es2017'],
   module: {
     rules: [
       { test: /\.ts(x)?$/, use: 'ts-loader' },

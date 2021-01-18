@@ -1,6 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
-// const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const name = require("./package.json").name;
 
 const { InjectManifest } = require("workbox-webpack-plugin");
@@ -9,7 +9,12 @@ const config = {
   entry: "./src/index.ts",
   context: path.resolve(__dirname),
   module: {
-    rules: [{ test: /\.ts(x)?$/, loader: "ts-loader" },
+    rules: [{
+      test: /\.ts(x)?$/,
+      loader: "ts-loader",
+      options: {
+        transpileOnly: true
+      } },
       {
         test: /\.m?js/,
         resolve: {
@@ -19,22 +24,6 @@ const config = {
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", "*.mjs"],
-    alias: {
-      buffer: require.resolve("buffer"),
-      process: require.resolve("process/browser")
-    },
-    fallback: {
-      os: false,
-      crypto: false,
-      http: false,
-      https: false,
-      dns: false,
-      fs: false,
-      assert: require.resolve("assert/"),
-      path: require.resolve("path-browserify/"),
-      stream: require.resolve("stream-browserify/"),
-      util: require.resolve("util/"),
-    }
   },
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -54,6 +43,7 @@ const config = {
     }
   },
   plugins: [
+    new CleanWebpackPlugin({ verbose: true }),
     new webpack.EnvironmentPlugin({
       GRAPHQL_URI: process.env.GRAPHQL_URI || "https://api.akasha.network/graphql",
       NODE_ENV: process.env.NODE_ENV || "development",
@@ -66,10 +56,6 @@ const config = {
       profile: true
     }),
     new webpack.AutomaticPrefetchPlugin(),
-    new webpack.ProvidePlugin({
-      Buffer: ["buffer", "Buffer"],
-      process: ["process"]
-    }),
     new InjectManifest({
       swSrc: "./lib/sw.js",
       swDest: "sw.js",
@@ -80,7 +66,7 @@ const config = {
   mode: process.env.NODE_ENV || "development",
   externals: [
     {
-      "single-spa-react": "singleSpaReact",
+//      "single-spa-react": "singleSpaReact",
       "rxjs": "rxjs"
     }
   ]
