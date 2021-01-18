@@ -9,6 +9,7 @@ interface IFeedState {
   };
   hasMoreItems: boolean;
   nextItemId?: string;
+  pendingEntries: string[];
 }
 export type IFeedAction =
   | { type: 'LOAD_FEED_START'; payload: { isFeedLoading: boolean } }
@@ -31,6 +32,10 @@ const initialFeedState: IFeedState = {
   feedItems: [],
   feedItemData: {},
   hasMoreItems: true,
+  /* entries that are in a publishing state
+   * they will be prepended to the feed using the customEntities
+   */
+  pendingEntries: [],
 };
 
 const feedStateReducer = (state: IFeedState, action: IFeedAction) => {
@@ -65,6 +70,8 @@ const feedStateReducer = (state: IFeedState, action: IFeedAction) => {
         ...state,
         hasMoreItems: action.payload.hasMoreItems,
       };
+    default:
+      throw new Error('[UseFeedReducer] action is not defined!');
   }
 };
 

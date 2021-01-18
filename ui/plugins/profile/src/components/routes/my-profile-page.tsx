@@ -9,18 +9,17 @@ import { IUserNameOption } from '@akashaproject/design-system/lib/components/Car
 import { UseLoginActions, UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { UseProfileActions } from '@akashaproject/ui-awf-hooks/lib/use-profile';
 
-
 const { styled, Helmet, ModalRenderer, BoxFormCard, EnsFormCard, Box } = DS;
 
 const MODAL_NAMES = {
   PROFILE_UPDATE: 'profileUpdate',
   CHANGE_ENS: 'changeENS',
-}
+};
 
 export interface MyProfileProps extends RootComponentProps {
   ethAddress: string | null;
   modalState: ModalState;
-  modalActions: ModalStateActions
+  modalActions: ModalStateActions;
   profileData: any;
   loginActions: UseLoginActions & UseProfileActions;
   profileUpdateStatus: UseLoginState['updateStatus'];
@@ -29,20 +28,27 @@ export interface MyProfileProps extends RootComponentProps {
 const ProfileForm = styled(BoxFormCard)`
   max-width: 100%;
   max-height: 100vh;
+  min-height: max-content;
+  overflow: auto;
   animation: fadeInAnimation ease 0.8s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     max-width: 66%;
-    max-height: 75%;
+  }
+  @media screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
+    max-width: 50%;
+  }
+  @media screen and (min-width: ${props => props.theme.breakpoints.xlarge.value}px) {
+    max-width: 33%;
   }
   @keyframes fadeInAnimation {
-      0% {
-          opacity: 0;
-      }
-      100% {
-          opacity: 1;
-      }
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 `;
 
@@ -57,12 +63,12 @@ const ENSForm = styled(EnsFormCard)`
     max-height: 75%;
   }
   @keyframes fadeInAnimation {
-      0% {
-          opacity: 0;
-      }
-      100% {
-          opacity: 1;
-      }
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 `;
 
@@ -104,7 +110,7 @@ const MyProfilePage = (props: MyProfileProps) => {
   }, [
     profileUpdateStatus.updateComplete,
     ensState.status.registrationComplete,
-    JSON.stringify(props.modalState)
+    JSON.stringify(props.modalState),
   ]);
 
   const onProfileUpdateSubmit = (data: any) => {
@@ -113,20 +119,20 @@ const MyProfilePage = (props: MyProfileProps) => {
 
   const closeProfileUpdateModal = () => {
     props.modalActions.hide(MODAL_NAMES.PROFILE_UPDATE);
-  }
+  };
 
-  const onENSSubmit = ({ name, option }: { name: string, option: IUserNameOption }) => {
-    if(option.name === 'local') {
+  const onENSSubmit = ({ name, option }: { name: string; option: IUserNameOption }) => {
+    if (option.name === 'local') {
       return ensActions.registerLocalUsername({ userName: name });
     }
     if (option.name === 'ensSubdomain') {
       return ensActions.register({ userName: name });
     }
-  }
+  };
 
   const closeEnsModal = () => {
     props.modalActions.hide(MODAL_NAMES.CHANGE_ENS);
-  }
+  };
   const handleModalShow = (name: string) => {
     if (name === MODAL_NAMES.PROFILE_UPDATE) {
       props.loginActions.resetUpdateStatus();
@@ -135,7 +141,7 @@ const MyProfilePage = (props: MyProfileProps) => {
       ensActions.resetRegistrationStatus();
     }
     props.modalActions.show(name);
-  }
+  };
 
   return (
     <Box fill="horizontal" margin={{ top: '.5rem' }}>
@@ -150,77 +156,77 @@ const MyProfilePage = (props: MyProfileProps) => {
         profileModalName={MODAL_NAMES.PROFILE_UPDATE}
         ensModalName={MODAL_NAMES.CHANGE_ENS}
       />
-        <ModalRenderer slotId={layout.app.modalSlotId} >
-          {props.modalState[MODAL_NAMES.PROFILE_UPDATE] &&
-            props.ethAddress &&
-            <Overlay>
-              <ProfileForm
-                titleLabel={t('Ethereum Address')}
-                avatarLabel={t('Avatar')}
-                nameLabel={t('Name')}
-                coverImageLabel={t('Cover Image')}
-                descriptionLabel={t('Description')}
-                uploadLabel={t('Upload')}
-                urlLabel={t('By url')}
-                cancelLabel={t('Cancel')}
-                saveLabel={t('Save')}
-                deleteLabel={t('Delete')}
-                nameFieldPlaceholder={t('Type your name here')}
-                descriptionFieldPlaceholder={t('Add a description about you here')}
-                ethAddress={props.ethAddress}
-                providerData={{
-                  ...props.profileData,
-                }}
-                onSave={onProfileUpdateSubmit}
-                onCancel={closeProfileUpdateModal}
-                updateStatus={profileUpdateStatus}
-              />
-            </Overlay>
-          }
-          {props.modalState[MODAL_NAMES.CHANGE_ENS] &&
-          props.ethAddress && (
-            <Overlay>
-              <ENSForm
-                titleLabel={t('Add a username')}
-                secondaryTitleLabel={t('Secondary Title')}
-                nameLabel={t('Select a username')}
-                errorLabel={t('Sorry, this username has already been taken. Please choose another one')}
-                ethAddressLabel={t('Your Ethereum Address')}
-                ethNameLabel={t('Your Ethereum Name')}
-                optionUsername={t('username')}
-                optionSpecify={t('Specify an Ethereum name')}
-                optionUseEthereumAddress={t('Use my Ethereum address')}
-                consentText={t('By creating an account you agree to the ')}
-                consentUrl="https://ethereum.world/community-agreement"
-                consentLabel={t('Community Agreement')}
-                poweredByLabel={t('Username powered by')}
-                iconLabel={t('ENS')}
-                cancelLabel={t('Cancel')}
-                changeButtonLabel={t('Change')}
-                saveLabel={t('Save')}
-                nameFieldPlaceholder={`${t('username')}`}
-                ethAddress={props.ethAddress}
-                providerData={{ name: ensState.userName || '' }}
-                onSave={onENSSubmit}
-                onCancel={closeEnsModal}
-                validateEns={ensActions.validateName}
-                validEns={ensState.isValidating ? null : ensState.isAvailable}
-                isValidating={ensState.isValidating}
-                userNameProviderOptions={[
-                  {
-                    name: 'local',
-                    label: t('Do not use ENS'),
-                  }
-                ]}
-                disableInputOnOption={{
-                  ensSubdomain: ensState.alreadyRegistered
-                }}
-                errorMessage={ensState.errorMessage}
-                registrationStatus={ensState.status}
-              />
-            </Overlay>
-          )}
-        </ModalRenderer>
+      <ModalRenderer slotId={layout.app.modalSlotId}>
+        {props.modalState[MODAL_NAMES.PROFILE_UPDATE] && props.ethAddress && (
+          <Overlay>
+            <ProfileForm
+              titleLabel={t('Ethereum Address')}
+              avatarLabel={t('Avatar')}
+              nameLabel={t('Name')}
+              coverImageLabel={t('Cover Image')}
+              descriptionLabel={t('Description')}
+              uploadLabel={t('Upload')}
+              urlLabel={t('By url')}
+              cancelLabel={t('Cancel')}
+              saveLabel={t('Save')}
+              deleteLabel={t('Delete')}
+              nameFieldPlaceholder={t('Type your name here')}
+              descriptionFieldPlaceholder={t('Add a description about you here')}
+              ethAddress={props.ethAddress}
+              providerData={{
+                ...props.profileData,
+              }}
+              onSave={onProfileUpdateSubmit}
+              onCancel={closeProfileUpdateModal}
+              updateStatus={profileUpdateStatus}
+            />
+          </Overlay>
+        )}
+        {props.modalState[MODAL_NAMES.CHANGE_ENS] && props.ethAddress && (
+          <Overlay>
+            <ENSForm
+              titleLabel={t('Add a username')}
+              secondaryTitleLabel={t('Secondary Title')}
+              nameLabel={t('Select a username')}
+              errorLabel={t(
+                'Sorry, this username has already been taken. Please choose another one',
+              )}
+              ethAddressLabel={t('Your Ethereum Address')}
+              ethNameLabel={t('Your Ethereum Name')}
+              optionUsername={t('username')}
+              optionSpecify={t('Specify an Ethereum name')}
+              optionUseEthereumAddress={t('Use my Ethereum address')}
+              consentText={t('By creating an account you agree to the ')}
+              consentUrl="https://ethereum.world/community-agreement"
+              consentLabel={t('Community Agreement')}
+              poweredByLabel={t('Username powered by')}
+              iconLabel={t('ENS')}
+              cancelLabel={t('Cancel')}
+              changeButtonLabel={t('Change')}
+              saveLabel={t('Save')}
+              nameFieldPlaceholder={`${t('username')}`}
+              ethAddress={props.ethAddress}
+              providerData={{ name: ensState.userName || '' }}
+              onSave={onENSSubmit}
+              onCancel={closeEnsModal}
+              validateEns={ensActions.validateName}
+              validEns={ensState.isValidating ? null : ensState.isAvailable}
+              isValidating={ensState.isValidating}
+              userNameProviderOptions={[
+                {
+                  name: 'local',
+                  label: t('Do not use ENS'),
+                },
+              ]}
+              disableInputOnOption={{
+                ensSubdomain: ensState.alreadyRegistered,
+              }}
+              errorMessage={ensState.errorMessage}
+              registrationStatus={ensState.status}
+            />
+          </Overlay>
+        )}
+      </ModalRenderer>
     </Box>
   );
 };

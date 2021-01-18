@@ -1,61 +1,46 @@
 import * as React from 'react';
 import CardRenderer from './card-renderer';
-import { GetItemCardFn, IRenderItemProps, IVirtualListProps } from './interfaces';
-import Rect from './v2/rect-obj';
 import Spinner from '../Spinner';
-
-export interface IListViewportProps {
-  items: string[];
-  itemsData: IVirtualListProps['itemsData'];
-  visitorEthAddress?: IVirtualListProps['visitorEthAddress'];
-  height: number;
-  getItemCard: GetItemCardFn;
-  onSizeChange: IRenderItemProps['onSizeChange'];
-  loadItemData: IVirtualListProps['loadItemData'];
-  coordinates: Map<string, Rect>;
-  itemSpacing: number;
-  slice: [number, number];
-  customEntities?: IVirtualListProps['customEntities'];
-  isFetching: boolean;
-}
+import { IListViewportProps } from './interfaces';
 
 const ListViewport: React.FC<IListViewportProps> = props => {
   const {
     itemsData,
-    visitorEthAddress,
-    coordinates,
-    items,
     itemSpacing,
-    slice,
     customEntities = [],
     isFetching,
-    height,
+    itemRects,
+    listHeight,
+    renderSlice,
+    itemIds,
+    averageItemHeight,
+    listHeader,
   } = props;
-  const itemsToRender = items.slice(...slice);
+
   return (
     <>
-      {itemsToRender.map((itemId: string) => {
-        const itemIdx = items.indexOf(itemId);
-        let itemKey = itemId;
-        const itemData = itemsData[itemId];
-        if (itemData && itemData.version) {
-          itemKey = `${itemId}-${itemData.version}`;
+      {listHeader && React.cloneElement(listHeader)}
+      {renderSlice.map(itemId => {
+        const idx = itemIds.indexOf(itemId);
+        const prev = itemIds[idx - 1];
+        let prevRect = null;
+        if (prev) {
+          prevRect = itemRects.get(prev);
         }
+
         return (
           <CardRenderer
-            key={itemKey}
+            key={itemId}
             itemId={itemId}
-            visitorEthAddress={visitorEthAddress}
-            getItemCard={props.getItemCard}
+            itemCard={props.itemCard}
             loadItemData={props.loadItemData}
-            itemData={itemData}
-            isBookmarked={false}
-            onSizeChange={props.onSizeChange}
+            itemData={itemsData[itemId]}
             customEntities={customEntities}
-            coordinates={coordinates}
-            prevItemId={items[itemIdx - 1]}
-            index={itemIdx}
             itemSpacing={itemSpacing}
+            itemRect={itemRects.get(itemId)}
+            updateRef={props.updateRef}
+            prevRect={prevRect}
+            averageItemHeight={averageItemHeight}
           />
         );
       })}
@@ -63,7 +48,7 @@ const ListViewport: React.FC<IListViewportProps> = props => {
         <div
           style={{
             position: 'absolute',
-            top: height + itemSpacing,
+            transform: `translateY(${listHeight + itemSpacing}px)`,
             width: '100%',
             minHeight: '5rem',
           }}
