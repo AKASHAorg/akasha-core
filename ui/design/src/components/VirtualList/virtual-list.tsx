@@ -165,12 +165,13 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   const handleResize = () => {
     /* @TODO: */
   };
+  const onScroll = throttle(handleScroll, 150, { leading: true });
   const onResize = throttle(handleResize, 150, { leading: true });
   /**
    * Attach scroll and resize listeners
    */
   React.useEffect(() => {
-    const scrollUnlisten = viewportActions.addScrollListener(handleScroll);
+    const scrollUnlisten = viewportActions.addScrollListener(onScroll);
     const resizeUnlisten = viewportActions.addResizeListener(onResize);
     return () => {
       scrollUnlisten();
