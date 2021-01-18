@@ -197,9 +197,25 @@ export const getInitialRect = (props: GetInitialRectProps) => {
   const { itemId, items, refs, prevPositions, globalOffsetTop, itemSpacing } = props;
   const globalIdx = items.indexOf(itemId);
   const initialHeight = refs[itemId].getBoundingClientRect().height;
+  const rectList = new Map(prevPositions.rects);
   let totalHeight = prevPositions.listHeight;
   let initialTop = itemSpacing;
   let prevItemRect;
+  if (globalIdx === 0) {
+    // check if we already have an item with index 0;
+    const firstItem = Array.from(prevPositions.rects).find(([, val]) => val.index === 0);
+    if (firstItem && firstItem[0] !== itemId) {
+      // so the new item is prepended to the list
+      // move items in the list lower
+      rectList.forEach((value, key) => {
+        rectList.set(key, {
+          rect: value.rect.translateBy(0, initialHeight + itemSpacing),
+          index: items.indexOf(key),
+          canRender: value.canRender,
+        });
+      });
+    }
+  }
   if (globalIdx > 0) {
     const prevId = items[globalIdx - 1];
     if (prevId) {
@@ -214,9 +230,8 @@ export const getInitialRect = (props: GetInitialRectProps) => {
   }
   if (!prevPositions.rects.get(itemId)) {
     const rect = new Rect({ height: initialHeight, top: initialTop });
-    const rectList = new Map(
-      prevPositions.rects.set(itemId, { rect, canRender: true, index: globalIdx }),
-    );
+    rectList.set(itemId, { rect, canRender: true, index: globalIdx });
+
     totalHeight += rect.getHeight() + itemSpacing;
 
     return {

@@ -192,7 +192,7 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
         // in between is not supported yet;
       }
     }
-  }, [items, scrollData.current, JSON.stringify(itemPositions)]);
+  }, [items, scrollData.current]);
 
   const onRefUpdate = (itemId: string, itemRef: any, isUnmounting?: boolean) => {
     const itemRect = itemPositions.rects.get(itemId);
