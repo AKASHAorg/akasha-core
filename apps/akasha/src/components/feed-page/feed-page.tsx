@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useFeedReducer, useEntryBookmark } from '@akashaproject/ui-awf-hooks';
+import { useFeedReducer, useEntryBookmark, useProfile } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import {
   ILoadItemDataPayload,
@@ -13,6 +13,7 @@ import {
   uploadMediaToTextile,
   buildPublishObject,
   PROPERTY_SLATE_CONTENT,
+  createPendingEntry,
 } from '../../services/posting-service';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { combineLatest } from 'rxjs';
@@ -28,6 +29,7 @@ const {
   ModalRenderer,
   useViewportSize,
   EditorModal,
+  EditorPlaceholder,
 } = DS;
 
 export interface FeedPageProps {
@@ -37,7 +39,7 @@ export interface FeedPageProps {
   logger: any;
   showLoginModal: () => void;
   ethAddress: string | null;
-  jwtToken: string | null;
+  pubKey: string | null;
   flagged: string;
   reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
@@ -55,7 +57,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     setReportModalOpen,
     showLoginModal,
     ethAddress,
-    jwtToken,
+    pubKey,
     onError,
     sdkModules,
     logger,
@@ -64,7 +66,17 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [showEditor, setShowEditor] = React.useState(false);
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
-  const [pendingEntries /* , setPendingEntries */] = React.useState<string[]>([]);
+  const [pendingEntries, setPendingEntries] = React.useState<any[]>([]);
+  const [loginProfile, loginProfileActions] = useProfile({
+    profileService: sdkModules.profiles.profileService,
+    ipfsService: sdkModules.commons.ipfsService,
+  });
+
+  React.useEffect(() => {
+    if (ethAddress && !loginProfile.ethAddress) {
+      loginProfileActions.getProfileData({ ethAddress });
+    }
+  }, [ethAddress, loginProfile.ethAddress]);
 
   const { size } = useViewportSize();
 
@@ -237,16 +249,32 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     content: any;
     textContent: any;
   }) => {
-    if (!ethAddress && !jwtToken) {
+    if (!ethAddress && !pubKey) {
       showLoginModal();
       return;
     }
     try {
       const publishObj = buildPublishObject(data);
+      console.log(publishObj, 'the publish object');
+
+      const pending = createPendingEntry(
+        {
+          ethAddress: loginProfile.ethAddress as string,
+          avatar: loginProfile.avatar,
+          userName: loginProfile.userName,
+          ensName: loginProfile.ensName,
+          coverImage: loginProfile.coverImage,
+          description: loginProfile.description,
+        },
+        data,
+      );
+      console.log(pending, 'the pending');
+
       const postEntryCall = sdkModules.posts.entries.postEntry(publishObj);
+      setPendingEntries(prev => prev.concat([pending]));
       postEntryCall.subscribe((postingResp: any) => {
         const publishedEntryId = postingResp.data.createPost;
-        // setPendingEntries(prev => prev.filter(e => e === tempEntryId));
+        setPendingEntries([]);
         feedStateActions.setFeedItems({
           reverse: true,
           items: [{ entryId: publishedEntryId }],
@@ -328,6 +356,16 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
         hasMoreItems={feedState.hasMoreItems}
+        listHeader={
+          !isMobile && ethAddress ? (
+            <EditorPlaceholder
+              ethAddress={ethAddress}
+              onClick={handleToggleEditor}
+              style={{ marginTop: 8 }}
+              avatar={loginProfile.avatar}
+            />
+          ) : undefined
+        }
         itemCard={
           <EntryCardRenderer
             bookmarks={bookmarks}
@@ -348,7 +386,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           isMobile,
           feedItems: feedState.feedItems,
           loggedEthAddress: ethAddress,
-          handleEditorPlaceholderClick: handleToggleEditor,
           pendingEntries: pendingEntries,
         })}
       />

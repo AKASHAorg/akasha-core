@@ -12,10 +12,6 @@ const CardRenderer = (props: IRenderItemProps) => {
     itemCard,
     itemRect,
     updateRef,
-    onItemInitialLoad,
-    onUnload,
-    isLoaded,
-    prevRect,
   } = props;
 
   const beforeEntities = customEntities.filter(
@@ -24,113 +20,48 @@ const CardRenderer = (props: IRenderItemProps) => {
   const afterEntities = customEntities.filter(
     entityObj => entityObj.position === 'after' && entityObj.itemId === itemId,
   );
-
-  const wasLoaded = React.useRef<boolean>();
-
+  console.log(beforeEntities, 'before!');
   React.useEffect(() => {
     if (itemId && !itemData && loadItemData) {
       loadItemData({ itemId });
     }
   }, [itemId]);
 
-  const savedRef = React.useRef<HTMLDivElement>();
-  const prevDOMRect = React.useRef<DOMRect>();
-  let prevBottom;
-  if (prevRect) {
-    prevBottom = prevRect.rect.getBottom() + 8;
-  }
-  const notifyChange = () => {
-    if (savedRef.current) {
-      const domRect = savedRef.current.getBoundingClientRect();
-      if (!itemRect || (itemRect && itemRect.rect.getHeight() !== domRect.height)) {
-        props.onItemSizeChange(itemId, domRect);
-        prevDOMRect.current = domRect;
-      }
-    }
-  };
-
-  const measurementInterval = React.useRef<number | null>(null);
-
-  React.useLayoutEffect(() => {
-    if (!measurementInterval.current && savedRef.current && isLoaded) {
-      measurementInterval.current = setInterval(notifyChange, 500);
-    }
-    if (!isLoaded && wasLoaded) {
-      if (measurementInterval.current) {
-        clearInterval(measurementInterval.current);
-        measurementInterval.current = null;
-      }
-    }
-    return () => {
-      if (measurementInterval.current) {
-        clearInterval(measurementInterval.current);
-        measurementInterval.current = null;
-      }
-    };
-  }, [savedRef.current, prevDOMRect.current, measurementInterval, isLoaded, wasLoaded]);
-
-  React.useEffect(() => {
-    wasLoaded.current = isLoaded;
-  }, [isLoaded]);
-
-  React.useEffect(() => {
-    if (isLoaded) {
-      notifyChange();
-    }
-  }, [itemData, isLoaded, beforeEntities.length, afterEntities.length]);
-
   React.useEffect(() => {
     return () => {
-      if (onUnload) {
-        onUnload(itemId);
+      if (updateRef) {
+        updateRef(itemId, null, true);
       }
     };
   }, []);
 
-  const handleRootLoad = () => {
-    if (!itemData) {
-      onItemInitialLoad(itemId);
-    }
-  };
-
-  React.useEffect(() => {
-    if (savedRef.current) {
-      handleRootLoad();
-    }
-  }, [savedRef.current]);
-
-  const onRef = (r: HTMLDivElement) => {
+  const onRef = (divElem: HTMLDivElement) => {
     if (updateRef) {
-      updateRef(itemId, r);
+      updateRef(itemId, divElem);
     }
-    savedRef.current = r;
+    // itemRef.current = divElem;
   };
-  let yPos;
-  if (prevBottom) {
-    yPos = prevBottom + (itemSpacing || 0);
-  } else if (itemRect) {
-    yPos = itemRect.rect.getTop();
-  }
+
+  const shouldLoadData = itemRect && itemRect.canRender;
+
   return (
     <div
-      key={itemId}
-      // id={`${itemId}`}
+      data-itemid={itemId}
       ref={onRef}
       style={{
         position: 'absolute',
-        transform: `translateY(${yPos || 0}px)`,
-        opacity: `${!yPos ? 0.01 : !itemData ? 0.6 : 1}`,
+        transform: `translateY(${itemRect ? itemRect.rect.getTop() : itemSpacing}px)`,
+        opacity: `${!itemRect ? 0.01 : 1}`,
         transition: 'opacity 0.24s ease-out',
         width: '100%',
-        minHeight: `${itemRect ? itemRect.rect.getHeight() : 200}px`,
       }}
     >
       {beforeEntities.map((entityObj, idx) => {
         return entityObj.getComponent({ key: idx, style: { marginBottom: itemSpacing } });
       })}
 
-      {!itemData && <EntryLoadingPlaceholder />}
-      {itemData && React.cloneElement(itemCard, { itemId, itemData })}
+      {!shouldLoadData && <EntryLoadingPlaceholder />}
+      {itemData && shouldLoadData && React.cloneElement(itemCard, { itemId, itemData })}
 
       {afterEntities.map((entityObj, idx) => {
         return entityObj.getComponent({ key: idx, style: { marginTop: itemSpacing } });

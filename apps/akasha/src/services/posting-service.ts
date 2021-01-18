@@ -254,6 +254,37 @@ export const mapEntry = (
   };
 };
 
+interface PendingEntry {
+  author: {
+    CID?: string;
+    avatar?: string;
+    coverImage?: string;
+    description?: string;
+    ensName?: string;
+    ethAddress: string;
+    userName?: string;
+  };
+  content: {};
+  ipfsLink?: string;
+  entryId?: string;
+  replies?: number;
+  reposts?: number;
+  time: string;
+}
+
+export const createPendingEntry = (
+  author: PendingEntry['author'],
+  entryPublishData: any,
+): PendingEntry => {
+  return {
+    author: author,
+    content: entryPublishData.content,
+    replies: 0,
+    reposts: 0,
+    time: `${Date.now()}`,
+  };
+};
+
 export const buildPublishObject = (data: any, parentEntryId?: string) => {
   // save only the ipfs CID prepended with CID: for the slate content image urls
   const cleanedContent = data.content.map((node: any) => {

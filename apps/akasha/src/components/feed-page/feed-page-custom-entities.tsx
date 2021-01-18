@@ -1,49 +1,40 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
-
-const { EditorPlaceholder, EntryCardLoading } = DS;
+import EntryCardRenderer from './entry-card-renderer';
 
 export interface IGetCustomEntitiesProps {
   isMobile: boolean;
   feedItems: string[];
   loggedEthAddress: string | null;
   handleEditorPlaceholderClick?: () => void;
-  pendingEntries?: string[];
+  pendingEntries?: any[];
 }
 
 export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
-  const {
-    isMobile,
-    feedItems,
-    loggedEthAddress,
-    handleEditorPlaceholderClick,
-    pendingEntries = [],
-  } = props;
+  const { feedItems, pendingEntries = [] } = props;
 
-  const customEntities = [];
+  let customEntities: any = [];
+  console.log(feedItems, 'the feed items');
 
-  if (!isMobile && loggedEthAddress) {
-    customEntities.push({
-      position: 'before',
-      // itemIndex: 0,
-      itemId: feedItems.length ? feedItems[0] : null,
-      getComponent: ({ key, style }: { key: string; style: any }) => (
-        <EditorPlaceholder
-          key={key}
-          ethAddress={loggedEthAddress}
-          onClick={handleEditorPlaceholderClick}
-          style={style}
-        />
-      ),
-    });
-  }
   if (pendingEntries.length) {
-    customEntities.concat(
-      pendingEntries.map(id => ({
+    customEntities = customEntities.concat(
+      pendingEntries.map((entry, idx) => ({
         position: 'before',
         itemId: feedItems.length ? feedItems[0] : null,
         getComponent: ({ key, style }: { key: string; style: React.CSSProperties }) => (
-          <EntryCardLoading key={`${id}-${key}`} style={style} />
+          <EntryCardRenderer
+            key={`${entry.author.ethAddress}-${idx}-${key}`}
+            style={{ ...style, backgroundColor: '#4e71ff0f' }}
+            itemData={entry}
+            onFollow={() => {}}
+            onUnfollow={() => {}}
+            onBookmark={() => {}}
+            onNavigate={() => {}}
+            onRepliesClick={() => {}}
+            onFlag={() => () => {}}
+            onShare={() => {}}
+            onRepost={() => {}}
+            onAvatarClick={() => {}}
+          />
         ),
       })),
     );

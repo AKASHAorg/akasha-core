@@ -9,12 +9,20 @@ export interface ViewportRect {
   right: number;
 }
 
+export interface IItemStateRect {
+  rect: Rect;
+  /* initial render notification flag */
+  canRender: boolean;
+  /* absolute index of the item */
+  index: number;
+}
+
 export interface Anchor {
   index: number;
   offset: number;
 }
 
-export type ItemRects = Map<string, { rect: Rect; index: number }>;
+export type ItemRects = Map<string, IItemStateRect>;
 
 export interface AnchorData {
   anchor: Anchor;
@@ -90,8 +98,8 @@ export type UseVirtualScrollProps = Pick<
 };
 
 export interface IListViewportProps {
-  itemsData: Map<string, any>;
-  itemRects: Map<string, { index: number; rect: Rect }>;
+  itemsData: { [key: string]: any };
+  itemRects: Map<string, IItemStateRect>;
   itemCard: React.ReactElement;
   loadItemData: IVirtualListProps['loadItemData'];
   itemSpacing: number;
@@ -99,13 +107,11 @@ export interface IListViewportProps {
   isFetching: boolean;
   useItemDataLoader: IVirtualListProps['useItemDataLoader'];
   listHeight: number;
-  updateRef?: (itemId: string, ref: React.ElementRef<'div'> | null) => void;
-  onItemSizeChange: (itemId: string, rect: DOMRect) => void;
+  updateRef?: (itemId: string, ref: React.ElementRef<'div'> | null, isUnmounting?: boolean) => void;
   renderSlice: string[];
-  onItemInitialLoad: (itemId: string) => void;
-  onUnload?: (itemId: string) => void;
-  loadedIds: string[];
   itemIds: string[];
+  averageItemHeight: number;
+  listHeader?: React.ReactElement;
 }
 export interface IRenderItemProps {
   itemId: string;
@@ -115,10 +121,7 @@ export interface IRenderItemProps {
   customEntities: IListCustomEntity[];
   itemCard: IVirtualListProps['itemCard'];
   updateRef?: IListViewportProps['updateRef'];
-  itemRect?: { index: number; rect: Rect };
-  onItemSizeChange: IListViewportProps['onItemSizeChange'];
-  onItemInitialLoad: IListViewportProps['onItemInitialLoad'];
-  onUnload?: IListViewportProps['onUnload'];
-  isLoaded: boolean;
-  prevRect?: { index: number; rect: Rect } | null;
+  itemRect?: IItemStateRect;
+  prevRect?: IItemStateRect | null;
+  averageItemHeight: number;
 }

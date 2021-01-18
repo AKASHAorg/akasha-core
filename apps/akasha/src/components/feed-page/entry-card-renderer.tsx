@@ -8,7 +8,7 @@ export interface IEntryCardRendererProps {
   itemId?: string;
   itemData?: any;
   isBookmarked?: boolean;
-  locale: any;
+  locale?: any;
   ethAddress?: string | null;
   onFollow: () => void;
   onUnfollow: () => void;
@@ -21,16 +21,17 @@ export interface IEntryCardRendererProps {
   onShare: (service: string, entryId: string) => void;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   bookmarks?: Set<string>;
+  style?: React.CSSProperties;
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
-  const { itemData, ethAddress, locale, bookmarks, itemId } = props;
+  const { itemData, ethAddress, locale, bookmarks, itemId, style } = props;
 
   let isBookmarked = false;
   if (bookmarks && itemId && bookmarks.has(itemId)) {
     isBookmarked = true;
   }
-
+  console.log(itemData, 'item data');
   const { t } = useTranslation();
 
   return (
@@ -68,8 +69,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   copyIPFSLinkLabel={t('Copy IPFS Link')}
                   flagAsLabel={t('Report Post')}
                   loggedProfileEthAddress={ethAddress as any}
-                  locale={locale}
-                  style={{ height: 'auto' }}
+                  locale={locale || 'en'}
+                  style={{ height: 'auto', ...style }}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
                   onRepost={props.onRepost}

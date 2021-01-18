@@ -1,4 +1,6 @@
 import { Anchor, AnchorData, ItemRects } from './interfaces';
+import { Rect } from './rect';
+// import { Rect } from './rect';
 
 export const diffArr = (prev: string[], curr: string[]) => {
   let insertPoint;
@@ -39,9 +41,7 @@ export const getLastRendered = (
 ) => {
   let idx = startAnchor.index;
   for (; idx < items.length; ) {
-    // console.log(idx, items, rects);
     if (!rects.has(items[idx])) {
-      // console.log('rect for', items[idx], 'is missing', rects, items, idx);
       break;
     }
     const rect = rects.get(items[idx])!.rect;
@@ -147,4 +147,82 @@ export const getAnchor = (props: GetAnchorProps) => {
     scrollTop: scrollTop,
     anchor: anchorItem,
   };
+};
+
+export const updatePositions = (
+  changedId: string,
+  domRect: DOMRect,
+  prevPositions: { rects: ItemRects; listHeight: number },
+  _itemSpacing: number,
+) => {
+  const newRects = new Map(prevPositions.rects);
+  const changedRect = newRects.get(changedId);
+  if (!changedRect) {
+    return prevPositions;
+  }
+  const heightDelta = -1 * (changedRect.rect.getHeight() - domRect.height);
+  const idx = changedRect.index;
+
+  if (Math.abs(heightDelta) === 0) {
+    return prevPositions;
+  }
+
+  // update current rect height;
+  newRects.set(changedId, {
+    ...changedRect,
+    rect: changedRect.rect.translateBy(heightDelta, 0),
+  });
+  newRects.forEach((val, key) => {
+    if (val.index <= idx) return;
+    newRects.set(key, {
+      ...val,
+      rect: val.rect.translateBy(0, heightDelta),
+    });
+  });
+  return {
+    rects: newRects,
+    listHeight: prevPositions.listHeight - changedRect.rect.getHeight() + domRect.height,
+  };
+};
+
+export interface GetInitialRectProps {
+  itemId: string;
+  items: string[];
+  refs: { [key: string]: HTMLDivElement };
+  prevPositions: { rects: ItemRects; listHeight: number };
+  globalOffsetTop: number;
+  itemSpacing: number;
+}
+export const getInitialRect = (props: GetInitialRectProps) => {
+  const { itemId, items, refs, prevPositions, globalOffsetTop, itemSpacing } = props;
+  const globalIdx = items.indexOf(itemId);
+  const initialHeight = refs[itemId].getBoundingClientRect().height;
+  let totalHeight = prevPositions.listHeight;
+  let initialTop = itemSpacing;
+  let prevItemRect;
+  if (globalIdx > 0) {
+    const prevId = items[globalIdx - 1];
+    if (prevId) {
+      prevItemRect = prevPositions.rects.get(prevId);
+    }
+  }
+  if (prevItemRect && prevItemRect.rect) {
+    initialTop += prevItemRect.rect.getBottom();
+  } else if (globalIdx > 0 && refs[items[globalIdx - 1]]) {
+    const prevDomRect = refs[items[globalIdx - 1]].getBoundingClientRect();
+    initialTop += prevDomRect.top - globalOffsetTop + prevDomRect.height;
+  }
+  if (!prevPositions.rects.get(itemId)) {
+    const rect = new Rect({ height: initialHeight, top: initialTop });
+    const rectList = new Map(
+      prevPositions.rects.set(itemId, { canRender: true, rect, index: globalIdx }),
+    );
+    totalHeight += rect.getHeight() + itemSpacing;
+
+    return {
+      rects: rectList,
+      listHeight: totalHeight,
+    };
+  }
+  return prevPositions;
 };
