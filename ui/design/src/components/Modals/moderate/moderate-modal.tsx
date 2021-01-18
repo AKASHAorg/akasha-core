@@ -34,6 +34,7 @@ export interface IModerateModalProps {
   // fetch pending items on modalClose
   onModalClose: () => void;
   closeModal: () => void;
+  signData: (data: object | string) => any;
 }
 
 const ModerateModal: React.FC<IModerateModalProps> = props => {
@@ -57,6 +58,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     size,
     onModalClose,
     closeModal,
+    signData,
   } = props;
 
   const [explanation, setExplanation] = React.useState('');
@@ -92,12 +94,22 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     const rheaders = new Headers();
     rheaders.append('Content-Type', 'application/json');
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: rheaders,
-      body: JSON.stringify(data),
+    // sign payload first before posting
+    const status = signData(data).subscribe(async (resp: any) => {
+      const signedData = {
+        ...resp.data,
+        serializedData: btoa(String.fromCharCode.apply(null, resp.data.serializedData)),
+        signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
+      };
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: rheaders,
+        body: JSON.stringify({ ...data, ...signedData }),
+      });
+      return response.status;
     });
-    return response.status;
+    return status;
   };
 
   const handleModerate = (isDelisted: boolean = true) => () => {

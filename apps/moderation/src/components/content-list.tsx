@@ -146,6 +146,7 @@ const ContentList: React.FC<IContentListProps> = props => {
               closeModal={() => {
                 setModalOpen(false);
               }}
+              signData={sdkModules.auth.authService.signData}
             />
           </ToastProvider>
         )}

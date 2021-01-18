@@ -21,9 +21,7 @@ const CardActions: React.FC<CardActionModProps> = props => {
   const repostsBtnText =
     size === 'small' ? `${entryData.reposts || 0}` : `${entryData.reposts || 0} ${repostsLabel}`;
   const repliesBtnText =
-    size === 'small'
-      ? `${entryData.replies?.length || 0}`
-      : `${entryData.replies?.length || 0} ${repliesLabel}`;
+    size === 'small' ? `${entryData.replies || 0}` : `${entryData.replies || 0} ${repliesLabel}`;
 
   return (
     <Box
