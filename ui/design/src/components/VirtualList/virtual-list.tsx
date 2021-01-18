@@ -153,10 +153,10 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   const handleScroll = () => {
     setAnchorData(prev =>
       getAnchor({
+        itemSpacing,
         scrollTop: viewportActions.getScrollTop(),
         anchorData: prev,
         averageItemHeight: scrollData.current.averageItemHeight,
-        itemSpacing,
         rects: itemPositions.rects,
         items: scrollData.current.loadedIds,
       }),
@@ -194,15 +194,15 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
     }
   }, [items, scrollData.current, JSON.stringify(itemPositions)]);
 
-  const onRefUpdate = (itemId: string, ref: any, isUnmounting?: boolean) => {
+  const onRefUpdate = (itemId: string, itemRef: any, isUnmounting?: boolean) => {
     const itemRect = itemPositions.rects.get(itemId);
 
     if (itemRect && itemRect.canRender && !scrollData.current.loadedIds.includes(itemId)) {
       scrollData.current.loadedIds.push(itemId);
     }
 
-    if (ref && itemRect) {
-      const domRect = ref.getBoundingClientRect();
+    if (itemRef && itemRect) {
+      const domRect = itemRef.getBoundingClientRect();
       if (domRect.height !== itemRect.rect.getHeight()) {
         setPositions(prev => updatePositions(itemId, domRect, prev, itemSpacing));
         scrollData.current.averageItemHeight =
@@ -211,20 +211,20 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
       }
     }
 
-    if (!itemRefs.current[itemId] && ref && !isUnmounting) {
-      itemRefs.current[itemId] = ref;
+    if (!itemRefs.current[itemId] && itemRef && !isUnmounting) {
+      itemRefs.current[itemId] = itemRef;
       // set the top offset
       if (items.indexOf(itemId) === 0) {
-        scrollData.current.globalOffsetTop = ref.getBoundingClientRect().top - itemSpacing;
+        scrollData.current.globalOffsetTop = itemRef.getBoundingClientRect().top - itemSpacing;
       }
 
       setPositions(prev =>
         getInitialRect({
           itemId,
           items,
+          itemSpacing,
           refs: itemRefs.current,
           prevPositions: prev,
-          itemSpacing,
           globalOffsetTop: scrollData.current.globalOffsetTop,
         }),
       );

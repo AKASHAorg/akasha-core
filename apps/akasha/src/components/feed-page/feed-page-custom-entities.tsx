@@ -13,7 +13,6 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
   const { feedItems, pendingEntries = [] } = props;
 
   let customEntities: any = [];
-  console.log(feedItems, 'the feed items');
 
   if (pendingEntries.length) {
     customEntities = customEntities.concat(
@@ -25,15 +24,33 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
             key={`${entry.author.ethAddress}-${idx}-${key}`}
             style={{ ...style, backgroundColor: '#4e71ff0f' }}
             itemData={entry}
-            onFollow={() => {}}
-            onUnfollow={() => {}}
-            onBookmark={() => {}}
-            onNavigate={() => {}}
-            onRepliesClick={() => {}}
-            onFlag={() => () => {}}
-            onShare={() => {}}
-            onRepost={() => {}}
-            onAvatarClick={() => {}}
+            onFollow={() => {
+              /* not allowed */
+            }}
+            onUnfollow={() => {
+              /* not allowed */
+            }}
+            onBookmark={() => {
+              /* not allowed */
+            }}
+            onNavigate={() => {
+              /* not allowed */
+            }}
+            onRepliesClick={() => {
+              /* not allowed */
+            }}
+            onFlag={() => () => {
+              /* not allowed */
+            }}
+            onShare={() => {
+              /* not allowed */
+            }}
+            onRepost={() => {
+              /* not allowed */
+            }}
+            onAvatarClick={() => {
+              /* not allowed */
+            }}
           />
         ),
       })),

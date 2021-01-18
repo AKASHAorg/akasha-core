@@ -20,7 +20,6 @@ const CardRenderer = (props: IRenderItemProps) => {
   const afterEntities = customEntities.filter(
     entityObj => entityObj.position === 'after' && entityObj.itemId === itemId,
   );
-  console.log(beforeEntities, 'before!');
   React.useEffect(() => {
     if (itemId && !itemData && loadItemData) {
       loadItemData({ itemId });

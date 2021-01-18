@@ -114,7 +114,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     });
   };
   const fetchEntries = async (payload: { limit: number; offset?: string }) => {
-    console.log('fetchEntries called');
     const getEntriesCall = sdkModules.posts.entries.getEntries({
       ...payload,
       offset: payload.offset || feedState.nextItemId,
@@ -255,8 +254,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
     try {
       const publishObj = buildPublishObject(data);
-      console.log(publishObj, 'the publish object');
-
       const pending = createPendingEntry(
         {
           ethAddress: loginProfile.ethAddress as string,
@@ -268,7 +265,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         },
         data,
       );
-      console.log(pending, 'the pending');
 
       const postEntryCall = sdkModules.posts.entries.postEntry(publishObj);
       setPendingEntries(prev => prev.concat([pending]));

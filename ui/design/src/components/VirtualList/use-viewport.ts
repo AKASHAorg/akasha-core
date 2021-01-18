@@ -94,7 +94,9 @@ export const useViewport = (offsetTop: number = 0): [ViewportState, ViewportActi
       viewport.window.scrollBy(0, pos);
       viewport.programmaticScrollListeners.forEach(listener => listener);
     },
-    scrollToTop: () => {},
+    scrollToTop: () => {
+      /* @TODO: */
+    },
   };
 
   return [viewport, actions];

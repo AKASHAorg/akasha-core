@@ -130,12 +130,12 @@ export const getAnchor = (props: GetAnchorProps) => {
     anchorItem = { index: 0, offset: 0 };
   } else {
     anchorItem = computeAnchoredItem({
-      anchor: anchorData.anchor,
       delta,
       rects,
       items,
       averageItemHeight,
       itemSpacing,
+      anchor: anchorData.anchor,
     });
   }
   if (delta < 0) {
@@ -215,7 +215,7 @@ export const getInitialRect = (props: GetInitialRectProps) => {
   if (!prevPositions.rects.get(itemId)) {
     const rect = new Rect({ height: initialHeight, top: initialTop });
     const rectList = new Map(
-      prevPositions.rects.set(itemId, { canRender: true, rect, index: globalIdx }),
+      prevPositions.rects.set(itemId, { rect, canRender: true, index: globalIdx }),
     );
     totalHeight += rect.getHeight() + itemSpacing;
 
