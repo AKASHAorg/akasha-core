@@ -28,10 +28,11 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   const { itemData, ethAddress, locale, bookmarks, itemId, style } = props;
 
   let isBookmarked = false;
+
   if (bookmarks && itemId && bookmarks.has(itemId)) {
     isBookmarked = true;
   }
-  console.log(itemData, 'item data');
+
   const { t } = useTranslation();
 
   return (

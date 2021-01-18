@@ -115,9 +115,9 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   React.useEffect(() => {
     setAnchorData(prev =>
       getAnchor({
+        itemSpacing,
         scrollTop: viewportActions.getScrollTop(),
         anchorData: prev,
-        itemSpacing,
         items: scrollData.current.items,
         rects: itemPositions.rects,
         averageItemHeight: scrollData.current.averageItemHeight,
