@@ -15,8 +15,6 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
 
   let customEntities: any = [];
 
-  console.log(feedItems, 'the feed items');
-
   if (pendingComments.length) {
     customEntities = customEntities.concat(
       pendingComments.map((entry, idx) => ({

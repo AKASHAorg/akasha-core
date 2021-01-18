@@ -283,7 +283,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
     setShowEditor(false);
   };
-  console.log(feedState.feedItems, 'feed items');
+
   return (
     <Box fill="horizontal">
       <Helmet>
