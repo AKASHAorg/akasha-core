@@ -77,6 +77,10 @@ const ContentList: React.FC<IContentListProps> = props => {
     if (isPending) {
       fetchPendingContents();
     }
+    // updates moderated contents if moderated tab is active
+    if (!isPending) {
+      fetchModeratedContents();
+    }
   }, [isPending]);
 
   const fetchPendingContents = async () => {

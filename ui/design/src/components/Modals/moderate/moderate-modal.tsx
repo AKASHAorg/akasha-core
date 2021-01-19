@@ -129,6 +129,8 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
         setRequesting(false);
         if (status === 400) {
           throw new Error('Bad request. Please try again later');
+        } else if (status === 403) {
+          throw new Error('You are not authorized to perform this operation');
         } else if (status === 409) {
           throw new Error('This content has already been moderated by you');
         } else if (status === 500) {
