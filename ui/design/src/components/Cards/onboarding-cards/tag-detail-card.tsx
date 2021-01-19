@@ -16,8 +16,8 @@ export interface ITagDetailCard {
   unsubscribeLabel?: string;
   popularityOverTimeLabel?: string;
   shareLabel?: string;
-  handleSubscribe: (tagName: string) => void;
-  handleUnsubscribe: (tagName: string) => void;
+  handleSubscribe: (name: string) => void;
+  handleUnsubscribe: (name: string) => void;
 }
 
 export interface ITagData extends ITag {
@@ -39,11 +39,11 @@ const TagDetailCard: React.FC<ITagDetailCard> = props => {
   } = props;
 
   const onSub = () => {
-    handleSubscribe(tag.tagName);
+    handleSubscribe(tag.name);
   };
 
   const onUnsub = () => {
-    handleUnsubscribe(tag.tagName);
+    handleUnsubscribe(tag.name);
   };
 
   const renderContent = () => {
@@ -62,8 +62,8 @@ const TagDetailCard: React.FC<ITagDetailCard> = props => {
         </Box>
         <Box direction="row" justify="between" pad={{ vertical: 'medium' }}>
           <SubtitleTextIcon
-            label={tag.tagName}
-            subtitle={`${tag.mentions} ${mentionsLabel}`}
+            label={tag.name}
+            subtitle={`${tag.posts} ${mentionsLabel}`}
             gap="xxsmall"
           />
           <DuplexButton

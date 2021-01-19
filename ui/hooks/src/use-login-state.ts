@@ -48,7 +48,7 @@ const useLoginState = (
   UseLoginState & { profileData: Partial<IProfileData> },
   UseLoginActions & UseProfileActions,
 ] => {
-  const { globalChannel, onError, authService, ipfsService, profileService, cacheService } = props;
+  const { globalChannel, onError, authService, ipfsService, profileService } = props;
   const [loginState, setLoginState] = React.useState<UseLoginState>({
     ethAddress: null,
     pubKey: null,
@@ -92,19 +92,16 @@ const useLoginState = (
 
   React.useEffect(() => {
     // make an attempt to load the eth address from cache;
-    const getDeps = cacheService.getStash(null);
+    const getDeps = authService.getCurrentUser(null);
     getDeps.subscribe(
       (resp: { data: any }) => {
         const { data } = resp;
-        if (data.entries.has('auth')) {
-          const authValue = data.cache.get('auth');
-          if (authValue.hasOwnProperty('ethAddress')) {
-            setLoginState(prev => ({
-              ...prev,
-              ethAddress: authValue.ethAddress,
-              token: authValue.token,
-            }));
-          }
+        if (data.ethAddress && data.pubKey) {
+          setLoginState(prev => ({
+            ...prev,
+            ethAddress: data.ethAddress,
+            pubKey: data.pubKey,
+          }));
         }
       },
       (err: Error) => {
