@@ -60,35 +60,32 @@ const ContentList: React.FC<IContentListProps> = props => {
   const { size } = useViewportSize();
 
   React.useEffect(() => {
-    // if not authenticated, prompt to authenticate
     if (!ethAddress) {
-      props.navigateToUrl('/moderation-app/unauthenticated');
-    } else if (!moderatorList.includes(ethAddress)) {
-      // if not an approved moderator address(es) on file, restrict access
-      props.navigateToUrl('/moderation-app/restricted');
+      // if not authenticated, prompt to authenticate
+      return props.navigateToUrl('/moderation-app/unauthenticated');
     } else {
-      fetchPendingContents();
-      fetchModeratedContents();
+      // if authenticated,
+      if (!moderatorList.includes(ethAddress)) {
+        // if not an approved moderator address(es) on file, restrict access
+        return props.navigateToUrl('/moderation-app/restricted');
+      }
+      if (isPending) {
+        // if authorised, check for pending contents while pending tab is active
+        fetchPendingContents();
+      }
+      if (!isPending) {
+        // check for moderated contents while moderated tab is active
+        fetchModeratedContents();
+      }
     }
-  }, [ethAddress]);
-
-  React.useEffect(() => {
-    // checks for new content if pending tab is active
-    if (isPending) {
-      fetchPendingContents();
-    }
-    // updates moderated contents if moderated tab is active
-    if (!isPending) {
-      fetchModeratedContents();
-    }
-  }, [isPending]);
+  }, [ethAddress, isPending]);
 
   const fetchPendingContents = async () => {
     // fetch pending (reported) contents
     setRequesting(true);
     try {
       const modResponse = await getAllPending();
-      setPendingItems(modResponse);
+      setPendingItems(() => modResponse);
       setRequesting(false);
     } catch (error) {
       setRequesting(false);
@@ -101,7 +98,7 @@ const ContentList: React.FC<IContentListProps> = props => {
     setRequesting(true);
     try {
       const modResponse = await getAllModerated();
-      setModeratedItems(modResponse);
+      setModeratedItems(() => modResponse);
       setRequesting(false);
     } catch (error) {
       setRequesting(false);
@@ -143,9 +140,8 @@ const ContentList: React.FC<IContentListProps> = props => {
               size={size}
               onModalClose={() => {
                 setModalOpen(false);
-                // on modal close, fetch pending and delisted items again
-                fetchPendingContents();
-                fetchModeratedContents();
+                // on modal close, fetch pending contents
+                return fetchPendingContents();
               }}
               closeModal={() => {
                 setModalOpen(false);

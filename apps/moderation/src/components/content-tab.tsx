@@ -39,8 +39,8 @@ const ContentTab: React.FC<IContentTabProps> = props => {
     setIsDelisted,
   } = props;
 
-  const handleTabClick = () => {
-    setIsPending(!isPending);
+  const handleTabClick = (value: boolean) => () => {
+    setIsPending(value);
   };
 
   return (
@@ -57,7 +57,7 @@ const ContentTab: React.FC<IContentTabProps> = props => {
                 color: 'accentText',
                 size: 'xsmall',
               }}
-              onClick={handleTabClick}
+              onClick={handleTabClick(true)}
             >
               <Text textAlign="center" color={isPending ? 'accentText' : 'secondaryText'}>
                 {pendingLabel}
@@ -72,7 +72,7 @@ const ContentTab: React.FC<IContentTabProps> = props => {
                 color: 'accentText',
                 size: 'xsmall',
               }}
-              onClick={handleTabClick}
+              onClick={handleTabClick(false)}
             >
               <Text textAlign="center" color={isPending ? 'secondaryText' : 'accentText'}>
                 {moderatedLabel}

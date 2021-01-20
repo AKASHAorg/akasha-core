@@ -95,38 +95,20 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     rheaders.append('Content-Type', 'application/json');
 
     // sign payload first before posting
-    const status = signData(data).subscribe(async (resp: any) => {
+    signData(data).subscribe(async (resp: any) => {
       const signedData = {
         ...resp.data,
         serializedData: btoa(String.fromCharCode.apply(null, resp.data.serializedData)),
         signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
       };
 
-      const response = await fetch(url, {
+      const { status } = await fetch(url, {
         method: 'POST',
         headers: rheaders,
         body: JSON.stringify({ ...data, ...signedData }),
       });
-      return response.status;
-    });
-    return status;
-  };
 
-  const handleModerate = (isDelisted: boolean = true) => () => {
-    const dataToPost = {
-      contentId,
-      contentType,
-      explanation,
-      moderator: user,
-      delisted: isDelisted,
-    };
-
-    setRequesting(true);
-
-    // @TODO: connect with moderation endpoint
-    postData('https://akasha-mod.herokuapp.com/decisions', dataToPost)
-      .then(status => {
-        setRequesting(false);
+      try {
         if (status === 400) {
           throw new Error('Bad request. Please try again later');
         } else if (status === 403) {
@@ -141,13 +123,28 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
           appearance: 'success',
         });
         return onModalClose();
-      })
-      .catch(error => {
+      } catch (error) {
         setRequesting(false);
         return addToast(error.message, {
           appearance: 'error',
         });
-      });
+      }
+    });
+  };
+
+  const handleModerate = (isDelisted: boolean = true) => () => {
+    const dataToPost = {
+      contentId,
+      contentType,
+      explanation,
+      moderator: user,
+      delisted: isDelisted,
+    };
+
+    setRequesting(true);
+
+    // @TODO: connect with moderation endpoint
+    return postData('https://akasha-mod.herokuapp.com/decisions', dataToPost);
   };
 
   return (
