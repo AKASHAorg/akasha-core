@@ -5,6 +5,7 @@ import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { TextIcon } from '../../TextIcon';
 import { IEntryData } from './entry-box';
 import { MobileListModal } from '../../Modals';
+import styled from 'styled-components';
 
 export type ServiceNames = 'twitter' | 'reddit' | 'facebook';
 
@@ -40,6 +41,20 @@ export interface CardActionProps {
   onShare: (service: ServiceNames) => void;
   onLinkCopy: () => void;
 }
+
+const BookmarkButton = styled(TextIcon)<{ isBookmarked?: boolean }>`
+  svg * {
+    ${props => {
+      if (props.isBookmarked) {
+        return `
+          fill: ${props.theme.colors.blue};
+          stroke: ${props.theme.colors.blue};
+        `;
+      }
+      return '';
+    }}
+  }
+`;
 
 const CardActions: React.FC<CardActionProps> = props => {
   const {
@@ -275,12 +290,13 @@ const CardActions: React.FC<CardActionProps> = props => {
       />
 
       {isBookmarked !== null && (
-        <TextIcon
+        <BookmarkButton
           label={bookmarkBtnText}
           iconType="bookmark"
           iconSize="md"
           clickable={!!loggedProfileEthAddress}
           onClick={handleEntryBookmark}
+          isBookmarked={isBookmarked}
         />
       )}
       {shareNodeRef.current && shareDropOpen && renderShareDrop()}

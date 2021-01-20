@@ -32,7 +32,7 @@ const SidebarWrapper = styled(BaseContainer)<{ visible: boolean }>`
           position: fixed;
           top: ${TOPBAR_HEIGHT}rem;
           width: 90vw;
-          height: calc(100vh - ${TOPBAR_HEIGHT}rem);
+          height: calc(100vh - ${TOPBAR_HEIGHT + 0.3}rem);
         `;
       }
       return css`
@@ -50,7 +50,7 @@ const ScrollableWidgetArea = styled.div`
     @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
       overflow-y: auto;
       overflow-x: hidden;
-      height: calc(100vh - ${TOPBAR_HEIGHT}rem);
+      height: calc(100vh - ${TOPBAR_HEIGHT + 0.3}rem);
     }
   `}
 `;

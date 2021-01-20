@@ -28,12 +28,19 @@ export interface MyProfileProps extends RootComponentProps {
 const ProfileForm = styled(BoxFormCard)`
   max-width: 100%;
   max-height: 100vh;
+  min-height: max-content;
+  overflow: auto;
   animation: fadeInAnimation ease 0.8s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     max-width: 66%;
-    max-height: 75%;
+  }
+  @media screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
+    max-width: 50%;
+  }
+  @media screen and (min-width: ${props => props.theme.breakpoints.xlarge.value}px) {
+    max-width: 33%;
   }
   @keyframes fadeInAnimation {
     0% {
