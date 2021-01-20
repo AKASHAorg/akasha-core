@@ -14,6 +14,7 @@ export interface ITextIconProps {
   spacing?: string;
   label?: string;
   iconType: IconType;
+  iconStyle?: React.CSSProperties;
   clickable?: boolean;
   menuActive?: boolean;
   menuIcon?: boolean;
@@ -38,6 +39,7 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
     backgroundColor,
     color,
     iconType,
+    iconStyle,
     label,
     spacing,
     clickable,
@@ -71,6 +73,7 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
           type={iconType}
           color={color}
           size={iconSize}
+          style={iconStyle}
           primaryColor={primaryColor}
           accentColor={accentColor}
         />
@@ -88,6 +91,7 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
           type={iconType}
           color={color}
           size={iconSize}
+          style={iconStyle}
           primaryColor={primaryColor}
           accentColor={accentColor}
         />

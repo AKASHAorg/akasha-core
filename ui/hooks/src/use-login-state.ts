@@ -138,7 +138,7 @@ const useLoginState = (
       };
       const obs = [];
 
-      if (avatar.src && avatar.preview !== loggedProfileData.avatar) {
+      if (avatar && avatar.src && avatar.preview !== loggedProfileData.avatar) {
         setLoginState(prev => ({
           ...prev,
           updateStatus: { ...prev.updateStatus, uploadingAvatar: true },
@@ -154,7 +154,7 @@ const useLoginState = (
         obs.push(Promise.resolve());
       }
 
-      if (coverImage.src && coverImage.preview !== loggedProfileData.coverImage) {
+      if (coverImage && coverImage.src && coverImage.preview !== loggedProfileData.coverImage) {
         setLoginState(prev => ({
           ...prev,
           updateStatus: { ...prev.updateStatus, uploadingCoverImage: true },

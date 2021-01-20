@@ -6,7 +6,7 @@ import commonServices, {
 import { EthProviders } from '@akashaproject/ui-awf-typings';
 import coreServices from '@akashaproject/sdk-core/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import {
+import services, {
   AUTH_CACHE,
   AUTH_ENDPOINT,
   AUTH_MESSAGE,
@@ -29,7 +29,7 @@ import { Database } from '@textile/threaddb';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { settingsSchema } from './db.schema';
 
-const service: AkashaService = (invoke, log) => {
+const service: AkashaService = (invoke, log, globalChannel) => {
   let identity: PrivateKey;
   let hubClient: Client;
   let hubUser: Users;
@@ -62,9 +62,22 @@ const service: AkashaService = (invoke, log) => {
           log.info('syncing session');
           sessionStorage.setItem(providerKey, response[providerKey]);
           sessionStorage.setItem(response?.identity?.key, response?.identity?.value);
+          currentUser = null;
+          getCurrentUser().then(data => log.info('logged in', data));
         }
       } else if (type === SIGN_OUT_EVENT && currentUser) {
-        signOut().then(e => log.info('signed-out'));
+        signOut().then(e => {
+          const response = {
+            data: null,
+            channelInfo: {
+              servicePath: services[AUTH_SERVICE],
+              method: 'signOut',
+              args: null,
+            },
+          };
+          globalChannel.next(response);
+          log.info('signed-out');
+        });
       }
     };
   }
@@ -116,10 +129,14 @@ const service: AkashaService = (invoke, log) => {
     // if (!mailID) {
     //   await hubUser.setupMailbox();
     // }
-    db = new Database(`awf-alpha-user-${pubKey.slice(-8)}`, {
-      name: 'settings',
-      schema: settingsSchema,
-    });
+    db = new Database(
+      `awf-alpha-user-${pubKey.slice(-8)}`,
+      {
+        name: 'settings',
+        schema: settingsSchema,
+      },
+      { name: 'apps' },
+    );
     await db.open(1);
     // // not working atm
     // const remote = await db.remote.setUserAuth(userAuth);
@@ -179,7 +196,17 @@ const service: AkashaService = (invoke, log) => {
     if (!sessionStorage.getItem(providerKey)) {
       return Promise.resolve(null);
     }
-    return signIn(EthProviders.None);
+    const data = await signIn(EthProviders.None);
+    const response = {
+      data: data,
+      channelInfo: {
+        servicePath: services[AUTH_SERVICE],
+        method: 'signIn',
+        args: null,
+      },
+    };
+    globalChannel.next(response);
+    return data;
   };
 
   const signOut = async () => {

@@ -13,6 +13,7 @@ export type CallableServiceMethods = R.Variadic<AkashaServiceMethods>;
 export type AkashaService = (
   serviceInvoker: R.CurriedFunction1<[string, string], any>,
   logger?: pino,
+  globalChannel?: any,
 ) => AkashaServiceMethods;
 
 export type AkashaServicePath = [string, string];
@@ -59,7 +60,7 @@ export abstract class IAkashaModule {
     };
   }
 
-  public startServices(di: DIContainer) {
+  public startServices(di: DIContainer, globalChannel?: any) {
     this.init(di);
     const services = this._registerServices(di);
     for (const provider of services) {
@@ -67,6 +68,7 @@ export abstract class IAkashaModule {
       const serviceMethods = providerInit.service(
         callService(di),
         this.logger.child({ service: providerInit.name }),
+        globalChannel,
       );
       const wrappedService = this.wrapService(
         registerServiceMethods(serviceMethods),

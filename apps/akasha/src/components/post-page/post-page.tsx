@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import {
-  ILoadItemDataPayload,
-  ILoadItemsPayload,
-} from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
+import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { useFeedReducer, useEntryBookmark } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
@@ -16,6 +13,7 @@ import {
 } from '../../services/posting-service';
 import { redirectToPost } from '../../services/routing-service';
 import { combineLatest } from 'rxjs';
+import PostRenderer from './post-renderer';
 // import { getPostPageCustomEntities } from './post-page-custom-entities';
 
 const {
@@ -27,9 +25,6 @@ const {
   ModalRenderer,
   useViewportSize,
   VirtualList,
-  ErrorLoader,
-  EntryCardLoading,
-  ErrorInfoCard,
   Helmet,
   CommentEditor,
   EditorPlaceholder,
@@ -129,15 +124,6 @@ const PostPage: React.FC<IPostPage> = props => {
       }
       setIsLoading(false);
     });
-  };
-
-  const onInitialLoad = async (payload: ILoadItemsPayload) => {
-    const req: { limit: number; offset?: string; postID: string } = {
-      limit: payload.limit,
-      postID: postId,
-    };
-    setIsLoading(true);
-    fetchComments(req);
   };
 
   const loadItemData = async (payload: ILoadItemDataPayload) => {
@@ -392,93 +378,25 @@ const PostPage: React.FC<IPostPage> = props => {
       <VirtualList
         items={feedState.feedItems}
         itemsData={feedState.feedItemData}
-        visitorEthAddress={ethAddress}
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
-        loadInitialFeed={onInitialLoad}
         hasMoreItems={feedState.hasMoreItems}
-        bookmarkedItems={bookmarks}
-        getItemCard={({ itemData, visitorEthAddress, isBookmarked }) => (
-          <ErrorInfoCard errors={{}}>
-            {(errorMessages: any, hasCriticalErrors: boolean) => (
-              <>
-                {errorMessages && (
-                  <ErrorLoader
-                    type="script-error"
-                    title={t('There was an error loading the entry')}
-                    details={t('We cannot show this entry right now')}
-                    devDetails={errorMessages}
-                  />
-                )}
-                {!hasCriticalErrors && (
-                  <>
-                    {(!itemData || !itemData.author?.ethAddress) && <EntryCardLoading />}
-                    {itemData && itemData.author.ethAddress && (
-                      <Box
-                        margin={{ horizontal: 'medium' }}
-                        border={{ side: 'bottom', size: '1px', color: 'border' }}
-                      >
-                        <EntryBox
-                          isBookmarked={isBookmarked}
-                          entryData={itemData}
-                          sharePostLabel={t('Share Post')}
-                          shareTextLabel={t('Share this post with your friends')}
-                          sharePostUrl={'https://ethereum.world'}
-                          onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                            handleAvatarClick(ev, itemData.author.ethAddress)
-                          }
-                          onEntryBookmark={handleEntryBookmark}
-                          repliesLabel={t('Replies')}
-                          repostsLabel={t('Reposts')}
-                          repostLabel={t('Repost')}
-                          repostWithCommentLabel={t('Repost with comment')}
-                          shareLabel={t('Share')}
-                          copyLinkLabel={t('Copy Link')}
-                          copyIPFSLinkLabel={t('Copy IPFS Link')}
-                          flagAsLabel={t('Report Post')}
-                          loggedProfileEthAddress={'0x00123123123123'}
-                          locale={locale}
-                          bookmarkLabel={t('Save')}
-                          bookmarkedLabel={t('Saved')}
-                          onRepost={handleEntryRepost}
-                          onEntryShare={handleEntryShare}
-                          onEntryFlag={handleEntryFlag(itemData.entryId, visitorEthAddress)}
-                          onClickReplies={handleClickReplies}
-                          handleFollow={handleFollow}
-                          handleUnfollow={handleUnfollow}
-                        />
-                      </Box>
-                    )}
-                  </>
-                )}
-              </>
-            )}
-          </ErrorInfoCard>
-        )}
-        // customEntities={getPostPageCustomEntities({
-        //   t,
-        //   locale,
-        //   feedItems: feedState.feedItems,
-        //   ethAddress: ethAddress,
-        //   onAvatarClick: handleAvatarClick,
-        //   onContentClick: handleNavigateToPost,
-        //   isBookmarked,
-        //   entryData,
-        //   onEntryBookmark: handleEntryBookmark,
-        //   showLoginModal,
-        //   handleEntryShare,
-        //   handleEntryFlag,
-        //   handleClickReplies,
-        //   handleFollow,
-        //   handleUnfollow,
-        //   handleNavigateToPost,
-        //   handlePublish,
-        //   handleGetMentions,
-        //   handleGetTags,
-        //   tags,
-        //   mentions,
-        //   onUploadRequest,
-        // })}
+        itemCard={
+          <PostRenderer
+            bookmarks={bookmarks}
+            ethAddress={ethAddress}
+            locale={locale}
+            onFollow={handleFollow}
+            onUnfollow={handleUnfollow}
+            onBookmark={handleEntryBookmark}
+            onNavigate={handleNavigateToPost}
+            onRepliesClick={handleClickReplies}
+            onFlag={handleEntryFlag}
+            onRepost={handleEntryRepost}
+            onShare={handleEntryShare}
+            onAvatarClick={handleAvatarClick}
+          />
+        }
       />
     </MainAreaCardBox>
   );
