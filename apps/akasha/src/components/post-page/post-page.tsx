@@ -15,7 +15,6 @@ import {
   PROPERTY_SLATE_CONTENT,
 } from '../../services/posting-service';
 import { redirectToPost } from '../../services/routing-service';
-import { getLoggedProfileStore } from '../../state/logged-profile-state';
 import { combineLatest } from 'rxjs';
 // import { getPostPageCustomEntities } from './post-page-custom-entities';
 
@@ -40,6 +39,8 @@ interface IPostPage {
   channels: any;
   globalChannel: any;
   logger: any;
+  ethAddress: string | null;
+  pubKey: string | null;
   slotId: string;
   flagged: string;
   reportModalOpen: boolean;
@@ -60,6 +61,7 @@ const PostPage: React.FC<IPostPage> = props => {
     showLoginModal,
     logger,
     navigateToUrl,
+    ethAddress,
   } = props;
 
   const { postId } = useParams<{ userId: string; postId: string }>();
@@ -72,11 +74,8 @@ const PostPage: React.FC<IPostPage> = props => {
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const Login = getLoggedProfileStore();
-  const loggedEthAddress = Login.useStoreState((state: any) => state.data.ethAddress);
-
   const [bookmarks, bookmarkActions] = useEntryBookmark({
-    ethAddress: loggedEthAddress,
+    ethAddress: ethAddress,
     onError: () => {
       return;
     },
@@ -181,7 +180,7 @@ const PostPage: React.FC<IPostPage> = props => {
   };
 
   const handleEntryBookmark = (entryId: string) => {
-    if (!loggedEthAddress) {
+    if (!ethAddress) {
       return showLoginModal();
     }
     bookmarkActions.addBookmark(entryId);
@@ -236,7 +235,7 @@ const PostPage: React.FC<IPostPage> = props => {
     content: any;
     textContent: any;
   }) => {
-    if (!loggedEthAddress) {
+    if (!ethAddress) {
       showLoginModal();
       return;
     }
@@ -317,7 +316,7 @@ const PostPage: React.FC<IPostPage> = props => {
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
               closeLabel={t('Close')}
-              user={loggedEthAddress ? loggedEthAddress : ''}
+              user={ethAddress ? ethAddress : ''}
               contentId={flagged}
               size={size}
               closeModal={() => {
@@ -360,7 +359,7 @@ const PostPage: React.FC<IPostPage> = props => {
                 return;
               }}
               onEntryShare={handleEntryShare}
-              onEntryFlag={handleEntryFlag(entryData.entryId, loggedEthAddress)}
+              onEntryFlag={handleEntryFlag(entryData.entryId, ethAddress)}
               onClickReplies={handleClickReplies}
               handleFollow={handleFollow}
               handleUnfollow={handleUnfollow}
@@ -368,15 +367,15 @@ const PostPage: React.FC<IPostPage> = props => {
               onMentionClick={handleMentionClick}
             />
           </Box>
-          {!loggedEthAddress && (
+          {!ethAddress && (
             <Box margin="medium">
               <EditorPlaceholder onClick={showLoginModal} ethAddress={null} />
             </Box>
           )}
-          {loggedEthAddress && (
+          {ethAddress && (
             <Box margin="medium">
               <CommentEditor
-                ethAddress={loggedEthAddress}
+                ethAddress={ethAddress}
                 postLabel={t('Reply')}
                 placeholderLabel={t('Write something')}
                 onPublish={handlePublish}
@@ -393,7 +392,7 @@ const PostPage: React.FC<IPostPage> = props => {
       <VirtualList
         items={feedState.feedItems}
         itemsData={feedState.feedItemData}
-        visitorEthAddress={loggedEthAddress}
+        visitorEthAddress={ethAddress}
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
         loadInitialFeed={onInitialLoad}
@@ -460,7 +459,7 @@ const PostPage: React.FC<IPostPage> = props => {
         //   t,
         //   locale,
         //   feedItems: feedState.feedItems,
-        //   loggedEthAddress: loggedEthAddress,
+        //   ethAddress: ethAddress,
         //   onAvatarClick: handleAvatarClick,
         //   onContentClick: handleNavigateToPost,
         //   isBookmarked,

@@ -84,9 +84,9 @@ const CardActions: React.FC<CardActionProps> = props => {
     url: sharePostUrl,
   };
 
-  const handleRepostsOpen = () => {
-    setRepostDropOpen(!repostDropOpen);
-  };
+  // const handleRepostsOpen = () => {
+  //   setRepostDropOpen(!repostDropOpen);
+  // };
   const handleRepostsClose = () => {
     setRepostDropOpen(false);
   };
@@ -264,7 +264,7 @@ const CardActions: React.FC<CardActionProps> = props => {
         iconSize="md"
         clickable={true}
         ref={repostNodeRef}
-        onClick={handleRepostsOpen}
+        onClick={onRepost}
       />
       <TextIcon
         label={repliesBtnText}

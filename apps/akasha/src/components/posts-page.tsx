@@ -9,6 +9,8 @@ export interface PostsPageProps {
   globalChannel: any;
   sdkModules: any;
   logger: any;
+  ethAddress: string | null;
+  pubKey: string | null;
   navigateToUrl: (url: string) => void;
   flagged: string;
   reportModalOpen: boolean;
@@ -28,6 +30,8 @@ const PostsPage: React.FC<PostsPageProps & RootComponentProps> = props => {
             channels={props.sdkModules}
             globalChannel={props.globalChannel}
             logger={props.logger}
+            ethAddress={props.ethAddress}
+            pubKey={props.pubKey}
             navigateToUrl={props.navigateToUrl}
           />
         </Route>
@@ -37,6 +41,8 @@ const PostsPage: React.FC<PostsPageProps & RootComponentProps> = props => {
             channels={props.sdkModules}
             globalChannel={props.globalChannel}
             logger={props.logger}
+            ethAddress={props.ethAddress}
+            pubKey={props.pubKey}
             flagged={props.flagged}
             reportModalOpen={props.reportModalOpen}
             setFlagged={props.setFlagged}
@@ -50,6 +56,8 @@ const PostsPage: React.FC<PostsPageProps & RootComponentProps> = props => {
             channels={props.sdkModules}
             globalChannel={props.globalChannel}
             logger={props.logger}
+            ethAddress={props.ethAddress}
+            pubKey={props.pubKey}
             navigateToUrl={props.navigateToUrl}
           />
         </Route>

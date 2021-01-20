@@ -14,12 +14,11 @@ const Routes: React.FC<RootComponentProps> = props => {
   const { activeWhen, logger } = props;
   const { path } = activeWhen;
 
-  const [ loginState, loginActions ] = useLoginState({
+  const [loginState, loginActions] = useLoginState({
     globalChannel: props.globalChannel,
     authService: props.sdkModules.authService,
     profileService: props.sdkModules.profiles.profileService,
     ipfsService: props.sdkModules.commons.ipfsService,
-    cacheService: props.sdkModules.commons.cacheService,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);
     },
@@ -28,9 +27,9 @@ const Routes: React.FC<RootComponentProps> = props => {
     initialState: {
       updateProfile: false,
       changeUsername: false,
-      changeENS: false
+      changeENS: false,
     },
-    isLoggedIn: !!loginState.ethAddress
+    isLoggedIn: !!loginState.ethAddress,
   });
 
   const { t } = useTranslation();
