@@ -59,6 +59,7 @@ export const mapEntry = (
     CID?: string;
     _id: string;
     quotes: any[];
+    creationDate: string;
     author: {
       CID?: string;
       description: string;
@@ -119,6 +120,7 @@ export const mapEntry = (
     },
     CID: entry.CID,
     content: contentWithMediaGateways,
+    time: entry.creationDate,
     quote: quotedEntry,
     entryId: entry._id,
     ipfsLink: entry._id,
