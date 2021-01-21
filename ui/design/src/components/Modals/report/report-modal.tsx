@@ -118,7 +118,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
         setRequesting(false);
         if (status === 409) {
           throw new Error('This content has already been flagged by you');
-        } else if (status === 500) {
+        } else if (status >= 400) {
           throw new Error('Unable to process your request right now. Please try again later');
         }
         return setSuccess(true);
