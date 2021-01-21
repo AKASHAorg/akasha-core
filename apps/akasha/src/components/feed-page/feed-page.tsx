@@ -118,8 +118,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       ...payload,
       offset: payload.offset || feedState.nextItemId,
     });
+
     const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
     const call = combineLatest([ipfsGatewayCall, getEntriesCall]);
+
     call.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
       const {
@@ -327,6 +329,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       </ModalRenderer>
       <EditorModal
         slotId={props.layout.app.modalSlotId}
+        avatar={loginProfile.avatar}
         showModal={showEditor}
         ethAddress={ethAddress as any}
         postLabel={t('Publish')}

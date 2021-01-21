@@ -43,6 +43,7 @@ const PostsPage: React.FC<PostsPageProps & RootComponentProps> = props => {
             setReportModalOpen={props.setReportModalOpen}
             showLoginModal={props.showLoginModal}
             navigateToUrl={props.singleSpa.navigateToUrl}
+            isMobile={props.isMobile}
           />
         </Route>
         <Route path={`${path}/:userId`}>

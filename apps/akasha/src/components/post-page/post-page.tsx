@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
-import { useFeedReducer, useEntryBookmark } from '@akashaproject/ui-awf-hooks';
+import { useFeedReducer, useEntryBookmark, useProfile } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import {
@@ -10,12 +10,13 @@ import {
   uploadMediaToTextile,
   buildPublishObject,
   PROPERTY_SLATE_CONTENT,
+  createPendingEntry,
 } from '../../services/posting-service';
 import { redirectToPost } from '../../services/routing-service';
 import { getLoggedProfileStore } from '../../state/logged-profile-state';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
-// import { getPostPageCustomEntities } from './post-page-custom-entities';
+import { getPendingComments } from './post-page-pending-comments';
 
 const {
   Box,
@@ -42,6 +43,7 @@ interface IPostPage {
   setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   showLoginModal: () => void;
   navigateToUrl: (path: string) => void;
+  isMobile: boolean;
 }
 
 const PostPage: React.FC<IPostPage> = props => {
@@ -55,6 +57,7 @@ const PostPage: React.FC<IPostPage> = props => {
     showLoginModal,
     logger,
     navigateToUrl,
+    isMobile,
   } = props;
 
   const { postId } = useParams<{ userId: string; postId: string }>();
@@ -62,6 +65,7 @@ const PostPage: React.FC<IPostPage> = props => {
 
   const [feedState, feedStateActions] = useFeedReducer({});
   const [isLoading, setIsLoading] = React.useState(false);
+  const [pendingComments, setPendingComments] = React.useState<any[]>([]);
 
   const { size } = useViewportSize();
 
@@ -69,6 +73,17 @@ const PostPage: React.FC<IPostPage> = props => {
 
   const Login = getLoggedProfileStore();
   const loggedEthAddress = Login.useStoreState((state: any) => state.data.ethAddress);
+
+  const [loginProfile, loginProfileActions] = useProfile({
+    profileService: props.channels.profiles.profileService,
+    ipfsService: props.channels.commons.ipfsService,
+  });
+
+  React.useEffect(() => {
+    if (loggedEthAddress) {
+      loginProfileActions.getProfileData({ ethAddress: loggedEthAddress });
+    }
+  }, [loggedEthAddress]);
 
   const [bookmarks, bookmarkActions] = useEntryBookmark({
     ethAddress: loggedEthAddress,
@@ -229,9 +244,25 @@ const PostPage: React.FC<IPostPage> = props => {
 
     try {
       const publishObj = buildPublishObject(data, postId);
+
+      const pending = createPendingEntry(
+        {
+          ethAddress: loginProfile.ethAddress as string,
+          avatar: loginProfile.avatar,
+          userName: loginProfile.userName,
+          ensName: loginProfile.ensName,
+          coverImage: loginProfile.coverImage,
+          description: loginProfile.description,
+        },
+        data,
+      );
+
+      setPendingComments(prev => prev.concat([pending]));
+
       const publishCommentCall = channels.posts.comments.addComment(publishObj);
       publishCommentCall.subscribe((postingResp: any) => {
         const publishedCommentId = postingResp.data.addComment;
+        setPendingComments([]);
         feedStateActions.setFeedItems({
           reverse: true,
           items: [{ entryId: publishedCommentId }],
@@ -362,6 +393,7 @@ const PostPage: React.FC<IPostPage> = props => {
           {loggedEthAddress && (
             <Box margin="medium">
               <CommentEditor
+                avatar={loginProfile.avatar}
                 ethAddress={loggedEthAddress}
                 postLabel={t('Reply')}
                 placeholderLabel={t('Write something')}
@@ -398,6 +430,13 @@ const PostPage: React.FC<IPostPage> = props => {
             onAvatarClick={handleAvatarClick}
           />
         }
+        customEntities={getPendingComments({
+          locale,
+          isMobile,
+          feedItems: feedState.feedItems,
+          loggedEthAddress: loggedEthAddress,
+          pendingComments: pendingComments,
+        })}
       />
     </MainAreaCardBox>
   );
