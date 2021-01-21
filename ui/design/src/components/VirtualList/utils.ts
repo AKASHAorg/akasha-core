@@ -1,6 +1,5 @@
 import { Anchor, AnchorData, ItemRects } from './interfaces';
 import { Rect } from './rect';
-// import { Rect } from './rect';
 
 export const diffArr = (prev: string[], curr: string[]) => {
   let insertPoint;
@@ -21,7 +20,7 @@ export const diffArr = (prev: string[], curr: string[]) => {
   }
   if (prev.length && curr[0] !== prev[0]) {
     insertPoint = 'before';
-    diff = curr.slice(0, prev.length);
+    diff = curr.slice(0, curr.indexOf(prev[0]));
     return {
       insertPoint,
       diffItems: diff,
@@ -82,7 +81,7 @@ export const computeAnchoredItem = (props: ComputeAnchorProps) => {
       rects.get(items[i - 1]) &&
       rects.get(items[i - 1])!.rect.getHeight()
     ) {
-      newDelta += rects.get(items[i - 1])!.rect.getHeight();
+      newDelta += rects.get(items[i - 1])!.rect.getHeight() + itemSpacing;
       i -= 1;
     }
     renderedItems = Math.max(
@@ -97,7 +96,7 @@ export const computeAnchoredItem = (props: ComputeAnchorProps) => {
       rects.get(items[i])!.rect.getHeight() &&
       rects.get(items[i])!.rect.getHeight() < delta
     ) {
-      newDelta -= rects.get(items[i])!.rect.getHeight();
+      newDelta -= rects.get(items[i])!.rect.getHeight() + itemSpacing;
       i += 1;
     }
     if (i >= rects.size || !rects.get(items[i])) {
@@ -114,7 +113,7 @@ export const computeAnchoredItem = (props: ComputeAnchorProps) => {
 
 export interface GetAnchorProps {
   anchorData: AnchorData;
-  scrollTop: number;
+  getScrollTop: () => number;
   rects: ItemRects;
   items: string[];
   averageItemHeight: number;
@@ -122,11 +121,11 @@ export interface GetAnchorProps {
 }
 
 export const getAnchor = (props: GetAnchorProps) => {
-  const { anchorData, scrollTop, rects, items, averageItemHeight, itemSpacing } = props;
-  const delta = scrollTop - anchorData.scrollTop;
+  const { anchorData, getScrollTop, rects, items, averageItemHeight, itemSpacing } = props;
+  const delta = getScrollTop() - anchorData.scrollTop;
 
   let anchorItem: Anchor;
-  if (scrollTop === 0) {
+  if (getScrollTop() === 0) {
     anchorItem = { index: 0, offset: 0 };
   } else {
     anchorItem = computeAnchoredItem({
@@ -144,7 +143,7 @@ export const getAnchor = (props: GetAnchorProps) => {
     // scrolling down
   }
   return {
-    scrollTop: scrollTop,
+    scrollTop: getScrollTop(),
     anchor: anchorItem,
   };
 };

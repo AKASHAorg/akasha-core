@@ -1,5 +1,7 @@
 import { initReactI18next } from 'react-i18next';
 import { moduleName as common } from '@akashaproject/sdk-common/lib/constants';
+import { moduleName as profiles } from '@akashaproject/sdk-profiles/lib/constants';
+import { moduleName as posts } from '@akashaproject/sdk-posts/lib/constants';
 import { IWidget } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 /**
@@ -25,5 +27,5 @@ export const Widget: IWidget = {
       './widget'
     ),
   name: 'ui-widget-trending',
-  sdkModules: [{ module: common }],
+  sdkModules: [{ module: common }, { module: posts }, { module: profiles }],
 };

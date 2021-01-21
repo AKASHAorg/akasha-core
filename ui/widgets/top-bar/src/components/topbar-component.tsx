@@ -40,7 +40,6 @@ const TopbarComponent = (props: TopBarProps) => {
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
     authService: props.sdkModules.auth.authService,
-    cacheService: props.sdkModules.commons.cacheService,
   });
 
   // React.useEffect(() => {
@@ -88,6 +87,12 @@ const TopbarComponent = (props: TopBarProps) => {
   const handleLogin = (provider: 2 | 3) => {
     loginActions.login(provider);
   };
+
+  const handleLogout = () => {
+    loginActions.logout();
+    navigateToUrl('/');
+    window.location.reload();
+  };
   const handleModalClose = () => {
     setShowLoginModal(false);
   };
@@ -112,6 +117,7 @@ const TopbarComponent = (props: TopBarProps) => {
         avatarImage={loginState.profileData.avatar}
         brandLabel="Ethereum World"
         signInLabel={t('Sign In')}
+        logoutLabel={t('Logout')}
         onNavigation={handleNavigation}
         onSearch={handleSearchBarKeyDown}
         onSidebarToggle={toggleSidebar}
@@ -120,6 +126,7 @@ const TopbarComponent = (props: TopBarProps) => {
         searchAreaItem={searchAreaItem}
         size={size}
         onLoginClick={handleLoginClick}
+        onLogout={handleLogout}
       />
       <LoginModal
         slotId={modalSlotId}

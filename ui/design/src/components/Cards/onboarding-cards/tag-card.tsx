@@ -19,8 +19,8 @@ export interface ITagCard {
   subscribeLabel?: string;
   subscribedLabel?: string;
   unsubscribeLabel?: string;
-  handleSubscribe: (tagName: string) => void;
-  handleUnsubscribe: (tagName: string) => void;
+  handleSubscribe: (name: string) => void;
+  handleUnsubscribe: (name: string) => void;
 }
 
 export interface ITagData extends ITag {
@@ -42,11 +42,11 @@ const TagCard: React.FC<ITagCard> = props => {
   const { size } = useViewportSize();
 
   const onSub = () => {
-    handleSubscribe(tag.tagName);
+    handleSubscribe(tag.name);
   };
 
   const onUnsub = () => {
-    handleUnsubscribe(tag.tagName);
+    handleUnsubscribe(tag.name);
   };
 
   const renderContent = () => {
@@ -61,8 +61,8 @@ const TagCard: React.FC<ITagCard> = props => {
             pad={{ top: 'small' }}
           >
             <SubtitleTextIcon
-              label={tag.tagName}
-              subtitle={`${tag.mentions} ${mentionsLabel}`}
+              label={tag.name}
+              subtitle={`${tag.posts} ${mentionsLabel}`}
               gap="xxsmall"
             />
             <Box width="8rem">
@@ -88,8 +88,8 @@ const TagCard: React.FC<ITagCard> = props => {
     return (
       <Box direction="row" justify="between" align="center">
         <SubtitleTextIcon
-          label={tag.tagName}
-          subtitle={`${tag.mentions} ${mentionsLabel}`}
+          label={tag.name}
+          subtitle={`${tag.posts} ${mentionsLabel}`}
           gap="xxsmall"
         />
         <Box basis="72%" justify="between" direction="row" align="center">

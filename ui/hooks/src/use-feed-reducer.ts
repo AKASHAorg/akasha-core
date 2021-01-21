@@ -45,8 +45,7 @@ const feedStateReducer = (state: IFeedState, action: IFeedAction) => {
     case 'SET_FEED_ITEMS':
       const { reverse, items, nextItemId } = action.payload;
       if (reverse) {
-        const feedItems = state.feedItems.slice();
-        feedItems.unshift(...items);
+        const feedItems = [...items, ...state.feedItems.slice()];
         return {
           ...state,
           nextItemId,

@@ -38,7 +38,6 @@ const CardRenderer = (props: IRenderItemProps) => {
     if (updateRef) {
       updateRef(itemId, divElem);
     }
-    // itemRef.current = divElem;
   };
 
   const shouldLoadData = itemRect && itemRect.canRender;

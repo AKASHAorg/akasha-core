@@ -17,6 +17,8 @@ interface IPostsListProps {
   channels: any;
   logger: any;
   globalChannel: any;
+  ethAddress: string | null;
+  pubKey: string | null;
   navigateToUrl: (path: string) => void;
 }
 

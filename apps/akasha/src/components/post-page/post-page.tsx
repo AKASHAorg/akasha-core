@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
-import { useFeedReducer, useEntryBookmark } from '@akashaproject/ui-awf-hooks';
+import { useFeedReducer, useEntryBookmark, useProfile } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import {
@@ -10,13 +10,13 @@ import {
   uploadMediaToTextile,
   buildPublishObject,
   PROPERTY_SLATE_CONTENT,
+  createPendingEntry,
 } from '../../services/posting-service';
 import { BASE_FLAG_URL } from '../../services/constants';
 import { redirectToPost } from '../../services/routing-service';
-import { getLoggedProfileStore } from '../../state/logged-profile-state';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
-// import { getPostPageCustomEntities } from './post-page-custom-entities';
+import { getPendingComments } from './post-page-pending-comments';
 
 const {
   Box,
@@ -36,6 +36,8 @@ interface IPostPage {
   channels: any;
   globalChannel: any;
   logger: any;
+  ethAddress: string | null;
+  pubKey: string | null;
   slotId: string;
   flagged: string;
   reportModalOpen: boolean;
@@ -43,6 +45,7 @@ interface IPostPage {
   setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   showLoginModal: () => void;
   navigateToUrl: (path: string) => void;
+  isMobile: boolean;
 }
 
 const PostPage: React.FC<IPostPage> = props => {
@@ -56,6 +59,8 @@ const PostPage: React.FC<IPostPage> = props => {
     showLoginModal,
     logger,
     navigateToUrl,
+    ethAddress,
+    isMobile,
   } = props;
 
   const { postId } = useParams<{ userId: string; postId: string }>();
@@ -63,16 +68,25 @@ const PostPage: React.FC<IPostPage> = props => {
 
   const [feedState, feedStateActions] = useFeedReducer({});
   const [isLoading, setIsLoading] = React.useState(false);
+  const [pendingComments, setPendingComments] = React.useState<any[]>([]);
 
   const { size } = useViewportSize();
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const Login = getLoggedProfileStore();
-  const loggedEthAddress = Login.useStoreState((state: any) => state.data.ethAddress);
+  const [loginProfile, loginProfileActions] = useProfile({
+    profileService: props.channels.profiles.profileService,
+    ipfsService: props.channels.commons.ipfsService,
+  });
+
+  React.useEffect(() => {
+    if (ethAddress) {
+      loginProfileActions.getProfileData({ ethAddress: ethAddress });
+    }
+  }, [ethAddress]);
 
   const [bookmarks, bookmarkActions] = useEntryBookmark({
-    ethAddress: loggedEthAddress,
+    ethAddress: ethAddress,
     onError: () => {
       return;
     },
@@ -168,7 +182,7 @@ const PostPage: React.FC<IPostPage> = props => {
   };
 
   const handleEntryBookmark = (entryId: string) => {
-    if (!loggedEthAddress) {
+    if (!ethAddress) {
       return showLoginModal();
     }
     bookmarkActions.addBookmark(entryId);
@@ -223,16 +237,32 @@ const PostPage: React.FC<IPostPage> = props => {
     content: any;
     textContent: any;
   }) => {
-    if (!loggedEthAddress) {
+    if (!ethAddress) {
       showLoginModal();
       return;
     }
 
     try {
       const publishObj = buildPublishObject(data, postId);
+
+      const pending = createPendingEntry(
+        {
+          ethAddress: loginProfile.ethAddress as string,
+          avatar: loginProfile.avatar,
+          userName: loginProfile.userName,
+          ensName: loginProfile.ensName,
+          coverImage: loginProfile.coverImage,
+          description: loginProfile.description,
+        },
+        data,
+      );
+
+      setPendingComments(prev => prev.concat([pending]));
+
       const publishCommentCall = channels.posts.comments.addComment(publishObj);
       publishCommentCall.subscribe((postingResp: any) => {
         const publishedCommentId = postingResp.data.addComment;
+        setPendingComments([]);
         feedStateActions.setFeedItems({
           reverse: true,
           items: [{ entryId: publishedCommentId }],
@@ -304,7 +334,7 @@ const PostPage: React.FC<IPostPage> = props => {
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
               closeLabel={t('Close')}
-              user={loggedEthAddress ? loggedEthAddress : ''}
+              user={ethAddress ? ethAddress : ''}
               contentId={flagged}
               baseUrl={BASE_FLAG_URL}
               size={size}
@@ -348,7 +378,7 @@ const PostPage: React.FC<IPostPage> = props => {
                 return;
               }}
               onEntryShare={handleEntryShare}
-              onEntryFlag={handleEntryFlag(entryData.entryId, loggedEthAddress)}
+              onEntryFlag={handleEntryFlag(entryData.entryId, ethAddress)}
               onClickReplies={handleClickReplies}
               handleFollow={handleFollow}
               handleUnfollow={handleUnfollow}
@@ -356,15 +386,16 @@ const PostPage: React.FC<IPostPage> = props => {
               onMentionClick={handleMentionClick}
             />
           </Box>
-          {!loggedEthAddress && (
+          {!ethAddress && (
             <Box margin="medium">
               <EditorPlaceholder onClick={showLoginModal} ethAddress={null} />
             </Box>
           )}
-          {loggedEthAddress && (
+          {ethAddress && (
             <Box margin="medium">
               <CommentEditor
-                ethAddress={loggedEthAddress}
+                avatar={loginProfile.avatar}
+                ethAddress={ethAddress}
                 postLabel={t('Reply')}
                 placeholderLabel={t('Write something')}
                 onPublish={handlePublish}
@@ -387,7 +418,7 @@ const PostPage: React.FC<IPostPage> = props => {
         itemCard={
           <PostRenderer
             bookmarks={bookmarks}
-            ethAddress={loggedEthAddress}
+            ethAddress={ethAddress}
             locale={locale}
             onFollow={handleFollow}
             onUnfollow={handleUnfollow}
@@ -400,6 +431,13 @@ const PostPage: React.FC<IPostPage> = props => {
             onAvatarClick={handleAvatarClick}
           />
         }
+        customEntities={getPendingComments({
+          locale,
+          isMobile,
+          feedItems: feedState.feedItems,
+          loggedEthAddress: ethAddress,
+          pendingComments: pendingComments,
+        })}
       />
     </MainAreaCardBox>
   );

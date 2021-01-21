@@ -19,7 +19,6 @@ const Routes: React.FC<RootComponentProps> = props => {
     authService: props.sdkModules.auth.authService,
     profileService: props.sdkModules.profiles.profileService,
     ipfsService: props.sdkModules.commons.ipfsService,
-    cacheService: props.sdkModules.commons.cacheService,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);
     },
