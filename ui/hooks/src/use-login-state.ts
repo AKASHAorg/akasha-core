@@ -96,7 +96,7 @@ const useLoginState = (
       getDeps.subscribe(
         (resp: { data: any }) => {
           const { data } = resp;
-          if (data && data.ethAddress && data.pubKey) {
+          if (data?.ethAddress && data?.pubKey) {
             setLoginState(prev => ({
               ...prev,
               ethAddress: data.ethAddress,
