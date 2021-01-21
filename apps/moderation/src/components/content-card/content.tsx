@@ -36,12 +36,9 @@ const Content: React.FC<IContentProps> = props => {
         align="center"
       >
         <Icon type="error" size="md" accentColor={true} />
-        <Text
-          margin={{ left: '0.2rem', bottom: '0.2rem' }}
-          style={{ fontWeight: 'bold' }}
-        >{`${props.contentType[0].toUpperCase()}${props.contentType.slice(1)} ${
-          props.reportedLabel
-        }  ${props.forLabel}`}</Text>
+        <Text margin={{ left: '0.2rem', bottom: '0.2rem' }} style={{ fontWeight: 'bold' }}>{`${
+          props.contentType && props.contentType[0].toUpperCase()
+        }${props.contentType.slice(1)} ${props.reportedLabel}  ${props.forLabel}`}</Text>
 
         {props.reasons.map((reason, idx) => (
           <>
