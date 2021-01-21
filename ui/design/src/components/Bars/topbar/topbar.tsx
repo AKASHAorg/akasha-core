@@ -70,6 +70,7 @@ const Topbar = (props: ITopbarProps) => {
       onNavigation(menuItem.route);
     }
     setDropOpen(false);
+    setAvatarDropOpen(false);
   };
 
   // const handleSidebarVisibility = () => {
