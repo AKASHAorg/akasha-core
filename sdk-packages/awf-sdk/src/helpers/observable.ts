@@ -6,6 +6,6 @@ export const createObservableValue = <T>(val: T): ObservableCallResult<T> => {
   return defer(() => of({ data: val }));
 };
 
-export const createObservableStream = <T>(val: T[]): ObservableCallResult<T> => {
+export const createObservableStream = <T>(val: T[] | Promise<T>): ObservableCallResult<T> => {
   return defer(() => from(val).pipe(map(v => ({ data: v }))));
 };

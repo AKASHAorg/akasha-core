@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@akashaproject/sdk-typings": "*",
+    "@textile/threaddb": "0.0.5",
     "inversify": "5.0.5",
     "pino": "6.7.0",
     "quick-lru": "6.0.0",
