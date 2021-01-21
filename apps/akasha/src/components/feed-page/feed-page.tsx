@@ -15,6 +15,7 @@ import {
   PROPERTY_SLATE_CONTENT,
   createPendingEntry,
 } from '../../services/posting-service';
+import { BASE_FLAG_URL } from '../../services/constants';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
@@ -319,6 +320,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               closeLabel={t('Close')}
               user={ethAddress ? ethAddress : ''}
               contentId={flagged}
+              contentType={t('post')}
+              baseUrl={BASE_FLAG_URL}
               size={size}
               closeModal={() => {
                 setReportModalOpen(false);

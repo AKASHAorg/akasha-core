@@ -16,7 +16,7 @@ export interface IEntryCardRendererProps {
   onNavigate: (details: any) => void;
   onLinkCopy?: () => void;
   onRepliesClick: () => void;
-  onFlag: (entryId: string, user: string | null) => () => void;
+  onFlag: (entryId: string, user?: string | null) => () => void;
   onRepost: (withComment: boolean, entryData: any) => void;
   onShare: (service: string, entryId: string) => void;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
@@ -76,7 +76,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   bookmarkedLabel={t('Saved')}
                   onRepost={props.onRepost}
                   onEntryShare={props.onShare}
-                  onEntryFlag={props.onFlag(itemData.CID, null)}
+                  onEntryFlag={props.onFlag(itemData.entryId, props.ethAddress)}
                   onClickReplies={props.onRepliesClick}
                   handleFollow={props.onFollow}
                   handleUnfollow={props.onUnfollow}

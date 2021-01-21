@@ -7,11 +7,14 @@ import {
 import EditorCard from './editor-cards/editor-card';
 import CommentEditor from './editor-cards/comment-editor';
 import { EditorPlaceholder } from './editor-cards/editor-placeholder';
-import { EntryCard } from './entry-cards/entry-card';
 import { EntryBox } from './entry-cards/entry-box';
+import { EntryBoxMod } from './entry-cards/entry-box-mod';
+import { EntryCard } from './entry-cards/entry-card';
+import { EntryCardMod } from './entry-cards/entry-card-mod';
 import BoxFormCard from './form-cards/box-form-card';
 import EnsFormCard from './form-cards/ens-form-card';
 import ProfileCard from './profile-cards/profile-card';
+import ProfileCardMod from './profile-cards/profile-card-mod';
 import ProfileWidgetCard from './profile-cards/profile-widget-card';
 import { ProfileMiniCard } from './profile-cards/profile-mini-card';
 import AppInfoWidgetCard from './widget-cards/app-info-widget-card';
@@ -33,6 +36,7 @@ export {
   TopicsWidgetCard,
   MiniInfoWidgetCard,
   ProfileCard,
+  ProfileCardMod,
   ProfileWidgetCard,
   ProfileMiniCard,
   CommentEditor,
@@ -42,7 +46,9 @@ export {
   MainAreaCardBox,
   BoxFormCard,
   EntryBox,
+  EntryBoxMod,
   EntryCard,
+  EntryCardMod,
   EnsFormCard,
   WidgetAreaCardBox,
   ModalCard,

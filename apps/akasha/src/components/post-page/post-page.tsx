@@ -12,6 +12,7 @@ import {
   PROPERTY_SLATE_CONTENT,
   createPendingEntry,
 } from '../../services/posting-service';
+import { BASE_FLAG_URL } from '../../services/constants';
 import { redirectToPost } from '../../services/routing-service';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
@@ -335,6 +336,7 @@ const PostPage: React.FC<IPostPage> = props => {
               closeLabel={t('Close')}
               user={ethAddress ? ethAddress : ''}
               contentId={flagged}
+              baseUrl={BASE_FLAG_URL}
               size={size}
               closeModal={() => {
                 setReportModalOpen(false);
