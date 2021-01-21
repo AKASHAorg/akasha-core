@@ -68,6 +68,7 @@ export interface IEntryBoxProps {
   handleUnfollow: (profileEthAddress: string) => void;
   onContentClick?: (details: IContentClickDetails) => void;
   onMentionClick?: any;
+  style?: React.CSSProperties;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -98,6 +99,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     handleUnfollow,
     onContentClick,
     onMentionClick,
+    style,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -162,7 +164,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   return (
     <ViewportSizeProvider>
-      <>
+      <Box style={style}>
         <Box direction="row" justify="between" pad={{ vertical: 'medium' }}>
           <ProfileAvatarButton
             label={entryData.author?.userName}
@@ -251,7 +253,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           handleRepliesClick={handleRepliesClick}
           onLinkCopy={handleLinkCopy('shareable')}
         />
-      </>
+      </Box>
     </ViewportSizeProvider>
   );
 };
