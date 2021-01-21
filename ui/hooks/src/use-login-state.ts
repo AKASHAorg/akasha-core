@@ -153,7 +153,7 @@ const useLoginState = (
           }),
         );
       } else {
-        obs.push(Promise.resolve());
+        obs.push(Promise.resolve({ data: null }));
       }
 
       if (coverImage && coverImage.src && coverImage.preview !== loggedProfileData.coverImage) {
@@ -169,11 +169,12 @@ const useLoginState = (
           }),
         );
       } else {
-        obs.push(Promise.resolve());
+        obs.push(Promise.resolve({ data: null }));
       }
 
       forkJoin(obs).subscribe((responses: any[]) => {
         const [avatarRes, coverImageRes] = responses;
+        console.log(responses, 'responses');
         setLoginState(prev => ({
           ...prev,
           updateStatus: {
@@ -216,6 +217,7 @@ const useLoginState = (
           const updatedFields = providers
             .map(provider => ({ [provider.property]: provider.value }))
             .reduce((acc, curr) => Object.assign(acc, curr), {});
+          console.log(updatedFields, 'updated fields');
           loggedProfileActions.updateProfile(updatedFields);
           setLoginState(prev => ({
             ...prev,

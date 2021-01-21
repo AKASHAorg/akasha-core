@@ -96,7 +96,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
             <Route path={routes[FEED]}>
               <FeedPage
                 {...props}
-                navigateToUrl={singleSpa.navigateToUrl}
                 ethAddress={ethAddress}
                 pubKey={pubKey}
                 flagged={flagged}

@@ -142,7 +142,7 @@ const MyProfilePage = (props: MyProfileProps) => {
     }
     props.modalActions.show(name);
   };
-
+  console.log(props.profileData, 'profile data!');
   return (
     <Box fill="horizontal" margin={{ top: '.5rem' }}>
       <Helmet>

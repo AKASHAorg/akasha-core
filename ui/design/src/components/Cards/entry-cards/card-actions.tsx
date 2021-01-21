@@ -60,7 +60,6 @@ const CardActions: React.FC<CardActionProps> = props => {
   const {
     // data
     entryData,
-    loggedProfileEthAddress,
     // share data
     sharePostLabel,
     shareTextLabel,
@@ -288,17 +287,14 @@ const CardActions: React.FC<CardActionProps> = props => {
         clickable={true}
         onClick={handleRepliesClick}
       />
-
-      {isBookmarked !== null && (
-        <BookmarkButton
-          label={bookmarkBtnText}
-          iconType="bookmark"
-          iconSize="md"
-          clickable={!!loggedProfileEthAddress}
-          onClick={handleEntryBookmark}
-          isBookmarked={isBookmarked}
-        />
-      )}
+      <BookmarkButton
+        label={bookmarkBtnText}
+        iconType="bookmark"
+        iconSize="md"
+        clickable={true}
+        onClick={handleEntryBookmark}
+        isBookmarked={isBookmarked}
+      />
       {shareNodeRef.current && shareDropOpen && renderShareDrop()}
       <TextIcon
         label={shareBtnText}

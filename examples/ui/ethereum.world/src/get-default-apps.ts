@@ -49,14 +49,14 @@ export const getDefaultApps = async (appsPublicPath, pluginsPublicPath, widgetsP
   ];
   // widgets
   const widgetSources = [
-    {
-      src: `${widgetsPublicPath}/login/index.js`,
-      name: 'akashaproject__ui_widget_login',
-      moduleName: './app',
-      config: {
-        notOnMobile: true,
-      },
-    },
+    // {
+    //   src: `${widgetsPublicPath}/login/index.js`,
+    //   name: 'akashaproject__ui_widget_login',
+    //   moduleName: './app',
+    //   config: {
+    //     notOnMobile: true,
+    //   },
+    // },
   ];
 
   return {
