@@ -5,6 +5,8 @@ import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
+import { BASE_FLAG_URL } from '../../services/constants';
+
 const { ProfileCard, ModalRenderer, ToastProvider, ReportModal, useViewportSize } = DS;
 
 export interface IProfileHeaderProps {
@@ -74,6 +76,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               user={loggedUserEthAddress ? loggedUserEthAddress : ''}
               contentId={profileData.ethAddress ? profileData.ethAddress : flagged}
               contentType={t('profile')}
+              baseUrl={BASE_FLAG_URL}
               size={size}
               closeModal={closeReportModal}
             />

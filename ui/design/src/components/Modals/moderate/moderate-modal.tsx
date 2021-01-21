@@ -29,6 +29,7 @@ export interface IModerateModalProps {
   cancelLabel?: string;
   user: string | null;
   contentId?: string;
+  baseUrl: string;
   // screen size passed by viewport provider
   size?: string;
   // fetch pending items on modalClose
@@ -55,6 +56,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     cancelLabel,
     user,
     contentId,
+    baseUrl,
     size,
     onModalClose,
     closeModal,
@@ -144,7 +146,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     setRequesting(true);
 
     // @TODO: connect with moderation endpoint
-    return postData('https://akasha-mod.herokuapp.com/decisions', dataToPost);
+    return postData(baseUrl, dataToPost);
   };
 
   return (

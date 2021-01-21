@@ -11,6 +11,7 @@ import {
   buildPublishObject,
   PROPERTY_SLATE_CONTENT,
 } from '../../services/posting-service';
+import { BASE_FLAG_URL } from '../../services/constants';
 import { redirectToPost } from '../../services/routing-service';
 import { getLoggedProfileStore } from '../../state/logged-profile-state';
 import { combineLatest } from 'rxjs';
@@ -305,6 +306,7 @@ const PostPage: React.FC<IPostPage> = props => {
               closeLabel={t('Close')}
               user={loggedEthAddress ? loggedEthAddress : ''}
               contentId={flagged}
+              baseUrl={BASE_FLAG_URL}
               size={size}
               closeModal={() => {
                 setReportModalOpen(false);

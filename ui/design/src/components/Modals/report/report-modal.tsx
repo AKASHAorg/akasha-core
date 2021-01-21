@@ -27,6 +27,7 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   user?: string;
   contentId?: string;
   contentType?: string;
+  baseUrl?: string;
   // screen size passed by viewport provider
   size?: string;
 }
@@ -54,6 +55,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     user,
     contentId,
     contentType,
+    baseUrl,
     size,
     closeModal,
   } = props;
@@ -111,7 +113,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
 
     setRequesting(true);
 
-    postData('https://akasha-mod.herokuapp.com/flags', dataToPost)
+    postData(baseUrl, dataToPost)
       .then(status => {
         setRequesting(false);
         if (status === 409) {

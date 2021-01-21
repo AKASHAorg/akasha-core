@@ -8,6 +8,7 @@ import ContentTab from './content-tab';
 
 import { getAllPending, getAllModerated } from '../services/fetch-contents';
 import { moderatorList } from '../services/dummy-data';
+import { BASE_DECISION_URL } from '../services/constants';
 
 const { Box, Text, useViewportSize, ModalRenderer, ToastProvider, ModerateModal } = DS;
 
@@ -62,7 +63,7 @@ const ContentList: React.FC<IContentListProps> = props => {
   React.useEffect(() => {
     if (!ethAddress) {
       // if not authenticated, prompt to authenticate
-      return props.navigateToUrl('/moderation-app/unauthenticated');
+      props.navigateToUrl('/moderation-app/unauthenticated');
     } else {
       // if authenticated,
       if (!moderatorList.includes(ethAddress)) {
@@ -137,6 +138,7 @@ const ContentList: React.FC<IContentListProps> = props => {
               cancelLabel={t('Cancel')}
               user={ethAddress}
               contentId={flagged}
+              baseUrl={BASE_DECISION_URL}
               size={size}
               onModalClose={() => {
                 setModalOpen(false);
