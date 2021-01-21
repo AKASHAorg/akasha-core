@@ -1,46 +1,46 @@
-const webpack = require("webpack");
-const CopyPlugin = require("copy-webpack-plugin");
+const webpack = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 const { ModuleFederationPlugin } = webpack.container;
-const path = require("path");
-const baseConfig = require("../../../ui/webpack.config");
+const path = require('path');
+const baseConfig = require('../../../ui/webpack.config');
 
 module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
-  entry: "./src/bootstrap",
+  entry: './src/bootstrap',
   plugins: baseConfig.plugins.concat([
     new ModuleFederationPlugin({
-      name: "ethereum.world",
+      name: 'ethereum.world',
       shared: {
         react: {
-          singleton: true
+          singleton: true,
         },
-        "react-dom": {
-          singleton: true
+        'react-dom': {
+          singleton: true,
         },
-        "styled-components": {
-          singleton: true
-        }
-      }
+        'styled-components': {
+          singleton: true,
+        },
+      },
     }),
     new CopyPlugin({
       patterns: [
-        { from: path.resolve(__dirname, "../../../ui/build") },
-        { from: path.resolve(__dirname, "../../../sdk-packages/akasha/dist") },
-        { from: path.resolve(__dirname, "../../../locales"), to: "locales" }
-      ]
-    })
+        { from: path.resolve(__dirname, '../../../ui/build') },
+        { from: path.resolve(__dirname, '../../../sdk-packages/akasha/dist') },
+        { from: path.resolve(__dirname, '../../../locales'), to: 'locales' },
+      ],
+    }),
   ]),
   externals: {
     ...baseConfig.externals,
-    "akasha.sdk.js": "akashaproject__sdk"
+    'akasha.sdk.js': 'akashaproject__sdk',
   },
   devServer: {
-    contentBase: path.join(__dirname, "public"),
-    publicPath: "/",
+    contentBase: path.join(__dirname, 'public'),
+    publicPath: '/',
     https: true,
     historyApiFallback: true,
     headers: {
-      "Access-Control-Allow-Origin": "*"
-    }
-  }
+      'Access-Control-Allow-Origin': '*',
+    },
+  },
 });

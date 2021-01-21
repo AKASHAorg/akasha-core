@@ -42,20 +42,20 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   profileProvidersData?: IProfileProvidersData;
   canUserEdit?: boolean;
   // @TODO fix this
-  onChangeProfileData: (newProfileData: any) => void;
-  editProfileLabel: string;
-  changeCoverImageLabel: string;
-  cancelLabel: string;
-  saveChangesLabel: string;
+  onChangeProfileData?: (newProfileData: any) => void;
+  editProfileLabel?: string;
+  changeCoverImageLabel?: string;
+  cancelLabel?: string;
+  saveChangesLabel?: string;
   flagAsLabel: string;
   flaggable: boolean;
   onEntryFlag: () => void;
-  getProfileProvidersData: () => void;
+  getProfileProvidersData?: () => void;
   onUpdateClick: () => void;
   onENSChangeClick: () => void;
-  updateProfileLabel: string;
-  changeENSLabel: string;
-  hideENSButton: boolean;
+  updateProfileLabel?: string;
+  changeENSLabel?: string;
+  hideENSButton?: boolean;
 }
 
 const EditButton = styled(IconButton)`

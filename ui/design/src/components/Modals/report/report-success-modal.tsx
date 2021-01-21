@@ -5,7 +5,7 @@ import { MainAreaCardBox } from '../../Cards/common/basic-card-box';
 import { ModalWrapper } from '../common/styled-modal';
 import { Button } from '../../Buttons';
 
-import { StyledBox } from './styled';
+import { StyledBox } from '../styled';
 
 export interface IReportSuccessModalProps {
   className?: string;

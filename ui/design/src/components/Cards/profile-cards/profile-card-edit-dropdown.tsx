@@ -8,9 +8,9 @@ interface IProfileEditMenuProps {
   onClose: () => void;
   onUpdateClick: () => void;
   onENSChangeClick: () => void;
-  updateProfileLabel: string;
-  changeENSLabel: string;
-  hideENSButton: boolean;
+  updateProfileLabel?: string;
+  changeENSLabel?: string;
+  hideENSButton?: boolean;
 }
 
 const ProfileEditMenuDropdown = (props: IProfileEditMenuProps) => {

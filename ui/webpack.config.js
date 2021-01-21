@@ -14,9 +14,9 @@ module.exports = {
       {
         test: /\.m?js/,
         resolve: {
-          fullySpecified: false
-        }
-      }
+          fullySpecified: false,
+        },
+      },
     ],
   },
   resolve: {
@@ -33,7 +33,7 @@ module.exports = {
       modules: true,
       modulesCount: 100,
       profile: true,
-    })
+    }),
   ],
   devtool: isProduction ? 'source-map' : 'inline-source-map',
   externals: commons.externals,
