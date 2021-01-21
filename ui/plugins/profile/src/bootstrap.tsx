@@ -1,8 +1,7 @@
 import { Application, LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { initReactI18next } from 'react-i18next';
 import routes, { rootRoute, MY_PROFILE } from './routes';
-import { Widget as TopicsWidget } from './components/widgets/topics';
-import { Widget as AppsWidget } from './components/widgets/apps';
+import { Widget as TrendingWidget } from './components/widgets/trending-widget';
 import { moduleName as profilesModule } from '@akashaproject/sdk-profiles/lib/constants';
 import { moduleName as commonsModule } from '@akashaproject/sdk-common/lib/constants';
 import { moduleName as authModule } from '@akashaproject/sdk-auth/lib/constants';
@@ -28,12 +27,16 @@ export const application: Application = {
     // i18next.use(arr[0]).use(arr[1]).use(arr[n])
     use: [initReactI18next],
   },
-  loadingFn: (): Promise<any> =>
-    import('./components'),
+  loadingFn: (): Promise<any> => import('./components'),
   name: 'ui-plugin-profile',
-  sdkModules: [{ module: profilesModule }, { module: commonsModule }, { module: authModule }, { module: registryModule }],
+  sdkModules: [
+    { module: profilesModule },
+    { module: commonsModule },
+    { module: authModule },
+    { module: registryModule },
+  ],
   title: 'AKASHA Profile',
   menuItems: routes,
   logo: { type: LogoTypeSource.AVATAR, value: '' },
-  widgets: { [routes[MY_PROFILE]]: [TopicsWidget, AppsWidget] },
+  widgets: { [routes[MY_PROFILE]]: [TrendingWidget] },
 };

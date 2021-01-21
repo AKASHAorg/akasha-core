@@ -85,13 +85,10 @@ storiesOf('Cards/Widget Cards', module)
         titleLabel={text('Title', 'Trending Right Now')}
         topicsLabel={text('Topics label', 'Topics')}
         profilesLabel={text('Profiles label', 'Profiles')}
-        showMoreLabel={text('Show more label', 'Show More')}
         onClickProfile={ethAddress => action('profile Clicked')(ethAddress)}
         onClickTag={tagName => action('tag clicked')(tagName)}
         onClickSubscribeProfile={ethAddress => action('subscribe profile clicked')(ethAddress)}
         onClickSubscribeTag={tagName => action('subscribe tag clicked')(tagName)}
-        onClickMoreTags={() => action('Show more Clicked')('Synthetic Event')}
-        onClickMoreProfiles={() => action('Show more Clicked')('Synthetic Event')}
         tags={trendingTagsData}
         profiles={trendingProfilesData}
       />

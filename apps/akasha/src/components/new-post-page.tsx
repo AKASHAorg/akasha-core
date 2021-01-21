@@ -1,6 +1,5 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { getLoggedProfileStore } from '../state/logged-profile-state';
 import { useTranslation } from 'react-i18next';
 import { uploadMediaToTextile } from '../services/posting-service';
 
@@ -9,15 +8,16 @@ const { Helmet, EditorCard, ErrorLoader, Box, Button, editorDefaultValue } = DS;
 interface NewPostPageProps {
   globalChannel: any;
   sdkModules: any;
+  ethAddress: string | null;
+  pubKey: string | null;
   logger: any;
   showLoginModal: () => void;
   onError: (err: Error) => void;
 }
 
 const NewPostPage: React.FC<NewPostPageProps> = props => {
-  const { showLoginModal, sdkModules } = props;
-  const Login = getLoggedProfileStore();
-  const loginEthAddr = Login.useStoreState((state: any) => state.data.ethAddress);
+  const { showLoginModal, sdkModules, ethAddress } = props;
+
   const [editorState, setEditorState] = React.useState(editorDefaultValue);
 
   const onUploadRequest = uploadMediaToTextile(
@@ -48,7 +48,7 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
       <Helmet>
         <title>Write something.. | AKASHA App</title>
       </Helmet>
-      {!loginEthAddr && (
+      {!ethAddress && (
         <ErrorLoader
           type="no-login"
           title={t('No Ethereum address detected')}
@@ -62,11 +62,11 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
           </Box>
         </ErrorLoader>
       )}
-      {loginEthAddr && (
+      {ethAddress && (
         <Box direction="column" align="center">
           <EditorCard
             avatar={'https://www.stevensegallery.com/360/360'}
-            ethAddress={loginEthAddr}
+            ethAddress={ethAddress}
             onPublish={handlePostPublish}
             handleNavigateBack={handleBackNavigation}
             postLabel={t('Publish')}
