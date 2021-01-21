@@ -52,6 +52,7 @@ describe('<Topbar /> Component', () => {
             searchAreaItem={undefined}
             quickAccessItems={[]}
             onLoginClick={() => {}}
+            onLogout={() => {}}
           />,
         ),
       );
