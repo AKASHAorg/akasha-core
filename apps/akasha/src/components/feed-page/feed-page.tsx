@@ -15,6 +15,7 @@ import {
   PROPERTY_SLATE_CONTENT,
   createPendingEntry,
 } from '../../services/posting-service';
+import { BASE_FLAG_URL } from '../../services/constants';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
@@ -120,8 +121,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       ...payload,
       offset: payload.offset || feedState.nextItemId,
     });
+
     const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
     const call = combineLatest([ipfsGatewayCall, getEntriesCall]);
+
     call.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
       const {
@@ -322,6 +325,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               closeLabel={t('Close')}
               user={ethAddress ? ethAddress : ''}
               contentId={flagged}
+              contentType={t('post')}
+              baseUrl={BASE_FLAG_URL}
               size={size}
               closeModal={() => {
                 setReportModalOpen(false);
@@ -332,6 +337,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       </ModalRenderer>
       <EditorModal
         slotId={props.layout.app.modalSlotId}
+        avatar={loginProfile.avatar}
         showModal={showEditor}
         ethAddress={ethAddress as any}
         postLabel={t('Publish')}

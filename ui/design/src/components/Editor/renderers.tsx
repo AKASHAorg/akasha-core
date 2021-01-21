@@ -33,7 +33,7 @@ const ImageElement = ({ attributes, children, element }: any) => {
 
 const MentionElement = (props: any) => {
   const { handleMentionClick, attributes, element, children } = props;
-  const mention = element.userName || element.ethAddress;
+  const mention = element.userName || element.name || element.ethAddress;
   const displayedMention = mention && mention.startsWith('@') ? mention : `@${mention}`;
   return (
     <StyledMention

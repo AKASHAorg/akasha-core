@@ -41,7 +41,11 @@ const EditorModal: React.FC<IEditorModal> = props => {
   const [editorState, setEditorState] = React.useState(editorDefaultValue);
 
   const handleToggleShowCancel = () => {
-    setShowCancel(!showCancel);
+    if (editorState === editorDefaultValue) {
+      handleNavigateBack();
+    } else {
+      setShowCancel(!showCancel);
+    }
   };
 
   const handleCloseModal = () => {

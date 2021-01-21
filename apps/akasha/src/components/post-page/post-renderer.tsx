@@ -21,10 +21,11 @@ export interface PostRendererProps {
   onShare: (service: string, entryId: string) => void;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   bookmarks?: Set<string>;
+  style?: React.CSSProperties;
 }
 
 const PostRenderer = (props: PostRendererProps) => {
-  const { itemData, isBookmarked } = props;
+  const { itemData, isBookmarked, style } = props;
   const { t } = useTranslation();
   return (
     <ErrorInfoCard errors={{}}>
@@ -74,6 +75,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     onClickReplies={props.onRepliesClick}
                     handleFollow={props.onFollow}
                     handleUnfollow={props.onUnfollow}
+                    style={style}
                   />
                 </Box>
               )}

@@ -1,0 +1,195 @@
+export const moderatorList = [
+  '0xfD44B4450F03c5d1C14b49D3dE69c646aA75838b',
+  '0x82fBd807Ae2E02490DaDcb516acb99444d75ef19',
+];
+
+export const sampleProfileData = {
+  CID:
+    'bafyriqhrcdfsqchki4sbxu4faatjfub6ffh5xcs65eetwbsnt2rjoubgx3yp4v5666qwzwanr6bfdnpexlq3btor2mcpbucsz2nb3y6aogqi2',
+  ensName: 'didnt1able',
+  ethAddress: '0x4A68039766A9D83602A67ca5113b00dBf625F7cb',
+  // optional fields?
+  apps: 2,
+  following: 53,
+};
+
+export const samplePostData = {
+  CID:
+    'bafyriqewvgwme6hrxg3qzz7qgla256re7rrp5awoldzrdeel6cdsheceha52agmdb6s5fkwyuh6keo2u4ll7o6dgyexn4dodo6uc6l4pfd6dq',
+  author: {
+    CID:
+      'bafyriqhrcdfsqchki4sbxu4faatjfub6ffh5xcs65eetwbsnt2rjoubgx3yp4v5666qwzwanr6bfdnpexlq3btor2mcpbucsz2nb3y6aogqi2',
+    avatar: '',
+    coverImage: '',
+    description: undefined,
+    ensName: 'didnt1able',
+    ethAddress: '0x4A68039766A9D83602A67ca5113b00dBf625F7cb',
+    postsNumber: 6,
+  },
+  content: [
+    {
+      children: [{ text: 'XLM, Is Stellar underrated?', bold: true }],
+      type: 'paragraph',
+    },
+    {
+      children: [{ text: '' }],
+      type: 'tag',
+      value: 'crypto',
+    },
+    { text: ' ' },
+    {
+      children: [{ text: '' }],
+      type: 'tag',
+      value: 'stellar',
+    },
+    { text: ' ' },
+    {
+      children: [{ text: '' }],
+      type: 'tag',
+      value: 'blockchain',
+    },
+  ],
+  entryId: '0x7e536ebab63f06b1095d9e29411ea925938d12519af9ce9f6868349948ef1b58',
+  ipfsLink: 'undefined',
+  permalink: 'null',
+};
+
+export const sampleDelistedData = [
+  {
+    id: 0,
+    type: 'post',
+    ethAddress: '0x3d1a5f7d03eaf1e18e7c49af072d03f94494abd',
+    reasons: ['Abusive or harmful to others', 'Violence'],
+    evaluation: 'This is a sample mandatory evaluation by the moderator',
+    reporterName: 'Estelle Collier',
+    reporterENSName: '@estellecollier',
+    moderatorName: 'EWA Moderator I',
+    moderatorENSName: '@ewamoderator1',
+    entryDate: '2020-10-20T20:21:00+0000',
+    evaluationDate: '2020-10-27T22:12:00+0000',
+  },
+  {
+    id: 1,
+    type: 'profile',
+    ethAddress: '0x4eeedfba3915e32593a2978e3eb56fd6e7849b9c',
+    reasons: ['Abusive or harmful to others', 'Self-harm or suicide'],
+    evaluation: 'This is a sample mandatory evaluation by the moderator',
+    reporterName: 'Jack Stone',
+    reporterENSName: '@jackstone99',
+    moderatorName: 'EWA Moderator II',
+    moderatorENSName: '@ewamoderator2',
+    entryDate: '2020-09-28T06:08:45+0000',
+    evaluationDate: '2020-10-03T19:28:00+0000',
+  },
+];
+
+export const samplePendingData = [
+  {
+    id: 0,
+    type: 'post',
+    ethAddress: '0x3d1a5f7d03eaf1e18e7c49af072d03f94494abd',
+    reasons: ['Abusive or harmful to others', 'Violence'],
+    description:
+      'This post is offensive and this person is directly threatening a group of people that are only using their right of protest.',
+    reporterName: 'Estelle Collier',
+    reporterENSName: '@estellecollier',
+    entryDate: '2020-10-20T20:21:00+0000',
+  },
+  {
+    id: 1,
+    type: 'profile',
+    ethAddress: '0x4eeedfba3915e32593a2978e3eb56fd6e7849b9c',
+    reasons: ['Abusive or harmful to others', 'Self-harm or suicide'],
+    description: 'This profile is really disturbing',
+    reporterName: 'Jack Stone',
+    reporterENSName: '@jackstone99',
+    entryDate: '2020-09-28T06:08:45+0000',
+  },
+  {
+    id: 2,
+    type: 'profile',
+    ethAddress: '0x18394664e15e040322fc090dce1625b77443634',
+    reasons: ['Nudity'],
+    description: '',
+    reporterName: 'Jin Xing',
+    reporterENSName: '@jxin',
+    entryDate: '2020-09-26T21:36:39+0000',
+  },
+  {
+    id: 3,
+    type: 'post',
+    ethAddress: '0x70ee66b1be11cf691ddf89d5d1c44687259c216',
+    reasons: ['Illegal'],
+    description: 'This seems illegal and not right in this community',
+    reporterName: 'Piu Gutenberg',
+    reporterENSName: '',
+    entryDate: '2020-09-17T19:07:44+0000',
+  },
+  {
+    id: 4,
+    type: 'profile',
+    ethAddress: '0x50c1393ac43a4121f98857c348897b2134a5b2',
+    reasons: ['Nudity'],
+    description: '',
+    reporterName: '',
+    reporterENSName: '@johnny914',
+    entryDate: '2020-09-07T21:17:29+0000',
+  },
+  {
+    id: 5,
+    type: 'post',
+    ethAddress: '0xad68e4c8f434b755566e50e8d5b24f78e07cf8d1',
+    reasons: ['Suspicious, deceptive, or spam'],
+    description: 'I wanted to write something serious here, but I found myself laughing instead!😅',
+    reporterName: 'Jose Nriagu',
+    reporterENSName: '@josenriagu',
+    entryDate: '2020-08-30T13:35:57+0000',
+  },
+  {
+    id: 6,
+    type: 'post',
+    ethAddress: '0x1a514ac3ef6e448985a576b87ab54a65ead9af',
+    reasons: ['Abusive or harmful to others'],
+    description: 'Get us some cakes instead of posting this!',
+    reporterName: 'Baker',
+    reporterENSName: '@peterbaker',
+    entryDate: '2020-08-13T14:57:18+0000',
+  },
+  {
+    id: 7,
+    type: 'post',
+    ethAddress: '0x408c1c6d3afd56a3be9273f8e39c3564854e687b',
+    reasons: ['Suspicious, deceptive, or spam'],
+    description: 'eenie meenie mannie mo. urrh! did I get it right? haha',
+    reporterName: 'Cool Kid',
+    reporterENSName: '',
+    entryDate: '2020-07-31T06:46:12+0000',
+  },
+  {
+    id: 8,
+    type: 'post',
+    ethAddress: '0x3ee8f3303faf05719f1ec16db7b7d669f21a22d',
+    reasons: [
+      'Suspicious, deceptive, or spam',
+      'Abusive or harmful to others',
+      'Self-harm or suicide',
+      'Illegal',
+      'Nudity',
+      'Violence',
+    ],
+    description: 'Content is capable of driving the whole world nuts!',
+    reporterName: 'Last Alien',
+    reporterENSName: '@alienxy',
+    entryDate: '2020-07-26T14:41:19+0000',
+  },
+  {
+    id: 9,
+    type: 'profile',
+    ethAddress: '0x283e8d995929ded08da6c31b689362895cb21a',
+    reasons: ['Suspicious, deceptive, or spam', 'Abusive or harmful to others'],
+    description: 'The author obviously spews so much hate towards mankind',
+    reporterName: 'GodFather',
+    reporterENSName: '@thegodfather',
+    entryDate: '2020-07-20T10:33:29+0000',
+  },
+];

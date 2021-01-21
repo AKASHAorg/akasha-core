@@ -23,11 +23,11 @@ export const MyProfileCard = (props: MPPHeaderProps) => {
 
   const showUpdateProfileModal = () => {
     props.onModalShow(profileModalName);
-  }
+  };
 
   const showEnsModal = () => {
     props.onModalShow(ensModalName);
-  }
+  };
 
   return (
     <ProfileCard

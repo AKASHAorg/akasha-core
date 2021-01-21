@@ -14,9 +14,6 @@ module.exports = Object.assign(baseConfig, {
       exposes: {
         './app': './src/bootstrap',
       },
-      remotes: {
-        loginWidgetConfig: 'loginWidgetConfig@https://localhost:8131/widgets/login/index.js',
-      },
       shared: {
         react: {
           singleton: true,

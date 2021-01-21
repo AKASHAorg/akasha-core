@@ -11,6 +11,14 @@ export const getDefaultApps = async (appsPublicPath, pluginsPublicPath, widgetsP
         area: MenuItemAreaType.AppArea,
       },
     },
+    {
+      src: `${appsPublicPath}/moderation/index.js`,
+      name: 'akashaproject__app_moderation_ewa',
+      moduleName: './app',
+      config: {
+        area: MenuItemAreaType.AppArea,
+      },
+    },
   ];
   // plugins
   const pluginSources = [

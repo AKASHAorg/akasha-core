@@ -1,4 +1,7 @@
 import { initReactI18next } from 'react-i18next';
+import { moduleName as common } from '@akashaproject/sdk-common/lib/constants';
+import { moduleName as profiles } from '@akashaproject/sdk-profiles/lib/constants';
+import { moduleName as posts } from '@akashaproject/sdk-posts/lib/constants';
 import { IWidget } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 /**
@@ -13,16 +16,16 @@ export const Widget: IWidget = {
     // In this case I will preserve the old ns instead loading a possibly undefined ns.
     loadNS: [],
     // translation namespace. defaults to plugin.name
-    ns: 'ui-plugin-profile',
+    ns: 'akasha-app',
     // i18next.use(arr[0]).use(arr[1]).use(arr[n])
     use: [initReactI18next],
   },
   loadingFn: () =>
     import(
-      /* webpackChunkName: "topics-widget" */
+      /* webpackChunkName: "trending-widget" */
       /* webpackMode: "lazy" */
-      './profile-topics-card-widget'
+      './widget'
     ),
-  name: 'topics-widget',
-  sdkModules: [],
+  name: 'ui-widget-trending',
+  sdkModules: [{ module: common }, { module: posts }, { module: profiles }],
 };

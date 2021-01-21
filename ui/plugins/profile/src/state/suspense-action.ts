@@ -15,7 +15,7 @@ export interface IActionParams {
 }
 
 const createPromiseResolver = () => {
-  let resolve: PromiseResolver['resolve'] = () => { };
+  let resolve: PromiseResolver['resolve'] = () => {};
   const promise: PromiseResolver['promise'] = new Promise(r => (resolve = r));
   return {
     resolve,
