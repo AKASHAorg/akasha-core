@@ -8,7 +8,7 @@ import { createObservableValue } from '../helpers/observable';
 class Stash implements IStashService {
   create(args: LRUOptions): ObservableCallResult<IStash> {
     const cache: IStash = new QuickLRU(args);
-    return createObservableValue(cache);
+    return createObservableValue<IStash>(cache);
   }
 }
 

@@ -1,7 +1,7 @@
 import { ObservableCallResult } from './responses';
 
 export default interface ISettingsService {
-  set(service: symbol, value: object): ObservableCallResult<object>;
-  get(service: symbol): ObservableCallResult<object>;
-  loadUserSettings(): ObservableCallResult<boolean>;
+  set(moduleName: string, value: object): ObservableCallResult<object>;
+  get(moduleName: string): ObservableCallResult<object>;
+  remove(moduleName: string): void;
 }

@@ -1,4 +1,4 @@
-import { injectable, inject } from 'inversify';
+import { injectable } from 'inversify';
 import ILogService, { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { ObservableCallResult } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 import pino from 'pino';
@@ -12,7 +12,7 @@ class Logging implements ILogService {
   }
   create(nameSpace?: string): ObservableCallResult<ILogger> {
     const log: ILogger = this._appLogger.child({ module: nameSpace });
-    return createObservableValue(log);
+    return createObservableValue<ILogger>(log);
   }
 }
 

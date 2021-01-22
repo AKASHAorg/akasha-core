@@ -24,12 +24,20 @@ const config = {
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", "*.mjs"],
+    fallback: {
+      os: false,
+      crypto: false,
+      http: false,
+      https: false,
+      dns: false,
+      fs: false,
+      util: false,
+    }
   },
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "akasha.sdk.js",
     library: name.replace(/@/, "").replace(/\//, "__").replace(/-/, "_"),
-    libraryTarget: "umd",
     publicPath: "/"
   },
   target: ['web', 'es2017'],

@@ -49,7 +49,7 @@ registerRoute(
 );
 
 registerRoute(
-  /^(https:\/\/unpkg.com|https:\/\/cdnjs.cloudflare.com\/ajax|https:\/\/cdn.jsdelivr.net\/npm|)/,
+  /^(https:\/\/unpkg.com|https:\/\/cdnjs.cloudflare.com\/ajax|https:\/\/cdn.jsdelivr.net\/npm|https:\/\/gateway.ipfs.io\/ipfs|)/,
   new CacheFirst({
     cacheName: 'vendor-cache',
     plugins: [
@@ -66,7 +66,7 @@ registerRoute(
 
 setCacheNameDetails({
   prefix: 'ewa',
-  suffix: 'v0.1',
+  suffix: 'v0.1.0',
   precache: 'install-time',
   runtime: 'run-time',
   googleAnalytics: 'ga',
