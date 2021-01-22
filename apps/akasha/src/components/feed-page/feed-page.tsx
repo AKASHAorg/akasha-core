@@ -21,8 +21,10 @@ import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
+import { application as loginWidget } from '@akashaproject/ui-widget-login/lib/bootstrap';
+
 // @ts-ignore
-// import { application as loginWidgetConfig } from 'loginWidgetConfig/app';
+import Parcel from 'single-spa-react/parcel';
 
 const {
   Box,
@@ -273,11 +275,15 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       );
 
       const postEntryCall = sdkModules.posts.entries.postEntry(publishObj);
-      setPendingEntries(prev => prev.concat([pending]));
+      setPendingEntries(prev => prev.concat([{ ...pending, quote: currentEmbedEntry }]));
       postEntryCall.subscribe((postingResp: any) => {
         const publishedEntryId = postingResp.data.createPost;
         const entryData = pending as IEntryData;
-        feedStateActions.setFeedItemData({ ...entryData, entryId: publishedEntryId });
+        feedStateActions.setFeedItemData({
+          ...entryData,
+          entryId: publishedEntryId,
+          quote: currentEmbedEntry,
+        });
         setPendingEntries([]);
         feedStateActions.setFeedItems({
           reverse: true,
@@ -289,7 +295,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
     setShowEditor(false);
   };
-  // console.log(loginWidgetConfig, 'lwconf');
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -372,7 +377,17 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               avatar={loginProfile.avatar}
             />
           ) : (
-            <>Login Widget</>
+            <>
+              <Parcel
+                config={loginWidget.loadingFn}
+                wrapWith="div"
+                sdkModules={props.sdkModules}
+                logger={props.logger}
+                layout={props.layout}
+                globalChannel={props.globalChannel}
+                i18n={props.i18n}
+              />
+            </>
           )
         }
         itemCard={

@@ -53,13 +53,13 @@ const Avatar: React.FC<AvatarProps> = props => {
     publicImgPath = '/images',
   } = props;
   const isClickable = typeof onClick === 'function';
-  const avatarImage = React.useRef<string | undefined>();
+  let avatarImage;
   if (src) {
-    avatarImage.current = src;
+    avatarImage = src;
   }
-  if (!avatarImage.current) {
+  if (!avatarImage) {
     const seed = getAvatarFromSeed(ethAddress);
-    avatarImage.current = `${publicImgPath}/avatar-placeholder-${seed}.png`;
+    avatarImage = `${publicImgPath}/avatar-placeholder-${seed}.png`;
   }
 
   return (
@@ -72,7 +72,7 @@ const Avatar: React.FC<AvatarProps> = props => {
       border={border}
     >
       <React.Suspense fallback={<></>}>
-        <AvatarImage image={avatarImage.current} />
+        <AvatarImage image={avatarImage} />
       </React.Suspense>
     </StyledAvatar>
   );

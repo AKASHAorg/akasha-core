@@ -114,6 +114,7 @@ const MyProfilePage = (props: MyProfileProps) => {
   ]);
 
   const onProfileUpdateSubmit = (data: any) => {
+    console.log(data, 'updating data');
     props.loginActions.optimisticUpdate(data);
   };
 
@@ -142,7 +143,7 @@ const MyProfilePage = (props: MyProfileProps) => {
     }
     props.modalActions.show(name);
   };
-  console.log(props.profileData, 'profile data!');
+
   return (
     <Box fill="horizontal" margin={{ top: '.5rem' }}>
       <Helmet>
