@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import useGlobalLogin from '@akashaproject/ui-awf-hooks/lib/use-global-login';
 import { LearnMoreTutorial } from './tutorial-modal';
-import LoginWidgetIllustration from './icons/login-widget-illustration';
+// import LoginWidgetIllustration from './icons/login-widget-illustration';
 import { useLoginState } from '../state';
 
 const { ModalRenderer, LoginCTAWidgetCard, LoginModal } = DS;
@@ -65,13 +65,6 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
   return (
     <>
       <LoginCTAWidgetCard
-        image={
-          <img
-            src={LoginWidgetIllustration}
-            style={{ width: '100%' }}
-            title={t('Connect an Ethereum address')}
-          />
-        }
         title={`🚀 ${t('Enter your world of Ethereum!')}`}
         textContent={t(
           'Connect an Ethereum address from your wallet to open a new world of interactions!',
@@ -80,6 +73,7 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
         connectLabel={t('Sign Up')}
         onLearnMoreClick={handleTutorialModalOpen}
         onLoginClick={handleLoginModalOpen}
+        inlineActions={true}
       />
 
       <LoginModal

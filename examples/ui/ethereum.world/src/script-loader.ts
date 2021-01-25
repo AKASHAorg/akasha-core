@@ -72,7 +72,9 @@ class ScriptLoader {
       const onLoad = () => {
         return resolve(true);
       };
-      const onError = () => () => {
+      const onError = src => () => {
+        // tslint:disable-next-line: no-console
+        console.error(`Cannot load ${src}`);
         return reject();
       };
       this.writeScript(script, onLoad, onError);

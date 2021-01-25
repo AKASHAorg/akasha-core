@@ -137,7 +137,6 @@ const useLoginState = (
         }
       };
       const obs = [];
-
       if (avatar && avatar.src && avatar.preview !== loggedProfileData.avatar) {
         setLoginState(prev => ({
           ...prev,
@@ -151,7 +150,7 @@ const useLoginState = (
           }),
         );
       } else {
-        obs.push(Promise.resolve());
+        obs.push(Promise.resolve(null));
       }
 
       if (coverImage && coverImage.src && coverImage.preview !== loggedProfileData.coverImage) {
@@ -167,11 +166,15 @@ const useLoginState = (
           }),
         );
       } else {
-        obs.push(Promise.resolve());
+        // setting to null will not do anything
+        obs.push(Promise.resolve(null));
       }
 
-      forkJoin(obs).subscribe((responses: any[]) => {
-        const [avatarRes, coverImageRes] = responses;
+      const ipfsSettings = ipfsService.getSettings({});
+      forkJoin([...obs, ipfsSettings]).subscribe((responses: any[]) => {
+        const [avatarRes, coverImageRes, ipfsSettingsRes] = responses;
+        const ipfsGateway = ipfsSettingsRes.data;
+
         setLoginState(prev => ({
           ...prev,
           updateStatus: {
@@ -181,18 +184,33 @@ const useLoginState = (
           },
         }));
         const providers: any[] = [];
-        if (avatarRes) {
+
+        if (!avatarRes && avatar === null) {
           providers.push({
             provider: 'ewa.providers.basic',
             property: 'avatar',
-            value: avatarRes.data?.CID,
+            value: '',
           });
         }
-        if (coverImageRes) {
+        if (avatarRes && avatarRes.data) {
+          providers.push({
+            provider: 'ewa.providers.basic',
+            property: 'avatar',
+            value: avatarRes.data.CID,
+          });
+        }
+        if (!coverImageRes && coverImage === null) {
           providers.push({
             provider: 'ewa.providers.basic',
             property: 'coverImage',
-            value: coverImageRes.data?.CID,
+            value: '',
+          });
+        }
+        if (coverImageRes && coverImageRes.data) {
+          providers.push({
+            provider: 'ewa.providers.basic',
+            property: 'coverImage',
+            value: coverImageRes.data.CID,
           });
         }
         if (description) {
@@ -212,7 +230,17 @@ const useLoginState = (
         const makeDefault = profileService.makeDefaultProvider(providers);
         makeDefault.subscribe((_res: any) => {
           const updatedFields = providers
-            .map(provider => ({ [provider.property]: provider.value }))
+            .map(provider => {
+              if (
+                (provider.property === 'coverImage' || provider.property === 'avatar') &&
+                !!provider.value
+              ) {
+                return {
+                  [provider.property]: `${ipfsGateway}/${provider.value}`,
+                };
+              }
+              return { [provider.property]: provider.value };
+            })
             .reduce((acc, curr) => Object.assign(acc, curr), {});
           loggedProfileActions.updateProfile(updatedFields);
           setLoginState(prev => ({
