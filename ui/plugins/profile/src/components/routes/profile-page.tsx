@@ -9,7 +9,7 @@ import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/u
 const { Box, Helmet } = DS;
 export interface ProfilePageProps extends RootComponentProps {
   modalActions: ModalStateActions;
-  modalState: ModalState
+  modalState: ModalState;
   ethAddress: string | null;
   onLogin: any;
 }
@@ -31,7 +31,7 @@ const ProfilePage = (props: ProfilePageProps) => {
       profileActions.getProfileData({ ethAddress: profileId });
     }
   }, [profileId]);
-  console.log(profileState, 'profile state');
+
   return (
     <Box fill="horizontal">
       <Helmet>

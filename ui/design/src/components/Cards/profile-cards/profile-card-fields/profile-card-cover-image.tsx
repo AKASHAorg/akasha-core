@@ -10,7 +10,7 @@ import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 
 export interface IProfileCardCoverImageProps {
   shareProfileLabel: string;
-  changeCoverImageLabel: string;
+  changeCoverImageLabel?: string;
   editable: boolean;
   canUserEdit?: boolean;
   coverImage?: string;

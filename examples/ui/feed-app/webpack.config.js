@@ -31,17 +31,17 @@ module.exports = {
   },
   plugins: [
     new CopyPlugin({
-        patterns: [
-          // { from: 'public', to: '.' },
-          // { from: 'serve.json', to: '.' },
-        ]
-      }),
+      patterns: [
+        // { from: 'public', to: '.' },
+        // { from: 'serve.json', to: '.' },
+      ],
+    }),
     new ModuleFederationPlugin({
       name: 'ethereum_world',
       library: { type: 'amd' },
       filename: 'remoteEntry.js',
       exposes: {
-        ethWorld: './src/index.ts'
+        ethWorld: './src/index.ts',
       },
       remotes: {
         designSystem: 'designSystem',

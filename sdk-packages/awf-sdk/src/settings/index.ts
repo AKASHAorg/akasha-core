@@ -2,7 +2,7 @@ import { injectable, inject } from 'inversify';
 import ISettingsService from '@akashaproject/sdk-typings/lib/interfaces/settings';
 import { TYPES } from '@akashaproject/sdk-typings';
 import { availableCollections, DB } from '../db';
-import { exhaustMap, switchMap } from 'rxjs/operators';
+import { exhaustMap, map, switchMap } from 'rxjs/operators';
 import { createObservableStream } from '../helpers/observable';
 
 @injectable()

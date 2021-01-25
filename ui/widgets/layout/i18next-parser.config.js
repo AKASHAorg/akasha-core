@@ -1,6 +1,5 @@
-
 const baseConfig = require('../../i18next.parser.config');
-const ns =  'ui-widget-layout';
+const ns = 'ui-widget-layout';
 
 module.exports = Object.assign(baseConfig, {
   defaultNamespace: ns,

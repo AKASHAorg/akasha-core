@@ -1,11 +1,8 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import {
-  ILoadItemDataPayload,
-  ILoadItemsPayload,
-} from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
-import { useFeedReducer, useEntryBookmark } from '@akashaproject/ui-awf-hooks';
+import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
+import { useFeedReducer, useEntryBookmark, useProfile } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import {
@@ -13,11 +10,14 @@ import {
   uploadMediaToTextile,
   buildPublishObject,
   PROPERTY_SLATE_CONTENT,
+  createPendingEntry,
 } from '../../services/posting-service';
+import { BASE_FLAG_URL } from '../../services/constants';
 import { redirectToPost } from '../../services/routing-service';
-import { getLoggedProfileStore } from '../../state/logged-profile-state';
 import { combineLatest } from 'rxjs';
-// import { getPostPageCustomEntities } from './post-page-custom-entities';
+import PostRenderer from './post-renderer';
+import { getPendingComments } from './post-page-pending-comments';
+import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
 
 const {
   Box,
@@ -28,9 +28,6 @@ const {
   ModalRenderer,
   useViewportSize,
   VirtualList,
-  ErrorLoader,
-  EntryCardLoading,
-  ErrorInfoCard,
   Helmet,
   CommentEditor,
   EditorPlaceholder,
@@ -40,6 +37,8 @@ interface IPostPage {
   channels: any;
   globalChannel: any;
   logger: any;
+  ethAddress: string | null;
+  pubKey: string | null;
   slotId: string;
   flagged: string;
   reportModalOpen: boolean;
@@ -47,6 +46,7 @@ interface IPostPage {
   setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   showLoginModal: () => void;
   navigateToUrl: (path: string) => void;
+  isMobile: boolean;
 }
 
 const PostPage: React.FC<IPostPage> = props => {
@@ -60,6 +60,8 @@ const PostPage: React.FC<IPostPage> = props => {
     showLoginModal,
     logger,
     navigateToUrl,
+    ethAddress,
+    isMobile,
   } = props;
 
   const { postId } = useParams<{ userId: string; postId: string }>();
@@ -67,16 +69,25 @@ const PostPage: React.FC<IPostPage> = props => {
 
   const [feedState, feedStateActions] = useFeedReducer({});
   const [isLoading, setIsLoading] = React.useState(false);
+  const [pendingComments, setPendingComments] = React.useState<any[]>([]);
 
   const { size } = useViewportSize();
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const Login = getLoggedProfileStore();
-  const loggedEthAddress = Login.useStoreState((state: any) => state.data.ethAddress);
+  const [loginProfile, loginProfileActions] = useProfile({
+    profileService: props.channels.profiles.profileService,
+    ipfsService: props.channels.commons.ipfsService,
+  });
+
+  React.useEffect(() => {
+    if (ethAddress) {
+      loginProfileActions.getProfileData({ ethAddress: ethAddress });
+    }
+  }, [ethAddress]);
 
   const [bookmarks, bookmarkActions] = useEntryBookmark({
-    ethAddress: loggedEthAddress,
+    ethAddress: ethAddress,
     onError: () => {
       return;
     },
@@ -132,15 +143,6 @@ const PostPage: React.FC<IPostPage> = props => {
     });
   };
 
-  const onInitialLoad = async (payload: ILoadItemsPayload) => {
-    const req: { limit: number; offset?: string; postID: string } = {
-      limit: payload.limit,
-      postID: postId,
-    };
-    setIsLoading(true);
-    fetchComments(req);
-  };
-
   const loadItemData = async (payload: ILoadItemDataPayload) => {
     const commentCall = channels.posts.comments.getComment({ commentID: payload.itemId });
     const ipfsGatewayCall = channels.commons.ipfsService.getSettings({});
@@ -181,7 +183,7 @@ const PostPage: React.FC<IPostPage> = props => {
   };
 
   const handleEntryBookmark = (entryId: string) => {
-    if (!loggedEthAddress) {
+    if (!ethAddress) {
       return showLoginModal();
     }
     bookmarkActions.addBookmark(entryId);
@@ -236,16 +238,34 @@ const PostPage: React.FC<IPostPage> = props => {
     content: any;
     textContent: any;
   }) => {
-    if (!loggedEthAddress) {
+    if (!ethAddress) {
       showLoginModal();
       return;
     }
 
     try {
       const publishObj = buildPublishObject(data, postId);
+
+      const pending = createPendingEntry(
+        {
+          ethAddress: loginProfile.ethAddress as string,
+          avatar: loginProfile.avatar,
+          userName: loginProfile.userName,
+          ensName: loginProfile.ensName,
+          coverImage: loginProfile.coverImage,
+          description: loginProfile.description,
+        },
+        data,
+      );
+
+      setPendingComments(prev => prev.concat([pending]));
+
       const publishCommentCall = channels.posts.comments.addComment(publishObj);
       publishCommentCall.subscribe((postingResp: any) => {
         const publishedCommentId = postingResp.data.addComment;
+        const commentData = pending as IEntryData;
+        feedStateActions.setFeedItemData({ ...commentData, entryId: publishedCommentId });
+        setPendingComments([]);
         feedStateActions.setFeedItems({
           reverse: true,
           items: [{ entryId: publishedCommentId }],
@@ -317,8 +337,9 @@ const PostPage: React.FC<IPostPage> = props => {
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
               closeLabel={t('Close')}
-              user={loggedEthAddress ? loggedEthAddress : ''}
+              user={ethAddress ? ethAddress : ''}
               contentId={flagged}
+              baseUrl={BASE_FLAG_URL}
               size={size}
               closeModal={() => {
                 setReportModalOpen(false);
@@ -360,7 +381,7 @@ const PostPage: React.FC<IPostPage> = props => {
                 return;
               }}
               onEntryShare={handleEntryShare}
-              onEntryFlag={handleEntryFlag(entryData.entryId, loggedEthAddress)}
+              onEntryFlag={handleEntryFlag(entryData.entryId, ethAddress)}
               onClickReplies={handleClickReplies}
               handleFollow={handleFollow}
               handleUnfollow={handleUnfollow}
@@ -368,15 +389,16 @@ const PostPage: React.FC<IPostPage> = props => {
               onMentionClick={handleMentionClick}
             />
           </Box>
-          {!loggedEthAddress && (
+          {!ethAddress && (
             <Box margin="medium">
               <EditorPlaceholder onClick={showLoginModal} ethAddress={null} />
             </Box>
           )}
-          {loggedEthAddress && (
+          {ethAddress && (
             <Box margin="medium">
               <CommentEditor
-                ethAddress={loggedEthAddress}
+                avatar={loginProfile.avatar}
+                ethAddress={ethAddress}
                 postLabel={t('Reply')}
                 placeholderLabel={t('Write something')}
                 onPublish={handlePublish}
@@ -393,93 +415,32 @@ const PostPage: React.FC<IPostPage> = props => {
       <VirtualList
         items={feedState.feedItems}
         itemsData={feedState.feedItemData}
-        visitorEthAddress={loggedEthAddress}
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
-        loadInitialFeed={onInitialLoad}
         hasMoreItems={feedState.hasMoreItems}
-        bookmarkedItems={bookmarks}
-        getItemCard={({ itemData, visitorEthAddress, isBookmarked }) => (
-          <ErrorInfoCard errors={{}}>
-            {(errorMessages: any, hasCriticalErrors: boolean) => (
-              <>
-                {errorMessages && (
-                  <ErrorLoader
-                    type="script-error"
-                    title={t('There was an error loading the entry')}
-                    details={t('We cannot show this entry right now')}
-                    devDetails={errorMessages}
-                  />
-                )}
-                {!hasCriticalErrors && (
-                  <>
-                    {(!itemData || !itemData.author?.ethAddress) && <EntryCardLoading />}
-                    {itemData && itemData.author.ethAddress && (
-                      <Box
-                        margin={{ horizontal: 'medium' }}
-                        border={{ side: 'bottom', size: '1px', color: 'border' }}
-                      >
-                        <EntryBox
-                          isBookmarked={isBookmarked}
-                          entryData={itemData}
-                          sharePostLabel={t('Share Post')}
-                          shareTextLabel={t('Share this post with your friends')}
-                          sharePostUrl={'https://ethereum.world'}
-                          onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                            handleAvatarClick(ev, itemData.author.ethAddress)
-                          }
-                          onEntryBookmark={handleEntryBookmark}
-                          repliesLabel={t('Replies')}
-                          repostsLabel={t('Reposts')}
-                          repostLabel={t('Repost')}
-                          repostWithCommentLabel={t('Repost with comment')}
-                          shareLabel={t('Share')}
-                          copyLinkLabel={t('Copy Link')}
-                          copyIPFSLinkLabel={t('Copy IPFS Link')}
-                          flagAsLabel={t('Report Post')}
-                          loggedProfileEthAddress={'0x00123123123123'}
-                          locale={locale}
-                          bookmarkLabel={t('Save')}
-                          bookmarkedLabel={t('Saved')}
-                          onRepost={handleEntryRepost}
-                          onEntryShare={handleEntryShare}
-                          onEntryFlag={handleEntryFlag(itemData.entryId, visitorEthAddress)}
-                          onClickReplies={handleClickReplies}
-                          handleFollow={handleFollow}
-                          handleUnfollow={handleUnfollow}
-                        />
-                      </Box>
-                    )}
-                  </>
-                )}
-              </>
-            )}
-          </ErrorInfoCard>
-        )}
-        // customEntities={getPostPageCustomEntities({
-        //   t,
-        //   locale,
-        //   feedItems: feedState.feedItems,
-        //   loggedEthAddress: loggedEthAddress,
-        //   onAvatarClick: handleAvatarClick,
-        //   onContentClick: handleNavigateToPost,
-        //   isBookmarked,
-        //   entryData,
-        //   onEntryBookmark: handleEntryBookmark,
-        //   showLoginModal,
-        //   handleEntryShare,
-        //   handleEntryFlag,
-        //   handleClickReplies,
-        //   handleFollow,
-        //   handleUnfollow,
-        //   handleNavigateToPost,
-        //   handlePublish,
-        //   handleGetMentions,
-        //   handleGetTags,
-        //   tags,
-        //   mentions,
-        //   onUploadRequest,
-        // })}
+        itemCard={
+          <PostRenderer
+            bookmarks={bookmarks}
+            ethAddress={ethAddress}
+            locale={locale}
+            onFollow={handleFollow}
+            onUnfollow={handleUnfollow}
+            onBookmark={handleEntryBookmark}
+            onNavigate={handleNavigateToPost}
+            onRepliesClick={handleClickReplies}
+            onFlag={handleEntryFlag}
+            onRepost={handleEntryRepost}
+            onShare={handleEntryShare}
+            onAvatarClick={handleAvatarClick}
+          />
+        }
+        customEntities={getPendingComments({
+          locale,
+          isMobile,
+          feedItems: feedState.feedItems,
+          loggedEthAddress: ethAddress,
+          pendingComments: pendingComments,
+        })}
       />
     </MainAreaCardBox>
   );

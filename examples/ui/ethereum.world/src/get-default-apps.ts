@@ -1,11 +1,11 @@
 import { MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-export const getDefaultApps = async (appsPublicPath, pluginsPublicPath, widgetsPublicPath) => {
+export const getDefaultApps = async (appsPublicPath, pluginsPublicPath, _widgetsPublicPath) => {
   // get default apps and widgets from somewhere
   const appSources = [
     {
-      src: `${appsPublicPath}/ens/index.js`,
-      name: 'akashaproject__app_ens_integration',
+      src: `${appsPublicPath}/moderation/index.js`,
+      name: 'akashaproject__app_moderation_ewa',
       moduleName: './app',
       config: {
         area: MenuItemAreaType.AppArea,
@@ -48,16 +48,7 @@ export const getDefaultApps = async (appsPublicPath, pluginsPublicPath, widgetsP
     },
   ];
   // widgets
-  const widgetSources = [
-    {
-      src: `${widgetsPublicPath}/login/index.js`,
-      name: 'akashaproject__ui_widget_login',
-      moduleName: './app',
-      config: {
-        notOnMobile: true,
-      },
-    },
-  ];
+  const widgetSources = [];
 
   return {
     apps: appSources,

@@ -5,6 +5,8 @@ import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
+import { BASE_FLAG_URL } from '../../services/constants';
+
 const { ProfileCard, ModalRenderer, ToastProvider, ReportModal, useViewportSize } = DS;
 
 export interface IProfileHeaderProps {
@@ -12,7 +14,7 @@ export interface IProfileHeaderProps {
   profileData: Partial<IProfileData>;
   loggedUserEthAddress: string | null;
   modalState: ModalState;
-  modalActions: ModalStateActions
+  modalActions: ModalStateActions;
 }
 
 export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps) => {
@@ -31,7 +33,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
 
   const closeReportModal = () => {
     props.modalActions.hide('reportModal');
-  }
+  };
 
   if (!profileData) {
     return null;
@@ -40,7 +42,6 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   const cardData = {
     ...profileData,
   };
-  console.log(profileData);
 
   return (
     <>
@@ -48,7 +49,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         {props.modalState.reportModal && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
-              titleLabel={t('Report a Post')}
+              titleLabel={t('Report a Profile')}
               successTitleLabel={t('Thank you for helping us keep Ethereum World Safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
@@ -74,6 +75,8 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               closeLabel={t('Close')}
               user={loggedUserEthAddress ? loggedUserEthAddress : ''}
               contentId={profileData.ethAddress ? profileData.ethAddress : flagged}
+              contentType={t('profile')}
+              baseUrl={BASE_FLAG_URL}
               size={size}
               closeModal={closeReportModal}
             />
