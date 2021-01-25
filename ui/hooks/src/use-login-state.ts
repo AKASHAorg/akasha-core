@@ -270,15 +270,10 @@ const useLoginState = (
           setLoginState(prev => ({
             ...prev,
             ethAddress: null,
-            token: null,
+            pubKey: null,
           }));
         }
       });
-      setLoginState(prev => ({
-        ...prev,
-        ethAddress: null,
-        token: null,
-      }));
     },
     resetUpdateStatus() {
       setLoginState(prev => ({

@@ -34,13 +34,14 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
       const ipfsGateway = resp[0].data;
       if (resp[1].data.searchProfiles) {
         const profiles = resp[1].data.searchProfiles.map((profile: any) => {
-          if (profile.avatar) {
+          const profileData = Object.assign({}, profile);
+          if (profile.avatar && !profile.avatar.startsWith(ipfsGateway)) {
             const profileAvatarWithGateway = `${ipfsGateway}/${profile.avatar}`;
-            profile.avatar = profileAvatarWithGateway;
+            profileData.avatar = profileAvatarWithGateway;
           }
           // should replace with real data once we integrate follow functionality
-          profile.followers = profile.followers || 0;
-          return profile;
+          profileData.followers = profileData.followers || 0;
+          return profileData;
         });
         setTrendingProfiles(profiles);
       }

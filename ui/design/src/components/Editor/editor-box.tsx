@@ -354,7 +354,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
   };
 
   const mentionsNames = mentions.map(mention => {
-    return mention.userName || mention.ethAddress;
+    return mention.userName || mention.name || mention.ethAddress;
   });
 
   return (
