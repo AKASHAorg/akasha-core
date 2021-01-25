@@ -16,7 +16,6 @@ export interface UseLoginProps {
   onError?: (err: IAkashaError) => void;
   /* sdk authentication module */
   authService: any;
-  cacheService: any;
   profileService: any;
   ipfsService: any;
 }
@@ -48,7 +47,7 @@ const useLoginState = (
   UseLoginState & { profileData: Partial<IProfileData> },
   UseLoginActions & UseProfileActions,
 ] => {
-  const { globalChannel, onError, authService, ipfsService, profileService, cacheService } = props;
+  const { globalChannel, onError, authService, ipfsService, profileService } = props;
   const [loginState, setLoginState] = React.useState<UseLoginState>({
     ethAddress: null,
     pubKey: null,
@@ -92,31 +91,30 @@ const useLoginState = (
 
   React.useEffect(() => {
     // make an attempt to load the eth address from cache;
-    const getDeps = cacheService.getStash(null);
-    getDeps.subscribe(
-      (resp: { data: any }) => {
-        const { data } = resp;
-        if (data.entries.has('auth')) {
-          const authValue = data.cache.get('auth');
-          if (authValue.hasOwnProperty('ethAddress')) {
+    if (authService) {
+      const getDeps = authService.getCurrentUser(null);
+      getDeps.subscribe(
+        (resp: { data: any }) => {
+          const { data } = resp;
+          if (data?.ethAddress && data?.pubKey) {
             setLoginState(prev => ({
               ...prev,
-              ethAddress: authValue.ethAddress,
-              token: authValue.token,
+              ethAddress: data.ethAddress,
+              pubKey: data.pubKey,
             }));
           }
-        }
-      },
-      (err: Error) => {
-        if (onError) {
-          onError({
-            errorKey: 'useLoginState.cacheService',
-            error: err,
-            critical: false,
-          });
-        }
-      },
-    );
+        },
+        (err: Error) => {
+          if (onError) {
+            onError({
+              errorKey: 'useLoginState.authService',
+              error: err,
+              critical: false,
+            });
+          }
+        },
+      );
+    }
   }, []);
 
   const actions: UseLoginActions = {
@@ -139,8 +137,7 @@ const useLoginState = (
         }
       };
       const obs = [];
-
-      if (avatar.src && avatar.preview !== loggedProfileData.avatar) {
+      if (avatar && avatar.src && avatar.preview !== loggedProfileData.avatar) {
         setLoginState(prev => ({
           ...prev,
           updateStatus: { ...prev.updateStatus, uploadingAvatar: true },
@@ -153,10 +150,10 @@ const useLoginState = (
           }),
         );
       } else {
-        obs.push(Promise.resolve());
+        obs.push(Promise.resolve(null));
       }
 
-      if (coverImage.src && coverImage.preview !== loggedProfileData.coverImage) {
+      if (coverImage && coverImage.src && coverImage.preview !== loggedProfileData.coverImage) {
         setLoginState(prev => ({
           ...prev,
           updateStatus: { ...prev.updateStatus, uploadingCoverImage: true },
@@ -169,11 +166,15 @@ const useLoginState = (
           }),
         );
       } else {
-        obs.push(Promise.resolve());
+        // setting to null will not do anything
+        obs.push(Promise.resolve(null));
       }
 
-      forkJoin(obs).subscribe((responses: any[]) => {
-        const [avatarRes, coverImageRes] = responses;
+      const ipfsSettings = ipfsService.getSettings({});
+      forkJoin([...obs, ipfsSettings]).subscribe((responses: any[]) => {
+        const [avatarRes, coverImageRes, ipfsSettingsRes] = responses;
+        const ipfsGateway = ipfsSettingsRes.data;
+
         setLoginState(prev => ({
           ...prev,
           updateStatus: {
@@ -183,18 +184,33 @@ const useLoginState = (
           },
         }));
         const providers: any[] = [];
-        if (avatarRes) {
+
+        if (!avatarRes && avatar === null) {
           providers.push({
             provider: 'ewa.providers.basic',
             property: 'avatar',
-            value: avatarRes.data?.CID,
+            value: '',
           });
         }
-        if (coverImageRes) {
+        if (avatarRes && avatarRes.data) {
+          providers.push({
+            provider: 'ewa.providers.basic',
+            property: 'avatar',
+            value: avatarRes.data.CID,
+          });
+        }
+        if (!coverImageRes && coverImage === null) {
           providers.push({
             provider: 'ewa.providers.basic',
             property: 'coverImage',
-            value: coverImageRes.data?.CID,
+            value: '',
+          });
+        }
+        if (coverImageRes && coverImageRes.data) {
+          providers.push({
+            provider: 'ewa.providers.basic',
+            property: 'coverImage',
+            value: coverImageRes.data.CID,
           });
         }
         if (description) {
@@ -214,7 +230,17 @@ const useLoginState = (
         const makeDefault = profileService.makeDefaultProvider(providers);
         makeDefault.subscribe((_res: any) => {
           const updatedFields = providers
-            .map(provider => ({ [provider.property]: provider.value }))
+            .map(provider => {
+              if (
+                (provider.property === 'coverImage' || provider.property === 'avatar') &&
+                !!provider.value
+              ) {
+                return {
+                  [provider.property]: `${ipfsGateway}/${provider.value}`,
+                };
+              }
+              return { [provider.property]: provider.value };
+            })
             .reduce((acc, curr) => Object.assign(acc, curr), {});
           loggedProfileActions.updateProfile(updatedFields);
           setLoginState(prev => ({
@@ -238,10 +264,10 @@ const useLoginState = (
         );
         race(call, globalCall).subscribe(
           (response: any) => {
-            const { token, ethAddress } = response.data;
+            const { pubKey, ethAddress } = response.data;
             setLoginState(prev => ({
               ...prev,
-              token,
+              pubKey,
               ethAddress,
             }));
           },
@@ -266,6 +292,16 @@ const useLoginState = (
       }
     },
     logout() {
+      const call = authService.signOut(null);
+      call.subscribe((resp: any) => {
+        if (resp.data) {
+          setLoginState(prev => ({
+            ...prev,
+            ethAddress: null,
+            token: null,
+          }));
+        }
+      });
       setLoginState(prev => ({
         ...prev,
         ethAddress: null,

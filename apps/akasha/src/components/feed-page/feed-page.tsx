@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useFeedReducer, useEntryBookmark } from '@akashaproject/ui-awf-hooks';
+import { useFeedReducer, useEntryBookmark, useProfile } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import {
   ILoadItemDataPayload,
@@ -13,30 +13,35 @@ import {
   uploadMediaToTextile,
   buildPublishObject,
   PROPERTY_SLATE_CONTENT,
+  createPendingEntry,
 } from '../../services/posting-service';
+import { BASE_FLAG_URL } from '../../services/constants';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
+import EntryCardRenderer from './entry-card-renderer';
+import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
+import { application as loginWidget } from '@akashaproject/ui-widget-login/lib/bootstrap';
+
+// @ts-ignore
+import Parcel from 'single-spa-react/parcel';
 
 const {
   Box,
   Helmet,
   VirtualList,
-  ErrorLoader,
-  EntryCardLoading,
-  EntryCard,
   ReportModal,
   ToastProvider,
   ModalRenderer,
-  ErrorInfoCard,
   useViewportSize,
   EditorModal,
+  EditorPlaceholder,
 } = DS;
 
 export interface FeedPageProps {
   globalChannel: any;
   sdkModules: any;
-  navigateToUrl: (path: string) => void;
+  singleSpa: any;
   logger: any;
   showLoginModal: () => void;
   ethAddress: string | null;
@@ -52,7 +57,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const {
     isMobile,
     flagged,
-    navigateToUrl,
     reportModalOpen,
     setFlagged,
     setReportModalOpen,
@@ -67,6 +71,17 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [showEditor, setShowEditor] = React.useState(false);
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
+  const [pendingEntries, setPendingEntries] = React.useState<any[]>([]);
+  const [loginProfile, loginProfileActions] = useProfile({
+    profileService: sdkModules.profiles.profileService,
+    ipfsService: sdkModules.commons.ipfsService,
+  });
+
+  React.useEffect(() => {
+    if (ethAddress && !loginProfile.ethAddress) {
+      loginProfileActions.getProfileData({ ethAddress });
+    }
+  }, [ethAddress, loginProfile.ethAddress]);
 
   const { size } = useViewportSize();
 
@@ -108,8 +123,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       ...payload,
       offset: payload.offset || feedState.nextItemId,
     });
+
     const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
     const call = combineLatest([ipfsGatewayCall, getEntriesCall]);
+
     call.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
       const {
@@ -117,10 +134,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       }: { channelInfo: any; data: { posts: { nextIndex: string; results: any[] } } } = resp[1];
       const { nextIndex, results } = data.posts;
       const entryIds: { entryId: string }[] = [];
-      results.forEach(entry => {
+      results.forEach(async entry => {
         // filter out entries without content in slate format
         // currently entries can display only content in slate format
         // this can be changed later
+
         if (entry.content.findIndex((elem: any) => elem.property === PROPERTY_SLATE_CONTENT) > -1) {
           entryIds.push({ entryId: entry._id });
           const mappedEntry = mapEntry(entry, ipfsGateway);
@@ -135,20 +153,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     });
   };
 
-  const onInitialLoad = async (payload: ILoadItemsPayload) => {
-    const req: { limit: number; offset?: string } = {
-      limit: payload.limit,
-    };
-    setIsLoading(true);
-    fetchEntries(req);
-  };
-
-  const handleMentionClick = (profileEthAddress: string) => {
-    navigateToUrl(`/profile/${profileEthAddress}`);
-  };
-
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
-    navigateToUrl(`/profile/${authorEth}`);
+    props.singleSpa.navigateToUrl(`/profile/${authorEth}`);
     ev.preventDefault();
   };
   const handleEntryBookmark = (entryId: string) => {
@@ -236,7 +242,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     sdkModules.commons.ipfsService,
   );
 
-  const handleNavigateToPost = redirectToPost(props.navigateToUrl);
+  const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
   const handleEntryPublish = async (data: {
     metadata: {
@@ -254,12 +260,31 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       showLoginModal();
       return;
     }
-
     try {
       const publishObj = buildPublishObject(data);
+      const pending = createPendingEntry(
+        {
+          ethAddress: loginProfile.ethAddress as string,
+          avatar: loginProfile.avatar,
+          userName: loginProfile.userName,
+          ensName: loginProfile.ensName,
+          coverImage: loginProfile.coverImage,
+          description: loginProfile.description,
+        },
+        data,
+      );
+
       const postEntryCall = sdkModules.posts.entries.postEntry(publishObj);
+      setPendingEntries(prev => prev.concat([{ ...pending, quote: currentEmbedEntry }]));
       postEntryCall.subscribe((postingResp: any) => {
         const publishedEntryId = postingResp.data.createPost;
+        const entryData = pending as IEntryData;
+        feedStateActions.setFeedItemData({
+          ...entryData,
+          entryId: publishedEntryId,
+          quote: currentEmbedEntry,
+        });
+        setPendingEntries([]);
         feedStateActions.setFeedItems({
           reverse: true,
           items: [{ entryId: publishedEntryId }],
@@ -270,7 +295,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
     setShowEditor(false);
   };
-
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -306,6 +330,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               closeLabel={t('Close')}
               user={ethAddress ? ethAddress : ''}
               contentId={flagged}
+              contentType={t('post')}
+              baseUrl={BASE_FLAG_URL}
               size={size}
               closeModal={() => {
                 setReportModalOpen(false);
@@ -316,6 +342,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       </ModalRenderer>
       <EditorModal
         slotId={props.layout.app.modalSlotId}
+        avatar={loginProfile.avatar}
         showModal={showEditor}
         ethAddress={ethAddress as any}
         postLabel={t('Publish')}
@@ -338,72 +365,52 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <VirtualList
         items={feedState.feedItems}
         itemsData={feedState.feedItemData}
-        visitorEthAddress={ethAddress}
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
-        loadInitialFeed={onInitialLoad}
         hasMoreItems={feedState.hasMoreItems}
-        bookmarkedItems={bookmarks}
-        getItemCard={({ itemData, visitorEthAddress, isBookmarked }) => (
-          <ErrorInfoCard errors={{}}>
-            {(errorMessages: any, hasCriticalErrors: boolean) => (
-              <>
-                {errorMessages && (
-                  <ErrorLoader
-                    type="script-error"
-                    title={t('There was an error loading the entry')}
-                    details={t('We cannot show this entry right now')}
-                    devDetails={errorMessages}
-                  />
-                )}
-                {!hasCriticalErrors && (
-                  <>
-                    {(!itemData || !itemData.author?.ethAddress) && <EntryCardLoading />}
-                    {itemData && itemData.author.ethAddress && (
-                      <EntryCard
-                        isBookmarked={isBookmarked}
-                        entryData={itemData}
-                        sharePostLabel={t('Share Post')}
-                        shareTextLabel={t('Share this post with your friends')}
-                        sharePostUrl={'https://ethereum.world'}
-                        onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                          handleAvatarClick(ev, itemData.author.ethAddress)
-                        }
-                        onEntryBookmark={handleEntryBookmark}
-                        repliesLabel={t('Replies')}
-                        repostsLabel={t('Reposts')}
-                        repostLabel={t('Repost')}
-                        repostWithCommentLabel={t('Repost with comment')}
-                        shareLabel={t('Share')}
-                        copyLinkLabel={t('Copy Link')}
-                        copyIPFSLinkLabel={t('Copy IPFS Link')}
-                        flagAsLabel={t('Report Post')}
-                        loggedProfileEthAddress={ethAddress as any}
-                        locale={locale}
-                        style={{ height: 'auto' }}
-                        bookmarkLabel={t('Save')}
-                        bookmarkedLabel={t('Saved')}
-                        onRepost={handleEntryRepost}
-                        onEntryShare={handleEntryShare}
-                        onEntryFlag={handleEntryFlag(itemData.CID, visitorEthAddress)}
-                        onClickReplies={handleClickReplies}
-                        handleFollow={handleFollow}
-                        handleUnfollow={handleUnfollow}
-                        onContentClick={handleNavigateToPost}
-                        onMentionClick={handleMentionClick}
-                      />
-                    )}
-                  </>
-                )}
-              </>
-            )}
-          </ErrorInfoCard>
-        )}
+        listHeader={
+          ethAddress ? (
+            <EditorPlaceholder
+              ethAddress={ethAddress}
+              onClick={handleToggleEditor}
+              style={{ marginTop: 8 }}
+              avatar={loginProfile.avatar}
+            />
+          ) : (
+            <>
+              <Parcel
+                config={loginWidget.loadingFn}
+                wrapWith="div"
+                sdkModules={props.sdkModules}
+                logger={props.logger}
+                layout={props.layout}
+                globalChannel={props.globalChannel}
+                i18n={props.i18n}
+              />
+            </>
+          )
+        }
+        itemCard={
+          <EntryCardRenderer
+            bookmarks={bookmarks}
+            ethAddress={ethAddress}
+            locale={locale}
+            onFollow={handleFollow}
+            onUnfollow={handleUnfollow}
+            onBookmark={handleEntryBookmark}
+            onNavigate={handleNavigateToPost}
+            onRepliesClick={handleClickReplies}
+            onFlag={handleEntryFlag}
+            onRepost={handleEntryRepost}
+            onShare={handleEntryShare}
+            onAvatarClick={handleAvatarClick}
+          />
+        }
         customEntities={getFeedCustomEntities({
           isMobile,
           feedItems: feedState.feedItems,
           loggedEthAddress: ethAddress,
-          handleEditorPlaceholderClick: handleToggleEditor,
+          pendingEntries: pendingEntries,
         })}
       />
     </Box>

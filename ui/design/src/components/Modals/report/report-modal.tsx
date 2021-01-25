@@ -1,13 +1,13 @@
 import React from 'react';
 import { useToasts } from 'react-toast-notifications';
-import { Box, Text, RadioButton, FormField } from 'grommet';
+import { Box, Text, FormField, RadioButtonGroup } from 'grommet';
 
 import { MainAreaCardBox } from '../../Cards/common/basic-card-box';
 import { ModalWrapper } from '../common/styled-modal';
 import { Button } from '../../Buttons';
 import { Icon } from '../../Icon';
 
-import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from './styled';
+import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from '../styled';
 import ReportSuccessModal, { IReportSuccessModalProps } from './report-success-modal';
 
 export interface IReportModalProps extends IReportSuccessModalProps {
@@ -26,6 +26,8 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   reportLabel?: string;
   user?: string;
   contentId?: string;
+  contentType?: string;
+  baseUrl?: string;
   // screen size passed by viewport provider
   size?: string;
 }
@@ -52,11 +54,13 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     closeLabel,
     user,
     contentId,
+    contentType,
+    baseUrl,
     size,
     closeModal,
   } = props;
 
-  const [reasons, setReasons] = React.useState<string[]>([]);
+  const [reason, setReason] = React.useState<string>('');
   const [explanation, setExplanation] = React.useState('');
   const [requesting, setRequesting] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
@@ -66,18 +70,6 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const { addToast } = useToasts();
-
-  const handleSelectReason = (selected: string) => {
-    if (!reasons.includes(selected)) {
-      setReasons(reasons.concat(selected));
-    }
-  };
-
-  const handleClickReason = (clicked: string) => {
-    if (reasons.includes(clicked)) {
-      setReasons(reasons.filter(reasn => reasn !== clicked));
-    }
-  };
 
   const handleChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (textAreaRef.current && hiddenSpanRef.current) {
@@ -93,7 +85,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   };
 
   const handleCancel = () => {
-    setReasons([]);
+    setReason('');
     setExplanation('');
     return closeModal();
   };
@@ -114,18 +106,19 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     const dataToPost = {
       user,
       contentId,
-      reasons,
+      contentType,
+      reason,
       explanation,
     };
 
     setRequesting(true);
 
-    postData('https://akasha-mod.herokuapp.com/flags', dataToPost)
+    postData(baseUrl, dataToPost)
       .then(status => {
         setRequesting(false);
         if (status === 409) {
           throw new Error('This content has already been flagged by you');
-        } else if (status === 500) {
+        } else if (status >= 400) {
           throw new Error('Unable to process your request right now. Please try again later');
         }
         return setSuccess(true);
@@ -192,17 +185,13 @@ const ReportModal: React.FC<IReportModalProps> = props => {
               </Text>
             </StyledText>
             <Box direction="column">
-              {optionLabels.map(label => (
-                <Box key={label} margin={{ top: 'xsmall' }}>
-                  <RadioButton
-                    name="prop"
-                    checked={reasons.some(el => el === label)}
-                    label={label}
-                    onChange={() => handleSelectReason(label)}
-                    onClick={() => handleClickReason(label)}
-                  />
-                </Box>
-              ))}
+              <RadioButtonGroup
+                gap="xxsmall"
+                name="reasons"
+                options={optionLabels}
+                value={reason}
+                onChange={(event: any) => setReason(event.target.value)}
+              />
             </Box>
             <StyledText
               margin={{ top: 'medium' }}
@@ -263,7 +252,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 label={reportLabel}
                 fill={size === 'small' ? true : false}
                 onClick={handleReport}
-                disabled={requesting ? true : reasons.every(rsn => !rsn) ? true : false}
+                disabled={requesting || !reason.length}
               />
             </Box>
           </Box>

@@ -1,36 +1,36 @@
 import * as React from 'react';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useGlobalLogin } from '@akashaproject/ui-awf-hooks';
 import routes, { NEW_POST, FEED, POSTS, rootRoute } from '../routes';
 import FeedPage from './feed-page/feed-page';
 import NewPostPage from './new-post-page';
 import PostsPage from './posts-page';
-import { createContextStore, ActionMapper } from 'easy-peasy';
-import { LoggedProfileStateModel } from '../state/logged-profile-state';
 import { useTranslation } from 'react-i18next';
+import { useLoginState } from '@akashaproject/ui-awf-hooks';
 
 const { Box, LoginModal, ViewportSizeProvider } = DS;
 interface AppRoutesProps {
-  profileStore: ReturnType<typeof createContextStore>;
   onError: (err: Error) => void;
 }
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
-  const { sdkModules, globalChannel, logger, singleSpa, layout, profileStore, onError } = props;
+  const { sdkModules, globalChannel, logger, singleSpa, layout, onError } = props;
 
   const { t } = useTranslation();
 
-  const pubKey = profileStore.useStoreState((state: LoggedProfileStateModel) => state.data.pubKey);
-  const ethAddress = profileStore.useStoreState(
-    (state: LoggedProfileStateModel) => state.data.ethAddress,
-  );
-  const updateData = profileStore.useStoreActions(
-    (act: ActionMapper<LoggedProfileStateModel, '1'>) => act.updateData,
-  );
-  const authorize = profileStore.useStoreActions(
-    (act: ActionMapper<LoggedProfileStateModel, '1'>) => act.authorize,
-  );
+  const [loginState, loginActions] = useLoginState({
+    globalChannel: globalChannel,
+    onError: (err: IAkashaError) => {
+      logger('useLoginState error %j', err);
+    },
+    authService: sdkModules.auth.authService,
+    ipfsService: sdkModules.commons.ipfsService,
+    profileService: sdkModules.profiles.profileService,
+  });
+
+  const pubKey = loginState.pubKey;
+  const ethAddress = loginState.ethAddress;
+
   const [loginModalState, setLoginModalState] = React.useState(false);
   const [reportModalOpen, setReportModalOpen] = React.useState(false);
   const [flagged, setFlagged] = React.useState('');
@@ -44,7 +44,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   };
 
   const handleLogin = (providerId: number) => {
-    authorize(providerId);
+    loginActions.login(providerId);
   };
 
   React.useEffect(() => {
@@ -59,21 +59,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
       setReportModalOpen(true);
     }
   }, [ethAddress]);
-
-  useGlobalLogin(
-    globalChannel,
-    data => {
-      updateData({
-        ethAddress: data.ethAddress,
-        pubKey: data.pubKey,
-      });
-    },
-    err => {
-      logger.error('[app-routes.tsx]: useGlobalState err %j', err.error);
-      onError(err.error);
-      setLoginModalState(false);
-    },
-  );
 
   const handleTutorialLinkClick = () => {
     /* goto tutorials */
@@ -91,12 +76,13 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
                 logger={logger}
                 showLoginModal={showLoginModal}
                 onError={onError}
+                ethAddress={ethAddress}
+                pubKey={pubKey}
               />
             </Route>
             <Route path={routes[FEED]}>
               <FeedPage
                 {...props}
-                navigateToUrl={singleSpa.navigateToUrl}
                 ethAddress={ethAddress}
                 pubKey={pubKey}
                 flagged={flagged}
@@ -113,6 +99,8 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
                 sdkModules={sdkModules}
                 globalChannel={globalChannel}
                 logger={logger}
+                ethAddress={ethAddress}
+                pubKey={pubKey}
                 navigateToUrl={singleSpa.navigateToUrl}
                 flagged={flagged}
                 reportModalOpen={reportModalOpen}

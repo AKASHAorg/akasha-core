@@ -25,7 +25,6 @@ export interface IImagePopover {
   insertLabel?: string;
   uploadFailedLabel?: string;
   fetchImageFailedLabel?: string;
-  tryAgainLabel?: string;
   target: HTMLElement;
   closePopover: () => void;
   insertImage: (data: {
@@ -54,7 +53,6 @@ const ImagePopover: React.FC<IImagePopover> = props => {
     insertLabel,
     uploadFailedLabel,
     fetchImageFailedLabel,
-    tryAgainLabel,
   } = props;
 
   const [linkInputValue, setLinkInputValue] = useState('');
@@ -234,7 +232,6 @@ const ImagePopover: React.FC<IImagePopover> = props => {
                         </Box>
                         <Box direction="row" gap="xsmall" align="center">
                           <Text color="errorText">{uploadFailedLabel}</Text>
-                          <Text color="accentText">{tryAgainLabel}</Text>
                         </Box>
                       </Box>
                     </Box>
@@ -265,7 +262,6 @@ const ImagePopover: React.FC<IImagePopover> = props => {
               {uploadErrorState && (
                 <Box direction="column" gap="xsmall" align="start" justify="center">
                   <Text color="errorText">{fetchImageFailedLabel}</Text>
-                  <Text color="accentText">{tryAgainLabel}</Text>
                 </Box>
               )}
             </Box>
@@ -296,7 +292,6 @@ ImagePopover.defaultProps = {
   insertLabel: 'Insert',
   uploadFailedLabel: 'Upload failed.',
   fetchImageFailedLabel: 'Sorry, we could not fetch the image.',
-  tryAgainLabel: 'Try again.',
 };
 
 export { ImagePopover };

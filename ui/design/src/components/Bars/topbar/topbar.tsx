@@ -20,6 +20,7 @@ export interface ITopbarProps {
   ethAddress: string | null;
   brandLabel: string;
   signInLabel?: string;
+  logoutLabel?: string;
   unreadNotifications?: number;
   quickAccessItems: IMenuItem[] | null;
   searchAreaItem?: IMenuItem;
@@ -32,6 +33,7 @@ export interface ITopbarProps {
   // viewport size
   size?: string;
   onLoginClick: () => void;
+  onLogout: any;
 }
 
 const Topbar = (props: ITopbarProps) => {
@@ -39,6 +41,7 @@ const Topbar = (props: ITopbarProps) => {
     avatarImage,
     brandLabel,
     signInLabel,
+    logoutLabel,
     className,
     quickAccessItems,
     searchAreaItem,
@@ -48,12 +51,14 @@ const Topbar = (props: ITopbarProps) => {
     ethAddress,
     size,
     onLoginClick,
+    onLogout,
   } = props;
 
   const [inputValue, setInputValue] = React.useState('');
   // const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   const [dropOpen, setDropOpen] = React.useState(false);
+  const [avatarDropOpen, setAvatarDropOpen] = React.useState(false);
   const [dropItems, setDropItems] = React.useState<IMenuItem[]>([]);
 
   const [currentDropItem, setCurrentDropItem] = React.useState<IMenuItem | null>(null);
@@ -65,6 +70,7 @@ const Topbar = (props: ITopbarProps) => {
       onNavigation(menuItem.route);
     }
     setDropOpen(false);
+    setAvatarDropOpen(false);
   };
 
   // const handleSidebarVisibility = () => {
@@ -82,6 +88,16 @@ const Topbar = (props: ITopbarProps) => {
     if (menuItem.subRoutes && menuItem.subRoutes.length > 0) {
       setDropItems(menuItem.subRoutes);
       setDropOpen(true);
+    } else {
+      onNavigation(menuItem.route);
+    }
+  };
+
+  const onClickAvatarButton = (menuItem: IMenuItem) => () => {
+    setCurrentDropItem(menuItem);
+    if (menuItem.subRoutes && menuItem.subRoutes.length > 0) {
+      setDropItems(menuItem.subRoutes);
+      setAvatarDropOpen(true);
     } else {
       onNavigation(menuItem.route);
     }
@@ -107,13 +123,47 @@ const Topbar = (props: ITopbarProps) => {
         border={{ style: 'solid', size: '1px', color: 'border', side: 'all' }}
       >
         {dropItems.map((menuItem: IMenuItem, index: number) => (
-          <Box onClick={handleNavigation(menuItem)} key={index}>
+          <Box fill="horizontal" onClick={handleNavigation(menuItem)} key={index}>
             <StyledText>{menuItem.label}</StyledText>
           </Box>
         ))}
       </Box>
     </StyledDrop>
   );
+
+  const renderAvatarDrop = () => (
+    <StyledDrop
+      target={currentDropItem && menuItemRefs.current[currentDropItem?.index]}
+      onClickOutside={() => {
+        setAvatarDropOpen(false);
+      }}
+      onEsc={() => {
+        setAvatarDropOpen(false);
+      }}
+      align={{ top: 'bottom', right: 'right' }}
+    >
+      <Box
+        round="xxsmall"
+        pad="xsmall"
+        align="center"
+        justify="start"
+        gap="xsmall"
+        border={{ style: 'solid', size: '1px', color: 'border', side: 'all' }}
+      >
+        {dropItems.map((menuItem: IMenuItem, index: number) => (
+          <Box fill="horizontal" onClick={handleNavigation(menuItem)} key={index}>
+            <StyledText>{menuItem.label}</StyledText>
+          </Box>
+        ))}
+        {ethAddress && (
+          <Box fill="horizontal" justify="start" direction="row" onClick={onLogout}>
+            <StyledText>{logoutLabel}</StyledText>
+          </Box>
+        )}
+      </Box>
+    </StyledDrop>
+  );
+
   const renderPluginButton = (menuItem: IMenuItem, index: number) => (
     <StyledDiv
       key={index}
@@ -127,7 +177,7 @@ const Topbar = (props: ITopbarProps) => {
           ethAddress={ethAddress}
           src={avatarImage}
           size="sm"
-          onClick={onClickPluginButton(menuItem)}
+          onClick={onClickAvatarButton(menuItem)}
         />
       ) : (
         <Icon type={menuItem.logo?.value || 'app'} size="sm" clickable={true} />
@@ -193,6 +243,7 @@ const Topbar = (props: ITopbarProps) => {
     >
       {renderContent()}
       {dropOpen && renderDrop()}
+      {avatarDropOpen && renderAvatarDrop()}
     </TopbarWrapper>
   );
 };
@@ -203,6 +254,7 @@ Topbar.defaultProps = {
   },
   unreadNotifications: 0,
   signInLabel: 'Sign In',
+  logoutLabel: 'Logout',
 };
 
 export { Topbar };

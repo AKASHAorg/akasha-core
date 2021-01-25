@@ -18,6 +18,7 @@ import isHotkey from 'is-hotkey';
 import { MentionPopover } from './mention-popover';
 import { EditorMeter } from './editor-meter';
 import { serializeToPlainText } from './serialize';
+import { editorDefaultValue } from './initialValue';
 
 export interface IEditorBox {
   avatar?: string;
@@ -151,6 +152,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
     const textContent: string = serializeToPlainText({ children: content });
     const data = { metadata, content, textContent, author: ethAddress };
     onPublish(data);
+    setEditorState(editorDefaultValue);
   };
 
   const reducer = (acc: number, val: number) => acc + val;

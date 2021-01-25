@@ -9,13 +9,16 @@ import { useParams, useRouteMatch } from 'react-router-dom';
 import { fetchFeedItems, fetchFeedItemData } from '../services/feed-service';
 import { redirectToPost } from '../services/routing-service';
 import DS from '@akashaproject/design-system';
+import EntryCardRenderer from './feed-page/entry-card-renderer';
 
-const { Helmet, VirtualList, ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard } = DS;
+const { Helmet, VirtualList /* ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard */ } = DS;
 
 interface IPostsListProps {
   channels: any;
   logger: any;
   globalChannel: any;
+  ethAddress: string | null;
+  pubKey: string | null;
   navigateToUrl: (path: string) => void;
 }
 
@@ -47,7 +50,7 @@ const postsStateReducer = (state: IPostsState, action: { type: string; payload: 
 const PostsList: React.FC<IPostsListProps> = props => {
   const { userId } = useParams<{ userId: string }>();
 
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [postsState, dispatch] = React.useReducer(postsStateReducer, {
@@ -79,19 +82,6 @@ const PostsList: React.FC<IPostsListProps> = props => {
     }
   };
 
-  const onInitialLoad = async (payload: ILoadItemsPayload) => {
-    const response = await fetchFeedItems({
-      start: payload.start,
-      limit: payload.limit,
-      reverse: payload.reverse,
-    });
-    if (response.items.length) {
-      dispatch({
-        type: 'LOAD_POST_ITEMS_SUCCESS',
-        payload: response.items.map(i => i.entryId),
-      });
-    }
-  };
   const handleAvatarClick = () => {
     /* todo */
   };
@@ -104,7 +94,7 @@ const PostsList: React.FC<IPostsListProps> = props => {
   const handleEntryShare = () => {
     /* todo */
   };
-  const handleEntryFlag = () => {
+  const handleEntryFlag = (_entryId: string, _author: string | null) => () => {
     /* todo */
   };
   const handleClickReplies = () => {
@@ -128,60 +118,21 @@ const PostsList: React.FC<IPostsListProps> = props => {
           itemsData={postsState.postItemData}
           loadMore={handleLoadMore}
           loadItemData={loadItemData}
-          loadInitialFeed={onInitialLoad}
           hasMoreItems={true}
-          getItemCard={({ itemData, isBookmarked }) => (
-            <ErrorInfoCard errors={{}}>
-              {(errorMessages, hasCriticalErrors) => (
-                <>
-                  {errorMessages && (
-                    <ErrorLoader
-                      type="script-error"
-                      title={t('There was an error loading the entry')}
-                      details={t('We cannot show this entry right now')}
-                      devDetails={errorMessages}
-                    />
-                  )}
-                  {!hasCriticalErrors && (
-                    <>
-                      {(!itemData || !itemData.author?.ethAddress) && <EntryCardLoading />}
-                      {itemData && itemData.author.ethAddress && (
-                        <EntryCard
-                          isBookmarked={isBookmarked}
-                          entryData={itemData}
-                          sharePostLabel={t('Share Post')}
-                          shareTextLabel={t('Share this post with your friends')}
-                          sharePostUrl={'https://ethereum.world'}
-                          onClickAvatar={handleAvatarClick}
-                          onEntryBookmark={handleEntryBookmark}
-                          repliesLabel={t('Replies')}
-                          repostsLabel={t('Reposts')}
-                          repostLabel={t('Repost')}
-                          repostWithCommentLabel={t('Repost with comment')}
-                          shareLabel={t('Share')}
-                          copyLinkLabel={t('Copy Link')}
-                          copyIPFSLinkLabel={t('Copy IPFS Link')}
-                          flagAsLabel={t('Flag as inappropiate')}
-                          loggedProfileEthAddress={'0x00123123123123'}
-                          locale={locale}
-                          style={{ height: 'auto' }}
-                          bookmarkLabel={t('Save')}
-                          bookmarkedLabel={t('Saved')}
-                          onRepost={handleEntryRepost}
-                          onEntryShare={handleEntryShare}
-                          onEntryFlag={handleEntryFlag}
-                          onClickReplies={handleClickReplies}
-                          handleFollow={handleFollow}
-                          handleUnfollow={handleUnfollow}
-                          onContentClick={redirectToPost(props.navigateToUrl)}
-                        />
-                      )}
-                    </>
-                  )}
-                </>
-              )}
-            </ErrorInfoCard>
-          )}
+          itemCard={
+            <EntryCardRenderer
+              locale={locale}
+              onFollow={handleFollow}
+              onUnfollow={handleUnfollow}
+              onBookmark={handleEntryBookmark}
+              onNavigate={redirectToPost(props.navigateToUrl)}
+              onRepliesClick={handleClickReplies}
+              onFlag={handleEntryFlag}
+              onRepost={handleEntryRepost}
+              onShare={handleEntryShare}
+              onAvatarClick={handleAvatarClick}
+            />
+          }
         />
       )}
     </>

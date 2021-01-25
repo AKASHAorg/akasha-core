@@ -5,6 +5,7 @@ import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { TextIcon } from '../../TextIcon';
 import { IEntryData } from './entry-box';
 import { MobileListModal } from '../../Modals';
+import styled from 'styled-components';
 
 export type ServiceNames = 'twitter' | 'reddit' | 'facebook';
 
@@ -41,11 +42,24 @@ export interface CardActionProps {
   onLinkCopy: () => void;
 }
 
+const BookmarkButton = styled(TextIcon)<{ isBookmarked?: boolean }>`
+  svg * {
+    ${props => {
+      if (props.isBookmarked) {
+        return `
+          fill: ${props.theme.colors.blue};
+          stroke: ${props.theme.colors.blue};
+        `;
+      }
+      return '';
+    }}
+  }
+`;
+
 const CardActions: React.FC<CardActionProps> = props => {
   const {
     // data
     entryData,
-    loggedProfileEthAddress,
     // share data
     sharePostLabel,
     shareTextLabel,
@@ -84,9 +98,9 @@ const CardActions: React.FC<CardActionProps> = props => {
     url: sharePostUrl,
   };
 
-  const handleRepostsOpen = () => {
-    setRepostDropOpen(!repostDropOpen);
-  };
+  // const handleRepostsOpen = () => {
+  //   setRepostDropOpen(!repostDropOpen);
+  // };
   const handleRepostsClose = () => {
     setRepostDropOpen(false);
   };
@@ -264,7 +278,7 @@ const CardActions: React.FC<CardActionProps> = props => {
         iconSize="md"
         clickable={true}
         ref={repostNodeRef}
-        onClick={handleRepostsOpen}
+        onClick={onRepost}
       />
       <TextIcon
         label={repliesBtnText}
@@ -273,16 +287,14 @@ const CardActions: React.FC<CardActionProps> = props => {
         clickable={true}
         onClick={handleRepliesClick}
       />
-
-      {isBookmarked !== null && (
-        <TextIcon
-          label={bookmarkBtnText}
-          iconType="bookmark"
-          iconSize="md"
-          clickable={!!loggedProfileEthAddress}
-          onClick={handleEntryBookmark}
-        />
-      )}
+      <BookmarkButton
+        label={bookmarkBtnText}
+        iconType="bookmark"
+        iconSize="md"
+        clickable={true}
+        onClick={handleEntryBookmark}
+        isBookmarked={isBookmarked}
+      />
       {shareNodeRef.current && shareDropOpen && renderShareDrop()}
       <TextIcon
         label={shareBtnText}
