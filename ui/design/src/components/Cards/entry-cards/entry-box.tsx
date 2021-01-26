@@ -61,7 +61,7 @@ export interface IEntryBoxProps {
   onEntryBookmark?: (entryId: string, isBookmarked?: boolean) => void;
   onClickAvatar: React.MouseEventHandler<HTMLDivElement>;
   onClickReplies: (entryId: string) => void;
-  onEntryShare: (service: ServiceNames, entryId?: string) => void;
+  onEntryShare: (service: ServiceNames, entryId?: string, authorEthAddress?: string) => void;
   onRepost: (withComment: boolean, entryData: IEntryData) => void;
   onEntryFlag: (entryId?: string) => void;
   handleFollow: (profileEthAddress: string) => void;
@@ -139,7 +139,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   };
 
   const handleEntryShare = (service: ServiceNames) => {
-    onEntryShare(service, entryData.entryId);
+    onEntryShare(service, entryData.entryId, entryData.author.ethAddress);
   };
 
   const handleEntryFlag = () => {

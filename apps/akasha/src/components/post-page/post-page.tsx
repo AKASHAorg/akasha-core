@@ -16,6 +16,7 @@ import { redirectToPost } from '../../services/routing-service';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
+import routes, { POSTS } from '../../routes';
 
 const {
   Box,
@@ -207,17 +208,22 @@ const PostPage: React.FC<IPostPage> = props => {
   const handleUnfollow = () => {
     // todo
   };
-  const handleEntryShare = (service: 'twitter' | 'facebook' | 'reddit', _entryId: string) => {
+  const handleEntryShare = (
+    service: 'twitter' | 'facebook' | 'reddit',
+    entryId: string,
+    authorEthAddress: string,
+  ) => {
+    const url = `${window.location.origin}/${routes[POSTS]}/${authorEthAddress}/post/${entryId}`;
     let shareUrl;
     switch (service) {
       case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?text=${window.location.href}`;
+        shareUrl = `https://twitter.com/intent/tweet?text=${url}`;
         break;
       case 'facebook':
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`;
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
         break;
       case 'reddit':
-        shareUrl = `http://www.reddit.com/submit?url=${window.location.href}`;
+        shareUrl = `http://www.reddit.com/submit?url=${url}`;
         break;
       default:
         break;

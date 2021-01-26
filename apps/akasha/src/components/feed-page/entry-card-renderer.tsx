@@ -18,7 +18,7 @@ export interface IEntryCardRendererProps {
   onRepliesClick: () => void;
   onFlag: (entryId: string, user: string | null) => () => void;
   onRepost: (withComment: boolean, entryData: any) => void;
-  onShare: (service: string, entryId: string) => void;
+  onShare: (service: string, entryId: string, authorEthAddress: string) => void;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (ethAddress: string) => void;
   bookmarks?: Set<string>;

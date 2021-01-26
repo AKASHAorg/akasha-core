@@ -25,6 +25,8 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
     profileService: sdkModules.profiles.profileService,
   });
 
+  // create a use following hook with isfollowing state, and follow/unfollow actions
+
   const handleIsFollowing: any = async (ethAddress: string) => {
     if (loginState.ethAddress) {
       const res: any = await sdkModules.profiles.profileService
