@@ -7,7 +7,6 @@ import ContentCard from './content-card/content-card';
 import ContentTab from './content-tab';
 
 import { getAllPending, getAllModerated } from '../services/fetch-contents';
-import { moderatorList } from '../services/dummy-data';
 import { BASE_DECISION_URL } from '../services/constants';
 
 const { Box, Text, useViewportSize, ModalRenderer, ToastProvider, ModerateModal } = DS;
@@ -66,10 +65,6 @@ const ContentList: React.FC<IContentListProps> = props => {
       props.navigateToUrl('/moderation-app/unauthenticated');
     } else {
       // if authenticated,
-      if (!moderatorList.includes(ethAddress)) {
-        // if not an approved moderator address(es) on file, restrict access
-        return props.navigateToUrl('/moderation-app/restricted');
-      }
       if (isPending) {
         // if authorised, check for pending contents while pending tab is active
         fetchPendingContents();
