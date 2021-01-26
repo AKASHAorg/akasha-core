@@ -14,8 +14,12 @@ const useRequest = (props: IUseRequest): [any] => {
     const response = await fetch(url, {
       method: method,
       headers: rheaders,
-      body: JSON.stringify(data),
+      ...(method === ('POST' || 'PUT' || 'PATCH') && { body: JSON.stringify(data) }),
     });
+
+    if (method === 'HEAD') {
+      return response.status;
+    }
 
     return response.json();
   };
