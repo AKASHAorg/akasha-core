@@ -1,9 +1,15 @@
 import { BASE_DECISION_URL, BASE_FLAG_URL } from './constants';
-import postRequest from './post-request';
+import { useRequest } from '@akashaproject/ui-awf-hooks';
 
 export const getFlags = async (entryId: string) => {
   try {
-    const response = await postRequest(`${BASE_FLAG_URL}/list/${entryId}`);
+    const [fetchFlags] = await useRequest({
+      method: 'POST',
+      url: `${BASE_FLAG_URL}/list/${entryId}`,
+    });
+
+    const response = await fetchFlags();
+
     return response;
   } catch (error) {
     return error;
@@ -12,7 +18,12 @@ export const getFlags = async (entryId: string) => {
 
 export const getAllPending = async () => {
   try {
-    const response = await postRequest(`${BASE_DECISION_URL}/pending`);
+    const [fetchPending] = await useRequest({
+      method: 'POST',
+      url: `${BASE_DECISION_URL}/pending`,
+    });
+
+    const response = await fetchPending();
 
     const modResponse = response.map(
       (
@@ -40,14 +51,24 @@ export const getAllPending = async () => {
 export const getAllModerated = async () => {
   try {
     // fetch delisted items
-    const delistedItems = await postRequest(`${BASE_DECISION_URL}/moderated`, {
-      delisted: true,
+    const [fetchDelisted] = await useRequest({
+      method: 'POST',
+      url: `${BASE_DECISION_URL}/moderated`,
+      data: {
+        delisted: true,
+      },
     });
 
     // fetch kept items
-    const keptItems = await postRequest(`${BASE_DECISION_URL}/moderated`, {
-      delisted: false,
+    const [fetchKept] = await useRequest({
+      method: 'POST',
+      url: `${BASE_DECISION_URL}/moderated`,
+      data: {
+        delisted: false,
+      },
     });
+    const delistedItems = await fetchDelisted();
+    const keptItems = await fetchKept();
 
     const modResponse = [...delistedItems, ...keptItems].map(
       (

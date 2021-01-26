@@ -6,6 +6,7 @@ import useGlobalLogin from './use-global-login';
 import useLoginState from './use-login-state';
 import useModalState from './use-modal-state';
 import useENSRegistration from './use-ens-registration';
+import useRequest from './use-request';
 
 export {
   useProfile,
@@ -16,4 +17,5 @@ export {
   useLoginState,
   useModalState,
   useENSRegistration,
+  useRequest,
 };
