@@ -91,6 +91,7 @@ storiesOf('Cards/Widget Cards', module)
         onClickSubscribeTag={tagName => action('subscribe tag clicked')(tagName)}
         tags={trendingTagsData}
         profiles={trendingProfilesData}
+        followedProfiles={[]}
       />
     </Box>
   ))

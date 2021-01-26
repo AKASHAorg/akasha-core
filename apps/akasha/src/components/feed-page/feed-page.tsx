@@ -151,6 +151,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     navigateToUrl(`/profile/${authorEth}`);
     ev.preventDefault();
   };
+  const handleMentionClick = (profileEthAddress: string) => {
+    navigateToUrl(`/profile/${profileEthAddress}`);
+  };
   const handleEntryBookmark = (entryId: string) => {
     if (!ethAddress) {
       return showLoginModal();
@@ -379,6 +382,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             onRepost={handleEntryRepost}
             onShare={handleEntryShare}
             onAvatarClick={handleAvatarClick}
+            onMentionClick={handleMentionClick}
           />
         }
         customEntities={getFeedCustomEntities({

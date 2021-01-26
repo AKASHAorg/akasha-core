@@ -106,6 +106,9 @@ const PostsList: React.FC<IPostsListProps> = props => {
   const handleUnfollow = () => {
     /* todo */
   };
+  const handleMentionClick = (profileEthAddress: string) => {
+    props.navigateToUrl(`/profile/${profileEthAddress}`);
+  };
 
   return (
     <>
@@ -131,6 +134,7 @@ const PostsList: React.FC<IPostsListProps> = props => {
               onRepost={handleEntryRepost}
               onShare={handleEntryShare}
               onAvatarClick={handleAvatarClick}
+              onMentionClick={handleMentionClick}
             />
           }
         />

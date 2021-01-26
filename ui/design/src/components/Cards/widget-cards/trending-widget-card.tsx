@@ -10,7 +10,7 @@ export interface ITrendingWidgetCardProps {
   // data
   tags: ITag[];
   profiles: IProfile[];
-  userSubscribtions?: { profileEthAddresses: string[]; tagNames: string[] };
+  followedProfiles?: string[];
   // labels
   titleLabel: string;
   topicsLabel: string;
@@ -50,9 +50,9 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
     titleLabel,
     tags,
     profiles,
-    userSubscribtions,
     topicsLabel,
     profilesLabel,
+    followedProfiles,
   } = props;
 
   return (
@@ -76,7 +76,6 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                   type="subscribe"
                   onClick={() => onClickSubscribeTag(tag.name)}
                   clickable={true}
-                  primaryColor={userSubscribtions?.tagNames.includes(tag.name)}
                 />
               </Box>
             ))}
@@ -98,7 +97,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                   type="following"
                   onClick={() => onClickSubscribeProfile(profile.ethAddress)}
                   clickable={true}
-                  primaryColor={userSubscribtions?.profileEthAddresses.includes(profile.ethAddress)}
+                  accentColor={followedProfiles?.includes(profile.ethAddress)}
                 />
               </Box>
             ))}

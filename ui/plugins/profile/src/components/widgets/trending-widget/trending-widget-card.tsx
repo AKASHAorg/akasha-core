@@ -1,51 +1,59 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
-import { combineLatest } from 'rxjs';
+import { useTrendingData, useLoginState } from '@akashaproject/ui-awf-hooks';
 
 const { TrendingWidgetCard } = DS;
 
 // export interface TrendingWidgetCardProps {}
 
 const TrendingWidget: React.FC<RootComponentProps> = props => {
+  const { globalChannel, sdkModules, logger } = props;
+
   const { t } = useTranslation();
 
-  const [trendingTags, setTrendingTags] = React.useState<any>([]);
-  const [trendingProfiles, setTrendingProfiles] = React.useState<any>([]);
+  const [trendingData] = useTrendingData({ sdkModules: props.sdkModules });
+
+  const [loginState] = useLoginState({
+    globalChannel: globalChannel,
+    onError: (err: IAkashaError) => {
+      logger('useLoginState error %j', err);
+    },
+    authService: sdkModules.auth.authService,
+    ipfsService: sdkModules.commons.ipfsService,
+    profileService: sdkModules.profiles.profileService,
+  });
+
+  const handleIsFollowing: any = async (ethAddress: string) => {
+    if (loginState.ethAddress) {
+      const res: any = await sdkModules.profiles.profileService
+        .isFollowing({ follower: loginState.ethAddress, following: ethAddress })
+        .toPromise();
+
+      return res.data?.isFollowing;
+    }
+    return false;
+  };
+
+  const [followedProfiles, setFollowedProfiles] = React.useState<string[]>([]);
 
   React.useEffect(() => {
-    const trendingTagsCall = props.sdkModules.posts.tags.getTrending({});
-    trendingTagsCall.subscribe((resp: any) => {
-      if (resp.data.searchTags) {
-        const tags = resp.data.searchTags.map((tag: string) => {
-          return {
-            name: tag,
-            posts: 1,
-          };
-        });
-        setTrendingTags(tags);
-      }
-    });
-    const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
-    const trendingProfilesCall = props.sdkModules.profiles.profileService.getTrending({});
-    const getTrendingProfiles = combineLatest([ipfsGatewayCall, trendingProfilesCall]);
-    getTrendingProfiles.subscribe((resp: any) => {
-      const ipfsGateway = resp[0].data;
-      if (resp[1].data.searchProfiles) {
-        const profiles = resp[1].data.searchProfiles.map((profile: any) => {
-          if (profile.avatar) {
-            const profileAvatarWithGateway = `${ipfsGateway}/${profile.avatar}`;
-            profile.avatar = profileAvatarWithGateway;
-          }
-          // should replace with real data once we integrate follow functionality
-          profile.followers = profile.followers || 0;
-          return profile;
-        });
-        setTrendingProfiles(profiles);
-      }
-    });
-  }, []);
+    if (loginState.ethAddress) {
+      trendingData.profiles.slice(0, 4).forEach(async (profile: any) => {
+        const following = await handleIsFollowing(profile.ethAddress);
+        if (following) {
+          setFollowedProfiles((followed: any) => followed.concat(profile.ethAddress));
+        } else if (following === false) {
+          setFollowedProfiles((followedProfiles: any) =>
+            followedProfiles.filter(
+              (followedProfile: any) => followedProfile.ethAddress === profile.ethAddress,
+            ),
+          );
+        }
+      });
+    }
+  }, [trendingData.profiles, loginState.ethAddress]);
 
   const handleTagClick = () => {
     // todo
@@ -53,8 +61,8 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
   const handleTagSubscribe = () => {
     // todo
   };
-  const handleProfileClick = () => {
-    // todo
+  const handleProfileClick = (ethAddress: string) => {
+    props.singleSpa.navigateToUrl(`/profile/${ethAddress}`);
   };
   const handleProfileSubscribe = () => {
     // todo
@@ -65,8 +73,9 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
       titleLabel={t('Trending Right Now')}
       topicsLabel={t('Topics')}
       profilesLabel={t('Profiles')}
-      tags={trendingTags}
-      profiles={trendingProfiles}
+      tags={trendingData.tags}
+      profiles={trendingData.profiles}
+      followedProfiles={followedProfiles}
       onClickTag={handleTagClick}
       onClickSubscribeTag={handleTagSubscribe}
       onClickProfile={handleProfileClick}

@@ -20,6 +20,7 @@ export interface IEntryCardRendererProps {
   onRepost: (withComment: boolean, entryData: any) => void;
   onShare: (service: string, entryId: string) => void;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
+  onMentionClick: (ethAddress: string) => void;
   bookmarks?: Set<string>;
   style?: React.CSSProperties;
 }
@@ -81,6 +82,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   handleFollow={props.onFollow}
                   handleUnfollow={props.onUnfollow}
                   onContentClick={props.onNavigate}
+                  onMentionClick={props.onMentionClick}
                 />
               )}
             </>

@@ -67,7 +67,7 @@ export interface IEntryBoxProps {
   handleFollow: (profileEthAddress: string) => void;
   handleUnfollow: (profileEthAddress: string) => void;
   onContentClick?: (details: IContentClickDetails) => void;
-  onMentionClick?: any;
+  onMentionClick?: (ethAddress: string) => void;
   style?: React.CSSProperties;
 }
 
@@ -223,7 +223,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             copyIPFSLinkLabel={copyIPFSLinkLabel}
           />
         )}
-        <Box pad={{ vertical: 'medium' }} onClick={() => handleContentClick(entryData)}>
+        <Box pad={{ vertical: 'medium' }}>
           <ReadOnlyEditor content={entryData.content} handleMentionClick={onMentionClick} />
         </Box>
         {entryData.quote && (

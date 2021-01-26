@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider } from 'react-i18next';
-import { profileInit, ProfileProvider, profileReducer } from '../state/profiles';
 import Routes from './routes';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 
@@ -59,9 +58,7 @@ class App extends PureComponent<RootComponentProps> {
             settings={{ activeTheme: 'Light-Theme' }}
           >
             <React.Suspense fallback={<>Loading Profile</>}>
-              <ProfileProvider reducer={profileReducer} initialState={profileInit()}>
-                <Routes {...this.props} />
-              </ProfileProvider>
+              <Routes {...this.props} />
             </React.Suspense>
           </ThemeSelector>
         </I18nextProvider>
