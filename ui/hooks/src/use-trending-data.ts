@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 
 export interface UseTrendingDataProps {
   //   ethAddress: string | null;
@@ -53,8 +53,10 @@ const useTrendingData = (
   const [trendingState, dispatch] = React.useReducer(trendingStateReducer, initialTrendingState);
 
   React.useEffect(() => {
+    let tagsSub: Subscription | undefined;
+    let profilesSub: Subscription | undefined;
     const trendingTagsCall = sdkModules.posts.tags.getTrending(null);
-    trendingTagsCall.subscribe((resp: any) => {
+    tagsSub = trendingTagsCall.subscribe((resp: any) => {
       if (resp.data.searchTags) {
         const tags = resp.data.searchTags.map((tag: string) => {
           return {
@@ -65,10 +67,11 @@ const useTrendingData = (
         actions.setTrendingTags(tags);
       }
     });
+
     const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings(null);
     const trendingProfilesCall = sdkModules.profiles.profileService.getTrending(null);
     const getTrendingProfiles = combineLatest([ipfsGatewayCall, trendingProfilesCall]);
-    getTrendingProfiles.subscribe((resp: any) => {
+    profilesSub = getTrendingProfiles.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
       if (resp[1].data.searchProfiles) {
         const profiles = resp[1].data.searchProfiles.map((profile: any) => {
@@ -85,11 +88,11 @@ const useTrendingData = (
       }
     });
     return () => {
-      if (trendingTagsCall) {
-        trendingTagsCall.unsubscribe();
+      if (tagsSub) {
+        tagsSub.unsubscribe();
       }
-      if (trendingProfilesCall) {
-        trendingProfilesCall.unsubscribe();
+      if (profilesSub) {
+        profilesSub.unsubscribe();
       }
     };
   }, []);

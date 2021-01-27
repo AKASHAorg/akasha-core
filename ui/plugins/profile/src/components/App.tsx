@@ -49,19 +49,19 @@ class App extends PureComponent<RootComponentProps> {
 
     return (
       <Box width="100vw">
-        <I18nextProvider i18n={i18n ? i18n : null}>
-          <Helmet>
-            <title>Profile</title>
-          </Helmet>
-          <ThemeSelector
-            availableThemes={[lightTheme, darkTheme]}
-            settings={{ activeTheme: 'Light-Theme' }}
-          >
-            <React.Suspense fallback={<>Loading Profile</>}>
+        <React.Suspense fallback={<>Loading Profile</>}>
+          <I18nextProvider i18n={i18n ? i18n : null}>
+            <Helmet>
+              <title>Profile</title>
+            </Helmet>
+            <ThemeSelector
+              availableThemes={[lightTheme, darkTheme]}
+              settings={{ activeTheme: 'Light-Theme' }}
+            >
               <Routes {...this.props} />
-            </React.Suspense>
-          </ThemeSelector>
-        </I18nextProvider>
+            </ThemeSelector>
+          </I18nextProvider>
+        </React.Suspense>
       </Box>
     );
   }
