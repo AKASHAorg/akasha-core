@@ -25,6 +25,7 @@ export interface IEntryData {
   author: IProfileData;
   socialData?: ISocialData;
   quote?: IEntryData;
+  reported?: boolean;
 }
 export interface IContentClickDetails {
   authorEthAddress: string;
