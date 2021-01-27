@@ -16,28 +16,35 @@ const ConnectButton = styled(Button)`
 // @ts-ignore-next-line
 const LoginWidgetBox = styled(WidgetAreaCardBox)`
   padding: 1em;
-  margin-bottom: 0.5em;
 `;
 export interface ILoginWidgetCardProps {
   onLoginClick: () => void;
   onLearnMoreClick: () => void;
   title: string;
   textContent: string;
-  image: React.ReactElement;
+  image?: React.ReactElement;
   learnMoreLabel: string;
   connectLabel: string;
+  inlineActions?: boolean;
 }
 const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
+  const { inlineActions = false } = props;
   return (
     <LoginWidgetBox callToAction={true}>
-      {props.image}
-      <Text weight="bold" size="large">
-        {props.title}
-      </Text>
-      <Text margin={{ top: '.25em', bottom: '1em' }}>{props.textContent}</Text>
-      <Box direction="row" justify="between">
-        <LearnMoreButton onClick={props.onLearnMoreClick} label={props.learnMoreLabel} />
-        <ConnectButton primary={true} onClick={props.onLoginClick} label={props.connectLabel} />
+      {props.image && props.image}
+      <Box direction={inlineActions ? 'row' : 'column'}>
+        <Box direction="column">
+          <Text weight="bold" size="medium">
+            {props.title}
+          </Text>
+          <Text size="small" margin={{ top: '.25em', bottom: '1em' }}>
+            {props.textContent}
+          </Text>
+        </Box>
+        <Box direction="row" justify="between" align="center" flex={{ shrink: 0 }}>
+          <LearnMoreButton onClick={props.onLearnMoreClick} label={props.learnMoreLabel} />
+          <ConnectButton primary={true} onClick={props.onLoginClick} label={props.connectLabel} />
+        </Box>
       </Box>
     </LoginWidgetBox>
   );

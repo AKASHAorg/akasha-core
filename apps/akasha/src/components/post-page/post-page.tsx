@@ -12,11 +12,13 @@ import {
   PROPERTY_SLATE_CONTENT,
   createPendingEntry,
 } from '../../services/posting-service';
+import { BASE_FLAG_URL } from '../../services/constants';
 import { redirectToPost } from '../../services/routing-service';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
 import routes, { POSTS } from '../../routes';
+import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
 
 const {
   Box,
@@ -267,6 +269,8 @@ const PostPage: React.FC<IPostPage> = props => {
       const publishCommentCall = channels.posts.comments.addComment(publishObj);
       publishCommentCall.subscribe((postingResp: any) => {
         const publishedCommentId = postingResp.data.addComment;
+        const commentData = pending as IEntryData;
+        feedStateActions.setFeedItemData({ ...commentData, entryId: publishedCommentId });
         setPendingComments([]);
         feedStateActions.setFeedItems({
           reverse: true,
@@ -341,6 +345,7 @@ const PostPage: React.FC<IPostPage> = props => {
               closeLabel={t('Close')}
               user={ethAddress ? ethAddress : ''}
               contentId={flagged}
+              baseUrl={BASE_FLAG_URL}
               size={size}
               closeModal={() => {
                 setReportModalOpen(false);

@@ -44,8 +44,9 @@ const PostRenderer = (props: PostRendererProps) => {
               {(!itemData || !itemData.author?.ethAddress) && <EntryCardLoading />}
               {itemData && itemData.author.ethAddress && (
                 <Box
-                  margin={{ horizontal: 'medium' }}
+                  pad={{ horizontal: 'medium' }}
                   border={{ side: 'bottom', size: '1px', color: 'border' }}
+                  style={style}
                 >
                   <EntryBox
                     isBookmarked={isBookmarked}
@@ -75,7 +76,6 @@ const PostRenderer = (props: PostRendererProps) => {
                     onClickReplies={props.onRepliesClick}
                     handleFollow={props.onFollow}
                     handleUnfollow={props.onUnfollow}
-                    style={style}
                   />
                 </Box>
               )}

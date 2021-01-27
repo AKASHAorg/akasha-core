@@ -114,6 +114,7 @@ const MyProfilePage = (props: MyProfileProps) => {
   ]);
 
   const onProfileUpdateSubmit = (data: any) => {
+    console.log(data, 'updating data');
     props.loginActions.optimisticUpdate(data);
   };
 
