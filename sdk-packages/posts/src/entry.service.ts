@@ -26,6 +26,8 @@ const service: AkashaService = (invoke, log) => {
           coverImage
           description
           ethAddress
+          totalFollowers
+          totalFollowing
         }
         title
         type
@@ -47,6 +49,8 @@ const service: AkashaService = (invoke, log) => {
               avatar
               coverImage
               ethAddress
+              totalFollowers
+              totalFollowing
             }
             title
             type
@@ -82,6 +86,8 @@ const service: AkashaService = (invoke, log) => {
             coverImage
             description
             ethAddress
+            totalFollowers
+            totalFollowing
           }
           title
           type
@@ -103,6 +109,8 @@ const service: AkashaService = (invoke, log) => {
               avatar
               coverImage
               ethAddress
+              totalFollowers
+              totalFollowing
             }
             title
             type
