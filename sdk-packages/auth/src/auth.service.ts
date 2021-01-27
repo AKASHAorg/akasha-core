@@ -210,9 +210,9 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   };
 
   const signOut = async () => {
-    const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
-    await cache.clear();
     sessionStorage.clear();
+    const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
+    cache.clear();
     identity = null;
     hubClient = null;
     hubUser = null;
