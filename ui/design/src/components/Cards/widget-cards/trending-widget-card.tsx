@@ -5,21 +5,33 @@ import { Icon } from '../../Icon/index';
 import { ProfileAvatarButton } from '../../Buttons/index';
 import { WidgetAreaCardBox } from '../common/basic-card-box';
 import { StyledTab } from './styled-widget-cards';
+import { DuplexButton } from '../../Buttons';
 
 export interface ITrendingWidgetCardProps {
   // data
   tags: ITag[];
   profiles: IProfile[];
   followedProfiles?: string[];
+  subscribedTags?: string[];
+  loggedEthAddress?: string | null;
   // labels
   titleLabel: string;
   topicsLabel: string;
   profilesLabel: string;
+  followLabel?: string;
+  followingLabel?: string;
+  followersLabel?: string;
+  unfollowLabel?: string;
+  subscribeLabel?: string;
+  unsubscribeLabel?: string;
+  subscribedLabel?: string;
   // handlers
   onClickTag: (tagName: string) => void;
   onClickProfile: (ethAddress: string) => void;
-  onClickSubscribeTag: (tagName: string) => void;
-  onClickSubscribeProfile: (ethAddress: string) => void;
+  handleFollowProfile: (ethAddress: string) => void;
+  handleUnfollowProfile: (ethAddress: string) => void;
+  handleSubscribeTag: (tagName: string) => void;
+  handleUnsubscribeTag: (tagName: string) => void;
   // css
   className?: string;
 }
@@ -46,14 +58,25 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
     className,
     onClickTag,
     onClickProfile,
-    onClickSubscribeTag,
-    onClickSubscribeProfile,
+    handleFollowProfile,
+    handleUnfollowProfile,
+    handleSubscribeTag,
+    handleUnsubscribeTag,
+    loggedEthAddress,
     titleLabel,
     tags,
     profiles,
     topicsLabel,
     profilesLabel,
+    followLabel,
+    followingLabel,
+    unfollowLabel,
+    followersLabel,
+    subscribeLabel,
+    subscribedLabel,
+    unsubscribeLabel,
     followedProfiles,
+    subscribedTags,
   } = props;
 
   return (
@@ -73,11 +96,17 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                   labelSize="large"
                   gap="xxsmall"
                 />
-                <Icon
-                  type="subscribe"
-                  onClick={() => onClickSubscribeTag(tag.name)}
-                  clickable={true}
-                />
+                {loggedEthAddress && (
+                  <DuplexButton
+                    inactiveLabel={subscribeLabel}
+                    activeLabel={subscribedLabel}
+                    activeHoverLabel={unsubscribeLabel}
+                    onClickInactive={() => handleSubscribeTag(tag.name)}
+                    onClickActive={() => handleUnsubscribeTag(tag.name)}
+                    active={subscribedTags?.includes(tag.name)}
+                    icon={<Icon type="subscribe" />}
+                  />
+                )}
               </Box>
             ))}
           </Box>
@@ -90,16 +119,21 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                   ethAddress={profile.ethAddress}
                   onClick={() => onClickProfile(profile.ethAddress)}
                   label={profile.userName || profile.name}
-                  info={`${profile.totalFollowers} followers`}
+                  info={`${profile.totalFollowers} ${followersLabel}`}
                   size="md"
                   avatarImage={profile.avatar}
                 />
-                <Icon
-                  type="following"
-                  onClick={() => onClickSubscribeProfile(profile.ethAddress)}
-                  clickable={true}
-                  accentColor={followedProfiles?.includes(profile.ethAddress)}
-                />
+                {loggedEthAddress && (
+                  <DuplexButton
+                    inactiveLabel={followLabel}
+                    activeLabel={followingLabel}
+                    activeHoverLabel={unfollowLabel}
+                    onClickInactive={() => handleFollowProfile(profile.ethAddress)}
+                    onClickActive={() => handleUnfollowProfile(profile.ethAddress)}
+                    active={followedProfiles?.includes(profile.ethAddress)}
+                    icon={<Icon type="following" />}
+                  />
+                )}
               </Box>
             ))}
           </Box>
@@ -113,6 +147,13 @@ TrendingWidgetCard.defaultProps = {
   titleLabel: 'Trending Right Now',
   topicsLabel: 'Topics',
   profilesLabel: 'Profiles',
+  followLabel: 'Follow',
+  unfollowLabel: 'Unfollow',
+  followersLabel: 'Followers',
+  followingLabel: 'Following',
+  subscribedLabel: 'Subscribed',
+  subscribeLabel: 'Subscribe',
+  unsubscribeLabel: 'Unsubscribe',
 };
 
 export default TrendingWidgetCard;

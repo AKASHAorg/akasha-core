@@ -143,7 +143,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
         metadata.mentions.push(node.pubKey as string);
       }
       if (node.type === 'tag') {
-        metadata.tags.push(node.value as string);
+        metadata.tags.push(node.name as string);
       }
       if (node.children) {
         node.children.map((n: any) => getMetadata(n));

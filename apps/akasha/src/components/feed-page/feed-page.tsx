@@ -67,6 +67,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     onError,
     sdkModules,
     logger,
+    globalChannel,
   } = props;
   const [feedState, feedStateActions] = useFeedReducer({});
   const [isLoading, setIsLoading] = React.useState(false);
@@ -401,8 +402,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         }
         itemCard={
           <EntryCardRenderer
-            sdkModules={props.sdkModules}
-            logger={props.logger}
+            sdkModules={sdkModules}
+            logger={logger}
+            globalChannel={globalChannel}
             bookmarks={bookmarks}
             ethAddress={ethAddress}
             locale={locale}

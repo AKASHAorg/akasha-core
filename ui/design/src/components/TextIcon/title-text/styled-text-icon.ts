@@ -76,7 +76,7 @@ export interface IconSize {
   size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
-//background div for icons, will scale with icon size, adding 0.75 rem to each icon size
+// background div for icons, will scale with icon size, adding 0.75 rem to each icon size
 const StyledIconDiv = styled.div<IconSize>`
   display: flex;
   align-items: center;

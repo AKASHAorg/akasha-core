@@ -49,7 +49,7 @@ const MentionElement = (props: any) => {
 const TagElement = ({ attributes, children, element }: any) => {
   return (
     <StyledMention {...attributes} contentEditable={false}>
-      #{element.value}
+      #{element.name}
       {children}
     </StyledMention>
   );

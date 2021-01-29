@@ -9,6 +9,7 @@ const { ErrorInfoCard, ErrorLoader, EntryBox, Box, EntryCardLoading } = DS;
 export interface PostRendererProps {
   sdkModules?: any;
   logger?: any;
+  globalChannel?: any;
   itemId?: string;
   itemData?: any;
   isBookmarked?: boolean;
@@ -30,11 +31,12 @@ export interface PostRendererProps {
 }
 
 const PostRenderer = (props: PostRendererProps) => {
-  const { itemData, isBookmarked, style, ethAddress, sdkModules, logger } = props;
+  const { itemData, isBookmarked, style, ethAddress, sdkModules, logger, globalChannel } = props;
 
   const { t } = useTranslation();
 
   const [followedProfiles, followActions] = useFollow({
+    globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);

@@ -2,7 +2,7 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
-import { useTrendingData, useLoginState } from '@akashaproject/ui-awf-hooks';
+import { useTrendingData, useLoginState, useFollow } from '@akashaproject/ui-awf-hooks';
 
 const { TrendingWidgetCard } = DS;
 
@@ -25,33 +25,19 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
     profileService: sdkModules.profiles.profileService,
   });
 
-  // create a use following hook with isfollowing state, and follow/unfollow actions
-
-  const handleIsFollowing: any = async (ethAddress: string) => {
-    if (loginState.ethAddress) {
-      const res: any = await sdkModules.profiles.profileService
-        .isFollowing({ follower: loginState.ethAddress, following: ethAddress })
-        .toPromise();
-
-      return res.data?.isFollowing;
-    }
-    return false;
-  };
-
-  const [followedProfiles, setFollowedProfiles] = React.useState<string[]>([]);
+  const [followedProfiles, followActions] = useFollow({
+    globalChannel,
+    profileService: sdkModules.profiles.profileService,
+    onError: (errorInfo: IAkashaError) => {
+      logger.error(errorInfo.error.message, errorInfo.errorKey);
+    },
+  });
 
   React.useEffect(() => {
     if (loginState.ethAddress) {
       trendingData.profiles.slice(0, 4).forEach(async (profile: any) => {
-        const following = await handleIsFollowing(profile.ethAddress);
-        if (following) {
-          setFollowedProfiles((followed: any) => followed.concat(profile.ethAddress));
-        } else if (following === false) {
-          setFollowedProfiles((followedProfiles: any) =>
-            followedProfiles.filter(
-              (followedProfile: any) => followedProfile !== profile.ethAddress,
-            ),
-          );
+        if (loginState.ethAddress && profile.ethAddress) {
+          followActions.isFollowing(loginState.ethAddress, profile.ethAddress);
         }
       });
     }
@@ -63,21 +49,18 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
   const handleTagSubscribe = () => {
     // todo
   };
+  const handleTagUnsubscribe = () => {
+    // todo
+  };
   const handleProfileClick = (ethAddress: string) => {
     singleSpa.navigateToUrl(`/profile/${ethAddress}`);
   };
-  const handleProfileSubscribe = (ethAddress: string) => {
-    const isFollowingCall = sdkModules.profiles.profileService.isFollowing({
-      follower: loginState.ethAddress,
-      following: ethAddress,
-    });
-    isFollowingCall.subscribe((resp: any) => {
-      if (resp.data?.isFollowing) {
-        sdkModules.profiles.profileService.unFollow({ ethAddress });
-      } else if (resp.data?.isFollowing === false) {
-        sdkModules.profiles.profileService.follow({ ethAddress });
-      }
-    });
+  const handleFollowProfile = (ethAddress: string) => {
+    followActions.follow(ethAddress);
+  };
+
+  const handleUnfollowProfile = (ethAddress: string) => {
+    followActions.unfollow(ethAddress);
   };
 
   return (
@@ -85,13 +68,21 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
       titleLabel={t('Trending Right Now')}
       topicsLabel={t('Topics')}
       profilesLabel={t('Profiles')}
+      followLabel={t('Follow')}
+      unfollowLabel={t('Unfollow')}
+      followersLabel={t('Followers')}
+      followingLabel={t('Following')}
       tags={trendingData.tags}
       profiles={trendingData.profiles}
       followedProfiles={followedProfiles}
+      subscribedTags={[]}
       onClickTag={handleTagClick}
-      onClickSubscribeTag={handleTagSubscribe}
+      handleSubscribeTag={handleTagSubscribe}
+      handleUnsubscribeTag={handleTagUnsubscribe}
       onClickProfile={handleProfileClick}
-      onClickSubscribeProfile={handleProfileSubscribe}
+      handleFollowProfile={handleFollowProfile}
+      handleUnfollowProfile={handleUnfollowProfile}
+      loggedEthAddress={loginState.ethAddress}
     />
   );
 };

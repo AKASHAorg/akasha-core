@@ -9,6 +9,7 @@ const { ErrorInfoCard, ErrorLoader, EntryCard, EntryCardLoading } = DS;
 export interface IEntryCardRendererProps {
   sdkModules?: any;
   logger?: any;
+  globalChannel?: any;
   itemId?: string;
   itemData?: any;
   isBookmarked?: boolean;
@@ -30,7 +31,17 @@ export interface IEntryCardRendererProps {
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
-  const { itemData, ethAddress, locale, bookmarks, itemId, style, sdkModules, logger } = props;
+  const {
+    itemData,
+    ethAddress,
+    locale,
+    bookmarks,
+    itemId,
+    style,
+    sdkModules,
+    logger,
+    globalChannel,
+  } = props;
 
   let isBookmarked = false;
 
@@ -41,6 +52,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   const { t } = useTranslation();
 
   const [followedProfiles, followActions] = useFollow({
+    globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);

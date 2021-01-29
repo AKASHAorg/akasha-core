@@ -60,6 +60,7 @@ const PostPage: React.FC<IPostPage> = props => {
   const {
     slotId,
     channels,
+    globalChannel,
     flagged,
     reportModalOpen,
     setFlagged,
@@ -105,6 +106,7 @@ const PostPage: React.FC<IPostPage> = props => {
   });
 
   const [followedProfiles, followActions] = useFollow({
+    globalChannel,
     profileService: channels.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);
@@ -457,6 +459,7 @@ const PostPage: React.FC<IPostPage> = props => {
           <PostRenderer
             sdkModules={channels}
             logger={logger}
+            globalChannel={globalChannel}
             bookmarks={bookmarks}
             ethAddress={ethAddress}
             locale={locale}

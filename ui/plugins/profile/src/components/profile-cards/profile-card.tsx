@@ -21,7 +21,7 @@ export interface IProfileHeaderProps {
 }
 
 export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps) => {
-  const { profileData, loggedUserEthAddress, sdkModules, logger, profileId } = props;
+  const { profileData, loggedUserEthAddress, sdkModules, logger, profileId, globalChannel } = props;
 
   const [flagged, setFlagged] = React.useState('');
 
@@ -30,6 +30,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   const { t } = useTranslation();
 
   const [followedProfiles, followActions] = useFollow({
+    globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);
