@@ -40,6 +40,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   let sessKey;
   let currentUser: { pubKey: string; ethAddress: string };
   let tokenGenerator: () => Promise<UserAuth>;
+  const waitForAuth = 'waitForAuth';
   const providerKey = '@providerType';
   const SYNC_REQUEST = '@sync_request';
   const SYNC_RESPONSE = '@sync_response';
@@ -194,8 +195,24 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       return Promise.resolve(currentUser);
     }
     if (!sessionStorage.getItem(providerKey)) {
+      globalChannel.next({
+        data: false,
+        channelInfo: {
+          servicePath: services[AUTH_SERVICE],
+          method: waitForAuth,
+          args: null,
+        },
+      });
       return Promise.resolve(null);
     }
+    globalChannel.next({
+      data: true,
+      channelInfo: {
+        servicePath: services[AUTH_SERVICE],
+        method: waitForAuth,
+        args: null,
+      },
+    });
     const data = await signIn(EthProviders.None);
     const response = {
       data: data,
@@ -210,9 +227,9 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   };
 
   const signOut = async () => {
-    const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
-    await cache.clear();
     sessionStorage.clear();
+    const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
+    cache.clear();
     identity = null;
     hubClient = null;
     hubUser = null;

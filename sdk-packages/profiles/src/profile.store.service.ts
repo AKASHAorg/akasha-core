@@ -75,6 +75,8 @@ const service: AkashaService = (invoke, log) => {
       'coverImage',
       'ethAddress',
       'totalPosts',
+      'totalFollowers',
+      'totalFollowing',
     ];
     const fields = opt.fields ? opt.fields : defaultFields;
     let query;
@@ -261,6 +263,10 @@ const service: AkashaService = (invoke, log) => {
              description
              coverImage
              ethAddress
+             creationDate
+             totalPosts
+             totalFollowers
+             totalFollowing
          }
        }`;
     const result = await runGQL({
