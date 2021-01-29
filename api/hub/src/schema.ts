@@ -17,12 +17,16 @@ const typeDefs = gql`
     total: Int
   }
 
+  type SearchTagsResult {
+    name: String
+    totalPosts: Int
+  }
   type Query {
     getProfile(ethAddress: String!): UserProfile!
     resolveProfile(pubKey: String!): UserProfile!
     getPost(id: String!): Post!
     getTag(name: String!): Tag
-    searchTags(name: String!): [String]
+    searchTags(name: String!): [SearchTagsResult]
     searchProfiles(name: String!): [UserProfile]
     tags(offset: String, limit: Int): TagsResult
     posts(offset: String, limit: Int): PostsResult
