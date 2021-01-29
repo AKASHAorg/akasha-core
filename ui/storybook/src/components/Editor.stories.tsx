@@ -24,9 +24,11 @@ const EditorComponent = () => {
     c.name.toLowerCase().startsWith(mentionsState.toLowerCase()),
   ).slice(0, 10);
 
-  const tags = TAGS.filter((c: string) =>
-    c.toLowerCase().startsWith(tagsState.toLowerCase()),
-  ).slice(0, 10);
+  const tags = TAGS.map(tag => {
+    return { name: tag, totalPosts: 1 };
+  })
+    .filter(c => c.name.toLowerCase().startsWith(tagsState.toLowerCase()))
+    .slice(0, 10);
 
   return (
     <EditorBox

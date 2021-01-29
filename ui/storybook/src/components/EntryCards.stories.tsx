@@ -1,7 +1,7 @@
 /* eslint-disable import/first */
 import DS from '@akashaproject/design-system';
 import { action } from '@storybook/addon-actions';
-import { object, select, text } from '@storybook/addon-knobs';
+import { boolean, object, select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import {
@@ -43,8 +43,9 @@ storiesOf('Cards/Entry Cards', module).add('entry card', () => (
       onClickAvatar={() => action('Avatar Clicked')('Synthetic Event')}
       shareLabel={text('Share Label', shareLabel)}
       copyLinkLabel={text('Copy link Label', copyLinkLabel)}
-      handleFollow={() => action('Following Box Clicked')('Synthetic Event')}
-      handleUnfollow={() => action('Following Box Clicked')('Synthetic Event')}
+      handleFollowAuthor={() => action('Following Box Clicked')('Synthetic Event')}
+      handleUnfollowAuthor={() => action('Following Box Clicked')('Synthetic Event')}
+      isFollowingAuthor={boolean('Is following author', false)}
       locale={select('Locale', { en: 'en', ro: 'ro', es: 'es' }, 'en')}
       loggedProfileAvatar={text('Logged Profile Avatar', 'https://www.stevensegallery.com/360/360')}
       loggedProfileEthAddress={text(
