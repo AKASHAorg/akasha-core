@@ -90,6 +90,8 @@ const typeDefs = gql`
     totalPosts: String
     providers: [DataProvider]
     default: [DataProvider]
+    totalFollowers: Int
+    totalFollowing: Int
   }
 
   enum PostType {

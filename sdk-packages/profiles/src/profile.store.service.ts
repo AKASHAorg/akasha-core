@@ -1,6 +1,6 @@
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import { runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
-import { LinkedProfileProp, LinkedProperty, PROFILE_MEDIA_FILES, PROFILE_STORE } from './constants';
+import { LinkedProperty, PROFILE_MEDIA_FILES, PROFILE_STORE } from './constants';
 import authServices, { AUTH_SERVICE } from '@akashaproject/sdk-auth/lib/constants';
 import commonServices, { IMAGE_UTILS_SERVICE } from '@akashaproject/sdk-common/lib/constants';
 // tslint:disable-next-line:no-var-requires
@@ -75,6 +75,8 @@ const service: AkashaService = (invoke, log) => {
       'coverImage',
       'ethAddress',
       'totalPosts',
+      'totalFollowers',
+      'totalFollowing',
     ];
     const fields = opt.fields ? opt.fields : defaultFields;
     let query;

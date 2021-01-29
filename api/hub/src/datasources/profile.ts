@@ -49,6 +49,10 @@ class ProfileAPI extends DataSource {
       for (const provider of q) {
         Object.assign(returnedObj, { [provider.property]: provider.value });
       }
+      Object.assign(returnedObj, {
+        totalFollowers: profilesFound[0]?.followers?.length || 0,
+        totalFollowing: profilesFound[0]?.following?.length || 0,
+      });
       queryCache.set(cacheKey, returnedObj);
       return returnedObj;
     }
@@ -159,7 +163,8 @@ class ProfileAPI extends DataSource {
     profile1.following.unshift(profile.pubKey);
     profile.followers.unshift(profile1.pubKey);
     await db.save(this.dbID, this.collection, [profile, profile1]);
-    queryCache.del(this.getCacheKey(pubKey));
+    queryCache.del(this.getCacheKey(profile.pubKey));
+    queryCache.del(this.getCacheKey(profile1.pubKey));
     return true;
   }
 
@@ -178,7 +183,8 @@ class ProfileAPI extends DataSource {
     profile1.following.splice(exists, 1);
     profile.followers.splice(exists1, 1);
     await db.save(this.dbID, this.collection, [profile, profile1]);
-    queryCache.del(this.getCacheKey(pubKey));
+    queryCache.del(this.getCacheKey(profile.pubKey));
+    queryCache.del(this.getCacheKey(profile1.pubKey));
     return true;
   }
 

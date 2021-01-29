@@ -85,6 +85,7 @@ class ScriptLoader {
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = src;
+    script.async = true;
     script.addEventListener('load', onLoad.bind(this));
     script.addEventListener('error', onError(src));
     const head = document.getElementsByTagName('head')[0];
