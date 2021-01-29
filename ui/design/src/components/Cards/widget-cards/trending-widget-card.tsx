@@ -26,7 +26,7 @@ export interface ITrendingWidgetCardProps {
 
 export interface ITag {
   name: string;
-  posts: number;
+  totalPosts: number;
 }
 
 export interface IProfile {
@@ -37,7 +37,8 @@ export interface IProfile {
   description?: string;
   userName?: string;
   name?: string;
-  followers?: number;
+  totalFollowers?: number | string;
+  totalFollowing?: number | string;
 }
 
 const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
@@ -68,7 +69,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                 <SubtitleTextIcon
                   onClick={() => onClickTag(tag.name)}
                   label={`#${tag.name}`}
-                  subtitle={`Used in ${tag.posts} posts`}
+                  subtitle={`Used in ${tag.totalPosts} posts`}
                   labelSize="large"
                   gap="xxsmall"
                 />
@@ -89,7 +90,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                   ethAddress={profile.ethAddress}
                   onClick={() => onClickProfile(profile.ethAddress)}
                   label={profile.userName || profile.name}
-                  info={`${profile.followers} followers`}
+                  info={`${profile.totalFollowers} followers`}
                   size="md"
                   avatarImage={profile.avatar}
                 />

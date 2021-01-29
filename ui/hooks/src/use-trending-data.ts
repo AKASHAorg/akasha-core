@@ -9,7 +9,7 @@ export interface UseTrendingDataProps {
 }
 
 interface ITrendingState {
-  tags: any[];
+  tags: { name: string; totalPosts: number }[];
   profiles: any[];
 }
 
@@ -58,13 +58,7 @@ const useTrendingData = (
     const trendingTagsCall = sdkModules.posts.tags.getTrending(null);
     tagsSub = trendingTagsCall.subscribe((resp: any) => {
       if (resp.data.searchTags) {
-        const tags = resp.data.searchTags.map((tag: string) => {
-          return {
-            name: tag,
-            posts: 1,
-          };
-        });
-        actions.setTrendingTags(tags);
+        actions.setTrendingTags(resp.data.searchTags);
       }
     });
 

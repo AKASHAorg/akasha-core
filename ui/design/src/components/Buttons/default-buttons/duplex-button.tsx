@@ -3,8 +3,8 @@ import * as React from 'react';
 import { StyledButton } from './styled-duplex-button';
 
 export interface IDuplexButtonProps extends ButtonProps {
-  onClickInactive: React.EventHandler<React.SyntheticEvent>;
-  onClickActive: React.EventHandler<React.SyntheticEvent>;
+  onClickInactive?: React.EventHandler<React.SyntheticEvent>;
+  onClickActive?: React.EventHandler<React.SyntheticEvent>;
   inactiveLabel?: string;
   activeLabel?: string;
   activeHoverLabel?: string;

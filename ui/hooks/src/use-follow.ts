@@ -4,7 +4,7 @@ import { IAkashaError } from '@akashaproject/ui-awf-typings';
 export interface UseFollowActions {
   isFollowing: (loggedEthAddress: string, followEthAddress: string) => void;
   follow: (followEthAddress: string) => void;
-  unFollow: (followEthAddress: string) => void;
+  unfollow: (followEthAddress: string) => void;
 }
 
 export interface UseFollowProps {
@@ -12,7 +12,7 @@ export interface UseFollowProps {
   profileService: any;
 }
 
-/* A hook with following functionality */
+/* A hook with follow, unfollow and isFollowing functionality */
 export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] => {
   const { onError, profileService } = props;
   const [isFollowingState, setIsFollowingState] = React.useState<string[]>([]);
@@ -29,6 +29,8 @@ export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] =
             setIsFollowingState((followedProfiles: string[]) =>
               followedProfiles.concat(followEthAddress),
             );
+          } else if (resp.data.isFollowing === false) {
+            setIsFollowingState(prev => prev.filter(profile => profile !== followEthAddress));
           }
         });
       } catch (ex) {
@@ -44,7 +46,12 @@ export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] =
 
     follow(followEthAddress) {
       try {
-        profileService.follow({ followEthAddress });
+        const call = profileService.follow({ ethAddress: followEthAddress });
+        call.subscribe((resp: any) => {
+          if (resp.data.follow) {
+            setIsFollowingState(prev => [...prev, followEthAddress]);
+          }
+        });
       } catch (ex) {
         if (onError) {
           onError({
@@ -55,13 +62,18 @@ export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] =
         }
       }
     },
-    unFollow(followEthAddress) {
+    unfollow(unfollowEthAddress) {
       try {
-        profileService.unFollow({ followEthAddress });
+        const call = profileService.unFollow({ ethAddress: unfollowEthAddress });
+        call.subscribe((resp: any) => {
+          if (resp.data.unFollow) {
+            setIsFollowingState(prev => prev.filter(profile => profile !== unfollowEthAddress));
+          }
+        });
       } catch (ex) {
         if (onError) {
           onError({
-            errorKey: 'useFollow.unFollow',
+            errorKey: 'useFollow.unfollow',
             error: ex,
             critical: false,
           });

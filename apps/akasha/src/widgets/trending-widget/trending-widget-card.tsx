@@ -15,10 +15,10 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
 
   const [trendingData] = useTrendingData({ sdkModules: sdkModules });
 
-  const [loginState, loginActions] = useLoginState({
+  const [loginState] = useLoginState({
     globalChannel: globalChannel,
     onError: (err: IAkashaError) => {
-      logger('useLoginState error %j', err);
+      logger.error('useLoginState error %j', err);
     },
     authService: sdkModules.auth.authService,
     ipfsService: sdkModules.commons.ipfsService,
@@ -72,18 +72,11 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
       following: ethAddress,
     });
     isFollowingCall.subscribe((resp: any) => {
-      let call;
       if (resp.data?.isFollowing) {
-        call = sdkModules.profiles.profileService.unFollow({ ethAddress });
+        sdkModules.profiles.profileService.unFollow({ ethAddress });
       } else if (resp.data?.isFollowing === false) {
-        call = sdkModules.profiles.profileService.follow({ ethAddress });
+        sdkModules.profiles.profileService.follow({ ethAddress });
       }
-
-      call.subscribe((resp: any) => {
-        if (resp.data && loginState.ethAddress) {
-          loginActions.getProfileData({ ethAddress: loginState.ethAddress });
-        }
-      });
     });
   };
 

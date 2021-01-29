@@ -1,10 +1,14 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
+import { useFollow } from '@akashaproject/ui-awf-hooks';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 const { ErrorInfoCard, ErrorLoader, EntryCard, EntryCardLoading } = DS;
 
 export interface IEntryCardRendererProps {
+  sdkModules?: any;
+  logger?: any;
   itemId?: string;
   itemData?: any;
   isBookmarked?: boolean;
@@ -26,7 +30,7 @@ export interface IEntryCardRendererProps {
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
-  const { itemData, ethAddress, locale, bookmarks, itemId, style } = props;
+  const { itemData, ethAddress, locale, bookmarks, itemId, style, sdkModules, logger } = props;
 
   let isBookmarked = false;
 
@@ -35,6 +39,33 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   }
 
   const { t } = useTranslation();
+
+  const [followedProfiles, followActions] = useFollow({
+    profileService: sdkModules.profiles.profileService,
+    onError: (errorInfo: IAkashaError) => {
+      logger.error(errorInfo.error.message, errorInfo.errorKey);
+    },
+  });
+
+  React.useEffect(() => {
+    if (ethAddress && itemData.author.ethAddress) {
+      followActions.isFollowing(ethAddress, itemData.author.ethAddress);
+    }
+  }, [ethAddress, itemData.author.ethAddress]);
+
+  const handleFollow = () => {
+    if (itemData.author.ethAddress) {
+      followActions.follow(itemData.author.ethAddress);
+    }
+  };
+
+  const handleUnfollow = () => {
+    if (itemData.author.ethAddress) {
+      followActions.unfollow(itemData.author.ethAddress);
+    }
+  };
+
+  const isFollowing = followedProfiles.includes(itemData.author.ethAddress);
 
   return (
     <ErrorInfoCard errors={{}}>
@@ -79,8 +110,9 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   onEntryShare={props.onShare}
                   onEntryFlag={props.onFlag(itemData.entryId, props.ethAddress)}
                   onClickReplies={props.onRepliesClick}
-                  handleFollow={props.onFollow}
-                  handleUnfollow={props.onUnfollow}
+                  handleFollowAuthor={handleFollow}
+                  handleUnfollowAuthor={handleUnfollow}
+                  isFollowingAuthor={isFollowing}
                   onContentClick={props.onNavigate}
                   onMentionClick={props.onMentionClick}
                 />

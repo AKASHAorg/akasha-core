@@ -3,11 +3,11 @@ import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { chartData } from './Charts.stories';
 
 const trendingTagsData = [
-  { name: '#AKASHA', posts: 176, tagHistoricData: chartData, subscribed: true },
-  { name: '#AKASHAWorld', posts: 94, tagHistoricData: chartData, subscribed: false },
-  { name: '#Ethereum', posts: 27, tagHistoricData: chartData, subscribed: false },
-  { name: '#EthereumWorld', posts: 17, tagHistoricData: chartData, subscribed: true },
-  { name: '#Crypto', posts: 6, tagHistoricData: chartData, subscribed: false },
+  { name: '#AKASHA', totalPosts: 176, tagHistoricData: chartData, subscribed: true },
+  { name: '#AKASHAWorld', totalPosts: 94, tagHistoricData: chartData, subscribed: false },
+  { name: '#Ethereum', totalPosts: 27, tagHistoricData: chartData, subscribed: false },
+  { name: '#EthereumWorld', totalPosts: 17, tagHistoricData: chartData, subscribed: true },
+  { name: '#Crypto', totalPosts: 6, tagHistoricData: chartData, subscribed: false },
 ];
 
 const trendingProfilesData = [
@@ -94,12 +94,12 @@ const profileData = {
   ensName: 'gilbert.akasha.eth',
   description:
     'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
-  followers: '15',
-  following: '1876',
+  totalFollowers: '15',
+  totalFollowing: '1876',
   isFollowed: true,
   apps: '12',
   profileType: 'user',
-  postsNumber: 235,
+  totalPosts: 235,
 };
 
 const profileProvidersData = {
@@ -397,10 +397,9 @@ const changeCoverImageLabel = 'Change Cover Image';
 const cancelLabel = 'Cancel';
 const saveChangesLabel = 'Save Changes';
 const followingLabel = 'Following';
-const appsLabel = 'Apps';
+const followersLabel = 'Followers';
+const postsLabel = 'Posts';
 const aboutMeLabel = 'About';
-const actionsLabel = 'Actions';
-const usersLabel = 'Users';
 const commentsLabel = 'Comments';
 const quotesLabel = 'Quotes';
 const shareLabel = 'Share';
@@ -424,10 +423,8 @@ const repostsLabel = 'Reposts';
 export {
   appInfo,
   aboutMeLabel,
-  actionsLabel,
   appData,
   appsDataSource,
-  appsLabel,
   cancelLabel,
   changeCoverImageLabel,
   commentInputPlaceholderLabel,
@@ -439,6 +436,8 @@ export {
   entryData,
   entrySocialData,
   followingLabel,
+  followersLabel,
+  postsLabel,
   profileProvidersData,
   placeholderLabel,
   profileData,
@@ -450,7 +449,6 @@ export {
   shareLabel,
   shareProfileLabel,
   topicsDataSource,
-  usersLabel,
   boxProviderData,
   ensProviderData,
   copyIPFSLinkLabel,

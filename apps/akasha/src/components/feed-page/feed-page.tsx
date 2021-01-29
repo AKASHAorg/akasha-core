@@ -276,7 +276,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           ethAddress: loginProfile.ethAddress as string,
           avatar: loginProfile.avatar,
           userName: loginProfile.userName,
-          ensName: loginProfile.ensName,
+          name: loginProfile.name,
           coverImage: loginProfile.coverImage,
           description: loginProfile.description,
         },
@@ -401,6 +401,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         }
         itemCard={
           <EntryCardRenderer
+            sdkModules={props.sdkModules}
+            logger={props.logger}
             bookmarks={bookmarks}
             ethAddress={ethAddress}
             locale={locale}

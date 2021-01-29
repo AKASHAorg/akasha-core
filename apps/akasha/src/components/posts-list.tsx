@@ -124,6 +124,8 @@ const PostsList: React.FC<IPostsListProps> = props => {
           hasMoreItems={true}
           itemCard={
             <EntryCardRenderer
+              sdkModules={props.channels}
+              logger={props.logger}
               locale={locale}
               onFollow={handleFollow}
               onUnfollow={handleUnfollow}

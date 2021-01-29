@@ -63,7 +63,7 @@ const TagDetailCard: React.FC<ITagDetailCard> = props => {
         <Box direction="row" justify="between" pad={{ vertical: 'medium' }}>
           <SubtitleTextIcon
             label={tag.name}
-            subtitle={`${tag.posts} ${mentionsLabel}`}
+            subtitle={`${tag.totalPosts} ${mentionsLabel}`}
             gap="xxsmall"
           />
           <DuplexButton

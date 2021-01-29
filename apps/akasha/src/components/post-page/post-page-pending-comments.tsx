@@ -53,6 +53,9 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
             onAvatarClick={() => {
               /* not allowed */
             }}
+            onMentionClick={() => {
+              /* not allowed */
+            }}
           />
         ),
       })),
