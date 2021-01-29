@@ -263,6 +263,10 @@ const service: AkashaService = (invoke, log) => {
              description
              coverImage
              ethAddress
+             creationDate
+             totalPosts
+             totalFollowers
+             totalFollowing
          }
        }`;
     const result = await runGQL({
