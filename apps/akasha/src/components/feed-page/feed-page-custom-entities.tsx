@@ -2,9 +2,9 @@ import * as React from 'react';
 import EntryCardRenderer from './entry-card-renderer';
 
 export interface IGetCustomEntitiesProps {
-  sdkModules?: any;
-  logger?: any;
-  globalChannel?: any;
+  sdkModules: any;
+  logger: any;
+  globalChannel: any;
   isMobile: boolean;
   feedItems: string[];
   loggedEthAddress: string | null;
