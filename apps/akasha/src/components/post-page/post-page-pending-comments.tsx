@@ -2,6 +2,9 @@ import * as React from 'react';
 import PostRenderer from './post-renderer';
 
 export interface IGetCustomEntitiesProps {
+  sdkModules?: any;
+  logger?: any;
+  globalChannel?: any;
   isMobile: boolean;
   feedItems: string[];
   loggedEthAddress: string | null;
@@ -11,7 +14,7 @@ export interface IGetCustomEntitiesProps {
 }
 
 export const getPendingComments = (props: IGetCustomEntitiesProps) => {
-  const { feedItems, pendingComments = [], locale } = props;
+  const { feedItems, pendingComments = [], locale, sdkModules, logger, globalChannel } = props;
 
   let customEntities: any = [];
 
@@ -22,6 +25,9 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
         itemId: feedItems.length ? feedItems[0] : null,
         getComponent: ({ key, style }: { key: string; style: React.CSSProperties }) => (
           <PostRenderer
+            sdkModules={sdkModules}
+            logger={logger}
+            globalChannel={globalChannel}
             key={`${entry.author.ethAddress}-${idx}-${key}`}
             style={{ ...style, backgroundColor: '#4e71ff0f' }}
             itemData={entry}
