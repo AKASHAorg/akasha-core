@@ -8,12 +8,15 @@ import { filter, takeLast } from 'rxjs/operators';
 import { forkJoin, race } from 'rxjs';
 import useProfile, { UseProfileActions } from './use-profile';
 import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
+import { createErrorHandler } from './utils/error-handler';
 
 export interface UseLoginProps {
   /* sdk global events observable */
   globalChannel: any;
   /* error handler */
   onError?: (err: IAkashaError) => void;
+  // handler called when the user is logging out
+  onLogout?: () => void;
   /* sdk authentication module */
   authService: any;
   profileService: any;
@@ -64,24 +67,33 @@ const useLoginState = (
     onError: onError,
   });
   // this will also reset profile data
-  useGlobalLogin(
+  useGlobalLogin({
     globalChannel,
-    payload =>
+    onLogin: payload =>
       setLoginState(prev => ({
         ...prev,
         ethAddress: payload.ethAddress,
         pubKey: payload.pubKey,
       })),
-    payload => {
-      if (onError) {
-        onError({
-          errorKey: 'useLoginState.globalLogin',
-          error: payload.error,
-          critical: false,
-        });
+    onLogout: () => {
+      if (props.onLogout) {
+        props.onLogout();
       }
+      setLoginState({
+        ethAddress: null,
+        pubKey: null,
+        updateStatus: {
+          saving: false,
+          uploadingAvatar: false,
+          uploadingCoverImage: false,
+          updateComplete: false,
+        },
+      });
     },
-  );
+    onError: payload => {
+      createErrorHandler('useLoginState.globalLogin', false, onError)(payload.error);
+    },
+  });
 
   React.useEffect(() => {
     if (loginState.ethAddress) {
@@ -93,27 +105,16 @@ const useLoginState = (
     // make an attempt to load the eth address from cache;
     if (authService) {
       const getDeps = authService.getCurrentUser(null);
-      getDeps.subscribe(
-        (resp: { data: any }) => {
-          const { data } = resp;
-          if (data?.ethAddress && data?.pubKey) {
-            setLoginState(prev => ({
-              ...prev,
-              ethAddress: data.ethAddress,
-              pubKey: data.pubKey,
-            }));
-          }
-        },
-        (err: Error) => {
-          if (onError) {
-            onError({
-              errorKey: 'useLoginState.authService',
-              error: err,
-              critical: false,
-            });
-          }
-        },
-      );
+      getDeps.subscribe((resp: { data: any }) => {
+        const { data } = resp;
+        if (data?.ethAddress && data?.pubKey) {
+          setLoginState(prev => ({
+            ...prev,
+            ethAddress: data.ethAddress,
+            pubKey: data.pubKey,
+          }));
+        }
+      }, createErrorHandler('useLoginState.authService', false, onError));
     }
   }, []);
 
@@ -127,15 +128,7 @@ const useLoginState = (
           saving: true,
         },
       }));
-      const errorHandler = (err: Error) => {
-        if (onError) {
-          onError({
-            errorKey: 'useLoginState.optimisticUpdate',
-            error: err,
-            critical: true,
-          });
-        }
-      };
+
       const obs = [];
       if (avatar && avatar.src && avatar.preview !== loggedProfileData.avatar) {
         setLoginState(prev => ({
@@ -251,8 +244,8 @@ const useLoginState = (
               updateComplete: true,
             },
           }));
-        }, errorHandler);
-      }, errorHandler);
+        }, createErrorHandler('useLoginState.optimisticUpdate.makeDefault', false, onError));
+      }, createErrorHandler('useLoginState.optimisticUpdate.forkJoin', false, onError));
     },
     login(selectedProvider: EthProviders) {
       try {
@@ -262,51 +255,39 @@ const useLoginState = (
           filter((response: any) => response.channelInfo.method === 'signIn'),
           takeLast(1),
         );
-        race(call, globalCall).subscribe(
-          (response: any) => {
-            const { pubKey, ethAddress } = response.data;
-            setLoginState(prev => ({
-              ...prev,
-              pubKey,
-              ethAddress,
-            }));
-          },
-          (err: Error) => {
-            if (onError) {
-              onError({
-                errorKey: 'useLoginState[subscription].login',
-                error: err,
-                critical: false,
-              });
-            }
-          },
-        );
+        race(call, globalCall).subscribe((response: any) => {
+          const { pubKey, ethAddress } = response.data;
+          setLoginState(prev => ({
+            ...prev,
+            pubKey,
+            ethAddress,
+          }));
+        }, createErrorHandler('useLoginState.login.subscription', false, onError));
       } catch (ex) {
-        if (onError) {
-          onError({
-            errorKey: 'useLoginState.login',
-            error: ex,
-            critical: false,
-          });
-        }
+        createErrorHandler('useLoginState.login', false, onError)(ex);
       }
     },
     logout() {
       const call = authService.signOut(null);
-      call.subscribe((resp: any) => {
-        if (resp.data) {
+      call.subscribe(
+        (resp: any) => {
+          if (resp.data) {
+            setLoginState(prev => ({
+              ...prev,
+              ethAddress: null,
+              token: null,
+            }));
+          }
+        },
+        (err: Error) => {
+          createErrorHandler('useLoginState.logout', false, onError)(err);
           setLoginState(prev => ({
             ...prev,
             ethAddress: null,
             token: null,
           }));
-        }
-      });
-      setLoginState(prev => ({
-        ...prev,
-        ethAddress: null,
-        token: null,
-      }));
+        },
+      );
     },
     resetUpdateStatus() {
       setLoginState(prev => ({

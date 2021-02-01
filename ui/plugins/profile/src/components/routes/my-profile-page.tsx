@@ -95,6 +95,8 @@ const MyProfilePage = (props: MyProfileProps) => {
     ensService: props.sdkModules.registry.ens,
   });
 
+  const prevEthAddress = React.useRef<string | null>(null);
+
   React.useEffect(() => {
     if (profileUpdateStatus.updateComplete && props.modalState[MODAL_NAMES.PROFILE_UPDATE]) {
       closeProfileUpdateModal();
@@ -113,8 +115,15 @@ const MyProfilePage = (props: MyProfileProps) => {
     JSON.stringify(props.modalState),
   ]);
 
+  React.useEffect(() => {
+    if (!props.ethAddress && prevEthAddress.current) {
+      props.singleSpa.navigateToUrl('/');
+    }
+    if (!prevEthAddress.current && props.ethAddress) {
+      prevEthAddress.current = props.ethAddress;
+    }
+  }, [props.ethAddress]);
   const onProfileUpdateSubmit = (data: any) => {
-    console.log(data, 'updating data');
     props.loginActions.optimisticUpdate(data);
   };
 

@@ -3,7 +3,6 @@ import { createGlobalStyle } from 'styled-components';
 import { Box, Text } from 'grommet';
 import { ModalRenderer } from '../common/modal-renderer';
 import { EthProviderListModal, EthProviderModal, EthProviderModalIllustration } from '../index';
-// import { IconLink } from '../../Buttons';
 import { TextIcon } from '../../TextIcon';
 import { Icon } from '../../Icon';
 
@@ -33,6 +32,7 @@ export interface LoginModalProps {
    * modal
    */
   helpText: string;
+  error: string | null;
 }
 
 const METAMASK_PROVIDER = 'metamask';
@@ -132,6 +132,7 @@ const LoginModal: React.FC<LoginModalProps> = props => {
           message={metamaskModalMessage}
           onLogin={handleMetamaskLogin}
           onModalClose={handleProviderModalClose}
+          error={props.error}
         />
       )}
       {showModal && modalState.selectedProvider === WALLETCONNECT_PROVIDER && (

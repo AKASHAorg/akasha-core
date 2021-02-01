@@ -4,6 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import ProfileCardWidget from './profile-card-widget';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import routes, { POST } from '../../routes';
 
 const { ThemeSelector, lightTheme, darkTheme, ErrorInfoCard, ErrorLoader } = DS;
 
@@ -51,7 +52,7 @@ class Widget extends React.Component<RootComponentProps> {
                         />
                       )}
                       {!isCritical && (
-                        <Route path="/:appName/posts/:userId">
+                        <Route path={`${routes[POST]}/:postId`}>
                           <ProfileCardWidget {...this.props} />
                         </Route>
                       )}

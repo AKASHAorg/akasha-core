@@ -18,6 +18,7 @@ import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
 import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
+import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const {
   Box,
@@ -34,12 +35,8 @@ const {
 } = DS;
 
 interface IPostPage {
-  channels: any;
-  globalChannel: any;
-  logger: any;
   ethAddress: string | null;
   pubKey: string | null;
-  slotId: string;
   flagged: string;
   reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
@@ -47,12 +44,12 @@ interface IPostPage {
   showLoginModal: () => void;
   navigateToUrl: (path: string) => void;
   isMobile: boolean;
+  onError: (err: IAkashaError) => void;
 }
 
-const PostPage: React.FC<IPostPage> = props => {
+const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const {
-    slotId,
-    channels,
+    sdkModules,
     flagged,
     reportModalOpen,
     setFlagged,
@@ -76,8 +73,8 @@ const PostPage: React.FC<IPostPage> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [loginProfile, loginProfileActions] = useProfile({
-    profileService: props.channels.profiles.profileService,
-    ipfsService: props.channels.commons.ipfsService,
+    profileService: props.sdkModules.profiles.profileService,
+    ipfsService: props.sdkModules.commons.ipfsService,
   });
 
   React.useEffect(() => {
@@ -91,7 +88,7 @@ const PostPage: React.FC<IPostPage> = props => {
     onError: () => {
       return;
     },
-    sdkModules: channels,
+    sdkModules,
     logger: logger,
   });
 
@@ -109,11 +106,11 @@ const PostPage: React.FC<IPostPage> = props => {
   };
 
   const fetchComments = async (payload: { limit: number; offset?: string; postID: string }) => {
-    const getCommentsCall = channels.posts.comments.getComments({
+    const getCommentsCall = sdkModules.posts.comments.getComments({
       ...payload,
       offset: payload.offset || feedState.nextItemId,
     });
-    const ipfsGatewayCall = channels.commons.ipfsService.getSettings({});
+    const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
     const call = combineLatest([ipfsGatewayCall, getCommentsCall]);
     call.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
@@ -144,8 +141,8 @@ const PostPage: React.FC<IPostPage> = props => {
   };
 
   const loadItemData = async (payload: ILoadItemDataPayload) => {
-    const commentCall = channels.posts.comments.getComment({ commentID: payload.itemId });
-    const ipfsGatewayCall = channels.commons.ipfsService.getSettings({});
+    const commentCall = sdkModules.posts.comments.getComment({ commentID: payload.itemId });
+    const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
     const getCommentCall = combineLatest([ipfsGatewayCall, commentCall]);
     getCommentCall.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
@@ -158,8 +155,8 @@ const PostPage: React.FC<IPostPage> = props => {
   };
 
   React.useEffect(() => {
-    const entryCall = channels.posts.entries.getEntry({ entryId: postId });
-    const ipfsGatewayCall = channels.commons.ipfsService.getSettings({});
+    const entryCall = sdkModules.posts.entries.getEntry({ entryId: postId });
+    const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
     const call = combineLatest([ipfsGatewayCall, entryCall]);
     call.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
@@ -186,7 +183,10 @@ const PostPage: React.FC<IPostPage> = props => {
     if (!ethAddress) {
       return showLoginModal();
     }
-    bookmarkActions.addBookmark(entryId);
+    if (bookmarks.has(entryId)) {
+      return bookmarkActions.removeBookmark(entryId);
+    }
+    return bookmarkActions.addBookmark(entryId);
   };
   const handleEntryRepost = () => {
     // todo
@@ -260,7 +260,7 @@ const PostPage: React.FC<IPostPage> = props => {
 
       setPendingComments(prev => prev.concat([pending]));
 
-      const publishCommentCall = channels.posts.comments.addComment(publishObj);
+      const publishCommentCall = sdkModules.posts.comments.addComment(publishObj);
       publishCommentCall.subscribe((postingResp: any) => {
         const publishedCommentId = postingResp.data.addComment;
         const commentData = pending as IEntryData;
@@ -278,7 +278,7 @@ const PostPage: React.FC<IPostPage> = props => {
 
   const [tags, setTags] = React.useState([]);
   const handleGetTags = (query: string) => {
-    const tagsService = channels.posts.tags.searchTags({ tagName: query });
+    const tagsService = sdkModules.posts.tags.searchTags({ tagName: query });
     tagsService.subscribe((resp: any) => {
       if (resp.data?.searchTags) {
         const filteredTags = resp.data.searchTags;
@@ -289,7 +289,7 @@ const PostPage: React.FC<IPostPage> = props => {
 
   const [mentions, setMentions] = React.useState([]);
   const handleGetMentions = (query: string) => {
-    const mentionsService = channels.profiles.profileService.searchProfiles({ name: query });
+    const mentionsService = sdkModules.profiles.profileService.searchProfiles({ name: query });
     mentionsService.subscribe((resp: any) => {
       if (resp.data?.searchProfiles) {
         const filteredMentions = resp.data.searchProfiles;
@@ -301,15 +301,15 @@ const PostPage: React.FC<IPostPage> = props => {
   const handleNavigateToPost = redirectToPost(navigateToUrl);
 
   const onUploadRequest = uploadMediaToTextile(
-    channels.profiles.profileService,
-    channels.commons.ipfsService,
+    sdkModules.profiles.profileService,
+    sdkModules.commons.ipfsService,
   );
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
         <title>AKASHA Post | Ethereum.world</title>
       </Helmet>
-      <ModalRenderer slotId={slotId}>
+      <ModalRenderer slotId={props.layout.app.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal

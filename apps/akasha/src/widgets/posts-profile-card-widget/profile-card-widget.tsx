@@ -7,8 +7,7 @@ import { useProfile } from '@akashaproject/ui-awf-hooks';
 const { ProfileMiniCard } = DS;
 
 const ProfileCardWidget: React.FC<RootComponentProps> = props => {
-  const { params } = useRouteMatch<{ userId: string }>();
-
+  const { params } = useRouteMatch<{ postId: string }>();
   const [profileState, profileActions] = useProfile({
     onError: err => {
       if (props.logger) {
@@ -17,13 +16,15 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
     },
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
+    postsService: props.sdkModules.posts,
   });
 
   React.useEffect(() => {
-    if (params.userId) {
-      profileActions.getProfileData({ ethAddress: params.userId });
+    if (params.postId) {
+      profileActions.getEntryAuthor({ entryId: params.postId });
+      // profileActions.getProfileData({ ethAddress: params.userId });
     }
-  }, [params.userId]);
+  }, [params.postId]);
 
   return (
     <>

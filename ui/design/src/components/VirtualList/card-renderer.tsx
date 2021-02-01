@@ -12,6 +12,7 @@ const CardRenderer = (props: IRenderItemProps) => {
     itemCard,
     itemRect,
     updateRef,
+    averageItemHeight,
   } = props;
 
   const beforeEntities = customEntities.filter(
@@ -58,7 +59,7 @@ const CardRenderer = (props: IRenderItemProps) => {
         return entityObj.getComponent({ key: idx, style: { marginBottom: itemSpacing } });
       })}
 
-      {!shouldLoadData && <EntryLoadingPlaceholder />}
+      {!shouldLoadData && <EntryLoadingPlaceholder height={averageItemHeight} />}
       {itemData && shouldLoadData && React.cloneElement(itemCard, { itemId, itemData })}
 
       {afterEntities.map((entityObj, idx) => {

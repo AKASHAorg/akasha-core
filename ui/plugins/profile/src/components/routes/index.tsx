@@ -5,8 +5,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import menuRoute, { MY_PROFILE, rootRoute } from '../../routes';
 import MyProfilePage from './my-profile-page';
 import ProfilePage from './profile-page';
-import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
-import { useLoginState, useModalState } from '@akashaproject/ui-awf-hooks';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { useLoginState, useModalState, useErrors } from '@akashaproject/ui-awf-hooks';
 
 const { Box, LoginModal } = DS;
 
@@ -14,15 +14,16 @@ const Routes: React.FC<RootComponentProps> = props => {
   const { activeWhen, logger } = props;
   const { path } = activeWhen;
 
+  const [errorState, errorActions] = useErrors({ logger });
+
   const [loginState, loginActions] = useLoginState({
     globalChannel: props.globalChannel,
     authService: props.sdkModules.auth.authService,
     profileService: props.sdkModules.profiles.profileService,
     ipfsService: props.sdkModules.commons.ipfsService,
-    onError: (errorInfo: IAkashaError) => {
-      logger.error(errorInfo.error.message, errorInfo.errorKey);
-    },
+    onError: errorActions.createError,
   });
+
   const [modalState, modalStateActions] = useModalState({
     initialState: {
       updateProfile: false,
@@ -34,6 +35,17 @@ const Routes: React.FC<RootComponentProps> = props => {
   });
 
   const { t } = useTranslation();
+
+  const loginErrors: string | null = React.useMemo(() => {
+    if (errorState && Object.keys(errorState).length) {
+      const txt = Object.keys(errorState)
+        .filter(key => key.split('.')[0] === 'useLoginState')
+        .map(k => errorState![k])
+        .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
+      return txt;
+    }
+    return null;
+  }, [errorState]);
 
   const hideLoginModal = () => {
     modalStateActions.hide('loginModal');
@@ -80,6 +92,7 @@ const Routes: React.FC<RootComponentProps> = props => {
         metamaskModalMessage={t('Please complete the process in your wallet')}
         onTutorialLinkClick={handleTutorialLinkClick}
         helpText={t('What is a wallet? How do i get an Ethereum address?')}
+        error={loginErrors}
       />
     </Router>
   );

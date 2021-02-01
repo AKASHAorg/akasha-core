@@ -1,30 +1,23 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useFeedReducer, useEntryBookmark, useProfile } from '@akashaproject/ui-awf-hooks';
+import { useEntryBookmark, useProfile, useErrors } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import {
   ILoadItemDataPayload,
   ILoadItemsPayload,
 } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import {
-  mapEntry,
-  uploadMediaToTextile,
-  buildPublishObject,
-  PROPERTY_SLATE_CONTENT,
-  createPendingEntry,
-} from '../../services/posting-service';
+import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { uploadMediaToTextile } from '../../services/posting-service';
 import { BASE_FLAG_URL } from '../../services/constants';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
-import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
-import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
 import { application as loginWidget } from '@akashaproject/ui-widget-login/lib/bootstrap';
 
-// @ts-ignore
+// @ts-expect-error: Missing types for parcel...
 import Parcel from 'single-spa-react/parcel';
+import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
 
 const {
   Box,
@@ -50,7 +43,7 @@ export interface FeedPageProps {
   reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
   setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onError: (err: Error) => void;
+  onError: (err: IAkashaError) => void;
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
@@ -67,11 +60,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     sdkModules,
     logger,
   } = props;
-  const [feedState, feedStateActions] = useFeedReducer({});
-  const [isLoading, setIsLoading] = React.useState(false);
   const [showEditor, setShowEditor] = React.useState(false);
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
-  const [pendingEntries, setPendingEntries] = React.useState<any[]>([]);
+
   const [loginProfile, loginProfileActions] = useProfile({
     profileService: sdkModules.profiles.profileService,
     ipfsService: sdkModules.commons.ipfsService,
@@ -94,63 +85,28 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     sdkModules: sdkModules,
     logger: logger,
   });
+  const [, errorActions] = useErrors({ logger });
 
-  const handleLoadMore = async (payload: ILoadItemsPayload) => {
+  const [postsState, postsActions] = usePosts({
+    postsService: sdkModules.posts,
+    ipfsService: sdkModules.commons.ipfsService,
+    onError: errorActions.createError,
+  });
+
+  const handleLoadMore = (payload: ILoadItemsPayload) => {
     const req: { limit: number; offset?: string } = {
       limit: payload.limit,
     };
-    if (!isLoading) {
-      setIsLoading(true);
+    if (!postsState.isFetchingList) {
       fetchEntries(req);
     }
   };
 
-  const loadItemData = async (payload: ILoadItemDataPayload) => {
-    const entryCall = sdkModules.posts.entries.getEntry({ entryId: payload.itemId });
-    const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
-    const getEntryCall = combineLatest([ipfsGatewayCall, entryCall]);
-    getEntryCall.subscribe((resp: any) => {
-      const ipfsGateway = resp[0].data;
-      const entry = resp[1].data?.getPost;
-      if (entry) {
-        const mappedEntry = mapEntry(entry, ipfsGateway);
-        feedStateActions.setFeedItemData(mappedEntry);
-      }
-    });
+  const loadItemData = (payload: ILoadItemDataPayload) => {
+    postsActions.getPost(payload.itemId);
   };
-  const fetchEntries = async (payload: { limit: number; offset?: string }) => {
-    const getEntriesCall = sdkModules.posts.entries.getEntries({
-      ...payload,
-      offset: payload.offset || feedState.nextItemId,
-    });
-
-    const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
-    const call = combineLatest([ipfsGatewayCall, getEntriesCall]);
-
-    call.subscribe((resp: any) => {
-      const ipfsGateway = resp[0].data;
-      const {
-        data,
-      }: { channelInfo: any; data: { posts: { nextIndex: string; results: any[] } } } = resp[1];
-      const { nextIndex, results } = data.posts;
-      const entryIds: { entryId: string }[] = [];
-      results.forEach(async entry => {
-        // filter out entries without content in slate format
-        // currently entries can display only content in slate format
-        // this can be changed later
-
-        if (entry.content.findIndex((elem: any) => elem.property === PROPERTY_SLATE_CONTENT) > -1) {
-          entryIds.push({ entryId: entry._id });
-          const mappedEntry = mapEntry(entry, ipfsGateway);
-          feedStateActions.setFeedItemData(mappedEntry);
-        }
-      });
-      feedStateActions.setFeedItems({ items: entryIds, nextItemId: nextIndex });
-      if (nextIndex === null) {
-        feedStateActions.hasMoreItems(false);
-      }
-      setIsLoading(false);
-    });
+  const fetchEntries = (payload: { limit: number; offset?: string }) => {
+    postsActions.getPosts(payload);
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
@@ -161,7 +117,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     if (!ethAddress) {
       return showLoginModal();
     }
-    bookmarkActions.addBookmark(entryId);
+    if (bookmarks.has(entryId)) {
+      return bookmarkActions.removeBookmark(entryId);
+    }
+    return bookmarkActions.addBookmark(entryId);
   };
   const handleEntryRepost = (_withComment: boolean, entryData: any) => {
     if (!ethAddress) {
@@ -223,7 +182,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [mentions, setMentions] = React.useState([]);
   const handleGetMentions = (query: string) => {
-    const mentionsService = sdkModules.profiles.profileService.searchProfiles({ name: query });
+    const mentionsService = sdkModules.profiles.profileService.searchProfiles({
+      name: query,
+    });
     mentionsService.subscribe((resp: any) => {
       if (resp.data?.searchProfiles) {
         const filteredMentions = resp.data.searchProfiles;
@@ -244,57 +205,15 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
-  const handleEntryPublish = async (data: {
-    metadata: {
-      app: string;
-      version: number;
-      quote?: string;
-      tags: string[];
-      mentions: string[];
-    };
-    author: string;
-    content: any;
-    textContent: any;
-  }) => {
+  const handleEntryPublish = async (data: PublishPostData) => {
     if (!ethAddress && !pubKey) {
       showLoginModal();
       return;
     }
-    try {
-      const publishObj = buildPublishObject(data);
-      const pending = createPendingEntry(
-        {
-          ethAddress: loginProfile.ethAddress as string,
-          avatar: loginProfile.avatar,
-          userName: loginProfile.userName,
-          ensName: loginProfile.ensName,
-          coverImage: loginProfile.coverImage,
-          description: loginProfile.description,
-        },
-        data,
-      );
-
-      const postEntryCall = sdkModules.posts.entries.postEntry(publishObj);
-      setPendingEntries(prev => prev.concat([{ ...pending, quote: currentEmbedEntry }]));
-      postEntryCall.subscribe((postingResp: any) => {
-        const publishedEntryId = postingResp.data.createPost;
-        const entryData = pending as IEntryData;
-        feedStateActions.setFeedItemData({
-          ...entryData,
-          entryId: publishedEntryId,
-          quote: currentEmbedEntry,
-        });
-        setPendingEntries([]);
-        feedStateActions.setFeedItems({
-          reverse: true,
-          items: [{ entryId: publishedEntryId }],
-        });
-      });
-    } catch (err) {
-      logger.error('Error publishing entry %j', err);
-    }
+    postsActions.optimisticPublish(data, loginProfile, currentEmbedEntry);
     setShowEditor(false);
   };
+
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -363,11 +282,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         style={{ width: '36rem' }}
       />
       <VirtualList
-        items={feedState.feedItems}
-        itemsData={feedState.feedItemData}
+        items={postsState.postIds}
+        itemsData={postsState.postsData}
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
-        hasMoreItems={feedState.hasMoreItems}
+        hasMoreItems={!!postsState.nextIndex}
         listHeader={
           ethAddress ? (
             <EditorPlaceholder
@@ -408,9 +327,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         }
         customEntities={getFeedCustomEntities({
           isMobile,
-          feedItems: feedState.feedItems,
+          feedItems: postsState.postIds,
           loggedEthAddress: ethAddress,
-          pendingEntries: pendingEntries,
+          pendingEntries: postsState.pending,
         })}
       />
     </Box>

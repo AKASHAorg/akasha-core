@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { createContextStore, ActionMapper } from 'easy-peasy';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useGlobalLogin } from '@akashaproject/ui-awf-hooks';
@@ -18,7 +18,7 @@ const { Box, LoginModal, ViewportSizeProvider } = DS;
 
 interface AppRoutesProps {
   profileStore: ReturnType<typeof createContextStore>;
-  onError: (err: Error) => void;
+  onError: (err: IAkashaError) => void;
 }
 
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
@@ -65,20 +65,25 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     }
   }, [ethAddress]);
 
-  useGlobalLogin(
+  useGlobalLogin({
     globalChannel,
-    data => {
+    onLogin: data => {
       updateData({
         ethAddress: data.ethAddress,
         jwtToken: data.pubKey,
       });
     },
-    err => {
-      logger.error('[app-routes.tsx]: useGlobalState err %j', err.error);
-      onError(err.error);
+    onLogout: () => {},
+    onError: err => {
+      logger.error('[app-routes.tsx]: useGlobalLogin err %j', err.error);
+      onError({
+        errorKey: 'moderation.appRoutes.useGlobalLogin',
+        error: err.error,
+        critical: false,
+      });
       setLoginModalState(false);
     },
-  );
+  });
 
   return (
     <ViewportSizeProvider>
@@ -130,6 +135,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           metamaskModalMessage={t('Please complete the process in your wallet')}
           onTutorialLinkClick={() => null}
           helpText={t('What is a wallet? How do I get an Ethereum address?')}
+          error={null}
         />
       </Box>
     </ViewportSizeProvider>

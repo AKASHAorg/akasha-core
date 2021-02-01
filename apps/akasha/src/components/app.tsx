@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { I18nextProvider } from 'react-i18next';
 import AppRoutes from './app-routes';
 
@@ -25,17 +25,14 @@ export default class Application extends React.Component<RootComponentProps> {
       });
     }
   }
-  public handleError(err: Error) {
+  public handleError(err: IAkashaError) {
     if (this.props.logger) {
       this.props.logger.error('akasha-app error %j', err);
     }
-    if (!this.state.errors[err.name]) {
+    if (!this.state.errors[err.errorKey]) {
       this.setState({
         errors: {
-          [err.name]: {
-            error: err,
-            critical: false,
-          },
+          [err.errorKey]: err,
         },
       });
     }
