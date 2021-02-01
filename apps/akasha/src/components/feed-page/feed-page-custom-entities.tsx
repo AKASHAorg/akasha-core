@@ -22,7 +22,7 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
         getComponent: ({ key, style }: { key: string; style: React.CSSProperties }) => (
           <EntryCardRenderer
             key={`${entry.author.ethAddress}-${idx}-${key}`}
-            style={{ ...style, backgroundColor: '#4e71ff0f' }}
+            style={{ ...style, backgroundColor: 'rgba(78,113,255,0.01)' }}
             itemData={entry}
             onFollow={() => {
               /* not allowed */
@@ -49,6 +49,9 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
               /* not allowed */
             }}
             onAvatarClick={() => {
+              /* not allowed */
+            }}
+            onMentionClick={() => {
               /* not allowed */
             }}
           />

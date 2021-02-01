@@ -21,7 +21,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   const [loginState, loginActions] = useLoginState({
     globalChannel: globalChannel,
     onError: (err: IAkashaError) => {
-      logger('useLoginState error %j', err);
+      logger.error('useLoginState error %j', err);
     },
     authService: sdkModules.auth.authService,
     ipfsService: sdkModules.commons.ipfsService,
@@ -83,7 +83,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
             <Route path={routes[FEED]}>
               <FeedPage
                 {...props}
-                navigateToUrl={singleSpa.navigateToUrl}
                 ethAddress={ethAddress}
                 pubKey={pubKey}
                 flagged={flagged}

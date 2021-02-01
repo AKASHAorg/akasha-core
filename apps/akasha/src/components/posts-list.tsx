@@ -110,6 +110,9 @@ const PostsList: React.FC<IPostsListProps> = props => {
   const handleUnfollow = () => {
     /* todo */
   };
+  const handleMentionClick = (profileEthAddress: string) => {
+    props.navigateToUrl(`/profile/${profileEthAddress}`);
+  };
 
   const handleFlipCard = (entry: any) => () => {
     const entryMod = { ...entry, reported: false };
@@ -133,6 +136,8 @@ const PostsList: React.FC<IPostsListProps> = props => {
           hasMoreItems={true}
           itemCard={
             <EntryCardRenderer
+              sdkModules={props.channels}
+              logger={props.logger}
               locale={locale}
               onFollow={handleFollow}
               onUnfollow={handleUnfollow}
@@ -143,6 +148,7 @@ const PostsList: React.FC<IPostsListProps> = props => {
               onRepost={handleEntryRepost}
               onShare={handleEntryShare}
               onAvatarClick={handleAvatarClick}
+              onMentionClick={handleMentionClick}
             />
           }
           itemCardAlt={(entry: any) => (

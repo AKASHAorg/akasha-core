@@ -9,12 +9,11 @@ import {
   appData,
   profileData,
   profileProvidersData,
-  appsLabel,
-  usersLabel,
+  postsLabel,
   cancelLabel,
   aboutMeLabel,
-  actionsLabel,
   followingLabel,
+  followersLabel,
   saveChangesLabel,
   editProfileLabel,
   shareProfileLabel,
@@ -27,18 +26,18 @@ storiesOf('Cards/Profile Cards', module)
   .add('profile card', () => (
     <Box align="center" pad={{ top: '40px' }}>
       <ProfileCard
-        onClickApps={() => action('Apps Box Clicked')('Synthetic Event')}
+        onClickFollowers={() => action('Followers Box Clicked')('Synthetic Event')}
         onClickFollowing={() => action('Following Box Clicked')('Synthetic Event')}
+        onClickPosts={() => action('PostsBox Clicked')('Synthetic Event')}
         onChangeProfileData={(newProfileData: IProfileData) =>
           action('ProfileData Changed')(newProfileData)
         }
         // @ts-ignore
         profileData={select('Profile Data', { dapp: appData, user: profileData }, profileData)}
         descriptionLabel={text('About me', aboutMeLabel)}
-        actionsLabel={text('Actions', actionsLabel)}
         followingLabel={text('Following', followingLabel)}
-        appsLabel={text('Apps', appsLabel)}
-        usersLabel={text('Users', usersLabel)}
+        followersLabel={text('Followers', followersLabel)}
+        postsLabel={text('Users', postsLabel)}
         shareProfileLabel={text('Share Profile', shareProfileLabel)}
         // edit profile related
         editProfileLabel={text('Edit Profile', editProfileLabel)}
@@ -61,10 +60,9 @@ storiesOf('Cards/Profile Cards', module)
         // @ts-ignore
         profileData={select('Profile Data', { dapp: appData, user: profileData }, profileData)}
         descriptionLabel={text('About me', aboutMeLabel)}
-        actionsLabel={text('Actions', actionsLabel)}
         followingLabel={text('Following', followingLabel)}
-        appsLabel={text('Apps', appsLabel)}
-        usersLabel={text('Users', usersLabel)}
+        followersLabel={text('Followers', followersLabel)}
+        postsLabel={text('Posts', postsLabel)}
         shareProfileLabel={text('Share Profile', shareProfileLabel)}
       />
     </Box>

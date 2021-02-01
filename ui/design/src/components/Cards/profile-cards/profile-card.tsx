@@ -1,8 +1,8 @@
 import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
-import { IconButton } from '../../Buttons/index';
+import { IconButton, DuplexButton } from '../../Buttons/index';
 import { Icon } from '../../Icon';
-import { SubtitleTextIcon, TextIcon } from '../../TextIcon/index';
+import { TextIcon } from '../../TextIcon/index';
 import { MainAreaCardBox } from '../common/basic-card-box';
 import CardHeaderMenuDropdown from '../entry-cards/card-header-menu';
 import {
@@ -76,16 +76,22 @@ const EditButton = styled(IconButton)`
 const ProfileCard: React.FC<IProfileCardProps> = props => {
   const {
     className,
+    loggedEthAddress,
     onClickFollowing,
-    onClickApps,
+    onClickFollowers,
+    onClickPosts,
+    handleFollow,
+    handleUnfollow,
+    isFollowing,
     profileData,
     descriptionLabel,
-    actionsLabel,
     followingLabel,
-    usersLabel,
+    followersLabel,
+    followLabel,
+    unfollowLabel,
+    postsLabel,
     editProfileLabel,
     shareProfileLabel,
-    appsLabel,
     changeCoverImageLabel,
     flagAsLabel,
     flaggable,
@@ -94,10 +100,9 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     canUserEdit,
   } = props;
 
-  const leftTitle = profileData.following ? profileData.following : profileData.users;
-  const rightTitle = profileData.apps ? profileData.apps : profileData.actions;
-  const leftSubtitle = profileData.profileType === 'dapp' ? usersLabel : followingLabel;
-  const rightSubtitle = profileData.profileType === 'dapp' ? actionsLabel : appsLabel;
+  const postsTitle = `${profileData.totalPosts} ${postsLabel}`;
+  const followersTitle = `${profileData.totalFollowers} ${followersLabel}`;
+  const followingTitle = `${profileData.totalFollowing} ${followingLabel}`;
 
   const handleShareClick = () => {
     // to be implemented
@@ -201,106 +206,121 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         profileProvidersData={profileProvidersData}
       />
       <Box
-        height="70px"
+        direction="column"
         border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
         margin={{ horizontal: 'medium' }}
-        direction="row"
-        justify="between"
       >
-        <Box direction="row">
-          <ProfileCardAvatar
-            ethAddress={profileData.ethAddress}
-            editable={editable}
-            avatar={avatar}
-            avatarIcon={avatarIcon}
-            handleChangeAvatar={handleChangeAvatar}
-            avatarPopoverOpen={avatarPopoverOpen}
-            setAvatarPopoverOpen={setAvatarPopoverOpen}
-            profileProvidersData={profileProvidersData}
-          />
-          <Box pad={{ vertical: 'small', left: 'xsmall' }}>
-            <ProfileCardName
+        <Box height="70px" direction="row" justify="between">
+          <Box direction="row">
+            <ProfileCardAvatar
+              ethAddress={profileData.ethAddress}
               editable={editable}
-              name={name}
-              nameIcon={nameIcon}
-              handleChangeName={handleChangeName}
-              namePopoverOpen={namePopoverOpen}
-              setNamePopoverOpen={setNamePopoverOpen}
+              avatar={avatar}
+              avatarIcon={avatarIcon}
+              handleChangeAvatar={handleChangeAvatar}
+              avatarPopoverOpen={avatarPopoverOpen}
+              setAvatarPopoverOpen={setAvatarPopoverOpen}
               profileProvidersData={profileProvidersData}
             />
+            <Box pad={{ vertical: 'small', left: 'xsmall' }}>
+              <ProfileCardName
+                editable={editable}
+                name={name}
+                nameIcon={nameIcon}
+                handleChangeName={handleChangeName}
+                namePopoverOpen={namePopoverOpen}
+                setNamePopoverOpen={setNamePopoverOpen}
+                profileProvidersData={profileProvidersData}
+              />
 
-            <Box direction="row" gap="xsmall">
-              <Text size="medium" color="secondaryText">
-                {profileData.userName ? profileData.userName : null}
-              </Text>
+              <Box direction="row" gap="xsmall">
+                <Text size="medium" color="secondaryText">
+                  {profileData.userName ? profileData.userName : null}
+                </Text>
+              </Box>
             </Box>
           </Box>
+          <Box direction="row" align="center" gap="small">
+            {!canUserEdit && loggedEthAddress && (
+              <DuplexButton
+                icon={<Icon type="following" />}
+                active={isFollowing}
+                activeLabel={followingLabel}
+                inactiveLabel={followLabel}
+                activeHoverLabel={unfollowLabel}
+                onClickActive={handleUnfollow}
+                onClickInactive={handleFollow}
+              />
+            )}
+            {canUserEdit && (
+              <EditButton
+                primary={true}
+                icon={<Icon type="editSimple" ref={editMenuRef} />}
+                label={editProfileLabel}
+                onClick={toggleEditMenu}
+              />
+            )}
+            {flaggable && (
+              <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
+            )}
+            {menuIconRef.current && menuDropOpen && (
+              <CardHeaderMenuDropdown
+                target={menuIconRef.current}
+                onMenuClose={closeMenuDrop}
+                onFlag={onEntryFlag}
+                flagAsLabel={flagAsLabel}
+              />
+            )}
+          </Box>
         </Box>
-        <Box direction="row" align="center">
-          {leftTitle && rightTitle && (
-            <Box
-              margin={{ right: 'large' }}
-              pad={{ vertical: 'medium', right: 'xxsmall' }}
-              direction="row"
-              alignContent="center"
-              gap="small"
-            >
-              <SubtitleTextIcon
-                iconType="person"
-                label={leftTitle}
-                labelSize="small"
-                subtitle={leftSubtitle}
-                onClick={onClickFollowing}
-                data-testid="following-button"
-              />
-              <SubtitleTextIcon
-                iconType="app"
-                label={rightTitle}
-                labelSize="small"
-                subtitle={rightSubtitle}
-                onClick={onClickApps}
-                data-testid="apps-button"
-              />
-            </Box>
-          )}
-          {canUserEdit && (
-            <EditButton
-              primary={true}
-              icon={<Icon type="editSimple" ref={editMenuRef} />}
-              label={editProfileLabel}
-              onClick={toggleEditMenu}
-            />
-          )}
-          {flaggable && (
-            <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
-          )}
-          {menuIconRef.current && menuDropOpen && (
-            <CardHeaderMenuDropdown
-              target={menuIconRef.current}
-              onMenuClose={closeMenuDrop}
-              onFlag={onEntryFlag}
-              flagAsLabel={flagAsLabel}
-            />
-          )}
-          {editMenuOpen && editMenuRef.current && (
-            <ProfileEditMenuDropdown
-              target={editMenuRef.current}
-              onClose={closeEditMenu}
-              onUpdateClick={() => {
-                props.onUpdateClick();
-                closeEditMenu();
-              }}
-              onENSChangeClick={() => {
-                props.onENSChangeClick();
-                closeEditMenu();
-              }}
-              changeENSLabel={props.changeENSLabel}
-              updateProfileLabel={props.updateProfileLabel}
-              hideENSButton={props.hideENSButton}
-            />
-          )}
+        <Box pad={{ vertical: 'medium' }} direction="row" alignContent="center" gap="medium">
+          <TextIcon
+            iconType="quote"
+            iconBackground={true}
+            iconSize="xxs"
+            label={postsTitle}
+            onClick={onClickPosts}
+            fadedText={true}
+            data-testid="posts-button"
+          />
+          <TextIcon
+            iconType="following"
+            iconBackground={true}
+            iconSize="xxs"
+            label={followersTitle}
+            onClick={onClickFollowers}
+            fadedText={true}
+            data-testid="followers-button"
+          />
+          <TextIcon
+            iconType="following"
+            iconBackground={true}
+            iconSize="xxs"
+            label={followingTitle}
+            onClick={onClickFollowing}
+            fadedText={true}
+            data-testid="following-button"
+          />
         </Box>
       </Box>
+      {editMenuOpen && editMenuRef.current && (
+        <ProfileEditMenuDropdown
+          target={editMenuRef.current}
+          onClose={closeEditMenu}
+          onUpdateClick={() => {
+            props.onUpdateClick();
+            closeEditMenu();
+          }}
+          onENSChangeClick={() => {
+            props.onENSChangeClick();
+            closeEditMenu();
+          }}
+          changeENSLabel={props.changeENSLabel}
+          updateProfileLabel={props.updateProfileLabel}
+          hideENSButton={props.hideENSButton}
+        />
+      )}
+
       <ProfileCardEthereumId profileData={profileData} />
       {(description || canUserEdit) && (
         <ProfileCardDescription

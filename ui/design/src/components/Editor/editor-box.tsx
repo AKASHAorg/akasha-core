@@ -40,7 +40,7 @@ export interface IEditorBox {
     description: string;
     coverImage: string;
   }[];
-  tags?: string[];
+  tags?: { name: string; totalPosts: number }[];
   // upload an URL or a file and returns a promise that resolves to an array
   uploadRequest?: (data: string | File, isUrl?: boolean) => any;
   publishingApp?: string;
@@ -143,7 +143,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
         metadata.mentions.push(node.pubKey as string);
       }
       if (node.type === 'tag') {
-        metadata.tags.push(node.value as string);
+        metadata.tags.push(node.name as string);
       }
       if (node.children) {
         node.children.map((n: any) => getMetadata(n));
@@ -311,7 +311,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
         selectTag(event, tagTargetRange);
       } else if (tagTargetRange && [9, 13, 32].includes(event.keyCode) && createTag.length > 1) {
         Transforms.select(editor, tagTargetRange);
-        CustomEditor.insertTag(editor, createTag);
+        CustomEditor.insertTag(editor, { name: createTag, totalPosts: 0 });
         setTagTargetRange(null);
       }
     },
@@ -354,8 +354,9 @@ const EditorBox: React.FC<IEditorBox> = props => {
   };
 
   const mentionsNames = mentions.map(mention => {
-    return mention.userName || mention.ethAddress;
+    return mention.userName || mention.name || mention.ethAddress;
   });
+  const tagsNames = tags.map(tag => tag.name);
 
   return (
     <StyledBox pad="none" justify="between" fill={true}>
@@ -388,7 +389,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
                 />
               )}
               {tagTargetRange && tags.length > 0 && (
-                <MentionPopover ref={mentionPopoverRef} values={tags} currentIndex={index} />
+                <MentionPopover ref={mentionPopoverRef} values={tagsNames} currentIndex={index} />
               )}
             </Slate>
             {embedEntryData && (

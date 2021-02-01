@@ -72,4 +72,63 @@ const StyledText = styled(Text)<IStyledTextProps>`
   }}
 `;
 
-export { StyledTextIcon, StyledText };
+export interface IconSize {
+  size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+}
+
+// background div for icons, will scale with icon size, adding 0.75 rem to each icon size
+const StyledIconDiv = styled.div<IconSize>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  ${props => {
+    if (props.size) {
+      switch (props.size) {
+        case 'xxs':
+          return css`
+            width: 1.5rem;
+            height: 1.5rem;
+          `;
+        case 'xs':
+          return css`
+            width: 1.75rem;
+            height: 1.75rem;
+          `;
+        case 'sm':
+          return css`
+            width: 2.25rem;
+            height: 2.25rem;
+          `;
+        case 'md':
+          return css`
+            width: 2.75rem;
+            height: 2.75rem;
+          `;
+        case 'lg':
+          return css`
+            width: 3.25rem;
+            height: 3.25rem;
+          `;
+        case 'xl':
+          return css`
+            width: 3.75rem;
+            height: 3.75rem;
+          `;
+        default:
+          return css`
+            width: 2.25rem;
+            height: 2.25rem;
+          `;
+      }
+    }
+    return css`
+      width: 2.25rem;
+      height: 2.25rem;
+    `;
+  }}
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: ${props => props.theme.colors.lightestGrey};
+`;
+
+export { StyledTextIcon, StyledText, StyledIconDiv };

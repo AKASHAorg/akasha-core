@@ -18,7 +18,9 @@
   },
   "nodemonConfig": {
     "ignore": [
-      "lib/*"
+      "lib/*",
+      "node_modules/*",
+      "public/*"
     ],
     "exec": "npm run build || exit 1",
     "ext": "ts,tsx"

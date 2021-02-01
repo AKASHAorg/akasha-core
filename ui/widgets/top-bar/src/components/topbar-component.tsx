@@ -42,12 +42,6 @@ const TopbarComponent = (props: TopBarProps) => {
     authService: props.sdkModules.auth.authService,
   });
 
-  // React.useEffect(() => {
-  //   if (ethAddress) {
-  //     profileActions.getProfileData({ ethAddress });
-  //   }
-  // }, [ethAddress]);
-
   React.useEffect(() => {
     const updateMenu = () => {
       const menuItems = getMenuItems();

@@ -21,6 +21,12 @@ import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
+import routes, { POSTS } from '../../routes';
+import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
+import { application as loginWidget } from '@akashaproject/ui-widget-login/lib/bootstrap';
+
+// @ts-ignore
+import Parcel from 'single-spa-react/parcel';
 
 const {
   Box,
@@ -38,7 +44,7 @@ const {
 export interface FeedPageProps {
   globalChannel: any;
   sdkModules: any;
-  navigateToUrl: (path: string) => void;
+  singleSpa: any;
   logger: any;
   showLoginModal: () => void;
   ethAddress: string | null;
@@ -54,7 +60,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const {
     isMobile,
     flagged,
-    navigateToUrl,
     reportModalOpen,
     setFlagged,
     setReportModalOpen,
@@ -64,6 +69,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     onError,
     sdkModules,
     logger,
+    globalChannel,
   } = props;
   const [feedState, feedStateActions] = useFeedReducer({});
   const [isLoading, setIsLoading] = React.useState(false);
@@ -137,6 +143,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         // filter out entries without content in slate format
         // currently entries can display only content in slate format
         // this can be changed later
+
         if (entry.content.findIndex((elem: any) => elem.property === PROPERTY_SLATE_CONTENT) > -1) {
           entryIds.push({ entryId: entry._id });
           const { delisted, reported } = await checkStatus(entry._id, {
@@ -157,8 +164,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
-    navigateToUrl(`/profile/${authorEth}`);
+    props.singleSpa.navigateToUrl(`/profile/${authorEth}`);
     ev.preventDefault();
+  };
+  const handleMentionClick = (profileEthAddress: string) => {
+    props.singleSpa.navigateToUrl(`/profile/${profileEthAddress}`);
   };
   const handleEntryBookmark = (entryId: string) => {
     if (!ethAddress) {
@@ -174,17 +184,22 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       setShowEditor(true);
     }
   };
-  const handleEntryShare = (service: 'twitter' | 'facebook' | 'reddit', _entryId: string) => {
+  const handleEntryShare = (
+    service: 'twitter' | 'facebook' | 'reddit',
+    entryId: string,
+    authorEthAddress: string,
+  ) => {
+    const url = `${window.location.origin}/${routes[POSTS]}/${authorEthAddress}/post/${entryId}`;
     let shareUrl;
     switch (service) {
       case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?text=${window.location.href}`;
+        shareUrl = `https://twitter.com/intent/tweet?text=${url}`;
         break;
       case 'facebook':
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`;
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
         break;
       case 'reddit':
-        shareUrl = `http://www.reddit.com/submit?url=${window.location.href}`;
+        shareUrl = `http://www.reddit.com/submit?url=${url}`;
         break;
       default:
         break;
@@ -245,7 +260,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     sdkModules.commons.ipfsService,
   );
 
-  const handleNavigateToPost = redirectToPost(props.navigateToUrl);
+  const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
   const handleEntryPublish = async (data: {
     metadata: {
@@ -270,7 +285,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           ethAddress: loginProfile.ethAddress as string,
           avatar: loginProfile.avatar,
           userName: loginProfile.userName,
-          ensName: loginProfile.ensName,
+          name: loginProfile.name,
           coverImage: loginProfile.coverImage,
           description: loginProfile.description,
         },
@@ -278,9 +293,15 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       );
 
       const postEntryCall = sdkModules.posts.entries.postEntry(publishObj);
-      setPendingEntries(prev => prev.concat([pending]));
+      setPendingEntries(prev => prev.concat([{ ...pending, quote: currentEmbedEntry }]));
       postEntryCall.subscribe((postingResp: any) => {
         const publishedEntryId = postingResp.data.createPost;
+        const entryData = pending as IEntryData;
+        feedStateActions.setFeedItemData({
+          ...entryData,
+          entryId: publishedEntryId,
+          quote: currentEmbedEntry,
+        });
         setPendingEntries([]);
         feedStateActions.setFeedItems({
           reverse: true,
@@ -378,17 +399,32 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         loadItemData={loadItemData}
         hasMoreItems={feedState.hasMoreItems}
         listHeader={
-          !isMobile && ethAddress ? (
+          ethAddress ? (
             <EditorPlaceholder
               ethAddress={ethAddress}
               onClick={handleToggleEditor}
               style={{ marginTop: 8 }}
               avatar={loginProfile.avatar}
             />
-          ) : undefined
+          ) : (
+            <>
+              <Parcel
+                config={loginWidget.loadingFn}
+                wrapWith="div"
+                sdkModules={props.sdkModules}
+                logger={props.logger}
+                layout={props.layout}
+                globalChannel={props.globalChannel}
+                i18n={props.i18n}
+              />
+            </>
+          )
         }
         itemCard={
           <EntryCardRenderer
+            sdkModules={sdkModules}
+            logger={logger}
+            globalChannel={globalChannel}
             bookmarks={bookmarks}
             ethAddress={ethAddress}
             locale={locale}
@@ -401,6 +437,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             onRepost={handleEntryRepost}
             onShare={handleEntryShare}
             onAvatarClick={handleAvatarClick}
+            onMentionClick={handleMentionClick}
           />
         }
         itemCardAlt={(entry: any) => (

@@ -114,6 +114,7 @@ const MyProfilePage = (props: MyProfileProps) => {
   ]);
 
   const onProfileUpdateSubmit = (data: any) => {
+    console.log(data, 'updating data');
     props.loginActions.optimisticUpdate(data);
   };
 
@@ -149,7 +150,7 @@ const MyProfilePage = (props: MyProfileProps) => {
         <title>Profile | My Page</title>
       </Helmet>
       <MyProfileCard
-        profileData={...props.profileData}
+        profileData={props.profileData}
         onModalShow={handleModalShow}
         canEdit={!!props.ethAddress}
         userName={props.profileData.userName}
