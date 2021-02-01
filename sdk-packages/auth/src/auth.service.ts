@@ -110,6 +110,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       identity = PrivateKey.fromString(sessionStorage.getItem(sessKey));
     } else {
       const sig = await signer.signMessage(AUTH_MESSAGE);
+      await new Promise(res => setTimeout(res, 600));
       identity = await generatePrivateKey(signer, address, sig, web3Utils);
       sessionStorage.setItem(sessKey, identity.toString());
     }
