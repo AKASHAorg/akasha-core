@@ -16,6 +16,7 @@ import {
   createPendingEntry,
 } from '../../services/posting-service';
 import { BASE_FLAG_URL } from '../../services/constants';
+import { checkStatus } from '../../services/fetch-contents';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { combineLatest } from 'rxjs';
 import { redirectToPost } from '../../services/routing-service';
@@ -31,6 +32,7 @@ const {
   useViewportSize,
   EditorModal,
   EditorPlaceholder,
+  EntryCardHidden,
 } = DS;
 
 export interface FeedPageProps {
@@ -114,6 +116,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       }
     });
   };
+
   const fetchEntries = async (payload: { limit: number; offset?: string }) => {
     const getEntriesCall = sdkModules.posts.entries.getEntries({
       ...payload,
@@ -130,13 +133,18 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       }: { channelInfo: any; data: { posts: { nextIndex: string; results: any[] } } } = resp[1];
       const { nextIndex, results } = data.posts;
       const entryIds: { entryId: string }[] = [];
-      results.forEach(entry => {
+      results.forEach(async entry => {
         // filter out entries without content in slate format
         // currently entries can display only content in slate format
         // this can be changed later
         if (entry.content.findIndex((elem: any) => elem.property === PROPERTY_SLATE_CONTENT) > -1) {
           entryIds.push({ entryId: entry._id });
-          const mappedEntry = mapEntry(entry, ipfsGateway);
+          const { delisted, reported } = await checkStatus(entry._id, {
+            ...(ethAddress && { user: ethAddress }),
+          });
+
+          const entryMod = { ...entry, delisted, reported };
+          const mappedEntry = mapEntry(entryMod, ipfsGateway);
           feedStateActions.setFeedItemData(mappedEntry);
         }
       });
@@ -285,6 +293,16 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     setShowEditor(false);
   };
 
+  const handleFlipCard = (entry: any) => () => {
+    const entryMod = { ...entry, reported: false };
+    feedStateActions.setFeedItemData(entryMod);
+  };
+
+  const updateEntry = (entryId: string) => {
+    const modEntry = { ...feedState.feedItemData[entryId], reported: true };
+    feedStateActions.setFeedItemData(modEntry);
+  };
+
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -323,6 +341,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               contentType={t('post')}
               baseUrl={BASE_FLAG_URL}
               size={size}
+              updateEntry={updateEntry}
               closeModal={() => {
                 setReportModalOpen(false);
               }}
@@ -384,6 +403,15 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             onAvatarClick={handleAvatarClick}
           />
         }
+        itemCardAlt={(entry: any) => (
+          <EntryCardHidden
+            descriptionLabel={t(
+              'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
+            )}
+            ctaLabel={t('See it anyway')}
+            handleFlipCard={handleFlipCard(entry)}
+          />
+        )}
         customEntities={getFeedCustomEntities({
           isMobile,
           feedItems: feedState.feedItems,

@@ -30,6 +30,7 @@ const {
   Helmet,
   CommentEditor,
   EditorPlaceholder,
+  EntryCardHidden,
 } = DS;
 
 interface IPostPage {
@@ -301,6 +302,12 @@ const PostPage: React.FC<IPostPage> = props => {
     channels.profiles.profileService,
     channels.commons.ipfsService,
   );
+
+  const handleFlipCard = (entry: any) => () => {
+    const entryMod = { ...entry, reported: false };
+    feedStateActions.setFeedItemData(entryMod);
+  };
+
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
@@ -431,6 +438,15 @@ const PostPage: React.FC<IPostPage> = props => {
             onAvatarClick={handleAvatarClick}
           />
         }
+        itemCardAlt={(entry: any) => (
+          <EntryCardHidden
+            descriptionLabel={t(
+              'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
+            )}
+            ctaLabel={t('See it anyway')}
+            handleFlipCard={handleFlipCard(entry)}
+          />
+        )}
         customEntities={getPendingComments({
           locale,
           isMobile,

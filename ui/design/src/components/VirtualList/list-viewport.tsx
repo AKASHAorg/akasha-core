@@ -33,6 +33,7 @@ const ListViewport: React.FC<IListViewportProps> = props => {
             key={itemId}
             itemId={itemId}
             itemCard={props.itemCard}
+            itemCardAlt={props.itemCardAlt}
             loadItemData={props.loadItemData}
             itemData={itemsData[itemId]}
             customEntities={customEntities}

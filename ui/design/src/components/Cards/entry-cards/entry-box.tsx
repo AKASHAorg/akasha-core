@@ -25,6 +25,7 @@ export interface IEntryData {
   author: IProfileData;
   socialData?: ISocialData;
   quote?: IEntryData;
+  delisted?: boolean;
   reported?: boolean;
 }
 export interface IContentClickDetails {

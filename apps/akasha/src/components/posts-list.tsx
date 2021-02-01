@@ -11,7 +11,11 @@ import { redirectToPost } from '../services/routing-service';
 import DS from '@akashaproject/design-system';
 import EntryCardRenderer from './feed-page/entry-card-renderer';
 
-const { Helmet, VirtualList /* ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard */ } = DS;
+const {
+  Helmet,
+  VirtualList,
+  EntryCardHidden /* ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard */,
+} = DS;
 
 interface IPostsListProps {
   channels: any;
@@ -50,7 +54,7 @@ const postsStateReducer = (state: IPostsState, action: { type: string; payload: 
 const PostsList: React.FC<IPostsListProps> = props => {
   const { userId } = useParams<{ userId: string }>();
 
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [postsState, dispatch] = React.useReducer(postsStateReducer, {
@@ -107,6 +111,14 @@ const PostsList: React.FC<IPostsListProps> = props => {
     /* todo */
   };
 
+  const handleFlipCard = (entry: any) => () => {
+    const entryMod = { ...entry, reported: false };
+    dispatch({
+      type: 'LOAD_POST_ITEM_DATA_SUCCESS',
+      payload: entryMod,
+    });
+  };
+
   return (
     <>
       <Helmet>
@@ -133,6 +145,15 @@ const PostsList: React.FC<IPostsListProps> = props => {
               onAvatarClick={handleAvatarClick}
             />
           }
+          itemCardAlt={(entry: any) => (
+            <EntryCardHidden
+              descriptionLabel={t(
+                'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
+              )}
+              ctaLabel={t('See it anyway')}
+              handleFlipCard={handleFlipCard(entry)}
+            />
+          )}
         />
       )}
     </>

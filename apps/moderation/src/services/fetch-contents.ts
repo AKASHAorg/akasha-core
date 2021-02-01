@@ -1,14 +1,29 @@
 import { BASE_DECISION_URL, BASE_FLAG_URL } from './constants';
-import { useRequest } from '@akashaproject/ui-awf-hooks';
+
+const fetchRequest = async (props: { method: string; url: string; data?: object }) => {
+  const { method, url, data = {} } = props;
+  const rheaders = new Headers();
+  rheaders.append('Content-Type', 'application/json');
+
+  const response = await fetch(url, {
+    method: method,
+    headers: rheaders,
+    ...(method === ('POST' || 'PUT' || 'PATCH') && { body: JSON.stringify(data) }),
+  });
+
+  if (method === 'HEAD') {
+    return response.status;
+  }
+
+  return response.json();
+};
 
 export const getFlags = async (entryId: string) => {
   try {
-    const [fetchFlags] = await useRequest({
+    const response = await fetchRequest({
       method: 'POST',
       url: `${BASE_FLAG_URL}/list/${entryId}`,
     });
-
-    const response = await fetchFlags();
 
     return response;
   } catch (error) {
@@ -18,12 +33,10 @@ export const getFlags = async (entryId: string) => {
 
 export const getAllPending = async () => {
   try {
-    const [fetchPending] = await useRequest({
+    const response = await fetchRequest({
       method: 'POST',
       url: `${BASE_DECISION_URL}/pending`,
     });
-
-    const response = await fetchPending();
 
     const modResponse = response.map(
       (
@@ -51,7 +64,7 @@ export const getAllPending = async () => {
 export const getAllModerated = async () => {
   try {
     // fetch delisted items
-    const [fetchDelisted] = await useRequest({
+    const delistedItems = await fetchRequest({
       method: 'POST',
       url: `${BASE_DECISION_URL}/moderated`,
       data: {
@@ -60,15 +73,13 @@ export const getAllModerated = async () => {
     });
 
     // fetch kept items
-    const [fetchKept] = await useRequest({
+    const keptItems = await fetchRequest({
       method: 'POST',
       url: `${BASE_DECISION_URL}/moderated`,
       data: {
         delisted: false,
       },
     });
-    const delistedItems = await fetchDelisted();
-    const keptItems = await fetchKept();
 
     const modResponse = [...delistedItems, ...keptItems].map(
       (
