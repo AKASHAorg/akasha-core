@@ -2,7 +2,12 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
-import { useFeedReducer, useEntryBookmark, useProfile } from '@akashaproject/ui-awf-hooks';
+import {
+  useFeedReducer,
+  useEntryBookmark,
+  useProfile,
+  useFollow,
+} from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import {
@@ -17,7 +22,9 @@ import { redirectToPost } from '../../services/routing-service';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
+import routes, { POSTS } from '../../routes';
 import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 const {
   Box,
@@ -53,6 +60,7 @@ const PostPage: React.FC<IPostPage> = props => {
   const {
     slotId,
     channels,
+    globalChannel,
     flagged,
     reportModalOpen,
     setFlagged,
@@ -71,6 +79,8 @@ const PostPage: React.FC<IPostPage> = props => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [pendingComments, setPendingComments] = React.useState<any[]>([]);
 
+  const [entryData, setEntryData] = React.useState<any>(null);
+
   const { size } = useViewportSize();
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -88,14 +98,40 @@ const PostPage: React.FC<IPostPage> = props => {
 
   const [bookmarks, bookmarkActions] = useEntryBookmark({
     ethAddress: ethAddress,
-    onError: () => {
-      return;
+    onError: (errorInfo: Error) => {
+      logger.error(errorInfo);
     },
     sdkModules: channels,
     logger: logger,
   });
 
-  const [entryData, setEntryData] = React.useState<any>(null);
+  const [followedProfiles, followActions] = useFollow({
+    globalChannel,
+    profileService: channels.profiles.profileService,
+    onError: (errorInfo: IAkashaError) => {
+      logger.error(errorInfo.error.message, errorInfo.errorKey);
+    },
+  });
+
+  React.useEffect(() => {
+    if (ethAddress && entryData?.author.ethAddress) {
+      followActions.isFollowing(ethAddress, entryData.author.ethAddress);
+    }
+  }, [ethAddress, entryData?.author.ethAddress]);
+
+  const handleFollow = () => {
+    if (entryData?.author.ethAddress) {
+      followActions.follow(entryData?.author.ethAddress);
+    }
+  };
+
+  const handleUnfollow = () => {
+    if (entryData.author.ethAddress) {
+      followActions.unfollow(entryData?.author.ethAddress);
+    }
+  };
+
+  const isFollowing = followedProfiles.includes(entryData?.author?.ethAddress);
 
   const handleLoadMore = async (payload: any) => {
     const req: { limit: number; offset?: string; postID: string } = {
@@ -203,23 +239,23 @@ const PostPage: React.FC<IPostPage> = props => {
   const handleClickReplies = () => {
     // todo
   };
-  const handleFollow = () => {
-    // todo
-  };
-  const handleUnfollow = () => {
-    // todo
-  };
-  const handleEntryShare = (service: 'twitter' | 'facebook' | 'reddit', _entryId: string) => {
+
+  const handleEntryShare = (
+    service: 'twitter' | 'facebook' | 'reddit',
+    entryId: string,
+    authorEthAddress: string,
+  ) => {
+    const url = `${window.location.origin}/${routes[POSTS]}/${authorEthAddress}/post/${entryId}`;
     let shareUrl;
     switch (service) {
       case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?text=${window.location.href}`;
+        shareUrl = `https://twitter.com/intent/tweet?text=${url}`;
         break;
       case 'facebook':
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`;
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
         break;
       case 'reddit':
-        shareUrl = `http://www.reddit.com/submit?url=${window.location.href}`;
+        shareUrl = `http://www.reddit.com/submit?url=${url}`;
         break;
       default:
         break;
@@ -251,7 +287,7 @@ const PostPage: React.FC<IPostPage> = props => {
           ethAddress: loginProfile.ethAddress as string,
           avatar: loginProfile.avatar,
           userName: loginProfile.userName,
-          ensName: loginProfile.ensName,
+          name: loginProfile.name,
           coverImage: loginProfile.coverImage,
           description: loginProfile.description,
         },
@@ -383,8 +419,9 @@ const PostPage: React.FC<IPostPage> = props => {
               onEntryShare={handleEntryShare}
               onEntryFlag={handleEntryFlag(entryData.entryId, ethAddress)}
               onClickReplies={handleClickReplies}
-              handleFollow={handleFollow}
-              handleUnfollow={handleUnfollow}
+              handleFollowAuthor={handleFollow}
+              handleUnfollowAuthor={handleUnfollow}
+              isFollowingAuthor={isFollowing}
               onContentClick={handleNavigateToPost}
               onMentionClick={handleMentionClick}
             />
@@ -420,6 +457,9 @@ const PostPage: React.FC<IPostPage> = props => {
         hasMoreItems={feedState.hasMoreItems}
         itemCard={
           <PostRenderer
+            sdkModules={channels}
+            logger={logger}
+            globalChannel={globalChannel}
             bookmarks={bookmarks}
             ethAddress={ethAddress}
             locale={locale}
@@ -432,6 +472,7 @@ const PostPage: React.FC<IPostPage> = props => {
             onRepost={handleEntryRepost}
             onShare={handleEntryShare}
             onAvatarClick={handleAvatarClick}
+            onMentionClick={handleMentionClick}
           />
         }
         customEntities={getPendingComments({

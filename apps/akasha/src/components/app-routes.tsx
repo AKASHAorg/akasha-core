@@ -21,7 +21,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   const [loginState, loginActions] = useLoginState({
     globalChannel: globalChannel,
     onError: (err: IAkashaError) => {
-      logger('useLoginState error %j', err);
+      logger.error('useLoginState error %j', err);
     },
     authService: sdkModules.auth.authService,
     ipfsService: sdkModules.commons.ipfsService,

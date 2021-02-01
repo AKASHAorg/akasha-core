@@ -18,9 +18,6 @@ const ImageElement = ({ attributes, children, element }: any) => {
       <div contentEditable={false}>
         <StyledImg
           src={element.url}
-          onClick={() => {
-            window.open(element.url, '_blank');
-          }}
           loading="lazy"
           height={element.size?.naturalHeight}
           width={element.size?.naturalWidth}
@@ -52,7 +49,7 @@ const MentionElement = (props: any) => {
 const TagElement = ({ attributes, children, element }: any) => {
   return (
     <StyledMention {...attributes} contentEditable={false}>
-      #{element.value}
+      #{element.name}
       {children}
     </StyledMention>
   );

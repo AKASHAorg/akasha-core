@@ -37,14 +37,16 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               flaggable={true}
               canUserEdit={false}
               profileData={entryData}
-              appsLabel={t('Apps')}
-              usersLabel={t('Users')}
-              actionsLabel={''}
+              postsLabel={t('Posts')}
+              followLabel={t('Follow')}
+              unfollowLabel={t('Unfollow')}
+              followersLabel={t('Followers')}
               followingLabel={t('Following')}
               descriptionLabel={t('About me')}
               shareProfileLabel={t('Share Profile')}
               flagAsLabel={t('Report Profile')}
-              onClickApps={() => null}
+              onClickFollowers={() => null}
+              onClickPosts={() => null}
               onClickFollowing={() => null}
               onEntryFlag={() => null}
               onUpdateClick={() => null}

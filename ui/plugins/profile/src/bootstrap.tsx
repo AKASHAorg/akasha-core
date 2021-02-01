@@ -38,5 +38,8 @@ export const application: Application = {
   title: 'AKASHA Profile',
   menuItems: routes,
   logo: { type: LogoTypeSource.AVATAR, value: '' },
-  widgets: { [routes[MY_PROFILE]]: [TrendingWidget] },
+  widgets: {
+    [routes[MY_PROFILE]]: [TrendingWidget],
+    [`${rootRoute}/:profileId`]: [TrendingWidget],
+  },
 };

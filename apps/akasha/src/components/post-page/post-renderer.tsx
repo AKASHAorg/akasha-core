@@ -1,10 +1,15 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
+import { useFollow } from '@akashaproject/ui-awf-hooks';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 const { ErrorInfoCard, ErrorLoader, EntryBox, Box, EntryCardLoading } = DS;
 
 export interface PostRendererProps {
+  sdkModules?: any;
+  logger?: any;
+  globalChannel?: any;
   itemId?: string;
   itemData?: any;
   isBookmarked?: boolean;
@@ -18,15 +23,46 @@ export interface PostRendererProps {
   onRepliesClick: () => void;
   onFlag: (entryId: string, user: string | null) => () => void;
   onRepost: (withComment: boolean, entryData: any) => void;
-  onShare: (service: string, entryId: string) => void;
+  onShare: (service: string, entryId: string, authorEthAddress: string) => void;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
+  onMentionClick: (ethAddress: string) => void;
   bookmarks?: Set<string>;
   style?: React.CSSProperties;
 }
 
 const PostRenderer = (props: PostRendererProps) => {
-  const { itemData, isBookmarked, style } = props;
+  const { itemData, isBookmarked, style, ethAddress, sdkModules, logger, globalChannel } = props;
+
   const { t } = useTranslation();
+
+  const [followedProfiles, followActions] = useFollow({
+    globalChannel,
+    profileService: sdkModules.profiles.profileService,
+    onError: (errorInfo: IAkashaError) => {
+      logger.error(errorInfo.error.message, errorInfo.errorKey);
+    },
+  });
+
+  React.useEffect(() => {
+    if (ethAddress && itemData.author.ethAddress) {
+      followActions.isFollowing(ethAddress, itemData.author.ethAddress);
+    }
+  }, [ethAddress, itemData.author.ethAddress]);
+
+  const handleFollow = () => {
+    if (itemData.author.ethAddress) {
+      followActions.follow(itemData.author.ethAddress);
+    }
+  };
+
+  const handleUnfollow = () => {
+    if (itemData.author.ethAddress) {
+      followActions.unfollow(itemData.author.ethAddress);
+    }
+  };
+
+  const isFollowing = followedProfiles.includes(itemData.author.ethAddress);
+
   return (
     <ErrorInfoCard errors={{}}>
       {(errorMessages: any, hasCriticalErrors: boolean) => (
@@ -74,8 +110,11 @@ const PostRenderer = (props: PostRendererProps) => {
                     onEntryShare={props.onShare}
                     onEntryFlag={props.onFlag(itemData.entryId, null)}
                     onClickReplies={props.onRepliesClick}
-                    handleFollow={props.onFollow}
-                    handleUnfollow={props.onUnfollow}
+                    handleFollowAuthor={handleFollow}
+                    handleUnfollowAuthor={handleUnfollow}
+                    isFollowingAuthor={isFollowing}
+                    onContentClick={props.onNavigate}
+                    onMentionClick={props.onMentionClick}
                   />
                 </Box>
               )}
