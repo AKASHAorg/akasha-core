@@ -284,7 +284,7 @@ const useLoginState = (
           setLoginState(prev => ({
             ...prev,
             ethAddress: null,
-            token: null,
+            pubKey: null,
           }));
         },
       );

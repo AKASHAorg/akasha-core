@@ -56,18 +56,22 @@ export interface IEntryBoxProps {
   comment?: boolean;
   bookmarkLabel: string;
   bookmarkedLabel: string;
-  isBookmarked?: boolean;
   // handlers
+  isBookmarked?: boolean;
   onEntryBookmark?: (entryId: string, isBookmarked?: boolean) => void;
   onClickAvatar: React.MouseEventHandler<HTMLDivElement>;
   onClickReplies: (entryId: string) => void;
-  onEntryShare: (service: ServiceNames, entryId?: string) => void;
+  onEntryShare: (service: ServiceNames, entryId?: string, authorEthAddress?: string) => void;
   onRepost: (withComment: boolean, entryData: IEntryData) => void;
   onEntryFlag: (entryId?: string) => void;
-  handleFollow: (profileEthAddress: string) => void;
-  handleUnfollow: (profileEthAddress: string) => void;
+  // follow related
+  handleFollowAuthor: (profileEthAddress: string) => void;
+  handleUnfollowAuthor: (profileEthAddress: string) => void;
+  isFollowingAuthor: boolean;
+  // redirects
   onContentClick?: (details: IContentClickDetails) => void;
-  onMentionClick?: any;
+  onMentionClick?: (ethAddress: string) => void;
+  // style
   style?: React.CSSProperties;
 }
 
@@ -95,8 +99,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onEntryShare,
     onRepost,
     onEntryFlag,
-    handleFollow,
-    handleUnfollow,
+    handleFollowAuthor,
+    handleUnfollowAuthor,
+    isFollowingAuthor,
     onContentClick,
     onMentionClick,
     style,
@@ -139,7 +144,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   };
 
   const handleEntryShare = (service: ServiceNames) => {
-    onEntryShare(service, entryData.entryId);
+    onEntryShare(service, entryData.entryId, entryData.author.ethAddress);
   };
 
   const handleEntryFlag = () => {
@@ -167,8 +172,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
       <Box style={style}>
         <Box direction="row" justify="between" pad={{ vertical: 'medium' }}>
           <ProfileAvatarButton
-            label={entryData.author?.userName}
-            info={entryData.author?.ensName}
+            label={entryData.author?.name}
+            info={entryData.author?.userName}
             avatarImage={entryData.author?.avatar}
             onClickAvatar={onClickAvatar}
             onClick={() => setProfileDropOpen(!profileDropOpen)}
@@ -185,9 +190,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             >
               <Box width="20rem" round="small" flex="grow">
                 <ProfileMiniCard
+                  loggedEthAddress={loggedProfileEthAddress}
                   profileData={entryData.author}
-                  handleFollow={handleFollow}
-                  handleUnfollow={handleUnfollow}
+                  handleFollow={handleFollowAuthor}
+                  handleUnfollow={handleUnfollowAuthor}
+                  isFollowing={isFollowingAuthor}
                 />
               </Box>
             </StyledProfileDrop>

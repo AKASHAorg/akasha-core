@@ -31,25 +31,23 @@ export const MyProfileCard = (props: MPPHeaderProps) => {
 
   return (
     <ProfileCard
-      onClickApps={() => {}}
+      //@todo: fix props to be optional
+      flagAsLabel={''}
+      onEntryFlag={() => {}}
       onClickFollowing={() => {}}
-      //@ts-ignore
-      profileData={profileData}
+      profileData={profileData as any}
       canUserEdit={props.canEdit}
       onChangeProfileData={() => {}}
       getProfileProvidersData={() => {}}
       descriptionLabel={t('About me')}
-      actionsLabel={t('Actions')}
       editProfileLabel={t('Edit profile')}
       updateProfileLabel={t('Update profile')}
-      changeUsernameLabel={t('Change username')}
-      changeEthereumNameLabel={t('Change Ethereum name')}
       changeCoverImageLabel={t('Change cover image')}
       cancelLabel={t('Cancel')}
       saveChangesLabel={t('Save changes')}
       followingLabel={t('Following')}
-      appsLabel={t('Apps')}
-      usersLabel={t('Users')}
+      followersLabel={t('Followers')}
+      postsLabel={t('Posts')}
       shareProfileLabel={t('Share Profile')}
       flaggable={false}
       onUpdateClick={showUpdateProfileModal}
