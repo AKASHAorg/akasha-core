@@ -150,7 +150,7 @@ const MyProfilePage = (props: MyProfileProps) => {
         <title>Profile | My Page</title>
       </Helmet>
       <MyProfileCard
-        profileData={...props.profileData}
+        profileData={props.profileData}
         onModalShow={handleModalShow}
         canEdit={!!props.ethAddress}
         userName={props.profileData.userName}

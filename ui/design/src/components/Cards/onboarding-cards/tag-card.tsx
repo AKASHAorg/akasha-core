@@ -62,7 +62,7 @@ const TagCard: React.FC<ITagCard> = props => {
           >
             <SubtitleTextIcon
               label={tag.name}
-              subtitle={`${tag.posts} ${mentionsLabel}`}
+              subtitle={`${tag.totalPosts} ${mentionsLabel}`}
               gap="xxsmall"
             />
             <Box width="8rem">
@@ -89,7 +89,7 @@ const TagCard: React.FC<ITagCard> = props => {
       <Box direction="row" justify="between" align="center">
         <SubtitleTextIcon
           label={tag.name}
-          subtitle={`${tag.posts} ${mentionsLabel}`}
+          subtitle={`${tag.totalPosts} ${mentionsLabel}`}
           gap="xxsmall"
         />
         <Box basis="72%" justify="between" direction="row" align="center">
