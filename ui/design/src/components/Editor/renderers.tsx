@@ -36,8 +36,9 @@ const MentionElement = (props: any) => {
     <StyledMention
       {...attributes}
       contentEditable={false}
-      onClick={() => {
+      onClick={ev => {
         handleMentionClick(element.ethAddress);
+        ev.stopPropagation();
       }}
     >
       {displayedMention}

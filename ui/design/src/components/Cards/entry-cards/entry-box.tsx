@@ -230,7 +230,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             copyIPFSLinkLabel={copyIPFSLinkLabel}
           />
         )}
-        <Box pad={{ vertical: 'medium' }}>
+        <Box pad={{ vertical: 'medium' }} onClick={() => handleContentClick(entryData)}>
           <ReadOnlyEditor content={entryData.content} handleMentionClick={onMentionClick} />
         </Box>
         {entryData.quote && (
