@@ -2,29 +2,58 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
+import { useFollow } from '@akashaproject/ui-awf-hooks';
 
-import { BASE_FLAG_URL } from '../../services/constants';
+const BASE_URL = 'https://moderation.akasha.network';
+
+export const BASE_FLAG_URL = `${BASE_URL}/flags`;
 
 const { ProfileCard, ModalRenderer, ToastProvider, ReportModal, useViewportSize } = DS;
 
 export interface IProfileHeaderProps {
   profileId: string;
-  profileData: Partial<IProfileData>;
+  profileData?: Partial<IProfileData>;
   loggedUserEthAddress: string | null;
   modalState: ModalState;
   modalActions: ModalStateActions;
 }
 
 export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps) => {
-  const { profileData, loggedUserEthAddress } = props;
+  const { profileData, loggedUserEthAddress, sdkModules, logger, profileId, globalChannel } = props;
 
   const [flagged, setFlagged] = React.useState('');
 
   const { size } = useViewportSize();
 
   const { t } = useTranslation();
+
+  const [followedProfiles, followActions] = useFollow({
+    globalChannel,
+    profileService: sdkModules.profiles.profileService,
+    onError: (errorInfo: IAkashaError) => {
+      logger.error(errorInfo.error.message, errorInfo.errorKey);
+    },
+  });
+
+  React.useEffect(() => {
+    if (loggedUserEthAddress) {
+      followActions.isFollowing(loggedUserEthAddress, profileId);
+    }
+  }, [loggedUserEthAddress, profileId]);
+
+  const handleFollow = () => {
+    if (profileData?.ethAddress) {
+      followActions.follow(profileData.ethAddress);
+    }
+  };
+
+  const handleUnfollow = () => {
+    if (profileData?.ethAddress) {
+      followActions.unfollow(profileData.ethAddress);
+    }
+  };
 
   const handleEntryFlag = (entryId: string) => () => {
     setFlagged(entryId);
@@ -35,7 +64,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     props.modalActions.hide('reportModal');
   };
 
-  if (!profileData) {
+  if (!profileData?.ethAddress) {
     return null;
   }
 
@@ -84,17 +113,25 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         )}
       </ModalRenderer>
       <ProfileCard
-        onClickApps={() => {}}
+        onENSChangeClick={() => {}}
+        onUpdateClick={() => {}}
+        onClickFollowers={() => {}}
         onClickFollowing={() => {}}
-        //@ts-ignore
-        profileData={cardData}
+        onClickPosts={() => {}}
+        handleFollow={handleFollow}
+        handleUnfollow={handleUnfollow}
+        isFollowing={followedProfiles.includes(profileData?.ethAddress)}
+        loggedEthAddress={loggedUserEthAddress}
+        profileData={cardData as any}
+        followLabel={t('Follow')}
+        unfollowLabel={t('Unfollow')}
         descriptionLabel={t('About me')}
-        followingLabel={'Following'}
-        appsLabel={'Apps'}
-        usersLabel={'Users'}
-        shareProfileLabel={'Share Profile'}
+        followingLabel={t('Following')}
+        followersLabel={t('Followers')}
+        postsLabel={t('Posts')}
+        shareProfileLabel={t('Share')}
         flaggable={true}
-        flagAsLabel={'Report Profile'}
+        flagAsLabel={t('Report Profile')}
         onEntryFlag={handleEntryFlag(profileData.ethAddress ? profileData.ethAddress : '')}
       />
     </>

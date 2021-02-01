@@ -87,10 +87,14 @@ storiesOf('Cards/Widget Cards', module)
         profilesLabel={text('Profiles label', 'Profiles')}
         onClickProfile={ethAddress => action('profile Clicked')(ethAddress)}
         onClickTag={tagName => action('tag clicked')(tagName)}
-        onClickSubscribeProfile={ethAddress => action('subscribe profile clicked')(ethAddress)}
-        onClickSubscribeTag={tagName => action('subscribe tag clicked')(tagName)}
+        handleFollowProfile={ethAddress => action('subscribe profile clicked')(ethAddress)}
+        handleUnfollowProfile={ethAddress => action('subscribe profile clicked')(ethAddress)}
+        handleSubscribeTag={tagName => action('subscribe profile clicked')(tagName)}
+        handleUnsubscribeTag={tagName => action('subscribe profile clicked')(tagName)}
         tags={trendingTagsData}
         profiles={trendingProfilesData}
+        followedProfiles={[]}
+        subscribedTags={[]}
       />
     </Box>
   ))
