@@ -186,12 +186,15 @@ export const mapEntry = (
     totalComments: string;
     author: {
       CID?: string;
-      description: string;
-      avatar: string;
+      description?: string;
+      avatar?: string;
       coverImage: string;
-      userName: string;
-      name: string;
+      userName?: string;
+      name?: string;
       ethAddress: string;
+      totalPosts?: number | string;
+      totalFollowers?: number | string;
+      totalFollowing?: number | string;
     };
   },
   ipfsGateway: string,
@@ -238,9 +241,12 @@ export const mapEntry = (
       description: entry.author.description,
       avatar: getMediaUrl(ipfsGateway, entry.author.avatar),
       coverImage: getMediaUrl(ipfsGateway, entry.author.coverImage),
-      ensName: entry.author.userName,
-      userName: entry.author.name,
+      userName: entry.author.userName,
+      name: entry.author.name,
       ethAddress: entry.author.ethAddress,
+      totalPosts: entry.author.totalPosts,
+      totalFollowers: entry.author.totalFollowers,
+      totalFollowing: entry.author.totalFollowing,
     },
     CID: entry.CID,
     content: contentWithMediaGateways,
@@ -260,7 +266,7 @@ interface PendingEntry {
     avatar?: string;
     coverImage?: string;
     description?: string;
-    ensName?: string;
+    name?: string;
     ethAddress: string;
     userName?: string;
   };

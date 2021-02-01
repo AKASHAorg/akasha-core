@@ -2,7 +2,7 @@ import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
 
 import { MainAreaCardBox } from '../common/basic-card-box';
-import { SubtitleTextIcon, TextIcon } from '../../TextIcon';
+import { TextIcon } from '../../TextIcon';
 import {
   ProfileCardAvatar,
   ProfileCardCoverImage,
@@ -24,22 +24,18 @@ export interface IProfileCardModProps extends IProfileWidgetCard {
 const ProfileCardMod: React.FC<IProfileCardModProps> = props => {
   const {
     className,
-    onClickFollowing,
-    onClickApps,
+    postsLabel,
+    followersLabel,
+    followingLabel,
     profileData,
     descriptionLabel,
-    actionsLabel,
-    followingLabel,
-    usersLabel,
     shareProfileLabel,
-    appsLabel,
     changeCoverImageLabel,
   } = props;
 
-  const leftTitle = profileData.following ? profileData.following : profileData.users;
-  const rightTitle = profileData.apps ? profileData.apps : profileData.actions;
-  const leftSubtitle = profileData.profileType === 'dapp' ? usersLabel : followingLabel;
-  const rightSubtitle = profileData.profileType === 'dapp' ? actionsLabel : appsLabel;
+  const postsTitle = `${profileData.totalPosts} ${postsLabel}`;
+  const followersTitle = `${profileData.totalFollowers} ${followersLabel}`;
+  const followingTitle = `${profileData.totalFollowing} ${followingLabel}`;
 
   const [avatar, setAvatar] = useState(profileData.avatar);
   const [coverImage, setCoverImage] = useState(profileData.coverImage);
@@ -71,64 +67,63 @@ const ProfileCardMod: React.FC<IProfileCardModProps> = props => {
         handleShareClick={() => null}
       />
       <Box
-        height="70px"
+        direction="column"
         border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
         margin={{ horizontal: 'medium' }}
-        direction="row"
-        justify="between"
       >
-        <Box direction="row">
-          <ProfileCardAvatar
-            ethAddress={profileData.ethAddress}
-            editable={false}
-            avatar={avatar}
-            handleChangeAvatar={() => null}
-            avatarPopoverOpen={false}
-            setAvatarPopoverOpen={() => null}
-          />
-          <Box pad={{ vertical: 'small', left: 'xsmall' }}>
-            <ProfileCardName
+        <Box height="70px" direction="row" justify="between">
+          <Box direction="row">
+            <ProfileCardAvatar
+              ethAddress={profileData.ethAddress}
               editable={false}
-              name={name}
-              handleChangeName={() => null}
-              namePopoverOpen={false}
-              setNamePopoverOpen={() => null}
+              avatar={avatar}
+              handleChangeAvatar={() => null}
+              avatarPopoverOpen={false}
+              setAvatarPopoverOpen={() => null}
             />
+            <Box pad={{ vertical: 'small', left: 'xsmall' }}>
+              <ProfileCardName
+                editable={false}
+                name={name}
+                handleChangeName={() => null}
+                namePopoverOpen={false}
+                setNamePopoverOpen={() => null}
+              />
 
-            <Box direction="row" gap="xsmall">
-              <Text size="medium" color="secondaryText">
-                {profileData.userName ? profileData.userName : null}
-              </Text>
+              <Box direction="row" gap="xsmall">
+                <Text size="medium" color="secondaryText">
+                  {profileData.userName ? profileData.userName : null}
+                </Text>
+              </Box>
             </Box>
           </Box>
-        </Box>
-        <Box direction="row" align="center">
-          {leftTitle && rightTitle && (
-            <Box
-              margin={{ right: 'large' }}
-              pad={{ vertical: 'medium', right: 'xxsmall' }}
-              direction="row"
-              alignContent="center"
-              gap="small"
-            >
-              <SubtitleTextIcon
-                iconType="person"
-                label={leftTitle}
-                labelSize="small"
-                subtitle={leftSubtitle}
-                onClick={onClickFollowing}
-                data-testid="following-button"
-              />
-              <SubtitleTextIcon
-                iconType="app"
-                label={rightTitle}
-                labelSize="small"
-                subtitle={rightSubtitle}
-                onClick={onClickApps}
-                data-testid="apps-button"
-              />
-            </Box>
-          )}
+
+          <Box pad={{ vertical: 'medium' }} direction="row" alignContent="center" gap="medium">
+            <TextIcon
+              iconType="quote"
+              iconBackground={true}
+              iconSize="xxs"
+              label={postsTitle}
+              fadedText={true}
+              data-testid="posts-button"
+            />
+            <TextIcon
+              iconType="following"
+              iconBackground={true}
+              iconSize="xxs"
+              label={followersTitle}
+              fadedText={true}
+              data-testid="followers-button"
+            />
+            <TextIcon
+              iconType="following"
+              iconBackground={true}
+              iconSize="xxs"
+              label={followingTitle}
+              fadedText={true}
+              data-testid="following-button"
+            />
+          </Box>
         </Box>
       </Box>
       <ProfileCardEthereumId profileData={profileData} />

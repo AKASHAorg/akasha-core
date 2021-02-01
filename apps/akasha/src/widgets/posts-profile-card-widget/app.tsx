@@ -34,7 +34,7 @@ class Widget extends React.Component<RootComponentProps> {
           <ThemeSelector
             settings={{ activeTheme: 'Light-Theme' }}
             availableThemes={[lightTheme, darkTheme]}
-            style={{ height: '100%' }}
+            style={{ height: '100%', width: '100vw', maxWidth: '100%' }}
             plain={true}
           >
             <Router>

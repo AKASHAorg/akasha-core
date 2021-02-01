@@ -51,6 +51,9 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
             onAvatarClick={() => {
               /* not allowed */
             }}
+            onMentionClick={() => {
+              /* not allowed */
+            }}
           />
         ),
       })),

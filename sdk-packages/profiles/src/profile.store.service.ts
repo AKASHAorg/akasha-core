@@ -154,7 +154,7 @@ const service: AkashaService = (invoke, log) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
     const mutation = `
   mutation UnFollow($ethAddress: String!) {
-       unfollow(ethAddress: $ethAddress)
+       unFollow(ethAddress: $ethAddress)
   }`;
     const result = await runGQL({
       query: mutation,
@@ -172,7 +172,7 @@ const service: AkashaService = (invoke, log) => {
   const isFollowing = async (opt: { follower: string; following: string }) => {
     const query = `
   query IsFollowing($follower: String!, $following: String!) {
-       isFollowing($follower: follower, following: $following)
+       isFollowing(follower: $follower, following: $following)
       }`;
     const result = await runGQL({
       query: query,

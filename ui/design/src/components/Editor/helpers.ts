@@ -70,8 +70,8 @@ const CustomEditor = {
     Transforms.move(editor);
   },
 
-  insertTag(editor: Editor, value: string) {
-    const tag = { value, type: 'tag', children: [{ text: '' }] };
+  insertTag(editor: Editor, tagData: { name: string; totalPosts: number }) {
+    const tag = Object.assign({ type: 'tag', children: [{ text: '' }] }, tagData);
     Transforms.insertNodes(editor, tag);
     Transforms.move(editor);
   },

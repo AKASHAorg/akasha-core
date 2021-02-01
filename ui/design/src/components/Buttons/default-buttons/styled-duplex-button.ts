@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 
 const StyledButton = styled(Button)<{ active: boolean }>`
   height: 2rem;
+  padding: 0.25rem 0.5rem;
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
   border: 1px solid ${props => props.theme.colors.accent};
   color: ${props => props.theme.colors.accent};
