@@ -210,6 +210,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   );
 
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
+  console.log(sdkModules, 'the sdkModules!');
 
   const handleEntryPublish = async (data: PublishPostData) => {
     if (!ethAddress && !pubKey) {

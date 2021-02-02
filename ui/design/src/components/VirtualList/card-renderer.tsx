@@ -56,14 +56,20 @@ const CardRenderer = (props: IRenderItemProps) => {
       }}
     >
       {beforeEntities.map((entityObj, idx) => {
-        return entityObj.getComponent({ key: idx, style: { marginBottom: itemSpacing } });
+        return entityObj.getComponent({
+          key: idx,
+          style: { marginBottom: itemSpacing },
+        });
       })}
 
       {!shouldLoadData && <EntryLoadingPlaceholder height={averageItemHeight} />}
       {itemData && shouldLoadData && React.cloneElement(itemCard, { itemId, itemData })}
 
       {afterEntities.map((entityObj, idx) => {
-        return entityObj.getComponent({ key: idx, style: { marginTop: itemSpacing } });
+        return entityObj.getComponent({
+          key: idx,
+          style: { marginTop: itemSpacing },
+        });
       })}
     </div>
   );

@@ -103,7 +103,6 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   }, []);
 
   React.useEffect(() => {
-    console.log(itemPositions.rects.get(items[items.length - 1]));
     if (isLoading && itemPositions.rects.get(items[items.length - 1])) {
       // everything loaded
       setIsLoading(false);
@@ -162,18 +161,16 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   }, [JSON.stringify(anchorData), lastRenderedIdx]);
 
   const handleScroll = () => {
-    requestAnimationFrame(() => {
-      setAnchorData(prev =>
-        getAnchor({
-          itemSpacing,
-          anchorData: prev,
-          averageItemHeight: scrollData.current.averageItemHeight,
-          rects: itemPositions.rects,
-          items: scrollData.current.loadedIds,
-          getScrollTop: viewportActions.getScrollTop,
-        }),
-      );
-    });
+    setAnchorData(prev =>
+      getAnchor({
+        itemSpacing,
+        anchorData: prev,
+        averageItemHeight: scrollData.current.averageItemHeight,
+        rects: itemPositions.rects,
+        items: scrollData.current.loadedIds,
+        getScrollTop: viewportActions.getScrollTop,
+      }),
+    );
   };
   const handleResize = () => {
     /* @TODO: */
@@ -270,12 +267,7 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   const getRenderSlice = () => {
     return items.slice(slice.start, slice.end);
   };
-  // console.log(
-  //   items.length,
-  //   scrollData.current.items.length,
-  //   itemPositions.rects.size,
-  //   Object.keys(itemRefs.current)
-  // );
+
   return (
     <div
       ref={rootContainerRef}

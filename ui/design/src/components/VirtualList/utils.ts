@@ -206,9 +206,7 @@ export const getInitialRect = (props: GetInitialRectProps) => {
   let totalHeight = prevPositions.listHeight;
   let initialTop = itemSpacing;
   let prevItemRect;
-  console.log('=========== getInitialRect ===========');
   if (globalIdx === 0) {
-    console.log('itemId', itemId, 'globalIdx = 0');
     // check if we already have an item with index 0;
     const firstItem = Array.from(prevPositions.rects).find(([, val]) => val.index === 0);
     if (firstItem && firstItem[0] !== itemId) {
@@ -225,26 +223,21 @@ export const getInitialRect = (props: GetInitialRectProps) => {
   }
   if (globalIdx > 0) {
     const prevId = items[globalIdx - 1];
-    console.log('itemId', itemId, 'globalIdx > 0', prevId);
     if (prevId) {
       prevItemRect = prevPositions.rects.get(prevId);
     }
   }
   if (prevItemRect && prevItemRect.rect) {
-    console.log('itemId', itemId, 'prevItemRect:', prevItemRect.rect);
     initialTop += prevItemRect.rect.getBottom();
   } else if (globalIdx > 0 && refs[items[globalIdx - 1]]) {
     const prevDomRect = refs[items[globalIdx - 1]].getBoundingClientRect();
-    console.log('itemId', itemId, 'prevDOMRect', prevDomRect);
     initialTop += prevDomRect.top - globalOffsetTop + prevDomRect.height;
   }
   if (!prevPositions.rects.get(itemId)) {
     const rect = new Rect({ height: initialHeight, top: initialTop });
-    console.log('itemId', itemId, 'no rect. Creating rect:', rect);
     rectList.set(itemId, { rect, canRender: true, index: globalIdx });
     totalHeight += rect.getHeight() + itemSpacing;
   }
-  console.log('=============//===============');
   return {
     rects: rectList,
     listHeight: totalHeight,
