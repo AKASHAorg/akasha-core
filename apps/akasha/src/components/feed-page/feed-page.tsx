@@ -337,6 +337,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           />
         }
         customEntities={getFeedCustomEntities({
+          sdkModules,
+          logger,
+          globalChannel,
           isMobile,
           feedItems: postsState.postIds,
           loggedEthAddress: ethAddress,
