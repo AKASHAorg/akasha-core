@@ -176,10 +176,10 @@ class ProfileAPI extends DataSource {
       property: 'NEW_FOLLOWER',
       provider: 'awf.graphql.profile.api',
       value: {
-        follower: profile.pubKey,
+        follower: pubKey,
       },
     };
-    await sendNotification(profile1.pubKey, notification);
+    await sendNotification(profile.pubKey, notification);
     return true;
   }
 

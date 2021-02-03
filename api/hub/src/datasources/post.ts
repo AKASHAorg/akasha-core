@@ -115,7 +115,7 @@ class PostAPI extends DataSource {
     await this.addQuotes(post.quotes, postID[0]);
     queryCache.del(this.allPostsCache);
     if (post.mentions && post.mentions.length) {
-      await this.triggerMentions(post.mentions, postID, post.author);
+      await this.triggerMentions(post.mentions, postID[0], post.author);
     }
     searchIndex
       .saveObject({
