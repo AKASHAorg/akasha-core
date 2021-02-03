@@ -35,10 +35,10 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     (state: LoggedProfileStateModel) => state.data.ethAddress,
   );
   const updateData = profileStore.useStoreActions(
-    (act: ActionMapper<LoggedProfileStateModel, '1'>) => act.updateData,
+    (act: ActionMapper<LoggedProfileStateModel, 'updateData'>) => act.updateData,
   );
   const authorize = profileStore.useStoreActions(
-    (act: ActionMapper<LoggedProfileStateModel, '1'>) => act.authorize,
+    (act: ActionMapper<LoggedProfileStateModel, 'authorize'>) => act.authorize,
   );
 
   const showLoginModal = () => {
