@@ -191,6 +191,36 @@ class PostAPI extends DataSource {
     const db: Client = await getAppDB();
     await db.delete(this.dbID, this.collection, id);
   }
+
+  async getPostsByAuthor(pubKey: string, offset: number = 0, length: number = 10) {
+    const result = await searchIndex.search(`${pubKey} `, {
+      facetFilters: ['category:post'],
+      length: length,
+      offset: offset,
+      restrictSearchableAttributes: ['author'],
+      typoTolerance: false,
+      distinct: true,
+      attributesToRetrieve: ['objectID'],
+    });
+    const nextIndex = result?.hits?.length ? result.hits.length + offset : null;
+
+    return { results: result.hits, nextIndex: nextIndex, total: result.nbHits };
+  }
+
+  async getPostsByTag(tagName: string, offset: number = 0, length: number = 10) {
+    const result = await searchIndex.search(`${tagName} `, {
+      facetFilters: ['category:post'],
+      length: length,
+      offset: offset,
+      restrictSearchableAttributes: ['tags'],
+      typoTolerance: false,
+      distinct: true,
+      attributesToRetrieve: ['objectID'],
+    });
+    const nextIndex = result?.hits?.length ? result.hits.length + offset : null;
+
+    return { results: result.hits, nextIndex: nextIndex, total: result.nbHits };
+  }
 }
 
 export default PostAPI;

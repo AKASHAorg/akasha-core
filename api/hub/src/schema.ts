@@ -11,6 +11,11 @@ const typeDefs = gql`
     nextIndex: String
     total: Int
   }
+  type NewPostsResult {
+    results: [Post!]
+    nextIndex: Int
+    total: Int
+  }
   type CommentsResult {
     results: [Comment!]
     nextIndex: String
@@ -33,6 +38,8 @@ const typeDefs = gql`
     isFollowing(follower: String!, following: String!): Boolean
     getComments(postID: String!, offset: String, limit: Int): CommentsResult
     getComment(commentID: String!): Comment!
+    getPostsByAuthor(author: String!, offset: Int, limit: Int): NewPostsResult
+    getPostsByTag(tag: String!, offset: Int, limit: Int): NewPostsResult
   }
 
   input DataProviderInput {

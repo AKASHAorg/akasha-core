@@ -89,6 +89,24 @@ const query = {
     const author = await dataSources.profileAPI.resolveProfile(commentData.author);
     return Object.assign({}, commentData, { author });
   },
+  getPostsByAuthor: async (_source, { author, limit, offset }, { dataSources }) => {
+    const returned = await dataSources.postsAPI.getPostsByAuthor(author, offset, limit);
+    const posts = await Promise.all(
+      returned.results.map(post => {
+        return query.getPost(_source, { id: post.objectID }, { dataSources });
+      }),
+    );
+    return Object.assign({}, returned, { results: posts });
+  },
+  getPostsByTag: async (_source, { tag, limit, offset }, { dataSources }) => {
+    const returned = await dataSources.postsAPI.getPostsByTag(tag, offset, limit);
+    const posts = await Promise.all(
+      returned.results.map(post => {
+        return query.getPost(_source, { id: post.objectID }, { dataSources });
+      }),
+    );
+    return Object.assign({}, returned, { results: posts });
+  },
 };
 
 export default query;
