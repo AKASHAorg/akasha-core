@@ -137,6 +137,7 @@ const PostsList: React.FC<IPostsListProps> = props => {
           itemCard={
             <EntryCardRenderer
               sdkModules={props.channels}
+              globalChannel={props.globalChannel}
               logger={props.logger}
               locale={locale}
               onFollow={handleFollow}

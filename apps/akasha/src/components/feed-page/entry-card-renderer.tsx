@@ -7,9 +7,9 @@ import { IAkashaError } from '@akashaproject/ui-awf-typings';
 const { ErrorInfoCard, ErrorLoader, EntryCard, EntryCardLoading } = DS;
 
 export interface IEntryCardRendererProps {
-  sdkModules?: any;
-  logger?: any;
-  globalChannel?: any;
+  sdkModules: any;
+  logger: any;
+  globalChannel: any;
   itemId?: string;
   itemData?: any;
   isBookmarked?: boolean;

@@ -2,6 +2,9 @@ import * as React from 'react';
 import EntryCardRenderer from './entry-card-renderer';
 
 export interface IGetCustomEntitiesProps {
+  sdkModules: any;
+  logger: any;
+  globalChannel: any;
   isMobile: boolean;
   feedItems: string[];
   loggedEthAddress: string | null;
@@ -10,7 +13,7 @@ export interface IGetCustomEntitiesProps {
 }
 
 export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
-  const { feedItems, pendingEntries = [] } = props;
+  const { feedItems, pendingEntries = [], sdkModules, logger, globalChannel } = props;
 
   let customEntities: any = [];
 
@@ -21,6 +24,9 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
         itemId: feedItems.length ? feedItems[0] : null,
         getComponent: ({ key, style }: { key: string; style: React.CSSProperties }) => (
           <EntryCardRenderer
+            sdkModules={sdkModules}
+            logger={logger}
+            globalChannel={globalChannel}
             key={`${entry.author.ethAddress}-${idx}-${key}`}
             style={{ ...style, backgroundColor: 'rgba(78,113,255,0.01)' }}
             itemData={entry}

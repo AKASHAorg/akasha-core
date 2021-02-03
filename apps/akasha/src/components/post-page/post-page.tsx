@@ -492,8 +492,11 @@ const PostPage: React.FC<IPostPage> = props => {
           />
         )}
         customEntities={getPendingComments({
+          logger,
+          globalChannel,
           locale,
           isMobile,
+          sdkModules: channels,
           feedItems: feedState.feedItems,
           loggedEthAddress: ethAddress,
           pendingComments: pendingComments,
