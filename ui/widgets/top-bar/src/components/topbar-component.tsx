@@ -5,7 +5,7 @@ import {
   EventTypes,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useLoginState } from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useNotifications } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
 const { lightTheme, Topbar, ThemeSelector, useViewportSize, LoginModal } = DS;
@@ -42,6 +42,12 @@ const TopbarComponent = (props: TopBarProps) => {
     authService: props.sdkModules.auth.authService,
   });
 
+  const [notificationsState] = useNotifications({
+    onError: err => logger.error(err),
+    authService: props.sdkModules.auth.authService,
+    loggedEthAddress: loginState.ethAddress,
+  });
+
   React.useEffect(() => {
     const updateMenu = () => {
       const menuItems = getMenuItems();
@@ -63,6 +69,7 @@ const TopbarComponent = (props: TopBarProps) => {
       setTimeout(() => setShowLoginModal(false), 500);
     }
   }, [loginState.ethAddress, showLoginModal]);
+
   // *how to obtain different topbar menu sections
   const quickAccessItems = currentMenu?.filter(
     menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,
@@ -121,6 +128,7 @@ const TopbarComponent = (props: TopBarProps) => {
         size={size}
         onLoginClick={handleLoginClick}
         onLogout={handleLogout}
+        notifications={notificationsState}
       />
       <LoginModal
         slotId={modalSlotId}

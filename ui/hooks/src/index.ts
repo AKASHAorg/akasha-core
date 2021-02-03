@@ -8,6 +8,7 @@ import useModalState from './use-modal-state';
 import useENSRegistration from './use-ens-registration';
 import useTrendingData from './use-trending-data';
 import useFollow from './use-follow';
+import useNotifications from './use-notifications';
 
 export {
   useProfile,
@@ -20,4 +21,5 @@ export {
   useENSRegistration,
   useTrendingData,
   useFollow,
+  useNotifications,
 };
