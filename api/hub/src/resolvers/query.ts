@@ -2,20 +2,10 @@ import { commentsStats, postsStats, statsProvider } from './constants';
 
 const query = {
   getProfile: async (_source, { ethAddress }, { dataSources }) => {
-    const profileData = await dataSources.profileAPI.getProfile(ethAddress);
-    const totalPostsIndex = profileData.metaData.findIndex(
-      m => m.provider === statsProvider && m.property === postsStats,
-    );
-    const totalPosts = totalPostsIndex !== -1 ? profileData.metaData[totalPostsIndex].value : '0';
-    return Object.assign({}, profileData, { totalPosts });
+    return dataSources.profileAPI.getProfile(ethAddress);
   },
   resolveProfile: async (_source, { pubKey }, { dataSources }) => {
-    const profileData = await dataSources.profileAPI.resolveProfile(pubKey);
-    const totalPostsIndex = profileData.metaData.findIndex(
-      m => m.provider === statsProvider && m.property === postsStats,
-    );
-    const totalPosts = totalPostsIndex !== -1 ? profileData.metaData[totalPostsIndex].value : '0';
-    return Object.assign({}, profileData, { totalPosts });
+    return dataSources.profileAPI.resolveProfile(pubKey);
   },
   getPost: async (_source, { id }, { dataSources }) => {
     const postData = await dataSources.postsAPI.getPost(id);

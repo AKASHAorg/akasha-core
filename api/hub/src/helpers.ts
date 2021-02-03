@@ -102,3 +102,10 @@ export const setupDBCollections = async () => {
   await updateCollections(appDB, threadID);
   return { threadID, client: appDB };
 };
+
+export const sendNotification = async (recipient: string, notificationObj: object) => {
+  const ms = await getMailSender();
+  const textEncoder = new TextEncoder();
+  const encodedNotification = textEncoder.encode(JSON.stringify(notificationObj));
+  await ms.sendMessage(recipient, encodedNotification);
+};
