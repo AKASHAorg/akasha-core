@@ -15,6 +15,8 @@ export default function registryApi(channel) {
         getEntry: extractedServices[ENTRY_SERVICE]('getEntry'),
         getEntries: extractedServices[ENTRY_SERVICE]('entries'),
         postEntry: extractedServices[ENTRY_SERVICE]('postEntry'),
+        entriesByAuthor: extractedServices[ENTRY_SERVICE]('entriesByAuthor'),
+        entriesByTag: extractedServices[ENTRY_SERVICE]('entriesByTag'),
       },
       tags: {
         getTag: extractedServices[TAG_SERVICE]('getTag'),
