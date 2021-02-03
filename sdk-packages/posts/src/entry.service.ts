@@ -156,7 +156,137 @@ const service: AkashaService = (invoke, log) => {
     });
     return result.data;
   };
-  return { getEntry, entries, postEntry };
+
+  const entriesByAuthor = async (opt: { pubKey: string; offset?: number; limit: number }) => {
+    const query = `
+  query GetPostsByAuthor($author: String!, $offset: Int, $limit: Int) {
+       getPostsByAuthor(author: $author, offset: $offset, limit: $limit) {
+        results{
+          content{
+            provider
+            property
+            value
+          }
+          author{
+            pubKey
+            name
+            userName
+            avatar
+            coverImage
+            description
+            ethAddress
+            totalPosts
+            totalFollowers
+            totalFollowing
+          }
+          title
+          type
+          _id
+          creationDate
+          tags
+          totalComments
+          quotedBy
+          quotes{
+            content{
+              provider
+              property
+              value
+            }
+            author{
+              pubKey
+              name
+              userName
+              avatar
+              coverImage
+              ethAddress
+              totalPosts
+              totalFollowers
+              totalFollowing
+            }
+            title
+            type
+            _id
+            creationDate
+            tags
+          }
+        }
+        nextIndex
+        total
+       }
+      }`;
+    const result = await runGQL({
+      query: query,
+      variables: { author: opt.pubKey, offset: opt.offset, limit: opt.limit },
+      operationName: 'GetPostsByAuthor',
+    });
+    return result.data;
+  };
+
+  const entriesByTag = async (opt: { name: string; offset?: string; limit: number }) => {
+    const query = `
+  query GetPostsByTag($tag: String!, $offset: Int, $limit: Int) {
+       getPostsByTag(tag: $tag, offset: $offset, limit: $limit) {
+        results{
+          content{
+            provider
+            property
+            value
+          }
+          author{
+            pubKey
+            name
+            userName
+            avatar
+            coverImage
+            description
+            ethAddress
+            totalPosts
+            totalFollowers
+            totalFollowing
+          }
+          title
+          type
+          _id
+          creationDate
+          tags
+          totalComments
+          quotedBy
+          quotes{
+            content{
+              provider
+              property
+              value
+            }
+            author{
+              pubKey
+              name
+              userName
+              avatar
+              coverImage
+              ethAddress
+              totalPosts
+              totalFollowers
+              totalFollowing
+            }
+            title
+            type
+            _id
+            creationDate
+            tags
+          }
+        }
+        nextIndex
+        total
+       }
+      }`;
+    const result = await runGQL({
+      query: query,
+      variables: { tag: opt.name, offset: opt.offset, limit: opt.limit },
+      operationName: 'GetPostsByTag',
+    });
+    return result.data;
+  };
+  return { getEntry, entries, postEntry, entriesByAuthor, entriesByTag };
 };
 
 export default { service, name: ENTRY_SERVICE };

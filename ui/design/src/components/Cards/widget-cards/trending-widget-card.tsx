@@ -123,7 +123,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                   size="md"
                   avatarImage={profile.avatar}
                 />
-                {loggedEthAddress && (
+                {loggedEthAddress && profile.ethAddress !== loggedEthAddress && (
                   <DuplexButton
                     inactiveLabel={followLabel}
                     activeLabel={followingLabel}
