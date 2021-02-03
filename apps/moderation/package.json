@@ -70,6 +70,6 @@
   "peerDependencies": {
     "react": "16.14.0",
     "react-dom": "16.14.0",
-    "rxjs": "6.5.5"
+    "rxjs": "6.6.3"
   }
 }
