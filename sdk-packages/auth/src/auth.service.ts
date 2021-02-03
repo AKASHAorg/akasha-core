@@ -273,7 +273,12 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   };
   const decryptMessage = async message => {
     const decryptedBody = await identity.decrypt(message.body);
-    const body = new TextDecoder().decode(decryptedBody);
+    let body = new TextDecoder().decode(decryptedBody);
+    try {
+      body = JSON.parse(body);
+    } catch (e) {
+      log.warn(e);
+    }
     const { from, readAt, createdAt, id } = message;
     return { body, from, readAt, createdAt, id };
   };
