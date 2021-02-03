@@ -127,10 +127,10 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
 
         setPostsState(prev => ({
           ...prev,
+          nextIndex,
           postsData: { ...prev.postsData, ...posts },
           postIds: prev.postIds.concat(newIds),
           isFetchingList: false,
-          nextIndex,
         }));
       }, createErrorHandler('usePosts.getPosts', false, onError));
     },
@@ -170,6 +170,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     },
     getUserPosts: (userId: string) => {
       if (!profileService) {
+        // tslint:disable-next-line: no-console
         return console.error('Cannot use getUserPosts without passing profileService module!');
       }
       const userPostsCall = profileService.getPosts(userId);

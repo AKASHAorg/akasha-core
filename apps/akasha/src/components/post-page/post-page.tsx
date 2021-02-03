@@ -93,11 +93,11 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   }, [ethAddress]);
 
   const [bookmarks, bookmarkActions] = useEntryBookmark({
+    sdkModules,
     ethAddress: ethAddress,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo);
     },
-    sdkModules,
     logger: logger,
   });
 
@@ -491,7 +491,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
           globalChannel,
           locale,
           isMobile,
-          sdkModules: channels,
+          sdkModules,
           feedItems: feedState.feedItems,
           loggedEthAddress: ethAddress,
           pendingComments: pendingComments,

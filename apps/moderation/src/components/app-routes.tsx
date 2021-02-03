@@ -73,7 +73,9 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
         jwtToken: data.pubKey,
       });
     },
-    onLogout: () => {},
+    onLogout: () => {
+      /* Do logout */
+    },
     onError: err => {
       logger.error('[app-routes.tsx]: useGlobalLogin err %j', err.error);
       onError({

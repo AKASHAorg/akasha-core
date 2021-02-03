@@ -149,9 +149,9 @@ export const createPendingEntry = (
   quote: any,
 ): PendingEntry => {
   return {
+    quote,
     author: author,
     content: entryPublishData.content,
-    quote,
     replies: 0,
     reposts: 0,
     time: `${Date.now()}`,
