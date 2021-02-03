@@ -99,16 +99,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     const req: { limit: number; offset?: string } = {
       limit: payload.limit,
     };
-    if (!postsState.isFetchingList) {
-      fetchEntries(req);
+    if (!postsState.isFetchingPosts) {
+      postsActions.getPosts(req);
     }
   };
 
   const loadItemData = (payload: ILoadItemDataPayload) => {
     postsActions.getPost(payload.itemId);
-  };
-  const fetchEntries = (payload: { limit: number; offset?: string }) => {
-    postsActions.getPosts(payload);
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
@@ -216,7 +213,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       showLoginModal();
       return;
     }
-    postsActions.optimisticPublish(data, loginProfile, currentEmbedEntry);
+    postsActions.optimisticPublishPost(data, loginProfile, currentEmbedEntry);
     setShowEditor(false);
   };
 
@@ -292,7 +289,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         itemsData={postsState.postsData}
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
-        hasMoreItems={!!postsState.nextIndex}
+        hasMoreItems={!!postsState.nextPostIndex}
         listHeader={
           ethAddress ? (
             <EditorPlaceholder
@@ -333,6 +330,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             onShare={handleEntryShare}
             onAvatarClick={handleAvatarClick}
             onMentionClick={handleMentionClick}
+            contentClickable={true}
           />
         }
         customEntities={getFeedCustomEntities({
@@ -342,7 +340,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           isMobile,
           feedItems: postsState.postIds,
           loggedEthAddress: ethAddress,
-          pendingEntries: postsState.pending,
+          pendingEntries: postsState.pendingPosts,
         })}
       />
     </Box>

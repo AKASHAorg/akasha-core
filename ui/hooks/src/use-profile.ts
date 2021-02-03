@@ -65,6 +65,9 @@ export const useProfile = (props: UseProfileProps): [Partial<IProfileData>, UseP
       const ipfsGatewayCall = ipfsService.getSettings({});
       forkJoin([getEntryCall, ipfsGatewayCall]).subscribe((responses: any) => {
         const [entryResp, ipfsResp] = responses;
+        if (!entryResp.data) {
+          return;
+        }
         const { getPost: entry } = entryResp.data;
         if (entry && entry.author) {
           setProfile({

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import routes, { FEED, rootRoute, POST } from '../routes';
+import routes, { FEED, rootRoute, POST, REPLY } from '../routes';
 import FeedPage from './feed-page/feed-page';
 import { useTranslation } from 'react-i18next';
 import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
@@ -107,6 +107,9 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
                 isMobile={props.isMobile}
                 onError={onError}
               />
+            </Route>
+            <Route path={`${routes[REPLY]}/:postId`}>
+              <div>Coming Soon!</div>
             </Route>
             <Redirect exact={true} from={rootRoute} to={routes[FEED]} />
           </Switch>

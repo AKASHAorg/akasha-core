@@ -103,8 +103,10 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   }, []);
 
   React.useEffect(() => {
-    if (isLoading && itemPositions.rects.get(items[items.length - 1])) {
+    if (isLoading && items.length && itemPositions.rects.get(items[items.length - 1])) {
       // everything loaded
+      setIsLoading(false);
+    } else if (!items.length && isLoading) {
       setIsLoading(false);
     }
   }, [itemPositions.rects.size, items.length, isLoading]);

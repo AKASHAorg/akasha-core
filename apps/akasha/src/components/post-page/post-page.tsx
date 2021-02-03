@@ -3,27 +3,21 @@ import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import {
-  useFeedReducer,
+  usePosts,
   useEntryBookmark,
   useProfile,
   useFollow,
+  useErrors,
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import {
-  mapEntry,
-  uploadMediaToTextile,
-  buildPublishObject,
-  PROPERTY_SLATE_CONTENT,
-  createPendingEntry,
-} from '../../services/posting-service';
+import { mapEntry, uploadMediaToTextile } from '../../services/posting-service';
 import { BASE_FLAG_URL } from '../../services/constants';
 import { redirectToPost } from '../../services/routing-service';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
 import routes, { POSTS } from '../../routes';
-import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const {
@@ -70,10 +64,13 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
+  const [, errorActions] = useErrors({ logger });
 
-  const [feedState, feedStateActions] = useFeedReducer({});
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [pendingComments, setPendingComments] = React.useState<any[]>([]);
+  const [postsState, postsActions] = usePosts({
+    postsService: sdkModules.posts,
+    ipfsService: sdkModules.commons.ipfsService,
+    onError: errorActions.createError,
+  });
 
   const [entryData, setEntryData] = React.useState<any>(null);
 
@@ -134,66 +131,13 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       limit: payload.limit,
       postID: postId,
     };
-    if (!isLoading) {
-      setIsLoading(true);
-      fetchComments(req);
+    if (!postsState.isFetchingComments) {
+      postsActions.getComments(req);
     }
   };
 
-  const fetchComments = async (payload: { limit: number; offset?: string; postID: string }) => {
-    const getCommentsCall = sdkModules.posts.comments.getComments({
-      ...payload,
-      offset: payload.offset || feedState.nextItemId,
-    });
-    const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
-    const call = combineLatest([ipfsGatewayCall, getCommentsCall]);
-    call.subscribe((resp: any) => {
-      const ipfsGateway = resp[0].data;
-      const {
-        data,
-      }: {
-        channelInfo: any;
-        data: {
-          getComments: { nextIndex: string; results: any[]; total: number };
-        };
-      } = resp[1];
-      const { nextIndex, results } = data.getComments;
-      const commentIds: { entryId: string }[] = [];
-      results.forEach(entry => {
-        // filter out entries without content in slate format
-        // currently entries can display only content in slate format
-        // this can be changed later
-        if (entry.content.findIndex((elem: any) => elem.property === PROPERTY_SLATE_CONTENT) > -1) {
-          commentIds.push({ entryId: entry._id });
-          const mappedEntry = mapEntry(entry, ipfsGateway);
-          feedStateActions.setFeedItemData(mappedEntry);
-        }
-      });
-      feedStateActions.setFeedItems({
-        items: commentIds,
-        nextItemId: nextIndex,
-      });
-      if (nextIndex === null) {
-        feedStateActions.hasMoreItems(false);
-      }
-      setIsLoading(false);
-    });
-  };
-
   const loadItemData = async (payload: ILoadItemDataPayload) => {
-    const commentCall = sdkModules.posts.comments.getComment({
-      commentID: payload.itemId,
-    });
-    const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
-    const getCommentCall = combineLatest([ipfsGatewayCall, commentCall]);
-    getCommentCall.subscribe((resp: any) => {
-      const ipfsGateway = resp[0].data;
-      const comment = resp[1].data?.getComment;
-      if (comment) {
-        const mappedComment = mapEntry(comment, ipfsGateway);
-        feedStateActions.setFeedItemData(mappedComment);
-      }
-    });
+    postsActions.getComment(payload.itemId);
   };
 
   React.useEffect(() => {
@@ -284,41 +228,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       showLoginModal();
       return;
     }
-
-    try {
-      const publishObj = buildPublishObject(data, postId);
-
-      const pending = createPendingEntry(
-        {
-          ethAddress: loginProfile.ethAddress as string,
-          avatar: loginProfile.avatar,
-          userName: loginProfile.userName,
-          name: loginProfile.name,
-          coverImage: loginProfile.coverImage,
-          description: loginProfile.description,
-        },
-        data,
-      );
-
-      setPendingComments(prev => prev.concat([pending]));
-
-      const publishCommentCall = sdkModules.posts.comments.addComment(publishObj);
-      publishCommentCall.subscribe((postingResp: any) => {
-        const publishedCommentId = postingResp.data.addComment;
-        const commentData = pending as IEntryData;
-        feedStateActions.setFeedItemData({
-          ...commentData,
-          entryId: publishedCommentId,
-        });
-        setPendingComments([]);
-        feedStateActions.setFeedItems({
-          reverse: true,
-          items: [{ entryId: publishedCommentId }],
-        });
-      });
-    } catch (err) {
-      logger.error('Error publishing comment %j', err);
-    }
+    postsActions.optimisticPublishComment(data, postId, loginProfile);
   };
 
   const [tags, setTags] = React.useState([]);
@@ -461,11 +371,11 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         </>
       )}
       <VirtualList
-        items={feedState.feedItems}
-        itemsData={feedState.feedItemData}
+        items={postsState.commentIds}
+        itemsData={postsState.postsData}
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
-        hasMoreItems={feedState.hasMoreItems}
+        hasMoreItems={!!postsState.nextCommentIndex}
         itemCard={
           <PostRenderer
             sdkModules={sdkModules}
@@ -484,6 +394,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             onShare={handleEntryShare}
             onAvatarClick={handleAvatarClick}
             onMentionClick={handleMentionClick}
+            // contentClickable={true}
           />
         }
         customEntities={getPendingComments({
@@ -492,9 +403,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
           locale,
           isMobile,
           sdkModules,
-          feedItems: feedState.feedItems,
+          feedItems: postsState.postIds,
           loggedEthAddress: ethAddress,
-          pendingComments: pendingComments,
+          pendingComments: postsState.pendingComments,
         })}
       />
     </MainAreaCardBox>

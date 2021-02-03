@@ -46,6 +46,10 @@ export const serializeSlateToBase64 = (slateContent: any) => {
   return btoa(toBinary(JSON.stringify(slateContent)));
 };
 
+export const excludeNonSlateContent = (entry: any) => {
+  return entry.content.findIndex((elem: any) => elem.property === PROPERTY_SLATE_CONTENT) > -1;
+};
+
 export const mapEntry = (
   entry: {
     content: { provider: string; property: string; value: string }[];
@@ -133,6 +137,7 @@ interface PendingEntry {
     ensName?: string;
     ethAddress: string;
     userName?: string;
+    name?: string;
   };
   content: {};
   ipfsLink?: string;
@@ -146,7 +151,7 @@ interface PendingEntry {
 export const createPendingEntry = (
   author: PendingEntry['author'],
   entryPublishData: any,
-  quote: any,
+  quote?: any,
 ): PendingEntry => {
   return {
     quote,

@@ -1,4 +1,4 @@
-import routes, { POST } from '../routes';
+import routes, { POST, REPLY } from '../routes';
 
 export const redirectToPost = (navigateToUrl: (path: string) => void) => (details: {
   authorEthAddress: string;
@@ -9,9 +9,10 @@ export const redirectToPost = (navigateToUrl: (path: string) => void) => (detail
   } | null;
 }) => {
   const { entryId, replyTo } = details;
-  const url = `${routes[POST]}/${entryId}`;
+  let url = `${routes[POST]}/${entryId}`;
   if (replyTo) {
     // handle the reply
+    url = `${routes[REPLY]}/${entryId}`;
   }
   navigateToUrl(url);
 };
