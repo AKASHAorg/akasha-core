@@ -21,12 +21,20 @@ class ProfileAPI extends DataSource {
   }
   async getProfile(ethAddress: string) {
     const db: Client = await getAppDB();
-    const query = new Where('ethAddress').eq(ethAddress);
-    const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
-    if (profilesFound.length) {
-      return await this.resolveProfile(profilesFound[0].pubKey);
+    let pubKey;
+    const key = this.getCacheKey(`:eth:${ethAddress}`);
+    if (!queryCache.has(key)) {
+      const query = new Where('ethAddress').eq(ethAddress);
+      const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
+      if (!profilesFound.length) {
+        return;
+      }
+      pubKey = profilesFound[0].pubKey;
+      queryCache.set(key, pubKey);
+    } else {
+      pubKey = queryCache.get(key);
     }
-    return;
+    return await this.resolveProfile(pubKey);
   }
 
   getCacheKey(pubKey: string) {

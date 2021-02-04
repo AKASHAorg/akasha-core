@@ -29,17 +29,17 @@ const typeDefs = gql`
   type Query {
     getProfile(ethAddress: String!): UserProfile!
     resolveProfile(pubKey: String!): UserProfile!
-    getPost(id: String!): Post!
+    getPost(id: String!, pubKey: String): Post!
     getTag(name: String!): Tag
     searchTags(name: String!): [SearchTagsResult]
     searchProfiles(name: String!): [UserProfile]
     tags(offset: String, limit: Int): TagsResult
-    posts(offset: String, limit: Int): PostsResult
+    posts(offset: String, limit: Int, pubKey: String): PostsResult
     isFollowing(follower: String!, following: String!): Boolean
     getComments(postID: String!, offset: String, limit: Int): CommentsResult
     getComment(commentID: String!): Comment!
-    getPostsByAuthor(author: String!, offset: Int, limit: Int): NewPostsResult
-    getPostsByTag(tag: String!, offset: Int, limit: Int): NewPostsResult
+    getPostsByAuthor(author: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
+    getPostsByTag(tag: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
   }
 
   input DataProviderInput {
@@ -123,6 +123,7 @@ const typeDefs = gql`
     quotedBy: [String]
     mentions: [String]
     totalComments: String
+    quotedByAuthors: [UserProfile]
   }
 
   type Comment {

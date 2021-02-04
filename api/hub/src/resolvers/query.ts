@@ -7,8 +7,8 @@ const query = {
   resolveProfile: async (_source, { pubKey }, { dataSources }) => {
     return dataSources.profileAPI.resolveProfile(pubKey);
   },
-  getPost: async (_source, { id }, { dataSources }) => {
-    const postData = await dataSources.postsAPI.getPost(id);
+  getPost: async (_source, { id, pubKey }, { dataSources }) => {
+    const postData = await dataSources.postsAPI.getPost(id, pubKey);
     const totalCommentsIndex = postData.metaData.findIndex(
       m => m.provider === statsProvider && m.property === commentsStats,
     );
@@ -17,6 +17,22 @@ const query = {
     if (postData && typeof postData.author === 'string') {
       const author = await dataSources.profileAPI.resolveProfile(postData.author);
       Object.assign(postData, { author });
+    }
+    if (postData && postData?.quotedBy?.length && !postData?.quotedByAuthors?.length) {
+      const qPosts: any = await Promise.all(
+        postData.quotedBy?.map(postID =>
+          query.getPost(_source, { pubKey, id: postID }, { dataSources }),
+        ),
+      );
+      const quotedByAuthors = qPosts?.map(el => el.author);
+      if (pubKey) {
+        const pProfile = await dataSources.profileAPI.resolveProfile(pubKey);
+        quotedByAuthors?.sort((a, b) => {
+          return pProfile.following.indexOf(b.pubKey) - pProfile.following.indexOf(a.pubKey);
+        });
+      }
+
+      Object.assign(postData, { quotedByAuthors });
     }
     if (postData.quotes && postData.quotes.length) {
       for (const quote of postData.quotes) {
@@ -42,8 +58,8 @@ const query = {
   tags: async (_source, { limit, offset }, { dataSources }) => {
     return dataSources.tagsAPI.getTags(limit, offset);
   },
-  posts: async (_source, { limit, offset }, { dataSources }) => {
-    const data = await dataSources.postsAPI.getPosts(limit, offset);
+  posts: async (_source, { limit, offset, pubKey }, { dataSources }) => {
+    const data = await dataSources.postsAPI.getPosts(limit, offset, pubKey);
     const results = [];
 
     for (const post of data.results) {
@@ -53,6 +69,22 @@ const query = {
       );
       const totalComments =
         totalCommentsIndex !== -1 ? post.metaData[totalCommentsIndex].value : '0';
+
+      if (post && post?.quotedBy?.length && !post?.quotedByAuthors?.length) {
+        const qPosts: any = await Promise.all(
+          post.quotedBy?.map(postID =>
+            query.getPost(_source, { pubKey, id: postID }, { dataSources }),
+          ),
+        );
+        const quotedByAuthors = qPosts?.map(el => el.author);
+        if (pubKey) {
+          const pProfile = await dataSources.profileAPI.resolveProfile(pubKey);
+          quotedByAuthors?.sort((a, b) => {
+            return pProfile.following.indexOf(b.pubKey) - pProfile.following.indexOf(a.pubKey);
+          });
+        }
+        Object.assign(post, { quotedByAuthors });
+      }
       if (post.quotes && post.quotes.length) {
         for (const quote of post.quotes) {
           if (typeof quote.author !== 'string') {
@@ -89,20 +121,20 @@ const query = {
     const author = await dataSources.profileAPI.resolveProfile(commentData.author);
     return Object.assign({}, commentData, { author });
   },
-  getPostsByAuthor: async (_source, { author, limit, offset }, { dataSources }) => {
+  getPostsByAuthor: async (_source, { author, limit, offset, pubKey }, { dataSources }) => {
     const returned = await dataSources.postsAPI.getPostsByAuthor(author, offset, limit);
     const posts = await Promise.all(
       returned.results.map(post => {
-        return query.getPost(_source, { id: post.objectID }, { dataSources });
+        return query.getPost(_source, { pubKey, id: post.objectID }, { dataSources });
       }),
     );
     return Object.assign({}, returned, { results: posts });
   },
-  getPostsByTag: async (_source, { tag, limit, offset }, { dataSources }) => {
+  getPostsByTag: async (_source, { tag, limit, offset, pubKey }, { dataSources }) => {
     const returned = await dataSources.postsAPI.getPostsByTag(tag, offset, limit);
     const posts = await Promise.all(
       returned.results.map(post => {
-        return query.getPost(_source, { id: post.objectID }, { dataSources });
+        return query.getPost(_source, { pubKey, id: post.objectID }, { dataSources });
       }),
     );
     return Object.assign({}, returned, { results: posts });

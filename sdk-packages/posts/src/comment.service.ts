@@ -27,6 +27,7 @@ const service: AkashaService = (invoke, log) => {
           coverImage
         }
         creationDate
+        replyTo
         _id
     }
   }`;
@@ -59,6 +60,7 @@ const service: AkashaService = (invoke, log) => {
           coverImage
         }
         creationDate
+        replyTo
         _id
       }
     }

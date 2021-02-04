@@ -27,7 +27,7 @@ class PostAPI extends DataSource {
     return `${this.collection}:postID${id}`;
   }
 
-  async getPost(id: string, stopIter = false) {
+  async getPost(id: string, pubKey?: string, stopIter = false) {
     const db: Client = await getAppDB();
     const cacheKey = this.getPostCacheKey(id);
     if (queryCache.has(cacheKey)) {
@@ -42,12 +42,14 @@ class PostAPI extends DataSource {
       ?.map(item => item.value);
     Object.assign(post, { quotedBy });
     if (post?.quotes?.length && !stopIter) {
-      post.quotes = await Promise.all(post.quotes.map(postID => this.getPost(postID, true)));
+      post.quotes = await Promise.all(
+        post.quotes.map(postID => this.getPost(postID, pubKey, true)),
+      );
     }
     queryCache.set(cacheKey, post);
     return post;
   }
-  async getPosts(limit: number, offset: string) {
+  async getPosts(limit: number, offset: string, pubKey?: string) {
     let posts;
     const db: Client = await getAppDB();
     if (queryCache.has(this.allPostsCache)) {
@@ -58,7 +60,7 @@ class PostAPI extends DataSource {
       });
       for (const post of posts) {
         if (post?.quotes?.length) {
-          post.quotes = await Promise.all(post.quotes.map(postID => this.getPost(postID)));
+          post.quotes = await Promise.all(post.quotes.map(postID => this.getPost(postID, pubKey)));
         }
         const quotedBy = post?.metaData
           ?.filter(item => item.property === this.quotedByPost)
