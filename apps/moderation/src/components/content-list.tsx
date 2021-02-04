@@ -31,15 +31,11 @@ interface IBaseItem {
 
 interface IPendingItem extends IBaseItem {
   reporter: string;
-  reporterName: string;
-  reporterENSName: string;
 }
 
 interface IModeratedItem extends IPendingItem {
   delisted: boolean;
   moderator: string;
-  moderatorName: string;
-  moderatorENSName: string;
   evaluationDate: string;
 }
 
@@ -179,8 +175,6 @@ const ContentList: React.FC<IContentListProps> = props => {
                 entryId={t(pendingItem.entryId)}
                 reasons={pendingItem.reasons.map((el: string) => t(el))}
                 reporter={t(pendingItem.reporter)}
-                reporterName={t(pendingItem.reporterName)}
-                reporterENSName={t(pendingItem.reporterENSName)}
                 andLabel={t('and')}
                 otherReporters={
                   pendingItem.count
@@ -218,8 +212,6 @@ const ContentList: React.FC<IContentListProps> = props => {
                   entryId={t(moderatedItem.entryId)}
                   reasons={moderatedItem.reasons.map(el => t(el))}
                   reporter={moderatedItem.reporter}
-                  reporterName={t(moderatedItem.reporterName)}
-                  reporterENSName={t(moderatedItem.reporterENSName)}
                   andLabel={t('and')}
                   otherReporters={
                     moderatedItem.count
@@ -234,8 +226,6 @@ const ContentList: React.FC<IContentListProps> = props => {
                   reportedDateTime={moderatedItem.entryDate}
                   moderatorDecision={moderatedItem.description}
                   moderator={moderatedItem.moderator}
-                  moderatorName={t(moderatedItem.moderatorName)}
-                  moderatorENSName={t(moderatedItem.moderatorENSName)}
                   moderatedByLabel={t('Moderated by')}
                   moderatedOnLabel={t('On')}
                   evaluationDateTime={moderatedItem.evaluationDate}

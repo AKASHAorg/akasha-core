@@ -3,17 +3,18 @@ import DS from '@akashaproject/design-system';
 
 import { getFlags } from '../services/fetch-contents';
 
+import ExplanationsCardEntry, { IExplanationsBoxEntryProps } from './explanations-box-entry';
+
 const { Box, Text, MainAreaCardBox } = DS;
 
-export interface IExplanationsBoxProps {
+export interface IExplanationsBoxProps extends Omit<IExplanationsBoxEntryProps, 'entry'> {
   entryId: string;
-  reportedByLabel: string;
-  forLabel: string;
   logger: any;
+  sdkModules: any;
 }
 
 const ExplanationsCard: React.FC<IExplanationsBoxProps> = props => {
-  const { entryId, reportedByLabel, forLabel, logger } = props;
+  const { entryId, reportedByLabel, forLabel, logger, sdkModules } = props;
 
   const [requesting, setRequesting] = React.useState<boolean>(false);
   const [flags, setFlags] = React.useState<any>([]);
@@ -40,26 +41,15 @@ const ExplanationsCard: React.FC<IExplanationsBoxProps> = props => {
       {!requesting && (
         <MainAreaCardBox>
           <Box pad="1rem" style={{ maxHeight: '8rem', overflowY: 'scroll' }}>
-            {flags.map((flag: any) => (
-              <>
-                <Text as="p" margin={{ top: 'none', bottom: 'xxsmall' }}>
-                  {reportedByLabel}
-                  <Text
-                    as="span"
-                    margin={{ left: '0.2rem' }}
-                    color="accentText"
-                  >{`${flag.user.slice(0, 6)}...${flag.user.slice(flag.user.length - 4)}`}</Text>
-                  <Text as="span" margin={{ left: '0.2rem' }}>
-                    {forLabel}
-                  </Text>
-                  <Text as="span" margin={{ left: '0.2rem' }}>
-                    {flag.reason}
-                  </Text>
-                </Text>
-                <Text as="p" margin={{ top: 'none', bottom: 'xsmall' }} color="secondaryText">
-                  {flag.explanation}
-                </Text>
-              </>
+            {flags.map((flag: any, id: number) => (
+              <ExplanationsCardEntry
+                key={id}
+                entry={flag}
+                reportedByLabel={reportedByLabel}
+                forLabel={forLabel}
+                logger={logger}
+                sdkModules={sdkModules}
+              />
             ))}
           </Box>
         </MainAreaCardBox>

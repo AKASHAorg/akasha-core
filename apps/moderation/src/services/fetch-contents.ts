@@ -49,7 +49,7 @@ export const getAllPending = async () => {
           type: type,
           entryId: contentId,
           reasons: reasons,
-          reporter: reportedBy, // @TODO: fetch reporter's Name and ENS Name (if applicable) from the profile API
+          reporter: reportedBy,
           count: reports - 1, // minus reporter, to get count of other users
           entryDate: reportedDate,
         };
@@ -104,9 +104,9 @@ export const getAllModerated = async () => {
           entryId: contentId,
           reasons: reasons,
           description: explanation,
-          reporter: reportedBy, // @TODO: fetch reporter's Name and ENS (if applicable) from the profile API
+          reporter: reportedBy,
           count: reports - 1,
-          moderator: moderator, // @TODO: fetch moderator's Name and ENS (if applicable) from the profile API
+          moderator: moderator,
           entryDate: reportedDate,
           evaluationDate: date,
           delisted: delisted,
