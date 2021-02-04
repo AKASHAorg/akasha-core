@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import { WidgetAreaCardBox } from '../common/basic-card-box';
 import { Button } from '../../Buttons';
 
-const LearnMoreButton = styled(Button)`
-  flex: 1;
-  margin-right: 0.5em;
-`;
+// const LearnMoreButton = styled(Button)`
+//   flex: 1;
+//   margin-right: 0.5em;
+// `;
 
 const ConnectButton = styled(Button)`
   flex: 1;
@@ -19,11 +19,11 @@ const LoginWidgetBox = styled(WidgetAreaCardBox)`
 `;
 export interface ILoginWidgetCardProps {
   onLoginClick: () => void;
-  onLearnMoreClick: () => void;
+  onLearnMoreClick?: () => void;
   title: string;
   textContent: string;
   image?: React.ReactElement;
-  learnMoreLabel: string;
+  learnMoreLabel?: string;
   connectLabel: string;
   inlineActions?: boolean;
 }
@@ -41,8 +41,8 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
             {props.textContent}
           </Text>
         </Box>
-        <Box direction="row" justify="between" align="center" flex={{ shrink: 0 }}>
-          <LearnMoreButton onClick={props.onLearnMoreClick} label={props.learnMoreLabel} />
+        <Box direction="row" justify="end" pad="0 0 0 2em" align="center" flex={{ shrink: 0 }}>
+          {/* <LearnMoreButton onClick={props.onLearnMoreClick} label={props.learnMoreLabel} /> */}
           <ConnectButton primary={true} onClick={props.onLoginClick} label={props.connectLabel} />
         </Box>
       </Box>

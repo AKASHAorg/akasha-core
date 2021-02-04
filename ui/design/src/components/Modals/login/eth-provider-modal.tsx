@@ -10,6 +10,7 @@ export interface IProviderModalProps {
   headLine: string;
   message: string;
   illustration: React.ReactElement;
+  error: string | null;
 }
 
 const ProviderAuthModal: React.FC<IProviderModalProps> = props => {
@@ -26,7 +27,12 @@ const ProviderAuthModal: React.FC<IProviderModalProps> = props => {
             {props.headLine}
           </Text>
           <Text style={{ marginBottom: '2em' }}>{props.message}</Text>
-          <Icon type="loading" accentColor={true} size="md" />
+          {!props.error && <Icon type="loading" accentColor={true} size="md" />}
+          {props.error && (
+            <Text size="small" color="errorText">
+              {props.error}
+            </Text>
+          )}
         </Box>
       </ModalCard>
     </ModalContainer>

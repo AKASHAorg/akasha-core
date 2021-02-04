@@ -18,7 +18,7 @@ export type ShareData = {
 export interface CardActionProps {
   // data
   entryData: IEntryData;
-  loggedProfileEthAddress?: string;
+  loggedProfileEthAddress?: string | null;
   // share data
   sharePostLabel?: string;
   shareTextLabel: string;
