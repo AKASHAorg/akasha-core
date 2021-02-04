@@ -293,6 +293,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     return inbox.slice();
   };
   const markMessageAsRead = async (messageId: string) => {
+    await hubUser.readInboxMessage(messageId);
     await hubUser.deleteInboxMessage(messageId);
     return true;
   };

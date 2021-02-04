@@ -10,7 +10,7 @@ const { ProfileMiniCard } = DS;
 const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   const { sdkModules, logger, globalChannel } = props;
 
-  const { params } = useRouteMatch<{ userId: string }>();
+  const { params } = useRouteMatch<{ postId: string }>();
   const { t } = useTranslation();
 
   const [profileState, profileActions] = useProfile({
@@ -21,6 +21,7 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
     },
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
+    postsService: props.sdkModules.posts,
   });
 
   const [loginState] = useLoginState({
@@ -41,16 +42,17 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   });
 
   React.useEffect(() => {
-    if (params.userId) {
-      profileActions.getProfileData({ ethAddress: params.userId });
+    if (params.postId) {
+      profileActions.getEntryAuthor({ entryId: params.postId });
+      // profileActions.getProfileData({ ethAddress: params.userId });
     }
-  }, [params.userId]);
+  }, [params.postId]);
 
   React.useEffect(() => {
-    if (loginState.ethAddress) {
-      followActions.isFollowing(loginState.ethAddress, params.userId);
+    if (loginState.ethAddress && profileState.ethAddress) {
+      followActions.isFollowing(loginState.ethAddress, profileState.ethAddress);
     }
-  }, [loginState.ethAddress, params.userId]);
+  }, [loginState.ethAddress, profileState.ethAddress]);
 
   const handleFollow = () => {
     if (profileState?.ethAddress) {
