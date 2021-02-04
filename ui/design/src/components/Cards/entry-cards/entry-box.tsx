@@ -39,7 +39,7 @@ export interface IEntryBoxProps {
   entryData: IEntryData;
   locale: ILocale;
   loggedProfileAvatar?: string;
-  loggedProfileEthAddress?: string;
+  loggedProfileEthAddress?: string | null;
   // share data
   sharePostLabel?: string;
   shareTextLabel: string;
@@ -70,6 +70,8 @@ export interface IEntryBoxProps {
   isFollowingAuthor: boolean;
   // redirects
   onContentClick?: (details: IContentClickDetails) => void;
+  /* Can click the content (not embed!) to navigate */
+  contentClickable?: boolean;
   onMentionClick?: (ethAddress: string) => void;
   // style
   style?: React.CSSProperties;
@@ -105,6 +107,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onContentClick,
     onMentionClick,
     style,
+    contentClickable,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -166,7 +169,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const toggleDisplayCID = () => {
     setDisplayCID(!displayCID);
   };
-
   return (
     <ViewportSizeProvider>
       <Box style={style}>
@@ -230,7 +232,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             copyIPFSLinkLabel={copyIPFSLinkLabel}
           />
         )}
-        <Box pad={{ vertical: 'medium' }} onClick={() => handleContentClick(entryData)}>
+        <Box
+          pad={{ vertical: 'medium' }}
+          style={{ cursor: contentClickable ? 'pointer' : 'default' }}
+          onClick={() => (contentClickable ? handleContentClick(entryData) : false)}
+        >
           <ReadOnlyEditor content={entryData.content} handleMentionClick={onMentionClick} />
         </Box>
         {entryData.quote && (

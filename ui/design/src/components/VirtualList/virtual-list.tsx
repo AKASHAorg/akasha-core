@@ -1,9 +1,16 @@
 import * as React from 'react';
-import throttle from 'lodash.throttle';
+// import throttle from 'lodash.throttle';
 import { AnchorData, ItemRects, IVirtualListProps } from './interfaces';
 import ListViewport from './list-viewport';
 import { useViewport } from './use-viewport';
-import { diffArr, getAnchor, getInitialRect, getLastRendered, updatePositions } from './utils';
+import {
+  diffArr,
+  getAnchor,
+  getInitialRect,
+  getLastRendered,
+  InsertPoint,
+  updatePositions,
+} from './utils';
 
 export interface ScrollData {
   items: string[];
@@ -32,7 +39,7 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
     getNotificationPill,
     useItemDataLoader,
     initialPaddingTop,
-    averageItemHeight = 200,
+    averageItemHeight = 350,
     loadLimit = DEFAULT_LOAD_LIMIT,
     listHeader,
   } = props;
@@ -58,7 +65,10 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
 
   const rootContainerRef = React.createRef<HTMLDivElement>();
 
-  const [itemPositions, setPositions] = React.useState<{ rects: ItemRects; listHeight: number }>({
+  const [itemPositions, setPositions] = React.useState<{
+    rects: ItemRects;
+    listHeight: number;
+  }>({
     rects: new Map(),
     listHeight: 0,
   });
@@ -93,11 +103,13 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   }, []);
 
   React.useEffect(() => {
-    if (isLoading && scrollData.current.loadedIds.length === scrollData.current.items.length) {
+    if (isLoading && items.length && itemPositions.rects.get(items[items.length - 1])) {
       // everything loaded
       setIsLoading(false);
+    } else if (!items.length && isLoading) {
+      setIsLoading(false);
     }
-  }, [scrollData.current.loadedIds.length, scrollData.current.items.length, isLoading]);
+  }, [itemPositions.rects.size, items.length, isLoading]);
 
   React.useEffect(() => {
     if (isLoading || !hasMoreItems) {
@@ -165,8 +177,8 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   const handleResize = () => {
     /* @TODO: */
   };
-  const onScroll = throttle(handleScroll, 150, { leading: true });
-  const onResize = throttle(handleResize, 150, { leading: true });
+  const onScroll = handleScroll;
+  const onResize = handleResize;
   /**
    * Attach scroll and resize listeners
    */
@@ -182,25 +194,21 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   /**
    *  Populate initial rect values
    */
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if (items.length && items.length > scrollData.current.items.length) {
       const diff = diffArr(scrollData.current.items, items);
-      if (diff.insertPoint === 'before') {
-        scrollData.current.items.unshift(...diff.diffItems);
-        setAnchorData(prev =>
-          getAnchor({
-            itemSpacing,
-            anchorData: prev,
-            items: scrollData.current.items,
-            rects: itemPositions.rects,
-            averageItemHeight: scrollData.current.averageItemHeight,
-            getScrollTop: viewportActions.getScrollTop,
-          }),
-        );
-      } else if (diff.insertPoint === 'after') {
-        scrollData.current.items.push(...diff.diffItems);
-      } else {
-        // in between is not supported yet;
+      switch (diff.insertPoint) {
+        case InsertPoint.LIST_HEAD:
+          scrollData.current.items.unshift(...diff.diffItems);
+          break;
+        case InsertPoint.LIST_TAIL:
+          scrollData.current.items = scrollData.current.items.concat(diff.diffItems);
+          break;
+        case InsertPoint.LIST_BETWEEN:
+          /* not supported yet */
+          break;
+        default:
+          break;
       }
     }
   }, [items, scrollData.current]);
@@ -211,11 +219,28 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
     if (itemRect && itemRect.canRender && !scrollData.current.loadedIds.includes(itemId)) {
       scrollData.current.loadedIds.push(itemId);
     }
+    // update top offset
+    // it's required because the list header size might change!
+    if (
+      items.indexOf(itemId) === 0 &&
+      itemRef &&
+      itemRef.offsetTop !== scrollData.current.globalOffsetTop
+    ) {
+      setPositions(prev => {
+        const offsetDelta = itemRef.offsetTop - scrollData.current.globalOffsetTop;
+        scrollData.current.globalOffsetTop = itemRef.offsetTop;
+
+        return {
+          ...prev,
+          listHeight: prev.listHeight + offsetDelta,
+        };
+      });
+    }
 
     if (itemRef && itemRect) {
       const domRect = itemRef.getBoundingClientRect();
       if (domRect.height !== itemRect.rect.getHeight()) {
-        setPositions(prev => updatePositions(itemId, domRect, prev, itemSpacing));
+        setPositions(prev => updatePositions(itemId, domRect, prev));
         scrollData.current.averageItemHeight =
           (scrollData.current.averageItemHeight * (itemPositions.rects.size - 1) + domRect.height) /
           itemPositions.rects.size;
@@ -224,11 +249,6 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
 
     if (!itemRefs.current[itemId] && itemRef && !isUnmounting) {
       itemRefs.current[itemId] = itemRef;
-      // set the top offset
-      if (items.indexOf(itemId) === 0) {
-        scrollData.current.globalOffsetTop = itemRef.getBoundingClientRect().top - itemSpacing;
-      }
-
       setPositions(prev =>
         getInitialRect({
           itemId,

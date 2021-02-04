@@ -1,30 +1,34 @@
 import * as React from 'react';
 import { filter } from 'rxjs/operators';
+import { createErrorHandler } from './utils/error-handler';
 
 /**
  * a hook that will fire an action when the signIn is called
  */
-export type OnSuccessHandler = (data: { ethAddress: string; pubKey: string }) => void;
+export type OnLoginSuccessHandler = (data: { ethAddress: string; pubKey: string }) => void;
+export type OnLogoutSuccessHandler = () => void;
 export type OnErrorHandler = (payload: { error: Error }) => void;
 
-const useGlobalLogin = (
-  channel: any,
-  onSuccess: OnSuccessHandler,
-  onError?: OnErrorHandler,
-): void => {
-  const handleSubscribe = (payload: any) => {
+export interface UseGlobalLoginProps {
+  globalChannel: any;
+  onLogin: OnLoginSuccessHandler;
+  onLogout: OnLogoutSuccessHandler;
+  onError?: OnErrorHandler;
+}
+
+const useGlobalLogin = (props: UseGlobalLoginProps): void => {
+  const { onError } = props;
+  const handleLoginSubscribe = (payload: any) => {
     const { data } = payload;
-    onSuccess(data);
+    props.onLogin(data);
   };
 
-  const handleError = (err: Error) => {
-    if (onError) {
-      onError({ error: err });
-    }
+  const handleLogoutSubscribe = () => {
+    props.onLogout();
   };
 
   React.useEffect(() => {
-    const call = channel.pipe(
+    const call = props.globalChannel.pipe(
       filter((payload: any) => {
         return (
           payload.channelInfo.method === 'signIn' &&
@@ -32,8 +36,23 @@ const useGlobalLogin = (
         );
       }),
     );
-    call.subscribe(handleSubscribe, handleError);
+    call.subscribe(handleLoginSubscribe, createErrorHandler('useGlobalLogin.login'));
     return () => call.unsubscribe();
+  }, []);
+
+  React.useEffect(() => {
+    const logoutCall = props.globalChannel.pipe(
+      filter((payload: any) => {
+        return (
+          payload.channelInfo.method === 'signOut' &&
+          payload.channelInfo.servicePath.includes('AUTH_SERVICE')
+        );
+      }),
+    );
+    logoutCall.subscribe(
+      handleLogoutSubscribe,
+      createErrorHandler('useGlobalLogin.logoutCall', false, onError),
+    );
   }, []);
 };
 
