@@ -13,6 +13,7 @@ export interface IEntryCardProps extends IEntryBoxProps {
   className?: string;
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
+  contentClickable?: boolean;
 }
 
 const EntryCard: React.FC<IEntryCardProps> = props => {
@@ -52,6 +53,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     isFollowingAuthor,
     flagAsLabel,
     copyIPFSLinkLabel,
+    contentClickable,
   } = props;
 
   return (
@@ -95,6 +97,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           isFollowingAuthor={isFollowingAuthor}
           onContentClick={onContentClick}
           onMentionClick={onMentionClick}
+          contentClickable={contentClickable}
         />
       </Box>
     </MainAreaCardBox>

@@ -1,5 +1,6 @@
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import * as React from 'react';
+import { createErrorHandler } from './utils/error-handler';
 
 export interface ModalState {
   loginModal: boolean;
@@ -27,6 +28,7 @@ export interface ModalStateActions {
 }
 
 const useModalState = (props: UseModalStateProps): [ModalState, ModalStateActions] => {
+  const { onError } = props;
   const [modalState, setModalState] = React.useState<ModalState>({
     loginModal: false,
     ...props.initialState,
@@ -46,11 +48,6 @@ const useModalState = (props: UseModalStateProps): [ModalState, ModalStateAction
     }
   }, [props.isLoggedIn]);
 
-  const handleErrors = (err: IAkashaError) => {
-    if (props.onError) {
-      props.onError(err);
-    }
-  };
   const actions: ModalStateActions = {
     show: modalKey => setModalState(prevState => ({ ...prevState, [modalKey]: true })),
     showAfterLogin: modalKey => {
@@ -59,11 +56,11 @@ const useModalState = (props: UseModalStateProps): [ModalState, ModalStateAction
       } else {
         setModalQueue(prev => {
           if (prev.indexOf(modalKey) > -1) {
-            handleErrors({
-              errorKey: 'useModalState.showAfterLogin',
-              error: new Error(`modalKey ${modalKey} already in queue`),
-              critical: false,
-            });
+            createErrorHandler(
+              'useModalState.showAfterLogin',
+              false,
+              onError,
+            )(new Error(`modalKey ${modalKey} already in queue`));
             return prev;
           }
           return [...prev, modalKey];

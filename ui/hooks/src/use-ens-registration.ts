@@ -1,3 +1,4 @@
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import * as React from 'react';
 import { concat } from 'rxjs';
 
@@ -5,6 +6,7 @@ export interface UseENSRegistrationProps {
   profileService: any;
   ensService: any;
   ethAddress: string | null;
+  onError?: (err: IAkashaError) => void;
 }
 
 export interface UseENSRegistrationState {

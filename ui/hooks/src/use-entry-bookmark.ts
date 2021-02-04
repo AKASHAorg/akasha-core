@@ -1,12 +1,14 @@
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import * as React from 'react';
 import { Subscription } from 'rxjs';
+import { createErrorHandler } from './utils/error-handler';
 
 export interface UseEntryBookmarkProps {
   ethAddress: string | null;
   bmKey?: string;
   sdkModules: { [key: string]: any };
   logger?: any;
-  onError: (err: Error) => void;
+  onError: (err: IAkashaError) => void;
 }
 
 export interface IBookmarkActions {
@@ -28,23 +30,25 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [Set<string>, IBookmark
         const call = sdkModules.db.settingsAttachment.get({
           moduleName: bmKey,
         });
-        subs = call.subscribe(
-          (resp: any) => {
-            const { data } = resp;
-            if (data && data.services) {
-              const bookmarkedEntries = data.services.findIndex(
-                (e: string[]) => e[0] === entriesBookmarks,
-              );
-              if (bookmarkedEntries !== -1) {
-                setBookmarks(new Set(JSON.parse(data.services[bookmarkedEntries][1])));
-              }
+        subs = call.subscribe((resp: any) => {
+          const { data } = resp;
+          if (data && data.services) {
+            const bookmarkedEntries = data.services.findIndex(
+              (e: string[]) => e[0] === entriesBookmarks,
+            );
+            if (bookmarkedEntries !== -1) {
+              setBookmarks(new Set(JSON.parse(data.services[bookmarkedEntries][1])));
             }
-          },
-          (err: Error) => onError(err),
-        );
+          }
+        }, createErrorHandler('useEntryBookmark.useEffect', false, onError));
       } else {
         if (logger) {
           logger.error('Cannot get bookmarks, DB package not loaded!');
+          createErrorHandler(
+            'useEntryBookmark.useEffect',
+            false,
+            onError,
+          )(new Error('Cannot get bookmarks, DB package not loaded!'));
         }
       }
     }
@@ -62,12 +66,9 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [Set<string>, IBookmark
         moduleName: bmKey,
         services: [[entriesBookmarks, JSON.stringify(Array.from(newBmks))]],
       });
-      call.subscribe(
-        async (_resp: any) => {
-          setBookmarks(newBmks);
-        },
-        (err: Error) => onError(err),
-      );
+      call.subscribe(async (_resp: any) => {
+        setBookmarks(newBmks);
+      }, createErrorHandler('useEntryBookmark.addBookmark', false, onError));
     },
     removeBookmark: entryId => {
       const newBkmks = new Set(bookmarks);
@@ -76,12 +77,9 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [Set<string>, IBookmark
         moduleName: bmKey,
         services: [['entries-bookmarks', JSON.stringify(Array.from(newBkmks))]],
       });
-      call.subscribe(
-        async (_resp: any) => {
-          setBookmarks(newBkmks);
-        },
-        (err: Error) => onError(err),
-      );
+      call.subscribe(async (_resp: any) => {
+        setBookmarks(newBkmks);
+      }, createErrorHandler('useEntryBookmark.removeBookmark', false, onError));
     },
   };
 

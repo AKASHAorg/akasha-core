@@ -1,6 +1,12 @@
 import { Anchor, AnchorData, ItemRects } from './interfaces';
 import { Rect } from './rect';
 
+export enum InsertPoint {
+  LIST_HEAD = 1,
+  LIST_TAIL,
+  LIST_BETWEEN,
+}
+
 export const diffArr = (prev: string[], curr: string[]) => {
   let insertPoint;
   let diff: string[] = [];
@@ -11,7 +17,7 @@ export const diffArr = (prev: string[], curr: string[]) => {
     };
   }
   if (!prev.length || curr[curr.length - 1] !== prev[prev.length - 1]) {
-    insertPoint = 'after';
+    insertPoint = InsertPoint.LIST_TAIL;
     diff = curr.slice(prev.length);
     return {
       insertPoint,
@@ -19,7 +25,7 @@ export const diffArr = (prev: string[], curr: string[]) => {
     };
   }
   if (prev.length && curr[0] !== prev[0]) {
-    insertPoint = 'before';
+    insertPoint = InsertPoint.LIST_HEAD;
     diff = curr.slice(0, curr.indexOf(prev[0]));
     return {
       insertPoint,
@@ -152,7 +158,6 @@ export const updatePositions = (
   changedId: string,
   domRect: DOMRect,
   prevPositions: { rects: ItemRects; listHeight: number },
-  _itemSpacing: number,
 ) => {
   const newRects = new Map(prevPositions.rects);
   const changedRect = newRects.get(changedId);
@@ -178,9 +183,10 @@ export const updatePositions = (
       rect: val.rect.translateBy(0, heightDelta),
     });
   });
+
   return {
     rects: newRects,
-    listHeight: prevPositions.listHeight - changedRect.rect.getHeight() + domRect.height,
+    listHeight: prevPositions.listHeight + heightDelta,
   };
 };
 
@@ -204,7 +210,7 @@ export const getInitialRect = (props: GetInitialRectProps) => {
     // check if we already have an item with index 0;
     const firstItem = Array.from(prevPositions.rects).find(([, val]) => val.index === 0);
     if (firstItem && firstItem[0] !== itemId) {
-      // so the new item is prepended to the list
+      // new item is prepended to the list
       // move items in the list lower
       rectList.forEach((value, key) => {
         rectList.set(key, {
@@ -230,13 +236,10 @@ export const getInitialRect = (props: GetInitialRectProps) => {
   if (!prevPositions.rects.get(itemId)) {
     const rect = new Rect({ height: initialHeight, top: initialTop });
     rectList.set(itemId, { rect, canRender: true, index: globalIdx });
-
     totalHeight += rect.getHeight() + itemSpacing;
-
-    return {
-      rects: rectList,
-      listHeight: totalHeight,
-    };
   }
-  return prevPositions;
+  return {
+    rects: rectList,
+    listHeight: totalHeight,
+  };
 };
