@@ -32,12 +32,6 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
             style={{ ...style, backgroundColor: '#4e71ff0f' }}
             itemData={entry}
             locale={locale}
-            onFollow={() => {
-              /* not allowed */
-            }}
-            onUnfollow={() => {
-              /* not allowed */
-            }}
             onBookmark={() => {
               /* not allowed */
             }}

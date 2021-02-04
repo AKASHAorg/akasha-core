@@ -1,5 +1,8 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import { getMediaUrl } from './use-profile';
+import { switchMap, catchError } from 'rxjs/operators';
+import { forkJoin, of } from 'rxjs';
 
 export interface UseNotificationsActions {
   getMessages: () => void;
@@ -9,12 +12,14 @@ export interface UseNotificationsActions {
 export interface UseNotificationsProps {
   onError?: (error: IAkashaError) => void;
   authService: any;
+  ipfsService: any;
+  profileService: any;
   loggedEthAddress?: string | null;
 }
 
 /* A hook to get notifications and mark them as read */
 export const useNotifications = (props: UseNotificationsProps): [any, UseNotificationsActions] => {
-  const { onError, authService, loggedEthAddress } = props;
+  const { onError, authService, ipfsService, profileService, loggedEthAddress } = props;
   const [notificationsState, setNotificationsState] = React.useState<any>([]);
 
   React.useEffect(() => {
@@ -26,12 +31,63 @@ export const useNotifications = (props: UseNotificationsProps): [any, UseNotific
   const actions: UseNotificationsActions = {
     getMessages() {
       try {
-        const call = authService.getMessages(null);
-        call.subscribe((resp: any) => {
-          if (resp.data) {
-            setNotificationsState(resp.data);
-          }
-        });
+        const getMessagesCall = authService.getMessages(null);
+        const ipfsGatewayCall = ipfsService.getSettings(null);
+        const obs = forkJoin([ipfsGatewayCall, getMessagesCall]);
+        obs
+          .pipe(
+            // call ipfsgateway and getMessages
+            switchMap((resp: any) =>
+              forkJoin([
+                // pass the response of the first call along
+                of(resp),
+                // get profile data for each profile in the getMessages response
+                ...resp[1].data.map((message: any) => {
+                  const pubKey = message.body.value.author || message.body.value.follower;
+                  if (pubKey) {
+                    return profileService.getProfile({ pubKey });
+                  }
+                }),
+              ]),
+            ),
+            catchError(err => of(`Error from obs: ${err}`)),
+          )
+          .subscribe((resp: any) => {
+            if (!resp.length) {
+              return;
+            }
+            // get the initial call response data
+            const [gatewayResp, messagesResp] = resp[0];
+            // get the profile data responses
+            const profileDataResp = resp.slice(1);
+
+            // add the profile data to the message value author/follower
+            let completeMessages: any = [];
+            profileDataResp?.map((profileResp: any) => {
+              const { avatar, coverImage, ...other } = profileResp.data.resolveProfile;
+              const images: { avatar: string | null; coverImage: string | null } = {
+                avatar: null,
+                coverImage: null,
+              };
+              if (avatar) {
+                images.avatar = getMediaUrl(gatewayResp.data, avatar);
+              }
+              if (coverImage) {
+                images.coverImage = getMediaUrl(gatewayResp.data, coverImage);
+              }
+              const profileData = { ...images, ...other };
+              completeMessages = messagesResp.data?.map((message: any) => {
+                if (message.body.value.author === profileData.pubKey) {
+                  message.body.value.author = profileData;
+                }
+                if (message.body.value.follower === profileData.pubKey) {
+                  message.body.value.follower = profileData;
+                }
+                return message;
+              });
+            });
+            setNotificationsState(completeMessages);
+          });
       } catch (ex) {
         if (onError) {
           onError({
@@ -49,7 +105,7 @@ export const useNotifications = (props: UseNotificationsProps): [any, UseNotific
           if (resp.data) {
             setNotificationsState((prev: any) =>
               prev.filter((notif: any) => {
-                return parseInt(notif.Id, 10) !== parseInt(messageId, 10);
+                return notif.id !== messageId;
               }),
             );
           }

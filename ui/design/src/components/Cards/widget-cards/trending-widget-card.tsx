@@ -115,14 +115,16 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
           <Box pad="medium" gap="medium">
             {profiles.slice(0, 4).map((profile, index) => (
               <Box key={index} direction="row" justify="between" align="center">
-                <ProfileAvatarButton
-                  ethAddress={profile.ethAddress}
-                  onClick={() => onClickProfile(profile.ethAddress)}
-                  label={profile.userName || profile.name}
-                  info={`${profile.totalFollowers} ${followersLabel}`}
-                  size="md"
-                  avatarImage={profile.avatar}
-                />
+                <Box width="9.3rem" pad="none">
+                  <ProfileAvatarButton
+                    ethAddress={profile.ethAddress}
+                    onClick={() => onClickProfile(profile.ethAddress)}
+                    label={profile.userName || profile.name}
+                    info={`${profile.totalFollowers} ${followersLabel}`}
+                    size="md"
+                    avatarImage={profile.avatar}
+                  />
+                </Box>
                 {loggedEthAddress && profile.ethAddress !== loggedEthAddress && (
                   <DuplexButton
                     inactiveLabel={followLabel}

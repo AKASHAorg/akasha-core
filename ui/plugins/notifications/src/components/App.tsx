@@ -45,18 +45,20 @@ class App extends PureComponent<IProps> {
 
     return (
       <Box width="100vw">
-        <I18nextProvider i18n={i18n ? i18n : null}>
+        <React.Suspense fallback={<>Loading</>}>
           <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
-            <ViewportSizeProvider>
-              <NotificationsPage
-                logger={this.props.logger}
-                sdkModules={this.props.sdkModules}
-                singleSpa={this.props.singleSpa}
-                globalChannel={this.props.globalChannel}
-              />
-            </ViewportSizeProvider>
+            <I18nextProvider i18n={i18n ? i18n : null}>
+              <ViewportSizeProvider>
+                <NotificationsPage
+                  logger={this.props.logger}
+                  sdkModules={this.props.sdkModules}
+                  singleSpa={this.props.singleSpa}
+                  globalChannel={this.props.globalChannel}
+                />
+              </ViewportSizeProvider>
+            </I18nextProvider>
           </ThemeSelector>
-        </I18nextProvider>
+        </React.Suspense>
       </Box>
     );
   }

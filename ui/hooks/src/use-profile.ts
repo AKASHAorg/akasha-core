@@ -17,32 +17,32 @@ export interface UseProfileProps {
   profileService: any;
 }
 
+export const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {
+  let ipfsUrl = '';
+
+  if (hash && !data) {
+    ipfsUrl = `${ipfsGateway}/${hash}`;
+  }
+
+  if (data) {
+    let imageSize = '';
+    for (const size in data) {
+      if (data.hasOwnProperty(size)) {
+        imageSize = size;
+        break;
+      }
+    }
+    if (imageSize) {
+      ipfsUrl = `${ipfsGateway}/${hash}/${imageSize}/src`;
+    }
+  }
+  return ipfsUrl;
+};
+
 /* A hook to be used on profile-page */
 export const useProfile = (props: UseProfileProps): [Partial<IProfileData>, UseProfileActions] => {
   const { onError, ipfsService, profileService } = props;
   const [profile, setProfile] = React.useState<Partial<IProfileData>>({});
-
-  const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {
-    let ipfsUrl = '';
-
-    if (hash && !data) {
-      ipfsUrl = `${ipfsGateway}/${hash}`;
-    }
-
-    if (data) {
-      let imageSize = '';
-      for (const size in data) {
-        if (data.hasOwnProperty(size)) {
-          imageSize = size;
-          break;
-        }
-      }
-      if (imageSize) {
-        ipfsUrl = `${ipfsGateway}/${hash}/${imageSize}/src`;
-      }
-    }
-    return ipfsUrl;
-  };
 
   const actions: UseProfileActions = {
     getProfileData: payload => {

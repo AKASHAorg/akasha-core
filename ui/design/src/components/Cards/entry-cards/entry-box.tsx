@@ -38,8 +38,7 @@ export interface IEntryBoxProps {
   // data
   entryData: IEntryData;
   locale: ILocale;
-  loggedProfileAvatar?: string;
-  loggedProfileEthAddress?: string;
+  loggedProfileEthAddress: string | null;
   // share data
   sharePostLabel?: string;
   shareTextLabel: string;

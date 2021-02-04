@@ -45,6 +45,8 @@ const TopbarComponent = (props: TopBarProps) => {
   const [notificationsState] = useNotifications({
     onError: err => logger.error(err),
     authService: props.sdkModules.auth.authService,
+    ipfsService: props.sdkModules.commons.ipfsService,
+    profileService: props.sdkModules.profiles.profileService,
     loggedEthAddress: loginState.ethAddress,
   });
 
@@ -74,6 +76,16 @@ const TopbarComponent = (props: TopBarProps) => {
   const quickAccessItems = currentMenu?.filter(
     menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,
   );
+  // sort them so that avatar is last on the topbar menu
+  const sortedQuickAccessItems = quickAccessItems.sort((menuItemA, menuItemB) => {
+    if (menuItemA.label.toLowerCase() > menuItemB.label.toLowerCase()) {
+      return -1;
+    }
+    if (menuItemA.label.toLowerCase() < menuItemB.label.toLowerCase()) {
+      return 1;
+    }
+    return 0;
+  });
   const searchAreaItem = currentMenu?.filter(
     menuItem => menuItem.area === MenuItemAreaType.SearchArea,
   )[0];
@@ -123,7 +135,7 @@ const TopbarComponent = (props: TopBarProps) => {
         onSearch={handleSearchBarKeyDown}
         onSidebarToggle={toggleSidebar}
         ethAddress={loginState.ethAddress}
-        quickAccessItems={loginState.ethAddress ? quickAccessItems : null}
+        quickAccessItems={loginState.ethAddress ? sortedQuickAccessItems : null}
         searchAreaItem={searchAreaItem}
         size={size}
         onLoginClick={handleLoginClick}

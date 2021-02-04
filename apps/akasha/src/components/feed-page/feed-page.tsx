@@ -212,12 +212,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleClickReplies = () => {
     /* todo */
   };
-  const handleFollow = () => {
-    /* todo */
-  };
-  const handleUnfollow = () => {
-    /* todo */
-  };
 
   const [tags, setTags] = React.useState([]);
 
@@ -408,8 +402,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             bookmarks={bookmarks}
             ethAddress={ethAddress}
             locale={locale}
-            onFollow={handleFollow}
-            onUnfollow={handleUnfollow}
             onBookmark={handleEntryBookmark}
             onNavigate={handleNavigateToPost}
             onRepliesClick={handleClickReplies}

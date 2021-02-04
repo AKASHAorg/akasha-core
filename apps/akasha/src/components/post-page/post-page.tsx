@@ -409,7 +409,7 @@ const PostPage: React.FC<IPostPage> = props => {
               copyLinkLabel={t('Copy Link')}
               copyIPFSLinkLabel={t('Copy IPFS Link')}
               flagAsLabel={t('Report Post')}
-              loggedProfileEthAddress={'0x00123123123123'}
+              loggedProfileEthAddress={ethAddress}
               locale={locale}
               bookmarkLabel={t('Save')}
               bookmarkedLabel={t('Saved')}
@@ -463,8 +463,6 @@ const PostPage: React.FC<IPostPage> = props => {
             bookmarks={bookmarks}
             ethAddress={ethAddress}
             locale={locale}
-            onFollow={handleFollow}
-            onUnfollow={handleUnfollow}
             onBookmark={handleEntryBookmark}
             onNavigate={handleNavigateToPost}
             onRepliesClick={handleClickReplies}
