@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
-import { getMediaUrl } from './use-profile';
+import { getMediaUrl } from './utils/media-utils';
 import { switchMap, filter } from 'rxjs/operators';
 import { forkJoin, of } from 'rxjs';
 
