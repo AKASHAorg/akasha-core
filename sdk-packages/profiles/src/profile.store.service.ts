@@ -312,6 +312,24 @@ const service: AkashaService = (invoke, log) => {
     }
     return rec.services[0].indexOf(tagName) !== -1;
   };
+
+  const globalSearch = async (keyword: string) => {
+    const query = `
+    query GlobalSearch($keyword: String!) {
+      globalSearch(keyword: $keyword){
+        posts{id}
+        profiles{id}
+        tags{id name}
+        comments{id}
+      }
+    }`;
+    const result = await runGQL({
+      query: query,
+      variables: { keyword: keyword },
+      operationName: 'GlobalSearch',
+    });
+    return result.data;
+  };
   return {
     addProfileProvider,
     saveMediaFile,
@@ -326,6 +344,7 @@ const service: AkashaService = (invoke, log) => {
     toggleTagSubscription,
     getTagSubscriptions,
     isSubscribedToTag,
+    globalSearch,
   };
 };
 
