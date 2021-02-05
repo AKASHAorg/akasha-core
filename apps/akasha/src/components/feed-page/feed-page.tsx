@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useEntryBookmark, useProfile, useErrors } from '@akashaproject/ui-awf-hooks';
+import { constants, useEntryBookmark, useProfile, useErrors } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import {
   ILoadItemDataPayload,
@@ -9,8 +9,6 @@ import {
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { uploadMediaToTextile } from '../../services/posting-service';
-import { BASE_FLAG_URL } from '../../services/constants';
-// import { checkStatus } from '../../services/fetch-contents';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
@@ -220,17 +218,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   const handleFlipCard = (entry: any) => () => {
-    const entryMod = { ...entry, reported: false };
-    console.log(entryMod);
-    // @TODO: set the modified entry back to state
-    // feedStateActions.setFeedItemData(entryMod);
+    const modifiedEntry = { ...entry, reported: false };
+    postsActions.updatePostsState(modifiedEntry);
   };
 
   const updateEntry = (entryId: string) => {
-    console.log(entryId);
-    // @TODO: find the entry from state, modify it and set it back to state
-    // const modEntry = { ...feedState.feedItemData[entryId], reported: true };
-    // feedStateActions.setFeedItemData(modEntry);
+    const modifiedEntry = { ...postsState.postsData[entryId], reported: true };
+    postsActions.updatePostsState(modifiedEntry);
   };
 
   return (
@@ -269,7 +263,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               user={ethAddress ? ethAddress : ''}
               contentId={flagged}
               contentType={t('post')}
-              baseUrl={BASE_FLAG_URL}
+              baseUrl={constants.BASE_FLAG_URL}
               size={size}
               updateEntry={updateEntry}
               closeModal={() => {

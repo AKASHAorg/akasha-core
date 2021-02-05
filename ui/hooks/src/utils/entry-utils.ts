@@ -68,6 +68,8 @@ export const mapEntry = (
       name: string;
       ethAddress: string;
     };
+    delisted?: boolean;
+    reported?: boolean;
   },
   ipfsGateway: any,
   logger?: any,
@@ -125,6 +127,8 @@ export const mapEntry = (
     ipfsLink: entry._id,
     permalink: 'null',
     replies: +entry.totalComments,
+    delisted: entry.delisted || false,
+    reported: entry.reported || false,
   };
 };
 

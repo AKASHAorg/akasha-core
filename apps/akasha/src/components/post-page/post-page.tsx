@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import {
+  constants,
   usePosts,
   useEntryBookmark,
   useProfile,
@@ -12,7 +13,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { mapEntry, uploadMediaToTextile } from '../../services/posting-service';
-import { BASE_FLAG_URL } from '../../services/constants';
 import { redirectToPost } from '../../services/routing-service';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
@@ -264,10 +264,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   );
 
   const handleFlipCard = (entry: any) => () => {
-    const entryMod = { ...entry, reported: false };
-    console.log(entryMod);
-    // @TODO: set the modified entry back to state
-    // feedStateActions.setFeedItemData(entryMod);
+    const modifiedEntry = { ...entry, reported: false };
+    postsActions.updatePostsState(modifiedEntry);
   };
 
   return (
@@ -305,7 +303,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               closeLabel={t('Close')}
               user={ethAddress ? ethAddress : ''}
               contentId={flagged}
-              baseUrl={BASE_FLAG_URL}
+              baseUrl={constants.BASE_FLAG_URL}
               size={size}
               closeModal={() => {
                 setReportModalOpen(false);

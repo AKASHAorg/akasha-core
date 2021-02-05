@@ -1,7 +1,7 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
 
-import { getFlags } from '../services/fetch-contents';
+import { fetchRequest } from '@akashaproject/ui-awf-hooks';
 
 import ExplanationsCardEntry, { IExplanationsBoxEntryProps } from './explanations-box-entry';
 
@@ -26,7 +26,7 @@ const ExplanationsCard: React.FC<IExplanationsBoxProps> = props => {
   const fetchContentFlags = async () => {
     setRequesting(true);
     try {
-      const response = await getFlags(entryId);
+      const response = await fetchRequest.getFlags(entryId);
       setFlags(response);
       setRequesting(false);
     } catch (error) {

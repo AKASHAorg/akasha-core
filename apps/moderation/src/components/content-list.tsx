@@ -2,11 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { fetchRequest } from '@akashaproject/ui-awf-hooks';
 
 import ContentCard from './content-card/content-card';
 import ContentTab from './content-tab';
 
-import { getAllPending, getAllModerated } from '../services/fetch-contents';
 import { BASE_DECISION_URL } from '../services/constants';
 
 const { Box, Text, useViewportSize, ModalRenderer, ToastProvider, ModerateModal } = DS;
@@ -76,7 +76,7 @@ const ContentList: React.FC<IContentListProps> = props => {
     // fetch pending (reported) contents
     setRequesting(true);
     try {
-      const modResponse = await getAllPending();
+      const modResponse = await fetchRequest.getAllPending();
       setPendingItems(() => modResponse);
       setRequesting(false);
     } catch (error) {
@@ -89,7 +89,7 @@ const ContentList: React.FC<IContentListProps> = props => {
     // fetch delisted (moderated) contents
     setRequesting(true);
     try {
-      const modResponse = await getAllModerated();
+      const modResponse = await fetchRequest.getAllModerated();
       setModeratedItems(() => modResponse);
       setRequesting(false);
     } catch (error) {
