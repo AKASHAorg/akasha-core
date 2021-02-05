@@ -10,6 +10,7 @@ import usePosts from './use-posts';
 import useErrors from './use-error-state';
 import useTrendingData from './use-trending-data';
 import useFollow from './use-follow';
+import useNotifications from './use-notifications';
 
 export {
   useProfile,
@@ -24,4 +25,5 @@ export {
   useErrors,
   useTrendingData,
   useFollow,
+  useNotifications,
 };

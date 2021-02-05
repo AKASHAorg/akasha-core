@@ -14,9 +14,7 @@ export interface PostRendererProps {
   itemData?: any;
   isBookmarked?: boolean;
   locale: any;
-  ethAddress?: string | null;
-  onFollow: () => void;
-  onUnfollow: () => void;
+  ethAddress: string | null;
   onBookmark: (entryId: string) => void;
   onNavigate: (details: any) => void;
   onLinkCopy?: () => void;
