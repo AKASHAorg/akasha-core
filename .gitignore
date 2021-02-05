@@ -38,4 +38,3 @@ release/
 *.tsbuildinfo
 lib
 dist
-/.project

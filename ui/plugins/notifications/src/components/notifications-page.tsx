@@ -56,7 +56,7 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
       notificationsActions.markMessageAsRead(notif.id);
     });
   };
-
+  // @todo: extract routes from config
   const handleAvatarClick = (profileEthAddress: string) => {
     singleSpa.navigateToUrl(`/profile/${profileEthAddress}`);
   };
