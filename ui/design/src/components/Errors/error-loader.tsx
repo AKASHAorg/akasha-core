@@ -10,6 +10,9 @@ const ErrorLoader: React.FC<ErrorLoaderProps> = props => {
     case 'missing-saved-items':
       imagesrc = `${publicImgPath}/no-saved-posts-error.png`;
       break;
+    case 'missing-notifications':
+      imagesrc = `${publicImgPath}/no-notifications-error.png`;
+      break;
     case 'missing-feed-customization':
       imagesrc = `${publicImgPath}/no-feed-customization-error.png`;
       break;

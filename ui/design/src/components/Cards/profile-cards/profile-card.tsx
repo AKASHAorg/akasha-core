@@ -241,7 +241,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             </Box>
           </Box>
           <Box direction="row" align="center" gap="small">
-            {!canUserEdit && loggedEthAddress && (
+            {!canUserEdit && loggedEthAddress && loggedEthAddress !== profileData.ethAddress && (
               <DuplexButton
                 icon={<Icon type="following" />}
                 active={isFollowing}
@@ -260,7 +260,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
                 onClick={toggleEditMenu}
               />
             )}
-            {flaggable && (
+            {flaggable && loggedEthAddress !== profileData.ethAddress && (
               <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
             )}
             {menuIconRef.current && menuDropOpen && (
@@ -322,7 +322,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
       )}
 
       <ProfileCardEthereumId profileData={profileData} />
-      {(description || canUserEdit) && (
+      {description && (
         <ProfileCardDescription
           editable={editable}
           description={description}

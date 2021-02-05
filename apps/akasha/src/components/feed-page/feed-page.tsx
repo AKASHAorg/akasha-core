@@ -177,7 +177,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   };
   const handleEntryShare = (
-    service: 'twitter' | 'facebook' | 'reddit',
+    service: 'twitter' | 'facebook' | 'reddit' | 'copy',
     entryId: string,
     authorEthAddress: string,
   ) => {
@@ -192,6 +192,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         break;
       case 'reddit':
         shareUrl = `http://www.reddit.com/submit?url=${url}`;
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(url);
         break;
       default:
         break;

@@ -13,6 +13,8 @@ const {
   Icon,
   ProfileAvatarButton,
   formatRelativeTime,
+  ErrorLoader,
+  Spinner,
 } = DS;
 
 interface AppRoutesProps {
@@ -42,6 +44,7 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
     onError: (err: IAkashaError) => {
       logger.error('useNotifications error %j', err);
     },
+    globalChannel: globalChannel,
     authService: sdkModules.auth.authService,
     ipfsService: sdkModules.commons.ipfsService,
     profileService: sdkModules.profiles.profileService,
@@ -49,7 +52,7 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
   });
 
   const handleMarkAllAsRead = () => {
-    notificationsState.forEach((notif: any) => {
+    notificationsState.notifications.forEach((notif: any) => {
       notificationsActions.markMessageAsRead(notif.id);
     });
   };
@@ -62,18 +65,24 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
     singleSpa.navigateToUrl(`/AKASHA-app/posts/${authorEthAddress}/post/${entryId}`);
   };
 
-  const renderNotifCard = (notif: any, index: number) => {
+  const renderNotificationCard = (notif: any, index: number) => {
     const profileData = notif.body.value.author || notif.body.value.follower;
     let label;
     let clickHandler;
     switch (notif.body.property) {
       case 'POST_MENTION':
         label = t('mentioned you in a post');
-        clickHandler = () => handlePostClick(profileData.ethAddress, notif.body.value.postID);
+        clickHandler = () => {
+          handlePostClick(profileData.ethAddress, notif.body.value.postID);
+          notificationsActions.markMessageAsRead(notif.id);
+        };
         break;
       case 'NEW_FOLLOWER':
         label = t('is now following you');
-        clickHandler = () => handleAvatarClick(profileData.ethAddress);
+        clickHandler = () => {
+          handleAvatarClick(profileData.ethAddress);
+          notificationsActions.markMessageAsRead(notif.id);
+        };
         break;
       default:
         label = '';
@@ -92,9 +101,11 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
           onClick={clickHandler}
           onClickAvatar={() => handleAvatarClick(profileData.ethAddress)}
         />
-        <Button
-          label={t('Mark as Read')}
-          primary={true}
+        <Icon
+          size="xs"
+          type="checkSimple"
+          primaryColor={true}
+          clickable={true}
           onClick={() => {
             notificationsActions.markMessageAsRead(notif.id);
           }}
@@ -109,19 +120,31 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
         <title>Notifications</title>
       </Helmet>
       <BasicCardBox>
-        <Box pad="medium" gap="medium">
-          <Box direction="row" justify="between">
-            <Text weight="bold">{t('Notifications')}</Text>
-            <Icon
-              size="sm"
-              type="checkSimple"
-              primaryColor={true}
-              clickable={true}
-              onClick={handleMarkAllAsRead}
-            />
+        {notificationsState.isFetching && (
+          <Box pad="large">
+            <Spinner />
           </Box>
-          {notificationsState.map((notif: any, index: number) => renderNotifCard(notif, index))}
-        </Box>
+        )}
+        {!notificationsState.isFetching && notificationsState.notifications.length === 0 && (
+          <ErrorLoader
+            type="missing-notifications"
+            title="Notifications"
+            details={t("You don't have any new notifications!")}
+          />
+        )}
+        {!notificationsState.isFetching && notificationsState.notifications.length !== 0 && (
+          <Box pad="medium" gap="medium">
+            <Box direction="row" justify="between" align="center">
+              <Text size="large" weight="bold">
+                {t('Notifications')}
+              </Text>
+              <Button label={t('Mark all as read')} primary={true} onClick={handleMarkAllAsRead} />
+            </Box>
+            {notificationsState.notifications.map((notif: any, index: number) =>
+              renderNotificationCard(notif, index),
+            )}
+          </Box>
+        )}
       </BasicCardBox>
     </Box>
   );

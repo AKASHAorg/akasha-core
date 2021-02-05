@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { getMediaUrl } from './use-profile';
-import { switchMap, catchError } from 'rxjs/operators';
+import { switchMap, filter } from 'rxjs/operators';
 import { forkJoin, of } from 'rxjs';
 
 export interface UseNotificationsActions {
@@ -11,6 +11,7 @@ export interface UseNotificationsActions {
 
 export interface UseNotificationsProps {
   onError?: (error: IAkashaError) => void;
+  globalChannel: any;
   authService: any;
   ipfsService: any;
   profileService: any;
@@ -18,9 +19,30 @@ export interface UseNotificationsProps {
 }
 
 /* A hook to get notifications and mark them as read */
-export const useNotifications = (props: UseNotificationsProps): [any, UseNotificationsActions] => {
-  const { onError, authService, ipfsService, profileService, loggedEthAddress } = props;
-  const [notificationsState, setNotificationsState] = React.useState<any>([]);
+export const useNotifications = (
+  props: UseNotificationsProps,
+): [
+  {
+    notifications: any[];
+    isFetching: boolean;
+  },
+  UseNotificationsActions,
+] => {
+  const {
+    onError,
+    globalChannel,
+    authService,
+    ipfsService,
+    profileService,
+    loggedEthAddress,
+  } = props;
+  const [notificationsState, setNotificationsState] = React.useState<{
+    notifications: any[];
+    isFetching: boolean;
+  }>({
+    notifications: [],
+    isFetching: false,
+  });
 
   React.useEffect(() => {
     if (loggedEthAddress) {
@@ -28,9 +50,53 @@ export const useNotifications = (props: UseNotificationsProps): [any, UseNotific
     }
   }, [loggedEthAddress]);
 
+  const handleSubscribe = (payload: any) => {
+    const { data, channelInfo } = payload;
+    if (data) {
+      setNotificationsState((prev: any) => {
+        return {
+          ...prev,
+          notifications: prev.notifications.filter((notif: any) => {
+            return notif.id !== channelInfo.args;
+          }),
+        };
+      });
+    }
+  };
+
+  const handleError = (err: Error) => {
+    if (onError) {
+      onError({
+        errorKey: 'useNotifications.globalNotifications',
+        error: err,
+        critical: false,
+      });
+    }
+  };
+
+  // this is used to sync notification state between different components using the hook
+  React.useEffect(() => {
+    const call = globalChannel.pipe(
+      filter((payload: any) => {
+        return (
+          payload.channelInfo.method === 'markMessageAsRead' &&
+          payload.channelInfo.servicePath.includes('AUTH_SERVICE')
+        );
+      }),
+    );
+    call.subscribe(handleSubscribe, handleError);
+    return () => call.unsubscribe();
+  }, []);
+
   const actions: UseNotificationsActions = {
     getMessages() {
       try {
+        setNotificationsState(prev => {
+          return {
+            ...prev,
+            isFetching: true,
+          };
+        });
         const getMessagesCall = authService.getMessages(null);
         const ipfsGatewayCall = ipfsService.getSettings(null);
         const obs = forkJoin([ipfsGatewayCall, getMessagesCall]);
@@ -50,7 +116,6 @@ export const useNotifications = (props: UseNotificationsProps): [any, UseNotific
                 }),
               ]),
             ),
-            catchError(err => of(`Error from obs: ${err}`)),
           )
           .subscribe((resp: any) => {
             if (!resp.length) {
@@ -86,7 +151,7 @@ export const useNotifications = (props: UseNotificationsProps): [any, UseNotific
                 return message;
               });
             });
-            setNotificationsState(completeMessages);
+            setNotificationsState({ isFetching: false, notifications: completeMessages });
           });
       } catch (ex) {
         if (onError) {
@@ -103,11 +168,14 @@ export const useNotifications = (props: UseNotificationsProps): [any, UseNotific
         const call = authService.markMessageAsRead(messageId);
         call.subscribe((resp: any) => {
           if (resp.data) {
-            setNotificationsState((prev: any) =>
-              prev.filter((notif: any) => {
-                return notif.id !== messageId;
-              }),
-            );
+            setNotificationsState((prev: any) => {
+              return {
+                ...prev,
+                notifications: prev.notifications.filter((notif: any) => {
+                  return notif.id !== messageId;
+                }),
+              };
+            });
           }
         });
       } catch (ex) {

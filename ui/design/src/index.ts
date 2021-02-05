@@ -94,6 +94,7 @@ import type { Helmet as HelmetType } from '@types/react-helmet';
 import Helmet from 'react-helmet';
 import { HorizontalDivider } from './components/Dividers';
 import { Notification, notify, BookmarkPill, NewPostsPill } from './components/Notification';
+import Spinner from './components/Spinner';
 
 /* Utilities (these are not components) */
 import responsiveBreakpoints from './styles/responsive-breakpoints';
@@ -203,6 +204,7 @@ const exported = {
   ModalContainer,
   ModalRenderer,
   Notification,
+  Spinner,
   notify,
   HorizontalDivider,
   LoginCTAWidgetCard,

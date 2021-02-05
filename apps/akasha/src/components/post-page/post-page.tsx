@@ -241,7 +241,7 @@ const PostPage: React.FC<IPostPage> = props => {
   };
 
   const handleEntryShare = (
-    service: 'twitter' | 'facebook' | 'reddit',
+    service: 'twitter' | 'facebook' | 'reddit' | 'copy',
     entryId: string,
     authorEthAddress: string,
   ) => {
@@ -256,6 +256,9 @@ const PostPage: React.FC<IPostPage> = props => {
         break;
       case 'reddit':
         shareUrl = `http://www.reddit.com/submit?url=${url}`;
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(url);
         break;
       default:
         break;

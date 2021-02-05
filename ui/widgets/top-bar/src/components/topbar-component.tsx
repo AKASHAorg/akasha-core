@@ -44,6 +44,7 @@ const TopbarComponent = (props: TopBarProps) => {
 
   const [notificationsState] = useNotifications({
     onError: err => logger.error(err),
+    globalChannel,
     authService: props.sdkModules.auth.authService,
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,

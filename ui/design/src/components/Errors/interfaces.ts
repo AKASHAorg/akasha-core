@@ -5,6 +5,7 @@ export interface ErrorLoaderProps {
   type:
     | 'missing-feed-customization'
     | 'missing-saved-items'
+    | 'missing-notifications'
     | 'no-connection'
     | 'no-login'
     | 'script-error';

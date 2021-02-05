@@ -257,7 +257,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           onRepostWithComment={handleRepost(true)}
           onShare={handleEntryShare}
           handleRepliesClick={handleRepliesClick}
-          onLinkCopy={handleLinkCopy('shareable')}
         />
       </Box>
     </ViewportSizeProvider>
