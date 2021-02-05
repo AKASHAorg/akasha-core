@@ -346,18 +346,18 @@ const EditorBox: React.FC<IEditorBox> = props => {
     CustomEditor.insertImage(editor, data.src, data.size);
   };
 
-  const handleInsertMention = (index: number) => {
+  const handleInsertMention = (mentionIndex: number) => {
     if (mentionTargetRange && mentions.length > 0) {
       Transforms.select(editor, mentionTargetRange);
-      CustomEditor.insertMention(editor, mentions[index]);
+      CustomEditor.insertMention(editor, mentions[mentionIndex]);
       setMentionTargetRange(null);
     }
   };
 
-  const handleInsertTag = (index: number) => {
+  const handleInsertTag = (tagIndex: number) => {
     if (tagTargetRange && tags.length > 0) {
       Transforms.select(editor, tagTargetRange);
-      CustomEditor.insertTag(editor, tags[index]);
+      CustomEditor.insertTag(editor, tags[tagIndex]);
       setTagTargetRange(null);
     }
   };

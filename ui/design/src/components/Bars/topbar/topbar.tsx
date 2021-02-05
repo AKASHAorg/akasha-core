@@ -170,7 +170,9 @@ const Topbar = (props: ITopbarProps) => {
       return (
         <Stack anchor="top-right">
           <Icon type={menuItem.logo?.value || 'app'} size="sm" clickable={true} />
-          {notifications?.length && <Box background="#FF5050" width="9px" height="9px" round />}
+          {notifications?.length && (
+            <Box background="#FF5050" width="9px" height="9px" round={true} />
+          )}
         </Stack>
       );
     }
