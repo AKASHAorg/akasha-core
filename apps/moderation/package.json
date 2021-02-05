@@ -52,7 +52,7 @@
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/sdk-runtime": "*",
     "@akashaproject/ui-awf-hooks": "*",
-    "easy-peasy": "3.3.1",
+    "easy-peasy": "4.0.1",
     "moment": "^2.29.1",
     "react-i18next": "11.4.0",
     "react-router-dom": "5.1.2",
@@ -68,8 +68,8 @@
     "nodemon": "2.0.3"
   },
   "peerDependencies": {
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "rxjs": "6.5.5"
+    "react": "16.14.0",
+    "react-dom": "16.14.0",
+    "rxjs": "6.6.3"
   }
 }

@@ -26,10 +26,20 @@ export interface PostRendererProps {
   onMentionClick: (ethAddress: string) => void;
   bookmarks?: Set<string>;
   style?: React.CSSProperties;
+  contentClickable?: boolean;
 }
 
 const PostRenderer = (props: PostRendererProps) => {
-  const { itemData, isBookmarked, style, ethAddress, sdkModules, logger, globalChannel } = props;
+  const {
+    itemData,
+    isBookmarked,
+    style,
+    ethAddress,
+    sdkModules,
+    logger,
+    globalChannel,
+    contentClickable,
+  } = props;
 
   const { t } = useTranslation();
 
@@ -100,7 +110,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     copyLinkLabel={t('Copy Link')}
                     copyIPFSLinkLabel={t('Copy IPFS Link')}
                     flagAsLabel={t('Report Post')}
-                    loggedProfileEthAddress={'0x00123123123123'}
+                    loggedProfileEthAddress={ethAddress}
                     locale={props.locale}
                     bookmarkLabel={t('Save')}
                     bookmarkedLabel={t('Saved')}
@@ -112,6 +122,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     handleUnfollowAuthor={handleUnfollow}
                     isFollowingAuthor={isFollowing}
                     onContentClick={props.onNavigate}
+                    contentClickable={contentClickable}
                     onMentionClick={props.onMentionClick}
                   />
                 </Box>

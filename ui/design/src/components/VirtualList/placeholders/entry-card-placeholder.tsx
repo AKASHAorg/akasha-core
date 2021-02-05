@@ -4,10 +4,12 @@ import { BasicCardBox } from '../../Cards';
 
 export interface IPlaceholderProps {
   style?: React.CSSProperties;
+  height?: number;
 }
 const EntryLoadingPlaceholder: React.FC<IPlaceholderProps> = props => {
+  const { height = 200 } = props;
   return (
-    <BasicCardBox style={{ minHeight: 200, padding: '1em', ...props.style }}>
+    <BasicCardBox style={{ minHeight: height, padding: '1em', ...props.style }}>
       <Box direction="row">
         <Box direction="row" align="center">
           <Box>

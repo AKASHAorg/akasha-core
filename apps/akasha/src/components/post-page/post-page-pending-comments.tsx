@@ -11,10 +11,19 @@ export interface IGetCustomEntitiesProps {
   handleEditorPlaceholderClick?: () => void;
   pendingComments?: any[];
   locale: string;
+  contentClickable?: boolean;
 }
 
 export const getPendingComments = (props: IGetCustomEntitiesProps) => {
-  const { feedItems, pendingComments = [], locale, sdkModules, logger, globalChannel } = props;
+  const {
+    feedItems,
+    pendingComments = [],
+    locale,
+    sdkModules,
+    logger,
+    globalChannel,
+    contentClickable,
+  } = props;
 
   let customEntities: any = [];
 
@@ -56,6 +65,7 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
             onMentionClick={() => {
               /* not allowed */
             }}
+            contentClickable={contentClickable}
           />
         ),
       })),

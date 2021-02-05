@@ -2,6 +2,7 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { uploadMediaToTextile } from '../services/posting-service';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 const { Helmet, EditorCard, ErrorLoader, Box, Button, editorDefaultValue } = DS;
 
@@ -12,7 +13,7 @@ interface NewPostPageProps {
   pubKey: string | null;
   logger: any;
   showLoginModal: () => void;
-  onError: (err: Error) => void;
+  onError: (err: IAkashaError) => void;
 }
 
 const NewPostPage: React.FC<NewPostPageProps> = props => {

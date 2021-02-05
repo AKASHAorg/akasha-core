@@ -5,7 +5,7 @@ import {
   EventTypes,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useLoginState, useNotifications } from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useErrors, useNotifications } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
 const { lightTheme, Topbar, ThemeSelector, useViewportSize, LoginModal } = DS;
@@ -34,9 +34,10 @@ const TopbarComponent = (props: TopBarProps) => {
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
   const [showLoginModal, setShowLoginModal] = React.useState(false);
+  const [errorState, errorActions] = useErrors({ logger });
   const [loginState, loginActions] = useLoginState({
     globalChannel,
-    onError: err => logger.error(err),
+    onError: errorActions.createError,
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
     authService: props.sdkModules.auth.authService,
@@ -50,6 +51,16 @@ const TopbarComponent = (props: TopBarProps) => {
     profileService: props.sdkModules.profiles.profileService,
     loggedEthAddress: loginState.ethAddress,
   });
+  const loginErrors: string | null = React.useMemo(() => {
+    if (errorState && Object.keys(errorState).length) {
+      const txt = Object.keys(errorState)
+        .filter(key => key.split('.')[0] === 'useLoginState')
+        .map(k => errorState![k])
+        .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
+      return txt;
+    }
+    return null;
+  }, [errorState]);
 
   React.useEffect(() => {
     const updateMenu = () => {
@@ -109,6 +120,7 @@ const TopbarComponent = (props: TopBarProps) => {
   };
   const handleModalClose = () => {
     setShowLoginModal(false);
+    errorActions.removeLoginErrors();
   };
   const handleSearchBarKeyDown = (
     ev: React.KeyboardEvent<HTMLInputElement>,
@@ -153,6 +165,7 @@ const TopbarComponent = (props: TopBarProps) => {
         metamaskModalMessage={t('Please complete the process in your wallet')}
         onTutorialLinkClick={handleTutorialLinkClick}
         helpText={t('What is a wallet? How do i get an Ethereum address?')}
+        error={loginErrors}
       />
     </ThemeSelector>
   );

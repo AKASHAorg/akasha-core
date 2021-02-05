@@ -26,6 +26,7 @@ export interface IEntryCardRendererProps {
   onMentionClick: (ethAddress: string) => void;
   bookmarks?: Set<string>;
   style?: React.CSSProperties;
+  contentClickable?: boolean;
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
@@ -39,6 +40,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     sdkModules,
     logger,
     globalChannel,
+    contentClickable,
   } = props;
 
   let isBookmarked = false;
@@ -125,6 +127,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   isFollowingAuthor={isFollowing}
                   onContentClick={props.onNavigate}
                   onMentionClick={props.onMentionClick}
+                  contentClickable={contentClickable}
                 />
               )}
             </>
