@@ -132,7 +132,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       setShowEditor(true);
     }
   };
-  const handleEntryShare = (service: 'twitter' | 'facebook' | 'reddit', entryId: string) => {
+  const handleEntryShare = (
+    service: 'twitter' | 'facebook' | 'reddit' | 'copy',
+    entryId: string,
+  ) => {
     const url = `${window.location.origin}/${routes[POST]}/${entryId}`;
     let shareUrl;
     switch (service) {
@@ -144,6 +147,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         break;
       case 'reddit':
         shareUrl = `http://www.reddit.com/submit?url=${url}`;
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(url);
         break;
       default:
         break;
@@ -162,12 +168,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   const handleClickReplies = () => {
-    /* todo */
-  };
-  const handleFollow = () => {
-    /* todo */
-  };
-  const handleUnfollow = () => {
     /* todo */
   };
 
@@ -320,8 +320,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             bookmarks={bookmarks}
             ethAddress={ethAddress}
             locale={locale}
-            onFollow={handleFollow}
-            onUnfollow={handleUnfollow}
             onBookmark={handleEntryBookmark}
             onNavigate={handleNavigateToPost}
             onRepliesClick={handleClickReplies}

@@ -7,7 +7,7 @@ import { IEntryData } from './entry-box';
 import { MobileListModal } from '../../Modals';
 import styled from 'styled-components';
 
-export type ServiceNames = 'twitter' | 'reddit' | 'facebook';
+export type ServiceNames = 'twitter' | 'reddit' | 'facebook' | 'copy';
 
 export type ShareData = {
   title?: string;
@@ -18,7 +18,7 @@ export type ShareData = {
 export interface CardActionProps {
   // data
   entryData: IEntryData;
-  loggedProfileEthAddress?: string | null;
+  loggedProfileEthAddress: string | null;
   // share data
   sharePostLabel?: string;
   shareTextLabel: string;
@@ -39,7 +39,6 @@ export interface CardActionProps {
   handleRepliesClick: () => void;
   onRepostWithComment: () => void;
   onShare: (service: ServiceNames) => void;
-  onLinkCopy: () => void;
 }
 
 const BookmarkButton = styled(TextIcon)<{ isBookmarked?: boolean }>`
@@ -80,7 +79,6 @@ const CardActions: React.FC<CardActionProps> = props => {
     handleRepliesClick,
     onRepostWithComment,
     onShare,
-    onLinkCopy,
   } = props;
 
   const { size } = useViewportSize();
@@ -128,11 +126,6 @@ const CardActions: React.FC<CardActionProps> = props => {
   };
   const handleShare = (service: ServiceNames) => () => {
     onShare(service);
-    setShareDropOpen(false);
-  };
-
-  const handleCopyLink = () => {
-    onLinkCopy();
     setShareDropOpen(false);
   };
 
@@ -216,7 +209,7 @@ const CardActions: React.FC<CardActionProps> = props => {
             <TextIcon
               iconType="link"
               label={copyLinkLabel}
-              onClick={handleCopyLink}
+              onClick={handleShare('copy')}
               clickable={true}
               primaryColor={true}
               iconSize="xs"

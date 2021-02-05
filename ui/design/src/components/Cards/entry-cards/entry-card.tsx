@@ -33,7 +33,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     shareLabel,
     copyLinkLabel,
     locale,
-    loggedProfileAvatar,
     loggedProfileEthAddress,
     style,
     className,
@@ -81,7 +80,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           flagAsLabel={flagAsLabel}
           copyLinkLabel={copyLinkLabel}
           locale={locale}
-          loggedProfileAvatar={loggedProfileAvatar}
           loggedProfileEthAddress={loggedProfileEthAddress}
           onEntryBookmark={onEntryBookmark}
           isBookmarked={isBookmarked}

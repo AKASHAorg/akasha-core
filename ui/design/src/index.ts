@@ -94,11 +94,13 @@ import type { Helmet as HelmetType } from '@types/react-helmet';
 import Helmet from 'react-helmet';
 import { HorizontalDivider } from './components/Dividers';
 import { Notification, notify, BookmarkPill, NewPostsPill } from './components/Notification';
+import Spinner from './components/Spinner';
 
 /* Utilities (these are not components) */
 import responsiveBreakpoints from './styles/responsive-breakpoints';
 import { formatImageSrc } from './utils/image-utils';
 import { isBase64 } from './utils/string-utils';
+import { formatRelativeTime } from './utils/time';
 
 /* Themes and theme related utils */
 import darkTheme from './styles/themes/dark';
@@ -193,6 +195,7 @@ const exported = {
   VirtualList,
   isBase64,
   formatImageSrc,
+  formatRelativeTime,
   WidgetAreaCardBox,
   ModalCard,
   EthProviderListModal,
@@ -201,6 +204,7 @@ const exported = {
   ModalContainer,
   ModalRenderer,
   Notification,
+  Spinner,
   notify,
   HorizontalDivider,
   LoginCTAWidgetCard,
