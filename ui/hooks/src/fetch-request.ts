@@ -1,4 +1,6 @@
-import { BASE_STATUS_URL, BASE_FLAG_URL, BASE_DECISION_URL } from './constants';
+import constants from './constants';
+
+const { BASE_FLAG_URL, BASE_STATUS_URL, BASE_DECISION_URL } = constants;
 
 const fetchRequest = async (props: { method: string; url: string; data?: object }) => {
   const { method, url, data = {} } = props;
