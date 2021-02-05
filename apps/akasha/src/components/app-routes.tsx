@@ -1,28 +1,27 @@
 import * as React from 'react';
-import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
+import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import routes, { NEW_POST, FEED, POSTS, rootRoute } from '../routes';
+import routes, { FEED, rootRoute, POST, REPLY } from '../routes';
 import FeedPage from './feed-page/feed-page';
-import NewPostPage from './new-post-page';
-import PostsPage from './posts-page';
 import { useTranslation } from 'react-i18next';
-import { useLoginState } from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
+import PostPage from './post-page/post-page';
 
 const { Box, LoginModal, ViewportSizeProvider } = DS;
 interface AppRoutesProps {
-  onError: (err: Error) => void;
+  onError: (err: IAkashaError) => void;
 }
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
-  const { sdkModules, globalChannel, logger, singleSpa, layout, onError } = props;
+  const { sdkModules, globalChannel, logger, layout, onError } = props;
 
   const { t } = useTranslation();
 
+  const [errorState, errorActions] = useErrors({ logger });
+
   const [loginState, loginActions] = useLoginState({
     globalChannel: globalChannel,
-    onError: (err: IAkashaError) => {
-      logger.error('useLoginState error %j', err);
-    },
+    onError: errorActions.createError,
     authService: sdkModules.auth.authService,
     ipfsService: sdkModules.commons.ipfsService,
     profileService: sdkModules.profiles.profileService,
@@ -41,6 +40,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
 
   const hideLoginModal = () => {
     setLoginModalState(false);
+    errorActions.removeLoginErrors();
   };
 
   const handleLogin = (providerId: number) => {
@@ -64,22 +64,22 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     /* goto tutorials */
   };
 
+  const loginErrors: string | null = React.useMemo(() => {
+    if (errorState && Object.keys(errorState).length) {
+      const txt = Object.keys(errorState)
+        .filter(key => key.split('.')[0] === 'useLoginState')
+        .map(k => errorState![k])
+        .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
+      return txt;
+    }
+    return null;
+  }, [errorState]);
+
   return (
     <ViewportSizeProvider>
       <Box>
         <Router>
           <Switch>
-            <Route path={routes[NEW_POST]}>
-              <NewPostPage
-                sdkModules={sdkModules}
-                globalChannel={globalChannel}
-                logger={logger}
-                showLoginModal={showLoginModal}
-                onError={onError}
-                ethAddress={ethAddress}
-                pubKey={pubKey}
-              />
-            </Route>
             <Route path={routes[FEED]}>
               <FeedPage
                 {...props}
@@ -93,22 +93,23 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
                 onError={onError}
               />
             </Route>
-            <Route path={routes[POSTS]}>
-              <PostsPage
+            <Route path={`${routes[POST]}/:postId`}>
+              <PostPage
                 {...props}
-                sdkModules={sdkModules}
-                globalChannel={globalChannel}
-                logger={logger}
                 ethAddress={ethAddress}
                 pubKey={pubKey}
-                navigateToUrl={singleSpa.navigateToUrl}
                 flagged={flagged}
                 reportModalOpen={reportModalOpen}
                 setFlagged={setFlagged}
                 setReportModalOpen={setReportModalOpen}
                 showLoginModal={showLoginModal}
+                navigateToUrl={props.singleSpa.navigateToUrl}
+                isMobile={props.isMobile}
                 onError={onError}
               />
+            </Route>
+            <Route path={`${routes[REPLY]}/:postId`}>
+              <div>Coming Soon!</div>
             </Route>
             <Redirect exact={true} from={rootRoute} to={routes[FEED]} />
           </Switch>
@@ -123,6 +124,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           metamaskModalMessage={t('Please complete the process in your wallet')}
           onTutorialLinkClick={handleTutorialLinkClick}
           helpText={t('What is a wallet? How do i get an Ethereum address?')}
+          error={loginErrors}
         />
       </Box>
     </ViewportSizeProvider>

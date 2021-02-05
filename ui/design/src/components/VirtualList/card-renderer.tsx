@@ -13,6 +13,7 @@ const CardRenderer = (props: IRenderItemProps) => {
     itemCardAlt,
     itemRect,
     updateRef,
+    averageItemHeight,
   } = props;
 
   const beforeEntities = customEntities.filter(
@@ -56,10 +57,13 @@ const CardRenderer = (props: IRenderItemProps) => {
       }}
     >
       {beforeEntities.map((entityObj, idx) => {
-        return entityObj.getComponent({ key: idx, style: { marginBottom: itemSpacing } });
+        return entityObj.getComponent({
+          key: idx,
+          style: { marginBottom: itemSpacing },
+        });
       })}
 
-      {!shouldLoadData && <EntryLoadingPlaceholder />}
+      {!shouldLoadData && <EntryLoadingPlaceholder height={averageItemHeight} />}
       {itemData &&
         shouldLoadData &&
         !itemData.delisted &&
@@ -72,7 +76,10 @@ const CardRenderer = (props: IRenderItemProps) => {
         itemCardAlt(itemData)}
 
       {afterEntities.map((entityObj, idx) => {
-        return entityObj.getComponent({ key: idx, style: { marginTop: itemSpacing } });
+        return entityObj.getComponent({
+          key: idx,
+          style: { marginTop: itemSpacing },
+        });
       })}
     </div>
   );

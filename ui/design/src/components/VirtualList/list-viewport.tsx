@@ -12,7 +12,6 @@ const ListViewport: React.FC<IListViewportProps> = props => {
     itemRects,
     listHeight,
     renderSlice,
-    itemIds,
     averageItemHeight,
     listHeader,
   } = props;
@@ -21,13 +20,6 @@ const ListViewport: React.FC<IListViewportProps> = props => {
     <>
       {listHeader && React.cloneElement(listHeader)}
       {renderSlice.map(itemId => {
-        const idx = itemIds.indexOf(itemId);
-        const prev = itemIds[idx - 1];
-        let prevRect = null;
-        if (prev) {
-          prevRect = itemRects.get(prev);
-        }
-
         return (
           <CardRenderer
             key={itemId}
@@ -40,7 +32,6 @@ const ListViewport: React.FC<IListViewportProps> = props => {
             itemSpacing={itemSpacing}
             itemRect={itemRects.get(itemId)}
             updateRef={props.updateRef}
-            prevRect={prevRect}
             averageItemHeight={averageItemHeight}
           />
         );
