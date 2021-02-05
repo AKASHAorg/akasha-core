@@ -287,14 +287,14 @@ const service: AkashaService = (invoke, log) => {
       moduleName: TagSubscriptions,
     });
     if (!rec || !rec?.services?.length) {
-      return await invoke(dbServices[DB_SETTINGS_ATTACHMENT]).put({
+      return invoke(dbServices[DB_SETTINGS_ATTACHMENT]).put({
         moduleName: TagSubscriptions,
         services: [[tagName]],
       });
     }
     const index = rec.services[0].indexOf(tagName);
     index !== -1 ? rec.services[0].splice(index, 1) : rec.services[0].push(tagName);
-    return await invoke(dbServices[DB_SETTINGS_ATTACHMENT]).put(rec);
+    return invoke(dbServices[DB_SETTINGS_ATTACHMENT]).put(rec);
   };
   const getTagSubscriptions = async () => {
     const rec = await invoke(dbServices[DB_SETTINGS_ATTACHMENT]).get({
