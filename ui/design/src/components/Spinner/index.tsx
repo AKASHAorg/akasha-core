@@ -76,7 +76,7 @@ const StyledSpinner = styled.svg`
   height: ${props => props.width}px;
 `;
 
-interface SpinnerProps {
+export interface SpinnerProps {
   /** the size (width, height) of the spinner. @default 50 */
   size?: number;
   /** speed (in seconds). ex: 1.2 or 2. @default 1.2 */

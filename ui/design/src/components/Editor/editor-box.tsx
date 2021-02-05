@@ -107,7 +107,6 @@ const EditorBox: React.FC<IEditorBox> = props => {
   );
 
   useEffect(() => {
-    countLetters();
     if (mentionTargetRange && mentions && mentions.length > 0) {
       const el = mentionPopoverRef.current;
       const domRange = ReactEditor.toDOMRange(editor, mentionTargetRange);
@@ -156,14 +155,22 @@ const EditorBox: React.FC<IEditorBox> = props => {
   };
 
   const reducer = (acc: number, val: number) => acc + val;
-  const countLetters = () => {
-    const textLength = editor.children
+
+  const handleChange = (value: Node[]) => {
+    let imageCounter = 0;
+    const textLength = value
       .map((node: Node) => {
         if (SlateText.isText(node)) return node.text.length;
+        if (node.type === 'image') {
+          imageCounter++;
+        }
         if (node.children) {
           return node.children
             .map(child => {
               if (SlateText.isText(child)) return child.text.length;
+              if (node.type === 'image') {
+                imageCounter++;
+              }
               return 0;
             })
             .reduce(reducer);
@@ -172,36 +179,20 @@ const EditorBox: React.FC<IEditorBox> = props => {
       })
       .reduce(reducer);
 
-    if (textLength > 0) {
+    if (textLength > 0 || imageCounter !== 0) {
       setPublishDisabled(false);
-    } else if (textLength === 0) {
+    } else if (textLength === 0 && imageCounter === 0) {
       setPublishDisabled(true);
     }
     if (typeof setLetterCount === 'function') {
       setLetterCount(textLength);
     }
-  };
-
-  const handleChange = (value: Node[]) => {
-    const textLength = value
-      .map((node: Node) => {
-        if (SlateText.isText(node)) return node.text.length;
-        if (node.children) {
-          return node.children
-            .map(child => {
-              if (SlateText.isText(child)) return child.text.length;
-              return 0;
-            })
-            .reduce(reducer);
-        }
-        return 0;
-      })
-      .reduce(reducer);
 
     if (textLength > 280) {
       editor.selection = currentSelection;
       return;
     }
+
     setCurrentSelection(editor.selection);
 
     setEditorState(value);
@@ -257,6 +248,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
         break;
       case 'Tab':
       case 'Enter':
+      case ' ':
         event.preventDefault();
         Transforms.select(editor, mentionRange);
         CustomEditor.insertMention(editor, mentions[index]);
@@ -283,9 +275,14 @@ const EditorBox: React.FC<IEditorBox> = props => {
         break;
       case 'Tab':
       case 'Enter':
+      case ' ':
         event.preventDefault();
         Transforms.select(editor, tagRange);
-        CustomEditor.insertTag(editor, tags[index]);
+        if (index === 0 && createTag.length > 1) {
+          CustomEditor.insertTag(editor, { name: createTag, totalPosts: 0 });
+        } else {
+          CustomEditor.insertTag(editor, tags[index]);
+        }
         setTagTargetRange(null);
         break;
       case 'Escape':
@@ -349,6 +346,22 @@ const EditorBox: React.FC<IEditorBox> = props => {
     CustomEditor.insertImage(editor, data.src, data.size);
   };
 
+  const handleInsertMention = (mentionIndex: number) => {
+    if (mentionTargetRange && mentions.length > 0) {
+      Transforms.select(editor, mentionTargetRange);
+      CustomEditor.insertMention(editor, mentions[mentionIndex]);
+      setMentionTargetRange(null);
+    }
+  };
+
+  const handleInsertTag = (tagIndex: number) => {
+    if (tagTargetRange && tags.length > 0) {
+      Transforms.select(editor, tagTargetRange);
+      CustomEditor.insertTag(editor, tags[tagIndex]);
+      setTagTargetRange(null);
+    }
+  };
+
   const handleInsertEmoji = (emojiCode: string) => {
     CustomEditor.insertText(editor, emojiCode);
   };
@@ -383,13 +396,19 @@ const EditorBox: React.FC<IEditorBox> = props => {
               />
               {mentionTargetRange && mentionsNames.length > 0 && (
                 <MentionPopover
+                  handleSelect={handleInsertMention}
                   ref={mentionPopoverRef}
                   values={mentionsNames}
                   currentIndex={index}
                 />
               )}
               {tagTargetRange && tags.length > 0 && (
-                <MentionPopover ref={mentionPopoverRef} values={tagsNames} currentIndex={index} />
+                <MentionPopover
+                  handleSelect={handleInsertTag}
+                  ref={mentionPopoverRef}
+                  values={tagsNames}
+                  currentIndex={index}
+                />
               )}
             </Slate>
             {embedEntryData && (

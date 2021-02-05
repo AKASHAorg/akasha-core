@@ -1,6 +1,6 @@
 import { Box } from 'grommet';
 import * as React from 'react';
-import { capitalize, truncateMiddle } from '../../../utils/string-utils';
+import { truncateMiddle } from '../../../utils/string-utils';
 import { Avatar } from '../../Avatar/index';
 import { AvatarSize } from '../../Avatar/styled-avatar';
 import StyledIconLink from '../icon-buttons/styled-icon-link';
@@ -27,7 +27,7 @@ const ProfileAvatarButton = React.forwardRef((props: ProfileAvatarButtonProps, r
       <Box pad={{ horizontal: 'small' }} justify="center" align="start" onClick={onClick}>
         <StyledIconLink
           primaryColor={true}
-          label={label ? capitalize(label) : truncateMiddle(ethAddress)}
+          label={label ? label : truncateMiddle(ethAddress)}
           ref={ref}
         />
         <ButtonInfo>{info}</ButtonInfo>

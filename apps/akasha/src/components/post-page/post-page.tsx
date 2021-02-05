@@ -17,7 +17,7 @@ import { redirectToPost } from '../../services/routing-service';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
-import routes, { POSTS } from '../../routes';
+import routes, { POST } from '../../routes';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const {
@@ -191,11 +191,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   };
 
   const handleEntryShare = (
-    service: 'twitter' | 'facebook' | 'reddit',
+    service: 'twitter' | 'facebook' | 'reddit' | 'copy',
     entryId: string,
-    authorEthAddress: string,
   ) => {
-    const url = `${window.location.origin}/${routes[POSTS]}/${authorEthAddress}/post/${entryId}`;
+    const url = `${window.location.origin}/${routes[POST]}/${entryId}`;
     let shareUrl;
     switch (service) {
       case 'twitter':
@@ -206,6 +205,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         break;
       case 'reddit':
         shareUrl = `http://www.reddit.com/submit?url=${url}`;
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(url);
         break;
       default:
         break;
@@ -330,7 +332,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               copyLinkLabel={t('Copy Link')}
               copyIPFSLinkLabel={t('Copy IPFS Link')}
               flagAsLabel={t('Report Post')}
-              loggedProfileEthAddress={'0x00123123123123'}
+              loggedProfileEthAddress={ethAddress}
               locale={locale}
               bookmarkLabel={t('Save')}
               bookmarkedLabel={t('Saved')}
@@ -384,8 +386,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             bookmarks={bookmarks}
             ethAddress={ethAddress}
             locale={locale}
-            onFollow={handleFollow}
-            onUnfollow={handleUnfollow}
             onBookmark={handleEntryBookmark}
             onNavigate={handleNavigateToPost}
             onRepliesClick={handleClickReplies}

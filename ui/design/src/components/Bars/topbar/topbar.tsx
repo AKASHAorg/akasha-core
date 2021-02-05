@@ -1,4 +1,4 @@
-import { Box } from 'grommet';
+import { Box, Stack } from 'grommet';
 import * as React from 'react';
 import { Icon } from '../../Icon';
 import { SearchBar } from './search-bar';
@@ -21,7 +21,7 @@ export interface ITopbarProps {
   brandLabel: string;
   signInLabel?: string;
   logoutLabel?: string;
-  unreadNotifications?: number;
+  notifications?: any;
   quickAccessItems: IMenuItem[] | null;
   searchAreaItem?: IMenuItem;
   // handlers
@@ -52,6 +52,7 @@ const Topbar = (props: ITopbarProps) => {
     size,
     onLoginClick,
     onLogout,
+    notifications,
   } = props;
 
   const [inputValue, setInputValue] = React.useState('');
@@ -164,6 +165,20 @@ const Topbar = (props: ITopbarProps) => {
     </StyledDrop>
   );
 
+  const renderPluginIcon = (menuItem: IMenuItem) => {
+    if (menuItem.label === 'Notifications') {
+      return (
+        <Stack anchor="top-right">
+          <Icon type={menuItem.logo?.value || 'app'} size="sm" clickable={true} />
+          {notifications?.length && (
+            <Box background="#FF5050" width="9px" height="9px" round={true} />
+          )}
+        </Stack>
+      );
+    }
+    return <Icon type={menuItem.logo?.value || 'app'} size="sm" clickable={true} />;
+  };
+
   const renderPluginButton = (menuItem: IMenuItem, index: number) => (
     <StyledDiv
       key={index}
@@ -180,7 +195,7 @@ const Topbar = (props: ITopbarProps) => {
           onClick={onClickAvatarButton(menuItem)}
         />
       ) : (
-        <Icon type={menuItem.logo?.value || 'app'} size="sm" clickable={true} />
+        renderPluginIcon(menuItem)
       )}
     </StyledDiv>
   );
@@ -252,7 +267,6 @@ Topbar.defaultProps = {
   onNavigation: () => {
     return;
   },
-  unreadNotifications: 0,
   signInLabel: 'Sign In',
   logoutLabel: 'Logout',
 };
