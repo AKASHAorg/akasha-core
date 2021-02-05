@@ -17,7 +17,7 @@ import { redirectToPost } from '../../services/routing-service';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
-import routes, { POSTS } from '../../routes';
+import routes, { POST } from '../../routes';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const {
@@ -193,9 +193,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const handleEntryShare = (
     service: 'twitter' | 'facebook' | 'reddit' | 'copy',
     entryId: string,
-    authorEthAddress: string,
   ) => {
-    const url = `${window.location.origin}/${routes[POSTS]}/${authorEthAddress}/post/${entryId}`;
+    const url = `${window.location.origin}/${routes[POST]}/${entryId}`;
     let shareUrl;
     switch (service) {
       case 'twitter':

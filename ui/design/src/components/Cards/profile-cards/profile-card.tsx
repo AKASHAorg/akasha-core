@@ -263,16 +263,16 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             {flaggable && loggedEthAddress !== profileData.ethAddress && (
               <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
             )}
-            {menuIconRef.current && menuDropOpen && (
-              <CardHeaderMenuDropdown
-                target={menuIconRef.current}
-                onMenuClose={closeMenuDrop}
-                onFlag={onEntryFlag}
-                flagAsLabel={flagAsLabel}
-              />
-            )}
           </Box>
         </Box>
+        {menuIconRef.current && menuDropOpen && (
+          <CardHeaderMenuDropdown
+            target={menuIconRef.current}
+            onMenuClose={closeMenuDrop}
+            onFlag={onEntryFlag}
+            flagAsLabel={flagAsLabel}
+          />
+        )}
         <Box pad={{ vertical: 'medium' }} direction="row" alignContent="center" gap="medium">
           <TextIcon
             iconType="quote"

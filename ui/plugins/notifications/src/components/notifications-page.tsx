@@ -61,8 +61,8 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
     singleSpa.navigateToUrl(`/profile/${profileEthAddress}`);
   };
 
-  const handlePostClick = (authorEthAddress: string, entryId: string) => {
-    singleSpa.navigateToUrl(`/AKASHA-app/posts/${authorEthAddress}/post/${entryId}`);
+  const handlePostClick = (entryId: string) => {
+    singleSpa.navigateToUrl(`/AKASHA-app/post/${entryId}`);
   };
 
   const renderNotificationCard = (notif: any, index: number) => {
@@ -73,7 +73,7 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
       case 'POST_MENTION':
         label = t('mentioned you in a post');
         clickHandler = () => {
-          handlePostClick(profileData.ethAddress, notif.body.value.postID);
+          handlePostClick(notif.body.value.postID);
           notificationsActions.markMessageAsRead(notif.id);
         };
         break;
@@ -128,7 +128,7 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
         {!notificationsState.isFetching && notificationsState.notifications.length === 0 && (
           <ErrorLoader
             type="missing-notifications"
-            title="Notifications"
+            title={t('All clear')}
             details={t("You don't have any new notifications!")}
           />
         )}

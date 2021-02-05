@@ -153,7 +153,7 @@ const TopbarComponent = (props: TopBarProps) => {
         size={size}
         onLoginClick={handleLoginClick}
         onLogout={handleLogout}
-        notifications={notificationsState}
+        notifications={notificationsState.notifications}
       />
       <LoginModal
         slotId={modalSlotId}

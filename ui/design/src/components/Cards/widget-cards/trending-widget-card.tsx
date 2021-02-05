@@ -115,7 +115,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
           <Box pad="medium" gap="medium">
             {profiles.slice(0, 4).map((profile, index) => (
               <Box key={index} direction="row" justify="between" align="center">
-                <Box width="9.3rem" pad="none">
+                <Box width="9rem" pad="none">
                   <ProfileAvatarButton
                     ethAddress={profile.ethAddress}
                     onClick={() => onClickProfile(profile.ethAddress)}

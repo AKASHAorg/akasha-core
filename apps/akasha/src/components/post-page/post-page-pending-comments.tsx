@@ -23,6 +23,7 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
     logger,
     globalChannel,
     contentClickable,
+    loggedEthAddress,
   } = props;
 
   let customEntities: any = [];
@@ -37,6 +38,7 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
             sdkModules={sdkModules}
             logger={logger}
             globalChannel={globalChannel}
+            ethAddress={loggedEthAddress}
             key={`${entry.author.ethAddress}-${idx}-${key}`}
             style={{ ...style, backgroundColor: '#4e71ff0f' }}
             itemData={entry}

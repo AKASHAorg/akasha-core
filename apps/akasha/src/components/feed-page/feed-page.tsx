@@ -132,7 +132,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       setShowEditor(true);
     }
   };
-  const handleEntryShare = (service: 'twitter' | 'facebook' | 'reddit', entryId: string) => {
+  const handleEntryShare = (
+    service: 'twitter' | 'facebook' | 'reddit' | 'copy',
+    entryId: string,
+  ) => {
     const url = `${window.location.origin}/${routes[POST]}/${entryId}`;
     let shareUrl;
     switch (service) {
