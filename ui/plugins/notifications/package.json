@@ -37,8 +37,11 @@
     "ext": "ts,tsx"
   },
   "dependencies": {
-    "@akashaproject/ui-awf-typings": "*",
+    "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/design-system": "*",
+    "@akashaproject/sdk-auth": "*",
+    "@akashaproject/sdk-profiles": "*",
+    "@akashaproject/sdk-common": "*",
     "@types/i18next": "13.0.0",
     "@types/react-i18next": "8.1.0",
     "@types/react-router": "5.1.8",
@@ -48,6 +51,7 @@
     "single-spa-react": "3.2.0"
   },
   "devDependencies": {
+    "@akashaproject/ui-awf-typings": "*",
     "@types/react": "16.9.56",
     "@types/react-dom": "16.9.9",
     "@types/react-test-renderer": "16.9.3",

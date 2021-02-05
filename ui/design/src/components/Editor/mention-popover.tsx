@@ -6,6 +6,7 @@ export interface IMentionPopover {
   values: string[];
   ref: React.Ref<any>;
   currentIndex: number;
+  handleSelect: (index: number) => void;
 }
 
 const StyledPopoverDiv = styled.div`
@@ -27,13 +28,17 @@ const StyledValueDiv = styled.div<{ background: boolean }>`
 `;
 
 export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props, ref) => {
-  const { values, currentIndex } = props;
+  const { values, currentIndex, handleSelect } = props;
 
   return (
     <Portal>
       <StyledPopoverDiv ref={ref}>
         {values.map((value, i) => (
-          <StyledValueDiv key={value} background={i === currentIndex}>
+          <StyledValueDiv
+            key={value}
+            background={i === currentIndex}
+            onClick={() => handleSelect(i)}
+          >
             {value}
           </StyledValueDiv>
         ))}

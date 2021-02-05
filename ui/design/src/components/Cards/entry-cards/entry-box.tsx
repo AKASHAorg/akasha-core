@@ -38,8 +38,7 @@ export interface IEntryBoxProps {
   // data
   entryData: IEntryData;
   locale: ILocale;
-  loggedProfileAvatar?: string;
-  loggedProfileEthAddress?: string | null;
+  loggedProfileEthAddress: string | null;
   // share data
   sharePostLabel?: string;
   shareTextLabel: string;
@@ -264,7 +263,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           onRepostWithComment={handleRepost(true)}
           onShare={handleEntryShare}
           handleRepliesClick={handleRepliesClick}
-          onLinkCopy={handleLinkCopy('shareable')}
         />
       </Box>
     </ViewportSizeProvider>
