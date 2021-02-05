@@ -1,6 +1,6 @@
 import { DataSource } from 'apollo-datasource';
 import { getAppDB, getMailSender } from '../helpers';
-import { Client, ThreadID, Users } from '@textile/hub';
+import { Client, ThreadID } from '@textile/hub';
 import { DataProvider, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 import { searchIndex } from './search-indexes';
@@ -222,6 +222,35 @@ class PostAPI extends DataSource {
     const nextIndex = result?.hits?.length ? result.hits.length + offset : null;
 
     return { results: result.hits, nextIndex: nextIndex, total: result.nbHits };
+  }
+
+  async globalSearch(keyword: string) {
+    const result = await searchIndex.search(keyword, {
+      typoTolerance: false,
+      distinct: true,
+      maxValuesPerFacet: 80,
+      hitsPerPage: 80,
+      attributesToRetrieve: ['objectID', 'category', 'name'],
+    });
+    const acc = {
+      post: [],
+      tag: [],
+      comment: [],
+      profile: [],
+    };
+    for (const rec of result.hits) {
+      const { category, name }: any = rec;
+      if (acc.hasOwnProperty(category)) {
+        acc[category].push({ id: rec.objectID, name: name });
+      }
+    }
+
+    return {
+      posts: acc.post,
+      tags: acc.tag,
+      comments: acc.comment,
+      profiles: acc.profile,
+    };
   }
 }
 

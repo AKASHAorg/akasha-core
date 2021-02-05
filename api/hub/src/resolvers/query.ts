@@ -139,6 +139,9 @@ const query = {
     );
     return Object.assign({}, returned, { results: posts });
   },
+  globalSearch: async (_source, { keyword }, { dataSources }) => {
+    return dataSources.postsAPI.globalSearch(keyword);
+  },
 };
 
 export default query;

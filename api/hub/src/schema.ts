@@ -26,6 +26,16 @@ const typeDefs = gql`
     name: String
     totalPosts: Int
   }
+  type GlobalSearchResultItem {
+    id: String
+    name: String
+  }
+  type GlobalSearchResult {
+    posts: [GlobalSearchResultItem]
+    tags: [GlobalSearchResultItem]
+    comments: [GlobalSearchResultItem]
+    profiles: [GlobalSearchResultItem]
+  }
   type Query {
     getProfile(ethAddress: String!): UserProfile!
     resolveProfile(pubKey: String!): UserProfile!
@@ -33,6 +43,7 @@ const typeDefs = gql`
     getTag(name: String!): Tag
     searchTags(name: String!): [SearchTagsResult]
     searchProfiles(name: String!): [UserProfile]
+    globalSearch(keyword: String!): GlobalSearchResult
     tags(offset: String, limit: Int): TagsResult
     posts(offset: String, limit: Int, pubKey: String): PostsResult
     isFollowing(follower: String!, following: String!): Boolean
