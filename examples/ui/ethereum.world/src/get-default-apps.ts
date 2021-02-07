@@ -23,6 +23,14 @@ export const getDefaultApps = async (appsPublicPath, pluginsPublicPath, _widgets
       },
     },
     {
+      src: `${pluginsPublicPath}/bookmarks/index.js`,
+      name: 'akashaproject__ui_plugin_bookmarks',
+      moduleName: './app',
+      config: {
+        area: MenuItemAreaType.QuickAccessArea,
+      },
+    },
+    {
       src: `${pluginsPublicPath}/search/index.js`,
       name: 'akashaproject__ui_plugin_search',
       moduleName: './app',

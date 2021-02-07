@@ -45,9 +45,7 @@
   },
   "dependencies": {
     "@akashaproject/sdk-auth": "*",
-    "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-common": "*",
-    "@akashaproject/sdk-runtime": "*",
     "@akashaproject/sdk-db": "*",
     "@akashaproject/sdk-posts": "*",
     "@akashaproject/design-system": "*",

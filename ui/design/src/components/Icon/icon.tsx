@@ -194,6 +194,7 @@ export interface IconProps extends CommonInterface<any> {
   primaryColor?: boolean;
   accentColor?: boolean;
   size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  disabled?: boolean;
 }
 
 const StyledRefDiv = styled.div`
@@ -249,6 +250,7 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
       }`};
   ${props =>
     props.clickable &&
+    !props.disabled &&
     `
       cursor: pointer;
       &: hover {

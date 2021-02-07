@@ -14,4 +14,5 @@ export interface IColors {
   secondary: string;
   secondaryOpacity: string;
   shadow: string;
+  disabledText: string;
 }

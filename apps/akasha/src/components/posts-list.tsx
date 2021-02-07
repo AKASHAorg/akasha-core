@@ -100,12 +100,6 @@ const PostsList: React.FC<IPostsListProps> = props => {
   const handleClickReplies = () => {
     /* todo */
   };
-  const handleFollow = () => {
-    /* todo */
-  };
-  const handleUnfollow = () => {
-    /* todo */
-  };
   const handleMentionClick = (profileEthAddress: string) => {
     props.navigateToUrl(`/profile/${profileEthAddress}`);
   };
@@ -128,8 +122,6 @@ const PostsList: React.FC<IPostsListProps> = props => {
               globalChannel={props.globalChannel}
               logger={props.logger}
               locale={locale}
-              onFollow={handleFollow}
-              onUnfollow={handleUnfollow}
               onBookmark={handleEntryBookmark}
               onNavigate={redirectToPost(props.navigateToUrl)}
               onRepliesClick={handleClickReplies}
