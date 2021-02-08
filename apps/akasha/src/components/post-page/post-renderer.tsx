@@ -27,6 +27,7 @@ export interface PostRendererProps {
   bookmarkState?: IBookmarkState;
   style?: React.CSSProperties;
   contentClickable?: boolean;
+  hidePublishTime?: boolean;
 }
 
 const PostRenderer = (props: PostRendererProps) => {
@@ -39,6 +40,7 @@ const PostRenderer = (props: PostRendererProps) => {
     globalChannel,
     contentClickable,
     bookmarkState,
+    hidePublishTime,
   } = props;
 
   const { t } = useTranslation();
@@ -136,6 +138,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     onContentClick={props.onNavigate}
                     contentClickable={contentClickable}
                     onMentionClick={props.onMentionClick}
+                    hidePublishTime={hidePublishTime}
                   />
                 </Box>
               )}

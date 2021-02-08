@@ -29,6 +29,7 @@ export interface IEntryCardRendererProps {
   style?: React.CSSProperties;
   contentClickable?: boolean;
   disableIpfsCopyLink?: boolean;
+  hidePublishTime?: boolean;
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
@@ -44,6 +45,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     globalChannel,
     contentClickable,
     disableIpfsCopyLink,
+    hidePublishTime,
   } = props;
 
   const isBookmarked = React.useMemo(() => {
@@ -139,6 +141,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   onMentionClick={props.onMentionClick}
                   contentClickable={contentClickable}
                   disableIpfsCopyLink={disableIpfsCopyLink}
+                  hidePublishTime={hidePublishTime}
                 />
               )}
             </>
