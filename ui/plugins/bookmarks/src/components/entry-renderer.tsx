@@ -67,7 +67,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     }
     return false;
   }, [bookmarkState]);
-
+  console.log(itemData, 'item data');
   const { t } = useTranslation();
 
   const [followedProfiles, followActions] = useFollow({
@@ -156,14 +156,12 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                       authorEthAddress: itemData.author.ethAddress,
                       entryId: itemData.entryId,
                       replyTo: {
-                        // for now just pass a boolean
-                        // @TODO: add the actual parent id
                         entryId: bookmarkState?.bookmarks.some(
                           bm =>
                             bm.entryId === itemData.entryId && bm.type === BookmarkTypes.COMMENT,
                         )
-                          ? true
-                          : false,
+                          ? itemData.postId
+                          : null,
                       },
                     });
                   }}
