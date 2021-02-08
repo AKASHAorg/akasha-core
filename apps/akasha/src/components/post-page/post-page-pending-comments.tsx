@@ -35,6 +35,7 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
         itemId: feedItems.length ? feedItems[0] : null,
         getComponent: ({ key, style }: { key: string; style: React.CSSProperties }) => (
           <PostRenderer
+            hidePublishTime={true}
             sdkModules={sdkModules}
             logger={logger}
             globalChannel={globalChannel}

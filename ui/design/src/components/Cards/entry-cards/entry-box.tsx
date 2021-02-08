@@ -23,7 +23,8 @@ export interface IEntryData {
   permalink: string;
   entryId: string;
   author: IProfileData;
-  socialData?: ISocialData;
+  quotedByAuthors?: ISocialData;
+  quotedBy?: string;
   quote?: IEntryData;
 }
 export interface IContentClickDetails {
@@ -71,11 +72,12 @@ export interface IEntryBoxProps {
   onContentClick?: (details: IContentClickDetails) => void;
   /* Can click the content (not embed!) to navigate */
   contentClickable?: boolean;
-  onMentionClick?: (ethAddress: string) => void;
+  onMentionClick: (ethAddress: string) => void;
   // style
   style?: React.CSSProperties;
   disableIpfsCopyLink?: boolean;
   disableReposting?: boolean;
+  hidePublishTime?: boolean;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -111,6 +113,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     contentClickable,
     disableIpfsCopyLink,
     disableReposting,
+    hidePublishTime,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -207,7 +210,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             </StyledProfileDrop>
           )}
           <Box direction="row" gap="xsmall" align="center">
-            {entryData.time && <Text>{formatRelativeTime(entryData.time, locale)}</Text>}
+            {entryData.time && !hidePublishTime && (
+              <Text>{formatRelativeTime(entryData.time, locale)}</Text>
+            )}
             <Icon
               type="akasha"
               size="sm"

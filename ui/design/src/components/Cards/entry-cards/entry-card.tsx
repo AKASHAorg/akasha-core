@@ -55,16 +55,18 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     contentClickable,
     disableIpfsCopyLink,
     disableReposting,
+    hidePublishTime,
   } = props;
 
   return (
     <MainAreaCardBox className={className} style={style} rootNodeRef={rootNodeRef}>
-      {entryData.socialData && entryData.socialData.users.length > 0 && (
+      {entryData.quotedByAuthors && entryData.quotedByAuthors.length > 0 && (
         <SocialBox
-          socialData={entryData.socialData}
+          socialData={entryData.quotedByAuthors}
           repostedThisLabel={repostedThisLabel}
           andLabel={andLabel}
           othersLabel={othersLabel}
+          onClickUser={onMentionClick}
         />
       )}
       <Box pad={{ horizontal: 'medium' }}>
@@ -100,6 +102,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           contentClickable={contentClickable}
           disableIpfsCopyLink={disableIpfsCopyLink}
           disableReposting={disableReposting}
+          hidePublishTime={hidePublishTime}
         />
       </Box>
     </MainAreaCardBox>
