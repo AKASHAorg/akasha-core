@@ -144,7 +144,7 @@ const typeDefs = gql`
     content: [DataProvider!]
     mentions: [String]
     replyTo: String
-    postID: String
+    postId: String
   }
 `;
 
