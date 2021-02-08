@@ -275,12 +275,19 @@ const EditorBox: React.FC<IEditorBox> = props => {
         break;
       case 'Tab':
       case 'Enter':
-      case ' ':
         event.preventDefault();
         Transforms.select(editor, tagRange);
+        CustomEditor.insertTag(editor, tags[index]);
+        setTagTargetRange(null);
+        break;
+      case ' ':
         if (index === 0 && createTag.length > 1) {
+          event.preventDefault();
+          Transforms.select(editor, tagRange);
           CustomEditor.insertTag(editor, { name: createTag, totalPosts: 0 });
         } else {
+          event.preventDefault();
+          Transforms.select(editor, tagRange);
           CustomEditor.insertTag(editor, tags[index]);
         }
         setTagTargetRange(null);
