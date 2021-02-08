@@ -75,7 +75,6 @@ export const mapEntry = (
   ipfsGateway: any,
   logger?: any,
 ) => {
-  console.log(entry, 'the orig entry');
   const slateContent = entry.content.find(elem => elem.property === PROPERTY_SLATE_CONTENT);
   let content = null;
   try {
