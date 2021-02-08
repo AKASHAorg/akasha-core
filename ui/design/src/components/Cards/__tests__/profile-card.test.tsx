@@ -21,6 +21,7 @@ const mockProfileData = {
 
 const createBaseComponent = (props: any) => (
   <ProfileCard
+    loggedEthAddress={null}
     profileData={mockProfileData}
     onClickFollowers={props.onClickFollowers}
     onClickFollowing={props.onClickFollowing}

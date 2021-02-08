@@ -23,6 +23,10 @@ export default function profilesApi(channel) {
         isFollowing: extractedServices[PROFILE_STORE]('isFollowing'),
         searchProfiles: extractedServices[PROFILE_STORE]('searchProfiles'),
         getTrending: extractedServices[PROFILE_STORE]('getTrending'),
+        toggleTagSubscription: extractedServices[PROFILE_STORE]('toggleTagSubscription'),
+        getTagSubscriptions: extractedServices[PROFILE_STORE]('getTagSubscriptions'),
+        isSubscribedToTag: extractedServices[PROFILE_STORE]('isSubscribedToTag'),
+        globalSearch: extractedServices[PROFILE_STORE]('globalSearch'),
       },
     },
   };

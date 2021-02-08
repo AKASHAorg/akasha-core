@@ -93,7 +93,10 @@ const BookmarksPage = (props: RootComponentProps) => {
     navigateToUrl(url);
   };
 
-  const handleEntryShare = (service: 'twitter' | 'facebook' | 'reddit', entryId: string) => {
+  const handleEntryShare = (
+    service: 'twitter' | 'facebook' | 'reddit' | 'copy',
+    entryId: string,
+  ) => {
     const bookmark = bookmarkState.bookmarks.find(bm => bm.entryId === entryId);
     let resourceName;
     switch (bookmark?.type) {
@@ -118,6 +121,9 @@ const BookmarksPage = (props: RootComponentProps) => {
         break;
       case 'reddit':
         shareUrl = `http://www.reddit.com/submit?url=${url}`;
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(url);
         break;
       default:
         break;

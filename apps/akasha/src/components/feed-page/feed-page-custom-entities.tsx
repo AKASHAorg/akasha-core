@@ -13,7 +13,14 @@ export interface IGetCustomEntitiesProps {
 }
 
 export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
-  const { feedItems, pendingEntries = [], sdkModules, logger, globalChannel } = props;
+  const {
+    feedItems,
+    pendingEntries = [],
+    sdkModules,
+    logger,
+    globalChannel,
+    loggedEthAddress,
+  } = props;
 
   let customEntities: any = [];
 
@@ -27,6 +34,7 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
             sdkModules={sdkModules}
             logger={logger}
             globalChannel={globalChannel}
+            ethAddress={loggedEthAddress}
             key={`${entry.author.ethAddress}-${idx}-${key}`}
             style={{ ...style, backgroundColor: '#4e71ff0f' }}
             itemData={entry}

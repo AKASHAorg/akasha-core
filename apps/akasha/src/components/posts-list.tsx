@@ -121,6 +121,7 @@ const PostsList: React.FC<IPostsListProps> = props => {
               sdkModules={props.channels}
               globalChannel={props.globalChannel}
               logger={props.logger}
+              ethAddress={props.ethAddress}
               locale={locale}
               onBookmark={handleEntryBookmark}
               onNavigate={redirectToPost(props.navigateToUrl)}

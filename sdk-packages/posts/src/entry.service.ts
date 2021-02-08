@@ -11,8 +11,8 @@ interface DataProviderInput {
 const service: AkashaService = (invoke, log) => {
   const getEntry = async (opt: { entryId: string }) => {
     const query = `
-  query GetEntry($id: String!) {
-       getPost(id: $id) {
+  query GetEntry($id: String!, $pubKey: String) {
+       getPost(id: $id, pubKey:$pubKey) {
         content{
           provider
           property
@@ -37,6 +37,18 @@ const service: AkashaService = (invoke, log) => {
         tags
         totalComments
         quotedBy
+        quotedByAuthors{
+          pubKey
+          name
+          userName
+          avatar
+          coverImage
+          description
+          ethAddress
+          totalPosts
+          totalFollowers
+          totalFollowing
+        }
         quotes{
             content{
               provider
@@ -62,9 +74,10 @@ const service: AkashaService = (invoke, log) => {
           }
        }
       }`;
+    const currentUser = await invoke(authServices[AUTH_SERVICE]).getCurrentUser();
     const result = await runGQL({
       query: query,
-      variables: { id: opt.entryId },
+      variables: { id: opt.entryId, pubKey: currentUser?.pubKey },
       operationName: 'GetEntry',
     });
     return result.data;
@@ -72,8 +85,8 @@ const service: AkashaService = (invoke, log) => {
 
   const entries = async (opt: { offset?: string; limit: number }) => {
     const query = `
-  query GetEntries($offset: String, $limit: Int) {
-       posts(offset: $offset, limit: $limit) {
+  query GetEntries($offset: String, $limit: Int, $pubKey: String) {
+       posts(offset: $offset, limit: $limit, pubKey:$pubKey) {
         results{
           content{
             provider
@@ -99,6 +112,18 @@ const service: AkashaService = (invoke, log) => {
           tags
           totalComments
           quotedBy
+          quotedByAuthors{
+            pubKey
+            name
+            userName
+            avatar
+            coverImage
+            description
+            ethAddress
+            totalPosts
+            totalFollowers
+            totalFollowing
+        }
           quotes{
             content{
               provider
@@ -127,9 +152,10 @@ const service: AkashaService = (invoke, log) => {
         total
        }
       }`;
+    const currentUser = await invoke(authServices[AUTH_SERVICE]).getCurrentUser();
     const result = await runGQL({
       query: query,
-      variables: { offset: opt.offset, limit: opt.limit },
+      variables: { offset: opt.offset, limit: opt.limit, pubKey: currentUser?.pubKey },
       operationName: 'GetEntries',
     });
     return result.data;
@@ -159,8 +185,8 @@ const service: AkashaService = (invoke, log) => {
 
   const entriesByAuthor = async (opt: { pubKey: string; offset?: number; limit: number }) => {
     const query = `
-  query GetPostsByAuthor($author: String!, $offset: Int, $limit: Int) {
-       getPostsByAuthor(author: $author, offset: $offset, limit: $limit) {
+  query GetPostsByAuthor($author: String!, $offset: Int, $limit: Int, $pubKey: String) {
+       getPostsByAuthor(author: $author, offset: $offset, limit: $limit, pubKey:$pubKey) {
         results{
           content{
             provider
@@ -186,6 +212,18 @@ const service: AkashaService = (invoke, log) => {
           tags
           totalComments
           quotedBy
+          quotedByAuthors{
+            pubKey
+            name
+            userName
+            avatar
+            coverImage
+            description
+            ethAddress
+            totalPosts
+            totalFollowers
+            totalFollowing
+          }
           quotes{
             content{
               provider
@@ -214,9 +252,15 @@ const service: AkashaService = (invoke, log) => {
         total
        }
       }`;
+    const currentUser = await invoke(authServices[AUTH_SERVICE]).getCurrentUser();
     const result = await runGQL({
       query: query,
-      variables: { author: opt.pubKey, offset: opt.offset, limit: opt.limit },
+      variables: {
+        author: opt.pubKey,
+        offset: opt.offset,
+        limit: opt.limit,
+        pubKey: currentUser?.pubKey,
+      },
       operationName: 'GetPostsByAuthor',
     });
     return result.data;
@@ -224,8 +268,8 @@ const service: AkashaService = (invoke, log) => {
 
   const entriesByTag = async (opt: { name: string; offset?: string; limit: number }) => {
     const query = `
-  query GetPostsByTag($tag: String!, $offset: Int, $limit: Int) {
-       getPostsByTag(tag: $tag, offset: $offset, limit: $limit) {
+  query GetPostsByTag($tag: String!, $offset: Int, $limit: Int, $pubKey: String) {
+       getPostsByTag(tag: $tag, offset: $offset, limit: $limit, pubKey:$pubKey) {
         results{
           content{
             provider
@@ -251,6 +295,18 @@ const service: AkashaService = (invoke, log) => {
           tags
           totalComments
           quotedBy
+          quotedByAuthors{
+            pubKey
+            name
+            userName
+            avatar
+            coverImage
+            description
+            ethAddress
+            totalPosts
+            totalFollowers
+            totalFollowing
+          }
           quotes{
             content{
               provider
@@ -279,9 +335,15 @@ const service: AkashaService = (invoke, log) => {
         total
        }
       }`;
+    const currentUser = await invoke(authServices[AUTH_SERVICE]).getCurrentUser();
     const result = await runGQL({
       query: query,
-      variables: { tag: opt.name, offset: opt.offset, limit: opt.limit },
+      variables: {
+        tag: opt.name,
+        offset: opt.offset,
+        limit: opt.limit,
+        pubKey: currentUser?.pubKey,
+      },
       operationName: 'GetPostsByTag',
     });
     return result.data;

@@ -47,7 +47,6 @@ storiesOf('Cards/Entry Cards', module).add('entry card', () => (
       handleUnfollowAuthor={() => action('Following Box Clicked')('Synthetic Event')}
       isFollowingAuthor={boolean('Is following author', false)}
       locale={select('Locale', { en: 'en', ro: 'ro', es: 'es' }, 'en')}
-      loggedProfileAvatar={text('Logged Profile Avatar', 'https://www.stevensegallery.com/360/360')}
       loggedProfileEthAddress={text(
         'Logged Profile EthAddress',
         '0x003410499401674320006570047391024572000',

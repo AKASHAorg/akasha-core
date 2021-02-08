@@ -15,7 +15,7 @@ export interface IEntryCardRendererProps {
   itemData?: any;
   isBookmarked?: boolean;
   locale?: any;
-  ethAddress?: string | null;
+  ethAddress: string | null;
   onBookmark: (entryId: string) => void;
   onNavigate: (details: any) => void;
   onLinkCopy?: () => void;
@@ -123,7 +123,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   copyLinkLabel={t('Copy Link')}
                   copyIPFSLinkLabel={t('Copy IPFS Link')}
                   flagAsLabel={t('Report Post')}
-                  loggedProfileEthAddress={ethAddress as any}
+                  loggedProfileEthAddress={ethAddress}
                   locale={locale || 'en'}
                   style={{ height: 'auto', ...style }}
                   bookmarkLabel={t('Save')}

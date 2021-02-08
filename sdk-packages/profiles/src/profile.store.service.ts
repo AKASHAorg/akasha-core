@@ -3,6 +3,7 @@ import { runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
 import { LinkedProfileProp, LinkedProperty, PROFILE_MEDIA_FILES, PROFILE_STORE } from './constants';
 import authServices, { AUTH_SERVICE } from '@akashaproject/sdk-auth/lib/constants';
 import commonServices, { IMAGE_UTILS_SERVICE } from '@akashaproject/sdk-common/lib/constants';
+import dbServices, { DB_SETTINGS_ATTACHMENT } from '@akashaproject/sdk-db/lib/constants';
 // tslint:disable-next-line:no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');
 
@@ -280,6 +281,55 @@ const service: AkashaService = (invoke, log) => {
   const getTrending = async () => {
     return searchProfiles({ name: '' });
   };
+  const TagSubscriptions = '@TagSubscriptions';
+  const toggleTagSubscription = async (tagName: string) => {
+    const rec = await invoke(dbServices[DB_SETTINGS_ATTACHMENT]).get({
+      moduleName: TagSubscriptions,
+    });
+    if (!rec || !rec?.services?.length) {
+      return invoke(dbServices[DB_SETTINGS_ATTACHMENT]).put({
+        moduleName: TagSubscriptions,
+        services: [[tagName]],
+      });
+    }
+    const index = rec.services[0].indexOf(tagName);
+    index !== -1 ? rec.services[0].splice(index, 1) : rec.services[0].push(tagName);
+    return invoke(dbServices[DB_SETTINGS_ATTACHMENT]).put(rec);
+  };
+  const getTagSubscriptions = async () => {
+    const rec = await invoke(dbServices[DB_SETTINGS_ATTACHMENT]).get({
+      moduleName: TagSubscriptions,
+    });
+    return rec?.services[0];
+  };
+
+  const isSubscribedToTag = async (tagName: string) => {
+    const rec = await invoke(dbServices[DB_SETTINGS_ATTACHMENT]).get({
+      moduleName: TagSubscriptions,
+    });
+    if (!rec) {
+      return false;
+    }
+    return rec.services[0].indexOf(tagName) !== -1;
+  };
+
+  const globalSearch = async (keyword: string) => {
+    const query = `
+    query GlobalSearch($keyword: String!) {
+      globalSearch(keyword: $keyword){
+        posts{id}
+        profiles{id}
+        tags{id name}
+        comments{id}
+      }
+    }`;
+    const result = await runGQL({
+      query: query,
+      variables: { keyword: keyword },
+      operationName: 'GlobalSearch',
+    });
+    return result.data;
+  };
   return {
     addProfileProvider,
     saveMediaFile,
@@ -291,6 +341,10 @@ const service: AkashaService = (invoke, log) => {
     isFollowing,
     searchProfiles,
     getTrending,
+    toggleTagSubscription,
+    getTagSubscriptions,
+    isSubscribedToTag,
+    globalSearch,
   };
 };
 
