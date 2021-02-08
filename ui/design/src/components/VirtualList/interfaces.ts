@@ -127,4 +127,5 @@ export interface IRenderItemProps {
   itemRect?: IItemStateRect;
   prevRect?: IItemStateRect | null;
   averageItemHeight: number;
+  itemIndex?: number;
 }

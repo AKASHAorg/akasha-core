@@ -5,7 +5,7 @@ import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/component
 import {
   constants,
   usePosts,
-  useEntryBookmark,
+  useBookmarks,
   useProfile,
   useFollow,
   useErrors,
@@ -17,7 +17,7 @@ import { redirectToPost } from '../../services/routing-service';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
-import routes, { POSTS } from '../../routes';
+import routes, { POST } from '../../routes';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const {
@@ -90,13 +90,12 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     }
   }, [ethAddress]);
 
-  const [bookmarks, bookmarkActions] = useEntryBookmark({
-    sdkModules,
+  const [bookmarkState, bookmarkActions] = useBookmarks({
+    dbService: sdkModules.db,
     ethAddress: ethAddress,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo);
     },
-    logger: logger,
   });
 
   const [followedProfiles, followActions] = useFollow({
@@ -155,7 +154,15 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     });
   }, [postId]);
 
-  const bookmarked = false;
+  const bookmarked = React.useMemo(() => {
+    if (
+      !bookmarkState.isFetching &&
+      bookmarkState.bookmarks.findIndex(bm => bm.entryId === postId) >= 0
+    ) {
+      return true;
+    }
+    return false;
+  }, [bookmarkState]);
 
   const handleMentionClick = (profileEthAddress: string) => {
     navigateToUrl(`/profile/${profileEthAddress}`);
@@ -170,11 +177,22 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     if (!ethAddress) {
       return showLoginModal();
     }
-    if (bookmarks.has(entryId)) {
+    if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
       return bookmarkActions.removeBookmark(entryId);
     }
-    return bookmarkActions.addBookmark(entryId);
+    return bookmarkActions.bookmarkPost(entryId);
   };
+
+  const handleCommentBookmark = (commentId: string) => {
+    if (!ethAddress) {
+      return showLoginModal();
+    }
+    if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === commentId) >= 0) {
+      return bookmarkActions.removeBookmark(commentId);
+    }
+    return bookmarkActions.bookmarkComment(commentId);
+  };
+
   const handleEntryRepost = () => {
     // todo
   };
@@ -192,11 +210,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   };
 
   const handleEntryShare = (
-    service: 'twitter' | 'facebook' | 'reddit',
+    service: 'twitter' | 'facebook' | 'reddit' | 'copy',
     entryId: string,
-    authorEthAddress: string,
   ) => {
-    const url = `${window.location.origin}/${routes[POSTS]}/${authorEthAddress}/post/${entryId}`;
+    const url = `${window.location.origin}/${routes[POST]}/${entryId}`;
     let shareUrl;
     switch (service) {
       case 'twitter':
@@ -207,6 +224,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         break;
       case 'reddit':
         shareUrl = `http://www.reddit.com/submit?url=${url}`;
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(url);
         break;
       default:
         break;
@@ -337,7 +357,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               copyLinkLabel={t('Copy Link')}
               copyIPFSLinkLabel={t('Copy IPFS Link')}
               flagAsLabel={t('Report Post')}
-              loggedProfileEthAddress={'0x00123123123123'}
+              loggedProfileEthAddress={ethAddress}
               locale={locale}
               bookmarkLabel={t('Save')}
               bookmarkedLabel={t('Saved')}
@@ -388,12 +408,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             sdkModules={sdkModules}
             logger={logger}
             globalChannel={globalChannel}
-            bookmarks={bookmarks}
+            bookmarkState={bookmarkState}
             ethAddress={ethAddress}
             locale={locale}
-            onFollow={handleFollow}
-            onUnfollow={handleUnfollow}
-            onBookmark={handleEntryBookmark}
+            onBookmark={handleCommentBookmark}
             onNavigate={handleNavigateToPost}
             onRepliesClick={handleClickReplies}
             onFlag={handleEntryFlag}
@@ -401,7 +419,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             onShare={handleEntryShare}
             onAvatarClick={handleAvatarClick}
             onMentionClick={handleMentionClick}
-            // contentClickable={true}
           />
         }
         itemCardAlt={(entry: any) => (

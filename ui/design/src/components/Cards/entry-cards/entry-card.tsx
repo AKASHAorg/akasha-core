@@ -33,7 +33,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     shareLabel,
     copyLinkLabel,
     locale,
-    loggedProfileAvatar,
     loggedProfileEthAddress,
     style,
     className,
@@ -54,6 +53,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     flagAsLabel,
     copyIPFSLinkLabel,
     contentClickable,
+    disableIpfsCopyLink,
+    disableReposting,
   } = props;
 
   return (
@@ -81,7 +82,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           flagAsLabel={flagAsLabel}
           copyLinkLabel={copyLinkLabel}
           locale={locale}
-          loggedProfileAvatar={loggedProfileAvatar}
           loggedProfileEthAddress={loggedProfileEthAddress}
           onEntryBookmark={onEntryBookmark}
           isBookmarked={isBookmarked}
@@ -98,6 +98,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           onContentClick={onContentClick}
           onMentionClick={onMentionClick}
           contentClickable={contentClickable}
+          disableIpfsCopyLink={disableIpfsCopyLink}
+          disableReposting={disableReposting}
         />
       </Box>
     </MainAreaCardBox>

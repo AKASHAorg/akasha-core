@@ -261,7 +261,6 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         currentEmbedEntry,
       );
 
-      const postEntryCall = postsService.entries.postEntry(publishObj);
       setPostsState(prev => {
         return {
           ...prev,
@@ -269,6 +268,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         };
       });
 
+      const postEntryCall = postsService.entries.postEntry(publishObj);
       postEntryCall.subscribe((postingResp: any) => {
         const publishedEntryId = postingResp.data.createPost;
         const entryData = pending as IEntryData;

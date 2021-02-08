@@ -27,10 +27,12 @@ export interface ITextIconProps {
   reverse?: boolean;
   fadedText?: boolean;
   ref?: React.Ref<HTMLDivElement>;
+  disabled?: boolean;
 }
 
 export interface IStyledTextProps extends TextProps {
   accentColor?: boolean;
+  disabled?: boolean;
 }
 
 const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
@@ -55,6 +57,7 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
     accentColor,
     reverse,
     fadedText,
+    disabled,
   } = props;
 
   const renderIcon = () => {
@@ -68,6 +71,7 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
             style={iconStyle}
             primaryColor={primaryColor}
             accentColor={accentColor}
+            disabled={disabled}
           />
         </StyledIconDiv>
       );
@@ -80,6 +84,7 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
         style={iconStyle}
         primaryColor={primaryColor}
         accentColor={accentColor}
+        disabled={disabled}
       />
     );
   };
@@ -106,6 +111,7 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
         accentColor={accentColor}
         wordBreak="break-word"
         color={fadedText ? 'secondaryText' : 'primaryText'}
+        disabled={disabled}
       >
         {label}
       </StyledText>

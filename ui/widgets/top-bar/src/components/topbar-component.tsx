@@ -5,7 +5,7 @@ import {
   EventTypes,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useErrors, useNotifications } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
 const { lightTheme, Topbar, ThemeSelector, useViewportSize, LoginModal } = DS;
@@ -43,6 +43,14 @@ const TopbarComponent = (props: TopBarProps) => {
     authService: props.sdkModules.auth.authService,
   });
 
+  const [notificationsState] = useNotifications({
+    globalChannel,
+    onError: err => logger.error(err),
+    authService: props.sdkModules.auth.authService,
+    ipfsService: props.sdkModules.commons.ipfsService,
+    profileService: props.sdkModules.profiles.profileService,
+    loggedEthAddress: loginState.ethAddress,
+  });
   const loginErrors: string | null = React.useMemo(() => {
     if (errorState && Object.keys(errorState).length) {
       const txt = Object.keys(errorState)
@@ -75,10 +83,21 @@ const TopbarComponent = (props: TopBarProps) => {
       setTimeout(() => setShowLoginModal(false), 500);
     }
   }, [loginState.ethAddress, showLoginModal]);
+
   // *how to obtain different topbar menu sections
   const quickAccessItems = currentMenu?.filter(
     menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,
   );
+  // sort them so that avatar is last on the topbar menu
+  const sortedQuickAccessItems = quickAccessItems.sort((menuItemA, menuItemB) => {
+    if (menuItemA.label.toLowerCase() > menuItemB.label.toLowerCase()) {
+      return -1;
+    }
+    if (menuItemA.label.toLowerCase() < menuItemB.label.toLowerCase()) {
+      return 1;
+    }
+    return 0;
+  });
   const searchAreaItem = currentMenu?.filter(
     menuItem => menuItem.area === MenuItemAreaType.SearchArea,
   )[0];
@@ -129,11 +148,12 @@ const TopbarComponent = (props: TopBarProps) => {
         onSearch={handleSearchBarKeyDown}
         onSidebarToggle={toggleSidebar}
         ethAddress={loginState.ethAddress}
-        quickAccessItems={loginState.ethAddress ? quickAccessItems : null}
+        quickAccessItems={loginState.ethAddress ? sortedQuickAccessItems : null}
         searchAreaItem={searchAreaItem}
         size={size}
         onLoginClick={handleLoginClick}
         onLogout={handleLogout}
+        notifications={notificationsState.notifications}
       />
       <LoginModal
         slotId={modalSlotId}

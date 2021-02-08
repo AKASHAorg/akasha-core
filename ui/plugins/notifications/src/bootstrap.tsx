@@ -1,5 +1,8 @@
 import { Application, LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { initReactI18next } from 'react-i18next';
+import { moduleName as authModule } from '@akashaproject/sdk-auth/lib/constants';
+import { moduleName as profilesModule } from '@akashaproject/sdk-profiles/lib/constants';
+import { moduleName as commonModule } from '@akashaproject/sdk-common/lib/constants';
 import { rootRoute } from './routes';
 
 /**
@@ -25,7 +28,7 @@ export const application: Application = {
   },
   loadingFn: (): Promise<any> => import('./components'),
   name: 'ui-plugin-notifications',
-  sdkModules: [],
+  sdkModules: [{ module: commonModule }, { module: authModule }, { module: profilesModule }],
   title: 'Notifications',
   logo: { type: LogoTypeSource.ICON, value: 'notifications' },
 };

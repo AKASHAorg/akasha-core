@@ -14,6 +14,7 @@ const CardRenderer = (props: IRenderItemProps) => {
     itemRect,
     updateRef,
     averageItemHeight,
+    itemIndex,
   } = props;
 
   const beforeEntities = customEntities.filter(
@@ -47,6 +48,7 @@ const CardRenderer = (props: IRenderItemProps) => {
   return (
     <div
       data-itemid={itemId}
+      data-itemindex={itemIndex}
       ref={onRef}
       style={{
         position: 'absolute',

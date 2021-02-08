@@ -40,8 +40,7 @@ export interface IEntryBoxProps {
   // data
   entryData: IEntryData;
   locale: ILocale;
-  loggedProfileAvatar?: string;
-  loggedProfileEthAddress?: string | null;
+  loggedProfileEthAddress: string | null;
   // share data
   sharePostLabel?: string;
   shareTextLabel: string;
@@ -65,7 +64,7 @@ export interface IEntryBoxProps {
   onClickReplies: (entryId: string) => void;
   onEntryShare: (service: ServiceNames, entryId?: string, authorEthAddress?: string) => void;
   onRepost: (withComment: boolean, entryData: IEntryData) => void;
-  onEntryFlag: (entryId?: string) => void;
+  onEntryFlag?: (entryId?: string) => void;
   // follow related
   handleFollowAuthor: (profileEthAddress: string) => void;
   handleUnfollowAuthor: (profileEthAddress: string) => void;
@@ -77,6 +76,8 @@ export interface IEntryBoxProps {
   onMentionClick?: (ethAddress: string) => void;
   // style
   style?: React.CSSProperties;
+  disableIpfsCopyLink?: boolean;
+  disableReposting?: boolean;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -110,6 +111,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onMentionClick,
     style,
     contentClickable,
+    disableIpfsCopyLink,
+    disableReposting,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -153,7 +156,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   };
 
   const handleEntryFlag = () => {
-    onEntryFlag(entryData.entryId);
+    if (onEntryFlag) {
+      onEntryFlag(entryData.entryId);
+    }
   };
 
   const handleRepliesClick = () => handleContentClick(entryData);
@@ -212,7 +217,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ref={akashaRef}
               clickable={true}
             />
-            <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
+            {(onEntryFlag || !disableIpfsCopyLink) && (
+              <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
+            )}
           </Box>
         </Box>
         {entryData.CID && akashaRef.current && displayCID && (
@@ -224,7 +231,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             CID={entryData.CID}
           />
         )}
-        {menuIconRef.current && menuDropOpen && (
+        {menuIconRef.current && menuDropOpen && (onEntryFlag || !disableIpfsCopyLink) && (
           <CardHeaderMenuDropdown
             target={menuIconRef.current}
             onMenuClose={closeMenuDrop}
@@ -266,7 +273,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           onRepostWithComment={handleRepost(true)}
           onShare={handleEntryShare}
           handleRepliesClick={handleRepliesClick}
-          onLinkCopy={handleLinkCopy('shareable')}
+          disableReposting={disableReposting}
         />
       </Box>
     </ViewportSizeProvider>
