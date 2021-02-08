@@ -59,6 +59,7 @@ export const mapEntry = (
     quotedBy?: string[];
     creationDate: string;
     totalComments: string;
+    postId?: string;
     author: {
       CID?: string;
       description: string;
@@ -131,6 +132,7 @@ export const mapEntry = (
     ipfsLink: entry._id,
     permalink: 'null',
     replies: +entry.totalComments,
+    postId: entry.postId,
   };
 };
 

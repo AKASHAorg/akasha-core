@@ -67,7 +67,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     }
     return false;
   }, [bookmarkState]);
-  console.log(itemData, 'item data');
   const { t } = useTranslation();
 
   const [followedProfiles, followActions] = useFollow({
