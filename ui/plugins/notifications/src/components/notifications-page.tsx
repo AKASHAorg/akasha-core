@@ -69,11 +69,15 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
     const profileData = notif.body.value.author || notif.body.value.follower;
     let label;
     let clickHandler;
+    // handle old mentions data structure
+    const postID = Array.isArray(notif.body.value.postID)
+      ? notif.body.value.postID[0]
+      : notif.body.value.postID;
     switch (notif.body.property) {
       case 'POST_MENTION':
         label = t('mentioned you in a post');
         clickHandler = () => {
-          handlePostClick(notif.body.value.postID);
+          handlePostClick(postID);
           notificationsActions.markMessageAsRead(notif.id);
         };
         break;
