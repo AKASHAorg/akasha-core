@@ -1,28 +1,21 @@
-#name: deploy ethereum.world
-#
-#on:
-#  push:
-#    branches:
-#      - master
-#    paths:
-#      - 'sdk-packages/**'
-#      - 'apps/**'
-#      - 'ui/**'
-#      - 'examples/**'
-#      - 'scripts/**'
-#      - 'Dockerfile'
-#      - '.github/workflows/**'
-#jobs:
-#
-#  build:
-#    name: Build
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: executing remote ssh commands using password
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.USERNAME }}
-#          password: ${{ secrets.PASSWORD }}
-#          port: ${{ secrets.PORT }}
-#          script: whoami
+name: deploy ethereum.world api
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'api/**'
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          KEY: ${{ secrets.SSHKEY }}
+          script: whoami
