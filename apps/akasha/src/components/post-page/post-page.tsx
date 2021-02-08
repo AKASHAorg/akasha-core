@@ -4,7 +4,7 @@ import DS from '@akashaproject/design-system';
 import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import {
   usePosts,
-  useEntryBookmark,
+  useBookmarks,
   useProfile,
   useFollow,
   useErrors,
@@ -89,13 +89,12 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     }
   }, [ethAddress]);
 
-  const [bookmarks, bookmarkActions] = useEntryBookmark({
-    sdkModules,
+  const [bookmarkState, bookmarkActions] = useBookmarks({
+    dbService: sdkModules.db,
     ethAddress: ethAddress,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo);
     },
-    logger: logger,
   });
 
   const [followedProfiles, followActions] = useFollow({
@@ -154,7 +153,15 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     });
   }, [postId]);
 
-  const bookmarked = false;
+  const bookmarked = React.useMemo(() => {
+    if (
+      !bookmarkState.isFetching &&
+      bookmarkState.bookmarks.findIndex(bm => bm.entryId === postId) >= 0
+    ) {
+      return true;
+    }
+    return false;
+  }, [bookmarkState]);
 
   const handleMentionClick = (profileEthAddress: string) => {
     navigateToUrl(`/profile/${profileEthAddress}`);
@@ -169,11 +176,22 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     if (!ethAddress) {
       return showLoginModal();
     }
-    if (bookmarks.has(entryId)) {
+    if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
       return bookmarkActions.removeBookmark(entryId);
     }
-    return bookmarkActions.addBookmark(entryId);
+    return bookmarkActions.bookmarkPost(entryId);
   };
+
+  const handleCommentBookmark = (commentId: string) => {
+    if (!ethAddress) {
+      return showLoginModal();
+    }
+    if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === commentId) >= 0) {
+      return bookmarkActions.removeBookmark(commentId);
+    }
+    return bookmarkActions.bookmarkComment(commentId);
+  };
+
   const handleEntryRepost = () => {
     // todo
   };
@@ -383,10 +401,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             sdkModules={sdkModules}
             logger={logger}
             globalChannel={globalChannel}
-            bookmarks={bookmarks}
+            bookmarkState={bookmarkState}
             ethAddress={ethAddress}
             locale={locale}
-            onBookmark={handleEntryBookmark}
+            onBookmark={handleCommentBookmark}
             onNavigate={handleNavigateToPost}
             onRepliesClick={handleClickReplies}
             onFlag={handleEntryFlag}
@@ -394,7 +412,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             onShare={handleEntryShare}
             onAvatarClick={handleAvatarClick}
             onMentionClick={handleMentionClick}
-            // contentClickable={true}
           />
         }
         customEntities={getPendingComments({

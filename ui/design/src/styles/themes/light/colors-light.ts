@@ -12,6 +12,7 @@ export interface IColorsLight extends IColors {
   deepGrey: string;
   white: string;
   red: string;
+  disabled: string;
 }
 
 const colors: IColorsLight = {
@@ -26,9 +27,11 @@ const colors: IColorsLight = {
   deepGrey: '#7F7F7F',
   white: '#FFF',
   red: '#FF4040',
+  disabled: '#9ea0a5',
   // define use cases for colors
   primaryText: '#132540', // darkBlue
   secondaryText: '#949EB3', // grey
+  disabledText: '#9ea0a5', // disabled
   errorText: '#FF4040', // red
   background: '#FFF', // white
   ultraLightBackground: '#FBFCFD', // ultralightGrey

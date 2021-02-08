@@ -3,55 +3,66 @@ import * as React from 'react';
 import { Subscription } from 'rxjs';
 import { createErrorHandler } from './utils/error-handler';
 
+export enum BookmarkTypes {
+  POST = 0,
+  COMMENT,
+}
+
+const BOOKMARKED_ENTRIES_KEY = 'AKASHA_APP_BOOKMARK_ENTRIES';
+const entriesBookmarks = 'entries-bookmarks';
+
 export interface UseEntryBookmarkProps {
   ethAddress: string | null;
   bmKey?: string;
-  sdkModules: { [key: string]: any };
-  logger?: any;
+  dbService: { [key: string]: any };
   onError: (err: IAkashaError) => void;
 }
 
+export interface IBookmarkState {
+  bookmarks: { entryId: string; type: BookmarkTypes }[];
+  isFetching: boolean;
+}
 export interface IBookmarkActions {
-  addBookmark: (entryId: string) => void;
+  bookmarkPost: (entryId: string) => void;
+  bookmarkComment: (entryId: string) => void;
   removeBookmark: (entryId: string) => void;
 }
 
-const BOOKMARKED_ENTRIES_KEY = 'FEED_APP_BOOKMARK_ENTRIES';
-
-const entriesBookmarks = 'entries-bookmarks';
-const useEntryBookmark = (props: UseEntryBookmarkProps): [Set<string>, IBookmarkActions] => {
-  const { ethAddress, sdkModules, bmKey = BOOKMARKED_ENTRIES_KEY, onError, logger } = props;
-  const [bookmarks, setBookmarks] = React.useState<Set<string>>(new Set());
+const useEntryBookmark = (props: UseEntryBookmarkProps): [IBookmarkState, IBookmarkActions] => {
+  const { ethAddress, dbService, bmKey = BOOKMARKED_ENTRIES_KEY, onError } = props;
+  const [bookmarkState, setBookmarkState] = React.useState<IBookmarkState>({
+    bookmarks: [],
+    isFetching: true,
+  });
 
   React.useEffect(() => {
     let subs: Subscription | undefined;
     if (ethAddress) {
-      if (sdkModules && sdkModules.hasOwnProperty('db')) {
-        const call = sdkModules.db.settingsAttachment.get({
-          moduleName: bmKey,
-        });
-        subs = call.subscribe((resp: any) => {
-          const { data } = resp;
-          if (data && data.services) {
-            const bookmarkedEntries = data.services.findIndex(
-              (e: string[]) => e[0] === entriesBookmarks,
-            );
-            if (bookmarkedEntries !== -1) {
-              setBookmarks(new Set(JSON.parse(data.services[bookmarkedEntries][1])));
-            }
-          }
-        }, createErrorHandler('useEntryBookmark.useEffect', false, onError));
-      } else {
-        if (logger) {
-          logger.error('Cannot get bookmarks, DB package not loaded!');
-          createErrorHandler(
-            'useEntryBookmark.useEffect',
-            false,
-            onError,
-          )(new Error('Cannot get bookmarks, DB package not loaded!'));
+      const call = dbService.settingsAttachment.get({
+        moduleName: bmKey,
+      });
+      subs = call.subscribe((resp: any) => {
+        const { data } = resp;
+        if (!data) {
+          return setBookmarkState({
+            bookmarks: [],
+            isFetching: false,
+          });
         }
-      }
+        if (data && data.services) {
+          const bookmarkedEntries = data.services.findIndex(
+            (e: string[]) => e[0] === entriesBookmarks,
+          );
+          if (bookmarkedEntries !== -1) {
+            setBookmarkState({
+              bookmarks: JSON.parse(data.services[bookmarkedEntries][1]),
+              isFetching: false,
+            });
+          }
+        }
+      }, createErrorHandler('useEntryBookmark.useEffect', false, onError));
     }
+
     return () => {
       if (subs) {
         subs.unsubscribe();
@@ -60,30 +71,46 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [Set<string>, IBookmark
   }, [ethAddress]);
 
   const actions: IBookmarkActions = {
-    addBookmark: entryId => {
-      const newBmks = new Set(bookmarks).add(entryId);
-      const call = sdkModules.db.settingsAttachment.put({
+    bookmarkPost(entryId) {
+      const newBmks = bookmarkState.bookmarks.slice();
+      newBmks.unshift({ entryId, type: BookmarkTypes.POST });
+
+      const call = dbService.settingsAttachment.put({
         moduleName: bmKey,
-        services: [[entriesBookmarks, JSON.stringify(Array.from(newBmks))]],
+        services: [[entriesBookmarks, JSON.stringify(newBmks)]],
       });
       call.subscribe(async (_resp: any) => {
-        setBookmarks(newBmks);
+        setBookmarkState(prev => ({ ...prev, bookmarks: newBmks }));
       }, createErrorHandler('useEntryBookmark.addBookmark', false, onError));
     },
-    removeBookmark: entryId => {
-      const newBkmks = new Set(bookmarks);
-      newBkmks.delete(entryId);
-      const call = sdkModules.db.settingsAttachment.put({
+    bookmarkComment(commentId) {
+      const newBmks = bookmarkState.bookmarks.slice();
+      newBmks.unshift({ entryId: commentId, type: BookmarkTypes.COMMENT });
+      const call = dbService.settingsAttachment.put({
         moduleName: bmKey,
-        services: [['entries-bookmarks', JSON.stringify(Array.from(newBkmks))]],
+        services: [[entriesBookmarks, JSON.stringify(newBmks)]],
       });
       call.subscribe(async (_resp: any) => {
-        setBookmarks(newBkmks);
+        setBookmarkState(prev => ({ ...prev, bookmarks: newBmks }));
+      }, createErrorHandler('useEntryBookmark.addBookmark', false, onError));
+    },
+    removeBookmark(entryId) {
+      const bookmarks = bookmarkState.bookmarks.slice();
+      const bmIndex = bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId);
+      if (bmIndex >= 0) {
+        bookmarks.splice(bmIndex, 1);
+      }
+      const call = dbService.settingsAttachment.put({
+        moduleName: bmKey,
+        services: [['entries-bookmarks', JSON.stringify(bookmarks)]],
+      });
+      call.subscribe(async (_resp: any) => {
+        setBookmarkState(prev => ({ ...prev, bookmarks }));
       }, createErrorHandler('useEntryBookmark.removeBookmark', false, onError));
     },
   };
 
-  return [bookmarks, actions];
+  return [bookmarkState, actions];
 };
 
 export default useEntryBookmark;

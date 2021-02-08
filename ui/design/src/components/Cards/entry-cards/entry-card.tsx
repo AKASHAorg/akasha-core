@@ -53,6 +53,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     flagAsLabel,
     copyIPFSLinkLabel,
     contentClickable,
+    disableIpfsCopyLink,
+    disableReposting,
   } = props;
 
   return (
@@ -96,6 +98,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           onContentClick={onContentClick}
           onMentionClick={onMentionClick}
           contentClickable={contentClickable}
+          disableIpfsCopyLink={disableIpfsCopyLink}
+          disableReposting={disableReposting}
         />
       </Box>
     </MainAreaCardBox>

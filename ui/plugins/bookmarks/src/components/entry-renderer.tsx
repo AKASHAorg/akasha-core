@@ -3,9 +3,18 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useFollow } from '@akashaproject/ui-awf-hooks';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
-import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
+import { BookmarkTypes, IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 
 const { ErrorInfoCard, ErrorLoader, EntryCard, EntryCardLoading } = DS;
+
+export interface NavigationDetails {
+  authorEthAddress: string;
+  entryId: string;
+  replyTo: {
+    authorEthAddress?: string;
+    entryId: string;
+  } | null;
+}
 
 export interface IEntryCardRendererProps {
   sdkModules: any;
@@ -15,12 +24,11 @@ export interface IEntryCardRendererProps {
   itemData?: any;
   isBookmarked?: boolean;
   locale?: any;
-  ethAddress: string | null;
+  ethAddress?: string | null;
   onBookmark: (entryId: string) => void;
   onNavigate: (details: any) => void;
   onLinkCopy?: () => void;
-  onRepliesClick: () => void;
-  onFlag?: (entryId: string, user?: string | null) => () => void;
+  onRepliesClick: (details: NavigationDetails) => void;
   onRepost: (withComment: boolean, entryData: any) => void;
   onShare: (service: string, entryId: string, authorEthAddress: string) => void;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
@@ -28,6 +36,7 @@ export interface IEntryCardRendererProps {
   bookmarkState?: IBookmarkState;
   style?: React.CSSProperties;
   contentClickable?: boolean;
+  disableReposting?: boolean;
   disableIpfsCopyLink?: boolean;
 }
 
@@ -44,6 +53,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     globalChannel,
     contentClickable,
     disableIpfsCopyLink,
+    disableReposting,
   } = props;
 
   const isBookmarked = React.useMemo(() => {
@@ -55,10 +65,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     ) {
       return true;
     }
-
     return false;
   }, [bookmarkState]);
-
   const { t } = useTranslation();
 
   const [followedProfiles, followActions] = useFollow({
@@ -123,22 +131,43 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   copyLinkLabel={t('Copy Link')}
                   copyIPFSLinkLabel={t('Copy IPFS Link')}
                   flagAsLabel={t('Report Post')}
-                  loggedProfileEthAddress={ethAddress}
+                  loggedProfileEthAddress={ethAddress as any}
                   locale={locale || 'en'}
                   style={{ height: 'auto', ...style }}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
                   onRepost={props.onRepost}
                   onEntryShare={props.onShare}
-                  onEntryFlag={props.onFlag && props.onFlag(itemData.entryId, props.ethAddress)}
-                  onClickReplies={props.onRepliesClick}
+                  onClickReplies={() =>
+                    props.onRepliesClick({
+                      authorEthAddress: itemData.author.ethAddress,
+                      entryId: itemData.entryId,
+                      replyTo: {
+                        entryId: itemData.parentId,
+                      },
+                    })
+                  }
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
                   isFollowingAuthor={isFollowing}
-                  onContentClick={props.onNavigate}
+                  onContentClick={() => {
+                    props.onNavigate({
+                      authorEthAddress: itemData.author.ethAddress,
+                      entryId: itemData.entryId,
+                      replyTo: {
+                        entryId: bookmarkState?.bookmarks.some(
+                          bm =>
+                            bm.entryId === itemData.entryId && bm.type === BookmarkTypes.COMMENT,
+                        )
+                          ? itemData.postId
+                          : null,
+                      },
+                    });
+                  }}
                   onMentionClick={props.onMentionClick}
                   contentClickable={contentClickable}
                   disableIpfsCopyLink={disableIpfsCopyLink}
+                  disableReposting={disableReposting}
                 />
               )}
             </>

@@ -39,6 +39,7 @@ export interface CardActionProps {
   handleRepliesClick: () => void;
   onRepostWithComment: () => void;
   onShare: (service: ServiceNames) => void;
+  disableReposting?: boolean;
 }
 
 const BookmarkButton = styled(TextIcon)<{ isBookmarked?: boolean }>`
@@ -79,6 +80,7 @@ const CardActions: React.FC<CardActionProps> = props => {
     handleRepliesClick,
     onRepostWithComment,
     onShare,
+    disableReposting,
   } = props;
 
   const { size } = useViewportSize();
@@ -269,9 +271,10 @@ const CardActions: React.FC<CardActionProps> = props => {
         label={repostsBtnText}
         iconType="transfer"
         iconSize="md"
-        clickable={true}
+        clickable={disableReposting ? false : true}
         ref={repostNodeRef}
-        onClick={onRepost}
+        onClick={disableReposting ? () => false : onRepost}
+        disabled={disableReposting}
       />
       <TextIcon
         label={repliesBtnText}
