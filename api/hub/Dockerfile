@@ -7,7 +7,7 @@ WORKDIR /app
 
 COPY . /app
 
-RUN apk add curl
+RUN apk add --no-cache curl
 RUN pwd
 RUN rm -rf /app/*.tsbuildinfo
 RUN rm -rf /app/lib
