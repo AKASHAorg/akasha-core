@@ -212,7 +212,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     service: 'twitter' | 'facebook' | 'reddit' | 'copy',
     entryId: string,
   ) => {
-    const url = `${window.location.origin}/${routes[POST]}/${entryId}`;
+    const url = `${window.location.origin}${routes[POST]}/${entryId}`;
     let shareUrl;
     switch (service) {
       case 'twitter':
@@ -230,7 +230,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       default:
         break;
     }
-    window.open(shareUrl, '_blank');
+    if (shareUrl) {
+      window.open(shareUrl, '_blank');
+    }
   };
   const handlePublish = async (data: {
     metadata: {
