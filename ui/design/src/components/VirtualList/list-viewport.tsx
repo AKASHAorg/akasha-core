@@ -16,13 +16,19 @@ const ListViewport: React.FC<IListViewportProps> = props => {
     listHeader,
   } = props;
 
+  const siblingCustomEntities = customEntities
+    .filter(ent => ent.position === 'before' && !ent.itemId)
+    .map((entity, idx) => entity.getComponent({ key: idx, style: { marginBottom: itemSpacing } }));
+
   return (
     <>
       {listHeader && React.cloneElement(listHeader)}
+      {siblingCustomEntities}
       {renderSlice.map(itemId => {
         return (
           <CardRenderer
             key={itemId}
+            itemIndex={itemRects.get(itemId)?.index}
             itemId={itemId}
             itemCard={props.itemCard}
             loadItemData={props.loadItemData}

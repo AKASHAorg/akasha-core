@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import MarginSetter from '../../../utils/marginSetter';
 import { IStyledTextProps, ITextIconProps } from './text-icon';
 import { Text } from 'grommet';
@@ -14,6 +14,7 @@ const StyledTextIcon = styled.div<ITextIconProps>`
       clickable,
       menuActive,
       menuIcon,
+      disabled,
     } = props;
 
     // change margins to ones passed in props
@@ -22,37 +23,54 @@ const StyledTextIcon = styled.div<ITextIconProps>`
       marginSize = MarginSetter(margin);
     }
 
-    return css`
+    return `
       & > *:first-child {
         margin-right: ${spacing ? spacing : '0.625em'};
       }
       background-color: ${backgroundColor ? backgroundColor : ''};
       color: ${color ? color : colors.dark};
-      ${menuIcon
-        ? `padding-left: ${props.theme.shapes.baseSpacing * 8 + 2}px
+      user-select: none;
+      ${
+        menuIcon
+          ? `padding-left: ${props.theme.shapes.baseSpacing * 8 + 2}px
           color: ${props.theme.colors.accent};
           & * {
             stroke: ${props.theme.colors.accent};
             }`
-        : ''}
-      ${menuActive
-        ? `padding-left: ${props.theme.shapes.baseSpacing * 8}px
+          : ''
+      }
+      ${
+        menuActive
+          ? `padding-left: ${props.theme.shapes.baseSpacing * 8}px
           border-left: 2px solid ${props.theme.colors.accent};
           color: ${props.theme.colors.accent};
           & * {
             stroke: ${props.theme.colors.accent};
             }`
-        : ''}
+          : ''
+      }
       ${marginSize}
 
       &:hover {
-        ${clickable
-          ? `cursor: pointer;
+        ${
+          clickable
+            ? `cursor: pointer;
           color: ${props.theme.colors.accent};
           & * {
             stroke: ${props.theme.colors.accent};
             }`
-          : ''}
+            : ''
+        }
+        ${
+          disabled &&
+          `
+          color: ${props.theme.colors.disabled};
+          cursor: default;
+          * {
+            stroke: ${props.theme.colors.disabled}
+          }
+        `
+        }
       }
     `;
   }};
@@ -64,7 +82,7 @@ const StyledTextIcon = styled.div<ITextIconProps>`
 const StyledText = styled(Text)<IStyledTextProps>`
   ${props => {
     if (props.accentColor) {
-      return css`
+      return `
         color: ${props.theme.colors.accent};
       `;
     }
@@ -85,43 +103,43 @@ const StyledIconDiv = styled.div<IconSize>`
     if (props.size) {
       switch (props.size) {
         case 'xxs':
-          return css`
+          return `
             width: 1.5rem;
             height: 1.5rem;
           `;
         case 'xs':
-          return css`
+          return `
             width: 1.75rem;
             height: 1.75rem;
           `;
         case 'sm':
-          return css`
+          return `
             width: 2.25rem;
             height: 2.25rem;
           `;
         case 'md':
-          return css`
+          return `
             width: 2.75rem;
             height: 2.75rem;
           `;
         case 'lg':
-          return css`
+          return `
             width: 3.25rem;
             height: 3.25rem;
           `;
         case 'xl':
-          return css`
+          return `
             width: 3.75rem;
             height: 3.75rem;
           `;
         default:
-          return css`
+          return `
             width: 2.25rem;
             height: 2.25rem;
           `;
       }
     }
-    return css`
+    return `
       width: 2.25rem;
       height: 2.25rem;
     `;
