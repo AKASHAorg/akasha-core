@@ -31,6 +31,7 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
         itemId: feedItems.length ? feedItems[0] : null,
         getComponent: ({ key, style }: { key: string; style: React.CSSProperties }) => (
           <EntryCardRenderer
+            hidePublishTime={true}
             sdkModules={sdkModules}
             logger={logger}
             globalChannel={globalChannel}
