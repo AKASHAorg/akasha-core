@@ -7,6 +7,9 @@ const baseConfig = require('../../../ui/webpack.config');
 module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
   entry: './src/bootstrap',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+  },
   plugins: baseConfig.plugins.concat([
     new ModuleFederationPlugin({
       name: 'ethereum.world',

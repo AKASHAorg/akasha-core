@@ -41,7 +41,7 @@ app.use(logger());
 app.use(bodyParser());
 
 /* change this in production */
-app.use(cors({ origin: '*' }));
+app.use(cors());
 
 const router = new Router();
 app.use(router.routes()).use(router.allowedMethods());
@@ -51,7 +51,6 @@ app.use(api.allowedMethods());
 
 app.ws.use(wss);
 
-const HOST = '127.0.0.1';
 let dbID;
 if (process.env.AWF_THREADdb) {
   dbID = ThreadID.fromString(process.env.AWF_THREADdb);
@@ -88,7 +87,7 @@ const server = new ApolloServer({
 server.applyMiddleware({ app });
 /** Start the server! */
 // tslint:disable-next-line:no-console
-app.listen(PORT, HOST, () => {
+app.listen(PORT, () => {
   // tslint:disable-next-line:no-console
-  console.log(`graphql ready at http://${HOST}:${PORT}${server.graphqlPath}`);
+  console.log(`graphql ready at http://localhost:${PORT}${server.graphqlPath}`);
 });
