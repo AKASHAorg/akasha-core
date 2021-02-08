@@ -6,12 +6,11 @@ import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { truncateMiddle } from '../../../utils/string-utils';
 import { IconLink } from '../../Buttons';
 
-export interface ISocialData {
-  users: IProfileData[];
-}
+export type ISocialData = IProfileData[];
 
 export interface ISocialBox {
   socialData: ISocialData;
+  onClickUser: (ethAddress: string) => void;
   // labels
   repostedThisLabel?: string;
   andLabel?: string;
@@ -19,10 +18,15 @@ export interface ISocialBox {
 }
 
 const SocialBox: React.FC<ISocialBox> = props => {
-  const { socialData, andLabel, othersLabel, repostedThisLabel } = props;
+  const { socialData, andLabel, othersLabel, repostedThisLabel, onClickUser } = props;
 
-  const avatarUserData = socialData.users.map(user => {
-    return { ethAddress: user.ethAddress, avatar: user.avatar, userName: user.userName };
+  const avatarUserData = socialData.map(user => {
+    return {
+      ethAddress: user.ethAddress,
+      avatar: user.avatar,
+      userName: user.userName,
+      name: user.name,
+    };
   });
   const othersNodeRef: React.Ref<any> = React.useRef(null);
   const [othersDropOpen, setOthersDropOpen] = React.useState(false);
@@ -49,8 +53,15 @@ const SocialBox: React.FC<ISocialBox> = props => {
             pad="xxsmall"
             flex={{ shrink: 0 }}
           >
-            <Avatar src={user.avatar} ethAddress={user.ethAddress} size="xs" />
-            <Text>{user.userName ? user.userName : truncateMiddle(user.ethAddress, 3, 3)}</Text>
+            <Avatar
+              src={user.avatar}
+              ethAddress={user.ethAddress}
+              size="xs"
+              onClick={() => onClickUser(user.ethAddress)}
+            />
+            <Text onClick={() => onClickUser(user.ethAddress)}>
+              {user.name || user.userName || truncateMiddle(user.ethAddress, 3, 3)}
+            </Text>
           </StyledSelectBox>
         ))}
       </Box>
@@ -60,22 +71,29 @@ const SocialBox: React.FC<ISocialBox> = props => {
   return (
     <Box
       direction="row"
+      align="center"
       gap="xxsmall"
       pad="medium"
       border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
     >
       {avatarUserData && <StackedAvatar userData={avatarUserData} maxAvatars={3} />}
-      <Text>
-        {socialData.users[0].userName
-          ? socialData?.users[0].userName
-          : truncateMiddle(socialData?.users[0].ethAddress, 3, 3)}
-      </Text>
-      {socialData.users.length > 1 ? (
+      <IconLink
+        onClick={() => onClickUser(socialData[0].ethAddress)}
+        label={
+          socialData[0].name ||
+          socialData[0].userName ||
+          truncateMiddle(socialData[0].ethAddress, 3, 3)
+        }
+        size="medium"
+        primaryColor={true}
+      />
+
+      {socialData.length > 1 ? (
         <Box direction="row" gap="xxsmall">
           <Text color="secondaryText">{andLabel}</Text>
 
           <IconLink
-            label={`${socialData.users.length - 1} ${othersLabel}`}
+            label={`${socialData.length - 1} ${othersLabel}`}
             size="medium"
             ref={othersNodeRef}
             onClick={() => setOthersDropOpen(!othersDropOpen)}
