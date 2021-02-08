@@ -87,8 +87,7 @@ const BookmarksPage = (props: RootComponentProps) => {
     let url = `/AKASHA-app/post/${entryId}`;
     if (replyTo && replyTo.entryId) {
       // handle the reply
-      return;
-      url = `/AKASHA-app/post/${entryId}`;
+      url = `/AKASHA-app/post/${replyTo.entryId}`;
     }
     navigateToUrl(url);
   };
