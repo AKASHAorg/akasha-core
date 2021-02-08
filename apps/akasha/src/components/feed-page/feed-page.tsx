@@ -215,7 +215,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     postsActions.optimisticPublishPost(data, loginProfile, currentEmbedEntry);
     setShowEditor(false);
   };
-
   return (
     <Box fill="horizontal">
       <Helmet>
