@@ -8,14 +8,16 @@ export interface UseTagSubscribeActions {
   getTagSubscriptions: () => void;
 }
 
-export interface UseFollowProps {
+export interface UseTagSubscribeProps {
   onError?: (error: IAkashaError) => void;
   profileService: any;
   globalChannel: any;
 }
 
 /* A hook with toggle tag subscription, get tag subscriptions and isSubscribedToTag functionality */
-export const useTagSubscribe = (props: UseFollowProps): [string[], UseTagSubscribeActions] => {
+export const useTagSubscribe = (
+  props: UseTagSubscribeProps,
+): [string[], UseTagSubscribeActions] => {
   const { onError, profileService, globalChannel } = props;
   const [tagSubscriptionState, setTagSubscriptionState] = React.useState<string[]>([]);
 
