@@ -11,24 +11,46 @@ const typeDefs = gql`
     nextIndex: String
     total: Int
   }
+  type NewPostsResult {
+    results: [Post!]
+    nextIndex: Int
+    total: Int
+  }
   type CommentsResult {
     results: [Comment!]
     nextIndex: String
     total: Int
   }
 
+  type SearchTagsResult {
+    name: String
+    totalPosts: Int
+  }
+  type GlobalSearchResultItem {
+    id: String
+    name: String
+  }
+  type GlobalSearchResult {
+    posts: [GlobalSearchResultItem]
+    tags: [GlobalSearchResultItem]
+    comments: [GlobalSearchResultItem]
+    profiles: [GlobalSearchResultItem]
+  }
   type Query {
     getProfile(ethAddress: String!): UserProfile!
     resolveProfile(pubKey: String!): UserProfile!
-    getPost(id: String!): Post!
+    getPost(id: String!, pubKey: String): Post!
     getTag(name: String!): Tag
-    searchTags(name: String!): [String]
+    searchTags(name: String!): [SearchTagsResult]
     searchProfiles(name: String!): [UserProfile]
+    globalSearch(keyword: String!): GlobalSearchResult
     tags(offset: String, limit: Int): TagsResult
-    posts(offset: String, limit: Int): PostsResult
+    posts(offset: String, limit: Int, pubKey: String): PostsResult
     isFollowing(follower: String!, following: String!): Boolean
     getComments(postID: String!, offset: String, limit: Int): CommentsResult
     getComment(commentID: String!): Comment!
+    getPostsByAuthor(author: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
+    getPostsByTag(tag: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
   }
 
   input DataProviderInput {
@@ -90,6 +112,8 @@ const typeDefs = gql`
     totalPosts: String
     providers: [DataProvider]
     default: [DataProvider]
+    totalFollowers: Int
+    totalFollowing: Int
   }
 
   enum PostType {
@@ -110,6 +134,7 @@ const typeDefs = gql`
     quotedBy: [String]
     mentions: [String]
     totalComments: String
+    quotedByAuthors: [UserProfile]
   }
 
   type Comment {
@@ -119,7 +144,7 @@ const typeDefs = gql`
     content: [DataProvider!]
     mentions: [String]
     replyTo: String
-    postID: String
+    postId: String
   }
 `;
 
