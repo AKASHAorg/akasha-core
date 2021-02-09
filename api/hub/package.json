@@ -35,6 +35,7 @@
     "@textile/hub": "6.0.1",
     "algoliasearch": "4.8.4",
     "apollo-server-koa": "2.19.2",
+    "apollo-server-cache-redis": "1.2.3",
     "dotenv": "8.2.0",
     "emittery": "0.8.1",
     "ethers": "5.0.29",
