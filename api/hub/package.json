@@ -45,7 +45,8 @@
     "koa-route": "3.2.0",
     "koa-router": "10.0.0",
     "koa-websocket": "6.0.0",
-    "lru-cache": "6.0.0"
+    "lru-cache": "6.0.0",
+    "winston": "3.3.3"
   },
   "devDependencies": {
     "@types/koa": "2.11.7",
