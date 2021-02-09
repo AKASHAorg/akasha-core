@@ -16,4 +16,9 @@ jobs:
           HOST: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
           KEY: ${{ secrets.SSHKEY }}
-          script: whoami
+          script: |
+            cd apps/akasha-world-framework
+            git pull
+            cd api/hub
+            docker-compose down
+            docker-compose up -d --build
