@@ -11,7 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import EntryCardRenderer from './entry-renderer';
 
-const { VirtualList, ErrorInfoCard, ErrorLoader, Spinner } = DS;
+const { VirtualList, EntryCardHidden, ErrorInfoCard, ErrorLoader, Spinner } = DS;
 
 const BookmarksPage = (props: RootComponentProps) => {
   const { globalChannel, sdkModules, logger } = props;
@@ -132,6 +132,11 @@ const BookmarksPage = (props: RootComponentProps) => {
 
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
+  const handleFlipCard = (entry: any) => () => {
+    const modifiedEntry = { ...entry, reported: false };
+    postActions.updatePostsState(modifiedEntry);
+  };
+
   return (
     <>
       <ErrorInfoCard errors={errorState}>
@@ -179,6 +184,15 @@ const BookmarksPage = (props: RootComponentProps) => {
                         disableReposting={true}
                       />
                     }
+                    itemCardAlt={(entry: any) => (
+                      <EntryCardHidden
+                        descriptionLabel={t(
+                          'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
+                        )}
+                        ctaLabel={t('See it anyway')}
+                        handleFlipCard={handleFlipCard(entry)}
+                      />
+                    )}
                   />
                 )}
               </>

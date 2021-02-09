@@ -184,6 +184,8 @@ export const mapEntry = (
     quotedBy?: string[];
     creationDate: string;
     totalComments: string;
+    delisted?: boolean;
+    reported?: boolean;
     author: {
       CID?: string;
       description?: string;
@@ -257,6 +259,8 @@ export const mapEntry = (
     ipfsLink: entry._id,
     permalink: 'null',
     replies: +entry.totalComments,
+    reported: entry.reported,
+    delisted: entry.delisted,
   };
 };
 

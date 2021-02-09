@@ -2,12 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { fetchRequest } from '@akashaproject/ui-awf-hooks';
 
 import ContentCard from './content-card/content-card';
 import ContentTab from './content-tab';
 
-import { getAllPending, getAllModerated } from '../services/fetch-contents';
-import { moderatorList } from '../services/dummy-data';
 import { BASE_DECISION_URL } from '../services/constants';
 
 const { Box, Text, useViewportSize, ModalRenderer, ToastProvider, ModerateModal } = DS;
@@ -32,15 +31,11 @@ interface IBaseItem {
 
 interface IPendingItem extends IBaseItem {
   reporter: string;
-  reporterName: string;
-  reporterENSName: string;
 }
 
 interface IModeratedItem extends IPendingItem {
   delisted: boolean;
   moderator: string;
-  moderatorName: string;
-  moderatorENSName: string;
   evaluationDate: string;
 }
 
@@ -66,10 +61,6 @@ const ContentList: React.FC<IContentListProps> = props => {
       props.navigateToUrl('/moderation-app/unauthenticated');
     } else {
       // if authenticated,
-      if (!moderatorList.includes(ethAddress)) {
-        // if not an approved moderator address(es) on file, restrict access
-        return props.navigateToUrl('/moderation-app/restricted');
-      }
       if (isPending) {
         // if authorised, check for pending contents while pending tab is active
         fetchPendingContents();
@@ -85,7 +76,7 @@ const ContentList: React.FC<IContentListProps> = props => {
     // fetch pending (reported) contents
     setRequesting(true);
     try {
-      const modResponse = await getAllPending();
+      const modResponse = await fetchRequest.getAllPending();
       setPendingItems(() => modResponse);
       setRequesting(false);
     } catch (error) {
@@ -98,7 +89,7 @@ const ContentList: React.FC<IContentListProps> = props => {
     // fetch delisted (moderated) contents
     setRequesting(true);
     try {
-      const modResponse = await getAllModerated();
+      const modResponse = await fetchRequest.getAllModerated();
       setModeratedItems(() => modResponse);
       setRequesting(false);
     } catch (error) {
@@ -158,8 +149,9 @@ const ContentList: React.FC<IContentListProps> = props => {
         isDelisted={isDelisted}
         pendingLabel={t('Pending')}
         moderatedLabel={t('Moderated')}
-        count={moderatedItems.length}
-        countLabel={t('Moderated items')}
+        countPending={pendingItems.length}
+        countModerated={moderatedItems.length}
+        countSpecific={moderatedItems.filter(item => item.delisted === isDelisted).length}
         keptLabel={t('Kept')}
         delistedLabel={t('Delisted')}
         setIsPending={setIsPending}
@@ -184,8 +176,6 @@ const ContentList: React.FC<IContentListProps> = props => {
                 entryId={t(pendingItem.entryId)}
                 reasons={pendingItem.reasons.map((el: string) => t(el))}
                 reporter={t(pendingItem.reporter)}
-                reporterName={t(pendingItem.reporterName)}
-                reporterENSName={t(pendingItem.reporterENSName)}
                 andLabel={t('and')}
                 otherReporters={
                   pendingItem.count
@@ -223,8 +213,6 @@ const ContentList: React.FC<IContentListProps> = props => {
                   entryId={t(moderatedItem.entryId)}
                   reasons={moderatedItem.reasons.map(el => t(el))}
                   reporter={moderatedItem.reporter}
-                  reporterName={t(moderatedItem.reporterName)}
-                  reporterENSName={t(moderatedItem.reporterENSName)}
                   andLabel={t('and')}
                   otherReporters={
                     moderatedItem.count
@@ -239,8 +227,6 @@ const ContentList: React.FC<IContentListProps> = props => {
                   reportedDateTime={moderatedItem.entryDate}
                   moderatorDecision={moderatedItem.description}
                   moderator={moderatedItem.moderator}
-                  moderatorName={t(moderatedItem.moderatorName)}
-                  moderatorENSName={t(moderatedItem.moderatorENSName)}
                   moderatedByLabel={t('Moderated by')}
                   moderatedOnLabel={t('On')}
                   evaluationDateTime={moderatedItem.evaluationDate}
@@ -250,7 +236,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                   handleButtonClick={() => null}
                 />
               ))
-          : renderNotFound('delisted'))}
+          : renderNotFound('moderated'))}
     </Box>
   );
 };

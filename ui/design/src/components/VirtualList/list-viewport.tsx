@@ -31,6 +31,7 @@ const ListViewport: React.FC<IListViewportProps> = props => {
             itemIndex={itemRects.get(itemId)?.index}
             itemId={itemId}
             itemCard={props.itemCard}
+            itemCardAlt={props.itemCardAlt}
             loadItemData={props.loadItemData}
             itemData={itemsData[itemId]}
             customEntities={customEntities}

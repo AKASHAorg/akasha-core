@@ -25,7 +25,6 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   cancelLabel?: string;
   reportLabel?: string;
   user?: string;
-  contentId?: string;
   contentType?: string;
   baseUrl?: string;
   // screen size passed by viewport provider
@@ -57,6 +56,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     contentType,
     baseUrl,
     size,
+    updateEntry,
     closeModal,
   } = props;
 
@@ -137,9 +137,11 @@ const ReportModal: React.FC<IReportModalProps> = props => {
         className={className}
         successTitleLabel={successTitleLabel}
         successMessageLabel={successMessageLabel}
+        contentId={contentId}
         blockLabel={blockLabel}
         closeLabel={closeLabel}
         size={size}
+        updateEntry={updateEntry}
         closeModal={closeModal}
       />
     );
