@@ -45,6 +45,7 @@ const config = {
     libraryTarget: 'umd',
     publicPath: '/',
   },
+  target: ['web', 'es2017'],
   optimization: {
     moduleIds: 'deterministic',
     chunkIds: 'named',
