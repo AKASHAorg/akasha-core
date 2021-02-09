@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useEntryBookmark, useProfile, useErrors } from '@akashaproject/ui-awf-hooks';
+import { useBookmarks, useProfile, useErrors } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import {
   ILoadItemDataPayload,
@@ -81,11 +81,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const [bookmarks, bookmarkActions] = useEntryBookmark({
+  const [bookmarkState, bookmarkActions] = useBookmarks({
     ethAddress,
     onError,
-    sdkModules: sdkModules,
-    logger: logger,
+    dbService: sdkModules.db,
   });
   const [, errorActions] = useErrors({ logger });
 
@@ -119,10 +118,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     if (!ethAddress) {
       return showLoginModal();
     }
-    if (bookmarks.has(entryId)) {
+    if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
       return bookmarkActions.removeBookmark(entryId);
     }
-    return bookmarkActions.addBookmark(entryId);
+    return bookmarkActions.bookmarkPost(entryId);
   };
   const handleEntryRepost = (_withComment: boolean, entryData: any) => {
     if (!ethAddress) {
@@ -136,7 +135,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     service: 'twitter' | 'facebook' | 'reddit' | 'copy',
     entryId: string,
   ) => {
-    const url = `${window.location.origin}/${routes[POST]}/${entryId}`;
+    const url = `${window.location.origin}${routes[POST]}/${entryId}`;
     let shareUrl;
     switch (service) {
       case 'twitter':
@@ -154,7 +153,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       default:
         break;
     }
-    window.open(shareUrl, '_blank');
+    if (shareUrl) {
+      window.open(shareUrl, '_blank');
+    }
   };
   const handleEntryFlag = (entryId: string, user?: string | null) => () => {
     /* todo */
@@ -216,7 +217,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     postsActions.optimisticPublishPost(data, loginProfile, currentEmbedEntry);
     setShowEditor(false);
   };
-
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -317,7 +317,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             sdkModules={sdkModules}
             logger={logger}
             globalChannel={globalChannel}
-            bookmarks={bookmarks}
+            bookmarkState={bookmarkState}
             ethAddress={ethAddress}
             locale={locale}
             onBookmark={handleEntryBookmark}

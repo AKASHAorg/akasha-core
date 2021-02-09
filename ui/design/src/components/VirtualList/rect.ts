@@ -32,3 +32,7 @@ export class Rect {
     return new Rect({ top: this.getTop() + top, height: this.getHeight() + height });
   }
 }
+
+export const rectFromDOMRect = (domRect: DOMRect) => {
+  return new Rect({ top: domRect.top, height: domRect.height });
+};

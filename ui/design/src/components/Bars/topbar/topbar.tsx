@@ -13,6 +13,7 @@ import {
   StyledDiv,
 } from './styled-topbar';
 import { TextIcon } from '../../TextIcon';
+import styled from 'styled-components';
 
 export interface ITopbarProps {
   // data
@@ -35,6 +36,14 @@ export interface ITopbarProps {
   onLoginClick: () => void;
   onLogout: any;
 }
+
+const BrandIcon = styled(Icon)`
+  &:hover {
+    & * {
+      stroke: none;
+    }
+  }
+`;
 
 const Topbar = (props: ITopbarProps) => {
   const {
@@ -212,7 +221,7 @@ const Topbar = (props: ITopbarProps) => {
             onNavigation('/');
           }}
         >
-          <Icon type="ethereumWorldLogo" clickable={true} />
+          <BrandIcon type="ethereumWorldLogo" clickable={true} />
           {size !== 'small' && (
             <StyledText size="large" weight="bold">
               {brandLabel}

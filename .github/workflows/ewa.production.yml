@@ -1,0 +1,25 @@
+name: deploy ethereum.world api
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          KEY: ${{ secrets.SSHKEY }}
+          script: |
+            cd apps/akasha-world-framework
+            git pull
+            cd api/hub
+            docker-compose down
+            docker-compose build --no-cache
+            docker-compose up -d

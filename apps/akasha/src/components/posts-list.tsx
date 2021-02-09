@@ -100,7 +100,6 @@ const PostsList: React.FC<IPostsListProps> = props => {
   const handleClickReplies = () => {
     /* todo */
   };
-
   const handleMentionClick = (profileEthAddress: string) => {
     props.navigateToUrl(`/profile/${profileEthAddress}`);
   };

@@ -3,6 +3,7 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useFollow } from '@akashaproject/ui-awf-hooks';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 
 const { ErrorInfoCard, ErrorLoader, EntryBox, Box, EntryCardLoading } = DS;
 
@@ -12,7 +13,6 @@ export interface PostRendererProps {
   globalChannel: any;
   itemId?: string;
   itemData?: any;
-  isBookmarked?: boolean;
   locale: any;
   ethAddress: string | null;
   onBookmark: (entryId: string) => void;
@@ -24,21 +24,23 @@ export interface PostRendererProps {
   onShare: (service: string, entryId: string, authorEthAddress: string) => void;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (ethAddress: string) => void;
-  bookmarks?: Set<string>;
+  bookmarkState?: IBookmarkState;
   style?: React.CSSProperties;
   contentClickable?: boolean;
+  hidePublishTime?: boolean;
 }
 
 const PostRenderer = (props: PostRendererProps) => {
   const {
     itemData,
-    isBookmarked,
     style,
     ethAddress,
     sdkModules,
     logger,
     globalChannel,
     contentClickable,
+    bookmarkState,
+    hidePublishTime,
   } = props;
 
   const { t } = useTranslation();
@@ -50,6 +52,18 @@ const PostRenderer = (props: PostRendererProps) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);
     },
   });
+
+  const isBookmarked = React.useMemo(() => {
+    if (
+      bookmarkState &&
+      !bookmarkState.isFetching &&
+      itemData.entryId &&
+      bookmarkState.bookmarks.findIndex(bm => bm.entryId === itemData.entryId) >= 0
+    ) {
+      return true;
+    }
+    return false;
+  }, [bookmarkState]);
 
   React.useEffect(() => {
     if (ethAddress && itemData.author.ethAddress) {
@@ -124,6 +138,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     onContentClick={props.onNavigate}
                     contentClickable={contentClickable}
                     onMentionClick={props.onMentionClick}
+                    hidePublishTime={hidePublishTime}
                   />
                 </Box>
               )}
