@@ -4,14 +4,5 @@ services:
     build: .
     environment:
       - APP_API_KEY
-      - APP_API_SECRET
-      - USER_GROUP_API_KEY
-      - USER_GROUP_API_SECRET
-      - AWF_THREADdb
-      - AWF_DBkey
-      - AWF_DBname
-      - AWF_SEARCH_ID
-      - AWF_SEARCH_KEY
-      - AWF_SEARCH_INDEX
     ports:
       - "3113:3113"
