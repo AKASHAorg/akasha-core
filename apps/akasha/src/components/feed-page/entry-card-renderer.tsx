@@ -3,6 +3,7 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useFollow } from '@akashaproject/ui-awf-hooks';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 
 const { ErrorInfoCard, ErrorLoader, EntryCard, EntryCardLoading } = DS;
 
@@ -19,14 +20,16 @@ export interface IEntryCardRendererProps {
   onNavigate: (details: any) => void;
   onLinkCopy?: () => void;
   onRepliesClick: () => void;
-  onFlag: (entryId: string, user?: string | null) => () => void;
+  onFlag?: (entryId: string, user?: string | null) => () => void;
   onRepost: (withComment: boolean, entryData: any) => void;
   onShare: (service: string, entryId: string, authorEthAddress: string) => void;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (ethAddress: string) => void;
-  bookmarks?: Set<string>;
+  bookmarkState?: IBookmarkState;
   style?: React.CSSProperties;
   contentClickable?: boolean;
+  disableIpfsCopyLink?: boolean;
+  hidePublishTime?: boolean;
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
@@ -34,20 +37,29 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     itemData,
     ethAddress,
     locale,
-    bookmarks,
+    bookmarkState,
     itemId,
     style,
     sdkModules,
     logger,
     globalChannel,
     contentClickable,
+    disableIpfsCopyLink,
+    hidePublishTime,
   } = props;
 
-  let isBookmarked = false;
+  const isBookmarked = React.useMemo(() => {
+    if (
+      bookmarkState &&
+      !bookmarkState.isFetching &&
+      itemId &&
+      bookmarkState.bookmarks.findIndex(bm => bm.entryId === itemId) >= 0
+    ) {
+      return true;
+    }
 
-  if (bookmarks && itemId && bookmarks.has(itemId)) {
-    isBookmarked = true;
-  }
+    return false;
+  }, [bookmarkState]);
 
   const { t } = useTranslation();
 
@@ -120,7 +132,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   bookmarkedLabel={t('Saved')}
                   onRepost={props.onRepost}
                   onEntryShare={props.onShare}
-                  onEntryFlag={props.onFlag(itemData.entryId, props.ethAddress)}
+                  onEntryFlag={props.onFlag && props.onFlag(itemData.entryId, props.ethAddress)}
                   onClickReplies={props.onRepliesClick}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
@@ -128,6 +140,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   onContentClick={props.onNavigate}
                   onMentionClick={props.onMentionClick}
                   contentClickable={contentClickable}
+                  disableIpfsCopyLink={disableIpfsCopyLink}
+                  hidePublishTime={hidePublishTime}
                 />
               )}
             </>

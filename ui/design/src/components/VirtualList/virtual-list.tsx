@@ -1,7 +1,9 @@
+import throttle from 'lodash.throttle';
 import * as React from 'react';
 // import throttle from 'lodash.throttle';
 import { AnchorData, ItemRects, IVirtualListProps } from './interfaces';
 import ListViewport from './list-viewport';
+import { rectFromDOMRect, Rect } from './rect';
 import { useViewport } from './use-viewport';
 import {
   diffArr,
@@ -163,21 +165,30 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   }, [JSON.stringify(anchorData), lastRenderedIdx]);
 
   const handleScroll = () => {
-    setAnchorData(prev =>
-      getAnchor({
-        itemSpacing,
-        anchorData: prev,
-        averageItemHeight: scrollData.current.averageItemHeight,
-        rects: itemPositions.rects,
-        items: scrollData.current.loadedIds,
-        getScrollTop: viewportActions.getScrollTop,
-      }),
-    );
+    requestAnimationFrame(() => {
+      setAnchorData(prev => {
+        const newScrollTop = viewportActions.getScrollTop();
+        if (Math.abs(newScrollTop - prev.scrollTop) <= scrollData.current.averageItemHeight / 2) {
+          return prev;
+        }
+        return getAnchor({
+          itemSpacing,
+          anchorData: prev,
+          averageItemHeight: scrollData.current.averageItemHeight,
+          rects: itemPositions.rects,
+          items: scrollData.current.loadedIds,
+          getScrollTop: viewportActions.getScrollTop,
+        });
+      });
+    });
   };
+
   const handleResize = () => {
     /* @TODO: */
   };
-  const onScroll = handleScroll;
+
+  const throttledScroll = throttle(handleScroll, 250, { trailing: true, leading: false });
+  const onScroll = throttledScroll;
   const onResize = handleResize;
   /**
    * Attach scroll and resize listeners
@@ -210,6 +221,31 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
         default:
           break;
       }
+    } else if (items.length && items.length < scrollData.current.items.length) {
+      // an item is removed from the list
+      const removedItems = scrollData.current.items.filter(id => !items.includes(id));
+      if (removedItems.length) {
+        removedItems.forEach(item => {
+          // an array of items [a, b, c] was removed,
+          // the original array was [a,b,c,d,e]
+          // d and e, should now get into positions of a,b,c
+          if (scrollData.current.items.indexOf(item) === scrollData.current.items.length - 1) {
+            // is last item, no reposition needed
+            scrollData.current.items.splice(scrollData.current.items.indexOf(item), 1);
+            return;
+          }
+          setPositions(prev => {
+            const updated = updatePositions(
+              item,
+              new Rect({ height: -1 * itemSpacing, top: 0 }),
+              prev,
+            );
+            updated.rects.delete(item);
+            const newPos = { ...updated };
+            return newPos;
+          });
+        });
+      }
     }
   }, [items, scrollData.current]);
 
@@ -239,10 +275,12 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
 
     if (itemRef && itemRect) {
       const domRect = itemRef.getBoundingClientRect();
-      if (domRect.height !== itemRect.rect.getHeight()) {
-        setPositions(prev => updatePositions(itemId, domRect, prev));
+      const rect = rectFromDOMRect(domRect);
+      if (rect.getHeight() !== itemRect.rect.getHeight()) {
+        setPositions(prev => updatePositions(itemId, rect, prev));
         scrollData.current.averageItemHeight =
-          (scrollData.current.averageItemHeight * (itemPositions.rects.size - 1) + domRect.height) /
+          (scrollData.current.averageItemHeight * (itemPositions.rects.size - 1) +
+            rect.getHeight()) /
           itemPositions.rects.size;
       }
     }
@@ -259,10 +297,6 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
           globalOffsetTop: scrollData.current.globalOffsetTop,
         }),
       );
-    }
-
-    if (itemRefs.current[itemId] && isUnmounting) {
-      delete itemRefs.current[itemId];
     }
   };
 

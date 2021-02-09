@@ -156,7 +156,7 @@ export const getAnchor = (props: GetAnchorProps) => {
 
 export const updatePositions = (
   changedId: string,
-  domRect: DOMRect,
+  rect: Rect,
   prevPositions: { rects: ItemRects; listHeight: number },
 ) => {
   const newRects = new Map(prevPositions.rects);
@@ -164,7 +164,7 @@ export const updatePositions = (
   if (!changedRect) {
     return prevPositions;
   }
-  const heightDelta = -1 * (changedRect.rect.getHeight() - domRect.height);
+  const heightDelta = -1 * (changedRect.rect.getHeight() - rect.getHeight());
   const idx = changedRect.index;
 
   if (Math.abs(heightDelta) === 0) {

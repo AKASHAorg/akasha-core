@@ -1,12 +1,26 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
     "lib": ["dom"],
     "module": "commonjs",
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "alwaysStrict": true,
+    "declaration": true,
+    "noImplicitAny": false,
+    "removeComments": false,
+    "noLib": false,
+    "composite": true,
+    "importHelpers": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "target": "es2018",
+    "sourceMap": true,
+    "pretty": true,
   },
+  "exclude": ["node_modules", "**/*.spec.ts"],
   "include": ["./src"]
 }

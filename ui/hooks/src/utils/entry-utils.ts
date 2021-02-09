@@ -57,8 +57,10 @@ export const mapEntry = (
     _id: string;
     quotes?: any[];
     quotedBy?: string[];
+    quotedByAuthors?: any[];
     creationDate: string;
     totalComments: string;
+    postId?: string;
     author: {
       CID?: string;
       description: string;
@@ -67,6 +69,9 @@ export const mapEntry = (
       userName: string;
       name: string;
       ethAddress: string;
+      totalPosts?: number | string;
+      totalFollowers?: number | string;
+      totalFollowing?: number | string;
     };
   },
   ipfsGateway: any,
@@ -112,9 +117,12 @@ export const mapEntry = (
       description: entry.author.description,
       avatar: getMediaUrl(ipfsGateway, entry.author.avatar),
       coverImage: getMediaUrl(ipfsGateway, entry.author.coverImage),
-      ensName: entry.author.userName,
-      userName: entry.author.name,
+      userName: entry.author.userName,
+      name: entry.author.name,
       ethAddress: entry.author.ethAddress,
+      totalPosts: entry.author.totalPosts,
+      totalFollowers: entry.author.totalFollowers,
+      totalFollowing: entry.author.totalFollowing,
     },
     CID: entry.CID,
     content: contentWithMediaGateways,
@@ -125,6 +133,9 @@ export const mapEntry = (
     ipfsLink: entry._id,
     permalink: 'null',
     replies: +entry.totalComments,
+    postId: entry.postId,
+    quotedBy: entry.quotedBy,
+    quotedByAuthors: entry.quotedByAuthors,
   };
 };
 

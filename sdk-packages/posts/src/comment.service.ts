@@ -28,6 +28,7 @@ const service: AkashaService = (invoke, log) => {
         }
         creationDate
         replyTo
+        postId
         _id
     }
   }`;
@@ -61,6 +62,7 @@ const service: AkashaService = (invoke, log) => {
         }
         creationDate
         replyTo
+        postId
         _id
       }
     }

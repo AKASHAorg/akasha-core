@@ -23,7 +23,8 @@ export interface IEntryData {
   permalink: string;
   entryId: string;
   author: IProfileData;
-  socialData?: ISocialData;
+  quotedByAuthors?: ISocialData;
+  quotedBy?: string;
   quote?: IEntryData;
 }
 export interface IContentClickDetails {
@@ -62,7 +63,7 @@ export interface IEntryBoxProps {
   onClickReplies: (entryId: string) => void;
   onEntryShare: (service: ServiceNames, entryId?: string, authorEthAddress?: string) => void;
   onRepost: (withComment: boolean, entryData: IEntryData) => void;
-  onEntryFlag: (entryId?: string) => void;
+  onEntryFlag?: (entryId?: string) => void;
   // follow related
   handleFollowAuthor: (profileEthAddress: string) => void;
   handleUnfollowAuthor: (profileEthAddress: string) => void;
@@ -71,9 +72,12 @@ export interface IEntryBoxProps {
   onContentClick?: (details: IContentClickDetails) => void;
   /* Can click the content (not embed!) to navigate */
   contentClickable?: boolean;
-  onMentionClick?: (ethAddress: string) => void;
+  onMentionClick: (ethAddress: string) => void;
   // style
   style?: React.CSSProperties;
+  disableIpfsCopyLink?: boolean;
+  disableReposting?: boolean;
+  hidePublishTime?: boolean;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -107,6 +111,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onMentionClick,
     style,
     contentClickable,
+    disableIpfsCopyLink,
+    disableReposting,
+    hidePublishTime,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -150,7 +157,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   };
 
   const handleEntryFlag = () => {
-    onEntryFlag(entryData.entryId);
+    if (onEntryFlag) {
+      onEntryFlag(entryData.entryId);
+    }
   };
 
   const handleRepliesClick = () => handleContentClick(entryData);
@@ -201,7 +210,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             </StyledProfileDrop>
           )}
           <Box direction="row" gap="xsmall" align="center">
-            {entryData.time && <Text>{formatRelativeTime(entryData.time, locale)}</Text>}
+            {entryData.time && !hidePublishTime && (
+              <Text>{formatRelativeTime(entryData.time, locale)}</Text>
+            )}
             <Icon
               type="akasha"
               size="sm"
@@ -209,7 +220,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ref={akashaRef}
               clickable={true}
             />
-            <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
+            {(onEntryFlag || !disableIpfsCopyLink) && (
+              <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
+            )}
           </Box>
         </Box>
         {entryData.CID && akashaRef.current && displayCID && (
@@ -221,7 +234,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             CID={entryData.CID}
           />
         )}
-        {menuIconRef.current && menuDropOpen && (
+        {menuIconRef.current && menuDropOpen && (onEntryFlag || !disableIpfsCopyLink) && (
           <CardHeaderMenuDropdown
             target={menuIconRef.current}
             onMenuClose={closeMenuDrop}
@@ -263,6 +276,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           onRepostWithComment={handleRepost(true)}
           onShare={handleEntryShare}
           handleRepliesClick={handleRepliesClick}
+          disableReposting={disableReposting}
         />
       </Box>
     </ViewportSizeProvider>

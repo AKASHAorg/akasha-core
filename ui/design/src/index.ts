@@ -167,6 +167,7 @@ const exported = {
   ShareModal,
   ReportModal,
   ModerateModal,
+  Spinner,
   ToastProvider,
   SelectPopover,
   SubtitleTextIcon,

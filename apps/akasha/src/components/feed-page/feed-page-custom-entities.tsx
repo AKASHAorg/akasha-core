@@ -31,12 +31,13 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
         itemId: feedItems.length ? feedItems[0] : null,
         getComponent: ({ key, style }: { key: string; style: React.CSSProperties }) => (
           <EntryCardRenderer
+            hidePublishTime={true}
             sdkModules={sdkModules}
             logger={logger}
             globalChannel={globalChannel}
             ethAddress={loggedEthAddress}
             key={`${entry.author.ethAddress}-${idx}-${key}`}
-            style={{ ...style, backgroundColor: 'rgba(78,113,255,0.01)' }}
+            style={{ ...style, backgroundColor: '#4e71ff0f' }}
             itemData={entry}
             onBookmark={() => {
               /* not allowed */
@@ -45,9 +46,6 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
               /* not allowed */
             }}
             onRepliesClick={() => {
-              /* not allowed */
-            }}
-            onFlag={() => () => {
               /* not allowed */
             }}
             onShare={() => {
@@ -62,6 +60,7 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
             onMentionClick={() => {
               /* not allowed */
             }}
+            disableIpfsCopyLink={true}
           />
         ),
       })),
