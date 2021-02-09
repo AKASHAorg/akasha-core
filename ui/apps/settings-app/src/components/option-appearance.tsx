@@ -11,7 +11,12 @@ const AppearanceOption: React.FC<IAppearanceOption> = props => {
 
   return (
     <>
-      <Box direction="row" pad="medium" align="center" border={{ side: 'bottom', color: 'border' }}>
+      <Box
+        direction="row"
+        pad="medium"
+        align="center"
+        border={{ side: 'bottom', color: 'lightBorder' }}
+      >
         <StyledIcon type="chevronLeft" onClick={OnChevronLeftClick} />
         <StyledText weight="bold" size="large" margin={{ vertical: '0', horizontal: 'auto' }}>
           {titleLabel}
@@ -22,7 +27,7 @@ const AppearanceOption: React.FC<IAppearanceOption> = props => {
         pad="medium"
         justify="between"
         align="center"
-        border={{ side: 'bottom', color: 'border' }}
+        border={{ side: 'bottom', color: 'lightBorder' }}
       >
         <StyledText weight="bold">{appThemeLabel}</StyledText>
       </Box>
@@ -30,7 +35,7 @@ const AppearanceOption: React.FC<IAppearanceOption> = props => {
         pad={{ top: 'medium', horizontal: 'medium', bottom: 'large' }}
         justify="center"
         align="start"
-        border={{ side: 'bottom', color: 'border' }}
+        border={{ side: 'bottom', color: 'lightBorder' }}
       >
         <StyledText>{appThemeInfo}:</StyledText>
         <RadioButtonGroup

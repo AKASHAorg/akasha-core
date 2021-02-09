@@ -71,7 +71,7 @@ const SettingsPage: React.FC<RootComponentProps> = () => {
               pad="medium"
               justify="center"
               align="center"
-              border={{ side: 'bottom', color: 'border' }}
+              border={{ side: 'bottom', color: 'lightBorder' }}
             >
               <Text weight="bold" size="large">{`${t('Settings')}`}</Text>
             </Box>
@@ -82,7 +82,9 @@ const SettingsPage: React.FC<RootComponentProps> = () => {
                 pad="medium"
                 justify={item.isSubheading ? 'start' : 'between'}
                 align="center"
-                border={idx !== settingsItems.length - 1 && { side: 'bottom', color: 'border' }}
+                border={
+                  idx !== settingsItems.length - 1 && { side: 'bottom', color: 'lightBorder' }
+                }
                 onClick={
                   item.clickable ? handleSettingsOptionClick(item.label as SettingsOption) : null
                 }

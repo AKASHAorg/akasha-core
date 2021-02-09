@@ -21,7 +21,12 @@ const AppsOption: React.FC<IAppsOption> = props => {
 
   return (
     <>
-      <Box direction="row" pad="medium" align="center" border={{ side: 'bottom', color: 'border' }}>
+      <Box
+        direction="row"
+        pad="medium"
+        align="center"
+        border={{ side: 'bottom', color: 'lightBorder' }}
+      >
         <StyledIcon type="chevronLeft" onClick={OnChevronLeftClick} />
         <StyledText weight="bold" size="large" margin={{ vertical: '0', horizontal: 'auto' }}>
           {titleLabel}
@@ -32,7 +37,7 @@ const AppsOption: React.FC<IAppsOption> = props => {
         pad="medium"
         justify="between"
         align="center"
-        border={{ side: 'bottom', color: 'border' }}
+        border={{ side: 'bottom', color: 'lightBorder' }}
       >
         <StyledText weight="bold">{autoUpdatesLabel}</StyledText>
         <Box pad={{ top: 'small' }}>
@@ -43,7 +48,7 @@ const AppsOption: React.FC<IAppsOption> = props => {
         pad={{ top: 'medium', horizontal: 'medium', bottom: 'large' }}
         justify="center"
         align="start"
-        border={{ side: 'bottom', color: 'border' }}
+        border={{ side: 'bottom', color: 'lightBorder' }}
       >
         <StyledText>{autoUpdatesInfo}</StyledText>
       </Box>
@@ -52,7 +57,7 @@ const AppsOption: React.FC<IAppsOption> = props => {
         pad="medium"
         justify="between"
         align="center"
-        border={{ side: 'bottom', color: 'border' }}
+        border={{ side: 'bottom', color: 'lightBorder' }}
       >
         <StyledText weight="bold">{dataAnalyticsLabel}</StyledText>
         <Box pad={{ top: 'small' }}>
@@ -63,7 +68,7 @@ const AppsOption: React.FC<IAppsOption> = props => {
         pad={{ top: 'medium', horizontal: 'medium', bottom: 'large' }}
         justify="center"
         align="start"
-        border={{ side: 'bottom', color: 'border' }}
+        border={{ side: 'bottom', color: 'lightBorder' }}
       >
         <StyledText>{dataAnalyticsinfo}</StyledText>
       </Box>

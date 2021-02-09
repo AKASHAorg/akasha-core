@@ -22,7 +22,12 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
   } = props;
   return (
     <>
-      <Box direction="row" pad="medium" align="center" border={{ side: 'bottom', color: 'border' }}>
+      <Box
+        direction="row"
+        pad="medium"
+        align="center"
+        border={{ side: 'bottom', color: 'lightBorder' }}
+      >
         <StyledIcon type="chevronLeft" onClick={OnChevronLeftClick} />
         <StyledText weight="bold" size="large" margin={{ vertical: '0', horizontal: 'auto' }}>
           {titleLabel}
@@ -33,7 +38,7 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
         pad="medium"
         justify="between"
         align="center"
-        border={{ side: 'bottom', color: 'border' }}
+        border={{ side: 'bottom', color: 'lightBorder' }}
       >
         <StyledText weight="bold">{essentialCookiesLabel}</StyledText>
       </Box>
@@ -41,7 +46,7 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
         pad={{ top: 'medium', horizontal: 'medium', bottom: 'xlarge' }}
         justify="center"
         align="start"
-        border={{ side: 'bottom', color: 'border' }}
+        border={{ side: 'bottom', color: 'lightBorder' }}
       >
         <StyledText>
           {essentialCookiesInfo}
@@ -66,7 +71,7 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
         pad="medium"
         justify="between"
         align="center"
-        border={{ side: 'bottom', color: 'border' }}
+        border={{ side: 'bottom', color: 'lightBorder' }}
       >
         <StyledText weight="bold">{trackingAnalyticsLabel}</StyledText>
         <Box pad={{ top: 'small' }}>
@@ -82,7 +87,7 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
         pad={{ top: 'medium', horizontal: 'medium', bottom: 'xlarge' }}
         justify="center"
         align="start"
-        border={{ side: 'bottom', color: 'border' }}
+        border={{ side: 'bottom', color: 'lightBorder' }}
       >
         <StyledText>
           {trackingAnalyticsInfoIntro}
