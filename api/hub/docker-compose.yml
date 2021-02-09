@@ -2,7 +2,5 @@ version: "3.9"
 services:
   graphql:
     build: .
-    environment:
-      - APP_API_KEY
     ports:
       - "3113:3113"
