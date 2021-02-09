@@ -8,7 +8,6 @@ on:
       - '.github/workflows/**'
       - 'api/**'
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest

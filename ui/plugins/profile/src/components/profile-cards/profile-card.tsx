@@ -6,7 +6,10 @@ import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings'
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { useFollow } from '@akashaproject/ui-awf-hooks';
 
-const BASE_URL = 'https://moderation.akasha.network';
+const BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://api.ethereum.world'
+    : 'https://moderation.akasha.network';
 
 export const BASE_FLAG_URL = `${BASE_URL}/flags`;
 

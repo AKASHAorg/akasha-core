@@ -73,6 +73,8 @@ export const mapEntry = (
       totalFollowers?: number | string;
       totalFollowing?: number | string;
     };
+    delisted?: boolean;
+    reported?: boolean;
   },
   ipfsGateway: any,
   logger?: any,
@@ -133,6 +135,8 @@ export const mapEntry = (
     ipfsLink: entry._id,
     permalink: 'null',
     replies: +entry.totalComments,
+    delisted: entry.delisted || false,
+    reported: entry.reported || false,
     postId: entry.postId,
     quotedBy: entry.quotedBy,
     quotedByAuthors: entry.quotedByAuthors,
