@@ -26,12 +26,23 @@ class TagAPI extends DataSource {
   async searchTags(name: string) {
     const result = await searchIndex.search(name, {
       facetFilters: ['category:tag'],
-      hitsPerPage: 20,
+      hitsPerPage: 50,
       attributesToRetrieve: ['name'],
     });
-    return result.hits.map((element: any) => {
+    const tags = result.hits.map((element: any) => {
       return element.name;
     });
+    const results = [];
+    for (const tag of tags) {
+      const postHits = await searchIndex.search(tag, {
+        facetFilters: ['category:post'],
+        hitsPerPage: 2,
+        attributesToRetrieve: ['author', 'tags'],
+        restrictSearchableAttributes: ['tags'],
+      });
+      results.push({ name: tag, totalPosts: postHits.nbHits });
+    }
+    return results.sort((x, y) => y.totalPosts - x.totalPosts);
   }
 
   async getTag(name: string) {

@@ -284,7 +284,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   };
   const getMessages = async (args: InboxListOptions) => {
     const messages = await hubUser.listInboxMessages(
-      Object.assign({}, args, { status: Status.UNREAD }),
+      Object.assign({}, { status: Status.UNREAD }, args),
     );
     const inbox = [];
     for (const message of messages) {

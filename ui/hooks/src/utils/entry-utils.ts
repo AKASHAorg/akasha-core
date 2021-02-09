@@ -57,6 +57,7 @@ export const mapEntry = (
     _id: string;
     quotes?: any[];
     quotedBy?: string[];
+    quotedByAuthors?: any[];
     creationDate: string;
     totalComments: string;
     postId?: string;
@@ -137,6 +138,8 @@ export const mapEntry = (
     delisted: entry.delisted || false,
     reported: entry.reported || false,
     postId: entry.postId,
+    quotedBy: entry.quotedBy,
+    quotedByAuthors: entry.quotedByAuthors,
   };
 };
 

@@ -93,12 +93,18 @@ export const setupDBCollections = async () => {
   const threadID = process.env.AWF_THREADdb
     ? ThreadID.fromString(process.env.AWF_THREADdb)
     : ThreadID.fromRandom();
-
-  if (!process.env.AWF_DBname && !process.env.AWF_THREADdb) {
-    await appDB.newDB(threadID, 'defaultDB');
+  if (!process.env.AWF_THREADdb) {
+    await appDB.newDB(threadID, process.env.AWF_DBname || 'defaultDB');
   }
 
   await initCollections(appDB, threadID);
   await updateCollections(appDB, threadID);
   return { threadID, client: appDB };
+};
+
+export const sendNotification = async (recipient: string, notificationObj: object) => {
+  const ms = await getMailSender();
+  const textEncoder = new TextEncoder();
+  const encodedNotification = textEncoder.encode(JSON.stringify(notificationObj));
+  await ms.sendMessage(recipient, encodedNotification);
 };

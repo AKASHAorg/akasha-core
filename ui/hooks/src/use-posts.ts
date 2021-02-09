@@ -156,7 +156,6 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         const [ipfsResp, entriesResp] = responses;
         const ipfsGateway = ipfsResp.data;
         const { data }: GetEntriesResponse = entriesResp;
-
         const { nextIndex, results } = data.posts;
         const newIds: string[] = [];
         const posts = results
@@ -274,7 +273,10 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         const entryData = pending as IEntryData;
         setPostsState(prev => ({
           ...prev,
-          postsData: { ...prev.postsData, [publishedEntryId]: entryData },
+          postsData: {
+            ...prev.postsData,
+            [publishedEntryId]: { ...entryData, entryId: publishedEntryId },
+          },
           pendingPosts: [],
           postIds: [publishedEntryId, ...prev.postIds],
         }));

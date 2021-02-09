@@ -1,6 +1,6 @@
 import { DataSource } from 'apollo-datasource';
 import { getAppDB, getMailSender } from '../helpers';
-import { Client, ThreadID, Users } from '@textile/hub';
+import { Client, ThreadID } from '@textile/hub';
 import { DataProvider, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 import { searchIndex } from './search-indexes';
@@ -27,7 +27,7 @@ class PostAPI extends DataSource {
     return `${this.collection}:postID${id}`;
   }
 
-  async getPost(id: string, stopIter = false) {
+  async getPost(id: string, pubKey?: string, stopIter = false) {
     const db: Client = await getAppDB();
     const cacheKey = this.getPostCacheKey(id);
     if (queryCache.has(cacheKey)) {
@@ -42,12 +42,14 @@ class PostAPI extends DataSource {
       ?.map(item => item.value);
     Object.assign(post, { quotedBy });
     if (post?.quotes?.length && !stopIter) {
-      post.quotes = await Promise.all(post.quotes.map(postID => this.getPost(postID, true)));
+      post.quotes = await Promise.all(
+        post.quotes.map(postID => this.getPost(postID, pubKey, true)),
+      );
     }
     queryCache.set(cacheKey, post);
     return post;
   }
-  async getPosts(limit: number, offset: string) {
+  async getPosts(limit: number, offset: string, pubKey?: string) {
     let posts;
     const db: Client = await getAppDB();
     if (queryCache.has(this.allPostsCache)) {
@@ -58,7 +60,7 @@ class PostAPI extends DataSource {
       });
       for (const post of posts) {
         if (post?.quotes?.length) {
-          post.quotes = await Promise.all(post.quotes.map(postID => this.getPost(postID)));
+          post.quotes = await Promise.all(post.quotes.map(postID => this.getPost(postID, pubKey)));
         }
         const quotedBy = post?.metaData
           ?.filter(item => item.property === this.quotedByPost)
@@ -115,7 +117,7 @@ class PostAPI extends DataSource {
     await this.addQuotes(post.quotes, postID[0]);
     queryCache.del(this.allPostsCache);
     if (post.mentions && post.mentions.length) {
-      await this.triggerMentions(post.mentions, postID, post.author);
+      await this.triggerMentions(post.mentions, postID[0], post.author);
     }
     searchIndex
       .saveObject({
@@ -190,6 +192,65 @@ class PostAPI extends DataSource {
   async removePosts(id: string[]) {
     const db: Client = await getAppDB();
     await db.delete(this.dbID, this.collection, id);
+  }
+
+  async getPostsByAuthor(pubKey: string, offset: number = 0, length: number = 10) {
+    const result = await searchIndex.search(`${pubKey} `, {
+      facetFilters: ['category:post'],
+      length: length,
+      offset: offset,
+      restrictSearchableAttributes: ['author'],
+      typoTolerance: false,
+      distinct: true,
+      attributesToRetrieve: ['objectID'],
+    });
+    const nextIndex = result?.hits?.length ? result.hits.length + offset : null;
+
+    return { results: result.hits, nextIndex: nextIndex, total: result.nbHits };
+  }
+
+  async getPostsByTag(tagName: string, offset: number = 0, length: number = 10) {
+    const result = await searchIndex.search(`${tagName} `, {
+      facetFilters: ['category:post'],
+      length: length,
+      offset: offset,
+      restrictSearchableAttributes: ['tags'],
+      typoTolerance: false,
+      distinct: true,
+      attributesToRetrieve: ['objectID'],
+    });
+    const nextIndex = result?.hits?.length ? result.hits.length + offset : null;
+
+    return { results: result.hits, nextIndex: nextIndex, total: result.nbHits };
+  }
+
+  async globalSearch(keyword: string) {
+    const result = await searchIndex.search(keyword, {
+      typoTolerance: false,
+      distinct: true,
+      maxValuesPerFacet: 80,
+      hitsPerPage: 80,
+      attributesToRetrieve: ['objectID', 'category', 'name'],
+    });
+    const acc = {
+      post: [],
+      tag: [],
+      comment: [],
+      profile: [],
+    };
+    for (const rec of result.hits) {
+      const { category, name }: any = rec;
+      if (acc.hasOwnProperty(category)) {
+        acc[category].push({ id: rec.objectID, name: name });
+      }
+    }
+
+    return {
+      posts: acc.post,
+      tags: acc.tag,
+      comments: acc.comment,
+      profiles: acc.profile,
+    };
   }
 }
 

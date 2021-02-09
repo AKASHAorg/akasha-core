@@ -1,9 +1,10 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB } from '../helpers';
+import { getAppDB, sendNotification } from '../helpers';
 import { ThreadID, Where, Client } from '@textile/hub';
 import { DataProvider, Profile } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 import { searchIndex } from './search-indexes';
+import { postsStats, statsProvider } from '../resolvers/constants';
 
 class ProfileAPI extends DataSource {
   private readonly collection: string;
@@ -20,12 +21,20 @@ class ProfileAPI extends DataSource {
   }
   async getProfile(ethAddress: string) {
     const db: Client = await getAppDB();
-    const query = new Where('ethAddress').eq(ethAddress);
-    const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
-    if (profilesFound.length) {
-      return await this.resolveProfile(profilesFound[0].pubKey);
+    let pubKey;
+    const key = this.getCacheKey(`:eth:${ethAddress}`);
+    if (!queryCache.has(key)) {
+      const query = new Where('ethAddress').eq(ethAddress);
+      const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
+      if (!profilesFound.length) {
+        return;
+      }
+      pubKey = profilesFound[0].pubKey;
+      queryCache.set(key, pubKey);
+    } else {
+      pubKey = queryCache.get(key);
     }
-    return;
+    return await this.resolveProfile(pubKey);
   }
 
   getCacheKey(pubKey: string) {
@@ -49,6 +58,16 @@ class ProfileAPI extends DataSource {
       for (const provider of q) {
         Object.assign(returnedObj, { [provider.property]: provider.value });
       }
+      const totalPostsIndex = profilesFound[0].metaData.findIndex(
+        m => m.provider === statsProvider && m.property === postsStats,
+      );
+      const totalPosts =
+        totalPostsIndex !== -1 ? profilesFound[0].metaData[totalPostsIndex].value : '0';
+      Object.assign(returnedObj, {
+        totalPosts,
+        totalFollowers: profilesFound[0]?.followers?.length || 0,
+        totalFollowing: profilesFound[0]?.following?.length || 0,
+      });
       queryCache.set(cacheKey, returnedObj);
       return returnedObj;
     }
@@ -159,7 +178,16 @@ class ProfileAPI extends DataSource {
     profile1.following.unshift(profile.pubKey);
     profile.followers.unshift(profile1.pubKey);
     await db.save(this.dbID, this.collection, [profile, profile1]);
-    queryCache.del(this.getCacheKey(pubKey));
+    queryCache.del(this.getCacheKey(profile.pubKey));
+    queryCache.del(this.getCacheKey(profile1.pubKey));
+    const notification = {
+      property: 'NEW_FOLLOWER',
+      provider: 'awf.graphql.profile.api',
+      value: {
+        follower: pubKey,
+      },
+    };
+    await sendNotification(profile.pubKey, notification);
     return true;
   }
 
@@ -178,7 +206,8 @@ class ProfileAPI extends DataSource {
     profile1.following.splice(exists, 1);
     profile.followers.splice(exists1, 1);
     await db.save(this.dbID, this.collection, [profile, profile1]);
-    queryCache.del(this.getCacheKey(pubKey));
+    queryCache.del(this.getCacheKey(profile.pubKey));
+    queryCache.del(this.getCacheKey(profile1.pubKey));
     return true;
   }
 
