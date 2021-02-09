@@ -11,15 +11,34 @@ export interface IReportSuccessModalProps {
   className?: string;
   successTitleLabel: string;
   successMessageLabel?: string;
+  contentId?: string;
   blockLabel?: string;
   closeLabel?: string;
   // screen size passed by viewport provider
   size?: string;
+  // @TODO: make prop required, and modify all instances appropriately
+  updateEntry?: (entryId: string) => void;
   closeModal: () => void;
 }
 
 const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
-  const { className, successTitleLabel, successMessageLabel, closeLabel, size, closeModal } = props;
+  const {
+    className,
+    successTitleLabel,
+    successMessageLabel,
+    contentId,
+    closeLabel,
+    size,
+    updateEntry,
+    closeModal,
+  } = props;
+
+  const handleModalClose = () => {
+    if (updateEntry && contentId) {
+      updateEntry(contentId);
+    }
+    closeModal();
+  };
 
   return (
     <ModalWrapper>
@@ -47,7 +66,7 @@ const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
               {successMessageLabel}
             </Text>
             <Box direction="row" margin={{ top: 'large' }} alignSelf="center">
-              <Button primary={true} label={closeLabel} onClick={closeModal} />
+              <Button primary={true} label={closeLabel} onClick={handleModalClose} />
             </Box>
           </Box>
         </MainAreaCardBox>

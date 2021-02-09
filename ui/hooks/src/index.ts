@@ -1,3 +1,5 @@
+import constants from './constants';
+import fetchRequest from './fetch-request';
 import useProfile from './use-profile';
 import useEntryPublisher from './use-entry-publisher';
 import useFeedReducer from './use-feed-reducer';
@@ -13,6 +15,8 @@ import useFollow from './use-follow';
 import useNotifications from './use-notifications';
 
 export {
+  constants,
+  fetchRequest,
   useProfile,
   useFeedReducer,
   useEntryPublisher,

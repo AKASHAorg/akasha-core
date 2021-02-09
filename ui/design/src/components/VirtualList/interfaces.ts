@@ -36,6 +36,7 @@ export interface IVirtualListProps {
   loadMore: (payload: ILoadItemsPayload) => void;
   loadItemData?: (payload: ILoadItemDataPayload) => void;
   itemCard: React.ReactElement;
+  itemCardAlt: (entryId: string) => React.ReactElement;
   listHeader?: React.ReactElement;
   /* spacing between items (bottom) */
   itemSpacing?: number;
@@ -101,6 +102,7 @@ export interface IListViewportProps {
   itemsData: { [key: string]: any };
   itemRects: Map<string, IItemStateRect>;
   itemCard: React.ReactElement;
+  itemCardAlt: IVirtualListProps['itemCardAlt'];
   loadItemData: IVirtualListProps['loadItemData'];
   itemSpacing: number;
   customEntities?: IVirtualListProps['customEntities'];
@@ -120,6 +122,7 @@ export interface IRenderItemProps {
   itemSpacing: IVirtualListProps['itemSpacing'];
   customEntities: IListCustomEntity[];
   itemCard: IVirtualListProps['itemCard'];
+  itemCardAlt: IVirtualListProps['itemCardAlt'];
   updateRef?: IListViewportProps['updateRef'];
   itemRect?: IItemStateRect;
   prevRect?: IItemStateRect | null;
