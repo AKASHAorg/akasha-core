@@ -149,8 +149,9 @@ const ContentList: React.FC<IContentListProps> = props => {
         isDelisted={isDelisted}
         pendingLabel={t('Pending')}
         moderatedLabel={t('Moderated')}
-        count={moderatedItems.length}
-        countLabel={t('Moderated items')}
+        countPending={pendingItems.length}
+        countModerated={moderatedItems.length}
+        countSpecific={moderatedItems.filter(item => item.delisted === isDelisted).length}
         keptLabel={t('Kept')}
         delistedLabel={t('Delisted')}
         setIsPending={setIsPending}
@@ -235,7 +236,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                   handleButtonClick={() => null}
                 />
               ))
-          : renderNotFound('delisted'))}
+          : renderNotFound('moderated'))}
     </Box>
   );
 };

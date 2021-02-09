@@ -1,4 +1,7 @@
-const BASE_URL = 'https://moderation.akasha.network';
+const BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://api.ethereum.world/'
+    : 'https://moderation.akasha.network';
 
 const BASE_FLAG_URL = `${BASE_URL}/flags`;
 const BASE_STATUS_URL = `${BASE_URL}/status`;
