@@ -32,6 +32,7 @@ storiesOf('Cards/Profile Cards', module)
         onChangeProfileData={(newProfileData: IProfileData) =>
           action('ProfileData Changed')(newProfileData)
         }
+        handleShareClick={() => action('Share profile Clicked')('Synthetic Event')}
         // @ts-ignore
         profileData={select('Profile Data', { dapp: appData, user: profileData }, profileData)}
         descriptionLabel={text('About me', aboutMeLabel)}
