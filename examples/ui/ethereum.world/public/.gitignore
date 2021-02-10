@@ -6,4 +6,6 @@ index.html
 !importmap.json
 !icons
 !icons/*.png
+!fonts
+!fonts/*
 
