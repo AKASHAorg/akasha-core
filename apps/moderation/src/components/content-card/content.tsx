@@ -77,6 +77,7 @@ const Content: React.FC<IContentProps> = props => {
           reportedByLabel={props.reportedByLabel}
           forLabel={props.forLabel}
           logger={props.logger}
+          sdkModules={props.sdkModules}
         />
       )}
       <Box
@@ -93,13 +94,13 @@ const Content: React.FC<IContentProps> = props => {
             <Text>{props.originallyReportedByLabel}</Text>
             <Avatar
               ethAddress={props.reporter || ''}
-              src="https://placebeard.it/360x360"
+              src={props.reporterAvatar}
               size="xs"
               margin={{ left: '0.2rem' }}
               backgroundColor={'lightBackground'}
               border="sm"
             />
-            {props.reporter && (
+            {props.reporter && !props.reporterName && (
               <Text margin={{ left: '0.2rem' }} color="accentText">
                 {`${props.reporter.slice(0, 6)}...${props.reporter.slice(
                   props.reporter.length - 4,
@@ -116,7 +117,7 @@ const Content: React.FC<IContentProps> = props => {
                 margin={{ left: '0.2rem' }}
                 color={!props.isPending ? 'secondaryText' : 'initial'}
               >
-                ({props.reporterENSName})
+                {`(@${props.reporterENSName})`}
               </Text>
             )}
             {props.otherReporters && !!props.otherReporters.length && (
@@ -155,7 +156,7 @@ const Content: React.FC<IContentProps> = props => {
           <Box direction="row" margin={{ top: 'large' }} justify="between" align="end">
             <Box>
               <Text>
-                {props.moderator
+                {props.moderator && !props.moderatorName
                   ? `${props.moderatedByLabel} ${props.moderator.slice(
                       0,
                       6,
@@ -163,7 +164,9 @@ const Content: React.FC<IContentProps> = props => {
                       props.moderator.length - 5,
                       props.moderator.length - 1,
                     )}`
-                  : `${props.moderatedByLabel} ${props.moderatorName} (${props.moderatorENSName})`}
+                  : `${props.moderatedByLabel} ${props.moderatorName} ${
+                      props.moderatorENSName ? `(@${props.moderatorENSName})` : ''
+                    }`}
               </Text>
               <Text color="secondaryText">{`${props.moderatedOnLabel} ${moment(
                 props.evaluationDateTime,

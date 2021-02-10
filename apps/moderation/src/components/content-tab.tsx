@@ -8,8 +8,9 @@ export interface IContentTabProps {
   isDelisted: boolean;
   pendingLabel: string;
   moderatedLabel: string;
-  count: number;
-  countLabel: string;
+  countPending: number;
+  countModerated: number;
+  countSpecific: number;
   keptLabel: string;
   delistedLabel: string;
   setIsPending: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,8 +32,9 @@ const ContentTab: React.FC<IContentTabProps> = props => {
     isDelisted,
     pendingLabel,
     moderatedLabel,
-    count,
-    countLabel,
+    countPending,
+    countModerated,
+    countSpecific,
     keptLabel,
     delistedLabel,
     setIsPending,
@@ -60,7 +62,7 @@ const ContentTab: React.FC<IContentTabProps> = props => {
               onClick={handleTabClick(true)}
             >
               <Text textAlign="center" color={isPending ? 'accentText' : 'secondaryText'}>
-                {pendingLabel}
+                {countPending} {pendingLabel}
               </Text>
             </Box>
             <Box
@@ -75,18 +77,18 @@ const ContentTab: React.FC<IContentTabProps> = props => {
               onClick={handleTabClick(false)}
             >
               <Text textAlign="center" color={isPending ? 'secondaryText' : 'accentText'}>
-                {moderatedLabel}
+                {countModerated} {moderatedLabel}
               </Text>
             </Box>
           </Box>
         </MainAreaCardBox>
       </Box>
-      {!isPending && !!count && (
+      {!isPending && !!countModerated && (
         <Box margin={{ bottom: '1rem' }}>
           <MainAreaCardBox>
             <Box direction="row" pad="1rem" justify="between" align="center">
               <Text>
-                {count} {countLabel}
+                {countSpecific} {isDelisted ? delistedLabel : keptLabel}
               </Text>
               <Box direction="row">
                 <StyledButton

@@ -32,9 +32,15 @@
   },
   "dependencies": {
     "@koa/cors": "3.1.0",
-    "@textile/hub": "6.0.1",
-    "algoliasearch": "4.8.4",
+    "@textile/hub": "6.0.2",
+    "algoliasearch": "4.8.5",
+    "@algolia/cache-in-memory": "4.8.5",
+    "@algolia/client-common": "4.8.5",
+    "@algolia/cache-common": "4.8.5",
+    "@algolia/logger-common": "4.8.5",
+    "@algolia/logger-console": "4.8.5",
     "apollo-server-koa": "2.19.2",
+    "apollo-server-cache-redis": "1.2.3",
     "dotenv": "8.2.0",
     "emittery": "0.8.1",
     "ethers": "5.0.29",
@@ -45,7 +51,8 @@
     "koa-route": "3.2.0",
     "koa-router": "10.0.0",
     "koa-websocket": "6.0.0",
-    "lru-cache": "6.0.0"
+    "lru-cache": "6.0.0",
+    "winston": "3.3.3"
   },
   "devDependencies": {
     "@types/koa": "2.11.7",

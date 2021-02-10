@@ -9,6 +9,7 @@ const StyledBox = styled(Box)`
 export interface IBasicCardBox {
   className?: string;
   callToAction?: boolean;
+  dashedBorder?: boolean;
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
 }
@@ -17,6 +18,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
   children,
   className,
   callToAction,
+  dashedBorder,
   style,
   rootNodeRef,
 }) => (
@@ -35,6 +37,8 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
             style: 'solid',
             side: 'all',
           }
+        : dashedBorder
+        ? { color: 'secondaryText', size: 'xsmall', style: 'dashed', side: 'all' }
         : {
             color: 'border',
             size: 'xsmall',

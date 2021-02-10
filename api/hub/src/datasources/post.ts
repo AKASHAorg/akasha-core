@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB, getMailSender } from '../helpers';
+import { getAppDB, getMailSender, logger } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
 import { DataProvider, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -112,8 +112,10 @@ class PostAPI extends DataSource {
         },
       ],
     };
+    logger.info('saving a new post:', post);
     queryCache.del(this.allPostsCache);
     const postID = await db.create(this.dbID, this.collection, [post]);
+    logger.info('created a new post:', postID[0]);
     await this.addQuotes(post.quotes, postID[0]);
     queryCache.del(this.allPostsCache);
     if (post.mentions && post.mentions.length) {
@@ -130,9 +132,9 @@ class PostAPI extends DataSource {
         content: post.content.find(e => e.property === 'textContent')?.value,
         title: post.title,
       })
-      .then(_ => _)
+      .then(_ => logger.info('indexed post:', postID[0]))
       // tslint:disable-next-line:no-console
-      .catch(e => console.error(e));
+      .catch(e => logger.error(e));
     return postID;
   }
 
@@ -149,6 +151,7 @@ class PostAPI extends DataSource {
     const textEncoder = new TextEncoder();
     const encodedNotification = textEncoder.encode(JSON.stringify(notification));
     for (const mention of mentions) {
+      logger.info('sending mentions notifications', mention);
       await mailSender.sendMessage(mention, encodedNotification);
     }
   }
@@ -170,6 +173,7 @@ class PostAPI extends DataSource {
         provider: this.graphqlPostsApi,
         value: postID,
       });
+      logger.info('adding quotes:', quotedPost);
       updatePosts.push(post);
     }
     if (updatePosts.length) {
