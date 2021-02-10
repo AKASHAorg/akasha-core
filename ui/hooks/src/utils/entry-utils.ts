@@ -112,6 +112,19 @@ export const mapEntry = (
   if (entry.quotes && entry.quotes[0]) {
     quotedEntry = mapEntry(entry.quotes[0], ipfsGateway, logger);
   }
+  let quotedByAuthors;
+  if (entry.quotedByAuthors && entry.quotedByAuthors.length > 0) {
+    quotedByAuthors = entry.quotedByAuthors.map((author: any) => {
+      let avatarWithGateway;
+      if (author.avatar) {
+        avatarWithGateway = getMediaUrl(ipfsGateway, author.avatar);
+      }
+      return {
+        ...author,
+        avatar: avatarWithGateway,
+      };
+    });
+  }
 
   return {
     author: {
@@ -139,7 +152,7 @@ export const mapEntry = (
     reported: entry.reported || false,
     postId: entry.postId,
     quotedBy: entry.quotedBy,
-    quotedByAuthors: entry.quotedByAuthors,
+    quotedByAuthors: quotedByAuthors,
   };
 };
 

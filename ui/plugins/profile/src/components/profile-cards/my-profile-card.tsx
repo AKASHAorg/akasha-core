@@ -11,11 +11,12 @@ interface MPPHeaderProps {
   canEdit: boolean;
   userName: string | null;
   profileModalName: string;
+  shareProfileModalName: string;
   ensModalName: string;
 }
 
 export const MyProfileCard = (props: MPPHeaderProps) => {
-  const { profileData, profileModalName, ensModalName } = props;
+  const { profileData, profileModalName, ensModalName, shareProfileModalName } = props;
   const { t } = useTranslation();
   if (!profileData) {
     return null;
@@ -27,6 +28,10 @@ export const MyProfileCard = (props: MPPHeaderProps) => {
 
   const showEnsModal = () => {
     props.onModalShow(ensModalName);
+  };
+
+  const showShareModal = () => {
+    props.onModalShow(shareProfileModalName);
   };
 
   return (
@@ -50,6 +55,7 @@ export const MyProfileCard = (props: MPPHeaderProps) => {
       postsLabel={t('Posts')}
       shareProfileLabel={t('Share Profile')}
       flaggable={false}
+      handleShareClick={showShareModal}
       onUpdateClick={showUpdateProfileModal}
       onENSChangeClick={showEnsModal}
       changeENSLabel={t('Change Ethereum name')}
