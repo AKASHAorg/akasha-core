@@ -52,7 +52,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               onUpdateClick={() => null}
               onENSChangeClick={() => null}
               hideENSButton={true}
-              handleShareClick={() => {}}
+              handleShareClick={() => null}
             />
           )}
         </>

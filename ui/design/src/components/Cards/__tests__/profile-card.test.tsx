@@ -21,7 +21,7 @@ const mockProfileData = {
 
 const createBaseComponent = (props: any) => (
   <ProfileCard
-    handleShareClick={() => {}}
+    handleShareClick={() => null}
     loggedEthAddress={null}
     profileData={mockProfileData}
     onClickFollowers={props.onClickFollowers}
