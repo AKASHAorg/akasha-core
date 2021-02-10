@@ -232,13 +232,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
 
               <Box direction="row" gap="xsmall">
                 <Text size="medium" color="secondaryText">
-                  {profileData.userName ? profileData.userName : null}
+                  {profileData.userName ? `@${profileData.userName}` : null}
                 </Text>
               </Box>
             </Box>
           </Box>
           <Box direction="row" align="center" gap="small">
-            {!canUserEdit && loggedEthAddress && loggedEthAddress !== profileData.ethAddress && (
+            {!canUserEdit && loggedEthAddress !== profileData.ethAddress && (
               <DuplexButton
                 icon={<Icon type="following" />}
                 active={isFollowing}

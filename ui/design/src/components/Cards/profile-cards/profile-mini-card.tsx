@@ -85,7 +85,8 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
             </Text>
           )}
           <Text size="medium" color="secondaryText" wordBreak="break-word" textAlign="center">
-            {profileData.userName || truncateMiddle(profileData.ethAddress)}
+            {(profileData.userName && `@${profileData.userName}`) ||
+              truncateMiddle(profileData.ethAddress)}
           </Text>
           {profileData.CID && (
             <Text size="small" color="primaryText" wordBreak="break-word" textAlign="center">

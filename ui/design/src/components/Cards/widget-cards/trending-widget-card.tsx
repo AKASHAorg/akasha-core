@@ -82,7 +82,9 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
   return (
     <WidgetAreaCardBox className={className}>
       <Box pad="medium" gap="medium">
-        <Text weight="bold">{titleLabel}</Text>
+        <Text weight="bold" size="large">
+          {titleLabel}
+        </Text>
       </Box>
       <Tabs>
         <StyledTab title={topicsLabel}>
@@ -96,17 +98,15 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                   labelSize="large"
                   gap="xxsmall"
                 />
-                {loggedEthAddress && (
-                  <DuplexButton
-                    inactiveLabel={subscribeLabel}
-                    activeLabel={subscribedLabel}
-                    activeHoverLabel={unsubscribeLabel}
-                    onClickInactive={() => handleSubscribeTag(tag.name)}
-                    onClickActive={() => handleUnsubscribeTag(tag.name)}
-                    active={subscribedTags?.includes(tag.name)}
-                    icon={<Icon type="subscribe" />}
-                  />
-                )}
+                <DuplexButton
+                  inactiveLabel={subscribeLabel}
+                  activeLabel={subscribedLabel}
+                  activeHoverLabel={unsubscribeLabel}
+                  onClickInactive={() => handleSubscribeTag(tag.name)}
+                  onClickActive={() => handleUnsubscribeTag(tag.name)}
+                  active={subscribedTags?.includes(tag.name)}
+                  icon={<Icon type="subscribe" />}
+                />
               </Box>
             ))}
           </Box>
@@ -115,7 +115,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
           <Box pad="medium" gap="medium">
             {profiles.slice(0, 4).map((profile, index) => (
               <Box key={index} direction="row" justify="between" align="center">
-                <Box width="9rem" pad="none">
+                <Box width="11rem" pad="none">
                   <ProfileAvatarButton
                     ethAddress={profile.ethAddress}
                     onClick={() => onClickProfile(profile.ethAddress)}
@@ -125,7 +125,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                     avatarImage={profile.avatar}
                   />
                 </Box>
-                {loggedEthAddress && profile.ethAddress !== loggedEthAddress && (
+                {profile.ethAddress !== loggedEthAddress && (
                   <DuplexButton
                     inactiveLabel={followLabel}
                     activeLabel={followingLabel}
@@ -148,7 +148,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
 TrendingWidgetCard.defaultProps = {
   titleLabel: 'Trending Right Now',
   topicsLabel: 'Topics',
-  profilesLabel: 'Profiles',
+  profilesLabel: 'People',
   followLabel: 'Follow',
   unfollowLabel: 'Unfollow',
   followersLabel: 'Followers',

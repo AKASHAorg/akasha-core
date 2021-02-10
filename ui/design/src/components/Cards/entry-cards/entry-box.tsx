@@ -54,7 +54,6 @@ export interface IEntryBoxProps {
   shareLabel: string;
   flagAsLabel: string;
   copyLinkLabel: string;
-  copyIPFSLinkLabel: string;
   comment?: boolean;
   bookmarkLabel: string;
   bookmarkedLabel: string;
@@ -96,7 +95,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     shareLabel,
     flagAsLabel,
     copyLinkLabel,
-    copyIPFSLinkLabel,
     locale,
     isBookmarked,
     bookmarkLabel,
@@ -125,15 +123,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
   const akashaRef: React.Ref<HTMLDivElement> = React.useRef(null);
-
-  const handleLinkCopy = (linkType: 'ipfs' | 'shareable') => () => {
-    switch (linkType) {
-      case 'ipfs':
-        return navigator.clipboard.writeText(entryData.ipfsLink);
-      case 'shareable':
-        return navigator.clipboard.writeText(window.location.href);
-    }
-  };
 
   const closeMenuDrop = () => {
     setMenuDropOpen(false);
@@ -182,15 +171,18 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   return (
     <ViewportSizeProvider>
       <Box style={style}>
-        <Box direction="row" justify="between" pad={{ vertical: 'medium' }}>
+        <Box direction="row" justify="between" pad={{ top: 'medium' }}>
           <ProfileAvatarButton
             label={entryData.author?.name}
-            info={entryData.author?.userName}
+            info={entryData.author?.userName && `@${entryData.author?.userName}`}
             avatarImage={entryData.author?.avatar}
             onClickAvatar={onClickAvatar}
             onClick={() => setProfileDropOpen(!profileDropOpen)}
             ethAddress={entryData.author?.ethAddress}
             ref={profileRef}
+            bold={true}
+            onMouseEnter={() => setProfileDropOpen(true)}
+            onMouseLeave={() => setProfileDropOpen(false)}
           />
           {profileRef.current && profileDropOpen && (
             <StyledProfileDrop
@@ -200,7 +192,13 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               onClickOutside={() => setProfileDropOpen(false)}
               onEsc={() => setProfileDropOpen(false)}
             >
-              <Box width="20rem" round="small" flex="grow">
+              <Box
+                width="20rem"
+                round="small"
+                flex="grow"
+                onClick={onClickAvatar}
+                elevation="shadow"
+              >
                 <ProfileMiniCard
                   loggedEthAddress={loggedProfileEthAddress}
                   profileData={entryData.author}
@@ -213,7 +211,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           )}
           <Box direction="row" gap="xsmall" align="center">
             {entryData.time && !hidePublishTime && (
-              <Text>{formatRelativeTime(entryData.time, locale)}</Text>
+              <Text color="secondaryText">{formatRelativeTime(entryData.time, locale)}</Text>
             )}
             <Icon
               type="akasha"
@@ -240,21 +238,18 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           <CardHeaderMenuDropdown
             target={menuIconRef.current}
             onMenuClose={closeMenuDrop}
-            onLinkCopy={handleLinkCopy}
             onFlag={handleEntryFlag}
             flagAsLabel={flagAsLabel}
-            copyIPFSLinkLabel={copyIPFSLinkLabel}
           />
         )}
         <Box
-          pad={{ vertical: 'medium' }}
           style={{ cursor: contentClickable ? 'pointer' : 'default' }}
           onClick={() => (contentClickable ? handleContentClick(entryData) : false)}
         >
           <ReadOnlyEditor content={entryData.content} handleMentionClick={onMentionClick} />
         </Box>
         {entryData.quote && (
-          <Box pad={{ vertical: 'medium' }} onClick={() => handleContentClick(entryData.quote)}>
+          <Box pad={{ bottom: 'medium' }} onClick={() => handleContentClick(entryData.quote)}>
             <EmbedBox embedEntryData={entryData.quote} />
           </Box>
         )}

@@ -51,7 +51,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     handleUnfollowAuthor,
     isFollowingAuthor,
     flagAsLabel,
-    copyIPFSLinkLabel,
     contentClickable,
     disableIpfsCopyLink,
     disableReposting,
@@ -93,7 +92,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           onClickReplies={onClickReplies}
           onEntryShare={onEntryShare}
           onEntryFlag={onEntryFlag}
-          copyIPFSLinkLabel={copyIPFSLinkLabel}
           handleFollowAuthor={handleFollowAuthor}
           handleUnfollowAuthor={handleUnfollowAuthor}
           isFollowingAuthor={isFollowingAuthor}
@@ -114,7 +112,6 @@ EntryCard.defaultProps = {
   repostLabel: 'Repost',
   repostWithCommentLabel: 'Repost With Comment',
   copyLinkLabel: 'Copy Link',
-  copyIPFSLinkLabel: 'Copy IPFS link',
   flagAsLabel: 'Report',
   shareLabel: 'Share',
 };
