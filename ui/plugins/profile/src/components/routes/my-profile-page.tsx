@@ -8,12 +8,14 @@ import { useTranslation } from 'react-i18next';
 import { IUserNameOption } from '@akashaproject/design-system/lib/components/Cards/form-cards/ens-form-card';
 import { UseLoginActions, UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { UseProfileActions } from '@akashaproject/ui-awf-hooks/lib/use-profile';
+import { rootRoute } from '../../routes';
 
-const { styled, Helmet, ModalRenderer, BoxFormCard, EnsFormCard, Box } = DS;
+const { styled, Helmet, ModalRenderer, BoxFormCard, EnsFormCard, Box, ShareModal } = DS;
 
 const MODAL_NAMES = {
   PROFILE_UPDATE: 'profileUpdate',
   CHANGE_ENS: 'changeENS',
+  PROFILE_SHARE: 'profileShare',
 };
 
 export interface MyProfileProps extends RootComponentProps {
@@ -153,6 +155,35 @@ const MyProfilePage = (props: MyProfileProps) => {
     props.modalActions.show(name);
   };
 
+  const closeShareModal = () => {
+    props.modalActions.hide(MODAL_NAMES.PROFILE_SHARE);
+  };
+
+  const url = `${window.location.origin}${rootRoute}/${props.ethAddress}`;
+
+  const handleProfileShare = (service: 'twitter' | 'facebook' | 'reddit' | 'copy', url: string) => {
+    let shareUrl;
+    switch (service) {
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${url}`;
+        break;
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+        break;
+      case 'reddit':
+        shareUrl = `http://www.reddit.com/submit?url=${url}`;
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(url);
+        break;
+      default:
+        break;
+    }
+    if (shareUrl) {
+      window.open(shareUrl, '_blank');
+    }
+  };
+
   return (
     <Box fill="horizontal" margin={{ top: '.5rem' }}>
       <Helmet>
@@ -165,6 +196,7 @@ const MyProfilePage = (props: MyProfileProps) => {
         userName={props.profileData.userName}
         profileModalName={MODAL_NAMES.PROFILE_UPDATE}
         ensModalName={MODAL_NAMES.CHANGE_ENS}
+        shareProfileModalName={MODAL_NAMES.PROFILE_SHARE}
       />
       <ModalRenderer slotId={layout.app.modalSlotId}>
         {props.modalState[MODAL_NAMES.PROFILE_UPDATE] && props.ethAddress && (
@@ -233,6 +265,15 @@ const MyProfilePage = (props: MyProfileProps) => {
               }}
               errorMessage={ensState.errorMessage}
               registrationStatus={ensState.status}
+            />
+          </Overlay>
+        )}
+        {props.modalState[MODAL_NAMES.PROFILE_SHARE] && (
+          <Overlay>
+            <ShareModal
+              link={url}
+              handleProfileShare={handleProfileShare}
+              closeModal={closeShareModal}
             />
           </Overlay>
         )}
