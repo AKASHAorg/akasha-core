@@ -6,6 +6,7 @@ import { moduleName as profilesModule } from '@akashaproject/sdk-profiles/lib/co
 import { moduleName as commonsModule } from '@akashaproject/sdk-common/lib/constants';
 import { moduleName as authModule } from '@akashaproject/sdk-auth/lib/constants';
 import { moduleName as registryModule } from '@akashaproject/sdk-registry/lib/constants';
+import { moduleName as postsModule } from '@akashaproject/sdk-posts/lib/constants';
 /**
  * All the plugins must export an object like this:
  */
@@ -34,6 +35,7 @@ export const application: Application = {
     { module: commonsModule },
     { module: authModule },
     { module: registryModule },
+    { module: postsModule },
   ],
   title: 'AKASHA Profile',
   menuItems: routes,

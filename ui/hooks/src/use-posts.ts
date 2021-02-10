@@ -270,10 +270,11 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         // tslint:disable-next-line: no-console
         return console.error('Cannot use getUserPosts without passing profileService module!');
       }
-      const userPostsCall = profileService.getPosts(userId);
+      const userPostsCall = postsService.entries.entriesByAuthor(userId);
       const ipfsGatewayCall = ipfsService.getSettings({});
       combineLatest([ipfsGatewayCall, userPostsCall]).subscribe((responses: [any, any]) => {
         const [ipfsGatewayResp, userPostsResp] = responses;
+        console.log(ipfsGatewayResp, userPostsResp, 'responses!');
         setPostsState(prev => ({
           ...prev,
           postIds: userPostsResp.data.map((post: any) => post._id),

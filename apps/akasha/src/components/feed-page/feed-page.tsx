@@ -15,8 +15,6 @@ import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
 import { application as loginWidget } from '@akashaproject/ui-widget-login/lib/bootstrap';
-
-// @ts-expect-error: Missing types for parcel...
 import Parcel from 'single-spa-react/parcel';
 import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
 
@@ -307,6 +305,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                 layout={props.layout}
                 globalChannel={props.globalChannel}
                 i18n={props.i18n}
+                mountParcel={props.singleSpa.mountRootParcel}
               />
             </>
           )

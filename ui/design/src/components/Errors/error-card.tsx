@@ -7,15 +7,15 @@ interface ErrorRendererProps {
   colorProp: any;
   size: any;
   textAlign: any;
-  style: any;
   level: any;
   theme: any;
-  className: any;
+  className: string;
+  style: React.CSSProperties;
 }
 
 const ErrorRenderer: React.FC<ErrorRendererProps> = props => {
   return (
-    <details style={{ width: '100%' }}>
+    <details style={{ width: '100%', ...props.style }}>
       <summary>Expand to see error details</summary>
       <div
         style={{
@@ -42,7 +42,7 @@ const ErrorCard: React.FC<ErrorLoaderProps & { imageSrc: string }> = props => {
   }
 
   return (
-    <StyledErrorCard>
+    <StyledErrorCard style={props.style}>
       <Box>
         <StyledImage src={props.imageSrc} />
       </Box>
