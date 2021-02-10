@@ -30,6 +30,7 @@ const ShareModalComponent = () => {
       />
       {modalOpen && (
         <ShareModal
+          handleProfileShare={() => null}
           link={text('Link', 'ethereum.world/gilbert')}
           closeModal={() => setModalOpen(false)}
           copyLabel="Copy"
