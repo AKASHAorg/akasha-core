@@ -4,13 +4,15 @@ on:
   push:
     branches:
       - master
+    paths:
+      - '.github/workflows/**'
+      - 'api/**'
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: executing remote ssh commands using password
+      - name: executing remote ssh deployment
         uses: appleboy/ssh-action@v0.1.4
         with:
           HOST: ${{ secrets.HOST }}

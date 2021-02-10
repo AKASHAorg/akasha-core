@@ -19,5 +19,5 @@ RUN npm run tsc
 EXPOSE ${PORT}
 
 ENTRYPOINT [ "node" ]
-CMD ["/app/lib/index.js"]
+CMD ["--trace-warnings", "/app/lib/index.js"]
 

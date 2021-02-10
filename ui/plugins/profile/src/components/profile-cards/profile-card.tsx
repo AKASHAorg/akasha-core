@@ -7,7 +7,10 @@ import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/u
 import { useFollow } from '@akashaproject/ui-awf-hooks';
 import { rootRoute } from '../../routes';
 
-const BASE_URL = 'https://moderation.akasha.network';
+const BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://api.ethereum.world'
+    : 'https://moderation.akasha.network';
 
 export const BASE_FLAG_URL = `${BASE_URL}/flags`;
 

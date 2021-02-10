@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB } from '../helpers';
+import { getAppDB, logger } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { Tag } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -82,6 +82,7 @@ class TagAPI extends DataSource {
   async indexPost(postsCollection: string, postID: string, tagName: string) {
     const db: Client = await getAppDB();
     const postExists = await db.has(this.dbID, postsCollection, [postID]);
+    logger.info('indexing tags for post:', postID, tagName);
     if (!postExists) {
       return Promise.reject(`postID: ${postID} was not found`);
     }

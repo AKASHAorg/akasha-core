@@ -8,6 +8,7 @@ import {
   Users,
 } from '@textile/hub';
 import { updateCollections, initCollections } from './collections';
+import winston from 'winston';
 
 export const getAPISig = async (minutes: number = 30) => {
   const expiration = new Date(Date.now() + 1000 * 60 * minutes);
@@ -108,3 +109,8 @@ export const sendNotification = async (recipient: string, notificationObj: objec
   const encodedNotification = textEncoder.encode(JSON.stringify(notificationObj));
   await ms.sendMessage(recipient, encodedNotification);
 };
+
+export const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL || 'info',
+  transports: [new winston.transports.Console({ format: winston.format.simple() })],
+});

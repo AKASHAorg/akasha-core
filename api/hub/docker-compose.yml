@@ -1,6 +1,6 @@
-version: "3.9"
+version: '3.9'
 services:
   graphql:
     build: .
     ports:
-      - "3113:3113"
+      - '3113:3113'

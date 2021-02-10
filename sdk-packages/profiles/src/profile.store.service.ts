@@ -1,6 +1,11 @@
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import { runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
-import { LinkedProperty, PROFILE_MEDIA_FILES, PROFILE_STORE } from './constants';
+import {
+  BUCKET_THREAD_NAME,
+  LinkedProperty,
+  PROFILE_MEDIA_FILES,
+  PROFILE_STORE,
+} from './constants';
 import authServices, { AUTH_SERVICE } from '@akashaproject/sdk-auth/lib/constants';
 import commonServices, { IMAGE_UTILS_SERVICE } from '@akashaproject/sdk-common/lib/constants';
 import dbServices, { DB_SETTINGS_ATTACHMENT } from '@akashaproject/sdk-db/lib/constants';
@@ -210,7 +215,9 @@ const service: AkashaService = (invoke, log) => {
       path = data.name;
     }
     const { buck } = await invoke(authServices[AUTH_SERVICE]).getSession();
-    const { root } = await buck.getOrCreate(PROFILE_MEDIA_FILES);
+    const { root } = await buck.getOrCreate(PROFILE_MEDIA_FILES, {
+      threadName: BUCKET_THREAD_NAME,
+    });
     if (!root) {
       throw new Error('Failed to open bucket');
     }

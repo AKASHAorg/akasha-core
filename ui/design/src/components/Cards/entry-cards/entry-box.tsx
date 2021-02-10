@@ -26,6 +26,8 @@ export interface IEntryData {
   quotedByAuthors?: ISocialData;
   quotedBy?: string;
   quote?: IEntryData;
+  delisted?: boolean;
+  reported?: boolean;
 }
 export interface IContentClickDetails {
   authorEthAddress: string;

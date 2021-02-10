@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useBookmarks, useProfile, useErrors } from '@akashaproject/ui-awf-hooks';
+import { constants, useBookmarks, useProfile, useErrors } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import {
   ILoadItemDataPayload,
@@ -9,7 +9,6 @@ import {
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { uploadMediaToTextile } from '../../services/posting-service';
-import { BASE_FLAG_URL } from '../../services/constants';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
@@ -30,6 +29,7 @@ const {
   useViewportSize,
   EditorModal,
   EditorPlaceholder,
+  EntryCardHidden,
 } = DS;
 
 export interface FeedPageProps {
@@ -217,6 +217,17 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     postsActions.optimisticPublishPost(data, loginProfile, currentEmbedEntry);
     setShowEditor(false);
   };
+
+  const handleFlipCard = (entry: any) => () => {
+    const modifiedEntry = { ...entry, reported: false };
+    postsActions.updatePostsState(modifiedEntry);
+  };
+
+  const updateEntry = (entryId: string) => {
+    const modifiedEntry = { ...postsState.postsData[entryId], reported: true };
+    postsActions.updatePostsState(modifiedEntry);
+  };
+
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -253,8 +264,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               user={ethAddress ? ethAddress : ''}
               contentId={flagged}
               contentType={t('post')}
-              baseUrl={BASE_FLAG_URL}
+              baseUrl={constants.BASE_FLAG_URL}
               size={size}
+              updateEntry={updateEntry}
               closeModal={() => {
                 setReportModalOpen(false);
               }}
@@ -331,6 +343,15 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             contentClickable={true}
           />
         }
+        itemCardAlt={(entry: any) => (
+          <EntryCardHidden
+            descriptionLabel={t(
+              'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
+            )}
+            ctaLabel={t('See it anyway')}
+            handleFlipCard={handleFlipCard(entry)}
+          />
+        )}
         customEntities={getFeedCustomEntities({
           sdkModules,
           logger,

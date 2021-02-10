@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import {
+  constants,
   usePosts,
   useBookmarks,
   useProfile,
@@ -12,7 +13,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { mapEntry, uploadMediaToTextile } from '../../services/posting-service';
-import { BASE_FLAG_URL } from '../../services/constants';
 import { redirectToPost } from '../../services/routing-service';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
@@ -32,6 +32,7 @@ const {
   Helmet,
   CommentEditor,
   EditorPlaceholder,
+  EntryCardHidden,
 } = DS;
 
 interface IPostPage {
@@ -283,6 +284,12 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     sdkModules.profiles.profileService,
     sdkModules.commons.ipfsService,
   );
+
+  const handleFlipCard = (entry: any) => () => {
+    const modifiedEntry = { ...entry, reported: false };
+    postsActions.updatePostsState(modifiedEntry);
+  };
+
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
@@ -318,7 +325,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               closeLabel={t('Close')}
               user={ethAddress ? ethAddress : ''}
               contentId={flagged}
-              baseUrl={BASE_FLAG_URL}
+              baseUrl={constants.BASE_FLAG_URL}
               size={size}
               closeModal={() => {
                 setReportModalOpen(false);
@@ -416,6 +423,15 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             onMentionClick={handleMentionClick}
           />
         }
+        itemCardAlt={(entry: any) => (
+          <EntryCardHidden
+            descriptionLabel={t(
+              'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
+            )}
+            ctaLabel={t('See it anyway')}
+            handleFlipCard={handleFlipCard(entry)}
+          />
+        )}
         customEntities={getPendingComments({
           logger,
           globalChannel,

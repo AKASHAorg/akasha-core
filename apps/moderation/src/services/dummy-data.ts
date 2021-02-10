@@ -1,8 +1,3 @@
-export const moderatorList = [
-  '0xfD44B4450F03c5d1C14b49D3dE69c646aA75838b',
-  '0x82fBd807Ae2E02490DaDcb516acb99444d75ef19',
-];
-
 export const sampleProfileData = {
   CID:
     'bafyriqhrcdfsqchki4sbxu4faatjfub6ffh5xcs65eetwbsnt2rjoubgx3yp4v5666qwzwanr6bfdnpexlq3btor2mcpbucsz2nb3y6aogqi2',
