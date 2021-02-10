@@ -15,6 +15,7 @@ export const GlobalStyle: any = createGlobalStyle<{ theme: any }>`
   }
   html,
   body {
+    font-family: Inter !important;
     font-size: 15px;
     height: 100%;
   }

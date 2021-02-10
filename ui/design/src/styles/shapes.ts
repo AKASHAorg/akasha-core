@@ -38,7 +38,7 @@ const shapes: IShapes = {
   smallBorderRadius: '4px',
   borderRadius: '8px',
   largeBorderRadius: '11px',
-  fontFamily: 'Content-font, Roboto, sans-serif',
+  fontFamily: 'Inter, Content-font, Roboto, sans-serif',
   defaultFontSize: '1em',
   fontSizes: {
     small: {
