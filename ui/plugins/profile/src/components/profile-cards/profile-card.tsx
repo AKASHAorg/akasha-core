@@ -5,6 +5,7 @@ import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/
 import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { useFollow } from '@akashaproject/ui-awf-hooks';
+import { rootRoute } from '../../routes';
 
 const BASE_URL =
   process.env.NODE_ENV === 'production'
@@ -13,7 +14,15 @@ const BASE_URL =
 
 export const BASE_FLAG_URL = `${BASE_URL}/flags`;
 
-const { ProfileCard, ModalRenderer, ToastProvider, ReportModal, useViewportSize } = DS;
+const {
+  styled,
+  ProfileCard,
+  ModalRenderer,
+  ToastProvider,
+  ReportModal,
+  useViewportSize,
+  ShareModal,
+} = DS;
 
 export interface IProfileHeaderProps {
   profileId: string;
@@ -22,6 +31,19 @@ export interface IProfileHeaderProps {
   modalState: ModalState;
   modalActions: ModalStateActions;
 }
+
+const Overlay = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  inset: 0;
+  opacity: 1;
+  background-color: ${props => props.theme.colors.modalBackground};
+  animation: fadeAnimation ease 0.4s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+`;
 
 export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps) => {
   const { profileData, loggedUserEthAddress, sdkModules, logger, profileId, globalChannel } = props;
@@ -65,6 +87,39 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
 
   const closeReportModal = () => {
     props.modalActions.hide('reportModal');
+  };
+
+  const showShareModal = () => {
+    props.modalActions.show('profileShare');
+  };
+
+  const closeShareModal = () => {
+    props.modalActions.hide('profileShare');
+  };
+
+  const url = `${window.location.origin}${rootRoute}/${profileId}`;
+
+  const handleProfileShare = (service: 'twitter' | 'facebook' | 'reddit' | 'copy', url: string) => {
+    let shareUrl;
+    switch (service) {
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${url}`;
+        break;
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+        break;
+      case 'reddit':
+        shareUrl = `http://www.reddit.com/submit?url=${url}`;
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(url);
+        break;
+      default:
+        break;
+    }
+    if (shareUrl) {
+      window.open(shareUrl, '_blank');
+    }
   };
 
   if (!profileData?.ethAddress) {
@@ -114,6 +169,15 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
             />
           </ToastProvider>
         )}
+        {props.modalState.profileShare && (
+          <Overlay>
+            <ShareModal
+              link={url}
+              handleProfileShare={handleProfileShare}
+              closeModal={closeShareModal}
+            />
+          </Overlay>
+        )}
       </ModalRenderer>
       <ProfileCard
         onENSChangeClick={() => {}}
@@ -123,6 +187,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         onClickPosts={() => {}}
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
+        handleShareClick={showShareModal}
         isFollowing={followedProfiles.includes(profileData?.ethAddress)}
         loggedEthAddress={loggedUserEthAddress}
         profileData={cardData as any}

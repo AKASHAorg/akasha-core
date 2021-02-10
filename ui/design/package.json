@@ -98,6 +98,7 @@
     "@vx/scale": "0.0.199",
     "@vx/shape": "0.0.199",
     "@vx/tooltip": "0.0.199",
+    "@types/qrcode.react": "1.0.1",
     "d3-array": "2.8.0",
     "dayjs": "1.9.6",
     "is-hotkey": "0.1.7",
@@ -108,7 +109,8 @@
     "slate-history": "0.59.0",
     "slate-react": "0.59.0",
     "lodash.isequal": "4.5.0",
-    "react-dropzone": "11.2.4"
+    "react-dropzone": "11.2.4",
+    "qrcode.react": "1.0.1"
   },
   "peerDependencies": {
     "react": "16.14.0",
