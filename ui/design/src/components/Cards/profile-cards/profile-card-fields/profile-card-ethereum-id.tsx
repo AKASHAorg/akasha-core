@@ -1,8 +1,8 @@
-import { Box, Text, Drop } from 'grommet';
+import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { IProfileData } from '../profile-widget-card';
 import { Icon } from '../../../Icon';
-import { TextIcon } from '../../../TextIcon';
+import EthereumIdDrop from './ethereum-id-drop';
 
 export interface IProfileCardEthereumIdProps {
   ethereumAddressLabel?: string;
@@ -33,73 +33,6 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
     setPopoverOpen(false);
   };
 
-  const handleCopy = (data: string) => {
-    navigator.clipboard.writeText(data);
-    closePopover();
-  };
-
-  const handleShowQR = () => {
-    return;
-  };
-
-  const renderPopover = () => (
-    <Drop
-      overflow="hidden"
-      target={popoverRef.current}
-      align={{ top: 'bottom', right: 'right' }}
-      onClickOutside={closePopover}
-      onEsc={closePopover}
-    >
-      <Box
-        round="xxsmall"
-        pad="small"
-        gap="xsmall"
-        border={{ size: 'xsmall', color: 'border', side: 'all', style: 'solid' }}
-      >
-        {profileData.ensName && (
-          <Box gap="xsmall">
-            <Text size="small" color="secondaryText">
-              {ethereumNameLabel}
-            </Text>
-            <TextIcon
-              iconType="copy"
-              fontSize="small"
-              label={copyLabel}
-              onClick={() => handleCopy(profileData.ensName!)}
-              clickable={true}
-            />
-            <TextIcon
-              iconType="copy"
-              fontSize="small"
-              label={showQRCodeLabel}
-              onClick={handleShowQR}
-              clickable={true}
-            />
-          </Box>
-        )}
-        <Box gap="xsmall">
-          <Text size="small" color="secondaryText">
-            {ethereumAddressLabel}
-          </Text>
-          <TextIcon
-            iconType="copy"
-            fontSize="small"
-            label={copyLabel}
-            onClick={() => handleCopy(profileData.ethAddress)}
-            clickable={true}
-          />
-          <TextIcon
-            iconType="copy"
-            fontSize="small"
-            label={showQRCodeLabel}
-            onClick={handleShowQR}
-            clickable={true}
-          />
-        </Box>
-      </Box>
-    </Drop>
-  );
-
   return (
     <>
       <Box direction="column" pad="medium" gap="medium">
@@ -113,7 +46,18 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
           <Icon type="copy" clickable={true} onClick={togglePopover} ref={popoverRef} />
         </Box>
       </Box>
-      {popoverOpen && popoverRef.current && renderPopover()}
+      {popoverOpen && popoverRef.current && (
+        <EthereumIdDrop
+          onClose={closePopover}
+          target={popoverRef.current}
+          copyLabel={copyLabel}
+          showQRCodeLabel={showQRCodeLabel}
+          ethAddress={profileData.ethAddress}
+          ensName={profileData.userName}
+          ethereumAddressLabel={ethereumAddressLabel}
+          ethereumNameLabel={ethereumNameLabel}
+        />
+      )}
     </>
   );
 };
