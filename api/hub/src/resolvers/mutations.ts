@@ -1,29 +1,30 @@
 import { commentsStats, postsStats, statsProvider } from './constants';
+import { queryCache } from '../storage/cache';
 
 const mutations = {
   addProfileProvider: async (_, { data }, { dataSources, user }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
-    return await dataSources.profileAPI.addProfileProvider(user.pubKey, data);
+    return dataSources.profileAPI.addProfileProvider(user.pubKey, data);
   },
   makeDefaultProvider: async (_, { data }, { dataSources, user }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
-    return await dataSources.profileAPI.makeDefaultProvider(user.pubKey, data);
+    return dataSources.profileAPI.makeDefaultProvider(user.pubKey, data);
   },
   registerUserName: async (_, { name }, { dataSources, user }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
-    return await dataSources.profileAPI.registerUserName(user.pubKey, name);
+    return dataSources.profileAPI.registerUserName(user.pubKey, name);
   },
   createTag: async (_, { name }, { dataSources, user }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
-    return await dataSources.tagsAPI.addTag(name);
+    return dataSources.tagsAPI.addTag(name);
   },
   createPost: async (_, { content, post }, { dataSources, user }) => {
     if (!user) {
@@ -59,25 +60,27 @@ const mutations = {
         await dataSources.tagsAPI.indexPost('Posts', postID[0], tag);
       }
     }
+    const userIDCache = dataSources.profileAPI.getCacheKey(user.pubKey);
+    await queryCache.del(userIDCache);
     return postID[0];
   },
   follow: async (_, { ethAddress }, { dataSources, user }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
-    return await dataSources.profileAPI.followProfile(user.pubKey, ethAddress);
+    return dataSources.profileAPI.followProfile(user.pubKey, ethAddress);
   },
   unFollow: async (_, { ethAddress }, { dataSources, user }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
-    return await dataSources.profileAPI.unFollowProfile(user.pubKey, ethAddress);
+    return dataSources.profileAPI.unFollowProfile(user.pubKey, ethAddress);
   },
   saveMetaData: async (_, { data }, { dataSources, user }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
-    return await dataSources.profileAPI.saveMetadata(user.pubKey, data);
+    return dataSources.profileAPI.saveMetadata(user.pubKey, data);
   },
   addComment: async (_, { content, comment }, { dataSources, user }) => {
     if (!user) {
@@ -116,6 +119,8 @@ const mutations = {
         await dataSources.tagsAPI.indexComment('Comments', commentID[0], tag);
       }
     }
+    const postIDCache = dataSources.postsAPI.getPostCacheKey(comment.postID);
+    await queryCache.del(postIDCache);
     return commentID[0];
   },
 };
