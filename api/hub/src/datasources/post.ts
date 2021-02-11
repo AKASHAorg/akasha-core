@@ -234,7 +234,7 @@ class PostAPI extends DataSource {
       distinct: true,
       maxValuesPerFacet: 80,
       hitsPerPage: 80,
-      attributesToRetrieve: ['objectID', 'category', 'name'],
+      attributesToRetrieve: ['objectID', 'category', 'name', 'pubKey'],
     });
     const acc = {
       post: [],
@@ -243,9 +243,9 @@ class PostAPI extends DataSource {
       profile: [],
     };
     for (const rec of result.hits) {
-      const { category, name }: any = rec;
+      const { category, name, pubKey }: any = rec;
       if (acc.hasOwnProperty(category)) {
-        acc[category].push({ id: rec.objectID, name: name });
+        acc[category].push({ id: pubKey || rec.objectID, name: name });
       }
     }
 
