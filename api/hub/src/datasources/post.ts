@@ -112,7 +112,7 @@ class PostAPI extends DataSource {
     };
     logger.info('saving a new post:', post);
     const postID = await db.create(this.dbID, this.collection, [post]);
-    logger.info('created a new post:', postID[0]);
+    logger.info('created a new post:', postID);
     const currentPosts = await queryCache.get(this.allPostsCache);
     if (currentPosts.length) {
       currentPosts.unshift(postID[0]);
@@ -132,7 +132,7 @@ class PostAPI extends DataSource {
         content: post.content.find(e => e.property === 'textContent')?.value,
         title: post.title,
       })
-      .then(_ => logger.info('indexed post:', postID[0]))
+      .then(_ => logger.info('indexed post:', postID))
       // tslint:disable-next-line:no-console
       .catch(e => logger.error(e));
     return postID;

@@ -82,7 +82,7 @@ class TagAPI extends DataSource {
   async indexPost(postsCollection: string, postID: string, tagName: string) {
     const db: Client = await getAppDB();
     const postExists = await db.has(this.dbID, postsCollection, [postID]);
-    logger.info('indexing tags for post:', postID, tagName);
+    logger.info(`indexing tags for post: ${postID} -- ${tagName}`);
     if (!postExists) {
       return Promise.reject(`postID: ${postID} was not found`);
     }
