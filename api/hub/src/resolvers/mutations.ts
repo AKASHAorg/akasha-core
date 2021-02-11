@@ -1,4 +1,5 @@
 import { commentsStats, postsStats, statsProvider } from './constants';
+import { queryCache } from '../storage/cache';
 
 const mutations = {
   addProfileProvider: async (_, { data }, { dataSources, user }) => {
@@ -59,6 +60,8 @@ const mutations = {
         await dataSources.tagsAPI.indexPost('Posts', postID[0], tag);
       }
     }
+    const userIDCache = dataSources.profileAPI.getCacheKey(user.pubKey);
+    await queryCache.del(userIDCache);
     return postID[0];
   },
   follow: async (_, { ethAddress }, { dataSources, user }) => {
@@ -116,6 +119,8 @@ const mutations = {
         await dataSources.tagsAPI.indexComment('Comments', commentID[0], tag);
       }
     }
+    const postIDCache = dataSources.postsAPI.getPostCacheKey(comment.postID);
+    await queryCache.del(postIDCache);
     return commentID[0];
   },
 };

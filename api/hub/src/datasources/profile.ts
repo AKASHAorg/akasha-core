@@ -23,16 +23,16 @@ class ProfileAPI extends DataSource {
     const db: Client = await getAppDB();
     let pubKey;
     const key = this.getCacheKey(`:eth:${ethAddress}`);
-    if (!queryCache.has(key)) {
+    if (!(await queryCache.has(key))) {
       const query = new Where('ethAddress').eq(ethAddress);
       const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
       if (!profilesFound.length) {
         return;
       }
       pubKey = profilesFound[0].pubKey;
-      queryCache.set(key, pubKey);
+      await queryCache.set(key, pubKey);
     } else {
-      pubKey = queryCache.get(key);
+      pubKey = await queryCache.get(key);
     }
     return await this.resolveProfile(pubKey);
   }
@@ -42,8 +42,8 @@ class ProfileAPI extends DataSource {
   }
   async resolveProfile(pubKey: string, noCache: boolean = false) {
     const cacheKey = this.getCacheKey(pubKey);
-    if (queryCache.has(cacheKey) && !noCache) {
-      return Promise.resolve(queryCache.get(cacheKey));
+    if ((await queryCache.has(cacheKey)) && !noCache) {
+      return queryCache.get(cacheKey);
     }
     const db: Client = await getAppDB();
     const query = new Where('pubKey').eq(pubKey);
@@ -54,7 +54,7 @@ class ProfileAPI extends DataSource {
     if (profilesFound.length) {
       const extractedFields = ['name', 'description', 'avatar', 'coverImage'];
       const q = profilesFound[0].default.filter(p => extractedFields.includes(p.property));
-      const returnedObj = Object.assign({}, profilesFound[0]);
+      const returnedObj = JSON.parse(JSON.stringify(profilesFound[0]));
       for (const provider of q) {
         Object.assign(returnedObj, { [provider.property]: provider.value });
       }
@@ -68,7 +68,7 @@ class ProfileAPI extends DataSource {
         totalFollowers: profilesFound[0]?.followers?.length || 0,
         totalFollowing: profilesFound[0]?.following?.length || 0,
       });
-      queryCache.set(cacheKey, returnedObj);
+      await queryCache.set(cacheKey, returnedObj);
       return returnedObj;
     }
     return;
@@ -93,7 +93,7 @@ class ProfileAPI extends DataSource {
       }
     }
     await db.save(this.dbID, this.collection, [profile]);
-    queryCache.del(this.getCacheKey(pubKey));
+    await queryCache.del(this.getCacheKey(pubKey));
     return profile._id;
   }
   async makeDefaultProvider(pubKey: string, data: DataProvider[]) {
@@ -113,7 +113,7 @@ class ProfileAPI extends DataSource {
       }
     }
     await db.save(this.dbID, this.collection, [profile]);
-    queryCache.del(this.getCacheKey(pubKey));
+    await queryCache.del(this.getCacheKey(pubKey));
     searchIndex
       .saveObject({
         objectID: profile._id,
@@ -148,7 +148,7 @@ class ProfileAPI extends DataSource {
 
     profile.userName = name;
     await db.save(this.dbID, this.collection, [profile]);
-    queryCache.del(this.getCacheKey(pubKey));
+    await queryCache.del(this.getCacheKey(pubKey));
     searchIndex
       .saveObject({
         objectID: profile._id,
@@ -178,8 +178,8 @@ class ProfileAPI extends DataSource {
     profile1.following.unshift(profile.pubKey);
     profile.followers.unshift(profile1.pubKey);
     await db.save(this.dbID, this.collection, [profile, profile1]);
-    queryCache.del(this.getCacheKey(profile.pubKey));
-    queryCache.del(this.getCacheKey(profile1.pubKey));
+    await queryCache.del(this.getCacheKey(profile.pubKey));
+    await queryCache.del(this.getCacheKey(profile1.pubKey));
     const notification = {
       property: 'NEW_FOLLOWER',
       provider: 'awf.graphql.profile.api',
@@ -206,8 +206,8 @@ class ProfileAPI extends DataSource {
     profile1.following.splice(exists, 1);
     profile.followers.splice(exists1, 1);
     await db.save(this.dbID, this.collection, [profile, profile1]);
-    queryCache.del(this.getCacheKey(profile.pubKey));
-    queryCache.del(this.getCacheKey(profile1.pubKey));
+    await queryCache.del(this.getCacheKey(profile.pubKey));
+    await queryCache.del(this.getCacheKey(profile1.pubKey));
     return true;
   }
 
@@ -229,7 +229,7 @@ class ProfileAPI extends DataSource {
     }
 
     await db.save(this.dbID, this.collection, [profile]);
-    queryCache.del(this.getCacheKey(pubKey));
+    await queryCache.del(this.getCacheKey(pubKey));
     return profile._id;
   }
 
