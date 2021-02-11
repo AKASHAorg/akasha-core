@@ -6,25 +6,25 @@ const mutations = {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
-    return await dataSources.profileAPI.addProfileProvider(user.pubKey, data);
+    return dataSources.profileAPI.addProfileProvider(user.pubKey, data);
   },
   makeDefaultProvider: async (_, { data }, { dataSources, user }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
-    return await dataSources.profileAPI.makeDefaultProvider(user.pubKey, data);
+    return dataSources.profileAPI.makeDefaultProvider(user.pubKey, data);
   },
   registerUserName: async (_, { name }, { dataSources, user }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
-    return await dataSources.profileAPI.registerUserName(user.pubKey, name);
+    return dataSources.profileAPI.registerUserName(user.pubKey, name);
   },
   createTag: async (_, { name }, { dataSources, user }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
-    return await dataSources.tagsAPI.addTag(name);
+    return dataSources.tagsAPI.addTag(name);
   },
   createPost: async (_, { content, post }, { dataSources, user }) => {
     if (!user) {
@@ -74,13 +74,13 @@ const mutations = {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
-    return await dataSources.profileAPI.unFollowProfile(user.pubKey, ethAddress);
+    return dataSources.profileAPI.unFollowProfile(user.pubKey, ethAddress);
   },
   saveMetaData: async (_, { data }, { dataSources, user }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
-    return await dataSources.profileAPI.saveMetadata(user.pubKey, data);
+    return dataSources.profileAPI.saveMetadata(user.pubKey, data);
   },
   addComment: async (_, { content, comment }, { dataSources, user }) => {
     if (!user) {
