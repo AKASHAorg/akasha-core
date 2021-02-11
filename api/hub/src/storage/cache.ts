@@ -6,9 +6,7 @@ import { ILRU } from './i-lru';
 
 export const contextCache = new LRU({ max: 6000, maxAge: 1000 * 60 * 40 });
 export const redisCache =
-  process.env.NODE_ENV === 'production' &&
-  process.env.REDIS_BACKED_CACHE &&
-  new RedisCache(process.env.REDIS_CONNECTION);
+  process.env.NODE_ENV === 'production' && new RedisCache(process.env.REDIS_CONNECTION);
 
 export const queryCache: ILRU = redisCache
   ? new RedisLRU(redisCache)
