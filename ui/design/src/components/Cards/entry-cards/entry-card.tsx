@@ -55,6 +55,10 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     disableIpfsCopyLink,
     disableReposting,
     hidePublishTime,
+    descriptionLabel,
+    descriptionAltLabel,
+    ctaLabel,
+    handleFlipCard,
   } = props;
 
   return (
@@ -101,6 +105,10 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           disableIpfsCopyLink={disableIpfsCopyLink}
           disableReposting={disableReposting}
           hidePublishTime={hidePublishTime}
+          descriptionLabel={descriptionLabel}
+          descriptionAltLabel={descriptionAltLabel}
+          ctaLabel={ctaLabel}
+          handleFlipCard={handleFlipCard}
         />
       </Box>
     </MainAreaCardBox>

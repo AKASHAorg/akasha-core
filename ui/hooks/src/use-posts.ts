@@ -158,22 +158,45 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         const { data }: GetEntriesResponse = entriesResp;
         const { nextIndex, results } = data.posts;
         const newIds: string[] = [];
+        const newQuoteIds: string[] = [];
         const posts = results
           .filter(excludeNonSlateContent)
           .map(entry => {
             newIds.push(entry._id);
+            // check if entry has quote and id of such quote is not yet in the list
+            if (entry.quotes.length > 0 && newQuoteIds.indexOf(entry.quotes[0]._id) === -1) {
+              newQuoteIds.push(entry.quotes[0]._id);
+            }
             return mapEntry(entry, ipfsGateway, logger);
           })
           .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
 
-        const response = await fetchRequest.checkStatus(true, { contentIds: newIds });
+        const status = await fetchRequest.checkStatus(true, { contentIds: newIds });
 
-        if (response && response.constructor === Array) {
-          response.forEach((resp: any) => {
-            posts[resp.contentId] = {
-              ...posts[resp.contentId],
-              delisted: resp.delisted,
-              reported: resp.reported,
+        const qstatus =
+          !!newQuoteIds.length &&
+          (await fetchRequest.checkStatus(true, { contentIds: newQuoteIds }));
+        if (status && status.constructor === Array) {
+          status.forEach((res: any) => {
+            const target = posts[res.contentId];
+            let quote: any;
+
+            if (target.quote) {
+              const { reported, delisted } = qstatus.find(
+                (el: any) => el.contentId === target.quote.entryId,
+              );
+              quote = {
+                ...target.quote,
+                reported: reported,
+                delisted: delisted,
+              };
+            }
+
+            posts[res.contentId] = {
+              ...target,
+              delisted: res.delisted,
+              reported: res.reported,
+              quote: quote,
             };
           });
         }

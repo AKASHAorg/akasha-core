@@ -94,6 +94,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           <Switch>
             <Route path={routes[HOME]}>
               <ContentList
+                {...props}
                 ethAddress={ethAddress}
                 slotId={layout.app.modalSlotId}
                 logger={logger}
