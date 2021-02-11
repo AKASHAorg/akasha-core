@@ -62,11 +62,12 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
   return (
     <>
       <LoginCTAWidgetCard
-        title={`🚀 ${t('Enter your world of Ethereum!')}`}
+        title={`🚀 ${t(' Enter your world of Ethereum!')}`}
         textContent={t(
           'Connect an Ethereum address from your wallet to open a new world of interactions!',
         )}
-        connectLabel={t('Sign In')}
+        signInLabel={t('Sign In')}
+        signUpLabel={t('Sign Up')}
         onLoginClick={handleLoginModalOpen}
         inlineActions={true}
       />

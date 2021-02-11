@@ -430,7 +430,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
         direction="row"
         justify="between"
         fill="horizontal"
-        pad={{ horizontal: 'medium', vertical: 'xsmall' }}
+        pad={{ horizontal: 'medium', top: 'xsmall', bottom: 'medium' }}
         flex={false}
       >
         <Box direction="row" gap="xsmall" align="center">

@@ -11,6 +11,7 @@ export interface ILinkIconButtonProps extends AnchorProps {
   active?: boolean;
   padded?: boolean;
   primaryColor?: boolean;
+  bold?: boolean;
 }
 
 const LinkIconButton = React.forwardRef((props: ILinkIconButtonProps, ref) => {

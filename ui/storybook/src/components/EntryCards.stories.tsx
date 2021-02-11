@@ -22,7 +22,6 @@ storiesOf('Cards/Entry Cards', module)
   .add('entry card', () => (
     <Box align="center" pad={{ top: '40px' }}>
       <EntryCard
-        copyIPFSLinkLabel={text('Copy IPFS link Label', copyIPFSLinkLabel)}
         flagAsLabel={text('Flag as label', flagAsLabel)}
         style={{ height: 'auto' }}
         bookmarkLabel={text('Bookmark Label', bookmarkLabel)}
