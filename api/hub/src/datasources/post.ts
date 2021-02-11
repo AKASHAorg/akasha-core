@@ -116,6 +116,7 @@ class PostAPI extends DataSource {
     const currentPosts = await queryCache.get(this.allPostsCache);
     if (currentPosts.length) {
       currentPosts.unshift(postID[0]);
+      await queryCache.set(this.allPostsCache, currentPosts);
     }
     await this.addQuotes(post.quotes, postID[0]);
     if (post.mentions && post.mentions.length) {
