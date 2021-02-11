@@ -52,7 +52,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     isFollowingAuthor,
     flagAsLabel,
     contentClickable,
-    disableIpfsCopyLink,
     disableReposting,
     hidePublishTime,
   } = props;
@@ -98,7 +97,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           onContentClick={onContentClick}
           onMentionClick={onMentionClick}
           contentClickable={contentClickable}
-          disableIpfsCopyLink={disableIpfsCopyLink}
           disableReposting={disableReposting}
           hidePublishTime={hidePublishTime}
         />

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { filter } from 'rxjs/operators';
+import { createErrorHandler } from './utils/error-handler';
 
 export interface UseTagSubscribeActions {
   isSubscribedToTag: (tagName: string) => void;
@@ -30,16 +31,6 @@ export const useTagSubscribe = (
     }
   };
 
-  const handleError = (err: Error) => {
-    if (onError) {
-      onError({
-        errorKey: 'useTagSubscribe.globalSubscribe',
-        error: err,
-        critical: false,
-      });
-    }
-  };
-
   // this is used to sync tag subscription state between different components using the hook
   React.useEffect(() => {
     const call = globalChannel.pipe(
@@ -50,69 +41,42 @@ export const useTagSubscribe = (
         );
       }),
     );
-    call.subscribe(handleSubscribe, handleError);
+    call.subscribe(
+      handleSubscribe,
+      createErrorHandler('useTagSubscribe.globalSubscribe', false, onError),
+    );
     return () => call.unsubscribe();
   }, []);
 
   const actions: UseTagSubscribeActions = {
     isSubscribedToTag(tagName) {
-      try {
-        const call = profileService.isSubscribedToTag(tagName);
-        call.subscribe((resp: { data?: { isSubscribedToTag: boolean } }) => {
-          if (resp.data && !tagSubscriptionState.includes(tagName)) {
-            setTagSubscriptionState(prev => [...prev, tagName]);
-          } else if (!resp.data && tagSubscriptionState.includes(tagName)) {
-            setTagSubscriptionState(prev => prev.filter(tag => tag !== tagName));
-          }
-        });
-      } catch (ex) {
-        if (onError) {
-          onError({
-            errorKey: 'useTagSubscribe.isSubscribedToTag',
-            error: ex,
-            critical: false,
-          });
+      const call = profileService.isSubscribedToTag(tagName);
+      call.subscribe((resp: { data?: { isSubscribedToTag: boolean } }) => {
+        if (resp.data && !tagSubscriptionState.includes(tagName)) {
+          setTagSubscriptionState(prev => [...prev, tagName]);
+        } else if (!resp.data && tagSubscriptionState.includes(tagName)) {
+          setTagSubscriptionState(prev => prev.filter(tag => tag !== tagName));
         }
-      }
+      }, createErrorHandler('useTagSubscribe.isSubscribedToTag', false, onError));
     },
 
     toggleTagSubscription(tagName) {
-      try {
-        const call = profileService.toggleTagSubscription(tagName);
-        call.subscribe((resp: any) => {
-          if (resp.data && !tagSubscriptionState.includes(tagName)) {
-            setTagSubscriptionState(prev => [...prev, tagName]);
-          } else if (resp.data && tagSubscriptionState.includes(tagName)) {
-            setTagSubscriptionState(prev => prev.filter(tag => tag !== tagName));
-          }
-        });
-      } catch (ex) {
-        if (onError) {
-          onError({
-            errorKey: 'useTagSubscribe.toggleTagSubscription',
-            error: ex,
-            critical: false,
-          });
+      const call = profileService.toggleTagSubscription(tagName);
+      call.subscribe((resp: any) => {
+        if (resp.data && !tagSubscriptionState.includes(tagName)) {
+          setTagSubscriptionState(prev => [...prev, tagName]);
+        } else if (resp.data && tagSubscriptionState.includes(tagName)) {
+          setTagSubscriptionState(prev => prev.filter(tag => tag !== tagName));
         }
-      }
+      }, createErrorHandler('useTagSubscribe.toggleTagSubscription', false, onError));
     },
     getTagSubscriptions() {
-      try {
-        const call = profileService.getTagSubscriptions(null);
-        call.subscribe((resp: any) => {
-          if (resp.data) {
-            setTagSubscriptionState(resp.data);
-          }
-        });
-      } catch (ex) {
-        if (onError) {
-          onError({
-            errorKey: 'useTagSubscribe.getTagSubscriptions',
-            error: ex,
-            critical: false,
-          });
+      const call = profileService.getTagSubscriptions(null);
+      call.subscribe((resp: any) => {
+        if (resp.data) {
+          setTagSubscriptionState(resp.data);
         }
-      }
+      }, createErrorHandler('useTagSubscribe.getTagSubscriptions', false, onError));
     },
   };
 

@@ -14,6 +14,7 @@ import useTrendingData from './use-trending-data';
 import useFollow from './use-follow';
 import useNotifications from './use-notifications';
 import useTagSubscribe from './use-tag-subscribe';
+import useSearch from './use-search';
 
 export {
   constants,
@@ -33,4 +34,5 @@ export {
   BookmarkTypes,
   useNotifications,
   useTagSubscribe,
+  useSearch,
 };
