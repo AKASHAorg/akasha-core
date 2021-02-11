@@ -24,9 +24,9 @@ export const useTagSubscribe = (
 
   const handleSubscribe = (payload: any) => {
     const { data, channelInfo } = payload;
-    if (data && !tagSubscriptionState.includes(channelInfo.args)) {
+    if (data && !(tagSubscriptionState.findIndex(tag => tag === channelInfo.args) >= 0)) {
       setTagSubscriptionState(prev => [...prev, channelInfo.args]);
-    } else if (!data && tagSubscriptionState.includes(channelInfo.args)) {
+    } else if (data && tagSubscriptionState.findIndex(tag => tag === channelInfo.args) >= 0) {
       setTagSubscriptionState(prev => prev.filter(tag => tag !== channelInfo.args));
     }
   };

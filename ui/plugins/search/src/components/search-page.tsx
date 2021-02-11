@@ -15,7 +15,7 @@ import {
 const {
   Helmet,
   Box,
-  Text,
+  Icon,
   BasicCardBox,
   ErrorLoader,
   Spinner,
@@ -168,13 +168,16 @@ const SearchPage: React.FC<AppRoutesProps> = props => {
       <Helmet>
         <title>Search</title>
       </Helmet>
-      <BasicCardBox>
-        {searchState.isFetching && (
+
+      {searchState.isFetching && (
+        <BasicCardBox>
           <Box pad="large">
             <Spinner />
           </Box>
-        )}
-        {!searchState.isFetching && emptySearchState && (
+        </BasicCardBox>
+      )}
+      {!searchState.isFetching && emptySearchState && (
+        <BasicCardBox>
           <ErrorLoader
             type="no-login"
             title={t('No matching results found 😞')}
@@ -182,32 +185,32 @@ const SearchPage: React.FC<AppRoutesProps> = props => {
               'Make sure you spelled everything correctly or try searching for something else',
             )}
           />
-        )}
-      </BasicCardBox>
+        </BasicCardBox>
+      )}
+
       {!searchState.isFetching && !emptySearchState && (
-        <Box pad="medium" gap="medium">
-          <Box direction="row" justify="between" align="center">
-            <Text size="large" weight="bold">
-              {t('Search')}
-            </Text>
+        <Box>
+          <Box align="start" pad={{ bottom: 'medium' }} gap="small" direction="row">
+            {searchState.tags.map((tag: any, index: number) => (
+              <Box key={index}>
+                <DuplexButton
+                  activeHoverLabel={`#${tag}`}
+                  active={tagSubscriptionState.includes(tag)}
+                  activeLabel={`#${tag}`}
+                  inactiveLabel={`#${tag}`}
+                  onClickActive={() => handleTagUnsubscribe(tag)}
+                  onClickInactive={() => handleTagSubscribe(tag)}
+                  icon={<Icon type="subscribe" />}
+                />
+              </Box>
+            ))}
           </Box>
-          {searchState.tags.map((tag: any, index: number) => (
-            <Box key={index}>
-              <DuplexButton
-                activeHoverLabel={tag}
-                active={tagSubscriptionState.includes(tag)}
-                activeLabel={tag}
-                inactiveLabel={tag}
-                onClickActive={() => handleTagUnsubscribe(tag)}
-                onClickInactive={() => handleTagSubscribe(tag)}
-              />
-            </Box>
-          ))}
+
           {searchState.profiles.slice(0, 4).map((profileData: any, index: number) => (
             <Box
               key={index}
               onClick={() => handleProfileClick(profileData.ethAddress)}
-              pad="medium"
+              pad={{ bottom: 'medium' }}
             >
               <ProfileCard
                 onENSChangeClick={() => {}}
@@ -235,10 +238,14 @@ const SearchPage: React.FC<AppRoutesProps> = props => {
             </Box>
           ))}
           {searchState.entries.slice(0, 4).map((entryData: any, index: number) => (
-            <Box key={index} onClick={() => handlePostClick(entryData.id)} pad="medium">
+            <Box
+              key={index}
+              onClick={() => handlePostClick(entryData.entryId)}
+              pad={{ bottom: 'medium' }}
+            >
               <EntryCard
                 isBookmarked={
-                  bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryData.id) >= 0
+                  bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryData.entryId) >= 0
                 }
                 entryData={entryData}
                 sharePostLabel={t('Share Post')}
@@ -261,12 +268,53 @@ const SearchPage: React.FC<AppRoutesProps> = props => {
                 onRepost={() => null}
                 onEntryShare={handleEntryShare}
                 onEntryFlag={() => null}
-                onClickReplies={() => handlePostClick(entryData.id)}
+                onClickReplies={() => handlePostClick(entryData.entryId)}
                 handleFollowAuthor={() => handleFollowProfile(entryData.author.ethAddress)}
                 handleUnfollowAuthor={() => handleUnfollowProfile(entryData.author.ethAddress)}
                 isFollowingAuthor={followedProfiles.includes(entryData.author)}
-                onContentClick={() => handlePostClick(entryData.id)}
+                onContentClick={() => handlePostClick(entryData.entryId)}
                 onMentionClick={() => handleProfileClick(entryData.author.ethAddress)}
+                contentClickable={true}
+              />
+            </Box>
+          ))}
+          {searchState.comments.slice(0, 4).map((commentData: any, index: number) => (
+            <Box
+              key={index}
+              onClick={() => handlePostClick(commentData.entryId)}
+              pad={{ bottom: 'medium' }}
+            >
+              <EntryCard
+                isBookmarked={
+                  bookmarkState.bookmarks.findIndex(bm => bm.entryId === commentData.entryId) >= 0
+                }
+                entryData={commentData}
+                sharePostLabel={t('Share Post')}
+                shareTextLabel={t('Share this post with your friends')}
+                sharePostUrl={'https://ethereum.world'}
+                onClickAvatar={() => handleProfileClick(commentData.author.ethAddress)}
+                onEntryBookmark={handleEntryBookmark}
+                repliesLabel={t('Replies')}
+                repostsLabel={t('Reposts')}
+                repostLabel={t('Repost')}
+                repostWithCommentLabel={t('Repost with comment')}
+                shareLabel={t('Share')}
+                copyLinkLabel={t('Copy Link')}
+                flagAsLabel={t('Report Post')}
+                loggedProfileEthAddress={loginState.ethAddress}
+                locale={locale || 'en'}
+                style={{ height: 'auto' }}
+                bookmarkLabel={t('Save')}
+                bookmarkedLabel={t('Saved')}
+                onRepost={() => null}
+                onEntryShare={handleEntryShare}
+                onEntryFlag={() => null}
+                onClickReplies={() => handlePostClick(commentData.entryId)}
+                handleFollowAuthor={() => handleFollowProfile(commentData.author.ethAddress)}
+                handleUnfollowAuthor={() => handleUnfollowProfile(commentData.author.ethAddress)}
+                isFollowingAuthor={followedProfiles.includes(commentData.author)}
+                onContentClick={() => handlePostClick(commentData.entryId)}
+                onMentionClick={() => handleProfileClick(commentData.author.ethAddress)}
                 contentClickable={true}
               />
             </Box>

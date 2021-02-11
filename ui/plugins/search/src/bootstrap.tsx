@@ -8,6 +8,8 @@ import { moduleName as auth } from '@akashaproject/sdk-auth/lib/constants';
 import { moduleName as profiles } from '@akashaproject/sdk-profiles/lib/constants';
 import { moduleName as posts } from '@akashaproject/sdk-posts/lib/constants';
 
+const searchRoute = `${rootRoute}/:postId`;
+
 /**
  * All the plugins must export an object like this:
  */
@@ -41,6 +43,6 @@ export const application: Application = {
   title: 'Search',
   logo: { type: LogoTypeSource.ICON, value: 'search' },
   widgets: {
-    [rootRoute]: [TrendingWidget],
+    [searchRoute]: [TrendingWidget],
   },
 };

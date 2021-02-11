@@ -48,7 +48,7 @@ export const useSearch = (props: UseSearchProps): [UseSearchState, UseSearchActi
         const ipfsGatewayResp = await ipfsService.getSettings(null).toPromise();
 
         // get profiles data
-        const getProfilesCalls = searchResp.data.globalSearch.profiles.map(
+        const getProfilesCalls = searchResp.data?.globalSearch?.profiles?.map(
           (profile: { id: string }) => {
             return profileService.getProfile({ pubKey: profile.id });
           },
@@ -71,35 +71,35 @@ export const useSearch = (props: UseSearchProps): [UseSearchState, UseSearchActi
         });
 
         // get posts data
-        const getEntriesCalls = searchResp.data.globalSearch.entries.map((entry: { id: string }) =>
+        const getEntriesCalls = searchResp.data?.globalSearch?.posts?.map((entry: { id: string }) =>
           postsService.entries.getEntry({ entryId: entry.id }),
         );
         const entriesResp: any = await forkJoin(getEntriesCalls).toPromise();
 
         const completeEntries = entriesResp?.map((entryResp: any) => {
-          return mapEntry(entryResp, ipfsGatewayResp.data, logger);
+          return mapEntry(entryResp.data?.getPost, ipfsGatewayResp.data, logger);
         });
 
         // get posts data
-        const getCommentsCalls = searchResp.data.globalSearch.comments.map(
-          (comment: { id: string }) => postsService.entries.getComment({ commentID: comment.id }),
+        const getCommentsCalls = searchResp.data?.globalSearch?.comments?.map(
+          (comment: { id: string }) => postsService.comments.getComment({ commentID: comment.id }),
         );
         const commentsResp: any = await forkJoin(getCommentsCalls).toPromise();
 
         const completeComments = commentsResp?.map((commentResp: any) => {
-          return mapEntry(commentResp, ipfsGatewayResp.data, logger);
+          return mapEntry(commentResp.data?.getComment, ipfsGatewayResp.data, logger);
         });
 
-        const completeTags = searchResp.data.globalSearch.tags.map(
+        const completeTags = searchResp.data?.globalSearch?.tags?.map(
           (tag: { id: string; name: string }) => tag.name,
         );
 
         setSearchResultsState({
           isFetching: false,
-          profiles: completeProfiles,
-          entries: completeEntries,
-          comments: completeComments,
-          tags: completeTags,
+          profiles: completeProfiles || [],
+          entries: completeEntries || [],
+          comments: completeComments || [],
+          tags: completeTags || [],
         });
       } catch (ex) {
         if (onError) {
