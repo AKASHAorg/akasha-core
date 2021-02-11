@@ -12,8 +12,8 @@ import {
   StyledDrop,
   StyledDiv,
 } from './styled-topbar';
-import { TextIcon } from '../../TextIcon';
 import styled from 'styled-components';
+import { Button } from '../../Buttons';
 
 export interface ITopbarProps {
   // data
@@ -21,7 +21,9 @@ export interface ITopbarProps {
   ethAddress: string | null;
   brandLabel: string;
   signInLabel?: string;
-  logoutLabel?: string;
+  signUpLabel?: string;
+  signOutLabel?: string;
+  searchBarLabel?: string;
   notifications?: any;
   quickAccessItems: IMenuItem[] | null;
   searchAreaItem?: IMenuItem;
@@ -50,7 +52,9 @@ const Topbar = (props: ITopbarProps) => {
     avatarImage,
     brandLabel,
     signInLabel,
-    logoutLabel,
+    signUpLabel,
+    signOutLabel,
+    searchBarLabel,
     className,
     quickAccessItems,
     searchAreaItem,
@@ -167,7 +171,7 @@ const Topbar = (props: ITopbarProps) => {
         ))}
         {ethAddress && (
           <Box fill="horizontal" justify="start" direction="row" onClick={onLogout}>
-            <StyledText>{logoutLabel}</StyledText>
+            <StyledText>{signOutLabel}</StyledText>
           </Box>
         )}
       </Box>
@@ -200,7 +204,7 @@ const Topbar = (props: ITopbarProps) => {
         <Avatar
           ethAddress={ethAddress}
           src={avatarImage}
-          size="sm"
+          size="xs"
           onClick={onClickAvatarButton(menuItem)}
         />
       ) : (
@@ -222,11 +226,7 @@ const Topbar = (props: ITopbarProps) => {
           }}
         >
           <BrandIcon type="ethereumWorldLogo" clickable={true} />
-          {size !== 'small' && (
-            <StyledText size="large" weight="bold">
-              {brandLabel}
-            </StyledText>
-          )}
+          {size !== 'small' && <StyledText size="large">{brandLabel}</StyledText>}
         </Box>
 
         <Box direction="row" align="center" gap="small" pad={{ horizontal: 'medium' }}>
@@ -236,17 +236,16 @@ const Topbar = (props: ITopbarProps) => {
                 inputValue={inputValue}
                 onInputChange={event => setInputValue(event.target.value)}
                 handleKeyDown={ev => onSearch(ev, inputValue)}
+                inputPlaceholderLabel={searchBarLabel}
               />
             </StyledSearchContainer>
           )}
           {quickAccessItems && quickAccessItems.map(renderPluginButton)}
           {!ethAddress && (
-            <TextIcon
-              label={signInLabel}
-              iconType="login"
-              onClick={onLoginClick}
-              clickable={true}
-            />
+            <Box direction="row" align="center" gap="small">
+              <Button onClick={onLoginClick} label={signInLabel} />
+              <Button primary={true} onClick={onLoginClick} label={signUpLabel} />
+            </Box>
           )}
         </Box>
       </>
@@ -276,8 +275,9 @@ Topbar.defaultProps = {
   onNavigation: () => {
     return;
   },
+  signUpLabel: 'Sign Up',
   signInLabel: 'Sign In',
-  logoutLabel: 'Logout',
+  signOutLabel: 'Sign Out',
 };
 
 export { Topbar };

@@ -81,6 +81,7 @@ export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] =
     follow(followEthAddress) {
       try {
         const call = profileService.follow({ ethAddress: followEthAddress });
+        setIsFollowingState(prev => [...prev, followEthAddress]);
         call.subscribe((resp: any) => {
           if (resp.data.follow && !isFollowingState.includes(followEthAddress)) {
             setIsFollowingState(prev => [...prev, followEthAddress]);
@@ -99,6 +100,7 @@ export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] =
     unfollow(unfollowEthAddress) {
       try {
         const call = profileService.unFollow({ ethAddress: unfollowEthAddress });
+        setIsFollowingState(prev => prev.filter(profile => profile !== unfollowEthAddress));
         call.subscribe((resp: any) => {
           if (resp.data.unFollow) {
             setIsFollowingState(prev => prev.filter(profile => profile !== unfollowEthAddress));

@@ -29,6 +29,14 @@ const StyledIconLink = styled(Anchor)<ILinkIconButtonProps>`
     }
     return;
   }}
+  ${props => {
+    if (props.bold) {
+      return css`
+        font-weight: 600;
+      `;
+    }
+    return;
+  }}
   &:hover {
     text-decoration: none;
     color: ${props => props.theme.colors.accent};

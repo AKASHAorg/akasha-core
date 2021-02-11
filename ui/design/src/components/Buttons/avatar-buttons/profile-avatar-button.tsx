@@ -15,20 +15,43 @@ export interface ProfileAvatarButtonProps {
   onClickAvatar?: React.MouseEventHandler<HTMLDivElement>;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   ethAddress: string;
+  bold?: boolean;
+  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
 }
 
 const ProfileAvatarButton = React.forwardRef((props: ProfileAvatarButtonProps, ref: any) => {
-  const { className, size, avatarImage, label, info, onClick, onClickAvatar, ethAddress } = props;
+  const {
+    className,
+    size,
+    avatarImage,
+    label,
+    info,
+    onClick,
+    onClickAvatar,
+    ethAddress,
+    bold,
+    onMouseEnter,
+    onMouseLeave,
+  } = props;
   return (
     <Box className={className} direction="row" align="center">
       <Box>
         <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onClickAvatar} />
       </Box>
-      <Box pad={{ horizontal: 'small' }} justify="center" align="start" onClick={onClick}>
+      <Box
+        pad={{ horizontal: 'small' }}
+        justify="center"
+        align="start"
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
         <StyledIconLink
           primaryColor={true}
-          label={label ? label : truncateMiddle(ethAddress)}
+          label={label || truncateMiddle(ethAddress)}
           ref={ref}
+          bold={bold}
         />
         <ButtonInfo>{info}</ButtonInfo>
       </Box>

@@ -357,7 +357,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               repostWithCommentLabel={t('Repost with comment')}
               shareLabel={t('Share')}
               copyLinkLabel={t('Copy Link')}
-              copyIPFSLinkLabel={t('Copy IPFS Link')}
               flagAsLabel={t('Report Post')}
               loggedProfileEthAddress={ethAddress}
               locale={locale}

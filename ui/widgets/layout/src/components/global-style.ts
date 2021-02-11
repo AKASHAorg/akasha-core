@@ -15,7 +15,8 @@ export const GlobalStyle: any = createGlobalStyle<{ theme: any }>`
   }
   html,
   body {
-    font-size: 15px;
+    font-family: Inter !important;
+    font-size: 16px;
     height: 100%;
   }
   body {
@@ -63,8 +64,7 @@ export const GlobalStyle: any = createGlobalStyle<{ theme: any }>`
     // 550 and lower
     @media only screen and (min-width: ${props.theme.breakpoints.small.value}px) {
       :root {
-        font-size: 18px;
-        line-height: 1.312;
+        font-size: 16px;
       }
     }
   `}
