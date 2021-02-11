@@ -12,6 +12,7 @@ import { IProfileData } from '../profile-cards/profile-widget-card';
 import { ISocialData } from './social-box';
 import ViewportSizeProvider from '../../Providers/viewport-dimension';
 import { EmbedBox, ReadOnlyEditor } from '../../Editor/index';
+import { EntryCardHidden } from '..';
 
 export interface IEntryData {
   CID?: string;
@@ -80,6 +81,10 @@ export interface IEntryBoxProps {
   disableIpfsCopyLink?: boolean;
   disableReposting?: boolean;
   hidePublishTime?: boolean;
+  descriptionLabel?: string;
+  descriptionAltLabel?: string;
+  ctaLabel?: string;
+  handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -116,6 +121,10 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     disableIpfsCopyLink,
     disableReposting,
     hidePublishTime,
+    descriptionLabel,
+    descriptionAltLabel,
+    ctaLabel,
+    handleFlipCard,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -253,9 +262,23 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         >
           <ReadOnlyEditor content={entryData.content} handleMentionClick={onMentionClick} />
         </Box>
-        {entryData.quote && (
+        {entryData.quote && !entryData.quote.delisted && !entryData.quote.reported && (
           <Box pad={{ vertical: 'medium' }} onClick={() => handleContentClick(entryData.quote)}>
             <EmbedBox embedEntryData={entryData.quote} />
+          </Box>
+        )}
+        {entryData.quote && !entryData.quote.delisted && entryData.quote.reported && (
+          <Box pad={{ vertical: 'medium' }} onClick={() => null}>
+            <EntryCardHidden
+              descriptionLabel={descriptionLabel}
+              ctaLabel={ctaLabel}
+              handleFlipCard={handleFlipCard && handleFlipCard(entryData, true)}
+            />
+          </Box>
+        )}
+        {entryData.quote && entryData.quote.delisted && (
+          <Box pad={{ vertical: 'medium' }} onClick={() => null}>
+            <EntryCardHidden descriptionAltLabel={descriptionAltLabel} isDelisted={true} />
           </Box>
         )}
         <CardActions

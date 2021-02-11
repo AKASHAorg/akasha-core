@@ -15,6 +15,7 @@ interface IContentListProps {
   slotId: string;
   ethAddress: string | null;
   logger: any;
+  singleSpa: any;
   sdkModules: any;
   navigateToUrl: (path: string) => void;
 }
@@ -39,8 +40,14 @@ interface IModeratedItem extends IPendingItem {
   evaluationDate: string;
 }
 
+interface ICount {
+  kept: number;
+  pending: number;
+  delisted: number;
+}
+
 const ContentList: React.FC<IContentListProps> = props => {
-  const { slotId, ethAddress, logger, sdkModules } = props;
+  const { slotId, ethAddress, logger, singleSpa, sdkModules } = props;
 
   const [pendingItems, setPendingItems] = React.useState<IPendingItem[]>([]);
   const [moderatedItems, setModeratedItems] = React.useState<IModeratedItem[]>([]);
@@ -50,6 +57,7 @@ const ContentList: React.FC<IContentListProps> = props => {
   const [isPending, setIsPending] = React.useState<boolean>(true);
   const [isDelisted, setIsDelisted] = React.useState<boolean>(true);
   const [requesting, setRequesting] = React.useState<boolean>(false);
+  const [count, setCount] = React.useState<ICount>({ kept: 0, pending: 0, delisted: 0 });
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -61,6 +69,7 @@ const ContentList: React.FC<IContentListProps> = props => {
       props.navigateToUrl('/moderation-app/unauthenticated');
     } else {
       // if authenticated,
+      getStatusCount();
       if (isPending) {
         // if authorised, check for pending contents while pending tab is active
         fetchPendingContents();
@@ -71,6 +80,18 @@ const ContentList: React.FC<IContentListProps> = props => {
       }
     }
   }, [ethAddress, isPending]);
+
+  const getStatusCount = async () => {
+    setRequesting(true);
+    try {
+      const response = await fetchRequest.getCount();
+      setCount(() => response);
+      setRequesting(false);
+    } catch (error) {
+      setRequesting(false);
+      logger.error('[content-list.tsx]: getStatusCount err %j', error.message || '');
+    }
+  };
 
   const fetchPendingContents = async () => {
     // fetch pending (reported) contents
@@ -149,9 +170,9 @@ const ContentList: React.FC<IContentListProps> = props => {
         isDelisted={isDelisted}
         pendingLabel={t('Pending')}
         moderatedLabel={t('Moderated')}
-        countPending={pendingItems.length}
-        countModerated={moderatedItems.length}
-        countSpecific={moderatedItems.filter(item => item.delisted === isDelisted).length}
+        countKept={count.kept}
+        countPending={count.pending}
+        countDelisted={count.delisted}
         keptLabel={t('Kept')}
         delistedLabel={t('Delisted')}
         setIsPending={setIsPending}
@@ -186,6 +207,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                 reportedDateTime={pendingItem.entryDate}
                 makeADecisionLabel={t('Make a Decision')}
                 logger={logger}
+                singleSpa={singleSpa}
                 sdkModules={sdkModules}
                 handleButtonClick={handleButtonClick}
               />
@@ -232,6 +254,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                   evaluationDateTime={moderatedItem.evaluationDate}
                   reviewDecisionLabel={t('Review decision')}
                   logger={logger}
+                  singleSpa={singleSpa}
                   sdkModules={sdkModules}
                   handleButtonClick={() => null}
                 />
