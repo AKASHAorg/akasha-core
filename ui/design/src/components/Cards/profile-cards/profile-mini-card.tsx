@@ -110,7 +110,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
       <Box direction="column" pad="medium" gap="medium">
         <Text color="primaryText">{profileData.description}</Text>
 
-        {showFollowingButton && (
+        {showFollowingButton && loggedEthAddress && (
           <DuplexButton
             inactiveLabel={followLabel}
             activeLabel={followingLabel}

@@ -144,7 +144,7 @@ const TopbarComponent = (props: TopBarProps) => {
         brandLabel="Ethereum World"
         signInLabel={t('Sign In')}
         signUpLabel={t('Sign Up')}
-        signOutLabel={t('Logout')}
+        signOutLabel={t('Sign Out')}
         searchBarLabel={t('Search profiles or topics...')}
         onNavigation={handleNavigation}
         onSearch={handleSearchBarKeyDown}
