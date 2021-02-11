@@ -115,7 +115,7 @@ class PostAPI extends DataSource {
     logger.info('saving a new post:', post);
     queryCache.del(this.allPostsCache);
     const postID = await db.create(this.dbID, this.collection, [post]);
-    logger.info('created a new post:', postID[0]);
+    logger.info('created a new post:', postID);
     await this.addQuotes(post.quotes, postID[0]);
     queryCache.del(this.allPostsCache);
     if (post.mentions && post.mentions.length) {
