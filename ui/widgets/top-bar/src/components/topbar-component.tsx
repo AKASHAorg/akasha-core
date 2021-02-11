@@ -143,7 +143,9 @@ const TopbarComponent = (props: TopBarProps) => {
         avatarImage={loginState.profileData.avatar}
         brandLabel="Ethereum World"
         signInLabel={t('Sign In')}
-        logoutLabel={t('Logout')}
+        signUpLabel={t('Sign Up')}
+        signOutLabel={t('Sign Out')}
+        searchBarLabel={t('Search profiles or topics...')}
         onNavigation={handleNavigation}
         onSearch={handleSearchBarKeyDown}
         onSidebarToggle={toggleSidebar}

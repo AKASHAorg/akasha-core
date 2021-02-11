@@ -270,7 +270,8 @@ const CardActions: React.FC<CardActionProps> = props => {
       <TextIcon
         label={repostsBtnText}
         iconType="transfer"
-        iconSize="md"
+        iconSize="sm"
+        fontSize="large"
         clickable={disableReposting ? false : true}
         ref={repostNodeRef}
         onClick={disableReposting ? () => false : onRepost}
@@ -279,14 +280,16 @@ const CardActions: React.FC<CardActionProps> = props => {
       <TextIcon
         label={repliesBtnText}
         iconType="comments"
-        iconSize="md"
+        iconSize="sm"
+        fontSize="large"
         clickable={true}
         onClick={handleRepliesClick}
       />
       <BookmarkButton
         label={bookmarkBtnText}
         iconType="bookmark"
-        iconSize="md"
+        iconSize="sm"
+        fontSize="large"
         clickable={true}
         onClick={handleEntryBookmark}
         isBookmarked={isBookmarked}
@@ -295,7 +298,8 @@ const CardActions: React.FC<CardActionProps> = props => {
       <TextIcon
         label={shareBtnText}
         iconType="shareSmallDark"
-        iconSize="md"
+        iconSize="sm"
+        fontSize="large"
         ref={shareNodeRef}
         clickable={true}
         onClick={handleShareOpen}

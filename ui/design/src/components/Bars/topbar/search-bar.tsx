@@ -17,24 +17,25 @@ const SearchBar: React.FC<ISearchBar> = props => {
       round="large"
       direction="row"
       align="center"
-      pad="xsmall"
+      pad={{ vertical: 'xsmall', horizontal: 'small' }}
       height="2rem"
       fill="horizontal"
     >
       <TextInput
+        size="xsmall"
         value={inputValue}
         onChange={onInputChange}
         placeholder={inputPlaceholderLabel}
         plain={true}
         onKeyDown={handleKeyDown}
       />
-      <Icon type="search" />
+      <Icon type="search" size="xs" />
     </Box>
   );
 };
 
 SearchBar.defaultProps = {
-  inputPlaceholderLabel: 'Search profiles or topics',
+  inputPlaceholderLabel: 'Search profiles or topics...',
 };
 
 export { SearchBar };
