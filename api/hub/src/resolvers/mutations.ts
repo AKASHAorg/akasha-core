@@ -68,7 +68,7 @@ const mutations = {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
-    return await dataSources.profileAPI.followProfile(user.pubKey, ethAddress);
+    return dataSources.profileAPI.followProfile(user.pubKey, ethAddress);
   },
   unFollow: async (_, { ethAddress }, { dataSources, user }) => {
     if (!user) {
