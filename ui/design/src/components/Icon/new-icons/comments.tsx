@@ -4,7 +4,7 @@ const Comments = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" {...props}>
     <g fill="none" fillRule="evenodd" transform="translate(-354 -2710)">
       <g
-        stroke="#949EB3"
+        stroke="#2E3747"
         strokeLinecap="round"
         strokeLinejoin="round"
         transform="translate(355.6 2711.6)"

@@ -7,6 +7,7 @@ const TopbarWrapper = styled(Box)`
 
 const StyledText = styled(Text)`
   cursor: pointer;
+  font-weight: 450;
 `;
 
 const StyledSearchContainer = styled(Box)`

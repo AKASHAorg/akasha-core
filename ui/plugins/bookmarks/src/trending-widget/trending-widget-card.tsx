@@ -67,7 +67,7 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
     <TrendingWidgetCard
       titleLabel={t('Trending Right Now')}
       topicsLabel={t('Topics')}
-      profilesLabel={t('Profiles')}
+      profilesLabel={t('People')}
       followLabel={t('Follow')}
       unfollowLabel={t('Unfollow')}
       followersLabel={t('Followers')}
