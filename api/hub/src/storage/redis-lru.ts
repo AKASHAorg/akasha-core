@@ -7,9 +7,6 @@ export class RedisLRU implements ILRU {
 
   constructor(redisInstance: RedisCache) {
     this.redis = redisInstance;
-    setTimeout(async () => {
-      await this.redis.flush();
-    }, 10000);
   }
 
   public async set(key: string, value: any) {
