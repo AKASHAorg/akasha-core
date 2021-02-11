@@ -30,8 +30,8 @@ class PostAPI extends DataSource {
   async getPost(id: string, pubKey?: string, stopIter = false) {
     const db: Client = await getAppDB();
     const cacheKey = this.getPostCacheKey(id);
-    if (queryCache.has(cacheKey)) {
-      return Promise.resolve(queryCache.get(cacheKey));
+    if (await queryCache.has(cacheKey)) {
+      return queryCache.get(cacheKey);
     }
     const post = await db.findByID<PostItem>(this.dbID, this.collection, id);
     if (!post) {
@@ -40,44 +40,42 @@ class PostAPI extends DataSource {
     const quotedBy = post?.metaData
       ?.filter(item => item.property === this.quotedByPost)
       ?.map(item => item.value);
-    Object.assign(post, { quotedBy });
-    if (post?.quotes?.length && !stopIter) {
-      post.quotes = await Promise.all(
-        post.quotes.map(postID => this.getPost(postID, pubKey, true)),
+    const result = JSON.parse(JSON.stringify(Object.assign({}, post, { quotedBy })));
+    if (result?.quotes?.length && !stopIter) {
+      result.quotes = await Promise.all(
+        result.quotes.map(postID => this.getPost(postID, pubKey, true)),
       );
     }
-    queryCache.set(cacheKey, post);
-    return post;
+    await queryCache.set(cacheKey, result);
+    return result;
   }
   async getPosts(limit: number, offset: string, pubKey?: string) {
     let posts;
     const db: Client = await getAppDB();
-    if (queryCache.has(this.allPostsCache)) {
-      posts = queryCache.get(this.allPostsCache);
-    } else {
+    if (!(await queryCache.has(this.allPostsCache))) {
       posts = await db.find<PostItem>(this.dbID, this.collection, {
         sort: { desc: true, fieldPath: 'creationDate' },
       });
-      for (const post of posts) {
-        if (post?.quotes?.length) {
-          post.quotes = await Promise.all(post.quotes.map(postID => this.getPost(postID, pubKey)));
-        }
-        const quotedBy = post?.metaData
-          ?.filter(item => item.property === this.quotedByPost)
-          ?.map(item => item.value);
-        Object.assign(post, { quotedBy });
-      }
-      queryCache.set(this.allPostsCache, posts);
+      await queryCache.set(
+        this.allPostsCache,
+        posts.map(p => p._id),
+      );
     }
+    posts = await queryCache.get(this.allPostsCache);
+    const fetchedPosts = [];
 
-    const offsetIndex = offset ? posts.findIndex(postItem => postItem._id === offset) : 0;
+    const offsetIndex = offset ? posts.findIndex(postItem => postItem === offset) : 0;
     let endIndex = limit + offsetIndex;
     if (posts.length <= endIndex) {
       endIndex = undefined;
     }
     const results = posts.slice(offsetIndex, endIndex);
-    const nextIndex = endIndex ? posts[endIndex]._id : null;
-    return { results: results, nextIndex: nextIndex, total: posts.length };
+    const nextIndex = endIndex ? posts[endIndex] : null;
+    for (const postID of results) {
+      const post = await this.getPost(postID, pubKey);
+      fetchedPosts.push(post);
+    }
+    return { results: fetchedPosts, nextIndex: nextIndex, total: posts.length };
   }
   async createPost(
     author: string,
@@ -113,11 +111,13 @@ class PostAPI extends DataSource {
       ],
     };
     logger.info('saving a new post:', post);
-    queryCache.del(this.allPostsCache);
     const postID = await db.create(this.dbID, this.collection, [post]);
     logger.info('created a new post:', postID);
+    const currentPosts = await queryCache.get(this.allPostsCache);
+    if (currentPosts.length) {
+      currentPosts.unshift(postID[0]);
+    }
     await this.addQuotes(post.quotes, postID[0]);
-    queryCache.del(this.allPostsCache);
     if (post.mentions && post.mentions.length) {
       await this.triggerMentions(post.mentions, postID[0], post.author);
     }
@@ -132,7 +132,7 @@ class PostAPI extends DataSource {
         content: post.content.find(e => e.property === 'textContent')?.value,
         title: post.title,
       })
-      .then(_ => logger.info('indexed post:', postID[0]))
+      .then(_ => logger.info('indexed post:', postID))
       // tslint:disable-next-line:no-console
       .catch(e => logger.error(e));
     return postID;
@@ -179,7 +179,7 @@ class PostAPI extends DataSource {
     if (updatePosts.length) {
       await db.save(this.dbID, this.collection, updatePosts);
       for (const post of updatePosts) {
-        queryCache.del(this.getPostCacheKey(post._id));
+        await queryCache.del(this.getPostCacheKey(post._id));
       }
     }
     updatePosts.length = 0;

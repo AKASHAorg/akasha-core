@@ -1,4 +1,4 @@
-import { commentsStats, postsStats, statsProvider } from './constants';
+import { commentsStats, statsProvider } from './constants';
 
 const query = {
   getProfile: async (_source, { ethAddress }, { dataSources }) => {
@@ -63,7 +63,10 @@ const query = {
     const results = [];
 
     for (const post of data.results) {
-      const author = await dataSources.profileAPI.resolveProfile(post.author);
+      const author =
+        typeof post.author === 'string'
+          ? await dataSources.profileAPI.resolveProfile(post.author)
+          : post.author;
       const totalCommentsIndex = post.metaData.findIndex(
         m => m.provider === statsProvider && m.property === commentsStats,
       );
