@@ -24,5 +24,5 @@ const IPFS_BOOTSTRAP_PEERS = [
 const DEFAULT_IPFS_CONFIG = {
   Bootstrap: IPFS_BOOTSTRAP_PEERS.concat(AKASHA_BOOTSTRAP_PEERS).concat(DEFAULT_CIRCUIT_RELAYS),
 };
-export const ipfsGateway = 'https://gateway.ipfs.io/ipfs';
+export const ipfsGateway = 'https://gateway.pinata.cloud/ipfs';
 export default DEFAULT_IPFS_CONFIG;
