@@ -3,13 +3,14 @@ import MarginInterface from '../../interfaces/margin.interface';
 import MarginSetter from '../../utils/marginSetter';
 
 const sizes = {
-  xs: '24px',
+  xxs: '24px',
+  xs: '28px',
   sm: '32px',
   md: '40px',
   lg: '48px',
   xl: '84px',
 };
-export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type AvatarSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 export interface AvatarProps {
   size: AvatarSize;

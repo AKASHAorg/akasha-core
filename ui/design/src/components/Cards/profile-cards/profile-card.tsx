@@ -232,7 +232,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
 
               <Box direction="row" gap="xsmall">
                 <Text size="medium" color="secondaryText">
-                  {profileData.userName ? profileData.userName : null}
+                  {profileData.userName ? `@${profileData.userName}` : null}
                 </Text>
               </Box>
             </Box>

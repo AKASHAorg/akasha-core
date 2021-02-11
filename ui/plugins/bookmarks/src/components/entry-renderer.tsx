@@ -129,7 +129,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   repostWithCommentLabel={t('Repost with comment')}
                   shareLabel={t('Share')}
                   copyLinkLabel={t('Copy Link')}
-                  copyIPFSLinkLabel={t('Copy IPFS Link')}
                   flagAsLabel={t('Report Post')}
                   loggedProfileEthAddress={ethAddress as any}
                   locale={locale || 'en'}

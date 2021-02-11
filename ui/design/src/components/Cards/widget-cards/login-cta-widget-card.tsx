@@ -4,12 +4,12 @@ import styled from 'styled-components';
 import { WidgetAreaCardBox } from '../common/basic-card-box';
 import { Button } from '../../Buttons';
 
-// const LearnMoreButton = styled(Button)`
-//   flex: 1;
-//   margin-right: 0.5em;
-// `;
+const SignInButton = styled(Button)`
+  flex: 1;
+  margin-right: 0.5em;
+`;
 
-const ConnectButton = styled(Button)`
+const SignUpButton = styled(Button)`
   flex: 1;
 `;
 
@@ -24,7 +24,8 @@ export interface ILoginWidgetCardProps {
   textContent: string;
   image?: React.ReactElement;
   learnMoreLabel?: string;
-  connectLabel: string;
+  signInLabel: string;
+  signUpLabel: string;
   inlineActions?: boolean;
 }
 const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
@@ -32,9 +33,9 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
   return (
     <LoginWidgetBox callToAction={true}>
       {props.image && props.image}
-      <Box direction={inlineActions ? 'row' : 'column'}>
+      <Box direction={inlineActions ? 'row' : 'column'} align="center">
         <Box direction="column">
-          <Text weight="bold" size="medium">
+          <Text weight="bold" size="large">
             {props.title}
           </Text>
           <Text size="small" margin={{ top: '.25em', bottom: '1em' }}>
@@ -42,8 +43,8 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
           </Text>
         </Box>
         <Box direction="row" justify="end" pad="0 0 0 2em" align="center" flex={{ shrink: 0 }}>
-          {/* <LearnMoreButton onClick={props.onLearnMoreClick} label={props.learnMoreLabel} /> */}
-          <ConnectButton primary={true} onClick={props.onLoginClick} label={props.connectLabel} />
+          <SignInButton onClick={props.onLoginClick} label={props.signInLabel} />
+          <SignUpButton primary={true} onClick={props.onLoginClick} label={props.signUpLabel} />
         </Box>
       </Box>
     </LoginWidgetBox>
