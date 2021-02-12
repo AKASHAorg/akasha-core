@@ -2,6 +2,7 @@ import { Box, Stack } from 'grommet';
 import * as React from 'react';
 import { Icon } from '../../Icon';
 import { SearchBar } from './search-bar';
+import { MobileSearchBar } from './mobile-search-bar';
 import { Avatar } from '../../Avatar/index';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings/lib/';
@@ -74,6 +75,7 @@ const Topbar = (props: ITopbarProps) => {
   const [dropOpen, setDropOpen] = React.useState(false);
   const [avatarDropOpen, setAvatarDropOpen] = React.useState(false);
   const [dropItems, setDropItems] = React.useState<IMenuItem[]>([]);
+  const [mobileSearchOpen, setMobileSearchOpen] = React.useState(false);
 
   const [currentDropItem, setCurrentDropItem] = React.useState<IMenuItem | null>(null);
 
@@ -213,7 +215,45 @@ const Topbar = (props: ITopbarProps) => {
     </StyledDiv>
   );
 
+  const renderSearchArea = () => {
+    if (searchAreaItem) {
+      if (size === 'small') {
+        return (
+          <Icon
+            type="search"
+            size="xs"
+            onClick={() => {
+              setMobileSearchOpen(true);
+            }}
+          />
+        );
+      }
+      return (
+        <StyledSearchContainer>
+          <SearchBar
+            inputValue={inputValue}
+            onInputChange={ev => setInputValue(ev.target.value)}
+            handleKeyDown={ev => onSearch(ev, inputValue)}
+            inputPlaceholderLabel={searchBarLabel}
+          />
+        </StyledSearchContainer>
+      );
+    }
+    return;
+  };
+
   const renderContent = () => {
+    if (size === 'small' && mobileSearchOpen) {
+      return (
+        <MobileSearchBar
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          handleKeyDown={ev => onSearch(ev, inputValue)}
+          inputPlaceholderLabel={searchBarLabel}
+          handleCloseInput={() => setMobileSearchOpen(false)}
+        />
+      );
+    }
     return (
       <>
         <Box
@@ -230,16 +270,7 @@ const Topbar = (props: ITopbarProps) => {
         </Box>
 
         <Box direction="row" align="center" gap="small" pad={{ horizontal: 'medium' }}>
-          {searchAreaItem && (
-            <StyledSearchContainer>
-              <SearchBar
-                inputValue={inputValue}
-                onInputChange={event => setInputValue(event.target.value)}
-                handleKeyDown={ev => onSearch(ev, inputValue)}
-                inputPlaceholderLabel={searchBarLabel}
-              />
-            </StyledSearchContainer>
-          )}
+          {renderSearchArea()}
           {quickAccessItems && quickAccessItems.map(renderPluginButton)}
           {!ethAddress && (
             <Box direction="row" align="center" gap="small">
