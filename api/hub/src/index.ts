@@ -5,8 +5,7 @@ import json from 'koa-json';
 import bodyParser from 'koa-bodyparser';
 import webSockify from 'koa-websocket';
 import cors from '@koa/cors';
-import { ApolloServer, gql } from 'apollo-server-koa';
-import { RedisCache } from 'apollo-server-cache-redis';
+import { ApolloServer } from 'apollo-server-koa';
 import typeDefs from './schema';
 
 import dotenv from 'dotenv';
@@ -15,7 +14,7 @@ dotenv.config();
 import wss from './wss';
 import api from './api';
 import ProfileAPI from './datasources/profile';
-import { contextCache } from './storage/cache';
+import { contextCache, redisCache } from './storage/cache';
 import TagAPI from './datasources/tag';
 import PostAPI from './datasources/post';
 import CommentAPI from './datasources/comment';
@@ -65,7 +64,7 @@ const server = new ApolloServer({
     Query: query,
     Mutation: mutations,
   },
-  cache: process.env.NODE_ENV === 'production' && new RedisCache(process.env.REDIS_CONNECTION),
+  cache: redisCache,
   dataSources: () => ({
     profileAPI: new ProfileAPI({ dbID, collection: 'Profiles' }),
     tagsAPI: new TagAPI({ dbID, collection: 'Tags' }),
