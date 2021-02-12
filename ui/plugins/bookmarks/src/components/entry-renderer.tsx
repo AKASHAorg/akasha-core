@@ -37,7 +37,6 @@ export interface IEntryCardRendererProps {
   style?: React.CSSProperties;
   contentClickable?: boolean;
   disableReposting?: boolean;
-  disableIpfsCopyLink?: boolean;
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
@@ -52,7 +51,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     logger,
     globalChannel,
     contentClickable,
-    disableIpfsCopyLink,
     disableReposting,
   } = props;
 
@@ -165,7 +163,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   }}
                   onMentionClick={props.onMentionClick}
                   contentClickable={contentClickable}
-                  disableIpfsCopyLink={disableIpfsCopyLink}
                   disableReposting={disableReposting}
                 />
               )}

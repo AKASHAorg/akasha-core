@@ -180,7 +180,6 @@ const BookmarksPage = (props: RootComponentProps) => {
                         onAvatarClick={handleAvatarClick}
                         onMentionClick={handleMentionClick}
                         contentClickable={true}
-                        disableIpfsCopyLink={true}
                         disableReposting={true}
                       />
                     }
