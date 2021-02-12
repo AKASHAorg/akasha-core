@@ -1,5 +1,5 @@
 import constants from './constants';
-import moderationRequest from './fetch-request';
+import moderationRequest from './use-moderation-request';
 import useProfile from './use-profile';
 import useEntryPublisher from './use-entry-publisher';
 import useFeedReducer from './use-feed-reducer';
