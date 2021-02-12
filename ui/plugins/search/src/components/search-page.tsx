@@ -281,7 +281,7 @@ const SearchPage: React.FC<AppRoutesProps> = props => {
           {searchState.comments.slice(0, 4).map((commentData: any, index: number) => (
             <Box
               key={index}
-              onClick={() => handlePostClick(commentData.entryId)}
+              onClick={() => handlePostClick(commentData.postId)}
               pad={{ bottom: 'medium' }}
             >
               <EntryCard
@@ -309,11 +309,11 @@ const SearchPage: React.FC<AppRoutesProps> = props => {
                 onRepost={() => null}
                 onEntryShare={handleEntryShare}
                 onEntryFlag={() => null}
-                onClickReplies={() => handlePostClick(commentData.entryId)}
+                onClickReplies={() => handlePostClick(commentData.postId)}
                 handleFollowAuthor={() => handleFollowProfile(commentData.author.ethAddress)}
                 handleUnfollowAuthor={() => handleUnfollowProfile(commentData.author.ethAddress)}
                 isFollowingAuthor={followedProfiles.includes(commentData.author)}
-                onContentClick={() => handlePostClick(commentData.entryId)}
+                onContentClick={() => handlePostClick(commentData.postId)}
                 onMentionClick={() => handleProfileClick(commentData.author.ethAddress)}
                 contentClickable={true}
               />
