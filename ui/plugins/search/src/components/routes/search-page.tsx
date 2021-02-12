@@ -4,54 +4,30 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { useParams } from 'react-router-dom';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
-import {
-  useBookmarks,
-  useFollow,
-  useLoginState,
-  useSearch,
-  useTagSubscribe,
-} from '@akashaproject/ui-awf-hooks';
+import { useBookmarks, useFollow, useSearch, useTagSubscribe } from '@akashaproject/ui-awf-hooks';
 
-const {
-  Helmet,
-  Box,
-  Icon,
-  BasicCardBox,
-  ErrorLoader,
-  Spinner,
-  DuplexButton,
-  EntryCard,
-  ProfileCard,
-} = DS;
+const { Box, Icon, BasicCardBox, ErrorLoader, Spinner, DuplexButton, EntryCard, ProfileCard } = DS;
 
-interface AppRoutesProps {
+interface SearchPageProps {
   onError?: (err: Error) => void;
   sdkModules: any;
   logger: any;
   globalChannel: any;
   singleSpa: any;
+  loggedEthAddress: string | null;
+  showLoginModal: () => void;
 }
 
-const SearchPage: React.FC<AppRoutesProps> = props => {
-  const { sdkModules, logger, singleSpa, globalChannel } = props;
+const SearchPage: React.FC<SearchPageProps> = props => {
+  const { sdkModules, logger, singleSpa, globalChannel, loggedEthAddress, showLoginModal } = props;
 
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const [loginState] = useLoginState({
-    globalChannel: globalChannel,
-    onError: (err: IAkashaError) => {
-      logger.error('useLoginState error %j', err);
-    },
-    authService: sdkModules.auth.authService,
-    ipfsService: sdkModules.commons.ipfsService,
-    profileService: sdkModules.profiles.profileService,
-  });
-
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    ethAddress: loginState.ethAddress,
+    ethAddress: loggedEthAddress,
     onError: (err: IAkashaError) => {
       logger.error('useBookmark error %j', err);
     },
@@ -89,30 +65,46 @@ const SearchPage: React.FC<AppRoutesProps> = props => {
   }, [searchKeyword]);
 
   React.useEffect(() => {
-    if (loginState.ethAddress) {
+    if (loggedEthAddress) {
       searchState.profiles.slice(0, 4).forEach(async (profile: any) => {
-        if (loginState.ethAddress && profile.ethAddress) {
-          followActions.isFollowing(loginState.ethAddress, profile.ethAddress);
+        if (loggedEthAddress && profile.ethAddress) {
+          followActions.isFollowing(loggedEthAddress, profile.ethAddress);
         }
       });
       tagSubscriptionActions.getTagSubscriptions();
     }
-  }, [searchState, loginState.ethAddress]);
+  }, [searchState, loggedEthAddress]);
 
   const handleTagSubscribe = (tagName: string) => {
+    if (!loggedEthAddress) {
+      showLoginModal();
+      return;
+    }
     tagSubscriptionActions.toggleTagSubscription(tagName);
   };
   const handleTagUnsubscribe = (tagName: string) => {
+    if (!loggedEthAddress) {
+      showLoginModal();
+      return;
+    }
     tagSubscriptionActions.toggleTagSubscription(tagName);
   };
   const handleProfileClick = (ethAddress: string) => {
     singleSpa.navigateToUrl(`/profile/${ethAddress}`);
   };
   const handleFollowProfile = (ethAddress: string) => {
+    if (!loggedEthAddress) {
+      showLoginModal();
+      return;
+    }
     followActions.follow(ethAddress);
   };
 
   const handleUnfollowProfile = (ethAddress: string) => {
+    if (!loggedEthAddress) {
+      showLoginModal();
+      return;
+    }
     followActions.unfollow(ethAddress);
   };
 
@@ -148,7 +140,8 @@ const SearchPage: React.FC<AppRoutesProps> = props => {
   };
 
   const handleEntryBookmark = (entryId: string) => {
-    if (!loginState.ethAddress) {
+    if (!loggedEthAddress) {
+      showLoginModal();
       return;
     }
     if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
@@ -165,10 +158,6 @@ const SearchPage: React.FC<AppRoutesProps> = props => {
 
   return (
     <Box fill="horizontal">
-      <Helmet>
-        <title>Search</title>
-      </Helmet>
-
       {searchState.isFetching && (
         <BasicCardBox>
           <Box pad="large">
@@ -222,7 +211,7 @@ const SearchPage: React.FC<AppRoutesProps> = props => {
                 handleUnfollow={() => handleUnfollowProfile(profileData.ethAddress)}
                 handleShareClick={() => null}
                 isFollowing={followedProfiles.includes(profileData?.ethAddress)}
-                loggedEthAddress={loginState.ethAddress}
+                loggedEthAddress={loggedEthAddress}
                 profileData={profileData}
                 followLabel={t('Follow')}
                 unfollowLabel={t('Unfollow')}
@@ -260,7 +249,7 @@ const SearchPage: React.FC<AppRoutesProps> = props => {
                 shareLabel={t('Share')}
                 copyLinkLabel={t('Copy Link')}
                 flagAsLabel={t('Report Post')}
-                loggedProfileEthAddress={loginState.ethAddress}
+                loggedProfileEthAddress={loggedEthAddress}
                 locale={locale || 'en'}
                 style={{ height: 'auto' }}
                 bookmarkLabel={t('Save')}
@@ -301,7 +290,7 @@ const SearchPage: React.FC<AppRoutesProps> = props => {
                 shareLabel={t('Share')}
                 copyLinkLabel={t('Copy Link')}
                 flagAsLabel={t('Report Post')}
-                loggedProfileEthAddress={loginState.ethAddress}
+                loggedProfileEthAddress={loggedEthAddress}
                 locale={locale || 'en'}
                 style={{ height: 'auto' }}
                 bookmarkLabel={t('Save')}

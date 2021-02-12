@@ -145,7 +145,7 @@ const TopbarComponent = (props: TopBarProps) => {
         signInLabel={t('Sign In')}
         signUpLabel={t('Sign Up')}
         signOutLabel={t('Sign Out')}
-        searchBarLabel={t('Search profiles or topics...')}
+        searchBarLabel={t('Search profiles or topics')}
         onNavigation={handleNavigation}
         onSearch={handleSearchBarKeyDown}
         onSidebarToggle={toggleSidebar}

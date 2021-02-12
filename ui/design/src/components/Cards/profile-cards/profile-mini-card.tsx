@@ -52,7 +52,6 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
     <Box
       round="xsmall"
       direction="column"
-      background="ultraLightBackground"
       border={{ side: 'all', color: 'border', size: 'xsmall', style: 'solid' }}
     >
       <Box
