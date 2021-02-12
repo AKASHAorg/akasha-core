@@ -1,9 +1,11 @@
-import React, { PureComponent, Suspense } from 'react';
+import React, { PureComponent } from 'react';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider } from 'react-i18next';
 import EntryFeed from './entry-feed';
 import ProfileFeed from './profile-feed';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import { i18n } from 'i18next';
+import { IContentClickDetails } from '@akashaproject/design-system/src/components/Cards/entry-cards/entry-box';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
@@ -15,7 +17,7 @@ export const enum ItemTypes {
 
 export interface IFeedWidgetProps {
   logger: any;
-  i18n: any;
+  i18n: i18n;
   globalChannel?: any;
   sdkModules: any;
   layout: any;
@@ -23,9 +25,19 @@ export interface IFeedWidgetProps {
   itemType: ItemTypes;
   loadMore: (payload: any) => void;
   loadItemData?: ({ itemId }: { itemId: string }) => void;
+  getShareUrl?: (entryId: string) => string;
   itemIds: string[];
   itemsData: { [key: string]: any };
   errors: { [key: string]: IAkashaError };
+  ethAddress: string | null;
+  profilePubKey: string | null;
+  onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
+  onLoginModalOpen: () => void;
+  isFetching?: boolean;
+  totalItems: number | null;
+  modalSlotId?: string;
+  loggedProfile?: any;
+  onRepostPublish?: (entryData: any, embeddedEntry: any) => void;
 }
 
 export default class FeedWidgetRoot extends PureComponent<IFeedWidgetProps> {
@@ -45,12 +57,15 @@ export default class FeedWidgetRoot extends PureComponent<IFeedWidgetProps> {
       },
     });
   }
-
+  componentDidMount() {
+    if (this.props.i18n) {
+      this.props.i18n.loadNamespaces('ui-widget-feed');
+    }
+  }
   public render() {
-    console.log(this.props.errors, this.state.errors, 'errors in App.tsx');
     return (
-      <I18nextProvider i18n={this.props.i18n}>
-        <Suspense fallback={<></>}>
+      <React.Suspense fallback={<></>}>
+        <I18nextProvider i18n={this.props.i18n} defaultNS="ui-widget-feed">
           <ThemeSelector
             settings={{ activeTheme: 'Light-Theme' }}
             availableThemes={[lightTheme, darkTheme]}
@@ -67,8 +82,8 @@ export default class FeedWidgetRoot extends PureComponent<IFeedWidgetProps> {
               />
             )}
           </ThemeSelector>
-        </Suspense>
-      </I18nextProvider>
+        </I18nextProvider>
+      </React.Suspense>
     );
   }
 }

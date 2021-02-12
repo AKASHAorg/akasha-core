@@ -70,7 +70,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   React.useEffect(() => {
     if (ethAddress && !loginProfile.ethAddress) {
-      loginProfileActions.getProfileData({ ethAddress });
+      loginProfileActions.getProfileData({ pubKey: ethAddress });
     }
   }, [ethAddress, loginProfile.ethAddress]);
 
@@ -105,12 +105,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     postsActions.getPost(payload.itemId);
   };
 
-  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
-    props.singleSpa.navigateToUrl(`/profile/${authorEth}`);
+  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorPubKey: string) => {
+    props.singleSpa.navigateToUrl(`/profile/${authorPubKey}`);
     ev.preventDefault();
   };
-  const handleMentionClick = (profileEthAddress: string) => {
-    props.singleSpa.navigateToUrl(`/profile/${profileEthAddress}`);
+  const handleMentionClick = (profilePubKey: string) => {
+    props.singleSpa.navigateToUrl(`/profile/${profilePubKey}`);
   };
   const handleEntryBookmark = (entryId: string) => {
     if (!ethAddress) {

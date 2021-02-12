@@ -25,6 +25,6 @@ export {
   useErrors,
   useTrendingData,
   useFollow,
-  BookmarkTypes,
   useNotifications,
+  BookmarkTypes,
 };

@@ -2,6 +2,12 @@ import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import * as React from 'react';
 import { createErrorHandler } from './utils/error-handler';
 
+export const MODAL_NAMES = {
+  PROFILE_UPDATE: 'profileUpdate',
+  CHANGE_ENS: 'changeENS',
+  LOGIN: 'login',
+  EDITOR: 'editor',
+};
 export interface ModalState {
   loginModal: boolean;
   [key: string]: boolean;

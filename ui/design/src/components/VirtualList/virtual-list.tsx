@@ -63,6 +63,7 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
     removeItem: (_itemId: string) => {
       /* @TODO: */
     },
+    reset: resetState,
   }));
 
   const rootContainerRef = React.createRef<HTMLDivElement>();
@@ -86,16 +87,34 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
     start: 0,
     end: items.length,
   });
-
-  // static data. will not trigger a rerender;
-  const scrollData = React.useRef<ScrollData>({
+  const initialScrollData: ScrollData = {
     averageItemHeight,
     items: [],
     loadedIds: [],
     globalOffsetTop: 0,
-  });
+  };
+  // static data. will not trigger a rerender;
+  const scrollData = React.useRef<ScrollData>(initialScrollData);
 
   const itemRefs = React.useRef<{ [key: string]: any }>({});
+
+  const resetState = () => {
+    scrollData.current = initialScrollData;
+    itemRefs.current = {};
+    setAnchorData({
+      anchor: { index: 0, offset: 0 },
+      scrollTop: 0,
+    });
+    setPositions({
+      rects: new Map(),
+      listHeight: 0,
+    });
+    setSlice({
+      start: 0,
+      end: items.length,
+    });
+    window.scrollTo({ top: 0 });
+  };
 
   React.useLayoutEffect(() => {
     if (!scrollData.current.items.length) {
@@ -206,6 +225,9 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
    *  Populate initial rect values
    */
   React.useEffect(() => {
+    if (!items.length && scrollData.current.items.length) {
+      resetState();
+    }
     if (items.length && items.length > scrollData.current.items.length) {
       const diff = diffArr(scrollData.current.items, items);
       switch (diff.insertPoint) {

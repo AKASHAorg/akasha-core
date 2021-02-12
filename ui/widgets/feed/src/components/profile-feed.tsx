@@ -1,11 +1,7 @@
 import * as React from 'react';
 import type { IFeedWidgetProps } from './App';
 
-export interface IProfileFeedProps extends IFeedWidgetProps {}
-
-const ProfileFeed = (props: IProfileFeedProps) => {
-  console.log(props.logger);
-
+const ProfileFeed = (_props: IFeedWidgetProps) => {
   return <>Profile Feed</>;
 };
 

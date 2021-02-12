@@ -85,7 +85,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   React.useEffect(() => {
     if (ethAddress) {
-      loginProfileActions.getProfileData({ ethAddress: ethAddress });
+      loginProfileActions.getProfileData({ pubKey: ethAddress });
     }
   }, [ethAddress]);
 
@@ -339,7 +339,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               shareTextLabel={t('Share this post with your friends')}
               sharePostUrl={'https://ethereum.world'}
               onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                handleAvatarClick(ev, entryData.author.ethAddress)
+                handleAvatarClick(ev, entryData.author.pubKey)
               }
               onEntryBookmark={handleEntryBookmark}
               repliesLabel={t('Replies')}
