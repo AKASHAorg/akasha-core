@@ -1,30 +1,15 @@
 import React, { PureComponent } from 'react';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import SearchPage from './search-page';
-import { rootRoute } from '../routes';
+import Routes from './routes';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 
-const { Box, lightTheme, ThemeSelector, ViewportSizeProvider } = DS;
+const { Box, lightTheme, ThemeSelector, ViewportSizeProvider, Helmet } = DS;
 
-export interface IProps {
-  singleSpa: any;
-  activeWhen: {
-    path: string;
-  };
-
-  mountParcel: (config: any, props: any) => void;
-  rootNodeId: string;
-  sdkModules: any;
-  globalChannel: any;
-  logger: any;
-  i18n?: any;
-}
-
-class App extends PureComponent<IProps> {
+class App extends PureComponent<RootComponentProps> {
   public state: { hasErrors: boolean };
 
-  constructor(props: IProps) {
+  constructor(props: RootComponentProps) {
     super(props);
     this.state = {
       hasErrors: false,
@@ -50,17 +35,11 @@ class App extends PureComponent<IProps> {
         <React.Suspense fallback={<>Loading</>}>
           <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
             <I18nextProvider i18n={i18n ? i18n : null}>
+              <Helmet>
+                <title>Search</title>
+              </Helmet>
               <ViewportSizeProvider>
-                <Router>
-                  <Route path={`${rootRoute}/:searchKeyword`}>
-                    <SearchPage
-                      logger={this.props.logger}
-                      sdkModules={this.props.sdkModules}
-                      singleSpa={this.props.singleSpa}
-                      globalChannel={this.props.globalChannel}
-                    />
-                  </Route>
-                </Router>
+                <Routes {...this.props} />
               </ViewportSizeProvider>
             </I18nextProvider>
           </ThemeSelector>
