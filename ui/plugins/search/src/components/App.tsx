@@ -1,26 +1,15 @@
 import React, { PureComponent } from 'react';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider } from 'react-i18next';
+import Routes from './routes';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 
-const { Helmet, Box } = DS;
+const { Box, lightTheme, ThemeSelector, ViewportSizeProvider, Helmet } = DS;
 
-export interface IProps {
-  singleSpa: any;
-  activeWhen: {
-    path: string;
-  };
-
-  mountParcel: (config: any, props: any) => void;
-  rootNodeId: string;
-  sdkModules: any;
-  logger: any;
-  i18n?: any;
-}
-
-class App extends PureComponent<IProps> {
+class App extends PureComponent<RootComponentProps> {
   public state: { hasErrors: boolean };
 
-  constructor(props: IProps) {
+  constructor(props: RootComponentProps) {
     super(props);
     this.state = {
       hasErrors: false,
@@ -43,12 +32,18 @@ class App extends PureComponent<IProps> {
 
     return (
       <Box width="100vw">
-        <I18nextProvider i18n={i18n ? i18n : null}>
-          <Helmet>
-            <title>Search</title>
-          </Helmet>
-          <h1>Search plugin</h1>
-        </I18nextProvider>
+        <React.Suspense fallback={<>Loading</>}>
+          <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
+            <I18nextProvider i18n={i18n ? i18n : null}>
+              <Helmet>
+                <title>Search</title>
+              </Helmet>
+              <ViewportSizeProvider>
+                <Routes {...this.props} />
+              </ViewportSizeProvider>
+            </I18nextProvider>
+          </ThemeSelector>
+        </React.Suspense>
       </Box>
     );
   }

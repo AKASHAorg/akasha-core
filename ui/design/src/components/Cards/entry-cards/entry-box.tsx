@@ -12,6 +12,7 @@ import { IProfileData } from '../profile-cards/profile-widget-card';
 import { ISocialData } from './social-box';
 import ViewportSizeProvider from '../../Providers/viewport-dimension';
 import { EmbedBox, ReadOnlyEditor } from '../../Editor/index';
+import { EntryCardHidden } from '..';
 
 export interface IEntryData {
   CID?: string;
@@ -76,9 +77,12 @@ export interface IEntryBoxProps {
   onMentionClick: (ethAddress: string) => void;
   // style
   style?: React.CSSProperties;
-  disableIpfsCopyLink?: boolean;
   disableReposting?: boolean;
   hidePublishTime?: boolean;
+  awaitingModerationLabel?: string;
+  moderatedContentLabel?: string;
+  ctaLabel?: string;
+  handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -111,9 +115,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onMentionClick,
     style,
     contentClickable,
-    disableIpfsCopyLink,
     disableReposting,
     hidePublishTime,
+    awaitingModerationLabel,
+    moderatedContentLabel,
+    ctaLabel,
+    handleFlipCard,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -168,6 +175,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const toggleDisplayCID = () => {
     setDisplayCID(!displayCID);
   };
+
   return (
     <ViewportSizeProvider>
       <Box style={style}>
@@ -220,7 +228,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ref={akashaRef}
               clickable={true}
             />
-            {(onEntryFlag || !disableIpfsCopyLink) && (
+            {onEntryFlag && (
               <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
             )}
           </Box>
@@ -234,7 +242,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             CID={entryData.CID}
           />
         )}
-        {menuIconRef.current && menuDropOpen && (onEntryFlag || !disableIpfsCopyLink) && (
+        {menuIconRef.current && menuDropOpen && onEntryFlag && (
           <CardHeaderMenuDropdown
             target={menuIconRef.current}
             onMenuClose={closeMenuDrop}
@@ -248,9 +256,23 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         >
           <ReadOnlyEditor content={entryData.content} handleMentionClick={onMentionClick} />
         </Box>
-        {entryData.quote && (
-          <Box pad={{ bottom: 'medium' }} onClick={() => handleContentClick(entryData.quote)}>
+        {entryData.quote && !entryData.quote.delisted && !entryData.quote.reported && (
+          <Box pad={{ vertical: 'medium' }} onClick={() => handleContentClick(entryData.quote)}>
             <EmbedBox embedEntryData={entryData.quote} />
+          </Box>
+        )}
+        {entryData.quote && !entryData.quote.delisted && entryData.quote.reported && (
+          <Box pad={{ vertical: 'medium' }} onClick={() => null}>
+            <EntryCardHidden
+              awaitingModerationLabel={awaitingModerationLabel}
+              ctaLabel={ctaLabel}
+              handleFlipCard={handleFlipCard && handleFlipCard(entryData, true)}
+            />
+          </Box>
+        )}
+        {entryData.quote && entryData.quote.delisted && (
+          <Box pad={{ vertical: 'medium' }} onClick={() => null}>
+            <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
           </Box>
         )}
         <CardActions

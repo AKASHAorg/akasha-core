@@ -52,9 +52,12 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     isFollowingAuthor,
     flagAsLabel,
     contentClickable,
-    disableIpfsCopyLink,
     disableReposting,
     hidePublishTime,
+    awaitingModerationLabel,
+    moderatedContentLabel,
+    ctaLabel,
+    handleFlipCard,
   } = props;
 
   return (
@@ -98,9 +101,12 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           onContentClick={onContentClick}
           onMentionClick={onMentionClick}
           contentClickable={contentClickable}
-          disableIpfsCopyLink={disableIpfsCopyLink}
           disableReposting={disableReposting}
           hidePublishTime={hidePublishTime}
+          awaitingModerationLabel={awaitingModerationLabel}
+          moderatedContentLabel={moderatedContentLabel}
+          ctaLabel={ctaLabel}
+          handleFlipCard={handleFlipCard}
         />
       </Box>
     </MainAreaCardBox>

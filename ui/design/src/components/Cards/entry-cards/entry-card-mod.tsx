@@ -25,7 +25,6 @@ const EntryCardMod: React.FC<IEntryCardProps> = props => {
     className,
     rootNodeRef,
     onClickAvatar,
-    onClickReplies,
     onContentClick,
   } = props;
 
@@ -38,7 +37,6 @@ const EntryCardMod: React.FC<IEntryCardProps> = props => {
           repliesLabel={repliesLabel}
           locale={locale}
           onClickAvatar={onClickAvatar}
-          onClickReplies={onClickReplies}
           onContentClick={onContentClick}
         />
       </Box>
