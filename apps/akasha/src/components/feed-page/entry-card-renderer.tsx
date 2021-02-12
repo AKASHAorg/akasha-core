@@ -44,7 +44,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     logger,
     globalChannel,
     contentClickable,
-    disableIpfsCopyLink,
     hidePublishTime,
   } = props;
 
@@ -139,7 +138,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   onContentClick={props.onNavigate}
                   onMentionClick={props.onMentionClick}
                   contentClickable={contentClickable}
-                  disableIpfsCopyLink={disableIpfsCopyLink}
                   hidePublishTime={hidePublishTime}
                 />
               )}

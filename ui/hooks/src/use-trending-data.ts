@@ -1,11 +1,13 @@
 import * as React from 'react';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { combineLatest, Subscription } from 'rxjs';
+import { createErrorHandler } from './utils/error-handler';
 
 export interface UseTrendingDataProps {
   //   ethAddress: string | null;
   sdkModules: { [key: string]: any };
   logger?: any;
-  onError?: (err: Error) => void;
+  onError: (err: IAkashaError) => void;
 }
 
 interface ITrendingState {
@@ -49,7 +51,7 @@ export interface ITrendingActions {
 const useTrendingData = (
   props: UseTrendingDataProps,
 ): [{ tags: any[]; profiles: any[] }, ITrendingActions] => {
-  const { sdkModules } = props;
+  const { sdkModules, onError } = props;
   const [trendingState, dispatch] = React.useReducer(trendingStateReducer, initialTrendingState);
 
   React.useEffect(() => {
@@ -60,7 +62,7 @@ const useTrendingData = (
       if (resp.data.searchTags) {
         actions.setTrendingTags(resp.data.searchTags);
       }
-    });
+    }, createErrorHandler('useTrendingData.getTrendingTags', false, onError));
 
     const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings(null);
     const trendingProfilesCall = sdkModules.profiles.profileService.getTrending(null);
@@ -80,7 +82,7 @@ const useTrendingData = (
         });
         actions.setTrendingProfiles(profiles);
       }
-    });
+    }, createErrorHandler('useTrendingData.getTrendingProfiles', false, onError));
     return () => {
       if (tagsSub) {
         tagsSub.unsubscribe();

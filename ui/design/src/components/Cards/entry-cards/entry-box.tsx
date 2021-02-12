@@ -76,7 +76,6 @@ export interface IEntryBoxProps {
   onMentionClick: (ethAddress: string) => void;
   // style
   style?: React.CSSProperties;
-  disableIpfsCopyLink?: boolean;
   disableReposting?: boolean;
   hidePublishTime?: boolean;
 }
@@ -111,7 +110,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onMentionClick,
     style,
     contentClickable,
-    disableIpfsCopyLink,
     disableReposting,
     hidePublishTime,
   } = props;
@@ -220,7 +218,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ref={akashaRef}
               clickable={true}
             />
-            {(onEntryFlag || !disableIpfsCopyLink) && (
+            {onEntryFlag && (
               <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
             )}
           </Box>
@@ -234,7 +232,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             CID={entryData.CID}
           />
         )}
-        {menuIconRef.current && menuDropOpen && (onEntryFlag || !disableIpfsCopyLink) && (
+        {menuIconRef.current && menuDropOpen && onEntryFlag && (
           <CardHeaderMenuDropdown
             target={menuIconRef.current}
             onMenuClose={closeMenuDrop}
@@ -249,7 +247,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           <ReadOnlyEditor content={entryData.content} handleMentionClick={onMentionClick} />
         </Box>
         {entryData.quote && (
-          <Box pad={{ bottom: 'medium' }} onClick={() => handleContentClick(entryData.quote)}>
+          <Box pad={{ vertical: 'medium' }} onClick={() => handleContentClick(entryData.quote)}>
             <EmbedBox embedEntryData={entryData.quote} />
           </Box>
         )}
