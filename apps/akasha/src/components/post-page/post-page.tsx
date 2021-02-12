@@ -91,7 +91,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
     dbService: sdkModules.db,
-    ethAddress: ethAddress,
+    pubKey: props.pubKey,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo);
     },

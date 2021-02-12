@@ -69,10 +69,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   });
 
   React.useEffect(() => {
-    if (ethAddress && !loginProfile.ethAddress) {
-      loginProfileActions.getProfileData({ pubKey: ethAddress });
+    if (pubKey) {
+      loginProfileActions.getProfileData({ pubKey });
     }
-  }, [ethAddress, loginProfile.ethAddress]);
+  }, [pubKey]);
 
   const { size } = useViewportSize();
 
@@ -80,7 +80,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    ethAddress,
+    pubKey,
     onError,
     dbService: sdkModules.db,
   });
@@ -113,7 +113,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     props.singleSpa.navigateToUrl(`/profile/${profilePubKey}`);
   };
   const handleEntryBookmark = (entryId: string) => {
-    if (!ethAddress) {
+    if (!pubKey) {
       return showLoginModal();
     }
     if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
@@ -122,7 +122,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     return bookmarkActions.bookmarkPost(entryId);
   };
   const handleEntryRepost = (_withComment: boolean, entryData: any) => {
-    if (!ethAddress) {
+    if (!pubKey) {
       showLoginModal();
     } else {
       setCurrentEmbedEntry(entryData);
