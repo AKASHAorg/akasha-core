@@ -177,6 +177,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const toggleDisplayCID = () => {
     setDisplayCID(!displayCID);
   };
+
   return (
     <ViewportSizeProvider>
       <Box style={style}>

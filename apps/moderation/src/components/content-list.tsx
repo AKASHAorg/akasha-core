@@ -17,7 +17,6 @@ interface IContentListProps {
   logger: any;
   singleSpa: any;
   sdkModules: any;
-  navigateToUrl: (path: string) => void;
 }
 
 interface IBaseItem {
@@ -66,7 +65,7 @@ const ContentList: React.FC<IContentListProps> = props => {
   React.useEffect(() => {
     if (!ethAddress) {
       // if not authenticated, prompt to authenticate
-      props.navigateToUrl('/moderation-app/unauthenticated');
+      props.singleSpa.navigateToUrl('/moderation-app/unauthenticated');
     } else {
       // if authenticated,
       getStatusCount();
