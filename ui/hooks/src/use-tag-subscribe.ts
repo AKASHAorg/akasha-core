@@ -65,7 +65,7 @@ export const useTagSubscribe = (
       call.subscribe((resp: any) => {
         if (resp.data && !tagSubscriptionState.includes(tagName)) {
           setTagSubscriptionState(prev => [...prev, tagName]);
-        } else if (resp.data && tagSubscriptionState.includes(tagName)) {
+        } else if (!resp.data && tagSubscriptionState.includes(tagName)) {
           setTagSubscriptionState(prev => prev.filter(tag => tag !== tagName));
         }
       }, createErrorHandler('useTagSubscribe.toggleTagSubscription', false, onError));
