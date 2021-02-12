@@ -32,7 +32,5 @@ export default async function getProvider(
       infuraId: '21f3771ff3814c3db46dfcd216c9e672',
     });
   }
-  const connection = new ethers.providers.Web3Provider(ethProvider);
-  await connection.listAccounts();
-  return connection;
+  return new ethers.providers.Web3Provider(ethProvider);
 }
