@@ -54,6 +54,10 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     contentClickable,
     disableReposting,
     hidePublishTime,
+    awaitingModerationLabel,
+    moderatedContentLabel,
+    ctaLabel,
+    handleFlipCard,
   } = props;
 
   return (
@@ -99,6 +103,10 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           contentClickable={contentClickable}
           disableReposting={disableReposting}
           hidePublishTime={hidePublishTime}
+          awaitingModerationLabel={awaitingModerationLabel}
+          moderatedContentLabel={moderatedContentLabel}
+          ctaLabel={ctaLabel}
+          handleFlipCard={handleFlipCard}
         />
       </Box>
     </MainAreaCardBox>

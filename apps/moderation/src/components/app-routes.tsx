@@ -22,7 +22,7 @@ interface AppRoutesProps {
 }
 
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
-  const { sdkModules, globalChannel, logger, singleSpa, layout, profileStore, onError } = props;
+  const { globalChannel, logger, layout, profileStore, onError } = props;
 
   const [loginModalState, setLoginModalState] = React.useState(false);
 
@@ -93,16 +93,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
         <Router>
           <Switch>
             <Route path={routes[HOME]}>
-              <ContentList
-                ethAddress={ethAddress}
-                slotId={layout.app.modalSlotId}
-                logger={logger}
-                sdkModules={sdkModules}
-                navigateToUrl={singleSpa.navigateToUrl}
-                // globalChannel={globalChannel}
-                // showLoginModal={showLoginModal}
-                // onError={onError}
-              />
+              <ContentList {...props} ethAddress={ethAddress} slotId={layout.app.modalSlotId} />
             </Route>
             <Route path={routes[UNAUTHENTICATED]}>
               <PromptAuthentication
@@ -112,7 +103,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
                 )}
                 buttonLabel={t('Connect a wallet')}
                 ethAddress={ethAddress}
-                navigateToUrl={singleSpa.navigateToUrl}
+                singleSpa={props.singleSpa}
                 showLoginModal={showLoginModal}
               />
             </Route>

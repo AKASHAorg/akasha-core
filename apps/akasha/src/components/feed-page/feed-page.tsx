@@ -89,6 +89,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [, errorActions] = useErrors({ logger });
 
   const [postsState, postsActions] = usePosts({
+    user: ethAddress,
     postsService: sdkModules.posts,
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
@@ -218,8 +219,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     setShowEditor(false);
   };
 
-  const handleFlipCard = (entry: any) => () => {
-    const modifiedEntry = { ...entry, reported: false };
+  const handleFlipCard = (entry: any, isQuote: boolean) => () => {
+    const modifiedEntry = isQuote
+      ? { ...entry, quote: { ...entry.quote, reported: false } }
+      : { ...entry, reported: false };
     postsActions.updatePostsState(modifiedEntry);
   };
 
@@ -341,15 +344,17 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             onAvatarClick={handleAvatarClick}
             onMentionClick={handleMentionClick}
             contentClickable={true}
+            awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
+            moderatedContentLabel={t('This content has been moderated')}
+            ctaLabel={t('See it anyway')}
+            handleFlipCard={handleFlipCard}
           />
         }
         itemCardAlt={(entry: any) => (
           <EntryCardHidden
-            descriptionLabel={t(
-              'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
-            )}
+            awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
             ctaLabel={t('See it anyway')}
-            handleFlipCard={handleFlipCard(entry)}
+            handleFlipCard={handleFlipCard(entry, false)}
           />
         )}
         customEntities={getFeedCustomEntities({

@@ -35,7 +35,7 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
             onClick={handleClick(onFlag)}
             color={'red'}
             iconSize="xs"
-            fontSize="small"
+            fontSize="medium"
           />
         </StyledSelectBox>
       </Box>

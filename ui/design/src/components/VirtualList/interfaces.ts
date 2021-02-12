@@ -36,7 +36,7 @@ export interface IVirtualListProps {
   loadMore: (payload: ILoadItemsPayload) => void;
   loadItemData?: (payload: ILoadItemDataPayload) => void;
   itemCard: React.ReactElement;
-  itemCardAlt: (entryId: string) => React.ReactElement;
+  itemCardAlt: (entry: any) => React.ReactElement;
   listHeader?: React.ReactElement;
   /* spacing between items (bottom) */
   itemSpacing?: number;

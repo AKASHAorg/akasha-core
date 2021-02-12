@@ -3,18 +3,23 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
+import { redirectToPost } from '../services/routing-service';
+
 const { Text, EntryCardMod, ProfileCard, MainAreaCardBox } = DS;
 
 export interface IEntryDataCardProps {
   entryData: any;
-  contentType: string;
   locale: ILocale;
+  contentType: string;
+  singleSpa: any;
 }
 
 const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
   const { entryData, contentType, locale } = props;
 
   const { t } = useTranslation();
+
+  const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
   return (
     <MainAreaCardBox>
@@ -27,9 +32,9 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               repliesLabel={t('Replies')}
               locale={locale}
               style={{ height: 'auto' }}
+              contentClickable={true}
               onClickAvatar={() => null}
-              onClickReplies={() => null}
-              onContentClick={() => null}
+              onContentClick={handleNavigateToPost}
             />
           )}
           {contentType === 'profile' && (

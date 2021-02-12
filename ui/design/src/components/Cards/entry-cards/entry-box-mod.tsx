@@ -23,8 +23,8 @@ export interface IEntryBoxModProps {
   repliesLabel: string;
   locale: ILocale;
   comment?: boolean;
+  contentClickable?: boolean;
   onClickAvatar: React.MouseEventHandler<HTMLDivElement>;
-  onClickReplies: (entryId: string) => void;
   onContentClick?: (details: IContentClickDetails) => void;
 }
 
@@ -34,8 +34,8 @@ const EntryBoxMod: React.FC<IEntryBoxModProps> = props => {
     repostsLabel,
     repliesLabel,
     locale,
+    contentClickable,
     onClickAvatar,
-    onClickReplies,
     onContentClick,
   } = props;
 
@@ -56,12 +56,10 @@ const EntryBoxMod: React.FC<IEntryBoxModProps> = props => {
     setMenuDropOpen(!menuDropOpen);
   };
 
-  const handleRepliesClick = () => {
-    onClickReplies(entryData.entryId);
-  };
+  const handleRepliesClick = () => handleContentClick(entryData);
 
-  const handleContentClick = () => {
-    if (onContentClick && typeof onContentClick === 'function') {
+  const handleContentClick = (data?: IEntryData) => {
+    if (onContentClick && typeof onContentClick === 'function' && data) {
       onContentClick({
         authorEthAddress: entryData.author.ethAddress,
         entryId: entryData.entryId,
@@ -125,7 +123,12 @@ const EntryBoxMod: React.FC<IEntryBoxModProps> = props => {
             CID={entryData.CID}
           />
         )}
-        <Box pad={{ vertical: 'medium' }} onClick={handleContentClick}>
+        <Box
+          pad={{ vertical: 'medium' }}
+          style={{ cursor: contentClickable ? 'pointer' : 'default' }}
+          onClick={() => (contentClickable ? handleContentClick(entryData) : false)}
+        >
+          {/* switch to readonly Editor */}
           <Slate
             editor={editor}
             value={entryData.content}
