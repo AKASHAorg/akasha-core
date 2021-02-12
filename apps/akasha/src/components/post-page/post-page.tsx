@@ -416,7 +416,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               descriptionLabel={t(
                 'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
               )}
-              descriptionAltLabel={t('This content has been delisted')}
+              descriptionAltLabel={t('This content has been moderated')}
               ctaLabel={t('See it anyway')}
               handleFlipCard={handleFlipCard}
             />
@@ -455,7 +455,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       )}
       {entryData && entryData.delisted && (
         <EntryCardHidden
-          descriptionAltLabel={t('This content has been delisted')}
+          descriptionAltLabel={t('This content has been moderated')}
           isDelisted={true}
         />
       )}

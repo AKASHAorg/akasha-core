@@ -346,7 +346,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             descriptionLabel={t(
               'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
             )}
-            descriptionAltLabel={t('This content has been delisted')}
+            descriptionAltLabel={t('This content has been moderated')}
             ctaLabel={t('See it anyway')}
             handleFlipCard={handleFlipCard}
           />
