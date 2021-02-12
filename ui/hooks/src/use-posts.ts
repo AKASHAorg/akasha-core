@@ -110,17 +110,51 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         ...prev,
         fetchingPosts: prev.fetchingPosts.concat([postId]),
       }));
-      getEntryCall.subscribe((responses: [any, any]) => {
+      getEntryCall.subscribe(async (responses: [any, any]) => {
         const [ipfsResp, entryResp] = responses;
         const ipfsGateway = ipfsResp.data;
         const entry = entryResp.data?.getPost;
         if (entry) {
           const mappedEntry = mapEntry(entry, ipfsGateway, logger);
-          setPostsState(prev => ({
-            ...prev,
-            postsData: { ...prev.postsData, [mappedEntry.entryId]: mappedEntry },
-            fetchingPosts: prev.fetchingPosts.filter(id => id !== postId),
-          }));
+
+          const status = await moderationRequest.checkStatus(false, { user }, mappedEntry.entryId);
+
+          const qstatus =
+            mappedEntry.quote &&
+            (await moderationRequest.checkStatus(false, { user }, mappedEntry.quote.entryId));
+
+          if (status && status.constructor === Object) {
+            const modifiedEntry = {
+              ...mappedEntry,
+              reported: status.reported,
+              delisted: status.delisted,
+              quote: mappedEntry.quote
+                ? {
+                    ...mappedEntry.quote,
+                    reported:
+                      qstatus && status.constructor === Object
+                        ? qstatus.reported
+                        : mappedEntry.quote.reported,
+                    delisted:
+                      qstatus && status.constructor === Object
+                        ? qstatus.delisted
+                        : mappedEntry.quote.reported,
+                  }
+                : mappedEntry.quote,
+            };
+
+            setPostsState(prev => ({
+              ...prev,
+              postsData: { ...prev.postsData, [modifiedEntry.entryId]: modifiedEntry },
+              fetchingPosts: prev.fetchingPosts.filter(id => id !== postId),
+            }));
+          } else {
+            setPostsState(prev => ({
+              ...prev,
+              postsData: { ...prev.postsData, [mappedEntry.entryId]: mappedEntry },
+              fetchingPosts: prev.fetchingPosts.filter(id => id !== postId),
+            }));
+          }
         }
       }, createErrorHandler('usePosts.getPost', false, onError));
     },
