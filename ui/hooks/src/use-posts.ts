@@ -51,6 +51,7 @@ export interface PostsActions {
 }
 
 export interface UsePostsProps {
+  user: string | null;
   postsService: any;
   ipfsService: any;
   profileService?: any;
@@ -85,7 +86,7 @@ export interface GetEntriesResponse {
 }
 
 const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
-  const { postsService, ipfsService, profileService, logger, onError } = props;
+  const { user, postsService, ipfsService, profileService, logger, onError } = props;
   const [postsState, setPostsState] = React.useState<PostsState>({
     postIds: [],
     commentIds: [],
@@ -171,11 +172,11 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
           })
           .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
 
-        const status = await fetchRequest.checkStatus(true, { contentIds: newIds });
+        const status = await fetchRequest.checkStatus(true, { user, contentIds: newIds });
 
         const qstatus =
           !!newQuoteIds.length &&
-          (await fetchRequest.checkStatus(true, { contentIds: newQuoteIds }));
+          (await fetchRequest.checkStatus(true, { user, contentIds: newQuoteIds }));
         if (status && status.constructor === Array) {
           status.forEach((res: any) => {
             const target = posts[res.contentId];

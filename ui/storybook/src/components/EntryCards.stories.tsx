@@ -60,7 +60,7 @@ storiesOf('Cards/Entry Cards', module)
       <EntryCardHidden
         descriptionLabel={text(
           'Description Label',
-          'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
+          'You have reported this post. It is awaiting moderation.',
         )}
         ctaLabel={text('Call To Action Label', 'See it anyway')}
         handleFlipCard={() => null}

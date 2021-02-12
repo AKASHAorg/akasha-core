@@ -36,6 +36,7 @@ const BookmarksPage = (props: RootComponentProps) => {
 
   const [postState, postActions] = usePosts({
     logger,
+    user: loginState.ethAddress,
     postsService: sdkModules.posts,
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
@@ -186,7 +187,7 @@ const BookmarksPage = (props: RootComponentProps) => {
                     itemCardAlt={(entry: any) => (
                       <EntryCardHidden
                         descriptionLabel={t(
-                          'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
+                          'You have reported this post. It is awaiting moderation.',
                         )}
                         ctaLabel={t('See it anyway')}
                         handleFlipCard={handleFlipCard(entry)}

@@ -69,6 +69,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const [, errorActions] = useErrors({ logger });
 
   const [postsState, postsActions] = usePosts({
+    user: ethAddress,
     postsService: sdkModules.posts,
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
@@ -151,11 +152,15 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       if (entry) {
         const mappedEntry = mapEntry(entry, ipfsGateway, logger);
 
-        const status = await fetchRequest.checkStatus(false, {}, mappedEntry.entryId);
+        const status = await fetchRequest.checkStatus(
+          false,
+          { user: ethAddress },
+          mappedEntry.entryId,
+        );
 
         const qstatus =
           mappedEntry.quote &&
-          (await fetchRequest.checkStatus(false, {}, mappedEntry.quote.entryId));
+          (await fetchRequest.checkStatus(false, { user: ethAddress }, mappedEntry.quote.entryId));
 
         if (status && status.constructor === Object) {
           const modifiedEntry = {
@@ -413,9 +418,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               isFollowingAuthor={isFollowing}
               onContentClick={handleNavigateToPost}
               onMentionClick={handleMentionClick}
-              descriptionLabel={t(
-                'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
-              )}
+              descriptionLabel={t('You have reported this post. It is awaiting moderation.')}
               descriptionAltLabel={t('This content has been moderated')}
               ctaLabel={t('See it anyway')}
               handleFlipCard={handleFlipCard}
@@ -446,9 +449,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       )}
       {entryData && !entryData.delisted && entryData.reported && (
         <EntryCardHidden
-          descriptionLabel={t(
-            'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
-          )}
+          descriptionLabel={t('You have reported this post. It is awaiting moderation.')}
           ctaLabel={t('See it anyway')}
           handleFlipCard={handleFlipCard(entryData, false)}
         />
@@ -485,9 +486,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         }
         itemCardAlt={(entry: any) => (
           <EntryCardHidden
-            descriptionLabel={t(
-              'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
-            )}
+            descriptionLabel={t('You have reported this post. It is awaiting moderation.')}
             ctaLabel={t('See it anyway')}
             handleFlipCard={handleListFlipCard(entry, false)}
           />
