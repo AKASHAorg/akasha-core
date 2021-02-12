@@ -1,5 +1,5 @@
 import constants from './constants';
-import fetchRequest from './fetch-request';
+import moderationRequest from './moderation-request';
 import useProfile from './use-profile';
 import useEntryPublisher from './use-entry-publisher';
 import useFeedReducer from './use-feed-reducer';
@@ -14,10 +14,11 @@ import useTrendingData from './use-trending-data';
 import useFollow from './use-follow';
 import useNotifications from './use-notifications';
 import useTagSubscribe from './use-tag-subscribe';
+import useSearch from './use-search';
 
 export {
   constants,
-  fetchRequest,
+  moderationRequest,
   useProfile,
   useFeedReducer,
   useEntryPublisher,
@@ -33,4 +34,5 @@ export {
   BookmarkTypes,
   useNotifications,
   useTagSubscribe,
+  useSearch,
 };

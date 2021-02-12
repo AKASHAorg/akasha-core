@@ -135,6 +135,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
           makeADecisionLabel={makeADecisionLabel}
           reviewDecisionLabel={reviewDecisionLabel}
           logger={props.logger}
+          singleSpa={props.singleSpa}
           sdkModules={props.sdkModules}
           handleButtonClick={props.handleButtonClick}
         />

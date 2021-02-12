@@ -3,6 +3,7 @@ import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { getMediaUrl } from './utils/media-utils';
 import { filter } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
+import { createErrorHandler } from './utils/error-handler';
 
 export interface UseNotificationsActions {
   getMessages: () => void;
@@ -64,16 +65,6 @@ export const useNotifications = (
     }
   };
 
-  const handleError = (err: Error) => {
-    if (onError) {
-      onError({
-        errorKey: 'useNotifications.globalNotifications',
-        error: err,
-        critical: false,
-      });
-    }
-  };
-
   // this is used to sync notification state between different components using the hook
   React.useEffect(() => {
     const call = globalChannel.pipe(
@@ -84,7 +75,10 @@ export const useNotifications = (
         );
       }),
     );
-    call.subscribe(handleSubscribe, handleError);
+    call.subscribe(
+      handleSubscribe,
+      createErrorHandler('useNotifications.globalNotifications', false, onError),
+    );
     return () => call.unsubscribe();
   }, []);
 
@@ -146,29 +140,19 @@ export const useNotifications = (
       }
     },
     markMessageAsRead(messageId) {
-      try {
-        const call = authService.markMessageAsRead(messageId);
-        call.subscribe((resp: any) => {
-          if (resp.data) {
-            setNotificationsState((prev: any) => {
-              return {
-                ...prev,
-                notifications: prev.notifications.filter((notif: any) => {
-                  return notif.id !== messageId;
-                }),
-              };
-            });
-          }
-        });
-      } catch (ex) {
-        if (onError) {
-          onError({
-            errorKey: 'useNotifications.markMessageAsRead',
-            error: ex,
-            critical: false,
+      const call = authService.markMessageAsRead(messageId);
+      call.subscribe((resp: any) => {
+        if (resp.data) {
+          setNotificationsState((prev: any) => {
+            return {
+              ...prev,
+              notifications: prev.notifications.filter((notif: any) => {
+                return notif.id !== messageId;
+              }),
+            };
           });
         }
-      }
+      }, createErrorHandler('useNotifications.markMessageAsRead', false, onError));
     },
   };
 

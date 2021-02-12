@@ -30,6 +30,10 @@ export interface IEntryCardRendererProps {
   contentClickable?: boolean;
   disableIpfsCopyLink?: boolean;
   hidePublishTime?: boolean;
+  moderatedContentLabel?: string;
+  awaitingModerationLabel?: string;
+  ctaLabel?: string;
+  handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
@@ -44,8 +48,11 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     logger,
     globalChannel,
     contentClickable,
-    disableIpfsCopyLink,
     hidePublishTime,
+    moderatedContentLabel,
+    awaitingModerationLabel,
+    ctaLabel,
+    handleFlipCard,
   } = props;
 
   const isBookmarked = React.useMemo(() => {
@@ -139,8 +146,11 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   onContentClick={props.onNavigate}
                   onMentionClick={props.onMentionClick}
                   contentClickable={contentClickable}
-                  disableIpfsCopyLink={disableIpfsCopyLink}
                   hidePublishTime={hidePublishTime}
+                  moderatedContentLabel={moderatedContentLabel}
+                  awaitingModerationLabel={awaitingModerationLabel}
+                  ctaLabel={ctaLabel}
+                  handleFlipCard={handleFlipCard}
                 />
               )}
             </>

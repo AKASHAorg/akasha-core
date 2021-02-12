@@ -27,6 +27,7 @@ const Content: React.FC<IContentProps> = props => {
           entryData={props.entryData}
           contentType={props.contentType}
           locale={props.locale}
+          singleSpa={props.singleSpa}
         />
       )}
       <Box

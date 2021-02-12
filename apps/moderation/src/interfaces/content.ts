@@ -34,6 +34,7 @@ export interface IContentProps {
   makeADecisionLabel?: string;
   reviewDecisionLabel?: string;
   logger: any;
+  singleSpa: any;
   sdkModules: any;
   handleButtonClick: (param1: string, param2: string) => void;
 }
