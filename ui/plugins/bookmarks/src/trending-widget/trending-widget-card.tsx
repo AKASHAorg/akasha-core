@@ -2,7 +2,12 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
-import { useTrendingData, useLoginState, useFollow } from '@akashaproject/ui-awf-hooks';
+import {
+  useTrendingData,
+  useLoginState,
+  useFollow,
+  useTagSubscribe,
+} from '@akashaproject/ui-awf-hooks';
 
 const { TrendingWidgetCard } = DS;
 
@@ -13,7 +18,12 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation();
 
-  const [trendingData] = useTrendingData({ sdkModules: sdkModules });
+  const [trendingData] = useTrendingData({
+    sdkModules: sdkModules,
+    onError: (err: IAkashaError) => {
+      logger.error('useTrendingData error %j', err);
+    },
+  });
 
   const [loginState] = useLoginState({
     globalChannel: globalChannel,
@@ -33,6 +43,14 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
     },
   });
 
+  const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
+    globalChannel,
+    profileService: sdkModules.profiles.profileService,
+    onError: (errorInfo: IAkashaError) => {
+      logger.error(errorInfo.error.message, errorInfo.errorKey);
+    },
+  });
+
   React.useEffect(() => {
     if (loginState.ethAddress) {
       trendingData.profiles.slice(0, 4).forEach(async (profile: any) => {
@@ -40,17 +58,18 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
           followActions.isFollowing(loginState.ethAddress, profile.ethAddress);
         }
       });
+      tagSubscriptionActions.getTagSubscriptions();
     }
-  }, [trendingData.profiles, loginState.ethAddress]);
+  }, [trendingData, loginState.ethAddress]);
 
   const handleTagClick = () => {
     // todo
   };
-  const handleTagSubscribe = () => {
-    // todo
+  const handleTagSubscribe = (tagName: string) => {
+    tagSubscriptionActions.toggleTagSubscription(tagName);
   };
-  const handleTagUnsubscribe = () => {
-    // todo
+  const handleTagUnsubscribe = (tagName: string) => {
+    tagSubscriptionActions.toggleTagSubscription(tagName);
   };
   const handleProfileClick = (ethAddress: string) => {
     singleSpa.navigateToUrl(`/profile/${ethAddress}`);
@@ -75,7 +94,7 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
       tags={trendingData.tags}
       profiles={trendingData.profiles}
       followedProfiles={followedProfiles}
-      subscribedTags={[]}
+      subscribedTags={tagSubscriptionState}
       onClickTag={handleTagClick}
       handleSubscribeTag={handleTagSubscribe}
       handleUnsubscribeTag={handleTagUnsubscribe}

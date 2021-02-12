@@ -77,7 +77,6 @@ export interface IEntryBoxProps {
   onMentionClick: (ethAddress: string) => void;
   // style
   style?: React.CSSProperties;
-  disableIpfsCopyLink?: boolean;
   disableReposting?: boolean;
   hidePublishTime?: boolean;
   descriptionLabel?: string;
@@ -116,7 +115,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onMentionClick,
     style,
     contentClickable,
-    disableIpfsCopyLink,
     disableReposting,
     hidePublishTime,
     descriptionLabel,
@@ -230,7 +228,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ref={akashaRef}
               clickable={true}
             />
-            {(onEntryFlag || !disableIpfsCopyLink) && (
+            {onEntryFlag && (
               <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
             )}
           </Box>
@@ -244,7 +242,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             CID={entryData.CID}
           />
         )}
-        {menuIconRef.current && menuDropOpen && (onEntryFlag || !disableIpfsCopyLink) && (
+        {menuIconRef.current && menuDropOpen && onEntryFlag && (
           <CardHeaderMenuDropdown
             target={menuIconRef.current}
             onMenuClose={closeMenuDrop}
