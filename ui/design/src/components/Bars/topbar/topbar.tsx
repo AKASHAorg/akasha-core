@@ -227,18 +227,17 @@ const Topbar = (props: ITopbarProps) => {
             }}
           />
         );
-      } else {
-        return (
-          <StyledSearchContainer>
-            <SearchBar
-              inputValue={inputValue}
-              onInputChange={ev => setInputValue(ev.target.value)}
-              handleKeyDown={ev => onSearch(ev, inputValue)}
-              inputPlaceholderLabel={searchBarLabel}
-            />
-          </StyledSearchContainer>
-        );
       }
+      return (
+        <StyledSearchContainer>
+          <SearchBar
+            inputValue={inputValue}
+            onInputChange={ev => setInputValue(ev.target.value)}
+            handleKeyDown={ev => onSearch(ev, inputValue)}
+            inputPlaceholderLabel={searchBarLabel}
+          />
+        </StyledSearchContainer>
+      );
     }
     return;
   };
