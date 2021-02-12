@@ -79,8 +79,8 @@ export interface IEntryBoxProps {
   style?: React.CSSProperties;
   disableReposting?: boolean;
   hidePublishTime?: boolean;
-  descriptionLabel?: string;
-  descriptionAltLabel?: string;
+  awaitingModerationLabel?: string;
+  moderatedContentLabel?: string;
   ctaLabel?: string;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
 }
@@ -117,8 +117,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     contentClickable,
     disableReposting,
     hidePublishTime,
-    descriptionLabel,
-    descriptionAltLabel,
+    awaitingModerationLabel,
+    moderatedContentLabel,
     ctaLabel,
     handleFlipCard,
   } = props;
@@ -264,7 +264,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         {entryData.quote && !entryData.quote.delisted && entryData.quote.reported && (
           <Box pad={{ vertical: 'medium' }} onClick={() => null}>
             <EntryCardHidden
-              descriptionLabel={descriptionLabel}
+              awaitingModerationLabel={awaitingModerationLabel}
               ctaLabel={ctaLabel}
               handleFlipCard={handleFlipCard && handleFlipCard(entryData, true)}
             />
@@ -272,7 +272,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {entryData.quote && entryData.quote.delisted && (
           <Box pad={{ vertical: 'medium' }} onClick={() => null}>
-            <EntryCardHidden descriptionAltLabel={descriptionAltLabel} isDelisted={true} />
+            <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
           </Box>
         )}
         <CardActions

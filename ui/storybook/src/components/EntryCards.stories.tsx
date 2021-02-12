@@ -58,7 +58,7 @@ storiesOf('Cards/Entry Cards', module)
   .add('entry card hidden', () => (
     <Box align="center" pad={{ top: '40px' }}>
       <EntryCardHidden
-        descriptionLabel={text(
+        awaitingModerationLabel={text(
           'Description Label',
           'You have reported this post. It is awaiting moderation.',
         )}

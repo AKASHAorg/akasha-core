@@ -3,7 +3,7 @@ import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import * as React from 'react';
 import { combineLatest } from 'rxjs';
 
-import fetchRequest from './fetch-request';
+import moderationRequest from './fetch-request';
 import {
   buildPublishObject,
   createPendingEntry,
@@ -172,11 +172,11 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
           })
           .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
 
-        const status = await fetchRequest.checkStatus(true, { user, contentIds: newIds });
+        const status = await moderationRequest.checkStatus(true, { user, contentIds: newIds });
 
         const qstatus =
           !!newQuoteIds.length &&
-          (await fetchRequest.checkStatus(true, { user, contentIds: newQuoteIds }));
+          (await moderationRequest.checkStatus(true, { user, contentIds: newQuoteIds }));
         if (status && status.constructor === Array) {
           status.forEach((res: any) => {
             const target = posts[res.contentId];

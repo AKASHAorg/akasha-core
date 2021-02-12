@@ -5,21 +5,27 @@ import { Icon } from '../../Icon';
 import { MainAreaCardBox } from '../common/basic-card-box';
 
 export interface IEntryCardHiddenProps {
-  descriptionLabel?: string;
-  descriptionAltLabel?: string;
+  awaitingModerationLabel?: string;
+  moderatedContentLabel?: string;
   ctaLabel?: string;
   isDelisted?: boolean;
   handleFlipCard?: any;
 }
 
 const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
-  const { descriptionLabel, descriptionAltLabel, ctaLabel, isDelisted, handleFlipCard } = props;
+  const {
+    awaitingModerationLabel,
+    moderatedContentLabel,
+    ctaLabel,
+    isDelisted,
+    handleFlipCard,
+  } = props;
   return (
     <MainAreaCardBox dashedBorder={true}>
       <Box direction="row" pad="medium" align="start">
         <Icon type="error" size="md" accentColor={true} />
         <Text size="large" margin={{ left: 'medium' }}>
-          {!isDelisted ? descriptionLabel : descriptionAltLabel}
+          {!isDelisted ? awaitingModerationLabel : moderatedContentLabel}
           {ctaLabel && (
             <Text
               as="span"

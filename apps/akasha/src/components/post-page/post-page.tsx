@@ -9,7 +9,7 @@ import {
   useProfile,
   useFollow,
   useErrors,
-  fetchRequest,
+  moderationRequest,
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
@@ -152,7 +152,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       if (entry) {
         const mappedEntry = mapEntry(entry, ipfsGateway, logger);
 
-        const status = await fetchRequest.checkStatus(
+        const status = await moderationRequest.checkStatus(
           false,
           { user: ethAddress },
           mappedEntry.entryId,
@@ -160,7 +160,11 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
         const qstatus =
           mappedEntry.quote &&
-          (await fetchRequest.checkStatus(false, { user: ethAddress }, mappedEntry.quote.entryId));
+          (await moderationRequest.checkStatus(
+            false,
+            { user: ethAddress },
+            mappedEntry.quote.entryId,
+          ));
 
         if (status && status.constructor === Object) {
           const modifiedEntry = {
@@ -418,8 +422,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               isFollowingAuthor={isFollowing}
               onContentClick={handleNavigateToPost}
               onMentionClick={handleMentionClick}
-              descriptionLabel={t('You have reported this post. It is awaiting moderation.')}
-              descriptionAltLabel={t('This content has been moderated')}
+              awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
+              moderatedContentLabel={t('This content has been moderated')}
               ctaLabel={t('See it anyway')}
               handleFlipCard={handleFlipCard}
             />
@@ -449,14 +453,14 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       )}
       {entryData && !entryData.delisted && entryData.reported && (
         <EntryCardHidden
-          descriptionLabel={t('You have reported this post. It is awaiting moderation.')}
+          awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
           ctaLabel={t('See it anyway')}
           handleFlipCard={handleFlipCard(entryData, false)}
         />
       )}
       {entryData && entryData.delisted && (
         <EntryCardHidden
-          descriptionAltLabel={t('This content has been moderated')}
+          moderatedContentLabel={t('This content has been moderated')}
           isDelisted={true}
         />
       )}
@@ -486,7 +490,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         }
         itemCardAlt={(entry: any) => (
           <EntryCardHidden
-            descriptionLabel={t('You have reported this post. It is awaiting moderation.')}
+            awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
             ctaLabel={t('See it anyway')}
             handleFlipCard={handleListFlipCard(entry, false)}
           />

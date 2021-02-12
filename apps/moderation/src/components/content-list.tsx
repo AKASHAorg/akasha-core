@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { fetchRequest } from '@akashaproject/ui-awf-hooks';
+import { moderationRequest } from '@akashaproject/ui-awf-hooks';
 
 import ContentCard from './content-card/content-card';
 import ContentTab from './content-tab';
@@ -46,7 +46,7 @@ interface ICount {
 }
 
 const ContentList: React.FC<IContentListProps> = props => {
-  const { slotId, ethAddress, logger, singleSpa, sdkModules } = props;
+  const { slotId, ethAddress, logger, sdkModules } = props;
 
   const [pendingItems, setPendingItems] = React.useState<IPendingItem[]>([]);
   const [moderatedItems, setModeratedItems] = React.useState<IModeratedItem[]>([]);
@@ -83,7 +83,7 @@ const ContentList: React.FC<IContentListProps> = props => {
   const getStatusCount = async () => {
     setRequesting(true);
     try {
-      const response = await fetchRequest.getCount();
+      const response = await moderationRequest.getCount();
       setCount(() => response);
       setRequesting(false);
     } catch (error) {
@@ -96,7 +96,7 @@ const ContentList: React.FC<IContentListProps> = props => {
     // fetch pending (reported) contents
     setRequesting(true);
     try {
-      const modResponse = await fetchRequest.getAllPending();
+      const modResponse = await moderationRequest.getAllPending();
       setPendingItems(() => modResponse);
       setRequesting(false);
     } catch (error) {
@@ -109,7 +109,7 @@ const ContentList: React.FC<IContentListProps> = props => {
     // fetch delisted (moderated) contents
     setRequesting(true);
     try {
-      const modResponse = await fetchRequest.getAllModerated();
+      const modResponse = await moderationRequest.getAllModerated();
       setModeratedItems(() => modResponse);
       setRequesting(false);
     } catch (error) {
@@ -183,6 +183,7 @@ const ContentList: React.FC<IContentListProps> = props => {
         (pendingItems.length
           ? pendingItems.map((pendingItem: IPendingItem) => (
               <ContentCard
+                {...props}
                 key={pendingItem.id}
                 isPending={isPending}
                 locale={locale}
@@ -205,9 +206,6 @@ const ContentList: React.FC<IContentListProps> = props => {
                 reportedOnLabel={t('On')}
                 reportedDateTime={pendingItem.entryDate}
                 makeADecisionLabel={t('Make a Decision')}
-                logger={logger}
-                singleSpa={singleSpa}
-                sdkModules={sdkModules}
                 handleButtonClick={handleButtonClick}
               />
             ))
@@ -219,6 +217,7 @@ const ContentList: React.FC<IContentListProps> = props => {
               .filter(item => item.delisted === isDelisted)
               .map(moderatedItem => (
                 <ContentCard
+                  {...props}
                   key={moderatedItem.id}
                   isPending={isPending}
                   locale={locale}
@@ -252,9 +251,6 @@ const ContentList: React.FC<IContentListProps> = props => {
                   moderatedOnLabel={t('On')}
                   evaluationDateTime={moderatedItem.evaluationDate}
                   reviewDecisionLabel={t('Review decision')}
-                  logger={logger}
-                  singleSpa={singleSpa}
-                  sdkModules={sdkModules}
                   handleButtonClick={() => null}
                 />
               ))

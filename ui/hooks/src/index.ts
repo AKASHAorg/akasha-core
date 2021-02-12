@@ -1,5 +1,5 @@
 import constants from './constants';
-import fetchRequest from './fetch-request';
+import moderationRequest from './fetch-request';
 import useProfile from './use-profile';
 import useEntryPublisher from './use-entry-publisher';
 import useFeedReducer from './use-feed-reducer';
@@ -18,7 +18,7 @@ import useSearch from './use-search';
 
 export {
   constants,
-  fetchRequest,
+  moderationRequest,
   useProfile,
   useFeedReducer,
   useEntryPublisher,

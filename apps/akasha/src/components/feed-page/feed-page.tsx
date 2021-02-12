@@ -344,15 +344,15 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             onAvatarClick={handleAvatarClick}
             onMentionClick={handleMentionClick}
             contentClickable={true}
-            descriptionLabel={t('You have reported this post. It is awaiting moderation.')}
-            descriptionAltLabel={t('This content has been moderated')}
+            awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
+            moderatedContentLabel={t('This content has been moderated')}
             ctaLabel={t('See it anyway')}
             handleFlipCard={handleFlipCard}
           />
         }
         itemCardAlt={(entry: any) => (
           <EntryCardHidden
-            descriptionLabel={t('You have reported this post. It is awaiting moderation.')}
+            awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
             ctaLabel={t('See it anyway')}
             handleFlipCard={handleFlipCard(entry, false)}
           />

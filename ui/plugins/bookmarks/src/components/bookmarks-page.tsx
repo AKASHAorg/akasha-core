@@ -186,7 +186,7 @@ const BookmarksPage = (props: RootComponentProps) => {
                     }
                     itemCardAlt={(entry: any) => (
                       <EntryCardHidden
-                        descriptionLabel={t(
+                        awaitingModerationLabel={t(
                           'You have reported this post. It is awaiting moderation.',
                         )}
                         ctaLabel={t('See it anyway')}

@@ -30,8 +30,8 @@ export interface IEntryCardRendererProps {
   contentClickable?: boolean;
   disableIpfsCopyLink?: boolean;
   hidePublishTime?: boolean;
-  descriptionAltLabel?: string;
-  descriptionLabel?: string;
+  moderatedContentLabel?: string;
+  awaitingModerationLabel?: string;
   ctaLabel?: string;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
 }
@@ -49,8 +49,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     globalChannel,
     contentClickable,
     hidePublishTime,
-    descriptionAltLabel,
-    descriptionLabel,
+    moderatedContentLabel,
+    awaitingModerationLabel,
     ctaLabel,
     handleFlipCard,
   } = props;
@@ -147,8 +147,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   onMentionClick={props.onMentionClick}
                   contentClickable={contentClickable}
                   hidePublishTime={hidePublishTime}
-                  descriptionAltLabel={descriptionAltLabel}
-                  descriptionLabel={descriptionLabel}
+                  moderatedContentLabel={moderatedContentLabel}
+                  awaitingModerationLabel={awaitingModerationLabel}
                   ctaLabel={ctaLabel}
                   handleFlipCard={handleFlipCard}
                 />

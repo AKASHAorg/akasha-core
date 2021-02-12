@@ -54,8 +54,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     contentClickable,
     disableReposting,
     hidePublishTime,
-    descriptionLabel,
-    descriptionAltLabel,
+    awaitingModerationLabel,
+    moderatedContentLabel,
     ctaLabel,
     handleFlipCard,
   } = props;
@@ -103,8 +103,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           contentClickable={contentClickable}
           disableReposting={disableReposting}
           hidePublishTime={hidePublishTime}
-          descriptionLabel={descriptionLabel}
-          descriptionAltLabel={descriptionAltLabel}
+          awaitingModerationLabel={awaitingModerationLabel}
+          moderatedContentLabel={moderatedContentLabel}
           ctaLabel={ctaLabel}
           handleFlipCard={handleFlipCard}
         />
