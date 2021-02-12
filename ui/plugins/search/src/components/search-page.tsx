@@ -213,11 +213,11 @@ const SearchPage: React.FC<AppRoutesProps> = props => {
               pad={{ bottom: 'medium' }}
             >
               <ProfileCard
-                onENSChangeClick={() => {}}
-                onUpdateClick={() => {}}
-                onClickFollowers={() => {}}
-                onClickFollowing={() => {}}
-                onClickPosts={() => {}}
+                onENSChangeClick={() => null}
+                onUpdateClick={() => null}
+                onClickFollowers={() => null}
+                onClickFollowing={() => null}
+                onClickPosts={() => null}
                 handleFollow={() => handleFollowProfile(profileData.ethAddress)}
                 handleUnfollow={() => handleUnfollowProfile(profileData.ethAddress)}
                 handleShareClick={() => null}

@@ -130,7 +130,6 @@ export const useNotifications = (
         });
         setNotificationsState({ isFetching: false, notifications: completeMessages });
       } catch (ex) {
-        console.log('================ NOTIF ERR', ex);
         if (onError) {
           onError({
             errorKey: 'useNotifications.getMessages',
