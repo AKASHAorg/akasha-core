@@ -3,7 +3,7 @@ import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import * as React from 'react';
 import { combineLatest } from 'rxjs';
 
-import moderationRequest from './use-moderation-request';
+import moderationRequest from './moderation-request';
 import {
   buildPublishObject,
   createPendingEntry,
