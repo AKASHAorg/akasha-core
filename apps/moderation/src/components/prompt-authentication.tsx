@@ -12,23 +12,16 @@ const { Box, Text, Image, Button } = DS;
 export interface IPromptAuthenticationProps extends IPromptAuthorizationProps {
   buttonLabel?: string;
   ethAddress: string | null;
-  navigateToUrl: (path: string) => void;
+  singleSpa: any;
   showLoginModal: () => void;
 }
 
 const PromptAuthentication: React.FC<IPromptAuthenticationProps> = props => {
-  const {
-    titleLabel,
-    subtitleLabel,
-    buttonLabel,
-    ethAddress,
-    navigateToUrl,
-    showLoginModal,
-  } = props;
+  const { titleLabel, subtitleLabel, buttonLabel, ethAddress, showLoginModal } = props;
 
   React.useEffect(() => {
     if (ethAddress) {
-      navigateToUrl('/moderation-app/home');
+      props.singleSpa.navigateToUrl('/moderation-app/home');
     }
   }, [ethAddress]);
 

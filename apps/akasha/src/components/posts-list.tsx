@@ -147,9 +147,7 @@ const PostsList: React.FC<IPostsListProps> = props => {
           }
           itemCardAlt={(entry: any) => (
             <EntryCardHidden
-              descriptionLabel={t(
-                'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
-              )}
+              awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
               ctaLabel={t('See it anyway')}
               handleFlipCard={handleFlipCard(entry)}
             />

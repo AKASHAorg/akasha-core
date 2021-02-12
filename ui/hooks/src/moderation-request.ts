@@ -34,6 +34,18 @@ export default {
       return error;
     }
   },
+  getCount: async () => {
+    try {
+      const response = await fetchRequest({
+        method: 'GET',
+        url: `${BASE_STATUS_URL}/counters`,
+      });
+
+      return response;
+    } catch (error) {
+      return error;
+    }
+  },
   getFlags: async (entryId: string) => {
     try {
       const response = await fetchRequest({
