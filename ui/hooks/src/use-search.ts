@@ -24,7 +24,7 @@ export interface UseSearchProps {
   postsService: any;
 }
 
-/* A hook to get notifications and mark them as read */
+/* A hook to get search results and resolve the data within */
 export const useSearch = (props: UseSearchProps): [UseSearchState, UseSearchActions] => {
   const { onError, logger, ipfsService, profileService, postsService } = props;
   const [searchResultsState, setSearchResultsState] = React.useState<UseSearchState>({
@@ -80,7 +80,7 @@ export const useSearch = (props: UseSearchProps): [UseSearchState, UseSearchActi
           return mapEntry(entryResp.data?.getPost, ipfsGatewayResp.data, logger);
         });
 
-        // get posts data
+        // get comments data
         const getCommentsCalls = searchResp.data?.globalSearch?.comments?.map(
           (comment: { id: string }) => postsService.comments.getComment({ commentID: comment.id }),
         );
@@ -90,6 +90,7 @@ export const useSearch = (props: UseSearchProps): [UseSearchState, UseSearchActi
           return mapEntry(commentResp.data?.getComment, ipfsGatewayResp.data, logger);
         });
 
+        // get tags data
         const completeTags = searchResp.data?.globalSearch?.tags?.map(
           (tag: { id: string; name: string }) => tag.name,
         );
