@@ -27,7 +27,7 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
   } = props;
 
   let customEntities: any = [];
-  if (pendingComments.length) {
+  if (pendingComments?.length) {
     customEntities = customEntities.concat(
       pendingComments.map((entry, idx) => ({
         position: 'before',
