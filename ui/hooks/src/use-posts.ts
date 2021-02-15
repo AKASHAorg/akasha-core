@@ -199,7 +199,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
           .map(entry => {
             newIds.push(entry._id);
             // check if entry has quote and id of such quote is not yet in the list
-            if (entry.quotes.length > 0 && newQuoteIds.indexOf(entry.quotes[0]._id) === -1) {
+            if (entry.quotes?.length > 0 && newQuoteIds.indexOf(entry.quotes[0]._id) === -1) {
               newQuoteIds.push(entry.quotes[0]._id);
             }
             return mapEntry(entry, ipfsGateway, logger);
