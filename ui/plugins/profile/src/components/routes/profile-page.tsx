@@ -41,6 +41,7 @@ const ProfilePage = (props: ProfilePageProps) => {
     postsService: props.sdkModules.posts,
     ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
+    user: ethAddress,
   });
 
   React.useEffect(() => {

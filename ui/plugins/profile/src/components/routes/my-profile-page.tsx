@@ -110,6 +110,7 @@ const MyProfilePage = (props: MyProfileProps) => {
     postsService: props.sdkModules.posts,
     ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
+    user: props.loggedProfileData.ethAddress,
   });
 
   React.useEffect(() => {
