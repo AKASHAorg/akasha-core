@@ -41,7 +41,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
   } = props;
 
   const [entryData, setEntryData] = React.useState<any>(null);
-  const [profileState, profileActions] = useProfile({
+  const [profile, profileActions] = useProfile({
     onError: error => {
       props.logger.error('[content-card.tsx]: useProfile err %j', error.error || '');
     },
@@ -49,7 +49,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     profileService: props.sdkModules.profiles.profileService,
   });
 
-  const [reporterProfileState, reporterProfileActions] = useProfile({
+  const [reporterProfile, reporterProfileActions] = useProfile({
     onError: error => {
       props.logger.error('[content-card.tsx]: useProfile err %j', error.error || '');
     },
@@ -57,7 +57,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     profileService: props.sdkModules.profiles.profileService,
   });
 
-  const [moderatorProfileState, moderatorProfileActions] = useProfile({
+  const [moderatorProfile, moderatorProfileActions] = useProfile({
     onError: error => {
       props.logger.error('[content-card.tsx]: useProfile err %j', error.error || '');
     },
@@ -81,11 +81,8 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     }
     if (contentType === 'profile') {
       profileActions.getProfileData({ ethAddress: entryId });
-      if (profileState) {
-        setEntryData(profileState);
-      }
     }
-  }, [entryId, profileState]);
+  }, [entryId]);
 
   React.useEffect(() => {
     if (reporter) {
@@ -105,7 +102,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
         <Content
           isPending={isPending}
           locale={locale}
-          entryData={entryData}
+          entryData={contentType === 'profile' ? profile : entryData}
           showExplanationsLabel={showExplanationsLabel}
           hideExplanationsLabel={hideExplanationsLabel}
           determinationLabel={determinationLabel}
@@ -119,16 +116,16 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
           entryId={entryId}
           reasons={reasons}
           reporter={reporter}
-          reporterAvatar={reporterProfileState.avatar}
-          reporterName={reporterProfileState.name}
-          reporterENSName={reporterProfileState.userName}
+          reporterAvatar={reporterProfile.avatar}
+          reporterName={reporterProfile.name}
+          reporterENSName={reporterProfile.userName}
           otherReporters={otherReporters}
           reportedOnLabel={reportedOnLabel}
           reportedDateTime={reportedDateTime}
           moderatorDecision={moderatorDecision}
           moderator={moderator}
-          moderatorName={moderatorProfileState.name}
-          moderatorENSName={moderatorProfileState.userName}
+          moderatorName={moderatorProfile.name}
+          moderatorENSName={moderatorProfile.userName}
           moderatedByLabel={moderatedByLabel}
           moderatedOnLabel={moderatedOnLabel}
           evaluationDateTime={evaluationDateTime}
