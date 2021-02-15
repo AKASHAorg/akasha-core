@@ -227,12 +227,22 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
               };
             }
 
-            posts[res.contentId] = {
-              ...target,
-              delisted: res.delisted,
-              reported: res.reported,
-              quote: quote,
-            };
+            if (res.delisted) {
+              const index = newIds.indexOf(res.contentId);
+              if (index > -1) {
+                // remove the entry id from newIds
+                newIds.splice(index, 1);
+              }
+              // remove the entry from posts object
+              delete posts[res.contentId];
+            } else {
+              posts[res.contentId] = {
+                ...target,
+                delisted: res.delisted,
+                reported: res.reported,
+                quote: quote,
+              };
+            }
           });
         }
 

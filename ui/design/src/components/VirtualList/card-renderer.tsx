@@ -68,14 +68,9 @@ const CardRenderer = (props: IRenderItemProps) => {
       {!shouldLoadData && <EntryLoadingPlaceholder height={averageItemHeight} />}
       {itemData &&
         shouldLoadData &&
-        !itemData.delisted &&
         !itemData.reported &&
         React.cloneElement(itemCard, { itemId, itemData })}
-      {itemData &&
-        shouldLoadData &&
-        !itemData.delisted &&
-        itemData.reported &&
-        itemCardAlt(itemData)}
+      {itemData && shouldLoadData && itemData.reported && itemCardAlt(itemData)}
 
       {afterEntities.map((entityObj, idx) => {
         return entityObj.getComponent({
