@@ -57,6 +57,7 @@ export const mapEntry = (
     _id: string;
     quotes?: any[];
     quotedBy?: string[];
+    quotedByAuthors?: any[];
     creationDate: string;
     totalComments: string;
     postId?: string;
@@ -73,6 +74,8 @@ export const mapEntry = (
       totalFollowers?: number | string;
       totalFollowing?: number | string;
     };
+    delisted?: boolean;
+    reported?: boolean;
   },
   ipfsGateway: any,
   logger?: any,
@@ -110,6 +113,19 @@ export const mapEntry = (
   if (entry.quotes && entry.quotes[0]) {
     quotedEntry = mapEntry(entry.quotes[0], ipfsGateway, logger);
   }
+  let quotedByAuthors;
+  if (entry.quotedByAuthors && entry.quotedByAuthors.length > 0) {
+    quotedByAuthors = entry.quotedByAuthors.map((author: any) => {
+      let avatarWithGateway;
+      if (author.avatar) {
+        avatarWithGateway = getMediaUrl(ipfsGateway, author.avatar);
+      }
+      return {
+        ...author,
+        avatar: avatarWithGateway,
+      };
+    });
+  }
 
   return {
     author: {
@@ -134,7 +150,11 @@ export const mapEntry = (
     ipfsLink: entry._id,
     permalink: 'null',
     replies: +entry.totalComments,
+    delisted: entry.delisted || false,
+    reported: entry.reported || false,
     postId: entry.postId,
+    quotedBy: entry.quotedBy,
+    quotedByAuthors: quotedByAuthors,
   };
 };
 

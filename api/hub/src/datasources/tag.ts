@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB } from '../helpers';
+import { getAppDB, logger } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { Tag } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -26,12 +26,23 @@ class TagAPI extends DataSource {
   async searchTags(name: string) {
     const result = await searchIndex.search(name, {
       facetFilters: ['category:tag'],
-      hitsPerPage: 20,
+      hitsPerPage: 50,
       attributesToRetrieve: ['name'],
     });
-    return result.hits.map((element: any) => {
+    const tags = result.hits.map((element: any) => {
       return element.name;
     });
+    const results = [];
+    for (const tag of tags) {
+      const postHits = await searchIndex.search(tag, {
+        facetFilters: ['category:post'],
+        hitsPerPage: 2,
+        attributesToRetrieve: ['author', 'tags'],
+        restrictSearchableAttributes: ['tags'],
+      });
+      results.push({ name: tag, totalPosts: postHits.nbHits });
+    }
+    return results.sort((x, y) => y.totalPosts - x.totalPosts);
   }
 
   async getTag(name: string) {
@@ -50,13 +61,13 @@ class TagAPI extends DataSource {
   async getTags(limit: number, offset: string) {
     let tag: Tag[];
     const db: Client = await getAppDB();
-    if (queryCache.has(this.collection)) {
-      tag = queryCache.get(this.collection);
+    if (await queryCache.has(this.collection)) {
+      tag = await queryCache.get(this.collection);
     } else {
       tag = await db.find<Tag>(this.dbID, this.collection, {
         sort: { desc: true, fieldPath: 'creationDate' },
       });
-      queryCache.set(this.collection, tag);
+      await queryCache.set(this.collection, tag);
     }
     const offsetIndex = offset ? tag.findIndex(tagItem => tagItem._id === offset) : 0;
     let endIndex = limit + offsetIndex;
@@ -71,6 +82,7 @@ class TagAPI extends DataSource {
   async indexPost(postsCollection: string, postID: string, tagName: string) {
     const db: Client = await getAppDB();
     const postExists = await db.has(this.dbID, postsCollection, [postID]);
+    logger.info(`indexing tags for post: ${postID} -- ${tagName}`);
     if (!postExists) {
       return Promise.reject(`postID: ${postID} was not found`);
     }
@@ -138,7 +150,7 @@ class TagAPI extends DataSource {
       .then(_ => _)
       // tslint:disable-next-line:no-console
       .catch(e => console.error(e));
-    queryCache.del(this.collection);
+    await queryCache.del(this.collection);
     return tagID[0];
   }
 }

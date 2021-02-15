@@ -23,8 +23,11 @@ export interface IEntryData {
   permalink: string;
   entryId: string;
   author: IProfileData;
-  socialData?: ISocialData;
+  quotedByAuthors?: ISocialData;
+  quotedBy?: string;
   quote?: IEntryData;
+  delisted?: boolean;
+  reported?: boolean;
 }
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -51,7 +54,6 @@ export interface IEntryBoxProps {
   shareLabel: string;
   flagAsLabel: string;
   copyLinkLabel: string;
-  copyIPFSLinkLabel: string;
   comment?: boolean;
   bookmarkLabel: string;
   bookmarkedLabel: string;
@@ -71,11 +73,11 @@ export interface IEntryBoxProps {
   onContentClick?: (details: IContentClickDetails) => void;
   /* Can click the content (not embed!) to navigate */
   contentClickable?: boolean;
-  onMentionClick?: (ethAddress: string) => void;
+  onMentionClick: (ethAddress: string) => void;
   // style
   style?: React.CSSProperties;
-  disableIpfsCopyLink?: boolean;
   disableReposting?: boolean;
+  hidePublishTime?: boolean;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -92,7 +94,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     shareLabel,
     flagAsLabel,
     copyLinkLabel,
-    copyIPFSLinkLabel,
     locale,
     isBookmarked,
     bookmarkLabel,
@@ -109,8 +110,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onMentionClick,
     style,
     contentClickable,
-    disableIpfsCopyLink,
     disableReposting,
+    hidePublishTime,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -120,15 +121,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
   const akashaRef: React.Ref<HTMLDivElement> = React.useRef(null);
-
-  const handleLinkCopy = (linkType: 'ipfs' | 'shareable') => () => {
-    switch (linkType) {
-      case 'ipfs':
-        return navigator.clipboard.writeText(entryData.ipfsLink);
-      case 'shareable':
-        return navigator.clipboard.writeText(window.location.href);
-    }
-  };
 
   const closeMenuDrop = () => {
     setMenuDropOpen(false);
@@ -177,15 +169,18 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   return (
     <ViewportSizeProvider>
       <Box style={style}>
-        <Box direction="row" justify="between" pad={{ vertical: 'medium' }}>
+        <Box direction="row" justify="between" pad={{ top: 'medium' }}>
           <ProfileAvatarButton
             label={entryData.author?.name}
-            info={entryData.author?.userName}
+            info={entryData.author?.userName && `@${entryData.author?.userName}`}
             avatarImage={entryData.author?.avatar}
             onClickAvatar={onClickAvatar}
             onClick={() => setProfileDropOpen(!profileDropOpen)}
             ethAddress={entryData.author?.ethAddress}
             ref={profileRef}
+            bold={true}
+            onMouseEnter={() => setProfileDropOpen(true)}
+            onMouseLeave={() => setProfileDropOpen(false)}
           />
           {profileRef.current && profileDropOpen && (
             <StyledProfileDrop
@@ -195,7 +190,13 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               onClickOutside={() => setProfileDropOpen(false)}
               onEsc={() => setProfileDropOpen(false)}
             >
-              <Box width="20rem" round="small" flex="grow">
+              <Box
+                width="20rem"
+                round="small"
+                flex="grow"
+                onClick={onClickAvatar}
+                elevation="shadow"
+              >
                 <ProfileMiniCard
                   loggedEthAddress={loggedProfileEthAddress}
                   profileData={entryData.author}
@@ -207,7 +208,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             </StyledProfileDrop>
           )}
           <Box direction="row" gap="xsmall" align="center">
-            {entryData.time && <Text>{formatRelativeTime(entryData.time, locale)}</Text>}
+            {entryData.time && !hidePublishTime && (
+              <Text color="secondaryText">{formatRelativeTime(entryData.time, locale)}</Text>
+            )}
             <Icon
               type="akasha"
               size="sm"
@@ -215,7 +218,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ref={akashaRef}
               clickable={true}
             />
-            {(onEntryFlag || !disableIpfsCopyLink) && (
+            {onEntryFlag && (
               <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
             )}
           </Box>
@@ -229,18 +232,15 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             CID={entryData.CID}
           />
         )}
-        {menuIconRef.current && menuDropOpen && (onEntryFlag || !disableIpfsCopyLink) && (
+        {menuIconRef.current && menuDropOpen && onEntryFlag && (
           <CardHeaderMenuDropdown
             target={menuIconRef.current}
             onMenuClose={closeMenuDrop}
-            onLinkCopy={handleLinkCopy}
             onFlag={handleEntryFlag}
             flagAsLabel={flagAsLabel}
-            copyIPFSLinkLabel={copyIPFSLinkLabel}
           />
         )}
         <Box
-          pad={{ vertical: 'medium' }}
           style={{ cursor: contentClickable ? 'pointer' : 'default' }}
           onClick={() => (contentClickable ? handleContentClick(entryData) : false)}
         >

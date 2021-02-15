@@ -17,6 +17,7 @@
     <link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png" />
     <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png" />
     <link rel="manifest" href="/manifest.json" />
+    <link rel="stylesheet" href="/fonts/inter.css" />
     <title>Ethereum World</title>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.1/umd/react.production.min.js"
@@ -44,7 +45,7 @@
       integrity="sha512-JnZPWAckMDks0CCIeGznqEo7ifmYK7VowHq/NVFlSXGkwxv4OBCJFy7nouOtJZmVldHo7FQLIdeWTI55yyZc4Q=="
       crossorigin="anonymous"
     ></script>
-    <script src="/design/main.js"></script>
+    <script src="/design/main.js" async></script>
     <style>
       html,
       body,
@@ -55,6 +56,26 @@
         padding: 0;
       }
     </style>
+    <!-- Matomo -->
+    <script type="text/javascript">
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function () {
+        var u = 'https://ethereum.matomo.cloud/';
+        _paq.push(['setTrackerUrl', u + 'matomo.php']);
+        _paq.push(['setSiteId', '2']);
+        var d = document,
+          g = d.createElement('script'),
+          s = d.getElementsByTagName('script')[0];
+        g.type = 'text/javascript';
+        g.async = true;
+        g.src = '//cdn.matomo.cloud/ethereum.matomo.cloud/matomo.js';
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script>
+    <!-- End Matomo Code -->
   </head>
 
   <body>
@@ -74,6 +95,6 @@
         });
       }
     </script>
-    <script src="/main.js" async></script>
+    <script type="module" src="/main.js"></script>
   </body>
 </html>

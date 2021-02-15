@@ -5,7 +5,7 @@ import json from 'koa-json';
 import bodyParser from 'koa-bodyparser';
 import webSockify from 'koa-websocket';
 import cors from '@koa/cors';
-import { ApolloServer, gql } from 'apollo-server-koa';
+import { ApolloServer } from 'apollo-server-koa';
 import typeDefs from './schema';
 
 import dotenv from 'dotenv';
@@ -14,7 +14,7 @@ dotenv.config();
 import wss from './wss';
 import api from './api';
 import ProfileAPI from './datasources/profile';
-import { contextCache } from './storage/cache';
+import { contextCache, redisCache } from './storage/cache';
 import TagAPI from './datasources/tag';
 import PostAPI from './datasources/post';
 import CommentAPI from './datasources/comment';
@@ -41,7 +41,7 @@ app.use(logger());
 app.use(bodyParser());
 
 /* change this in production */
-app.use(cors({ origin: '*' }));
+app.use(cors());
 
 const router = new Router();
 app.use(router.routes()).use(router.allowedMethods());
@@ -51,13 +51,12 @@ app.use(api.allowedMethods());
 
 app.ws.use(wss);
 
-const HOST = '127.0.0.1';
 let dbID;
 if (process.env.AWF_THREADdb) {
   dbID = ThreadID.fromString(process.env.AWF_THREADdb);
 }
 
-(async () => await setupDBCollections())();
+(async () => setupDBCollections())();
 
 const server = new ApolloServer({
   typeDefs,
@@ -65,6 +64,7 @@ const server = new ApolloServer({
     Query: query,
     Mutation: mutations,
   },
+  cache: redisCache,
   dataSources: () => ({
     profileAPI: new ProfileAPI({ dbID, collection: 'Profiles' }),
     tagsAPI: new TagAPI({ dbID, collection: 'Tags' }),
@@ -88,7 +88,7 @@ const server = new ApolloServer({
 server.applyMiddleware({ app });
 /** Start the server! */
 // tslint:disable-next-line:no-console
-app.listen(PORT, HOST, () => {
+app.listen(PORT, () => {
   // tslint:disable-next-line:no-console
-  console.log(`graphql ready at http://${HOST}:${PORT}${server.graphqlPath}`);
+  console.log(`graphql ready at http://localhost:${PORT}${server.graphqlPath}`);
 });

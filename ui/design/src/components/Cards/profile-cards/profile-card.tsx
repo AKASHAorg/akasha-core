@@ -53,6 +53,7 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   getProfileProvidersData?: () => void;
   onUpdateClick: () => void;
   onENSChangeClick: () => void;
+  handleShareClick: () => void;
   updateProfileLabel?: string;
   changeENSLabel?: string;
   hideENSButton?: boolean;
@@ -82,6 +83,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     onClickPosts,
     handleFollow,
     handleUnfollow,
+    handleShareClick,
     isFollowing,
     profileData,
     descriptionLabel,
@@ -103,11 +105,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const postsTitle = `${profileData.totalPosts || 0} ${postsLabel}`;
   const followersTitle = `${profileData.totalFollowers || 0} ${followersLabel}`;
   const followingTitle = `${profileData.totalFollowing || 0} ${followingLabel}`;
-
-  const handleShareClick = () => {
-    // to be implemented
-    return;
-  };
 
   const [editable /* , setEditable */] = useState(false);
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -235,7 +232,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
 
               <Box direction="row" gap="xsmall">
                 <Text size="medium" color="secondaryText">
-                  {profileData.userName ? profileData.userName : null}
+                  {profileData.userName ? `@${profileData.userName}` : null}
                 </Text>
               </Box>
             </Box>

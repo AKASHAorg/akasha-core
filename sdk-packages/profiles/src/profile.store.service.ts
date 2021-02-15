@@ -1,6 +1,11 @@
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import { runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
-import { LinkedProfileProp, LinkedProperty, PROFILE_MEDIA_FILES, PROFILE_STORE } from './constants';
+import {
+  BUCKET_THREAD_NAME,
+  LinkedProperty,
+  PROFILE_MEDIA_FILES,
+  PROFILE_STORE,
+} from './constants';
 import authServices, { AUTH_SERVICE } from '@akashaproject/sdk-auth/lib/constants';
 import commonServices, { IMAGE_UTILS_SERVICE } from '@akashaproject/sdk-common/lib/constants';
 import dbServices, { DB_SETTINGS_ATTACHMENT } from '@akashaproject/sdk-db/lib/constants';
@@ -210,7 +215,9 @@ const service: AkashaService = (invoke, log) => {
       path = data.name;
     }
     const { buck } = await invoke(authServices[AUTH_SERVICE]).getSession();
-    const { root } = await buck.getOrCreate(PROFILE_MEDIA_FILES);
+    const { root } = await buck.getOrCreate(PROFILE_MEDIA_FILES, {
+      threadName: BUCKET_THREAD_NAME,
+    });
     if (!root) {
       throw new Error('Failed to open bucket');
     }
@@ -282,19 +289,21 @@ const service: AkashaService = (invoke, log) => {
     return searchProfiles({ name: '' });
   };
   const TagSubscriptions = '@TagSubscriptions';
-  const toggleTagSubscription = async (tagName: string) => {
+  const toggleTagSubscription = async (tagName: string): Promise<boolean> => {
     const rec = await invoke(dbServices[DB_SETTINGS_ATTACHMENT]).get({
       moduleName: TagSubscriptions,
     });
     if (!rec || !rec?.services?.length) {
-      return invoke(dbServices[DB_SETTINGS_ATTACHMENT]).put({
+      await invoke(dbServices[DB_SETTINGS_ATTACHMENT]).put({
         moduleName: TagSubscriptions,
         services: [[tagName]],
       });
+      return true;
     }
     const index = rec.services[0].indexOf(tagName);
     index !== -1 ? rec.services[0].splice(index, 1) : rec.services[0].push(tagName);
-    return invoke(dbServices[DB_SETTINGS_ATTACHMENT]).put(rec);
+    await invoke(dbServices[DB_SETTINGS_ATTACHMENT]).put(rec);
+    return index === -1;
   };
   const getTagSubscriptions = async () => {
     const rec = await invoke(dbServices[DB_SETTINGS_ATTACHMENT]).get({

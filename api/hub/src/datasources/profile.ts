@@ -1,9 +1,10 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB } from '../helpers';
+import { getAppDB, sendNotification } from '../helpers';
 import { ThreadID, Where, Client } from '@textile/hub';
 import { DataProvider, Profile } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 import { searchIndex } from './search-indexes';
+import { postsStats, statsProvider } from '../resolvers/constants';
 
 class ProfileAPI extends DataSource {
   private readonly collection: string;
@@ -20,12 +21,20 @@ class ProfileAPI extends DataSource {
   }
   async getProfile(ethAddress: string) {
     const db: Client = await getAppDB();
-    const query = new Where('ethAddress').eq(ethAddress);
-    const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
-    if (profilesFound.length) {
-      return await this.resolveProfile(profilesFound[0].pubKey);
+    let pubKey;
+    const key = this.getCacheKey(`:eth:${ethAddress}`);
+    if (!(await queryCache.has(key))) {
+      const query = new Where('ethAddress').eq(ethAddress);
+      const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
+      if (!profilesFound.length) {
+        return;
+      }
+      pubKey = profilesFound[0].pubKey;
+      await queryCache.set(key, pubKey);
+    } else {
+      pubKey = await queryCache.get(key);
     }
-    return;
+    return await this.resolveProfile(pubKey);
   }
 
   getCacheKey(pubKey: string) {
@@ -33,8 +42,8 @@ class ProfileAPI extends DataSource {
   }
   async resolveProfile(pubKey: string, noCache: boolean = false) {
     const cacheKey = this.getCacheKey(pubKey);
-    if (queryCache.has(cacheKey) && !noCache) {
-      return Promise.resolve(queryCache.get(cacheKey));
+    if ((await queryCache.has(cacheKey)) && !noCache) {
+      return queryCache.get(cacheKey);
     }
     const db: Client = await getAppDB();
     const query = new Where('pubKey').eq(pubKey);
@@ -45,11 +54,21 @@ class ProfileAPI extends DataSource {
     if (profilesFound.length) {
       const extractedFields = ['name', 'description', 'avatar', 'coverImage'];
       const q = profilesFound[0].default.filter(p => extractedFields.includes(p.property));
-      const returnedObj = Object.assign({}, profilesFound[0]);
+      const returnedObj = JSON.parse(JSON.stringify(profilesFound[0]));
       for (const provider of q) {
         Object.assign(returnedObj, { [provider.property]: provider.value });
       }
-      queryCache.set(cacheKey, returnedObj);
+      const totalPostsIndex = profilesFound[0].metaData.findIndex(
+        m => m.provider === statsProvider && m.property === postsStats,
+      );
+      const totalPosts =
+        totalPostsIndex !== -1 ? profilesFound[0].metaData[totalPostsIndex].value : '0';
+      Object.assign(returnedObj, {
+        totalPosts,
+        totalFollowers: profilesFound[0]?.followers?.length || 0,
+        totalFollowing: profilesFound[0]?.following?.length || 0,
+      });
+      await queryCache.set(cacheKey, returnedObj);
       return returnedObj;
     }
     return;
@@ -74,7 +93,7 @@ class ProfileAPI extends DataSource {
       }
     }
     await db.save(this.dbID, this.collection, [profile]);
-    queryCache.del(this.getCacheKey(pubKey));
+    await queryCache.del(this.getCacheKey(pubKey));
     return profile._id;
   }
   async makeDefaultProvider(pubKey: string, data: DataProvider[]) {
@@ -94,7 +113,7 @@ class ProfileAPI extends DataSource {
       }
     }
     await db.save(this.dbID, this.collection, [profile]);
-    queryCache.del(this.getCacheKey(pubKey));
+    await queryCache.del(this.getCacheKey(pubKey));
     searchIndex
       .saveObject({
         objectID: profile._id,
@@ -129,7 +148,7 @@ class ProfileAPI extends DataSource {
 
     profile.userName = name;
     await db.save(this.dbID, this.collection, [profile]);
-    queryCache.del(this.getCacheKey(pubKey));
+    await queryCache.del(this.getCacheKey(pubKey));
     searchIndex
       .saveObject({
         objectID: profile._id,
@@ -159,7 +178,16 @@ class ProfileAPI extends DataSource {
     profile1.following.unshift(profile.pubKey);
     profile.followers.unshift(profile1.pubKey);
     await db.save(this.dbID, this.collection, [profile, profile1]);
-    queryCache.del(this.getCacheKey(pubKey));
+    await queryCache.del(this.getCacheKey(profile.pubKey));
+    await queryCache.del(this.getCacheKey(profile1.pubKey));
+    const notification = {
+      property: 'NEW_FOLLOWER',
+      provider: 'awf.graphql.profile.api',
+      value: {
+        follower: pubKey,
+      },
+    };
+    await sendNotification(profile.pubKey, notification);
     return true;
   }
 
@@ -178,7 +206,8 @@ class ProfileAPI extends DataSource {
     profile1.following.splice(exists, 1);
     profile.followers.splice(exists1, 1);
     await db.save(this.dbID, this.collection, [profile, profile1]);
-    queryCache.del(this.getCacheKey(pubKey));
+    await queryCache.del(this.getCacheKey(profile.pubKey));
+    await queryCache.del(this.getCacheKey(profile1.pubKey));
     return true;
   }
 
@@ -200,7 +229,7 @@ class ProfileAPI extends DataSource {
     }
 
     await db.save(this.dbID, this.collection, [profile]);
-    queryCache.del(this.getCacheKey(pubKey));
+    await queryCache.del(this.getCacheKey(pubKey));
     return profile._id;
   }
 

@@ -1,14 +1,23 @@
-FROM node:lts-buster-slim
+FROM node:lts-alpine
 
-WORKDIR /usr/src/app
+ENV PORT 3113
+ENV NODE_ENV production
 
-COPY package*.json ./
+WORKDIR /app
 
-RUN npm i typescript
+COPY . /app
+
+RUN apk add --no-cache curl
+RUN pwd
+RUN rm -rf /app/*.tsbuildinfo
+RUN rm -rf /app/lib
+RUN npm i -g typescript
+
 RUN npm install
+RUN npm run tsc
 
-COPY . .
+EXPOSE ${PORT}
 
-EXPOSE 3113
+ENTRYPOINT [ "node" ]
+CMD ["--trace-warnings", "/app/lib/index.js"]
 
-CMD [ "node", "./lib/index.js" ]

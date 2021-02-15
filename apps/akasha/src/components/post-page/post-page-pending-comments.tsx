@@ -27,7 +27,7 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
   } = props;
 
   let customEntities: any = [];
-
+  console.log(pendingComments, 'pending comments');
   if (pendingComments.length) {
     customEntities = customEntities.concat(
       pendingComments.map((entry, idx) => ({
@@ -35,6 +35,7 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
         itemId: feedItems.length ? feedItems[0] : null,
         getComponent: ({ key, style }: { key: string; style: React.CSSProperties }) => (
           <PostRenderer
+            hidePublishTime={true}
             sdkModules={sdkModules}
             logger={logger}
             globalChannel={globalChannel}

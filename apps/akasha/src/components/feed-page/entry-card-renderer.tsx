@@ -29,6 +29,7 @@ export interface IEntryCardRendererProps {
   style?: React.CSSProperties;
   contentClickable?: boolean;
   disableIpfsCopyLink?: boolean;
+  hidePublishTime?: boolean;
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
@@ -43,7 +44,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     logger,
     globalChannel,
     contentClickable,
-    disableIpfsCopyLink,
+    hidePublishTime,
   } = props;
 
   const isBookmarked = React.useMemo(() => {
@@ -120,7 +121,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   repostWithCommentLabel={t('Repost with comment')}
                   shareLabel={t('Share')}
                   copyLinkLabel={t('Copy Link')}
-                  copyIPFSLinkLabel={t('Copy IPFS Link')}
                   flagAsLabel={t('Report Post')}
                   loggedProfileEthAddress={ethAddress}
                   locale={locale || 'en'}
@@ -137,7 +137,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   onContentClick={props.onNavigate}
                   onMentionClick={props.onMentionClick}
                   contentClickable={contentClickable}
-                  disableIpfsCopyLink={disableIpfsCopyLink}
+                  hidePublishTime={hidePublishTime}
                 />
               )}
             </>

@@ -2,7 +2,7 @@ import route from 'koa-route';
 import Emittery from 'emittery';
 import { ThreadID, UserAuth, Where } from '@textile/hub';
 import { utils } from 'ethers';
-import { getAPISig, getAppDB, newClientDB } from './helpers';
+import { getAPISig, getAppDB, logger, newClientDB } from './helpers';
 import { contextCache } from './storage/cache';
 import { Profile } from './collections/interfaces';
 
@@ -88,6 +88,7 @@ const wss = route.all('/ws/userauth', ctx => {
             ethAddress: currentUser.ethAddress,
           });
           if (!currentUser._id) {
+            logger.info('saving new user', currentUser);
             await db.create(dbId, 'Profiles', [currentUser]);
           }
           currentUser = null;
@@ -103,6 +104,7 @@ const wss = route.all('/ws/userauth', ctx => {
         }
       }
     } catch (error) {
+      logger.error('error from wss: ', error);
       ctx.websocket.send(
         JSON.stringify({
           type: 'error',

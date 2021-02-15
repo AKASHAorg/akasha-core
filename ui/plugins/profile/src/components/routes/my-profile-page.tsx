@@ -57,6 +57,19 @@ const ProfileForm = styled(BoxFormCard)`
   }
 `;
 
+const Overlay = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  inset: 0;
+  opacity: 1;
+  background-color: ${props => props.theme.colors.modalBackground};
+  animation: fadeAnimation ease 0.4s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+`;
+
 const ENSForm = styled(EnsFormCard)`
   max-width: 100%;
   max-height: 100vh;
@@ -75,19 +88,6 @@ const ENSForm = styled(EnsFormCard)`
       opacity: 1;
     }
   }
-`;
-
-const Overlay = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  inset: 0;
-  opacity: 1;
-  background-color: ${props => props.theme.colors.modalBackground};
-  animation: fadeAnimation ease 0.4s;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
 `;
 
 const MyProfilePage = (props: MyProfileProps) => {
@@ -226,6 +226,15 @@ const MyProfilePage = (props: MyProfileProps) => {
   const handleRepostPublish = (entryData: any, embedEntry: any) => {
     postsActions.optimisticPublishPost(entryData, props.loggedProfileData, embedEntry);
   };
+  const handleProfileShare = () => {};
+  const handleShareModalClose = () => {
+    props.modalActions.hide(MODAL_NAMES.PROFILE_SHARE);
+  };
+
+  const profileShareUrl = React.useMemo(() => {
+    return `/profile/${props.loggedProfileData.pubKey}`;
+  }, [props.loggedProfileData]);
+
   return (
     <Box fill="horizontal" margin={{ top: '.5rem' }}>
       <Helmet>
@@ -236,8 +245,10 @@ const MyProfilePage = (props: MyProfileProps) => {
         onModalShow={handleModalShow}
         canEdit={!!props.loggedProfileData.ethAddress}
         userName={props.loggedProfileData.userName}
-        profileModalName={MODAL_NAMES.PROFILE_UPDATE}
-        ensModalName={MODAL_NAMES.CHANGE_ENS}
+        onShare={handleProfileShare}
+        onShareModalClose={handleShareModalClose}
+        shareUrl={profileShareUrl}
+        modalState={props.modalState}
       />
       <FeedWidget
         // pass i18n from props (the i18next instance, not the react one!)

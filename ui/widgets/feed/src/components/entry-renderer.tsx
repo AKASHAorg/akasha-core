@@ -27,7 +27,6 @@ export interface IEntryRenderer {
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   checkIsFollowing: (viewerEthAddress: string, targetEthAddress: string) => void;
   contentClickable?: boolean;
-  disableIpfsCopyLink?: boolean;
   itemType: ItemTypes;
 }
 
@@ -49,7 +48,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
     getShareUrl,
     onRepost,
     contentClickable,
-    disableIpfsCopyLink,
   } = props;
 
   const isBookmarked = React.useMemo(() => {
@@ -182,7 +180,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   repostWithCommentLabel={t('Repost with comment')}
                   shareLabel={t('Share')}
                   copyLinkLabel={t('Copy Link')}
-                  copyIPFSLinkLabel={t('Copy IPFS Link')}
                   flagAsLabel={t('Report Post')}
                   loggedProfileEthAddress={ethAddress}
                   locale={locale || 'en'}
@@ -199,7 +196,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   onContentClick={handleContentClick}
                   onMentionClick={handleMentionClick}
                   contentClickable={contentClickable}
-                  disableIpfsCopyLink={disableIpfsCopyLink}
                 />
               )}
             </>

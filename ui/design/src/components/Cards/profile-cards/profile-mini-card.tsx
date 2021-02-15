@@ -52,7 +52,6 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
     <Box
       round="xsmall"
       direction="column"
-      background="ultraLightBackground"
       border={{ side: 'all', color: 'border', size: 'xsmall', style: 'solid' }}
     >
       <Box
@@ -85,7 +84,8 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
             </Text>
           )}
           <Text size="medium" color="secondaryText" wordBreak="break-word" textAlign="center">
-            {profileData.userName || truncateMiddle(profileData.ethAddress)}
+            {(profileData.userName && `@${profileData.userName}`) ||
+              truncateMiddle(profileData.ethAddress)}
           </Text>
           {profileData.CID && (
             <Text size="small" color="primaryText" wordBreak="break-word" textAlign="center">
@@ -109,7 +109,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
       <Box direction="column" pad="medium" gap="medium">
         <Text color="primaryText">{profileData.description}</Text>
 
-        {showFollowingButton && (
+        {showFollowingButton && loggedEthAddress && (
           <DuplexButton
             inactiveLabel={followLabel}
             activeLabel={followingLabel}

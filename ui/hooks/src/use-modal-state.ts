@@ -7,6 +7,7 @@ export const MODAL_NAMES = {
   CHANGE_ENS: 'changeENS',
   LOGIN: 'login',
   EDITOR: 'editor',
+  PROFILE_SHARE: 'profileShare',
 };
 export interface ModalState {
   loginModal: boolean;

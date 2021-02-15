@@ -2,6 +2,8 @@ import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/en
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import * as React from 'react';
 import { combineLatest } from 'rxjs';
+
+import fetchRequest from './fetch-request';
 import {
   buildPublishObject,
   createPendingEntry,
@@ -48,6 +50,7 @@ export interface PostsActions {
   ) => void;
   /* reset post ids (basically reset the list) */
   resetPostIds: () => void;
+  updatePostsState: (updatedEntry: any) => void;
 }
 
 export interface UsePostsProps {
@@ -161,7 +164,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       setPostsState(prev => ({ ...prev, isFetchingPosts: true }));
       const ipfsSettingsCall = ipfsService.getSettings({});
       const calls = combineLatest([ipfsSettingsCall, entriesCall]);
-      calls.subscribe((responses: [any, any]) => {
+      calls.subscribe(async (responses: [any, any]) => {
         const [ipfsResp, entriesResp] = responses;
         const ipfsGateway = ipfsResp.data;
         const { data }: GetEntriesResponse = entriesResp;
@@ -175,6 +178,18 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
             return mapEntry(entry, ipfsGateway, logger);
           })
           .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
+
+        const response = await fetchRequest.checkStatus(true, { contentIds: newIds });
+
+        if (response && response.constructor === Array) {
+          response.forEach((resp: any) => {
+            posts[resp.contentId] = {
+              ...posts[resp.contentId],
+              delisted: resp.delisted,
+              reported: resp.reported,
+            };
+          });
+        }
 
         setPostsState(prev => ({
           ...prev,
@@ -277,7 +292,10 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
           const entryData = pending as IEntryData;
           setPostsState(prev => ({
             ...prev,
-            postsData: { ...prev.postsData, [publishedEntryId]: entryData },
+            postsData: {
+              ...prev.postsData,
+              [publishedEntryId]: { ...entryData, entryId: publishedEntryId },
+            },
             pendingPosts: [],
             postIds: [publishedEntryId, ...prev.postIds],
           }));
@@ -325,6 +343,12 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
           totalItems: total,
         }));
       }, createErrorHandler('usePosts.getUserPosts', false, onError));
+    },
+    updatePostsState: (updatedEntry: any) => {
+      setPostsState(prev => ({
+        ...prev,
+        postsData: { ...prev.postsData, [updatedEntry.entryId]: updatedEntry },
+      }));
     },
   };
   return [postsState, actions];

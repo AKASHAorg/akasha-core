@@ -13,7 +13,6 @@ import services, {
   AUTH_SERVICE,
   ethAddressCache,
   moduleName,
-  tokenCache,
 } from './constants';
 import {
   Client,
@@ -67,7 +66,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
           getCurrentUser().then(data => log.info('logged in', data));
         }
       } else if (type === SIGN_OUT_EVENT && currentUser) {
-        signOut().then(e => {
+        signOut().then(_ => {
           const response = {
             data: null,
             channelInfo: {
@@ -84,7 +83,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   }
   const signIn = async (provider: EthProviders = EthProviders.Web3Injected) => {
     let currentProvider;
-    const { setServiceSettings } = invoke(coreServices.SETTINGS_SERVICE);
+    // const { setServiceSettings } = invoke(coreServices.SETTINGS_SERVICE);
     const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
 
     if (provider === EthProviders.None) {
@@ -92,9 +91,9 @@ const service: AkashaService = (invoke, log, globalChannel) => {
         throw new Error('The provider must have a wallet/key in order to authenticate.');
       }
       currentProvider = +sessionStorage.getItem(providerKey); // cast to int
+      sessionStorage.removeItem(providerKey);
     } else {
       currentProvider = provider;
-      sessionStorage.setItem(providerKey, currentProvider);
     }
 
     const web3 = await invoke(commonServices[WEB3_SERVICE]).web3(currentProvider);
@@ -108,11 +107,11 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
     if (sessionStorage.getItem(sessKey)) {
       identity = PrivateKey.fromString(sessionStorage.getItem(sessKey));
+      sessionStorage.removeItem(sessKey);
     } else {
       const sig = await signer.signMessage(AUTH_MESSAGE);
       await new Promise(res => setTimeout(res, 600));
       identity = await generatePrivateKey(signer, address, sig, web3Utils);
-      sessionStorage.setItem(sessKey, identity.toString());
     }
 
     const userAuth = loginWithChallenge(identity, signer);
@@ -157,6 +156,8 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       };
       channel.postMessage({ response, type: SYNC_RESPONSE });
     }
+    sessionStorage.setItem(providerKey, currentProvider);
+    sessionStorage.setItem(sessKey, identity.toString());
     return currentUser;
   };
 
@@ -284,7 +285,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   };
   const getMessages = async (args: InboxListOptions) => {
     const messages = await hubUser.listInboxMessages(
-      Object.assign({}, args, { status: Status.UNREAD }),
+      Object.assign({}, { status: Status.UNREAD }, args),
     );
     const inbox = [];
     for (const message of messages) {

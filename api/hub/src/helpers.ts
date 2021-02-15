@@ -8,6 +8,7 @@ import {
   Users,
 } from '@textile/hub';
 import { updateCollections, initCollections } from './collections';
+import winston from 'winston';
 
 export const getAPISig = async (minutes: number = 30) => {
   const expiration = new Date(Date.now() + 1000 * 60 * minutes);
@@ -93,12 +94,23 @@ export const setupDBCollections = async () => {
   const threadID = process.env.AWF_THREADdb
     ? ThreadID.fromString(process.env.AWF_THREADdb)
     : ThreadID.fromRandom();
-
-  if (!process.env.AWF_DBname && !process.env.AWF_THREADdb) {
-    await appDB.newDB(threadID, 'defaultDB');
+  if (!process.env.AWF_THREADdb) {
+    await appDB.newDB(threadID, process.env.AWF_DBname || 'defaultDB');
   }
 
   await initCollections(appDB, threadID);
   await updateCollections(appDB, threadID);
   return { threadID, client: appDB };
 };
+
+export const sendNotification = async (recipient: string, notificationObj: object) => {
+  const ms = await getMailSender();
+  const textEncoder = new TextEncoder();
+  const encodedNotification = textEncoder.encode(JSON.stringify(notificationObj));
+  await ms.sendMessage(recipient, encodedNotification);
+};
+
+export const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL || 'info',
+  transports: [new winston.transports.Console({ format: winston.format.simple() })],
+});

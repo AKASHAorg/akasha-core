@@ -5,7 +5,12 @@ import {
   EventTypes,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useLoginState, useErrors, useNotifications } from '@akashaproject/ui-awf-hooks';
+import {
+  useLoginState,
+  useErrors,
+  useNotifications,
+  useProfile,
+} from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
 const { lightTheme, Topbar, ThemeSelector, useViewportSize, LoginModal } = DS;
@@ -42,6 +47,18 @@ const TopbarComponent = (props: TopBarProps) => {
     profileService: props.sdkModules.profiles.profileService,
     authService: props.sdkModules.auth.authService,
   });
+
+  const [loggedProfileData, loggedProfileActions] = useProfile({
+    onError: err => logger.error(err),
+    profileService: props.sdkModules.profiles.profileService,
+    ipfsService: props.sdkModules.commons.ipfsService,
+  });
+
+  React.useEffect(() => {
+    if (loginState.pubKey) {
+      loggedProfileActions.getProfileData({ pubKey: loginState.pubKey });
+    }
+  }, [loginState.pubKey]);
 
   const [notificationsState] = useNotifications({
     globalChannel,
@@ -140,10 +157,12 @@ const TopbarComponent = (props: TopBarProps) => {
   return (
     <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
       <Topbar
-        avatarImage={loginState.profileData.avatar}
+        avatarImage={loggedProfileData.avatar}
         brandLabel="Ethereum World"
         signInLabel={t('Sign In')}
-        logoutLabel={t('Logout')}
+        signUpLabel={t('Sign Up')}
+        signOutLabel={t('Sign Out')}
+        searchBarLabel={t('Search profiles or topics')}
         onNavigation={handleNavigation}
         onSearch={handleSearchBarKeyDown}
         onSidebarToggle={toggleSidebar}

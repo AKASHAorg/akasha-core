@@ -37,7 +37,6 @@ export interface IEntryCardRendererProps {
   style?: React.CSSProperties;
   contentClickable?: boolean;
   disableReposting?: boolean;
-  disableIpfsCopyLink?: boolean;
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
@@ -52,7 +51,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     logger,
     globalChannel,
     contentClickable,
-    disableIpfsCopyLink,
     disableReposting,
   } = props;
 
@@ -129,7 +127,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   repostWithCommentLabel={t('Repost with comment')}
                   shareLabel={t('Share')}
                   copyLinkLabel={t('Copy Link')}
-                  copyIPFSLinkLabel={t('Copy IPFS Link')}
                   flagAsLabel={t('Report Post')}
                   loggedProfileEthAddress={ethAddress as any}
                   locale={locale || 'en'}
@@ -166,7 +163,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   }}
                   onMentionClick={props.onMentionClick}
                   contentClickable={contentClickable}
-                  disableIpfsCopyLink={disableIpfsCopyLink}
                   disableReposting={disableReposting}
                 />
               )}

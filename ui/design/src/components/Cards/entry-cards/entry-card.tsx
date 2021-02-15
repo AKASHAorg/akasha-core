@@ -51,20 +51,20 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     handleUnfollowAuthor,
     isFollowingAuthor,
     flagAsLabel,
-    copyIPFSLinkLabel,
     contentClickable,
-    disableIpfsCopyLink,
     disableReposting,
+    hidePublishTime,
   } = props;
 
   return (
     <MainAreaCardBox className={className} style={style} rootNodeRef={rootNodeRef}>
-      {entryData.socialData && entryData.socialData.users.length > 0 && (
+      {entryData.quotedByAuthors && entryData.quotedByAuthors.length > 0 && (
         <SocialBox
-          socialData={entryData.socialData}
+          socialData={entryData.quotedByAuthors}
           repostedThisLabel={repostedThisLabel}
           andLabel={andLabel}
           othersLabel={othersLabel}
+          onClickUser={onMentionClick}
         />
       )}
       <Box pad={{ horizontal: 'medium' }}>
@@ -91,15 +91,14 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           onClickReplies={onClickReplies}
           onEntryShare={onEntryShare}
           onEntryFlag={onEntryFlag}
-          copyIPFSLinkLabel={copyIPFSLinkLabel}
           handleFollowAuthor={handleFollowAuthor}
           handleUnfollowAuthor={handleUnfollowAuthor}
           isFollowingAuthor={isFollowingAuthor}
           onContentClick={onContentClick}
           onMentionClick={onMentionClick}
           contentClickable={contentClickable}
-          disableIpfsCopyLink={disableIpfsCopyLink}
           disableReposting={disableReposting}
+          hidePublishTime={hidePublishTime}
         />
       </Box>
     </MainAreaCardBox>
@@ -111,7 +110,6 @@ EntryCard.defaultProps = {
   repostLabel: 'Repost',
   repostWithCommentLabel: 'Repost With Comment',
   copyLinkLabel: 'Copy Link',
-  copyIPFSLinkLabel: 'Copy IPFS link',
   flagAsLabel: 'Report',
   shareLabel: 'Share',
 };

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import {
+  constants,
   usePosts,
   useBookmarks,
   useProfile,
@@ -12,7 +13,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { mapEntry, uploadMediaToTextile } from '../../services/posting-service';
-import { BASE_FLAG_URL } from '../../services/constants';
 import { redirectToPost } from '../../services/routing-service';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
@@ -32,6 +32,7 @@ const {
   Helmet,
   CommentEditor,
   EditorPlaceholder,
+  EntryCardHidden,
 } = DS;
 
 interface IPostPage {
@@ -84,10 +85,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   });
 
   React.useEffect(() => {
-    if (ethAddress) {
-      loginProfileActions.getProfileData({ pubKey: ethAddress });
+    if (props.pubKey) {
+      loginProfileActions.getProfileData({ pubKey: props.pubKey });
     }
-  }, [ethAddress]);
+  }, [props.pubKey]);
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
     dbService: sdkModules.db,
@@ -212,7 +213,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     service: 'twitter' | 'facebook' | 'reddit' | 'copy',
     entryId: string,
   ) => {
-    const url = `${window.location.origin}/${routes[POST]}/${entryId}`;
+    const url = `${window.location.origin}${routes[POST]}/${entryId}`;
     let shareUrl;
     switch (service) {
       case 'twitter':
@@ -230,7 +231,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       default:
         break;
     }
-    window.open(shareUrl, '_blank');
+    if (shareUrl) {
+      window.open(shareUrl, '_blank');
+    }
   };
   const handlePublish = async (data: {
     metadata: {
@@ -248,6 +251,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       showLoginModal();
       return;
     }
+    console.log('publish comment data:', data);
     postsActions.optimisticPublishComment(data, postId, loginProfile);
   };
 
@@ -281,6 +285,12 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     sdkModules.profiles.profileService,
     sdkModules.commons.ipfsService,
   );
+
+  const handleFlipCard = (entry: any) => () => {
+    const modifiedEntry = { ...entry, reported: false };
+    postsActions.updatePostsState(modifiedEntry);
+  };
+
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
@@ -316,7 +326,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               closeLabel={t('Close')}
               user={ethAddress ? ethAddress : ''}
               contentId={flagged}
-              baseUrl={BASE_FLAG_URL}
+              baseUrl={constants.BASE_FLAG_URL}
               size={size}
               closeModal={() => {
                 setReportModalOpen(false);
@@ -348,7 +358,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               repostWithCommentLabel={t('Repost with comment')}
               shareLabel={t('Share')}
               copyLinkLabel={t('Copy Link')}
-              copyIPFSLinkLabel={t('Copy IPFS Link')}
               flagAsLabel={t('Report Post')}
               loggedProfileEthAddress={ethAddress}
               locale={locale}
@@ -414,6 +423,15 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             onMentionClick={handleMentionClick}
           />
         }
+        itemCardAlt={(entry: any) => (
+          <EntryCardHidden
+            descriptionLabel={t(
+              'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
+            )}
+            ctaLabel={t('See it anyway')}
+            handleFlipCard={handleFlipCard(entry)}
+          />
+        )}
         customEntities={getPendingComments({
           logger,
           globalChannel,

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 const StyledImg = styled.img`
   display: block;
   max-width: 100%;
+  border-radius: ${props => props.theme.shapes.smallBorderRadius};
 `;
 
 const StyledMention = styled.span`

@@ -1,3 +1,5 @@
+import constants from './constants';
+import fetchRequest from './fetch-request';
 import useProfile from './use-profile';
 import useEntryPublisher from './use-entry-publisher';
 import useFeedReducer from './use-feed-reducer';
@@ -11,8 +13,12 @@ import useErrors from './use-error-state';
 import useTrendingData from './use-trending-data';
 import useFollow from './use-follow';
 import useNotifications from './use-notifications';
+import useTagSubscribe from './use-tag-subscribe';
+import useSearch from './use-search';
 
 export {
+  constants,
+  fetchRequest,
   useProfile,
   useFeedReducer,
   useEntryPublisher,
@@ -27,4 +33,6 @@ export {
   useFollow,
   useNotifications,
   BookmarkTypes,
+  useTagSubscribe,
+  useSearch,
 };

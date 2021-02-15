@@ -3,7 +3,8 @@ import { buildServicePath } from '@akashaproject/sdk-core/lib/utils';
 
 export const PROFILE_STORE = 'PROFILE_STORE';
 export const PROFILE_LEGACY = 'PROFILE_LEGACY';
-export const PROFILE_MEDIA_FILES = 'awf.media.upload';
+export const PROFILE_MEDIA_FILES = 'awf-media-upload';
+export const BUCKET_THREAD_NAME = 'ewa-bucket';
 export interface LinkedProperty {
   provider: string;
   property: string;

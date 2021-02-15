@@ -167,6 +167,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
                   onRepost={handleRepost}
                 />
               }
+              itemCardAlt={() => <></>}
             />
           )}
         </>
