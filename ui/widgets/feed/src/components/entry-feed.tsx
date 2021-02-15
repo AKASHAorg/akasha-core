@@ -103,6 +103,15 @@ const EntryFeed = (props: IFeedWidgetProps) => {
       setShowEditor(false);
     }
   };
+  const hasMoreItems = React.useMemo(() => {
+    if (props.totalItems && props.itemIds?.length) {
+      return props.totalItems > props.itemIds.length;
+    }
+    // defaults to true,
+    // meaning that the list will try to fetch
+    // the first/next batch of items
+    return true;
+  }, [props.totalItems, props.itemIds?.length]);
 
   return (
     <ErrorInfoCard errors={{ ...errors, ...errorState }}>
@@ -147,7 +156,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
               loadMore={props.loadMore}
               loadItemData={props.loadItemData}
               listHeader={props.listHeader}
-              hasMoreItems={props.totalItems ? props.totalItems > props.itemIds.length : true}
+              hasMoreItems={hasMoreItems}
               itemCard={
                 <EntryRenderer
                   pubKey={props.profilePubKey}

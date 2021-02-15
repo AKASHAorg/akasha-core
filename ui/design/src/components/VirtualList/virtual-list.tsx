@@ -117,26 +117,26 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   };
 
   React.useLayoutEffect(() => {
-    if (!scrollData.current.items.length) {
+    if (!scrollData.current.items?.length) {
       setIsLoading(true);
       loadMore({ limit: loadLimit });
     }
   }, []);
 
   React.useEffect(() => {
-    if (isLoading && items.length && itemPositions.rects.get(items[items.length - 1])) {
+    if (isLoading && items?.length && itemPositions.rects.get(items[items?.length - 1])) {
       // everything loaded
       setIsLoading(false);
-    } else if (!items.length && isLoading) {
+    } else if (!items?.length && isLoading) {
       setIsLoading(false);
     }
-  }, [itemPositions.rects.size, items.length, isLoading]);
+  }, [itemPositions.rects.size, items?.length, isLoading]);
 
   React.useEffect(() => {
     if (isLoading || !hasMoreItems) {
       return;
     }
-    const isRequired = slice.end - scrollData.current.loadedIds.length > 0;
+    const isRequired = slice.end - scrollData.current.loadedIds?.length > 0;
     if (!isRequired) {
       return;
     }
@@ -166,7 +166,7 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
         itemPositions.rects,
         scrollData.current.items,
       ),
-    [JSON.stringify(anchorData), JSON.stringify(itemPositions), scrollData.current.items.length],
+    [JSON.stringify(anchorData), JSON.stringify(itemPositions), scrollData.current.items?.length],
   );
 
   React.useEffect(() => {
@@ -225,17 +225,17 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
    *  Populate initial rect values
    */
   React.useEffect(() => {
-    if (!items.length && scrollData.current.items.length) {
+    if (!items.length && scrollData.current.items?.length) {
       resetState();
     }
-    if (items.length && items.length > scrollData.current.items.length) {
+    if (items.length && items.length > scrollData.current.items?.length) {
       const diff = diffArr(scrollData.current.items, items);
       switch (diff.insertPoint) {
         case InsertPoint.LIST_HEAD:
-          scrollData.current.items.unshift(...diff.diffItems);
+          scrollData.current.items?.unshift(...diff.diffItems);
           break;
         case InsertPoint.LIST_TAIL:
-          scrollData.current.items = scrollData.current.items.concat(diff.diffItems);
+          scrollData.current.items = scrollData.current.items?.concat(diff.diffItems);
           break;
         case InsertPoint.LIST_BETWEEN:
           /* not supported yet */
@@ -243,17 +243,17 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
         default:
           break;
       }
-    } else if (items.length && items.length < scrollData.current.items.length) {
+    } else if (items?.length && items?.length < scrollData.current.items?.length) {
       // an item is removed from the list
-      const removedItems = scrollData.current.items.filter(id => !items.includes(id));
-      if (removedItems.length) {
+      const removedItems = scrollData.current.items?.filter(id => !items.includes(id));
+      if (removedItems?.length) {
         removedItems.forEach(item => {
           // an array of items [a, b, c] was removed,
           // the original array was [a,b,c,d,e]
           // d and e, should now get into positions of a,b,c
-          if (scrollData.current.items.indexOf(item) === scrollData.current.items.length - 1) {
+          if (scrollData.current.items.indexOf(item) === scrollData.current.items?.length - 1) {
             // is last item, no reposition needed
-            scrollData.current.items.splice(scrollData.current.items.indexOf(item), 1);
+            scrollData.current.items.splice(scrollData.current.items?.indexOf(item), 1);
             return;
           }
           setPositions(prev => {
@@ -301,9 +301,9 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
       if (rect.getHeight() !== itemRect.rect.getHeight()) {
         setPositions(prev => updatePositions(itemId, rect, prev));
         scrollData.current.averageItemHeight =
-          (scrollData.current.averageItemHeight * (itemPositions.rects.size - 1) +
+          (scrollData.current.averageItemHeight * (itemPositions.rects?.size - 1) +
             rect.getHeight()) /
-          itemPositions.rects.size;
+          itemPositions.rects?.size;
       }
     }
 

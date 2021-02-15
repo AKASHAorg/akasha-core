@@ -31,7 +31,7 @@ const ErrorInfoCard = ({
       };
     });
   const hasCriticalErrors = errorArr.some(err => err.isCritical);
-  if (errorArr.length) {
+  if (errorArr?.length) {
     const messages = errorArr.map((err, idx) => (
       <Box key={idx}>
         <ErrorElement>{err.message}</ErrorElement>
