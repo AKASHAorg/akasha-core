@@ -3,7 +3,7 @@ import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import * as React from 'react';
 import { combineLatest } from 'rxjs';
 
-import fetchRequest from './fetch-request';
+import moderationRequest from './moderation-request';
 import {
   buildPublishObject,
   createPendingEntry,
@@ -54,6 +54,7 @@ export interface PostsActions {
 }
 
 export interface UsePostsProps {
+  user: string | null;
   postsService: any;
   ipfsService: any;
   onError: (error: IAkashaError) => void;
@@ -88,7 +89,7 @@ export interface GetEntriesResponse {
 }
 
 const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
-  const { postsService, ipfsService, logger, onError } = props;
+  const { user, postsService, ipfsService, logger, onError } = props;
   const [postsState, setPostsState] = React.useState<PostsState>({
     postIds: [],
     commentIds: [],
@@ -113,17 +114,51 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         ...prev,
         fetchingPosts: prev.fetchingPosts.concat([postId]),
       }));
-      getEntryCall.subscribe((responses: [any, any]) => {
+      getEntryCall.subscribe(async (responses: [any, any]) => {
         const [ipfsResp, entryResp] = responses;
         const ipfsGateway = ipfsResp.data;
         const entry = entryResp.data?.getPost;
         if (entry) {
           const mappedEntry = mapEntry(entry, ipfsGateway, logger);
-          setPostsState(prev => ({
-            ...prev,
-            postsData: { ...prev.postsData, [mappedEntry.entryId]: mappedEntry },
-            fetchingPosts: prev.fetchingPosts.filter(id => id !== postId),
-          }));
+
+          const status = await moderationRequest.checkStatus(false, { user }, mappedEntry.entryId);
+
+          const qstatus =
+            mappedEntry.quote &&
+            (await moderationRequest.checkStatus(false, { user }, mappedEntry.quote.entryId));
+
+          if (status && status.constructor === Object) {
+            const modifiedEntry = {
+              ...mappedEntry,
+              reported: status.reported,
+              delisted: status.delisted,
+              quote: mappedEntry.quote
+                ? {
+                    ...mappedEntry.quote,
+                    reported:
+                      qstatus && status.constructor === Object
+                        ? qstatus.reported
+                        : mappedEntry.quote.reported,
+                    delisted:
+                      qstatus && status.constructor === Object
+                        ? qstatus.delisted
+                        : mappedEntry.quote.reported,
+                  }
+                : mappedEntry.quote,
+            };
+
+            setPostsState(prev => ({
+              ...prev,
+              postsData: { ...prev.postsData, [modifiedEntry.entryId]: modifiedEntry },
+              fetchingPosts: prev.fetchingPosts.filter(id => id !== postId),
+            }));
+          } else {
+            setPostsState(prev => ({
+              ...prev,
+              postsData: { ...prev.postsData, [mappedEntry.entryId]: mappedEntry },
+              fetchingPosts: prev.fetchingPosts.filter(id => id !== postId),
+            }));
+          }
         }
       }, createErrorHandler('usePosts.getPost', false, onError));
     },
@@ -171,22 +206,45 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
 
         const { nextIndex, results, total } = data.posts;
         const newIds: string[] = [];
+        const newQuoteIds: string[] = [];
         const posts = results
           .filter(excludeNonSlateContent)
           .map(entry => {
             newIds.push(entry._id);
+            // check if entry has quote and id of such quote is not yet in the list
+            if (entry.quotes.length > 0 && newQuoteIds.indexOf(entry.quotes[0]._id) === -1) {
+              newQuoteIds.push(entry.quotes[0]._id);
+            }
             return mapEntry(entry, ipfsGateway, logger);
           })
           .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
 
-        const response = await fetchRequest.checkStatus(true, { contentIds: newIds });
+        const status = await moderationRequest.checkStatus(true, { user, contentIds: newIds });
 
-        if (response && response.constructor === Array) {
-          response.forEach((resp: any) => {
-            posts[resp.contentId] = {
-              ...posts[resp.contentId],
-              delisted: resp.delisted,
-              reported: resp.reported,
+        const qstatus =
+          !!newQuoteIds.length &&
+          (await moderationRequest.checkStatus(true, { user, contentIds: newQuoteIds }));
+        if (status && status.constructor === Array) {
+          status.forEach((res: any) => {
+            const target = posts[res.contentId];
+            let quote: any;
+
+            if (target.quote) {
+              const { reported, delisted } = qstatus.find(
+                (el: any) => el.contentId === target.quote.entryId,
+              );
+              quote = {
+                ...target.quote,
+                reported: reported,
+                delisted: delisted,
+              };
+            }
+
+            posts[res.contentId] = {
+              ...target,
+              delisted: res.delisted,
+              reported: res.reported,
+              quote: quote,
             };
           });
         }

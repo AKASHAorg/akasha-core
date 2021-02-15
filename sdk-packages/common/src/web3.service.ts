@@ -10,10 +10,14 @@ const service: AkashaService = (invoke, log) => {
     const cacheService = invoke(commonServices[CACHE_SERVICE]);
     log.info('returning a new ethers provider instance');
     const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);
-    const web3Provider = await getProvider(getSettings, provider);
     const stash = await cacheService.getStash();
-    stash.set(commonServices[WEB3_SERVICE], web3Provider);
-    return web3Provider;
+    try {
+      const web3Provider = await getProvider(getSettings, provider);
+      stash.set(commonServices[WEB3_SERVICE], web3Provider);
+    } catch (e) {
+      throw e;
+    }
+    return stash.get(commonServices[WEB3_SERVICE]);
   };
 
   // to force regen() on the next web3 call

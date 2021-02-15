@@ -1,4 +1,4 @@
-// inspired from https://github.com/web3connect/web3connect
+import detectEthereumProvider from '@metamask/detect-provider';
 
 interface IWalletConnectConnectorOptions {
   infuraId: string;
@@ -8,20 +8,14 @@ interface IWalletConnectConnectorOptions {
 }
 
 export const ConnectToInjected = async () => {
-  let provider = null;
-  const currentWindow: any = window;
-  if (currentWindow.ethereum) {
-    provider = currentWindow.ethereum;
-    try {
-      await currentWindow.ethereum.enable();
-    } catch (error) {
-      throw new Error('User Rejected');
-    }
-  } else if (currentWindow.web3) {
-    provider = currentWindow.web3.currentProvider;
-  } else {
+  const provider: any = await detectEthereumProvider();
+  if (!provider) {
     throw new Error('No Web3 Provider found');
   }
+  provider.on('accountsChanged', _ => {
+    // refresh on metamask logout or changed acc
+    window.location.reload();
+  });
   return provider;
 };
 
@@ -55,9 +49,9 @@ export const ConnectToWalletConnect = (
     }
 
     const provider = new WalletConnectProvider({
-      qrcode,
       infuraId,
       chainId,
+      qrcode,
     });
 
     await provider.enable();

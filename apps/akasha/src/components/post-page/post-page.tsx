@@ -9,6 +9,7 @@ import {
   useProfile,
   useFollow,
   useErrors,
+  moderationRequest,
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
@@ -68,6 +69,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const [, errorActions] = useErrors({ logger });
 
   const [postsState, postsActions] = usePosts({
+    user: ethAddress,
     postsService: sdkModules.posts,
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
@@ -144,12 +146,50 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     const entryCall = sdkModules.posts.entries.getEntry({ entryId: postId });
     const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
     const call = combineLatest([ipfsGatewayCall, entryCall]);
-    call.subscribe((resp: any) => {
+    call.subscribe(async (resp: any) => {
       const ipfsGateway = resp[0].data;
       const entry = resp[1].data?.getPost;
       if (entry) {
         const mappedEntry = mapEntry(entry, ipfsGateway, logger);
-        setEntryData(mappedEntry);
+
+        const status = await moderationRequest.checkStatus(
+          false,
+          { user: ethAddress },
+          mappedEntry.entryId,
+        );
+
+        const qstatus =
+          mappedEntry.quote &&
+          (await moderationRequest.checkStatus(
+            false,
+            { user: ethAddress },
+            mappedEntry.quote.entryId,
+          ));
+
+        if (status && status.constructor === Object) {
+          const modifiedEntry = {
+            ...mappedEntry,
+            reported: status.reported,
+            delisted: status.delisted,
+            quote: mappedEntry.quote
+              ? {
+                  ...mappedEntry.quote,
+                  reported:
+                    qstatus && status.constructor === Object
+                      ? qstatus.reported
+                      : mappedEntry.quote.reported,
+                  delisted:
+                    qstatus && status.constructor === Object
+                      ? qstatus.delisted
+                      : mappedEntry.quote.reported,
+                }
+              : mappedEntry.quote,
+          };
+
+          setEntryData(modifiedEntry);
+        } else {
+          setEntryData(mappedEntry);
+        }
       }
     });
   }, [postId]);
@@ -286,8 +326,17 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     sdkModules.commons.ipfsService,
   );
 
-  const handleFlipCard = (entry: any) => () => {
-    const modifiedEntry = { ...entry, reported: false };
+  const handleFlipCard = (entry: any, isQuote: boolean) => () => {
+    const modifiedEntry = isQuote
+      ? { ...entry, quote: { ...entry.quote, reported: false } }
+      : { ...entry, reported: false };
+    setEntryData(modifiedEntry);
+  };
+
+  const handleListFlipCard = (entry: any, isQuote: boolean) => () => {
+    const modifiedEntry = isQuote
+      ? { ...entry, quote: { ...entry.quote, reported: false } }
+      : { ...entry, reported: false };
     postsActions.updatePostsState(modifiedEntry);
   };
 
@@ -335,7 +384,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
           </ToastProvider>
         )}
       </ModalRenderer>
-      {entryData && (
+      {entryData && !entryData.delisted && !entryData.reported && (
         <>
           <Box
             margin={{ horizontal: 'medium' }}
@@ -374,6 +423,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               isFollowingAuthor={isFollowing}
               onContentClick={handleNavigateToPost}
               onMentionClick={handleMentionClick}
+              awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
+              moderatedContentLabel={t('This content has been moderated')}
+              ctaLabel={t('See it anyway')}
+              handleFlipCard={handleFlipCard}
             />
           </Box>
           {!ethAddress && (
@@ -398,6 +451,19 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             </Box>
           )}
         </>
+      )}
+      {entryData && !entryData.delisted && entryData.reported && (
+        <EntryCardHidden
+          awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
+          ctaLabel={t('See it anyway')}
+          handleFlipCard={handleFlipCard(entryData, false)}
+        />
+      )}
+      {entryData && entryData.delisted && (
+        <EntryCardHidden
+          moderatedContentLabel={t('This content has been moderated')}
+          isDelisted={true}
+        />
       )}
       <VirtualList
         items={postsState.commentIds}
@@ -425,11 +491,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         }
         itemCardAlt={(entry: any) => (
           <EntryCardHidden
-            descriptionLabel={t(
-              'This post was reported by a user for offensive and abusive content. It is awaiting moderation.',
-            )}
+            awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
             ctaLabel={t('See it anyway')}
-            handleFlipCard={handleFlipCard(entry)}
+            handleFlipCard={handleListFlipCard(entry, false)}
           />
         )}
         customEntities={getPendingComments({

@@ -29,9 +29,8 @@ export default async function getProvider(
   if (provider === EthProviders.WalletConnect) {
     ethProvider = await ConnectToWalletConnect(WalletConnectProvider, {
       network,
-      infuraId: '21f3771ff3814c3db46dfcd216c9e672', // @Todo: change this on production
+      infuraId: '21f3771ff3814c3db46dfcd216c9e672',
     });
   }
-
   return new ethers.providers.Web3Provider(ethProvider);
 }
