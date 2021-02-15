@@ -291,7 +291,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       showLoginModal();
       return;
     }
-    console.log('publish comment data:', data);
     postsActions.optimisticPublishComment(data, postId, loginProfile);
   };
 
