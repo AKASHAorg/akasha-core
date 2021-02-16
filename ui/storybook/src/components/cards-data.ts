@@ -13,6 +13,7 @@ const trendingTagsData = [
 const trendingProfilesData = [
   {
     ethAddress: '0x003410490050000320006570034567114572000',
+    pubKey: 'abc123zxcv7scxkfe32fce21ce2ce2rv',
     name: 'Jon Gilbert',
     userName: '@jongilbert',
     ensName: 'jongilbert.akasha.eth',
@@ -25,6 +26,7 @@ const trendingProfilesData = [
   },
   {
     ethAddress: '0x003410490050778032325657003456711457212',
+    pubKey: 'abc123zxcv7scxkfe32fce21ce2ce2rv',
     name: 'Alexei Gilbertovich',
     userName: '@alexeigilbertovich',
     ensName: 'alexeigilbertovich.akasha.eth',
@@ -37,6 +39,7 @@ const trendingProfilesData = [
   },
   {
     ethAddress: '0x003410490050000320006570034567114572000',
+    pubKey: 'abc123zxcv7scxkfe32fce21ce2ce2rv',
     name: 'Jon Gilbert',
     userName: '@jongilbert',
     ensName: 'jongilbert.akasha.eth',
@@ -49,6 +52,7 @@ const trendingProfilesData = [
   },
   {
     ethAddress: '0x003410490050000320006570034567114572000',
+    pubKey: 'abc123zxcv7scxkfe32fce21ce2ce2rv',
     name: 'Jon Gilbert',
     userName: '@jongilbert',
     ensName: 'jongilbert.akasha.eth',
@@ -61,6 +65,7 @@ const trendingProfilesData = [
   },
   {
     ethAddress: '0x003410490050000320006570034567114572000',
+    pubKey: 'abc123zxcv7scxkfe32fce21ce2ce2rv',
     name: 'Jon Gilbert',
     userName: '@jongilbert',
     ensName: 'jongilbert.akasha.eth',
@@ -87,6 +92,7 @@ const appsDataSource: IAppData[] = [
 
 const profileData = {
   ethAddress: '0x003410490050000320006570034567114572000',
+  pubKey: 'abc123',
   avatar: 'https://placebeard.it/480/480',
   coverImage: 'goldenrod',
   name: 'Gilbert The Bearded',

@@ -15,11 +15,20 @@ interface SearchPageProps {
   globalChannel: any;
   singleSpa: any;
   loggedEthAddress: string | null;
+  loggedPubKey: string | null;
   showLoginModal: () => void;
 }
 
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const { sdkModules, logger, singleSpa, globalChannel, loggedEthAddress, showLoginModal } = props;
+  const {
+    sdkModules,
+    logger,
+    singleSpa,
+    globalChannel,
+    loggedPubKey,
+    loggedEthAddress,
+    showLoginModal,
+  } = props;
 
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 
@@ -27,7 +36,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    ethAddress: loggedEthAddress,
+    pubKey: loggedPubKey,
     onError: (err: IAkashaError) => {
       logger.error('useBookmark error %j', err);
     },

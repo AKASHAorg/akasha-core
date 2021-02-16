@@ -54,7 +54,7 @@
     "@akashaproject/ui-widget-login": "*",
     "react-i18next": "11.7.3",
     "react-router-dom": "5.2.0",
-    "single-spa-react": "3.2.0"
+    "single-spa-react": "4.0.0"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
