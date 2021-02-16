@@ -322,7 +322,6 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
         itemRects={itemPositions.rects}
         itemsData={itemsData}
         itemCard={itemCard}
-        itemCardAlt={props.itemCardAlt}
         listHeight={itemPositions.listHeight}
         loadItemData={loadItemData}
         itemSpacing={itemSpacing}

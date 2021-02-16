@@ -11,11 +11,7 @@ import { redirectToPost } from '../services/routing-service';
 import DS from '@akashaproject/design-system';
 import EntryCardRenderer from './feed-page/entry-card-renderer';
 
-const {
-  Helmet,
-  VirtualList,
-  EntryCardHidden /* ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard */,
-} = DS;
+const { Helmet, VirtualList } = DS;
 
 interface IPostsListProps {
   channels: any;
@@ -143,15 +139,12 @@ const PostsList: React.FC<IPostsListProps> = props => {
               onShare={handleEntryShare}
               onAvatarClick={handleAvatarClick}
               onMentionClick={handleMentionClick}
+              awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
+              moderatedContentLabel={t('This content has been moderated')}
+              ctaLabel={t('See it anyway')}
+              handleFlipCard={handleFlipCard}
             />
           }
-          itemCardAlt={(entry: any) => (
-            <EntryCardHidden
-              awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
-              ctaLabel={t('See it anyway')}
-              handleFlipCard={handleFlipCard(entry)}
-            />
-          )}
         />
       )}
     </>
