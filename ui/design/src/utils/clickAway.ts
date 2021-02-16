@@ -59,15 +59,7 @@ const isDescendant = (parent: HTMLElement, child: HTMLElement) => {
  * @params options <Object> Not used yet
  */
 const useOnClickAway = (ref: React.RefObject<any>, handler: (e: any) => void | undefined) => {
-  const handlerRef = React.useRef(handler);
-
-  // React.useEffect(() => {
-  //   handlerRef.current = handler
-  // })
   React.useEffect(() => {
-    if (!handlerRef.current) {
-      return;
-    }
     const listener = (ev: Event) => {
       if (
         !ref.current ||
@@ -78,9 +70,7 @@ const useOnClickAway = (ref: React.RefObject<any>, handler: (e: any) => void | u
       ) {
         return;
       }
-      if (handlerRef.current) {
-        handlerRef.current(ev);
-      }
+      handler(ev);
     };
     supportedEvents.forEach((eventName /* : EventNames */) => {
       // @todo check if passive event is supported and use it
@@ -92,7 +82,7 @@ const useOnClickAway = (ref: React.RefObject<any>, handler: (e: any) => void | u
         document.body.removeEventListener(eventName, listener);
       });
     };
-  }, [!handler]);
+  }, [handler, ref]);
 };
 
 /* @description: This hook lets you use clickAway and a toggler button (HTMLElement)

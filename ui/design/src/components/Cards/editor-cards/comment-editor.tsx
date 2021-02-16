@@ -3,7 +3,7 @@ import { IEditorBox } from '../../Editor/editor-box';
 import { Box } from 'grommet';
 import { EditorPlaceholder } from './editor-placeholder';
 import { EditorBox, editorDefaultValue } from '../../Editor/index';
-import useSimpleClickAway from '../../../utils/simpleClickAway';
+import { useOnClickAway } from '../../../utils/clickAway';
 import isEqual from 'lodash.isequal';
 
 const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>> = props => {
@@ -23,9 +23,14 @@ const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>
   const [showEditor, setShowEditor] = React.useState(false);
   const [editorState, setEditorState] = React.useState(editorDefaultValue);
   const wrapperRef: React.RefObject<any> = React.useRef();
+  const editorRef: React.RefObject<any> = React.useRef();
 
   const handleClickAway = () => {
-    if (showEditor && isEqual(editorState, editorDefaultValue)) {
+    if (
+      showEditor &&
+      isEqual(editorState, editorDefaultValue) &&
+      !editorRef.current?.getPopoversState()
+    ) {
       setShowEditor(false);
     }
   };
@@ -34,7 +39,7 @@ const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>
     setShowEditor(false);
   };
 
-  useSimpleClickAway(wrapperRef, handleClickAway);
+  useOnClickAway(wrapperRef, handleClickAway);
 
   const handleToggleEditor = (ev: any) => {
     ev.stopPropagation();
@@ -54,6 +59,7 @@ const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>
       {showEditor && (
         <Box border={{ side: 'all', size: '1px', color: 'border' }} pad="xxsmall" round="xsmall">
           <EditorBox
+            ref={editorRef}
             avatar={avatar}
             ethAddress={ethAddress}
             postLabel={postLabel}

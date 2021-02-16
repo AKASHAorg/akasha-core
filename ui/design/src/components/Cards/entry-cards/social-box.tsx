@@ -73,7 +73,7 @@ const SocialBox: React.FC<ISocialBox> = props => {
       direction="row"
       align="center"
       gap="xxsmall"
-      pad="medium"
+      pad={{ horizontal: 'medium', vertical: 'small' }}
       border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
     >
       {avatarUserData && <StackedAvatar userData={avatarUserData} maxAvatars={3} />}
