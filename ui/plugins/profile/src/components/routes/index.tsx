@@ -6,7 +6,8 @@ import menuRoute, { MY_PROFILE, rootRoute } from '../../routes';
 import MyProfilePage from './my-profile-page';
 import ProfilePage from './profile-page';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useLoginState, useModalState, useErrors } from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useModalState, useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
+import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
 const { Box, LoginModal } = DS;
 
@@ -24,13 +25,20 @@ const Routes: React.FC<RootComponentProps> = props => {
     onError: errorActions.createError,
   });
 
+  const [loggedProfileData, loggedProfileActions, profileUpdateStatus] = useProfile({
+    profileService: props.sdkModules.profiles.profileService,
+    ipfsService: props.sdkModules.commons.ipfsService,
+    onError: errorActions.createError,
+  });
+
+  React.useEffect(() => {
+    if (loginState.pubKey) {
+      loggedProfileActions.getProfileData({ pubKey: loginState.pubKey });
+    }
+  }, [loginState.pubKey]);
+
   const [modalState, modalStateActions] = useModalState({
-    initialState: {
-      updateProfile: false,
-      changeUsername: false,
-      changeENS: false,
-      reportModal: false,
-    },
+    initialState: {},
     isLoggedIn: !!loginState.ethAddress,
   });
 
@@ -48,7 +56,7 @@ const Routes: React.FC<RootComponentProps> = props => {
   }, [errorState]);
 
   const hideLoginModal = () => {
-    modalStateActions.hide('loginModal');
+    modalStateActions.hide(MODAL_NAMES.LOGIN);
   };
   const handleTutorialLinkClick = () => {
     /* goto tutorials */
@@ -64,26 +72,27 @@ const Routes: React.FC<RootComponentProps> = props => {
               {...props}
               modalActions={modalStateActions}
               modalState={modalState}
-              ethAddress={loginState.ethAddress}
-              profileData={loginState.profileData}
+              loggedProfileData={loggedProfileData}
+              loggedProfileActions={loggedProfileActions}
               loginActions={loginActions}
-              profileUpdateStatus={loginState.updateStatus}
+              profileUpdateStatus={profileUpdateStatus}
             />
           </Route>
-          <Route path={`${path}/:profileId`}>
+          <Route path={`${path}/:pubKey`}>
             <ProfilePage
               {...props}
               ethAddress={loginState.ethAddress}
               onLogin={loginActions.login}
               modalActions={modalStateActions}
               modalState={modalState}
+              loggedProfileData={loggedProfileData}
             />
           </Route>
           <Route render={() => <div>{t('Oops, Profile not found!')}</div>} />
         </Switch>
       </Box>
       <LoginModal
-        showModal={modalState.loginModal}
+        showModal={modalState[MODAL_NAMES.LOGIN]}
         slotId={props.layout.app.modalSlotId}
         onLogin={loginActions.login}
         onModalClose={hideLoginModal}

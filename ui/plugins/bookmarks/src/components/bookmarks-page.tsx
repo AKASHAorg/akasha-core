@@ -11,7 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import EntryCardRenderer from './entry-renderer';
 
-const { VirtualList, EntryCardHidden, ErrorInfoCard, ErrorLoader, Spinner } = DS;
+const { VirtualList, ErrorInfoCard, ErrorLoader, Spinner } = DS;
 
 const BookmarksPage = (props: RootComponentProps) => {
   const { globalChannel, sdkModules, logger } = props;
@@ -29,7 +29,7 @@ const BookmarksPage = (props: RootComponentProps) => {
     onLogout: () => props.singleSpa.navigateToUrl('/'),
   });
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    ethAddress: loginState.ethAddress,
+    pubKey: loginState.pubKey,
     dbService: sdkModules.db,
     onError: errorActions.createError,
   });
@@ -182,17 +182,14 @@ const BookmarksPage = (props: RootComponentProps) => {
                         onMentionClick={handleMentionClick}
                         contentClickable={true}
                         disableReposting={true}
-                      />
-                    }
-                    itemCardAlt={(entry: any) => (
-                      <EntryCardHidden
                         awaitingModerationLabel={t(
                           'You have reported this post. It is awaiting moderation.',
                         )}
+                        moderatedContentLabel={t('This content has been moderated')}
                         ctaLabel={t('See it anyway')}
-                        handleFlipCard={handleFlipCard(entry)}
+                        handleFlipCard={handleFlipCard}
                       />
-                    )}
+                    }
                   />
                 )}
               </>

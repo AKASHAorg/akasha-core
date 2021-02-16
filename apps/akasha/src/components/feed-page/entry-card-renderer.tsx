@@ -5,7 +5,7 @@ import { useFollow } from '@akashaproject/ui-awf-hooks';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 
-const { ErrorInfoCard, ErrorLoader, EntryCard, EntryCardLoading } = DS;
+const { ErrorInfoCard, ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading } = DS;
 
 export interface IEntryCardRendererProps {
   sdkModules: any;
@@ -98,6 +98,16 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const isFollowing = followedProfiles.includes(itemData.author.ethAddress);
 
+  if (itemData.reported) {
+    return (
+      <EntryCardHidden
+        awaitingModerationLabel={awaitingModerationLabel}
+        ctaLabel={ctaLabel}
+        handleFlipCard={handleFlipCard && handleFlipCard(itemData, false)}
+      />
+    );
+  }
+
   return (
     <ErrorInfoCard errors={{}}>
       {(errorMessages: any, hasCriticalErrors: boolean) => (
@@ -121,7 +131,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   shareTextLabel={t('Share this post with your friends')}
                   sharePostUrl={'https://ethereum.world'}
                   onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                    props.onAvatarClick(ev, itemData.author.ethAddress)
+                    props.onAvatarClick(ev, itemData.author.pubKey)
                   }
                   onEntryBookmark={props.onBookmark}
                   repliesLabel={t('Replies')}

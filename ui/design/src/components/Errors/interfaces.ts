@@ -23,4 +23,5 @@ export interface ErrorLoaderProps {
    *  Message to be shown when in deveolopment mode
    */
   devDetails?: string | React.ReactNode;
+  style?: React.CSSProperties;
 }

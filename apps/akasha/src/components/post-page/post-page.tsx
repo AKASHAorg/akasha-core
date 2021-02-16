@@ -87,14 +87,14 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   });
 
   React.useEffect(() => {
-    if (ethAddress) {
-      loginProfileActions.getProfileData({ ethAddress: ethAddress });
+    if (props.pubKey) {
+      loginProfileActions.getProfileData({ pubKey: props.pubKey });
     }
-  }, [ethAddress]);
+  }, [props.pubKey]);
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
     dbService: sdkModules.db,
-    ethAddress: ethAddress,
+    pubKey: props.pubKey,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo);
     },
@@ -397,7 +397,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               shareTextLabel={t('Share this post with your friends')}
               sharePostUrl={'https://ethereum.world'}
               onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                handleAvatarClick(ev, entryData.author.ethAddress)
+                handleAvatarClick(ev, entryData.author.pubKey)
               }
               onEntryBookmark={handleEntryBookmark}
               repliesLabel={t('Replies')}
@@ -486,15 +486,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             onShare={handleEntryShare}
             onAvatarClick={handleAvatarClick}
             onMentionClick={handleMentionClick}
+            handleFlipCard={handleListFlipCard}
           />
         }
-        itemCardAlt={(entry: any) => (
-          <EntryCardHidden
-            awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
-            ctaLabel={t('See it anyway')}
-            handleFlipCard={handleListFlipCard(entry, false)}
-          />
-        )}
         customEntities={getPendingComments({
           logger,
           globalChannel,
