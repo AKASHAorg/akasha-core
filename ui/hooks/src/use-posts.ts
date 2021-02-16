@@ -166,7 +166,9 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       setPostsState(prev => ({
         ...prev,
         postIds: [],
+        commentIds: [],
         nextPostIndex: null,
+        nextCommentIndex: null,
         totalItems: null,
       }));
     },

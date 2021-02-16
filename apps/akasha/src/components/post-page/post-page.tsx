@@ -192,6 +192,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         }
       }
     });
+    // this is used to initialise comments when navigating to other post ids
+    if (postId) {
+      handleLoadMore({ limit: 5, postID: postId });
+    }
   }, [postId]);
 
   const bookmarked = React.useMemo(() => {
@@ -318,7 +322,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     });
   };
 
-  const handleNavigateToPost = redirectToPost(navigateToUrl);
+  const handleNavigateToPost = redirectToPost(navigateToUrl, postsActions.resetPostIds);
 
   const onUploadRequest = uploadMediaToTextile(
     sdkModules.profiles.profileService,

@@ -269,7 +269,12 @@ const Topbar = (props: ITopbarProps) => {
           {size !== 'small' && <StyledText size="large">{brandLabel}</StyledText>}
         </Box>
 
-        <Box direction="row" align="center" gap="small" pad={{ horizontal: 'medium' }}>
+        <Box
+          direction="row"
+          align="center"
+          gap="small"
+          pad={size === 'small' ? 'none' : { horizontal: 'medium' }}
+        >
           {renderSearchArea()}
           {quickAccessItems && quickAccessItems.map(renderPluginButton)}
           {!ethAddress && (
@@ -286,7 +291,7 @@ const Topbar = (props: ITopbarProps) => {
   return (
     <TopbarWrapper
       direction="row"
-      pad="small"
+      pad={{ vertical: 'small', horizontal: 'medium' }}
       justify="between"
       align="center"
       fill="horizontal"

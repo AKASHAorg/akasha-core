@@ -5,18 +5,18 @@ import { WidgetAreaCardBox } from '../common/basic-card-box';
 import { Button } from '../../Buttons';
 
 const SignInButton = styled(Button)`
-  flex: 1;
+  flex-grow: 1;
   margin-right: 0.5em;
 `;
 
 const SignUpButton = styled(Button)`
-  flex: 1;
+  flex-grow: 1;
 `;
 
-// @ts-ignore-next-line
 const LoginWidgetBox = styled(WidgetAreaCardBox)`
   padding: 1em;
 `;
+
 export interface ILoginWidgetCardProps {
   onLoginClick: () => void;
   onLearnMoreClick?: () => void;
@@ -33,7 +33,7 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
   return (
     <LoginWidgetBox callToAction={true}>
       {props.image && props.image}
-      <Box direction={inlineActions ? 'row' : 'column'} align="center">
+      <Box direction={inlineActions ? 'row' : 'column'} align="center" gap="xsmall">
         <Box direction="column">
           <Text weight="bold" size="large">
             {props.title}
@@ -42,7 +42,13 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
             {props.textContent}
           </Text>
         </Box>
-        <Box direction="row" justify="end" pad="0 0 0 2em" align="center" flex={{ shrink: 0 }}>
+        <Box
+          direction="row"
+          justify={inlineActions ? 'end' : 'stretch'}
+          align="center"
+          flex={inlineActions ? { shrink: 0 } : 'grow'}
+          fill={inlineActions ? false : 'horizontal'}
+        >
           <SignInButton onClick={props.onLoginClick} label={props.signInLabel} />
           <SignUpButton primary={true} onClick={props.onLoginClick} label={props.signUpLabel} />
         </Box>
