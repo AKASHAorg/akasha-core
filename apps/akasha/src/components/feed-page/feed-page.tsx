@@ -27,7 +27,6 @@ const {
   useViewportSize,
   EditorModal,
   EditorPlaceholder,
-  EntryCardHidden,
 } = DS;
 
 export interface FeedPageProps {
@@ -349,13 +348,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             handleFlipCard={handleFlipCard}
           />
         }
-        itemCardAlt={(entry: any) => (
-          <EntryCardHidden
-            awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
-            ctaLabel={t('See it anyway')}
-            handleFlipCard={handleFlipCard(entry, false)}
-          />
-        )}
         customEntities={getFeedCustomEntities({
           sdkModules,
           logger,

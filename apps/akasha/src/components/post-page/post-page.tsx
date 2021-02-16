@@ -486,15 +486,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             onShare={handleEntryShare}
             onAvatarClick={handleAvatarClick}
             onMentionClick={handleMentionClick}
+            handleFlipCard={handleListFlipCard}
           />
         }
-        itemCardAlt={(entry: any) => (
-          <EntryCardHidden
-            awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
-            ctaLabel={t('See it anyway')}
-            handleFlipCard={handleListFlipCard(entry, false)}
-          />
-        )}
         customEntities={getPendingComments({
           logger,
           globalChannel,
