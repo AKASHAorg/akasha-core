@@ -13,7 +13,6 @@ import {
   bookmarkLabel,
   copyLinkLabel,
   bookmarkedLabel,
-  copyIPFSLinkLabel,
 } from './cards-data';
 
 const { Box, EntryCard, EntryCardHidden } = DS;

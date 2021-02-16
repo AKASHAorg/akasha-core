@@ -44,7 +44,6 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   React.useEffect(() => {
     if (params.postId) {
       profileActions.getEntryAuthor({ entryId: params.postId });
-      // profileActions.getProfileData({ ethAddress: params.userId });
     }
   }, [params.postId]);
 
