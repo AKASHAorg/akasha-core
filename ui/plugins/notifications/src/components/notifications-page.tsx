@@ -57,8 +57,8 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
     });
   };
   // @todo: extract routes from config
-  const handleAvatarClick = (profileEthAddress: string) => {
-    singleSpa.navigateToUrl(`/profile/${profileEthAddress}`);
+  const handleAvatarClick = (profilePubKey: string) => {
+    singleSpa.navigateToUrl(`/profile/${profilePubKey}`);
   };
 
   const handlePostClick = (entryId: string) => {
@@ -84,7 +84,7 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
       case 'NEW_FOLLOWER':
         label = t('is now following you');
         clickHandler = () => {
-          handleAvatarClick(profileData.ethAddress);
+          handleAvatarClick(profileData.pubKey);
           notificationsActions.markMessageAsRead(notif.id);
         };
         break;
@@ -103,7 +103,7 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
           label={fullLabel}
           info={relativeTime}
           onClick={clickHandler}
-          onClickAvatar={() => handleAvatarClick(profileData.ethAddress)}
+          onClickAvatar={() => handleAvatarClick(profileData.pubKey)}
         />
         <Icon
           size="xs"
