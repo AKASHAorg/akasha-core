@@ -5,7 +5,7 @@ import { useFollow } from '@akashaproject/ui-awf-hooks';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 
-const { ErrorInfoCard, ErrorLoader, EntryBox, Box, EntryCardLoading } = DS;
+const { ErrorInfoCard, ErrorLoader, EntryCardHidden, EntryBox, Box, EntryCardLoading } = DS;
 
 export interface PostRendererProps {
   sdkModules: any;
@@ -28,6 +28,7 @@ export interface PostRendererProps {
   style?: React.CSSProperties;
   contentClickable?: boolean;
   hidePublishTime?: boolean;
+  handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
 }
 
 const PostRenderer = (props: PostRendererProps) => {
@@ -41,6 +42,7 @@ const PostRenderer = (props: PostRendererProps) => {
     contentClickable,
     bookmarkState,
     hidePublishTime,
+    handleFlipCard,
   } = props;
 
   const { t } = useTranslation();
@@ -84,6 +86,17 @@ const PostRenderer = (props: PostRendererProps) => {
   };
 
   const isFollowing = followedProfiles.includes(itemData.author.ethAddress);
+
+  if (itemData.reported) {
+    return (
+      <EntryCardHidden
+        awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
+        moderatedContentLabel={t('This content has been moderated')}
+        ctaLabel={t('See it anyway')}
+        handleFlipCard={handleFlipCard && handleFlipCard(itemData, false)}
+      />
+    );
+  }
 
   return (
     <ErrorInfoCard errors={{}}>

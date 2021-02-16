@@ -212,7 +212,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
           .map(entry => {
             newIds.push(entry._id);
             // check if entry has quote and id of such quote is not yet in the list
-            if (entry.quotes.length > 0 && newQuoteIds.indexOf(entry.quotes[0]._id) === -1) {
+            if (entry.quotes?.length > 0 && newQuoteIds.indexOf(entry.quotes[0]._id) === -1) {
               newQuoteIds.push(entry.quotes[0]._id);
             }
             return mapEntry(entry, ipfsGateway, logger);
@@ -240,12 +240,22 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
               };
             }
 
-            posts[res.contentId] = {
-              ...target,
-              delisted: res.delisted,
-              reported: res.reported,
-              quote: quote,
-            };
+            if (res.delisted) {
+              const index = newIds.indexOf(res.contentId);
+              if (index > -1) {
+                // remove the entry id from newIds
+                newIds.splice(index, 1);
+              }
+              // remove the entry from posts object
+              delete posts[res.contentId];
+            } else {
+              posts[res.contentId] = {
+                ...target,
+                delisted: res.delisted,
+                reported: res.reported,
+                quote: quote,
+              };
+            }
           });
         }
 
