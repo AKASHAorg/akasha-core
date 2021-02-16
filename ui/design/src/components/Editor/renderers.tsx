@@ -38,7 +38,7 @@ const MentionElement = (props: any) => {
       {...attributes}
       contentEditable={false}
       onClick={ev => {
-        handleMentionClick(element.ethAddress);
+        handleMentionClick(element.pubKey);
         ev.stopPropagation();
       }}
     >

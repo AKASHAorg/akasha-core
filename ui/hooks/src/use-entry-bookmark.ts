@@ -12,7 +12,7 @@ const BOOKMARKED_ENTRIES_KEY = 'AKASHA_APP_BOOKMARK_ENTRIES';
 const entriesBookmarks = 'entries-bookmarks';
 
 export interface UseEntryBookmarkProps {
-  ethAddress: string | null;
+  pubKey: string | null;
   bmKey?: string;
   dbService: { [key: string]: any };
   onError: (err: IAkashaError) => void;
@@ -29,7 +29,7 @@ export interface IBookmarkActions {
 }
 
 const useEntryBookmark = (props: UseEntryBookmarkProps): [IBookmarkState, IBookmarkActions] => {
-  const { ethAddress, dbService, bmKey = BOOKMARKED_ENTRIES_KEY, onError } = props;
+  const { pubKey, dbService, bmKey = BOOKMARKED_ENTRIES_KEY, onError } = props;
   const [bookmarkState, setBookmarkState] = React.useState<IBookmarkState>({
     bookmarks: [],
     isFetching: true,
@@ -37,7 +37,7 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [IBookmarkState, IBookm
 
   React.useEffect(() => {
     let subs: Subscription | undefined;
-    if (ethAddress) {
+    if (pubKey) {
       const call = dbService.settingsAttachment.get({
         moduleName: bmKey,
       });
@@ -68,7 +68,7 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [IBookmarkState, IBookm
         subs.unsubscribe();
       }
     };
-  }, [ethAddress]);
+  }, [pubKey]);
 
   const actions: IBookmarkActions = {
     bookmarkPost(entryId) {

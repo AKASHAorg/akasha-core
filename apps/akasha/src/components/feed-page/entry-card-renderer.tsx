@@ -131,7 +131,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   shareTextLabel={t('Share this post with your friends')}
                   sharePostUrl={'https://ethereum.world'}
                   onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                    props.onAvatarClick(ev, itemData.author.ethAddress)
+                    props.onAvatarClick(ev, itemData.author.pubKey)
                   }
                   onEntryBookmark={props.onBookmark}
                   repliesLabel={t('Replies')}

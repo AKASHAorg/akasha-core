@@ -15,6 +15,7 @@ export interface IProfileData {
   url?: string;
   ensName?: string;
   ethAddress: string;
+  pubKey: string;
   totalPosts?: string | number;
   totalFollowers?: string | number;
   totalFollowing?: string | number;

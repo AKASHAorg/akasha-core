@@ -29,7 +29,7 @@ const BookmarksPage = (props: RootComponentProps) => {
     onLogout: () => props.singleSpa.navigateToUrl('/'),
   });
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    ethAddress: loginState.ethAddress,
+    pubKey: loginState.pubKey,
     dbService: sdkModules.db,
     onError: errorActions.createError,
   });

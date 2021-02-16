@@ -14,8 +14,6 @@ import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
 import { application as loginWidget } from '@akashaproject/ui-widget-login/lib/bootstrap';
-
-// @ts-expect-error: Missing types for parcel...
 import Parcel from 'single-spa-react/parcel';
 import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
 
@@ -70,10 +68,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   });
 
   React.useEffect(() => {
-    if (ethAddress && !loginProfile.ethAddress) {
-      loginProfileActions.getProfileData({ ethAddress });
+    if (pubKey) {
+      loginProfileActions.getProfileData({ pubKey });
     }
-  }, [ethAddress, loginProfile.ethAddress]);
+  }, [pubKey]);
 
   const { size } = useViewportSize();
 
@@ -81,7 +79,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    ethAddress,
+    pubKey,
     onError,
     dbService: sdkModules.db,
   });
@@ -107,15 +105,15 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     postsActions.getPost(payload.itemId);
   };
 
-  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
-    props.singleSpa.navigateToUrl(`/profile/${authorEth}`);
+  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorPubKey: string) => {
+    props.singleSpa.navigateToUrl(`/profile/${authorPubKey}`);
     ev.preventDefault();
   };
-  const handleMentionClick = (profileEthAddress: string) => {
-    props.singleSpa.navigateToUrl(`/profile/${profileEthAddress}`);
+  const handleMentionClick = (profilePubKey: string) => {
+    props.singleSpa.navigateToUrl(`/profile/${profilePubKey}`);
   };
   const handleEntryBookmark = (entryId: string) => {
-    if (!ethAddress) {
+    if (!pubKey) {
       return showLoginModal();
     }
     if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
@@ -124,7 +122,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     return bookmarkActions.bookmarkPost(entryId);
   };
   const handleEntryRepost = (_withComment: boolean, entryData: any) => {
-    if (!ethAddress) {
+    if (!pubKey) {
       showLoginModal();
     } else {
       setCurrentEmbedEntry(entryData);
@@ -322,6 +320,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                 layout={props.layout}
                 globalChannel={props.globalChannel}
                 i18n={props.i18n}
+                mountParcel={props.singleSpa.mountRootParcel}
               />
             </>
           )
