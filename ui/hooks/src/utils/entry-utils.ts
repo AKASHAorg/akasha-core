@@ -69,6 +69,7 @@ export const mapEntry = (
       userName: string;
       name: string;
       ethAddress: string;
+      pubKey: string;
       totalPosts?: number | string;
       totalFollowers?: number | string;
       totalFollowing?: number | string;
@@ -135,6 +136,7 @@ export const mapEntry = (
       userName: entry.author.userName,
       name: entry.author.name,
       ethAddress: entry.author.ethAddress,
+      pubKey: entry.author.pubKey,
       totalPosts: entry.author.totalPosts,
       totalFollowers: entry.author.totalFollowers,
       totalFollowing: entry.author.totalFollowing,

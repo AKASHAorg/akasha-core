@@ -22,6 +22,7 @@ const SocialBox: React.FC<ISocialBox> = props => {
 
   const avatarUserData = socialData.map(user => {
     return {
+      pubKey: user.pubKey,
       ethAddress: user.ethAddress,
       avatar: user.avatar,
       userName: user.userName,
@@ -57,9 +58,9 @@ const SocialBox: React.FC<ISocialBox> = props => {
               src={user.avatar}
               ethAddress={user.ethAddress}
               size="xs"
-              onClick={() => onClickUser(user.ethAddress)}
+              onClick={() => onClickUser(user.pubKey)}
             />
-            <Text onClick={() => onClickUser(user.ethAddress)}>
+            <Text onClick={() => onClickUser(user.pubKey)}>
               {user.name || user.userName || truncateMiddle(user.ethAddress, 3, 3)}
             </Text>
           </StyledSelectBox>
@@ -73,12 +74,12 @@ const SocialBox: React.FC<ISocialBox> = props => {
       direction="row"
       align="center"
       gap="xxsmall"
-      pad="medium"
+      pad={{ horizontal: 'medium', vertical: 'small' }}
       border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
     >
       {avatarUserData && <StackedAvatar userData={avatarUserData} maxAvatars={3} />}
       <IconLink
-        onClick={() => onClickUser(socialData[0].ethAddress)}
+        onClick={() => onClickUser(socialData[0].pubKey)}
         label={
           socialData[0].name ||
           socialData[0].userName ||

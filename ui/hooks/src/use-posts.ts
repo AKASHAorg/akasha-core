@@ -36,7 +36,7 @@ export interface PostsActions {
   getComment: (commentId: string) => void;
   getPosts: (payload: GetItemsPayload) => void;
   getComments: (payload: GetItemsPayload) => void;
-  getUserPosts: (userId: string) => void;
+  getUserPosts: (payload: { pubKey: string; limit: number; offset?: string }) => void;
   optimisticPublishComment: (
     commentData: PublishPostData,
     postId: string,
@@ -46,7 +46,10 @@ export interface PostsActions {
     postData: PublishPostData,
     loggedProfile: any,
     currentEmbedEntry: any,
+    disablePendingFeedback?: boolean,
   ) => void;
+  /* reset post ids (basically reset the list) */
+  resetPostIds: () => void;
   updatePostsState: (updatedEntry: any) => void;
 }
 
@@ -54,7 +57,6 @@ export interface UsePostsProps {
   user: string | null;
   postsService: any;
   ipfsService: any;
-  profileService?: any;
   onError: (error: IAkashaError) => void;
   logger?: {};
 }
@@ -67,7 +69,7 @@ export interface PostsState {
   /* posts/comments data */
   postsData: { [key: string]: any };
   /* next index of posts */
-  nextPostIndex: string | null;
+  nextPostIndex: string | number | null;
   /* next index of comments */
   nextCommentIndex: string | null;
   isFetchingPosts: boolean;
@@ -78,20 +80,21 @@ export interface PostsState {
   pendingPosts: any[];
   /* pending publish comments */
   pendingComments: any[];
+  totalItems: number | null;
 }
 
 export interface GetEntriesResponse {
   channelInfo: any;
-  data: { posts: { nextIndex: string; results: any[] } };
+  data: { posts: { nextIndex: string; results: any[]; total: number } };
 }
 
 const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
-  const { user, postsService, ipfsService, profileService, logger, onError } = props;
+  const { user, postsService, ipfsService, logger, onError } = props;
   const [postsState, setPostsState] = React.useState<PostsState>({
     postIds: [],
     commentIds: [],
     postsData: {},
-    nextPostIndex: '',
+    nextPostIndex: null,
     nextCommentIndex: '',
     isFetchingPosts: false,
     isFetchingComments: false,
@@ -99,6 +102,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     fetchingComments: [],
     pendingPosts: [],
     pendingComments: [],
+    totalItems: null,
   });
 
   const actions: PostsActions = {
@@ -158,6 +162,16 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         }
       }, createErrorHandler('usePosts.getPost', false, onError));
     },
+    resetPostIds: () => {
+      setPostsState(prev => ({
+        ...prev,
+        postIds: [],
+        commentIds: [],
+        nextPostIndex: null,
+        nextCommentIndex: null,
+        totalItems: null,
+      }));
+    },
     getComment: commentId => {
       const commentCall = postsService.comments.getComment({ commentID: commentId });
       const ipfsGatewayCall = ipfsService.getSettings({});
@@ -191,7 +205,8 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         const [ipfsResp, entriesResp] = responses;
         const ipfsGateway = ipfsResp.data;
         const { data }: GetEntriesResponse = entriesResp;
-        const { nextIndex, results } = data.posts;
+
+        const { nextIndex, results, total } = data.posts;
         const newIds: string[] = [];
         const newQuoteIds: string[] = [];
         const posts = results
@@ -199,7 +214,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
           .map(entry => {
             newIds.push(entry._id);
             // check if entry has quote and id of such quote is not yet in the list
-            if (entry.quotes.length > 0 && newQuoteIds.indexOf(entry.quotes[0]._id) === -1) {
+            if (entry.quotes?.length > 0 && newQuoteIds.indexOf(entry.quotes[0]._id) === -1) {
               newQuoteIds.push(entry.quotes[0]._id);
             }
             return mapEntry(entry, ipfsGateway, logger);
@@ -227,12 +242,22 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
               };
             }
 
-            posts[res.contentId] = {
-              ...target,
-              delisted: res.delisted,
-              reported: res.reported,
-              quote: quote,
-            };
+            if (res.delisted) {
+              const index = newIds.indexOf(res.contentId);
+              if (index > -1) {
+                // remove the entry id from newIds
+                newIds.splice(index, 1);
+              }
+              // remove the entry from posts object
+              delete posts[res.contentId];
+            } else {
+              posts[res.contentId] = {
+                ...target,
+                delisted: res.delisted,
+                reported: res.reported,
+                quote: quote,
+              };
+            }
           });
         }
 
@@ -242,6 +267,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
           postsData: { ...prev.postsData, ...posts },
           postIds: prev.postIds.concat(newIds),
           isFetchingPosts: false,
+          totalItems: total,
         }));
       }, createErrorHandler('usePosts.getPosts', false, onError));
     },
@@ -256,7 +282,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       calls.subscribe((responses: [any, any]) => {
         const [ipfsResp, commentsResp] = responses;
         const { data } = commentsResp;
-        const { nextIndex, results }: GetEntriesResponse['data']['posts'] = data.getComments;
+        const { nextIndex, results, total }: GetEntriesResponse['data']['posts'] = data.getComments;
         const newIds: string[] = [];
         const comments = results
           .filter(excludeNonSlateContent)
@@ -272,6 +298,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
           postsData: { ...prev.postsData, ...comments },
           commentIds: prev.commentIds.concat(newIds),
           isFetchingComments: false,
+          totalItems: total,
         }));
       }, createErrorHandler('usePosts.getComments', false, onError));
     },
@@ -303,66 +330,87 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         }));
       }, createErrorHandler('usePosts.optimusticPublishComment'));
     },
-    optimisticPublishPost: (postData, loggedProfile, currentEmbedEntry) => {
+    optimisticPublishPost: (postData, loggedProfile, currentEmbedEntry, disablePendingFeedback) => {
       const publishObj = buildPublishObject(postData);
-      const pending = createPendingEntry(
-        {
-          ethAddress: loggedProfile.ethAddress as string,
-          avatar: loggedProfile.avatar,
-          userName: loggedProfile.userName,
-          ensName: loggedProfile.ensName,
-          coverImage: loggedProfile.coverImage,
-          description: loggedProfile.description,
-        },
-        postData,
-        currentEmbedEntry,
-      );
+      let pending: any;
+      if (!disablePendingFeedback) {
+        pending = createPendingEntry(
+          {
+            ethAddress: loggedProfile.ethAddress as string,
+            avatar: loggedProfile.avatar,
+            userName: loggedProfile.userName,
+            ensName: loggedProfile.ensName,
+            coverImage: loggedProfile.coverImage,
+            description: loggedProfile.description,
+          },
+          postData,
+          currentEmbedEntry,
+        );
 
-      setPostsState(prev => {
-        return {
-          ...prev,
-          pendingPosts: [pending, ...prev.pendingPosts],
-        };
-      });
+        setPostsState(prev => {
+          return {
+            ...prev,
+            pendingPosts: [pending, ...prev.pendingPosts],
+          };
+        });
+      }
 
       const postEntryCall = postsService.entries.postEntry(publishObj);
       postEntryCall.subscribe((postingResp: any) => {
         const publishedEntryId = postingResp.data.createPost;
-        const entryData = pending as IEntryData;
-        setPostsState(prev => ({
-          ...prev,
-          postsData: {
-            ...prev.postsData,
-            [publishedEntryId]: { ...entryData, entryId: publishedEntryId },
-          },
-          pendingPosts: [],
-          postIds: [publishedEntryId, ...prev.postIds],
-        }));
+        if (!disablePendingFeedback) {
+          const entryData = pending as IEntryData;
+          setPostsState(prev => ({
+            ...prev,
+            postsData: {
+              ...prev.postsData,
+              [publishedEntryId]: { ...entryData, entryId: publishedEntryId },
+            },
+            pendingPosts: [],
+            postIds: [publishedEntryId, ...prev.postIds],
+          }));
+        }
       }, createErrorHandler('usePosts.optimisticPublishPost', false, onError));
     },
-    getUserPosts: (userId: string) => {
-      if (!profileService) {
-        // tslint:disable-next-line: no-console
-        return console.error('Cannot use getUserPosts without passing profileService module!');
+    getUserPosts: payload => {
+      const req: any = {
+        ...payload,
+      };
+      if (typeof postsState.nextPostIndex === 'number') {
+        req.offset = postsState.nextPostIndex;
       }
-      const userPostsCall = profileService.getPosts(userId);
+      setPostsState(prev => ({ ...prev, isFetchingPosts: true }));
+
+      const userPostsCall = postsService.entries.entriesByAuthor(req);
       const ipfsGatewayCall = ipfsService.getSettings({});
+
       combineLatest([ipfsGatewayCall, userPostsCall]).subscribe((responses: [any, any]) => {
         const [ipfsGatewayResp, userPostsResp] = responses;
+        const {
+          results,
+          nextIndex,
+          total,
+        }: {
+          results: any[];
+          nextIndex: number;
+          total: number;
+        } = userPostsResp.data.getPostsByAuthor;
+        const newIds: string[] = [];
+        const posts = results
+          .filter(excludeNonSlateContent)
+          .map(entry => {
+            newIds.push(entry._id);
+            return mapEntry(entry, ipfsGatewayResp.data, logger);
+          })
+          .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
+
         setPostsState(prev => ({
           ...prev,
-          postIds: userPostsResp.data.map((post: any) => post._id),
-          // should we keep already fetched data for posts?
-          // if yes, start the reduce with {...prev.postsData}
-          postsData: userPostsResp.data.reduce(
-            (acc: {}, post: any) => ({
-              ...acc,
-              [post._id]: mapEntry(post, ipfsGatewayResp.data, logger),
-            }),
-            {
-              /* ...prev.postsData */
-            },
-          ),
+          postIds: prev.postIds.concat(newIds),
+          postsData: { ...prev.postsData, ...posts },
+          nextPostIndex: nextIndex,
+          isFetchingPosts: false,
+          totalItems: total,
         }));
       }, createErrorHandler('usePosts.getUserPosts', false, onError));
     },

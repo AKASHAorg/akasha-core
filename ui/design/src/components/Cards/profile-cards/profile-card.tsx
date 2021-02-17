@@ -102,9 +102,9 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     canUserEdit,
   } = props;
 
-  const postsTitle = `${profileData.totalPosts} ${postsLabel}`;
-  const followersTitle = `${profileData.totalFollowers} ${followersLabel}`;
-  const followingTitle = `${profileData.totalFollowing} ${followingLabel}`;
+  const postsTitle = `${profileData.totalPosts || 0} ${postsLabel}`;
+  const followersTitle = `${profileData.totalFollowers || 0} ${followersLabel}`;
+  const followingTitle = `${profileData.totalFollowing || 0} ${followingLabel}`;
 
   const [editable /* , setEditable */] = useState(false);
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -232,7 +232,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
 
               <Box direction="row" gap="xsmall">
                 <Text size="medium" color="secondaryText">
-                  {profileData.userName ? `@${profileData.userName}` : null}
+                  {profileData.userName ? `@${profileData.userName.replace('@', '')}` : null}
                 </Text>
               </Box>
             </Box>

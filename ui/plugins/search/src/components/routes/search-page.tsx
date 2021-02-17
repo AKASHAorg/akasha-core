@@ -15,11 +15,20 @@ interface SearchPageProps {
   globalChannel: any;
   singleSpa: any;
   loggedEthAddress: string | null;
+  loggedPubKey: string | null;
   showLoginModal: () => void;
 }
 
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const { sdkModules, logger, singleSpa, globalChannel, loggedEthAddress, showLoginModal } = props;
+  const {
+    sdkModules,
+    logger,
+    singleSpa,
+    globalChannel,
+    loggedPubKey,
+    loggedEthAddress,
+    showLoginModal,
+  } = props;
 
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 
@@ -27,7 +36,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    ethAddress: loggedEthAddress,
+    pubKey: loggedPubKey,
     onError: (err: IAkashaError) => {
       logger.error('useBookmark error %j', err);
     },
@@ -89,8 +98,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     }
     tagSubscriptionActions.toggleTagSubscription(tagName);
   };
-  const handleProfileClick = (ethAddress: string) => {
-    singleSpa.navigateToUrl(`/profile/${ethAddress}`);
+  const handleProfileClick = (pubKey: string) => {
+    singleSpa.navigateToUrl(`/profile/${pubKey}`);
   };
   const handleFollowProfile = (ethAddress: string) => {
     if (!loggedEthAddress) {
@@ -198,7 +207,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           {searchState.profiles.slice(0, 4).map((profileData: any, index: number) => (
             <Box
               key={index}
-              onClick={() => handleProfileClick(profileData.ethAddress)}
+              onClick={() => handleProfileClick(profileData.pubKey)}
               pad={{ bottom: 'medium' }}
             >
               <ProfileCard
@@ -240,7 +249,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 sharePostLabel={t('Share Post')}
                 shareTextLabel={t('Share this post with your friends')}
                 sharePostUrl={'https://ethereum.world'}
-                onClickAvatar={() => handleProfileClick(entryData.author.ethAddress)}
+                onClickAvatar={() => handleProfileClick(entryData.author.pubKey)}
                 onEntryBookmark={handleEntryBookmark}
                 repliesLabel={t('Replies')}
                 repostsLabel={t('Reposts')}
@@ -262,7 +271,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 handleUnfollowAuthor={() => handleUnfollowProfile(entryData.author.ethAddress)}
                 isFollowingAuthor={followedProfiles.includes(entryData.author)}
                 onContentClick={() => handlePostClick(entryData.entryId)}
-                onMentionClick={() => handleProfileClick(entryData.author.ethAddress)}
+                onMentionClick={() => handleProfileClick(entryData.author.pubKey)}
                 contentClickable={true}
               />
             </Box>
@@ -281,7 +290,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 sharePostLabel={t('Share Post')}
                 shareTextLabel={t('Share this post with your friends')}
                 sharePostUrl={'https://ethereum.world'}
-                onClickAvatar={() => handleProfileClick(commentData.author.ethAddress)}
+                onClickAvatar={() => handleProfileClick(commentData.author.pubKey)}
                 onEntryBookmark={handleEntryBookmark}
                 repliesLabel={t('Replies')}
                 repostsLabel={t('Reposts')}
@@ -303,7 +312,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 handleUnfollowAuthor={() => handleUnfollowProfile(commentData.author.ethAddress)}
                 isFollowingAuthor={followedProfiles.includes(commentData.author)}
                 onContentClick={() => handlePostClick(commentData.postId)}
-                onMentionClick={() => handleProfileClick(commentData.author.ethAddress)}
+                onMentionClick={() => handleProfileClick(commentData.author.pubKey)}
                 contentClickable={true}
               />
             </Box>

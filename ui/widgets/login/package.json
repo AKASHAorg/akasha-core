@@ -43,8 +43,7 @@
     "@types/i18next": "13.0.0",
     "@types/react-i18next": "8.1.0",
     "single-spa-react": "3.2.0",
-    "react-i18next": "^11.7.3",
-    "easy-peasy": "3.3.0"
+    "react-i18next": "^11.7.3"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",

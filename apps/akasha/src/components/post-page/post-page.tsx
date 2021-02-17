@@ -13,7 +13,8 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { mapEntry, uploadMediaToTextile } from '../../services/posting-service';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { uploadMediaToTextile } from '../../services/posting-service';
 import { redirectToPost } from '../../services/routing-service';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
@@ -87,14 +88,14 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   });
 
   React.useEffect(() => {
-    if (ethAddress) {
-      loginProfileActions.getProfileData({ ethAddress: ethAddress });
+    if (props.pubKey) {
+      loginProfileActions.getProfileData({ pubKey: props.pubKey });
     }
-  }, [ethAddress]);
+  }, [props.pubKey]);
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
     dbService: sdkModules.db,
-    ethAddress: ethAddress,
+    pubKey: props.pubKey,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo);
     },
@@ -192,6 +193,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         }
       }
     });
+    // this is used to initialise comments when navigating to other post ids
+    if (postId) {
+      handleLoadMore({ limit: 5, postID: postId });
+    }
   }, [postId]);
 
   const bookmarked = React.useMemo(() => {
@@ -204,12 +209,12 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     return false;
   }, [bookmarkState]);
 
-  const handleMentionClick = (profileEthAddress: string) => {
-    navigateToUrl(`/profile/${profileEthAddress}`);
+  const handleMentionClick = (pubKey: string) => {
+    navigateToUrl(`/profile/${pubKey}`);
   };
 
-  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
-    navigateToUrl(`/profile/${authorEth}`);
+  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, pubKey: string) => {
+    navigateToUrl(`/profile/${pubKey}`);
     ev.preventDefault();
   };
 
@@ -318,7 +323,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     });
   };
 
-  const handleNavigateToPost = redirectToPost(navigateToUrl);
+  const handleNavigateToPost = redirectToPost(navigateToUrl, postsActions.resetPostIds);
 
   const onUploadRequest = uploadMediaToTextile(
     sdkModules.profiles.profileService,
@@ -349,7 +354,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
               titleLabel={t('Report a Post')}
-              successTitleLabel={t('Thank you for helping us keep Ethereum World Safe! 🙌')}
+              successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
               optionLabels={[
@@ -397,7 +402,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               shareTextLabel={t('Share this post with your friends')}
               sharePostUrl={'https://ethereum.world'}
               onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                handleAvatarClick(ev, entryData.author.ethAddress)
+                handleAvatarClick(ev, entryData.author.pubKey)
               }
               onEntryBookmark={handleEntryBookmark}
               repliesLabel={t('Replies')}
@@ -486,15 +491,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             onShare={handleEntryShare}
             onAvatarClick={handleAvatarClick}
             onMentionClick={handleMentionClick}
+            handleFlipCard={handleListFlipCard}
           />
         }
-        itemCardAlt={(entry: any) => (
-          <EntryCardHidden
-            awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
-            ctaLabel={t('See it anyway')}
-            handleFlipCard={handleListFlipCard(entry, false)}
-          />
-        )}
         customEntities={getPendingComments({
           logger,
           globalChannel,
