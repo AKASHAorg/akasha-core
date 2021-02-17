@@ -13,7 +13,8 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { mapEntry, uploadMediaToTextile } from '../../services/posting-service';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { uploadMediaToTextile } from '../../services/posting-service';
 import { redirectToPost } from '../../services/routing-service';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
@@ -192,6 +193,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         }
       }
     });
+    // this is used to initialise comments when navigating to other post ids
+    if (postId) {
+      handleLoadMore({ limit: 5, postID: postId });
+    }
   }, [postId]);
 
   const bookmarked = React.useMemo(() => {
@@ -204,12 +209,12 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     return false;
   }, [bookmarkState]);
 
-  const handleMentionClick = (profileEthAddress: string) => {
-    navigateToUrl(`/profile/${profileEthAddress}`);
+  const handleMentionClick = (pubKey: string) => {
+    navigateToUrl(`/profile/${pubKey}`);
   };
 
-  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
-    navigateToUrl(`/profile/${authorEth}`);
+  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, pubKey: string) => {
+    navigateToUrl(`/profile/${pubKey}`);
     ev.preventDefault();
   };
 
@@ -318,7 +323,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     });
   };
 
-  const handleNavigateToPost = redirectToPost(navigateToUrl);
+  const handleNavigateToPost = redirectToPost(navigateToUrl, postsActions.resetPostIds);
 
   const onUploadRequest = uploadMediaToTextile(
     sdkModules.profiles.profileService,

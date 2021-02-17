@@ -43,7 +43,7 @@ export interface ITag {
 
 export interface IProfile {
   ethAddress: string;
-  pubKey?: string;
+  pubKey: string;
   avatar?: string;
   coverImage?: string;
   description?: string;
@@ -120,7 +120,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                 <Box width="11rem" pad="none">
                   <ProfileAvatarButton
                     ethAddress={profile.ethAddress}
-                    onClick={() => onClickProfile(profile.ethAddress)}
+                    onClick={() => onClickProfile(profile.pubKey)}
                     label={profile.userName || profile.name}
                     info={`${profile.totalFollowers} ${followersLabel}`}
                     size="md"
