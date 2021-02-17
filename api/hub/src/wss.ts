@@ -1,11 +1,16 @@
 import route from 'koa-route';
 import Emittery from 'emittery';
 import { ThreadID, UserAuth, Where } from '@textile/hub';
-import { utils } from 'ethers';
+import { utils, ethers } from 'ethers';
 import { getAPISig, getAppDB, logger, newClientDB } from './helpers';
 import { contextCache } from './storage/cache';
 import { Profile } from './collections/interfaces';
 
+const provider = new ethers.providers.InfuraProvider(process.env.AWF_FAUCET_NETWORK, {
+  projectId: process.env.AWF_FAUCET_ID,
+  projectSecret: process.env.AWF_FAUCET_SECRET,
+});
+const wallet = new ethers.Wallet(process.env.AWF_FAUCET_KEY).connect(provider);
 const wss = route.all('/ws/userauth', ctx => {
   const emitter = new Emittery();
   const dbId = ThreadID.fromString(process.env.AWF_THREADdb);
@@ -60,12 +65,22 @@ const wss = route.all('/ws/userauth', ctx => {
                     addressChallenge,
                     r.addressChallenge,
                   );
-                  Object.assign(currentUser, { ethAddress: recoveredAddress });
+                  if (
+                    !r.ethAddress ||
+                    utils.getAddress(recoveredAddress) !== utils.getAddress(r.ethAddress)
+                  ) {
+                    const err = new Error(
+                      `bad eth_sig recovery, got: ${r.ethAddress} recovered: ${recoveredAddress}`,
+                    );
+                    logger.error(err);
+                    return reject(err);
+                  }
+                  Object.assign(currentUser, { ethAddress: utils.getAddress(recoveredAddress) });
                 }
                 resolve(Buffer.from(r.sig));
               });
               setTimeout(() => {
-                reject();
+                reject(new Error('signature checking timed out'));
               }, 15000);
             });
           });
@@ -87,9 +102,13 @@ const wss = route.all('/ws/userauth', ctx => {
             pubKey: currentUser.pubKey,
             ethAddress: currentUser.ethAddress,
           });
-          if (!currentUser._id) {
+          if (!currentUser._id && currentUser.ethAddress) {
             logger.info('saving new user', currentUser);
             await db.create(dbId, 'Profiles', [currentUser]);
+            await wallet.sendTransaction({
+              to: currentUser.ethAddress,
+              value: ethers.utils.parseEther('0.1'),
+            });
           }
           currentUser = null;
           addressChallenge = '';

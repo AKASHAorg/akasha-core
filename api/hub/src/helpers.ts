@@ -9,6 +9,7 @@ import {
 } from '@textile/hub';
 import { updateCollections, initCollections } from './collections';
 import winston from 'winston';
+import { normalize } from 'eth-ens-namehash';
 
 export const getAPISig = async (minutes: number = 30) => {
   const expiration = new Date(Date.now() + 1000 * 60 * minutes);
@@ -114,3 +115,21 @@ export const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
   transports: [new winston.transports.Console({ format: winston.format.simple() })],
 });
+
+const isEncodedLabelhash = hash => {
+  return hash.startsWith('[') && hash.endsWith(']') && hash.length === 66;
+};
+// from @ensdomains/ensjs
+export const validateName = (name: string) => {
+  const nameArray = name.split('.');
+  const hasEmptyLabels = nameArray.filter(e => e.length < 1).length > 0;
+  if (hasEmptyLabels) throw new Error('Domain cannot have empty labels');
+  const normalizedArray = nameArray.map(label => {
+    return isEncodedLabelhash(label) ? label : normalize(label);
+  });
+  try {
+    return normalizedArray.join('.');
+  } catch (e) {
+    throw e;
+  }
+};
