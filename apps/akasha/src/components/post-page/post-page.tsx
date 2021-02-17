@@ -349,7 +349,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
               titleLabel={t('Report a Post')}
-              successTitleLabel={t('Thank you for helping us keep Ethereum World Safe! 🙌')}
+              successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
               optionLabels={[
