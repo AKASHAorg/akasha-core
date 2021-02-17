@@ -169,7 +169,7 @@ storiesOf('Modals/ Report Modal', module)
         titleLabel={text('Title Label', 'Report a Post')}
         successTitleLabel={text(
           'Success Title Label',
-          'Thank you for helping us keep Ethereum World Safe! 🙌',
+          'Thank you for helping us keep Ethereum World safe! 🙌',
         )}
         successMessageLabel={text(
           'Success Content Label',
@@ -205,7 +205,7 @@ storiesOf('Modals/ Report Modal', module)
         titleLabel={text('Title Label', 'Report an Account')}
         successTitleLabel={text(
           'Success Title Label',
-          'Thank you for helping us keep Ethereum World Safe! 🙌',
+          'Thank you for helping us keep Ethereum World safe! 🙌',
         )}
         successMessageLabel={text(
           'Success Content Label',
