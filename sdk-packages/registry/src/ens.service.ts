@@ -47,12 +47,12 @@ const service: AkashaService = (invoke, log) => {
 
   const resolveAddress = async (args: { ethAddress: string }) => {
     const web3Provider = await invoke(commonServices[WEB3_SERVICE]).getWeb3Instance();
-    return await web3Provider.lookupAddress(args.ethAddress);
+    return web3Provider.lookupAddress(args.ethAddress);
   };
 
   const resolveName = async (args: { name: string }) => {
     const web3Provider = await invoke(commonServices[WEB3_SERVICE]).getWeb3Instance();
-    return await web3Provider.resolveName(args.name);
+    return web3Provider.resolveName(args.name);
   };
 
   const isEncodedLabelhash = hash => {
