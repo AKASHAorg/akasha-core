@@ -41,7 +41,7 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
     getNotificationPill,
     useItemDataLoader,
     initialPaddingTop,
-    averageItemHeight = 350,
+    averageItemHeight = 300,
     loadLimit = DEFAULT_LOAD_LIMIT,
     listHeader,
   } = props;
