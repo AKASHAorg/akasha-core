@@ -104,21 +104,23 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     const endPoint = authSettings[AUTH_ENDPOINT];
     const signer = web3.getSigner();
     const address = await signer.getAddress();
+    const web3Service = await invoke(commonServices[WEB3_SERVICE]);
+    log.info(`using eth address ${address}`);
     sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
     if (sessionStorage.getItem(sessKey)) {
       identity = PrivateKey.fromString(sessionStorage.getItem(sessKey));
       sessionStorage.removeItem(sessKey);
     } else {
-      const sig = await signer.signMessage(AUTH_MESSAGE);
+      const sig = await web3Service.signMessage(AUTH_MESSAGE);
       await new Promise(res => setTimeout(res, 600));
-      identity = await generatePrivateKey(signer, address, sig, web3Utils);
+      identity = await generatePrivateKey(web3Service, address, sig, web3Utils);
     }
 
-    const userAuth = loginWithChallenge(identity, signer);
+    const userAuth = loginWithChallenge(identity, web3Service, web3Utils);
     hubClient = Client.withUserAuth(userAuth, endPoint);
     hubUser = Users.withUserAuth(userAuth, endPoint);
     buckClient = Buckets.withUserAuth(userAuth, endPoint);
-    tokenGenerator = loginWithChallenge(identity, signer);
+    tokenGenerator = loginWithChallenge(identity, web3Service, web3Utils);
     auth = await tokenGenerator();
     await hubUser.getToken(identity);
 

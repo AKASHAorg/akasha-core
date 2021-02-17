@@ -9,8 +9,8 @@ import {
 import AkashaRegistrarABI from './artifacts/AkashaRegistrar.json';
 import ReverseRegistrarABI from './artifacts/ReverseRegistrar.json';
 import EnsABI from './artifacts/ENS.json';
-
 import commonServices, { WEB3_SERVICE } from '@akashaproject/sdk-common/lib/constants';
+import { normalize } from 'eth-ens-namehash';
 
 const service: AkashaService = (invoke, log) => {
   let AkashaRegistrarInstance;
@@ -20,10 +20,11 @@ const service: AkashaService = (invoke, log) => {
   // register an akasha.eth subdomain
   const registerName = async (args: { name: string }) => {
     const available = await isAvailable(args);
+    const validatedName = validateName(args.name);
     if (!available) {
       throw new Error('Subdomain already taken!');
     }
-    const registerTx = await AkashaRegistrarInstance.register(args.name, RESOLVER_ADDRESS);
+    const registerTx = await AkashaRegistrarInstance.register(validatedName, RESOLVER_ADDRESS);
     await registerTx.wait();
     await claimName(args);
   };
@@ -33,7 +34,8 @@ const service: AkashaService = (invoke, log) => {
     if (!ReverseRegistrarInstance) {
       await setupContracts();
     }
-    await ReverseRegistrarInstance.setName(`${args.name}.akasha.eth`);
+    const validatedName = validateName(args.name);
+    await ReverseRegistrarInstance.setName(`${validatedName}.akasha.eth`);
   };
 
   const isAvailable = async (args: { name: string }) => {
@@ -51,6 +53,24 @@ const service: AkashaService = (invoke, log) => {
   const resolveName = async (args: { name: string }) => {
     const web3Provider = await invoke(commonServices[WEB3_SERVICE]).getWeb3Instance();
     return await web3Provider.resolveName(args.name);
+  };
+
+  const isEncodedLabelhash = hash => {
+    return hash.startsWith('[') && hash.endsWith(']') && hash.length === 66;
+  };
+  // from @ensdomains/ensjs
+  const validateName = async (name: string) => {
+    const nameArray = name.split('.');
+    const hasEmptyLabels = nameArray.filter(e => e.length < 1).length > 0;
+    if (hasEmptyLabels) throw new Error('Domain cannot have empty labels');
+    const normalizedArray = nameArray.map(label => {
+      return isEncodedLabelhash(label) ? label : normalize(label);
+    });
+    try {
+      return normalizedArray.join('.');
+    } catch (e) {
+      throw e;
+    }
   };
 
   // boilerplate for smart contracts
@@ -85,7 +105,15 @@ const service: AkashaService = (invoke, log) => {
     };
   };
 
-  return { getContracts, claimName, registerName, resolveAddress, resolveName, isAvailable };
+  return {
+    getContracts,
+    claimName,
+    registerName,
+    resolveAddress,
+    resolveName,
+    isAvailable,
+    validateName,
+  };
 };
 
 export default { service, name: ENS_SERVICE };

@@ -110,6 +110,15 @@ class PostAPI extends DataSource {
         },
       ],
     };
+    if (opt?.quotes?.length) {
+      for (const quoteID of opt.quotes) {
+        const postExists = await db.has(this.dbID, this.collection, [quoteID]);
+        if (!postExists) {
+          logger.error('could not save post', post);
+          throw new Error('Quoted post does not exist');
+        }
+      }
+    }
     logger.info('saving a new post:', post);
     const postID = await db.create(this.dbID, this.collection, [post]);
     logger.info('created a new post:', postID);
