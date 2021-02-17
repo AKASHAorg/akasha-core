@@ -5,7 +5,7 @@ import { useRouteMatch } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useProfile, useFollow, useLoginState } from '@akashaproject/ui-awf-hooks';
 
-const { ProfileMiniCard } = DS;
+const { Box, ProfileMiniCard } = DS;
 
 const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   const { sdkModules, logger, globalChannel } = props;
@@ -70,7 +70,7 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   }
 
   return (
-    <>
+    <Box pad={{ bottom: 'medium' }}>
       <ProfileMiniCard
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
@@ -83,7 +83,7 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
         followersLabel={t('Followers')}
         postsLabel={t('Posts')}
       />
-    </>
+    </Box>
   );
 };
 

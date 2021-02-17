@@ -21,6 +21,7 @@ export interface IProfileMiniCard {
   // handlers
   handleFollow: (profileEthAddress: string) => void;
   handleUnfollow: (profileEthAddress: string) => void;
+  disableFollowing?: boolean;
 }
 
 const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
@@ -35,6 +36,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
     handleFollow,
     handleUnfollow,
     isFollowing,
+    disableFollowing,
   } = props;
 
   const onFollow = () => {
@@ -109,7 +111,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
       <Box direction="column" pad="medium" gap="medium">
         <Text color="primaryText">{profileData.description}</Text>
 
-        {showFollowingButton && loggedEthAddress && (
+        {!disableFollowing && showFollowingButton && (
           <DuplexButton
             inactiveLabel={followLabel}
             activeLabel={followingLabel}

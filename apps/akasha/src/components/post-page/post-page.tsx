@@ -13,7 +13,8 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { mapEntry, uploadMediaToTextile } from '../../services/posting-service';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { uploadMediaToTextile } from '../../services/posting-service';
 import { redirectToPost } from '../../services/routing-service';
 import { combineLatest } from 'rxjs';
 import PostRenderer from './post-renderer';
@@ -208,12 +209,12 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     return false;
   }, [bookmarkState]);
 
-  const handleMentionClick = (profileEthAddress: string) => {
-    navigateToUrl(`/profile/${profileEthAddress}`);
+  const handleMentionClick = (pubKey: string) => {
+    navigateToUrl(`/profile/${pubKey}`);
   };
 
-  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
-    navigateToUrl(`/profile/${authorEth}`);
+  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, pubKey: string) => {
+    navigateToUrl(`/profile/${pubKey}`);
     ev.preventDefault();
   };
 
