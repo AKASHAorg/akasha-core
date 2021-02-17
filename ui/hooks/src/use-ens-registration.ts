@@ -1,6 +1,7 @@
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import * as React from 'react';
-import { concat } from 'rxjs';
+import { forkJoin } from 'rxjs';
+import { createErrorHandler } from './utils/error-handler';
 
 export interface UseENSRegistrationProps {
   profileService: any;
@@ -84,6 +85,7 @@ const useENSRegistration = (
           }
         },
         (err: Error) => {
+          createErrorHandler('useEnsRegistration.getENSByAddress', false, props.onError)(err);
           setRegistrationState(prev => ({
             ...prev,
             errorMessage: `Failed to get ENS name. ${err.message}`,
@@ -100,17 +102,46 @@ const useENSRegistration = (
           registering: true,
         },
       }));
-      const register = ensService.registerName({ name: `@${userName.replace('@', '')}` });
+      const register = ensService.registerName({ name: `${userName.replace('@', '')}` });
       register.subscribe((_resp: any) => {
+        // if (!resp?.data) {
+        //   return createErrorHandler(
+        //     'useEnsRegistration.registerName.nullResponse',
+        //     false,
+        //     props.onError
+        //   )(new Error(`Cannot register ${userName}. Unexpected response received!`))
+        // }
         const userNameCall = profileService.registerUserName({
-          userName: `@${userName.replace('@', '')}`,
+          userName: `${userName.replace('@', '')}`,
         });
         const makeDefault = profileService.makeDefaultProvider({
           provider: 'ewa.providers.ens',
           property: 'userName',
-          value: `@${userName.replace('@', '')}`,
+          value: `${userName.replace('@', '')}`,
         });
-        concat(userNameCall, makeDefault).subscribe(() => {
+        forkJoin([userNameCall, makeDefault]).subscribe((responses: [any, any]) => {
+          const [userNameResp, makeDefaultResp] = responses;
+
+          if (!userNameResp?.data) {
+            return createErrorHandler(
+              'useEnsRegistration.nullData',
+              false,
+              props.onError,
+            )(new Error(`Cannot save ${userName} to your profile. Unexpected response received!`));
+          }
+
+          if (!makeDefaultResp?.data) {
+            return createErrorHandler(
+              'useEnsRegistration.nullData',
+              false,
+              props.onError,
+            )(
+              new Error(
+                `Cannot set default provider for ${userName}. Unexpected response received!`,
+              ),
+            );
+          }
+
           setRegistrationState(prev => ({
             ...prev,
             userName,
@@ -120,8 +151,8 @@ const useENSRegistration = (
               claiming: false,
             },
           }));
-        });
-      });
+        }, createErrorHandler('useEnsRegitration.registerUsername', false, props.onError));
+      }, createErrorHandler('useEnsRegistration.registerName', false, props.onError));
     },
     updateUserName: (userName: string) => {
       setRegistrationState(prev => ({ ...prev, userName }));
@@ -138,7 +169,7 @@ const useENSRegistration = (
           isValidating: false,
           isAvailable: resp.data,
         }));
-      });
+      }, createErrorHandler('useEnsRegistration.validateName', false, props.onError));
     },
     claim: ({ userName }: { userName: string }) => {
       const call = ensService.claimName({ name: userName });
@@ -153,6 +184,7 @@ const useENSRegistration = (
           }));
         },
         (err: Error) => {
+          createErrorHandler('useEnsRegistration.claim', false, props.onError)(err);
           setRegistrationState(prev => ({
             ...prev,
             errorMessage: `ENS claim failed. ${err.message}`,
@@ -169,6 +201,7 @@ const useENSRegistration = (
       const registerLocal = profileService.registerUserName({ userName: userName });
       setRegistrationState(prev => ({
         ...prev,
+        userName,
         status: {
           ...prev.status,
           registering: true,
@@ -182,7 +215,14 @@ const useENSRegistration = (
             value: userName,
           });
           makeDefault.subscribe(
-            () => {
+            (response: any) => {
+              if (!response.data) {
+                return createErrorHandler(
+                  'useEnsRegistration.registerLocalUsername.nullResp',
+                  false,
+                  props.onError,
+                )(new Error(`Cannot set ${userName} as default. Unexpected response.`));
+              }
               setRegistrationState(prev => ({
                 ...prev,
                 status: {
@@ -201,6 +241,7 @@ const useENSRegistration = (
           );
         },
         (err: Error) => {
+          createErrorHandler('useEnsRegistration.registerLocalUsername', false, props.onError)(err);
           setRegistrationState(prev => ({
             ...prev,
             errorMessage: `Failed to register local username. ${err.message}`,
