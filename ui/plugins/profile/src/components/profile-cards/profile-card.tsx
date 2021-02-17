@@ -162,7 +162,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               closeLabel={t('Close')}
               user={loggedUserEthAddress ? loggedUserEthAddress : ''}
               contentId={profileData.ethAddress ? profileData.ethAddress : flagged}
-              contentType={t('profile')}
+              contentType="profile"
               baseUrl={BASE_FLAG_URL}
               size={size}
               closeModal={closeReportModal}
@@ -199,7 +199,8 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         postsLabel={t('Posts')}
         shareProfileLabel={t('Share')}
         flaggable={true}
-        flagAsLabel={t('Report Profile')}
+        // uncomment this to enable report profile
+        // flagAsLabel={t('Report Profile')}
         onEntryFlag={handleEntryFlag(profileData.ethAddress ? profileData.ethAddress : '')}
       />
     </>

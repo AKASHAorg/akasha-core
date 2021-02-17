@@ -337,6 +337,11 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     setEntryData(modifiedEntry);
   };
 
+  const updateEntry = (entryId: string) => {
+    const modifiedEntry = { ...postsState.postsData[entryId], reported: true };
+    postsActions.updatePostsState(modifiedEntry);
+  };
+
   const handleListFlipCard = (entry: any, isQuote: boolean) => () => {
     const modifiedEntry = isQuote
       ? { ...entry, quote: { ...entry.quote, reported: false } }
@@ -379,8 +384,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               closeLabel={t('Close')}
               user={ethAddress ? ethAddress : ''}
               contentId={flagged}
+              contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
               size={size}
+              updateEntry={updateEntry}
               closeModal={() => {
                 setReportModalOpen(false);
               }}

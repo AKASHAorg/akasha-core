@@ -47,7 +47,7 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   changeCoverImageLabel?: string;
   cancelLabel?: string;
   saveChangesLabel?: string;
-  flagAsLabel: string;
+  flagAsLabel?: string;
   flaggable: boolean;
   onEntryFlag: () => void;
   getProfileProvidersData?: () => void;
@@ -257,7 +257,8 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
                 onClick={toggleEditMenu}
               />
             )}
-            {flaggable && loggedEthAddress !== profileData.ethAddress && (
+            {/* if more options need to be in the dropdown, consider adjusting these conditions */}
+            {flaggable && !!flagAsLabel?.length && loggedEthAddress !== profileData.ethAddress && (
               <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
             )}
           </Box>
