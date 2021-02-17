@@ -56,7 +56,8 @@ export const useProfile = (
           if (!profileResp.data) {
             return;
           }
-          const { avatar, coverImage, ...other } = profileResp.data.resolveProfile;
+          const { avatar, coverImage, ...other } =
+            profileResp.data.getProfile || profileResp.data.resolveProfile;
           const images: { avatar?: string; coverImage?: string } = {};
           if (avatar) {
             images.avatar = getMediaUrl(gatewayResp.data, avatar);
