@@ -1,12 +1,12 @@
 import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 import { ExpirationPlugin } from 'workbox-expiration';
-import * as navigationPreload from 'workbox-navigation-preload';
 import { registerRoute } from 'workbox-routing';
 import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
 import { skipWaiting, clientsClaim, setCacheNameDetails } from 'workbox-core';
 import { precacheAndRoute } from 'workbox-precaching';
 
-navigationPreload.enable();
+// @ts-ignore
+precacheAndRoute(self.__WB_MANIFEST || []);
 
 registerRoute(
   /\.js$/,
@@ -66,13 +66,10 @@ registerRoute(
 
 setCacheNameDetails({
   prefix: 'ewa',
-  suffix: 'v0.1',
+  suffix: 'v0.1.1',
   precache: 'install-time',
   runtime: 'run-time',
   googleAnalytics: 'ga',
 });
 skipWaiting();
 clientsClaim();
-
-// @ts-ignore
-precacheAndRoute(self.__WB_MANIFEST || []);
