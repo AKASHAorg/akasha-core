@@ -19,7 +19,7 @@ import {
   UseProfileActions,
 } from '@akashaproject/ui-awf-hooks/lib/use-profile';
 
-const { styled, Helmet, ModalRenderer, BoxFormCard, EnsFormCard, Box } = DS;
+const { styled, Helmet, ModalRenderer, BoxFormCard, EnsFormCard, Box, ErrorInfoCard } = DS;
 
 export interface MyProfileProps extends RootComponentProps {
   modalState: ModalState;
@@ -94,10 +94,13 @@ const MyProfilePage = (props: MyProfileProps) => {
   const { layout, profileUpdateStatus } = props;
   const { t } = useTranslation();
 
+  const [ensErrors, ensErrorActions] = useErrors({ logger: props.logger });
+
   const [ensState, ensActions] = useENSRegistration({
     profileService: props.sdkModules.profiles.profileService,
     ethAddress: props.loggedProfileData.ethAddress,
     ensService: props.sdkModules.registry.ens,
+    onError: ensErrorActions.createError,
   });
 
   const prevPubKey = React.useRef<string | null>(null);
@@ -303,46 +306,64 @@ const MyProfilePage = (props: MyProfileProps) => {
         )}
         {props.modalState[MODAL_NAMES.CHANGE_ENS] && props.loggedProfileData.ethAddress && (
           <Overlay>
-            <ENSForm
-              titleLabel={t('Add a username')}
-              secondaryTitleLabel={t('Secondary Title')}
-              nameLabel={t('Select a username')}
-              errorLabel={t(
-                'Sorry, this username has already been taken. Please choose another one',
+            <ErrorInfoCard errors={ensErrors}>
+              {(errorMessage, hasCriticalErrors) => (
+                <>
+                  {!hasCriticalErrors && (
+                    <ENSForm
+                      titleLabel={t('Add a username')}
+                      secondaryTitleLabel={t('Secondary Title')}
+                      nameLabel={t('Select a username')}
+                      errorLabel={t(
+                        'Sorry, this username has already been taken. Please choose another one',
+                      )}
+                      ethAddressLabel={t('Your Ethereum Address')}
+                      ethNameLabel={t('Your Ethereum Name')}
+                      optionUsername={t('username')}
+                      optionSpecify={t('Specify an Ethereum name')}
+                      optionUseEthereumAddress={t('Use my Ethereum address')}
+                      consentText={t('By creating an account you agree to the ')}
+                      consentUrl="https://ethereum.world/community-agreement"
+                      consentLabel={t('Community Agreement')}
+                      poweredByLabel={t('Username powered by')}
+                      iconLabel={t('ENS')}
+                      cancelLabel={t('Cancel')}
+                      changeButtonLabel={t('Change')}
+                      saveLabel={t('Save')}
+                      nameFieldPlaceholder={`${t('username')}`}
+                      ethAddress={props.loggedProfileData.ethAddress}
+                      providerData={{ name: ensState.userName || '' }}
+                      onSave={onENSSubmit}
+                      onCancel={closeEnsModal}
+                      validateEns={ensActions.validateName}
+                      validEns={ensState.isValidating ? null : ensState.isAvailable}
+                      isValidating={ensState.isValidating}
+                      userNameProviderOptions={[
+                        {
+                          name: 'local',
+                          label: t('Do not use ENS'),
+                        },
+                      ]}
+                      disableInputOnOption={{
+                        ensSubdomain: ensState.alreadyRegistered,
+                      }}
+                      errorMessage={`
+                        ${ensState.errorMessage ? ensState.errorMessage : ''}
+                        ${
+                          errorMessage
+                            ? Object.keys(ensErrors).reduce(
+                                (str, errKey) => `${str}, ${ensErrors[errKey].error.message}`,
+                                '',
+                              )
+                            : ''
+                        }
+                        `}
+                      registrationStatus={ensState.status}
+                    />
+                  )}
+                </>
               )}
-              ethAddressLabel={t('Your Ethereum Address')}
-              ethNameLabel={t('Your Ethereum Name')}
-              optionUsername={t('username')}
-              optionSpecify={t('Specify an Ethereum name')}
-              optionUseEthereumAddress={t('Use my Ethereum address')}
-              consentText={t('By creating an account you agree to the ')}
-              consentUrl="https://ethereum.world/community-agreement"
-              consentLabel={t('Community Agreement')}
-              poweredByLabel={t('Username powered by')}
-              iconLabel={t('ENS')}
-              cancelLabel={t('Cancel')}
-              changeButtonLabel={t('Change')}
-              saveLabel={t('Save')}
-              nameFieldPlaceholder={`${t('username')}`}
-              ethAddress={props.loggedProfileData.ethAddress}
-              providerData={{ name: ensState.userName || '' }}
-              onSave={onENSSubmit}
-              onCancel={closeEnsModal}
-              validateEns={ensActions.validateName}
-              validEns={ensState.isValidating ? null : ensState.isAvailable}
-              isValidating={ensState.isValidating}
-              userNameProviderOptions={[
-                {
-                  name: 'local',
-                  label: t('Do not use ENS'),
-                },
-              ]}
-              disableInputOnOption={{
-                ensSubdomain: ensState.alreadyRegistered,
-              }}
-              errorMessage={ensState.errorMessage}
-              registrationStatus={ensState.status}
-            />
+            </ErrorInfoCard>
           </Overlay>
         )}
       </ModalRenderer>
