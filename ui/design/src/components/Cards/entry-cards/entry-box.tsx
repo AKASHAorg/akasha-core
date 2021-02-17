@@ -185,7 +185,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             info={entryData.author?.userName && `@${entryData.author?.userName}`}
             avatarImage={entryData.author?.avatar}
             onClickAvatar={onClickAvatar}
-            onClick={() => setProfileDropOpen(!profileDropOpen)}
+            onClick={onClickAvatar}
             ethAddress={entryData.author?.ethAddress}
             ref={profileRef}
             bold={true}
@@ -213,6 +213,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                   handleFollow={handleFollowAuthor}
                   handleUnfollow={handleUnfollowAuthor}
                   isFollowing={isFollowingAuthor}
+                  disableFollowing={true}
                 />
               </Box>
             </StyledProfileDrop>

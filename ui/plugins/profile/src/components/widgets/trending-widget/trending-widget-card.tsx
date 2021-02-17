@@ -71,8 +71,8 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
   const handleTagUnsubscribe = (tagName: string) => {
     tagSubscriptionActions.toggleTagSubscription(tagName);
   };
-  const handleProfileClick = (ethAddress: string) => {
-    singleSpa.navigateToUrl(`/profile/${ethAddress}`);
+  const handleProfileClick = (pubKey: string) => {
+    singleSpa.navigateToUrl(`/profile/${pubKey}`);
   };
   const handleFollowProfile = (ethAddress: string) => {
     followActions.follow(ethAddress);

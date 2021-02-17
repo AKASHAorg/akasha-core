@@ -1,6 +1,9 @@
 import routes, { POST, REPLY } from '../routes';
 
-export const redirectToPost = (navigateToUrl: (path: string) => void) => (details: {
+export const redirectToPost = (
+  navigateToUrl: (path: string) => void,
+  callback?: () => void,
+) => (details: {
   authorEthAddress: string;
   entryId: string;
   replyTo: {
@@ -13,6 +16,9 @@ export const redirectToPost = (navigateToUrl: (path: string) => void) => (detail
   if (replyTo) {
     // handle the reply
     url = `${routes[REPLY]}/${entryId}`;
+  }
+  if (callback && typeof callback === 'function') {
+    callback();
   }
   navigateToUrl(url);
 };

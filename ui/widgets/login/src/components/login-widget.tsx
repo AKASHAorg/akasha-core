@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { useErrors, useLoginState } from '@akashaproject/ui-awf-hooks';
 
-const { LoginCTAWidgetCard, LoginModal } = DS;
+const { LoginCTAWidgetCard, LoginModal, useViewportSize } = DS;
 
 export interface ILoginWidgetProps {
   sdkModules: any;
@@ -16,6 +16,8 @@ export interface ILoginWidgetProps {
 
 const LoginWidget: React.FC<ILoginWidgetProps> = props => {
   const { t } = useTranslation();
+
+  const { size } = useViewportSize();
 
   const [errorState, errorActions] = useErrors({ logger: props.logger });
   const [loginState, loginActions] = useLoginState({
@@ -69,7 +71,7 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
         signInLabel={t('Sign In')}
         signUpLabel={t('Sign Up')}
         onLoginClick={handleLoginModalOpen}
-        inlineActions={true}
+        inlineActions={size !== 'small'}
       />
       <LoginModal
         slotId={props.layoutConfig.modalSlotId}

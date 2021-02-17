@@ -46,6 +46,7 @@ export interface IEditorBox {
   publishingApp?: string;
   editorState: any;
   setEditorState: any;
+  ref?: React.Ref<any>;
 }
 
 export interface IMetadata {
@@ -63,7 +64,7 @@ const HOTKEYS = {
   'mod+`': 'code',
 };
 
-const EditorBox: React.FC<IEditorBox> = props => {
+const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const {
     avatar,
     ethAddress,
@@ -100,6 +101,16 @@ const EditorBox: React.FC<IEditorBox> = props => {
 
   const [imagePopoverOpen, setImagePopoverOpen] = useState(false);
   const [emojiPopoverOpen, setEmojiPopoverOpen] = useState(false);
+
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      getPopoversState: () => {
+        return imagePopoverOpen || emojiPopoverOpen;
+      },
+    }),
+    [imagePopoverOpen, emojiPopoverOpen],
+  );
 
   const editor = useMemo(
     () => withTags(withMentions(withHistory(withReact(withImages(createEditor()))))),
@@ -470,7 +481,7 @@ const EditorBox: React.FC<IEditorBox> = props => {
       )}
     </StyledBox>
   );
-};
+});
 
 EditorBox.defaultProps = {
   postLabel: 'Post',
