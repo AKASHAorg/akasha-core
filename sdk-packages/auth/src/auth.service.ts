@@ -96,7 +96,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       currentProvider = provider;
     }
 
-    const web3 = await invoke(commonServices[WEB3_SERVICE]).web3(currentProvider);
+    const web3 = await invoke(commonServices[WEB3_SERVICE]).regen(currentProvider);
     const web3Utils = await invoke(commonServices[WEB3_UTILS_SERVICE]).getUtils();
 
     const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);
