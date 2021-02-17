@@ -16,12 +16,23 @@ const StyledMention = styled.span`
 const ImageElement = ({ attributes, children, element }: any) => {
   return (
     <div {...attributes}>
-      <div contentEditable={false}>
+      <div
+        contentEditable={false}
+        style={{
+          height: element.size?.naturalHeight,
+          width: '100%',
+          position: 'relative',
+        }}
+      >
         <StyledImg
           src={element.url}
           loading="lazy"
-          height={element.size?.naturalHeight}
-          width={element.size?.naturalWidth}
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
         />
       </div>
       {children}
