@@ -41,6 +41,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   let tokenGenerator: () => Promise<UserAuth>;
   const waitForAuth = 'waitForAuth';
   const providerKey = '@providerType';
+  const currentUserKey = '@currentUserType';
   const SYNC_REQUEST = '@sync_request';
   const SYNC_RESPONSE = '@sync_response';
   const SYNC_CHANNEL = '@sync_data';
@@ -53,6 +54,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       if (type === SYNC_REQUEST) {
         const response = {
           [providerKey]: sessionStorage.getItem(providerKey),
+          [currentUserKey]: sessionStorage.getItem(currentUserKey),
           identity: { key: sessKey, value: identity?.toString() },
         };
         channel.postMessage({ response, type: SYNC_RESPONSE });
@@ -62,6 +64,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
           log.info('syncing session');
           sessionStorage.setItem(providerKey, response[providerKey]);
           sessionStorage.setItem(response?.identity?.key, response?.identity?.value);
+          sessionStorage.setItem(currentUserKey, response[currentUserKey]);
           currentUser = null;
           getCurrentUser().then(data => log.info('logged in', data));
         }
@@ -160,6 +163,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     }
     sessionStorage.setItem(providerKey, currentProvider);
     sessionStorage.setItem(sessKey, identity.toString());
+    sessionStorage.setItem(currentUserKey, JSON.stringify(currentUser));
     return currentUser;
   };
 
@@ -209,6 +213,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       });
       return Promise.resolve(null);
     }
+    const localUser = sessionStorage.getItem(currentUserKey);
     globalChannel.next({
       data: true,
       channelInfo: {
@@ -217,6 +222,20 @@ const service: AkashaService = (invoke, log, globalChannel) => {
         args: null,
       },
     });
+    if (localUser) {
+      try {
+        globalChannel.next({
+          data: JSON.parse(localUser),
+          channelInfo: {
+            servicePath: services[AUTH_SERVICE],
+            method: 'signIn',
+            args: null,
+          },
+        });
+      } catch (e) {
+        log.error(e);
+      }
+    }
     const data = await signIn(EthProviders.None);
     const response = {
       data: data,
