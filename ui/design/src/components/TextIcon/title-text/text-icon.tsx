@@ -112,6 +112,7 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
         wordBreak="break-word"
         color={fadedText ? 'secondaryText' : 'primaryText'}
         disabled={disabled}
+        truncate={true}
       >
         {label}
       </StyledText>
