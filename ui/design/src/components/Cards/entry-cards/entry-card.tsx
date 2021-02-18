@@ -58,6 +58,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     moderatedContentLabel,
     ctaLabel,
     handleFlipCard,
+    isModerated,
   } = props;
 
   return (
@@ -107,6 +108,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           moderatedContentLabel={moderatedContentLabel}
           ctaLabel={ctaLabel}
           handleFlipCard={handleFlipCard}
+          isModerated={isModerated}
         />
       </Box>
     </MainAreaCardBox>
