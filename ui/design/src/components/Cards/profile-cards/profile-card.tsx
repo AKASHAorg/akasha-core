@@ -16,6 +16,7 @@ import { IProfileWidgetCard } from './profile-widget-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 import ProfileEditMenuDropdown from './profile-card-edit-dropdown';
 import styled from 'styled-components';
+import { truncateMiddle } from '../../../utils/string-utils';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -222,7 +223,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             <Box pad={{ vertical: 'small', left: 'xsmall' }}>
               <ProfileCardName
                 editable={editable}
-                name={name}
+                name={name || truncateMiddle(profileData.ethAddress)}
                 nameIcon={nameIcon}
                 handleChangeName={handleChangeName}
                 namePopoverOpen={namePopoverOpen}
