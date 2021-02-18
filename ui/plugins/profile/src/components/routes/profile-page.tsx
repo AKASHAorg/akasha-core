@@ -84,6 +84,9 @@ const ProfilePage = (props: ProfilePageProps) => {
     let url;
     switch (itemType) {
       case ItemTypes.PROFILE:
+        if (details.entryId === pubKey) {
+          return;
+        }
         url = `/profile/${details.entryId}`;
         postsActions.resetPostIds();
         profileActions.resetProfileData();
