@@ -30,8 +30,8 @@ const ProfileCardName: React.FC<IProfileCardNameProps> = props => {
 
   return (
     <>
-      <Box direction="row" gap="xsmall" align="center">
-        <Text size="xlarge" weight="bold" color="primaryText">
+      <Box direction="row" gap="xsmall" align="center" width="10rem">
+        <Text size="xlarge" weight="bold" color="primaryText" truncate={true}>
           {name}
         </Text>
         {editable &&

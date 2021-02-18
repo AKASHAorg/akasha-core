@@ -3,9 +3,19 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
 import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
-import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
-import { useFollow } from '@akashaproject/ui-awf-hooks';
+import {
+  ModalState,
+  ModalStateActions,
+  MODAL_NAMES,
+} from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
+import { useFollow, useENSRegistration, useErrors } from '@akashaproject/ui-awf-hooks';
+import { IUserNameOption } from '@akashaproject/design-system/lib/components/Cards/form-cards/ens-form-card';
 import { rootRoute } from '../../routes';
+import {
+  ProfileUpdateStatus,
+  UseProfileActions,
+} from '@akashaproject/ui-awf-hooks/lib/use-profile';
+import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
 const BASE_URL =
   process.env.NODE_ENV === 'production'
@@ -22,15 +32,48 @@ const {
   ReportModal,
   useViewportSize,
   ShareModal,
+  BoxFormCard,
+  EnsFormCard,
+  ErrorInfoCard,
 } = DS;
 
 export interface IProfileHeaderProps {
   profileId: string;
-  profileData?: Partial<IProfileData>;
+  profileData: IProfileData;
+  profileUpdateStatus: ProfileUpdateStatus;
+  profileActions: UseProfileActions;
   loggedUserEthAddress: string | null;
   modalState: ModalState;
   modalActions: ModalStateActions;
+  loginActions: UseLoginActions;
 }
+
+const ProfileForm = styled(BoxFormCard)`
+  max-width: 100%;
+  max-height: 100vh;
+  min-height: max-content;
+  overflow: auto;
+  animation: fadeInAnimation ease 0.8s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
+    max-width: 66%;
+  }
+  @media screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
+    max-width: 50%;
+  }
+  @media screen and (min-width: ${props => props.theme.breakpoints.xlarge.value}px) {
+    max-width: 33%;
+  }
+  @keyframes fadeInAnimation {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+`;
 
 const Overlay = styled.div`
   display: flex;
@@ -45,8 +88,36 @@ const Overlay = styled.div`
   animation-fill-mode: forwards;
 `;
 
+const ENSForm = styled(EnsFormCard)`
+  max-width: 100%;
+  max-height: 100vh;
+  animation: fadeInAnimation ease 0.8s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
+    max-width: 66%;
+    max-height: 75%;
+  }
+  @keyframes fadeInAnimation {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+`;
+
 export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps) => {
-  const { profileData, loggedUserEthAddress, sdkModules, logger, profileId, globalChannel } = props;
+  const {
+    profileData,
+    loggedUserEthAddress,
+    sdkModules,
+    logger,
+    profileId,
+    globalChannel,
+    profileUpdateStatus,
+  } = props;
 
   const [flagged, setFlagged] = React.useState('');
 
@@ -62,11 +133,44 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     },
   });
 
+  const [ensErrors, ensErrorActions] = useErrors({ logger: props.logger });
+
+  const [ensState, ensActions] = useENSRegistration({
+    profileService: sdkModules.profiles.profileService,
+    ethAddress: profileData.ethAddress,
+    ensService: sdkModules.registry.ens,
+    onError: ensErrorActions.createError,
+  });
+
   React.useEffect(() => {
-    if (loggedUserEthAddress) {
-      followActions.isFollowing(loggedUserEthAddress, profileId);
+    if (profileUpdateStatus.updateComplete && props.modalState[MODAL_NAMES.PROFILE_UPDATE]) {
+      closeProfileUpdateModal();
+      return;
     }
-  }, [loggedUserEthAddress, profileId]);
+    if (ensState.status.registrationComplete && props.modalState[MODAL_NAMES.CHANGE_ENS]) {
+      if (ensState.userName) {
+        props.profileActions.updateProfile({
+          userName: `@${ensState.userName.replace('@', '')}`,
+        });
+      }
+      closeEnsModal();
+      return;
+    }
+  }, [
+    profileUpdateStatus.updateComplete,
+    ensState.status.registrationComplete,
+    JSON.stringify(props.modalState),
+  ]);
+
+  React.useEffect(() => {
+    if (
+      loggedUserEthAddress &&
+      profileData.ethAddress &&
+      loggedUserEthAddress !== profileData.ethAddress
+    ) {
+      followActions.isFollowing(loggedUserEthAddress, profileData.ethAddress);
+    }
+  }, [loggedUserEthAddress, profileData.ethAddress]);
 
   const handleFollow = () => {
     if (profileData?.ethAddress) {
@@ -89,12 +193,43 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     props.modalActions.hide('reportModal');
   };
 
-  const showShareModal = () => {
-    props.modalActions.show('profileShare');
+  const onProfileUpdateSubmit = (data: any) => {
+    props.profileActions.optimisticUpdate(data);
+  };
+
+  const closeProfileUpdateModal = () => {
+    props.modalActions.hide(MODAL_NAMES.PROFILE_UPDATE);
+  };
+
+  const onENSSubmit = ({ name, option }: { name: string; option: IUserNameOption }) => {
+    if (option.name === 'local') {
+      return ensActions.registerLocalUsername({ userName: name });
+    }
+    if (option.name === 'ensSubdomain') {
+      return ensActions.register({ userName: name });
+    }
+  };
+
+  const closeEnsModal = () => {
+    props.modalActions.hide(MODAL_NAMES.CHANGE_ENS);
   };
 
   const closeShareModal = () => {
-    props.modalActions.hide('profileShare');
+    props.modalActions.hide(MODAL_NAMES.PROFILE_SHARE);
+  };
+
+  const showUpdateProfileModal = () => {
+    props.loginActions.resetUpdateStatus();
+    props.modalActions.show(MODAL_NAMES.PROFILE_UPDATE);
+  };
+
+  const showEnsModal = () => {
+    ensActions.resetRegistrationStatus();
+    props.modalActions.show(MODAL_NAMES.CHANGE_ENS);
+  };
+
+  const showShareModal = () => {
+    props.modalActions.show(MODAL_NAMES.PROFILE_SHARE);
   };
 
   const url = `${window.location.origin}${rootRoute}/${profileId}`;
@@ -178,19 +313,104 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
             />
           </Overlay>
         )}
+        {props.modalState[MODAL_NAMES.PROFILE_UPDATE] && profileData.ethAddress && (
+          <Overlay>
+            <ProfileForm
+              titleLabel={t('Ethereum Address')}
+              avatarLabel={t('Avatar')}
+              nameLabel={t('Name')}
+              coverImageLabel={t('Cover Image')}
+              descriptionLabel={t('Description')}
+              uploadLabel={t('Upload')}
+              urlLabel={t('By url')}
+              cancelLabel={t('Cancel')}
+              saveLabel={t('Save')}
+              deleteLabel={t('Delete')}
+              nameFieldPlaceholder={t('Type your name here')}
+              descriptionFieldPlaceholder={t('Add a description about you here')}
+              ethAddress={profileData.ethAddress}
+              providerData={{
+                ...profileData,
+              }}
+              onSave={onProfileUpdateSubmit}
+              onCancel={closeProfileUpdateModal}
+              updateStatus={profileUpdateStatus}
+            />
+          </Overlay>
+        )}
+        {props.modalState[MODAL_NAMES.CHANGE_ENS] && profileData.ethAddress && (
+          <Overlay>
+            <ErrorInfoCard errors={ensErrors}>
+              {(errorMessage, hasCriticalErrors) => (
+                <>
+                  {!hasCriticalErrors && (
+                    <ENSForm
+                      titleLabel={t('Add a username')}
+                      secondaryTitleLabel={t('Secondary Title')}
+                      nameLabel={t('Select a username')}
+                      errorLabel={t(
+                        'Sorry, this username has already been taken. Please choose another one',
+                      )}
+                      ethAddressLabel={t('Your Ethereum Address')}
+                      ethNameLabel={t('Your Ethereum Name')}
+                      optionUsername={t('username')}
+                      optionSpecify={t('Specify an Ethereum name')}
+                      optionUseEthereumAddress={t('Use my Ethereum address')}
+                      consentText={t('By creating an account you agree to the ')}
+                      consentUrl="https://ethereum.world/community-agreement"
+                      consentLabel={t('Community Agreement')}
+                      poweredByLabel={t('Username powered by')}
+                      iconLabel={t('ENS')}
+                      cancelLabel={t('Cancel')}
+                      changeButtonLabel={t('Change')}
+                      saveLabel={t('Save')}
+                      nameFieldPlaceholder={`${t('username')}`}
+                      ethAddress={profileData.ethAddress}
+                      providerData={{ name: ensState.userName || '' }}
+                      onSave={onENSSubmit}
+                      onCancel={closeEnsModal}
+                      validateEns={ensActions.validateName}
+                      validEns={ensState.isValidating ? null : ensState.isAvailable}
+                      isValidating={ensState.isValidating}
+                      userNameProviderOptions={[
+                        {
+                          name: 'local',
+                          label: t('Do not use ENS'),
+                        },
+                      ]}
+                      disableInputOnOption={{
+                        ensSubdomain: ensState.alreadyRegistered,
+                      }}
+                      errorMessage={`
+                        ${ensState.errorMessage ? ensState.errorMessage : ''}
+                        ${
+                          errorMessage
+                            ? Object.keys(ensErrors).reduce(
+                                (str, errKey) => `${str}, ${ensErrors[errKey].error.message}`,
+                                '',
+                              )
+                            : ''
+                        }
+                        `}
+                      registrationStatus={ensState.status}
+                    />
+                  )}
+                </>
+              )}
+            </ErrorInfoCard>
+          </Overlay>
+        )}
       </ModalRenderer>
       <ProfileCard
-        onENSChangeClick={() => {}}
-        onUpdateClick={() => {}}
-        onClickFollowers={() => {}}
-        onClickFollowing={() => {}}
-        onClickPosts={() => {}}
+        onClickFollowers={() => null}
+        onClickFollowing={() => null}
+        onClickPosts={() => null}
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
         handleShareClick={showShareModal}
         isFollowing={followedProfiles.includes(profileData?.ethAddress)}
         loggedEthAddress={loggedUserEthAddress}
-        profileData={cardData as any}
+        profileData={cardData}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
         descriptionLabel={t('About me')}
@@ -198,10 +418,20 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         followersLabel={t('Followers')}
         postsLabel={t('Posts')}
         shareProfileLabel={t('Share')}
-        flaggable={true}
+        editProfileLabel={t('Edit profile')}
+        updateProfileLabel={t('Update profile')}
+        changeCoverImageLabel={t('Change cover image')}
+        cancelLabel={t('Cancel')}
+        saveChangesLabel={t('Save changes')}
+        canUserEdit={loggedUserEthAddress === profileData.ethAddress}
+        flaggable={loggedUserEthAddress !== profileData.ethAddress}
         // uncomment this to enable report profile
         // flagAsLabel={t('Report Profile')}
         onEntryFlag={handleEntryFlag(profileData.ethAddress ? profileData.ethAddress : '')}
+        onUpdateClick={showUpdateProfileModal}
+        onENSChangeClick={showEnsModal}
+        changeENSLabel={t('Change Ethereum name')}
+        hideENSButton={!!profileData.userName}
       />
     </>
   );

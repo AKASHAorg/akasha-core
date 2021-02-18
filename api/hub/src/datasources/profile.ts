@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB, sendNotification } from '../helpers';
+import { getAppDB, sendNotification, validateName } from '../helpers';
 import { ThreadID, Where, Client } from '@textile/hub';
 import { DataProvider, Profile } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -131,7 +131,8 @@ class ProfileAPI extends DataSource {
 
   async registerUserName(pubKey: string, name: string) {
     const db: Client = await getAppDB();
-    const query = new Where('userName').eq(name);
+    const validatedName = validateName(name);
+    const query = new Where('userName').eq(validatedName);
     const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
     if (profilesFound.length) {
       return;
@@ -146,14 +147,14 @@ class ProfileAPI extends DataSource {
       return;
     }
 
-    profile.userName = name;
+    profile.userName = validatedName;
     await db.save(this.dbID, this.collection, [profile]);
     await queryCache.del(this.getCacheKey(pubKey));
     searchIndex
       .saveObject({
         objectID: profile._id,
         category: 'profile',
-        userName: name,
+        userName: validatedName,
         pubKey: profile.pubKey,
         creationDate: profile.creationDate,
       })
