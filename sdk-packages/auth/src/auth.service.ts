@@ -94,7 +94,6 @@ const service: AkashaService = (invoke, log, globalChannel) => {
         throw new Error('The provider must have a wallet/key in order to authenticate.');
       }
       currentProvider = +sessionStorage.getItem(providerKey); // cast to int
-      sessionStorage.removeItem(providerKey);
     } else {
       currentProvider = provider;
     }
@@ -112,7 +111,6 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
     if (sessionStorage.getItem(sessKey)) {
       identity = PrivateKey.fromString(sessionStorage.getItem(sessKey));
-      sessionStorage.removeItem(sessKey);
     } else {
       const sig = await web3Service.signMessage(AUTH_MESSAGE);
       await new Promise(res => setTimeout(res, 600));
