@@ -56,7 +56,9 @@ const StyledTextIcon = styled.div<ITextIconProps>`
         ${
           clickable
             ? `cursor: pointer;
-          color: ${props.theme.colors.accent};
+          & * {
+            color: ${props.theme.colors.accent};
+          };
           & * {
             stroke: ${props.theme.colors.accent};
             }`
@@ -65,9 +67,11 @@ const StyledTextIcon = styled.div<ITextIconProps>`
         ${
           disabled &&
           `
-          color: ${props.theme.colors.disabled};
+          & * {
+            color: ${props.theme.colors.disabled};
+          };
           cursor: default;
-          * {
+          & * {
             stroke: ${props.theme.colors.disabled}
           }
         `

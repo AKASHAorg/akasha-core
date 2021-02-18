@@ -1,24 +1,16 @@
 import * as React from 'react';
 import { ModalContainer } from '../common/fullscreen-modal-container';
-import { HorizontalDivider } from '../../Dividers';
 import { Box, Text } from 'grommet';
 import { ModalCard } from '../../Cards';
 import styled from 'styled-components';
+import { Icon } from '../../Icon';
 
 const WalletProviderButton = styled(Box)`
-  padding: 1.75em;
   flex: 1;
-  margin: 1em;
   cursor: pointer;
   user-select: none;
 `;
 
-// @ts-ignore-next-line
-const StyledWalletList = styled(Box)`
-  ${WalletProviderButton}:nth-child(2) {
-    border-left: 1px solid ${props => props.theme.colors.border};
-  }
-`;
 export interface IProviderInfo {
   id: string;
   logo: React.ReactElement | string;
@@ -29,32 +21,40 @@ const ProvidersListModal = (props: {
   onModalClose: () => void;
   onProviderClick: (providerId: string) => void;
   providers: IProviderInfo[];
-  footer: React.ReactElement;
+  titleLabel: string;
 }) => {
   return (
     <ModalContainer onModalClose={props.onModalClose}>
       <ModalCard>
-        <StyledWalletList direction="row">
-          {props.providers.map(provider => (
-            <WalletProviderButton
-              align="center"
-              onClick={() => props.onProviderClick(provider.id)}
-              key={provider.id}
-            >
-              <Box>{provider.logo}</Box>
-              <Box>
-                <Text weight="bold" size="large" margin={{ top: '1em' }}>
-                  {provider.title}
-                </Text>
-              </Box>
-              <Box>
-                <Text textAlign="center">{provider.description}</Text>
-              </Box>
-            </WalletProviderButton>
-          ))}
-        </StyledWalletList>
-        <HorizontalDivider />
-        <Box>{props.footer}</Box>
+        <Box width={{ max: '22rem' }}>
+          <Box align="center" justify="center" pad="large">
+            <Text weight="bold" size="large">
+              {props.titleLabel}
+            </Text>
+          </Box>
+          <Box direction="column">
+            {props.providers.map(provider => (
+              <WalletProviderButton
+                direction="row"
+                gap="small"
+                align="center"
+                justify="between"
+                pad="small"
+                margin="small"
+                onClick={() => props.onProviderClick(provider.id)}
+                key={provider.id}
+                border={{ color: 'accent', side: 'all' }}
+                round="xsmall"
+              >
+                <Box>{provider.logo}</Box>
+                <Box>
+                  <Text color="accentColor">{provider.description}</Text>
+                </Box>
+                <Icon type="arrowRight" size="xs" />
+              </WalletProviderButton>
+            ))}
+          </Box>
+        </Box>
       </ModalCard>
     </ModalContainer>
   );

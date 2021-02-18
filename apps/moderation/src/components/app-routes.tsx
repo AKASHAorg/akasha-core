@@ -123,11 +123,9 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           slotId={layout.app.modalSlotId}
           onLogin={handleLogin}
           onModalClose={hideLoginModal}
-          tutorialLinkLabel={t('Tutorial')}
+          titleLabel={t('Connect a wallet')}
           metamaskModalHeadline={t('Connecting')}
           metamaskModalMessage={t('Please complete the process in your wallet')}
-          onTutorialLinkClick={() => null}
-          helpText={t('What is a wallet? How do I get an Ethereum address?')}
           error={null}
         />
       </Box>
