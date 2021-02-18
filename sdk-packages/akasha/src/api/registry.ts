@@ -20,6 +20,7 @@ export default function registryApi(channel) {
         resolveAddress: extractedServices[ENS_SERVICE]('resolveAddress'),
         resolveName: extractedServices[ENS_SERVICE]('resolveName'),
         isAvailable: extractedServices[ENS_SERVICE]('isAvailable'),
+        validateName: extractedServices[ENS_SERVICE]('validateName'),
       },
     },
   };

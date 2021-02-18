@@ -12,6 +12,12 @@ export const ConnectToInjected = async () => {
   if (!provider) {
     throw new Error('No Web3 Provider found');
   }
+  const acc = await provider.request({
+    method: 'eth_requestAccounts',
+  });
+  if (!acc?.length) {
+    throw new Error('Must connect at least one address from the wallet.');
+  }
   provider.on('accountsChanged', _ => {
     // refresh on metamask logout or changed acc
     window.location.reload();
