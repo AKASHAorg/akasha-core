@@ -46,7 +46,11 @@ export const generatePrivateKey = async (signer, ethAddress, sig, utils) => {
   return identity;
 };
 
-export const loginWithChallenge = (identity: Identity, signer): (() => Promise<UserAuth>) => {
+export const loginWithChallenge = (
+  identity: Identity,
+  signer,
+  utils,
+): (() => Promise<UserAuth>) => {
   return () => {
     return new Promise((resolve, reject) => {
       const socket = new WebSocket(process.env.AUTH_ENDPOINT);
@@ -71,14 +75,17 @@ export const loginWithChallenge = (identity: Identity, signer): (() => Promise<U
               /** Convert the challenge json to a Buffer */
               const buf = Buffer.from(data.value);
               let addressChallenge;
+              let currentAddress;
               if (data.addressChallenge) {
                 addressChallenge = await signer.signMessage(data.addressChallenge);
+                currentAddress = await signer.getAddress();
               }
               /** User our identity to sign the challenge */
               const signed = await identity.sign(buf);
               socket.send(
                 JSON.stringify({
                   addressChallenge,
+                  ethAddress: currentAddress,
                   type: 'challenge',
                   sig: Buffer.from(signed).toJSON(),
                 }),
