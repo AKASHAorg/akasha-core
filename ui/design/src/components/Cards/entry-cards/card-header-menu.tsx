@@ -6,7 +6,7 @@ import { Box } from 'grommet';
 export interface ICardHeaderMenuProps {
   target: {};
   onMenuClose: () => void;
-  flagAsLabel: string;
+  flagAsLabel?: string;
   onFlag: () => void;
 }
 
