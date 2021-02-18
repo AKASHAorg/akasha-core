@@ -16,6 +16,7 @@ import { IProfileWidgetCard } from './profile-widget-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 import ProfileEditMenuDropdown from './profile-card-edit-dropdown';
 import styled from 'styled-components';
+import { truncateMiddle } from '../../../utils/string-utils';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -47,7 +48,7 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   changeCoverImageLabel?: string;
   cancelLabel?: string;
   saveChangesLabel?: string;
-  flagAsLabel: string;
+  flagAsLabel?: string;
   flaggable: boolean;
   onEntryFlag: () => void;
   getProfileProvidersData?: () => void;
@@ -222,7 +223,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             <Box pad={{ vertical: 'small', left: 'xsmall' }}>
               <ProfileCardName
                 editable={editable}
-                name={name}
+                name={name || truncateMiddle(profileData.ethAddress)}
                 nameIcon={nameIcon}
                 handleChangeName={handleChangeName}
                 namePopoverOpen={namePopoverOpen}
@@ -257,7 +258,8 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
                 onClick={toggleEditMenu}
               />
             )}
-            {flaggable && loggedEthAddress !== profileData.ethAddress && (
+            {/* if more options need to be in the dropdown, consider adjusting these conditions */}
+            {flaggable && !!flagAsLabel?.length && loggedEthAddress !== profileData.ethAddress && (
               <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
             )}
           </Box>

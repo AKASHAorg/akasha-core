@@ -43,11 +43,11 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
           <Icon type={iconType} />
         </IconDiv>
       ) : null}
-      <Box pad="none" gap={gap}>
-        <Text color={labelColor} size={labelSize}>
+      <Box pad="none" gap={gap} width={{ max: '10rem' }}>
+        <Text color={labelColor} size={labelSize} truncate={true}>
           {label}
         </Text>
-        <Text size="small" color={subtitleColor}>
+        <Text size="small" color={subtitleColor} truncate={true}>
           {subtitle}
         </Text>
       </Box>

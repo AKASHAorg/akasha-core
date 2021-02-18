@@ -3,13 +3,14 @@ import { ProfilePageCard } from '../profile-cards/profile-card';
 import DS from '@akashaproject/design-system';
 import { useErrors, usePosts, useProfile } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
+import menuRoute, { MY_PROFILE } from '../../routes';
 import {
   ModalState,
   ModalStateActions,
   MODAL_NAMES,
 } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
-
+import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
 import { ILoadItemsPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
@@ -19,19 +20,23 @@ export interface ProfilePageProps extends RootComponentProps {
   modalActions: ModalStateActions;
   modalState: ModalState;
   ethAddress: string | null;
-  onLogin: any;
+  loginActions: UseLoginActions;
   loggedProfileData: any;
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
-  const { ethAddress } = props;
+  const { ethAddress, loginActions, loggedProfileData } = props;
+  const location = useLocation();
 
-  const { pubKey } = useParams() as any;
+  let { pubKey } = useParams() as any;
+  if (location.pathname.includes(menuRoute[MY_PROFILE])) {
+    pubKey = loggedProfileData.pubKey;
+  }
   const [errorState, errorActions] = useErrors({
     logger: props.logger,
   });
 
-  const [profileState, profileActions] = useProfile({
+  const [profileState, profileActions, profileUpdateStatus] = useProfile({
     onError: errorActions.createError,
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
@@ -47,14 +52,26 @@ const ProfilePage = (props: ProfilePageProps) => {
   React.useEffect(() => {
     if (pubKey) {
       profileActions.getProfileData({ pubKey });
+      postsActions.resetPostIds();
     }
   }, [pubKey]);
+
+  React.useEffect(() => {
+    if (
+      props.loggedProfileData.pubKey &&
+      pubKey === loggedProfileData.pubKey &&
+      !postsState.postIds.length &&
+      !postsState.isFetchingPosts
+    ) {
+      postsActions.getUserPosts({ pubKey: props.loggedProfileData.pubKey, limit: 5 });
+    }
+  }, [props.loggedProfileData.pubKey]);
 
   const handleLoadMore = (payload: ILoadItemsPayload) => {
     const req: { limit: number; offset?: string } = {
       limit: payload.limit,
     };
-    if (!postsState.isFetchingPosts) {
+    if (!postsState.isFetchingPosts && pubKey) {
       postsActions.getUserPosts({ pubKey, ...req });
     }
   };
@@ -90,7 +107,7 @@ const ProfilePage = (props: ProfilePageProps) => {
   };
 
   const handleRepostPublish = (entryData: any, embedEntry: any) => {
-    postsActions.optimisticPublishPost(entryData, props.loggedProfileData, embedEntry, true);
+    postsActions.optimisticPublishPost(entryData, loggedProfileData, embedEntry, true);
   };
 
   const profileUserName = React.useMemo(() => {
@@ -110,11 +127,14 @@ const ProfilePage = (props: ProfilePageProps) => {
       </Helmet>
       <ProfilePageCard
         {...props}
-        profileData={profileState}
+        profileData={profileState as any}
+        profileActions={profileActions}
+        profileUpdateStatus={profileUpdateStatus}
         profileId={pubKey}
         loggedUserEthAddress={ethAddress}
         modalActions={props.modalActions}
         modalState={props.modalState}
+        loginActions={loginActions}
       />
       <FeedWidget
         // pass i18n from props (the i18next instance, not the react one!)
@@ -136,7 +156,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         totalItems={postsState.totalItems}
         profilePubKey={pubKey}
         modalSlotId={props.layout.app.modalSlotId}
-        loggedProfile={props.loggedProfileData}
+        loggedProfile={loggedProfileData}
         onRepostPublish={handleRepostPublish}
       />
     </Box>

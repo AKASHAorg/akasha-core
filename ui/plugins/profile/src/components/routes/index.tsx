@@ -3,7 +3,6 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import menuRoute, { MY_PROFILE, rootRoute } from '../../routes';
-import MyProfilePage from './my-profile-page';
 import ProfilePage from './profile-page';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useLoginState, useModalState, useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
@@ -25,7 +24,7 @@ const Routes: React.FC<RootComponentProps> = props => {
     onError: errorActions.createError,
   });
 
-  const [loggedProfileData, loggedProfileActions, profileUpdateStatus] = useProfile({
+  const [loggedProfileData, loggedProfileActions] = useProfile({
     profileService: props.sdkModules.profiles.profileService,
     ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
@@ -67,22 +66,11 @@ const Routes: React.FC<RootComponentProps> = props => {
       <Box>
         <Switch>
           <Route path={`${rootRoute}/list`} render={() => <>A list of profiles</>} />
-          <Route path={menuRoute[MY_PROFILE]}>
-            <MyProfilePage
-              {...props}
-              modalActions={modalStateActions}
-              modalState={modalState}
-              loggedProfileData={loggedProfileData}
-              loggedProfileActions={loggedProfileActions}
-              loginActions={loginActions}
-              profileUpdateStatus={profileUpdateStatus}
-            />
-          </Route>
-          <Route path={`${path}/:pubKey`}>
+          <Route path={[`${path}/:pubKey`, menuRoute[MY_PROFILE]]}>
             <ProfilePage
               {...props}
               ethAddress={loginState.ethAddress}
-              onLogin={loginActions.login}
+              loginActions={loginActions}
               modalActions={modalStateActions}
               modalState={modalState}
               loggedProfileData={loggedProfileData}
