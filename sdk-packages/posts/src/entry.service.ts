@@ -180,6 +180,9 @@ const service: AkashaService = (invoke, log) => {
         },
       },
     });
+    if (result.errors) {
+      throw new Error('Could not save the post!');
+    }
     return result.data;
   };
 
