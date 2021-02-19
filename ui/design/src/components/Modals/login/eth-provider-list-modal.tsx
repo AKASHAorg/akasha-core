@@ -44,7 +44,7 @@ const ProvidersListModal = (props: {
                 onClick={() => props.onProviderClick(provider.id)}
                 key={provider.id}
                 border={{ color: 'accent', side: 'all' }}
-                round="xsmall"
+                round="xxsmall"
               >
                 <Box>{provider.logo}</Box>
                 <Box>
