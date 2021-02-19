@@ -4,7 +4,7 @@ import { truncateMiddle } from '../../../utils/string-utils';
 import { Avatar } from '../../Avatar/index';
 import { AvatarSize } from '../../Avatar/styled-avatar';
 import StyledIconLink from '../icon-buttons/styled-icon-link';
-import { ButtonInfo } from './styled-profile-avatar-button';
+import { ButtonInfo, StyledWrapperBox } from './styled-profile-avatar-button';
 
 export interface ProfileAvatarButtonProps {
   info?: string | React.ReactElement;
@@ -35,8 +35,8 @@ const ProfileAvatarButton = React.forwardRef((props: ProfileAvatarButtonProps, r
     onMouseLeave,
   } = props;
   return (
-    <Box className={className} direction="row" align="center">
-      <Box>
+    <StyledWrapperBox className={className} direction="row" align="center">
+      <Box flex={{ shrink: 0 }}>
         <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onClickAvatar} />
       </Box>
       <Box
@@ -55,7 +55,7 @@ const ProfileAvatarButton = React.forwardRef((props: ProfileAvatarButtonProps, r
         />
         <ButtonInfo>{info}</ButtonInfo>
       </Box>
-    </Box>
+    </StyledWrapperBox>
   );
 });
 

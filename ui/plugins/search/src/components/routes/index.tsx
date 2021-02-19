@@ -50,9 +50,6 @@ const Routes: React.FC<RootComponentProps> = props => {
   const hideLoginModal = () => {
     modalStateActions.hide('loginModal');
   };
-  const handleTutorialLinkClick = () => {
-    /* goto tutorials */
-  };
 
   return (
     <Router>
@@ -76,11 +73,9 @@ const Routes: React.FC<RootComponentProps> = props => {
         slotId={props.layout.app.modalSlotId}
         onLogin={loginActions.login}
         onModalClose={hideLoginModal}
-        tutorialLinkLabel={t('Tutorial')}
+        titleLabel={t('Connect a wallet')}
         metamaskModalHeadline={t('Connecting')}
         metamaskModalMessage={t('Please complete the process in your wallet')}
-        onTutorialLinkClick={handleTutorialLinkClick}
-        helpText={t('What is a wallet? How do i get an Ethereum address?')}
         error={loginErrors}
       />
     </Router>

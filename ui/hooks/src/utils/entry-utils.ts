@@ -166,6 +166,7 @@ interface PendingEntry {
     description?: string;
     ensName?: string;
     ethAddress: string;
+    pubKey: string;
     userName?: string;
     name?: string;
   };
