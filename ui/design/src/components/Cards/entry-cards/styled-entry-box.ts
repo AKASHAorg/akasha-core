@@ -16,6 +16,7 @@ const StyledDrop = styled(Drop)`
 `;
 
 const StyledProfileDrop = styled(Drop)`
+  max-width: 20rem;
   position: fixed;
   border-radius: ${props => props.theme.shapes.borderRadius};
 `;

@@ -83,6 +83,7 @@ export interface IEntryBoxProps {
   moderatedContentLabel?: string;
   ctaLabel?: string;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
+  scrollHiddenContent?: boolean;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -121,6 +122,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     moderatedContentLabel,
     ctaLabel,
     handleFlipCard,
+    scrollHiddenContent,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -178,8 +180,13 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   return (
     <ViewportSizeProvider>
-      <Box style={style}>
-        <Box direction="row" justify="between" pad={{ top: 'medium' }}>
+      <Box
+        style={style}
+        height={{ max: '50rem' }}
+        overflow={scrollHiddenContent ? 'auto' : 'hidden'}
+        pad={{ horizontal: 'medium' }}
+      >
+        <Box direction="row" justify="between" pad={{ top: 'medium' }} flex={{ shrink: 0 }}>
           <ProfileAvatarButton
             label={entryData.author?.name}
             info={entryData.author?.userName && `@${entryData.author?.userName}`}
@@ -218,7 +225,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               </Box>
             </StyledProfileDrop>
           )}
-          <Box direction="row" gap="xsmall" align="center">
+          <Box direction="row" gap="xsmall" align="center" flex={{ shrink: 0 }}>
             {entryData.time && !hidePublishTime && (
               <Text color="secondaryText">{formatRelativeTime(entryData.time, locale)}</Text>
             )}

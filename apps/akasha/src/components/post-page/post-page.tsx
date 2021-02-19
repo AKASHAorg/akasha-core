@@ -397,11 +397,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       </ModalRenderer>
       {entryData && !entryData.delisted && !entryData.reported && (
         <>
-          <Box
-            margin={{ horizontal: 'medium' }}
-            pad={{ bottom: 'small' }}
-            border={{ side: 'bottom', size: '1px', color: 'border' }}
-          >
+          <Box pad={{ bottom: 'small' }} border={{ side: 'bottom', size: '1px', color: 'border' }}>
             <EntryBox
               isBookmarked={bookmarked}
               entryData={entryData}
@@ -438,6 +434,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               moderatedContentLabel={t('This content has been moderated')}
               ctaLabel={t('See it anyway')}
               handleFlipCard={handleFlipCard}
+              scrollHiddenContent={true}
             />
           </Box>
           {!ethAddress && (

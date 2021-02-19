@@ -30,7 +30,7 @@ const StyledTextIcon = styled.div<ITextIconProps>`
       background-color: ${backgroundColor ? backgroundColor : ''};
       color: ${color ? color : colors.dark};
       user-select: none;
-      max-width: 10rem;
+      display: inline-flex;
       ${
         menuIcon
           ? `padding-left: ${props.theme.shapes.baseSpacing * 8 + 2}px

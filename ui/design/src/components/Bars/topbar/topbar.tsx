@@ -264,6 +264,7 @@ const Topbar = (props: ITopbarProps) => {
           onClick={() => {
             onNavigation('/');
           }}
+          flex={{ shrink: 0 }}
         >
           <BrandIcon type="ethereumWorldLogo" clickable={true} />
           {size !== 'small' && <StyledText size="large">{brandLabel}</StyledText>}

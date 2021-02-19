@@ -1,4 +1,9 @@
+import { Box } from 'grommet';
 import styled from 'styled-components';
+
+const StyledWrapperBox = styled(Box)`
+  display: inline-flex;
+`;
 
 const ButtonInfo = styled.div`
   max-width: 10rem;
@@ -10,4 +15,4 @@ const ButtonInfo = styled.div`
   font-weight: lighter;
 `;
 
-export { ButtonInfo };
+export { ButtonInfo, StyledWrapperBox };
