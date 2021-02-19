@@ -13,6 +13,7 @@ import { ISocialData } from './social-box';
 import ViewportSizeProvider from '../../Providers/viewport-dimension';
 import { EmbedBox, ReadOnlyEditor } from '../../Editor/index';
 import { EntryCardHidden } from '..';
+import styled from 'styled-components';
 
 export interface IEntryData {
   CID?: string;
@@ -84,6 +85,11 @@ export interface IEntryBoxProps {
   ctaLabel?: string;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
 }
+
+const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
+  flex-grow: 1;
+  flex-shrink: 1;
+`;
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
   const {
@@ -180,7 +186,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     <ViewportSizeProvider>
       <Box style={style}>
         <Box direction="row" justify="between" pad={{ top: 'medium' }}>
-          <ProfileAvatarButton
+          <StyledProfileAvatarButton
             label={entryData.author?.name}
             info={entryData.author?.userName && `@${entryData.author?.userName}`}
             avatarImage={entryData.author?.avatar}
@@ -218,9 +224,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               </Box>
             </StyledProfileDrop>
           )}
-          <Box direction="row" gap="xsmall" align="center">
+          <Box direction="row" gap="xsmall" align="center" flex={{ shrink: 0 }}>
             {entryData.time && !hidePublishTime && (
-              <Text color="secondaryText">{formatRelativeTime(entryData.time, locale)}</Text>
+              <Text style={{ flexShrink: 0 }} color="secondaryText">
+                {formatRelativeTime(entryData.time, locale)}
+              </Text>
             )}
             <Icon
               type="akasha"
