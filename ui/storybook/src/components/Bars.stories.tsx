@@ -104,7 +104,7 @@ const TopbarComponent = () => {
       searchAreaItem={searchAreaItem}
       brandLabel={text('Brand Label', 'Ethereum.world')}
       onNavigation={(path: string) => action('Navigate to')(path)}
-      onSearch={(ev: any, inputValue: string) => action('Navigate to')(ev, inputValue)}
+      onSearch={(inputValue: string) => action('Navigate to')(inputValue)}
       size={size}
       onLoginClick={() => action('OnLoginClick')('Synthetic Event')}
       onLogout={() => action('OnLogoutClick')('Synthetic Event')}
