@@ -91,7 +91,7 @@ const Content: React.FC<IContentProps> = props => {
         }
       >
         <Box width={props.isPending ? '75%' : '100%'}>
-          <Box direction="row">
+          <Box direction="row" align="center">
             <Text>{props.originallyReportedByLabel}</Text>
             <Avatar
               ethAddress={props.reporter || ''}
