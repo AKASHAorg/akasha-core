@@ -128,14 +128,6 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       // const mailID = await hubUser.getMailboxID();
       const pubKey = identity.public.toString();
       currentUser = { pubKey, ethAddress: address };
-      db = new Database(
-        `awf-alpha-user-${pubKey.slice(-8)}`,
-        {
-          name: 'settings',
-          schema: settingsSchema,
-        },
-        { name: 'apps' },
-      );
     } catch (e) {
       sessionStorage.clear();
       log.error(e);
@@ -156,13 +148,23 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     sessionStorage.setItem(providerKey, currentProvider);
     sessionStorage.setItem(sessKey, identity.toString());
     sessionStorage.setItem(currentUserKey, JSON.stringify(currentUser));
+    if (currentUser?.pubKey) {
+      db = new Database(
+        `awf-alpha-user-${currentUser.pubKey.slice(-8)}`,
+        {
+          name: 'settings',
+          schema: settingsSchema,
+        },
+        { name: 'apps' },
+      );
+      // // not working atm
+      // const remote = await db.remote.setUserAuth(userAuth);
+      // remote.config.metadata.set('x-textile-thread-name', db.dexie.name);
+      // remote.config.metadata.set('x-textile-thread', db.id);
+      // await remote.authorize(identity);
+      await db.open(1);
+    }
 
-    // // not working atm
-    // const remote = await db.remote.setUserAuth(userAuth);
-    // remote.config.metadata.set('x-textile-thread-name', db.dexie.name);
-    // remote.config.metadata.set('x-textile-thread', db.id);
-    // await remote.authorize(identity);
-    await db.open(1);
     return currentUser;
   };
 
