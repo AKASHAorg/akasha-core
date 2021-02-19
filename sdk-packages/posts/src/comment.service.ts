@@ -94,6 +94,9 @@ const service: AkashaService = (invoke, log) => {
         },
       },
     });
+    if (result.errors) {
+      throw new Error('Could not save the comment!');
+    }
     return result.data;
   };
   return { getComment, getComments, addComment };
