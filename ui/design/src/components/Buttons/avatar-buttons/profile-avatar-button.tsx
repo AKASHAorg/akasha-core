@@ -36,7 +36,7 @@ const ProfileAvatarButton = React.forwardRef((props: ProfileAvatarButtonProps, r
   } = props;
   return (
     <StyledWrapperBox className={className} direction="row" align="center">
-      <Box>
+      <Box flex={{ shrink: 0 }}>
         <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onClickAvatar} />
       </Box>
       <Box
