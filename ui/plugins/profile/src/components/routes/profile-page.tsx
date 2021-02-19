@@ -161,6 +161,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         modalSlotId={props.layout.app.modalSlotId}
         loggedProfile={loggedProfileData}
         onRepostPublish={handleRepostPublish}
+        contentClickable={true}
       />
     </Box>
   );

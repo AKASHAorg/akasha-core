@@ -38,6 +38,7 @@ export interface IFeedWidgetProps {
   modalSlotId?: string;
   loggedProfile?: any;
   onRepostPublish?: (entryData: any, embeddedEntry: any) => void;
+  contentClickable?: boolean;
 }
 
 export default class FeedWidgetRoot extends PureComponent<IFeedWidgetProps> {
