@@ -139,16 +139,10 @@ const TopbarComponent = (props: TopBarProps) => {
     setShowLoginModal(false);
     errorActions.removeLoginErrors();
   };
-  const handleSearchBarKeyDown = (
-    ev: React.KeyboardEvent<HTMLInputElement>,
-    inputValue: string,
-  ) => {
-    if (ev.key === 'Enter' && searchAreaItem) {
+  const handleSearch = (inputValue: string) => {
+    if (searchAreaItem) {
       handleNavigation(`${searchAreaItem.route}/${inputValue}`);
     }
-  };
-  const handleTutorialLinkClick = () => {
-    /* goto tutorials */
   };
 
   const { size } = useViewportSize();
@@ -164,7 +158,7 @@ const TopbarComponent = (props: TopBarProps) => {
         signOutLabel={t('Sign Out')}
         searchBarLabel={t('Search profiles or topics')}
         onNavigation={handleNavigation}
-        onSearch={handleSearchBarKeyDown}
+        onSearch={handleSearch}
         onSidebarToggle={toggleSidebar}
         ethAddress={loginState.ethAddress}
         quickAccessItems={loginState.ethAddress ? sortedQuickAccessItems : null}
@@ -179,11 +173,9 @@ const TopbarComponent = (props: TopBarProps) => {
         onLogin={handleLogin}
         onModalClose={handleModalClose}
         showModal={showLoginModal}
-        tutorialLinkLabel={t('Tutorial')}
+        titleLabel={t('Connect a wallet')}
         metamaskModalHeadline={t('Connecting')}
         metamaskModalMessage={t('Please complete the process in your wallet')}
-        onTutorialLinkClick={handleTutorialLinkClick}
-        helpText={t('What is a wallet? How do i get an Ethereum address?')}
         error={loginErrors}
       />
     </ThemeSelector>

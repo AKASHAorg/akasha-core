@@ -56,6 +56,10 @@ const StyledImage = styled(Image)`
   border-radius: 50%;
 `;
 
+const StyledInlineBox = styled(Box)`
+  display: inline-flex;
+`;
+
 export {
   AvatarDiv,
   ShareButtonContainer,
@@ -65,4 +69,5 @@ export {
   StyledAvatarEditDiv,
   StyledImage,
   MiniProfileAvatarDiv,
+  StyledInlineBox,
 };

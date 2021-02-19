@@ -174,6 +174,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
                     /* reporting */
                   }}
                   onRepost={handleRepost}
+                  contentClickable={props.contentClickable}
                 />
               }
             />

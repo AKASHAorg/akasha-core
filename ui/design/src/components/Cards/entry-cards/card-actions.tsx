@@ -265,7 +265,7 @@ const CardActions: React.FC<CardActionProps> = props => {
   const shareBtnText = size === 'small' ? undefined : shareLabel;
 
   return (
-    <Box pad={{ vertical: 'medium' }} direction="row" justify="between">
+    <Box pad="medium" direction="row" justify="between">
       {repostNodeRef.current && repostDropOpen && renderRepostDrop()}
       <TextIcon
         label={repostsBtnText}
