@@ -12,7 +12,7 @@ const StyledText = styled(Text)`
 
 const StyledSearchContainer = styled(Box)`
   flex-grow: 1;
-  max-width: 15rem;
+  align-items: flex-end;
 `;
 
 const StyledDrop = styled(Drop)`

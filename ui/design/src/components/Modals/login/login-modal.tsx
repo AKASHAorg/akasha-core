@@ -1,24 +1,16 @@
 import * as React from 'react';
 import { createGlobalStyle } from 'styled-components';
-import { Box, Text } from 'grommet';
 import { ModalRenderer } from '../common/modal-renderer';
 import { EthProviderListModal, EthProviderModal, EthProviderModalIllustration } from '../index';
-import { TextIcon } from '../../TextIcon';
 import { Icon } from '../../Icon';
+import ViewportSizeProvider, { useViewportSize } from '../../Providers/viewport-dimension';
 
 export interface LoginModalProps {
   slotId: string;
   onLogin: (providerId: number) => void;
   showModal: boolean;
   onModalClose: () => void;
-  /**
-   * placed at the bottom of the provider list modal
-   */
-  tutorialLinkLabel: string;
-  /**
-   * handler for tutorial link (tutorialLinkLabel) click
-   */
-  onTutorialLinkClick: () => void;
+  titleLabel: string;
   /**
    * text to be displayed when the user selects to login with metamask
    */
@@ -27,11 +19,6 @@ export interface LoginModalProps {
    * additional message to be displayed when the user selects to login with metamask
    */
   metamaskModalMessage: string;
-  /**
-   * helpText to be displayed at the bottom of the providerList
-   * modal
-   */
-  helpText: string;
   error: string | null;
 }
 
@@ -48,12 +35,13 @@ const LoginModal: React.FC<LoginModalProps> = props => {
     showModal,
     onModalClose,
     onLogin,
-    tutorialLinkLabel,
-    onTutorialLinkClick,
-    helpText,
     metamaskModalHeadline,
     metamaskModalMessage,
+    titleLabel,
   } = props;
+
+  const { size } = useViewportSize();
+
   const [modalState, setModalState] = React.useState<{ selectedProvider: string | null }>({
     selectedProvider: null,
   });
@@ -83,62 +71,47 @@ const LoginModal: React.FC<LoginModalProps> = props => {
   };
 
   return (
-    <ModalRenderer slotId={props.slotId}>
-      {showModal && !modalState.selectedProvider && (
-        <EthProviderListModal
-          onProviderClick={handleProviderClick}
-          onModalClose={handleProvidersModalClose}
-          providers={[
-            {
-              id: METAMASK_PROVIDER,
-              logo: <Icon type="metamask" size="xl" />,
-              title: 'MetaMask',
-              description: 'Connect to your MetaMask wallet',
-            },
-            {
-              id: WALLETCONNECT_PROVIDER,
-              logo: <Icon type="walletconnect" size="xl" />,
-              title: 'WalletConnect',
-              description: 'Scan with WalletConnect',
-            },
-          ]}
-          footer={
-            <Box
-              direction="row"
-              align="center"
-              justify="center"
-              pad={{ top: 'xsmall' }}
-              gap="xsmall"
-            >
-              <Text textAlign="center" style={{ userSelect: 'none' }}>
-                {helpText}
-              </Text>
-              <TextIcon
-                onClick={onTutorialLinkClick}
-                iconType="media"
-                label={tutorialLinkLabel}
-                clickable={true}
-              />
-            </Box>
-          }
-        />
-      )}
-      {showModal && modalState.selectedProvider === METAMASK_PROVIDER && (
-        <EthProviderModal
-          illustration={
-            <EthProviderModalIllustration providerIcon={<Icon type="metamask" size="lg" />} />
-          }
-          headLine={metamaskModalHeadline}
-          message={metamaskModalMessage}
-          onLogin={handleMetamaskLogin}
-          onModalClose={handleProviderModalClose}
-          error={props.error}
-        />
-      )}
-      {showModal && modalState.selectedProvider === WALLETCONNECT_PROVIDER && (
-        <WalletConnectModalTrigger onLogin={handleWalletConnectLogin} />
-      )}
-    </ModalRenderer>
+    <ViewportSizeProvider>
+      <ModalRenderer slotId={props.slotId}>
+        {showModal && !modalState.selectedProvider && (
+          <EthProviderListModal
+            titleLabel={titleLabel}
+            onProviderClick={handleProviderClick}
+            onModalClose={handleProvidersModalClose}
+            providers={[
+              {
+                id: METAMASK_PROVIDER,
+                logo: <Icon type="metamask" size="md" />,
+                title: 'MetaMask',
+                description: 'Connect your MetaMask wallet',
+              },
+              {
+                id: WALLETCONNECT_PROVIDER,
+                logo: <Icon type="walletconnect" size="md" />,
+                title: 'WalletConnect',
+                description: 'Scan with WalletConnect',
+              },
+            ]}
+          />
+        )}
+        {showModal && modalState.selectedProvider === METAMASK_PROVIDER && (
+          <EthProviderModal
+            illustration={
+              <EthProviderModalIllustration providerIcon={<Icon type="metamask" size="lg" />} />
+            }
+            headLine={metamaskModalHeadline}
+            message={metamaskModalMessage}
+            onLogin={handleMetamaskLogin}
+            onModalClose={handleProviderModalClose}
+            error={props.error}
+            isMobile={size === 'small'}
+          />
+        )}
+        {showModal && modalState.selectedProvider === WALLETCONNECT_PROVIDER && (
+          <WalletConnectModalTrigger onLogin={handleWalletConnectLogin} />
+        )}
+      </ModalRenderer>
+    </ViewportSizeProvider>
   );
 };
 

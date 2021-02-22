@@ -302,7 +302,7 @@ const CardActions: React.FC<CardActionProps> = props => {
   }
 
   return (
-    <Box pad={{ vertical: 'medium' }} direction="row" justify="between">
+    <Box pad="medium" direction="row" justify="between">
       {repostNodeRef.current && repostDropOpen && renderRepostDrop()}
       <TextIcon
         label={repostsBtnText}

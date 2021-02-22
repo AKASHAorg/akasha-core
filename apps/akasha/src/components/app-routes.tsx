@@ -60,10 +60,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     }
   }, [ethAddress]);
 
-  const handleTutorialLinkClick = () => {
-    /* goto tutorials */
-  };
-
   const loginErrors: string | null = React.useMemo(() => {
     if (errorState && Object.keys(errorState).length) {
       const txt = Object.keys(errorState)
@@ -119,11 +115,9 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           slotId={layout.app.modalSlotId}
           onLogin={handleLogin}
           onModalClose={hideLoginModal}
-          tutorialLinkLabel={t('Tutorial')}
+          titleLabel={t('Connect a wallet')}
           metamaskModalHeadline={t('Connecting')}
           metamaskModalMessage={t('Please complete the process in your wallet')}
-          onTutorialLinkClick={handleTutorialLinkClick}
-          helpText={t('What is a wallet? How do i get an Ethereum address?')}
           error={loginErrors}
         />
       </Box>

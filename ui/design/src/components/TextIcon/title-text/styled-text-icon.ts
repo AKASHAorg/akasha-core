@@ -30,7 +30,7 @@ const StyledTextIcon = styled.div<ITextIconProps>`
       background-color: ${backgroundColor ? backgroundColor : ''};
       color: ${color ? color : colors.dark};
       user-select: none;
-      max-width: 10rem;
+      display: inline-flex;
       ${
         menuIcon
           ? `padding-left: ${props.theme.shapes.baseSpacing * 8 + 2}px
@@ -56,7 +56,9 @@ const StyledTextIcon = styled.div<ITextIconProps>`
         ${
           clickable
             ? `cursor: pointer;
-          color: ${props.theme.colors.accent};
+          & * {
+            color: ${props.theme.colors.accent};
+          };
           & * {
             stroke: ${props.theme.colors.accent};
             }`
@@ -65,9 +67,11 @@ const StyledTextIcon = styled.div<ITextIconProps>`
         ${
           disabled &&
           `
-          color: ${props.theme.colors.disabled};
+          & * {
+            color: ${props.theme.colors.disabled};
+          };
           cursor: default;
-          * {
+          & * {
             stroke: ${props.theme.colors.disabled}
           }
         `

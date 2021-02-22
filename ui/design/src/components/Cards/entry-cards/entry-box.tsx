@@ -84,6 +84,7 @@ export interface IEntryBoxProps {
   ctaLabel?: string;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
   isModerated?: boolean;
+  scrollHiddenContent?: boolean;
 }
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
@@ -123,6 +124,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     ctaLabel,
     handleFlipCard,
     isModerated,
+    scrollHiddenContent,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -185,7 +187,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   return (
     <ViewportSizeProvider>
       <Box style={style}>
-        <Box direction="row" justify="between" pad={{ top: 'medium' }}>
+        <Box
+          direction="row"
+          justify="between"
+          pad={{ top: 'medium', horizontal: 'medium' }}
+          flex={{ shrink: 0 }}
+        >
           <ProfileAvatarButton
             label={entryData.author?.name}
             info={entryData.author?.userName && `@${entryData.author?.userName}`}
@@ -224,7 +231,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               </Box>
             </StyledProfileDrop>
           )}
-          <Box direction="row" gap="xsmall" align="center">
+          <Box direction="row" gap="xsmall" align="center" flex={{ shrink: 0 }}>
             {entryData.time && !hidePublishTime && (
               <Text color="secondaryText">{formatRelativeTime(entryData.time, locale)}</Text>
             )}
@@ -258,18 +265,21 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           />
         )}
         <Box
+          pad={{ horizontal: 'medium' }}
+          height={{ max: '50rem' }}
+          overflow={scrollHiddenContent ? 'auto' : 'hidden'}
           style={{ cursor: contentClickable ? 'pointer' : 'default' }}
           onClick={() => (contentClickable ? handleContentClick(entryData) : false)}
         >
           <ReadOnlyEditor content={entryData.content} handleMentionClick={onMentionClick} />
         </Box>
         {entryData.quote && !entryData.quote.delisted && !entryData.quote.reported && (
-          <Box pad={{ vertical: 'medium' }} onClick={() => handleContentClick(entryData.quote)}>
+          <Box pad="medium" onClick={() => handleContentClick(entryData.quote)}>
             <EmbedBox embedEntryData={entryData.quote} />
           </Box>
         )}
         {entryData.quote && !entryData.quote.delisted && entryData.quote.reported && (
-          <Box pad={{ vertical: 'medium' }} onClick={() => null}>
+          <Box pad="medium" onClick={() => null}>
             <EntryCardHidden
               awaitingModerationLabel={awaitingModerationLabel}
               ctaLabel={ctaLabel}
@@ -278,7 +288,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           </Box>
         )}
         {entryData.quote && entryData.quote.delisted && (
-          <Box pad={{ vertical: 'medium' }} onClick={() => null}>
+          <Box pad="medium" onClick={() => null}>
             <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
           </Box>
         )}

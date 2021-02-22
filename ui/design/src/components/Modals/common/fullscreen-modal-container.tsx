@@ -15,7 +15,7 @@ const StyledModalWrapper = styled(Box)`
 `;
 export const ModalContainer: React.FC<IModalContainerProps> = props => {
   return (
-    <StyledModalWrapper fill={true} pad={{ top: '2em' }} align="center" style={props.style}>
+    <StyledModalWrapper fill={true} justify="center" align="center" style={props.style}>
       <Box
         style={{ zIndex: 10 }}
         animation={{

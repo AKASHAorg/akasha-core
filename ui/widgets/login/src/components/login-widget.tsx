@@ -53,10 +53,6 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
     setLoginModal(false);
   };
 
-  const handleTutorialLinkClick = () => {
-    /* goto tutorials */
-  };
-
   if (loginState.ethAddress) {
     return null;
   }
@@ -78,11 +74,9 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
         onLogin={handleLogin}
         onModalClose={handleLoginModalClose}
         showModal={loginModal}
-        tutorialLinkLabel={t('Tutorial')}
+        titleLabel={t('Connect a wallet')}
         metamaskModalHeadline={t('Connecting')}
         metamaskModalMessage={t('Please complete the process in your wallet')}
-        onTutorialLinkClick={handleTutorialLinkClick}
-        helpText={t('What is a wallet? How do i get an Ethereum address?')}
         error={loginErrors}
       />
     </>

@@ -15,7 +15,13 @@ const EditorPlaceholder: React.FC<IEditorPlaceholder> = props => {
   const { avatar, ethAddress, placeholderLabel, onClick, style } = props;
   return (
     <BasicCardBox style={style}>
-      <Box direction="row" align="center" pad="medium" gap="small" onClick={onClick}>
+      <Box
+        direction="row"
+        align="center"
+        pad={{ horizontal: 'medium', vertical: 'small' }}
+        gap="small"
+        onClick={onClick}
+      >
         {ethAddress && <Avatar src={avatar} ethAddress={ethAddress} size="md" />}
         <Text size="large" color="secondaryText">
           {placeholderLabel}

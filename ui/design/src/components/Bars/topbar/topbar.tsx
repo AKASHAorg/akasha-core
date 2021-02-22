@@ -31,7 +31,7 @@ export interface ITopbarProps {
   // handlers
   onNavigation: (path: string) => void;
   onSidebarToggle?: (visibility: boolean) => void;
-  onSearch: (ev: React.KeyboardEvent<HTMLInputElement>, inputValue: string) => void;
+  onSearch: (inputValue: string) => void;
   // external css
   className?: string;
   // viewport size
@@ -233,7 +233,7 @@ const Topbar = (props: ITopbarProps) => {
           <SearchBar
             inputValue={inputValue}
             onInputChange={ev => setInputValue(ev.target.value)}
-            handleKeyDown={ev => onSearch(ev, inputValue)}
+            onSearch={onSearch}
             inputPlaceholderLabel={searchBarLabel}
           />
         </StyledSearchContainer>
@@ -248,7 +248,7 @@ const Topbar = (props: ITopbarProps) => {
         <MobileSearchBar
           inputValue={inputValue}
           setInputValue={setInputValue}
-          handleKeyDown={ev => onSearch(ev, inputValue)}
+          onSearch={onSearch}
           inputPlaceholderLabel={searchBarLabel}
           handleCloseInput={() => setMobileSearchOpen(false)}
         />
@@ -264,6 +264,7 @@ const Topbar = (props: ITopbarProps) => {
           onClick={() => {
             onNavigation('/');
           }}
+          flex={{ shrink: 0 }}
         >
           <BrandIcon type="ethereumWorldLogo" clickable={true} />
           {size !== 'small' && <StyledText size="large">{brandLabel}</StyledText>}
@@ -274,6 +275,8 @@ const Topbar = (props: ITopbarProps) => {
           align="center"
           gap="small"
           pad={size === 'small' ? 'none' : { horizontal: 'medium' }}
+          fill="horizontal"
+          justify="end"
         >
           {renderSearchArea()}
           {quickAccessItems && quickAccessItems.map(renderPluginButton)}

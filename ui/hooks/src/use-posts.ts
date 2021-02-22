@@ -307,6 +307,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       const pending = createPendingEntry(
         {
           ethAddress: loggedProfile.ethAddress as string,
+          pubKey: loggedProfile.pubKey,
           avatar: loggedProfile.avatar,
           userName: loggedProfile.userName,
           name: loggedProfile.name,
@@ -342,6 +343,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
             ensName: loggedProfile.ensName,
             coverImage: loggedProfile.coverImage,
             description: loggedProfile.description,
+            pubKey: loggedProfile.pubKey,
           },
           postData,
           currentEmbedEntry,
