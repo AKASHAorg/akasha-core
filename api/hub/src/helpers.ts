@@ -10,6 +10,7 @@ import {
 import { updateCollections, initCollections } from './collections';
 import winston from 'winston';
 import { normalize } from 'eth-ens-namehash';
+import { ethers, utils, providers } from 'ethers';
 
 export const getAPISig = async (minutes: number = 30) => {
   const expiration = new Date(Date.now() + 1000 * 60 * minutes);
@@ -131,5 +132,28 @@ export const validateName = (name: string) => {
     return normalizedArray.join('.');
   } catch (e) {
     throw e;
+  }
+};
+
+const eip1271Abi = [
+  'function isValidSignature(bytes32 _message, bytes _signature) public view returns (bool)',
+];
+
+export const isValidSignature = async (
+  message: string,
+  signature: string,
+  address: string,
+  provider: providers.Provider,
+): Promise<boolean> => {
+  const normalisedMsg = utils.hexlify(utils.toUtf8Bytes(message));
+  const hexArray = utils.arrayify(normalisedMsg);
+  const hashMessage = utils.hashMessage(hexArray);
+  try {
+    const contract = new ethers.Contract(address, eip1271Abi, provider);
+    const valid = await contract.isValidSignature(hashMessage, signature);
+    return Promise.resolve(valid);
+  } catch (err) {
+    const msgSigner = utils.verifyMessage(hexArray, signature);
+    return Promise.resolve(utils.getAddress(msgSigner) === utils.getAddress(address));
   }
 };
