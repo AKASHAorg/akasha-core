@@ -9,10 +9,14 @@ import ExplanationsCard from '../explanations-box';
 
 import { StyledBox } from '../styled';
 
-const { Box, Icon, Text, Avatar, Button } = DS;
+const { Box, Icon, Text, Avatar, Button, useViewportSize } = DS;
 
 const Content: React.FC<IContentProps> = props => {
   const [showExplanations, setShowExplanations] = React.useState<boolean>(false);
+
+  const { size } = useViewportSize();
+
+  const isMobile = size === 'small';
 
   const handleClick = () => () => {
     if (props.entryId) {
@@ -82,7 +86,7 @@ const Content: React.FC<IContentProps> = props => {
         />
       )}
       <Box
-        direction="row"
+        direction={isMobile ? 'column' : 'row'}
         margin={{ top: 'medium' }}
         pad={{ top: props.isPending ? 'medium' : '0rem' }}
         align="center"
@@ -90,32 +94,32 @@ const Content: React.FC<IContentProps> = props => {
           props.isPending ? { side: 'top', color: 'border', style: 'solid' } : { size: '0rem' }
         }
       >
-        <Box width={props.isPending ? '75%' : '100%'}>
-          <Box direction="row" align="center">
-            <Text>{props.originallyReportedByLabel}</Text>
+        <Box width={props.isPending && !isMobile ? '70%' : '100%'}>
+          <Box direction="row" align="center" wrap={true}>
+            <Text margin={{ right: '0.2rem' }}>{props.originallyReportedByLabel}</Text>
             <Avatar
               ethAddress={props.reporter || ''}
               src={props.reporterAvatar}
               size="xs"
-              margin={{ left: '0.2rem' }}
+              margin={{ right: '0.2rem' }}
               backgroundColor={'lightBackground'}
               border="sm"
             />
             {props.reporter && !props.reporterName && (
-              <Text margin={{ left: '0.2rem' }} color="accentText">
+              <Text margin={{ right: '0.2rem' }} color="accentText">
                 {`${props.reporter.slice(0, 6)}...${props.reporter.slice(
                   props.reporter.length - 4,
                 )}`}
               </Text>
             )}
             {props.reporterName && (
-              <Text margin={{ left: '0.2rem' }} color="accentText">
+              <Text margin={{ right: '0.2rem' }} color="accentText">
                 {props.reporterName}
               </Text>
             )}
             {props.reporterENSName && (
               <Text
-                margin={{ left: '0.2rem' }}
+                margin={{ right: '0.2rem' }}
                 color={!props.isPending ? 'secondaryText' : 'initial'}
               >
                 {`(@${props.reporterENSName})`}
@@ -123,8 +127,8 @@ const Content: React.FC<IContentProps> = props => {
             )}
             {props.otherReporters && !!props.otherReporters.length && (
               <>
-                <Text margin={{ left: '0.2rem' }}>{props.andLabel}</Text>
-                <Text margin={{ left: '0.2rem' }} color="accentText">
+                <Text margin={{ right: '0.2rem' }}>{props.andLabel}</Text>
+                <Text margin={{ right: '0.2rem' }} color="accentText">
                   {props.otherReporters}
                 </Text>
               </>
@@ -135,27 +139,32 @@ const Content: React.FC<IContentProps> = props => {
           ).format('D MMM yyyy・h:mm a')}`}</Text>
         </Box>
         {props.isPending && (
-          <Box direction="row" width="25%" justify="end">
+          <Box
+            direction="row"
+            width={isMobile ? '100%' : '30%'}
+            margin={isMobile ? 'small' : '0rem'}
+            justify="end"
+          >
             <Button primary={true} label={props.makeADecisionLabel} onClick={handleClick()} />
           </Box>
         )}
       </Box>
       {!props.isPending && (
         <Box margin={{ top: 'medium' }} border={{ side: 'top', color: 'border', style: 'solid' }}>
-          {!props.isPending && (
-            <>
-              <Text margin={{ top: 'large' }} style={{ fontWeight: 'bold' }}>
-                {props.determinationLabel}
-                {': '}
-                <Text as="span" color="accentText">
-                  {props.determination}
-                </Text>
-              </Text>
-              <Text margin={{ top: 'xsmall' }}>{props.moderatorDecision}</Text>
-            </>
-          )}
-          <Box direction="row" margin={{ top: 'large' }} justify="between" align="end">
-            <Box>
+          <Text margin={{ top: 'large' }} style={{ fontWeight: 'bold' }}>
+            {props.determinationLabel}
+            {': '}
+            <Text as="span" color="accentText">
+              {props.determination}
+            </Text>
+          </Text>
+          <Text margin={{ top: 'xsmall' }}>{props.moderatorDecision}</Text>
+          <Box
+            direction={isMobile ? 'column' : 'row'}
+            margin={{ top: 'large' }}
+            align={isMobile ? 'start' : 'center'}
+          >
+            <Box width={!isMobile ? '70%' : '100%'} wrap={true}>
               <Text>
                 {props.moderator && !props.moderatorName
                   ? `${props.moderatedByLabel} ${props.moderator.slice(
@@ -173,7 +182,12 @@ const Content: React.FC<IContentProps> = props => {
                 props.evaluationDateTime,
               ).format('D MMM yyyy・h:mm a')}`}</Text>
             </Box>
-            <Box direction="row" width="35%" justify="end">
+            <Box
+              direction="row"
+              margin={isMobile ? 'small' : '0rem'}
+              width={isMobile ? '100%' : '30%'}
+              justify="end"
+            >
               <Button label={props.reviewDecisionLabel} onClick={() => null} />
             </Box>
           </Box>
