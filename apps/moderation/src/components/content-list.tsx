@@ -60,7 +60,10 @@ const ContentList: React.FC<IContentListProps> = props => {
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
-  const { size } = useViewportSize();
+  const {
+    size,
+    dimensions: { width },
+  } = useViewportSize();
 
   React.useEffect(() => {
     if (!ethAddress) {
@@ -151,6 +154,7 @@ const ContentList: React.FC<IContentListProps> = props => {
               contentId={flagged}
               baseUrl={BASE_DECISION_URL}
               size={size}
+              width={width}
               onModalClose={() => {
                 setModalOpen(false);
                 // on modal close, fetch pending contents

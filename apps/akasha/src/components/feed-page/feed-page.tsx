@@ -73,7 +73,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   }, [pubKey]);
 
-  const { size } = useViewportSize();
+  const {
+    size,
+    dimensions: { width },
+  } = useViewportSize();
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -266,6 +269,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
               size={size}
+              width={width}
               updateEntry={updateEntry}
               closeModal={() => {
                 setReportModalOpen(false);

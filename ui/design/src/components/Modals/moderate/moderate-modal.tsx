@@ -30,8 +30,9 @@ export interface IModerateModalProps {
   user: string | null;
   contentId?: string;
   baseUrl: string;
-  // screen size passed by viewport provider
+  // screen size and width passed by viewport provider
   size?: string;
+  width: number;
   // fetch pending items on modalClose
   onModalClose: () => void;
   closeModal: () => void;
@@ -58,6 +59,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     contentId,
     baseUrl,
     size,
+    width,
     onModalClose,
     closeModal,
     signData,
@@ -151,7 +153,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
 
   return (
     <ModalWrapper>
-      <StyledBox width={size === 'small' ? '100%' : '33%'}>
+      <StyledBox width={width > 800 ? '35%' : width > 500 ? '50%' : '100%'}>
         <MainAreaCardBox className={className}>
           <Box direction="column" pad="large">
             <Box direction="row" margin={{ top: 'xsmall' }} align="start">
