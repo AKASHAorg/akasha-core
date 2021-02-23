@@ -164,7 +164,14 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       // await remote.authorize(identity);
       await db.open(1);
     }
-
+    globalChannel.next({
+      data: currentUser,
+      channelInfo: {
+        servicePath: services[AUTH_SERVICE],
+        method: 'ready',
+        args: null,
+      },
+    });
     return currentUser;
   };
 
@@ -253,6 +260,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   const signOut = async () => {
     sessionStorage.clear();
     const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
+    await invoke(commonServices[WEB3_SERVICE]).destroy({});
     cache.clear();
     identity = null;
     hubClient = null;

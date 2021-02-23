@@ -92,9 +92,9 @@ const wss = route.all('/ws/userauth', ctx => {
                           Object.assign(currentUser, {
                             ethAddress: utils.getAddress(r.ethAddress),
                           });
-                        } else {
-                          return reject(err);
+                          return resolve(Buffer.from(r.sig));
                         }
+                        return reject(err);
                       });
                     }
                     return reject(err);
