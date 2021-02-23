@@ -130,10 +130,11 @@ const TopbarComponent = (props: TopBarProps) => {
     loginActions.login(provider);
   };
 
-  const handleLogout = () => {
-    loginActions.logout();
-    navigateToUrl('/');
-    window.location.reload();
+  const handleLogout = async () => {
+    await Promise.resolve(loginActions.logout()).then(_ => {
+      navigateToUrl('/');
+      setTimeout(() => window.location.reload(), 50);
+    });
   };
   const handleModalClose = () => {
     setShowLoginModal(false);

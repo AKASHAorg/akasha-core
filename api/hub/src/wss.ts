@@ -2,11 +2,15 @@ import route from 'koa-route';
 import Emittery from 'emittery';
 import { ThreadID, UserAuth, Where } from '@textile/hub';
 import { utils, ethers } from 'ethers';
-import { getAPISig, getAppDB, logger, newClientDB } from './helpers';
+import { getAPISig, getAppDB, isValidSignature, logger, newClientDB } from './helpers';
 import { contextCache } from './storage/cache';
 import { Profile } from './collections/interfaces';
 
 const provider = new ethers.providers.InfuraProvider(process.env.AWF_FAUCET_NETWORK, {
+  projectId: process.env.AWF_FAUCET_ID,
+  projectSecret: process.env.AWF_FAUCET_SECRET,
+});
+const mainNetProvider = new ethers.providers.InfuraProvider('homestead', {
   projectId: process.env.AWF_FAUCET_ID,
   projectSecret: process.env.AWF_FAUCET_SECRET,
 });
@@ -65,6 +69,7 @@ const wss = route.all('/ws/userauth', ctx => {
                     addressChallenge,
                     r.addressChallenge,
                   );
+                  Object.assign(currentUser, { ethAddress: utils.getAddress(recoveredAddress) });
                   if (
                     !r.ethAddress ||
                     utils.getAddress(recoveredAddress) !== utils.getAddress(r.ethAddress)
@@ -73,9 +78,27 @@ const wss = route.all('/ws/userauth', ctx => {
                       `bad eth_sig recovery, got: ${r.ethAddress} recovered: ${recoveredAddress}`,
                     );
                     logger.error(err);
+
+                    if (r.ethAddress) {
+                      logger.info('checking for eip1271');
+                      return isValidSignature(
+                        addressChallenge,
+                        r.addressChallenge,
+                        r.ethAddress,
+                        mainNetProvider,
+                      ).then(valid => {
+                        logger.info(r, { valid });
+                        if (valid) {
+                          Object.assign(currentUser, {
+                            ethAddress: utils.getAddress(r.ethAddress),
+                          });
+                          return resolve(Buffer.from(r.sig));
+                        }
+                        return reject(err);
+                      });
+                    }
                     return reject(err);
                   }
-                  Object.assign(currentUser, { ethAddress: utils.getAddress(recoveredAddress) });
                 }
                 resolve(Buffer.from(r.sig));
               });
