@@ -34,6 +34,6 @@
     "@akashaproject/sdk-common": "*",
     "@akashaproject/ui-awf-typings": "*",
     "@textile/hub": "6.0.2",
-    "@textile/threaddb": "0.0.5"
+    "@textile/threaddb": "0.0.6"
   }
 }
