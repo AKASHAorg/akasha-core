@@ -232,9 +232,10 @@ const service: AkashaService = (invoke, log) => {
       config: data.config,
     });
     const buckPath = `ewa/${path}/${resized.size.width}x${resized.size.height}`;
+    const bufferImage: ArrayBuffer = await resized.image.arrayBuffer();
     const upload = await buck.pushPath(root.key, buckPath, {
       path: buckPath,
-      content: resized.image,
+      content: new Uint8Array(bufferImage),
     });
     const cid = upload.path.cid.toString();
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
