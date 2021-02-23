@@ -166,10 +166,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     setReportModalOpen(true);
   };
 
-  const handleClickReplies = () => {
-    /* todo */
-  };
-
   const [tags, setTags] = React.useState([]);
 
   const handleGetTags = (query: string) => {
@@ -335,7 +331,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             locale={locale}
             onBookmark={handleEntryBookmark}
             onNavigate={handleNavigateToPost}
-            onRepliesClick={handleClickReplies}
             onFlag={handleEntryFlag}
             onRepost={handleEntryRepost}
             onShare={handleEntryShare}

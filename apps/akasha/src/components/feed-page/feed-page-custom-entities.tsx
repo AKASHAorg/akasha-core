@@ -45,9 +45,6 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
             onNavigate={() => {
               /* not allowed */
             }}
-            onRepliesClick={() => {
-              /* not allowed */
-            }}
             onShare={() => {
               /* not allowed */
             }}
@@ -60,7 +57,7 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
             onMentionClick={() => {
               /* not allowed */
             }}
-            disableIpfsCopyLink={true}
+            disableActions={true}
           />
         ),
       })),

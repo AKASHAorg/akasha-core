@@ -62,7 +62,6 @@ export interface IEntryBoxProps {
   isBookmarked?: boolean;
   onEntryBookmark?: (entryId: string, isBookmarked?: boolean) => void;
   onClickAvatar: React.MouseEventHandler<HTMLDivElement>;
-  onClickReplies: (entryId: string) => void;
   onEntryShare: (service: ServiceNames, entryId?: string, authorEthAddress?: string) => void;
   onRepost: (withComment: boolean, entryData: IEntryData) => void;
   onEntryFlag?: (entryId?: string) => void;
@@ -78,6 +77,7 @@ export interface IEntryBoxProps {
   // style
   style?: React.CSSProperties;
   disableReposting?: boolean;
+  disableActions?: boolean;
   hidePublishTime?: boolean;
   awaitingModerationLabel?: string;
   moderatedContentLabel?: string;
@@ -117,6 +117,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     style,
     contentClickable,
     disableReposting,
+    disableActions,
     hidePublishTime,
     awaitingModerationLabel,
     moderatedContentLabel,
@@ -191,8 +192,18 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             label={entryData.author?.name}
             info={entryData.author?.userName && `@${entryData.author?.userName}`}
             avatarImage={entryData.author?.avatar}
-            onClickAvatar={onClickAvatar}
-            onClick={onClickAvatar}
+            onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) => {
+              if (disableActions) {
+                return;
+              }
+              onClickAvatar(ev);
+            }}
+            onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
+              if (disableActions) {
+                return;
+              }
+              onClickAvatar(ev);
+            }}
             ethAddress={entryData.author?.ethAddress}
             ref={profileRef}
             bold={true}
@@ -234,10 +245,20 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               size="sm"
               onClick={toggleDisplayCID}
               ref={akashaRef}
-              clickable={true}
+              clickable={false}
             />
             {onEntryFlag && (
-              <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
+              <Icon
+                type="moreDark"
+                onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
+                  if (disableActions) {
+                    return;
+                  }
+                  toggleMenuDrop(ev);
+                }}
+                clickable={!disableActions}
+                ref={menuIconRef}
+              />
             )}
           </Box>
         </Box>
@@ -263,12 +284,22 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           height={{ max: '50rem' }}
           overflow={scrollHiddenContent ? 'auto' : 'hidden'}
           style={{ cursor: contentClickable ? 'pointer' : 'default' }}
-          onClick={() => (contentClickable ? handleContentClick(entryData) : false)}
+          onClick={() =>
+            !disableActions && contentClickable ? handleContentClick(entryData) : false
+          }
         >
           <ReadOnlyEditor content={entryData.content} handleMentionClick={onMentionClick} />
         </Box>
         {entryData.quote && !entryData.quote.delisted && !entryData.quote.reported && (
-          <Box pad="medium" onClick={() => handleContentClick(entryData.quote)}>
+          <Box
+            pad="medium"
+            onClick={() => {
+              if (disableActions) {
+                return;
+              }
+              handleContentClick(entryData.quote);
+            }}
+          >
             <EmbedBox embedEntryData={entryData.quote} />
           </Box>
         )}
@@ -307,6 +338,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           onShare={handleEntryShare}
           handleRepliesClick={handleRepliesClick}
           disableReposting={disableReposting}
+          disableActions={disableActions}
         />
       </Box>
     </ViewportSizeProvider>

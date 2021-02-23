@@ -19,7 +19,6 @@ export interface IEntryCardRendererProps {
   onBookmark: (entryId: string) => void;
   onNavigate: (details: any) => void;
   onLinkCopy?: () => void;
-  onRepliesClick: () => void;
   onFlag?: (entryId: string, user?: string | null) => () => void;
   onRepost: (withComment: boolean, entryData: any) => void;
   onShare: (service: string, entryId: string, authorEthAddress: string) => void;
@@ -28,7 +27,7 @@ export interface IEntryCardRendererProps {
   bookmarkState?: IBookmarkState;
   style?: React.CSSProperties;
   contentClickable?: boolean;
-  disableIpfsCopyLink?: boolean;
+  disableActions?: boolean;
   hidePublishTime?: boolean;
   moderatedContentLabel?: string;
   awaitingModerationLabel?: string;
@@ -53,6 +52,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     awaitingModerationLabel,
     ctaLabel,
     handleFlipCard,
+    disableActions,
   } = props;
 
   const isBookmarked = React.useMemo(() => {
@@ -149,7 +149,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   onRepost={props.onRepost}
                   onEntryShare={props.onShare}
                   onEntryFlag={props.onFlag && props.onFlag(itemData.entryId, props.ethAddress)}
-                  onClickReplies={props.onRepliesClick}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
                   isFollowingAuthor={isFollowing}
@@ -161,6 +160,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   awaitingModerationLabel={awaitingModerationLabel}
                   ctaLabel={ctaLabel}
                   handleFlipCard={handleFlipCard}
+                  disableActions={disableActions}
                 />
               )}
             </>

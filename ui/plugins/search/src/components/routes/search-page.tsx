@@ -266,7 +266,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 onRepost={() => null}
                 onEntryShare={handleEntryShare}
                 onEntryFlag={() => null}
-                onClickReplies={() => handlePostClick(entryData.entryId)}
                 handleFollowAuthor={() => handleFollowProfile(entryData.author.ethAddress)}
                 handleUnfollowAuthor={() => handleUnfollowProfile(entryData.author.ethAddress)}
                 isFollowingAuthor={followedProfiles.includes(entryData.author)}
@@ -307,7 +306,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 onRepost={() => null}
                 onEntryShare={handleEntryShare}
                 onEntryFlag={() => null}
-                onClickReplies={() => handlePostClick(commentData.postId)}
                 handleFollowAuthor={() => handleFollowProfile(commentData.author.ethAddress)}
                 handleUnfollowAuthor={() => handleUnfollowProfile(commentData.author.ethAddress)}
                 isFollowingAuthor={followedProfiles.includes(commentData.author)}

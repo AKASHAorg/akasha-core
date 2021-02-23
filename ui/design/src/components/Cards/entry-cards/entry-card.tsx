@@ -41,7 +41,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     bookmarkLabel,
     bookmarkedLabel,
     onRepost,
-    onClickReplies,
     onEntryShare,
     onEntryFlag,
     onMentionClick,
@@ -58,6 +57,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     ctaLabel,
     handleFlipCard,
     scrollHiddenContent,
+    disableActions,
   } = props;
 
   return (
@@ -92,7 +92,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         bookmarkLabel={bookmarkLabel}
         bookmarkedLabel={bookmarkedLabel}
         onRepost={onRepost}
-        onClickReplies={onClickReplies}
         onEntryShare={onEntryShare}
         onEntryFlag={onEntryFlag}
         handleFollowAuthor={handleFollowAuthor}
@@ -108,6 +107,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         ctaLabel={ctaLabel}
         handleFlipCard={handleFlipCard}
         scrollHiddenContent={scrollHiddenContent}
+        disableActions={disableActions}
       />
     </MainAreaCardBox>
   );

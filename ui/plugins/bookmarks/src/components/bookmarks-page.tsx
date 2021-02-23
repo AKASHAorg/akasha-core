@@ -175,7 +175,6 @@ const BookmarksPage = (props: RootComponentProps) => {
                         ethAddress={loginState.ethAddress}
                         onBookmark={handleBookmarkClick}
                         onNavigate={handleNavigateToPost}
-                        onRepliesClick={handleNavigateToPost}
                         onRepost={() => false}
                         onShare={handleEntryShare}
                         onAvatarClick={handleAvatarClick}

@@ -100,13 +100,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
     onNavigate(props.itemType, details);
   };
 
-  const handleRepliesClick = () => {
-    handleNavigation({
-      entryId: itemData.ethAddress,
-      authorEthAddress: itemData.author.ethAddress,
-      replyTo: null,
-    });
-  };
   const handleContentClick = (details: IContentClickDetails) => {
     handleNavigation(details);
   };
@@ -189,7 +182,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   onRepost={onRepost}
                   onEntryShare={handleShare}
                   onEntryFlag={handleEntryReport}
-                  onClickReplies={handleRepliesClick}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
                   isFollowingAuthor={isFollowing}

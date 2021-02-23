@@ -3,6 +3,7 @@ import * as React from 'react';
 import { IProfileData } from '../profile-widget-card';
 import { Icon } from '../../../Icon';
 import EthereumIdDrop from './ethereum-id-drop';
+import { isMobile } from 'react-device-detect';
 
 export interface IProfileCardEthereumIdProps {
   ethereumAddressLabel?: string;
@@ -40,7 +41,7 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
           {profileData.ensName ? ethereumNameLabel : ethereumAddressLabel}
         </Text>
         <Box direction="row" gap="xsmall" align="center">
-          <Text color="primaryText">
+          <Text color="primaryText" size={isMobile ? 'small' : 'medium'}>
             {profileData.ensName ? profileData.ensName : profileData.ethAddress}
           </Text>
           <Icon type="copy" clickable={true} onClick={togglePopover} ref={popoverRef} />

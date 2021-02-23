@@ -55,6 +55,7 @@ storiesOf('TextIcon/TextIcon', module).add('default', () => (
       fontSize={select('Font Size', fontSizes, 'medium')}
       fontWeight={select('Font Weight', fontWeights, 'normal' as any)}
       iconSize={select('Icon Size', iconSizes, 'md' as any)}
+      disabled={boolean('Disabled', false)}
     />
   </Box>
 ));

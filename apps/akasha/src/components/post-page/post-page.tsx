@@ -250,9 +250,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     setFlagged(entryId);
     setReportModalOpen(true);
   };
-  const handleClickReplies = () => {
-    // todo
-  };
 
   const handleEntryShare = (
     service: 'twitter' | 'facebook' | 'reddit' | 'copy',
@@ -424,7 +421,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               }}
               onEntryShare={handleEntryShare}
               onEntryFlag={handleEntryFlag(entryData.entryId, ethAddress)}
-              onClickReplies={handleClickReplies}
               handleFollowAuthor={handleFollow}
               handleUnfollowAuthor={handleUnfollow}
               isFollowingAuthor={isFollowing}
@@ -489,7 +485,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             locale={locale}
             onBookmark={handleCommentBookmark}
             onNavigate={handleNavigateToPost}
-            onRepliesClick={handleClickReplies}
             onFlag={handleEntryFlag}
             onRepost={handleEntryRepost}
             onShare={handleEntryShare}

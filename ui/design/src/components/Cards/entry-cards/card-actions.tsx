@@ -40,6 +40,7 @@ export interface CardActionProps {
   onRepostWithComment: () => void;
   onShare: (service: ServiceNames) => void;
   disableReposting?: boolean;
+  disableActions?: boolean;
 }
 
 const BookmarkButton = styled(TextIcon)<{ isBookmarked?: boolean }>`
@@ -81,6 +82,7 @@ const CardActions: React.FC<CardActionProps> = props => {
     onRepostWithComment,
     onShare,
     disableReposting,
+    disableActions,
   } = props;
 
   const { size } = useViewportSize();
@@ -272,27 +274,44 @@ const CardActions: React.FC<CardActionProps> = props => {
         iconType="transfer"
         iconSize="sm"
         fontSize="large"
-        clickable={disableReposting ? false : true}
+        clickable={!disableReposting && !disableActions}
         ref={repostNodeRef}
-        onClick={disableReposting ? () => false : onRepost}
-        disabled={disableReposting}
+        onClick={() => {
+          if (disableActions || disableReposting) {
+            return;
+          }
+          onRepost();
+        }}
+        disabled={disableReposting || disableActions}
       />
       <TextIcon
         label={repliesBtnText}
         iconType="comments"
         iconSize="sm"
         fontSize="large"
-        clickable={true}
-        onClick={handleRepliesClick}
+        clickable={!disableActions}
+        onClick={() => {
+          if (disableActions) {
+            return;
+          }
+          handleRepliesClick();
+        }}
+        disabled={disableActions}
       />
       <BookmarkButton
         label={bookmarkBtnText}
         iconType="bookmark"
         iconSize="sm"
         fontSize="large"
-        clickable={true}
-        onClick={handleEntryBookmark}
+        clickable={!disableActions}
+        onClick={() => {
+          if (disableActions) {
+            return;
+          }
+          handleEntryBookmark();
+        }}
         isBookmarked={isBookmarked}
+        disabled={disableActions}
       />
       {shareNodeRef.current && shareDropOpen && renderShareDrop()}
       <TextIcon
@@ -301,8 +320,14 @@ const CardActions: React.FC<CardActionProps> = props => {
         iconSize="sm"
         fontSize="large"
         ref={shareNodeRef}
-        clickable={true}
-        onClick={handleShareOpen}
+        clickable={!disableActions}
+        onClick={() => {
+          if (disableActions) {
+            return;
+          }
+          handleShareOpen();
+        }}
+        disabled={disableActions}
       />
     </Box>
   );
