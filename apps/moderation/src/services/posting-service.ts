@@ -59,7 +59,11 @@ export const mapEntry = (
     CID?: string;
     _id: string;
     quotes: any[];
+    quotedBy?: string[];
+    quotedByAuthors?: any[];
     creationDate: string;
+    totalComments: string;
+    postId?: string;
     author: {
       CID?: string;
       description: string;
@@ -68,7 +72,13 @@ export const mapEntry = (
       userName: string;
       name: string;
       ethAddress: string;
+      pubKey: string;
+      totalPosts?: number | string;
+      totalFollowers?: number | string;
+      totalFollowing?: number | string;
     };
+    delisted?: boolean;
+    reported?: boolean;
   },
   ipfsGateway: string,
   logger?: any,
@@ -107,6 +117,19 @@ export const mapEntry = (
   if (entry.quotes && entry.quotes[0]) {
     quotedEntry = mapEntry(entry.quotes[0], ipfsGateway, logger);
   }
+  let quotedByAuthors;
+  if (entry.quotedByAuthors && entry.quotedByAuthors.length > 0) {
+    quotedByAuthors = entry.quotedByAuthors.map((author: any) => {
+      let avatarWithGateway;
+      if (author.avatar) {
+        avatarWithGateway = getMediaUrl(ipfsGateway, author.avatar);
+      }
+      return {
+        ...author,
+        avatar: avatarWithGateway,
+      };
+    });
+  }
 
   return {
     author: {
@@ -117,13 +140,24 @@ export const mapEntry = (
       ensName: entry.author.userName,
       userName: entry.author.name,
       ethAddress: entry.author.ethAddress,
+      pubKey: entry.author.pubKey,
+      totalPosts: entry.author.totalPosts,
+      totalFollowers: entry.author.totalFollowers,
+      totalFollowing: entry.author.totalFollowing,
     },
     CID: entry.CID,
     content: contentWithMediaGateways,
-    time: entry.creationDate,
     quote: quotedEntry,
     entryId: entry._id,
+    time: entry.creationDate,
+    reposts: entry.quotedBy?.length,
     ipfsLink: entry._id,
     permalink: 'null',
+    replies: +entry.totalComments,
+    delisted: entry.delisted || false,
+    reported: entry.reported || false,
+    postId: entry.postId,
+    quotedBy: entry.quotedBy,
+    quotedByAuthors: quotedByAuthors,
   };
 };

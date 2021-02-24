@@ -20,9 +20,9 @@ export interface IMobileListModal {
 }
 
 interface IMenuItem {
-  label: string;
+  label?: string;
   icon?: string;
-  handler: (arg1?: any) => void;
+  handler?: (arg1?: any) => void;
 }
 
 const MobileListModal: React.FC<IMobileListModal> = props => {
