@@ -60,7 +60,10 @@ const ContentList: React.FC<IContentListProps> = props => {
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
-  const { size } = useViewportSize();
+  const {
+    size,
+    dimensions: { width },
+  } = useViewportSize();
 
   React.useEffect(() => {
     if (!ethAddress) {
@@ -84,7 +87,7 @@ const ContentList: React.FC<IContentListProps> = props => {
     setRequesting(true);
     try {
       const response = await moderationRequest.getCount();
-      setCount(() => response);
+      setCount(response);
       setRequesting(false);
     } catch (error) {
       setRequesting(false);
@@ -97,7 +100,7 @@ const ContentList: React.FC<IContentListProps> = props => {
     setRequesting(true);
     try {
       const modResponse = await moderationRequest.getAllPending();
-      setPendingItems(() => modResponse);
+      setPendingItems(modResponse);
       setRequesting(false);
     } catch (error) {
       setRequesting(false);
@@ -110,7 +113,7 @@ const ContentList: React.FC<IContentListProps> = props => {
     setRequesting(true);
     try {
       const modResponse = await moderationRequest.getAllModerated();
-      setModeratedItems(() => modResponse);
+      setModeratedItems(modResponse);
       setRequesting(false);
     } catch (error) {
       setRequesting(false);
@@ -151,6 +154,7 @@ const ContentList: React.FC<IContentListProps> = props => {
               contentId={flagged}
               baseUrl={BASE_DECISION_URL}
               size={size}
+              width={width}
               onModalClose={() => {
                 setModalOpen(false);
                 // on modal close, fetch pending contents
