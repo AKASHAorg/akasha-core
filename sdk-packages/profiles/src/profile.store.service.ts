@@ -15,6 +15,8 @@ const urlSource = require('ipfs-utils/src/files/url-source');
 const service: AkashaService = (invoke, log) => {
   const addProfileProvider = async (opt: LinkedProperty[]) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
+    const { signData } = await invoke(authServices[AUTH_SERVICE]);
+    const signedData = await signData(opt, true);
     const mutation = `
   mutation AddProfileProvider($data: [DataProviderInput]) {
        addProfileProvider(data: $data)
@@ -26,6 +28,7 @@ const service: AkashaService = (invoke, log) => {
       context: {
         headers: {
           Authorization: `Bearer ${token}`,
+          Signature: signedData.signature,
         },
       },
     });
@@ -34,6 +37,8 @@ const service: AkashaService = (invoke, log) => {
 
   const makeDefaultProvider = async (opt: LinkedProperty[]) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
+    const { signData } = await invoke(authServices[AUTH_SERVICE]);
+    const signedData = await signData(opt, true);
     const mutation = `
   mutation MakeDefaultProvider($data: [DataProviderInput]) {
        makeDefaultProvider(data: $data)
@@ -45,6 +50,7 @@ const service: AkashaService = (invoke, log) => {
       context: {
         headers: {
           Authorization: `Bearer ${token}`,
+          Signature: signedData.signature,
         },
       },
     });
@@ -53,6 +59,8 @@ const service: AkashaService = (invoke, log) => {
 
   const registerUserName = async (opt: { userName: string }) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
+    const { signData } = await invoke(authServices[AUTH_SERVICE]);
+    const signedData = await signData(opt.userName, true);
     const mutation = `
   mutation RegisterUsername($name: String!) {
        registerUserName(name: $name)
@@ -64,6 +72,7 @@ const service: AkashaService = (invoke, log) => {
       context: {
         headers: {
           Authorization: `Bearer ${token}`,
+          Signature: signedData.signature,
         },
       },
     });
@@ -139,6 +148,8 @@ const service: AkashaService = (invoke, log) => {
 
   const follow = async (opt: { ethAddress: string }) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
+    const { signData } = await invoke(authServices[AUTH_SERVICE]);
+    const signedData = await signData(opt.ethAddress, true);
     const mutation = `
   mutation Follow($ethAddress: String!) {
        follow(ethAddress: $ethAddress)
@@ -150,6 +161,7 @@ const service: AkashaService = (invoke, log) => {
       context: {
         headers: {
           Authorization: `Bearer ${token}`,
+          Signature: signedData.signature,
         },
       },
     });
@@ -158,6 +170,8 @@ const service: AkashaService = (invoke, log) => {
 
   const unFollow = async (opt: { ethAddress: string }) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
+    const { signData } = await invoke(authServices[AUTH_SERVICE]);
+    const signedData = await signData(opt.ethAddress, true);
     const mutation = `
   mutation UnFollow($ethAddress: String!) {
        unFollow(ethAddress: $ethAddress)
@@ -169,6 +183,7 @@ const service: AkashaService = (invoke, log) => {
       context: {
         headers: {
           Authorization: `Bearer ${token}`,
+          Signature: signedData.signature,
         },
       },
     });
