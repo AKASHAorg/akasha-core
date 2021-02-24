@@ -19,8 +19,8 @@ export interface IProfileMiniCard {
   unfollowLabel?: string;
   postsLabel?: string;
   // handlers
-  handleFollow: (profileEthAddress: string) => void;
-  handleUnfollow: (profileEthAddress: string) => void;
+  handleFollow?: (profileEthAddress: string) => void;
+  handleUnfollow?: (profileEthAddress: string) => void;
   disableFollowing?: boolean;
 }
 
@@ -40,11 +40,15 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
   } = props;
 
   const onFollow = () => {
-    handleFollow(profileData.ethAddress);
+    if (handleFollow) {
+      handleFollow(profileData.ethAddress);
+    }
   };
 
   const onUnfollow = () => {
-    handleUnfollow(profileData.ethAddress);
+    if (handleUnfollow) {
+      handleUnfollow(profileData.ethAddress);
+    }
   };
 
   // check if a user is logged in and different from the profile displayed
