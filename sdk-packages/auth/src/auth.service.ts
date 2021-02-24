@@ -46,7 +46,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   const SYNC_RESPONSE = '@sync_response';
   const SYNC_CHANNEL = '@sync_data';
   const SIGN_OUT_EVENT = '@sign_out';
-  const decoder = new TextDecoder();
+  // const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   if ('BroadcastChannel' in self) {
     channel = new BroadcastChannel(SYNC_CHANNEL);
