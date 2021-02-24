@@ -78,7 +78,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   const [entryData, setEntryData] = React.useState<any>(null);
 
-  const { size } = useViewportSize();
+  const {
+    size,
+    dimensions: { width },
+  } = useViewportSize();
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
@@ -387,6 +390,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
               size={size}
+              width={width}
               updateEntry={updateEntry}
               closeModal={() => {
                 setReportModalOpen(false);
