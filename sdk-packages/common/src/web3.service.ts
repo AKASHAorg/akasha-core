@@ -23,7 +23,12 @@ const service: AkashaService = (invoke, log) => {
   // to force regen() on the next web3 call
   const destroy = async () => {
     const stash: any = await invoke(commonServices[CACHE_SERVICE]).getStash();
+    const web3Instance = await web3();
+    if (typeof web3Instance?.provider?.disconnect === 'function') {
+      await web3Instance.provider.disconnect();
+    }
     stash.remove(commonServices[WEB3_SERVICE]);
+    return Promise.resolve();
   };
 
   // fetch an existing instance or create web3Provider
