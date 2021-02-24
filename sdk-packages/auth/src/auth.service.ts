@@ -46,6 +46,8 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   const SYNC_RESPONSE = '@sync_response';
   const SYNC_CHANNEL = '@sync_data';
   const SIGN_OUT_EVENT = '@sign_out';
+  const decoder = new TextDecoder();
+  const encoder = new TextEncoder();
   if ('BroadcastChannel' in self) {
     channel = new BroadcastChannel(SYNC_CHANNEL);
     channel.postMessage({ type: SYNC_REQUEST });
@@ -275,32 +277,42 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     return;
   };
 
-  const signData = async (data: object | string) => {
+  const signData = async (data: object | string, base64Format: boolean = false) => {
     const session = await getSession();
     let serializedData;
     if (typeof data === 'object') {
       serializedData = JSON.stringify(data);
     }
     serializedData = new TextEncoder().encode(serializedData);
-    const sig = await session.identity.sign(serializedData);
+    let sig: Uint8Array | string = await session.identity.sign(serializedData);
+    if (base64Format) {
+      sig = Buffer.from(sig).toString('base64');
+    }
     return { serializedData, signature: sig, pubKey: identity.public.toString() };
   };
 
   const verifySignature = async (args: {
     pubKey: string;
     data: Uint8Array | string | object;
-    signature: Uint8Array;
+    signature: Uint8Array | string;
   }) => {
     const pub = PublicKey.fromString(args.pubKey);
+    let sig: Uint8Array;
+    if (args.signature instanceof Uint8Array) {
+      sig = args.signature;
+    } else {
+      const str = Buffer.from(args.signature, 'base64');
+      sig = Uint8Array.from(str);
+    }
     let serializedData;
     if (args.data instanceof Uint8Array) {
-      return pub.verify(args.data, args.signature);
+      return pub.verify(args.data, sig);
     }
     if (typeof args.data === 'object') {
       serializedData = JSON.stringify(args.data);
     }
-    serializedData = new TextEncoder().encode(serializedData);
-    return pub.verify(serializedData, args.signature);
+    serializedData = encoder.encode(serializedData);
+    return pub.verify(serializedData, sig);
   };
   const decryptMessage = async message => {
     const decryptedBody = await identity.decrypt(message.body);

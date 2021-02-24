@@ -52,6 +52,7 @@ const allowedOrigins = [
   'https://unpkg.com',
   'https://cdnjs.cloudflare.com',
   'https://cdn.jsdelivr.net',
+  'https://gateway.pinata.cloud',
 ];
 registerRoute(
   ({ url }) => allowedOrigins.includes(url.origin),

@@ -166,6 +166,8 @@ const service: AkashaService = (invoke, log) => {
     post: { title?: string; tags?: string[]; quotes?: string[] };
   }) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
+    const { signData } = await invoke(authServices[AUTH_SERVICE]);
+    const signedData = await signData(opt.data, true);
     const mutation = `
   mutation CreateEntry($content: [DataProviderInput!], $post: PostData) {
        createPost(content: $content, post: $post)
@@ -177,6 +179,7 @@ const service: AkashaService = (invoke, log) => {
       context: {
         headers: {
           Authorization: `Bearer ${token}`,
+          Signature: signedData.signature,
         },
       },
     });
