@@ -20,7 +20,7 @@ export interface PostRendererProps {
   onLinkCopy?: () => void;
   onFlag: (entryId: string, user: string | null) => () => void;
   onRepost: (withComment: boolean, entryData: any) => void;
-  onShare: (service: string, entryId: string, authorEthAddress: string) => void;
+  sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (ethAddress: string) => void;
   bookmarkState?: IBookmarkState;
@@ -44,6 +44,7 @@ const PostRenderer = (props: PostRendererProps) => {
     hidePublishTime,
     handleFlipCard,
     disableActions,
+    sharePostUrl,
   } = props;
 
   const { t } = useTranslation();
@@ -125,7 +126,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     entryData={itemData}
                     sharePostLabel={t('Share Post')}
                     shareTextLabel={t('Share this post with your friends')}
-                    sharePostUrl={'https://ethereum.world'}
+                    sharePostUrl={sharePostUrl}
                     onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
                       props.onAvatarClick(ev, itemData.author.pubKey)
                     }
@@ -142,7 +143,6 @@ const PostRenderer = (props: PostRendererProps) => {
                     bookmarkLabel={t('Save')}
                     bookmarkedLabel={t('Saved')}
                     onRepost={props.onRepost}
-                    onEntryShare={props.onShare}
                     onEntryFlag={props.onFlag(itemData.entryId, null)}
                     handleFollowAuthor={handleFollow}
                     handleUnfollowAuthor={handleUnfollow}

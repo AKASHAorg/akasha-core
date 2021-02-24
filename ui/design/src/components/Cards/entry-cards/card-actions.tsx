@@ -38,7 +38,7 @@ export interface CardActionProps {
   onRepost: () => void;
   handleRepliesClick: () => void;
   onRepostWithComment: () => void;
-  onShare: (service: ServiceNames) => void;
+  onShare: (service: ServiceNames, entryId: string) => void;
   disableReposting?: boolean;
   disableActions?: boolean;
 }
@@ -97,7 +97,7 @@ const CardActions: React.FC<CardActionProps> = props => {
     // @TODO: replace with appropriate title, text and url of the post to be shared
     title: sharePostLabel,
     text: shareTextLabel,
-    url: sharePostUrl,
+    url: `${sharePostUrl}${entryData.entryId}`,
   };
 
   // const handleRepostsOpen = () => {
@@ -129,7 +129,7 @@ const CardActions: React.FC<CardActionProps> = props => {
     setShareDropOpen(false);
   };
   const handleShare = (service: ServiceNames) => () => {
-    onShare(service);
+    onShare(service, entryData.entryId);
     setShareDropOpen(false);
   };
 

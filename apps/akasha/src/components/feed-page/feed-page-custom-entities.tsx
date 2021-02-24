@@ -45,9 +45,7 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
             onNavigate={() => {
               /* not allowed */
             }}
-            onShare={() => {
-              /* not allowed */
-            }}
+            sharePostUrl={''}
             onRepost={() => {
               /* not allowed */
             }}

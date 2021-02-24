@@ -251,32 +251,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     setReportModalOpen(true);
   };
 
-  const handleEntryShare = (
-    service: 'twitter' | 'facebook' | 'reddit' | 'copy',
-    entryId: string,
-  ) => {
-    const url = `${window.location.origin}${routes[POST]}/${entryId}`;
-    let shareUrl;
-    switch (service) {
-      case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?text=${url}`;
-        break;
-      case 'facebook':
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-        break;
-      case 'reddit':
-        shareUrl = `http://www.reddit.com/submit?url=${url}`;
-        break;
-      case 'copy':
-        navigator.clipboard.writeText(url);
-        break;
-      default:
-        break;
-    }
-    if (shareUrl) {
-      window.open(shareUrl, '_blank');
-    }
-  };
   const handlePublish = async (data: {
     metadata: {
       app: string;
@@ -400,7 +374,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               entryData={entryData}
               sharePostLabel={t('Share Post')}
               shareTextLabel={t('Share this post with your friends')}
-              sharePostUrl={'https://ethereum.world'}
+              sharePostUrl={`${window.location.origin}${routes[POST]}/`}
               onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
                 handleAvatarClick(ev, entryData.author.pubKey)
               }
@@ -419,7 +393,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               onRepost={() => {
                 return;
               }}
-              onEntryShare={handleEntryShare}
               onEntryFlag={handleEntryFlag(entryData.entryId, ethAddress)}
               handleFollowAuthor={handleFollow}
               handleUnfollowAuthor={handleUnfollow}
@@ -487,7 +460,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             onNavigate={handleNavigateToPost}
             onFlag={handleEntryFlag}
             onRepost={handleEntryRepost}
-            onShare={handleEntryShare}
+            sharePostUrl={`${window.location.origin}${routes[POST]}/`}
             onAvatarClick={handleAvatarClick}
             onMentionClick={handleMentionClick}
             handleFlipCard={handleListFlipCard}

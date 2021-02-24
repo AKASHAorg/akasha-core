@@ -121,33 +121,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     singleSpa.navigateToUrl(`/AKASHA-app/post/${entryId}`);
   };
 
-  const handleEntryShare = (
-    service: 'twitter' | 'facebook' | 'reddit' | 'copy',
-    entryId: string,
-  ) => {
-    const url = `${window.location.origin}/AKASHA-app/post/${entryId}`;
-    let shareUrl;
-    switch (service) {
-      case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?text=${url}`;
-        break;
-      case 'facebook':
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-        break;
-      case 'reddit':
-        shareUrl = `http://www.reddit.com/submit?url=${url}`;
-        break;
-      case 'copy':
-        navigator.clipboard.writeText(url);
-        break;
-      default:
-        break;
-    }
-    if (shareUrl) {
-      window.open(shareUrl, '_blank');
-    }
-  };
-
   const handleEntryBookmark = (entryId: string) => {
     if (!loggedEthAddress) {
       showLoginModal();
@@ -248,7 +221,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 entryData={entryData}
                 sharePostLabel={t('Share Post')}
                 shareTextLabel={t('Share this post with your friends')}
-                sharePostUrl={'https://ethereum.world'}
+                sharePostUrl={`${window.location.origin}/AKASHA-app/post/`}
                 onClickAvatar={() => handleProfileClick(entryData.author.pubKey)}
                 onEntryBookmark={handleEntryBookmark}
                 repliesLabel={t('Replies')}
@@ -264,7 +237,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 bookmarkLabel={t('Save')}
                 bookmarkedLabel={t('Saved')}
                 onRepost={() => null}
-                onEntryShare={handleEntryShare}
                 onEntryFlag={() => null}
                 handleFollowAuthor={() => handleFollowProfile(entryData.author.ethAddress)}
                 handleUnfollowAuthor={() => handleUnfollowProfile(entryData.author.ethAddress)}
@@ -304,7 +276,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 bookmarkLabel={t('Save')}
                 bookmarkedLabel={t('Saved')}
                 onRepost={() => null}
-                onEntryShare={handleEntryShare}
                 onEntryFlag={() => null}
                 handleFollowAuthor={() => handleFollowProfile(commentData.author.ethAddress)}
                 handleUnfollowAuthor={() => handleUnfollowProfile(commentData.author.ethAddress)}

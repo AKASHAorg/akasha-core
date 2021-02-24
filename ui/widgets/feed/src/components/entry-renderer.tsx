@@ -4,7 +4,6 @@ import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/src/utils/time';
 import { IContentClickDetails } from '@akashaproject/design-system/src/components/Cards/entry-cards/entry-box';
 import { useTranslation } from 'react-i18next';
-import { ServiceNames } from '@akashaproject/design-system/src/components/Cards/entry-cards/card-actions';
 import { ItemTypes } from './App';
 
 const { ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard } = DS;
@@ -12,7 +11,7 @@ const { ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard } = DS;
 export interface IEntryRenderer {
   itemId?: string;
   itemData?: any;
-  getShareUrl?: (entryId: string) => string;
+  sharePostUrl: string;
   ethAddress: string | null;
   pubKey: string | null;
   locale: ILocale;
@@ -45,7 +44,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     onReport,
     onNavigate,
     checkIsFollowing,
-    getShareUrl,
+    sharePostUrl,
     onRepost,
     contentClickable,
   } = props;
@@ -112,30 +111,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
     });
   };
 
-  const handleShare = (service: ServiceNames, entryId: string) => {
-    if (!getShareUrl) {
-      return;
-    }
-    const url = getShareUrl(entryId);
-    let shareUrl;
-    switch (service) {
-      case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?text=${url}`;
-        break;
-      case 'facebook':
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-        break;
-      case 'reddit':
-        shareUrl = `http://www.reddit.com/submit?url=${url}`;
-        break;
-      case 'copy':
-        navigator.clipboard.writeText(url);
-        break;
-      default:
-        break;
-    }
-    window.open(shareUrl, '_blank');
-  };
   const handleEntryBookmark = (entryId: string) => {
     onBookmark(isBookmarked, entryId);
   };
@@ -162,7 +137,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 <EntryCard
                   isBookmarked={isBookmarked}
                   entryData={itemData}
-                  sharePostUrl="https://ethereum.world"
+                  sharePostUrl={sharePostUrl}
                   sharePostLabel={t('Share Post')}
                   shareTextLabel={t('Share this post with your friends')}
                   onClickAvatar={handleAvatarClick}
@@ -180,7 +155,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
                   onRepost={onRepost}
-                  onEntryShare={handleShare}
                   onEntryFlag={handleEntryReport}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}

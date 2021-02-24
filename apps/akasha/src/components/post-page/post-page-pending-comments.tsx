@@ -52,9 +52,7 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
             onFlag={() => () => {
               /* not allowed */
             }}
-            onShare={() => {
-              /* not allowed */
-            }}
+            sharePostUrl={''}
             onRepost={() => {
               /* not allowed */
             }}

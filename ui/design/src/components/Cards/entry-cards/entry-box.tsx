@@ -62,7 +62,6 @@ export interface IEntryBoxProps {
   isBookmarked?: boolean;
   onEntryBookmark?: (entryId: string, isBookmarked?: boolean) => void;
   onClickAvatar: React.MouseEventHandler<HTMLDivElement>;
-  onEntryShare: (service: ServiceNames, entryId?: string, authorEthAddress?: string) => void;
   onRepost: (withComment: boolean, entryData: IEntryData) => void;
   onEntryFlag?: (entryId?: string) => void;
   // follow related
@@ -106,7 +105,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     bookmarkedLabel,
     onEntryBookmark,
     onClickAvatar,
-    onEntryShare,
     onRepost,
     onEntryFlag,
     handleFollowAuthor,
@@ -153,8 +151,28 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onRepost(withComment, entryData);
   };
 
-  const handleEntryShare = (service: ServiceNames) => {
-    onEntryShare(service, entryData.entryId, entryData.author.ethAddress);
+  const handleEntryShare = (service: ServiceNames, entryId: string) => {
+    const url = `${sharePostUrl}${entryId}`;
+    let shareUrl;
+    switch (service) {
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${url}`;
+        break;
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+        break;
+      case 'reddit':
+        shareUrl = `http://www.reddit.com/submit?url=${url}`;
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(url);
+        break;
+      default:
+        break;
+    }
+    if (shareUrl) {
+      window.open(shareUrl, '_blank');
+    }
   };
 
   const handleEntryFlag = () => {
