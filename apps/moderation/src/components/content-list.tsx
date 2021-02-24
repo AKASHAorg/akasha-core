@@ -87,7 +87,7 @@ const ContentList: React.FC<IContentListProps> = props => {
     setRequesting(true);
     try {
       const response = await moderationRequest.getCount();
-      setCount(() => response);
+      setCount(response);
       setRequesting(false);
     } catch (error) {
       setRequesting(false);
@@ -100,7 +100,7 @@ const ContentList: React.FC<IContentListProps> = props => {
     setRequesting(true);
     try {
       const modResponse = await moderationRequest.getAllPending();
-      setPendingItems(() => modResponse);
+      setPendingItems(modResponse);
       setRequesting(false);
     } catch (error) {
       setRequesting(false);
@@ -113,7 +113,7 @@ const ContentList: React.FC<IContentListProps> = props => {
     setRequesting(true);
     try {
       const modResponse = await moderationRequest.getAllModerated();
-      setModeratedItems(() => modResponse);
+      setModeratedItems(modResponse);
       setRequesting(false);
     } catch (error) {
       setRequesting(false);

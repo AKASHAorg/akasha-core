@@ -5,8 +5,6 @@ import { I18nextProvider } from 'react-i18next';
 
 import AppRoutes from './app-routes';
 
-import { getLoggedProfileStore } from '../state/logged-profile-state';
-
 const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
 
 export default class Application extends React.Component<RootComponentProps> {
@@ -42,11 +40,6 @@ export default class Application extends React.Component<RootComponentProps> {
   }
   render() {
     const { i18n } = this.props;
-    const Login = getLoggedProfileStore(
-      this.props.sdkModules,
-      this.props.globalChannel,
-      this.props.logger,
-    );
 
     return (
       <Box width="100vw">
@@ -56,9 +49,7 @@ export default class Application extends React.Component<RootComponentProps> {
             availableThemes={[lightTheme, darkTheme]}
           >
             <I18nextProvider i18n={i18n ? i18n : null}>
-              <Login.Provider>
-                <AppRoutes {...this.props} profileStore={Login} onError={this.handleError} />
-              </Login.Provider>
+              <AppRoutes {...this.props} onError={this.handleError} />
             </I18nextProvider>
           </ThemeSelector>
         </React.Suspense>
