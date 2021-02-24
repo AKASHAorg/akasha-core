@@ -48,8 +48,13 @@ registerRoute(
   }),
 );
 
+const allowedOrigins = [
+  'https://unpkg.com',
+  'https://cdnjs.cloudflare.com',
+  'https://cdn.jsdelivr.net',
+];
 registerRoute(
-  /^(https:\/\/unpkg.com|https:\/\/cdnjs.cloudflare.com\/ajax|https:\/\/cdn.jsdelivr.net\/npm|)/,
+  ({ url }) => allowedOrigins.includes(url.origin),
   new CacheFirst({
     cacheName: 'vendor-cache',
     plugins: [
