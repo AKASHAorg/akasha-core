@@ -11,6 +11,7 @@ export interface IProviderModalProps {
   message: string;
   illustration: React.ReactElement;
   error: string | null;
+  isMobile?: boolean;
 }
 
 const ProviderAuthModal: React.FC<IProviderModalProps> = props => {
@@ -20,21 +21,25 @@ const ProviderAuthModal: React.FC<IProviderModalProps> = props => {
 
   return (
     <ModalContainer onModalClose={props.onModalClose}>
-      <ModalCard style={{ padding: '2em 4em' }}>
-        {props.illustration}
-        <Box align="center" gap="xsmall">
-          <Text weight="bold" size="medium">
-            {props.headLine}
-          </Text>
-          <Text style={{ marginBottom: '2em' }}>{props.message}</Text>
-          {!props.error && <Icon type="loading" accentColor={true} size="md" />}
-          {props.error && (
-            <Text size="small" color="errorText">
-              {props.error}
+      <Box width={props.isMobile ? { max: '22rem' } : 'auto'}>
+        <ModalCard style={{ padding: '2em 4em' }}>
+          {!props.isMobile && props.illustration}
+          <Box align="center" gap="xsmall">
+            <Text weight="bold" size="medium">
+              {props.headLine}
             </Text>
-          )}
-        </Box>
-      </ModalCard>
+            <Text textAlign="center" style={{ marginBottom: '1.5rem' }}>
+              {props.message}
+            </Text>
+            {!props.error && <Icon type="loading" accentColor={true} size="md" />}
+            {props.error && (
+              <Text textAlign="center" size="small" color="errorText">
+                {props.error}
+              </Text>
+            )}
+          </Box>
+        </ModalCard>
+      </Box>
     </ModalContainer>
   );
 };

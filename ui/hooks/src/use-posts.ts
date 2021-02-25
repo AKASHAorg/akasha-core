@@ -372,6 +372,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
             ensName: loggedProfile.ensName,
             coverImage: loggedProfile.coverImage,
             description: loggedProfile.description,
+            pubKey: loggedProfile.pubKey,
           },
           postData,
           currentEmbedEntry,

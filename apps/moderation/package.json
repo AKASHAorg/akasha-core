@@ -50,7 +50,6 @@
     "@akashaproject/sdk-db": "*",
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/ui-awf-hooks": "*",
-    "easy-peasy": "4.0.1",
     "moment": "^2.29.1",
     "react-i18next": "11.4.0",
     "react-router-dom": "5.1.2",

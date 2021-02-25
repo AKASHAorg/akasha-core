@@ -11,7 +11,7 @@ export type ISocialData = IProfileData[];
 
 export interface ISocialBox {
   socialData: ISocialData;
-  onClickUser: (ethAddress: string) => void;
+  onClickUser?: (ethAddress: string) => void;
   // labels
   repostedThisLabel?: string;
   andLabel?: string;
@@ -67,9 +67,19 @@ const SocialBox: React.FC<ISocialBox> = props => {
               src={user.avatar}
               ethAddress={user.ethAddress}
               size="xs"
-              onClick={() => onClickUser(user.pubKey)}
+              onClick={() => {
+                if (onClickUser) {
+                  onClickUser(user.pubKey);
+                }
+              }}
             />
-            <Text as="a" onClick={() => onClickUser(user.pubKey)}>
+            <Text
+              onClick={() => {
+                if (onClickUser) {
+                  onClickUser(user.pubKey);
+                }
+              }}
+            >
               {user.name || user.userName || truncateMiddle(user.ethAddress, 3, 3)}
             </Text>
           </StyledSelectBox>
@@ -87,8 +97,12 @@ const SocialBox: React.FC<ISocialBox> = props => {
       border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
     >
       {avatarUserData && <StackedAvatar userData={avatarUserData} maxAvatars={3} />}
-      <StackableAvatarLink
-        onClick={() => onClickUser(socialData[0]?.pubKey)}
+      <IconLink
+        onClick={() => {
+          if (onClickUser) {
+            onClickUser(socialData[0].pubKey);
+          }
+        }}
         label={
           socialData[0].name ||
           socialData[0].userName ||

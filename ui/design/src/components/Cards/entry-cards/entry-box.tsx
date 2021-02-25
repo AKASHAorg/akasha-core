@@ -43,39 +43,39 @@ export interface IEntryBoxProps {
   // data
   entryData: IEntryData;
   locale: ILocale;
-  loggedProfileEthAddress: string | null;
+  loggedProfileEthAddress?: string | null;
   // share data
   sharePostLabel?: string;
-  shareTextLabel: string;
-  sharePostUrl: string;
+  shareTextLabel?: string;
+  sharePostUrl?: string;
   // labels
   repliesLabel: string;
   repostsLabel: string;
-  repostLabel: string;
-  repostWithCommentLabel: string;
-  shareLabel: string;
-  flagAsLabel: string;
-  copyLinkLabel: string;
+  repostLabel?: string;
+  repostWithCommentLabel?: string;
+  shareLabel?: string;
+  flagAsLabel?: string;
+  copyLinkLabel?: string;
   comment?: boolean;
-  bookmarkLabel: string;
-  bookmarkedLabel: string;
+  bookmarkLabel?: string;
+  bookmarkedLabel?: string;
   // handlers
   isBookmarked?: boolean;
   onEntryBookmark?: (entryId: string, isBookmarked?: boolean) => void;
-  onClickAvatar: React.MouseEventHandler<HTMLDivElement>;
-  onClickReplies: (entryId: string) => void;
-  onEntryShare: (service: ServiceNames, entryId?: string, authorEthAddress?: string) => void;
-  onRepost: (withComment: boolean, entryData: IEntryData) => void;
+  onClickAvatar?: React.MouseEventHandler<HTMLDivElement>;
+  onClickReplies?: (entryId: string) => void;
+  onEntryShare?: (service: ServiceNames, entryId?: string, authorEthAddress?: string) => void;
+  onRepost?: (withComment: boolean, entryData: IEntryData) => void;
   onEntryFlag?: (entryId?: string) => void;
   // follow related
-  handleFollowAuthor: (profileEthAddress: string) => void;
-  handleUnfollowAuthor: (profileEthAddress: string) => void;
-  isFollowingAuthor: boolean;
+  handleFollowAuthor?: (profileEthAddress: string) => void;
+  handleUnfollowAuthor?: (profileEthAddress: string) => void;
+  isFollowingAuthor?: boolean;
   // redirects
   onContentClick?: (details: IContentClickDetails) => void;
   /* Can click the content (not embed!) to navigate */
   contentClickable?: boolean;
-  onMentionClick: (ethAddress: string) => void;
+  onMentionClick?: (ethAddress: string) => void;
   // style
   style?: React.CSSProperties;
   disableReposting?: boolean;
@@ -84,6 +84,8 @@ export interface IEntryBoxProps {
   moderatedContentLabel?: string;
   ctaLabel?: string;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
+  isModerated?: boolean;
+  scrollHiddenContent?: boolean;
 }
 
 const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
@@ -127,6 +129,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     moderatedContentLabel,
     ctaLabel,
     handleFlipCard,
+    isModerated,
+    scrollHiddenContent,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -153,11 +157,15 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   };
 
   const handleRepost = (withComment: boolean) => () => {
-    onRepost(withComment, entryData);
+    if (onRepost) {
+      onRepost(withComment, entryData);
+    }
   };
 
   const handleEntryShare = (service: ServiceNames) => {
-    onEntryShare(service, entryData.entryId, entryData.author.ethAddress);
+    if (onEntryShare) {
+      onEntryShare(service, entryData.entryId, entryData.author.ethAddress);
+    }
   };
 
   const handleEntryFlag = () => {
@@ -185,7 +193,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   return (
     <ViewportSizeProvider>
       <Box style={style}>
-        <Box direction="row" justify="between" pad={{ top: 'medium' }}>
+        <Box
+          direction="row"
+          justify="between"
+          pad={{ top: 'medium', horizontal: 'medium' }}
+          flex={{ shrink: 0 }}
+        >
           <StyledProfileAvatarButton
             label={entryData.author?.name}
             info={entryData.author?.userName && `@${entryData.author?.userName}`}
@@ -260,18 +273,21 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           />
         )}
         <Box
+          pad={{ horizontal: 'medium' }}
+          height={{ max: '50rem' }}
+          overflow={scrollHiddenContent ? 'auto' : 'hidden'}
           style={{ cursor: contentClickable ? 'pointer' : 'default' }}
           onClick={() => (contentClickable ? handleContentClick(entryData) : false)}
         >
           <ReadOnlyEditor content={entryData.content} handleMentionClick={onMentionClick} />
         </Box>
         {entryData.quote && !entryData.quote.delisted && !entryData.quote.reported && (
-          <Box pad={{ vertical: 'medium' }} onClick={() => handleContentClick(entryData.quote)}>
+          <Box pad="medium" onClick={() => handleContentClick(entryData.quote)}>
             <EmbedBox embedEntryData={entryData.quote} />
           </Box>
         )}
         {entryData.quote && !entryData.quote.delisted && entryData.quote.reported && (
-          <Box pad={{ vertical: 'medium' }} onClick={() => null}>
+          <Box pad="medium" onClick={() => null}>
             <EntryCardHidden
               awaitingModerationLabel={awaitingModerationLabel}
               ctaLabel={ctaLabel}
@@ -280,7 +296,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           </Box>
         )}
         {entryData.quote && entryData.quote.delisted && (
-          <Box pad={{ vertical: 'medium' }} onClick={() => null}>
+          <Box pad="medium" onClick={() => null}>
             <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
           </Box>
         )}
@@ -305,6 +321,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           onShare={handleEntryShare}
           handleRepliesClick={handleRepliesClick}
           disableReposting={disableReposting}
+          isModerated={isModerated}
         />
       </Box>
     </ViewportSizeProvider>

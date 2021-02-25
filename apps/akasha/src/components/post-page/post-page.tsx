@@ -82,7 +82,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     return null;
   }, [postId, postsState.postsData[postId]]);
 
-  const { size } = useViewportSize();
+  const {
+    size,
+    dimensions: { width },
+  } = useViewportSize();
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
@@ -342,6 +345,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
               size={size}
+              width={width}
               updateEntry={updateEntry}
               closeModal={() => {
                 setReportModalOpen(false);
@@ -350,11 +354,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
           </ToastProvider>
         )}
       </ModalRenderer>
-      <Box
-        margin={{ horizontal: 'medium' }}
-        pad={{ bottom: 'small' }}
-        border={{ side: 'bottom', size: '1px', color: 'border' }}
-      >
+      <Box pad={{ bottom: 'small' }} border={{ side: 'bottom', size: '1px', color: 'border' }}>
         <ErrorInfoCard errors={postErrors}>
           {(errorMessages, hasCriticalErrors) => (
             <>
@@ -420,6 +420,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       moderatedContentLabel={t('This content has been moderated')}
                       ctaLabel={t('See it anyway')}
                       handleFlipCard={handleFlipCard}
+                      scrollHiddenContent={true}
                     />
                   )}
                 </>

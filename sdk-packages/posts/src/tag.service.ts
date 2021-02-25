@@ -55,6 +55,8 @@ const service: AkashaService = (invoke, log) => {
   };
   const createTag = async (tagName: string) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
+    const { signData } = await invoke(authServices[AUTH_SERVICE]);
+    const signedData = await signData(tagName, true);
     const mutation = `
   mutation CreateTag($name: String!) {
        createTag(name: $name)
@@ -66,6 +68,7 @@ const service: AkashaService = (invoke, log) => {
       context: {
         headers: {
           Authorization: `Bearer ${token}`,
+          Signature: signedData.signature,
         },
       },
     });

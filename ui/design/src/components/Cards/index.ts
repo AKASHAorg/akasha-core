@@ -8,9 +8,7 @@ import EditorCard from './editor-cards/editor-card';
 import CommentEditor from './editor-cards/comment-editor';
 import { EditorPlaceholder } from './editor-cards/editor-placeholder';
 import { EntryBox } from './entry-cards/entry-box';
-import { EntryBoxMod } from './entry-cards/entry-box-mod';
 import { EntryCard } from './entry-cards/entry-card';
-import { EntryCardMod } from './entry-cards/entry-card-mod';
 import { EntryCardHidden } from './entry-cards/entry-card-hidden';
 import BoxFormCard from './form-cards/box-form-card';
 import EnsFormCard from './form-cards/ens-form-card';
@@ -47,9 +45,7 @@ export {
   MainAreaCardBox,
   BoxFormCard,
   EntryBox,
-  EntryBoxMod,
   EntryCard,
-  EntryCardMod,
   EntryCardHidden,
   EnsFormCard,
   WidgetAreaCardBox,

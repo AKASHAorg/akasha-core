@@ -27,8 +27,9 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   user?: string;
   contentType?: string;
   baseUrl?: string;
-  // screen size passed by viewport provider
+  // screen size and width passed by viewport provider
   size?: string;
+  width: number;
 }
 
 const ReportModal: React.FC<IReportModalProps> = props => {
@@ -56,6 +57,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     contentType,
     baseUrl,
     size,
+    width,
     updateEntry,
     closeModal,
   } = props;
@@ -154,7 +156,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
 
   return (
     <ModalWrapper>
-      <StyledBox width={size === 'small' ? '100%' : '33%'}>
+      <StyledBox width={width > 800 ? '35%' : width > 500 ? '50%' : '100%'}>
         <MainAreaCardBox className={className}>
           <Box direction="column" pad="large">
             <Box direction="row" margin={{ top: 'xsmall' }} align="start">
