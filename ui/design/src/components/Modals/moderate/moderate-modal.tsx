@@ -13,6 +13,7 @@ import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from '../styled';
 export interface IModerateModalProps {
   className?: string;
   titleLabel: string;
+  altTitleLabel: string;
   contentType: string;
 
   decisionLabel: string;
@@ -30,6 +31,7 @@ export interface IModerateModalProps {
   user: string | null;
   contentId?: string;
   baseUrl: string;
+  isReview?: boolean;
   // screen size and width passed by viewport provider
   size?: string;
   width: number;
@@ -43,6 +45,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
   const {
     className,
     titleLabel,
+    altTitleLabel,
     contentType,
     decisionLabel,
     optionLabels,
@@ -58,6 +61,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     user,
     contentId,
     baseUrl,
+    isReview,
     size,
     width,
     onModalClose,
@@ -167,7 +171,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                 />
               )}
               <Text weight={600} margin={{ bottom: '1rem', horizontal: 'auto' }} size="large">
-                {titleLabel}
+                {isReview ? altTitleLabel : titleLabel}
               </Text>
               {size !== 'small' && (
                 <Icon

@@ -188,7 +188,7 @@ const Content: React.FC<IContentProps> = props => {
               width={isMobile ? '100%' : '30%'}
               justify="end"
             >
-              <Button label={props.reviewDecisionLabel} onClick={() => null} />
+              <Button label={props.reviewDecisionLabel} onClick={handleClick()} />
             </Box>
           </Box>
         </Box>
