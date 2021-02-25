@@ -168,7 +168,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     const status = await moderationRequest.checkStatus(false, { user: ethAddress }, postId);
     if (status.delisted) {
       // if content is delisted, short-circuit further requests
-      return setIsDelisted(true);
+      setIsDelisted(true);
     } else if (status.reported) {
       setIsReported(true);
       getPostData();

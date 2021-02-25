@@ -256,7 +256,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                   moderatedOnLabel={t('On')}
                   evaluationDateTime={moderatedItem.evaluationDate}
                   reviewDecisionLabel={t('Review decision')}
-                  handleButtonClick={handleButtonClick}
+                  handleButtonClick={() => handleButtonClick}
                 />
               ))
           : renderNotFound('moderated'))}
