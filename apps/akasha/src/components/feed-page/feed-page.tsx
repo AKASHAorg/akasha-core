@@ -73,6 +73,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   }, [pubKey]);
 
+  React.useEffect(() => {
+    if (ethAddress) {
+      postsActions.resetPostIds();
+      postsActions.getPosts({ limit: 5 });
+    }
+  }, [ethAddress]);
+
   const {
     size,
     dimensions: { width },
@@ -99,7 +106,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     const req: { limit: number; offset?: string } = {
       limit: payload.limit,
     };
-    if (!postsState.isFetchingPosts) {
+    if (!postsState.isFetchingPosts && ethAddress) {
       postsActions.getPosts(req);
     }
   };
