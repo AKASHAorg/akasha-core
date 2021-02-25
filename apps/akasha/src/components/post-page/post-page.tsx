@@ -77,6 +77,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   });
 
   const [entryData, setEntryData] = React.useState<any>(null);
+  const [isDelisted, setIsDelisted] = React.useState<boolean>(false);
+  const [isReported, setIsReported] = React.useState<boolean>(false);
 
   const {
     size,
@@ -147,6 +149,35 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   };
 
   React.useEffect(() => {
+    checkModerationStatus();
+    // this is used to initialise comments when navigating to other post ids
+    if (postId) {
+      handleLoadMore({ limit: 5, postID: postId });
+    }
+  }, [postId]);
+
+  React.useEffect(() => {
+    if (ethAddress) {
+      checkModerationStatus();
+    }
+  }, [ethAddress]);
+
+  const checkModerationStatus = async () => {
+    // checks, regardless of if ethAddress is available yet
+    // detects delisted posts and renders accordingly
+    const status = await moderationRequest.checkStatus(false, { user: ethAddress }, postId);
+    if (status.delisted) {
+      // if content is delisted, short-circuit further requests
+      return setIsDelisted(true);
+    } else if (status.reported) {
+      setIsReported(true);
+      getPostData();
+    } else {
+      getPostData();
+    }
+  };
+
+  const getPostData = () => {
     const entryCall = sdkModules.posts.entries.getEntry({ entryId: postId });
     const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings({});
     const call = combineLatest([ipfsGatewayCall, entryCall]);
@@ -156,12 +187,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       if (entry) {
         const mappedEntry = mapEntry(entry, ipfsGateway, logger);
 
-        const status = await moderationRequest.checkStatus(
-          false,
-          { user: ethAddress },
-          mappedEntry.entryId,
-        );
-
         const qstatus =
           mappedEntry.quote &&
           (await moderationRequest.checkStatus(
@@ -170,11 +195,12 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             mappedEntry.quote.entryId,
           ));
 
-        if (status && status.constructor === Object) {
+        if (qstatus && qstatus.constructor === Object) {
           const modifiedEntry = {
             ...mappedEntry,
-            reported: status.reported,
-            delisted: status.delisted,
+            // status already available in state
+            reported: isReported,
+            delisted: isDelisted,
             quote: mappedEntry.quote
               ? {
                   ...mappedEntry.quote,
@@ -196,11 +222,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         }
       }
     });
-    // this is used to initialise comments when navigating to other post ids
-    if (postId) {
-      handleLoadMore({ limit: 5, postID: postId });
-    }
-  }, [postId]);
+  };
 
   const bookmarked = React.useMemo(() => {
     if (
@@ -334,9 +356,13 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   );
 
   const handleFlipCard = (entry: any, isQuote: boolean) => () => {
+    // toggle isReported status
+    setIsReported(false);
+    // modify entry or its quote (if applicable)
     const modifiedEntry = isQuote
       ? { ...entry, quote: { ...entry.quote, reported: false } }
       : { ...entry, reported: false };
+    // update state
     setEntryData(modifiedEntry);
   };
 
@@ -351,6 +377,25 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       : { ...entry, reported: false };
     postsActions.updatePostsState(modifiedEntry);
   };
+
+  if (isDelisted) {
+    return (
+      <EntryCardHidden
+        moderatedContentLabel={t('This content has been moderated')}
+        isDelisted={isDelisted}
+      />
+    );
+  }
+
+  if (!isDelisted && isReported) {
+    return (
+      <EntryCardHidden
+        awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
+        ctaLabel={t('See it anyway')}
+        handleFlipCard={handleFlipCard(entryData, false)}
+      />
+    );
+  }
 
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
@@ -463,19 +508,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             </Box>
           )}
         </>
-      )}
-      {entryData && !entryData.delisted && entryData.reported && (
-        <EntryCardHidden
-          awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
-          ctaLabel={t('See it anyway')}
-          handleFlipCard={handleFlipCard(entryData, false)}
-        />
-      )}
-      {entryData && entryData.delisted && (
-        <EntryCardHidden
-          moderatedContentLabel={t('This content has been moderated')}
-          isDelisted={true}
-        />
       )}
       <VirtualList
         items={postsState.commentIds}
