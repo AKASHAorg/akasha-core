@@ -11,7 +11,7 @@ const Routes = (props: RootComponentProps) => {
   return (
     <Router>
       <Helmet>
-        <title>App Center</title>
+        <title>My Bookmarks | Ethereum World</title>
       </Helmet>
       <Route path={`${routes[BOOKMARKS]}`}>
         <BookmarksPage {...props} />

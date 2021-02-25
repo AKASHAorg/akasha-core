@@ -22,6 +22,8 @@ import { Sidebar, Topbar } from './components/Bars/index';
 
 import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
 
+import EntryPublishErrorCard from './components/Errors/entry-publish-error-card';
+
 import {
   Button,
   DuplexButton,
@@ -211,6 +213,7 @@ const exported = {
   SourcesWidgetCard,
   TutorialWidgetCard,
   FilterCard,
+  EntryPublishErrorCard,
   Helmet: Helmet as HelmetType,
 };
 

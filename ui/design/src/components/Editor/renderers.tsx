@@ -19,14 +19,15 @@ const ImageElement = ({ attributes, children, element }: any) => {
       <div
         contentEditable={false}
         style={{
-          height: element.size?.naturalHeight,
+          minHeight: element.size?.naturalHeight,
           width: '100%',
           position: 'relative',
+          overflow: 'hidden',
+          contain: 'layout',
         }}
       >
         <StyledImg
           src={element.url}
-          loading="lazy"
           style={{
             position: 'absolute',
             top: '50%',
