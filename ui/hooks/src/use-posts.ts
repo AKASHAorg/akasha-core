@@ -198,7 +198,10 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         ...payload,
         offset: payload.offset || postsState.nextPostIndex,
       });
-      setPostsState(prev => ({ ...prev, isFetchingPosts: true }));
+      setPostsState(prev => ({
+        ...prev,
+        isFetchingPosts: true,
+      }));
       const ipfsSettingsCall = ipfsService.getSettings({});
       const calls = combineLatest([ipfsSettingsCall, entriesCall]);
       calls.subscribe(async (responses: [any, any]) => {
@@ -220,55 +223,62 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
             return mapEntry(entry, ipfsGateway, logger);
           })
           .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
+        try {
+          const status = await moderationRequest.checkStatus(true, { user, contentIds: newIds });
+          const qstatus =
+            !!newQuoteIds.length &&
+            (await moderationRequest.checkStatus(true, { user, contentIds: newQuoteIds }));
+          if (status && status.constructor === Array) {
+            status.forEach((res: any) => {
+              const target = posts[res.contentId];
+              let quote: any;
 
-        const status = await moderationRequest.checkStatus(true, { user, contentIds: newIds });
-
-        const qstatus =
-          !!newQuoteIds.length &&
-          (await moderationRequest.checkStatus(true, { user, contentIds: newQuoteIds }));
-        if (status && status.constructor === Array) {
-          status.forEach((res: any) => {
-            const target = posts[res.contentId];
-            let quote: any;
-
-            if (target.quote) {
-              const { reported, delisted } = qstatus.find(
-                (el: any) => el.contentId === target.quote.entryId,
-              );
-              quote = {
-                ...target.quote,
-                reported: reported,
-                delisted: delisted,
-              };
-            }
-
-            if (res.delisted) {
-              const index = newIds.indexOf(res.contentId);
-              if (index > -1) {
-                // remove the entry id from newIds
-                newIds.splice(index, 1);
+              if (target.quote) {
+                const { reported, delisted } = qstatus.find(
+                  (el: any) => el.contentId === target.quote.entryId,
+                );
+                quote = {
+                  ...target.quote,
+                  reported: reported,
+                  delisted: delisted,
+                };
               }
-              // remove the entry from posts object
-              delete posts[res.contentId];
-            } else {
-              posts[res.contentId] = {
-                ...target,
-                delisted: res.delisted,
-                reported: res.reported,
-                quote: quote,
-              };
-            }
+
+              if (res.delisted) {
+                const index = newIds.indexOf(res.contentId);
+                if (index > -1) {
+                  // remove the entry id from newIds
+                  newIds.splice(index, 1);
+                }
+                // remove the entry from posts object
+                delete posts[res.contentId];
+              } else {
+                posts[res.contentId] = {
+                  ...target,
+                  delisted: res.delisted,
+                  reported: res.reported,
+                  quote: quote,
+                };
+              }
+            });
+          }
+          setPostsState(prev => ({
+            ...prev,
+            nextPostIndex: nextIndex,
+            postsData: { ...prev.postsData, ...posts },
+            postIds: prev.postIds.concat(newIds),
+            isFetchingPosts: false,
+            totalItems: total,
+          }));
+        } catch (err) {
+          newIds.forEach(id => {
+            createErrorHandler(
+              `${id}`,
+              false,
+              onError,
+            )(new Error(`Failed to fetch moderated content. ${err.message}`));
           });
         }
-
-        setPostsState(prev => ({
-          ...prev,
-          nextPostIndex: nextIndex,
-          postsData: { ...prev.postsData, ...posts },
-          postIds: prev.postIds.concat(newIds),
-          isFetchingPosts: false,
-          totalItems: total,
-        }));
       }, createErrorHandler('usePosts.getPosts', false, onError));
     },
     getComments: payload => {
@@ -304,6 +314,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     },
     optimisticPublishComment: (commentData, postId, loggedProfile) => {
       const publishObj = buildPublishObject(commentData, postId);
+      const pendingId = `${loggedProfile.ethAddress}-${postsState.pendingPosts.length}`;
       const pending = createPendingEntry(
         {
           ethAddress: loggedProfile.ethAddress as string,
@@ -318,11 +329,26 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       );
       setPostsState(prev => ({
         ...prev,
-        pendingComments: [pending, ...prev.pendingComments],
+        pendingComments: [{ pendingId, ...pending }, ...prev.pendingComments],
       }));
       const publishCall = postsService.comments.addComment(publishObj);
       publishCall.subscribe((resp: any) => {
-        const commentId = resp.data.addComment;
+        const commentId = resp.data?.addComment;
+        if (!commentId) {
+          return setPostsState(prev => {
+            const pendingComments = prev.pendingComments.slice();
+            const erroredIdx = pendingComments.findIndex(p => p.pendingId === pendingId);
+            pendingComments.splice(erroredIdx, 1, {
+              ...pendingComments[erroredIdx],
+              error: 'There was an error publishing this comment!',
+            });
+
+            return {
+              ...prev,
+              pendingComments,
+            };
+          });
+        }
         setPostsState(prev => ({
           ...prev,
           pendingComments: [],
@@ -333,17 +359,19 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     },
     optimisticPublishPost: (postData, loggedProfile, currentEmbedEntry, disablePendingFeedback) => {
       const publishObj = buildPublishObject(postData);
+      const pendingId = `${loggedProfile.ethAddress}-${postsState.pendingPosts.length}`;
       let pending: any;
       if (!disablePendingFeedback) {
         pending = createPendingEntry(
           {
             ethAddress: loggedProfile.ethAddress as string,
+            pubKey: loggedProfile.pubKey,
             avatar: loggedProfile.avatar,
+            name: loggedProfile.name,
             userName: loggedProfile.userName,
             ensName: loggedProfile.ensName,
             coverImage: loggedProfile.coverImage,
             description: loggedProfile.description,
-            pubKey: loggedProfile.pubKey,
           },
           postData,
           currentEmbedEntry,
@@ -352,13 +380,29 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         setPostsState(prev => {
           return {
             ...prev,
-            pendingPosts: [pending, ...prev.pendingPosts],
+            pendingPosts: [{ pendingId, ...pending }, ...prev.pendingPosts],
           };
         });
       }
-
       const postEntryCall = postsService.entries.postEntry(publishObj);
       postEntryCall.subscribe((postingResp: any) => {
+        if (!postingResp.data?.createPost) {
+          if (!disablePendingFeedback) {
+            return setPostsState(prev => {
+              const pendingPosts = prev.pendingPosts.slice();
+              const erroredIdx = pendingPosts.findIndex(p => p.pendingId === pendingId);
+              pendingPosts.splice(erroredIdx, 1, {
+                ...pendingPosts[erroredIdx],
+                error: 'There was an error publishing this post!',
+              });
+
+              return {
+                ...prev,
+                pendingPosts,
+              };
+            });
+          }
+        }
         const publishedEntryId = postingResp.data.createPost;
         if (!disablePendingFeedback) {
           const entryData = pending as IEntryData;
@@ -368,7 +412,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
               ...prev.postsData,
               [publishedEntryId]: { ...entryData, entryId: publishedEntryId },
             },
-            pendingPosts: [],
+            pendingPosts: prev.pendingPosts.filter(post => post.pendingId !== pendingId),
             postIds: [publishedEntryId, ...prev.postIds],
           }));
         }

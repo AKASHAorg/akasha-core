@@ -11,6 +11,7 @@ export interface ErrorActions {
   createError: (err: IAkashaError) => void;
   removeError: (errorKey: string) => void;
   removeLoginErrors: () => void;
+  getFilteredErrors: (filterKey: string) => { [key: string]: IAkashaError };
 }
 const useErrorState = (props: UseErrorStateProps): [ErrorState, ErrorActions] => {
   const { logger } = props;
@@ -18,9 +19,11 @@ const useErrorState = (props: UseErrorStateProps): [ErrorState, ErrorActions] =>
 
   const actions: ErrorActions = {
     createError(err) {
-      logger.error(err);
+      if (logger) {
+        logger.error(err);
+      }
       if (!errors[err.errorKey]) {
-        setErrors({ [err.errorKey]: err });
+        setErrors(prev => ({ [err.errorKey]: err, ...prev }));
       }
     },
     removeError(errorKey) {
@@ -42,6 +45,11 @@ const useErrorState = (props: UseErrorStateProps): [ErrorState, ErrorActions] =>
         });
         return newErrors;
       });
+    },
+    getFilteredErrors(filterKey) {
+      return Object.keys(errors)
+        .filter(k => k.startsWith(filterKey))
+        .reduce((obj, key) => ({ ...obj, [key]: errors[key] }), {});
     },
   };
   return [errors, actions];
