@@ -74,6 +74,7 @@ const server = new ApolloServer({
   // access Koa context
   context: ({ ctx }) => {
     const header = ctx.headers.authorization || '';
+    const signature = ctx.headers.signature || undefined;
     let user;
     if (header) {
       const auth = header.split(' ');
@@ -81,7 +82,7 @@ const server = new ApolloServer({
         user = contextCache.get(utils.id(auth[1]));
       }
     }
-    return { user };
+    return { user, signature };
   },
 });
 

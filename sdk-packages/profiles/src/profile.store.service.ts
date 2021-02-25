@@ -263,6 +263,8 @@ const service: AkashaService = (invoke, log) => {
       provider: PROFILE_MEDIA_FILES,
       value: upload.path.cid.toString(),
     };
+    const { signData } = await invoke(authServices[AUTH_SERVICE]);
+    const signedData = await signData(dataFinal, true);
     await runGQL({
       query: mutation,
       variables: { data: dataFinal },
@@ -270,6 +272,7 @@ const service: AkashaService = (invoke, log) => {
       context: {
         headers: {
           Authorization: `Bearer ${token}`,
+          Signature: signedData.signature,
         },
       },
     });
