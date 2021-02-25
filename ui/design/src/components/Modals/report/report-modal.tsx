@@ -111,6 +111,11 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       explanation,
     };
 
+    // hard check: makes sure contentType is specified
+    if (!contentType || contentType?.length < 1) {
+      return handleCancel();
+    }
+
     setRequesting(true);
 
     postData(baseUrl, dataToPost)

@@ -41,6 +41,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   let tokenGenerator: () => Promise<UserAuth>;
   const waitForAuth = 'waitForAuth';
   const providerKey = '@providerType';
+  const currentUserKey = '@currentUserType';
   const SYNC_REQUEST = '@sync_request';
   const SYNC_RESPONSE = '@sync_response';
   const SYNC_CHANNEL = '@sync_data';
@@ -53,6 +54,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       if (type === SYNC_REQUEST) {
         const response = {
           [providerKey]: sessionStorage.getItem(providerKey),
+          [currentUserKey]: sessionStorage.getItem(currentUserKey),
           identity: { key: sessKey, value: identity?.toString() },
         };
         channel.postMessage({ response, type: SYNC_RESPONSE });
@@ -62,6 +64,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
           log.info('syncing session');
           sessionStorage.setItem(providerKey, response[providerKey]);
           sessionStorage.setItem(response?.identity?.key, response?.identity?.value);
+          sessionStorage.setItem(currentUserKey, response[currentUserKey]);
           currentUser = null;
           getCurrentUser().then(data => log.info('logged in', data));
         }
@@ -91,66 +94,58 @@ const service: AkashaService = (invoke, log, globalChannel) => {
         throw new Error('The provider must have a wallet/key in order to authenticate.');
       }
       currentProvider = +sessionStorage.getItem(providerKey); // cast to int
-      sessionStorage.removeItem(providerKey);
     } else {
       currentProvider = provider;
     }
+    try {
+      const web3 = await invoke(commonServices[WEB3_SERVICE]).regen(currentProvider);
+      const web3Utils = await invoke(commonServices[WEB3_UTILS_SERVICE]).getUtils();
 
-    const web3 = await invoke(commonServices[WEB3_SERVICE]).regen(currentProvider);
-    const web3Utils = await invoke(commonServices[WEB3_UTILS_SERVICE]).getUtils();
+      const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);
+      const authSettings = await getSettings(moduleName);
+      const endPoint = authSettings[AUTH_ENDPOINT];
+      const signer = web3.getSigner();
+      const address = await signer.getAddress();
+      const web3Service = await invoke(commonServices[WEB3_SERVICE]);
+      log.info(`using eth address ${address}`);
+      sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
+      if (sessionStorage.getItem(sessKey)) {
+        identity = PrivateKey.fromString(sessionStorage.getItem(sessKey));
+      } else {
+        const sig = await web3Service.signMessage(AUTH_MESSAGE);
+        await new Promise(res => setTimeout(res, 600));
+        identity = await generatePrivateKey(web3Service, address, sig, web3Utils);
+      }
 
-    const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);
-    const authSettings = await getSettings(moduleName);
-    const endPoint = authSettings[AUTH_ENDPOINT];
-    const signer = web3.getSigner();
-    const address = await signer.getAddress();
-    const web3Service = await invoke(commonServices[WEB3_SERVICE]);
-    log.info(`using eth address ${address}`);
-    sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
-    if (sessionStorage.getItem(sessKey)) {
-      identity = PrivateKey.fromString(sessionStorage.getItem(sessKey));
-      sessionStorage.removeItem(sessKey);
-    } else {
-      const sig = await web3Service.signMessage(AUTH_MESSAGE);
-      await new Promise(res => setTimeout(res, 600));
-      identity = await generatePrivateKey(web3Service, address, sig, web3Utils);
+      const userAuth = loginWithChallenge(identity, web3Service, web3Utils);
+      hubClient = Client.withUserAuth(userAuth, endPoint);
+      hubUser = Users.withUserAuth(userAuth, endPoint);
+      buckClient = Buckets.withUserAuth(userAuth, endPoint);
+      tokenGenerator = loginWithChallenge(identity, web3Service, web3Utils);
+      cache.set(AUTH_CACHE, {
+        [ethAddressCache]: address,
+      });
+      // const mailID = await hubUser.getMailboxID();
+      const pubKey = identity.public.toString();
+      currentUser = { pubKey, ethAddress: address };
+      db = new Database(
+        `awf-alpha-user-${pubKey.slice(-8)}`,
+        {
+          name: 'settings',
+          schema: settingsSchema,
+        },
+        { name: 'apps' },
+      );
+    } catch (e) {
+      sessionStorage.clear();
+      log.error(e);
+      throw e;
     }
-
-    const userAuth = loginWithChallenge(identity, web3Service, web3Utils);
-    hubClient = Client.withUserAuth(userAuth, endPoint);
-    hubUser = Users.withUserAuth(userAuth, endPoint);
-    buckClient = Buckets.withUserAuth(userAuth, endPoint);
-    tokenGenerator = loginWithChallenge(identity, web3Service, web3Utils);
     auth = await tokenGenerator();
     await hubUser.getToken(identity);
 
     // @Todo: on error try to setupMail
     await hubUser.setupMailbox();
-    // const mailID = await hubUser.getMailboxID();
-    const pubKey = identity.public.toString();
-    // // for 1st time users
-    // if (!mailID) {
-    //   await hubUser.setupMailbox();
-    // }
-    db = new Database(
-      `awf-alpha-user-${pubKey.slice(-8)}`,
-      {
-        name: 'settings',
-        schema: settingsSchema,
-      },
-      { name: 'apps' },
-    );
-    await db.open(1);
-    // // not working atm
-    // const remote = await db.remote.setUserAuth(userAuth);
-    // remote.config.metadata.set('x-textile-thread-name', db.dexie.name);
-    // remote.config.metadata.set('x-textile-thread', db.id);
-    // await remote.authorize(identity);
-
-    cache.set(AUTH_CACHE, {
-      [ethAddressCache]: address,
-    });
-    currentUser = { pubKey, ethAddress: address };
     if (channel) {
       const response = {
         [providerKey]: sessionStorage.getItem(providerKey),
@@ -160,6 +155,14 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     }
     sessionStorage.setItem(providerKey, currentProvider);
     sessionStorage.setItem(sessKey, identity.toString());
+    sessionStorage.setItem(currentUserKey, JSON.stringify(currentUser));
+
+    // // not working atm
+    // const remote = await db.remote.setUserAuth(userAuth);
+    // remote.config.metadata.set('x-textile-thread-name', db.dexie.name);
+    // remote.config.metadata.set('x-textile-thread', db.id);
+    // await remote.authorize(identity);
+    await db.open(1);
     return currentUser;
   };
 
@@ -209,6 +212,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       });
       return Promise.resolve(null);
     }
+    const localUser = sessionStorage.getItem(currentUserKey);
     globalChannel.next({
       data: true,
       channelInfo: {
@@ -217,6 +221,20 @@ const service: AkashaService = (invoke, log, globalChannel) => {
         args: null,
       },
     });
+    if (localUser) {
+      try {
+        globalChannel.next({
+          data: JSON.parse(localUser),
+          channelInfo: {
+            servicePath: services[AUTH_SERVICE],
+            method: 'signIn',
+            args: null,
+          },
+        });
+      } catch (e) {
+        log.error(e);
+      }
+    }
     const data = await signIn(EthProviders.None);
     const response = {
       data: data,

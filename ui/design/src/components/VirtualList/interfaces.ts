@@ -55,6 +55,7 @@ export interface IVirtualListProps {
   onItemRead?: (itemId: string) => void;
   averageItemHeight?: number;
   ref?: React.Ref<any>;
+  usePlaceholders?: boolean;
 }
 
 export interface ILoadItemsPayload {
@@ -112,6 +113,8 @@ export interface IListViewportProps {
   itemIds: string[];
   averageItemHeight: number;
   listHeader?: React.ReactElement;
+  loadLimit: number;
+  usePlaceholders: boolean;
 }
 export interface IRenderItemProps {
   itemId: string;
@@ -125,4 +128,5 @@ export interface IRenderItemProps {
   prevRect?: IItemStateRect | null;
   averageItemHeight: number;
   itemIndex?: number;
+  className?: string;
 }

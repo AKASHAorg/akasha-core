@@ -19,6 +19,7 @@ export const ConnectToInjected = async () => {
     throw new Error('Must connect at least one address from the wallet.');
   }
   provider.on('accountsChanged', _ => {
+    sessionStorage.clear();
     // refresh on metamask logout or changed acc
     window.location.reload();
   });

@@ -198,7 +198,10 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         ...payload,
         offset: payload.offset || postsState.nextPostIndex,
       });
-      setPostsState(prev => ({ ...prev, isFetchingPosts: true }));
+      setPostsState(prev => ({
+        ...prev,
+        isFetchingPosts: true,
+      }));
       const ipfsSettingsCall = ipfsService.getSettings({});
       const calls = combineLatest([ipfsSettingsCall, entriesCall]);
       calls.subscribe(async (responses: [any, any]) => {
@@ -311,6 +314,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     },
     optimisticPublishComment: (commentData, postId, loggedProfile) => {
       const publishObj = buildPublishObject(commentData, postId);
+      const pendingId = `${loggedProfile.ethAddress}-${postsState.pendingPosts.length}`;
       const pending = createPendingEntry(
         {
           ethAddress: loggedProfile.ethAddress as string,
@@ -325,11 +329,26 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       );
       setPostsState(prev => ({
         ...prev,
-        pendingComments: [pending, ...prev.pendingComments],
+        pendingComments: [{ pendingId, ...pending }, ...prev.pendingComments],
       }));
       const publishCall = postsService.comments.addComment(publishObj);
       publishCall.subscribe((resp: any) => {
-        const commentId = resp.data.addComment;
+        const commentId = resp.data?.addComment;
+        if (!commentId) {
+          return setPostsState(prev => {
+            const pendingComments = prev.pendingComments.slice();
+            const erroredIdx = pendingComments.findIndex(p => p.pendingId === pendingId);
+            pendingComments.splice(erroredIdx, 1, {
+              ...pendingComments[erroredIdx],
+              error: 'There was an error publishing this comment!',
+            });
+
+            return {
+              ...prev,
+              pendingComments,
+            };
+          });
+        }
         setPostsState(prev => ({
           ...prev,
           pendingComments: [],
@@ -365,12 +384,11 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
           };
         });
       }
-
       const postEntryCall = postsService.entries.postEntry(publishObj);
       postEntryCall.subscribe((postingResp: any) => {
         if (!postingResp.data?.createPost) {
           if (!disablePendingFeedback) {
-            setPostsState(prev => {
+            return setPostsState(prev => {
               const pendingPosts = prev.pendingPosts.slice();
               const erroredIdx = pendingPosts.findIndex(p => p.pendingId === pendingId);
               pendingPosts.splice(erroredIdx, 1, {

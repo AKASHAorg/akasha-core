@@ -263,7 +263,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               closeLabel={t('Close')}
               user={ethAddress ? ethAddress : ''}
               contentId={flagged}
-              contentType={t('post')}
+              contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
               size={size}
               updateEntry={updateEntry}
@@ -302,6 +302,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
         hasMoreItems={!!postsState.nextPostIndex}
+        usePlaceholders={true}
         listHeader={
           ethAddress ? (
             <EditorPlaceholder
