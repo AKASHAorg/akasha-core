@@ -36,6 +36,7 @@ export interface FeedPageProps {
   logger: any;
   showLoginModal: () => void;
   ethAddress: string | null;
+  currentUserCalled: boolean;
   pubKey: string | null;
   flagged: string;
   reportModalOpen: boolean;
@@ -53,6 +54,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     setReportModalOpen,
     showLoginModal,
     ethAddress,
+    currentUserCalled,
     pubKey,
     onError,
     sdkModules,
@@ -74,11 +76,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   }, [pubKey]);
 
   React.useEffect(() => {
-    if (ethAddress) {
+    if (currentUserCalled) {
       postsActions.resetPostIds();
       postsActions.getPosts({ limit: 5 });
     }
-  }, [ethAddress]);
+  }, [currentUserCalled]);
 
   const {
     size,
@@ -106,7 +108,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     const req: { limit: number; offset?: string } = {
       limit: payload.limit,
     };
-    if (!postsState.isFetchingPosts && ethAddress) {
+    if (!postsState.isFetchingPosts && currentUserCalled) {
       postsActions.getPosts(req);
     }
   };

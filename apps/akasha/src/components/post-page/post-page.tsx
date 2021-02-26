@@ -9,7 +9,6 @@ import {
   useProfile,
   useFollow,
   useErrors,
-  moderationRequest,
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
@@ -40,6 +39,7 @@ const {
 
 interface IPostPage {
   ethAddress: string | null;
+  currentUserCalled: boolean;
   pubKey: string | null;
   flagged: string;
   reportModalOpen: boolean;
@@ -57,6 +57,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     globalChannel,
     flagged,
     reportModalOpen,
+    currentUserCalled,
     setFlagged,
     setReportModalOpen,
     showLoginModal,
@@ -76,9 +77,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
-
-  const [isDelisted, setIsDelisted] = React.useState<boolean>(false);
-  const [isReported, setIsReported] = React.useState<boolean>(false);
 
   const entryData = React.useMemo(() => {
     if (postId && postsState.postsData[postId]) {
@@ -153,32 +151,12 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   };
 
   React.useEffect(() => {
-    checkModerationStatus();
     // this is used to initialise comments when navigating to other post ids
-    if (postId) {
+    if (postId && currentUserCalled) {
       postsActions.getPost(postId);
       handleLoadMore({ limit: 5, postID: postId });
     }
-  }, [postId]);
-
-  React.useEffect(() => {
-    if (ethAddress) {
-      checkModerationStatus();
-    }
-  }, [ethAddress]);
-
-  const checkModerationStatus = async () => {
-    // checks, regardless of if ethAddress is available yet
-    // detects delisted posts and renders accordingly
-    const status = await moderationRequest.checkStatus(false, { user: ethAddress }, postId);
-    if (status.delisted) {
-      // if content is delisted, short-circuit further requests
-      setIsDelisted(true);
-    } else if (status.reported) {
-      setIsReported(true);
-    } else {
-    }
-  };
+  }, [postId, currentUserCalled]);
 
   const bookmarked = React.useMemo(() => {
     if (
@@ -312,8 +290,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   );
 
   const handleFlipCard = (entry: any, isQuote: boolean) => () => {
-    // toggle isReported status
-    setIsReported(false);
     // modify entry or its quote (if applicable)
     const modifiedEntry = isQuote
       ? { ...entry, quote: { ...entry.quote, reported: false } }
@@ -333,16 +309,16 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     postsActions.updatePostsState(modifiedEntry);
   };
 
-  if (isDelisted) {
+  if (postsState.delistedItems.includes(postId)) {
     return (
       <EntryCardHidden
         moderatedContentLabel={t('This content has been moderated')}
-        isDelisted={isDelisted}
+        isDelisted={true}
       />
     );
   }
 
-  if (!isDelisted && isReported) {
+  if (!postsState.delistedItems.includes(postId) && postsState.reportedItems.includes(postId)) {
     return (
       <EntryCardHidden
         awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
@@ -429,7 +405,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       style={{ background: 'transparent', boxShadow: 'none', border: 0 }}
                     />
                   )}
-                  {entryData && !entryData.delisted && !entryData.reported && (
+                  {entryData && (
                     <EntryBox
                       isBookmarked={bookmarked}
                       entryData={entryData}
