@@ -27,9 +27,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     profileService: sdkModules.profiles.profileService,
   });
 
-  const pubKey = loginState.pubKey;
-  const ethAddress = loginState.ethAddress;
-
   const [loginModalState, setLoginModalState] = React.useState(false);
   const [reportModalOpen, setReportModalOpen] = React.useState(false);
   const [flagged, setFlagged] = React.useState('');
@@ -48,17 +45,17 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   };
 
   React.useEffect(() => {
-    if (pubKey) {
+    if (loginState.pubKey) {
       setLoginModalState(false);
     }
-  }, [pubKey]);
+  }, [loginState.pubKey]);
 
   React.useEffect(() => {
-    if (ethAddress && flagged.length) {
+    if (loginState.ethAddress && flagged.length) {
       setLoginModalState(false);
       setReportModalOpen(true);
     }
-  }, [ethAddress]);
+  }, [loginState.ethAddress]);
 
   const loginErrors: string | null = React.useMemo(() => {
     if (errorState && Object.keys(errorState).length) {
@@ -79,8 +76,8 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
             <Route path={routes[FEED]}>
               <FeedPage
                 {...props}
-                ethAddress={ethAddress}
-                pubKey={pubKey}
+                ethAddress={loginState.ethAddress}
+                pubKey={loginState.pubKey}
                 flagged={flagged}
                 reportModalOpen={reportModalOpen}
                 setFlagged={setFlagged}
@@ -92,8 +89,8 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
             <Route path={`${routes[POST]}/:postId`}>
               <PostPage
                 {...props}
-                ethAddress={ethAddress}
-                pubKey={pubKey}
+                ethAddress={loginState.ethAddress}
+                pubKey={loginState.pubKey}
                 flagged={flagged}
                 reportModalOpen={reportModalOpen}
                 setFlagged={setFlagged}
