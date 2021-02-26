@@ -18,7 +18,7 @@ const Content: React.FC<IContentProps> = props => {
 
   const isMobile = size === 'small';
 
-  const handleClick = () => () => {
+  const handleClick = () => {
     if (props.entryId) {
       props.handleButtonClick(props.entryId, props.contentType);
     }
@@ -145,7 +145,7 @@ const Content: React.FC<IContentProps> = props => {
             margin={isMobile ? 'small' : '0rem'}
             justify="end"
           >
-            <Button primary={true} label={props.makeADecisionLabel} onClick={handleClick()} />
+            <Button primary={true} label={props.makeADecisionLabel} onClick={handleClick} />
           </Box>
         )}
       </Box>
@@ -188,7 +188,7 @@ const Content: React.FC<IContentProps> = props => {
               width={isMobile ? '100%' : '30%'}
               justify="end"
             >
-              <Button label={props.reviewDecisionLabel} onClick={() => null} />
+              <Button label={props.reviewDecisionLabel} onClick={handleClick} />
             </Box>
           </Box>
         </Box>

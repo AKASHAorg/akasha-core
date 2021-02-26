@@ -294,8 +294,9 @@ const CardActions: React.FC<CardActionProps> = props => {
           iconType="comments"
           iconSize="sm"
           fontSize="large"
-          clickable={true}
-          onClick={handleRepliesClick}
+          clickable={disableReposting ? false : true}
+          onClick={disableReposting ? () => false : handleRepliesClick}
+          disabled={disableReposting}
         />
       </Box>
     );
