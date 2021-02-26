@@ -42,6 +42,7 @@ export default function commonApi(channel) {
         web3: extractedServices[WEB3_SERVICE]('web3'),
         wallet: extractedServices[WEB3_SERVICE]('wallet'),
         regen: extractedServices[WEB3_SERVICE]('regen'),
+        checkCurrentNetwork: extractedServices[WEB3_SERVICE]('checkCurrentNetwork'),
       },
       web3UtilsService: {
         getUtils: extractedServices[WEB3_UTILS_SERVICE]('getUtils'),

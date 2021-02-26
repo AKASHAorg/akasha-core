@@ -2,8 +2,9 @@ import coreServices from '@akashaproject/sdk-core/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import { EthProviders } from '@akashaproject/ui-awf-typings';
 import { ethers } from 'ethers';
-import commonServices, { CACHE_SERVICE, WEB3_SERVICE } from './constants';
+import commonServices, { CACHE_SERVICE, ETH_NETWORK, moduleName, WEB3_SERVICE } from './constants';
 import getProvider from './web3.methods/provider';
+import * as net from 'net';
 
 const service: AkashaService = (invoke, log) => {
   const regen = async provider => {
@@ -67,7 +68,19 @@ const service: AkashaService = (invoke, log) => {
     const signer = await web3Instance.getSigner();
     return signer.getAddress();
   };
-
+  const checkCurrentNetwork = async () => {
+    const web3Instance = await getWeb3Instance();
+    const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);
+    const network = await web3Instance.getNetwork();
+    const moduleSettings = await getSettings(moduleName);
+    const networkName = moduleSettings[ETH_NETWORK];
+    if (network?.name !== networkName) {
+      throw new Error(
+        `Change the ethereum network to: ${networkName}! Currently on: ${network?.name}`,
+      );
+    }
+    log.info(`currently on network: ${network.name}`);
+  };
   return {
     regen,
     destroy,
@@ -77,6 +90,7 @@ const service: AkashaService = (invoke, log) => {
     getContractFactory,
     signMessage,
     getAddress,
+    checkCurrentNetwork,
   };
 };
 
