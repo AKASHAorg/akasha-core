@@ -157,3 +157,28 @@ export const isValidSignature = async (
     return Promise.resolve(utils.getAddress(msgSigner) === utils.getAddress(address));
   }
 };
+const encoder = new TextEncoder();
+// @Todo: Use the sdk lib for this
+export const verifyEd25519Sig = async (args: {
+  pubKey: string;
+  data: Uint8Array | string | object;
+  signature: Uint8Array | string;
+}) => {
+  const pub = PublicKey.fromString(args.pubKey);
+  let sig: Uint8Array;
+  if (args.signature instanceof Uint8Array) {
+    sig = args.signature;
+  } else {
+    const str = Buffer.from(args.signature, 'base64');
+    sig = Uint8Array.from(str);
+  }
+  let serializedData;
+  if (args.data instanceof Uint8Array) {
+    return pub.verify(args.data, sig);
+  }
+  if (typeof args.data === 'object') {
+    serializedData = JSON.stringify(args.data);
+  }
+  serializedData = encoder.encode(serializedData);
+  return pub.verify(serializedData, sig);
+};

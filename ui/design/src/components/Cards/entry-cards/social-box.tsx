@@ -5,6 +5,7 @@ import { StackedAvatar, Avatar } from '../../Avatar/index';
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { truncateMiddle } from '../../../utils/string-utils';
 import { IconLink } from '../../Buttons';
+import styled from 'styled-components';
 
 export type ISocialData = IProfileData[];
 
@@ -16,6 +17,14 @@ export interface ISocialBox {
   andLabel?: string;
   othersLabel?: string;
 }
+
+const StackableAvatarLink = styled(IconLink)`
+  max-width: 100%;
+  flex-shrink: 1;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 const SocialBox: React.FC<ISocialBox> = props => {
   const { socialData, andLabel, othersLabel, repostedThisLabel, onClickUser } = props;
@@ -97,7 +106,7 @@ const SocialBox: React.FC<ISocialBox> = props => {
         label={
           socialData[0].name ||
           socialData[0].userName ||
-          truncateMiddle(socialData[0].ethAddress, 3, 3)
+          truncateMiddle(socialData[0]?.ethAddress, 3, 3)
         }
         size="medium"
         primaryColor={true}
@@ -107,18 +116,22 @@ const SocialBox: React.FC<ISocialBox> = props => {
         <Box direction="row" gap="xxsmall">
           <Text color="secondaryText">{andLabel}</Text>
 
-          <IconLink
-            label={`${socialData.length - 1} ${othersLabel}`}
+          <StackableAvatarLink
+            label={`${socialData?.length - 1} ${othersLabel}`}
             size="medium"
             ref={othersNodeRef}
             onClick={() => setOthersDropOpen(!othersDropOpen)}
             primaryColor={true}
           />
 
-          <Text color="secondaryText">{repostedThisLabel}</Text>
+          <Text style={{ flexShrink: 0 }} color="secondaryText">
+            {repostedThisLabel}
+          </Text>
         </Box>
       ) : (
-        <Text color="secondaryText">{repostedThisLabel}</Text>
+        <Text style={{ flexShrink: 0 }} color="secondaryText">
+          {repostedThisLabel}
+        </Text>
       )}
       {othersNodeRef.current && othersDropOpen && renderOthersDrop()}
     </Box>

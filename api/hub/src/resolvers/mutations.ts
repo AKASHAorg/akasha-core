@@ -1,35 +1,79 @@
 import { commentsStats, postsStats, statsProvider } from './constants';
 import { queryCache } from '../storage/cache';
+import { logger, verifyEd25519Sig } from '../helpers';
 
+const dataSigError = new Error('Data signature was not validated!');
 const mutations = {
-  addProfileProvider: async (_, { data }, { dataSources, user }) => {
+  addProfileProvider: async (_, { data }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: data,
+      signature: signature,
+    });
+    if (!verified) {
+      return Promise.reject(dataSigError);
     }
     return dataSources.profileAPI.addProfileProvider(user.pubKey, data);
   },
-  makeDefaultProvider: async (_, { data }, { dataSources, user }) => {
+  makeDefaultProvider: async (_, { data }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: data,
+      signature: signature,
+    });
+    if (!verified) {
+      return Promise.reject(dataSigError);
     }
     return dataSources.profileAPI.makeDefaultProvider(user.pubKey, data);
   },
-  registerUserName: async (_, { name }, { dataSources, user }) => {
+  registerUserName: async (_, { name }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: name,
+      signature: signature,
+    });
+    if (!verified) {
+      return Promise.reject(dataSigError);
     }
     return dataSources.profileAPI.registerUserName(user.pubKey, name);
   },
-  createTag: async (_, { name }, { dataSources, user }) => {
+  createTag: async (_, { name }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: name,
+      signature: signature,
+    });
+    if (!verified) {
+      return Promise.reject(dataSigError);
     }
     return dataSources.tagsAPI.addTag(name);
   },
-  createPost: async (_, { content, post }, { dataSources, user }) => {
+  createPost: async (_, { content, post }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: content,
+      signature: signature,
+    });
+    if (!verified) {
+      logger.warn(`bad createPost sig: ${signature}`);
+      return Promise.reject(dataSigError);
+    }
+    logger.info(`verified createPost sig: ${signature}`);
     const profile = await dataSources.profileAPI.resolveProfile(user.pubKey, true);
     if (!profile.length) {
       return Promise.reject('[Must be authenticated! Profile not found!]');
@@ -64,27 +108,59 @@ const mutations = {
     await queryCache.del(userIDCache);
     return postID[0];
   },
-  follow: async (_, { ethAddress }, { dataSources, user }) => {
+  follow: async (_, { ethAddress }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: ethAddress,
+      signature: signature,
+    });
+    if (!verified) {
+      return Promise.reject(dataSigError);
     }
     return dataSources.profileAPI.followProfile(user.pubKey, ethAddress);
   },
-  unFollow: async (_, { ethAddress }, { dataSources, user }) => {
+  unFollow: async (_, { ethAddress }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: ethAddress,
+      signature: signature,
+    });
+    if (!verified) {
+      return Promise.reject(dataSigError);
     }
     return dataSources.profileAPI.unFollowProfile(user.pubKey, ethAddress);
   },
-  saveMetaData: async (_, { data }, { dataSources, user }) => {
+  saveMetaData: async (_, { data }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: data,
+      signature: signature,
+    });
+    if (!verified) {
+      return Promise.reject(dataSigError);
+    }
     return dataSources.profileAPI.saveMetadata(user.pubKey, data);
   },
-  addComment: async (_, { content, comment }, { dataSources, user }) => {
+  addComment: async (_, { content, comment }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: content,
+      signature: signature,
+    });
+    if (!verified) {
+      return Promise.reject(dataSigError);
     }
     if (!comment.postID) {
       return Promise.reject('Must provide a postID to the call!');

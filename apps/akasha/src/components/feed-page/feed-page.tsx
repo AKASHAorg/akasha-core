@@ -313,6 +313,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
         hasMoreItems={!!postsState.nextPostIndex}
+        usePlaceholders={true}
         listHeader={
           ethAddress ? (
             <EditorPlaceholder
