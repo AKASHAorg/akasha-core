@@ -39,6 +39,7 @@ const {
 
 interface IPostPage {
   ethAddress: string | null;
+  currentUserCalled: boolean;
   pubKey: string | null;
   flagged: string;
   reportModalOpen: boolean;
@@ -56,6 +57,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     globalChannel,
     flagged,
     reportModalOpen,
+    currentUserCalled,
     setFlagged,
     setReportModalOpen,
     showLoginModal,
@@ -75,6 +77,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
+
   const entryData = React.useMemo(() => {
     if (postId && postsState.postsData[postId]) {
       return postsState.postsData[postId];
@@ -148,11 +151,12 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   };
 
   React.useEffect(() => {
-    if (postId) {
+    // this is used to initialise comments when navigating to other post ids
+    if (postId && currentUserCalled) {
       postsActions.getPost(postId);
       handleLoadMore({ limit: 5, postID: postId });
     }
-  }, [postId]);
+  }, [postId, currentUserCalled]);
 
   const bookmarked = React.useMemo(() => {
     if (
@@ -286,6 +290,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   );
 
   const handleFlipCard = (entry: any, isQuote: boolean) => () => {
+    // modify entry or its quote (if applicable)
     const modifiedEntry = isQuote
       ? { ...entry, quote: { ...entry.quote, reported: false } }
       : { ...entry, reported: false };
@@ -303,6 +308,25 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       : { ...entry, reported: false };
     postsActions.updatePostsState(modifiedEntry);
   };
+
+  if (postsState.delistedItems.includes(postId)) {
+    return (
+      <EntryCardHidden
+        moderatedContentLabel={t('This content has been moderated')}
+        isDelisted={true}
+      />
+    );
+  }
+
+  if (!postsState.delistedItems.includes(postId) && postsState.reportedItems.includes(postId)) {
+    return (
+      <EntryCardHidden
+        awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
+        ctaLabel={t('See it anyway')}
+        handleFlipCard={handleFlipCard(entryData, false)}
+      />
+    );
+  }
 
   const postErrors = errorActions.getFilteredErrors('usePost.getPost');
   const commentErrors = errorActions.getFilteredErrors('usePosts.getComments');
@@ -381,7 +405,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       style={{ background: 'transparent', boxShadow: 'none', border: 0 }}
                     />
                   )}
-                  {entryData && !entryData.delisted && !entryData.reported && (
+                  {entryData && (
                     <EntryBox
                       isBookmarked={bookmarked}
                       entryData={entryData}
@@ -450,19 +474,42 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
           />
         </Box>
       )}
-      {entryData && !entryData.delisted && entryData.reported && (
-        <EntryCardHidden
-          awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
-          ctaLabel={t('See it anyway')}
-          handleFlipCard={handleFlipCard(entryData, false)}
-        />
-      )}
-      {entryData && entryData.delisted && (
-        <EntryCardHidden
-          moderatedContentLabel={t('This content has been moderated')}
-          isDelisted={true}
-        />
-      )}
+      <VirtualList
+        items={postsState.commentIds}
+        itemsData={postsState.postsData}
+        loadMore={handleLoadMore}
+        loadItemData={loadItemData}
+        hasMoreItems={!!postsState.nextCommentIndex}
+        itemCard={
+          <PostRenderer
+            sdkModules={sdkModules}
+            logger={logger}
+            globalChannel={globalChannel}
+            bookmarkState={bookmarkState}
+            ethAddress={ethAddress}
+            locale={locale}
+            onBookmark={handleCommentBookmark}
+            onNavigate={handleNavigateToPost}
+            onRepliesClick={handleClickReplies}
+            onFlag={handleEntryFlag}
+            onRepost={handleEntryRepost}
+            onShare={handleEntryShare}
+            onAvatarClick={handleAvatarClick}
+            onMentionClick={handleMentionClick}
+            handleFlipCard={handleListFlipCard}
+          />
+        }
+        customEntities={getPendingComments({
+          logger,
+          globalChannel,
+          locale,
+          isMobile,
+          sdkModules,
+          feedItems: postsState.postIds,
+          loggedEthAddress: ethAddress,
+          pendingComments: postsState.pendingComments,
+        })}
+      />
       <ErrorInfoCard errors={commentErrors}>
         {(errorMessages, hasCriticalErrors) => (
           <>
