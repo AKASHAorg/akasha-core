@@ -222,7 +222,6 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   };
 
   const showUpdateProfileModal = () => {
-    props.loginActions.resetUpdateStatus();
     props.modalActions.show(MODAL_NAMES.PROFILE_UPDATE);
   };
 

@@ -14,6 +14,8 @@ export interface UseGlobalLoginProps {
   onLogin: OnLoginSuccessHandler;
   onLogout: OnLogoutSuccessHandler;
   onError?: OnErrorHandler;
+  waitForAuth?: (data: boolean) => void;
+  onReady?: (data: boolean) => void;
 }
 
 const useGlobalLogin = (props: UseGlobalLoginProps): void => {
@@ -38,6 +40,43 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
     );
     call.subscribe(handleLoginSubscribe, createErrorHandler('useGlobalLogin.login'));
     return () => call.unsubscribe();
+  }, []);
+  React.useEffect(() => {
+    const waitForAuthCall = props.globalChannel.pipe(
+      filter((payload: any) => {
+        return (
+          payload.channelInfo.method === 'waitForAuth' &&
+          payload.channelInfo.servicePath.includes('AUTH_SERVICE')
+        );
+      }),
+    );
+
+    waitForAuthCall.subscribe((payload: { data: boolean }) => {
+      const { data } = payload;
+      if (props.waitForAuth) {
+        props.waitForAuth(data);
+      }
+    });
+    return () => waitForAuthCall.unsubscribe();
+  }, []);
+
+  React.useEffect(() => {
+    const readyCall = props.globalChannel.pipe(
+      filter((payload: any) => {
+        return (
+          payload.channelInfo.method === 'ready' &&
+          payload.channelInfo.servicePath.includes('AUTH_SERVICE')
+        );
+      }),
+    );
+
+    readyCall.subscribe((payload: { data: boolean }) => {
+      const { data } = payload;
+      if (props.onReady) {
+        props.onReady(data);
+      }
+    });
+    return () => readyCall.unsubscribe();
   }, []);
 
   React.useEffect(() => {
