@@ -18,6 +18,12 @@ export interface GetItemsPayload {
   limit?: number;
 }
 
+export interface Status {
+  delisted: boolean;
+  moderated: boolean;
+  reported: boolean;
+}
+
 export interface PublishPostData {
   metadata: {
     app: string;
@@ -33,6 +39,7 @@ export interface PublishPostData {
 
 export interface PostsActions {
   getPost: (postId: string) => void;
+  getPostData: (status: Status, postId: string) => void;
   getComment: (commentId: string) => void;
   getPosts: (payload: GetItemsPayload) => void;
   getComments: (payload: GetItemsPayload) => void;
@@ -81,6 +88,8 @@ export interface PostsState {
   /* pending publish comments */
   pendingComments: any[];
   totalItems: number | null;
+  delistedItems: string[];
+  reportedItems: string[];
 }
 
 export interface GetEntriesResponse {
@@ -103,10 +112,39 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     pendingPosts: [],
     pendingComments: [],
     totalItems: null,
+    delistedItems: [],
+    reportedItems: [],
   });
 
   const actions: PostsActions = {
-    getPost: postId => {
+    getPost: async postId => {
+      // check moderation status of post
+      const [status] = await moderationRequest.checkStatus(true, { user, contentIds: [postId] });
+      // if post is delisted,
+      if (status.delisted) {
+        // short circuit other requests
+        setPostsState(prev => ({
+          ...prev,
+          delistedItems: !prev.delistedItems.includes(postId)
+            ? prev.delistedItems.concat(postId)
+            : prev.delistedItems,
+        }));
+        // if post is reported and not yet moderated
+      } else if (status.reported && !status.moderated) {
+        // update state,
+        setPostsState(prev => ({
+          ...prev,
+          reportedItems: !prev.reportedItems.includes(postId)
+            ? prev.reportedItems.concat(postId)
+            : prev.reportedItems,
+        }));
+        // then continue to fetch post
+        actions.getPostData(status, postId);
+      } else {
+        actions.getPostData(status, postId);
+      }
+    },
+    getPostData: (status: Status, postId) => {
       const entryCall = postsService.entries.getEntry({ entryId: postId });
       const ipfsGatewayCall = ipfsService.getSettings({});
       const getEntryCall = combineLatest([ipfsGatewayCall, entryCall]);
@@ -119,15 +157,24 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         const ipfsGateway = ipfsResp.data;
         const entry = entryResp.data?.getPost;
         if (entry) {
-          const mappedEntry = mapEntry(entry, ipfsGateway, logger);
+          const mappedEntry = mapEntry(
+            {
+              ...entry,
+              reported: status.moderated ? false : status.reported,
+              delisted: status.delisted,
+            },
+            ipfsGateway,
+            logger,
+          );
 
-          const status = await moderationRequest.checkStatus(false, { user }, mappedEntry.entryId);
-
-          const qstatus =
+          const quotestatus =
             mappedEntry.quote &&
-            (await moderationRequest.checkStatus(false, { user }, mappedEntry.quote.entryId));
+            (await moderationRequest.checkStatus(true, {
+              user,
+              contentIds: [mappedEntry.quote.entryId],
+            }));
 
-          if (status && status.constructor === Object) {
+          if (quotestatus && quotestatus.constructor === Array) {
             const modifiedEntry = {
               ...mappedEntry,
               reported: status.reported,
@@ -135,14 +182,9 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
               quote: mappedEntry.quote
                 ? {
                     ...mappedEntry.quote,
-                    reported:
-                      qstatus && status.constructor === Object
-                        ? qstatus.reported
-                        : mappedEntry.quote.reported,
-                    delisted:
-                      qstatus && status.constructor === Object
-                        ? qstatus.delisted
-                        : mappedEntry.quote.reported,
+                    // if moderated, bypass value of reported for the user
+                    reported: quotestatus[0].moderated ? false : quotestatus[0].reported,
+                    delisted: quotestatus[0].delisted,
                   }
                 : mappedEntry.quote,
             };
@@ -225,7 +267,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
           .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
         try {
           const status = await moderationRequest.checkStatus(true, { user, contentIds: newIds });
-          const qstatus =
+          const quotestatus =
             !!newQuoteIds.length &&
             (await moderationRequest.checkStatus(true, { user, contentIds: newQuoteIds }));
           if (status && status.constructor === Array) {
@@ -234,12 +276,13 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
               let quote: any;
 
               if (target.quote) {
-                const { reported, delisted } = qstatus.find(
+                const { reported, delisted, moderated } = quotestatus.find(
                   (el: any) => el.contentId === target.quote.entryId,
                 );
                 quote = {
                   ...target.quote,
-                  reported: reported,
+                  // if moderated, bypass value of reported for the user
+                  reported: moderated ? false : reported,
                   delisted: delisted,
                 };
               }
@@ -256,7 +299,8 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
                 posts[res.contentId] = {
                   ...target,
                   delisted: res.delisted,
-                  reported: res.reported,
+                  // if moderated, bypass value of reported for the user
+                  reported: res.moderated ? false : res.reported,
                   quote: quote,
                 };
               }
@@ -461,10 +505,17 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       }, createErrorHandler('usePosts.getUserPosts', false, onError));
     },
     updatePostsState: (updatedEntry: any) => {
-      setPostsState(prev => ({
-        ...prev,
-        postsData: { ...prev.postsData, [updatedEntry.entryId]: updatedEntry },
-      }));
+      setPostsState(prev => {
+        const index = prev.reportedItems.indexOf(updatedEntry.entryId);
+        if (index > -1) {
+          prev.reportedItems.splice(index, 1);
+        }
+        return {
+          ...prev,
+          postsData: { ...prev.postsData, [updatedEntry.entryId]: updatedEntry },
+          reportedItems: prev.reportedItems,
+        };
+      });
     },
   };
   return [postsState, actions];
