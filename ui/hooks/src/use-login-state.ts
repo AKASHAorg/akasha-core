@@ -24,14 +24,21 @@ export interface UseLoginState {
   /* logged in user's ethAddress */
   ethAddress: string | null;
   pubKey: string | null;
+  /**
+   * check if the user is fully logged in or not
+   * check this flag whenever you need to make sure
+   * that the user login status is settled
+   * defaults to false
+   */
+  currentUserCalled: boolean;
+  ready: boolean | null;
+  waitForAuth: boolean | null;
 }
 export interface UseLoginActions {
   /* Login */
   login: (provider: EthProviders) => void;
   /* Logout */
   logout: () => void;
-  /* call this before showing the profile form */
-  resetUpdateStatus: () => void;
 }
 
 const useLoginState = (props: UseLoginProps): [UseLoginState, UseLoginActions] => {
@@ -39,42 +46,61 @@ const useLoginState = (props: UseLoginProps): [UseLoginState, UseLoginActions] =
   const [loginState, setLoginState] = React.useState<UseLoginState>({
     ethAddress: null,
     pubKey: null,
+    currentUserCalled: false,
+    ready: null,
+    waitForAuth: null,
   });
   // this will also reset profile data
   useGlobalLogin({
     globalChannel,
     onLogin: payload =>
-      setLoginState({
+      setLoginState(prev => ({
+        ...prev,
         ethAddress: payload.ethAddress,
         pubKey: payload.pubKey,
-      }),
+      })),
+    waitForAuth: data =>
+      setLoginState(prev => ({
+        ...prev,
+        waitForAuth: data,
+      })),
+    onReady: data => setLoginState(prev => ({ ...prev, ready: data })),
     onLogout: () => {
       if (props.onLogout) {
         props.onLogout();
       }
-      setLoginState({
+      setLoginState(prev => ({
+        ...prev,
         ethAddress: null,
         pubKey: null,
-      });
+        ready: null,
+      }));
     },
     onError: payload => {
       createErrorHandler('useLoginState.globalLogin', false, onError)(payload.error);
     },
   });
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     // make an attempt to load the eth address from cache;
     if (authService) {
       const getDeps = authService.getCurrentUser(null);
       getDeps.subscribe((resp: { data: any }) => {
         const { data } = resp;
-        if (data?.ethAddress && data?.pubKey) {
-          setLoginState(prev => ({
+        setLoginState(prev => {
+          if (!data) {
+            return {
+              ...prev,
+              currentUserCalled: true,
+            };
+          }
+          return {
             ...prev,
+            currentUserCalled: true,
             ethAddress: data.ethAddress,
             pubKey: data.pubKey,
-          }));
-        }
+          };
+        });
       }, createErrorHandler('useLoginState.authService', false, onError));
     }
   }, []);
@@ -121,17 +147,6 @@ const useLoginState = (props: UseLoginProps): [UseLoginState, UseLoginActions] =
           }));
         },
       );
-    },
-    resetUpdateStatus() {
-      setLoginState(prev => ({
-        ...prev,
-        updateStatus: {
-          updateComplete: false,
-          saving: false,
-          uploadingAvatar: false,
-          uploadingCoverImage: false,
-        },
-      }));
     },
   };
   return [loginState, actions];
