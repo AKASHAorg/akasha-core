@@ -19,16 +19,15 @@ export interface IEntryCardRendererProps {
   onBookmark: (entryId: string) => void;
   onNavigate: (details: any) => void;
   onLinkCopy?: () => void;
-  onRepliesClick: () => void;
   onFlag?: (entryId: string, user?: string | null) => () => void;
   onRepost: (withComment: boolean, entryData: any) => void;
-  onShare: (service: string, entryId: string, authorEthAddress: string) => void;
+  sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (ethAddress: string) => void;
   bookmarkState?: IBookmarkState;
   style?: React.CSSProperties;
   contentClickable?: boolean;
-  disableIpfsCopyLink?: boolean;
+  disableActions?: boolean;
   hidePublishTime?: boolean;
   moderatedContentLabel?: string;
   awaitingModerationLabel?: string;
@@ -53,6 +52,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     awaitingModerationLabel,
     ctaLabel,
     handleFlipCard,
+    disableActions,
+    sharePostUrl,
   } = props;
 
   const isBookmarked = React.useMemo(() => {
@@ -129,7 +130,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   entryData={itemData}
                   sharePostLabel={t('Share Post')}
                   shareTextLabel={t('Share this post with your friends')}
-                  sharePostUrl={'https://ethereum.world'}
+                  sharePostUrl={sharePostUrl}
                   onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
                     props.onAvatarClick(ev, itemData.author.pubKey)
                   }
@@ -147,9 +148,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
                   onRepost={props.onRepost}
-                  onEntryShare={props.onShare}
                   onEntryFlag={props.onFlag && props.onFlag(itemData.entryId, props.ethAddress)}
-                  onClickReplies={props.onRepliesClick}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
                   isFollowingAuthor={isFollowing}
@@ -161,6 +160,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   awaitingModerationLabel={awaitingModerationLabel}
                   ctaLabel={ctaLabel}
                   handleFlipCard={handleFlipCard}
+                  disableActions={disableActions}
                 />
               )}
             </>

@@ -18,15 +18,15 @@ export interface PostRendererProps {
   onBookmark: (entryId: string) => void;
   onNavigate: (details: any) => void;
   onLinkCopy?: () => void;
-  onRepliesClick: () => void;
   onFlag: (entryId: string, user: string | null) => () => void;
   onRepost: (withComment: boolean, entryData: any) => void;
-  onShare: (service: string, entryId: string, authorEthAddress: string) => void;
+  sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (ethAddress: string) => void;
   bookmarkState?: IBookmarkState;
   style?: React.CSSProperties;
   contentClickable?: boolean;
+  disableActions?: boolean;
   hidePublishTime?: boolean;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
 }
@@ -43,6 +43,8 @@ const PostRenderer = (props: PostRendererProps) => {
     bookmarkState,
     hidePublishTime,
     handleFlipCard,
+    disableActions,
+    sharePostUrl,
   } = props;
 
   const { t } = useTranslation();
@@ -124,7 +126,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     entryData={itemData}
                     sharePostLabel={t('Share Post')}
                     shareTextLabel={t('Share this post with your friends')}
-                    sharePostUrl={'https://ethereum.world'}
+                    sharePostUrl={sharePostUrl}
                     onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
                       props.onAvatarClick(ev, itemData.author.pubKey)
                     }
@@ -141,9 +143,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     bookmarkLabel={t('Save')}
                     bookmarkedLabel={t('Saved')}
                     onRepost={props.onRepost}
-                    onEntryShare={props.onShare}
                     onEntryFlag={props.onFlag(itemData.entryId, null)}
-                    onClickReplies={props.onRepliesClick}
                     handleFollowAuthor={handleFollow}
                     handleUnfollowAuthor={handleUnfollow}
                     isFollowingAuthor={isFollowing}
@@ -151,6 +151,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     contentClickable={contentClickable}
                     onMentionClick={props.onMentionClick}
                     hidePublishTime={hidePublishTime}
+                    disableActions={disableActions}
                   />
                 </Box>
               )}

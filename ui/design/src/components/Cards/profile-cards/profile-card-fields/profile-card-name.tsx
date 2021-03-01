@@ -31,7 +31,7 @@ const ProfileCardName: React.FC<IProfileCardNameProps> = props => {
 
   return (
     <>
-      <StyledInlineBox direction="row" gap="xsmall" align="center" width={{ max: '80%' }}>
+      <StyledInlineBox direction="row" gap="xsmall" align="center">
         <Text size="xlarge" weight="bold" color="primaryText" truncate={true}>
           {name}
         </Text>
