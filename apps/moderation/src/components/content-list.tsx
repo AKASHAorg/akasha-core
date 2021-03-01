@@ -60,7 +60,10 @@ const ContentList: React.FC<IContentListProps> = props => {
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
-  const { size } = useViewportSize();
+  const {
+    size,
+    dimensions: { width },
+  } = useViewportSize();
 
   React.useEffect(() => {
     if (!ethAddress) {
@@ -68,7 +71,6 @@ const ContentList: React.FC<IContentListProps> = props => {
       props.singleSpa.navigateToUrl('/moderation-app/unauthenticated');
     } else {
       // if authenticated,
-      getStatusCount();
       if (isPending) {
         // if authorised, check for pending contents while pending tab is active
         fetchPendingContents();
@@ -84,10 +86,8 @@ const ContentList: React.FC<IContentListProps> = props => {
     setRequesting(true);
     try {
       const response = await moderationRequest.getCount();
-      setCount(() => response);
-      setRequesting(false);
+      setCount(response);
     } catch (error) {
-      setRequesting(false);
       logger.error('[content-list.tsx]: getStatusCount err %j', error.message || '');
     }
   };
@@ -97,11 +97,12 @@ const ContentList: React.FC<IContentListProps> = props => {
     setRequesting(true);
     try {
       const modResponse = await moderationRequest.getAllPending();
-      setPendingItems(() => modResponse);
-      setRequesting(false);
+      setPendingItems(modResponse);
+      getStatusCount();
     } catch (error) {
-      setRequesting(false);
       logger.error('[content-list.tsx]: fetchPendingContents err %j', error.message || '');
+    } finally {
+      setRequesting(false);
     }
   };
 
@@ -110,11 +111,12 @@ const ContentList: React.FC<IContentListProps> = props => {
     setRequesting(true);
     try {
       const modResponse = await moderationRequest.getAllModerated();
-      setModeratedItems(() => modResponse);
-      setRequesting(false);
+      setModeratedItems(modResponse);
+      getStatusCount();
     } catch (error) {
-      setRequesting(false);
       logger.error('[content-list.tsx]: fetchModeratedContents err %j', error.message || '');
+    } finally {
+      setRequesting(false);
     }
   };
 
@@ -135,6 +137,7 @@ const ContentList: React.FC<IContentListProps> = props => {
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ModerateModal
               titleLabel={t('Make a Decision')}
+              altTitleLabel={t('Review a Decision')}
               contentType={t(contentType)}
               decisionLabel={t('Decision')}
               optionLabels={[t('Delist'), t('Keep')]}
@@ -150,11 +153,13 @@ const ContentList: React.FC<IContentListProps> = props => {
               user={ethAddress}
               contentId={flagged}
               baseUrl={BASE_DECISION_URL}
+              isReview={true}
               size={size}
+              width={width}
               onModalClose={() => {
                 setModalOpen(false);
-                // on modal close, fetch pending contents
-                return fetchPendingContents();
+                // on modal close, fetch moderated contents
+                fetchModeratedContents();
               }}
               closeModal={() => {
                 setModalOpen(false);
@@ -251,7 +256,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                   moderatedOnLabel={t('On')}
                   evaluationDateTime={moderatedItem.evaluationDate}
                   reviewDecisionLabel={t('Review decision')}
-                  handleButtonClick={() => null}
+                  handleButtonClick={handleButtonClick}
                 />
               ))
           : renderNotFound('moderated'))}

@@ -22,6 +22,8 @@ import { Sidebar, Topbar } from './components/Bars/index';
 
 import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
 
+import EntryPublishErrorCard from './components/Errors/entry-publish-error-card';
+
 import {
   Button,
   DuplexButton,
@@ -43,9 +45,7 @@ import {
   EditorPlaceholder,
   EnsFormCard,
   EntryBox,
-  EntryBoxMod,
   EntryCard,
-  EntryCardMod,
   EntryCardHidden,
   MiniInfoWidgetCard,
   ProfileCard,
@@ -139,9 +139,7 @@ const exported = {
   EditorPlaceholder,
   EditorModal,
   EntryBox,
-  EntryBoxMod,
   EntryCard,
-  EntryCardMod,
   EntryCardHidden,
   EntryCardLoading,
   BoxFormCard,
@@ -215,6 +213,7 @@ const exported = {
   SourcesWidgetCard,
   TutorialWidgetCard,
   FilterCard,
+  EntryPublishErrorCard,
   Helmet: Helmet as HelmetType,
 };
 

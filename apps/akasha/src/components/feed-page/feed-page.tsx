@@ -36,6 +36,7 @@ export interface FeedPageProps {
   logger: any;
   showLoginModal: () => void;
   ethAddress: string | null;
+  currentUserCalled: boolean;
   pubKey: string | null;
   flagged: string;
   reportModalOpen: boolean;
@@ -53,6 +54,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     setReportModalOpen,
     showLoginModal,
     ethAddress,
+    currentUserCalled,
     pubKey,
     onError,
     sdkModules,
@@ -73,7 +75,17 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   }, [pubKey]);
 
-  const { size } = useViewportSize();
+  React.useEffect(() => {
+    if (currentUserCalled) {
+      postsActions.resetPostIds();
+      postsActions.getPosts({ limit: 5 });
+    }
+  }, [currentUserCalled]);
+
+  const {
+    size,
+    dimensions: { width },
+  } = useViewportSize();
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -96,7 +108,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     const req: { limit: number; offset?: string } = {
       limit: payload.limit,
     };
-    if (!postsState.isFetchingPosts) {
+    if (!postsState.isFetchingPosts && currentUserCalled) {
       postsActions.getPosts(req);
     }
   };
@@ -237,6 +249,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
               size={size}
+              width={width}
               updateEntry={updateEntry}
               closeModal={() => {
                 setReportModalOpen(false);
@@ -273,6 +286,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
         hasMoreItems={!!postsState.nextPostIndex}
+        usePlaceholders={true}
         listHeader={
           ethAddress ? (
             <EditorPlaceholder

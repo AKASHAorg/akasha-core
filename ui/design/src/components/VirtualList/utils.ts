@@ -74,7 +74,6 @@ export const computeAnchoredItem = (props: ComputeAnchorProps) => {
   if (newDelta === 0) {
     return anchor;
   }
-
   newDelta += anchor.offset;
 
   let i = anchor.index;
@@ -99,13 +98,13 @@ export const computeAnchoredItem = (props: ComputeAnchorProps) => {
       newDelta > 0 &&
       i < rects.size &&
       rects.get(items[i]) &&
-      rects.get(items[i])!.rect.getHeight() &&
-      rects.get(items[i])!.rect.getHeight() < delta
+      rects.get(items[i])!.rect.getHeight() + itemSpacing < newDelta
     ) {
       newDelta -= rects.get(items[i])!.rect.getHeight() + itemSpacing;
       i += 1;
     }
     if (i >= rects.size || !rects.get(items[i])) {
+      // renderedItems = rects.size;
       renderedItems = Math.floor(Math.max(newDelta, 0) / (averageItemHeight + itemSpacing));
     }
   }
@@ -240,6 +239,27 @@ export const getInitialRect = (props: GetInitialRectProps) => {
   }
   return {
     rects: rectList,
+    listHeight: totalHeight,
+  };
+};
+
+export const updateListHeight = (
+  positionState: { rects: ItemRects; listHeight: number },
+  items: string[],
+  itemSpacing: number,
+  averageItemHeight: number,
+) => {
+  let totalHeight = 0;
+  items.forEach(item => {
+    let itemHeight = averageItemHeight;
+    const itemRect = positionState.rects.get(item)?.rect;
+    if (itemRect) {
+      itemHeight = itemRect.getHeight();
+    }
+    totalHeight += itemHeight + itemSpacing;
+  });
+  return {
+    ...positionState,
     listHeight: totalHeight,
   };
 };

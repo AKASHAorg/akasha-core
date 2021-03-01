@@ -121,7 +121,10 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
 
   const [flagged, setFlagged] = React.useState('');
 
-  const { size } = useViewportSize();
+  const {
+    size,
+    dimensions: { width },
+  } = useViewportSize();
 
   const { t } = useTranslation();
 
@@ -219,7 +222,6 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   };
 
   const showUpdateProfileModal = () => {
-    props.loginActions.resetUpdateStatus();
     props.modalActions.show(MODAL_NAMES.PROFILE_UPDATE);
   };
 
@@ -300,6 +302,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               contentType="profile"
               baseUrl={BASE_FLAG_URL}
               size={size}
+              width={width}
               closeModal={closeReportModal}
             />
           </ToastProvider>

@@ -18,6 +18,12 @@ export interface GetItemsPayload {
   limit?: number;
 }
 
+export interface Status {
+  delisted: boolean;
+  moderated: boolean;
+  reported: boolean;
+}
+
 export interface PublishPostData {
   metadata: {
     app: string;
@@ -33,6 +39,7 @@ export interface PublishPostData {
 
 export interface PostsActions {
   getPost: (postId: string) => void;
+  getPostData: (status: Status, postId: string) => void;
   getComment: (commentId: string) => void;
   getPosts: (payload: GetItemsPayload) => void;
   getComments: (payload: GetItemsPayload) => void;
@@ -81,6 +88,8 @@ export interface PostsState {
   /* pending publish comments */
   pendingComments: any[];
   totalItems: number | null;
+  delistedItems: string[];
+  reportedItems: string[];
 }
 
 export interface GetEntriesResponse {
@@ -103,10 +112,39 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     pendingPosts: [],
     pendingComments: [],
     totalItems: null,
+    delistedItems: [],
+    reportedItems: [],
   });
 
   const actions: PostsActions = {
-    getPost: postId => {
+    getPost: async postId => {
+      // check moderation status of post
+      const [status] = await moderationRequest.checkStatus(true, { user, contentIds: [postId] });
+      // if post is delisted,
+      if (status.delisted) {
+        // short circuit other requests
+        setPostsState(prev => ({
+          ...prev,
+          delistedItems: !prev.delistedItems.includes(postId)
+            ? prev.delistedItems.concat(postId)
+            : prev.delistedItems,
+        }));
+        // if post is reported and not yet moderated
+      } else if (status.reported && !status.moderated) {
+        // update state,
+        setPostsState(prev => ({
+          ...prev,
+          reportedItems: !prev.reportedItems.includes(postId)
+            ? prev.reportedItems.concat(postId)
+            : prev.reportedItems,
+        }));
+        // then continue to fetch post
+        actions.getPostData(status, postId);
+      } else {
+        actions.getPostData(status, postId);
+      }
+    },
+    getPostData: (status: Status, postId) => {
       const entryCall = postsService.entries.getEntry({ entryId: postId });
       const ipfsGatewayCall = ipfsService.getSettings({});
       const getEntryCall = combineLatest([ipfsGatewayCall, entryCall]);
@@ -119,15 +157,24 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         const ipfsGateway = ipfsResp.data;
         const entry = entryResp.data?.getPost;
         if (entry) {
-          const mappedEntry = mapEntry(entry, ipfsGateway, logger);
+          const mappedEntry = mapEntry(
+            {
+              ...entry,
+              reported: status.moderated ? false : status.reported,
+              delisted: status.delisted,
+            },
+            ipfsGateway,
+            logger,
+          );
 
-          const status = await moderationRequest.checkStatus(false, { user }, mappedEntry.entryId);
-
-          const qstatus =
+          const quotestatus =
             mappedEntry.quote &&
-            (await moderationRequest.checkStatus(false, { user }, mappedEntry.quote.entryId));
+            (await moderationRequest.checkStatus(true, {
+              user,
+              contentIds: [mappedEntry.quote.entryId],
+            }));
 
-          if (status && status.constructor === Object) {
+          if (quotestatus && quotestatus.constructor === Array) {
             const modifiedEntry = {
               ...mappedEntry,
               reported: status.reported,
@@ -135,14 +182,9 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
               quote: mappedEntry.quote
                 ? {
                     ...mappedEntry.quote,
-                    reported:
-                      qstatus && status.constructor === Object
-                        ? qstatus.reported
-                        : mappedEntry.quote.reported,
-                    delisted:
-                      qstatus && status.constructor === Object
-                        ? qstatus.delisted
-                        : mappedEntry.quote.reported,
+                    // if moderated, bypass value of reported for the user
+                    reported: quotestatus[0].moderated ? false : quotestatus[0].reported,
+                    delisted: quotestatus[0].delisted,
                   }
                 : mappedEntry.quote,
             };
@@ -198,7 +240,10 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         ...payload,
         offset: payload.offset || postsState.nextPostIndex,
       });
-      setPostsState(prev => ({ ...prev, isFetchingPosts: true }));
+      setPostsState(prev => ({
+        ...prev,
+        isFetchingPosts: true,
+      }));
       const ipfsSettingsCall = ipfsService.getSettings({});
       const calls = combineLatest([ipfsSettingsCall, entriesCall]);
       calls.subscribe(async (responses: [any, any]) => {
@@ -220,55 +265,64 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
             return mapEntry(entry, ipfsGateway, logger);
           })
           .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
+        try {
+          const status = await moderationRequest.checkStatus(true, { user, contentIds: newIds });
+          const quotestatus =
+            !!newQuoteIds.length &&
+            (await moderationRequest.checkStatus(true, { user, contentIds: newQuoteIds }));
+          if (status && status.constructor === Array) {
+            status.forEach((res: any) => {
+              const target = posts[res.contentId];
+              let quote: any;
 
-        const status = await moderationRequest.checkStatus(true, { user, contentIds: newIds });
-
-        const qstatus =
-          !!newQuoteIds.length &&
-          (await moderationRequest.checkStatus(true, { user, contentIds: newQuoteIds }));
-        if (status && status.constructor === Array) {
-          status.forEach((res: any) => {
-            const target = posts[res.contentId];
-            let quote: any;
-
-            if (target.quote) {
-              const { reported, delisted } = qstatus.find(
-                (el: any) => el.contentId === target.quote.entryId,
-              );
-              quote = {
-                ...target.quote,
-                reported: reported,
-                delisted: delisted,
-              };
-            }
-
-            if (res.delisted) {
-              const index = newIds.indexOf(res.contentId);
-              if (index > -1) {
-                // remove the entry id from newIds
-                newIds.splice(index, 1);
+              if (target.quote) {
+                const { reported, delisted, moderated } = quotestatus.find(
+                  (el: any) => el.contentId === target.quote.entryId,
+                );
+                quote = {
+                  ...target.quote,
+                  // if moderated, bypass value of reported for the user
+                  reported: moderated ? false : reported,
+                  delisted: delisted,
+                };
               }
-              // remove the entry from posts object
-              delete posts[res.contentId];
-            } else {
-              posts[res.contentId] = {
-                ...target,
-                delisted: res.delisted,
-                reported: res.reported,
-                quote: quote,
-              };
-            }
+
+              if (res.delisted) {
+                const index = newIds.indexOf(res.contentId);
+                if (index > -1) {
+                  // remove the entry id from newIds
+                  newIds.splice(index, 1);
+                }
+                // remove the entry from posts object
+                delete posts[res.contentId];
+              } else {
+                posts[res.contentId] = {
+                  ...target,
+                  delisted: res.delisted,
+                  // if moderated, bypass value of reported for the user
+                  reported: res.moderated ? false : res.reported,
+                  quote: quote,
+                };
+              }
+            });
+          }
+          setPostsState(prev => ({
+            ...prev,
+            nextPostIndex: nextIndex,
+            postsData: { ...prev.postsData, ...posts },
+            postIds: prev.postIds.concat(newIds),
+            isFetchingPosts: false,
+            totalItems: total,
+          }));
+        } catch (err) {
+          newIds.forEach(id => {
+            createErrorHandler(
+              `${id}`,
+              false,
+              onError,
+            )(new Error(`Failed to fetch moderated content. ${err.message}`));
           });
         }
-
-        setPostsState(prev => ({
-          ...prev,
-          nextPostIndex: nextIndex,
-          postsData: { ...prev.postsData, ...posts },
-          postIds: prev.postIds.concat(newIds),
-          isFetchingPosts: false,
-          totalItems: total,
-        }));
       }, createErrorHandler('usePosts.getPosts', false, onError));
     },
     getComments: payload => {
@@ -304,6 +358,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     },
     optimisticPublishComment: (commentData, postId, loggedProfile) => {
       const publishObj = buildPublishObject(commentData, postId);
+      const pendingId = `${loggedProfile.ethAddress}-${postsState.pendingPosts.length}`;
       const pending = createPendingEntry(
         {
           ethAddress: loggedProfile.ethAddress as string,
@@ -318,11 +373,26 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       );
       setPostsState(prev => ({
         ...prev,
-        pendingComments: [pending, ...prev.pendingComments],
+        pendingComments: [{ pendingId, ...pending }, ...prev.pendingComments],
       }));
       const publishCall = postsService.comments.addComment(publishObj);
       publishCall.subscribe((resp: any) => {
-        const commentId = resp.data.addComment;
+        const commentId = resp.data?.addComment;
+        if (!commentId) {
+          return setPostsState(prev => {
+            const pendingComments = prev.pendingComments.slice();
+            const erroredIdx = pendingComments.findIndex(p => p.pendingId === pendingId);
+            pendingComments.splice(erroredIdx, 1, {
+              ...pendingComments[erroredIdx],
+              error: 'There was an error publishing this comment!',
+            });
+
+            return {
+              ...prev,
+              pendingComments,
+            };
+          });
+        }
         setPostsState(prev => ({
           ...prev,
           pendingComments: [],
@@ -333,17 +403,19 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     },
     optimisticPublishPost: (postData, loggedProfile, currentEmbedEntry, disablePendingFeedback) => {
       const publishObj = buildPublishObject(postData);
+      const pendingId = `${loggedProfile.ethAddress}-${postsState.pendingPosts.length}`;
       let pending: any;
       if (!disablePendingFeedback) {
         pending = createPendingEntry(
           {
             ethAddress: loggedProfile.ethAddress as string,
+            pubKey: loggedProfile.pubKey,
             avatar: loggedProfile.avatar,
+            name: loggedProfile.name,
             userName: loggedProfile.userName,
             ensName: loggedProfile.ensName,
             coverImage: loggedProfile.coverImage,
             description: loggedProfile.description,
-            pubKey: loggedProfile.pubKey,
           },
           postData,
           currentEmbedEntry,
@@ -352,13 +424,29 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         setPostsState(prev => {
           return {
             ...prev,
-            pendingPosts: [pending, ...prev.pendingPosts],
+            pendingPosts: [{ pendingId, ...pending }, ...prev.pendingPosts],
           };
         });
       }
-
       const postEntryCall = postsService.entries.postEntry(publishObj);
       postEntryCall.subscribe((postingResp: any) => {
+        if (!postingResp.data?.createPost) {
+          if (!disablePendingFeedback) {
+            return setPostsState(prev => {
+              const pendingPosts = prev.pendingPosts.slice();
+              const erroredIdx = pendingPosts.findIndex(p => p.pendingId === pendingId);
+              pendingPosts.splice(erroredIdx, 1, {
+                ...pendingPosts[erroredIdx],
+                error: 'There was an error publishing this post!',
+              });
+
+              return {
+                ...prev,
+                pendingPosts,
+              };
+            });
+          }
+        }
         const publishedEntryId = postingResp.data.createPost;
         if (!disablePendingFeedback) {
           const entryData = pending as IEntryData;
@@ -368,7 +456,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
               ...prev.postsData,
               [publishedEntryId]: { ...entryData, entryId: publishedEntryId },
             },
-            pendingPosts: [],
+            pendingPosts: prev.pendingPosts.filter(post => post.pendingId !== pendingId),
             postIds: [publishedEntryId, ...prev.postIds],
           }));
         }
@@ -417,10 +505,17 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       }, createErrorHandler('usePosts.getUserPosts', false, onError));
     },
     updatePostsState: (updatedEntry: any) => {
-      setPostsState(prev => ({
-        ...prev,
-        postsData: { ...prev.postsData, [updatedEntry.entryId]: updatedEntry },
-      }));
+      setPostsState(prev => {
+        const index = prev.reportedItems.indexOf(updatedEntry.entryId);
+        if (index > -1) {
+          prev.reportedItems.splice(index, 1);
+        }
+        return {
+          ...prev,
+          postsData: { ...prev.postsData, [updatedEntry.entryId]: updatedEntry },
+          reportedItems: prev.reportedItems,
+        };
+      });
     },
   };
   return [postsState, actions];

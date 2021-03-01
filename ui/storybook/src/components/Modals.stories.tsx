@@ -91,7 +91,7 @@ const MobileListModalComponent = ({
   );
 };
 
-const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal'>) => {
+const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal' | 'width'>) => {
   const {
     titleLabel,
     successTitleLabel,
@@ -114,7 +114,10 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal'>) => {
 
   const [modalOpen, setModalOpen] = React.useState(false);
 
-  const { size } = useViewportSize();
+  const {
+    size,
+    dimensions: { width },
+  } = useViewportSize();
 
   return (
     <Box fill={true} justify="center" align="center">
@@ -145,6 +148,7 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal'>) => {
             blockLabel={blockLabel}
             closeLabel={closeLabel}
             size={size}
+            width={width}
             closeModal={() => {
               setModalOpen(false);
             }}

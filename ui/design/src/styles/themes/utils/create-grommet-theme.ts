@@ -62,9 +62,9 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
       },
     },
     radioButton: {
-      size: '14px',
+      size: '16px',
       border: {
-        width: '2px',
+        width: '5px',
       },
       check: {
         color: styledComponentsTheme.colors.white,

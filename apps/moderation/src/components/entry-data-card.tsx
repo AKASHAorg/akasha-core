@@ -5,7 +5,7 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
 import { redirectToPost } from '../services/routing-service';
 
-const { Text, EntryCardMod, ProfileCard, MainAreaCardBox } = DS;
+const { Text, EntryCard, ProfileCard, MainAreaCardBox } = DS;
 
 export interface IEntryDataCardProps {
   entryData: any;
@@ -26,7 +26,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
       {entryData ? (
         <>
           {contentType === 'post' && entryData && (
-            <EntryCardMod
+            <EntryCard
               entryData={entryData}
               repostsLabel={t('Reposts')}
               repliesLabel={t('Replies')}
@@ -35,6 +35,8 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               contentClickable={true}
               onClickAvatar={() => null}
               onContentClick={handleNavigateToPost}
+              disableReposting={true}
+              isModerated={true}
             />
           )}
           {contentType === 'profile' && (

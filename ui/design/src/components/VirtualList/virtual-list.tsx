@@ -41,9 +41,10 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
     getNotificationPill,
     useItemDataLoader,
     initialPaddingTop,
-    averageItemHeight = 300,
+    averageItemHeight = 200,
     loadLimit = DEFAULT_LOAD_LIMIT,
     listHeader,
+    usePlaceholders = false,
   } = props;
 
   React.useImperativeHandle(ref, () => ({
@@ -136,12 +137,12 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
     if (isLoading || !hasMoreItems) {
       return;
     }
-    const isRequired = slice.end - scrollData.current.loadedIds?.length > 0;
-    if (!isRequired) {
+    const required = slice.end - scrollData.current.items?.length;
+    if (required < loadLimit) {
       return;
     }
     setIsLoading(true);
-    loadMore({ start: items[items.length - 1], limit: loadLimit });
+    loadMore({ start: items[items.length - 1], limit: required });
   }, [slice.start, slice.end]);
 
   // compute initial anchor
@@ -168,7 +169,6 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
       ),
     [JSON.stringify(anchorData), JSON.stringify(itemPositions), scrollData.current.items?.length],
   );
-
   React.useEffect(() => {
     const startIdx = Math.max(anchorData.anchor.index - overscan, 0);
     const endIdx = lastRenderedIdx + overscan;
@@ -185,19 +185,22 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
 
   const handleScroll = () => {
     requestAnimationFrame(() => {
-      setAnchorData(prev => {
-        const newScrollTop = viewportActions.getScrollTop();
-        if (Math.abs(newScrollTop - prev.scrollTop) <= scrollData.current.averageItemHeight / 2) {
-          return prev;
-        }
-        return getAnchor({
-          itemSpacing,
-          anchorData: prev,
-          averageItemHeight: scrollData.current.averageItemHeight,
-          rects: itemPositions.rects,
-          items: scrollData.current.loadedIds,
-          getScrollTop: viewportActions.getScrollTop,
+      setPositions(positions => {
+        setAnchorData(prev => {
+          const newScrollTop = viewportActions.getScrollTop();
+          if (Math.abs(newScrollTop - prev.scrollTop) <= scrollData.current.averageItemHeight / 2) {
+            return prev;
+          }
+          return getAnchor({
+            itemSpacing,
+            anchorData: prev,
+            averageItemHeight: scrollData.current.averageItemHeight,
+            rects: positions.rects,
+            items: scrollData.current.loadedIds,
+            getScrollTop: viewportActions.getScrollTop,
+          });
         });
+        return positions;
       });
     });
   };
@@ -306,7 +309,17 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
           itemPositions.rects?.size;
       }
     }
-
+    if (itemRefs.current[itemId] && isUnmounting && items.indexOf(itemId) < 0) {
+      scrollData.current.loadedIds.splice(scrollData.current.loadedIds.indexOf(itemId), 1);
+      let itemHeight = averageItemHeight + itemSpacing;
+      if (itemRect) {
+        itemHeight = itemRect.rect.getHeight() + itemSpacing;
+      }
+      setPositions(prev => ({
+        ...prev,
+        listHeight: prev.listHeight - itemHeight,
+      }));
+    }
     if (!itemRefs.current[itemId] && itemRef && !isUnmounting) {
       itemRefs.current[itemId] = itemRef;
       setPositions(prev =>
@@ -355,6 +368,8 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
         updateRef={onRefUpdate}
         averageItemHeight={scrollData.current.averageItemHeight}
         listHeader={listHeader}
+        usePlaceholders={usePlaceholders}
+        loadLimit={loadLimit}
       />
     </div>
   );

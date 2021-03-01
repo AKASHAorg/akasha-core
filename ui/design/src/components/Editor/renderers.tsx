@@ -21,9 +21,11 @@ const ImageElement = ({ attributes, children, element, handleDeleteImage }: any)
       <div
         contentEditable={false}
         style={{
-          height: element.size?.height,
+          minHeight: element.size?.naturalHeight,
           width: '100%',
           position: 'relative',
+          overflow: 'hidden',
+          contain: 'layout',
         }}
       >
         {handleDeleteImage && (
@@ -33,7 +35,6 @@ const ImageElement = ({ attributes, children, element, handleDeleteImage }: any)
         )}
         <StyledImg
           src={element.url}
-          loading="lazy"
           style={{
             position: 'absolute',
           }}

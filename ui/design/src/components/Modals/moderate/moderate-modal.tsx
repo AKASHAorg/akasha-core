@@ -13,6 +13,7 @@ import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from '../styled';
 export interface IModerateModalProps {
   className?: string;
   titleLabel: string;
+  altTitleLabel: string;
   contentType: string;
 
   decisionLabel: string;
@@ -30,8 +31,10 @@ export interface IModerateModalProps {
   user: string | null;
   contentId?: string;
   baseUrl: string;
-  // screen size passed by viewport provider
+  isReview?: boolean;
+  // screen size and width passed by viewport provider
   size?: string;
+  width: number;
   // fetch pending items on modalClose
   onModalClose: () => void;
   closeModal: () => void;
@@ -42,6 +45,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
   const {
     className,
     titleLabel,
+    altTitleLabel,
     contentType,
     decisionLabel,
     optionLabels,
@@ -57,7 +61,9 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     user,
     contentId,
     baseUrl,
+    isReview,
     size,
+    width,
     onModalClose,
     closeModal,
     signData,
@@ -151,7 +157,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
 
   return (
     <ModalWrapper>
-      <StyledBox width={size === 'small' ? '100%' : '33%'}>
+      <StyledBox width={width > 800 ? '35%' : width > 500 ? '50%' : '100%'}>
         <MainAreaCardBox className={className}>
           <Box direction="column" pad="large">
             <Box direction="row" margin={{ top: 'xsmall' }} align="start">
@@ -165,7 +171,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                 />
               )}
               <Text weight={600} margin={{ bottom: '1rem', horizontal: 'auto' }} size="large">
-                {titleLabel}
+                {isReview ? altTitleLabel : titleLabel}
               </Text>
               {size !== 'small' && (
                 <Icon

@@ -5,17 +5,26 @@ import { StackedAvatar, Avatar } from '../../Avatar/index';
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { truncateMiddle } from '../../../utils/string-utils';
 import { IconLink } from '../../Buttons';
+import styled from 'styled-components';
 
 export type ISocialData = IProfileData[];
 
 export interface ISocialBox {
   socialData: ISocialData;
-  onClickUser: (ethAddress: string) => void;
+  onClickUser?: (ethAddress: string) => void;
   // labels
   repostedThisLabel?: string;
   andLabel?: string;
   othersLabel?: string;
 }
+
+const StackableAvatarLink = styled(IconLink)`
+  max-width: 100%;
+  flex-shrink: 1;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 const SocialBox: React.FC<ISocialBox> = props => {
   const { socialData, andLabel, othersLabel, repostedThisLabel, onClickUser } = props;
@@ -58,9 +67,19 @@ const SocialBox: React.FC<ISocialBox> = props => {
               src={user.avatar}
               ethAddress={user.ethAddress}
               size="xs"
-              onClick={() => onClickUser(user.pubKey)}
+              onClick={() => {
+                if (onClickUser) {
+                  onClickUser(user.pubKey);
+                }
+              }}
             />
-            <Text onClick={() => onClickUser(user.pubKey)}>
+            <Text
+              onClick={() => {
+                if (onClickUser) {
+                  onClickUser(user.pubKey);
+                }
+              }}
+            >
               {user.name || user.userName || truncateMiddle(user.ethAddress, 3, 3)}
             </Text>
           </StyledSelectBox>
@@ -79,11 +98,15 @@ const SocialBox: React.FC<ISocialBox> = props => {
     >
       {avatarUserData && <StackedAvatar userData={avatarUserData} maxAvatars={3} />}
       <IconLink
-        onClick={() => onClickUser(socialData[0].pubKey)}
+        onClick={() => {
+          if (onClickUser) {
+            onClickUser(socialData[0].pubKey);
+          }
+        }}
         label={
           socialData[0].name ||
           socialData[0].userName ||
-          truncateMiddle(socialData[0].ethAddress, 3, 3)
+          truncateMiddle(socialData[0]?.ethAddress, 3, 3)
         }
         size="medium"
         primaryColor={true}
@@ -93,18 +116,22 @@ const SocialBox: React.FC<ISocialBox> = props => {
         <Box direction="row" gap="xxsmall">
           <Text color="secondaryText">{andLabel}</Text>
 
-          <IconLink
-            label={`${socialData.length - 1} ${othersLabel}`}
+          <StackableAvatarLink
+            label={`${socialData?.length - 1} ${othersLabel}`}
             size="medium"
             ref={othersNodeRef}
             onClick={() => setOthersDropOpen(!othersDropOpen)}
             primaryColor={true}
           />
 
-          <Text color="secondaryText">{repostedThisLabel}</Text>
+          <Text style={{ flexShrink: 0 }} color="secondaryText">
+            {repostedThisLabel}
+          </Text>
         </Box>
       ) : (
-        <Text color="secondaryText">{repostedThisLabel}</Text>
+        <Text style={{ flexShrink: 0 }} color="secondaryText">
+          {repostedThisLabel}
+        </Text>
       )}
       {othersNodeRef.current && othersDropOpen && renderOthersDrop()}
     </Box>

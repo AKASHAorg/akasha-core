@@ -11,36 +11,37 @@ export type ServiceNames = 'twitter' | 'reddit' | 'facebook' | 'copy';
 
 export type ShareData = {
   title?: string;
-  text: string;
-  url: string;
+  text?: string;
+  url?: string;
 };
 
 export interface CardActionProps {
   // data
   entryData: IEntryData;
-  loggedProfileEthAddress: string | null;
+  loggedProfileEthAddress?: string | null;
   // share data
   sharePostLabel?: string;
-  shareTextLabel: string;
-  sharePostUrl: string;
+  shareTextLabel?: string;
+  sharePostUrl?: string;
   // labels
   repostsLabel: string;
-  repostLabel: string;
-  repostWithCommentLabel: string;
+  repostLabel?: string;
+  repostWithCommentLabel?: string;
   repliesLabel: string;
   isBookmarked?: boolean;
-  copyLinkLabel: string;
-  bookmarkLabel: string;
-  bookmarkedLabel: string;
-  shareLabel: string;
+  copyLinkLabel?: string;
+  bookmarkLabel?: string;
+  bookmarkedLabel?: string;
+  shareLabel?: string;
   // handlers
-  handleEntryBookmark: () => void;
+  handleEntryBookmark?: () => void;
   onRepost: () => void;
   handleRepliesClick: () => void;
-  onRepostWithComment: () => void;
   onShare: (service: ServiceNames, entryId: string) => void;
-  disableReposting?: boolean;
   disableActions?: boolean;
+  onRepostWithComment?: () => void;
+  disableReposting?: boolean;
+  isModerated?: boolean;
 }
 
 const BookmarkButton = styled(TextIcon)<{ isBookmarked?: boolean }>`
@@ -83,6 +84,7 @@ const CardActions: React.FC<CardActionProps> = props => {
     onShare,
     disableReposting,
     disableActions,
+    isModerated,
   } = props;
 
   const { size } = useViewportSize();
@@ -142,7 +144,9 @@ const CardActions: React.FC<CardActionProps> = props => {
   const handleRepostWithComment = (ev: React.SyntheticEvent) => {
     ev.stopPropagation();
     handleRepostsClose();
-    onRepostWithComment();
+    if (onRepostWithComment) {
+      onRepostWithComment();
+    }
   };
 
   const renderRepostDrop = () => {
@@ -266,6 +270,38 @@ const CardActions: React.FC<CardActionProps> = props => {
     size === 'small' ? undefined : isBookmarked ? bookmarkedLabel : bookmarkLabel;
   const shareBtnText = size === 'small' ? undefined : shareLabel;
 
+  if (isModerated) {
+    return (
+      <Box
+        width="75%"
+        alignSelf="center"
+        pad={{ vertical: 'medium' }}
+        direction="row"
+        justify="between"
+      >
+        <TextIcon
+          label={repostsBtnText}
+          iconType="transfer"
+          iconSize="sm"
+          fontSize="large"
+          clickable={disableReposting ? false : true}
+          ref={repostNodeRef}
+          onClick={disableReposting ? () => false : onRepost}
+          disabled={disableReposting}
+        />
+        <TextIcon
+          label={repliesBtnText}
+          iconType="comments"
+          iconSize="sm"
+          fontSize="large"
+          clickable={disableReposting ? false : true}
+          onClick={disableReposting ? () => false : handleRepliesClick}
+          disabled={disableReposting}
+        />
+      </Box>
+    );
+  }
+
   return (
     <Box pad="medium" direction="row" justify="between">
       {repostNodeRef.current && repostDropOpen && renderRepostDrop()}
@@ -308,7 +344,9 @@ const CardActions: React.FC<CardActionProps> = props => {
           if (disableActions) {
             return;
           }
-          handleEntryBookmark();
+          if (handleEntryBookmark) {
+            handleEntryBookmark();
+          }
         }}
         isBookmarked={isBookmarked}
         disabled={disableActions}
