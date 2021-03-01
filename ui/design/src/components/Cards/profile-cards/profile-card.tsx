@@ -188,6 +188,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
       navigator.clipboard.writeText(CID);
     }
   };
+
   return (
     <MainAreaCardBox className={className}>
       <ProfileCardCoverImage
