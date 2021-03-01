@@ -93,44 +93,6 @@ const BookmarksPage = (props: RootComponentProps) => {
     navigateToUrl(url);
   };
 
-  const handleEntryShare = (
-    service: 'twitter' | 'facebook' | 'reddit' | 'copy',
-    entryId: string,
-  ) => {
-    const bookmark = bookmarkState.bookmarks.find(bm => bm.entryId === entryId);
-    let resourceName;
-    switch (bookmark?.type) {
-      case BookmarkTypes.POST:
-        resourceName = 'post';
-        break;
-      case BookmarkTypes.COMMENT:
-        resourceName = 'comment';
-        break;
-      default:
-        resourceName = 'unknown';
-        break;
-    }
-    const url = `${window.location.origin}/AKASHA-app/${resourceName}/${entryId}`;
-    let shareUrl;
-    switch (service) {
-      case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?text=${url}`;
-        break;
-      case 'facebook':
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-        break;
-      case 'reddit':
-        shareUrl = `http://www.reddit.com/submit?url=${url}`;
-        break;
-      case 'copy':
-        navigator.clipboard.writeText(url);
-        break;
-      default:
-        break;
-    }
-    window.open(shareUrl, '_blank');
-  };
-
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
   const handleFlipCard = (entry: any) => () => {
@@ -175,13 +137,12 @@ const BookmarksPage = (props: RootComponentProps) => {
                         ethAddress={loginState.ethAddress}
                         onBookmark={handleBookmarkClick}
                         onNavigate={handleNavigateToPost}
-                        onRepliesClick={handleNavigateToPost}
                         onRepost={() => false}
-                        onShare={handleEntryShare}
                         onAvatarClick={handleAvatarClick}
                         onMentionClick={handleMentionClick}
                         contentClickable={true}
                         disableReposting={true}
+                        sharePostUrl={`${window.location.origin}/AKASHA-app/post/`}
                         awaitingModerationLabel={t(
                           'You have reported this post. It is awaiting moderation.',
                         )}
