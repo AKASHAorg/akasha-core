@@ -1,30 +1,43 @@
-import { Box } from 'grommet';
+import { Box, Text } from 'grommet';
 import React, { useState, useRef, useMemo, useCallback, useEffect } from 'react';
-import { createEditor, Editor, Range, Transforms, Node, Text as SlateText } from 'slate';
+import { createEditor, Editor, Range, Transforms, Node, Text as SlateText, Element } from 'slate';
 import { withHistory } from 'slate-history';
-import { Slate, withReact, ReactEditor } from 'slate-react';
+import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 import { Avatar } from '../Avatar/index';
 import { IEntryData } from '../Cards/entry-cards/entry-box';
 import { Icon } from '../Icon/index';
-import { EmojiPopover, ImagePopover } from '../Popovers/index';
+import { EmojiPopover } from '../Popovers/index';
 import { EmbedBox } from './embed-box';
 import { FormatToolbar } from './format-toolbar';
 import { CustomEditor } from './helpers';
 import { withMentions, withImages, withTags } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
-import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
+import {
+  StyledBox,
+  StyledEditable,
+  StyledIconDiv,
+  StyledImageInput,
+  StyledImageDiv,
+  StyledValueText,
+  StyledUploadingDiv,
+  StyledText,
+  StyledCloseDiv,
+} from './styled-editor-box';
 import { Button } from '../Buttons';
 import isHotkey from 'is-hotkey';
 import { MentionPopover } from './mention-popover';
 import { EditorMeter } from './editor-meter';
 import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
+import { isMobile } from 'react-device-detect';
 
 export interface IEditorBox {
   avatar?: string;
   ethAddress: string | null;
   postLabel?: string;
   placeholderLabel?: string;
+  uploadFailedLabel?: string;
+  uploadingImageLabel?: string;
   onPublish: any;
   embedEntryData?: IEntryData;
   minHeight?: string;
@@ -70,6 +83,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     ethAddress,
     postLabel,
     placeholderLabel,
+    uploadFailedLabel,
+    uploadingImageLabel,
     onPublish,
     embedEntryData,
     minHeight,
@@ -99,17 +114,16 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const [publishDisabled, setPublishDisabled] = useState(true);
 
-  const [imagePopoverOpen, setImagePopoverOpen] = useState(false);
   const [emojiPopoverOpen, setEmojiPopoverOpen] = useState(false);
 
   React.useImperativeHandle(
     ref,
     () => ({
       getPopoversState: () => {
-        return imagePopoverOpen || emojiPopoverOpen;
+        return emojiPopoverOpen;
       },
     }),
-    [imagePopoverOpen, emojiPopoverOpen],
+    [emojiPopoverOpen],
   );
 
   const editor = useMemo(
@@ -333,35 +347,12 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     [index, mentionTargetRange, tagTargetRange, mentions, tags],
   );
 
-  const handleMediaClick = () => {
-    setImagePopoverOpen(!imagePopoverOpen);
-  };
-
-  const closeImagePopover = () => {
-    setImagePopoverOpen(false);
-  };
-
   const openEmojiPicker = () => {
     setEmojiPopoverOpen(!emojiPopoverOpen);
   };
 
   const closeEmojiPicker = () => {
     setEmojiPopoverOpen(false);
-  };
-
-  const handleInsertImageLink = (data: {
-    src: string;
-    size: {
-      width: string;
-      height: string;
-      naturalWidth: string;
-      naturalHeight: string;
-    };
-  }) => {
-    if (!data.src || !data.size) {
-      return;
-    }
-    CustomEditor.insertImage(editor, data.src, data.size);
   };
 
   const handleInsertMention = (mentionIndex: number) => {
@@ -389,8 +380,88 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   });
   const tagsNames = tags.map(tag => tag.name);
 
+  // image insertion
+  const [uploadValueName, setUploadValueName] = React.useState('');
+  const [uploading, setUploading] = React.useState(false);
+  const [imageSize, setImageSize] = React.useState<{ height: number; width: number } | null>(null);
+  const [uploadErrorState, setUploadErrorState] = useState(false);
+
+  const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
+
+  const handleInsertImageLink = (data: {
+    src: string;
+    size: {
+      width: string;
+      height: string;
+      naturalWidth: string;
+      naturalHeight: string;
+    };
+  }) => {
+    if (!data.src || !data.size) {
+      return;
+    }
+    CustomEditor.insertImage(editor, data.src, data.size);
+  };
+
+  const handleMediaClick = () => {
+    if (uploadInputRef.current && !uploading) {
+      uploadInputRef.current.click();
+    }
+    return;
+  };
+
+  const handleDeleteImage = (element: Element) => {
+    console.log('DELETING IMAGE', element);
+    Transforms.removeNodes(editor, {
+      voids: true,
+      match: n => {
+        console.log('NODE: ', n, 'ELEMENT: ', element);
+        return n === element;
+      },
+    });
+  };
+
+  const handleCancelUpload = () => {
+    setUploadErrorState(false);
+    setUploading(false);
+    setImageSize(null);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!(e.target.files && e.target.files[0])) {
+      setUploadErrorState(true);
+      return;
+    }
+    const file = e.target.files[0];
+    const fileName = file.name;
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+
+    fileReader.addEventListener('load', async () => {
+      setUploadValueName(fileName);
+      setUploadErrorState(false);
+      if (uploadRequest && fileReader.result) {
+        const img = new Image();
+        img.src = fileReader.result as string;
+        img.onload = () => {
+          setUploading(true);
+          setImageSize({ height: Math.min(img.height, 640), width: Math.min(img.width, 640) });
+        };
+
+        const resp = await uploadRequest(file);
+        if (resp.error) {
+          setUploadErrorState(true);
+          setUploading(false);
+        } else if (resp.data) {
+          handleInsertImageLink(resp.data);
+          setUploading(false);
+        }
+      }
+    });
+  };
+
   return (
-    <StyledBox pad="none" justify="between" fill={true}>
+    <StyledBox pad="none" justify="between" fill={true} isMobile={isMobile}>
       <Box
         direction="row"
         pad={{ horizontal: 'medium' }}
@@ -408,7 +479,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 placeholder={placeholderLabel}
                 spellCheck={false}
                 autoFocus={true}
-                renderElement={renderElement}
+                renderElement={(renderProps: RenderElementProps) =>
+                  renderElement(renderProps, () => null, handleDeleteImage)
+                }
                 renderLeaf={renderLeaf}
                 onKeyDown={onKeyDown}
               />
@@ -434,6 +507,36 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 <EmbedBox embedEntryData={embedEntryData} />
               </Box>
             )}
+            {!uploading && uploadErrorState && imageSize && (
+              <StyledUploadingDiv>
+                <StyledCloseDiv onClick={handleCancelUpload}>
+                  <Icon type="close" clickable={true} />
+                </StyledCloseDiv>
+                <StyledImageDiv>
+                  <Icon type="image" />
+                </StyledImageDiv>
+                <Box direction="column" gap="small">
+                  <StyledValueText>{uploadValueName}</StyledValueText>
+
+                  <Box direction="row" gap="xsmall" align="center">
+                    <Text color="errorText">{uploadFailedLabel}</Text>
+                  </Box>
+                </Box>
+              </StyledUploadingDiv>
+            )}
+            {uploading && (
+              <StyledUploadingDiv>
+                <StyledCloseDiv onClick={handleCancelUpload}>
+                  <Icon type="close" clickable={true} />
+                </StyledCloseDiv>
+                <Box direction="column" gap="medium" align="center" justify="center">
+                  <Icon type="loading" />
+                  <StyledText size="medium" color="accentText">
+                    {uploadingImageLabel}
+                  </StyledText>
+                </Box>
+              </StyledUploadingDiv>
+            )}
           </Box>
         </Box>
       </Box>
@@ -445,11 +548,19 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         flex={false}
       >
         <Box direction="row" gap="xsmall" align="center">
-          <StyledIconDiv ref={emojiIconRef}>
-            <Icon type="emoji" clickable={true} onClick={openEmojiPicker} size="md" />
-          </StyledIconDiv>
+          {!isMobile && (
+            <StyledIconDiv ref={emojiIconRef}>
+              <Icon type="emoji" clickable={true} onClick={openEmojiPicker} size="md" />
+            </StyledIconDiv>
+          )}
           <StyledIconDiv ref={mediaIconRef}>
-            <Icon type="image" clickable={true} onClick={handleMediaClick} size="md" />
+            <Icon type="image" clickable={!uploading} onClick={handleMediaClick} size="md" />
+            <StyledImageInput
+              value=""
+              onChange={handleFileUpload}
+              type="file"
+              ref={uploadInputRef}
+            />
           </StyledIconDiv>
         </Box>
 
@@ -464,14 +575,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           />
         </Box>
       </Box>
-      {imagePopoverOpen && mediaIconRef.current && (
-        <ImagePopover
-          target={mediaIconRef.current}
-          closePopover={closeImagePopover}
-          insertImage={handleInsertImageLink}
-          uploadRequest={uploadRequest}
-        />
-      )}
       {emojiPopoverOpen && emojiIconRef.current && (
         <EmojiPopover
           target={emojiIconRef.current}
@@ -486,6 +589,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 EditorBox.defaultProps = {
   postLabel: 'Post',
   placeholderLabel: 'Share your thoughts',
+  uploadingImageLabel: 'Uploading Image',
+  uploadFailedLabel: 'Upload failed.',
 };
 
 export default EditorBox;
