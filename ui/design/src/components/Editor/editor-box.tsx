@@ -1,4 +1,4 @@
-import { Box, Text } from 'grommet';
+import { Box } from 'grommet';
 import React, { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import { createEditor, Editor, Range, Transforms, Node, Text as SlateText, Element } from 'slate';
 import { withHistory } from 'slate-history';
@@ -12,17 +12,8 @@ import { FormatToolbar } from './format-toolbar';
 import { CustomEditor } from './helpers';
 import { withMentions, withImages, withTags } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
-import {
-  StyledBox,
-  StyledEditable,
-  StyledIconDiv,
-  StyledImageInput,
-  StyledImageDiv,
-  StyledValueText,
-  StyledUploadingDiv,
-  StyledText,
-  StyledCloseDiv,
-} from './styled-editor-box';
+import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
+import { ImageUpload } from './image-upload';
 import { Button } from '../Buttons';
 import isHotkey from 'is-hotkey';
 import { MentionPopover } from './mention-popover';
@@ -381,11 +372,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const tagsNames = tags.map(tag => tag.name);
 
   // image insertion
-  const [uploadValueName, setUploadValueName] = React.useState('');
-  const [uploading, setUploading] = React.useState(false);
-  const [imageSize, setImageSize] = React.useState<{ height: number; width: number } | null>(null);
-  const [uploadErrorState, setUploadErrorState] = useState(false);
 
+  const [uploading, setUploading] = React.useState(false);
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 
   const handleInsertImageLink = (data: {
@@ -411,52 +399,11 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   };
 
   const handleDeleteImage = (element: Element) => {
-    console.log('DELETING IMAGE', element);
     Transforms.removeNodes(editor, {
       voids: true,
       match: n => {
-        console.log('NODE: ', n, 'ELEMENT: ', element);
         return n === element;
       },
-    });
-  };
-
-  const handleCancelUpload = () => {
-    setUploadErrorState(false);
-    setUploading(false);
-    setImageSize(null);
-  };
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!(e.target.files && e.target.files[0])) {
-      setUploadErrorState(true);
-      return;
-    }
-    const file = e.target.files[0];
-    const fileName = file.name;
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-
-    fileReader.addEventListener('load', async () => {
-      setUploadValueName(fileName);
-      setUploadErrorState(false);
-      if (uploadRequest && fileReader.result) {
-        const img = new Image();
-        img.src = fileReader.result as string;
-        img.onload = () => {
-          setUploading(true);
-          setImageSize({ height: Math.min(img.height, 640), width: Math.min(img.width, 640) });
-        };
-
-        const resp = await uploadRequest(file);
-        if (resp.error) {
-          setUploadErrorState(true);
-          setUploading(false);
-        } else if (resp.data) {
-          handleInsertImageLink(resp.data);
-          setUploading(false);
-        }
-      }
     });
   };
 
@@ -507,36 +454,15 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 <EmbedBox embedEntryData={embedEntryData} />
               </Box>
             )}
-            {!uploading && uploadErrorState && imageSize && (
-              <StyledUploadingDiv>
-                <StyledCloseDiv onClick={handleCancelUpload}>
-                  <Icon type="close" clickable={true} />
-                </StyledCloseDiv>
-                <StyledImageDiv>
-                  <Icon type="image" />
-                </StyledImageDiv>
-                <Box direction="column" gap="small">
-                  <StyledValueText>{uploadValueName}</StyledValueText>
-
-                  <Box direction="row" gap="xsmall" align="center">
-                    <Text color="errorText">{uploadFailedLabel}</Text>
-                  </Box>
-                </Box>
-              </StyledUploadingDiv>
-            )}
-            {uploading && (
-              <StyledUploadingDiv>
-                <StyledCloseDiv onClick={handleCancelUpload}>
-                  <Icon type="close" clickable={true} />
-                </StyledCloseDiv>
-                <Box direction="column" gap="medium" align="center" justify="center">
-                  <Icon type="loading" />
-                  <StyledText size="medium" color="accentText">
-                    {uploadingImageLabel}
-                  </StyledText>
-                </Box>
-              </StyledUploadingDiv>
-            )}
+            <ImageUpload
+              uploading={uploading}
+              setUploading={setUploading}
+              uploadFailedLabel={uploadFailedLabel}
+              uploadingImageLabel={uploadingImageLabel}
+              uploadRequest={uploadRequest}
+              handleInsertImage={handleInsertImageLink}
+              ref={uploadInputRef}
+            />
           </Box>
         </Box>
       </Box>
@@ -555,12 +481,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           )}
           <StyledIconDiv ref={mediaIconRef}>
             <Icon type="image" clickable={!uploading} onClick={handleMediaClick} size="md" />
-            <StyledImageInput
-              value=""
-              onChange={handleFileUpload}
-              type="file"
-              ref={uploadInputRef}
-            />
           </StyledIconDiv>
         </Box>
 
