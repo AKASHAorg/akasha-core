@@ -26,7 +26,6 @@ storiesOf('Cards/Entry Cards', module)
         bookmarkLabel={text('Bookmark Label', bookmarkLabel)}
         bookmarkedLabel={text('Bookmarked Label', bookmarkedLabel)}
         onRepost={() => action('Repost Clicked')('Synthetic Event')}
-        onEntryShare={() => action('Share entry Clicked')('Synthetic Event')}
         onEntryFlag={() => action('Flag Entry Clicked')('Synthetic Event')}
         onEntryBookmark={() => action('Bookmark Clicked')('Synthetic Event')}
         entryData={object('Entry Data', entryData)}
