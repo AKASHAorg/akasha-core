@@ -6,11 +6,14 @@ export const capitalize = (str?: string) => {
 };
 
 export const truncateMiddle = (str: string, startChars: number = 6, endChars: number = 4) => {
-  let truncated = '';
-  truncated += str.substring(0, startChars);
-  truncated += '...';
-  truncated += str.substring(str.length - endChars, str.length);
-  return truncated;
+  if (str) {
+    let truncated = '';
+    truncated += str.substring(0, startChars);
+    truncated += '...';
+    truncated += str.substring(str.length - endChars, str.length);
+    return truncated;
+  }
+  return '';
 };
 
 /**
