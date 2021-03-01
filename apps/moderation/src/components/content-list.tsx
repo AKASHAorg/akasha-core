@@ -69,18 +69,20 @@ const ContentList: React.FC<IContentListProps> = props => {
     if (!ethAddress) {
       // if not authenticated, prompt to authenticate
       props.singleSpa.navigateToUrl('/moderation-app/unauthenticated');
-    } else {
-      // if authenticated,
-      if (isPending) {
-        // if authorised, check for pending contents while pending tab is active
-        fetchPendingContents();
-      }
-      if (!isPending) {
-        // check for moderated contents while moderated tab is active
-        fetchModeratedContents();
-      }
     }
-  }, [ethAddress, isPending]);
+  }, [ethAddress]);
+
+  React.useEffect(() => {
+    // if authenticated,
+    if (ethAddress && isPending) {
+      // if authorised, check for pending contents while pending tab is active
+      fetchPendingContents();
+    }
+    if (ethAddress && !isPending) {
+      // check for moderated contents while moderated tab is active
+      fetchModeratedContents();
+    }
+  }, [isPending]);
 
   const getStatusCount = async () => {
     setRequesting(true);
