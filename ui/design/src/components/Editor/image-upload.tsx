@@ -29,7 +29,7 @@ export interface IImageUpload {
       naturalHeight: string;
     };
   }) => void;
-  //ref
+  // ref for hidden input
   ref: React.Ref<HTMLInputElement>;
 }
 
