@@ -12,6 +12,10 @@ export const tokenCache = 'token';
 export const moduleName = 'auth';
 const servicePath = buildServicePath(moduleName);
 
+export const authStatus = {
+  isNewUser: false,
+};
+
 const services: IAkashaModuleServices = {
   [AUTH_SERVICE]: servicePath(AUTH_SERVICE),
 };
