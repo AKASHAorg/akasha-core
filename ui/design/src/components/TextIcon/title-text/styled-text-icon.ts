@@ -32,6 +32,18 @@ const StyledTextIcon = styled.div<ITextIconProps>`
       user-select: none;
       display: inline-flex;
       ${
+        disabled &&
+        `
+        & * {
+          color: ${props.theme.colors.disabled};
+        };
+        cursor: default;
+        & * {
+          stroke: ${props.theme.colors.disabled}
+        }
+      `
+      }
+      ${
         menuIcon
           ? `padding-left: ${props.theme.shapes.baseSpacing * 8 + 2}px
           color: ${props.theme.colors.accent};
@@ -63,18 +75,6 @@ const StyledTextIcon = styled.div<ITextIconProps>`
             stroke: ${props.theme.colors.accent};
             }`
             : ''
-        }
-        ${
-          disabled &&
-          `
-          & * {
-            color: ${props.theme.colors.disabled};
-          };
-          cursor: default;
-          & * {
-            stroke: ${props.theme.colors.disabled}
-          }
-        `
         }
       }
     `;

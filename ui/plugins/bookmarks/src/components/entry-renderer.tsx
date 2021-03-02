@@ -26,11 +26,10 @@ export interface IEntryCardRendererProps {
   locale?: any;
   ethAddress?: string | null;
   onBookmark: (entryId: string) => void;
-  onNavigate: (details: any) => void;
+  onNavigate: (details: NavigationDetails) => void;
   onLinkCopy?: () => void;
-  onRepliesClick: (details: NavigationDetails) => void;
   onRepost: (withComment: boolean, entryData: any) => void;
-  onShare: (service: string, entryId: string, authorEthAddress: string) => void;
+  sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (ethAddress: string) => void;
   bookmarkState?: IBookmarkState;
@@ -135,7 +134,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   entryData={itemData}
                   sharePostLabel={t('Share Post')}
                   shareTextLabel={t('Share this post with your friends')}
-                  sharePostUrl={'https://ethereum.world'}
+                  sharePostUrl={props.sharePostUrl}
                   onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
                     props.onAvatarClick(ev, itemData.author.ethAddress)
                   }
@@ -153,16 +152,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
                   onRepost={props.onRepost}
-                  onEntryShare={props.onShare}
-                  onClickReplies={() =>
-                    props.onRepliesClick({
-                      authorEthAddress: itemData.author.ethAddress,
-                      entryId: itemData.entryId,
-                      replyTo: {
-                        entryId: itemData.parentId,
-                      },
-                    })
-                  }
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
                   isFollowingAuthor={isFollowing}

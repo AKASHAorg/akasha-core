@@ -209,36 +209,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     setFlagged(entryId);
     setReportModalOpen(true);
   };
-  const handleClickReplies = () => {
-    // todo
-  };
 
-  const handleEntryShare = (
-    service: 'twitter' | 'facebook' | 'reddit' | 'copy',
-    entryId: string,
-  ) => {
-    const url = `${window.location.origin}${routes[POST]}/${entryId}`;
-    let shareUrl;
-    switch (service) {
-      case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?text=${url}`;
-        break;
-      case 'facebook':
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-        break;
-      case 'reddit':
-        shareUrl = `http://www.reddit.com/submit?url=${url}`;
-        break;
-      case 'copy':
-        navigator.clipboard.writeText(url);
-        break;
-      default:
-        break;
-    }
-    if (shareUrl) {
-      window.open(shareUrl, '_blank');
-    }
-  };
   const handlePublish = async (data: {
     metadata: {
       app: string;
@@ -411,7 +382,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       entryData={entryData}
                       sharePostLabel={t('Share Post')}
                       shareTextLabel={t('Share this post with your friends')}
-                      sharePostUrl={'https://ethereum.world'}
+                      sharePostUrl={`${window.location.origin}${routes[POST]}/`}
                       onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
                         handleAvatarClick(ev, entryData.author.pubKey)
                       }
@@ -430,9 +401,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       onRepost={() => {
                         return;
                       }}
-                      onEntryShare={handleEntryShare}
                       onEntryFlag={handleEntryFlag(entryData.entryId, ethAddress)}
-                      onClickReplies={handleClickReplies}
                       handleFollowAuthor={handleFollow}
                       handleUnfollowAuthor={handleUnfollow}
                       isFollowingAuthor={isFollowing}
@@ -474,42 +443,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
           />
         </Box>
       )}
-      <VirtualList
-        items={postsState.commentIds}
-        itemsData={postsState.postsData}
-        loadMore={handleLoadMore}
-        loadItemData={loadItemData}
-        hasMoreItems={!!postsState.nextCommentIndex}
-        itemCard={
-          <PostRenderer
-            sdkModules={sdkModules}
-            logger={logger}
-            globalChannel={globalChannel}
-            bookmarkState={bookmarkState}
-            ethAddress={ethAddress}
-            locale={locale}
-            onBookmark={handleCommentBookmark}
-            onNavigate={handleNavigateToPost}
-            onRepliesClick={handleClickReplies}
-            onFlag={handleEntryFlag}
-            onRepost={handleEntryRepost}
-            onShare={handleEntryShare}
-            onAvatarClick={handleAvatarClick}
-            onMentionClick={handleMentionClick}
-            handleFlipCard={handleListFlipCard}
-          />
-        }
-        customEntities={getPendingComments({
-          logger,
-          globalChannel,
-          locale,
-          isMobile,
-          sdkModules,
-          feedItems: postsState.postIds,
-          loggedEthAddress: ethAddress,
-          pendingComments: postsState.pendingComments,
-        })}
-      />
       <ErrorInfoCard errors={commentErrors}>
         {(errorMessages, hasCriticalErrors) => (
           <>
@@ -544,10 +477,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                     locale={locale}
                     onBookmark={handleCommentBookmark}
                     onNavigate={handleNavigateToPost}
-                    onRepliesClick={handleClickReplies}
+                    sharePostUrl={`${window.location.origin}${routes[POST]}/`}
                     onFlag={handleEntryFlag}
                     onRepost={handleEntryRepost}
-                    onShare={handleEntryShare}
                     onAvatarClick={handleAvatarClick}
                     onMentionClick={handleMentionClick}
                     handleFlipCard={handleListFlipCard}

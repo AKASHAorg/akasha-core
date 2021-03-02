@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
 import styled from 'styled-components';
+import { Icon } from '../Icon';
+import { StyledCloseDiv } from './styled-editor-box';
 
 const StyledImg = styled.img`
   display: block;
@@ -13,7 +15,7 @@ const StyledMention = styled.span`
   cursor: pointer;
 `;
 
-const ImageElement = ({ attributes, children, element }: any) => {
+const ImageElement = ({ attributes, children, element, handleDeleteImage }: any) => {
   return (
     <div {...attributes}>
       <div
@@ -26,13 +28,15 @@ const ImageElement = ({ attributes, children, element }: any) => {
           contain: 'layout',
         }}
       >
+        {handleDeleteImage && (
+          <StyledCloseDiv onClick={() => handleDeleteImage(element)}>
+            <Icon type="close" clickable={true} />
+          </StyledCloseDiv>
+        )}
         <StyledImg
           src={element.url}
           style={{
             position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
           }}
         />
       </div>
@@ -69,12 +73,16 @@ const TagElement = ({ attributes, children, element }: any) => {
   );
 };
 
-const renderElement = (props: RenderElementProps, handleMentionClick?: any) => {
+const renderElement = (
+  props: RenderElementProps,
+  handleMentionClick?: any,
+  handleDeleteImage?: any,
+) => {
   switch (props.element.type) {
     case 'quote':
       return <blockquote {...props.attributes}>{props.children}</blockquote>;
     case 'image':
-      return <ImageElement {...props} />;
+      return <ImageElement handleDeleteImage={handleDeleteImage} {...props} />;
     case 'mention':
       return <MentionElement handleMentionClick={handleMentionClick} {...props} />;
     case 'tag':
