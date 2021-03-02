@@ -61,9 +61,8 @@ const Routes: React.FC<RootComponentProps> = props => {
               sdkModules={props.sdkModules}
               singleSpa={props.singleSpa}
               globalChannel={props.globalChannel}
-              loggedPubKey={loginState.pubKey}
-              loggedEthAddress={loginState.ethAddress}
               showLoginModal={showLoginModal}
+              loginState={loginState}
             />
           </Route>
         </Switch>

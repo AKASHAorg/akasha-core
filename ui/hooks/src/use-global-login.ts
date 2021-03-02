@@ -15,7 +15,7 @@ export interface UseGlobalLoginProps {
   onLogout: OnLogoutSuccessHandler;
   onError?: OnErrorHandler;
   waitForAuth?: (data: boolean) => void;
-  onReady?: (data: boolean) => void;
+  onReady?: (data: { ethAddress: string; pubKey: string }) => void;
 }
 
 const useGlobalLogin = (props: UseGlobalLoginProps): void => {
@@ -70,7 +70,7 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
       }),
     );
 
-    readyCall.subscribe((payload: { data: boolean }) => {
+    readyCall.subscribe((payload: { data: { ethAddress: string; pubKey: string } }) => {
       const { data } = payload;
       if (props.onReady) {
         props.onReady(data);

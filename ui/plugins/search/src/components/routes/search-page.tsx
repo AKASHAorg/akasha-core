@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import { useBookmarks, useFollow, useSearch, useTagSubscribe } from '@akashaproject/ui-awf-hooks';
+import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
 const { Box, Icon, BasicCardBox, ErrorLoader, Spinner, DuplexButton, EntryCard, ProfileCard } = DS;
 
@@ -14,21 +15,12 @@ interface SearchPageProps {
   logger: any;
   globalChannel: any;
   singleSpa: any;
-  loggedEthAddress: string | null;
-  loggedPubKey: string | null;
+  loginState: UseLoginState;
   showLoginModal: () => void;
 }
 
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const {
-    sdkModules,
-    logger,
-    singleSpa,
-    globalChannel,
-    loggedPubKey,
-    loggedEthAddress,
-    showLoginModal,
-  } = props;
+  const { sdkModules, logger, singleSpa, globalChannel, loginState, showLoginModal } = props;
 
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 
@@ -36,7 +28,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    pubKey: loggedPubKey,
     onError: (err: IAkashaError) => {
       logger.error('useBookmark error %j', err);
     },
@@ -74,25 +65,31 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   }, [searchKeyword]);
 
   React.useEffect(() => {
-    if (loggedEthAddress) {
+    if (loginState.currentUserCalled && loginState.ethAddress) {
+      bookmarkActions.getBookmarks();
+    }
+  }, [loginState.currentUserCalled, loginState.ethAddress]);
+
+  React.useEffect(() => {
+    if (loginState.ethAddress) {
       searchState.profiles.slice(0, 4).forEach(async (profile: any) => {
-        if (loggedEthAddress && profile.ethAddress) {
-          followActions.isFollowing(loggedEthAddress, profile.ethAddress);
+        if (loginState.ethAddress && profile.ethAddress) {
+          followActions.isFollowing(loginState.ethAddress, profile.ethAddress);
         }
       });
       tagSubscriptionActions.getTagSubscriptions();
     }
-  }, [searchState, loggedEthAddress]);
+  }, [searchState, loginState.ethAddress]);
 
   const handleTagSubscribe = (tagName: string) => {
-    if (!loggedEthAddress) {
+    if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
     tagSubscriptionActions.toggleTagSubscription(tagName);
   };
   const handleTagUnsubscribe = (tagName: string) => {
-    if (!loggedEthAddress) {
+    if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
@@ -102,7 +99,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     singleSpa.navigateToUrl(`/profile/${pubKey}`);
   };
   const handleFollowProfile = (ethAddress: string) => {
-    if (!loggedEthAddress) {
+    if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
@@ -110,7 +107,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleUnfollowProfile = (ethAddress: string) => {
-    if (!loggedEthAddress) {
+    if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
@@ -149,7 +146,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleEntryBookmark = (entryId: string) => {
-    if (!loggedEthAddress) {
+    if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
@@ -220,7 +217,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 handleUnfollow={() => handleUnfollowProfile(profileData.ethAddress)}
                 handleShareClick={() => null}
                 isFollowing={followedProfiles.includes(profileData?.ethAddress)}
-                loggedEthAddress={loggedEthAddress}
+                loggedEthAddress={loginState.ethAddress}
                 profileData={profileData}
                 followLabel={t('Follow')}
                 unfollowLabel={t('Unfollow')}
@@ -258,7 +255,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 shareLabel={t('Share')}
                 copyLinkLabel={t('Copy Link')}
                 flagAsLabel={t('Report Post')}
-                loggedProfileEthAddress={loggedEthAddress}
+                loggedProfileEthAddress={loginState.ethAddress}
                 locale={locale || 'en'}
                 style={{ height: 'auto' }}
                 bookmarkLabel={t('Save')}
@@ -299,7 +296,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 shareLabel={t('Share')}
                 copyLinkLabel={t('Copy Link')}
                 flagAsLabel={t('Report Post')}
-                loggedProfileEthAddress={loggedEthAddress}
+                loggedProfileEthAddress={loginState.ethAddress}
                 locale={locale || 'en'}
                 style={{ height: 'auto' }}
                 bookmarkLabel={t('Save')}

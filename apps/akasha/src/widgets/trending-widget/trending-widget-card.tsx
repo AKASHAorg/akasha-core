@@ -58,9 +58,14 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
           followActions.isFollowing(loginState.ethAddress, profile.ethAddress);
         }
       });
-      tagSubscriptionActions.getTagSubscriptions();
     }
   }, [trendingData, loginState.ethAddress]);
+
+  React.useEffect(() => {
+    if (loginState.currentUserCalled && loginState.ethAddress) {
+      tagSubscriptionActions.getTagSubscriptions();
+    }
+  }, [loginState.currentUserCalled && loginState.ethAddress]);
 
   const handleTagClick = () => {
     // todo
