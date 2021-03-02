@@ -11,6 +11,7 @@ import services, {
   AUTH_ENDPOINT,
   AUTH_MESSAGE,
   AUTH_SERVICE,
+  authStatus,
   ethAddressCache,
   moduleName,
 } from './constants';
@@ -37,7 +38,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   let db: Database;
   let channel;
   let sessKey;
-  let currentUser: { pubKey: string; ethAddress: string };
+  let currentUser: { pubKey: string; ethAddress: string; isNewUser?: boolean };
   let tokenGenerator: () => Promise<UserAuth>;
   const waitForAuth = 'waitForAuth';
   const providerKey = '@providerType';
@@ -54,12 +55,14 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     channel.onmessage = function (event) {
       const { type } = event.data;
       if (type === SYNC_REQUEST) {
-        const response = {
-          [providerKey]: sessionStorage.getItem(providerKey),
-          [currentUserKey]: sessionStorage.getItem(currentUserKey),
-          identity: { key: sessKey, value: identity?.toString() },
-        };
-        channel.postMessage({ response, type: SYNC_RESPONSE });
+        if (currentUser) {
+          const response = {
+            [providerKey]: sessionStorage.getItem(providerKey),
+            [currentUserKey]: sessionStorage.getItem(currentUserKey),
+            identity: { key: sessKey, value: identity?.toString() },
+          };
+          channel.postMessage({ response, type: SYNC_RESPONSE });
+        }
       } else if (type === SYNC_RESPONSE) {
         const { response } = event.data;
         if (response && response.identity.key !== sessKey) {
@@ -87,7 +90,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     };
   }
   const signIn = async (provider: EthProviders = EthProviders.Web3Injected) => {
-    let currentProvider;
+    let currentProvider: number;
     // const { setServiceSettings } = invoke(coreServices.SETTINGS_SERVICE);
     const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
 
@@ -98,6 +101,11 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       currentProvider = +sessionStorage.getItem(providerKey); // cast to int
     } else {
       currentProvider = provider;
+      if (currentProvider === EthProviders.WalletConnect) {
+        // @Todo: track https://github.com/WalletConnect/walletconnect-monorepo/issues/444
+        // until there is a consistent way of detecting previous sessions and initiate disconnect
+        localStorage.clear();
+      }
     }
     try {
       const web3 = await invoke(commonServices[WEB3_SERVICE]).regen(currentProvider);
@@ -140,16 +148,18 @@ const service: AkashaService = (invoke, log, globalChannel) => {
 
     // @Todo: on error try to setupMail
     await hubUser.setupMailbox();
+    sessionStorage.setItem(providerKey, currentProvider.toString());
+    sessionStorage.setItem(sessKey, identity.toString());
+    sessionStorage.setItem(currentUserKey, JSON.stringify(currentUser));
     if (channel) {
       const response = {
         [providerKey]: sessionStorage.getItem(providerKey),
-        identity: { key: sessKey, value: identity?.toString() },
+        identity: { key: sessKey, value: sessionStorage.getItem(sessKey) },
+        [currentUserKey]: sessionStorage.getItem(currentUserKey),
       };
       channel.postMessage({ response, type: SYNC_RESPONSE });
     }
-    sessionStorage.setItem(providerKey, currentProvider);
-    sessionStorage.setItem(sessKey, identity.toString());
-    sessionStorage.setItem(currentUserKey, JSON.stringify(currentUser));
+
     if (currentUser?.pubKey) {
       db = new Database(
         `awf-alpha-user-${currentUser.pubKey.slice(-8)}`,
@@ -174,7 +184,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
         args: null,
       },
     });
-    return currentUser;
+    return Object.assign(currentUser, authStatus);
   };
 
   const getSession = async () => {
@@ -261,9 +271,6 @@ const service: AkashaService = (invoke, log, globalChannel) => {
 
   const signOut = async () => {
     sessionStorage.clear();
-    const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
-    await invoke(commonServices[WEB3_SERVICE]).destroy({});
-    cache.clear();
     identity = null;
     hubClient = null;
     hubUser = null;
@@ -274,7 +281,10 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     if (channel) {
       channel.postMessage({ type: SIGN_OUT_EVENT });
     }
-    return;
+    const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
+    await invoke(commonServices[WEB3_SERVICE]).destroy({});
+    cache.clear();
+    return true;
   };
 
   const signData = async (data: object | string, base64Format: boolean = false) => {

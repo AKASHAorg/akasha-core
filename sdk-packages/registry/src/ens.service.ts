@@ -16,6 +16,7 @@ const service: AkashaService = (invoke, log) => {
   let AkashaRegistrarInstance;
   let ReverseRegistrarInstance;
   let ENSinstance;
+  let chainChecked = false;
 
   // register an akasha.eth subdomain
   const registerName = async (args: { name: string }) => {
@@ -46,7 +47,15 @@ const service: AkashaService = (invoke, log) => {
   };
 
   const resolveAddress = async (args: { ethAddress: string }) => {
+    if (!chainChecked) {
+      const { checkCurrentNetwork } = await invoke(commonServices[WEB3_SERVICE]);
+      await checkCurrentNetwork();
+      chainChecked = true;
+    }
     const web3Provider = await invoke(commonServices[WEB3_SERVICE]).getWeb3Instance();
+    if (!AkashaRegistrarInstance) {
+      await setupContracts();
+    }
     return web3Provider.lookupAddress(args.ethAddress);
   };
 
@@ -75,6 +84,11 @@ const service: AkashaService = (invoke, log) => {
 
   // boilerplate for smart contracts
   const setupContracts = async () => {
+    if (!chainChecked) {
+      const { checkCurrentNetwork } = await invoke(commonServices[WEB3_SERVICE]);
+      await checkCurrentNetwork();
+      chainChecked = true;
+    }
     const web3Provider = await invoke(commonServices[WEB3_SERVICE]).getWeb3Instance();
     const contractFactory = await invoke(commonServices[WEB3_SERVICE]).getContractFactory();
     const AkashaRegistrar = await contractFactory.fromSolidity(AkashaRegistrarABI);
