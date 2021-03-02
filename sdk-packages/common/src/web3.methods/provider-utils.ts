@@ -18,11 +18,13 @@ export const ConnectToInjected = async () => {
   if (!acc?.length) {
     throw new Error('Must connect at least one address from the wallet.');
   }
-  provider.on('accountsChanged', _ => {
+  const refreshPage = _ => {
     sessionStorage.clear();
     // refresh on metamask logout or changed acc
     window.location.reload();
-  });
+  };
+  provider.on('accountsChanged', refreshPage);
+  provider.on('chainChanged', refreshPage);
   return provider;
 };
 
@@ -48,7 +50,7 @@ export const ConnectToWalletConnect = (
   return new Promise(async (resolve, reject) => {
     const qrcode = true;
     let infuraId = '';
-    let chainId = 1;
+    let chainId;
 
     if (opts) {
       infuraId = opts.infuraId || '';
