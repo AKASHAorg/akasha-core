@@ -8,7 +8,6 @@ import { PageWrapper, ContentWrapper } from './styled-elements';
 
 const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => {
   const {
-    pad,
     size,
     errorType,
     titleLabel,
@@ -17,8 +16,7 @@ const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => 
     textMarginTop,
     textMarginBottom,
     hasButton,
-    boxHasMargin,
-    wrapperHasMargin,
+    imageBoxHasMargin,
     publicImgPath = '/images',
     showLoginModal,
   } = props;
@@ -30,23 +28,20 @@ const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => 
   };
 
   return (
-    <PageWrapper style={{ background: 'white' }}>
-      <ContentWrapper
-        pad={{ top: '0rem', horizontal: pad, bottom: pad }}
-        margin={{ ...(wrapperHasMargin && { top: '-2rem' }) }}
-      >
+    <PageWrapper>
+      <ContentWrapper pad={{ top: '0rem', horizontal: '5rem', bottom: '1.2rem' }}>
         <Box
           height={size}
           width={size}
-          margin={{ ...(boxHasMargin && { bottom: 'small' }) }}
+          margin={{ ...(imageBoxHasMargin && { bottom: 'small' }) }}
           alignSelf="center"
         >
           <Image fit="contain" src={`${publicImgPath}/${errorType}.png`} />
         </Box>
         <Text
           weight={600}
-          margin={{ bottom: 'large', horizontal: 'auto' }}
-          size="large"
+          margin={{ bottom: 'medium', horizontal: 'auto' }}
+          size="xlarge"
           textAlign="center"
         >
           {titleLabel}
@@ -58,7 +53,7 @@ const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => 
             ...(textMarginBottom && { bottom: 'medium' }),
           }}
           color="secondaryText"
-          size="medium"
+          size="large"
           textAlign="center"
         >
           {subtitleLabel}

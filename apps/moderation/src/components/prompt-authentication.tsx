@@ -23,7 +23,6 @@ const PromptAuthentication: React.FC<IPromptAuthenticationProps> = props => {
 
   return (
     <ModerationAppErrorCard
-      pad={'1.2rem'}
       size={'18.75rem'}
       errorType={'no-authentication'}
       titleLabel={titleLabel}
@@ -31,7 +30,6 @@ const PromptAuthentication: React.FC<IPromptAuthenticationProps> = props => {
       buttonLabel={buttonLabel}
       textMarginBottom={true}
       hasButton={true}
-      wrapperHasMargin={true}
       showLoginModal={showLoginModal}
     />
   );

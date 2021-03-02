@@ -27,7 +27,6 @@ export interface ErrorLoaderProps {
 }
 
 export interface IModerationAppErrorCardProps {
-  pad: string;
   size: string;
   errorType: string;
   titleLabel: string;
@@ -36,8 +35,7 @@ export interface IModerationAppErrorCardProps {
   textMarginTop?: boolean;
   textMarginBottom?: boolean;
   hasButton?: boolean;
-  boxHasMargin?: boolean;
-  wrapperHasMargin?: boolean;
+  imageBoxHasMargin?: boolean;
   /* Path to public folder */
   publicImgPath?: string;
   showLoginModal?: () => void;
