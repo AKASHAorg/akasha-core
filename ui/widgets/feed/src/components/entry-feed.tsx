@@ -151,6 +151,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           )}
           {!hasCriticalErrors && (
             <VirtualList
+              ref={props.virtualListRef}
               items={props.itemIds}
               itemsData={props.itemsData}
               loadMore={props.loadMore}
