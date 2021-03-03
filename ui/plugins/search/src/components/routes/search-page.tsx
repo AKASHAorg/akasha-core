@@ -70,7 +70,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   });
 
   React.useEffect(() => {
-    searchActions.search(searchKeyword);
+    searchActions.search(decodeURIComponent(searchKeyword));
   }, [searchKeyword]);
 
   React.useEffect(() => {

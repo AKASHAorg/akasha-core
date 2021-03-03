@@ -141,8 +141,9 @@ const TopbarComponent = (props: TopBarProps) => {
     errorActions.removeLoginErrors();
   };
   const handleSearch = (inputValue: string) => {
+    const encodedSearchKey = encodeURIComponent(inputValue);
     if (searchAreaItem) {
-      handleNavigation(`${searchAreaItem.route}/${inputValue}`);
+      handleNavigation(`${searchAreaItem.route}/${encodedSearchKey}`);
     }
   };
 
