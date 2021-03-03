@@ -167,6 +167,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           )}
           {!hasCriticalErrors && (
             <VirtualList
+              ref={props.virtualListRef}
               items={props.itemIds}
               itemsData={props.itemsData}
               loadMore={props.loadMore}
@@ -187,11 +188,15 @@ const EntryFeed = (props: IFeedWidgetProps) => {
                   onUnfollow={followActions.unfollow}
                   onBookmark={handleBookmark}
                   onNavigate={props.onNavigate}
-                  onReport={() => {
-                    /* reporting */
-                  }}
+                  onReport={props.onReport}
                   onRepost={handleRepost}
                   contentClickable={props.contentClickable}
+                  awaitingModerationLabel={t(
+                    'You have reported this post. It is awaiting moderation.',
+                  )}
+                  moderatedContentLabel={t('This content has been moderated')}
+                  ctaLabel={t('See it anyway')}
+                  handleFlipCard={props.handleFlipCard}
                 />
               }
             />

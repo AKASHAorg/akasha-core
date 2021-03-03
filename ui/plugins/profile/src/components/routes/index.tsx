@@ -8,7 +8,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useLoginState, useModalState, useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
 import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
-const { Box, LoginModal } = DS;
+const { Box, LoginModal, ViewportSizeProvider } = DS;
 
 const Routes: React.FC<RootComponentProps> = props => {
   const { activeWhen, logger } = props;
@@ -29,6 +29,22 @@ const Routes: React.FC<RootComponentProps> = props => {
     ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
+
+  const [reportModalOpen, setReportModalOpen] = React.useState(false);
+  const [flagged, setFlagged] = React.useState('');
+
+  const showLoginModal = () => {
+    modalStateActions.show(MODAL_NAMES.LOGIN);
+  };
+
+  React.useEffect(() => {
+    if (loginState.ethAddress) {
+      hideLoginModal();
+      if (!!flagged.length) {
+        setReportModalOpen(true);
+      }
+    }
+  }, [loginState.ethAddress]);
 
   React.useEffect(() => {
     if (loginState.pubKey) {
@@ -59,34 +75,41 @@ const Routes: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <Router>
-      <Box>
-        <Switch>
-          <Route path={`${rootRoute}/list`} render={() => <>A list of profiles</>} />
-          <Route path={[`${path}/:pubKey`, menuRoute[MY_PROFILE]]}>
-            <ProfilePage
-              {...props}
-              ethAddress={loginState.ethAddress}
-              loginActions={loginActions}
-              modalActions={modalStateActions}
-              modalState={modalState}
-              loggedProfileData={loggedProfileData}
-            />
-          </Route>
-          <Route render={() => <div>{t('Oops, Profile not found!')}</div>} />
-        </Switch>
-      </Box>
-      <LoginModal
-        showModal={modalState[MODAL_NAMES.LOGIN]}
-        slotId={props.layout.app.modalSlotId}
-        onLogin={loginActions.login}
-        onModalClose={hideLoginModal}
-        titleLabel={t('Connect a wallet')}
-        metamaskModalHeadline={t('Connecting')}
-        metamaskModalMessage={t('Please complete the process in your wallet')}
-        error={loginErrors}
-      />
-    </Router>
+    <ViewportSizeProvider>
+      <Router>
+        <Box>
+          <Switch>
+            <Route path={`${rootRoute}/list`} render={() => <>A list of profiles</>} />
+            <Route path={[`${path}/:pubKey`, menuRoute[MY_PROFILE]]}>
+              <ProfilePage
+                {...props}
+                ethAddress={loginState.ethAddress}
+                loginActions={loginActions}
+                modalActions={modalStateActions}
+                modalState={modalState}
+                loggedProfileData={loggedProfileData}
+                flagged={flagged}
+                reportModalOpen={reportModalOpen}
+                setFlagged={setFlagged}
+                showLoginModal={showLoginModal}
+                setReportModalOpen={setReportModalOpen}
+              />
+            </Route>
+            <Route render={() => <div>{t('Oops, Profile not found!')}</div>} />
+          </Switch>
+        </Box>
+        <LoginModal
+          showModal={modalState[MODAL_NAMES.LOGIN]}
+          slotId={props.layout.app.modalSlotId}
+          onLogin={loginActions.login}
+          onModalClose={hideLoginModal}
+          titleLabel={t('Connect a wallet')}
+          metamaskModalHeadline={t('Connecting')}
+          metamaskModalMessage={t('Please complete the process in your wallet')}
+          error={loginErrors}
+        />
+      </Router>
+    </ViewportSizeProvider>
   );
 };
 
