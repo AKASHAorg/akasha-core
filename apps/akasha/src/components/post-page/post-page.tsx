@@ -35,16 +35,22 @@ const {
   ErrorInfoCard,
   ErrorLoader,
   EntryCardLoading,
+  EditorModal,
 } = DS;
 
 interface IPostPage {
   ethAddress: string | null;
   currentUserCalled: boolean;
   pubKey: string | null;
+  loggedProfileData?: any;
   flagged: string;
-  reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  reportModalOpen: boolean;
+  setReportModalOpen: () => void;
+  closeReportModal: () => void;
+  editorModalOpen: boolean;
+  setEditorModalOpen: () => void;
+  closeEditorModal: () => void;
   showLoginModal: () => void;
   navigateToUrl: (path: string) => void;
   isMobile: boolean;
@@ -60,10 +66,16 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     currentUserCalled,
     setFlagged,
     setReportModalOpen,
+    closeReportModal,
+    editorModalOpen,
+    setEditorModalOpen,
+    closeEditorModal,
     showLoginModal,
     logger,
     navigateToUrl,
     ethAddress,
+    pubKey,
+    loggedProfileData,
     isMobile,
   } = props;
 
@@ -207,7 +219,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       return showLoginModal();
     }
     setFlagged(entryId);
-    setReportModalOpen(true);
+    setReportModalOpen();
   };
 
   const handlePublish = async (data: {
@@ -251,6 +263,36 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         setMentions(filteredMentions);
       }
     });
+  };
+
+  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
+
+  const handleRepost = (_withComment: boolean, entryData: any) => {
+    if (!pubKey) {
+      showLoginModal();
+    } else {
+      setCurrentEmbedEntry(entryData);
+      setEditorModalOpen();
+    }
+  };
+
+  const handleToggleEditor = () => {
+    setCurrentEmbedEntry(undefined);
+    if (editorModalOpen) {
+      closeEditorModal();
+    } else {
+      setEditorModalOpen();
+    }
+  };
+
+  const handleEntryPublish = (entryData: any) => {
+    if (!ethAddress || !pubKey) {
+      showLoginModal();
+      return;
+    }
+
+    postsActions.optimisticPublishPost(entryData, loggedProfileData, currentEmbedEntry, true);
+    closeEditorModal();
   };
 
   const handleNavigateToPost = redirectToPost(navigateToUrl, postsActions.resetPostIds);
@@ -342,11 +384,33 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               size={size}
               width={width}
               updateEntry={updateEntry}
-              closeModal={() => {
-                setReportModalOpen(false);
-              }}
+              closeModal={closeReportModal}
             />
           </ToastProvider>
+        )}
+        {editorModalOpen && props.layout.app.modalSlotId && (
+          <EditorModal
+            slotId={props.layout.app.modalSlotId}
+            avatar={loggedProfileData.avatar}
+            showModal={editorModalOpen}
+            ethAddress={ethAddress}
+            postLabel={t('Publish')}
+            placeholderLabel={t('Write something')}
+            discardPostLabel={t('Discard Post')}
+            discardPostInfoLabel={t(
+              "You have not posted yet. If you leave now you'll discard your post.",
+            )}
+            keepEditingLabel={t('Keep Editing')}
+            onPublish={handleEntryPublish}
+            handleNavigateBack={handleToggleEditor}
+            getMentions={handleGetMentions}
+            getTags={handleGetTags}
+            tags={tags}
+            mentions={mentions}
+            uploadRequest={onUploadRequest}
+            embedEntryData={currentEmbedEntry}
+            style={{ width: '36rem' }}
+          />
         )}
       </ModalRenderer>
       <Box pad={{ bottom: 'small' }} border={{ side: 'bottom', size: '1px', color: 'border' }}>
@@ -398,9 +462,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       locale={locale}
                       bookmarkLabel={t('Save')}
                       bookmarkedLabel={t('Saved')}
-                      onRepost={() => {
-                        return;
-                      }}
+                      onRepost={handleRepost}
                       onEntryFlag={handleEntryFlag(entryData.entryId, ethAddress)}
                       handleFollowAuthor={handleFollow}
                       handleUnfollowAuthor={handleUnfollow}

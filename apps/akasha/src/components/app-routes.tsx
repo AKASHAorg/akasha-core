@@ -5,7 +5,8 @@ import DS from '@akashaproject/design-system';
 import routes, { FEED, rootRoute, POST, REPLY } from '../routes';
 import FeedPage from './feed-page/feed-page';
 import { useTranslation } from 'react-i18next';
-import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useErrors, useProfile, useModalState } from '@akashaproject/ui-awf-hooks';
+import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import PostPage from './post-page/post-page';
 
 const { Box, LoginModal, ViewportSizeProvider } = DS;
@@ -27,17 +28,50 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     profileService: sdkModules.profiles.profileService,
   });
 
-  const [loginModalState, setLoginModalState] = React.useState(false);
-  const [reportModalOpen, setReportModalOpen] = React.useState(false);
+  const [loginProfile, loginProfileActions] = useProfile({
+    profileService: sdkModules.profiles.profileService,
+    ipfsService: sdkModules.commons.ipfsService,
+  });
+
+  React.useEffect(() => {
+    if (loginState.pubKey) {
+      loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
+    }
+  }, [loginState.pubKey]);
+
+  const [modalState, modalStateActions] = useModalState({
+    initialState: {
+      reportModal: false,
+      editorModal: false,
+    },
+    isLoggedIn: !!loginState.ethAddress,
+  });
+
   const [flagged, setFlagged] = React.useState('');
 
   const showLoginModal = () => {
-    setLoginModalState(true);
+    modalStateActions.show(MODAL_NAMES.LOGIN);
   };
 
   const hideLoginModal = () => {
-    setLoginModalState(false);
+    modalStateActions.hide(MODAL_NAMES.LOGIN);
     errorActions.removeLoginErrors();
+  };
+
+  const showReportModal = () => {
+    modalStateActions.show(MODAL_NAMES.REPORT);
+  };
+
+  const hideReportModal = () => {
+    modalStateActions.hide(MODAL_NAMES.REPORT);
+  };
+
+  const showEditorModal = () => {
+    modalStateActions.showAfterLogin(MODAL_NAMES.EDITOR);
+  };
+
+  const hideEditorModal = () => {
+    modalStateActions.hide(MODAL_NAMES.EDITOR);
   };
 
   const handleLogin = (providerId: number) => {
@@ -46,14 +80,14 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
 
   React.useEffect(() => {
     if (loginState.pubKey) {
-      setLoginModalState(false);
+      modalStateActions.hide(MODAL_NAMES.LOGIN);
     }
   }, [loginState.pubKey]);
 
   React.useEffect(() => {
     if (loginState.ethAddress && flagged.length) {
-      setLoginModalState(false);
-      setReportModalOpen(true);
+      modalStateActions.hide(MODAL_NAMES.LOGIN);
+      modalStateActions.show(MODAL_NAMES.REPORT);
     }
   }, [loginState.ethAddress]);
 
@@ -79,10 +113,15 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
                 ethAddress={loginState.ethAddress}
                 currentUserCalled={loginState.currentUserCalled}
                 pubKey={loginState.pubKey}
+                loggedProfileData={loginProfile}
                 flagged={flagged}
-                reportModalOpen={reportModalOpen}
+                reportModalOpen={modalState.report}
                 setFlagged={setFlagged}
-                setReportModalOpen={setReportModalOpen}
+                setReportModalOpen={showReportModal}
+                closeReportModal={hideReportModal}
+                editorModalOpen={modalState.editor}
+                setEditorModalOpen={showEditorModal}
+                closeEditorModal={hideEditorModal}
                 showLoginModal={showLoginModal}
                 onError={onError}
               />
@@ -93,10 +132,15 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
                 ethAddress={loginState.ethAddress}
                 currentUserCalled={loginState.currentUserCalled}
                 pubKey={loginState.pubKey}
+                loggedProfileData={loginProfile}
                 flagged={flagged}
-                reportModalOpen={reportModalOpen}
+                reportModalOpen={modalState.report}
                 setFlagged={setFlagged}
-                setReportModalOpen={setReportModalOpen}
+                setReportModalOpen={showReportModal}
+                closeReportModal={hideReportModal}
+                editorModalOpen={modalState.editor}
+                setEditorModalOpen={showEditorModal}
+                closeEditorModal={hideEditorModal}
                 showLoginModal={showLoginModal}
                 navigateToUrl={props.singleSpa.navigateToUrl}
                 isMobile={props.isMobile}
@@ -110,7 +154,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           </Switch>
         </Router>
         <LoginModal
-          showModal={loginModalState}
+          showModal={modalState.login}
           slotId={layout.app.modalSlotId}
           onLogin={handleLogin}
           onModalClose={hideLoginModal}

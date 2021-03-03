@@ -6,6 +6,7 @@ import { rootRoute } from '../../routes';
 import SearchPage from './search-page';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useLoginState, useModalState, useErrors } from '@akashaproject/ui-awf-hooks';
+import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
 const { Box, LoginModal } = DS;
 
@@ -69,7 +70,7 @@ const Routes: React.FC<RootComponentProps> = props => {
         </Switch>
       </Box>
       <LoginModal
-        showModal={modalState.loginModal}
+        showModal={modalState[MODAL_NAMES.LOGIN]}
         slotId={props.layout.app.modalSlotId}
         onLogin={loginActions.login}
         onModalClose={hideLoginModal}

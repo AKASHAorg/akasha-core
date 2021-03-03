@@ -99,15 +99,17 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                   gap="xxsmall"
                 />
                 {loggedEthAddress && (
-                  <DuplexButton
-                    inactiveLabel={subscribeLabel}
-                    activeLabel={subscribedLabel}
-                    activeHoverLabel={unsubscribeLabel}
-                    onClickInactive={() => handleSubscribeTag(tag.name)}
-                    onClickActive={() => handleUnsubscribeTag(tag.name)}
-                    active={subscribedTags?.includes(tag.name)}
-                    icon={<Icon type="subscribe" />}
-                  />
+                  <Box width="7rem">
+                    <DuplexButton
+                      inactiveLabel={subscribeLabel}
+                      activeLabel={subscribedLabel}
+                      activeHoverLabel={unsubscribeLabel}
+                      onClickInactive={() => handleSubscribeTag(tag.name)}
+                      onClickActive={() => handleUnsubscribeTag(tag.name)}
+                      active={subscribedTags?.includes(tag.name)}
+                      icon={<Icon type="subscribe" />}
+                    />
+                  </Box>
                 )}
               </Box>
             ))}
@@ -128,15 +130,17 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                   />
                 </Box>
                 {loggedEthAddress && profile.ethAddress !== loggedEthAddress && (
-                  <DuplexButton
-                    inactiveLabel={followLabel}
-                    activeLabel={followingLabel}
-                    activeHoverLabel={unfollowLabel}
-                    onClickInactive={() => handleFollowProfile(profile.ethAddress)}
-                    onClickActive={() => handleUnfollowProfile(profile.ethAddress)}
-                    active={followedProfiles?.includes(profile.ethAddress)}
-                    icon={<Icon type="following" />}
-                  />
+                  <Box width="7rem">
+                    <DuplexButton
+                      inactiveLabel={followLabel}
+                      activeLabel={followingLabel}
+                      activeHoverLabel={unfollowLabel}
+                      onClickInactive={() => handleFollowProfile(profile.ethAddress)}
+                      onClickActive={() => handleUnfollowProfile(profile.ethAddress)}
+                      active={followedProfiles?.includes(profile.ethAddress)}
+                      icon={<Icon type="following" />}
+                    />
+                  </Box>
                 )}
               </Box>
             ))}

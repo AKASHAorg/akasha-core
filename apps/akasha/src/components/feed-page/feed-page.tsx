@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { constants, useBookmarks, useProfile, useErrors } from '@akashaproject/ui-awf-hooks';
+import { constants, useBookmarks, useErrors } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import {
   ILoadItemDataPayload,
@@ -38,10 +38,15 @@ export interface FeedPageProps {
   ethAddress: string | null;
   currentUserCalled: boolean;
   pubKey: string | null;
+  loggedProfileData?: any;
   flagged: string;
   reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setReportModalOpen: () => void;
+  closeReportModal: () => void;
+  editorModalOpen: boolean;
+  setEditorModalOpen: () => void;
+  closeEditorModal: () => void;
   onError: (err: IAkashaError) => void;
 }
 
@@ -52,28 +57,22 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     reportModalOpen,
     setFlagged,
     setReportModalOpen,
+    closeReportModal,
+    editorModalOpen,
+    setEditorModalOpen,
+    closeEditorModal,
     showLoginModal,
     ethAddress,
     currentUserCalled,
     pubKey,
+    loggedProfileData,
     onError,
     sdkModules,
     logger,
     globalChannel,
   } = props;
-  const [showEditor, setShowEditor] = React.useState(false);
+
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
-
-  const [loginProfile, loginProfileActions] = useProfile({
-    profileService: sdkModules.profiles.profileService,
-    ipfsService: sdkModules.commons.ipfsService,
-  });
-
-  React.useEffect(() => {
-    if (pubKey) {
-      loginProfileActions.getProfileData({ pubKey });
-    }
-  }, [pubKey]);
 
   React.useEffect(() => {
     if (currentUserCalled) {
@@ -134,12 +133,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     return bookmarkActions.bookmarkPost(entryId);
   };
   const handleEntryRepost = (_withComment: boolean, entryData: any) => {
-    if (!pubKey) {
-      showLoginModal();
-    } else {
-      setCurrentEmbedEntry(entryData);
-      setShowEditor(true);
-    }
+    setCurrentEmbedEntry(entryData);
+    setEditorModalOpen();
   };
 
   const handleEntryFlag = (entryId: string, user?: string | null) => () => {
@@ -150,7 +145,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       return showLoginModal();
     }
     setFlagged(entryId);
-    setReportModalOpen(true);
+    setReportModalOpen();
   };
 
   const [tags, setTags] = React.useState([]);
@@ -179,8 +174,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   const handleToggleEditor = () => {
-    setShowEditor(!showEditor);
     setCurrentEmbedEntry(undefined);
+    if (editorModalOpen) {
+      closeEditorModal();
+    } else {
+      setEditorModalOpen();
+    }
   };
 
   const onUploadRequest = uploadMediaToTextile(
@@ -195,8 +194,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       showLoginModal();
       return;
     }
-    postsActions.optimisticPublishPost(data, loginProfile, currentEmbedEntry);
-    setShowEditor(false);
+    postsActions.optimisticPublishPost(data, loggedProfileData, currentEmbedEntry);
+    closeEditorModal();
   };
 
   const handleFlipCard = (entry: any, isQuote: boolean) => () => {
@@ -251,17 +250,15 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               size={size}
               width={width}
               updateEntry={updateEntry}
-              closeModal={() => {
-                setReportModalOpen(false);
-              }}
+              closeModal={closeReportModal}
             />
           </ToastProvider>
         )}
       </ModalRenderer>
       <EditorModal
         slotId={props.layout.app.modalSlotId}
-        avatar={loginProfile.avatar}
-        showModal={showEditor}
+        avatar={loggedProfileData.avatar}
+        showModal={editorModalOpen}
         ethAddress={ethAddress as any}
         postLabel={t('Publish')}
         placeholderLabel={t('Write something')}
@@ -293,7 +290,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               ethAddress={ethAddress}
               onClick={handleToggleEditor}
               style={{ marginTop: 8 }}
-              avatar={loginProfile.avatar}
+              avatar={loggedProfileData.avatar}
             />
           ) : (
             <>
