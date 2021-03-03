@@ -71,6 +71,7 @@ import TextInputField from './components/Forms/text-input-field';
 import { AppIcon, Icon, iconTypes } from './components/Icon';
 import ErrorInfoCard from './components/Errors/error-info-card';
 import ErrorLoader from './components/Errors/error-loader';
+import ModerationAppErrorCard from './components/Errors/moderation-app-error-card';
 
 import { CommentInput, SearchInput, DropSearchInput } from './components/Input';
 import {
@@ -124,6 +125,7 @@ const exported = {
   EditableAvatar,
   ErrorInfoCard,
   ErrorLoader,
+  ModerationAppErrorCard,
   AppInfoWidgetCard,
   AppsWidgetCard,
   BasicCardBox,

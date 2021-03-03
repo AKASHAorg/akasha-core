@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { Box } from 'grommet';
+
 import { BasicCardBox } from '../Cards';
 
 const StyledErrorCard = styled(BasicCardBox)`
@@ -14,4 +16,19 @@ const StyledImage = styled.img`
   height: auto;
   padding: 2em 0;
 `;
-export { StyledErrorCard, StyledImage };
+
+const PageWrapper: any = styled(Box)`
+  background: white;
+`;
+
+const ContentWrapper: any = styled(Box)`
+  margin: auto;
+  position: absolute;
+  top: 40%;
+  transform: translate(0, -50%);
+  border-radius: 0.5rem;
+  span {
+    letter-spacing: 0.03em;
+  }
+`;
+export { StyledErrorCard, StyledImage, PageWrapper, ContentWrapper };
