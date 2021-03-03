@@ -4,7 +4,6 @@ import { EthProviders } from '@akashaproject/ui-awf-typings';
 import { ethers } from 'ethers';
 import commonServices, { CACHE_SERVICE, ETH_NETWORK, moduleName, WEB3_SERVICE } from './constants';
 import getProvider from './web3.methods/provider';
-import * as net from 'net';
 
 const service: AkashaService = (invoke, log) => {
   const regen = async provider => {
@@ -71,13 +70,11 @@ const service: AkashaService = (invoke, log) => {
   const checkCurrentNetwork = async () => {
     const web3Instance = await getWeb3Instance();
     const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);
-    const network = await web3Instance.getNetwork();
+    const network = await web3Instance.detectNetwork();
     const moduleSettings = await getSettings(moduleName);
     const networkName = moduleSettings[ETH_NETWORK];
     if (network?.name !== networkName) {
-      throw new Error(
-        `Change the ethereum network to: ${networkName}! Currently on: ${network?.name}`,
-      );
+      throw new Error(`Please change the ethereum network to ${networkName}!`);
     }
     log.info(`currently on network: ${network.name}`);
   };
