@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import {
   useTrendingData,
@@ -11,8 +11,6 @@ import {
 import useErrorState from '@akashaproject/ui-awf-hooks/lib/use-error-state';
 
 const { TrendingWidgetCard, ErrorInfoCard, ErrorLoader } = DS;
-
-// export interface TrendingWidgetCardProps {}
 
 const TrendingWidget: React.FC<RootComponentProps> = props => {
   const { globalChannel, sdkModules, logger, singleSpa } = props;
@@ -37,9 +35,7 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
   const [followedProfiles, followActions] = useFollow({
     globalChannel,
     profileService: sdkModules.profiles.profileService,
-    onError: (errorInfo: IAkashaError) => {
-      logger.error(errorInfo.error.message, errorInfo.errorKey);
-    },
+    onError: errorActions.createError,
   });
 
   const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
@@ -59,10 +55,13 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
   }, [trendingData, loginState.ethAddress]);
 
   React.useEffect(() => {
-    if (loginState.currentUserCalled && loginState.ethAddress) {
+    if (loginState.waitForAuth && !loginState.ready) {
+      return;
+    }
+    if ((loginState.waitForAuth && loginState.ready) || loginState.currentUserCalled) {
       tagSubscriptionActions.getTagSubscriptions();
     }
-  }, [loginState.currentUserCalled && loginState.ethAddress]);
+  }, [JSON.stringify(loginState)]);
 
   const handleTagClick = () => {
     // todo

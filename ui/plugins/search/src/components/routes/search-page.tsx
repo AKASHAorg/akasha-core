@@ -65,10 +65,14 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   }, [searchKeyword]);
 
   React.useEffect(() => {
-    if (loginState.currentUserCalled && loginState.ethAddress) {
-      bookmarkActions.getBookmarks();
+    if (loginState.waitForAuth && !loginState.ready) {
+      return;
     }
-  }, [loginState.currentUserCalled, loginState.ethAddress]);
+    if ((loginState.waitForAuth && loginState.ready) || loginState.currentUserCalled) {
+      bookmarkActions.getBookmarks();
+      tagSubscriptionActions.getTagSubscriptions();
+    }
+  }, [JSON.stringify(loginState)]);
 
   React.useEffect(() => {
     if (loginState.ethAddress) {
@@ -77,7 +81,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           followActions.isFollowing(loginState.ethAddress, profile.ethAddress);
         }
       });
-      tagSubscriptionActions.getTagSubscriptions();
     }
   }, [searchState, loginState.ethAddress]);
 
@@ -148,7 +151,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         <BasicCardBox>
           <ErrorLoader
             type="no-login"
-            title={t('No matching results found 😞')}
+            title={`${t('No matching results found')} 😞`}
             details={t(
               'Make sure you spelled everything correctly or try searching for something else',
             )}

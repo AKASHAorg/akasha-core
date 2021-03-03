@@ -1,35 +1,30 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import {
   useTrendingData,
   useLoginState,
   useFollow,
   useTagSubscribe,
+  useErrors,
 } from '@akashaproject/ui-awf-hooks';
 
-const { TrendingWidgetCard } = DS;
-
-// export interface TrendingWidgetCardProps {}
+const { TrendingWidgetCard, ErrorInfoCard, ErrorLoader } = DS;
 
 const TrendingWidget: React.FC<RootComponentProps> = props => {
   const { globalChannel, sdkModules, logger, singleSpa } = props;
 
   const { t } = useTranslation();
-
+  const [errorState, errorActions] = useErrors({ logger });
   const [trendingData] = useTrendingData({
     sdkModules: sdkModules,
-    onError: (err: IAkashaError) => {
-      logger.error('useTrendingData error %j', err);
-    },
+    onError: errorActions.createError,
   });
 
   const [loginState] = useLoginState({
     globalChannel: globalChannel,
-    onError: (err: IAkashaError) => {
-      logger.error('useLoginState error %j', err);
-    },
+    onError: errorActions.createError,
     authService: sdkModules.auth.authService,
     ipfsService: sdkModules.commons.ipfsService,
     profileService: sdkModules.profiles.profileService,
@@ -38,18 +33,23 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
   const [followedProfiles, followActions] = useFollow({
     globalChannel,
     profileService: sdkModules.profiles.profileService,
-    onError: (errorInfo: IAkashaError) => {
-      logger.error(errorInfo.error.message, errorInfo.errorKey);
-    },
+    onError: errorActions.createError,
   });
 
   const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
     globalChannel,
     profileService: sdkModules.profiles.profileService,
-    onError: (errorInfo: IAkashaError) => {
-      logger.error(errorInfo.error.message, errorInfo.errorKey);
-    },
+    onError: errorActions.createError,
   });
+
+  React.useEffect(() => {
+    if (loginState.waitForAuth && !loginState.ready) {
+      return;
+    }
+    if ((loginState.waitForAuth && loginState.ready) || loginState.currentUserCalled) {
+      tagSubscriptionActions.getTagSubscriptions();
+    }
+  }, [JSON.stringify(loginState)]);
 
   React.useEffect(() => {
     if (loginState.ethAddress) {
@@ -58,7 +58,6 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
           followActions.isFollowing(loginState.ethAddress, profile.ethAddress);
         }
       });
-      tagSubscriptionActions.getTagSubscriptions();
     }
   }, [trendingData, loginState.ethAddress]);
 
@@ -83,26 +82,46 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <TrendingWidgetCard
-      titleLabel={t('Trending Right Now')}
-      topicsLabel={t('Topics')}
-      profilesLabel={t('People')}
-      followLabel={t('Follow')}
-      unfollowLabel={t('Unfollow')}
-      followersLabel={t('Followers')}
-      followingLabel={t('Following')}
-      tags={trendingData.tags}
-      profiles={trendingData.profiles}
-      followedProfiles={followedProfiles}
-      subscribedTags={tagSubscriptionState}
-      onClickTag={handleTagClick}
-      handleSubscribeTag={handleTagSubscribe}
-      handleUnsubscribeTag={handleTagUnsubscribe}
-      onClickProfile={handleProfileClick}
-      handleFollowProfile={handleFollowProfile}
-      handleUnfollowProfile={handleUnfollowProfile}
-      loggedEthAddress={loginState.ethAddress}
-    />
+    <ErrorInfoCard errors={errorState}>
+      {(errMessages, hasCriticalErrors) => (
+        <>
+          {(hasCriticalErrors || errMessages) && (
+            <ErrorLoader
+              type="script-error"
+              title={t('Oops, this widget has an error')}
+              details={
+                hasCriticalErrors
+                  ? t('An issue prevented this widget to be displayed')
+                  : t('Some functionality of this widget may not work properly')
+              }
+              devDetails={errMessages}
+            />
+          )}
+          {!hasCriticalErrors && !errMessages && (
+            <TrendingWidgetCard
+              titleLabel={t('Trending Right Now')}
+              topicsLabel={t('Topics')}
+              profilesLabel={t('People')}
+              followLabel={t('Follow')}
+              unfollowLabel={t('Unfollow')}
+              followersLabel={t('Followers')}
+              followingLabel={t('Following')}
+              tags={trendingData.tags}
+              profiles={trendingData.profiles}
+              followedProfiles={followedProfiles}
+              subscribedTags={tagSubscriptionState}
+              onClickTag={handleTagClick}
+              handleSubscribeTag={handleTagSubscribe}
+              handleUnsubscribeTag={handleTagUnsubscribe}
+              onClickProfile={handleProfileClick}
+              handleFollowProfile={handleFollowProfile}
+              handleUnfollowProfile={handleUnfollowProfile}
+              loggedEthAddress={loginState.ethAddress}
+            />
+          )}
+        </>
+      )}
+    </ErrorInfoCard>
   );
 };
 

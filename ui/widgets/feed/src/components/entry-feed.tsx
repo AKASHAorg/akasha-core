@@ -37,10 +37,13 @@ const EntryFeed = (props: IFeedWidgetProps) => {
   });
 
   React.useEffect(() => {
-    if (loginState.currentUserCalled && loginState.ethAddress) {
+    if (loginState.waitForAuth && !loginState.ready) {
+      return;
+    }
+    if ((loginState.waitForAuth && loginState.ready) || loginState.currentUserCalled) {
       bookmarkActions.getBookmarks();
     }
-  }, [loginState.currentUserCalled, loginState.ethAddress]);
+  }, [JSON.stringify(loginState)]);
 
   const handleBookmark = (isBookmarked: boolean, entryId: string) => {
     if (props.loggedProfile.pubKey) {
