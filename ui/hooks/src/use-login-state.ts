@@ -31,7 +31,7 @@ export interface UseLoginState {
    * defaults to false
    */
   currentUserCalled: boolean;
-  ready: boolean | null;
+  ready: { ethAddress: string; pubKey: string } | null;
   waitForAuth: boolean | null;
 }
 export interface UseLoginActions {
