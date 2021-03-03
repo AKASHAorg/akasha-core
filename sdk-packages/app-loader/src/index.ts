@@ -66,6 +66,7 @@ export default class AppLoader implements IAppLoader {
     integrationId: string;
     menuItemType?: MenuItemType;
   }[];
+  private fourOhFourTimeout: NodeJS.Timeout | null;
   private isRegisteringLayout: boolean;
   private apps: IAppEntry[];
   private widgets: {
@@ -101,6 +102,8 @@ export default class AppLoader implements IAppLoader {
     this.globalChannel = globalChannel;
     this.channels = channels;
     this.isMobile = detectMobile().phone || detectMobile().tablet;
+
+    this.fourOhFourTimeout = null;
 
     this.events = new BehaviorSubject(EventTypes.Instantiated);
     this.menuItems = { nextIndex: 1, items: [] };
@@ -420,24 +423,31 @@ export default class AppLoader implements IAppLoader {
     if (fourOhFourElem) {
       fourOhFourElem.parentElement.removeChild(fourOhFourElem);
     }
-    if (!currentPlugins.length) {
-      const pluginsNode = document.getElementById(this.config.layout.app.pluginSlotId);
-      // create a 404 page and return it instead of a plugin
-      const FourOhFourNode: ChildNode = fourOhFour;
-      if (pluginsNode) {
-        pluginsNode.appendChild(FourOhFourNode);
-      }
-      return;
+    if (this.fourOhFourTimeout) {
+      clearTimeout(this.fourOhFourTimeout);
+      this.fourOhFourTimeout = null;
     }
-    this.appLogger.info(`active plugin %j`, currentPlugins);
-    const firstPlugin = currentPlugins.find(plugin => this.registeredIntegrations.has(plugin));
-    if (firstPlugin) {
-      setPageTitle(this.registeredIntegrations.get(firstPlugin).title);
-    } else {
-      this.appLogger.warn(
-        `could not find a registered active app from active plugins list %j`,
-        currentPlugins,
-      );
+    this.fourOhFourTimeout = setTimeout(() => {
+      if (!currentPlugins.length) {
+        const pluginsNode = document.getElementById(this.config.layout.app.pluginSlotId);
+        // create a 404 page and return it instead of a plugin
+        const FourOhFourNode: ChildNode = fourOhFour;
+        if (pluginsNode) {
+          pluginsNode.appendChild(FourOhFourNode);
+        }
+      }
+    }, 1500);
+    if (currentPlugins.length) {
+      this.appLogger.info(`active plugin %j`, currentPlugins);
+      const firstPlugin = currentPlugins.find(plugin => this.registeredIntegrations.has(plugin));
+      if (firstPlugin) {
+        setPageTitle(this.registeredIntegrations.get(firstPlugin).title);
+      } else {
+        this.appLogger.warn(
+          `could not find a registered active app from active plugins list %j`,
+          currentPlugins,
+        );
+      }
     }
   }
   private getAppEntries(appNames) {

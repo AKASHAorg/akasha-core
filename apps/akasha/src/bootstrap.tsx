@@ -35,7 +35,7 @@ export const application: Application = {
   logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
   widgets: {
     [userPostsRoute]: [ProfileCardWidget],
-    [fullPostRoute]: [ProfileCardWidget],
+    [fullPostRoute]: [TrendingWidget, ProfileCardWidget],
     [routes[FEED]]: [TrendingWidget],
   },
 };

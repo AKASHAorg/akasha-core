@@ -18,6 +18,7 @@ import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
 import routes, { POST } from '../../routes';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
 const {
   Box,
@@ -38,9 +39,7 @@ const {
 } = DS;
 
 interface IPostPage {
-  ethAddress: string | null;
-  currentUserCalled: boolean;
-  pubKey: string | null;
+  loginState: UseLoginState;
   flagged: string;
   reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
@@ -57,13 +56,12 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     globalChannel,
     flagged,
     reportModalOpen,
-    currentUserCalled,
     setFlagged,
     setReportModalOpen,
     showLoginModal,
     logger,
     navigateToUrl,
-    ethAddress,
+    loginState,
     isMobile,
   } = props;
 
@@ -72,7 +70,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const [, errorActions] = useErrors({ logger });
 
   const [postsState, postsActions] = usePosts({
-    user: ethAddress,
+    user: loginState.ethAddress,
     postsService: sdkModules.posts,
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
@@ -99,14 +97,13 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   });
 
   React.useEffect(() => {
-    if (props.pubKey) {
-      loginProfileActions.getProfileData({ pubKey: props.pubKey });
+    if (loginState.pubKey) {
+      loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
     }
-  }, [props.pubKey]);
+  }, [loginState.pubKey]);
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
     dbService: sdkModules.db,
-    pubKey: props.pubKey,
     onError: errorActions.createError,
   });
 
@@ -117,10 +114,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   });
 
   React.useEffect(() => {
-    if (ethAddress && entryData?.author.ethAddress) {
-      followActions.isFollowing(ethAddress, entryData.author.ethAddress);
+    if (loginState.ethAddress && entryData?.author.ethAddress) {
+      followActions.isFollowing(loginState.ethAddress, entryData.author.ethAddress);
     }
-  }, [ethAddress, entryData?.author.ethAddress]);
+  }, [loginState.ethAddress, entryData?.author.ethAddress]);
 
   const handleFollow = () => {
     if (entryData?.author.ethAddress) {
@@ -152,11 +149,14 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   React.useEffect(() => {
     // this is used to initialise comments when navigating to other post ids
-    if (postId && currentUserCalled) {
+    if (postId && loginState.currentUserCalled) {
       postsActions.getPost(postId);
       handleLoadMore({ limit: 5, postID: postId });
+      if (loginState.ethAddress) {
+        bookmarkActions.getBookmarks();
+      }
     }
-  }, [postId, currentUserCalled]);
+  }, [postId, loginState.currentUserCalled, loginState.ethAddress]);
 
   const bookmarked = React.useMemo(() => {
     if (
@@ -178,7 +178,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   };
 
   const handleEntryBookmark = (entryId: string) => {
-    if (!ethAddress) {
+    if (!loginState.ethAddress) {
       return showLoginModal();
     }
     if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
@@ -188,7 +188,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   };
 
   const handleCommentBookmark = (commentId: string) => {
-    if (!ethAddress) {
+    if (!loginState.ethAddress) {
       return showLoginModal();
     }
     if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === commentId) >= 0) {
@@ -222,7 +222,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     content: any;
     textContent: any;
   }) => {
-    if (!ethAddress) {
+    if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
@@ -335,7 +335,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
               closeLabel={t('Close')}
-              user={ethAddress ? ethAddress : ''}
+              user={loginState.ethAddress ? loginState.ethAddress : ''}
               contentId={flagged}
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
@@ -394,14 +394,14 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       shareLabel={t('Share')}
                       copyLinkLabel={t('Copy Link')}
                       flagAsLabel={t('Report Post')}
-                      loggedProfileEthAddress={ethAddress}
+                      loggedProfileEthAddress={loginState.ethAddress}
                       locale={locale}
                       bookmarkLabel={t('Save')}
                       bookmarkedLabel={t('Saved')}
                       onRepost={() => {
                         return;
                       }}
-                      onEntryFlag={handleEntryFlag(entryData.entryId, ethAddress)}
+                      onEntryFlag={handleEntryFlag(entryData.entryId, loginState.ethAddress)}
                       handleFollowAuthor={handleFollow}
                       handleUnfollowAuthor={handleUnfollow}
                       isFollowingAuthor={isFollowing}
@@ -422,16 +422,16 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
           )}
         </ErrorInfoCard>
       </Box>
-      {!ethAddress && (
+      {!loginState.ethAddress && (
         <Box margin="medium">
           <EditorPlaceholder onClick={showLoginModal} ethAddress={null} />
         </Box>
       )}
-      {ethAddress && (
+      {loginState.ethAddress && (
         <Box margin="medium">
           <CommentEditor
             avatar={loginProfile.avatar}
-            ethAddress={ethAddress}
+            ethAddress={loginState.ethAddress}
             postLabel={t('Reply')}
             placeholderLabel={t('Write something')}
             onPublish={handlePublish}
@@ -473,7 +473,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                     logger={logger}
                     globalChannel={globalChannel}
                     bookmarkState={bookmarkState}
-                    ethAddress={ethAddress}
+                    ethAddress={loginState.ethAddress}
                     locale={locale}
                     onBookmark={handleCommentBookmark}
                     onNavigate={handleNavigateToPost}
@@ -492,7 +492,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                   isMobile,
                   sdkModules,
                   feedItems: postsState.postIds,
-                  loggedEthAddress: ethAddress,
+                  loggedEthAddress: loginState.ethAddress,
                   pendingComments: postsState.pendingComments,
                 })}
               />
