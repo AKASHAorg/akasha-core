@@ -56,15 +56,10 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
                 onNavigate={() => {
                   /* not allowed */
                 }}
-                onRepliesClick={() => {
-                  /* not allowed */
-                }}
                 onFlag={() => () => {
                   /* not allowed */
                 }}
-                onShare={() => {
-                  /* not allowed */
-                }}
+                sharePostUrl={''}
                 onRepost={() => {
                   /* not allowed */
                 }}
@@ -75,6 +70,7 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
                   /* not allowed */
                 }}
                 contentClickable={contentClickable}
+                disableActions={true}
               />
             )}
           </>

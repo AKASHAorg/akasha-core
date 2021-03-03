@@ -175,6 +175,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
                   pubKey={props.profilePubKey}
                   ethAddress={props.ethAddress}
                   itemType={props.itemType}
+                  sharePostUrl={`${window.location.origin}/AKASHA-app/post/`}
                   locale={locale as ILocale}
                   bookmarkState={bookmarkState}
                   followedProfiles={followedProfiles}

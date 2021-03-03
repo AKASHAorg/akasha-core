@@ -1,4 +1,5 @@
 import { PrivateKey, Identity, UserAuth } from '@textile/hub';
+import { authStatus } from './constants';
 
 const metamaskGen = (ethAddress: string, secret: string, appName = 'ethereum.world') =>
   `
@@ -75,17 +76,18 @@ export const loginWithChallenge = (
               /** Convert the challenge json to a Buffer */
               const buf = Buffer.from(data.value);
               let addressChallenge;
-              let currentAddress;
+              let ethAddress;
               if (data.addressChallenge) {
                 addressChallenge = await signer.signMessage(data.addressChallenge);
-                currentAddress = await signer.getAddress();
+                ethAddress = await signer.getAddress();
+                authStatus.isNewUser = true;
               }
               /** User our identity to sign the challenge */
               const signed = await identity.sign(buf);
               socket.send(
                 JSON.stringify({
                   addressChallenge,
-                  ethAddress: currentAddress,
+                  ethAddress,
                   type: 'challenge',
                   sig: Buffer.from(signed).toJSON(),
                 }),

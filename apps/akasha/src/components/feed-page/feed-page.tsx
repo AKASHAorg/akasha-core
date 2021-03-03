@@ -140,32 +140,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       setShowEditor(true);
     }
   };
-  const handleEntryShare = (
-    service: 'twitter' | 'facebook' | 'reddit' | 'copy',
-    entryId: string,
-  ) => {
-    const url = `${window.location.origin}${routes[POST]}/${entryId}`;
-    let shareUrl;
-    switch (service) {
-      case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?text=${url}`;
-        break;
-      case 'facebook':
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-        break;
-      case 'reddit':
-        shareUrl = `http://www.reddit.com/submit?url=${url}`;
-        break;
-      case 'copy':
-        navigator.clipboard.writeText(url);
-        break;
-      default:
-        break;
-    }
-    if (shareUrl) {
-      window.open(shareUrl, '_blank');
-    }
-  };
+
   const handleEntryFlag = (entryId: string, user?: string | null) => () => {
     /* todo */
     if (!user) {
@@ -175,10 +150,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
     setFlagged(entryId);
     setReportModalOpen(true);
-  };
-
-  const handleClickReplies = () => {
-    /* todo */
   };
 
   const [tags, setTags] = React.useState([]);
@@ -348,10 +319,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             locale={locale}
             onBookmark={handleEntryBookmark}
             onNavigate={handleNavigateToPost}
-            onRepliesClick={handleClickReplies}
             onFlag={handleEntryFlag}
             onRepost={handleEntryRepost}
-            onShare={handleEntryShare}
+            sharePostUrl={`${window.location.origin}${routes[POST]}/`}
             onAvatarClick={handleAvatarClick}
             onMentionClick={handleMentionClick}
             contentClickable={true}

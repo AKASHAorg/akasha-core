@@ -24,7 +24,12 @@ const query = {
           query.getPost(_source, { pubKey, id: postID }, { dataSources }),
         ),
       );
-      const quotedByAuthors = qPosts?.map(el => el.author);
+      let uniqueAuthors = {};
+      qPosts.forEach(el => {
+        uniqueAuthors[el.author.pubKey] = el.author;
+      });
+      const quotedByAuthors: any = Object.values(uniqueAuthors);
+      uniqueAuthors = null;
       if (pubKey) {
         const pProfile = await dataSources.profileAPI.resolveProfile(pubKey);
         quotedByAuthors?.sort((a, b) => {
@@ -79,7 +84,12 @@ const query = {
             query.getPost(_source, { pubKey, id: postID }, { dataSources }),
           ),
         );
-        const quotedByAuthors = qPosts?.map(el => el.author);
+        let uniqueAuthors = {};
+        qPosts.forEach(el => {
+          uniqueAuthors[el.author.pubKey] = el.author;
+        });
+        const quotedByAuthors: any = Object.values(uniqueAuthors);
+        uniqueAuthors = null;
         if (pubKey) {
           const pProfile = await dataSources.profileAPI.resolveProfile(pubKey);
           quotedByAuthors?.sort((a, b) => {
