@@ -1,6 +1,5 @@
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import * as React from 'react';
-import { Subscription } from 'rxjs';
 import { createErrorHandler } from './utils/error-handler';
 
 export enum BookmarkTypes {
@@ -12,7 +11,6 @@ const BOOKMARKED_ENTRIES_KEY = 'AKASHA_APP_BOOKMARK_ENTRIES';
 const entriesBookmarks = 'entries-bookmarks';
 
 export interface UseEntryBookmarkProps {
-  pubKey: string | null;
   bmKey?: string;
   dbService: { [key: string]: any };
   onError: (err: IAkashaError) => void;
@@ -23,25 +21,25 @@ export interface IBookmarkState {
   isFetching: boolean;
 }
 export interface IBookmarkActions {
+  getBookmarks: () => void;
   bookmarkPost: (entryId: string) => void;
   bookmarkComment: (entryId: string) => void;
   removeBookmark: (entryId: string) => void;
 }
 
 const useEntryBookmark = (props: UseEntryBookmarkProps): [IBookmarkState, IBookmarkActions] => {
-  const { pubKey, dbService, bmKey = BOOKMARKED_ENTRIES_KEY, onError } = props;
+  const { dbService, bmKey = BOOKMARKED_ENTRIES_KEY, onError } = props;
   const [bookmarkState, setBookmarkState] = React.useState<IBookmarkState>({
     bookmarks: [],
     isFetching: true,
   });
 
-  React.useEffect(() => {
-    let subs: Subscription | undefined;
-    if (pubKey) {
+  const actions: IBookmarkActions = {
+    getBookmarks() {
       const call = dbService.settingsAttachment.get({
         moduleName: bmKey,
       });
-      subs = call.subscribe((resp: any) => {
+      call.subscribe((resp: any) => {
         const { data } = resp;
         if (!data) {
           return setBookmarkState({
@@ -60,17 +58,8 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [IBookmarkState, IBookm
             });
           }
         }
-      }, createErrorHandler('useEntryBookmark.useEffect', false, onError));
-    }
-
-    return () => {
-      if (subs) {
-        subs.unsubscribe();
-      }
-    };
-  }, [pubKey]);
-
-  const actions: IBookmarkActions = {
+      }, createErrorHandler('useEntryBookmark.getBookmarks'));
+    },
     bookmarkPost(entryId) {
       const newBmks = bookmarkState.bookmarks.slice();
       newBmks.unshift({ entryId, type: BookmarkTypes.POST });

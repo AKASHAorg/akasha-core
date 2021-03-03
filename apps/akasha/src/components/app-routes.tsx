@@ -76,9 +76,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
             <Route path={routes[FEED]}>
               <FeedPage
                 {...props}
-                ethAddress={loginState.ethAddress}
-                currentUserCalled={loginState.currentUserCalled}
-                pubKey={loginState.pubKey}
+                loginState={loginState}
                 flagged={flagged}
                 reportModalOpen={reportModalOpen}
                 setFlagged={setFlagged}
@@ -90,9 +88,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
             <Route path={`${routes[POST]}/:postId`}>
               <PostPage
                 {...props}
-                ethAddress={loginState.ethAddress}
-                currentUserCalled={loginState.currentUserCalled}
-                pubKey={loginState.pubKey}
+                loginState={loginState}
                 flagged={flagged}
                 reportModalOpen={reportModalOpen}
                 setFlagged={setFlagged}
