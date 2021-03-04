@@ -10,8 +10,16 @@ import {
   useFollow,
   useSearch,
   useTagSubscribe,
+  usePosts,
+  useErrors,
 } from '@akashaproject/ui-awf-hooks';
+import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import {
+  ModalState,
+  ModalStateActions,
+  MODAL_NAMES,
+} from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
 const {
   Box,
@@ -22,6 +30,7 @@ const {
   DuplexButton,
   EntryCard,
   EntryCardHidden,
+  EditorModal,
   ProfileCard,
   ReportModal,
   ToastProvider,
@@ -36,11 +45,10 @@ interface SearchPageProps {
   globalChannel: any;
   singleSpa: any;
   loginState: UseLoginState;
-  flagged: string;
-  reportModalOpen: boolean;
+  loggedProfileData: any;
   showLoginModal: () => void;
-  setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  modalState: ModalState;
+  modalStateActions: ModalStateActions;
 }
 
 const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
@@ -50,17 +58,27 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
     singleSpa,
     globalChannel,
     loginState,
-    flagged,
-    reportModalOpen,
+    loggedProfileData,
+    modalState,
+    modalStateActions,
     showLoginModal,
-    setFlagged,
-    setReportModalOpen,
   } = props;
 
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
+
+  const [flagged, setFlagged] = React.useState('');
+
+  const [, errorActions] = useErrors({ logger });
+
+  const [, postsActions] = usePosts({
+    user: loginState.ethAddress,
+    postsService: sdkModules.posts,
+    ipfsService: sdkModules.commons.ipfsService,
+    onError: errorActions.createError,
+  });
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
     onError: (err: IAkashaError) => {
@@ -75,9 +93,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
     postsService: sdkModules.posts,
     ipfsService: sdkModules.commons.ipfsService,
     profileService: sdkModules.profiles.profileService,
-    onError: (err: IAkashaError) => {
-      logger.error('useSearch error %j', err);
-    },
+    onError: errorActions.createError,
   });
 
   const [followedProfiles, followActions] = useFollow({
@@ -91,9 +107,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
   const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
     globalChannel,
     profileService: sdkModules.profiles.profileService,
-    onError: (errorInfo: IAkashaError) => {
-      logger.error(errorInfo.error.message, errorInfo.errorKey);
-    },
+    onError: errorActions.createError,
   });
 
   const {
@@ -104,11 +118,6 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
   React.useEffect(() => {
     if (loginState.currentUserCalled) {
       searchActions.search(decodeURIComponent(searchKeyword));
-      // if user successfully logs in after attempting to report a post
-      if (loginState.ethAddress && !!flagged.length) {
-        // show the report modal
-        setReportModalOpen(true);
-      }
     }
   }, [searchKeyword, loginState.currentUserCalled, loginState.ethAddress]);
 
@@ -181,13 +190,77 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
   };
 
   const handleEntryFlag = (entryId: string) => {
-    if (!loginState.ethAddress) {
-      // setting entryId to state first, if not logged in
-      setFlagged(entryId);
-      return showLoginModal();
-    }
     setFlagged(entryId);
-    setReportModalOpen(true);
+
+    modalStateActions.showAfterLogin(MODAL_NAMES.REPORT);
+  };
+
+  const hideReportModal = () => {
+    modalStateActions.hide(MODAL_NAMES.REPORT);
+  };
+
+  // repost related
+  const showEditorModal = () => {
+    modalStateActions.showAfterLogin(MODAL_NAMES.EDITOR);
+  };
+
+  const hideEditorModal = () => {
+    modalStateActions.hide(MODAL_NAMES.EDITOR);
+  };
+
+  const onUploadRequest = uploadMediaToTextile(
+    sdkModules.profiles.profileService,
+    sdkModules.commons.ipfsService,
+  );
+
+  const [tags, setTags] = React.useState([]);
+  const handleGetTags = (query: string) => {
+    const tagsService = sdkModules.posts.tags.searchTags({ tagName: query });
+    tagsService.subscribe((resp: any) => {
+      if (resp.data?.searchTags) {
+        const filteredTags = resp.data.searchTags;
+        setTags(filteredTags);
+      }
+    });
+  };
+
+  const [mentions, setMentions] = React.useState([]);
+  const handleGetMentions = (query: string) => {
+    const mentionsService = sdkModules.profiles.profileService.searchProfiles({
+      name: query,
+    });
+    mentionsService.subscribe((resp: any) => {
+      if (resp.data?.searchProfiles) {
+        const filteredMentions = resp.data.searchProfiles;
+        setMentions(filteredMentions);
+      }
+    });
+  };
+
+  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
+
+  const handleRepost = (_withComment: boolean, entryData: any) => {
+    setCurrentEmbedEntry(entryData);
+    showEditorModal();
+  };
+
+  const handleToggleEditor = () => {
+    setCurrentEmbedEntry(undefined);
+    if (modalState.editor) {
+      hideEditorModal();
+    } else {
+      showEditorModal();
+    }
+  };
+
+  const handleEntryPublish = (entryData: any) => {
+    if (!loginState.ethAddress || !loginState.pubKey) {
+      showLoginModal();
+      return;
+    }
+
+    postsActions.optimisticPublishPost(entryData, loggedProfileData, currentEmbedEntry, true);
+    hideEditorModal();
   };
 
   const handleFlipCard = (entry: any, isQuote: boolean) => () => {
@@ -218,7 +291,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
   return (
     <Box fill="horizontal">
       <ModalRenderer slotId={props.layout.app.modalSlotId}>
-        {reportModalOpen && (
+        {modalState.report && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
               titleLabel={t('Report a Post')}
@@ -252,11 +325,33 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
               size={size}
               width={width}
               updateEntry={updateEntry}
-              closeModal={() => {
-                setReportModalOpen(false);
-              }}
+              closeModal={hideReportModal}
             />
           </ToastProvider>
+        )}
+        {modalState.editor && props.layout.app.modalSlotId && (
+          <EditorModal
+            slotId={props.layout.app.modalSlotId}
+            avatar={loggedProfileData.avatar}
+            showModal={modalState.editor}
+            ethAddress={loginState.ethAddress}
+            postLabel={t('Publish')}
+            placeholderLabel={t('Write something')}
+            discardPostLabel={t('Discard Post')}
+            discardPostInfoLabel={t(
+              "You have not posted yet. If you leave now you'll discard your post.",
+            )}
+            keepEditingLabel={t('Keep Editing')}
+            onPublish={handleEntryPublish}
+            handleNavigateBack={handleToggleEditor}
+            getMentions={handleGetMentions}
+            getTags={handleGetTags}
+            tags={tags}
+            mentions={mentions}
+            uploadRequest={onUploadRequest}
+            embedEntryData={currentEmbedEntry}
+            style={{ width: '36rem' }}
+          />
         )}
       </ModalRenderer>
       {searchState.isFetching && (
@@ -366,13 +461,13 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                   style={{ height: 'auto' }}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
-                  onRepost={() => null}
+                  onRepost={handleRepost}
                   onEntryFlag={handleEntryFlag}
                   handleFollowAuthor={() => handleFollowProfile(entryData.author.ethAddress)}
                   handleUnfollowAuthor={() => handleUnfollowProfile(entryData.author.ethAddress)}
                   isFollowingAuthor={followedProfiles.includes(entryData.author)}
                   onContentClick={() => handlePostClick(entryData.entryId)}
-                  onMentionClick={() => handleProfileClick(entryData.author.pubKey)}
+                  onMentionClick={handleProfileClick}
                   contentClickable={true}
                   handleFlipCard={handleFlipCard}
                 />
@@ -409,7 +504,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                 handleUnfollowAuthor={() => handleUnfollowProfile(commentData.author.ethAddress)}
                 isFollowingAuthor={followedProfiles.includes(commentData.author)}
                 onContentClick={() => handlePostClick(commentData.postId)}
-                onMentionClick={() => handleProfileClick(commentData.author.pubKey)}
+                onMentionClick={handleProfileClick}
                 contentClickable={true}
                 handleFlipCard={handleFlipCard}
               />

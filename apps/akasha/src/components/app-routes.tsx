@@ -59,7 +59,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   };
 
   const showReportModal = () => {
-    modalStateActions.show(MODAL_NAMES.REPORT);
+    modalStateActions.showAfterLogin(MODAL_NAMES.REPORT);
   };
 
   const hideReportModal = () => {

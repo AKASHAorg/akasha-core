@@ -12,7 +12,7 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { uploadMediaToTextile } from '../../services/posting-service';
+import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { redirectToPost } from '../../services/routing-service';
 import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
@@ -208,20 +208,15 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     return bookmarkActions.bookmarkComment(commentId);
   };
 
-  const handleEntryRepost = () => {
+  const handleCommentRepost = () => {
     // todo
   };
-  const handleEntryFlag = (entryId: string, user?: string | null) => () => {
-    /* todo */
-    if (!user) {
-      setFlagged(entryId);
-      return showLoginModal();
-    }
+  const handleEntryFlag = (entryId: string) => () => {
     setFlagged(entryId);
     setReportModalOpen();
   };
 
-  const handlePublish = async (data: {
+  const handlePublishComment = async (data: {
     metadata: {
       app: string;
       version: number;
@@ -458,7 +453,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       bookmarkLabel={t('Save')}
                       bookmarkedLabel={t('Saved')}
                       onRepost={handleRepost}
-                      onEntryFlag={handleEntryFlag(entryData.entryId, loginState.ethAddress)}
+                      onEntryFlag={handleEntryFlag(entryData.entryId)}
                       handleFollowAuthor={handleFollow}
                       handleUnfollowAuthor={handleUnfollow}
                       isFollowingAuthor={isFollowing}
@@ -491,7 +486,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             ethAddress={loginState.ethAddress}
             postLabel={t('Reply')}
             placeholderLabel={t('Write something')}
-            onPublish={handlePublish}
+            onPublish={handlePublishComment}
             getMentions={handleGetMentions}
             getTags={handleGetTags}
             tags={tags}
@@ -536,7 +531,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                     onNavigate={handleNavigateToPost}
                     sharePostUrl={`${window.location.origin}${routes[POST]}/`}
                     onFlag={handleEntryFlag}
-                    onRepost={handleEntryRepost}
+                    onRepost={handleCommentRepost}
                     onAvatarClick={handleAvatarClick}
                     onMentionClick={handleMentionClick}
                     handleFlipCard={handleListFlipCard}
