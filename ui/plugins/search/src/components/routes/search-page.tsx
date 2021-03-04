@@ -125,7 +125,10 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
     if (loginState.waitForAuth && !loginState.ready) {
       return;
     }
-    if ((loginState.waitForAuth && loginState.ready) || loginState.currentUserCalled) {
+    if (
+      (loginState.waitForAuth && loginState.ready) ||
+      (loginState.currentUserCalled && loginState.ethAddress)
+    ) {
       bookmarkActions.getBookmarks();
       tagSubscriptionActions.getTagSubscriptions();
     }

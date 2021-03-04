@@ -71,16 +71,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
 
-  React.useEffect(() => {
-    if (loginState.currentUserCalled) {
-      postsActions.resetPostIds();
-      postsActions.getPosts({ limit: 5 });
-      if (loginState.ethAddress) {
-        bookmarkActions.getBookmarks();
-      }
-    }
-  }, [loginState.currentUserCalled, loginState.ethAddress]);
-
   const {
     size,
     dimensions: { width },
@@ -93,7 +83,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     onError,
     dbService: sdkModules.db,
   });
-  const [, errorActions] = useErrors({ logger });
+  const [errorState, errorActions] = useErrors({ logger });
 
   const [postsState, postsActions] = usePosts({
     user: loginState.ethAddress,
@@ -101,6 +91,36 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
+
+  React.useEffect(() => {
+    if (Object.keys(errorState).length) {
+      logger.error(errorState);
+    }
+  }, [JSON.stringify(errorState)]);
+
+  const virtualListRef = React.useRef<{ reset: () => void } | undefined>();
+
+  React.useEffect(() => {
+    if (loginState.currentUserCalled) {
+      postsActions.resetPostIds();
+      if (virtualListRef.current) {
+        virtualListRef.current.reset();
+      }
+      if (loginState.ethAddress) {
+        bookmarkActions.getBookmarks();
+      }
+    }
+  }, [JSON.stringify(loginState)]);
+
+  React.useEffect(() => {
+    if (
+      !postsState.postIds.length &&
+      !postsState.isFetchingPosts &&
+      postsState.totalItems === null
+    ) {
+      postsActions.getPosts({ limit: 5 });
+    }
+  }, [postsState.postIds.length, postsState.isFetchingPosts]);
 
   const handleLoadMore = (payload: ILoadItemsPayload) => {
     const req: { limit: number; offset?: string } = {
@@ -277,6 +297,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         loadItemData={loadItemData}
         hasMoreItems={!!postsState.nextPostIndex}
         usePlaceholders={true}
+        ref={virtualListRef}
         listHeader={
           loginState.ethAddress ? (
             <EditorPlaceholder
