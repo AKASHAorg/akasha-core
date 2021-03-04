@@ -30,6 +30,9 @@ const Routes: React.FC<RootComponentProps> = props => {
     isLoggedIn: !!loginState.ethAddress,
   });
 
+  const [reportModalOpen, setReportModalOpen] = React.useState(false);
+  const [flagged, setFlagged] = React.useState('');
+
   const { t } = useTranslation();
 
   const loginErrors: string | null = React.useMemo(() => {
@@ -57,12 +60,17 @@ const Routes: React.FC<RootComponentProps> = props => {
         <Switch>
           <Route path={`${rootRoute}/:searchKeyword`}>
             <SearchPage
+              {...props}
               logger={props.logger}
               sdkModules={props.sdkModules}
               singleSpa={props.singleSpa}
               globalChannel={props.globalChannel}
+              flagged={flagged}
+              reportModalOpen={reportModalOpen}
+              setFlagged={setFlagged}
               showLoginModal={showLoginModal}
               loginState={loginState}
+              setReportModalOpen={setReportModalOpen}
             />
           </Route>
         </Switch>
