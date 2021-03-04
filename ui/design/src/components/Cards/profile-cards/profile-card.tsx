@@ -17,6 +17,7 @@ import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 import ProfileEditMenuDropdown from './profile-card-edit-dropdown';
 import styled from 'styled-components';
 import { truncateMiddle } from '../../../utils/string-utils';
+import { isMobile } from 'react-device-detect';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -71,6 +72,20 @@ const EditButton = styled(IconButton)`
       stroke: ${props => props.theme.colors.blue};
     }
   }
+`;
+
+const StatIcon = styled(TextIcon)<{ isMobile?: boolean }>`
+  ${props => {
+    if (props.isMobile) {
+      return `
+        flex-direction: column;
+        align-items: start;
+      `;
+    }
+    return `
+      flex-direction: row;
+    `;
+  }}
 `;
 
 // tslint:disable:cyclomatic-complexity
@@ -207,6 +222,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
       <Box
         direction="column"
         border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
+        pad={{ bottom: 'medium' }}
         margin={{ horizontal: 'medium' }}
       >
         <Box height="70px" direction="row" justify="between">
@@ -274,7 +290,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           />
         )}
         <Box pad={{ vertical: 'medium' }} direction="row" alignContent="center" gap="medium">
-          <TextIcon
+          <StatIcon
             iconType="quote"
             iconBackground={true}
             iconSize="xxs"
@@ -282,8 +298,9 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             onClick={onClickPosts}
             fadedText={true}
             data-testid="posts-button"
+            isMobile={isMobile}
           />
-          <TextIcon
+          <StatIcon
             iconType="following"
             iconBackground={true}
             iconSize="xxs"
@@ -291,8 +308,9 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             onClick={onClickFollowers}
             fadedText={true}
             data-testid="followers-button"
+            isMobile={isMobile}
           />
-          <TextIcon
+          <StatIcon
             iconType="following"
             iconBackground={true}
             iconSize="xxs"
@@ -300,6 +318,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             onClick={onClickFollowing}
             fadedText={true}
             data-testid="following-button"
+            isMobile={isMobile}
           />
         </Box>
       </Box>
@@ -320,20 +339,21 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           hideENSButton={props.hideENSButton}
         />
       )}
-
-      <ProfileCardEthereumId profileData={profileData} />
-      {description && (
-        <ProfileCardDescription
-          editable={editable}
-          description={description}
-          descriptionIcon={descriptionIcon}
-          handleChangeDescription={handleChangeDescription}
-          descriptionPopoverOpen={descriptionPopoverOpen}
-          setDescriptionPopoverOpen={setDescriptionPopoverOpen}
-          profileProvidersData={profileProvidersData}
-          descriptionLabel={descriptionLabel}
-        />
-      )}
+      <Box pad={{ top: 'medium', bottom: 'xsmall' }}>
+        <ProfileCardEthereumId profileData={profileData} />
+        {description && (
+          <ProfileCardDescription
+            editable={editable}
+            description={description}
+            descriptionIcon={descriptionIcon}
+            handleChangeDescription={handleChangeDescription}
+            descriptionPopoverOpen={descriptionPopoverOpen}
+            setDescriptionPopoverOpen={setDescriptionPopoverOpen}
+            profileProvidersData={profileProvidersData}
+            descriptionLabel={descriptionLabel}
+          />
+        )}
+      </Box>
       {profileData.CID && (
         <>
           <Box direction="column" pad="medium" gap="medium">

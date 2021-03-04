@@ -36,12 +36,17 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
 
   return (
     <>
-      <Box direction="column" pad="medium" gap="medium">
-        <Text size="large" weight="bold" color="primaryText">
+      <Box direction="column" pad={{ vertical: 'xsmall', horizontal: 'medium' }} gap="xxsmall">
+        <Text size="large" weight="bold" color="primaryText" style={{ lineHeight: 1.7 }}>
           {profileData.ensName ? ethereumNameLabel : ethereumAddressLabel}
         </Text>
         <Box direction="row" gap="xsmall" align="center">
-          <Text color="primaryText" size={isMobile ? 'small' : 'medium'}>
+          <Text
+            color="primaryText"
+            size={isMobile ? 'small' : 'large'}
+            truncate={true}
+            style={{ lineHeight: 1.7 }}
+          >
             {profileData.ensName ? profileData.ensName : profileData.ethAddress}
           </Text>
           <Icon type="copy" clickable={true} onClick={togglePopover} ref={popoverRef} />
