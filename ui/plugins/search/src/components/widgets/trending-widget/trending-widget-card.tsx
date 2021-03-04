@@ -60,7 +60,10 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
     if (loginState.waitForAuth && !loginState.ready) {
       return;
     }
-    if ((loginState.waitForAuth && loginState.ready) || loginState.currentUserCalled) {
+    if (
+      (loginState.waitForAuth && loginState.ready) ||
+      (loginState.currentUserCalled && loginState.ethAddress)
+    ) {
       tagSubscriptionActions.getTagSubscriptions();
     }
   }, [JSON.stringify(loginState)]);
