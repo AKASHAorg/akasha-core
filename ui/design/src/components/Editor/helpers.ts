@@ -1,4 +1,5 @@
 import { Editor, Text, Transforms } from 'slate';
+import { ReactEditor } from 'slate-react';
 import ReactDOM from 'react-dom';
 
 const CustomEditor = {
@@ -37,7 +38,7 @@ const CustomEditor = {
   },
 
   insertImage(
-    editor: Editor,
+    editor: ReactEditor,
     url: string,
     size: {
       width: string;
@@ -49,9 +50,13 @@ const CustomEditor = {
     const text = { text: '' };
     const image = { url, size, type: 'image', children: [text] };
     Transforms.insertNodes(editor, image);
+    ReactEditor.focus(editor);
+    Transforms.select(editor, Editor.end(editor, []));
   },
 
-  insertText(editor: Editor, text: string) {
+  insertText(editor: ReactEditor, text: string) {
+    ReactEditor.focus(editor);
+    Transforms.select(editor, Editor.end(editor, []));
     Transforms.insertNodes(editor, { text, type: 'text' });
   },
 
@@ -74,6 +79,16 @@ const CustomEditor = {
     const tag = Object.assign({ type: 'tag', children: [{ text: '' }] }, tagData);
     Transforms.insertNodes(editor, tag);
     Transforms.move(editor);
+  },
+
+  deleteImage(editor: Editor, element: any) {
+    Transforms.removeNodes(editor, {
+      voids: true,
+      match: n => {
+        return n === element;
+      },
+    });
+    Transforms.select(editor, Editor.end(editor, []));
   },
 };
 
