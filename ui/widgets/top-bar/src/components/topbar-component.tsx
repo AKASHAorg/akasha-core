@@ -54,13 +54,7 @@ const TopbarComponent = (props: TopBarProps) => {
     ipfsService: props.sdkModules.commons.ipfsService,
   });
 
-  React.useEffect(() => {
-    if (loginState.pubKey) {
-      loggedProfileActions.getProfileData({ pubKey: loginState.pubKey });
-    }
-  }, [loginState.pubKey]);
-
-  const [notificationsState] = useNotifications({
+  const [notificationsState, notificationActions] = useNotifications({
     globalChannel,
     onError: err => logger.error(err),
     authService: props.sdkModules.auth.authService,
@@ -68,6 +62,19 @@ const TopbarComponent = (props: TopBarProps) => {
     profileService: props.sdkModules.profiles.profileService,
     loggedEthAddress: loginState.ethAddress,
   });
+
+  React.useEffect(() => {
+    if (loginState.ready?.ethAddress && loginState.ethAddress) {
+      notificationActions.getMessages();
+    }
+  }, [loginState.ready?.ethAddress, loginState.ethAddress]);
+
+  React.useEffect(() => {
+    if (loginState.pubKey) {
+      loggedProfileActions.getProfileData({ pubKey: loginState.pubKey });
+    }
+  }, [loginState.pubKey]);
+
   const loginErrors: string | null = React.useMemo(() => {
     if (errorState && Object.keys(errorState).length) {
       const txt = Object.keys(errorState)
@@ -115,6 +122,7 @@ const TopbarComponent = (props: TopBarProps) => {
     }
     return 0;
   });
+
   const searchAreaItem = currentMenu?.filter(
     menuItem => menuItem.area === MenuItemAreaType.SearchArea,
   )[0];
@@ -126,6 +134,7 @@ const TopbarComponent = (props: TopBarProps) => {
   const handleLoginClick = () => {
     setShowLoginModal(true);
   };
+
   const handleLogin = (provider: 2 | 3) => {
     loginActions.login(provider);
   };
@@ -136,10 +145,12 @@ const TopbarComponent = (props: TopBarProps) => {
       setTimeout(() => window.location.reload(), 50);
     });
   };
+
   const handleModalClose = () => {
     setShowLoginModal(false);
     errorActions.removeLoginErrors();
   };
+
   const handleSearch = (inputValue: string) => {
     const encodedSearchKey = encodeURIComponent(inputValue);
     if (searchAreaItem) {

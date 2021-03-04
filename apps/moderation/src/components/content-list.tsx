@@ -155,7 +155,7 @@ const ContentList: React.FC<IContentListProps> = props => {
               user={ethAddress}
               contentId={flagged}
               baseUrl={BASE_DECISION_URL}
-              isReview={true}
+              isReview={!isPending}
               size={size}
               width={width}
               onModalClose={() => {

@@ -16,6 +16,7 @@ import routes, { POST } from '../../routes';
 import { application as loginWidget } from '@akashaproject/ui-widget-login/lib/bootstrap';
 import Parcel from 'single-spa-react/parcel';
 import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
+import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
 const {
   Box,
@@ -35,10 +36,8 @@ export interface FeedPageProps {
   singleSpa: any;
   logger: any;
   showLoginModal: () => void;
-  ethAddress: string | null;
-  currentUserCalled: boolean;
-  pubKey: string | null;
   loggedProfileData?: any;
+  loginState: UseLoginState;
   flagged: string;
   reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
@@ -62,10 +61,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     setEditorModalOpen,
     closeEditorModal,
     showLoginModal,
-    ethAddress,
-    currentUserCalled,
-    pubKey,
     loggedProfileData,
+    loginState,
     onError,
     sdkModules,
     logger,
@@ -75,11 +72,14 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
 
   React.useEffect(() => {
-    if (currentUserCalled) {
+    if (loginState.currentUserCalled) {
       postsActions.resetPostIds();
       postsActions.getPosts({ limit: 5 });
+      if (loginState.ethAddress) {
+        bookmarkActions.getBookmarks();
+      }
     }
-  }, [currentUserCalled]);
+  }, [loginState.currentUserCalled, loginState.ethAddress]);
 
   const {
     size,
@@ -90,14 +90,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    pubKey,
     onError,
     dbService: sdkModules.db,
   });
   const [, errorActions] = useErrors({ logger });
 
   const [postsState, postsActions] = usePosts({
-    user: ethAddress,
+    user: loginState.ethAddress,
     postsService: sdkModules.posts,
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
@@ -107,7 +106,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     const req: { limit: number; offset?: string } = {
       limit: payload.limit,
     };
-    if (!postsState.isFetchingPosts && currentUserCalled) {
+    if (!postsState.isFetchingPosts && loginState.currentUserCalled) {
       postsActions.getPosts(req);
     }
   };
@@ -124,7 +123,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     props.singleSpa.navigateToUrl(`/profile/${profilePubKey}`);
   };
   const handleEntryBookmark = (entryId: string) => {
-    if (!pubKey) {
+    if (!loginState.pubKey) {
       return showLoginModal();
     }
     if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
@@ -190,7 +189,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
   const handleEntryPublish = async (data: PublishPostData) => {
-    if (!ethAddress && !pubKey) {
+    if (!loginState.ethAddress && !loginState.pubKey) {
       showLoginModal();
       return;
     }
@@ -243,7 +242,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
               closeLabel={t('Close')}
-              user={ethAddress ? ethAddress : ''}
+              user={loginState.ethAddress ? loginState.ethAddress : ''}
               contentId={flagged}
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
@@ -259,7 +258,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         slotId={props.layout.app.modalSlotId}
         avatar={loggedProfileData.avatar}
         showModal={editorModalOpen}
-        ethAddress={ethAddress as any}
+        ethAddress={loginState.ethAddress as any}
         postLabel={t('Publish')}
         placeholderLabel={t('Write something')}
         discardPostLabel={t('Discard Post')}
@@ -285,9 +284,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         hasMoreItems={!!postsState.nextPostIndex}
         usePlaceholders={true}
         listHeader={
-          ethAddress ? (
+          loginState.ethAddress ? (
             <EditorPlaceholder
-              ethAddress={ethAddress}
+              ethAddress={loginState.ethAddress}
               onClick={handleToggleEditor}
               style={{ marginTop: 8 }}
               avatar={loggedProfileData.avatar}
@@ -313,7 +312,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             logger={logger}
             globalChannel={globalChannel}
             bookmarkState={bookmarkState}
-            ethAddress={ethAddress}
+            ethAddress={loginState.ethAddress}
             locale={locale}
             onBookmark={handleEntryBookmark}
             onNavigate={handleNavigateToPost}
@@ -335,7 +334,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           globalChannel,
           isMobile,
           feedItems: postsState.postIds,
-          loggedEthAddress: ethAddress,
+          loggedEthAddress: loginState.ethAddress,
           pendingEntries: postsState.pendingPosts,
         })}
       />

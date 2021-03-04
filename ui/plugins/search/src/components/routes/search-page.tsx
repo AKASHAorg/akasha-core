@@ -2,11 +2,32 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { useParams } from 'react-router-dom';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
-import { useBookmarks, useFollow, useSearch, useTagSubscribe } from '@akashaproject/ui-awf-hooks';
+import {
+  constants,
+  useBookmarks,
+  useFollow,
+  useSearch,
+  useTagSubscribe,
+} from '@akashaproject/ui-awf-hooks';
+import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
-const { Box, Icon, BasicCardBox, ErrorLoader, Spinner, DuplexButton, EntryCard, ProfileCard } = DS;
+const {
+  Box,
+  Icon,
+  BasicCardBox,
+  ErrorLoader,
+  Spinner,
+  DuplexButton,
+  EntryCard,
+  EntryCardHidden,
+  ProfileCard,
+  ReportModal,
+  ToastProvider,
+  ModalRenderer,
+  useViewportSize,
+} = DS;
 
 interface SearchPageProps {
   onError?: (err: Error) => void;
@@ -14,20 +35,26 @@ interface SearchPageProps {
   logger: any;
   globalChannel: any;
   singleSpa: any;
-  loggedEthAddress: string | null;
-  loggedPubKey: string | null;
+  loginState: UseLoginState;
+  flagged: string;
+  reportModalOpen: boolean;
   showLoginModal: () => void;
+  setFlagged: React.Dispatch<React.SetStateAction<string>>;
+  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SearchPage: React.FC<SearchPageProps> = props => {
+const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
   const {
     sdkModules,
     logger,
     singleSpa,
     globalChannel,
-    loggedPubKey,
-    loggedEthAddress,
+    loginState,
+    flagged,
+    reportModalOpen,
     showLoginModal,
+    setFlagged,
+    setReportModalOpen,
   } = props;
 
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
@@ -36,7 +63,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    pubKey: loggedPubKey,
     onError: (err: IAkashaError) => {
       logger.error('useBookmark error %j', err);
     },
@@ -44,13 +70,14 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   });
 
   const [searchState, searchActions] = useSearch({
+    user: loginState.ethAddress,
+    logger: logger,
+    postsService: sdkModules.posts,
+    ipfsService: sdkModules.commons.ipfsService,
+    profileService: sdkModules.profiles.profileService,
     onError: (err: IAkashaError) => {
       logger.error('useSearch error %j', err);
     },
-    logger: logger,
-    ipfsService: sdkModules.commons.ipfsService,
-    profileService: sdkModules.profiles.profileService,
-    postsService: sdkModules.posts,
   });
 
   const [followedProfiles, followActions] = useFollow({
@@ -69,30 +96,51 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     },
   });
 
-  React.useEffect(() => {
-    searchActions.search(decodeURIComponent(searchKeyword));
-  }, [searchKeyword]);
+  const {
+    size,
+    dimensions: { width },
+  } = useViewportSize();
 
   React.useEffect(() => {
-    if (loggedEthAddress) {
-      searchState.profiles.slice(0, 4).forEach(async (profile: any) => {
-        if (loggedEthAddress && profile.ethAddress) {
-          followActions.isFollowing(loggedEthAddress, profile.ethAddress);
-        }
-      });
+    if (loginState.currentUserCalled) {
+      searchActions.search(decodeURIComponent(searchKeyword));
+      // if user successfully logs in after attempting to report a post
+      if (loginState.ethAddress && !!flagged.length) {
+        // show the report modal
+        setReportModalOpen(true);
+      }
+    }
+  }, [searchKeyword, loginState.currentUserCalled, loginState.ethAddress]);
+
+  React.useEffect(() => {
+    if (loginState.waitForAuth && !loginState.ready) {
+      return;
+    }
+    if ((loginState.waitForAuth && loginState.ready) || loginState.currentUserCalled) {
+      bookmarkActions.getBookmarks();
       tagSubscriptionActions.getTagSubscriptions();
     }
-  }, [searchState, loggedEthAddress]);
+  }, [JSON.stringify(loginState)]);
+
+  React.useEffect(() => {
+    if (loginState.ethAddress) {
+      searchState.profiles.slice(0, 4).forEach(async (profile: any) => {
+        if (loginState.ethAddress && profile.ethAddress) {
+          followActions.isFollowing(loginState.ethAddress, profile.ethAddress);
+        }
+      });
+    }
+  }, [searchState, loginState.ethAddress]);
 
   const handleTagSubscribe = (tagName: string) => {
-    if (!loggedEthAddress) {
+    if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
     tagSubscriptionActions.toggleTagSubscription(tagName);
   };
   const handleTagUnsubscribe = (tagName: string) => {
-    if (!loggedEthAddress) {
+    if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
@@ -102,7 +150,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     singleSpa.navigateToUrl(`/profile/${pubKey}`);
   };
   const handleFollowProfile = (ethAddress: string) => {
-    if (!loggedEthAddress) {
+    if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
@@ -110,7 +158,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleUnfollowProfile = (ethAddress: string) => {
-    if (!loggedEthAddress) {
+    if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
@@ -122,7 +170,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleEntryBookmark = (entryId: string) => {
-    if (!loggedEthAddress) {
+    if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
@@ -130,6 +178,35 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       return bookmarkActions.removeBookmark(entryId);
     }
     return bookmarkActions.bookmarkPost(entryId);
+  };
+
+  const handleEntryFlag = (entryId: string) => {
+    if (!loginState.ethAddress) {
+      // setting entryId to state first, if not logged in
+      setFlagged(entryId);
+      return showLoginModal();
+    }
+    setFlagged(entryId);
+    setReportModalOpen(true);
+  };
+
+  const handleFlipCard = (entry: any, isQuote: boolean) => () => {
+    // modify the entry
+    const modifiedEntry = isQuote
+      ? { ...entry, quote: { ...entry.quote, reported: false } }
+      : { ...entry, reported: false };
+    // update state
+    searchActions.updateSearchState(modifiedEntry);
+  };
+
+  const updateEntry = (entryId: string) => {
+    // find and modify the entry from state using the entryId
+    const modifiedEntry = {
+      ...searchState.entries.find((entry: any) => entry.entryId === entryId),
+      reported: true,
+    };
+    // update state
+    searchActions.updateSearchState(modifiedEntry);
   };
 
   const emptySearchState =
@@ -140,6 +217,48 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   return (
     <Box fill="horizontal">
+      <ModalRenderer slotId={props.layout.app.modalSlotId}>
+        {reportModalOpen && (
+          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
+            <ReportModal
+              titleLabel={t('Report a Post')}
+              successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
+              successMessageLabel={t('We will investigate this post and take appropriate action.')}
+              optionsTitleLabel={t('Please select a reason')}
+              optionLabels={[
+                t('Suspicious, deceptive, or spam'),
+                t('Abusive or harmful to others'),
+                t('Self-harm or suicide'),
+                t('Illegal'),
+                t('Nudity'),
+                t('Violence'),
+              ]}
+              descriptionLabel={t('Explanation')}
+              descriptionPlaceholder={t('Please explain your reason(s)')}
+              footerText1Label={t('If you are unsure, you can refer to our')}
+              footerLink1Label={t('Code of Conduct')}
+              footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
+              footerText2Label={t('and')}
+              footerLink2Label={t('Terms of Service')}
+              footerUrl2={'https://ethereum.world/terms-of-service'}
+              cancelLabel={t('Cancel')}
+              reportLabel={t('Report')}
+              blockLabel={t('Block User')}
+              closeLabel={t('Close')}
+              user={loginState.ethAddress ? loginState.ethAddress : ''}
+              contentId={flagged}
+              contentType="post"
+              baseUrl={constants.BASE_FLAG_URL}
+              size={size}
+              width={width}
+              updateEntry={updateEntry}
+              closeModal={() => {
+                setReportModalOpen(false);
+              }}
+            />
+          </ToastProvider>
+        )}
+      </ModalRenderer>
       {searchState.isFetching && (
         <BasicCardBox>
           <Box pad="large">
@@ -151,7 +270,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         <BasicCardBox>
           <ErrorLoader
             type="no-login"
-            title={t('No matching results found 😞')}
+            title={`${t('No matching results found')} 😞`}
             details={t(
               'Make sure you spelled everything correctly or try searching for something else',
             )}
@@ -193,7 +312,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 handleUnfollow={() => handleUnfollowProfile(profileData.ethAddress)}
                 handleShareClick={() => null}
                 isFollowing={followedProfiles.includes(profileData?.ethAddress)}
-                loggedEthAddress={loggedEthAddress}
+                loggedEthAddress={loginState.ethAddress}
                 profileData={profileData}
                 followLabel={t('Follow')}
                 unfollowLabel={t('Unfollow')}
@@ -203,56 +322,65 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 postsLabel={t('Posts')}
                 shareProfileLabel={t('Share')}
                 flaggable={true}
-                flagAsLabel={t('Report Profile')}
+                // uncomment this to enable report profile
+                // flagAsLabel={t('Report Profile')}
                 onEntryFlag={() => null}
               />
             </Box>
           ))}
-          {searchState.entries.slice(0, 4).map((entryData: any, index: number) => (
-            <Box
-              key={index}
-              onClick={() => handlePostClick(entryData.entryId)}
-              pad={{ bottom: 'medium' }}
-            >
-              <EntryCard
-                isBookmarked={
-                  bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryData.entryId) >= 0
-                }
-                entryData={entryData}
-                sharePostLabel={t('Share Post')}
-                shareTextLabel={t('Share this post with your friends')}
-                sharePostUrl={`${window.location.origin}/AKASHA-app/post/`}
-                onClickAvatar={() => handleProfileClick(entryData.author.pubKey)}
-                onEntryBookmark={handleEntryBookmark}
-                repliesLabel={t('Replies')}
-                repostsLabel={t('Reposts')}
-                repostLabel={t('Repost')}
-                repostWithCommentLabel={t('Repost with comment')}
-                shareLabel={t('Share')}
-                copyLinkLabel={t('Copy Link')}
-                flagAsLabel={t('Report Post')}
-                loggedProfileEthAddress={loggedEthAddress}
-                locale={locale || 'en'}
-                style={{ height: 'auto' }}
-                bookmarkLabel={t('Save')}
-                bookmarkedLabel={t('Saved')}
-                onRepost={() => null}
-                onEntryFlag={() => null}
-                handleFollowAuthor={() => handleFollowProfile(entryData.author.ethAddress)}
-                handleUnfollowAuthor={() => handleUnfollowProfile(entryData.author.ethAddress)}
-                isFollowingAuthor={followedProfiles.includes(entryData.author)}
-                onContentClick={() => handlePostClick(entryData.entryId)}
-                onMentionClick={() => handleProfileClick(entryData.author.pubKey)}
-                contentClickable={true}
-              />
+          {searchState.entries.slice(0, 4).map((entryData: any) => (
+            <Box key={entryData.entyId} pad={{ bottom: 'medium' }}>
+              {entryData.delisted ? (
+                <EntryCardHidden
+                  moderatedContentLabel={t('This content has been moderated')}
+                  isDelisted={true}
+                />
+              ) : entryData.reported ? (
+                <EntryCardHidden
+                  awaitingModerationLabel={t(
+                    'You have reported this post. It is awaiting moderation.',
+                  )}
+                  ctaLabel={t('See it anyway')}
+                  handleFlipCard={handleFlipCard && handleFlipCard(entryData, false)}
+                />
+              ) : (
+                <EntryCard
+                  isBookmarked={
+                    bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryData.entryId) >= 0
+                  }
+                  entryData={entryData}
+                  sharePostLabel={t('Share Post')}
+                  shareTextLabel={t('Share this post with your friends')}
+                  sharePostUrl={`${window.location.origin}/AKASHA-app/post/`}
+                  onClickAvatar={() => handleProfileClick(entryData.author.pubKey)}
+                  onEntryBookmark={handleEntryBookmark}
+                  repliesLabel={t('Replies')}
+                  repostsLabel={t('Reposts')}
+                  repostLabel={t('Repost')}
+                  repostWithCommentLabel={t('Repost with comment')}
+                  shareLabel={t('Share')}
+                  copyLinkLabel={t('Copy Link')}
+                  flagAsLabel={t('Report Post')}
+                  loggedProfileEthAddress={loginState.ethAddress}
+                  locale={locale || 'en'}
+                  style={{ height: 'auto' }}
+                  bookmarkLabel={t('Save')}
+                  bookmarkedLabel={t('Saved')}
+                  onRepost={() => null}
+                  onEntryFlag={handleEntryFlag}
+                  handleFollowAuthor={() => handleFollowProfile(entryData.author.ethAddress)}
+                  handleUnfollowAuthor={() => handleUnfollowProfile(entryData.author.ethAddress)}
+                  isFollowingAuthor={followedProfiles.includes(entryData.author)}
+                  onContentClick={() => handlePostClick(entryData.entryId)}
+                  onMentionClick={() => handleProfileClick(entryData.author.pubKey)}
+                  contentClickable={true}
+                  handleFlipCard={handleFlipCard}
+                />
+              )}
             </Box>
           ))}
           {searchState.comments.slice(0, 4).map((commentData: any, index: number) => (
-            <Box
-              key={index}
-              onClick={() => handlePostClick(commentData.postId)}
-              pad={{ bottom: 'medium' }}
-            >
+            <Box key={index} pad={{ bottom: 'medium' }}>
               <EntryCard
                 isBookmarked={
                   bookmarkState.bookmarks.findIndex(bm => bm.entryId === commentData.entryId) >= 0
@@ -270,19 +398,20 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 shareLabel={t('Share')}
                 copyLinkLabel={t('Copy Link')}
                 flagAsLabel={t('Report Post')}
-                loggedProfileEthAddress={loggedEthAddress}
+                loggedProfileEthAddress={loginState.ethAddress}
                 locale={locale || 'en'}
                 style={{ height: 'auto' }}
                 bookmarkLabel={t('Save')}
                 bookmarkedLabel={t('Saved')}
                 onRepost={() => null}
-                onEntryFlag={() => null}
+                onEntryFlag={handleEntryFlag}
                 handleFollowAuthor={() => handleFollowProfile(commentData.author.ethAddress)}
                 handleUnfollowAuthor={() => handleUnfollowProfile(commentData.author.ethAddress)}
                 isFollowingAuthor={followedProfiles.includes(commentData.author)}
                 onContentClick={() => handlePostClick(commentData.postId)}
                 onMentionClick={() => handleProfileClick(commentData.author.pubKey)}
                 contentClickable={true}
+                handleFlipCard={handleFlipCard}
               />
             </Box>
           ))}

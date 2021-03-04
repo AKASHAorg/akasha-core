@@ -29,7 +29,6 @@ const BookmarksPage = (props: RootComponentProps) => {
     onLogout: () => props.singleSpa.navigateToUrl('/'),
   });
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    pubKey: loginState.pubKey,
     dbService: sdkModules.db,
     onError: errorActions.createError,
   });
@@ -41,6 +40,18 @@ const BookmarksPage = (props: RootComponentProps) => {
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
+  React.useEffect(() => {
+    if (loginState.waitForAuth && !loginState.ready) {
+      return;
+    }
+    if (loginState.waitForAuth && loginState.ready) {
+      return bookmarkActions.getBookmarks();
+    }
+    if (loginState.currentUserCalled) {
+      return bookmarkActions.getBookmarks();
+    }
+  }, [JSON.stringify(loginState)]);
+
   React.useEffect(() => {
     if (bookmarkState.bookmarks.length) {
       bookmarkState.bookmarks.forEach(bookmark => {
@@ -99,7 +110,6 @@ const BookmarksPage = (props: RootComponentProps) => {
     const modifiedEntry = { ...entry, reported: false };
     postActions.updatePostsState(modifiedEntry);
   };
-
   return (
     <>
       <ErrorInfoCard errors={errorState}>

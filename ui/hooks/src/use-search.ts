@@ -1,11 +1,15 @@
 import * as React from 'react';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
-import { getMediaUrl } from './utils/media-utils';
 import { forkJoin } from 'rxjs';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
+
 import { mapEntry } from './utils/entry-utils';
+import { getMediaUrl } from './utils/media-utils';
+import { createErrorHandler } from './utils/error-handler';
+import moderationRequest from './moderation-request';
 
 export interface UseSearchActions {
   search: (keyword: string) => void;
+  updateSearchState: (updatedEntry: any) => void;
 }
 
 export interface UseSearchState {
@@ -17,6 +21,7 @@ export interface UseSearchState {
 }
 
 export interface UseSearchProps {
+  user: string | null;
   onError: (error: IAkashaError) => void;
   logger: any;
   ipfsService: any;
@@ -26,7 +31,7 @@ export interface UseSearchProps {
 
 /* A hook to get search results and resolve the data within */
 export const useSearch = (props: UseSearchProps): [UseSearchState, UseSearchActions] => {
-  const { onError, logger, ipfsService, profileService, postsService } = props;
+  const { user, onError, logger, ipfsService, profileService, postsService } = props;
   const [searchResultsState, setSearchResultsState] = React.useState<UseSearchState>({
     profiles: [],
     entries: [],
@@ -76,9 +81,42 @@ export const useSearch = (props: UseSearchProps): [UseSearchState, UseSearchActi
         );
         const entriesResp: any = await forkJoin(getEntriesCalls).toPromise();
 
-        const completeEntries = entriesResp?.map((entryResp: any) => {
+        const entryIds: string[] = [];
+
+        let completeEntries = entriesResp?.map((entryResp: any) => {
+          entryIds.push(entryResp.data?.getPost._id);
           return mapEntry(entryResp.data?.getPost, ipfsGatewayResp.data, logger);
         });
+
+        try {
+          // check moderation status for all entry ids
+          const status = await moderationRequest.checkStatus(true, { user, contentIds: entryIds });
+
+          if (status && status.constructor === Array) {
+            // if valid response is returned and is an array, reduce to an object
+            const statusObject = status.reduce(
+              (obj: any, el: any) => ({ ...obj, [el.contentId]: el }),
+              {},
+            );
+
+            // map through the completeEntries and update moderation props for each entry
+            completeEntries = completeEntries.map((entry: any) => ({
+              ...entry,
+              reported: statusObject[entry.entryId].moderated
+                ? false
+                : statusObject[entry.entryId].reported,
+              delisted: statusObject[entry.entryId].delisted,
+            }));
+          }
+        } catch (err) {
+          entryIds.forEach(id => {
+            createErrorHandler(
+              `${id}`,
+              false,
+              onError,
+            )(new Error(`Failed to fetch moderated content. ${err.message}`));
+          });
+        }
 
         // get comments data
         const getCommentsCalls = searchResp.data?.globalSearch?.comments?.map(
@@ -111,6 +149,17 @@ export const useSearch = (props: UseSearchProps): [UseSearchState, UseSearchActi
           });
         }
       }
+    },
+    updateSearchState: (updatedEntry: any) => {
+      // map through entries and replace the updated entry
+      const updatedEntries = searchResultsState.entries.map((entry: any) =>
+        entry.entryId === updatedEntry.entryId ? updatedEntry : entry,
+      );
+      // set the updated array back to entries slice of state
+      setSearchResultsState(prev => ({
+        ...prev,
+        entries: updatedEntries,
+      }));
     },
   };
 

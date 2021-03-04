@@ -1,9 +1,6 @@
 import DS from '@akashaproject/design-system';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
-// @ts-ignore
-import SingleSpaReact from 'single-spa-react';
-import { filter } from 'rxjs/operators';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import TopbarComponent from './topbar-component';
 
@@ -36,11 +33,6 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
     };
   }
 
-  componentDidMount() {
-    this.subscription = this.props.globalChannel
-      .pipe(filter((response: any) => response.channelInfo.method === 'signIn'))
-      .subscribe((response: any) => this.setState({ ethAddress: response.data.ethAddress }));
-  }
   componentWillUnmount() {
     this.subscription.unsubscribe();
   }
