@@ -57,7 +57,10 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
     if (loginState.waitForAuth && !loginState.ready) {
       return;
     }
-    if ((loginState.waitForAuth && loginState.ready) || loginState.currentUserCalled) {
+    if (
+      (loginState.waitForAuth && loginState.ready) ||
+      (loginState.currentUserCalled && loginState.ethAddress)
+    ) {
       return notificationsActions.getMessages();
     }
   }, [JSON.stringify(loginState)]);
