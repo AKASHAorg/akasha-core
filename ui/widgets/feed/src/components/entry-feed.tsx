@@ -40,7 +40,10 @@ const EntryFeed = (props: IFeedWidgetProps) => {
     if (loginState.waitForAuth && !loginState.ready) {
       return;
     }
-    if ((loginState.waitForAuth && loginState.ready) || loginState.currentUserCalled) {
+    if (
+      (loginState.waitForAuth && loginState.ready) ||
+      (loginState.currentUserCalled && loginState.ethAddress)
+    ) {
       bookmarkActions.getBookmarks();
     }
   }, [JSON.stringify(loginState)]);
