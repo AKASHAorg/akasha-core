@@ -261,8 +261,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
 
-  const handleRepost = (_withComment: boolean, entryData: any) => {
-    setCurrentEmbedEntry(entryData);
+  const handleRepost = (_withComment: boolean, entry: any) => {
+    setCurrentEmbedEntry(entry);
     setEditorModalOpen();
   };
 
@@ -275,13 +275,13 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     }
   };
 
-  const handleEntryPublish = (entryData: any) => {
+  const handleEntryPublish = (entry: any) => {
     if (!loginState.ethAddress || !loginState.pubKey) {
       showLoginModal();
       return;
     }
 
-    postsActions.optimisticPublishPost(entryData, loggedProfileData, currentEmbedEntry, true);
+    postsActions.optimisticPublishPost(entry, loggedProfileData, currentEmbedEntry, true);
     closeEditorModal();
   };
 
