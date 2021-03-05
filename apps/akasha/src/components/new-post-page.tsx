@@ -1,7 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { uploadMediaToTextile } from '../services/posting-service';
+import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 const { Helmet, EditorCard, ErrorLoader, Box, Button, editorDefaultValue } = DS;

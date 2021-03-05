@@ -152,8 +152,9 @@ const TopbarComponent = (props: TopBarProps) => {
   };
 
   const handleSearch = (inputValue: string) => {
+    const encodedSearchKey = encodeURIComponent(inputValue);
     if (searchAreaItem) {
-      handleNavigation(`${searchAreaItem.route}/${inputValue}`);
+      handleNavigation(`${searchAreaItem.route}/${encodedSearchKey}`);
     }
   };
 

@@ -5,7 +5,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { rootRoute } from '../../routes';
 import SearchPage from './search-page';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useLoginState, useModalState, useErrors } from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useModalState, useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
+import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
 const { Box, LoginModal } = DS;
 
@@ -20,18 +21,18 @@ const Routes: React.FC<RootComponentProps> = props => {
     onError: errorActions.createError,
   });
 
+  const [loginProfile] = useProfile({
+    profileService: props.sdkModules.profiles.profileService,
+    ipfsService: props.sdkModules.commons.ipfsService,
+  });
+
   const [modalState, modalStateActions] = useModalState({
     initialState: {
-      updateProfile: false,
-      changeUsername: false,
-      changeENS: false,
-      reportModal: false,
+      editor: false,
+      report: false,
     },
     isLoggedIn: !!loginState.ethAddress,
   });
-
-  const [reportModalOpen, setReportModalOpen] = React.useState(false);
-  const [flagged, setFlagged] = React.useState('');
 
   const { t } = useTranslation();
 
@@ -47,11 +48,11 @@ const Routes: React.FC<RootComponentProps> = props => {
   }, [errorState]);
 
   const showLoginModal = () => {
-    modalStateActions.show('loginModal');
+    modalStateActions.show(MODAL_NAMES.LOGIN);
   };
 
   const hideLoginModal = () => {
-    modalStateActions.hide('loginModal');
+    modalStateActions.hide(MODAL_NAMES.LOGIN);
   };
 
   return (
@@ -65,18 +66,17 @@ const Routes: React.FC<RootComponentProps> = props => {
               sdkModules={props.sdkModules}
               singleSpa={props.singleSpa}
               globalChannel={props.globalChannel}
-              flagged={flagged}
-              reportModalOpen={reportModalOpen}
-              setFlagged={setFlagged}
+              modalState={modalState}
+              modalStateActions={modalStateActions}
               showLoginModal={showLoginModal}
               loginState={loginState}
-              setReportModalOpen={setReportModalOpen}
+              loggedProfileData={loginProfile}
             />
           </Route>
         </Switch>
       </Box>
       <LoginModal
-        showModal={modalState.loginModal}
+        showModal={modalState[MODAL_NAMES.LOGIN]}
         slotId={props.layout.app.modalSlotId}
         onLogin={loginActions.login}
         onModalClose={hideLoginModal}

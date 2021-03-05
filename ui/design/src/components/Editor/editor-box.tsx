@@ -8,14 +8,12 @@ import { IEntryData } from '../Cards/entry-cards/entry-box';
 import { Icon } from '../Icon/index';
 import { EmojiPopover } from '../Popovers/index';
 import { EmbedBox } from './embed-box';
-import { FormatToolbar } from './format-toolbar';
 import { CustomEditor } from './helpers';
 import { withMentions, withImages, withTags } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
 import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
 import { ImageUpload } from './image-upload';
 import { Button } from '../Buttons';
-import isHotkey from 'is-hotkey';
 import { MentionPopover } from './mention-popover';
 import { EditorMeter } from './editor-meter';
 import { serializeToPlainText } from './serialize';
@@ -60,13 +58,6 @@ export interface IMetadata {
   tags: string[];
   mentions: string[];
 }
-
-const HOTKEYS = {
-  'mod+b': 'bold',
-  'mod+i': 'italic',
-  'mod+u': 'underline',
-  'mod+`': 'code',
-};
 
 const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const {
@@ -317,13 +308,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const onKeyDown = useCallback(
     event => {
-      for (const hotkey in HOTKEYS) {
-        if (isHotkey(hotkey, event)) {
-          event.preventDefault();
-          const mark = HOTKEYS[hotkey];
-          CustomEditor.toggleFormat(editor, mark);
-        }
-      }
       if (mentionTargetRange && mentions.length > 0) {
         selectMention(event, mentionTargetRange);
       }
@@ -399,12 +383,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   };
 
   const handleDeleteImage = (element: Element) => {
-    Transforms.removeNodes(editor, {
-      voids: true,
-      match: n => {
-        return n === element;
-      },
-    });
+    CustomEditor.deleteImage(editor, element);
   };
 
   return (
@@ -421,7 +400,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         <Box width="100%" pad={{ horizontal: 'small' }} direction="row" justify="between">
           <Box fill={true}>
             <Slate editor={editor} value={editorState} onChange={handleChange}>
-              <FormatToolbar />
               <StyledEditable
                 placeholder={placeholderLabel}
                 spellCheck={false}

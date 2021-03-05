@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Portal } from './helpers';
 import styled from 'styled-components';
-
+import { Text } from 'grommet';
 export interface IMentionPopover {
   values: string[];
   ref: React.Ref<any>;
@@ -25,6 +25,10 @@ const StyledValueDiv = styled.div<{ background: boolean }>`
   padding: ${props => `${props.theme.shapes.baseSpacing}px`};
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
   background: ${props => (props.background ? '#B4D5FF' : 'transparent')};
+  max-width: 20rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props, ref) => {
@@ -39,7 +43,7 @@ export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props
             background={i === currentIndex}
             onClick={() => handleSelect(i)}
           >
-            {value}
+            <Text>{value}</Text>
           </StyledValueDiv>
         ))}
       </StyledPopoverDiv>
