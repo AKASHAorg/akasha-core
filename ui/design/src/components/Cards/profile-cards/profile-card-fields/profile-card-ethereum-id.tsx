@@ -22,26 +22,31 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
     profileData,
   } = props;
 
-  const [popoverOpen, setPopoverOpen] = React.useState(false);
+  const [popoverOpen /* setPopoverOpen */] = React.useState(false);
 
   const popoverRef: React.Ref<any> = React.useRef(null);
 
   const togglePopover = () => {
-    setPopoverOpen(!popoverOpen);
+    // setPopoverOpen(!popoverOpen);
   };
 
   const closePopover = () => {
-    setPopoverOpen(false);
+    // setPopoverOpen(false);
   };
 
   return (
     <>
-      <Box direction="column" pad="medium" gap="medium">
-        <Text size="large" weight="bold" color="primaryText">
+      <Box direction="column" pad={{ vertical: 'xsmall', horizontal: 'medium' }} gap="xxsmall">
+        <Text size="large" weight="bold" color="primaryText" style={{ lineHeight: 1.7 }}>
           {profileData.ensName ? ethereumNameLabel : ethereumAddressLabel}
         </Text>
         <Box direction="row" gap="xsmall" align="center">
-          <Text color="primaryText" size={isMobile ? 'small' : 'medium'}>
+          <Text
+            color="primaryText"
+            size={isMobile ? 'small' : 'large'}
+            truncate={true}
+            style={{ lineHeight: 1.7 }}
+          >
             {profileData.ensName ? profileData.ensName : profileData.ethAddress}
           </Text>
           <Icon type="copy" clickable={true} onClick={togglePopover} ref={popoverRef} />
@@ -64,8 +69,8 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
 };
 
 ProfileCardEthereumId.defaultProps = {
-  ethereumNameLabel: 'Ethereum Name',
-  ethereumAddressLabel: 'Ethereum Address',
+  ethereumNameLabel: 'Ethereum name',
+  ethereumAddressLabel: 'Ethereum address',
   copyLabel: 'Copy',
   showQRCodeLabel: 'Show QR code',
 };

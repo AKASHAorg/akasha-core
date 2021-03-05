@@ -51,60 +51,39 @@ export interface IProfileHeaderProps {
 const ProfileForm = styled(BoxFormCard)`
   max-width: 100%;
   max-height: 100vh;
-  min-height: max-content;
   overflow: auto;
-  animation: fadeInAnimation ease 0.8s;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
+  min-height: 100vh;
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     max-width: 66%;
+    min-height: max-content;
   }
   @media screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
     max-width: 50%;
+    min-height: max-content;
   }
   @media screen and (min-width: ${props => props.theme.breakpoints.xlarge.value}px) {
     max-width: 33%;
+    min-height: max-content;
   }
-  @keyframes fadeInAnimation {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-`;
-
-const Overlay = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  inset: 0;
-  opacity: 1;
-  background-color: ${props => props.theme.colors.modalBackground};
-  animation: fadeAnimation ease 0.4s;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
 `;
 
 const ENSForm = styled(EnsFormCard)`
   max-width: 100%;
   max-height: 100vh;
-  animation: fadeInAnimation ease 0.8s;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
+  overflow: auto;
+  min-height: 100vh;
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     max-width: 66%;
     max-height: 75%;
+    min-height: max-content;
   }
-  @keyframes fadeInAnimation {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
+  @media screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
+    max-width: 50%;
+    min-height: max-content;
+  }
+  @media screen and (min-width: ${props => props.theme.breakpoints.xlarge.value}px) {
+    max-width: 33%;
+    min-height: max-content;
   }
 `;
 
@@ -148,6 +127,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   React.useEffect(() => {
     if (profileUpdateStatus.updateComplete && props.modalState[MODAL_NAMES.PROFILE_UPDATE]) {
       closeProfileUpdateModal();
+      props.profileActions.resetUpdateStatus();
       return;
     }
     if (ensState.status.registrationComplete && props.modalState[MODAL_NAMES.CHANGE_ENS]) {
@@ -157,6 +137,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         });
       }
       closeEnsModal();
+      ensActions.resetRegistrationStatus();
       return;
     }
   }, [
@@ -308,83 +289,78 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
           </ToastProvider>
         )}
         {props.modalState.profileShare && (
-          <Overlay>
-            <ShareModal
-              link={url}
-              handleProfileShare={handleProfileShare}
-              closeModal={closeShareModal}
-            />
-          </Overlay>
+          <ShareModal
+            link={url}
+            handleProfileShare={handleProfileShare}
+            closeModal={closeShareModal}
+          />
         )}
         {props.modalState[MODAL_NAMES.PROFILE_UPDATE] && profileData.ethAddress && (
-          <Overlay>
-            <ProfileForm
-              titleLabel={t('Ethereum Address')}
-              avatarLabel={t('Avatar')}
-              nameLabel={t('Name')}
-              coverImageLabel={t('Cover Image')}
-              descriptionLabel={t('Description')}
-              uploadLabel={t('Upload')}
-              urlLabel={t('By url')}
-              cancelLabel={t('Cancel')}
-              saveLabel={t('Save')}
-              deleteLabel={t('Delete')}
-              nameFieldPlaceholder={t('Type your name here')}
-              descriptionFieldPlaceholder={t('Add a description about you here')}
-              ethAddress={profileData.ethAddress}
-              providerData={{
-                ...profileData,
-              }}
-              onSave={onProfileUpdateSubmit}
-              onCancel={closeProfileUpdateModal}
-              updateStatus={profileUpdateStatus}
-            />
-          </Overlay>
+          <ProfileForm
+            titleLabel={t('Ethereum Address')}
+            avatarLabel={t('Avatar')}
+            nameLabel={t('Name')}
+            coverImageLabel={t('Cover Image')}
+            descriptionLabel={t('About me')}
+            uploadLabel={t('Upload')}
+            urlLabel={t('By url')}
+            cancelLabel={t('Cancel')}
+            saveLabel={t('Save')}
+            deleteLabel={t('Delete')}
+            nameFieldPlaceholder={t('Type your name here')}
+            descriptionFieldPlaceholder={t('Add a description about you here')}
+            ethAddress={profileData.ethAddress}
+            providerData={{
+              ...profileData,
+            }}
+            onSave={onProfileUpdateSubmit}
+            onCancel={closeProfileUpdateModal}
+            updateStatus={profileUpdateStatus}
+          />
         )}
         {props.modalState[MODAL_NAMES.CHANGE_ENS] && profileData.ethAddress && (
-          <Overlay>
-            <ErrorInfoCard errors={ensErrors}>
-              {(errorMessage, hasCriticalErrors) => (
-                <>
-                  {!hasCriticalErrors && (
-                    <ENSForm
-                      titleLabel={t('Add a username')}
-                      secondaryTitleLabel={t('Secondary Title')}
-                      nameLabel={t('Select a username')}
-                      errorLabel={t(
-                        'Sorry, this username has already been taken. Please choose another one',
-                      )}
-                      ethAddressLabel={t('Your Ethereum Address')}
-                      ethNameLabel={t('Your Ethereum Name')}
-                      optionUsername={t('username')}
-                      optionSpecify={t('Specify an Ethereum name')}
-                      optionUseEthereumAddress={t('Use my Ethereum address')}
-                      consentText={t('By creating an account you agree to the ')}
-                      consentUrl="https://ethereum.world/community-agreement"
-                      consentLabel={t('Community Agreement')}
-                      poweredByLabel={t('Username powered by')}
-                      iconLabel={t('ENS')}
-                      cancelLabel={t('Cancel')}
-                      changeButtonLabel={t('Change')}
-                      saveLabel={t('Save')}
-                      nameFieldPlaceholder={`${t('username')}`}
-                      ethAddress={profileData.ethAddress}
-                      providerData={{ name: ensState.userName || '' }}
-                      onSave={onENSSubmit}
-                      onCancel={closeEnsModal}
-                      validateEns={ensActions.validateName}
-                      validEns={ensState.isValidating ? null : ensState.isAvailable}
-                      isValidating={ensState.isValidating}
-                      userNameProviderOptions={[
-                        {
-                          name: 'local',
-                          label: t('Do not use ENS'),
-                        },
-                      ]}
-                      disableInputOnOption={{
-                        ensSubdomain: ensState.alreadyRegistered,
-                      }}
-                      errorMessage={`
+          <ErrorInfoCard errors={ensErrors}>
+            {(errorMessage, hasCriticalErrors) => (
+              <>
+                {!hasCriticalErrors && (
+                  <ENSForm
+                    titleLabel={t('Add a username')}
+                    secondaryTitleLabel={t('Secondary title')}
+                    nameLabel={t('Select a username')}
+                    errorLabel={t(
+                      'Sorry, this username has already been taken. Please choose another one',
+                    )}
+                    ethAddressLabel={t('Your Ethereum address')}
+                    ethNameLabel={t('Your Ethereum name')}
+                    optionUsername={t('username')}
+                    optionSpecify={t('Specify an Ethereum name')}
+                    optionUseEthereumAddress={t('Use my Ethereum address')}
+                    consentText={t('By creating an account you agree to the ')}
+                    consentUrl="https://ethereum.world/community-agreement"
+                    consentLabel={t('Community Agreement')}
+                    poweredByLabel={t('Username powered by')}
+                    iconLabel={t('ENS')}
+                    cancelLabel={t('Cancel')}
+                    changeButtonLabel={t('Change')}
+                    saveLabel={t('Save')}
+                    nameFieldPlaceholder={`${t('username')}`}
+                    ethAddress={profileData.ethAddress}
+                    providerData={{ name: ensState.userName || '' }}
+                    onSave={onENSSubmit}
+                    onCancel={closeEnsModal}
+                    validateEns={ensActions.validateName}
+                    validEns={ensState.isValidating ? null : ensState.isAvailable}
+                    isValidating={ensState.isValidating}
+                    userNameProviderOptions={[
+                      {
+                        name: 'local',
+                        label: t('Do not use ENS'),
+                      },
+                    ]}
+                    disableInputOnOption={{
+                      ensSubdomain: ensState.alreadyRegistered,
+                    }}
+                    errorMessage={`
                         ${ensState.errorMessage ? ensState.errorMessage : ''}
                         ${
                           errorMessage
@@ -395,13 +371,12 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
                             : ''
                         }
                         `}
-                      registrationStatus={ensState.status}
-                    />
-                  )}
-                </>
-              )}
-            </ErrorInfoCard>
-          </Overlay>
+                    registrationStatus={ensState.status}
+                  />
+                )}
+              </>
+            )}
+          </ErrorInfoCard>
         )}
       </ModalRenderer>
       <ProfileCard
