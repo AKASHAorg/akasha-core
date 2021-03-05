@@ -76,7 +76,7 @@ export interface RootComponentProps {
     app: LayoutConfig;
   };
   logger: any;
-  mountParcel: () => void;
+  mountParcel: (parcel: any, config?: any) => any;
   name: string;
   rootNodeId: string;
   sdkModules: {

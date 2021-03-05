@@ -62,6 +62,12 @@ const LoginModal: React.FC<LoginModalProps> = props => {
   };
   const handleWalletConnectLogin = () => {
     onLogin(ETH_PROVIDERS[WALLETCONNECT_PROVIDER]);
+    // close the modal in the state, because we
+    // are no longer in control of the wallet connect modal
+    setModalState({
+      selectedProvider: null,
+    });
+    onModalClose();
   };
   const handleProviderModalClose = () => {
     setModalState({

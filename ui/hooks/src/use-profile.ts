@@ -13,6 +13,7 @@ export interface UseProfileActions {
   resetProfileData: () => void;
   optimisticUpdate: (data: any) => void;
   updateProfile: (fields: any) => void;
+  resetUpdateStatus: () => void;
 }
 
 export interface UseProfileProps {
@@ -220,6 +221,14 @@ export const useProfile = (
           }));
         }, createErrorHandler('useLoginState.optimisticUpdate.makeDefault', false, onError));
       }, createErrorHandler('useLoginState.optimisticUpdate.forkJoin', false, onError));
+    },
+    resetUpdateStatus() {
+      setUpdateStatus({
+        saving: false,
+        uploadingAvatar: false,
+        uploadingCoverImage: false,
+        updateComplete: false,
+      });
     },
     resetProfileData() {
       setProfile({});

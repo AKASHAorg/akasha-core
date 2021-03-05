@@ -22,16 +22,16 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
     profileData,
   } = props;
 
-  const [popoverOpen, setPopoverOpen] = React.useState(false);
+  const [popoverOpen /* setPopoverOpen */] = React.useState(false);
 
   const popoverRef: React.Ref<any> = React.useRef(null);
 
   const togglePopover = () => {
-    setPopoverOpen(!popoverOpen);
+    // setPopoverOpen(!popoverOpen);
   };
 
   const closePopover = () => {
-    setPopoverOpen(false);
+    // setPopoverOpen(false);
   };
 
   return (
@@ -69,8 +69,8 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
 };
 
 ProfileCardEthereumId.defaultProps = {
-  ethereumNameLabel: 'Ethereum Name',
-  ethereumAddressLabel: 'Ethereum Address',
+  ethereumNameLabel: 'Ethereum name',
+  ethereumAddressLabel: 'Ethereum address',
   copyLabel: 'Copy',
   showQRCodeLabel: 'Show QR code',
 };
