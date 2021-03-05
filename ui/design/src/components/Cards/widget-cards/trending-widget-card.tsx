@@ -98,19 +98,17 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                   labelSize="large"
                   gap="xxsmall"
                 />
-                {loggedEthAddress && (
-                  <Box width="7rem">
-                    <DuplexButton
-                      inactiveLabel={subscribeLabel}
-                      activeLabel={subscribedLabel}
-                      activeHoverLabel={unsubscribeLabel}
-                      onClickInactive={() => handleSubscribeTag(tag.name)}
-                      onClickActive={() => handleUnsubscribeTag(tag.name)}
-                      active={subscribedTags?.includes(tag.name)}
-                      icon={<Icon type="subscribe" />}
-                    />
-                  </Box>
-                )}
+                <Box width="7rem">
+                  <DuplexButton
+                    inactiveLabel={subscribeLabel}
+                    activeLabel={subscribedLabel}
+                    activeHoverLabel={unsubscribeLabel}
+                    onClickInactive={() => handleSubscribeTag(tag.name)}
+                    onClickActive={() => handleUnsubscribeTag(tag.name)}
+                    active={subscribedTags?.includes(tag.name)}
+                    icon={<Icon type="subscribe" />}
+                  />
+                </Box>
               </Box>
             ))}
           </Box>
@@ -129,7 +127,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                     avatarImage={profile.avatar}
                   />
                 </Box>
-                {loggedEthAddress && profile.ethAddress !== loggedEthAddress && (
+                {profile.ethAddress !== loggedEthAddress && (
                   <Box width="7rem">
                     <DuplexButton
                       inactiveLabel={followLabel}
