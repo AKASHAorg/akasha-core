@@ -12,7 +12,7 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { uploadMediaToTextile } from '../../services/posting-service';
+import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { redirectToPost } from '../../services/routing-service';
 import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
@@ -36,14 +36,20 @@ const {
   ErrorInfoCard,
   ErrorLoader,
   EntryCardLoading,
+  EditorModal,
 } = DS;
 
 interface IPostPage {
+  loggedProfileData?: any;
   loginState: UseLoginState;
   flagged: string;
-  reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  reportModalOpen: boolean;
+  setReportModalOpen: () => void;
+  closeReportModal: () => void;
+  editorModalOpen: boolean;
+  setEditorModalOpen: () => void;
+  closeEditorModal: () => void;
   showLoginModal: () => void;
   navigateToUrl: (path: string) => void;
   isMobile: boolean;
@@ -58,9 +64,14 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     reportModalOpen,
     setFlagged,
     setReportModalOpen,
+    closeReportModal,
+    editorModalOpen,
+    setEditorModalOpen,
+    closeEditorModal,
     showLoginModal,
     logger,
     navigateToUrl,
+    loggedProfileData,
     loginState,
     isMobile,
   } = props;
@@ -197,20 +208,15 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     return bookmarkActions.bookmarkComment(commentId);
   };
 
-  const handleEntryRepost = () => {
+  const handleCommentRepost = () => {
     // todo
   };
-  const handleEntryFlag = (entryId: string, user?: string | null) => () => {
-    /* todo */
-    if (!user) {
-      setFlagged(entryId);
-      return showLoginModal();
-    }
+  const handleEntryFlag = (entryId: string) => () => {
     setFlagged(entryId);
-    setReportModalOpen(true);
+    setReportModalOpen();
   };
 
-  const handlePublish = async (data: {
+  const handlePublishComment = async (data: {
     metadata: {
       app: string;
       version: number;
@@ -251,6 +257,32 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         setMentions(filteredMentions);
       }
     });
+  };
+
+  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
+
+  const handleRepost = (_withComment: boolean, entry: any) => {
+    setCurrentEmbedEntry(entry);
+    setEditorModalOpen();
+  };
+
+  const handleToggleEditor = () => {
+    setCurrentEmbedEntry(undefined);
+    if (editorModalOpen) {
+      closeEditorModal();
+    } else {
+      setEditorModalOpen();
+    }
+  };
+
+  const handleEntryPublish = (entry: any) => {
+    if (!loginState.ethAddress || !loginState.pubKey) {
+      showLoginModal();
+      return;
+    }
+
+    postsActions.optimisticPublishPost(entry, loggedProfileData, currentEmbedEntry, true);
+    closeEditorModal();
   };
 
   const handleNavigateToPost = redirectToPost(navigateToUrl, postsActions.resetPostIds);
@@ -342,11 +374,33 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               size={size}
               width={width}
               updateEntry={updateEntry}
-              closeModal={() => {
-                setReportModalOpen(false);
-              }}
+              closeModal={closeReportModal}
             />
           </ToastProvider>
+        )}
+        {editorModalOpen && props.layout.app.modalSlotId && (
+          <EditorModal
+            slotId={props.layout.app.modalSlotId}
+            avatar={loggedProfileData.avatar}
+            showModal={editorModalOpen}
+            ethAddress={loggedProfileData.ethAddress}
+            postLabel={t('Publish')}
+            placeholderLabel={t('Write something')}
+            discardPostLabel={t('Discard Post')}
+            discardPostInfoLabel={t(
+              "You have not posted yet. If you leave now you'll discard your post.",
+            )}
+            keepEditingLabel={t('Keep Editing')}
+            onPublish={handleEntryPublish}
+            handleNavigateBack={handleToggleEditor}
+            getMentions={handleGetMentions}
+            getTags={handleGetTags}
+            tags={tags}
+            mentions={mentions}
+            uploadRequest={onUploadRequest}
+            embedEntryData={currentEmbedEntry}
+            style={{ width: '36rem' }}
+          />
         )}
       </ModalRenderer>
       <Box pad={{ bottom: 'small' }} border={{ side: 'bottom', size: '1px', color: 'border' }}>
@@ -398,10 +452,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       locale={locale}
                       bookmarkLabel={t('Save')}
                       bookmarkedLabel={t('Saved')}
-                      onRepost={() => {
-                        return;
-                      }}
-                      onEntryFlag={handleEntryFlag(entryData.entryId, loginState.ethAddress)}
+                      onRepost={handleRepost}
+                      onEntryFlag={handleEntryFlag(entryData.entryId)}
                       handleFollowAuthor={handleFollow}
                       handleUnfollowAuthor={handleUnfollow}
                       isFollowingAuthor={isFollowing}
@@ -434,7 +486,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             ethAddress={loginState.ethAddress}
             postLabel={t('Reply')}
             placeholderLabel={t('Write something')}
-            onPublish={handlePublish}
+            onPublish={handlePublishComment}
             getMentions={handleGetMentions}
             getTags={handleGetTags}
             tags={tags}
@@ -479,7 +531,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                     onNavigate={handleNavigateToPost}
                     sharePostUrl={`${window.location.origin}${routes[POST]}/`}
                     onFlag={handleEntryFlag}
-                    onRepost={handleEntryRepost}
+                    onRepost={handleCommentRepost}
                     onAvatarClick={handleAvatarClick}
                     onMentionClick={handleMentionClick}
                     handleFlipCard={handleListFlipCard}

@@ -7,22 +7,26 @@ import {
   useLoginState,
   useFollow,
   useTagSubscribe,
-  useErrors,
+  useModalState,
 } from '@akashaproject/ui-awf-hooks';
+import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
+import useErrorState from '@akashaproject/ui-awf-hooks/lib/use-error-state';
 
-const { TrendingWidgetCard, ErrorInfoCard, ErrorLoader } = DS;
+const { TrendingWidgetCard, ErrorInfoCard, ErrorLoader, LoginModal } = DS;
 
 const TrendingWidget: React.FC<RootComponentProps> = props => {
   const { globalChannel, sdkModules, logger, singleSpa } = props;
 
   const { t } = useTranslation();
-  const [errorState, errorActions] = useErrors({ logger });
+
+  const [errorState, errorActions] = useErrorState({ logger });
+
   const [trendingData] = useTrendingData({
     sdkModules: sdkModules,
     onError: errorActions.createError,
   });
 
-  const [loginState] = useLoginState({
+  const [loginState, loginActions] = useLoginState({
     globalChannel: globalChannel,
     onError: errorActions.createError,
     authService: sdkModules.auth.authService,
@@ -42,6 +46,45 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
     onError: errorActions.createError,
   });
 
+  const [modalState, modalStateActions] = useModalState({
+    initialState: {},
+    isLoggedIn: !!loginState.ethAddress,
+  });
+
+  const loginErrors: string | null = React.useMemo(() => {
+    if (errorState && Object.keys(errorState).length) {
+      const txt = Object.keys(errorState)
+        .filter(key => key.split('.')[0] === 'useLoginState')
+        .map(k => errorState![k])
+        .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
+      return txt;
+    }
+    return null;
+  }, [errorState]);
+
+  const showLoginModal = () => {
+    modalStateActions.show(MODAL_NAMES.LOGIN);
+  };
+
+  const hideLoginModal = () => {
+    modalStateActions.hide(MODAL_NAMES.LOGIN);
+    errorActions.removeLoginErrors();
+  };
+
+  const handleLogin = (providerId: number) => {
+    loginActions.login(providerId);
+  };
+
+  React.useEffect(() => {
+    if (loginState.ethAddress) {
+      trendingData.profiles.slice(0, 4).forEach(async (profile: any) => {
+        if (loginState.ethAddress && profile.ethAddress) {
+          followActions.isFollowing(loginState.ethAddress, profile.ethAddress);
+        }
+      });
+    }
+  }, [trendingData, loginState.ethAddress]);
+
   React.useEffect(() => {
     if (loginState.waitForAuth && !loginState.ready) {
       return;
@@ -54,33 +97,39 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
     }
   }, [JSON.stringify(loginState)]);
 
-  React.useEffect(() => {
-    if (loginState.ethAddress) {
-      trendingData.profiles.slice(0, 4).forEach(async (profile: any) => {
-        if (loginState.ethAddress && profile.ethAddress) {
-          followActions.isFollowing(loginState.ethAddress, profile.ethAddress);
-        }
-      });
-    }
-  }, [trendingData, loginState.ethAddress]);
-
   const handleTagClick = () => {
     // todo
   };
   const handleTagSubscribe = (tagName: string) => {
+    if (!loginState.ethAddress) {
+      showLoginModal();
+      return;
+    }
     tagSubscriptionActions.toggleTagSubscription(tagName);
   };
   const handleTagUnsubscribe = (tagName: string) => {
+    if (!loginState.ethAddress) {
+      showLoginModal();
+      return;
+    }
     tagSubscriptionActions.toggleTagSubscription(tagName);
   };
   const handleProfileClick = (pubKey: string) => {
     singleSpa.navigateToUrl(`/profile/${pubKey}`);
   };
   const handleFollowProfile = (ethAddress: string) => {
+    if (!loginState.ethAddress) {
+      showLoginModal();
+      return;
+    }
     followActions.follow(ethAddress);
   };
 
   const handleUnfollowProfile = (ethAddress: string) => {
+    if (!loginState.ethAddress) {
+      showLoginModal();
+      return;
+    }
     followActions.unfollow(ethAddress);
   };
 
@@ -122,6 +171,16 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
               loggedEthAddress={loginState.ethAddress}
             />
           )}
+          <LoginModal
+            showModal={modalState.login}
+            slotId={props.layout.app.modalSlotId}
+            onLogin={handleLogin}
+            onModalClose={hideLoginModal}
+            titleLabel={t('Connect a wallet')}
+            metamaskModalHeadline={t('Connecting')}
+            metamaskModalMessage={t('Please complete the process in your wallet')}
+            error={loginErrors}
+          />
         </>
       )}
     </ErrorInfoCard>
