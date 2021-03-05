@@ -106,7 +106,7 @@ const ProfilePage = (props: ProfilePageProps) => {
     ) {
       postsActions.getUserPosts({ pubKey: loggedProfileData.pubKey, limit: 5 });
     }
-  }, [loggedProfileData.pubKey]);
+  }, [loggedProfileData.pubKey, pubKey]);
 
   const { t } = useTranslation();
 

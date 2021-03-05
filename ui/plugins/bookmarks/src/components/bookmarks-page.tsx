@@ -44,11 +44,11 @@ const BookmarksPage = (props: RootComponentProps) => {
     if (loginState.waitForAuth && !loginState.ready) {
       return;
     }
-    if (loginState.waitForAuth && loginState.ready) {
-      return bookmarkActions.getBookmarks();
-    }
-    if (loginState.currentUserCalled) {
-      return bookmarkActions.getBookmarks();
+    if (
+      (loginState.waitForAuth && loginState.ready) ||
+      (loginState.currentUserCalled && loginState.ethAddress)
+    ) {
+      bookmarkActions.getBookmarks();
     }
   }, [JSON.stringify(loginState)]);
 

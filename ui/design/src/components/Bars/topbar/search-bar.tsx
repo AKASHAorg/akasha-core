@@ -36,7 +36,7 @@ const SearchBar: React.FC<ISearchBar> = props => {
         plain={true}
         onKeyDown={handleSearch}
       />
-      <Icon type="search" size="xs" onClick={() => onSearch(inputValue)} />
+      <Icon type="search" size="xs" onClick={() => onSearch(inputValue)} clickable={true} />
     </Box>
   );
 };

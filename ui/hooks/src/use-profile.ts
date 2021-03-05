@@ -66,7 +66,6 @@ export const useProfile = (
           if (coverImage) {
             images.coverImage = getMediaUrl(gatewayResp.data, coverImage);
           }
-
           setProfile({ ...images, ...other });
         }, createErrorHandler('useProfile.getProfileData.subscription', false, onError));
       } catch (err) {

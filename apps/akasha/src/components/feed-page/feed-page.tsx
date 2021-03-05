@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { constants, useBookmarks, useProfile, useErrors } from '@akashaproject/ui-awf-hooks';
+import { constants, useBookmarks, useErrors } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import {
   ILoadItemDataPayload,
@@ -8,7 +8,7 @@ import {
 } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { uploadMediaToTextile } from '../../services/posting-service';
+import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
@@ -36,11 +36,16 @@ export interface FeedPageProps {
   singleSpa: any;
   logger: any;
   showLoginModal: () => void;
+  loggedProfileData?: any;
   loginState: UseLoginState;
   flagged: string;
   reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setReportModalOpen: () => void;
+  closeReportModal: () => void;
+  editorModalOpen: boolean;
+  setEditorModalOpen: () => void;
+  closeEditorModal: () => void;
   onError: (err: IAkashaError) => void;
 }
 
@@ -51,36 +56,20 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     reportModalOpen,
     setFlagged,
     setReportModalOpen,
+    closeReportModal,
+    editorModalOpen,
+    setEditorModalOpen,
+    closeEditorModal,
     showLoginModal,
+    loggedProfileData,
     loginState,
     onError,
     sdkModules,
     logger,
     globalChannel,
   } = props;
-  const [showEditor, setShowEditor] = React.useState(false);
+
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
-
-  const [loginProfile, loginProfileActions] = useProfile({
-    profileService: sdkModules.profiles.profileService,
-    ipfsService: sdkModules.commons.ipfsService,
-  });
-
-  React.useEffect(() => {
-    if (loginState.pubKey) {
-      loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
-    }
-  }, [loginState.pubKey]);
-
-  React.useEffect(() => {
-    if (loginState.currentUserCalled) {
-      postsActions.resetPostIds();
-      postsActions.getPosts({ limit: 5 });
-      if (loginState.ethAddress) {
-        bookmarkActions.getBookmarks();
-      }
-    }
-  }, [loginState.currentUserCalled, loginState.ethAddress]);
 
   const {
     size,
@@ -94,7 +83,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     onError,
     dbService: sdkModules.db,
   });
-  const [, errorActions] = useErrors({ logger });
+  const [errorState, errorActions] = useErrors({ logger });
 
   const [postsState, postsActions] = usePosts({
     user: loginState.ethAddress,
@@ -102,6 +91,36 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
+
+  React.useEffect(() => {
+    if (Object.keys(errorState).length) {
+      logger.error(errorState);
+    }
+  }, [JSON.stringify(errorState)]);
+
+  const virtualListRef = React.useRef<{ reset: () => void } | undefined>();
+
+  React.useEffect(() => {
+    if (loginState.currentUserCalled) {
+      postsActions.resetPostIds();
+      if (virtualListRef.current) {
+        virtualListRef.current.reset();
+      }
+      if (loginState.ethAddress) {
+        bookmarkActions.getBookmarks();
+      }
+    }
+  }, [JSON.stringify(loginState)]);
+
+  React.useEffect(() => {
+    if (
+      !postsState.postIds.length &&
+      !postsState.isFetchingPosts &&
+      postsState.totalItems === null
+    ) {
+      postsActions.getPosts({ limit: 5 });
+    }
+  }, [postsState.postIds.length, postsState.isFetchingPosts]);
 
   const handleLoadMore = (payload: ILoadItemsPayload) => {
     const req: { limit: number; offset?: string } = {
@@ -133,23 +152,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     return bookmarkActions.bookmarkPost(entryId);
   };
   const handleEntryRepost = (_withComment: boolean, entryData: any) => {
-    if (!loginState.pubKey) {
-      showLoginModal();
-    } else {
-      setCurrentEmbedEntry(entryData);
-      setShowEditor(true);
-    }
+    setCurrentEmbedEntry(entryData);
+    setEditorModalOpen();
   };
 
-  const handleEntryFlag = (entryId: string, user?: string | null) => () => {
-    /* todo */
-    if (!user) {
-      // setting entryId to state first, if not logged in
-      setFlagged(entryId);
-      return showLoginModal();
-    }
+  const handleEntryFlag = (entryId: string) => () => {
     setFlagged(entryId);
-    setReportModalOpen(true);
+    setReportModalOpen();
   };
 
   const [tags, setTags] = React.useState([]);
@@ -178,8 +187,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   const handleToggleEditor = () => {
-    setShowEditor(!showEditor);
     setCurrentEmbedEntry(undefined);
+    if (editorModalOpen) {
+      closeEditorModal();
+    } else {
+      setEditorModalOpen();
+    }
   };
 
   const onUploadRequest = uploadMediaToTextile(
@@ -194,8 +207,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       showLoginModal();
       return;
     }
-    postsActions.optimisticPublishPost(data, loginProfile, currentEmbedEntry);
-    setShowEditor(false);
+    postsActions.optimisticPublishPost(data, loggedProfileData, currentEmbedEntry);
+    closeEditorModal();
   };
 
   const handleFlipCard = (entry: any, isQuote: boolean) => () => {
@@ -250,17 +263,15 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               size={size}
               width={width}
               updateEntry={updateEntry}
-              closeModal={() => {
-                setReportModalOpen(false);
-              }}
+              closeModal={closeReportModal}
             />
           </ToastProvider>
         )}
       </ModalRenderer>
       <EditorModal
         slotId={props.layout.app.modalSlotId}
-        avatar={loginProfile.avatar}
-        showModal={showEditor}
+        avatar={loggedProfileData.avatar}
+        showModal={editorModalOpen}
         ethAddress={loginState.ethAddress as any}
         postLabel={t('Publish')}
         placeholderLabel={t('Write something')}
@@ -286,13 +297,14 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         loadItemData={loadItemData}
         hasMoreItems={!!postsState.nextPostIndex}
         usePlaceholders={true}
+        ref={virtualListRef}
         listHeader={
           loginState.ethAddress ? (
             <EditorPlaceholder
               ethAddress={loginState.ethAddress}
               onClick={handleToggleEditor}
               style={{ marginTop: 8 }}
-              avatar={loginProfile.avatar}
+              avatar={loggedProfileData.avatar}
             />
           ) : (
             <>

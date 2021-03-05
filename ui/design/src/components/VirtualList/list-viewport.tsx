@@ -68,7 +68,9 @@ const ListViewport: React.FC<IListViewportProps> = props => {
           itemIndex={idx}
           itemId={placeholderId}
           itemCard={props.itemCard}
-          loadItemData={props.loadItemData}
+          loadItemData={() => {
+            /* explicitly left empty! */
+          }}
           itemData={null}
           customEntities={[]}
           itemSpacing={itemSpacing}
