@@ -2,6 +2,7 @@ import { Box, FormField, Text, TextArea, TextInput } from 'grommet';
 import * as React from 'react';
 import { Button } from '../../Buttons/index';
 import { Icon } from '../../Icon/index';
+import { StyledLayer } from '../../Modals/common/styled-modal';
 import { FormImagePopover } from '../../Popovers/index';
 import Spinner from '../../Spinner';
 import { MainAreaCardBox } from '../common/basic-card-box';
@@ -156,123 +157,127 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   };
 
   return (
-    <MainAreaCardBox className={className}>
-      <Box direction="column" pad="medium" height={{ min: 'fit-content' }}>
-        <Box direction="column" pad="xsmall">
-          <Text weight="bold"> {titleLabel}</Text>
-          <Box direction="row" gap="xxsmall" pad={{ bottom: 'xsmall' }} align="center">
-            <Text color="secondaryText">{ethAddress}</Text>
-            <Icon type="copy" onClick={handleCopyEthAddress} clickable={true} />
+    <StyledLayer className={className}>
+      <MainAreaCardBox>
+        <Box direction="column" pad="medium" height={{ min: 'fit-content' }}>
+          <Box direction="column" pad="xsmall">
+            <Text weight="bold"> {titleLabel}</Text>
+            <Box direction="row" gap="xxsmall" pad={{ bottom: 'xsmall' }} align="center">
+              <Text color="secondaryText">{ethAddress}</Text>
+              <Icon type="copy" onClick={handleCopyEthAddress} clickable={true} />
+            </Box>
           </Box>
-        </Box>
-        <Box direction="column" pad="xsmall">
-          <StyledText color="secondaryText" size="small">
-            {avatarLabel}
-          </StyledText>
-          {(!formValues.avatar || !formValues.avatar.preview) && (
-            <StyledAvatarPlaceholderDiv onClick={handleAvatarClick} active={avatarPopoverOpen}>
-              <Icon type="image" ref={avatarRef} />
-            </StyledAvatarPlaceholderDiv>
-          )}
-          {formValues.avatar && (
-            <StyledAvatarDiv onClick={handleAvatarClick}>
-              <StyledImage src={formValues.avatar.preview} fit="contain" />
-              <StyledAvatarOverlay>
-                <Icon type="editSimple" ref={avatarRef} />
-              </StyledAvatarOverlay>
-            </StyledAvatarDiv>
-          )}
+          <Box direction="column" pad="xsmall">
+            <StyledText color="secondaryText" size="small">
+              {avatarLabel}
+            </StyledText>
+            {(!formValues.avatar || !formValues.avatar.preview) && (
+              <StyledAvatarPlaceholderDiv onClick={handleAvatarClick} active={avatarPopoverOpen}>
+                <Icon type="image" ref={avatarRef} />
+              </StyledAvatarPlaceholderDiv>
+            )}
+            {formValues.avatar && (
+              <StyledAvatarDiv onClick={handleAvatarClick}>
+                <StyledImage src={formValues.avatar.preview} fit="contain" />
+                <StyledAvatarOverlay>
+                  <Icon type="editSimple" ref={avatarRef} />
+                </StyledAvatarOverlay>
+              </StyledAvatarDiv>
+            )}
 
-          <StyledText color="secondaryText" size="small">
-            {coverImageLabel}
-          </StyledText>
-          {(!formValues.coverImage || !formValues.coverImage.preview) && (
-            <StyledCoverImagePlaceholderDiv
-              onClick={handleCoverImageClick}
-              active={coverImagePopoverOpen}
-            >
-              <Icon type="image" ref={coverImageRef} />
-            </StyledCoverImagePlaceholderDiv>
-          )}
-          {formValues.coverImage && formValues.coverImage.preview && (
-            <StyledCoverImageDiv onClick={handleCoverImageClick}>
-              <StyledCoverImageOverlay>
-                <Icon type="editSimple" ref={coverImageRef} />
-              </StyledCoverImageOverlay>
-              <StyledImage src={formValues.coverImage.preview} fit="contain" />
-            </StyledCoverImageDiv>
-          )}
+            <StyledText color="secondaryText" size="small">
+              {coverImageLabel}
+            </StyledText>
+            {(!formValues.coverImage || !formValues.coverImage.preview) && (
+              <StyledCoverImagePlaceholderDiv
+                onClick={handleCoverImageClick}
+                active={coverImagePopoverOpen}
+              >
+                <Icon type="image" ref={coverImageRef} />
+              </StyledCoverImagePlaceholderDiv>
+            )}
+            {formValues.coverImage && formValues.coverImage.preview && (
+              <StyledCoverImageDiv onClick={handleCoverImageClick}>
+                <StyledCoverImageOverlay>
+                  <Icon type="editSimple" ref={coverImageRef} />
+                </StyledCoverImageOverlay>
+                <StyledImage src={formValues.coverImage.preview} fit="contain" />
+              </StyledCoverImageDiv>
+            )}
 
-          <FormField
-            name="name"
-            htmlFor="3box-form-name-input"
-            label={
-              <StyledText color="secondaryText" size="small">
-                {nameLabel}
-              </StyledText>
-            }
-          >
-            <TextInput
-              id="3box-form-name-input"
+            <FormField
               name="name"
-              value={formValues.name}
-              onChange={(ev: any) => handleFormFieldChange({ name: ev.target.value })}
-              placeholder={nameFieldPlaceholder}
-            />
-          </FormField>
-          <FormField
-            name="description"
-            htmlFor="3box-form-description-textarea"
-            label={
-              <StyledText color="secondaryText" size="small">
-                {descriptionLabel}
-              </StyledText>
-            }
-          >
-            <TextArea
-              id="3box-form-description-textarea"
+              htmlFor="3box-form-name-input"
+              label={
+                <StyledText color="secondaryText" size="small">
+                  {nameLabel}
+                </StyledText>
+              }
+            >
+              <TextInput
+                id="3box-form-name-input"
+                name="name"
+                value={formValues.name}
+                onChange={(ev: any) => handleFormFieldChange({ name: ev.target.value })}
+                placeholder={nameFieldPlaceholder}
+              />
+            </FormField>
+            <FormField
               name="description"
-              value={formValues.description}
-              onChange={ev => handleFormFieldChange({ description: ev.target.value })}
-              placeholder={descriptionFieldPlaceholder}
-            />
-          </FormField>
-          <Box direction="row" gap="xsmall" justify="end">
-            <Button label={cancelLabel} onClick={handleRevert} />
-            <Button
-              label={updateStatus.saving ? <Spinner style={{ padding: 0 }} size={15} /> : saveLabel}
-              onClick={handleSave}
-              primary={true}
-              disabled={!formChanged}
-            />
+              htmlFor="3box-form-description-textarea"
+              label={
+                <StyledText color="secondaryText" size="small">
+                  {descriptionLabel}
+                </StyledText>
+              }
+            >
+              <TextArea
+                id="3box-form-description-textarea"
+                name="description"
+                value={formValues.description}
+                onChange={ev => handleFormFieldChange({ description: ev.target.value })}
+                placeholder={descriptionFieldPlaceholder}
+              />
+            </FormField>
+            <Box direction="row" gap="xsmall" justify="end">
+              <Button label={cancelLabel} onClick={handleRevert} />
+              <Button
+                label={
+                  updateStatus.saving ? <Spinner style={{ padding: 0 }} size={15} /> : saveLabel
+                }
+                onClick={handleSave}
+                primary={true}
+                disabled={!formChanged}
+              />
+            </Box>
           </Box>
         </Box>
-      </Box>
-      {avatarPopoverOpen && avatarRef.current && (
-        <FormImagePopover
-          uploadLabel={uploadLabel}
-          urlLabel={urlLabel}
-          deleteLabel={deleteLabel}
-          target={avatarRef.current}
-          closePopover={closeAvatarPopover}
-          insertImage={handleImageInsert('avatar')}
-          currentImage={!!formValues.avatar}
-          handleDeleteImage={() => handleFormFieldChange({ avatar: null })}
-        />
-      )}
-      {coverImagePopoverOpen && coverImageRef.current && (
-        <FormImagePopover
-          uploadLabel={uploadLabel}
-          urlLabel={urlLabel}
-          deleteLabel={deleteLabel}
-          target={coverImageRef.current}
-          closePopover={closeCoverImagePopover}
-          insertImage={handleImageInsert('coverImage')}
-          currentImage={!!formValues.coverImage}
-          handleDeleteImage={() => handleFormFieldChange({ coverImage: null })}
-        />
-      )}
-    </MainAreaCardBox>
+        {avatarPopoverOpen && avatarRef.current && (
+          <FormImagePopover
+            uploadLabel={uploadLabel}
+            urlLabel={urlLabel}
+            deleteLabel={deleteLabel}
+            target={avatarRef.current}
+            closePopover={closeAvatarPopover}
+            insertImage={handleImageInsert('avatar')}
+            currentImage={!!formValues.avatar}
+            handleDeleteImage={() => handleFormFieldChange({ avatar: null })}
+          />
+        )}
+        {coverImagePopoverOpen && coverImageRef.current && (
+          <FormImagePopover
+            uploadLabel={uploadLabel}
+            urlLabel={urlLabel}
+            deleteLabel={deleteLabel}
+            target={coverImageRef.current}
+            closePopover={closeCoverImagePopover}
+            insertImage={handleImageInsert('coverImage')}
+            currentImage={!!formValues.coverImage}
+            handleDeleteImage={() => handleFormFieldChange({ coverImage: null })}
+          />
+        )}
+      </MainAreaCardBox>
+    </StyledLayer>
   );
 };
 
