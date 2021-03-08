@@ -129,7 +129,7 @@ const ContentList: React.FC<IContentListProps> = props => {
   };
 
   const renderNotFound = (type: string) => {
-    return <Text textAlign="center">No {type} items found. Please check again later</Text>;
+    return <Text textAlign="center">{t(`No ${type} items found. Please check again later`)}</Text>;
   };
 
   return (
@@ -140,9 +140,10 @@ const ContentList: React.FC<IContentListProps> = props => {
             <ModerateModal
               titleLabel={t('Make a Decision')}
               altTitleLabel={t('Review a Decision')}
-              contentType={t(contentType)}
+              contentType={contentType}
               decisionLabel={t('Decision')}
               optionLabels={[t('Delist'), t('Keep')]}
+              optionValues={['Delist', 'Keep']}
               descriptionLabel={t('Evaluation')}
               descriptionPlaceholder={t('Please explain the reason(s)')}
               footerText1Label={t('If you are unsure, you can refer to our')}
@@ -197,17 +198,19 @@ const ContentList: React.FC<IContentListProps> = props => {
                 showExplanationsLabel={t('Show explanations')}
                 hideExplanationsLabel={t('Hide explanations')}
                 reportedLabel={t('reported')}
-                contentType={t(pendingItem.type)}
+                contentType={pendingItem.type}
                 forLabel={t('for')}
                 reportedByLabel={t('Reported by')}
                 originallyReportedByLabel={t('Initially reported by')}
-                entryId={t(pendingItem.entryId)}
+                entryId={pendingItem.entryId}
                 reasons={pendingItem.reasons.map((el: string) => t(el))}
-                reporter={t(pendingItem.reporter)}
+                reporter={pendingItem.reporter}
                 andLabel={t('and')}
                 otherReporters={
                   pendingItem.count
-                    ? t(`${pendingItem.count} ${pendingItem.count === 1 ? 'other' : 'others'}`)
+                    ? `${pendingItem.count} ${
+                        pendingItem.count === 1 ? `${t('other')}` : `${t('others')}`
+                      }`
                     : ''
                 }
                 reportedOnLabel={t('On')}
@@ -233,21 +236,19 @@ const ContentList: React.FC<IContentListProps> = props => {
                   determinationLabel={t('Determination')}
                   determination={moderatedItem.delisted ? t('Delisted') : t('Kept')}
                   reportedLabel={t('reported')}
-                  contentType={t(moderatedItem.type)}
+                  contentType={moderatedItem.type}
                   forLabel={t('for')}
                   reportedByLabel={t('Reported by')}
                   originallyReportedByLabel={t('Initially reported by')}
-                  entryId={t(moderatedItem.entryId)}
+                  entryId={moderatedItem.entryId}
                   reasons={moderatedItem.reasons.map(el => t(el))}
                   reporter={moderatedItem.reporter}
                   andLabel={t('and')}
                   otherReporters={
                     moderatedItem.count
-                      ? t(
-                          `${moderatedItem.count} ${
-                            moderatedItem.count === 1 ? 'other' : 'others'
-                          }`,
-                        )
+                      ? `${moderatedItem.count} ${
+                          moderatedItem.count === 1 ? `${t('other')}` : `${t('others')}`
+                        }`
                       : ''
                   }
                   reportedOnLabel={t('On')}

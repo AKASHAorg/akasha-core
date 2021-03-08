@@ -18,6 +18,7 @@ export interface IModerateModalProps {
 
   decisionLabel: string;
   optionLabels: string[];
+  optionValues: string[];
 
   descriptionLabel: string;
   descriptionPlaceholder: string;
@@ -49,6 +50,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     contentType,
     decisionLabel,
     optionLabels,
+    optionValues,
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
@@ -265,7 +267,11 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                   primary={true}
                   label={action}
                   fill={size === 'small' ? true : false}
-                  onClick={action === 'Delist' ? handleModerate() : handleModerate(false)}
+                  onClick={
+                    optionValues[optionLabels.indexOf(action)] === 'Delist'
+                      ? handleModerate()
+                      : handleModerate(false)
+                  }
                   disabled={requesting || !explanation.length || !action.length}
                 />
               </Box>
