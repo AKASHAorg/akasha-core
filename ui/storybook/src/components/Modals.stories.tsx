@@ -101,11 +101,8 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal' | 'wid
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
-    footerText2Label,
     footerLink1Label,
-    footerLink2Label,
     footerUrl1,
-    footerUrl2,
     cancelLabel,
     reportLabel,
     blockLabel,
@@ -140,9 +137,6 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal' | 'wid
             footerText1Label={footerText1Label}
             footerLink1Label={footerLink1Label}
             footerUrl1={footerUrl1}
-            footerText2Label={footerText2Label}
-            footerLink2Label={footerLink2Label}
-            footerUrl2={footerUrl2}
             cancelLabel={cancelLabel}
             reportLabel={reportLabel}
             blockLabel={blockLabel}
@@ -193,9 +187,6 @@ storiesOf('Modals/ Report Modal', module)
         footerText1Label={text('Footer Text 1 Label', 'If you are unsure, you can refer to our')}
         footerLink1Label={text('Footer Link 1 Label', 'Code of Conduct')}
         footerUrl1={text('Footer URL 1', 'https://ethereum.world/code-of-conduct')}
-        footerText2Label={text('Footer Text 2 Label', 'and')}
-        footerLink2Label={text('Footer Link 2 Label', 'Terms of Service')}
-        footerUrl2={text('Footer URL 2', 'https://ethereum.world/terms-of-service')}
         cancelLabel={text('Cancel Label', 'Cancel')}
         reportLabel={text('Save Label', 'Report')}
         blockLabel={text('Block User Label', 'Block User')}
@@ -229,9 +220,6 @@ storiesOf('Modals/ Report Modal', module)
         footerText1Label={text('Footer Text 1 Label', 'If you are unsure, you can refer to our')}
         footerLink1Label={text('Footer Link 1 Label', 'Code of Conduct')}
         footerUrl1={text('Footer URL 1', 'https://ethereum.world/code-of-conduct')}
-        footerText2Label={text('Footer Text 2 Label', 'and')}
-        footerLink2Label={text('Footer Link 2 Label', 'Terms of Service')}
-        footerUrl2={text('Footer URL 2', 'https://ethereum.world/terms-of-service')}
         cancelLabel={text('Cancel Label', 'Cancel')}
         reportLabel={text('Save Label', 'Report')}
         blockLabel={text('Block User Label', 'Block User')}

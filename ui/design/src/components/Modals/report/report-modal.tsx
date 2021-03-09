@@ -19,9 +19,6 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   footerText1Label: string;
   footerLink1Label: string;
   footerUrl1: string;
-  footerText2Label: string;
-  footerLink2Label: string;
-  footerUrl2: string;
   cancelLabel?: string;
   reportLabel?: string;
   user?: string;
@@ -43,11 +40,8 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
-    footerText2Label,
     footerLink1Label,
-    footerLink2Label,
     footerUrl1,
-    footerUrl2,
     cancelLabel,
     reportLabel,
     blockLabel,
@@ -238,17 +232,6 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                   }
                 >
                   {footerLink1Label}{' '}
-                </Text>
-                {footerText2Label}{' '}
-                <Text
-                  color="accentText"
-                  size="medium"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    window.open(footerUrl2, footerLink2Label, '_blank noopener noreferrer')
-                  }
-                >
-                  {footerLink2Label}
                 </Text>
               </Text>
             </Box>

@@ -249,9 +249,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               footerText1Label={t('If you are unsure, you can refer to our')}
               footerLink1Label={t('Code of Conduct')}
               footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
-              footerText2Label={t('and')}
-              footerLink2Label={t('Terms of Service')}
-              footerUrl2={'https://ethereum.world/terms-of-service'}
               cancelLabel={t('Cancel')}
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
