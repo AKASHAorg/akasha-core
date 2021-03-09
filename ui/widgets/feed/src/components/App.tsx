@@ -30,6 +30,7 @@ export interface IFeedWidgetProps {
   itemIds: string[];
   itemsData: { [key: string]: any };
   errors: { [key: string]: IAkashaError };
+  /* eth address of the logged in user */
   ethAddress: string | null;
   profilePubKey: string | null;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
