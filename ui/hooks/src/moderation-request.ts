@@ -1,6 +1,6 @@
 import constants from './constants';
 
-const { BASE_FLAG_URL, BASE_STATUS_URL, BASE_DECISION_URL } = constants;
+const { BASE_FLAG_URL, BASE_STATUS_URL, BASE_DECISION_URL, BASE_MODERATOR_URL } = constants;
 
 const fetchRequest = async (props: { method: string; url: string; data?: object }) => {
   const { method, url, data = {} } = props;
@@ -21,6 +21,17 @@ const fetchRequest = async (props: { method: string; url: string; data?: object 
 };
 
 export default {
+  checkModerator: async (loggedUserEthAddress: string) => {
+    try {
+      const response = await fetchRequest({
+        method: 'HEAD',
+        url: `${BASE_MODERATOR_URL}/${loggedUserEthAddress}`,
+      });
+      return response;
+    } catch (error) {
+      return error;
+    }
+  },
   checkStatus: async (isBatch: boolean, data: object, entryId?: string) => {
     try {
       const response = await fetchRequest({

@@ -4,8 +4,9 @@ import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { moderationRequest } from '@akashaproject/ui-awf-hooks';
 
-import ContentCard from './content-card/content-card';
 import ContentTab from './content-tab';
+import ContentCard from './content-card/content-card';
+import PromptAuthorization from './prompt-authorization';
 
 import { BASE_DECISION_URL } from '../services/constants';
 
@@ -57,6 +58,7 @@ const ContentList: React.FC<IContentListProps> = props => {
   const [isDelisted, setIsDelisted] = React.useState<boolean>(true);
   const [requesting, setRequesting] = React.useState<boolean>(false);
   const [count, setCount] = React.useState<ICount>({ kept: 0, pending: 0, delisted: 0 });
+  const [isAuthorised, setIsAuthorised] = React.useState<boolean>(false);
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -69,20 +71,37 @@ const ContentList: React.FC<IContentListProps> = props => {
     if (!ethAddress) {
       // if not authenticated, prompt to authenticate
       props.singleSpa.navigateToUrl('/moderation-app/unauthenticated');
+    } else {
+      // if authenticated, check authorisation status
+      getModeratorStatus(ethAddress);
     }
   }, [ethAddress]);
 
   React.useEffect(() => {
-    // if authenticated,
-    if (ethAddress && isPending) {
-      // if authorised, check for pending contents while pending tab is active
+    // if authorised,
+    if (isAuthorised && isPending) {
+      // check for pending contents while pending tab is active
       fetchPendingContents();
     }
-    if (ethAddress && !isPending) {
+    if (isAuthorised && !isPending) {
       // check for moderated contents while moderated tab is active
       fetchModeratedContents();
     }
-  }, [isPending]);
+  }, [isPending, isAuthorised]);
+
+  const getModeratorStatus = async (loggedEthAddress: string) => {
+    setRequesting(true);
+    try {
+      const response = await moderationRequest.checkModerator(loggedEthAddress);
+      if (response === 200) {
+        setIsAuthorised(true);
+      }
+    } catch (error) {
+      logger.error('[content-list.tsx]: getModeratorStatus err %j', error.message || '');
+    } finally {
+      setRequesting(false);
+    }
+  };
 
   const getStatusCount = async () => {
     setRequesting(true);
@@ -91,6 +110,8 @@ const ContentList: React.FC<IContentListProps> = props => {
       setCount(response);
     } catch (error) {
       logger.error('[content-list.tsx]: getStatusCount err %j', error.message || '');
+    } finally {
+      setRequesting(false);
     }
   };
 
@@ -131,6 +152,17 @@ const ContentList: React.FC<IContentListProps> = props => {
   const renderNotFound = (type: string) => {
     return <Text textAlign="center">No {type} items found. Please check again later</Text>;
   };
+
+  if (ethAddress && !isAuthorised) {
+    return (
+      <PromptAuthorization
+        titleLabel={t('You must be an Ethereum World Moderator to access this page')}
+        subtitleLabel={t(
+          'The wallet you connected does not match a moderator account in our system. Please try again with the correct wallet.',
+        )}
+      />
+    );
+  }
 
   return (
     <Box>

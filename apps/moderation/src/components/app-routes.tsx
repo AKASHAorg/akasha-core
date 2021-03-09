@@ -5,11 +5,10 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import DS from '@akashaproject/design-system';
 import { useLoginState } from '@akashaproject/ui-awf-hooks';
 
-import routes, { HOME, RESTRICTED, UNAUTHENTICATED, rootRoute } from '../routes';
+import routes, { HOME, UNAUTHENTICATED, rootRoute } from '../routes';
 
 import ContentList from './content-list';
 import PromptAuthentication from './prompt-authentication';
-import PromptAuthorization from './prompt-authorization';
 
 const { Box, LoginModal, ViewportSizeProvider } = DS;
 
@@ -72,14 +71,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
                 ethAddress={loginState.ethAddress}
                 singleSpa={props.singleSpa}
                 showLoginModal={showLoginModal}
-              />
-            </Route>
-            <Route path={routes[RESTRICTED]}>
-              <PromptAuthorization
-                titleLabel={t('You must be an Ethereum World Moderator to access this page')}
-                subtitleLabel={t(
-                  'The wallet you connected does not match a moderator account in our system. Please try again with the correct wallet.',
-                )}
               />
             </Route>
             <Redirect exact={true} from={rootRoute} to={routes[HOME]} />
