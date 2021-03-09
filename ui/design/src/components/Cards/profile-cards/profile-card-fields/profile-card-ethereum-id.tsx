@@ -2,13 +2,14 @@ import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { IProfileData } from '../profile-widget-card';
 import { Icon } from '../../../Icon';
-import EthereumIdDrop from './ethereum-id-drop';
 import { isMobile } from 'react-device-detect';
+import Tooltip from '../../../Tooltip/tooltip';
 
 export interface IProfileCardEthereumIdProps {
   ethereumAddressLabel?: string;
   ethereumNameLabel?: string;
   copyLabel?: string;
+  copiedLabel?: string;
   showQRCodeLabel?: string;
   profileData: IProfileData;
 }
@@ -17,21 +18,22 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
   const {
     ethereumAddressLabel,
     ethereumNameLabel,
-    copyLabel,
-    showQRCodeLabel,
-    profileData,
+    /* copyLabel, copiedLabel, */ profileData,
   } = props;
-
-  const [popoverOpen /* setPopoverOpen */] = React.useState(false);
-
+  const [isCopied, setIsCopied] = React.useState(false);
   const popoverRef: React.Ref<any> = React.useRef(null);
 
-  const togglePopover = () => {
-    // setPopoverOpen(!popoverOpen);
-  };
+  React.useEffect(() => {
+    if (isCopied) {
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 3000);
+    }
+  }, [isCopied]);
 
-  const closePopover = () => {
-    // setPopoverOpen(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(profileData.userName ?? profileData.ethAddress);
+    setIsCopied(true);
   };
 
   return (
@@ -49,21 +51,17 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
           >
             {profileData.ensName ? profileData.ensName : profileData.ethAddress}
           </Text>
-          <Icon type="copy" clickable={true} onClick={togglePopover} ref={popoverRef} />
+          <Tooltip
+            dropProps={{ align: isMobile ? { right: 'left' } : { left: 'right' } }}
+            message={isCopied ? 'Copied' : 'Copy to clipboard'}
+            icon={isCopied ? 'check' : undefined}
+            plain={true}
+            caretPosition={isMobile ? 'right' : 'left'}
+          >
+            <Icon type="copy" clickable={true} onClick={handleCopy} ref={popoverRef} />
+          </Tooltip>
         </Box>
       </Box>
-      {popoverOpen && popoverRef.current && (
-        <EthereumIdDrop
-          onClose={closePopover}
-          target={popoverRef.current}
-          copyLabel={copyLabel}
-          showQRCodeLabel={showQRCodeLabel}
-          ethAddress={profileData.ethAddress}
-          ensName={profileData.userName}
-          ethereumAddressLabel={ethereumAddressLabel}
-          ethereumNameLabel={ethereumNameLabel}
-        />
-      )}
     </>
   );
 };
@@ -73,6 +71,7 @@ ProfileCardEthereumId.defaultProps = {
   ethereumAddressLabel: 'Ethereum address',
   copyLabel: 'Copy',
   showQRCodeLabel: 'Show QR code',
+  copiedLabel: 'Copied',
 };
 
 export default ProfileCardEthereumId;

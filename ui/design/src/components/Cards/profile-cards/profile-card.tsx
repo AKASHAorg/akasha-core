@@ -194,12 +194,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     setNamePopoverOpen(false);
   };
 
-  const onLinkCopy = (CID?: string) => {
-    if (CID) {
-      navigator.clipboard.writeText(CID);
-    }
-  };
-
   return (
     <MainAreaCardBox className={className}>
       <ProfileCardCoverImage
@@ -252,7 +246,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             </Box>
           </Box>
           <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
-            {!canUserEdit && loggedEthAddress && loggedEthAddress !== profileData.ethAddress && (
+            {loggedEthAddress !== profileData.ethAddress && (
               <DuplexButton
                 icon={<Icon type="following" />}
                 active={isFollowing}
@@ -362,27 +356,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           />
         )}
       </Box>
-      {profileData.CID && (
-        <>
-          <Box direction="column" pad="medium" gap="medium">
-            <Box direction="row" gap="xsmall" align="center">
-              <Text size="large" weight="bold" color="primaryText">
-                {`CID`}
-              </Text>
-            </Box>
-
-            <TextIcon
-              iconType="copy"
-              label={profileData.CID}
-              onClick={() => onLinkCopy(profileData.CID)}
-              clickable={true}
-              iconSize="xs"
-              fontSize="medium"
-              reverse={true}
-            />
-          </Box>
-        </>
-      )}
     </MainAreaCardBox>
   );
 };
