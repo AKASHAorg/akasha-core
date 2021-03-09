@@ -460,19 +460,37 @@ export default class AppLoader implements IAppLoader {
       if (plugin) return plugin;
     });
   }
-  private createHtmlElement(elementId, elementType, parentNode?: string) {
+
+  /**
+   * InsertPosition
+   *
+   * ```html
+   * <!-- beforebegin -->
+   * <TargetElement>
+   *  <!-- afterbegin -->
+   *    <!-- other child elements -->
+   *  <!-- beforeend -->
+   * </TargetElement>
+   * <!-- afterend -->
+   * ```
+   */
+
+  private createHtmlElement(
+    elementId: string,
+    elementType: string,
+    insertAt: { position: InsertPosition; targetId: string },
+  ) {
     const alreadyCreated = document.getElementById(elementId);
     if (alreadyCreated) {
       return elementId;
     }
     const elem: HTMLElement = document.createElement(elementType);
     elem.id = elementId;
-    if (parentNode) {
-      const parentElem = document.getElementById(parentNode);
-      if (parentElem && elem) {
-        parentElem.appendChild(elem);
-      }
+    const targetElement = document.getElementById(insertAt.targetId);
+    if (!targetElement) {
+      return this.appLogger.error(`Target element: ${insertAt.targetId} not found!`);
     }
+    targetElement.insertAdjacentElement(insertAt.position, elem);
     return elementId;
   }
   private mountWidgetsOfApps(apps) {
@@ -482,12 +500,11 @@ export default class AppLoader implements IAppLoader {
       const widgetRoutes = Object.keys(widgets);
       const path = window.location.pathname;
       if (widgetRoutes.length) {
-        widgetRoutes.forEach(route => {
-          const routeRegex = pathToRegexp(route);
-          const isMatching = routeRegex.test(path);
-          if (isMatching) {
+        widgetRoutes
+          .filter(route => pathToRegexp(route).test(path))
+          .forEach(route => {
             const widgetListForPath = widgets[route];
-            widgetListForPath.forEach(async (widget: IWidget) => {
+            widgetListForPath.forEach(async (widget: IWidget, index: number) => {
               this.currentlyMountedWidgets.push({
                 route: route,
                 widgetId: this.getIdFromName(widget.name),
@@ -498,19 +515,20 @@ export default class AppLoader implements IAppLoader {
                       basePath: route,
                     },
                     config: {
-                      slot: this.createHtmlElement(
-                        this.getIdFromName(widget.name),
-                        'div',
-                        this.config.layout.app.widgetSlotId,
-                      ),
+                      slot: this.createHtmlElement(this.getIdFromName(widget.name), 'div', {
+                        position: index === 0 ? 'afterbegin' : 'afterend',
+                        targetId:
+                          index === 0
+                            ? this.config.layout.app.widgetSlotId
+                            : this.getIdFromName(widgetListForPath[index - 1].name),
+                      }),
                     },
                   },
                   'integration',
                 ),
               });
             });
-          }
-        });
+          });
       }
     });
   }
