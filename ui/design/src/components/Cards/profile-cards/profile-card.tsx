@@ -59,6 +59,8 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   updateProfileLabel?: string;
   changeENSLabel?: string;
   hideENSButton?: boolean;
+  copyLabel?: string;
+  copiedLabel?: string;
 }
 
 const EditButton = styled(TextIcon)`
@@ -342,7 +344,11 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         />
       )}
       <Box pad={{ top: 'medium', bottom: 'xsmall' }}>
-        <ProfileCardEthereumId profileData={profileData} />
+        <ProfileCardEthereumId
+          profileData={profileData}
+          copiedLabel={props.copiedLabel}
+          copyLabel={props.copyLabel}
+        />
         {description && (
           <ProfileCardDescription
             editable={editable}

@@ -15,11 +15,7 @@ export interface IProfileCardEthereumIdProps {
 }
 
 const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
-  const {
-    ethereumAddressLabel,
-    ethereumNameLabel,
-    /* copyLabel, copiedLabel, */ profileData,
-  } = props;
+  const { ethereumAddressLabel, ethereumNameLabel, copyLabel, copiedLabel, profileData } = props;
   const [isCopied, setIsCopied] = React.useState(false);
   const popoverRef: React.Ref<any> = React.useRef(null);
 
@@ -32,7 +28,7 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
   }, [isCopied]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(profileData.userName ?? profileData.ethAddress);
+    navigator.clipboard.writeText(profileData.ensName ?? profileData.ethAddress);
     setIsCopied(true);
   };
 
@@ -53,7 +49,7 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
           </Text>
           <Tooltip
             dropProps={{ align: isMobile ? { right: 'left' } : { left: 'right' } }}
-            message={isCopied ? 'Copied' : 'Copy to clipboard'}
+            message={isCopied ? (copiedLabel as string) : (copyLabel as string)}
             icon={isCopied ? 'check' : undefined}
             plain={true}
             caretPosition={isMobile ? 'right' : 'left'}
@@ -69,7 +65,7 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
 ProfileCardEthereumId.defaultProps = {
   ethereumNameLabel: 'Ethereum name',
   ethereumAddressLabel: 'Ethereum address',
-  copyLabel: 'Copy',
+  copyLabel: 'Copy to clipboard',
   showQRCodeLabel: 'Show QR code',
   copiedLabel: 'Copied',
 };

@@ -413,6 +413,8 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         onENSChangeClick={showEnsModal}
         changeENSLabel={t('Change Ethereum name')}
         hideENSButton={!!profileData.userName}
+        copyLabel={t('Copy to clipboard')}
+        copiedLabel={t('Copied')}
       />
     </>
   );
