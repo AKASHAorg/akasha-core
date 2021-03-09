@@ -20,6 +20,8 @@ import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
 
+const MAX_LENGTH = 280;
+
 export interface IEditorBox {
   avatar?: string;
   ethAddress: string | null;
@@ -92,9 +94,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const [letterCount, setLetterCount] = useState(0);
 
-  const [currentSelection, setCurrentSelection] = useState<Range | null>(null);
-
   const [publishDisabled, setPublishDisabled] = useState(true);
+  const [imageUploadDisabled, setImageUploadDisabled] = useState(false);
 
   const [emojiPopoverOpen, setEmojiPopoverOpen] = useState(false);
 
@@ -186,21 +187,21 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       })
       .reduce(reducer);
 
-    if (textLength > 0 || imageCounter !== 0) {
+    if ((textLength > 0 || imageCounter !== 0) && textLength <= MAX_LENGTH) {
       setPublishDisabled(false);
-    } else if (textLength === 0 && imageCounter === 0) {
+    } else if ((textLength === 0 && imageCounter === 0) || textLength > MAX_LENGTH) {
       setPublishDisabled(true);
     }
+
+    if (imageCounter === 0) {
+      setImageUploadDisabled(false);
+    } else if (imageCounter > 0) {
+      setImageUploadDisabled(true);
+    }
+
     if (typeof setLetterCount === 'function') {
       setLetterCount(textLength);
     }
-
-    if (textLength > 280) {
-      editor.selection = currentSelection;
-      return;
-    }
-
-    setCurrentSelection(editor.selection);
 
     setEditorState(value);
 
@@ -376,7 +377,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   };
 
   const handleMediaClick = () => {
-    if (uploadInputRef.current && !uploading) {
+    if (uploadInputRef.current && !uploading && !imageUploadDisabled) {
       uploadInputRef.current.click();
     }
     return;
@@ -458,12 +459,17 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
             </StyledIconDiv>
           )}
           <StyledIconDiv ref={mediaIconRef}>
-            <Icon type="image" clickable={!uploading} onClick={handleMediaClick} size="md" />
+            <Icon
+              type="image"
+              clickable={!uploading && !imageUploadDisabled}
+              onClick={handleMediaClick}
+              size="md"
+            />
           </StyledIconDiv>
         </Box>
 
         <Box direction="row" gap="small" align="center">
-          {withMeter && <EditorMeter counter={letterCount} />}
+          {withMeter && <EditorMeter counter={letterCount} maxValue={MAX_LENGTH} />}
           <Button
             primary={true}
             icon={<Icon type="send" color="white" />}

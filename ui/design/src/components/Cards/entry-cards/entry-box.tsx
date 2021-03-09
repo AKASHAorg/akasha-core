@@ -78,6 +78,7 @@ export interface IEntryBoxProps {
   style?: React.CSSProperties;
   disableReposting?: boolean;
   disableActions?: boolean;
+  hideActionButtons?: boolean;
   hidePublishTime?: boolean;
   awaitingModerationLabel?: string;
   moderatedContentLabel?: string;
@@ -123,6 +124,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     contentClickable,
     disableReposting,
     disableActions,
+    hideActionButtons,
     hidePublishTime,
     awaitingModerationLabel,
     moderatedContentLabel,
@@ -351,30 +353,32 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
           </Box>
         )}
-        <CardActions
-          entryData={entryData}
-          loggedProfileEthAddress={loggedProfileEthAddress}
-          sharePostLabel={sharePostLabel}
-          shareTextLabel={shareTextLabel}
-          sharePostUrl={sharePostUrl}
-          repliesLabel={repliesLabel}
-          repostsLabel={repostsLabel}
-          repostLabel={repostLabel}
-          repostWithCommentLabel={repostWithCommentLabel}
-          isBookmarked={isBookmarked}
-          bookmarkLabel={bookmarkLabel}
-          bookmarkedLabel={bookmarkedLabel}
-          shareLabel={shareLabel}
-          copyLinkLabel={copyLinkLabel}
-          handleEntryBookmark={handleEntryBookmark}
-          onRepost={handleRepost(false)}
-          onRepostWithComment={handleRepost(true)}
-          onShare={handleEntryShare}
-          handleRepliesClick={handleRepliesClick}
-          disableReposting={disableReposting}
-          disableActions={disableActions}
-          isModerated={isModerated}
-        />
+        {!hideActionButtons && (
+          <CardActions
+            entryData={entryData}
+            loggedProfileEthAddress={loggedProfileEthAddress}
+            sharePostLabel={sharePostLabel}
+            shareTextLabel={shareTextLabel}
+            sharePostUrl={sharePostUrl}
+            repliesLabel={repliesLabel}
+            repostsLabel={repostsLabel}
+            repostLabel={repostLabel}
+            repostWithCommentLabel={repostWithCommentLabel}
+            isBookmarked={isBookmarked}
+            bookmarkLabel={bookmarkLabel}
+            bookmarkedLabel={bookmarkedLabel}
+            shareLabel={shareLabel}
+            copyLinkLabel={copyLinkLabel}
+            handleEntryBookmark={handleEntryBookmark}
+            onRepost={handleRepost(false)}
+            onRepostWithComment={handleRepost(true)}
+            onShare={handleEntryShare}
+            handleRepliesClick={handleRepliesClick}
+            disableReposting={disableReposting}
+            disableActions={disableActions}
+            isModerated={isModerated}
+          />
+        )}
       </Box>
     </ViewportSizeProvider>
   );
