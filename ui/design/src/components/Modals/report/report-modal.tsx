@@ -69,7 +69,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
 
   const handleChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (textAreaRef.current && hiddenSpanRef.current) {
-      hiddenSpanRef.current.textContent = ev.currentTarget.value;
+      hiddenSpanRef.current.textContent = ev.currentTarget.value.replace(/  +/g, ' ');
       // calculate the number of rows adding offset value
       const calcRows = Math.floor(
         (hiddenSpanRef.current.offsetWidth + 30) / textAreaRef.current.offsetWidth,
@@ -77,7 +77,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       // check if text area is empty or not and set rows accordingly
       setRows(prevRows => (calcRows === 0 ? prevRows / prevRows : calcRows + 1));
     }
-    setExplanation(ev.currentTarget.value);
+    setExplanation(ev.currentTarget.value.replace(/  +/g, ' '));
   };
 
   const handleCancel = () => {
@@ -104,7 +104,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       contentId,
       contentType,
       reason,
-      explanation,
+      explanation: explanation.trim(),
     };
 
     // hard check: makes sure contentType is specified

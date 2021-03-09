@@ -81,7 +81,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
 
   const handleChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (textAreaRef.current && hiddenSpanRef.current) {
-      hiddenSpanRef.current.textContent = ev.currentTarget.value;
+      hiddenSpanRef.current.textContent = ev.currentTarget.value.replace(/  +/g, ' ');
       // calculate the number of rows adding offset value
       const calcRows = Math.floor(
         (hiddenSpanRef.current.offsetWidth + 30) / textAreaRef.current.offsetWidth,
@@ -89,7 +89,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
       // check if text area is empty or not and set rows accordingly
       setRows(prevRows => (calcRows === 0 ? prevRows / prevRows : calcRows + 1));
     }
-    setExplanation(ev.currentTarget.value);
+    setExplanation(ev.currentTarget.value.replace(/  +/g, ' '));
   };
 
   const handleCancel = () => {
@@ -144,9 +144,9 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     const dataToPost = {
       contentId,
       contentType,
-      explanation,
       moderator: user,
       delisted: isDelisted,
+      explanation: explanation.trim(),
     };
 
     setRequesting(true);
@@ -266,7 +266,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                   label={action}
                   fill={size === 'small' ? true : false}
                   onClick={action === 'Delist' ? handleModerate() : handleModerate(false)}
-                  disabled={requesting || !explanation.length || !action.length}
+                  disabled={requesting || !explanation.trim().length || !action.length}
                 />
               </Box>
             )}
