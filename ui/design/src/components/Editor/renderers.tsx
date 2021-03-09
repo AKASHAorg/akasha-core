@@ -21,6 +21,7 @@ const ImageElement = ({ attributes, children, element, handleDeleteImage }: any)
       <div
         role="img"
         aria-label={element.url}
+        contentEditable={false}
         style={{
           minHeight: element.size?.naturalHeight,
           width: '100%',
