@@ -98,6 +98,7 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal' | 'wid
     successMessageLabel,
     optionsTitleLabel,
     optionLabels,
+    optionValues,
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
@@ -132,6 +133,7 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal' | 'wid
             successMessageLabel={successMessageLabel}
             optionsTitleLabel={optionsTitleLabel}
             optionLabels={optionLabels}
+            optionValues={optionValues}
             descriptionLabel={descriptionLabel}
             descriptionPlaceholder={descriptionPlaceholder}
             footerText1Label={footerText1Label}
@@ -182,6 +184,14 @@ storiesOf('Modals/ Report Modal', module)
           text('Option 5 Label', 'Nudity'),
           text('Option 6 Label', 'Violence'),
         ]}
+        optionValues={[
+          text('Option 1 Value', 'Suspicious, deceptive, or spam'),
+          text('Option 2 Value', 'Abusive or harmful to others'),
+          text('Option 3 Value', 'Self-harm or suicide'),
+          text('Option 4 Value', 'Illegal'),
+          text('Option 5 Value', 'Nudity'),
+          text('Option 6 Value', 'Violence'),
+        ]}
         descriptionLabel={text('Explanation Label', 'Explanation')}
         descriptionPlaceholder={text('Description Placeholder', 'Please explain your reason(s)')}
         footerText1Label={text('Footer Text 1 Label', 'If you are unsure, you can refer to our')}
@@ -214,6 +224,14 @@ storiesOf('Modals/ Report Modal', module)
           text('Option 4 Label', 'Illegal'),
           text('Option 5 Label', 'Nudity'),
           text('Option 6 Label', 'Violence'),
+        ]}
+        optionValues={[
+          text('Option 1 Value', 'Suspicious, deceptive, or spam'),
+          text('Option 2 Value', 'Abusive or harmful to others'),
+          text('Option 3 Value', 'Self-harm or suicide'),
+          text('Option 4 Value', 'Illegal'),
+          text('Option 5 Value', 'Nudity'),
+          text('Option 6 Value', 'Violence'),
         ]}
         descriptionLabel={text('Explanation Label', 'Explanation')}
         descriptionPlaceholder={text('Description Placeholder', 'Please explain your reason(s)')}

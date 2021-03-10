@@ -14,6 +14,7 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   titleLabel: string;
   optionsTitleLabel: string;
   optionLabels: string[];
+  optionValues: string[];
   descriptionLabel: string;
   descriptionPlaceholder: string;
   footerText1Label: string;
@@ -37,6 +38,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     successMessageLabel,
     optionsTitleLabel,
     optionLabels,
+    optionValues,
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
@@ -103,8 +105,8 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       user,
       contentId,
       contentType,
-      reason,
-      explanation: explanation.trim(),
+      explanation,
+      reason: optionValues[optionLabels.indexOf(reason)],
     };
 
     // hard check: makes sure contentType is specified

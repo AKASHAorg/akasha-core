@@ -244,6 +244,14 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                 t('Nudity'),
                 t('Violence'),
               ]}
+              optionValues={[
+                'Suspicious, deceptive, or spam',
+                'Abusive or harmful to others',
+                'Self-harm or suicide',
+                'Illegal',
+                'Nudity',
+                'Violence',
+              ]}
               descriptionLabel={t('Explanation')}
               descriptionPlaceholder={t('Please explain your reason(s)')}
               footerText1Label={t('If you are unsure, you can refer to our')}
