@@ -3,11 +3,11 @@ import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { chartData } from './Charts.stories';
 
 const trendingTagsData = [
-  { name: '#AKASHA', totalPosts: 176, tagHistoricData: chartData, subscribed: true },
-  { name: '#AKASHAWorld', totalPosts: 94, tagHistoricData: chartData, subscribed: false },
-  { name: '#Ethereum', totalPosts: 27, tagHistoricData: chartData, subscribed: false },
-  { name: '#EthereumWorld', totalPosts: 17, tagHistoricData: chartData, subscribed: true },
-  { name: '#Crypto', totalPosts: 6, tagHistoricData: chartData, subscribed: false },
+  { name: 'AKASHA', totalPosts: 176, tagHistoricData: chartData, subscribed: true },
+  { name: 'AKASHAWorld', totalPosts: 94, tagHistoricData: chartData, subscribed: false },
+  { name: 'Ethereum', totalPosts: 27, tagHistoricData: chartData, subscribed: false },
+  { name: 'EthereumWorld', totalPosts: 17, tagHistoricData: chartData, subscribed: true },
+  { name: 'Crypto', totalPosts: 6, tagHistoricData: chartData, subscribed: false },
 ];
 
 const trendingProfilesData = [
