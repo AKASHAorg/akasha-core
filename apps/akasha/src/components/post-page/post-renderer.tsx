@@ -152,6 +152,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     onMentionClick={props.onMentionClick}
                     hidePublishTime={hidePublishTime}
                     disableActions={disableActions}
+                    hideActionButtons={true}
                   />
                 </Box>
               )}

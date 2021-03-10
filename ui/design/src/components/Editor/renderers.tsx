@@ -15,10 +15,16 @@ const StyledMention = styled.span`
   cursor: pointer;
 `;
 
+const DisabledSpan = styled.span`
+  color: ${props => props.theme.colors.secondaryText};
+`;
+
 const ImageElement = ({ attributes, children, element, handleDeleteImage }: any) => {
   return (
     <div {...attributes}>
       <div
+        role="img"
+        aria-label={element.url}
         contentEditable={false}
         style={{
           minHeight: element.size?.naturalHeight,
@@ -117,12 +123,17 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
       </span>
     );
   }
+
   if (leaf.code) {
     return (
       <span {...attributes}>
         <code>{children}</code>
       </span>
     );
+  }
+
+  if (leaf.disabled) {
+    return <DisabledSpan {...attributes}>{children}</DisabledSpan>;
   }
 
   return <span {...attributes}>{children}</span>;
