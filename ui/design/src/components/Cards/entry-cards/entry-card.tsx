@@ -58,6 +58,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     isModerated,
     scrollHiddenContent,
     disableActions,
+    hideActionButtons,
   } = props;
 
   return (
@@ -108,6 +109,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         isModerated={isModerated}
         scrollHiddenContent={scrollHiddenContent}
         disableActions={disableActions}
+        hideActionButtons={hideActionButtons}
       />
     </MainAreaCardBox>
   );

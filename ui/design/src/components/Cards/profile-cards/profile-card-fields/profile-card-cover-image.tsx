@@ -50,7 +50,8 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
       pad="none"
       round={{ corner: 'top', size: 'xsmall' }}
     >
-      {!editable && (
+      {/* disable sharing for v.01 */}
+      {false && !editable && (
         <Box align="end" pad="none">
           <ShareButtonContainer gap="xsmall" direction="row">
             <IconButton
