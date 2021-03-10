@@ -81,13 +81,13 @@ const CustomEditor = {
     Transforms.move(editor);
   },
 
-  deleteImage(editor: Editor, element: any) {
+  deleteImage(editor: ReactEditor & Editor, element: any) {
+    const path = ReactEditor.findPath(editor, element);
     Transforms.removeNodes(editor, {
       voids: true,
-      match: n => {
-        return n === element;
-      },
+      at: path,
     });
+    ReactEditor.focus(editor);
     Transforms.select(editor, Editor.end(editor, []));
   },
 };
