@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RenderElementProps, RenderLeafProps, ReactEditor } from 'slate-react';
+import { RenderElementProps, RenderLeafProps } from 'slate-react';
 import styled from 'styled-components';
 import { Icon } from '../Icon';
 import { StyledCloseDiv } from './styled-editor-box';
