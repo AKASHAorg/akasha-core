@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RenderElementProps, RenderLeafProps } from 'slate-react';
+import { RenderElementProps, RenderLeafProps, ReactEditor } from 'slate-react';
 import styled from 'styled-components';
 import { Icon } from '../Icon';
 import { StyledCloseDiv } from './styled-editor-box';
@@ -119,10 +119,19 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
       </span>
     );
   }
+
   if (leaf.code) {
     return (
       <span {...attributes}>
         <code>{children}</code>
+      </span>
+    );
+  }
+
+  if (leaf.disabled) {
+    return (
+      <span {...attributes} color="#949EB3">
+        {children}
       </span>
     );
   }

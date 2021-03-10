@@ -162,30 +162,28 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     setEditorState(editorDefaultValue);
   };
 
-  const reducer = (acc: number, val: number) => acc + val;
-
   const handleChange = (value: Node[]) => {
     let imageCounter = 0;
-    const textLength = value
-      .map((node: Node) => {
-        if (SlateText.isText(node)) return node.text.length;
-        if (node.type === 'image') {
-          imageCounter++;
-        }
-        if (node.children) {
-          return node.children
-            .map(child => {
-              if (SlateText.isText(child)) return child.text.length;
-              if (node.type === 'image') {
-                imageCounter++;
-              }
-              return 0;
-            })
-            .reduce(reducer);
-        }
-        return 0;
-      })
-      .reduce(reducer);
+    let textLength = 0;
+
+    value.map((node: Node) => {
+      if (SlateText.isText(node)) {
+        textLength += node.text.length;
+      }
+      if (node.type === 'image') {
+        imageCounter++;
+      }
+      if (node.children) {
+        (node.children as any).map((child: any) => {
+          if (SlateText.isText(child)) {
+            textLength += child.text.length;
+          }
+          if (node.type === 'image') {
+            imageCounter++;
+          }
+        });
+      }
+    });
 
     if ((textLength > 0 || imageCounter !== 0) && textLength <= MAX_LENGTH) {
       setPublishDisabled(false);
