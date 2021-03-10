@@ -352,21 +352,24 @@ const CardActions: React.FC<CardActionProps> = props => {
         disabled={disableActions}
       />
       {shareNodeRef.current && shareDropOpen && renderShareDrop()}
-      <TextIcon
-        label={shareBtnText}
-        iconType="shareSmallDark"
-        iconSize="sm"
-        fontSize="large"
-        ref={shareNodeRef}
-        clickable={!disableActions}
-        onClick={() => {
-          if (disableActions) {
-            return;
-          }
-          handleShareOpen();
-        }}
-        disabled={disableActions}
-      />
+      {/* disable sharing for v0.1 */}
+      {false && (
+        <TextIcon
+          label={shareBtnText}
+          iconType="shareSmallDark"
+          iconSize="sm"
+          fontSize="large"
+          ref={shareNodeRef}
+          clickable={!disableActions}
+          onClick={() => {
+            if (disableActions) {
+              return;
+            }
+            handleShareOpen();
+          }}
+          disabled={disableActions}
+        />
+      )}
     </Box>
   );
 };

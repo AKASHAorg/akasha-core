@@ -119,7 +119,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
 
   const [ensState, ensActions] = useENSRegistration({
     profileService: sdkModules.profiles.profileService,
-    ethAddress: profileData.ethAddress,
+    ethAddress: props.loggedUserEthAddress,
     ensService: sdkModules.registry.ens,
     onError: ensErrorActions.createError,
   });
@@ -157,8 +157,11 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   }, [loggedUserEthAddress, profileData.ethAddress]);
 
   const handleFollow = () => {
+    if (!loggedUserEthAddress) {
+      return props.modalActions.show(MODAL_NAMES.LOGIN);
+    }
     if (profileData?.ethAddress) {
-      followActions.follow(profileData.ethAddress);
+      return followActions.follow(profileData.ethAddress);
     }
   };
 
@@ -418,6 +421,8 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         onENSChangeClick={showEnsModal}
         changeENSLabel={t('Change Ethereum name')}
         hideENSButton={!!profileData.userName}
+        copyLabel={t('Copy to clipboard')}
+        copiedLabel={t('Copied')}
       />
     </>
   );

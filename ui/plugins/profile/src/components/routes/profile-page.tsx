@@ -97,6 +97,10 @@ const ProfilePage = (props: ProfilePageProps) => {
     }
   }, [pubKey]);
 
+  /**
+   * Hook used in the /profile/my-profile route
+   * because we don't have the /:pubkey url param
+   */
   React.useEffect(() => {
     if (
       loggedProfileData.pubKey &&

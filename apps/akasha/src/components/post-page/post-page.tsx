@@ -334,6 +334,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const postErrors = errorActions.getFilteredErrors('usePost.getPost');
   const commentErrors = errorActions.getFilteredErrors('usePosts.getComments');
 
+  const entryAuthorName =
+    entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
+
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
@@ -493,7 +496,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             avatar={loginProfile.avatar}
             ethAddress={loginState.ethAddress}
             postLabel={t('Reply')}
-            placeholderLabel={t('Write something')}
+            placeholderLabel={`${t('Reply to')} ${entryAuthorName}`}
             onPublish={handlePublishComment}
             getMentions={handleGetMentions}
             getTags={handleGetTags}
