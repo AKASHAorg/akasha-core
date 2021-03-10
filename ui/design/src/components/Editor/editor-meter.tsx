@@ -29,7 +29,7 @@ const EditorMeter: React.FC<IEditorMeter> = props => {
           max={maxValue}
           size="24px"
           thickness="medium"
-          background="#C6D1FF"
+          background="lightBackground"
           type="circle"
           values={[{ value: counter, color: displayColor }]}
         />

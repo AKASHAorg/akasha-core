@@ -15,6 +15,10 @@ const StyledMention = styled.span`
   cursor: pointer;
 `;
 
+const DisabledSpan = styled.span`
+  color: ${props => props.theme.colors.secondaryText};
+`;
+
 const ImageElement = ({ attributes, children, element, handleDeleteImage }: any) => {
   return (
     <div {...attributes}>
@@ -129,11 +133,7 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   }
 
   if (leaf.disabled) {
-    return (
-      <span {...attributes} color="#949EB3">
-        {children}
-      </span>
-    );
+    return <DisabledSpan {...attributes}>{children}</DisabledSpan>;
   }
 
   return <span {...attributes}>{children}</span>;
