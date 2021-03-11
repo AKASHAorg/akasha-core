@@ -13,6 +13,7 @@ export const enum ItemTypes {
   ENTRY = 0,
   PROFILE,
   COMMENT,
+  TAG,
 }
 
 export interface IFeedWidgetProps {

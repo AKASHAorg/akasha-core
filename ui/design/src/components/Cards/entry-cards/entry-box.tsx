@@ -73,7 +73,8 @@ export interface IEntryBoxProps {
   onContentClick?: (details: IContentClickDetails) => void;
   /* Can click the content (not embed!) to navigate */
   contentClickable?: boolean;
-  onMentionClick?: (ethAddress: string) => void;
+  onMentionClick?: (pubKey: string) => void;
+  onTagClick?: (name: string) => void;
   // style
   style?: React.CSSProperties;
   disableReposting?: boolean;
@@ -120,6 +121,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     isFollowingAuthor,
     onContentClick,
     onMentionClick,
+    onTagClick,
     style,
     contentClickable,
     disableReposting,
@@ -324,7 +326,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             !disableActions && contentClickable ? handleContentClick(entryData) : false
           }
         >
-          <ReadOnlyEditor content={entryData.content} handleMentionClick={onMentionClick} />
+          <ReadOnlyEditor
+            content={entryData.content}
+            handleMentionClick={onMentionClick}
+            handleTagClick={onTagClick}
+          />
         </Box>
         {entryData.quote && !entryData.quote.delisted && !entryData.quote.reported && (
           <Box

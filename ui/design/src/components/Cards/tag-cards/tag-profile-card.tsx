@@ -6,6 +6,7 @@ import { MainAreaCardBox } from '../common/basic-card-box';
 import { ITag } from '../widget-cards/trending-widget-card';
 import styled from 'styled-components';
 import { isMobileOnly } from 'react-device-detect';
+import { TextLine } from '../../VirtualList/placeholders/entry-card-placeholder';
 
 const TagIconDiv = styled.div`
   position: relative;
@@ -17,6 +18,7 @@ const TagIconDiv = styled.div`
   width: 80px;
   height: 80px;
   background-color: ${props => props.theme.colors.lightBackground};
+  flex-shrink: 0;
 `;
 
 const StyledInlineBox = styled(Box)`
@@ -25,7 +27,7 @@ const StyledInlineBox = styled(Box)`
 
 export interface ITagProfileCard {
   // data
-  tag: ITag;
+  tag: ITag | null;
   subscribedTags: string[];
   loggedEthAddress?: string | null;
   // labels
@@ -75,26 +77,39 @@ const TagProfileCard: React.FC<ITagProfileCard> = props => {
             <Icon type="hashtag" size="xl" accentColor={true} />
           </TagIconDiv>
           <Box pad={{ vertical: 'small', left: 'xsmall', right: 'small' }}>
-            <StyledInlineBox direction="row" gap="xsmall" align="center">
-              <Text size="xlarge" weight="bold" color="primaryText" truncate={true}>
-                {tag.name}
-              </Text>
-            </StyledInlineBox>
-            <Text size="medium" color="secondaryText">
-              {`${tag.totalPosts} ${mentionsLabel}`}
-            </Text>
+            {tag && (
+              <Box gap="xsmall">
+                <StyledInlineBox direction="row" gap="xsmall" align="center">
+                  <Text size="xlarge" weight="bold" color="primaryText" truncate={true}>
+                    {tag.name}
+                  </Text>
+                </StyledInlineBox>
+                <Text size="medium" color="secondaryText">
+                  {`${tag.totalPosts} ${mentionsLabel}`}
+                </Text>
+              </Box>
+            )}
+
+            {!tag && (
+              <Box gap="xsmall">
+                <TextLine title="tagName" animated={false} width="140px" />
+                <TextLine title="tagName" animated={false} width="80px" />
+              </Box>
+            )}
           </Box>
         </Box>
-        <Box width="7rem" pad={{ vertical: 'small' }}>
-          <DuplexButton
-            inactiveLabel={subscribeLabel}
-            activeLabel={subscribedLabel}
-            activeHoverLabel={unsubscribeLabel}
-            onClickInactive={() => handleSubscribeTag(tag.name)}
-            onClickActive={() => handleUnsubscribeTag(tag.name)}
-            active={subscribedTags?.includes(tag.name)}
-            icon={<Icon type="subscribe" />}
-          />
+        <Box width="7rem" pad={{ vertical: 'small' }} flex={{ shrink: 0 }}>
+          {tag && (
+            <DuplexButton
+              inactiveLabel={subscribeLabel}
+              activeLabel={subscribedLabel}
+              activeHoverLabel={unsubscribeLabel}
+              onClickInactive={() => handleSubscribeTag(tag.name)}
+              onClickActive={() => handleUnsubscribeTag(tag.name)}
+              active={subscribedTags?.includes(tag.name)}
+              icon={<Icon type="subscribe" />}
+            />
+          )}
         </Box>
       </Box>
     </MainAreaCardBox>

@@ -142,6 +142,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleMentionClick = (profilePubKey: string) => {
     props.singleSpa.navigateToUrl(`/profile/${profilePubKey}`);
   };
+
+  const handleTagClick = (name: string) => {
+    props.singleSpa.navigateToUrl(`/AKASHA-app/tags/${name}`);
+  };
   const handleEntryBookmark = (entryId: string) => {
     if (!loginState.pubKey) {
       return showLoginModal();
@@ -336,6 +340,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             sharePostUrl={`${window.location.origin}${routes[POST]}/`}
             onAvatarClick={handleAvatarClick}
             onMentionClick={handleMentionClick}
+            onTagClick={handleTagClick}
             contentClickable={true}
             awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
             moderatedContentLabel={t('This content has been moderated')}
