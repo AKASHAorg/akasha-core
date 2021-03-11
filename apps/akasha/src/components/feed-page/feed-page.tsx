@@ -25,7 +25,6 @@ const {
   ReportModal,
   ToastProvider,
   ModalRenderer,
-  useViewportSize,
   EditorModal,
   EditorPlaceholder,
 } = DS;
@@ -70,11 +69,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   } = props;
 
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
-
-  const {
-    size,
-    dimensions: { width },
-  } = useViewportSize();
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -265,8 +259,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               contentId={flagged}
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
-              size={size}
-              width={width}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
             />

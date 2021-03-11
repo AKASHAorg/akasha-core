@@ -9,6 +9,7 @@ import { Icon } from '../../Icon';
 
 import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from '../styled';
 import ReportSuccessModal, { IReportSuccessModalProps } from './report-success-modal';
+import { useViewportSize } from '../../Providers/viewport-dimension';
 
 export interface IReportModalProps extends IReportSuccessModalProps {
   titleLabel: string;
@@ -25,9 +26,6 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   user?: string;
   contentType?: string;
   baseUrl?: string;
-  // screen size and width passed by viewport provider
-  size?: string;
-  width: number;
 }
 
 const ReportModal: React.FC<IReportModalProps> = props => {
@@ -52,8 +50,6 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     contentId,
     contentType,
     baseUrl,
-    size,
-    width,
     updateEntry,
     closeModal,
   } = props;
@@ -68,6 +64,11 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const { addToast } = useToasts();
+
+  const {
+    size,
+    dimensions: { width },
+  } = useViewportSize();
 
   const handleChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (textAreaRef.current && hiddenSpanRef.current) {

@@ -17,7 +17,7 @@ import { IContentClickDetails } from '@akashaproject/design-system/lib/component
 import { ProfilePageCard } from '../profile-cards/profile-card';
 import menuRoute, { MY_PROFILE } from '../../routes';
 
-const { Box, Helmet, ReportModal, ToastProvider, ModalRenderer, useViewportSize } = DS;
+const { Box, Helmet, ReportModal, ToastProvider, ModalRenderer } = DS;
 
 export interface ProfilePageProps extends RootComponentProps {
   modalActions: ModalStateActions;
@@ -113,11 +113,6 @@ const ProfilePage = (props: ProfilePageProps) => {
   }, [loggedProfileData.pubKey, pubKey]);
 
   const { t } = useTranslation();
-
-  const {
-    size,
-    dimensions: { width },
-  } = useViewportSize();
 
   const handleLoadMore = (payload: ILoadItemsPayload) => {
     const req: { limit: number; offset?: string } = {
@@ -239,8 +234,6 @@ const ProfilePage = (props: ProfilePageProps) => {
               contentId={flagged}
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
-              size={size}
-              width={width}
               updateEntry={updateEntry}
               closeModal={() => {
                 setReportModalOpen(false);

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Box } from 'grommet';
-import { useViewportSize } from '../../Providers/viewport-dimension';
+import { isMobile } from 'react-device-detect';
+
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { TextIcon } from '../../TextIcon';
 import { IEntryData } from './entry-box';
@@ -87,8 +88,6 @@ const CardActions: React.FC<CardActionProps> = props => {
     isModerated,
   } = props;
 
-  const { size } = useViewportSize();
-
   const [repostDropOpen, setRepostDropOpen] = React.useState(false);
   const [shareDropOpen, setShareDropOpen] = React.useState(false);
 
@@ -116,7 +115,7 @@ const CardActions: React.FC<CardActionProps> = props => {
     } = window.navigator;
 
     if (
-      size === 'small' &&
+      isMobile &&
       winNavigator.share &&
       winNavigator.canShare &&
       winNavigator.canShare(shareData)
@@ -163,7 +162,7 @@ const CardActions: React.FC<CardActionProps> = props => {
       },
     ];
 
-    if (size === 'small') {
+    if (isMobile) {
       return <MobileListModal menuItems={menuItems} closeModal={handleRepostsClose} />;
     }
 
@@ -262,13 +261,14 @@ const CardActions: React.FC<CardActionProps> = props => {
     );
   };
 
-  const repostsBtnText =
-    size === 'small' ? `${entryData.reposts || 0}` : `${entryData.reposts || 0} ${repostsLabel}`;
-  const repliesBtnText =
-    size === 'small' ? `${entryData.replies || 0}` : `${entryData.replies || 0} ${repliesLabel}`;
-  const bookmarkBtnText =
-    size === 'small' ? undefined : isBookmarked ? bookmarkedLabel : bookmarkLabel;
-  const shareBtnText = size === 'small' ? undefined : shareLabel;
+  const repostsBtnText = isMobile
+    ? `${entryData.reposts || 0}`
+    : `${entryData.reposts || 0} ${repostsLabel}`;
+  const repliesBtnText = isMobile
+    ? `${entryData.replies || 0}`
+    : `${entryData.replies || 0} ${repliesLabel}`;
+  const bookmarkBtnText = isMobile ? undefined : isBookmarked ? bookmarkedLabel : bookmarkLabel;
+  const shareBtnText = isMobile ? undefined : shareLabel;
 
   if (isModerated) {
     return (

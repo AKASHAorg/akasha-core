@@ -9,6 +9,7 @@ import { Icon } from '../../Icon';
 import { ModalWrapper } from '../common/styled-modal';
 
 import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from '../styled';
+import { useViewportSize } from '../../Providers/viewport-dimension';
 
 export interface IModerateModalProps {
   className?: string;
@@ -25,17 +26,11 @@ export interface IModerateModalProps {
   footerText1Label: string;
   footerLink1Label: string;
   footerUrl1: string;
-  footerText2Label: string;
-  footerLink2Label: string;
-  footerUrl2: string;
   cancelLabel?: string;
   user: string | null;
   contentId?: string;
   baseUrl: string;
   isReview?: boolean;
-  // screen size and width passed by viewport provider
-  size?: string;
-  width: number;
   // fetch pending items on modalClose
   onModalClose: () => void;
   closeModal: () => void;
@@ -54,18 +49,13 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
-    footerText2Label,
     footerLink1Label,
-    footerLink2Label,
     footerUrl1,
-    footerUrl2,
     cancelLabel,
     user,
     contentId,
     baseUrl,
     isReview,
-    size,
-    width,
     onModalClose,
     closeModal,
     signData,
@@ -80,6 +70,11 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const { addToast } = useToasts();
+
+  const {
+    size,
+    dimensions: { width },
+  } = useViewportSize();
 
   const handleChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (textAreaRef.current && hiddenSpanRef.current) {
@@ -244,17 +239,6 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                   }
                 >
                   {footerLink1Label}{' '}
-                </Text>
-                {footerText2Label}{' '}
-                <Text
-                  color="accentText"
-                  size="medium"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    window.open(footerUrl2, footerLink2Label, '_blank noopener noreferrer')
-                  }
-                >
-                  {footerLink2Label}
                 </Text>
               </Text>
             </Box>

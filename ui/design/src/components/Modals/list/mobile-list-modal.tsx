@@ -8,7 +8,7 @@ import { Icon } from '../../Icon';
 const StyledBox = styled(Box)`
   width: calc(100% - 1rem);
   position: absolute;
-  bottom: 1rem;
+  bottom: 4rem;
   left: 0.5rem;
 `;
 
@@ -56,7 +56,7 @@ const MobileListModal: React.FC<IMobileListModal> = props => {
               fill="horizontal"
               background="background"
             >
-              <Box width="60%" align="start" direction="row">
+              <Box width={!menuItem.icon ? '75%' : '60%'} align="start" direction="row">
                 {menuItem.icon && <Icon type={menuItem.icon} size="md" clickable={false} />}
                 <Text size="xlarge" margin={{ left: 'xsmall' }}>
                   {menuItem.label}

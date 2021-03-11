@@ -27,7 +27,6 @@ const {
   ReportModal,
   ToastProvider,
   ModalRenderer,
-  useViewportSize,
   VirtualList,
   Helmet,
   CommentEditor,
@@ -93,11 +92,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     }
     return null;
   }, [postId, postsState.postsData[postId]]);
-
-  const {
-    size,
-    dimensions: { width },
-  } = useViewportSize();
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
@@ -379,8 +373,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               contentId={flagged}
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
-              size={size}
-              width={width}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
             />

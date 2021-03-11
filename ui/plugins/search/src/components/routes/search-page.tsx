@@ -35,7 +35,6 @@ const {
   ReportModal,
   ToastProvider,
   ModalRenderer,
-  useViewportSize,
 } = DS;
 
 interface SearchPageProps {
@@ -109,11 +108,6 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
     profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
   });
-
-  const {
-    size,
-    dimensions: { width },
-  } = useViewportSize();
 
   React.useEffect(() => {
     if (loginState.currentUserCalled) {
@@ -330,8 +324,6 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
               contentId={flagged}
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
-              size={size}
-              width={width}
               updateEntry={updateEntry}
               closeModal={hideReportModal}
             />

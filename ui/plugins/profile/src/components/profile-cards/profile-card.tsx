@@ -30,7 +30,6 @@ const {
   ModalRenderer,
   ToastProvider,
   ReportModal,
-  useViewportSize,
   ShareModal,
   BoxFormCard,
   EnsFormCard,
@@ -99,11 +98,6 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   } = props;
 
   const [flagged, setFlagged] = React.useState('');
-
-  const {
-    size,
-    dimensions: { width },
-  } = useViewportSize();
 
   const { t } = useTranslation();
 
@@ -290,8 +284,6 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               contentId={profileData.ethAddress ? profileData.ethAddress : flagged}
               contentType="profile"
               baseUrl={BASE_FLAG_URL}
-              size={size}
-              width={width}
               closeModal={closeReportModal}
             />
           </ToastProvider>
