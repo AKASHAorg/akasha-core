@@ -106,7 +106,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       user,
       contentId,
       contentType,
-      explanation,
+      explanation: explanation.trim(),
       reason: optionValues[optionLabels.indexOf(reason)],
     };
 
