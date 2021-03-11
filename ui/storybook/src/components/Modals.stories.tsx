@@ -6,16 +6,7 @@ import * as React from 'react';
 
 import { IReportModalProps } from '@akashaproject/design-system/lib/components/Modals';
 
-const {
-  Box,
-  ShareModal,
-  Icon,
-  MobileListModal,
-  ReportModal,
-  ToastProvider,
-  ViewportSizeProvider,
-  useViewportSize,
-} = DS;
+const { Box, ShareModal, Icon, MobileListModal, ReportModal, ToastProvider } = DS;
 
 const ShareModalComponent = () => {
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -102,11 +93,8 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal' | 'wid
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
-    footerText2Label,
     footerLink1Label,
-    footerLink2Label,
     footerUrl1,
-    footerUrl2,
     cancelLabel,
     reportLabel,
     blockLabel,
@@ -114,11 +102,6 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal' | 'wid
   } = props;
 
   const [modalOpen, setModalOpen] = React.useState(false);
-
-  const {
-    size,
-    dimensions: { width },
-  } = useViewportSize();
 
   return (
     <Box fill={true} justify="center" align="center">
@@ -142,15 +125,10 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal' | 'wid
             footerText1Label={footerText1Label}
             footerLink1Label={footerLink1Label}
             footerUrl1={footerUrl1}
-            footerText2Label={footerText2Label}
-            footerLink2Label={footerLink2Label}
-            footerUrl2={footerUrl2}
             cancelLabel={cancelLabel}
             reportLabel={reportLabel}
             blockLabel={blockLabel}
             closeLabel={closeLabel}
-            size={size}
-            width={width}
             closeModal={() => {
               setModalOpen(false);
             }}
@@ -170,90 +148,80 @@ storiesOf('Modals/List Modal', module).add('Mobile list modal', () => (
 ));
 storiesOf('Modals/ Report Modal', module)
   .add('Report post modal', () => (
-    <ViewportSizeProvider>
-      <ReportModalComponent
-        titleLabel={text('Title Label', 'Report a Post')}
-        successTitleLabel={text(
-          'Success Title Label',
-          'Thank you for helping us keep Ethereum World safe! 🙌',
-        )}
-        successMessageLabel={text(
-          'Success Content Label',
-          'We will investigate this post and take appropriate action.',
-        )}
-        optionsTitleLabel={text('Subtitle Label', 'Please select a reason')}
-        optionLabels={[
-          text('Option 1 Label', 'Suspicious, deceptive, or spam'),
-          text('Option 2 Label', 'Abusive or harmful to others'),
-          text('Option 3 Label', 'Self-harm or suicide'),
-          text('Option 4 Label', 'Illegal'),
-          text('Option 5 Label', 'Nudity'),
-          text('Option 6 Label', 'Violence'),
-        ]}
-        optionValues={[
-          text('Option 1 Value', 'Suspicious, deceptive, or spam'),
-          text('Option 2 Value', 'Abusive or harmful to others'),
-          text('Option 3 Value', 'Self-harm or suicide'),
-          text('Option 4 Value', 'Illegal'),
-          text('Option 5 Value', 'Nudity'),
-          text('Option 6 Value', 'Violence'),
-        ]}
-        descriptionLabel={text('Explanation Label', 'Explanation')}
-        descriptionPlaceholder={text('Description Placeholder', 'Please explain your reason(s)')}
-        footerText1Label={text('Footer Text 1 Label', 'If you are unsure, you can refer to our')}
-        footerLink1Label={text('Footer Link 1 Label', 'Code of Conduct')}
-        footerUrl1={text('Footer URL 1', 'https://ethereum.world/code-of-conduct')}
-        footerText2Label={text('Footer Text 2 Label', 'and')}
-        footerLink2Label={text('Footer Link 2 Label', 'Terms of Service')}
-        footerUrl2={text('Footer URL 2', 'https://ethereum.world/terms-of-service')}
-        cancelLabel={text('Cancel Label', 'Cancel')}
-        reportLabel={text('Save Label', 'Report')}
-        blockLabel={text('Block User Label', 'Block User')}
-        closeLabel={text('Close Label', 'Close')}
-      />
-    </ViewportSizeProvider>
+    <ReportModalComponent
+      titleLabel={text('Title Label', 'Report a Post')}
+      successTitleLabel={text(
+        'Success Title Label',
+        'Thank you for helping us keep Ethereum World safe! 🙌',
+      )}
+      successMessageLabel={text(
+        'Success Content Label',
+        'We will investigate this post and take appropriate action.',
+      )}
+      optionsTitleLabel={text('Subtitle Label', 'Please select a reason')}
+      optionLabels={[
+        text('Option 1 Label', 'Suspicious, deceptive, or spam'),
+        text('Option 2 Label', 'Abusive or harmful to others'),
+        text('Option 3 Label', 'Self-harm or suicide'),
+        text('Option 4 Label', 'Illegal'),
+        text('Option 5 Label', 'Nudity'),
+        text('Option 6 Label', 'Violence'),
+      ]}
+      optionValues={[
+        text('Option 1 Value', 'Suspicious, deceptive, or spam'),
+        text('Option 2 Value', 'Abusive or harmful to others'),
+        text('Option 3 Value', 'Self-harm or suicide'),
+        text('Option 4 Value', 'Illegal'),
+        text('Option 5 Value', 'Nudity'),
+        text('Option 6 Value', 'Violence'),
+      ]}
+      descriptionLabel={text('Explanation Label', 'Explanation')}
+      descriptionPlaceholder={text('Description Placeholder', 'Please explain your reason(s)')}
+      footerText1Label={text('Footer Text 1 Label', 'If you are unsure, you can refer to our')}
+      footerLink1Label={text('Footer Link 1 Label', 'Code of Conduct')}
+      footerUrl1={text('Footer URL 1', 'https://ethereum.world/code-of-conduct')}
+      cancelLabel={text('Cancel Label', 'Cancel')}
+      reportLabel={text('Save Label', 'Report')}
+      blockLabel={text('Block User Label', 'Block User')}
+      closeLabel={text('Close Label', 'Close')}
+    />
   ))
   .add('Report account modal', () => (
-    <ViewportSizeProvider>
-      <ReportModalComponent
-        titleLabel={text('Title Label', 'Report an Account')}
-        successTitleLabel={text(
-          'Success Title Label',
-          'Thank you for helping us keep Ethereum World safe! 🙌',
-        )}
-        successMessageLabel={text(
-          'Success Content Label',
-          'We will investigate this post and take appropriate action',
-        )}
-        optionsTitleLabel={text('Subtitle Label', 'Please select a reason')}
-        optionLabels={[
-          text('Option 1 Label', 'Suspicious, deceptive, or spam'),
-          text('Option 2 Label', 'Abusive or harmful to others'),
-          text('Option 3 Label', 'Self-harm or suicide'),
-          text('Option 4 Label', 'Illegal'),
-          text('Option 5 Label', 'Nudity'),
-          text('Option 6 Label', 'Violence'),
-        ]}
-        optionValues={[
-          text('Option 1 Value', 'Suspicious, deceptive, or spam'),
-          text('Option 2 Value', 'Abusive or harmful to others'),
-          text('Option 3 Value', 'Self-harm or suicide'),
-          text('Option 4 Value', 'Illegal'),
-          text('Option 5 Value', 'Nudity'),
-          text('Option 6 Value', 'Violence'),
-        ]}
-        descriptionLabel={text('Explanation Label', 'Explanation')}
-        descriptionPlaceholder={text('Description Placeholder', 'Please explain your reason(s)')}
-        footerText1Label={text('Footer Text 1 Label', 'If you are unsure, you can refer to our')}
-        footerLink1Label={text('Footer Link 1 Label', 'Code of Conduct')}
-        footerUrl1={text('Footer URL 1', 'https://ethereum.world/code-of-conduct')}
-        footerText2Label={text('Footer Text 2 Label', 'and')}
-        footerLink2Label={text('Footer Link 2 Label', 'Terms of Service')}
-        footerUrl2={text('Footer URL 2', 'https://ethereum.world/terms-of-service')}
-        cancelLabel={text('Cancel Label', 'Cancel')}
-        reportLabel={text('Save Label', 'Report')}
-        blockLabel={text('Block User Label', 'Block User')}
-        closeLabel={text('Close Label', 'Close')}
-      />
-    </ViewportSizeProvider>
+    <ReportModalComponent
+      titleLabel={text('Title Label', 'Report an Account')}
+      successTitleLabel={text(
+        'Success Title Label',
+        'Thank you for helping us keep Ethereum World safe! 🙌',
+      )}
+      successMessageLabel={text(
+        'Success Content Label',
+        'We will investigate this post and take appropriate action',
+      )}
+      optionsTitleLabel={text('Subtitle Label', 'Please select a reason')}
+      optionLabels={[
+        text('Option 1 Label', 'Suspicious, deceptive, or spam'),
+        text('Option 2 Label', 'Abusive or harmful to others'),
+        text('Option 3 Label', 'Self-harm or suicide'),
+        text('Option 4 Label', 'Illegal'),
+        text('Option 5 Label', 'Nudity'),
+        text('Option 6 Label', 'Violence'),
+      ]}
+      optionValues={[
+        text('Option 1 Value', 'Suspicious, deceptive, or spam'),
+        text('Option 2 Value', 'Abusive or harmful to others'),
+        text('Option 3 Value', 'Self-harm or suicide'),
+        text('Option 4 Value', 'Illegal'),
+        text('Option 5 Value', 'Nudity'),
+        text('Option 6 Value', 'Violence'),
+      ]}
+      descriptionLabel={text('Explanation Label', 'Explanation')}
+      descriptionPlaceholder={text('Description Placeholder', 'Please explain your reason(s)')}
+      footerText1Label={text('Footer Text 1 Label', 'If you are unsure, you can refer to our')}
+      footerLink1Label={text('Footer Link 1 Label', 'Code of Conduct')}
+      footerUrl1={text('Footer URL 1', 'https://ethereum.world/code-of-conduct')}
+      cancelLabel={text('Cancel Label', 'Cancel')}
+      reportLabel={text('Save Label', 'Report')}
+      blockLabel={text('Block User Label', 'Block User')}
+      closeLabel={text('Close Label', 'Close')}
+    />
   ));

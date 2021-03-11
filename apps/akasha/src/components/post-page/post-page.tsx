@@ -27,7 +27,6 @@ const {
   ReportModal,
   ToastProvider,
   ModalRenderer,
-  useViewportSize,
   VirtualList,
   Helmet,
   CommentEditor,
@@ -93,11 +92,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     }
     return null;
   }, [postId, postsState.postsData[postId]]);
-
-  const {
-    size,
-    dimensions: { width },
-  } = useViewportSize();
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
@@ -371,9 +365,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               footerText1Label={t('If you are unsure, you can refer to our')}
               footerLink1Label={t('Code of Conduct')}
               footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
-              footerText2Label={t('and')}
-              footerLink2Label={t('Terms of Service')}
-              footerUrl2={'https://ethereum.world/terms-of-service'}
               cancelLabel={t('Cancel')}
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
@@ -382,8 +373,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               contentId={flagged}
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
-              size={size}
-              width={width}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
             />
