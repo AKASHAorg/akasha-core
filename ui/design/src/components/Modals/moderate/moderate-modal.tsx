@@ -9,6 +9,7 @@ import { Icon } from '../../Icon';
 import { ModalWrapper } from '../common/styled-modal';
 
 import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from '../styled';
+import { useViewportSize } from '../../Providers/viewport-dimension';
 
 export interface IModerateModalProps {
   className?: string;
@@ -18,23 +19,18 @@ export interface IModerateModalProps {
 
   decisionLabel: string;
   optionLabels: string[];
+  optionValues: string[];
 
   descriptionLabel: string;
   descriptionPlaceholder: string;
   footerText1Label: string;
   footerLink1Label: string;
   footerUrl1: string;
-  footerText2Label: string;
-  footerLink2Label: string;
-  footerUrl2: string;
   cancelLabel?: string;
   user: string | null;
   contentId?: string;
   baseUrl: string;
   isReview?: boolean;
-  // screen size and width passed by viewport provider
-  size?: string;
-  width: number;
   // fetch pending items on modalClose
   onModalClose: () => void;
   closeModal: () => void;
@@ -49,21 +45,17 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     contentType,
     decisionLabel,
     optionLabels,
+    optionValues,
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
-    footerText2Label,
     footerLink1Label,
-    footerLink2Label,
     footerUrl1,
-    footerUrl2,
     cancelLabel,
     user,
     contentId,
     baseUrl,
     isReview,
-    size,
-    width,
     onModalClose,
     closeModal,
     signData,
@@ -79,9 +71,14 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
 
   const { addToast } = useToasts();
 
+  const {
+    size,
+    dimensions: { width },
+  } = useViewportSize();
+
   const handleChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (textAreaRef.current && hiddenSpanRef.current) {
-      hiddenSpanRef.current.textContent = ev.currentTarget.value;
+      hiddenSpanRef.current.textContent = ev.currentTarget.value.replace(/  +/g, ' ');
       // calculate the number of rows adding offset value
       const calcRows = Math.floor(
         (hiddenSpanRef.current.offsetWidth + 30) / textAreaRef.current.offsetWidth,
@@ -89,7 +86,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
       // check if text area is empty or not and set rows accordingly
       setRows(prevRows => (calcRows === 0 ? prevRows / prevRows : calcRows + 1));
     }
-    setExplanation(ev.currentTarget.value);
+    setExplanation(ev.currentTarget.value.replace(/  +/g, ' '));
   };
 
   const handleCancel = () => {
@@ -144,9 +141,9 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     const dataToPost = {
       contentId,
       contentType,
-      explanation,
       moderator: user,
       delisted: isDelisted,
+      explanation: explanation.trim(),
     };
 
     setRequesting(true);
@@ -243,17 +240,6 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                 >
                   {footerLink1Label}{' '}
                 </Text>
-                {footerText2Label}{' '}
-                <Text
-                  color="accentText"
-                  size="medium"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    window.open(footerUrl2, footerLink2Label, '_blank noopener noreferrer')
-                  }
-                >
-                  {footerLink2Label}
-                </Text>
               </Text>
             </Box>
             {!!action.length && (
@@ -265,7 +251,11 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                   primary={true}
                   label={action}
                   fill={size === 'small' ? true : false}
-                  onClick={action === 'Delist' ? handleModerate() : handleModerate(false)}
+                  onClick={
+                    optionValues[optionLabels.indexOf(action)] === 'Delist'
+                      ? handleModerate()
+                      : handleModerate(false)
+                  }
                   disabled={requesting || !explanation.length || !action.length}
                 />
               </Box>

@@ -30,7 +30,6 @@ const {
   ModalRenderer,
   ToastProvider,
   ReportModal,
-  useViewportSize,
   ShareModal,
   BoxFormCard,
   EnsFormCard,
@@ -99,11 +98,6 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   } = props;
 
   const [flagged, setFlagged] = React.useState('');
-
-  const {
-    size,
-    dimensions: { width },
-  } = useViewportSize();
 
   const { t } = useTranslation();
 
@@ -269,14 +263,19 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
                 t('Nudity'),
                 t('Violence'),
               ]}
+              optionValues={[
+                'Suspicious, deceptive, or spam',
+                'Abusive or harmful to others',
+                'Self-harm or suicide',
+                'Illegal',
+                'Nudity',
+                'Violence',
+              ]}
               descriptionLabel={t('Explanation')}
               descriptionPlaceholder={t('Please explain your reason(s)')}
               footerText1Label={t('If you are unsure, you can refer to our ')}
               footerLink1Label={t('Code of Conduct')}
               footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
-              footerText2Label={t(' and ')}
-              footerLink2Label={t('Terms of Service')}
-              footerUrl2={'https://ethereum.world/terms-of-service'}
               cancelLabel={t('Cancel')}
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
@@ -285,8 +284,6 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               contentId={profileData.ethAddress ? profileData.ethAddress : flagged}
               contentType="profile"
               baseUrl={BASE_FLAG_URL}
-              size={size}
-              width={width}
               closeModal={closeReportModal}
             />
           </ToastProvider>
