@@ -9,6 +9,7 @@ import { Icon } from '../../Icon';
 
 import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from '../styled';
 import ReportSuccessModal, { IReportSuccessModalProps } from './report-success-modal';
+import { useViewportSize } from '../../Providers/viewport-dimension';
 
 export interface IReportModalProps extends IReportSuccessModalProps {
   titleLabel: string;
@@ -20,17 +21,11 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   footerText1Label: string;
   footerLink1Label: string;
   footerUrl1: string;
-  footerText2Label: string;
-  footerLink2Label: string;
-  footerUrl2: string;
   cancelLabel?: string;
   reportLabel?: string;
   user?: string;
   contentType?: string;
   baseUrl?: string;
-  // screen size and width passed by viewport provider
-  size?: string;
-  width: number;
 }
 
 const ReportModal: React.FC<IReportModalProps> = props => {
@@ -45,11 +40,8 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     descriptionLabel,
     descriptionPlaceholder,
     footerText1Label,
-    footerText2Label,
     footerLink1Label,
-    footerLink2Label,
     footerUrl1,
-    footerUrl2,
     cancelLabel,
     reportLabel,
     blockLabel,
@@ -58,8 +50,6 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     contentId,
     contentType,
     baseUrl,
-    size,
-    width,
     updateEntry,
     closeModal,
   } = props;
@@ -75,9 +65,14 @@ const ReportModal: React.FC<IReportModalProps> = props => {
 
   const { addToast } = useToasts();
 
+  const {
+    size,
+    dimensions: { width },
+  } = useViewportSize();
+
   const handleChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (textAreaRef.current && hiddenSpanRef.current) {
-      hiddenSpanRef.current.textContent = ev.currentTarget.value;
+      hiddenSpanRef.current.textContent = ev.currentTarget.value.replace(/  +/g, ' ');
       // calculate the number of rows adding offset value
       const calcRows = Math.floor(
         (hiddenSpanRef.current.offsetWidth + 30) / textAreaRef.current.offsetWidth,
@@ -85,7 +80,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       // check if text area is empty or not and set rows accordingly
       setRows(prevRows => (calcRows === 0 ? prevRows / prevRows : calcRows + 1));
     }
-    setExplanation(ev.currentTarget.value);
+    setExplanation(ev.currentTarget.value.replace(/  +/g, ' '));
   };
 
   const handleCancel = () => {
@@ -111,7 +106,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       user,
       contentId,
       contentType,
-      explanation,
+      explanation: explanation.trim(),
       reason: optionValues[optionLabels.indexOf(reason)],
     };
 
@@ -240,17 +235,6 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                   }
                 >
                   {footerLink1Label}{' '}
-                </Text>
-                {footerText2Label}{' '}
-                <Text
-                  color="accentText"
-                  size="medium"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    window.open(footerUrl2, footerLink2Label, '_blank noopener noreferrer')
-                  }
-                >
-                  {footerLink2Label}
                 </Text>
               </Text>
             </Box>

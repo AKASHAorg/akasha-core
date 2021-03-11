@@ -69,7 +69,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
       check: {
         color: styledComponentsTheme.colors.white,
         background: {
-          color: styledComponentsTheme.colors.accent,
+          // color: styledComponentsTheme.colors.accent,
         },
       },
       hover: {
@@ -77,7 +77,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
           color: styledComponentsTheme.colors.accent,
         },
         background: {
-          color: styledComponentsTheme.colors.accent,
+          // color: styledComponentsTheme.colors.accent,
         },
       },
     },
