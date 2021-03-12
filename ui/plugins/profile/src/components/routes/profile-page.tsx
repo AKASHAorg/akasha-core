@@ -200,7 +200,9 @@ const ProfilePage = (props: ProfilePageProps) => {
   return (
     <Box fill="horizontal">
       <Helmet>
-        <title>Profile | {`${profileUserName}`}'s Page</title>
+        <title>
+          {t('Profile')} | {t("{{profileUsername}}'s Page", { profileUsername: profileUserName })}
+        </title>
       </Helmet>
       <ModalRenderer slotId={props.layout.app.modalSlotId}>
         {reportModalOpen && (

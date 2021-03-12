@@ -10,12 +10,13 @@ import {
 } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { useFollow, useENSRegistration, useErrors } from '@akashaproject/ui-awf-hooks';
 import { IUserNameOption } from '@akashaproject/design-system/lib/components/Cards/form-cards/ens-form-card';
-import { rootRoute } from '../../routes';
+import menuRoute, { rootRoute, MY_PROFILE } from '../../routes';
 import {
   ProfileUpdateStatus,
   UseProfileActions,
 } from '@akashaproject/ui-awf-hooks/lib/use-profile';
 import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { Route } from 'react-router';
 
 const BASE_URL =
   process.env.NODE_ENV === 'production'
@@ -126,8 +127,8 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
 
   React.useEffect(() => {
     if (profileUpdateStatus.updateComplete && props.modalState[MODAL_NAMES.PROFILE_UPDATE]) {
-      closeProfileUpdateModal();
       props.profileActions.resetUpdateStatus();
+      props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
       return;
     }
     if (ensState.status.registrationComplete && props.modalState[MODAL_NAMES.CHANGE_ENS]) {
@@ -136,8 +137,8 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
           userName: `@${ensState.userName.replace('@', '')}`,
         });
       }
-      closeEnsModal();
       ensActions.resetRegistrationStatus();
+      props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
       return;
     }
   }, [
@@ -185,7 +186,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   };
 
   const closeProfileUpdateModal = () => {
-    props.modalActions.hide(MODAL_NAMES.PROFILE_UPDATE);
+    props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
   };
 
   const onENSSubmit = ({ name, option }: { name: string; option: IUserNameOption }) => {
@@ -198,7 +199,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   };
 
   const closeEnsModal = () => {
-    props.modalActions.hide(MODAL_NAMES.CHANGE_ENS);
+    props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
   };
 
   const closeShareModal = () => {
@@ -206,12 +207,12 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   };
 
   const showUpdateProfileModal = () => {
-    props.modalActions.show(MODAL_NAMES.PROFILE_UPDATE);
+    props.singleSpa.navigateToUrl(`${menuRoute[MY_PROFILE]}/update-info`);
   };
 
   const showEnsModal = () => {
     ensActions.resetRegistrationStatus();
-    props.modalActions.show(MODAL_NAMES.CHANGE_ENS);
+    props.singleSpa.navigateToUrl(`${menuRoute[MY_PROFILE]}/update-ens`);
   };
 
   const showShareModal = () => {
@@ -298,72 +299,80 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
             closeModal={closeShareModal}
           />
         )}
-        {props.modalState[MODAL_NAMES.PROFILE_UPDATE] && profileData.ethAddress && (
-          <ProfileForm
-            titleLabel={t('Ethereum Address')}
-            avatarLabel={t('Avatar')}
-            nameLabel={t('Name')}
-            coverImageLabel={t('Cover Image')}
-            descriptionLabel={t('About me')}
-            uploadLabel={t('Upload')}
-            urlLabel={t('By url')}
-            cancelLabel={t('Cancel')}
-            saveLabel={t('Save')}
-            deleteLabel={t('Delete')}
-            nameFieldPlaceholder={t('Type your name here')}
-            descriptionFieldPlaceholder={t('Add a description about you here')}
-            ethAddress={profileData.ethAddress}
-            providerData={{
-              ...profileData,
-            }}
-            onSave={onProfileUpdateSubmit}
-            onCancel={closeProfileUpdateModal}
-            updateStatus={profileUpdateStatus}
-          />
-        )}
-        {props.modalState[MODAL_NAMES.CHANGE_ENS] && profileData.ethAddress && (
-          <ErrorInfoCard errors={ensErrors}>
-            {(errorMessage, hasCriticalErrors) => (
-              <>
-                {!hasCriticalErrors && (
-                  <ENSForm
-                    titleLabel={t('Add a username')}
-                    secondaryTitleLabel={t('Secondary title')}
-                    nameLabel={t('Select a username')}
-                    errorLabel={t(
-                      'Sorry, this username has already been taken. Please choose another one',
-                    )}
-                    ethAddressLabel={t('Your Ethereum address')}
-                    ethNameLabel={t('Your Ethereum name')}
-                    optionUsername={t('username')}
-                    optionSpecify={t('Specify an Ethereum name')}
-                    optionUseEthereumAddress={t('Use my Ethereum address')}
-                    consentText={t('By creating an account you agree to the ')}
-                    consentUrl="https://ethereum.world/community-agreement"
-                    consentLabel={t('Community Agreement')}
-                    poweredByLabel={t('Username powered by')}
-                    iconLabel={t('ENS')}
-                    cancelLabel={t('Cancel')}
-                    changeButtonLabel={t('Change')}
-                    saveLabel={t('Save')}
-                    nameFieldPlaceholder={`${t('username')}`}
-                    ethAddress={profileData.ethAddress}
-                    providerData={{ name: ensState.userName || '' }}
-                    onSave={onENSSubmit}
-                    onCancel={closeEnsModal}
-                    validateEns={ensActions.validateName}
-                    validEns={ensState.isValidating ? null : ensState.isAvailable}
-                    isValidating={ensState.isValidating}
-                    userNameProviderOptions={[
-                      {
-                        name: 'local',
-                        label: t('Do not use ENS'),
-                      },
-                    ]}
-                    disableInputOnOption={{
-                      ensSubdomain: ensState.alreadyRegistered,
-                    }}
-                    errorMessage={`
+      </ModalRenderer>
+      <Route path={`${menuRoute[MY_PROFILE]}/update-info`}>
+        <ModalRenderer slotId={props.layout.app.modalSlotId}>
+          {profileData.ethAddress && (
+            <ProfileForm
+              titleLabel={t('Ethereum Address')}
+              avatarLabel={t('Avatar')}
+              nameLabel={t('Name')}
+              coverImageLabel={t('Cover Image')}
+              descriptionLabel={t('About me')}
+              uploadLabel={t('Upload')}
+              urlLabel={t('By url')}
+              cancelLabel={t('Cancel')}
+              saveLabel={t('Save')}
+              deleteLabel={t('Delete')}
+              nameFieldPlaceholder={t('Type your name here')}
+              descriptionFieldPlaceholder={t('Add a description about you here')}
+              ethAddress={profileData.ethAddress}
+              providerData={{
+                ...profileData,
+              }}
+              onSave={onProfileUpdateSubmit}
+              onCancel={closeProfileUpdateModal}
+              updateStatus={profileUpdateStatus}
+              showUsername={true}
+            />
+          )}
+        </ModalRenderer>
+      </Route>
+      <Route path={`${menuRoute[MY_PROFILE]}/update-ens`}>
+        <ModalRenderer slotId={props.layout.app.modalSlotId}>
+          {profileData.ethAddress && (
+            <ErrorInfoCard errors={ensErrors}>
+              {(errorMessage, hasCriticalErrors) => (
+                <>
+                  {!hasCriticalErrors && (
+                    <ENSForm
+                      titleLabel={t('Add a username')}
+                      secondaryTitleLabel={t('Secondary title')}
+                      nameLabel={t('Select a username')}
+                      errorLabel={t(
+                        'Sorry, this username has already been taken. Please choose another one',
+                      )}
+                      ethAddressLabel={t('Your Ethereum address')}
+                      ethNameLabel={t('Your Ethereum name')}
+                      optionUsername={t('username')}
+                      optionSpecify={t('Specify an Ethereum name')}
+                      optionUseEthereumAddress={t('Use my Ethereum address')}
+                      consentText={t('By creating an account you agree to the ')}
+                      consentUrl="https://ethereum.world/community-agreement"
+                      consentLabel={t('Community Agreement')}
+                      poweredByLabel={t('Username powered by')}
+                      iconLabel={t('ENS')}
+                      cancelLabel={t('Cancel')}
+                      changeButtonLabel={t('Change')}
+                      saveLabel={t('Save')}
+                      nameFieldPlaceholder={`${t('username')}`}
+                      ethAddress={profileData.ethAddress}
+                      providerData={{ name: ensState.userName || '' }}
+                      onSave={onENSSubmit}
+                      onCancel={closeEnsModal}
+                      validateEns={ensActions.validateName}
+                      validEns={ensState.isValidating ? null : ensState.isAvailable}
+                      isValidating={ensState.isValidating}
+                      userNameProviderOptions={[
+                        {
+                          name: 'local',
+                          label: t('Do not use ENS'),
+                        },
+                      ]}
+                      disableInputOnOption={{
+                        ensSubdomain: ensState.alreadyRegistered,
+                      }}
+                      errorMessage={`
                         ${ensState.errorMessage ? ensState.errorMessage : ''}
                         ${
                           errorMessage
@@ -374,14 +383,15 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
                             : ''
                         }
                         `}
-                    registrationStatus={ensState.status}
-                  />
-                )}
-              </>
-            )}
-          </ErrorInfoCard>
-        )}
-      </ModalRenderer>
+                      registrationStatus={ensState.status}
+                    />
+                  )}
+                </>
+              )}
+            </ErrorInfoCard>
+          )}
+        </ModalRenderer>
+      </Route>
       <ProfileCard
         onClickFollowers={() => null}
         onClickFollowing={() => null}

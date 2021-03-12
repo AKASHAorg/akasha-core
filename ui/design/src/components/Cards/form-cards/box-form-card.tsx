@@ -15,6 +15,7 @@ import {
   StyledCoverImagePlaceholderDiv,
   StyledImage,
   StyledText,
+  StyledTextInput,
 } from './styled-form-card';
 
 export interface IBoxFormCardProps {
@@ -23,6 +24,7 @@ export interface IBoxFormCardProps {
   avatarLabel?: string;
   coverImageLabel?: string;
   nameLabel?: string;
+  usernameLabel?: string;
   descriptionLabel?: string;
   cancelLabel?: string;
   saveLabel?: string;
@@ -32,12 +34,18 @@ export interface IBoxFormCardProps {
   deleteLabel?: string;
   // props
   nameFieldPlaceholder: string;
+  usernameFieldPlaceholder?: string;
   descriptionFieldPlaceholder: string;
   ethAddress: string;
   providerData: IBoxData;
   onSave: (data: any) => void;
   onCancel?: () => void;
   updateStatus: any;
+  usernameFieldInfo?: string;
+  showUsername?: boolean;
+  isValidatingUsername?: boolean;
+  usernameError?: string;
+  usernameSuccess?: string;
 }
 
 export interface IImageSrc {
@@ -56,6 +64,7 @@ export interface IFormValues {
   avatar?: IImageSrc | null;
   coverImage?: IImageSrc | null;
   name?: string;
+  username?: string;
   description?: string;
 }
 
@@ -66,6 +75,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     avatarLabel,
     coverImageLabel,
     nameLabel,
+    usernameLabel,
     descriptionLabel,
     cancelLabel,
     saveLabel,
@@ -73,11 +83,17 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     urlLabel,
     deleteLabel,
     nameFieldPlaceholder,
+    usernameFieldPlaceholder,
     descriptionFieldPlaceholder,
-    ethAddress,
+    isValidatingUsername,
+    // ethAddress,
     providerData,
     onSave,
     updateStatus,
+    showUsername,
+    usernameFieldInfo,
+    usernameError,
+    usernameSuccess,
   } = props;
 
   const [avatarPopoverOpen, setAvatarPopoverOpen] = React.useState(false);
@@ -108,10 +124,6 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
       ...images,
     }));
   }, [JSON.stringify(providerData)]);
-
-  const handleCopyEthAddress = () => {
-    navigator.clipboard.writeText(ethAddress);
-  };
 
   const handleAvatarClick = () => {
     setAvatarPopoverOpen(true);
@@ -156,38 +168,142 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     }
   };
 
+  const handleUsernameChange = () => {};
+  const renderIcon = () => {
+    if (isValidatingUsername) {
+      return <Icon type="loading" />;
+    }
+    if (usernameError) {
+      return <Icon type="error" />;
+    }
+    if (usernameSuccess) {
+      return <Icon type="check" accentColor={true} />;
+    }
+    return;
+  };
+
   return (
     <StyledLayer className={className}>
       <MainAreaCardBox>
         <Box direction="column" pad="medium" height={{ min: 'fit-content' }}>
           <Box direction="column" pad="xsmall">
-            <Text weight="bold"> {titleLabel}</Text>
-            <Box direction="row" gap="xxsmall" pad={{ bottom: 'xsmall' }} align="center">
-              <Text color="secondaryText">{ethAddress}</Text>
-              <Icon type="copy" onClick={handleCopyEthAddress} clickable={true} />
-            </Box>
+            <Text
+              size="large"
+              textAlign="center"
+              style={{ userSelect: 'none', paddingBottom: '1.5em' }}
+            >
+              {titleLabel}
+            </Text>
           </Box>
           <Box direction="column" pad="xsmall">
-            <StyledText color="secondaryText" size="small">
-              {avatarLabel}
-            </StyledText>
-            {(!formValues.avatar || !formValues.avatar.preview) && (
-              <StyledAvatarPlaceholderDiv onClick={handleAvatarClick} active={avatarPopoverOpen}>
-                <Icon type="image" ref={avatarRef} />
-              </StyledAvatarPlaceholderDiv>
-            )}
-            {formValues.avatar && (
-              <StyledAvatarDiv onClick={handleAvatarClick}>
-                <StyledImage src={formValues.avatar.preview} fit="contain" />
-                <StyledAvatarOverlay>
-                  <Icon type="editSimple" ref={avatarRef} />
-                </StyledAvatarOverlay>
-              </StyledAvatarDiv>
-            )}
+            <Box direction="row" justify="start">
+              <Box direction="column" flex={{ shrink: 0, grow: 1 }}>
+                <StyledText
+                  style={{ margin: '0.5rem', lineHeight: 2, userSelect: 'none' }}
+                  color="secondaryText"
+                  size="small"
+                  title={avatarLabel}
+                >
+                  {avatarLabel}
+                </StyledText>
 
+                {(!formValues.avatar || !formValues.avatar.preview) && (
+                  <StyledAvatarPlaceholderDiv
+                    onClick={handleAvatarClick}
+                    active={avatarPopoverOpen}
+                  >
+                    <Icon type="image" ref={avatarRef} />
+                  </StyledAvatarPlaceholderDiv>
+                )}
+                {formValues.avatar && (
+                  <StyledAvatarDiv onClick={handleAvatarClick}>
+                    <StyledImage src={formValues.avatar.preview} fit="contain" />
+                    <StyledAvatarOverlay>
+                      <Icon type="editSimple" ref={avatarRef} />
+                    </StyledAvatarOverlay>
+                  </StyledAvatarDiv>
+                )}
+              </Box>
+              <Box
+                justify="start"
+                fill="horizontal"
+                flex={{ shrink: 1, grow: 1 }}
+                margin={{ left: '0.5em' }}
+              >
+                <FormField
+                  name="name"
+                  htmlFor="form-name-input"
+                  margin="0"
+                  contentProps={{ margin: { left: '1em' } }}
+                  label={
+                    <StyledText
+                      size="small"
+                      color="secondaryText"
+                      style={{ verticalAlign: 'text-top', userSelect: 'none' }}
+                    >
+                      {nameLabel} <Text color="accent">*</Text>
+                    </StyledText>
+                  }
+                >
+                  <TextInput
+                    id="form-name-input"
+                    name="name"
+                    value={formValues.name}
+                    onChange={(ev: React.ChangeEvent<HTMLInputElement>) =>
+                      handleFormFieldChange({ name: ev.target.value })
+                    }
+                    placeholder={nameFieldPlaceholder}
+                    size="large"
+                    style={{
+                      width: '100%',
+                      padding: '1em 0',
+                    }}
+                  />
+                </FormField>
+              </Box>
+            </Box>
+            {showUsername && (
+              <Box pad={{ top: 'small' }} justify="start" fill="horizontal">
+                <Box direction="row" align="center">
+                  <StyledText
+                    size="small"
+                    margin={{ bottom: '0.5em', left: '0' }}
+                    color="secondaryText"
+                    style={{ userSelect: 'none' }}
+                  >
+                    {usernameLabel} <Text color="accent">*</Text>
+                  </StyledText>
+                </Box>
+                <FormField
+                  name="name"
+                  htmlFor="username-input"
+                  info={
+                    <Text color="secondaryText" style={{ fontSize: '0.6em' }}>
+                      {usernameFieldInfo}
+                    </Text>
+                  }
+                >
+                  <Box justify="between" direction="row">
+                    <Box fill="horizontal" direction="row" align="center">
+                      {'@'}
+                      <StyledTextInput
+                        spellCheck={false}
+                        computedWidth={'100%'}
+                        id="username-input"
+                        value={formValues.username}
+                        onChange={handleUsernameChange}
+                        placeholder={usernameFieldPlaceholder}
+                      />
+                    </Box>
+                    {renderIcon()}
+                  </Box>
+                </FormField>
+              </Box>
+            )}
             <StyledText color="secondaryText" size="small">
               {coverImageLabel}
             </StyledText>
+
             {(!formValues.coverImage || !formValues.coverImage.preview) && (
               <StyledCoverImagePlaceholderDiv
                 onClick={handleCoverImageClick}
@@ -196,6 +312,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
                 <Icon type="image" ref={coverImageRef} />
               </StyledCoverImagePlaceholderDiv>
             )}
+
             {formValues.coverImage && formValues.coverImage.preview && (
               <StyledCoverImageDiv onClick={handleCoverImageClick}>
                 <StyledCoverImageOverlay>
@@ -204,27 +321,9 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
                 <StyledImage src={formValues.coverImage.preview} fit="contain" />
               </StyledCoverImageDiv>
             )}
-
-            <FormField
-              name="name"
-              htmlFor="3box-form-name-input"
-              label={
-                <StyledText color="secondaryText" size="small">
-                  {nameLabel}
-                </StyledText>
-              }
-            >
-              <TextInput
-                id="3box-form-name-input"
-                name="name"
-                value={formValues.name}
-                onChange={(ev: any) => handleFormFieldChange({ name: ev.target.value })}
-                placeholder={nameFieldPlaceholder}
-              />
-            </FormField>
             <FormField
               name="description"
-              htmlFor="3box-form-description-textarea"
+              htmlFor="form-description-textarea"
               label={
                 <StyledText color="secondaryText" size="small">
                   {descriptionLabel}
@@ -232,7 +331,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
               }
             >
               <TextArea
-                id="3box-form-description-textarea"
+                id="form-description-textarea"
                 name="description"
                 value={formValues.description}
                 onChange={ev => handleFormFieldChange({ description: ev.target.value })}
@@ -252,6 +351,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             </Box>
           </Box>
         </Box>
+
         {avatarPopoverOpen && avatarRef.current && (
           <FormImagePopover
             uploadLabel={uploadLabel}
@@ -264,6 +364,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             handleDeleteImage={() => handleFormFieldChange({ avatar: null })}
           />
         )}
+
         {coverImagePopoverOpen && coverImageRef.current && (
           <FormImagePopover
             uploadLabel={uploadLabel}
@@ -283,6 +384,10 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
 
 BoxFormCard.defaultProps = {
   nameLabel: 'Name',
+  usernameLabel: 'Username',
+  usernameFieldPlaceholder: 'username',
+  usernameFieldInfo:
+    'Your username identifies you in Ethereum World. Once you choose one, you won’t be able to change it.',
   descriptionLabel: 'About',
   titleLabel: 'Ethereum Address',
   avatarLabel: 'Avatar',
