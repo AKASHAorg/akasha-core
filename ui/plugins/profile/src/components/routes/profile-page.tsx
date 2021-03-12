@@ -69,30 +69,36 @@ const ProfilePage = (props: ProfilePageProps) => {
   const virtualListRef = React.useRef<any>(null);
 
   const resetListState = () => {
-    if (virtualListRef.current) {
-      postsActions.resetPostIds();
+    postsActions.resetPostIds();
+    // virtualListRef.current.reset();
+  };
+  React.useEffect(() => {
+    if (postsState.postIds.length === 0 && virtualListRef.current) {
       virtualListRef.current.reset();
     }
-  };
+  }, [postsState.postIds]);
 
   React.useEffect(() => {
     // reset post ids and virtual list, if user logs in
-    resetListState();
+    if (loggedEthAddress) {
+      resetListState();
+    }
   }, [loggedEthAddress]);
 
-  React.useEffect(() => {
-    // if post ids array is reset, get user posts
-    if (
-      postsState.postIds.length === 0 &&
-      !postsState.isFetchingPosts &&
-      postsState.totalItems === null
-    ) {
-      postsActions.getUserPosts({ pubKey, limit: 5 });
-    }
-  }, [postsState.postIds, postsState.isFetchingPosts]);
+  // React.useEffect(() => {
+  //   // if post ids array is reset, get user posts
+  //   if (
+  //     postsState.postIds.length === 0 &&
+  //     !postsState.isFetchingPosts &&
+  //     postsState.totalItems === null
+  //   ) {
+  //     postsActions.getUserPosts({ pubKey, limit: 5 });
+  //   }
+  // }, [postsState.postIds, postsState.isFetchingPosts]);
 
   React.useEffect(() => {
     if (pubKey) {
+      profileActions.resetProfileData();
       profileActions.getProfileData({ pubKey });
       resetListState();
     }
@@ -136,8 +142,6 @@ const ProfilePage = (props: ProfilePageProps) => {
           return;
         }
         url = `/profile/${details.entryId}`;
-        resetListState();
-        profileActions.resetProfileData();
         break;
       case ItemTypes.TAG:
         url = `/AKASHA-app/tags/${details.entryId}`;

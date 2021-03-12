@@ -10,15 +10,7 @@ import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
 import { ITag } from '@akashaproject/design-system/lib/components/Cards/widget-cards/trending-widget-card';
 
-const {
-  Box,
-  ReportModal,
-  ToastProvider,
-  ModalRenderer,
-  useViewportSize,
-  TagProfileCard,
-  Helmet,
-} = DS;
+const { Box, ReportModal, ToastProvider, ModalRenderer, TagProfileCard, Helmet } = DS;
 
 interface IPostPage {
   loggedProfileData?: any;
@@ -110,11 +102,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   const { t } = useTranslation();
 
-  const {
-    size,
-    dimensions: { width },
-  } = useViewportSize();
-
   const handleLoadMore = (payload: ILoadItemsPayload) => {
     const req: { limit: number; offset?: string } = {
       limit: payload.limit,
@@ -197,7 +184,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
-              titleLabel={t('Report a post')}
+              titleLabel={t('Report a Post')}
               successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
@@ -209,24 +196,27 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                 t('Nudity'),
                 t('Violence'),
               ]}
+              optionValues={[
+                'Suspicious, deceptive, or spam',
+                'Abusive or harmful to others',
+                'Self-harm or suicide',
+                'Illegal',
+                'Nudity',
+                'Violence',
+              ]}
               descriptionLabel={t('Explanation')}
               descriptionPlaceholder={t('Please explain your reason(s)')}
               footerText1Label={t('If you are unsure, you can refer to our')}
               footerLink1Label={t('Code of Conduct')}
               footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
-              footerText2Label={t('and')}
-              footerLink2Label={t('Terms of Service')}
-              footerUrl2={'https://ethereum.world/terms-of-service'}
               cancelLabel={t('Cancel')}
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
               closeLabel={t('Close')}
-              user={loginState.ethAddress || ''}
+              user={loginState.ethAddress ? loginState.ethAddress : ''}
               contentId={flagged}
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
-              size={size}
-              width={width}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
             />

@@ -115,6 +115,7 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
       end: items.length,
     });
     window.scrollTo({ top: 0 });
+    console.log('RESETING STATE+++++++++++++', items);
   };
 
   React.useLayoutEffect(() => {
@@ -157,7 +158,7 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
         getScrollTop: viewportActions.getScrollTop,
       }),
     );
-  }, []);
+  }, [items.length]);
 
   const lastRenderedIdx = React.useMemo(
     () =>
@@ -338,7 +339,16 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   const getRenderSlice = () => {
     return items.slice(slice.start, slice.end);
   };
-
+  console.log(
+    '=========POSITIONS=====',
+    itemPositions,
+    'ITEMS: ',
+    items,
+    'ScrollData: ',
+    scrollData,
+    'ITEM REFS: ',
+    itemRefs.current,
+  );
   return (
     <div
       ref={rootContainerRef}
