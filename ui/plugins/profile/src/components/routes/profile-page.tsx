@@ -66,41 +66,18 @@ const ProfilePage = (props: ProfilePageProps) => {
     user: loggedEthAddress,
   });
 
-  const virtualListRef = React.useRef<any>(null);
-
-  const resetListState = () => {
-    postsActions.resetPostIds();
-    // virtualListRef.current.reset();
-  };
-  React.useEffect(() => {
-    if (postsState.postIds.length === 0 && virtualListRef.current) {
-      virtualListRef.current.reset();
-    }
-  }, [postsState.postIds]);
-
   React.useEffect(() => {
     // reset post ids and virtual list, if user logs in
     if (loggedEthAddress) {
-      resetListState();
+      postsActions.resetPostIds();
     }
   }, [loggedEthAddress]);
-
-  // React.useEffect(() => {
-  //   // if post ids array is reset, get user posts
-  //   if (
-  //     postsState.postIds.length === 0 &&
-  //     !postsState.isFetchingPosts &&
-  //     postsState.totalItems === null
-  //   ) {
-  //     postsActions.getUserPosts({ pubKey, limit: 5 });
-  //   }
-  // }, [postsState.postIds, postsState.isFetchingPosts]);
 
   React.useEffect(() => {
     if (pubKey) {
       profileActions.resetProfileData();
       profileActions.getProfileData({ pubKey });
-      resetListState();
+      postsActions.resetPostIds();
     }
   }, [pubKey]);
 
@@ -264,7 +241,6 @@ const ProfilePage = (props: ProfilePageProps) => {
       <FeedWidget
         // pass i18n from props (the i18next instance, not the react one!)
         i18n={props.i18n}
-        virtualListRef={virtualListRef}
         itemType={ItemTypes.ENTRY}
         logger={props.logger}
         loadMore={handleLoadMore}

@@ -75,18 +75,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     onError: errorActions.createError,
   });
 
-  const virtualListRef = React.useRef<any>(null);
-
-  const resetListState = () => {
-    if (virtualListRef.current) {
-      postsActions.resetPostIds();
-      virtualListRef.current.reset();
-    }
-  };
-
   React.useEffect(() => {
     // reset post ids and virtual list, if user logs in or tag changes
-    resetListState();
+    postsActions.resetPostIds();
   }, [loginState.ethAddress, tagName]);
 
   React.useEffect(() => {
@@ -123,7 +114,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         break;
       case ItemTypes.TAG:
         url = `/AKASHA-app/tags/${details.entryId}`;
-        resetListState();
+        postsActions.resetPostIds();
         break;
       case ItemTypes.ENTRY:
         url = `/AKASHA-app/post/${details.entryId}`;
@@ -232,7 +223,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       <FeedWidget
         // pass i18n from props (the i18next instance, not the react one!)
         i18n={props.i18n}
-        virtualListRef={virtualListRef}
         itemType={ItemTypes.ENTRY}
         logger={props.logger}
         loadMore={handleLoadMore}
