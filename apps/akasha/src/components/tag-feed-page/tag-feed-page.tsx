@@ -50,11 +50,11 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       });
       tagsService.subscribe((resp: any) => {
         if (resp.data?.getTag) {
-          const tagData = {
+          const tag = {
             name: resp.data.getTag.name,
             totalPosts: resp.data.getTag.posts?.length + resp.data.getTag.comments?.length,
           };
-          setTagData(tagData);
+          setTagData(tag);
         }
       });
     }
@@ -160,19 +160,19 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     postsActions.updatePostsState(modifiedEntry);
   };
 
-  const handleTagSubscribe = (tagName: string) => {
+  const handleTagSubscribe = (name: string) => {
     if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
-    tagSubscriptionActions.toggleTagSubscription(tagName);
+    tagSubscriptionActions.toggleTagSubscription(name);
   };
-  const handleTagUnsubscribe = (tagName: string) => {
+  const handleTagUnsubscribe = (name: string) => {
     if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
-    tagSubscriptionActions.toggleTagSubscription(tagName);
+    tagSubscriptionActions.toggleTagSubscription(name);
   };
 
   return (
