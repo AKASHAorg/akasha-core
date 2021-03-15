@@ -164,16 +164,16 @@ const TopbarComponent = (props: TopBarProps) => {
   return (
     <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
       <Topbar
-        avatarImage={loggedProfileData.avatar}
+        loggedProfileData={loggedProfileData}
         brandLabel="Ethereum World"
         signInLabel={t('Sign In')}
         signUpLabel={t('Sign Up')}
         signOutLabel={t('Sign Out')}
         searchBarLabel={t('Search profiles or topics')}
+        versionLabel="ALPHA"
         onNavigation={handleNavigation}
         onSearch={handleSearch}
         onSidebarToggle={toggleSidebar}
-        ethAddress={loginState.ethAddress}
         quickAccessItems={loginState.ethAddress ? sortedQuickAccessItems : null}
         searchAreaItem={searchAreaItem}
         size={size}

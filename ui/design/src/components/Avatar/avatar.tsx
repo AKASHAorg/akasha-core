@@ -7,7 +7,7 @@ import AvatarImage from './avatar-image';
 import StyledAvatar, { AvatarSize } from './styled-avatar';
 
 export interface AvatarProps extends CommonInterface<HTMLDivElement> {
-  ethAddress: string | null;
+  ethAddress?: string | null;
   src?: string;
   onClick?: React.MouseEventHandler<any>;
   alt?: string;

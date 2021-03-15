@@ -15,12 +15,13 @@ import {
 } from './styled-topbar';
 import styled from 'styled-components';
 import { Button } from '../../Buttons';
+import { IProfileData } from '../../Cards/profile-cards/profile-widget-card';
 
 export interface ITopbarProps {
   // data
-  avatarImage?: string;
-  ethAddress: string | null;
+  loggedProfileData?: Partial<IProfileData>;
   brandLabel: string;
+  versionLabel?: string;
   signInLabel?: string;
   signUpLabel?: string;
   signOutLabel?: string;
@@ -50,8 +51,8 @@ const BrandIcon = styled(Icon)`
 
 const Topbar = (props: ITopbarProps) => {
   const {
-    avatarImage,
     brandLabel,
+    versionLabel,
     signInLabel,
     signUpLabel,
     signOutLabel,
@@ -62,11 +63,11 @@ const Topbar = (props: ITopbarProps) => {
     onSearch,
     onNavigation,
     // onSidebarToggle,
-    ethAddress,
     size,
     onLoginClick,
     onLogout,
     notifications,
+    loggedProfileData,
   } = props;
 
   const [inputValue, setInputValue] = React.useState('');
@@ -171,11 +172,10 @@ const Topbar = (props: ITopbarProps) => {
             <StyledText>{menuItem.label}</StyledText>
           </Box>
         ))}
-        {ethAddress && (
-          <Box fill="horizontal" justify="start" direction="row" onClick={onLogout}>
-            <StyledText>{signOutLabel}</StyledText>
-          </Box>
-        )}
+
+        <Box fill="horizontal" justify="start" direction="row" onClick={onLogout}>
+          <StyledText>{signOutLabel}</StyledText>
+        </Box>
       </Box>
     </StyledDrop>
   );
@@ -204,8 +204,8 @@ const Topbar = (props: ITopbarProps) => {
     >
       {menuItem.logo?.type === LogoTypeSource.AVATAR ? (
         <Avatar
-          ethAddress={ethAddress}
-          src={avatarImage}
+          ethAddress={loggedProfileData?.ethAddress}
+          src={loggedProfileData?.avatar}
           size="xs"
           onClick={onClickAvatarButton(menuItem)}
         />
@@ -256,20 +256,19 @@ const Topbar = (props: ITopbarProps) => {
     }
     return (
       <>
-        <Box
-          direction="row"
-          gap="small"
-          align="center"
-          pad={{ right: 'medium' }}
-          onClick={() => {
-            onNavigation('/');
-          }}
-          flex={{ shrink: 0 }}
-        >
-          <BrandIcon type="ethereumWorldLogo" clickable={true} />
-          {size !== 'small' && <StyledText size="large">{brandLabel}</StyledText>}
+        <Box direction="row" pad={{ right: 'medium' }} align="center" flex={{ shrink: 0 }}>
+          <Box
+            direction="row"
+            gap="small"
+            align="center"
+            onClick={() => {
+              onNavigation('/');
+            }}
+          >
+            <BrandIcon type="ethereumWorldLogo" clickable={true} />
+            {size !== 'small' && <StyledText size="large">{brandLabel}</StyledText>}
+          </Box>
         </Box>
-
         <Box
           direction="row"
           align="center"
@@ -280,7 +279,7 @@ const Topbar = (props: ITopbarProps) => {
         >
           {renderSearchArea()}
           {quickAccessItems && quickAccessItems.map(renderPluginButton)}
-          {!ethAddress && (
+          {!loggedProfileData?.ethAddress && (
             <Box direction="row" align="center" gap="small">
               <Button onClick={onLoginClick} label={signInLabel} />
               <Button primary={true} onClick={onLoginClick} label={signUpLabel} />
