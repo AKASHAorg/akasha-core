@@ -92,14 +92,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   }, [JSON.stringify(errorState)]);
 
-  const virtualListRef = React.useRef<{ reset: () => void } | undefined>();
-
   React.useEffect(() => {
     if (loginState.currentUserCalled) {
       postsActions.resetPostIds();
-      if (virtualListRef.current) {
-        virtualListRef.current.reset();
-      }
       if (loginState.ethAddress) {
         bookmarkActions.getBookmarks();
       }
@@ -298,7 +293,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         loadItemData={loadItemData}
         hasMoreItems={!!postsState.nextPostIndex}
         usePlaceholders={true}
-        ref={virtualListRef}
         listHeader={
           loginState.ethAddress ? (
             <EditorPlaceholder

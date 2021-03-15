@@ -31,6 +31,7 @@ const CardRenderer = (props: IRenderItemProps) => {
     averageItemHeight,
     itemIndex,
     className,
+    onItemUnmount,
   } = props;
 
   const beforeEntities = customEntities.filter(
@@ -47,8 +48,8 @@ const CardRenderer = (props: IRenderItemProps) => {
 
   React.useEffect(() => {
     return () => {
-      if (updateRef) {
-        updateRef(itemId, null, true);
+      if (onItemUnmount) {
+        onItemUnmount(itemId, itemRect);
       }
     };
   }, []);

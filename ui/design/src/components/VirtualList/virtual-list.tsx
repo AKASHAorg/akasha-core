@@ -1,6 +1,5 @@
 import throttle from 'lodash.throttle';
 import * as React from 'react';
-// import throttle from 'lodash.throttle';
 import { AnchorData, ItemRects, IVirtualListProps } from './interfaces';
 import ListViewport from './list-viewport';
 import { rectFromDOMRect, Rect } from './rect';
@@ -78,6 +77,7 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   });
   const [, viewportActions] = useViewport(initialPaddingTop);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [unmounting, setUnmounting] = React.useState<string[]>([]);
 
   const [anchorData, setAnchorData] = React.useState<AnchorData>({
     anchor: { index: 0, offset: 0 },
@@ -115,7 +115,6 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
       end: items.length,
     });
     window.scrollTo({ top: 0 });
-    console.log('RESETING STATE+++++++++++++', items);
   };
 
   React.useLayoutEffect(() => {
@@ -275,9 +274,48 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
     }
   }, [items, scrollData.current]);
 
-  const onRefUpdate = (itemId: string, itemRef: any, isUnmounting?: boolean) => {
-    const itemRect = itemPositions.rects.get(itemId);
+  /**
+   * hook to keep the external state (props.items)
+   * in sync with the internal state
+   * when props.items.length === 0
+   * the list will automatically reset it's
+   * internal state.
+   */
+  React.useMemo(() => {
+    if (!unmounting.length) {
+      return;
+    }
+    setPositions(prev => {
+      const newRects = new Map(prev.rects);
+      const rem = unmounting.slice();
+      unmounting.forEach(item => {
+        // keep the item if it's still in the list!
+        if (items.includes(item)) {
+          return;
+        }
+        scrollData.current.loadedIds.splice(scrollData.current.loadedIds.indexOf(item), 1);
+        scrollData.current.items.splice(scrollData.current.items.indexOf(item), 1);
+        newRects.delete(item);
+        delete itemRefs.current[item];
+        rem.splice(rem.indexOf(item), 1);
+      });
 
+      if (rem.length !== unmounting.length) {
+        setUnmounting(rem);
+      }
+
+      if (newRects.size === prev.rects.size) {
+        return prev;
+      }
+      return {
+        rects: newRects,
+        listHeight: !items.length ? 0 : prev.listHeight,
+      };
+    });
+  }, [unmounting.length, items.length]);
+
+  const onRefUpdate = (itemId: string, itemRef: any) => {
+    const itemRect = itemPositions.rects.get(itemId);
     if (itemRect && itemRect.canRender && !scrollData.current.loadedIds.includes(itemId)) {
       scrollData.current.loadedIds.push(itemId);
     }
@@ -310,18 +348,7 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
           itemPositions.rects?.size;
       }
     }
-    if (itemRefs.current[itemId] && isUnmounting && items.indexOf(itemId) < 0) {
-      scrollData.current.loadedIds.splice(scrollData.current.loadedIds.indexOf(itemId), 1);
-      let itemHeight = averageItemHeight + itemSpacing;
-      if (itemRect) {
-        itemHeight = itemRect.rect.getHeight() + itemSpacing;
-      }
-      setPositions(prev => ({
-        ...prev,
-        listHeight: prev.listHeight - itemHeight,
-      }));
-    }
-    if (!itemRefs.current[itemId] && itemRef && !isUnmounting) {
+    if (!itemRefs.current[itemId] && itemRef) {
       itemRefs.current[itemId] = itemRef;
       setPositions(prev =>
         getInitialRect({
@@ -339,16 +366,13 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   const getRenderSlice = () => {
     return items.slice(slice.start, slice.end);
   };
-  console.log(
-    '=========POSITIONS=====',
-    itemPositions,
-    'ITEMS: ',
-    items,
-    'ScrollData: ',
-    scrollData,
-    'ITEM REFS: ',
-    itemRefs.current,
-  );
+
+  const handleItemUnmount = (itemId: string) => {
+    if (!unmounting.includes(itemId)) {
+      setUnmounting(prev => prev.concat(itemId));
+    }
+  };
+
   return (
     <div
       ref={rootContainerRef}
@@ -380,6 +404,7 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
         listHeader={listHeader}
         usePlaceholders={usePlaceholders}
         loadLimit={loadLimit}
+        onItemUnmount={handleItemUnmount}
       />
     </div>
   );

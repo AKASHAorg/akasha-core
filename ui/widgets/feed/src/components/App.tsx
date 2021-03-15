@@ -19,7 +19,7 @@ export const enum ItemTypes {
 export interface IFeedWidgetProps {
   logger: any;
   i18n: i18n;
-  virtualListRef: any;
+  virtualListRef?: any;
   globalChannel?: any;
   sdkModules: any;
   layout: any;
