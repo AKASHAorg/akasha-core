@@ -145,8 +145,10 @@ const ContentList: React.FC<IContentListProps> = props => {
     setContentType(content);
   };
 
-  const renderNotFound = (type: string) => {
-    return <Text textAlign="center">{t(`No ${type} items found. Please check again later`)}</Text>;
+  const renderNotFound = (activeTab: string) => {
+    return (
+      <Text textAlign="center">{t(`No ${activeTab} items found. Please check again later`)}</Text>
+    );
   };
 
   if (ethAddress && !isAuthorised) {
@@ -184,8 +186,8 @@ const ContentList: React.FC<IContentListProps> = props => {
               isReview={!isPending}
               onModalClose={() => {
                 setModalOpen(false);
-                // on modal close, fetch moderated contents
-                fetchModeratedContents();
+                // on modal close, update current contents in view
+                isPending ? fetchPendingContents() : fetchModeratedContents();
               }}
               closeModal={() => {
                 setModalOpen(false);
