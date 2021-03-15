@@ -19,7 +19,7 @@ const { Box, EntryCard, EntryCardHidden } = DS;
 
 storiesOf('Cards/Entry Cards', module)
   .add('entry card', () => (
-    <Box align="center" pad={{ top: '40px' }}>
+    <Box align="center" pad={{ top: '40px' }} width="582px">
       <EntryCard
         flagAsLabel={text('Flag as label', flagAsLabel)}
         style={{ height: 'auto' }}
@@ -53,7 +53,7 @@ storiesOf('Cards/Entry Cards', module)
     </Box>
   ))
   .add('entry card hidden', () => (
-    <Box align="center" pad={{ top: '40px' }}>
+    <Box align="center" pad={{ top: '40px' }} width="582px">
       <EntryCardHidden
         awaitingModerationLabel={text(
           'Description Label',

@@ -23,7 +23,8 @@ export interface IEntryCardRendererProps {
   onRepost: (withComment: boolean, entryData: any) => void;
   sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
-  onMentionClick: (ethAddress: string) => void;
+  onMentionClick: (pubKey: string) => void;
+  onTagClick: (name: string) => void;
   bookmarkState?: IBookmarkState;
   style?: React.CSSProperties;
   contentClickable?: boolean;
@@ -154,6 +155,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   isFollowingAuthor={isFollowing}
                   onContentClick={props.onNavigate}
                   onMentionClick={props.onMentionClick}
+                  onTagClick={props.onTagClick}
                   contentClickable={contentClickable}
                   hidePublishTime={hidePublishTime}
                   moderatedContentLabel={moderatedContentLabel}

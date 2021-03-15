@@ -10,7 +10,7 @@ const { Box, BoxFormCard, EnsFormCard } = DS;
 
 storiesOf('Cards/Form Cards', module)
   .add('3Box form card', () => (
-    <Box align="center" pad={{ top: '40px' }}>
+    <Box align="center" pad={{ top: '40px' }} width="582px">
       <BoxFormCard
         uploadLabel={text('Upload Label', 'Upload an image')}
         urlLabel={text('url Label', 'By url')}
@@ -36,7 +36,7 @@ storiesOf('Cards/Form Cards', module)
     </Box>
   ))
   .add('ENS form card', () => (
-    <Box align="center" pad={{ top: '40px' }}>
+    <Box align="center" pad={{ top: '40px' }} width="582px">
       <EnsFormCard
         titleLabel={text('Title Label', 'Add a Username')}
         secondaryTitleLabel={text('Secondary Title Label', 'Ethereum Name')}

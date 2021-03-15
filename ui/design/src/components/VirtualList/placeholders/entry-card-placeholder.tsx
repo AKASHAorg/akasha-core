@@ -9,7 +9,7 @@ export interface IPlaceholderProps {
   animated?: boolean;
 }
 
-const TextLine = styled(Box)<{ animated?: boolean }>`
+export const TextLine = styled(Box)<{ animated?: boolean }>`
   min-height: 18px;
   ${props => {
     if (props.animated) {
