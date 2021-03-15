@@ -98,6 +98,8 @@ export interface GetEntriesResponse {
   data: { posts: { nextIndex: string; results: any[]; total: number } };
 }
 
+// tslint:disable:cyclomatic-complexity
+/* eslint-disable complexity */
 const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
   const { user, postsService, ipfsService, logger, onError } = props;
   const [postsState, setPostsState] = React.useState<PostsState>({
@@ -676,5 +678,6 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
   };
   return [postsState, actions];
 };
-
+// tslint:disable:cyclomatic-complexity
+/* eslint-disable complexity */
 export default usePosts;
