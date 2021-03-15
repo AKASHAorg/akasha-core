@@ -177,6 +177,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     navigateToUrl(`/profile/${pubKey}`);
   };
 
+  const handleTagClick = (name: string) => {
+    props.singleSpa.navigateToUrl(`/AKASHA-app/tags/${name}`);
+  };
+
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, pubKey: string) => {
     navigateToUrl(`/profile/${pubKey}`);
     ev.preventDefault();
@@ -459,6 +463,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       isFollowingAuthor={isFollowing}
                       onContentClick={handleNavigateToPost}
                       onMentionClick={handleMentionClick}
+                      onTagClick={handleTagClick}
                       awaitingModerationLabel={t(
                         'You have reported this post. It is awaiting moderation.',
                       )}
@@ -534,6 +539,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                     onRepost={handleCommentRepost}
                     onAvatarClick={handleAvatarClick}
                     onMentionClick={handleMentionClick}
+                    onTagClick={handleTagClick}
                     handleFlipCard={handleListFlipCard}
                   />
                 }

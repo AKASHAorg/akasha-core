@@ -62,6 +62,9 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
                 onMentionClick={() => {
                   /* not allowed */
                 }}
+                onTagClick={() => {
+                  /* not allowed */
+                }}
                 disableActions={true}
               />
             )}

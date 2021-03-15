@@ -1,100 +1,95 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { constants, useErrors, usePosts, useProfile } from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
-import {
-  ModalState,
-  ModalStateActions,
-  MODAL_NAMES,
-} from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
-import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
 import { ILoadItemsPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
+import { constants, usePosts, useTagSubscribe, useErrors } from '@akashaproject/ui-awf-hooks';
+import { useTranslation } from 'react-i18next';
+import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
+import { ITag } from '@akashaproject/design-system/lib/components/Cards/widget-cards/trending-widget-card';
 
-import { ProfilePageCard } from '../profile-cards/profile-card';
-import menuRoute, { MY_PROFILE } from '../../routes';
+const { Box, ReportModal, ToastProvider, ModalRenderer, TagProfileCard, Helmet } = DS;
 
-const { Box, Helmet, ReportModal, ToastProvider, ModalRenderer } = DS;
-
-export interface ProfilePageProps extends RootComponentProps {
-  modalActions: ModalStateActions;
-  modalState: ModalState;
-  loggedEthAddress: string | null;
-  loginActions: UseLoginActions;
-  loggedProfileData: any;
+interface IPostPage {
+  loggedProfileData?: any;
+  loginState: UseLoginState;
   flagged: string;
-  reportModalOpen: boolean;
-  showLoginModal: () => void;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  reportModalOpen: boolean;
+  setReportModalOpen: () => void;
+  closeReportModal: () => void;
+  showLoginModal: () => void;
 }
 
-const ProfilePage = (props: ProfilePageProps) => {
+const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const {
-    loggedEthAddress,
-    loginActions,
-    loggedProfileData,
+    sdkModules,
+    globalChannel,
     flagged,
     reportModalOpen,
     setFlagged,
-    showLoginModal,
     setReportModalOpen,
+    closeReportModal,
+    showLoginModal,
+    logger,
+    loggedProfileData,
+    loginState,
   } = props;
-  const location = useLocation();
 
-  let { pubKey } = useParams() as any;
-  if (location.pathname.includes(menuRoute[MY_PROFILE])) {
-    pubKey = loggedProfileData.pubKey;
-  }
-  const [errorState, errorActions] = useErrors({
-    logger: props.logger,
-  });
+  const { tagName } = useParams<{ tagName: string }>();
 
-  const [profileState, profileActions, profileUpdateStatus] = useProfile({
-    onError: errorActions.createError,
-    ipfsService: props.sdkModules.commons.ipfsService,
-    profileService: props.sdkModules.profiles.profileService,
-  });
+  const [tagData, setTagData] = React.useState<ITag | null>(null);
+
+  React.useEffect(() => {
+    if (tagName) {
+      const tagsService = sdkModules.posts.tags.getTag({
+        tagName,
+        fields: ['name', 'posts', 'comments'],
+      });
+      tagsService.subscribe((resp: any) => {
+        if (resp.data?.getTag) {
+          const tag = {
+            name: resp.data.getTag.name,
+            totalPosts: resp.data.getTag.posts?.length + resp.data.getTag.comments?.length,
+          };
+          setTagData(tag);
+        }
+      });
+    }
+  }, [tagName]);
+
+  const [errorState, errorActions] = useErrors({ logger });
 
   const [postsState, postsActions] = usePosts({
-    postsService: props.sdkModules.posts,
-    ipfsService: props.sdkModules.commons.ipfsService,
+    user: loginState.ethAddress,
+    postsService: sdkModules.posts,
+    ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
-    user: loggedEthAddress,
+  });
+
+  const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
+    globalChannel,
+    profileService: sdkModules.profiles.profileService,
+    onError: errorActions.createError,
   });
 
   React.useEffect(() => {
-    // reset post ids and virtual list, if user logs in
-    if (loggedEthAddress) {
-      postsActions.resetPostIds();
-    }
-  }, [loggedEthAddress]);
+    // reset post ids and virtual list, if user logs in or tag changes
+    postsActions.resetPostIds();
+  }, [loginState.ethAddress, tagName]);
 
   React.useEffect(() => {
-    if (pubKey) {
-      profileActions.resetProfileData();
-      profileActions.getProfileData({ pubKey });
-      postsActions.resetPostIds();
-    }
-  }, [pubKey]);
-
-  /**
-   * Hook used in the /profile/my-profile route
-   * because we don't have the /:pubkey url param
-   */
-  React.useEffect(() => {
+    // if post ids array is reset, get tag posts
     if (
-      loggedProfileData.pubKey &&
-      pubKey === loggedProfileData.pubKey &&
-      !postsState.postIds.length &&
-      !postsState.isFetchingPosts
+      postsState.postIds.length === 0 &&
+      !postsState.isFetchingPosts &&
+      postsState.totalItems === null
     ) {
-      postsActions.getUserPosts({ pubKey: loggedProfileData.pubKey, limit: 5 });
+      postsActions.getTagPosts({ name: tagName, limit: 5 });
     }
-  }, [loggedProfileData.pubKey, pubKey]);
+  }, [postsState.postIds, postsState.isFetchingPosts]);
 
   const { t } = useTranslation();
 
@@ -102,8 +97,8 @@ const ProfilePage = (props: ProfilePageProps) => {
     const req: { limit: number; offset?: string } = {
       limit: payload.limit,
     };
-    if (!postsState.isFetchingPosts && pubKey) {
-      postsActions.getUserPosts({ pubKey, ...req });
+    if (!postsState.isFetchingPosts && tagName) {
+      postsActions.getTagPosts({ name: tagName, ...req });
     }
   };
 
@@ -115,13 +110,11 @@ const ProfilePage = (props: ProfilePageProps) => {
     let url;
     switch (itemType) {
       case ItemTypes.PROFILE:
-        if (details.entryId === pubKey) {
-          return;
-        }
         url = `/profile/${details.entryId}`;
         break;
       case ItemTypes.TAG:
         url = `/AKASHA-app/tags/${details.entryId}`;
+        postsActions.resetPostIds();
         break;
       case ItemTypes.ENTRY:
         url = `/AKASHA-app/post/${details.entryId}`;
@@ -137,32 +130,13 @@ const ProfilePage = (props: ProfilePageProps) => {
     props.singleSpa.navigateToUrl(url);
   };
 
-  const handleLoginModalOpen = () => {
-    props.modalActions.show(MODAL_NAMES.LOGIN);
-  };
-
   const handleRepostPublish = (entryData: any, embedEntry: any) => {
     postsActions.optimisticPublishPost(entryData, loggedProfileData, embedEntry, true);
   };
 
-  const profileUserName = React.useMemo(() => {
-    if (profileState.name) {
-      return profileState.name;
-    }
-    if (profileState.ensName) {
-      return profileState.ensName;
-    }
-    return pubKey;
-  }, [profileState, pubKey]);
-
-  const handleEntryFlag = (entryId: string, user?: string | null) => {
-    if (!user) {
-      // setting entryId to state first, if not logged in
-      setFlagged(entryId);
-      return showLoginModal();
-    }
+  const handleEntryFlag = (entryId: string) => {
     setFlagged(entryId);
-    setReportModalOpen(true);
+    setReportModalOpen();
   };
 
   const handleFlipCard = (entry: any, isQuote: boolean) => () => {
@@ -177,16 +151,31 @@ const ProfilePage = (props: ProfilePageProps) => {
     postsActions.updatePostsState(modifiedEntry);
   };
 
+  const handleTagSubscribe = (name: string) => {
+    if (!loginState.ethAddress) {
+      showLoginModal();
+      return;
+    }
+    tagSubscriptionActions.toggleTagSubscription(name);
+  };
+  const handleTagUnsubscribe = (name: string) => {
+    if (!loginState.ethAddress) {
+      showLoginModal();
+      return;
+    }
+    tagSubscriptionActions.toggleTagSubscription(name);
+  };
+
   return (
     <Box fill="horizontal">
       <Helmet>
-        <title>Profile | {`${profileUserName}`}'s Page</title>
+        <title>Tag Page</title>
       </Helmet>
       <ModalRenderer slotId={props.layout.app.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
-              titleLabel={t('Report a post')}
+              titleLabel={t('Report a Post')}
               successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
@@ -215,28 +204,21 @@ const ProfilePage = (props: ProfilePageProps) => {
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
               closeLabel={t('Close')}
-              user={loggedEthAddress ? loggedEthAddress : ''}
+              user={loginState.ethAddress ? loginState.ethAddress : ''}
               contentId={flagged}
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
               updateEntry={updateEntry}
-              closeModal={() => {
-                setReportModalOpen(false);
-              }}
+              closeModal={closeReportModal}
             />
           </ToastProvider>
         )}
       </ModalRenderer>
-      <ProfilePageCard
-        {...props}
-        profileData={profileState as any}
-        profileActions={profileActions}
-        profileUpdateStatus={profileUpdateStatus}
-        profileId={pubKey}
-        loggedUserEthAddress={loggedEthAddress}
-        modalActions={props.modalActions}
-        modalState={props.modalState}
-        loginActions={loginActions}
+      <TagProfileCard
+        tag={tagData}
+        subscribedTags={tagSubscriptionState}
+        handleSubscribeTag={handleTagSubscribe}
+        handleUnsubscribeTag={handleTagUnsubscribe}
       />
       <FeedWidget
         // pass i18n from props (the i18next instance, not the react one!)
@@ -252,11 +234,11 @@ const ProfilePage = (props: ProfilePageProps) => {
         sdkModules={props.sdkModules}
         layout={props.layout}
         globalChannel={props.globalChannel}
-        ethAddress={loggedEthAddress}
+        ethAddress={loginState.ethAddress}
         onNavigate={handleNavigation}
-        onLoginModalOpen={handleLoginModalOpen}
+        onLoginModalOpen={showLoginModal}
         totalItems={postsState.totalItems}
-        profilePubKey={pubKey}
+        profilePubKey={loginState.pubKey}
         modalSlotId={props.layout.app.modalSlotId}
         loggedProfile={loggedProfileData}
         onRepostPublish={handleRepostPublish}
@@ -268,4 +250,4 @@ const ProfilePage = (props: ProfilePageProps) => {
   );
 };
 
-export default ProfilePage;
+export default PostPage;

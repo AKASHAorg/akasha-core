@@ -83,7 +83,7 @@ const Routes: React.FC<RootComponentProps> = props => {
             <Route path={[`${path}/:pubKey`, menuRoute[MY_PROFILE]]}>
               <ProfilePage
                 {...props}
-                ethAddress={loginState.ethAddress}
+                loggedEthAddress={loginState.ethAddress}
                 loginActions={loginActions}
                 modalActions={modalStateActions}
                 modalState={modalState}

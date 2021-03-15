@@ -70,9 +70,16 @@ const MentionElement = (props: any) => {
   );
 };
 
-const TagElement = ({ attributes, children, element }: any) => {
+const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
   return (
-    <StyledMention {...attributes} contentEditable={false}>
+    <StyledMention
+      {...attributes}
+      contentEditable={false}
+      onClick={ev => {
+        handleTagClick(element.name);
+        ev.stopPropagation();
+      }}
+    >
       #{element.name}
       {children}
     </StyledMention>
@@ -81,8 +88,9 @@ const TagElement = ({ attributes, children, element }: any) => {
 
 const renderElement = (
   props: RenderElementProps,
-  handleMentionClick?: any,
-  handleDeleteImage?: any,
+  handleMentionClick?: (pubKey: string) => void,
+  handleTagClick?: (name: string) => void,
+  handleDeleteImage?: (element: any) => void,
 ) => {
   switch (props.element.type) {
     case 'quote':
@@ -92,7 +100,7 @@ const renderElement = (
     case 'mention':
       return <MentionElement handleMentionClick={handleMentionClick} {...props} />;
     case 'tag':
-      return <TagElement {...props} />;
+      return <TagElement handleTagClick={handleTagClick} {...props} />;
 
     default:
       return <p {...props.attributes}>{props.children}</p>;
