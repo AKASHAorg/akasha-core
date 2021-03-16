@@ -25,7 +25,6 @@ const {
   ReportModal,
   ToastProvider,
   ModalRenderer,
-  useViewportSize,
   EditorModal,
   EditorPlaceholder,
 } = DS;
@@ -71,11 +70,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
 
-  const {
-    size,
-    dimensions: { width },
-  } = useViewportSize();
-
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
@@ -98,14 +92,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   }, [JSON.stringify(errorState)]);
 
-  const virtualListRef = React.useRef<{ reset: () => void } | undefined>();
-
   React.useEffect(() => {
     if (loginState.currentUserCalled) {
       postsActions.resetPostIds();
-      if (virtualListRef.current) {
-        virtualListRef.current.reset();
-      }
       if (loginState.ethAddress) {
         bookmarkActions.getBookmarks();
       }
@@ -141,6 +130,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
   const handleMentionClick = (profilePubKey: string) => {
     props.singleSpa.navigateToUrl(`/profile/${profilePubKey}`);
+  };
+
+  const handleTagClick = (name: string) => {
+    props.singleSpa.navigateToUrl(`/AKASHA-app/tags/${name}`);
   };
   const handleEntryBookmark = (entryId: string) => {
     if (!loginState.pubKey) {
@@ -244,14 +237,19 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                 t('Nudity'),
                 t('Violence'),
               ]}
+              optionValues={[
+                'Suspicious, deceptive, or spam',
+                'Abusive or harmful to others',
+                'Self-harm or suicide',
+                'Illegal',
+                'Nudity',
+                'Violence',
+              ]}
               descriptionLabel={t('Explanation')}
               descriptionPlaceholder={t('Please explain your reason(s)')}
               footerText1Label={t('If you are unsure, you can refer to our')}
               footerLink1Label={t('Code of Conduct')}
               footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
-              footerText2Label={t('and')}
-              footerLink2Label={t('Terms of Service')}
-              footerUrl2={'https://ethereum.world/terms-of-service'}
               cancelLabel={t('Cancel')}
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
@@ -260,8 +258,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               contentId={flagged}
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
-              size={size}
-              width={width}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
             />
@@ -297,7 +293,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         loadItemData={loadItemData}
         hasMoreItems={!!postsState.nextPostIndex}
         usePlaceholders={true}
-        ref={virtualListRef}
         listHeader={
           loginState.ethAddress ? (
             <EditorPlaceholder
@@ -336,6 +331,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             sharePostUrl={`${window.location.origin}${routes[POST]}/`}
             onAvatarClick={handleAvatarClick}
             onMentionClick={handleMentionClick}
+            onTagClick={handleTagClick}
             contentClickable={true}
             awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
             moderatedContentLabel={t('This content has been moderated')}

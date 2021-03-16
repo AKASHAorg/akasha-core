@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 import { IProfileData } from '../profile-cards/profile-widget-card';
-import { StackedAvatar, Avatar } from '../../Avatar/index';
+import { Avatar } from '../../Avatar/index';
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { truncateMiddle } from '../../../utils/string-utils';
 import { IconLink } from '../../Buttons';
@@ -96,7 +96,18 @@ const SocialBox: React.FC<ISocialBox> = props => {
       pad={{ horizontal: 'medium', vertical: 'small' }}
       border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
     >
-      {avatarUserData && <StackedAvatar userData={avatarUserData} maxAvatars={3} />}
+      {avatarUserData && (
+        <Avatar
+          src={avatarUserData[0].avatar}
+          ethAddress={avatarUserData[0].ethAddress}
+          size="xs"
+          onClick={() => {
+            if (onClickUser) {
+              onClickUser(avatarUserData[0].pubKey);
+            }
+          }}
+        />
+      )}
       <IconLink
         onClick={() => {
           if (onClickUser) {

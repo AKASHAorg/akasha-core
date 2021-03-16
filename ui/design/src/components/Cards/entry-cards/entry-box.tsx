@@ -73,11 +73,13 @@ export interface IEntryBoxProps {
   onContentClick?: (details: IContentClickDetails) => void;
   /* Can click the content (not embed!) to navigate */
   contentClickable?: boolean;
-  onMentionClick?: (ethAddress: string) => void;
+  onMentionClick?: (pubKey: string) => void;
+  onTagClick?: (name: string) => void;
   // style
   style?: React.CSSProperties;
   disableReposting?: boolean;
   disableActions?: boolean;
+  hideActionButtons?: boolean;
   hidePublishTime?: boolean;
   awaitingModerationLabel?: string;
   moderatedContentLabel?: string;
@@ -119,10 +121,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     isFollowingAuthor,
     onContentClick,
     onMentionClick,
+    onTagClick,
     style,
     contentClickable,
     disableReposting,
     disableActions,
+    hideActionButtons,
     hidePublishTime,
     awaitingModerationLabel,
     moderatedContentLabel,
@@ -322,7 +326,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             !disableActions && contentClickable ? handleContentClick(entryData) : false
           }
         >
-          <ReadOnlyEditor content={entryData.content} handleMentionClick={onMentionClick} />
+          <ReadOnlyEditor
+            content={entryData.content}
+            handleMentionClick={onMentionClick}
+            handleTagClick={onTagClick}
+          />
         </Box>
         {entryData.quote && !entryData.quote.delisted && !entryData.quote.reported && (
           <Box
@@ -351,30 +359,32 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
           </Box>
         )}
-        <CardActions
-          entryData={entryData}
-          loggedProfileEthAddress={loggedProfileEthAddress}
-          sharePostLabel={sharePostLabel}
-          shareTextLabel={shareTextLabel}
-          sharePostUrl={sharePostUrl}
-          repliesLabel={repliesLabel}
-          repostsLabel={repostsLabel}
-          repostLabel={repostLabel}
-          repostWithCommentLabel={repostWithCommentLabel}
-          isBookmarked={isBookmarked}
-          bookmarkLabel={bookmarkLabel}
-          bookmarkedLabel={bookmarkedLabel}
-          shareLabel={shareLabel}
-          copyLinkLabel={copyLinkLabel}
-          handleEntryBookmark={handleEntryBookmark}
-          onRepost={handleRepost(false)}
-          onRepostWithComment={handleRepost(true)}
-          onShare={handleEntryShare}
-          handleRepliesClick={handleRepliesClick}
-          disableReposting={disableReposting}
-          disableActions={disableActions}
-          isModerated={isModerated}
-        />
+        {!hideActionButtons && (
+          <CardActions
+            entryData={entryData}
+            loggedProfileEthAddress={loggedProfileEthAddress}
+            sharePostLabel={sharePostLabel}
+            shareTextLabel={shareTextLabel}
+            sharePostUrl={sharePostUrl}
+            repliesLabel={repliesLabel}
+            repostsLabel={repostsLabel}
+            repostLabel={repostLabel}
+            repostWithCommentLabel={repostWithCommentLabel}
+            isBookmarked={isBookmarked}
+            bookmarkLabel={bookmarkLabel}
+            bookmarkedLabel={bookmarkedLabel}
+            shareLabel={shareLabel}
+            copyLinkLabel={copyLinkLabel}
+            handleEntryBookmark={handleEntryBookmark}
+            onRepost={handleRepost(false)}
+            onRepostWithComment={handleRepost(true)}
+            onShare={handleEntryShare}
+            handleRepliesClick={handleRepliesClick}
+            disableReposting={disableReposting}
+            disableActions={disableActions}
+            isModerated={isModerated}
+          />
+        )}
       </Box>
     </ViewportSizeProvider>
   );

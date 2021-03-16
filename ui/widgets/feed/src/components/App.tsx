@@ -13,12 +13,13 @@ export const enum ItemTypes {
   ENTRY = 0,
   PROFILE,
   COMMENT,
+  TAG,
 }
 
 export interface IFeedWidgetProps {
   logger: any;
   i18n: i18n;
-  virtualListRef: any;
+  virtualListRef?: any;
   globalChannel?: any;
   sdkModules: any;
   layout: any;
