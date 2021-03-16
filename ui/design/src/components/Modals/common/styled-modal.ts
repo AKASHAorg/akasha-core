@@ -1,5 +1,11 @@
 import { Box, Layer } from 'grommet';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+import { Button } from '../../Buttons';
+
+export interface IMobileProps {
+  isMobile?: boolean;
+}
 
 const StyledLayer = styled(Layer)`
   max-width: 36.313em;
@@ -20,4 +26,19 @@ const ModalWrapper = styled(Box)`
   background: ${props => props.theme.colors.modalBackground};
 `;
 
-export { StyledLayer, ModalWrapper };
+const ModalButton = styled(Button)<IMobileProps>`
+  height: auto;
+  border-width: 0.1rem;
+  font-size: ${props => (props.isMobile ? '0.9rem' : '0.8rem')};
+  padding: ${props => (props.isMobile ? '0.75rem 0' : '0.3rem 0.7rem')};
+  ${props => {
+    if (props.isMobile) {
+      return css`
+        width: 50%;
+      `;
+    }
+    return;
+  }}
+`;
+
+export { StyledLayer, ModalWrapper, ModalButton };

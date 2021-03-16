@@ -1,10 +1,8 @@
 import React from 'react';
 import { Box, Text, Image } from 'grommet';
 
-import { Button } from '../Buttons';
-
 import type { IModerationAppErrorCardProps } from './interfaces';
-import { PageWrapper, ContentWrapper } from './styled-elements';
+import { PageWrapper, ContentWrapper, StyledButton } from './styled-elements';
 
 const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => {
   const {
@@ -40,7 +38,7 @@ const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => 
         </Box>
         <Text
           weight={600}
-          margin={{ bottom: 'medium', horizontal: 'auto' }}
+          margin={{ bottom: 'small', horizontal: 'auto' }}
           size="xlarge"
           textAlign="center"
         >
@@ -50,17 +48,18 @@ const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => 
           weight="normal"
           margin={{
             ...(textMarginTop && { top: 'xsmall' }),
-            ...(textMarginBottom && { bottom: 'medium' }),
+            ...(textMarginBottom && { bottom: 'large' }),
           }}
           color="secondaryText"
           size="large"
+          style={{ lineHeight: '1.6' }}
           textAlign="center"
         >
           {subtitleLabel}
         </Text>
         {hasButton && (
           <Box width="fit-content" alignSelf="center">
-            <Button primary={true} label={buttonLabel} onClick={handleClick} />
+            <StyledButton primary={true} label={buttonLabel} onClick={handleClick} />
           </Box>
         )}
       </ContentWrapper>

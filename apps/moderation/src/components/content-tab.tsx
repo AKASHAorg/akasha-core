@@ -1,7 +1,9 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
 
-const { Box, Text, styled, Button, MainAreaCardBox } = DS;
+import { ContentCardButton } from './styled';
+
+const { Box, Text, styled, MainAreaCardBox } = DS;
 
 export interface IContentTabProps {
   isPending: boolean;
@@ -21,7 +23,7 @@ export interface ISideProps {
   readonly right?: boolean;
 }
 
-const StyledButton = styled(Button)<ISideProps>`
+const StyledButton = styled(ContentCardButton)<ISideProps>`
   border-radius: ${props =>
     props.right ? '0.25rem 0rem 0rem 0.25rem' : '0rem 0.25rem 0.25rem 0rem'};
 `;
