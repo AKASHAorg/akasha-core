@@ -4,6 +4,7 @@ import { IProfileData } from '../profile-widget-card';
 import { Icon } from '../../../Icon';
 import { isMobile } from 'react-device-detect';
 import Tooltip from '../../../Tooltip/tooltip';
+import { truncateMiddle } from '../../../../utils/string-utils';
 
 export interface IProfileCardEthereumIdProps {
   ethereumAddressLabel?: string;
@@ -39,13 +40,12 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
           {profileData.ensName ? ethereumNameLabel : ethereumAddressLabel}
         </Text>
         <Box direction="row" gap="xsmall" align="center">
-          <Text
-            color="primaryText"
-            size={isMobile ? 'small' : 'large'}
-            truncate={true}
-            style={{ lineHeight: 1.7 }}
-          >
-            {profileData.ensName ? profileData.ensName : profileData.ethAddress}
+          <Text color="primaryText" size={'medium'} truncate={true} style={{ lineHeight: 1.7 }}>
+            {profileData.ensName
+              ? profileData.ensName
+              : isMobile
+              ? truncateMiddle(profileData.ethAddress)
+              : profileData.ethAddress}
           </Text>
           <Tooltip
             dropProps={{ align: isMobile ? { right: 'left' } : { left: 'right' } }}

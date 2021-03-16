@@ -126,12 +126,12 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   });
 
   React.useEffect(() => {
-    if (profileUpdateStatus.updateComplete && props.modalState[MODAL_NAMES.PROFILE_UPDATE]) {
+    if (profileUpdateStatus.updateComplete) {
       props.profileActions.resetUpdateStatus();
       props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
       return;
     }
-    if (ensState.status.registrationComplete && props.modalState[MODAL_NAMES.CHANGE_ENS]) {
+    if (ensState.status.registrationComplete) {
       if (ensState.userName) {
         props.profileActions.updateProfile({
           userName: `@${ensState.userName.replace('@', '')}`,
@@ -156,6 +156,45 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
       followActions.isFollowing(loggedUserEthAddress, profileData.ethAddress);
     }
   }, [loggedUserEthAddress, profileData.ethAddress]);
+  /**
+   * username to be displayed in the card
+   */
+  const userName = React.useMemo(() => {
+    if (profileData) {
+      let name = profileData.userName;
+      if (!name && profileData.default?.length) {
+        const provider = profileData.default.find(
+          provider =>
+            provider.property &&
+            provider.property === 'userName' &&
+            provider.provider === 'ewa.providers.basic',
+        );
+        if (provider) {
+          name = provider.value;
+        }
+      }
+      return name;
+    }
+    return undefined;
+  }, [profileData]);
+
+  /**
+   * check if user has a local username
+   * username field will show up in form if it does not
+   */
+
+  const hasBasicUsername = React.useMemo(() => {
+    if (!profileData || !profileData.default?.length) {
+      return false;
+    }
+    const provider = profileData.default.find(
+      p => p.property === 'userName' && p.provider === 'ewa.providers.basic',
+    );
+    if (provider?.value) {
+      return true;
+    }
+    return false;
+  }, [profileData]);
 
   const handleFollow = () => {
     if (!loggedUserEthAddress) {
@@ -219,6 +258,10 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     props.modalActions.show(MODAL_NAMES.PROFILE_SHARE);
   };
 
+  const validateUsername = (userName: string) => {
+    props.profileActions.validateUsername({ userName });
+  };
+
   const url = `${window.location.origin}${rootRoute}/${profileId}`;
 
   const handleProfileShare = (service: 'twitter' | 'facebook' | 'reddit' | 'copy', url: string) => {
@@ -247,10 +290,6 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   if (!profileData?.ethAddress) {
     return null;
   }
-
-  const cardData = {
-    ...profileData,
-  };
 
   return (
     <>
@@ -317,13 +356,22 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               nameFieldPlaceholder={t('Type your name here')}
               descriptionFieldPlaceholder={t('Add a description about you here')}
               ethAddress={profileData.ethAddress}
-              providerData={{
-                ...profileData,
-              }}
+              providerData={profileData}
               onSave={onProfileUpdateSubmit}
               onCancel={closeProfileUpdateModal}
               updateStatus={profileUpdateStatus}
-              showUsername={true}
+              showUsername={!hasBasicUsername}
+              onUsernameChange={validateUsername}
+              isValidatingUsername={props.profileUpdateStatus.isValidating}
+              usernameSuccess={props.profileUpdateStatus.isValidUsername ? ' ' : undefined}
+              usernameError={
+                props.profileUpdateStatus.isValidUsername !== null &&
+                !props.profileUpdateStatus.isValidUsername
+                  ? props.profileUpdateStatus.notAllowed
+                    ? t('Sorry, username can contain letters, numbers and must end in a letter.')
+                    : t('Sorry, this username has already been taken. Please choose another one.')
+                  : undefined
+              }
             />
           )}
         </ModalRenderer>
@@ -401,7 +449,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         handleShareClick={showShareModal}
         isFollowing={followedProfiles.includes(profileData?.ethAddress)}
         loggedEthAddress={loggedUserEthAddress}
-        profileData={cardData}
+        profileData={{ ...profileData, userName }}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
         descriptionLabel={t('About me')}

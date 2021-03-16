@@ -57,6 +57,7 @@ const ProfilePage = (props: ProfilePageProps) => {
     onError: errorActions.createError,
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
+    ensService: props.sdkModules.registry.ens,
   });
 
   const [postsState, postsActions] = usePosts({

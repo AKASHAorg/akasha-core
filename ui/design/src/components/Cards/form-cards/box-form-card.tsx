@@ -1,5 +1,6 @@
 import { Box, FormField, Text, TextArea, TextInput } from 'grommet';
 import * as React from 'react';
+import { isMobile } from 'react-device-detect';
 import { Button } from '../../Buttons/index';
 import { Icon } from '../../Icon/index';
 import { StyledLayer } from '../../Modals/common/styled-modal';
@@ -46,6 +47,7 @@ export interface IBoxFormCardProps {
   isValidatingUsername?: boolean;
   usernameError?: string;
   usernameSuccess?: string;
+  onUsernameChange?: (value: string) => void;
 }
 
 export interface IImageSrc {
@@ -59,12 +61,13 @@ export interface IBoxData {
   coverImage?: string | IImageSrc;
   name?: string;
   description?: string;
+  default?: any[];
 }
 export interface IFormValues {
   avatar?: IImageSrc | null;
   coverImage?: IImageSrc | null;
   name?: string;
-  username?: string;
+  userName?: string;
   description?: string;
 }
 
@@ -118,10 +121,20 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     } else if (coverImage && coverImage.src) {
       images.coverImage = coverImage;
     }
+    let userName: string | undefined;
+    if (providerData && providerData.default) {
+      const provider = providerData.default.find(
+        p => p.property === 'userName' && p.provider === 'ewa.providers.basic',
+      );
+      if (provider) {
+        userName = provider.value;
+      }
+    }
     setFormValues(prevValues => ({
       ...prevValues,
       ...rest,
       ...images,
+      userName,
     }));
   }, [JSON.stringify(providerData)]);
 
@@ -168,7 +181,12 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     }
   };
 
-  const handleUsernameChange = () => {};
+  const handleUsernameChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    handleFormFieldChange({ userName: ev.target.value });
+    if (props.onUsernameChange) {
+      props.onUsernameChange(ev.target.value);
+    }
+  };
   const renderIcon = () => {
     if (isValidatingUsername) {
       return <Icon type="loading" />;
@@ -184,7 +202,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
 
   return (
     <StyledLayer className={className}>
-      <MainAreaCardBox>
+      <MainAreaCardBox style={{ height: isMobile ? '100%' : 'auto', overflowY: 'auto' }}>
         <Box direction="column" pad="medium" height={{ min: 'fit-content' }}>
           <Box direction="column" pad="xsmall">
             <Text
@@ -233,7 +251,6 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
                 <FormField
                   name="name"
                   htmlFor="form-name-input"
-                  margin="0"
                   contentProps={{ margin: { left: '1em' } }}
                   label={
                     <StyledText
@@ -253,6 +270,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
                       handleFormFieldChange({ name: ev.target.value })
                     }
                     placeholder={nameFieldPlaceholder}
+                    required={true}
                     size="large"
                     style={{
                       width: '100%',
@@ -278,9 +296,15 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
                   name="name"
                   htmlFor="username-input"
                   info={
-                    <Text color="secondaryText" style={{ fontSize: '0.6em' }}>
-                      {usernameFieldInfo}
-                    </Text>
+                    usernameError ? (
+                      <Text color="errorText" style={{ fontSize: '0.75em' }}>
+                        {usernameError}
+                      </Text>
+                    ) : (
+                      <Text color="secondaryText" style={{ fontSize: '0.6em' }}>
+                        {usernameFieldInfo}
+                      </Text>
+                    )
                   }
                 >
                   <Box justify="between" direction="row">
@@ -290,7 +314,8 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
                         spellCheck={false}
                         computedWidth={'100%'}
                         id="username-input"
-                        value={formValues.username}
+                        required={true}
+                        value={formValues.userName}
                         onChange={handleUsernameChange}
                         placeholder={usernameFieldPlaceholder}
                       />
@@ -300,7 +325,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
                 </FormField>
               </Box>
             )}
-            <StyledText color="secondaryText" size="small">
+            <StyledText color="secondaryText" size="small" margin={{ top: 'small' }}>
               {coverImageLabel}
             </StyledText>
 
@@ -321,32 +346,38 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
                 <StyledImage src={formValues.coverImage.preview} fit="contain" />
               </StyledCoverImageDiv>
             )}
-            <FormField
-              name="description"
-              htmlFor="form-description-textarea"
-              label={
-                <StyledText color="secondaryText" size="small">
-                  {descriptionLabel}
-                </StyledText>
-              }
-            >
-              <TextArea
-                id="form-description-textarea"
-                name="description"
-                value={formValues.description}
-                onChange={ev => handleFormFieldChange({ description: ev.target.value })}
-                placeholder={descriptionFieldPlaceholder}
-              />
-            </FormField>
+            <Box direction="column">
+              <StyledText
+                size="small"
+                margin={{ bottom: '0.5em', left: '0' }}
+                color="secondaryText"
+                style={{ userSelect: 'none' }}
+              >
+                {descriptionLabel}
+              </StyledText>
+              <FormField name="description" htmlFor="form-description-textarea">
+                <TextArea
+                  resize="vertical"
+                  size="large"
+                  rows={3}
+                  style={{ padding: 0 }}
+                  id="form-description-textarea"
+                  name="description"
+                  value={formValues.description}
+                  onChange={ev => handleFormFieldChange({ description: ev.target.value })}
+                  placeholder={descriptionFieldPlaceholder}
+                />
+              </FormField>
+            </Box>
             <Box direction="row" gap="xsmall" justify="end">
-              <Button label={cancelLabel} onClick={handleRevert} />
+              {!showUsername && <Button label={cancelLabel} onClick={handleRevert} />}
               <Button
                 label={
                   updateStatus.saving ? <Spinner style={{ padding: 0 }} size={15} /> : saveLabel
                 }
                 onClick={handleSave}
                 primary={true}
-                disabled={!formChanged}
+                disabled={!formChanged || !formValues.userName || !formValues.name}
               />
             </Box>
           </Box>
