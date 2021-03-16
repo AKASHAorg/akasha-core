@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Box } from 'grommet';
+import { Box, Button } from 'grommet';
 
 import { BasicCardBox } from '../Cards';
 
@@ -31,4 +31,10 @@ const ContentWrapper: any = styled(Box)`
     letter-spacing: 0.03em;
   }
 `;
-export { StyledErrorCard, StyledImage, PageWrapper, ContentWrapper };
+
+const StyledButton = styled(Button)`
+  height: auto;
+  padding: 0.25rem 0.5rem;
+`;
+
+export { StyledErrorCard, StyledImage, PageWrapper, ContentWrapper, StyledButton };
