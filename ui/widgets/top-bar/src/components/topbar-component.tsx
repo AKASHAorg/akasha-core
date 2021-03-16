@@ -111,7 +111,6 @@ const TopbarComponent = (props: TopBarProps) => {
   React.useEffect(() => {
     const isLoadingProfile =
       loggedProfileData.isLoading !== undefined && loggedProfileData.isLoading;
-    console.log(loggedProfileData, isLoadingProfile, loginState.ethAddress);
     if (loginState.ethAddress && !isLoadingProfile && !loggedProfileData.default?.length) {
       return props.navigateToUrl('/profile/my-profile/update-info');
     }
