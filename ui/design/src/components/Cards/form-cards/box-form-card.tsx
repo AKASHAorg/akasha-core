@@ -4,6 +4,7 @@ import { isMobile } from 'react-device-detect';
 import { Button } from '../../Buttons/index';
 import { Icon } from '../../Icon/index';
 import { StyledLayer } from '../../Modals/common/styled-modal';
+import { StyledImageInput } from '../../Popovers/image/styled-form-image-popover';
 import { FormImagePopover } from '../../Popovers/index';
 import Spinner from '../../Spinner';
 import { MainAreaCardBox } from '../common/basic-card-box';
@@ -108,6 +109,9 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const avatarRef: React.RefObject<HTMLDivElement> = React.useRef(null);
   const coverImageRef: React.RefObject<HTMLDivElement> = React.useRef(null);
 
+  const avatarInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
+  const coverInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
+
   React.useEffect(() => {
     const { avatar, coverImage, ...rest } = providerData;
     const images: { avatar?: IImageSrc; coverImage?: IImageSrc } = {};
@@ -139,10 +143,18 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   }, [JSON.stringify(providerData)]);
 
   const handleAvatarClick = () => {
+    const avatarInput = avatarInputRef.current;
+    if (!formValues.avatar && avatarInput) {
+      return avatarInput.click();
+    }
     setAvatarPopoverOpen(true);
   };
 
   const handleCoverImageClick = () => {
+    const coverInput = coverInputRef.current;
+    if (!formValues.coverImage && coverInput) {
+      return coverInput.click();
+    }
     setCoverImagePopoverOpen(true);
   };
 
@@ -187,6 +199,23 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
       props.onUsernameChange(ev.target.value);
     }
   };
+
+  const handleAvatarFileUpload = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    if (!(ev.target.files && ev.target.files[0])) {
+      return;
+    }
+    const file: any = ev.target.files[0];
+    handleImageInsert('avatar')(file, false);
+  };
+
+  const handleCoverFileUpload = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    if (!(ev.target.files && ev.target.files[0])) {
+      return;
+    }
+    const file: any = ev.target.files[0];
+    handleImageInsert('coverImage')(file, false);
+  };
+
   const renderIcon = () => {
     if (isValidatingUsername) {
       return <Icon type="loading" />;
@@ -230,6 +259,11 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
                     onClick={handleAvatarClick}
                     active={avatarPopoverOpen}
                   >
+                    <StyledImageInput
+                      onChange={handleAvatarFileUpload}
+                      type="file"
+                      ref={avatarInputRef}
+                    />
                     <Icon type="image" ref={avatarRef} />
                   </StyledAvatarPlaceholderDiv>
                 )}
@@ -334,6 +368,11 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
                 onClick={handleCoverImageClick}
                 active={coverImagePopoverOpen}
               >
+                <StyledImageInput
+                  onChange={handleCoverFileUpload}
+                  type="file"
+                  ref={coverInputRef}
+                />
                 <Icon type="image" ref={coverImageRef} />
               </StyledCoverImagePlaceholderDiv>
             )}
@@ -346,7 +385,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
                 <StyledImage src={formValues.coverImage.preview} fit="contain" />
               </StyledCoverImageDiv>
             )}
-            <Box direction="column">
+            <Box direction="column" margin={{ top: 'small' }}>
               <StyledText
                 size="small"
                 margin={{ bottom: '0.5em', left: '0' }}
@@ -383,7 +422,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           </Box>
         </Box>
 
-        {avatarPopoverOpen && avatarRef.current && (
+        {avatarPopoverOpen && avatarRef.current && formValues.avatar && (
           <FormImagePopover
             uploadLabel={uploadLabel}
             urlLabel={urlLabel}
@@ -396,7 +435,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           />
         )}
 
-        {coverImagePopoverOpen && coverImageRef.current && (
+        {coverImagePopoverOpen && coverImageRef.current && formValues.coverImage && (
           <FormImagePopover
             uploadLabel={uploadLabel}
             urlLabel={urlLabel}
