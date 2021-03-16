@@ -7,9 +7,9 @@ import { IContentProps } from '../../interfaces';
 import EntryDataCard from '../entry-data-card';
 import ExplanationsCard from '../explanations-box';
 
-import { StyledBox } from '../styled';
+import { ContentCardButton, StyledBox } from '../styled';
 
-const { Box, Icon, Text, Avatar, Button, useViewportSize } = DS;
+const { Box, Text, Avatar, useViewportSize } = DS;
 
 const Content: React.FC<IContentProps> = props => {
   const [showExplanations, setShowExplanations] = React.useState<boolean>(false);
@@ -23,6 +23,8 @@ const Content: React.FC<IContentProps> = props => {
       props.handleButtonClick(props.entryId, props.contentType);
     }
   };
+
+  const textStyle = { fontSize: '1rem', fontWeight: 600 };
 
   return (
     <Box pad="1rem">
@@ -40,8 +42,7 @@ const Content: React.FC<IContentProps> = props => {
         wrap={true}
         align="center"
       >
-        <Icon type="error" size="md" accentColor={true} />
-        <Text margin={{ left: '0.2rem', bottom: '0.2rem' }} style={{ fontWeight: 'bold' }}>{`${
+        <Text margin={{ left: '0.2rem', bottom: '0.2rem' }} style={textStyle}>{`${
           props.contentType && props.contentType[0].toUpperCase()
         }${props.contentType.slice(1)} ${props.reportedLabel}  ${props.forLabel}`}</Text>
 
@@ -49,7 +50,7 @@ const Content: React.FC<IContentProps> = props => {
           <>
             {/* show 'and' at the appropriate position, if more than one reason */}
             {props.reasons.length > 1 && idx === props.reasons.length - 1 && (
-              <Text margin={{ left: '0.2rem', bottom: '0.2rem' }} style={{ fontWeight: 'bold' }}>
+              <Text margin={{ left: '0.2rem', bottom: '0.2rem' }} style={textStyle}>
                 {props.andLabel}
               </Text>
             )}
@@ -59,7 +60,7 @@ const Content: React.FC<IContentProps> = props => {
               pad={{ horizontal: '0.2rem' }}
               round={'0.125rem'}
             >
-              <Text as="span" color="accentText" style={{ fontWeight: 'bold' }}>
+              <Text as="span" color="accentText" style={textStyle}>
                 {reason}
               </Text>
             </StyledBox>
@@ -145,7 +146,11 @@ const Content: React.FC<IContentProps> = props => {
             margin={isMobile ? 'small' : '0rem'}
             justify="end"
           >
-            <Button primary={true} label={props.makeADecisionLabel} onClick={handleClick} />
+            <ContentCardButton
+              primary={true}
+              label={props.makeADecisionLabel}
+              onClick={handleClick}
+            />
           </Box>
         )}
       </Box>
@@ -188,7 +193,7 @@ const Content: React.FC<IContentProps> = props => {
               width={isMobile ? '100%' : '30%'}
               justify="end"
             >
-              <Button label={props.reviewDecisionLabel} onClick={handleClick} />
+              <ContentCardButton label={props.reviewDecisionLabel} onClick={handleClick} />
             </Box>
           </Box>
         </Box>
