@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 
 const StyledText = styled(Text)`
   text-transform: uppercase;
+  margin-left: 0.5em;
 `;
 
 export interface IStyledTextInput {
@@ -98,6 +99,7 @@ const StyledAvatarPlaceholderDiv = styled(BasePlaceholderDiv)`
   width: 4rem;
   height: 4rem;
   border-radius: 50%;
+  margin: 0;
 `;
 const StyledCoverImagePlaceholderDiv = styled(BasePlaceholderDiv)`
   background-color: ${props => props.theme.colors.ultraLightGrey};

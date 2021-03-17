@@ -18,6 +18,7 @@ const mockProfileData = {
   apps: '12',
   profileType: 'user',
   vnd: {},
+  default: [],
 };
 
 const createBaseComponent = (props: any) => (
