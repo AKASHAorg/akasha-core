@@ -31,7 +31,9 @@ const ModalWrapper = styled(Box)<IModalWrapperProps>`
   top: 0;
   z-index: 199;
   background: ${props =>
-    !props.isTransparent ? props.theme.colors.modalBackgroundAlt : 'rgba(97, 120, 158, 0.45)'};
+    props.isTransparent
+      ? props.theme.colors.modalBackgroundTransparent
+      : props.theme.colors.modalBackgroundAlt};
   ${props => {
     if (props.isMobile) {
       return css`

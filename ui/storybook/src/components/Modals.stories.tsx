@@ -1,6 +1,7 @@
 /* eslint-disable import/first */
 import DS from '@akashaproject/design-system';
 import { text } from '@storybook/addon-knobs';
+import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
@@ -142,16 +143,8 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal' | 'wid
   );
 };
 
-const FeedbackModalComponent = (
-  props: Omit<
-    IFeedbackModalProps,
-    'closeModal' | 'onOpenAnIssueClick' | 'onEmailUsClick' | 'onJoinDiscordClick'
-  >,
-) => {
+const FeedbackModalComponent = (props: IFeedbackModalProps) => {
   const {
-    boxSize,
-    assetName,
-    imageBoxHasMargin,
     titleLabel,
     subtitleLabel,
     openAnIssueLabel,
@@ -159,9 +152,18 @@ const FeedbackModalComponent = (
     footerTextLabel,
     footerLinkText1Label,
     footerLinkText2Label,
+    onOpenAnIssueClick,
+    onEmailUsClick,
+    onJoinDiscordClick,
+    closeModal,
   } = props;
 
   const [modalOpen, setModalOpen] = React.useState(false);
+
+  const handleCloseModal = () => {
+    closeModal();
+    setModalOpen(false);
+  };
 
   return (
     <Box fill={true} justify="center" align="center">
@@ -174,9 +176,6 @@ const FeedbackModalComponent = (
       {modalOpen && (
         <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
           <FeedbackModal
-            boxSize={boxSize}
-            assetName={assetName}
-            imageBoxHasMargin={imageBoxHasMargin}
             titleLabel={titleLabel}
             subtitleLabel={subtitleLabel}
             openAnIssueLabel={openAnIssueLabel}
@@ -184,12 +183,10 @@ const FeedbackModalComponent = (
             footerTextLabel={footerTextLabel}
             footerLinkText1Label={footerLinkText1Label}
             footerLinkText2Label={footerLinkText2Label}
-            onOpenAnIssueClick={() => null}
-            onEmailUsClick={() => null}
-            onJoinDiscordClick={() => null}
-            closeModal={() => {
-              setModalOpen(false);
-            }}
+            onOpenAnIssueClick={onOpenAnIssueClick}
+            onEmailUsClick={onEmailUsClick}
+            onJoinDiscordClick={onJoinDiscordClick}
+            closeModal={handleCloseModal}
           />
         </ToastProvider>
       )}
@@ -285,9 +282,6 @@ storiesOf('Modals/Report Modal', module)
   ));
 storiesOf('Modals/Feeback Modal', module).add('Feedback modal', () => (
   <FeedbackModalComponent
-    boxSize={'10rem'}
-    assetName={'feedback'}
-    imageBoxHasMargin={true}
     titleLabel={text('Title Label', "We'd love to hear your feedback!")}
     subtitleLabel={text('Subtitle Label', 'If you find any bugs or problems, please let us know')}
     openAnIssueLabel={text('Open An Issue Label', 'Open an Issue')}
@@ -298,5 +292,9 @@ storiesOf('Modals/Feeback Modal', module).add('Feedback modal', () => (
     )}
     footerLinkText1Label={text('Footer Link Text 1 Label', 'Join in')}
     footerLinkText2Label={text('Footer Link Text 2 Label', 'Discord')}
+    onOpenAnIssueClick={() => action('Open an Issue')('Issue opened!')}
+    onEmailUsClick={() => action('Email Us')('Email successfully sent!')}
+    onJoinDiscordClick={() => action('Join Discord')('Welcome to our Discord channel!')}
+    closeModal={() => action('Close Modal')('Modal closed')}
   />
 ));

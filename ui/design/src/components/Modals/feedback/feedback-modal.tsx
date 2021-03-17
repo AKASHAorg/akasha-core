@@ -1,5 +1,5 @@
 import React from 'react';
-import { isMobile } from 'react-device-detect';
+import { isMobileOnly } from 'react-device-detect';
 import { Box, Text, Image } from 'grommet';
 
 import {
@@ -13,10 +13,8 @@ import {
 import { Icon } from '../../Icon';
 
 export interface IFeedbackModalProps {
-  boxSize: string;
-  assetName: string;
+  assetName?: string;
   publicImgPath?: string;
-  imageBoxHasMargin?: boolean;
   titleLabel: string;
   subtitleLabel: string;
   openAnIssueLabel: string;
@@ -32,10 +30,8 @@ export interface IFeedbackModalProps {
 
 const FeedbackModal: React.FC<IFeedbackModalProps> = props => {
   const {
-    boxSize,
-    assetName,
+    assetName = 'feedback',
     publicImgPath = '/images',
-    imageBoxHasMargin,
     titleLabel,
     subtitleLabel,
     openAnIssueLabel,
@@ -63,11 +59,11 @@ const FeedbackModal: React.FC<IFeedbackModalProps> = props => {
   };
 
   return (
-    <ModalWrapper isTransparent={true} isMobile={isMobile} onClick={closeModal}>
-      <StyledContentArea isMobile={isMobile}>
+    <ModalWrapper isTransparent={true} isMobile={isMobileOnly} onClick={closeModal}>
+      <StyledContentArea isMobile={isMobileOnly}>
         <Box direction="column" pad={{ horizontal: 'medium' }}>
           <Box direction="row" margin={{ top: 'xsmall' }} align="start">
-            {isMobile && (
+            {isMobileOnly && (
               <Icon
                 type="arrowLeft"
                 color="secondaryText"
@@ -77,12 +73,7 @@ const FeedbackModal: React.FC<IFeedbackModalProps> = props => {
               />
             )}
           </Box>
-          <Box
-            height={boxSize}
-            width={boxSize}
-            margin={{ ...(imageBoxHasMargin && { bottom: 'small' }) }}
-            alignSelf="center"
-          >
+          <Box height="10rem" width="10rem" margin={{ bottom: 'small' }} alignSelf="center">
             <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
           </Box>
           <Text
@@ -104,7 +95,7 @@ const FeedbackModal: React.FC<IFeedbackModalProps> = props => {
           </Text>
           <StyledButtonWrapper direction="row" justify="end" alignSelf="center">
             <ModalButton
-              isMobile={isMobile}
+              isMobile={isMobileOnly}
               isOnFeedback={true}
               margin={{ right: '0.5rem' }}
               icon={<Icon type="github" clickable={false} />}
@@ -113,7 +104,7 @@ const FeedbackModal: React.FC<IFeedbackModalProps> = props => {
             />
             <ModalButton
               primary={true}
-              isMobile={isMobile}
+              isMobile={isMobileOnly}
               isOnFeedback={true}
               icon={<Icon type="email" color="white" clickable={false} />}
               label={emailUsLabel}
