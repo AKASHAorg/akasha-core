@@ -229,7 +229,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               setAvatarPopoverOpen={setAvatarPopoverOpen}
               profileProvidersData={profileProvidersData}
             />
-            <Box pad={{ vertical: 'small', left: 'xsmall', right: 'small' }}>
+            <Box pad={{ vertical: 'xxsmall', left: 'xsmall', right: 'small' }}>
               <ProfileCardName
                 editable={editable}
                 name={name || truncateMiddle(profileData.ethAddress)}
