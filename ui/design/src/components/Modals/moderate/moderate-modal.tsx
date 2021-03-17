@@ -258,7 +258,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                       ? handleModerate()
                       : handleModerate(false)
                   }
-                  disabled={requesting || !explanation.length || !action.length}
+                  disabled={requesting || !explanation.trim().length || !action.length}
                 />
               </Box>
             )}
