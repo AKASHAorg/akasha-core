@@ -57,6 +57,7 @@ const ProfilePage = (props: ProfilePageProps) => {
     onError: errorActions.createError,
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
+    ensService: props.sdkModules.registry.ens,
   });
 
   const [postsState, postsActions] = usePosts({
@@ -180,7 +181,9 @@ const ProfilePage = (props: ProfilePageProps) => {
   return (
     <Box fill="horizontal">
       <Helmet>
-        <title>Profile | {`${profileUserName}`}'s Page</title>
+        <title>
+          {t('Profile')} | {t("{{profileUsername}}'s Page", { profileUsername: profileUserName })}
+        </title>
       </Helmet>
       <ModalRenderer slotId={props.layout.app.modalSlotId}>
         {reportModalOpen && (

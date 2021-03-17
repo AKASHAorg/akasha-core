@@ -1,7 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { Icon } from '../../Icon/index';
-import { FormLinkInput } from '../../Input/index';
 import {
   StyledBox,
   StyledDeleteBox,
@@ -23,7 +22,6 @@ export interface IFormImagePopover {
 const FormImagePopover: React.FC<IFormImagePopover> = props => {
   const {
     uploadLabel,
-    urlLabel,
     deleteLabel,
     target,
     closePopover,
@@ -32,26 +30,11 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
     handleDeleteImage,
   } = props;
 
-  const [linkInputActive, setLinkInputActive] = React.useState(false);
-  const [linkInputValue, setLinkInputValue] = React.useState('');
-
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
-
-  const handleLinkInputSave = () => {
-    // @Todo check if isUrl and isImage
-    if (insertImage) {
-      insertImage(linkInputValue, true);
-    }
-    closePopover();
-  };
 
   const handleDeleteClick = () => {
     if (handleDeleteImage) handleDeleteImage();
     closePopover();
-  };
-
-  const handleLinkInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setLinkInputValue(ev.target.value);
   };
 
   const handleUploadInputClick = () => {
@@ -92,27 +75,6 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
           <Text>{uploadLabel}</Text>
           <StyledImageInput onChange={handleFileUpload} type="file" ref={uploadInputRef} />
         </StyledBox>
-        {!linkInputActive && (
-          <StyledBox
-            pad={{ left: 'xxsmall' }}
-            align="center"
-            direction="row"
-            gap="xsmall"
-            onClick={() => {
-              setLinkInputActive(true);
-            }}
-          >
-            <Icon type="link" />
-            <Text>{urlLabel}</Text>
-          </StyledBox>
-        )}
-        {linkInputActive && (
-          <FormLinkInput
-            onClick={handleLinkInputSave}
-            onChange={handleLinkInputChange}
-            inputValue={linkInputValue}
-          />
-        )}
         {currentImage && (
           <StyledDeleteBox
             pad={{ left: 'xxsmall' }}
