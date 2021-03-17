@@ -13,7 +13,7 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
-const { lightTheme, Topbar, ThemeSelector, useViewportSize, LoginModal } = DS;
+const { lightTheme, Topbar, ThemeSelector, LoginModal } = DS;
 
 interface TopBarProps {
   navigateToUrl: (url: string) => void;
@@ -173,13 +173,34 @@ const TopbarComponent = (props: TopBarProps) => {
     }
   };
 
-  const { size } = useViewportSize();
+  /**
+   * username to be displayed in the card
+   */
+  const userName = React.useMemo(() => {
+    if (loggedProfileData) {
+      let name = loggedProfileData.userName;
+      if (!name && loggedProfileData.default?.length) {
+        const provider = loggedProfileData.default.find(
+          provider =>
+            provider.property &&
+            provider.property === 'userName' &&
+            provider.provider === 'ewa.providers.basic',
+        );
+        if (provider) {
+          name = provider.value;
+        }
+      }
+      return name;
+    }
+    return undefined;
+  }, [loggedProfileData]);
+
   const { t } = useTranslation();
 
   return (
     <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
       <Topbar
-        loggedProfileData={loggedProfileData}
+        loggedProfileData={{ ...loggedProfileData, userName }}
         brandLabel="Ethereum World"
         signInLabel={t('Sign In')}
         signUpLabel={t('Sign Up')}
@@ -190,9 +211,8 @@ const TopbarComponent = (props: TopBarProps) => {
         onNavigation={handleNavigation}
         onSearch={handleSearch}
         onSidebarToggle={toggleSidebar}
-        quickAccessItems={loginState.ethAddress ? sortedQuickAccessItems : null}
+        quickAccessItems={sortedQuickAccessItems}
         searchAreaItem={searchAreaItem}
-        size={size}
         onLoginClick={handleLoginClick}
         onLogout={handleLogout}
         notifications={notificationsState.notifications}

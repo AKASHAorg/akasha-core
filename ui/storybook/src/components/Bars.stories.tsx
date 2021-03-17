@@ -10,6 +10,7 @@ import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { text } from '@storybook/addon-knobs';
+import { profileData } from './cards-data';
 
 const installedAppsData: IMenuItem[] = [
   {
@@ -94,18 +95,14 @@ const footer = installedAppsData?.filter(menuItem => menuItem.area === MenuItemA
 const { Sidebar, Topbar, ViewportSizeProvider, useViewportSize } = DS;
 
 const TopbarComponent = () => {
-  const { size } = useViewportSize();
-
   return (
     <Topbar
-      ethAddress="0x003410490050000320006570034567114572000"
-      avatarImage="https://placebeard.it/360x360"
+      loggedProfileData={profileData}
       quickAccessItems={quickAccessItems}
       searchAreaItem={searchAreaItem}
       brandLabel={text('Brand Label', 'Ethereum.world')}
       onNavigation={(path: string) => action('Navigate to')(path)}
       onSearch={(inputValue: string) => action('Navigate to')(inputValue)}
-      size={size}
       onLoginClick={() => action('OnLoginClick')('Synthetic Event')}
       onLogout={() => action('OnLogoutClick')('Synthetic Event')}
     />

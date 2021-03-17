@@ -60,14 +60,12 @@ const config = {
       GRAPHQL_URI:
         process.env.NODE_ENV === 'production'
           ? 'https://api.ethereum.world/graphql'
-          : 'https://api.ethereum.world/graphql',
-      // : 'https://api.akasha.network/graphql',
+          : 'https://api.akasha.network/graphql',
       NODE_ENV: process.env.NODE_ENV || 'development',
       AUTH_ENDPOINT:
         process.env.NODE_ENV === 'production'
           ? 'wss://api.ethereum.world/ws/userauth'
-          : 'wss://api.ethereum.world/ws/userauth',
-      // : 'wss://api.akasha.network/ws/userauth',
+          : 'wss://api.akasha.network/ws/userauth',
     }),
     new webpack.ProgressPlugin({
       entries: true,

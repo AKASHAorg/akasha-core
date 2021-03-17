@@ -4,7 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import TopbarComponent from './topbar-component';
 
-const { lightTheme, ThemeSelector, ViewportSizeProvider } = DS;
+const { lightTheme, ThemeSelector } = DS;
 
 /**
  * This is the entry point of a plugin.
@@ -69,18 +69,16 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
       <I18nextProvider i18n={this.props.i18n}>
         <Suspense fallback={<>...</>}>
           <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
-            <ViewportSizeProvider>
-              <TopbarComponent
-                navigateToUrl={this.props.singleSpa.navigateToUrl}
-                toggleSidebar={this.toggleSidebar}
-                getMenuItems={this.props.getMenuItems}
-                loaderEvents={this.props.events}
-                modalSlotId={this.props.layout.app.modalSlotId}
-                globalChannel={this.props.globalChannel}
-                logger={this.props.logger}
-                sdkModules={this.props.sdkModules}
-              />
-            </ViewportSizeProvider>
+            <TopbarComponent
+              navigateToUrl={this.props.singleSpa.navigateToUrl}
+              toggleSidebar={this.toggleSidebar}
+              getMenuItems={this.props.getMenuItems}
+              loaderEvents={this.props.events}
+              modalSlotId={this.props.layout.app.modalSlotId}
+              globalChannel={this.props.globalChannel}
+              logger={this.props.logger}
+              sdkModules={this.props.sdkModules}
+            />
           </ThemeSelector>
         </Suspense>
       </I18nextProvider>

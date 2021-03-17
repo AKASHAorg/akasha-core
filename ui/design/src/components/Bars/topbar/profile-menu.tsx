@@ -59,7 +59,11 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
                 ethAddress={loggedProfileData?.ethAddress as string}
                 avatarImage={loggedProfileData?.avatar}
                 label={loggedProfileData?.name}
-                info={loggedProfileData?.userName}
+                info={
+                  loggedProfileData?.userName
+                    ? `@${loggedProfileData.userName.replace('@', '')}`
+                    : undefined
+                }
               />
             </StyledPopoverBox>
           </Box>

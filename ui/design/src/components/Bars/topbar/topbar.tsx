@@ -15,7 +15,7 @@ import {
   BrandIcon,
   VersionButton,
 } from './styled-topbar';
-
+import { isMobileOnly } from 'react-device-detect';
 import { Button } from '../../Buttons';
 import { IProfileData } from '../../Cards/profile-cards/profile-widget-card';
 import { ProfileMenu } from './profile-menu';
@@ -42,8 +42,6 @@ export interface ITopbarProps {
   onSearch: (inputValue: string) => void;
   // external css
   className?: string;
-  // viewport size
-  size?: string;
   onLoginClick: () => void;
   onLogout: any;
 }
@@ -66,7 +64,6 @@ const Topbar = (props: ITopbarProps) => {
     onSearch,
     onNavigation,
     // onSidebarToggle,
-    size,
     onLoginClick,
     onLogout,
     notifications,
@@ -188,7 +185,7 @@ const Topbar = (props: ITopbarProps) => {
 
   const renderSearchArea = () => {
     if (searchAreaItem) {
-      if (size === 'small') {
+      if (isMobileOnly) {
         return (
           <Icon
             type="search"
@@ -214,7 +211,7 @@ const Topbar = (props: ITopbarProps) => {
   };
 
   const renderContent = () => {
-    if (size === 'small' && mobileSearchOpen) {
+    if (isMobileOnly && mobileSearchOpen) {
       return (
         <MobileSearchBar
           inputValue={inputValue}
@@ -243,7 +240,7 @@ const Topbar = (props: ITopbarProps) => {
             }}
           >
             <BrandIcon type="ethereumWorldLogo" clickable={true} />
-            {size !== 'small' && (
+            {!isMobileOnly && (
               <StyledText unselectable="on" size="large">
                 {brandLabel}
               </StyledText>
@@ -264,12 +261,14 @@ const Topbar = (props: ITopbarProps) => {
           direction="row"
           align="center"
           gap="small"
-          pad={size === 'small' ? 'none' : { horizontal: 'medium' }}
+          pad={isMobileOnly ? 'none' : { horizontal: 'medium' }}
           fill="horizontal"
           justify="end"
         >
           {renderSearchArea()}
-          {quickAccessItems && quickAccessItems.map(renderPluginButton)}
+          {loggedProfileData?.ethAddress &&
+            quickAccessItems &&
+            quickAccessItems.map(renderPluginButton)}
           {!loggedProfileData?.ethAddress && (
             <Box direction="row" align="center" gap="small">
               <Button onClick={onLoginClick} label={signInLabel} />

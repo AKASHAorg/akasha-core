@@ -48,6 +48,7 @@ const VersionButton = styled(Button)`
 
 const StyledPopoverBox = styled(Box)`
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
+  width: 100%;
   &:hover {
     cursor: pointer;
     background-color: ${props => props.theme.colors.ultraLightBackground};
