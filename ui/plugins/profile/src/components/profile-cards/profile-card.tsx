@@ -324,20 +324,26 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               <>
                 {!hasCriticalErrors && (
                   <ENSForm
-                    titleLabel={t('Add a username')}
-                    secondaryTitleLabel={t('Secondary title')}
+                    titleLabel={t('Add an Ethereum Name')}
                     nameLabel={t('Select a username')}
                     errorLabel={t(
                       'Sorry, this username has already been taken. Please choose another one',
                     )}
+                    options={[
+                      {
+                        label: t('Use an AKASHA-provided Ethereum name'),
+                        value:
+                          profileData.userName ??
+                          profileData.default.find(
+                            p => p.property === 'userName' && p.provider === 'ewa.providers.basic',
+                          ),
+                      },
+                    ]}
                     ethAddressLabel={t('Your Ethereum address')}
                     ethNameLabel={t('Your Ethereum name')}
                     optionUsername={t('username')}
                     optionSpecify={t('Specify an Ethereum name')}
                     optionUseEthereumAddress={t('Use my Ethereum address')}
-                    consentText={t('By creating an account you agree to the ')}
-                    consentUrl="https://ethereum.world/community-agreement"
-                    consentLabel={t('Community Agreement')}
                     poweredByLabel={t('Username powered by')}
                     iconLabel={t('ENS')}
                     cancelLabel={t('Cancel')}

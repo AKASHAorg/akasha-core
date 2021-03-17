@@ -1,12 +1,12 @@
-import { Box, FormField, Text, RadioButton } from 'grommet';
+import { Box, RadioButton, Text } from 'grommet';
 import * as React from 'react';
-import { isMobile } from 'react-device-detect';
+// import { isMobile } from 'react-device-detect';
 import { Button } from '../../Buttons/index';
 import { Icon } from '../../Icon/index';
 import { StyledLayer } from '../../Modals/common/styled-modal';
 import Spinner from '../../Spinner';
 import { MainAreaCardBox } from '../common/basic-card-box';
-import { StyledText, StyledTextInput } from './styled-form-card';
+import { StyledText /* StyledTextInput */ } from './styled-form-card';
 
 export interface IUserNameOption {
   /* Option identifier (ensDomain, local, ethAddress), ensSubdomain added by default */
@@ -15,6 +15,13 @@ export interface IUserNameOption {
   label: string;
   /* This option cannot be selected, serving just as a preview of coming soon functionality */
   isDisabled?: boolean;
+}
+
+export interface EnsFormOptions {
+  label: string;
+  valueType?: 'dropdown' | 'textfield' | 'text';
+  value: string;
+  textDetails: string;
 }
 
 export interface IEnsFormCardProps {
@@ -49,6 +56,8 @@ export interface IEnsFormCardProps {
   disableInputOnOption?: { [key: string]: boolean };
   errorMessage?: string | null;
   registrationStatus?: { registering: boolean; claiming: boolean };
+
+  options: EnsFormOptions[];
 }
 
 export interface IEnsData {
@@ -61,27 +70,27 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     className,
     titleLabel,
     nameLabel,
-    errorLabel,
-    ethAddressLabel,
-    ethNameLabel,
-    consentText,
-    consentUrl,
-    consentLabel,
+    // errorLabel,
+    // ethAddressLabel,
+    // ethNameLabel,
+    // consentText,
+    // consentUrl,
+    // consentLabel,
     poweredByLabel,
     iconLabel,
     cancelLabel,
     saveLabel,
-    changeButtonLabel,
-    nameFieldPlaceholder,
-    ethAddress,
+    // changeButtonLabel,
+    // nameFieldPlaceholder,
+    // ethAddress,
     providerData,
     onSave,
-    validateEns,
+    // validateEns,
     validEns,
-    isValidating,
+    // isValidating,
     ensSubdomain = 'akasha.eth',
     userNameProviderOptions,
-    disableInputOnOption,
+    // disableInputOnOption,
     errorMessage,
     registrationStatus,
   } = props;
@@ -89,8 +98,8 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   const [name, setName] = React.useState('');
 
   const [error, setError] = React.useState(false);
-  const [success, setSuccess] = React.useState(false);
-  const [optionsVisible, setOptionsVisible] = React.useState(false);
+  const [, /* success */ setSuccess] = React.useState(false);
+  // const [optionsVisible, setOptionsVisible] = React.useState(false);
 
   const userNameOptions: IUserNameOption[] = [
     {
@@ -101,7 +110,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     ...userNameProviderOptions,
   ];
   // make ensSubdomain option as default
-  const [selectedUsernameOption, setSelectedUsernameOption] = React.useState('ensSubdomain');
+  const [selectedUsernameOption /* setSelectedUsernameOption */] = React.useState('ensSubdomain');
 
   React.useEffect(() => {
     if (providerData.name) {
@@ -119,39 +128,39 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     }
   }, [validEns]);
 
-  const renderIcon = () => {
-    if (isValidating) {
-      return <Icon type="loading" />;
-    }
-    if (error) {
-      return <Icon type="error" />;
-    }
-    if (success) {
-      return <Icon type="check" accentColor={true} />;
-    }
-    return;
-  };
+  // const renderIcon = () => {
+  //   if (isValidating) {
+  //     return <Icon type="loading" />;
+  //   }
+  //   if (error) {
+  //     return <Icon type="error" />;
+  //   }
+  //   if (success) {
+  //     return <Icon type="check" accentColor={true} />;
+  //   }
+  //   return;
+  // };
 
-  const showOptions = () => {
-    setOptionsVisible(true);
-  };
+  // const showOptions = () => {
+  //   setOptionsVisible(true);
+  // };
 
-  const handleSelectEns = (selected: string) => {
-    setSelectedUsernameOption(selected);
-  };
+  // const handleSelectEns = (selected: string) => {
+  //   setSelectedUsernameOption(selected);
+  // };
 
-  const handleCopyEthAddress = () => {
-    navigator.clipboard.writeText(ethAddress);
-  };
+  // const handleCopyEthAddress = () => {
+  //   navigator.clipboard.writeText(ethAddress);
+  // };
 
-  const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    const value = ev.target.value;
-    setName(value);
-    setError(false);
-    if (validateEns) {
-      validateEns(value);
-    }
-  };
+  // const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = ev.target.value;
+  //   setName(value);
+  //   setError(false);
+  //   if (validateEns) {
+  //     validateEns(value);
+  //   }
+  // };
 
   const handleCancel = () => {
     setName('');
@@ -195,175 +204,43 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
               {nameLabel}
             </StyledText>
           </Box>
-          <FormField name="name" error={error ? errorLabel : null} htmlFor="text-input">
-            <Box justify="between" direction="row" pad={{ top: 'small', bottom: '11px' }}>
-              <Box fill="horizontal" direction="row" align="center">
-                {'@'}
-                <StyledTextInput
-                  spellCheck={false}
-                  autoFocus={true}
-                  computedWidth={'100%'}
-                  id="text-input"
-                  value={name}
-                  onChange={handleChange}
-                  disabled={disableInputOnOption && disableInputOnOption[selectedUsernameOption]}
-                  placeholder={nameFieldPlaceholder}
-                />
+          <Box>
+            {props.options.map((option, idx) => (
+              <Box key={`${option.label}-${idx}`}>
+                <RadioButton name={option.label} label={option.label} />
               </Box>
-              {renderIcon()}
-            </Box>
-          </FormField>
-          <Box direction="column">
-            {!!name.length && (
-              <>
-                <Box direction="column" pad={{ top: 'large', bottom: 'medium' }}>
-                  <Box direction="row" align="baseline">
-                    <StyledText color="secondaryText" size="small" margin={{ right: 'xsmall' }}>
-                      {ethNameLabel}
-                    </StyledText>
-                  </Box>
-                  {!optionsVisible && (
-                    <Box
-                      direction="row"
-                      gap="xxsmall"
-                      pad={{ top: 'small', bottom: 'small' }}
-                      align="baseline"
-                    >
-                      {selectedUsernameOption === userNameOptions[0].name && (
-                        <Text size="large">
-                          {name.replace(`.${ensSubdomain}`, '')}
-                          <Text color="accentText" size="large" margin={{ right: 'xxsmall' }}>
-                            .{ensSubdomain}
-                          </Text>
-                        </Text>
-                      )}
-                      {selectedUsernameOption === 'ensDomain' && (
-                        <Text size="large">
-                          {name.replace(`.${ensSubdomain}`, '')}
-                          <Text color="accentText" size="large" margin={{ right: 'xxsmall' }}>
-                            .eth
-                          </Text>
-                        </Text>
-                      )}
-                      {selectedUsernameOption === 'local' && (
-                        <Text size="large">
-                          @{name.replace(`.${ensSubdomain}`, '').replace('.eth', '')}
-                        </Text>
-                      )}
-                      {selectedUsernameOption === 'ethAddress' && (
-                        <>
-                          <Text
-                            size={isMobile ? 'small' : 'large'}
-                            truncate={true}
-                            margin={{ right: 'xxsmall' }}
-                          >
-                            {ethAddress}
-                          </Text>
-                          <Icon type="copy" onClick={handleCopyEthAddress} clickable={true} />
-                        </>
-                      )}
-                      <Text
-                        color="accentText"
-                        size="small"
-                        style={{ cursor: 'pointer' }}
-                        onClick={showOptions}
-                      >
-                        {changeButtonLabel}
-                      </Text>
-                    </Box>
-                  )}
-                  {optionsVisible && name.length > 1 && (
-                    <Box direction="column">
-                      {userNameOptions.map(provider => (
-                        <Box key={provider.name} margin={{ vertical: 'xsmall' }}>
-                          <RadioButton
-                            name="prop"
-                            disabled={!!provider.isDisabled}
-                            checked={selectedUsernameOption === provider.name}
-                            label={provider.label}
-                            onClick={() => setOptionsVisible(false)}
-                            onChange={() => handleSelectEns(provider.name)}
-                          />
-                        </Box>
-                      ))}
-                    </Box>
-                  )}
-                </Box>
-              </>
-            )}
-            {!name.length && (
-              <>
-                <Box direction="column" pad={{ top: 'large', bottom: 'medium' }}>
-                  <Box direction="row" align="center">
-                    <StyledText color="secondaryText" size="small" margin={{ right: 'xsmall' }}>
-                      {ethAddressLabel}
-                    </StyledText>
-                    <Icon type="questionMark" size="xxs" clickable={true} />
-                  </Box>
-                  <Box
-                    direction="row"
-                    gap="xxsmall"
-                    pad={{ top: 'small', bottom: 'small' }}
-                    align="center"
-                  >
-                    <Text size={isMobile ? 'small' : 'large'} margin={{ right: 'xxsmall' }}>
-                      {ethAddress}
-                    </Text>
-                    <Icon type="copy" onClick={handleCopyEthAddress} clickable={true} />
-                  </Box>
-                </Box>
-              </>
-            )}
-            <Box>
-              <Text
-                color="secondaryText"
-                size={isMobile ? 'xsmall' : 'medium'}
-                margin={{ bottom: 'medium' }}
-              >
-                {consentText}
-                <Text
-                  color="accentText"
-                  size={isMobile ? 'xsmall' : 'medium'}
-                  style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    window.open(consentUrl, consentLabel, '_blank noopener noreferrer')
-                  }
-                >
-                  {consentLabel}
+            ))}
+          </Box>
+          <Box direction="row" gap="xsmall" justify="between" align="center">
+            <Box direction="row" align="center">
+              {poweredByLabel && (
+                <Text color="secondaryText" size="10px" margin={{ right: 'xxsmall' }}>
+                  {poweredByLabel}
                 </Text>
-              </Text>
-            </Box>
-            <Box direction="row" gap="xsmall" justify="between" align="center">
-              <Box direction="row" align="center">
-                {poweredByLabel && (
-                  <Text color="secondaryText" size="10px" margin={{ right: 'xxsmall' }}>
-                    {poweredByLabel}
+              )}
+              {iconLabel && (
+                <>
+                  <Icon type="appEns" size="xs" />
+                  <Text
+                    style={{ opacity: 0.75 }}
+                    size="xsmall"
+                    margin={{ left: '0.05rem', right: 'xsmall' }}
+                  >
+                    {iconLabel}
                   </Text>
-                )}
-                {iconLabel && (
-                  <>
-                    <Icon type="appEns" size="xs" />
-                    <Text
-                      style={{ opacity: 0.75 }}
-                      size="xsmall"
-                      margin={{ left: '0.05rem', right: 'xsmall' }}
-                    >
-                      {iconLabel}
-                    </Text>
-                  </>
-                )}
-                <Icon type="questionMark" size="xxs" clickable={true} />
-              </Box>
-              <Box direction="row">{errorMessage && <>{errorMessage}</>}</Box>
-              <Box direction="row">
-                <Button margin={{ right: '0.5rem' }} label={cancelLabel} onClick={handleCancel} />
-                <Button
-                  label={saveButtonLabel}
-                  onClick={handleSave}
-                  disabled={registrationStatus && registrationStatus.registering}
-                  primary={true}
-                />
-              </Box>
+                </>
+              )}
+              <Icon type="questionMark" size="xxs" clickable={true} />
+            </Box>
+            <Box direction="row">{errorMessage && <>{errorMessage}</>}</Box>
+            <Box direction="row">
+              <Button margin={{ right: '0.5rem' }} label={cancelLabel} onClick={handleCancel} />
+              <Button
+                label={saveButtonLabel}
+                onClick={handleSave}
+                disabled={registrationStatus && registrationStatus.registering}
+                primary={true}
+              />
             </Box>
           </Box>
         </Box>
