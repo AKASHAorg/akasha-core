@@ -395,12 +395,15 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         className="scrollBox"
         height={minHeight ? { min: minHeight } : undefined}
       >
-        <Avatar src={avatar} ethAddress={ethAddress} margin={{ top: '0.5rem' }} />
+        <Box flex={{ shrink: 0 }}>
+          <Avatar src={avatar} ethAddress={ethAddress} margin={{ top: '0.5rem' }} />
+        </Box>
         <Box width="100%" pad={{ horizontal: 'small' }} direction="row" justify="between">
           <Box fill={true}>
             <Slate editor={editor} value={editorState} onChange={handleChange}>
               <StyledEditable
                 placeholder={placeholderLabel}
+                autoComplete="off"
                 spellCheck={false}
                 autoFocus={true}
                 renderElement={(renderProps: RenderElementProps) =>

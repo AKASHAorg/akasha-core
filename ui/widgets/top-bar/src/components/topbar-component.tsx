@@ -171,6 +171,7 @@ const TopbarComponent = (props: TopBarProps) => {
         signOutLabel={t('Sign Out')}
         searchBarLabel={t('Search profiles or topics')}
         versionLabel="ALPHA"
+        versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
         onNavigation={handleNavigation}
         onSearch={handleSearch}
         onSidebarToggle={toggleSidebar}

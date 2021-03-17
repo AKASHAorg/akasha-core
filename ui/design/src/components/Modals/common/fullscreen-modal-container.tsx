@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Box } from 'grommet';
+import { Box, BoxProps } from 'grommet';
 import styled from 'styled-components';
 
 export interface IModalContainerProps {
   onModalClose?: () => void;
   style?: React.CSSProperties;
+  animation?: BoxProps['animation'];
 }
 const StyledModalWrapper = styled(Box)`
   position: fixed;
@@ -18,11 +19,13 @@ export const ModalContainer: React.FC<IModalContainerProps> = props => {
     <StyledModalWrapper fill={true} justify="center" align="center" style={props.style}>
       <Box
         style={{ zIndex: 10 }}
-        animation={{
-          type: 'slideDown',
-          duration: 250,
-          delay: 0,
-        }}
+        animation={
+          props.animation || {
+            type: 'slideDown',
+            duration: 250,
+            delay: 0,
+          }
+        }
       >
         {props.children}
       </Box>

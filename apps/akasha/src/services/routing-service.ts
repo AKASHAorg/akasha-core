@@ -2,6 +2,7 @@ import routes, { POST, REPLY } from '../routes';
 
 export const redirectToPost = (
   navigateToUrl: (path: string) => void,
+  currentPostId?: string,
   callback?: () => void,
 ) => (details: {
   authorEthAddress: string;
@@ -20,5 +21,7 @@ export const redirectToPost = (
   if (callback && typeof callback === 'function') {
     callback();
   }
-  navigateToUrl(url);
+  if (currentPostId && currentPostId !== entryId) {
+    navigateToUrl(url);
+  }
 };

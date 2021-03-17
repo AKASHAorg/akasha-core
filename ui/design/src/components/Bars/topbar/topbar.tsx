@@ -12,20 +12,27 @@ import {
   StyledSearchContainer,
   StyledDrop,
   StyledDiv,
+  BrandIcon,
+  VersionButton,
 } from './styled-topbar';
-import styled from 'styled-components';
+
 import { Button } from '../../Buttons';
 import { IProfileData } from '../../Cards/profile-cards/profile-widget-card';
+import { ProfileMenu } from './profile-menu';
 
 export interface ITopbarProps {
   // data
   loggedProfileData?: Partial<IProfileData>;
+  versionURL?: string;
+  // labels
   brandLabel: string;
   versionLabel?: string;
   signInLabel?: string;
   signUpLabel?: string;
   signOutLabel?: string;
   searchBarLabel?: string;
+  feedbackLabel?: string;
+  feedbackInfoLabel?: string;
   notifications?: any;
   quickAccessItems: IMenuItem[] | null;
   searchAreaItem?: IMenuItem;
@@ -41,22 +48,18 @@ export interface ITopbarProps {
   onLogout: any;
 }
 
-const BrandIcon = styled(Icon)`
-  &:hover {
-    & * {
-      stroke: none;
-    }
-  }
-`;
-
 const Topbar = (props: ITopbarProps) => {
   const {
+    loggedProfileData,
+    versionURL,
     brandLabel,
     versionLabel,
     signInLabel,
     signUpLabel,
     signOutLabel,
     searchBarLabel,
+    feedbackLabel,
+    feedbackInfoLabel,
     className,
     quickAccessItems,
     searchAreaItem,
@@ -67,7 +70,6 @@ const Topbar = (props: ITopbarProps) => {
     onLoginClick,
     onLogout,
     notifications,
-    loggedProfileData,
   } = props;
 
   const [inputValue, setInputValue] = React.useState('');
@@ -148,47 +150,17 @@ const Topbar = (props: ITopbarProps) => {
     </StyledDrop>
   );
 
-  const renderAvatarDrop = () => (
-    <StyledDrop
-      target={currentDropItem && menuItemRefs.current[currentDropItem?.index]}
-      onClickOutside={() => {
-        setAvatarDropOpen(false);
-      }}
-      onEsc={() => {
-        setAvatarDropOpen(false);
-      }}
-      align={{ top: 'bottom', right: 'right' }}
-    >
-      <Box
-        round="xxsmall"
-        pad="xsmall"
-        align="center"
-        justify="start"
-        gap="xsmall"
-        border={{ style: 'solid', size: '1px', color: 'border', side: 'all' }}
-      >
-        {dropItems.map((menuItem: IMenuItem, index: number) => (
-          <Box fill="horizontal" onClick={handleNavigation(menuItem)} key={index}>
-            <StyledText>{menuItem.label}</StyledText>
-          </Box>
-        ))}
-
-        <Box fill="horizontal" justify="start" direction="row" onClick={onLogout}>
-          <StyledText>{signOutLabel}</StyledText>
-        </Box>
-      </Box>
-    </StyledDrop>
-  );
-
   const renderPluginIcon = (menuItem: IMenuItem) => {
     if (menuItem.label === 'Notifications') {
       return (
-        <Stack anchor="top-right">
-          <Icon type={menuItem.logo?.value || 'app'} size="sm" clickable={true} />
-          {notifications?.length && (
-            <Box background="#FF5050" width="9px" height="9px" round={true} />
-          )}
-        </Stack>
+        <Box onClick={onClickPluginButton(menuItem)}>
+          <Stack anchor="top-right">
+            <Icon type={menuItem.logo?.value || 'app'} size="sm" clickable={true} />
+            {notifications?.length && (
+              <Box background="errorText" width="9px" height="9px" round={true} />
+            )}
+          </Stack>
+        </Box>
       );
     }
     return <Icon type={menuItem.logo?.value || 'app'} size="sm" clickable={true} />;
@@ -197,7 +169,6 @@ const Topbar = (props: ITopbarProps) => {
   const renderPluginButton = (menuItem: IMenuItem, index: number) => (
     <StyledDiv
       key={index}
-      onClick={onClickPluginButton(menuItem)}
       ref={ref => {
         menuItemRefs.current[menuItem.index] = ref;
       }}
@@ -256,7 +227,13 @@ const Topbar = (props: ITopbarProps) => {
     }
     return (
       <>
-        <Box direction="row" pad={{ right: 'medium' }} align="center" flex={{ shrink: 0 }}>
+        <Box
+          direction="row"
+          pad={{ right: 'medium' }}
+          align="center"
+          flex={{ shrink: 0 }}
+          gap="small"
+        >
           <Box
             direction="row"
             gap="small"
@@ -266,8 +243,22 @@ const Topbar = (props: ITopbarProps) => {
             }}
           >
             <BrandIcon type="ethereumWorldLogo" clickable={true} />
-            {size !== 'small' && <StyledText size="large">{brandLabel}</StyledText>}
+            {size !== 'small' && (
+              <StyledText unselectable="on" size="large">
+                {brandLabel}
+              </StyledText>
+            )}
           </Box>
+          {versionURL && (
+            <VersionButton
+              href={versionURL}
+              target="_blank"
+              color="errorText"
+              label={versionLabel}
+              primary={true}
+              size="small"
+            />
+          )}
         </Box>
         <Box
           direction="row"
@@ -304,7 +295,19 @@ const Topbar = (props: ITopbarProps) => {
     >
       {renderContent()}
       {dropOpen && renderDrop()}
-      {avatarDropOpen && renderAvatarDrop()}
+      {avatarDropOpen && loggedProfileData && (
+        <ProfileMenu
+          target={currentDropItem && menuItemRefs.current[currentDropItem?.index]}
+          closePopover={() => setAvatarDropOpen(false)}
+          onNavigation={onNavigation}
+          loggedProfileData={loggedProfileData}
+          signOutLabel={signOutLabel}
+          feedbackLabel={feedbackLabel}
+          feedbackInfoLabel={feedbackInfoLabel}
+          menuItems={dropItems}
+          onLogout={onLogout}
+        />
+      )}
     </TopbarWrapper>
   );
 };
@@ -316,6 +319,8 @@ Topbar.defaultProps = {
   signUpLabel: 'Sign Up',
   signInLabel: 'Sign In',
   signOutLabel: 'Sign Out',
+  feedbackLabel: 'Send Us Feedback',
+  feedbackInfoLabel: 'Help us improve the experience!',
 };
 
 export { Topbar };

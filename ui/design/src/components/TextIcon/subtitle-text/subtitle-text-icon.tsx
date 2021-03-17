@@ -8,13 +8,15 @@ export interface ISubtitleTextIcon {
   className?: string;
   iconType?: IconType;
   iconSize?: string;
-  label: string | number;
+  iconBackground?: boolean;
+  label?: string | number;
   labelColor?: string;
   labelSize?: 'small' | 'large';
-  subtitle: string;
+  subtitle?: string;
   subtitleColor?: string;
   onClick?: React.EventHandler<React.SyntheticEvent>;
   gap?: 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large';
+  maxWidth?: string;
 }
 
 const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
@@ -22,6 +24,7 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
     className,
     iconType,
     iconSize,
+    iconBackground,
     label,
     labelColor,
     labelSize,
@@ -29,6 +32,7 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
     subtitleColor,
     onClick,
     gap,
+    maxWidth,
   } = props;
   return (
     <StyledBox
@@ -39,11 +43,11 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
       className={className}
     >
       {iconType ? (
-        <IconDiv iconSize={iconSize}>
+        <IconDiv iconSize={iconSize} iconBackground={iconBackground}>
           <Icon type={iconType} />
         </IconDiv>
       ) : null}
-      <Box pad="none" gap={gap} width={{ max: '10rem' }}>
+      <Box pad="none" gap={gap} width={{ max: maxWidth }}>
         <Text color={labelColor} size={labelSize} truncate={true}>
           {label}
         </Text>

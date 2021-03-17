@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { Box, Text, Drop } from 'grommet';
+import { Box, Button, Text, Drop } from 'grommet';
+import { Icon } from '../../Icon';
 
 const TopbarWrapper = styled(Box)`
   background-color: ${props => props.theme.colors.background};
@@ -25,4 +26,48 @@ const StyledDiv = styled.div`
   cursor: pointer!;
 `;
 
-export { TopbarWrapper, StyledText, StyledSearchContainer, StyledDrop, StyledDiv };
+const BrandIcon = styled(Icon)`
+  &:hover {
+    & * {
+      stroke: none;
+    }
+  }
+`;
+
+const VersionButton = styled(Button)`
+  padding: 0.125rem 0.375rem;
+  &:hover {
+    box-shadow: none;
+  }
+  color: ${props => props.theme.colors.white};
+  font-weight: 700;
+  font-size: 9.5px;
+  line-height: 11px;
+  user-select: none;
+`;
+
+const StyledPopoverBox = styled(Box)`
+  border-radius: ${props => props.theme.shapes.smallBorderRadius};
+  &:hover {
+    cursor: pointer;
+    background-color: ${props => props.theme.colors.ultraLightBackground};
+  }
+`;
+
+const StyledOverlay = styled(Box)`
+  background-color: ${props => props.theme.colors.background};
+  width: 80vw;
+  height: 100vh;
+`;
+
+export {
+  TopbarWrapper,
+  StyledText,
+  StyledSearchContainer,
+  StyledDrop,
+  StyledDiv,
+  BrandIcon,
+  VersionButton,
+  StyledPopoverBox,
+  StyledOverlay,
+};
