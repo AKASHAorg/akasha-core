@@ -152,7 +152,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   }
 
   return (
-    <ModalWrapper>
+    <ModalWrapper isMobile={isMobile}>
       <StyledBox width={width > 800 ? '35%' : width > 500 ? '50%' : '100%'}>
         <MainAreaCardBox className={className}>
           <Box direction="column" pad="large">
