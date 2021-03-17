@@ -4,9 +4,12 @@ import { text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
-import { IReportModalProps } from '@akashaproject/design-system/lib/components/Modals';
+import {
+  IFeedbackModalProps,
+  IReportModalProps,
+} from '@akashaproject/design-system/lib/components/Modals';
 
-const { Box, ShareModal, Icon, MobileListModal, ReportModal, ToastProvider } = DS;
+const { Box, ShareModal, Icon, MobileListModal, ReportModal, FeedbackModal, ToastProvider } = DS;
 
 const ShareModalComponent = () => {
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -139,6 +142,61 @@ const ReportModalComponent = (props: Omit<IReportModalProps, 'closeModal' | 'wid
   );
 };
 
+const FeedbackModalComponent = (
+  props: Omit<
+    IFeedbackModalProps,
+    'closeModal' | 'onOpenAnIssueClick' | 'onEmailUsClick' | 'onJoinDiscordClick'
+  >,
+) => {
+  const {
+    boxSize,
+    assetName,
+    imageBoxHasMargin,
+    titleLabel,
+    subtitleLabel,
+    openAnIssueLabel,
+    emailUsLabel,
+    footerTextLabel,
+    footerLinkText1Label,
+    footerLinkText2Label,
+  } = props;
+
+  const [modalOpen, setModalOpen] = React.useState(false);
+
+  return (
+    <Box fill={true} justify="center" align="center">
+      <Icon
+        type="eye"
+        onClick={() => {
+          setModalOpen(true);
+        }}
+      />
+      {modalOpen && (
+        <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
+          <FeedbackModal
+            boxSize={boxSize}
+            assetName={assetName}
+            imageBoxHasMargin={imageBoxHasMargin}
+            titleLabel={titleLabel}
+            subtitleLabel={subtitleLabel}
+            openAnIssueLabel={openAnIssueLabel}
+            emailUsLabel={emailUsLabel}
+            footerTextLabel={footerTextLabel}
+            footerLinkText1Label={footerLinkText1Label}
+            footerLinkText2Label={footerLinkText2Label}
+            onOpenAnIssueClick={() => null}
+            onEmailUsClick={() => null}
+            onJoinDiscordClick={() => null}
+            closeModal={() => {
+              setModalOpen(false);
+            }}
+          />
+        </ToastProvider>
+      )}
+    </Box>
+  );
+};
+
 storiesOf('Modals/Share Modal', module).add('Share modal', () => <ShareModalComponent />);
 storiesOf('Modals/List Modal', module).add('Mobile list modal', () => (
   <MobileListModalComponent
@@ -146,7 +204,7 @@ storiesOf('Modals/List Modal', module).add('Mobile list modal', () => (
     repostWithCommentLabel={text('Repost With Comment Label', 'Repost with comment')}
   />
 ));
-storiesOf('Modals/ Report Modal', module)
+storiesOf('Modals/Report Modal', module)
   .add('Report post modal', () => (
     <ReportModalComponent
       titleLabel={text('Title Label', 'Report a Post')}
@@ -225,3 +283,20 @@ storiesOf('Modals/ Report Modal', module)
       closeLabel={text('Close Label', 'Close')}
     />
   ));
+storiesOf('Modals/Feeback Modal', module).add('Feedback modal', () => (
+  <FeedbackModalComponent
+    boxSize={'10rem'}
+    assetName={'feedback'}
+    imageBoxHasMargin={true}
+    titleLabel={text('Title Label', "We'd love to hear your feedback!")}
+    subtitleLabel={text('Subtitle Label', 'If you find any bugs or problems, please let us know')}
+    openAnIssueLabel={text('Open An Issue Label', 'Open an Issue')}
+    emailUsLabel={text('Email Us Label', 'Email Us')}
+    footerTextLabel={text(
+      'Footer Text Label',
+      'Join our Discord channel to meet everyone, say "Hello!", provide feedback and share ideas.',
+    )}
+    footerLinkText1Label={text('Footer Link Text 1 Label', 'Join in')}
+    footerLinkText2Label={text('Footer Link Text 2 Label', 'Discord')}
+  />
+));
