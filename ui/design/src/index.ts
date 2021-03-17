@@ -84,6 +84,7 @@ import {
   LoginModal,
   ReportModal,
   ModerateModal,
+  FeedbackModal,
   ToastProvider,
   EditorModal,
 } from './components/Modals';
@@ -169,6 +170,7 @@ const exported = {
   ShareModal,
   ReportModal,
   ModerateModal,
+  FeedbackModal,
   Spinner,
   ToastProvider,
   SelectPopover,

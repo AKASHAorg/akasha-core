@@ -13,6 +13,8 @@ import ReportModal from './report';
 import { IReportModalProps } from './report/report-modal';
 import ModerateModal from './moderate';
 import { IModerateModalProps } from './moderate/moderate-modal';
+import FeedbackModal from './feedback';
+import { IFeedbackModalProps } from './feedback/feedback-modal';
 import EditorModal from './editor/editor-modal';
 
 export {
@@ -29,6 +31,8 @@ export {
   IReportModalProps,
   ModerateModal,
   IModerateModalProps,
+  FeedbackModal,
+  IFeedbackModalProps,
   ToastProvider,
   EditorModal,
 };
