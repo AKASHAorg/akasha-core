@@ -407,7 +407,12 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 spellCheck={false}
                 autoFocus={true}
                 renderElement={(renderProps: RenderElementProps) =>
-                  renderElement(renderProps, () => null, handleDeleteImage)
+                  renderElement(
+                    renderProps,
+                    () => null,
+                    () => null,
+                    handleDeleteImage,
+                  )
                 }
                 renderLeaf={renderLeaf}
                 onKeyDown={onKeyDown}

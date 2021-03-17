@@ -1,12 +1,12 @@
 import React from 'react';
+import { isMobile } from 'react-device-detect';
 import { useToasts } from 'react-toast-notifications';
 import { Box, Text, FormField, RadioButtonGroup } from 'grommet';
 
 import { MainAreaCardBox } from '../../Cards';
-import { Button } from '../../Buttons';
 import { Icon } from '../../Icon';
 
-import { ModalWrapper } from '../common/styled-modal';
+import { ModalWrapper, ModalButton } from '../common/styled-modal';
 
 import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from '../styled';
 import { useViewportSize } from '../../Providers/viewport-dimension';
@@ -72,7 +72,6 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
   const { addToast } = useToasts();
 
   const {
-    size,
     dimensions: { width },
   } = useViewportSize();
 
@@ -158,7 +157,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
         <MainAreaCardBox className={className}>
           <Box direction="column" pad="large">
             <Box direction="row" margin={{ top: 'xsmall' }} align="start">
-              {size === 'small' && (
+              {isMobile && (
                 <Icon
                   type="arrowLeft"
                   color="secondaryText"
@@ -170,7 +169,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
               <Text weight={600} margin={{ bottom: '1rem', horizontal: 'auto' }} size="large">
                 {isReview ? altTitleLabel : titleLabel}
               </Text>
-              {size !== 'small' && (
+              {!isMobile && (
                 <Icon
                   type="close"
                   color="secondaryText"
@@ -244,13 +243,16 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
             </Box>
             {!!action.length && (
               <Box width="100%" direction="row" justify="end">
-                {size !== 'small' && (
-                  <Button margin={{ right: '0.5rem' }} label={cancelLabel} onClick={handleCancel} />
-                )}
-                <Button
+                <ModalButton
+                  margin={{ right: '0.5rem' }}
+                  label={cancelLabel}
+                  isMobile={isMobile}
+                  onClick={handleCancel}
+                />
+                <ModalButton
                   primary={true}
                   label={action}
-                  fill={size === 'small' ? true : false}
+                  isMobile={isMobile}
                   onClick={
                     optionValues[optionLabels.indexOf(action)] === 'Delist'
                       ? handleModerate()

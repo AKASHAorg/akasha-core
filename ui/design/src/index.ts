@@ -61,6 +61,7 @@ import {
   CustomizeFeedCard,
   TagCard,
   TagDetailCard,
+  TagProfileCard,
   FilterCard,
 } from './components/Cards';
 
@@ -153,6 +154,7 @@ const exported = {
   TopicsWidgetCard,
   TagCard,
   TagDetailCard,
+  TagProfileCard,
   Icon,
   iconTypes,
   IconButton,

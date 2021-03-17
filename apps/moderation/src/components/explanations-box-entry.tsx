@@ -45,7 +45,7 @@ const ExplanationsCardEntry: React.FC<IExplanationsBoxEntryProps> = props => {
           {entry.reason}
         </Text>
       </Text>
-      <Text as="p" margin={{ top: 'none', bottom: 'xsmall' }} color="secondaryText">
+      <Text as="p" margin={{ top: 'none', bottom: 'medium' }} color="secondaryText">
         {entry.explanation}
       </Text>
     </>

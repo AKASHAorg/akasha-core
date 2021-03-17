@@ -5,6 +5,12 @@ import { TextIcon } from '../../TextIcon/index';
 import { WidgetAreaCardBox } from '../common/basic-card-box';
 import { AvatarDiv } from './styled-profile-card';
 
+export interface DefaultProvider {
+  property: string;
+  provider: string;
+  value: any;
+}
+
 export interface IProfileData {
   CID?: string;
   avatar?: string;
@@ -19,6 +25,7 @@ export interface IProfileData {
   totalPosts?: string | number;
   totalFollowers?: string | number;
   totalFollowing?: string | number;
+  default: DefaultProvider[];
   // app specific
   apps?: string | number;
   profileType?: string;

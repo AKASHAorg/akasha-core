@@ -3,11 +3,11 @@ import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { chartData } from './Charts.stories';
 
 const trendingTagsData = [
-  { name: '#AKASHA', totalPosts: 176, tagHistoricData: chartData, subscribed: true },
-  { name: '#AKASHAWorld', totalPosts: 94, tagHistoricData: chartData, subscribed: false },
-  { name: '#Ethereum', totalPosts: 27, tagHistoricData: chartData, subscribed: false },
-  { name: '#EthereumWorld', totalPosts: 17, tagHistoricData: chartData, subscribed: true },
-  { name: '#Crypto', totalPosts: 6, tagHistoricData: chartData, subscribed: false },
+  { name: 'AKASHA', totalPosts: 176, tagHistoricData: chartData, subscribed: true },
+  { name: 'AKASHAWorld', totalPosts: 94, tagHistoricData: chartData, subscribed: false },
+  { name: 'Ethereum', totalPosts: 27, tagHistoricData: chartData, subscribed: false },
+  { name: 'EthereumWorld', totalPosts: 17, tagHistoricData: chartData, subscribed: true },
+  { name: 'Crypto', totalPosts: 6, tagHistoricData: chartData, subscribed: false },
 ];
 
 const trendingProfilesData = [
@@ -21,6 +21,7 @@ const trendingProfilesData = [
     coverImage: 'goldenrod',
     followers: 312,
     postsNumber: 235,
+    default: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
@@ -36,6 +37,7 @@ const trendingProfilesData = [
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
     isFollowed: true,
+    default: [],
   },
   {
     ethAddress: '0x003410490050000320006570034567114572000',
@@ -47,6 +49,7 @@ const trendingProfilesData = [
     coverImage: 'goldenrod',
     followers: 312,
     postsNumber: 235,
+    default: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
@@ -60,6 +63,7 @@ const trendingProfilesData = [
     coverImage: 'goldenrod',
     followers: 312,
     postsNumber: 235,
+    default: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
@@ -73,6 +77,7 @@ const trendingProfilesData = [
     coverImage: 'goldenrod',
     followers: 312,
     postsNumber: 235,
+    default: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
@@ -106,6 +111,7 @@ const profileData = {
   apps: '12',
   profileType: 'user',
   totalPosts: 235,
+  default: [],
 };
 
 const profileProvidersData = {

@@ -118,6 +118,14 @@ const EntryRenderer = (props: IEntryRenderer) => {
     });
   };
 
+  const handleTagClick = (name: string) => {
+    onNavigate(ItemTypes.TAG, {
+      entryId: name,
+      authorEthAddress: name,
+      replyTo: null,
+    });
+  };
+
   const handleEntryBookmark = (entryId: string) => {
     onBookmark(isBookmarked, entryId);
   };
@@ -178,6 +186,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   isFollowingAuthor={isFollowing}
                   onContentClick={handleContentClick}
                   onMentionClick={handleMentionClick}
+                  onTagClick={handleTagClick}
                   contentClickable={contentClickable}
                   moderatedContentLabel={moderatedContentLabel}
                   awaitingModerationLabel={awaitingModerationLabel}

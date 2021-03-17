@@ -92,14 +92,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   }, [JSON.stringify(errorState)]);
 
-  const virtualListRef = React.useRef<{ reset: () => void } | undefined>();
-
   React.useEffect(() => {
     if (loginState.currentUserCalled) {
       postsActions.resetPostIds();
-      if (virtualListRef.current) {
-        virtualListRef.current.reset();
-      }
       if (loginState.ethAddress) {
         bookmarkActions.getBookmarks();
       }
@@ -135,6 +130,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
   const handleMentionClick = (profilePubKey: string) => {
     props.singleSpa.navigateToUrl(`/profile/${profilePubKey}`);
+  };
+
+  const handleTagClick = (name: string) => {
+    props.singleSpa.navigateToUrl(`/AKASHA-app/tags/${name}`);
   };
   const handleEntryBookmark = (entryId: string) => {
     if (!loginState.pubKey) {
@@ -294,7 +293,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         loadItemData={loadItemData}
         hasMoreItems={!!postsState.nextPostIndex}
         usePlaceholders={true}
-        ref={virtualListRef}
         listHeader={
           loginState.ethAddress ? (
             <EditorPlaceholder
@@ -333,6 +331,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             sharePostUrl={`${window.location.origin}${routes[POST]}/`}
             onAvatarClick={handleAvatarClick}
             onMentionClick={handleMentionClick}
+            onTagClick={handleTagClick}
             contentClickable={true}
             awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
             moderatedContentLabel={t('This content has been moderated')}

@@ -2,12 +2,13 @@ import * as React from 'react';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import routes, { FEED, rootRoute, POST, REPLY } from '../routes';
+import routes, { FEED, rootRoute, POST, REPLY, TAGS } from '../routes';
 import FeedPage from './feed-page/feed-page';
+import PostPage from './post-page/post-page';
+import TagFeedPage from './tag-feed-page/tag-feed-page';
 import { useTranslation } from 'react-i18next';
 import { useLoginState, useErrors, useProfile, useModalState } from '@akashaproject/ui-awf-hooks';
 import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
-import PostPage from './post-page/post-page';
 
 const { Box, LoginModal } = DS;
 interface AppRoutesProps {
@@ -140,6 +141,19 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               navigateToUrl={props.singleSpa.navigateToUrl}
               isMobile={props.isMobile}
               onError={onError}
+            />
+          </Route>
+          <Route path={`${routes[TAGS]}/:tagName`}>
+            <TagFeedPage
+              {...props}
+              loggedProfileData={loginProfile}
+              loginState={loginState}
+              flagged={flagged}
+              reportModalOpen={modalState.report}
+              setFlagged={setFlagged}
+              setReportModalOpen={showReportModal}
+              closeReportModal={hideReportModal}
+              showLoginModal={showLoginModal}
             />
           </Route>
           <Route path={`${routes[REPLY]}/:postId`}>

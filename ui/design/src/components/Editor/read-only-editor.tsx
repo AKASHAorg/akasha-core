@@ -6,11 +6,12 @@ import { renderElement, renderLeaf } from './renderers';
 
 export interface IReadOnlyEditor {
   content: any;
-  handleMentionClick?: any;
+  handleMentionClick?: (pubKey: string) => void;
+  handleTagClick?: (name: string) => void;
 }
 
 const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
-  const { content, handleMentionClick } = props;
+  const { content, handleMentionClick, handleTagClick } = props;
   const editor = React.useMemo(
     () => withTags(withMentions(withReact(withImages(createEditor())))),
     [],
@@ -26,7 +27,7 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
       <Editable
         readOnly={true}
         renderElement={(renderProps: RenderElementProps) =>
-          renderElement(renderProps, handleMentionClick)
+          renderElement(renderProps, handleMentionClick, handleTagClick)
         }
         renderLeaf={renderLeaf}
       />

@@ -115,6 +115,7 @@ export interface IListViewportProps {
   listHeader?: React.ReactElement;
   loadLimit: number;
   usePlaceholders: boolean;
+  onItemUnmount?: (itemId: string, itemRect?: IItemStateRect) => void;
 }
 export interface IRenderItemProps {
   itemId: string;
@@ -129,4 +130,5 @@ export interface IRenderItemProps {
   averageItemHeight: number;
   itemIndex?: number;
   className?: string;
+  onItemUnmount?: IListViewportProps['onItemUnmount'];
 }
