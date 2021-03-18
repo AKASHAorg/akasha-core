@@ -71,4 +71,15 @@ export const StyleFileInput = styled.input`
   display: none;
 `;
 
+export const ActiveOverlay = styled.div`
+  background-color: ${props => props.theme.colors.accent};
+  opacity: 0.25;
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+`;
+
 export default StyledAvatar;

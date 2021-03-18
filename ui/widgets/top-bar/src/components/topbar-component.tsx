@@ -1,5 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
+import { useLocation } from 'react-router-dom';
 import {
   IMenuItem,
   EventTypes,
@@ -142,6 +143,10 @@ const TopbarComponent = (props: TopBarProps) => {
     menuItem => menuItem.area === MenuItemAreaType.SearchArea,
   )[0];
 
+  const otherAreaItems = currentMenu?.filter(
+    menuItem => menuItem.area === MenuItemAreaType.OtherArea,
+  );
+
   const handleNavigation = (path: string) => {
     navigateToUrl(path);
   };
@@ -173,39 +178,22 @@ const TopbarComponent = (props: TopBarProps) => {
     }
   };
 
-  /**
-   * username to be displayed in the card
-   */
-  const userName = React.useMemo(() => {
-    if (loggedProfileData) {
-      let name = loggedProfileData.userName;
-      if (!name && loggedProfileData.default?.length) {
-        const provider = loggedProfileData.default.find(
-          provider =>
-            provider.property &&
-            provider.property === 'userName' &&
-            provider.provider === 'ewa.providers.basic',
-        );
-        if (provider) {
-          name = provider.value;
-        }
-      }
-      return name;
-    }
-    return undefined;
-  }, [loggedProfileData]);
-
   const { t } = useTranslation();
+  const location = useLocation();
 
   return (
     <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
       <Topbar
-        loggedProfileData={{ ...loggedProfileData, userName }}
+        loggedProfileData={loggedProfileData}
         brandLabel="Ethereum World"
         signInLabel={t('Sign In')}
         signUpLabel={t('Sign Up')}
         signOutLabel={t('Sign Out')}
         searchBarLabel={t('Search profiles or topics')}
+        legalLabel={t('Legal')}
+        feedbackLabel={t('Send Us Feedback')}
+        feedbackInfoLabel={t('Help us improve the experience!')}
+        legalCopyRightLabel={'© AKASHA Foundation'}
         versionLabel="ALPHA"
         versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
         onNavigation={handleNavigation}
@@ -213,9 +201,12 @@ const TopbarComponent = (props: TopBarProps) => {
         onSidebarToggle={toggleSidebar}
         quickAccessItems={sortedQuickAccessItems}
         searchAreaItem={searchAreaItem}
+        otherAreaItems={otherAreaItems}
         onLoginClick={handleLoginClick}
         onLogout={handleLogout}
+        onFeedbackClick={() => null}
         notifications={notificationsState.notifications}
+        currentLocation={location?.pathname}
       />
       <LoginModal
         slotId={modalSlotId}

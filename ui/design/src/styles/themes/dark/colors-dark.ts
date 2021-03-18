@@ -36,6 +36,7 @@ const colors: IColorsDark = {
   modalBackground: '#7F7F7F', // deepGrey
   modalBackgroundAlt: '#87909E', // deeperGrey
   accent: '#4E71FF', // blue
+  accentOpacity: 'rgba(78, 113, 255, 0.1)', // blue with 0.1 opacity
   accentLight: '#E9EDFD', // lightBlue
   border: '#EDF0F5', // lightGrey
   secondary: '#000C20', // darkGrey

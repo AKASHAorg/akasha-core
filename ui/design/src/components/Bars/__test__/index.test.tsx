@@ -51,6 +51,8 @@ describe('<Topbar /> Component', () => {
             quickAccessItems={[]}
             onLoginClick={() => {}}
             onLogout={() => {}}
+            onFeedbackClick={() => {}}
+            currentLocation={''}
           />,
         ),
       );

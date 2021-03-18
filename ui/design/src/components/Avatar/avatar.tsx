@@ -4,11 +4,12 @@ import CommonInterface from '../../interfaces/common.interface';
 import MarginInterface from '../../interfaces/margin.interface';
 import AvatarImage from './avatar-image';
 // import { loadPlaceholder } from './placeholders';
-import StyledAvatar, { AvatarSize } from './styled-avatar';
+import StyledAvatar, { AvatarSize, ActiveOverlay } from './styled-avatar';
 
 export interface AvatarProps extends CommonInterface<HTMLDivElement> {
   ethAddress?: string | null;
   src?: string;
+  active?: boolean;
   onClick?: React.MouseEventHandler<any>;
   alt?: string;
   margin?: MarginInterface;
@@ -49,6 +50,7 @@ const Avatar: React.FC<AvatarProps> = props => {
     size = 'md',
     margin,
     border,
+    active,
     ethAddress = '0x0000000000000000000000000000000',
     publicImgPath = '/images',
   } = props;
@@ -74,6 +76,7 @@ const Avatar: React.FC<AvatarProps> = props => {
       <React.Suspense fallback={<></>}>
         <AvatarImage image={avatarImage} />
       </React.Suspense>
+      {active && <ActiveOverlay />}
     </StyledAvatar>
   );
 };

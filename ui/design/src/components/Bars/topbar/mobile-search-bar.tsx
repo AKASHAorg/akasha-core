@@ -25,6 +25,7 @@ const MobileSearchBar: React.FC<ISearchBar> = props => {
       align="center"
       pad={{ vertical: 'xsmall', horizontal: 'small' }}
       fill="horizontal"
+      height="3rem"
     >
       <Icon type="arrowLeft" primaryColor={true} size="xs" onClick={handleCloseInput} />
       <TextInput

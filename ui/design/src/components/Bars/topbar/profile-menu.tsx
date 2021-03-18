@@ -1,40 +1,47 @@
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { IProfileData } from '../../Cards/profile-cards/profile-widget-card';
 import * as React from 'react';
-import { Box } from 'grommet';
+import { Accordion, Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
 import { SubtitleTextIcon, TextIcon } from '../../TextIcon';
 import { ProfileAvatarButton } from '../../Buttons';
-import { StyledDrop, StyledPopoverBox, StyledOverlay } from './styled-topbar';
+import { StyledDrop, StyledPopoverBox, StyledOverlay, StyledAccordionPanel } from './styled-topbar';
 import { ModalContainer } from '../../Modals/common/fullscreen-modal-container';
 import { Portal } from '../../Editor/helpers';
 import { Icon } from '../../Icon';
 
 export interface IProfileMenu {
-  loggedProfileData: Partial<IProfileData>;
-  menuItems: IMenuItem[];
+  loggedProfileData?: Partial<IProfileData>;
+  menuItems?: IMenuItem[];
+  legalMenu: IMenuItem | null;
   target: HTMLElement;
-
   // labels
+  legalLabel?: string;
   signOutLabel?: string;
   feedbackLabel?: string;
   feedbackInfoLabel?: string;
+  legalCopyRightLabel?: string;
   // handlers
   closePopover: () => void;
   onNavigation: (path: string) => void;
-  onLogout: any;
+  handleFeedbackClick: () => void;
+  onLogout?: any;
 }
 
 const ProfileMenu: React.FC<IProfileMenu> = props => {
   const {
     loggedProfileData,
     menuItems,
+    legalMenu,
     target,
-    closePopover,
-    onNavigation,
+    legalLabel,
     signOutLabel,
     feedbackLabel,
     feedbackInfoLabel,
+    legalCopyRightLabel,
+    closePopover,
+    onNavigation,
+    handleFeedbackClick,
     onLogout,
   } = props;
 
@@ -52,9 +59,8 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
           <Box
             border={{ style: 'solid', size: '1px', color: 'border', side: 'bottom' }}
             justify="start"
-            direction="row"
           >
-            <StyledPopoverBox pad="xsmall" margin={{ bottom: 'xsmall' }}>
+            <StyledPopoverBox pad="xsmall" margin="xsmall" responsive={false}>
               <ProfileAvatarButton
                 ethAddress={loggedProfileData?.ethAddress as string}
                 avatarImage={loggedProfileData?.avatar}
@@ -67,42 +73,90 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
               />
             </StyledPopoverBox>
           </Box>
-          <Box
-            border={{ style: 'solid', size: '1px', color: 'border', side: 'bottom' }}
-            justify="start"
-            direction="row"
-          >
-            <StyledPopoverBox pad="xsmall" margin={{ vertical: 'xsmall' }}>
-              <SubtitleTextIcon
-                label={feedbackLabel}
-                subtitle={feedbackInfoLabel}
-                subtitleColor={'secondaryText'}
-                iconType="feedback"
-                iconSize={'1.250rem'}
-              />
-            </StyledPopoverBox>
-          </Box>
         </>
       );
     }
-    return (
-      <StyledPopoverBox pad="xsmall" fill="horizontal" justify="start">
-        <TextIcon label={menuItem.label} iconType="legal" />
-      </StyledPopoverBox>
-    );
+    return null;
   };
 
   const renderProfileMenu = () => (
-    <Box pad="xsmall" align="center" justify="start" gap="xsmall">
-      {menuItems.map((menuItem: IMenuItem, index: number) => (
-        <Box fill="horizontal" onClick={handleNavigation(menuItem)} key={index}>
-          {renderAvatarMenuItem(menuItem)}
-        </Box>
-      ))}
+    <Box pad="xsmall" direction="column" align="center" justify="start">
+      {loggedProfileData?.ethAddress &&
+        menuItems?.map((menuItem: IMenuItem, index: number) => (
+          <Box fill="horizontal" onClick={handleNavigation(menuItem)} key={index}>
+            {renderAvatarMenuItem(menuItem)}
+          </Box>
+        ))}
 
-      <StyledPopoverBox pad="xsmall" onClick={onLogout} fill="horizontal" justify="start">
-        <TextIcon label={signOutLabel} iconType="signOut" />
-      </StyledPopoverBox>
+      <Box
+        border={{ style: 'solid', size: '1px', color: 'border', side: 'bottom' }}
+        justify="start"
+        fill="horizontal"
+      >
+        <StyledPopoverBox
+          pad="xsmall"
+          margin="xsmall"
+          align="start"
+          onClick={handleFeedbackClick}
+          responsive={false}
+        >
+          <SubtitleTextIcon
+            label={feedbackLabel}
+            subtitle={feedbackInfoLabel}
+            subtitleColor={'secondaryText'}
+            iconType="feedback"
+            iconSize={'1.250rem'}
+          />
+        </StyledPopoverBox>
+      </Box>
+      <Box
+        border={
+          loggedProfileData?.ethAddress
+            ? { style: 'solid', size: '1px', color: 'border', side: 'bottom' }
+            : undefined
+        }
+        fill="horizontal"
+      >
+        <Accordion fill="horizontal">
+          <StyledAccordionPanel
+            label={
+              <StyledPopoverBox pad="xsmall" fill="horizontal" justify="start" responsive={false}>
+                <TextIcon label={legalLabel} iconType="legal" />
+              </StyledPopoverBox>
+            }
+          >
+            {legalMenu?.subRoutes?.map((menuItem: IMenuItem, index: number) => (
+              <StyledPopoverBox
+                key={index}
+                onClick={handleNavigation(menuItem)}
+                pad={{ left: 'medium', vertical: 'small' }}
+                responsive={false}
+              >
+                <Text>{menuItem.label}</Text>
+              </StyledPopoverBox>
+            ))}
+            <Box pad={{ left: 'medium', vertical: 'small' }}>
+              <Text color="secondaryText" size="small">
+                {legalCopyRightLabel}
+              </Text>
+            </Box>
+          </StyledAccordionPanel>
+        </Accordion>
+      </Box>
+      {loggedProfileData?.ethAddress && onLogout && (
+        <Box fill="horizontal" justify="start">
+          <StyledPopoverBox
+            pad="xsmall"
+            margin="xsmall"
+            onClick={onLogout}
+            fill="horizontal"
+            justify="start"
+            responsive={false}
+          >
+            <TextIcon label={signOutLabel} iconType="signOut" />
+          </StyledPopoverBox>
+        </Box>
+      )}
     </Box>
   );
 

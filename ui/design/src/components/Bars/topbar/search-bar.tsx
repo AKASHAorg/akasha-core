@@ -11,6 +11,8 @@ export interface ISearchBar {
 
 const SearchBar: React.FC<ISearchBar> = props => {
   const { inputValue, onInputChange, inputPlaceholderLabel, onSearch } = props;
+  const initialBoxWidth = '15rem';
+  const [boxWidth, setBoxWidth] = React.useState(initialBoxWidth);
 
   const handleSearch = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key === 'Enter') {
@@ -26,7 +28,7 @@ const SearchBar: React.FC<ISearchBar> = props => {
       align="center"
       pad={{ vertical: 'xsmall', horizontal: 'small' }}
       height="2rem"
-      width="15rem"
+      width={boxWidth}
     >
       <TextInput
         size="xsmall"
@@ -35,6 +37,8 @@ const SearchBar: React.FC<ISearchBar> = props => {
         placeholder={inputPlaceholderLabel}
         plain={true}
         onKeyDown={handleSearch}
+        onFocus={() => setBoxWidth('100%')}
+        onBlur={() => setBoxWidth(initialBoxWidth)}
       />
       <Icon type="search" size="xs" onClick={() => onSearch(inputValue)} clickable={true} />
     </Box>

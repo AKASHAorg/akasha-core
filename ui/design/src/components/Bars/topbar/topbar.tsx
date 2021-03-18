@@ -13,7 +13,9 @@ import {
   StyledDrop,
   StyledDiv,
   BrandIcon,
+  MenuIcon,
   VersionButton,
+  IconDiv,
 } from './styled-topbar';
 import { isMobileOnly } from 'react-device-detect';
 import { Button } from '../../Buttons';
@@ -24,6 +26,11 @@ export interface ITopbarProps {
   // data
   loggedProfileData?: Partial<IProfileData>;
   versionURL?: string;
+  notifications?: any;
+  quickAccessItems?: IMenuItem[];
+  searchAreaItem?: IMenuItem;
+  otherAreaItems?: IMenuItem[];
+  currentLocation?: string;
   // labels
   brandLabel: string;
   versionLabel?: string;
@@ -31,15 +38,15 @@ export interface ITopbarProps {
   signUpLabel?: string;
   signOutLabel?: string;
   searchBarLabel?: string;
+  legalLabel?: string;
   feedbackLabel?: string;
   feedbackInfoLabel?: string;
-  notifications?: any;
-  quickAccessItems: IMenuItem[] | null;
-  searchAreaItem?: IMenuItem;
+  legalCopyRightLabel?: string;
   // handlers
   onNavigation: (path: string) => void;
   onSidebarToggle?: (visibility: boolean) => void;
   onSearch: (inputValue: string) => void;
+  onFeedbackClick: () => void;
   // external css
   className?: string;
   onLoginClick: () => void;
@@ -50,21 +57,26 @@ const Topbar = (props: ITopbarProps) => {
   const {
     loggedProfileData,
     versionURL,
+    currentLocation,
     brandLabel,
     versionLabel,
     signInLabel,
     signUpLabel,
     signOutLabel,
     searchBarLabel,
+    legalLabel,
     feedbackLabel,
     feedbackInfoLabel,
+    legalCopyRightLabel,
     className,
     quickAccessItems,
     searchAreaItem,
+    otherAreaItems,
     onSearch,
     onNavigation,
     // onSidebarToggle,
     onLoginClick,
+    onFeedbackClick,
     onLogout,
     notifications,
   } = props;
@@ -76,10 +88,22 @@ const Topbar = (props: ITopbarProps) => {
   const [avatarDropOpen, setAvatarDropOpen] = React.useState(false);
   const [dropItems, setDropItems] = React.useState<IMenuItem[]>([]);
   const [mobileSearchOpen, setMobileSearchOpen] = React.useState(false);
+  const [menuDropOpen, setMenuDropOpen] = React.useState(false);
+  const [legalMenu, setLegalMenu] = React.useState<IMenuItem | null>(null);
 
   const [currentDropItem, setCurrentDropItem] = React.useState<IMenuItem | null>(null);
 
   const menuItemRefs: React.RefObject<any> = React.useRef([]);
+  const feedbackMenuRef: React.RefObject<any> = React.useRef(null);
+
+  const mobileSignedOutView = isMobileOnly && !loggedProfileData?.ethAddress;
+
+  React.useEffect(() => {
+    const legal = otherAreaItems?.find(menuItem => menuItem.label === 'Legal');
+    if (legal && legal.subRoutes?.length) {
+      setLegalMenu(legal);
+    }
+  }, [otherAreaItems]);
 
   const handleNavigation = (menuItem: IMenuItem) => () => {
     if (onNavigation) {
@@ -87,6 +111,10 @@ const Topbar = (props: ITopbarProps) => {
     }
     setDropOpen(false);
     setAvatarDropOpen(false);
+  };
+
+  const handleMenuClick = () => {
+    setMenuDropOpen(true);
   };
 
   // const handleSidebarVisibility = () => {
@@ -150,17 +178,37 @@ const Topbar = (props: ITopbarProps) => {
   const renderPluginIcon = (menuItem: IMenuItem) => {
     if (menuItem.label === 'Notifications') {
       return (
-        <Box onClick={onClickPluginButton(menuItem)}>
+        <IconDiv
+          onClick={onClickPluginButton(menuItem)}
+          isActive={currentLocation?.includes(menuItem.route) || false}
+        >
           <Stack anchor="top-right">
-            <Icon type={menuItem.logo?.value || 'app'} size="sm" clickable={true} />
+            <Icon
+              type={menuItem.logo?.value || 'app'}
+              size="sm"
+              clickable={true}
+              accentColor={currentLocation?.includes(menuItem.route) || false}
+            />
             {notifications?.length && (
               <Box background="errorText" width="9px" height="9px" round={true} />
             )}
           </Stack>
-        </Box>
+        </IconDiv>
       );
     }
-    return <Icon type={menuItem.logo?.value || 'app'} size="sm" clickable={true} />;
+    return (
+      <IconDiv
+        onClick={onClickPluginButton(menuItem)}
+        isActive={currentLocation?.includes(menuItem.route) || false}
+      >
+        <Icon
+          type={menuItem.logo?.value || 'app'}
+          size="sm"
+          clickable={true}
+          accentColor={currentLocation?.includes(menuItem.route) || false}
+        />
+      </IconDiv>
+    );
   };
 
   const renderPluginButton = (menuItem: IMenuItem, index: number) => (
@@ -172,6 +220,11 @@ const Topbar = (props: ITopbarProps) => {
     >
       {menuItem.logo?.type === LogoTypeSource.AVATAR ? (
         <Avatar
+          active={
+            currentLocation?.includes(menuItem.route) ||
+            (loggedProfileData?.pubKey && currentLocation?.includes(loggedProfileData?.pubKey)) ||
+            false
+          }
           ethAddress={loggedProfileData?.ethAddress}
           src={loggedProfileData?.avatar}
           size="xs"
@@ -223,14 +276,8 @@ const Topbar = (props: ITopbarProps) => {
       );
     }
     return (
-      <>
-        <Box
-          direction="row"
-          pad={{ right: 'medium' }}
-          align="center"
-          flex={{ shrink: 0 }}
-          gap="small"
-        >
+      <Box direction="row" align="center" justify="between" fill="horizontal" height="3rem">
+        <Box direction="row" align="center" flex={{ shrink: 0 }} gap="small">
           <Box
             direction="row"
             gap="small"
@@ -269,42 +316,70 @@ const Topbar = (props: ITopbarProps) => {
           {loggedProfileData?.ethAddress &&
             quickAccessItems &&
             quickAccessItems.map(renderPluginButton)}
-          {!loggedProfileData?.ethAddress && (
+          {!isMobileOnly && !loggedProfileData?.ethAddress && (
             <Box direction="row" align="center" gap="small">
               <Button onClick={onLoginClick} label={signInLabel} />
               <Button primary={true} onClick={onLoginClick} label={signUpLabel} />
             </Box>
           )}
+          {!loggedProfileData?.ethAddress && (
+            <MenuIcon
+              ref={feedbackMenuRef}
+              type="moreDark"
+              onClick={handleMenuClick}
+              clickable={true}
+            />
+          )}
         </Box>
-      </>
+      </Box>
     );
   };
 
   return (
     <TopbarWrapper
-      direction="row"
       pad={{ vertical: 'small', horizontal: 'medium' }}
-      justify="between"
-      align="center"
       fill="horizontal"
       className={className}
       elevation="shadow"
-      height="3rem"
+      height={mobileSignedOutView ? '6rem' : '3rem'}
       border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
     >
       {renderContent()}
+      {mobileSignedOutView && (
+        <Box direction="row" align="center" gap="small" fill="horizontal">
+          <Button onClick={onLoginClick} label={signInLabel} fill="horizontal" />
+          <Button primary={true} onClick={onLoginClick} label={signUpLabel} fill="horizontal" />
+        </Box>
+      )}
       {dropOpen && renderDrop()}
-      {avatarDropOpen && loggedProfileData && (
+      {avatarDropOpen && loggedProfileData?.ethAddress && (
         <ProfileMenu
           target={currentDropItem && menuItemRefs.current[currentDropItem?.index]}
           closePopover={() => setAvatarDropOpen(false)}
           onNavigation={onNavigation}
           loggedProfileData={loggedProfileData}
+          legalLabel={legalLabel}
           signOutLabel={signOutLabel}
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
+          legalCopyRightLabel={legalCopyRightLabel}
           menuItems={dropItems}
+          legalMenu={legalMenu}
           onLogout={onLogout}
+          handleFeedbackClick={onFeedbackClick}
+        />
+      )}
+      {menuDropOpen && !loggedProfileData?.ethAddress && (
+        <ProfileMenu
+          target={feedbackMenuRef.current}
+          closePopover={() => setMenuDropOpen(false)}
+          onNavigation={onNavigation}
+          legalLabel={legalLabel}
+          legalMenu={legalMenu}
+          feedbackLabel={feedbackLabel}
+          feedbackInfoLabel={feedbackInfoLabel}
+          legalCopyRightLabel={legalCopyRightLabel}
+          handleFeedbackClick={onFeedbackClick}
         />
       )}
     </TopbarWrapper>
@@ -318,6 +393,7 @@ Topbar.defaultProps = {
   signUpLabel: 'Sign Up',
   signInLabel: 'Sign In',
   signOutLabel: 'Sign Out',
+  legalLabel: 'Legal',
   feedbackLabel: 'Send Us Feedback',
   feedbackInfoLabel: 'Help us improve the experience!',
 };

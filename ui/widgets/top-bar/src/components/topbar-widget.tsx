@@ -3,6 +3,7 @@ import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import TopbarComponent from './topbar-component';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const { lightTheme, ThemeSelector } = DS;
 
@@ -69,16 +70,18 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
       <I18nextProvider i18n={this.props.i18n}>
         <Suspense fallback={<>...</>}>
           <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
-            <TopbarComponent
-              navigateToUrl={this.props.singleSpa.navigateToUrl}
-              toggleSidebar={this.toggleSidebar}
-              getMenuItems={this.props.getMenuItems}
-              loaderEvents={this.props.events}
-              modalSlotId={this.props.layout.app.modalSlotId}
-              globalChannel={this.props.globalChannel}
-              logger={this.props.logger}
-              sdkModules={this.props.sdkModules}
-            />
+            <Router>
+              <TopbarComponent
+                navigateToUrl={this.props.singleSpa.navigateToUrl}
+                toggleSidebar={this.toggleSidebar}
+                getMenuItems={this.props.getMenuItems}
+                loaderEvents={this.props.events}
+                modalSlotId={this.props.layout.app.modalSlotId}
+                globalChannel={this.props.globalChannel}
+                logger={this.props.logger}
+                sdkModules={this.props.sdkModules}
+              />
+            </Router>
           </ThemeSelector>
         </Suspense>
       </I18nextProvider>

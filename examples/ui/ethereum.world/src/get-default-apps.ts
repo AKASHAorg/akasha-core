@@ -54,6 +54,14 @@ export const getDefaultApps = async (appsPublicPath, pluginsPublicPath, _widgets
         area: MenuItemAreaType.BottomArea,
       },
     },
+    {
+      src: `${pluginsPublicPath}/legal/index.js`,
+      name: 'akashaproject__ui_plugin_legal',
+      moduleName: './app',
+      config: {
+        area: MenuItemAreaType.OtherArea,
+      },
+    },
   ];
   // widgets
   const widgetSources = [];
