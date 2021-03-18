@@ -28,6 +28,7 @@ import { CustomizeFeedCard } from './onboarding-cards/customize-feed-card';
 import { TagCard } from './tag-cards/tag-card';
 import { TagDetailCard } from './tag-cards/tag-detail-card';
 import { TagProfileCard } from './tag-cards/tag-profile-card';
+import { TagSearchCard } from './tag-cards/tag-search-card';
 import { FilterCard } from './utility-cards/filter-card';
 
 export {
@@ -59,5 +60,6 @@ export {
   TagCard,
   TagDetailCard,
   TagProfileCard,
+  TagSearchCard,
   FilterCard,
 };

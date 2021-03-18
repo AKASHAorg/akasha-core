@@ -63,6 +63,7 @@ import {
   TagCard,
   TagDetailCard,
   TagProfileCard,
+  TagSearchCard,
   FilterCard,
 } from './components/Cards';
 
@@ -158,6 +159,7 @@ const exported = {
   TagCard,
   TagDetailCard,
   TagProfileCard,
+  TagSearchCard,
   Icon,
   iconTypes,
   IconButton,
