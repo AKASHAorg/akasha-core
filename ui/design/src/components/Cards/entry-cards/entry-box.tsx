@@ -285,7 +285,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ref={akashaRef}
               clickable={false}
             />
-            {onEntryFlag && (
+            {/* this condition hides the icon for logged user's own posts */}
+            {onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress) && (
               <Icon
                 type="moreDark"
                 onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
