@@ -211,6 +211,16 @@ const Topbar = (props: ITopbarProps) => {
     );
   };
 
+  const checkActiveAvatar = (menuItem: IMenuItem) => {
+    if (menuItem.subRoutes?.length && currentLocation?.includes(menuItem?.subRoutes[0]?.route)) {
+      return true;
+    }
+    if (loggedProfileData?.pubKey && currentLocation?.includes(loggedProfileData?.pubKey)) {
+      return true;
+    }
+    return false;
+  };
+
   const renderPluginButton = (menuItem: IMenuItem, index: number) => (
     <StyledDiv
       key={index}
@@ -220,11 +230,7 @@ const Topbar = (props: ITopbarProps) => {
     >
       {menuItem.logo?.type === LogoTypeSource.AVATAR ? (
         <Avatar
-          active={
-            currentLocation?.includes(menuItem.route) ||
-            (loggedProfileData?.pubKey && currentLocation?.includes(loggedProfileData?.pubKey)) ||
-            false
-          }
+          active={checkActiveAvatar(menuItem)}
           ethAddress={loggedProfileData?.ethAddress}
           src={loggedProfileData?.avatar}
           size="xs"
