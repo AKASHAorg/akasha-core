@@ -65,6 +65,7 @@ import {
   TagProfileCard,
   TagSearchCard,
   FilterCard,
+  SwitchCard,
 } from './components/Cards';
 
 import { EditorBox, EditorMeter, editorDefaultValue } from './components/Editor';
@@ -221,6 +222,7 @@ const exported = {
   SourcesWidgetCard,
   TutorialWidgetCard,
   FilterCard,
+  SwitchCard,
   EntryPublishErrorCard,
   Helmet: Helmet as HelmetType,
 };

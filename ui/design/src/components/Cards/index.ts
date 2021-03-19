@@ -30,6 +30,7 @@ import { TagDetailCard } from './tag-cards/tag-detail-card';
 import { TagProfileCard } from './tag-cards/tag-profile-card';
 import { TagSearchCard } from './tag-cards/tag-search-card';
 import { FilterCard } from './utility-cards/filter-card';
+import SwitchCard from './utility-cards/switch-card';
 
 export {
   AppInfoWidgetCard,
@@ -62,4 +63,5 @@ export {
   TagProfileCard,
   TagSearchCard,
   FilterCard,
+  SwitchCard,
 };
