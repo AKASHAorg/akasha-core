@@ -49,6 +49,7 @@ import {
   EntryCardHidden,
   MiniInfoWidgetCard,
   ProfileCard,
+  ProfileSearchCard,
   ProfileWidgetCard,
   ProfileMiniCard,
   TopicsWidgetCard,
@@ -62,7 +63,9 @@ import {
   TagCard,
   TagDetailCard,
   TagProfileCard,
+  TagSearchCard,
   FilterCard,
+  SwitchCard,
 } from './components/Cards';
 
 import { EditorBox, EditorMeter, editorDefaultValue } from './components/Editor';
@@ -149,6 +152,7 @@ const exported = {
   EnsFormCard,
   MiniInfoWidgetCard,
   ProfileCard,
+  ProfileSearchCard,
   ProfileWidgetCard,
   ProfileMiniCard,
   TextInputField,
@@ -156,6 +160,7 @@ const exported = {
   TagCard,
   TagDetailCard,
   TagProfileCard,
+  TagSearchCard,
   Icon,
   iconTypes,
   IconButton,
@@ -217,6 +222,7 @@ const exported = {
   SourcesWidgetCard,
   TutorialWidgetCard,
   FilterCard,
+  SwitchCard,
   EntryPublishErrorCard,
   Helmet: Helmet as HelmetType,
 };

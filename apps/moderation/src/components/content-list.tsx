@@ -10,7 +10,7 @@ import PromptAuthorization from './prompt-authorization';
 
 import { BASE_DECISION_URL } from '../services/constants';
 
-const { Box, Text, ModalRenderer, ToastProvider, ModerateModal } = DS;
+const { Box, Text, ModalRenderer, ToastProvider, ModerateModal, SwitchCard } = DS;
 
 interface IContentListProps {
   slotId: string;
@@ -59,6 +59,7 @@ const ContentList: React.FC<IContentListProps> = props => {
   const [requesting, setRequesting] = React.useState<boolean>(false);
   const [count, setCount] = React.useState<ICount>({ kept: 0, pending: 0, delisted: 0 });
   const [isAuthorised, setIsAuthorised] = React.useState<boolean>(false);
+  const [activeButton, setActiveButton] = React.useState<string>('Delisted');
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -151,6 +152,21 @@ const ContentList: React.FC<IContentListProps> = props => {
     );
   };
 
+  const buttonLabels = [t('Kept'), t('Delisted')];
+
+  const buttonValues = ['Kept', 'Delisted'];
+
+  const onTabClick = (value: string) => {
+    // set active button state
+    setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
+    // toggle list accordingly
+    if (value === 'Kept') {
+      setIsDelisted(false);
+    } else if (value === 'Delisted') {
+      setIsDelisted(true);
+    }
+  };
+
   if (ethAddress && !isAuthorised) {
     return (
       <PromptAuthorization
@@ -199,17 +215,23 @@ const ContentList: React.FC<IContentListProps> = props => {
       </ModalRenderer>
       <ContentTab
         isPending={isPending}
-        isDelisted={isDelisted}
         pendingLabel={t('Pending')}
         moderatedLabel={t('Moderated')}
         countKept={count.kept}
         countPending={count.pending}
         countDelisted={count.delisted}
-        keptLabel={t('Kept')}
-        delistedLabel={t('Delisted')}
         setIsPending={setIsPending}
-        setIsDelisted={setIsDelisted}
       />
+      {!isPending && (
+        <SwitchCard
+          count={isDelisted ? count.delisted : count.kept}
+          activeButton={activeButton}
+          countLabel={!isDelisted ? buttonLabels[0] : buttonLabels[1]}
+          buttonLabels={buttonLabels}
+          buttonValues={buttonValues}
+          onTabClick={onTabClick}
+        />
+      )}
       {requesting && <Text textAlign="center">Fetching items. Please wait...</Text>}
       {!requesting &&
         isPending &&
