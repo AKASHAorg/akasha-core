@@ -78,7 +78,7 @@ const StyledAccordionPanel = styled(AccordionPanel)<{ isMobile?: boolean }>`
         }
       }
       &:hover {
-        background-color: ${props => props.theme.colors.ultraLightBackground};
+        background-color: ${props.theme.colors.ultraLightBackground};
         div:nth-child(2) {
           svg {
             stroke: ${props.theme.colors.primaryText};
@@ -98,11 +98,11 @@ const IconDiv = styled(Box)<{ isActive: boolean }>`
   ${props => {
     if (props.isActive) {
       return css`
-        background-color: ${props => props.theme.colors.accentOpacity};
+        background-color: ${props.theme.colors.accentOpacity};
       `;
     }
     return css`
-      background-color: ${props => props.theme.colors.background};
+      background-color: ${props.theme.colors.background};
     `;
   }}
 `;
