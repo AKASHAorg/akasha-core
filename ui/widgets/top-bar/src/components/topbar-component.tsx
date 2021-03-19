@@ -11,10 +11,12 @@ import {
   useErrors,
   useNotifications,
   useProfile,
+  useModalState,
 } from '@akashaproject/ui-awf-hooks';
+import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { useTranslation } from 'react-i18next';
 
-const { lightTheme, Topbar, ThemeSelector, LoginModal } = DS;
+const { lightTheme, Topbar, ThemeSelector, LoginModal, FeedbackModal, ModalRenderer } = DS;
 
 interface TopBarProps {
   navigateToUrl: (url: string) => void;
@@ -39,8 +41,9 @@ const TopbarComponent = (props: TopBarProps) => {
   } = props;
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
-  const [showLoginModal, setShowLoginModal] = React.useState(false);
+
   const [errorState, errorActions] = useErrors({ logger });
+
   const [loginState, loginActions] = useLoginState({
     globalChannel,
     onError: errorActions.createError,
@@ -62,6 +65,13 @@ const TopbarComponent = (props: TopBarProps) => {
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
     loggedEthAddress: loginState.ethAddress,
+  });
+
+  const [modalState, modalStateActions] = useModalState({
+    initialState: {
+      feedback: false,
+    },
+    isLoggedIn: !!loginState.ethAddress,
   });
 
   React.useEffect(() => {
@@ -104,10 +114,10 @@ const TopbarComponent = (props: TopBarProps) => {
   }, []);
 
   React.useEffect(() => {
-    if (loginState.ethAddress && showLoginModal) {
-      setTimeout(() => setShowLoginModal(false), 500);
+    if (loginState.ethAddress && modalState[MODAL_NAMES.LOGIN]) {
+      setTimeout(() => handleLoginModalClose(), 500);
     }
-  }, [loginState.ethAddress, showLoginModal]);
+  }, [loginState.ethAddress, modalState[MODAL_NAMES.LOGIN]]);
 
   React.useEffect(() => {
     const isLoadingProfile =
@@ -152,7 +162,7 @@ const TopbarComponent = (props: TopBarProps) => {
   };
 
   const handleLoginClick = () => {
-    setShowLoginModal(true);
+    modalStateActions.show(MODAL_NAMES.LOGIN);
   };
 
   const handleLogin = (provider: 2 | 3) => {
@@ -166,9 +176,17 @@ const TopbarComponent = (props: TopBarProps) => {
     });
   };
 
-  const handleModalClose = () => {
-    setShowLoginModal(false);
+  const handleLoginModalClose = () => {
+    modalStateActions.hide(MODAL_NAMES.LOGIN);
     errorActions.removeLoginErrors();
+  };
+
+  const handleFeedbackModalClose = () => {
+    modalStateActions.hide(MODAL_NAMES.FEEDBACK);
+  };
+
+  const handleFeedbackModalShow = () => {
+    modalStateActions.show(MODAL_NAMES.FEEDBACK);
   };
 
   const handleSearch = (inputValue: string) => {
@@ -204,15 +222,34 @@ const TopbarComponent = (props: TopBarProps) => {
         otherAreaItems={otherAreaItems}
         onLoginClick={handleLoginClick}
         onLogout={handleLogout}
-        onFeedbackClick={() => null}
+        onFeedbackClick={handleFeedbackModalShow}
         notifications={notificationsState.notifications}
         currentLocation={location?.pathname}
       />
+      <ModalRenderer slotId={modalSlotId}>
+        {modalState[MODAL_NAMES.FEEDBACK] && (
+          <FeedbackModal
+            titleLabel={t("We'd love to hear your feedback!")}
+            subtitleLabel={t('If you find any bugs or problems, please let us know')}
+            openAnIssueLabel={t('Open an Issue')}
+            emailUsLabel={t('Email Us')}
+            footerTextLabel={t(
+              'Join our Discord channel to meet everyone, say "Hello!", provide feedback and share ideas.',
+            )}
+            footerLinkText1Label={t('Join in')}
+            footerLinkText2Label={t('Discord')}
+            openIssueLink={'https://github.com/AKASHAorg/akasha-world-framework/issues/new/choose'}
+            emailUsLink={''}
+            joinDiscordLink={''}
+            closeModal={handleFeedbackModalClose}
+          />
+        )}
+      </ModalRenderer>
       <LoginModal
         slotId={modalSlotId}
         onLogin={handleLogin}
-        onModalClose={handleModalClose}
-        showModal={showLoginModal}
+        onModalClose={handleLoginModalClose}
+        showModal={modalState[MODAL_NAMES.LOGIN]}
         titleLabel={t('Connect a wallet')}
         metamaskModalHeadline={t('Connecting')}
         metamaskModalMessage={t('Please complete the process in your wallet')}

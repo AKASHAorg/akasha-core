@@ -34,13 +34,8 @@ const BrandIcon = styled(Icon)`
   }
 `;
 
-const MenuIcon = styled(Icon)`
-  transform: rotate(90deg);
-  &:hover {
-    & * {
-      stroke: none;
-    }
-  }
+const MenuIcon = styled(Icon)<{ rotate?: number }>`
+  transform: ${props => `rotate(${props.rotate || 0}deg)`};
 `;
 
 const VersionButton = styled(Button)`

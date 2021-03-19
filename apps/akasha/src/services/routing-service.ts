@@ -21,7 +21,8 @@ export const redirectToPost = (
   if (callback && typeof callback === 'function') {
     callback();
   }
-  if (currentPostId && currentPostId !== entryId) {
-    navigateToUrl(url);
+  if (currentPostId && currentPostId === entryId) {
+    return;
   }
+  return navigateToUrl(url);
 };

@@ -329,12 +329,16 @@ const Topbar = (props: ITopbarProps) => {
             </Box>
           )}
           {!loggedProfileData?.ethAddress && (
-            <MenuIcon
-              ref={feedbackMenuRef}
-              type="moreDark"
-              onClick={handleMenuClick}
-              clickable={true}
-            />
+            <IconDiv isActive={menuDropOpen} onClick={handleMenuClick}>
+              <MenuIcon
+                rotate={isMobileOnly ? 90 : 0}
+                ref={feedbackMenuRef}
+                type={isMobileOnly ? 'moreDark' : 'arrowDown'}
+                clickable={true}
+                accentColor={menuDropOpen}
+                size="sm"
+              />
+            </IconDiv>
           )}
         </Box>
       </Box>
@@ -372,7 +376,7 @@ const Topbar = (props: ITopbarProps) => {
           menuItems={dropItems}
           legalMenu={legalMenu}
           onLogout={onLogout}
-          handleFeedbackClick={onFeedbackClick}
+          onFeedbackClick={onFeedbackClick}
         />
       )}
       {menuDropOpen && !loggedProfileData?.ethAddress && (
@@ -385,7 +389,7 @@ const Topbar = (props: ITopbarProps) => {
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
           legalCopyRightLabel={legalCopyRightLabel}
-          handleFeedbackClick={onFeedbackClick}
+          onFeedbackClick={onFeedbackClick}
         />
       )}
     </TopbarWrapper>

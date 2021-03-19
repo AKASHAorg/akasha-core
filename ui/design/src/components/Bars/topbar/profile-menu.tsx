@@ -24,7 +24,7 @@ export interface IProfileMenu {
   // handlers
   closePopover: () => void;
   onNavigation: (path: string) => void;
-  handleFeedbackClick: () => void;
+  onFeedbackClick: () => void;
   onLogout?: any;
 }
 
@@ -41,13 +41,20 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
     legalCopyRightLabel,
     closePopover,
     onNavigation,
-    handleFeedbackClick,
+    onFeedbackClick,
     onLogout,
   } = props;
 
   const handleNavigation = (menuItem: IMenuItem) => () => {
     if (onNavigation) {
       onNavigation(menuItem.route);
+    }
+    closePopover();
+  };
+
+  const handleFeedbackClick = () => {
+    if (onFeedbackClick) {
+      onFeedbackClick();
     }
     closePopover();
   };
