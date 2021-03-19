@@ -24,6 +24,7 @@ import LoginCTAWidgetCard from './widget-cards/login-cta-widget-card';
 import TrendingWidgetCard from './widget-cards/trending-widget-card';
 import SourcesWidgetCard from './widget-cards/sources-widget-card';
 import TutorialWidgetCard from './widget-cards/tutorial-widget/tutorial-widget-card';
+import CookieWidgetCard from './widget-cards/cookie-card';
 import { CustomizeFeedCard } from './onboarding-cards/customize-feed-card';
 import { TagCard } from './tag-cards/tag-card';
 import { TagDetailCard } from './tag-cards/tag-detail-card';
@@ -57,6 +58,7 @@ export {
   TrendingWidgetCard,
   SourcesWidgetCard,
   TutorialWidgetCard,
+  CookieWidgetCard,
   CustomizeFeedCard,
   TagCard,
   TagDetailCard,

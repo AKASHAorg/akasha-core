@@ -53,12 +53,20 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
   </StyledBox>
 );
 
-const MainAreaCardBox = styled(BasicCardBox)<{ verticalFill?: boolean }>`
+const MainAreaCardBox = styled(BasicCardBox)<{ verticalFill?: boolean; borderedShadow?: boolean }>`
   /* max-width: 36.313rem; */
   ${props => {
     if (props.verticalFill) {
       return css`
         height: 100%;
+      `;
+    }
+    if (props.borderedShadow) {
+      return css`
+        border: 0.1rem solid ${props.theme.colors.darkerBorder};
+        box-shadow: 2px 1px 11px 1px rgba(98, 107, 122, 0.25);
+        -webkit-box-shadow: 2px 1px 11px 0px rgba(98, 107, 122, 0.25);
+        -moz-box-shadow: 2px 1px 11px 0px rgba(98, 107, 122, 0.25);
       `;
     }
     return;

@@ -21,6 +21,7 @@ const {
   MiniInfoWidgetCard,
   TrendingWidgetCard,
   TutorialWidgetCard,
+  CookieWidgetCard,
 } = DS;
 
 storiesOf('Cards/Widget Cards', module)
@@ -130,6 +131,21 @@ storiesOf('Cards/Widget Cards', module)
         handleLearnMore={() => action('handle learn more Clicked')('Synthetic Event')}
         handleCallToAction={() => action('handle call to action Clicked')('Synthetic Event')}
         handleDismiss={() => action('handle dismiss Clicked')('Synthetic Event')}
+      />
+    </Box>
+  ))
+  .add('coookie card', () => (
+    <Box align="center" pad={{ top: '40px' }}>
+      <CookieWidgetCard
+        titleLabel={text('Title Label', 'Cookies 🍪')}
+        contentLabel={text(
+          'Content Label',
+          'To help provide you with the best experience when visiting this Website, we use cookies for security and product improvement purposes in accordance with our',
+        )}
+        privacyUrlLabel={text('Privacy Url Label', 'Privacy Policy')}
+        privacyUrl={text('Privacy Url', 'https://ethereum.world/privacy-policy')}
+        acceptLabel={text('Accept Label', 'Accept')}
+        onClick={() => action('clicked button')('Synthetic Event')}
       />
     </Box>
   ));
