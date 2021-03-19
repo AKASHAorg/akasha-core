@@ -34,7 +34,7 @@ const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
   return (
     <>
       <AvatarDiv>
-        <Avatar size="xl" border="lg" ethAddress={ethAddress} src={avatar} />
+        <Avatar size="xxl" border="lg" ethAddress={ethAddress} src={avatar} />
         {editable &&
           profileProvidersData &&
           profileProvidersData.avatarProviders &&

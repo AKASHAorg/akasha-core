@@ -1,29 +1,15 @@
-import { Box, Text } from 'grommet';
 import React from 'react';
-import { DuplexButton } from '../../Buttons/index';
-import { Icon } from '../../Icon';
+import { Box, Text } from 'grommet';
+import { isMobileOnly } from 'react-device-detect';
+
+import { TagIconDiv, StyledInlineBox } from './styled-tag-card';
+
 import { MainAreaCardBox } from '../common/basic-card-box';
 import { ITag } from '../widget-cards/trending-widget-card';
-import styled from 'styled-components';
-import { isMobileOnly } from 'react-device-detect';
+
+import { DuplexButton } from '../../Buttons/index';
+import { Icon } from '../../Icon';
 import { TextLine } from '../../VirtualList/placeholders/entry-card-placeholder';
-
-const TagIconDiv = styled.div`
-  position: relative;
-  top: -1.875em;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 80px;
-  height: 80px;
-  background-color: ${props => props.theme.colors.lightBackground};
-  flex-shrink: 0;
-`;
-
-const StyledInlineBox = styled(Box)`
-  display: inline-flex;
-`;
 
 export interface ITagProfileCard {
   // data

@@ -25,9 +25,11 @@ import code from './code';
 import coins from './coins';
 import comments from './comments';
 import copy from './copy';
+import discord from './discord';
 import document from './document';
 import edit from './edit';
 import editSimple from './edit-simple';
+import email from './email';
 import emoji from './emoji';
 import error from './error';
 import ethereumWorldLogo from './ethereum-world-logo';
@@ -36,6 +38,7 @@ import eye from './eye';
 import facebook from './facebook';
 import feedback from './feedback';
 import following from './following';
+import github from './github';
 import hashtag from './hashtag';
 import heart from './heart';
 import home from './home';
@@ -112,12 +115,14 @@ export {
   copy,
   check,
   checkSimple,
+  discord,
   payment,
   eye,
   error,
   facebook,
   feedback,
   following,
+  github,
   document,
   ethereum,
   ethereumWorldLogo,
@@ -135,6 +140,7 @@ export {
   trash,
   editSimple,
   edit,
+  email,
   emoji,
   hashtag,
   heart,

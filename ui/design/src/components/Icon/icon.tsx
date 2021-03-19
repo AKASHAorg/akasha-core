@@ -32,9 +32,11 @@ export type IconType =
   | 'copy'
   | 'check'
   | 'checkSimple'
+  | 'discord'
   | 'document'
   | 'editSimple'
   | 'edit'
+  | 'email'
   | 'emoji'
   | 'eye'
   | 'ethereum'
@@ -43,6 +45,7 @@ export type IconType =
   | 'facebook'
   | 'feedback'
   | 'following'
+  | 'github'
   | 'hashtag'
   | 'heart'
   | 'home'
@@ -125,9 +128,11 @@ export const iconTypes: IconType[] = [
   'check',
   'checkSimple',
   'coins',
+  'discord',
   'document',
   'editSimple',
   'edit',
+  'email',
   'emoji',
   'eye',
   'ethereum',
@@ -136,6 +141,7 @@ export const iconTypes: IconType[] = [
   'facebook',
   'feedback',
   'following',
+  'github',
   'hashtag',
   'heart',
   'home',
