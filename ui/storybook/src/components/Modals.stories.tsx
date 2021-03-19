@@ -292,9 +292,9 @@ storiesOf('Modals/Feeback Modal', module).add('Feedback modal', () => (
     )}
     footerLinkText1Label={text('Footer Link Text 1 Label', 'Join in')}
     footerLinkText2Label={text('Footer Link Text 2 Label', 'Discord')}
-    onOpenAnIssueClick={() => action('Open an Issue')('Issue opened!')}
-    onEmailUsClick={() => action('Email Us')('Email successfully sent!')}
-    onJoinDiscordClick={() => action('Join Discord')('Welcome to our Discord channel!')}
-    closeModal={() => action('Close Modal')('Modal closed')}
+    onOpenAnIssueClick={() => action('Open an Issue')('Synthetic Event')}
+    onEmailUsClick={() => action('Email Us')('Synthetic Event')}
+    onJoinDiscordClick={() => action('Join Discord')('Synthetic Event')}
+    closeModal={() => action('Close Modal')('Synthetic Event')}
   />
 ));

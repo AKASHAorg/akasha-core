@@ -70,7 +70,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
         <MiniProfileAvatarDiv>
           <Avatar
             border="lg"
-            size="xl"
+            size="xxl"
             src={profileData.avatar}
             ethAddress={profileData.ethAddress}
           />
