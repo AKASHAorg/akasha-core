@@ -74,16 +74,11 @@ const StyledAccordionPanel = styled(AccordionPanel)<{ isMobile?: boolean }>`
     return css`
       div:nth-child(2) {
         svg {
-          stroke: ${props.theme.colors.background};
+          stroke: ${props.theme.colors.primaryText};
         }
       }
       &:hover {
         background-color: ${props.theme.colors.ultraLightBackground};
-        div:nth-child(2) {
-          svg {
-            stroke: ${props.theme.colors.primaryText};
-          }
-        }
       }
     `;
   }}

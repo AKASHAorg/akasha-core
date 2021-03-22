@@ -1,6 +1,15 @@
 import * as React from 'react';
 import { Box, TextInput } from 'grommet';
 import { Icon } from '../../Icon';
+import styled from 'styled-components';
+
+const SearchContainer = styled(Box)`
+  transition: width 0.3s ease;
+  width: 15rem;
+  &:focus-within {
+    width: 100%;
+  }
+`;
 
 export interface ISearchBar {
   inputValue: string;
@@ -11,8 +20,6 @@ export interface ISearchBar {
 
 const SearchBar: React.FC<ISearchBar> = props => {
   const { inputValue, onInputChange, inputPlaceholderLabel, onSearch } = props;
-  const initialBoxWidth = '15rem';
-  const [boxWidth, setBoxWidth] = React.useState(initialBoxWidth);
 
   const handleSearch = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key === 'Enter') {
@@ -21,14 +28,13 @@ const SearchBar: React.FC<ISearchBar> = props => {
   };
 
   return (
-    <Box
+    <SearchContainer
       border={{ side: 'all', size: '1px', style: 'solid', color: 'border' }}
       round="large"
       direction="row"
       align="center"
       pad={{ vertical: 'xsmall', horizontal: 'small' }}
       height="2rem"
-      width={boxWidth}
     >
       <TextInput
         size="xsmall"
@@ -37,11 +43,9 @@ const SearchBar: React.FC<ISearchBar> = props => {
         placeholder={inputPlaceholderLabel}
         plain={true}
         onKeyDown={handleSearch}
-        onFocus={() => setBoxWidth('100%')}
-        onBlur={() => setBoxWidth(initialBoxWidth)}
       />
       <Icon type="search" size="xs" onClick={() => onSearch(inputValue)} clickable={true} />
-    </Box>
+    </SearchContainer>
   );
 };
 
