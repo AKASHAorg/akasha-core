@@ -239,8 +239,8 @@ const TopbarComponent = (props: TopBarProps) => {
             footerLinkText1Label={t('Join in')}
             footerLinkText2Label={t('Discord')}
             openIssueLink={'https://github.com/AKASHAorg/akasha-world-framework/issues/new/choose'}
-            emailUsLink={''}
-            joinDiscordLink={''}
+            emailUsLink={'mailto:feedback@ethereum.world'}
+            joinDiscordLink={'https://discord.gg/uJZrvHv6'}
             closeModal={handleFeedbackModalClose}
           />
         )}
