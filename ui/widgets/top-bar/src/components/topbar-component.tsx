@@ -39,6 +39,13 @@ const TopbarComponent = (props: TopBarProps) => {
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
   const [showLoginModal, setShowLoginModal] = React.useState(false);
+  const [showSignUpModal, setshowSignUpModal] = React.useState<{
+    inviteToken: string | null;
+    status: boolean;
+  }>({
+    inviteToken: null,
+    status: false,
+  });
   const [errorState, errorActions] = useErrors({ logger });
   const [loginState, loginActions] = useLoginState({
     globalChannel,
@@ -126,6 +133,14 @@ const TopbarComponent = (props: TopBarProps) => {
   const handleLoginClick = () => {
     setShowLoginModal(true);
   };
+  const handleSingUpClick = () => {
+    const state = {
+      inviteToken: localStorage.getItem('@signUpToken'),
+      status: true,
+    };
+    setshowSignUpModal(state);
+    setShowLoginModal(true);
+  };
   const handleLogin = (provider: 2 | 3) => {
     loginActions.login(provider);
   };
@@ -137,8 +152,18 @@ const TopbarComponent = (props: TopBarProps) => {
     });
   };
   const handleModalClose = () => {
+    setshowSignUpModal({
+      inviteToken: null,
+      status: false,
+    });
     setShowLoginModal(false);
     errorActions.removeLoginErrors();
+  };
+  const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setshowSignUpModal({
+      inviteToken: e.target.value,
+      status: true,
+    });
   };
   const handleSearch = (inputValue: string) => {
     if (searchAreaItem) {
@@ -166,6 +191,7 @@ const TopbarComponent = (props: TopBarProps) => {
         searchAreaItem={searchAreaItem}
         size={size}
         onLoginClick={handleLoginClick}
+        onSignUpClick={handleSingUpClick}
         onLogout={handleLogout}
         notifications={notificationsState.notifications}
       />
@@ -174,6 +200,8 @@ const TopbarComponent = (props: TopBarProps) => {
         onLogin={handleLogin}
         onModalClose={handleModalClose}
         showModal={showLoginModal}
+        showSignUpModal={showSignUpModal}
+        onInputTokenChange={onInputTokenChange}
         titleLabel={t('Connect a wallet')}
         metamaskModalHeadline={t('Connecting')}
         metamaskModalMessage={t('Please complete the process in your wallet')}

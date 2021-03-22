@@ -1,24 +1,42 @@
 import Router from 'koa-router';
 import koa from 'koa';
-import { contextCache } from './storage/cache';
+import { ThreadID } from '@textile/hub';
+import { getAppDB } from './helpers';
 
 const api = new Router({
   prefix: '/api',
 });
-
-api.get('/validate-token', async (ctx: koa.Context, next: () => Promise<any>) => {
-  const authHeader = ctx.headers.authorization || '';
-  if (!authHeader) {
-    ctx.status = 400; // bad request
+const dbId = ThreadID.fromString(process.env.AWF_THREADdb);
+api.post('/validate-token/:token', async (ctx: koa.Context, next: () => Promise<any>) => {
+  const invite = ctx?.params?.token;
+  if (!invite) {
+    ctx.status = 401;
   } else {
-    const auth = authHeader.split(' ');
-    if (auth.length !== 2 || auth[0] !== 'Bearer') {
-      ctx.status = 401; // no valid authentication credentials
+    const db = await getAppDB();
+    const exists = await db.findByID(dbId, 'Invites', invite);
+    if (exists) {
+      ctx.status = exists.used ? 403 : 200;
     } else {
-      const token = auth[1];
-      ctx.status = contextCache.has(token) ? 204 : 403;
+      ctx.status = 401;
     }
   }
   await next();
 });
+
+api.post('/add-token/:token', async (ctx: koa.Context, next: () => Promise<any>) => {
+  const token = ctx?.params?.token;
+  if (!token) {
+    ctx.status = 401;
+  } else {
+    const db = await getAppDB();
+    const id = await db.create(dbId, 'Invites', [{ _id: token, name: token, used: false }]);
+    if (id.length) {
+      ctx.status = 200;
+    } else {
+      ctx.status = 400;
+    }
+  }
+  await next();
+});
+
 export default api;

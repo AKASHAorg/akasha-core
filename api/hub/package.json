@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@koa/cors": "3.1.0",
-    "@textile/hub": "6.0.2",
+    "@textile/hub": "6.1.2",
     "algoliasearch": "4.8.5",
     "@algolia/cache-in-memory": "4.8.5",
     "@algolia/client-common": "4.8.5",
@@ -45,6 +45,7 @@
     "emittery": "0.8.1",
     "eth-ens-namehash": "2.0.8",
     "ethers": "5.0.29",
+    "graphql": "15.5.0",
     "koa": "2.13.1",
     "koa-bodyparser": "4.3.0",
     "koa-json": "2.0.2",
