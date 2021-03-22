@@ -22,7 +22,8 @@ export interface PostRendererProps {
   onRepost: (withComment: boolean, entryData: any) => void;
   sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
-  onMentionClick: (ethAddress: string) => void;
+  onMentionClick: (pubKey: string) => void;
+  onTagClick: (name: string) => void;
   bookmarkState?: IBookmarkState;
   style?: React.CSSProperties;
   contentClickable?: boolean;
@@ -150,6 +151,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     onContentClick={props.onNavigate}
                     contentClickable={contentClickable}
                     onMentionClick={props.onMentionClick}
+                    onTagClick={props.onTagClick}
                     hidePublishTime={hidePublishTime}
                     disableActions={disableActions}
                     hideActionButtons={true}

@@ -22,7 +22,7 @@ const { Box, Helmet, ReportModal, ToastProvider, ModalRenderer } = DS;
 export interface ProfilePageProps extends RootComponentProps {
   modalActions: ModalStateActions;
   modalState: ModalState;
-  ethAddress: string | null;
+  loggedEthAddress: string | null;
   loginActions: UseLoginActions;
   loggedProfileData: any;
   flagged: string;
@@ -34,7 +34,7 @@ export interface ProfilePageProps extends RootComponentProps {
 
 const ProfilePage = (props: ProfilePageProps) => {
   const {
-    ethAddress,
+    loggedEthAddress,
     loginActions,
     loggedProfileData,
     flagged,
@@ -57,43 +57,28 @@ const ProfilePage = (props: ProfilePageProps) => {
     onError: errorActions.createError,
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
+    ensService: props.sdkModules.registry.ens,
   });
 
   const [postsState, postsActions] = usePosts({
     postsService: props.sdkModules.posts,
     ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
-    user: ethAddress,
+    user: loggedEthAddress,
   });
-
-  const virtualListRef = React.useRef<any>(null);
 
   React.useEffect(() => {
     // reset post ids and virtual list, if user logs in
-    if (ethAddress && virtualListRef.current) {
+    if (loggedEthAddress) {
       postsActions.resetPostIds();
-      virtualListRef.current.reset();
     }
-  }, [ethAddress]);
-
-  React.useEffect(() => {
-    // if post ids array is reset, get user posts
-    if (
-      !!postsState.postIds.length &&
-      !postsState.isFetchingPosts &&
-      postsState.totalItems === null
-    ) {
-      postsActions.getUserPosts({ pubKey, limit: 5 });
-    }
-  }, [postsState.postIds, postsState.isFetchingPosts]);
+  }, [loggedEthAddress]);
 
   React.useEffect(() => {
     if (pubKey) {
+      profileActions.resetProfileData();
       profileActions.getProfileData({ pubKey });
       postsActions.resetPostIds();
-      if (virtualListRef.current) {
-        virtualListRef.current.reset();
-      }
     }
   }, [pubKey]);
 
@@ -135,8 +120,9 @@ const ProfilePage = (props: ProfilePageProps) => {
           return;
         }
         url = `/profile/${details.entryId}`;
-        postsActions.resetPostIds();
-        profileActions.resetProfileData();
+        break;
+      case ItemTypes.TAG:
+        url = `/AKASHA-app/tags/${details.entryId}`;
         break;
       case ItemTypes.ENTRY:
         url = `/AKASHA-app/post/${details.entryId}`;
@@ -195,7 +181,9 @@ const ProfilePage = (props: ProfilePageProps) => {
   return (
     <Box fill="horizontal">
       <Helmet>
-        <title>Profile | {`${profileUserName}`}'s Page</title>
+        <title>
+          {t('Profile')} | {t("{{profileUsername}}'s Page", { profileUsername: profileUserName })}
+        </title>
       </Helmet>
       <ModalRenderer slotId={props.layout.app.modalSlotId}>
         {reportModalOpen && (
@@ -230,7 +218,7 @@ const ProfilePage = (props: ProfilePageProps) => {
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
               closeLabel={t('Close')}
-              user={ethAddress ? ethAddress : ''}
+              user={loggedEthAddress ? loggedEthAddress : ''}
               contentId={flagged}
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
@@ -248,7 +236,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         profileActions={profileActions}
         profileUpdateStatus={profileUpdateStatus}
         profileId={pubKey}
-        loggedUserEthAddress={ethAddress}
+        loggedUserEthAddress={loggedEthAddress}
         modalActions={props.modalActions}
         modalState={props.modalState}
         loginActions={loginActions}
@@ -256,7 +244,6 @@ const ProfilePage = (props: ProfilePageProps) => {
       <FeedWidget
         // pass i18n from props (the i18next instance, not the react one!)
         i18n={props.i18n}
-        virtualListRef={virtualListRef}
         itemType={ItemTypes.ENTRY}
         logger={props.logger}
         loadMore={handleLoadMore}
@@ -268,7 +255,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         sdkModules={props.sdkModules}
         layout={props.layout}
         globalChannel={props.globalChannel}
-        ethAddress={ethAddress}
+        ethAddress={loggedEthAddress}
         onNavigate={handleNavigation}
         onLoginModalOpen={handleLoginModalOpen}
         totalItems={postsState.totalItems}

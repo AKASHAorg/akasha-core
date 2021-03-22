@@ -1,10 +1,10 @@
 import React from 'react';
+import { isMobileOnly } from 'react-device-detect';
 import { useToasts } from 'react-toast-notifications';
 import { Box, Text, FormField, RadioButtonGroup } from 'grommet';
 
 import { MainAreaCardBox } from '../../Cards/common/basic-card-box';
-import { ModalWrapper } from '../common/styled-modal';
-import { Button } from '../../Buttons';
+import { ModalWrapper, ModalButton } from '../common/styled-modal';
 import { Icon } from '../../Icon';
 
 import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from '../styled';
@@ -152,12 +152,12 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   }
 
   return (
-    <ModalWrapper>
+    <ModalWrapper isMobile={isMobileOnly}>
       <StyledBox width={width > 800 ? '35%' : width > 500 ? '50%' : '100%'}>
         <MainAreaCardBox className={className}>
           <Box direction="column" pad="large">
             <Box direction="row" margin={{ top: 'xsmall' }} align="start">
-              {size === 'small' && (
+              {isMobileOnly && (
                 <Icon
                   type="arrowLeft"
                   color="secondaryText"
@@ -169,7 +169,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
               <Text weight={600} margin={{ bottom: '1rem', horizontal: 'auto' }} size="large">
                 {titleLabel}
               </Text>
-              {size !== 'small' && (
+              {!isMobileOnly && (
                 <Icon
                   type="close"
                   color="secondaryText"
@@ -239,13 +239,16 @@ const ReportModal: React.FC<IReportModalProps> = props => {
               </Text>
             </Box>
             <Box width="100%" direction="row" justify="end">
-              {size !== 'small' && (
-                <Button margin={{ right: '0.5rem' }} label={cancelLabel} onClick={handleCancel} />
-              )}
-              <Button
+              <ModalButton
+                margin={{ right: '0.5rem' }}
+                label={cancelLabel}
+                isMobile={isMobileOnly}
+                onClick={handleCancel}
+              />
+              <ModalButton
                 primary={true}
                 label={reportLabel}
-                fill={size === 'small' ? true : false}
+                isMobile={isMobileOnly}
                 onClick={handleReport}
                 disabled={requesting || !reason.length}
               />

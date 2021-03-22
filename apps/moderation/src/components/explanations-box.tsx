@@ -5,7 +5,7 @@ import { moderationRequest } from '@akashaproject/ui-awf-hooks';
 
 import ExplanationsCardEntry, { IExplanationsBoxEntryProps } from './explanations-box-entry';
 
-const { Box, Text, MainAreaCardBox } = DS;
+const { Box, Text } = DS;
 
 export interface IExplanationsBoxProps extends Omit<IExplanationsBoxEntryProps, 'entry'> {
   entryId: string;
@@ -39,20 +39,18 @@ const ExplanationsCard: React.FC<IExplanationsBoxProps> = props => {
     <Box width="100%">
       {requesting && <Text>Loading ...</Text>}
       {!requesting && (
-        <MainAreaCardBox>
-          <Box pad="1rem" style={{ maxHeight: '8rem', overflowY: 'scroll' }}>
-            {flags.map((flag: any, id: number) => (
-              <ExplanationsCardEntry
-                key={id}
-                entry={flag}
-                reportedByLabel={reportedByLabel}
-                forLabel={forLabel}
-                logger={logger}
-                sdkModules={sdkModules}
-              />
-            ))}
-          </Box>
-        </MainAreaCardBox>
+        <Box>
+          {flags.map((flag: any, id: number) => (
+            <ExplanationsCardEntry
+              key={id}
+              entry={flag}
+              reportedByLabel={reportedByLabel}
+              forLabel={forLabel}
+              logger={logger}
+              sdkModules={sdkModules}
+            />
+          ))}
+        </Box>
       )}
     </Box>
   );

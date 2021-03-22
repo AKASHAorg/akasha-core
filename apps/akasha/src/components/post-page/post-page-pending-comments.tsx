@@ -69,6 +69,9 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
                 onMentionClick={() => {
                   /* not allowed */
                 }}
+                onTagClick={() => {
+                  /* not allowed */
+                }}
                 contentClickable={contentClickable}
                 disableActions={true}
               />

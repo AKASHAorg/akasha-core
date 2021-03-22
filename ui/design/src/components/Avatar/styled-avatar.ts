@@ -8,9 +8,10 @@ const sizes = {
   sm: '32px',
   md: '40px',
   lg: '48px',
-  xl: '84px',
+  xl: '72px',
+  xxl: '84px',
 };
-export type AvatarSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type AvatarSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
 export interface AvatarProps {
   size: AvatarSize;

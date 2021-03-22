@@ -20,7 +20,7 @@ import {
   changeCoverImageLabel,
 } from './cards-data';
 
-const { Box, ProfileCard, ProfileWidgetCard, ProfileMiniCard } = DS;
+const { Box, ProfileCard, ProfileWidgetCard, ProfileMiniCard, ProfileSearchCard } = DS;
 
 storiesOf('Cards/Profile Cards', module)
   .add('profile card', () => (
@@ -50,6 +50,17 @@ storiesOf('Cards/Profile Cards', module)
         flaggable={true}
         onEntryFlag={() => null}
         getProfileProvidersData={() => action('Gettting full Profile Data')('Synthetic Event')}
+      />
+    </Box>
+  ))
+  .add('profile search card', () => (
+    <Box align="center" pad={{ top: '40px' }}>
+      <ProfileSearchCard
+        postsLabel={text('Users', postsLabel)}
+        // @ts-ignore
+        profileData={select('Profile Data', { dapp: appData, user: profileData }, profileData)}
+        handleFollow={() => action('Following Box Clicked')('Synthetic Event')}
+        handleUnfollow={() => action('Following Box Clicked')('Synthetic Event')}
       />
     </Box>
   ))

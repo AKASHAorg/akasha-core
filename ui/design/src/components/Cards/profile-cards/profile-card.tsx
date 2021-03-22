@@ -229,7 +229,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               setAvatarPopoverOpen={setAvatarPopoverOpen}
               profileProvidersData={profileProvidersData}
             />
-            <Box pad={{ vertical: 'small', left: 'xsmall', right: 'small' }}>
+            <Box pad={{ vertical: 'xxsmall', left: 'xsmall', right: 'small' }}>
               <ProfileCardName
                 editable={editable}
                 name={name || truncateMiddle(profileData.ethAddress)}
@@ -249,15 +249,17 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           </Box>
           <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
             {loggedEthAddress !== profileData.ethAddress && (
-              <DuplexButton
-                icon={<Icon type="following" />}
-                active={isFollowing}
-                activeLabel={followingLabel}
-                inactiveLabel={followLabel}
-                activeHoverLabel={unfollowLabel}
-                onClickActive={handleUnfollow}
-                onClickInactive={handleFollow}
-              />
+              <Box width="7rem">
+                <DuplexButton
+                  icon={<Icon type="following" />}
+                  active={isFollowing}
+                  activeLabel={followingLabel}
+                  inactiveLabel={followLabel}
+                  activeHoverLabel={unfollowLabel}
+                  onClickActive={handleUnfollow}
+                  onClickInactive={handleFollow}
+                />
+              </Box>
             )}
             {!isMobile && canUserEdit && (
               <EditButton
