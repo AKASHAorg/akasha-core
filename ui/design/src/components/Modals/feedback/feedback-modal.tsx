@@ -22,9 +22,12 @@ export interface IFeedbackModalProps {
   footerTextLabel: string;
   footerLinkText1Label: string;
   footerLinkText2Label: string;
-  onOpenAnIssueClick: () => void;
-  onEmailUsClick: () => void;
-  onJoinDiscordClick: () => void;
+  openIssueLink: string;
+  emailUsLink: string;
+  joinDiscordLink: string;
+  onOpenAnIssueClick?: () => void;
+  onEmailUsClick?: () => void;
+  onJoinDiscordClick?: () => void;
   closeModal: () => void;
 }
 
@@ -39,23 +42,14 @@ const FeedbackModal: React.FC<IFeedbackModalProps> = props => {
     footerTextLabel,
     footerLinkText1Label,
     footerLinkText2Label,
-    onOpenAnIssueClick,
-    onEmailUsClick,
-    onJoinDiscordClick,
+    openIssueLink,
+    emailUsLink,
+    joinDiscordLink,
     closeModal,
   } = props;
 
-  // handlers
-  const handleOpenAnIssue = () => {
-    onOpenAnIssueClick();
-  };
-
-  const handleEmailUs = () => {
-    onEmailUsClick();
-  };
-
-  const handleJoinDiscord = () => {
-    onJoinDiscordClick();
+  const handleJoinDiscordClick = () => {
+    window.open(joinDiscordLink, '_blank');
   };
 
   return (
@@ -100,7 +94,8 @@ const FeedbackModal: React.FC<IFeedbackModalProps> = props => {
               margin={{ right: '0.5rem' }}
               icon={<Icon type="github" clickable={false} />}
               label={openAnIssueLabel}
-              onClick={handleOpenAnIssue}
+              href={openIssueLink}
+              target="_blank"
             />
             <ModalButton
               primary={true}
@@ -108,7 +103,8 @@ const FeedbackModal: React.FC<IFeedbackModalProps> = props => {
               isOnFeedback={true}
               icon={<Icon type="email" color="white" clickable={false} />}
               label={emailUsLabel}
-              onClick={handleEmailUs}
+              href={emailUsLink}
+              target="_blank"
             />
           </StyledButtonWrapper>
           <StyledFooterArea>
@@ -127,7 +123,7 @@ const FeedbackModal: React.FC<IFeedbackModalProps> = props => {
               wrap={true}
               align="center"
               justify="center"
-              onClick={handleJoinDiscord}
+              onClick={handleJoinDiscordClick}
             >
               <Text color="accentText" margin={{ right: '0.25rem', bottom: '0.2rem' }}>
                 {footerLinkText1Label}

@@ -10,6 +10,7 @@ export interface IColors {
   modalBackgroundAlt: string;
   modalBackgroundTransparent: string;
   accent: string;
+  accentOpacity: string;
   accentLight: string;
   border: string;
   secondary: string;

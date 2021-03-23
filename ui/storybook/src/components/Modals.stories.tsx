@@ -152,9 +152,9 @@ const FeedbackModalComponent = (props: IFeedbackModalProps) => {
     footerTextLabel,
     footerLinkText1Label,
     footerLinkText2Label,
-    onOpenAnIssueClick,
-    onEmailUsClick,
-    onJoinDiscordClick,
+    openIssueLink,
+    emailUsLink,
+    joinDiscordLink,
     closeModal,
   } = props;
 
@@ -183,9 +183,9 @@ const FeedbackModalComponent = (props: IFeedbackModalProps) => {
             footerTextLabel={footerTextLabel}
             footerLinkText1Label={footerLinkText1Label}
             footerLinkText2Label={footerLinkText2Label}
-            onOpenAnIssueClick={onOpenAnIssueClick}
-            onEmailUsClick={onEmailUsClick}
-            onJoinDiscordClick={onJoinDiscordClick}
+            openIssueLink={openIssueLink}
+            emailUsLink={emailUsLink}
+            joinDiscordLink={joinDiscordLink}
             closeModal={handleCloseModal}
           />
         </ToastProvider>
@@ -292,9 +292,9 @@ storiesOf('Modals/Feeback Modal', module).add('Feedback modal', () => (
     )}
     footerLinkText1Label={text('Footer Link Text 1 Label', 'Join in')}
     footerLinkText2Label={text('Footer Link Text 2 Label', 'Discord')}
-    onOpenAnIssueClick={() => action('Open an Issue')('Synthetic Event')}
-    onEmailUsClick={() => action('Email Us')('Synthetic Event')}
-    onJoinDiscordClick={() => action('Join Discord')('Synthetic Event')}
+    openIssueLink={''}
+    emailUsLink={''}
+    joinDiscordLink={''}
     closeModal={() => action('Close Modal')('Synthetic Event')}
   />
 ));

@@ -1,19 +1,25 @@
-import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { formatRelativeTime, ILocale } from '../../../utils/time';
-import { ProfileAvatarButton } from '../../Buttons/index';
-import { Icon } from '../../Icon/index';
-import CardActions, { ServiceNames } from './card-actions';
+import { Box, Text } from 'grommet';
+import styled from 'styled-components';
+import { isMobile } from 'react-device-detect';
+
+import { ISocialData } from './social-box';
 import CardHeaderMenuDropdown from './card-header-menu';
+import CardActions, { ServiceNames } from './card-actions';
 import CardHeaderAkashaDropdown from './card-header-akasha';
-import { StyledProfileDrop } from './styled-entry-box';
+import { StyledDropAlt, StyledProfileDrop } from './styled-entry-box';
+
+import { EntryCardHidden } from '..';
 import { ProfileMiniCard } from '../profile-cards/profile-mini-card';
 import { IProfileData } from '../profile-cards/profile-widget-card';
-import { ISocialData } from './social-box';
-import ViewportSizeProvider from '../../Providers/viewport-dimension';
+
+import { Icon } from '../../Icon/index';
+import { MobileListModal } from '../../Modals';
+import { ProfileAvatarButton } from '../../Buttons/index';
 import { EmbedBox, ReadOnlyEditor } from '../../Editor/index';
-import { EntryCardHidden } from '..';
-import styled from 'styled-components';
+import ViewportSizeProvider from '../../Providers/viewport-dimension';
+
+import { formatRelativeTime, ILocale } from '../../../utils/time';
 
 export interface IEntryData {
   CID?: string;
@@ -52,6 +58,7 @@ export interface IEntryBoxProps {
   repliesLabel: string;
   repostsLabel: string;
   repostLabel?: string;
+  cancelLabel?: string;
   repostWithCommentLabel?: string;
   shareLabel?: string;
   flagAsLabel?: string;
@@ -104,6 +111,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     repliesLabel,
     repostsLabel,
     repostLabel,
+    cancelLabel,
     repostWithCommentLabel,
     shareLabel,
     flagAsLabel,
@@ -310,13 +318,27 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             CID={entryData.CID}
           />
         )}
-        {menuIconRef.current && menuDropOpen && onEntryFlag && (
+        {!isMobile && menuIconRef.current && menuDropOpen && onEntryFlag && (
           <CardHeaderMenuDropdown
             target={menuIconRef.current}
             onMenuClose={closeMenuDrop}
             onFlag={handleEntryFlag}
             flagAsLabel={flagAsLabel}
           />
+        )}
+        {isMobile && menuDropOpen && onEntryFlag && (
+          <StyledDropAlt>
+            <MobileListModal
+              closeModal={closeMenuDrop}
+              menuItems={[
+                {
+                  label: props.flagAsLabel,
+                  icon: 'report',
+                  handler: () => handleEntryFlag(),
+                },
+              ]}
+            />
+          </StyledDropAlt>
         )}
         <Box
           pad={{ horizontal: 'medium' }}
@@ -370,6 +392,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             repliesLabel={repliesLabel}
             repostsLabel={repostsLabel}
             repostLabel={repostLabel}
+            cancelLabel={cancelLabel}
             repostWithCommentLabel={repostWithCommentLabel}
             isBookmarked={isBookmarked}
             bookmarkLabel={bookmarkLabel}
