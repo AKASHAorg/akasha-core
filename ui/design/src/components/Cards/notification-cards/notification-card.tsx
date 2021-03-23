@@ -1,13 +1,14 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
-import { MainAreaCardBox } from '../common/basic-card-box';
+import { BasicCardBox } from '../common/basic-card-box';
 import { Icon } from '../../Icon';
 import { formatRelativeTime } from '../../../utils/time';
 import { ProfileAvatarButton } from '../../Buttons/index';
 import styled from 'styled-components';
 import Spinner from '../../Spinner/index';
 import Tooltip from '../../Tooltip/tooltip';
+import ErrorLoader from '../../Errors/error-loader';
 
 const BlueDot = styled.div`
   height: 8px;
@@ -52,13 +53,13 @@ export interface ITagProfileCard {
   repostLabel?: string;
   replyLabel?: string;
   markAsReadLabel?: string;
+  emptyTitle?: string;
+  emptySubtitle?: string;
   // handlers
   handleMessageRead: (notifId: string) => void;
   handleEntryClick: (entryId: string) => void;
   handleProfileClick: (pubKey: string) => void;
   handleNavBack: () => void;
-  // error component
-  errorLoader: React.ReactElement;
 }
 
 const NotificationsCard: React.FC<ITagProfileCard> = props => {
@@ -71,11 +72,12 @@ const NotificationsCard: React.FC<ITagProfileCard> = props => {
     replyLabel,
     repostLabel,
     markAsReadLabel,
+    emptyTitle,
+    emptySubtitle,
     handleMessageRead,
     handleEntryClick,
     handleProfileClick,
     handleNavBack,
-    errorLoader,
   } = props;
 
   const handleMarkAllAsRead = () => {
@@ -107,7 +109,7 @@ const NotificationsCard: React.FC<ITagProfileCard> = props => {
           handleMessageRead(notif.id);
         };
         break;
-      case 'POST_REPOST':
+      case 'POST_QUOTE':
         label = repostLabel;
         clickHandler = () => {
           handleEntryClick(postID);
@@ -143,58 +145,81 @@ const NotificationsCard: React.FC<ITagProfileCard> = props => {
           label={fullLabel}
           info={relativeTime}
           onClickAvatar={() => handleProfileClick(profileData.pubKey)}
-          active={notif.readAt === 0}
+          active={!notif.read}
         />
-        <BlueDot
-          onClick={() => {
-            handleMessageRead(notif.id);
-          }}
-        />
+        {!notif.read && (
+          <BlueDot
+            onClick={() => {
+              handleMessageRead(notif.id);
+            }}
+          />
+        )}
       </StyledNotifBox>
     );
   };
 
-  return (
-    <MainAreaCardBox>
+  const renderHeader = () => (
+    <Box direction="row" justify="between" align="center" pad={{ left: 'small', bottom: 'medium' }}>
+      {isMobileOnly && <Icon type="arrowLeft" primaryColor={true} onClick={handleNavBack} />}
+      <Text size="xlarge" weight="bold">
+        {notificationsLabel}
+      </Text>
+      <Tooltip
+        dropProps={{ align: { right: 'left' } }}
+        message={`${markAsReadLabel}`}
+        plain={true}
+        caretPosition={'right'}
+      >
+        <IconDiv>
+          <Icon
+            size="xs"
+            type="checkSimple"
+            primaryColor={true}
+            clickable={true}
+            onClick={handleMarkAllAsRead}
+          />
+        </IconDiv>
+      </Tooltip>
+    </Box>
+  );
+
+  const renderContent = () => (
+    <>
       {isFetching && (
         <Box pad="large">
           <Spinner />
         </Box>
       )}
-      {!isFetching && notifications.length === 0 && errorLoader}
+      {!isFetching && notifications.length === 0 && (
+        <Box>
+          {isMobileOnly && renderHeader()}
+          <ErrorLoader
+            type="missing-notifications"
+            title={emptyTitle}
+            details={emptySubtitle}
+            style={
+              isMobileOnly
+                ? {
+                    border: 'none',
+                    boxShadow: 'none',
+                  }
+                : {}
+            }
+          />
+        </Box>
+      )}
       {!isFetching && notifications.length !== 0 && (
         <Box pad={isMobileOnly ? 'xsmall' : 'small'}>
-          <Box
-            direction="row"
-            justify="between"
-            align="center"
-            pad={{ left: 'small', bottom: 'medium' }}
-          >
-            {isMobileOnly && <Icon type="arrowLeft" primaryColor={true} onClick={handleNavBack} />}
-            <Text size="xlarge" weight="bold">
-              {notificationsLabel}
-            </Text>
-            <Tooltip
-              dropProps={{ align: { right: 'left' } }}
-              message={`${markAsReadLabel}`}
-              plain={true}
-              caretPosition={'right'}
-            >
-              <IconDiv>
-                <Icon
-                  size="xs"
-                  type="checkSimple"
-                  primaryColor={true}
-                  clickable={true}
-                  onClick={handleMarkAllAsRead}
-                />
-              </IconDiv>
-            </Tooltip>
-          </Box>
+          {renderHeader()}
           {notifications?.map((notif: any, index: number) => renderNotificationCard(notif, index))}
         </Box>
       )}
-    </MainAreaCardBox>
+    </>
+  );
+  return (
+    <>
+      {isMobileOnly ? <Box>{renderContent()}</Box> : <BasicCardBox>{renderContent()}</BasicCardBox>}
+    </>
   );
 };
 NotificationsCard.defaultProps = {

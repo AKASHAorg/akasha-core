@@ -95,18 +95,15 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
                 replyLabel={t('replied to your post')}
                 repostLabel={t('reposted your post')}
                 markAsReadLabel={t('Mark as read')}
+                emptyTitle={t('All clear')}
+                emptySubtitle={t("You don't have any new notifications!")}
                 handleMessageRead={notificationsActions.markMessageAsRead}
                 handleEntryClick={handlePostClick}
                 handleProfileClick={handleAvatarClick}
-                handleNavBack={() => null}
+                handleNavBack={() => {
+                  history.back();
+                }}
                 isFetching={notificationsState.isFetching}
-                errorLoader={
-                  <ErrorLoader
-                    type="missing-notifications"
-                    title={t('All clear')}
-                    details={t("You don't have any new notifications!")}
-                  />
-                }
               />
             )}
           </>
