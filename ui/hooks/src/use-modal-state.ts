@@ -9,6 +9,7 @@ export const MODAL_NAMES = {
   EDITOR: 'editor',
   PROFILE_SHARE: 'profileShare',
   REPORT: 'report',
+  FEEDBACK: 'feedback',
 };
 export interface ModalState {
   login: boolean;

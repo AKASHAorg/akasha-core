@@ -1,5 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
+import { useLocation } from 'react-router-dom';
 import {
   IMenuItem,
   EventTypes,
@@ -10,10 +11,12 @@ import {
   useErrors,
   useNotifications,
   useProfile,
+  useModalState,
 } from '@akashaproject/ui-awf-hooks';
+import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { useTranslation } from 'react-i18next';
 
-const { lightTheme, Topbar, ThemeSelector, useViewportSize, LoginModal } = DS;
+const { lightTheme, Topbar, ThemeSelector, LoginModal, FeedbackModal, ModalRenderer } = DS;
 
 interface TopBarProps {
   navigateToUrl: (url: string) => void;
@@ -38,8 +41,15 @@ const TopbarComponent = (props: TopBarProps) => {
   } = props;
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
-  const [showLoginModal, setShowLoginModal] = React.useState(false);
+  const [showSignUpModal, setshowSignUpModal] = React.useState<{
+    inviteToken: string | null;
+    status: boolean;
+  }>({
+    inviteToken: null,
+    status: false,
+  });
   const [errorState, errorActions] = useErrors({ logger });
+
   const [loginState, loginActions] = useLoginState({
     globalChannel,
     onError: errorActions.createError,
@@ -47,7 +57,19 @@ const TopbarComponent = (props: TopBarProps) => {
     profileService: props.sdkModules.profiles.profileService,
     authService: props.sdkModules.auth.authService,
   });
-
+  const [inviteTokenForm, setinviteTokenForm] = React.useState<{
+    submitted: boolean;
+    submitting: boolean;
+    success: boolean;
+    hasError: boolean;
+    errorMsg: string;
+  }>({
+    submitted: false,
+    submitting: false,
+    success: false,
+    hasError: false,
+    errorMsg: '',
+  });
   const [loggedProfileData, loggedProfileActions] = useProfile({
     onError: err => logger.error(err),
     profileService: props.sdkModules.profiles.profileService,
@@ -61,6 +83,13 @@ const TopbarComponent = (props: TopBarProps) => {
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
     loggedEthAddress: loginState.ethAddress,
+  });
+
+  const [modalState, modalStateActions] = useModalState({
+    initialState: {
+      feedback: false,
+    },
+    isLoggedIn: !!loginState.ethAddress,
   });
 
   React.useEffect(() => {
@@ -103,10 +132,10 @@ const TopbarComponent = (props: TopBarProps) => {
   }, []);
 
   React.useEffect(() => {
-    if (loginState.ethAddress && showLoginModal) {
-      setTimeout(() => setShowLoginModal(false), 500);
+    if (loginState.ethAddress && modalState[MODAL_NAMES.LOGIN]) {
+      setTimeout(() => handleLoginModalClose(), 500);
     }
-  }, [loginState.ethAddress, showLoginModal]);
+  }, [loginState.ethAddress, modalState[MODAL_NAMES.LOGIN]]);
 
   React.useEffect(() => {
     const isLoadingProfile =
@@ -142,14 +171,17 @@ const TopbarComponent = (props: TopBarProps) => {
     menuItem => menuItem.area === MenuItemAreaType.SearchArea,
   )[0];
 
+  const otherAreaItems = currentMenu?.filter(
+    menuItem => menuItem.area === MenuItemAreaType.OtherArea,
+  );
+
   const handleNavigation = (path: string) => {
     navigateToUrl(path);
   };
 
   const handleLoginClick = () => {
-    setShowLoginModal(true);
+    modalStateActions.show(MODAL_NAMES.LOGIN);
   };
-
   const handleLogin = (provider: 2 | 3) => {
     loginActions.login(provider);
   };
@@ -160,10 +192,91 @@ const TopbarComponent = (props: TopBarProps) => {
       setTimeout(() => window.location.reload(), 50);
     });
   };
-
-  const handleModalClose = () => {
-    setShowLoginModal(false);
+  const _handleModalClose = () => {
+    setshowSignUpModal({
+      inviteToken: null,
+      status: false,
+    });
     errorActions.removeLoginErrors();
+  };
+  const handleSignUpClick = () => {
+    const state = {
+      inviteToken: localStorage.getItem('@signUpToken'),
+      status: true,
+    };
+    setshowSignUpModal(state);
+    if (showSignUpModal.inviteToken) {
+      triggerInviteValidation();
+    }
+    modalStateActions.show(MODAL_NAMES.LOGIN);
+  };
+
+  const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setinviteTokenForm({
+      submitted: false,
+      submitting: false,
+      success: false,
+      hasError: false,
+      errorMsg: '',
+    });
+    setshowSignUpModal({
+      inviteToken: e.target.value,
+      status: true,
+    });
+  };
+  const triggerInviteValidation = () => {
+    if (showSignUpModal.inviteToken?.length && showSignUpModal.inviteToken.length === 24) {
+      checkIsValidToken();
+    }
+  };
+  const checkIsValidToken = () => {
+    setinviteTokenForm({
+      submitted: false,
+      submitting: true,
+      success: false,
+      hasError: false,
+      errorMsg: '',
+    });
+    props.sdkModules.auth.authService
+      .validateInvite(showSignUpModal.inviteToken)
+      .toPromise()
+      .then((_: any) => {
+        setinviteTokenForm({
+          submitted: true,
+          submitting: false,
+          success: true,
+          hasError: false,
+          errorMsg: '',
+        });
+      })
+      .catch((err: Error) => {
+        setinviteTokenForm({
+          submitted: true,
+          submitting: false,
+          success: false,
+          hasError: true,
+          errorMsg: err.message,
+        });
+      });
+  };
+  const validateTokenFn = (e: any) => {
+    e.preventDefault();
+    checkIsValidToken();
+  };
+  React.useEffect(triggerInviteValidation, [showSignUpModal]);
+
+  const handleLoginModalClose = () => {
+    modalStateActions.hide(MODAL_NAMES.LOGIN);
+    _handleModalClose();
+    errorActions.removeLoginErrors();
+  };
+
+  const handleFeedbackModalClose = () => {
+    modalStateActions.hide(MODAL_NAMES.FEEDBACK);
+  };
+
+  const handleFeedbackModalShow = () => {
+    modalStateActions.show(MODAL_NAMES.FEEDBACK);
   };
 
   const handleSearch = (inputValue: string) => {
@@ -173,34 +286,69 @@ const TopbarComponent = (props: TopBarProps) => {
     }
   };
 
-  const { size } = useViewportSize();
   const { t } = useTranslation();
+  const location = useLocation();
 
   return (
     <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
       <Topbar
-        avatarImage={loggedProfileData.avatar}
+        loggedProfileData={loggedProfileData}
         brandLabel="Ethereum World"
         signInLabel={t('Sign In')}
         signUpLabel={t('Sign Up')}
         signOutLabel={t('Sign Out')}
         searchBarLabel={t('Search profiles or topics')}
+        legalLabel={t('Legal')}
+        feedbackLabel={t('Send Us Feedback')}
+        feedbackInfoLabel={t('Help us improve the experience!')}
+        legalCopyRightLabel={'© AKASHA Foundation'}
+        versionLabel="ALPHA"
+        versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
         onNavigation={handleNavigation}
         onSearch={handleSearch}
         onSidebarToggle={toggleSidebar}
-        ethAddress={loginState.ethAddress}
-        quickAccessItems={loginState.ethAddress ? sortedQuickAccessItems : null}
+        quickAccessItems={sortedQuickAccessItems}
         searchAreaItem={searchAreaItem}
-        size={size}
+        otherAreaItems={otherAreaItems}
         onLoginClick={handleLoginClick}
+        onSignUpClick={handleSignUpClick}
         onLogout={handleLogout}
+        onFeedbackClick={handleFeedbackModalShow}
         notifications={notificationsState.notifications}
+        currentLocation={location?.pathname}
       />
+      <ModalRenderer slotId={modalSlotId}>
+        {modalState[MODAL_NAMES.FEEDBACK] && (
+          <FeedbackModal
+            titleLabel={t("We'd love to hear your feedback!")}
+            subtitleLabel={t('If you find any bugs or problems, please let us know')}
+            openAnIssueLabel={t('Open an Issue')}
+            emailUsLabel={t('Email Us')}
+            footerTextLabel={t(
+              'Join our Discord channel to meet everyone, say "Hello!", provide feedback and share ideas.',
+            )}
+            footerLinkText1Label={t('Join in')}
+            footerLinkText2Label={t('Discord')}
+            openIssueLink={'https://github.com/AKASHAorg/akasha-world-framework/issues/new/choose'}
+            emailUsLink={'mailto:feedback@ethereum.world'}
+            joinDiscordLink={'https://discord.gg/uJZrvHv6'}
+            closeModal={handleFeedbackModalClose}
+          />
+        )}
+      </ModalRenderer>
       <LoginModal
         slotId={modalSlotId}
         onLogin={handleLogin}
-        onModalClose={handleModalClose}
-        showModal={showLoginModal}
+        showSignUpModal={showSignUpModal}
+        onInputTokenChange={onInputTokenChange}
+        validateTokenFn={validateTokenFn}
+        submitted={inviteTokenForm.submitted}
+        submitting={inviteTokenForm.submitting}
+        success={inviteTokenForm.success}
+        hasError={inviteTokenForm.hasError}
+        errorMsg={inviteTokenForm.errorMsg}
+        onModalClose={handleLoginModalClose}
+        showModal={modalState[MODAL_NAMES.LOGIN]}
         titleLabel={t('Connect a wallet')}
         metamaskModalHeadline={t('Connecting')}
         metamaskModalMessage={t('Please complete the process in your wallet')}

@@ -27,6 +27,7 @@ const ModalWrapper = styled(Box)<IModalWrapperProps>`
   width: 100vw;
   height: 100vh;
   position: fixed;
+  cursor: auto;
   left: 0;
   top: 0;
   z-index: 199;

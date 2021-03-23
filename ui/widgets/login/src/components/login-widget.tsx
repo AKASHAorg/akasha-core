@@ -40,7 +40,27 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
   }, [errorState]);
 
   const [loginModal, setLoginModal] = React.useState(false);
+  const [showSignUpModal, setshowSignUpModal] = React.useState<{
+    inviteToken: string | null;
+    status: boolean;
+  }>({
+    inviteToken: null,
+    status: false,
+  });
 
+  const [inviteTokenForm, setinviteTokenForm] = React.useState<{
+    submitted: boolean;
+    submitting: boolean;
+    success: boolean;
+    hasError: boolean;
+    errorMsg: string;
+  }>({
+    submitted: false,
+    submitting: false,
+    success: false,
+    hasError: false,
+    errorMsg: '',
+  });
   const handleLoginModalOpen = () => {
     setLoginModal(true);
   };
@@ -48,11 +68,77 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
   const handleLogin = (provider: 2 | 3) => {
     loginActions.login(provider);
   };
-
+  const handleSignUpClick = () => {
+    const state = {
+      inviteToken: localStorage.getItem('@signUpToken'),
+      status: true,
+    };
+    setshowSignUpModal(state);
+    if (showSignUpModal.inviteToken) {
+      triggerInviteValidation();
+    }
+    setLoginModal(true);
+  };
   const handleLoginModalClose = () => {
+    setshowSignUpModal({
+      inviteToken: null,
+      status: false,
+    });
     setLoginModal(false);
   };
-
+  const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setinviteTokenForm({
+      submitted: false,
+      submitting: false,
+      success: false,
+      hasError: false,
+      errorMsg: '',
+    });
+    setshowSignUpModal({
+      inviteToken: e.target.value,
+      status: true,
+    });
+  };
+  const triggerInviteValidation = () => {
+    if (showSignUpModal.inviteToken?.length && showSignUpModal.inviteToken.length === 24) {
+      checkIsValidToken();
+    }
+  };
+  const checkIsValidToken = () => {
+    setinviteTokenForm({
+      submitted: false,
+      submitting: true,
+      success: false,
+      hasError: false,
+      errorMsg: '',
+    });
+    props.sdkModules.auth.authService
+      .validateInvite(showSignUpModal.inviteToken)
+      .toPromise()
+      .then((_: any) => {
+        setinviteTokenForm({
+          submitted: true,
+          submitting: false,
+          success: true,
+          hasError: false,
+          errorMsg: '',
+        });
+      })
+      .catch((err: Error) => {
+        setinviteTokenForm({
+          submitted: true,
+          submitting: false,
+          success: false,
+          hasError: true,
+          errorMsg: err.message,
+        });
+      });
+  };
+  const validateTokenFn = (e: any) => {
+    e.preventDefault();
+    checkIsValidToken();
+  };
+  React.useEffect(triggerInviteValidation, [showSignUpModal]);
   if (loginState.ethAddress) {
     return null;
   }
@@ -67,6 +153,7 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
         signInLabel={t('Sign In')}
         signUpLabel={t('Sign Up')}
         onLoginClick={handleLoginModalOpen}
+        onSignUpClick={handleSignUpClick}
         inlineActions={size !== 'small'}
       />
       <LoginModal
@@ -74,6 +161,14 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
         onLogin={handleLogin}
         onModalClose={handleLoginModalClose}
         showModal={loginModal}
+        showSignUpModal={showSignUpModal}
+        onInputTokenChange={onInputTokenChange}
+        validateTokenFn={validateTokenFn}
+        submitted={inviteTokenForm.submitted}
+        submitting={inviteTokenForm.submitting}
+        success={inviteTokenForm.success}
+        hasError={inviteTokenForm.hasError}
+        errorMsg={inviteTokenForm.errorMsg}
         titleLabel={t('Connect a wallet')}
         metamaskModalHeadline={t('Connecting')}
         metamaskModalMessage={t('Please complete the process in your wallet')}

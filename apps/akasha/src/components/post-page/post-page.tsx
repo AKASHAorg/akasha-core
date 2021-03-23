@@ -283,7 +283,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     closeEditorModal();
   };
 
-  const handleNavigateToPost = redirectToPost(navigateToUrl, postsActions.resetPostIds);
+  const handleNavigateToPost = redirectToPost(navigateToUrl, postId, postsActions.resetPostIds);
 
   const onUploadRequest = uploadMediaToTextile(
     sdkModules.profiles.profileService,

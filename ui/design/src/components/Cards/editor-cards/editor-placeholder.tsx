@@ -23,7 +23,7 @@ const EditorPlaceholder: React.FC<IEditorPlaceholder> = props => {
         onClick={onClick}
       >
         {ethAddress && <Avatar src={avatar} ethAddress={ethAddress} size="md" />}
-        <Text size="large" color="secondaryText">
+        <Text size="large" color="secondaryText" truncate={true}>
           {placeholderLabel}
         </Text>
       </Box>
