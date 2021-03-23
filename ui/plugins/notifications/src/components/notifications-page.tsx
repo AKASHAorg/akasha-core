@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useLoginState, useNotifications } from '@akashaproject/ui-awf-hooks';
 import useErrorState from '@akashaproject/ui-awf-hooks/lib/use-error-state';
 
-const { Helmet, Box, BasicCardBox, ErrorLoader, ErrorInfoCard, Spinner, NotificationsCard } = DS;
+const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard } = DS;
 
 interface AppRoutesProps {
   onError?: (err: Error) => void;
@@ -87,36 +87,27 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
               />
             )}
             {!hasCriticalErrors && (
-              <BasicCardBox>
-                {notificationsState.isFetching && (
-                  <Box pad="large">
-                    <Spinner />
-                  </Box>
-                )}
-                {!notificationsState.isFetching &&
-                  notificationsState.notifications.length === 0 && (
-                    <ErrorLoader
-                      type="missing-notifications"
-                      title={t('All clear')}
-                      details={t("You don't have any new notifications!")}
-                    />
-                  )}
-                {!notificationsState.isFetching &&
-                  notificationsState.notifications.length !== 0 && (
-                    <NotificationsCard
-                      notifications={notificationsState.notifications}
-                      notificationsLabel={t('Notifications')}
-                      followingLabel={t('is now following you')}
-                      mentionedLabel={t('mentioned you in a post')}
-                      replyLabel={t('replied to your post')}
-                      repostLabel={t('reposted your post')}
-                      handleMessageRead={notificationsActions.markMessageAsRead}
-                      handleEntryClick={handlePostClick}
-                      handleProfileClick={handleAvatarClick}
-                      handleNavBack={() => null}
-                    />
-                  )}
-              </BasicCardBox>
+              <NotificationsCard
+                notifications={notificationsState.notifications}
+                notificationsLabel={t('Notifications')}
+                followingLabel={t('is now following you')}
+                mentionedLabel={t('mentioned you in a post')}
+                replyLabel={t('replied to your post')}
+                repostLabel={t('reposted your post')}
+                markAsReadLabel={t('Mark as read')}
+                handleMessageRead={notificationsActions.markMessageAsRead}
+                handleEntryClick={handlePostClick}
+                handleProfileClick={handleAvatarClick}
+                handleNavBack={() => null}
+                isFetching={notificationsState.isFetching}
+                errorLoader={
+                  <ErrorLoader
+                    type="missing-notifications"
+                    title={t('All clear')}
+                    details={t("You don't have any new notifications!")}
+                  />
+                }
+              />
             )}
           </>
         )}
