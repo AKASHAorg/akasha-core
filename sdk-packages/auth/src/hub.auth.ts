@@ -77,10 +77,13 @@ export const loginWithChallenge = (
               const buf = Buffer.from(data.value);
               let addressChallenge;
               let ethAddress;
+              let signUpToken;
               if (data.addressChallenge) {
                 addressChallenge = await signer.signMessage(data.addressChallenge);
                 ethAddress = await signer.getAddress();
                 authStatus.isNewUser = true;
+                signUpToken = localStorage.getItem('@signUpToken');
+                localStorage.removeItem('@signUpToken');
               }
               /** User our identity to sign the challenge */
               const signed = await identity.sign(buf);
@@ -88,6 +91,7 @@ export const loginWithChallenge = (
                 JSON.stringify({
                   addressChallenge,
                   ethAddress,
+                  signUpToken,
                   type: 'challenge',
                   sig: Buffer.from(signed).toJSON(),
                 }),

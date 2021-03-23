@@ -19,6 +19,7 @@ const LoginWidgetBox = styled(WidgetAreaCardBox)`
 
 export interface ILoginWidgetCardProps {
   onLoginClick: () => void;
+  onSignUpClick: () => void;
   onLearnMoreClick?: () => void;
   title: string;
   textContent: string;
@@ -50,7 +51,7 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
           fill={inlineActions ? false : 'horizontal'}
         >
           <SignInButton onClick={props.onLoginClick} label={props.signInLabel} />
-          <SignUpButton primary={true} onClick={props.onLoginClick} label={props.signUpLabel} />
+          <SignUpButton primary={true} onClick={props.onSignUpClick} label={props.signUpLabel} />
         </Box>
       </Box>
     </LoginWidgetBox>

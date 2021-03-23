@@ -21,7 +21,7 @@ import CommentAPI from './datasources/comment';
 import { ThreadID } from '@textile/hub';
 import query from './resolvers/query';
 import mutations from './resolvers/mutations';
-import { setupDBCollections } from './helpers';
+import { getAppDB, setupDBCollections } from './helpers';
 import { utils } from 'ethers';
 
 if (!process.env.USER_GROUP_API_KEY || !process.env.USER_GROUP_API_SECRET) {

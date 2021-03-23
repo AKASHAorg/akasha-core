@@ -22,6 +22,7 @@ export default function authApi(channel) {
         verifySignature: extractedServices[AUTH_SERVICE]('verifySignature'),
         getMessages: extractedServices[AUTH_SERVICE]('getMessages'),
         markMessageAsRead: extractedServices[AUTH_SERVICE]('markMessageAsRead'),
+        validateInvite: extractedServices[AUTH_SERVICE]('validateInvite'),
       },
     },
   };
