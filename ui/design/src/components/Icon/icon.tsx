@@ -43,6 +43,7 @@ export type IconType =
   | 'ethereumWorldLogo'
   | 'error'
   | 'facebook'
+  | 'feedback'
   | 'following'
   | 'github'
   | 'hashtag'
@@ -52,6 +53,7 @@ export type IconType =
   | 'image'
   | 'italic'
   | 'info'
+  | 'legal'
   | 'link'
   | 'loading'
   | 'login'
@@ -78,6 +80,7 @@ export type IconType =
   | 'send'
   | 'settings'
   | 'share'
+  | 'signOut'
   | 'subscribe'
   | 'stopwatch'
   | 'shareSmallBlue'
@@ -136,6 +139,7 @@ export const iconTypes: IconType[] = [
   'ethereumWorldLogo',
   'error',
   'facebook',
+  'feedback',
   'following',
   'github',
   'hashtag',
@@ -145,6 +149,7 @@ export const iconTypes: IconType[] = [
   'image',
   'info',
   'italic',
+  'legal',
   'link',
   'loading',
   'login',
@@ -169,6 +174,7 @@ export const iconTypes: IconType[] = [
   'search',
   'send',
   'settings',
+  'signOut',
   'share',
   'subscribe',
   'stopwatch',
