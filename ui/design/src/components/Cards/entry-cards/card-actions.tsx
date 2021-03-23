@@ -27,6 +27,7 @@ export interface CardActionProps {
   // labels
   repostsLabel: string;
   repostLabel?: string;
+  cancelLabel?: string;
   repostWithCommentLabel?: string;
   repliesLabel: string;
   isBookmarked?: boolean;
@@ -70,6 +71,7 @@ const CardActions: React.FC<CardActionProps> = props => {
     // labels
     repostsLabel,
     repostLabel,
+    cancelLabel,
     repostWithCommentLabel,
     repliesLabel,
     isBookmarked,
@@ -163,7 +165,13 @@ const CardActions: React.FC<CardActionProps> = props => {
     ];
 
     if (isMobile) {
-      return <MobileListModal menuItems={menuItems} closeModal={handleRepostsClose} />;
+      return (
+        <MobileListModal
+          menuItems={menuItems}
+          cancelLabel={cancelLabel}
+          closeModal={handleRepostsClose}
+        />
+      );
     }
 
     return (
