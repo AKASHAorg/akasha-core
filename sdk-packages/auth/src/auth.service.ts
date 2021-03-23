@@ -336,17 +336,38 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     return { body, from, readAt, createdAt, id };
   };
   const getMessages = async (args: InboxListOptions) => {
+    const limit = args?.limit || 50;
     const messages = await hubUser.listInboxMessages(
-      Object.assign({}, { status: Status.UNREAD }, args),
+      Object.assign({}, { status: Status.UNREAD, limit: limit }, args),
     );
+    const readMessagesLimit = limit - messages.length;
+    const readMessages =
+      readMessagesLimit > 0
+        ? await hubUser.listInboxMessages(
+            Object.assign({}, { status: Status.ALL, limit: limit }, args),
+          )
+        : [];
+    const combinedMessages = messages
+      .concat(readMessages)
+      .sort((a, b) => b.createdAt - a.createdAt);
     const inbox = [];
-    for (const message of messages) {
-      inbox.push(await decryptMessage(message));
+    const uniqueMessages = new Map();
+    for (const messageObj of combinedMessages) {
+      uniqueMessages.set(messageObj.id, messageObj);
     }
+    for (const message of uniqueMessages.values()) {
+      const decryptedObj = await decryptMessage(message);
+      inbox.push(Object.assign({}, decryptedObj, { read: decryptedObj.readAt > 0 }));
+    }
+    uniqueMessages.clear();
     return inbox.slice();
   };
   const markMessageAsRead = async (messageId: string) => {
     await hubUser.readInboxMessage(messageId);
+    return true;
+  };
+
+  const deleteMessage = async (messageId: string) => {
     await hubUser.deleteInboxMessage(messageId);
     return true;
   };
@@ -375,6 +396,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     getCurrentUser,
     getMessages,
     markMessageAsRead,
+    deleteMessage,
     validateInvite,
   };
 };
