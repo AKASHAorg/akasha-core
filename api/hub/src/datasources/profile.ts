@@ -78,8 +78,8 @@ class ProfileAPI extends DataSource {
     const db: Client = await getAppDB();
     const query = new Where('pubKey').eq(pubKey);
     const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
-    if (!profilesFound?.length) {
-      return;
+    if (!profilesFound?.length || !data?.length) {
+      throw new Error('Profile not found');
     }
     const profile = profilesFound[0];
     for (const rec of data) {
