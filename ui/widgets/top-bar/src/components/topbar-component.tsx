@@ -41,7 +41,6 @@ const TopbarComponent = (props: TopBarProps) => {
   } = props;
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
-  const [showLoginModal, setShowLoginModal] = React.useState(false);
   const [showSignUpModal, setshowSignUpModal] = React.useState<{
     inviteToken: string | null;
     status: boolean;
@@ -58,7 +57,19 @@ const TopbarComponent = (props: TopBarProps) => {
     profileService: props.sdkModules.profiles.profileService,
     authService: props.sdkModules.auth.authService,
   });
-
+  const [inviteTokenForm, setinviteTokenForm] = React.useState<{
+    submitted: boolean;
+    submitting: boolean;
+    success: boolean;
+    hasError: boolean;
+    errorMsg: string;
+  }>({
+    submitted: false,
+    submitting: false,
+    success: false,
+    hasError: false,
+    errorMsg: '',
+  });
   const [loggedProfileData, loggedProfileActions] = useProfile({
     onError: err => logger.error(err),
     profileService: props.sdkModules.profiles.profileService,
@@ -171,14 +182,6 @@ const TopbarComponent = (props: TopBarProps) => {
   const handleLoginClick = () => {
     modalStateActions.show(MODAL_NAMES.LOGIN);
   };
-  const handleSingUpClick = () => {
-    const state = {
-      inviteToken: localStorage.getItem('@signUpToken'),
-      status: true,
-    };
-    setshowSignUpModal(state);
-    setShowLoginModal(true);
-  };
   const handleLogin = (provider: 2 | 3) => {
     loginActions.login(provider);
   };
@@ -189,23 +192,82 @@ const TopbarComponent = (props: TopBarProps) => {
       setTimeout(() => window.location.reload(), 50);
     });
   };
-  const handleModalClose = () => {
+  const _handleModalClose = () => {
     setshowSignUpModal({
       inviteToken: null,
       status: false,
     });
-    setShowLoginModal(false);
     errorActions.removeLoginErrors();
   };
+  const handleSignUpClick = () => {
+    const state = {
+      inviteToken: localStorage.getItem('@signUpToken'),
+      status: true,
+    };
+    setshowSignUpModal(state);
+    if (showSignUpModal.inviteToken) {
+      triggerInviteValidation();
+    }
+    modalStateActions.show(MODAL_NAMES.LOGIN);
+  };
+
   const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setinviteTokenForm({
+      submitted: false,
+      submitting: false,
+      success: false,
+      hasError: false,
+      errorMsg: '',
+    });
     setshowSignUpModal({
       inviteToken: e.target.value,
       status: true,
     });
   };
+  const triggerInviteValidation = () => {
+    if (showSignUpModal.inviteToken?.length && showSignUpModal.inviteToken.length === 24) {
+      checkIsValidToken();
+    }
+  };
+  const checkIsValidToken = () => {
+    setinviteTokenForm({
+      submitted: false,
+      submitting: true,
+      success: false,
+      hasError: false,
+      errorMsg: '',
+    });
+    props.sdkModules.auth.authService
+      .validateInvite(showSignUpModal.inviteToken)
+      .toPromise()
+      .then((_: any) => {
+        setinviteTokenForm({
+          submitted: true,
+          submitting: false,
+          success: true,
+          hasError: false,
+          errorMsg: '',
+        });
+      })
+      .catch((err: Error) => {
+        setinviteTokenForm({
+          submitted: true,
+          submitting: false,
+          success: false,
+          hasError: true,
+          errorMsg: err.message,
+        });
+      });
+  };
+  const validateTokenFn = (e: any) => {
+    e.preventDefault();
+    checkIsValidToken();
+  };
+  React.useEffect(triggerInviteValidation, [showSignUpModal]);
 
   const handleLoginModalClose = () => {
     modalStateActions.hide(MODAL_NAMES.LOGIN);
+    _handleModalClose();
     errorActions.removeLoginErrors();
   };
 
@@ -249,7 +311,7 @@ const TopbarComponent = (props: TopBarProps) => {
         searchAreaItem={searchAreaItem}
         otherAreaItems={otherAreaItems}
         onLoginClick={handleLoginClick}
-        onSignUpClick={handleSingUpClick}
+        onSignUpClick={handleSignUpClick}
         onLogout={handleLogout}
         onFeedbackClick={handleFeedbackModalShow}
         notifications={notificationsState.notifications}
@@ -277,10 +339,14 @@ const TopbarComponent = (props: TopBarProps) => {
       <LoginModal
         slotId={modalSlotId}
         onLogin={handleLogin}
-        onModalClose={handleModalClose}
-        showModal={showLoginModal}
         showSignUpModal={showSignUpModal}
         onInputTokenChange={onInputTokenChange}
+        validateTokenFn={validateTokenFn}
+        submitted={inviteTokenForm.submitted}
+        submitting={inviteTokenForm.submitting}
+        success={inviteTokenForm.success}
+        hasError={inviteTokenForm.hasError}
+        errorMsg={inviteTokenForm.errorMsg}
         onModalClose={handleLoginModalClose}
         showModal={modalState[MODAL_NAMES.LOGIN]}
         titleLabel={t('Connect a wallet')}

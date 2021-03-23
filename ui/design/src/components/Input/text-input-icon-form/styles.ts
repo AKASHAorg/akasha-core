@@ -5,8 +5,8 @@ import { Icon } from '../../Icon';
 const StyledTextInput = styled(TextInput)`
   padding: 0;
   font-family: ${props => props.theme.shapes.fontFamily};
-  font-size: ${props => props.theme.shapes.fontSizes.medium.size};
-  line-height: ${props => props.theme.shapes.fontSizes.medium.height};
+  font-size: ${props => props.theme.shapes.fontSizes.large.size};
+  line-height: ${props => props.theme.shapes.fontSizes.large.height};
   color: ${props => props.theme.colors.primaryText};
 `;
 
