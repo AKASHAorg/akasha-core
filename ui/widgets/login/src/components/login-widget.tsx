@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { useErrors, useLoginState } from '@akashaproject/ui-awf-hooks';
-import { useEffect } from 'react';
 
 const { LoginCTAWidgetCard, LoginModal, useViewportSize } = DS;
 
@@ -139,7 +138,7 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
     e.preventDefault();
     checkIsValidToken();
   };
-  useEffect(triggerInviteValidation, [showSignUpModal]);
+  React.useEffect(triggerInviteValidation, [showSignUpModal]);
   if (loginState.ethAddress) {
     return null;
   }

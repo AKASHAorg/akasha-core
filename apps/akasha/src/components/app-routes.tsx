@@ -162,8 +162,8 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
             <div>Coming Soon!</div>
           </Route>
           <Route path={`${routes[INVITE]}/:inviteCode`}>
-             <InvitePage {...props} />
-           </Route>
+            <InvitePage {...props} />
+          </Route>
           <Redirect exact={true} from={rootRoute} to={routes[FEED]} />
         </Switch>
       </Router>

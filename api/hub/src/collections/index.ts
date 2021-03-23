@@ -4,6 +4,7 @@ import * as Posts from './posts';
 import * as Comments from './comments';
 import * as Invites from './invites';
 import { Client, ThreadID } from '@textile/hub';
+import { logger } from '../helpers';
 
 export const initCollections = async (client: Client, threadID: ThreadID) => {
   try {
@@ -34,7 +35,7 @@ export const initCollections = async (client: Client, threadID: ThreadID) => {
       await Invites.newCollection(client, threadID);
     }
   } catch (e) {
-    console.log(e);
+    logger.error(e);
   }
 };
 
