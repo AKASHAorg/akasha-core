@@ -350,6 +350,21 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     await hubUser.deleteInboxMessage(messageId);
     return true;
   };
+
+  const validateInvite = async (inviteCode: string) => {
+    const response = await fetch(`${process.env.INVITATION_ENDPOINT}/${inviteCode}`, {
+      method: 'POST',
+    });
+    if (response.ok) {
+      localStorage.setItem('@signUpToken', inviteCode);
+      return true;
+    }
+    if (response.status === 403) {
+      throw new Error('Sorry, this code was already taken. Please try another one.');
+    }
+
+    throw new Error('Sorry, this code is not valid. Please try again.');
+  };
   return {
     signIn,
     signData,
@@ -360,6 +375,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     getCurrentUser,
     getMessages,
     markMessageAsRead,
+    validateInvite,
   };
 };
 

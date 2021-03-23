@@ -50,6 +50,7 @@ export interface ITopbarProps {
   // external css
   className?: string;
   onLoginClick: () => void;
+  onSignUpClick: () => void;
   onLogout: any;
 }
 
@@ -76,6 +77,7 @@ const Topbar = (props: ITopbarProps) => {
     onNavigation,
     // onSidebarToggle,
     onLoginClick,
+    onSignUpClick,
     onFeedbackClick,
     onLogout,
     notifications,
@@ -325,7 +327,7 @@ const Topbar = (props: ITopbarProps) => {
           {!isMobileOnly && !loggedProfileData?.ethAddress && (
             <Box direction="row" align="center" gap="small">
               <Button onClick={onLoginClick} label={signInLabel} />
-              <Button primary={true} onClick={onLoginClick} label={signUpLabel} />
+              <Button primary={true} onClick={onSignUpClick} label={signUpLabel} />
             </Box>
           )}
           {!loggedProfileData?.ethAddress && (
