@@ -51,6 +51,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         background: styledComponentsTheme.colors.background,
         modalBackground: styledComponentsTheme.colors.modalBackground,
         modalBackgroundAlt: styledComponentsTheme.colors.modalBackgroundAlt,
+        modalBackgroundTransparent: styledComponentsTheme.colors.modalBackgroundTransparent,
         lightBackground: styledComponentsTheme.colors.lightBackground,
         ultraLightBackground: styledComponentsTheme.colors.ultraLightBackground,
         focus: styledComponentsTheme.colors.accent,
@@ -69,7 +70,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
       check: {
         color: styledComponentsTheme.colors.white,
         background: {
-          color: styledComponentsTheme.colors.accent,
+          // color: styledComponentsTheme.colors.accent,
         },
       },
       hover: {
@@ -77,7 +78,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
           color: styledComponentsTheme.colors.accent,
         },
         background: {
-          color: styledComponentsTheme.colors.accent,
+          // color: styledComponentsTheme.colors.accent,
         },
       },
     },

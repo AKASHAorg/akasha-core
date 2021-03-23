@@ -49,7 +49,7 @@ import {
   EntryCardHidden,
   MiniInfoWidgetCard,
   ProfileCard,
-  ProfileCardMod,
+  ProfileSearchCard,
   ProfileWidgetCard,
   ProfileMiniCard,
   TopicsWidgetCard,
@@ -62,7 +62,10 @@ import {
   CustomizeFeedCard,
   TagCard,
   TagDetailCard,
+  TagProfileCard,
+  TagSearchCard,
   FilterCard,
+  SwitchCard,
 } from './components/Cards';
 
 import { EditorBox, EditorMeter, editorDefaultValue } from './components/Editor';
@@ -71,6 +74,7 @@ import TextInputField from './components/Forms/text-input-field';
 import { AppIcon, Icon, iconTypes } from './components/Icon';
 import ErrorInfoCard from './components/Errors/error-info-card';
 import ErrorLoader from './components/Errors/error-loader';
+import ModerationAppErrorCard from './components/Errors/moderation-app-error-card';
 
 import { CommentInput, SearchInput, DropSearchInput } from './components/Input';
 import {
@@ -83,6 +87,7 @@ import {
   LoginModal,
   ReportModal,
   ModerateModal,
+  FeedbackModal,
   ToastProvider,
   EditorModal,
 } from './components/Modals';
@@ -124,6 +129,7 @@ const exported = {
   EditableAvatar,
   ErrorInfoCard,
   ErrorLoader,
+  ModerationAppErrorCard,
   AppInfoWidgetCard,
   AppsWidgetCard,
   BasicCardBox,
@@ -146,13 +152,15 @@ const exported = {
   EnsFormCard,
   MiniInfoWidgetCard,
   ProfileCard,
-  ProfileCardMod,
+  ProfileSearchCard,
   ProfileWidgetCard,
   ProfileMiniCard,
   TextInputField,
   TopicsWidgetCard,
   TagCard,
   TagDetailCard,
+  TagProfileCard,
+  TagSearchCard,
   Icon,
   iconTypes,
   IconButton,
@@ -167,6 +175,7 @@ const exported = {
   ShareModal,
   ReportModal,
   ModerateModal,
+  FeedbackModal,
   Spinner,
   ToastProvider,
   SelectPopover,
@@ -213,6 +222,7 @@ const exported = {
   SourcesWidgetCard,
   TutorialWidgetCard,
   FilterCard,
+  SwitchCard,
   EntryPublishErrorCard,
   Helmet: Helmet as HelmetType,
 };

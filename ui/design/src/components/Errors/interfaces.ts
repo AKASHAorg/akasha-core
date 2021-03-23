@@ -25,3 +25,18 @@ export interface ErrorLoaderProps {
   devDetails?: string | React.ReactNode;
   style?: React.CSSProperties;
 }
+
+export interface IModerationAppErrorCardProps {
+  size: string;
+  errorType: string;
+  titleLabel: string;
+  subtitleLabel: string;
+  buttonLabel?: string;
+  textMarginTop?: boolean;
+  textMarginBottom?: boolean;
+  hasButton?: boolean;
+  imageBoxHasMargin?: boolean;
+  /* Path to public folder */
+  publicImgPath?: string;
+  showLoginModal?: () => void;
+}

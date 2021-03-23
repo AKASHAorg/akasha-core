@@ -63,7 +63,7 @@ storiesOf('Avatar/Avatar', module)
     return (
       <Avatar
         ethAddress={guestEthAddress}
-        size="xl"
+        size="xxl"
         border={select('border', ['sm', 'md', 'lg'], undefined)}
       />
     );
@@ -73,7 +73,7 @@ storiesOf('Avatar/Avatar', module)
       <Avatar
         ethAddress={ethAddress}
         border={select('border', ['sm', 'md', 'lg'], undefined)}
-        size="xl"
+        size="xxl"
       />
     );
   })
@@ -82,7 +82,7 @@ storiesOf('Avatar/Avatar', module)
       <EditableAvatar
         ethAddress={ethAddress}
         border={select('border', ['sm', 'md', 'lg'], undefined)}
-        size="xl"
+        size="xxl"
         onChange={
           // tslint:disable-next-line:jsx-no-lambda
           () => {

@@ -1,19 +1,25 @@
-import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { formatRelativeTime, ILocale } from '../../../utils/time';
-import { ProfileAvatarButton } from '../../Buttons/index';
-import { Icon } from '../../Icon/index';
-import CardActions, { ServiceNames } from './card-actions';
+import { Box, Text } from 'grommet';
+import styled from 'styled-components';
+import { isMobile } from 'react-device-detect';
+
+import { ISocialData } from './social-box';
 import CardHeaderMenuDropdown from './card-header-menu';
+import CardActions, { ServiceNames } from './card-actions';
 import CardHeaderAkashaDropdown from './card-header-akasha';
-import { StyledProfileDrop } from './styled-entry-box';
+import { StyledDropAlt, StyledProfileDrop } from './styled-entry-box';
+
+import { EntryCardHidden } from '..';
 import { ProfileMiniCard } from '../profile-cards/profile-mini-card';
 import { IProfileData } from '../profile-cards/profile-widget-card';
-import { ISocialData } from './social-box';
-import ViewportSizeProvider from '../../Providers/viewport-dimension';
+
+import { Icon } from '../../Icon/index';
+import { MobileListModal } from '../../Modals';
+import { ProfileAvatarButton } from '../../Buttons/index';
 import { EmbedBox, ReadOnlyEditor } from '../../Editor/index';
-import { EntryCardHidden } from '..';
-import styled from 'styled-components';
+import ViewportSizeProvider from '../../Providers/viewport-dimension';
+
+import { formatRelativeTime, ILocale } from '../../../utils/time';
 
 export interface IEntryData {
   CID?: string;
@@ -52,6 +58,7 @@ export interface IEntryBoxProps {
   repliesLabel: string;
   repostsLabel: string;
   repostLabel?: string;
+  cancelLabel?: string;
   repostWithCommentLabel?: string;
   shareLabel?: string;
   flagAsLabel?: string;
@@ -73,11 +80,13 @@ export interface IEntryBoxProps {
   onContentClick?: (details: IContentClickDetails) => void;
   /* Can click the content (not embed!) to navigate */
   contentClickable?: boolean;
-  onMentionClick?: (ethAddress: string) => void;
+  onMentionClick?: (pubKey: string) => void;
+  onTagClick?: (name: string) => void;
   // style
   style?: React.CSSProperties;
   disableReposting?: boolean;
   disableActions?: boolean;
+  hideActionButtons?: boolean;
   hidePublishTime?: boolean;
   awaitingModerationLabel?: string;
   moderatedContentLabel?: string;
@@ -102,6 +111,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     repliesLabel,
     repostsLabel,
     repostLabel,
+    cancelLabel,
     repostWithCommentLabel,
     shareLabel,
     flagAsLabel,
@@ -119,10 +129,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     isFollowingAuthor,
     onContentClick,
     onMentionClick,
+    onTagClick,
     style,
     contentClickable,
     disableReposting,
     disableActions,
+    hideActionButtons,
     hidePublishTime,
     awaitingModerationLabel,
     moderatedContentLabel,
@@ -239,8 +251,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             ethAddress={entryData.author?.ethAddress}
             ref={profileRef}
             bold={true}
-            onMouseEnter={() => setProfileDropOpen(true)}
-            onMouseLeave={() => setProfileDropOpen(false)}
+            // onMouseEnter={() => setProfileDropOpen(true)}
+            // onMouseLeave={() => setProfileDropOpen(false)}
           />
           {profileRef.current && profileDropOpen && (
             <StyledProfileDrop
@@ -281,7 +293,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ref={akashaRef}
               clickable={false}
             />
-            {onEntryFlag && (
+            {/* this condition hides the icon for logged user's own posts */}
+            {onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress) && (
               <Icon
                 type="moreDark"
                 onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
@@ -305,13 +318,27 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             CID={entryData.CID}
           />
         )}
-        {menuIconRef.current && menuDropOpen && onEntryFlag && (
+        {!isMobile && menuIconRef.current && menuDropOpen && onEntryFlag && (
           <CardHeaderMenuDropdown
             target={menuIconRef.current}
             onMenuClose={closeMenuDrop}
             onFlag={handleEntryFlag}
             flagAsLabel={flagAsLabel}
           />
+        )}
+        {isMobile && menuDropOpen && onEntryFlag && (
+          <StyledDropAlt>
+            <MobileListModal
+              closeModal={closeMenuDrop}
+              menuItems={[
+                {
+                  label: props.flagAsLabel,
+                  icon: 'report',
+                  handler: () => handleEntryFlag(),
+                },
+              ]}
+            />
+          </StyledDropAlt>
         )}
         <Box
           pad={{ horizontal: 'medium' }}
@@ -322,7 +349,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             !disableActions && contentClickable ? handleContentClick(entryData) : false
           }
         >
-          <ReadOnlyEditor content={entryData.content} handleMentionClick={onMentionClick} />
+          <ReadOnlyEditor
+            content={entryData.content}
+            handleMentionClick={onMentionClick}
+            handleTagClick={onTagClick}
+          />
         </Box>
         {entryData.quote && !entryData.quote.delisted && !entryData.quote.reported && (
           <Box
@@ -351,30 +382,33 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
           </Box>
         )}
-        <CardActions
-          entryData={entryData}
-          loggedProfileEthAddress={loggedProfileEthAddress}
-          sharePostLabel={sharePostLabel}
-          shareTextLabel={shareTextLabel}
-          sharePostUrl={sharePostUrl}
-          repliesLabel={repliesLabel}
-          repostsLabel={repostsLabel}
-          repostLabel={repostLabel}
-          repostWithCommentLabel={repostWithCommentLabel}
-          isBookmarked={isBookmarked}
-          bookmarkLabel={bookmarkLabel}
-          bookmarkedLabel={bookmarkedLabel}
-          shareLabel={shareLabel}
-          copyLinkLabel={copyLinkLabel}
-          handleEntryBookmark={handleEntryBookmark}
-          onRepost={handleRepost(false)}
-          onRepostWithComment={handleRepost(true)}
-          onShare={handleEntryShare}
-          handleRepliesClick={handleRepliesClick}
-          disableReposting={disableReposting}
-          disableActions={disableActions}
-          isModerated={isModerated}
-        />
+        {!hideActionButtons && (
+          <CardActions
+            entryData={entryData}
+            loggedProfileEthAddress={loggedProfileEthAddress}
+            sharePostLabel={sharePostLabel}
+            shareTextLabel={shareTextLabel}
+            sharePostUrl={sharePostUrl}
+            repliesLabel={repliesLabel}
+            repostsLabel={repostsLabel}
+            repostLabel={repostLabel}
+            cancelLabel={cancelLabel}
+            repostWithCommentLabel={repostWithCommentLabel}
+            isBookmarked={isBookmarked}
+            bookmarkLabel={bookmarkLabel}
+            bookmarkedLabel={bookmarkedLabel}
+            shareLabel={shareLabel}
+            copyLinkLabel={copyLinkLabel}
+            handleEntryBookmark={handleEntryBookmark}
+            onRepost={handleRepost(false)}
+            onRepostWithComment={handleRepost(true)}
+            onShare={handleEntryShare}
+            handleRepliesClick={handleRepliesClick}
+            disableReposting={disableReposting}
+            disableActions={disableActions}
+            isModerated={isModerated}
+          />
+        )}
       </Box>
     </ViewportSizeProvider>
   );

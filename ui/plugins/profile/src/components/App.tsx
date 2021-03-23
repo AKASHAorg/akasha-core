@@ -4,7 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import Routes from './routes';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 
-const { ThemeSelector, lightTheme, darkTheme, Helmet, Box } = DS;
+const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
 
 /**
  * This is the entry point of a plugin.
@@ -51,9 +51,6 @@ class App extends PureComponent<RootComponentProps> {
       <Box width="100vw">
         <React.Suspense fallback={<>Loading Profile</>}>
           <I18nextProvider i18n={i18n ? i18n : null}>
-            <Helmet>
-              <title>Profile</title>
-            </Helmet>
             <ThemeSelector
               availableThemes={[lightTheme, darkTheme]}
               settings={{ activeTheme: 'Light-Theme' }}

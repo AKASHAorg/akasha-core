@@ -12,12 +12,13 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { uploadMediaToTextile } from '../../services/posting-service';
+import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { redirectToPost } from '../../services/routing-service';
 import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
 import routes, { POST } from '../../routes';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
 const {
   Box,
@@ -26,7 +27,6 @@ const {
   ReportModal,
   ToastProvider,
   ModalRenderer,
-  useViewportSize,
   VirtualList,
   Helmet,
   CommentEditor,
@@ -35,16 +35,20 @@ const {
   ErrorInfoCard,
   ErrorLoader,
   EntryCardLoading,
+  EditorModal,
 } = DS;
 
 interface IPostPage {
-  ethAddress: string | null;
-  currentUserCalled: boolean;
-  pubKey: string | null;
+  loggedProfileData?: any;
+  loginState: UseLoginState;
   flagged: string;
-  reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  reportModalOpen: boolean;
+  setReportModalOpen: () => void;
+  closeReportModal: () => void;
+  editorModalOpen: boolean;
+  setEditorModalOpen: () => void;
+  closeEditorModal: () => void;
   showLoginModal: () => void;
   navigateToUrl: (path: string) => void;
   isMobile: boolean;
@@ -57,13 +61,17 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     globalChannel,
     flagged,
     reportModalOpen,
-    currentUserCalled,
     setFlagged,
     setReportModalOpen,
+    closeReportModal,
+    editorModalOpen,
+    setEditorModalOpen,
+    closeEditorModal,
     showLoginModal,
     logger,
     navigateToUrl,
-    ethAddress,
+    loggedProfileData,
+    loginState,
     isMobile,
   } = props;
 
@@ -72,7 +80,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const [, errorActions] = useErrors({ logger });
 
   const [postsState, postsActions] = usePosts({
-    user: ethAddress,
+    user: loginState.ethAddress,
     postsService: sdkModules.posts,
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
@@ -85,11 +93,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     return null;
   }, [postId, postsState.postsData[postId]]);
 
-  const {
-    size,
-    dimensions: { width },
-  } = useViewportSize();
-
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [loginProfile, loginProfileActions] = useProfile({
@@ -99,14 +102,13 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   });
 
   React.useEffect(() => {
-    if (props.pubKey) {
-      loginProfileActions.getProfileData({ pubKey: props.pubKey });
+    if (loginState.pubKey) {
+      loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
     }
-  }, [props.pubKey]);
+  }, [loginState.pubKey]);
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
     dbService: sdkModules.db,
-    pubKey: props.pubKey,
     onError: errorActions.createError,
   });
 
@@ -117,10 +119,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   });
 
   React.useEffect(() => {
-    if (ethAddress && entryData?.author.ethAddress) {
-      followActions.isFollowing(ethAddress, entryData.author.ethAddress);
+    if (loginState.ethAddress && entryData?.author.ethAddress) {
+      followActions.isFollowing(loginState.ethAddress, entryData.author.ethAddress);
     }
-  }, [ethAddress, entryData?.author.ethAddress]);
+  }, [loginState.ethAddress, entryData?.author.ethAddress]);
 
   const handleFollow = () => {
     if (entryData?.author.ethAddress) {
@@ -152,11 +154,14 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   React.useEffect(() => {
     // this is used to initialise comments when navigating to other post ids
-    if (postId && currentUserCalled) {
+    if (postId && loginState.currentUserCalled) {
       postsActions.getPost(postId);
       handleLoadMore({ limit: 5, postID: postId });
+      if (loginState.ethAddress) {
+        bookmarkActions.getBookmarks();
+      }
     }
-  }, [postId, currentUserCalled]);
+  }, [postId, loginState.currentUserCalled, loginState.ethAddress]);
 
   const bookmarked = React.useMemo(() => {
     if (
@@ -172,13 +177,17 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     navigateToUrl(`/profile/${pubKey}`);
   };
 
+  const handleTagClick = (name: string) => {
+    props.singleSpa.navigateToUrl(`/AKASHA-app/tags/${name}`);
+  };
+
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, pubKey: string) => {
     navigateToUrl(`/profile/${pubKey}`);
     ev.preventDefault();
   };
 
   const handleEntryBookmark = (entryId: string) => {
-    if (!ethAddress) {
+    if (!loginState.ethAddress) {
       return showLoginModal();
     }
     if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
@@ -188,7 +197,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   };
 
   const handleCommentBookmark = (commentId: string) => {
-    if (!ethAddress) {
+    if (!loginState.ethAddress) {
       return showLoginModal();
     }
     if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === commentId) >= 0) {
@@ -197,20 +206,15 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     return bookmarkActions.bookmarkComment(commentId);
   };
 
-  const handleEntryRepost = () => {
+  const handleCommentRepost = () => {
     // todo
   };
-  const handleEntryFlag = (entryId: string, user?: string | null) => () => {
-    /* todo */
-    if (!user) {
-      setFlagged(entryId);
-      return showLoginModal();
-    }
+  const handleEntryFlag = (entryId: string) => () => {
     setFlagged(entryId);
-    setReportModalOpen(true);
+    setReportModalOpen();
   };
 
-  const handlePublish = async (data: {
+  const handlePublishComment = async (data: {
     metadata: {
       app: string;
       version: number;
@@ -222,7 +226,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     content: any;
     textContent: any;
   }) => {
-    if (!ethAddress) {
+    if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
@@ -253,7 +257,33 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     });
   };
 
-  const handleNavigateToPost = redirectToPost(navigateToUrl, postsActions.resetPostIds);
+  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
+
+  const handleRepost = (_withComment: boolean, entry: any) => {
+    setCurrentEmbedEntry(entry);
+    setEditorModalOpen();
+  };
+
+  const handleToggleEditor = () => {
+    setCurrentEmbedEntry(undefined);
+    if (editorModalOpen) {
+      closeEditorModal();
+    } else {
+      setEditorModalOpen();
+    }
+  };
+
+  const handleEntryPublish = (entry: any) => {
+    if (!loginState.ethAddress || !loginState.pubKey) {
+      showLoginModal();
+      return;
+    }
+
+    postsActions.optimisticPublishPost(entry, loggedProfileData, currentEmbedEntry, true);
+    closeEditorModal();
+  };
+
+  const handleNavigateToPost = redirectToPost(navigateToUrl, postId, postsActions.resetPostIds);
 
   const onUploadRequest = uploadMediaToTextile(
     sdkModules.profiles.profileService,
@@ -302,6 +332,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const postErrors = errorActions.getFilteredErrors('usePost.getPost');
   const commentErrors = errorActions.getFilteredErrors('usePosts.getComments');
 
+  const entryAuthorName =
+    entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
+
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
@@ -323,30 +356,55 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                 t('Nudity'),
                 t('Violence'),
               ]}
+              optionValues={[
+                'Suspicious, deceptive, or spam',
+                'Abusive or harmful to others',
+                'Self-harm or suicide',
+                'Illegal',
+                'Nudity',
+                'Violence',
+              ]}
               descriptionLabel={t('Explanation')}
               descriptionPlaceholder={t('Please explain your reason(s)')}
               footerText1Label={t('If you are unsure, you can refer to our')}
               footerLink1Label={t('Code of Conduct')}
               footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
-              footerText2Label={t('and')}
-              footerLink2Label={t('Terms of Service')}
-              footerUrl2={'https://ethereum.world/terms-of-service'}
               cancelLabel={t('Cancel')}
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
               closeLabel={t('Close')}
-              user={ethAddress ? ethAddress : ''}
+              user={loginState.ethAddress ? loginState.ethAddress : ''}
               contentId={flagged}
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
-              size={size}
-              width={width}
               updateEntry={updateEntry}
-              closeModal={() => {
-                setReportModalOpen(false);
-              }}
+              closeModal={closeReportModal}
             />
           </ToastProvider>
+        )}
+        {editorModalOpen && props.layout.app.modalSlotId && (
+          <EditorModal
+            slotId={props.layout.app.modalSlotId}
+            avatar={loggedProfileData.avatar}
+            showModal={editorModalOpen}
+            ethAddress={loggedProfileData.ethAddress}
+            postLabel={t('Publish')}
+            placeholderLabel={t('Write something')}
+            discardPostLabel={t('Discard Post')}
+            discardPostInfoLabel={t(
+              "You have not posted yet. If you leave now you'll discard your post.",
+            )}
+            keepEditingLabel={t('Keep Editing')}
+            onPublish={handleEntryPublish}
+            handleNavigateBack={handleToggleEditor}
+            getMentions={handleGetMentions}
+            getTags={handleGetTags}
+            tags={tags}
+            mentions={mentions}
+            uploadRequest={onUploadRequest}
+            embedEntryData={currentEmbedEntry}
+            style={{ width: '36rem' }}
+          />
         )}
       </ModalRenderer>
       <Box pad={{ bottom: 'small' }} border={{ side: 'bottom', size: '1px', color: 'border' }}>
@@ -394,19 +452,18 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       shareLabel={t('Share')}
                       copyLinkLabel={t('Copy Link')}
                       flagAsLabel={t('Report Post')}
-                      loggedProfileEthAddress={ethAddress}
+                      loggedProfileEthAddress={loginState.ethAddress}
                       locale={locale}
                       bookmarkLabel={t('Save')}
                       bookmarkedLabel={t('Saved')}
-                      onRepost={() => {
-                        return;
-                      }}
-                      onEntryFlag={handleEntryFlag(entryData.entryId, ethAddress)}
+                      onRepost={handleRepost}
+                      onEntryFlag={handleEntryFlag(entryData.entryId)}
                       handleFollowAuthor={handleFollow}
                       handleUnfollowAuthor={handleUnfollow}
                       isFollowingAuthor={isFollowing}
                       onContentClick={handleNavigateToPost}
                       onMentionClick={handleMentionClick}
+                      onTagClick={handleTagClick}
                       awaitingModerationLabel={t(
                         'You have reported this post. It is awaiting moderation.',
                       )}
@@ -422,19 +479,19 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
           )}
         </ErrorInfoCard>
       </Box>
-      {!ethAddress && (
+      {!loginState.ethAddress && (
         <Box margin="medium">
           <EditorPlaceholder onClick={showLoginModal} ethAddress={null} />
         </Box>
       )}
-      {ethAddress && (
+      {loginState.ethAddress && (
         <Box margin="medium">
           <CommentEditor
             avatar={loginProfile.avatar}
-            ethAddress={ethAddress}
+            ethAddress={loginState.ethAddress}
             postLabel={t('Reply')}
-            placeholderLabel={t('Write something')}
-            onPublish={handlePublish}
+            placeholderLabel={`${t('Reply to')} ${entryAuthorName}`}
+            onPublish={handlePublishComment}
             getMentions={handleGetMentions}
             getTags={handleGetTags}
             tags={tags}
@@ -473,15 +530,16 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                     logger={logger}
                     globalChannel={globalChannel}
                     bookmarkState={bookmarkState}
-                    ethAddress={ethAddress}
+                    ethAddress={loginState.ethAddress}
                     locale={locale}
                     onBookmark={handleCommentBookmark}
                     onNavigate={handleNavigateToPost}
                     sharePostUrl={`${window.location.origin}${routes[POST]}/`}
                     onFlag={handleEntryFlag}
-                    onRepost={handleEntryRepost}
+                    onRepost={handleCommentRepost}
                     onAvatarClick={handleAvatarClick}
                     onMentionClick={handleMentionClick}
+                    onTagClick={handleTagClick}
                     handleFlipCard={handleListFlipCard}
                   />
                 }
@@ -492,7 +550,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                   isMobile,
                   sdkModules,
                   feedItems: postsState.postIds,
-                  loggedEthAddress: ethAddress,
+                  loggedEthAddress: loginState.ethAddress,
                   pendingComments: postsState.pendingComments,
                 })}
               />

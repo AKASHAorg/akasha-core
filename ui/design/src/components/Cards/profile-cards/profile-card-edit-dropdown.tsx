@@ -1,5 +1,6 @@
 import { Box } from 'grommet';
 import React from 'react';
+import styled from 'styled-components';
 import { StyledText } from '../../Buttons/default-buttons/styled-plain-button';
 import { StyledDrop, StyledSelectBox } from '../entry-cards/styled-entry-box';
 
@@ -13,29 +14,36 @@ interface IProfileEditMenuProps {
   hideENSButton?: boolean;
 }
 
+const MenuOption = styled(StyledSelectBox)`
+  padding: 0.5em;
+  &:hover {
+    background: transparent;
+  }
+`;
+
 const ProfileEditMenuDropdown = (props: IProfileEditMenuProps) => {
   const { onClose, onENSChangeClick, onUpdateClick } = props;
   return (
     <StyledDrop
       overflow="hidden"
       target={props.target}
-      align={{ top: 'bottom', left: 'left' }}
+      align={{ top: 'bottom', right: 'right' }}
       onClickOutside={onClose}
       onEsc={onClose}
-      style={{ marginTop: '.5em' }}
+      style={{ padding: '0.65em 0.3em' }}
     >
       <Box pad="xxsmall" width={{ min: '13rem' }}>
-        <StyledSelectBox>
+        <MenuOption>
           <Box onClick={onUpdateClick}>
             <StyledText>{props.updateProfileLabel}</StyledText>
           </Box>
-        </StyledSelectBox>
+        </MenuOption>
         {!props.hideENSButton && (
-          <StyledSelectBox>
+          <MenuOption>
             <Box onClick={onENSChangeClick}>
               <StyledText>{props.changeENSLabel}</StyledText>
             </Box>
-          </StyledSelectBox>
+          </MenuOption>
         )}
       </Box>
     </StyledDrop>

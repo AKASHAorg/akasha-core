@@ -1,10 +1,9 @@
 import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
-import { IconButton, DuplexButton } from '../../Buttons/index';
+import { DuplexButton } from '../../Buttons/index';
 import { Icon } from '../../Icon';
 import { TextIcon } from '../../TextIcon/index';
 import { MainAreaCardBox } from '../common/basic-card-box';
-import CardHeaderMenuDropdown from '../entry-cards/card-header-menu';
 import {
   ProfileCardAvatar,
   ProfileCardCoverImage,
@@ -17,6 +16,8 @@ import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 import ProfileEditMenuDropdown from './profile-card-edit-dropdown';
 import styled from 'styled-components';
 import { truncateMiddle } from '../../../utils/string-utils';
+import { isMobile } from 'react-device-detect';
+import { MobileListModal } from '../../Modals';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -58,19 +59,44 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   updateProfileLabel?: string;
   changeENSLabel?: string;
   hideENSButton?: boolean;
+  copyLabel?: string;
+  copiedLabel?: string;
 }
 
-const EditButton = styled(IconButton)`
+const EditButton = styled(TextIcon)`
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
-  min-height: 1.375rem;
+  cursor: pointer;
+  border: 1px solid ${props => props.theme.colors.blue};
+  padding: 0.625em 0.5em;
+  > span {
+    color: ${props => props.theme.colors.blue};
+  }
   svg * {
-    stroke: ${props => props.theme.colors.white};
+    stroke: ${props => props.theme.colors.blue};
   }
   &:hover {
+    background: ${props => props.theme.colors.blue};
+    > span {
+      color: ${props => props.theme.colors.white};
+    }
     svg * {
-      stroke: ${props => props.theme.colors.blue};
+      stroke: ${props => props.theme.colors.white};
     }
   }
+`;
+
+const StatIcon = styled(TextIcon)<{ isMobile?: boolean }>`
+  ${props => {
+    if (props.isMobile) {
+      return `
+        flex-direction: column;
+        align-items: start;
+      `;
+    }
+    return `
+      flex-direction: row;
+    `;
+  }}
 `;
 
 // tslint:disable:cyclomatic-complexity
@@ -96,9 +122,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     editProfileLabel,
     shareProfileLabel,
     changeCoverImageLabel,
-    flagAsLabel,
-    flaggable,
-    onEntryFlag,
     profileProvidersData,
     canUserEdit,
   } = props;
@@ -108,14 +131,12 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const followingTitle = `${profileData.totalFollowing || 0} ${followingLabel}`;
 
   const [editable /* , setEditable */] = useState(false);
-  const [menuDropOpen, setMenuDropOpen] = React.useState(false);
   const [editMenuOpen, setEditMenuOpen] = React.useState(false);
   const [avatar, setAvatar] = useState(profileData.avatar);
   const [coverImage, setCoverImage] = useState(profileData.coverImage);
   const [description, setDescription] = useState(profileData.description);
   const [name, setName] = useState(profileData.name);
 
-  const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
   const editMenuRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
   React.useEffect(() => {
@@ -143,16 +164,8 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const [descriptionPopoverOpen, setDescriptionPopoverOpen] = useState(false);
   const [namePopoverOpen, setNamePopoverOpen] = useState(false);
 
-  const toggleMenuDrop = () => {
-    setMenuDropOpen(!menuDropOpen);
-  };
-
   const toggleEditMenu = () => {
     setEditMenuOpen(!editMenuOpen);
-  };
-
-  const closeMenuDrop = () => {
-    setMenuDropOpen(false);
   };
 
   const closeEditMenu = () => {
@@ -183,12 +196,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     setNamePopoverOpen(false);
   };
 
-  const onLinkCopy = (CID?: string) => {
-    if (CID) {
-      navigator.clipboard.writeText(CID);
-    }
-  };
-
   return (
     <MainAreaCardBox className={className}>
       <ProfileCardCoverImage
@@ -207,6 +214,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
       <Box
         direction="column"
         border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
+        pad={{ bottom: 'medium' }}
         margin={{ horizontal: 'medium' }}
       >
         <Box height="70px" direction="row" justify="between">
@@ -221,7 +229,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               setAvatarPopoverOpen={setAvatarPopoverOpen}
               profileProvidersData={profileProvidersData}
             />
-            <Box pad={{ vertical: 'small', left: 'xsmall', right: 'small' }}>
+            <Box pad={{ vertical: 'xxsmall', left: 'xsmall', right: 'small' }}>
               <ProfileCardName
                 editable={editable}
                 name={name || truncateMiddle(profileData.ethAddress)}
@@ -240,41 +248,34 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             </Box>
           </Box>
           <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
-            {!canUserEdit && loggedEthAddress && loggedEthAddress !== profileData.ethAddress && (
-              <DuplexButton
-                icon={<Icon type="following" />}
-                active={isFollowing}
-                activeLabel={followingLabel}
-                inactiveLabel={followLabel}
-                activeHoverLabel={unfollowLabel}
-                onClickActive={handleUnfollow}
-                onClickInactive={handleFollow}
-              />
+            {loggedEthAddress !== profileData.ethAddress && (
+              <Box width="7rem">
+                <DuplexButton
+                  icon={<Icon type="following" />}
+                  active={isFollowing}
+                  activeLabel={followingLabel}
+                  inactiveLabel={followLabel}
+                  activeHoverLabel={unfollowLabel}
+                  onClickActive={handleUnfollow}
+                  onClickInactive={handleFollow}
+                />
+              </Box>
             )}
-            {canUserEdit && (
+            {!isMobile && canUserEdit && (
               <EditButton
-                primary={true}
-                icon={<Icon type="editSimple" ref={editMenuRef} />}
+                iconType="editSimple"
+                ref={editMenuRef}
                 label={editProfileLabel}
                 onClick={toggleEditMenu}
               />
             )}
-            {/* if more options need to be in the dropdown, consider adjusting these conditions */}
-            {flaggable && !!flagAsLabel?.length && loggedEthAddress !== profileData.ethAddress && (
-              <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
+            {isMobile && loggedEthAddress === profileData.ethAddress && (
+              <Icon type="moreDark" onClick={toggleEditMenu} clickable={true} ref={editMenuRef} />
             )}
           </Box>
         </Box>
-        {menuIconRef.current && menuDropOpen && (
-          <CardHeaderMenuDropdown
-            target={menuIconRef.current}
-            onMenuClose={closeMenuDrop}
-            onFlag={onEntryFlag}
-            flagAsLabel={flagAsLabel}
-          />
-        )}
-        <Box pad={{ vertical: 'medium' }} direction="row" alignContent="center" gap="medium">
-          <TextIcon
+        <Box pad={{ bottom: 'medium' }} direction="row" alignContent="center" gap="medium">
+          <StatIcon
             iconType="quote"
             iconBackground={true}
             iconSize="xxs"
@@ -282,8 +283,9 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             onClick={onClickPosts}
             fadedText={true}
             data-testid="posts-button"
+            isMobile={isMobile}
           />
-          <TextIcon
+          <StatIcon
             iconType="following"
             iconBackground={true}
             iconSize="xxs"
@@ -291,8 +293,9 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             onClick={onClickFollowers}
             fadedText={true}
             data-testid="followers-button"
+            isMobile={isMobile}
           />
-          <TextIcon
+          <StatIcon
             iconType="following"
             iconBackground={true}
             iconSize="xxs"
@@ -300,10 +303,11 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             onClick={onClickFollowing}
             fadedText={true}
             data-testid="following-button"
+            isMobile={isMobile}
           />
         </Box>
       </Box>
-      {editMenuOpen && editMenuRef.current && (
+      {!isMobile && editMenuOpen && editMenuRef.current && (
         <ProfileEditMenuDropdown
           target={editMenuRef.current}
           onClose={closeEditMenu}
@@ -320,41 +324,46 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           hideENSButton={props.hideENSButton}
         />
       )}
-
-      <ProfileCardEthereumId profileData={profileData} />
-      {description && (
-        <ProfileCardDescription
-          editable={editable}
-          description={description}
-          descriptionIcon={descriptionIcon}
-          handleChangeDescription={handleChangeDescription}
-          descriptionPopoverOpen={descriptionPopoverOpen}
-          setDescriptionPopoverOpen={setDescriptionPopoverOpen}
-          profileProvidersData={profileProvidersData}
-          descriptionLabel={descriptionLabel}
+      {isMobile && editMenuOpen && (
+        <MobileListModal
+          closeModal={closeEditMenu}
+          menuItems={[
+            {
+              label: props.updateProfileLabel,
+              handler: () => {
+                props.onUpdateClick();
+                closeEditMenu();
+              },
+            },
+            {
+              label: props.changeENSLabel,
+              handler: () => {
+                props.onENSChangeClick();
+                closeEditMenu();
+              },
+            },
+          ]}
         />
       )}
-      {profileData.CID && (
-        <>
-          <Box direction="column" pad="medium" gap="medium">
-            <Box direction="row" gap="xsmall" align="center">
-              <Text size="large" weight="bold" color="primaryText">
-                {`CID`}
-              </Text>
-            </Box>
-
-            <TextIcon
-              iconType="copy"
-              label={profileData.CID}
-              onClick={() => onLinkCopy(profileData.CID)}
-              clickable={true}
-              iconSize="xs"
-              fontSize="medium"
-              reverse={true}
-            />
-          </Box>
-        </>
-      )}
+      <Box pad={{ top: 'medium', bottom: 'xsmall' }}>
+        <ProfileCardEthereumId
+          profileData={profileData}
+          copiedLabel={props.copiedLabel}
+          copyLabel={props.copyLabel}
+        />
+        {description && (
+          <ProfileCardDescription
+            editable={editable}
+            description={description}
+            descriptionIcon={descriptionIcon}
+            handleChangeDescription={handleChangeDescription}
+            descriptionPopoverOpen={descriptionPopoverOpen}
+            setDescriptionPopoverOpen={setDescriptionPopoverOpen}
+            profileProvidersData={profileProvidersData}
+            descriptionLabel={descriptionLabel}
+          />
+        )}
+      </Box>
     </MainAreaCardBox>
   );
 };

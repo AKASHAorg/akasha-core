@@ -66,6 +66,7 @@ export default class AppLoader implements IAppLoader {
     integrationId: string;
     menuItemType?: MenuItemType;
   }[];
+  private fourOhFourTimeout: NodeJS.Timeout | null;
   private isRegisteringLayout: boolean;
   private apps: IAppEntry[];
   private widgets: {
@@ -101,6 +102,8 @@ export default class AppLoader implements IAppLoader {
     this.globalChannel = globalChannel;
     this.channels = channels;
     this.isMobile = detectMobile().phone || detectMobile().tablet;
+
+    this.fourOhFourTimeout = null;
 
     this.events = new BehaviorSubject(EventTypes.Instantiated);
     this.menuItems = { nextIndex: 1, items: [] };
@@ -420,24 +423,31 @@ export default class AppLoader implements IAppLoader {
     if (fourOhFourElem) {
       fourOhFourElem.parentElement.removeChild(fourOhFourElem);
     }
-    if (!currentPlugins.length) {
-      const pluginsNode = document.getElementById(this.config.layout.app.pluginSlotId);
-      // create a 404 page and return it instead of a plugin
-      const FourOhFourNode: ChildNode = fourOhFour;
-      if (pluginsNode) {
-        pluginsNode.appendChild(FourOhFourNode);
-      }
-      return;
+    if (this.fourOhFourTimeout) {
+      clearTimeout(this.fourOhFourTimeout);
+      this.fourOhFourTimeout = null;
     }
-    this.appLogger.info(`active plugin %j`, currentPlugins);
-    const firstPlugin = currentPlugins.find(plugin => this.registeredIntegrations.has(plugin));
-    if (firstPlugin) {
-      setPageTitle(this.registeredIntegrations.get(firstPlugin).title);
-    } else {
-      this.appLogger.warn(
-        `could not find a registered active app from active plugins list %j`,
-        currentPlugins,
-      );
+    this.fourOhFourTimeout = setTimeout(() => {
+      if (!currentPlugins.length) {
+        const pluginsNode = document.getElementById(this.config.layout.app.pluginSlotId);
+        // create a 404 page and return it instead of a plugin
+        const FourOhFourNode: ChildNode = fourOhFour;
+        if (pluginsNode) {
+          pluginsNode.appendChild(FourOhFourNode);
+        }
+      }
+    }, 1500);
+    if (currentPlugins.length) {
+      this.appLogger.info(`active plugin %j`, currentPlugins);
+      const firstPlugin = currentPlugins.find(plugin => this.registeredIntegrations.has(plugin));
+      if (firstPlugin) {
+        setPageTitle(this.registeredIntegrations.get(firstPlugin).title);
+      } else {
+        this.appLogger.warn(
+          `could not find a registered active app from active plugins list %j`,
+          currentPlugins,
+        );
+      }
     }
   }
   private getAppEntries(appNames) {
@@ -450,19 +460,37 @@ export default class AppLoader implements IAppLoader {
       if (plugin) return plugin;
     });
   }
-  private createHtmlElement(elementId, elementType, parentNode?: string) {
+
+  /**
+   * InsertPosition
+   *
+   * ```html
+   * <!-- beforebegin -->
+   * <TargetElement>
+   *  <!-- afterbegin -->
+   *    <!-- other child elements -->
+   *  <!-- beforeend -->
+   * </TargetElement>
+   * <!-- afterend -->
+   * ```
+   */
+
+  private createHtmlElement(
+    elementId: string,
+    elementType: string,
+    insertAt: { position: InsertPosition; targetId: string },
+  ) {
     const alreadyCreated = document.getElementById(elementId);
     if (alreadyCreated) {
       return elementId;
     }
     const elem: HTMLElement = document.createElement(elementType);
     elem.id = elementId;
-    if (parentNode) {
-      const parentElem = document.getElementById(parentNode);
-      if (parentElem && elem) {
-        parentElem.appendChild(elem);
-      }
+    const targetElement = document.getElementById(insertAt.targetId);
+    if (!targetElement) {
+      return this.appLogger.error(`Target element: ${insertAt.targetId} not found!`);
     }
+    targetElement.insertAdjacentElement(insertAt.position, elem);
     return elementId;
   }
   private mountWidgetsOfApps(apps) {
@@ -472,12 +500,11 @@ export default class AppLoader implements IAppLoader {
       const widgetRoutes = Object.keys(widgets);
       const path = window.location.pathname;
       if (widgetRoutes.length) {
-        widgetRoutes.forEach(route => {
-          const routeRegex = pathToRegexp(route);
-          const isMatching = routeRegex.test(path);
-          if (isMatching) {
+        widgetRoutes
+          .filter(route => pathToRegexp(route).test(path))
+          .forEach(route => {
             const widgetListForPath = widgets[route];
-            widgetListForPath.forEach(async (widget: IWidget) => {
+            widgetListForPath.forEach(async (widget: IWidget, index: number) => {
               this.currentlyMountedWidgets.push({
                 route: route,
                 widgetId: this.getIdFromName(widget.name),
@@ -488,19 +515,20 @@ export default class AppLoader implements IAppLoader {
                       basePath: route,
                     },
                     config: {
-                      slot: this.createHtmlElement(
-                        this.getIdFromName(widget.name),
-                        'div',
-                        this.config.layout.app.widgetSlotId,
-                      ),
+                      slot: this.createHtmlElement(this.getIdFromName(widget.name), 'div', {
+                        position: index === 0 ? 'afterbegin' : 'afterend',
+                        targetId:
+                          index === 0
+                            ? this.config.layout.app.widgetSlotId
+                            : this.getIdFromName(widgetListForPath[index - 1].name),
+                      }),
                     },
                   },
                   'integration',
                 ),
               });
             });
-          }
-        });
+          });
       }
     });
   }

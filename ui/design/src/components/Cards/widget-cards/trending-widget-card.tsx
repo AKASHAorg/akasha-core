@@ -97,8 +97,9 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                   subtitle={`Used in ${tag.totalPosts} posts`}
                   labelSize="large"
                   gap="xxsmall"
+                  maxWidth="10rem"
                 />
-                {loggedEthAddress && (
+                <Box width="7rem">
                   <DuplexButton
                     inactiveLabel={subscribeLabel}
                     activeLabel={subscribedLabel}
@@ -108,7 +109,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                     active={subscribedTags?.includes(tag.name)}
                     icon={<Icon type="subscribe" />}
                   />
-                )}
+                </Box>
               </Box>
             ))}
           </Box>
@@ -127,16 +128,18 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                     avatarImage={profile.avatar}
                   />
                 </Box>
-                {loggedEthAddress && profile.ethAddress !== loggedEthAddress && (
-                  <DuplexButton
-                    inactiveLabel={followLabel}
-                    activeLabel={followingLabel}
-                    activeHoverLabel={unfollowLabel}
-                    onClickInactive={() => handleFollowProfile(profile.ethAddress)}
-                    onClickActive={() => handleUnfollowProfile(profile.ethAddress)}
-                    active={followedProfiles?.includes(profile.ethAddress)}
-                    icon={<Icon type="following" />}
-                  />
+                {profile.ethAddress !== loggedEthAddress && (
+                  <Box width="7rem">
+                    <DuplexButton
+                      inactiveLabel={followLabel}
+                      activeLabel={followingLabel}
+                      activeHoverLabel={unfollowLabel}
+                      onClickInactive={() => handleFollowProfile(profile.ethAddress)}
+                      onClickActive={() => handleUnfollowProfile(profile.ethAddress)}
+                      active={followedProfiles?.includes(profile.ethAddress)}
+                      icon={<Icon type="following" />}
+                    />
+                  </Box>
                 )}
               </Box>
             ))}

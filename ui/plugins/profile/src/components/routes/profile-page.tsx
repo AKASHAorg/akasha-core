@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { ProfilePageCard } from '../profile-cards/profile-card';
-import DS from '@akashaproject/design-system';
-import { useErrors, usePosts, useProfile } from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
+import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
-import menuRoute, { MY_PROFILE } from '../../routes';
+import DS from '@akashaproject/design-system';
+import { constants, useErrors, usePosts, useProfile } from '@akashaproject/ui-awf-hooks';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 import {
   ModalState,
   ModalStateActions,
@@ -15,17 +14,35 @@ import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/compone
 import { ILoadItemsPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
 
-const { Box, Helmet } = DS;
+import { ProfilePageCard } from '../profile-cards/profile-card';
+import menuRoute, { MY_PROFILE } from '../../routes';
+
+const { Box, Helmet, ReportModal, ToastProvider, ModalRenderer } = DS;
+
 export interface ProfilePageProps extends RootComponentProps {
   modalActions: ModalStateActions;
   modalState: ModalState;
-  ethAddress: string | null;
+  loggedEthAddress: string | null;
   loginActions: UseLoginActions;
   loggedProfileData: any;
+  flagged: string;
+  reportModalOpen: boolean;
+  showLoginModal: () => void;
+  setFlagged: React.Dispatch<React.SetStateAction<string>>;
+  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
-  const { ethAddress, loginActions, loggedProfileData } = props;
+  const {
+    loggedEthAddress,
+    loginActions,
+    loggedProfileData,
+    flagged,
+    reportModalOpen,
+    setFlagged,
+    showLoginModal,
+    setReportModalOpen,
+  } = props;
   const location = useLocation();
 
   let { pubKey } = useParams() as any;
@@ -40,32 +57,47 @@ const ProfilePage = (props: ProfilePageProps) => {
     onError: errorActions.createError,
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
+    ensService: props.sdkModules.registry.ens,
   });
 
   const [postsState, postsActions] = usePosts({
     postsService: props.sdkModules.posts,
     ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
-    user: ethAddress,
+    user: loggedEthAddress,
   });
 
   React.useEffect(() => {
+    // reset post ids and virtual list, if user logs in
+    if (loggedEthAddress) {
+      postsActions.resetPostIds();
+    }
+  }, [loggedEthAddress]);
+
+  React.useEffect(() => {
     if (pubKey) {
+      profileActions.resetProfileData();
       profileActions.getProfileData({ pubKey });
       postsActions.resetPostIds();
     }
   }, [pubKey]);
 
+  /**
+   * Hook used in the /profile/my-profile route
+   * because we don't have the /:pubkey url param
+   */
   React.useEffect(() => {
     if (
-      props.loggedProfileData.pubKey &&
+      loggedProfileData.pubKey &&
       pubKey === loggedProfileData.pubKey &&
       !postsState.postIds.length &&
       !postsState.isFetchingPosts
     ) {
-      postsActions.getUserPosts({ pubKey: props.loggedProfileData.pubKey, limit: 5 });
+      postsActions.getUserPosts({ pubKey: loggedProfileData.pubKey, limit: 5 });
     }
-  }, [props.loggedProfileData.pubKey]);
+  }, [loggedProfileData.pubKey, pubKey]);
+
+  const { t } = useTranslation();
 
   const handleLoadMore = (payload: ILoadItemsPayload) => {
     const req: { limit: number; offset?: string } = {
@@ -88,8 +120,9 @@ const ProfilePage = (props: ProfilePageProps) => {
           return;
         }
         url = `/profile/${details.entryId}`;
-        postsActions.resetPostIds();
-        profileActions.resetProfileData();
+        break;
+      case ItemTypes.TAG:
+        url = `/AKASHA-app/tags/${details.entryId}`;
         break;
       case ItemTypes.ENTRY:
         url = `/AKASHA-app/post/${details.entryId}`;
@@ -123,18 +156,87 @@ const ProfilePage = (props: ProfilePageProps) => {
     return pubKey;
   }, [profileState, pubKey]);
 
+  const handleEntryFlag = (entryId: string, user?: string | null) => {
+    if (!user) {
+      // setting entryId to state first, if not logged in
+      setFlagged(entryId);
+      return showLoginModal();
+    }
+    setFlagged(entryId);
+    setReportModalOpen(true);
+  };
+
+  const handleFlipCard = (entry: any, isQuote: boolean) => () => {
+    const modifiedEntry = isQuote
+      ? { ...entry, quote: { ...entry.quote, reported: false } }
+      : { ...entry, reported: false };
+    postsActions.updatePostsState(modifiedEntry);
+  };
+
+  const updateEntry = (entryId: string) => {
+    const modifiedEntry = { ...postsState.postsData[entryId], reported: true };
+    postsActions.updatePostsState(modifiedEntry);
+  };
+
   return (
     <Box fill="horizontal">
       <Helmet>
-        <title>Profile | {`${profileUserName}`}'s Page</title>
+        <title>
+          {t('Profile')} | {t("{{profileUsername}}'s Page", { profileUsername: profileUserName })}
+        </title>
       </Helmet>
+      <ModalRenderer slotId={props.layout.app.modalSlotId}>
+        {reportModalOpen && (
+          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
+            <ReportModal
+              titleLabel={t('Report a post')}
+              successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
+              successMessageLabel={t('We will investigate this post and take appropriate action.')}
+              optionsTitleLabel={t('Please select a reason')}
+              optionLabels={[
+                t('Suspicious, deceptive, or spam'),
+                t('Abusive or harmful to others'),
+                t('Self-harm or suicide'),
+                t('Illegal'),
+                t('Nudity'),
+                t('Violence'),
+              ]}
+              optionValues={[
+                'Suspicious, deceptive, or spam',
+                'Abusive or harmful to others',
+                'Self-harm or suicide',
+                'Illegal',
+                'Nudity',
+                'Violence',
+              ]}
+              descriptionLabel={t('Explanation')}
+              descriptionPlaceholder={t('Please explain your reason(s)')}
+              footerText1Label={t('If you are unsure, you can refer to our')}
+              footerLink1Label={t('Code of Conduct')}
+              footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
+              cancelLabel={t('Cancel')}
+              reportLabel={t('Report')}
+              blockLabel={t('Block User')}
+              closeLabel={t('Close')}
+              user={loggedEthAddress ? loggedEthAddress : ''}
+              contentId={flagged}
+              contentType="post"
+              baseUrl={constants.BASE_FLAG_URL}
+              updateEntry={updateEntry}
+              closeModal={() => {
+                setReportModalOpen(false);
+              }}
+            />
+          </ToastProvider>
+        )}
+      </ModalRenderer>
       <ProfilePageCard
         {...props}
         profileData={profileState as any}
         profileActions={profileActions}
         profileUpdateStatus={profileUpdateStatus}
         profileId={pubKey}
-        loggedUserEthAddress={ethAddress}
+        loggedUserEthAddress={loggedEthAddress}
         modalActions={props.modalActions}
         modalState={props.modalState}
         loginActions={loginActions}
@@ -153,7 +255,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         sdkModules={props.sdkModules}
         layout={props.layout}
         globalChannel={props.globalChannel}
-        ethAddress={ethAddress}
+        ethAddress={loggedEthAddress}
         onNavigate={handleNavigation}
         onLoginModalOpen={handleLoginModalOpen}
         totalItems={postsState.totalItems}
@@ -162,6 +264,8 @@ const ProfilePage = (props: ProfilePageProps) => {
         loggedProfile={loggedProfileData}
         onRepostPublish={handleRepostPublish}
         contentClickable={true}
+        onReport={handleEntryFlag}
+        handleFlipCard={handleFlipCard}
       />
     </Box>
   );

@@ -13,6 +13,8 @@ export interface UseProfileActions {
   resetProfileData: () => void;
   optimisticUpdate: (data: any) => void;
   updateProfile: (fields: any) => void;
+  resetUpdateStatus: () => void;
+  validateUsername: ({ userName }: { userName: string }) => void;
 }
 
 export interface UseProfileProps {
@@ -20,6 +22,7 @@ export interface UseProfileProps {
   ipfsService: any;
   profileService: any;
   postsService?: any;
+  ensService?: any;
 }
 
 export interface ProfileUpdateStatus {
@@ -27,24 +30,35 @@ export interface ProfileUpdateStatus {
   uploadingAvatar: boolean;
   uploadingCoverImage: boolean;
   updateComplete: boolean;
+  isValidating: boolean;
+  isValidUsername: boolean | null;
+  /* additional context for isValidUsername flag */
+  /* when true, it means the regex failed: username contains invalid characters */
+  notAllowed: boolean;
 }
 
 /* A hook to be used on profile-page */
 export const useProfile = (
   props: UseProfileProps,
-): [Partial<IProfileData>, UseProfileActions, ProfileUpdateStatus] => {
+): [Partial<IProfileData & { isLoading: boolean }>, UseProfileActions, ProfileUpdateStatus] => {
   const { onError, ipfsService, profileService, postsService } = props;
-  const [profile, setProfile] = React.useState<Partial<IProfileData>>({});
+  const [profile, setProfile] = React.useState<Partial<IProfileData & { isLoading: boolean }>>({
+    isLoading: true,
+  });
   const [updateStatus, setUpdateStatus] = React.useState<ProfileUpdateStatus>({
     saving: false,
     uploadingAvatar: false,
     uploadingCoverImage: false,
     updateComplete: false,
+    isValidUsername: null,
+    isValidating: false,
+    notAllowed: false,
   });
 
   const actions: UseProfileActions = {
     getProfileData(payload) {
       try {
+        setProfile({ isLoading: true });
         const ipfsGatewayCall = ipfsService.getSettings({});
         const getProfileCall = profileService.getProfile(payload);
         const obs = forkJoin([ipfsGatewayCall, getProfileCall]);
@@ -65,11 +79,33 @@ export const useProfile = (
           if (coverImage) {
             images.coverImage = getMediaUrl(gatewayResp.data, coverImage);
           }
-
-          setProfile({ ...images, ...other });
+          setProfile({ ...images, ...other, isLoading: false });
         }, createErrorHandler('useProfile.getProfileData.subscription', false, onError));
       } catch (err) {
         createErrorHandler('useProfile.getProfileData', false, onError)(err);
+      }
+    },
+    validateUsername({ userName }) {
+      if (props.ensService) {
+        setUpdateStatus(prev => ({ ...prev, isValidating: true }));
+        if (/^([a-z0-9\.](?![0-9\.]$))+$/g.test(userName)) {
+          const channel = props.ensService.isAvailable({ name: userName });
+          channel.subscribe((resp: any) => {
+            setUpdateStatus(prev => ({
+              ...prev,
+              isValidating: false,
+              notAllowed: false,
+              isValidUsername: resp.data,
+            }));
+          }, createErrorHandler('useProfile.validateUsername', false, props.onError));
+        } else {
+          setUpdateStatus(prev => ({
+            ...prev,
+            isValidating: false,
+            isValidUsername: false,
+            notAllowed: true,
+          }));
+        }
       }
     },
     getEntryAuthor({ entryId }) {
@@ -103,7 +139,7 @@ export const useProfile = (
       }));
     },
     optimisticUpdate(data) {
-      const { avatar, coverImage, name, description } = data;
+      const { avatar, coverImage, name, description, userName } = data;
       setUpdateStatus(prev => ({
         ...prev,
         saving: true,
@@ -197,6 +233,13 @@ export const useProfile = (
             value: name,
           });
         }
+        if (userName) {
+          providers.push({
+            provider: 'ewa.providers.basic',
+            property: 'userName',
+            value: userName,
+          });
+        }
         const makeDefault = profileService.makeDefaultProvider(providers);
         makeDefault.subscribe((_res: any) => {
           const updatedFields = providers
@@ -221,14 +264,20 @@ export const useProfile = (
         }, createErrorHandler('useLoginState.optimisticUpdate.makeDefault', false, onError));
       }, createErrorHandler('useLoginState.optimisticUpdate.forkJoin', false, onError));
     },
-    resetProfileData() {
-      setProfile({});
+    resetUpdateStatus() {
       setUpdateStatus({
         saving: false,
         uploadingAvatar: false,
         uploadingCoverImage: false,
         updateComplete: false,
+        isValidUsername: null,
+        isValidating: false,
+        notAllowed: false,
       });
+    },
+    resetProfileData() {
+      setProfile({});
+      actions.resetUpdateStatus();
     },
   };
 

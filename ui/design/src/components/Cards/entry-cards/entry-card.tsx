@@ -43,6 +43,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     onRepost,
     onEntryFlag,
     onMentionClick,
+    onTagClick,
     onContentClick,
     handleFollowAuthor,
     handleUnfollowAuthor,
@@ -58,6 +59,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     isModerated,
     scrollHiddenContent,
     disableActions,
+    hideActionButtons,
   } = props;
 
   return (
@@ -98,6 +100,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         isFollowingAuthor={isFollowingAuthor}
         onContentClick={onContentClick}
         onMentionClick={onMentionClick}
+        onTagClick={onTagClick}
         contentClickable={contentClickable}
         disableReposting={disableReposting}
         hidePublishTime={hidePublishTime}
@@ -108,6 +111,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         isModerated={isModerated}
         scrollHiddenContent={scrollHiddenContent}
         disableActions={disableActions}
+        hideActionButtons={hideActionButtons}
       />
     </MainAreaCardBox>
   );

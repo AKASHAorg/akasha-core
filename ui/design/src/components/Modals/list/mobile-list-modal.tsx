@@ -7,7 +7,7 @@ import { Icon } from '../../Icon';
 
 const StyledBox = styled(Box)`
   width: calc(100% - 1rem);
-  position: absolute;
+  position: fixed;
   bottom: 1rem;
   left: 0.5rem;
 `;
@@ -35,7 +35,9 @@ const MobileListModal: React.FC<IMobileListModal> = props => {
           {menuItems.map((menuItem, index) => (
             <Box
               round={
-                index === 0
+                menuItems.length === 1
+                  ? 'small'
+                  : index === 0
                   ? { corner: 'top', size: 'small' }
                   : index === menuItems.length - 1
                   ? { corner: 'bottom', size: 'small' }
@@ -56,9 +58,20 @@ const MobileListModal: React.FC<IMobileListModal> = props => {
               fill="horizontal"
               background="background"
             >
-              <Box width="60%" align="start" direction="row">
-                {menuItem.icon && <Icon type={menuItem.icon} size="md" clickable={false} />}
-                <Text size="xlarge" margin={{ left: 'xsmall' }}>
+              <Box align="center" direction="row">
+                {menuItem.icon && (
+                  <Icon
+                    type={menuItem.icon}
+                    size="md"
+                    clickable={false}
+                    color={menuItem.icon === 'report' ? 'errorText' : 'primaryText'}
+                  />
+                )}
+                <Text
+                  size="xlarge"
+                  margin={{ left: 'xsmall' }}
+                  color={menuItem.icon === 'report' ? 'errorText' : 'primaryText'}
+                >
                   {menuItem.label}
                 </Text>
               </Box>

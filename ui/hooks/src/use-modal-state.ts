@@ -8,9 +8,11 @@ export const MODAL_NAMES = {
   LOGIN: 'login',
   EDITOR: 'editor',
   PROFILE_SHARE: 'profileShare',
+  REPORT: 'report',
+  FEEDBACK: 'feedback',
 };
 export interface ModalState {
-  loginModal: boolean;
+  login: boolean;
   [key: string]: boolean;
 }
 
@@ -19,7 +21,7 @@ export interface UseModalStateProps {
    * initial state of the hook
    * loginModal is added by default
    */
-  initialState: Omit<ModalState, 'loginModal'>;
+  initialState: Omit<ModalState, 'login'>;
   /* a boolean that indicates if the user is logged in or not */
   isLoggedIn: boolean;
   onError?: (err: IAkashaError) => void;
@@ -37,15 +39,15 @@ export interface ModalStateActions {
 const useModalState = (props: UseModalStateProps): [ModalState, ModalStateActions] => {
   const { onError } = props;
   const [modalState, setModalState] = React.useState<ModalState>({
-    loginModal: false,
+    login: false,
     ...props.initialState,
   });
 
   const [modalQueue, setModalQueue] = React.useState<string[]>([]);
 
   React.useEffect(() => {
-    if (props.isLoggedIn && modalState.loginModal) {
-      setModalState(prev => ({ ...prev, loginModal: false }));
+    if (props.isLoggedIn && modalState.login) {
+      setModalState(prev => ({ ...prev, login: false }));
       if (modalQueue.length) {
         const newQueueState = modalQueue.slice();
         const modalKey = newQueueState.shift() as string;
@@ -72,7 +74,7 @@ const useModalState = (props: UseModalStateProps): [ModalState, ModalStateAction
           }
           return [...prev, modalKey];
         });
-        setModalState(prevState => ({ ...prevState, loginModal: true }));
+        setModalState(prevState => ({ ...prevState, login: true }));
       }
     },
     hide: modalKey => setModalState(prevState => ({ ...prevState, [modalKey]: false })),

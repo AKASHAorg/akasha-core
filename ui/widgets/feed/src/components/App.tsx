@@ -13,11 +13,13 @@ export const enum ItemTypes {
   ENTRY = 0,
   PROFILE,
   COMMENT,
+  TAG,
 }
 
 export interface IFeedWidgetProps {
   logger: any;
   i18n: i18n;
+  virtualListRef?: any;
   globalChannel?: any;
   sdkModules: any;
   layout: any;
@@ -29,6 +31,7 @@ export interface IFeedWidgetProps {
   itemIds: string[];
   itemsData: { [key: string]: any };
   errors: { [key: string]: IAkashaError };
+  /* eth address of the logged in user */
   ethAddress: string | null;
   profilePubKey: string | null;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
@@ -39,6 +42,8 @@ export interface IFeedWidgetProps {
   loggedProfile?: any;
   onRepostPublish?: (entryData: any, embeddedEntry: any) => void;
   contentClickable?: boolean;
+  onReport: (entryId: string, user?: string | null) => void;
+  handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
 }
 
 export default class FeedWidgetRoot extends PureComponent<IFeedWidgetProps> {

@@ -44,6 +44,7 @@ export interface PostsActions {
   getPosts: (payload: GetItemsPayload) => void;
   getComments: (payload: GetItemsPayload) => void;
   getUserPosts: (payload: { pubKey: string; limit: number; offset?: string }) => void;
+  getTagPosts: (payload: { name: string; limit: number; offset?: string }) => void;
   optimisticPublishComment: (
     commentData: PublishPostData,
     postId: string,
@@ -97,6 +98,8 @@ export interface GetEntriesResponse {
   data: { posts: { nextIndex: string; results: any[]; total: number } };
 }
 
+// tslint:disable:cyclomatic-complexity
+/* eslint-disable complexity */
 const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
   const { user, postsService, ipfsService, logger, onError } = props;
   const [postsState, setPostsState] = React.useState<PostsState>({
@@ -209,6 +212,10 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         ...prev,
         postIds: [],
         commentIds: [],
+        fetchingPosts: [],
+        fetchingComments: [],
+        pendingPosts: [],
+        pendingComments: [],
         nextPostIndex: null,
         nextCommentIndex: null,
         totalItems: null,
@@ -296,6 +303,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
                 // remove the entry from posts object
                 delete posts[res.contentId];
               } else {
+                // update entry in posts object
                 posts[res.contentId] = {
                   ...target,
                   delisted: res.delisted,
@@ -474,7 +482,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       const userPostsCall = postsService.entries.entriesByAuthor(req);
       const ipfsGatewayCall = ipfsService.getSettings({});
 
-      combineLatest([ipfsGatewayCall, userPostsCall]).subscribe((responses: [any, any]) => {
+      combineLatest([ipfsGatewayCall, userPostsCall]).subscribe(async (responses: [any, any]) => {
         const [ipfsGatewayResp, userPostsResp] = responses;
         const {
           results,
@@ -486,23 +494,177 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
           total: number;
         } = userPostsResp.data.getPostsByAuthor;
         const newIds: string[] = [];
+        const newQuoteIds: string[] = [];
         const posts = results
           .filter(excludeNonSlateContent)
           .map(entry => {
             newIds.push(entry._id);
+            // check if entry has quote and id of such quote is not yet in the list
+            if (entry.quotes?.length > 0 && newQuoteIds.indexOf(entry.quotes[0]._id) === -1) {
+              newQuoteIds.push(entry.quotes[0]._id);
+            }
             return mapEntry(entry, ipfsGatewayResp.data, logger);
           })
           .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
 
-        setPostsState(prev => ({
-          ...prev,
-          postIds: prev.postIds.concat(newIds),
-          postsData: { ...prev.postsData, ...posts },
-          nextPostIndex: nextIndex,
-          isFetchingPosts: false,
-          totalItems: total,
-        }));
+        try {
+          const status = await moderationRequest.checkStatus(true, { user, contentIds: newIds });
+          const quotestatus =
+            !!newQuoteIds.length &&
+            (await moderationRequest.checkStatus(true, { user, contentIds: newQuoteIds }));
+          if (status && status.constructor === Array) {
+            status.forEach((res: any) => {
+              const target = posts[res.contentId];
+              let quote: any;
+
+              if (target.quote) {
+                const { reported, delisted, moderated } = quotestatus.find(
+                  (el: any) => el.contentId === target.quote.entryId,
+                );
+                quote = {
+                  ...target.quote,
+                  // if moderated, bypass value of reported for the user
+                  reported: moderated ? false : reported,
+                  delisted: delisted,
+                };
+              }
+
+              if (res.delisted) {
+                const index = newIds.indexOf(res.contentId);
+                if (index > -1) {
+                  // remove the entry id from newIds
+                  newIds.splice(index, 1);
+                }
+                // remove the entry from posts object
+                delete posts[res.contentId];
+              } else {
+                // update entry in posts object
+                posts[res.contentId] = {
+                  ...target,
+                  delisted: res.delisted,
+                  // if moderated, bypass value of reported for the user
+                  reported: res.moderated ? false : res.reported,
+                  quote: quote,
+                };
+              }
+            });
+          }
+          setPostsState(prev => ({
+            ...prev,
+            nextPostIndex: nextIndex,
+            postsData: { ...prev.postsData, ...posts },
+            postIds: prev.postIds.concat(newIds),
+            isFetchingPosts: false,
+            totalItems: total,
+          }));
+        } catch (err) {
+          newIds.forEach(id => {
+            createErrorHandler(
+              `${id}`,
+              false,
+              onError,
+            )(new Error(`Failed to fetch moderated content. ${err.message}`));
+          });
+        }
       }, createErrorHandler('usePosts.getUserPosts', false, onError));
+    },
+    getTagPosts: payload => {
+      const req: any = {
+        ...payload,
+      };
+      if (typeof postsState.nextPostIndex === 'number') {
+        req.offset = postsState.nextPostIndex;
+      }
+      setPostsState(prev => ({ ...prev, isFetchingPosts: true }));
+
+      const tagPostsCall = postsService.entries.entriesByTag(req);
+      const ipfsGatewayCall = ipfsService.getSettings({});
+
+      combineLatest([ipfsGatewayCall, tagPostsCall]).subscribe(async (responses: [any, any]) => {
+        const [ipfsGatewayResp, tagPostsResp] = responses;
+        const {
+          results,
+          nextIndex,
+          total,
+        }: {
+          results: any[];
+          nextIndex: number;
+          total: number;
+        } = tagPostsResp.data.getPostsByTag;
+        const newIds: string[] = [];
+        const newQuoteIds: string[] = [];
+        const posts = results
+          .filter(excludeNonSlateContent)
+          .map(entry => {
+            newIds.push(entry._id);
+            // check if entry has quote and id of such quote is not yet in the list
+            if (entry.quotes?.length > 0 && newQuoteIds.indexOf(entry.quotes[0]._id) === -1) {
+              newQuoteIds.push(entry.quotes[0]._id);
+            }
+            return mapEntry(entry, ipfsGatewayResp.data, logger);
+          })
+          .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
+
+        try {
+          const status = await moderationRequest.checkStatus(true, { user, contentIds: newIds });
+          const quotestatus =
+            !!newQuoteIds.length &&
+            (await moderationRequest.checkStatus(true, { user, contentIds: newQuoteIds }));
+          if (status && status.constructor === Array) {
+            status.forEach((res: any) => {
+              const target = posts[res.contentId];
+              let quote: any;
+
+              if (target.quote) {
+                const { reported, delisted, moderated } = quotestatus.find(
+                  (el: any) => el.contentId === target.quote.entryId,
+                );
+                quote = {
+                  ...target.quote,
+                  // if moderated, bypass value of reported for the user
+                  reported: moderated ? false : reported,
+                  delisted: delisted,
+                };
+              }
+
+              if (res.delisted) {
+                const index = newIds.indexOf(res.contentId);
+                if (index > -1) {
+                  // remove the entry id from newIds
+                  newIds.splice(index, 1);
+                }
+                // remove the entry from posts object
+                delete posts[res.contentId];
+              } else {
+                // update entry in posts object
+                posts[res.contentId] = {
+                  ...target,
+                  delisted: res.delisted,
+                  // if moderated, bypass value of reported for the user
+                  reported: res.moderated ? false : res.reported,
+                  quote: quote,
+                };
+              }
+            });
+          }
+          setPostsState(prev => ({
+            ...prev,
+            nextPostIndex: nextIndex,
+            postsData: { ...prev.postsData, ...posts },
+            postIds: prev.postIds.concat(newIds),
+            isFetchingPosts: false,
+            totalItems: total,
+          }));
+        } catch (err) {
+          newIds.forEach(id => {
+            createErrorHandler(
+              `${id}`,
+              false,
+              onError,
+            )(new Error(`Failed to fetch moderated content. ${err.message}`));
+          });
+        }
+      }, createErrorHandler('usePosts.getTagPosts', false, onError));
     },
     updatePostsState: (updatedEntry: any) => {
       setPostsState(prev => {
@@ -520,5 +682,6 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
   };
   return [postsState, actions];
 };
-
+// tslint:disable:cyclomatic-complexity
+/* eslint-disable complexity */
 export default usePosts;

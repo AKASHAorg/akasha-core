@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { constants, useBookmarks, useProfile, useErrors } from '@akashaproject/ui-awf-hooks';
+import { constants, useBookmarks, useErrors } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import {
   ILoadItemDataPayload,
@@ -8,7 +8,7 @@ import {
 } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { uploadMediaToTextile } from '../../services/posting-service';
+import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
@@ -16,6 +16,7 @@ import routes, { POST } from '../../routes';
 import { application as loginWidget } from '@akashaproject/ui-widget-login/lib/bootstrap';
 import Parcel from 'single-spa-react/parcel';
 import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
+import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
 const {
   Box,
@@ -24,7 +25,6 @@ const {
   ReportModal,
   ToastProvider,
   ModalRenderer,
-  useViewportSize,
   EditorModal,
   EditorPlaceholder,
 } = DS;
@@ -35,13 +35,16 @@ export interface FeedPageProps {
   singleSpa: any;
   logger: any;
   showLoginModal: () => void;
-  ethAddress: string | null;
-  currentUserCalled: boolean;
-  pubKey: string | null;
+  loggedProfileData?: any;
+  loginState: UseLoginState;
   flagged: string;
   reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setReportModalOpen: () => void;
+  closeReportModal: () => void;
+  editorModalOpen: boolean;
+  setEditorModalOpen: () => void;
+  closeEditorModal: () => void;
   onError: (err: IAkashaError) => void;
 }
 
@@ -52,63 +55,67 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     reportModalOpen,
     setFlagged,
     setReportModalOpen,
+    closeReportModal,
+    editorModalOpen,
+    setEditorModalOpen,
+    closeEditorModal,
     showLoginModal,
-    ethAddress,
-    currentUserCalled,
-    pubKey,
+    loggedProfileData,
+    loginState,
     onError,
     sdkModules,
     logger,
     globalChannel,
   } = props;
-  const [showEditor, setShowEditor] = React.useState(false);
+
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
-
-  const [loginProfile, loginProfileActions] = useProfile({
-    profileService: sdkModules.profiles.profileService,
-    ipfsService: sdkModules.commons.ipfsService,
-  });
-
-  React.useEffect(() => {
-    if (pubKey) {
-      loginProfileActions.getProfileData({ pubKey });
-    }
-  }, [pubKey]);
-
-  React.useEffect(() => {
-    if (currentUserCalled) {
-      postsActions.resetPostIds();
-      postsActions.getPosts({ limit: 5 });
-    }
-  }, [currentUserCalled]);
-
-  const {
-    size,
-    dimensions: { width },
-  } = useViewportSize();
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    pubKey,
     onError,
     dbService: sdkModules.db,
   });
-  const [, errorActions] = useErrors({ logger });
+  const [errorState, errorActions] = useErrors({ logger });
 
   const [postsState, postsActions] = usePosts({
-    user: ethAddress,
+    user: loginState.ethAddress,
     postsService: sdkModules.posts,
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
 
+  React.useEffect(() => {
+    if (Object.keys(errorState).length) {
+      logger.error(errorState);
+    }
+  }, [JSON.stringify(errorState)]);
+
+  React.useEffect(() => {
+    if (loginState.currentUserCalled) {
+      postsActions.resetPostIds();
+      if (loginState.ethAddress) {
+        bookmarkActions.getBookmarks();
+      }
+    }
+  }, [JSON.stringify(loginState)]);
+
+  React.useEffect(() => {
+    if (
+      !postsState.postIds.length &&
+      !postsState.isFetchingPosts &&
+      postsState.totalItems === null
+    ) {
+      postsActions.getPosts({ limit: 5 });
+    }
+  }, [postsState.postIds.length, postsState.isFetchingPosts]);
+
   const handleLoadMore = (payload: ILoadItemsPayload) => {
     const req: { limit: number; offset?: string } = {
       limit: payload.limit,
     };
-    if (!postsState.isFetchingPosts && currentUserCalled) {
+    if (!postsState.isFetchingPosts && loginState.currentUserCalled) {
       postsActions.getPosts(req);
     }
   };
@@ -124,8 +131,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleMentionClick = (profilePubKey: string) => {
     props.singleSpa.navigateToUrl(`/profile/${profilePubKey}`);
   };
+
+  const handleTagClick = (name: string) => {
+    props.singleSpa.navigateToUrl(`/AKASHA-app/tags/${name}`);
+  };
   const handleEntryBookmark = (entryId: string) => {
-    if (!pubKey) {
+    if (!loginState.pubKey) {
       return showLoginModal();
     }
     if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
@@ -134,23 +145,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     return bookmarkActions.bookmarkPost(entryId);
   };
   const handleEntryRepost = (_withComment: boolean, entryData: any) => {
-    if (!pubKey) {
-      showLoginModal();
-    } else {
-      setCurrentEmbedEntry(entryData);
-      setShowEditor(true);
-    }
+    setCurrentEmbedEntry(entryData);
+    setEditorModalOpen();
   };
 
-  const handleEntryFlag = (entryId: string, user?: string | null) => () => {
-    /* todo */
-    if (!user) {
-      // setting entryId to state first, if not logged in
-      setFlagged(entryId);
-      return showLoginModal();
-    }
+  const handleEntryFlag = (entryId: string) => () => {
     setFlagged(entryId);
-    setReportModalOpen(true);
+    setReportModalOpen();
   };
 
   const [tags, setTags] = React.useState([]);
@@ -179,8 +180,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   const handleToggleEditor = () => {
-    setShowEditor(!showEditor);
     setCurrentEmbedEntry(undefined);
+    if (editorModalOpen) {
+      closeEditorModal();
+    } else {
+      setEditorModalOpen();
+    }
   };
 
   const onUploadRequest = uploadMediaToTextile(
@@ -191,12 +196,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
   const handleEntryPublish = async (data: PublishPostData) => {
-    if (!ethAddress && !pubKey) {
+    if (!loginState.ethAddress && !loginState.pubKey) {
       showLoginModal();
       return;
     }
-    postsActions.optimisticPublishPost(data, loginProfile, currentEmbedEntry);
-    setShowEditor(false);
+    postsActions.optimisticPublishPost(data, loggedProfileData, currentEmbedEntry);
+    closeEditorModal();
   };
 
   const handleFlipCard = (entry: any, isQuote: boolean) => () => {
@@ -232,37 +237,38 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                 t('Nudity'),
                 t('Violence'),
               ]}
+              optionValues={[
+                'Suspicious, deceptive, or spam',
+                'Abusive or harmful to others',
+                'Self-harm or suicide',
+                'Illegal',
+                'Nudity',
+                'Violence',
+              ]}
               descriptionLabel={t('Explanation')}
               descriptionPlaceholder={t('Please explain your reason(s)')}
               footerText1Label={t('If you are unsure, you can refer to our')}
               footerLink1Label={t('Code of Conduct')}
               footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
-              footerText2Label={t('and')}
-              footerLink2Label={t('Terms of Service')}
-              footerUrl2={'https://ethereum.world/terms-of-service'}
               cancelLabel={t('Cancel')}
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
               closeLabel={t('Close')}
-              user={ethAddress ? ethAddress : ''}
+              user={loginState.ethAddress ? loginState.ethAddress : ''}
               contentId={flagged}
               contentType="post"
               baseUrl={constants.BASE_FLAG_URL}
-              size={size}
-              width={width}
               updateEntry={updateEntry}
-              closeModal={() => {
-                setReportModalOpen(false);
-              }}
+              closeModal={closeReportModal}
             />
           </ToastProvider>
         )}
       </ModalRenderer>
       <EditorModal
         slotId={props.layout.app.modalSlotId}
-        avatar={loginProfile.avatar}
-        showModal={showEditor}
-        ethAddress={ethAddress as any}
+        avatar={loggedProfileData.avatar}
+        showModal={editorModalOpen}
+        ethAddress={loginState.ethAddress as any}
         postLabel={t('Publish')}
         placeholderLabel={t('Write something')}
         discardPostLabel={t('Discard Post')}
@@ -288,12 +294,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         hasMoreItems={!!postsState.nextPostIndex}
         usePlaceholders={true}
         listHeader={
-          ethAddress ? (
+          loginState.ethAddress ? (
             <EditorPlaceholder
-              ethAddress={ethAddress}
+              ethAddress={loginState.ethAddress}
               onClick={handleToggleEditor}
               style={{ marginTop: 8 }}
-              avatar={loginProfile.avatar}
+              avatar={loggedProfileData.avatar}
             />
           ) : (
             <>
@@ -316,7 +322,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             logger={logger}
             globalChannel={globalChannel}
             bookmarkState={bookmarkState}
-            ethAddress={ethAddress}
+            ethAddress={loginState.ethAddress}
             locale={locale}
             onBookmark={handleEntryBookmark}
             onNavigate={handleNavigateToPost}
@@ -325,6 +331,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             sharePostUrl={`${window.location.origin}${routes[POST]}/`}
             onAvatarClick={handleAvatarClick}
             onMentionClick={handleMentionClick}
+            onTagClick={handleTagClick}
             contentClickable={true}
             awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
             moderatedContentLabel={t('This content has been moderated')}
@@ -338,7 +345,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           globalChannel,
           isMobile,
           feedItems: postsState.postIds,
-          loggedEthAddress: ethAddress,
+          loggedEthAddress: loginState.ethAddress,
           pendingEntries: postsState.pendingPosts,
         })}
       />

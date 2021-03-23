@@ -4,12 +4,13 @@ import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { moderationRequest } from '@akashaproject/ui-awf-hooks';
 
-import ContentCard from './content-card/content-card';
 import ContentTab from './content-tab';
+import ContentCard from './content-card/content-card';
+import PromptAuthorization from './prompt-authorization';
 
 import { BASE_DECISION_URL } from '../services/constants';
 
-const { Box, Text, useViewportSize, ModalRenderer, ToastProvider, ModerateModal } = DS;
+const { Box, Text, ModalRenderer, ToastProvider, ModerateModal, SwitchCard } = DS;
 
 interface IContentListProps {
   slotId: string;
@@ -57,32 +58,47 @@ const ContentList: React.FC<IContentListProps> = props => {
   const [isDelisted, setIsDelisted] = React.useState<boolean>(true);
   const [requesting, setRequesting] = React.useState<boolean>(false);
   const [count, setCount] = React.useState<ICount>({ kept: 0, pending: 0, delisted: 0 });
+  const [isAuthorised, setIsAuthorised] = React.useState<boolean>(false);
+  const [activeButton, setActiveButton] = React.useState<string>('Delisted');
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
-  const {
-    size,
-    dimensions: { width },
-  } = useViewportSize();
 
   React.useEffect(() => {
     if (!ethAddress) {
       // if not authenticated, prompt to authenticate
       props.singleSpa.navigateToUrl('/moderation-app/unauthenticated');
+    } else {
+      // if authenticated, check authorisation status
+      getModeratorStatus(ethAddress);
     }
   }, [ethAddress]);
 
   React.useEffect(() => {
-    // if authenticated,
-    if (ethAddress && isPending) {
-      // if authorised, check for pending contents while pending tab is active
+    // if authorised,
+    if (isAuthorised && isPending) {
+      // check for pending contents while pending tab is active
       fetchPendingContents();
     }
-    if (ethAddress && !isPending) {
+    if (isAuthorised && !isPending) {
       // check for moderated contents while moderated tab is active
       fetchModeratedContents();
     }
-  }, [isPending]);
+  }, [isPending, isAuthorised]);
+
+  const getModeratorStatus = async (loggedEthAddress: string) => {
+    setRequesting(true);
+    try {
+      const response = await moderationRequest.checkModerator(loggedEthAddress);
+      if (response === 200) {
+        setIsAuthorised(true);
+      }
+    } catch (error) {
+      logger.error('[content-list.tsx]: getModeratorStatus err %j', error.message || '');
+    } finally {
+      setRequesting(false);
+    }
+  };
 
   const getStatusCount = async () => {
     setRequesting(true);
@@ -91,6 +107,8 @@ const ContentList: React.FC<IContentListProps> = props => {
       setCount(response);
     } catch (error) {
       logger.error('[content-list.tsx]: getStatusCount err %j', error.message || '');
+    } finally {
+      setRequesting(false);
     }
   };
 
@@ -128,9 +146,37 @@ const ContentList: React.FC<IContentListProps> = props => {
     setContentType(content);
   };
 
-  const renderNotFound = (type: string) => {
-    return <Text textAlign="center">No {type} items found. Please check again later</Text>;
+  const renderNotFound = (activeTab: string) => {
+    return (
+      <Text textAlign="center">{t(`No ${activeTab} items found. Please check again later`)}</Text>
+    );
   };
+
+  const buttonLabels = [t('Kept'), t('Delisted')];
+
+  const buttonValues = ['Kept', 'Delisted'];
+
+  const onTabClick = (value: string) => {
+    // set active button state
+    setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
+    // toggle list accordingly
+    if (value === 'Kept') {
+      setIsDelisted(false);
+    } else if (value === 'Delisted') {
+      setIsDelisted(true);
+    }
+  };
+
+  if (ethAddress && !isAuthorised) {
+    return (
+      <PromptAuthorization
+        titleLabel={t('You must be an Ethereum World Moderator to access this page')}
+        subtitleLabel={t(
+          'The wallet you connected does not match a moderator account in our system. Please try again with the correct wallet.',
+        )}
+      />
+    );
+  }
 
   return (
     <Box>
@@ -140,28 +186,24 @@ const ContentList: React.FC<IContentListProps> = props => {
             <ModerateModal
               titleLabel={t('Make a Decision')}
               altTitleLabel={t('Review a Decision')}
-              contentType={t(contentType)}
+              contentType={contentType}
               decisionLabel={t('Decision')}
               optionLabels={[t('Delist'), t('Keep')]}
+              optionValues={['Delist', 'Keep']}
               descriptionLabel={t('Evaluation')}
               descriptionPlaceholder={t('Please explain the reason(s)')}
               footerText1Label={t('If you are unsure, you can refer to our')}
               footerLink1Label={t('Code of Conduct')}
               footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
-              footerText2Label={t('and')}
-              footerLink2Label={t('Terms of Service')}
-              footerUrl2={'https://ethereum.world/terms-of-service'}
               cancelLabel={t('Cancel')}
               user={ethAddress}
               contentId={flagged}
               baseUrl={BASE_DECISION_URL}
-              isReview={true}
-              size={size}
-              width={width}
+              isReview={!isPending}
               onModalClose={() => {
                 setModalOpen(false);
-                // on modal close, fetch moderated contents
-                fetchModeratedContents();
+                // on modal close, update current contents in view
+                isPending ? fetchPendingContents() : fetchModeratedContents();
               }}
               closeModal={() => {
                 setModalOpen(false);
@@ -173,17 +215,23 @@ const ContentList: React.FC<IContentListProps> = props => {
       </ModalRenderer>
       <ContentTab
         isPending={isPending}
-        isDelisted={isDelisted}
         pendingLabel={t('Pending')}
         moderatedLabel={t('Moderated')}
         countKept={count.kept}
         countPending={count.pending}
         countDelisted={count.delisted}
-        keptLabel={t('Kept')}
-        delistedLabel={t('Delisted')}
         setIsPending={setIsPending}
-        setIsDelisted={setIsDelisted}
       />
+      {!isPending && (
+        <SwitchCard
+          count={isDelisted ? count.delisted : count.kept}
+          activeButton={activeButton}
+          countLabel={!isDelisted ? buttonLabels[0] : buttonLabels[1]}
+          buttonLabels={buttonLabels}
+          buttonValues={buttonValues}
+          onTabClick={onTabClick}
+        />
+      )}
       {requesting && <Text textAlign="center">Fetching items. Please wait...</Text>}
       {!requesting &&
         isPending &&
@@ -197,17 +245,19 @@ const ContentList: React.FC<IContentListProps> = props => {
                 showExplanationsLabel={t('Show explanations')}
                 hideExplanationsLabel={t('Hide explanations')}
                 reportedLabel={t('reported')}
-                contentType={t(pendingItem.type)}
+                contentType={pendingItem.type}
                 forLabel={t('for')}
                 reportedByLabel={t('Reported by')}
                 originallyReportedByLabel={t('Initially reported by')}
-                entryId={t(pendingItem.entryId)}
+                entryId={pendingItem.entryId}
                 reasons={pendingItem.reasons.map((el: string) => t(el))}
-                reporter={t(pendingItem.reporter)}
+                reporter={pendingItem.reporter}
                 andLabel={t('and')}
                 otherReporters={
                   pendingItem.count
-                    ? t(`${pendingItem.count} ${pendingItem.count === 1 ? 'other' : 'others'}`)
+                    ? `${pendingItem.count} ${
+                        pendingItem.count === 1 ? `${t('other')}` : `${t('others')}`
+                      }`
                     : ''
                 }
                 reportedOnLabel={t('On')}
@@ -233,21 +283,19 @@ const ContentList: React.FC<IContentListProps> = props => {
                   determinationLabel={t('Determination')}
                   determination={moderatedItem.delisted ? t('Delisted') : t('Kept')}
                   reportedLabel={t('reported')}
-                  contentType={t(moderatedItem.type)}
+                  contentType={moderatedItem.type}
                   forLabel={t('for')}
                   reportedByLabel={t('Reported by')}
                   originallyReportedByLabel={t('Initially reported by')}
-                  entryId={t(moderatedItem.entryId)}
+                  entryId={moderatedItem.entryId}
                   reasons={moderatedItem.reasons.map(el => t(el))}
                   reporter={moderatedItem.reporter}
                   andLabel={t('and')}
                   otherReporters={
                     moderatedItem.count
-                      ? t(
-                          `${moderatedItem.count} ${
-                            moderatedItem.count === 1 ? 'other' : 'others'
-                          }`,
-                        )
+                      ? `${moderatedItem.count} ${
+                          moderatedItem.count === 1 ? `${t('other')}` : `${t('others')}`
+                        }`
                       : ''
                   }
                   reportedOnLabel={t('On')}

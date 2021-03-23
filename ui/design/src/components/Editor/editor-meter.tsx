@@ -1,28 +1,46 @@
 import * as React from 'react';
-import { Meter } from 'grommet';
+import { Box, Meter, Stack, Text } from 'grommet';
 
 export interface IEditorMeter {
-  maxValue?: number;
+  maxValue: number;
   counter: number;
 }
 
 const EditorMeter: React.FC<IEditorMeter> = props => {
   const { counter, maxValue } = props;
+  const remainingChars = maxValue - counter;
+  let displayCounter = null;
+  let displayColor = 'accentText';
+  if (remainingChars >= 0) {
+    displayColor = 'accentText';
+    if (remainingChars < 21) {
+      displayCounter = remainingChars;
+    }
+  }
+  if (remainingChars < 0) {
+    displayCounter = Math.max(remainingChars, -99);
+    displayColor = 'errorText';
+  }
 
   return (
-    <Meter
-      max={maxValue}
-      size="20px"
-      thickness="medium"
-      background="#C6D1FF"
-      type="circle"
-      values={[{ value: counter, color: 'accent' }]}
-    />
+    <Stack anchor="center">
+      <Box align="center" justify="center">
+        <Meter
+          max={maxValue}
+          size="24px"
+          thickness="medium"
+          background="lightBackground"
+          type="circle"
+          values={[{ value: counter, color: displayColor }]}
+        />
+      </Box>
+      <Box align="center" justify="center">
+        <Text size="small" color={displayColor}>
+          {displayCounter}
+        </Text>
+      </Box>
+    </Stack>
   );
-};
-
-EditorMeter.defaultProps = {
-  maxValue: 280,
 };
 
 export { EditorMeter };

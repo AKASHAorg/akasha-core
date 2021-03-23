@@ -2,14 +2,17 @@ import * as React from 'react';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import routes, { FEED, rootRoute, POST, REPLY, INVITE } from '../routes';
+
+import routes, { FEED, rootRoute, POST, REPLY, TAGS, INVITE } from '../routes';
 import FeedPage from './feed-page/feed-page';
-import { useTranslation } from 'react-i18next';
-import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
 import PostPage from './post-page/post-page';
 import InvitePage from './post-page/invite-page';
+import TagFeedPage from './tag-feed-page/tag-feed-page';
+import { useTranslation } from 'react-i18next';
+import { useLoginState, useErrors, useProfile, useModalState } from '@akashaproject/ui-awf-hooks';
+import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
-const { Box, LoginModal, ViewportSizeProvider } = DS;
+const { Box, LoginModal } = DS;
 interface AppRoutesProps {
   onError: (err: IAkashaError) => void;
 }
@@ -28,17 +31,50 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     profileService: sdkModules.profiles.profileService,
   });
 
-  const [loginModalState, setLoginModalState] = React.useState(false);
-  const [reportModalOpen, setReportModalOpen] = React.useState(false);
+  const [loginProfile, loginProfileActions] = useProfile({
+    profileService: sdkModules.profiles.profileService,
+    ipfsService: sdkModules.commons.ipfsService,
+  });
+
+  React.useEffect(() => {
+    if (loginState.pubKey) {
+      loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
+    }
+  }, [loginState.pubKey]);
+
+  const [modalState, modalStateActions] = useModalState({
+    initialState: {
+      reportModal: false,
+      editorModal: false,
+    },
+    isLoggedIn: !!loginState.ethAddress,
+  });
+
   const [flagged, setFlagged] = React.useState('');
 
   const showLoginModal = () => {
-    setLoginModalState(true);
+    modalStateActions.show(MODAL_NAMES.LOGIN);
   };
 
   const hideLoginModal = () => {
-    setLoginModalState(false);
+    modalStateActions.hide(MODAL_NAMES.LOGIN);
     errorActions.removeLoginErrors();
+  };
+
+  const showReportModal = () => {
+    modalStateActions.showAfterLogin(MODAL_NAMES.REPORT);
+  };
+
+  const hideReportModal = () => {
+    modalStateActions.hide(MODAL_NAMES.REPORT);
+  };
+
+  const showEditorModal = () => {
+    modalStateActions.showAfterLogin(MODAL_NAMES.EDITOR);
+  };
+
+  const hideEditorModal = () => {
+    modalStateActions.hide(MODAL_NAMES.EDITOR);
   };
 
   const handleLogin = (providerId: number) => {
@@ -47,14 +83,14 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
 
   React.useEffect(() => {
     if (loginState.pubKey) {
-      setLoginModalState(false);
+      modalStateActions.hide(MODAL_NAMES.LOGIN);
     }
   }, [loginState.pubKey]);
 
   React.useEffect(() => {
     if (loginState.ethAddress && flagged.length) {
-      setLoginModalState(false);
-      setReportModalOpen(true);
+      modalStateActions.hide(MODAL_NAMES.LOGIN);
+      modalStateActions.show(MODAL_NAMES.REPORT);
     }
   }, [loginState.ethAddress]);
 
@@ -70,61 +106,78 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   }, [errorState]);
 
   return (
-    <ViewportSizeProvider>
-      <Box>
-        <Router>
-          <Switch>
-            <Route path={routes[FEED]}>
-              <FeedPage
-                {...props}
-                ethAddress={loginState.ethAddress}
-                currentUserCalled={loginState.currentUserCalled}
-                pubKey={loginState.pubKey}
-                flagged={flagged}
-                reportModalOpen={reportModalOpen}
-                setFlagged={setFlagged}
-                setReportModalOpen={setReportModalOpen}
-                showLoginModal={showLoginModal}
-                onError={onError}
-              />
-            </Route>
-            <Route path={`${routes[POST]}/:postId`}>
-              <PostPage
-                {...props}
-                ethAddress={loginState.ethAddress}
-                currentUserCalled={loginState.currentUserCalled}
-                pubKey={loginState.pubKey}
-                flagged={flagged}
-                reportModalOpen={reportModalOpen}
-                setFlagged={setFlagged}
-                setReportModalOpen={setReportModalOpen}
-                showLoginModal={showLoginModal}
-                navigateToUrl={props.singleSpa.navigateToUrl}
-                isMobile={props.isMobile}
-                onError={onError}
-              />
-            </Route>
-            <Route path={`${routes[REPLY]}/:postId`}>
-              <div>Coming Soon!</div>
-            </Route>
-            <Route path={`${routes[INVITE]}/:inviteCode`}>
-              <InvitePage {...props} />
-            </Route>
-            <Redirect exact={true} from={rootRoute} to={routes[FEED]} />
-          </Switch>
-        </Router>
-        <LoginModal
-          showModal={loginModalState}
-          slotId={layout.app.modalSlotId}
-          onLogin={handleLogin}
-          onModalClose={hideLoginModal}
-          titleLabel={t('Connect a wallet')}
-          metamaskModalHeadline={t('Connecting')}
-          metamaskModalMessage={t('Please complete the process in your wallet')}
-          error={loginErrors}
-        />
-      </Box>
-    </ViewportSizeProvider>
+    <Box>
+      <Router>
+        <Switch>
+          <Route path={routes[FEED]}>
+            <FeedPage
+              {...props}
+              loggedProfileData={loginProfile}
+              loginState={loginState}
+              flagged={flagged}
+              reportModalOpen={modalState.report}
+              setFlagged={setFlagged}
+              setReportModalOpen={showReportModal}
+              closeReportModal={hideReportModal}
+              editorModalOpen={modalState.editor}
+              setEditorModalOpen={showEditorModal}
+              closeEditorModal={hideEditorModal}
+              showLoginModal={showLoginModal}
+              onError={onError}
+            />
+          </Route>
+          <Route path={`${routes[POST]}/:postId`}>
+            <PostPage
+              {...props}
+              loggedProfileData={loginProfile}
+              loginState={loginState}
+              flagged={flagged}
+              reportModalOpen={modalState.report}
+              setFlagged={setFlagged}
+              setReportModalOpen={showReportModal}
+              closeReportModal={hideReportModal}
+              editorModalOpen={modalState.editor}
+              setEditorModalOpen={showEditorModal}
+              closeEditorModal={hideEditorModal}
+              showLoginModal={showLoginModal}
+              navigateToUrl={props.singleSpa.navigateToUrl}
+              isMobile={props.isMobile}
+              onError={onError}
+            />
+          </Route>
+          <Route path={`${routes[TAGS]}/:tagName`}>
+            <TagFeedPage
+              {...props}
+              loggedProfileData={loginProfile}
+              loginState={loginState}
+              flagged={flagged}
+              reportModalOpen={modalState.report}
+              setFlagged={setFlagged}
+              setReportModalOpen={showReportModal}
+              closeReportModal={hideReportModal}
+              showLoginModal={showLoginModal}
+            />
+          </Route>
+          <Route path={`${routes[REPLY]}/:postId`}>
+            <div>Coming Soon!</div>
+          </Route>
+          <Route path={`${routes[INVITE]}/:inviteCode`}>
+             <InvitePage {...props} />
+           </Route>
+          <Redirect exact={true} from={rootRoute} to={routes[FEED]} />
+        </Switch>
+      </Router>
+      <LoginModal
+        showModal={modalState.login}
+        slotId={layout.app.modalSlotId}
+        onLogin={handleLogin}
+        onModalClose={hideLoginModal}
+        titleLabel={t('Connect a wallet')}
+        metamaskModalHeadline={t('Connecting')}
+        metamaskModalMessage={t('Please complete the process in your wallet')}
+        error={loginErrors}
+      />
+    </Box>
   );
 };
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { IFeedWidgetProps, ItemTypes } from './App';
-import { useErrors, useFollow, useBookmarks } from '@akashaproject/ui-awf-hooks';
+import { useErrors, useFollow, useBookmarks, useLoginState } from '@akashaproject/ui-awf-hooks';
 import EntryRenderer from './entry-renderer';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/src/utils/time';
@@ -14,6 +14,14 @@ const EntryFeed = (props: IFeedWidgetProps) => {
   const [errorState, errorActions] = useErrors({ logger: props.logger });
   const { t, i18n } = useTranslation('ui-widget-feed');
 
+  const [loginState] = useLoginState({
+    profileService: props.sdkModules.profiles.profileService,
+    ipfsService: props.sdkModules.commons.ipfsService,
+    onError: errorActions.createError,
+    authService: props.sdkModules.auth.authService,
+    globalChannel: props.globalChannel,
+  });
+
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
   const [showEditor, setShowEditor] = React.useState<boolean>(false);
 
@@ -24,10 +32,21 @@ const EntryFeed = (props: IFeedWidgetProps) => {
   });
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    pubKey: props.loggedProfile.pubKey,
     dbService: props.sdkModules.db,
     onError: errorActions.createError,
   });
+
+  React.useEffect(() => {
+    if (loginState.waitForAuth && !loginState.ready) {
+      return;
+    }
+    if (
+      (loginState.waitForAuth && loginState.ready) ||
+      (loginState.currentUserCalled && loginState.ethAddress)
+    ) {
+      bookmarkActions.getBookmarks();
+    }
+  }, [JSON.stringify(loginState)]);
 
   const handleBookmark = (isBookmarked: boolean, entryId: string) => {
     if (props.loggedProfile.pubKey) {
@@ -151,6 +170,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           )}
           {!hasCriticalErrors && (
             <VirtualList
+              ref={props.virtualListRef}
               items={props.itemIds}
               itemsData={props.itemsData}
               loadMore={props.loadMore}
@@ -171,11 +191,15 @@ const EntryFeed = (props: IFeedWidgetProps) => {
                   onUnfollow={followActions.unfollow}
                   onBookmark={handleBookmark}
                   onNavigate={props.onNavigate}
-                  onReport={() => {
-                    /* reporting */
-                  }}
+                  onReport={props.onReport}
                   onRepost={handleRepost}
                   contentClickable={props.contentClickable}
+                  awaitingModerationLabel={t(
+                    'You have reported this post. It is awaiting moderation.',
+                  )}
+                  moderatedContentLabel={t('This content has been moderated')}
+                  ctaLabel={t('See it anyway')}
+                  handleFlipCard={props.handleFlipCard}
                 />
               }
             />

@@ -8,19 +8,19 @@ import { IEntryData } from '../Cards/entry-cards/entry-box';
 import { Icon } from '../Icon/index';
 import { EmojiPopover } from '../Popovers/index';
 import { EmbedBox } from './embed-box';
-import { FormatToolbar } from './format-toolbar';
 import { CustomEditor } from './helpers';
 import { withMentions, withImages, withTags } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
 import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
 import { ImageUpload } from './image-upload';
 import { Button } from '../Buttons';
-import isHotkey from 'is-hotkey';
 import { MentionPopover } from './mention-popover';
 import { EditorMeter } from './editor-meter';
 import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
+
+const MAX_LENGTH = 280;
 
 export interface IEditorBox {
   avatar?: string;
@@ -61,13 +61,6 @@ export interface IMetadata {
   mentions: string[];
 }
 
-const HOTKEYS = {
-  'mod+b': 'bold',
-  'mod+i': 'italic',
-  'mod+u': 'underline',
-  'mod+`': 'code',
-};
-
 const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const {
     avatar,
@@ -101,9 +94,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const [letterCount, setLetterCount] = useState(0);
 
-  const [currentSelection, setCurrentSelection] = useState<Range | null>(null);
-
   const [publishDisabled, setPublishDisabled] = useState(true);
+  const [imageUploadDisabled, setImageUploadDisabled] = useState(false);
 
   const [emojiPopoverOpen, setEmojiPopoverOpen] = useState(false);
 
@@ -170,46 +162,44 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     setEditorState(editorDefaultValue);
   };
 
-  const reducer = (acc: number, val: number) => acc + val;
-
   const handleChange = (value: Node[]) => {
     let imageCounter = 0;
-    const textLength = value
-      .map((node: Node) => {
-        if (SlateText.isText(node)) return node.text.length;
-        if (node.type === 'image') {
-          imageCounter++;
-        }
-        if (node.children) {
-          return node.children
-            .map(child => {
-              if (SlateText.isText(child)) return child.text.length;
-              if (node.type === 'image') {
-                imageCounter++;
-              }
-              return 0;
-            })
-            .reduce(reducer);
-        }
-        return 0;
-      })
-      .reduce(reducer);
+    let textLength = 0;
 
-    if (textLength > 0 || imageCounter !== 0) {
+    value.map((node: Node) => {
+      if (SlateText.isText(node)) {
+        textLength += node.text.length;
+      }
+      if (node.type === 'image') {
+        imageCounter++;
+      }
+      if (node.children) {
+        (node.children as any).map((child: any) => {
+          if (SlateText.isText(child)) {
+            textLength += child.text.length;
+          }
+          if (node.type === 'image') {
+            imageCounter++;
+          }
+        });
+      }
+    });
+
+    if ((textLength > 0 || imageCounter !== 0) && textLength <= MAX_LENGTH) {
       setPublishDisabled(false);
-    } else if (textLength === 0 && imageCounter === 0) {
+    } else if ((textLength === 0 && imageCounter === 0) || textLength > MAX_LENGTH) {
       setPublishDisabled(true);
     }
+
+    if (imageCounter === 0) {
+      setImageUploadDisabled(false);
+    } else if (imageCounter > 0) {
+      setImageUploadDisabled(true);
+    }
+
     if (typeof setLetterCount === 'function') {
       setLetterCount(textLength);
     }
-
-    if (textLength > 280) {
-      editor.selection = currentSelection;
-      return;
-    }
-
-    setCurrentSelection(editor.selection);
 
     setEditorState(value);
 
@@ -317,13 +307,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const onKeyDown = useCallback(
     event => {
-      for (const hotkey in HOTKEYS) {
-        if (isHotkey(hotkey, event)) {
-          event.preventDefault();
-          const mark = HOTKEYS[hotkey];
-          CustomEditor.toggleFormat(editor, mark);
-        }
-      }
       if (mentionTargetRange && mentions.length > 0) {
         selectMention(event, mentionTargetRange);
       }
@@ -392,19 +375,14 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   };
 
   const handleMediaClick = () => {
-    if (uploadInputRef.current && !uploading) {
+    if (uploadInputRef.current && !uploading && !imageUploadDisabled) {
       uploadInputRef.current.click();
     }
     return;
   };
 
   const handleDeleteImage = (element: Element) => {
-    Transforms.removeNodes(editor, {
-      voids: true,
-      match: n => {
-        return n === element;
-      },
-    });
+    CustomEditor.deleteImage(editor, element);
   };
 
   return (
@@ -417,17 +395,24 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         className="scrollBox"
         height={minHeight ? { min: minHeight } : undefined}
       >
-        <Avatar src={avatar} ethAddress={ethAddress} margin={{ top: '0.5rem' }} />
+        <Box flex={{ shrink: 0 }}>
+          <Avatar src={avatar} ethAddress={ethAddress} margin={{ top: '0.5rem' }} />
+        </Box>
         <Box width="100%" pad={{ horizontal: 'small' }} direction="row" justify="between">
           <Box fill={true}>
             <Slate editor={editor} value={editorState} onChange={handleChange}>
-              <FormatToolbar />
               <StyledEditable
                 placeholder={placeholderLabel}
+                autoComplete="off"
                 spellCheck={false}
                 autoFocus={true}
                 renderElement={(renderProps: RenderElementProps) =>
-                  renderElement(renderProps, () => null, handleDeleteImage)
+                  renderElement(
+                    renderProps,
+                    () => null,
+                    () => null,
+                    handleDeleteImage,
+                  )
                 }
                 renderLeaf={renderLeaf}
                 onKeyDown={onKeyDown}
@@ -480,12 +465,17 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
             </StyledIconDiv>
           )}
           <StyledIconDiv ref={mediaIconRef}>
-            <Icon type="image" clickable={!uploading} onClick={handleMediaClick} size="md" />
+            <Icon
+              type="image"
+              clickable={!uploading && !imageUploadDisabled}
+              onClick={handleMediaClick}
+              size="md"
+            />
           </StyledIconDiv>
         </Box>
 
         <Box direction="row" gap="small" align="center">
-          {withMeter && <EditorMeter counter={letterCount} />}
+          {withMeter && <EditorMeter counter={letterCount} maxValue={MAX_LENGTH} />}
           <Button
             primary={true}
             icon={<Icon type="send" color="white" />}

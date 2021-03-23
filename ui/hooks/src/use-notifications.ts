@@ -29,27 +29,14 @@ export const useNotifications = (
   },
   UseNotificationsActions,
 ] => {
-  const {
-    onError,
-    globalChannel,
-    authService,
-    ipfsService,
-    profileService,
-    loggedEthAddress,
-  } = props;
+  const { onError, globalChannel, authService, ipfsService, profileService } = props;
   const [notificationsState, setNotificationsState] = React.useState<{
     notifications: any[];
     isFetching: boolean;
   }>({
     notifications: [],
-    isFetching: false,
+    isFetching: true,
   });
-
-  React.useEffect(() => {
-    if (loggedEthAddress) {
-      actions.getMessages();
-    }
-  }, [loggedEthAddress]);
 
   const handleSubscribe = (payload: any) => {
     const { data, channelInfo } = payload;
@@ -85,12 +72,6 @@ export const useNotifications = (
   const actions: UseNotificationsActions = {
     async getMessages() {
       try {
-        setNotificationsState(prev => {
-          return {
-            ...prev,
-            isFetching: true,
-          };
-        });
         const getMessagesCall = authService.getMessages(null);
         const ipfsGatewayCall = ipfsService.getSettings(null);
         const initialResp: any = await forkJoin([ipfsGatewayCall, getMessagesCall]).toPromise();
@@ -105,29 +86,31 @@ export const useNotifications = (
         const [gatewayResp, messagesResp] = initialResp;
 
         let completeMessages: any = [];
-        profilesResp?.map((profileResp: any) => {
-          const { avatar, coverImage, ...other } = profileResp.data?.resolveProfile;
-          const images: { avatar: string | null; coverImage: string | null } = {
-            avatar: null,
-            coverImage: null,
-          };
-          if (avatar) {
-            images.avatar = getMediaUrl(gatewayResp.data, avatar);
-          }
-          if (coverImage) {
-            images.coverImage = getMediaUrl(gatewayResp.data, coverImage);
-          }
-          const profileData = { ...images, ...other };
-          completeMessages = messagesResp.data?.map((message: any) => {
-            if (message.body.value.author === profileData.pubKey) {
-              message.body.value.author = profileData;
+        profilesResp
+          ?.filter((res: any) => res.data)
+          .map((profileResp: any) => {
+            const { avatar, coverImage, ...other } = profileResp.data?.resolveProfile;
+            const images: { avatar: string | null; coverImage: string | null } = {
+              avatar: null,
+              coverImage: null,
+            };
+            if (avatar) {
+              images.avatar = getMediaUrl(gatewayResp.data, avatar);
             }
-            if (message.body.value.follower === profileData.pubKey) {
-              message.body.value.follower = profileData;
+            if (coverImage) {
+              images.coverImage = getMediaUrl(gatewayResp.data, coverImage);
             }
-            return message;
+            const profileData = { ...images, ...other };
+            completeMessages = messagesResp.data?.map((message: any) => {
+              if (message.body.value.author === profileData.pubKey) {
+                message.body.value.author = profileData;
+              }
+              if (message.body.value.follower === profileData.pubKey) {
+                message.body.value.follower = profileData;
+              }
+              return message;
+            });
           });
-        });
         setNotificationsState({ isFetching: false, notifications: completeMessages });
       } catch (ex) {
         if (onError) {

@@ -200,7 +200,11 @@ export interface GetInitialRectProps {
 export const getInitialRect = (props: GetInitialRectProps) => {
   const { itemId, items, refs, prevPositions, globalOffsetTop, itemSpacing } = props;
   const globalIdx = items.indexOf(itemId);
-  const initialHeight = refs[itemId].getBoundingClientRect().height;
+  // this should be the height of the placeholder
+  let initialHeight = 200;
+  if (refs[itemId]) {
+    initialHeight = refs[itemId].getBoundingClientRect().height;
+  }
   const rectList = new Map(prevPositions.rects);
   let totalHeight = prevPositions.listHeight;
   let initialTop = itemSpacing;

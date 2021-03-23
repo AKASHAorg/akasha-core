@@ -18,11 +18,12 @@ export interface PostRendererProps {
   onBookmark: (entryId: string) => void;
   onNavigate: (details: any) => void;
   onLinkCopy?: () => void;
-  onFlag: (entryId: string, user: string | null) => () => void;
+  onFlag: (entryId: string) => () => void;
   onRepost: (withComment: boolean, entryData: any) => void;
   sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
-  onMentionClick: (ethAddress: string) => void;
+  onMentionClick: (pubKey: string) => void;
+  onTagClick: (name: string) => void;
   bookmarkState?: IBookmarkState;
   style?: React.CSSProperties;
   contentClickable?: boolean;
@@ -143,15 +144,17 @@ const PostRenderer = (props: PostRendererProps) => {
                     bookmarkLabel={t('Save')}
                     bookmarkedLabel={t('Saved')}
                     onRepost={props.onRepost}
-                    onEntryFlag={props.onFlag(itemData.entryId, null)}
+                    onEntryFlag={props.onFlag(itemData.entryId)}
                     handleFollowAuthor={handleFollow}
                     handleUnfollowAuthor={handleUnfollow}
                     isFollowingAuthor={isFollowing}
                     onContentClick={props.onNavigate}
                     contentClickable={contentClickable}
                     onMentionClick={props.onMentionClick}
+                    onTagClick={props.onTagClick}
                     hidePublishTime={hidePublishTime}
                     disableActions={disableActions}
+                    hideActionButtons={true}
                   />
                 </Box>
               )}

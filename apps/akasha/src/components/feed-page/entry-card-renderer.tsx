@@ -19,11 +19,12 @@ export interface IEntryCardRendererProps {
   onBookmark: (entryId: string) => void;
   onNavigate: (details: any) => void;
   onLinkCopy?: () => void;
-  onFlag?: (entryId: string, user?: string | null) => () => void;
+  onFlag?: (entryId: string) => () => void;
   onRepost: (withComment: boolean, entryData: any) => void;
   sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
-  onMentionClick: (ethAddress: string) => void;
+  onMentionClick: (pubKey: string) => void;
+  onTagClick: (name: string) => void;
   bookmarkState?: IBookmarkState;
   style?: React.CSSProperties;
   contentClickable?: boolean;
@@ -148,12 +149,13 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
                   onRepost={props.onRepost}
-                  onEntryFlag={props.onFlag && props.onFlag(itemData.entryId, props.ethAddress)}
+                  onEntryFlag={props.onFlag && props.onFlag(itemData.entryId)}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
                   isFollowingAuthor={isFollowing}
                   onContentClick={props.onNavigate}
                   onMentionClick={props.onMentionClick}
+                  onTagClick={props.onTagClick}
                   contentClickable={contentClickable}
                   hidePublishTime={hidePublishTime}
                   moderatedContentLabel={moderatedContentLabel}

@@ -1,13 +1,11 @@
 import DS from '@akashaproject/design-system';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
-// @ts-ignore
-import SingleSpaReact from 'single-spa-react';
-import { filter } from 'rxjs/operators';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import TopbarComponent from './topbar-component';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-const { lightTheme, ThemeSelector, ViewportSizeProvider } = DS;
+const { lightTheme, ThemeSelector } = DS;
 
 /**
  * This is the entry point of a plugin.
@@ -36,11 +34,6 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
     };
   }
 
-  componentDidMount() {
-    this.subscription = this.props.globalChannel
-      .pipe(filter((response: any) => response.channelInfo.method === 'signIn'))
-      .subscribe((response: any) => this.setState({ ethAddress: response.data.ethAddress }));
-  }
   componentWillUnmount() {
     this.subscription.unsubscribe();
   }
@@ -77,7 +70,7 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
       <I18nextProvider i18n={this.props.i18n}>
         <Suspense fallback={<>...</>}>
           <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
-            <ViewportSizeProvider>
+            <Router>
               <TopbarComponent
                 navigateToUrl={this.props.singleSpa.navigateToUrl}
                 toggleSidebar={this.toggleSidebar}
@@ -88,7 +81,7 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
                 logger={this.props.logger}
                 sdkModules={this.props.sdkModules}
               />
-            </ViewportSizeProvider>
+            </Router>
           </ThemeSelector>
         </Suspense>
       </I18nextProvider>

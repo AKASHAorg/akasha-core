@@ -3,6 +3,7 @@ export const NEW_POST = 'New post';
 export const POSTS = 'Posts';
 export const POST = 'Post';
 export const REPLY = 'Reply';
+export const TAGS = 'Tags';
 export const rootRoute = '/AKASHA-app';
 export const INVITE = 'Invite';
 
@@ -13,4 +14,5 @@ export default {
   [POST]: `${rootRoute}/post`,
   [REPLY]: `${rootRoute}/reply`,
   [INVITE]: `${rootRoute}/invite`,
+  [TAGS]: `${rootRoute}/tags`,
 };

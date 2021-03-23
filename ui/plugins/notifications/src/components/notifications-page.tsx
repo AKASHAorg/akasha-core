@@ -3,6 +3,7 @@ import DS from '@akashaproject/design-system';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import { useLoginState, useNotifications } from '@akashaproject/ui-awf-hooks';
+import useErrorState from '@akashaproject/ui-awf-hooks/lib/use-error-state';
 
 const {
   Helmet,
@@ -14,6 +15,7 @@ const {
   ProfileAvatarButton,
   formatRelativeTime,
   ErrorLoader,
+  ErrorInfoCard,
   Spinner,
 } = DS;
 
@@ -40,16 +42,28 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
     profileService: sdkModules.profiles.profileService,
   });
 
+  const [notifErrors, notifErrorActions] = useErrorState({ logger });
+
   const [notificationsState, notificationsActions] = useNotifications({
-    onError: (err: IAkashaError) => {
-      logger.error('useNotifications error %j', err);
-    },
+    onError: notifErrorActions.createError,
     globalChannel: globalChannel,
     authService: sdkModules.auth.authService,
     ipfsService: sdkModules.commons.ipfsService,
     profileService: sdkModules.profiles.profileService,
     loggedEthAddress: loginState.ethAddress,
   });
+
+  React.useEffect(() => {
+    if (loginState.waitForAuth && !loginState.ready) {
+      return;
+    }
+    if (
+      (loginState.waitForAuth && loginState.ready) ||
+      (loginState.currentUserCalled && loginState.ethAddress)
+    ) {
+      return notificationsActions.getMessages();
+    }
+  }, [JSON.stringify(loginState)]);
 
   const handleMarkAllAsRead = () => {
     notificationsState.notifications.forEach((notif: any) => {
@@ -121,35 +135,64 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
   return (
     <Box fill="horizontal">
       <Helmet>
-        <title>Notifications</title>
+        <title>{t('My notifications')}</title>
       </Helmet>
-      <BasicCardBox>
-        {notificationsState.isFetching && (
-          <Box pad="large">
-            <Spinner />
-          </Box>
-        )}
-        {!notificationsState.isFetching && notificationsState.notifications.length === 0 && (
-          <ErrorLoader
-            type="missing-notifications"
-            title={t('All clear')}
-            details={t("You don't have any new notifications!")}
-          />
-        )}
-        {!notificationsState.isFetching && notificationsState.notifications.length !== 0 && (
-          <Box pad="medium" gap="medium">
-            <Box direction="row" justify="between" align="center">
-              <Text size="large" weight="bold">
-                {t('Notifications')}
-              </Text>
-              <Button label={t('Mark all as read')} primary={true} onClick={handleMarkAllAsRead} />
-            </Box>
-            {notificationsState.notifications.map((notif: any, index: number) =>
-              renderNotificationCard(notif, index),
+      <ErrorInfoCard errors={notifErrors}>
+        {(messages, hasCriticalErrors) => (
+          <>
+            {hasCriticalErrors && (
+              <ErrorLoader
+                type="script-error"
+                title={t('Sorry, we cannot get the notifications this time')}
+                details={t('Please try again later!')}
+                devDetails={messages}
+              />
             )}
-          </Box>
+            {messages && (
+              <ErrorLoader
+                type="script-error"
+                title={t('Sorry, we cannot get the notifications this time')}
+                details={t('Please try again later!')}
+                devDetails={messages}
+              />
+            )}
+            {!hasCriticalErrors && (
+              <BasicCardBox>
+                {notificationsState.isFetching && (
+                  <Box pad="large">
+                    <Spinner />
+                  </Box>
+                )}
+                {!notificationsState.isFetching &&
+                  notificationsState.notifications.length === 0 && (
+                    <ErrorLoader
+                      type="missing-notifications"
+                      title={t('All clear')}
+                      details={t("You don't have any new notifications!")}
+                    />
+                  )}
+                {!notificationsState.isFetching && notificationsState.notifications.length !== 0 && (
+                  <Box pad="medium" gap="medium">
+                    <Box direction="row" justify="between" align="center">
+                      <Text size="large" weight="bold">
+                        {t('Notifications')}
+                      </Text>
+                      <Button
+                        label={t('Mark all as read')}
+                        primary={true}
+                        onClick={handleMarkAllAsRead}
+                      />
+                    </Box>
+                    {notificationsState.notifications.map((notif: any, index: number) =>
+                      renderNotificationCard(notif, index),
+                    )}
+                  </Box>
+                )}
+              </BasicCardBox>
+            )}
+          </>
         )}
-      </BasicCardBox>
+      </ErrorInfoCard>
     </Box>
   );
 };

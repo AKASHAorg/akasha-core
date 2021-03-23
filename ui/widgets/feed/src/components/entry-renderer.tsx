@@ -6,7 +6,7 @@ import { IContentClickDetails } from '@akashaproject/design-system/src/component
 import { useTranslation } from 'react-i18next';
 import { ItemTypes } from './App';
 
-const { ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard } = DS;
+const { ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard, EntryCardHidden } = DS;
 
 export interface IEntryRenderer {
   itemId?: string;
@@ -21,12 +21,16 @@ export interface IEntryRenderer {
   onFollow: (ethAddress: string) => void;
   onUnfollow: (ethAddress: string) => void;
   onBookmark: (isBookmarked: boolean, entryId: string) => void;
-  onReport: (itemId: string, reporterEthAddress: string) => void;
+  onReport: (entryId?: string, reporterEthAddress?: string | null) => void;
   onRepost: (withComment: boolean, entryData: any) => void;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   checkIsFollowing: (viewerEthAddress: string, targetEthAddress: string) => void;
   contentClickable?: boolean;
   itemType: ItemTypes;
+  moderatedContentLabel?: string;
+  awaitingModerationLabel?: string;
+  ctaLabel?: string;
+  handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
 }
 
 const EntryRenderer = (props: IEntryRenderer) => {
@@ -47,6 +51,10 @@ const EntryRenderer = (props: IEntryRenderer) => {
     sharePostUrl,
     onRepost,
     contentClickable,
+    moderatedContentLabel,
+    awaitingModerationLabel,
+    ctaLabel,
+    handleFlipCard,
   } = props;
 
   const isBookmarked = React.useMemo(() => {
@@ -90,11 +98,10 @@ const EntryRenderer = (props: IEntryRenderer) => {
     });
   };
 
-  const handleEntryReport = () => {
-    if (onReport && props.ethAddress) {
-      onReport(itemData.entryId, props.ethAddress);
-    }
+  const handleEntryFlag = (entryId: string) => {
+    onReport(entryId, props.ethAddress);
   };
+
   const handleNavigation = (details: IContentClickDetails) => {
     onNavigate(props.itemType, details);
   };
@@ -111,12 +118,30 @@ const EntryRenderer = (props: IEntryRenderer) => {
     });
   };
 
+  const handleTagClick = (name: string) => {
+    onNavigate(ItemTypes.TAG, {
+      entryId: name,
+      authorEthAddress: name,
+      replyTo: null,
+    });
+  };
+
   const handleEntryBookmark = (entryId: string) => {
     onBookmark(isBookmarked, entryId);
   };
   const isFollowing = React.useMemo(() => followedProfiles.includes(itemData.author.ethAddress), [
     followedProfiles,
   ]);
+
+  if (itemData.reported) {
+    return (
+      <EntryCardHidden
+        awaitingModerationLabel={awaitingModerationLabel}
+        ctaLabel={ctaLabel}
+        handleFlipCard={handleFlipCard && handleFlipCard(itemData, false)}
+      />
+    );
+  }
 
   return (
     <ErrorInfoCard errors={{}}>
@@ -155,13 +180,18 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
                   onRepost={onRepost}
-                  onEntryFlag={handleEntryReport}
+                  onEntryFlag={handleEntryFlag}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
                   isFollowingAuthor={isFollowing}
                   onContentClick={handleContentClick}
                   onMentionClick={handleMentionClick}
+                  onTagClick={handleTagClick}
                   contentClickable={contentClickable}
+                  moderatedContentLabel={moderatedContentLabel}
+                  awaitingModerationLabel={awaitingModerationLabel}
+                  ctaLabel={ctaLabel}
+                  handleFlipCard={handleFlipCard}
                 />
               )}
             </>

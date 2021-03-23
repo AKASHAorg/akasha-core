@@ -56,6 +56,7 @@ const ListViewport: React.FC<IListViewportProps> = props => {
                   itemRect={itemRects.get(itemId)}
                   updateRef={props.updateRef}
                   averageItemHeight={averageItemHeight}
+                  onItemUnmount={props.onItemUnmount}
                 />
               )}
             </CSSTransition>
@@ -68,7 +69,9 @@ const ListViewport: React.FC<IListViewportProps> = props => {
           itemIndex={idx}
           itemId={placeholderId}
           itemCard={props.itemCard}
-          loadItemData={props.loadItemData}
+          loadItemData={() => {
+            /* explicitly left empty! */
+          }}
           itemData={null}
           customEntities={[]}
           itemSpacing={itemSpacing}
