@@ -366,7 +366,7 @@ export const useProfile = (
     getUsernameTypes() {
       // default username is the one set in
       // the onboarding flow (UsernameTypes.TEXTILE)
-      let type: UsernameTypes[] = [];
+      const type: UsernameTypes[] = [];
 
       const defaultProvider = profile.default?.find(
         p => p.property === ProfileProviderProperties.USERNAME,
