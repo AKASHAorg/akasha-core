@@ -31,6 +31,7 @@ const SwitchCardComponent: React.FC<SwitchCardComponent> = props => {
       activeButton={activeButton}
       buttonLabels={buttonLabels}
       buttonValues={buttonValues}
+      hasMobileDesign={true}
       onIconClick={onIconClick}
       onTabClick={onTabClick}
     />
