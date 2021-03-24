@@ -96,13 +96,6 @@ const TopbarComponent = (props: TopBarProps) => {
     if (loginState.ready?.ethAddress && loginState.ethAddress) {
       notificationActions.hasNewNotifications();
     }
-    // @TODO remove this polling when we have event on global channel
-    const checkNotifications = setInterval(() => {
-      if (loginState.ready?.ethAddress && loginState.ethAddress) {
-        notificationActions.hasNewNotifications();
-      }
-    }, 60000);
-    return () => clearInterval(checkNotifications);
   }, [loginState.ready?.ethAddress, loginState.ethAddress]);
 
   React.useEffect(() => {

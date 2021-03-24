@@ -37,7 +37,7 @@ export const useNotifications = (
     hasNewNotifications: false,
   });
 
-  const handleSubscribe = (payload: any) => {
+  const handleSubscribeMarkAsRead = (payload: any) => {
     const { data, channelInfo } = payload;
     if (data) {
       setNotificationsState((prev: any) => {
@@ -54,9 +54,19 @@ export const useNotifications = (
     }
   };
 
+  const handleSubscribeHasNewNotifs = (payload: any) => {
+    const { data } = payload;
+    setNotificationsState((prev: any) => {
+      return {
+        ...prev,
+        hasNewNotifications: data,
+      };
+    });
+  };
+
   // this is used to sync notification state between different components using the hook
   React.useEffect(() => {
-    const call = globalChannel.pipe(
+    const callMarkAsRead = globalChannel.pipe(
       filter((payload: any) => {
         return (
           payload.channelInfo.method === 'markMessageAsRead' &&
@@ -64,11 +74,27 @@ export const useNotifications = (
         );
       }),
     );
-    call.subscribe(
-      handleSubscribe,
-      createErrorHandler('useNotifications.globalNotifications', false, onError),
+    callMarkAsRead.subscribe(
+      handleSubscribeMarkAsRead,
+      createErrorHandler('useNotifications.globalMarkAsRead', false, onError),
     );
-    return () => call.unsubscribe();
+
+    const callHasNewNotifs = globalChannel.pipe(
+      filter((payload: any) => {
+        return (
+          payload.channelInfo.method === 'hasNewNotifications' &&
+          payload.channelInfo.servicePath.includes('AUTH_SERVICE')
+        );
+      }),
+    );
+    callHasNewNotifs.subscribe(
+      handleSubscribeHasNewNotifs,
+      createErrorHandler('useNotifications.globalHasNewNotifications', false, onError),
+    );
+    return () => {
+      callMarkAsRead.unsubscribe();
+      callHasNewNotifs.unsubscribe();
+    };
   }, []);
 
   const actions: UseNotificationsActions = {
@@ -132,10 +158,14 @@ export const useNotifications = (
       const call = authService.markMessageAsRead(messageId);
       call.subscribe((resp: any) => {
         if (resp.data) {
+          let readCounter = 0;
           setNotificationsState((prev: any) => {
             return {
               ...prev,
               notifications: prev.notifications.map((notif: any) => {
+                if (notif.read) {
+                  readCounter++;
+                }
                 if (notif.id === messageId) {
                   return { ...notif, read: true };
                 }
@@ -143,20 +173,22 @@ export const useNotifications = (
               }),
             };
           });
+          // check for new notifications when last notif gets read
+          if (readCounter >= notificationsState.notifications.length - 1) {
+            authService.hasNewNotifications(null).subscribe();
+          }
         }
       }, createErrorHandler('useNotifications.markMessageAsRead', false, onError));
     },
     hasNewNotifications() {
       const call = authService.hasNewNotifications(null);
       call.subscribe((resp: any) => {
-        if (resp.data) {
-          setNotificationsState((prev: any) => {
-            return {
-              ...prev,
-              hasNewNotifications: resp.data,
-            };
-          });
-        }
+        setNotificationsState((prev: any) => {
+          return {
+            ...prev,
+            hasNewNotifications: resp?.data,
+          };
+        });
       }, createErrorHandler('useNotifications.hasNewNotifications', false, onError));
     },
   };
