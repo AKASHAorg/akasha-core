@@ -362,6 +362,12 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     uniqueMessages.clear();
     return inbox.slice();
   };
+
+  const hasNewNotifications = async () => {
+    const limit = 1;
+    const messages = await hubUser.listInboxMessages({ status: Status.UNREAD, limit: limit });
+    return messages.length > 0;
+  };
   const markMessageAsRead = async (messageId: string) => {
     await hubUser.readInboxMessage(messageId);
     return true;
@@ -396,6 +402,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     getCurrentUser,
     getMessages,
     markMessageAsRead,
+    hasNewNotifications,
     deleteMessage,
     validateInvite,
   };
