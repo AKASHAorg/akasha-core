@@ -5,44 +5,12 @@ import { BasicCardBox } from '../common/basic-card-box';
 import { Icon } from '../../Icon';
 import { formatRelativeTime } from '../../../utils/time';
 import { ProfileAvatarButton } from '../../Buttons/index';
-import styled from 'styled-components';
+import { BlueDot, IconDiv, StyledNotifBox } from './styled-notifications';
 import Spinner from '../../Spinner/index';
 import Tooltip from '../../Tooltip/tooltip';
 import ErrorLoader from '../../Errors/error-loader';
 
-const BlueDot = styled.div`
-  height: 8px;
-  width: 8px;
-  border-radius: 50%;
-  background-color: ${props => props.theme.colors.accent};
-`;
-
-const StyledNotifBox = styled(Box)`
-  cursor: pointer;
-  border-radius: ${props => props.theme.shapes.smallBorderRadius};
-  &:hover {
-    background-color: ${props => props.theme.colors.accentOpacity};
-  }
-`;
-
-const IconDiv = styled(Box)`
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  width: 2rem;
-  height: 2rem;
-  &:hover {
-    background-color: ${props => props.theme.colors.accentOpacity};
-    div:nth-child(1) {
-      & * {
-        stroke: ${props => props.theme.colors.accent};
-      }
-    }
-  }
-`;
-
-export interface ITagProfileCard {
+export interface INotificationsCard {
   // data
   notifications: any[];
   isFetching?: boolean;
@@ -62,7 +30,7 @@ export interface ITagProfileCard {
   handleNavBack: () => void;
 }
 
-const NotificationsCard: React.FC<ITagProfileCard> = props => {
+const NotificationsCard: React.FC<INotificationsCard> = props => {
   const {
     notifications,
     isFetching,
