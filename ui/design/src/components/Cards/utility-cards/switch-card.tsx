@@ -1,4 +1,5 @@
 import React from 'react';
+import { isMobileOnly } from 'react-device-detect';
 import { Box, Text } from 'grommet';
 import styled from 'styled-components';
 
@@ -14,7 +15,9 @@ export interface ISwitchCard {
   activeButton: string;
   buttonLabels: string[];
   buttonValues: string[];
+  hasMobileDesign?: boolean;
   onIconClick?: () => void;
+  buttonsWrapperWidth?: string;
   wrapperMarginBottom?: string;
   onTabClick: (value: string) => void;
 }
@@ -46,9 +49,11 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
     countLabel,
     buttonLabels,
     buttonValues,
+    hasMobileDesign,
     onIconClick,
     onTabClick,
     wrapperMarginBottom = '1rem',
+    buttonsWrapperWidth,
   } = props;
 
   const length = buttonLabels.length;
@@ -65,39 +70,79 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
 
   return (
     <Box width="100%" margin={{ bottom: wrapperMarginBottom }}>
-      <MainAreaCardBox>
-        <Box direction="row" pad="1rem" justify="between" align="center">
-          <Box direction="row">
-            {hasIcon && (
-              <Box margin={{ right: '1.25rem' }}>
-                <Icon
-                  size="sm"
-                  type="arrowLeft"
-                  color="secondaryText"
-                  primaryColor={true}
-                  clickable={true}
-                  onClick={handleIconClick}
+      {!(isMobileOnly && hasMobileDesign) && (
+        <MainAreaCardBox>
+          <Box direction="row" pad="1rem" justify="between" align="center">
+            <Box direction="row">
+              {hasIcon && (
+                <Box margin={{ right: '1.25rem' }}>
+                  <Icon
+                    size="sm"
+                    type="arrowLeft"
+                    color="secondaryText"
+                    primaryColor={true}
+                    clickable={true}
+                    onClick={handleIconClick}
+                  />
+                </Box>
+              )}
+              <Text size="large">{`${count} ${countLabel}`}</Text>
+            </Box>
+            <Box
+              direction="row"
+              width={
+                isMobileOnly && buttonsWrapperWidth
+                  ? buttonsWrapperWidth
+                  : length > 3
+                  ? '50%'
+                  : length > 2
+                  ? '33%'
+                  : '30%'
+              }
+            >
+              {buttonLabels.map((el, idx) => (
+                <StyledButton
+                  key={idx}
+                  label={el}
+                  size="large"
+                  first={idx === 0}
+                  removeBorder={idx > 0}
+                  primary={buttonValues[buttonLabels.indexOf(el)] === activeButton}
+                  last={idx === length - 1}
+                  onClick={handleTabClick(el)}
                 />
-              </Box>
-            )}
-            <Text size="large">{`${count} ${countLabel}`}</Text>
+              ))}
+            </Box>
           </Box>
-          <Box direction="row" width={length > 3 ? '50%' : length > 2 ? '33%' : '25%'}>
-            {buttonLabels.map((el, idx) => (
-              <StyledButton
-                key={idx}
-                label={el}
-                size="large"
-                first={idx === 0}
-                removeBorder={idx > 0}
-                primary={buttonValues[buttonLabels.indexOf(el)] === activeButton}
-                last={idx === length - 1}
-                onClick={handleTabClick(el)}
-              />
-            ))}
-          </Box>
+        </MainAreaCardBox>
+      )}
+      {isMobileOnly && hasMobileDesign && (
+        <Box direction="row">
+          {buttonLabels.map((el, idx) => (
+            <Box
+              key={idx}
+              basis="full"
+              pad={{ vertical: '0.5rem', horizontal: '0.6rem' }}
+              border={{
+                ...(buttonValues[buttonLabels.indexOf(el)] === activeButton
+                  ? {
+                      color: 'accent',
+                      side: 'bottom',
+                    }
+                  : {
+                      color: 'border',
+                      side: 'bottom',
+                    }),
+              }}
+              onClick={handleTabClick(el)}
+            >
+              <Text color="secondaryText" textAlign="center">
+                {el}
+              </Text>
+            </Box>
+          ))}
         </Box>
-      </MainAreaCardBox>
+      )}
     </Box>
   );
 };
