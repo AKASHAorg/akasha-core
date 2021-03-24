@@ -18,6 +18,11 @@ import styled from 'styled-components';
 import { truncateMiddle } from '../../../utils/string-utils';
 import { isMobile } from 'react-device-detect';
 import { MobileListModal } from '../../Modals';
+import {
+  IProfileProvider,
+  ProfileProviders,
+  UsernameTypes,
+} from '@akashaproject/ui-awf-typings/lib/profile';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -61,6 +66,7 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   hideENSButton?: boolean;
   copyLabel?: string;
   copiedLabel?: string;
+  userNameType?: { default?: IProfileProvider; available: UsernameTypes[] };
 }
 
 const EditButton = styled(TextIcon)`
@@ -350,6 +356,11 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           profileData={profileData}
           copiedLabel={props.copiedLabel}
           copyLabel={props.copyLabel}
+          ensName={
+            props.userNameType?.default?.provider === ProfileProviders.ENS
+              ? props.userNameType.default.value
+              : undefined
+          }
         />
         {description && (
           <ProfileCardDescription
