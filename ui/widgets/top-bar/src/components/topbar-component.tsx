@@ -94,8 +94,15 @@ const TopbarComponent = (props: TopBarProps) => {
 
   React.useEffect(() => {
     if (loginState.ready?.ethAddress && loginState.ethAddress) {
-      notificationActions.getMessages();
+      notificationActions.hasNewNotifications();
     }
+    // @TODO remove this polling when we have event on global channel
+    const checkNotifications = setInterval(() => {
+      if (loginState.ready?.ethAddress && loginState.ethAddress) {
+        notificationActions.hasNewNotifications();
+      }
+    }, 60000);
+    return () => clearInterval(checkNotifications);
   }, [loginState.ready?.ethAddress, loginState.ethAddress]);
 
   React.useEffect(() => {
@@ -314,7 +321,7 @@ const TopbarComponent = (props: TopBarProps) => {
         onSignUpClick={handleSignUpClick}
         onLogout={handleLogout}
         onFeedbackClick={handleFeedbackModalShow}
-        notifications={notificationsState.notifications}
+        hasNewNotifications={notificationsState.hasNewNotifications}
         currentLocation={location?.pathname}
       />
       <ModalRenderer slotId={modalSlotId}>

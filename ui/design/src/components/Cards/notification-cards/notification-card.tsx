@@ -137,7 +137,7 @@ const NotificationsCard: React.FC<ITagProfileCard> = props => {
         justify="between"
         align="center"
         pad="small"
-        onClick={clickHandler}
+        onClick={() => handleMessageRead(notif.id)}
       >
         <ProfileAvatarButton
           ethAddress={profileData.ethAddress}
@@ -145,6 +145,7 @@ const NotificationsCard: React.FC<ITagProfileCard> = props => {
           label={fullLabel}
           info={relativeTime}
           onClickAvatar={() => handleProfileClick(profileData.pubKey)}
+          onClick={clickHandler}
           active={!notif.read}
         />
         {!notif.read && (
