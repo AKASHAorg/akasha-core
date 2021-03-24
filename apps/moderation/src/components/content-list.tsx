@@ -230,6 +230,7 @@ const ContentList: React.FC<IContentListProps> = props => {
           buttonLabels={buttonLabels}
           buttonValues={buttonValues}
           onTabClick={onTabClick}
+          buttonsWrapperWidth={'40%'}
         />
       )}
       {requesting && <Text textAlign="center">Fetching items. Please wait...</Text>}
