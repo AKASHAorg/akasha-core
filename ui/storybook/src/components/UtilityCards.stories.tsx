@@ -34,6 +34,7 @@ const SwitchCardComponent: React.FC<SwitchCardComponent> = props => {
       hasMobileDesign={true}
       onIconClick={onIconClick}
       onTabClick={onTabClick}
+      loggedEthAddress={'0x000'}
     />
   );
 };
