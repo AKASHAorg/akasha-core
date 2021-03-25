@@ -349,6 +349,8 @@ const TopbarComponent = (props: TopBarProps) => {
         errorMsg={inviteTokenForm.errorMsg}
         onModalClose={handleLoginModalClose}
         showModal={modalState[MODAL_NAMES.LOGIN]}
+        subtitleLabel={t('Please enter your invitation code')}
+        headerLabel={t('Sign Up')}
         titleLabel={t('Connect a wallet')}
         metamaskModalHeadline={t('Connecting')}
         metamaskModalMessage={t('Please complete the process in your wallet')}

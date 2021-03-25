@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { ModalContainer } from '../common/fullscreen-modal-container';
-import { Box, Text } from 'grommet';
+import { Box, Button, CheckBoxGroup, Text } from 'grommet';
 import { ModalCard } from '../../Cards';
 import styled from 'styled-components';
 import { Icon } from '../../Icon';
-import LinkInput from '../../Input/text-input-icon-form/index';
+import LinkInput from '../../Input/text-input-icon-form';
+import { StyledDivider, StyledAnchor } from '../../Input/text-input-icon-form/styles';
 
 const WalletProviderButton = styled(Box)`
   flex: 1;
@@ -27,38 +28,83 @@ const ProvidersListModal = (props: {
     status: boolean;
   };
   titleLabel: string;
+  headerLabel?: string;
+  subtitleLabel?: string;
   inputPlaceholder?: string;
   submitted?: boolean;
   submitting?: boolean;
   success?: boolean;
   hasError?: boolean;
   errorMsg?: string;
+  acceptedTerms?: boolean;
   onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
   validateTokenFn?: (ev: any) => void;
+  checkedTermsValues: any;
+  onCheckedTermsValues: (ev: any) => void;
+  waitForCheckTerms: boolean;
+  onAcceptTerms: (ev: any) => void;
 }) => {
   return (
     <ModalContainer onModalClose={props.onModalClose}>
       <ModalCard>
         <Box width={{ max: '22rem', min: '30ch' }}>
-          {props?.showSignUp?.status && (
+          {props?.showSignUp?.status && !props?.acceptedTerms && (
             <>
               <Box align="center" justify="center" pad="small">
-                <Text weight="bold" size="xlarge">
-                  {'Please enter here your '}
-                </Text>
-                <Text weight="bold" size="xlarge">
-                  {'invitation code'}
+                <Text weight="bold" textAlign={'center'} size="xlarge">
+                  {props.headerLabel}
                 </Text>
               </Box>
               <Box align="center" justify="center" pad="small">
+                <Text textAlign={'center'} size="large" color={'secondaryText'}>
+                  {props.subtitleLabel}
+                </Text>
                 <LinkInput inputValue={props?.showSignUp?.inviteToken || ''} {...props} />
                 {props.errorMsg && props.hasError && (
                   <Text color={'status-critical'}>{props.errorMsg}</Text>
                 )}
               </Box>
+              <Box align="center" justify="center" pad="small">
+                <StyledDivider
+                  pad="small"
+                  height={{ max: '0' }}
+                  border={{ style: 'solid', side: 'top' }}
+                />
+              </Box>
+              <Box align="center" justify="center" pad="small">
+                <Text textAlign={'start'} size="medium" color={'secondaryText'}>
+                  {/*@Todo: move this up*/}
+                  {'Please confirm below that you have read and agree to our'}
+                  <StyledAnchor size="medium" href={'#'} label={' Terms of Service '} /> {'and'}
+                  <StyledAnchor size="medium" href={'#'} label={' Privacy Policy. '} />
+                  {'Please also acknowledge our'}
+                  <StyledAnchor size="medium" href={'#'} label={' Code of Conduct '} />
+                  {'as the basis for respectful interactions with each other on Ethereum World.'}
+                </Text>
+              </Box>
+              <Box align="start" justify="start" pad="small">
+                <CheckBoxGroup
+                  value={props.checkedTermsValues}
+                  options={[
+                    { label: 'I accept the Terms of Service' },
+                    { label: 'I accept the Privacy Policy' },
+                  ]}
+                  onChange={props.onCheckedTermsValues}
+                  style={{ fontSize: '13px' }}
+                />
+              </Box>
+              <Box align="center" justify="center" pad="small">
+                <Button
+                  primary={true}
+                  label={'Accept'}
+                  style={{ borderRadius: '3px', color: '#fff' }}
+                  disabled={props.waitForCheckTerms}
+                  onClick={props.onAcceptTerms}
+                />
+              </Box>
             </>
           )}
-          {(!props?.showSignUp?.status || props?.success) && (
+          {(!props?.showSignUp?.status || (props?.success && props?.acceptedTerms)) && (
             <>
               <Box align="center" justify="center" pad="small">
                 <Text weight="bold" size="xlarge">
