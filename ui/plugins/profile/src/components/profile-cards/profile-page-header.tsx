@@ -131,15 +131,11 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     if (profileUpdateStatus.updateComplete) {
       props.profileActions.resetUpdateStatus();
       // reload profile
-      props.profileActions.resetProfileData();
-      props.profileActions.getProfileData({ pubKey: profileData.pubKey });
       props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
       return;
     }
     if (ensState.status.registrationComplete) {
       ensActions.resetRegistrationStatus();
-      props.profileActions.resetProfileData();
-      props.profileActions.getProfileData({ pubKey: profileData.pubKey });
       props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
       return;
     }
@@ -476,6 +472,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
                       saveLabel={t('Save')}
                       onSave={onENSSubmit}
                       onCancel={closeEnsModal}
+                      saving={!!ensState.status.registering || !!profileUpdateStatus.saving}
                       errorMessage={`
                         ${ensState.errorMessage ? ensState.errorMessage : ''}
                         ${

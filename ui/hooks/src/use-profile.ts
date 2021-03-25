@@ -281,7 +281,6 @@ export const useProfile = (
               props.onError,
             )(new Error(`Cannot save a provider to your profile.`));
           }
-
           const updatedFields = providers
             .map(provider => {
               if (
@@ -297,7 +296,6 @@ export const useProfile = (
             .reduce((acc, curr) => Object.assign(acc, curr), {});
 
           actions.updateProfile(updatedFields);
-
           if (resp && resp.data.makeDefaultProvider) {
             setUpdateStatus(prev => ({
               ...prev,
@@ -340,6 +338,9 @@ export const useProfile = (
           )(new Error('Cannot save default provider'));
         }
         if (resp && resp.data && resp.data.makeDefaultProvider) {
+          actions.updateProfile({
+            default: [...profile.default!.filter(p => p.property !== 'userName'), providerData],
+          });
           setUpdateStatus(prev => ({
             ...prev,
             saving: false,
@@ -373,7 +374,6 @@ export const useProfile = (
       );
 
       if (!defaultProvider?.value && typeof defaultProvider?.value !== 'string') {
-        // return textile provider;
         return {
           default: defaultProvider,
           available: type,
