@@ -23,15 +23,15 @@ import {
 
 const {
   Box,
-  Icon,
   BasicCardBox,
   ErrorLoader,
   Spinner,
-  DuplexButton,
   EntryCard,
   EntryCardHidden,
   EditorModal,
-  ProfileCard,
+  ProfileSearchCard,
+  TagSearchCard,
+  SwitchCard,
   ReportModal,
   ToastProvider,
   ModalRenderer,
@@ -285,6 +285,24 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
     searchState.comments.length === 0 &&
     searchState.tags.length === 0;
 
+  const [activeButton, setActiveButton] = React.useState<string>('All');
+  const buttonValues = ['All', 'People', 'Topics', 'Posts', 'Replies'];
+  const buttonLabels = [t('All'), t('People'), t('Topics'), t('Posts'), t('Replies')];
+
+  const onTabClick = (value: string) => {
+    setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
+  };
+
+  const onNavBack = () => {
+    history.back();
+  };
+
+  const searchCount =
+    searchState.profiles?.length +
+    searchState.entries?.length +
+    searchState.tags?.length +
+    searchState.comments?.length;
+
   return (
     <Box fill="horizontal">
       <ModalRenderer slotId={props.layout.app.modalSlotId}>
@@ -354,6 +372,20 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
           />
         )}
       </ModalRenderer>
+
+      <SwitchCard
+        count={searchCount}
+        countLabel={t('Results')}
+        activeButton={activeButton}
+        onTabClick={onTabClick}
+        onIconClick={onNavBack}
+        hasIcon={true}
+        hasMobileDesign={true}
+        buttonLabels={buttonLabels}
+        buttonValues={buttonValues}
+        loggedEthAddress={loginState.ethAddress}
+      />
+
       {searchState.isFetching && (
         <BasicCardBox>
           <Box pad="large">
@@ -375,79 +407,104 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
 
       {!searchState.isFetching && !emptySearchState && (
         <Box>
-          <Box align="start" pad={{ bottom: 'medium' }} gap="small" direction="row">
-            {searchState.tags.map((tag: any, index: number) => (
-              <Box key={index}>
-                <DuplexButton
-                  activeHoverLabel={`#${tag}`}
-                  active={tagSubscriptionState.includes(tag)}
-                  activeLabel={`#${tag}`}
-                  inactiveLabel={`#${tag}`}
-                  onClickActive={() => handleTagUnsubscribe(tag)}
-                  onClickInactive={() => handleTagSubscribe(tag)}
-                  icon={<Icon type="subscribe" />}
+          {(activeButton === buttonValues[0] || activeButton === buttonValues[1]) &&
+            searchState.profiles.slice(0, 4).map((profileData: any, index: number) => (
+              <Box key={index} pad={{ bottom: 'medium' }}>
+                <ProfileSearchCard
+                  handleFollow={() => handleFollowProfile(profileData.ethAddress)}
+                  handleUnfollow={() => handleUnfollowProfile(profileData.ethAddress)}
+                  isFollowing={followedProfiles.includes(profileData?.ethAddress)}
+                  loggedEthAddress={loginState.ethAddress}
+                  profileData={profileData}
+                  followLabel={t('Follow')}
+                  unfollowLabel={t('Unfollow')}
+                  descriptionLabel={t('About me')}
+                  followingLabel={t('Following')}
+                  followersLabel={t('Followers')}
+                  postsLabel={t('Posts')}
+                  shareProfileLabel={t('Share')}
+                  onClickProfile={() => handleProfileClick(profileData.pubKey)}
                 />
               </Box>
             ))}
-          </Box>
 
-          {searchState.profiles.slice(0, 4).map((profileData: any, index: number) => (
-            <Box
-              key={index}
-              onClick={() => handleProfileClick(profileData.pubKey)}
-              pad={{ bottom: 'medium' }}
-            >
-              <ProfileCard
-                onENSChangeClick={() => null}
-                onUpdateClick={() => null}
-                onClickFollowers={() => null}
-                onClickFollowing={() => null}
-                onClickPosts={() => null}
-                handleFollow={() => handleFollowProfile(profileData.ethAddress)}
-                handleUnfollow={() => handleUnfollowProfile(profileData.ethAddress)}
-                handleShareClick={() => null}
-                isFollowing={followedProfiles.includes(profileData?.ethAddress)}
-                loggedEthAddress={loginState.ethAddress}
-                profileData={profileData}
-                followLabel={t('Follow')}
-                unfollowLabel={t('Unfollow')}
-                descriptionLabel={t('About me')}
-                followingLabel={t('Following')}
-                followersLabel={t('Followers')}
-                postsLabel={t('Posts')}
-                shareProfileLabel={t('Share')}
-                flaggable={true}
-                // uncomment this to enable report profile
-                // flagAsLabel={t('Report Profile')}
-                onEntryFlag={() => null}
-              />
-            </Box>
-          ))}
-          {searchState.entries.slice(0, 4).map((entryData: any) => (
-            <Box key={entryData.entyId} pad={{ bottom: 'medium' }}>
-              {entryData.delisted ? (
-                <EntryCardHidden
-                  moderatedContentLabel={t('This content has been moderated')}
-                  isDelisted={true}
+          {(activeButton === buttonValues[0] || activeButton === buttonValues[2]) &&
+            searchState.tags.map((tag: any, index: number) => (
+              <Box key={index} pad={{ bottom: 'medium' }}>
+                <TagSearchCard
+                  tag={tag}
+                  subscribedTags={tagSubscriptionState}
+                  subscribeLabel={t('Subscribe')}
+                  unsubscribeLabel={t('Unsubscribe')}
+                  handleSubscribeTag={() => handleTagSubscribe(tag)}
+                  handleUnsubscribeTag={() => handleTagUnsubscribe(tag)}
                 />
-              ) : entryData.reported ? (
-                <EntryCardHidden
-                  awaitingModerationLabel={t(
-                    'You have reported this post. It is awaiting moderation.',
-                  )}
-                  ctaLabel={t('See it anyway')}
-                  handleFlipCard={handleFlipCard && handleFlipCard(entryData, false)}
-                />
-              ) : (
+              </Box>
+            ))}
+          {(activeButton === buttonValues[0] || activeButton === buttonValues[3]) &&
+            searchState.entries.slice(0, 4).map((entryData: any) => (
+              <Box key={entryData.entyId} pad={{ bottom: 'medium' }}>
+                {entryData.delisted ? (
+                  <EntryCardHidden
+                    moderatedContentLabel={t('This content has been moderated')}
+                    isDelisted={true}
+                  />
+                ) : entryData.reported ? (
+                  <EntryCardHidden
+                    awaitingModerationLabel={t(
+                      'You have reported this post. It is awaiting moderation.',
+                    )}
+                    ctaLabel={t('See it anyway')}
+                    handleFlipCard={handleFlipCard && handleFlipCard(entryData, false)}
+                  />
+                ) : (
+                  <EntryCard
+                    isBookmarked={
+                      bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryData.entryId) >= 0
+                    }
+                    entryData={entryData}
+                    sharePostLabel={t('Share Post')}
+                    shareTextLabel={t('Share this post with your friends')}
+                    sharePostUrl={`${window.location.origin}/AKASHA-app/post/`}
+                    onClickAvatar={() => handleProfileClick(entryData.author.pubKey)}
+                    onEntryBookmark={handleEntryBookmark}
+                    repliesLabel={t('Replies')}
+                    repostsLabel={t('Reposts')}
+                    repostLabel={t('Repost')}
+                    repostWithCommentLabel={t('Repost with comment')}
+                    shareLabel={t('Share')}
+                    copyLinkLabel={t('Copy Link')}
+                    flagAsLabel={t('Report Post')}
+                    loggedProfileEthAddress={loginState.ethAddress}
+                    locale={locale || 'en'}
+                    style={{ height: 'auto' }}
+                    bookmarkLabel={t('Save')}
+                    bookmarkedLabel={t('Saved')}
+                    onRepost={handleRepost}
+                    onEntryFlag={handleEntryFlag}
+                    handleFollowAuthor={() => handleFollowProfile(entryData.author.ethAddress)}
+                    handleUnfollowAuthor={() => handleUnfollowProfile(entryData.author.ethAddress)}
+                    isFollowingAuthor={followedProfiles.includes(entryData.author)}
+                    onContentClick={() => handlePostClick(entryData.entryId)}
+                    onMentionClick={handleProfileClick}
+                    contentClickable={true}
+                    handleFlipCard={handleFlipCard}
+                  />
+                )}
+              </Box>
+            ))}
+          {(activeButton === buttonValues[0] || activeButton === buttonValues[4]) &&
+            searchState.comments.slice(0, 4).map((commentData: any, index: number) => (
+              <Box key={index} pad={{ bottom: 'medium' }}>
                 <EntryCard
                   isBookmarked={
-                    bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryData.entryId) >= 0
+                    bookmarkState.bookmarks.findIndex(bm => bm.entryId === commentData.entryId) >= 0
                   }
-                  entryData={entryData}
+                  entryData={commentData}
                   sharePostLabel={t('Share Post')}
                   shareTextLabel={t('Share this post with your friends')}
-                  sharePostUrl={`${window.location.origin}/AKASHA-app/post/`}
-                  onClickAvatar={() => handleProfileClick(entryData.author.pubKey)}
+                  sharePostUrl={'https://ethereum.world'}
+                  onClickAvatar={() => handleProfileClick(commentData.author.pubKey)}
                   onEntryBookmark={handleEntryBookmark}
                   repliesLabel={t('Replies')}
                   repostsLabel={t('Reposts')}
@@ -461,55 +518,18 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                   style={{ height: 'auto' }}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
-                  onRepost={handleRepost}
+                  onRepost={() => null}
                   onEntryFlag={handleEntryFlag}
-                  handleFollowAuthor={() => handleFollowProfile(entryData.author.ethAddress)}
-                  handleUnfollowAuthor={() => handleUnfollowProfile(entryData.author.ethAddress)}
-                  isFollowingAuthor={followedProfiles.includes(entryData.author)}
-                  onContentClick={() => handlePostClick(entryData.entryId)}
+                  handleFollowAuthor={() => handleFollowProfile(commentData.author.ethAddress)}
+                  handleUnfollowAuthor={() => handleUnfollowProfile(commentData.author.ethAddress)}
+                  isFollowingAuthor={followedProfiles.includes(commentData.author)}
+                  onContentClick={() => handlePostClick(commentData.postId)}
                   onMentionClick={handleProfileClick}
                   contentClickable={true}
                   handleFlipCard={handleFlipCard}
                 />
-              )}
-            </Box>
-          ))}
-          {searchState.comments.slice(0, 4).map((commentData: any, index: number) => (
-            <Box key={index} pad={{ bottom: 'medium' }}>
-              <EntryCard
-                isBookmarked={
-                  bookmarkState.bookmarks.findIndex(bm => bm.entryId === commentData.entryId) >= 0
-                }
-                entryData={commentData}
-                sharePostLabel={t('Share Post')}
-                shareTextLabel={t('Share this post with your friends')}
-                sharePostUrl={'https://ethereum.world'}
-                onClickAvatar={() => handleProfileClick(commentData.author.pubKey)}
-                onEntryBookmark={handleEntryBookmark}
-                repliesLabel={t('Replies')}
-                repostsLabel={t('Reposts')}
-                repostLabel={t('Repost')}
-                repostWithCommentLabel={t('Repost with comment')}
-                shareLabel={t('Share')}
-                copyLinkLabel={t('Copy Link')}
-                flagAsLabel={t('Report Post')}
-                loggedProfileEthAddress={loginState.ethAddress}
-                locale={locale || 'en'}
-                style={{ height: 'auto' }}
-                bookmarkLabel={t('Save')}
-                bookmarkedLabel={t('Saved')}
-                onRepost={() => null}
-                onEntryFlag={handleEntryFlag}
-                handleFollowAuthor={() => handleFollowProfile(commentData.author.ethAddress)}
-                handleUnfollowAuthor={() => handleUnfollowProfile(commentData.author.ethAddress)}
-                isFollowingAuthor={followedProfiles.includes(commentData.author)}
-                onContentClick={() => handlePostClick(commentData.postId)}
-                onMentionClick={handleProfileClick}
-                contentClickable={true}
-                handleFlipCard={handleFlipCard}
-              />
-            </Box>
-          ))}
+              </Box>
+            ))}
         </Box>
       )}
     </Box>
