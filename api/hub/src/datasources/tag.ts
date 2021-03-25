@@ -26,7 +26,7 @@ class TagAPI extends DataSource {
   async searchTags(name: string) {
     const result = await searchIndex.search(name, {
       facetFilters: ['category:tag'],
-      hitsPerPage: 50,
+      hitsPerPage: 20,
       attributesToRetrieve: ['name'],
     });
     const tags = result.hits.map((element: any) => {
@@ -34,13 +34,8 @@ class TagAPI extends DataSource {
     });
     const results = [];
     for (const tag of tags) {
-      const postHits = await searchIndex.search(tag, {
-        facetFilters: ['category:post'],
-        hitsPerPage: 2,
-        attributesToRetrieve: ['author', 'tags'],
-        restrictSearchableAttributes: ['tags'],
-      });
-      results.push({ name: tag, totalPosts: postHits.nbHits });
+      const tagData = await this.getTag(tag);
+      results.push({ name: tag, totalPosts: tagData?.posts?.length || 0 });
     }
     return results.sort((x, y) => y.totalPosts - x.totalPosts);
   }
@@ -115,6 +110,9 @@ class TagAPI extends DataSource {
   async addTag(name: string) {
     const db: Client = await getAppDB();
     const formattedName = name.toLowerCase();
+    if (formattedName.length > 32) {
+      return Promise.reject('Tags can have a maximum of 32 characters!');
+    }
     // starts with alpha-num and ends with alpha-num
     if (!this.format.test(formattedName)) {
       return Promise.reject('Tags must start and end with alphanumeric character!');

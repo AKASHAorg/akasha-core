@@ -30,9 +30,14 @@ const typeDefs = gql`
     id: String
     name: String
   }
+  type GlobalSearchResultTagItem {
+    id: String
+    name: String
+    totalPosts: Int
+  }
   type GlobalSearchResult {
     posts: [GlobalSearchResultItem]
-    tags: [GlobalSearchResultItem]
+    tags: [GlobalSearchResultTagItem]
     comments: [GlobalSearchResultItem]
     profiles: [GlobalSearchResultItem]
   }
