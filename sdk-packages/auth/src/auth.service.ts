@@ -38,6 +38,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   let db: Database;
   let channel;
   let sessKey;
+  let inboxWatcher;
   let currentUser: { pubKey: string; ethAddress: string; isNewUser?: boolean };
   let tokenGenerator: () => Promise<UserAuth>;
   const waitForAuth = 'waitForAuth';
@@ -148,6 +149,19 @@ const service: AkashaService = (invoke, log, globalChannel) => {
 
     // @Todo: on error try to setupMail
     await hubUser.setupMailbox();
+    const mailboxID = await hubUser.getMailboxID();
+    inboxWatcher = await hubUser.watchInbox(mailboxID, ev => {
+      if (ev?.message?.body && ev?.message?.readAt === 0) {
+        globalChannel.next({
+          data: true,
+          channelInfo: {
+            servicePath: services[AUTH_SERVICE],
+            method: 'hasNewNotifications',
+            args: null,
+          },
+        });
+      }
+    });
     sessionStorage.setItem(providerKey, currentProvider.toString());
     sessionStorage.setItem(sessKey, identity.toString());
     sessionStorage.setItem(currentUserKey, JSON.stringify(currentUser));
@@ -274,6 +288,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     identity = null;
     hubClient = null;
     hubUser = null;
+    inboxWatcher = null;
     buckClient = null;
     auth = null;
     db = null;
@@ -362,6 +377,12 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     uniqueMessages.clear();
     return inbox.slice();
   };
+
+  const hasNewNotifications = async () => {
+    const limit = 1;
+    const messages = await hubUser.listInboxMessages({ status: Status.UNREAD, limit: limit });
+    return messages.length > 0;
+  };
   const markMessageAsRead = async (messageId: string) => {
     await hubUser.readInboxMessage(messageId);
     return true;
@@ -396,6 +417,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     getCurrentUser,
     getMessages,
     markMessageAsRead,
+    hasNewNotifications,
     deleteMessage,
     validateInvite,
   };
