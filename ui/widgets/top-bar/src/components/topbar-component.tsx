@@ -94,7 +94,7 @@ const TopbarComponent = (props: TopBarProps) => {
 
   React.useEffect(() => {
     if (loginState.ready?.ethAddress && loginState.ethAddress) {
-      notificationActions.getMessages();
+      notificationActions.hasNewNotifications();
     }
   }, [loginState.ready?.ethAddress, loginState.ethAddress]);
 
@@ -314,7 +314,7 @@ const TopbarComponent = (props: TopBarProps) => {
         onSignUpClick={handleSignUpClick}
         onLogout={handleLogout}
         onFeedbackClick={handleFeedbackModalShow}
-        notifications={notificationsState.notifications}
+        hasNewNotifications={notificationsState.hasNewNotifications}
         currentLocation={location?.pathname}
       />
       <ModalRenderer slotId={modalSlotId}>

@@ -26,7 +26,7 @@ export interface ITopbarProps {
   // data
   loggedProfileData?: Partial<IProfileData>;
   versionURL?: string;
-  notifications?: any;
+  hasNewNotifications?: boolean;
   quickAccessItems?: IMenuItem[];
   searchAreaItem?: IMenuItem;
   otherAreaItems?: IMenuItem[];
@@ -80,7 +80,7 @@ const Topbar = (props: ITopbarProps) => {
     onSignUpClick,
     onFeedbackClick,
     onLogout,
-    notifications,
+    hasNewNotifications,
   } = props;
 
   const [inputValue, setInputValue] = React.useState('');
@@ -191,7 +191,7 @@ const Topbar = (props: ITopbarProps) => {
               clickable={true}
               accentColor={currentLocation?.includes(menuItem.route) || false}
             />
-            {notifications?.length && (
+            {hasNewNotifications && (
               <Box background="errorText" width="9px" height="9px" round={true} />
             )}
           </Stack>
