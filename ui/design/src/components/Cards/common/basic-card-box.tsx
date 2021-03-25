@@ -2,14 +2,16 @@ import { Box } from 'grommet';
 import * as React from 'react';
 import styled, { css } from 'styled-components';
 
-const StyledBox = styled(Box)`
+const StyledBox = styled(Box)<{ elevate?: string }>`
   background-color: ${props => props.theme.colors.background};
 `;
 
 export interface IBasicCardBox {
   className?: string;
+  elevate?: string;
   callToAction?: boolean;
   dashedBorder?: boolean;
+  darkBorder?: boolean;
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
 }
@@ -17,8 +19,10 @@ export interface IBasicCardBox {
 const BasicCardBox: React.FC<IBasicCardBox> = ({
   children,
   className,
+  elevate,
   callToAction,
   dashedBorder,
+  darkBorder,
   style,
   rootNodeRef,
 }) => (
@@ -29,6 +33,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
     fill="horizontal"
     pad="none"
     round="xsmall"
+    elevate={elevate}
     border={
       callToAction
         ? {
@@ -39,6 +44,11 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
           }
         : dashedBorder
         ? { color: 'secondaryText', size: 'xsmall', style: 'dashed', side: 'all' }
+        : darkBorder
+        ? {
+            color: 'darkBorder',
+            side: 'all',
+          }
         : {
             color: 'border',
             size: 'xsmall',
@@ -59,14 +69,6 @@ const MainAreaCardBox = styled(BasicCardBox)<{ verticalFill?: boolean; borderedS
     if (props.verticalFill) {
       return css`
         height: 100%;
-      `;
-    }
-    if (props.borderedShadow) {
-      return css`
-        border: 0.1rem solid ${props.theme.colors.darkerBorder};
-        box-shadow: 2px 1px 11px 1px rgba(98, 107, 122, 0.25);
-        -webkit-box-shadow: 2px 1px 11px 0px rgba(98, 107, 122, 0.25);
-        -moz-box-shadow: 2px 1px 11px 0px rgba(98, 107, 122, 0.25);
       `;
     }
     return;

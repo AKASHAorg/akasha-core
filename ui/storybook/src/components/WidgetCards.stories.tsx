@@ -134,7 +134,7 @@ storiesOf('Cards/Widget Cards', module)
       />
     </Box>
   ))
-  .add('coookie card', () => (
+  .add('cookie card', () => (
     <Box align="center" pad={{ top: '40px' }}>
       <CookieWidgetCard
         titleLabel={text('Title Label', 'Cookies 🍪')}

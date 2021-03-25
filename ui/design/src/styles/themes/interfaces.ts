@@ -13,7 +13,7 @@ export interface IColors {
   accentOpacity: string;
   accentLight: string;
   border: string;
-  darkerBorder: string;
+  darkBorder: string;
   secondary: string;
   secondaryOpacity: string;
   shadow: string;

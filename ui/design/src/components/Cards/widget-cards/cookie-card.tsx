@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Button } from '../../Buttons';
 
-import { MainAreaCardBox } from '../common/basic-card-box';
+import { BasicCardBox } from '../common/basic-card-box';
 
 export interface ICookieWidgetCard {
   titleLabel: string;
@@ -25,12 +25,8 @@ const CookieCardButton = styled(Button)`
 const CookieWidgetCard: React.FC<ICookieWidgetCard> = props => {
   const { titleLabel, contentLabel, acceptLabel, privacyUrl, privacyUrlLabel, onClick } = props;
 
-  const handleClick = () => {
-    onClick();
-  };
-
   return (
-    <MainAreaCardBox borderedShadow={true}>
+    <BasicCardBox elevate="shadow" darkBorder={true}>
       <Box margin="1rem">
         <Text weight={600} textAlign="start" margin={{ bottom: 'medium' }} size="large">
           {titleLabel}
@@ -47,7 +43,7 @@ const CookieWidgetCard: React.FC<ICookieWidgetCard> = props => {
             style={{ cursor: 'pointer' }}
             onClick={() => window.open(privacyUrl, privacyUrlLabel, '_blank noopener noreferrer')}
           >
-            {privacyUrlLabel}{' '}
+            {privacyUrlLabel}
           </Text>
         </Text>
         <Box width="30%" align="center">
@@ -56,11 +52,11 @@ const CookieWidgetCard: React.FC<ICookieWidgetCard> = props => {
             size="large"
             primary={true}
             label={acceptLabel}
-            onClick={handleClick}
+            onClick={onClick}
           />
         </Box>
       </Box>
-    </MainAreaCardBox>
+    </BasicCardBox>
   );
 };
 
