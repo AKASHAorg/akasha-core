@@ -372,6 +372,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
           />
         )}
       </ModalRenderer>
+
       <SwitchCard
         count={searchCount}
         countLabel={t('Results')}
@@ -382,7 +383,9 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
         hasMobileDesign={true}
         buttonLabels={buttonLabels}
         buttonValues={buttonValues}
+        loggedEthAddress={loginState.ethAddress}
       />
+
       {searchState.isFetching && (
         <BasicCardBox>
           <Box pad="large">
