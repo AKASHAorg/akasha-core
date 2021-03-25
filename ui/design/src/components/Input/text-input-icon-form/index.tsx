@@ -1,7 +1,7 @@
 import { Box } from 'grommet';
 import * as React from 'react';
-import { Icon } from '../../Icon/index';
-import { StyledTextInput, StyledArrowIcon } from './styles';
+import { Icon } from '../../Icon';
+import { StyledTextInput, StyledArrowIcon, StyledDisabledBox } from './styles';
 
 export interface ILinkInput {
   onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
@@ -32,8 +32,9 @@ const LinkInput: React.FC<ILinkInput> = props => {
   const isWriting = inputValue && !submitted && !submitting;
   const inputColor = (isWriting && 'accent') || 'border';
   const placeHolder = inputPlaceholder || 'Invitation Code';
+  const Container = success ? StyledDisabledBox : Box;
   return (
-    <Box
+    <Container
       fill="horizontal"
       direction="row"
       align="center"
@@ -70,8 +71,8 @@ const LinkInput: React.FC<ILinkInput> = props => {
       )}
       {submitting && <Icon type="loading" />}
       {hasError && !isEmpty && <Icon type="error" />}
-      {success && <Icon type="available" />}
-    </Box>
+      {success && <Icon type="available" color={'green'} />}
+    </Container>
   );
 };
 
