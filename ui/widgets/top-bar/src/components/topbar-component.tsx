@@ -70,6 +70,15 @@ const TopbarComponent = (props: TopBarProps) => {
     hasError: false,
     errorMsg: '',
   });
+  const [termsState, setTermsState] = React.useState<{
+    waitForCheckTerms: boolean;
+    checkedTermsValues: string[];
+    acceptedTerms: boolean;
+  }>({
+    waitForCheckTerms: true,
+    checkedTermsValues: [],
+    acceptedTerms: false,
+  });
   const [loggedProfileData, loggedProfileActions] = useProfile({
     onError: err => logger.error(err),
     profileService: props.sdkModules.profiles.profileService,
@@ -263,7 +272,33 @@ const TopbarComponent = (props: TopBarProps) => {
     e.preventDefault();
     checkIsValidToken();
   };
+  const onCheckedTermsValues = (e: any) => {
+    setTermsState(prevState => {
+      return {
+        ...prevState,
+        checkedTermsValues: e.value,
+      };
+    });
+  };
+  const onAcceptTerms = (_: any) => {
+    setTermsState(prevState => {
+      return {
+        ...prevState,
+        acceptedTerms: true,
+      };
+    });
+    localStorage.setItem('@acceptedTermsAndPrivacy', new Date().toISOString());
+  };
+  const activateAcceptButton = () => {
+    setTermsState(prevState => {
+      return {
+        ...prevState,
+        waitForCheckTerms: !(termsState.checkedTermsValues.length === 2),
+      };
+    });
+  };
   React.useEffect(triggerInviteValidation, [showSignUpModal]);
+  React.useEffect(activateAcceptButton, [termsState.checkedTermsValues]);
 
   const handleLoginModalClose = () => {
     modalStateActions.hide(MODAL_NAMES.LOGIN);
@@ -355,6 +390,11 @@ const TopbarComponent = (props: TopBarProps) => {
         metamaskModalHeadline={t('Connecting')}
         metamaskModalMessage={t('Please complete the process in your wallet')}
         error={loginErrors}
+        onAcceptTerms={onAcceptTerms}
+        onCheckedTermsValues={onCheckedTermsValues}
+        waitForCheckTerms={termsState.waitForCheckTerms}
+        checkedTermsValues={termsState.checkedTermsValues}
+        acceptedTerms={termsState.acceptedTerms}
       />
     </ThemeSelector>
   );

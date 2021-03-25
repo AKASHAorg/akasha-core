@@ -39,10 +39,10 @@ const ProvidersListModal = (props: {
   acceptedTerms?: boolean;
   onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
   validateTokenFn?: (ev: any) => void;
-  checkedTermsValues: any;
-  onCheckedTermsValues: (ev: any) => void;
-  waitForCheckTerms: boolean;
-  onAcceptTerms: (ev: any) => void;
+  checkedTermsValues?: any;
+  onCheckedTermsValues?: (ev: any) => void;
+  waitForCheckTerms?: boolean;
+  onAcceptTerms?: (ev: any) => void;
 }) => {
   return (
     <ModalContainer onModalClose={props.onModalClose}>
@@ -64,44 +64,52 @@ const ProvidersListModal = (props: {
                   <Text color={'status-critical'}>{props.errorMsg}</Text>
                 )}
               </Box>
-              <Box align="center" justify="center" pad="small">
-                <StyledDivider
-                  pad="small"
-                  height={{ max: '0' }}
-                  border={{ style: 'solid', side: 'top' }}
-                />
-              </Box>
-              <Box align="center" justify="center" pad="small">
-                <Text textAlign={'start'} size="medium" color={'secondaryText'}>
-                  {/*@Todo: move this up*/}
-                  {'Please confirm below that you have read and agree to our'}
-                  <StyledAnchor size="medium" href={'#'} label={' Terms of Service '} /> {'and'}
-                  <StyledAnchor size="medium" href={'#'} label={' Privacy Policy. '} />
-                  {'Please also acknowledge our'}
-                  <StyledAnchor size="medium" href={'#'} label={' Code of Conduct '} />
-                  {'as the basis for respectful interactions with each other on Ethereum World.'}
-                </Text>
-              </Box>
-              <Box align="start" justify="start" pad="small">
-                <CheckBoxGroup
-                  value={props.checkedTermsValues}
-                  options={[
-                    { label: 'I accept the Terms of Service' },
-                    { label: 'I accept the Privacy Policy' },
-                  ]}
-                  onChange={props.onCheckedTermsValues}
-                  style={{ fontSize: '13px' }}
-                />
-              </Box>
-              <Box align="center" justify="center" pad="small">
-                <Button
-                  primary={true}
-                  label={'Accept'}
-                  style={{ borderRadius: '3px', color: '#fff' }}
-                  disabled={props.waitForCheckTerms}
-                  onClick={props.onAcceptTerms}
-                />
-              </Box>
+              {/*@Todo: extract this up and add legal document links */}
+              {props?.success && (
+                <>
+                  <Box align="center" justify="center" pad="small">
+                    <StyledDivider
+                      pad="small"
+                      height={{ max: '0' }}
+                      border={{ style: 'solid', side: 'top' }}
+                    />
+                  </Box>
+                  <Box align="center" justify="center" pad="small">
+                    <Text textAlign={'start'} size="medium" color={'secondaryText'}>
+                      {'Please confirm below that you have read and agree to our'}
+                      <StyledAnchor size="medium" href={'#'} label={' Terms of Service '} /> {'and'}
+                      <StyledAnchor size="medium" href={'#'} label={' Privacy Policy. '} />
+                      {'Please also acknowledge our'}
+                      <StyledAnchor size="medium" href={'#'} label={' Code of Conduct '} />
+                      {
+                        'as the basis for respectful interactions with each other on Ethereum World.'
+                      }
+                    </Text>
+                  </Box>
+                  <Box align="start" justify="start" pad="small">
+                    <CheckBoxGroup
+                      value={props.checkedTermsValues}
+                      labelKey="label"
+                      valueKey="key"
+                      options={[
+                        { label: 'I accept the Terms of Service', key: 'terms' },
+                        { label: 'I accept the Privacy Policy', key: 'privacy' },
+                      ]}
+                      onChange={props.onCheckedTermsValues}
+                      style={{ fontSize: '13px' }}
+                    />
+                  </Box>
+                  <Box align="center" justify="center" pad="small">
+                    <Button
+                      primary={true}
+                      label={'Accept'}
+                      style={{ borderRadius: '3px', color: '#fff' }}
+                      disabled={props.waitForCheckTerms}
+                      onClick={props.onAcceptTerms}
+                    />
+                  </Box>
+                </>
+              )}
             </>
           )}
           {(!props?.showSignUp?.status || (props?.success && props?.acceptedTerms)) && (
