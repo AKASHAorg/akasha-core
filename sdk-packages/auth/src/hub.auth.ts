@@ -78,12 +78,18 @@ export const loginWithChallenge = (
               let addressChallenge;
               let ethAddress;
               let signUpToken;
+              let acceptedTermsAndPrivacy;
               if (data.addressChallenge) {
                 addressChallenge = await signer.signMessage(data.addressChallenge);
                 ethAddress = await signer.getAddress();
                 authStatus.isNewUser = true;
                 signUpToken = localStorage.getItem('@signUpToken');
+                acceptedTermsAndPrivacy = localStorage.getItem('@acceptedTermsAndPrivacy');
+                if (!acceptedTermsAndPrivacy) {
+                  return reject(new Error('Terms of Service and Privacy Policy were not accepted'));
+                }
                 localStorage.removeItem('@signUpToken');
+                localStorage.removeItem('@acceptedTermsAndPrivacy');
               }
               /** User our identity to sign the challenge */
               const signed = await identity.sign(buf);
@@ -92,6 +98,7 @@ export const loginWithChallenge = (
                   addressChallenge,
                   ethAddress,
                   signUpToken,
+                  acceptedTermsAndPrivacy,
                   type: 'challenge',
                   sig: Buffer.from(signed).toJSON(),
                 }),

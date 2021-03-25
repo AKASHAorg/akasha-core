@@ -1,57 +1,69 @@
 import * as React from 'react';
-import { Box, Text } from 'grommet';
+import { Box, Text, Image } from 'grommet';
+import { isMobile } from 'react-device-detect';
 import styled from 'styled-components';
+
 import { WidgetAreaCardBox } from '../common/basic-card-box';
-import { Button } from '../../Buttons';
-
-const SignInButton = styled(Button)`
-  flex-grow: 1;
-  margin-right: 0.5em;
-`;
-
-const SignUpButton = styled(Button)`
-  flex-grow: 1;
-`;
 
 const LoginWidgetBox = styled(WidgetAreaCardBox)`
   padding: 1em;
 `;
 
+const StyledText = styled(Text)`
+  font-size: 1rem;
+`;
+
 export interface ILoginWidgetCardProps {
-  onLoginClick: () => void;
-  onSignUpClick: () => void;
   onLearnMoreClick?: () => void;
   title: string;
-  textContent: string;
+  subtitle: string;
+  beforeLinkLabel: string;
+  afterLinkLabel: string;
+  writeToUsLabel: string;
+  writeToUsUrl: string;
   image?: React.ReactElement;
-  learnMoreLabel?: string;
-  signInLabel: string;
-  signUpLabel: string;
-  inlineActions?: boolean;
+  publicImgPath?: string;
 }
 const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
-  const { inlineActions = false } = props;
+  const {
+    title,
+    subtitle,
+    beforeLinkLabel,
+    afterLinkLabel,
+    writeToUsLabel,
+    writeToUsUrl,
+    publicImgPath = '/images',
+  } = props;
   return (
-    <LoginWidgetBox callToAction={true}>
+    <LoginWidgetBox>
       {props.image && props.image}
-      <Box direction={inlineActions ? 'row' : 'column'} align="center" gap="xsmall">
-        <Box direction="column">
-          <Text weight="bold" size="large">
-            {props.title}
+      <Box direction={isMobile ? 'column-reverse' : 'row'} align="center" justify="between">
+        <Box direction="column" width={isMobile ? '100%' : '50%'}>
+          <Text weight="bold" size="1rem" margin={{ top: 'xsmall' }}>
+            {title}
           </Text>
-          <Text size="small" margin={{ top: '.25em', bottom: '1em' }}>
-            {props.textContent}
-          </Text>
+          <StyledText margin={{ top: 'xsmall' }}>{subtitle}</StyledText>
+          <StyledText margin={{ top: 'xsmall' }}>
+            {beforeLinkLabel}{' '}
+            <StyledText
+              color="accentText"
+              style={{ cursor: 'pointer' }}
+              onClick={() =>
+                window.open(writeToUsUrl, writeToUsLabel, '_blank noopener noreferrer')
+              }
+            >
+              {writeToUsLabel}
+            </StyledText>{' '}
+            {afterLinkLabel}
+          </StyledText>
         </Box>
         <Box
-          direction="row"
-          justify={inlineActions ? 'end' : 'stretch'}
-          align="center"
-          flex={inlineActions ? { shrink: 0 } : 'grow'}
-          fill={inlineActions ? false : 'horizontal'}
+          width={isMobile ? '60%' : '43%'}
+          margin={{ ...(isMobile && { bottom: 'small' }) }}
+          pad={{ ...(!isMobile && { right: 'small' }) }}
+          alignSelf="center"
         >
-          <SignInButton onClick={props.onLoginClick} label={props.signInLabel} />
-          <SignUpButton primary={true} onClick={props.onSignUpClick} label={props.signUpLabel} />
+          <Image fit="contain" src={`${publicImgPath}/login-widget-illustration.png`} />
         </Box>
       </Box>
     </LoginWidgetBox>
