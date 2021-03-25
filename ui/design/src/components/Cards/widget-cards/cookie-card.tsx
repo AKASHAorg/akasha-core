@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
 import styled from 'styled-components';
+import { isMobileOnly } from 'react-device-detect';
 
 import { Button } from '../../Buttons';
 
@@ -37,7 +38,7 @@ const CookieWidgetCard: React.FC<ICookieWidgetCard> = props => {
   } = props;
 
   return (
-    <BasicCardBox elevate="shadow" darkBorder={true}>
+    <BasicCardBox elevate="shadow" darkBorder={true} noBorderRadius={isMobileOnly}>
       <Box margin="1rem">
         <Text weight={600} textAlign="start" margin={{ bottom: 'medium' }} size="large">
           {titleLabel}

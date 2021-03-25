@@ -16,6 +16,7 @@ export interface IBasicCardBox {
   rootNodeRef?: React.Ref<HTMLDivElement>;
   pad?: any;
   margin?: any;
+  noBorderRadius?: boolean;
 }
 
 const BasicCardBox: React.FC<IBasicCardBox> = ({
@@ -29,6 +30,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
   rootNodeRef,
   pad,
   margin,
+  noBorderRadius,
 }) => (
   <StyledBox
     style={style}
@@ -37,7 +39,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
     fill="horizontal"
     pad={pad || 'none'}
     margin={margin || 'none'}
-    round="xsmall"
+    round={noBorderRadius ? false : 'xsmall'}
     elevate={elevate}
     border={
       callToAction
