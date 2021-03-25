@@ -22,6 +22,13 @@ export interface LoginModalProps {
   errorMsg?: string;
   onModalClose: () => void;
   titleLabel: string;
+  subtitleLabel?: string;
+  headerLabel?: string;
+  acceptedTerms?: boolean;
+  checkedTermsValues?: string[];
+  onAcceptTerms?: (ev: any) => void;
+  onCheckedTermsValues?: (ev: any) => void;
+  waitForCheckTerms?: boolean;
   /**
    * text to be displayed when the user selects to login with metamask
    */
@@ -57,6 +64,13 @@ const LoginModal: React.FC<LoginModalProps> = props => {
     success,
     hasError,
     errorMsg,
+    subtitleLabel,
+    headerLabel,
+    acceptedTerms,
+    checkedTermsValues,
+    onAcceptTerms,
+    onCheckedTermsValues,
+    waitForCheckTerms,
   } = props;
 
   const { size } = useViewportSize();
@@ -101,6 +115,8 @@ const LoginModal: React.FC<LoginModalProps> = props => {
         {showModal && !modalState.selectedProvider && (
           <EthProviderListModal
             titleLabel={titleLabel}
+            subtitleLabel={subtitleLabel}
+            headerLabel={headerLabel}
             onProviderClick={handleProviderClick}
             onModalClose={handleProvidersModalClose}
             showSignUp={showSignUpModal}
@@ -110,6 +126,7 @@ const LoginModal: React.FC<LoginModalProps> = props => {
             success={success}
             hasError={hasError}
             errorMsg={errorMsg}
+            acceptedTerms={acceptedTerms}
             validateTokenFn={validateTokenFn}
             providers={[
               {
@@ -125,6 +142,10 @@ const LoginModal: React.FC<LoginModalProps> = props => {
                 description: 'Scan with WalletConnect',
               },
             ]}
+            checkedTermsValues={checkedTermsValues}
+            onAcceptTerms={onAcceptTerms}
+            onCheckedTermsValues={onCheckedTermsValues}
+            waitForCheckTerms={waitForCheckTerms}
           />
         )}
         {showModal && modalState.selectedProvider === METAMASK_PROVIDER && (
