@@ -4,16 +4,7 @@ import DS from '@akashaproject/design-system';
 
 const { LoginCTAWidgetCard } = DS;
 
-export interface ILoginWidgetProps {
-  sdkModules: any;
-  logger: any;
-  globalChannel?: any;
-  layoutConfig: {
-    modalSlotId: string;
-  };
-}
-
-const LoginWidget: React.FC<ILoginWidgetProps> = () => {
+const LoginWidget: React.FC = () => {
   const { t } = useTranslation();
 
   return (

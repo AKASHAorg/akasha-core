@@ -4,7 +4,7 @@ import WidgetErrorCard from './widget-error-card';
 import { I18nextProvider } from 'react-i18next';
 import LoginWidget from './login-widget';
 
-const { ThemeSelector, lightTheme, darkTheme, ViewportSizeProvider } = DS;
+const { ThemeSelector, lightTheme, darkTheme } = DS;
 
 export interface ILoginWidgetProps {
   logger: any;
@@ -43,14 +43,7 @@ export default class LoginWidgetRoot extends PureComponent<ILoginWidgetProps> {
             plain={true}
           >
             <WidgetErrorCard errors={this.state.errors}>
-              <ViewportSizeProvider>
-                <LoginWidget
-                  sdkModules={this.props.sdkModules}
-                  globalChannel={this.props.globalChannel}
-                  logger={this.props.logger}
-                  layoutConfig={this.props.layout.app}
-                />
-              </ViewportSizeProvider>
+              <LoginWidget />
             </WidgetErrorCard>
           </ThemeSelector>
         </Suspense>
