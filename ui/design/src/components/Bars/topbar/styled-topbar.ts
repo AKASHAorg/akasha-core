@@ -84,12 +84,12 @@ const StyledAccordionPanel = styled(AccordionPanel)<{ isMobile?: boolean }>`
   }}
 `;
 
-const IconDiv = styled(Box)<{ isActive: boolean }>`
+const IconDiv = styled(Box)<{ isActive: boolean; isMobile?: boolean }>`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: ${props => (props.isMobile ? '2rem' : '1.5rem')};
+  height: ${props => (props.isMobile ? '2rem' : '1.5rem')};
   ${props => {
     if (props.isActive) {
       return css`
