@@ -144,8 +144,10 @@ storiesOf('Cards/Widget Cards', module)
         )}
         privacyUrlLabel={text('Privacy Url Label', 'Privacy Policy')}
         privacyUrl={text('Privacy Url', 'https://ethereum.world/privacy-policy')}
-        acceptLabel={text('Accept Label', 'Accept')}
-        onClick={() => action('clicked button')('Synthetic Event')}
+        onlyEssentialLabel={text('Only essential', 'Only essential')}
+        acceptAllLabel={text('Accept Label', 'Accept all')}
+        onClickOnlyEssential={() => action('clicked button')('Synthetic Event')}
+        onClickAcceptAll={() => action('clicked button')('Synthetic Event')}
       />
     </Box>
   ));

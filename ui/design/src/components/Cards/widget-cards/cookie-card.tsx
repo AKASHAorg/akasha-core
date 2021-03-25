@@ -11,8 +11,10 @@ export interface ICookieWidgetCard {
   contentLabel: string;
   privacyUrl: string;
   privacyUrlLabel: string;
-  acceptLabel: string;
-  onClick: () => void;
+  onlyEssentialLabel: string;
+  acceptAllLabel: string;
+  onClickAcceptAll: () => void;
+  onClickOnlyEssential: () => void;
 }
 
 const CookieCardButton = styled(Button)`
@@ -23,7 +25,16 @@ const CookieCardButton = styled(Button)`
 `;
 
 const CookieWidgetCard: React.FC<ICookieWidgetCard> = props => {
-  const { titleLabel, contentLabel, acceptLabel, privacyUrl, privacyUrlLabel, onClick } = props;
+  const {
+    titleLabel,
+    contentLabel,
+    onlyEssentialLabel,
+    acceptAllLabel,
+    privacyUrl,
+    privacyUrlLabel,
+    onClickAcceptAll,
+    onClickOnlyEssential,
+  } = props;
 
   return (
     <BasicCardBox elevate="shadow" darkBorder={true}>
@@ -46,13 +57,18 @@ const CookieWidgetCard: React.FC<ICookieWidgetCard> = props => {
             {privacyUrlLabel}
           </Text>
         </Text>
-        <Box width="30%" align="center">
+        <Box width="100%" direction="row" align="center">
           <CookieCardButton
-            fill={true}
+            size="large"
+            label={onlyEssentialLabel}
+            margin={{ right: '0.5rem' }}
+            onClick={onClickOnlyEssential}
+          />
+          <CookieCardButton
             size="large"
             primary={true}
-            label={acceptLabel}
-            onClick={onClick}
+            label={acceptAllLabel}
+            onClick={onClickAcceptAll}
           />
         </Box>
       </Box>
