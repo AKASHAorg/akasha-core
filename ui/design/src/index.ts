@@ -67,6 +67,7 @@ import {
   TagSearchCard,
   FilterCard,
   SwitchCard,
+  NotificationsCard,
 } from './components/Cards';
 
 import { EditorBox, EditorMeter, editorDefaultValue } from './components/Editor';
@@ -215,6 +216,7 @@ const exported = {
   ModalContainer,
   ModalRenderer,
   Notification,
+  NotificationsCard,
   Spinner,
   notify,
   HorizontalDivider,

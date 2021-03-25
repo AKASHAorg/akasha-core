@@ -23,6 +23,8 @@ export default function authApi(channel) {
         getMessages: extractedServices[AUTH_SERVICE]('getMessages'),
         markMessageAsRead: extractedServices[AUTH_SERVICE]('markMessageAsRead'),
         validateInvite: extractedServices[AUTH_SERVICE]('validateInvite'),
+        hasNewNotifications: extractedServices[AUTH_SERVICE]('hasNewNotifications'),
+        deleteMessage: extractedServices[AUTH_SERVICE]('deleteMessage'),
       },
     },
   };
