@@ -42,14 +42,14 @@ const MobileSearchBar: React.FC<ISearchBar> = props => {
       {inputValue ? (
         <Icon
           type="close"
-          size="xs"
+          size="md"
           onClick={() => {
             setInputValue('');
           }}
           primaryColor={true}
         />
       ) : (
-        <Icon type="search" size="xs" onClick={() => onSearch(inputValue)} />
+        <Icon type="search" size="md" onClick={() => onSearch(inputValue)} />
       )}
     </Box>
   );

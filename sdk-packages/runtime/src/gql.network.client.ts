@@ -24,7 +24,7 @@ export const makeOperation = (operation: GqlOperation) => {
 };
 const stash = new Stash({
   max: 640,
-  maxAge: 1000 * 30, // 30s
+  maxAge: 1000 * 60 * 5, // 5min
 });
 export const runGQL = async (operation: GqlOperation) => {
   const opHash = hash(operation, { algorithm: 'sha1', unorderedObjects: false });

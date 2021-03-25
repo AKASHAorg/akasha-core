@@ -12,7 +12,7 @@ import { ITag } from '@akashaproject/design-system/lib/components/Cards/widget-c
 
 const { Box, ReportModal, ToastProvider, ModalRenderer, TagProfileCard, Helmet } = DS;
 
-interface IPostPage {
+interface ITagFeedPage {
   loggedProfileData?: any;
   loginState: UseLoginState;
   flagged: string;
@@ -23,7 +23,7 @@ interface IPostPage {
   showLoginModal: () => void;
 }
 
-const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
+const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const {
     sdkModules,
     globalChannel,
@@ -250,4 +250,4 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   );
 };
 
-export default PostPage;
+export default TagFeedPage;

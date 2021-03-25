@@ -14,6 +14,8 @@ export interface IBasicCardBox {
   darkBorder?: boolean;
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
+  pad?: any;
+  margin?: any;
 }
 
 const BasicCardBox: React.FC<IBasicCardBox> = ({
@@ -25,13 +27,16 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
   darkBorder,
   style,
   rootNodeRef,
+  pad,
+  margin,
 }) => (
   <StyledBox
     style={style}
     direction="column"
     elevation="shadow"
     fill="horizontal"
-    pad="none"
+    pad={pad || 'none'}
+    margin={margin || 'none'}
     round="xsmall"
     elevate={elevate}
     border={
