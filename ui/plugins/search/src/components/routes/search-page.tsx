@@ -436,8 +436,8 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                   subscribedTags={tagSubscriptionState}
                   subscribeLabel={t('Subscribe')}
                   unsubscribeLabel={t('Unsubscribe')}
-                  handleSubscribeTag={() => handleTagSubscribe(tag)}
-                  handleUnsubscribeTag={() => handleTagUnsubscribe(tag)}
+                  handleSubscribeTag={handleTagSubscribe}
+                  handleUnsubscribeTag={handleTagUnsubscribe}
                 />
               </Box>
             ))}
