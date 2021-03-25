@@ -9,9 +9,9 @@ import { Icon } from '../../Icon';
 import { MainAreaCardBox } from '../common/basic-card-box';
 
 export interface ISwitchCard {
-  count: number;
+  count?: number;
   hasIcon?: boolean;
-  countLabel: string;
+  countLabel?: string;
   activeButton: string;
   buttonLabels: string[];
   buttonValues: string[];
@@ -58,12 +58,6 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
 
   const length = buttonLabels.length;
 
-  const handleIconClick = () => {
-    if (onIconClick) {
-      onIconClick();
-    }
-  };
-
   const handleTabClick = (value: string) => () => {
     onTabClick(value);
   };
@@ -82,11 +76,11 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
                     color="secondaryText"
                     primaryColor={true}
                     clickable={true}
-                    onClick={handleIconClick}
+                    onClick={onIconClick}
                   />
                 </Box>
               )}
-              <Text size="large">{`${count} ${countLabel}`}</Text>
+              {count && <Text size="large">{`${count} ${countLabel}`}</Text>}
             </Box>
             <Box
               direction="row"
