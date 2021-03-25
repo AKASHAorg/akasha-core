@@ -16,6 +16,7 @@ export interface ProfileAvatarButtonProps {
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   ethAddress: string;
   bold?: boolean;
+  active?: boolean;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
 }
@@ -31,6 +32,7 @@ const ProfileAvatarButton = React.forwardRef((props: ProfileAvatarButtonProps, r
     onClickAvatar,
     ethAddress,
     bold,
+    active,
     onMouseEnter,
     onMouseLeave,
   } = props;
@@ -53,7 +55,7 @@ const ProfileAvatarButton = React.forwardRef((props: ProfileAvatarButtonProps, r
           ref={ref}
           bold={bold}
         />
-        <ButtonInfo>{info}</ButtonInfo>
+        <ButtonInfo active={active}>{info}</ButtonInfo>
       </Box>
     </StyledWrapperBox>
   );

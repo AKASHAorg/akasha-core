@@ -36,6 +36,7 @@ export interface IProfileData {
 export interface IProfileWidgetCard {
   className?: string;
   loggedEthAddress?: string | null;
+  onClickProfile?: React.EventHandler<React.SyntheticEvent>;
   onClickFollowers?: React.EventHandler<React.SyntheticEvent>;
   onClickFollowing?: React.EventHandler<React.SyntheticEvent>;
   onClickPosts?: React.EventHandler<React.SyntheticEvent>;

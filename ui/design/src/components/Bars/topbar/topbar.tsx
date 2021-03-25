@@ -26,7 +26,7 @@ export interface ITopbarProps {
   // data
   loggedProfileData?: Partial<IProfileData>;
   versionURL?: string;
-  notifications?: any;
+  hasNewNotifications?: boolean;
   quickAccessItems?: IMenuItem[];
   searchAreaItem?: IMenuItem;
   otherAreaItems?: IMenuItem[];
@@ -80,7 +80,7 @@ const Topbar = (props: ITopbarProps) => {
     onSignUpClick,
     onFeedbackClick,
     onLogout,
-    notifications,
+    hasNewNotifications,
   } = props;
 
   const [inputValue, setInputValue] = React.useState('');
@@ -99,6 +99,7 @@ const Topbar = (props: ITopbarProps) => {
   const feedbackMenuRef: React.RefObject<any> = React.useRef(null);
 
   const mobileSignedOutView = isMobileOnly && !loggedProfileData?.ethAddress;
+  const iconSize = isMobileOnly ? 'md' : 'sm';
 
   React.useEffect(() => {
     const legal = otherAreaItems?.find(menuItem => menuItem.label === 'Legal');
@@ -183,15 +184,16 @@ const Topbar = (props: ITopbarProps) => {
         <IconDiv
           onClick={onClickPluginButton(menuItem)}
           isActive={currentLocation?.includes(menuItem.route) || false}
+          isMobile={isMobileOnly}
         >
           <Stack anchor="top-right">
             <Icon
               type={menuItem.logo?.value || 'app'}
-              size="sm"
+              size={iconSize}
               clickable={true}
               accentColor={currentLocation?.includes(menuItem.route) || false}
             />
-            {notifications?.length && (
+            {hasNewNotifications && (
               <Box background="errorText" width="9px" height="9px" round={true} />
             )}
           </Stack>
@@ -202,10 +204,11 @@ const Topbar = (props: ITopbarProps) => {
       <IconDiv
         onClick={onClickPluginButton(menuItem)}
         isActive={currentLocation?.includes(menuItem.route) || false}
+        isMobile={isMobileOnly}
       >
         <Icon
           type={menuItem.logo?.value || 'app'}
-          size="sm"
+          size={iconSize}
           clickable={true}
           accentColor={currentLocation?.includes(menuItem.route) || false}
         />
@@ -250,7 +253,7 @@ const Topbar = (props: ITopbarProps) => {
         return (
           <Icon
             type="search"
-            size="xs"
+            size={iconSize}
             onClick={() => {
               setMobileSearchOpen(true);
             }}
@@ -331,14 +334,14 @@ const Topbar = (props: ITopbarProps) => {
             </Box>
           )}
           {!loggedProfileData?.ethAddress && (
-            <IconDiv isActive={menuDropOpen} onClick={handleMenuClick}>
+            <IconDiv isActive={menuDropOpen} onClick={handleMenuClick} isMobile={isMobileOnly}>
               <MenuIcon
                 rotate={isMobileOnly ? 90 : 0}
                 ref={feedbackMenuRef}
                 type={isMobileOnly ? 'moreDark' : 'arrowDown'}
                 clickable={true}
                 accentColor={menuDropOpen}
-                size="sm"
+                size={iconSize}
               />
             </IconDiv>
           )}

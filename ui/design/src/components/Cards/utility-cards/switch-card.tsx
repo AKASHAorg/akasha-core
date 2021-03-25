@@ -6,12 +6,13 @@ import styled from 'styled-components';
 import { Button } from '../../Buttons';
 import { Icon } from '../../Icon';
 
-import { MainAreaCardBox } from '../common/basic-card-box';
+import { BasicCardBox } from '../common/basic-card-box';
 
 export interface ISwitchCard {
-  count: number;
+  count?: number;
+  loggedEthAddress: string | null;
   hasIcon?: boolean;
-  countLabel: string;
+  countLabel?: string;
   activeButton: string;
   buttonLabels: string[];
   buttonValues: string[];
@@ -41,9 +42,17 @@ const StyledButton = styled(SwitchCardButton)<IStyledButtonProps>`
     props.first ? '0.25rem 0rem 0rem 0.25rem' : props.last ? '0rem 0.25rem 0.25rem 0rem' : '0'};
 `;
 
+const StickyBox = styled(Box)<{ userSignedIn: boolean }>`
+  position: sticky;
+  top: ${props => (props.userSignedIn ? '3rem' : '6rem')};
+  background-color: ${props => props.theme.colors.background};
+  z-index: 999;
+`;
+
 const SwitchCard: React.FC<ISwitchCard> = props => {
   const {
     count,
+    loggedEthAddress,
     activeButton,
     hasIcon = false,
     countLabel,
@@ -52,26 +61,19 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
     hasMobileDesign,
     onIconClick,
     onTabClick,
-    wrapperMarginBottom = '1rem',
     buttonsWrapperWidth,
   } = props;
 
   const length = buttonLabels.length;
-
-  const handleIconClick = () => {
-    if (onIconClick) {
-      onIconClick();
-    }
-  };
 
   const handleTabClick = (value: string) => () => {
     onTabClick(value);
   };
 
   return (
-    <Box width="100%" margin={{ bottom: wrapperMarginBottom }}>
+    <>
       {!(isMobileOnly && hasMobileDesign) && (
-        <MainAreaCardBox>
+        <BasicCardBox margin={{ bottom: 'medium' }}>
           <Box direction="row" pad="1rem" justify="between" align="center">
             <Box direction="row">
               {hasIcon && (
@@ -82,11 +84,11 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
                     color="secondaryText"
                     primaryColor={true}
                     clickable={true}
-                    onClick={handleIconClick}
+                    onClick={onIconClick}
                   />
                 </Box>
               )}
-              <Text size="large">{`${count} ${countLabel}`}</Text>
+              {count && <Text size="large">{`${count} ${countLabel}`}</Text>}
             </Box>
             <Box
               direction="row"
@@ -114,10 +116,10 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
               ))}
             </Box>
           </Box>
-        </MainAreaCardBox>
+        </BasicCardBox>
       )}
       {isMobileOnly && hasMobileDesign && (
-        <Box direction="row">
+        <StickyBox userSignedIn={!!loggedEthAddress} direction="row" margin={{ bottom: 'medium' }}>
           {buttonLabels.map((el, idx) => (
             <Box
               key={idx}
@@ -141,9 +143,9 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
               </Text>
             </Box>
           ))}
-        </Box>
+        </StickyBox>
       )}
-    </Box>
+    </>
   );
 };
 
