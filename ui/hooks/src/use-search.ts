@@ -129,9 +129,7 @@ export const useSearch = (props: UseSearchProps): [UseSearchState, UseSearchActi
         });
 
         // get tags data
-        const completeTags = searchResp.data?.globalSearch?.tags?.map(
-          (tag: { id: string; name: string }) => tag.name,
-        );
+        const completeTags = searchResp.data?.globalSearch?.tags;
 
         setSearchResultsState({
           isFetching: false,

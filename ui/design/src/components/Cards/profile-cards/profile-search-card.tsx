@@ -22,6 +22,7 @@ const ProfileSearchCard: React.FC<IProfileWidgetCard> = props => {
     followLabel,
     unfollowLabel,
     postsLabel,
+    onClickProfile,
   } = props;
 
   const postsTitle = `${profileData.totalPosts || 0} ${postsLabel}`;
@@ -30,7 +31,7 @@ const ProfileSearchCard: React.FC<IProfileWidgetCard> = props => {
     <MainAreaCardBox className={className}>
       <Box direction="column" margin="small">
         <Box height="70px" direction="row" justify="between">
-          <Box direction="row" align="center">
+          <Box direction="row" align="center" onClick={onClickProfile}>
             <SearchProfileAvatarDiv>
               <Avatar
                 border="lg"

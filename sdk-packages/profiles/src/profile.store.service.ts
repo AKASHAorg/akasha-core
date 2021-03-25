@@ -347,7 +347,7 @@ const service: AkashaService = (invoke, log) => {
       globalSearch(keyword: $keyword){
         posts{id}
         profiles{id}
-        tags{id name}
+        tags{id name totalPosts}
         comments{id}
       }
     }`;

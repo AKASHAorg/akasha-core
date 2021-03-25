@@ -153,7 +153,16 @@ const query = {
     return Object.assign({}, returned, { results: posts });
   },
   globalSearch: async (_source, { keyword }, { dataSources }) => {
-    return dataSources.postsAPI.globalSearch(keyword);
+    const results = await dataSources.postsAPI.globalSearch(keyword);
+    results.tags = await (async () => {
+      const res = [];
+      for (const rec of results.tags) {
+        const tag = await dataSources.tagsAPI.getTag(rec.name);
+        res.push(Object.assign({}, rec, { totalPosts: tag?.posts?.length || 0 }));
+      }
+      return res;
+    })();
+    return results;
   },
 };
 
