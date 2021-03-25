@@ -68,6 +68,11 @@ const wss = route.all('/ws/userauth', ctx => {
                   if (!r.signUpToken) {
                     return reject(new Error('Missing ethereum.world invite token'));
                   }
+                  if (!r.acceptedTermsAndPrivacy) {
+                    return reject(
+                      new Error('Terms of Service and Privacy Policy were not accepted'),
+                    );
+                  }
                   const exists = await db.findByID(dbId, 'Invites', r.signUpToken);
                   if (!exists) {
                     return reject(new Error('The invite token is not valid.'));
@@ -81,6 +86,11 @@ const wss = route.all('/ws/userauth', ctx => {
                     addressChallenge,
                     r.addressChallenge,
                   );
+                  currentUser.metaData.push({
+                    provider: 'ewa.user.consent',
+                    property: 'acceptedTermsAndPrivacy',
+                    value: r.acceptedTermsAndPrivacy,
+                  });
                   Object.assign(currentUser, { ethAddress: utils.getAddress(recoveredAddress) });
                   if (
                     !r.ethAddress ||
