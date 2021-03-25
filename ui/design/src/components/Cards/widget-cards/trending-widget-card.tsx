@@ -97,6 +97,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                   subtitle={`Used in ${tag.totalPosts} posts`}
                   labelSize="large"
                   gap="xxsmall"
+                  maxWidth="10rem"
                 />
                 <Box width="7rem">
                   <DuplexButton

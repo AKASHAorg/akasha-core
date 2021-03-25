@@ -9,6 +9,17 @@ export interface LoginModalProps {
   slotId: string;
   onLogin: (providerId: number) => void;
   showModal: boolean;
+  showSignUpModal?: {
+    inviteToken: string | null;
+    status: boolean;
+  };
+  onInputTokenChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
+  validateTokenFn?: (ev: any) => void;
+  submitted?: boolean;
+  submitting?: boolean;
+  success?: boolean;
+  hasError?: boolean;
+  errorMsg?: string;
   onModalClose: () => void;
   titleLabel: string;
   /**
@@ -33,11 +44,19 @@ const ETH_PROVIDERS = {
 const LoginModal: React.FC<LoginModalProps> = props => {
   const {
     showModal,
+    showSignUpModal,
     onModalClose,
     onLogin,
     metamaskModalHeadline,
     metamaskModalMessage,
     titleLabel,
+    onInputTokenChange,
+    validateTokenFn,
+    submitted,
+    submitting,
+    success,
+    hasError,
+    errorMsg,
   } = props;
 
   const { size } = useViewportSize();
@@ -84,6 +103,14 @@ const LoginModal: React.FC<LoginModalProps> = props => {
             titleLabel={titleLabel}
             onProviderClick={handleProviderClick}
             onModalClose={handleProvidersModalClose}
+            showSignUp={showSignUpModal}
+            onChange={onInputTokenChange}
+            submitted={submitted}
+            submitting={submitting}
+            success={success}
+            hasError={hasError}
+            errorMsg={errorMsg}
+            validateTokenFn={validateTokenFn}
             providers={[
               {
                 id: METAMASK_PROVIDER,

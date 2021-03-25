@@ -4,6 +4,7 @@ import { moduleName as authModule } from '@akashaproject/sdk-auth/lib/constants'
 import { moduleName as profilesModule } from '@akashaproject/sdk-profiles/lib/constants';
 import { moduleName as commonModule } from '@akashaproject/sdk-common/lib/constants';
 import { rootRoute } from './routes';
+import { Widget as TrendingWidget } from './trending-widget';
 
 /**
  * All the plugins must export an object like this:
@@ -28,6 +29,9 @@ export const application: Application = {
   },
   loadingFn: (): Promise<any> => import('./components'),
   name: 'ui-plugin-notifications',
+  widgets: {
+    [rootRoute]: [TrendingWidget],
+  },
   sdkModules: [{ module: commonModule }, { module: authModule }, { module: profilesModule }],
   title: 'Notifications',
   logo: { type: LogoTypeSource.ICON, value: 'notifications' },

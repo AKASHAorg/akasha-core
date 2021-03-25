@@ -62,6 +62,10 @@ const config = {
           ? 'https://api.akasha.network/graphql'
           : 'https://api.ethereum.world/graphql',
       NODE_ENV: process.env.NODE_ENV || 'development',
+      INVITATION_ENDPOINT:
+        process.env.NODE_ENV === 'production'
+          ? 'https://api.ethereum.world/api/validate-token'
+          : 'https://api.akasha.network/api/validate-token',
       AUTH_ENDPOINT:
         process.env.NODE_ENV === 'production'
           ? 'wss://api.akasha.network/ws/userauth'

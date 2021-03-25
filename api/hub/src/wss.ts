@@ -60,11 +60,23 @@ const wss = route.all('/ws/userauth', ctx => {
                   value: Buffer.from(challenge).toJSON(),
                 }),
               );
-              emitter.on('challenge', (r: any) => {
+              emitter.on('challenge', async (r: any) => {
                 if (addressChallenge) {
                   if (!r.addressChallenge) {
-                    throw new Error('missing ethereum address signature challenge');
+                    return reject(new Error('Missing ethereum address signature challenge'));
                   }
+                  if (!r.signUpToken) {
+                    return reject(new Error('Missing ethereum.world invite token'));
+                  }
+                  const exists = await db.findByID(dbId, 'Invites', r.signUpToken);
+                  if (!exists) {
+                    return reject(new Error('The invite token is not valid.'));
+                  }
+                  if (exists.used) {
+                    return reject(new Error('The invite token was already used.'));
+                  }
+                  exists.used = true;
+                  exists.updateDate = new Date().getTime();
                   const recoveredAddress = utils.verifyMessage(
                     addressChallenge,
                     r.addressChallenge,
@@ -99,6 +111,7 @@ const wss = route.all('/ws/userauth', ctx => {
                     }
                     return reject(err);
                   }
+                  await db.save(dbId, 'Invites', [exists]);
                 }
                 resolve(Buffer.from(r.sig));
               });

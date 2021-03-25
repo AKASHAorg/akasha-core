@@ -5,7 +5,8 @@
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
-    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
+    "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)"
   ],
   "license": "MIT",
   "repository": {
@@ -40,6 +41,7 @@
     "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/design-system": "*",
     "@akashaproject/sdk-auth": "*",
+    "@akashaproject/sdk-posts": "*",
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/sdk-common": "*",
     "@types/i18next": "13.0.0",

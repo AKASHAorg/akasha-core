@@ -38,6 +38,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   let db: Database;
   let channel;
   let sessKey;
+  let inboxWatcher;
   let currentUser: { pubKey: string; ethAddress: string; isNewUser?: boolean };
   let tokenGenerator: () => Promise<UserAuth>;
   const waitForAuth = 'waitForAuth';
@@ -148,6 +149,19 @@ const service: AkashaService = (invoke, log, globalChannel) => {
 
     // @Todo: on error try to setupMail
     await hubUser.setupMailbox();
+    const mailboxID = await hubUser.getMailboxID();
+    inboxWatcher = await hubUser.watchInbox(mailboxID, ev => {
+      if (ev?.message?.body && ev?.message?.readAt === 0) {
+        globalChannel.next({
+          data: true,
+          channelInfo: {
+            servicePath: services[AUTH_SERVICE],
+            method: 'hasNewNotifications',
+            args: null,
+          },
+        });
+      }
+    });
     sessionStorage.setItem(providerKey, currentProvider.toString());
     sessionStorage.setItem(sessKey, identity.toString());
     sessionStorage.setItem(currentUserKey, JSON.stringify(currentUser));
@@ -274,6 +288,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     identity = null;
     hubClient = null;
     hubUser = null;
+    inboxWatcher = null;
     buckClient = null;
     auth = null;
     db = null;
@@ -336,19 +351,61 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     return { body, from, readAt, createdAt, id };
   };
   const getMessages = async (args: InboxListOptions) => {
+    const limit = args?.limit || 50;
     const messages = await hubUser.listInboxMessages(
-      Object.assign({}, { status: Status.UNREAD }, args),
+      Object.assign({}, { status: Status.UNREAD, limit: limit }, args),
     );
+    const readMessagesLimit = limit - messages.length;
+    const readMessages =
+      readMessagesLimit > 0
+        ? await hubUser.listInboxMessages(
+            Object.assign({}, { status: Status.ALL, limit: limit }, args),
+          )
+        : [];
+    const combinedMessages = messages
+      .concat(readMessages)
+      .sort((a, b) => b.createdAt - a.createdAt);
     const inbox = [];
-    for (const message of messages) {
-      inbox.push(await decryptMessage(message));
+    const uniqueMessages = new Map();
+    for (const messageObj of combinedMessages) {
+      uniqueMessages.set(messageObj.id, messageObj);
     }
+    for (const message of uniqueMessages.values()) {
+      const decryptedObj = await decryptMessage(message);
+      inbox.push(Object.assign({}, decryptedObj, { read: decryptedObj.readAt > 0 }));
+    }
+    uniqueMessages.clear();
     return inbox.slice();
+  };
+
+  const hasNewNotifications = async () => {
+    const limit = 1;
+    const messages = await hubUser.listInboxMessages({ status: Status.UNREAD, limit: limit });
+    return messages.length > 0;
   };
   const markMessageAsRead = async (messageId: string) => {
     await hubUser.readInboxMessage(messageId);
+    return true;
+  };
+
+  const deleteMessage = async (messageId: string) => {
     await hubUser.deleteInboxMessage(messageId);
     return true;
+  };
+
+  const validateInvite = async (inviteCode: string) => {
+    const response = await fetch(`${process.env.INVITATION_ENDPOINT}/${inviteCode}`, {
+      method: 'POST',
+    });
+    if (response.ok) {
+      localStorage.setItem('@signUpToken', inviteCode);
+      return true;
+    }
+    if (response.status === 403) {
+      throw new Error('Sorry, this code was already taken. Please try another one.');
+    }
+
+    throw new Error('Sorry, this code is not valid. Please try again.');
   };
   return {
     signIn,
@@ -360,6 +417,9 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     getCurrentUser,
     getMessages,
     markMessageAsRead,
+    hasNewNotifications,
+    deleteMessage,
+    validateInvite,
   };
 };
 
