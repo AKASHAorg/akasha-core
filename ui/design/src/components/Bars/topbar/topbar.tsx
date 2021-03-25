@@ -12,61 +12,75 @@ import {
   StyledSearchContainer,
   StyledDrop,
   StyledDiv,
+  BrandIcon,
+  MenuIcon,
+  VersionButton,
+  IconDiv,
 } from './styled-topbar';
-import styled from 'styled-components';
+import { isMobileOnly } from 'react-device-detect';
 import { Button } from '../../Buttons';
+import { IProfileData } from '../../Cards/profile-cards/profile-widget-card';
+import { ProfileMenu } from './profile-menu';
 
 export interface ITopbarProps {
   // data
-  avatarImage?: string;
-  ethAddress: string | null;
+  loggedProfileData?: Partial<IProfileData>;
+  versionURL?: string;
+  hasNewNotifications?: boolean;
+  quickAccessItems?: IMenuItem[];
+  searchAreaItem?: IMenuItem;
+  otherAreaItems?: IMenuItem[];
+  currentLocation?: string;
+  // labels
   brandLabel: string;
+  versionLabel?: string;
   signInLabel?: string;
   signUpLabel?: string;
   signOutLabel?: string;
   searchBarLabel?: string;
-  notifications?: any;
-  quickAccessItems: IMenuItem[] | null;
-  searchAreaItem?: IMenuItem;
+  legalLabel?: string;
+  feedbackLabel?: string;
+  feedbackInfoLabel?: string;
+  legalCopyRightLabel?: string;
   // handlers
   onNavigation: (path: string) => void;
   onSidebarToggle?: (visibility: boolean) => void;
   onSearch: (inputValue: string) => void;
+  onFeedbackClick: () => void;
   // external css
   className?: string;
-  // viewport size
-  size?: string;
   onLoginClick: () => void;
+  onSignUpClick: () => void;
   onLogout: any;
 }
 
-const BrandIcon = styled(Icon)`
-  &:hover {
-    & * {
-      stroke: none;
-    }
-  }
-`;
-
 const Topbar = (props: ITopbarProps) => {
   const {
-    avatarImage,
+    loggedProfileData,
+    versionURL,
+    currentLocation,
     brandLabel,
+    versionLabel,
     signInLabel,
     signUpLabel,
     signOutLabel,
     searchBarLabel,
+    legalLabel,
+    feedbackLabel,
+    feedbackInfoLabel,
+    legalCopyRightLabel,
     className,
     quickAccessItems,
     searchAreaItem,
+    otherAreaItems,
     onSearch,
     onNavigation,
     // onSidebarToggle,
-    ethAddress,
-    size,
     onLoginClick,
+    onSignUpClick,
+    onFeedbackClick,
     onLogout,
-    notifications,
+    hasNewNotifications,
   } = props;
 
   const [inputValue, setInputValue] = React.useState('');
@@ -76,10 +90,22 @@ const Topbar = (props: ITopbarProps) => {
   const [avatarDropOpen, setAvatarDropOpen] = React.useState(false);
   const [dropItems, setDropItems] = React.useState<IMenuItem[]>([]);
   const [mobileSearchOpen, setMobileSearchOpen] = React.useState(false);
+  const [menuDropOpen, setMenuDropOpen] = React.useState(false);
+  const [legalMenu, setLegalMenu] = React.useState<IMenuItem | null>(null);
 
   const [currentDropItem, setCurrentDropItem] = React.useState<IMenuItem | null>(null);
 
   const menuItemRefs: React.RefObject<any> = React.useRef([]);
+  const feedbackMenuRef: React.RefObject<any> = React.useRef(null);
+
+  const mobileSignedOutView = isMobileOnly && !loggedProfileData?.ethAddress;
+
+  React.useEffect(() => {
+    const legal = otherAreaItems?.find(menuItem => menuItem.label === 'Legal');
+    if (legal && legal.subRoutes?.length) {
+      setLegalMenu(legal);
+    }
+  }, [otherAreaItems]);
 
   const handleNavigation = (menuItem: IMenuItem) => () => {
     if (onNavigation) {
@@ -87,6 +113,10 @@ const Topbar = (props: ITopbarProps) => {
     }
     setDropOpen(false);
     setAvatarDropOpen(false);
+  };
+
+  const handleMenuClick = () => {
+    setMenuDropOpen(true);
   };
 
   // const handleSidebarVisibility = () => {
@@ -147,65 +177,64 @@ const Topbar = (props: ITopbarProps) => {
     </StyledDrop>
   );
 
-  const renderAvatarDrop = () => (
-    <StyledDrop
-      target={currentDropItem && menuItemRefs.current[currentDropItem?.index]}
-      onClickOutside={() => {
-        setAvatarDropOpen(false);
-      }}
-      onEsc={() => {
-        setAvatarDropOpen(false);
-      }}
-      align={{ top: 'bottom', right: 'right' }}
-    >
-      <Box
-        round="xxsmall"
-        pad="xsmall"
-        align="center"
-        justify="start"
-        gap="xsmall"
-        border={{ style: 'solid', size: '1px', color: 'border', side: 'all' }}
-      >
-        {dropItems.map((menuItem: IMenuItem, index: number) => (
-          <Box fill="horizontal" onClick={handleNavigation(menuItem)} key={index}>
-            <StyledText>{menuItem.label}</StyledText>
-          </Box>
-        ))}
-        {ethAddress && (
-          <Box fill="horizontal" justify="start" direction="row" onClick={onLogout}>
-            <StyledText>{signOutLabel}</StyledText>
-          </Box>
-        )}
-      </Box>
-    </StyledDrop>
-  );
-
   const renderPluginIcon = (menuItem: IMenuItem) => {
     if (menuItem.label === 'Notifications') {
       return (
-        <Stack anchor="top-right">
-          <Icon type={menuItem.logo?.value || 'app'} size="sm" clickable={true} />
-          {notifications?.length && (
-            <Box background="#FF5050" width="9px" height="9px" round={true} />
-          )}
-        </Stack>
+        <IconDiv
+          onClick={onClickPluginButton(menuItem)}
+          isActive={currentLocation?.includes(menuItem.route) || false}
+        >
+          <Stack anchor="top-right">
+            <Icon
+              type={menuItem.logo?.value || 'app'}
+              size="sm"
+              clickable={true}
+              accentColor={currentLocation?.includes(menuItem.route) || false}
+            />
+            {hasNewNotifications && (
+              <Box background="errorText" width="9px" height="9px" round={true} />
+            )}
+          </Stack>
+        </IconDiv>
       );
     }
-    return <Icon type={menuItem.logo?.value || 'app'} size="sm" clickable={true} />;
+    return (
+      <IconDiv
+        onClick={onClickPluginButton(menuItem)}
+        isActive={currentLocation?.includes(menuItem.route) || false}
+      >
+        <Icon
+          type={menuItem.logo?.value || 'app'}
+          size="sm"
+          clickable={true}
+          accentColor={currentLocation?.includes(menuItem.route) || false}
+        />
+      </IconDiv>
+    );
+  };
+
+  const checkActiveAvatar = (menuItem: IMenuItem) => {
+    if (menuItem.subRoutes?.length && currentLocation?.includes(menuItem?.subRoutes[0]?.route)) {
+      return true;
+    }
+    if (loggedProfileData?.pubKey && currentLocation?.includes(loggedProfileData?.pubKey)) {
+      return true;
+    }
+    return false;
   };
 
   const renderPluginButton = (menuItem: IMenuItem, index: number) => (
     <StyledDiv
       key={index}
-      onClick={onClickPluginButton(menuItem)}
       ref={ref => {
         menuItemRefs.current[menuItem.index] = ref;
       }}
     >
       {menuItem.logo?.type === LogoTypeSource.AVATAR ? (
         <Avatar
-          ethAddress={ethAddress}
-          src={avatarImage}
+          active={checkActiveAvatar(menuItem)}
+          ethAddress={loggedProfileData?.ethAddress}
+          src={loggedProfileData?.avatar}
           size="xs"
           onClick={onClickAvatarButton(menuItem)}
         />
@@ -217,7 +246,7 @@ const Topbar = (props: ITopbarProps) => {
 
   const renderSearchArea = () => {
     if (searchAreaItem) {
-      if (size === 'small') {
+      if (isMobileOnly) {
         return (
           <Icon
             type="search"
@@ -243,7 +272,7 @@ const Topbar = (props: ITopbarProps) => {
   };
 
   const renderContent = () => {
-    if (size === 'small' && mobileSearchOpen) {
+    if (isMobileOnly && mobileSearchOpen) {
       return (
         <MobileSearchBar
           inputValue={inputValue}
@@ -255,57 +284,116 @@ const Topbar = (props: ITopbarProps) => {
       );
     }
     return (
-      <>
-        <Box
-          direction="row"
-          gap="small"
-          align="center"
-          pad={{ right: 'medium' }}
-          onClick={() => {
-            onNavigation('/');
-          }}
-          flex={{ shrink: 0 }}
-        >
-          <BrandIcon type="ethereumWorldLogo" clickable={true} />
-          {size !== 'small' && <StyledText size="large">{brandLabel}</StyledText>}
+      <Box direction="row" align="center" justify="between" fill="horizontal" height="3rem">
+        <Box direction="row" align="center" flex={{ shrink: 0 }} gap="small">
+          <Box
+            direction="row"
+            gap="small"
+            align="center"
+            onClick={() => {
+              onNavigation('/');
+            }}
+          >
+            <BrandIcon type="ethereumWorldLogo" clickable={true} />
+            {!isMobileOnly && (
+              <StyledText unselectable="on" size="large">
+                {brandLabel}
+              </StyledText>
+            )}
+          </Box>
+          {versionURL && (
+            <VersionButton
+              href={versionURL}
+              target="_blank"
+              color="errorText"
+              label={versionLabel}
+              primary={true}
+              size="small"
+            />
+          )}
         </Box>
-
         <Box
           direction="row"
           align="center"
           gap="small"
-          pad={size === 'small' ? 'none' : { horizontal: 'medium' }}
+          pad={isMobileOnly ? 'none' : { horizontal: 'medium' }}
           fill="horizontal"
           justify="end"
         >
           {renderSearchArea()}
-          {quickAccessItems && quickAccessItems.map(renderPluginButton)}
-          {!ethAddress && (
+          {loggedProfileData?.ethAddress &&
+            quickAccessItems &&
+            quickAccessItems.map(renderPluginButton)}
+          {!isMobileOnly && !loggedProfileData?.ethAddress && (
             <Box direction="row" align="center" gap="small">
               <Button onClick={onLoginClick} label={signInLabel} />
-              <Button primary={true} onClick={onLoginClick} label={signUpLabel} />
+              <Button primary={true} onClick={onSignUpClick} label={signUpLabel} />
             </Box>
           )}
+          {!loggedProfileData?.ethAddress && (
+            <IconDiv isActive={menuDropOpen} onClick={handleMenuClick}>
+              <MenuIcon
+                rotate={isMobileOnly ? 90 : 0}
+                ref={feedbackMenuRef}
+                type={isMobileOnly ? 'moreDark' : 'arrowDown'}
+                clickable={true}
+                accentColor={menuDropOpen}
+                size="sm"
+              />
+            </IconDiv>
+          )}
         </Box>
-      </>
+      </Box>
     );
   };
 
   return (
     <TopbarWrapper
-      direction="row"
       pad={{ vertical: 'small', horizontal: 'medium' }}
-      justify="between"
-      align="center"
       fill="horizontal"
       className={className}
       elevation="shadow"
-      height="3rem"
+      height={mobileSignedOutView ? '6rem' : '3rem'}
       border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
     >
       {renderContent()}
+      {mobileSignedOutView && (
+        <Box direction="row" align="center" gap="small" fill="horizontal">
+          <Button onClick={onLoginClick} label={signInLabel} fill="horizontal" />
+          <Button primary={true} onClick={onLoginClick} label={signUpLabel} fill="horizontal" />
+        </Box>
+      )}
       {dropOpen && renderDrop()}
-      {avatarDropOpen && renderAvatarDrop()}
+      {avatarDropOpen && loggedProfileData?.ethAddress && (
+        <ProfileMenu
+          target={currentDropItem && menuItemRefs.current[currentDropItem?.index]}
+          closePopover={() => setAvatarDropOpen(false)}
+          onNavigation={onNavigation}
+          loggedProfileData={loggedProfileData}
+          legalLabel={legalLabel}
+          signOutLabel={signOutLabel}
+          feedbackLabel={feedbackLabel}
+          feedbackInfoLabel={feedbackInfoLabel}
+          legalCopyRightLabel={legalCopyRightLabel}
+          menuItems={dropItems}
+          legalMenu={legalMenu}
+          onLogout={onLogout}
+          onFeedbackClick={onFeedbackClick}
+        />
+      )}
+      {menuDropOpen && !loggedProfileData?.ethAddress && (
+        <ProfileMenu
+          target={feedbackMenuRef.current}
+          closePopover={() => setMenuDropOpen(false)}
+          onNavigation={onNavigation}
+          legalLabel={legalLabel}
+          legalMenu={legalMenu}
+          feedbackLabel={feedbackLabel}
+          feedbackInfoLabel={feedbackInfoLabel}
+          legalCopyRightLabel={legalCopyRightLabel}
+          onFeedbackClick={onFeedbackClick}
+        />
+      )}
     </TopbarWrapper>
   );
 };
@@ -317,6 +405,9 @@ Topbar.defaultProps = {
   signUpLabel: 'Sign Up',
   signInLabel: 'Sign In',
   signOutLabel: 'Sign Out',
+  legalLabel: 'Legal',
+  feedbackLabel: 'Send Us Feedback',
+  feedbackInfoLabel: 'Help us improve the experience!',
 };
 
 export { Topbar };

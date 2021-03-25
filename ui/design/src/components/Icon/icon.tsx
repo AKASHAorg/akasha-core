@@ -32,16 +32,20 @@ export type IconType =
   | 'copy'
   | 'check'
   | 'checkSimple'
+  | 'discord'
   | 'document'
   | 'editSimple'
   | 'edit'
+  | 'email'
   | 'emoji'
   | 'eye'
   | 'ethereum'
   | 'ethereumWorldLogo'
   | 'error'
   | 'facebook'
+  | 'feedback'
   | 'following'
+  | 'github'
   | 'hashtag'
   | 'heart'
   | 'home'
@@ -49,6 +53,7 @@ export type IconType =
   | 'image'
   | 'italic'
   | 'info'
+  | 'legal'
   | 'link'
   | 'loading'
   | 'login'
@@ -75,6 +80,7 @@ export type IconType =
   | 'send'
   | 'settings'
   | 'share'
+  | 'signOut'
   | 'subscribe'
   | 'stopwatch'
   | 'shareSmallBlue'
@@ -122,16 +128,20 @@ export const iconTypes: IconType[] = [
   'check',
   'checkSimple',
   'coins',
+  'discord',
   'document',
   'editSimple',
   'edit',
+  'email',
   'emoji',
   'eye',
   'ethereum',
   'ethereumWorldLogo',
   'error',
   'facebook',
+  'feedback',
   'following',
+  'github',
   'hashtag',
   'heart',
   'home',
@@ -139,6 +149,7 @@ export const iconTypes: IconType[] = [
   'image',
   'info',
   'italic',
+  'legal',
   'link',
   'loading',
   'login',
@@ -163,6 +174,7 @@ export const iconTypes: IconType[] = [
   'search',
   'send',
   'settings',
+  'signOut',
   'share',
   'subscribe',
   'stopwatch',

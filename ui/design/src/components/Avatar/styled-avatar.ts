@@ -8,9 +8,10 @@ const sizes = {
   sm: '32px',
   md: '40px',
   lg: '48px',
-  xl: '84px',
+  xl: '72px',
+  xxl: '84px',
 };
-export type AvatarSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type AvatarSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
 export interface AvatarProps {
   size: AvatarSize;
@@ -69,6 +70,17 @@ const StyledAvatar = styled.div<AvatarProps>`
 
 export const StyleFileInput = styled.input`
   display: none;
+`;
+
+export const ActiveOverlay = styled.div`
+  background-color: ${props => props.theme.colors.accent};
+  opacity: 0.25;
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 `;
 
 export default StyledAvatar;

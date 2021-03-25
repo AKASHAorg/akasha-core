@@ -13,6 +13,7 @@ import { EntryCardHidden } from './entry-cards/entry-card-hidden';
 import BoxFormCard from './form-cards/box-form-card';
 import EnsFormCard from './form-cards/ens-form-card';
 import ProfileCard from './profile-cards/profile-card';
+import ProfileSearchCard from './profile-cards/profile-search-card';
 import ProfileWidgetCard from './profile-cards/profile-widget-card';
 import { ProfileMiniCard } from './profile-cards/profile-mini-card';
 import AppInfoWidgetCard from './widget-cards/app-info-widget-card';
@@ -27,7 +28,10 @@ import { CustomizeFeedCard } from './onboarding-cards/customize-feed-card';
 import { TagCard } from './tag-cards/tag-card';
 import { TagDetailCard } from './tag-cards/tag-detail-card';
 import { TagProfileCard } from './tag-cards/tag-profile-card';
+import { TagSearchCard } from './tag-cards/tag-search-card';
 import { FilterCard } from './utility-cards/filter-card';
+import SwitchCard from './utility-cards/switch-card';
+import { NotificationsCard } from './notification-cards/notification-card';
 
 export {
   AppInfoWidgetCard,
@@ -35,6 +39,7 @@ export {
   TopicsWidgetCard,
   MiniInfoWidgetCard,
   ProfileCard,
+  ProfileSearchCard,
   ProfileWidgetCard,
   ProfileMiniCard,
   CommentEditor,
@@ -57,5 +62,8 @@ export {
   TagCard,
   TagDetailCard,
   TagProfileCard,
+  TagSearchCard,
   FilterCard,
+  SwitchCard,
+  NotificationsCard,
 };

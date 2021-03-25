@@ -127,7 +127,7 @@ class PostAPI extends DataSource {
       currentPosts.unshift(postID[0]);
       await queryCache.set(this.allPostsCache, currentPosts);
     }
-    await this.addQuotes(post.quotes, postID[0]);
+    await this.addQuotes(post.quotes, postID[0], author);
     if (post.mentions && post.mentions.length) {
       await this.triggerMentions(post.mentions, postID[0], post.author);
     }
@@ -149,7 +149,6 @@ class PostAPI extends DataSource {
   }
 
   async triggerMentions(mentions: string[], postID, author) {
-    const mailSender = await getMailSender();
     const notification = {
       property: 'POST_MENTION',
       provider: 'awf.graphql.posts.api',
@@ -158,15 +157,24 @@ class PostAPI extends DataSource {
         author,
       },
     };
-    const textEncoder = new TextEncoder();
-    const encodedNotification = textEncoder.encode(JSON.stringify(notification));
-    for (const mention of mentions) {
-      logger.info('sending mentions notifications', mention);
-      await mailSender.sendMessage(mention, encodedNotification);
+    for (const recipient of mentions) {
+      await this.sendNotification(recipient, notification);
     }
   }
-
-  async addQuotes(quotedPosts: string[], postID: string) {
+  async sendNotification(
+    recipient: string,
+    notification: { property: string; provider: string; value: any },
+  ) {
+    if (recipient === notification?.value?.author) {
+      return;
+    }
+    const mailSender = await getMailSender();
+    const textEncoder = new TextEncoder();
+    const encodedNotification = textEncoder.encode(JSON.stringify(notification));
+    logger.info('sending notification to', recipient);
+    await mailSender.sendMessage(recipient, encodedNotification);
+  }
+  async addQuotes(quotedPosts: string[], postID: string, author: string) {
     const db: Client = await getAppDB();
     const updatePosts = [];
     for (const quotedPost of quotedPosts) {
@@ -189,6 +197,16 @@ class PostAPI extends DataSource {
     if (updatePosts.length) {
       await db.save(this.dbID, this.collection, updatePosts);
       for (const post of updatePosts) {
+        const notificationObj = {
+          property: 'POST_QUOTE',
+          provider: 'awf.graphql.posts.api',
+          value: {
+            postID,
+            author,
+            quotedPost: post._id,
+          },
+        };
+        await this.sendNotification(post.author, notificationObj);
         await queryCache.del(this.getPostCacheKey(post._id));
       }
     }
