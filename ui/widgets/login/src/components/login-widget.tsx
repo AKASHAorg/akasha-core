@@ -162,6 +162,7 @@ const LoginWidget: React.FC<ILoginWidgetProps> = props => {
         onModalClose={handleLoginModalClose}
         showModal={loginModal}
         showSignUpModal={showSignUpModal}
+        subtitleLabel={'removethis'}
         onInputTokenChange={onInputTokenChange}
         validateTokenFn={validateTokenFn}
         submitted={inviteTokenForm.submitted}
