@@ -33,10 +33,10 @@
     "@akashaproject/jsonschema-web3": "1.0.4",
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-runtime": "*",
-    "@walletconnect/web3-provider": "1.3.6",
+    "@walletconnect/web3-provider": "1.4.0",
     "@akashaproject/ui-awf-typings": "*",
-    "ethers": "5.0.31",
-    "browser-image-resizer": "2.1.3",
+    "ethers": "5.0.32",
+    "browser-image-resizer": "2.2.0",
     "@metamask/detect-provider": "1.2.0"
   },
   "devDependencies": {
