@@ -91,6 +91,7 @@ import {
   FeedbackModal,
   ToastProvider,
   EditorModal,
+  StyledLayer,
 } from './components/Modals';
 
 import { NotificationsPopover, SelectPopover } from './components/Popovers';
@@ -226,6 +227,7 @@ const exported = {
   FilterCard,
   SwitchCard,
   EntryPublishErrorCard,
+  StyledLayer,
   Helmet: Helmet as HelmetType,
 };
 
