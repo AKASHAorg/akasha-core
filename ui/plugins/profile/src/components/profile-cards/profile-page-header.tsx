@@ -133,11 +133,10 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     onError: ensErrorActions.createError,
   });
 
-  const [networkState, networkActions] = useNetworkState({
+  const [networkState] = useNetworkState({
     web3Service: sdkModules.commons.web3Service,
   });
 
-  console.log(networkState, networkActions, '<<< network');
   React.useEffect(() => {
     if (profileUpdateStatus.updateComplete) {
       props.profileActions.resetUpdateStatus();
