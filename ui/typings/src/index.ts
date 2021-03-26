@@ -94,3 +94,11 @@ export enum EthProviders {
   WalletConnect,
 }
 export const AppLoader = AppLoaderTypes;
+
+export enum LEGAL_DOCS {
+  TERMS_OF_USE = 'TermsOfUse',
+  TERMS_OF_SERVICE = 'TermsOfService',
+  PRIVACY_POLICY = 'PrivacyPolicy',
+  CODE_OF_CONDUCT = 'CodeOfConduct',
+  APP_GUIDE = 'AppGuide',
+}
