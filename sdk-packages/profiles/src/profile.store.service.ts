@@ -143,7 +143,7 @@ const service: AkashaService = (invoke, log) => {
       variables: variables,
       operationName: operationName,
     });
-    if (result.err) return result.data;
+    return result.data;
   };
 
   const follow = async (opt: { ethAddress: string }) => {
