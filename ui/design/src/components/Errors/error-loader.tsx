@@ -21,6 +21,7 @@ const ErrorLoader: React.FC<ErrorLoaderProps> = props => {
       break;
     case 'not-registered':
       imagesrc = `${publicImgPath}/login-widget-illustration.png`;
+      break;
     case 'network-not-supported':
       imagesrc = `${publicImgPath}/network-not-supported-error.png`;
       break;

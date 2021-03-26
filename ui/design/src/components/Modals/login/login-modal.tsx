@@ -37,7 +37,7 @@ export interface LoginModalProps {
   onCheckedTermsValues?: (ev: any) => void;
   waitForCheckTerms?: boolean;
   suggestSignUp?: boolean;
-  suggestedSignUpFn: () => void;
+  suggestedSignUpFn?: () => void;
   /**
    * text to be displayed when the user selects to login with metamask
    */
@@ -122,7 +122,9 @@ const LoginModal: React.FC<LoginModalProps> = props => {
 
   const handleSignUpClick = () => {
     handleProviderModalClose();
-    suggestedSignUpFn();
+    if (suggestedSignUpFn) {
+      suggestedSignUpFn();
+    }
   };
 
   return (
