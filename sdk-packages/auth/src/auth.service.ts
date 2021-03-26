@@ -28,6 +28,7 @@ import {
 import { Database } from '@textile/threaddb';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { settingsSchema } from './db.schema';
+import { runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
 
 const service: AkashaService = (invoke, log, globalChannel) => {
   let identity: PrivateKey;
@@ -90,6 +91,27 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       }
     };
   }
+
+  const checkIfSignedUp = async (ethAddress: string) => {
+    const query = `
+    query GetProfile($ethAddress: String!) {
+       getProfile(ethAddress: $ethAddress) {
+         ethAddress
+         pubKey
+       }
+      }`;
+    const variables = { ethAddress: ethAddress };
+    const result = await runGQL({
+      query: query,
+      variables: variables,
+      operationName: 'GetProfile',
+    });
+    if (result.errors) {
+      const err = new Error('This ethereum key is not registered');
+      err.name = 'UserNotRegistered';
+      throw err;
+    }
+  };
   const signIn = async (provider: EthProviders = EthProviders.Web3Injected) => {
     let currentProvider: number;
     // const { setServiceSettings } = invoke(coreServices.SETTINGS_SERVICE);
@@ -117,6 +139,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       const endPoint = authSettings[AUTH_ENDPOINT];
       const signer = web3.getSigner();
       const address = await signer.getAddress();
+      await checkIfSignedUp(address);
       const web3Service = await invoke(commonServices[WEB3_SERVICE]);
       log.info(`using eth address ${address}`);
       sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;

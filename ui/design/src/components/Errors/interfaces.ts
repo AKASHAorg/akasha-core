@@ -8,7 +8,8 @@ export interface ErrorLoaderProps {
     | 'missing-notifications'
     | 'no-connection'
     | 'no-login'
-    | 'script-error';
+    | 'script-error'
+    | 'not-registered';
   /* Path to public folder */
   publicImgPath?: string;
   /**
