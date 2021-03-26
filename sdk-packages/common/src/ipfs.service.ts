@@ -1,5 +1,6 @@
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import { IPFS_SERVICE } from './constants';
+import { IPFS_SERVICE, LEGAL_DOCS_SOURCE } from './constants';
+import { LEGAL_DOCS } from '@akashaproject/ui-awf-typings';
 // import ipfsMethods from './ipfs.methods';
 import { ipfsGateway } from './ipfs.settings';
 // tslint:disable-next-line:no-var-requires
@@ -55,12 +56,18 @@ const service: AkashaService = (invoke, log) => {
     return ipfsGateway;
   };
 
+  const getLegalDoc = async (doc: LEGAL_DOCS) => {
+    const selectedDoc = LEGAL_DOCS_SOURCE[doc];
+    const data = await fetch(`${ipfsGateway}/${selectedDoc}`);
+    return data.text();
+  };
+
   // const dagGet = async (cid: string, path: string) => {
   //   const ipfs = await getInstance();
   //   const result = await ipfs.dag.get(cid, { path });
   //   return result.value;
   // };
 
-  return { getSettings };
+  return { getSettings, getLegalDoc };
 };
 export default { service, name: IPFS_SERVICE };
