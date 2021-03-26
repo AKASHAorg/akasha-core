@@ -149,15 +149,9 @@ const TopbarComponent = (props: TopBarProps) => {
   React.useEffect(() => {
     const isLoadingProfile =
       loggedProfileData.isLoading !== undefined && loggedProfileData.isLoading;
-    if (loginState.ethAddress && !isLoadingProfile && !loggedProfileData.default?.length) {
-      return props.navigateToUrl('/profile/my-profile/update-info');
-    }
-    if (loginState.ethAddress && !isLoadingProfile && loggedProfileData.default?.length) {
-      const basicUsername = loggedProfileData.default.find(
-        p => p.property === 'userName' && p.provider === 'ewa.providers.basic',
-      );
-      if (!basicUsername?.value) {
-        props.navigateToUrl('/profile/my-profile/update-info');
+    if (loginState.ethAddress && !isLoadingProfile) {
+      if (!loggedProfileData.userName) {
+        return props.navigateToUrl('/profile/my-profile/update-info');
       }
     }
   }, [loggedProfileData.default?.length, loggedProfileData.isLoading, loginState.ethAddress]);

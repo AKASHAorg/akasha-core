@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
-import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
 import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
 import {
   ModalState,
@@ -9,7 +8,10 @@ import {
   MODAL_NAMES,
 } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { useFollow, useENSRegistration, useErrors } from '@akashaproject/ui-awf-hooks';
-import { IUserNameOption } from '@akashaproject/design-system/lib/components/Cards/form-cards/ens-form-card';
+import {
+  ENSOptionTypes,
+  EnsFormOption,
+} from '@akashaproject/design-system/lib/components/Cards/form-cards/ens-form-card';
 import menuRoute, { rootRoute, MY_PROFILE } from '../../routes';
 import {
   ProfileUpdateStatus,
@@ -17,6 +19,11 @@ import {
 } from '@akashaproject/ui-awf-hooks/lib/use-profile';
 import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { Route } from 'react-router';
+import {
+  ProfileProviders,
+  UsernameTypes,
+  IProfileData,
+} from '@akashaproject/ui-awf-typings/lib/profile';
 
 const BASE_URL =
   process.env.NODE_ENV === 'production'
@@ -35,6 +42,7 @@ const {
   BoxFormCard,
   EnsFormCard,
   ErrorInfoCard,
+  Icon,
 } = DS;
 
 export interface IProfileHeaderProps {
@@ -122,24 +130,16 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   React.useEffect(() => {
     if (profileUpdateStatus.updateComplete) {
       props.profileActions.resetUpdateStatus();
+      // reload profile
       props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
       return;
     }
     if (ensState.status.registrationComplete) {
-      if (ensState.userName) {
-        props.profileActions.updateProfile({
-          userName: `@${ensState.userName.replace('@', '')}`,
-        });
-      }
       ensActions.resetRegistrationStatus();
       props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
       return;
     }
-  }, [
-    profileUpdateStatus.updateComplete,
-    ensState.status.registrationComplete,
-    JSON.stringify(props.modalState),
-  ]);
+  }, [profileUpdateStatus.updateComplete, ensState.status.registrationComplete]);
 
   React.useEffect(() => {
     if (
@@ -150,45 +150,86 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
       followActions.isFollowing(loggedUserEthAddress, profileData.ethAddress);
     }
   }, [loggedUserEthAddress, profileData.ethAddress]);
-  /**
-   * username to be displayed in the card
-   */
-  const userName = React.useMemo(() => {
-    if (profileData) {
-      let name = profileData.userName;
-      if (!name && profileData.default?.length) {
-        const provider = profileData.default.find(
-          provider =>
-            provider.property &&
-            provider.property === 'userName' &&
-            provider.provider === 'ewa.providers.basic',
-        );
-        if (provider) {
-          name = provider.value;
-        }
-      }
-      return name;
-    }
-    return undefined;
-  }, [profileData]);
 
-  /**
-   * check if user has a local username
-   * username field will show up in form if it does not
-   */
+  const userNameType = React.useMemo(() => {
+    return props.profileActions.getUsernameTypes();
+  }, [JSON.stringify(profileData)]);
 
-  const hasBasicUsername = React.useMemo(() => {
-    if (!profileData || !profileData.default?.length) {
-      return false;
-    }
-    const provider = profileData.default.find(
-      p => p.property === 'userName' && p.provider === 'ewa.providers.basic',
+  const ensFormOptions: EnsFormOption[] = React.useMemo(() => {
+    const options = [];
+
+    const hasEnsSubdomainAvail = userNameType.available.includes(
+      UsernameTypes.AKASHA_ENS_SUBDOMAIN,
     );
-    if (provider?.value) {
-      return true;
+    const hasEnsDomainAvail = userNameType.available.includes(UsernameTypes.ENS_DOMAIN);
+    const detectedEns = ensState.userName;
+    const currentDefault = userNameType.default;
+
+    /**
+     * Show akasha subdomain option if it's not using ens domain
+     */
+    if (
+      (hasEnsSubdomainAvail && !currentDefault?.value.endsWith('.akasha.eth')) ||
+      detectedEns?.endsWith('.akasha.eth') ||
+      (currentDefault?.provider === ProfileProviders.ENS &&
+        !currentDefault.value.endsWith('.akasha.eth'))
+    ) {
+      options.push({
+        type: ENSOptionTypes.ENS_AKASHA_SUBDOMAIN,
+        label: userNameType.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN)
+          ? t('Display my AKASHA Ethereum name')
+          : t('Use an AKASHA-provided Ethereum name'),
+        value: `${profileData.userName}.akasha.eth`,
+        defaultChecked: !options.length,
+        textDetails: userNameType.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN) ? (
+          <></>
+        ) : (
+          <>
+            {t('Username Powered by')}{' '}
+            <Icon
+              type="appEns"
+              size="xs"
+              wrapperStyle={{ display: 'inline', verticalAlign: 'middle' }}
+            />{' '}
+            <strong>ENS</strong>.{' '}
+            {t('You will need to pay gas fees to register this Ethereum name.')}
+          </>
+        ),
+      });
     }
-    return false;
-  }, [profileData]);
+    /**
+     * Show ens domain options if we detect one and it's not already set
+     */
+    if (
+      hasEnsDomainAvail ||
+      (!userNameType.default?.value.endsWith('.eth') &&
+        detectedEns &&
+        !detectedEns.endsWith('.akasha.eth'))
+    ) {
+      options.push({
+        type: ENSOptionTypes.BRING_YOUR_OWN_ENS,
+        label: t('Use my own Ethereum name'),
+        value: ensState.userName,
+        defaultChecked: !options.length,
+      });
+    }
+    /**
+     * Show ethAddress option if the user aready have akasha subdomain or ens domain
+     */
+    if (
+      userNameType.default &&
+      currentDefault &&
+      currentDefault.provider === ProfileProviders.ENS
+    ) {
+      options.push({
+        type: ENSOptionTypes.ETH_ADDRESS,
+        label: t('Display only my Ethereum address'),
+        value: profileData.ethAddress,
+        defaultChecked: !options.length,
+      });
+    }
+    return options;
+  }, [profileData, ensState, userNameType]);
 
   const handleFollow = () => {
     if (!loggedUserEthAddress) {
@@ -222,12 +263,47 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
   };
 
-  const onENSSubmit = ({ name, option }: { name: string; option: IUserNameOption }) => {
-    if (option.name === 'local') {
-      return ensActions.registerLocalUsername({ userName: name });
+  const onENSSubmit = (option: EnsFormOption) => {
+    let selectedOption: EnsFormOption | undefined = option;
+
+    if (!selectedOption) {
+      selectedOption = ensFormOptions.find(option => option.defaultChecked);
     }
-    if (option.name === 'ensSubdomain') {
-      return ensActions.register({ userName: name });
+
+    if (!selectedOption) {
+      logger.error('Selected option is undefined!');
+      return;
+    }
+
+    if (
+      selectedOption.type === ENSOptionTypes.ENS_AKASHA_SUBDOMAIN &&
+      selectedOption.value &&
+      !userNameType.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN)
+    ) {
+      return ensActions.register({ userName: selectedOption.value });
+    }
+    if (
+      selectedOption.type === ENSOptionTypes.ENS_AKASHA_SUBDOMAIN &&
+      selectedOption.value &&
+      userNameType.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN)
+    ) {
+      return props.profileActions.updateUsernameProvider({
+        userName: selectedOption.value,
+        provider: ProfileProviders.ENS,
+      });
+    }
+    if (selectedOption.type === ENSOptionTypes.BRING_YOUR_OWN_ENS && selectedOption.value) {
+      return props.profileActions.updateUsernameProvider({
+        userName: selectedOption.value,
+        provider: ProfileProviders.ENS,
+      });
+    }
+
+    if (selectedOption.type === ENSOptionTypes.ETH_ADDRESS) {
+      return props.profileActions.updateUsernameProvider({
+        userName: '',
+        provider: ProfileProviders.EWA_BASIC,
+      });
     }
   };
 
@@ -357,7 +433,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               onSave={onProfileUpdateSubmit}
               onCancel={closeProfileUpdateModal}
               updateStatus={profileUpdateStatus}
-              showUsername={!hasBasicUsername}
+              showUsername={!profileData.userName}
               onUsernameChange={validateUsername}
               isValidatingUsername={props.profileUpdateStatus.isValidating}
               usernameSuccess={props.profileUpdateStatus.isValidUsername ? ' ' : undefined}
@@ -381,48 +457,31 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
                 <>
                   {!hasCriticalErrors && (
                     <ENSForm
-                      titleLabel={t('Add a username')}
-                      secondaryTitleLabel={t('Secondary title')}
-                      nameLabel={t('Select a username')}
+                      titleLabel={
+                        userNameType.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN) ||
+                        userNameType.available.includes(UsernameTypes.ENS_DOMAIN)
+                          ? t('Manage Ethereum name')
+                          : t('Add an Ethereum name')
+                      }
+                      nameLabel={t('Choose Ethereum name')}
                       errorLabel={t(
                         'Sorry, this username has already been taken. Please choose another one',
                       )}
-                      ethAddressLabel={t('Your Ethereum address')}
-                      ethNameLabel={t('Your Ethereum name')}
-                      optionUsername={t('username')}
-                      optionSpecify={t('Specify an Ethereum name')}
-                      optionUseEthereumAddress={t('Use my Ethereum address')}
-                      consentText={t('By creating an account you agree to the ')}
-                      consentUrl="https://ethereum.world/community-agreement"
-                      consentLabel={t('Community Agreement')}
-                      poweredByLabel={t('Username powered by')}
-                      iconLabel={t('ENS')}
+                      options={ensFormOptions}
                       cancelLabel={t('Cancel')}
-                      changeButtonLabel={t('Change')}
                       saveLabel={t('Save')}
-                      nameFieldPlaceholder={`${t('username')}`}
-                      ethAddress={profileData.ethAddress}
-                      providerData={{ name: ensState.userName || '' }}
                       onSave={onENSSubmit}
                       onCancel={closeEnsModal}
-                      validateEns={ensActions.validateName}
-                      validEns={ensState.isValidating ? null : ensState.isAvailable}
-                      isValidating={ensState.isValidating}
-                      userNameProviderOptions={[
-                        {
-                          name: 'local',
-                          label: t('Do not use ENS'),
-                        },
-                      ]}
-                      disableInputOnOption={{
-                        ensSubdomain: ensState.alreadyRegistered,
-                      }}
+                      saving={!!ensState.status.registering || !!profileUpdateStatus.saving}
                       errorMessage={`
                         ${ensState.errorMessage ? ensState.errorMessage : ''}
                         ${
                           errorMessage
                             ? Object.keys(ensErrors).reduce(
-                                (str, errKey) => `${str}, ${ensErrors[errKey].error.message}`,
+                                (str, errKey) =>
+                                  str.length
+                                    ? `${str}, ${ensErrors[errKey].error.message}`
+                                    : ensErrors[errKey].error.message,
                                 '',
                               )
                             : ''
@@ -446,7 +505,8 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         handleShareClick={showShareModal}
         isFollowing={followedProfiles.includes(profileData?.ethAddress)}
         loggedEthAddress={loggedUserEthAddress}
-        profileData={{ ...profileData, userName }}
+        profileData={{ ...profileData }}
+        userNameType={userNameType}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
         descriptionLabel={t('About me')}
@@ -466,8 +526,12 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         onEntryFlag={handleEntryFlag(profileData.ethAddress ? profileData.ethAddress : '')}
         onUpdateClick={showUpdateProfileModal}
         onENSChangeClick={showEnsModal}
-        changeENSLabel={t('Change Ethereum name')}
-        hideENSButton={!!profileData.userName}
+        changeENSLabel={
+          userNameType.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN) ||
+          userNameType.available.includes(UsernameTypes.ENS_DOMAIN)
+            ? t('Manage Ethereum name')
+            : t('Add an Ethereum name')
+        }
         copyLabel={t('Copy to clipboard')}
         copiedLabel={t('Copied')}
       />

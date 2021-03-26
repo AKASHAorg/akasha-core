@@ -13,10 +13,18 @@ export interface IProfileCardEthereumIdProps {
   copiedLabel?: string;
   showQRCodeLabel?: string;
   profileData: IProfileData;
+  ensName?: string;
 }
 
 const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
-  const { ethereumAddressLabel, ethereumNameLabel, copyLabel, copiedLabel, profileData } = props;
+  const {
+    ethereumAddressLabel,
+    ethereumNameLabel,
+    copyLabel,
+    copiedLabel,
+    profileData,
+    ensName,
+  } = props;
   const [isCopied, setIsCopied] = React.useState(false);
   const popoverRef: React.Ref<any> = React.useRef(null);
 
@@ -29,7 +37,7 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
   }, [isCopied]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(profileData.ensName ?? profileData.ethAddress);
+    navigator.clipboard.writeText(ensName ?? profileData.ethAddress);
     setIsCopied(true);
   };
 
@@ -37,12 +45,12 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
     <>
       <Box direction="column" pad={{ vertical: 'xsmall', horizontal: 'medium' }} gap="xxsmall">
         <Text size="large" weight="bold" color="primaryText" style={{ lineHeight: 1.7 }}>
-          {profileData.ensName ? ethereumNameLabel : ethereumAddressLabel}
+          {ensName ? ethereumNameLabel : ethereumAddressLabel}
         </Text>
         <Box direction="row" gap="xsmall" align="center">
           <Text color="primaryText" size={'medium'} truncate={true} style={{ lineHeight: 1.7 }}>
-            {profileData.ensName
-              ? profileData.ensName
+            {ensName
+              ? ensName
               : isMobile
               ? truncateMiddle(profileData.ethAddress)
               : profileData.ethAddress}

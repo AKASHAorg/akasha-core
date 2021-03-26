@@ -207,6 +207,7 @@ export interface IconProps extends CommonInterface<any> {
   accentColor?: boolean;
   size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   disabled?: boolean;
+  wrapperStyle?: React.CSSProperties;
 }
 
 const StyledRefDiv = styled.div`
@@ -217,7 +218,18 @@ const StyledRefDiv = styled.div`
 
 const IconBase: React.FC<IconProps> = React.forwardRef(
   (
-    { color, fill, size, clickable, clickableRed, type, primaryColor, accentColor, ...props },
+    {
+      color,
+      fill,
+      size,
+      clickable,
+      clickableRed,
+      type,
+      primaryColor,
+      accentColor,
+      wrapperStyle,
+      ...props
+    },
     ref,
   ) => {
     const Component = (icons as any)[type];
@@ -228,7 +240,7 @@ const IconBase: React.FC<IconProps> = React.forwardRef(
     }
     const iconClass = classNames('icon', props.className);
     return (
-      <StyledRefDiv ref={ref}>
+      <StyledRefDiv ref={ref} style={wrapperStyle}>
         <Component className={iconClass} {...props} />
       </StyledRefDiv>
     );
