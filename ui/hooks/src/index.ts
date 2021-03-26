@@ -16,6 +16,7 @@ import useNotifications from './use-notifications';
 import useTagSubscribe from './use-tag-subscribe';
 import useSearch from './use-search';
 import useLegal from './use-legal';
+import useNetworkState from './use-network-state';
 
 export {
   constants,
@@ -37,4 +38,5 @@ export {
   useTagSubscribe,
   useSearch,
   useLegal,
+  useNetworkState,
 };

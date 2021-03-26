@@ -15,6 +15,7 @@ import ModerateModal from './moderate';
 import { IModerateModalProps } from './moderate/moderate-modal';
 import FeedbackModal, { IFeedbackModalProps } from './feedback/feedback-modal';
 import EditorModal from './editor/editor-modal';
+import { StyledLayer } from './common/styled-modal';
 
 export {
   ListModal,
@@ -34,4 +35,5 @@ export {
   IFeedbackModalProps,
   ToastProvider,
   EditorModal,
+  StyledLayer,
 };

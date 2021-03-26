@@ -7,7 +7,12 @@ import {
   ModalStateActions,
   MODAL_NAMES,
 } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
-import { useFollow, useENSRegistration, useErrors } from '@akashaproject/ui-awf-hooks';
+import {
+  useFollow,
+  useENSRegistration,
+  useErrors,
+  useNetworkState,
+} from '@akashaproject/ui-awf-hooks';
 import {
   ENSOptionTypes,
   EnsFormOption,
@@ -42,7 +47,9 @@ const {
   BoxFormCard,
   EnsFormCard,
   ErrorInfoCard,
+  ErrorLoader,
   Icon,
+  StyledLayer,
 } = DS;
 
 export interface IProfileHeaderProps {
@@ -109,7 +116,6 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   const [flagged, setFlagged] = React.useState('');
 
   const { t } = useTranslation();
-
   const [followedProfiles, followActions] = useFollow({
     globalChannel,
     profileService: sdkModules.profiles.profileService,
@@ -125,6 +131,10 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     ethAddress: props.loggedUserEthAddress,
     ensService: sdkModules.registry.ens,
     onError: ensErrorActions.createError,
+  });
+
+  const [networkState] = useNetworkState({
+    web3Service: sdkModules.commons.web3Service,
   });
 
   React.useEffect(() => {
@@ -451,7 +461,16 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
       </Route>
       <Route path={`${menuRoute[MY_PROFILE]}/update-ens`}>
         <ModalRenderer slotId={props.layout.app.modalSlotId}>
-          {profileData.ethAddress && (
+          {networkState.networkNotSupported && (
+            <StyledLayer>
+              <ErrorLoader
+                type={'network-not-supported'}
+                title={t('Network not supported')}
+                details={t('Please set your Ethereum provider to the Rinkeby Test Network')}
+              />
+            </StyledLayer>
+          )}
+          {!networkState.networkNotSupported && profileData.ethAddress && (
             <ErrorInfoCard errors={ensErrors}>
               {(errorMessage, hasCriticalErrors) => (
                 <>
