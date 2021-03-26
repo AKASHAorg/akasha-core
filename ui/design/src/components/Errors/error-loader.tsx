@@ -19,6 +19,9 @@ const ErrorLoader: React.FC<ErrorLoaderProps> = props => {
     case 'no-connection':
       imagesrc = `${publicImgPath}/no-internet-connection-error.png`;
       break;
+    case 'network-not-supported':
+      imagesrc = `${publicImgPath}/network-not-supported-error.png`;
+      break;
     case 'no-login':
     default:
       imagesrc = `${publicImgPath}/general-error.png`;
