@@ -14,7 +14,7 @@ import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/compone
 import { ILoadItemsPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
 
-import { ProfilePageCard } from '../profile-cards/profile-card';
+import { ProfilePageCard } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
 
 const { Box, Helmet, ReportModal, ToastProvider, ModalRenderer } = DS;

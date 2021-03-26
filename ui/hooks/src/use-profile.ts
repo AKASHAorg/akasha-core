@@ -1,7 +1,13 @@
 import * as React from 'react';
-import { forkJoin } from 'rxjs';
-import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
+import { concat, forkJoin } from 'rxjs';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import {
+  IProfileData,
+  IProfileProvider,
+  ProfileProviderProperties,
+  ProfileProviders,
+  UsernameTypes,
+} from '@akashaproject/ui-awf-typings/lib/profile';
 import { createErrorHandler } from './utils/error-handler';
 import { getMediaUrl } from './utils/media-utils';
 
@@ -15,6 +21,18 @@ export interface UseProfileActions {
   updateProfile: (fields: any) => void;
   resetUpdateStatus: () => void;
   validateUsername: ({ userName }: { userName: string }) => void;
+  /**
+   * get available username provider types
+   * return UsernameTypes[]
+   */
+  getUsernameTypes: () => { default?: IProfileProvider; available: UsernameTypes[] };
+  /**
+   * Add/Change the username's default provider
+   * used for ens domains and to 'unset'
+   * a username by providing an empty value.
+   * This method does not interact with ens in any way.
+   */
+  updateUsernameProvider: (payload: { userName: string; provider: ProfileProviders }) => void;
 }
 
 export interface UseProfileProps {
@@ -70,6 +88,7 @@ export const useProfile = (
           if (!profileResp.data) {
             return;
           }
+
           const { avatar, coverImage, ...other } =
             profileResp.data.getProfile || profileResp.data.resolveProfile;
           const images: { avatar?: string; coverImage?: string } = {};
@@ -175,15 +194,19 @@ export const useProfile = (
           }),
         );
       } else {
-        // setting to null will not do anything
+        obs.push(Promise.resolve(null));
+      }
+
+      if (userName && !profile.userName) {
+        obs.push(profileService.registerUserName({ userName }));
+      } else {
         obs.push(Promise.resolve(null));
       }
 
       const ipfsSettings = ipfsService.getSettings({});
       forkJoin([...obs, ipfsSettings]).subscribe((responses: any[]) => {
-        const [avatarRes, coverImageRes, ipfsSettingsRes] = responses;
+        const [avatarRes, coverImageRes, userNameRes, ipfsSettingsRes] = responses;
         const ipfsGateway = ipfsSettingsRes.data;
-
         setUpdateStatus(prev => ({
           ...prev,
           uploadingAvatar: false,
@@ -193,55 +216,71 @@ export const useProfile = (
 
         if (!avatarRes && avatar === null) {
           providers.push({
-            provider: 'ewa.providers.basic',
-            property: 'avatar',
+            provider: ProfileProviders.EWA_BASIC,
+            property: ProfileProviderProperties.AVATAR,
             value: '',
           });
         }
         if (avatarRes && avatarRes.data) {
           providers.push({
-            provider: 'ewa.providers.basic',
-            property: 'avatar',
+            provider: ProfileProviders.EWA_BASIC,
+            property: ProfileProviderProperties.AVATAR,
             value: avatarRes.data.CID,
           });
         }
         if (!coverImageRes && coverImage === null) {
           providers.push({
-            provider: 'ewa.providers.basic',
-            property: 'coverImage',
+            provider: ProfileProviders.EWA_BASIC,
+            property: ProfileProviderProperties.COVER_IMAGE,
             value: '',
           });
         }
         if (coverImageRes && coverImageRes.data) {
           providers.push({
-            provider: 'ewa.providers.basic',
-            property: 'coverImage',
+            provider: ProfileProviders.EWA_BASIC,
+            property: ProfileProviderProperties.COVER_IMAGE,
             value: coverImageRes.data.CID,
           });
         }
         if (description) {
           providers.push({
-            provider: 'ewa.providers.basic',
-            property: 'description',
+            provider: ProfileProviders.EWA_BASIC,
+            property: ProfileProviderProperties.DESCRIPTION,
             value: description,
           });
         }
         if (name) {
           providers.push({
-            provider: 'ewa.providers.basic',
-            property: 'name',
+            provider: ProfileProviders.EWA_BASIC,
+            property: ProfileProviderProperties.NAME,
             value: name,
           });
         }
-        if (userName) {
+        let addProvider = Promise.resolve(null);
+        if (userNameRes) {
           providers.push({
-            provider: 'ewa.providers.basic',
-            property: 'userName',
+            provider: ProfileProviders.EWA_BASIC,
+            property: ProfileProviderProperties.USERNAME,
             value: userName,
           });
+          addProvider = profileService.addProfileProvider([
+            {
+              provider: ProfileProviders.EWA_BASIC,
+              property: ProfileProviderProperties.USERNAME,
+              value: userName,
+            },
+          ]);
         }
+
         const makeDefault = profileService.makeDefaultProvider(providers);
-        makeDefault.subscribe((_res: any) => {
+        concat(addProvider, makeDefault).subscribe((resp: any) => {
+          if (resp && !resp.data) {
+            return createErrorHandler(
+              'useProfile.nullData',
+              false,
+              props.onError,
+            )(new Error(`Cannot save a provider to your profile.`));
+          }
           const updatedFields = providers
             .map(provider => {
               if (
@@ -255,14 +294,60 @@ export const useProfile = (
               return { [provider.property]: provider.value };
             })
             .reduce((acc, curr) => Object.assign(acc, curr), {});
+
           actions.updateProfile(updatedFields);
+          if (resp && resp.data.makeDefaultProvider) {
+            setUpdateStatus(prev => ({
+              ...prev,
+              saving: false,
+              updateComplete: true,
+            }));
+          }
+        });
+      }, createErrorHandler('useProfile.optimisticUpdate.forkJoin', false, onError));
+    },
+    updateUsernameProvider({ userName, provider }) {
+      setUpdateStatus({
+        saving: true,
+        updateComplete: false,
+        uploadingAvatar: false,
+        isValidating: false,
+        uploadingCoverImage: false,
+        isValidUsername: null,
+        notAllowed: false,
+      });
+      let addProvider = Promise.resolve(null);
+      const providerData = {
+        provider,
+        property: ProfileProviderProperties.USERNAME,
+        value: userName,
+      };
+      if (profile.providers?.length) {
+        if (!profile.providers.find(p => p.provider === provider)) {
+          addProvider = profileService.addProfileProvider(providerData);
+        }
+      }
+
+      const makeDefault = profileService.makeDefaultProvider([providerData]);
+      concat(addProvider, makeDefault).subscribe((resp: any) => {
+        if (resp && resp.channelInfo.method === 'makeDefaultProvider' && !resp.data) {
+          return createErrorHandler(
+            'useProfile.updateUsernameProvider',
+            false,
+            props.onError,
+          )(new Error('Cannot save default provider'));
+        }
+        if (resp && resp.data && resp.data.makeDefaultProvider) {
+          actions.updateProfile({
+            default: [...profile.default!.filter(p => p.property !== 'userName'), providerData],
+          });
           setUpdateStatus(prev => ({
             ...prev,
             saving: false,
             updateComplete: true,
           }));
-        }, createErrorHandler('useLoginState.optimisticUpdate.makeDefault', false, onError));
-      }, createErrorHandler('useLoginState.optimisticUpdate.forkJoin', false, onError));
+        }
+      });
     },
     resetUpdateStatus() {
       setUpdateStatus({
@@ -278,6 +363,42 @@ export const useProfile = (
     resetProfileData() {
       setProfile({});
       actions.resetUpdateStatus();
+    },
+    getUsernameTypes() {
+      // default username is the one set in
+      // the onboarding flow (UsernameTypes.TEXTILE)
+      const type: UsernameTypes[] = [];
+
+      const defaultProvider = profile.default?.find(
+        p => p.property === ProfileProviderProperties.USERNAME,
+      );
+
+      if (!defaultProvider?.value && typeof defaultProvider?.value !== 'string') {
+        return {
+          default: defaultProvider,
+          available: type,
+        };
+      }
+      if (profile.providers?.length) {
+        profile.providers.forEach(provider => {
+          if (provider.property === ProfileProviderProperties.USERNAME) {
+            if (provider.provider === ProfileProviders.ENS) {
+              if (provider.value.endsWith('.akasha.eth')) {
+                type.push(UsernameTypes.AKASHA_ENS_SUBDOMAIN);
+              } else if (provider.value.endsWith('.eth')) {
+                type.push(UsernameTypes.ENS_DOMAIN);
+              }
+            }
+            if (provider.provider === ProfileProviders.EWA_BASIC) {
+              type.push(UsernameTypes.TEXTILE);
+            }
+          }
+        });
+      }
+      return {
+        default: defaultProvider,
+        available: type,
+      };
     },
   };
 
