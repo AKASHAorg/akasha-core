@@ -1,6 +1,8 @@
 import { IAkashaModuleServices } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import { buildServicePath } from '@akashaproject/sdk-core/lib/utils';
 
+import { LEGAL_DOCS } from '@akashaproject/ui-awf-typings';
+
 export const VALIDATOR_SERVICE = 'VALIDATOR_SERVICE';
 export const CACHE_SERVICE = 'CACHE_SERVICE';
 export const WEB3_SERVICE = 'WEB3_SERVICE';
@@ -17,6 +19,14 @@ export const IPFS_GATEWAY = 'ipfs_gateway';
 export const WEB3_PROVIDER = 'WEB3_PROVIDER';
 
 export const moduleName = 'commons';
+
+export const LEGAL_DOCS_SOURCE = {
+  [LEGAL_DOCS.TERMS_OF_USE]: 'QmZJd6V6TQiCSaxaXXedfvGW6c9pu2Kvjpz4iiDAd89xh6',
+  [LEGAL_DOCS.TERMS_OF_SERVICE]: 'QmS1n8L2k7ScWTiUVtCXDD6iXoiufSinVa5ZN4zTRk7mwV',
+  [LEGAL_DOCS.PRIVACY_POLICY]: 'Qmdgcf29pwADYGwaCDQRiiNCK3RsS27ZWjZb2z1ghxAXQY',
+  [LEGAL_DOCS.CODE_OF_CONDUCT]: 'QmZGeXbYH2YPqHHCSDqtvzYpi91n1XfXgy8QY3Q377hcES',
+  [LEGAL_DOCS.APP_GUIDE]: 'Qmdsev2U4V1Zs86U3k3NJ5y7Tqo6tdpngp4DxwnTyWoHBL',
+};
 const servicePath = buildServicePath(moduleName);
 
 // for service consumers
