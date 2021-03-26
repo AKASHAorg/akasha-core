@@ -39,7 +39,9 @@
   },
   "dependencies": {
     "@akashaproject/ui-awf-typings": "*",
+    "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/design-system": "*",
+    "@akashaproject/sdk-common": "*",
     "@types/i18next": "13.0.0",
     "@types/react-i18next": "8.1.0",
     "@types/react-router": "5.1.8",

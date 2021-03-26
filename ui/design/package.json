@@ -108,6 +108,8 @@
     "react-test-renderer": "16.14.0",
     "react-toastify": "6.1.0",
     "react-device-detect": "1.15.0",
+    "react-markdown": "5.0.3",
+    "remark-gfm": "1.0.0",
     "slate": "0.59.0",
     "slate-history": "0.59.0",
     "slate-react": "0.59.0",

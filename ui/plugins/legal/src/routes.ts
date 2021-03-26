@@ -5,8 +5,8 @@ export const PP = 'Privacy Policy';
 export const COC = 'Code of Conduct';
 
 export default {
-  [TOS]: `${rootRoute}/termsofservice`,
-  [TOU]: `${rootRoute}/termsofuse`,
-  [PP]: `${rootRoute}/privacypolicy`,
-  [COC]: `${rootRoute}/codeofconduct`,
+  [TOS]: `${rootRoute}/terms-of-service`,
+  [TOU]: `${rootRoute}/terms-of-use`,
+  [PP]: `${rootRoute}/privacy-policy`,
+  [COC]: `${rootRoute}/code-of-conduct`,
 };

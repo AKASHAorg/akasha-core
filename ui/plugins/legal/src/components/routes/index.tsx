@@ -3,19 +3,31 @@ import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import route, { TOS, TOU, PP, COC } from '../../routes';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import TermsOfService from './tos';
+import TermsOfUse from './tou';
+import CodeOfConduct from './coc';
+import PrivacyPolicy from './pp';
 
 const { Box, ViewportSizeProvider } = DS;
 
-const Routes: React.FC<RootComponentProps> = _props => {
+const Routes: React.FC<RootComponentProps> = props => {
   return (
     <ViewportSizeProvider>
       <Router>
         <Box>
           <Switch>
-            <Route path={route[TOS]} render={() => <>Terms of Service</>} />
-            <Route path={route[TOU]} render={() => <>Terms of Use</>} />
-            <Route path={route[PP]} render={() => <>Privacy Policy</>} />
-            <Route path={route[COC]} render={() => <>Code of conduct</>} />
+            <Route path={route[TOS]}>
+              <TermsOfService {...props} />
+            </Route>
+            <Route path={route[TOU]}>
+              <TermsOfUse {...props} />
+            </Route>
+            <Route path={route[PP]}>
+              <PrivacyPolicy {...props} />
+            </Route>
+            <Route path={route[COC]}>
+              <CodeOfConduct {...props} />
+            </Route>
           </Switch>
         </Box>
       </Router>

@@ -15,6 +15,7 @@ import useFollow from './use-follow';
 import useNotifications from './use-notifications';
 import useTagSubscribe from './use-tag-subscribe';
 import useSearch from './use-search';
+import useLegal from './use-legal';
 
 export {
   constants,
@@ -35,4 +36,5 @@ export {
   BookmarkTypes,
   useTagSubscribe,
   useSearch,
+  useLegal,
 };
