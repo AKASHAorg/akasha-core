@@ -81,18 +81,21 @@ const ProvidersListModal = (props: {
                         size="medium"
                         href={'/legal/terms-of-service'}
                         label={' Terms of Service '}
+                        target={'_blank'}
                       />{' '}
                       {'and'}
                       <StyledAnchor
                         size="medium"
                         href={'/legal/privacy-policy'}
                         label={' Privacy Policy. '}
+                        target={'_blank'}
                       />
                       {'Please also acknowledge our'}
                       <StyledAnchor
                         size="medium"
                         href={'/legal/code-of-conduct'}
                         label={' Code of Conduct '}
+                        target={'_blank'}
                       />
                       {
                         'as the basis for respectful interactions with each other on Ethereum World.'
