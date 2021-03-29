@@ -1,5 +1,5 @@
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import { runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
+import { gqlStash, runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
 import {
   BUCKET_THREAD_NAME,
   LinkedProperty,
@@ -138,11 +138,14 @@ const service: AkashaService = (invoke, log) => {
     } else {
       return Promise.reject('Must provide ethAddress of pubKey value');
     }
-    const result = await runGQL({
-      query: query,
-      variables: variables,
-      operationName: operationName,
-    });
+    const result = await runGQL(
+      {
+        query: query,
+        variables: variables,
+        operationName: operationName,
+      },
+      true,
+    );
     return result.data;
   };
 
@@ -165,6 +168,7 @@ const service: AkashaService = (invoke, log) => {
         },
       },
     });
+    gqlStash.clear();
     return result.data;
   };
 
@@ -187,6 +191,7 @@ const service: AkashaService = (invoke, log) => {
         },
       },
     });
+    gqlStash.clear();
     return result.data;
   };
 
@@ -296,11 +301,14 @@ const service: AkashaService = (invoke, log) => {
              totalFollowing
          }
        }`;
-    const result = await runGQL({
-      query: query,
-      variables: { name: opt.name },
-      operationName: 'SearchProfiles',
-    });
+    const result = await runGQL(
+      {
+        query: query,
+        variables: { name: opt.name },
+        operationName: 'SearchProfiles',
+      },
+      true,
+    );
     return result.data;
   };
 
@@ -351,11 +359,14 @@ const service: AkashaService = (invoke, log) => {
         comments{id}
       }
     }`;
-    const result = await runGQL({
-      query: query,
-      variables: { keyword: keyword },
-      operationName: 'GlobalSearch',
-    });
+    const result = await runGQL(
+      {
+        query: query,
+        variables: { keyword: keyword },
+        operationName: 'GlobalSearch',
+      },
+      true,
+    );
     return result.data;
   };
   return {

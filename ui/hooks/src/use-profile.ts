@@ -174,7 +174,7 @@ export const useProfile = (
           profileService.saveMediaFile({
             isUrl: avatar.isUrl,
             content: avatar.src,
-            name: 'avatar',
+            name: ProfileProviderProperties.AVATAR,
           }),
         );
       } else {
@@ -190,7 +190,7 @@ export const useProfile = (
           profileService.saveMediaFile({
             isUrl: coverImage.isUrl,
             content: coverImage.src,
-            name: 'coverImage',
+            name: ProfileProviderProperties.COVER_IMAGE,
           }),
         );
       } else {
@@ -284,7 +284,8 @@ export const useProfile = (
           const updatedFields = providers
             .map(provider => {
               if (
-                (provider.property === 'coverImage' || provider.property === 'avatar') &&
+                (provider.property === ProfileProviderProperties.COVER_IMAGE ||
+                  provider.property === ProfileProviderProperties.AVATAR) &&
                 !!provider.value
               ) {
                 return {
@@ -339,7 +340,10 @@ export const useProfile = (
         }
         if (resp && resp.data && resp.data.makeDefaultProvider) {
           actions.updateProfile({
-            default: [...profile.default!.filter(p => p.property !== 'userName'), providerData],
+            default: [
+              ...profile.default!.filter(p => p.property !== ProfileProviderProperties.USERNAME),
+              providerData,
+            ],
           });
           setUpdateStatus(prev => ({
             ...prev,
@@ -373,12 +377,13 @@ export const useProfile = (
         p => p.property === ProfileProviderProperties.USERNAME,
       );
 
-      if (!defaultProvider?.value && typeof defaultProvider?.value !== 'string') {
+      if (!defaultProvider || (defaultProvider && !defaultProvider.value)) {
         return {
           default: defaultProvider,
           available: type,
         };
       }
+
       if (profile.providers?.length) {
         profile.providers.forEach(provider => {
           if (provider.property === ProfileProviderProperties.USERNAME) {
