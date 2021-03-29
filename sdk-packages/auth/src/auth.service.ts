@@ -16,14 +16,14 @@ import services, {
   moduleName,
 } from './constants';
 import {
-  Client,
-  PrivateKey,
-  Users,
   Buckets,
-  UserAuth,
-  PublicKey,
+  Client,
   InboxListOptions,
+  PrivateKey,
+  PublicKey,
   Status,
+  UserAuth,
+  Users,
 } from '@textile/hub';
 import { Database } from '@textile/threaddb';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
@@ -112,18 +112,23 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       throw err;
     }
   };
-  const signIn = async (provider: EthProviders = EthProviders.Web3Injected) => {
+  const signIn = async (
+    args: { provider?: EthProviders; checkRegistered: boolean } = {
+      provider: EthProviders.Web3Injected,
+      checkRegistered: true,
+    },
+  ) => {
     let currentProvider: number;
     // const { setServiceSettings } = invoke(coreServices.SETTINGS_SERVICE);
     const cache = await invoke(commonServices[CACHE_SERVICE]).getStash();
 
-    if (provider === EthProviders.None) {
+    if (args.provider === EthProviders.None) {
       if (!sessionStorage.getItem(providerKey)) {
         throw new Error('The provider must have a wallet/key in order to authenticate.');
       }
       currentProvider = +sessionStorage.getItem(providerKey); // cast to int
     } else {
-      currentProvider = provider;
+      currentProvider = args.provider;
       if (currentProvider === EthProviders.WalletConnect) {
         // @Todo: track https://github.com/WalletConnect/walletconnect-monorepo/issues/444
         // until there is a consistent way of detecting previous sessions and initiate disconnect
@@ -139,7 +144,9 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       const endPoint = authSettings[AUTH_ENDPOINT];
       const signer = web3.getSigner();
       const address = await signer.getAddress();
-      await checkIfSignedUp(address);
+      if (args.checkRegistered) {
+        await checkIfSignedUp(address);
+      }
       const web3Service = await invoke(commonServices[WEB3_SERVICE]);
       log.info(`using eth address ${address}`);
       sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
@@ -230,7 +237,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     }
 
     if (!identity) {
-      await signIn(EthProviders.None);
+      await signIn({ provider: EthProviders.None, checkRegistered: false });
     }
 
     return {
@@ -293,7 +300,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
         log.error(e);
       }
     }
-    const data = await signIn(EthProviders.None);
+    const data = await signIn({ provider: EthProviders.None, checkRegistered: false });
     const response = {
       data: data,
       channelInfo: {
@@ -425,7 +432,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       return true;
     }
     if (response.status === 403) {
-      throw new Error('Sorry, this code was already taken. Please try another one.');
+      throw new Error('Sorry, this code has already been used. Please try another one.');
     }
 
     throw new Error('Sorry, this code is not valid. Please try again.');

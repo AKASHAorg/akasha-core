@@ -1,6 +1,6 @@
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import { COMMENT_SERVICE } from './constants';
-import { runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
+import { gqlStash, runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
 import authServices, { AUTH_SERVICE } from '@akashaproject/sdk-auth/lib/constants';
 
 interface DataProviderInput {
@@ -100,6 +100,7 @@ const service: AkashaService = (invoke, log) => {
     if (result.errors) {
       throw new Error('Could not save the comment!');
     }
+    gqlStash.clear();
     return result.data;
   };
   return { getComment, getComments, addComment };
