@@ -1,6 +1,7 @@
 import { Application, LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { initReactI18next } from 'react-i18next';
 import routes, { rootRoute } from './routes';
+import { moduleName as commons } from '@akashaproject/sdk-common/lib/constants';
 
 /**
  * All the plugins must export an object like this:
@@ -25,7 +26,7 @@ export const application: Application = {
   },
   loadingFn: (): Promise<any> => import('./components'),
   name: 'ui-plugin-legal',
-  sdkModules: [],
+  sdkModules: [{ module: commons }],
   title: 'Legal',
   menuItems: routes,
   logo: { type: LogoTypeSource.ICON, value: 'legal' },

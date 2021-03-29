@@ -32,6 +32,7 @@ import { TagProfileCard } from './tag-cards/tag-profile-card';
 import { TagSearchCard } from './tag-cards/tag-search-card';
 import { FilterCard } from './utility-cards/filter-card';
 import SwitchCard from './utility-cards/switch-card';
+import { MdCard } from './utility-cards/md-card';
 import { NotificationsCard } from './notification-cards/notification-card';
 
 export {
@@ -68,4 +69,5 @@ export {
   FilterCard,
   SwitchCard,
   NotificationsCard,
+  MdCard,
 };

@@ -41,6 +41,7 @@ const TopbarComponent = (props: TopBarProps) => {
   } = props;
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
+  const [suggestSignUp, setSuggestSignUp] = React.useState<boolean>(false);
   const [showSignUpModal, setshowSignUpModal] = React.useState<{
     inviteToken: string | null;
     status: boolean;
@@ -117,7 +118,12 @@ const TopbarComponent = (props: TopBarProps) => {
     if (errorState && Object.keys(errorState).length) {
       const txt = Object.keys(errorState)
         .filter(key => key.split('.')[0] === 'useLoginState')
-        .map(k => errorState![k])
+        .map(k => {
+          if (errorState[k].error.name === 'UserNotRegistered') {
+            setSuggestSignUp(true);
+          }
+          return errorState[k];
+        })
         .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
       return txt;
     }
@@ -200,6 +206,7 @@ const TopbarComponent = (props: TopBarProps) => {
       inviteToken: null,
       status: false,
     });
+    setSuggestSignUp(false);
     errorActions.removeLoginErrors();
   };
   const handleSignUpClick = () => {
@@ -389,6 +396,8 @@ const TopbarComponent = (props: TopBarProps) => {
         waitForCheckTerms={termsState.waitForCheckTerms}
         checkedTermsValues={termsState.checkedTermsValues}
         acceptedTerms={termsState.acceptedTerms}
+        suggestSignUp={suggestSignUp}
+        suggestedSignUpFn={handleSignUpClick}
       />
     </ThemeSelector>
   );

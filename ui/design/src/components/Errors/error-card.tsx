@@ -43,8 +43,8 @@ const ErrorCard: React.FC<ErrorLoaderProps & { imageSrc: string }> = props => {
       <Box>
         <StyledImage src={props.imageSrc} />
       </Box>
-      <Box>
-        <Text size="xlarge" weight="bold">
+      <Box align="center" fill="horizontal">
+        <Text size="xlarge" weight="bold" textAlign="center">
           {props.title}
         </Text>
       </Box>
