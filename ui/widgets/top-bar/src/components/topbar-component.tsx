@@ -160,7 +160,7 @@ const TopbarComponent = (props: TopBarProps) => {
         return props.navigateToUrl('/profile/my-profile/update-info');
       }
     }
-  }, [loggedProfileData.default?.length, loggedProfileData.isLoading, loginState.ethAddress]);
+  }, [loggedProfileData.isLoading, loginState.ethAddress]);
   // *how to obtain different topbar menu sections
   const quickAccessItems = currentMenu?.filter(
     menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,
