@@ -77,10 +77,23 @@ const ProvidersListModal = (props: {
                   <Box align="center" justify="center" pad="small">
                     <Text textAlign={'start'} size="medium" color={'secondaryText'}>
                       {'Please confirm below that you have read and agree to our'}
-                      <StyledAnchor size="medium" href={'#'} label={' Terms of Service '} /> {'and'}
-                      <StyledAnchor size="medium" href={'#'} label={' Privacy Policy. '} />
+                      <StyledAnchor
+                        size="medium"
+                        href={'/legal/terms-of-service'}
+                        label={' Terms of Service '}
+                      />{' '}
+                      {'and'}
+                      <StyledAnchor
+                        size="medium"
+                        href={'/legal/privacy-policy'}
+                        label={' Privacy Policy. '}
+                      />
                       {'Please also acknowledge our'}
-                      <StyledAnchor size="medium" href={'#'} label={' Code of Conduct '} />
+                      <StyledAnchor
+                        size="medium"
+                        href={'/legal/code-of-conduct'}
+                        label={' Code of Conduct '}
+                      />
                       {
                         'as the basis for respectful interactions with each other on Ethereum World.'
                       }

@@ -15,6 +15,7 @@ import useFollow from './use-follow';
 import useNotifications from './use-notifications';
 import useTagSubscribe from './use-tag-subscribe';
 import useSearch from './use-search';
+import useLegal from './use-legal';
 import useNetworkState from './use-network-state';
 
 export {
@@ -36,5 +37,6 @@ export {
   BookmarkTypes,
   useTagSubscribe,
   useSearch,
+  useLegal,
   useNetworkState,
 };
