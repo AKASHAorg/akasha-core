@@ -288,15 +288,16 @@ const Topbar = (props: ITopbarProps) => {
     }
     return (
       <Box direction="row" align="center" justify="between" fill="horizontal" height="3rem">
-        <Box direction="row" align="center" flex={{ shrink: 0 }} gap="small">
-          <Box
-            direction="row"
-            gap="small"
-            align="center"
-            onClick={() => {
-              onNavigation('/');
-            }}
-          >
+        <Box
+          direction="row"
+          align="center"
+          flex={{ shrink: 0 }}
+          gap="small"
+          onClick={() => {
+            onNavigation('/');
+          }}
+        >
+          <Box direction="row" gap="small" align="center">
             <BrandIcon type="ethereumWorldLogo" clickable={true} />
             {!isMobileOnly && (
               <StyledText unselectable="on" size="large">
@@ -305,14 +306,7 @@ const Topbar = (props: ITopbarProps) => {
             )}
           </Box>
           {versionURL && (
-            <VersionButton
-              href={versionURL}
-              target="_blank"
-              color="errorText"
-              label={versionLabel}
-              primary={true}
-              size="small"
-            />
+            <VersionButton color="errorText" label={versionLabel} primary={true} size="small" />
           )}
         </Box>
         <Box
