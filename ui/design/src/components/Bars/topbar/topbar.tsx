@@ -363,7 +363,7 @@ const Topbar = (props: ITopbarProps) => {
       {mobileSignedOutView && (
         <Box direction="row" align="center" gap="small" fill="horizontal">
           <Button onClick={onLoginClick} label={signInLabel} fill="horizontal" />
-          <Button primary={true} onClick={onLoginClick} label={signUpLabel} fill="horizontal" />
+          <Button primary={true} onClick={onSignUpClick} label={signUpLabel} fill="horizontal" />
         </Box>
       )}
       {dropOpen && renderDrop()}
