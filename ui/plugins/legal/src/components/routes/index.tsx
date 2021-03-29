@@ -1,21 +1,37 @@
 import DS from '@akashaproject/design-system';
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import route, { TOS, TOU, PP, COC } from '../../routes';
+import route, { TOS, TOU, PP, COC, DG } from '../../routes';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import TermsOfService from './terms-of-service';
+import TermsOfUse from './terms-of-use';
+import CodeOfConduct from './code-of-conduct';
+import PrivacyPolicy from './privacy-policy';
+import DeveloperGuidelines from './developer-guidelines';
 
 const { Box, ViewportSizeProvider } = DS;
 
-const Routes: React.FC<RootComponentProps> = _props => {
+const Routes: React.FC<RootComponentProps> = props => {
   return (
     <ViewportSizeProvider>
       <Router>
         <Box>
           <Switch>
-            <Route path={route[TOS]} render={() => <>Terms of Service</>} />
-            <Route path={route[TOU]} render={() => <>Terms of Use</>} />
-            <Route path={route[PP]} render={() => <>Privacy Policy</>} />
-            <Route path={route[COC]} render={() => <>Code of conduct</>} />
+            <Route path={route[TOS]}>
+              <TermsOfService {...props} />
+            </Route>
+            <Route path={route[TOU]}>
+              <TermsOfUse {...props} />
+            </Route>
+            <Route path={route[PP]}>
+              <PrivacyPolicy {...props} />
+            </Route>
+            <Route path={route[COC]}>
+              <CodeOfConduct {...props} />
+            </Route>
+            <Route path={route[DG]}>
+              <DeveloperGuidelines {...props} />
+            </Route>
           </Switch>
         </Box>
       </Router>
