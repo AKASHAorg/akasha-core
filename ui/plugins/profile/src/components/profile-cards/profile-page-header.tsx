@@ -182,7 +182,8 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
       (hasEnsSubdomainAvail && !currentDefault?.value.endsWith('.akasha.eth')) ||
       detectedEns?.endsWith('.akasha.eth') ||
       (currentDefault?.provider === ProfileProviders.ENS &&
-        !currentDefault.value.endsWith('.akasha.eth'))
+        !currentDefault.value.endsWith('.akasha.eth')) ||
+      currentDefault?.provider === ProfileProviders.EWA_BASIC
     ) {
       options.push({
         type: ENSOptionTypes.ENS_AKASHA_SUBDOMAIN,
