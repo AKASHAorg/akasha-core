@@ -36,7 +36,7 @@ export interface UseLoginState {
 }
 export interface UseLoginActions {
   /* Login */
-  login: (provider: EthProviders) => void;
+  login: (provider: EthProviders, checkRegistered?: boolean) => void;
   /* Logout */
   logout: () => void;
 }
@@ -106,9 +106,12 @@ const useLoginState = (props: UseLoginProps): [UseLoginState, UseLoginActions] =
   }, []);
 
   const actions: UseLoginActions = {
-    login(selectedProvider: EthProviders) {
+    login(selectedProvider: EthProviders, checkRegistered = true) {
       try {
-        const call = authService.signIn(selectedProvider);
+        const call = authService.signIn({
+          provider: selectedProvider,
+          checkRegistered: checkRegistered,
+        });
         // handle the case where signIn was triggered from another place
         const globalCall = globalChannel.pipe(
           filter((response: any) => response.channelInfo.method === 'signIn'),

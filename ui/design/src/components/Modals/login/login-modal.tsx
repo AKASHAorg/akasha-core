@@ -166,7 +166,7 @@ const LoginModal: React.FC<LoginModalProps> = props => {
             waitForCheckTerms={waitForCheckTerms}
           />
         )}
-        {suggestSignUp && showModal && (
+        {suggestSignUp && showModal && !showSignUpModal?.status && (
           <ModalContainer onModalClose={handleProviderModalClose}>
             <ErrorLoader
               type="not-registered"
