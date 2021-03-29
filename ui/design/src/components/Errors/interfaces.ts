@@ -9,7 +9,8 @@ export interface ErrorLoaderProps {
     | 'no-connection'
     | 'network-not-supported'
     | 'no-login'
-    | 'script-error';
+    | 'script-error'
+    | 'not-registered';
   /* Path to public folder */
   publicImgPath?: string;
   /**
