@@ -1,9 +1,16 @@
 import * as React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { ModalRenderer } from '../common/modal-renderer';
-import { EthProviderListModal, EthProviderModal, EthProviderModalIllustration } from '../index';
+import {
+  EthProviderListModal,
+  EthProviderModal,
+  EthProviderModalIllustration,
+  ModalContainer,
+} from '../index';
 import { Icon } from '../../Icon';
 import ViewportSizeProvider, { useViewportSize } from '../../Providers/viewport-dimension';
+import ErrorLoader from '../../Errors/error-loader';
+import { Button } from 'grommet';
 
 export interface LoginModalProps {
   slotId: string;
@@ -29,6 +36,8 @@ export interface LoginModalProps {
   onAcceptTerms?: (ev: any) => void;
   onCheckedTermsValues?: (ev: any) => void;
   waitForCheckTerms?: boolean;
+  suggestSignUp?: boolean;
+  suggestedSignUpFn?: () => void;
   /**
    * text to be displayed when the user selects to login with metamask
    */
@@ -71,6 +80,8 @@ const LoginModal: React.FC<LoginModalProps> = props => {
     onAcceptTerms,
     onCheckedTermsValues,
     waitForCheckTerms,
+    suggestSignUp,
+    suggestedSignUpFn,
   } = props;
 
   const { size } = useViewportSize();
@@ -107,6 +118,13 @@ const LoginModal: React.FC<LoginModalProps> = props => {
       selectedProvider: null,
     });
     onModalClose();
+  };
+
+  const handleSignUpClick = () => {
+    handleProviderModalClose();
+    if (suggestedSignUpFn) {
+      suggestedSignUpFn();
+    }
   };
 
   return (
@@ -148,7 +166,24 @@ const LoginModal: React.FC<LoginModalProps> = props => {
             waitForCheckTerms={waitForCheckTerms}
           />
         )}
-        {showModal && modalState.selectedProvider === METAMASK_PROVIDER && (
+        {suggestSignUp && showModal && (
+          <ModalContainer onModalClose={handleProviderModalClose}>
+            <ErrorLoader
+              type="not-registered"
+              title={'No account associated with this Ethereum address'}
+              details={'Please sign up to create an Ethereum World account'}
+              style={{ padding: '1em 3em' }}
+            >
+              <Button
+                primary={true}
+                label={'Sign Up'}
+                style={{ borderRadius: '3px', color: '#fff' }}
+                onClick={handleSignUpClick}
+              />
+            </ErrorLoader>
+          </ModalContainer>
+        )}
+        {showModal && !suggestSignUp && modalState.selectedProvider === METAMASK_PROVIDER && (
           <EthProviderModal
             illustration={
               <EthProviderModalIllustration providerIcon={<Icon type="metamask" size="lg" />} />
@@ -161,7 +196,7 @@ const LoginModal: React.FC<LoginModalProps> = props => {
             isMobile={size === 'small'}
           />
         )}
-        {showModal && modalState.selectedProvider === WALLETCONNECT_PROVIDER && (
+        {showModal && !suggestSignUp && modalState.selectedProvider === WALLETCONNECT_PROVIDER && (
           <WalletConnectModalTrigger onLogin={handleWalletConnectLogin} />
         )}
       </ModalRenderer>
