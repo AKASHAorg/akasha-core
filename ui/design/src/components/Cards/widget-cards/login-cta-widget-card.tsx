@@ -3,11 +3,7 @@ import { Box, Text, Image } from 'grommet';
 import { isMobile } from 'react-device-detect';
 import styled from 'styled-components';
 
-import { WidgetAreaCardBox } from '../common/basic-card-box';
-
-const LoginWidgetBox = styled(WidgetAreaCardBox)`
-  padding: 1em;
-`;
+import { BasicCardBox } from '../common/basic-card-box';
 
 const StyledText = styled(Text)`
   font-size: 1rem;
@@ -35,7 +31,7 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
     publicImgPath = '/images',
   } = props;
   return (
-    <LoginWidgetBox>
+    <BasicCardBox pad="medium" callToAction={true}>
       {props.image && props.image}
       <Box direction={isMobile ? 'column-reverse' : 'row'} align="center" justify="between">
         <Box direction="column" width={isMobile ? '100%' : '50%'}>
@@ -66,7 +62,7 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
           <Image fit="contain" src={`${publicImgPath}/login-widget-illustration.png`} />
         </Box>
       </Box>
-    </LoginWidgetBox>
+    </BasicCardBox>
   );
 };
 

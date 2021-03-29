@@ -67,6 +67,7 @@ import {
   FilterCard,
   SwitchCard,
   NotificationsCard,
+  MdCard,
 } from './components/Cards';
 
 import { EditorBox, EditorMeter, editorDefaultValue } from './components/Editor';
@@ -226,6 +227,7 @@ const exported = {
   TutorialWidgetCard,
   FilterCard,
   SwitchCard,
+  MdCard,
   EntryPublishErrorCard,
   StyledLayer,
   Helmet: Helmet as HelmetType,
