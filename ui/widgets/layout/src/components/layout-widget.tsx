@@ -2,14 +2,17 @@ import DS from '@akashaproject/design-system';
 import { i18n as I18nType } from 'i18next';
 import React, { PureComponent } from 'react';
 import { GlobalStyle } from './global-style';
-import { BaseContainer, MainAreaContainer, WidgetContainer } from './styled-containers';
+import {
+  MainAreaContainer,
+  ScrollableWidgetArea,
+  SidebarWrapper,
+  WidgetContainer,
+} from './styled-containers';
 import { ModalSlot, PluginSlot, TopbarSlot, SidebarSlot, WidgetSlot } from './styled-slots';
 import CookieWidget from './cookie-widget';
 
 const {
   Box,
-  styled,
-  css,
   lightTheme,
   // darkTheme,
   ThemeSelector,
@@ -17,44 +20,6 @@ const {
   ViewportSizeProvider,
   // useViewportSize,
 } = DS;
-
-const TOPBAR_HEIGHT = 4;
-
-const SidebarWrapper = styled(BaseContainer)<{ visible: boolean }>`
-  z-index: 999;
-  flex-grow: 1;
-  height: calc(100vh - ${TOPBAR_HEIGHT}rem);
-  top: ${TOPBAR_HEIGHT}rem;
-  position: sticky;
-  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
-    ${props => {
-      if (props.visible) {
-        return css`
-          position: fixed;
-          top: ${TOPBAR_HEIGHT}rem;
-          width: 90vw;
-          height: calc(100vh - ${TOPBAR_HEIGHT + 0.3}rem);
-        `;
-      }
-      return css`
-        display: none;
-      `;
-    }}
-  }
-`;
-
-const ScrollableWidgetArea = styled.div`
-  ${props => css`
-    &::-webkit-scrollbar {
-      width: 0 !important;
-    }
-    @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
-      overflow-y: auto;
-      overflow-x: hidden;
-      height: calc(100vh - ${TOPBAR_HEIGHT + 0.3}rem);
-    }
-  `}
-`;
 
 export interface IProps {
   i18n: I18nType;
