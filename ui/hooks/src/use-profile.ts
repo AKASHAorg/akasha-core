@@ -281,7 +281,7 @@ export const useProfile = (
               props.onError,
             )(new Error(`Cannot save a provider to your profile.`));
           }
-          const updatedFields = providers
+          const updatedFields: { [key: string]: any } = providers
             .map(provider => {
               if (
                 (provider.property === ProfileProviderProperties.COVER_IMAGE ||
@@ -296,8 +296,24 @@ export const useProfile = (
             })
             .reduce((acc, curr) => Object.assign(acc, curr), {});
 
-          actions.updateProfile(updatedFields);
           if (resp && resp.data.makeDefaultProvider) {
+            if (updatedFields.userName && !profile.userName) {
+              updatedFields.providers = [
+                {
+                  provider: ProfileProviders.EWA_BASIC,
+                  property: ProfileProviderProperties.USERNAME,
+                  value: updatedFields.userName,
+                },
+              ];
+              updatedFields.default = [
+                {
+                  provider: ProfileProviders.EWA_BASIC,
+                  property: ProfileProviderProperties.USERNAME,
+                  value: updatedFields.userName,
+                },
+              ];
+            }
+            actions.updateProfile(updatedFields);
             setUpdateStatus(prev => ({
               ...prev,
               saving: false,
