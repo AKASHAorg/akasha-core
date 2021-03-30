@@ -7,7 +7,7 @@ import { ISocialData } from './social-box';
 import CardHeaderMenuDropdown from './card-header-menu';
 import CardActions, { ServiceNames } from './card-actions';
 import CardHeaderAkashaDropdown from './card-header-akasha';
-import { StyledDropAlt, StyledProfileDrop } from './styled-entry-box';
+import { StyledDropAlt, StyledProfileDrop, StyledIcon } from './styled-entry-box';
 
 import { EntryCardHidden } from '..';
 import { ProfileMiniCard } from '../profile-cards/profile-mini-card';
@@ -295,7 +295,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             />
             {/* this condition hides the icon for logged user's own posts */}
             {onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress) && (
-              <Icon
+              <StyledIcon
                 type="moreDark"
                 onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
                   if (disableActions) {
