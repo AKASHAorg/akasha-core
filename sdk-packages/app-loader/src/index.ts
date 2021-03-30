@@ -604,6 +604,7 @@ export default class AppLoader implements IAppLoader {
       await new Promise(async resolve => {
         const pProps = {
           domElement: domEl,
+          isMobile: this.isMobile,
           ...otherProps,
           themeReadyEvent: () => {
             resolve(null);
