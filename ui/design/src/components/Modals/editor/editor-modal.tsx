@@ -6,6 +6,7 @@ import EditorCard, { IEditorCard } from '../../Cards/editor-cards/editor-card';
 import { editorDefaultValue } from '../../Editor';
 import { ModalContainer } from '../common/fullscreen-modal-container';
 import { ModalRenderer } from '../common/modal-renderer';
+import { isMobileOnly } from 'react-device-detect';
 
 export interface IEditorModal extends Omit<IEditorCard, 'editorState' | 'setEditorState'> {
   slotId: string;
@@ -57,7 +58,9 @@ const EditorModal: React.FC<IEditorModal> = props => {
   return (
     <ModalRenderer slotId={slotId}>
       {showModal && (
-        <ModalContainer style={{ display: 'flex', justifyContent: 'center' }}>
+        <ModalContainer
+          style={{ display: 'flex', justifyContent: isMobileOnly ? 'start' : 'center' }}
+        >
           {!showCancel && (
             <EditorCard
               avatar={avatar}
