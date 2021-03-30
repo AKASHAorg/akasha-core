@@ -1,9 +1,9 @@
-name: deploy ethereum.world api
+name: deploy staging ethereum.world api
 
 on:
   push:
     branches:
-      - master
+      - next
     paths:
       - '.github/workflows/**'
       - 'api/**'
