@@ -140,7 +140,6 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   React.useEffect(() => {
     if (profileUpdateStatus.updateComplete) {
       props.profileActions.resetUpdateStatus();
-      // reload profile
       props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
       return;
     }

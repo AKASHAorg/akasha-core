@@ -27,6 +27,9 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin({ verbose: true }),
+    new webpack.EnvironmentPlugin({
+      MODERATION_API: process.env.MODERATION_API || 'https://staging-moderation.ethereum.world'
+    }),
     new webpack.AutomaticPrefetchPlugin(),
     new webpack.ProgressPlugin({
       entries: true,
