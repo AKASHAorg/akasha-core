@@ -4,7 +4,7 @@ export const POSTS = 'Posts';
 export const POST = 'Post';
 export const REPLY = 'Reply';
 export const TAGS = 'Tags';
-export const rootRoute = '/AKASHA-app';
+export const rootRoute = '/social-app';
 export const INVITE = 'Invite';
 
 export default {
