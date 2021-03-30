@@ -32,7 +32,45 @@ export const MainAreaContainer: any = styled(BaseContainer)`
   `}
 `;
 
+const TOPBAR_HEIGHT = 48;
+
 export const WidgetContainer: any = styled(BaseContainer)`
   position: sticky;
-  top: 4rem;
+  top: calc(${TOPBAR_HEIGHT}px + 0.5em);
+`;
+
+export const ScrollableWidgetArea: any = styled.div`
+  ${props => css`
+    &::-webkit-scrollbar {
+      width: 0 !important;
+    }
+    @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: calc(100vh - ${TOPBAR_HEIGHT}px - 0.5em);
+    }
+  `}
+`;
+
+export const SidebarWrapper: any = styled(BaseContainer)<{ visible: boolean }>`
+  z-index: 999;
+  flex-grow: 1;
+  /* height: calc(100vh - ${TOPBAR_HEIGHT}rem); */
+  /* top: ${TOPBAR_HEIGHT}rem; */
+  position: sticky;
+  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
+    ${props => {
+      if (props.visible) {
+        return css`
+          position: fixed;
+          /* top: ${TOPBAR_HEIGHT}rem; */
+          width: 90vw;
+          /* height: calc(100vh - ${TOPBAR_HEIGHT + 0.3}rem); */
+        `;
+      }
+      return css`
+        display: none;
+      `;
+    }}
+  }
 `;

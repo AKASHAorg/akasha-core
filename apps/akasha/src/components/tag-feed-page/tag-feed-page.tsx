@@ -81,6 +81,18 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   }, [loginState.ethAddress, tagName]);
 
   React.useEffect(() => {
+    if (loginState.waitForAuth && !loginState.ready) {
+      return;
+    }
+    if (
+      (loginState.waitForAuth && loginState.ready) ||
+      (loginState.currentUserCalled && loginState.ethAddress)
+    ) {
+      tagSubscriptionActions.getTagSubscriptions();
+    }
+  }, [JSON.stringify(loginState)]);
+
+  React.useEffect(() => {
     // if post ids array is reset, get tag posts
     if (
       postsState.postIds.length === 0 &&

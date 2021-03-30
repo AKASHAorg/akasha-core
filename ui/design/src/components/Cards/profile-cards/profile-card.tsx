@@ -23,6 +23,7 @@ import {
   ProfileProviders,
   UsernameTypes,
 } from '@akashaproject/ui-awf-typings/lib/profile';
+import { StyledDropAlt } from '../entry-cards/styled-entry-box';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -331,25 +332,27 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         />
       )}
       {isMobile && editMenuOpen && (
-        <MobileListModal
-          closeModal={closeEditMenu}
-          menuItems={[
-            {
-              label: props.updateProfileLabel,
-              handler: () => {
-                props.onUpdateClick();
-                closeEditMenu();
+        <StyledDropAlt>
+          <MobileListModal
+            closeModal={closeEditMenu}
+            menuItems={[
+              {
+                label: props.updateProfileLabel,
+                handler: () => {
+                  props.onUpdateClick();
+                  closeEditMenu();
+                },
               },
-            },
-            {
-              label: props.changeENSLabel,
-              handler: () => {
-                props.onENSChangeClick();
-                closeEditMenu();
+              {
+                label: props.changeENSLabel,
+                handler: () => {
+                  props.onENSChangeClick();
+                  closeEditMenu();
+                },
               },
-            },
-          ]}
-        />
+            ]}
+          />
+        </StyledDropAlt>
       )}
       <Box pad={{ top: 'medium', bottom: 'xsmall' }}>
         <ProfileCardEthereumId
