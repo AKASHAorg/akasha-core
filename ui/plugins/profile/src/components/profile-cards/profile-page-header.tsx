@@ -427,11 +427,11 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         <ModalRenderer slotId={props.layout.app.modalSlotId}>
           {profileData.ethAddress && (
             <ProfileForm
-              titleLabel={t('Ethereum Address')}
+              titleLabel={profileData.userName ? t('Update Profile') : t('Create Profile')}
               avatarLabel={t('Avatar')}
               nameLabel={t('Name')}
               coverImageLabel={t('Cover Image')}
-              descriptionLabel={t('About me')}
+              descriptionLabel={t('About Me')}
               uploadLabel={t('Upload')}
               urlLabel={t('By url')}
               cancelLabel={t('Cancel')}
