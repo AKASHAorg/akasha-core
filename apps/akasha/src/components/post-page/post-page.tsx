@@ -178,7 +178,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   };
 
   const handleTagClick = (name: string) => {
-    props.singleSpa.navigateToUrl(`/AKASHA-app/tags/${name}`);
+    props.singleSpa.navigateToUrl(`/social-app/tags/${name}`);
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, pubKey: string) => {

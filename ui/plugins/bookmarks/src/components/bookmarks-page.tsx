@@ -96,10 +96,10 @@ const BookmarksPage = (props: RootComponentProps) => {
     } | null;
   }) => {
     const { entryId, replyTo } = details;
-    let url = `/AKASHA-app/post/${entryId}`;
+    let url = `/social-app/post/${entryId}`;
     if (replyTo && replyTo.entryId) {
       // handle the reply
-      url = `/AKASHA-app/post/${replyTo.entryId}`;
+      url = `/social-app/post/${replyTo.entryId}`;
     }
     navigateToUrl(url);
   };
@@ -152,7 +152,7 @@ const BookmarksPage = (props: RootComponentProps) => {
                         onMentionClick={handleMentionClick}
                         contentClickable={true}
                         disableReposting={true}
-                        sharePostUrl={`${window.location.origin}/AKASHA-app/post/`}
+                        sharePostUrl={`${window.location.origin}/social-app/post/`}
                         awaitingModerationLabel={t(
                           'You have reported this post. It is awaiting moderation.',
                         )}

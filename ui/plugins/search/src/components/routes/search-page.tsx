@@ -172,7 +172,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
   };
 
   const handlePostClick = (entryId: string) => {
-    singleSpa.navigateToUrl(`/AKASHA-app/post/${entryId}`);
+    singleSpa.navigateToUrl(`/social-app/post/${entryId}`);
   };
 
   const handleEntryBookmark = (entryId: string) => {
@@ -465,7 +465,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                     entryData={entryData}
                     sharePostLabel={t('Share Post')}
                     shareTextLabel={t('Share this post with your friends')}
-                    sharePostUrl={`${window.location.origin}/AKASHA-app/post/`}
+                    sharePostUrl={`${window.location.origin}/social-app/post/`}
                     onClickAvatar={() => handleProfileClick(entryData.author.pubKey)}
                     onEntryBookmark={handleEntryBookmark}
                     repliesLabel={t('Replies')}
