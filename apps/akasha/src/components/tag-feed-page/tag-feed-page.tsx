@@ -113,16 +113,16 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         url = `/profile/${details.entryId}`;
         break;
       case ItemTypes.TAG:
-        url = `/AKASHA-app/tags/${details.entryId}`;
+        url = `/social-app/tags/${details.entryId}`;
         postsActions.resetPostIds();
         break;
       case ItemTypes.ENTRY:
-        url = `/AKASHA-app/post/${details.entryId}`;
+        url = `/social-app/post/${details.entryId}`;
         break;
       case ItemTypes.COMMENT:
         /* Navigate to parent post because we don't have the comment page yet */
         const parentId = postsState.postsData[details.entryId].postId;
-        url = `/AKASHA-app/post/${parentId}`;
+        url = `/social-app/post/${parentId}`;
         break;
       default:
         break;
@@ -227,7 +227,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         logger={props.logger}
         loadMore={handleLoadMore}
         loadItemData={handleItemDataLoad}
-        getShareUrl={(itemId: string) => `${window.location.origin}/AKASHA-app/post/${itemId}`}
+        getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
         itemIds={postsState.postIds}
         itemsData={postsState.postsData}
         errors={errorState}
