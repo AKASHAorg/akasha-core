@@ -16,7 +16,7 @@ import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 import ProfileEditMenuDropdown from './profile-card-edit-dropdown';
 import styled from 'styled-components';
 import { truncateMiddle } from '../../../utils/string-utils';
-import { isMobile } from 'react-device-detect';
+import { isMobile, isMobileOnly } from 'react-device-detect';
 import { MobileListModal } from '../../Modals';
 import {
   IProfileProvider,
@@ -313,7 +313,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           />
         </Box>
       </Box>
-      {!isMobile && editMenuOpen && editMenuRef.current && (
+      {!isMobileOnly && editMenuOpen && editMenuRef.current && (
         <ProfileEditMenuDropdown
           target={editMenuRef.current}
           onClose={closeEditMenu}
@@ -330,7 +330,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           hideENSButton={props.hideENSButton}
         />
       )}
-      {isMobile && editMenuOpen && (
+      {isMobileOnly && editMenuOpen && (
         <MobileListModal
           closeModal={closeEditMenu}
           menuItems={[
