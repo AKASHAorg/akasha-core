@@ -16,13 +16,14 @@ import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 import ProfileEditMenuDropdown from './profile-card-edit-dropdown';
 import styled from 'styled-components';
 import { truncateMiddle } from '../../../utils/string-utils';
-import { isMobile, isMobileOnly } from 'react-device-detect';
+import { isMobile } from 'react-device-detect';
 import { MobileListModal } from '../../Modals';
 import {
   IProfileProvider,
   ProfileProviders,
   UsernameTypes,
 } from '@akashaproject/ui-awf-typings/lib/profile';
+import { StyledDropAlt } from '../entry-cards/styled-entry-box';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -313,7 +314,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           />
         </Box>
       </Box>
-      {!isMobileOnly && editMenuOpen && editMenuRef.current && (
+      {!isMobile && editMenuOpen && editMenuRef.current && (
         <ProfileEditMenuDropdown
           target={editMenuRef.current}
           onClose={closeEditMenu}
@@ -330,26 +331,28 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           hideENSButton={props.hideENSButton}
         />
       )}
-      {isMobileOnly && editMenuOpen && (
-        <MobileListModal
-          closeModal={closeEditMenu}
-          menuItems={[
-            {
-              label: props.updateProfileLabel,
-              handler: () => {
-                props.onUpdateClick();
-                closeEditMenu();
+      {isMobile && editMenuOpen && (
+        <StyledDropAlt>
+          <MobileListModal
+            closeModal={closeEditMenu}
+            menuItems={[
+              {
+                label: props.updateProfileLabel,
+                handler: () => {
+                  props.onUpdateClick();
+                  closeEditMenu();
+                },
               },
-            },
-            {
-              label: props.changeENSLabel,
-              handler: () => {
-                props.onENSChangeClick();
-                closeEditMenu();
+              {
+                label: props.changeENSLabel,
+                handler: () => {
+                  props.onENSChangeClick();
+                  closeEditMenu();
+                },
               },
-            },
-          ]}
-        />
+            ]}
+          />
+        </StyledDropAlt>
       )}
       <Box pad={{ top: 'medium', bottom: 'xsmall' }}>
         <ProfileCardEthereumId
