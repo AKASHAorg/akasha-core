@@ -8,4 +8,5 @@ index.html
 !icons/*.png
 !fonts
 !fonts/*
+!_redirects
 
