@@ -25,9 +25,9 @@ const CookieWidget: React.FC<ICookieWidgetProps> = props => {
             <Translation>
               {t => (
                 <CookieWidgetCard
-                  titleLabel={`${t('Cookies')} 🍪`}
+                  titleLabel={`${t('But first, cookies!')} 🙈🍪`}
                   contentLabel={t(
-                    'To help provide you with the best experience when visiting this Website, we use cookies for security and product improvement purposes in accordance with our',
+                    'This website requires essential cookies for security and stability purposes. Matomo cookies and tracking can be accepted for product improvement according to our',
                   )}
                   privacyUrlLabel={t('Privacy Policy')}
                   privacyUrl={`${window.location.protocol}//${window.location.host}/legal/privacy-policy`}
