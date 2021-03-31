@@ -40,7 +40,6 @@ class LayoutWidget extends PureComponent<IProps> {
     hasErrors: boolean;
     errorMessage: string;
     showSidebar?: boolean;
-    consent?: boolean;
   };
 
   constructor(props: IProps) {
@@ -48,7 +47,6 @@ class LayoutWidget extends PureComponent<IProps> {
     this.state = {
       hasErrors: false,
       errorMessage: '',
-      consent: false,
     };
   }
 
@@ -72,10 +70,6 @@ class LayoutWidget extends PureComponent<IProps> {
   public componentDidMount() {
     window.addEventListener('layout:showSidebar', this.showSidebar);
     window.addEventListener('layout:hideSidebar', this.hideSidebar);
-    const cookieConsent = localStorage.getItem('ew-cookie-consent');
-    if (cookieConsent) {
-      this.setState({ ...this.state, consent: true });
-    }
   }
 
   public componentWillUnmount() {
@@ -93,11 +87,6 @@ class LayoutWidget extends PureComponent<IProps> {
       modalSlotId,
     } = this.props;
     const { showSidebar } = this.state;
-
-    const acceptCookie = (all: boolean = false) => {
-      localStorage.setItem('ew-cookie-consent', `${all ? 'all' : 'essential'}`);
-      return this.setState({ ...this.state, consent: true });
-    };
 
     if (this.state.hasErrors) {
       return (
@@ -137,11 +126,8 @@ class LayoutWidget extends PureComponent<IProps> {
                     <PluginSlot id={pluginSlotId} className="container" />
                     <WidgetSlot>
                       <WidgetContainer>
-                        {!this.state.consent && !this.props.isMobile && (
-                          <CookieWidget
-                            style={{ position: 'absolute', bottom: 0 }}
-                            acceptCookie={acceptCookie}
-                          />
+                        {!this.props.isMobile && (
+                          <CookieWidget style={{ position: 'absolute', bottom: 0 }} />
                         )}
                         <ScrollableWidgetArea>
                           <Box id={rootWidgetSlotId} />
@@ -152,12 +138,7 @@ class LayoutWidget extends PureComponent<IProps> {
                   </MainAreaContainer>
                 </Box>
                 <ModalSlot id={modalSlotId} />
-                {!this.state.consent && this.props.isMobile && (
-                  <CookieWidget
-                    style={{ position: 'fixed', bottom: 0 }}
-                    acceptCookie={acceptCookie}
-                  />
-                )}
+                {this.props.isMobile && <CookieWidget style={{ position: 'fixed', bottom: 0 }} />}
               </Box>
             </ViewportSizeProvider>
           </ThemeSelector>

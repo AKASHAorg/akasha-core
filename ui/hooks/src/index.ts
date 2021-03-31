@@ -17,6 +17,7 @@ import useTagSubscribe from './use-tag-subscribe';
 import useSearch from './use-search';
 import useLegal from './use-legal';
 import useNetworkState from './use-network-state';
+import useAnalytics from './use-analytics';
 
 export {
   constants,
@@ -39,4 +40,5 @@ export {
   useSearch,
   useLegal,
   useNetworkState,
+  useAnalytics,
 };
