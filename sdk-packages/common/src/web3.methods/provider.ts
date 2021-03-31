@@ -30,7 +30,7 @@ export default async function getProvider(
   if (provider === EthProviders.WalletConnect) {
     ethProvider = await ConnectToWalletConnect(WalletConnectProvider, {
       network,
-      infuraId: '21f3771ff3814c3db46dfcd216c9e672',
+      infuraId: process.env.INFURA_ID,
     });
   }
   log.info(`connecting to network ${network}`);

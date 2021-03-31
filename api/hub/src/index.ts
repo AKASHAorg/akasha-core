@@ -40,8 +40,17 @@ app.use(json());
 app.use(logger());
 app.use(bodyParser());
 
-/* change this in production */
-app.use(cors());
+const enabledDomains = JSON.parse(process.env.ALLOWED_ORIGINS);
+app.use(
+  cors({
+    origin: ctx => {
+      if (enabledDomains.indexOf(ctx.request.header.origin) !== -1) {
+        return ctx.request.header.origin;
+      }
+      return enabledDomains[0];
+    },
+  }),
+);
 
 const router = new Router();
 app.use(router.routes()).use(router.allowedMethods());
