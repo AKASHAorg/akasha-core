@@ -393,7 +393,7 @@ export const useProfile = (
         p => p.property === ProfileProviderProperties.USERNAME,
       );
 
-      if (!defaultProvider || (defaultProvider && !defaultProvider.value)) {
+      if (!defaultProvider || (defaultProvider && defaultProvider.value === null)) {
         return {
           default: defaultProvider,
           available: type,

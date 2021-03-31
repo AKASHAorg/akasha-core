@@ -145,6 +145,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     }
     if (ensState.status.registrationComplete) {
       ensActions.resetRegistrationStatus();
+      props.profileActions.getProfileData({ pubKey: profileId });
       props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
       return;
     }
@@ -177,6 +178,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     /**
      * Show akasha subdomain option if it's not using ens domain
      */
+    console.log(userNameType, profileData, 'username type');
     if (
       (hasEnsSubdomainAvail && !currentDefault?.value.endsWith('.akasha.eth')) ||
       detectedEns?.endsWith('.akasha.eth') ||
