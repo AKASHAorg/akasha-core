@@ -63,9 +63,13 @@
     <!-- Matomo -->
     <script type="text/javascript">
       var _paq = (window._paq = window._paq || []);
+      _paq.push(['requireConsent']);
+      _paq.push(['requireCookieConsent']);
+      _paq.push(['rememberConsentGiven']);
+      _paq.push(['rememberCookieConsentGiven']);
       /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
+      // _paq.push(['trackPageView']);
+      // _paq.push(['enableLinkTracking']);
       (function () {
         var u = 'https://ethereum.matomo.cloud/';
         _paq.push(['setTrackerUrl', u + 'matomo.php']);
