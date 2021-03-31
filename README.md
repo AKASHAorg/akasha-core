@@ -6,10 +6,10 @@
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square)](https://lerna.js.org/)
 
 
-| App        | Status           |
-| ------------- |-------------|
-| [Feed-app](https://ethereum-world.netlify.app/)      | [![Netlify Status](https://api.netlify.com/api/v1/badges/f2a5bca3-3853-406e-8cb0-105719cabb00/deploy-status)](https://app.netlify.com/sites/ethereum-world/deploys) |
-| [Storybook](https://storybook-awf.netlify.app/)      | [![Netlify Status](https://api.netlify.com/api/v1/badges/04915c36-eff6-4bbe-945b-e9255cae6fb1/deploy-status)](https://app.netlify.com/sites/storybook-awf/deploys)      |
+| App        | Staging           | Production           |
+| ------------- |-------------|-------------|
+| [ethereum.world](https://akasha.ethereum.world/)      | [![Netlify Status](https://api.netlify.com/api/v1/badges/f2a5bca3-3853-406e-8cb0-105719cabb00/deploy-status)](https://app.netlify.com/sites/ethereum-world/deploys) | [![Netlify Status](https://api.netlify.com/api/v1/badges/27d14e03-9955-480b-b3dd-0d281ad2d9e2/deploy-status)](https://app.netlify.com/sites/brave-prod-ewa-uwu/deploys) |
+| [Storybook](https://storybook-awf.netlify.app/)      | [![Netlify Status](https://api.netlify.com/api/v1/badges/04915c36-eff6-4bbe-945b-e9255cae6fb1/deploy-status)](https://app.netlify.com/sites/storybook-awf/deploys)      | NA |
 
 
  
