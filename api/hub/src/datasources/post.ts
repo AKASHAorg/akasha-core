@@ -53,15 +53,18 @@ class PostAPI extends DataSource {
     let posts;
     const db: Client = await getAppDB();
     if (!(await queryCache.has(this.allPostsCache))) {
+      logger.info('creating redis cache');
       posts = await db.find<PostItem>(this.dbID, this.collection, {
         sort: { desc: true, fieldPath: 'creationDate' },
       });
+      logger.info(`got search results ${posts}`);
       await queryCache.set(
         this.allPostsCache,
         posts.map(p => p._id),
       );
     }
     posts = await queryCache.get(this.allPostsCache);
+    logger.info(`got redis cache ${posts}`);
     const fetchedPosts = [];
 
     const offsetIndex = offset ? posts.findIndex(postItem => postItem === offset) : 0;
