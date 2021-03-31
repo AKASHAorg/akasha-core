@@ -1,16 +1,11 @@
 const path = require('path');
 const baseConfig = require('../webpack.config');
+const packageName = require('./package.json').name;
 
-const config = {
+module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
   output: {
-    libraryTarget: baseConfig.output.libraryTarget,
-    //library: 'design-system',
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'design-system.js',
-    publicPath: '/',
-    chunkFilename: '[chunkhash].design-system.js',
+    library: packageName.replace(/@/, '').replace(/\//, '__').replace(/-/, '_'),
+    libraryTarget: 'umd',
   },
-};
-
-module.exports = Object.assign({}, baseConfig, config);
+});

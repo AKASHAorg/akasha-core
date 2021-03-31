@@ -10,9 +10,9 @@ const { Box, BoxFormCard, EnsFormCard } = DS;
 
 storiesOf('Cards/Form Cards', module)
   .add('3Box form card', () => (
-    <Box align="center" pad={{ top: '40px' }}>
+    <Box align="center" pad={{ top: '40px' }} width="582px">
       <BoxFormCard
-        uploadLabel={text('upload Label', 'Upload an image')}
+        uploadLabel={text('Upload Label', 'Upload an image')}
         urlLabel={text('url Label', 'By url')}
         deleteLabel={text('delete Label', 'Delete Image')}
         titleLabel={text('Title Label', 'Ethereum Address')}
@@ -29,38 +29,34 @@ storiesOf('Cards/Form Cards', module)
         )}
         ethAddress={text('Logged Profile EthAddress', '0x003410499401674320006570047391024572456')}
         providerData={object('Provider Data', boxProviderData)}
-        handleSubmit={() => action('Form submitted')('Synthetic Event')}
+        onSave={() => action('Form submitted')('Synthetic Event')}
+        onCancel={() => action('Form Cancelled')('Synthetic Event')}
+        updateStatus={{ saving: boolean('Is saving', false) }}
       />
     </Box>
   ))
   .add('ENS form card', () => (
-    <Box align="center" pad={{ top: '40px' }}>
+    <Box align="center" pad={{ top: '40px' }} width="582px">
       <EnsFormCard
         titleLabel={text('Title Label', 'Add a Username')}
-        secondaryTitleLabel={text('Secondary Title Label', 'Ethereum Name')}
         nameLabel={text('Name Label', 'Select a username')}
         errorLabel={text(
           'Error Label',
           'Sorry, this username has already been taken. Please choose another one.',
         )}
-        ethAddressLabel={text('Ethereum Address Label', 'Your Ethereum Address')}
-        ethNameLabel={text('Ethereum Name Label', 'Your Ethereum Name')}
-        optionUsername={text('Option Username', 'username')}
-        optionSpecify={text('Option Specify', 'Specify an Ethereum name')}
-        optionUseEthereumAddress={text('Option Use Address', 'Use my Ethereum address')}
-        consentText={text('Consent Text', 'By creating an account you agree to the ')}
-        consentUrl={text('Consent Url', 'https://ethereum.world/community-agreement')}
-        consentLabel={text('Consent Label', 'Community Agreement')}
-        poweredByLabel={text('Powered by Label', 'Username powered by')}
-        iconLabel={text('Icon Label', 'ENS')}
+        options={[
+          {
+            type: 0,
+            label: text('Option label', 'Display my AKASHA Ethereum name'),
+            value: text('option value', 'mysubdomain.akasha.eth'),
+            defaultChecked: boolean('Checked by default', false),
+            textDetails: <>text('Additional details text', 'Username Powered by ENS')</>,
+          },
+        ]}
         cancelLabel={text('Cancel Label', 'Cancel')}
         saveLabel={text('Save Label', 'Save')}
-        nameFieldPlaceholder={text('Name Placeholder', '@username')}
-        ethAddress={text('Logged Profile EthAddress', '0x003410499401674320006570047391024572456')}
-        providerData={object('Provider Data', ensProviderData)}
-        handleSubmit={() => action('Form submitted')('Synthetic Event')}
-        validateEns={() => action('validating ens')('Synthetic Event')}
-        validEns={boolean('valid ens', true)}
+        onSave={() => action('Form submitted')('Synthetic Event')}
+        onCancel={() => action('Form Cancelled')('Synthetic Event')}
       />
     </Box>
   ));

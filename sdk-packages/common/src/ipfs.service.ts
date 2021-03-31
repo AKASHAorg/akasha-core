@@ -1,63 +1,73 @@
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import { IPFS_SERVICE } from './constants';
-import ipfsMethods from './ipfs.methods';
-// import ipfsSettings from './ipfs.settings';
+import { IPFS_SERVICE, LEGAL_DOCS_SOURCE } from './constants';
+import { LEGAL_DOCS } from '@akashaproject/ui-awf-typings';
+// import ipfsMethods from './ipfs.methods';
+import { ipfsGateway } from './ipfs.settings';
+// tslint:disable-next-line:no-var-requires
+// const Ipfs = require('ipfs');
 
 const service: AkashaService = (invoke, log) => {
-  let ipfsNode;
-  let utils;
+  // let ipfsNode;
   //
-  const getUtils = async (ipfsUtils?: any) => {
-    if (ipfsUtils && !utils) {
-      log.info('using provided ipfsUtils');
-      utils = ipfsUtils;
-    }
-
-    if (!utils && !ipfsUtils && window.hasOwnProperty('Ipfs')) {
-      // @ts-ignore
-      const { Ipfs } = window;
-      utils = Ipfs;
-    }
-    return utils;
-  };
+  // const getUtils = async () => {
+  //   return Ipfs;
+  // };
   //
-  const getInstance = async (refresh: boolean = false, ipfsInstance: any) => {
-    if (ipfsNode && !refresh) {
-      log.info('reusing existing ipfs instance');
-      return ipfsNode;
-    }
-
-    if (!ipfsInstance && window.hasOwnProperty('Ipfs')) {
-      // @ts-ignore
-      const { Ipfs } = window;
-      ipfsNode = await Ipfs.create({
-        repo: 'ewaAlpha',
-        config: {
-          Addresses: {
-            Swarm: ['/dns4/akasha.cloud/tcp/443/wss/p2p-webrtc-star/'],
-          },
-        },
-      });
-      log.info('ipfs node instantiated');
-    }
-
-    if (!ipfsNode && ipfsInstance) {
-      log.info('using provided ipfs instance');
-      ipfsNode = ipfsInstance;
-    }
-
-    return ipfsNode;
-  };
+  // const getInstance = async (refresh: boolean = false, ipfsInstance?: any) => {
+  //   if (ipfsNode && !refresh) {
+  //     log.info('reusing existing ipfs instance');
+  //     return ipfsNode;
+  //   }
   //
-  const upload = async (
-    data: {
-      content: Buffer | ArrayBuffer | string | any;
-      isUrl?: boolean;
-      path?: string;
-    }[],
-  ) => {
-    return ipfsMethods.add(data, { getInstance, getUtils }, log);
+  //   if (!ipfsInstance) {
+  //     ipfsNode = await Ipfs.create({
+  //       repo: 'ewaAlpha',
+  //       config: {
+  //         Addresses: {
+  //           Swarm: [
+  //             '/dns4/akasha.cloud/tcp/443/wss/p2p-webrtc-star/',
+  //             '/ip4/207.154.192.173/tcp/9096/p2p/QmV5i4xsCmuFzTs6FBxMb6H4kpjRTyomL7AbZZdqEAoDUg',
+  //           ],
+  //         },
+  //       },
+  //     });
+  //     log.info('ipfs node instantiated');
+  //   }
+  //
+  //   if (!ipfsNode && ipfsInstance) {
+  //     log.info('using provided ipfs instance');
+  //     ipfsNode = ipfsInstance;
+  //   }
+  //
+  //   return ipfsNode;
+  // };
+
+  // const upload = async (
+  //   data: {
+  //     content: Buffer | ArrayBuffer | string | any;
+  //     isUrl?: boolean;
+  //     path?: string;
+  //   }[],
+  // ) => {
+  //   return ipfsMethods.add(data, { getInstance, getUtils }, log);
+  // };
+
+  const getSettings = async () => {
+    return ipfsGateway;
   };
-  return { getInstance, getUtils, upload };
+
+  const getLegalDoc = async (doc: LEGAL_DOCS) => {
+    const selectedDoc = LEGAL_DOCS_SOURCE[doc];
+    const data = await fetch(`${ipfsGateway}/${selectedDoc}`);
+    return data.text();
+  };
+
+  // const dagGet = async (cid: string, path: string) => {
+  //   const ipfs = await getInstance();
+  //   const result = await ipfs.dag.get(cid, { path });
+  //   return result.value;
+  // };
+
+  return { getSettings, getLegalDoc };
 };
 export default { service, name: IPFS_SERVICE };

@@ -7,6 +7,7 @@ import { ConnectToInjected, ConnectToWalletConnect } from './provider-utils';
 export default async function getProvider(
   getSettings: CallableFunction,
   provider: EthProviders = EthProviders.None,
+  log: any,
 ) {
   let ethProvider;
   const moduleSettings = await getSettings(moduleName);
@@ -29,9 +30,9 @@ export default async function getProvider(
   if (provider === EthProviders.WalletConnect) {
     ethProvider = await ConnectToWalletConnect(WalletConnectProvider, {
       network,
-      infuraId: '21f3771ff3814c3db46dfcd216c9e672', // @Todo: change this on production
+      infuraId: process.env.INFURA_ID,
     });
   }
-
-  return new ethers.providers.Web3Provider(ethProvider);
+  log.info(`connecting to network ${network}`);
+  return new ethers.providers.Web3Provider(ethProvider, network);
 }

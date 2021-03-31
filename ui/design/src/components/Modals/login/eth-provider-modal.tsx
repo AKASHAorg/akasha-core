@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { ModalContainer } from '../common/fullscreen-modal-container';
 import { ModalCard } from '../../Cards';
-import { Text } from 'grommet';
+import { Box, Text } from 'grommet';
+import { Icon } from '../../Icon';
 
 export interface IProviderModalProps {
   onModalClose: () => void;
@@ -9,6 +10,8 @@ export interface IProviderModalProps {
   headLine: string;
   message: string;
   illustration: React.ReactElement;
+  error: string | null;
+  isMobile?: boolean;
 }
 
 const ProviderAuthModal: React.FC<IProviderModalProps> = props => {
@@ -18,13 +21,25 @@ const ProviderAuthModal: React.FC<IProviderModalProps> = props => {
 
   return (
     <ModalContainer onModalClose={props.onModalClose}>
-      <ModalCard style={{ padding: '2em 4em' }}>
-        {props.illustration}
-        <Text weight="bold" size="large">
-          {props.headLine}
-        </Text>
-        <Text style={{ marginBottom: '1em' }}>{props.message}</Text>
-      </ModalCard>
+      <Box width={props.isMobile ? { max: '22rem' } : 'auto'}>
+        <ModalCard style={{ padding: '2em 4em' }}>
+          {!props.isMobile && props.illustration}
+          <Box align="center" gap="xsmall">
+            <Text weight="bold" size="medium">
+              {props.headLine}
+            </Text>
+            <Text textAlign="center" style={{ marginBottom: '1.5rem' }}>
+              {props.message}
+            </Text>
+            {!props.error && <Icon type="loading" accentColor={true} size="md" />}
+            {props.error && (
+              <Text textAlign="center" size="small" color="errorText">
+                {props.error}
+              </Text>
+            )}
+          </Box>
+        </ModalCard>
+      </Box>
     </ModalContainer>
   );
 };

@@ -1,235 +1,351 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
+import { constants, useBookmarks, useErrors } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import {
   ILoadItemDataPayload,
   ILoadItemsPayload,
 } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { fetchFeedItemData, fetchFeedItems } from '../../services/feed-service';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import useFeedReducer from '../../hooks/use-feed-reducer';
-import {
-  addToIPFS,
-  getPending,
-  publishEntry,
-  removePending,
-  savePending,
-  updatePending,
-} from '../../services/posting-service';
+import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
-import useEntryPublisher from '../../hooks/use-entry-publisher';
-import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
-import useEntryBookmark from '../../hooks/use-entry-bookmark';
+import { redirectToPost } from '../../services/routing-service';
+import EntryCardRenderer from './entry-card-renderer';
+import routes, { POST } from '../../routes';
+import { application as loginWidget } from '@akashaproject/ui-widget-login/lib/bootstrap';
+import Parcel from 'single-spa-react/parcel';
+import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
+import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
-const { Helmet, VirtualList, Box, ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard } = DS;
+const {
+  Box,
+  Helmet,
+  VirtualList,
+  ReportModal,
+  ToastProvider,
+  ModalRenderer,
+  EditorModal,
+  EditorPlaceholder,
+} = DS;
 
 export interface FeedPageProps {
   globalChannel: any;
   sdkModules: any;
+  singleSpa: any;
   logger: any;
   showLoginModal: () => void;
-  ethAddress: string | null;
-  jwtToken: string | null;
-  onError: (err: Error) => void;
+  loggedProfileData?: any;
+  loginState: UseLoginState;
+  flagged: string;
+  reportModalOpen: boolean;
+  setFlagged: React.Dispatch<React.SetStateAction<string>>;
+  setReportModalOpen: () => void;
+  closeReportModal: () => void;
+  editorModalOpen: boolean;
+  setEditorModalOpen: () => void;
+  closeEditorModal: () => void;
+  onError: (err: IAkashaError) => void;
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const { isMobile, showLoginModal, ethAddress, jwtToken, onError } = props;
-  const [feedState, feedStateActions] = useFeedReducer({});
+  const {
+    isMobile,
+    flagged,
+    reportModalOpen,
+    setFlagged,
+    setReportModalOpen,
+    closeReportModal,
+    editorModalOpen,
+    setEditorModalOpen,
+    closeEditorModal,
+    showLoginModal,
+    loggedProfileData,
+    loginState,
+    onError,
+    sdkModules,
+    logger,
+    globalChannel,
+  } = props;
+
+  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const [pendingEntries, pendingActions] = useEntryPublisher({
-    publishEntry: publishEntry,
-    onPublishComplete: (ethAddr, publishedEntry) => {
-      removePending(ethAddr, publishedEntry.localId);
-      pendingActions.removeEntry(publishedEntry.localId);
-      if (publishedEntry.entry.entryId) {
-        // @TODO: this call (setFeedItemData) should be removed when we have real data
-        // aka we should only `setFeedItems` and let the list to load fresh data from server/ipfs
-        feedStateActions.setFeedItemData(publishedEntry.entry as IEntryData);
-        feedStateActions.setFeedItems({
-          reverse: true,
-          items: [publishedEntry.entry as IEntryData],
-        });
-      }
-    },
-    ethAddress: ethAddress,
-    addToIPFS: addToIPFS,
-    getPendingEntries: getPending,
-    onStep: (ethAddr, localId) => updatePending(ethAddr, localId).catch(err => onError(err)),
-  });
-
-  const [bookmarks, bookmarkActions] = useEntryBookmark({
-    ethAddress,
+  const [bookmarkState, bookmarkActions] = useBookmarks({
     onError,
-    sdkModules: props.sdkModules,
-    logger: props.logger,
+    dbService: sdkModules.db,
+  });
+  const [errorState, errorActions] = useErrors({ logger });
+
+  const [postsState, postsActions] = usePosts({
+    user: loginState.ethAddress,
+    postsService: sdkModules.posts,
+    ipfsService: sdkModules.commons.ipfsService,
+    onError: errorActions.createError,
   });
 
-  const handleLoadMore = async (payload: ILoadItemsPayload) => {
-    const resp = await fetchFeedItems(payload);
-    if (resp.items.length) {
-      feedStateActions.setFeedItems(resp);
+  React.useEffect(() => {
+    if (Object.keys(errorState).length) {
+      logger.error(errorState);
     }
-  };
+  }, [JSON.stringify(errorState)]);
 
-  const loadItemData = async (payload: ILoadItemDataPayload) => {
-    const resp = await fetchFeedItemData({ entryId: payload.itemId });
-    if (resp) {
-      feedStateActions.setFeedItemData(resp);
+  React.useEffect(() => {
+    if (loginState.currentUserCalled) {
+      postsActions.resetPostIds();
+      if (loginState.ethAddress) {
+        bookmarkActions.getBookmarks();
+      }
     }
-  };
+  }, [JSON.stringify(loginState)]);
 
-  const onInitialLoad = async (payload: ILoadItemsPayload) => {
-    const response = await fetchFeedItems({
-      start: payload.start,
+  React.useEffect(() => {
+    if (
+      !postsState.postIds.length &&
+      !postsState.isFetchingPosts &&
+      postsState.totalItems === null
+    ) {
+      postsActions.getPosts({ limit: 5 });
+    }
+  }, [postsState.postIds.length, postsState.isFetchingPosts]);
+
+  const handleLoadMore = (payload: ILoadItemsPayload) => {
+    const req: { limit: number; offset?: string } = {
       limit: payload.limit,
-      reverse: payload.reverse,
-    });
-    if (response.items.length) {
-      feedStateActions.setFeedItems(response);
+    };
+    if (!postsState.isFetchingPosts && loginState.currentUserCalled) {
+      postsActions.getPosts(req);
     }
   };
 
-  const handleBackNavigation = () => {
-    /* back navigation logic here */
+  const loadItemData = (payload: ILoadItemDataPayload) => {
+    postsActions.getPost(payload.itemId);
   };
 
-  const handleAvatarClick = () => {
-    /* todo */
+  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorPubKey: string) => {
+    props.singleSpa.navigateToUrl(`/profile/${authorPubKey}`);
+    ev.preventDefault();
+  };
+  const handleMentionClick = (profilePubKey: string) => {
+    props.singleSpa.navigateToUrl(`/profile/${profilePubKey}`);
+  };
+
+  const handleTagClick = (name: string) => {
+    props.singleSpa.navigateToUrl(`/social-app/tags/${name}`);
   };
   const handleEntryBookmark = (entryId: string) => {
-    if (!ethAddress) {
+    if (!loginState.pubKey) {
       return showLoginModal();
     }
-    bookmarkActions.addBookmark(entryId);
+    if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
+      return bookmarkActions.removeBookmark(entryId);
+    }
+    return bookmarkActions.bookmarkPost(entryId);
   };
-  const handleEntryRepost = () => {
-    /* todo */
-  };
-  const handleEntryShare = () => {
-    /* todo */
-  };
-  const handleEntryFlag = () => {
-    /* todo */
-  };
-  const handleLinkCopy = () => {
-    /* todo */
-  };
-  const handleClickReplies = () => {
-    /* todo */
-  };
-  const handleFollow = () => {
-    /* todo */
-  };
-  const handleUnfollow = () => {
-    /* todo */
+  const handleEntryRepost = (_withComment: boolean, entryData: any) => {
+    setCurrentEmbedEntry(entryData);
+    setEditorModalOpen();
   };
 
-  const handleEntryPublish = async (authorEthAddr: string, _content: any) => {
-    if (!ethAddress && !jwtToken) {
+  const handleEntryFlag = (entryId: string) => () => {
+    setFlagged(entryId);
+    setReportModalOpen();
+  };
+
+  const [tags, setTags] = React.useState([]);
+
+  const handleGetTags = (query: string) => {
+    const tagsService = sdkModules.posts.tags.searchTags({ tagName: query });
+    tagsService.subscribe((resp: any) => {
+      if (resp.data?.searchTags) {
+        const filteredTags = resp.data.searchTags;
+        setTags(filteredTags);
+      }
+    });
+  };
+
+  const [mentions, setMentions] = React.useState([]);
+  const handleGetMentions = (query: string) => {
+    const mentionsService = sdkModules.profiles.profileService.searchProfiles({
+      name: query,
+    });
+    mentionsService.subscribe((resp: any) => {
+      if (resp.data?.searchProfiles) {
+        const filteredMentions = resp.data.searchProfiles;
+        setMentions(filteredMentions);
+      }
+    });
+  };
+
+  const handleToggleEditor = () => {
+    setCurrentEmbedEntry(undefined);
+    if (editorModalOpen) {
+      closeEditorModal();
+    } else {
+      setEditorModalOpen();
+    }
+  };
+
+  const onUploadRequest = uploadMediaToTextile(
+    sdkModules.profiles.profileService,
+    sdkModules.commons.ipfsService,
+  );
+
+  const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
+
+  const handleEntryPublish = async (data: PublishPostData) => {
+    if (!loginState.ethAddress && !loginState.pubKey) {
       showLoginModal();
       return;
     }
-    const localId = `${authorEthAddr}-${pendingEntries.length + 1}`;
-    try {
-      const entry = {
-        content: 'this is a test published content',
-        author: {
-          ethAddress: authorEthAddr,
-        },
-        time: new Date().getTime() / 1000,
-      };
-      pendingActions.addEntry({
-        entry,
-        localId,
-        step: 'PUBLISH_START',
-      });
-      if (ethAddress) {
-        await savePending(
-          ethAddress,
-          pendingEntries.concat([{ entry, localId, step: 'PUBLISH_START' }]),
-        );
-      }
-    } catch (err) {
-      props.logger.error('Error publishing entry');
-    }
+    postsActions.optimisticPublishPost(data, loggedProfileData, currentEmbedEntry);
+    closeEditorModal();
   };
+
+  const handleFlipCard = (entry: any, isQuote: boolean) => () => {
+    const modifiedEntry = isQuote
+      ? { ...entry, quote: { ...entry.quote, reported: false } }
+      : { ...entry, reported: false };
+    postsActions.updatePostsState(modifiedEntry);
+  };
+
+  const updateEntry = (entryId: string) => {
+    const modifiedEntry = { ...postsState.postsData[entryId], reported: true };
+    postsActions.updatePostsState(modifiedEntry);
+  };
+
   return (
     <Box fill="horizontal">
       <Helmet>
         <title>AKASHA Feed | Ethereum.world</title>
       </Helmet>
+      <ModalRenderer slotId={props.layout.app.modalSlotId}>
+        {reportModalOpen && (
+          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
+            <ReportModal
+              titleLabel={t('Report a Post')}
+              successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
+              successMessageLabel={t('We will investigate this post and take appropriate action.')}
+              optionsTitleLabel={t('Please select a reason')}
+              optionLabels={[
+                t('Suspicious, deceptive, or spam'),
+                t('Abusive or harmful to others'),
+                t('Self-harm or suicide'),
+                t('Illegal'),
+                t('Nudity'),
+                t('Violence'),
+              ]}
+              optionValues={[
+                'Suspicious, deceptive, or spam',
+                'Abusive or harmful to others',
+                'Self-harm or suicide',
+                'Illegal',
+                'Nudity',
+                'Violence',
+              ]}
+              descriptionLabel={t('Explanation')}
+              descriptionPlaceholder={t('Please explain your reason(s)')}
+              footerText1Label={t('If you are unsure, you can refer to our')}
+              footerLink1Label={t('Code of Conduct')}
+              footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
+              cancelLabel={t('Cancel')}
+              reportLabel={t('Report')}
+              blockLabel={t('Block User')}
+              closeLabel={t('Close')}
+              user={loginState.ethAddress ? loginState.ethAddress : ''}
+              contentId={flagged}
+              contentType="post"
+              baseUrl={constants.BASE_FLAG_URL}
+              updateEntry={updateEntry}
+              closeModal={closeReportModal}
+            />
+          </ToastProvider>
+        )}
+      </ModalRenderer>
+      <EditorModal
+        slotId={props.layout.app.modalSlotId}
+        avatar={loggedProfileData.avatar}
+        showModal={editorModalOpen}
+        ethAddress={loginState.ethAddress as any}
+        postLabel={t('Publish')}
+        placeholderLabel={t('Write something')}
+        discardPostLabel={t('Discard Post')}
+        discardPostInfoLabel={t(
+          "You have not posted yet. If you leave now you'll discard your post.",
+        )}
+        keepEditingLabel={t('Keep Editing')}
+        onPublish={handleEntryPublish}
+        handleNavigateBack={handleToggleEditor}
+        getMentions={handleGetMentions}
+        getTags={handleGetTags}
+        tags={tags}
+        mentions={mentions}
+        uploadRequest={onUploadRequest}
+        embedEntryData={currentEmbedEntry}
+        style={{ width: '36rem' }}
+      />
       <VirtualList
-        items={feedState.feedItems}
-        itemsData={feedState.feedItemData}
+        items={postsState.postIds}
+        itemsData={postsState.postsData}
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
-        loadInitialFeed={onInitialLoad}
-        hasMoreItems={true}
-        bookmarkedItems={bookmarks}
-        getItemCard={({ itemData, isBookmarked }) => (
-          <ErrorInfoCard errors={{}}>
-            {(errorMessages, hasCriticalErrors) => (
-              <>
-                {errorMessages && (
-                  <ErrorLoader
-                    type="script-error"
-                    title={t('There was an error loading the entry')}
-                    details={t('We cannot show this entry right now')}
-                    devDetails={errorMessages}
-                  />
-                )}
-                {!hasCriticalErrors && (
-                  <>
-                    {(!itemData || !itemData.author?.ethAddress) && <EntryCardLoading />}
-                    {itemData && itemData.author.ethAddress && (
-                      <EntryCard
-                        isBookmarked={isBookmarked}
-                        entryData={itemData}
-                        onClickAvatar={handleAvatarClick}
-                        onEntryBookmark={handleEntryBookmark}
-                        repliesLabel={t('Replies')}
-                        repostsLabel={t('Reposts')}
-                        repostLabel={t('Repost')}
-                        repostWithCommentLabel={t('Repost with comment')}
-                        shareLabel={t('Share')}
-                        copyLinkLabel={t('Copy Link')}
-                        copyIPFSLinkLabel={t('Copy IPFS Link')}
-                        flagAsLabel={t('Flag as inappropiate')}
-                        loggedProfileEthAddress={'0x00123123123123'}
-                        locale={locale}
-                        style={{ height: 'auto' }}
-                        bookmarkLabel={t('Save')}
-                        bookmarkedLabel={t('Saved')}
-                        onRepost={handleEntryRepost}
-                        onEntryShare={handleEntryShare}
-                        onEntryFlag={handleEntryFlag}
-                        onLinkCopy={handleLinkCopy}
-                        onClickReplies={handleClickReplies}
-                        handleFollow={handleFollow}
-                        handleUnfollow={handleUnfollow}
-                      />
-                    )}
-                  </>
-                )}
-              </>
-            )}
-          </ErrorInfoCard>
-        )}
+        hasMoreItems={!!postsState.nextPostIndex}
+        usePlaceholders={true}
+        listHeader={
+          loginState.ethAddress ? (
+            <EditorPlaceholder
+              ethAddress={loginState.ethAddress}
+              onClick={handleToggleEditor}
+              avatar={loggedProfileData.avatar}
+            />
+          ) : (
+            <>
+              <Parcel
+                config={loginWidget.loadingFn}
+                wrapWith="div"
+                sdkModules={props.sdkModules}
+                logger={props.logger}
+                layout={props.layout}
+                globalChannel={props.globalChannel}
+                i18n={props.i18n}
+                mountParcel={props.singleSpa.mountRootParcel}
+              />
+            </>
+          )
+        }
+        itemCard={
+          <EntryCardRenderer
+            sdkModules={sdkModules}
+            logger={logger}
+            globalChannel={globalChannel}
+            bookmarkState={bookmarkState}
+            ethAddress={loginState.ethAddress}
+            locale={locale}
+            onBookmark={handleEntryBookmark}
+            onNavigate={handleNavigateToPost}
+            onFlag={handleEntryFlag}
+            onRepost={handleEntryRepost}
+            sharePostUrl={`${window.location.origin}${routes[POST]}/`}
+            onAvatarClick={handleAvatarClick}
+            onMentionClick={handleMentionClick}
+            onTagClick={handleTagClick}
+            contentClickable={true}
+            awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
+            moderatedContentLabel={t('This content has been moderated')}
+            ctaLabel={t('See it anyway')}
+            handleFlipCard={handleFlipCard}
+          />
+        }
         customEntities={getFeedCustomEntities({
-          t,
-          locale,
+          sdkModules,
+          logger,
+          globalChannel,
           isMobile,
-          handleBackNavigation,
-          feedItems: feedState.feedItems,
-          loggedEthAddress: ethAddress,
-          handlePublish: handleEntryPublish,
-          pendingEntries: pendingEntries,
-          onAvatarClick: handleAvatarClick,
+          feedItems: postsState.postIds,
+          loggedEthAddress: loginState.ethAddress,
+          pendingEntries: postsState.pendingPosts,
         })}
       />
     </Box>

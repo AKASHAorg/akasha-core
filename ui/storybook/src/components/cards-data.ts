@@ -3,16 +3,17 @@ import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { chartData } from './Charts.stories';
 
 const trendingTagsData = [
-  { tagName: '#AKASHA', mentions: 176, tagHistoricData: chartData, subscribed: true },
-  { tagName: '#AKASHAWorld', mentions: 94, tagHistoricData: chartData, subscribed: false },
-  { tagName: '#Ethereum', mentions: 27, tagHistoricData: chartData, subscribed: false },
-  { tagName: '#EthereumWorld', mentions: 17, tagHistoricData: chartData, subscribed: true },
-  { tagName: '#Crypto', mentions: 6, tagHistoricData: chartData, subscribed: false },
+  { name: 'AKASHA', totalPosts: 176, tagHistoricData: chartData, subscribed: true },
+  { name: 'AKASHAWorld', totalPosts: 94, tagHistoricData: chartData, subscribed: false },
+  { name: 'Ethereum', totalPosts: 27, tagHistoricData: chartData, subscribed: false },
+  { name: 'EthereumWorld', totalPosts: 17, tagHistoricData: chartData, subscribed: true },
+  { name: 'Crypto', totalPosts: 6, tagHistoricData: chartData, subscribed: false },
 ];
 
 const trendingProfilesData = [
   {
     ethAddress: '0x003410490050000320006570034567114572000',
+    pubKey: 'abc123zxcv7scxkfe32fce21ce2ce2rv',
     name: 'Jon Gilbert',
     userName: '@jongilbert',
     ensName: 'jongilbert.akasha.eth',
@@ -20,11 +21,13 @@ const trendingProfilesData = [
     coverImage: 'goldenrod',
     followers: 312,
     postsNumber: 235,
+    default: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
   {
     ethAddress: '0x003410490050778032325657003456711457212',
+    pubKey: 'abc123zxcv7scxkfe32fce21ce2ce2rv',
     name: 'Alexei Gilbertovich',
     userName: '@alexeigilbertovich',
     ensName: 'alexeigilbertovich.akasha.eth',
@@ -34,9 +37,11 @@ const trendingProfilesData = [
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
     isFollowed: true,
+    default: [],
   },
   {
     ethAddress: '0x003410490050000320006570034567114572000',
+    pubKey: 'abc123zxcv7scxkfe32fce21ce2ce2rv',
     name: 'Jon Gilbert',
     userName: '@jongilbert',
     ensName: 'jongilbert.akasha.eth',
@@ -44,11 +49,13 @@ const trendingProfilesData = [
     coverImage: 'goldenrod',
     followers: 312,
     postsNumber: 235,
+    default: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
   {
     ethAddress: '0x003410490050000320006570034567114572000',
+    pubKey: 'abc123zxcv7scxkfe32fce21ce2ce2rv',
     name: 'Jon Gilbert',
     userName: '@jongilbert',
     ensName: 'jongilbert.akasha.eth',
@@ -56,11 +63,13 @@ const trendingProfilesData = [
     coverImage: 'goldenrod',
     followers: 312,
     postsNumber: 235,
+    default: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
   {
     ethAddress: '0x003410490050000320006570034567114572000',
+    pubKey: 'abc123zxcv7scxkfe32fce21ce2ce2rv',
     name: 'Jon Gilbert',
     userName: '@jongilbert',
     ensName: 'jongilbert.akasha.eth',
@@ -68,6 +77,7 @@ const trendingProfilesData = [
     coverImage: 'goldenrod',
     followers: 312,
     postsNumber: 235,
+    default: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
@@ -87,6 +97,7 @@ const appsDataSource: IAppData[] = [
 
 const profileData = {
   ethAddress: '0x003410490050000320006570034567114572000',
+  pubKey: 'abc123',
   avatar: 'https://placebeard.it/480/480',
   coverImage: 'goldenrod',
   name: 'Gilbert The Bearded',
@@ -94,12 +105,13 @@ const profileData = {
   ensName: 'gilbert.akasha.eth',
   description:
     'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
-  followers: '15',
-  following: '1876',
+  totalFollowers: '15',
+  totalFollowing: '1876',
   isFollowed: true,
   apps: '12',
   profileType: 'user',
-  postsNumber: 235,
+  totalPosts: 235,
+  default: [],
 };
 
 const profileProvidersData = {
@@ -254,10 +266,79 @@ const entryData = {
   ipfsLink: 'ipfs.io/placeholder',
   permalink: 'ethereum.world/akasha/johngilbert/412412',
   author: profileData,
-  content:
-    'We’re back in action, energized after an epic retreat in #verbier 🇨🇭 🤜💥🤛Here’s to everyone keeping us in their minds and hearts 🥂You’ve been in our hearts and minds as well! 🤗Looking forward to sharing our insights and plans in the coming days! 🚀#AKASHAReloaded #AKASHAFoundation',
+  content: [
+    {
+      type: 'paragraph',
+      children: [
+        {
+          text: 'Hello ',
+        },
+        {
+          name: 'Arnulfo Madrain',
+          userName: '@arnulfo',
+          pubKey: '4m1242mb42m4b',
+          avatar: '',
+          ethAddress: '0x03131',
+          type: 'mention',
+          children: [{ text: '' }],
+        },
+        { text: ' how is ' },
+        { value: 'ethereum', type: 'tag', children: [{ text: '' }] },
+        { text: ' working out for you?' },
+      ],
+    },
+    {
+      children: [{ text: '' }],
+      type: 'image',
+      url:
+        'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMTZweCIgaGVpZ2h0PSIyM3B4IiB2aWV3Qm94PSIwIDAgMTYgMjMiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogc2tldGNodG9vbCA1OS4xICgxMDEwMTApIC0gaHR0cHM6Ly9za2V0Y2guY29tIC0tPgogICAgPHRpdGxlPjAxN0RDRjM1LTI5RjUtNDQxNS1BOENDLTJBMkUxMzM3MDA4ODwvdGl0bGU+CiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggc2tldGNodG9vbC48L2Rlc2M+CiAgICA8ZGVmcz4KICAgICAgICA8cG9seWdvbiBpZD0icGF0aC0xIiBwb2ludHM9IjAgMC4wMDIwMzM2MzEyNiA3LjYzMiA0LjE1NDI1ODU1IDcuNjMyIDkuOTQ1NiI+PC9wb2x5Z29uPgogICAgICAgIDxwb2x5Z29uIGlkPSJwYXRoLTMiIHBvaW50cz0iMCAwLjAwMjAzMzYzMTI2IDcuNjMyIDQuMTU0MjU4NTUgNy42MzIgOS45NDU2Ij48L3BvbHlnb24+CiAgICAgICAgPHBvbHlnb24gaWQ9InBhdGgtNSIgcG9pbnRzPSIwLjAxNDQgMCAwLjAxNDQgMTUuOTE0NTg2NCA3LjcxODQgMTEuNzY2NTQyMSI+PC9wb2x5Z29uPgogICAgICAgIDxwb2x5Z29uIGlkPSJwYXRoLTciIHBvaW50cz0iMC4wMTQ0IDAgMC4wMTQ0IDE1LjkxNDU4NjQgNy43MTg0IDExLjc2NjU0MjEiPjwvcG9seWdvbj4KICAgIDwvZGVmcz4KICAgIDxnIGlkPSJGbG93LSMxLeKAlC1SZWd1bGFyLVBvc3QtIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iUmVndWxhci1Qb3N0LUZsb3ct4oCULTMuNi1MaW5rLUltYWdlLVBvcG92ZXIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yOC4wMDAwMDAsIC0yNS4wMDAwMDApIj4KICAgICAgICAgICAgPGcgaWQ9IkhvbWUiPgogICAgICAgICAgICAgICAgPGcgaWQ9IlRvcGJhciI+CiAgICAgICAgICAgICAgICAgICAgPGcgaWQ9IldvcmxkLU5hbWUiPgogICAgICAgICAgICAgICAgICAgICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNC4wMDAwMDAsIDI1LjAwMDAwMCkiPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPGcgaWQ9ImV0aGVyZXVtLndvcmxkLWxvZ28iPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxnIGlkPSJMb2dvIj4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGcgaWQ9ImV0aGVyZXVtLndvcmxkLWxvZ28iIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQuMDAwMDAwLCAwLjAwMDAwMCkiPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGcgaWQ9ImFrYXNoYS1oZXJvQDN4IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjA4NjQwMCwgMTMuMDk0NDAwKSI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPG1hc2sgaWQ9Im1hc2stMiIgZmlsbD0id2hpdGUiPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNwYXRoLTEiPjwvdXNlPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvbWFzaz4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8dXNlIGlkPSJNYXNrIiBmaWxsPSIjNkU2RUZBIiB4bGluazpocmVmPSIjcGF0aC0xIj48L3VzZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxnIGlkPSJha2FzaGEtaGVyb0AzeCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTEuNTEwNDAwLCAxOC4zNzQ0MDApIHNjYWxlKC0xLCAxKSB0cmFuc2xhdGUoLTExLjUxMDQwMCwgLTE4LjM3NDQwMCkgdHJhbnNsYXRlKDcuNjcwNDAwLCAxMy4wOTQ0MDApIj4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8bWFzayBpZD0ibWFzay00IiBmaWxsPSJ3aGl0ZSI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI3BhdGgtMyI+PC91c2U+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9tYXNrPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgaWQ9Ik1hc2siIGZpbGw9IiMyOTI2RDciIHhsaW5rOmhyZWY9IiNwYXRoLTMiPjwvdXNlPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9nPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGcgaWQ9ImFrYXNoYS1oZXJvQDN4Ij4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8bWFzayBpZD0ibWFzay02IiBmaWxsPSJ3aGl0ZSI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI3BhdGgtNSI+PC91c2U+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9tYXNrPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgaWQ9Ik1hc2siIGZpbGw9IiNFRThDOEEiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMuODY2NDAwLCA3Ljk1NzI5Mykgc2NhbGUoLTEsIDEpIHRyYW5zbGF0ZSgtMy44NjY0MDAsIC03Ljk1NzI5MykgIiB4bGluazpocmVmPSIjcGF0aC01Ij48L3VzZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxnIGlkPSJha2FzaGEtaGVyb0AzeCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTEuMTE2ODAwLCA4LjE2MDAwMCkgc2NhbGUoLTEsIDEpIHRyYW5zbGF0ZSgtMTEuMTE2ODAwLCAtOC4xNjAwMDApIHRyYW5zbGF0ZSg2Ljc5NjgwMCwgMC4wMDAwMDApIj4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8bWFzayBpZD0ibWFzay04IiBmaWxsPSJ3aGl0ZSI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI3BhdGgtNyI+PC91c2U+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9tYXNrPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgaWQ9Ik1hc2siIGZpbGw9IiM0MTM1NTIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMuODY2NDAwLCA3Ljk1NzI5Mykgc2NhbGUoLTEsIDEpIHRyYW5zbGF0ZSgtMy44NjY0MDAsIC03Ljk1NzI5MykgIiB4bGluazpocmVmPSIjcGF0aC03Ij48L3VzZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9nPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgICAgICAgICAgICAgPC9nPgogICAgICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+',
+    },
+    {
+      type: 'paragraph',
+      children: [
+        {
+          text: 'We’re back in action, energized after an epic retreat in ',
+        },
+        { value: 'verbier', type: 'tag', children: [{ text: '' }] },
+        { text: ' 🇨🇭 🤜💥🤛' },
+      ],
+    },
+    {
+      type: 'paragraph',
+      children: [
+        {
+          text: 'Here’s to everyone keeping us in their ',
+        },
+        { text: 'minds', bold: true },
+        { text: ' and ' },
+        { text: 'hearts', bold: true },
+        { text: ' 🥂' },
+      ],
+    },
+    {
+      type: 'paragraph',
+      children: [
+        {
+          text: 'You’ve been in our hearts and minds as well! 🤗',
+        },
+      ],
+    },
+    {
+      type: 'paragraph',
+      children: [
+        {
+          text: 'Looking forward to sharing our insights and plans in the coming days! 🚀 ',
+        },
+        { value: 'AKASHAReloaded', type: 'tag', children: [{ text: '' }] },
+        { text: ' ' },
+        { value: 'AKASHAFoundation', type: 'tag', children: [{ text: '' }] },
+      ],
+    },
+  ],
+
   time: '1572036522',
-  replies: [
+  replies: 2,
+  repliesContent: [
     {
       entryId: '412413',
       ipfsLink: 'ipfs.io/placeholder',
@@ -328,10 +409,9 @@ const changeCoverImageLabel = 'Change Cover Image';
 const cancelLabel = 'Cancel';
 const saveChangesLabel = 'Save Changes';
 const followingLabel = 'Following';
-const appsLabel = 'Apps';
+const followersLabel = 'Followers';
+const postsLabel = 'Posts';
 const aboutMeLabel = 'About';
-const actionsLabel = 'Actions';
-const usersLabel = 'Users';
 const commentsLabel = 'Comments';
 const quotesLabel = 'Quotes';
 const shareLabel = 'Share';
@@ -355,10 +435,8 @@ const repostsLabel = 'Reposts';
 export {
   appInfo,
   aboutMeLabel,
-  actionsLabel,
   appData,
   appsDataSource,
-  appsLabel,
   cancelLabel,
   changeCoverImageLabel,
   commentInputPlaceholderLabel,
@@ -370,6 +448,8 @@ export {
   entryData,
   entrySocialData,
   followingLabel,
+  followersLabel,
+  postsLabel,
   profileProvidersData,
   placeholderLabel,
   profileData,
@@ -381,7 +461,6 @@ export {
   shareLabel,
   shareProfileLabel,
   topicsDataSource,
-  usersLabel,
   boxProviderData,
   ensProviderData,
   copyIPFSLinkLabel,

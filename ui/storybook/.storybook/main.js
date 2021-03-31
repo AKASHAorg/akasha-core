@@ -1,4 +1,7 @@
 module.exports = {
+  typescript: {
+    check: false,
+  },
   stories: ['../src/components/*.stories.tsx'],
   addons: [
     '@storybook/preset-create-react-app',
@@ -12,4 +15,18 @@ module.exports = {
     // add theme sync between component's theme and storybook theme
     // './theme-sync-addon',
   ],
+  webpackFinal: config => {
+    config.module.rules.push({
+      test: /\.(ts|tsx)$/,
+      use: [
+        {
+          loader: require.resolve('awesome-typescript-loader'),
+        },
+      ],
+      exclude: {
+        test: [/\*d.ts(x?)$/, /\.map$/],
+      },
+    });
+    return config;
+  },
 };

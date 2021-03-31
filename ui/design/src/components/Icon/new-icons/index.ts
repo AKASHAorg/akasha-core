@@ -11,6 +11,7 @@ import appIpfs from './app-ipfs';
 import announcement from './announcement';
 import app from './app';
 import arrowDown from './arrow-down';
+import arrowUp from './arrow-up';
 import arrowLeft from './arrow-left';
 import arrowRight from './arrow-right';
 import available from './available';
@@ -24,16 +25,20 @@ import code from './code';
 import coins from './coins';
 import comments from './comments';
 import copy from './copy';
+import discord from './discord';
 import document from './document';
 import edit from './edit';
 import editSimple from './edit-simple';
+import email from './email';
 import emoji from './emoji';
 import error from './error';
 import ethereumWorldLogo from './ethereum-world-logo';
 import ethereum from './ethereum';
 import eye from './eye';
 import facebook from './facebook';
+import feedback from './feedback';
 import following from './following';
+import github from './github';
 import hashtag from './hashtag';
 import heart from './heart';
 import home from './home';
@@ -41,8 +46,10 @@ import hotTopics from './hot-topics';
 import image from './image';
 import info from './info';
 import italic from './italic';
+import legal from './legal';
 import link from './link';
 import loading from './loading';
+import login from './login';
 import media from './media';
 import menuCollapsed from './menu-collapsed';
 import menu from './menu';
@@ -65,6 +72,7 @@ import report from './report';
 import search from './search';
 import send from './send';
 import settings from './settings';
+import signOut from './sign-out';
 import share from './share';
 import shareSmallBlue from './share-small-blue';
 import shareSmallDark from './share-small-dark';
@@ -107,11 +115,14 @@ export {
   copy,
   check,
   checkSimple,
+  discord,
   payment,
   eye,
   error,
   facebook,
+  feedback,
   following,
+  github,
   document,
   ethereum,
   ethereumWorldLogo,
@@ -119,6 +130,7 @@ export {
   addAppGrey,
   app,
   arrowDown,
+  arrowUp,
   arrowLeft,
   arrowRight,
   bookmark,
@@ -128,6 +140,7 @@ export {
   trash,
   editSimple,
   edit,
+  email,
   emoji,
   hashtag,
   heart,
@@ -136,7 +149,10 @@ export {
   image,
   info,
   italic,
+  legal,
   link,
+  loading,
+  login,
   media,
   menuCollapsed,
   menu,
@@ -155,6 +171,7 @@ export {
   report,
   search,
   send,
+  signOut,
   share,
   shareSmallBlue,
   shareSmallDark,
@@ -171,5 +188,4 @@ export {
   video,
   wallet,
   walletconnect,
-  loading,
 };

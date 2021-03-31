@@ -6,6 +6,10 @@ const StyledIconLink = styled(Anchor)<ILinkIconButtonProps>`
   border-radius: ${props => props.theme.shapes.largeBorderRadius};
   border: none;
   font-weight: 400;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   ${props => {
     if (props.active) {
       return css`
@@ -25,6 +29,14 @@ const StyledIconLink = styled(Anchor)<ILinkIconButtonProps>`
     if (props.padded) {
       return css`
         padding: 0 0.8rem;
+      `;
+    }
+    return;
+  }}
+  ${props => {
+    if (props.bold) {
+      return css`
+        font-weight: 600;
       `;
     }
     return;

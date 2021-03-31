@@ -1,9 +1,8 @@
 import DS from '@akashaproject/design-system';
-import { GlobalStyleComponent } from 'styled-components';
 
 const { createGlobalStyle, css } = DS;
 
-export const GlobalStyle: GlobalStyleComponent<{}, any> = createGlobalStyle<{ theme: any }>`
+export const GlobalStyle: any = createGlobalStyle<{ theme: any }>`
   html {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -16,7 +15,8 @@ export const GlobalStyle: GlobalStyleComponent<{}, any> = createGlobalStyle<{ th
   }
   html,
   body {
-    font-size: 15px;
+    font-family: Inter !important;
+    font-size: 16px;
     height: 100%;
   }
   body {
@@ -64,9 +64,19 @@ export const GlobalStyle: GlobalStyleComponent<{}, any> = createGlobalStyle<{ th
     // 550 and lower
     @media only screen and (min-width: ${props.theme.breakpoints.small.value}px) {
       :root {
-        font-size: 18px;
-        line-height: 1.312;
+        font-size: 16px;
       }
     }
   `}
+  @keyframes bgRotate {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
 `;

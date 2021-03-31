@@ -1,7 +1,8 @@
 import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
-import { Button } from '../../Buttons/index';
-import { SubtitleTextIcon } from '../../TextIcon/index';
+import { DuplexButton } from '../../Buttons/index';
+import { Icon } from '../../Icon';
+import { TextIcon } from '../../TextIcon/index';
 import { MainAreaCardBox } from '../common/basic-card-box';
 import {
   ProfileCardAvatar,
@@ -12,6 +13,17 @@ import {
 } from './profile-card-fields/index';
 import { IProfileWidgetCard } from './profile-widget-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
+import ProfileEditMenuDropdown from './profile-card-edit-dropdown';
+import styled from 'styled-components';
+import { truncateMiddle } from '../../../utils/string-utils';
+import { isMobile } from 'react-device-detect';
+import { MobileListModal } from '../../Modals';
+import {
+  IProfileProvider,
+  ProfileProviders,
+  UsernameTypes,
+} from '@akashaproject/ui-awf-typings/lib/profile';
+import { StyledDropAlt } from '../entry-cards/styled-entry-box';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -36,57 +48,110 @@ export interface IProfileDataProvider {
 export interface IProfileCardProps extends IProfileWidgetCard {
   // edit profile related
   profileProvidersData?: IProfileProvidersData;
+  canUserEdit?: boolean;
   // @TODO fix this
-  onChangeProfileData: (newProfileData: any) => void;
-  editProfileLabel: string;
-  changeCoverImageLabel: string;
-  cancelLabel: string;
-  saveChangesLabel: string;
-  getProfileProvidersData: () => void;
+  onChangeProfileData?: (newProfileData: any) => void;
+  editProfileLabel?: string;
+  changeCoverImageLabel?: string;
+  cancelLabel?: string;
+  saveChangesLabel?: string;
+  flagAsLabel?: string;
+  flaggable: boolean;
+  onEntryFlag: () => void;
+  getProfileProvidersData?: () => void;
+  onUpdateClick: () => void;
+  onENSChangeClick: () => void;
+  handleShareClick: () => void;
+  updateProfileLabel?: string;
+  changeENSLabel?: string;
+  hideENSButton?: boolean;
+  copyLabel?: string;
+  copiedLabel?: string;
+  userNameType?: { default?: IProfileProvider; available: UsernameTypes[] };
 }
 
+const EditButton = styled(TextIcon)`
+  border-radius: ${props => props.theme.shapes.smallBorderRadius};
+  cursor: pointer;
+  border: 1px solid ${props => props.theme.colors.blue};
+  padding: 0.625em 0.5em;
+  > span {
+    color: ${props => props.theme.colors.blue};
+  }
+  svg * {
+    stroke: ${props => props.theme.colors.blue};
+  }
+  &:hover {
+    background: ${props => props.theme.colors.blue};
+    > span {
+      color: ${props => props.theme.colors.white};
+    }
+    svg * {
+      stroke: ${props => props.theme.colors.white};
+    }
+  }
+`;
+
+const StatIcon = styled(TextIcon)<{ isMobile?: boolean }>`
+  ${props => {
+    if (props.isMobile) {
+      return `
+        flex-direction: column;
+        align-items: start;
+      `;
+    }
+    return `
+      flex-direction: row;
+    `;
+  }}
+`;
+
+// tslint:disable:cyclomatic-complexity
+/* eslint-disable complexity */
 const ProfileCard: React.FC<IProfileCardProps> = props => {
   const {
     className,
+    loggedEthAddress,
     onClickFollowing,
-    onClickApps,
-    onChangeProfileData,
+    onClickFollowers,
+    onClickPosts,
+    handleFollow,
+    handleUnfollow,
+    handleShareClick,
+    isFollowing,
     profileData,
     descriptionLabel,
-    actionsLabel,
     followingLabel,
-    usersLabel,
+    followersLabel,
+    followLabel,
+    unfollowLabel,
+    postsLabel,
     editProfileLabel,
     shareProfileLabel,
-    appsLabel,
     changeCoverImageLabel,
-    cancelLabel,
-    saveChangesLabel,
-    getProfileProvidersData,
     profileProvidersData,
+    canUserEdit,
   } = props;
 
-  const leftTitle = profileData.following ? profileData.following : profileData.users;
-  const rightTitle = profileData.apps ? profileData.apps : profileData.actions;
-  const leftSubtitle = profileData.profileType === 'dapp' ? usersLabel : followingLabel;
-  const rightSubtitle = profileData.profileType === 'dapp' ? actionsLabel : appsLabel;
+  const postsTitle = `${profileData.totalPosts || 0} ${postsLabel}`;
+  const followersTitle = `${profileData.totalFollowers || 0} ${followersLabel}`;
+  const followingTitle = `${profileData.totalFollowing || 0} ${followingLabel}`;
 
-  const handleEditClick = () => {
-    getProfileProvidersData();
-    setEditable(true);
-  };
-
-  const handleShareClick = () => {
-    // to be implemented
-    return;
-  };
-
-  const [editable, setEditable] = useState(false);
-
+  const [editable /* , setEditable */] = useState(false);
+  const [editMenuOpen, setEditMenuOpen] = React.useState(false);
   const [avatar, setAvatar] = useState(profileData.avatar);
   const [coverImage, setCoverImage] = useState(profileData.coverImage);
   const [description, setDescription] = useState(profileData.description);
   const [name, setName] = useState(profileData.name);
+
+  const editMenuRef: React.Ref<HTMLDivElement> = React.useRef(null);
+
+  React.useEffect(() => {
+    setAvatar(profileData.avatar);
+    setCoverImage(profileData.coverImage);
+    setDescription(profileData.description);
+    setName(profileData.name);
+  }, [profileData]);
 
   const [avatarIcon, setAvatarIcon] = useState(
     profileProvidersData?.currentProviders.avatar?.providerIcon,
@@ -105,6 +170,14 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const [coverImagePopoverOpen, setCoverImagePopoverOpen] = useState(false);
   const [descriptionPopoverOpen, setDescriptionPopoverOpen] = useState(false);
   const [namePopoverOpen, setNamePopoverOpen] = useState(false);
+
+  const toggleEditMenu = () => {
+    setEditMenuOpen(!editMenuOpen);
+  };
+
+  const closeEditMenu = () => {
+    setEditMenuOpen(false);
+  };
 
   const handleChangeAvatar = (provider: IProfileDataProvider) => {
     setAvatar(provider.value);
@@ -130,127 +203,184 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     setNamePopoverOpen(false);
   };
 
-  const handleCancelEdit = () => {
-    // reset to initial state
-    setAvatar(profileData.avatar);
-    setCoverImage(profileData.coverImage);
-    setDescription(profileData.description);
-    setName(profileData.name);
-    setAvatarIcon(profileProvidersData?.currentProviders.avatar?.providerIcon);
-    setCoverImageIcon(profileProvidersData?.currentProviders.coverImage?.providerIcon);
-    setDescriptionIcon(profileProvidersData?.currentProviders.description?.providerIcon);
-    setNameIcon(profileProvidersData?.currentProviders.name?.providerIcon);
-    // turn off editing
-    setEditable(false);
-  };
-
-  const handleSaveEdit = () => {
-    // @TODO construct object
-    const newProfileData = {};
-    onChangeProfileData(newProfileData);
-    setEditable(false);
-  };
   return (
     <MainAreaCardBox className={className}>
       <ProfileCardCoverImage
         shareProfileLabel={shareProfileLabel}
-        editProfileLabel={editProfileLabel}
         changeCoverImageLabel={changeCoverImageLabel}
         editable={editable}
+        canUserEdit={canUserEdit}
         coverImage={coverImage}
         coverImageIcon={coverImageIcon}
         handleChangeCoverImage={handleChangeCoverImage}
         coverImagePopoverOpen={coverImagePopoverOpen}
         setCoverImagePopoverOpen={setCoverImagePopoverOpen}
-        handleEditClick={handleEditClick}
         handleShareClick={handleShareClick}
         profileProvidersData={profileProvidersData}
       />
       <Box
-        height="70px"
+        direction="column"
         border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
+        pad={{ bottom: 'medium' }}
         margin={{ horizontal: 'medium' }}
-        direction="row"
-        justify="between"
       >
-        <Box direction="row">
-          <ProfileCardAvatar
-            ethAddress={profileData.ethAddress}
-            editable={editable}
-            avatar={avatar}
-            avatarIcon={avatarIcon}
-            handleChangeAvatar={handleChangeAvatar}
-            avatarPopoverOpen={avatarPopoverOpen}
-            setAvatarPopoverOpen={setAvatarPopoverOpen}
-            profileProvidersData={profileProvidersData}
-          />
-          <Box pad={{ vertical: 'small', left: 'xsmall' }}>
-            <ProfileCardName
+        <Box height="70px" direction="row" justify="between">
+          <Box direction="row">
+            <ProfileCardAvatar
+              ethAddress={profileData.ethAddress}
               editable={editable}
-              name={name}
-              nameIcon={nameIcon}
-              handleChangeName={handleChangeName}
-              namePopoverOpen={namePopoverOpen}
-              setNamePopoverOpen={setNamePopoverOpen}
+              avatar={avatar}
+              avatarIcon={avatarIcon}
+              handleChangeAvatar={handleChangeAvatar}
+              avatarPopoverOpen={avatarPopoverOpen}
+              setAvatarPopoverOpen={setAvatarPopoverOpen}
               profileProvidersData={profileProvidersData}
             />
+            <Box pad={{ vertical: 'xxsmall', left: 'xsmall', right: 'small' }}>
+              <ProfileCardName
+                editable={editable}
+                name={name || truncateMiddle(profileData.ethAddress)}
+                nameIcon={nameIcon}
+                handleChangeName={handleChangeName}
+                namePopoverOpen={namePopoverOpen}
+                setNamePopoverOpen={setNamePopoverOpen}
+                profileProvidersData={profileProvidersData}
+              />
 
-            <Box direction="row" gap="xsmall">
-              <Text size="medium" color="secondaryText">
-                {profileData.userName ? profileData.userName : null}
-              </Text>
+              <Box direction="row" gap="xsmall">
+                <Text size="medium" color="secondaryText">
+                  {profileData.userName ? `@${profileData.userName.replace('@', '')}` : null}
+                </Text>
+              </Box>
             </Box>
+          </Box>
+          <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
+            {loggedEthAddress !== profileData.ethAddress && (
+              <Box width="7rem">
+                <DuplexButton
+                  icon={<Icon type="following" />}
+                  active={isFollowing}
+                  activeLabel={followingLabel}
+                  inactiveLabel={followLabel}
+                  activeHoverLabel={unfollowLabel}
+                  onClickActive={handleUnfollow}
+                  onClickInactive={handleFollow}
+                />
+              </Box>
+            )}
+            {!isMobile && canUserEdit && (
+              <EditButton
+                iconType="editSimple"
+                ref={editMenuRef}
+                label={editProfileLabel}
+                onClick={toggleEditMenu}
+              />
+            )}
+            {isMobile && loggedEthAddress === profileData.ethAddress && (
+              <Icon type="moreDark" onClick={toggleEditMenu} clickable={true} ref={editMenuRef} />
+            )}
           </Box>
         </Box>
-        {leftTitle && rightTitle && (
-          <Box
-            pad={{ vertical: 'medium', right: 'xxsmall' }}
-            direction="row"
-            alignContent="center"
-            gap="small"
-          >
-            <SubtitleTextIcon
-              iconType="person"
-              label={leftTitle}
-              labelSize="small"
-              subtitle={leftSubtitle}
-              onClick={onClickFollowing}
-              data-testid="following-button"
-            />
-            <SubtitleTextIcon
-              iconType="app"
-              label={rightTitle}
-              labelSize="small"
-              subtitle={rightSubtitle}
-              onClick={onClickApps}
-              data-testid="apps-button"
-            />
-          </Box>
-        )}
+        <Box pad={{ bottom: 'medium' }} direction="row" alignContent="center" gap="medium">
+          <StatIcon
+            iconType="quote"
+            iconBackground={true}
+            iconSize="xxs"
+            label={postsTitle}
+            onClick={onClickPosts}
+            fadedText={true}
+            data-testid="posts-button"
+            isMobile={isMobile}
+          />
+          <StatIcon
+            iconType="following"
+            iconBackground={true}
+            iconSize="xxs"
+            label={followersTitle}
+            onClick={onClickFollowers}
+            fadedText={true}
+            data-testid="followers-button"
+            isMobile={isMobile}
+          />
+          <StatIcon
+            iconType="following"
+            iconBackground={true}
+            iconSize="xxs"
+            label={followingTitle}
+            onClick={onClickFollowing}
+            fadedText={true}
+            data-testid="following-button"
+            isMobile={isMobile}
+          />
+        </Box>
       </Box>
-      <ProfileCardEthereumId profileData={profileData} />
-      <ProfileCardDescription
-        editable={editable}
-        description={description}
-        descriptionIcon={descriptionIcon}
-        handleChangeDescription={handleChangeDescription}
-        descriptionPopoverOpen={descriptionPopoverOpen}
-        setDescriptionPopoverOpen={setDescriptionPopoverOpen}
-        profileProvidersData={profileProvidersData}
-        descriptionLabel={descriptionLabel}
-      />
-      <Box height="40px">
-        {editable && (
-          <div>
-            <Box gap="xsmall" direction="row" justify="end" pad={{ horizontal: 'medium' }}>
-              <Button label={cancelLabel} onClick={handleCancelEdit} />
-              <Button label={saveChangesLabel} onClick={handleSaveEdit} primary={true} />
-            </Box>
-          </div>
+      {!isMobile && editMenuOpen && editMenuRef.current && (
+        <ProfileEditMenuDropdown
+          target={editMenuRef.current}
+          onClose={closeEditMenu}
+          onUpdateClick={() => {
+            props.onUpdateClick();
+            closeEditMenu();
+          }}
+          onENSChangeClick={() => {
+            props.onENSChangeClick();
+            closeEditMenu();
+          }}
+          changeENSLabel={props.changeENSLabel}
+          updateProfileLabel={props.updateProfileLabel}
+          hideENSButton={props.hideENSButton}
+        />
+      )}
+      {isMobile && editMenuOpen && (
+        <StyledDropAlt>
+          <MobileListModal
+            closeModal={closeEditMenu}
+            menuItems={[
+              {
+                label: props.updateProfileLabel,
+                handler: () => {
+                  props.onUpdateClick();
+                  closeEditMenu();
+                },
+              },
+              {
+                label: props.changeENSLabel,
+                handler: () => {
+                  props.onENSChangeClick();
+                  closeEditMenu();
+                },
+              },
+            ]}
+          />
+        </StyledDropAlt>
+      )}
+      <Box pad={{ top: 'medium', bottom: 'xsmall' }}>
+        <ProfileCardEthereumId
+          profileData={profileData}
+          copiedLabel={props.copiedLabel}
+          copyLabel={props.copyLabel}
+          ensName={
+            props.userNameType?.default?.provider === ProfileProviders.ENS
+              ? props.userNameType.default.value
+              : undefined
+          }
+        />
+        {description && (
+          <ProfileCardDescription
+            editable={editable}
+            description={description}
+            descriptionIcon={descriptionIcon}
+            handleChangeDescription={handleChangeDescription}
+            descriptionPopoverOpen={descriptionPopoverOpen}
+            setDescriptionPopoverOpen={setDescriptionPopoverOpen}
+            profileProvidersData={profileProvidersData}
+            descriptionLabel={descriptionLabel}
+          />
         )}
       </Box>
     </MainAreaCardBox>
   );
 };
-
+// tslint:disable:cyclomatic-complexity
+/* eslint-disable complexity */
 export default ProfileCard;

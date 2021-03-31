@@ -1,7 +1,8 @@
-import { Box } from 'grommet';
+import { Box, Stack } from 'grommet';
 import * as React from 'react';
 import { Icon } from '../../Icon';
 import { SearchBar } from './search-bar';
+import { MobileSearchBar } from './mobile-search-bar';
 import { Avatar } from '../../Avatar/index';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings/lib/';
@@ -11,72 +12,139 @@ import {
   StyledSearchContainer,
   StyledDrop,
   StyledDiv,
+  BrandIcon,
+  MenuIcon,
+  VersionButton,
+  IconDiv,
 } from './styled-topbar';
+import { isMobileOnly } from 'react-device-detect';
+import { Button } from '../../Buttons';
+import { IProfileData } from '../../Cards/profile-cards/profile-widget-card';
+import { ProfileMenu } from './profile-menu';
 
 export interface ITopbarProps {
   // data
-  avatarImage?: string;
-  ethAddress: string;
-  brandLabel: string;
-  unreadNotifications?: number;
-  quickAccessItems: IMenuItem[];
+  loggedProfileData?: Partial<IProfileData>;
+  versionURL?: string;
+  hasNewNotifications?: boolean;
+  quickAccessItems?: IMenuItem[];
   searchAreaItem?: IMenuItem;
+  otherAreaItems?: IMenuItem[];
+  currentLocation?: string;
+  // labels
+  brandLabel: string;
+  versionLabel?: string;
+  signInLabel?: string;
+  signUpLabel?: string;
+  signOutLabel?: string;
+  searchBarLabel?: string;
+  legalLabel?: string;
+  feedbackLabel?: string;
+  feedbackInfoLabel?: string;
+  legalCopyRightLabel?: string;
   // handlers
   onNavigation: (path: string) => void;
-  onSidebarToggle: (visibility: boolean) => void;
-  onSearch: (ev: React.KeyboardEvent<HTMLInputElement>, inputValue: string) => void;
+  onSidebarToggle?: (visibility: boolean) => void;
+  onSearch: (inputValue: string) => void;
+  onFeedbackClick: () => void;
   // external css
   className?: string;
-  // viewport size
-  size?: string;
+  onLoginClick: () => void;
+  onSignUpClick: () => void;
+  onLogout: any;
 }
 
 const Topbar = (props: ITopbarProps) => {
   const {
-    avatarImage,
+    loggedProfileData,
+    versionURL,
+    currentLocation,
     brandLabel,
+    versionLabel,
+    signInLabel,
+    signUpLabel,
+    signOutLabel,
+    searchBarLabel,
+    legalLabel,
+    feedbackLabel,
+    feedbackInfoLabel,
+    legalCopyRightLabel,
     className,
     quickAccessItems,
     searchAreaItem,
+    otherAreaItems,
     onSearch,
     onNavigation,
-    onSidebarToggle,
-    ethAddress,
-    size,
+    // onSidebarToggle,
+    onLoginClick,
+    onSignUpClick,
+    onFeedbackClick,
+    onLogout,
+    hasNewNotifications,
   } = props;
 
   const [inputValue, setInputValue] = React.useState('');
-  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  // const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   const [dropOpen, setDropOpen] = React.useState(false);
+  const [avatarDropOpen, setAvatarDropOpen] = React.useState(false);
   const [dropItems, setDropItems] = React.useState<IMenuItem[]>([]);
+  const [mobileSearchOpen, setMobileSearchOpen] = React.useState(false);
+  const [menuDropOpen, setMenuDropOpen] = React.useState(false);
+  const [legalMenu, setLegalMenu] = React.useState<IMenuItem | null>(null);
 
   const [currentDropItem, setCurrentDropItem] = React.useState<IMenuItem | null>(null);
 
   const menuItemRefs: React.RefObject<any> = React.useRef([]);
+  const feedbackMenuRef: React.RefObject<any> = React.useRef(null);
+
+  const mobileSignedOutView = isMobileOnly && !loggedProfileData?.ethAddress;
+  const iconSize = isMobileOnly ? 'md' : 'sm';
+
+  React.useEffect(() => {
+    const legal = otherAreaItems?.find(menuItem => menuItem.label === 'Legal');
+    if (legal && legal.subRoutes?.length) {
+      setLegalMenu(legal);
+    }
+  }, [otherAreaItems]);
 
   const handleNavigation = (menuItem: IMenuItem) => () => {
     if (onNavigation) {
       onNavigation(menuItem.route);
     }
     setDropOpen(false);
+    setAvatarDropOpen(false);
   };
 
-  const handleSidebarVisibility = () => {
-    if (!sidebarOpen && onSidebarToggle) {
-      onSidebarToggle(true);
-      setSidebarOpen(true);
-    } else if (sidebarOpen && onSidebarToggle) {
-      onSidebarToggle(false);
-      setSidebarOpen(false);
-    }
+  const handleMenuClick = () => {
+    setMenuDropOpen(true);
   };
+
+  // const handleSidebarVisibility = () => {
+  //   if (!sidebarOpen && onSidebarToggle) {
+  //     onSidebarToggle(true);
+  //     setSidebarOpen(true);
+  //   } else if (sidebarOpen && onSidebarToggle) {
+  //     onSidebarToggle(false);
+  //     setSidebarOpen(false);
+  //   }
+  // };
 
   const onClickPluginButton = (menuItem: IMenuItem) => () => {
     setCurrentDropItem(menuItem);
     if (menuItem.subRoutes && menuItem.subRoutes.length > 0) {
       setDropItems(menuItem.subRoutes);
       setDropOpen(true);
+    } else {
+      onNavigation(menuItem.route);
+    }
+  };
+
+  const onClickAvatarButton = (menuItem: IMenuItem) => () => {
+    setCurrentDropItem(menuItem);
+    if (menuItem.subRoutes && menuItem.subRoutes.length > 0) {
+      setDropItems(menuItem.subRoutes);
+      setAvatarDropOpen(true);
     } else {
       onNavigation(menuItem.route);
     }
@@ -102,7 +170,7 @@ const Topbar = (props: ITopbarProps) => {
         border={{ style: 'solid', size: '1px', color: 'border', side: 'all' }}
       >
         {dropItems.map((menuItem: IMenuItem, index: number) => (
-          <Box onClick={handleNavigation(menuItem)} key={index}>
+          <Box fill="horizontal" onClick={handleNavigation(menuItem)} key={index}>
             <StyledText>{menuItem.label}</StyledText>
           </Box>
         ))}
@@ -110,110 +178,219 @@ const Topbar = (props: ITopbarProps) => {
     </StyledDrop>
   );
 
+  const renderPluginIcon = (menuItem: IMenuItem) => {
+    if (menuItem.label === 'Notifications') {
+      return (
+        <IconDiv
+          onClick={onClickPluginButton(menuItem)}
+          isActive={currentLocation?.includes(menuItem.route) || false}
+          isMobile={isMobileOnly}
+        >
+          <Stack anchor="top-right">
+            <Icon
+              type={menuItem.logo?.value || 'app'}
+              size={iconSize}
+              clickable={true}
+              accentColor={currentLocation?.includes(menuItem.route) || false}
+            />
+            {hasNewNotifications && (
+              <Box background="errorText" width="9px" height="9px" round={true} />
+            )}
+          </Stack>
+        </IconDiv>
+      );
+    }
+    return (
+      <IconDiv
+        onClick={onClickPluginButton(menuItem)}
+        isActive={currentLocation?.includes(menuItem.route) || false}
+        isMobile={isMobileOnly}
+      >
+        <Icon
+          type={menuItem.logo?.value || 'app'}
+          size={iconSize}
+          clickable={true}
+          accentColor={currentLocation?.includes(menuItem.route) || false}
+        />
+      </IconDiv>
+    );
+  };
+
+  const checkActiveAvatar = (menuItem: IMenuItem) => {
+    if (menuItem.subRoutes?.length && currentLocation?.includes(menuItem?.subRoutes[0]?.route)) {
+      return true;
+    }
+    if (loggedProfileData?.pubKey && currentLocation?.includes(loggedProfileData?.pubKey)) {
+      return true;
+    }
+    return false;
+  };
+
   const renderPluginButton = (menuItem: IMenuItem, index: number) => (
     <StyledDiv
       key={index}
-      onClick={onClickPluginButton(menuItem)}
       ref={ref => {
         menuItemRefs.current[menuItem.index] = ref;
       }}
     >
       {menuItem.logo?.type === LogoTypeSource.AVATAR ? (
         <Avatar
-          ethAddress={ethAddress}
-          src={avatarImage}
+          active={checkActiveAvatar(menuItem)}
+          ethAddress={loggedProfileData?.ethAddress}
+          src={loggedProfileData?.avatar}
           size="xs"
-          onClick={onClickPluginButton(menuItem)}
+          onClick={onClickAvatarButton(menuItem)}
         />
       ) : (
-        <Icon type={menuItem.logo?.value || 'app'} size="sm" clickable={true} />
+        renderPluginIcon(menuItem)
       )}
     </StyledDiv>
   );
 
-  const renderContent = () => {
-    if (size === 'small') {
+  const renderSearchArea = () => {
+    if (searchAreaItem) {
+      if (isMobileOnly) {
+        return (
+          <Icon
+            type="search"
+            size={iconSize}
+            onClick={() => {
+              setMobileSearchOpen(true);
+            }}
+          />
+        );
+      }
       return (
-        <>
-          <Box direction="row" gap="small" align="center" pad={{ right: 'medium' }}>
-            <Icon type="menu" onClick={handleSidebarVisibility} clickable={true} />
-            {sidebarOpen && (
-              <StyledText
-                size="large"
-                weight="bold"
-                onClick={() => {
-                  onNavigation('/');
-                }}
-              >
+        <StyledSearchContainer>
+          <SearchBar
+            inputValue={inputValue}
+            onInputChange={ev => setInputValue(ev.target.value)}
+            onSearch={onSearch}
+            inputPlaceholderLabel={searchBarLabel}
+          />
+        </StyledSearchContainer>
+      );
+    }
+    return;
+  };
+
+  const renderContent = () => {
+    if (isMobileOnly && mobileSearchOpen) {
+      return (
+        <MobileSearchBar
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          onSearch={onSearch}
+          inputPlaceholderLabel={searchBarLabel}
+          handleCloseInput={() => setMobileSearchOpen(false)}
+        />
+      );
+    }
+    return (
+      <Box direction="row" align="center" justify="between" fill="horizontal" height="3rem">
+        <Box
+          direction="row"
+          align="center"
+          flex={{ shrink: 0 }}
+          gap="small"
+          onClick={() => {
+            onNavigation('/');
+          }}
+        >
+          <Box direction="row" gap="small" align="center">
+            <BrandIcon type="ethereumWorldLogo" clickable={true} />
+            {!isMobileOnly && (
+              <StyledText unselectable="on" size="large">
                 {brandLabel}
               </StyledText>
             )}
           </Box>
-          {searchAreaItem && !sidebarOpen && (
-            <StyledSearchContainer>
-              <SearchBar
-                inputValue={inputValue}
-                onInputChange={event => setInputValue(event.target.value)}
-                handleKeyDown={ev => onSearch(ev, inputValue)}
-              />
-            </StyledSearchContainer>
+          {versionURL && (
+            <VersionButton color="errorText" label={versionLabel} primary={true} size="small" />
           )}
-          {!sidebarOpen && (
-            <Box direction="row" align="center" gap="small" pad={{ left: 'medium' }}>
-              {quickAccessItems.map(renderPluginButton)}
+        </Box>
+        <Box
+          direction="row"
+          align="center"
+          gap="small"
+          pad={isMobileOnly ? 'none' : { horizontal: 'medium' }}
+          fill="horizontal"
+          justify="end"
+        >
+          {renderSearchArea()}
+          {loggedProfileData?.ethAddress &&
+            quickAccessItems &&
+            quickAccessItems.map(renderPluginButton)}
+          {!isMobileOnly && !loggedProfileData?.ethAddress && (
+            <Box direction="row" align="center" gap="small">
+              <Button onClick={onLoginClick} label={signInLabel} />
+              <Button primary={true} onClick={onSignUpClick} label={signUpLabel} />
             </Box>
           )}
-        </>
-      );
-    }
-    return (
-      <>
-        <Box direction="row" gap="small" align="center" pad={{ right: 'medium' }}>
-          <Icon type="menu" onClick={handleSidebarVisibility} clickable={true} />
-          <StyledText
-            size="large"
-            weight="bold"
-            onClick={() => {
-              onNavigation('/');
-            }}
-          >
-            {brandLabel}
-          </StyledText>
+          {!loggedProfileData?.ethAddress && (
+            <IconDiv isActive={menuDropOpen} onClick={handleMenuClick} isMobile={isMobileOnly}>
+              <MenuIcon
+                rotate={isMobileOnly ? 90 : 0}
+                ref={feedbackMenuRef}
+                type={isMobileOnly ? 'moreDark' : 'arrowDown'}
+                clickable={true}
+                accentColor={menuDropOpen}
+                size={iconSize}
+              />
+            </IconDiv>
+          )}
         </Box>
-        {searchAreaItem && (
-          <StyledSearchContainer>
-            <SearchBar
-              inputValue={inputValue}
-              onInputChange={event => setInputValue(event.target.value)}
-              handleKeyDown={ev => onSearch(ev, inputValue)}
-            />
-          </StyledSearchContainer>
-        )}
-        <Box direction="row" align="center" gap="small" pad={{ horizontal: 'medium' }}>
-          {quickAccessItems.map(renderPluginButton)}
-        </Box>
-      </>
+      </Box>
     );
   };
 
   return (
     <TopbarWrapper
-      direction="row"
-      pad="small"
-      justify="between"
-      align="center"
+      pad={{ vertical: 'small', horizontal: 'medium' }}
       fill="horizontal"
       className={className}
       elevation="shadow"
-      height="3rem"
-      border={
-        size === 'small' && sidebarOpen
-          ? undefined
-          : { side: 'bottom', size: '1px', style: 'solid', color: 'border' }
-      }
+      height={mobileSignedOutView ? '6rem' : '3rem'}
+      border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
     >
       {renderContent()}
+      {mobileSignedOutView && (
+        <Box direction="row" align="center" gap="small" fill="horizontal">
+          <Button onClick={onLoginClick} label={signInLabel} fill="horizontal" />
+          <Button primary={true} onClick={onSignUpClick} label={signUpLabel} fill="horizontal" />
+        </Box>
+      )}
       {dropOpen && renderDrop()}
+      {avatarDropOpen && loggedProfileData?.ethAddress && (
+        <ProfileMenu
+          target={currentDropItem && menuItemRefs.current[currentDropItem?.index]}
+          closePopover={() => setAvatarDropOpen(false)}
+          onNavigation={onNavigation}
+          loggedProfileData={loggedProfileData}
+          legalLabel={legalLabel}
+          signOutLabel={signOutLabel}
+          feedbackLabel={feedbackLabel}
+          feedbackInfoLabel={feedbackInfoLabel}
+          legalCopyRightLabel={legalCopyRightLabel}
+          menuItems={dropItems}
+          legalMenu={legalMenu}
+          onLogout={onLogout}
+          onFeedbackClick={onFeedbackClick}
+        />
+      )}
+      {menuDropOpen && !loggedProfileData?.ethAddress && (
+        <ProfileMenu
+          target={feedbackMenuRef.current}
+          closePopover={() => setMenuDropOpen(false)}
+          onNavigation={onNavigation}
+          legalLabel={legalLabel}
+          legalMenu={legalMenu}
+          feedbackLabel={feedbackLabel}
+          feedbackInfoLabel={feedbackInfoLabel}
+          legalCopyRightLabel={legalCopyRightLabel}
+          onFeedbackClick={onFeedbackClick}
+        />
+      )}
     </TopbarWrapper>
   );
 };
@@ -222,7 +399,12 @@ Topbar.defaultProps = {
   onNavigation: () => {
     return;
   },
-  unreadNotifications: 0,
+  signUpLabel: 'Sign Up',
+  signInLabel: 'Sign In',
+  signOutLabel: 'Sign Out',
+  legalLabel: 'Legal',
+  feedbackLabel: 'Send Us Feedback',
+  feedbackInfoLabel: 'Help us improve the experience!',
 };
 
 export { Topbar };

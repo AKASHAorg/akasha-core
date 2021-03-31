@@ -21,15 +21,19 @@ export default async function upload(
         source.push(content);
       }
     } else {
-      source.push({ path: folderPrefix + entryData.path, content: entryData.content });
+      source.push(entryData);
     }
   }
 
-  for await (const entry of instance.addAll(source)) {
+  for await (const entry of instance.addAll(source, {
+    hashAlg: 'sha3-512',
+    pin: true,
+    cidVersion: 1,
+  })) {
     log.info({ entry, msg: 'uploaded on ipfs' });
     result.push(entry.cid.toBaseEncodedString());
   }
   // ignore folder path atm
-  result.pop();
+  // result.pop();
   return result;
 }

@@ -1,15 +1,19 @@
-import { Box, Text, Drop } from 'grommet';
+import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { IProfileData } from '../profile-widget-card';
 import { Icon } from '../../../Icon';
-import { TextIcon } from '../../../TextIcon';
+import { isMobile } from 'react-device-detect';
+import Tooltip from '../../../Tooltip/tooltip';
+import { truncateMiddle } from '../../../../utils/string-utils';
 
 export interface IProfileCardEthereumIdProps {
   ethereumAddressLabel?: string;
   ethereumNameLabel?: string;
   copyLabel?: string;
+  copiedLabel?: string;
   showQRCodeLabel?: string;
   profileData: IProfileData;
+  ensName?: string;
 }
 
 const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
@@ -17,112 +21,61 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
     ethereumAddressLabel,
     ethereumNameLabel,
     copyLabel,
-    showQRCodeLabel,
+    copiedLabel,
     profileData,
+    ensName,
   } = props;
-
-  const [popoverOpen, setPopoverOpen] = React.useState(false);
-
+  const [isCopied, setIsCopied] = React.useState(false);
   const popoverRef: React.Ref<any> = React.useRef(null);
 
-  const togglePopover = () => {
-    setPopoverOpen(!popoverOpen);
-  };
+  React.useEffect(() => {
+    if (isCopied) {
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 3000);
+    }
+  }, [isCopied]);
 
-  const closePopover = () => {
-    setPopoverOpen(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(ensName ?? profileData.ethAddress);
+    setIsCopied(true);
   };
-
-  const handleCopy = (data: string) => {
-    navigator.clipboard.writeText(data);
-    closePopover();
-  };
-
-  const handleShowQR = () => {
-    return;
-  };
-
-  const renderPopover = () => (
-    <Drop
-      overflow="hidden"
-      target={popoverRef.current}
-      align={{ top: 'bottom', right: 'right' }}
-      onClickOutside={closePopover}
-      onEsc={closePopover}
-    >
-      <Box
-        round="xxsmall"
-        pad="small"
-        gap="xsmall"
-        border={{ size: 'xsmall', color: 'border', side: 'all', style: 'solid' }}
-      >
-        {profileData.ensName && (
-          <Box gap="xsmall">
-            <Text size="small" color="secondaryText">
-              {ethereumNameLabel}
-            </Text>
-            <TextIcon
-              iconType="copy"
-              fontSize="small"
-              label={copyLabel}
-              onClick={() => handleCopy(profileData.ensName!)}
-              clickable={true}
-            />
-            <TextIcon
-              iconType="copy"
-              fontSize="small"
-              label={showQRCodeLabel}
-              onClick={handleShowQR}
-              clickable={true}
-            />
-          </Box>
-        )}
-        <Box gap="xsmall">
-          <Text size="small" color="secondaryText">
-            {ethereumAddressLabel}
-          </Text>
-          <TextIcon
-            iconType="copy"
-            fontSize="small"
-            label={copyLabel}
-            onClick={() => handleCopy(profileData.ethAddress)}
-            clickable={true}
-          />
-          <TextIcon
-            iconType="copy"
-            fontSize="small"
-            label={showQRCodeLabel}
-            onClick={handleShowQR}
-            clickable={true}
-          />
-        </Box>
-      </Box>
-    </Drop>
-  );
 
   return (
     <>
-      <Box direction="column" pad="medium" gap="medium">
-        <Text size="large" weight="bold" color="primaryText">
-          {profileData.ensName ? ethereumNameLabel : ethereumAddressLabel}
+      <Box direction="column" pad={{ vertical: 'xsmall', horizontal: 'medium' }} gap="xxsmall">
+        <Text size="large" weight="bold" color="primaryText" style={{ lineHeight: 1.7 }}>
+          {ensName ? ethereumNameLabel : ethereumAddressLabel}
         </Text>
         <Box direction="row" gap="xsmall" align="center">
-          <Text color="primaryText">
-            {profileData.ensName ? profileData.ensName : profileData.ethAddress}
+          <Text color="primaryText" size={'medium'} truncate={true} style={{ lineHeight: 1.7 }}>
+            {ensName
+              ? ensName
+              : isMobile
+              ? truncateMiddle(profileData.ethAddress)
+              : profileData.ethAddress}
           </Text>
-          <Icon type="copy" clickable={true} onClick={togglePopover} ref={popoverRef} />
+          <Tooltip
+            dropProps={{ align: isMobile ? { right: 'left' } : { left: 'right' } }}
+            message={isCopied ? (copiedLabel as string) : (copyLabel as string)}
+            icon={isCopied ? 'check' : undefined}
+            plain={true}
+            caretPosition={isMobile ? 'right' : 'left'}
+          >
+            <Icon type="copy" clickable={true} onClick={handleCopy} ref={popoverRef} />
+          </Tooltip>
         </Box>
       </Box>
-      {popoverOpen && popoverRef.current && renderPopover()}
     </>
   );
 };
 
 ProfileCardEthereumId.defaultProps = {
-  ethereumNameLabel: 'Ethereum Name',
-  ethereumAddressLabel: 'Ethereum Address',
-  copyLabel: 'Copy',
+  ethereumNameLabel: 'Ethereum name',
+  ethereumAddressLabel: 'Ethereum address',
+  copyLabel: 'Copy to clipboard',
   showQRCodeLabel: 'Show QR code',
+  copiedLabel: 'Copied',
 };
 
 export default ProfileCardEthereumId;

@@ -5,7 +5,7 @@
 version: 2.1
 commands:
   create_concatenated_package_lock:
-    description: "Concatenate all package-lock.json"
+    description: 'Concatenate all package-lock.json'
     parameters:
       filename:
         type: string
@@ -17,7 +17,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:12.13.0
+      - image: circleci/node:14.15.4
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -32,13 +32,15 @@ jobs:
           filename: combined-package-lock.txt
       - run:
           name: update-npm
-          command: 'sudo npm install -g npm@latest'
+          command: 'sudo npm install -g npm@6.14.11'
       - restore_cache: # special step to restore the dependency cache
           # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
           keys:
             - dependency-cache-v1-{{ checksum "package-lock.json" }}-{{ checksum "combined-package-lock.txt" }}
             - dependency-cache-v1
-
+      - run:
+          command: |
+            sudo apt install -y git build-essential
       - run:
           name: install-npm-wee
           command: npm install
@@ -53,7 +55,7 @@ jobs:
           command: npm run build:sdk
       - run: # pack ui-apps
           name: pack-ui-apps
-          command: npm run pack:ui-apps
+          command: npm run pack:ui
       - run: # extract-translations
           name: extract-translations
           command: npm run extract:translations

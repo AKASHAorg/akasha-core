@@ -1,0 +1,40 @@
+{
+  "name": "@akashaproject/ethereum.world",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@akashaproject/ui-awf-typings": "*",
+    "@types/react": "16.14.0",
+    "@types/react-dom": "16.9.7"
+  },
+  "scripts": {
+    "start": "webpack serve --config ./webpack.config.js --port 8131",
+    "start:expose": "webpack serve --config ./webpack.config.js --port 8131 --host 0.0.0.0",
+    "build": "webpack --config ./webpack.config.js",
+    "watch": "nodemon",
+    "clean": "rm -rf dist",
+    "build:staging": "webpack --config ./webpack.config.js",
+    "postbuild:staging": "copyfiles -u 1 \"./dist/**/*\" ./public"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "lib/*",
+      "node_modules/*",
+      "public/*"
+    ],
+    "exec": "npm run build || exit 1",
+    "ext": "ts,tsx"
+  },
+  "dependencies": {},
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "development": [
+    "last 1 chrome version",
+    "last 1 firefox version",
+    "last 1 safari version"
+  ]
+}

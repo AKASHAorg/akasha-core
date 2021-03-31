@@ -46,12 +46,14 @@ describe('<Topbar /> Component', () => {
           <Topbar
             onNavigation={jest.fn()}
             onSearch={jest.fn()}
-            onSidebarToggle={jest.fn()}
-            avatarImage={'https://placebeard.it/640/480'}
-            ethAddress={'0x0132312'}
             brandLabel={'test'}
             searchAreaItem={undefined}
             quickAccessItems={[]}
+            onLoginClick={() => {}}
+            onSignUpClick={() => {}}
+            onLogout={() => {}}
+            onFeedbackClick={() => {}}
+            currentLocation={''}
           />,
         ),
       );

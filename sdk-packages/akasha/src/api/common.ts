@@ -2,6 +2,7 @@ import registerCommonModule from '@akashaproject/sdk-common';
 import { extractCallableServices } from '../utils';
 import {
   CACHE_SERVICE,
+  IMAGE_UTILS_SERVICE,
   IPFS_SERVICE,
   VALIDATOR_SERVICE,
   WEB3_SERVICE,
@@ -29,9 +30,11 @@ export default function commonApi(channel) {
         getStash: extractedServices[CACHE_SERVICE]('getStash'),
       },
       ipfsService: {
-        getInstance: extractedServices[IPFS_SERVICE]('getInstance'),
-        getUtils: extractedServices[IPFS_SERVICE]('getUtils'),
-        upload: extractedServices[IPFS_SERVICE]('upload'),
+        // getInstance: extractedServices[IPFS_SERVICE]('getInstance'),
+        // getUtils: extractedServices[IPFS_SERVICE]('getUtils'),
+        // upload: extractedServices[IPFS_SERVICE]('upload'),
+        getSettings: extractedServices[IPFS_SERVICE]('getSettings'),
+        getLegalDoc: extractedServices[IPFS_SERVICE]('getLegalDoc'),
       },
       validatorService: {
         getValidator: extractedServices[VALIDATOR_SERVICE]('getValidator'),
@@ -40,9 +43,14 @@ export default function commonApi(channel) {
         web3: extractedServices[WEB3_SERVICE]('web3'),
         wallet: extractedServices[WEB3_SERVICE]('wallet'),
         regen: extractedServices[WEB3_SERVICE]('regen'),
+        checkCurrentNetwork: extractedServices[WEB3_SERVICE]('checkCurrentNetwork'),
       },
       web3UtilsService: {
         getUtils: extractedServices[WEB3_UTILS_SERVICE]('getUtils'),
+      },
+      imageUtilsService: {
+        resizeImage: extractedServices[IMAGE_UTILS_SERVICE]('resizeImage'),
+        getImageSize: extractedServices[IMAGE_UTILS_SERVICE]('getImageSize'),
       },
     },
   };

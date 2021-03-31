@@ -4,7 +4,7 @@ import { MainAreaCardBox } from '../common/basic-card-box';
 import { IconLink } from '../../Buttons';
 import { TextIcon } from '../../TextIcon';
 import { SearchInput } from '../../Input';
-import { TagCard, ITagData } from './tag-card';
+import { TagCard, ITagData } from '../tag-cards/tag-card';
 import { IProfileData } from '../profile-cards/profile-widget-card';
 import { ProfileMiniCard } from '../profile-cards/profile-mini-card';
 import { Icon } from '../../Icon';
@@ -33,7 +33,7 @@ export interface ICustomizeFeedCardProps {
   handleFollow: (profileEthAddress: string) => void;
   handleUnfollow: (profileEthAddress: string) => void;
   handleSubscribe: (tagNAme: string) => void;
-  handleUnsubscribe: (tagName: string) => void;
+  handleUnsubscribe: (name: string) => void;
   // external css
   className?: string;
   style?: React.CSSProperties;
@@ -163,7 +163,7 @@ const CustomizeFeedCard: React.FC<ICustomizeFeedCardProps> = props => {
 
           <Box gap="small" direction="column" pad="medium" overflow="scroll">
             {tags
-              .filter(tag => tag.tagName.toLowerCase().includes(inputValue.toLowerCase()))
+              .filter(tag => tag.name.toLowerCase().includes(inputValue.toLowerCase()))
               .map((tag, index) => (
                 <TagCard
                   key={index}

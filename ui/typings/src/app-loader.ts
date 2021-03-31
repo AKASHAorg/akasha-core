@@ -11,8 +11,8 @@ export interface IPluginConfig {
 
 export interface ILoaderConfig {
   rootNodeId: string;
-  layout: IWidget;
-  rootLoadedApp: IAppEntry['app'];
+  layout: IWidgetEntry;
+  rootLoadedApp: IPluginEntry;
   System: any;
 }
 
@@ -53,13 +53,18 @@ export interface ISingleSpaLifecycle {
   update?: (props: any) => Promise<void>;
 }
 
+export interface IScriptSrc {
+  src: string;
+  name: string;
+  moduleName: string;
+}
+
 export interface IWidget {
   name: string;
   i18nConfig?: II18nConfig;
   loadingFn: () => Promise<ISingleSpaLifecycle>;
   pluginSlotId?: string;
   topbarSlotId?: string;
-  sidebarSlotId?: string;
   widgetSlotId?: string;
   rootWidgetSlotId?: string;
   sdkModules?: SDKdependency[];

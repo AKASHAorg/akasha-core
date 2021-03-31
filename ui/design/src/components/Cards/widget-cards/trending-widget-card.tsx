@@ -2,41 +2,56 @@ import { Box, Text, Tabs } from 'grommet';
 import * as React from 'react';
 import { SubtitleTextIcon } from '../../TextIcon/index';
 import { Icon } from '../../Icon/index';
-import { ProfileAvatarButton, IconLink } from '../../Buttons/index';
+import { ProfileAvatarButton } from '../../Buttons/index';
 import { WidgetAreaCardBox } from '../common/basic-card-box';
 import { StyledTab } from './styled-widget-cards';
+import { DuplexButton } from '../../Buttons';
+import { TextLine } from '../../VirtualList/placeholders/entry-card-placeholder';
 
 export interface ITrendingWidgetCardProps {
   // data
   tags: ITag[];
   profiles: IProfile[];
-  userSubscribtions?: { profileEthAddresses: string[]; tagNames: string[] };
+  followedProfiles?: string[];
+  subscribedTags?: string[];
+  loggedEthAddress?: string | null;
   // labels
   titleLabel: string;
   topicsLabel: string;
   profilesLabel: string;
-  showMoreLabel: string;
+  followLabel?: string;
+  followingLabel?: string;
+  followersLabel?: string;
+  unfollowLabel?: string;
+  subscribeLabel?: string;
+  unsubscribeLabel?: string;
+  subscribedLabel?: string;
   // handlers
   onClickTag: (tagName: string) => void;
   onClickProfile: (ethAddress: string) => void;
-  onClickSubscribeTag: (tagName: string) => void;
-  onClickSubscribeProfile: (ethAddress: string) => void;
-  onClickMoreTags: React.EventHandler<React.SyntheticEvent>;
-  onClickMoreProfiles: React.EventHandler<React.SyntheticEvent>;
+  handleFollowProfile: (ethAddress: string) => void;
+  handleUnfollowProfile: (ethAddress: string) => void;
+  handleSubscribeTag: (tagName: string) => void;
+  handleUnsubscribeTag: (tagName: string) => void;
   // css
   className?: string;
 }
 
 export interface ITag {
-  tagName: string;
-  mentions: number;
+  name: string;
+  totalPosts: number;
 }
 
 export interface IProfile {
   ethAddress: string;
+  pubKey: string;
   avatar?: string;
+  coverImage?: string;
+  description?: string;
   userName?: string;
-  followers?: number;
+  name?: string;
+  totalFollowers?: number | string;
+  totalFollowing?: number | string;
 }
 
 const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
@@ -44,72 +59,119 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
     className,
     onClickTag,
     onClickProfile,
-    onClickSubscribeTag,
-    onClickSubscribeProfile,
-    onClickMoreTags,
-    onClickMoreProfiles,
+    handleFollowProfile,
+    handleUnfollowProfile,
+    handleSubscribeTag,
+    handleUnsubscribeTag,
+    loggedEthAddress,
     titleLabel,
     tags,
     profiles,
-    userSubscribtions,
     topicsLabel,
     profilesLabel,
-    showMoreLabel,
+    followLabel,
+    followingLabel,
+    unfollowLabel,
+    followersLabel,
+    subscribeLabel,
+    subscribedLabel,
+    unsubscribeLabel,
+    followedProfiles,
+    subscribedTags,
   } = props;
+
+  const iterateArr = [...Array(4).keys()];
 
   return (
     <WidgetAreaCardBox className={className}>
       <Box pad="medium" gap="medium">
-        <Text weight="bold">{titleLabel}</Text>
+        <Text weight="bold" size="large">
+          {titleLabel}
+        </Text>
       </Box>
       <Tabs>
         <StyledTab title={topicsLabel}>
           <Box pad="medium" gap="medium">
-            {tags.map((tag, index) => (
-              <Box key={index} direction="row" justify="between" align="center">
-                <SubtitleTextIcon
-                  onClick={() => onClickTag(tag.tagName)}
-                  label={tag.tagName}
-                  subtitle={`Used in ${tag.mentions} posts`}
-                  labelSize="large"
-                  gap="xxsmall"
-                />
-                <Icon
-                  type="subscribe"
-                  onClick={() => onClickSubscribeTag(tag.tagName)}
-                  clickable={true}
-                  primaryColor={userSubscribtions?.tagNames.includes(tag.tagName)}
-                />
-              </Box>
-            ))}
-            <Box align="center">
-              <IconLink label={showMoreLabel} onClick={onClickMoreTags} size="medium" />
-            </Box>
+            {tags.length === 0 &&
+              iterateArr.map((_el, index: number) => (
+                <Box key={index} direction="row" justify="between" align="center">
+                  <Box gap="xxsmall">
+                    <TextLine title="tagName" animated={false} width="140px" />
+                    <TextLine title="tagName" animated={false} width="80px" />
+                  </Box>
+                  <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
+                </Box>
+              ))}
+            {tags.length !== 0 &&
+              tags.slice(0, 4).map((tag, index) => (
+                <Box key={index} direction="row" justify="between" align="center">
+                  <SubtitleTextIcon
+                    onClick={() => onClickTag(tag.name)}
+                    label={`#${tag.name}`}
+                    subtitle={`Used in ${tag.totalPosts} posts`}
+                    labelSize="large"
+                    gap="xxsmall"
+                    maxWidth="10rem"
+                  />
+                  <Box width="7rem">
+                    <DuplexButton
+                      inactiveLabel={subscribeLabel}
+                      activeLabel={subscribedLabel}
+                      activeHoverLabel={unsubscribeLabel}
+                      onClickInactive={() => handleSubscribeTag(tag.name)}
+                      onClickActive={() => handleUnsubscribeTag(tag.name)}
+                      active={subscribedTags?.includes(tag.name)}
+                      icon={<Icon type="subscribe" />}
+                    />
+                  </Box>
+                </Box>
+              ))}
           </Box>
         </StyledTab>
         <StyledTab title={profilesLabel}>
           <Box pad="medium" gap="medium">
-            {profiles.map((profile, index) => (
-              <Box key={index} direction="row" justify="between" align="center">
-                <ProfileAvatarButton
-                  ethAddress={profile.ethAddress}
-                  onClick={() => onClickProfile(profile.ethAddress)}
-                  label={profile.userName}
-                  info={`${profile.followers} followers`}
-                  size="md"
-                  avatarImage={profile.avatar}
-                />
-                <Icon
-                  type="following"
-                  onClick={() => onClickSubscribeProfile(profile.ethAddress)}
-                  clickable={true}
-                  primaryColor={userSubscribtions?.profileEthAddresses.includes(profile.ethAddress)}
-                />
-              </Box>
-            ))}
-            <Box align="center">
-              <IconLink label={showMoreLabel} onClick={onClickMoreProfiles} size="medium" />
-            </Box>
+            {profiles.length === 0 &&
+              iterateArr.map((_el, index: number) => (
+                <Box key={index} direction="row" justify="between" align="center">
+                  <Box direction="row" gap="xsmall">
+                    <TextLine title="avatar" width="40px" height="40px" round={{ size: '50%' }} />
+                    <Box gap="xxsmall">
+                      <TextLine title="tagName" animated={false} width="140px" />
+                      <TextLine title="tagName" animated={false} width="80px" />
+                    </Box>
+                  </Box>
+
+                  <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
+                </Box>
+              ))}
+            {profiles.length !== 0 &&
+              profiles.slice(0, 4).map((profile, index) => (
+                <Box key={index} direction="row" justify="between" align="center">
+                  <Box width="11rem" pad="none">
+                    <ProfileAvatarButton
+                      ethAddress={profile.ethAddress}
+                      onClick={() => onClickProfile(profile.pubKey)}
+                      label={profile.userName || profile.name}
+                      info={`${profile.totalFollowers} ${followersLabel}`}
+                      size="md"
+                      avatarImage={profile.avatar}
+                    />
+                  </Box>
+                  {profile.ethAddress !== loggedEthAddress && (
+                    <Box width="7rem">
+                      <DuplexButton
+                        inactiveLabel={followLabel}
+                        activeLabel={followingLabel}
+                        activeHoverLabel={unfollowLabel}
+                        onClickInactive={() => handleFollowProfile(profile.ethAddress)}
+                        onClickActive={() => handleUnfollowProfile(profile.ethAddress)}
+                        active={followedProfiles?.includes(profile.ethAddress)}
+                        icon={<Icon type="following" />}
+                      />
+                    </Box>
+                  )}
+                </Box>
+              ))}
           </Box>
         </StyledTab>
       </Tabs>
@@ -120,8 +182,14 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
 TrendingWidgetCard.defaultProps = {
   titleLabel: 'Trending Right Now',
   topicsLabel: 'Topics',
-  profilesLabel: 'Profiles',
-  showMoreLabel: 'Show more',
+  profilesLabel: 'People',
+  followLabel: 'Follow',
+  unfollowLabel: 'Unfollow',
+  followersLabel: 'Followers',
+  followingLabel: 'Following',
+  subscribedLabel: 'Subscribed',
+  subscribeLabel: 'Subscribe',
+  unsubscribeLabel: 'Unsubscribe',
 };
 
 export default TrendingWidgetCard;

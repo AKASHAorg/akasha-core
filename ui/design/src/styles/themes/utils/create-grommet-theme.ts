@@ -48,8 +48,11 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         },
         accent: styledComponentsTheme.colors.accent,
         brand: styledComponentsTheme.colors.accent,
+        darkBorder: styledComponentsTheme.colors.darkBorder,
         background: styledComponentsTheme.colors.background,
         modalBackground: styledComponentsTheme.colors.modalBackground,
+        modalBackgroundAlt: styledComponentsTheme.colors.modalBackgroundAlt,
+        modalBackgroundTransparent: styledComponentsTheme.colors.modalBackgroundTransparent,
         lightBackground: styledComponentsTheme.colors.lightBackground,
         ultraLightBackground: styledComponentsTheme.colors.ultraLightBackground,
         focus: styledComponentsTheme.colors.accent,
@@ -61,14 +64,14 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
       },
     },
     radioButton: {
-      size: '14px',
+      size: '16px',
       border: {
-        width: '2px',
+        width: '5px',
       },
       check: {
         color: styledComponentsTheme.colors.white,
         background: {
-          color: styledComponentsTheme.colors.accent,
+          // color: styledComponentsTheme.colors.accent,
         },
       },
       hover: {
@@ -76,7 +79,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
           color: styledComponentsTheme.colors.accent,
         },
         background: {
-          color: styledComponentsTheme.colors.accent,
+          // color: styledComponentsTheme.colors.accent,
         },
       },
     },

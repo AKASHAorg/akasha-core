@@ -16,10 +16,13 @@ import {
 
 import pino from 'pino';
 import { BehaviorSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
 import TranslationManager from './i18n';
 import detectMobile from 'ismobilejs';
+
+import createTemplateElement from './create-template-element';
 
 import { setPageTitle } from './setPageMetadata';
 import { Application } from '@akashaproject/ui-awf-typings';
@@ -63,6 +66,7 @@ export default class AppLoader implements IAppLoader {
     integrationId: string;
     menuItemType?: MenuItemType;
   }[];
+  private fourOhFourTimeout: NodeJS.Timeout | null;
   private isRegisteringLayout: boolean;
   private apps: IAppEntry[];
   private widgets: {
@@ -99,6 +103,8 @@ export default class AppLoader implements IAppLoader {
     this.channels = channels;
     this.isMobile = detectMobile().phone || detectMobile().tablet;
 
+    this.fourOhFourTimeout = null;
+
     this.events = new BehaviorSubject(EventTypes.Instantiated);
     this.menuItems = { nextIndex: 1, items: [] };
 
@@ -121,20 +127,36 @@ export default class AppLoader implements IAppLoader {
 
     // register event listeners
     this.addSingleSpaEventListeners();
-
     // call as fast as possible
     // https://github.com/single-spa/single-spa/issues/484
     singleSpa.start({
       urlRerouteOnly: true,
     });
+    if (this.globalChannel) {
+      const loginEvent = this.globalChannel.pipe(
+        filter((ev: { channelInfo: any; data: any }) => ev?.channelInfo?.method === 'signIn'),
+      );
+      loginEvent.subscribe(e => {
+        const doc = this.channels.db.apps.getInstalled({});
+        this.appLogger.info('registering apps installed by user');
+        doc.subscribe(record => {
+          this.appLogger.info('currently installed apps', record.apps);
+          if (record?.apps?.length) {
+            record.apps.forEach(this.registerApp);
+          }
+        });
+      });
+    }
 
     this.loadLayout();
   }
 
-  public installApp() {
-    // todo
+  public async installApp(appEntry: IAppEntry) {
+    this.registerApp(appEntry);
+    const doc = this.channels.db.apps.install(appEntry);
+    return await doc.toPromise();
   }
-
+  public static createTemplateElement = createTemplateElement;
   public async uninstallApp(appName: string, packageLoader: any, packageId: string) {
     if (this.registeredIntegrations.has(appName)) {
       await singleSpa.unloadApplication(appName, { waitForUnmount: true });
@@ -147,7 +169,8 @@ export default class AppLoader implements IAppLoader {
     const removedPackage = packageLoader.delete(packageId);
     this.events.next(EventTypes.AppOrPluginUninstall);
     this.appLogger.info(`package ${packageId} removed ${removedPackage}`);
-    return;
+    const doc = this.channels.db.apps.remove({ name: appName });
+    return await doc.toPromise();
   }
 
   private addSingleSpaEventListeners() {
@@ -218,7 +241,10 @@ export default class AppLoader implements IAppLoader {
     );
     const widgetId = this.getIdFromName(widget.app.name);
     widget.app.name = widgetId;
-
+    if (this.isRegisteringLayout) {
+      this.widgets.root.push(widget);
+      return;
+    }
     if (this.registeredWidgets.has(widgetId)) {
       this.appLogger.info(`Widget ${widgetId} already registered... skipping...`);
       return;
@@ -266,13 +292,6 @@ export default class AppLoader implements IAppLoader {
       this.deferredIntegrations.push({ integration, integrationId, menuItemType });
       return;
     }
-    if (integration.config && integration.config.activeWhen && integration.config.activeWhen.path) {
-      integration.app.activeWhen = integration.config.activeWhen;
-    }
-
-    if (integration.config && integration.config.title) {
-      integration.app.title = integration.config.title;
-    }
     this.translationManager.createInstance(
       integration.app,
       this.appLogger.child({ i18nPlugin: integrationId }),
@@ -291,7 +310,7 @@ export default class AppLoader implements IAppLoader {
         ...this.config,
         ...integration.config,
         activeWhen: integration.app.activeWhen,
-        domElementGetter: () => document.getElementById(this.config.layout.pluginSlotId),
+        domElementGetter: () => document.getElementById(this.config.layout.app.pluginSlotId),
         i18n: this.translationManager.getInstance(integrationId),
         i18nConfig: integration.app.i18nConfig,
         logger: this.appLogger.child({ plugin: integrationId }),
@@ -325,9 +344,9 @@ export default class AppLoader implements IAppLoader {
     });
   }
   /* eslint-enable complexity */
-  private getDependencies(app: any, id) {
+  private getDependencies(app: Application | IWidget, id: string) {
     const dependencies = {};
-    if (app.sdkModules.length) {
+    if (app.sdkModules && app.sdkModules.length) {
       for (const dep of app.sdkModules) {
         if (this.channels.hasOwnProperty(dep.module)) {
           Object.assign(dependencies, { [dep.module]: this.channels[dep.module] });
@@ -343,7 +362,7 @@ export default class AppLoader implements IAppLoader {
     const matchedPlugins = this.getPluginsForLocation(window.location);
     if (window.location.pathname === '/' && matchedPlugins.length === 0) {
       if (this.config.rootLoadedApp) {
-        singleSpa.navigateToUrl(this.config.rootLoadedApp.activeWhen.path);
+        singleSpa.navigateToUrl(this.config.rootLoadedApp.app.activeWhen.path);
       } else {
         this.appLogger.error('There is no rootLoadedApp set. Nothing to render!');
       }
@@ -355,13 +374,13 @@ export default class AppLoader implements IAppLoader {
    * and see if there are any that does not match the route anymore
    * otherwise the router will not work reliably.
    */
-  private onRouting(ev: CustomEvent<SingleSpaEventDetail>) {
+  private onRouting(_ev: CustomEvent<SingleSpaEventDetail>) {
     const { pathname } = window.location;
     const mountedApps = this.getPluginsForLocation(window.location);
     let matchedApps = [];
     if (mountedApps.length === 0 && window.location.pathname === '/') {
       if (this.config.rootLoadedApp) {
-        singleSpa.navigateToUrl(this.config.rootLoadedApp.activeWhen.path);
+        singleSpa.navigateToUrl(this.config.rootLoadedApp.app.activeWhen.path);
       } else {
         this.appLogger.error('There is no rootLoadedApp set. Nothing to render!');
       }
@@ -404,24 +423,31 @@ export default class AppLoader implements IAppLoader {
     if (fourOhFourElem) {
       fourOhFourElem.parentElement.removeChild(fourOhFourElem);
     }
-    if (!currentPlugins.length) {
-      const pluginsNode = document.getElementById(this.config.layout.pluginSlotId);
-      // create a 404 page and return it instead of a plugin
-      const FourOhFourNode: ChildNode = fourOhFour();
-      if (pluginsNode) {
-        pluginsNode.appendChild(FourOhFourNode);
-      }
-      return;
+    if (this.fourOhFourTimeout) {
+      clearTimeout(this.fourOhFourTimeout);
+      this.fourOhFourTimeout = null;
     }
-    this.appLogger.info(`active plugin %j`, currentPlugins);
-    const firstPlugin = currentPlugins.find(plugin => this.registeredIntegrations.has(plugin));
-    if (firstPlugin) {
-      setPageTitle(this.registeredIntegrations.get(firstPlugin).title);
-    } else {
-      this.appLogger.warn(
-        `could not find a registered active app from active plugins list %j`,
-        currentPlugins,
-      );
+    this.fourOhFourTimeout = setTimeout(() => {
+      if (!currentPlugins.length) {
+        const pluginsNode = document.getElementById(this.config.layout.app.pluginSlotId);
+        // create a 404 page and return it instead of a plugin
+        const FourOhFourNode: ChildNode = fourOhFour;
+        if (pluginsNode) {
+          pluginsNode.appendChild(FourOhFourNode);
+        }
+      }
+    }, 1500);
+    if (currentPlugins.length) {
+      this.appLogger.info(`active plugin %j`, currentPlugins);
+      const firstPlugin = currentPlugins.find(plugin => this.registeredIntegrations.has(plugin));
+      if (firstPlugin) {
+        setPageTitle(this.registeredIntegrations.get(firstPlugin).title);
+      } else {
+        this.appLogger.warn(
+          `could not find a registered active app from active plugins list %j`,
+          currentPlugins,
+        );
+      }
     }
   }
   private getAppEntries(appNames) {
@@ -434,19 +460,37 @@ export default class AppLoader implements IAppLoader {
       if (plugin) return plugin;
     });
   }
-  private createHtmlElement(elementId, elementType, parentNode?: string) {
+
+  /**
+   * InsertPosition
+   *
+   * ```html
+   * <!-- beforebegin -->
+   * <TargetElement>
+   *  <!-- afterbegin -->
+   *    <!-- other child elements -->
+   *  <!-- beforeend -->
+   * </TargetElement>
+   * <!-- afterend -->
+   * ```
+   */
+
+  private createHtmlElement(
+    elementId: string,
+    elementType: string,
+    insertAt: { position: InsertPosition; targetId: string },
+  ) {
     const alreadyCreated = document.getElementById(elementId);
     if (alreadyCreated) {
       return elementId;
     }
     const elem: HTMLElement = document.createElement(elementType);
     elem.id = elementId;
-    if (parentNode) {
-      const parentElem = document.getElementById(parentNode);
-      if (parentElem && elem) {
-        parentElem.appendChild(elem);
-      }
+    const targetElement = document.getElementById(insertAt.targetId);
+    if (!targetElement) {
+      return this.appLogger.error(`Target element: ${insertAt.targetId} not found!`);
     }
+    targetElement.insertAdjacentElement(insertAt.position, elem);
     return elementId;
   }
   private mountWidgetsOfApps(apps) {
@@ -456,12 +500,11 @@ export default class AppLoader implements IAppLoader {
       const widgetRoutes = Object.keys(widgets);
       const path = window.location.pathname;
       if (widgetRoutes.length) {
-        widgetRoutes.forEach(route => {
-          const routeRegex = pathToRegexp(route);
-          const isMatching = routeRegex.test(path);
-          if (isMatching) {
+        widgetRoutes
+          .filter(route => pathToRegexp(route).test(path))
+          .forEach(route => {
             const widgetListForPath = widgets[route];
-            widgetListForPath.forEach(async (widget: IWidget) => {
+            widgetListForPath.forEach(async (widget: IWidget, index: number) => {
               this.currentlyMountedWidgets.push({
                 route: route,
                 widgetId: this.getIdFromName(widget.name),
@@ -472,19 +515,20 @@ export default class AppLoader implements IAppLoader {
                       basePath: route,
                     },
                     config: {
-                      slot: this.createHtmlElement(
-                        this.getIdFromName(widget.name),
-                        'div',
-                        this.config.layout.widgetSlotId,
-                      ),
+                      slot: this.createHtmlElement(this.getIdFromName(widget.name), 'div', {
+                        position: index === 0 ? 'afterbegin' : 'afterend',
+                        targetId:
+                          index === 0
+                            ? this.config.layout.app.widgetSlotId
+                            : this.getIdFromName(widgetListForPath[index - 1].name),
+                      }),
                     },
                   },
                   'integration',
                 ),
               });
             });
-          }
-        });
+          });
       }
     });
   }
@@ -535,7 +579,7 @@ export default class AppLoader implements IAppLoader {
       Object.keys(widgets).forEach(widgetRoute => {
         const configuredWidgets = widgets[widgetRoute].map(wd => ({
           app: wd,
-          config: { slot: this.config.layout.widgetSlotId },
+          config: { slot: this.config.layout.app.widgetSlotId },
         }));
         this.widgets.app[integrationId] = {
           [widgetRoute]: configuredWidgets,
@@ -555,14 +599,15 @@ export default class AppLoader implements IAppLoader {
       throw new Error('[@akashaproject/sdk-ui-plugin-loader]: root node element not found!');
     }
 
-    const { loadingFn, ...otherProps } = this.config.layout;
+    const { loadingFn, ...otherProps } = this.config.layout.app;
     try {
       await new Promise(async resolve => {
         const pProps = {
           domElement: domEl,
+          isMobile: this.isMobile,
           ...otherProps,
           themeReadyEvent: () => {
-            resolve();
+            resolve(null);
           },
         };
         const layout = singleSpa.mountRootParcel(loadingFn, pProps);
@@ -576,12 +621,11 @@ export default class AppLoader implements IAppLoader {
   private async loadLayout() {
     try {
       await this.mountLayoutWidget();
+      // after mounting all the root widgets
+      this.isRegisteringLayout = false;
       for (const widget of this.widgets.root) {
         await this.registerWidget(widget, 'root');
       }
-      // after mounting all the root widgets
-      this.isRegisteringLayout = false;
-
       if (this.plugins) {
         this.plugins.forEach(plugin => {
           const isDeferred =

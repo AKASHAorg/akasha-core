@@ -1,15 +1,30 @@
 const path = require('path');
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const baseConfig = require('../../ui/webpack.config');
+const packageName = require('./package.json').name;
 
-const config = {
+module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
-  output: {
-    libraryTarget: baseConfig.output.libraryTarget,
-    //library: 'akasha-app-ewa',
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'akasha-app.js',
-    publicPath: '/apps/',
-  },
-};
 
-module.exports = Object.assign({}, baseConfig, config);
+  plugins: baseConfig.plugins.concat([
+    new ModuleFederationPlugin({
+      // akashaproject__app_akasha_integration
+      name: packageName.replace(/@/g, '').replace(/\//g, '__').replace(/-/g, '_'),
+      filename: 'index.js',
+      exposes: {
+        './app': './src/bootstrap',
+      },
+      shared: {
+        react: {
+          singleton: true,
+        },
+        'react-dom': {
+          singleton: true,
+        },
+        'styled-components': {
+          singleton: true,
+        },
+      },
+    }),
+  ]),
+});

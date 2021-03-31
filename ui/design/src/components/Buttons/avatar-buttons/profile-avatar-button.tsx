@@ -1,10 +1,10 @@
 import { Box } from 'grommet';
 import * as React from 'react';
-import { capitalize } from '../../../utils/string-utils';
+import { truncateMiddle } from '../../../utils/string-utils';
 import { Avatar } from '../../Avatar/index';
 import { AvatarSize } from '../../Avatar/styled-avatar';
 import StyledIconLink from '../icon-buttons/styled-icon-link';
-import { ButtonInfo } from './styled-profile-avatar-button';
+import { ButtonInfo, StyledWrapperBox } from './styled-profile-avatar-button';
 
 export interface ProfileAvatarButtonProps {
   info?: string | React.ReactElement;
@@ -13,27 +13,51 @@ export interface ProfileAvatarButtonProps {
   size?: AvatarSize;
   className?: string;
   onClickAvatar?: React.MouseEventHandler<HTMLDivElement>;
-  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
   ethAddress: string;
+  bold?: boolean;
+  active?: boolean;
+  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
 }
 
 const ProfileAvatarButton = React.forwardRef((props: ProfileAvatarButtonProps, ref: any) => {
-  const { className, size, avatarImage, label, info, onClick, onClickAvatar, ethAddress } = props;
+  const {
+    className,
+    size,
+    avatarImage,
+    label,
+    info,
+    onClick,
+    onClickAvatar,
+    ethAddress,
+    bold,
+    active,
+    onMouseEnter,
+    onMouseLeave,
+  } = props;
   return (
-    <Box className={className} direction="row" align="center">
-      <Box>
+    <StyledWrapperBox className={className} direction="row" align="center">
+      <Box flex={{ shrink: 0 }}>
         <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onClickAvatar} />
       </Box>
-      <Box pad={{ horizontal: 'small' }} justify="center" align="start">
+      <Box
+        pad={{ horizontal: 'small' }}
+        justify="center"
+        align="start"
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
         <StyledIconLink
           primaryColor={true}
-          label={label ? capitalize(label) : label}
-          onClick={onClick}
+          label={label || truncateMiddle(ethAddress)}
           ref={ref}
+          bold={bold}
         />
-        <ButtonInfo>{info}</ButtonInfo>
+        <ButtonInfo active={active}>{info}</ButtonInfo>
       </Box>
-    </Box>
+    </StyledWrapperBox>
   );
 });
 

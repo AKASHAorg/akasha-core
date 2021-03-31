@@ -1,28 +1,42 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 import { IProfileData } from '../profile-cards/profile-widget-card';
-import { StackedAvatar, Avatar } from '../../Avatar/index';
+import { Avatar } from '../../Avatar/index';
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { truncateMiddle } from '../../../utils/string-utils';
 import { IconLink } from '../../Buttons';
+import styled from 'styled-components';
 
-export interface ISocialData {
-  users: IProfileData[];
-}
+export type ISocialData = IProfileData[];
 
 export interface ISocialBox {
   socialData: ISocialData;
+  onClickUser?: (ethAddress: string) => void;
   // labels
   repostedThisLabel?: string;
   andLabel?: string;
   othersLabel?: string;
 }
 
-const SocialBox: React.FC<ISocialBox> = props => {
-  const { socialData, andLabel, othersLabel, repostedThisLabel } = props;
+const StackableAvatarLink = styled(IconLink)`
+  max-width: 100%;
+  flex-shrink: 1;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
-  const avatarUserData = socialData.users.map(user => {
-    return { ethAddress: user.ethAddress, avatar: user.avatar, userName: user.userName };
+const SocialBox: React.FC<ISocialBox> = props => {
+  const { socialData, andLabel, othersLabel, repostedThisLabel, onClickUser } = props;
+
+  const avatarUserData = socialData.map(user => {
+    return {
+      pubKey: user.pubKey,
+      ethAddress: user.ethAddress,
+      avatar: user.avatar,
+      userName: user.userName,
+      name: user.name,
+    };
   });
   const othersNodeRef: React.Ref<any> = React.useRef(null);
   const [othersDropOpen, setOthersDropOpen] = React.useState(false);
@@ -49,8 +63,25 @@ const SocialBox: React.FC<ISocialBox> = props => {
             pad="xxsmall"
             flex={{ shrink: 0 }}
           >
-            <Avatar src={user.avatar} size="xs" />
-            <Text>{user.userName ? user.userName : truncateMiddle(user.ethAddress, 3, 3)}</Text>
+            <Avatar
+              src={user.avatar}
+              ethAddress={user.ethAddress}
+              size="xs"
+              onClick={() => {
+                if (onClickUser) {
+                  onClickUser(user.pubKey);
+                }
+              }}
+            />
+            <Text
+              onClick={() => {
+                if (onClickUser) {
+                  onClickUser(user.pubKey);
+                }
+              }}
+            >
+              {user.name || user.userName || truncateMiddle(user.ethAddress, 3, 3)}
+            </Text>
           </StyledSelectBox>
         ))}
       </Box>
@@ -60,32 +91,58 @@ const SocialBox: React.FC<ISocialBox> = props => {
   return (
     <Box
       direction="row"
+      align="center"
       gap="xxsmall"
-      pad="medium"
+      pad={{ horizontal: 'medium', vertical: 'small' }}
       border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
     >
-      {avatarUserData && <StackedAvatar userData={avatarUserData} maxAvatars={3} />}
-      <Text>
-        {socialData.users[0].userName
-          ? socialData?.users[0].userName
-          : truncateMiddle(socialData?.users[0].ethAddress, 3, 3)}
-      </Text>
-      {socialData.users.length > 1 ? (
+      {avatarUserData && (
+        <Avatar
+          src={avatarUserData[0].avatar}
+          ethAddress={avatarUserData[0].ethAddress}
+          size="xs"
+          onClick={() => {
+            if (onClickUser) {
+              onClickUser(avatarUserData[0].pubKey);
+            }
+          }}
+        />
+      )}
+      <IconLink
+        onClick={() => {
+          if (onClickUser) {
+            onClickUser(socialData[0].pubKey);
+          }
+        }}
+        label={
+          socialData[0].name ||
+          socialData[0].userName ||
+          truncateMiddle(socialData[0]?.ethAddress, 3, 3)
+        }
+        size="medium"
+        primaryColor={true}
+      />
+
+      {socialData.length > 1 ? (
         <Box direction="row" gap="xxsmall">
           <Text color="secondaryText">{andLabel}</Text>
 
-          <IconLink
-            label={`${socialData.users.length - 1} ${othersLabel}`}
+          <StackableAvatarLink
+            label={`${socialData?.length - 1} ${othersLabel}`}
             size="medium"
             ref={othersNodeRef}
             onClick={() => setOthersDropOpen(!othersDropOpen)}
             primaryColor={true}
           />
 
-          <Text color="secondaryText">{repostedThisLabel}</Text>
+          <Text style={{ flexShrink: 0 }} color="secondaryText">
+            {repostedThisLabel}
+          </Text>
         </Box>
       ) : (
-        <Text color="secondaryText">{repostedThisLabel}</Text>
+        <Text style={{ flexShrink: 0 }} color="secondaryText">
+          {repostedThisLabel}
+        </Text>
       )}
       {othersNodeRef.current && othersDropOpen && renderOthersDrop()}
     </Box>

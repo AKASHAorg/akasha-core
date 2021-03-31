@@ -18,6 +18,7 @@ export type IconType =
   | 'announcement'
   | 'app'
   | 'arrowDown'
+  | 'arrowUp'
   | 'arrowLeft'
   | 'arrowRight'
   | 'available'
@@ -31,16 +32,20 @@ export type IconType =
   | 'copy'
   | 'check'
   | 'checkSimple'
+  | 'discord'
   | 'document'
   | 'editSimple'
   | 'edit'
+  | 'email'
   | 'emoji'
   | 'eye'
   | 'ethereum'
   | 'ethereumWorldLogo'
   | 'error'
   | 'facebook'
+  | 'feedback'
   | 'following'
+  | 'github'
   | 'hashtag'
   | 'heart'
   | 'home'
@@ -48,8 +53,10 @@ export type IconType =
   | 'image'
   | 'italic'
   | 'info'
+  | 'legal'
   | 'link'
   | 'loading'
+  | 'login'
   | 'media'
   | 'menuCollapsed'
   | 'menu'
@@ -73,6 +80,7 @@ export type IconType =
   | 'send'
   | 'settings'
   | 'share'
+  | 'signOut'
   | 'subscribe'
   | 'stopwatch'
   | 'shareSmallBlue'
@@ -106,6 +114,7 @@ export const iconTypes: IconType[] = [
   'announcement',
   'app',
   'arrowDown',
+  'arrowUp',
   'arrowLeft',
   'arrowRight',
   'available',
@@ -119,16 +128,20 @@ export const iconTypes: IconType[] = [
   'check',
   'checkSimple',
   'coins',
+  'discord',
   'document',
   'editSimple',
   'edit',
+  'email',
   'emoji',
   'eye',
   'ethereum',
   'ethereumWorldLogo',
   'error',
   'facebook',
+  'feedback',
   'following',
+  'github',
   'hashtag',
   'heart',
   'home',
@@ -136,8 +149,10 @@ export const iconTypes: IconType[] = [
   'image',
   'info',
   'italic',
+  'legal',
   'link',
   'loading',
+  'login',
   'media',
   'menuCollapsed',
   'menu',
@@ -159,6 +174,7 @@ export const iconTypes: IconType[] = [
   'search',
   'send',
   'settings',
+  'signOut',
   'share',
   'subscribe',
   'stopwatch',
@@ -182,12 +198,16 @@ export const iconTypes: IconType[] = [
 
 export interface IconProps extends CommonInterface<any> {
   color?: string;
+  fill?: string;
   ref?: React.Ref<HTMLDivElement>;
   type: IconType | string;
   clickable?: boolean;
+  clickableRed?: boolean;
   primaryColor?: boolean;
   accentColor?: boolean;
   size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  disabled?: boolean;
+  wrapperStyle?: React.CSSProperties;
 }
 
 const StyledRefDiv = styled.div`
@@ -197,7 +217,21 @@ const StyledRefDiv = styled.div`
 `;
 
 const IconBase: React.FC<IconProps> = React.forwardRef(
-  ({ color, size, clickable, type, primaryColor, accentColor, ...props }, ref) => {
+  (
+    {
+      color,
+      fill,
+      size,
+      clickable,
+      clickableRed,
+      type,
+      primaryColor,
+      accentColor,
+      wrapperStyle,
+      ...props
+    },
+    ref,
+  ) => {
     const Component = (icons as any)[type];
     if (!Component) {
       // tslint:disable-next-line no-console
@@ -206,7 +240,7 @@ const IconBase: React.FC<IconProps> = React.forwardRef(
     }
     const iconClass = classNames('icon', props.className);
     return (
-      <StyledRefDiv ref={ref}>
+      <StyledRefDiv ref={ref} style={wrapperStyle}>
         <Component className={iconClass} {...props} />
       </StyledRefDiv>
     );
@@ -219,6 +253,12 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
     `
       & * {
         stroke: ${props.color};
+      }`};
+  ${props =>
+    props.fill &&
+    `
+      & * {
+        fill: ${props.fill};
       }`};
   ${props =>
     props.primaryColor &&
@@ -234,6 +274,7 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
       }`};
   ${props =>
     props.clickable &&
+    !props.disabled &&
     `
       cursor: pointer;
       &: hover {
@@ -242,6 +283,16 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
         }
       }
     `};
+  ${props =>
+    props.clickableRed &&
+    `
+        cursor: pointer;
+        &: hover {
+          & * {
+            stroke: ${props.theme.colors.red};
+          }
+        }
+      `};
   ${props => {
     if (props.size) {
       switch (props.size) {

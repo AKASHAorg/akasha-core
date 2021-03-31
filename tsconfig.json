@@ -16,7 +16,8 @@
     "target": "es2018",
     "sourceMap": true,
     "pretty": true,
-    "lib": ["es2018", "dom"]
+    "skipLibCheck": true,
+    "lib": ["es2019", "dom"]
   },
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

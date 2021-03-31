@@ -1,45 +1,69 @@
 import * as React from 'react';
-import { Box, Text } from 'grommet';
+import { Anchor, Box, Text, Image } from 'grommet';
+import { isMobile } from 'react-device-detect';
 import styled from 'styled-components';
-import { WidgetAreaCardBox } from '../common/basic-card-box';
-import { Button } from '../../Buttons';
 
-const LearnMoreButton = styled(Button)`
-  flex: 1;
-  margin-right: 0.5em;
+import { BasicCardBox } from '../common/basic-card-box';
+
+const StyledText = styled(Text)`
+  font-size: ${props => props.theme.shapes.fontSizes.large.size};
 `;
 
-const ConnectButton = styled(Button)`
-  flex: 1;
+const StyledAnchor = styled(Anchor)`
+  color: ${props => props.theme.colors.accent};
+  font-size: ${props => props.theme.shapes.fontSizes.large.size};
+  font-weight: ${props => props.theme.shapes.fontWeight.regular};
+  &:hover {
+    text-decoration: none;
+  }
 `;
 
-// @ts-ignore-next-line
-const LoginWidgetBox = styled(WidgetAreaCardBox)`
-  padding: 1em;
-  margin-bottom: 0.5em;
-`;
 export interface ILoginWidgetCardProps {
-  onLoginClick: () => void;
-  onLearnMoreClick: () => void;
+  onLearnMoreClick?: () => void;
   title: string;
-  textContent: string;
-  image: React.ReactElement;
-  learnMoreLabel: string;
-  connectLabel: string;
+  subtitle: string;
+  beforeLinkLabel: string;
+  afterLinkLabel: string;
+  writeToUsLabel: string;
+  writeToUsUrl: string;
+  image?: React.ReactElement;
+  publicImgPath?: string;
 }
 const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
+  const {
+    title,
+    subtitle,
+    beforeLinkLabel,
+    afterLinkLabel,
+    writeToUsLabel,
+    writeToUsUrl,
+    publicImgPath = '/images',
+  } = props;
   return (
-    <LoginWidgetBox callToAction={true}>
-      {props.image}
-      <Text weight="bold" size="large">
-        {props.title}
-      </Text>
-      <Text margin={{ top: '.25em', bottom: '1em' }}>{props.textContent}</Text>
-      <Box direction="row" justify="between">
-        <LearnMoreButton onClick={props.onLearnMoreClick} label={props.learnMoreLabel} />
-        <ConnectButton primary={true} onClick={props.onLoginClick} label={props.connectLabel} />
+    <BasicCardBox pad="medium" callToAction={true}>
+      {props.image && props.image}
+      <Box direction={isMobile ? 'column-reverse' : 'row'} align="center" justify="between">
+        <Box direction="column" width={isMobile ? '100%' : '50%'}>
+          <Text weight="bold" size="1rem" margin={{ top: 'xsmall' }}>
+            {title}
+          </Text>
+          <StyledText margin={{ top: 'xsmall' }}>{subtitle}</StyledText>
+          <StyledText margin={{ top: 'xsmall' }}>
+            {beforeLinkLabel}{' '}
+            <StyledAnchor size="medium" href={writeToUsUrl} label={writeToUsLabel} />{' '}
+            {afterLinkLabel}
+          </StyledText>
+        </Box>
+        <Box
+          width={isMobile ? '60%' : '43%'}
+          margin={{ ...(isMobile && { bottom: 'small' }) }}
+          pad={{ ...(!isMobile && { right: 'small' }) }}
+          alignSelf="center"
+        >
+          <Image fit="contain" src={`${publicImgPath}/login-widget-illustration.png`} />
+        </Box>
       </Box>
-    </LoginWidgetBox>
+    </BasicCardBox>
   );
 };
 

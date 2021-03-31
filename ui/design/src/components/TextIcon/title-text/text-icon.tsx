@@ -2,7 +2,7 @@ import * as React from 'react';
 import MarginInterface from '../../../interfaces/margin.interface';
 import { Icon } from '../../Icon';
 import { IconType } from '../../Icon/icon';
-import { StyledText, StyledTextIcon } from './styled-text-icon';
+import { StyledIconDiv, StyledText, StyledTextIcon } from './styled-text-icon';
 import { TextProps } from 'grommet';
 
 export interface ITextIconProps {
@@ -10,24 +10,29 @@ export interface ITextIconProps {
   onClick?: React.EventHandler<React.SyntheticEvent>;
   margin?: MarginInterface;
   backgroundColor?: string;
+  iconBackground?: boolean;
   color?: string;
   spacing?: string;
   label?: string;
   iconType: IconType;
+  iconStyle?: React.CSSProperties;
   clickable?: boolean;
   menuActive?: boolean;
   menuIcon?: boolean;
-  iconSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  iconSize?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   fontSize?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge' | string;
   fontWeight?: 'normal' | 'bold' | number;
   primaryColor?: boolean;
   accentColor?: boolean;
   reverse?: boolean;
+  fadedText?: boolean;
   ref?: React.Ref<HTMLDivElement>;
+  disabled?: boolean;
 }
 
 export interface IStyledTextProps extends TextProps {
   accentColor?: boolean;
+  disabled?: boolean;
 }
 
 const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
@@ -36,8 +41,10 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
     onClick,
     margin,
     backgroundColor,
+    iconBackground,
     color,
     iconType,
+    iconStyle,
     label,
     spacing,
     clickable,
@@ -49,7 +56,38 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
     primaryColor,
     accentColor,
     reverse,
+    fadedText,
+    disabled,
   } = props;
+
+  const renderIcon = () => {
+    if (iconBackground) {
+      return (
+        <StyledIconDiv size={iconSize}>
+          <Icon
+            type={iconType}
+            color={color}
+            size={iconSize}
+            style={iconStyle}
+            primaryColor={primaryColor}
+            accentColor={accentColor}
+            disabled={disabled}
+          />
+        </StyledIconDiv>
+      );
+    }
+    return (
+      <Icon
+        type={iconType}
+        color={color}
+        size={iconSize}
+        style={iconStyle}
+        primaryColor={primaryColor}
+        accentColor={accentColor}
+        disabled={disabled}
+      />
+    );
+  };
 
   return (
     <StyledTextIcon
@@ -66,27 +104,19 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
       menuIcon={menuIcon}
       ref={ref}
     >
-      {!reverse && (
-        <Icon
-          type={iconType}
-          color={color}
-          size={iconSize}
-          primaryColor={primaryColor}
-          accentColor={accentColor}
-        />
-      )}
-      <StyledText weight={fontWeight} size={fontSize} accentColor={accentColor}>
+      {!reverse && renderIcon()}
+      <StyledText
+        weight={fontWeight}
+        size={fontSize}
+        accentColor={accentColor}
+        wordBreak="break-word"
+        color={fadedText ? 'secondaryText' : 'primaryText'}
+        disabled={disabled}
+        truncate={true}
+      >
         {label}
       </StyledText>
-      {reverse && (
-        <Icon
-          type={iconType}
-          color={color}
-          size={iconSize}
-          primaryColor={primaryColor}
-          accentColor={accentColor}
-        />
-      )}
+      {reverse && renderIcon()}
     </StyledTextIcon>
   );
 });

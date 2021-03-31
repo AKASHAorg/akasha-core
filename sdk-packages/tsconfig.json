@@ -11,7 +11,7 @@
       "path": "runtime"
     },
     {
-      "path": "db-storage"
+      "path": "db"
     }
   ]
 }

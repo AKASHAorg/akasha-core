@@ -5,9 +5,14 @@ export interface ErrorLoaderProps {
   type:
     | 'missing-feed-customization'
     | 'missing-saved-items'
+    | 'missing-notifications'
     | 'no-connection'
+    | 'network-not-supported'
     | 'no-login'
-    | 'script-error';
+    | 'script-error'
+    | 'not-registered';
+  /* Path to public folder */
+  publicImgPath?: string;
   /**
    * The error title
    */
@@ -20,4 +25,20 @@ export interface ErrorLoaderProps {
    *  Message to be shown when in deveolopment mode
    */
   devDetails?: string | React.ReactNode;
+  style?: React.CSSProperties;
+}
+
+export interface IModerationAppErrorCardProps {
+  size: string;
+  errorType: string;
+  titleLabel: string;
+  subtitleLabel: string;
+  buttonLabel?: string;
+  textMarginTop?: boolean;
+  textMarginBottom?: boolean;
+  hasButton?: boolean;
+  imageBoxHasMargin?: boolean;
+  /* Path to public folder */
+  publicImgPath?: string;
+  showLoginModal?: () => void;
 }

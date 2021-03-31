@@ -1,23 +1,10 @@
 import React, { PureComponent } from 'react';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider } from 'react-i18next';
-import { profileInit, ProfileProvider, profileReducer } from '../state/profiles';
 import Routes from './routes';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 
-const { ThemeSelector, lightTheme, darkTheme, Helmet, Box } = DS;
-
-export interface IProps {
-  singleSpa: any;
-  activeWhen: {
-    path: string;
-  };
-
-  mountParcel: (config: any, props: any) => void;
-  rootNodeId: string;
-  sdkModules: any;
-  logger: any;
-  i18n?: any;
-}
+const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
 
 /**
  * This is the entry point of a plugin.
@@ -29,15 +16,10 @@ export interface IProps {
  * @warning :: Always use default export
  */
 
-// this example is to showcase how the consumers can be outside of component, reusable
-// maybe react hooks call inside?
-// tslint:disable-next-line:no-console
-const subConsumer = (data: any) => console.log('sdkModule call', data);
-
-class App extends PureComponent<IProps> {
+class App extends PureComponent<RootComponentProps> {
   public state: { hasErrors: boolean };
 
-  constructor(props: IProps) {
+  constructor(props: RootComponentProps) {
     super(props);
     this.state = {
       hasErrors: false,
@@ -51,13 +33,7 @@ class App extends PureComponent<IProps> {
     const { logger } = this.props;
     logger.error(err, info);
   }
-  // @TODO: remove this after having a real use-case
-  public onClickSdk = () => {
-    const { sdkModules, logger } = this.props;
-    logger.info('sdk call');
-    const callMethod = sdkModules.commons.validator_service({ method: 'validator', args: {} });
-    callMethod.subscribe(subConsumer);
-  };
+
   public handleNavigation(href: string) {
     return (ev: React.SyntheticEvent) => {
       this.props.singleSpa.navigateToUrl(href);
@@ -73,21 +49,16 @@ class App extends PureComponent<IProps> {
 
     return (
       <Box width="100vw">
-        <I18nextProvider i18n={i18n ? i18n : null}>
-          <Helmet>
-            <title>Profile</title>
-          </Helmet>
-          <ThemeSelector
-            availableThemes={[lightTheme, darkTheme]}
-            settings={{ activeTheme: 'Light-Theme' }}
-          >
-            <React.Suspense fallback={<>Loading Profile</>}>
-              <ProfileProvider reducer={profileReducer} initialState={profileInit()}>
-                <Routes {...this.props} />
-              </ProfileProvider>
-            </React.Suspense>
-          </ThemeSelector>
-        </I18nextProvider>
+        <React.Suspense fallback={<>Loading Profile</>}>
+          <I18nextProvider i18n={i18n ? i18n : null}>
+            <ThemeSelector
+              availableThemes={[lightTheme, darkTheme]}
+              settings={{ activeTheme: 'Light-Theme' }}
+            >
+              <Routes {...this.props} />
+            </ThemeSelector>
+          </I18nextProvider>
+        </React.Suspense>
       </Box>
     );
   }

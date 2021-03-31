@@ -1,5 +1,6 @@
 import { Box, Drop } from 'grommet';
 import styled from 'styled-components';
+import { Icon } from '../../Icon/index';
 
 const StyledLayerElemDiv = styled.div`
   border-radius: ${props => props.theme.shapes.borderRadius};
@@ -9,11 +10,24 @@ const StyledLayerElemDiv = styled.div`
 `;
 
 const StyledDrop = styled(Drop)`
+  z-index: 10;
+  position: fixed;
   border: 1px solid ${props => props.theme.colors.border};
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
 `;
 
+const StyledDropAlt = styled(Drop)`
+  position: fixed;
+  z-index: 9999;
+  height: 100vh;
+  width: 100vw;
+  left: 0px;
+  top: 0px;
+`;
+
 const StyledProfileDrop = styled(Drop)`
+  max-width: 20rem;
+  position: fixed;
   border-radius: ${props => props.theme.shapes.borderRadius};
 `;
 
@@ -26,4 +40,19 @@ const StyledSelectBox = styled(Box)`
   }
 `;
 
-export { StyledLayerElemDiv, StyledDrop, StyledProfileDrop, StyledSelectBox };
+const StyledIcon = styled(Icon)`
+  &:hover {
+    & * {
+      stroke: none;
+    }
+  }
+`;
+
+export {
+  StyledLayerElemDiv,
+  StyledDrop,
+  StyledDropAlt,
+  StyledProfileDrop,
+  StyledSelectBox,
+  StyledIcon,
+};

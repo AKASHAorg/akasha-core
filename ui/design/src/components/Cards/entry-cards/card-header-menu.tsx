@@ -6,14 +6,19 @@ import { Box } from 'grommet';
 export interface ICardHeaderMenuProps {
   target: {};
   onMenuClose: () => void;
-  flagAsLabel: string;
+  flagAsLabel?: string;
   onFlag: () => void;
-  copyIPFSLinkLabel: string;
-  onLinkCopy: (linkType: 'ipfs' | 'shareable') => () => void;
 }
 
 const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
-  const { target, onMenuClose, flagAsLabel, onFlag, copyIPFSLinkLabel, onLinkCopy } = props;
+  const { target, onMenuClose, flagAsLabel, onFlag } = props;
+
+  const handleClick = (handler: () => void) => () => {
+    // hide menu dropdown when clicked
+    handler();
+    return onMenuClose();
+  };
+
   return (
     <StyledDrop
       overflow="hidden"
@@ -22,25 +27,15 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
       onClickOutside={onMenuClose}
       onEsc={onMenuClose}
     >
-      <Box pad="xxsmall" width={{ min: '13rem' }}>
-        <StyledSelectBox>
-          <TextIcon
-            iconType="appIpfs"
-            label={copyIPFSLinkLabel}
-            onClick={onLinkCopy('ipfs')}
-            clickable={true}
-            iconSize="xs"
-            fontSize="small"
-          />
-        </StyledSelectBox>
+      <Box pad="xxsmall">
         <StyledSelectBox>
           <TextIcon
             iconType="report"
             label={flagAsLabel}
-            onClick={onFlag}
+            onClick={handleClick(onFlag)}
             color={'red'}
             iconSize="xs"
-            fontSize="small"
+            fontSize="medium"
           />
         </StyledSelectBox>
       </Box>

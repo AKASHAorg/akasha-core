@@ -1,35 +1,44 @@
 import { Box } from 'grommet';
 import * as React from 'react';
 import { Icon } from '../../Icon/index';
-import { StyledLinkIconDiv, StyledTextInput } from './styled-link-input';
+import { StyledCloseIconDiv, StyledLinkIconDiv, StyledTextInput } from './styled-link-input';
 
 export interface ILinkInput {
   onChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
+  handleClearInput: () => void;
   className?: string;
   inputValue: string;
 }
 
 const LinkInput: React.FC<ILinkInput> = props => {
-  const { onChange, className, inputValue } = props;
+  const { onChange, handleClearInput, className, inputValue } = props;
 
   return (
     <Box
       fill="horizontal"
       direction="row"
       align="center"
-      pad={{ horizontal: 'xsmall', vertical: 'xsmall' }}
+      pad="xsmall"
       round="small"
       border={{
         side: 'all',
         color: 'border',
       }}
       className={className}
-      gap="xsmall"
+      justify="between"
     >
-      <StyledLinkIconDiv>
-        <Icon type="link" />
-      </StyledLinkIconDiv>
-      <StyledTextInput plain={true} value={inputValue} onChange={onChange} />
+      <Box direction="row" gap="xsmall" align="center" flex={{ grow: 1 }} pad={{ right: 'xsmall' }}>
+        <StyledLinkIconDiv>
+          <Icon type="link" />
+        </StyledLinkIconDiv>
+        <StyledTextInput plain={true} value={inputValue} onChange={onChange} />
+      </Box>
+
+      {inputValue && (
+        <StyledCloseIconDiv onClick={handleClearInput}>
+          <Icon type="close" size="xxs" clickable={true} />
+        </StyledCloseIconDiv>
+      )}
     </Box>
   );
 };

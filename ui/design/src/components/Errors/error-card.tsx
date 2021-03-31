@@ -7,16 +7,16 @@ interface ErrorRendererProps {
   colorProp: any;
   size: any;
   textAlign: any;
-  style: any;
   level: any;
   theme: any;
-  className: any;
+  className: string;
+  style: React.CSSProperties;
 }
 
 const ErrorRenderer: React.FC<ErrorRendererProps> = props => {
   return (
-    <details style={{ width: '100%' }}>
-      <summary>Expand to see error details</summary>
+    <details style={{ width: '100%', ...props.style }}>
+      <summary style={{ whiteSpace: 'nowrap' }}>Expand to see error details</summary>
       <div
         style={{
           width: '100%',
@@ -35,28 +35,25 @@ const ErrorRenderer: React.FC<ErrorRendererProps> = props => {
 const ErrorCard: React.FC<ErrorLoaderProps & { imageSrc: string }> = props => {
   const { details, devDetails } = props;
   let message;
-  let isDevMode = false;
-  if (process.env.NODE_ENV !== 'production') {
-    isDevMode = true;
-    message = devDetails || details;
-  }
+  const isDevMode = false;
+  message = details ?? devDetails;
 
   return (
-    <StyledErrorCard>
+    <StyledErrorCard style={props.style}>
       <Box>
         <StyledImage src={props.imageSrc} />
       </Box>
-      <Box>
-        <Text size="xlarge" weight="bold">
+      <Box align="center" fill="horizontal">
+        <Text size="xlarge" weight="bold" textAlign="center">
           {props.title}
         </Text>
       </Box>
-      <Box align="center">
+      <Box align="center" fill="horizontal">
         <Text
           size="large"
           color="secondaryText"
           textAlign="center"
-          style={{ paddingTop: '1em', maxWidth: '70%' }}
+          style={{ paddingTop: '1em', maxWidth: '70%', width: '100%' }}
           as={isDevMode && props.devDetails ? ErrorRenderer : 'span'}
         >
           {message}

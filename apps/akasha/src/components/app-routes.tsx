@@ -1,118 +1,181 @@
 import * as React from 'react';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import routes, { NEW_POST, FEED, POSTS, rootRoute } from '../routes';
-import FeedPage from './feed-page/feed-page';
-import LoginModal from './login-modal';
-import NewPostPage from './new-post-page';
-import PostsPage from './posts-page';
-import { createContextStore, ActionMapper } from 'easy-peasy';
-import { LoggedProfileStateModel } from '../state/logged-profile-state';
 
-const { Box, useGlobalLogin } = DS;
+import routes, { FEED, rootRoute, POST, REPLY, TAGS, INVITE } from '../routes';
+import FeedPage from './feed-page/feed-page';
+import PostPage from './post-page/post-page';
+import InvitePage from './post-page/invite-page';
+import TagFeedPage from './tag-feed-page/tag-feed-page';
+import { useTranslation } from 'react-i18next';
+import { useLoginState, useErrors, useProfile, useModalState } from '@akashaproject/ui-awf-hooks';
+import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
+
+const { Box, LoginModal } = DS;
 interface AppRoutesProps {
-  profileStore: ReturnType<typeof createContextStore>;
-  onError: (err: Error) => void;
+  onError: (err: IAkashaError) => void;
 }
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
-  const { sdkModules, globalChannel, logger, singleSpa, layout, profileStore, onError } = props;
-  const jwtToken = profileStore.useStoreState(
-    (state: LoggedProfileStateModel) => state.data.jwtToken,
-  );
-  const ethAddress = profileStore.useStoreState(
-    (state: LoggedProfileStateModel) => state.data.ethAddress,
-  );
-  const updateData = profileStore.useStoreActions(
-    (act: ActionMapper<LoggedProfileStateModel, '1'>) => act.updateData,
-  );
-  const authorize = profileStore.useStoreActions(
-    (act: ActionMapper<LoggedProfileStateModel, '1'>) => act.authorize,
-  );
-  const [loginModalState, setLoginModalState] = React.useState({
-    showLoginModal: false,
+  const { sdkModules, globalChannel, logger, layout, onError } = props;
+
+  const { t } = useTranslation();
+
+  const [errorState, errorActions] = useErrors({ logger });
+
+  const [loginState, loginActions] = useLoginState({
+    globalChannel: globalChannel,
+    onError: errorActions.createError,
+    authService: sdkModules.auth.authService,
+    ipfsService: sdkModules.commons.ipfsService,
+    profileService: sdkModules.profiles.profileService,
   });
-  const showLoginModal = () => {
-    setLoginModalState({
-      showLoginModal: true,
-    });
-  };
-  const hideLoginModal = () => {
-    setLoginModalState({
-      showLoginModal: false,
-    });
-  };
-  const handleLogin = (providerId: number) => {
-    authorize(providerId);
-  };
+
+  const [loginProfile, loginProfileActions] = useProfile({
+    profileService: sdkModules.profiles.profileService,
+    ipfsService: sdkModules.commons.ipfsService,
+  });
+
   React.useEffect(() => {
-    if (jwtToken) {
-      setTimeout(() => {
-        setLoginModalState({
-          showLoginModal: false,
-        });
-      }, 1000);
+    if (loginState.pubKey) {
+      loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
     }
-  }, [jwtToken]);
-  useGlobalLogin(
-    globalChannel,
-    data => {
-      updateData({
-        ethAddress: data.ethAddress,
-        jwtToken: data.token,
-      });
+  }, [loginState.pubKey]);
+
+  const [modalState, modalStateActions] = useModalState({
+    initialState: {
+      reportModal: false,
+      editorModal: false,
     },
-    err => {
-      logger.error('[app-routes.tsx]: useGlobalState err %j', err.error);
-      onError(err.error);
-      setLoginModalState({
-        showLoginModal: false,
-      });
-    },
-  );
+    isLoggedIn: !!loginState.ethAddress,
+  });
+
+  const [flagged, setFlagged] = React.useState('');
+
+  const showLoginModal = () => {
+    modalStateActions.show(MODAL_NAMES.LOGIN);
+  };
+
+  const hideLoginModal = () => {
+    modalStateActions.hide(MODAL_NAMES.LOGIN);
+    errorActions.removeLoginErrors();
+  };
+
+  const showReportModal = () => {
+    modalStateActions.showAfterLogin(MODAL_NAMES.REPORT);
+  };
+
+  const hideReportModal = () => {
+    modalStateActions.hide(MODAL_NAMES.REPORT);
+  };
+
+  const showEditorModal = () => {
+    modalStateActions.showAfterLogin(MODAL_NAMES.EDITOR);
+  };
+
+  const hideEditorModal = () => {
+    modalStateActions.hide(MODAL_NAMES.EDITOR);
+  };
+
+  const handleLogin = (providerId: number) => {
+    loginActions.login(providerId);
+  };
+
+  React.useEffect(() => {
+    if (loginState.pubKey) {
+      modalStateActions.hide(MODAL_NAMES.LOGIN);
+    }
+  }, [loginState.pubKey]);
+
+  React.useEffect(() => {
+    if (loginState.ethAddress && flagged.length) {
+      modalStateActions.hide(MODAL_NAMES.LOGIN);
+      modalStateActions.show(MODAL_NAMES.REPORT);
+    }
+  }, [loginState.ethAddress]);
+
+  const loginErrors: string | null = React.useMemo(() => {
+    if (errorState && Object.keys(errorState).length) {
+      const txt = Object.keys(errorState)
+        .filter(key => key.split('.')[0] === 'useLoginState')
+        .map(k => errorState![k])
+        .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
+      return txt;
+    }
+    return null;
+  }, [errorState]);
+
   return (
     <Box>
       <Router>
         <Switch>
-          <Route path={routes[NEW_POST]}>
-            <NewPostPage
-              sdkModules={sdkModules}
-              globalChannel={globalChannel}
-              logger={logger}
-              showLoginModal={showLoginModal}
-              onError={onError}
-            />
-          </Route>
           <Route path={routes[FEED]}>
             <FeedPage
               {...props}
+              loggedProfileData={loginProfile}
+              loginState={loginState}
+              flagged={flagged}
+              reportModalOpen={modalState.report}
+              setFlagged={setFlagged}
+              setReportModalOpen={showReportModal}
+              closeReportModal={hideReportModal}
+              editorModalOpen={modalState.editor}
+              setEditorModalOpen={showEditorModal}
+              closeEditorModal={hideEditorModal}
               showLoginModal={showLoginModal}
-              ethAddress={ethAddress}
-              jwtToken={jwtToken}
               onError={onError}
             />
           </Route>
-          <Route path={routes[POSTS]}>
-            <PostsPage
-              sdkModules={sdkModules}
-              globalChannel={globalChannel}
-              logger={logger}
-              navigateToUrl={singleSpa.navigateToUrl}
+          <Route path={`${routes[POST]}/:postId`}>
+            <PostPage
+              {...props}
+              loggedProfileData={loginProfile}
+              loginState={loginState}
+              flagged={flagged}
+              reportModalOpen={modalState.report}
+              setFlagged={setFlagged}
+              setReportModalOpen={showReportModal}
+              closeReportModal={hideReportModal}
+              editorModalOpen={modalState.editor}
+              setEditorModalOpen={showEditorModal}
+              closeEditorModal={hideEditorModal}
               showLoginModal={showLoginModal}
+              navigateToUrl={props.singleSpa.navigateToUrl}
+              isMobile={props.isMobile}
               onError={onError}
             />
+          </Route>
+          <Route path={`${routes[TAGS]}/:tagName`}>
+            <TagFeedPage
+              {...props}
+              loggedProfileData={loginProfile}
+              loginState={loginState}
+              flagged={flagged}
+              reportModalOpen={modalState.report}
+              setFlagged={setFlagged}
+              setReportModalOpen={showReportModal}
+              closeReportModal={hideReportModal}
+              showLoginModal={showLoginModal}
+            />
+          </Route>
+          <Route path={`${routes[REPLY]}/:postId`}>
+            <div>Coming Soon!</div>
+          </Route>
+          <Route path={`${routes[INVITE]}/:inviteCode`}>
+            <InvitePage {...props} />
           </Route>
           <Redirect exact={true} from={rootRoute} to={routes[FEED]} />
         </Switch>
       </Router>
       <LoginModal
-        showModal={loginModalState.showLoginModal}
-        slotId={layout.modalSlotId}
+        showModal={modalState.login}
+        slotId={layout.app.modalSlotId}
         onLogin={handleLogin}
         onModalClose={hideLoginModal}
-        channels={sdkModules}
-        globalChannel={globalChannel}
-        logger={logger}
+        titleLabel={t('Connect a wallet')}
+        metamaskModalHeadline={t('Connecting')}
+        metamaskModalMessage={t('Please complete the process in your wallet')}
+        error={loginErrors}
       />
     </Box>
   );

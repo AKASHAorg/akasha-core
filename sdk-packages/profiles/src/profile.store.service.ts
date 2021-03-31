@@ -1,70 +1,390 @@
-import commonServices, {
-  IPFS_SERVICE,
-  VALIDATOR_SERVICE,
-} from '@akashaproject/sdk-common/lib/constants';
 import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
-import { runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
-import { LinkedProfileProp, PROFILE_STORE } from './constants';
+import { gqlStash, runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
+import {
+  BUCKET_THREAD_NAME,
+  LinkedProperty,
+  PROFILE_MEDIA_FILES,
+  PROFILE_STORE,
+} from './constants';
+import authServices, { AUTH_SERVICE } from '@akashaproject/sdk-auth/lib/constants';
+import commonServices, { IMAGE_UTILS_SERVICE } from '@akashaproject/sdk-common/lib/constants';
+import dbServices, { DB_SETTINGS_ATTACHMENT } from '@akashaproject/sdk-db/lib/constants';
+// tslint:disable-next-line:no-var-requires
+const urlSource = require('ipfs-utils/src/files/url-source');
 
-export const linkedPropId = '/linkedProp';
-export const linkedProp = {
-  id: linkedPropId,
-  type: 'object',
-  properties: {
-    provider: 'string', // app:3box
-    property: 'string', // name
-    value: 'string', // john doe
-  },
-  dependencies: {
-    value: ['provider', 'property'],
-  },
-};
-export const cidFormat = { format: 'dag-cbor', hashAlg: 'sha3-512', pin: true };
 const service: AkashaService = (invoke, log) => {
-  let registeredSchema = false;
-  const registerSchema = async () => {
-    if (registeredSchema) {
-      return;
-    }
-    log.info('registering Profile json-schema for validation');
-    const validator = await invoke(commonServices[VALIDATOR_SERVICE]).getValidator();
-    validator.addSchema(linkedProp, linkedPropId);
-    registeredSchema = true;
-    return;
+  const addProfileProvider = async (opt: LinkedProperty[]) => {
+    const token = await invoke(authServices[AUTH_SERVICE]).getToken();
+    const { signData } = await invoke(authServices[AUTH_SERVICE]);
+    const signedData = await signData(opt, true);
+    const mutation = `
+  mutation AddProfileProvider($data: [DataProviderInput]) {
+       addProfileProvider(data: $data)
+  }`;
+    const result = await runGQL({
+      query: mutation,
+      variables: { data: opt },
+      operationName: 'AddProfileProvider',
+      context: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Signature: signedData.signature,
+        },
+      },
+    });
+    return result.data;
   };
 
-  const store = async (profileData: LinkedProfileProp[]) => {
-    log.info('storing linked Profile data');
-    if (!registeredSchema) {
-      await registerSchema();
-    }
-    const validator = await invoke(commonServices[VALIDATOR_SERVICE]).getValidator();
-    const ipfs = await invoke(commonServices[IPFS_SERVICE]).getInstance();
-    const doc = {};
-    for (const record of profileData) {
-      validator.validate(record.data, linkedPropId, { throwError: true });
-      const cidLinkedData = await ipfs.dag.put(record.data, cidFormat);
-      Object.assign(doc, { [record.field]: cidLinkedData });
-    }
-    const profileCID = await ipfs.dag.put(doc, cidFormat);
-    return profileCID.toBaseEncodedString();
+  const makeDefaultProvider = async (opt: LinkedProperty[]) => {
+    const token = await invoke(authServices[AUTH_SERVICE]).getToken();
+    const { signData } = await invoke(authServices[AUTH_SERVICE]);
+    const signedData = await signData(opt, true);
+    const mutation = `
+  mutation MakeDefaultProvider($data: [DataProviderInput]) {
+       makeDefaultProvider(data: $data)
+  }`;
+    const result = await runGQL({
+      query: mutation,
+      variables: { data: opt },
+      operationName: 'MakeDefaultProvider',
+      context: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Signature: signedData.signature,
+        },
+      },
+    });
+    return result.data;
   };
 
-  const getProfile = async (opt: { fields: string[]; ethAddress: string }) => {
-    log.info('fetching data from graphql server for profile data', opt);
-    const query = `
-  query GetProfile($ethAddress: String!) {
-       profile(ethAddress: $ethAddress) {
-         ${opt.fields.concat(' ')}
+  const registerUserName = async (opt: { userName: string }) => {
+    const token = await invoke(authServices[AUTH_SERVICE]).getToken();
+    const { signData } = await invoke(authServices[AUTH_SERVICE]);
+    const signedData = await signData(opt.userName, true);
+    const mutation = `
+  mutation RegisterUsername($name: String!) {
+       registerUserName(name: $name)
+  }`;
+    const result = await runGQL({
+      query: mutation,
+      variables: { name: opt.userName },
+      operationName: 'RegisterUsername',
+      context: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Signature: signedData.signature,
+        },
+      },
+    });
+    return result.data;
+  };
+
+  const getProfile = async (opt: { fields?: string[]; ethAddress?: string; pubKey?: string }) => {
+    const defaultFields = [
+      'pubKey',
+      'description',
+      'creationDate',
+      'avatar',
+      'userName',
+      'name',
+      'coverImage',
+      'ethAddress',
+      'totalPosts',
+      'totalFollowers',
+      'totalFollowing',
+    ];
+    const fields = opt.fields ? opt.fields : defaultFields;
+    let query;
+    let variables;
+    let operationName;
+    if (opt.pubKey) {
+      query = `
+  query ResolveProfile($pubKey: String!) {
+       resolveProfile(pubKey: $pubKey) {
+         ${fields.join(' ')}
+         providers{
+          provider
+          property
+          value
+         }
+         default{
+          provider
+          property
+          value
+         }
        }
       }`;
-    return runGQL({
-      query: query,
-      variables: { ethAddress: opt.ethAddress },
-      operationName: 'GetProfile',
-    });
+      variables = { pubKey: opt.pubKey };
+      operationName = 'ResolveProfile';
+    } else if (opt.ethAddress) {
+      query = `
+  query GetProfile($ethAddress: String!) {
+       getProfile(ethAddress: $ethAddress) {
+         ${fields.join(' ')}
+         providers{
+          provider
+          property
+          value
+         }
+         default{
+          provider
+          property
+          value
+         }
+       }
+      }`;
+      variables = { ethAddress: opt.ethAddress };
+      operationName = 'GetProfile';
+    } else {
+      return Promise.reject('Must provide ethAddress of pubKey value');
+    }
+    const result = await runGQL(
+      {
+        query: query,
+        variables: variables,
+        operationName: operationName,
+      },
+      true,
+    );
+    return result.data;
   };
-  return { registerSchema, store, getProfile };
+
+  const follow = async (opt: { ethAddress: string }) => {
+    const token = await invoke(authServices[AUTH_SERVICE]).getToken();
+    const { signData } = await invoke(authServices[AUTH_SERVICE]);
+    const signedData = await signData(opt.ethAddress, true);
+    const mutation = `
+  mutation Follow($ethAddress: String!) {
+       follow(ethAddress: $ethAddress)
+  }`;
+    const result = await runGQL({
+      query: mutation,
+      variables: { ethAddress: opt.ethAddress },
+      operationName: 'Follow',
+      context: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Signature: signedData.signature,
+        },
+      },
+    });
+    gqlStash.clear();
+    return result.data;
+  };
+
+  const unFollow = async (opt: { ethAddress: string }) => {
+    const token = await invoke(authServices[AUTH_SERVICE]).getToken();
+    const { signData } = await invoke(authServices[AUTH_SERVICE]);
+    const signedData = await signData(opt.ethAddress, true);
+    const mutation = `
+  mutation UnFollow($ethAddress: String!) {
+       unFollow(ethAddress: $ethAddress)
+  }`;
+    const result = await runGQL({
+      query: mutation,
+      variables: { ethAddress: opt.ethAddress },
+      operationName: 'UnFollow',
+      context: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Signature: signedData.signature,
+        },
+      },
+    });
+    gqlStash.clear();
+    return result.data;
+  };
+
+  const isFollowing = async (opt: { follower: string; following: string }) => {
+    const query = `
+  query IsFollowing($follower: String!, $following: String!) {
+       isFollowing(follower: $follower, following: $following)
+      }`;
+    const result = await runGQL({
+      query: query,
+      variables: { follower: opt.follower, following: opt.following },
+      operationName: 'IsFollowing',
+    });
+
+    return result.data;
+  };
+  const saveMediaFile = async (data: {
+    content: Buffer | ArrayBuffer | string | any;
+    isUrl?: boolean;
+    name?: string;
+    config?: {
+      quality?: number;
+      maxWidth: number;
+      maxHeight: number;
+      autoRotate?: boolean;
+      mimeType?: string;
+    };
+  }) => {
+    let file;
+    let path;
+    if (!data.isUrl && !data.name) {
+      throw new Error('Must specify a name for the media file');
+    }
+    if (data.isUrl) {
+      for await (const src of urlSource(data.content)) {
+        file = src.content;
+        path = data.name ? data.name : src.path;
+      }
+    } else {
+      file = data.content;
+      path = data.name;
+    }
+    const { buck } = await invoke(authServices[AUTH_SERVICE]).getSession();
+    const { root } = await buck.getOrCreate(PROFILE_MEDIA_FILES, {
+      threadName: BUCKET_THREAD_NAME,
+    });
+    if (!root) {
+      throw new Error('Failed to open bucket');
+    }
+    if (!data.config) {
+      data.config = {
+        maxWidth: 640,
+        maxHeight: 640,
+      };
+    }
+    const resized = await invoke(commonServices[IMAGE_UTILS_SERVICE]).resizeImage({
+      file,
+      config: data.config,
+    });
+    const buckPath = `ewa/${path}/${resized.size.width}x${resized.size.height}`;
+    const bufferImage: ArrayBuffer = await resized.image.arrayBuffer();
+    const upload = await buck.pushPath(root.key, buckPath, {
+      path: buckPath,
+      content: new Uint8Array(bufferImage),
+    });
+    const cid = upload.path.cid.toString();
+    const token = await invoke(authServices[AUTH_SERVICE]).getToken();
+    const mutation = `
+  mutation SaveMetaData($data: DataProviderInput) {
+       saveMetaData(data: $data)
+  }`;
+    const dataFinal: LinkedProperty = {
+      property: buckPath,
+      provider: PROFILE_MEDIA_FILES,
+      value: upload.path.cid.toString(),
+    };
+    const { signData } = await invoke(authServices[AUTH_SERVICE]);
+    const signedData = await signData(dataFinal, true);
+    await runGQL({
+      query: mutation,
+      variables: { data: dataFinal },
+      operationName: 'SaveMetaData',
+      context: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Signature: signedData.signature,
+        },
+      },
+    });
+
+    return { CID: cid, size: resized.size };
+  };
+  const searchProfiles = async (opt: { name: string }) => {
+    const query = `
+    query SearchProfiles($name: String!) {
+         searchProfiles(name: $name) {
+             name
+             userName
+             pubKey
+             avatar
+             description
+             coverImage
+             ethAddress
+             creationDate
+             totalPosts
+             totalFollowers
+             totalFollowing
+         }
+       }`;
+    const result = await runGQL(
+      {
+        query: query,
+        variables: { name: opt.name },
+        operationName: 'SearchProfiles',
+      },
+      true,
+    );
+    return result.data;
+  };
+
+  const getTrending = async () => {
+    return searchProfiles({ name: '' });
+  };
+  const TagSubscriptions = '@TagSubscriptions';
+  const toggleTagSubscription = async (tagName: string): Promise<boolean> => {
+    const rec = await invoke(dbServices[DB_SETTINGS_ATTACHMENT]).get({
+      moduleName: TagSubscriptions,
+    });
+    if (!rec || !rec?.services?.length) {
+      await invoke(dbServices[DB_SETTINGS_ATTACHMENT]).put({
+        moduleName: TagSubscriptions,
+        services: [[tagName]],
+      });
+      return true;
+    }
+    const index = rec.services[0].indexOf(tagName);
+    index !== -1 ? rec.services[0].splice(index, 1) : rec.services[0].push(tagName);
+    await invoke(dbServices[DB_SETTINGS_ATTACHMENT]).put(rec);
+    return index === -1;
+  };
+  const getTagSubscriptions = async () => {
+    const rec = await invoke(dbServices[DB_SETTINGS_ATTACHMENT]).get({
+      moduleName: TagSubscriptions,
+    });
+    return rec?.services[0];
+  };
+
+  const isSubscribedToTag = async (tagName: string) => {
+    const rec = await invoke(dbServices[DB_SETTINGS_ATTACHMENT]).get({
+      moduleName: TagSubscriptions,
+    });
+    if (!rec) {
+      return false;
+    }
+    return rec.services[0].indexOf(tagName) !== -1;
+  };
+
+  const globalSearch = async (keyword: string) => {
+    const query = `
+    query GlobalSearch($keyword: String!) {
+      globalSearch(keyword: $keyword){
+        posts{id}
+        profiles{id}
+        tags{id name totalPosts}
+        comments{id}
+      }
+    }`;
+    const result = await runGQL(
+      {
+        query: query,
+        variables: { keyword: keyword },
+        operationName: 'GlobalSearch',
+      },
+      true,
+    );
+    return result.data;
+  };
+  return {
+    addProfileProvider,
+    saveMediaFile,
+    makeDefaultProvider,
+    getProfile,
+    registerUserName,
+    follow,
+    unFollow,
+    isFollowing,
+    searchProfiles,
+    getTrending,
+    toggleTagSubscription,
+    getTagSubscriptions,
+    isSubscribedToTag,
+    globalSearch,
+  };
 };
 
 export default { service, name: PROFILE_STORE };

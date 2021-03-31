@@ -11,7 +11,7 @@ import * as operators from 'rxjs/operators';
 import { forkJoin, from, zip, of, concat } from 'rxjs';
 import startApi from './api';
 
-export function init(appLoaderOptions: {
+export default async function init(appLoaderOptions: {
   config: ILoaderConfig;
   initialApps: { plugins?: IPluginEntry[]; widgets?: IWidgetEntry[] };
 }) {
@@ -19,7 +19,7 @@ export function init(appLoaderOptions: {
   const di: DIContainer = initDI();
   // general channel to send service calls
   const channel = initChannel(di);
-  const apiChannels = startApi(channel, di);
+  const apiChannels = await startApi(channel, di, globalChannel);
   const appLoader = new AppLoader(
     appLoaderOptions.config,
     appLoaderOptions.initialApps,

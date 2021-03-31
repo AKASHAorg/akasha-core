@@ -1,26 +1,41 @@
-import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { formatRelativeTime, ILocale } from '../../../utils/time';
-import { ProfileAvatarButton } from '../../Buttons/index';
-import { Icon } from '../../Icon/index';
-import CardActions, { ServiceNames } from './card-actions';
+import { Box, Text } from 'grommet';
+import styled from 'styled-components';
+import { isMobile } from 'react-device-detect';
+
+import { ISocialData } from './social-box';
 import CardHeaderMenuDropdown from './card-header-menu';
-import { StyledProfileDrop } from './styled-entry-box';
+import CardActions, { ServiceNames } from './card-actions';
+import CardHeaderAkashaDropdown from './card-header-akasha';
+import { StyledDropAlt, StyledProfileDrop, StyledIcon } from './styled-entry-box';
+
+import { EntryCardHidden } from '..';
 import { ProfileMiniCard } from '../profile-cards/profile-mini-card';
 import { IProfileData } from '../profile-cards/profile-widget-card';
-import { ISocialData } from './social-box';
-import { useViewportSize } from '../../Providers/viewport-dimension';
+
+import { Icon } from '../../Icon/index';
+import { MobileListModal } from '../../Modals';
+import { ProfileAvatarButton } from '../../Buttons/index';
+import { EmbedBox, ReadOnlyEditor } from '../../Editor/index';
+import ViewportSizeProvider from '../../Providers/viewport-dimension';
+
+import { formatRelativeTime, ILocale } from '../../../utils/time';
 
 export interface IEntryData {
-  content: string;
-  time: string;
-  replies?: IEntryData[];
+  CID?: string;
+  content: any;
+  time?: string | number | Date;
+  replies?: number;
   reposts?: number;
   ipfsLink: string;
   permalink: string;
   entryId: string;
   author: IProfileData;
-  socialData?: ISocialData;
+  quotedByAuthors?: ISocialData;
+  quotedBy?: string;
+  quote?: IEntryData;
+  delisted?: boolean;
+  reported?: boolean;
 }
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -34,84 +49,115 @@ export interface IEntryBoxProps {
   // data
   entryData: IEntryData;
   locale: ILocale;
-  loggedProfileAvatar?: string;
-  loggedProfileEthAddress?: string;
+  loggedProfileEthAddress?: string | null;
+  // share data
+  sharePostLabel?: string;
+  shareTextLabel?: string;
+  sharePostUrl?: string;
   // labels
   repliesLabel: string;
   repostsLabel: string;
-  repostLabel: string;
-  repostWithCommentLabel: string;
-  shareLabel: string;
-  flagAsLabel: string;
-  copyLinkLabel: string;
-  copyIPFSLinkLabel: string;
+  repostLabel?: string;
+  cancelLabel?: string;
+  repostWithCommentLabel?: string;
+  shareLabel?: string;
+  flagAsLabel?: string;
+  copyLinkLabel?: string;
   comment?: boolean;
-  bookmarkLabel: string;
-  bookmarkedLabel: string;
-  isBookmarked?: boolean;
+  bookmarkLabel?: string;
+  bookmarkedLabel?: string;
   // handlers
+  isBookmarked?: boolean;
   onEntryBookmark?: (entryId: string, isBookmarked?: boolean) => void;
-  onClickAvatar: React.MouseEventHandler<HTMLDivElement>;
-  onClickReplies: (entryId: string) => void;
-  onEntryShare: (service: ServiceNames, entryId?: string) => void;
-  onLinkCopy: (link: string) => void;
-  onRepost: (withComment: boolean, entryId?: string) => void;
-  onEntryFlag: (entryId?: string) => void;
-  handleFollow: (profileEthAddress: string) => void;
-  handleUnfollow: (profileEthAddress: string) => void;
+  onClickAvatar?: React.MouseEventHandler<HTMLDivElement>;
+  onRepost?: (withComment: boolean, entryData: IEntryData) => void;
+  onEntryFlag?: (entryId?: string) => void;
+  // follow related
+  handleFollowAuthor?: (profileEthAddress: string) => void;
+  handleUnfollowAuthor?: (profileEthAddress: string) => void;
+  isFollowingAuthor?: boolean;
+  // redirects
   onContentClick?: (details: IContentClickDetails) => void;
+  /* Can click the content (not embed!) to navigate */
+  contentClickable?: boolean;
+  onMentionClick?: (pubKey: string) => void;
+  onTagClick?: (name: string) => void;
+  // style
+  style?: React.CSSProperties;
+  disableReposting?: boolean;
+  disableActions?: boolean;
+  hideActionButtons?: boolean;
+  hidePublishTime?: boolean;
+  awaitingModerationLabel?: string;
+  moderatedContentLabel?: string;
+  ctaLabel?: string;
+  handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
+  isModerated?: boolean;
+  scrollHiddenContent?: boolean;
 }
+
+const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
+  flex-grow: 1;
+  flex-shrink: 1;
+`;
 
 const EntryBox: React.FC<IEntryBoxProps> = props => {
   const {
     entryData,
     loggedProfileEthAddress,
+    sharePostLabel,
+    shareTextLabel,
+    sharePostUrl,
     repliesLabel,
     repostsLabel,
     repostLabel,
+    cancelLabel,
     repostWithCommentLabel,
     shareLabel,
     flagAsLabel,
     copyLinkLabel,
-    copyIPFSLinkLabel,
     locale,
     isBookmarked,
     bookmarkLabel,
     bookmarkedLabel,
     onEntryBookmark,
     onClickAvatar,
-    onClickReplies,
-    onEntryShare,
-    onLinkCopy,
     onRepost,
     onEntryFlag,
-    handleFollow,
-    handleUnfollow,
+    handleFollowAuthor,
+    handleUnfollowAuthor,
+    isFollowingAuthor,
     onContentClick,
+    onMentionClick,
+    onTagClick,
+    style,
+    contentClickable,
+    disableReposting,
+    disableActions,
+    hideActionButtons,
+    hidePublishTime,
+    awaitingModerationLabel,
+    moderatedContentLabel,
+    ctaLabel,
+    handleFlipCard,
+    isModerated,
+    scrollHiddenContent,
   } = props;
-
-  const size = useViewportSize().size;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
   const [profileDropOpen, setProfileDropOpen] = React.useState(false);
+  const [displayCID, setDisplayCID] = React.useState(false);
 
   const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
-
-  const handleLinkCopy = (linkType: 'ipfs' | 'shareable') => () => {
-    switch (linkType) {
-      case 'ipfs':
-        return onLinkCopy('dummiIPFScid');
-      case 'shareable':
-        return onLinkCopy('http://dummy.link');
-    }
-  };
+  const akashaRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
   const closeMenuDrop = () => {
     setMenuDropOpen(false);
   };
 
-  const toggleMenuDrop = () => {
+  const toggleMenuDrop = (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
     setMenuDropOpen(!menuDropOpen);
   };
 
@@ -122,100 +168,249 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   };
 
   const handleRepost = (withComment: boolean) => () => {
-    onRepost(withComment, entryData.entryId);
+    if (onRepost) {
+      onRepost(withComment, entryData);
+    }
   };
 
-  const handleEntryShare = (service: ServiceNames) => {
-    onEntryShare(service, entryData.entryId);
+  const handleEntryShare = (service: ServiceNames, entryId: string) => {
+    const url = `${sharePostUrl}${entryId}`;
+    let shareUrl;
+    switch (service) {
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${url}`;
+        break;
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+        break;
+      case 'reddit':
+        shareUrl = `http://www.reddit.com/submit?url=${url}`;
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(url);
+        break;
+      default:
+        break;
+    }
+    if (shareUrl) {
+      window.open(shareUrl, '_blank');
+    }
   };
 
   const handleEntryFlag = () => {
-    onEntryFlag(entryData.entryId);
+    if (onEntryFlag) {
+      onEntryFlag(entryData.entryId);
+    }
   };
 
-  const handleRepliesClick = () => {
-    onClickReplies(entryData.entryId);
-  };
+  const handleRepliesClick = () => handleContentClick(entryData);
 
-  const handleContentClick = () => {
-    if (onContentClick && typeof onContentClick === 'function') {
+  const handleContentClick = (data?: IEntryData) => {
+    if (onContentClick && typeof onContentClick === 'function' && data) {
       onContentClick({
-        authorEthAddress: entryData.author.ethAddress,
-        entryId: entryData.entryId,
+        authorEthAddress: data.author.ethAddress,
+        entryId: data.entryId,
         replyTo: null,
       });
     }
   };
 
+  const toggleDisplayCID = () => {
+    setDisplayCID(!displayCID);
+  };
+
   return (
-    <>
-      <Box direction="row" justify="between" pad={{ vertical: 'medium' }}>
-        <ProfileAvatarButton
-          label={entryData.author?.userName}
-          info={entryData.author?.ensName}
-          avatarImage={entryData.author?.avatar}
-          onClickAvatar={onClickAvatar}
-          onClick={() => setProfileDropOpen(!profileDropOpen)}
-          ethAddress={entryData.author?.ethAddress}
-          ref={profileRef}
-        />
-        {profileRef.current && profileDropOpen && (
-          <StyledProfileDrop
-            overflow="hidden"
-            target={profileRef.current}
-            align={{ top: 'bottom', left: 'left' }}
-            onClickOutside={() => setProfileDropOpen(false)}
-            onEsc={() => setProfileDropOpen(false)}
-          >
-            <Box width="20rem" round="small">
-              <ProfileMiniCard
-                profileData={entryData.author}
-                handleFollow={handleFollow}
-                handleUnfollow={handleUnfollow}
+    <ViewportSizeProvider>
+      <Box style={style}>
+        <Box
+          direction="row"
+          justify="between"
+          pad={{ top: 'medium', horizontal: 'medium' }}
+          flex={{ shrink: 0 }}
+        >
+          <StyledProfileAvatarButton
+            label={entryData.author?.name}
+            info={entryData.author?.userName && `@${entryData.author?.userName}`}
+            avatarImage={entryData.author?.avatar}
+            onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) => {
+              if (disableActions) {
+                return;
+              }
+              if (onClickAvatar) {
+                onClickAvatar(ev);
+              }
+            }}
+            onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
+              if (disableActions) {
+                return;
+              }
+              if (onClickAvatar) {
+                onClickAvatar(ev);
+              }
+            }}
+            ethAddress={entryData.author?.ethAddress}
+            ref={profileRef}
+            bold={true}
+            // onMouseEnter={() => setProfileDropOpen(true)}
+            // onMouseLeave={() => setProfileDropOpen(false)}
+          />
+          {profileRef.current && profileDropOpen && (
+            <StyledProfileDrop
+              overflow="hidden"
+              target={profileRef.current}
+              align={{ top: 'bottom', left: 'left' }}
+              onClickOutside={() => setProfileDropOpen(false)}
+              onEsc={() => setProfileDropOpen(false)}
+            >
+              <Box
+                width="20rem"
+                round="small"
+                flex="grow"
+                onClick={onClickAvatar}
+                elevation="shadow"
+              >
+                <ProfileMiniCard
+                  loggedEthAddress={loggedProfileEthAddress}
+                  profileData={entryData.author}
+                  handleFollow={handleFollowAuthor}
+                  handleUnfollow={handleUnfollowAuthor}
+                  isFollowing={isFollowingAuthor}
+                  disableFollowing={true}
+                />
+              </Box>
+            </StyledProfileDrop>
+          )}
+          <Box direction="row" gap="xsmall" align="center" flex={{ shrink: 0 }}>
+            {entryData.time && !hidePublishTime && (
+              <Text style={{ flexShrink: 0 }} color="secondaryText">
+                {formatRelativeTime(entryData.time, locale)}
+              </Text>
+            )}
+            <Icon
+              type="akasha"
+              size="sm"
+              onClick={toggleDisplayCID}
+              ref={akashaRef}
+              clickable={false}
+            />
+            {/* this condition hides the icon for logged user's own posts */}
+            {onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress) && (
+              <StyledIcon
+                type="moreDark"
+                onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
+                  if (disableActions) {
+                    return;
+                  }
+                  toggleMenuDrop(ev);
+                }}
+                clickable={!disableActions}
+                ref={menuIconRef}
               />
-            </Box>
-          </StyledProfileDrop>
-        )}
-        <Box direction="row" gap="xsmall" align="center">
-          <Text> {formatRelativeTime(entryData.time, locale)} </Text>
-          <Icon type="akasha" size="sm" />
-          <Icon type="moreDark" onClick={toggleMenuDrop} clickable={true} ref={menuIconRef} />
+            )}
+          </Box>
         </Box>
+        {entryData.CID && akashaRef.current && displayCID && (
+          <CardHeaderAkashaDropdown
+            target={akashaRef.current}
+            onMenuClose={() => {
+              setDisplayCID(false);
+            }}
+            CID={entryData.CID}
+          />
+        )}
+        {!isMobile && menuIconRef.current && menuDropOpen && onEntryFlag && (
+          <CardHeaderMenuDropdown
+            target={menuIconRef.current}
+            onMenuClose={closeMenuDrop}
+            onFlag={handleEntryFlag}
+            flagAsLabel={flagAsLabel}
+          />
+        )}
+        {isMobile && menuDropOpen && onEntryFlag && (
+          <StyledDropAlt>
+            <MobileListModal
+              closeModal={closeMenuDrop}
+              menuItems={[
+                {
+                  label: props.flagAsLabel,
+                  icon: 'report',
+                  handler: () => handleEntryFlag(),
+                },
+              ]}
+            />
+          </StyledDropAlt>
+        )}
+        <Box
+          pad={{ horizontal: 'medium' }}
+          height={{ max: '50rem' }}
+          overflow={scrollHiddenContent ? 'auto' : 'hidden'}
+          style={{ cursor: contentClickable ? 'pointer' : 'default' }}
+          onClick={() =>
+            !disableActions && contentClickable ? handleContentClick(entryData) : false
+          }
+        >
+          <ReadOnlyEditor
+            content={entryData.content}
+            handleMentionClick={onMentionClick}
+            handleTagClick={onTagClick}
+          />
+        </Box>
+        {entryData.quote && !entryData.quote.delisted && !entryData.quote.reported && (
+          <Box
+            pad="medium"
+            onClick={() => {
+              if (disableActions) {
+                return;
+              }
+              handleContentClick(entryData.quote);
+            }}
+          >
+            <EmbedBox embedEntryData={entryData.quote} />
+          </Box>
+        )}
+        {entryData.quote && !entryData.quote.delisted && entryData.quote.reported && (
+          <Box pad="medium" onClick={() => null}>
+            <EntryCardHidden
+              awaitingModerationLabel={awaitingModerationLabel}
+              ctaLabel={ctaLabel}
+              handleFlipCard={handleFlipCard && handleFlipCard(entryData, true)}
+            />
+          </Box>
+        )}
+        {entryData.quote && entryData.quote.delisted && (
+          <Box pad="medium" onClick={() => null}>
+            <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
+          </Box>
+        )}
+        {!hideActionButtons && (
+          <CardActions
+            entryData={entryData}
+            loggedProfileEthAddress={loggedProfileEthAddress}
+            sharePostLabel={sharePostLabel}
+            shareTextLabel={shareTextLabel}
+            sharePostUrl={sharePostUrl}
+            repliesLabel={repliesLabel}
+            repostsLabel={repostsLabel}
+            repostLabel={repostLabel}
+            cancelLabel={cancelLabel}
+            repostWithCommentLabel={repostWithCommentLabel}
+            isBookmarked={isBookmarked}
+            bookmarkLabel={bookmarkLabel}
+            bookmarkedLabel={bookmarkedLabel}
+            shareLabel={shareLabel}
+            copyLinkLabel={copyLinkLabel}
+            handleEntryBookmark={handleEntryBookmark}
+            onRepost={handleRepost(false)}
+            onRepostWithComment={handleRepost(true)}
+            onShare={handleEntryShare}
+            handleRepliesClick={handleRepliesClick}
+            disableReposting={disableReposting}
+            disableActions={disableActions}
+            isModerated={isModerated}
+          />
+        )}
       </Box>
-      {menuIconRef.current && menuDropOpen && (
-        <CardHeaderMenuDropdown
-          target={menuIconRef.current}
-          onMenuClose={closeMenuDrop}
-          onLinkCopy={handleLinkCopy}
-          onFlag={handleEntryFlag}
-          flagAsLabel={flagAsLabel}
-          copyIPFSLinkLabel={copyIPFSLinkLabel}
-        />
-      )}
-      <Box pad={{ vertical: 'medium' }} onClick={handleContentClick}>
-        {entryData.content}
-      </Box>
-      <CardActions
-        entryData={entryData}
-        loggedProfileEthAddress={loggedProfileEthAddress}
-        repliesLabel={repliesLabel}
-        repostsLabel={repostsLabel}
-        repostLabel={repostLabel}
-        repostWithCommentLabel={repostWithCommentLabel}
-        isBookmarked={isBookmarked}
-        bookmarkLabel={bookmarkLabel}
-        bookmarkedLabel={bookmarkedLabel}
-        shareLabel={shareLabel}
-        copyLinkLabel={copyLinkLabel}
-        handleEntryBookmark={handleEntryBookmark}
-        onRepost={handleRepost(false)}
-        onRepostWithComment={handleRepost(true)}
-        onShare={handleEntryShare}
-        handleRepliesClick={handleRepliesClick}
-        onLinkCopy={handleLinkCopy('shareable')}
-        size={size}
-      />
-    </>
+    </ViewportSizeProvider>
   );
 };
 

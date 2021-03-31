@@ -32,9 +32,9 @@ const ProfileCardDescription: React.FC<IProfileCardDescriptionProps> = props => 
 
   return (
     <>
-      <Box direction="column" pad="medium" gap="medium">
-        <Box direction="row" gap="xsmall" align="center">
-          <Text size="large" weight="bold" color="primaryText">
+      <Box direction="column" pad={{ vertical: 'xsmall', horizontal: 'medium' }} gap="xxsmall">
+        <Box direction="row" gap="xxsmall" align="center">
+          <Text size="large" weight="bold" color="primaryText" style={{ lineHeight: 1.7 }}>
             {descriptionLabel}
           </Text>
           {editable &&
@@ -51,7 +51,9 @@ const ProfileCardDescription: React.FC<IProfileCardDescriptionProps> = props => 
             )}
         </Box>
 
-        <Text color="primaryText">{description}</Text>
+        <Text color="primaryText" size="large" style={{ lineHeight: 1.7 }} wordBreak="break-word">
+          {description}
+        </Text>
       </Box>
       {editDescriptionRef.current &&
         descriptionPopoverOpen &&

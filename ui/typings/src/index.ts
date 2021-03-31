@@ -1,5 +1,11 @@
 import * as AppLoaderTypes from './app-loader';
 
+export interface IAkashaError {
+  errorKey: string;
+  error: Error;
+  critical: boolean;
+}
+
 export interface LogoSourceType {
   type: LogoTypeSource;
   value: string;
@@ -42,7 +48,7 @@ export interface LayoutConfig {
   /**
    * sidebar area slot
    */
-  sidebarSlotId: string;
+  // sidebarSlotId: string;
   title: string;
   /**
    * topbar loading node
@@ -54,6 +60,7 @@ export interface LayoutConfig {
   widgetSlotId: string;
 }
 export interface RootComponentProps {
+  activeWhen: { path: string };
   domElement: HTMLElement;
   events: any;
   getMenuItems: () => any;
@@ -61,9 +68,11 @@ export interface RootComponentProps {
   i18n: any;
   i18nConfig: any;
   isMobile: boolean;
-  layout: LayoutConfig;
+  layout: {
+    app: LayoutConfig;
+  };
   logger: any;
-  mountParcel: () => void;
+  mountParcel: (parcel: any, config?: any) => any;
   name: string;
   rootNodeId: string;
   sdkModules: {
@@ -85,3 +94,11 @@ export enum EthProviders {
   WalletConnect,
 }
 export const AppLoader = AppLoaderTypes;
+
+export enum LEGAL_DOCS {
+  TERMS_OF_USE = 'TermsOfUse',
+  TERMS_OF_SERVICE = 'TermsOfService',
+  PRIVACY_POLICY = 'PrivacyPolicy',
+  CODE_OF_CONDUCT = 'CodeOfConduct',
+  APP_GUIDE = 'AppGuide',
+}

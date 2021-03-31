@@ -1,10 +1,9 @@
 import DS from '@akashaproject/design-system';
-import { css, StyledComponent } from 'styled-components';
 import { BaseContainer } from './styled-containers';
 
-const { styled } = DS;
+const { css, styled } = DS;
 
-export const SidebarSlot: StyledComponent<any, any, any, any> = styled(BaseContainer)<{
+export const SidebarSlot: any = styled(BaseContainer)<{
   visible: boolean;
 }>`
   flex-grow: 1;
@@ -16,14 +15,14 @@ export const SidebarSlot: StyledComponent<any, any, any, any> = styled(BaseConta
   `}
 `;
 
-export const TopbarSlot: StyledComponent<any, any, any, any> = styled.div`
+export const TopbarSlot: any = styled.div`
   z-index: 100;
   position: sticky;
   top: 0;
   width: 100%;
 `;
 
-export const PluginSlot: StyledComponent<any, any, any, any> = styled(BaseContainer)`
+export const PluginSlot: any = styled(BaseContainer)`
   flex-grow: 1;
   flex-shrink: 1;
   margin-top: 0.5em;
@@ -40,8 +39,9 @@ export const PluginSlot: StyledComponent<any, any, any, any> = styled(BaseContai
   `}
 `;
 
-export const WidgetSlot: StyledComponent<any, any, any, any> = styled(BaseContainer)`
+export const WidgetSlot: any = styled(BaseContainer)`
   display: none;
+  margin-top: 0.5em;
   ${props => css`
     @media screen and (min-width: ${props.theme.breakpoints.small.value}px) {
       max-width: 30em;
@@ -62,6 +62,7 @@ export const WidgetSlot: StyledComponent<any, any, any, any> = styled(BaseContai
     width: 100%;
   }
 `;
-export const ModalSlot: StyledComponent<any, any, any, any> = styled.div`
+
+export const ModalSlot: any = styled.div`
   z-index: 300;
 `;

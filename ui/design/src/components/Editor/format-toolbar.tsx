@@ -1,10 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Editor, Range } from 'slate';
 import { ReactEditor, useSlate } from 'slate-react';
 import styled from 'styled-components';
 import { Icon, IconType } from '../Icon/icon';
-import { CustomEditor } from './helpers';
+import { CustomEditor, Portal } from './helpers';
 
 const StyledDiv = styled.div`
   margin: 0 ${props => props.theme.shapes.baseSpacing}px;
@@ -30,10 +29,6 @@ const StyledToolbar = styled.div`
   display: inline-flex;
   align-items: center;
 `;
-
-export const Portal = ({ children }: any) => {
-  return ReactDOM.createPortal(children, document.body);
-};
 
 const FormatButton: React.FC<IFormatButton> = ({ format, icon }) => {
   const editor = useSlate();

@@ -43,12 +43,7 @@ export default class LoginWidgetRoot extends PureComponent<ILoginWidgetProps> {
             plain={true}
           >
             <WidgetErrorCard errors={this.state.errors}>
-              <LoginWidget
-                sdkModules={this.props.sdkModules}
-                globalChannel={this.props.globalChannel}
-                logger={this.props.logger}
-                layoutConfig={this.props.layout}
-              />
+              <LoginWidget />
             </WidgetErrorCard>
           </ThemeSelector>
         </Suspense>

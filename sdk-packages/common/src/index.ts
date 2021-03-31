@@ -10,6 +10,7 @@ import DIContainer from '@akashaproject/sdk-runtime/lib/DIContainer';
 import cacheService from './cache.service';
 import services, {
   CACHE_SERVICE,
+  IMAGE_UTILS_SERVICE,
   IPFS_SERVICE,
   moduleName,
   VALIDATOR_SERVICE,
@@ -21,6 +22,7 @@ import settings from './settings';
 import validatorService from './validator.service';
 import web3UtilsService from './web3-utils.service';
 import web3Service from './web3.service';
+import imageUtilsService from './image-utils.service';
 
 export class CommonsModule extends IAkashaModule {
   public async init(di: DIContainer) {
@@ -31,7 +33,14 @@ export class CommonsModule extends IAkashaModule {
 
   public availableServices(): IAkashaModuleServices {
     return IAkashaModule.EXPORT_TO_CHANNEL(
-      [WEB3_UTILS_SERVICE, VALIDATOR_SERVICE, WEB3_SERVICE, CACHE_SERVICE, IPFS_SERVICE],
+      [
+        WEB3_UTILS_SERVICE,
+        VALIDATOR_SERVICE,
+        WEB3_SERVICE,
+        CACHE_SERVICE,
+        IPFS_SERVICE,
+        IMAGE_UTILS_SERVICE,
+      ],
       services,
     );
   }
@@ -41,7 +50,14 @@ export class CommonsModule extends IAkashaModule {
   }
 
   protected _registerServices(di: any): IAkashaNamedService[] {
-    return [cacheService, ipfsService, validatorService, web3Service, web3UtilsService];
+    return [
+      cacheService,
+      ipfsService,
+      validatorService,
+      web3Service,
+      web3UtilsService,
+      imageUtilsService,
+    ];
   }
 }
 

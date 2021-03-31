@@ -5,26 +5,26 @@ import { Icon } from '../../Icon/index';
 import { StyledLayer } from '../common/styled-modal';
 import { StyledIconDiv, StyledShareSocialDiv, StyledTextInput } from './styled-share-modal';
 
+export type ServiceNames = 'twitter' | 'reddit' | 'facebook' | 'copy';
+
 export interface IShareModal {
   className?: string;
-  profileLink: string;
+  link: string;
   closeModal: () => void;
-  copyLabel: string;
-  shareTitleLabel: string;
-  shareSubtitleLabel: string;
-  shareSocialLabel: string;
+  handleProfileShare: (serviceName: ServiceNames, link: string) => void;
+  copyLabel?: string;
+  shareTitleLabel?: string;
+  shareSubtitleLabel?: string;
+  shareSocialLabel?: string;
 }
 
-const socialApps = [
-  { name: 'twitter', link: 'https://twitter.com/' },
-  { name: 'reddit', link: 'https://www.reddit.com/' },
-  { name: 'facebook', link: 'https://www.facebook.com/' },
-];
+const socialApps: ServiceNames[] = ['twitter', 'reddit', 'facebook'];
 
 const ShareModal: React.FC<IShareModal> = props => {
   const {
     closeModal,
-    profileLink,
+    link,
+    handleProfileShare,
     className,
     copyLabel,
     shareTitleLabel,
@@ -34,15 +34,8 @@ const ShareModal: React.FC<IShareModal> = props => {
 
   const linkRef: React.Ref<any> = React.useRef(null);
 
-  const handleCopyLink = () => {
-    linkRef?.current.select();
-    document.execCommand('copy');
-    closeModal();
-  };
-
-  const handleShareSocial = (link: string) => () => {
-    // @TODO: add logic for social sharing
-    window.open(link, '_blank');
+  const onShareProfile = (serviceName: ServiceNames) => {
+    handleProfileShare(serviceName, link);
     closeModal();
   };
 
@@ -52,7 +45,7 @@ const ShareModal: React.FC<IShareModal> = props => {
         <Text size="large" weight="bold">
           {shareTitleLabel}
         </Text>
-        <Text color="secondaryText">{shareSubtitleLabel}</Text>
+        {shareSubtitleLabel && <Text color="secondaryText">{shareSubtitleLabel}</Text>}
         <Box
           fill="horizontal"
           direction="row"
@@ -67,26 +60,27 @@ const ShareModal: React.FC<IShareModal> = props => {
           <StyledIconDiv>
             <Icon type="link" />
           </StyledIconDiv>
-          <StyledTextInput
-            plain={true}
-            readOnly={true}
-            ref={linkRef}
-            value={profileLink}
-            size="medium"
-          />
-          <Button label={copyLabel} onClick={handleCopyLink} primary={true} />
+          <StyledTextInput plain={true} readOnly={true} ref={linkRef} value={link} size="medium" />
+          <Button label={copyLabel} onClick={() => onShareProfile('copy')} primary={true} />
         </Box>
         <Text color="secondaryText">{shareSocialLabel}</Text>
         <Box direction="row" align="center" justify="center" gap="xsmall">
           {socialApps.map((app, index) => (
             <StyledShareSocialDiv key={index}>
-              <Icon type={app.name} onClick={handleShareSocial(app.link)} color="white" />
+              <Icon type={app} onClick={() => onShareProfile(app)} color="white" />
             </StyledShareSocialDiv>
           ))}
         </Box>
       </Box>
     </StyledLayer>
   );
+};
+
+ShareModal.defaultProps = {
+  copyLabel: 'Copy',
+  shareTitleLabel: 'Share',
+  shareSubtitleLabel: '',
+  shareSocialLabel: 'Or share it on',
 };
 
 export default ShareModal;

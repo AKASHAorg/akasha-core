@@ -1,11 +1,18 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { Avatar } from '../../Avatar/index';
-import { SubtitleTextIcon } from '../../TextIcon/index';
+import { TextIcon } from '../../TextIcon/index';
 import { WidgetAreaCardBox } from '../common/basic-card-box';
 import { AvatarDiv } from './styled-profile-card';
 
+export interface DefaultProvider {
+  property: string;
+  provider: string;
+  value: any;
+}
+
 export interface IProfileData {
+  CID?: string;
   avatar?: string;
   coverImage?: string;
   userName?: string;
@@ -14,11 +21,12 @@ export interface IProfileData {
   url?: string;
   ensName?: string;
   ethAddress: string;
-  postsNumber?: number;
-  isFollowed?: boolean;
+  pubKey: string;
+  totalPosts?: string | number;
+  totalFollowers?: string | number;
+  totalFollowing?: string | number;
+  default: DefaultProvider[];
   // app specific
-  followers?: string | number;
-  following?: string | number;
   apps?: string | number;
   profileType?: string;
   users?: string | number;
@@ -27,14 +35,21 @@ export interface IProfileData {
 
 export interface IProfileWidgetCard {
   className?: string;
-  onClickApps: React.EventHandler<React.SyntheticEvent>;
-  onClickFollowing: React.EventHandler<React.SyntheticEvent>;
+  loggedEthAddress?: string | null;
+  onClickProfile?: React.EventHandler<React.SyntheticEvent>;
+  onClickFollowers?: React.EventHandler<React.SyntheticEvent>;
+  onClickFollowing?: React.EventHandler<React.SyntheticEvent>;
+  onClickPosts?: React.EventHandler<React.SyntheticEvent>;
+  handleUnfollow?: React.EventHandler<React.SyntheticEvent>;
+  handleFollow?: React.EventHandler<React.SyntheticEvent>;
+  isFollowing?: boolean;
   profileData: IProfileData;
   descriptionLabel: string;
-  actionsLabel: string;
+  postsLabel: string;
   followingLabel: string;
-  appsLabel: string;
-  usersLabel: string;
+  followersLabel: string;
+  followLabel?: string;
+  unfollowLabel?: string;
   shareProfileLabel: string;
 }
 
@@ -42,19 +57,18 @@ const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
   const {
     className,
     onClickFollowing,
-    onClickApps,
+    onClickFollowers,
+    onClickPosts,
     profileData,
     descriptionLabel,
-    actionsLabel,
     followingLabel,
-    usersLabel,
-    appsLabel,
+    followersLabel,
+    postsLabel,
   } = props;
 
-  const leftLabel = profileData.following ? profileData.following : profileData.users;
-  const rightLabel = profileData.apps ? profileData.apps : profileData.actions;
-  const leftSubLabel = profileData.profileType === 'dapp' ? usersLabel : followingLabel;
-  const rightSubLabel = profileData.profileType === 'dapp' ? actionsLabel : appsLabel;
+  const postsTitle = `${profileData.totalPosts} ${postsLabel}`;
+  const followersTitle = `${profileData.totalFollowers} ${followersLabel}`;
+  const followingTitle = `${profileData.totalFollowing} ${followingLabel}`;
 
   return (
     <WidgetAreaCardBox className={className}>
@@ -68,7 +82,7 @@ const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
         <AvatarDiv>
           <Avatar
             border="lg"
-            size="xl"
+            size="xxl"
             src={profileData.avatar}
             ethAddress={profileData.ethAddress}
           />
@@ -90,24 +104,26 @@ const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
         direction="row"
         justify="between"
       >
-        {leftLabel && rightLabel && (
-          <Box pad={{ vertical: 'medium' }} direction="row" alignContent="center" gap="small">
-            <SubtitleTextIcon
-              iconType="person"
-              label={leftLabel}
-              labelSize="small"
-              subtitle={leftSubLabel}
-              onClick={onClickFollowing}
-            />
-            <SubtitleTextIcon
-              iconType="app"
-              label={rightLabel}
-              labelSize="small"
-              subtitle={rightSubLabel}
-              onClick={onClickApps}
-            />
-          </Box>
-        )}
+        <Box pad="medium" direction="row" alignContent="center" gap="medium">
+          <TextIcon
+            iconType="quote"
+            label={postsTitle}
+            onClick={onClickPosts}
+            data-testid="posts-button"
+          />
+          <TextIcon
+            iconType="following"
+            label={followingTitle}
+            onClick={onClickFollowing}
+            data-testid="following-button"
+          />
+          <TextIcon
+            iconType="following"
+            label={followersTitle}
+            onClick={onClickFollowers}
+            data-testid="followers-button"
+          />
+        </Box>
       </Box>
       <Box direction="column" pad="medium" gap="medium">
         <Text size="large" weight="bold" color="primaryText">

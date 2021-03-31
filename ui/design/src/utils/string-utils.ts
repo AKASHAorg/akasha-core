@@ -5,12 +5,15 @@ export const capitalize = (str?: string) => {
     .join(' ');
 };
 
-export const truncateMiddle = (str: string, startChars: number, endChars: number) => {
-  let truncated = '';
-  truncated += str.substring(0, startChars);
-  truncated += '...';
-  truncated += str.substring(str.length - endChars, str.length);
-  return truncated;
+export const truncateMiddle = (str: string, startChars: number = 6, endChars: number = 4) => {
+  if (str) {
+    let truncated = '';
+    truncated += str.substring(0, startChars);
+    truncated += '...';
+    truncated += str.substring(str.length - endChars, str.length);
+    return truncated;
+  }
+  return '';
 };
 
 /**

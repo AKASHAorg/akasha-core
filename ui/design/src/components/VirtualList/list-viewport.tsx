@@ -1,45 +1,107 @@
 import * as React from 'react';
 import CardRenderer from './card-renderer';
-import { GetItemCardFn, IRenderItemProps, IVirtualListProps } from './interfaces';
-import Rect from './v2/rect-obj';
+import Spinner from '../Spinner';
+import { IListViewportProps } from './interfaces';
+import { TransitionGroup, CSSTransition, TransitionStatus } from 'react-transition-group';
+import { Rect } from './rect';
 
-export interface IListViewportProps {
-  items: string[];
-  itemsData: IVirtualListProps['itemsData'];
-  height: number;
-  getItemCard: GetItemCardFn;
-  onSizeChange: IRenderItemProps['onSizeChange'];
-  loadItemData: IVirtualListProps['loadItemData'];
-  coordinates: Map<string, Rect>;
-  itemSpacing: number;
-  slice: [number, number];
-  customEntities?: IVirtualListProps['customEntities'];
-}
+const PLACEHOLDER_KEY = 'vlist-item-loading-placeholder';
 
 const ListViewport: React.FC<IListViewportProps> = props => {
-  const { itemsData, coordinates, items, itemSpacing, slice, customEntities = [] } = props;
-  const itemsToRender = items.slice(slice[0], slice[1]);
+  const {
+    itemsData,
+    itemSpacing,
+    customEntities = [],
+    isFetching,
+    itemRects,
+    listHeight,
+    renderSlice,
+    averageItemHeight,
+    listHeader,
+    loadLimit,
+    usePlaceholders,
+  } = props;
+
+  const siblingCustomEntities = customEntities
+    .filter(ent => ent.position === 'before' && !ent.itemId)
+    .map((entity, idx) => entity.getComponent({ key: idx, style: { marginBottom: itemSpacing } }));
+
+  const placeholders: string[] = React.useMemo(() => {
+    if (!renderSlice.length && usePlaceholders) {
+      return Array(loadLimit)
+        .fill(null)
+        .map((_v, i) => `${PLACEHOLDER_KEY}-${i}`);
+    }
+    return [];
+  }, [renderSlice.length]);
+
   return (
     <>
-      {itemsToRender.map((itemId: string) => {
-        const itemIdx = items.indexOf(itemId);
-        return (
-          <CardRenderer
-            key={itemId}
-            itemId={itemId}
-            getItemCard={props.getItemCard}
-            loadItemData={props.loadItemData}
-            itemData={itemsData[itemId]}
-            isBookmarked={false}
-            onSizeChange={props.onSizeChange}
-            customEntities={customEntities}
-            coordinates={coordinates}
-            prevItemId={items[itemIdx - 1]}
-            index={itemIdx}
-            itemSpacing={itemSpacing}
-          />
-        );
-      })}
+      {listHeader && React.cloneElement(listHeader)}
+      {siblingCustomEntities}
+      <TransitionGroup component={null}>
+        {renderSlice.map(itemId => {
+          return (
+            <CSSTransition classNames="vlist-item" timeout={300} key={itemId}>
+              {(state: TransitionStatus) => (
+                <CardRenderer
+                  className={state}
+                  itemIndex={itemRects.get(itemId)?.index}
+                  itemId={itemId}
+                  itemCard={props.itemCard}
+                  loadItemData={props.loadItemData}
+                  itemData={itemsData[itemId]}
+                  customEntities={customEntities}
+                  itemSpacing={itemSpacing}
+                  itemRect={itemRects.get(itemId)}
+                  updateRef={props.updateRef}
+                  averageItemHeight={averageItemHeight}
+                  onItemUnmount={props.onItemUnmount}
+                />
+              )}
+            </CSSTransition>
+          );
+        })}
+      </TransitionGroup>
+      {placeholders.map((placeholderId, idx) => (
+        <CardRenderer
+          key={placeholderId}
+          itemIndex={idx}
+          itemId={placeholderId}
+          itemCard={props.itemCard}
+          loadItemData={() => {
+            /* explicitly left empty! */
+          }}
+          itemData={null}
+          customEntities={[]}
+          itemSpacing={itemSpacing}
+          itemRect={{
+            rect: new Rect({
+              top:
+                (itemRects.get(renderSlice[renderSlice.length - 1])?.rect.getBottom() || 8) +
+                itemSpacing * idx +
+                averageItemHeight * idx,
+              height: averageItemHeight,
+            }),
+            canRender: true,
+            index: idx,
+          }}
+          averageItemHeight={averageItemHeight}
+        />
+      ))}
+
+      {isFetching && (
+        <div
+          style={{
+            position: 'absolute',
+            transform: `translateY(${listHeight + itemSpacing}px)`,
+            width: '100%',
+            minHeight: '5rem',
+          }}
+        >
+          <Spinner />
+        </div>
+      )}
     </>
   );
 };

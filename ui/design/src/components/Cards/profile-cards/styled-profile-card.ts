@@ -11,6 +11,10 @@ const MiniProfileAvatarDiv = styled.div`
   top: 1rem;
 `;
 
+const SearchProfileAvatarDiv = styled.div`
+  position: relative;
+`;
+
 const ShareButtonContainer = styled(Box)`
   position: relative;
   top: 1em;
@@ -56,6 +60,10 @@ const StyledImage = styled(Image)`
   border-radius: 50%;
 `;
 
+const StyledInlineBox = styled(Box)`
+  display: inline-flex;
+`;
+
 export {
   AvatarDiv,
   ShareButtonContainer,
@@ -65,4 +73,6 @@ export {
   StyledAvatarEditDiv,
   StyledImage,
   MiniProfileAvatarDiv,
+  SearchProfileAvatarDiv,
+  StyledInlineBox,
 };

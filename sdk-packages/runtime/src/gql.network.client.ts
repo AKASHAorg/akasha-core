@@ -22,17 +22,19 @@ export const makeOperation = (operation: GqlOperation) => {
     ...other,
   };
 };
-const stash = new Stash({
-  max: 420,
-  maxAge: 1000 * 60 * 60, // 1h
+export const gqlStash = new Stash({
+  max: 640,
+  maxAge: 1000 * 20, // 20s
 });
-export const runGQL = async (operation: GqlOperation) => {
+export const runGQL = async (operation: GqlOperation, saveCache: boolean = false) => {
   const opHash = hash(operation, { algorithm: 'sha1', unorderedObjects: false });
-  if (stash.entries.has(opHash)) {
-    return stash.get(opHash);
+  if (gqlStash.entries.has(opHash)) {
+    return gqlStash.get(opHash);
   }
   const tOperation = makeOperation(operation);
   const data = await makePromise(execute(link, tOperation));
-  stash.set(opHash, data);
+  if (saveCache) {
+    gqlStash.set(opHash, data);
+  }
   return data;
 };

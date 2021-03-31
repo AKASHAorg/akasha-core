@@ -1,26 +1,43 @@
 import * as React from 'react';
-
-import EthereumIcon from './eth-color-icon';
-import styled, { createGlobalStyle } from 'styled-components';
-import { Box, Text } from 'grommet';
+import { createGlobalStyle } from 'styled-components';
 import { ModalRenderer } from '../common/modal-renderer';
-import { EthProviderListModal, EthProviderModal } from '..';
-import { IconLink } from '../../Buttons';
+import {
+  EthProviderListModal,
+  EthProviderModal,
+  EthProviderModalIllustration,
+  ModalContainer,
+} from '../index';
 import { Icon } from '../../Icon';
+import ViewportSizeProvider, { useViewportSize } from '../../Providers/viewport-dimension';
+import ErrorLoader from '../../Errors/error-loader';
+import { Button } from 'grommet';
 
 export interface LoginModalProps {
   slotId: string;
   onLogin: (providerId: number) => void;
   showModal: boolean;
+  showSignUpModal?: {
+    inviteToken: string | null;
+    status: boolean;
+  };
+  onInputTokenChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
+  validateTokenFn?: (ev: any) => void;
+  submitted?: boolean;
+  submitting?: boolean;
+  success?: boolean;
+  hasError?: boolean;
+  errorMsg?: string;
   onModalClose: () => void;
-  /**
-   * placed at the bottom of the provider list modal
-   */
-  tutorialLinkLabel: string;
-  /**
-   * handler for tutorial link (tutorialLinkLabel) click
-   */
-  onTutorialLinkClick: () => void;
+  titleLabel: string;
+  subtitleLabel?: string;
+  headerLabel?: string;
+  acceptedTerms?: boolean;
+  checkedTermsValues?: string[];
+  onAcceptTerms?: (ev: any) => void;
+  onCheckedTermsValues?: (ev: any) => void;
+  waitForCheckTerms?: boolean;
+  suggestSignUp?: boolean;
+  suggestedSignUpFn?: () => void;
   /**
    * text to be displayed when the user selects to login with metamask
    */
@@ -29,11 +46,7 @@ export interface LoginModalProps {
    * additional message to be displayed when the user selects to login with metamask
    */
   metamaskModalMessage: string;
-  /**
-   * helpText to be displayed at the bottom of the providerList
-   * modal
-   */
-  helpText: string;
+  error: string | null;
 }
 
 const METAMASK_PROVIDER = 'metamask';
@@ -43,47 +56,36 @@ const ETH_PROVIDERS = {
   [METAMASK_PROVIDER]: 2,
   [WALLETCONNECT_PROVIDER]: 3,
 };
-export interface IEthProviderIllustrationProps {
-  providerIcon: React.ReactElement;
-}
-const IconCircleBg = styled.div`
-  border-radius: 50%;
-  background: ${props => props.theme.colors.border};
-  width: 64px;
-  height: 64px;
-  text-align: center;
-  padding: 14px 12px;
-`;
-const HorizontalDashedLine = styled.div`
-  border-bottom: 1px dashed ${props => props.theme.colors.border};
-  height: 1px;
-  flex: 1;
-`;
-const EthProviderModalIllustration: React.FC<IEthProviderIllustrationProps> = props => (
-  <Box direction="row" align="center" justify="center" margin="1.5em 0">
-    <Box
-      alignContent="between"
-      justify="between"
-      style={{ maxWidth: '67%', width: '100%', alignItems: 'center' }}
-      direction="row"
-    >
-      <IconCircleBg>{props.providerIcon}</IconCircleBg>
-      <HorizontalDashedLine />
-      <EthereumIcon />
-    </Box>
-  </Box>
-);
+
 const LoginModal: React.FC<LoginModalProps> = props => {
   const {
     showModal,
+    showSignUpModal,
     onModalClose,
     onLogin,
-    tutorialLinkLabel,
-    onTutorialLinkClick,
-    helpText,
     metamaskModalHeadline,
     metamaskModalMessage,
+    titleLabel,
+    onInputTokenChange,
+    validateTokenFn,
+    submitted,
+    submitting,
+    success,
+    hasError,
+    errorMsg,
+    subtitleLabel,
+    headerLabel,
+    acceptedTerms,
+    checkedTermsValues,
+    onAcceptTerms,
+    onCheckedTermsValues,
+    waitForCheckTerms,
+    suggestSignUp,
+    suggestedSignUpFn,
   } = props;
+
+  const { size } = useViewportSize();
+
   const [modalState, setModalState] = React.useState<{ selectedProvider: string | null }>({
     selectedProvider: null,
   });
@@ -104,6 +106,12 @@ const LoginModal: React.FC<LoginModalProps> = props => {
   };
   const handleWalletConnectLogin = () => {
     onLogin(ETH_PROVIDERS[WALLETCONNECT_PROVIDER]);
+    // close the modal in the state, because we
+    // are no longer in control of the wallet connect modal
+    setModalState({
+      selectedProvider: null,
+    });
+    onModalClose();
   };
   const handleProviderModalClose = () => {
     setModalState({
@@ -112,54 +120,87 @@ const LoginModal: React.FC<LoginModalProps> = props => {
     onModalClose();
   };
 
+  const handleSignUpClick = () => {
+    handleProviderModalClose();
+    if (suggestedSignUpFn) {
+      suggestedSignUpFn();
+    }
+  };
+
   return (
-    <ModalRenderer slotId={props.slotId}>
-      {showModal && !modalState.selectedProvider && (
-        <EthProviderListModal
-          onProviderClick={handleProviderClick}
-          onModalClose={handleProvidersModalClose}
-          providers={[
-            {
-              id: METAMASK_PROVIDER,
-              logo: <Icon type="metamask" size="xl" />,
-              title: 'MetaMask',
-              description: 'Connect to your MetaMask wallet',
-            },
-            {
-              id: WALLETCONNECT_PROVIDER,
-              logo: <Icon type="walletconnect" size="xl" />,
-              title: 'WalletConnect',
-              description: 'Scan with WalletConnect',
-            },
-          ]}
-          footer={
-            <Text textAlign="center" margin={{ top: '1em' }} style={{ userSelect: 'none' }}>
-              <>{helpText}</>
-              <IconLink
-                onClick={onTutorialLinkClick}
-                icon={<Icon type="media" />}
-                label={tutorialLinkLabel}
-                padded={true}
+    <ViewportSizeProvider>
+      <ModalRenderer slotId={props.slotId}>
+        {showModal && !modalState.selectedProvider && (
+          <EthProviderListModal
+            titleLabel={titleLabel}
+            subtitleLabel={subtitleLabel}
+            headerLabel={headerLabel}
+            onProviderClick={handleProviderClick}
+            onModalClose={handleProvidersModalClose}
+            showSignUp={showSignUpModal}
+            onChange={onInputTokenChange}
+            submitted={submitted}
+            submitting={submitting}
+            success={success}
+            hasError={hasError}
+            errorMsg={errorMsg}
+            acceptedTerms={acceptedTerms}
+            validateTokenFn={validateTokenFn}
+            providers={[
+              {
+                id: METAMASK_PROVIDER,
+                logo: <Icon type="metamask" size="md" />,
+                title: 'MetaMask',
+                description: 'Connect your MetaMask wallet',
+              },
+              {
+                id: WALLETCONNECT_PROVIDER,
+                logo: <Icon type="walletconnect" size="md" />,
+                title: 'WalletConnect',
+                description: 'Scan with WalletConnect',
+              },
+            ]}
+            checkedTermsValues={checkedTermsValues}
+            onAcceptTerms={onAcceptTerms}
+            onCheckedTermsValues={onCheckedTermsValues}
+            waitForCheckTerms={waitForCheckTerms}
+          />
+        )}
+        {suggestSignUp && showModal && !showSignUpModal?.status && (
+          <ModalContainer onModalClose={handleProviderModalClose}>
+            <ErrorLoader
+              type="not-registered"
+              title={'No account associated with this Ethereum address'}
+              details={'Please sign up to create an Ethereum World account'}
+              style={{ padding: '1em 3em' }}
+            >
+              <Button
+                primary={true}
+                label={'Sign Up'}
+                style={{ borderRadius: '3px', color: '#fff' }}
+                onClick={handleSignUpClick}
               />
-            </Text>
-          }
-        />
-      )}
-      {showModal && modalState.selectedProvider === METAMASK_PROVIDER && (
-        <EthProviderModal
-          illustration={
-            <EthProviderModalIllustration providerIcon={<Icon type="metamask" size="lg" />} />
-          }
-          headLine={metamaskModalHeadline}
-          message={metamaskModalMessage}
-          onLogin={handleMetamaskLogin}
-          onModalClose={handleProviderModalClose}
-        />
-      )}
-      {showModal && modalState.selectedProvider === WALLETCONNECT_PROVIDER && (
-        <WalletConnectModalTrigger onLogin={handleWalletConnectLogin} />
-      )}
-    </ModalRenderer>
+            </ErrorLoader>
+          </ModalContainer>
+        )}
+        {showModal && !suggestSignUp && modalState.selectedProvider === METAMASK_PROVIDER && (
+          <EthProviderModal
+            illustration={
+              <EthProviderModalIllustration providerIcon={<Icon type="metamask" size="lg" />} />
+            }
+            headLine={metamaskModalHeadline}
+            message={metamaskModalMessage}
+            onLogin={handleMetamaskLogin}
+            onModalClose={handleProviderModalClose}
+            error={props.error}
+            isMobile={size === 'small'}
+          />
+        )}
+        {showModal && !suggestSignUp && modalState.selectedProvider === WALLETCONNECT_PROVIDER && (
+          <WalletConnectModalTrigger onLogin={handleWalletConnectLogin} />
+        )}
+      </ModalRenderer>
+    </ViewportSizeProvider>
   );
 };
 

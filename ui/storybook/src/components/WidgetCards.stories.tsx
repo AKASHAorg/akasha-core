@@ -21,6 +21,7 @@ const {
   MiniInfoWidgetCard,
   TrendingWidgetCard,
   TutorialWidgetCard,
+  CookieWidgetCard,
 } = DS;
 
 storiesOf('Cards/Widget Cards', module)
@@ -85,15 +86,16 @@ storiesOf('Cards/Widget Cards', module)
         titleLabel={text('Title', 'Trending Right Now')}
         topicsLabel={text('Topics label', 'Topics')}
         profilesLabel={text('Profiles label', 'Profiles')}
-        showMoreLabel={text('Show more label', 'Show More')}
         onClickProfile={ethAddress => action('profile Clicked')(ethAddress)}
         onClickTag={tagName => action('tag clicked')(tagName)}
-        onClickSubscribeProfile={ethAddress => action('subscribe profile clicked')(ethAddress)}
-        onClickSubscribeTag={tagName => action('subscribe tag clicked')(tagName)}
-        onClickMoreTags={() => action('Show more Clicked')('Synthetic Event')}
-        onClickMoreProfiles={() => action('Show more Clicked')('Synthetic Event')}
+        handleFollowProfile={ethAddress => action('subscribe profile clicked')(ethAddress)}
+        handleUnfollowProfile={ethAddress => action('subscribe profile clicked')(ethAddress)}
+        handleSubscribeTag={tagName => action('subscribe profile clicked')(tagName)}
+        handleUnsubscribeTag={tagName => action('subscribe profile clicked')(tagName)}
         tags={trendingTagsData}
         profiles={trendingProfilesData}
+        followedProfiles={[]}
+        subscribedTags={[]}
       />
     </Box>
   ))
@@ -129,6 +131,23 @@ storiesOf('Cards/Widget Cards', module)
         handleLearnMore={() => action('handle learn more Clicked')('Synthetic Event')}
         handleCallToAction={() => action('handle call to action Clicked')('Synthetic Event')}
         handleDismiss={() => action('handle dismiss Clicked')('Synthetic Event')}
+      />
+    </Box>
+  ))
+  .add('cookie card', () => (
+    <Box align="center" pad={{ top: '40px' }}>
+      <CookieWidgetCard
+        titleLabel={text('Title Label', 'Cookies 🍪')}
+        contentLabel={text(
+          'Content Label',
+          'To help provide you with the best experience when visiting this Website, we use cookies for security and product improvement purposes in accordance with our',
+        )}
+        privacyUrlLabel={text('Privacy Url Label', 'Privacy Policy')}
+        privacyUrl={text('Privacy Url', 'https://ethereum.world/privacy-policy')}
+        onlyEssentialLabel={text('Only essential', 'Only essential')}
+        acceptAllLabel={text('Accept Label', 'Accept all')}
+        onClickOnlyEssential={() => action('clicked button')('Synthetic Event')}
+        onClickAcceptAll={() => action('clicked button')('Synthetic Event')}
       />
     </Box>
   ));

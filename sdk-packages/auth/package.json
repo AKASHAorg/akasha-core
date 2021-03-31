@@ -32,8 +32,8 @@
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-runtime": "*",
     "@akashaproject/sdk-common": "*",
-    "@akashaproject/sdk-db": "*",
     "@akashaproject/ui-awf-typings": "*",
-    "superagent": "5.2.2"
+    "@textile/hub": "6.1.2",
+    "@textile/threaddb": "0.0.6"
   }
 }

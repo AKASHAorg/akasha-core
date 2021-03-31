@@ -1,45 +1,77 @@
 import * as React from 'react';
 import { Box } from 'grommet';
+import { isMobile } from 'react-device-detect';
+
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { TextIcon } from '../../TextIcon';
 import { IEntryData } from './entry-box';
 import { MobileListModal } from '../../Modals';
+import styled from 'styled-components';
 
-export type ServiceNames = 'twitter' | 'reddit' | 'facebook';
+export type ServiceNames = 'twitter' | 'reddit' | 'facebook' | 'copy';
+
+export type ShareData = {
+  title?: string;
+  text?: string;
+  url?: string;
+};
 
 export interface CardActionProps {
   // data
   entryData: IEntryData;
-  loggedProfileEthAddress?: string;
+  loggedProfileEthAddress?: string | null;
+  // share data
+  sharePostLabel?: string;
+  shareTextLabel?: string;
+  sharePostUrl?: string;
   // labels
   repostsLabel: string;
-  repostLabel: string;
-  repostWithCommentLabel: string;
+  repostLabel?: string;
+  cancelLabel?: string;
+  repostWithCommentLabel?: string;
   repliesLabel: string;
   isBookmarked?: boolean;
-  copyLinkLabel: string;
-  bookmarkLabel: string;
-  bookmarkedLabel: string;
-  shareLabel: string;
+  copyLinkLabel?: string;
+  bookmarkLabel?: string;
+  bookmarkedLabel?: string;
+  shareLabel?: string;
   // handlers
-  handleEntryBookmark: () => void;
+  handleEntryBookmark?: () => void;
   onRepost: () => void;
   handleRepliesClick: () => void;
-  onRepostWithComment: () => void;
-  onShare: (service: ServiceNames) => void;
-  onLinkCopy: () => void;
-  // screen size passed by viewport provider
-  size?: string;
+  onShare: (service: ServiceNames, entryId: string) => void;
+  disableActions?: boolean;
+  onRepostWithComment?: () => void;
+  disableReposting?: boolean;
+  isModerated?: boolean;
 }
+
+const BookmarkButton = styled(TextIcon)<{ isBookmarked?: boolean }>`
+  svg * {
+    ${props => {
+      if (props.isBookmarked) {
+        return `
+          fill: ${props.theme.colors.blue};
+          stroke: ${props.theme.colors.blue};
+        `;
+      }
+      return '';
+    }}
+  }
+`;
 
 const CardActions: React.FC<CardActionProps> = props => {
   const {
     // data
     entryData,
-    loggedProfileEthAddress,
+    // share data
+    sharePostLabel,
+    shareTextLabel,
+    sharePostUrl,
     // labels
     repostsLabel,
     repostLabel,
+    cancelLabel,
     repostWithCommentLabel,
     repliesLabel,
     isBookmarked,
@@ -53,25 +85,46 @@ const CardActions: React.FC<CardActionProps> = props => {
     handleRepliesClick,
     onRepostWithComment,
     onShare,
-    onLinkCopy,
-    // screen size
-    size,
+    disableReposting,
+    disableActions,
+    isModerated,
   } = props;
 
-  const [repostDropOpen, setReplyDropOpen] = React.useState(false);
+  const [repostDropOpen, setRepostDropOpen] = React.useState(false);
   const [shareDropOpen, setShareDropOpen] = React.useState(false);
 
   const repostNodeRef: React.RefObject<any> = React.useRef(null);
   const shareNodeRef: React.RefObject<any> = React.useRef(null);
 
-  const handleRepostsOpen = () => {
-    setReplyDropOpen(!repostDropOpen);
+  const shareData: ShareData = {
+    // @TODO: replace with appropriate title, text and url of the post to be shared
+    title: sharePostLabel,
+    text: shareTextLabel,
+    url: `${sharePostUrl}${entryData.entryId}`,
   };
+
+  // const handleRepostsOpen = () => {
+  //   setRepostDropOpen(!repostDropOpen);
+  // };
   const handleRepostsClose = () => {
-    setReplyDropOpen(false);
+    setRepostDropOpen(false);
   };
 
   const handleShareOpen = () => {
+    const winNavigator: Navigator & {
+      canShare?: (param: ShareData) => void;
+      share?: (data: ShareData) => Promise<void>;
+    } = window.navigator;
+
+    if (
+      isMobile &&
+      winNavigator.share &&
+      winNavigator.canShare &&
+      winNavigator.canShare(shareData)
+    ) {
+      winNavigator.share(shareData);
+      return;
+    }
     setShareDropOpen(!shareDropOpen);
   };
 
@@ -79,7 +132,22 @@ const CardActions: React.FC<CardActionProps> = props => {
     setShareDropOpen(false);
   };
   const handleShare = (service: ServiceNames) => () => {
-    onShare(service);
+    onShare(service, entryData.entryId);
+    setShareDropOpen(false);
+  };
+
+  const handleRepost = (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
+    handleRepostsClose();
+    onRepost();
+  };
+
+  const handleRepostWithComment = (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
+    handleRepostsClose();
+    if (onRepostWithComment) {
+      onRepostWithComment();
+    }
   };
 
   const renderRepostDrop = () => {
@@ -87,24 +155,23 @@ const CardActions: React.FC<CardActionProps> = props => {
       {
         label: repostLabel,
         icon: 'transfer',
-        handler: (e: any) => {
-          // block event bubbling to parent
-          e.stopPropagation();
-          return onRepost();
-        },
+        handler: handleRepost,
       },
       {
         label: repostWithCommentLabel,
         icon: 'edit',
-        handler: (e: any) => {
-          e.stopPropagation();
-          return onRepostWithComment();
-        },
+        handler: handleRepostWithComment,
       },
     ];
 
-    if (size === 'small') {
-      return <MobileListModal menuItems={menuItems} closeModal={handleRepostsClose} />;
+    if (isMobile) {
+      return (
+        <MobileListModal
+          menuItems={menuItems}
+          cancelLabel={cancelLabel}
+          closeModal={handleRepostsClose}
+        />
+      );
     }
 
     return (
@@ -120,7 +187,7 @@ const CardActions: React.FC<CardActionProps> = props => {
             <TextIcon
               iconType="transfer"
               label={repostLabel}
-              onClick={onRepost}
+              onClick={handleRepost}
               clickable={true}
               iconSize="xs"
               fontSize="small"
@@ -130,7 +197,7 @@ const CardActions: React.FC<CardActionProps> = props => {
             <TextIcon
               iconType="edit"
               label={repostWithCommentLabel}
-              onClick={onRepostWithComment}
+              onClick={handleRepostWithComment}
               clickable={true}
               iconSize="xs"
               fontSize="small"
@@ -157,7 +224,7 @@ const CardActions: React.FC<CardActionProps> = props => {
             <TextIcon
               iconType="link"
               label={copyLinkLabel}
-              onClick={onLinkCopy}
+              onClick={handleShare('copy')}
               clickable={true}
               primaryColor={true}
               iconSize="xs"
@@ -202,53 +269,115 @@ const CardActions: React.FC<CardActionProps> = props => {
     );
   };
 
-  const repostsBtnText =
-    size === 'small' ? `${entryData.reposts || 0}` : `${entryData.reposts || 0} ${repostsLabel}`;
-  const repliesBtnText =
-    size === 'small'
-      ? `${entryData.replies?.length || 0}`
-      : `${entryData.replies?.length || 0} ${repliesLabel}`;
-  const bookmarkBtnText =
-    size === 'small' ? undefined : isBookmarked ? bookmarkedLabel : bookmarkLabel;
-  const shareBtnText = size === 'small' ? undefined : shareLabel;
+  const repostsBtnText = isMobile
+    ? `${entryData.reposts || 0}`
+    : `${entryData.reposts || 0} ${repostsLabel}`;
+  const repliesBtnText = isMobile
+    ? `${entryData.replies || 0}`
+    : `${entryData.replies || 0} ${repliesLabel}`;
+  const bookmarkBtnText = isMobile ? undefined : isBookmarked ? bookmarkedLabel : bookmarkLabel;
+  const shareBtnText = isMobile ? undefined : shareLabel;
+
+  if (isModerated) {
+    return (
+      <Box
+        width="75%"
+        alignSelf="center"
+        pad={{ vertical: 'medium' }}
+        direction="row"
+        justify="between"
+      >
+        <TextIcon
+          label={repostsBtnText}
+          iconType="transfer"
+          iconSize="sm"
+          fontSize="large"
+          clickable={disableReposting ? false : true}
+          ref={repostNodeRef}
+          onClick={disableReposting ? () => false : onRepost}
+          disabled={disableReposting}
+        />
+        <TextIcon
+          label={repliesBtnText}
+          iconType="comments"
+          iconSize="sm"
+          fontSize="large"
+          clickable={disableReposting ? false : true}
+          onClick={disableReposting ? () => false : handleRepliesClick}
+          disabled={disableReposting}
+        />
+      </Box>
+    );
+  }
 
   return (
-    <Box pad={{ vertical: 'medium' }} direction="row" justify="between">
+    <Box pad="medium" direction="row" justify="between">
       {repostNodeRef.current && repostDropOpen && renderRepostDrop()}
       <TextIcon
         label={repostsBtnText}
         iconType="transfer"
-        iconSize="md"
-        clickable={true}
+        iconSize="sm"
+        fontSize="large"
+        clickable={!disableReposting && !disableActions}
         ref={repostNodeRef}
-        onClick={handleRepostsOpen}
+        onClick={() => {
+          if (disableActions || disableReposting) {
+            return;
+          }
+          onRepost();
+        }}
+        disabled={disableReposting || disableActions}
       />
       <TextIcon
         label={repliesBtnText}
         iconType="comments"
-        iconSize="md"
-        clickable={true}
-        onClick={handleRepliesClick}
+        iconSize="sm"
+        fontSize="large"
+        clickable={!disableActions}
+        onClick={() => {
+          if (disableActions) {
+            return;
+          }
+          handleRepliesClick();
+        }}
+        disabled={disableActions}
       />
-
-      {isBookmarked !== null && (
+      <BookmarkButton
+        label={bookmarkBtnText}
+        iconType="bookmark"
+        iconSize="sm"
+        fontSize="large"
+        clickable={!disableActions}
+        onClick={() => {
+          if (disableActions) {
+            return;
+          }
+          if (handleEntryBookmark) {
+            handleEntryBookmark();
+          }
+        }}
+        isBookmarked={isBookmarked}
+        disabled={disableActions}
+      />
+      {shareNodeRef.current && shareDropOpen && renderShareDrop()}
+      {/* disable sharing for v0.1 */}
+      {false && (
         <TextIcon
-          label={bookmarkBtnText}
-          iconType="bookmark"
-          iconSize="md"
-          clickable={!!loggedProfileEthAddress}
-          onClick={handleEntryBookmark}
+          label={shareBtnText}
+          iconType="shareSmallDark"
+          iconSize="sm"
+          fontSize="large"
+          ref={shareNodeRef}
+          clickable={!disableActions}
+          onClick={() => {
+            if (disableActions) {
+              return;
+            }
+            handleShareOpen();
+          }}
+          disabled={disableActions}
         />
       )}
-      {shareNodeRef.current && shareDropOpen && renderShareDrop()}
-      <TextIcon
-        label={shareBtnText}
-        iconType="shareSmallDark"
-        iconSize="md"
-        ref={shareNodeRef}
-        clickable={true}
-        onClick={handleShareOpen}
-      />
     </Box>
   );
 };

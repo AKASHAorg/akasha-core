@@ -1,22 +1,30 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { getLoggedProfileStore } from '../state/logged-profile-state';
 import { useTranslation } from 'react-i18next';
+import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
-const { Helmet, EditorCard, ErrorLoader, Box, Button } = DS;
+const { Helmet, EditorCard, ErrorLoader, Box, Button, editorDefaultValue } = DS;
 
 interface NewPostPageProps {
   globalChannel: any;
   sdkModules: any;
+  ethAddress: string | null;
+  pubKey: string | null;
   logger: any;
   showLoginModal: () => void;
-  onError: (err: Error) => void;
+  onError: (err: IAkashaError) => void;
 }
 
 const NewPostPage: React.FC<NewPostPageProps> = props => {
-  const { showLoginModal } = props;
-  const Login = getLoggedProfileStore();
-  const loginEthAddr = Login.useStoreState((state: any) => state.data.ethAddress);
+  const { showLoginModal, sdkModules, ethAddress } = props;
+
+  const [editorState, setEditorState] = React.useState(editorDefaultValue);
+
+  const onUploadRequest = uploadMediaToTextile(
+    sdkModules.profiles.profileService,
+    sdkModules.commons.ipfsService,
+  );
 
   const { t } = useTranslation();
 
@@ -28,12 +36,20 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
     // todo
   };
 
+  const handleGetMentions = () => {
+    // todo
+  };
+
+  const handleGetTags = () => {
+    // todo
+  };
+
   return (
     <Box fill="horizontal">
       <Helmet>
         <title>Write something.. | AKASHA App</title>
       </Helmet>
-      {!loginEthAddr && (
+      {!ethAddress && (
         <ErrorLoader
           type="no-login"
           title={t('No Ethereum address detected')}
@@ -47,15 +63,22 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
           </Box>
         </ErrorLoader>
       )}
-      {loginEthAddr && (
+      {ethAddress && (
         <Box direction="column" align="center">
           <EditorCard
             avatar={'https://www.stevensegallery.com/360/360'}
-            ethAddress={loginEthAddr}
+            ethAddress={ethAddress}
             onPublish={handlePostPublish}
             handleNavigateBack={handleBackNavigation}
             postLabel={t('Publish')}
             placeholderLabel={t('Share your thoughts')}
+            getMentions={handleGetMentions}
+            getTags={handleGetTags}
+            // mentions={mentions}
+            // tags={tags}
+            uploadRequest={onUploadRequest}
+            editorState={editorState}
+            setEditorState={setEditorState}
           />
         </Box>
       )}

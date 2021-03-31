@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' 'unsafe-inline' 'unsafe-eval' cloudflare.com *.cloudflare.com unpkg.com *.akasha.network *.ethereum.world *.walletconnect.org *.infura.io https://* wss://*; img-src https: data: blob:"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width,viewport-fit=cover,initial-scale=1,user-scalable=0,maximum-scale=1"
+    />
+    <meta name="theme-color" content="#000000" />
+    <link rel="shortcut icon" href="/icons/icon-48x48.png" />
+    <link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="256x256" href="/icons/icon-256x256.png" />
+    <link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="stylesheet" href="/fonts/inter.css" />
+    <title>Ethereum World</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.1/umd/react.production.min.js"
+      integrity="sha512-YMtLFKDKe5a4zi7rJ0y4wdGErKZe3tx7L+AXDTxjNDzkv7jsaNhvumeU1xQvw6UqVwBVmYlO9NhsSuSVPUN/xQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/react-is/17.0.1/umd/react-is.production.min.js"
+      integrity="sha512-etfv1dN8QdfqT1mzQZvN+oIRU5LF9V6WfMi1F3VX73isn1VL6sQlD+ZYVFEz5DkuDxZiZ1uAuG6YHZGQjKPdWw=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.1/umd/react-dom.production.min.js"
+      integrity="sha512-vN6rbu+vWW4Ck3s6RbLZs+0gRl5PWOZRUqap38gZtsheSqA2zDeI3PCshuxfYx7ytkoFMrmd0gA2sZZeP1RZYQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/single-spa-react@3.2.0/lib/umd/single-spa-react.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/styled-components/5.2.1/styled-components.min.js"
+      integrity="sha512-lzASbW0hyzHBbXLn4vqlR8V9az75mayKbzAfgbFvuzNEqSJ8jW+GAiygwupbhLUp6C+ZaWo1ryS7JYujhXgeww=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/6.6.3/rxjs.umd.min.js"
+      integrity="sha512-JnZPWAckMDks0CCIeGznqEo7ifmYK7VowHq/NVFlSXGkwxv4OBCJFy7nouOtJZmVldHo7FQLIdeWTI55yyZc4Q=="
+      crossorigin="anonymous"
+    ></script>
+    <script src="/design/main.js" async></script>
+    <style>
+      html,
+      body,
+      #root {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <!-- Matomo -->
+    <script type="text/javascript">
+      var _paq = (window._paq = window._paq || []);
+      _paq.push(['requireConsent']);
+      _paq.push(['requireCookieConsent']);
+      _paq.push(['rememberConsentGiven']);
+      _paq.push(['rememberCookieConsentGiven']);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      // _paq.push(['trackPageView']);
+      // _paq.push(['enableLinkTracking']);
+      (function () {
+        var u = 'https://ethereum.matomo.cloud/';
+        _paq.push(['setTrackerUrl', u + 'matomo.php']);
+        _paq.push(['setSiteId', '2']);
+        var d = document,
+          g = d.createElement('script'),
+          s = d.getElementsByTagName('script')[0];
+        g.type = 'text/javascript';
+        g.async = true;
+        g.src = '//cdn.matomo.cloud/ethereum.matomo.cloud/matomo.js';
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script>
+    <!-- End Matomo Code -->
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker
+            .register('/sw.js')
+            .then(registration => {
+              console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

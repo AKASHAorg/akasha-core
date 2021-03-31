@@ -3,21 +3,23 @@ import * as React from 'react';
 import CommonInterface from '../../interfaces/common.interface';
 import MarginInterface from '../../interfaces/margin.interface';
 import AvatarImage from './avatar-image';
-import { loadPlaceholder } from './placeholders';
-import StyledAvatar, { AvatarSize } from './styled-avatar';
+// import { loadPlaceholder } from './placeholders';
+import StyledAvatar, { AvatarSize, ActiveOverlay } from './styled-avatar';
 
 export interface AvatarProps extends CommonInterface<HTMLDivElement> {
-  ethAddress?: string;
+  ethAddress?: string | null;
   src?: string;
+  active?: boolean;
   onClick?: React.MouseEventHandler<any>;
   alt?: string;
   margin?: MarginInterface;
   backgroundColor?: string;
   border?: 'sm' | 'md' | 'lg';
   size?: AvatarSize;
+  publicImgPath?: string;
 }
 
-export const getAvatarFromSeed = (seed: string) => {
+export const getAvatarFromSeed = (seed: string | null) => {
   let str = seed;
   if (seed && seed.startsWith('0x')) {
     str = seed.replace('0x', '');
@@ -40,17 +42,27 @@ export const getAvatarFromSeed = (seed: string) => {
   return 7;
 };
 
-const defaultProps: Partial<AvatarProps> = {
-  size: 'md' as AvatarSize,
-  ethAddress: '0x0000000000000000000000000000000',
-};
-
-const Avatar: React.FC<AvatarProps & typeof defaultProps> = props => {
-  const { onClick, src, className, size, margin, border, ethAddress } = props;
+const Avatar: React.FC<AvatarProps> = props => {
+  const {
+    onClick,
+    src,
+    className,
+    size = 'md',
+    margin,
+    border,
+    active,
+    ethAddress = '0x0000000000000000000000000000000',
+    publicImgPath = '/images',
+  } = props;
   const isClickable = typeof onClick === 'function';
-  const avatarImage = src
-    ? src
-    : loadPlaceholder(`placeholder_${getAvatarFromSeed(ethAddress as string)}`);
+  let avatarImage;
+  if (src) {
+    avatarImage = src;
+  }
+  if (!avatarImage) {
+    const seed = getAvatarFromSeed(ethAddress);
+    avatarImage = `${publicImgPath}/avatar-placeholder-${seed}.png`;
+  }
 
   return (
     <StyledAvatar
@@ -61,9 +73,10 @@ const Avatar: React.FC<AvatarProps & typeof defaultProps> = props => {
       margin={margin}
       border={border}
     >
-      <React.Suspense fallback={<>...</>}>
+      <React.Suspense fallback={<></>}>
         <AvatarImage image={avatarImage} />
       </React.Suspense>
+      {active && <ActiveOverlay />}
     </StyledAvatar>
   );
 };

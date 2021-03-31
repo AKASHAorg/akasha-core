@@ -6,6 +6,7 @@ import ProfileCard from '../profile-cards/profile-card';
 
 const mockProfileData = {
   ethAddress: '0x003410490050000320006570034567114572000',
+  pubKey: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba',
   avatar: 'https://placebeard.it/480/480',
   coverImage: 'goldenrod',
   name: 'Gilbert The Bearded',
@@ -17,25 +18,40 @@ const mockProfileData = {
   apps: '12',
   profileType: 'user',
   vnd: {},
+  default: [],
 };
 
 const createBaseComponent = (props: any) => (
   <ProfileCard
+    handleShareClick={() => null}
+    loggedEthAddress={null}
     profileData={mockProfileData}
-    onClickApps={props.onClickApps}
+    onClickFollowers={props.onClickFollowers}
     onClickFollowing={props.onClickFollowing}
+    onClickPosts={props.onClickPosts}
     onChangeProfileData={props.onChangeProfileData}
     descriptionLabel="Description"
-    actionsLabel="Popular Actions"
     followingLabel="Followings"
-    appsLabel="Apps"
-    usersLabel="Users"
+    followersLabel="Followers"
+    postsLabel="Posts"
     shareProfileLabel="Share"
     editProfileLabel="Edit"
     cancelLabel="Cancel"
     saveChangesLabel="Save Changes"
+    flagAsLabel="Report Profile"
     changeCoverImageLabel="Change Cover Image"
+    flaggable={true}
+    onEntryFlag={() => null}
     getProfileProvidersData={props.getProfileProvidersData}
+    updateProfileLabel="Update Profile"
+    changeENSLabel="Update Ethereum Name"
+    onENSChangeClick={() => {
+      /* not empty block */
+    }}
+    onUpdateClick={() => {
+      /* not an empty block */
+    }}
+    hideENSButton={false}
   />
 );
 
@@ -48,9 +64,11 @@ describe('<ProfileCard /> Component, (read mode)', () => {
         wrapWithTheme(
           createBaseComponent({
             // tslint:disable-next-line: no-empty
-            onClickApps: () => {},
+            onClickFollowers: () => {},
             // tslint:disable-next-line: no-empty
             onClickFollowing: () => {},
+            // tslint:disable-next-line: no-empty
+            onClickPosts: () => {},
             // tslint:disable-next-line: no-empty
             onChangeProfileData: () => {},
           }),
@@ -89,31 +107,38 @@ describe('<ProfileCard /> Component, (read mode)', () => {
     expect(avatarImages).toHaveLength(1);
   });
 
-  it('should have followings and apps buttons', async () => {
+  it('should have followings and followers and posts buttons', async () => {
     const { findByTestId } = customRender(createBaseComponent({}), {});
 
     const followingButton = await waitForElement(() => findByTestId('following-button'));
-    const appsButton = await waitForElement(() => findByTestId('apps-button'));
+    const followersButton = await waitForElement(() => findByTestId('followers-button'));
+    const postsButton = await waitForElement(() => findByTestId('posts-button'));
     expect(followingButton).toBeDefined();
-    expect(appsButton).toBeDefined();
+    expect(followersButton).toBeDefined();
+    expect(postsButton).toBeDefined();
   });
 
-  it('should call following and apps button handlers', async () => {
-    const onClickAppsHandler = jest.fn();
+  it('should call following and followers and posts button handlers', async () => {
+    const onClickFollowersHandler = jest.fn();
     const onClickFollowingHandler = jest.fn();
+    const onClickPostsHandler = jest.fn();
 
     const { findByTestId } = customRender(
       createBaseComponent({
-        onClickApps: onClickAppsHandler,
+        onClickFollowers: onClickFollowersHandler,
         onClickFollowing: onClickFollowingHandler,
+        onClickPosts: onClickPostsHandler,
       }),
       {},
     );
     const followingButton = await waitForElement(() => findByTestId('following-button'));
-    const appsButton = await waitForElement(() => findByTestId('apps-button'));
+    const followersButton = await waitForElement(() => findByTestId('followers-button'));
+    const postsButton = await waitForElement(() => findByTestId('posts-button'));
     fireEvent.click(followingButton);
-    fireEvent.click(appsButton);
+    fireEvent.click(followersButton);
+    fireEvent.click(postsButton);
     expect(onClickFollowingHandler).toBeCalledTimes(1);
-    expect(onClickAppsHandler).toBeCalledTimes(1);
+    expect(onClickFollowersHandler).toBeCalledTimes(1);
+    expect(onClickPostsHandler).toBeCalledTimes(1);
   });
 });
