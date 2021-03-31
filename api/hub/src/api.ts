@@ -23,7 +23,7 @@ api.post('/validate-token/:token', async (ctx: koa.Context, next: () => Promise<
   await next();
 });
 
-api.post('/add-token/:token', async (ctx: koa.Context, next: () => Promise<any>) => {
+/*api.post('/add-token/:token', async (ctx: koa.Context, next: () => Promise<any>) => {
   const token = ctx?.params?.token;
   if (!token) {
     ctx.status = 401;
@@ -37,6 +37,6 @@ api.post('/add-token/:token', async (ctx: koa.Context, next: () => Promise<any>)
     }
   }
   await next();
-});
+});*/
 
 export default api;
