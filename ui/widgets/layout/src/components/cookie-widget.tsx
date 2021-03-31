@@ -14,12 +14,12 @@ export interface ICookieWidgetProps {
 const CookieWidget: React.FC<ICookieWidgetProps> = props => {
   const [analytics, analyticsActions] = useAnalytics();
   const acceptCookie = (all?: boolean) => {
-    analyticsActions.acceptCookie(all ? CookieConsentTypes.ALL : CookieConsentTypes.ESSENTIAL);
+    analyticsActions.acceptConsent(all ? CookieConsentTypes.ALL : CookieConsentTypes.ESSENTIAL);
   };
 
   return (
     <>
-      {!analytics.consentGiven && (
+      {!analytics.cookieBannerDismissed && (
         <div style={{ ...props.style }}>
           <React.Suspense fallback={<></>}>
             <Translation>

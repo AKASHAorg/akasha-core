@@ -11,13 +11,15 @@ export interface UseAnalyticsActions {
   /* enable tracking */
   enableTracking: () => void;
   /* Store cookie consent in localstorage and enable tracking if it's the case */
-  acceptCookie: (type: CookieConsentTypes) => void;
+  acceptConsent: (type: CookieConsentTypes) => void;
+  /* Used to opt out a user from tracking */
+  rejectConsent: () => void;
   /* Track an event. This is not used yet */
   trackEvent: (category: string, action: string, name: string, value?: string | number) => void;
 }
 
 export interface UseAnalyticsState {
-  consentGiven: null | boolean;
+  cookieBannerDismissed: null | boolean;
   consentType: null | CookieConsentTypes;
 }
 
@@ -25,7 +27,7 @@ const hookGlobal = globalThis as any;
 
 const useAnalytics = (): [UseAnalyticsState, UseAnalyticsActions] => {
   const [state, setState] = React.useState<UseAnalyticsState>({
-    consentGiven: null,
+    cookieBannerDismissed: null,
     consentType: null,
   });
 
@@ -34,7 +36,7 @@ const useAnalytics = (): [UseAnalyticsState, UseAnalyticsActions] => {
       const consentType = localStorage.getItem(COOKIE_CONSENT_NAME);
       if (consentType) {
         setState({
-          consentGiven: true,
+          cookieBannerDismissed: true,
           consentType: CookieConsentTypes[consentType],
         });
         if (consentType === CookieConsentTypes.ALL) {
@@ -47,19 +49,33 @@ const useAnalytics = (): [UseAnalyticsState, UseAnalyticsActions] => {
   const actions: UseAnalyticsActions = {
     enableTracking() {
       if (hookGlobal._paq) {
+        hookGlobal._paq.push(['setConsentGiven']);
         hookGlobal._paq.push(['setCookieConsentGiven']);
+        hookGlobal._paq.push(['trackPageView']);
+        hookGlobal._paq.push(['enableLinkTracking']);
       }
     },
-    acceptCookie(type) {
+    acceptConsent(type) {
       if (globalThis.localStorage) {
         localStorage.setItem(COOKIE_CONSENT_NAME, type);
         setState({
-          consentGiven: true,
+          cookieBannerDismissed: true,
           consentType: type,
         });
         if (type === CookieConsentTypes.ALL) {
           actions.enableTracking();
         }
+      }
+    },
+    rejectConsent() {
+      if (globalThis.localStorage) {
+        localStorage.removeItem(COOKIE_CONSENT_NAME);
+        setState({
+          cookieBannerDismissed: null,
+          consentType: null,
+        });
+        hookGlobal._paq.push(['forgetConsentGiven']);
+        hookGlobal._paq.push(['forgetCookieConsentGiven']);
       }
     },
     trackEvent(category, action, name, value) {
