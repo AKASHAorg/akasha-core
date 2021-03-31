@@ -133,7 +133,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   const handleTagClick = (name: string) => {
-    props.singleSpa.navigateToUrl(`/AKASHA-app/tags/${name}`);
+    props.singleSpa.navigateToUrl(`/social-app/tags/${name}`);
   };
   const handleEntryBookmark = (entryId: string) => {
     if (!loginState.pubKey) {
@@ -298,7 +298,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             <EditorPlaceholder
               ethAddress={loginState.ethAddress}
               onClick={handleToggleEditor}
-              style={{ marginTop: 8 }}
               avatar={loggedProfileData.avatar}
             />
           ) : (

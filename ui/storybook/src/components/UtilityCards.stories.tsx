@@ -5,7 +5,7 @@ import { text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
-const { Box, FilterCard, SwitchCard, ProfileAvatarButton, ViewportSizeProvider } = DS;
+const { Box, FilterCard, SwitchCard, ProfileAvatarButton, ViewportSizeProvider, MdCard } = DS;
 
 export interface SwitchCardComponent {
   count: number;
@@ -76,5 +76,10 @@ storiesOf('Cards/Utility Cards', module)
         buttonValues={['All', 'Posts', 'Topics', 'People']}
         onIconClick={() => action('click icon')('Synthetic Event')}
       />
+    </Box>
+  ))
+  .add('markdown card', () => (
+    <Box align="center" pad={{ top: '40px' }} width="582px">
+      <MdCard mdText={`**Hello**`} />
     </Box>
   ));
