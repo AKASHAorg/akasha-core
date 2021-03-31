@@ -7,7 +7,7 @@ export interface DataProvider {
 export interface Tag {
   _id: string;
   name: string;
-  creationDate: number;
+  creationDate: string;
   posts: string[];
   comments: string[];
 }
@@ -15,7 +15,7 @@ export interface Tag {
 export interface PostItem {
   _id: string;
   title?: string;
-  creationDate: number;
+  creationDate: string;
   author: string;
   type: string;
   content: DataProvider[];
@@ -31,7 +31,7 @@ export interface Profile {
   pubKey: string;
   userName?: string;
   default?: DataProvider[];
-  creationDate: number;
+  creationDate: string;
   following?: string[];
   followers?: string[];
   providers?: DataProvider[];
@@ -40,7 +40,7 @@ export interface Profile {
 
 export interface Comment {
   _id: string;
-  creationDate: number;
+  creationDate: string;
   author: string;
   content: DataProvider[];
   tags: string[];

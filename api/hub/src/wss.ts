@@ -42,7 +42,7 @@ const wss = route.all('/ws/userauth', ctx => {
                 ethAddress: '',
                 pubKey: data.pubkey,
                 _id: '',
-                creationDate: new Date().getTime(),
+                creationDate: new Date().toISOString(),
                 default: [],
                 providers: [],
                 metaData: [],
@@ -81,7 +81,7 @@ const wss = route.all('/ws/userauth', ctx => {
                     return reject(new Error('The invite token was already used.'));
                   }
                   exists.used = true;
-                  exists.updateDate = new Date().getTime();
+                  exists.updateDate = new Date().toISOString();
                   const recoveredAddress = utils.verifyMessage(
                     addressChallenge,
                     r.addressChallenge,

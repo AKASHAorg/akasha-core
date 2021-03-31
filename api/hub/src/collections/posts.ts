@@ -44,7 +44,7 @@ const schema = {
       },
     },
     author: { type: 'string' },
-    creationDate: { type: 'number' },
+    creationDate: { type: 'string' },
     metaData: {
       type: 'array',
       uniqueItems: true,
