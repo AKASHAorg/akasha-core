@@ -178,7 +178,6 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     /**
      * Show akasha subdomain option if it's not using ens domain
      */
-    console.log(userNameType, profileData, 'username type');
     if (
       (hasEnsSubdomainAvail && !currentDefault?.value.endsWith('.akasha.eth')) ||
       detectedEns?.endsWith('.akasha.eth') ||
