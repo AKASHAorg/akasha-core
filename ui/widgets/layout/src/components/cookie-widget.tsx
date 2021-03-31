@@ -5,7 +5,7 @@ import DS from '@akashaproject/design-system';
 import { useAnalytics } from '@akashaproject/ui-awf-hooks';
 import { CookieConsentTypes } from '@akashaproject/ui-awf-hooks/lib/use-analytics';
 
-const { CookieWidgetCard } = DS;
+const { CookieWidgetCard, Text } = DS;
 
 export interface ICookieWidgetProps {
   style?: React.CSSProperties;
@@ -25,10 +25,27 @@ const CookieWidget: React.FC<ICookieWidgetProps> = props => {
             <Translation>
               {t => (
                 <CookieWidgetCard
-                  titleLabel={`${t('Cookies')} 🍪`}
-                  contentLabel={t(
-                    'To help provide you with the best experience when visiting this Website, we use cookies for security and product improvement purposes in accordance with our',
-                  )}
+                  titleLabel={`${t('But first, cookies!')} 🙈🍪`}
+                  contentLabel={
+                    <>
+                      {t(
+                        'This website requires essential cookies for security and stability purposes. ',
+                      )}
+                      <Text
+                        color="accentText"
+                        size="medium"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() =>
+                          window.open('https://matomo.org', 'Matomo', '_blank noopener noreferrer')
+                        }
+                      >
+                        Matomo
+                      </Text>
+                      {t(
+                        ' cookies and tracking can be accepted for product improvement according to our',
+                      )}
+                    </>
+                  }
                   privacyUrlLabel={t('Privacy Policy.')}
                   privacyUrl={`${window.location.protocol}//${window.location.host}/legal/privacy-policy`}
                   onlyEssentialLabel={t('Only essential')}
