@@ -97,7 +97,7 @@ class PostAPI extends DataSource {
     }
     const post: PostItem = {
       _id: '',
-      creationDate: new Date().toISOString(),
+      creationDate: new Date().getTime(),
       author: author,
       type: opt.type || 'DEFAULT',
       content: Array.from(content),
