@@ -1,5 +1,6 @@
 import { Box, Drop } from 'grommet';
 import styled from 'styled-components';
+import { Icon } from '../../Icon/index';
 
 const StyledLayerElemDiv = styled.div`
   border-radius: ${props => props.theme.shapes.borderRadius};
@@ -39,4 +40,19 @@ const StyledSelectBox = styled(Box)`
   }
 `;
 
-export { StyledLayerElemDiv, StyledDrop, StyledDropAlt, StyledProfileDrop, StyledSelectBox };
+const StyledIcon = styled(Icon)`
+  &:hover {
+    & * {
+      stroke: none;
+    }
+  }
+`;
+
+export {
+  StyledLayerElemDiv,
+  StyledDrop,
+  StyledDropAlt,
+  StyledProfileDrop,
+  StyledSelectBox,
+  StyledIcon,
+};

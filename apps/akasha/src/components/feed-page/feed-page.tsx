@@ -298,7 +298,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             <EditorPlaceholder
               ethAddress={loginState.ethAddress}
               onClick={handleToggleEditor}
-              style={{ marginTop: 8 }}
               avatar={loggedProfileData.avatar}
             />
           ) : (
