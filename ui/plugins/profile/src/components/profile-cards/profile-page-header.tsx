@@ -145,6 +145,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     }
     if (ensState.status.registrationComplete) {
       ensActions.resetRegistrationStatus();
+      props.profileActions.getProfileData({ pubKey: profileId });
       props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
       return;
     }
