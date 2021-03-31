@@ -9,7 +9,7 @@ import { BasicCardBox } from '../common/basic-card-box';
 
 export interface ICookieWidgetCard {
   titleLabel: string;
-  contentLabel: string;
+  contentLabel: string | React.ReactElement;
   privacyUrl: string;
   privacyUrlLabel: string;
   onlyEssentialLabel: string;

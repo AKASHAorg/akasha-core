@@ -125,13 +125,13 @@ const useENSRegistration = (
           },
         ]);
         concat(userNameCall, addProvider, makeDefault).subscribe((resp: any) => {
-          if (!resp.data) {
-            return createErrorHandler(
-              'useEnsRegistration.nullData',
-              false,
-              props.onError,
-            )(new Error(`Cannot save ${userName} to your profile.`));
-          }
+          // if (!resp.data) {
+          //   return createErrorHandler(
+          //     'useEnsRegistration.nullData',
+          //     false,
+          //     props.onError,
+          //   )(new Error(`Cannot save ${userName} to your profile.`));
+          // }
           if (resp.data.makeDefaultProvider) {
             setRegistrationState(prev => ({
               ...prev,
