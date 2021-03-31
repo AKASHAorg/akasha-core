@@ -66,7 +66,7 @@ const StyledOverlay = styled(Box)`
 `;
 
 const StyledAccordionPanel = styled(AccordionPanel)<{ isMobile?: boolean }>`
-  margin: ${props => `${(props.theme.shapes.baseSpacing * 2) / 16}rem`};
+  margin: ${props => `${(props.theme.shapes.baseSpacing * 2) / 16}rem`} 0;
   ${props => {
     if (props.isMobile) {
       return;

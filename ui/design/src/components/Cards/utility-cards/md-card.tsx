@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box } from 'grommet';
-import ReactMarkdownWithHtml from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import Spinner from '../../Spinner/index';
 import { BasicCardBox } from '../common/basic-card-box';
@@ -15,9 +15,7 @@ const MdCard: React.FC<IMdCard> = props => {
   const renderContent = () => (
     <>
       {!mdText && <Spinner />}
-      {mdText && (
-        <ReactMarkdownWithHtml plugins={[gfm]} children={mdText} allowDangerousHtml={true} />
-      )}
+      {mdText && <ReactMarkdown plugins={[gfm]} children={mdText} />}
     </>
   );
   return (

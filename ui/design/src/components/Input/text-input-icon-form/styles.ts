@@ -30,6 +30,10 @@ const StyledArrowIcon = styled(Icon)`
 
 const StyledAnchor = styled(Anchor)`
   color: ${props => props.theme.colors.accent};
+  font-weight: ${props => props.theme.shapes.fontWeight.regular};
+  &:hover {
+    text-decoration: none;
+  }
 `;
 
 export { StyledTextInput, StyledArrowIcon, StyledDisabledBox, StyledDivider, StyledAnchor };
