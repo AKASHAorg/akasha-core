@@ -1,12 +1,21 @@
 import * as React from 'react';
-import { Box, Text, Image } from 'grommet';
+import { Anchor, Box, Text, Image } from 'grommet';
 import { isMobile } from 'react-device-detect';
 import styled from 'styled-components';
 
 import { BasicCardBox } from '../common/basic-card-box';
 
 const StyledText = styled(Text)`
-  font-size: 1rem;
+  font-size: ${props => props.theme.shapes.fontSizes.large.size};
+`;
+
+const StyledAnchor = styled(Anchor)`
+  color: ${props => props.theme.colors.accent};
+  font-size: ${props => props.theme.shapes.fontSizes.large.size};
+  font-weight: ${props => props.theme.shapes.fontWeight.regular};
+  &:hover {
+    text-decoration: none;
+  }
 `;
 
 export interface ILoginWidgetCardProps {
@@ -41,15 +50,7 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
           <StyledText margin={{ top: 'xsmall' }}>{subtitle}</StyledText>
           <StyledText margin={{ top: 'xsmall' }}>
             {beforeLinkLabel}{' '}
-            <StyledText
-              color="accentText"
-              style={{ cursor: 'pointer' }}
-              onClick={() =>
-                window.open(writeToUsUrl, writeToUsLabel, '_blank noopener noreferrer')
-              }
-            >
-              {writeToUsLabel}
-            </StyledText>{' '}
+            <StyledAnchor size="medium" href={writeToUsUrl} label={writeToUsLabel} />{' '}
             {afterLinkLabel}
           </StyledText>
         </Box>
