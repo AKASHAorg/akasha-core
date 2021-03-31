@@ -40,7 +40,7 @@ class CommentAPI extends DataSource {
     }
     const comment: Comment = {
       _id: '',
-      creationDate: new Date().getTime(),
+      creationDate: new Date().toISOString(),
       author: author,
       content: Array.from(content),
       postId: commentData.postID,

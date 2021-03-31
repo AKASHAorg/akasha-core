@@ -7,7 +7,7 @@ const schema = {
   properties: {
     _id: { type: 'string' },
     name: { type: 'string' },
-    updateDate: { type: 'number' },
+    updateDate: { type: 'string' },
     used: { type: 'boolean' },
   },
 };

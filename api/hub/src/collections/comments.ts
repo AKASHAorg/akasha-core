@@ -36,7 +36,7 @@ const schema = {
     },
     author: { type: 'string' },
     replyTo: { type: 'string' },
-    creationDate: { type: 'number' },
+    creationDate: { type: 'string' },
     postId: { type: 'string' },
     metaData: {
       type: 'array',
