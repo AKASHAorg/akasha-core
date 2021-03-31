@@ -98,7 +98,7 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
   }, [JSON.stringify(loginState)]);
 
   const handleTagClick = (tagName: string) => {
-    singleSpa.navigateToUrl(`/AKASHA-app/tags/${tagName}`);
+    singleSpa.navigateToUrl(`/social-app/tags/${tagName}`);
   };
   const handleTagSubscribe = (tagName: string) => {
     if (!loginState.ethAddress) {

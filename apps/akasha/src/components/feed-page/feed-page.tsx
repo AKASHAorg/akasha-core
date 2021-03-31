@@ -133,7 +133,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   const handleTagClick = (name: string) => {
-    props.singleSpa.navigateToUrl(`/AKASHA-app/tags/${name}`);
+    props.singleSpa.navigateToUrl(`/social-app/tags/${name}`);
   };
   const handleEntryBookmark = (entryId: string) => {
     if (!loginState.pubKey) {
