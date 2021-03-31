@@ -8,7 +8,7 @@ const schema = {
   properties: {
     _id: { type: 'string' },
     name: { type: 'string' },
-    creationDate: { type: 'number' },
+    creationDate: { type: 'string' },
     posts: {
       type: 'array',
       items: {

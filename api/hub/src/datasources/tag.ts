@@ -129,7 +129,7 @@ class TagAPI extends DataSource {
     }
     const tag: Tag = {
       name: formattedName,
-      creationDate: new Date().getTime(),
+      creationDate: new Date().toISOString(),
       _id: '',
       posts: [],
       comments: [],
