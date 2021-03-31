@@ -8,7 +8,10 @@ export type ILocale = 'es' | 'ro' | 'en';
 
 const formatDate = (date: any, locale?: ILocale) => {
   if (dayjs(date).isValid()) {
-    const time = date.length > 10 ? dayjs(+date) : dayjs.unix(+date);
+    let time = dayjs(date);
+    if (/^[0-9]*$/.test(date)) {
+      time = date.length > 10 ? dayjs(+date) : dayjs.unix(+date);
+    }
     if (locale) {
       return time.locale(locale).format('D MMMM YYYY  H[h]mm');
     }
@@ -19,7 +22,10 @@ const formatDate = (date: any, locale?: ILocale) => {
 
 const formatDateShort = (date: any, locale?: ILocale) => {
   if (dayjs(date).isValid()) {
-    const time = date.length > 10 ? dayjs(+date) : dayjs.unix(+date);
+    let time = dayjs(date);
+    if (/^[0-9]*$/.test(date)) {
+      time = date.length > 10 ? dayjs(+date) : dayjs.unix(+date);
+    }
     if (locale) {
       return time.locale(locale).format('D MMMM YYYY');
     }
@@ -30,7 +36,11 @@ const formatDateShort = (date: any, locale?: ILocale) => {
 
 const formatRelativeTime = (date: any, locale?: ILocale) => {
   if (dayjs(date).isValid()) {
-    const time = date.length > 10 ? dayjs(+date) : dayjs.unix(+date);
+    let time = dayjs(date);
+    if (/^[0-9]*$/.test(date)) {
+      time = date.length > 10 ? dayjs(+date) : dayjs.unix(+date);
+    }
+
     if (locale) {
       return time.locale(locale).fromNow();
     }
