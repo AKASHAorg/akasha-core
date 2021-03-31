@@ -23,7 +23,7 @@ const schema = {
         },
       },
     },
-    creationDate: { type: 'string' },
+    creationDate: { type: 'number' },
     following: {
       type: 'array',
       items: {
