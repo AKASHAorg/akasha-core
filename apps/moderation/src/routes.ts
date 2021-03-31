@@ -4,7 +4,7 @@ export const UNAUTHENTICATED = 'Unauthenticated';
 export const rootRoute = '/moderation-app';
 export const POST = 'Post';
 export const REPLY = 'Reply';
-export const rootAKASHARoute = '/AKASHA-app';
+export const rootAKASHARoute = '/social-app';
 
 export default {
   [HOME]: `${rootRoute}/home`,

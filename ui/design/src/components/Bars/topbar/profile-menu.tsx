@@ -67,7 +67,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
             border={{ style: 'solid', size: '1px', color: 'border', side: 'bottom' }}
             justify="start"
           >
-            <StyledPopoverBox pad="xsmall" margin="xsmall" responsive={false}>
+            <StyledPopoverBox pad="xsmall" margin={{ vertical: 'xsmall' }} responsive={false}>
               <ProfileAvatarButton
                 ethAddress={loggedProfileData?.ethAddress as string}
                 avatarImage={loggedProfileData?.avatar}
@@ -87,7 +87,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
   };
 
   const renderProfileMenu = () => (
-    <Box pad="xsmall" direction="column" align="center" justify="start">
+    <Box pad="xsmall" direction="column" align="center">
       {loggedProfileData?.ethAddress &&
         menuItems?.map((menuItem: IMenuItem, index: number) => (
           <Box fill="horizontal" onClick={handleNavigation(menuItem)} key={index}>
@@ -102,7 +102,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
       >
         <StyledPopoverBox
           pad="xsmall"
-          margin="xsmall"
+          margin={{ vertical: 'xsmall' }}
           align="start"
           onClick={handleFeedbackClick}
           responsive={false}
@@ -154,7 +154,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
         <Box fill="horizontal" justify="start">
           <StyledPopoverBox
             pad="xsmall"
-            margin="xsmall"
+            margin={{ vertical: 'xsmall' }}
             onClick={onLogout}
             fill="horizontal"
             justify="start"

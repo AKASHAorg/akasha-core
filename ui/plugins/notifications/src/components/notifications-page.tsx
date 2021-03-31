@@ -59,7 +59,7 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
   };
 
   const handlePostClick = (entryId: string) => {
-    singleSpa.navigateToUrl(`/AKASHA-app/post/${entryId}`);
+    singleSpa.navigateToUrl(`/social-app/post/${entryId}`);
   };
 
   return (
