@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { createErrorHandler } from './utils/error-handler';
-import { debounceTime } from 'rxjs/operators';
 
 export interface UseMentionsActions {
   getTags: (query: string) => void;
@@ -29,11 +28,10 @@ export const useMentions = (props: UseMentionsProps): [UseMentionsState, UseMent
 
   const actions: UseMentionsActions = {
     getMentions(query) {
-      const mentionsService = profileService
-        .searchProfiles({
-          name: query,
-        })
-        .pipe(debounceTime(300));
+      const mentionsService = profileService.searchProfiles({
+        name: query,
+      });
+
       mentionsService.subscribe((resp: any) => {
         if (resp.data?.searchProfiles) {
           const filteredMentions = resp.data.searchProfiles;
@@ -42,7 +40,7 @@ export const useMentions = (props: UseMentionsProps): [UseMentionsState, UseMent
       }, createErrorHandler('useMentions.getMentions', false, onError));
     },
     getTags(query) {
-      const tagsService = postsService.searchTags({ tagName: query }).pipe(debounceTime(300));
+      const tagsService = postsService.searchTags({ tagName: query });
       tagsService.subscribe((resp: any) => {
         if (resp.data?.searchTags) {
           const filteredTags = resp.data.searchTags;
