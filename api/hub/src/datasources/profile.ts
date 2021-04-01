@@ -83,7 +83,7 @@ class ProfileAPI extends DataSource {
     }
     const profile = profilesFound[0];
     for (const rec of data) {
-      rec.value = decodeURIComponent(rec.value);
+      rec.value = encodeURIComponent(rec.value);
       logger.info('saving provider', rec);
       const existing = profile.providers.findIndex(
         d => d.provider === rec.provider && d.property === rec.property,
@@ -107,8 +107,7 @@ class ProfileAPI extends DataSource {
     }
     const profile = profilesFound[0];
     for (const rec of data) {
-      rec.value = decodeURIComponent(rec.value);
-      logger.info('saving provider', rec);
+      rec.value = encodeURIComponent(rec.value);
       const indexFound = profile.default.findIndex(provider => provider.property === rec.property);
       if (indexFound !== -1) {
         profile.default[indexFound] = rec;
