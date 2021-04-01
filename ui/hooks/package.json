@@ -27,14 +27,14 @@
     "lib"
   ],
   "dependencies": {
-    "@akashaproject/design-system": "*"
+    "@akashaproject/design-system": "*",
+    "rxjs": "6.6.7"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
     "@types/react": "16.9.56"
   },
   "peerDependencies": {
-    "react": "16.14.0",
-    "rxjs": "6.6.7"
+    "react": "16.14.0"
   }
 }

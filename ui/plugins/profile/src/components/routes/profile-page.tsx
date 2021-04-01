@@ -58,6 +58,7 @@ const ProfilePage = (props: ProfilePageProps) => {
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
     ensService: props.sdkModules.registry.ens,
+    rxjsOperators: props.rxjsOperators,
   });
 
   const [postsState, postsActions] = usePosts({

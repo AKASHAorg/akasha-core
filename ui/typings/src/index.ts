@@ -80,6 +80,7 @@ export interface RootComponentProps {
   };
   singleSpa: any;
   unmountSelf: () => void;
+  rxjsOperators: any;
 }
 
 export enum LogoTypeSource {
