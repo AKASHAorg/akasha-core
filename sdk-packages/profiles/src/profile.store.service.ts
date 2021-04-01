@@ -32,6 +32,10 @@ const service: AkashaService = (invoke, log) => {
         },
       },
     });
+    if (result.errors) {
+      log.error(result.errors);
+      throw new Error('Saving this profile provider has failed.');
+    }
     return result.data;
   };
 
@@ -54,6 +58,10 @@ const service: AkashaService = (invoke, log) => {
         },
       },
     });
+    if (result.errors) {
+      log.error(result.errors);
+      throw new Error('Saving this default profile provider has failed.');
+    }
     return result.data;
   };
 
