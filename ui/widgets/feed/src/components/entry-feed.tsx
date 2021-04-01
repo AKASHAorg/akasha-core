@@ -1,7 +1,13 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { IFeedWidgetProps, ItemTypes } from './App';
-import { useErrors, useFollow, useBookmarks, useLoginState } from '@akashaproject/ui-awf-hooks';
+import {
+  useErrors,
+  useFollow,
+  useBookmarks,
+  useLoginState,
+  useMentions,
+} from '@akashaproject/ui-awf-hooks';
 import EntryRenderer from './entry-renderer';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/src/utils/time';
@@ -34,6 +40,12 @@ const EntryFeed = (props: IFeedWidgetProps) => {
   const [bookmarkState, bookmarkActions] = useBookmarks({
     dbService: props.sdkModules.db,
     onError: errorActions.createError,
+  });
+
+  const [mentionsState, mentionsActions] = useMentions({
+    onError: errorActions.createError,
+    profileService: props.sdkModules.profiles.profileService,
+    postsService: props.sdkModules.posts.tags,
   });
 
   React.useEffect(() => {
@@ -80,31 +92,6 @@ const EntryFeed = (props: IFeedWidgetProps) => {
     props.sdkModules.profiles.profileService,
     props.sdkModules.commons.ipfsService,
   );
-
-  const [tags, setTags] = React.useState([]);
-
-  const handleGetTags = (query: string) => {
-    const tagsService = props.sdkModules.posts.tags.searchTags({ tagName: query });
-    tagsService.subscribe((resp: any) => {
-      if (resp.data?.searchTags) {
-        const filteredTags = resp.data.searchTags;
-        setTags(filteredTags);
-      }
-    });
-  };
-
-  const [mentions, setMentions] = React.useState([]);
-  const handleGetMentions = (query: string) => {
-    const mentionsService = props.sdkModules.profiles.profileService.searchProfiles({
-      name: query,
-    });
-    mentionsService.subscribe((resp: any) => {
-      if (resp.data?.searchProfiles) {
-        const filteredMentions = resp.data.searchProfiles;
-        setMentions(filteredMentions);
-      }
-    });
-  };
 
   const handleToggleEditor = () => {
     setShowEditor(prev => !prev);
@@ -159,10 +146,10 @@ const EntryFeed = (props: IFeedWidgetProps) => {
               keepEditingLabel={t('Keep Editing')}
               onPublish={handleEntryPublish}
               handleNavigateBack={handleToggleEditor}
-              getMentions={handleGetMentions}
-              getTags={handleGetTags}
-              tags={tags}
-              mentions={mentions}
+              getMentions={mentionsActions.getMentions}
+              getTags={mentionsActions.getTags}
+              tags={mentionsState.tags}
+              mentions={mentionsState.mentions}
               uploadRequest={onUploadRequest}
               embedEntryData={currentEmbedEntry}
               style={{ width: '36rem' }}

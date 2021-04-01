@@ -1,6 +1,5 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { constants, useBookmarks, useErrors } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import {
   ILoadItemDataPayload,
@@ -8,13 +7,14 @@ import {
 } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
 import { application as loginWidget } from '@akashaproject/ui-widget-login/lib/bootstrap';
 import Parcel from 'single-spa-react/parcel';
+import { constants, useBookmarks, useErrors, useMentions } from '@akashaproject/ui-awf-hooks';
+import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
 import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
@@ -86,6 +86,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     onError: errorActions.createError,
   });
 
+  const [mentionsState, mentionsActions] = useMentions({
+    onError: errorActions.createError,
+    profileService: sdkModules.profiles.profileService,
+    postsService: sdkModules.posts.tags,
+  });
+
   React.useEffect(() => {
     if (Object.keys(errorState).length) {
       logger.error(errorState);
@@ -152,31 +158,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleEntryFlag = (entryId: string) => () => {
     setFlagged(entryId);
     setReportModalOpen();
-  };
-
-  const [tags, setTags] = React.useState([]);
-
-  const handleGetTags = (query: string) => {
-    const tagsService = sdkModules.posts.tags.searchTags({ tagName: query });
-    tagsService.subscribe((resp: any) => {
-      if (resp.data?.searchTags) {
-        const filteredTags = resp.data.searchTags;
-        setTags(filteredTags);
-      }
-    });
-  };
-
-  const [mentions, setMentions] = React.useState([]);
-  const handleGetMentions = (query: string) => {
-    const mentionsService = sdkModules.profiles.profileService.searchProfiles({
-      name: query,
-    });
-    mentionsService.subscribe((resp: any) => {
-      if (resp.data?.searchProfiles) {
-        const filteredMentions = resp.data.searchProfiles;
-        setMentions(filteredMentions);
-      }
-    });
   };
 
   const handleToggleEditor = () => {
@@ -249,7 +230,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               descriptionPlaceholder={t('Please explain your reason(s)')}
               footerText1Label={t('If you are unsure, you can refer to our')}
               footerLink1Label={t('Code of Conduct')}
-              footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
+              footerUrl1={'/legal/code-of-conduct'}
               cancelLabel={t('Cancel')}
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
@@ -278,10 +259,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         keepEditingLabel={t('Keep Editing')}
         onPublish={handleEntryPublish}
         handleNavigateBack={handleToggleEditor}
-        getMentions={handleGetMentions}
-        getTags={handleGetTags}
-        tags={tags}
-        mentions={mentions}
+        getMentions={mentionsActions.getMentions}
+        getTags={mentionsActions.getTags}
+        tags={mentionsState.tags}
+        mentions={mentionsState.mentions}
         uploadRequest={onUploadRequest}
         embedEntryData={currentEmbedEntry}
         style={{ width: '36rem' }}
