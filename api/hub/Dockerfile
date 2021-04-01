@@ -1,6 +1,6 @@
 FROM node:lts-alpine
 
-ENV PORT 3113
+ENV PORT "$PORT"
 ENV NODE_ENV production
 
 WORKDIR /app
