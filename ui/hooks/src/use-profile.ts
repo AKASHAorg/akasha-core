@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { forkJoin, from } from 'rxjs';
+import { forkJoin, from, interval } from 'rxjs';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import {
   IProfileData,
@@ -10,7 +10,7 @@ import {
 } from '@akashaproject/ui-awf-typings/lib/profile';
 import { createErrorHandler } from './utils/error-handler';
 import { getMediaUrl } from './utils/media-utils';
-import { exhaust } from 'rxjs/operators';
+import { debounce, exhaustMap } from 'rxjs/operators';
 
 type voidFunc<T = object> = (arg: T) => void;
 
@@ -109,7 +109,9 @@ export const useProfile = (
       if (props.ensService) {
         setUpdateStatus(prev => ({ ...prev, isValidating: true }));
         if (/^([a-z0-9\.](?![0-9\.]$))+$/g.test(userName)) {
-          const channel = props.ensService.isAvailable({ name: userName });
+          const channel = props.ensService
+            .isAvailable({ name: userName })
+            .pipe(debounce(() => interval(250)));
           channel.subscribe((resp: any) => {
             setUpdateStatus(prev => ({
               ...prev,
@@ -274,48 +276,46 @@ export const useProfile = (
         }
 
         const makeDefault = profileService.makeDefaultProvider(providers);
-        addProvider
-          .pipe(makeDefault)
-          .pipe(exhaust())
-          .subscribe(() => {
-            const updatedFields: { [key: string]: any } = providers
-              .map(provider => {
-                if (
-                  (provider.property === ProfileProviderProperties.COVER_IMAGE ||
-                    provider.property === ProfileProviderProperties.AVATAR) &&
-                  !!provider.value
-                ) {
-                  return {
-                    [provider.property]: `${ipfsGateway}/${provider.value}`,
-                  };
-                }
-                return { [provider.property]: provider.value };
-              })
-              .reduce((acc, curr) => Object.assign(acc, curr), {});
+        const call = addProvider.pipe(exhaustMap(() => makeDefault));
+        call.subscribe(() => {
+          const updatedFields: { [key: string]: any } = providers
+            .map(provider => {
+              if (
+                (provider.property === ProfileProviderProperties.COVER_IMAGE ||
+                  provider.property === ProfileProviderProperties.AVATAR) &&
+                !!provider.value
+              ) {
+                return {
+                  [provider.property]: `${ipfsGateway}/${provider.value}`,
+                };
+              }
+              return { [provider.property]: provider.value };
+            })
+            .reduce((acc, curr) => Object.assign(acc, curr), {});
 
-            if (updatedFields.userName && !profile.userName) {
-              updatedFields.providers = [
-                {
-                  provider: ProfileProviders.EWA_BASIC,
-                  property: ProfileProviderProperties.USERNAME,
-                  value: updatedFields.userName,
-                },
-              ];
-              updatedFields.default = [
-                {
-                  provider: ProfileProviders.EWA_BASIC,
-                  property: ProfileProviderProperties.USERNAME,
-                  value: updatedFields.userName,
-                },
-              ];
-            }
-            actions.updateProfile(updatedFields);
-            setUpdateStatus(prev => ({
-              ...prev,
-              saving: false,
-              updateComplete: true,
-            }));
-          }, createErrorHandler('useProfile.optimisticUpdate.addProviders', false, onError));
+          if (updatedFields.userName && !profile.userName) {
+            updatedFields.providers = [
+              {
+                provider: ProfileProviders.EWA_BASIC,
+                property: ProfileProviderProperties.USERNAME,
+                value: updatedFields.userName,
+              },
+            ];
+            updatedFields.default = [
+              {
+                provider: ProfileProviders.EWA_BASIC,
+                property: ProfileProviderProperties.USERNAME,
+                value: updatedFields.userName,
+              },
+            ];
+          }
+          actions.updateProfile(updatedFields);
+          setUpdateStatus(prev => ({
+            ...prev,
+            saving: false,
+            updateComplete: true,
+          }));
+        }, createErrorHandler('useProfile.optimisticUpdate.addProviders', false, onError));
       }, createErrorHandler('useProfile.optimisticUpdate.forkJoin', false, onError));
     },
     updateUsernameProvider({ userName, provider }) {
@@ -341,22 +341,21 @@ export const useProfile = (
       }
 
       const makeDefault = profileService.makeDefaultProvider([providerData]);
-      addProvider
-        .pipe(makeDefault)
-        .pipe(exhaust())
-        .subscribe(() => {
-          actions.updateProfile({
-            default: [
-              ...profile.default!.filter(p => p.property !== ProfileProviderProperties.USERNAME),
-              providerData,
-            ],
-          });
-          setUpdateStatus(prev => ({
-            ...prev,
-            saving: false,
-            updateComplete: true,
-          }));
-        }, createErrorHandler('useProfile.updateUsernameProvider', false, onError));
+      console.log(exhaustMap, 'em');
+      const call = addProvider.pipe(exhaustMap(() => makeDefault));
+      call.subscribe(() => {
+        actions.updateProfile({
+          default: [
+            ...profile.default!.filter(p => p.property !== ProfileProviderProperties.USERNAME),
+            providerData,
+          ],
+        });
+        setUpdateStatus(prev => ({
+          ...prev,
+          saving: false,
+          updateComplete: true,
+        }));
+      }, createErrorHandler('useProfile.updateUsernameProvider', false, onError));
     },
     resetUpdateStatus() {
       setUpdateStatus({

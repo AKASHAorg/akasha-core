@@ -128,7 +128,7 @@ const useENSRegistration = (
           .pipe(addProvider)
           .pipe(makeDefault)
           .pipe(exhaust())
-          .subscribe((resp: any) => {
+          .subscribe(() => {
             setRegistrationState(prev => ({
               ...prev,
               userName,
