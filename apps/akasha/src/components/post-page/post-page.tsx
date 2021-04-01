@@ -6,6 +6,7 @@ import {
   constants,
   usePosts,
   useBookmarks,
+  useMentions,
   useProfile,
   useFollow,
   useErrors,
@@ -84,6 +85,12 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     postsService: sdkModules.posts,
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
+  });
+
+  const [mentionsState, mentionsActions] = useMentions({
+    onError: errorActions.createError,
+    profileService: sdkModules.profiles.profileService,
+    postsService: sdkModules.posts.tags,
   });
 
   const entryData = React.useMemo(() => {
@@ -233,30 +240,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     postsActions.optimisticPublishComment(data, postId, loginProfile);
   };
 
-  const [tags, setTags] = React.useState([]);
-  const handleGetTags = (query: string) => {
-    const tagsService = sdkModules.posts.tags.searchTags({ tagName: query });
-    tagsService.subscribe((resp: any) => {
-      if (resp.data?.searchTags) {
-        const filteredTags = resp.data.searchTags;
-        setTags(filteredTags);
-      }
-    });
-  };
-
-  const [mentions, setMentions] = React.useState([]);
-  const handleGetMentions = (query: string) => {
-    const mentionsService = sdkModules.profiles.profileService.searchProfiles({
-      name: query,
-    });
-    mentionsService.subscribe((resp: any) => {
-      if (resp.data?.searchProfiles) {
-        const filteredMentions = resp.data.searchProfiles;
-        setMentions(filteredMentions);
-      }
-    });
-  };
-
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
 
   const handleRepost = (_withComment: boolean, entry: any) => {
@@ -397,10 +380,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             keepEditingLabel={t('Keep Editing')}
             onPublish={handleEntryPublish}
             handleNavigateBack={handleToggleEditor}
-            getMentions={handleGetMentions}
-            getTags={handleGetTags}
-            tags={tags}
-            mentions={mentions}
+            getMentions={mentionsActions.getMentions}
+            getTags={mentionsActions.getTags}
+            tags={mentionsState.tags}
+            mentions={mentionsState.mentions}
             uploadRequest={onUploadRequest}
             embedEntryData={currentEmbedEntry}
             style={{ width: '36rem' }}
@@ -492,10 +475,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             postLabel={t('Reply')}
             placeholderLabel={`${t('Reply to')} ${entryAuthorName}`}
             onPublish={handlePublishComment}
-            getMentions={handleGetMentions}
-            getTags={handleGetTags}
-            tags={tags}
-            mentions={mentions}
+            getMentions={mentionsActions.getMentions}
+            getTags={mentionsActions.getTags}
+            tags={mentionsState.tags}
+            mentions={mentionsState.mentions}
             uploadRequest={onUploadRequest}
           />
         </Box>
