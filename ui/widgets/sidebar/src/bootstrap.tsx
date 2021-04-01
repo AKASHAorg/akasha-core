@@ -19,5 +19,5 @@ export const application = {
   loadingFn: (): Promise<any> => import('./components'),
   name: 'ui-widget-sidebar',
   sdkModules: [],
-  title: 'Sidebar-Widget',
+  title: 'Ethereum World',
 };
