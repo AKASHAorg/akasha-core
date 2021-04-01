@@ -116,13 +116,14 @@ class ProfileAPI extends DataSource {
     }
     await db.save(this.dbID, this.collection, [profile]);
     await queryCache.del(this.getCacheKey(pubKey));
+    const name = profile.default.find(p => p.property === 'name')?.value;
     searchIndex
       .saveObject({
         objectID: profile._id,
         category: 'profile',
         userName: profile.userName,
         pubKey: profile.pubKey,
-        name: profile.default.find(p => p.property === 'name')?.value,
+        name: name ? decodeURIComponent(name) : '',
         creationDate: profile.creationDate,
       })
       .then(_ => _)
