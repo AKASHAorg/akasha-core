@@ -417,7 +417,11 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
                 onClick={handleSave}
                 primary={true}
                 disabled={
-                  !formChanged || (!formValues.userName && showUsername) || !formValues.name
+                  !formChanged ||
+                  (!formValues.userName && showUsername) ||
+                  !formValues.name ||
+                  isValidatingUsername ||
+                  !!usernameError
                 }
               />
             </Box>

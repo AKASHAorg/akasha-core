@@ -34,6 +34,8 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   const [loginProfile, loginProfileActions] = useProfile({
     profileService: sdkModules.profiles.profileService,
     ipfsService: sdkModules.commons.ipfsService,
+    onError: errorActions.createError,
+    rxjsOperators: props.rxjsOperators,
   });
 
   React.useEffect(() => {

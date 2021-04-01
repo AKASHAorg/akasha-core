@@ -28,6 +28,7 @@ const Routes: React.FC<RootComponentProps> = props => {
     profileService: props.sdkModules.profiles.profileService,
     ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
+    rxjsOperators: props.rxjsOperators,
   });
 
   const [reportModalOpen, setReportModalOpen] = React.useState(false);

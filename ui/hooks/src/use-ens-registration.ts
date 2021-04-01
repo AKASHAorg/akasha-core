@@ -4,7 +4,6 @@ import {
   ProfileProviders,
 } from '@akashaproject/ui-awf-typings/lib/profile';
 import * as React from 'react';
-import { concat } from 'rxjs';
 import { createErrorHandler } from './utils/error-handler';
 
 export interface UseENSRegistrationProps {
@@ -12,6 +11,7 @@ export interface UseENSRegistrationProps {
   ensService: any;
   ethAddress: string | null;
   onError?: (err: IAkashaError) => void;
+  rxjsOperators?: any;
 }
 
 export interface UseENSRegistrationState {
@@ -124,15 +124,11 @@ const useENSRegistration = (
             value: `${userName.replace('@', '')}`,
           },
         ]);
-        concat(userNameCall, addProvider, makeDefault).subscribe((resp: any) => {
-          // if (!resp.data) {
-          //   return createErrorHandler(
-          //     'useEnsRegistration.nullData',
-          //     false,
-          //     props.onError,
-          //   )(new Error(`Cannot save ${userName} to your profile.`));
-          // }
-          if (resp.data.makeDefaultProvider) {
+        userNameCall
+          .pipe(props.rxjsOperators.tap(() => addProvider))
+          .pipe(props.rxjsOperators.tap(() => makeDefault))
+          .pipe(props.rxjsOperators.exhaust())
+          .subscribe(() => {
             setRegistrationState(prev => ({
               ...prev,
               userName,
@@ -142,8 +138,7 @@ const useENSRegistration = (
                 claiming: false,
               },
             }));
-          }
-        }, createErrorHandler('useEnsRegistration.registerUsername', false, props.onError));
+          }, createErrorHandler('useEnsRegistration.registerUsername', false, props.onError));
       }, createErrorHandler('useEnsRegistration.registerName', false, props.onError));
     },
     updateUserName: (userName: string) => {
