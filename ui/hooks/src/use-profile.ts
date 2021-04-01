@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { concat, forkJoin } from 'rxjs';
+import { forkJoin, from } from 'rxjs';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import {
   IProfileData,
@@ -10,6 +10,7 @@ import {
 } from '@akashaproject/ui-awf-typings/lib/profile';
 import { createErrorHandler } from './utils/error-handler';
 import { getMediaUrl } from './utils/media-utils';
+import { exhaust } from 'rxjs/operators';
 
 type voidFunc<T = object> = (arg: T) => void;
 
@@ -256,7 +257,7 @@ export const useProfile = (
             value: name,
           });
         }
-        let addProvider = Promise.resolve(null);
+        let addProvider = from([null]);
         if (userNameRes) {
           providers.push({
             provider: ProfileProviders.EWA_BASIC,
@@ -273,30 +274,25 @@ export const useProfile = (
         }
 
         const makeDefault = profileService.makeDefaultProvider(providers);
-        concat(addProvider, makeDefault).subscribe((resp: any) => {
-          if (resp && !resp.data) {
-            return createErrorHandler(
-              'useProfile.nullData',
-              false,
-              props.onError,
-            )(new Error(`Cannot save a provider to your profile.`));
-          }
-          const updatedFields: { [key: string]: any } = providers
-            .map(provider => {
-              if (
-                (provider.property === ProfileProviderProperties.COVER_IMAGE ||
-                  provider.property === ProfileProviderProperties.AVATAR) &&
-                !!provider.value
-              ) {
-                return {
-                  [provider.property]: `${ipfsGateway}/${provider.value}`,
-                };
-              }
-              return { [provider.property]: provider.value };
-            })
-            .reduce((acc, curr) => Object.assign(acc, curr), {});
+        addProvider
+          .pipe(makeDefault)
+          .pipe(exhaust())
+          .subscribe(() => {
+            const updatedFields: { [key: string]: any } = providers
+              .map(provider => {
+                if (
+                  (provider.property === ProfileProviderProperties.COVER_IMAGE ||
+                    provider.property === ProfileProviderProperties.AVATAR) &&
+                  !!provider.value
+                ) {
+                  return {
+                    [provider.property]: `${ipfsGateway}/${provider.value}`,
+                  };
+                }
+                return { [provider.property]: provider.value };
+              })
+              .reduce((acc, curr) => Object.assign(acc, curr), {});
 
-          if (resp && resp.data.makeDefaultProvider) {
             if (updatedFields.userName && !profile.userName) {
               updatedFields.providers = [
                 {
@@ -319,8 +315,7 @@ export const useProfile = (
               saving: false,
               updateComplete: true,
             }));
-          }
-        });
+          }, createErrorHandler('useProfile.optimisticUpdate.addProviders', false, onError));
       }, createErrorHandler('useProfile.optimisticUpdate.forkJoin', false, onError));
     },
     updateUsernameProvider({ userName, provider }) {
@@ -333,7 +328,7 @@ export const useProfile = (
         isValidUsername: null,
         notAllowed: false,
       });
-      let addProvider = Promise.resolve(null);
+      let addProvider = from([null]);
       const providerData = {
         provider,
         property: ProfileProviderProperties.USERNAME,
@@ -346,15 +341,10 @@ export const useProfile = (
       }
 
       const makeDefault = profileService.makeDefaultProvider([providerData]);
-      concat(addProvider, makeDefault).subscribe((resp: any) => {
-        if (resp && resp.channelInfo.method === 'makeDefaultProvider' && !resp.data) {
-          return createErrorHandler(
-            'useProfile.updateUsernameProvider',
-            false,
-            props.onError,
-          )(new Error('Cannot save default provider'));
-        }
-        if (resp && resp.data && resp.data.makeDefaultProvider) {
+      addProvider
+        .pipe(makeDefault)
+        .pipe(exhaust())
+        .subscribe(() => {
           actions.updateProfile({
             default: [
               ...profile.default!.filter(p => p.property !== ProfileProviderProperties.USERNAME),
@@ -366,8 +356,7 @@ export const useProfile = (
             saving: false,
             updateComplete: true,
           }));
-        }
-      });
+        }, createErrorHandler('useProfile.updateUsernameProvider', false, onError));
     },
     resetUpdateStatus() {
       setUpdateStatus({
