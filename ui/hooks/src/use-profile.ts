@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { forkJoin, from, interval } from 'rxjs';
+import { forkJoin, from } from 'rxjs';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import {
   IProfileData,
@@ -10,7 +10,6 @@ import {
 } from '@akashaproject/ui-awf-typings/lib/profile';
 import { createErrorHandler } from './utils/error-handler';
 import { getMediaUrl } from './utils/media-utils';
-import { debounce, exhaustMap } from 'rxjs/operators';
 
 type voidFunc<T = object> = (arg: T) => void;
 
@@ -42,6 +41,7 @@ export interface UseProfileProps {
   profileService: any;
   postsService?: any;
   ensService?: any;
+  rxjsOperators?: any;
 }
 
 export interface ProfileUpdateStatus {
@@ -109,9 +109,7 @@ export const useProfile = (
       if (props.ensService) {
         setUpdateStatus(prev => ({ ...prev, isValidating: true }));
         if (/^([a-z0-9\.](?![0-9\.]$))+$/g.test(userName)) {
-          const channel = props.ensService
-            .isAvailable({ name: userName })
-            .pipe(debounce(() => interval(250)));
+          const channel = props.ensService.isAvailable({ name: userName });
           channel.subscribe((resp: any) => {
             setUpdateStatus(prev => ({
               ...prev,
@@ -276,7 +274,7 @@ export const useProfile = (
         }
 
         const makeDefault = profileService.makeDefaultProvider(providers);
-        const call = addProvider.pipe(exhaustMap(() => makeDefault));
+        const call = addProvider.pipe(props.rxjsOperators.exhaustMap(() => makeDefault));
         call.subscribe(() => {
           const updatedFields: { [key: string]: any } = providers
             .map(provider => {
@@ -341,8 +339,7 @@ export const useProfile = (
       }
 
       const makeDefault = profileService.makeDefaultProvider([providerData]);
-      console.log(exhaustMap, 'em');
-      const call = addProvider.pipe(exhaustMap(() => makeDefault));
+      const call = addProvider.pipe(props.rxjsOperators.exhaustMap(() => makeDefault));
       call.subscribe(() => {
         actions.updateProfile({
           default: [

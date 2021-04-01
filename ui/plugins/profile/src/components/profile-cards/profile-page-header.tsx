@@ -131,6 +131,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     ethAddress: props.loggedUserEthAddress,
     ensService: sdkModules.registry.ens,
     onError: ensErrorActions.createError,
+    rxjsOperators: props.rxjsOperators,
   });
 
   const [networkState] = useNetworkState({

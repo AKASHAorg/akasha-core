@@ -99,6 +99,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     profileService: props.sdkModules.profiles.profileService,
     ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
+    rxjsOperators: props.rxjsOperators,
   });
 
   React.useEffect(() => {

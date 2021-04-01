@@ -4,7 +4,6 @@ import {
   ProfileProviders,
 } from '@akashaproject/ui-awf-typings/lib/profile';
 import * as React from 'react';
-import { exhaust } from 'rxjs/operators';
 import { createErrorHandler } from './utils/error-handler';
 
 export interface UseENSRegistrationProps {
@@ -12,6 +11,7 @@ export interface UseENSRegistrationProps {
   ensService: any;
   ethAddress: string | null;
   onError?: (err: IAkashaError) => void;
+  rxjsOperators?: any;
 }
 
 export interface UseENSRegistrationState {
@@ -125,9 +125,9 @@ const useENSRegistration = (
           },
         ]);
         userNameCall
-          .pipe(addProvider)
-          .pipe(makeDefault)
-          .pipe(exhaust())
+          .pipe(props.rxjsOperators.tap(() => addProvider))
+          .pipe(props.rxjsOperators.tap(() => makeDefault))
+          .pipe(props.rxjsOperators.exhaust())
           .subscribe(() => {
             setRegistrationState(prev => ({
               ...prev,
