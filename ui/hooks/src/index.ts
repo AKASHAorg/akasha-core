@@ -18,6 +18,7 @@ import useSearch from './use-search';
 import useLegal from './use-legal';
 import useNetworkState from './use-network-state';
 import useAnalytics from './use-analytics';
+import useMentions from './use-mentions';
 
 export {
   constants,
@@ -41,4 +42,5 @@ export {
   useLegal,
   useNetworkState,
   useAnalytics,
+  useMentions,
 };

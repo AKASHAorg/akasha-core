@@ -102,7 +102,7 @@ const Topbar = (props: ITopbarProps) => {
   const iconSize = isMobileOnly ? 'md' : 'sm';
 
   React.useEffect(() => {
-    const legal = otherAreaItems?.find(menuItem => menuItem.label === 'Legal');
+    const legal = otherAreaItems?.find(menuItem => menuItem.name === 'ui-plugin-legal');
     if (legal && legal.subRoutes?.length) {
       setLegalMenu(legal);
     }
