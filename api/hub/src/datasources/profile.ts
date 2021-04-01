@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB, sendNotification, validateName } from '../helpers';
+import { getAppDB, logger, sendNotification, validateName } from '../helpers';
 import { ThreadID, Where, Client } from '@textile/hub';
 import { DataProvider, Profile } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -84,6 +84,7 @@ class ProfileAPI extends DataSource {
     const profile = profilesFound[0];
     for (const rec of data) {
       rec.value = encodeURIComponent(rec.value);
+      logger.info('saving provider', rec);
       const existing = profile.providers.findIndex(
         d => d.provider === rec.provider && d.property === rec.property,
       );
