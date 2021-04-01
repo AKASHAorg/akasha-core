@@ -20,6 +20,7 @@ jobs:
           KEY: ${{ secrets.SSHKEY }}
           script: |
             cd apps/akasha-world-framework
+            git checkout next
             git pull
             cd api/hub
             docker-compose down
