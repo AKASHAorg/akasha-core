@@ -29,7 +29,7 @@ const CardRenderer = (props: IRenderItemProps) => {
     itemRect,
     updateRef,
     averageItemHeight,
-    itemIndex,
+    // itemIndex,
     className,
     onItemUnmount,
   } = props;
@@ -64,8 +64,8 @@ const CardRenderer = (props: IRenderItemProps) => {
 
   return (
     <CardItemWrapper
-      data-itemid={itemId}
-      data-itemindex={itemIndex}
+      // data-itemid={itemId}
+      // data-itemindex={itemIndex}
       ref={onRef}
       className={className}
       yPos={itemRect ? itemRect.rect.getTop() : itemSpacing}
