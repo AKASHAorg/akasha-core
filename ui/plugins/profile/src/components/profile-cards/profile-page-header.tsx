@@ -448,7 +448,9 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
                 props.profileUpdateStatus.isValidUsername !== null &&
                 !props.profileUpdateStatus.isValidUsername
                   ? props.profileUpdateStatus.notAllowed
-                    ? t('Sorry, username can contain letters, numbers and must end in a letter.')
+                    ? t(
+                        'Sorry, username can contain lowercase letters, numbers and must end in a letter.',
+                      )
                     : t('Sorry, this username has already been taken. Please choose another one.')
                   : undefined
               }
