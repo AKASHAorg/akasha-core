@@ -12,6 +12,7 @@ import {
   useTagSubscribe,
   usePosts,
   useErrors,
+  useMentions,
 } from '@akashaproject/ui-awf-hooks';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
@@ -107,6 +108,12 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
+  });
+
+  const [mentionsState, mentionsActions] = useMentions({
+    onError: errorActions.createError,
+    profileService: sdkModules.profiles.profileService,
+    postsService: sdkModules.posts.tags,
   });
 
   React.useEffect(() => {
@@ -209,30 +216,6 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
     sdkModules.profiles.profileService,
     sdkModules.commons.ipfsService,
   );
-
-  const [tags, setTags] = React.useState([]);
-  const handleGetTags = (query: string) => {
-    const tagsService = sdkModules.posts.tags.searchTags({ tagName: query });
-    tagsService.subscribe((resp: any) => {
-      if (resp.data?.searchTags) {
-        const filteredTags = resp.data.searchTags;
-        setTags(filteredTags);
-      }
-    });
-  };
-
-  const [mentions, setMentions] = React.useState([]);
-  const handleGetMentions = (query: string) => {
-    const mentionsService = sdkModules.profiles.profileService.searchProfiles({
-      name: query,
-    });
-    mentionsService.subscribe((resp: any) => {
-      if (resp.data?.searchProfiles) {
-        const filteredMentions = resp.data.searchProfiles;
-        setMentions(filteredMentions);
-      }
-    });
-  };
 
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
 
@@ -362,10 +345,10 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
             keepEditingLabel={t('Keep Editing')}
             onPublish={handleEntryPublish}
             handleNavigateBack={handleToggleEditor}
-            getMentions={handleGetMentions}
-            getTags={handleGetTags}
-            tags={tags}
-            mentions={mentions}
+            getMentions={mentionsActions.getMentions}
+            getTags={mentionsActions.getTags}
+            tags={mentionsState.tags}
+            mentions={mentionsState.mentions}
             uploadRequest={onUploadRequest}
             embedEntryData={currentEmbedEntry}
             style={{ width: '36rem' }}
