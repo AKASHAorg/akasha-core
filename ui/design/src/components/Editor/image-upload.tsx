@@ -97,7 +97,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
           <StyledImageDiv>
             <Icon type="image" />
           </StyledImageDiv>
-          <Box direction="column" gap="small">
+          <Box direction="column" gap="small" pad={{ left: 'small' }}>
             <StyledValueText>{uploadValueName}</StyledValueText>
 
             <Box direction="row" gap="xsmall" align="center">

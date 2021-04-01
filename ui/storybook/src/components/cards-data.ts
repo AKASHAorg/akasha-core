@@ -336,7 +336,7 @@ const entryData = {
     },
   ],
 
-  time: '1572036522',
+  time: '2011-10-05T14:48:00.000Z',
   replies: 2,
   repliesContent: [
     {

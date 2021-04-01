@@ -167,12 +167,21 @@ const TopbarComponent = (props: TopBarProps) => {
   );
   // sort them so that avatar is last on the topbar menu
   const sortedQuickAccessItems = quickAccessItems.sort((menuItemA, menuItemB) => {
-    if (menuItemA.label.toLowerCase() > menuItemB.label.toLowerCase()) {
-      return -1;
+    if (menuItemA.name && menuItemB.name) {
+      const getPluginName = (pluginName: string) => {
+        const splitName = pluginName.split('-');
+        const name = splitName[splitName.length - 1];
+        return name;
+      };
+
+      if (getPluginName(menuItemA.name) > getPluginName(menuItemB.name)) {
+        return 1;
+      }
+      if (getPluginName(menuItemA.name) < getPluginName(menuItemB.name)) {
+        return -1;
+      }
     }
-    if (menuItemA.label.toLowerCase() < menuItemB.label.toLowerCase()) {
-      return 1;
-    }
+
     return 0;
   });
 
