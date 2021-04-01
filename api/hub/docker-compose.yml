@@ -6,3 +6,8 @@ services:
       - PORT=3113
     ports:
       - '3113:3113'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "15m"
+        max-file: "3"

@@ -56,7 +56,7 @@ class ProfileAPI extends DataSource {
       const q = profilesFound[0].default.filter(p => extractedFields.includes(p.property));
       const returnedObj = JSON.parse(JSON.stringify(profilesFound[0]));
       for (const provider of q) {
-        Object.assign(returnedObj, { [provider.property]: provider.value });
+        Object.assign(returnedObj, { [provider.property]: decodeURIComponent(provider.value) });
       }
       const totalPostsIndex = profilesFound[0].metaData.findIndex(
         m => m.provider === statsProvider && m.property === postsStats,
