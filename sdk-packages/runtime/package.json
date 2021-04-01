@@ -29,12 +29,12 @@
     "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
   },
   "dependencies": {
-    "bottlejs": "1.7.2",
+    "bottlejs": "2.0.0",
     "lru-cache": "5.1.1",
-    "graphql-tag": "2.10.3",
+    "graphql-tag": "2.11.0",
     "apollo-link-http": "1.5.17",
     "apollo-link": "1.2.14",
-    "graphql": "14.6.0",
+    "graphql": "15.5.0",
     "object-hash": "2.0.3"
   }
 }
