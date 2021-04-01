@@ -83,6 +83,7 @@ class ProfileAPI extends DataSource {
     }
     const profile = profilesFound[0];
     for (const rec of data) {
+      rec.value = encodeURIComponent(rec.value);
       const existing = profile.providers.findIndex(
         d => d.provider === rec.provider && d.property === rec.property,
       );
@@ -105,6 +106,7 @@ class ProfileAPI extends DataSource {
     }
     const profile = profilesFound[0];
     for (const rec of data) {
+      rec.value = encodeURIComponent(rec.value);
       const indexFound = profile.default.findIndex(provider => provider.property === rec.property);
       if (indexFound !== -1) {
         profile.default[indexFound] = rec;
@@ -114,13 +116,14 @@ class ProfileAPI extends DataSource {
     }
     await db.save(this.dbID, this.collection, [profile]);
     await queryCache.del(this.getCacheKey(pubKey));
+    const name = profile.default.find(p => p.property === 'name')?.value;
     searchIndex
       .saveObject({
         objectID: profile._id,
         category: 'profile',
         userName: profile.userName,
         pubKey: profile.pubKey,
-        name: profile.default.find(p => p.property === 'name')?.value,
+        name: name ? decodeURIComponent(name) : '',
         creationDate: profile.creationDate,
       })
       .then(_ => _)
@@ -220,6 +223,7 @@ class ProfileAPI extends DataSource {
       return;
     }
     const profile = profilesFound[0];
+    data.value = encodeURIComponent(data.value);
     const indexFound = profile.metaData.findIndex(
       p => p.property === data.property && p.provider === data.provider,
     );
