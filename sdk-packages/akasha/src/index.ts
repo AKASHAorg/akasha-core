@@ -7,8 +7,6 @@ import {
   IWidgetEntry,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import initChannel, { globalChannel } from './channel';
-import * as operators from 'rxjs/operators';
-import { forkJoin, from, zip, of, concat } from 'rxjs';
 import startApi from './api';
 
 export default async function init(appLoaderOptions: {
