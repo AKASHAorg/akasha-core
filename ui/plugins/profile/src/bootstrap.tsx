@@ -39,7 +39,7 @@ export const application: Application = {
     { module: postsModule },
     { module: dbModule },
   ],
-  title: 'AKASHA Profile',
+  title: 'Profile | Ethereum World',
   menuItems: routes,
   logo: { type: LogoTypeSource.AVATAR, value: '' },
   widgets: {

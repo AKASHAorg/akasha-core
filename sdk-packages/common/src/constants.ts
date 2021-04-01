@@ -22,10 +22,10 @@ export const moduleName = 'commons';
 
 export const LEGAL_DOCS_SOURCE = {
   [LEGAL_DOCS.TERMS_OF_USE]: 'QmZJd6V6TQiCSaxaXXedfvGW6c9pu2Kvjpz4iiDAd89xh6',
-  [LEGAL_DOCS.TERMS_OF_SERVICE]: 'QmPrs1Fn1TkAFrVJN3VAri3zELeTxkS6qBqKMi4kTa9a91',
+  [LEGAL_DOCS.TERMS_OF_SERVICE]: 'QmcvHEvprqZJmQa366svdWLL8dVkTRhxdcpzfGbmDL2bVE',
   [LEGAL_DOCS.PRIVACY_POLICY]: 'QmRLbfaNNhjDz4dpYhhYFxkZDABJvivyCxX5VrRQeTDQ3Q',
   [LEGAL_DOCS.CODE_OF_CONDUCT]: 'QmZGeXbYH2YPqHHCSDqtvzYpi91n1XfXgy8QY3Q377hcES',
-  [LEGAL_DOCS.APP_GUIDE]: 'QmVVsNkJqgT5XRNb2L677ASPdcUzLvkm7tFnH7mXgJh1Xv',
+  [LEGAL_DOCS.APP_GUIDE]: 'QmNZGKJywWYTLiyYLzSeAdCva3jHZ2grV4Yz9cw2jpMhQQ',
 };
 const servicePath = buildServicePath(moduleName);
 

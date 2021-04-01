@@ -145,6 +145,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     }
     if (ensState.status.registrationComplete) {
       ensActions.resetRegistrationStatus();
+      props.profileActions.getProfileData({ pubKey: profileId });
       props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
       return;
     }
@@ -178,10 +179,9 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
      * Show akasha subdomain option if it's not using ens domain
      */
     if (
-      (hasEnsSubdomainAvail && !currentDefault?.value.endsWith('.akasha.eth')) ||
+      hasEnsSubdomainAvail ||
       detectedEns?.endsWith('.akasha.eth') ||
-      (currentDefault?.provider === ProfileProviders.ENS &&
-        !currentDefault.value.endsWith('.akasha.eth')) ||
+      currentDefault?.provider === ProfileProviders.ENS ||
       currentDefault?.provider === ProfileProviders.EWA_BASIC
     ) {
       options.push({
@@ -226,11 +226,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     /**
      * Show ethAddress option if the user aready have akasha subdomain or ens domain
      */
-    if (
-      userNameType.default &&
-      currentDefault &&
-      currentDefault.provider === ProfileProviders.ENS
-    ) {
+    if (hasEnsSubdomainAvail || hasEnsDomainAvail) {
       options.push({
         type: ENSOptionTypes.ETH_ADDRESS,
         label: t('Display only my Ethereum address'),

@@ -42,7 +42,7 @@
     "@akashaproject/sdk-registry": "*",
     "@akashaproject/sdk-posts": "*",
     "single-spa-react": "3.2.0",
-    "rxjs": "6.6.3",
+    "rxjs": "6.6.7",
     "util": "0.12.3",
     "assert": "2.0.0",
     "stream-browserify": "3.0.0",
@@ -72,8 +72,5 @@
     "workbox-webpack-plugin": "5.1.4",
     "html-webpack-plugin": "4.5.0",
     "graphql": "15.4.0"
-  },
-  "peerDependencies": {
-    "rxjs": "^6.6.3"
   }
 }

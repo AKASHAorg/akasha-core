@@ -13,6 +13,8 @@ export interface ISearchBar {
 const MobileSearchBar: React.FC<ISearchBar> = props => {
   const { inputValue, setInputValue, inputPlaceholderLabel, onSearch, handleCloseInput } = props;
 
+  const [showSearch, setShowSearch] = React.useState(true);
+
   const handleSearch = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key === 'Enter') {
       onSearch(inputValue);
@@ -38,13 +40,21 @@ const MobileSearchBar: React.FC<ISearchBar> = props => {
         placeholder={inputPlaceholderLabel}
         plain={true}
         onKeyDown={handleSearch}
+        onFocus={() => {
+          if (!showSearch) {
+            setShowSearch(true);
+          }
+        }}
       />
       <Icon
-        type={inputValue ? 'close' : 'search'}
+        type={inputValue && !showSearch ? 'close' : 'search'}
         size="md"
         onClick={() => {
-          if (inputValue) {
-            return setInputValue('');
+          if (inputValue && !showSearch) {
+            setInputValue('');
+          } else if (inputValue && showSearch) {
+            onSearch(inputValue);
+            setShowSearch(false);
           }
         }}
         primaryColor={true}

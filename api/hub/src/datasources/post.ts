@@ -52,7 +52,9 @@ class PostAPI extends DataSource {
   async getPosts(limit: number, offset: string, pubKey?: string) {
     let posts;
     const db: Client = await getAppDB();
-    if (!(await queryCache.has(this.allPostsCache))) {
+    const hasAllPostsCache = await queryCache.has(this.allPostsCache);
+    if (!hasAllPostsCache) {
+      logger.info('creating redis cache');
       posts = await db.find<PostItem>(this.dbID, this.collection, {
         sort: { desc: true, fieldPath: 'creationDate' },
       });

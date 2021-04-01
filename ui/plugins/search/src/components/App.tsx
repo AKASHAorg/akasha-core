@@ -36,7 +36,7 @@ class App extends PureComponent<RootComponentProps> {
           <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
             <I18nextProvider i18n={i18n ? i18n : null}>
               <Helmet>
-                <title>Search</title>
+                <title>Search | Ethereum World</title>
               </Helmet>
               <ViewportSizeProvider>
                 <Routes {...this.props} />

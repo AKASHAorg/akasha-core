@@ -27,7 +27,7 @@ export const application: Application = {
   loadingFn: (): Promise<any> => import('./components'),
   name: 'ui-plugin-legal',
   sdkModules: [{ module: commons }],
-  title: 'Legal',
+  title: 'Legal | Ethereum World',
   menuItems: routes,
   logo: { type: LogoTypeSource.ICON, value: 'legal' },
 };
