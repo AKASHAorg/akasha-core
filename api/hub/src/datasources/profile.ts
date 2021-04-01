@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB, sendNotification, validateName } from '../helpers';
+import { getAppDB, logger, sendNotification, validateName } from '../helpers';
 import { ThreadID, Where, Client } from '@textile/hub';
 import { DataProvider, Profile } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -56,7 +56,7 @@ class ProfileAPI extends DataSource {
       const q = profilesFound[0].default.filter(p => extractedFields.includes(p.property));
       const returnedObj = JSON.parse(JSON.stringify(profilesFound[0]));
       for (const provider of q) {
-        Object.assign(returnedObj, { [provider.property]: provider.value });
+        Object.assign(returnedObj, { [provider.property]: decodeURIComponent(provider.value) });
       }
       const totalPostsIndex = profilesFound[0].metaData.findIndex(
         m => m.provider === statsProvider && m.property === postsStats,
@@ -83,6 +83,8 @@ class ProfileAPI extends DataSource {
     }
     const profile = profilesFound[0];
     for (const rec of data) {
+      rec.value = decodeURIComponent(rec.value);
+      logger.info('saving provider', rec);
       const existing = profile.providers.findIndex(
         d => d.provider === rec.provider && d.property === rec.property,
       );
@@ -105,6 +107,8 @@ class ProfileAPI extends DataSource {
     }
     const profile = profilesFound[0];
     for (const rec of data) {
+      rec.value = decodeURIComponent(rec.value);
+      logger.info('saving provider', rec);
       const indexFound = profile.default.findIndex(provider => provider.property === rec.property);
       if (indexFound !== -1) {
         profile.default[indexFound] = rec;
@@ -114,13 +118,14 @@ class ProfileAPI extends DataSource {
     }
     await db.save(this.dbID, this.collection, [profile]);
     await queryCache.del(this.getCacheKey(pubKey));
+    const name = profile.default.find(p => p.property === 'name')?.value;
     searchIndex
       .saveObject({
         objectID: profile._id,
         category: 'profile',
         userName: profile.userName,
         pubKey: profile.pubKey,
-        name: profile.default.find(p => p.property === 'name')?.value,
+        name: name ? decodeURIComponent(name) : '',
         creationDate: profile.creationDate,
       })
       .then(_ => _)
@@ -220,6 +225,7 @@ class ProfileAPI extends DataSource {
       return;
     }
     const profile = profilesFound[0];
+    data.value = encodeURIComponent(data.value);
     const indexFound = profile.metaData.findIndex(
       p => p.property === data.property && p.provider === data.provider,
     );
