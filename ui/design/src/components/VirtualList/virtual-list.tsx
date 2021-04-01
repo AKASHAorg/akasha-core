@@ -1,4 +1,4 @@
-import throttle from 'lodash.throttle';
+// import throttle from 'lodash.throttle';
 import * as React from 'react';
 import { AnchorData, ItemRects, IVirtualListProps } from './interfaces';
 import ListViewport from './list-viewport';
@@ -20,9 +20,9 @@ export interface ScrollData {
   globalOffsetTop: number;
 }
 
-const DEFAULT_LOAD_LIMIT = 5;
+const DEFAULT_LOAD_LIMIT = 3;
 const DEFAULT_ITEM_SPACING = 8;
-const DEFAULT_OVERSCAN_SIZE = 8;
+const DEFAULT_OVERSCAN_SIZE = 6;
 
 const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   const {
@@ -188,7 +188,7 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
       setPositions(positions => {
         setAnchorData(prev => {
           const newScrollTop = viewportActions.getScrollTop();
-          if (Math.abs(newScrollTop - prev.scrollTop) <= scrollData.current.averageItemHeight / 2) {
+          if (Math.abs(newScrollTop - prev.scrollTop) <= scrollData.current.averageItemHeight / 4) {
             return prev;
           }
           return getAnchor({
@@ -209,8 +209,8 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
     /* @TODO: */
   };
 
-  const throttledScroll = throttle(handleScroll, 250, { trailing: true, leading: false });
-  const onScroll = throttledScroll;
+  // const throttledScroll = throttle(handleScroll, 150, { trailing: true, leading: false });
+  const onScroll = handleScroll;
   const onResize = handleResize;
   /**
    * Attach scroll and resize listeners

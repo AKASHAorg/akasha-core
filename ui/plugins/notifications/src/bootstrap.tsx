@@ -33,6 +33,6 @@ export const application: Application = {
     [rootRoute]: [TrendingWidget],
   },
   sdkModules: [{ module: commonModule }, { module: authModule }, { module: profilesModule }],
-  title: 'Notifications',
+  title: 'Notifications | Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'notifications' },
 };

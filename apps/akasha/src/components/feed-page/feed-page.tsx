@@ -219,7 +219,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   return (
     <Box fill="horizontal">
       <Helmet>
-        <title>AKASHA Feed | Ethereum.world</title>
+        <title>Ethereum World</title>
       </Helmet>
       <ModalRenderer slotId={props.layout.app.modalSlotId}>
         {reportModalOpen && (

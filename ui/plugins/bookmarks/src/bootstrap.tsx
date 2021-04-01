@@ -41,6 +41,6 @@ export const application: Application = {
     { module: commons },
     { module: profiles },
   ],
-  title: 'Bookmarks',
+  title: 'Bookmarks | Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'bookmark' },
 };
