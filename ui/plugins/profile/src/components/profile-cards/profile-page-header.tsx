@@ -131,6 +131,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     ethAddress: props.loggedUserEthAddress,
     ensService: sdkModules.registry.ens,
     onError: ensErrorActions.createError,
+    rxjsOperators: props.rxjsOperators,
   });
 
   const [networkState] = useNetworkState({
@@ -397,7 +398,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               descriptionPlaceholder={t('Please explain your reason(s)')}
               footerText1Label={t('If you are unsure, you can refer to our ')}
               footerLink1Label={t('Code of Conduct')}
-              footerUrl1={'https://akasha.slab.com/public/ethereum-world-code-of-conduct-e7ejzqoo'}
+              footerUrl1={'/legal/code-of-conduct'}
               cancelLabel={t('Cancel')}
               reportLabel={t('Report')}
               blockLabel={t('Block User')}
