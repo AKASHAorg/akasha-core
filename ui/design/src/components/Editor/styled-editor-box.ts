@@ -54,6 +54,7 @@ const StyledImageDiv = styled.div`
 `;
 
 const StyledUploadingDiv = styled.div<{ width?: number; height?: number }>`
+  position: relative;
   height: ${props => (props.height ? `${props.height}px` : '8.125rem')};
   width: ${props => (props.width ? `${props.width}px` : '100%')};
   background-color: ${props => props.theme.colors.ultraLightBackground};
