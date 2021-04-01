@@ -16,9 +16,6 @@ const service: AkashaService = (invoke, log) => {
   const addProfileProvider = async (opt: LinkedProperty[]) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
     const { signData } = await invoke(authServices[AUTH_SERVICE]);
-    for (const rec of opt) {
-      rec.value = encodeURIComponent(rec.value);
-    }
     const signedData = await signData(opt, true);
     const mutation = `
   mutation AddProfileProvider($data: [DataProviderInput]) {
@@ -45,9 +42,6 @@ const service: AkashaService = (invoke, log) => {
   const makeDefaultProvider = async (opt: LinkedProperty[]) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
     const { signData } = await invoke(authServices[AUTH_SERVICE]);
-    for (const rec of opt) {
-      rec.value = encodeURIComponent(rec.value);
-    }
     const signedData = await signData(opt, true);
     const mutation = `
   mutation MakeDefaultProvider($data: [DataProviderInput]) {
