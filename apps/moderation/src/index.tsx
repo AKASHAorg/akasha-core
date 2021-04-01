@@ -25,7 +25,7 @@ export const application: Application = {
     { module: 'posts' },
   ],
   menuItems: routes,
-  title: 'Moderator Dashboard',
+  title: 'Moderator Dashboard | Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'appModeration' },
   widgets: {},
 };

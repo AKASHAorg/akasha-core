@@ -47,7 +47,7 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
   return (
     <Box fill="horizontal">
       <Helmet>
-        <title>Write something.. | AKASHA App</title>
+        <title>Write something.. | Ethereum World</title>
       </Helmet>
       {!ethAddress && (
         <ErrorLoader

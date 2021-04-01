@@ -47,7 +47,7 @@ export const ScrollableWidgetArea: any = styled.div`
     @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
       overflow-y: auto;
       overflow-x: hidden;
-      height: calc(100vh - ${TOPBAR_HEIGHT}px - 0.5em);
+      height: calc(100vh - ${TOPBAR_HEIGHT}px - 1em);
     }
   `}
 `;

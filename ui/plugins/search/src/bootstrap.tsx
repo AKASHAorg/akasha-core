@@ -40,7 +40,7 @@ export const application: Application = {
     { module: posts },
     { module: dbModule },
   ],
-  title: 'Search',
+  title: 'Search | Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'search' },
   widgets: {
     [searchRoute]: [TrendingWidget],
