@@ -181,7 +181,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   return (
     <Box fill="horizontal">
       <Helmet>
-        <title>Tag Page</title>
+        <title>Ethereum World</title>
       </Helmet>
       <ModalRenderer slotId={props.layout.app.modalSlotId}>
         {reportModalOpen && (

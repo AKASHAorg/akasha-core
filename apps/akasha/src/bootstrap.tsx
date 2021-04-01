@@ -32,7 +32,7 @@ export const application: Application = {
     { module: posts },
   ],
   menuItems: routes,
-  title: 'AKASHA',
+  title: 'Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
   widgets: {
     [userPostsRoute]: [ProfileCardWidget],

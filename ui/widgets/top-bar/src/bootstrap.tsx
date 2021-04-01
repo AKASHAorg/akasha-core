@@ -22,5 +22,5 @@ export const application = {
   loadingFn: (): Promise<any> => import('./components'),
   name: 'ui-widget-topbar',
   sdkModules: [{ module: commonModule }, { module: authModule }, { module: profilesModule }],
-  title: 'Topbar Widget',
+  title: 'Ethereum World',
 };

@@ -42,7 +42,7 @@ const ListViewport: React.FC<IListViewportProps> = props => {
       <TransitionGroup component={null}>
         {renderSlice.map(itemId => {
           return (
-            <CSSTransition classNames="vlist-item" timeout={300} key={itemId}>
+            <CSSTransition classNames="vlist-item" timeout={150} key={itemId}>
               {(state: TransitionStatus) => (
                 <CardRenderer
                   className={state}
