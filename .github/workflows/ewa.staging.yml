@@ -1,11 +1,9 @@
-name: deploy production ethereum.world api
+name: deploy staging ethereum.world api
 
 on:
   push:
-    tags:
-      - '**'
     branches:
-      - releases
+      - next
     paths:
       - '.github/workflows/**'
       - 'api/**'
@@ -21,10 +19,9 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           KEY: ${{ secrets.SSHKEY }}
           script: |
-            cd apps/ewa-api-prod
-            git checkout releases
+            cd apps/akasha-world-framework
             git pull
             cd api/hub
-            docker-compose -p ewa-api-production -f docker-compose.production.yml down
-            docker-compose -p ewa-api-production -f docker-compose.production.yml build --no-cache
-            docker-compose -p ewa-api-production -f docker-compose.production.yml up -d
+            docker-compose down
+            docker-compose build --no-cache
+            docker-compose up -d
