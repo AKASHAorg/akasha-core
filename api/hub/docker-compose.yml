@@ -2,5 +2,7 @@ version: '3.9'
 services:
   graphql:
     build: .
+    environment:
+      - PORT=3113
     ports:
       - '3113:3113'
