@@ -338,7 +338,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
-        <title>Ethereum World | Post</title>
+        <title>Post | Ethereum World</title>
       </Helmet>
       <ModalRenderer slotId={props.layout.app.modalSlotId}>
         {reportModalOpen && (
