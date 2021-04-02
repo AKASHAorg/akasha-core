@@ -98,6 +98,7 @@ const service: AkashaService = (invoke, log) => {
       },
     });
     if (result.errors) {
+      log.error('comment errors', result.errors);
       throw new Error('Could not save the comment!');
     }
     gqlStash.clear();
