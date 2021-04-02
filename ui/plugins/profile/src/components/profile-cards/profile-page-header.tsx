@@ -136,7 +136,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     rxjsOperators: props.rxjsOperators,
   });
 
-  const [networkState] = useNetworkState({
+  const [networkState, networkActions] = useNetworkState({
     web3Service: sdkModules.commons.web3Service,
   });
 
@@ -161,6 +161,9 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
       loggedUserEthAddress !== profileData.ethAddress
     ) {
       followActions.isFollowing(loggedUserEthAddress, profileData.ethAddress);
+    }
+    if (loggedUserEthAddress) {
+      networkActions.checkNetwork();
     }
   }, [loggedUserEthAddress, profileData.ethAddress]);
 
