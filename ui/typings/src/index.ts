@@ -93,6 +93,7 @@ export enum EthProviders {
   None = 1,
   Web3Injected,
   WalletConnect,
+  FallbackProvider,
 }
 export const AppLoader = AppLoaderTypes;
 

@@ -267,26 +267,19 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       return Promise.resolve(currentUser);
     }
     if (!sessionStorage.getItem(providerKey)) {
+      return Promise.resolve(null);
+    }
+
+    const localUser = sessionStorage.getItem(currentUserKey);
+    if (localUser) {
       globalChannel.next({
-        data: false,
+        data: true,
         channelInfo: {
           servicePath: services[AUTH_SERVICE],
           method: waitForAuth,
           args: null,
         },
       });
-      return Promise.resolve(null);
-    }
-    const localUser = sessionStorage.getItem(currentUserKey);
-    globalChannel.next({
-      data: true,
-      channelInfo: {
-        servicePath: services[AUTH_SERVICE],
-        method: waitForAuth,
-        args: null,
-      },
-    });
-    if (localUser) {
       try {
         globalChannel.next({
           data: JSON.parse(localUser),

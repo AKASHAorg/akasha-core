@@ -23,6 +23,10 @@ export default async function getProvider(
     return ethers.getDefaultProvider(network);
   }
 
+  if (provider === EthProviders.FallbackProvider) {
+    return ethers.getDefaultProvider(network, { infura: process.env.INFURA_ID });
+  }
+
   if (provider === EthProviders.Web3Injected || !provider) {
     ethProvider = await ConnectToInjected();
   }
