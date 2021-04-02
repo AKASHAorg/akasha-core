@@ -107,6 +107,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     profileData,
     loggedUserEthAddress,
     sdkModules,
+    rxjsOperators,
     logger,
     profileId,
     globalChannel,
@@ -117,6 +118,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
 
   const { t } = useTranslation();
   const [followedProfiles, followActions] = useFollow({
+    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
@@ -134,7 +136,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     rxjsOperators: props.rxjsOperators,
   });
 
-  const [networkState] = useNetworkState({
+  const [networkState, networkActions] = useNetworkState({
     web3Service: sdkModules.commons.web3Service,
   });
 
@@ -159,6 +161,9 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
       loggedUserEthAddress !== profileData.ethAddress
     ) {
       followActions.isFollowing(loggedUserEthAddress, profileData.ethAddress);
+    }
+    if (loggedUserEthAddress) {
+      networkActions.checkNetwork();
     }
   }, [loggedUserEthAddress, profileData.ethAddress]);
 

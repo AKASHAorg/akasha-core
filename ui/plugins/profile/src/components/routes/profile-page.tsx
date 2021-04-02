@@ -42,6 +42,7 @@ const ProfilePage = (props: ProfilePageProps) => {
     setFlagged,
     showLoginModal,
     setReportModalOpen,
+    rxjsOperators,
   } = props;
   const location = useLocation();
 
@@ -256,6 +257,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         sdkModules={props.sdkModules}
         layout={props.layout}
         globalChannel={props.globalChannel}
+        rxjsOperators={rxjsOperators}
         ethAddress={loggedEthAddress}
         onNavigate={handleNavigation}
         onLoginModalOpen={handleLoginModalOpen}

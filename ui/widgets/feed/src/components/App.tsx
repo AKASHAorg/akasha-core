@@ -22,6 +22,7 @@ export interface IFeedWidgetProps {
   virtualListRef?: any;
   globalChannel?: any;
   sdkModules: any;
+  rxjsOperators: any;
   layout: any;
   listHeader?: React.ReactElement;
   itemType: ItemTypes;
