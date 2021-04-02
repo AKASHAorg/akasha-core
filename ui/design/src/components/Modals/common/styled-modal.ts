@@ -77,9 +77,22 @@ const StyledButtonWrapper = styled(Box)`
 
 const ModalButton = styled(Button)<IOptionalButtonProps>`
   height: auto;
-  width: 8.8rem;
-  font-size: ${props => (props.isMobile ? '0.9rem' : '0.8rem')};
   border-width: 1px;
+  font-size: ${props => (props.isMobile ? '0.9rem' : '0.8rem')};
+  padding: 0.3rem 0.7rem;
+  ${props => {
+    if (props.isMobile) {
+      return css`
+        width: 50%;
+      `;
+    }
+    if (props.isOnFeedback) {
+      return css`
+        min-width: 8.8rem;
+      `;
+    }
+    return;
+  }}
 `;
 
 const StyledFooterArea = styled(Box)`
