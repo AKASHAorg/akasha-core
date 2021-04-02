@@ -14,13 +14,14 @@ import EntryCardRenderer from './entry-renderer';
 const { VirtualList, ErrorInfoCard, ErrorLoader, Spinner } = DS;
 
 const BookmarksPage = (props: RootComponentProps) => {
-  const { globalChannel, sdkModules, logger } = props;
+  const { globalChannel, sdkModules, logger, rxjsOperators } = props;
 
   const { t } = useTranslation();
 
   const [errorState, errorActions] = useErrors({ logger });
 
   const [loginState] = useLoginState({
+    rxjsOperators,
     globalChannel: globalChannel,
     onError: errorActions.createError,
     authService: sdkModules.auth.authService,
@@ -143,6 +144,7 @@ const BookmarksPage = (props: RootComponentProps) => {
                         logger={logger}
                         globalChannel={globalChannel}
                         sdkModules={sdkModules}
+                        rxjsOperators={rxjsOperators}
                         bookmarkState={bookmarkState}
                         ethAddress={loginState.ethAddress}
                         onBookmark={handleBookmarkClick}

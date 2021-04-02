@@ -107,6 +107,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     profileData,
     loggedUserEthAddress,
     sdkModules,
+    rxjsOperators,
     logger,
     profileId,
     globalChannel,
@@ -117,6 +118,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
 
   const { t } = useTranslation();
   const [followedProfiles, followActions] = useFollow({
+    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {

@@ -15,7 +15,7 @@ import useErrorState from '@akashaproject/ui-awf-hooks/lib/use-error-state';
 const { TrendingWidgetCard, ErrorInfoCard, ErrorLoader, LoginModal } = DS;
 
 const TrendingWidget: React.FC<RootComponentProps> = props => {
-  const { globalChannel, sdkModules, logger, singleSpa } = props;
+  const { globalChannel, sdkModules, logger, singleSpa, rxjsOperators } = props;
 
   const { t } = useTranslation();
 
@@ -27,6 +27,7 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
   });
 
   const [loginState, loginActions] = useLoginState({
+    rxjsOperators,
     globalChannel: globalChannel,
     onError: errorActions.createError,
     authService: sdkModules.auth.authService,
@@ -35,12 +36,14 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
   });
 
   const [followedProfiles, followActions] = useFollow({
+    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
   });
 
   const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
+    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,

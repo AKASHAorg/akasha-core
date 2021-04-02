@@ -11,6 +11,7 @@ export interface PostRendererProps {
   sdkModules: any;
   logger: any;
   globalChannel: any;
+  rxjsOperators: any;
   itemId?: string;
   itemData?: any;
   locale: any;
@@ -40,6 +41,7 @@ const PostRenderer = (props: PostRendererProps) => {
     sdkModules,
     logger,
     globalChannel,
+    rxjsOperators,
     contentClickable,
     bookmarkState,
     hidePublishTime,
@@ -51,6 +53,7 @@ const PostRenderer = (props: PostRendererProps) => {
   const { t } = useTranslation();
 
   const [followedProfiles, followActions] = useFollow({
+    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
