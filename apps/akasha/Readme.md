@@ -21,21 +21,21 @@ Akasha Integration App (Ethereum World) is the foremost implementation of the Ak
 
 The core components include:
 
-### Feed page
-A scrollable list of entries. [view](./src/components/feed-page) 
+> ### Feed page
+> A scrollable list of entries. 
 
-### Post page
-A single entry with its comment(s). [view](./src/components/post-page)
+> ### Post page
+> A single entry with its comment(s).
 
-### Tag feed page
-A scrollable list of entries associated with a specific tag. [view](/.src/components/tag-feed-page)
+> ### Tag feed page
+> A scrollable list of entries associated with a specific tag.
 
 ## Services
 
-These are methods that interact with, modify and/enrich data from the API or affect the overall behaviour of components. They include [Posting service](./src/services/posting-service.ts), [Routing service](./src/services/routing-service.ts)
+These are methods that interact with, modify and/enrich data from the API or affect the overall behaviour of components. They include `Posting service`, `Routing service`
 
 ## Widgets
 Standalone elements that are conditionally rendered on the widget area of the app based on the active route. A sample widget include:
 
-### Trending widget
-Displays the trending tags. [view](./src/widgets/trending-widget)
+> ### Trending widget
+> Displays the trending tags.

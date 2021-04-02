@@ -19,18 +19,18 @@ Moderation App is integrated into the Ethereum World to assist in reporting and 
 
 The core components include:
 
-### Content List
-A scrollable list of entries. [view](./src/components/content-list.tsx) 
+> ### Content List
+> A scrollable list of entries.
 
-### Content Tab
-Switch like component that controls the view between pending and moderated items. [view](./src/components/content-tab.tsx)
+> ### Content Tab
+> Switch like component that controls the view between pending and moderated items.
 
-### Prompt Authentication
-Blocks access to the moderation app for unauthenticated users. [view](./src/components/prompt-authentication.tsx)
+> ### Prompt Authentication
+> Blocks access to the moderation app for unauthenticated users.
 
-### Prompt Authorization
-Blocks access to the moderation app for unauthorized users. [view](./src/components/prompt-authorization.tsx)
+> ### Prompt Authorization
+> Blocks access to the moderation app for unauthorized users.
 
 ## Services
 
-These are methods that interact with, modify and/enrich data from the API or affect the overall behaviour of components. They include [Posting service](./src/services/posting-service.ts), [Routing service](./src/services/routing-service.ts)
+These are methods that interact with, modify and/enrich data from the API or affect the overall behaviour of components. They include `Posting service`, `Routing service`
