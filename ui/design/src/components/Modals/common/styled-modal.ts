@@ -72,20 +72,23 @@ const StyledContentArea = styled(Box)<IMobileProps>`
 const StyledButtonWrapper = styled(Box)`
   margin: 1rem 0;
   width: 100%;
-  @media only screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
-    width: 75%;
-  }
+  justify-content: center;
 `;
 
 const ModalButton = styled(Button)<IOptionalButtonProps>`
   height: auto;
-  border-width: 0.1rem;
+  border-width: 1px;
   font-size: ${props => (props.isMobile ? '0.9rem' : '0.8rem')};
-  padding: ${props => (props.isMobile ? '0.75rem 0' : '0.3rem 0.7rem')};
+  padding: 0.3rem 0.7rem;
   ${props => {
-    if (props.isMobile || props.isOnFeedback) {
+    if (props.isMobile) {
       return css`
         width: 50%;
+      `;
+    }
+    if (props.isOnFeedback) {
+      return css`
+        min-width: 8.8rem;
       `;
     }
     return;
