@@ -1,7 +1,7 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB } from '../helpers';
+import { getAppDB, sendAuthorNotification } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
-import { DataProvider, Comment } from '../collections/interfaces';
+import { DataProvider, Comment, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 import { searchIndex } from './search-indexes';
 
@@ -38,6 +38,10 @@ class CommentAPI extends DataSource {
     if (!author) {
       throw new Error('Not authorized');
     }
+    const post = await db.findByID<PostItem>(this.dbID, 'Posts', commentData.postID);
+    if (!post) {
+      throw new Error('This post does not exist.');
+    }
     const comment: Comment = {
       _id: '',
       creationDate: new Date().getTime(),
@@ -65,6 +69,26 @@ class CommentAPI extends DataSource {
       postId: comment.postId,
       content: comment.content.find(e => e.property === 'textContent')?.value,
     });
+    await sendAuthorNotification(post.author, {
+      property: 'NEW_COMMENT',
+      provider: 'awf.graphql.comments.api',
+      value: {
+        postID: comment.postId,
+        author: author,
+        commentID: commentID,
+      },
+    });
+    for (const commentMentionedAuthor of comment.mentions) {
+      await sendAuthorNotification(commentMentionedAuthor, {
+        property: 'COMMENT_MENTION',
+        provider: 'awf.graphql.comments.api',
+        value: {
+          postID: comment.postId,
+          author: author,
+          commentID: commentID,
+        },
+      });
+    }
     await queryCache.del(this.getAllCommentsCacheKey(commentData.postID));
     return commentID;
   }
