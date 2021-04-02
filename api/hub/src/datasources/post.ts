@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB, getMailSender, logger } from '../helpers';
+import { getAppDB, getMailSender, logger, sendAuthorNotification } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
 import { DataProvider, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -121,6 +121,10 @@ class PostAPI extends DataSource {
         }
       }
     }
+    const textContent = post.content.find(e => e.property === 'textContent');
+    if (textContent) {
+      textContent.value = Buffer.from(textContent.value).toString('base64');
+    }
     logger.info('saving a new post:', post);
     const postID = await db.create(this.dbID, this.collection, [post]);
     logger.info('created a new post:', postID);
@@ -141,7 +145,7 @@ class PostAPI extends DataSource {
         tags: post.tags,
         category: 'post',
         creationDate: post.creationDate,
-        content: post.content.find(e => e.property === 'textContent')?.value,
+        content: textContent ? Buffer.from(textContent?.value, 'base64').toString() : '',
         title: post.title,
       })
       .then(_ => logger.info('indexed post:', postID))
@@ -160,21 +164,8 @@ class PostAPI extends DataSource {
       },
     };
     for (const recipient of mentions) {
-      await this.sendNotification(recipient, notification);
+      await sendAuthorNotification(recipient, notification);
     }
-  }
-  async sendNotification(
-    recipient: string,
-    notification: { property: string; provider: string; value: any },
-  ) {
-    if (recipient === notification?.value?.author) {
-      return;
-    }
-    const mailSender = await getMailSender();
-    const textEncoder = new TextEncoder();
-    const encodedNotification = textEncoder.encode(JSON.stringify(notification));
-    logger.info('sending notification to', recipient);
-    await mailSender.sendMessage(recipient, encodedNotification);
   }
   async addQuotes(quotedPosts: string[], postID: string, author: string) {
     const db: Client = await getAppDB();
@@ -208,7 +199,7 @@ class PostAPI extends DataSource {
             quotedPost: post._id,
           },
         };
-        await this.sendNotification(post.author, notificationObj);
+        await sendAuthorNotification(post.author, notificationObj);
         await queryCache.del(this.getPostCacheKey(post._id));
       }
     }
