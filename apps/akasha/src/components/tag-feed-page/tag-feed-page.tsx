@@ -27,6 +27,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const {
     sdkModules,
     globalChannel,
+    rxjsOperators,
     flagged,
     reportModalOpen,
     setFlagged,
@@ -70,6 +71,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   });
 
   const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
+    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
@@ -246,6 +248,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         sdkModules={props.sdkModules}
         layout={props.layout}
         globalChannel={props.globalChannel}
+        rxjsOperators={rxjsOperators}
         ethAddress={loginState.ethAddress}
         onNavigate={handleNavigation}
         onLoginModalOpen={showLoginModal}

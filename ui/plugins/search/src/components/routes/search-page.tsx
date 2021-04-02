@@ -43,6 +43,7 @@ interface SearchPageProps {
   sdkModules: any;
   logger: any;
   globalChannel: any;
+  rxjsOperators: any;
   singleSpa: any;
   loginState: UseLoginState;
   loggedProfileData: any;
@@ -57,6 +58,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
     logger,
     singleSpa,
     globalChannel,
+    rxjsOperators,
     loginState,
     loggedProfileData,
     modalState,
@@ -97,6 +99,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
   });
 
   const [followedProfiles, followActions] = useFollow({
+    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
@@ -105,6 +108,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
   });
 
   const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
+    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
