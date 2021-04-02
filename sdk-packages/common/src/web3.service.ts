@@ -36,7 +36,7 @@ const service: AkashaService = (invoke, log) => {
     const stash: any = await invoke(commonServices[CACHE_SERVICE]).getStash();
     const web3Provider = stash.get(commonServices[WEB3_SERVICE]);
     if (!web3Provider) {
-      return await regen(provider || EthProviders.Web3Injected);
+      return await regen(provider || EthProviders.FallbackProvider);
     }
     log.info('reusing an existing ethers provider instance');
     return web3Provider;
