@@ -56,7 +56,9 @@ class ProfileAPI extends DataSource {
       const q = profilesFound[0].default.filter(p => extractedFields.includes(p.property));
       const returnedObj = JSON.parse(JSON.stringify(profilesFound[0]));
       for (const provider of q) {
-        Object.assign(returnedObj, { [provider.property]: decodeURIComponent(provider.value) });
+        Object.assign(returnedObj, {
+          [provider.property]: Buffer.from(provider.value, 'base64').toString(),
+        });
       }
       const totalPostsIndex = profilesFound[0].metaData.findIndex(
         m => m.provider === statsProvider && m.property === postsStats,
@@ -83,7 +85,7 @@ class ProfileAPI extends DataSource {
     }
     const profile = profilesFound[0];
     for (const rec of data) {
-      rec.value = encodeURIComponent(rec.value);
+      rec.value = Buffer.from(rec.value).toString('base64');
       logger.info('saving provider', rec);
       const existing = profile.providers.findIndex(
         d => d.provider === rec.provider && d.property === rec.property,
@@ -107,7 +109,7 @@ class ProfileAPI extends DataSource {
     }
     const profile = profilesFound[0];
     for (const rec of data) {
-      rec.value = encodeURIComponent(rec.value);
+      rec.value = Buffer.from(rec.value).toString('base64');
       const indexFound = profile.default.findIndex(provider => provider.property === rec.property);
       if (indexFound !== -1) {
         profile.default[indexFound] = rec;
@@ -124,7 +126,7 @@ class ProfileAPI extends DataSource {
         category: 'profile',
         userName: profile.userName,
         pubKey: profile.pubKey,
-        name: name ? decodeURIComponent(name) : '',
+        name: name ? Buffer.from(name, 'base64').toString() : '',
         creationDate: profile.creationDate,
       })
       .then(_ => _)

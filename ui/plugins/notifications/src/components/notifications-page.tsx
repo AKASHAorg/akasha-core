@@ -13,14 +13,16 @@ interface AppRoutesProps {
   logger: any;
   globalChannel: any;
   singleSpa: any;
+  rxjsOperators: any;
 }
 
 const NotificationsPage: React.FC<AppRoutesProps> = props => {
-  const { sdkModules, logger, globalChannel, singleSpa } = props;
+  const { sdkModules, logger, globalChannel, singleSpa, rxjsOperators } = props;
 
   const { t } = useTranslation();
 
   const [loginState] = useLoginState({
+    rxjsOperators,
     globalChannel: globalChannel,
     onError: (err: IAkashaError) => {
       logger.error('useLoginState error %j', err);
@@ -33,6 +35,7 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
   const [notifErrors, notifErrorActions] = useErrorState({ logger });
 
   const [notificationsState, notificationsActions] = useNotifications({
+    rxjsOperators,
     onError: notifErrorActions.createError,
     globalChannel: globalChannel,
     authService: sdkModules.auth.authService,

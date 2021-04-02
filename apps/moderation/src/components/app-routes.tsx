@@ -17,13 +17,14 @@ interface AppRoutesProps {
 }
 
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
-  const { sdkModules, globalChannel, layout, onError } = props;
+  const { sdkModules, globalChannel, layout, onError, rxjsOperators } = props;
 
   const [loginModalState, setLoginModalState] = React.useState(false);
 
   const { t } = useTranslation();
 
   const [loginState, loginActions] = useLoginState({
+    rxjsOperators,
     globalChannel: globalChannel,
     onError: onError,
     authService: sdkModules.auth.authService,
