@@ -20,6 +20,7 @@ export interface IEntryCardRendererProps {
   sdkModules: any;
   logger: any;
   globalChannel: any;
+  rxjsOperators: any;
   itemId?: string;
   itemData?: any;
   isBookmarked?: boolean;
@@ -53,6 +54,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     sdkModules,
     logger,
     globalChannel,
+    rxjsOperators,
     contentClickable,
     disableReposting,
     moderatedContentLabel,
@@ -75,6 +77,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   const { t } = useTranslation();
 
   const [followedProfiles, followActions] = useFollow({
+    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {

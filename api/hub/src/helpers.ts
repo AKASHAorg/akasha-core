@@ -109,7 +109,12 @@ export const sendNotification = async (recipient: string, notificationObj: objec
   const ms = await getMailSender();
   const textEncoder = new TextEncoder();
   const encodedNotification = textEncoder.encode(JSON.stringify(notificationObj));
-  await ms.sendMessage(recipient, encodedNotification);
+  logger.info('sending notification to', recipient);
+  try {
+    await ms.sendMessage(recipient, encodedNotification);
+  } catch (e) {
+    logger.error('notification error', e);
+  }
 };
 
 export const logger = winston.createLogger({
@@ -181,4 +186,14 @@ export const verifyEd25519Sig = async (args: {
   }
   serializedData = encoder.encode(serializedData);
   return pub.verify(serializedData, sig);
+};
+
+export const sendAuthorNotification = async (
+  recipient: string,
+  notification: { property: string; provider: string; value: any },
+) => {
+  if (recipient === notification?.value?.author) {
+    return;
+  }
+  return sendNotification(recipient, notification);
 };

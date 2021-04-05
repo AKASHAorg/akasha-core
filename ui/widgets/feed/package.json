@@ -4,7 +4,8 @@
   "description": "Feed widget",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
-    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)"
+    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
+    "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)"
   ],
   "license": "MIT",
   "repository": {

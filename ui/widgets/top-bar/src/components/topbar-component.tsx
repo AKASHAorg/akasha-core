@@ -27,6 +27,7 @@ interface TopBarProps {
   globalChannel: any;
   logger: any;
   sdkModules: any;
+  rxjsOperators: any;
 }
 
 const TopbarComponent = (props: TopBarProps) => {
@@ -37,6 +38,7 @@ const TopbarComponent = (props: TopBarProps) => {
     toggleSidebar,
     modalSlotId,
     globalChannel,
+    rxjsOperators,
     logger,
   } = props;
 
@@ -52,6 +54,7 @@ const TopbarComponent = (props: TopBarProps) => {
   const [errorState, errorActions] = useErrors({ logger });
 
   const [loginState, loginActions] = useLoginState({
+    rxjsOperators,
     globalChannel,
     onError: errorActions.createError,
     ipfsService: props.sdkModules.commons.ipfsService,
@@ -87,6 +90,7 @@ const TopbarComponent = (props: TopBarProps) => {
   });
 
   const [notificationsState, notificationActions] = useNotifications({
+    rxjsOperators,
     globalChannel,
     onError: err => logger.error(err),
     authService: props.sdkModules.auth.authService,

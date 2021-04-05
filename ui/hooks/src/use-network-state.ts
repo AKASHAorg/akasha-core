@@ -13,14 +13,11 @@ export interface UseNetworkActions {
   checkNetwork: () => void;
 }
 
+/* Note: Do not call checkNetwork automatically! Only after loginEthAddress detected */
 const useNetworkState = (props: UseNetworkProps): [UseNetworkState, UseNetworkActions] => {
   const [state, setState] = React.useState<UseNetworkState>({
     networkNotSupported: false,
   });
-
-  React.useEffect(() => {
-    actions.checkNetwork();
-  }, []);
 
   const actions = {
     checkNetwork() {

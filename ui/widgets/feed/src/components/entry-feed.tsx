@@ -16,36 +16,38 @@ import { uploadMediaToTextile } from '../utils/media-utils';
 const { VirtualList, ErrorInfoCard, ErrorLoader, EditorModal } = DS;
 
 const EntryFeed = (props: IFeedWidgetProps) => {
-  const { errors } = props;
+  const { errors, sdkModules, globalChannel, rxjsOperators } = props;
   const [errorState, errorActions] = useErrors({ logger: props.logger });
   const { t, i18n } = useTranslation('ui-widget-feed');
 
   const [loginState] = useLoginState({
-    profileService: props.sdkModules.profiles.profileService,
-    ipfsService: props.sdkModules.commons.ipfsService,
+    rxjsOperators,
+    profileService: sdkModules.profiles.profileService,
+    ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
-    authService: props.sdkModules.auth.authService,
-    globalChannel: props.globalChannel,
+    authService: sdkModules.auth.authService,
+    globalChannel: globalChannel,
   });
 
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
   const [showEditor, setShowEditor] = React.useState<boolean>(false);
 
   const [followedProfiles, followActions] = useFollow({
-    globalChannel: props.globalChannel,
-    profileService: props.sdkModules.profiles.profileService,
+    rxjsOperators,
+    globalChannel: globalChannel,
+    profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
   });
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    dbService: props.sdkModules.db,
+    dbService: sdkModules.db,
     onError: errorActions.createError,
   });
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
-    profileService: props.sdkModules.profiles.profileService,
-    postsService: props.sdkModules.posts.tags,
+    profileService: sdkModules.profiles.profileService,
+    postsService: sdkModules.posts.tags,
   });
 
   React.useEffect(() => {
@@ -89,8 +91,8 @@ const EntryFeed = (props: IFeedWidgetProps) => {
   const locale: any = i18n.languages[0];
 
   const onUploadRequest = uploadMediaToTextile(
-    props.sdkModules.profiles.profileService,
-    props.sdkModules.commons.ipfsService,
+    sdkModules.profiles.profileService,
+    sdkModules.commons.ipfsService,
   );
 
   const handleToggleEditor = () => {
