@@ -55,12 +55,15 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
           </StyledText>
         </Box>
         <Box
-          width={isMobile ? '60%' : '43%'}
+          width={isMobile ? '100%' : '43%'}
           margin={{ ...(isMobile && { bottom: 'small' }) }}
           pad={{ ...(!isMobile && { right: 'small' }) }}
-          alignSelf="center"
         >
-          <Image fit="contain" src={`${publicImgPath}/login-widget-illustration.png`} />
+          <Image
+            style={{ ...(isMobile && { width: '60%', alignSelf: 'center' }) }}
+            fit="contain"
+            src={`${publicImgPath}/login-widget-illustration.png`}
+          />
         </Box>
       </Box>
     </BasicCardBox>
