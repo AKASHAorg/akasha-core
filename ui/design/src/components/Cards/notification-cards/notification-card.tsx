@@ -17,7 +17,8 @@ export interface INotificationsCard {
   // labels
   notificationsLabel?: string;
   followingLabel?: string;
-  mentionedLabel?: string;
+  mentionedPostLabel?: string;
+  mentionedCommentLabel?: string;
   repostLabel?: string;
   replyLabel?: string;
   markAsReadLabel?: string;
@@ -36,7 +37,8 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     isFetching,
     notificationsLabel,
     followingLabel,
-    mentionedLabel,
+    mentionedPostLabel,
+    mentionedCommentLabel,
     replyLabel,
     repostLabel,
     markAsReadLabel,
@@ -59,28 +61,46 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     let label;
     let clickHandler;
     // handle old mentions data structure
-    const postID = Array.isArray(notif.body.value.postID)
-      ? notif.body.value.postID[0]
-      : notif.body.value.postID;
+    const postID = Array.isArray(notif.body?.value?.postID)
+      ? notif.body?.value?.postID[0]
+      : notif.body?.value?.postID;
+    const commentID = Array.isArray(notif.body?.value?.commentID)
+      ? notif.body?.value?.commentID[0]
+      : notif.body?.value?.commentID;
     switch (notif.body.property) {
       case 'POST_MENTION':
-        label = mentionedLabel;
+        label = mentionedPostLabel;
         clickHandler = () => {
-          handleEntryClick(postID);
+          if (postID) {
+            handleEntryClick(postID);
+          }
           handleMessageRead(notif.id);
         };
         break;
-      case 'POST_REPLY':
+      case 'COMMENT_MENTION':
+        label = mentionedCommentLabel;
+        clickHandler = () => {
+          if (commentID) {
+            handleEntryClick(commentID);
+          }
+          handleMessageRead(notif.id);
+        };
+        break;
+      case 'NEW_COMMENT':
         label = replyLabel;
         clickHandler = () => {
-          handleEntryClick(postID);
+          if (commentID) {
+            handleEntryClick(commentID);
+          }
           handleMessageRead(notif.id);
         };
         break;
       case 'POST_QUOTE':
         label = repostLabel;
         clickHandler = () => {
-          handleEntryClick(postID);
+          if (postID) {
+            handleEntryClick(postID);
+          }
           handleMessageRead(notif.id);
         };
         break;
@@ -193,7 +213,8 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
 };
 NotificationsCard.defaultProps = {
   notificationsLabel: 'Notifications',
-  mentionedLabel: 'mentioned you in a post',
+  mentionedPostLabel: 'mentioned you in a post',
+  mentionedCommentLabel: 'mentioned you in a comment',
   replyLabel: 'replied to your post',
   followingLabel: 'is now following you',
   repostLabel: 'reposted your post',

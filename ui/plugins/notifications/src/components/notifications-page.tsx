@@ -94,7 +94,8 @@ const NotificationsPage: React.FC<AppRoutesProps> = props => {
                 notifications={notificationsState.notifications}
                 notificationsLabel={t('Notifications')}
                 followingLabel={t('is now following you')}
-                mentionedLabel={t('mentioned you in a post')}
+                mentionedPostLabel={t('mentioned you in a post')}
+                mentionedCommentLabel={t('mentioned you in a comment')}
                 replyLabel={t('replied to your post')}
                 repostLabel={t('reposted your post')}
                 markAsReadLabel={t('Mark as read')}
