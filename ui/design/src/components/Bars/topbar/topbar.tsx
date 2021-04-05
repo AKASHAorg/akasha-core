@@ -179,7 +179,7 @@ const Topbar = (props: ITopbarProps) => {
   );
 
   const renderPluginIcon = (menuItem: IMenuItem) => {
-    if (menuItem.label === 'Notifications') {
+    if (menuItem.name === 'ui-plugin-notifications') {
       return (
         <IconDiv
           onClick={onClickPluginButton(menuItem)}
