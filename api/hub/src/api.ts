@@ -1,7 +1,12 @@
 import Router from 'koa-router';
 import koa from 'koa';
 import { ThreadID } from '@textile/hub';
-import { getAppDB } from './helpers';
+import { captureCallDuration, getAppDB } from './helpers';
+import promClient from 'prom-client';
+
+export const promRegistry = new promClient.Registry();
+promClient.collectDefaultMetrics({ register: promRegistry });
+promRegistry.registerMetric(captureCallDuration);
 
 const api = new Router({
   prefix: '/api',
@@ -20,6 +25,12 @@ api.post('/validate-token/:token', async (ctx: koa.Context, next: () => Promise<
       ctx.status = 401;
     }
   }
+  await next();
+});
+
+api.get('/metrics', async (ctx: koa.Context, next: () => Promise<any>) => {
+  ctx.set('Content-Type', promRegistry.contentType);
+  ctx.body = await promRegistry.metrics();
   await next();
 });
 

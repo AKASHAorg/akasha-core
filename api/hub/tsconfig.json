@@ -19,7 +19,7 @@
     "resolveJsonModule": true,
     "target": "es2018",
     "sourceMap": true,
-    "pretty": true
+    "pretty": true,
   },
   "exclude": ["node_modules", "**/*.spec.ts"],
   "include": ["./src"]

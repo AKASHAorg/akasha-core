@@ -11,6 +11,7 @@ import { updateCollections, initCollections } from './collections';
 import winston from 'winston';
 import { normalize } from 'eth-ens-namehash';
 import { ethers, utils, providers } from 'ethers';
+import promClient from 'prom-client';
 
 export const getAPISig = async (minutes: number = 30) => {
   const expiration = new Date(Date.now() + 1000 * 60 * minutes);
@@ -197,3 +198,10 @@ export const sendAuthorNotification = async (
   }
   return sendNotification(recipient, notification);
 };
+
+export const captureCallDuration = new promClient.Histogram({
+  name: 'http_request_duration_seconds',
+  help: 'Duration of api requests in seconds',
+  labelNames: ['method', 'route', 'code'],
+  buckets: [0.1, 0.3, 0.7, 1, 3, 5, 7, 10, 15],
+});
