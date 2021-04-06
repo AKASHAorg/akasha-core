@@ -23,6 +23,10 @@ class TagAPI extends DataSource {
     this.context = config.context;
   }
 
+  getTagCacheKey(tag: string) {
+    return `${this.collection}:tagName${tag.toLowerCase()}`;
+  }
+
   async searchTags(name: string) {
     const result = await searchIndex.search(name, {
       facetFilters: ['category:tag'],
@@ -43,9 +47,15 @@ class TagAPI extends DataSource {
   async getTag(name: string) {
     const db: Client = await getAppDB();
     const formattedName = name.toLowerCase();
+    const key = this.getTagCacheKey(formattedName);
+    const hasCachedValue = await queryCache.has(key);
+    if (hasCachedValue) {
+      return queryCache.get(key);
+    }
     const query = new Where('name').eq(formattedName);
     const tag = await db.find<Tag>(this.dbID, this.collection, query);
     if (tag.length) {
+      await queryCache.set(key, tag[0]);
       return tag[0];
     }
     return;
@@ -88,6 +98,7 @@ class TagAPI extends DataSource {
       tag = await this.getTag(tagName);
     }
     tag.posts.unshift(postID);
+    await queryCache.del(this.getTagCacheKey(tagName));
     return await db.save(this.dbID, this.collection, [tag]);
   }
 
@@ -104,6 +115,7 @@ class TagAPI extends DataSource {
       tag = await this.getTag(tagName);
     }
     tag.comments.unshift(commentID);
+    await queryCache.del(this.getTagCacheKey(tagName));
     return await db.save(this.dbID, this.collection, [tag]);
   }
 
