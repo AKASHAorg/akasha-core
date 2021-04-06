@@ -12,7 +12,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import wss from './wss';
-import api from './api';
+import api, { promRegistry } from './api';
 import ProfileAPI from './datasources/profile';
 import { contextCache, redisCache } from './storage/cache';
 import TagAPI from './datasources/tag';
@@ -21,8 +21,9 @@ import CommentAPI from './datasources/comment';
 import { ThreadID } from '@textile/hub';
 import query from './resolvers/query';
 import mutations from './resolvers/mutations';
-import { getAppDB, setupDBCollections } from './helpers';
+import { setupDBCollections } from './helpers';
 import { utils } from 'ethers';
+import createMetricsPlugin from './plugins/metrics';
 
 if (!process.env.USER_GROUP_API_KEY || !process.env.USER_GROUP_API_SECRET) {
   // tslint:disable-next-line:no-console
@@ -93,6 +94,7 @@ const server = new ApolloServer({
     }
     return { user, signature };
   },
+  plugins: [createMetricsPlugin(promRegistry)],
 });
 
 server.applyMiddleware({ app });
