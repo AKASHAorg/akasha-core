@@ -59,6 +59,10 @@ class CommentAPI extends DataSource {
         },
       ],
     };
+    const textContent = comment.content.find(e => e.property === 'textContent');
+    if (textContent) {
+      textContent.value = Buffer.from(textContent.value).toString('base64');
+    }
     const commentID = await db.create(this.dbID, this.collection, [comment]);
     searchIndex.saveObject({
       objectID: commentID[0],
@@ -67,7 +71,7 @@ class CommentAPI extends DataSource {
       category: 'comment',
       creationDate: comment.creationDate,
       postId: comment.postId,
-      content: comment.content.find(e => e.property === 'textContent')?.value,
+      content: textContent ? Buffer.from(textContent?.value, 'base64').toString() : '',
     });
     await sendAuthorNotification(post.author, {
       property: 'NEW_COMMENT',
