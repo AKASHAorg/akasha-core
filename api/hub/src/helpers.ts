@@ -198,10 +198,3 @@ export const sendAuthorNotification = async (
   }
   return sendNotification(recipient, notification);
 };
-
-export const captureCallDuration = new promClient.Histogram({
-  name: 'http_request_duration_seconds',
-  help: 'Duration of api requests in seconds',
-  labelNames: ['method', 'route', 'code'],
-  buckets: [0.1, 0.3, 0.7, 1, 3, 5, 7, 10, 15],
-});

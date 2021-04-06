@@ -1,12 +1,11 @@
 import Router from 'koa-router';
 import koa from 'koa';
 import { ThreadID } from '@textile/hub';
-import { captureCallDuration, getAppDB } from './helpers';
+import { getAppDB } from './helpers';
 import promClient from 'prom-client';
 
 export const promRegistry = new promClient.Registry();
 promClient.collectDefaultMetrics({ register: promRegistry });
-promRegistry.registerMetric(captureCallDuration);
 
 const api = new Router({
   prefix: '/api',
