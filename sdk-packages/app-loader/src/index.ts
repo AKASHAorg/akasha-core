@@ -534,10 +534,6 @@ export default class AppLoader implements IAppLoader {
               'div',
               this.config.layout.app.widgetSlotId,
             ).then(() => {
-              console.log(
-                document.getElementById(this.getIdFromName(widgetListForPath[0].name)),
-                'first widget node',
-              );
               widgetListForPath.forEach(async (widget: IWidget, index: number) => {
                 this.currentlyMountedWidgets.push({
                   route: route,
