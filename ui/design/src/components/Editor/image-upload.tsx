@@ -79,7 +79,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
         if (resp.error) {
           setUploadErrorState(true);
           setUploading(false);
-        } else if (resp.data) {
+        } else if (resp.data && uploading) {
           handleInsertImage(resp.data);
           setUploading(false);
         }

@@ -166,24 +166,24 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     let imageCounter = 0;
     let textLength = 0;
 
-    value.map((node: Node) => {
-      if (SlateText.isText(node)) {
-        textLength += node.text.length;
-      }
-      if (node.type === 'image') {
-        imageCounter++;
-      }
-      if (node.children) {
-        (node.children as any).map((child: any) => {
-          if (SlateText.isText(child)) {
-            textLength += child.text.length;
+    (function computeLength(nodeArr: any) {
+      if (nodeArr.length) {
+        nodeArr.map((node: any) => {
+          if (SlateText.isText(node)) {
+            textLength += node.text.length;
+          }
+          if (node.type === 'tag' && node.name?.length) {
+            textLength += node.name?.length;
           }
           if (node.type === 'image') {
             imageCounter++;
           }
+          if (node.children) {
+            computeLength(node.children);
+          }
         });
       }
-    });
+    })(value);
 
     if ((textLength > 0 || imageCounter !== 0) && textLength <= MAX_LENGTH) {
       setPublishDisabled(false);
