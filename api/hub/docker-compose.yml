@@ -9,6 +9,7 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
       - '9090:9090'
+    restart: unless-stopped
   grafana:
     image: grafana/grafana:latest
     volumes:
@@ -22,12 +23,14 @@ services:
       - prometheus
     ports:
       - '3003:3000'
+    restart: unless-stopped
   graphql_ewa:
     build: .
     environment:
       - PORT=3113
     ports:
       - '3113:3113'
+    restart: unless-stopped
     logging:
       driver: "json-file"
       options:
