@@ -23,6 +23,6 @@ jobs:
             git checkout next
             git pull
             cd api/hub
-            docker-compose down
+            docker-compose down graphql_ewa
             docker-compose build --no-cache
             docker-compose up -d graphql_ewa
