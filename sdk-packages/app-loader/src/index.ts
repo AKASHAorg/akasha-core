@@ -408,10 +408,15 @@ export default class AppLoader implements IAppLoader {
           this.currentlyMountedWidgets = this.currentlyMountedWidgets.filter(
             w => w.route !== widget.route,
           );
+          // const widgetNode = document.getElementById(this.getIdFromName(widget.widgetId));
+          // if (widgetNode) {
+          //   widgetNode.parentNode.removeChild(widgetNode);
+          // }
           this.registeredWidgets.delete(widget.widgetId);
         }
       }
     });
+
     this.mountWidgetsOfApps(matchedApps);
   }
   private beforeRouting(_ev: CustomEvent<SingleSpaEventDetail>) {
@@ -479,23 +484,39 @@ export default class AppLoader implements IAppLoader {
    * ```
    */
 
-  private createHtmlElement(
-    elementId: string,
+  private createHtmlElements(
+    order: string[],
     elementType: string,
-    insertAt: { position: InsertPosition; targetId: string },
-  ) {
-    const alreadyCreated = document.getElementById(elementId);
-    if (alreadyCreated) {
-      return elementId;
+    parentElement: string,
+  ): Promise<void> {
+    const parentNode = document.getElementById(parentElement);
+    const created = [];
+    if (!parentNode) {
+      return this.appLogger.error(`Target element: ${parentElement} not found!`);
     }
-    const elem: HTMLElement = document.createElement(elementType);
-    elem.id = elementId;
-    const targetElement = document.getElementById(insertAt.targetId);
-    if (!targetElement) {
-      return this.appLogger.error(`Target element: ${insertAt.targetId} not found!`);
-    }
-    targetElement.insertAdjacentElement(insertAt.position, elem);
-    return elementId;
+
+    return new Promise(resolve => {
+      order.forEach(itemId => {
+        const itemIdx = order.indexOf(itemId);
+        let elem = document.getElementById(itemId);
+        if (!elem) {
+          elem = document.createElement(elementType);
+          elem.id = itemId;
+        }
+        if (itemIdx > 0) {
+          const prevElem = document.getElementById(order[itemIdx - 1]);
+          if (prevElem) {
+            prevElem.after(elem);
+          }
+        } else {
+          parentNode.insertAdjacentElement('afterbegin', elem);
+        }
+        created.push(itemId);
+      });
+      if (created.length === order.length) {
+        resolve();
+      }
+    });
   }
   private mountWidgetsOfApps(apps) {
     apps.forEach(integration => {
@@ -508,28 +529,32 @@ export default class AppLoader implements IAppLoader {
           .filter(route => pathToRegexp(route).test(path))
           .forEach(route => {
             const widgetListForPath = widgets[route];
-            widgetListForPath.forEach(async (widget: IWidget, index: number) => {
-              this.currentlyMountedWidgets.push({
-                route: route,
-                widgetId: this.getIdFromName(widget.name),
-                widget: await this.registerWidget(
-                  {
-                    app: {
-                      ...widget,
-                      basePath: route,
+            this.createHtmlElements(
+              widgetListForPath.map((w: IWidget) => this.getIdFromName(w.name)),
+              'div',
+              this.config.layout.app.widgetSlotId,
+            ).then(() => {
+              console.log(
+                document.getElementById(this.getIdFromName(widgetListForPath[0].name)),
+                'first widget node',
+              );
+              widgetListForPath.forEach(async (widget: IWidget, index: number) => {
+                this.currentlyMountedWidgets.push({
+                  route: route,
+                  widgetId: this.getIdFromName(widget.name),
+                  widget: await this.registerWidget(
+                    {
+                      app: {
+                        ...widget,
+                        basePath: route,
+                      },
+                      config: {
+                        slot: this.getIdFromName(widget.name),
+                      },
                     },
-                    config: {
-                      slot: this.createHtmlElement(this.getIdFromName(widget.name), 'div', {
-                        position: index === 0 ? 'afterbegin' : 'afterend',
-                        targetId:
-                          index === 0
-                            ? this.config.layout.app.widgetSlotId
-                            : this.getIdFromName(widgetListForPath[index - 1].name),
-                      }),
-                    },
-                  },
-                  'integration',
-                ),
+                    'integration',
+                  ),
+                });
               });
             });
           });
@@ -555,10 +580,10 @@ export default class AppLoader implements IAppLoader {
           w => w.route !== cmw.route,
         );
         this.registeredWidgets.delete(cmw.widgetId);
-        const htmlElem: HTMLElement | null = document.getElementById(cmw.widgetId);
-        if (htmlElem) {
-          htmlElem.remove();
-        }
+        // const htmlElem: HTMLElement | null = document.getElementById(cmw.widgetId);
+        // if (htmlElem) {
+        //   htmlElem.parentNode.removeChild(htmlElem);
+        // }
       }
     });
   }
