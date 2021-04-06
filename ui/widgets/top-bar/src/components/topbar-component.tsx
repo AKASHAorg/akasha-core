@@ -350,7 +350,7 @@ const TopbarComponent = (props: TopBarProps) => {
         legalLabel={t('Legal')}
         feedbackLabel={t('Send Us Feedback')}
         feedbackInfoLabel={t('Help us improve the experience!')}
-        legalCopyRightLabel={'© AKASHA Foundation'}
+        legalCopyRightLabel={'© Ethereum World Association'}
         versionLabel="ALPHA"
         versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
         onNavigation={handleNavigation}
