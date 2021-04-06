@@ -13,7 +13,7 @@ const LoginWidget: React.FC = () => {
         title={`🚀 ${t(' Welcome to Ethereum World!')}`}
         subtitle={t('We are in private alpha at this time. ')}
         beforeLinkLabel={t("If you'd like to participate,")}
-        afterLinkLabel={t("and we'll add you to our waitlist!")}
+        afterLinkLabel={t("and we'll add you to our wait list!")}
         writeToUsLabel={t('write to us')}
         writeToUsUrl={'mailto:alpha@ethereum.world'}
       />

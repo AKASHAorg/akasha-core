@@ -1,0 +1,13 @@
+
+scrape_configs:
+  - job_name: 'graphql_api_scraper'
+    scrape_interval: 45s
+    scrape_timeout: 45s
+    metrics_path: /api/metrics
+
+    static_configs:
+      - targets: [
+          'graphql_ewa:3113',
+      ]
+        labels:
+          name: 'ewa-api-app'
