@@ -81,7 +81,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         label = mentionedCommentLabel;
         clickHandler = () => {
           if (commentID) {
-            handleEntryClick(commentID);
+            handleEntryClick(postID);
           }
           handleMessageRead(notif.id);
         };
@@ -90,7 +90,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         label = replyLabel;
         clickHandler = () => {
           if (commentID) {
-            handleEntryClick(commentID);
+            handleEntryClick(postID);
           }
           handleMessageRead(notif.id);
         };
