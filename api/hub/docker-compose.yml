@@ -1,6 +1,28 @@
 version: '3.9'
 services:
-  graphql:
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - prometheus_data:/prometheus
+      - ./conf/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - '9090:9090'
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./conf/grafana/provisioning:/etc/grafana/provisioning
+      - ./conf/grafana/config.ini:/etc/grafana/config.ini
+      - ./conf/grafana/dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=s0p3rs3cr3t123
+    depends_on:
+      - prometheus
+    ports:
+      - '3003:3000'
+  graphql_ewa:
     build: .
     environment:
       - PORT=3113
@@ -11,3 +33,7 @@ services:
       options:
         max-size: "15m"
         max-file: "3"
+
+volumes:
+  prometheus_data: {}
+  grafana_data: {}

@@ -11,6 +11,7 @@ import { updateCollections, initCollections } from './collections';
 import winston from 'winston';
 import { normalize } from 'eth-ens-namehash';
 import { ethers, utils, providers } from 'ethers';
+import promClient from 'prom-client';
 
 export const getAPISig = async (minutes: number = 30) => {
   const expiration = new Date(Date.now() + 1000 * 60 * minutes);
