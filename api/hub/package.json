@@ -41,6 +41,7 @@
     "@algolia/logger-console": "4.8.5",
     "apollo-server-koa": "2.22.2",
     "apollo-server-cache-redis": "1.2.3",
+    "apollo-server-plugin-base": "0.11.0",
     "dotenv": "8.2.0",
     "emittery": "0.8.1",
     "eth-ens-namehash": "2.0.8",
@@ -54,6 +55,7 @@
     "koa-router": "10.0.0",
     "koa-websocket": "6.0.0",
     "lru-cache": "6.0.0",
+    "prom-client": "13.1.0",
     "winston": "3.3.3"
   },
   "devDependencies": {
