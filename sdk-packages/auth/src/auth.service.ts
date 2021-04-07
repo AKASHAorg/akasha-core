@@ -138,7 +138,8 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     try {
       const web3 = await invoke(commonServices[WEB3_SERVICE]).regen(currentProvider);
       const web3Utils = await invoke(commonServices[WEB3_UTILS_SERVICE]).getUtils();
-
+      // throw if the current network is not the one from settings
+      await invoke(commonServices[WEB3_SERVICE]).checkCurrentNetwork();
       const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);
       const authSettings = await getSettings(moduleName);
       const endPoint = authSettings[AUTH_ENDPOINT];
@@ -391,6 +392,9 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     const inbox = [];
     const uniqueMessages = new Map();
     for (const messageObj of combinedMessages) {
+      if (messageObj.from !== process.env.EWA_MAILSENDER) {
+        continue;
+      }
       uniqueMessages.set(messageObj.id, messageObj);
     }
     for (const message of uniqueMessages.values()) {
@@ -404,7 +408,8 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   const hasNewNotifications = async () => {
     const limit = 1;
     const messages = await hubUser.listInboxMessages({ status: Status.UNREAD, limit: limit });
-    return messages.length > 0;
+    const filteredMessages = messages.filter(rec => rec.from === process.env.EWA_MAILSENDER);
+    return filteredMessages.length > 0;
   };
   const markMessageAsRead = async (messageId: string) => {
     await hubUser.readInboxMessage(messageId);
