@@ -37,6 +37,7 @@ export const newClientDB = async () => {
   return client;
 };
 const identity = () => PrivateKey.fromString(process.env.AWF_DBkey);
+const mailSenderIdentity = () => PrivateKey.fromString(process.env.AWF_MAILSENDER_KEY);
 let appDBClient;
 export const getAppDB = async () => {
   if (appDBClient) {
@@ -75,7 +76,7 @@ export const getMailSender = async () => {
     await createUserAuth(process.env.USER_GROUP_API_KEY, process.env.USER_GROUP_API_SECRET),
     { debug: process.env.NODE_ENV !== 'production' },
   );
-  const mailSenderID = identity();
+  const mailSenderID = mailSenderIdentity();
   await api.getToken(mailSenderID);
   await api.setupMailbox();
   // const mailID = await api.getMailboxID();
