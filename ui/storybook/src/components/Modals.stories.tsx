@@ -8,6 +8,7 @@ import * as React from 'react';
 import {
   IFeedbackModalProps,
   IReportModalProps,
+  ProfileCompletedModal,
 } from '@akashaproject/design-system/lib/components/Modals';
 
 const { Box, ShareModal, Icon, MobileListModal, ReportModal, FeedbackModal, ToastProvider } = DS;
@@ -296,5 +297,16 @@ storiesOf('Modals/Feeback Modal', module).add('Feedback modal', () => (
     emailUsLink={''}
     joinDiscordLink={''}
     closeModal={() => action('Close Modal')('Synthetic Event')}
+  />
+));
+storiesOf('Modals/Profile Completed Modal', module).add('Profile completed modal', () => (
+  <ProfileCompletedModal
+    titleLabel={text('Title Label', 'Welcome to the alpha!🙌')}
+    subtitleLabel={text(
+      'Subtitle Label',
+      'So happy to see you! Thank you for being part of this adventure! 🚀',
+    )}
+    buttonLabel={text('Button Label', "Let's rock")}
+    onClick={() => action('OnClick')('Synthetic Event')}
   />
 ));
