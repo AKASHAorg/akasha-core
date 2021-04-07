@@ -408,8 +408,8 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   const hasNewNotifications = async () => {
     const limit = 1;
     const messages = await hubUser.listInboxMessages({ status: Status.UNREAD, limit: limit });
-    const filteredMessages = messages.filter(rec => rec.from === process.env.EWA_MAILSENDER);
-    return filteredMessages.length > 0;
+    const newMessage = messages.find(rec => rec.from === process.env.EWA_MAILSENDER);
+    return !!newMessage;
   };
   const markMessageAsRead = async (messageId: string) => {
     await hubUser.readInboxMessage(messageId);
