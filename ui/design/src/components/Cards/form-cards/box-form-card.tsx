@@ -1,6 +1,6 @@
 import { Box, FormField, Text, TextArea, TextInput } from 'grommet';
 import * as React from 'react';
-import { isMobile } from 'react-device-detect';
+import { isMobile, isMobileOnly } from 'react-device-detect';
 import { Button } from '../../Buttons/index';
 import { Icon } from '../../Icon/index';
 import { StyledLayer } from '../../Modals/common/styled-modal';
@@ -437,6 +437,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             closePopover={closeAvatarPopover}
             insertImage={handleImageInsert('avatar')}
             currentImage={!!formValues.avatar}
+            onMobile={isMobileOnly}
             handleDeleteImage={() => handleFormFieldChange({ avatar: null })}
           />
         )}
@@ -450,6 +451,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             closePopover={closeCoverImagePopover}
             insertImage={handleImageInsert('coverImage')}
             currentImage={!!formValues.coverImage}
+            onMobile={isMobileOnly}
             handleDeleteImage={() => handleFormFieldChange({ coverImage: null })}
           />
         )}

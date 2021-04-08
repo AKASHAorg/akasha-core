@@ -32,14 +32,14 @@ const useAnalytics = (): [UseAnalyticsState, UseAnalyticsActions] => {
   });
 
   React.useLayoutEffect(() => {
-    if (globalThis.localStorage && hookGlobal._paq) {
+    if (globalThis.localStorage) {
       const consentType = localStorage.getItem(COOKIE_CONSENT_NAME);
       if (consentType) {
         setState({
           cookieBannerDismissed: true,
           consentType: CookieConsentTypes[consentType],
         });
-        if (consentType === CookieConsentTypes.ALL) {
+        if (consentType === CookieConsentTypes.ALL && hookGlobal._paq) {
           actions.enableTracking();
         }
       }

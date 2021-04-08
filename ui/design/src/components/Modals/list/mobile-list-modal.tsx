@@ -1,4 +1,4 @@
-import { Box, Text } from 'grommet';
+import { Box, Text, ThemeContext } from 'grommet';
 import * as React from 'react';
 import styled from 'styled-components';
 
@@ -27,6 +27,10 @@ interface IMenuItem {
 
 const MobileListModal: React.FC<IMobileListModal> = props => {
   const { closeModal, menuItems, cancelLabel } = props;
+
+  const theme: any = React.useContext(ThemeContext);
+
+  const redIcons = ['report', 'trash'];
 
   return (
     <ModalWrapper onClick={closeModal}>
@@ -64,13 +68,19 @@ const MobileListModal: React.FC<IMobileListModal> = props => {
                     type={menuItem.icon}
                     size="md"
                     clickable={false}
-                    color={menuItem.icon === 'report' ? 'errorText' : 'primaryText'}
+                    color={
+                      menuItem.icon && redIcons.includes(menuItem.icon)
+                        ? theme.colors.errorText
+                        : theme.colors.primaryText
+                    }
                   />
                 )}
                 <Text
                   size="xlarge"
                   margin={{ left: 'xsmall' }}
-                  color={menuItem.icon === 'report' ? 'errorText' : 'primaryText'}
+                  color={
+                    menuItem.icon && redIcons.includes(menuItem.icon) ? 'errorText' : 'primaryText'
+                  }
                 >
                   {menuItem.label}
                 </Text>

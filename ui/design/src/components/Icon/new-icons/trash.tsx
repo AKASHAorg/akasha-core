@@ -5,7 +5,7 @@ const Trash = (props: React.SVGProps<SVGSVGElement>) => (
     <g
       fill="none"
       fillRule="evenodd"
-      stroke="#949EB3"
+      stroke={props.color}
       strokeLinejoin="round"
       transform="translate(1.4)"
     >
