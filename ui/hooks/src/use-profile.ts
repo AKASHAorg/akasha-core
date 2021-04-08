@@ -14,7 +14,10 @@ import { getMediaUrl } from './utils/media-utils';
 type voidFunc<T = object> = (arg: T) => void;
 
 export interface UseProfileActions {
-  getProfileData: voidFunc<{ pubKey?: string | null; ethAddress?: string | null }>;
+  getProfileData: (
+    payload: { pubKey?: string | null; ethAddress?: string | null },
+    disableLoadingIndicator?: boolean,
+  ) => void;
   getEntryAuthor: voidFunc<{ entryId: string }>;
   resetProfileData: () => void;
   optimisticUpdate: (data: any) => void;
@@ -42,6 +45,7 @@ export interface UseProfileProps {
   postsService?: any;
   ensService?: any;
   rxjsOperators?: any;
+  globalChannel: any;
 }
 
 export interface ProfileUpdateStatus {
@@ -60,7 +64,7 @@ export interface ProfileUpdateStatus {
 export const useProfile = (
   props: UseProfileProps,
 ): [Partial<IProfileData & { isLoading: boolean }>, UseProfileActions, ProfileUpdateStatus] => {
-  const { onError, ipfsService, profileService, postsService } = props;
+  const { onError, ipfsService, profileService, postsService, globalChannel } = props;
   const [profile, setProfile] = React.useState<Partial<IProfileData & { isLoading: boolean }>>({
     isLoading: true,
   });
@@ -74,10 +78,31 @@ export const useProfile = (
     notAllowed: false,
   });
 
+  React.useEffect(() => {
+    if (globalChannel && props.rxjsOperators) {
+      globalChannel
+        .pipe(
+          props.rxjsOperators.filter((payload: any) => {
+            return (
+              payload.channelInfo.method === 'makeDefaultProvider' &&
+              payload.channelInfo.servicePath.includes('PROFILE_STORE')
+            );
+          }),
+        )
+        .subscribe(() => {
+          if (profile.pubKey) {
+            actions.getProfileData({ pubKey: profile.pubKey }, true);
+          }
+        });
+    }
+  }, [profile]);
+
   const actions: UseProfileActions = {
-    getProfileData(payload) {
+    getProfileData(payload, disableLoadingIndicator) {
       try {
-        setProfile({ isLoading: true });
+        if (!disableLoadingIndicator) {
+          setProfile({ isLoading: true });
+        }
         const ipfsGatewayCall = ipfsService.getSettings({});
         const getProfileCall = profileService.getProfile(payload);
         const obs = forkJoin([ipfsGatewayCall, getProfileCall]);
