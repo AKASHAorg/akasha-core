@@ -57,13 +57,13 @@ const config = {
   },
   plugins: [
     new webpack.EnvironmentPlugin({
-      GRAPHQL_URI: process.env.GRAPHQL_URI || 'https://api.akasha.network/graphql',
+      GRAPHQL_URI: process.env.GRAPHQL_URI || 'https://staging-api.ethereum.world/graphql',
       NODE_ENV: process.env.NODE_ENV || 'development',
-      INVITATION_ENDPOINT: process.env.INVITATION_ENDPOINT || 'https://api.akasha.network/api/validate-token',
-      AUTH_ENDPOINT: process.env.AUTH_ENDPOINT || 'wss://api.akasha.network/ws/userauth',
+      INVITATION_ENDPOINT: process.env.INVITATION_ENDPOINT || 'https://staging-api.ethereum.world/api/validate-token',
+      AUTH_ENDPOINT: process.env.AUTH_ENDPOINT || 'wss://staging-api.ethereum.world/ws/userauth',
       INFURA_ID: process.env.INFURA_ID || '',
       BUCKET_VERSION: process.env.BUCKET_VERSION || '',
-      EWA_MAILSENDER: process.env.EWA_MAILSENDER || ''
+      EWA_MAILSENDER: process.env.EWA_MAILSENDER || 'bbaareicas3jf76tu4dt2cwmif2wshx2yfekfwu4jc2y2bmzrmcol76zaai'
     }),
     new webpack.ProgressPlugin({
       entries: true,
