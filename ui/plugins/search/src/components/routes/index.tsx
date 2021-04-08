@@ -25,6 +25,7 @@ const Routes: React.FC<RootComponentProps> = props => {
   const [loginProfile] = useProfile({
     profileService: props.sdkModules.profiles.profileService,
     ipfsService: props.sdkModules.commons.ipfsService,
+    globalChannel: props.globalChannel,
   });
 
   const [modalState, modalStateActions] = useModalState({
