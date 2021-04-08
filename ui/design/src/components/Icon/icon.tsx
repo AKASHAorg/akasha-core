@@ -216,42 +216,32 @@ const StyledRefDiv = styled.div`
   user-select: none;
 `;
 
-const IconBase: React.FC<IconProps> = React.forwardRef(
-  (
-    {
-      color,
-      fill,
-      size,
-      clickable,
-      clickableRed,
-      type,
-      primaryColor,
-      accentColor,
-      wrapperStyle,
-      ...props
-    },
-    ref,
-  ) => {
-    const Component = (icons as any)[type];
-    if (!Component) {
-      // tslint:disable-next-line no-console
-      console.error('There is no such icon', type);
-      return null;
-    }
-    const iconClass = classNames('icon', props.className);
-    return (
-      <StyledRefDiv ref={ref} style={wrapperStyle}>
-        <Component className={iconClass} {...props} />
-      </StyledRefDiv>
-    );
-  },
-);
+const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
+  const Component = (icons as any)[props.type];
+  if (!Component) {
+    // tslint:disable-next-line no-console
+    console.error('There is no such icon', props.type);
+    return null;
+  }
+  const iconClass = classNames('icon', props.className);
+  return (
+    <StyledRefDiv ref={ref} style={props.wrapperStyle}>
+      <Component className={iconClass} {...props} />
+    </StyledRefDiv>
+  );
+});
 
 const Icon: React.FC<IconProps> = styled(IconBase)`
   ${props =>
     props.color &&
     `
       & * {
+        stroke: ${props.color};
+      }`};
+  ${props =>
+    props.color &&
+    `
+      g {
         stroke: ${props.color};
       }`};
   ${props =>
