@@ -30,6 +30,7 @@ const Routes: React.FC<RootComponentProps> = props => {
     ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
     rxjsOperators: props.rxjsOperators,
+    globalChannel: props.globalChannel,
   });
 
   const [reportModalOpen, setReportModalOpen] = React.useState(false);
