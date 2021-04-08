@@ -63,7 +63,7 @@ const config = {
       AUTH_ENDPOINT: process.env.AUTH_ENDPOINT || 'wss://staging-api.ethereum.world/ws/userauth',
       INFURA_ID: process.env.INFURA_ID || '',
       BUCKET_VERSION: process.env.BUCKET_VERSION || '',
-      EWA_MAILSENDER: process.env.EWA_MAILSENDER || ''
+      EWA_MAILSENDER: process.env.EWA_MAILSENDER || 'bbaareicas3jf76tu4dt2cwmif2wshx2yfekfwu4jc2y2bmzrmcol76zaai'
     }),
     new webpack.ProgressPlugin({
       entries: true,
