@@ -60,6 +60,7 @@ const ProfilePage = (props: ProfilePageProps) => {
     profileService: props.sdkModules.profiles.profileService,
     ensService: props.sdkModules.registry.ens,
     rxjsOperators: props.rxjsOperators,
+    globalChannel: props.globalChannel,
   });
 
   const [postsState, postsActions] = usePosts({

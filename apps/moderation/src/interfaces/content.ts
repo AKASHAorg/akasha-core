@@ -36,5 +36,6 @@ export interface IContentProps {
   logger: any;
   singleSpa: any;
   sdkModules: any;
+  globalChannel: any;
   handleButtonClick: (param1: string, param2: string) => void;
 }

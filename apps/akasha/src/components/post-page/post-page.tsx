@@ -108,6 +108,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
     rxjsOperators: props.rxjsOperators,
+    globalChannel: props.globalChannel,
   });
 
   React.useEffect(() => {

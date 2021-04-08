@@ -10,6 +10,7 @@ export interface IExplanationsBoxEntryProps {
   forLabel: string;
   logger: any;
   sdkModules: any;
+  globalChannel: any;
 }
 
 const ExplanationsCardEntry: React.FC<IExplanationsBoxEntryProps> = props => {
@@ -21,6 +22,7 @@ const ExplanationsCardEntry: React.FC<IExplanationsBoxEntryProps> = props => {
     },
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
+    globalChannel: props.globalChannel,
   });
 
   React.useEffect(() => {
