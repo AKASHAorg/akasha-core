@@ -239,12 +239,6 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
         stroke: ${props.color};
       }`};
   ${props =>
-    props.color &&
-    `
-      g {
-        stroke: ${props.color};
-      }`};
-  ${props =>
     props.fill &&
     `
       & * {
