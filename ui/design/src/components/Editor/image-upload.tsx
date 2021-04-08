@@ -63,26 +63,23 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
     const fileName = file.name;
     const fileReader = new FileReader();
     fileReader.readAsDataURL(file);
-
     fileReader.addEventListener('load', async () => {
       setUploadValueName(fileName);
       setUploadErrorState(false);
       if (uploadRequest && fileReader.result) {
         const img = new Image();
-        img.src = fileReader.result as string;
         img.onload = () => {
           setUploading(true);
           setImageSize({ height: Math.min(img.height, 640), width: Math.min(img.width, 640) });
         };
-
+        img.src = fileReader.result as string;
         const resp = await uploadRequest(file);
         if (resp.error) {
           setUploadErrorState(true);
-          setUploading(false);
-        } else if (resp.data && uploading) {
+        } else if (resp.data) {
           handleInsertImage(resp.data);
-          setUploading(false);
         }
+        setUploading(false);
       }
     });
   };
