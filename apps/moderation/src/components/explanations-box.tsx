@@ -48,6 +48,7 @@ const ExplanationsCard: React.FC<IExplanationsBoxProps> = props => {
               forLabel={forLabel}
               logger={logger}
               sdkModules={sdkModules}
+              globalChannel={props.globalChannel}
             />
           ))}
         </Box>

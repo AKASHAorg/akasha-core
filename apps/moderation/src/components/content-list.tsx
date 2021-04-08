@@ -18,6 +18,7 @@ interface IContentListProps {
   logger: any;
   singleSpa: any;
   sdkModules: any;
+  globalChannel: any;
 }
 
 interface IBaseItem {
@@ -266,6 +267,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                 reportedDateTime={pendingItem.entryDate}
                 makeADecisionLabel={t('Make a Decision')}
                 handleButtonClick={handleButtonClick}
+                globalChannel={props.globalChannel}
               />
             ))
           : renderNotFound('pending'))}
@@ -309,6 +311,7 @@ const ContentList: React.FC<IContentListProps> = props => {
                   evaluationDateTime={moderatedItem.evaluationDate}
                   reviewDecisionLabel={t('Review decision')}
                   handleButtonClick={handleButtonClick}
+                  globalChannel={props.globalChannel}
                 />
               ))
           : renderNotFound('moderated'))}

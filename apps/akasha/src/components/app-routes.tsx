@@ -37,6 +37,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
     rxjsOperators: props.rxjsOperators,
+    globalChannel: props.globalChannel,
   });
 
   React.useEffect(() => {
