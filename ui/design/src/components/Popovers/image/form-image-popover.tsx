@@ -1,12 +1,14 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { Icon } from '../../Icon/index';
 import {
   StyledBox,
   StyledDeleteBox,
   StyledDrop,
   StyledImageInput,
 } from './styled-form-image-popover';
+import { Icon } from '../../Icon/index';
+import { MobileListModal } from '../../Modals';
+import { StyledDropAlt } from '../../Cards/entry-cards/styled-entry-box';
 
 export interface IFormImagePopover {
   uploadLabel?: string;
@@ -16,6 +18,7 @@ export interface IFormImagePopover {
   closePopover: () => void;
   insertImage?: (src: File | string, isUrl: boolean) => void;
   currentImage?: boolean;
+  onMobile: any;
   handleDeleteImage?: () => void;
 }
 
@@ -27,6 +30,7 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
     closePopover,
     insertImage,
     currentImage,
+    onMobile,
     handleDeleteImage,
   } = props;
 
@@ -54,6 +58,41 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
     }
     closePopover();
   };
+
+  if (onMobile) {
+    return (
+      <>
+        <StyledDropAlt>
+          <MobileListModal
+            closeModal={closePopover}
+            menuItems={[
+              {
+                label: uploadLabel,
+                icon: 'upload',
+                handler: () => {
+                  handleUploadInputClick();
+                  closePopover();
+                },
+              },
+              ...(currentImage
+                ? [
+                    {
+                      label: deleteLabel,
+                      icon: 'trash',
+                      handler: () => {
+                        handleDeleteClick();
+                        closePopover();
+                      },
+                    },
+                  ]
+                : []),
+            ]}
+          />
+        </StyledDropAlt>
+        <StyledImageInput onChange={handleFileUpload} type="file" ref={uploadInputRef} />
+      </>
+    );
+  }
 
   return (
     <StyledDrop
