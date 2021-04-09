@@ -39,14 +39,19 @@ const app = webSockify(new Koa(), wsOptions);
 /** Middlewares */
 app.use(json());
 app.use(logger());
-app.use(bodyParser());
+app.use(
+  bodyParser({
+    onerror: function (err, ctx) {
+      ctx.throw('body parse error', err);
+    },
+  }),
+);
 
 const enabledDomains = JSON.parse(process.env.ALLOWED_ORIGINS);
 app.use(
   cors({
     origin: ctx => {
       if (enabledDomains.indexOf(ctx.request.header.origin) !== -1) {
-        console.info(ctx.request.header.origin);
         return ctx.request.header.origin;
       }
       return enabledDomains[0];
