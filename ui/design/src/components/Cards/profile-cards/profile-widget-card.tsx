@@ -4,6 +4,7 @@ import { Avatar } from '../../Avatar/index';
 import { TextIcon } from '../../TextIcon/index';
 import { WidgetAreaCardBox } from '../common/basic-card-box';
 import { AvatarDiv } from './styled-profile-card';
+import { IProfileData as ProfileDataType } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export interface DefaultProvider {
   property: string;
@@ -43,7 +44,7 @@ export interface IProfileWidgetCard {
   handleUnfollow?: React.EventHandler<React.SyntheticEvent>;
   handleFollow?: React.EventHandler<React.SyntheticEvent>;
   isFollowing?: boolean;
-  profileData: IProfileData;
+  profileData: ProfileDataType;
   descriptionLabel: string;
   postsLabel: string;
   followingLabel: string;
