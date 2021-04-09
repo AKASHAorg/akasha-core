@@ -167,9 +167,9 @@ const service: AkashaService = (invoke, log) => {
   }) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
     const { signData } = await invoke(authServices[AUTH_SERVICE]);
-    const signedData = await signData(opt.data, true);
     const textContent = opt.data.find(e => e.property === 'textContent');
     textContent.value = btoa(textContent.value);
+    const signedData = await signData(opt.data, true);
     const mutation = `
   mutation CreateEntry($content: [DataProviderInput!], $post: PostData) {
        createPost(content: $content, post: $post)
