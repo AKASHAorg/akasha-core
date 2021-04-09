@@ -235,7 +235,7 @@ const ProfilePage = (props: ProfilePageProps) => {
       </ModalRenderer>
       <ProfilePageCard
         {...props}
-        profileData={profileState as any}
+        profileState={profileState}
         profileActions={profileActions}
         profileUpdateStatus={profileUpdateStatus}
         profileId={pubKey}
