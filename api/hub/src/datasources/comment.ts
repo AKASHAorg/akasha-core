@@ -60,7 +60,7 @@ class CommentAPI extends DataSource {
       ],
     };
     const textContent = comment.content.find(e => e.property === 'textContent');
-    if (textContent) {
+    if (Buffer.from(textContent.value, 'base64').toString('base64') !== textContent.value) {
       textContent.value = Buffer.from(textContent.value).toString('base64');
     }
     const commentID = await db.create(this.dbID, this.collection, [comment]);

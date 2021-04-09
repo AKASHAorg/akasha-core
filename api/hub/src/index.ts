@@ -39,13 +39,7 @@ const app = webSockify(new Koa(), wsOptions);
 /** Middlewares */
 app.use(json());
 app.use(logger());
-app.use(
-  bodyParser({
-    onerror: function (err, ctx) {
-      ctx.throw('body parse error', err);
-    },
-  }),
-);
+app.use(bodyParser());
 
 const enabledDomains = JSON.parse(process.env.ALLOWED_ORIGINS);
 app.use(

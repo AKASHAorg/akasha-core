@@ -122,7 +122,8 @@ class PostAPI extends DataSource {
       }
     }
     const textContent = post.content.find(e => e.property === 'textContent');
-    if (textContent) {
+    // this is just for migration
+    if (Buffer.from(textContent.value, 'base64').toString('base64') !== textContent.value) {
       textContent.value = Buffer.from(textContent.value).toString('base64');
     }
     logger.info('saving a new post');
