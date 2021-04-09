@@ -23,6 +23,7 @@ const wss = route.all('/ws/userauth', ctx => {
       const data = JSON.parse(msg);
       let currentUser: Profile = null;
       let addressChallenge;
+      let exists = null;
       switch (data.type) {
         case 'token': {
           if (!data.pubkey) {
@@ -73,7 +74,7 @@ const wss = route.all('/ws/userauth', ctx => {
                       new Error('Terms of Service and Privacy Policy were not accepted'),
                     );
                   }
-                  const exists = await db.findByID(dbId, 'Invites', r.signUpToken);
+                  exists = await db.findByID(dbId, 'Invites', r.signUpToken);
                   if (!exists) {
                     return reject(new Error('The invite token is not valid.'));
                   }
@@ -121,13 +122,12 @@ const wss = route.all('/ws/userauth', ctx => {
                     }
                     return reject(err);
                   }
-                  await db.save(dbId, 'Invites', [exists]);
                 }
                 resolve(Buffer.from(r.sig));
               });
               setTimeout(() => {
                 reject(new Error('signature checking timed out'));
-              }, 15000);
+              }, 45000);
             });
           });
           const auth = await getAPISig();
@@ -149,14 +149,19 @@ const wss = route.all('/ws/userauth', ctx => {
             ethAddress: currentUser.ethAddress,
           });
           if (!currentUser._id && currentUser.ethAddress) {
-            logger.info('saving new user', currentUser);
+            logger.info('saving new user');
             await db.create(dbId, 'Profiles', [currentUser]);
+            if (exists?.used) {
+              logger.info('updating the invite code status');
+              await db.save(dbId, 'Invites', [exists]);
+            }
             await wallet.sendTransaction({
               to: currentUser.ethAddress,
               value: ethers.utils.parseEther('0.1'),
             });
           }
           currentUser = null;
+          exists = null;
           addressChallenge = '';
           break;
         }
@@ -169,7 +174,8 @@ const wss = route.all('/ws/userauth', ctx => {
         }
       }
     } catch (error) {
-      logger.error('error from wss: ', error);
+      logger.warn('error from auth:wss: ');
+      logger.error(error);
       ctx.websocket.send(
         JSON.stringify({
           type: 'error',

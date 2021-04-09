@@ -14,6 +14,7 @@ const mutations = {
       signature: signature,
     });
     if (!verified) {
+      logger.warn(`bad addProfileProvider sig`);
       return Promise.reject(dataSigError);
     }
     return dataSources.profileAPI.addProfileProvider(user.pubKey, data);
@@ -28,6 +29,7 @@ const mutations = {
       signature: signature,
     });
     if (!verified) {
+      logger.warn(`bad makeDefaultProvider sig`);
       return Promise.reject(dataSigError);
     }
     return dataSources.profileAPI.makeDefaultProvider(user.pubKey, data);
@@ -42,6 +44,7 @@ const mutations = {
       signature: signature,
     });
     if (!verified) {
+      logger.warn(`bad registerUserName sig`);
       return Promise.reject(dataSigError);
     }
     return dataSources.profileAPI.registerUserName(user.pubKey, name);
@@ -56,6 +59,7 @@ const mutations = {
       signature: signature,
     });
     if (!verified) {
+      logger.warn(`bad createTag sig`);
       return Promise.reject(dataSigError);
     }
     return dataSources.tagsAPI.addTag(name);
@@ -70,10 +74,10 @@ const mutations = {
       signature: signature,
     });
     if (!verified) {
-      logger.warn(`bad createPost sig: ${signature}`);
+      logger.warn(`bad createPost sig`);
       return Promise.reject(dataSigError);
     }
-    logger.info(`verified createPost sig: ${signature}`);
+    logger.info(`verified createPost sig`);
     const profile = await dataSources.profileAPI.resolveProfile(user.pubKey, true);
     if (!profile.length) {
       return Promise.reject('[Must be authenticated! Profile not found!]');
@@ -118,6 +122,7 @@ const mutations = {
       signature: signature,
     });
     if (!verified) {
+      logger.warn(`bad follow sig`);
       return Promise.reject(dataSigError);
     }
     return dataSources.profileAPI.followProfile(user.pubKey, ethAddress);
@@ -132,6 +137,7 @@ const mutations = {
       signature: signature,
     });
     if (!verified) {
+      logger.warn(`bad unFollow sig`);
       return Promise.reject(dataSigError);
     }
     return dataSources.profileAPI.unFollowProfile(user.pubKey, ethAddress);
@@ -146,6 +152,7 @@ const mutations = {
       signature: signature,
     });
     if (!verified) {
+      logger.warn(`bad saveMetaData sig`);
       return Promise.reject(dataSigError);
     }
     return dataSources.profileAPI.saveMetadata(user.pubKey, data);
@@ -160,6 +167,7 @@ const mutations = {
       signature: signature,
     });
     if (!verified) {
+      logger.warn(`bad addComment sig`);
       return Promise.reject(dataSigError);
     }
     if (!comment.postID) {
