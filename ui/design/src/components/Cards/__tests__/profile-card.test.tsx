@@ -19,6 +19,7 @@ const mockProfileData = {
   profileType: 'user',
   vnd: {},
   default: [],
+  providers: [],
 };
 
 const createBaseComponent = (props: any) => (

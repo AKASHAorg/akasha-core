@@ -19,7 +19,7 @@ export interface EnsFormOption {
   label: string;
   fieldType?: 'dropdown' | 'textfield' | 'text';
   fieldOptions?: string[];
-  value: string | null;
+  value?: string | null;
   textDetails?: React.ReactElement;
   defaultChecked?: boolean;
   disabled?: boolean;
