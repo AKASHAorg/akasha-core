@@ -76,11 +76,13 @@ const service: AkashaService = (invoke, log) => {
   };
 
   const addComment = async (opt: {
-    data: DataProviderInput;
+    data: DataProviderInput[];
     comment: { postID: string; replyTo?: string; tags?: string[]; mentions?: string[] };
   }) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
     const { signData } = await invoke(authServices[AUTH_SERVICE]);
+    const textContent = opt.data.find(e => e.property === 'textContent');
+    textContent.value = btoa(textContent.value);
     const signedData = await signData(opt.data, true);
     const mutation = `
   mutation AddComment($content: [DataProviderInput!], $comment: CommentData) {
