@@ -107,7 +107,7 @@ export default function createMetricsPlugin(register: Registry): ApolloServerPlu
             operationName: errorContext.request.operationName || '',
             operation: errorContext.operation?.operation,
           });
-          logger.error(errorContext);
+          logger.error(JSON.stringify(errorContext));
         },
         willSendResponse(responseContext) {
           const labels = {

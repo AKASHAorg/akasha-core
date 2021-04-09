@@ -174,8 +174,7 @@ const wss = route.all('/ws/userauth', ctx => {
         }
       }
     } catch (error) {
-      logger.warn('error from auth:wss: ');
-      logger.error(error);
+      logger.error('error from auth:wss: ', error);
       ctx.websocket.send(
         JSON.stringify({
           type: 'error',

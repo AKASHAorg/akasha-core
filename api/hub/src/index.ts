@@ -46,6 +46,7 @@ app.use(
   cors({
     origin: ctx => {
       if (enabledDomains.indexOf(ctx.request.header.origin) !== -1) {
+        console.info(ctx.request.header.origin);
         return ctx.request.header.origin;
       }
       return enabledDomains[0];
