@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { TextIcon } from '../../TextIcon';
-import { Box } from 'grommet';
+import { Box, ThemeContext } from 'grommet';
 
 export interface ICardHeaderMenuProps {
   target: {};
@@ -12,6 +12,8 @@ export interface ICardHeaderMenuProps {
 
 const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
   const { target, onMenuClose, flagAsLabel, onFlag } = props;
+
+  const theme: any = React.useContext(ThemeContext);
 
   const handleClick = (handler: () => void) => () => {
     // hide menu dropdown when clicked
@@ -33,7 +35,7 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
             iconType="report"
             label={flagAsLabel}
             onClick={handleClick(onFlag)}
-            color={'red'}
+            color={theme.colors.errorText}
             iconSize="xs"
             fontSize="medium"
           />

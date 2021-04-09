@@ -30,7 +30,8 @@ module.exports = {
     new webpack.EnvironmentPlugin({
       MODERATION_API: process.env.MODERATION_API || 'https://staging-moderation.ethereum.world',
       INFURA_ID: process.env.INFURA_ID || '',
-      BUCKET_VERSION: process.env.BUCKET_VERSION || ''
+      BUCKET_VERSION: process.env.BUCKET_VERSION || '',
+      EWA_MAILSENDER: process.env.EWA_MAILSENDER || ''
     }),
     new webpack.AutomaticPrefetchPlugin(),
     new webpack.ProgressPlugin({

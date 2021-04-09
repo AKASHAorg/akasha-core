@@ -11,7 +11,7 @@ import { updateCollections, initCollections } from './collections';
 import winston from 'winston';
 import { normalize } from 'eth-ens-namehash';
 import { ethers, utils, providers } from 'ethers';
-import promClient from 'prom-client';
+import objHash from 'object-hash';
 
 export const getAPISig = async (minutes: number = 30) => {
   const expiration = new Date(Date.now() + 1000 * 60 * minutes);
@@ -37,6 +37,7 @@ export const newClientDB = async () => {
   return client;
 };
 const identity = () => PrivateKey.fromString(process.env.AWF_DBkey);
+const mailSenderIdentity = () => PrivateKey.fromString(process.env.AWF_MAILSENDER_KEY);
 let appDBClient;
 export const getAppDB = async () => {
   if (appDBClient) {
@@ -75,7 +76,7 @@ export const getMailSender = async () => {
     await createUserAuth(process.env.USER_GROUP_API_KEY, process.env.USER_GROUP_API_SECRET),
     { debug: process.env.NODE_ENV !== 'production' },
   );
-  const mailSenderID = identity();
+  const mailSenderID = mailSenderIdentity();
   await api.getToken(mailSenderID);
   await api.setupMailbox();
   // const mailID = await api.getMailboxID();
@@ -183,7 +184,7 @@ export const verifyEd25519Sig = async (args: {
     return pub.verify(args.data, sig);
   }
   if (typeof args.data === 'object') {
-    serializedData = JSON.stringify(args.data);
+    serializedData = objHash(args.data);
   }
   serializedData = encoder.encode(serializedData);
   return pub.verify(serializedData, sig);

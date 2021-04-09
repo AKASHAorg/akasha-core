@@ -29,6 +29,7 @@ import { Database } from '@textile/threaddb';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { settingsSchema } from './db.schema';
 import { runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
+import hash from 'object-hash';
 
 const service: AkashaService = (invoke, log, globalChannel) => {
   let identity: PrivateKey;
@@ -138,7 +139,8 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     try {
       const web3 = await invoke(commonServices[WEB3_SERVICE]).regen(currentProvider);
       const web3Utils = await invoke(commonServices[WEB3_UTILS_SERVICE]).getUtils();
-
+      // throw if the current network is not the one from settings
+      await invoke(commonServices[WEB3_SERVICE]).checkCurrentNetwork();
       const { getSettings } = invoke(coreServices.SETTINGS_SERVICE);
       const authSettings = await getSettings(moduleName);
       const endPoint = authSettings[AUTH_ENDPOINT];
@@ -329,7 +331,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     const session = await getSession();
     let serializedData;
     if (typeof data === 'object') {
-      serializedData = JSON.stringify(data);
+      serializedData = hash(data);
     }
     serializedData = new TextEncoder().encode(serializedData);
     let sig: Uint8Array | string = await session.identity.sign(serializedData);
@@ -357,7 +359,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       return pub.verify(args.data, sig);
     }
     if (typeof args.data === 'object') {
-      serializedData = JSON.stringify(args.data);
+      serializedData = hash(args.data);
     }
     serializedData = encoder.encode(serializedData);
     return pub.verify(serializedData, sig);
@@ -391,6 +393,9 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     const inbox = [];
     const uniqueMessages = new Map();
     for (const messageObj of combinedMessages) {
+      if (messageObj.from !== process.env.EWA_MAILSENDER) {
+        continue;
+      }
       uniqueMessages.set(messageObj.id, messageObj);
     }
     for (const message of uniqueMessages.values()) {
@@ -404,7 +409,8 @@ const service: AkashaService = (invoke, log, globalChannel) => {
   const hasNewNotifications = async () => {
     const limit = 1;
     const messages = await hubUser.listInboxMessages({ status: Status.UNREAD, limit: limit });
-    return messages.length > 0;
+    const newMessage = messages.find(rec => rec.from === process.env.EWA_MAILSENDER);
+    return !!newMessage;
   };
   const markMessageAsRead = async (messageId: string) => {
     await hubUser.readInboxMessage(messageId);

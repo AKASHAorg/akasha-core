@@ -22,6 +22,7 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
     postsService: props.sdkModules.posts,
+    globalChannel: props.globalChannel,
   });
 
   const [loginState] = useLoginState({

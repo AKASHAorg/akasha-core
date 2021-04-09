@@ -47,6 +47,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     },
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
+    globalChannel: props.globalChannel,
   });
 
   const [reporterProfile, reporterProfileActions] = useProfile({
@@ -55,6 +56,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     },
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
+    globalChannel: props.globalChannel,
   });
 
   const [moderatorProfile, moderatorProfileActions] = useProfile({
@@ -63,6 +65,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     },
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
+    globalChannel: props.globalChannel,
   });
 
   React.useEffect(() => {
@@ -135,6 +138,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
           singleSpa={props.singleSpa}
           sdkModules={props.sdkModules}
           handleButtonClick={props.handleButtonClick}
+          globalChannel={props.globalChannel}
         />
       </MainAreaCardBox>
     </Box>
