@@ -127,7 +127,7 @@ export const logger = winston.createLogger({
       format: winston.format.combine(
         winston.format.colorize(),
         winston.format.timestamp(),
-        winston.format.json(),
+        winston.format.simple(),
       ),
     }),
   ],
