@@ -2,6 +2,7 @@ import { AkashaService } from '@akashaproject/sdk-core/lib/IAkashaModule';
 import { ENTRY_SERVICE } from './constants';
 import { gqlStash, runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
 import authServices, { AUTH_SERVICE } from '@akashaproject/sdk-auth/lib/constants';
+import { Buffer } from 'buffer';
 
 interface DataProviderInput {
   provider: string;
@@ -168,7 +169,7 @@ const service: AkashaService = (invoke, log) => {
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
     const { signData } = await invoke(authServices[AUTH_SERVICE]);
     const textContent = opt.data.find(e => e.property === 'textContent');
-    textContent.value = btoa(textContent.value);
+    textContent.value = Buffer.from(textContent.value).toString('base64');
     const signedData = await signData(opt.data, true);
     const mutation = `
   mutation CreateEntry($content: [DataProviderInput!], $post: PostData) {

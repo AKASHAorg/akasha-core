@@ -84,6 +84,10 @@ const service: AkashaService = (invoke, log) => {
         },
       },
     });
+    if (result.errors) {
+      log.error(result.errors);
+      throw new Error('Saving this username has failed.');
+    }
     return result.data;
   };
 
