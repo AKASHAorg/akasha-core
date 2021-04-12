@@ -125,9 +125,9 @@ const useENSRegistration = (
           },
         ]);
         userNameCall
-          .pipe(props.rxjsOperators.tap(() => addProvider))
-          .pipe(props.rxjsOperators.tap(() => makeDefault))
-          .pipe(props.rxjsOperators.exhaust())
+          .pipe(props.rxjsOperators.map(() => addProvider))
+          .pipe(props.rxjsOperators.map(() => makeDefault))
+          .pipe(props.rxjsOperators.switchAll())
           .subscribe(() => {
             setRegistrationState(prev => ({
               ...prev,
