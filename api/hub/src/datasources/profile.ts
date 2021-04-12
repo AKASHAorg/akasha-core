@@ -54,10 +54,15 @@ class ProfileAPI extends DataSource {
     if (profilesFound.length) {
       const extractedFields = ['name', 'description', 'avatar', 'coverImage'];
       const q = profilesFound[0].default.filter(p => extractedFields.includes(p.property));
+      for (const prov of profilesFound[0].default) {
+        if (Buffer.from(prov.value, 'base64').toString('base64') === prov.value) {
+          prov.value = Buffer.from(prov.value, 'base64').toString();
+        }
+      }
       const returnedObj = JSON.parse(JSON.stringify(profilesFound[0]));
       for (const provider of q) {
         Object.assign(returnedObj, {
-          [provider.property]: Buffer.from(provider.value, 'base64').toString(),
+          [provider.property]: provider.value,
         });
       }
       const totalPostsIndex = profilesFound[0].metaData.findIndex(

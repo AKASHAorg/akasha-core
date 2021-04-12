@@ -22,7 +22,7 @@ const config = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '*.mjs'],
     alias: {
-      buffer: require.resolve('buffer'),
+      buffer: require.resolve('buffer/'),
       process: require.resolve('process/browser'),
     },
     fallback: {

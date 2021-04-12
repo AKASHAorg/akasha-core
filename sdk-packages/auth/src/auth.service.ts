@@ -30,6 +30,7 @@ import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { settingsSchema } from './db.schema';
 import { runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
 import hash from 'object-hash';
+import { Buffer } from 'buffer';
 
 const service: AkashaService = (invoke, log, globalChannel) => {
   let identity: PrivateKey;
