@@ -58,6 +58,8 @@ export interface ProfileUpdateStatus {
   /* additional context for isValidUsername flag */
   /* when true, it means the regex failed: username contains invalid characters */
   notAllowed: boolean;
+  /* true when the username.length < 3 characters */
+  tooShort: boolean;
 }
 
 /* A hook to be used on profile-page */
@@ -76,6 +78,7 @@ export const useProfile = (
     isValidUsername: null,
     isValidating: false,
     notAllowed: false,
+    tooShort: false,
   });
 
   React.useEffect(() => {
@@ -132,8 +135,13 @@ export const useProfile = (
     },
     validateUsername({ userName }) {
       if (props.ensService) {
-        setUpdateStatus(prev => ({ ...prev, isValidating: true }));
-        if (/^([a-z0-9\.](?![0-9\.]$))+$/g.test(userName)) {
+        setUpdateStatus(prev => ({
+          ...prev,
+          isValidating: true,
+          notAllowed: false,
+          tooShort: false,
+        }));
+        if (/^([a-z0-9\.](?![0-9\.]$))+$/g.test(userName) && userName.length >= 3) {
           const channel = props.ensService.isAvailable({ name: userName });
           channel.subscribe((resp: any) => {
             setUpdateStatus(prev => ({
@@ -143,6 +151,14 @@ export const useProfile = (
               isValidUsername: resp.data,
             }));
           }, createErrorHandler('useProfile.validateUsername', false, props.onError));
+        } else if (userName.length < 3) {
+          setUpdateStatus(prev => ({
+            ...prev,
+            isValidating: false,
+            isValidUsername: false,
+            notAllowed: false,
+            tooShort: true,
+          }));
         } else {
           setUpdateStatus(prev => ({
             ...prev,
@@ -346,6 +362,7 @@ export const useProfile = (
         uploadingCoverImage: false,
         isValidUsername: null,
         notAllowed: false,
+        tooShort: false,
       });
       let addProvider = from([null]);
       const providerData = {
@@ -384,6 +401,7 @@ export const useProfile = (
         isValidUsername: null,
         isValidating: false,
         notAllowed: false,
+        tooShort: false,
       });
     },
     resetProfileData() {

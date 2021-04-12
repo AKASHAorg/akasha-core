@@ -49,6 +49,7 @@ export interface IBoxFormCardProps {
   usernameError?: string;
   usernameSuccess?: string;
   onUsernameChange?: (value: string) => void;
+  onUsernameBlur?: (username: string) => void;
 }
 
 export interface IImageSrc {
@@ -197,6 +198,13 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     handleFormFieldChange({ userName: ev.target.value });
     if (props.onUsernameChange) {
       props.onUsernameChange(ev.target.value);
+    }
+  };
+
+  const handleUsernameBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
+    const val = ev.target.value;
+    if (props.onUsernameBlur) {
+      props.onUsernameBlur(val);
     }
   };
 
@@ -352,6 +360,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
                         value={formValues.userName}
                         onChange={handleUsernameChange}
                         placeholder={usernameFieldPlaceholder}
+                        onBlur={handleUsernameBlur}
                       />
                     </Box>
                     {renderIcon()}

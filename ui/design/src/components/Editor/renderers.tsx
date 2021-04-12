@@ -27,7 +27,6 @@ const ImageElement = ({ attributes, children, element, handleDeleteImage }: any)
         aria-label={element.url}
         contentEditable={false}
         style={{
-          minHeight: element.size?.naturalHeight,
           width: '100%',
           position: 'relative',
           overflow: 'hidden',

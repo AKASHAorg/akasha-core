@@ -341,7 +341,9 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   };
 
   const validateUsername = (userName: string) => {
-    props.profileActions.validateUsername({ userName });
+    if (userName.length > 3) {
+      props.profileActions.validateUsername({ userName });
+    }
   };
 
   const url = `${window.location.origin}${rootRoute}/${profileId}`;
@@ -368,6 +370,27 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
       window.open(shareUrl, '_blank');
     }
   };
+
+  const usernameErrors = React.useMemo(() => {
+    if (props.profileUpdateStatus.isValidUsername) {
+      return;
+    }
+    if (
+      props.profileUpdateStatus.isValidUsername !== null &&
+      !props.profileUpdateStatus.isValidUsername
+    ) {
+      if (props.profileUpdateStatus.notAllowed) {
+        return t(
+          'Sorry, username can contain lowercase letters, numbers and must end in a letter.',
+        );
+      }
+      if (props.profileUpdateStatus.tooShort) {
+        return t('Sorry, username should have at least 3 characters');
+      }
+      return t('Sorry, this username has already been taken. Please choose another one.');
+    }
+    return;
+  }, [props.profileUpdateStatus]);
 
   if (!profileData?.ethAddress) {
     return null;
@@ -447,18 +470,12 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               updateStatus={profileUpdateStatus}
               showUsername={!profileData.userName}
               onUsernameChange={validateUsername}
+              onUsernameBlur={(userName: string) =>
+                props.profileActions.validateUsername({ userName })
+              }
               isValidatingUsername={props.profileUpdateStatus.isValidating}
               usernameSuccess={props.profileUpdateStatus.isValidUsername ? ' ' : undefined}
-              usernameError={
-                props.profileUpdateStatus.isValidUsername !== null &&
-                !props.profileUpdateStatus.isValidUsername
-                  ? props.profileUpdateStatus.notAllowed
-                    ? t(
-                        'Sorry, username can contain lowercase letters, numbers and must end in a letter.',
-                      )
-                    : t('Sorry, this username has already been taken. Please choose another one.')
-                  : undefined
-              }
+              usernameError={usernameErrors}
             />
           )}
         </ModalRenderer>
