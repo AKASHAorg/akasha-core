@@ -13,6 +13,7 @@ import ReportModal from './report';
 import { IReportModalProps } from './report/report-modal';
 import ModerateModal from './moderate';
 import { IModerateModalProps } from './moderate/moderate-modal';
+import ProfileCompletedModal from './profile-completed/profile-completed';
 import FeedbackModal, { IFeedbackModalProps } from './feedback/feedback-modal';
 import EditorModal from './editor/editor-modal';
 import { StyledLayer } from './common/styled-modal';
@@ -31,6 +32,7 @@ export {
   IReportModalProps,
   ModerateModal,
   IModerateModalProps,
+  ProfileCompletedModal,
   FeedbackModal,
   IFeedbackModalProps,
   ToastProvider,

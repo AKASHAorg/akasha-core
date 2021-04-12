@@ -14,7 +14,7 @@ export interface IProfileCardAvatarProps {
   setAvatarPopoverOpen: (value: boolean) => void;
   handleChangeAvatar: (provider: IProfileDataProvider) => void;
   profileProvidersData?: IProfileProvidersData;
-  ethAddress: string;
+  ethAddress?: string;
 }
 
 const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {

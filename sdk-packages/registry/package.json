@@ -27,6 +27,7 @@
   "dependencies": {
     "@akashaproject/sdk-core": "*",
     "@akashaproject/sdk-runtime": "*",
+    "@akashaproject/sdk-auth": "*",
     "@akashaproject/sdk-common": "*",
     "@akashaproject/ui-awf-typings": "*",
     "@openzeppelin/contracts": "3.1.0",

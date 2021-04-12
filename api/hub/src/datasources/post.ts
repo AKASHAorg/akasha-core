@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB, getMailSender, logger, sendAuthorNotification } from '../helpers';
+import { getAppDB, logger, sendAuthorNotification } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
 import { DataProvider, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -116,16 +116,17 @@ class PostAPI extends DataSource {
       for (const quoteID of opt.quotes) {
         const postExists = await db.has(this.dbID, this.collection, [quoteID]);
         if (!postExists) {
-          logger.error('could not save post', post);
+          logger.warn('could not save post');
           throw new Error('Quoted post does not exist');
         }
       }
     }
     const textContent = post.content.find(e => e.property === 'textContent');
-    if (textContent) {
+    // this is just for migration
+    if (Buffer.from(textContent.value, 'base64').toString('base64') !== textContent.value) {
       textContent.value = Buffer.from(textContent.value).toString('base64');
     }
-    logger.info('saving a new post:', post);
+    logger.info('saving a new post');
     const postID = await db.create(this.dbID, this.collection, [post]);
     logger.info('created a new post:', postID);
     const currentPosts = await queryCache.get(this.allPostsCache);
@@ -148,7 +149,7 @@ class PostAPI extends DataSource {
         content: textContent ? Buffer.from(textContent?.value, 'base64').toString() : '',
         title: post.title,
       })
-      .then(_ => logger.info('indexed post:', postID))
+      .then(_ => logger.info(`indexed post: ${postID}`))
       // tslint:disable-next-line:no-console
       .catch(e => logger.error(e));
     return postID;

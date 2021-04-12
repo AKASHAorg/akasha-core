@@ -11,7 +11,7 @@ import { updateCollections, initCollections } from './collections';
 import winston from 'winston';
 import { normalize } from 'eth-ens-namehash';
 import { ethers, utils, providers } from 'ethers';
-import promClient from 'prom-client';
+import objHash from 'object-hash';
 
 export const getAPISig = async (minutes: number = 30) => {
   const expiration = new Date(Date.now() + 1000 * 60 * minutes);
@@ -43,7 +43,7 @@ export const getAppDB = async () => {
   if (appDBClient) {
     if (appDBClient.context.isExpired) {
       // tslint:disable-next-line:no-console
-      console.info('==refreshing grpc session==');
+      logger.info('==refreshing grpc session==');
       appDBClient = undefined;
       return getAppDB();
     }
@@ -66,7 +66,7 @@ export const getMailSender = async () => {
   if (mailSender) {
     if (mailSender.api.context.isExpired) {
       // tslint:disable-next-line:no-console
-      console.info('==refreshing mail sender grpc session==');
+      logger.info('==refreshing mail sender grpc session==');
       mailSender = undefined;
       return getMailSender();
     }
@@ -111,17 +111,26 @@ export const sendNotification = async (recipient: string, notificationObj: objec
   const ms = await getMailSender();
   const textEncoder = new TextEncoder();
   const encodedNotification = textEncoder.encode(JSON.stringify(notificationObj));
-  logger.info('sending notification to', recipient);
+  logger.info('sending notification');
   try {
     await ms.sendMessage(recipient, encodedNotification);
   } catch (e) {
-    logger.error('notification error', e);
+    logger.warn('notification error');
+    logger.error(e);
   }
 };
 
 export const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
-  transports: [new winston.transports.Console({ format: winston.format.simple() })],
+  transports: [
+    new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.timestamp(),
+        winston.format.simple(),
+      ),
+    }),
+  ],
 });
 
 const isEncodedLabelhash = hash => {
@@ -184,7 +193,7 @@ export const verifyEd25519Sig = async (args: {
     return pub.verify(args.data, sig);
   }
   if (typeof args.data === 'object') {
-    serializedData = JSON.stringify(args.data);
+    serializedData = objHash(args.data);
   }
   serializedData = encoder.encode(serializedData);
   return pub.verify(serializedData, sig);

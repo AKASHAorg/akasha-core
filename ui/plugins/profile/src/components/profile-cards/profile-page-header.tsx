@@ -23,11 +23,12 @@ import {
   UseProfileActions,
 } from '@akashaproject/ui-awf-hooks/lib/use-profile';
 import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import { Route } from 'react-router';
+import { Route, useLocation } from 'react-router';
 import {
   ProfileProviders,
   UsernameTypes,
   IProfileData,
+  IProfileProvider,
 } from '@akashaproject/ui-awf-typings/lib/profile';
 
 const BASE_URL =
@@ -44,6 +45,7 @@ const {
   ToastProvider,
   ReportModal,
   ShareModal,
+  ProfileCompletedModal,
   BoxFormCard,
   EnsFormCard,
   ErrorInfoCard,
@@ -54,7 +56,7 @@ const {
 
 export interface IProfileHeaderProps {
   profileId: string;
-  profileData: IProfileData;
+  profileState: Partial<IProfileData & { isLoading: boolean }>;
   profileUpdateStatus: ProfileUpdateStatus;
   profileActions: UseProfileActions;
   loggedUserEthAddress: string | null;
@@ -104,7 +106,7 @@ const ENSForm = styled(EnsFormCard)`
 
 export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps) => {
   const {
-    profileData,
+    profileState,
     loggedUserEthAddress,
     sdkModules,
     rxjsOperators,
@@ -115,6 +117,9 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   } = props;
 
   const [flagged, setFlagged] = React.useState('');
+  const [isRegistration, setIsRegistration] = React.useState<boolean>(false);
+
+  const location = useLocation();
 
   const { t } = useTranslation();
   const [followedProfiles, followActions] = useFollow({
@@ -141,10 +146,8 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   });
 
   React.useEffect(() => {
-    if (profileUpdateStatus.updateComplete) {
-      props.profileActions.resetUpdateStatus();
-      props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
-      return;
+    if (profileUpdateStatus.updateComplete && !isRegistration) {
+      handleModalClose();
     }
     if (ensState.status.registrationComplete) {
       ensActions.resetRegistrationStatus();
@@ -156,20 +159,38 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
 
   React.useEffect(() => {
     if (
-      loggedUserEthAddress &&
-      profileData.ethAddress &&
-      loggedUserEthAddress !== profileData.ethAddress
+      location.pathname === `${menuRoute[MY_PROFILE]}/update-info` &&
+      profileState.ethAddress &&
+      !profileUpdateStatus.updateComplete
     ) {
-      followActions.isFollowing(loggedUserEthAddress, profileData.ethAddress);
+      if (!profileState.userName) {
+        setIsRegistration(true);
+      }
+    }
+  }, [profileState.ethAddress, profileState.userName, profileUpdateStatus, location]);
+
+  React.useEffect(() => {
+    if (
+      loggedUserEthAddress &&
+      profileState.ethAddress &&
+      loggedUserEthAddress !== profileState.ethAddress
+    ) {
+      followActions.isFollowing(loggedUserEthAddress, profileState.ethAddress);
     }
     if (loggedUserEthAddress) {
       networkActions.checkNetwork();
     }
-  }, [loggedUserEthAddress, profileData.ethAddress]);
+  }, [loggedUserEthAddress, profileState.ethAddress]);
 
+  const handleModalClose = () => {
+    setIsRegistration(false);
+    props.profileActions.resetUpdateStatus();
+    props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
+    return;
+  };
   const userNameType = React.useMemo(() => {
     return props.profileActions.getUsernameTypes();
-  }, [JSON.stringify(profileData)]);
+  }, [JSON.stringify(profileState)]);
 
   const ensFormOptions: EnsFormOption[] = React.useMemo(() => {
     const options = [];
@@ -195,7 +216,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         label: userNameType.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN)
           ? t('Display my AKASHA Ethereum name')
           : t('Use an AKASHA-provided Ethereum name'),
-        value: `${profileData.userName}.akasha.eth`,
+        value: `${profileState.userName}.akasha.eth`,
         defaultChecked: !options.length,
         textDetails: userNameType.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN) ? (
           <></>
@@ -225,7 +246,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
       options.push({
         type: ENSOptionTypes.BRING_YOUR_OWN_ENS,
         label: t('Use my own Ethereum name'),
-        value: ensState.userName,
+        value: ensState.userName as string,
         defaultChecked: !options.length,
       });
     }
@@ -236,25 +257,25 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
       options.push({
         type: ENSOptionTypes.ETH_ADDRESS,
         label: t('Display only my Ethereum address'),
-        value: profileData.ethAddress,
+        value: profileState.ethAddress as string,
         defaultChecked: !options.length,
       });
     }
     return options;
-  }, [profileData, ensState, userNameType]);
+  }, [profileState, ensState, userNameType]);
 
   const handleFollow = () => {
     if (!loggedUserEthAddress) {
       return props.modalActions.show(MODAL_NAMES.LOGIN);
     }
-    if (profileData?.ethAddress) {
-      return followActions.follow(profileData.ethAddress);
+    if (profileState?.ethAddress) {
+      return followActions.follow(profileState.ethAddress);
     }
   };
 
   const handleUnfollow = () => {
-    if (profileData?.ethAddress) {
-      followActions.unfollow(profileData.ethAddress);
+    if (profileState?.ethAddress) {
+      followActions.unfollow(profileState.ethAddress);
     }
   };
 
@@ -432,7 +453,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               blockLabel={t('Block User')}
               closeLabel={t('Close')}
               user={loggedUserEthAddress ? loggedUserEthAddress : ''}
-              contentId={profileData.ethAddress ? profileData.ethAddress : flagged}
+              contentId={profileState.ethAddress ? profileState.ethAddress : flagged}
               contentType="profile"
               baseUrl={BASE_FLAG_URL}
               closeModal={closeReportModal}
@@ -449,9 +470,9 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
       </ModalRenderer>
       <Route path={`${menuRoute[MY_PROFILE]}/update-info`}>
         <ModalRenderer slotId={props.layout.app.modalSlotId}>
-          {profileData.ethAddress && (
+          {profileState.ethAddress && !profileUpdateStatus.updateComplete && (
             <ProfileForm
-              titleLabel={profileData.userName ? t('Update Profile') : t('Create Profile')}
+              titleLabel={profileState.userName ? t('Update Profile') : t('Create Profile')}
               avatarLabel={t('Avatar')}
               nameLabel={t('Name')}
               coverImageLabel={t('Cover Image')}
@@ -463,12 +484,12 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               deleteLabel={t('Delete')}
               nameFieldPlaceholder={t('Type your name here')}
               descriptionFieldPlaceholder={t('Add a description about you here')}
-              ethAddress={profileData.ethAddress}
-              providerData={profileData}
+              ethAddress={profileState.ethAddress}
+              providerData={profileState}
               onSave={onProfileUpdateSubmit}
               onCancel={closeProfileUpdateModal}
               updateStatus={profileUpdateStatus}
-              showUsername={!profileData.userName}
+              showUsername={!profileState.userName}
               onUsernameChange={validateUsername}
               onUsernameBlur={(userName: string) =>
                 props.profileActions.validateUsername({ userName })
@@ -476,6 +497,17 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               isValidatingUsername={props.profileUpdateStatus.isValidating}
               usernameSuccess={props.profileUpdateStatus.isValidUsername ? ' ' : undefined}
               usernameError={usernameErrors}
+            />
+          )}
+          {profileState.ethAddress && isRegistration && profileUpdateStatus.updateComplete && (
+            <ProfileCompletedModal
+              titleLabel={`${t('Welcome to the alpha!')}🙌`}
+              subtitleLabel={`${t(
+                'So happy to see you! Thank you for being part of this adventure!',
+              )} 🚀
+            `}
+              buttonLabel={t("Let's rock")}
+              onClick={handleModalClose}
             />
           )}
         </ModalRenderer>
@@ -491,7 +523,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               />
             </StyledLayer>
           )}
-          {!networkState.networkNotSupported && profileData.ethAddress && (
+          {!networkState.networkNotSupported && profileState.ethAddress && (
             <ErrorInfoCard errors={ensErrors}>
               {(errorMessage, hasCriticalErrors) => (
                 <>
@@ -543,9 +575,15 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
         handleShareClick={showShareModal}
-        isFollowing={followedProfiles.includes(profileData?.ethAddress)}
+        isFollowing={followedProfiles.includes(profileState?.ethAddress)}
         loggedEthAddress={loggedUserEthAddress}
-        profileData={{ ...profileData }}
+        profileData={{
+          ...profileState,
+          ethAddress: profileState.ethAddress as string,
+          pubKey: profileState.pubKey as string,
+          providers: profileState.providers as IProfileProvider[],
+          default: profileState.default as IProfileProvider[],
+        }}
         userNameType={userNameType}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
@@ -559,11 +597,11 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         changeCoverImageLabel={t('Change cover image')}
         cancelLabel={t('Cancel')}
         saveChangesLabel={t('Save changes')}
-        canUserEdit={loggedUserEthAddress === profileData.ethAddress}
-        flaggable={loggedUserEthAddress !== profileData.ethAddress}
+        canUserEdit={loggedUserEthAddress === profileState.ethAddress}
+        flaggable={loggedUserEthAddress !== profileState.ethAddress}
         // uncomment this to enable report profile
         // flagAsLabel={t('Report Profile')}
-        onEntryFlag={handleEntryFlag(profileData.ethAddress ? profileData.ethAddress : '')}
+        onEntryFlag={handleEntryFlag(profileState.ethAddress ? profileState.ethAddress : '')}
         onUpdateClick={showUpdateProfileModal}
         onENSChangeClick={showEnsModal}
         changeENSLabel={

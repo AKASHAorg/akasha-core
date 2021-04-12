@@ -1,6 +1,5 @@
-import { execute, makePromise } from 'apollo-link';
-import { HttpLink } from 'apollo-link-http';
-import gql from 'graphql-tag';
+import { ApolloLink, HttpLink, gql, toPromise } from '@apollo/client';
+
 import Stash from './Stash';
 import hash from 'object-hash';
 
@@ -32,7 +31,7 @@ export const runGQL = async (operation: GqlOperation, saveCache: boolean = false
     return gqlStash.get(opHash);
   }
   const tOperation = makeOperation(operation);
-  const data = await makePromise(execute(link, tOperation));
+  const data = await toPromise(ApolloLink.execute(link, tOperation));
   if (saveCache) {
     gqlStash.set(opHash, data);
   }

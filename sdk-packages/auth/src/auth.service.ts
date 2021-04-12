@@ -29,6 +29,8 @@ import { Database } from '@textile/threaddb';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { settingsSchema } from './db.schema';
 import { runGQL } from '@akashaproject/sdk-runtime/lib/gql.network.client';
+import hash from 'object-hash';
+import { Buffer } from 'buffer';
 
 const service: AkashaService = (invoke, log, globalChannel) => {
   let identity: PrivateKey;
@@ -330,7 +332,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     const session = await getSession();
     let serializedData;
     if (typeof data === 'object') {
-      serializedData = JSON.stringify(data);
+      serializedData = hash(data);
     }
     serializedData = new TextEncoder().encode(serializedData);
     let sig: Uint8Array | string = await session.identity.sign(serializedData);
@@ -358,7 +360,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       return pub.verify(args.data, sig);
     }
     if (typeof args.data === 'object') {
-      serializedData = JSON.stringify(args.data);
+      serializedData = hash(args.data);
     }
     serializedData = encoder.encode(serializedData);
     return pub.verify(serializedData, sig);

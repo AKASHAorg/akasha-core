@@ -45,6 +45,16 @@ const ModalWrapper = styled(Box)<IModalWrapperProps>`
   }}
 `;
 
+const ContentWrapper = styled(Box)`
+  padding: 1.5rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 0.5rem;
+  background: ${props => props.theme.colors.background};
+`;
+
 const StyledContentArea = styled(Box)<IMobileProps>`
   background: ${props => props.theme.colors.background};
   border-radius: 0.5rem;
@@ -113,6 +123,7 @@ const StyledFooterArea = styled(Box)`
 export {
   StyledLayer,
   ModalWrapper,
+  ContentWrapper,
   StyledContentArea,
   StyledButtonWrapper,
   ModalButton,
