@@ -413,7 +413,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     return;
   }, [props.profileUpdateStatus]);
 
-  if (!profileData?.ethAddress) {
+  if (!profileState.ethAddress) {
     return null;
   }
 
@@ -575,7 +575,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
         handleShareClick={showShareModal}
-        isFollowing={followedProfiles.includes(profileState?.ethAddress)}
+        isFollowing={followedProfiles.includes(profileState.ethAddress)}
         loggedEthAddress={loggedUserEthAddress}
         profileData={{
           ...profileState,
