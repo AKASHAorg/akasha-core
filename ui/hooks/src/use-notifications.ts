@@ -159,18 +159,21 @@ export const useNotifications = (
       call.subscribe((resp: any) => {
         if (resp.data) {
           let readCounter = 0;
+          const readNotifs = notificationsState.notifications.map((notif: any) => {
+            console.log('notif inside prev: ', notif);
+            if (notif.read) {
+              readCounter++;
+              console.log('readCounter after updating: ', readCounter);
+            }
+            if (notif.id === messageId) {
+              return { ...notif, read: true };
+            }
+            return notif;
+          });
           setNotificationsState((prev: any) => {
             return {
               ...prev,
-              notifications: prev.notifications.map((notif: any) => {
-                if (notif.read) {
-                  readCounter++;
-                }
-                if (notif.id === messageId) {
-                  return { ...notif, read: true };
-                }
-                return notif;
-              }),
+              notifications: readNotifs,
             };
           });
           // check for new notifications when last notif gets read
