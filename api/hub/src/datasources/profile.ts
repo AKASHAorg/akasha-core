@@ -6,6 +6,8 @@ import { queryCache } from '../storage/cache';
 import { searchIndex } from './search-indexes';
 import { postsStats, statsProvider } from '../resolvers/constants';
 
+const NOT_FOUND_PROFILE = new Error('Profile not found');
+const NOT_REGISTERED = new Error('Must be registered first.');
 class ProfileAPI extends DataSource {
   private readonly collection: string;
   private context: any;
@@ -27,7 +29,8 @@ class ProfileAPI extends DataSource {
       const query = new Where('ethAddress').eq(ethAddress);
       const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
       if (!profilesFound.length) {
-        return;
+        logger.warn(NOT_REGISTERED);
+        throw NOT_REGISTERED;
       }
       pubKey = profilesFound[0].pubKey;
       await queryCache.set(key, pubKey);
@@ -78,7 +81,8 @@ class ProfileAPI extends DataSource {
       await queryCache.set(cacheKey, returnedObj);
       return returnedObj;
     }
-    return;
+    logger.warn(NOT_FOUND_PROFILE);
+    throw NOT_FOUND_PROFILE;
   }
 
   async addProfileProvider(pubKey: string, data: DataProvider[]) {
@@ -86,7 +90,8 @@ class ProfileAPI extends DataSource {
     const query = new Where('pubKey').eq(pubKey);
     const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
     if (!profilesFound?.length || !data?.length) {
-      throw new Error('Profile not found');
+      logger.warn(NOT_FOUND_PROFILE);
+      throw NOT_FOUND_PROFILE;
     }
     const profile = profilesFound[0];
     for (const rec of data) {
@@ -110,7 +115,8 @@ class ProfileAPI extends DataSource {
     const query = new Where('pubKey').eq(pubKey);
     const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
     if (!profilesFound?.length) {
-      return;
+      logger.warn(NOT_REGISTERED);
+      throw NOT_REGISTERED;
     }
     const profile = profilesFound[0];
     for (const rec of data) {
@@ -145,18 +151,18 @@ class ProfileAPI extends DataSource {
     const validatedName = validateName(name);
     const query = new Where('userName').eq(validatedName);
     const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
-    if (profilesFound.length) {
-      return;
+    if (profilesFound.length && profilesFound[0].pubKey !== pubKey) {
+      logger.warn(`userName ${name} already taken`);
+      throw new Error('userName already taken');
     }
+
     const query1 = new Where('pubKey').eq(pubKey);
     const profilesFound1 = await db.find<Profile>(this.dbID, this.collection, query1);
     if (!profilesFound1?.length) {
-      return;
+      logger.warn(NOT_REGISTERED);
+      throw NOT_REGISTERED;
     }
     const profile = profilesFound1[0];
-    if (!profile) {
-      return;
-    }
 
     profile.userName = validatedName;
     await db.save(this.dbID, this.collection, [profile]);
@@ -228,7 +234,8 @@ class ProfileAPI extends DataSource {
     const query = new Where('pubKey').eq(pubKey);
     const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
     if (!profilesFound?.length) {
-      return;
+      logger.warn(NOT_REGISTERED);
+      throw NOT_REGISTERED;
     }
     const profile = profilesFound[0];
     data.value = encodeURIComponent(data.value);

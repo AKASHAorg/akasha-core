@@ -35,7 +35,8 @@ class PostAPI extends DataSource {
     }
     const post = await db.findByID<PostItem>(this.dbID, this.collection, id);
     if (!post) {
-      return;
+      logger.warn(`Post ${id} not found`);
+      throw new Error('Post not found!');
     }
     const quotedBy = post?.metaData
       ?.filter(item => item.property === this.quotedByPost)
