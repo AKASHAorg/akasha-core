@@ -204,7 +204,7 @@ export const sendAuthorNotification = async (
   notification: { property: string; provider: string; value: any },
 ) => {
   if (recipient === notification?.value?.author) {
-    return;
+    return Promise.resolve(null);
   }
   return sendNotification(recipient, notification);
 };

@@ -30,7 +30,7 @@ class TagAPI extends DataSource {
   async searchTags(name: string) {
     const result = await searchIndex.search(name, {
       facetFilters: ['category:tag'],
-      hitsPerPage: 20,
+      hitsPerPage: 150,
       attributesToRetrieve: ['name'],
     });
     const tags = result.hits.map((element: any) => {
@@ -58,7 +58,8 @@ class TagAPI extends DataSource {
       await queryCache.set(key, tag[0]);
       return tag[0];
     }
-    return;
+    logger.warn(`tag ${name} not found`);
+    throw new Error('tag not found');
   }
 
   // threadsdb doesn't have limit and offset selectors atm
@@ -137,7 +138,7 @@ class TagAPI extends DataSource {
 
     const exists = await this.getTag(formattedName);
     if (exists) {
-      return;
+      return null;
     }
     const tag: Tag = {
       name: formattedName,
@@ -148,7 +149,8 @@ class TagAPI extends DataSource {
     };
     const tagID = await db.create(this.dbID, this.collection, [tag]);
     if (!tagID || !tagID.length) {
-      return;
+      logger.warn(`tag ${formattedName} could not be created`);
+      throw new Error('tag could not be created');
     }
     searchIndex
       .saveObject({

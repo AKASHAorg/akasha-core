@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB, sendAuthorNotification } from '../helpers';
+import { getAppDB, logger, sendAuthorNotification } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { DataProvider, Comment, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -126,7 +126,8 @@ class CommentAPI extends DataSource {
     }
     comment = await db.findByID<Comment>(this.dbID, this.collection, commentId);
     if (!comment) {
-      return;
+      logger.warn(`comment ${commentId} not found`);
+      throw new Error(`Comment not found`);
     }
     await queryCache.set(commentCache, comment);
     return comment;
