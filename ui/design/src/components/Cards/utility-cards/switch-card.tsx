@@ -88,7 +88,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
                   />
                 </Box>
               )}
-              {count && <Text size="large">{`${count} ${countLabel}`}</Text>}
+              <Text size="large">{`${count} ${countLabel}`}</Text>
             </Box>
             <Box
               direction="row"
