@@ -47,7 +47,6 @@ class PostAPI extends DataSource {
         result.quotes.map(postID => this.getPost(postID, pubKey, true)),
       );
     }
-    await queryCache.set(cacheKey, result);
     return result;
   }
   async getPosts(limit: number, offset: string, pubKey?: string) {
