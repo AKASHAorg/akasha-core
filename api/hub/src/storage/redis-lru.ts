@@ -1,5 +1,7 @@
 import { RedisCache } from 'apollo-server-cache-redis';
 import { ILRU } from './i-lru';
+import { logger } from '../helpers';
+import { parse, stringify } from 'flatted';
 
 export class RedisLRU implements ILRU {
   private redis: RedisCache;
@@ -10,8 +12,13 @@ export class RedisLRU implements ILRU {
   }
 
   public async set(key: string, value: any) {
-    const _value = JSON.stringify(value);
-    return this.redis.set(`${this.prefix}${key}`, _value, { ttl: 86400 });
+    try {
+      const _value = stringify(value);
+      return this.redis.set(`${this.prefix}${key}`, _value, { ttl: 86400 });
+    } catch (e) {
+      logger.warn(`error setting ${key}`);
+      logger.error(e);
+    }
   }
 
   public async has(key: string): Promise<boolean> {
@@ -20,7 +27,10 @@ export class RedisLRU implements ILRU {
 
   public async get(key: string): Promise<any> {
     const _value = await this.redis.get(`${this.prefix}${key}`);
-    return JSON.parse(_value);
+    if (!_value) {
+      return undefined;
+    }
+    return parse(_value);
   }
 
   public async del(key): Promise<void> {

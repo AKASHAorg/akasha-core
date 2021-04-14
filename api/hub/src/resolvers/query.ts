@@ -1,4 +1,5 @@
 import { commentsStats, statsProvider } from './constants';
+import { queryCache } from '../storage/cache';
 
 const query = {
   getProfile: async (_source, { ethAddress }, { dataSources }) => {
@@ -8,6 +9,11 @@ const query = {
     return dataSources.profileAPI.resolveProfile(pubKey);
   },
   getPost: async (_source, { id, pubKey }, { dataSources }) => {
+    const cacheKey = dataSources.postsAPI.getPostCacheKey(id);
+    const hasKey = await queryCache.has(cacheKey);
+    if (hasKey) {
+      return queryCache.get(cacheKey);
+    }
     const postData = await dataSources.postsAPI.getPost(id, pubKey);
     const totalCommentsIndex = postData.metaData.findIndex(
       m => m.provider === statsProvider && m.property === commentsStats,
@@ -48,7 +54,9 @@ const query = {
         Object.assign(quote, { author: resolvedAuthor });
       }
     }
-    return Object.assign({}, postData, { totalComments });
+    const result = Object.assign({}, postData, { totalComments });
+    await queryCache.set(cacheKey, result);
+    return result;
   },
 
   getTag: async (_source, { name }, { dataSources }) => {
@@ -61,10 +69,10 @@ const query = {
     return dataSources.profileAPI.searchProfiles(name);
   },
   tags: async (_source, { limit, offset }, { dataSources }) => {
-    return dataSources.tagsAPI.getTags(limit, offset);
+    return dataSources.tagsAPI.getTags(limit, offset || 0);
   },
   posts: async (_source, { limit, offset, pubKey }, { dataSources }) => {
-    const data = await dataSources.postsAPI.getPosts(limit, offset, pubKey);
+    const data = await dataSources.postsAPI.getPosts(limit, offset || 0, pubKey);
     const results = [];
 
     for (const post of data.results) {
@@ -119,7 +127,7 @@ const query = {
     return profile.following.indexOf(followingProfile.pubKey) !== -1;
   },
   getComments: async (_source, { postID, limit, offset }, { dataSources }) => {
-    const data = await dataSources.commentsAPI.getComments(postID, limit, offset);
+    const data = await dataSources.commentsAPI.getComments(postID, limit, offset || 0);
     const results = [];
     for (const comment of data.results) {
       const author = await dataSources.profileAPI.resolveProfile(comment.author);
@@ -135,7 +143,7 @@ const query = {
     return Object.assign({}, commentData, { author });
   },
   getPostsByAuthor: async (_source, { author, limit, offset, pubKey }, { dataSources }) => {
-    const returned = await dataSources.postsAPI.getPostsByAuthor(author, offset, limit);
+    const returned = await dataSources.postsAPI.getPostsByAuthor(author, offset || 0, limit);
     const posts = await Promise.all(
       returned.results.map(post => {
         return query.getPost(_source, { pubKey, id: post.objectID }, { dataSources });
@@ -144,7 +152,7 @@ const query = {
     return Object.assign({}, returned, { results: posts });
   },
   getPostsByTag: async (_source, { tag, limit, offset, pubKey }, { dataSources }) => {
-    const returned = await dataSources.postsAPI.getPostsByTag(tag, offset, limit);
+    const returned = await dataSources.postsAPI.getPostsByTag(tag, offset || 0, limit);
     const posts = await Promise.all(
       returned.results.map(post => {
         return query.getPost(_source, { pubKey, id: post.objectID }, { dataSources });

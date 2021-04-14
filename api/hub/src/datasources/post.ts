@@ -35,7 +35,8 @@ class PostAPI extends DataSource {
     }
     const post = await db.findByID<PostItem>(this.dbID, this.collection, id);
     if (!post) {
-      return;
+      logger.warn(`Post ${id} not found`);
+      throw new Error('Post not found!');
     }
     const quotedBy = post?.metaData
       ?.filter(item => item.property === this.quotedByPost)
@@ -46,7 +47,6 @@ class PostAPI extends DataSource {
         result.quotes.map(postID => this.getPost(postID, pubKey, true)),
       );
     }
-    await queryCache.set(cacheKey, result);
     return result;
   }
   async getPosts(limit: number, offset: string, pubKey?: string) {
