@@ -66,6 +66,9 @@ const service: AkashaService = (invoke, log) => {
   };
 
   const registerUserName = async (opt: { userName: string }) => {
+    if (opt.userName.length < 3) {
+      throw new Error('Subdomain must have at least 3 characters');
+    }
     const token = await invoke(authServices[AUTH_SERVICE]).getToken();
     const { signData } = await invoke(authServices[AUTH_SERVICE]);
     const signedData = await signData(opt.userName, true);
@@ -84,6 +87,10 @@ const service: AkashaService = (invoke, log) => {
         },
       },
     });
+    if (result.errors) {
+      log.error(result.errors);
+      throw new Error('Saving this username has failed.');
+    }
     return result.data;
   };
 

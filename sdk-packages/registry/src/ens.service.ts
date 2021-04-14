@@ -11,6 +11,7 @@ import ReverseRegistrarABI from './artifacts/ReverseRegistrar.json';
 import EnsABI from './artifacts/ENS.json';
 import commonServices, { WEB3_SERVICE } from '@akashaproject/sdk-common/lib/constants';
 import { normalize } from 'eth-ens-namehash';
+import authServices, { AUTH_SERVICE } from '@akashaproject/sdk-auth/lib/constants';
 
 const service: AkashaService = (invoke, log) => {
   let AkashaRegistrarInstance;
@@ -20,14 +21,17 @@ const service: AkashaService = (invoke, log) => {
 
   // register an akasha.eth subdomain
   const registerName = async (args: { name: string }) => {
-    const available = await isAvailable(args);
-    const validatedName = validateName(args.name);
+    const validatedName = await validateName(args.name);
+    const available = await isAvailable({ name: validatedName });
     if (!available) {
       throw new Error('Subdomain already taken!');
     }
-    const registerTx = await AkashaRegistrarInstance.register(validatedName, RESOLVER_ADDRESS);
-    await registerTx.wait();
-    await claimName(args);
+    const isOwner = await userIsOwnerOf({ name: validatedName });
+    if (!isOwner) {
+      const registerTx = await AkashaRegistrarInstance.register(validatedName, RESOLVER_ADDRESS);
+      await registerTx.wait();
+    }
+    return claimName({ name: validatedName });
   };
 
   // set the returned name for address lookup
@@ -35,13 +39,28 @@ const service: AkashaService = (invoke, log) => {
     if (!ReverseRegistrarInstance) {
       await setupContracts();
     }
-    const validatedName = validateName(args.name);
-    await ReverseRegistrarInstance.setName(`${validatedName}.akasha.eth`);
+    const validatedName = await validateName(args.name);
+    return ReverseRegistrarInstance.setName(`${validatedName}.akasha.eth`);
   };
 
+  const userIsOwnerOf = async (args: { name: string }) => {
+    const { getCurrentUser } = await invoke(authServices[AUTH_SERVICE]);
+    const curUser = await getCurrentUser();
+    if (curUser?.ethAddress) {
+      const resolved = await resolveName({ name: `${args.name}.akasha.eth` });
+      if (resolved === curUser.ethAddress) {
+        return true;
+      }
+    }
+    return false;
+  };
   const isAvailable = async (args: { name: string }) => {
     if (!AkashaRegistrarInstance) {
       await setupContracts();
+    }
+    const isOwner = await userIsOwnerOf(args);
+    if (isOwner) {
+      return true;
     }
     return AkashaRegistrarInstance.isAvailable(args.name);
   };
@@ -76,7 +95,7 @@ const service: AkashaService = (invoke, log) => {
       return isEncodedLabelhash(label) ? label : normalize(label);
     });
     try {
-      return normalizedArray.join('.');
+      return Promise.resolve(normalizedArray.join('.'));
     } catch (e) {
       throw e;
     }

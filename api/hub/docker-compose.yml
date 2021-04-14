@@ -33,10 +33,10 @@ services:
       - '3113:3113'
     restart: unless-stopped
     logging:
-      driver: "json-file"
+      driver: 'json-file'
       options:
-        max-size: "15m"
-        max-file: "3"
+        max-size: '15m'
+        max-file: '3'
 
 volumes:
   prometheus_data: {}
