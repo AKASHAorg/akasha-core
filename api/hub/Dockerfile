@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM node:14.16.1-alpine3.13
 
 ENV PORT "$PORT"
 ENV NODE_ENV "production"

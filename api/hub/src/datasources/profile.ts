@@ -25,7 +25,8 @@ class ProfileAPI extends DataSource {
     const db: Client = await getAppDB();
     let pubKey;
     const key = this.getCacheKey(`:eth:${ethAddress}`);
-    if (!(await queryCache.has(key))) {
+    const hasKey = await queryCache.has(key);
+    if (!hasKey) {
       const query = new Where('ethAddress').eq(ethAddress);
       const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
       if (!profilesFound.length) {
@@ -45,7 +46,8 @@ class ProfileAPI extends DataSource {
   }
   async resolveProfile(pubKey: string, noCache: boolean = false) {
     const cacheKey = this.getCacheKey(pubKey);
-    if ((await queryCache.has(cacheKey)) && !noCache) {
+    const hasKey = await queryCache.has(cacheKey);
+    if (hasKey && !noCache) {
       return queryCache.get(cacheKey);
     }
     const db: Client = await getAppDB();

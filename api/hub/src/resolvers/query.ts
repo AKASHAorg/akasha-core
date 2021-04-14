@@ -10,7 +10,8 @@ const query = {
   },
   getPost: async (_source, { id, pubKey }, { dataSources }) => {
     const cacheKey = dataSources.postsAPI.getPostCacheKey(id);
-    if (await queryCache.has(cacheKey)) {
+    const hasKey = await queryCache.has(cacheKey);
+    if (hasKey) {
       return queryCache.get(cacheKey);
     }
     const postData = await dataSources.postsAPI.getPost(id, pubKey);
@@ -54,7 +55,7 @@ const query = {
       }
     }
     const result = Object.assign({}, postData, { totalComments });
-    queryCache.set(cacheKey, result);
+    await queryCache.set(cacheKey, result);
     return result;
   },
 

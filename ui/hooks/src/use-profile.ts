@@ -309,7 +309,7 @@ export const useProfile = (
               ]);
             }
             const makeDefault = profileService.makeDefaultProvider(providers);
-            const call = addProvider.pipe(props.rxjsOperators.exhaustMap(() => makeDefault));
+            const call = addProvider.pipe(props.rxjsOperators.switchMap(() => makeDefault));
             call.subscribe(() => {
               const updatedFields: { [key: string]: any } = providers
                 .map(provider => {
