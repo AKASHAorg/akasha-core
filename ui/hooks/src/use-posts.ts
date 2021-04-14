@@ -119,6 +119,44 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     reportedItems: [],
   });
 
+  const [fetchCommentsPayload, setFetchCommentsPayload] = React.useState<GetItemsPayload | null>(
+    null,
+  );
+
+  React.useEffect(() => {
+    if (postsState.isFetchingComments && fetchCommentsPayload) {
+      const commentsCall = postsService.comments.getComments(fetchCommentsPayload);
+      // console.log(payload.offset, postsState.nextCommentIndex, 'offset, nextIdx');
+      const ipfsSettingsCall = ipfsService.getSettings({});
+      const calls = combineLatest([ipfsSettingsCall, commentsCall]);
+      const sub = calls.subscribe((responses: [any, any]) => {
+        const [ipfsResp, commentsResp] = responses;
+        const { data } = commentsResp;
+        const { nextIndex, results, total }: GetEntriesResponse['data']['posts'] = data.getComments;
+        const newIds: string[] = [];
+        const comments = results
+          .filter(excludeNonSlateContent)
+          .map(entry => {
+            newIds.push(entry._id);
+            return mapEntry(entry, ipfsResp.data);
+          })
+          .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
+
+        setPostsState(prev => ({
+          ...prev,
+          nextCommentIndex: nextIndex,
+          postsData: { ...prev.postsData, ...comments },
+          commentIds: prev.commentIds.concat(newIds),
+          isFetchingComments: false,
+          totalItems: total,
+        }));
+        setFetchCommentsPayload(null);
+      }, createErrorHandler('usePosts.getComments', false, onError));
+      return () => sub && sub.unsubscribe();
+    }
+    return;
+  }, [postsState.isFetchingComments, fetchCommentsPayload]);
+
   const actions: PostsActions = {
     getPost: async postId => {
       // check moderation status of post
@@ -334,35 +372,18 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       }, createErrorHandler('usePosts.getPosts', false, onError));
     },
     getComments: payload => {
-      const commentsCall = postsService.comments.getComments({
-        ...payload,
-        offset: payload.offset || postsState.nextCommentIndex,
-      });
-      const ipfsSettingsCall = ipfsService.getSettings({});
-      setPostsState(prev => ({ ...prev, isFetchingComments: true }));
-      const calls = combineLatest([ipfsSettingsCall, commentsCall]);
-      calls.subscribe((responses: [any, any]) => {
-        const [ipfsResp, commentsResp] = responses;
-        const { data } = commentsResp;
-        const { nextIndex, results, total }: GetEntriesResponse['data']['posts'] = data.getComments;
-        const newIds: string[] = [];
-        const comments = results
-          .filter(excludeNonSlateContent)
-          .map(entry => {
-            newIds.push(entry._id);
-            return mapEntry(entry, ipfsResp.data);
-          })
-          .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
+      if (postsState.commentIds.length === postsState.totalItems || postsState.isFetchingComments) {
+        return;
+      }
+      const { offset = postsState.nextCommentIndex, ...other } = payload;
 
-        setPostsState(prev => ({
-          ...prev,
-          nextCommentIndex: nextIndex,
-          postsData: { ...prev.postsData, ...comments },
-          commentIds: prev.commentIds.concat(newIds),
-          isFetchingComments: false,
-          totalItems: total,
-        }));
-      }, createErrorHandler('usePosts.getComments', false, onError));
+      setPostsState(prev => ({ ...prev, isFetchingComments: true }));
+
+      const params: GetItemsPayload = { ...other };
+      if (offset) {
+        params.offset = offset;
+      }
+      setFetchCommentsPayload(params);
     },
     optimisticPublishComment: (commentData, postId, loggedProfile) => {
       const publishObj = buildPublishObject(commentData, postId);
