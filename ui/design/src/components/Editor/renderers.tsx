@@ -2,6 +2,7 @@ import * as React from 'react';
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
 import styled from 'styled-components';
 import { Icon } from '../Icon';
+import { StyledAnchor } from '../Input/text-input-icon-form/styles';
 import { StyledCloseDiv } from './styled-editor-box';
 
 const StyledImg = styled.img`
@@ -86,6 +87,20 @@ const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
   );
 };
 
+const LinkElement = ({ attributes, children, element }: any) => {
+  return (
+    <StyledAnchor
+      {...attributes}
+      href={element.url as string}
+      size="medium"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {children}
+    </StyledAnchor>
+  );
+};
+
 const renderElement = (
   props: RenderElementProps,
   handleMentionClick?: (pubKey: string) => void,
@@ -101,6 +116,8 @@ const renderElement = (
       return <MentionElement handleMentionClick={handleMentionClick} {...props} />;
     case 'tag':
       return <TagElement handleTagClick={handleTagClick} {...props} />;
+    case 'link':
+      return <LinkElement {...props} />;
 
     default:
       return <p {...props.attributes}>{props.children}</p>;
