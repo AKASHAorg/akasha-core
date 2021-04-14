@@ -30,8 +30,8 @@ class ProfileAPI extends DataSource {
       const query = new Where('ethAddress').eq(ethAddress);
       const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
       if (!profilesFound.length) {
-        logger.warn(NOT_REGISTERED);
-        throw NOT_REGISTERED;
+        logger.warn(`${ethAddress} not registered`);
+        throw NOT_FOUND_PROFILE;
       }
       pubKey = profilesFound[0].pubKey;
       await queryCache.set(key, pubKey);
@@ -83,7 +83,7 @@ class ProfileAPI extends DataSource {
       await queryCache.set(cacheKey, returnedObj);
       return returnedObj;
     }
-    logger.warn(NOT_FOUND_PROFILE);
+    logger.warn(`${pubKey} not registered`);
     throw NOT_FOUND_PROFILE;
   }
 
@@ -117,7 +117,7 @@ class ProfileAPI extends DataSource {
     const query = new Where('pubKey').eq(pubKey);
     const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
     if (!profilesFound?.length) {
-      logger.warn(NOT_REGISTERED);
+      logger.warn(`${pubKey} not registered`);
       throw NOT_REGISTERED;
     }
     const profile = profilesFound[0];
@@ -161,7 +161,7 @@ class ProfileAPI extends DataSource {
     const query1 = new Where('pubKey').eq(pubKey);
     const profilesFound1 = await db.find<Profile>(this.dbID, this.collection, query1);
     if (!profilesFound1?.length) {
-      logger.warn(NOT_REGISTERED);
+      logger.warn(`${pubKey} not registered`);
       throw NOT_REGISTERED;
     }
     const profile = profilesFound1[0];

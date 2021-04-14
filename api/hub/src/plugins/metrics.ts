@@ -1,6 +1,5 @@
 import { ApolloServerPlugin } from 'apollo-server-plugin-base';
 import { Counter, Histogram, Registry } from 'prom-client';
-import { logger } from '../helpers';
 
 // inspired from apollo-metrics
 export default function createMetricsPlugin(register: Registry): ApolloServerPlugin {
@@ -107,7 +106,6 @@ export default function createMetricsPlugin(register: Registry): ApolloServerPlu
             operationName: errorContext.request.operationName || '',
             operation: errorContext.operation?.operation,
           });
-          logger.error(JSON.stringify(errorContext));
         },
         willSendResponse(responseContext) {
           const labels = {
