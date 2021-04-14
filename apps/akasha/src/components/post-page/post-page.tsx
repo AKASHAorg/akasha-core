@@ -477,7 +477,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             avatar={loginProfile.avatar}
             ethAddress={loginState.ethAddress}
             postLabel={t('Reply')}
-            placeholderLabel={`${t('Reply to')} ${entryAuthorName}`}
+            placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
             onPublish={handlePublishComment}
             getMentions={mentionsActions.getMentions}
             getTags={mentionsActions.getTags}
