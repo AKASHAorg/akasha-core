@@ -64,51 +64,52 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     const postID = Array.isArray(notif.body?.value?.postID)
       ? notif.body?.value?.postID[0]
       : notif.body?.value?.postID;
-    const commentID = Array.isArray(notif.body?.value?.commentID)
-      ? notif.body?.value?.commentID[0]
-      : notif.body?.value?.commentID;
+    // use this when we have routing available for comments
+    // const commentID = Array.isArray(notif.body?.value?.commentID)
+    //   ? notif.body?.value?.commentID[0]
+    //   : notif.body?.value?.commentID;
     switch (notif.body.property) {
       case 'POST_MENTION':
         label = mentionedPostLabel;
         clickHandler = () => {
+          handleMessageRead(notif.id);
           if (postID) {
             handleEntryClick(postID);
           }
-          handleMessageRead(notif.id);
         };
         break;
       case 'COMMENT_MENTION':
         label = mentionedCommentLabel;
         clickHandler = () => {
-          if (commentID) {
+          handleMessageRead(notif.id);
+          if (postID) {
             handleEntryClick(postID);
           }
-          handleMessageRead(notif.id);
         };
         break;
       case 'NEW_COMMENT':
         label = replyLabel;
         clickHandler = () => {
-          if (commentID) {
+          handleMessageRead(notif.id);
+          if (postID) {
             handleEntryClick(postID);
           }
-          handleMessageRead(notif.id);
         };
         break;
       case 'POST_QUOTE':
         label = repostLabel;
         clickHandler = () => {
+          handleMessageRead(notif.id);
           if (postID) {
             handleEntryClick(postID);
           }
-          handleMessageRead(notif.id);
         };
         break;
       case 'NEW_FOLLOWER':
         label = followingLabel;
         clickHandler = () => {
-          handleProfileClick(profileData.pubKey);
           handleMessageRead(notif.id);
+          handleProfileClick(profileData.pubKey);
         };
         break;
       default:
@@ -132,7 +133,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
           avatarImage={profileData.avatar}
           label={fullLabel}
           info={relativeTime}
-          onClickAvatar={() => handleProfileClick(profileData.pubKey)}
+          onClickAvatar={clickHandler}
           onClick={clickHandler}
           active={!notif.read}
         />

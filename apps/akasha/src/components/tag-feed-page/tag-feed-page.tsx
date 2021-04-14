@@ -53,7 +53,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         if (resp.data?.getTag) {
           const tag = {
             name: resp.data.getTag.name,
-            totalPosts: resp.data.getTag.posts?.length + resp.data.getTag.comments?.length,
+            totalPosts: resp.data.getTag.posts?.length,
           };
           setTagData(tag);
         }
