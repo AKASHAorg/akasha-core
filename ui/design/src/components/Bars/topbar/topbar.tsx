@@ -282,7 +282,13 @@ const Topbar = (props: ITopbarProps) => {
           setInputValue={setInputValue}
           onSearch={onSearch}
           inputPlaceholderLabel={searchBarLabel}
-          handleCloseInput={() => setMobileSearchOpen(false)}
+          handleCloseInput={() => {
+            if (currentLocation?.includes('search')) {
+              history.back();
+            }
+            setInputValue('');
+            setMobileSearchOpen(false);
+          }}
         />
       );
     }
