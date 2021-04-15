@@ -116,14 +116,24 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   React.useEffect(() => {
     const { avatar, coverImage, ...rest } = providerData;
     const images: { avatar?: IImageSrc; coverImage?: IImageSrc } = {};
-    if (typeof avatar === 'string') {
+    if (typeof avatar === 'string' && !formValues.hasOwnProperty('avatar')) {
       images.avatar = { preview: avatar, src: null, prefix: null, isUrl: true };
-    } else if (avatar && avatar.src) {
+    } else if (
+      avatar &&
+      typeof avatar !== 'string' &&
+      avatar.src &&
+      !formValues.hasOwnProperty('avatar')
+    ) {
       images.avatar = avatar;
     }
-    if (typeof coverImage === 'string') {
+    if (typeof coverImage === 'string' && !formValues.hasOwnProperty('coverImage')) {
       images.coverImage = { preview: coverImage, src: null, prefix: null, isUrl: true };
-    } else if (coverImage && coverImage.src) {
+    } else if (
+      coverImage &&
+      typeof coverImage !== 'string' &&
+      coverImage.src &&
+      !formValues.hasOwnProperty('coverImage')
+    ) {
       images.coverImage = coverImage;
     }
     let userName: string | undefined;
@@ -141,7 +151,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
       ...images,
       userName,
     }));
-  }, [JSON.stringify(providerData)]);
+  }, [JSON.stringify(providerData), JSON.stringify(formValues)]);
 
   const handleAvatarClick = () => {
     const avatarInput = avatarInputRef.current;
@@ -275,7 +285,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
                     <Icon type="image" ref={avatarRef} />
                   </StyledAvatarPlaceholderDiv>
                 )}
-                {formValues.avatar && (
+                {formValues.avatar && formValues.avatar.preview && (
                   <StyledAvatarDiv onClick={handleAvatarClick}>
                     <StyledImage src={formValues.avatar.preview} fit="contain" />
                     <StyledAvatarOverlay>
