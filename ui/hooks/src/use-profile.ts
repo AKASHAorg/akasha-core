@@ -449,17 +449,13 @@ export const useProfile = (
           value: profile.userName,
           provider: ProfileProviders.EWA_BASIC,
         });
-        call.subscribe(
-          () => {
-            // nothing to do here as we don't really
-            // need to wait for the response
-          },
-          (err: Error) => {
+        call.subscribe({
+          error(err: Error) {
             if (logger) {
               logger.error(`Error in getUsernameTypes: ${err}`);
             }
           },
-        );
+        });
         type.push(UsernameTypes.TEXTILE);
       }
 
