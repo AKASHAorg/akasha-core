@@ -409,8 +409,6 @@ export const useProfile = (
       actions.resetUpdateStatus();
     },
     getUsernameTypes() {
-      // default username is the one set in
-      // the onboarding flow (UsernameTypes.TEXTILE)
       const type: UsernameTypes[] = [];
 
       const defaultProvider = profile.default?.find(
@@ -440,6 +438,23 @@ export const useProfile = (
           }
         });
       }
+      /**
+       * treat th case of failure in saving the profile provider
+       * in the onboarding phase
+       */
+      if (profile.providers?.length === 0 && profile.userName) {
+        const call = props.profileService.addProfileProvider({
+          property: ProfileProviderProperties.USERNAME,
+          value: profile.userName,
+          provider: ProfileProviders.EWA_BASIC,
+        });
+        call.subscribe(() => {
+          // nothing to do here as we don't really
+          // need to wait for the response
+        });
+        type.push(UsernameTypes.TEXTILE);
+      }
+
       return {
         default: defaultProvider,
         available: type,
