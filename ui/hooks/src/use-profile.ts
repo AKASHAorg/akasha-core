@@ -46,6 +46,7 @@ export interface UseProfileProps {
   ensService?: any;
   rxjsOperators?: any;
   globalChannel: any;
+  logger?: any;
 }
 
 export interface ProfileUpdateStatus {
@@ -66,7 +67,7 @@ export interface ProfileUpdateStatus {
 export const useProfile = (
   props: UseProfileProps,
 ): [Partial<IProfileData & { isLoading: boolean }>, UseProfileActions, ProfileUpdateStatus] => {
-  const { onError, ipfsService, profileService, postsService, globalChannel } = props;
+  const { onError, ipfsService, profileService, postsService, globalChannel, logger } = props;
   const [profile, setProfile] = React.useState<Partial<IProfileData & { isLoading: boolean }>>({
     isLoading: true,
   });
@@ -448,10 +449,17 @@ export const useProfile = (
           value: profile.userName,
           provider: ProfileProviders.EWA_BASIC,
         });
-        call.subscribe(() => {
-          // nothing to do here as we don't really
-          // need to wait for the response
-        });
+        call.subscribe(
+          () => {
+            // nothing to do here as we don't really
+            // need to wait for the response
+          },
+          (err: Error) => {
+            if (logger) {
+              logger.error(`Error in getUsernameTypes: ${err}`);
+            }
+          },
+        );
         type.push(UsernameTypes.TEXTILE);
       }
 
