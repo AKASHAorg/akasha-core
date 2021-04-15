@@ -68,12 +68,8 @@ const CardRenderer = (props: IRenderItemProps) => {
           updateRef(itemId, cardWrapperRef.current);
         }
       } else if (itemRect) {
-        const currentHeight = cardWrapperRef.current.getBoundingClientRect().height;
-        const prevHeight = itemRect.rect.getHeight();
-        if (currentHeight !== prevHeight) {
-          if (updateRef) {
-            updateRef(itemId, cardWrapperRef.current);
-          }
+        if (updateRef) {
+          updateRef(itemId, cardWrapperRef.current);
         }
       }
       return;
