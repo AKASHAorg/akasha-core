@@ -8,7 +8,6 @@ const CardItemWrapper = styled.div<{ yPos?: number; opacity: number }>`
   width: 100%;
   position: absolute;
   opacity: ${props => props.opacity};
-  transform: translateY(${props => props.yPos}px);
   &.vlist-item-exit {
     /* transform: translateY(${props => props.yPos}px); */
     opacity: 0 !important;
@@ -29,8 +28,8 @@ const CardRenderer = (props: IRenderItemProps) => {
     itemRect,
     updateRef,
     averageItemHeight,
-    // itemIndex,
-    className,
+    itemIndex,
+    // className,
     onItemUnmount,
   } = props;
 
@@ -40,6 +39,12 @@ const CardRenderer = (props: IRenderItemProps) => {
   const afterEntities = customEntities.filter(
     entityObj => entityObj.position === 'after' && entityObj.itemId === itemId,
   );
+  // first time render
+  const ftRender = React.useRef(true);
+  const isMounted = React.useRef(true);
+
+  const cardWrapperRef = React.useRef<HTMLDivElement | null>(null);
+
   React.useEffect(() => {
     if (itemId && !itemData && loadItemData) {
       loadItemData({ itemId });
@@ -47,28 +52,49 @@ const CardRenderer = (props: IRenderItemProps) => {
   }, [itemId]);
 
   React.useEffect(() => {
+    ftRender.current = false;
     return () => {
+      isMounted.current = false;
       if (onItemUnmount) {
         onItemUnmount(itemId, itemRect);
       }
     };
   }, []);
 
-  const onRef = (divElem: HTMLDivElement) => {
-    if (updateRef) {
-      updateRef(itemId, divElem);
+  React.useLayoutEffect(() => {
+    if (cardWrapperRef.current) {
+      if (ftRender.current) {
+        if (updateRef) {
+          updateRef(itemId, cardWrapperRef.current);
+        }
+      } else if (itemRect) {
+        const currentHeight = cardWrapperRef.current.getBoundingClientRect().height;
+        const prevHeight = itemRect.rect.getHeight();
+        if (currentHeight !== prevHeight) {
+          if (updateRef) {
+            updateRef(itemId, cardWrapperRef.current);
+          }
+        }
+      }
+      return;
     }
-  };
+    if (!cardWrapperRef.current && isMounted.current) {
+      if (onItemUnmount) {
+        onItemUnmount(itemId, itemRect);
+      }
+    }
+  }, [cardWrapperRef.current, isMounted.current, ftRender.current, itemRect]);
 
   const shouldLoadData = itemRect && itemRect.canRender;
 
   return (
     <CardItemWrapper
-      // data-itemid={itemId}
-      // data-itemindex={itemIndex}
-      ref={onRef}
-      className={className}
-      yPos={itemRect ? itemRect.rect.getTop() : itemSpacing}
+      data-itemid={itemId}
+      data-itemindex={itemIndex}
+      ref={cardWrapperRef}
+      style={{
+        transform: `translateY(${itemRect ? itemRect.rect.getTop() : itemSpacing}px)`,
+      }}
       opacity={itemRect ? 1 : 0.01}
     >
       {beforeEntities.map((entityObj, idx) => {
