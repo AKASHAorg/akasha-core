@@ -162,6 +162,8 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
               unfollowLabel={t('Unfollow')}
               followersLabel={t('Followers')}
               followingLabel={t('Following')}
+              tagAnchorLink={'/social-app/tags'}
+              profileAnchorLink={'/profile'}
               tags={trendingData.tags}
               profiles={trendingData.profiles}
               followedProfiles={followedProfiles}

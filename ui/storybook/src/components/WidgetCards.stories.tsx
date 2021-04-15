@@ -92,6 +92,8 @@ storiesOf('Cards/Widget Cards', module)
         handleUnfollowProfile={ethAddress => action('subscribe profile clicked')(ethAddress)}
         handleSubscribeTag={tagName => action('subscribe profile clicked')(tagName)}
         handleUnsubscribeTag={tagName => action('subscribe profile clicked')(tagName)}
+        tagAnchorLink={'/social-app/tags'}
+        profileAnchorLink={'/profile'}
         tags={trendingTagsData}
         profiles={trendingProfilesData}
         followedProfiles={[]}

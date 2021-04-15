@@ -1,4 +1,4 @@
-import { Box, Text, Tabs } from 'grommet';
+import { Box, Text, Tabs, Anchor } from 'grommet';
 import * as React from 'react';
 import { SubtitleTextIcon } from '../../TextIcon/index';
 import { Icon } from '../../Icon/index';
@@ -26,6 +26,9 @@ export interface ITrendingWidgetCardProps {
   subscribeLabel?: string;
   unsubscribeLabel?: string;
   subscribedLabel?: string;
+  // anchor link
+  tagAnchorLink: string;
+  profileAnchorLink: string;
   // handlers
   onClickTag: (tagName: string) => void;
   onClickProfile: (ethAddress: string) => void;
@@ -76,11 +79,22 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
     subscribeLabel,
     subscribedLabel,
     unsubscribeLabel,
+    tagAnchorLink,
+    profileAnchorLink,
     followedProfiles,
     subscribedTags,
   } = props;
 
   const iterateArr = [...Array(4).keys()];
+
+  const anchorStyle: { [key: string]: string } = {
+    WebkitUserSelect: 'none',
+    KhtmlUserSelect: 'none',
+    textDecoration: 'none',
+    MozUserSelect: 'none',
+    msUserSelect: 'none',
+    userSelect: 'none',
+  };
 
   return (
     <WidgetAreaCardBox className={className}>
@@ -105,13 +119,24 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
             {tags.length !== 0 &&
               tags.slice(0, 4).map((tag, index) => (
                 <Box key={index} direction="row" justify="between" align="center">
-                  <SubtitleTextIcon
-                    onClick={() => onClickTag(tag.name)}
-                    label={`#${tag.name}`}
-                    subtitle={`Used in ${tag.totalPosts} posts`}
-                    labelSize="large"
-                    gap="xxsmall"
-                    maxWidth="10rem"
+                  <Anchor
+                    onClick={e => {
+                      e.preventDefault();
+                      return false;
+                    }}
+                    weight="normal"
+                    href={`${tagAnchorLink}/${tag.name}`}
+                    style={anchorStyle}
+                    label={
+                      <SubtitleTextIcon
+                        onClick={() => onClickTag(tag.name)}
+                        label={`#${tag.name}`}
+                        subtitle={`Used in ${tag.totalPosts} posts`}
+                        labelSize="large"
+                        gap="xxsmall"
+                        maxWidth="10rem"
+                      />
+                    }
                   />
                   <Box width="7rem">
                     <DuplexButton
@@ -147,16 +172,27 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
             {profiles.length !== 0 &&
               profiles.slice(0, 4).map((profile, index) => (
                 <Box key={index} direction="row" justify="between" align="center">
-                  <Box width="11rem" pad="none">
-                    <ProfileAvatarButton
-                      ethAddress={profile.ethAddress}
-                      onClick={() => onClickProfile(profile.pubKey)}
-                      label={profile.userName || profile.name}
-                      info={`${profile.totalFollowers} ${followersLabel}`}
-                      size="md"
-                      avatarImage={profile.avatar}
-                    />
-                  </Box>
+                  <Anchor
+                    onClick={e => {
+                      e.preventDefault();
+                      return false;
+                    }}
+                    weight="normal"
+                    href={`${profileAnchorLink}/${profile.pubKey}`}
+                    style={anchorStyle}
+                    label={
+                      <Box width="11rem" pad="none">
+                        <ProfileAvatarButton
+                          ethAddress={profile.ethAddress}
+                          onClick={() => onClickProfile(profile.pubKey)}
+                          label={profile.userName || profile.name}
+                          info={`${profile.totalFollowers} ${followersLabel}`}
+                          size="md"
+                          avatarImage={profile.avatar}
+                        />
+                      </Box>
+                    }
+                  />
                   {profile.ethAddress !== loggedEthAddress && (
                     <Box width="7rem">
                       <DuplexButton
