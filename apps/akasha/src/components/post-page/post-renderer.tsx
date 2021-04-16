@@ -25,6 +25,7 @@ export interface PostRendererProps {
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (pubKey: string) => void;
   onTagClick: (name: string) => void;
+  singleSpaNavigate: (url: string) => void;
   bookmarkState?: IBookmarkState;
   style?: React.CSSProperties;
   contentClickable?: boolean;
@@ -155,6 +156,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     contentClickable={contentClickable}
                     onMentionClick={props.onMentionClick}
                     onTagClick={props.onTagClick}
+                    singleSpaNavigate={props.singleSpaNavigate}
                     hidePublishTime={hidePublishTime}
                     disableActions={disableActions}
                     hideActionButtons={true}

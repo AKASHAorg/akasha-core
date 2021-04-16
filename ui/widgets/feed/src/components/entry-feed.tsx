@@ -180,6 +180,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
                   onUnfollow={followActions.unfollow}
                   onBookmark={handleBookmark}
                   onNavigate={props.onNavigate}
+                  singleSpaNavigate={props.singleSpaNavigate}
                   onReport={props.onReport}
                   onRepost={handleRepost}
                   contentClickable={props.contentClickable}

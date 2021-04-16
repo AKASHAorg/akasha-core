@@ -2,6 +2,7 @@ import * as React from 'react';
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
 import styled from 'styled-components';
 import { Icon } from '../Icon';
+import { StyledAnchor } from '../Input/text-input-icon-form/styles';
 import { StyledCloseDiv } from './styled-editor-box';
 
 const StyledImg = styled.img`
@@ -86,10 +87,34 @@ const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
   );
 };
 
+const LinkElement = ({ attributes, children, element, handleLinkClick }: any) => {
+  return (
+    <StyledAnchor
+      {...attributes}
+      href={element.url as string}
+      size="large"
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={ev => {
+        if (new URL(element.url).origin === window.location.origin) {
+          handleLinkClick(element.url);
+          ev.stopPropagation();
+          ev.preventDefault();
+          return false;
+        }
+        return ev.stopPropagation();
+      }}
+    >
+      {children}
+    </StyledAnchor>
+  );
+};
+
 const renderElement = (
   props: RenderElementProps,
   handleMentionClick?: (pubKey: string) => void,
   handleTagClick?: (name: string) => void,
+  handleLinkClick?: (url: string) => void,
   handleDeleteImage?: (element: any) => void,
 ) => {
   switch (props.element.type) {
@@ -101,6 +126,8 @@ const renderElement = (
       return <MentionElement handleMentionClick={handleMentionClick} {...props} />;
     case 'tag':
       return <TagElement handleTagClick={handleTagClick} {...props} />;
+    case 'link':
+      return <LinkElement handleLinkClick={handleLinkClick} {...props} />;
 
     default:
       return <p {...props.attributes}>{props.children}</p>;
