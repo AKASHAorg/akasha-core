@@ -46,6 +46,7 @@ export interface UseProfileProps {
   ensService?: any;
   rxjsOperators?: any;
   globalChannel: any;
+  logger?: any;
 }
 
 export interface ProfileUpdateStatus {
@@ -66,7 +67,7 @@ export interface ProfileUpdateStatus {
 export const useProfile = (
   props: UseProfileProps,
 ): [Partial<IProfileData & { isLoading: boolean }>, UseProfileActions, ProfileUpdateStatus] => {
-  const { onError, ipfsService, profileService, postsService, globalChannel } = props;
+  const { onError, ipfsService, profileService, postsService, globalChannel, logger } = props;
   const [profile, setProfile] = React.useState<Partial<IProfileData & { isLoading: boolean }>>({
     isLoading: true,
   });
@@ -309,7 +310,7 @@ export const useProfile = (
               ]);
             }
             const makeDefault = profileService.makeDefaultProvider(providers);
-            const call = addProvider.pipe(props.rxjsOperators.exhaustMap(() => makeDefault));
+            const call = addProvider.pipe(props.rxjsOperators.switchMap(() => makeDefault));
             call.subscribe(() => {
               const updatedFields: { [key: string]: any } = providers
                 .map(provider => {
@@ -409,8 +410,6 @@ export const useProfile = (
       actions.resetUpdateStatus();
     },
     getUsernameTypes() {
-      // default username is the one set in
-      // the onboarding flow (UsernameTypes.TEXTILE)
       const type: UsernameTypes[] = [];
 
       const defaultProvider = profile.default?.find(
@@ -440,6 +439,26 @@ export const useProfile = (
           }
         });
       }
+      /**
+       * treat th case of failure in saving the profile provider
+       * in the onboarding phase
+       */
+      if (profile.providers?.length === 0 && profile.userName) {
+        const call = props.profileService.addProfileProvider({
+          property: ProfileProviderProperties.USERNAME,
+          value: profile.userName,
+          provider: ProfileProviders.EWA_BASIC,
+        });
+        call.subscribe({
+          error(err: Error) {
+            if (logger) {
+              logger.error(`Error in getUsernameTypes: ${err}`);
+            }
+          },
+        });
+        type.push(UsernameTypes.TEXTILE);
+      }
+
       return {
         default: defaultProvider,
         available: type,

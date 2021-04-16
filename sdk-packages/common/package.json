@@ -35,7 +35,7 @@
     "@akashaproject/sdk-runtime": "*",
     "@walletconnect/web3-provider": "1.4.1",
     "@akashaproject/ui-awf-typings": "*",
-    "ethers": "5.0.32",
+    "ethers": "5.1.0",
     "browser-image-resizer": "2.2.0",
     "@metamask/detect-provider": "1.2.0"
   },

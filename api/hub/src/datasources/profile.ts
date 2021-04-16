@@ -25,12 +25,13 @@ class ProfileAPI extends DataSource {
     const db: Client = await getAppDB();
     let pubKey;
     const key = this.getCacheKey(`:eth:${ethAddress}`);
-    if (!(await queryCache.has(key))) {
+    const hasKey = await queryCache.has(key);
+    if (!hasKey) {
       const query = new Where('ethAddress').eq(ethAddress);
       const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
       if (!profilesFound.length) {
-        logger.warn(NOT_REGISTERED);
-        throw NOT_REGISTERED;
+        logger.warn(`${ethAddress} not registered`);
+        throw NOT_FOUND_PROFILE;
       }
       pubKey = profilesFound[0].pubKey;
       await queryCache.set(key, pubKey);
@@ -45,7 +46,8 @@ class ProfileAPI extends DataSource {
   }
   async resolveProfile(pubKey: string, noCache: boolean = false) {
     const cacheKey = this.getCacheKey(pubKey);
-    if ((await queryCache.has(cacheKey)) && !noCache) {
+    const hasKey = await queryCache.has(cacheKey);
+    if (hasKey && !noCache) {
       return queryCache.get(cacheKey);
     }
     const db: Client = await getAppDB();
@@ -62,6 +64,13 @@ class ProfileAPI extends DataSource {
           prov.value = Buffer.from(prov.value, 'base64').toString();
         }
       }
+
+      for (const prov of profilesFound[0].providers) {
+        if (Buffer.from(prov.value, 'base64').toString('base64') === prov.value) {
+          prov.value = Buffer.from(prov.value, 'base64').toString();
+        }
+      }
+
       const returnedObj = JSON.parse(JSON.stringify(profilesFound[0]));
       for (const provider of q) {
         Object.assign(returnedObj, {
@@ -81,7 +90,7 @@ class ProfileAPI extends DataSource {
       await queryCache.set(cacheKey, returnedObj);
       return returnedObj;
     }
-    logger.warn(NOT_FOUND_PROFILE);
+    logger.warn(`${pubKey} not registered`);
     throw NOT_FOUND_PROFILE;
   }
 
@@ -115,7 +124,7 @@ class ProfileAPI extends DataSource {
     const query = new Where('pubKey').eq(pubKey);
     const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
     if (!profilesFound?.length) {
-      logger.warn(NOT_REGISTERED);
+      logger.warn(`${pubKey} not registered`);
       throw NOT_REGISTERED;
     }
     const profile = profilesFound[0];
@@ -159,7 +168,7 @@ class ProfileAPI extends DataSource {
     const query1 = new Where('pubKey').eq(pubKey);
     const profilesFound1 = await db.find<Profile>(this.dbID, this.collection, query1);
     if (!profilesFound1?.length) {
-      logger.warn(NOT_REGISTERED);
+      logger.warn(`${pubKey} not registered`);
       throw NOT_REGISTERED;
     }
     const profile = profilesFound1[0];

@@ -2,7 +2,6 @@ import * as React from 'react';
 import CardRenderer from './card-renderer';
 import Spinner from '../Spinner';
 import { IListViewportProps } from './interfaces';
-import { TransitionGroup, CSSTransition, TransitionStatus } from 'react-transition-group';
 import { Rect } from './rect';
 
 const PLACEHOLDER_KEY = 'vlist-item-loading-placeholder';
@@ -39,30 +38,26 @@ const ListViewport: React.FC<IListViewportProps> = props => {
     <>
       {listHeader && React.cloneElement(listHeader)}
       {siblingCustomEntities}
-      <TransitionGroup component={null}>
-        {renderSlice.map(itemId => {
-          return (
-            <CSSTransition classNames="vlist-item" timeout={150} key={itemId}>
-              {(state: TransitionStatus) => (
-                <CardRenderer
-                  className={state}
-                  itemIndex={itemRects.get(itemId)?.index}
-                  itemId={itemId}
-                  itemCard={props.itemCard}
-                  loadItemData={props.loadItemData}
-                  itemData={itemsData[itemId]}
-                  customEntities={customEntities}
-                  itemSpacing={itemSpacing}
-                  itemRect={itemRects.get(itemId)}
-                  updateRef={props.updateRef}
-                  averageItemHeight={averageItemHeight}
-                  onItemUnmount={props.onItemUnmount}
-                />
-              )}
-            </CSSTransition>
-          );
-        })}
-      </TransitionGroup>
+
+      {renderSlice.map(itemId => {
+        return (
+          <CardRenderer
+            key={itemId}
+            itemIndex={itemRects.get(itemId)?.index}
+            itemId={itemId}
+            itemCard={props.itemCard}
+            loadItemData={props.loadItemData}
+            itemData={itemsData[itemId]}
+            customEntities={customEntities}
+            itemSpacing={itemSpacing}
+            itemRect={itemRects.get(itemId)}
+            updateRef={props.updateRef}
+            averageItemHeight={averageItemHeight}
+            onItemUnmount={props.onItemUnmount}
+          />
+        );
+      })}
+
       {placeholders.map((placeholderId, idx) => (
         <CardRenderer
           key={placeholderId}

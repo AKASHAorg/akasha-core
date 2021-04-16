@@ -108,25 +108,34 @@ const service: AkashaService = (invoke, log) => {
       await checkCurrentNetwork();
       chainChecked = true;
     }
-    const web3Provider = await invoke(commonServices[WEB3_SERVICE]).getWeb3Instance();
-    const contractFactory = await invoke(commonServices[WEB3_SERVICE]).getContractFactory();
-    const AkashaRegistrar = await contractFactory.fromSolidity(AkashaRegistrarABI);
-    const ReverseRegistrar = await contractFactory.fromSolidity(ReverseRegistrarABI);
-    const ENS = await contractFactory.fromSolidity(EnsABI);
-    const signer = await web3Provider.getSigner();
-    AkashaRegistrarInstance = await AkashaRegistrar.connect(signer);
-    AkashaRegistrarInstance = await AkashaRegistrarInstance.attach(REGISTRAR_ADDRESS);
-    // get the ens address from subdomain registrar
-    // const ensAddress = await AkashaRegistrarInstance.ens();
-    ENSinstance = await ENS.connect(signer);
-    ENSinstance = await ENSinstance.attach(ENS_ADDRESS);
-    await AkashaRegistrarInstance.deployed();
-    await ENSinstance.deployed();
-    // getting the actual reverse address from registry
-    const reverseAddress = await ENSinstance.owner(REVERSE_STRING);
-    ReverseRegistrarInstance = await ReverseRegistrar.connect(signer);
-    ReverseRegistrarInstance = await ReverseRegistrarInstance.attach(reverseAddress);
-    await ReverseRegistrarInstance.deployed();
+    try {
+      const web3Provider = await invoke(commonServices[WEB3_SERVICE]).getWeb3Instance();
+      const contractFactory = await invoke(commonServices[WEB3_SERVICE]).getContractFactory();
+      const AkashaRegistrar = await contractFactory.fromSolidity(AkashaRegistrarABI);
+      const ReverseRegistrar = await contractFactory.fromSolidity(ReverseRegistrarABI);
+      const ENS = await contractFactory.fromSolidity(EnsABI);
+      const signer = await web3Provider.getSigner();
+      AkashaRegistrarInstance = await AkashaRegistrar.connect(signer);
+      AkashaRegistrarInstance = await AkashaRegistrarInstance.attach(REGISTRAR_ADDRESS);
+      // get the ens address from subdomain registrar
+      // const ensAddress = await AkashaRegistrarInstance.ens();
+      ENSinstance = await ENS.connect(signer);
+      ENSinstance = await ENSinstance.attach(ENS_ADDRESS);
+      await AkashaRegistrarInstance.deployed();
+      await ENSinstance.deployed();
+      // getting the actual reverse address from registry
+      const reverseAddress = await ENSinstance.owner(REVERSE_STRING);
+      ReverseRegistrarInstance = await ReverseRegistrar.connect(signer);
+      ReverseRegistrarInstance = await ReverseRegistrarInstance.attach(reverseAddress);
+      await ReverseRegistrarInstance.deployed();
+    } catch (e) {
+      log.error(e);
+      AkashaRegistrarInstance = null;
+      ENSinstance = null;
+      ReverseRegistrarInstance = null;
+      chainChecked = false;
+      throw e;
+    }
   };
 
   // interact with contracts from ui
