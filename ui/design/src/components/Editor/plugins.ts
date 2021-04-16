@@ -1,4 +1,4 @@
-import { Editor, Range, Transforms } from 'slate';
+import { Editor, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 import isUrl from 'is-url';
 
@@ -41,27 +41,24 @@ const withTags = (editor: Editor & ReactEditor) => {
 };
 
 const wrapLink = (editor: Editor & ReactEditor, url: string) => {
-  const { selection } = editor;
-  const isCollapsed = selection && Range.isCollapsed(selection);
   const link = {
     url,
     type: 'link',
-    children: isCollapsed ? [{ text: url }] : [],
+    children: [{ text: '' }],
   };
-
-  if (isCollapsed) {
-    Transforms.insertNodes(editor, link);
-  } else {
-    Transforms.wrapNodes(editor, link, { split: true });
-    Transforms.collapse(editor, { edge: 'end' });
-  }
+  Transforms.insertNodes(editor, link);
+  Transforms.move(editor);
 };
 
 const withLinks = (editor: Editor & ReactEditor) => {
-  const { insertData, insertText, isInline } = editor;
+  const { insertData, insertText, isInline, isVoid } = editor;
 
   editor.isInline = element => {
     return element.type === 'link' ? true : isInline(element);
+  };
+
+  editor.isVoid = element => {
+    return element.type === 'link' ? true : isVoid(element);
   };
 
   editor.insertText = text => {
