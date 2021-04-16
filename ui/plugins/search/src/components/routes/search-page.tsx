@@ -163,6 +163,9 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
     }
     tagSubscriptionActions.toggleTagSubscription(tagName);
   };
+  const handleTagClick = (tagName: string) => {
+    singleSpa.navigateToUrl(`/social-app/tags/${tagName}`);
+  };
   const handleProfileClick = (pubKey: string) => {
     singleSpa.navigateToUrl(`/profile/${pubKey}`);
   };
@@ -425,6 +428,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                   subscribeLabel={t('Subscribe')}
                   unsubscribeLabel={t('Unsubscribe')}
                   tagAnchorLink={'/social-app/tags'}
+                  onClickTag={() => handleTagClick(tag.name)}
                   handleSubscribeTag={handleTagSubscribe}
                   handleUnsubscribeTag={handleTagUnsubscribe}
                 />

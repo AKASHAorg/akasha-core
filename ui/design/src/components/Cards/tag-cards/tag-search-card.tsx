@@ -23,6 +23,7 @@ export interface ITagSearchCard {
   // anchor link
   tagAnchorLink: string;
   // handlers
+  onClickTag?: React.EventHandler<React.SyntheticEvent>;
   handleSubscribeTag: (tagName: string) => void;
   handleUnsubscribeTag: (tagName: string) => void;
 }
@@ -31,13 +32,14 @@ const TagSearchCard: React.FC<ITagSearchCard> = props => {
   const {
     tag,
     subscribedTags,
-    handleSubscribeTag,
-    handleUnsubscribeTag,
     subscribeLabel,
     subscribedLabel,
     unsubscribeLabel,
     mentionsLabel,
     tagAnchorLink,
+    onClickTag,
+    handleSubscribeTag,
+    handleUnsubscribeTag,
   } = props;
 
   const anchorStyle: { [key: string]: string } = {
@@ -62,7 +64,7 @@ const TagSearchCard: React.FC<ITagSearchCard> = props => {
             href={`${tagAnchorLink}/${tag?.name}`}
             style={anchorStyle}
             label={
-              <Box direction="row" align="center">
+              <Box direction="row" align="center" onClick={onClickTag}>
                 <TagIconDiv onSearchCard={true}>
                   <Icon type="hashtag" size="xl" accentColor={true} />
                 </TagIconDiv>
