@@ -44,8 +44,8 @@ const wrapLink = (editor: Editor & ReactEditor, url: string) => {
   const { selection } = editor;
   const isCollapsed = selection && Range.isCollapsed(selection);
   const link = {
-    type: 'link',
     url,
+    type: 'link',
     children: isCollapsed ? [{ text: url }] : [],
   };
 
