@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Text } from 'grommet';
+import { Anchor, Box, Text } from 'grommet';
 
 import { TagIconDiv, StyledInlineBox } from './styled-tag-card';
 
@@ -20,6 +20,8 @@ export interface ITagSearchCard {
   subscribeLabel?: string;
   unsubscribeLabel?: string;
   subscribedLabel?: string;
+  // anchor link
+  tagAnchorLink: string;
   // handlers
   handleSubscribeTag: (tagName: string) => void;
   handleUnsubscribeTag: (tagName: string) => void;
@@ -35,38 +37,59 @@ const TagSearchCard: React.FC<ITagSearchCard> = props => {
     subscribedLabel,
     unsubscribeLabel,
     mentionsLabel,
+    tagAnchorLink,
   } = props;
+
+  const anchorStyle: { [key: string]: string } = {
+    WebkitUserSelect: 'none',
+    KhtmlUserSelect: 'none',
+    textDecoration: 'none',
+    MozUserSelect: 'none',
+    msUserSelect: 'none',
+    userSelect: 'none',
+  };
 
   return (
     <MainAreaCardBox>
       <Box direction="column" margin="small">
         <Box height="70px" direction="row" justify="between" margin="xxsmall">
-          <Box direction="row" align="center">
-            <TagIconDiv onSearchCard={true}>
-              <Icon type="hashtag" size="xl" accentColor={true} />
-            </TagIconDiv>
-            <Box pad={{ vertical: 'small', left: 'xsmall', right: 'small' }}>
-              {tag && (
-                <Box>
-                  <StyledInlineBox direction="row" gap="xsmall" align="center">
-                    <Text size="xlarge" weight="bold" color="primaryText" truncate={true}>
-                      {tag.name}
-                    </Text>
-                  </StyledInlineBox>
-                  <Text size="medium" color="secondaryText">
-                    {`${tag.totalPosts} ${mentionsLabel}`}
-                  </Text>
-                </Box>
-              )}
+          <Anchor
+            onClick={e => {
+              e.preventDefault();
+              return false;
+            }}
+            weight="normal"
+            href={`${tagAnchorLink}/${tag?.name}`}
+            style={anchorStyle}
+            label={
+              <Box direction="row" align="center">
+                <TagIconDiv onSearchCard={true}>
+                  <Icon type="hashtag" size="xl" accentColor={true} />
+                </TagIconDiv>
+                <Box pad={{ vertical: 'small', left: 'xsmall', right: 'small' }}>
+                  {tag && (
+                    <Box>
+                      <StyledInlineBox direction="row" gap="xsmall" align="center">
+                        <Text size="xlarge" weight="bold" color="primaryText" truncate={true}>
+                          {tag.name}
+                        </Text>
+                      </StyledInlineBox>
+                      <Text size="medium" color="secondaryText">
+                        {`${tag.totalPosts} ${mentionsLabel}`}
+                      </Text>
+                    </Box>
+                  )}
 
-              {!tag && (
-                <Box gap="xsmall">
-                  <TextLine title="tagName" animated={false} width="140px" />
-                  <TextLine title="tagName" animated={false} width="80px" />
+                  {!tag && (
+                    <Box gap="xsmall">
+                      <TextLine title="tagName" animated={false} width="140px" />
+                      <TextLine title="tagName" animated={false} width="80px" />
+                    </Box>
+                  )}
                 </Box>
-              )}
-            </Box>
-          </Box>
+              </Box>
+            }
+          />
           <Box width="7rem" flex={{ shrink: 0 }} justify="center">
             {tag && (
               <DuplexButton

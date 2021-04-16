@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Text } from 'grommet';
+import { Anchor, Box, Text } from 'grommet';
 
 import { IProfileWidgetCard } from './profile-widget-card';
 import { SearchProfileAvatarDiv, StyledInlineBox } from './styled-profile-card';
@@ -22,38 +22,59 @@ const ProfileSearchCard: React.FC<IProfileWidgetCard> = props => {
     followLabel,
     unfollowLabel,
     postsLabel,
+    profileAnchorLink,
     onClickProfile,
   } = props;
 
   const postsTitle = `${profileData.totalPosts || 0} ${postsLabel}`;
 
+  const anchorStyle: { [key: string]: string } = {
+    WebkitUserSelect: 'none',
+    KhtmlUserSelect: 'none',
+    textDecoration: 'none',
+    MozUserSelect: 'none',
+    msUserSelect: 'none',
+    userSelect: 'none',
+  };
+
   return (
     <MainAreaCardBox className={className}>
       <Box direction="column" margin="small">
         <Box height="70px" direction="row" justify="between">
-          <Box direction="row" align="center" onClick={onClickProfile}>
-            <SearchProfileAvatarDiv>
-              <Avatar
-                border="lg"
-                size="xl"
-                src={profileData.avatar}
-                ethAddress={profileData.ethAddress}
-              />
-            </SearchProfileAvatarDiv>
-            <Box pad={{ vertical: 'xxsmall', left: 'xxsmall', right: 'small' }}>
-              <StyledInlineBox direction="row" gap="xsmall" align="center">
-                <Text size="xlarge" weight="bold" color="primaryText" truncate={true}>
-                  {profileData.name || truncateMiddle(profileData.ethAddress)}
-                </Text>
-              </StyledInlineBox>
-              <Box direction="row" gap="xsmall">
-                <Text size="medium" color="secondaryText">
-                  {profileData.userName ? `@${profileData.userName.replace('@', '')}` : null}・
-                  {postsTitle}
-                </Text>
+          <Anchor
+            onClick={e => {
+              e.preventDefault();
+              return false;
+            }}
+            weight="normal"
+            href={`${profileAnchorLink}/${profileData.pubKey}`}
+            style={anchorStyle}
+            label={
+              <Box direction="row" align="center" onClick={onClickProfile}>
+                <SearchProfileAvatarDiv>
+                  <Avatar
+                    border="lg"
+                    size="xl"
+                    src={profileData.avatar}
+                    ethAddress={profileData.ethAddress}
+                  />
+                </SearchProfileAvatarDiv>
+                <Box pad={{ vertical: 'xxsmall', left: 'xxsmall', right: 'small' }}>
+                  <StyledInlineBox direction="row" gap="xsmall" align="center">
+                    <Text size="xlarge" weight="bold" color="primaryText" truncate={true}>
+                      {profileData.name || truncateMiddle(profileData.ethAddress)}
+                    </Text>
+                  </StyledInlineBox>
+                  <Box direction="row" gap="xsmall">
+                    <Text size="medium" color="secondaryText">
+                      {profileData.userName ? `@${profileData.userName.replace('@', '')}` : null}・
+                      {postsTitle}
+                    </Text>
+                  </Box>
+                </Box>
               </Box>
-            </Box>
-          </Box>
+            }
+          />
           <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
             {loggedEthAddress !== profileData.ethAddress && (
               <Box width="7rem" margin={{ right: 'xxsmall' }}>

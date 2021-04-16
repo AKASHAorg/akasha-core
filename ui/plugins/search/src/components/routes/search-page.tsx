@@ -410,6 +410,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                   followersLabel={t('Followers')}
                   postsLabel={t('Posts')}
                   shareProfileLabel={t('Share')}
+                  profileAnchorLink={'/profile'}
                   onClickProfile={() => handleProfileClick(profileData.pubKey)}
                 />
               </Box>
@@ -423,6 +424,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                   subscribedTags={tagSubscriptionState}
                   subscribeLabel={t('Subscribe')}
                   unsubscribeLabel={t('Unsubscribe')}
+                  tagAnchorLink={'/social-app/tags'}
                   handleSubscribeTag={handleTagSubscribe}
                   handleUnsubscribeTag={handleTagUnsubscribe}
                 />
