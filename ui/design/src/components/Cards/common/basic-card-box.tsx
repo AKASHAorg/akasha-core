@@ -96,6 +96,9 @@ const StyledAnchor = styled(Anchor)`
   -ms-user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
+  :hover {
+    text-decoration: none;
+  }
 `;
 
 export { BasicCardBox, MainAreaCardBox, WidgetAreaCardBox, ModalCard, StyledAnchor };

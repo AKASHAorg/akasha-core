@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useFollow } from '@akashaproject/ui-awf-hooks';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
+import routes, { POST } from '../../routes';
 
 const { ErrorInfoCard, ErrorLoader, EntryCardHidden, EntryBox, Box, EntryCardLoading } = DS;
 
@@ -148,7 +149,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     bookmarkLabel={t('Save')}
                     bookmarkedLabel={t('Saved')}
                     profileAnchorLink={'/profile'}
-                    repliesAnchorLink={'/social-app/post'}
+                    repliesAnchorLink={routes[POST]}
                     onRepost={props.onRepost}
                     onEntryFlag={props.onFlag(itemData.entryId)}
                     handleFollowAuthor={handleFollow}
