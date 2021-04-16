@@ -14,7 +14,7 @@ import EntryCardRenderer from './entry-renderer';
 const { VirtualList, ErrorInfoCard, ErrorLoader, Spinner } = DS;
 
 const BookmarksPage = (props: RootComponentProps) => {
-  const { globalChannel, sdkModules, logger, rxjsOperators } = props;
+  const { globalChannel, sdkModules, singleSpa, logger, rxjsOperators } = props;
 
   const { t } = useTranslation();
 
@@ -83,6 +83,10 @@ const BookmarksPage = (props: RootComponentProps) => {
     props.singleSpa.navigateToUrl(`/profile/${profileEthAddress}`);
   };
 
+  const handleTagClick = (name: string) => {
+    props.singleSpa.navigateToUrl(`/social-app/tags/${name}`);
+  };
+
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
     props.singleSpa.navigateToUrl(`/profile/${authorEth}`);
     ev.preventDefault();
@@ -144,6 +148,7 @@ const BookmarksPage = (props: RootComponentProps) => {
                         logger={logger}
                         globalChannel={globalChannel}
                         sdkModules={sdkModules}
+                        singleSpa={singleSpa}
                         rxjsOperators={rxjsOperators}
                         bookmarkState={bookmarkState}
                         ethAddress={loginState.ethAddress}
@@ -152,6 +157,7 @@ const BookmarksPage = (props: RootComponentProps) => {
                         onRepost={() => false}
                         onAvatarClick={handleAvatarClick}
                         onMentionClick={handleMentionClick}
+                        onTagClick={handleTagClick}
                         contentClickable={true}
                         disableReposting={true}
                         sharePostUrl={`${window.location.origin}/social-app/post/`}

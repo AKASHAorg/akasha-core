@@ -68,6 +68,9 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
                 onTagClick={() => {
                   /* not allowed */
                 }}
+                singleSpaNavigate={() => {
+                  /* not allowed */
+                }}
                 disableActions={true}
               />
             )}

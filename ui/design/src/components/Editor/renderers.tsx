@@ -87,14 +87,23 @@ const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
   );
 };
 
-const LinkElement = ({ attributes, children, element }: any) => {
+const LinkElement = ({ attributes, children, element, handleLinkClick }: any) => {
   return (
     <StyledAnchor
       {...attributes}
       href={element.url as string}
-      size="medium"
+      size="large"
       target="_blank"
       rel="noopener noreferrer"
+      onClick={ev => {
+        if (new URL(element.url).origin === window.location.origin) {
+          handleLinkClick(element.url);
+          ev.stopPropagation();
+          ev.preventDefault();
+          return false;
+        }
+        return ev.stopPropagation();
+      }}
     >
       {children}
     </StyledAnchor>
@@ -105,6 +114,7 @@ const renderElement = (
   props: RenderElementProps,
   handleMentionClick?: (pubKey: string) => void,
   handleTagClick?: (name: string) => void,
+  handleLinkClick?: (url: string) => void,
   handleDeleteImage?: (element: any) => void,
 ) => {
   switch (props.element.type) {
@@ -117,7 +127,7 @@ const renderElement = (
     case 'tag':
       return <TagElement handleTagClick={handleTagClick} {...props} />;
     case 'link':
-      return <LinkElement {...props} />;
+      return <LinkElement handleLinkClick={handleLinkClick} {...props} />;
 
     default:
       return <p {...props.attributes}>{props.children}</p>;

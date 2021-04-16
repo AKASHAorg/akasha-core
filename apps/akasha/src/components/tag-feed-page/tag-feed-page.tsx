@@ -251,6 +251,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         rxjsOperators={rxjsOperators}
         ethAddress={loginState.ethAddress}
         onNavigate={handleNavigation}
+        singleSpaNavigate={props.singleSpa.navigateToUrl}
         onLoginModalOpen={showLoginModal}
         totalItems={postsState.totalItems}
         profilePubKey={loginState.pubKey}

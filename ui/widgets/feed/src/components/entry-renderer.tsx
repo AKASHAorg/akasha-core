@@ -24,6 +24,7 @@ export interface IEntryRenderer {
   onReport: (entryId?: string, reporterEthAddress?: string | null) => void;
   onRepost: (withComment: boolean, entryData: any) => void;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
+  singleSpaNavigate: (url: string) => void;
   checkIsFollowing: (viewerEthAddress: string, targetEthAddress: string) => void;
   contentClickable?: boolean;
   itemType: ItemTypes;
@@ -47,6 +48,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     onBookmark,
     onReport,
     onNavigate,
+    singleSpaNavigate,
     checkIsFollowing,
     sharePostUrl,
     onRepost,
@@ -187,6 +189,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   onContentClick={handleContentClick}
                   onMentionClick={handleMentionClick}
                   onTagClick={handleTagClick}
+                  singleSpaNavigate={singleSpaNavigate}
                   contentClickable={contentClickable}
                   moderatedContentLabel={moderatedContentLabel}
                   awaitingModerationLabel={awaitingModerationLabel}

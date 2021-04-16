@@ -27,6 +27,7 @@ const StyledBox = styled(Box)<{ isMobile?: boolean }>`
     if (props.isMobile) {
       return css`
         height: 100vh;
+        background-color: ${props => props.theme.colors.background};
         &:focus-within {
           height: 45vh;
         }

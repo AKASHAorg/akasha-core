@@ -36,6 +36,7 @@ export interface IFeedWidgetProps {
   ethAddress: string | null;
   profilePubKey: string | null;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
+  singleSpaNavigate: (url: string) => void;
   onLoginModalOpen: () => void;
   isFetching?: boolean;
   totalItems: number | null;

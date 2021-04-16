@@ -411,6 +411,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                     renderProps,
                     () => null,
                     () => null,
+                    () => null,
                     handleDeleteImage,
                   )
                 }
