@@ -64,6 +64,13 @@ class ProfileAPI extends DataSource {
           prov.value = Buffer.from(prov.value, 'base64').toString();
         }
       }
+
+      for (const prov of profilesFound[0].providers) {
+        if (Buffer.from(prov.value, 'base64').toString('base64') === prov.value) {
+          prov.value = Buffer.from(prov.value, 'base64').toString();
+        }
+      }
+
       const returnedObj = JSON.parse(JSON.stringify(profilesFound[0]));
       for (const provider of q) {
         Object.assign(returnedObj, {
