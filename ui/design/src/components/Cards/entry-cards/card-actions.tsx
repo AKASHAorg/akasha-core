@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box } from 'grommet';
+import { Anchor, Box } from 'grommet';
 import { isMobile } from 'react-device-detect';
 
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
@@ -35,6 +35,8 @@ export interface CardActionProps {
   bookmarkLabel?: string;
   bookmarkedLabel?: string;
   shareLabel?: string;
+  // anchor link
+  repliesAnchorLink?: string;
   // handlers
   handleEntryBookmark?: () => void;
   onRepost: () => void;
@@ -79,6 +81,7 @@ const CardActions: React.FC<CardActionProps> = props => {
     bookmarkedLabel,
     shareLabel,
     copyLinkLabel,
+    repliesAnchorLink,
     // handlers
     handleEntryBookmark,
     onRepost,
@@ -328,19 +331,30 @@ const CardActions: React.FC<CardActionProps> = props => {
         }}
         disabled={disableReposting || disableActions}
       />
-      <TextIcon
-        label={repliesBtnText}
-        iconType="comments"
-        iconSize="sm"
-        fontSize="large"
-        clickable={!disableActions}
-        onClick={() => {
-          if (disableActions) {
-            return;
-          }
-          handleRepliesClick();
+      <Anchor
+        onClick={e => {
+          e.preventDefault();
+          return false;
         }}
-        disabled={disableActions}
+        weight="normal"
+        href={`${repliesAnchorLink}/${entryData.entryId}`}
+        style={{ textDecoration: 'none' }}
+        label={
+          <TextIcon
+            label={repliesBtnText}
+            iconType="comments"
+            iconSize="sm"
+            fontSize="large"
+            clickable={!disableActions}
+            onClick={() => {
+              if (disableActions) {
+                return;
+              }
+              handleRepliesClick();
+            }}
+            disabled={disableActions}
+          />
+        }
       />
       <BookmarkButton
         label={bookmarkBtnText}

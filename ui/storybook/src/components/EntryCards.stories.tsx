@@ -40,6 +40,8 @@ storiesOf('Cards/Entry Cards', module)
         onClickAvatar={() => action('Avatar Clicked')('Synthetic Event')}
         shareLabel={text('Share Label', shareLabel)}
         copyLinkLabel={text('Copy link Label', copyLinkLabel)}
+        profileAnchorLink={text('Profile Anchor Link', '/profile')}
+        repliesAnchorLink={text('Replies Anchor Link', '/social-app/post')}
         handleFollowAuthor={() => action('Following Box Clicked')('Synthetic Event')}
         handleUnfollowAuthor={() => action('Following Box Clicked')('Synthetic Event')}
         isFollowingAuthor={boolean('Is following author', false)}

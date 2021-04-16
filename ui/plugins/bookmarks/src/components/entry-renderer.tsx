@@ -156,6 +156,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   style={{ height: 'auto', ...style }}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
+                  profileAnchorLink={'/profile'}
+                  repliesAnchorLink={'/social-app/post'}
                   onRepost={props.onRepost}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
