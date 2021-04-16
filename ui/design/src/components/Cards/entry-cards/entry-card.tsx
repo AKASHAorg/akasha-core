@@ -46,6 +46,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     onEntryFlag,
     onMentionClick,
     onTagClick,
+    singleSpaNavigate,
     onContentClick,
     handleFollowAuthor,
     handleUnfollowAuthor,
@@ -105,6 +106,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         onContentClick={onContentClick}
         onMentionClick={onMentionClick}
         onTagClick={onTagClick}
+        singleSpaNavigate={singleSpaNavigate}
         contentClickable={contentClickable}
         disableReposting={disableReposting}
         hidePublishTime={hidePublishTime}

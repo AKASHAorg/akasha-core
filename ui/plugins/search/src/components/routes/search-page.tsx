@@ -189,6 +189,10 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
     singleSpa.navigateToUrl(`/social-app/post/${entryId}`);
   };
 
+  const handleTagClick = (name: string) => {
+    props.singleSpa.navigateToUrl(`/social-app/tags/${name}`);
+  };
+
   const handleEntryBookmark = (entryId: string) => {
     if (!loginState.ethAddress) {
       showLoginModal();
@@ -482,6 +486,8 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                     isFollowingAuthor={followedProfiles.includes(entryData.author)}
                     onContentClick={() => handlePostClick(entryData.entryId)}
                     onMentionClick={handleProfileClick}
+                    onTagClick={handleTagClick}
+                    singleSpaNavigate={singleSpa.navigateToUrl}
                     contentClickable={true}
                     handleFlipCard={handleFlipCard}
                   />
@@ -522,6 +528,8 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                   isFollowingAuthor={followedProfiles.includes(commentData.author)}
                   onContentClick={() => handlePostClick(commentData.postId)}
                   onMentionClick={handleProfileClick}
+                  onTagClick={handleTagClick}
+                  singleSpaNavigate={singleSpa.navigateToUrl}
                   contentClickable={true}
                   handleFlipCard={handleFlipCard}
                 />

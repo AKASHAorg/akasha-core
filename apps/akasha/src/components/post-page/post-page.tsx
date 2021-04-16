@@ -14,7 +14,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import { redirectToPost } from '../../services/routing-service';
+import { redirect, redirectToPost } from '../../services/routing-service';
 import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
 import routes, { POST } from '../../routes';
@@ -272,6 +272,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   const handleNavigateToPost = redirectToPost(navigateToUrl, postId, postsActions.resetPostIds);
 
+  const handleSingleSpaNavigate = redirect(navigateToUrl, postsActions.resetPostIds);
+
   const onUploadRequest = uploadMediaToTextile(
     sdkModules.profiles.profileService,
     sdkModules.commons.ipfsService,
@@ -451,6 +453,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       handleUnfollowAuthor={handleUnfollow}
                       isFollowingAuthor={isFollowing}
                       onContentClick={handleNavigateToPost}
+                      singleSpaNavigate={handleSingleSpaNavigate}
                       onMentionClick={handleMentionClick}
                       onTagClick={handleTagClick}
                       awaitingModerationLabel={t(
@@ -530,6 +533,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                     onAvatarClick={handleAvatarClick}
                     onMentionClick={handleMentionClick}
                     onTagClick={handleTagClick}
+                    singleSpaNavigate={handleSingleSpaNavigate}
                     handleFlipCard={handleListFlipCard}
                   />
                 }

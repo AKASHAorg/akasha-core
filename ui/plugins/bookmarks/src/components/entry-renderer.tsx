@@ -19,6 +19,7 @@ export interface NavigationDetails {
 export interface IEntryCardRendererProps {
   sdkModules: any;
   logger: any;
+  singleSpa: any;
   globalChannel: any;
   rxjsOperators: any;
   itemId?: string;
@@ -33,6 +34,7 @@ export interface IEntryCardRendererProps {
   sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (ethAddress: string) => void;
+  onTagClick: (name: string) => void;
   bookmarkState?: IBookmarkState;
   style?: React.CSSProperties;
   contentClickable?: boolean;
@@ -175,6 +177,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                     });
                   }}
                   onMentionClick={props.onMentionClick}
+                  onTagClick={props.onTagClick}
+                  singleSpaNavigate={props.singleSpa.navigateToUrl}
                   contentClickable={contentClickable}
                   disableReposting={disableReposting}
                 />

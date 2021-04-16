@@ -9,7 +9,7 @@ import { Icon } from '../Icon/index';
 import { EmojiPopover } from '../Popovers/index';
 import { EmbedBox } from './embed-box';
 import { CustomEditor } from './helpers';
-import { withMentions, withImages, withTags } from './plugins';
+import { withMentions, withImages, withTags, withLinks } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
 import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
 import { ImageUpload } from './image-upload';
@@ -110,7 +110,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   );
 
   const editor = useMemo(
-    () => withTags(withMentions(withHistory(withReact(withImages(createEditor()))))),
+    () => withLinks(withTags(withMentions(withHistory(withReact(withImages(createEditor())))))),
     [],
   );
 
@@ -409,6 +409,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 renderElement={(renderProps: RenderElementProps) =>
                   renderElement(
                     renderProps,
+                    () => null,
                     () => null,
                     () => null,
                     handleDeleteImage,

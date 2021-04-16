@@ -86,6 +86,7 @@ export interface IEntryBoxProps {
   contentClickable?: boolean;
   onMentionClick?: (pubKey: string) => void;
   onTagClick?: (name: string) => void;
+  singleSpaNavigate?: (url: string) => void;
   // style
   style?: React.CSSProperties;
   disableReposting?: boolean;
@@ -136,6 +137,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onContentClick,
     onMentionClick,
     onTagClick,
+    singleSpaNavigate,
     style,
     contentClickable,
     disableReposting,
@@ -369,6 +371,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             content={entryData.content}
             handleMentionClick={onMentionClick}
             handleTagClick={onTagClick}
+            handleLinkClick={singleSpaNavigate}
           />
         </Box>
         {entryData.quote && !entryData.quote.delisted && !entryData.quote.reported && (

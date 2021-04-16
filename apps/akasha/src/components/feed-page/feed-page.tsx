@@ -308,6 +308,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             locale={locale}
             onBookmark={handleEntryBookmark}
             onNavigate={handleNavigateToPost}
+            singleSpaNavigate={props.singleSpa.navigateToUrl}
             onFlag={handleEntryFlag}
             onRepost={handleEntryRepost}
             sharePostUrl={`${window.location.origin}${routes[POST]}/`}
