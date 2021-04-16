@@ -52,6 +52,8 @@ export interface IProfileWidgetCard {
   followLabel?: string;
   unfollowLabel?: string;
   shareProfileLabel: string;
+  // anchor link
+  profileAnchorLink?: string;
 }
 
 const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {

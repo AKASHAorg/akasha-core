@@ -50,6 +50,7 @@ storiesOf('Cards/Tag Cards', module)
         subscribeLabel={text('Subscribe Label', 'Subscribe')}
         subscribedLabel={text('Subscribed Label', 'Subscribed')}
         unsubscribeLabel={text('Unsubscribe Label', 'Unsubscribe')}
+        tagAnchorLink={text('Tag Anchor Link', '/social-app/tags')}
         handleSubscribeTag={tagName => action('Subscribe to tag')(tagName)}
         handleUnsubscribeTag={tagName => action('Unsubscribe from tag')(tagName)}
       />

@@ -57,6 +57,7 @@ storiesOf('Cards/Profile Cards', module)
     <Box align="center" pad={{ top: '40px' }}>
       <ProfileSearchCard
         postsLabel={text('Users', postsLabel)}
+        profileAnchorLink={text('Profile Anchor Link', '/profile')}
         // @ts-ignore
         profileData={select('Profile Data', { dapp: appData, user: profileData }, profileData)}
         handleFollow={() => action('Following Box Clicked')('Synthetic Event')}

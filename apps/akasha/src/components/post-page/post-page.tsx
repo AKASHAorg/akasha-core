@@ -445,6 +445,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       locale={locale}
                       bookmarkLabel={t('Save')}
                       bookmarkedLabel={t('Saved')}
+                      profileAnchorLink={'/profile'}
+                      repliesAnchorLink={routes[POST]}
                       onRepost={handleRepost}
                       onEntryFlag={handleEntryFlag(entryData.entryId)}
                       handleFollowAuthor={handleFollow}

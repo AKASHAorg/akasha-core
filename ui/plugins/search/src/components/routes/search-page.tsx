@@ -163,6 +163,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
     }
     tagSubscriptionActions.toggleTagSubscription(tagName);
   };
+
   const handleProfileClick = (pubKey: string) => {
     singleSpa.navigateToUrl(`/profile/${pubKey}`);
   };
@@ -414,6 +415,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                   followersLabel={t('Followers')}
                   postsLabel={t('Posts')}
                   shareProfileLabel={t('Share')}
+                  profileAnchorLink={'/profile'}
                   onClickProfile={() => handleProfileClick(profileData.pubKey)}
                 />
               </Box>
@@ -427,6 +429,8 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                   subscribedTags={tagSubscriptionState}
                   subscribeLabel={t('Subscribe')}
                   unsubscribeLabel={t('Unsubscribe')}
+                  tagAnchorLink={'/social-app/tags'}
+                  onClickTag={() => handleTagClick(tag.name)}
                   handleSubscribeTag={handleTagSubscribe}
                   handleUnsubscribeTag={handleTagUnsubscribe}
                 />
@@ -471,6 +475,8 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                     style={{ height: 'auto' }}
                     bookmarkLabel={t('Save')}
                     bookmarkedLabel={t('Saved')}
+                    profileAnchorLink={'/profile'}
+                    repliesAnchorLink={'/social-app/post'}
                     onRepost={handleRepost}
                     onEntryFlag={handleEntryFlag}
                     handleFollowAuthor={() => handleFollowProfile(entryData.author.ethAddress)}
@@ -511,6 +517,8 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                   style={{ height: 'auto' }}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
+                  profileAnchorLink={'/profile'}
+                  repliesAnchorLink={'/social-app/post'}
                   onRepost={() => null}
                   onEntryFlag={handleEntryFlag}
                   handleFollowAuthor={() => handleFollowProfile(commentData.author.ethAddress)}

@@ -12,6 +12,7 @@ import { StyledDropAlt, StyledProfileDrop, StyledIcon } from './styled-entry-box
 import { EntryCardHidden } from '..';
 import { ProfileMiniCard } from '../profile-cards/profile-mini-card';
 import { IProfileData } from '../profile-cards/profile-widget-card';
+import { StyledAnchor } from '../common/basic-card-box';
 
 import { Icon } from '../../Icon/index';
 import { MobileListModal } from '../../Modals';
@@ -66,6 +67,9 @@ export interface IEntryBoxProps {
   comment?: boolean;
   bookmarkLabel?: string;
   bookmarkedLabel?: string;
+  // anchor link
+  profileAnchorLink?: string;
+  repliesAnchorLink?: string;
   // handlers
   isBookmarked?: boolean;
   onEntryBookmark?: (entryId: string, isBookmarked?: boolean) => void;
@@ -121,6 +125,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     isBookmarked,
     bookmarkLabel,
     bookmarkedLabel,
+    profileAnchorLink,
+    repliesAnchorLink,
     onEntryBookmark,
     onClickAvatar,
     onRepost,
@@ -230,31 +236,41 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           pad={{ top: 'medium', horizontal: 'medium' }}
           flex={{ shrink: 0 }}
         >
-          <StyledProfileAvatarButton
-            label={entryData.author?.name}
-            info={entryData.author?.userName && `@${entryData.author?.userName}`}
-            avatarImage={entryData.author?.avatar}
-            onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) => {
-              if (disableActions) {
-                return;
-              }
-              if (onClickAvatar) {
-                onClickAvatar(ev);
-              }
+          <StyledAnchor
+            onClick={e => {
+              e.preventDefault();
+              return false;
             }}
-            onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
-              if (disableActions) {
-                return;
-              }
-              if (onClickAvatar) {
-                onClickAvatar(ev);
-              }
-            }}
-            ethAddress={entryData.author?.ethAddress}
-            ref={profileRef}
-            bold={true}
-            // onMouseEnter={() => setProfileDropOpen(true)}
-            // onMouseLeave={() => setProfileDropOpen(false)}
+            weight="normal"
+            href={`${profileAnchorLink}/${entryData.author.pubKey}`}
+            label={
+              <StyledProfileAvatarButton
+                label={entryData.author?.name}
+                info={entryData.author?.userName && `@${entryData.author?.userName}`}
+                avatarImage={entryData.author?.avatar}
+                onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) => {
+                  if (disableActions) {
+                    return;
+                  }
+                  if (onClickAvatar) {
+                    onClickAvatar(ev);
+                  }
+                }}
+                onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
+                  if (disableActions) {
+                    return;
+                  }
+                  if (onClickAvatar) {
+                    onClickAvatar(ev);
+                  }
+                }}
+                ethAddress={entryData.author?.ethAddress}
+                ref={profileRef}
+                bold={true}
+                // onMouseEnter={() => setProfileDropOpen(true)}
+                // onMouseLeave={() => setProfileDropOpen(false)}
+              />
+            }
           />
           {profileRef.current && profileDropOpen && (
             <StyledProfileDrop
@@ -402,6 +418,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             bookmarkedLabel={bookmarkedLabel}
             shareLabel={shareLabel}
             copyLinkLabel={copyLinkLabel}
+            repliesAnchorLink={repliesAnchorLink}
             handleEntryBookmark={handleEntryBookmark}
             onRepost={handleRepost(false)}
             onRepostWithComment={handleRepost(true)}
