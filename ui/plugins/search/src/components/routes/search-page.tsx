@@ -163,9 +163,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
     }
     tagSubscriptionActions.toggleTagSubscription(tagName);
   };
-  const handleTagClick = (tagName: string) => {
-    singleSpa.navigateToUrl(`/social-app/tags/${tagName}`);
-  };
+
   const handleProfileClick = (pubKey: string) => {
     singleSpa.navigateToUrl(`/profile/${pubKey}`);
   };
