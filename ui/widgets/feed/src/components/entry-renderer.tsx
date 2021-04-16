@@ -179,6 +179,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   style={{ height: 'auto', ...style }}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
+                  profileAnchorLink={'/profile'}
+                  repliesAnchorLink={'/social-app/post'}
                   onRepost={onRepost}
                   onEntryFlag={handleEntryFlag}
                   handleFollowAuthor={handleFollow}

@@ -146,6 +146,8 @@ const PostRenderer = (props: PostRendererProps) => {
                     locale={props.locale}
                     bookmarkLabel={t('Save')}
                     bookmarkedLabel={t('Saved')}
+                    profileAnchorLink={'/profile'}
+                    repliesAnchorLink={'/social-app/post'}
                     onRepost={props.onRepost}
                     onEntryFlag={props.onFlag(itemData.entryId)}
                     handleFollowAuthor={handleFollow}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Text } from 'grommet';
+import { Box, Text, Anchor } from 'grommet';
 import styled from 'styled-components';
 import { isMobile } from 'react-device-detect';
 
@@ -66,6 +66,9 @@ export interface IEntryBoxProps {
   comment?: boolean;
   bookmarkLabel?: string;
   bookmarkedLabel?: string;
+  // anchor link
+  profileAnchorLink?: string;
+  repliesAnchorLink?: string;
   // handlers
   isBookmarked?: boolean;
   onEntryBookmark?: (entryId: string, isBookmarked?: boolean) => void;
@@ -120,6 +123,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     isBookmarked,
     bookmarkLabel,
     bookmarkedLabel,
+    profileAnchorLink,
+    repliesAnchorLink,
     onEntryBookmark,
     onClickAvatar,
     onRepost,
@@ -219,6 +224,15 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     setDisplayCID(!displayCID);
   };
 
+  const anchorStyle: { [key: string]: string } = {
+    WebkitUserSelect: 'none',
+    KhtmlUserSelect: 'none',
+    textDecoration: 'none',
+    MozUserSelect: 'none',
+    msUserSelect: 'none',
+    userSelect: 'none',
+  };
+
   return (
     <ViewportSizeProvider>
       <Box style={style}>
@@ -228,31 +242,42 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           pad={{ top: 'medium', horizontal: 'medium' }}
           flex={{ shrink: 0 }}
         >
-          <StyledProfileAvatarButton
-            label={entryData.author?.name}
-            info={entryData.author?.userName && `@${entryData.author?.userName}`}
-            avatarImage={entryData.author?.avatar}
-            onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) => {
-              if (disableActions) {
-                return;
-              }
-              if (onClickAvatar) {
-                onClickAvatar(ev);
-              }
+          <Anchor
+            onClick={e => {
+              e.preventDefault();
+              return false;
             }}
-            onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
-              if (disableActions) {
-                return;
-              }
-              if (onClickAvatar) {
-                onClickAvatar(ev);
-              }
-            }}
-            ethAddress={entryData.author?.ethAddress}
-            ref={profileRef}
-            bold={true}
-            // onMouseEnter={() => setProfileDropOpen(true)}
-            // onMouseLeave={() => setProfileDropOpen(false)}
+            weight="normal"
+            href={`${profileAnchorLink}/${entryData.author.pubKey}`}
+            style={anchorStyle}
+            label={
+              <StyledProfileAvatarButton
+                label={entryData.author?.name}
+                info={entryData.author?.userName && `@${entryData.author?.userName}`}
+                avatarImage={entryData.author?.avatar}
+                onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) => {
+                  if (disableActions) {
+                    return;
+                  }
+                  if (onClickAvatar) {
+                    onClickAvatar(ev);
+                  }
+                }}
+                onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
+                  if (disableActions) {
+                    return;
+                  }
+                  if (onClickAvatar) {
+                    onClickAvatar(ev);
+                  }
+                }}
+                ethAddress={entryData.author?.ethAddress}
+                ref={profileRef}
+                bold={true}
+                // onMouseEnter={() => setProfileDropOpen(true)}
+                // onMouseLeave={() => setProfileDropOpen(false)}
+              />
+            }
           />
           {profileRef.current && profileDropOpen && (
             <StyledProfileDrop
@@ -399,6 +424,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             bookmarkedLabel={bookmarkedLabel}
             shareLabel={shareLabel}
             copyLinkLabel={copyLinkLabel}
+            repliesAnchorLink={repliesAnchorLink}
             handleEntryBookmark={handleEntryBookmark}
             onRepost={handleRepost(false)}
             onRepostWithComment={handleRepost(true)}

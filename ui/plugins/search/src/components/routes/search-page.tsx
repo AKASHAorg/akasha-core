@@ -467,6 +467,8 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                     style={{ height: 'auto' }}
                     bookmarkLabel={t('Save')}
                     bookmarkedLabel={t('Saved')}
+                    profileAnchorLink={'/profile'}
+                    repliesAnchorLink={'/social-app/post'}
                     onRepost={handleRepost}
                     onEntryFlag={handleEntryFlag}
                     handleFollowAuthor={() => handleFollowProfile(entryData.author.ethAddress)}
@@ -505,6 +507,8 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                   style={{ height: 'auto' }}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
+                  profileAnchorLink={'/profile'}
+                  repliesAnchorLink={'/social-app/post'}
                   onRepost={() => null}
                   onEntryFlag={handleEntryFlag}
                   handleFollowAuthor={() => handleFollowProfile(commentData.author.ethAddress)}
