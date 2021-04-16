@@ -22,6 +22,7 @@ const StyledPopoverDiv = styled.div`
 `;
 
 const StyledValueDiv = styled.div<{ background: boolean }>`
+  cursor: pointer;
   padding: ${props => `${props.theme.shapes.baseSpacing}px`};
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
   background: ${props => (props.background ? '#B4D5FF' : 'transparent')};
@@ -41,7 +42,9 @@ export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props
           <StyledValueDiv
             key={value}
             background={i === currentIndex}
-            onClick={() => handleSelect(i)}
+            onClick={() => {
+              handleSelect(i);
+            }}
           >
             <Text>{value}</Text>
           </StyledValueDiv>

@@ -26,6 +26,7 @@ export interface IEntryCardRendererProps {
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (pubKey: string) => void;
   onTagClick: (name: string) => void;
+  singleSpaNavigate: (url: string) => void;
   bookmarkState?: IBookmarkState;
   style?: React.CSSProperties;
   contentClickable?: boolean;
@@ -159,6 +160,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   onContentClick={props.onNavigate}
                   onMentionClick={props.onMentionClick}
                   onTagClick={props.onTagClick}
+                  singleSpaNavigate={props.singleSpaNavigate}
                   contentClickable={contentClickable}
                   hidePublishTime={hidePublishTime}
                   moderatedContentLabel={moderatedContentLabel}

@@ -262,6 +262,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         rxjsOperators={rxjsOperators}
         ethAddress={loggedEthAddress}
         onNavigate={handleNavigation}
+        singleSpaNavigate={props.singleSpa.navigateToUrl}
         onLoginModalOpen={handleLoginModalOpen}
         totalItems={postsState.totalItems}
         profilePubKey={pubKey}
