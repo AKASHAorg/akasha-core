@@ -102,7 +102,7 @@ class CommentAPI extends DataSource {
     let comments;
     const allCommentsCache = this.getAllCommentsCacheKey(postID);
     if (!(await queryCache.has(allCommentsCache))) {
-      const query = new Where('postId').eq(postID).orderByDesc('creationDate');
+      const query = new Where('postId').eq(postID).orderBy('creationDate');
       comments = await db.find<Comment>(this.dbID, this.collection, query);
       await queryCache.set(allCommentsCache, comments);
     }
