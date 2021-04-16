@@ -1,9 +1,9 @@
 import React from 'react';
-import { Anchor, Box, Text } from 'grommet';
+import { Box, Text } from 'grommet';
 
 import { TagIconDiv, StyledInlineBox } from './styled-tag-card';
 
-import { MainAreaCardBox } from '../common/basic-card-box';
+import { MainAreaCardBox, StyledAnchor } from '../common/basic-card-box';
 import { ITag } from '../widget-cards/trending-widget-card';
 
 import { DuplexButton } from '../../Buttons/index';
@@ -42,27 +42,17 @@ const TagSearchCard: React.FC<ITagSearchCard> = props => {
     handleUnsubscribeTag,
   } = props;
 
-  const anchorStyle: { [key: string]: string } = {
-    WebkitUserSelect: 'none',
-    KhtmlUserSelect: 'none',
-    textDecoration: 'none',
-    MozUserSelect: 'none',
-    msUserSelect: 'none',
-    userSelect: 'none',
-  };
-
   return (
     <MainAreaCardBox>
       <Box direction="column" margin="small">
         <Box height="70px" direction="row" justify="between" margin="xxsmall">
-          <Anchor
+          <StyledAnchor
             onClick={e => {
               e.preventDefault();
               return false;
             }}
             weight="normal"
             href={`${tagAnchorLink}/${tag?.name}`}
-            style={anchorStyle}
             label={
               <Box direction="row" align="center" onClick={onClickTag}>
                 <TagIconDiv onSearchCard={true}>

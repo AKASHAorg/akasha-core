@@ -1,4 +1,4 @@
-import { Box } from 'grommet';
+import { Box, Anchor } from 'grommet';
 import * as React from 'react';
 import styled, { css } from 'styled-components';
 
@@ -90,4 +90,12 @@ const ModalCard = styled(BasicCardBox)`
   padding: 1em;
 `;
 
-export { BasicCardBox, MainAreaCardBox, WidgetAreaCardBox, ModalCard };
+const StyledAnchor = styled(Anchor)`
+  user-select: none;
+  text-decoration: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+`;
+
+export { BasicCardBox, MainAreaCardBox, WidgetAreaCardBox, ModalCard, StyledAnchor };

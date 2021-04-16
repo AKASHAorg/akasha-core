@@ -1,9 +1,9 @@
-import { Box, Text, Tabs, Anchor } from 'grommet';
+import { Box, Text, Tabs } from 'grommet';
 import * as React from 'react';
 import { SubtitleTextIcon } from '../../TextIcon/index';
 import { Icon } from '../../Icon/index';
 import { ProfileAvatarButton } from '../../Buttons/index';
-import { WidgetAreaCardBox } from '../common/basic-card-box';
+import { WidgetAreaCardBox, StyledAnchor } from '../common/basic-card-box';
 import { StyledTab } from './styled-widget-cards';
 import { DuplexButton } from '../../Buttons';
 import { TextLine } from '../../VirtualList/placeholders/entry-card-placeholder';
@@ -87,15 +87,6 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
 
   const iterateArr = [...Array(4).keys()];
 
-  const anchorStyle: { [key: string]: string } = {
-    WebkitUserSelect: 'none',
-    KhtmlUserSelect: 'none',
-    textDecoration: 'none',
-    MozUserSelect: 'none',
-    msUserSelect: 'none',
-    userSelect: 'none',
-  };
-
   return (
     <WidgetAreaCardBox className={className}>
       <Box pad="medium" gap="medium">
@@ -119,14 +110,13 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
             {tags.length !== 0 &&
               tags.slice(0, 4).map((tag, index) => (
                 <Box key={index} direction="row" justify="between" align="center">
-                  <Anchor
+                  <StyledAnchor
                     onClick={e => {
                       e.preventDefault();
                       return false;
                     }}
                     weight="normal"
                     href={`${tagAnchorLink}/${tag.name}`}
-                    style={anchorStyle}
                     label={
                       <SubtitleTextIcon
                         onClick={() => onClickTag(tag.name)}
@@ -172,14 +162,13 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
             {profiles.length !== 0 &&
               profiles.slice(0, 4).map((profile, index) => (
                 <Box key={index} direction="row" justify="between" align="center">
-                  <Anchor
+                  <StyledAnchor
                     onClick={e => {
                       e.preventDefault();
                       return false;
                     }}
                     weight="normal"
                     href={`${profileAnchorLink}/${profile.pubKey}`}
-                    style={anchorStyle}
                     label={
                       <Box width="11rem" pad="none">
                         <ProfileAvatarButton

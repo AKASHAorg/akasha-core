@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Text, Anchor } from 'grommet';
+import { Box, Text } from 'grommet';
 import styled from 'styled-components';
 import { isMobile } from 'react-device-detect';
 
@@ -12,6 +12,7 @@ import { StyledDropAlt, StyledProfileDrop, StyledIcon } from './styled-entry-box
 import { EntryCardHidden } from '..';
 import { ProfileMiniCard } from '../profile-cards/profile-mini-card';
 import { IProfileData } from '../profile-cards/profile-widget-card';
+import { StyledAnchor } from '../common/basic-card-box';
 
 import { Icon } from '../../Icon/index';
 import { MobileListModal } from '../../Modals';
@@ -224,15 +225,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     setDisplayCID(!displayCID);
   };
 
-  const anchorStyle: { [key: string]: string } = {
-    WebkitUserSelect: 'none',
-    KhtmlUserSelect: 'none',
-    textDecoration: 'none',
-    MozUserSelect: 'none',
-    msUserSelect: 'none',
-    userSelect: 'none',
-  };
-
   return (
     <ViewportSizeProvider>
       <Box style={style}>
@@ -242,14 +234,13 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           pad={{ top: 'medium', horizontal: 'medium' }}
           flex={{ shrink: 0 }}
         >
-          <Anchor
+          <StyledAnchor
             onClick={e => {
               e.preventDefault();
               return false;
             }}
             weight="normal"
             href={`${profileAnchorLink}/${entryData.author.pubKey}`}
-            style={anchorStyle}
             label={
               <StyledProfileAvatarButton
                 label={entryData.author?.name}

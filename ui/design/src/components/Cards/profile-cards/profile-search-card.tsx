@@ -1,10 +1,10 @@
 import React from 'react';
-import { Anchor, Box, Text } from 'grommet';
+import { Box, Text } from 'grommet';
 
 import { IProfileWidgetCard } from './profile-widget-card';
 import { SearchProfileAvatarDiv, StyledInlineBox } from './styled-profile-card';
 
-import { MainAreaCardBox } from '../common/basic-card-box';
+import { MainAreaCardBox, StyledAnchor } from '../common/basic-card-box';
 import { Avatar } from '../../Avatar/index';
 import { DuplexButton } from '../../Buttons/index';
 import { Icon } from '../../Icon';
@@ -28,27 +28,17 @@ const ProfileSearchCard: React.FC<IProfileWidgetCard> = props => {
 
   const postsTitle = `${profileData.totalPosts || 0} ${postsLabel}`;
 
-  const anchorStyle: { [key: string]: string } = {
-    WebkitUserSelect: 'none',
-    KhtmlUserSelect: 'none',
-    textDecoration: 'none',
-    MozUserSelect: 'none',
-    msUserSelect: 'none',
-    userSelect: 'none',
-  };
-
   return (
     <MainAreaCardBox className={className}>
       <Box direction="column" margin="small">
         <Box height="70px" direction="row" justify="between">
-          <Anchor
+          <StyledAnchor
             onClick={e => {
               e.preventDefault();
               return false;
             }}
             weight="normal"
             href={`${profileAnchorLink}/${profileData.pubKey}`}
-            style={anchorStyle}
             label={
               <Box direction="row" align="center" onClick={onClickProfile}>
                 <SearchProfileAvatarDiv>
