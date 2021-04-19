@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 import { IProfileData } from '../profile-cards/profile-widget-card';
-import { Avatar } from '../../Avatar/index';
+import Avatar from '../../Avatar';
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { truncateMiddle } from '../../../utils/string-utils';
 import { IconLink } from '../../Buttons';

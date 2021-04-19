@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Avatar } from '../../../Avatar/index';
+import Avatar from '../../../Avatar';
 import { AppIcon } from '../../../Icon/index';
 import { SelectPopover } from '../../../Popovers/index';
 import { IProfileDataProvider, IProfileProvidersData } from '../profile-card';
