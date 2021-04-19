@@ -45,15 +45,16 @@
     "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"
   },
   "dependencies": {
+    "@akashaproject/design-system": "*",
     "@akashaproject/sdk-auth": "*",
     "@akashaproject/sdk-common": "*",
     "@akashaproject/sdk-db": "*",
     "@akashaproject/sdk-posts": "*",
-    "@akashaproject/design-system": "*",
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/ui-awf-hooks": "*",
-    "@akashaproject/ui-widget-login": "*",
     "@akashaproject/ui-widget-feed": "*",
+    "@akashaproject/ui-widget-login": "*",
+    "jest": "^26.6.3",
     "react-i18next": "11.8.13",
     "react-router-dom": "5.2.0",
     "single-spa-react": "4.1.1"

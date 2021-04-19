@@ -110,9 +110,9 @@
     "react-device-detect": "1.17.0",
     "react-markdown": "6.0.0",
     "remark-gfm": "1.0.0",
-    "slate": "0.62.0",
-    "slate-history": "0.62.0",
-    "slate-react": "0.62.0",
+    "slate": "0.59.0",
+    "slate-history": "0.59.0",
+    "slate-react": "0.59.0",
     "lodash.isequal": "4.5.0",
     "react-dropzone": "11.3.2",
     "qrcode.react": "1.0.1"
