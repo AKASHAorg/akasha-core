@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyledAppIconWrapper } from './styled-sidebar';
-import { AppIcon } from '../../Icon/index';
+import { AppIcon } from '../Icon/index';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 export interface IMenuAppButton {

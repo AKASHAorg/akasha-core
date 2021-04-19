@@ -1,14 +1,14 @@
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { IProfileData } from '../../Cards/profile-cards/profile-widget-card';
+import { IProfileData } from '../Cards/profile-cards/profile-widget-card';
 import * as React from 'react';
 import { Accordion, Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
-import { SubtitleTextIcon, TextIcon } from '../../TextIcon';
-import { ProfileAvatarButton } from '../../Buttons';
+import { SubtitleTextIcon, TextIcon } from '../TextIcon';
+import { ProfileAvatarButton } from '../Buttons';
 import { StyledDrop, StyledPopoverBox, StyledOverlay, StyledAccordionPanel } from './styled-topbar';
-import { ModalContainer } from '../../Modals/common/fullscreen-modal-container';
-import { Portal } from '../../Editor/helpers';
-import { Icon } from '../../Icon';
+import { ModalContainer } from '../Modals/common/fullscreen-modal-container';
+import { Portal } from '../Editor/helpers';
+import { Icon } from '../Icon';
 
 export interface IProfileMenu {
   loggedProfileData?: Partial<IProfileData>;

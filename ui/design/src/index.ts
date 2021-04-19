@@ -19,7 +19,8 @@ import Autosizer from 'react-virtualized-auto-sizer';
 import Avatar from './components/Avatar';
 import EditableAvatar from './components/EditableAvatar';
 
-import { Sidebar, Topbar } from './components/Bars/index';
+import Sidebar from './components/SideBar';
+import TopBar from './components/TopBar';
 
 import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
 
