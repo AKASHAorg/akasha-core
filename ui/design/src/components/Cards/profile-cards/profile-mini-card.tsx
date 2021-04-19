@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { Avatar } from '../../Avatar/index';
+import Avatar from '../../Avatar';
 import { MiniProfileAvatarDiv } from './styled-profile-card';
 import { DuplexButton } from '../../Buttons';
 import { Icon } from '../../Icon';

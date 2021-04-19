@@ -16,7 +16,8 @@ import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
 
 import Autosizer from 'react-virtualized-auto-sizer';
 
-import { Avatar, EditableAvatar } from './components/Avatar';
+import Avatar from './components/Avatar';
+import EditableAvatar from './components/EditableAvatar';
 
 import { Sidebar, Topbar } from './components/Bars/index';
 

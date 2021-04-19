@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Icon } from '../../Icon';
 import { SearchBar } from './search-bar';
 import { MobileSearchBar } from './mobile-search-bar';
-import { Avatar } from '../../Avatar/index';
+import Avatar from '../../Avatar';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings/lib/';
 import {

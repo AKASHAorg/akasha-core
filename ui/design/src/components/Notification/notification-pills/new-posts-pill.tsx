@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { Icon } from '../../Icon/index';
-import { StackedAvatar } from '../../Avatar/index';
+import StackedAvatar from '../../StackedAvatar';
 
 export interface INewPostsPill {
   infoLabel?: string;

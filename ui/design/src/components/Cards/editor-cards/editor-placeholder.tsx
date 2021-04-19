@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Avatar } from '../../Avatar/index';
+import Avatar from '../../Avatar';
 import { BasicCardBox } from '../common/basic-card-box';
 import { Box, Text } from 'grommet';
 

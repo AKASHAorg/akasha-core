@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { getEditableImageFieldHandlers } from '../../utils/get-editable-field-handlers';
-import Avatar, { AvatarProps } from './avatar';
-import { AvatarSize, StyleFileInput } from './styled-avatar';
+import Avatar, { AvatarProps } from '../Avatar';
+import { AvatarSize, StyleFileInput } from '../Avatar/styled-avatar';
 
 export interface EditableAvatarProps extends Omit<AvatarProps, 'onClick'> {
   onChange: (newSrc: string) => void;

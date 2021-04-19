@@ -3,7 +3,7 @@ import React, { useState, useRef, useMemo, useCallback, useEffect } from 'react'
 import { createEditor, Editor, Range, Transforms, Node, Text as SlateText, Element } from 'slate';
 import { withHistory } from 'slate-history';
 import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
-import { Avatar } from '../Avatar/index';
+import Avatar from '../Avatar';
 import { IEntryData } from '../Cards/entry-cards/entry-box';
 import { Icon } from '../Icon/index';
 import { EmojiPopover } from '../Popovers/index';
