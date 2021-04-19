@@ -40,21 +40,21 @@
     "@akashaproject/design-system": "*",
     "@types/i18next": "13.0.0",
     "@types/react-i18next": "8.1.0",
-    "@types/react-router-dom": "5.1.6",
-    "single-spa-react": "3.2.0",
-    "react-i18next": "11.7.3",
+    "@types/react-router-dom": "5.1.7",
+    "single-spa-react": "4.1.1",
+    "react-i18next": "11.8.13",
     "react-router-dom": "5.2.0"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
-    "@types/react": "16.9.56",
-    "@types/react-dom": "16.9.9",
-    "@types/single-spa-react": "2.12.0",
-    "@types/styled-components": "5.1.4"
+    "@types/react": "17.0.3",
+    "@types/react-dom": "17.0.3",
+    "@types/single-spa-react": "3.0.1",
+    "@types/styled-components": "5.1.9"
   },
   "peerDependencies": {
-    "react": "16.14.0",
-    "react-dom": "16.14.0"
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
   },
   "files": [
     "lib"

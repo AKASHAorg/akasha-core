@@ -1,14 +1,21 @@
 module.exports = {
+  automock: true,
   verbose: true,
   bail: true,
   preset: 'ts-jest',
-  testEnvironment: 'node',
   collectCoverage: true,
+  setupFiles: ['<rootDir>/jest.setup.js'],
+  testPathIgnorePatterns: ['<rootDir>/node_modules', '<rootDir>/__tests__/__mocks__'],
   coverageReporters: ['text-summary'],
-  roots: [
-    "<rootDir>/src"
-  ],
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest"
+  },
+  globals: {
+    'ts-jest': {
+      tsConfig: './tsconfig.json',
+    },
+  },
+  moduleNameMapper: {
+    'react-i18next': '<rootDir>/__mocks__/react-i18next.js',
   },
 };

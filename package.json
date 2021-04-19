@@ -62,7 +62,7 @@
     "clean-webpack-plugin": "4.0.0-alpha.0",
     "copy-webpack-plugin": "8.1.1",
     "copyfiles": "2.4.1",
-    "core-js": "3.10.1",
+    "core-js": "3.10.2",
     "html-webpack-plugin": "5.3.1",
     "husky": "6.0.0",
     "i18next-parser": "3.7.0",
@@ -90,7 +90,8 @@
     "webpack-cli": "4.6.0",
     "webpack-dev-server": "3.11.2",
     "styled-components": "5.2.3",
-    "@testing-library/react": "11.2.6"
+    "@testing-library/react": "11.2.6",
+    "@testing-library/react-hooks": "5.1.1"
   },
   "workspaces": [
     "sdk-packages/*",

@@ -46,25 +46,22 @@
     "@akashaproject/sdk-common": "*",
     "@types/i18next": "13.0.0",
     "@types/react-i18next": "8.1.0",
-    "@types/react-router": "5.1.8",
-    "@types/react-router-dom": "5.1.6",
-    "react-i18next": "11.7.3",
+    "@types/react-router": "5.1.13",
+    "@types/react-router-dom": "5.1.7",
+    "react-i18next": "11.8.13",
     "react-router-dom": "5.2.0",
-    "single-spa-react": "3.2.0"
+    "single-spa-react": "4.1.1"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
-    "@types/react": "16.9.56",
-    "@types/react-dom": "16.9.9",
-    "@types/react-test-renderer": "16.9.3",
-    "@types/single-spa-react": "2.12.0",
-    "acorn-jsx": "5.3.1",
-    "jest-styled-components": "7.0.3",
-    "react-test-renderer": "16.14.0"
+    "@types/react": "17.0.3",
+    "@types/react-dom": "17.0.3",
+    "@types/react-test-renderer": "17.0.1",
+    "@types/single-spa-react": "3.0.1"
   },
   "peerDependencies": {
-    "react": "16.14.0",
-    "react-dom": "16.14.0"
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
   },
   "files": [
     "lib"
