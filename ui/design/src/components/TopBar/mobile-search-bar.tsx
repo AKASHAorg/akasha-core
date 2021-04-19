@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, TextInput } from 'grommet';
-import { Icon } from '../../Icon';
+import { Icon } from '../Icon';
 
 export interface ISearchBar {
   inputValue: string;

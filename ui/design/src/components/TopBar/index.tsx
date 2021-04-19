@@ -1,9 +1,9 @@
 import { Box, Stack } from 'grommet';
 import * as React from 'react';
-import { Icon } from '../../Icon';
+import { Icon } from '../Icon';
 import { SearchBar } from './search-bar';
 import { MobileSearchBar } from './mobile-search-bar';
-import Avatar from '../../Avatar';
+import Avatar from '../Avatar';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings/lib/';
 import {
@@ -18,8 +18,8 @@ import {
   IconDiv,
 } from './styled-topbar';
 import { isMobileOnly } from 'react-device-detect';
-import { Button } from '../../Buttons';
-import { IProfileData } from '../../Cards/profile-cards/profile-widget-card';
+import { Button } from '../Buttons';
+import { IProfileData } from '../Cards/profile-cards/profile-widget-card';
 import { ProfileMenu } from './profile-menu';
 
 export interface ITopbarProps {

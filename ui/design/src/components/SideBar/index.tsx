@@ -1,6 +1,6 @@
 import { Accordion, Box, Text } from 'grommet';
 import * as React from 'react';
-import { IconLink } from '../../Buttons';
+import { IconLink } from '../Buttons';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   StyledAppOptionBox,
