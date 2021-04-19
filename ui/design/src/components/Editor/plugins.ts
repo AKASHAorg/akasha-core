@@ -1,6 +1,7 @@
-import { Editor, Transforms } from 'slate';
+import { Editor } from 'slate';
 import { ReactEditor } from 'slate-react';
 import isUrl from 'is-url';
+import { CustomEditor } from './helpers';
 
 const withImages = (editor: Editor) => {
   const { isVoid } = editor;
@@ -40,16 +41,6 @@ const withTags = (editor: Editor & ReactEditor) => {
   return editor;
 };
 
-const wrapLink = (editor: Editor & ReactEditor, url: string) => {
-  const link = {
-    url,
-    type: 'link',
-    children: [{ text: '' }],
-  };
-  Transforms.insertNodes(editor, link);
-  Transforms.move(editor);
-};
-
 const withLinks = (editor: Editor & ReactEditor) => {
   const { insertData, insertText, isInline, isVoid } = editor;
 
@@ -63,7 +54,7 @@ const withLinks = (editor: Editor & ReactEditor) => {
 
   editor.insertText = text => {
     if (text && isUrl(text)) {
-      wrapLink(editor, text);
+      CustomEditor.insertLink(editor, { url: text });
     } else {
       insertText(text);
     }
@@ -73,7 +64,7 @@ const withLinks = (editor: Editor & ReactEditor) => {
     const text = data.getData('text/plain');
 
     if (text && isUrl(text)) {
-      wrapLink(editor, text);
+      CustomEditor.insertLink(editor, { url: text });
     } else {
       insertData(data);
     }

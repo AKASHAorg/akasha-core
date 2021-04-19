@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createEditor } from 'slate';
 import { Slate, withReact, Editable, RenderElementProps } from 'slate-react';
-import { withMentions, withImages, withTags } from './plugins';
+import { withMentions, withImages, withTags, withLinks } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
 
 export interface IReadOnlyEditor {
@@ -14,7 +14,7 @@ export interface IReadOnlyEditor {
 const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
   const { content, handleMentionClick, handleTagClick, handleLinkClick } = props;
   const editor = React.useMemo(
-    () => withTags(withMentions(withReact(withImages(createEditor())))),
+    () => withLinks(withTags(withMentions(withReact(withImages(createEditor()))))),
     [],
   );
   return (
