@@ -81,6 +81,12 @@ const CustomEditor = {
     Transforms.move(editor);
   },
 
+  insertLink(editor: Editor, linkData: { url: string }) {
+    const link = Object.assign({ type: 'link', children: [{ text: '' }] }, linkData);
+    Transforms.insertNodes(editor, link);
+    Transforms.move(editor);
+  },
+
   deleteImage(editor: ReactEditor & Editor, element: any) {
     const path = ReactEditor.findPath(editor, element);
     Transforms.removeNodes(editor, {
