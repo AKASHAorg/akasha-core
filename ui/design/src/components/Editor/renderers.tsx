@@ -91,6 +91,7 @@ const LinkElement = ({ attributes, children, element, handleLinkClick }: any) =>
   return (
     <StyledAnchor
       {...attributes}
+      contentEditable={false}
       href={element.url as string}
       size="large"
       target="_blank"
@@ -105,6 +106,7 @@ const LinkElement = ({ attributes, children, element, handleLinkClick }: any) =>
         return ev.stopPropagation();
       }}
     >
+      {element.url}
       {children}
     </StyledAnchor>
   );
