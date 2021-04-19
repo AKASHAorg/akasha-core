@@ -2,7 +2,7 @@ import { Box, Text } from 'grommet';
 import * as React from 'react';
 import Avatar from '../../Avatar';
 import { MiniProfileAvatarDiv } from './styled-profile-card';
-import { DuplexButton } from '../../Buttons';
+import DuplexButton from '../../DuplexButton';
 import { Icon } from '../../Icon';
 import { IProfileData } from './profile-widget-card';
 import { truncateMiddle } from '../../../utils/string-utils';

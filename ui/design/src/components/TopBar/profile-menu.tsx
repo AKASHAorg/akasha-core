@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Accordion, Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
 import { SubtitleTextIcon, TextIcon } from '../TextIcon';
-import { ProfileAvatarButton } from '../Buttons';
+import ProfileAvatarButton from '../ProfileAvatarButton';
 import { StyledDrop, StyledPopoverBox, StyledOverlay, StyledAccordionPanel } from './styled-topbar';
 import { ModalContainer } from '../Modals/common/fullscreen-modal-container';
 import { Portal } from '../Editor/helpers';

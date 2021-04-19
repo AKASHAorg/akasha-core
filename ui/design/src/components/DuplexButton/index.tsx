@@ -50,4 +50,4 @@ DuplexButton.defaultProps = {
   active: false,
 };
 
-export { DuplexButton };
+export default DuplexButton;

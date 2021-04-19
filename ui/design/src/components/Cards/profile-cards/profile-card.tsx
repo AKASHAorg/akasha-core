@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
-import { DuplexButton } from '../../Buttons/index';
+import DuplexButton from '../../DuplexButton';
 import { Icon } from '../../Icon';
 import { TextIcon } from '../../TextIcon/index';
 import { MainAreaCardBox } from '../common/basic-card-box';

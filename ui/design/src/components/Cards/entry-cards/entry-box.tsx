@@ -16,7 +16,7 @@ import { StyledAnchor } from '../common/basic-card-box';
 
 import { Icon } from '../../Icon/index';
 import { MobileListModal } from '../../Modals';
-import { ProfileAvatarButton } from '../../Buttons/index';
+import ProfileAvatarButton from '../../ProfileAvatarButton';
 import { EmbedBox, ReadOnlyEditor } from '../../Editor/index';
 import ViewportSizeProvider from '../../Providers/viewport-dimension';
 

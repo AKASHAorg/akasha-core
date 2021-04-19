@@ -1,7 +1,7 @@
 import { Box } from 'grommet';
 import React from 'react';
 import styled from 'styled-components';
-import { StyledText } from '../../Buttons/default-buttons/styled-plain-button';
+import { StyledText } from '../../PlainButton/styled-plain-button';
 import { StyledDrop, StyledSelectBox } from '../entry-cards/styled-entry-box';
 
 interface IProfileEditMenuProps {
