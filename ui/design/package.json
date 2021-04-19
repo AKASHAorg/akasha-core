@@ -5,8 +5,7 @@
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
     "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)",
-    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
-    "Andrei Saleba <andrei.saleba@akasha.world> (https://github.com/andreysaleba)"
+    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)"
   ],
   "main": "lib/index.js",
   "directories": {
