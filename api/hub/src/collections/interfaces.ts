@@ -49,3 +49,26 @@ export interface Comment {
   postId: string;
   replyTo: string;
 }
+
+export interface ModerationReport {
+  _id: string;
+  creationDate: number;
+  contentType: string;
+  contentId: string;
+  author: string;
+  reason: string;
+  explanation?: string;
+}
+
+export interface ModerationDecision {
+  _id: string;
+  creationDate: number;
+  contentType: string;
+  contentId: string;
+  firstReportedBy: string;
+  moderatedBy?: string;
+  moderatedDate?: number;
+  explanation?: string;
+  delisted: boolean;
+  moderated: boolean;
+}
