@@ -3,7 +3,7 @@ import { isMobileOnly } from 'react-device-detect';
 import { Box, Text } from 'grommet';
 import styled from 'styled-components';
 
-import { Button } from '../../Buttons';
+import Button from '../../Button';
 import { Icon } from '../../Icon';
 
 import { BasicCardBox } from '../common/basic-card-box';

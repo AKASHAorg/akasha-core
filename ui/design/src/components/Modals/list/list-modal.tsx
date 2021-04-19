@@ -2,7 +2,7 @@ import { Box, Text } from 'grommet';
 import * as React from 'react';
 import styled from 'styled-components';
 import { formatDate, ILocale } from '../../../utils/time';
-import { ProfileAvatarButton } from '../../Buttons/index';
+import ProfileAvatarButton from '../../ProfileAvatarButton';
 import { IconType } from '../../Icon/icon';
 import { TextIcon } from '../../TextIcon/index';
 import { StyledLayer } from '../common/styled-modal';

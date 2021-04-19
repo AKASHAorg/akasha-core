@@ -6,7 +6,7 @@ import { SearchProfileAvatarDiv, StyledInlineBox } from './styled-profile-card';
 
 import { MainAreaCardBox, StyledAnchor } from '../common/basic-card-box';
 import Avatar from '../../Avatar';
-import { DuplexButton } from '../../Buttons/index';
+import DuplexButton from '../../DuplexButton';
 import { Icon } from '../../Icon';
 import { truncateMiddle } from '../../../utils/string-utils';
 

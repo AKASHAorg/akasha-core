@@ -1,6 +1,6 @@
 import { Anchor } from 'grommet';
 import styled, { css } from 'styled-components';
-import { ILinkIconButtonProps } from './icon-link';
+import { ILinkIconButtonProps } from '.';
 
 const StyledIconLink = styled(Anchor)<ILinkIconButtonProps>`
   border-radius: ${props => props.theme.shapes.largeBorderRadius};

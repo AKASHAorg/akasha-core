@@ -4,7 +4,7 @@ import { IProfileData } from '../profile-cards/profile-widget-card';
 import Avatar from '../../Avatar';
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { truncateMiddle } from '../../../utils/string-utils';
-import { IconLink } from '../../Buttons';
+import IconLink from '../../IconLink';
 import styled from 'styled-components';
 
 export type ISocialData = IProfileData[];

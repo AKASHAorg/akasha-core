@@ -1,9 +1,9 @@
 import { Box } from 'grommet';
 import * as React from 'react';
-import { truncateMiddle } from '../../../utils/string-utils';
-import Avatar from '../../Avatar';
-import { AvatarSize } from '../../Avatar/styled-avatar';
-import StyledIconLink from '../icon-buttons/styled-icon-link';
+import { truncateMiddle } from '../../utils/string-utils';
+import Avatar from '../Avatar';
+import { AvatarSize } from '../Avatar/styled-avatar';
+import StyledIconLink from '../IconLink/styled-icon-link';
 import { ButtonInfo, StyledWrapperBox } from './styled-profile-avatar-button';
 
 export interface ProfileAvatarButtonProps {

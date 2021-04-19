@@ -1,6 +1,6 @@
 import { Text, Tab, TabProps } from 'grommet';
 import styled, { css } from 'styled-components';
-import { Button } from '../../Buttons';
+import Button from '../../Button';
 
 const StyledButton = styled(Button)`
   width: 50%;

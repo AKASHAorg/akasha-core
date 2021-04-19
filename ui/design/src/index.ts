@@ -26,14 +26,13 @@ import EntryCardLoading from './components/VirtualList/placeholders/entry-card-p
 
 import EntryPublishErrorCard from './components/Errors/entry-publish-error-card';
 
-import {
-  Button,
-  DuplexButton,
-  IconButton,
-  IconLink,
-  ProfileAvatarButton,
-  VoteIconButton,
-} from './components/Buttons';
+import Button from './components/Button';
+import DuplexButton from './components/DuplexButton';
+import IconButton from './components/IconButton';
+import IconLink from './components/IconLink';
+import ProfileAvatarButton from './components/ProfileAvatarButton';
+import VoteIconButton from './components/VoteIconButton';
+
 import { AreaChart, LineChart, ResponsiveChart } from './components/Charts';
 
 import {

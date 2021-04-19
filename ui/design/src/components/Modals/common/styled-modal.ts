@@ -1,7 +1,7 @@
 import { Box, Layer } from 'grommet';
 import styled, { css } from 'styled-components';
 
-import { Button } from '../../Buttons';
+import Button from '../../Button';
 
 export interface IMobileProps {
   readonly isMobile?: boolean;

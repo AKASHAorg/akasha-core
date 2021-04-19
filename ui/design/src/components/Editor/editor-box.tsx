@@ -13,7 +13,7 @@ import { withMentions, withImages, withTags, withLinks } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
 import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
 import { ImageUpload } from './image-upload';
-import { Button } from '../Buttons';
+import Button from '../Button';
 import { MentionPopover } from './mention-popover';
 import { EditorMeter } from './editor-meter';
 import { serializeToPlainText } from './serialize';
