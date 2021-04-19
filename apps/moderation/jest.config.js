@@ -1,8 +1,11 @@
-module.exports = {
-  verbose: true,
-  bail: true,
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  collectCoverage: true,
-  coverageReporters: ['text-summary'],
-};
+const baseConfig = require('../../jest.config.base');
+
+module.exports = Object.assign(baseConfig, {
+  verbose: false,
+  roots: [
+    "<rootDir>/src"
+  ],
+  transform: {
+    "^.+\\.(ts|tsx)$": "ts-jest"
+  },
+});

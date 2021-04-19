@@ -5,4 +5,10 @@ module.exports = {
   testEnvironment: 'node',
   collectCoverage: true,
   coverageReporters: ['text-summary'],
+  roots: [
+    "<rootDir>/src"
+  ],
+  transform: {
+    "^.+\\.(ts|tsx)$": "ts-jest"
+  },
 };
