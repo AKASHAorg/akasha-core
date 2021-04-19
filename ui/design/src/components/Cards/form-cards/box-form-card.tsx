@@ -136,19 +136,19 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     ) {
       images.coverImage = coverImage;
     }
-    let userName: string | undefined;
+    let userName: string | undefined = formValues.userName;
     if (providerData && providerData.default) {
       const provider = providerData.default.find(
         p => p.property === 'userName' && p.provider === 'ewa.providers.basic',
       );
-      if (provider) {
+      if (provider && !formValues.userName) {
         userName = provider.value;
       }
     }
     setFormValues(prevValues => ({
-      ...prevValues,
       ...rest,
       ...images,
+      ...prevValues,
       userName,
     }));
   }, [JSON.stringify(providerData), JSON.stringify(formValues)]);
