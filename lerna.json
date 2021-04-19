@@ -1,5 +1,5 @@
 {
-  "packages": ["sdk-packages/*", "apps/*", "ui/**", "examples/ui/**", "scripts/*", "api/**"],
+  "packages": ["sdk-packages/*", "apps/*", "ui/**", "examples/ui/**", "scripts/*", "api/**", "sdk/**"],
   "npmClient": "npm",
   "useWorkspaces": false,
   "version": "0.0.0"
