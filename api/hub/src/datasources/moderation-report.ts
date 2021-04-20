@@ -2,8 +2,6 @@ import { DataSource } from 'apollo-datasource';
 import { getAppDB, logger } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { ModerationDecision, ModerationReport } from '../collections/interfaces';
-import { queryCache } from '../storage/cache';
-import { searchIndex } from './search-indexes';
 
 class ModerationReportAPI extends DataSource {
   private readonly collection: string;
@@ -20,8 +18,10 @@ class ModerationReportAPI extends DataSource {
   }
 
   async countReports(contentId: string) {
-    const result = await searchIndex.search(contentId);
-    return result.hits.length;
+    const db: Client = await getAppDB();
+    const query = new Where('contentId').eq(contentId);
+    const reports = await db.find<ModerationReport>(this.dbID, this.collection, query);
+    return reports.length;
   }
 
   async getReport(contentId: string, author: string) {
@@ -94,6 +94,11 @@ class ModerationReportAPI extends DataSource {
         delisted: false,
         moderated: false,
       };
+      const decisionID = await db.create(this.dbID, decisionsCollection, [decision]);
+      if (!decisionID || !decisionID.length) {
+        logger.warn(`pending decision could not be created for contentId ${contentId}`);
+        throw new Error('pending decision could not be created');
+      }
     }
 
     const report: ModerationReport = {
