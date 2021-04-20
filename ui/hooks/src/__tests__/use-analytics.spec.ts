@@ -1,38 +1,21 @@
 /**
  * @jest-environment jsdom
  */
-import { act, cleanup } from '@testing-library/react';
-import { renderHook } from './utils';
-import useAnalytics from '../use-analytics';
-
-let container: HTMLElement | null = null;
-console.log(renderHook, 'render hook');
-beforeEach(() => {
-  // create container
-  container = document.createElement('div');
-  document.body.appendChild(container);
-});
-afterEach(() => {
-  // cleanups
-  cleanup();
-  container!.remove();
-  container = null;
-});
+import { renderHook, act } from '@testing-library/react-hooks';
+import useAnalytics, { CookieConsentTypes } from '../use-analytics';
 
 describe('useAnalytics', () => {
-  it('should render', () => {
-    const { rerender, result } = renderHook(useAnalytics, {}, container as HTMLElement);
-    act(() => {
-      // const res = result.data as any;
-      expect(result.data).toBeDefined();
-      rerender({});
-    });
+  it('should return [state, actions]', () => {
+    const { result } = renderHook(() => useAnalytics());
+    expect(result.current[0]).toBeDefined();
+    expect(result.current[1]).toBeDefined();
   });
-  // it('should expose actions', () => {
-  //   expect(actions).toBeDefined();
-  // });
-  // it('should set cookieBannerDismissed to true when acceptConsent action is called', () => {
-  // actions.acceptConsent('ALL');
-  // expect(state.cookieBannerDismissed).toBe(true);
-  // });
+
+  it('should change state on .acceptConsent call', () => {
+    const { result } = renderHook(() => useAnalytics());
+    act(() => {
+      result.current[1].acceptConsent(CookieConsentTypes.ALL);
+    });
+    expect(result.current[0].cookieBannerDismissed).toBe(true);
+  });
 });

@@ -5,10 +5,6 @@ module.exports = Object.assign(baseConfig, {
   transform: {
     "^.+\\.ts?$": "ts-jest",
   },
-  testRegex: "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-  preset: "ts-jest",
-  moduleNameMapper: {
-    "@akashaproject/ui-awf-typings": "<rootDir>../../ui/typings/src",
-    "react": "<rootDir>../../node_modules/react"
-  },
+  testRegex: "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?|ts?)$",
+  preset: "ts-jest"
 });
