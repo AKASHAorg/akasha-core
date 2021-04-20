@@ -50,6 +50,14 @@ export interface Comment {
   replyTo: string;
 }
 
+export interface Moderator {
+  _id: string;
+  creationDate: number;
+  address: string;
+  admin: boolean;
+  active: boolean;
+}
+
 export interface ModerationReport {
   _id: string;
   creationDate: number;
@@ -65,7 +73,6 @@ export interface ModerationDecision {
   creationDate: number;
   contentType: string;
   contentId: string;
-  firstReportedBy: string;
   moderatedBy?: string;
   moderatedDate?: number;
   explanation?: string;
