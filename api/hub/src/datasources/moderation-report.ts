@@ -35,6 +35,14 @@ class ModerationReportAPI extends DataSource {
     throw new Error('report not found');
   }
 
+  async getReports(contentId: string, limit?: number, offset?: number) {
+    limit = limit ? limit : 10;
+    offset = offset ? offset : 0;
+    const db: Client = await getAppDB();
+    const query = new Where('contentId').eq(contentId).skipNum(offset).limitTo(limit);
+    return await db.find<ModerationReport>(this.dbID, this.collection, query);
+  }
+
   async getFirstReport(contentId: string) {
     const db: Client = await getAppDB();
     // get the first report for this contentID
@@ -83,9 +91,10 @@ class ModerationReportAPI extends DataSource {
     }
 
     // Do we need to check if a pending decision was created for this post?
-    const decisionExists = await db.has(this.dbID, decisionsCollection, [contentId]);
-    if (!decisionExists) {
-      // need to create it
+    const query = new Where('contentId').eq(contentId);
+    const results = await db.find<ModerationReport>(this.dbID, decisionsCollection, query);
+    if (results.length < 1) {
+      // need to create it (how to avoid race condition here?)
       const decision: ModerationDecision = {
         _id: '',
         creationDate: new Date().getTime(),
