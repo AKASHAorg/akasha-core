@@ -65,9 +65,6 @@ describe('<DropSearchInput /> Component', () => {
     const component = componentWrapper.root.findByType(DropSearchInput);
     expect(component).toBeDefined();
   });
-  it.skip('should match snapshot', () => {
-    expect(componentWrapper.toJSON()).toMatchSnapshot('search-input');
-  });
   it('should be customizable via className passed as prop', async () => {
     const { container } = customRender(createBaseComponent(), {});
     const rootNode = container.firstElementChild?.firstElementChild;

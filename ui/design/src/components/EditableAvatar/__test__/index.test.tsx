@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { cleanup, fireEvent, waitForElement } from '@testing-library/react';
 import * as React from 'react';
 import { act, create, ReactTestRenderer } from 'react-test-renderer';
-import { createFile, customRender, delay, wrapWithTheme } from '../../../test-utils';
+import { createFile, customRender, wrapWithTheme } from '../../../test-utils';
 import { MockFileReader, WindowWithFileReader } from '../../../test-utils/mocks';
 import EditableAvatar from '../../EditableAvatar';
 
@@ -26,11 +26,6 @@ describe('<EditableAvatar /> Component', () => {
       componentWrapper.unmount();
     });
     cleanup();
-  });
-  it('should match snapshot', async () => {
-    // delay to allow avatar to mount the AvatarImage component
-    await delay();
-    expect(componentWrapper.toJSON()).toMatchSnapshot('editable-avatar');
   });
   it('should have 1 input type file', async () => {
     const { getAllByTestId } = customRender(

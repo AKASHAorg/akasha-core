@@ -27,11 +27,6 @@ describe('<Avatar /> component', () => {
     expect(avatarComp).toBeDefined();
   });
 
-  it('when in guest mode, should match snapshot', async () => {
-    await delay();
-    expect(componentWrapper.toJSON()).toMatchSnapshot('avatar');
-  });
-
   it('when in guest mode, should pass an image obj to AvatarImage', async () => {
     const avatarRoot = componentWrapper.root.findByType(Avatar);
     // this is required because the avatarImage may not be mounted yet.
