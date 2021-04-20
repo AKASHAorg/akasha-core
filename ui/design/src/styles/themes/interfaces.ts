@@ -1,4 +1,16 @@
+import { ThemeType } from "grommet";
+import { IBreakpoints } from "../responsive-breakpoints";
+import { IShapes } from "../shapes";
+
+export interface DefaultTheme extends ThemeType {
+  colors: IColors;
+  shapes: IShapes;
+  breakpoints: IBreakpoints;
+  name?: string;
+}
+
 export interface IColors {
+  white: string;
   primaryText: string;
   secondaryText: string;
   errorText: string;

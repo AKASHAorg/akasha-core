@@ -1,6 +1,6 @@
 import { Grommet, GrommetProps } from 'grommet';
 import * as React from 'react';
-import { DefaultTheme } from 'styled-components';
+import { DefaultTheme } from '../interfaces';
 
 export interface ITheme {
   name: string;

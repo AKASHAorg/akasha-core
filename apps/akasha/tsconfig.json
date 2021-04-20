@@ -2,8 +2,7 @@
   "extends": "../../ui/tsconfig.json",
   "compilerOptions": {
     "outDir": "./lib",
-    "rootDir": "./src",
-    "allowJs": true,
+    "rootDir": "./src"
   },
   "references": [
     {
@@ -17,4 +16,5 @@
     }
   ],
   "include": ["./src"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

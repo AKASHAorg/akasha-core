@@ -11,8 +11,7 @@
   "license": "AGPL-3.0",
   "main": "lib/index.js",
   "directories": {
-    "lib": "lib",
-    "test": "__tests__"
+    "lib": "lib"
   },
   "files": [
     "lib"
@@ -29,16 +28,7 @@
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../../ui/build/apps/moderation",
-    "watch": "nodemon"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "lib/*",
-      "dist/*",
-      "build/*"
-    ],
-    "exec": "npm run pack || exit 1",
-    "ext": "ts,tsx"
+    "watch": "webpack --config webpack.config.js --watch"
   },
   "bugs": {
     "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"
@@ -56,14 +46,12 @@
     "single-spa-react": "4.1.1"
   },
   "devDependencies": {
-    "@testing-library/react": "11.2.6",
     "@akashaproject/ui-awf-typings": "*",
     "@types/react": "17.0.3",
     "@types/react-dom": "17.0.3",
     "@types/react-router-dom": "5.1.7",
     "@types/react-test-renderer": "17.0.1",
-    "@types/single-spa-react": "3.0.1",
-    "nodemon": "2.0.7"
+    "@types/single-spa-react": "3.0.1"
   },
   "peerDependencies": {
     "react": "17.0.2",

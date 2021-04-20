@@ -1,12 +1,13 @@
 const baseConfig = require('../../jest.config.base');
 
 module.exports = Object.assign(baseConfig, {
-  automock: true,
+  automock: false,
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
+    "^.(tsx?|ts?|js?)$": "ts-jest",
   },
-  testRegex: "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-  preset: "ts-jest/presets/default",
+  testRegex: "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?|ts?)$",
+  preset: "ts-jest",
+
   moduleNameMapper: {
     "@akashaproject/design-system": "<rootDir>../../ui/design/src",
     "@akashaproject/ui-awf-hooks": "<rootDir>../../ui/hooks/src",

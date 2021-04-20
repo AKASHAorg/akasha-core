@@ -42,7 +42,7 @@
     "watch:all": "lerna run --scope='@akashaproject/*' --parallel watch",
     "watch:feed-app": "lerna run --scope=@akashaproject/ethereum.world --stream watch",
     "test:sdk": "lerna run test --scope @akashaproject/sdk-* --stream",
-    "test:apps": "lerna run test --scope @akashaproject/app-akasha-integration --stream",
+    "test:apps": "lerna run test --scope @akashaproject/app-moderation-ewa --stream",
     "test:ui:watch": "lerna exec --parallel --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream -- jest --watch",
     "test:design-system": "lerna run test --scope @akashaproject/design-system --stream",
     "test:hooks": "lerna run test --scope @akashaproject/ui-awf-hooks --stream",

@@ -6,5 +6,6 @@ module.exports = Object.assign(baseConfig, {
     "^.+\\.ts?$": "ts-jest",
   },
   testRegex: "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?|ts?)$",
-  preset: "ts-jest"
+  preset: "ts-jest",
+  testEnvironment: "jsdom"
 });
