@@ -4,6 +4,7 @@ import { TYPES } from '@akashaproject/sdk-typings';
 import { availableCollections, DB } from '../db';
 import { exhaustMap, map, switchMap } from 'rxjs/operators';
 import { createObservableStream } from '../helpers/observable';
+import { ObservableCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
 
 @injectable()
 class Settings implements ISettingsService {
@@ -13,14 +14,14 @@ class Settings implements ISettingsService {
     return this._db.getCollection(availableCollections.Settings).pipe(
       switchMap(collection => {
         // this does not play well with threaddb typings
-        const query: any = { serviceName: { $eq: service } };
+        const query: unknown = { serviceName: { $eq: service } };
         const doc = collection.data.findOne(query);
         return createObservableStream(doc);
       }),
     );
   }
 
-  set(service: string, options: string[][]) {
+  set(service: string, options: [[string, unknown]]): ObservableCallResult<string[]> {
     return this.get(service).pipe(
       exhaustMap(settings => {
         const objToSave = {

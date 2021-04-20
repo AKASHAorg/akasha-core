@@ -3,12 +3,12 @@ import { ObservableCallResult } from './responses';
 // compatible with apollo-link gql request
 export interface IGqlOperation {
   query: string;
-  variables?: object;
+  variables?: Record<string, unknown>;
   operationName?: string;
-  context?: object;
-  extensions?: object;
+  context?: Record<string, unknown>;
+  extensions?: Record<string, unknown>;
 }
 
-export default interface IGqlClient {
-  run(operation: IGqlOperation): ObservableCallResult<any>;
+export default interface IGqlClient<Operation> {
+  run(operation: IGqlOperation): ObservableCallResult<Operation>;
 }
