@@ -17,7 +17,10 @@
     "sourceMap": true,
     "pretty": true,
     "skipLibCheck": true,
-    "lib": ["es2019", "dom"]
+    "lib": ["es2019", "dom"],
+    "paths": {
+      "@akashaproject/design-system": ["./ui/design/lib"]
+    }
   },
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx"]
 }

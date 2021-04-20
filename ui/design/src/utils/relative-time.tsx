@@ -14,7 +14,7 @@ const RelativeTime: React.FC<IRelativeTime> = props => {
 
   const [relativeTime, setRelativeTime] = React.useState('');
 
-  let interval: number | undefined;
+  let interval: NodeJS.Timeout | undefined;
 
   React.useEffect(() => {
     parseRelativeTime(timestamp);
