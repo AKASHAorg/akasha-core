@@ -4,7 +4,6 @@ import { I18nextProvider } from 'react-i18next';
 import TrendingWidgetComponent from './trending-widget-component';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { i18n } from 'i18next';
-import { IContentClickDetails } from '@akashaproject/design-system/src/components/Cards/entry-cards/entry-box';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
@@ -21,11 +20,7 @@ export interface ITrendingWidgetProps {
   sdkModules: any;
   rxjsOperators: any;
   layout: any;
-  errors: { [key: string]: IAkashaError };
-  /* eth address of the logged in user */
-  ethAddress: string | null;
-  profilePubKey: string | null;
-  onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
+  errors?: { [key: string]: IAkashaError };
 }
 
 export default class TrendingWidgetRoot extends PureComponent<ITrendingWidgetProps> {

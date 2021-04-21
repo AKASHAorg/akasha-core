@@ -54,6 +54,7 @@
     "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/ui-widget-login": "*",
     "@akashaproject/ui-widget-feed": "*",
+    "@akashaproject/ui-widget-trending": "*",
     "react-i18next": "11.7.3",
     "react-router-dom": "5.2.0",
     "single-spa-react": "4.0.0"
