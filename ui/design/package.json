@@ -5,8 +5,7 @@
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
     "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)",
-    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
-    "Andrei Saleba <andrei.saleba@akasha.world> (https://github.com/andreysaleba)"
+    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)"
   ],
   "main": "lib/index.js",
   "directories": {
@@ -34,7 +33,9 @@
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./src/static/img/* ../build/images && copyfiles -f ./dist/* ../build/design/",
-    "pack:watch": "nodemon"
+    "pack:watch": "nodemon",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "nodemonConfig": {
     "ignore": [
@@ -71,27 +72,33 @@
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
+    "@babel/core": "^7.13.15",
+    "@storybook/addon-actions": "^6.2.8",
+    "@storybook/addon-essentials": "^6.2.8",
+    "@storybook/addon-links": "^6.2.8",
+    "@storybook/react": "^6.2.8",
     "@testing-library/react": "11.2.2",
     "@testing-library/react-hooks": "3.4.2",
     "@types/classnames": "2.2.11",
     "@types/d3-array": "2.8.0",
+    "@types/is-url": "1.2.28",
     "@types/jest": "26.0.15",
+    "@types/lodash.isequal": "4.5.5",
     "@types/lodash.throttle": "4.1.6",
     "@types/node": "14.14.9",
+    "@types/qrcode.react": "1.0.1",
     "@types/react": "16.9.56",
     "@types/react-dom": "16.9.9",
+    "@types/react-dropzone": "5.1.0",
+    "@types/react-helmet": "6.1.0",
     "@types/react-router-dom": "5.1.6",
     "@types/react-test-renderer": "16.9.2",
-    "@types/react-transition-group": "4.4.1",
-    "@types/react-helmet": "6.1.0",
     "@types/react-toast-notifications": "^2.4.0",
+    "@types/react-transition-group": "4.4.1",
     "@types/react-virtualized-auto-sizer": "1.0.0",
     "@types/slate": "0.47.8",
     "@types/slate-react": "0.22.9",
     "@types/styled-components": "5.1.4",
-    "@types/lodash.isequal": "4.5.5",
-    "@types/react-dropzone": "5.1.0",
-    "@types/is-url": "1.2.28",
     "@vx/axis": "0.0.199",
     "@vx/curve": "0.0.199",
     "@vx/event": "0.0.199",
@@ -101,27 +108,29 @@
     "@vx/scale": "0.0.199",
     "@vx/shape": "0.0.199",
     "@vx/tooltip": "0.0.199",
-    "@types/qrcode.react": "1.0.1",
+    "babel-loader": "^8.2.2",
     "d3-array": "2.8.0",
     "dayjs": "1.9.6",
     "is-hotkey": "0.1.7",
     "is-url": "1.2.4",
+    "lodash.isequal": "4.5.0",
+    "qrcode.react": "1.0.1",
+    "react-device-detect": "1.15.0",
+    "react-dropzone": "11.2.4",
+    "react-docgen-typescript": "1.22.0",
     "react-helmet": "6.1.0",
+    "react-markdown": "5.0.3",
     "react-test-renderer": "16.14.0",
     "react-toastify": "6.1.0",
-    "react-device-detect": "1.15.0",
-    "react-markdown": "5.0.3",
     "remark-gfm": "1.0.0",
     "slate": "0.59.0",
     "slate-history": "0.59.0",
-    "slate-react": "0.59.0",
-    "lodash.isequal": "4.5.0",
-    "react-dropzone": "11.2.4",
-    "qrcode.react": "1.0.1"
+    "slate-react": "0.59.0"
   },
   "peerDependencies": {
     "react": "16.14.0",
     "react-dom": "16.14.0",
-    "styled-components": "5.2.1"
+    "styled-components": "5.2.1",
+    "typescript": "^4.2.4"
   }
 }
