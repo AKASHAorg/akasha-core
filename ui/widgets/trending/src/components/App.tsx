@@ -7,11 +7,6 @@ import { i18n } from 'i18next';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
-export const enum ItemTypes {
-  PROFILE,
-  TAG,
-}
-
 export interface ITrendingWidgetProps {
   logger: any;
   i18n: i18n;
