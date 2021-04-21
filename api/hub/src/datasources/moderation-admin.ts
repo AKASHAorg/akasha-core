@@ -2,7 +2,6 @@ import { DataSource } from 'apollo-datasource';
 import { getAppDB, logger } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { Moderator } from '../collections/interfaces';
-import { add } from 'winston';
 
 class ModerationAdminAPI extends DataSource {
   private readonly collection: string;
