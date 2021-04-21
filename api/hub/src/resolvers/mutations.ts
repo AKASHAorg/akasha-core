@@ -207,5 +207,80 @@ const mutations = {
     await queryCache.del(postIDCache);
     return commentID[0];
   },
+  reportContent: async (_, { data, content }, { dataSources, user, signature }) => {
+    if (!user) {
+      return Promise.reject('Must be authenticated!');
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: data,
+      signature: signature,
+    });
+    if (!verified) {
+      logger.warn(`bad reportContent sig`);
+      return Promise.reject(dataSigError);
+    }
+    logger.info(`verified reportContent sig`);
+    const profile = await dataSources.profileAPI.resolveProfile(user.pubKey, true);
+    if (!profile.length) {
+      return Promise.reject('[Must be authenticated! Profile not found!]');
+    }
+    const reportID = await dataSources.reportingAPI.addReport(
+      'ModerationDecisions',
+      content.contentType,
+      content.contentId,
+      user.publicKey,
+      data.reason,
+      data.explanation,
+    );
+    return reportID;
+  },
+  moderateContent: async (_, { data, content }, { dataSources, user, signature }) => {
+    if (!user) {
+      return Promise.reject('Must be authenticated!');
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: data,
+      signature: signature,
+    });
+    if (!verified) {
+      logger.warn(`bad moderateContent sig`);
+      return Promise.reject(dataSigError);
+    }
+    logger.info(`verified moderateContent sig`);
+    // verify that current user is a valid moderator
+    const isAllowed = await dataSources.moderatorsAPI.isModerator(user.pubKey);
+    if (!isAllowed) {
+      return Promise.reject('[Must be a valid moderator!]');
+    }
+    return await dataSources.moderationAPI.makeDecision(
+      content.contentId,
+      user.publicKey,
+      data.explanation,
+      data.delisted,
+    );
+  },
+  updateModerator: async (_, { data }, { dataSources, user, signature }) => {
+    if (!user) {
+      return Promise.reject('Must be authenticated!');
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: data,
+      signature: signature,
+    });
+    if (!verified) {
+      logger.warn(`bad updateModerator sig`);
+      return Promise.reject(dataSigError);
+    }
+    logger.info(`verified updateModerator sig`);
+    // verify that current user is a valid admin
+    const isAllowed = await dataSources.moderatorsAPI.isAdmin(user.pubKey);
+    if (!isAllowed) {
+      return Promise.reject('[Must be a valid moderation admin!]');
+    }
+    return await dataSources.moderatorsAPI.updateModerator(data.address, data.admin, data.active);
+  },
 };
 export default mutations;
