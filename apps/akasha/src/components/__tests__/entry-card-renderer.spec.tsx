@@ -4,14 +4,14 @@ import { from } from 'rxjs';
 
 import {
   RenderResult,
-  act,
   genEthAddress,
   genPostData,
   renderWithAllWrappers,
+  act,
 } from '@akashaproject/ui-awf-testing-utils';
 
 describe('<ContentCard /> component', () => {
-  let componentWrapper: RenderResult;
+  let renderResult: RenderResult;
   const mockEth = genEthAddress();
   const itemData = genPostData();
   const mockObs = from(['test']);
@@ -43,17 +43,11 @@ describe('<ContentCard /> component', () => {
     />
   );
   act(() => {
-    componentWrapper = renderWithAllWrappers(Base, {});
+    renderResult = renderWithAllWrappers(Base, {});
   });
 
-  it('should render avatar', () => {
-    act(() => {
-      componentWrapper.rerender(Base);
-      // const avatar = componentWrapper.findByTestId('avatar-image');
-      // console.log(avatar);
-    });
-    // componentWrapper.debug(document.body);
-    const avatarNode = componentWrapper.container.querySelector("[data-testid='avatar-image']");
+  it('should render avatar', async () => {
+    const avatarNode = await renderResult.findByTestId('avatar-image');
     expect(avatarNode).toBeDefined();
     expect(avatarNode?.getAttribute('src')).toEqual(itemData.author.avatar);
   });

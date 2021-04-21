@@ -36,7 +36,6 @@ const TranslationProvider: React.FC = ({ children }) => {
 };
 
 const AllProviders: React.FC = ({ children }) => {
-  console.log(TestThemeProvider, 'tt provi');
   return (
     <TranslationProvider>
       <TestThemeProvider>{children}</TestThemeProvider>

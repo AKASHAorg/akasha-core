@@ -40,6 +40,7 @@
     "@akashaproject/sdk-db": "*",
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/ui-awf-hooks": "*",
+    "@akashaproject/ui-awf-testing-utils": "*",
     "moment": "^2.29.1",
     "react-i18next": "11.8.13",
     "react-router-dom": "5.2.0",
