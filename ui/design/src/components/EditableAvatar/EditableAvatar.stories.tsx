@@ -18,9 +18,9 @@ const Template = (args: any) => (
   </Grommet>
 );
 
-export const EditableAvatarStory = Template.bind({});
+export const BaseEditableAvatar = Template.bind({});
 
-EditableAvatarStory.args = {
+BaseEditableAvatar.args = {
   ethAddress: ethAddress,
   src: 'https://placebeard.it/360x360', // optional since this avatar is editable
   border: 'sm',
