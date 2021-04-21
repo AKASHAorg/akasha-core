@@ -17,7 +17,7 @@ const schema = {
         type: 'string',
       },
     },
-    moderatedBy: { type: 'string' },
+    moderator: { type: 'string' },
     moderatedDate: { type: 'number' },
     explanation: { type: 'string' },
     delisted: { type: 'boolean' },

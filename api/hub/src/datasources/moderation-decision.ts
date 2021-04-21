@@ -63,20 +63,15 @@ class ModerationDecisionAPI extends DataSource {
     throw new Error('decision not found');
   }
 
-  async makeDecision(
-    contentId: string,
-    moderatedBy: string,
-    explanation: string,
-    delisted: boolean,
-  ) {
+  async makeDecision(contentId: string, moderator: string, explanation: string, delisted: boolean) {
     const db: Client = await getAppDB();
-    if (!moderatedBy) {
+    if (!moderator) {
       throw new Error('Not authorized');
     }
     // load existing (i.e. pending) decision data
     let decision = await this.getDecision(contentId);
 
-    decision.moderatedBy = moderatedBy;
+    decision.moderator = moderator;
     decision.moderatedDate = new Date().getTime();
     decision.explanation = explanation;
     decision.delisted = delisted;

@@ -73,7 +73,7 @@ export interface ModerationDecision {
   creationDate: number;
   contentType: string;
   contentId: string;
-  moderatedBy?: string;
+  moderator?: string;
   moderatedDate?: number;
   explanation?: string;
   delisted: boolean;
