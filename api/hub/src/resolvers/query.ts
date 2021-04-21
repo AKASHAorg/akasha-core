@@ -172,6 +172,29 @@ const query = {
     })();
     return results;
   },
+
+  getModerator: async (_source, { ethAddress }, { dataSources }) => {
+    return dataSources.moderatorsAPI.getModerator(ethAddress);
+  },
+  isModerator: async (_source, { ethAddress }, { dataSources }) => {
+    return dataSources.moderatorsAPI.isModerator(ethAddress);
+  },
+
+  getDecision: async (_source, { contentID }, { dataSources }) => {
+    const decision = await dataSources.moderationAPI.getDecision(contentID);
+    const reports = await dataSources.reportingAPI.countReports(contentID);
+    const first = await dataSources.reportingAPI.getFirstReport(contentID);
+    const reportedBy = first.author;
+    const reportedDate = first.creationDate;
+    const reasons = await dataSources.reportingAPI.getReasons(contentID);
+    return Object.assign({}, decision, { reports, reportedBy, reportedDate, reasons });
+  },
+  countDecisions: async (_source, {}, { dataSources }) => {
+    return dataSources.moderationAPI.countDecisions();
+  },
+  listDecisions: async (_source, { delisted, moderated, offset, limit }, { dataSources }) => {
+    return dataSources.moderationAPI.listDecisions(delisted, moderated, offset, limit);
+  },
 };
 
 export default query;
