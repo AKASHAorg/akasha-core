@@ -82,7 +82,7 @@ class ModerationDecisionAPI extends DataSource {
     decision.delisted = delisted;
     decision.moderated = true;
 
-    return await db.save(this.dbID, this.collection, [decision]);
+    return await db.create(this.dbID, this.collection, [decision]);
   }
 }
 

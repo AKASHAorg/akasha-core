@@ -94,7 +94,8 @@ class ModerationReportAPI extends DataSource {
     const query = new Where('contentId').eq(contentId);
     const results = await db.find<ModerationReport>(this.dbID, decisionsCollection, query);
     if (results.length < 1) {
-      // need to create it (how to avoid race condition here?)
+      // need to create a pending decision to track moderation status
+      // how to avoid race condition here?
       const decision: ModerationDecision = {
         _id: '',
         creationDate: new Date().getTime(),
