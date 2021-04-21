@@ -29,10 +29,10 @@ describe('<Avatar /> component', () => {
     expect(avatarComp).toBeDefined();
   });
 
-  it('when in guest mode, should match snapshot', async () => {
-    await delay();
-    expect(componentWrapper.toJSON()).toMatchSnapshot('avatar');
-  });
+  // it('when in guest mode, should match snapshot', async () => {
+  //   await delay();
+  //   expect(componentWrapper.toJSON()).toMatchSnapshot('avatar');
+  // });
 
   it('when in guest mode, should pass an image obj to AvatarImage', async () => {
     const avatarRoot = componentWrapper.root.findByType(Avatar);
@@ -85,11 +85,11 @@ describe('<EditableAvatar /> Component', () => {
     });
     cleanup();
   });
-  it('should match snapshot', async () => {
-    // delay to allow avatar to mount the AvatarImage component
-    await delay();
-    expect(componentWrapper.toJSON()).toMatchSnapshot('editable-avatar');
-  });
+  // it('should match snapshot', async () => {
+  //   // delay to allow avatar to mount the AvatarImage component
+  //   await delay();
+  //   expect(componentWrapper.toJSON()).toMatchSnapshot('editable-avatar');
+  // });
   it('should have 1 input type file', async () => {
     const { getAllByTestId } = customRender(
       <EditableAvatar onChange={jest.fn()} ethAddress={'0x1230am3421h3i14cvv21n4'} />,

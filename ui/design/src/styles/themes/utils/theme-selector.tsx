@@ -4,7 +4,7 @@ import { DefaultTheme } from '../interfaces';
 
 export interface ITheme {
   name: string;
-  theme: Promise<{ default: DefaultTheme }>;
+  theme: Promise<{ default: DefaultTheme }> | DefaultTheme;
 }
 
 export interface IThemeSelector extends GrommetProps {
@@ -39,16 +39,24 @@ const setFallbackTheme = (
   availableThemes: ITheme[],
   themeSetter: React.Dispatch<{ name: string; theme: DefaultTheme }>,
 ) => {
-  availableThemes[0].theme.then(themeData =>
-    themeSetter({ name: availableThemes[0].name, theme: themeData.default }),
-  );
+  if (availableThemes[0].theme instanceof Promise) {
+    availableThemes[0].theme.then(themeData =>
+      themeSetter({ name: availableThemes[0].name, theme: themeData.default }),
+    );
+  } else {
+    themeSetter({ name: availableThemes[0].name, theme: availableThemes[0].theme });
+  }
 };
 
 const setTheme = (
   theme: ITheme,
   themeSetter: React.Dispatch<{ name: string; theme: DefaultTheme }>,
 ) => {
-  theme.theme.then(themeData => themeSetter({ name: theme.name, theme: themeData.default }));
+  if (theme.theme instanceof Promise) {
+    theme.theme.then(themeData => themeSetter({ name: theme.name, theme: themeData.default }));
+  } else {
+    themeSetter({ name: theme.name, theme: theme.theme });
+  }
 };
 
 const ThemeSelector = (props: IThemeSelector) => {

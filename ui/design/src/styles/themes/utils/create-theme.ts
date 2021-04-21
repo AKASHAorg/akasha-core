@@ -6,7 +6,6 @@ import createGrommetTheme from './create-grommet-theme';
 
 // defaults to 'light theme' if no override is passed
 export function createTheme(overrides?: object): DefaultTheme {
-
   const styles = {
     colors,
     shapes,
