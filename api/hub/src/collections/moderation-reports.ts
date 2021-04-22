@@ -4,12 +4,12 @@ import { ModerationReport } from './interfaces';
 const schema = {
   title: 'ModerationReport',
   type: 'object',
-  required: ['_id', 'contentType', 'contentId', 'author', 'reason'],
+  required: ['_id', 'contentType', 'contentID', 'author', 'reason'],
   properties: {
     _id: { type: 'string' },
     creationDate: { type: 'number' },
     contentType: { type: 'string' },
-    contentId: { type: 'string' },
+    contentID: { type: 'string' },
     author: { type: 'string' },
     reason: { type: 'string' },
     explanation: { type: 'string' },
@@ -26,7 +26,7 @@ const readFilter = (reader: string, instance: ModerationReport) => {
 
 const indexes = [
   {
-    path: 'contentId',
+    path: 'contentID',
     unique: false,
   },
   {

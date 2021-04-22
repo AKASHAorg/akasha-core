@@ -8,7 +8,7 @@ const schema = {
   properties: {
     _id: { type: 'string' },
     creationDate: { type: 'number' },
-    address: { type: 'string' },
+    ethAddress: { type: 'string' },
     admin: { type: 'boolean' },
     active: { type: 'boolean' },
   },
@@ -24,7 +24,7 @@ const readFilter = (reader: string, instance: Moderator) => {
 
 const indexes = [
   {
-    path: 'address',
+    path: 'ethAddress',
     unique: true,
   },
   {
