@@ -40,8 +40,6 @@ class ModerationDecisionAPI extends DataSource {
   }
 
   async listDecisions(delisted: boolean, moderated: boolean, offset?: number, limit?: number) {
-    limit = limit ? limit : 10;
-    offset = offset ? offset : 0;
     const db: Client = await getAppDB();
     const query = new Where('delisted')
       .eq(delisted)
@@ -49,7 +47,7 @@ class ModerationDecisionAPI extends DataSource {
       .eq(moderated)
       .skipNum(offset)
       .limitTo(limit);
-    return await db.find<ModerationReport>(this.dbID, this.collection, query);
+    return db.find<ModerationReport>(this.dbID, this.collection, query);
   }
 
   async getDecision(contentId: string) {
@@ -69,7 +67,7 @@ class ModerationDecisionAPI extends DataSource {
       throw new Error('Not authorized');
     }
     // load existing (i.e. pending) decision data
-    let decision = await this.getDecision(contentId);
+    const decision = await this.getDecision(contentId);
 
     decision.moderator = moderator;
     decision.moderatedDate = new Date().getTime();
@@ -77,7 +75,8 @@ class ModerationDecisionAPI extends DataSource {
     decision.delisted = delisted;
     decision.moderated = true;
 
-    return await db.create(this.dbID, this.collection, [decision]);
+    await db.create(this.dbID, this.collection, [decision]);
+    return true;
   }
 }
 

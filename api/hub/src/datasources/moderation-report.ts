@@ -35,14 +35,6 @@ class ModerationReportAPI extends DataSource {
     throw new Error('report not found');
   }
 
-  async getReports(contentId: string, limit?: number, offset?: number) {
-    limit = limit ? limit : 10;
-    offset = offset ? offset : 0;
-    const db: Client = await getAppDB();
-    const query = new Where('contentId').eq(contentId).skipNum(offset).limitTo(limit);
-    return await db.find<ModerationReport>(this.dbID, this.collection, query);
-  }
-
   async getFirstReport(contentId: string) {
     const db: Client = await getAppDB();
     // get the first report for this contentID
@@ -60,11 +52,11 @@ class ModerationReportAPI extends DataSource {
     const db: Client = await getAppDB();
     const query = new Where('contentId').eq(contentId);
     reports = await db.find<ModerationReport>(this.dbID, this.collection, query);
-    let reasons: string[];
+    const reasons = [];
     if (reports.length) {
       for (const report of reports) {
         // add unique reasons to the list
-        if (reasons.includes(report.reason) === false) {
+        if (!reasons.includes(report.reason)) {
           reasons.push(report.reason);
         }
       }
@@ -75,7 +67,7 @@ class ModerationReportAPI extends DataSource {
   async addReport(
     decisionsCollection: string,
     contentType: string,
-    contentId: string,
+    contentID: string,
     author: string,
     reason: string,
     explanation?: string,
@@ -85,13 +77,13 @@ class ModerationReportAPI extends DataSource {
       throw new Error('Not authorized');
     }
 
-    let exists = await this.getReport(contentId, author);
+    const exists = await this.getReport(contentID, author);
     if (exists) {
-      return Promise.reject(`cannot report content ${contentId} twice as user ${author}`);
+      return Promise.reject(`cannot report content ${contentID} twice as user ${author}`);
     }
 
     // Do we need to check if a pending decision was created for this post?
-    const query = new Where('contentId').eq(contentId);
+    const query = new Where('contentID').eq(contentID);
     const results = await db.find<ModerationReport>(this.dbID, decisionsCollection, query);
     if (results.length < 1) {
       // need to create a pending decision to track moderation status
@@ -100,13 +92,13 @@ class ModerationReportAPI extends DataSource {
         _id: '',
         creationDate: new Date().getTime(),
         contentType: contentType,
-        contentId: contentId,
+        contentID: contentID,
         delisted: false,
         moderated: false,
       };
       const decisionID = await db.create(this.dbID, decisionsCollection, [decision]);
       if (!decisionID || !decisionID.length) {
-        logger.warn(`pending decision could not be created for contentId ${contentId}`);
+        logger.warn(`pending decision could not be created for contentID ${contentID}`);
         throw new Error('pending decision could not be created');
       }
     }
@@ -116,13 +108,13 @@ class ModerationReportAPI extends DataSource {
       creationDate: new Date().getTime(),
       author: author,
       contentType: contentType,
-      contentId: contentId,
+      contentID: contentID,
       reason: reason,
       explanation: explanation ? explanation : '',
     };
     const reportID = await db.create(this.dbID, this.collection, [report]);
     if (!reportID || !reportID.length) {
-      logger.warn(`report by ${author} for contentId ${contentId} could not be created`);
+      logger.warn(`report by ${author} for contentId ${contentID} could not be created`);
       throw new Error('report could not be created');
     }
     return reportID[0];

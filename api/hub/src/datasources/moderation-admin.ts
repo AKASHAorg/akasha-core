@@ -42,23 +42,25 @@ class ModerationAdminAPI extends DataSource {
     return results.length ? true : false;
   }
 
-  async updateModerator(address: string, admin: boolean, active: boolean) {
+  async updateModerator(ethAddress: string, admin: boolean, active: boolean) {
     let moderator: Moderator;
     moderator._id = '';
-    moderator.address = address;
+    moderator.ethAddress = ethAddress;
     moderator.creationDate = new Date().getTime();
     // check if moderator already exists
-    const exists = this.isModerator(address);
+    const exists = this.isModerator(ethAddress);
     if (exists) {
-      moderator = await this.getModerator(address);
+      moderator = await this.getModerator(ethAddress);
     }
     moderator.admin = admin;
     moderator.active = active;
     const db: Client = await getAppDB();
     if (exists) {
-      return await db.save(this.dbID, this.collection, [moderator]);
+      await db.save(this.dbID, this.collection, [moderator]);
+      return true;
     }
-    return await db.create(this.dbID, this.collection, [moderator]);
+    await db.create(this.dbID, this.collection, [moderator]);
+    return true;
   }
 }
 
