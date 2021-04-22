@@ -90,7 +90,7 @@ const typeDefs = gql`
     getModerator(ethAddress: String!): Moderator
     isModerator(ethAddress: String!): Boolean
     getDecision(contentID: String!): Decision
-    countDecisions: DecisiousCount
+    countDecisions: DecisionsCount
     listDecisions(delisted: Boolean, moderated: Boolean, offset: Int, limit: Int): [Decision]
   }
 
@@ -127,7 +127,7 @@ const typeDefs = gql`
 
   input ReportMeta {
     contentType: String
-    contentID: string
+    contentID: String
   }
 
   input DecisionData {
