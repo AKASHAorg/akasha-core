@@ -53,7 +53,7 @@ export interface Comment {
 export interface Moderator {
   _id: string;
   creationDate: number;
-  address: string;
+  ethAddress: string;
   admin: boolean;
   active: boolean;
 }
@@ -62,7 +62,7 @@ export interface ModerationReport {
   _id: string;
   creationDate: number;
   contentType: string;
-  contentId: string;
+  contentID: string;
   author: string;
   reason: string;
   explanation?: string;
@@ -72,7 +72,7 @@ export interface ModerationDecision {
   _id: string;
   creationDate: number;
   contentType: string;
-  contentId: string;
+  contentID: string;
   moderator?: string;
   moderatedDate?: number;
   explanation?: string;
