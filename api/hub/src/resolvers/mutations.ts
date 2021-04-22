@@ -207,13 +207,13 @@ const mutations = {
     await queryCache.del(postIDCache);
     return commentID[0];
   },
-  reportContent: async (_, { data, content }, { dataSources, user, signature }) => {
+  reportContent: async (_, { report, meta }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
     const verified = await verifyEd25519Sig({
       pubKey: user?.pubKey,
-      data: data,
+      data: report,
       signature: signature,
     });
     if (!verified) {
@@ -227,21 +227,21 @@ const mutations = {
     }
     const reportID = await dataSources.reportingAPI.addReport(
       'ModerationDecisions',
-      content.contentType,
-      content.contentId,
+      meta.contentType,
+      meta.contentID,
       user.publicKey,
-      data.reason,
-      data.explanation,
+      report.reason,
+      report.explanation,
     );
     return reportID;
   },
-  moderateContent: async (_, { data, content }, { dataSources, user, signature }) => {
+  moderateContent: async (_, { decision, meta }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
     const verified = await verifyEd25519Sig({
       pubKey: user?.pubKey,
-      data: data,
+      data: decision,
       signature: signature,
     });
     if (!verified) {
@@ -254,20 +254,20 @@ const mutations = {
     if (!isAllowed) {
       return Promise.reject('[Must be a valid moderator!]');
     }
-    return await dataSources.moderationAPI.makeDecision(
-      content.contentId,
+    return dataSources.moderationAPI.makeDecision(
+      meta.contentID,
       user.publicKey,
-      data.explanation,
-      data.delisted,
+      decision.explanation,
+      decision.delisted,
     );
   },
-  updateModerator: async (_, { data }, { dataSources, user, signature }) => {
+  updateModerator: async (_, { moderator }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
     const verified = await verifyEd25519Sig({
       pubKey: user?.pubKey,
-      data: data,
+      data: moderator,
       signature: signature,
     });
     if (!verified) {
@@ -280,7 +280,11 @@ const mutations = {
     if (!isAllowed) {
       return Promise.reject('[Must be a valid moderation admin!]');
     }
-    return await dataSources.moderatorsAPI.updateModerator(data.address, data.admin, data.active);
+    return await dataSources.moderatorsAPI.updateModerator(
+      moderator.ethAddress,
+      moderator.admin,
+      moderator.active,
+    );
   },
 };
 export default mutations;
