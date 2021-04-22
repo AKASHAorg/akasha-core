@@ -1,6 +1,5 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import {
   useTrendingData,
@@ -11,11 +10,12 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import useErrorState from '@akashaproject/ui-awf-hooks/lib/use-error-state';
+import { ITrendingWidgetProps } from './App';
 
 const { TrendingWidgetCard, ErrorInfoCard, ErrorLoader, LoginModal } = DS;
 
-const TrendingWidget: React.FC<RootComponentProps> = props => {
-  const { globalChannel, sdkModules, logger, singleSpa, rxjsOperators } = props;
+const TrendingWidgetComponent: React.FC<ITrendingWidgetProps> = props => {
+  const { globalChannel, sdkModules, logger, singleSpa, rxjsOperators, layout } = props;
 
   const { t } = useTranslation();
 
@@ -103,6 +103,7 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
   const handleTagClick = (tagName: string) => {
     singleSpa.navigateToUrl(`/social-app/tags/${tagName}`);
   };
+
   const handleTagSubscribe = (tagName: string) => {
     if (!loginState.ethAddress) {
       showLoginModal();
@@ -178,7 +179,7 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
           )}
           <LoginModal
             showModal={modalState.login}
-            slotId={props.layout.app.modalSlotId}
+            slotId={layout.app.modalSlotId}
             onLogin={handleLogin}
             onModalClose={hideLoginModal}
             titleLabel={t('Connect a wallet')}
@@ -192,4 +193,4 @@ const TrendingWidget: React.FC<RootComponentProps> = props => {
   );
 };
 
-export default TrendingWidget;
+export default TrendingWidgetComponent;

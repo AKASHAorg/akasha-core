@@ -2,7 +2,7 @@ import * as React from 'react';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { I18nextProvider } from 'react-i18next';
 import DS from '@akashaproject/design-system';
-import TrendingWidgetCard from './trending-widget-card';
+import TrendingWidget from '@akashaproject/ui-widget-trending/lib/components/App';
 
 const { ThemeSelector, lightTheme, darkTheme, ErrorInfoCard, ErrorLoader } = DS;
 
@@ -48,7 +48,18 @@ class Widget extends React.Component<RootComponentProps> {
                         devDetails={messages}
                       />
                     )}
-                    {!isCritical && <TrendingWidgetCard {...this.props} />}
+                    {!isCritical && (
+                      <TrendingWidget
+                        layout={this.props.layout}
+                        i18n={this.props.i18n}
+                        globalChannel={this.props.globalChannel}
+                        sdkModules={this.props.sdkModules}
+                        logger={this.props.logger}
+                        singleSpa={this.props.singleSpa}
+                        rxjsOperators={this.props.rxjsOperators}
+                        errors={this.state.errors}
+                      />
+                    )}
                   </>
                 );
               }}
