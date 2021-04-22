@@ -41,6 +41,37 @@ const typeDefs = gql`
     comments: [GlobalSearchResultItem]
     profiles: [GlobalSearchResultItem]
   }
+
+  type Moderator {
+    _id: ID!
+    creationDate: String!
+    ethAddress: String!
+    admin: Boolean
+    active: Boolean
+  }
+
+  type Decision {
+    _id: ID!
+    creationDate: String!
+    contentType: String!
+    contentID: String!
+    moderator: UserProfile
+    moderatedDate: String
+    explanation: String
+    reports: Int!
+    reportedBy: UserProfile!
+    reportedDate: String!
+    reasons: [String]!
+    delisted: Boolean
+    moderated: Boolean
+  }
+
+  type DecisionsCount {
+    pending: Int
+    delisted: Int
+    kept: Int
+  }
+
   type Query {
     getProfile(ethAddress: String!): UserProfile!
     resolveProfile(pubKey: String!): UserProfile!
@@ -56,6 +87,11 @@ const typeDefs = gql`
     getComment(commentID: String!): Comment!
     getPostsByAuthor(author: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
     getPostsByTag(tag: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
+    getModerator(ethAddress: String!): Moderator
+    isModerator(ethAddress: String!): Boolean
+    getDecision(contentID: String!): Decision
+    countDecisions: DecisiousCount
+    listDecisions(delisted: Boolean, moderated: Boolean, offset: Int, limit: Int): [Decision]
   }
 
   input DataProviderInput {
@@ -84,6 +120,31 @@ const typeDefs = gql`
     replyTo: String
   }
 
+  input ReportData {
+    reason: String
+    explanation: String
+  }
+
+  input ReportMeta {
+    contentType: String
+    contentID: string
+  }
+
+  input DecisionData {
+    explanation: String
+    delisted: Boolean
+  }
+
+  input DecisionMeta {
+    contentID: String
+  }
+
+  input ModeratorData {
+    ethAddress: String
+    admin: Boolean
+    active: Boolean
+  }
+
   type Mutation {
     addProfileProvider(data: [DataProviderInput]): String!
     makeDefaultProvider(data: [DataProviderInput]): String!
@@ -94,6 +155,9 @@ const typeDefs = gql`
     follow(ethAddress: String!): Boolean
     unFollow(ethAddress: String!): Boolean
     addComment(content: [DataProviderInput!], comment: CommentData): String
+    reportContent(report: ReportData, meta: ReportMeta): String
+    moderateContent(decision: DecisionData, meta: DecisionMeta): Boolean
+    updateModerator(moderator: ModeratorData): Boolean
   }
 
   type Tag {
