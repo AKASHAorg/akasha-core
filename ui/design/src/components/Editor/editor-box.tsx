@@ -110,7 +110,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   );
 
   const editor = useMemo(
-    () => withLinks(withTags(withMentions(withHistory(withReact(withImages(createEditor())))))),
+    () => withLinks(withTags(withMentions(withImages(withHistory(withReact(createEditor())))))),
     [],
   );
 

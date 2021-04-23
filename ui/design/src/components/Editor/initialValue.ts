@@ -6,7 +6,6 @@ export const editorDefaultValue: Node[] = [
     children: [
       {
         text: '',
-        type: 'text',
       },
     ],
   },

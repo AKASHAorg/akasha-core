@@ -96,8 +96,6 @@
     "@types/react-toast-notifications": "^2.4.0",
     "@types/react-transition-group": "4.4.1",
     "@types/react-virtualized-auto-sizer": "1.0.0",
-    "@types/slate": "0.47.8",
-    "@types/slate-react": "0.22.9",
     "@types/styled-components": "5.1.4",
     "@vx/axis": "0.0.199",
     "@vx/curve": "0.0.199",
@@ -123,9 +121,9 @@
     "react-test-renderer": "16.14.0",
     "react-toastify": "6.1.0",
     "remark-gfm": "1.0.0",
-    "slate": "0.59.0",
-    "slate-history": "0.59.0",
-    "slate-react": "0.59.0"
+    "slate": "0.62.0",
+    "slate-history": "0.62.0",
+    "slate-react": "0.62.0"
   },
   "peerDependencies": {
     "react": "16.14.0",
