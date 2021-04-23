@@ -1,6 +1,6 @@
-import { render, RenderOptions } from "@testing-library/react";
-import React from "react";
-import { AllProviders } from "./providers";
+import { render, RenderOptions } from '@testing-library/react';
+import React from 'react';
+import { AllProviders } from './providers';
 // import reactI18next from 'react-i18next';
 
 // const installMocks = (origI18next: typeof reactI18next) => {
@@ -19,16 +19,18 @@ import { AllProviders } from "./providers";
 
 // installMocks(reactI18next);
 
-
-
-const renderWithWrapper = (component: React.ReactElement, wrapper: React.ComponentType, options: RenderOptions) => {
+const renderWithWrapper = (
+  component: React.ReactElement,
+  wrapper: React.ComponentType,
+  options: RenderOptions,
+) => {
   return render(component, { wrapper, ...options });
-}
+};
 
 /* Utility function to render with all required providers */
 const renderWithAllProviders = (component: React.ReactElement, options: RenderOptions) => {
   return render(component, { wrapper: AllProviders, ...options });
-}
+};
 
 export * from '@testing-library/react';
 export { renderWithWrapper, renderWithAllProviders };

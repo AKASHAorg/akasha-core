@@ -6,11 +6,11 @@ const genUser = (ethAddress?: string, userName?: string) => {
     coverImage: faker.image.imageUrl(),
     description: faker.lorem.sentences(3),
     ethAddress: ethAddress || faker.finance.ethereumAddress(),
-    name: faker.fake("{{name.firstName}} {{name.lastName}}"),
+    name: faker.fake('{{name.firstName}} {{name.lastName}}'),
     pubKey: faker.datatype.uuid(),
     userName: userName || faker.internet.userName(),
-  }
-}
+  };
+};
 
 const genLoggedUser = (ethAddress?: string) => {
   const userName = faker.internet.userName();
@@ -18,30 +18,30 @@ const genLoggedUser = (ethAddress?: string) => {
 
   return {
     ...genUser(ethAddress, userName),
-    default: [{
-      property: 'userName',
-      provider: 'ewa.providers.basic',
-      value: userName
-    }],
-    providers: [{
-      property: 'userName',
-      provider: 'ewa.providers.basic',
-      value: userName
-    }, {
-      property: 'userName',
-      provider: 'ewa.providers.ens',
-      value: ensName,
-    }],
-
-  }
-}
+    default: [
+      {
+        property: 'userName',
+        provider: 'ewa.providers.basic',
+        value: userName,
+      },
+    ],
+    providers: [
+      {
+        property: 'userName',
+        provider: 'ewa.providers.basic',
+        value: userName,
+      },
+      {
+        property: 'userName',
+        provider: 'ewa.providers.ens',
+        value: ensName,
+      },
+    ],
+  };
+};
 
 const genEthAddress = () => {
   return faker.finance.ethereumAddress();
-}
+};
 
-export {
-  genLoggedUser,
-  genEthAddress,
-  genUser,
-}
+export { genLoggedUser, genEthAddress, genUser };
