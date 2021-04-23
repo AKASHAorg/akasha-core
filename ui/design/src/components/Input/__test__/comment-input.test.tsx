@@ -39,10 +39,6 @@ describe('<CommentInput> Component', () => {
     expect(commentInputComp).toBeDefined();
   });
 
-  it.skip('should match the snapshot', () => {
-    expect(componentWrapper.toJSON()).toMatchSnapshot('comment-input');
-  });
-
   it('should have a fake input when not clicked', () => {
     const { findByTestId } = customRender(createDefaultComponent(), {});
     expect(findByTestId('fake-input-wrapper')).toBeDefined();

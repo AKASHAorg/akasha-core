@@ -38,6 +38,7 @@
     "@akashaproject/sdk-posts": "*",
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/ui-awf-hooks": "*",
+    "@akashaproject/ui-widget-trending": "*",
     "react-i18next": "11.8.13",
     "react-router-dom": "5.2.0",
     "single-spa-react": "4.1.1"

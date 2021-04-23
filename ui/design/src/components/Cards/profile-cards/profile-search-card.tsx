@@ -5,8 +5,8 @@ import { IProfileWidgetCard } from './profile-widget-card';
 import { SearchProfileAvatarDiv, StyledInlineBox } from './styled-profile-card';
 
 import { MainAreaCardBox, StyledAnchor } from '../common/basic-card-box';
-import { Avatar } from '../../Avatar/index';
-import { DuplexButton } from '../../Buttons/index';
+import Avatar from '../../Avatar';
+import DuplexButton from '../../DuplexButton';
 import { Icon } from '../../Icon';
 import { truncateMiddle } from '../../../utils/string-utils';
 

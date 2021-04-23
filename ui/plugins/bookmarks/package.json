@@ -38,6 +38,7 @@
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/sdk-posts": "*",
+    "@akashaproject/ui-widget-trending": "*",
     "@types/i18next": "13.0.0",
     "@types/react-i18next": "8.1.0",
     "@types/react-router": "5.1.13",

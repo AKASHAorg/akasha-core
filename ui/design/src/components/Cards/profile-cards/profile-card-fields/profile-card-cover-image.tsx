@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { IconButton } from '../../../Buttons/index';
+import IconButton from '../../../IconButton';
 import { Icon } from '../../../Icon';
 import { AppIcon } from '../../../Icon/index';
 import { SelectPopover } from '../../../Popovers/index';

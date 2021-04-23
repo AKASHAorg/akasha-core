@@ -1,6 +1,5 @@
 import { TextInput, FormField } from 'grommet';
 import styled from 'styled-components';
-// import { Button } from '../../Buttons/index';
 
 const StyledLinkIconDiv = styled.div`
   height: 2rem;

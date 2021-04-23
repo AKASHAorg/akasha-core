@@ -16,22 +16,23 @@ import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
 
 import Autosizer from 'react-virtualized-auto-sizer';
 
-import { Avatar, EditableAvatar } from './components/Avatar';
+import Avatar from './components/Avatar';
+import EditableAvatar from './components/EditableAvatar';
 
-import { Sidebar, Topbar } from './components/Bars/index';
+import Sidebar from './components/SideBar';
+import TopBar from './components/TopBar';
 
 import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
 
 import EntryPublishErrorCard from './components/Errors/entry-publish-error-card';
 
-import {
-  Button,
-  DuplexButton,
-  IconButton,
-  IconLink,
-  ProfileAvatarButton,
-  VoteIconButton,
-} from './components/Buttons';
+import Button from './components/Button';
+import DuplexButton from './components/DuplexButton';
+import IconButton from './components/IconButton';
+import IconLink from './components/IconLink';
+import ProfileAvatarButton from './components/ProfileAvatarButton';
+import VoteIconButton from './components/VoteIconButton';
+
 import { AreaChart, LineChart, ResponsiveChart } from './components/Charts';
 
 import {
