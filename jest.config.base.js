@@ -5,7 +5,7 @@ module.exports = {
   testEnvironment: 'node',
   // preset: 'ts-jest/presets/default-esm',
   collectCoverage: true,
-  // setupFiles: ['<rootDir>/jest.setup.js'],
+  setupFiles: ['<rootDir>/jest.setup.js'],
   testPathIgnorePatterns: ['<rootDir>/node_modules', '<rootDir>/__tests__/__mocks__', '<rootDir>/lib', '<rootDir>/dist'],
   coverageReporters: ['text-summary'],
   globals: {

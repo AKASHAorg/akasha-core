@@ -24,9 +24,11 @@
   "devDependencies": {
     "@akashaproject/design-system": "*",
     "@akashaproject/ui-awf-typings": "*",
+    "@types/react-router-dom": "5.1.7",
     "react-i18next": "11.8.13",
     "faker": "5.5.3",
-    "@types/faker": "5.5.3"
+    "@types/faker": "5.5.3",
+    "react-router-dom": "5.2.0"
   },
   "files": [
     "lib"

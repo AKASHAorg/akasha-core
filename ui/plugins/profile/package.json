@@ -25,16 +25,9 @@
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../../build/plugins/profile",
-    "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8332",
-    "watch": "nodemon"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "lib/*",
-      "dist/*"
-    ],
-    "exec": "npm run pack || exit 1",
-    "ext": "ts,tsx"
+    "start": "webpack-dev-server --config ./webpack.config.js --port 8332",
+    "watch": "webpack --config ./webpack.config.js --watch",
+    "test": "jest"
   },
   "dependencies": {
     "@akashaproject/sdk-auth": "*",
@@ -56,6 +49,7 @@
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
+    "@akashaproject/ui-awf-testing-utils": "*",
     "@types/react": "17.0.3",
     "@types/react-dom": "17.0.3",
     "@types/react-test-renderer": "17.0.1",

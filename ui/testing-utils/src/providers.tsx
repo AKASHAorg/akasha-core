@@ -1,35 +1,27 @@
 import * as React from 'react';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { TestThemeProvider } from '@akashaproject/design-system/src/test-utils/providers';
 import i18n from 'i18next';
 
-jest.unmock('react-i18next');
-jest.unmock('i18next');
-
-const instance: any = {
-  language: 'en',
-  languages: ['en', 'fr'],
-  services: {
-    resourceStore: {
-      data: {},
+const getI18nInstance = () => {
+  i18n.use(initReactI18next).init({
+    fallbackLng: 'en',
+    ns: ['translations'],
+    defaultNS: 'translations',
+    debug: false,
+    interpolation: {
+      escapeValue: false, // not needed for react as it escapes by default
     },
-    backendConnector: { backend: {}, state: {} },
-  },
-  isInitialized: true,
-  changeLanguage: () => {},
-  getFixedT: () => (message: string) => message,
-  hasResourceBundle: (_lng: string, ns: string) => ns === 'translation',
-  loadNamespaces: () => {},
-  on: () => {},
-  off: () => {},
-  options: {},
+    resources: { en: {}, es: {}, de: {} },
+  });
+  return i18n;
 };
 
 const TranslationProvider: React.FC = ({ children }) => {
   return (
     <React.Suspense fallback="loading">
       <div id="test-translation-provider">
-        <I18nextProvider i18n={instance as typeof i18n}>{children}</I18nextProvider>
+        <I18nextProvider i18n={getI18nInstance()}>{children}</I18nextProvider>
       </div>
     </React.Suspense>
   );

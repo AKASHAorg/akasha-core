@@ -26,11 +26,13 @@ const renderWithWrapper = (component: React.ReactElement, wrapper: React.Compone
 }
 
 /* Utility function to render with all required providers */
-const renderWithAllWrappers = (component: React.ReactElement, options: RenderOptions) => {
+const renderWithAllProviders = (component: React.ReactElement, options: RenderOptions) => {
   return render(component, { wrapper: AllProviders, ...options });
 }
 
 export * from '@testing-library/react';
-export { renderWithWrapper, renderWithAllWrappers };
+export { renderWithWrapper, renderWithAllProviders };
 
 export * from './data-generator';
+export * from './mocks/channels';
+export * from './mocks/operator';

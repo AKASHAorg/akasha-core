@@ -104,7 +104,23 @@ const ENSForm = styled(EnsFormCard)`
   }
 `;
 
-export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps) => {
+type ProfilePageCardProps = IProfileHeaderProps &
+  Omit<
+    RootComponentProps,
+    | 'domElement'
+    | 'events'
+    | 'getMenuItems'
+    | 'i18n'
+    | 'isMobile'
+    | 'activeWhen'
+    | 'i18nConfig'
+    | 'mountParcel'
+    | 'name'
+    | 'rootNodeId'
+    | 'unmountSelf'
+  >;
+
+export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
   const {
     profileState,
     loggedUserEthAddress,

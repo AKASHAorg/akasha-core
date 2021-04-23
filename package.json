@@ -46,7 +46,8 @@
     "test:ui:watch": "lerna exec --parallel --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream -- jest --watch",
     "test:design-system": "lerna run test --scope @akashaproject/design-system --stream",
     "test:hooks": "lerna run test --scope @akashaproject/ui-awf-hooks --stream",
-    "test": "jest --config ./jest.config.base.js",
+    "test:plugins": "lerna run test --scope @akashaproject/ui-plugin-* --stream",
+    "test:widgets": "lerna run test --scope @akashaproject/ui-widget-* --stream",
     "dev:server": "lerna run dev:server --stream"
   },
   "devDependencies": {

@@ -25,16 +25,8 @@
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../../build/plugins/app-center",
     "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333",
-    "watch": "nodemon"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "lib/*",
-      "dist/*",
-      "build/*"
-    ],
-    "exec": "npm run pack || exit 1",
-    "ext": "ts,tsx"
+    "watch": "webpack --config webpack.config.js --watch",
+    "test": "jest"
   },
   "dependencies": {
     "@akashaproject/ui-awf-typings": "*",
@@ -51,7 +43,8 @@
     "@types/react": "17.0.3",
     "@types/react-dom": "17.0.3",
     "@types/react-test-renderer": "17.0.1",
-    "@types/single-spa-react": "3.0.1"
+    "@types/single-spa-react": "3.0.1",
+    "@akashaproject/ui-awf-testing-utils": "*"
   },
   "peerDependencies": {
     "react": "17.0.2",

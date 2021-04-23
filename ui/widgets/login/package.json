@@ -24,7 +24,8 @@
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js --profile --json ../../stats/login.json",
     "postpack": "copyfiles -f ./dist/* ../../build/widgets/login",
-    "watch": "nodemon"
+    "watch": "webpack --config webpack.config.js --watch",
+    "test": "jest"
   },
   "nodemonConfig": {
     "ignore": [
@@ -47,6 +48,7 @@
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
+    "@akashaproject/ui-awf-testing-utils": "*",
     "@types/react": "17.0.3",
     "@types/react-dom": "17.0.3",
     "@types/single-spa-react": "3.0.1",

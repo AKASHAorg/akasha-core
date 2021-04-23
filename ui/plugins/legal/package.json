@@ -26,16 +26,7 @@
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../../build/plugins/legal",
     "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333",
-    "watch": "nodemon"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "lib/*",
-      "dist/*",
-      "build/*"
-    ],
-    "exec": "npm run pack || exit 1",
-    "ext": "ts,tsx"
+    "watch": "webpack --config ./webpack.config.js --watch"
   },
   "dependencies": {
     "@akashaproject/ui-awf-typings": "*",

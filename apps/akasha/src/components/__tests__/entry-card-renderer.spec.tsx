@@ -6,11 +6,11 @@ import {
   RenderResult,
   genEthAddress,
   genPostData,
-  renderWithAllWrappers,
+  renderWithAllProviders,
   act,
 } from '@akashaproject/ui-awf-testing-utils';
 
-describe('<ContentCard /> component', () => {
+describe('<EntryCardRenderer /> component', () => {
   let renderResult: RenderResult;
   const mockEth = genEthAddress();
   const itemData = genPostData();
@@ -43,7 +43,7 @@ describe('<ContentCard /> component', () => {
     />
   );
   act(() => {
-    renderResult = renderWithAllWrappers(Base, {});
+    renderResult = renderWithAllProviders(Base, {});
   });
 
   it('should render avatar', async () => {
