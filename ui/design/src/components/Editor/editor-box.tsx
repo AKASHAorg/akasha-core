@@ -3,7 +3,7 @@ import React, { useState, useRef, useMemo, useCallback, useEffect } from 'react'
 import { createEditor, Editor, Range, Transforms, Node, Text as SlateText, Element } from 'slate';
 import { withHistory } from 'slate-history';
 import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
-import { Avatar } from '../Avatar/index';
+import Avatar from '../Avatar';
 import { IEntryData } from '../Cards/entry-cards/entry-box';
 import { Icon } from '../Icon/index';
 import { EmojiPopover } from '../Popovers/index';
@@ -13,7 +13,7 @@ import { withMentions, withImages, withTags, withLinks } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
 import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
 import { ImageUpload } from './image-upload';
-import { Button } from '../Buttons';
+import Button from '../Button';
 import { MentionPopover } from './mention-popover';
 import { EditorMeter } from './editor-meter';
 import { serializeToPlainText } from './serialize';

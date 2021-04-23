@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { Button } from '../../Buttons';
+import Button from '../../Button';
 import { BasicCardBox } from '../../Cards';
 import EditorCard, { IEditorCard } from '../../Cards/editor-cards/editor-card';
 import { editorDefaultValue } from '../../Editor';

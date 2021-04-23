@@ -1,7 +1,8 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { formatDateShort } from '../../../utils/time';
-import { Button, IconLink } from '../../Buttons';
+import Button from '../../Button';
+import IconLink from '../../IconLink';
 import { Icon } from '../../Icon/index';
 import { WidgetAreaCardBox } from '../common/basic-card-box';
 import { StyledText } from './styled-widget-cards';

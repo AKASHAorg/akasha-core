@@ -7,7 +7,7 @@ import { TagIconDiv, StyledInlineBox } from './styled-tag-card';
 import { MainAreaCardBox } from '../common/basic-card-box';
 import { ITag } from '../widget-cards/trending-widget-card';
 
-import { DuplexButton } from '../../Buttons/index';
+import DuplexButton from '../../DuplexButton';
 import { Icon } from '../../Icon';
 import { TextLine } from '../../VirtualList/placeholders/entry-card-placeholder';
 
