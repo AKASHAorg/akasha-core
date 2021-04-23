@@ -120,8 +120,6 @@ const renderElement = (
   handleDeleteImage?: (element: any) => void,
 ) => {
   switch (props.element.type) {
-    case 'quote':
-      return <blockquote {...props.attributes}>{props.children}</blockquote>;
     case 'image':
       return <ImageElement handleDeleteImage={handleDeleteImage} {...props} />;
     case 'mention':
