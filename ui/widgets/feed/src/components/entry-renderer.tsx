@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/src/utils/time';
-import { IContentClickDetails } from '@akashaproject/design-system/src/components/Cards/entry-cards/entry-box';
+import { IContentClickDetails } from '@akashaproject/design-system/src/components/EntryCard/entry-box';
 import { useTranslation } from 'react-i18next';
 import { ItemTypes } from './App';
 

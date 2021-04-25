@@ -8,7 +8,7 @@ import {
 } from './styled-form-image-popover';
 import { Icon } from '../../Icon/index';
 import { MobileListModal } from '../../Modals';
-import { StyledDropAlt } from '../../Cards/entry-cards/styled-entry-box';
+import { StyledDropAlt } from '../../EntryCard/styled-entry-box';
 
 export interface IFormImagePopover {
   uploadLabel?: string;

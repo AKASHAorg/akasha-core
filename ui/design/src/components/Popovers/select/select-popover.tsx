@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { IProfileDataProvider } from '../../Cards/profile-cards/profile-card';
+import { IProfileDataProvider } from '../../ProfileCard';
 import { StyledBox, StyledDrop, StyledListElem, StyledRadioButton } from './styled-select-popover';
 
 export interface ISelectPopover {

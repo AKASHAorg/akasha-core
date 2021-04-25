@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FormField, TextInput } from 'grommet';
-import { StyledText } from '../Cards/form-cards/styled-form-card';
+import { StyledText } from '../BoxFormCard/styled-form-card';
 export interface ITextInputFieldProps {
   label: string;
   id: string;

@@ -19,8 +19,53 @@ import Autosizer from 'react-virtualized-auto-sizer';
 import Avatar from './components/Avatar';
 import EditableAvatar from './components/EditableAvatar';
 
-import Sidebar from './components/SideBar';
+import { Sidebar } from './components/SideBar';
 import TopBar from './components/TopBar';
+
+import EditorCard from './components/EditorCard';
+import CommentEditor from './components/EditorCard/comment-editor';
+import { EditorPlaceholder } from './components/EditorCard/editor-placeholder';
+
+import { EntryBox } from './components/EntryCard/entry-box';
+import { EntryCard } from './components/EntryCard';
+import { EntryCardHidden } from './components/EntryCard/entry-card-hidden';
+import {
+  BasicCardBox,
+  MainAreaCardBox,
+  WidgetAreaCardBox,
+  ModalCard,
+} from './components/EntryCard/basic-card-box';
+
+import BoxFormCard from './components/BoxFormCard';
+import EnsFormCard from './components/EnsFormCard';
+
+import { NotificationsCard } from './components/NotificationCard/notification-card';
+
+import { CustomizeFeedCard } from './components/OnboardingCard/customize-feed-card';
+
+import ProfileCard from './components/ProfileCard';
+import ProfileSearchCard from './components/ProfileCard/profile-search-card';
+import ProfileWidgetCard from './components/ProfileCard/profile-widget-card';
+import { ProfileMiniCard } from './components/ProfileCard/profile-mini-card';
+
+import { TagCard } from './components/TagCard';
+import { TagDetailCard } from './components/TagCard/tag-detail-card';
+import { TagProfileCard } from './components/TagCard/tag-profile-card';
+import { TagSearchCard } from './components/TagCard/tag-search-card';
+
+import { FilterCard } from './components/UtilityCard/filter-card';
+import SwitchCard from './components/UtilityCard/switch-card';
+import { MdCard } from './components/UtilityCard/md-card';
+
+import AppInfoWidgetCard from './components/WidgetCard/app-info-widget-card';
+import AppsWidgetCard from './components/WidgetCard/apps-widget-card';
+import MiniInfoWidgetCard from './components/WidgetCard/mini-info-widget-card';
+import TopicsWidgetCard from './components/WidgetCard/topics-widget-card';
+import LoginCTAWidgetCard from './components/WidgetCard/login-cta-widget-card';
+import TrendingWidgetCard from './components/WidgetCard/trending-widget-card';
+import SourcesWidgetCard from './components/WidgetCard/sources-widget-card';
+import TutorialWidgetCard from './components/WidgetCard/tutorial-widget/tutorial-widget-card';
+import CookieWidgetCard from './components/WidgetCard/cookie-card';
 
 import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
 
@@ -34,43 +79,6 @@ import ProfileAvatarButton from './components/ProfileAvatarButton';
 import VoteIconButton from './components/VoteIconButton';
 
 import { AreaChart, LineChart, ResponsiveChart } from './components/Charts';
-
-import {
-  AppInfoWidgetCard,
-  AppsWidgetCard,
-  BasicCardBox,
-  MainAreaCardBox,
-  BoxFormCard,
-  CommentEditor,
-  EditorCard,
-  EditorPlaceholder,
-  EnsFormCard,
-  EntryBox,
-  EntryCard,
-  EntryCardHidden,
-  MiniInfoWidgetCard,
-  ProfileCard,
-  ProfileSearchCard,
-  ProfileWidgetCard,
-  ProfileMiniCard,
-  TopicsWidgetCard,
-  WidgetAreaCardBox,
-  ModalCard,
-  LoginCTAWidgetCard,
-  TrendingWidgetCard,
-  SourcesWidgetCard,
-  TutorialWidgetCard,
-  CookieWidgetCard,
-  CustomizeFeedCard,
-  TagCard,
-  TagDetailCard,
-  TagProfileCard,
-  TagSearchCard,
-  FilterCard,
-  SwitchCard,
-  NotificationsCard,
-  MdCard,
-} from './components/Cards';
 
 import { EditorBox, EditorMeter, editorDefaultValue } from './components/Editor';
 
