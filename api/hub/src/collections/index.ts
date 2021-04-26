@@ -62,4 +62,8 @@ export const updateCollections = async (client: Client, threadID: ThreadID) => {
   await Tags.updateCollection(client, threadID);
   await Posts.updateCollection(client, threadID);
   await Comments.updateCollection(client, threadID);
+  await Invites.updateCollection(client, threadID);
+  await ModerationReports.updateCollection(client, threadID);
+  await ModerationDecisions.updateCollection(client, threadID);
+  await Moderators.updateCollection(client, threadID);
 };
