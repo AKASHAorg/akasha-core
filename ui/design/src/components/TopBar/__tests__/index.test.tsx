@@ -17,10 +17,10 @@ describe('<Topbar /> Component', () => {
             brandLabel={'test'}
             searchAreaItem={undefined}
             quickAccessItems={[]}
-            onLoginClick={() => {}}
-            onSignUpClick={() => {}}
-            onLogout={() => {}}
-            onFeedbackClick={() => {}}
+            onLoginClick={() => null}
+            onSignUpClick={() => null}
+            onLogout={() => null}
+            onFeedbackClick={() => null}
             currentLocation={''}
           />,
         ),

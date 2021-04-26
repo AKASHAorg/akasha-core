@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { cleanup, fireEvent, waitForElement } from '@testing-library/react';
 import * as React from 'react';
 import { act, create } from 'react-test-renderer';
-import { CommentInput } from '../';
+import { CommentInput } from '..';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
 const testEthAddr = '0x00123123123';
