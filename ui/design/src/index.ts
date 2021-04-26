@@ -53,9 +53,9 @@ import { TagDetailCard } from './components/TagCard/tag-detail-card';
 import { TagProfileCard } from './components/TagCard/tag-profile-card';
 import { TagSearchCard } from './components/TagCard/tag-search-card';
 
-import { FilterCard } from './components/UtilityCard/filter-card';
-import SwitchCard from './components/UtilityCard/switch-card';
-import { MdCard } from './components/UtilityCard/md-card';
+import { FilterCard } from './components/FilterCard';
+import SwitchCard from './components/SwitchCard';
+import { MdCard } from './components/MdCard';
 
 import AppInfoWidgetCard from './components/WidgetCard/app-info-widget-card';
 import AppsWidgetCard from './components/WidgetCard/apps-widget-card';
