@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { forkJoin, from } from 'rxjs';
+import { forkJoin, from, timer } from 'rxjs';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import {
   IProfileData,
@@ -456,11 +456,15 @@ export const useProfile = (
        * in the onboarding phase
        */
       if (profile.providers?.length === 0 && profile.userName) {
-        const call = props.profileService.addProfileProvider({
-          property: ProfileProviderProperties.USERNAME,
-          value: profile.userName,
-          provider: ProfileProviders.EWA_BASIC,
-        });
+        const call = timer(2000).pipe(
+          props.rxjsOperators.switchMap(() =>
+            props.profileService.addProfileProvider({
+              property: ProfileProviderProperties.USERNAME,
+              value: profile.userName,
+              provider: ProfileProviders.EWA_BASIC,
+            }),
+          ),
+        );
         call.subscribe({
           error(err: Error) {
             if (logger) {
