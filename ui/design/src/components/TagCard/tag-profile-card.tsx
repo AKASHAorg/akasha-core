@@ -5,7 +5,7 @@ import { isMobileOnly } from 'react-device-detect';
 import { TagIconDiv, StyledInlineBox } from './styled-tag-card';
 
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
-import { ITag } from '../WidgetCard/trending-widget-card';
+import { ITag } from '../TrendingWidgetCard';
 
 import DuplexButton from '../DuplexButton';
 import { Icon } from '../Icon';

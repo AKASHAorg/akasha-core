@@ -57,15 +57,15 @@ import { FilterCard } from './components/FilterCard';
 import SwitchCard from './components/SwitchCard';
 import { MdCard } from './components/MdCard';
 
-import AppInfoWidgetCard from './components/WidgetCard/app-info-widget-card';
-import AppsWidgetCard from './components/WidgetCard/apps-widget-card';
-import MiniInfoWidgetCard from './components/WidgetCard/mini-info-widget-card';
-import TopicsWidgetCard from './components/WidgetCard/topics-widget-card';
-import LoginCTAWidgetCard from './components/WidgetCard/login-cta-widget-card';
-import TrendingWidgetCard from './components/WidgetCard/trending-widget-card';
-import SourcesWidgetCard from './components/WidgetCard/sources-widget-card';
-import TutorialWidgetCard from './components/WidgetCard/tutorial-widget/tutorial-widget-card';
-import CookieWidgetCard from './components/WidgetCard/cookie-card';
+import AppInfoWidgetCard from './components/AppInfoWidgetCard';
+import AppsWidgetCard from './components/AppsWidgetCard';
+import CookieWidgetCard from './components/CookieCard';
+import LoginCTAWidgetCard from './components/LoginCTAWidgetCard';
+import SourcesWidgetCard from './components/SourcesWidgetCard';
+import MiniInfoWidgetCard from './components/MiniInfoWidgetCard';
+import TopicsWidgetCard from './components/TopicsWidgetCard';
+import TrendingWidgetCard from './components/TrendingWidgetCard';
+import TutorialWidgetCard from './components/TutorialWidgetCard';
 
 import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
 

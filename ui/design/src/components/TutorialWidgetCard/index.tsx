@@ -1,11 +1,11 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { Icon } from '../../Icon/index';
-import { WidgetAreaCardBox } from '../../EntryCard/basic-card-box';
+import { Icon } from '../Icon/index';
+import { WidgetAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledButton, StyledImageBox } from './styled-tutorial';
-import { IconType, iconTypes } from '../../Icon/icon';
-import Button from '../../Button';
-import { ProgressBar } from './progress-bar/progress-bar';
+import { IconType, iconTypes } from '../Icon/icon';
+import Button from '../Button';
+import { ProgressBar } from './progress-bar';
 
 export interface ITutorialWidgetCardProps {
   // data

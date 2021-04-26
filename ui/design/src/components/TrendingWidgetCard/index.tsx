@@ -4,7 +4,7 @@ import { SubtitleTextIcon } from '../TextIcon/index';
 import { Icon } from '../Icon/index';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { WidgetAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
-import { StyledTab } from './styled-widget-cards';
+import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import DuplexButton from '../DuplexButton';
 import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ITag } from '../WidgetCard/trending-widget-card';
+import { ITag } from '../TrendingWidgetCard';
 import { SubtitleTextIcon } from '../TextIcon';
 import { Box } from 'grommet';
 import DuplexButton from '../DuplexButton';

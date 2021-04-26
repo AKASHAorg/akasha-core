@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 
-import { ITag } from '../WidgetCard/trending-widget-card';
+import { ITag } from '../TrendingWidgetCard';
 import { SubtitleTextIcon } from '../TextIcon';
 import IconButton from '../IconButton';
 import DuplexButton from '../DuplexButton';

@@ -4,7 +4,7 @@ import { Box, Text } from 'grommet';
 import { TagIconDiv, StyledInlineBox } from './styled-tag-card';
 
 import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
-import { ITag } from '../WidgetCard/trending-widget-card';
+import { ITag } from '../TrendingWidgetCard';
 
 import DuplexButton from '../DuplexButton';
 import { Icon } from '../Icon';

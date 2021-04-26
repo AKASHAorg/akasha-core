@@ -8,7 +8,7 @@ import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/compone
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { ITag } from '@akashaproject/design-system/lib/components/WidgetCard/trending-widget-card';
+import { ITag } from '@akashaproject/design-system/lib/components/TrendingWidgetCard';
 
 const { Box, ReportModal, ToastProvider, ModalRenderer, TagProfileCard, Helmet } = DS;
 
