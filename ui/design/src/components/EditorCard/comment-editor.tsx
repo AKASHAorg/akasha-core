@@ -80,4 +80,4 @@ const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>
   );
 };
 
-export default CommentEditor;
+export { CommentEditor };

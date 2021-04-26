@@ -29,4 +29,4 @@ const MdCard: React.FC<IMdCard> = props => {
   );
 };
 
-export { MdCard };
+export default MdCard;

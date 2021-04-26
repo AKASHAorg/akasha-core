@@ -133,4 +133,4 @@ TagCard.defaultProps = {
   unsubscribeLabel: 'Unsubscribe',
 };
 
-export { TagCard };
+export default TagCard;

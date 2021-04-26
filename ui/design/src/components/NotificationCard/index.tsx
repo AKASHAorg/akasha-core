@@ -221,4 +221,4 @@ NotificationsCard.defaultProps = {
   repostLabel: 'reposted your post',
   markAsReadLabel: 'Mark as read',
 };
-export { NotificationsCard };
+export default NotificationsCard;

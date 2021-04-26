@@ -19,15 +19,15 @@ import Autosizer from 'react-virtualized-auto-sizer';
 import Avatar from './components/Avatar';
 import EditableAvatar from './components/EditableAvatar';
 
-import { Sidebar } from './components/SideBar';
-import TopBar from './components/TopBar';
+import Sidebar from './components/SideBar';
+import Topbar from './components/TopBar';
 
 import EditorCard from './components/EditorCard';
-import CommentEditor from './components/EditorCard/comment-editor';
+import { CommentEditor } from './components/EditorCard/comment-editor';
 import { EditorPlaceholder } from './components/EditorCard/editor-placeholder';
 
+import EntryCard from './components/EntryCard';
 import { EntryBox } from './components/EntryCard/entry-box';
-import { EntryCard } from './components/EntryCard';
 import { EntryCardHidden } from './components/EntryCard/entry-card-hidden';
 import {
   BasicCardBox,
@@ -39,23 +39,23 @@ import {
 import BoxFormCard from './components/BoxFormCard';
 import EnsFormCard from './components/EnsFormCard';
 
-import { NotificationsCard } from './components/NotificationCard/notification-card';
+import NotificationsCard from './components/NotificationCard';
 
-import { CustomizeFeedCard } from './components/OnboardingCard/customize-feed-card';
+import CustomizeFeedCard from './components/OnboardingCard';
 
 import ProfileCard from './components/ProfileCard';
-import ProfileSearchCard from './components/ProfileCard/profile-search-card';
-import ProfileWidgetCard from './components/ProfileCard/profile-widget-card';
+import { ProfileSearchCard } from './components/ProfileCard/profile-search-card';
+import { ProfileWidgetCard } from './components/ProfileCard/profile-widget-card';
 import { ProfileMiniCard } from './components/ProfileCard/profile-mini-card';
 
-import { TagCard } from './components/TagCard';
+import TagCard from './components/TagCard';
 import { TagDetailCard } from './components/TagCard/tag-detail-card';
 import { TagProfileCard } from './components/TagCard/tag-profile-card';
 import { TagSearchCard } from './components/TagCard/tag-search-card';
 
-import { FilterCard } from './components/FilterCard';
+import FilterCard from './components/FilterCard';
 import SwitchCard from './components/SwitchCard';
-import { MdCard } from './components/MdCard';
+import MdCard from './components/MdCard';
 
 import AppInfoWidgetCard from './components/AppInfoWidgetCard';
 import AppsWidgetCard from './components/AppsWidgetCard';

@@ -86,4 +86,4 @@ const ProfileSearchCard: React.FC<IProfileWidgetCard> = props => {
   );
 };
 
-export default ProfileSearchCard;
+export { ProfileSearchCard };

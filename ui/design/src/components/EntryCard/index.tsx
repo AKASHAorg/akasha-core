@@ -132,4 +132,4 @@ EntryCard.defaultProps = {
   shareLabel: 'Share',
 };
 
-export { EntryCard };
+export default EntryCard;

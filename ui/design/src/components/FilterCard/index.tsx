@@ -78,4 +78,4 @@ FilterCard.defaultProps = {
   closeLabel: 'Close',
 };
 
-export { FilterCard };
+export default FilterCard;

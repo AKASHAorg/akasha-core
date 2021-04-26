@@ -138,4 +138,4 @@ const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {
   );
 };
 
-export default ProfileWidgetCard;
+export { ProfileWidgetCard };
