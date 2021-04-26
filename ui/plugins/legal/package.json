@@ -35,15 +35,15 @@
     "@akashaproject/sdk-common": "*",
     "@types/i18next": "13.0.0",
     "@types/react-i18next": "8.1.0",
-    "@types/react-router": "5.1.13",
-    "@types/react-router-dom": "5.1.7",
-    "react-i18next": "11.8.13",
+    "@types/react-router": "5.1.8",
+    "@types/react-router-dom": "5.1.6",
+    "react-i18next": "11.3.1",
     "react-router-dom": "5.2.0",
-    "single-spa-react": "4.1.1"
+    "single-spa-react": "3.2.0"
   },
   "devDependencies": {
-    "@types/react": "17.0.3",
-    "@types/react-dom": "17.0.3",
+    "@types/react": "16.9.56",
+    "@types/react-dom": "16.9.9",
     "@types/react-test-renderer": "17.0.1",
     "@types/single-spa-react": "3.0.1"
   },

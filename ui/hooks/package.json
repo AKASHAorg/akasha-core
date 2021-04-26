@@ -33,9 +33,9 @@
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
-    "@types/react": "17.0.3"
+    "@types/react": "16.9.56"
   },
   "peerDependencies": {
-    "react": "17.0.2"
+    "react": "16.14.0"
   }
 }
