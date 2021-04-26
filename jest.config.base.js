@@ -1,3 +1,6 @@
+const path = require('path');
+const mainTsConfig = require('./tsconfig.json');
+
 module.exports = {
   automock: false,
   verbose: true,
@@ -10,7 +13,10 @@ module.exports = {
   coverageReporters: ['text-summary'],
   globals: {
     'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.json',
+      tsconfig: {
+        ...mainTsConfig.compilerOptions,
+        module: 'commonjs'
+      },
       useESM: true
     },
   },

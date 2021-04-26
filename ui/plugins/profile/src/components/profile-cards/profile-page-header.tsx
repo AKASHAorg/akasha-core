@@ -209,7 +209,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
   }, [JSON.stringify(profileState)]);
 
   const ensFormOptions: EnsFormOption[] = React.useMemo(() => {
-    const options = [];
+    const options: EnsFormOption[] = [];
 
     const hasEnsSubdomainAvail = userNameType.available.includes(
       UsernameTypes.AKASHA_ENS_SUBDOMAIN,
