@@ -50,6 +50,13 @@ export interface Comment {
   replyTo: string;
 }
 
+export interface Invite {
+  _id: string;
+  name: string;
+  updateDate: number;
+  used: boolean;
+}
+
 export interface Moderator {
   _id: string;
   creationDate: number;
