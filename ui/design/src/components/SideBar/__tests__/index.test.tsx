@@ -3,7 +3,7 @@ import { cleanup } from '@testing-library/react';
 import * as React from 'react';
 import { act, create, ReactTestRenderer } from 'react-test-renderer';
 import { wrapWithTheme } from '../../../test-utils';
-import Sidebar from '..';
+import Sidebar from '../';
 
 describe('<Sidebar /> component', () => {
   let componentWrapper: ReactTestRenderer = create(<></>);

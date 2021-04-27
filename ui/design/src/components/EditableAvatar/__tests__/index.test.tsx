@@ -4,7 +4,7 @@ import * as React from 'react';
 import { act, create, ReactTestRenderer } from 'react-test-renderer';
 import { createFile, customRender, wrapWithTheme } from '../../../test-utils';
 import { MockFileReader, WindowWithFileReader } from '../../../test-utils/mocks';
-import EditableAvatar from '..';
+import EditableAvatar from '../';
 
 describe('<EditableAvatar /> Component', () => {
   let componentWrapper: ReactTestRenderer = create(<></>);

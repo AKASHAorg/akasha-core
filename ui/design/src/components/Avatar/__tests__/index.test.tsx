@@ -3,7 +3,7 @@ import { cleanup, waitForElement } from '@testing-library/react';
 import * as React from 'react';
 import { act, create, ReactTestRenderer } from 'react-test-renderer';
 import { customRender, delay, wrapWithTheme } from '../../../test-utils';
-import Avatar, { getAvatarFromSeed } from '..';
+import Avatar, { getAvatarFromSeed } from '../';
 import AvatarImage from '../avatar-image';
 
 describe('<Avatar /> component', () => {

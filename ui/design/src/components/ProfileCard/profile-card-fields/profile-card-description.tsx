@@ -2,7 +2,7 @@ import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { AppIcon } from '../../Icon/index';
 import { SelectPopover } from '../../Popovers/index';
-import { IProfileDataProvider, IProfileProvidersData } from '..';
+import { IProfileDataProvider, IProfileProvidersData } from '../';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 
 export interface IProfileCardDescriptionProps {

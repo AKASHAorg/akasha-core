@@ -4,7 +4,7 @@ import IconButton from '../../IconButton';
 import { Icon } from '../../Icon';
 import { AppIcon } from '../../Icon/index';
 import { SelectPopover } from '../../Popovers/index';
-import { IProfileDataProvider, IProfileProvidersData } from '..';
+import { IProfileDataProvider, IProfileProvidersData } from '../';
 import { ShareButtonContainer, StyledEditCoverImageBox } from '../styled-profile-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 
