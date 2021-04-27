@@ -12,7 +12,7 @@ export const availableCollections = Object.freeze({
 });
 
 @injectable()
-class DB implements DBService {
+class DB implements DBService<Database, Collection> {
   private _dbName: string;
   private readonly _db: Database;
   private _opened = false;

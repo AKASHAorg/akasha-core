@@ -71,12 +71,12 @@ const service: AkashaService = (invoke, log) => {
     return { result, last };
   };
 
-  const getProfiles = async (offset: number = 0, results: number = 5) => {
+  const getProfiles = async (offset = 0, results = 5) => {
     // page of profiles?
     return offset;
   };
 
-  const getProfile = async (identifier: { address: string }, resolve: boolean = true) => {
+  const getProfile = async (identifier: { address: string }, resolve = true) => {
     let profile;
     if (!identifier.address) {
       throw new Error('Must specify address for the profile!');

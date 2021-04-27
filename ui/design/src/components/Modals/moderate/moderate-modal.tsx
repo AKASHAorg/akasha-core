@@ -136,7 +136,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     });
   };
 
-  const handleModerate = (isDelisted: boolean = true) => () => {
+  const handleModerate = (isDelisted = true) => () => {
     const dataToPost = {
       contentId,
       contentType,
