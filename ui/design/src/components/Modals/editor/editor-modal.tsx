@@ -1,8 +1,8 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import Button from '../../Button';
-import { BasicCardBox } from '../../Cards';
-import EditorCard, { IEditorCard } from '../../Cards/editor-cards/editor-card';
+import { BasicCardBox } from '../../EntryCard/basic-card-box';
+import EditorCard, { IEditorCard } from '../../EditorCard';
 import { editorDefaultValue } from '../../Editor';
 import { ModalContainer } from '../common/fullscreen-modal-container';
 import { ModalRenderer } from '../common/modal-renderer';

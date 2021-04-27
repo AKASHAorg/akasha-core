@@ -16,7 +16,7 @@ import {
 import {
   ENSOptionTypes,
   EnsFormOption,
-} from '@akashaproject/design-system/lib/components/Cards/form-cards/ens-form-card';
+} from '@akashaproject/design-system/lib/components/EnsFormCard';
 import menuRoute, { rootRoute, MY_PROFILE } from '../../routes';
 import {
   ProfileUpdateStatus,

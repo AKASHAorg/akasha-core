@@ -3,7 +3,7 @@ import { Box } from 'grommet';
 
 import Button from '../Button';
 
-import { BasicCardBox } from '../Cards';
+import { BasicCardBox } from '../EntryCard/basic-card-box';
 
 const StyledErrorCard = styled(BasicCardBox)`
   display: flex;

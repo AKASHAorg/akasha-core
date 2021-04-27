@@ -1,4 +1,4 @@
-import { IAppData } from '@akashaproject/design-system/lib/components/Cards/widget-cards/apps-widget-card';
+import { IAppData } from '@akashaproject/design-system/lib/components/AppsWidgetCard';
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { chartData } from './Charts.stories';
 
