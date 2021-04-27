@@ -26,6 +26,7 @@
     "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js --profile --json ../../stats/top-bar.json",
     "postpack": "copyfiles -f ./dist/* ../../build/widgets/topbar",
     "watch": "webpack --config webpack.config.js --watch",
+    "pretest": "tsc -m commonjs",
     "test": "jest"
   },
   "dependencies": {

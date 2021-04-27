@@ -413,4 +413,4 @@ Topbar.defaultProps = {
   feedbackInfoLabel: 'Help us improve the experience!',
 };
 
-export { Topbar };
+export default Topbar;

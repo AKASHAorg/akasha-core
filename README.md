@@ -12,20 +12,20 @@
 | [Storybook](https://storybook-awf.netlify.app/)      | [![Netlify Status](https://api.netlify.com/api/v1/badges/04915c36-eff6-4bbe-945b-e9255cae6fb1/deploy-status)](https://app.netlify.com/sites/storybook-awf/deploys)      | NA |
 
 
- 
- 
+
+
 > Monorepo for AWF
 
 ## Table of contents
 
 - [Background](#background)
 - [Install](#install)
-- [Usage](#usage) 
-    - [SDK](#sdk) 
-        - [Package Components](#package-components) 
-        - [Build](#build-the-sdk-package) 
-    - [UI](#ui-workspace) 
-    - [Examples](#playground-test-app) 
+- [Usage](#usage)
+    - [SDK](#sdk)
+        - [Package Components](#package-components)
+        - [Build](#build-the-sdk-package)
+    - [UI](#ui-workspace)
+    - [Examples](#playground-test-app)
     - [Server Scripts](#scripts-workspace)
 - [Contributors](#contributors-)
 - [License](#license)
@@ -49,7 +49,7 @@ $ npm run bootstrap
 ## Usage
 
 For a definitive guide on all available scripts, check out [Scripts-Guide](./SCRIPTS-GUIDE.md)
-          
+
 This repository is split into four [lerna](https://github.com/lerna/lerna) workspaces:
 
 ### SDK
@@ -75,6 +75,16 @@ $ npm run build:sdk
 ```
 
 This will create under the [akasha](./sdk-packages/akasha/README.md) package repo a folder `dist` that contains the built files.
+
+#### Running Tests
+
+From the root of the project:
+
+```shell script
+$ npm run build:test
+$ npm run test:<package-group>
+```
+where `<package-group>` can be one of `apps`, `widgets`, `plugins`, `design-system`, `hooks`
 
 ### UI workspace
 

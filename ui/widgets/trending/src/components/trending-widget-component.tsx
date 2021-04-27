@@ -14,7 +14,9 @@ import { ITrendingWidgetProps } from './App';
 
 const { TrendingWidgetCard, ErrorInfoCard, ErrorLoader, LoginModal } = DS;
 
-const TrendingWidgetComponent: React.FC<ITrendingWidgetProps> = props => {
+type TrendingWidgetComponentProps = Omit<ITrendingWidgetProps, 'i18n'>;
+
+const TrendingWidgetComponent: React.FC<TrendingWidgetComponentProps> = props => {
   const { globalChannel, sdkModules, logger, singleSpa, rxjsOperators, layout } = props;
 
   const { t } = useTranslation();

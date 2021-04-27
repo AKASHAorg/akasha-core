@@ -3,7 +3,7 @@ import { cleanup } from '@testing-library/react';
 import * as React from 'react';
 import { act, create, ReactTestRenderer } from 'react-test-renderer';
 import { wrapWithTheme } from '../../../test-utils';
-import { Topbar } from '..';
+import Topbar from '..';
 
 describe('<Topbar /> Component', () => {
   let componentWrapper: ReactTestRenderer = create(<></>);
