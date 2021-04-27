@@ -189,7 +189,10 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     return;
   };
   const userNameType = React.useMemo(() => {
-    return props.profileActions.getUsernameTypes();
+    if (loggedUserEthAddress && loggedUserEthAddress === profileState.ethAddress) {
+      return props.profileActions.getUsernameTypes();
+    }
+    return { available: [] };
   }, [JSON.stringify(profileState)]);
 
   const ensFormOptions: EnsFormOption[] = React.useMemo(() => {
