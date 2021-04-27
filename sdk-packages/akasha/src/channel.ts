@@ -11,7 +11,11 @@ export const globalChannel = new ReplaySubject(42, 15000);
 export default function init(di: IDIContainer): any {
   const invoke = callServiceMethod(di);
   // call any registered service and create an Observable
-  const send = (servicePath: AkashaServicePath, method: string, args: object): Observable<any> => {
+  const send = (
+    servicePath: AkashaServicePath,
+    method: string,
+    args: Record<string, unknown>,
+  ): Observable<any> => {
     const service: any = invoke(servicePath)(method);
     const obsSource = callChannelService(service, args);
     const obs = obsSource.pipe(

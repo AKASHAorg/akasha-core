@@ -44,7 +44,7 @@ class ProfileAPI extends DataSource {
   getCacheKey(pubKey: string) {
     return `${this.collection}:pubKey${pubKey}`;
   }
-  async resolveProfile(pubKey: string, noCache: boolean = false) {
+  async resolveProfile(pubKey: string, noCache = false) {
     const cacheKey = this.getCacheKey(pubKey);
     const hasKey = await queryCache.has(cacheKey);
     if (hasKey && !noCache) {

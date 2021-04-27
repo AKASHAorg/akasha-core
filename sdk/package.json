@@ -9,6 +9,7 @@
     "inversify": "5.0.5",
     "pino": "6.11.3",
     "quick-lru": "6.0.0",
+    "reflect-metadata": "^0.1.13",
     "rxjs": "6.6.7",
     "workbox-core": "6.1.5",
     "workbox-cacheable-response": "^6.1.5",
