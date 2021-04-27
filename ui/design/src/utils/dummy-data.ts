@@ -187,7 +187,7 @@ const trendingProfilesData = [
     ensName: 'jongilbert.akasha.eth',
     avatar: 'https://placebeard.it/480/480',
     coverImage: 'goldenrod',
-    followers: 312,
+    totalFollowers: 312,
     postsNumber: 235,
     default: [],
     description:
@@ -199,8 +199,9 @@ const trendingProfilesData = [
     name: 'Alexei Gilbertovich',
     userName: '@alexeigilbertovich',
     ensName: 'alexeigilbertovich.akasha.eth',
+    avatar: 'https://placebeard.it/480/480',
     coverImage: 'blue',
-    followers: 7585,
+    totalFollowers: 7585,
     postsNumber: 235,
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
@@ -215,7 +216,7 @@ const trendingProfilesData = [
     ensName: 'jongilbert.akasha.eth',
     avatar: 'https://placebeard.it/480/480',
     coverImage: 'goldenrod',
-    followers: 312,
+    totalFollowers: 312,
     postsNumber: 235,
     default: [],
     description:
@@ -229,7 +230,7 @@ const trendingProfilesData = [
     ensName: 'jongilbert.akasha.eth',
     avatar: 'https://placebeard.it/480/480',
     coverImage: 'goldenrod',
-    followers: 312,
+    totalFollowers: 312,
     postsNumber: 235,
     default: [],
     description:
@@ -243,7 +244,7 @@ const trendingProfilesData = [
     ensName: 'jongilbert.akasha.eth',
     avatar: 'https://placebeard.it/480/480',
     coverImage: 'goldenrod',
-    followers: 312,
+    totalFollowers: 312,
     postsNumber: 235,
     default: [],
     description:
