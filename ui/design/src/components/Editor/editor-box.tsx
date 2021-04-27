@@ -15,10 +15,12 @@ import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
 import { ImageUpload } from './image-upload';
 import Button from '../Button';
 import { MentionPopover } from './mention-popover';
+import { TagPopover } from './tag-popover';
 import { EditorMeter } from './editor-meter';
 import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
+import { useAndroidPlugin } from 'slate-android-plugin';
 
 const MAX_LENGTH = 280;
 
@@ -99,6 +101,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const [emojiPopoverOpen, setEmojiPopoverOpen] = useState(false);
 
+  const slicedTags = tags.slice(0, 4);
+  const slicedMentions = mentions.slice(0, 4);
+
   React.useImperativeHandle(
     ref,
     () => ({
@@ -109,9 +114,11 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     [emojiPopoverOpen],
   );
 
-  const editor = useMemo(
-    () => withLinks(withTags(withMentions(withImages(withHistory(withReact(createEditor())))))),
-    [],
+  const editor = useAndroidPlugin(
+    useMemo(
+      () => withLinks(withTags(withMentions(withImages(withHistory(withReact(createEditor())))))),
+      [],
+    ),
   );
 
   useEffect(() => {
@@ -235,21 +242,18 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         return;
       }
     }
-
-    setMentionTargetRange(null);
-    setTagTargetRange(null);
   };
 
   const selectMention = (event: KeyboardEvent, mentionRange: Range) => {
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
-        const prevIndex = index >= mentions.length - 1 ? 0 : index + 1;
+        const prevIndex = index >= slicedMentions.length - 1 ? 0 : index + 1;
         setIndex(prevIndex);
         break;
       case 'ArrowUp':
         event.preventDefault();
-        const nextIndex = index <= 0 ? mentions.length - 1 : index - 1;
+        const nextIndex = index <= 0 ? slicedMentions.length - 1 : index - 1;
         setIndex(nextIndex);
         break;
       case 'Tab':
@@ -257,7 +261,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       case ' ':
         event.preventDefault();
         Transforms.select(editor, mentionRange);
-        CustomEditor.insertMention(editor, mentions[index]);
+        CustomEditor.insertMention(editor, slicedMentions[index]);
         setMentionTargetRange(null);
         break;
       case 'Escape':
@@ -271,19 +275,19 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
-        const prevIndex = index >= tags.length - 1 ? 0 : index + 1;
+        const prevIndex = index >= slicedTags.length - 1 ? 0 : index + 1;
         setIndex(prevIndex);
         break;
       case 'ArrowUp':
         event.preventDefault();
-        const nextIndex = index <= 0 ? tags.length - 1 : index - 1;
+        const nextIndex = index <= 0 ? slicedTags.length - 1 : index - 1;
         setIndex(nextIndex);
         break;
       case 'Tab':
       case 'Enter':
         event.preventDefault();
         Transforms.select(editor, tagRange);
-        CustomEditor.insertTag(editor, tags[index]);
+        CustomEditor.insertTag(editor, slicedTags[index]);
         setTagTargetRange(null);
         break;
       case ' ':
@@ -294,7 +298,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         } else {
           event.preventDefault();
           Transforms.select(editor, tagRange);
-          CustomEditor.insertTag(editor, tags[index]);
+          CustomEditor.insertTag(editor, slicedTags[index]);
         }
         setTagTargetRange(null);
         break;
@@ -348,11 +352,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const handleInsertEmoji = (emojiCode: string) => {
     CustomEditor.insertText(editor, emojiCode);
   };
-
-  const mentionsNames = mentions.map(mention => {
-    return mention.userName || mention.name || mention.ethAddress;
-  });
-  const tagsNames = tags.map(tag => tag.name);
 
   // image insertion
 
@@ -418,20 +417,22 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 renderLeaf={renderLeaf}
                 onKeyDown={onKeyDown}
               />
-              {mentionTargetRange && mentionsNames.length > 0 && (
+              {mentionTargetRange && mentions.length > 0 && (
                 <MentionPopover
                   handleSelect={handleInsertMention}
                   ref={mentionPopoverRef}
-                  values={mentionsNames}
+                  values={slicedMentions}
                   currentIndex={index}
+                  setIndex={setIndex}
                 />
               )}
               {tagTargetRange && tags.length > 0 && (
-                <MentionPopover
+                <TagPopover
                   handleSelect={handleInsertTag}
                   ref={mentionPopoverRef}
-                  values={tagsNames}
+                  values={slicedTags}
                   currentIndex={index}
+                  setIndex={setIndex}
                 />
               )}
             </Slate>

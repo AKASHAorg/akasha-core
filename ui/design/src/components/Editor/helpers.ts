@@ -69,6 +69,7 @@ const CustomEditor = {
     };
     const mention: MentionElement = Object.assign(baseMention, mentionData);
     Transforms.insertNodes(editor, mention);
+    ReactEditor.focus(editor);
     Transforms.move(editor);
   },
 
@@ -79,6 +80,7 @@ const CustomEditor = {
     };
     const tag: TagElement = Object.assign(baseTag, tagData);
     Transforms.insertNodes(editor, tag);
+    ReactEditor.focus(editor);
     Transforms.move(editor);
   },
 
@@ -89,6 +91,7 @@ const CustomEditor = {
     };
     const link: LinkElement = Object.assign(baseLink, linkData);
     Transforms.insertNodes(editor, link);
+    ReactEditor.focus(editor);
     Transforms.move(editor);
   },
 

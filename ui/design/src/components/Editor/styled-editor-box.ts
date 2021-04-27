@@ -98,6 +98,30 @@ const StyledEditable = styled(Editable)`
   }
 `;
 
+const StyledPopoverDiv = styled.div`
+  top: -9999px;
+  left: -9999px;
+  position: absolute;
+  z-index: 100;
+  padding: ${props => `${props.theme.shapes.baseSpacing}px`};
+  background: ${props => props.theme.colors.white};
+  border-radius: ${props => props.theme.shapes.borderRadius};
+  border: 1px solid ${props => props.theme.colors.border};
+  box-shadow: ${props => props.theme.colors.shadow};
+`;
+
+const StyledPopoverValueBox = styled(Box)<{ background: boolean }>`
+  cursor: pointer;
+  padding: ${props => `${props.theme.shapes.baseSpacing}px`};
+  border-radius: ${props => props.theme.shapes.smallBorderRadius};
+  background: ${props => (props.background ? props.theme.colors.lightestGrey : 'transparent')};
+  max-width: 20rem;
+  min-width: 12rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
 export {
   StyledBox,
   StyledDiv,
@@ -110,4 +134,6 @@ export {
   StyledValueText,
   StyledText,
   StyledCloseDiv,
+  StyledPopoverDiv,
+  StyledPopoverValueBox,
 };

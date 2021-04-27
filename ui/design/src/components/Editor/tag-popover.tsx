@@ -1,19 +1,20 @@
 import * as React from 'react';
 import { Portal } from './helpers';
+import { Text } from 'grommet';
 import { StyledPopoverDiv, StyledPopoverValueBox } from './styled-editor-box';
-import ProfileAvatarButton from '../ProfileAvatarButton';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { ITag } from '../Cards/widget-cards/trending-widget-card';
 
 export interface IMentionPopover {
-  values: Partial<IProfileData>[];
+  postsLabel?: string;
+  values: ITag[];
   ref: React.Ref<any>;
   currentIndex: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
   handleSelect: (index: number) => void;
 }
 
-export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props, ref) => {
-  const { values, currentIndex, setIndex, handleSelect } = props;
+export const TagPopover: React.FC<IMentionPopover> = React.forwardRef((props, ref) => {
+  const { postsLabel, values, currentIndex, setIndex, handleSelect } = props;
 
   return (
     <Portal>
@@ -30,15 +31,17 @@ export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props
               setIndex(i);
             }}
           >
-            <ProfileAvatarButton
-              label={value.name}
-              info={value.userName && `@${value.userName}`}
-              avatarImage={value.avatar}
-              ethAddress={value.ethAddress as string}
-            />
+            <Text size="medium">{`#${value.name}`}</Text>
+            <Text size="small" color="secondaryText">
+              {`${value.totalPosts} ${postsLabel}`}
+            </Text>
           </StyledPopoverValueBox>
         ))}
       </StyledPopoverDiv>
     </Portal>
   );
 });
+
+TagPopover.defaultProps = {
+  postsLabel: 'posts',
+};

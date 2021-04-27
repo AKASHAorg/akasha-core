@@ -3,7 +3,7 @@ import { Grommet } from 'grommet';
 
 import { MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-import { Topbar } from '.';
+import Topbar from '.';
 import ViewportSizeProvider from '../Providers/viewport-dimension';
 
 import lightTheme from '../../styles/themes/light/light-theme';

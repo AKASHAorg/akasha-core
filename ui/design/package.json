@@ -123,7 +123,8 @@
     "remark-gfm": "1.0.0",
     "slate": "0.62.0",
     "slate-history": "0.62.0",
-    "slate-react": "0.62.0"
+    "slate-react": "0.62.0",
+    "slate-android-plugin": "0.0.4"
   },
   "peerDependencies": {
     "react": "16.14.0",
