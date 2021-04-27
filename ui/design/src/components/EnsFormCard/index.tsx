@@ -8,7 +8,7 @@ import Spinner from '../Spinner';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledText } from '../BoxFormCard/styled-form-card';
 
-export const enum ENSOptionTypes {
+export enum ENSOptionTypes {
   ENS_AKASHA_SUBDOMAIN = 0,
   BRING_YOUR_OWN_ENS,
   ETH_ADDRESS,
