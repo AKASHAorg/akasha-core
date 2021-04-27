@@ -24,6 +24,6 @@ export const resizeWindow = (width: number, height: number) => {
   fireEvent(window, new Event('resize'));
 };
 
-export const createFile = (name: string, type: string = 'image/png') => {
+export const createFile = (name: string, type = 'image/png') => {
   return new File(['test-file-content'], name, { type });
 };
