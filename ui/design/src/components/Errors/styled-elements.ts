@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Box } from 'grommet';
 
-import { Button } from '../Buttons';
+import Button from '../Button';
 
 import { BasicCardBox } from '../Cards';
 

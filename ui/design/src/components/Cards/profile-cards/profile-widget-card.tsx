@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { Avatar } from '../../Avatar/index';
+import Avatar from '../../Avatar';
 import { TextIcon } from '../../TextIcon/index';
 import { WidgetAreaCardBox } from '../common/basic-card-box';
 import { AvatarDiv } from './styled-profile-card';

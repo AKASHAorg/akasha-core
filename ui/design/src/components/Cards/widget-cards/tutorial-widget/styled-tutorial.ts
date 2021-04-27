@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button } from '../../../Buttons';
+import Button from '../../../Button';
 import { Box } from 'grommet';
 
 const StyledButton = styled(Button)`

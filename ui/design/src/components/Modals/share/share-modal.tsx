@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { Button } from '../../Buttons/index';
+import Button from '../../Button';
 import { Icon } from '../../Icon/index';
 import { StyledLayer } from '../common/styled-modal';
 import { StyledIconDiv, StyledShareSocialDiv, StyledTextInput } from './styled-share-modal';

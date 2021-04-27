@@ -2,10 +2,10 @@ import { Box, Text, Tabs } from 'grommet';
 import * as React from 'react';
 import { SubtitleTextIcon } from '../../TextIcon/index';
 import { Icon } from '../../Icon/index';
-import { ProfileAvatarButton } from '../../Buttons/index';
+import ProfileAvatarButton from '../../ProfileAvatarButton';
 import { WidgetAreaCardBox, StyledAnchor } from '../common/basic-card-box';
 import { StyledTab } from './styled-widget-cards';
-import { DuplexButton } from '../../Buttons';
+import DuplexButton from '../../DuplexButton';
 import { TextLine } from '../../VirtualList/placeholders/entry-card-placeholder';
 
 export interface ITrendingWidgetCardProps {

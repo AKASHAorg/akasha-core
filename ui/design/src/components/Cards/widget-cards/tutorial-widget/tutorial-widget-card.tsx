@@ -4,7 +4,7 @@ import { Icon } from '../../../Icon/index';
 import { WidgetAreaCardBox } from '../../common/basic-card-box';
 import { StyledButton, StyledImageBox } from './styled-tutorial';
 import { IconType, iconTypes } from '../../../Icon/icon';
-import { Button } from '../../../Buttons/index';
+import Button from '../../../Button';
 import { ProgressBar } from './progress-bar/progress-bar';
 
 export interface ITutorialWidgetCardProps {

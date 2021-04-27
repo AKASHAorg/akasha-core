@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { MainAreaCardBox } from '../common/basic-card-box';
-import { IconLink } from '../../Buttons';
+import IconLink from '../../IconLink';
 import { TextIcon } from '../../TextIcon';
 import { SearchInput } from '../../Input';
 import { TagCard, ITagData } from '../tag-cards/tag-card';

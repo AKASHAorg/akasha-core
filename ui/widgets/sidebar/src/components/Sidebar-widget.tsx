@@ -21,7 +21,6 @@ const {
 } = DS;
 export interface IProps {
   i18n: I18nType;
-  sdkModules: any;
   singleSpa: any;
   globalChannel: any;
   getMenuItems: () => any[];

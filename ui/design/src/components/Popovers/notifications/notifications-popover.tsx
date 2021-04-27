@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { Avatar } from '../../Avatar/index';
+import Avatar from '../../Avatar';
 import BasicPopover from '../common/basic-popover';
 import { StyledListContainer, StyledListElem } from './styled-notifications-popover';
 
