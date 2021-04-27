@@ -1,6 +1,6 @@
 import { base } from 'grommet/themes';
 import { deepMerge } from 'grommet/utils';
-import { DefaultTheme } from 'styled-components';
+import { DefaultTheme } from '../interfaces';
 
 const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
   const customTheme = deepMerge(styledComponentsTheme, base);

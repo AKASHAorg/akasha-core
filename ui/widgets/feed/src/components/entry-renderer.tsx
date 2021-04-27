@@ -178,7 +178,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   flagAsLabel={t('Report Post')}
                   loggedProfileEthAddress={ethAddress}
                   locale={locale || 'en'}
-                  style={{ height: 'auto', ...style }}
+                  style={{ height: 'auto', ...(style as React.CSSProperties) }}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
                   profileAnchorLink={'/profile'}

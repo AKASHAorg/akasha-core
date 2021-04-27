@@ -1,0 +1,36 @@
+{
+  "name": "@akashaproject/ui-awf-testing-utils",
+  "version": "0.1.0",
+  "description": "AWF testing utilities",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "main": "lib/index.js",
+  "contributors": [
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+  },
+  "engines": {
+    "node": ">=10",
+    "npm": ">=5"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "tsc": "tsc --build",
+    "prepare": "npm run tsc"
+  },
+  "devDependencies": {
+    "@akashaproject/design-system": "*",
+    "@akashaproject/ui-awf-typings": "*",
+    "@types/react-router-dom": "5.1.7",
+    "react-i18next": "11.8.13",
+    "faker": "5.5.3",
+    "@types/faker": "5.5.3",
+    "react-router-dom": "5.2.0"
+  },
+  "files": [
+    "lib"
+  ]
+}

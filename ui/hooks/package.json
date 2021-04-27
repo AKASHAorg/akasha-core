@@ -21,7 +21,8 @@
   "scripts": {
     "build": "tsc --build",
     "tsc": "tsc --build",
-    "prepare": "npm run tsc"
+    "prepare": "npm run tsc",
+    "test": "jest"
   },
   "files": [
     "lib"
