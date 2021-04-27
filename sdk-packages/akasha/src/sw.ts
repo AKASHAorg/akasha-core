@@ -14,7 +14,7 @@ registerRoute(
     cacheName: 'js-cache',
     plugins: [
       new ExpirationPlugin({
-        maxAgeSeconds: 7 * 24 * 60 * 60,
+        maxAgeSeconds: 24 * 60 * 60,
       }),
     ],
   }),
@@ -29,7 +29,7 @@ registerRoute(
     cacheName: 'css-cache',
     plugins: [
       new ExpirationPlugin({
-        maxAgeSeconds: 7 * 24 * 60 * 60,
+        maxAgeSeconds: 24 * 60 * 60,
       }),
     ],
   }),
@@ -42,7 +42,7 @@ registerRoute(
     plugins: [
       new ExpirationPlugin({
         maxEntries: 120,
-        maxAgeSeconds: 7 * 24 * 60 * 60,
+        maxAgeSeconds: 24 * 60 * 60,
       }),
     ],
   }),
@@ -53,6 +53,7 @@ const allowedOrigins = [
   'https://cdnjs.cloudflare.com',
   'https://cdn.jsdelivr.net',
   'https://gateway.pinata.cloud',
+  'https://hub.textile.io',
 ];
 registerRoute(
   ({ url }) => allowedOrigins.includes(url.origin),
@@ -64,7 +65,7 @@ registerRoute(
       }),
       new ExpirationPlugin({
         maxEntries: 420,
-        maxAgeSeconds: 30 * 24 * 60 * 60,
+        maxAgeSeconds: 24 * 60 * 60,
       }),
     ],
   }),
@@ -72,7 +73,7 @@ registerRoute(
 
 setCacheNameDetails({
   prefix: 'ewa',
-  suffix: 'v0.1.1',
+  suffix: 'v0.1.2',
   precache: 'install-time',
   runtime: 'run-time',
   googleAnalytics: 'ga',

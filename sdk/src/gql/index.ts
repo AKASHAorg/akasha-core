@@ -3,8 +3,8 @@ import IGqlClient, { IGqlOperation } from '@akashaproject/sdk-typings/lib/interf
 import { ObservableCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
 
 @injectable()
-class Gql implements IGqlClient {
-  run(operation: IGqlOperation): ObservableCallResult<any> {
+class Gql implements IGqlClient<unknown> {
+  run(operation: IGqlOperation): ObservableCallResult<unknown> {
     return undefined;
   }
 }

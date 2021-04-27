@@ -5,9 +5,9 @@ import ISettingsService from './interfaces/settings';
 import IDBService from './interfaces/db';
 
 export default interface IServices {
-  gql: IGqlClient;
+  gql: IGqlClient<unknown>;
   log: ILog;
   stash: IStash;
   settings: ISettingsService;
-  db: IDBService;
+  db: IDBService<unknown, unknown>;
 }

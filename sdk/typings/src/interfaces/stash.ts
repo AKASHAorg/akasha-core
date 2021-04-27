@@ -6,13 +6,13 @@ export interface LRUOptions {
 }
 
 export interface IStash {
-  get(key: any): any;
+  get(key: string): unknown;
 
-  set(key: any, value: any): IStash;
+  set(key: string, value: unknown): IStash;
 
-  peek(key: any): any;
+  peek(key: string): unknown;
 
-  delete(key: any): boolean;
+  delete(key: string): boolean;
   // reset the cache
   clear(): void;
 }
