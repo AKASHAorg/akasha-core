@@ -1,7 +1,7 @@
 import { Box, FormField, Text, RadioButton } from 'grommet';
 import * as React from 'react';
 import { isMobile } from 'react-device-detect';
-import { Button } from '../../Buttons/index';
+import Button from '../../Button';
 import { Icon } from '../../Icon/index';
 import { StyledLayer } from '../../Modals/common/styled-modal';
 import Spinner from '../../Spinner';

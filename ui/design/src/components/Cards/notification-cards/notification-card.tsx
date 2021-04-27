@@ -4,7 +4,7 @@ import { isMobileOnly } from 'react-device-detect';
 import { BasicCardBox } from '../common/basic-card-box';
 import { Icon } from '../../Icon';
 import { formatRelativeTime } from '../../../utils/time';
-import { ProfileAvatarButton } from '../../Buttons/index';
+import ProfileAvatarButton from '../../ProfileAvatarButton';
 import { BlueDot, IconDiv, StyledNotifBox } from './styled-notifications';
 import Spinner from '../../Spinner/index';
 import Tooltip from '../../Tooltip/tooltip';

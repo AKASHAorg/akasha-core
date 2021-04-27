@@ -1,7 +1,7 @@
 import { Box } from 'grommet';
 import * as React from 'react';
 import styled from 'styled-components';
-import { ProfileAvatarButton } from '../Buttons/index';
+import ProfileAvatarButton from '../ProfileAvatarButton';
 import { IEntryData } from '../Cards/entry-cards/entry-box';
 import { ReadOnlyEditor } from './index';
 

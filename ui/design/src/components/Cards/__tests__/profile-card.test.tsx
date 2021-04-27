@@ -91,10 +91,6 @@ describe('<ProfileCard /> Component, (read mode)', () => {
     expect(profileCardComp).toBeDefined();
   });
 
-  it.skip('should match the snapshot', () => {
-    expect(componentWrapper.toJSON()).toMatchSnapshot('profile-card');
-  });
-
   it('should have one cover image, that is not editable', async () => {
     const { getAllByTestId } = customRender(createBaseComponent({}), {});
     const coverImages = await waitForElement(() => getAllByTestId('profile-card-cover-image'));

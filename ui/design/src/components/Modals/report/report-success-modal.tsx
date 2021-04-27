@@ -3,7 +3,7 @@ import { Box, Text } from 'grommet';
 
 import { MainAreaCardBox } from '../../Cards/common/basic-card-box';
 import { ModalWrapper } from '../common/styled-modal';
-import { Button } from '../../Buttons';
+import Button from '../../Button';
 
 import { StyledBox } from '../styled';
 

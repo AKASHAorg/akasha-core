@@ -3,7 +3,10 @@ import * as React from 'react';
 import styled, { css } from 'styled-components';
 
 const StyledBox = styled(Box)<{ elevate?: string }>`
-  background-color: ${props => props.theme.colors.background};
+  background-color: ${props => {
+    // console.log(props, 'box props');
+    return props.theme.colors.background;
+  }};
 `;
 
 export interface IBasicCardBox {

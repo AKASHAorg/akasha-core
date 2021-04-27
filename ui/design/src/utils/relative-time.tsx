@@ -14,7 +14,7 @@ const RelativeTime: React.FC<IRelativeTime> = props => {
 
   const [relativeTime, setRelativeTime] = React.useState('');
 
-  let interval: number | undefined;
+  let interval: ReturnType<typeof setInterval> | undefined;
 
   React.useEffect(() => {
     parseRelativeTime(timestamp);
@@ -50,7 +50,9 @@ const RelativeTime: React.FC<IRelativeTime> = props => {
 
   const parseRelativeTime = (date: number) => {
     const nextRelativeTime = date ? formatDifference(date) : '';
-    if (nextRelativeTime === relativeTime) return;
+    if (nextRelativeTime === relativeTime) {
+      return;
+    }
     setRelativeTime(nextRelativeTime);
   };
 

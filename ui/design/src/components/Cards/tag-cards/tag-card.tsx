@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ITag } from '../widget-cards/trending-widget-card';
 import { SubtitleTextIcon } from '../../TextIcon';
 import { Box } from 'grommet';
-import { DuplexButton } from '../../Buttons';
+import DuplexButton from '../../DuplexButton';
 import { IMentionData } from '../../Charts/area-chart';
 import { ResponsiveChart } from '../../Charts/responsive-chart';
 import { Icon } from '../../Icon';

@@ -1,18 +1,11 @@
-module.exports = {
-  automock: true,
-  verbose: true,
-  bail: true,
-  preset: 'ts-jest',
-  collectCoverage: true,
-  setupFiles: ['<rootDir>/jest.setup.js'],
-  testPathIgnorePatterns: ['<rootDir>/node_modules', '<rootDir>/__tests__/__mocks__'],
-  coverageReporters: ['text-summary'],
-  globals: {
-    'ts-jest': {
-      tsConfig: './tsconfig.json',
-    },
+const baseConfig = require('../../../jest.config.base');
+
+module.exports = Object.assign(baseConfig, {
+  automock: false,
+  transform: {
+    "^.(tsx?|ts?)$": "ts-jest",
   },
-  moduleNameMapper: {
-    'react-i18next': '<rootDir>/__mocks__/react-i18next.js',
-  },
-};
+  testRegex: "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?|ts?)$",
+  preset: "ts-jest",
+  testEnvironment: "jsdom"
+});
