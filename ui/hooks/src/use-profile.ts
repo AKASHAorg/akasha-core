@@ -425,11 +425,11 @@ export const useProfile = (
           property: ProfileProviderProperties.USERNAME,
           value: profile.userName,
         };
-        const call = props.profileService.makeDefault([defaultProvider]);
+        const call = props.profileService.makeDefaultProvider([defaultProvider]);
         call.subscribe({
           error(err: Error) {
             if (logger) {
-              logger.error(`makeDefault error (getUsernameTypes): ${err}`);
+              logger.error(`makeDefaultProvider error (getUsernameTypes): ${err}`);
             }
           },
         });
