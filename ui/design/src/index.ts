@@ -20,7 +20,7 @@ import Avatar from './components/Avatar';
 import EditableAvatar from './components/EditableAvatar';
 
 import Sidebar from './components/SideBar';
-import Topbar from './components/TopBar';
+import TopBar from './components/TopBar';
 
 import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
 
