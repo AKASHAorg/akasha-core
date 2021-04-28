@@ -1,6 +1,6 @@
 import constants from './constants';
 
-const { BASE_FLAG_URL, BASE_STATUS_URL, BASE_DECISION_URL, BASE_MODERATOR_URL } = constants;
+const { BASE_REPORT_URL, BASE_STATUS_URL, BASE_DECISION_URL, BASE_MODERATOR_URL } = constants;
 
 const fetchRequest = async (props: { method: string; url: string; data?: object }) => {
   const { method, url, data = {} } = props;
@@ -61,7 +61,7 @@ export default {
     try {
       const response = await fetchRequest({
         method: 'POST',
-        url: `${BASE_FLAG_URL}/list/${entryId}`,
+        url: `${BASE_REPORT_URL}/list/${entryId}`,
       });
 
       return response;
@@ -78,14 +78,14 @@ export default {
 
       const modResponse = response.map(
         (
-          { contentType: type, contentId, reasons, reportedBy, reportedDate, reports }: any,
+          { contentType: type, contentID, reasons, reportedBy, reportedDate, reports }: any,
           idx: number,
         ) => {
           // formatting data to match labels already in use
           return {
             id: idx,
             type: type,
-            entryId: contentId,
+            entryId: contentID,
             reasons: reasons,
             reporter: reportedBy,
             count: reports - 1, // minus reporter, to get count of other users
@@ -122,7 +122,7 @@ export default {
         (
           {
             contentType: type,
-            contentId,
+            contentID,
             date,
             explanation,
             moderator,
@@ -138,7 +138,7 @@ export default {
           return {
             id: idx,
             type: type,
-            entryId: contentId,
+            entryId: contentID,
             reasons: reasons,
             description: explanation,
             reporter: reportedBy,
