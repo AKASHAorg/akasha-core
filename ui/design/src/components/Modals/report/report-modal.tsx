@@ -26,6 +26,7 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   user?: string;
   contentType?: string;
   baseUrl?: string;
+  signData: (data: object | string) => any;
 }
 
 const ReportModal: React.FC<IReportModalProps> = props => {
@@ -52,6 +53,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     baseUrl,
     updateEntry,
     closeModal,
+    signData,
   } = props;
 
   const [reason, setReason] = React.useState<string>('');
@@ -90,10 +92,11 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   };
 
   const postData = async (url = '', data = {}) => {
+    const postURL = `${url}/new`;
     const rheaders = new Headers();
     rheaders.append('Content-Type', 'application/json');
 
-    const response = await fetch(url, {
+    const response = await fetch(postURL, {
       method: 'POST',
       headers: rheaders,
       body: JSON.stringify(data),
@@ -102,14 +105,6 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   };
 
   const handleReport = () => {
-    const dataToPost = {
-      user,
-      contentId,
-      contentType,
-      explanation: explanation.trim(),
-      reason: optionValues[optionLabels.indexOf(reason)],
-    };
-
     // hard check: makes sure contentType is specified
     if (!contentType || contentType?.length < 1) {
       return handleCancel();
@@ -117,22 +112,37 @@ const ReportModal: React.FC<IReportModalProps> = props => {
 
     setRequesting(true);
 
-    postData(baseUrl, dataToPost)
-      .then(status => {
-        setRequesting(false);
-        if (status === 409) {
-          throw new Error('This content has already been flagged by you');
-        } else if (status >= 400) {
-          throw new Error('Unable to process your request right now. Please try again later');
-        }
-        return setSuccess(true);
-      })
-      .catch(error => {
-        setRequesting(false);
-        return addToast(error.message, {
-          appearance: 'error',
+    // sign payload first before posting
+    const dataToSign = {
+      user,
+      explanation: explanation.trim(),
+      reason: optionValues[optionLabels.indexOf(reason)],
+    };
+    signData(dataToSign).subscribe(async (resp: any) => {
+      const data = {
+        contentId,
+        contentType,
+        data: dataToSign,
+        signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
+      };
+
+      postData(baseUrl, data)
+        .then(status => {
+          setRequesting(false);
+          if (status === 409) {
+            throw new Error('This content has already been flagged by you');
+          } else if (status >= 400) {
+            throw new Error('Unable to process your request right now. Please try again later');
+          }
+          return setSuccess(true);
+        })
+        .catch(error => {
+          setRequesting(false);
+          return addToast(error.message, {
+            appearance: 'error',
+          });
         });
-      });
+    });
   };
 
   if (success) {
