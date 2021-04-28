@@ -19,48 +19,48 @@ class ModerationAdminAPI extends DataSource {
 
   async getModerator(address: string) {
     const db: Client = await getAppDB();
-    const query = new Where('address').eq(address);
+    const query = new Where('ethAddress').eq(address);
     const results = await db.find<Moderator>(this.dbID, this.collection, query);
     if (results.length) {
       return results[0];
     }
     logger.warn(`could not find moderator with address ${address}`);
-    throw new Error('moderator not found');
+    return undefined;
   }
 
   async isModerator(address: string) {
     const db: Client = await getAppDB();
-    const query = new Where('address').eq(address).and('active').eq(true);
+    const query = new Where('ethAddress').eq(address).and('active').eq(true);
     const results = await db.find<Moderator>(this.dbID, this.collection, query);
-    return results.length ? true : false;
+    return results.length > 0 ? true : false;
   }
 
   async isAdmin(address: string) {
     const db: Client = await getAppDB();
-    const query = new Where('address').eq(address).and('active').eq(true).and('admin').eq(true);
+    const query = new Where('ethAddress').eq(address).and('active').eq(true).and('admin').eq(true);
     const results = await db.find<Moderator>(this.dbID, this.collection, query);
-    return results.length ? true : false;
+    return results.length > 0 ? true : false;
   }
 
   async updateModerator(ethAddress: string, admin: boolean, active: boolean) {
-    let moderator: Moderator;
-    moderator._id = '';
-    moderator.ethAddress = ethAddress;
-    moderator.creationDate = new Date().getTime();
+    const db: Client = await getAppDB();
     // check if moderator already exists
-    const exists = this.isModerator(ethAddress);
+    const exists = await this.isModerator(ethAddress);
+    let moderator: Moderator;
     if (exists) {
       moderator = await this.getModerator(ethAddress);
+      moderator.admin = admin;
+      moderator.active = active;
+      return db.save(this.dbID, this.collection, [moderator]);
     }
-    moderator.admin = admin;
-    moderator.active = active;
-    const db: Client = await getAppDB();
-    if (exists) {
-      await db.save(this.dbID, this.collection, [moderator]);
-      return true;
-    }
-    await db.create(this.dbID, this.collection, [moderator]);
-    return true;
+    moderator = {
+      ethAddress,
+      admin,
+      active,
+      _id: '',
+      creationDate: new Date().getTime(),
+    };
+    return db.create(this.dbID, this.collection, [moderator]);
   }
 }
 

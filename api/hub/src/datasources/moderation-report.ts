@@ -17,40 +17,59 @@ class ModerationReportAPI extends DataSource {
     this.context = config.context;
   }
 
-  async countReports(contentId: string) {
+  async countReports(contentID: string) {
     const db: Client = await getAppDB();
-    const query = new Where('contentId').eq(contentId);
+    const query = new Where('contentID').eq(contentID);
     const reports = await db.find<ModerationReport>(this.dbID, this.collection, query);
     return reports.length;
   }
 
-  async getReport(contentId: string, author: string) {
+  async exists(contentID: string, author: string) {
     const db: Client = await getAppDB();
-    const query = new Where('contentId').eq(contentId).and('author').eq(author);
+    const query = new Where('contentID').eq(contentID).and('author').eq(author);
+    const report = await db.find<ModerationReport>(this.dbID, this.collection, query);
+    if (report.length) {
+      return true;
+    }
+    return false;
+  }
+
+  async listReports(contentID: string, offset?: number, limit?: number) {
+    const db: Client = await getAppDB();
+    const query = new Where('contentID')
+      .eq(contentID)
+      .skipNum(offset || 0)
+      .limitTo(limit || 10);
+    return db.find<ModerationReport>(this.dbID, this.collection, query);
+  }
+
+  async getReport(contentID: string, author: string) {
+    const db: Client = await getAppDB();
+    const query = new Where('contentID').eq(contentID).and('author').eq(author);
     const report = await db.find<ModerationReport>(this.dbID, this.collection, query);
     if (report.length) {
       return report[0];
     }
-    logger.warn(`report not found for contentId:${contentId} and author:${author}`);
-    throw new Error('report not found');
+    logger.warn(`report not found for contentID:${contentID} and author:${author}`);
+    return undefined;
   }
 
-  async getFirstReport(contentId: string) {
+  async getFirstReport(contentID: string) {
     const db: Client = await getAppDB();
     // get the first report for this contentID
-    const query = new Where('contentId').eq(contentId).orderBy('creationDate').limitTo(1);
+    const query = new Where('contentID').eq(contentID).orderBy('creationDate').limitTo(1);
     const report = await db.find<ModerationReport>(this.dbID, this.collection, query);
     if (report.length) {
       return report[0];
     }
-    logger.warn(`no reports found for contentId:${contentId}`);
+    logger.warn(`no reports found for contentID:${contentID}`);
     throw new Error('report not found');
   }
 
-  async getReasons(contentId: string) {
+  async getReasons(contentID: string) {
     let reports: ModerationReport[];
     const db: Client = await getAppDB();
-    const query = new Where('contentId').eq(contentId);
+    const query = new Where('contentID').eq(contentID);
     reports = await db.find<ModerationReport>(this.dbID, this.collection, query);
     const reasons = [];
     if (reports.length) {
@@ -77,7 +96,7 @@ class ModerationReportAPI extends DataSource {
       throw new Error('Not authorized');
     }
 
-    const exists = await this.getReport(contentID, author);
+    const exists = await this.exists(contentID, author);
     if (exists) {
       return Promise.reject(`cannot report content ${contentID} twice as user ${author}`);
     }
@@ -114,7 +133,7 @@ class ModerationReportAPI extends DataSource {
     };
     const reportID = await db.create(this.dbID, this.collection, [report]);
     if (!reportID || !reportID.length) {
-      logger.warn(`report by ${author} for contentId ${contentID} could not be created`);
+      logger.warn(`report by ${author} for contentID ${contentID} could not be created`);
       throw new Error('report could not be created');
     }
     return reportID[0];
