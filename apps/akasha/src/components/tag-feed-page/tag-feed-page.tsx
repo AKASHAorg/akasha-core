@@ -221,9 +221,10 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
               user={loginState.ethAddress ? loginState.ethAddress : ''}
               contentId={flagged}
               contentType="post"
-              baseUrl={constants.BASE_FLAG_URL}
+              baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
+              signData={sdkModules.auth.authService.signData}
             />
           </ToastProvider>
         )}
