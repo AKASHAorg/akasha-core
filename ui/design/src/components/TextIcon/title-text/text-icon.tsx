@@ -28,6 +28,7 @@ export interface ITextIconProps {
   fadedText?: boolean;
   ref?: React.Ref<HTMLDivElement>;
   disabled?: boolean;
+  datatestid?: string;
 }
 
 export interface IStyledTextProps extends TextProps {
@@ -58,6 +59,7 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
     reverse,
     fadedText,
     disabled,
+    datatestid,
   } = props;
 
   const renderIcon = () => {
@@ -103,6 +105,7 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
       menuActive={menuActive}
       menuIcon={menuIcon}
       ref={ref}
+      data-testid={datatestid}
     >
       {!reverse && renderIcon()}
       <StyledText

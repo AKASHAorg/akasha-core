@@ -289,7 +289,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             label={postsTitle}
             onClick={onClickPosts}
             fadedText={true}
-            data-testid="posts-button"
+            datatestid="posts-button"
             isMobile={isMobile}
           />
           <StatIcon
@@ -299,7 +299,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             label={followersTitle}
             onClick={onClickFollowers}
             fadedText={true}
-            data-testid="followers-button"
+            datatestid="followers-button"
             isMobile={isMobile}
           />
           <StatIcon
@@ -309,7 +309,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             label={followingTitle}
             onClick={onClickFollowing}
             fadedText={true}
-            data-testid="following-button"
+            datatestid="following-button"
             isMobile={isMobile}
           />
         </Box>
