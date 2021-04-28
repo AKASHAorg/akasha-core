@@ -42,7 +42,6 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     className,
     titleLabel,
     altTitleLabel,
-    contentType,
     decisionLabel,
     optionLabels,
     optionValues,
@@ -94,22 +93,29 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     return closeModal();
   };
 
-  const postData = async (url = '', data = {}) => {
-    const rheaders = new Headers();
-    rheaders.append('Content-Type', 'application/json');
+  const handleModerate = (isDelisted: boolean = true) => () => {
+    setRequesting(true);
 
     // sign payload first before posting
-    signData(data).subscribe(async (resp: any) => {
-      const signedData = {
-        ...resp.data,
-        serializedData: btoa(String.fromCharCode.apply(null, resp.data.serializedData)),
+    const dataToSign = {
+      moderator: user,
+      explanation: explanation.trim(),
+      delisted: isDelisted,
+    };
+    signData(dataToSign).subscribe(async (resp: any) => {
+      const data = {
+        contentId,
+        data: dataToSign,
         signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
       };
 
-      const { status } = await fetch(url, {
+      const postURL = `${baseUrl}/new`;
+      const rheaders = new Headers();
+      rheaders.append('Content-Type', 'application/json');
+      const { status } = await fetch(postURL, {
         method: 'POST',
         headers: rheaders,
-        body: JSON.stringify({ ...data, ...signedData }),
+        body: JSON.stringify(data),
       });
 
       try {
@@ -134,21 +140,6 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
         });
       }
     });
-  };
-
-  const handleModerate = (isDelisted: boolean = true) => () => {
-    const dataToPost = {
-      contentId,
-      contentType,
-      moderator: user,
-      delisted: isDelisted,
-      explanation: explanation.trim(),
-    };
-
-    setRequesting(true);
-
-    // @TODO: connect with moderation endpoint
-    return postData(baseUrl, dataToPost);
   };
 
   return (
