@@ -4,7 +4,7 @@ import { Moderator } from './interfaces';
 const schema = {
   title: 'Moderator',
   type: 'object',
-  required: ['_id', 'address', 'admin', 'active'],
+  required: ['_id', 'ethAddress', 'admin', 'active'],
   properties: {
     _id: { type: 'string' },
     creationDate: { type: 'number' },
