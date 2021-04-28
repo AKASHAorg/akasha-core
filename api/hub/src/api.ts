@@ -103,19 +103,25 @@ api.post('/moderation/reports/new', async (ctx: koa.Context, next: () => Promise
     if (!verified) {
       ctx.status = 403;
     }
-    try {
-      await dataSources.reportingAPI.addReport(
-        'ModerationDecisions',
-        report.contentType,
-        report.contentId,
-        report.data.user,
-        report.data.reason,
-        report.data.explanation,
-      );
-      ctx.status = 201;
-    } catch (error) {
-      ctx.body = error;
-      ctx.status = 500;
+    const exists = await dataSources.reportingAPI.exists(report.contentId, report.data.user);
+    if (exists) {
+      ctx.status = 409;
+      ctx.body = `You have already reported this content.`;
+    } else {
+      try {
+        await dataSources.reportingAPI.addReport(
+          'ModerationDecisions',
+          report.contentType,
+          report.contentId,
+          report.data.user,
+          report.data.reason,
+          report.data.explanation,
+        );
+        ctx.status = 201;
+      } catch (error) {
+        ctx.body = error;
+        ctx.status = 500;
+      }
     }
   }
   await next();
