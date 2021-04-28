@@ -225,11 +225,12 @@ const ProfilePage = (props: ProfilePageProps) => {
               user={loggedEthAddress ? loggedEthAddress : ''}
               contentId={flagged}
               contentType="post"
-              baseUrl={constants.BASE_FLAG_URL}
+              baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={() => {
                 setReportModalOpen(false);
               }}
+              signData={props.sdkModules.auth.authService.signData}
             />
           </ToastProvider>
         )}

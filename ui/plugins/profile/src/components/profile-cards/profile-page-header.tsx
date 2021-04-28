@@ -36,7 +36,7 @@ const BASE_URL =
     ? 'https://moderation.ethereum.world'
     : 'https://moderation.akasha.network';
 
-export const BASE_FLAG_URL = `${BASE_URL}/flags`;
+export const BASE_REPORT_URL = `${BASE_URL}/flags`;
 
 const {
   styled,
@@ -455,8 +455,9 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               user={loggedUserEthAddress ? loggedUserEthAddress : ''}
               contentId={profileState.ethAddress ? profileState.ethAddress : flagged}
               contentType="profile"
-              baseUrl={BASE_FLAG_URL}
+              baseUrl={BASE_REPORT_URL}
               closeModal={closeReportModal}
+              signData={sdkModules.auth.authService.signData}
             />
           </ToastProvider>
         )}
