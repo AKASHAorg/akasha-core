@@ -87,11 +87,6 @@ const typeDefs = gql`
     getComment(commentID: String!): Comment!
     getPostsByAuthor(author: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
     getPostsByTag(tag: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
-    getModerator(ethAddress: String!): Moderator
-    isModerator(ethAddress: String!): Boolean
-    getDecision(contentID: String!): Decision
-    countDecisions: DecisionsCount
-    listDecisions(delisted: Boolean, moderated: Boolean, offset: Int, limit: Int): [Decision]
   }
 
   input DataProviderInput {
