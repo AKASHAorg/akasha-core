@@ -172,45 +172,6 @@ const query = {
     })();
     return results;
   },
-
-  getModerator: async (_source, { ethAddress }, { dataSources }) => {
-    return dataSources.moderatorsAPI.getModerator(ethAddress);
-  },
-  isModerator: async (_source, { ethAddress }, { dataSources }) => {
-    return dataSources.moderatorsAPI.isModerator(ethAddress);
-  },
-
-  getDecision: async (_source, { contentID }, { dataSources }) => {
-    const decision = await dataSources.moderationAPI.getDecision(contentID);
-
-    const moderator = await dataSources.profileAPI.getProfile(decision.moderator);
-
-    const first = await dataSources.reportingAPI.getFirstReport(contentID);
-    const reportedBy = await dataSources.profileAPI.getProfile(first.author);
-    const reportedDate = first.creationDate;
-    const reports = await dataSources.reportingAPI.countReports(contentID);
-
-    const reasons = await dataSources.reportingAPI.getReasons(contentID);
-
-    return Object.assign({}, decision, { moderator, reports, reportedBy, reportedDate, reasons });
-  },
-  countDecisions: async (_source, {}, { dataSources }) => {
-    return dataSources.moderationAPI.countDecisions();
-  },
-  listDecisions: async (_source, { delisted, moderated, offset, limit }, { dataSources }) => {
-    const decisions = await dataSources.moderationAPI.listDecisions(
-      delisted,
-      moderated,
-      offset || 0,
-      limit || 10,
-    );
-    const list = await Promise.all(
-      decisions.map(decision => {
-        return query.getDecision(_source, { contentID: decision.contentID }, { dataSources });
-      }),
-    );
-    return list;
-  },
 };
 
 export default query;
