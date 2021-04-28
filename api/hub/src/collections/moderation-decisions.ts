@@ -4,19 +4,12 @@ import { ModerationDecision } from './interfaces';
 const schema = {
   title: 'ModerationDecision',
   type: 'object',
-  required: ['_id', 'contentType', 'contentId', 'firstReportedBy'],
+  required: ['_id', 'contentType', 'contentID'],
   properties: {
     _id: { type: 'string' },
     creationDate: { type: 'number' },
     contentType: { type: 'string' },
-    contentId: { type: 'string' },
-    firstReportedBy: { type: 'string' },
-    reasons: {
-      type: 'array',
-      items: {
-        type: 'string',
-      },
-    },
+    contentID: { type: 'string' },
     moderator: { type: 'string' },
     moderatedDate: { type: 'number' },
     explanation: { type: 'string' },
@@ -35,11 +28,15 @@ const readFilter = (reader: string, instance: ModerationDecision) => {
 
 const indexes = [
   {
-    path: 'contentId',
+    path: 'contentID',
     unique: true,
   },
   {
     path: 'creationDate',
+    unique: false,
+  },
+  {
+    path: 'moderator',
     unique: false,
   },
 ];
