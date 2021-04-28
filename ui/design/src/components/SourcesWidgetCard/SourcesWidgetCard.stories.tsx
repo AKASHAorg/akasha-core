@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import SourcesWidgetCard from '.';
+import SourcesWidgetCard, { ISourceWidgetCardProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -10,7 +10,7 @@ export default {
   component: SourcesWidgetCard,
 };
 
-const Template = (args: any) => (
+const Template = (args: ISourceWidgetCardProps) => (
   <Grommet theme={lightTheme}>
     <Box width="30%" pad="none" align="center">
       <SourcesWidgetCard {...args} />

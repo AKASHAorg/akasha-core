@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 
-import EnsFormCard from '.';
+import EnsFormCard, { IEnsFormCardProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -9,7 +9,7 @@ export default {
   title: 'Cards/EnsFormCard',
   component: EnsFormCard,
   argTypes: {
-    title: { control: 'text' },
+    titleLabel: { control: 'text' },
     nameLabel: { control: 'text' },
     errorLabel: { control: 'text' },
     cancelLabel: { control: 'text' },
@@ -28,7 +28,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: IEnsFormCardProps) => (
   <Grommet theme={lightTheme}>
     <EnsFormCard {...args} />
   </Grommet>
@@ -37,7 +37,7 @@ const Template = (args: any) => (
 export const BaseEnsFormCard = Template.bind({});
 
 BaseEnsFormCard.args = {
-  title: 'Add a Username',
+  titleLabel: 'Add a Username',
   nameLabel: 'Select a username',
   errorLabel: 'Sorry, this username has already been taken. Please choose another one.',
   cancelLabel: 'Cancel',
@@ -48,7 +48,7 @@ BaseEnsFormCard.args = {
       label: 'Display my AKASHA Ethereum name',
       value: 'mysubdomain.akasha.eth',
       defaultChecked: false,
-      textDetails: 'Username Powered by ENS',
+      textDetails: <>`Username Powered by ENS`</>,
     },
   ],
 };

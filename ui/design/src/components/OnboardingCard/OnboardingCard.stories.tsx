@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 
-import CustomizeFeedCard from '.';
+import CustomizeFeedCard, { ICustomizeFeedCardProps } from '.';
 
 import ViewportSizeProvider from '../Providers/viewport-dimension';
 
@@ -20,7 +20,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: ICustomizeFeedCardProps) => (
   <Grommet theme={lightTheme}>
     <ViewportSizeProvider>
       <CustomizeFeedCard {...args} />
