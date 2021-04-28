@@ -33,6 +33,10 @@ const indexes = [
     path: 'creationDate',
     unique: false,
   },
+  {
+    path: 'author',
+    unique: false,
+  },
 ];
 export function newCollection(client: Client, threadID: ThreadID) {
   return client.newCollection(threadID, {
