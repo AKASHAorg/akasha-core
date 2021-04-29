@@ -27,6 +27,7 @@
     "lint": "tslint -c tslint.json src/**/*.{ts,tsx} --fix --format verbose",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "build": "tsc --build",
+    "pretest": "tsc -m commonjs",
     "test": "jest",
     "tsc": "tsc --build",
     "prepare": "npm run tsc",

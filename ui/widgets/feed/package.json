@@ -26,16 +26,8 @@
     "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js --profile --json ../../stats/feed-widget.json",
     "postpack": "copyfiles -f ./dist/* ../../build/widgets/feed",
     "watch": "webpack --config webpack.config.js --watch",
+    "pretest": "tsc -m commonjs",
     "test": "jest"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "lib/*",
-      "dist/*",
-      "build/*"
-    ],
-    "exec": "npm run pack || exit 1",
-    "ext": "ts,tsx"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",

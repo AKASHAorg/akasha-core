@@ -27,6 +27,7 @@
     "postpack": "copyfiles -f ./dist/* ../../build/plugins/bookmarks",
     "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333",
     "watch": "webpack --config webpack.config.js --watch",
+    "pretest": "tsc -m commonjs",
     "test": "jest"
   },
   "dependencies": {

@@ -25,16 +25,9 @@
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js --profile --json ../../stats/trending-widget.json",
     "postpack": "copyfiles -f ./dist/* ../../build/widgets/trending",
-    "watch": "nodemon"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "lib/*",
-      "dist/*",
-      "build/*"
-    ],
-    "exec": "npm run pack || exit 1",
-    "ext": "ts,tsx"
+    "pretest": "tsc -m commonjs",
+    "test": "jest",
+    "watch": "webpack --config webpack.config.js"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",
@@ -46,6 +39,7 @@
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
+    "@akashaproject/ui-awf-testing-utils": "*",
     "@types/react": "16.9.56",
     "@types/react-dom": "16.9.9",
     "@types/single-spa-react": "2.12.0",
