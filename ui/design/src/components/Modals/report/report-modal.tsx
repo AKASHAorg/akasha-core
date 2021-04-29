@@ -3,7 +3,7 @@ import { isMobileOnly } from 'react-device-detect';
 import { useToasts } from 'react-toast-notifications';
 import { Box, Text, FormField, RadioButtonGroup } from 'grommet';
 
-import { MainAreaCardBox } from '../../Cards/common/basic-card-box';
+import { MainAreaCardBox } from '../../EntryCard/basic-card-box';
 import { ModalWrapper, ModalButton } from '../common/styled-modal';
 import { Icon } from '../../Icon';
 

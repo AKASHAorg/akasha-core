@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ModalContainer } from '../common/fullscreen-modal-container';
-import { ModalCard } from '../../Cards';
+import { ModalCard } from '../../EntryCard/basic-card-box';
 import { Box, Text } from 'grommet';
 import { Icon } from '../../Icon';
 

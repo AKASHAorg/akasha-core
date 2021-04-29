@@ -19,7 +19,7 @@ import {
 } from './styled-topbar';
 import { isMobileOnly } from 'react-device-detect';
 import Button from '../Button';
-import { IProfileData } from '../Cards/profile-cards/profile-widget-card';
+import { IProfileData } from '../ProfileCard/profile-widget-card';
 import { ProfileMenu } from './profile-menu';
 
 export interface ITopbarProps {
@@ -413,4 +413,4 @@ Topbar.defaultProps = {
   feedbackInfoLabel: 'Help us improve the experience!',
 };
 
-export { Topbar };
+export default Topbar;

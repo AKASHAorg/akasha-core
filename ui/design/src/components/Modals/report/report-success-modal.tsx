@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
 
-import { MainAreaCardBox } from '../../Cards/common/basic-card-box';
+import { MainAreaCardBox } from '../../EntryCard/basic-card-box';
 import { ModalWrapper } from '../common/styled-modal';
 import Button from '../../Button';
 
