@@ -18,9 +18,6 @@ import { contextCache, redisCache } from './storage/cache';
 import TagAPI from './datasources/tag';
 import PostAPI from './datasources/post';
 import CommentAPI from './datasources/comment';
-import ModerationReportAPI from './datasources/moderation-report';
-import ModerationDecisionAPI from './datasources/moderation-decision';
-import ModerationAdminAPI from './datasources/moderation-admin';
 import { ThreadID } from '@textile/hub';
 import query from './resolvers/query';
 import mutations from './resolvers/mutations';
@@ -83,9 +80,6 @@ const server = new ApolloServer({
     tagsAPI: new TagAPI({ dbID, collection: 'Tags' }),
     postsAPI: new PostAPI({ dbID, collection: 'Posts' }),
     commentsAPI: new CommentAPI({ dbID, collection: 'Comments' }),
-    reportingAPI: new ModerationReportAPI({ dbID, collection: 'ModerationReports' }),
-    moderationAPI: new ModerationDecisionAPI({ dbID, collection: 'ModerationDecisions' }),
-    moderatorsAPI: new ModerationAdminAPI({ dbID, collection: 'Moderators' }),
   }),
   // access Koa context
   context: ({ ctx }) => {
