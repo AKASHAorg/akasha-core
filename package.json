@@ -42,8 +42,14 @@
     "watch:all": "lerna run --scope='@akashaproject/*' --parallel watch",
     "watch:feed-app": "lerna run --scope=@akashaproject/ethereum.world --stream watch",
     "test:sdk": "lerna run test --scope @akashaproject/sdk-* --stream",
+    "build:test": "lerna run pretest --scope @akashaproject/design-* --scope @akashaproject/ui-* --scope @akashaproject/app-* --stream",
+    "test:ui:watch": "lerna exec --parallel --ignore @akashaproject/sdk-* --stream -- jest --watch",
+    "test:apps": "lerna run test --scope @akashaproject/app-* --stream",
+    "test:design-system": "lerna run test --scope @akashaproject/design-system --stream",
+    "test:hooks": "lerna run test --scope @akashaproject/ui-awf-hooks --stream",
+    "test:plugins": "lerna run test --scope @akashaproject/ui-plugin-* --stream",
+    "test:widgets": "lerna run test --scope @akashaproject/ui-widget-* --stream",
     "test:ui": "lerna run test --scope @akashaproject/ui-* --scope @akashaproject/design-* --scope @akashaproject/app-* --stream",
-    "test:ui:watch": "lerna exec --parallel --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream -- jest --watch",
     "dev:server": "lerna run dev:server --stream"
   },
   "devDependencies": {

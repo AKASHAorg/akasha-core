@@ -17,6 +17,7 @@ export interface ChannelOverrides {
   authService?: {};
   ensService?: {};
   web3Service?: {};
+  tagService?: {};
 }
 
 const getSDKMocks = (overrides: ChannelOverrides) => ({
@@ -29,6 +30,7 @@ const getSDKMocks = (overrides: ChannelOverrides) => ({
   profiles: {
     profileService: {
       isFollowing: () => mockObservable,
+      getTrending: () => mockObservable,
       ...overrides.profileService,
     },
   },
@@ -49,7 +51,10 @@ const getSDKMocks = (overrides: ChannelOverrides) => ({
     },
   },
   posts: {
-    tags: {},
+    tags: {
+      getTrending: () => mockObservable,
+      ...overrides.tagService,
+    },
   },
 });
 
