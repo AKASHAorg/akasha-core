@@ -84,6 +84,8 @@ import ResponsiveChart from './components/ResponsiveChart';
 
 import { EditorBox, EditorMeter, editorDefaultValue } from './components/Editor';
 
+import HorizontalDivider from './components/HorizontalDivider';
+
 import TextInputField from './components/Forms/text-input-field';
 import { AppIcon, Icon, iconTypes } from './components/Icon';
 import ErrorInfoCard from './components/Errors/error-info-card';
@@ -114,7 +116,6 @@ import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
 import VirtualList from './components/VirtualList';
 import type { Helmet as HelmetType } from '@types/react-helmet';
 import Helmet from 'react-helmet';
-import { HorizontalDivider } from './components/Dividers';
 import { Notification, notify, BookmarkPill, NewPostsPill } from './components/Notification';
 import Spinner from './components/Spinner';
 
@@ -232,7 +233,6 @@ const exported = {
   ModalRenderer,
   Notification,
   NotificationsCard,
-  Spinner,
   notify,
   HorizontalDivider,
   LoginCTAWidgetCard,
