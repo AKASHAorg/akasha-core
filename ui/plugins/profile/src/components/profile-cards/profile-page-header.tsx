@@ -36,7 +36,7 @@ const BASE_URL =
     ? 'https://moderation.ethereum.world'
     : 'https://moderation.akasha.network';
 
-export const BASE_REPORT_URL = `${BASE_URL}/flags`;
+export const BASE_REPORT_URL = `${BASE_URL}/reports/new`;
 
 const {
   styled,
