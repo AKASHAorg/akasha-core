@@ -78,7 +78,9 @@ import IconLink from './components/IconLink';
 import ProfileAvatarButton from './components/ProfileAvatarButton';
 import VoteIconButton from './components/VoteIconButton';
 
-import { AreaChart, LineChart, ResponsiveChart } from './components/Charts';
+import AreaChart from './components/AreaChart';
+import LineChart from './components/LineChart';
+import ResponsiveChart from './components/ResponsiveChart';
 
 import { EditorBox, EditorMeter, editorDefaultValue } from './components/Editor';
 

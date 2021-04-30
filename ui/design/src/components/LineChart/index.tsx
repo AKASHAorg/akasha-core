@@ -9,7 +9,7 @@ import { extent, max, bisector } from 'd3-array';
 import { useTooltip, TooltipWithBounds, defaultStyles } from '@vx/tooltip';
 import { localPoint } from '@vx/event';
 import useSimpleClickAway from '../../utils/simpleClickAway';
-import { IMentionData } from './area-chart';
+import { IMentionData } from '../AreaChart';
 
 export interface ILineChart {
   data: IMentionData[];
@@ -167,4 +167,4 @@ LineChart.defaultProps = {
   margin: { top: 16, bottom: 16, left: 16, right: 16 },
 };
 
-export { LineChart };
+export default LineChart;

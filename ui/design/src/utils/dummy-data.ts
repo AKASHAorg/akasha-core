@@ -590,6 +590,7 @@ export {
   appInfo,
   aboutMeLabel,
   appData,
+  chartData,
   appsDataSource,
   cancelLabel,
   changeCoverImageLabel,

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AreaChart, IMentionData } from './area-chart';
+import AreaChart, { IMentionData } from '../AreaChart';
 import { ParentSize } from '@vx/responsive';
 
 const ResponsiveChart: React.FC<{ data: IMentionData[] }> = props => (
@@ -15,4 +15,4 @@ const ResponsiveChart: React.FC<{ data: IMentionData[] }> = props => (
   </ParentSize>
 );
 
-export { ResponsiveChart };
+export default ResponsiveChart;

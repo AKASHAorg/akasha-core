@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { IMentionData } from './area-chart';
-import { LineChart } from './line-chart';
+import { IMentionData } from '../AreaChart';
+import LineChart from '../LineChart';
 import { ParentSize } from '@vx/responsive';
 
 const ResponsiveLineChart: React.FC<{ data: IMentionData[] }> = props => (
@@ -16,4 +16,4 @@ const ResponsiveLineChart: React.FC<{ data: IMentionData[] }> = props => (
   </ParentSize>
 );
 
-export { ResponsiveLineChart };
+export default ResponsiveLineChart;

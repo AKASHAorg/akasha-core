@@ -4,8 +4,8 @@ import { ITag } from '../TrendingWidgetCard';
 import { SubtitleTextIcon } from '../TextIcon';
 import { Box } from 'grommet';
 import DuplexButton from '../DuplexButton';
-import { IMentionData } from '../Charts/area-chart';
-import { ResponsiveChart } from '../Charts/responsive-chart';
+import { IMentionData } from '../AreaChart';
+import ResponsiveChart from '../ResponsiveChart';
 import { Icon } from '../Icon';
 import { useViewportSize } from '../Providers/viewport-dimension';
 
