@@ -7,13 +7,12 @@ import ProfileAPI from './datasources/profile';
 import ModerationReportAPI from './datasources/moderation-report';
 import ModerationDecisionAPI from './datasources/moderation-decision';
 import ModerationAdminAPI from './datasources/moderation-admin';
-// import { stringify } from 'flatted';
 // import { Invite } from './collections/interfaces';
 
 export const promRegistry = new promClient.Registry();
 promClient.collectDefaultMetrics({ register: promRegistry });
 
-const adminSecret = process.env.AWF_API_ADMIN_SECRET;
+const adminSecret = process.env.MODERATION_ADMIN_SECRET;
 
 const dbID = ThreadID.fromString(process.env.AWF_THREADdb);
 const dataSources = {
