@@ -9,7 +9,7 @@ import {
 } from '../index';
 import { Icon } from '../../Icon';
 import ViewportSizeProvider, { useViewportSize } from '../../Providers/viewport-dimension';
-import ErrorLoader from '../../Errors/error-loader';
+import ErrorLoader from '../../ErrorLoader';
 import { Button } from 'grommet';
 
 export interface LoginModalProps {

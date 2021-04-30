@@ -8,7 +8,7 @@ import ProfileAvatarButton from '../ProfileAvatarButton';
 import { BlueDot, IconDiv, StyledNotifBox } from './styled-notifications';
 import Spinner from '../Spinner';
 import Tooltip from '../Tooltip/tooltip';
-import ErrorLoader from '../Errors/error-loader';
+import ErrorLoader from '../ErrorLoader';
 
 export interface INotificationsCard {
   // data

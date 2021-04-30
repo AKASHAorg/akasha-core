@@ -9,7 +9,7 @@ const ErrorElement = styled('pre')`
   overflow-x: auto;
 `;
 
-const ErrorInfoCard = ({
+export const ErrorInfoCard = ({
   errors = {},
   children,
 }: {
@@ -42,5 +42,3 @@ const ErrorInfoCard = ({
   }
   return children(null, false);
 };
-
-export default ErrorInfoCard;

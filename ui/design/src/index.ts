@@ -69,8 +69,6 @@ import TutorialWidgetCard from './components/TutorialWidgetCard';
 
 import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
 
-import EntryPublishErrorCard from './components/Errors/entry-publish-error-card';
-
 import Button from './components/Button';
 import DuplexButton from './components/DuplexButton';
 import IconButton from './components/IconButton';
@@ -86,11 +84,13 @@ import { EditorBox, EditorMeter, editorDefaultValue } from './components/Editor'
 
 import HorizontalDivider from './components/HorizontalDivider';
 
+import ErrorLoader from './components/ErrorLoader';
+import { ErrorInfoCard } from './components/ErrorLoader/error-info-card';
+import EntryPublishErrorCard from './components/EntryPublishErrorCard';
+import ModerationAppErrorCard from './components/ModerationAppErrorCard';
+
 import TextInputField from './components/Forms/text-input-field';
 import { AppIcon, Icon, iconTypes } from './components/Icon';
-import ErrorInfoCard from './components/Errors/error-info-card';
-import ErrorLoader from './components/Errors/error-loader';
-import ModerationAppErrorCard from './components/Errors/moderation-app-error-card';
 
 import { CommentInput, SearchInput, DropSearchInput } from './components/Input';
 import {

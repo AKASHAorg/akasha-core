@@ -1,8 +1,22 @@
 import React from 'react';
 import { Box, Text, Image } from 'grommet';
 
-import type { IModerationAppErrorCardProps } from './interfaces';
-import { PageWrapper, ContentWrapper, StyledButton } from './styled-elements';
+import { PageWrapper, ContentWrapper, StyledButton } from '../ErrorLoader/styled-elements';
+
+export interface IModerationAppErrorCardProps {
+  size: string;
+  errorType: string;
+  titleLabel: string;
+  subtitleLabel: string;
+  buttonLabel?: string;
+  textMarginTop?: boolean;
+  textMarginBottom?: boolean;
+  hasButton?: boolean;
+  imageBoxHasMargin?: boolean;
+  /* Path to public folder */
+  publicImgPath?: string;
+  showLoginModal?: () => void;
+}
 
 const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => {
   const {
