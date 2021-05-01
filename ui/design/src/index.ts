@@ -89,7 +89,8 @@ import { ErrorInfoCard } from './components/ErrorLoader/error-info-card';
 import EntryPublishErrorCard from './components/EntryPublishErrorCard';
 import ModerationAppErrorCard from './components/ModerationAppErrorCard';
 
-import TextInputField from './components/Forms/text-input-field';
+import TextInputField from './components/TextInputField';
+
 import { AppIcon, Icon, iconTypes } from './components/Icon';
 
 import { CommentInput, SearchInput, DropSearchInput } from './components/Input';
