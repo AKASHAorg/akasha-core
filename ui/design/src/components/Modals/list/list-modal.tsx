@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { formatDate, ILocale } from '../../../utils/time';
 import ProfileAvatarButton from '../../ProfileAvatarButton';
-import { IconType } from '../../Icon/icon';
+import { IconType } from '../../Icon';
 import { TextIcon } from '../../TextIcon/index';
 import { StyledLayer } from '../common/styled-modal';
 

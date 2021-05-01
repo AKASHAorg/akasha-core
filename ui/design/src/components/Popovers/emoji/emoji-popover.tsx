@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon } from '../../Icon/index';
+import Icon from '../../Icon';
 import {
   StyledSearchBox,
   StyledTextInput,

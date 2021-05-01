@@ -8,7 +8,7 @@ import ProfileAvatarButton from '../ProfileAvatarButton';
 import { StyledDrop, StyledPopoverBox, StyledOverlay, StyledAccordionPanel } from './styled-topbar';
 import { ModalContainer } from '../Modals/common/fullscreen-modal-container';
 import { Portal } from '../Editor/helpers';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 
 export interface IProfileMenu {
   loggedProfileData?: Partial<IProfileData>;

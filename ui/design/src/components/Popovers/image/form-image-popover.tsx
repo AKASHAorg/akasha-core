@@ -6,7 +6,7 @@ import {
   StyledDrop,
   StyledImageInput,
 } from './styled-form-image-popover';
-import { Icon } from '../../Icon/index';
+import Icon from '../../Icon';
 import { MobileListModal } from '../../Modals';
 import { StyledDropAlt } from '../../EntryCard/styled-entry-box';
 

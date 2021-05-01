@@ -7,7 +7,7 @@ import { SearchInput } from '../Input';
 import TagCard, { ITagData } from '../TagCard';
 import { IProfileData } from '../ProfileCard/profile-widget-card';
 import { ProfileMiniCard } from '../ProfileCard/profile-mini-card';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 
 export interface ICustomizeFeedCardProps {
   // data

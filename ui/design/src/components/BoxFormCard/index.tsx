@@ -2,7 +2,7 @@ import { Box, FormField, Text, TextArea, TextInput } from 'grommet';
 import * as React from 'react';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import Button from '../Button';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 import { StyledLayer } from '../Modals/common/styled-modal';
 import { StyledImageInput } from '../Popovers/image/styled-form-image-popover';
 import { FormImagePopover } from '../Popovers/index';

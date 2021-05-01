@@ -1,6 +1,6 @@
 import { Box } from 'grommet';
 import * as React from 'react';
-import { Icon } from '../../Icon/index';
+import Icon from '../../Icon';
 import { StyledTextInput, StyledFormField } from '../link-input/styled-link-input';
 import IconLink from '../../IconLink';
 

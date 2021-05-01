@@ -2,7 +2,7 @@ import { Box, RadioButton, Text } from 'grommet';
 import * as React from 'react';
 import styled from 'styled-components';
 import Button from '../Button';
-import { Icon } from '../Icon/index';
+import Icon from '../Icon';
 import { StyledLayer } from '../Modals/common/styled-modal';
 import Spinner from '../Spinner';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';

@@ -4,7 +4,7 @@ import { useToasts } from 'react-toast-notifications';
 import { Box, Text, FormField, RadioButtonGroup } from 'grommet';
 
 import { MainAreaCardBox } from '../../EntryCard/basic-card-box';
-import { Icon } from '../../Icon';
+import Icon from '../../Icon';
 
 import { ModalWrapper, ModalButton } from '../common/styled-modal';
 

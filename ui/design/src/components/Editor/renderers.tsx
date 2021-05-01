@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
 import styled from 'styled-components';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 import { StyledAnchor } from '../Input/text-input-icon-form/styles';
 import { StyledCloseDiv } from './styled-editor-box';
 

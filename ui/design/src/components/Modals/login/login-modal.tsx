@@ -7,7 +7,7 @@ import {
   EthProviderModalIllustration,
   ModalContainer,
 } from '../index';
-import { Icon } from '../../Icon';
+import Icon from '../../Icon';
 import ViewportSizeProvider, { useViewportSize } from '../../Providers/viewport-dimension';
 import ErrorLoader from '../../ErrorLoader';
 import { Button } from 'grommet';

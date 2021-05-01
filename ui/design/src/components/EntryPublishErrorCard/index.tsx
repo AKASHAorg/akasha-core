@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Box } from 'grommet';
 import styled from 'styled-components';
 import EntryLoadingPlaceholder from '../VirtualList/placeholders/entry-card-placeholder';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 
 export interface PublishErrorCardProps {
   style?: React.CSSProperties;

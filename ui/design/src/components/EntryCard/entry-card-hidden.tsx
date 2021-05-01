@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 import { MainAreaCardBox } from './basic-card-box';
 
 export interface IEntryCardHiddenProps {

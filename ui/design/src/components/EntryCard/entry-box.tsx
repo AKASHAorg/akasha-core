@@ -14,7 +14,7 @@ import { ProfileMiniCard } from '../ProfileCard/profile-mini-card';
 import { IProfileData } from '../ProfileCard/profile-widget-card';
 import { StyledAnchor } from './basic-card-box';
 
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 import { MobileListModal } from '../Modals';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { EmbedBox, ReadOnlyEditor } from '../Editor/index';

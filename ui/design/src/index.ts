@@ -91,7 +91,8 @@ import ModerationAppErrorCard from './components/ModerationAppErrorCard';
 
 import TextInputField from './components/TextInputField';
 
-import { AppIcon, Icon, iconTypes } from './components/Icon';
+import Icon, { iconTypes } from './components/Icon';
+import { AppIcon } from './components/Icon/app-icon';
 
 import { CommentInput, SearchInput, DropSearchInput } from './components/Input';
 import {

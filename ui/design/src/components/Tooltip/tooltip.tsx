@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon, IconType } from '../Icon/icon';
+import Icon, { IconType } from '../Icon';
 import { Box, Tip, TipProps, Text } from 'grommet';
 import styled from 'styled-components';
 

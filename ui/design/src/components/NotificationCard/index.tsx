@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 import { formatRelativeTime } from '../../utils/time';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { BlueDot, IconDiv, StyledNotifBox } from './styled-notifications';

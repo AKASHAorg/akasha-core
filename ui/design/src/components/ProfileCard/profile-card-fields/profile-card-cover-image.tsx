@@ -1,8 +1,8 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import IconButton from '../../IconButton';
-import { Icon } from '../../Icon';
-import { AppIcon } from '../../Icon/index';
+import Icon from '../../Icon';
+import { AppIcon } from '../../Icon/app-icon';
 import { SelectPopover } from '../../Popovers/index';
 import { IProfileDataProvider, IProfileProvidersData } from '../';
 import { ShareButtonContainer, StyledEditCoverImageBox } from '../styled-profile-card';

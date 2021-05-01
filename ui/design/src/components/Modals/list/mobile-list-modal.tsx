@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { ModalWrapper } from '../common/styled-modal';
-import { Icon } from '../../Icon';
+import Icon from '../../Icon';
 
 const StyledBox = styled(Box)`
   width: calc(100% - 1rem);

@@ -1,6 +1,6 @@
 import { Box } from 'grommet';
 import * as React from 'react';
-import { Icon } from '../../Icon';
+import Icon from '../../Icon';
 import { StyledTextInput, StyledArrowIcon, StyledDisabledBox } from './styles';
 
 export interface ILinkInput {

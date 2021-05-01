@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { IProfileData } from '../profile-widget-card';
-import { Icon } from '../../Icon';
+import Icon from '../../Icon';
 import { isMobile } from 'react-device-detect';
 import Tooltip from '../../Tooltip/tooltip';
 import { truncateMiddle } from '../../../utils/string-utils';

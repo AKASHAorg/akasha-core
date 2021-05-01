@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ModalContainer } from '../common/fullscreen-modal-container';
 import { ModalCard } from '../../EntryCard/basic-card-box';
 import { Box, Text } from 'grommet';
-import { Icon } from '../../Icon';
+import Icon from '../../Icon';
 
 export interface IProviderModalProps {
   onModalClose: () => void;

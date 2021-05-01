@@ -1,6 +1,6 @@
 import { Tabs } from 'grommet';
 import React, { useEffect, useRef, useState } from 'react';
-import { Icon } from '../../Icon/index';
+import Icon from '../../Icon';
 import { SearchInputApps, SearchInputTags, SearchInputUsers } from './content';
 import {
   StyledDrop,

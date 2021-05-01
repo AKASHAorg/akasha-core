@@ -10,7 +10,7 @@ import {
   ModalButton,
 } from '../common/styled-modal';
 
-import { Icon } from '../../Icon';
+import Icon from '../../Icon';
 
 export interface IFeedbackModalProps {
   assetName?: string;

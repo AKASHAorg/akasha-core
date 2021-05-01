@@ -3,7 +3,7 @@ import * as React from 'react';
 import { formatDateShort } from '../../utils/time';
 import Button from '../Button';
 import IconLink from '../IconLink';
-import { Icon } from '../Icon/index';
+import Icon from '../Icon';
 import { WidgetAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledText } from './styled-widget-cards';
 

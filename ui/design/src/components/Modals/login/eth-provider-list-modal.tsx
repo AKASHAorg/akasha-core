@@ -3,7 +3,7 @@ import { ModalContainer } from '../common/fullscreen-modal-container';
 import { Box, Button, CheckBoxGroup, Text } from 'grommet';
 import { ModalCard } from '../../EntryCard/basic-card-box';
 import styled from 'styled-components';
-import { Icon } from '../../Icon';
+import Icon from '../../Icon';
 import LinkInput from '../../Input/text-input-icon-form';
 import { StyledDivider, StyledAnchor } from '../../Input/text-input-icon-form/styles';
 

@@ -1,7 +1,6 @@
 import { Box, Text } from 'grommet';
 import React from 'react';
-import { Icon } from '../../Icon';
-import { IconType } from '../../Icon/icon';
+import Icon, { IconType } from '../../Icon';
 import { IconDiv, StyledBox } from './styled-subtitle-text-icon';
 
 export interface ISubtitleTextIcon {

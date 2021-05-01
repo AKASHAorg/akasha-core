@@ -5,7 +5,7 @@ import { Box, Text, FormField, RadioButtonGroup } from 'grommet';
 
 import { MainAreaCardBox } from '../../EntryCard/basic-card-box';
 import { ModalWrapper, ModalButton } from '../common/styled-modal';
-import { Icon } from '../../Icon';
+import Icon from '../../Icon';
 
 import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from '../styled';
 import ReportSuccessModal, { IReportSuccessModalProps } from './report-success-modal';
