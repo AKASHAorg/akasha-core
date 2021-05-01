@@ -3,7 +3,7 @@ import * as React from 'react';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import IconLink from '../IconLink';
 import { TextIcon } from '../TextIcon';
-import { SearchInput } from '../Input';
+import SearchInput from '../SearchInput';
 import TagCard, { ITagData } from '../TagCard';
 import { IProfileData } from '../ProfileCard/profile-widget-card';
 import { ProfileMiniCard } from '../ProfileCard/profile-mini-card';

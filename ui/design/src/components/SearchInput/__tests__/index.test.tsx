@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { cleanup, fireEvent } from '@testing-library/react';
 import * as React from 'react';
 import { act, create } from 'react-test-renderer';
-import { DropSearchInput } from '../';
+import DropSearchInput from '../../DropSearchInput';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 const mockDataSource = {
   users: [

@@ -4,8 +4,8 @@ import { Box, Button, CheckBoxGroup, Text } from 'grommet';
 import { ModalCard } from '../../EntryCard/basic-card-box';
 import styled from 'styled-components';
 import Icon from '../../Icon';
-import LinkInput from '../../Input/text-input-icon-form';
-import { StyledDivider, StyledAnchor } from '../../Input/text-input-icon-form/styles';
+import LinkInput from '../../TextInputIconForm';
+import { StyledDivider, StyledAnchor } from '../../TextInputIconForm/styles';
 
 const WalletProviderButton = styled(Box)`
   flex: 1;

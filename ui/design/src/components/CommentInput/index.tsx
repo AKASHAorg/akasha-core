@@ -1,8 +1,8 @@
 import { Box, Text, TextArea } from 'grommet';
 import React, { useRef, useState } from 'react';
-import useSimpleClickAway from '../../../utils/simpleClickAway';
-import Avatar from '../../Avatar';
-import Icon from '../../Icon';
+import useSimpleClickAway from '../../utils/simpleClickAway';
+import Avatar from '../Avatar';
+import Icon from '../Icon';
 import { StyledDiv, StyledCommentWrapper } from './styled-comment-input';
 
 export interface ICommentInput {

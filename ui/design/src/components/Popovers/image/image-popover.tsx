@@ -1,7 +1,7 @@
 import { Box, Tabs, Text } from 'grommet';
 import React, { useState } from 'react';
 import Icon from '../../Icon';
-import { LinkInput } from '../../Input/index';
+import LinkInput from '../../LinkInput';
 import { Dropzone } from './dropzone';
 import {
   StyledButton,

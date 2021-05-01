@@ -3,7 +3,7 @@ import Icon from '../../Icon';
 import {
   StyledSearchBox,
   StyledTextInput,
-} from '../../Input/drop-search-input/drop-styled-search-input';
+} from '../../DropSearchInput/drop-styled-search-input';
 import { emojis } from './emojis';
 import { groups } from './groups';
 import {

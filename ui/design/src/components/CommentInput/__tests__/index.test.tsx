@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom/extend-expect';
-import { cleanup, fireEvent, waitForElement } from '@testing-library/react';
+import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { act, create } from 'react-test-renderer';
-import { CommentInput } from '../';
+import CommentInput from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
 const testEthAddr = '0x00123123123';
@@ -47,8 +47,8 @@ describe('<CommentInput> Component', () => {
     const { findByTestId } = customRender(createDefaultComponent(), {});
     const fakeInputBtn = await findByTestId('fake-input-wrapper');
     fireEvent.click(fakeInputBtn);
-    const commentTextarea = await waitForElement(() => findByTestId('comment-textarea'));
-    const publishButton = await waitForElement(() => findByTestId('comment-publish-button'));
+    const commentTextarea = await waitFor(() => findByTestId('comment-textarea'));
+    const publishButton = await waitFor(() => findByTestId('comment-publish-button'));
     expect(commentTextarea).toBeDefined();
     expect(publishButton).toBeDefined();
   });
@@ -60,8 +60,8 @@ describe('<CommentInput> Component', () => {
     const { findByTestId } = customRender(createDefaultComponent(publishHandler), {});
     const fakeInputBtn = await findByTestId('fake-input-wrapper');
     fireEvent.click(fakeInputBtn);
-    const commentTextarea = await waitForElement(() => findByTestId('comment-textarea'));
-    const publishButton = await waitForElement(() => findByTestId('comment-publish-button'));
+    const commentTextarea = await waitFor(() => findByTestId('comment-textarea'));
+    const publishButton = await waitFor(() => findByTestId('comment-publish-button'));
     fireEvent.change(commentTextarea, { target: { value: mockString } });
     fireEvent.click(publishButton);
     expect(publishArgs[0]).toStrictEqual(mockString);
@@ -71,10 +71,8 @@ describe('<CommentInput> Component', () => {
     const { findByTestId } = customRender(createDefaultComponent(), {});
     const fakeInputBtn = await findByTestId('fake-input-wrapper');
     fireEvent.click(fakeInputBtn);
-    const commentTextarea = await waitForElement<Promise<any>>(() =>
-      findByTestId('comment-textarea'),
-    );
-    const publishButton = await waitForElement(() => findByTestId('comment-publish-button'));
+    const commentTextarea = await waitFor<Promise<any>>(() => findByTestId('comment-textarea'));
+    const publishButton = await waitFor(() => findByTestId('comment-publish-button'));
     fireEvent.change(commentTextarea, { target: { value: mockString } });
     expect(commentTextarea.innerHTML).toStrictEqual(mockString);
     fireEvent.click(publishButton);

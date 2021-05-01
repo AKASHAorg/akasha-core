@@ -1,8 +1,8 @@
 import { Box } from 'grommet';
 import * as React from 'react';
-import Icon from '../../Icon';
-import { StyledTextInput, StyledFormField } from '../link-input/styled-link-input';
-import IconLink from '../../IconLink';
+import Icon from '../Icon';
+import { StyledTextInput, StyledFormField } from '../LinkInput/styled-link-input';
+import IconLink from '../IconLink';
 
 export interface ISearchInput {
   onChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;

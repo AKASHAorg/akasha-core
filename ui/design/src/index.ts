@@ -94,7 +94,10 @@ import TextInputField from './components/TextInputField';
 import Icon, { iconTypes } from './components/Icon';
 import { AppIcon } from './components/Icon/app-icon';
 
-import { CommentInput, SearchInput, DropSearchInput } from './components/Input';
+import CommentInput from './components/CommentInput';
+import SearchInput from './components/SearchInput';
+import DropSearchInput from './components/DropSearchInput';
+
 import {
   ShareModal,
   ModalContainer,

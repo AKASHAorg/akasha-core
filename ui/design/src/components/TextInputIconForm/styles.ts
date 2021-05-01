@@ -1,6 +1,6 @@
 import { Anchor, Box, TextInput } from 'grommet';
 import styled from 'styled-components';
-import Icon from '../../Icon';
+import Icon from '../Icon';
 
 const StyledTextInput = styled(TextInput)`
   padding: 0;
