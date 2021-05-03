@@ -1,7 +1,8 @@
 import * as React from 'react';
-import styled from 'styled-components';
 import { Box } from 'grommet';
-import Icon from '../../Icon';
+import styled from 'styled-components';
+
+import Icon from '../Icon';
 
 const IconCircleBg = styled.div`
   border-radius: 50%;

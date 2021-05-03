@@ -1,7 +1,7 @@
-import { Box, Layer } from 'grommet';
+import { Box, Layer, Text } from 'grommet';
 import styled, { css } from 'styled-components';
 
-import Button from '../../Button';
+import Button from '../Button';
 
 export interface IMobileProps {
   readonly isMobile?: boolean;
@@ -13,6 +13,52 @@ export interface IOptionalButtonProps extends IMobileProps {
 export interface IModalWrapperProps extends IMobileProps {
   readonly isTransparent?: boolean;
 }
+
+const StyledBox = styled(Box)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+`;
+
+const StyledText = styled(Text)`
+  text-transform: uppercase;
+`;
+
+const StyledTextArea = styled.textarea`
+  width: 100%;
+  resize: none;
+  outline: none;
+  background: transparent;
+  border: none;
+  box-sizing: content-box;
+  border-bottom: ${props => `0.5px solid ${props.theme.colors.secondaryText}`};
+  ${props => css`
+    font-family: ${props.theme.shapes.fontFamily};
+    font-size: ${props.theme.shapes.fontSizes.large.size};
+    line-height: ${props.theme.shapes.fontSizes.large.height};
+    color: ${props.theme.colors.primaryText};
+  `}
+  &::placeholder {
+    font-family: ${props => props.theme.shapes.fontFamily};
+    color: ${props => props.theme.colors.secondaryText};
+  }
+`;
+
+const HiddenSpan = styled.span`
+  ${props => css`
+    font-family: ${props.theme.shapes.fontFamily};
+    font-size: ${props.theme.shapes.fontSizes.large.size};
+    line-height: ${props.theme.shapes.fontSizes.large.height};
+  `}
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  height: 0;
+  overflow: hidden;
+  white-space: pre;
+`;
 
 const StyledLayer = styled(Layer)`
   max-width: 36.313em;
@@ -121,6 +167,10 @@ const StyledFooterArea = styled(Box)`
 `;
 
 export {
+  StyledBox,
+  StyledText,
+  StyledTextArea,
+  HiddenSpan,
   StyledLayer,
   ModalWrapper,
   ContentWrapper,

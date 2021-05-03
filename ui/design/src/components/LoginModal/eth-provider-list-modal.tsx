@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { ModalContainer } from '../common/fullscreen-modal-container';
-import { Box, Button, CheckBoxGroup, Text } from 'grommet';
-import { ModalCard } from '../../EntryCard/basic-card-box';
 import styled from 'styled-components';
-import Icon from '../../Icon';
-import LinkInput from '../../TextInputIconForm';
-import { StyledDivider, StyledAnchor } from '../../TextInputIconForm/styles';
+import { Box, Button, CheckBoxGroup, Text } from 'grommet';
+
+import { ModalContainer } from './fullscreen-modal-container';
+
+import Icon from '../Icon';
+import LinkInput from '../TextInputIconForm';
+import { ModalCard } from '../EntryCard/basic-card-box';
+import { StyledDivider, StyledAnchor } from '../TextInputIconForm/styles';
 
 const WalletProviderButton = styled(Box)`
   flex: 1;

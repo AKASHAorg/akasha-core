@@ -1,8 +1,8 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import Button from '../../Button';
-import Icon from '../../Icon';
-import { StyledLayer } from '../common/styled-modal';
+import Button from '../Button';
+import Icon from '../Icon';
+import { StyledLayer } from '../ListModal/styled-modal';
 import { StyledIconDiv, StyledShareSocialDiv, StyledTextInput } from './styled-share-modal';
 
 export type ServiceNames = 'twitter' | 'reddit' | 'facebook' | 'copy';

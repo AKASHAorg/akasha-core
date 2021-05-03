@@ -3,7 +3,7 @@ import * as React from 'react';
 import { isMobile } from 'react-device-detect';
 import Button from '../Button';
 import Icon from '../Icon';
-import { StyledLayer } from '../Modals/common/styled-modal';
+import { StyledLayer } from '../ListModal/styled-modal';
 import Spinner from '../Spinner';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledText, StyledTextInput } from '../BoxFormCard/styled-form-card';

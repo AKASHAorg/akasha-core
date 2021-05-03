@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { createGlobalStyle } from 'styled-components';
-import { ModalRenderer } from '../common/modal-renderer';
-import {
-  EthProviderListModal,
-  EthProviderModal,
-  EthProviderModalIllustration,
-  ModalContainer,
-} from '../index';
-import Icon from '../../Icon';
-import ViewportSizeProvider, { useViewportSize } from '../../Providers/viewport-dimension';
-import ErrorLoader from '../../ErrorLoader';
 import { Button } from 'grommet';
+import { createGlobalStyle } from 'styled-components';
+
+import EthProviderModal from './eth-provider-modal';
+import EthProviderListModal from './eth-provider-list-modal';
+import EthProviderModalIllustration from './eth-provider-modal-illustration';
+
+import Icon from '../Icon';
+import ErrorLoader from '../ErrorLoader';
+import { ModalRenderer } from './modal-renderer';
+import { ModalContainer } from './fullscreen-modal-container';
+import ViewportSizeProvider, { useViewportSize } from '../Providers/viewport-dimension';
 
 export interface LoginModalProps {
   slotId: string;

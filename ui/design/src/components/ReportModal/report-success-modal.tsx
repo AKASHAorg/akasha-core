@@ -1,11 +1,9 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
 
-import { MainAreaCardBox } from '../../EntryCard/basic-card-box';
-import { ModalWrapper } from '../common/styled-modal';
-import Button from '../../Button';
-
-import { StyledBox } from '../styled';
+import { MainAreaCardBox } from '../EntryCard/basic-card-box';
+import { StyledBox, ModalWrapper } from '../ListModal/styled-modal';
+import Button from '../Button';
 
 export interface IReportSuccessModalProps {
   className?: string;

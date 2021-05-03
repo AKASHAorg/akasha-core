@@ -17,7 +17,7 @@ import ProfileEditMenuDropdown from './profile-card-edit-dropdown';
 import styled from 'styled-components';
 import { truncateMiddle } from '../../utils/string-utils';
 import { isMobile } from 'react-device-detect';
-import { MobileListModal } from '../Modals';
+import MobileListModal from '../MobileListModal';
 import {
   IProfileProvider,
   ProfileProviders,

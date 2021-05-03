@@ -2,8 +2,8 @@ import { Box, Text, ThemeContext } from 'grommet';
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { ModalWrapper } from '../common/styled-modal';
-import Icon from '../../Icon';
+import { ModalWrapper } from '../ListModal/styled-modal';
+import Icon from '../Icon';
 
 const StyledBox = styled(Box)`
   width: calc(100% - 1rem);
@@ -109,4 +109,4 @@ MobileListModal.defaultProps = {
   cancelLabel: 'Cancel',
 };
 
-export { MobileListModal };
+export default MobileListModal;

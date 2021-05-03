@@ -2,7 +2,7 @@ import React from 'react';
 import { isMobileOnly } from 'react-device-detect';
 import { Box, Text, Image } from 'grommet';
 
-import { ModalWrapper, ContentWrapper, ModalButton } from '../common/styled-modal';
+import { ModalWrapper, ContentWrapper, ModalButton } from '../ListModal/styled-modal';
 
 export interface IProfileCompletedModalProps {
   assetName?: string;

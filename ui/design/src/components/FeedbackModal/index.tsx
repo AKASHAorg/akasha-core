@@ -3,14 +3,14 @@ import { isMobileOnly } from 'react-device-detect';
 import { Box, Text, Image } from 'grommet';
 
 import {
-  ModalWrapper,
-  StyledContentArea,
-  StyledButtonWrapper,
-  StyledFooterArea,
   ModalButton,
-} from '../common/styled-modal';
+  ModalWrapper,
+  StyledButtonWrapper,
+  StyledContentArea,
+  StyledFooterArea,
+} from '../ListModal/styled-modal';
 
-import Icon from '../../Icon';
+import Icon from '../Icon';
 
 export interface IFeedbackModalProps {
   assetName?: string;

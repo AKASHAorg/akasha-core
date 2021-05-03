@@ -3,13 +3,19 @@ import { isMobileOnly } from 'react-device-detect';
 import { useToasts } from 'react-toast-notifications';
 import { Box, Text, FormField, RadioButtonGroup } from 'grommet';
 
-import { MainAreaCardBox } from '../../EntryCard/basic-card-box';
-import { ModalWrapper, ModalButton } from '../common/styled-modal';
-import Icon from '../../Icon';
-
-import { HiddenSpan, StyledBox, StyledText, StyledTextArea } from '../styled';
 import ReportSuccessModal, { IReportSuccessModalProps } from './report-success-modal';
-import { useViewportSize } from '../../Providers/viewport-dimension';
+
+import Icon from '../Icon';
+import { MainAreaCardBox } from '../EntryCard/basic-card-box';
+import {
+  StyledBox,
+  StyledText,
+  HiddenSpan,
+  ModalButton,
+  ModalWrapper,
+  StyledTextArea,
+} from '../ListModal/styled-modal';
+import { useViewportSize } from '../Providers/viewport-dimension';
 
 export interface IReportModalProps extends IReportSuccessModalProps {
   titleLabel: string;

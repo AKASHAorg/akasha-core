@@ -1,12 +1,13 @@
-import { Box, Text } from 'grommet';
 import * as React from 'react';
-import Button from '../../Button';
-import { BasicCardBox } from '../../EntryCard/basic-card-box';
-import EditorCard, { IEditorCard } from '../../EditorCard';
-import { editorDefaultValue } from '../../Editor';
-import { ModalContainer } from '../common/fullscreen-modal-container';
-import { ModalRenderer } from '../common/modal-renderer';
+import { Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
+
+import Button from '../Button';
+import { BasicCardBox } from '../EntryCard/basic-card-box';
+import EditorCard, { IEditorCard } from '../EditorCard';
+import { editorDefaultValue } from '../Editor';
+import { ModalContainer } from '../LoginModal/fullscreen-modal-container';
+import { ModalRenderer } from '../LoginModal/modal-renderer';
 
 export interface IEditorModal extends Omit<IEditorCard, 'editorState' | 'setEditorState'> {
   slotId: string;

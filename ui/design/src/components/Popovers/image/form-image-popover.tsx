@@ -7,7 +7,7 @@ import {
   StyledImageInput,
 } from './styled-form-image-popover';
 import Icon from '../../Icon';
-import { MobileListModal } from '../../Modals';
+import MobileListModal from '../../MobileListModal';
 import { StyledDropAlt } from '../../EntryCard/styled-entry-box';
 
 export interface IFormImagePopover {

@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { ModalContainer } from '../common/fullscreen-modal-container';
-import { ModalCard } from '../../EntryCard/basic-card-box';
 import { Box, Text } from 'grommet';
-import Icon from '../../Icon';
+
+import { ModalContainer } from './fullscreen-modal-container';
+
+import Icon from '../Icon';
+import { ModalCard } from '../EntryCard/basic-card-box';
 
 export interface IProviderModalProps {
   onModalClose: () => void;
