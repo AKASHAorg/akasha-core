@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyledDrop } from '../notifications/styled-notifications-popover';
+import { StyledDrop } from '../NotificationsPopover/styled-notifications-popover';
 
 export interface IBasicPopover {
   className?: string;

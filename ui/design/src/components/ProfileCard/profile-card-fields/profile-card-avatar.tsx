@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Avatar from '../../Avatar';
 import { AppIcon } from '../../Icon/app-icon';
-import { SelectPopover } from '../../Popovers/index';
+import SelectPopover from '../../SelectPopover';
 import { IProfileDataProvider, IProfileProvidersData } from '../';
 import { AvatarDiv, StyledAvatarEditDiv } from '../styled-profile-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';

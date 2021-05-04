@@ -1,9 +1,6 @@
 import * as React from 'react';
-import Icon from '../../Icon';
-import {
-  StyledSearchBox,
-  StyledTextInput,
-} from '../../DropSearchInput/drop-styled-search-input';
+import Icon from '../Icon';
+import { StyledSearchBox, StyledTextInput } from '../DropSearchInput/drop-styled-search-input';
 import { emojis } from './emojis';
 import { groups } from './groups';
 import {
@@ -146,4 +143,4 @@ const EmojiPopover: React.FC<IEmojiPopover> = props => {
   );
 };
 
-export { EmojiPopover };
+export default EmojiPopover;

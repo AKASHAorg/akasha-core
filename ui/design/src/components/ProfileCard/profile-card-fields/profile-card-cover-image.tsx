@@ -3,7 +3,7 @@ import * as React from 'react';
 import IconButton from '../../IconButton';
 import Icon from '../../Icon';
 import { AppIcon } from '../../Icon/app-icon';
-import { SelectPopover } from '../../Popovers/index';
+import SelectPopover from '../../SelectPopover';
 import { IProfileDataProvider, IProfileProvidersData } from '../';
 import { ShareButtonContainer, StyledEditCoverImageBox } from '../styled-profile-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';

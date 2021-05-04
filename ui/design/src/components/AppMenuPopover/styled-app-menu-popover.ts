@@ -10,14 +10,14 @@ const StyledDrop = styled(Drop)`
 const StyledTitleBox = styled(Box)`
   height: 3em;
   border-top-right-radius: ${props => props.theme.shapes.smallBorderRadius};
-  border-right: 1px solid ${props => props.theme.colors.border}
-  border-top: 1px solid ${props => props.theme.colors.border}
+  border-right: 1px solid ${props => props.theme.colors.border};
+  border-top: 1px solid ${props => props.theme.colors.border};
 `;
 
 const StyledOptionsBox = styled(Box)`
-border-bottom: 1px solid ${props => props.theme.colors.border}
-border-right: 1px solid ${props => props.theme.colors.border}
-border-bottom-right-radius: ${props => props.theme.shapes.smallBorderRadius};
+  border-bottom: 1px solid ${props => props.theme.colors.border};
+  border-right: 1px solid ${props => props.theme.colors.border};
+  border-bottom-right-radius: ${props => props.theme.shapes.smallBorderRadius};
 `;
 
 const StyledOptionDiv = styled.div`

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const StyledDrop = styled(Drop)`
   width: 10.875rem;
-  border: 1px solid ${props => props.theme.colors.border}
+  border: 1px solid ${props => props.theme.colors.border};
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
 `;
 

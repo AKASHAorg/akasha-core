@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { IProfileDataProvider } from '../../ProfileCard';
+import { IProfileDataProvider } from '../ProfileCard';
 import { StyledBox, StyledDrop, StyledListElem, StyledRadioButton } from './styled-select-popover';
 
 export interface ISelectPopover {
@@ -52,4 +52,4 @@ const SelectPopover: React.FC<ISelectPopover> = props => {
   );
 };
 
-export { SelectPopover };
+export default SelectPopover;

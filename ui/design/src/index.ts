@@ -119,7 +119,9 @@ import BookmarkPill from './components/BookmarkPill';
 import NewPostsPill from './components/NewPostsPill';
 import { Notification, notify } from './components/NotificationToast';
 
-import { NotificationsPopover, SelectPopover } from './components/Popovers';
+import NotificationsPopover from './components/NotificationsPopover';
+import SelectPopover from './components/SelectPopover';
+
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
 import VirtualList from './components/VirtualList';

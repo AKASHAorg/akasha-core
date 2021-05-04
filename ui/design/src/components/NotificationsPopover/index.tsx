@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import Avatar from '../../Avatar';
-import BasicPopover from '../common/basic-popover';
+import Avatar from '../Avatar';
+import BasicPopover from '../BasicPopover';
 import { StyledListContainer, StyledListElem } from './styled-notifications-popover';
 
 export interface INotificationsPopover {
@@ -56,4 +56,4 @@ const NotificationsPopover: React.FC<INotificationsPopover> = props => {
   );
 };
 
-export { NotificationsPopover };
+export default NotificationsPopover;
