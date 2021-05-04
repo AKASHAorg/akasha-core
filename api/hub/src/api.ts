@@ -144,7 +144,7 @@ api.post(
 api.post('/moderation/status', async (ctx: koa.Context, next: () => Promise<any>) => {
   const body = ctx?.request.body;
   const contentIDs = body.contentIds;
-  if (!contentIDs || !body.user) {
+  if (!contentIDs) {
     ctx.status = 400;
   } else {
     const statuses = [];
@@ -159,9 +159,11 @@ api.post('/moderation/status', async (ctx: koa.Context, next: () => Promise<any>
       if (decision) {
         status.moderated = decision.moderated;
         status.delisted = decision.delisted;
-        const reported = await dataSources.reportingAPI.getReport(contentID, body.user);
-        if (reported) {
-          status.reported = true;
+        if (body.user) {
+          const reported = await dataSources.reportingAPI.getReport(contentID, body.user);
+          if (reported) {
+            status.reported = true;
+          }
         }
       }
       statuses.push(status);
