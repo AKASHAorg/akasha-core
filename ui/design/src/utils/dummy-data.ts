@@ -7,6 +7,25 @@ import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 
 import { IAppData } from '../components/AppsWidgetCard';
 
+const userData: { ethAddress: string; avatar?: string }[] = [
+  {
+    ethAddress: '0x003410490050000320006570034567114572000',
+    avatar: 'https://placebeard.it/360x360',
+  },
+  {
+    ethAddress: '0x004410490050000320006570034567114572001',
+    avatar: 'https://placebeard.it/360x360',
+  },
+  {
+    ethAddress: '0x005410490050000320006570034567114572002',
+    avatar: 'https://placebeard.it/360x360',
+  },
+  {
+    ethAddress: '0x006410490050000320006570034567114572003',
+    avatar: 'https://placebeard.it/360x360',
+  },
+];
+
 const installedAppsData: IMenuItem[] = [
   {
     label: 'AKASHA Feed',
@@ -583,6 +602,7 @@ const repliesLabel = 'Replies';
 const repostsLabel = 'Reposts';
 
 export {
+  userData,
   installedAppsData,
   profileData,
   TAGS,

@@ -115,13 +115,16 @@ import ReportModal from './components/ReportModal';
 import ProfileCompletedModal from './components/ProfileCompletedModal';
 import FeedbackModal from './components/FeedbackModal';
 
+import BookmarkPill from './components/BookmarkPill';
+import NewPostsPill from './components/NewPostsPill';
+import { Notification, notify } from './components/NotificationToast';
+
 import { NotificationsPopover, SelectPopover } from './components/Popovers';
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
 import VirtualList from './components/VirtualList';
 import type { Helmet as HelmetType } from '@types/react-helmet';
 import Helmet from 'react-helmet';
-import { Notification, notify, BookmarkPill, NewPostsPill } from './components/Notification';
 import Spinner from './components/Spinner';
 
 /* Utilities (these are not components) */

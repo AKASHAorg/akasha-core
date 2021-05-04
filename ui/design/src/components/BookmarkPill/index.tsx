@@ -1,6 +1,7 @@
-import { Box, Text } from 'grommet';
 import * as React from 'react';
-import Icon from '../../Icon';
+import { Box, Text } from 'grommet';
+
+import Icon from '../Icon';
 
 export interface IBookmarkPill {
   infoLabel?: string;
