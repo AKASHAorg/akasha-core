@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Avatar from '../../Avatar';
-import { AppIcon } from '../../Icon/index';
+import { AppIcon } from '../../Icon/app-icon';
 import { SelectPopover } from '../../Popovers/index';
 import { IProfileDataProvider, IProfileProvidersData } from '../';
 import { AvatarDiv, StyledAvatarEditDiv } from '../styled-profile-card';

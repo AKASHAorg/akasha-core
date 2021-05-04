@@ -7,7 +7,7 @@ import { SearchProfileAvatarDiv, StyledInlineBox } from './styled-profile-card';
 import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import Avatar from '../Avatar';
 import DuplexButton from '../DuplexButton';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 import { truncateMiddle } from '../../utils/string-utils';
 
 const ProfileSearchCard: React.FC<IProfileWidgetCard> = props => {

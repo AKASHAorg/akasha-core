@@ -2,7 +2,7 @@ import * as React from 'react';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { EditorBox } from '../Editor/index';
 import { Box, Text } from 'grommet';
-import { Icon } from '../Icon/index';
+import Icon from '../Icon';
 import { IEditorBox } from '../Editor/editor-box';
 
 export interface IEditorCard extends IEditorBox {

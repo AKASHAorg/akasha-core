@@ -2,13 +2,13 @@ import React from 'react';
 import { Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 import { formatRelativeTime } from '../../utils/time';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { BlueDot, IconDiv, StyledNotifBox } from './styled-notifications';
 import Spinner from '../Spinner';
 import Tooltip from '../Tooltip/tooltip';
-import ErrorLoader from '../Errors/error-loader';
+import ErrorLoader from '../ErrorLoader';
 
 export interface INotificationsCard {
   // data

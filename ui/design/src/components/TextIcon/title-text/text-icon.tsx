@@ -1,7 +1,6 @@
 import * as React from 'react';
 import MarginInterface from '../../../interfaces/margin.interface';
-import { Icon } from '../../Icon';
-import { IconType } from '../../Icon/icon';
+import Icon, { IconType } from '../../Icon';
 import { StyledIconDiv, StyledText, StyledTextIcon } from './styled-text-icon';
 import { TextProps } from 'grommet';
 

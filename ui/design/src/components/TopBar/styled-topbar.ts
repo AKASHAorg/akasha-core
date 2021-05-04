@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { Box, Button, Text, Drop, AccordionPanel } from 'grommet';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 
 const TopbarWrapper = styled(Box)`
   background-color: ${props => props.theme.colors.background};

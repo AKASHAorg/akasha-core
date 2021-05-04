@@ -16,6 +16,8 @@ import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
 
 import Autosizer from 'react-virtualized-auto-sizer';
 
+import { ToastProvider } from 'react-toast-notifications';
+
 import Avatar from './components/Avatar';
 import EditableAvatar from './components/EditableAvatar';
 
@@ -69,8 +71,6 @@ import TutorialWidgetCard from './components/TutorialWidgetCard';
 
 import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
 
-import EntryPublishErrorCard from './components/Errors/entry-publish-error-card';
-
 import Button from './components/Button';
 import DuplexButton from './components/DuplexButton';
 import IconButton from './components/IconButton';
@@ -78,33 +78,42 @@ import IconLink from './components/IconLink';
 import ProfileAvatarButton from './components/ProfileAvatarButton';
 import VoteIconButton from './components/VoteIconButton';
 
-import { AreaChart, LineChart, ResponsiveChart } from './components/Charts';
+import AreaChart from './components/AreaChart';
+import LineChart from './components/LineChart';
+import ResponsiveChart from './components/ResponsiveChart';
 
 import { EditorBox, EditorMeter, editorDefaultValue } from './components/Editor';
 
-import TextInputField from './components/Forms/text-input-field';
-import { AppIcon, Icon, iconTypes } from './components/Icon';
-import ErrorInfoCard from './components/Errors/error-info-card';
-import ErrorLoader from './components/Errors/error-loader';
-import ModerationAppErrorCard from './components/Errors/moderation-app-error-card';
+import HorizontalDivider from './components/HorizontalDivider';
 
-import { CommentInput, SearchInput, DropSearchInput } from './components/Input';
-import {
-  ShareModal,
-  ModalContainer,
-  ModalRenderer,
-  EthProviderListModal,
-  EthProviderModal,
-  MobileListModal,
-  LoginModal,
-  ReportModal,
-  ModerateModal,
-  ProfileCompletedModal,
-  FeedbackModal,
-  ToastProvider,
-  EditorModal,
-  StyledLayer,
-} from './components/Modals';
+import ErrorLoader from './components/ErrorLoader';
+import { ErrorInfoCard } from './components/ErrorLoader/error-info-card';
+import EntryPublishErrorCard from './components/EntryPublishErrorCard';
+import ModerationAppErrorCard from './components/ModerationAppErrorCard';
+
+import TextInputField from './components/TextInputField';
+
+import Icon, { iconTypes } from './components/Icon';
+import { AppIcon } from './components/Icon/app-icon';
+
+import CommentInput from './components/CommentInput';
+import SearchInput from './components/SearchInput';
+import DropSearchInput from './components/DropSearchInput';
+
+import EditorModal from './components/EditorModal';
+import ShareModal from './components/ShareModal';
+import { StyledLayer } from './components/ListModal/styled-modal';
+import LoginModal from './components/LoginModal';
+import { EthProviderListModal } from './components/LoginModal/eth-provider-list-modal';
+import { EthProviderModal } from './components/LoginModal/eth-provider-modal';
+import { EthProviderListModal } from './components/LoginModal/eth-provider-list-modal';
+import { ModalContainer } from './components/LoginModal/fullscreen-modal-container';
+import { ModalRenderer } from './components/LoginModal/modal-renderer';
+import MobileListModal from './components/MobileListModal';
+import ModerateModal from './components/ModerateModal';
+import ReportModal from './components/ReportModal';
+import ProfileCompletedModal from './components/ProfileCompletedModal';
+import FeedbackModal from './components/FeedbackModal';
 
 import { NotificationsPopover, SelectPopover } from './components/Popovers';
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
@@ -112,7 +121,6 @@ import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
 import VirtualList from './components/VirtualList';
 import type { Helmet as HelmetType } from '@types/react-helmet';
 import Helmet from 'react-helmet';
-import { HorizontalDivider } from './components/Dividers';
 import { Notification, notify, BookmarkPill, NewPostsPill } from './components/Notification';
 import Spinner from './components/Spinner';
 
@@ -230,7 +238,6 @@ const exported = {
   ModalRenderer,
   Notification,
   NotificationsCard,
-  Spinner,
   notify,
   HorizontalDivider,
   LoginCTAWidgetCard,

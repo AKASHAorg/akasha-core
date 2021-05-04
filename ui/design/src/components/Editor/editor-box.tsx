@@ -5,7 +5,7 @@ import { withHistory } from 'slate-history';
 import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 import Avatar from '../Avatar';
 import { IEntryData } from '../EntryCard/entry-box';
-import { Icon } from '../Icon/index';
+import Icon from '../Icon';
 import { EmojiPopover } from '../Popovers/index';
 import { EmbedBox } from './embed-box';
 import { CustomEditor } from './helpers';
