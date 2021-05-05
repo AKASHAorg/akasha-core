@@ -22,8 +22,8 @@ const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>
 
   const [showEditor, setShowEditor] = React.useState(false);
   const [editorState, setEditorState] = React.useState(editorDefaultValue);
-  const wrapperRef: React.RefObject<any> = React.useRef();
-  const editorRef: React.RefObject<any> = React.useRef();
+  const wrapperRef: React.RefObject<HTMLDivElement> = React.useRef(null);
+  const editorRef: React.RefObject<any> = React.useRef(null);
 
   const handleClickAway = () => {
     if (

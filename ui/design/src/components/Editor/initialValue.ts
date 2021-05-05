@@ -1,6 +1,6 @@
-import { Node } from 'slate';
+import { Descendant } from 'slate';
 
-export const editorDefaultValue: Node[] = [
+export const editorDefaultValue: Descendant[] = [
   {
     type: 'paragraph',
     children: [

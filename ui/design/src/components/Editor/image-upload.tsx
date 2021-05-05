@@ -17,7 +17,7 @@ export interface IImageUpload {
   uploadingImageLabel?: string;
   // parent state
   uploading: boolean;
-  setUploading: any;
+  setUploading: React.Dispatch<React.SetStateAction<boolean>>;
   // handlers
   uploadRequest?: (data: string | File, isUrl?: boolean) => any;
   handleInsertImage: (data: {
@@ -105,9 +105,6 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
       )}
       {uploading && (
         <StyledUploadingDiv>
-          <StyledCloseDiv onClick={handleCancelUpload}>
-            <Icon type="close" clickable={true} />
-          </StyledCloseDiv>
           <Box direction="column" gap="medium" align="center" justify="center">
             <Icon type="loading" />
             <StyledText size="medium" color="accentText">

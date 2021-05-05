@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { Box, Meter, Stack, Text } from 'grommet';
 
+/**
+ * @param maxValue maximum number of characters allowed
+ * @param counter current text length
+ */
 export interface IEditorMeter {
   maxValue: number;
   counter: number;

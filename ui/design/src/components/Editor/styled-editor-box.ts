@@ -120,6 +120,9 @@ const StyledPopoverValueBox = styled(Box)<{ background: boolean }>`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  &:hover {
+    color: ${props => props.theme.colors.accent};
+  }
 `;
 
 export {

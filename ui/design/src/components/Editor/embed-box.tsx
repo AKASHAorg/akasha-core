@@ -6,7 +6,7 @@ import { IEntryData } from '../Cards/entry-cards/entry-box';
 import { ReadOnlyEditor } from './index';
 
 const StyledBox = styled(Box)`
-  background-color: #fbfcfd;
+  background-color: ${props => props.theme.colors.ultraLightGrey};
 `;
 
 export interface IEmbedEntryBox {
