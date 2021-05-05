@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
-import { TextIcon } from '../TextIcon';
 import { FormDown } from 'grommet-icons';
+
 import { MenuDrop } from './menu-drop';
 import { StyledDiv } from './styled-filter-box';
+
+import TextIcon from '../TextIcon';
 
 export interface IFilterBox {
   currentlySeeingLabel?: string;

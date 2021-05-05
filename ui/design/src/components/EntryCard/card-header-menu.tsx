@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
-import { TextIcon } from '../TextIcon';
+import TextIcon from '../TextIcon';
 import { Box, ThemeContext } from 'grommet';
 
 export interface ICardHeaderMenuProps {

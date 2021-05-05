@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { ITag } from '../TrendingWidgetCard';
-import { SubtitleTextIcon } from '../TextIcon';
+import SubtitleTextIcon from '../SubtitleTextIcon';
 import { Box } from 'grommet';
 import DuplexButton from '../DuplexButton';
 import { IMentionData } from '../AreaChart';

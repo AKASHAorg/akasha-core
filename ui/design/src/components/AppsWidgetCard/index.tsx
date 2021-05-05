@@ -2,7 +2,8 @@ import { Box } from 'grommet';
 import * as React from 'react';
 import MarginInterface from '../../interfaces/margin.interface';
 import { IconType } from '../Icon';
-import { SubtitleTextIcon, TextIcon } from '../TextIcon/index';
+import TextIcon from '../TextIcon';
+import SubtitleTextIcon from '../SubtitleTextIcon';
 import { WidgetAreaCardBox } from '../EntryCard/basic-card-box';
 
 export interface IAppsWidgetCardProps {

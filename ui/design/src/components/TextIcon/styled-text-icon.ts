@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import MarginSetter from '../../../utils/marginSetter';
-import { IStyledTextProps, ITextIconProps } from './text-icon';
+import MarginSetter from '../../utils/marginSetter';
+import { IStyledTextProps, ITextIconProps } from '.';
 import { Text } from 'grommet';
 
 const StyledTextIcon = styled.div<ITextIconProps>`
