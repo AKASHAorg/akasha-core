@@ -3,7 +3,7 @@ import * as React from 'react';
 import { IProfileData } from '../profile-widget-card';
 import Icon from '../../Icon';
 import { isMobile } from 'react-device-detect';
-import Tooltip from '../../Tooltip/tooltip';
+import Tooltip from '../../Tooltip';
 import { truncateMiddle } from '../../../utils/string-utils';
 
 export interface IProfileCardEthereumIdProps {
