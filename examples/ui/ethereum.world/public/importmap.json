@@ -1,0 +1,21 @@
+{
+  "imports": {
+    "react": "https://unpkg.com/react@17/umd/react.development.js",
+    "react-dom": "https://unpkg.com/react-dom@17/umd/react-dom.development.js",
+    "single-spa": "https://unpkg.com/single-spa@5.3.4/lib/umd/single-spa.dev.js",
+    "rxjs": "https://cdn.jsdelivr.net/npm/@esm-bundle/rxjs@6.5.5/system/rxjs.min.js",
+    "rxjs/operators": "https://cdn.jsdelivr.net/npm/@esm-bundle/rxjs@6.5.5/system/rxjs-operators.min.js",
+    "@akashaproject/sdk": "/akasha.sdk.js",
+    "@akashaproject/design-system": "/design/index.js",
+    "@widget/sidebar": "/widgets/sidebar/index.js",
+    "@widget/layout": "/widgets/layout/index.js",
+    "@widget/topbar": "/widgets/topbar/index.js",
+    "@widget/login": "/widgets/login/index.js",
+    "@plugins/profile": "/plugins/profile/index.js",
+    "@plugins/notifications": "/plugins/notifications//index.js",
+    "@plugins/app-center": "/plugins/app-center/index.js",
+    "@plugins/search": "/plugins/search/index.js",
+    "@app/AKASHA": "/apps/akasha/index.js",
+    "@app/moderation": "/apps/moderation/index.js"
+  }
+}

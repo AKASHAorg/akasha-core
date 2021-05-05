@@ -1,12 +1,13 @@
 module.exports = {
   externals: [
     {
-      react: 'React',
-      'react-dom': 'ReactDOM',
-      'styled-components': 'styled',
+      react: 'react',
       rxjs: 'rxjs',
-      '@akashaproject/design-system': 'akashaproject__design_system',
+      'react-dom': 'react-dom',
+      // 'styled-components': 'styled',
+      // '@akashaproject/design-system': 'akashaproject__design_system',
     },
+    '@akashaproject/design-system',
   ],
   optimization: {
     moduleIds: 'deterministic',

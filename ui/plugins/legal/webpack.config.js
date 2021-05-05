@@ -5,25 +5,10 @@ const packageName = require('./package.json').name;
 
 module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
-  plugins: baseConfig.plugins.concat([
-    new ModuleFederationPlugin({
-      // akashaproject__ui_plugin_legal
-      name: packageName.replace(/@/g, '').replace(/\//g, '__').replace(/-/g, '_'),
-      filename: 'index.js',
-      exposes: {
-        './app': './src/bootstrap',
-      },
-      shared: {
-        react: {
-          singleton: true,
-        },
-        'react-dom': {
-          singleton: true,
-        },
-        'styled-components': {
-          singleton: true,
-        },
-      },
-    }),
-  ]),
+  output: Object.assign(baseConfig.output, {
+    library: packageName.replace(/@/g, '').replace(/\//g, '__').replace(/-/g, '_'),
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'index.js',
+    publicPath: '/plugins/',
+  }),
 });
