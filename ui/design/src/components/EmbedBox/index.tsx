@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { IEntryData } from '../EntryCard/entry-box';
-import { ReadOnlyEditor } from './index';
+import ReadOnlyEditor from '../ReadOnlyEditor/index';
 
 const StyledBox = styled(Box)`
   background-color: ${props => props.theme.colors.ultraLightGrey};
@@ -38,4 +38,4 @@ const EmbedBox: React.FC<IEmbedEntryBox> = props => (
   </StyledBox>
 );
 
-export { EmbedBox };
+export default EmbedBox;

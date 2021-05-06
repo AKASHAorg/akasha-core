@@ -3,7 +3,7 @@ import { Box, Grommet } from 'grommet';
 
 import EditorCard from '.';
 
-import { editorDefaultValue } from '../Editor';
+import { editorDefaultValue } from '../Editor/initialValue';
 
 import { USERNAMES, TAGS } from '../../utils/dummy-data';
 import lightTheme from '../../styles/themes/light/light-theme';

@@ -20,17 +20,19 @@ export interface IImageUpload {
   setUploading: React.Dispatch<React.SetStateAction<boolean>>;
   // handlers
   uploadRequest?: (data: string | File, isUrl?: boolean) => any;
-  handleInsertImage: (data: {
-    src: string;
-    size: {
-      width: string;
-      height: string;
-      naturalWidth: string;
-      naturalHeight: string;
-    };
-  }) => void;
+  handleInsertImage: (data: ImageData) => void;
   // ref for hidden input
   ref: React.Ref<HTMLInputElement>;
+}
+
+export interface ImageData {
+  src: string;
+  size: {
+    width: string;
+    height: string;
+    naturalWidth: string;
+    naturalHeight: string;
+  };
 }
 
 const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
@@ -117,5 +119,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
     </>
   );
 });
+
+ImageUpload.displayName = 'ImageUpload';
 
 export { ImageUpload };

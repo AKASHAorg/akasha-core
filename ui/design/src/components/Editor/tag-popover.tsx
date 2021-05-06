@@ -7,7 +7,7 @@ import { ITag } from '../TrendingWidgetCard';
 export interface IMentionPopover {
   postsLabel?: string;
   values: ITag[];
-  ref: React.Ref<any>;
+  ref: React.Ref<HTMLDivElement>;
   currentIndex: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
   handleSelect: (index: number) => void;
@@ -41,6 +41,8 @@ export const TagPopover: React.FC<IMentionPopover> = React.forwardRef((props, re
     </Portal>
   );
 });
+
+TagPopover.displayName = 'TagPopover';
 
 TagPopover.defaultProps = {
   postsLabel: 'posts',

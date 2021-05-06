@@ -24,5 +24,6 @@ module.exports = {
   rules: {
     'tsdoc/syntax': 'warn',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'react/prop-types': 'off',
   },
 };

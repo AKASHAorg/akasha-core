@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { createEditor } from 'slate';
+import { createEditor, Descendant } from 'slate';
 import { Slate, withReact, Editable, RenderElementProps } from 'slate-react';
-import { withMentions, withImages, withTags, withLinks } from './plugins';
-import { renderElement, renderLeaf } from './renderers';
+import { withMentions, withImages, withTags, withLinks } from '../Editor/plugins';
+import { renderElement, renderLeaf } from '../Editor/renderers';
 
 export interface IReadOnlyEditor {
-  content: any;
+  content: Descendant[];
   handleMentionClick?: (pubKey: string) => void;
   handleTagClick?: (name: string) => void;
   handleLinkClick?: (url: string) => void;
@@ -36,4 +36,4 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
   );
 };
 
-export { ReadOnlyEditor };
+export default ReadOnlyEditor;

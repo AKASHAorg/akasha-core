@@ -6,7 +6,7 @@ import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export interface IMentionPopover {
   values: Partial<IProfileData>[];
-  ref: React.Ref<any>;
+  ref: React.Ref<HTMLDivElement>;
   currentIndex: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
   handleSelect: (index: number) => void;
@@ -42,3 +42,5 @@ export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props
     </Portal>
   );
 });
+
+MentionPopover.displayName = 'Mention Popover';

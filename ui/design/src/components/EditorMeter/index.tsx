@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Box, Meter, Stack, Text } from 'grommet';
 
 /**
- * @param maxValue maximum number of characters allowed
- * @param counter current text length
+ * @param maxValue - maximum number of characters allowed
+ * @param counter - current text length
  */
 export interface IEditorMeter {
   maxValue: number;
@@ -47,4 +47,4 @@ const EditorMeter: React.FC<IEditorMeter> = props => {
   );
 };
 
-export { EditorMeter };
+export default EditorMeter;

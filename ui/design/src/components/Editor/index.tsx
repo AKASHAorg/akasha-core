@@ -15,7 +15,7 @@ import Avatar from '../Avatar';
 import { IEntryData } from '../EntryCard/entry-box';
 import Icon from '../Icon';
 import EmojiPopover from '../EmojiPopover';
-import { EmbedBox } from './embed-box';
+import EmbedBox from '../EmbedBox';
 import { CustomEditor } from './helpers';
 import { withMentions, withImages, withTags, withLinks } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
@@ -24,7 +24,7 @@ import { ImageUpload } from './image-upload';
 import Button from '../Button';
 import { MentionPopover } from './mention-popover';
 import { TagPopover } from './tag-popover';
-import { EditorMeter } from './editor-meter';
+import EditorMeter from '../EditorMeter';
 import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
@@ -33,8 +33,8 @@ import { useAndroidPlugin } from 'slate-android-plugin';
 const MAX_LENGTH = 280;
 
 /**
- * @param uploadRequest upload a file and returns a promise that resolves to an array
- * @param editorState the state of the editor is controlled from the parent component
+ * @param uploadRequest - upload a file and returns a promise that resolves to an array
+ * @param editorState - the state of the editor is controlled from the parent component
  */
 export interface IEditorBox {
   avatar?: string;
@@ -63,7 +63,7 @@ export interface IEditorBox {
   publishingApp?: string;
   editorState: Descendant[];
   setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
-  ref?: React.Ref<any>;
+  ref?: React.Ref<unknown>;
 }
 
 export interface IPublishData {
@@ -176,7 +176,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   /**
    * creates the object for publishing and resets the editor state after
    * metadata contains tags, mentions, quote, the publishing app and the version of the document
-   * @todo version should be passed as a prop
+   * todo version should be passed as a prop
    */
   const handlePublish = () => {
     const content = editorState;
@@ -192,8 +192,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
      * wrap content in object to make recursive getMetadata work
      * breaks slate typing
      */
-    const initContent: any = { children: content };
-    (function getMetadata(node: Descendant) {
+    const initContent: { children: Descendant[] } = { children: content };
+    (function getMetadata(node: Descendant | { children: Descendant[] }) {
       if (Element.isElement(node) && node.type === 'mention') {
         metadata.mentions.push(node.pubKey);
       }
@@ -314,16 +314,18 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
    */
   const selectMention = (event: KeyboardEvent, mentionRange: Range) => {
     switch (event.key) {
-      case 'ArrowDown':
+      case 'ArrowDown': {
         event.preventDefault();
         const prevIndex = index >= slicedMentions.length - 1 ? 0 : index + 1;
         setIndex(prevIndex);
         break;
-      case 'ArrowUp':
+      }
+      case 'ArrowUp': {
         event.preventDefault();
         const nextIndex = index <= 0 ? slicedMentions.length - 1 : index - 1;
         setIndex(nextIndex);
         break;
+      }
       case 'Tab':
       case 'Enter':
       case ' ':
@@ -347,16 +349,18 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
    */
   const selectTag = (event: KeyboardEvent, tagRange: Range) => {
     switch (event.key) {
-      case 'ArrowDown':
+      case 'ArrowDown': {
         event.preventDefault();
         const prevIndex = index >= slicedTags.length - 1 ? 0 : index + 1;
         setIndex(prevIndex);
         break;
-      case 'ArrowUp':
+      }
+      case 'ArrowUp': {
         event.preventDefault();
         const nextIndex = index <= 0 ? slicedTags.length - 1 : index - 1;
         setIndex(nextIndex);
         break;
+      }
       case 'Tab':
       case 'Enter':
         event.preventDefault();

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { IEditorBox } from '../Editor/editor-box';
 import { Box } from 'grommet';
 import { EditorPlaceholder } from './editor-placeholder';
-import { EditorBox, editorDefaultValue } from '../Editor/index';
+import EditorBox, { IEditorBox, IPublishData } from '../Editor/index';
+import { editorDefaultValue } from '../Editor/initialValue';
 import { useOnClickAway } from '../../utils/clickAway';
 import isEqual from 'lodash.isequal';
 
@@ -34,14 +34,14 @@ const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>
       setShowEditor(false);
     }
   };
-  const handlePublish = (data: any) => {
+  const handlePublish = (data: IPublishData) => {
     onPublish(data);
     setShowEditor(false);
   };
 
   useOnClickAway(wrapperRef, handleClickAway);
 
-  const handleToggleEditor = (ev: any) => {
+  const handleToggleEditor = (ev: React.SyntheticEvent) => {
     ev.stopPropagation();
     setShowEditor(!showEditor);
   };

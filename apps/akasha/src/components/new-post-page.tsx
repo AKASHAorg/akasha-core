@@ -29,7 +29,8 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
 
   const { t } = useTranslation();
 
-  const handlePostPublish = (_data: PublishPostData) => {
+  const handlePostPublish = (data: PublishPostData) => {
+    return data;
     // todo
   };
 
