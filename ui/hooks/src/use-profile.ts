@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { forkJoin, from } from 'rxjs';
+import { forkJoin, from, timer } from 'rxjs';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import {
   IProfileData,
@@ -412,15 +412,27 @@ export const useProfile = (
     getUsernameTypes() {
       const type: UsernameTypes[] = [];
 
-      const defaultProvider = profile.default?.find(
+      let defaultProvider = profile.default?.find(
         p => p.property === ProfileProviderProperties.USERNAME,
       );
-
-      if (!defaultProvider || (defaultProvider && defaultProvider.value === null)) {
-        return {
-          default: defaultProvider,
-          available: type,
+      /**
+       * treat the case of failure in saving the default username provider
+       * in the onboarding step
+       */
+      if (!defaultProvider && profile.userName) {
+        defaultProvider = {
+          provider: ProfileProviders.EWA_BASIC,
+          property: ProfileProviderProperties.USERNAME,
+          value: profile.userName,
         };
+        const call = props.profileService.makeDefaultProvider([defaultProvider]);
+        call.subscribe({
+          error(err: Error) {
+            if (logger) {
+              logger.error(`makeDefaultProvider error (getUsernameTypes): ${err}`);
+            }
+          },
+        });
       }
 
       if (profile.providers?.length) {
@@ -440,15 +452,19 @@ export const useProfile = (
         });
       }
       /**
-       * treat th case of failure in saving the profile provider
+       * treat the case of failure in saving the profile provider
        * in the onboarding phase
        */
       if (profile.providers?.length === 0 && profile.userName) {
-        const call = props.profileService.addProfileProvider({
-          property: ProfileProviderProperties.USERNAME,
-          value: profile.userName,
-          provider: ProfileProviders.EWA_BASIC,
-        });
+        const call = timer(2000).pipe(
+          props.rxjsOperators.switchMap(() =>
+            props.profileService.addProfileProvider({
+              property: ProfileProviderProperties.USERNAME,
+              value: profile.userName,
+              provider: ProfileProviders.EWA_BASIC,
+            }),
+          ),
+        );
         call.subscribe({
           error(err: Error) {
             if (logger) {
