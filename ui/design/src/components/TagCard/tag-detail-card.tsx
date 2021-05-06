@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Box, Text } from 'grommet';
 
 import { ITag } from '../TrendingWidgetCard';
-import { SubtitleTextIcon } from '../TextIcon';
+import SubtitleTextIcon from '../SubtitleTextIcon';
 import IconButton from '../IconButton';
 import DuplexButton from '../DuplexButton';
 import { IMentionData } from '../AreaChart';

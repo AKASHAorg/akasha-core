@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { AppIcon } from '../../Icon/app-icon';
-import { SelectPopover } from '../../Popovers/index';
+import SelectPopover from '../../SelectPopover';
 import { IProfileDataProvider, IProfileProvidersData } from '../';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 

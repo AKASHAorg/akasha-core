@@ -7,6 +7,25 @@ import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 
 import { IAppData } from '../components/AppsWidgetCard';
 
+const userData: { ethAddress: string; avatar?: string }[] = [
+  {
+    ethAddress: '0x003410490050000320006570034567114572000',
+    avatar: 'https://placebeard.it/360x360',
+  },
+  {
+    ethAddress: '0x004410490050000320006570034567114572001',
+    avatar: 'https://placebeard.it/360x360',
+  },
+  {
+    ethAddress: '0x005410490050000320006570034567114572002',
+    avatar: 'https://placebeard.it/360x360',
+  },
+  {
+    ethAddress: '0x006410490050000320006570034567114572003',
+    avatar: 'https://placebeard.it/360x360',
+  },
+];
+
 const installedAppsData: IMenuItem[] = [
   {
     label: 'AKASHA Feed',
@@ -555,6 +574,79 @@ const entrySocialData = {
   ],
 };
 
+const notificationsData = [
+  {
+    ethAddress: '0x003410490050000320006570034567114572000',
+    user: 'Mariana Gomes',
+    userAvatar: 'https://placebeard.it/640/480',
+    action: 'Comment',
+    time: '22 July 2019 | 20h30',
+  },
+  {
+    ethAddress: '0x003420490050000320006570034567114572000',
+    user: 'Gigi Patratel',
+    userAvatar: 'https://placebeard.it/640/480',
+    action: 'Upvote',
+    time: '22 July 2019 | 20h30',
+  },
+  {
+    ethAddress: '0x003410490050000320006570034567114572000',
+    user: 'Mariana Gomes',
+    userAvatar: 'https://placebeard.it/640/480',
+    action: 'Comment',
+    time: '22 July 2019 | 20h30',
+  },
+  {
+    ethAddress: '0x003420490050000320006570034567114572000',
+    user: 'Gigi Patratel',
+    userAvatar: 'https://placebeard.it/640/480',
+    action: 'Upvote',
+    time: '22 July 2019 | 20h30',
+  },
+  {
+    ethAddress: '0x003410490050000320006570034567114572000',
+    user: 'Mariana Gomes',
+    userAvatar: 'https://placebeard.it/640/480',
+    action: 'Comment',
+    time: '22 July 2019 | 20h30',
+  },
+  {
+    ethAddress: '0x003420490050000320006570034567114572000',
+    user: 'Gigi Patratel',
+    userAvatar: 'https://placebeard.it/640/480',
+    action: 'Upvote',
+    time: '22 July 2019 | 20h30',
+  },
+  {
+    ethAddress: '0x003410490050000320006570034567114572000',
+    user: 'Mariana Gomes',
+    userAvatar: 'https://placebeard.it/640/480',
+    action: 'Comment',
+    time: '22 July 2019 | 20h30',
+  },
+  {
+    ethAddress: '0x003420490050000320006570034567114572000',
+    user: 'Gigi Patratel',
+    userAvatar: 'https://placebeard.it/640/480',
+    action: 'Upvote',
+    time: '22 July 2019 | 20h30',
+  },
+  {
+    ethAddress: '0x003410490050000320006570034567114572000',
+    user: 'Mariana Gomes',
+    userAvatar: 'https://placebeard.it/640/480',
+    action: 'Comment',
+    time: '22 July 2019 | 20h30',
+  },
+  {
+    ethAddress: '0x003420490050000320006570034567114572000',
+    user: 'Gigi Patratel',
+    userAvatar: 'https://placebeard.it/640/480',
+    action: 'Upvote',
+    time: '22 July 2019 | 20h30',
+  },
+];
+
 const changeCoverImageLabel = 'Change Cover Image';
 const cancelLabel = 'Cancel';
 const saveChangesLabel = 'Save Changes';
@@ -583,6 +675,7 @@ const repliesLabel = 'Replies';
 const repostsLabel = 'Reposts';
 
 export {
+  userData,
   installedAppsData,
   profileData,
   TAGS,
@@ -592,6 +685,7 @@ export {
   appData,
   chartData,
   appsDataSource,
+  notificationsData,
   cancelLabel,
   changeCoverImageLabel,
   commentInputPlaceholderLabel,

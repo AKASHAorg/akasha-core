@@ -7,7 +7,7 @@ import { formatRelativeTime } from '../../utils/time';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { BlueDot, IconDiv, StyledNotifBox } from './styled-notifications';
 import Spinner from '../Spinner';
-import Tooltip from '../Tooltip/tooltip';
+import Tooltip from '../Tooltip';
 import ErrorLoader from '../ErrorLoader';
 
 export interface INotificationsCard {

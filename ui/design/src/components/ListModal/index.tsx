@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { formatDate, ILocale } from '../../utils/time';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { IconType } from '../Icon';
-import { TextIcon } from '../TextIcon/index';
+import TextIcon from '../TextIcon';
 import { StyledLayer } from './styled-modal';
 
 export interface IlistModal {

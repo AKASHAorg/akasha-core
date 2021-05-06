@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Box } from 'grommet';
 import { IFilterBox, FilterBox } from './filter-box';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
-import { TextIcon } from '../TextIcon';
+import TextIcon from '../TextIcon';
 
 export interface IFilterCard extends IFilterBox {
   filtersLabel?: string;

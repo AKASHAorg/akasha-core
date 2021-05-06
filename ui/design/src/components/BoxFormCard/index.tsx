@@ -4,8 +4,8 @@ import { isMobile, isMobileOnly } from 'react-device-detect';
 import Button from '../Button';
 import Icon from '../Icon';
 import { StyledLayer } from '../ListModal/styled-modal';
-import { StyledImageInput } from '../Popovers/image/styled-form-image-popover';
-import { FormImagePopover } from '../Popovers/index';
+import { StyledImageInput } from '../ImagePopover/styled-form-image-popover';
+import { FormImagePopover } from '../ImagePopover/form-image-popover';
 import Spinner from '../Spinner';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import {

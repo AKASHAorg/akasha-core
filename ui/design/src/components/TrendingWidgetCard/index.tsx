@@ -1,6 +1,6 @@
 import { Box, Text, Tabs } from 'grommet';
 import * as React from 'react';
-import { SubtitleTextIcon } from '../TextIcon/index';
+import SubtitleTextIcon from '../SubtitleTextIcon';
 import Icon from '../Icon';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { WidgetAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
