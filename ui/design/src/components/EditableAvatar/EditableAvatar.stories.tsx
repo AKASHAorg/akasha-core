@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 
-import EditableAvatar from '.';
+import EditableAvatar, { EditableAvatarProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -12,7 +12,7 @@ export default {
 
 const ethAddress = '0x003410490050000320006570034567114572000';
 
-const Template = (args: any) => (
+const Template = (args: EditableAvatarProps) => (
   <Grommet theme={lightTheme}>
     <EditableAvatar {...args} />
   </Grommet>

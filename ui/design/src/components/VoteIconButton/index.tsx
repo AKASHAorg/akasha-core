@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 import StyledIconButton from '../IconButton/styled-icon-button';
 
 export interface IVoteIconProps {

@@ -1,8 +1,8 @@
 import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
 import DuplexButton from '../DuplexButton';
-import { Icon } from '../Icon';
-import { TextIcon } from '../TextIcon/index';
+import Icon from '../Icon';
+import TextIcon from '../TextIcon';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import {
   ProfileCardAvatar,
@@ -17,7 +17,7 @@ import ProfileEditMenuDropdown from './profile-card-edit-dropdown';
 import styled from 'styled-components';
 import { truncateMiddle } from '../../utils/string-utils';
 import { isMobile } from 'react-device-detect';
-import { MobileListModal } from '../Modals';
+import MobileListModal from '../MobileListModal';
 import {
   IProfileProvider,
   ProfileProviders,

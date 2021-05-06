@@ -1,9 +1,9 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { Icon } from '../Icon/index';
+import Icon from '../Icon';
 import { WidgetAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledButton, StyledImageBox } from './styled-tutorial';
-import { IconType, iconTypes } from '../Icon/icon';
+import { IconType, iconTypes } from '../Icon';
 import Button from '../Button';
 import { ProgressBar } from './progress-bar';
 

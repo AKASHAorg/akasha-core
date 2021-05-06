@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 import { WidgetAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledButton } from '../AppInfoWidgetCard/styled-widget-cards';
 

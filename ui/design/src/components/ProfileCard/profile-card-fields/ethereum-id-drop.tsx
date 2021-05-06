@@ -1,6 +1,6 @@
 import { Box, Drop, Text } from 'grommet';
 import React from 'react';
-import { TextIcon } from '../../TextIcon';
+import TextIcon from '../../TextIcon';
 import QRCode from 'qrcode.react';
 
 interface IProfileEditMenuProps {

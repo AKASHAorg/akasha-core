@@ -2,12 +2,12 @@ import * as React from 'react';
 import { Box, Text } from 'grommet';
 
 import { ITag } from '../TrendingWidgetCard';
-import { SubtitleTextIcon } from '../TextIcon';
+import SubtitleTextIcon from '../SubtitleTextIcon';
 import IconButton from '../IconButton';
 import DuplexButton from '../DuplexButton';
-import { IMentionData } from '../Charts/area-chart';
-import { ResponsiveLineChart } from '../Charts';
-import { Icon } from '../Icon';
+import { IMentionData } from '../AreaChart';
+import ResponsiveLineChart from '../ResponsiveLineChart';
+import Icon from '../Icon';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 
 export interface ITagDetailCard {
