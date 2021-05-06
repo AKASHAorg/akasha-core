@@ -44,10 +44,6 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
       app: topbarWidget.application,
       config: { slot: layout.application.topbarSlotId },
     },
-    {
-      app: loginWidget.application,
-      config: { slot: layout.application.rootWidgetSlotId, notOnMobile: true },
-    },
   ];
 
   const appCenterPlugin = await System.import('@plugins/app-center');

@@ -1,14 +1,5 @@
 module.exports = {
-  externals: [
-    {
-      react: 'react',
-      rxjs: 'rxjs',
-      'react-dom': 'react-dom',
-      // 'styled-components': 'styled',
-      // '@akashaproject/design-system': 'akashaproject__design_system',
-    },
-    '@akashaproject/design-system',
-  ],
+  externals: ['react', 'react-dom', 'rxjs', 'single-spa', '@akashaproject/design-system'],
   optimization: {
     moduleIds: 'deterministic',
     chunkIds: 'named',

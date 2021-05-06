@@ -173,7 +173,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
       </Router>
       <LoginModal
         showModal={modalState.login}
-        slotId={layout.app.modalSlotId}
+        slotId={layout.modalSlotId}
         onLogin={handleLogin}
         onModalClose={hideLoginModal}
         titleLabel={t('Connect a wallet')}

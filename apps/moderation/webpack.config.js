@@ -1,5 +1,8 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const baseConfig = require('../../ui/webpack.config');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageName = require('./package.json').name;
 
 module.exports = Object.assign(baseConfig, {
@@ -7,7 +10,6 @@ module.exports = Object.assign(baseConfig, {
   output: Object.assign(baseConfig.output, {
     library: packageName.replace(/@/g, '').replace(/\//g, '__').replace(/-/g, '_'),
     path: path.resolve(__dirname, 'dist'),
-    filename: 'index.js',
-    publicPath: '/apps/',
+    publicPath: '/apps/moderation/',
   }),
 });

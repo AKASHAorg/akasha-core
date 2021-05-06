@@ -203,7 +203,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.app.modalSlotId}>
+      <ModalRenderer slotId={props.layout.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -247,7 +247,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         )}
       </ModalRenderer>
       <EditorModal
-        slotId={props.layout.app.modalSlotId}
+        slotId={props.layout.modalSlotId}
         avatar={loggedProfileData.avatar}
         showModal={editorModalOpen}
         ethAddress={loginState.ethAddress as any}

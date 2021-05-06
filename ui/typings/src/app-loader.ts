@@ -11,8 +11,8 @@ export interface IPluginConfig {
 
 export interface ILoaderConfig {
   rootNodeId: string;
-  layout: IWidgetEntry;
-  rootLoadedApp: IPluginEntry;
+  layout: IWidget;
+  rootLoadedApp: IPlugin;
   System: any;
 }
 

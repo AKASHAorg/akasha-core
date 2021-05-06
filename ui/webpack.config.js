@@ -28,6 +28,7 @@ module.exports = {
   output: {
     libraryTarget: 'umd',
     publicPath: 'auto',
+    filename: 'index.js',
   },
   plugins: [
     new CleanWebpackPlugin({ verbose: true }),
@@ -38,12 +39,12 @@ module.exports = {
       EWA_MAILSENDER: process.env.EWA_MAILSENDER || '',
     }),
     new webpack.AutomaticPrefetchPlugin(),
-    new webpack.ProgressPlugin({
-      entries: true,
-      modules: true,
-      modulesCount: 100,
-      profile: true,
-    }),
+    // new webpack.ProgressPlugin({
+    //   entries: true,
+    //   modules: true,
+    //   modulesCount: 100,
+    //   profile: true,
+    // }),
   ],
   devtool: isProduction ? 'source-map' : 'inline-source-map',
   externals: commons.externals,

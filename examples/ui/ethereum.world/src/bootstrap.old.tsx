@@ -73,6 +73,7 @@ const bootstrap = async () => {
 
   const initializeSdk = async config => {
     const defaultApps = await getDefaultApps(APPS_PATH, PLUGINS_PATH, WIDGETS_PATH);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const { default: sdkInit } = win.akashaproject__sdk;
     const sdk = await sdkInit({
@@ -102,7 +103,7 @@ const bootstrap = async () => {
       sdk.appLoader.registerWidget({
         app: result.module.application,
         config: Object.assign({}, result.config, {
-          slot: sdk.appLoader.config.layout.app.topbarSlotId,
+          slot: sdk.appLoader.config.layout.topbarSlotId,
         }),
       });
     });
@@ -122,7 +123,7 @@ const bootstrap = async () => {
       sdk.appLoader.registerWidget({
         app: result.module.application,
         config: Object.assign({}, result.config, {
-          slot: sdk.appLoader.config.layout.app.rootWidgetSlotId,
+          slot: sdk.appLoader.config.layout.rootWidgetSlotId,
         }),
       });
     });
