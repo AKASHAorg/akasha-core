@@ -1,6 +1,6 @@
 import { Box, Stack } from 'grommet';
 import * as React from 'react';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 import { SearchBar } from './search-bar';
 import { MobileSearchBar } from './mobile-search-bar';
 import Avatar from '../Avatar';
@@ -19,7 +19,7 @@ import {
 } from './styled-topbar';
 import { isMobileOnly } from 'react-device-detect';
 import Button from '../Button';
-import { IProfileData } from '../Cards/profile-cards/profile-widget-card';
+import { IProfileData } from '../ProfileCard/profile-widget-card';
 import { ProfileMenu } from './profile-menu';
 
 export interface ITopbarProps {

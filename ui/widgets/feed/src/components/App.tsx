@@ -5,7 +5,7 @@ import EntryFeed from './entry-feed';
 import ProfileFeed from './profile-feed';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { i18n } from 'i18next';
-import { IContentClickDetails } from '@akashaproject/design-system/src/components/Cards/entry-cards/entry-box';
+import { IContentClickDetails } from '@akashaproject/design-system/src/components/EntryCard/entry-box';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 

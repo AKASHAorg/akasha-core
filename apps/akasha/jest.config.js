@@ -1,8 +1,11 @@
-module.exports = {
-  verbose: true,
-  bail: true,
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  collectCoverage: true,
-  coverageReporters: ['text-summary'],
-};
+const baseConfig = require('../../jest.config.base');
+
+module.exports = Object.assign(baseConfig, {
+  automock: false,
+  transform: {
+    "^.(tsx?|ts?)$": "ts-jest",
+  },
+  testRegex: "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?|ts?)$",
+  preset: "ts-jest",
+  testEnvironment: "jsdom"
+});

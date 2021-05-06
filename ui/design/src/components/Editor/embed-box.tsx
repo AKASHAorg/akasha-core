@@ -2,7 +2,7 @@ import { Box } from 'grommet';
 import * as React from 'react';
 import styled from 'styled-components';
 import ProfileAvatarButton from '../ProfileAvatarButton';
-import { IEntryData } from '../Cards/entry-cards/entry-box';
+import { IEntryData } from '../EntryCard/entry-box';
 import { ReadOnlyEditor } from './index';
 
 const StyledBox = styled(Box)`

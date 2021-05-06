@@ -14,8 +14,8 @@
     "compile:sc": "lerna run compile:sc",
     "deploy:sc": "lerna run deploy:sc",
     "extract:translations": "lerna run extract:translations --stream",
-    "linter:check": "tslint --project tsconfig.json",
-    "linter:fix": "tslint --project tsconfig.json --fix",
+    "linter:check": "eslint . --ext .ts,.tsx --fix-dry-run",
+    "linter:fix": "eslint . --ext .ts,.tsx --fix",
     "pack:ui-design": "lerna run pack --scope @akashaproject/design-* --stream",
     "pack:ui-plugins": "lerna run pack --scope @akashaproject/ui-* --stream",
     "pack:ui-apps": "lerna run pack --scope @akashaproject/app-* --stream",
@@ -42,8 +42,14 @@
     "watch:all": "lerna run --scope='@akashaproject/*' --parallel watch",
     "watch:feed-app": "lerna run --scope=@akashaproject/ethereum.world --stream watch",
     "test:sdk": "lerna run test --scope @akashaproject/sdk-* --stream",
+    "build:test": "lerna run pretest --scope @akashaproject/design-* --scope @akashaproject/ui-* --scope @akashaproject/app-* --stream",
+    "test:ui:watch": "lerna exec --parallel --ignore @akashaproject/sdk-* --stream -- jest --watch",
+    "test:apps": "lerna run test --scope @akashaproject/app-* --stream",
+    "test:design-system": "lerna run test --scope @akashaproject/design-system --stream",
+    "test:hooks": "lerna run test --scope @akashaproject/ui-awf-hooks --stream",
+    "test:plugins": "lerna run test --scope @akashaproject/ui-plugin-* --stream",
+    "test:widgets": "lerna run test --scope @akashaproject/ui-widget-* --stream",
     "test:ui": "lerna run test --scope @akashaproject/ui-* --scope @akashaproject/design-* --scope @akashaproject/app-* --stream",
-    "test:ui:watch": "lerna exec --parallel --scope @akashaproject/ui-* --scope @akashaproject/design-* --stream -- jest --watch",
     "dev:server": "lerna run dev:server --stream"
   },
   "devDependencies": {
@@ -53,16 +59,27 @@
     "@babel/preset-env": "7.12.13",
     "@babel/preset-react": "7.12.13",
     "@babel/preset-typescript": "7.12.13",
-    "@types/jest": "26.0.20",
-    "@types/node": "14.14.25",
+    "@testing-library/jest-dom": "5.12.0",
+    "@testing-library/react": "11.2.6",
+    "@testing-library/react-hooks": "5.1.2",
+    "@types/jest": "26.0.22",
+    "@types/node": "14.14.41",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
     "babel-loader": "8.2.2",
     "babel-plugin-i18next-extract": "0.8.2",
     "clean-webpack-plugin": "3.0.0",
     "copy-webpack-plugin": "7.0.0",
     "copyfiles": "2.4.1",
     "core-js": "3.8.3",
+    "eslint": "7.24.0",
+    "eslint-config-prettier": "8.2.0",
+    "eslint-plugin-prettier": "3.4.0",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "eslint-plugin-tsdoc": "0.2.14",
     "html-webpack-plugin": "5.0.0",
-    "husky": "4.3.8",
+    "husky": "6.0.0",
     "i18next-parser": "3.6.0",
     "jest": "26.6.3",
     "lerna": "4.0.0",
@@ -70,6 +87,7 @@
     "prettier": "2.2.1",
     "pretty-quick": "3.1.0",
     "react": "16.14.0",
+    "react-test-renderer": "16.14.0",
     "react-dom": "16.14.0",
     "regenerator-runtime": "0.13.7",
     "rxjs": "6.6.3",
@@ -77,12 +95,6 @@
     "styled-components": "5.2.1",
     "ts-jest": "26.5.0",
     "ts-loader": "8.0.14",
-    "tslint": "6.1.3",
-    "tslint-config-airbnb": "5.11.2",
-    "tslint-config-prettier": "1.18.0",
-    "tslint-plugin-prettier": "2.3.0",
-    "tslint-react": "5.0.0",
-    "tslint-react-hooks": "2.2.2",
     "typedoc": "^0.20.35",
     "typescript": "4.2.4",
     "webpack": "5.20.1",
@@ -102,8 +114,15 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "pretty-quick --staged",
+      "eslint --fix",
+      "git add"
+    ]
   },
   "dependencies": {}
 }

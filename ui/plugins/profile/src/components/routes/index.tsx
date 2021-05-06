@@ -43,7 +43,7 @@ const Routes: React.FC<RootComponentProps> = props => {
   React.useEffect(() => {
     if (loginState.ethAddress) {
       hideLoginModal();
-      if (!!flagged.length) {
+      if (flagged.length) {
         setReportModalOpen(true);
       }
     }

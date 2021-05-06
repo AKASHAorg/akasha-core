@@ -12,9 +12,9 @@ import {
 import { withHistory } from 'slate-history';
 import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 import Avatar from '../Avatar';
-import { IEntryData } from '../Cards/entry-cards/entry-box';
-import { Icon } from '../Icon/index';
-import { EmojiPopover } from '../Popovers/index';
+import { IEntryData } from '../EntryCard/entry-box';
+import Icon from '../Icon';
+import EmojiPopover from '../EmojiPopover';
 import { EmbedBox } from './embed-box';
 import { CustomEditor } from './helpers';
 import { withMentions, withImages, withTags, withLinks } from './plugins';

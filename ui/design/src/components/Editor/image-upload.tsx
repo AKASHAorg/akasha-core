@@ -9,7 +9,7 @@ import {
   StyledImageInput,
 } from './styled-editor-box';
 
-import { Icon } from '../Icon/index';
+import Icon from '../Icon';
 
 export interface IImageUpload {
   // labels

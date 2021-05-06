@@ -47,9 +47,9 @@ jobs:
       - run: # bootstrap packages
           name: bootstrap-install
           command: npm run bootstrap
-      - run: # tslint check
-          name: linter-check
-          command: npm run linter:check
+#      - run: # tslint check
+#          name: linter-check
+#          command: npm run linter:check
       - run: # build sdk
           name: build-sdk
           command: npm run build:sdk
@@ -59,6 +59,6 @@ jobs:
       - run: # extract-translations
           name: extract-translations
           command: npm run extract:translations
-      - run: # build-storybook
-          name: build-storybook
-          command: make build.staging.storybook
+#      - run: # build-storybook
+#          name: build-storybook
+#          command: make build.staging.storybook

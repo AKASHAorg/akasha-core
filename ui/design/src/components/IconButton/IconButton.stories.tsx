@@ -2,7 +2,7 @@ import React from 'react';
 import { Grommet } from 'grommet';
 
 import IconButton from '.';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 

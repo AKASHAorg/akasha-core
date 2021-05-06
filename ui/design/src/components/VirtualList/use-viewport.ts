@@ -23,7 +23,7 @@ export interface ViewportActions {
   scrollToTop: () => void;
 }
 
-export const useViewport = (offsetTop: number = 0): [ViewportState, ViewportActions] => {
+export const useViewport = (offsetTop = 0): [ViewportState, ViewportActions] => {
   const [viewport, setViewport] = React.useState<ViewportState>({
     window,
     offsetTop,

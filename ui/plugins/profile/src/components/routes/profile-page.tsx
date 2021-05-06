@@ -12,7 +12,7 @@ import {
 import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
 import { ILoadItemsPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
+import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 
 import { ProfilePageCard } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';

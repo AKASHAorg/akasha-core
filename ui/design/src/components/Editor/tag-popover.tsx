@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Portal } from './helpers';
 import { Text } from 'grommet';
 import { StyledPopoverDiv, StyledPopoverValueBox } from './styled-editor-box';
-import { ITag } from '../Cards/widget-cards/trending-widget-card';
+import { ITag } from '../TrendingWidgetCard';
 
 export interface IMentionPopover {
   postsLabel?: string;
