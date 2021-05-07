@@ -48,8 +48,8 @@ const TagDetailCard: React.FC<ITagDetailCard> = props => {
     handleUnsubscribe(tag.name);
   };
 
-  const renderContent = () => {
-    return (
+  return (
+    <MainAreaCardBox>
       <Box direction="column" pad="medium">
         <Box direction="row" justify="between" pad={{ bottom: 'small' }}>
           <Text size="xsmall">{popularityOverTimeLabel}</Text>
@@ -81,9 +81,8 @@ const TagDetailCard: React.FC<ITagDetailCard> = props => {
           />
         </Box>
       </Box>
-    );
-  };
-  return <MainAreaCardBox>{renderContent()}</MainAreaCardBox>;
+    </MainAreaCardBox>
+  );
 };
 
 TagDetailCard.defaultProps = {
