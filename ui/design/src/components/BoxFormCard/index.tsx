@@ -196,7 +196,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     setCoverImagePopoverOpen(false);
   };
 
-  const handleImageInsert = (imageKey: string) => (src: unknown, isUrl: boolean) => {
+  const handleImageInsert = (imageKey: string) => (src: string | File, isUrl: boolean) => {
     if (isUrl) {
       handleFormFieldChange({ [imageKey]: { src, isUrl, preview: src } });
     } else {
