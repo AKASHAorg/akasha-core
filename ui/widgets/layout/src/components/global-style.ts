@@ -2,7 +2,6 @@ import DS from '@akashaproject/design-system';
 import { DefaultTheme } from '@akashaproject/design-system/src/styles/themes/interfaces';
 
 const { createGlobalStyle, css } = DS;
-
 export const GlobalStyle: any = createGlobalStyle<{ theme: DefaultTheme }>`
   html {
     -webkit-box-sizing: border-box;

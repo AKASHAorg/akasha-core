@@ -23,7 +23,7 @@ export const application: Application = {
     // i18next.use(arr[0]).use(arr[1]).use(arr[n])
     use: [initReactI18next],
   },
-  loadingFn: (): Promise<any> => import('./components'),
+  loadingFn: () => import('./components'),
   name: 'ui-plugin-app-center',
   sdkModules: [],
   title: 'App center',

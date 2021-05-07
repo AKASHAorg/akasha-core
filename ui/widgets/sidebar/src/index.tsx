@@ -16,7 +16,7 @@ export const application = {
     // i18next.use(arr[0]).use(arr[1]).use(arr[n])
     use: [initReactI18next],
   },
-  loadingFn: (): Promise<any> => import('./components'),
+  loadingFn: () => import('./components'),
   name: 'ui-widget-sidebar',
   sdkModules: [],
   title: 'Ethereum World',

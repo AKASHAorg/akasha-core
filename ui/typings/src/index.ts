@@ -13,7 +13,7 @@ export interface LogoSourceType {
 export interface Application {
   activeWhen: { path: string; exact?: boolean };
   i18nConfig: AppLoaderTypes.II18nConfig;
-  loadingFn: () => Promise<any>;
+  loadingFn: () => Promise<AppLoaderTypes.ISingleSpaLifecycle>;
   name: string;
   sdkModules?: AppLoaderTypes.SDKdependency[];
   title: string;
@@ -30,7 +30,7 @@ export interface Application {
   };
 }
 export interface LayoutConfig {
-  loadingFn: () => any;
+  loadingFn: () => Promise<AppLoaderTypes.ISingleSpaLifecycle>;
   /**
    * load modals inside this node
    */
@@ -58,13 +58,14 @@ export interface LayoutConfig {
    * load app defined widgets into this node
    */
   widgetSlotId: string;
+  sidebarSlotId: string;
 }
 export interface RootComponentProps {
   activeWhen: { path: string };
   domElement: HTMLElement;
-  events: any;
+  events: unknown;
   getMenuItems: () => any;
-  globalChannel: any;
+  globalChannel: unknown;
   i18n: any;
   i18nConfig: any;
   isMobile: boolean;

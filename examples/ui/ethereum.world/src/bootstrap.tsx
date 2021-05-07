@@ -10,7 +10,6 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
   const { default: sdkInit } = await System.import('@akashaproject/sdk');
   const layout = await System.import('@widget/layout');
   const topbarWidget = await System.import('@widget/topbar');
-  const loginWidget = await System.import('@widget/login');
 
   const AKASHAApp = await System.import('@app/AKASHA');
   const profilePlugin = await System.import('@plugins/profile');
@@ -35,7 +34,7 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
     },
   ];
 
-  const registeredWidgets: any[] = [
+  const registeredWidgets: unknown[] = [
     {
       app: sidebarWidget.application,
       config: { slot: layout.application.sidebarSlotId },
