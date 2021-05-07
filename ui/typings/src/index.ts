@@ -67,19 +67,19 @@ export interface RootComponentProps {
   getMenuItems: () => any;
   globalChannel: unknown;
   i18n: any;
-  i18nConfig: any;
+  i18nConfig: AppLoaderTypes.II18nConfig;
   isMobile: boolean;
   layout: LayoutConfig;
   logger: any;
-  mountParcel: (parcel: any, config?: any) => any;
+  mountParcel: (parcel: unknown, config?: unknown) => unknown;
   name: string;
   rootNodeId: string;
   sdkModules: {
-    [key: string]: { [key: string]: any };
+    [key: string]: any;
   };
   singleSpa: any;
   unmountSelf: () => void;
-  rxjsOperators: any;
+  rxjsOperators: unknown;
 }
 
 export enum LogoTypeSource {

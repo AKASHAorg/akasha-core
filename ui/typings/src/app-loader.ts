@@ -13,7 +13,7 @@ export interface ILoaderConfig {
   rootNodeId: string;
   layout: IWidget;
   rootLoadedApp: IPlugin;
-  System: any;
+  System: unknown;
 }
 
 export interface IWidgetConfig {

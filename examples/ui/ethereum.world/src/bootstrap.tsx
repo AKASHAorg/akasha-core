@@ -1,4 +1,8 @@
-import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import {
+  IAppEntry,
+  IWidgetEntry,
+  MenuItemAreaType,
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 (async function bootstrap(System) {
   await System.import('single-spa');
@@ -34,7 +38,7 @@ import { IAppEntry, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/a
     },
   ];
 
-  const registeredWidgets: unknown[] = [
+  const registeredWidgets: IWidgetEntry[] = [
     {
       app: sidebarWidget.application,
       config: { slot: layout.application.sidebarSlotId },
