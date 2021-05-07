@@ -26,16 +26,9 @@
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../../build/plugins/bookmarks",
     "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333",
-    "watch": "nodemon"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "lib/*",
-      "dist/*",
-      "build/*"
-    ],
-    "exec": "npm run pack || exit 1",
-    "ext": "ts,tsx"
+    "watch": "webpack --config webpack.config.js --watch",
+    "pretest": "tsc -m commonjs",
+    "test": "jest"
   },
   "dependencies": {
     "@akashaproject/ui-awf-typings": "*",
@@ -46,6 +39,7 @@
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/sdk-posts": "*",
+    "@akashaproject/ui-widget-trending": "*",
     "@types/i18next": "13.0.0",
     "@types/react-i18next": "8.1.0",
     "@types/react-router": "5.1.8",
@@ -55,13 +49,11 @@
     "single-spa-react": "3.2.0"
   },
   "devDependencies": {
+    "@akashaproject/ui-awf-testing-utils": "*",
     "@types/react": "16.9.56",
     "@types/react-dom": "16.9.9",
-    "@types/react-test-renderer": "16.9.3",
-    "@types/single-spa-react": "2.12.0",
-    "acorn-jsx": "5.3.1",
-    "jest-styled-components": "7.0.3",
-    "react-test-renderer": "16.14.0"
+    "@types/react-test-renderer": "17.0.1",
+    "@types/single-spa-react": "3.0.1"
   },
   "peerDependencies": {
     "react": "16.14.0",

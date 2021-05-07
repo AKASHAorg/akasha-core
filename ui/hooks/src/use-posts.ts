@@ -1,4 +1,4 @@
-import { IEntryData } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
+import { IEntryData } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import * as React from 'react';
 import { combineLatest } from 'rxjs';

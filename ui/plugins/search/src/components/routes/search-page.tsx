@@ -38,13 +38,12 @@ const {
   ModalRenderer,
 } = DS;
 
-interface SearchPageProps {
+interface SearchPageProps
+  extends Pick<
+    RootComponentProps,
+    'sdkModules' | 'globalChannel' | 'logger' | 'rxjsOperators' | 'singleSpa' | 'layout'
+  > {
   onError?: (err: Error) => void;
-  sdkModules: any;
-  logger: any;
-  globalChannel: any;
-  rxjsOperators: any;
-  singleSpa: any;
   loginState: UseLoginState;
   loggedProfileData: any;
   showLoginModal: () => void;
@@ -52,7 +51,7 @@ interface SearchPageProps {
   modalStateActions: ModalStateActions;
 }
 
-const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
+const SearchPage: React.FC<SearchPageProps> = props => {
   const {
     sdkModules,
     logger,
@@ -69,6 +68,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 
   const { t, i18n } = useTranslation();
+
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [flagged, setFlagged] = React.useState('');

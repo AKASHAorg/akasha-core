@@ -1,6 +1,6 @@
 /* eslint-disable import/first */
 import DS from '@akashaproject/design-system';
-import { IProfileData } from '@akashaproject/design-system/lib/components/Cards/profile-cards/profile-widget-card';
+import { IProfileData } from '@akashaproject/design-system/lib/components/ProfileCard/profile-widget-card';
 import { action } from '@storybook/addon-actions';
 import { select, text } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';

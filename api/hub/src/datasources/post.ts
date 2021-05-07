@@ -220,7 +220,7 @@ class PostAPI extends DataSource {
     await db.delete(this.dbID, this.collection, id);
   }
 
-  async getPostsByAuthor(pubKey: string, offset: number = 0, length: number = 10) {
+  async getPostsByAuthor(pubKey: string, offset = 0, length = 10) {
     const result = await searchIndex.search(`${pubKey} `, {
       facetFilters: ['category:post'],
       length: length,
@@ -235,7 +235,7 @@ class PostAPI extends DataSource {
     return { results: result.hits, nextIndex: nextIndex, total: result.nbHits };
   }
 
-  async getPostsByTag(tagName: string, offset: number = 0, length: number = 10) {
+  async getPostsByTag(tagName: string, offset = 0, length = 10) {
     const result = await searchIndex.search(`${tagName} `, {
       facetFilters: ['category:post'],
       length: length,

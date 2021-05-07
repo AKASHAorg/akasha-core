@@ -13,10 +13,10 @@ export const application: IWidget = {
     // In this case I will preserve the old ns instead loading a possibly undefined ns.
     loadNS: [],
     // translation namespace. defaults to plugin.name
-    // ns: 'ui-widget-login',
+    // ns: 'ui-widget-feed',
     // i18next.use(arr[0]).use(arr[1]).use(arr[n])
     use: [initReactI18next],
   },
   loadingFn: () => import('./components'),
-  name: 'ui-widget-login',
+  name: 'ui-widget-feed',
 };

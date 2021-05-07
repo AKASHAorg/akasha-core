@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/src/utils/time';
-import { IContentClickDetails } from '@akashaproject/design-system/src/components/Cards/entry-cards/entry-box';
+import { IContentClickDetails } from '@akashaproject/design-system/src/components/EntryCard/entry-box';
 import { useTranslation } from 'react-i18next';
 import { ItemTypes } from './App';
 
@@ -178,7 +178,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   flagAsLabel={t('Report Post')}
                   loggedProfileEthAddress={ethAddress}
                   locale={locale || 'en'}
-                  style={{ height: 'auto', ...style }}
+                  style={{ height: 'auto', ...(style as React.CSSProperties) }}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
                   profileAnchorLink={'/profile'}
