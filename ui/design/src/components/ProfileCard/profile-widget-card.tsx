@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import Avatar from '../Avatar';
-import { TextIcon } from '../TextIcon/index';
+import TextIcon from '../TextIcon';
 import { WidgetAreaCardBox } from '../EntryCard/basic-card-box';
 import { AvatarDiv } from './styled-profile-card';
 import { IProfileData as ProfileDataType } from '@akashaproject/ui-awf-typings/lib/profile';

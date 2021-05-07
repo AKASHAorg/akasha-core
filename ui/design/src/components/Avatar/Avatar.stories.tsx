@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 
-import Avatar from '.';
+import Avatar, { AvatarProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -18,7 +18,7 @@ const ethAddress = '0x003410490050000320006570034567114572000';
 
 const guestEthAddress = '0x00000000000000000000000000000';
 
-const Template = (args: any) => (
+const Template = (args: AvatarProps) => (
   <Grommet theme={lightTheme}>
     <Avatar {...args} />
   </Grommet>

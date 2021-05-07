@@ -7,7 +7,7 @@ import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import { ITag } from '../TrendingWidgetCard';
 
 import DuplexButton from '../DuplexButton';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
 
 export interface ITagSearchCard {

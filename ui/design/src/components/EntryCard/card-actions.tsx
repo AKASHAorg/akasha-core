@@ -3,9 +3,9 @@ import { Anchor, Box } from 'grommet';
 import { isMobile } from 'react-device-detect';
 
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
-import { TextIcon } from '../TextIcon';
+import TextIcon from '../TextIcon';
 import { IEntryData } from './entry-box';
-import { MobileListModal } from '../Modals';
+import MobileListModal from '../MobileListModal';
 import styled from 'styled-components';
 
 export type ServiceNames = 'twitter' | 'reddit' | 'facebook' | 'copy';

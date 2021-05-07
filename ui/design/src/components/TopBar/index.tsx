@@ -1,6 +1,6 @@
 import { Box, Stack } from 'grommet';
 import * as React from 'react';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 import { SearchBar } from './search-bar';
 import { MobileSearchBar } from './mobile-search-bar';
 import Avatar from '../Avatar';

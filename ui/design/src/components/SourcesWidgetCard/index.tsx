@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import { WidgetAreaCardBox } from '../EntryCard/basic-card-box';
-import { Icon } from '../Icon';
+import Icon from '../Icon';
 
 export interface ISourceWidgetCardProps {
   className?: string;

@@ -43,7 +43,6 @@ storiesOf('TextIcon/TextIcon', module).add('default', () => (
       onClick={() => action('TextIcon Clicked')('Synthetic Event')}
       backgroundColor={color('Background Color', '')}
       color={color('Color', '#132540')}
-      iconType={select('Type', iconTypeOptions, iconTypeDefaultValue)}
       label={text('Label', 'Home')}
       spacing={text('Spacing', '10px')}
       margin={object('Margin', { margin: '0px' })}
@@ -52,6 +51,7 @@ storiesOf('TextIcon/TextIcon', module).add('default', () => (
       menuIcon={boolean('Menu Icon', false)}
       accentColor={boolean('Accent color', false)}
       fadedText={boolean('Faded text', false)}
+      iconType={select('Type', iconTypeOptions, iconTypeDefaultValue)}
       fontSize={select('Font Size', fontSizes, 'medium')}
       fontWeight={select('Font Weight', fontWeights, 'normal' as any)}
       iconSize={select('Icon Size', iconSizes, 'md' as any)}
@@ -65,9 +65,9 @@ storiesOf('TextIcon/SubtitleTextIcon', module).add('default', () => (
     <SubtitleTextIcon
       onClick={() => action('SubtitleTextIcon Clicked')('Synthetic Event')}
       iconType={select('Type', iconTypeOptions, iconTypeDefaultValue)}
+      labelSize={select('label size', { Small: 'small', Large: 'large' }, 'small')}
       label={text('Label', 'Text')}
       subtitle={text('Subtitle label', 'Some text')}
-      labelSize={select('label size', { Small: 'small', Large: 'large' }, 'small')}
       labelColor={color('Color', '#132540')}
       subtitleColor={color('Color', '#132540')}
     />
