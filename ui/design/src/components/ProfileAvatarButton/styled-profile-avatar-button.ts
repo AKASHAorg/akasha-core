@@ -1,8 +1,14 @@
-import { Box } from 'grommet';
+import { Box, Text } from 'grommet';
 import styled, { css } from 'styled-components';
 
 const StyledWrapperBox = styled(Box)`
   display: inline-flex;
+`;
+
+const StyledText = styled(Text)`
+  font-size: 1rem;
+  font-weight: bold;
+  color: ${props => props.theme.colors.primaryText};
 `;
 
 const ButtonInfo = styled.div<{ active?: boolean }>`
@@ -24,4 +30,4 @@ const ButtonInfo = styled.div<{ active?: boolean }>`
   }}
 `;
 
-export { ButtonInfo, StyledWrapperBox };
+export { ButtonInfo, StyledText, StyledWrapperBox };
