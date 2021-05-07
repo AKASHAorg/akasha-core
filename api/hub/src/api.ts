@@ -22,22 +22,6 @@ const dataSources = {
   moderatorsAPI: new ModerationAdminAPI({ dbID, collection: 'Moderators' }),
 };
 
-const getFinalDecision = async (contentID: string) => {
-  let decision = await dataSources.decisionsAPI.getDecision(contentID);
-
-  if (decision.moderator) {
-    const moderator = await dataSources.profileAPI.getProfile(decision.moderator);
-    decision = Object.assign({}, decision, moderator);
-  }
-  const first = await dataSources.reportingAPI.getFirstReport(contentID);
-  const reportedBy = first.author;
-  const reportedDate = first.creationDate;
-  const reports = await dataSources.reportingAPI.countReports(contentID);
-  const reasons = await dataSources.reportingAPI.getReasons(contentID);
-  decision = Object.assign({}, decision, { reports, reportedBy, reportedDate, reasons });
-  return decision;
-};
-
 const api = new Router({
   prefix: '/api',
 });
@@ -182,7 +166,7 @@ api.get('/moderation/status/counters', async (ctx: koa.Context, next: () => Prom
   await next();
 });
 
-api.post('/moderation/decisions/new', async (ctx: koa.Context, next: () => Promise<any>) => {
+api.post('/moderation/decisions/moderate', async (ctx: koa.Context, next: () => Promise<any>) => {
   const report = ctx?.request.body;
   if (!report.data || !report.contentId || !report.signature) {
     ctx.status = 400;
@@ -222,7 +206,7 @@ api.get('/moderation/decisions/:contentId', async (ctx: koa.Context, next: () =>
     ctx.body = 'Missing "contentId" attribute from request.';
   } else {
     ctx.set('Content-Type', 'application/json');
-    ctx.body = await getFinalDecision(contentID);
+    ctx.body = await dataSources.decisionsAPI.getFinalDecision(contentID);
     ctx.status = 200;
   }
   await next();
@@ -236,11 +220,11 @@ api.post('/moderation/decisions/pending', async (ctx: koa.Context, next: () => P
     req.offset,
     req.limit,
   );
-  const list = await Promise.all(
-    decisions.map(decision => {
-      return getFinalDecision(decision.contentID);
-    }),
-  );
+  const list = [];
+  for (const decision of decisions) {
+    console.log('\n\nPENDING:\n\n', decision);
+    list.push(await dataSources.decisionsAPI.getFinalDecision(decision.contentID));
+  }
   ctx.set('Content-Type', 'application/json');
   ctx.body = list;
   ctx.status = 200;
@@ -259,11 +243,10 @@ api.post('/moderation/decisions/moderated', async (ctx: koa.Context, next: () =>
       req.offset,
       req.limit,
     );
-    const list = await Promise.all(
-      decisions.map(decision => {
-        return getFinalDecision(decision.contentID);
-      }),
-    );
+    const list = [];
+    for (const decision of decisions) {
+      list.push(await dataSources.decisionsAPI.getFinalDecision(decision.contentID));
+    }
     ctx.set('Content-Type', 'application/json');
     ctx.body = list;
     ctx.status = 200;
@@ -290,7 +273,7 @@ api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Prom
             data: request.data,
             signature: request.signature,
           });
-          const isAdmin = dataSources.moderatorsAPI.isAdmin(request.data.adminEthAddress);
+          const isAdmin = await dataSources.moderatorsAPI.isAdmin(request.data.adminEthAddress);
           if (!verified || !isAdmin) {
             ctx.status = 403;
           } else {

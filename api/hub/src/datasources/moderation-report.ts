@@ -1,7 +1,9 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB, logger } from '../helpers';
+import { getAppDB, logger, decodeString, encodeString } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { ModerationDecision, ModerationReport } from '../collections/interfaces';
+import ModerationDecisionAPI from './moderation-decision';
+import { queryCache } from '../storage/cache';
 
 class ModerationReportAPI extends DataSource {
   private readonly collection: string;
@@ -39,16 +41,24 @@ class ModerationReportAPI extends DataSource {
     const query = new Where('contentID')
       .eq(contentID)
       .skipNum(offset || 0)
-      .limitTo(limit || 10);
-    return db.find<ModerationReport>(this.dbID, this.collection, query);
+      .limitTo(limit || 10)
+      .orderByDesc('creationDate');
+    const reports = await db.find<ModerationReport>(this.dbID, this.collection, query);
+    const list = [];
+    for (const report of reports) {
+      report.explanation = decodeString(report.explanation);
+      list.push(report);
+    }
+    return list;
   }
 
   async getReport(contentID: string, author: string) {
     const db: Client = await getAppDB();
     const query = new Where('contentID').eq(contentID).and('author').eq(author);
-    const report = await db.find<ModerationReport>(this.dbID, this.collection, query);
-    if (report.length) {
-      return report[0];
+    const reports = await db.find<ModerationReport>(this.dbID, this.collection, query);
+    if (reports.length) {
+      reports[0].explanation = decodeString(reports[0].explanation);
+      return reports[0];
     }
     logger.warn(`report not found for contentID:${contentID} and author:${author}`);
     return undefined;
@@ -58,9 +68,10 @@ class ModerationReportAPI extends DataSource {
     const db: Client = await getAppDB();
     // get the first report for this contentID
     const query = new Where('contentID').eq(contentID).orderBy('creationDate').limitTo(1);
-    const report = await db.find<ModerationReport>(this.dbID, this.collection, query);
-    if (report.length) {
-      return report[0];
+    const reports = await db.find<ModerationReport>(this.dbID, this.collection, query);
+    if (reports.length) {
+      reports[0].explanation = decodeString(reports[0].explanation);
+      return reports[0];
     }
     logger.warn(`no reports found for contentID:${contentID}`);
     throw new Error('report not found');
@@ -125,17 +136,25 @@ class ModerationReportAPI extends DataSource {
     const report: ModerationReport = {
       _id: '',
       creationDate: new Date().getTime(),
-      author: author,
-      contentType: contentType,
-      contentID: contentID,
+      author,
+      contentType,
+      contentID,
       reason: reason,
-      explanation: explanation ? explanation : '',
+      explanation: encodeString(explanation),
     };
     const reportID = await db.create(this.dbID, this.collection, [report]);
     if (!reportID || !reportID.length) {
       logger.warn(`report by ${author} for contentID ${contentID} could not be created`);
       throw new Error('report could not be created');
     }
+
+    // invalidate counters cache
+    const decisionsAPI = new ModerationDecisionAPI({
+      dbID: this.dbID,
+      collection: 'ModerationDecisions',
+    });
+    await queryCache.del(decisionsAPI.getCountersCacheKey());
+
     return reportID[0];
   }
 }
