@@ -109,7 +109,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
         signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
       };
 
-      const postURL = `${baseUrl}/new`;
+      const postURL = `${baseUrl}/moderate`;
       const rheaders = new Headers();
       rheaders.append('Content-Type', 'application/json');
       const { status } = await fetch(postURL, {
