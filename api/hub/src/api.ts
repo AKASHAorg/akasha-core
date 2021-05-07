@@ -222,7 +222,6 @@ api.post('/moderation/decisions/pending', async (ctx: koa.Context, next: () => P
   );
   const list = [];
   for (const decision of decisions) {
-    console.log('\n\nPENDING:\n\n', decision);
     list.push(await dataSources.decisionsAPI.getFinalDecision(decision.contentID));
   }
   ctx.set('Content-Type', 'application/json');
