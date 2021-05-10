@@ -15,7 +15,7 @@ export const application: Application = {
     loadNS: [],
     use: [initReactI18next],
   },
-  loadingFn: (): Promise<any> => import('./components'),
+  loadingFn: () => import('./components'),
   name: 'moderation-app',
   sdkModules: [
     { module: commons },

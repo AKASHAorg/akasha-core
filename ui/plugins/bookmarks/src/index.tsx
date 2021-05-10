@@ -1,8 +1,10 @@
 import { Application, LogoTypeSource } from '@akashaproject/ui-awf-typings';
+import { moduleName as dbModule } from '@akashaproject/sdk-db/lib/constants';
+import { moduleName as auth } from '@akashaproject/sdk-auth/lib/constants';
+import { moduleName as posts } from '@akashaproject/sdk-posts/lib/constants';
+import { moduleName as commons } from '@akashaproject/sdk-common/lib/constants';
+import { moduleName as profiles } from '@akashaproject/sdk-profiles/lib/constants';
 import { initReactI18next } from 'react-i18next';
-import { moduleName as authModule } from '@akashaproject/sdk-auth/lib/constants';
-import { moduleName as profilesModule } from '@akashaproject/sdk-profiles/lib/constants';
-import { moduleName as commonModule } from '@akashaproject/sdk-common/lib/constants';
 import { rootRoute } from './routes';
 import { Widget as TrendingWidget } from './trending-widget';
 
@@ -27,12 +29,18 @@ export const application: Application = {
     // i18next.use(arr[0]).use(arr[1]).use(arr[n])
     use: [initReactI18next],
   },
-  loadingFn: (): Promise<any> => import('./components'),
-  name: 'ui-plugin-notifications',
+  loadingFn: () => import('./components'),
+  name: 'ui-plugin-bookmarks',
   widgets: {
     [rootRoute]: [TrendingWidget],
   },
-  sdkModules: [{ module: commonModule }, { module: authModule }, { module: profilesModule }],
-  title: 'Notifications | Ethereum World',
-  logo: { type: LogoTypeSource.ICON, value: 'notifications' },
+  sdkModules: [
+    { module: dbModule },
+    { module: auth },
+    { module: posts },
+    { module: commons },
+    { module: profiles },
+  ],
+  title: 'Bookmarks | Ethereum World',
+  logo: { type: LogoTypeSource.ICON, value: 'bookmark' },
 };

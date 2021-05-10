@@ -1,30 +1,17 @@
-const webpack = require('webpack');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const CopyPlugin = require('copy-webpack-plugin');
-const { ModuleFederationPlugin } = webpack.container;
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const baseConfig = require('../../../ui/webpack.config');
 
 module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
-  entry: './src/bootstrap',
+  entry: './src/index',
   output: {
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: baseConfig.plugins.concat([
-    new ModuleFederationPlugin({
-      name: 'ethereum.world',
-      shared: {
-        react: {
-          singleton: true,
-        },
-        'react-dom': {
-          singleton: true,
-        },
-        'styled-components': {
-          singleton: true,
-        },
-      },
-    }),
     new CopyPlugin({
       patterns: [
         { from: path.resolve(__dirname, '../../../ui/build') },
@@ -35,13 +22,15 @@ module.exports = Object.assign(baseConfig, {
   ]),
   externals: {
     ...baseConfig.externals,
-    'akasha.sdk.js': 'akashaproject__sdk',
   },
   devServer: {
     contentBase: path.join(__dirname, 'public'),
     publicPath: '/',
     https: true,
-    historyApiFallback: true,
+    index: 'index.dev.html',
+    historyApiFallback: {
+      index: 'index.dev.html',
+    },
     headers: {
       'Access-Control-Allow-Origin': '*',
     },

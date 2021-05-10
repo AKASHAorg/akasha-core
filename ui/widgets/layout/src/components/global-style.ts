@@ -1,8 +1,8 @@
 import DS from '@akashaproject/design-system';
+import { DefaultTheme } from '@akashaproject/design-system/src/styles/themes/interfaces';
 
 const { createGlobalStyle, css } = DS;
-
-export const GlobalStyle: any = createGlobalStyle<{ theme: any }>`
+export const GlobalStyle: any = createGlobalStyle<{ theme: DefaultTheme }>`
   html {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -42,7 +42,7 @@ export const GlobalStyle: any = createGlobalStyle<{ theme: any }>`
     position: relative;
     z-index: 0;
   }
-  ${props => css<any>`
+  ${props => css`
     // 1920 and lower
     @media only screen and (min-width: ${props.theme.breakpoints.xlarge.value}px) {
       :root {

@@ -2,11 +2,12 @@
 <html lang="en">
 
 <head>
-  <!-- PROD HTML FILE -->
+  <!-- DEV HTML FILE -->
   <meta charset="utf-8" />
   <meta http-equiv="Content-Security-Policy"
     content="default-src 'self' 'unsafe-inline' 'unsafe-eval' cloudflare.com *.cloudflare.com unpkg.com *.akasha.network *.ethereum.world *.walletconnect.org *.infura.io https://* wss://*; img-src https: data: blob:" />
-  <meta name="viewport" content="width=device-width,viewport-fit=cover,initial-scale=1,user-scalable=0,maximum-scale=1" />
+  <meta name="viewport"
+    content="width=device-width,viewport-fit=cover,initial-scale=1,user-scalable=0,maximum-scale=1" />
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#000000" />
   <link rel="shortcut icon" href="/icons/icon-48x48.png" />
@@ -21,25 +22,28 @@
   <link rel="manifest" href="/manifest.json" />
   <link rel="stylesheet" href="/fonts/inter.css" />
   <title>Ethereum World</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/system.min.js"
-    integrity="sha512-R1dzyrUOrbjCRxsRK7JRUVJA5yFEHQ9Ui/qcyon6QRbcVeSzz1SfHzqVuVZh9CPGiCftiJpeHOLz+uFcVNevYQ=="
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/system.js"
+    integrity="sha512-Ch/Rs9YsR/h/dztJqbpJE5g82yXqpeQSAzewezXCeIc2tBcb5kdpDfFJvxJfSpOljP4mjjGhk+XU+kWx2pHvXA=="
     crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/amd.min.js"
-    integrity="sha512-fRfysEnVm90UgqFUsB+UlgnHK5vvSnsl64hxHaJJl4wE+P1sTwDUuQGmohtg/CSK60mY5A4elesW6UWQdLQsAg=="
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/amd.js"
+    integrity="sha512-XuSVveSde1UkQKc8He1NO+7CxiYAac7Fej1avrqJvnr+bdiw3CSohzwv1aOJE2gm3GvxpXbKOaF2Yb6RXoq86Q=="
     crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/use-default.min.js"
-    integrity="sha512-Ahpc6VqzcdPS1xTuBGdnw+l64Iz6KNXAy/4/1bBzAv6nTl+NK7mnYHMDtI8wAzd2PTV9GVNURwKf87y36eWZ+g=="
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/named-exports.js"
+    integrity="sha512-WsJXbzVd2QyFkUOXkEHgVgMGFK7aWw4t8x3BkLs7iR1e4/2fw5WGTy1oY84nkCKuTrz5e+qLETCZIvsj5m0KBQ=="
     crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/dynamic-import-maps.min.js"
-    integrity="sha512-kKfX9iNn9dwleItNCB6NjDD2wGBUkCeKMpFLMgxrUqXCq/nEN9/VKEPLy6k5xTZkkyJsAb81VqNW4E6zt59LPQ=="
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/use-default.js"
+    integrity="sha512-H3Nthybs/3kHDHCy1xHJ+1o8jTYvHB31gYduc1oDd4TMw4N9dZyrTadAnp2BG0bl/Tfm4A/xV/jYhpf7DbXTIA=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/dynamic-import-maps.js"
+    integrity="sha512-0WAfcuqF28kxThUzrlVMA143QmXZPv4POmP4mG90ksP3/qv0oN24l69sW5WNiIRbXe3IcQa37bmN9Z9AbiigiQ=="
     crossorigin="anonymous"></script>
   <meta name="importmap-type" content="systemjs-importmap" />
 
-  <script type="systemjs-importmap" src="/importmap.json"></script>
+  <script type="systemjs-importmap" src="/importmap.dev.json"></script>
 
-  <link rel="preload" href="https://unpkg.com/react@17.0.2/umd/react.production.min.js" as="script" crossorigin>
+  <link rel="preload" href="https://unpkg.com/react@17.0.2/umd/react.development.js" as="script" crossorigin>
   </link>
-  <link rel="preload" href="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js" as="script" crossorigin>
+  <link rel="preload" href="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" as="script" crossorigin>
   </link>
   <style>
     html,
@@ -51,7 +55,7 @@
       padding: 0;
     }
   </style>
-  </head>
+</head>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
