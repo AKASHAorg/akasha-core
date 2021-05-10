@@ -10,10 +10,9 @@ const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
  * This is the entry point of a plugin.
  * Here you can add react-router, react-redux, etc..
  *
- * @todo Add more documentation for this component
+ * TODO: Add more documentation for this component
  *
- * @warning :: Root component for a plugin should always extend React.Component
- * @warning :: Always use default export
+ * warning :: Always use default export
  */
 
 class App extends PureComponent<RootComponentProps> {

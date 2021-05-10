@@ -60,7 +60,7 @@ const TrendingWidgetComponent: React.FC<TrendingWidgetComponentProps> = props =>
     if (errorState && Object.keys(errorState).length) {
       const txt = Object.keys(errorState)
         .filter(key => key.split('.')[0] === 'useLoginState')
-        .map(k => errorState![k])
+        .map(k => errorState[k])
         .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
       return txt;
     }
@@ -82,13 +82,13 @@ const TrendingWidgetComponent: React.FC<TrendingWidgetComponentProps> = props =>
 
   React.useEffect(() => {
     if (loginState.ethAddress) {
-      trendingData.profiles.slice(0, 4).forEach(async (profile: any) => {
+      trendingData.profiles.slice(0, 4).forEach(async (profile: { ethAddress: string }) => {
         if (loginState.ethAddress && profile.ethAddress) {
           followActions.isFollowing(loginState.ethAddress, profile.ethAddress);
         }
       });
     }
-  }, [trendingData, loginState.ethAddress]);
+  }, [trendingData, loginState.ethAddress, followActions]);
 
   React.useEffect(() => {
     if (loginState.waitForAuth && !loginState.ready) {
@@ -100,7 +100,13 @@ const TrendingWidgetComponent: React.FC<TrendingWidgetComponentProps> = props =>
     ) {
       tagSubscriptionActions.getTagSubscriptions();
     }
-  }, [JSON.stringify(loginState)]);
+  }, [
+    loginState.currentUserCalled,
+    loginState.ethAddress,
+    loginState.ready,
+    loginState.waitForAuth,
+    tagSubscriptionActions,
+  ]);
 
   const handleTagClick = (tagName: string) => {
     singleSpa.navigateToUrl(`/social-app/tags/${tagName}`);
@@ -181,7 +187,7 @@ const TrendingWidgetComponent: React.FC<TrendingWidgetComponentProps> = props =>
           )}
           <LoginModal
             showModal={modalState.login}
-            slotId={layout.app.modalSlotId}
+            slotId={layout.modalSlotId}
             onLogin={handleLogin}
             onModalClose={hideLoginModal}
             titleLabel={t('Connect a wallet')}

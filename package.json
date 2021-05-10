@@ -40,7 +40,6 @@
     "watch:widgets": "lerna run --parallel --scope @akashaproject/ui-widget-* watch",
     "watch:apps": "lerna run --parallel --scope @akashaproject/app-* watch",
     "watch:all": "lerna run --scope='@akashaproject/*' --parallel watch",
-    "watch:feed-app": "lerna run --scope=@akashaproject/ethereum.world --stream watch",
     "test:sdk": "lerna run test --scope @akashaproject/sdk-* --stream",
     "build:test": "lerna run pretest --scope @akashaproject/design-* --scope @akashaproject/ui-* --scope @akashaproject/app-* --stream",
     "test:ui:watch": "lerna exec --parallel --ignore @akashaproject/sdk-* --stream -- jest --watch",

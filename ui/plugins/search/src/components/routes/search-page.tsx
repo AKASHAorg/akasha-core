@@ -297,7 +297,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   return (
     <Box fill="horizontal">
-      <ModalRenderer slotId={props.layout.app.modalSlotId}>
+      <ModalRenderer slotId={props.layout.modalSlotId}>
         {modalState.report && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -339,9 +339,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             />
           </ToastProvider>
         )}
-        {modalState.editor && props.layout.app.modalSlotId && (
+        {modalState.editor && props.layout.modalSlotId && (
           <EditorModal
-            slotId={props.layout.app.modalSlotId}
+            slotId={props.layout.modalSlotId}
             avatar={loggedProfileData.avatar}
             showModal={modalState.editor}
             ethAddress={loginState.ethAddress}

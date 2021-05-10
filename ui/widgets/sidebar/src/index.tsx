@@ -1,16 +1,9 @@
-import { Application, LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { initReactI18next } from 'react-i18next';
-import { rootRoute } from './routes';
 
 /**
- * All the plugins must export an object like this:
+ * All widgets must export an object like this:
  */
-export const application: Application = {
-  // This is the root route in which the plugin will render.
-  // Make sure to change it as it fits.
-  activeWhen: {
-    path: rootRoute,
-  },
+export const application = {
   // translation config
   i18nConfig: {
     // namespaces that this plugin requires.
@@ -19,13 +12,12 @@ export const application: Application = {
     // In this case I will preserve the old ns instead loading a possibly undefined ns.
     loadNS: [],
     // translation namespace. defaults to plugin.name
-    // ns: 'ui-plugin-events',
+    // ns: 'ui-widget-sidebar',
     // i18next.use(arr[0]).use(arr[1]).use(arr[n])
     use: [initReactI18next],
   },
-  loadingFn: (): Promise<any> => import('./components'),
-  name: 'ui-plugin-app-center',
+  loadingFn: () => import('./components'),
+  name: 'ui-widget-sidebar',
   sdkModules: [],
-  title: 'App center',
-  logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
+  title: 'Ethereum World',
 };
