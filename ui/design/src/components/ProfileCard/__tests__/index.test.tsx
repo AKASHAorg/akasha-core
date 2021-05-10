@@ -65,13 +65,9 @@ describe('<ProfileCard /> Component, (read mode)', () => {
       componentWrapper = create(
         wrapWithTheme(
           createBaseComponent({
-            // tslint:disable-next-line: no-empty
             onClickFollowers: () => null,
-            // tslint:disable-next-line: no-empty
             onClickFollowing: () => null,
-            // tslint:disable-next-line: no-empty
             onClickPosts: () => null,
-            // tslint:disable-next-line: no-empty
             onChangeProfileData: () => null,
           }),
         ),
@@ -99,7 +95,7 @@ describe('<ProfileCard /> Component, (read mode)', () => {
     // expect(coverImages[0]).not.toHaveAttribute('type', 'file');
   });
 
-  it.skip('should have an avatar, that is not editable', async () => {
+  it('should have an avatar, that is not editable', async () => {
     const { getAllByTestId } = customRender(createBaseComponent({}), {});
     const avatarImages = await waitFor(() => getAllByTestId('avatar-image'));
     expect(avatarImages).toHaveLength(1);
