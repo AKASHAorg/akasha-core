@@ -14,6 +14,9 @@ promClient.collectDefaultMetrics({ register: promRegistry });
 
 const adminSecret = process.env.MODERATION_ADMIN_SECRET;
 
+/**
+ * Init ThreadDB and collections APIs.
+ */
 const dbID = ThreadID.fromString(process.env.AWF_THREADdb);
 const dataSources = {
   profileAPI: new ProfileAPI({ dbID, collection: 'Profiles' }),
@@ -26,12 +29,18 @@ const api = new Router({
   prefix: '/api',
 });
 
+/**
+ * Get metrics for the server.
+ */
 api.get('/metrics', async (ctx: koa.Context, next: () => Promise<any>) => {
   ctx.set('Content-Type', promRegistry.contentType);
   ctx.body = await promRegistry.metrics();
   await next();
 });
 
+/**
+ * Validate an invitation token.
+ */
 api.post('/validate-token/:token', async (ctx: koa.Context, next: () => Promise<any>) => {
   const invite = ctx?.params?.token;
   if (!invite) {
@@ -69,15 +78,20 @@ api.post('/validate-token/:token', async (ctx: koa.Context, next: () => Promise<
 //   await next();
 // });
 
+/**
+ * Create a new moderation report.
+ */
 api.post('/moderation/reports/new', async (ctx: koa.Context, next: () => Promise<any>) => {
   const report = ctx?.request.body;
   if (!report.data || !report.contentId || !report.contentType || !report.signature) {
     ctx.status = 400;
   } else {
+    // check if the user is local (exists)
     const profile = await dataSources.profileAPI.getProfile(report.data.user);
     if (!profile.length || !report.data.signature) {
       ctx.status = 401;
     }
+    // verify request signature (from client)
     const verified = await verifyEd25519Sig({
       pubKey: profile.pubKey,
       data: report.data,
@@ -86,12 +100,14 @@ api.post('/moderation/reports/new', async (ctx: koa.Context, next: () => Promise
     if (!verified) {
       ctx.status = 403;
     }
+    // check if the user has already reported this content identifier
     const exists = await dataSources.reportingAPI.exists(report.contentId, report.data.user);
     if (exists) {
       ctx.status = 409;
       ctx.body = `You have already reported this content.`;
     } else {
       try {
+        // add report
         await dataSources.reportingAPI.addReport(
           'ModerationDecisions',
           report.contentType,
@@ -110,6 +126,9 @@ api.post('/moderation/reports/new', async (ctx: koa.Context, next: () => Promise
   await next();
 });
 
+/**
+ * List reports for a specific content identifier.
+ */
 api.post(
   '/moderation/reports/list/:contentId',
   async (ctx: koa.Context, next: () => Promise<any>) => {
@@ -125,6 +144,9 @@ api.post(
   },
 );
 
+/**
+ * Check moderation status (reported/moderated/delisted)for a list of content identifiers.
+ */
 api.post('/moderation/status', async (ctx: koa.Context, next: () => Promise<any>) => {
   const body = ctx?.request.body;
   const contentIDs = body.contentIds;
@@ -139,10 +161,12 @@ api.post('/moderation/status', async (ctx: koa.Context, next: () => Promise<any>
         moderated: false,
         delisted: false,
       };
+      // get decision for the current contentID
       const decision = await dataSources.decisionsAPI.getDecision(contentID);
       if (decision) {
         status.moderated = decision.moderated;
         status.delisted = decision.delisted;
+        // check if the current logged user has already reported this content
         if (body.user) {
           const reported = await dataSources.reportingAPI.getReport(contentID, body.user);
           if (reported) {
@@ -159,6 +183,9 @@ api.post('/moderation/status', async (ctx: koa.Context, next: () => Promise<any>
   await next();
 });
 
+/**
+ * Get total counters for pending/moderated content.
+ */
 api.get('/moderation/status/counters', async (ctx: koa.Context, next: () => Promise<any>) => {
   ctx.set('Content-Type', 'application/json');
   ctx.body = await dataSources.decisionsAPI.countDecisions();
@@ -166,15 +193,20 @@ api.get('/moderation/status/counters', async (ctx: koa.Context, next: () => Prom
   await next();
 });
 
+/**
+ * Moderate content.
+ */
 api.post('/moderation/decisions/moderate', async (ctx: koa.Context, next: () => Promise<any>) => {
   const report = ctx?.request.body;
   if (!report.data || !report.contentId || !report.signature) {
     ctx.status = 400;
   } else {
+    // check if the user is local (exists)
     const profile = await dataSources.profileAPI.getProfile(report.data.moderator);
     if (!profile.length || !report.data.signature) {
       ctx.status = 401;
     }
+    // verify request signature (from client)
     const verified = await verifyEd25519Sig({
       pubKey: profile.pubKey,
       data: report.data,
@@ -184,6 +216,7 @@ api.post('/moderation/decisions/moderate', async (ctx: koa.Context, next: () => 
       ctx.status = 403;
     }
     try {
+      // store moderation decision
       await dataSources.decisionsAPI.makeDecision(
         report.contentId,
         report.data.moderator,
@@ -199,6 +232,9 @@ api.post('/moderation/decisions/moderate', async (ctx: koa.Context, next: () => 
   await next();
 });
 
+/**
+ * Get data for a specific moderation decision.
+ */
 api.get('/moderation/decisions/:contentId', async (ctx: koa.Context, next: () => Promise<any>) => {
   const contentID = ctx?.params?.contentId;
   if (!contentID) {
@@ -212,6 +248,9 @@ api.get('/moderation/decisions/:contentId', async (ctx: koa.Context, next: () =>
   await next();
 });
 
+/**
+ * Get a list of pending moderation decisions.
+ */
 api.post('/moderation/decisions/pending', async (ctx: koa.Context, next: () => Promise<any>) => {
   const req = ctx?.request.body;
   const decisions = await dataSources.decisionsAPI.listDecisions(
@@ -222,6 +261,7 @@ api.post('/moderation/decisions/pending', async (ctx: koa.Context, next: () => P
   );
   const list = [];
   for (const decision of decisions) {
+    // get the full data for each decision
     list.push(await dataSources.decisionsAPI.getFinalDecision(decision.contentID));
   }
   ctx.set('Content-Type', 'application/json');
@@ -230,6 +270,9 @@ api.post('/moderation/decisions/pending', async (ctx: koa.Context, next: () => P
   await next();
 });
 
+/**
+ * Get a list of all decisions that have been moderated.
+ */
 api.post('/moderation/decisions/moderated', async (ctx: koa.Context, next: () => Promise<any>) => {
   const req = ctx?.request.body;
   if (req.delisted === undefined) {
@@ -244,6 +287,7 @@ api.post('/moderation/decisions/moderated', async (ctx: koa.Context, next: () =>
     );
     const list = [];
     for (const decision of decisions) {
+      // get the full data for each decision
       list.push(await dataSources.decisionsAPI.getFinalDecision(decision.contentID));
     }
     ctx.set('Content-Type', 'application/json');
@@ -253,6 +297,9 @@ api.post('/moderation/decisions/moderated', async (ctx: koa.Context, next: () =>
   await next();
 });
 
+/**
+ * Add a new moderator.
+ */
 api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Promise<any>) => {
   const request = ctx?.request.body;
   if (!request.data || !request.secret) {
@@ -262,16 +309,19 @@ api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Prom
     if (request.secret === adminSecret) {
       ok = true;
     } else {
+      // check if the user is local (exists)
       const profile = await dataSources.profileAPI.getProfile(request.data.adminEthAddress);
       if (!profile || !profile.pubKey || !request.data.signature) {
         ctx.status = 401;
       } else {
         try {
+          // verify request signature (from client)
           const verified = await verifyEd25519Sig({
             pubKey: profile.pubKey,
             data: request.data,
             signature: request.signature,
           });
+          // check is the user has admin rights to be able to add moderators
           const isAdmin = await dataSources.moderatorsAPI.isAdmin(request.data.adminEthAddress);
           if (!verified || !isAdmin) {
             ctx.status = 403;
@@ -286,6 +336,7 @@ api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Prom
     }
     if (ok) {
       try {
+        // add the new moderator
         await dataSources.moderatorsAPI.updateModerator(
           request.data.ethAddress,
           request.data.admin,
@@ -301,6 +352,9 @@ api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Prom
   await next();
 });
 
+/**
+ * Check if the given user (ETH address) is a moderator or not.
+ */
 api.head(
   '/moderation/moderators/:ethAddress',
   async (ctx: koa.Context, next: () => Promise<any>) => {
@@ -316,6 +370,9 @@ api.head(
   },
 );
 
+/**
+ * Get data for a given moderator.
+ */
 api.get(
   '/moderation/moderators/:ethAddress',
   async (ctx: koa.Context, next: () => Promise<any>) => {

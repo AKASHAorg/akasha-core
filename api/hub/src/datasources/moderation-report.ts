@@ -5,6 +5,10 @@ import { ModerationDecision, ModerationReport } from '../collections/interfaces'
 import ModerationDecisionAPI from './moderation-decision';
 import { queryCache } from '../storage/cache';
 
+/**
+ * The ModerationReportAPI class handles all the interactions between the reporting API
+ * and the underlying storage layer.
+ */
 class ModerationReportAPI extends DataSource {
   private readonly collection: string;
   private context: any;
@@ -19,6 +23,11 @@ class ModerationReportAPI extends DataSource {
     this.context = config.context;
   }
 
+  /**
+   * Count total number of reports.
+   * @param contentID content identifier
+   * @returns number
+   */
   async countReports(contentID: string) {
     const db: Client = await getAppDB();
     const query = new Where('contentID').eq(contentID);
@@ -26,6 +35,12 @@ class ModerationReportAPI extends DataSource {
     return reports.length;
   }
 
+  /**
+   * Check if a user has reported this content.
+   * @param contentID content identifier
+   * @param author reporting user
+   * @returns boolean
+   */
   async exists(contentID: string, author: string) {
     const db: Client = await getAppDB();
     const query = new Where('contentID').eq(contentID).and('author').eq(author);
@@ -36,6 +51,13 @@ class ModerationReportAPI extends DataSource {
     return false;
   }
 
+  /**
+   * List reports for a given content identifier.
+   * @param contentID content identifier
+   * @param offset offset by number of records
+   * @param limit limit number records returned
+   * @returns ModerationReport[]
+   */
   async listReports(contentID: string, offset?: number, limit?: number) {
     const db: Client = await getAppDB();
     const query = new Where('contentID')
@@ -52,6 +74,12 @@ class ModerationReportAPI extends DataSource {
     return list;
   }
 
+  /**
+   * Get an individual report.
+   * @param contentID content identifier
+   * @param author author of this report
+   * @returns ModerationReport
+   */
   async getReport(contentID: string, author: string) {
     const db: Client = await getAppDB();
     const query = new Where('contentID').eq(contentID).and('author').eq(author);
@@ -64,6 +92,12 @@ class ModerationReportAPI extends DataSource {
     return undefined;
   }
 
+  /**
+   * Get the first report for a given content identifier. This is very useful
+   * when trying to see who is the first person to report something.
+   * @param contentID content identifier
+   * @returns ModerationReport
+   */
   async getFirstReport(contentID: string) {
     const db: Client = await getAppDB();
     // get the first report for this contentID
@@ -77,6 +111,12 @@ class ModerationReportAPI extends DataSource {
     throw new Error('report not found');
   }
 
+  /**
+   * Aggregate all reporting reasons for a given content identifier. This is useful to
+   * moderators when they make their final decisions.
+   * @param contentID content identifier
+   * @returns string[]
+   */
   async getReasons(contentID: string) {
     let reports: ModerationReport[];
     const db: Client = await getAppDB();
@@ -94,6 +134,16 @@ class ModerationReportAPI extends DataSource {
     return reasons;
   }
 
+  /**
+   * Adds a report to the data storage layer. It requires the decision collection
+   * name in order to also register a pending decision for moderators (on first report).
+   * @param decisionsCollection name of the collection that stores decisions
+   * @param contentType type of content (i.e. post, comment, user, etc.)
+   * @param contentID content identifier
+   * @param author author of this report
+   * @param reason reson for reporting this content
+   * @param explanation [optional] explanation for reporting
+   */
   async addReport(
     decisionsCollection: string,
     contentType: string,
@@ -112,7 +162,7 @@ class ModerationReportAPI extends DataSource {
       return Promise.reject(`cannot report content ${contentID} twice as user ${author}`);
     }
 
-    // Do we need to check if a pending decision was created for this post?
+    // we need to check if a pending decision was created for this post
     const query = new Where('contentID').eq(contentID);
     const results = await db.find<ModerationReport>(this.dbID, decisionsCollection, query);
     if (results.length < 1) {
@@ -129,7 +179,7 @@ class ModerationReportAPI extends DataSource {
       const decisionID = await db.create(this.dbID, decisionsCollection, [decision]);
       if (!decisionID || !decisionID.length) {
         logger.warn(`pending decision could not be created for contentID ${contentID}`);
-        throw new Error('pending decision could not be created');
+        // throw new Error('pending decision could not be created');
       }
     }
 
@@ -154,8 +204,6 @@ class ModerationReportAPI extends DataSource {
       collection: 'ModerationDecisions',
     });
     await queryCache.del(decisionsAPI.getCountersCacheKey());
-
-    return reportID[0];
   }
 }
 
