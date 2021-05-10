@@ -10,7 +10,11 @@ const AvatarImage = (props: any) => {
     avatar = image;
   }
 
-  return <img data-testid="avatar-image" src={avatar} />;
+  return (
+    <picture>
+      <img data-testid="avatar-image" src={avatar} />
+    </picture>
+  );
 };
 
 export default AvatarImage;
