@@ -55,7 +55,7 @@ const TagSearchCard: React.FC<ITagSearchCard> = props => {
             href={`${tagAnchorLink}/${tag?.name}`}
             label={
               <Box direction="row" align="center" onClick={onClickTag}>
-                <TagIconDiv onSearchCard={true}>
+                <TagIconDiv searchCard={true}>
                   <Icon type="hashtag" size="xl" accentColor={true} />
                 </TagIconDiv>
                 <Box pad={{ vertical: 'small', left: 'xsmall', right: 'small' }}>

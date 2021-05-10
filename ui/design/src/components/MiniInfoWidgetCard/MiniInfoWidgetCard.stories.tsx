@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import MiniInfoWidgetCard from '.';
+import MiniInfoWidgetCard, { IMiniInfoCardProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -15,7 +15,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: IMiniInfoCardProps) => (
   <Grommet theme={lightTheme}>
     <Box width="30%" pad="none" align="center">
       <MiniInfoWidgetCard {...args} />

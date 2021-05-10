@@ -180,7 +180,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const handleSave = () => {
     onSave(formValues);
   };
-  const handleFormFieldChange = (newValues: {}) => {
+  const handleFormFieldChange = (newValues: Record<string, unknown>) => {
     setFormChanged(true);
     setFormValues(oldValues => ({
       ...oldValues,
@@ -196,7 +196,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     setCoverImagePopoverOpen(false);
   };
 
-  const handleImageInsert = (imageKey: string) => (src: string, isUrl: boolean) => {
+  const handleImageInsert = (imageKey: string) => (src: string | File, isUrl: boolean) => {
     if (isUrl) {
       handleFormFieldChange({ [imageKey]: { src, isUrl, preview: src } });
     } else {

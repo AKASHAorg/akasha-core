@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import EntryCard from '.';
-import { EntryCardHidden } from '../EntryCard/entry-card-hidden';
+import EntryCard, { IEntryCardProps } from '.';
+import { EntryCardHidden, IEntryCardHiddenProps } from '../EntryCard/entry-card-hidden';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -56,7 +56,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: IEntryCardProps) => (
   <Grommet theme={lightTheme}>
     <Box align="center" pad={{ top: '40px' }} width="582px">
       <EntryCard {...args} />
@@ -64,7 +64,7 @@ const Template = (args: any) => (
   </Grommet>
 );
 
-const TemplateHidden = (args: any) => (
+const TemplateHidden = (args: IEntryCardHiddenProps) => (
   <Grommet theme={lightTheme}>
     <Box align="center" pad={{ top: '40px' }} width="582px">
       <EntryCardHidden {...args} />

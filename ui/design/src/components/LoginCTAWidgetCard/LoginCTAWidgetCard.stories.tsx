@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import LoginCTAWidgetCard from '.';
+import LoginCTAWidgetCard, { ILoginWidgetCardProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -10,7 +10,7 @@ export default {
   component: LoginCTAWidgetCard,
 };
 
-const Template = (args: any) => (
+const Template = (args: ILoginWidgetCardProps) => (
   <Grommet theme={lightTheme}>
     <Box width="35%" pad="none" align="center">
       <LoginCTAWidgetCard {...args} />

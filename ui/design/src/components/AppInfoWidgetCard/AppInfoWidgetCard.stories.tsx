@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import AppInfoWidgetCard from '.';
+import AppInfoWidgetCard, { IAppsWidgetCardProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 import { appInfo } from '../../utils/dummy-data';
@@ -15,7 +15,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: IAppsWidgetCardProps) => (
   <Grommet theme={lightTheme}>
     <Box width="30%" pad="none" align="center">
       <AppInfoWidgetCard {...args} />

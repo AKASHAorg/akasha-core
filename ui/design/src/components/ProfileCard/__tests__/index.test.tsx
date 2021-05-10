@@ -1,8 +1,9 @@
-import { cleanup, fireEvent, waitForElement } from '@testing-library/react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { act, create } from 'react-test-renderer';
 import { customRender, wrapWithTheme } from '../../../test-utils';
-import ProfileCard from '../';
+import ProfileCard from '..';
 
 const mockProfileData = {
   ethAddress: '0x003410490050000320006570034567114572000',
@@ -64,14 +65,10 @@ describe('<ProfileCard /> Component, (read mode)', () => {
       componentWrapper = create(
         wrapWithTheme(
           createBaseComponent({
-            // tslint:disable-next-line: no-empty
-            onClickFollowers: () => {},
-            // tslint:disable-next-line: no-empty
-            onClickFollowing: () => {},
-            // tslint:disable-next-line: no-empty
-            onClickPosts: () => {},
-            // tslint:disable-next-line: no-empty
-            onChangeProfileData: () => {},
+            onClickFollowers: () => null,
+            onClickFollowing: () => null,
+            onClickPosts: () => null,
+            onChangeProfileData: () => null,
           }),
         ),
       );
@@ -93,23 +90,23 @@ describe('<ProfileCard /> Component, (read mode)', () => {
 
   it('should have one cover image, that is not editable', async () => {
     const { getAllByTestId } = customRender(createBaseComponent({}), {});
-    const coverImages = await waitForElement(() => getAllByTestId('profile-card-cover-image'));
+    const coverImages = await waitFor(() => getAllByTestId('profile-card-cover-image'));
     expect(coverImages).toHaveLength(1);
     // expect(coverImages[0]).not.toHaveAttribute('type', 'file');
   });
 
-  it.skip('should have an avatar, that is not editable', async () => {
+  it('should have an avatar, that is not editable', async () => {
     const { getAllByTestId } = customRender(createBaseComponent({}), {});
-    const avatarImages = await waitForElement(() => getAllByTestId('avatar-image'));
+    const avatarImages = await waitFor(() => getAllByTestId('avatar-image'));
     expect(avatarImages).toHaveLength(1);
   });
 
   it('should have followings and followers and posts buttons', async () => {
     const { findByTestId } = customRender(createBaseComponent({}), {});
 
-    const followingButton = await waitForElement(() => findByTestId('following-button'));
-    const followersButton = await waitForElement(() => findByTestId('followers-button'));
-    const postsButton = await waitForElement(() => findByTestId('posts-button'));
+    const followingButton = await waitFor(() => findByTestId('following-button'));
+    const followersButton = await waitFor(() => findByTestId('followers-button'));
+    const postsButton = await waitFor(() => findByTestId('posts-button'));
     expect(followingButton).toBeDefined();
     expect(followersButton).toBeDefined();
     expect(postsButton).toBeDefined();
@@ -128,9 +125,9 @@ describe('<ProfileCard /> Component, (read mode)', () => {
       }),
       {},
     );
-    const followingButton = await waitForElement(() => findByTestId('following-button'));
-    const followersButton = await waitForElement(() => findByTestId('followers-button'));
-    const postsButton = await waitForElement(() => findByTestId('posts-button'));
+    const followingButton = await waitFor(() => findByTestId('following-button'));
+    const followersButton = await waitFor(() => findByTestId('followers-button'));
+    const postsButton = await waitFor(() => findByTestId('posts-button'));
     fireEvent.click(followingButton);
     fireEvent.click(followersButton);
     fireEvent.click(postsButton);

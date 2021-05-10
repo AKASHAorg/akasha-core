@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import MdCard from '.';
+import MdCard, { IMdCard } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -10,7 +10,7 @@ export default {
   component: MdCard,
 };
 
-const Template = (args: any) => (
+const Template = (args: IMdCard) => (
   <Grommet theme={lightTheme}>
     <Box align="center" pad={{ top: '40px' }} width="582px">
       <MdCard {...args} />
