@@ -4,6 +4,8 @@ import {
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
+console.time('AppLoader:firstMount');
+
 (async function bootstrap(System) {
   await System.import('single-spa');
   // await System.import('single-spa-react');

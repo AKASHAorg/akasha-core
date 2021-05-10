@@ -1,10 +1,13 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const CopyPlugin = require('copy-webpack-plugin');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const baseConfig = require('../../../ui/webpack.config');
 
 module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
-  entry: './src/bootstrap',
+  entry: './src/index',
   output: {
     path: path.resolve(__dirname, 'dist'),
   },
@@ -19,13 +22,15 @@ module.exports = Object.assign(baseConfig, {
   ]),
   externals: {
     ...baseConfig.externals,
-    'akasha.sdk.js': 'akashaproject__sdk',
   },
   devServer: {
     contentBase: path.join(__dirname, 'public'),
     publicPath: '/',
     https: true,
-    historyApiFallback: true,
+    index: 'index.dev.html',
+    historyApiFallback: {
+      index: 'index.dev.html',
+    },
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
