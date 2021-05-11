@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
-import EditorBox, { IEditorBox } from '../Editor/index';
+import EditorBox, { IEditorBox } from '../Editor';
 import { Box, Text } from 'grommet';
 import Icon from '../Icon';
 

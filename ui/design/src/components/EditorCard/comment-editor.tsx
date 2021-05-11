@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box } from 'grommet';
 import { EditorPlaceholder } from './editor-placeholder';
-import EditorBox, { IEditorBox, IPublishData } from '../Editor/index';
+import EditorBox, { IEditorBox, IPublishData } from '../Editor';
 import { editorDefaultValue } from '../Editor/initialValue';
 import { useOnClickAway } from '../../utils/clickAway';
 import isEqual from 'lodash.isequal';
