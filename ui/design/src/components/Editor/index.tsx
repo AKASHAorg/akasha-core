@@ -20,7 +20,7 @@ import { CustomEditor } from './helpers';
 import { withMentions, withImages, withTags, withLinks } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
 import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
-import { ImageUpload } from './image-upload';
+import { ImageData, ImageUpload } from './image-upload';
 import Button from '../Button';
 import { MentionPopover } from './mention-popover';
 import { TagPopover } from './tag-popover';
@@ -446,15 +446,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const [uploading, setUploading] = React.useState(false);
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 
-  const handleInsertImageLink = (data: {
-    src: string;
-    size: {
-      width: string;
-      height: string;
-      naturalWidth: string;
-      naturalHeight: string;
-    };
-  }) => {
+  const handleInsertImageLink = (data: ImageData) => {
     if (!data.src || !data.size) {
       return;
     }

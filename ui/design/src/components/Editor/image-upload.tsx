@@ -19,7 +19,7 @@ export interface IImageUpload {
   uploading: boolean;
   setUploading: React.Dispatch<React.SetStateAction<boolean>>;
   // handlers
-  uploadRequest?: (data: string | File, isUrl?: boolean) => any;
+  uploadRequest?: (data: string | File, isUrl?: boolean) => { data?: ImageData; error?: Error };
   handleInsertImage: (data: ImageData) => void;
   // ref for hidden input
   ref: React.Ref<HTMLInputElement>;

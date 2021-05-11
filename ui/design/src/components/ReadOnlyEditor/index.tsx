@@ -8,6 +8,7 @@ import { Portal } from '../Editor/helpers';
 import Icon from '../Icon';
 import styled from 'styled-components';
 import { StyledCloseDiv } from '../Editor/styled-editor-box';
+import { ImageElement } from '../Editor/custom-types';
 
 export interface IReadOnlyEditor {
   content: Descendant[];
@@ -29,7 +30,7 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
   const { content, handleMentionClick, handleTagClick, handleLinkClick } = props;
 
   const [imageOverlayOpen, setImageOverlayOpen] = React.useState(false);
-  const [imgUrl, setImgUrl] = React.useState(undefined);
+  const [imgUrl, setImgUrl] = React.useState<string | null>(null);
 
   const closeImageOverlay = () => {
     setImageOverlayOpen(false);
@@ -64,7 +65,7 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
     </Portal>
   );
 
-  const handleClickImage = (element: any) => {
+  const handleClickImage = (element: ImageElement) => {
     setImgUrl(element.url);
     setImageOverlayOpen(true);
   };

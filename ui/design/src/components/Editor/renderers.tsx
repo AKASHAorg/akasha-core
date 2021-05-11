@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Icon from '../Icon';
 import { StyledAnchor } from '../TextInputIconForm/styles';
 import { StyledCloseDiv } from './styled-editor-box';
+import { ImageElement } from './custom-types';
 
 const StyledImg = styled.img`
   display: block;
@@ -29,7 +30,13 @@ const ImageElement = ({
   handleClickImage,
 }: any) => {
   return (
-    <div {...attributes} onClick={() => handleClickImage(element)}>
+    <div
+      {...attributes}
+      onClick={ev => {
+        handleClickImage(element);
+        ev.stopPropagation();
+      }}
+    >
       <div
         role="img"
         aria-label={element.url}
@@ -121,8 +128,8 @@ const renderElement = (
   handleMentionClick?: (pubKey: string) => void,
   handleTagClick?: (name: string) => void,
   handleLinkClick?: (url: string) => void,
-  handleDeleteImage?: ((element: any) => void) | null,
-  handleClickImage?: (element: any) => void,
+  handleDeleteImage?: ((element: ImageElement) => void) | null,
+  handleClickImage?: (element: ImageElement) => void,
 ) => {
   switch (props.element.type) {
     case 'image':
