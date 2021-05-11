@@ -53,9 +53,7 @@ describe('<DropSearchInput /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => {
-      componentWrapper.unmount();
-    });
+    act(() => componentWrapper.unmount());
     cleanup();
   });
 

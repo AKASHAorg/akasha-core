@@ -76,9 +76,7 @@ describe('<ProfileCard /> Component, (read mode)', () => {
   });
 
   afterEach(() => {
-    act(() => {
-      componentWrapper.unmount();
-    });
+    act(() => componentWrapper.unmount());
     cleanup();
   });
 

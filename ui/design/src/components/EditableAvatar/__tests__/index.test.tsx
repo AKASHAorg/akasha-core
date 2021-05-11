@@ -23,9 +23,7 @@ describe('<EditableAvatar /> Component', () => {
 
   afterEach(() => {
     (window as WindowWithFileReader).FileReader = originalFileReader;
-    act(() => {
-      componentWrapper.unmount();
-    });
+    act(() => componentWrapper.unmount());
     cleanup();
   });
 

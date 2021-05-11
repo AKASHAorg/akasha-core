@@ -56,9 +56,7 @@ describe('<DropSearchInput /> Component', () => {
     });
   });
   afterEach(() => {
-    act(() => {
-      componentWrapper.unmount();
-    });
+    act(() => componentWrapper.unmount());
     cleanup();
   });
   it('should mount without errors', () => {
