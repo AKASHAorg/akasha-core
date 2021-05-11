@@ -208,3 +208,14 @@ export const sendAuthorNotification = async (
   }
   return sendNotification(recipient, notification);
 };
+
+export const decodeString = (value: string) => {
+  return value ? Buffer.from(value, 'base64').toString() : '';
+};
+
+export const encodeString = (value: string) => {
+  if (Buffer.from(value, 'base64').toString('base64') !== value) {
+    return Buffer.from(value).toString('base64');
+  }
+  return value;
+};
