@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { act, cleanup, fireEvent } from '@testing-library/react';
+import { act, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import AppMenuPopover from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
@@ -12,8 +13,8 @@ const BaseComponent = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
   return (
     <Box width="medium" pad={{ top: 'large' }}>
-      <div ref={iconRef} data-testid="icon-wrapper">
-        <Icon type="eye" onClick={() => setMenuOpen(true)} />
+      <div ref={iconRef}>
+        <Icon type="eye" testId="eye-icon" onClick={() => setMenuOpen(true)} />
       </div>
       {iconRef?.current && menuOpen && (
         <AppMenuPopover
@@ -51,18 +52,17 @@ describe('<AppMenuPopover /> Component', () => {
   });
 
   it('renders popover when clicked', () => {
-    const { getByTestId, findByText } = componentWrapper;
-    const icon = getByTestId('icon-wrapper');
+    const { getByTestId, getByText } = componentWrapper;
+    const icon = getByTestId('eye-icon');
     expect(icon).toBeDefined();
 
     // perform click action to reveal popover
-    fireEvent.click(icon);
+    userEvent.click(icon);
 
-    // using findByText which returns a Promise
-    const popoverTitle = findByText(/AKASHA feed/i);
-    const ENS = findByText(installedAppsData[1].label);
-    const ThreeBox = findByText(installedAppsData[1].label);
-    const Profile = findByText(installedAppsData[1].label);
+    const popoverTitle = getByText(installedAppsData[0].label);
+    const ENS = getByText(installedAppsData[1].label);
+    const ThreeBox = getByText(installedAppsData[2].label);
+    const Profile = getByText(installedAppsData[3].label);
 
     expect(popoverTitle).toBeDefined();
     expect(ENS).toBeDefined();
