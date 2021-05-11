@@ -25,8 +25,8 @@ class ModerationReportAPI extends DataSource {
 
   /**
    * Count total number of reports.
-   * @param contentID The content identifier
-   * @returns number
+   * @param contentID - The content identifier
+   * @returns The number of reports as an integer
    */
   async countReports(contentID: string) {
     const db: Client = await getAppDB();
@@ -37,9 +37,9 @@ class ModerationReportAPI extends DataSource {
 
   /**
    * Check if a user has reported this content.
-   * @param contentID The content identifier
-   * @param author The reporting user
-   * @returns boolean to indicate if it exists or not
+   * @param contentID - The content identifier
+   * @param author - The reporting user
+   * @returns True/false to indicate if it exists or not
    */
   async exists(contentID: string, author: string) {
     const db: Client = await getAppDB();
@@ -53,10 +53,10 @@ class ModerationReportAPI extends DataSource {
 
   /**
    * List reports for a given content identifier.
-   * @param contentID The content identifier
-   * @param offset The offset represented by number of records
-   * @param limit The limit of number records returned
-   * @returns ModerationReport[]
+   * @param contentID - The content identifier
+   * @param offset - The offset represented by number of records
+   * @param limit - The limit of number records returned
+   * @returns A list of ModerationReport objects
    */
   async listReports(contentID: string, offset?: number, limit?: number) {
     const db: Client = await getAppDB();
@@ -76,9 +76,9 @@ class ModerationReportAPI extends DataSource {
 
   /**
    * Get an individual report.
-   * @param contentID The content identifier
-   * @param author The author of this report
-   * @returns ModerationReport
+   * @param contentID - The content identifier
+   * @param author - The author of this report
+   * @returns A ModerationReport object
    */
   async getReport(contentID: string, author: string) {
     const db: Client = await getAppDB();
@@ -95,8 +95,8 @@ class ModerationReportAPI extends DataSource {
   /**
    * Get the first report for a given content identifier. This is very useful
    * when trying to see who is the first person to report something.
-   * @param contentID The content identifier
-   * @returns ModerationReport
+   * @param contentID - The content identifier
+   * @returns A ModerationReport object
    */
   async getFirstReport(contentID: string) {
     const db: Client = await getAppDB();
@@ -114,8 +114,8 @@ class ModerationReportAPI extends DataSource {
   /**
    * Aggregate all reporting reasons for a given content identifier. This is useful to
    * moderators when they make their final decisions.
-   * @param contentID The content identifier
-   * @returns string[]
+   * @param contentID - The content identifier
+   * @returns A list of reasons as strings
    */
   async getReasons(contentID: string) {
     let reports: ModerationReport[];
@@ -137,12 +137,12 @@ class ModerationReportAPI extends DataSource {
   /**
    * Adds a report to the data storage layer. It requires the decision collection
    * name in order to also register a pending decision for moderators (on first report).
-   * @param decisionsCollection The name of the collection that stores decisions
-   * @param contentType The type of content (i.e. post, comment, user, etc.)
-   * @param contentID The content identifier
-   * @param author The author of this report
-   * @param reason The reson for reporting this content
-   * @param explanation [optional] explanation for reporting
+   * @param decisionsCollection - The name of the collection that stores decisions
+   * @param contentType - The type of content (i.e. post, comment, user, etc.)
+   * @param contentID - The content identifier
+   * @param author - The author of this report
+   * @param reason - The reson for reporting this content
+   * @param explanation - [optional] an explanation for reporting
    */
   async addReport(
     decisionsCollection: string,

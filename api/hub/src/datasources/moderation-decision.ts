@@ -25,17 +25,17 @@ class ModerationDecisionAPI extends DataSource {
   }
 
   /**
-   * Get the value of the key for decisions cache.
-   * @param contentID The content identifier
-   * @returns string
+   * Get the name of the key for decisions cache.
+   * @param contentID - The content identifier
+   * @returns The key as a string
    */
   getDecisionCacheKey(contentID: string) {
     return `${this.collection}:contentID${contentID}`;
   }
 
   /**
-   * Get the value of the key for counters cache
-   * @returns string
+   * Get the name of the key for counters cache
+   * @returns The key as a string
   */
   getCountersCacheKey() {
     return `${this.collection}:counters`;
@@ -43,7 +43,7 @@ class ModerationDecisionAPI extends DataSource {
 
   /**
    * Count all decisions (pending, moderated and delisted, moderated and kept).
-   * @returns Object
+   * @returns An object with all three counters
    * @example Getting all counters
    * ```typescript
    * const count = await countDecisions();
@@ -80,11 +80,11 @@ class ModerationDecisionAPI extends DataSource {
 
   /**
    * List decisions based on provided status (i.e. pending/moderated).
-   * @param delisted Whether it should check for delisted items or not
-   * @param moderated Whether it should check for moderated or not (i.e. pending)
-   * @param offset Offset by number of records
-   * @param limit Limit number of records returned
-   * @returns ModerationDecision[]
+   * @param delisted - Whether it should check for delisted items or not
+   * @param moderated - Whether it should check for moderated or not (i.e. pending)
+   * @param offset - Offset by number of records
+   * @param limit - Limit number of records returned
+   * @returns A list of ModerationDecision objects
    */
   async listDecisions(delisted: boolean, moderated: boolean, offset?: number, limit?: number) {
     const db: Client = await getAppDB();
@@ -101,8 +101,8 @@ class ModerationDecisionAPI extends DataSource {
 
   /**
    * Get a single decision based on the provided content identifier.
-   * @param contentID The content identifier
-   * @returns ModerationDecision
+   * @param contentID - The content identifier
+   * @returns A ModerationDecision object
    */
   async getDecision(contentID: string) {
     const db: Client = await getAppDB();
@@ -120,7 +120,7 @@ class ModerationDecisionAPI extends DataSource {
    * Aggregates data for a final decision. It contains profile data for moderator,
    * first report, number of total reports, and full list of reasons it was reported for.
    * @param contentID The content identifier
-   * @returns Object
+   * @returns An object with all the relevant data
    */
   async getFinalDecision(contentID: string) {
     const decisionCache = this.getDecisionCacheKey(contentID);
@@ -153,10 +153,10 @@ class ModerationDecisionAPI extends DataSource {
 
   /**
    * Moderate content by making a formal decision.
-   * @param contentID The content identifier
-   * @param moderator The moderator user who made the final decision
-   * @param explanation Personal conclusion of the moderator
-   * @param delisted Outcome of the moderation action (delisted or kept)
+   * @param contentID - The content identifier
+   * @param moderator - The moderator user who made the final decision
+   * @param explanation - Personal conclusion of the moderator
+   * @param delisted - Outcome of the moderation action (delisted or kept)
    */
   async makeDecision(contentID: string, moderator: string, explanation: string, delisted: boolean) {
     const db: Client = await getAppDB();
