@@ -36,7 +36,7 @@ const BASE_URL =
     ? 'https://moderation.ethereum.world'
     : 'https://moderation.akasha.network';
 
-export const BASE_FLAG_URL = `${BASE_URL}/flags`;
+export const BASE_REPORT_URL = `${BASE_URL}/reports/new`;
 
 const {
   styled,
@@ -205,7 +205,10 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
     return;
   };
   const userNameType = React.useMemo(() => {
-    return props.profileActions.getUsernameTypes();
+    if (loggedUserEthAddress && loggedUserEthAddress === profileState.ethAddress) {
+      return props.profileActions.getUsernameTypes();
+    }
+    return { available: [] };
   }, [JSON.stringify(profileState)]);
 
   const ensFormOptions: EnsFormOption[] = React.useMemo(() => {
@@ -471,8 +474,9 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
               user={loggedUserEthAddress ? loggedUserEthAddress : ''}
               contentId={profileState.ethAddress ? profileState.ethAddress : flagged}
               contentType="profile"
-              baseUrl={BASE_FLAG_URL}
+              baseUrl={BASE_REPORT_URL}
               closeModal={closeReportModal}
+              signData={sdkModules.auth.authService.signData}
             />
           </ToastProvider>
         )}

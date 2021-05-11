@@ -26,8 +26,8 @@ const ExplanationsCardEntry: React.FC<IExplanationsBoxEntryProps> = props => {
   });
 
   React.useEffect(() => {
-    if (entry.user) {
-      reporterProfileActions.getProfileData({ ethAddress: entry.user });
+    if (entry.author) {
+      reporterProfileActions.getProfileData({ ethAddress: entry.author });
     }
   }, [entry]);
 
@@ -38,7 +38,7 @@ const ExplanationsCardEntry: React.FC<IExplanationsBoxEntryProps> = props => {
         <Text as="span" margin={{ left: '0.2rem' }} color="accentText">
           {reporterProfileState.name
             ? reporterProfileState.name
-            : `${entry.user.slice(0, 6)}...${entry.user.slice(entry.user.length - 4)}`}
+            : `${entry.author.slice(0, 6)}...${entry.author.slice(entry.author.length - 4)}`}
         </Text>
         <Text as="span" margin={{ left: '0.2rem' }}>
           {forLabel}

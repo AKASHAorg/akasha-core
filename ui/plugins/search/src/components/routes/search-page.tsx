@@ -333,9 +333,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               user={loginState.ethAddress ? loginState.ethAddress : ''}
               contentId={flagged}
               contentType="post"
-              baseUrl={constants.BASE_FLAG_URL}
+              baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={hideReportModal}
+              signData={sdkModules.auth.authService.signData}
             />
           </ToastProvider>
         )}
