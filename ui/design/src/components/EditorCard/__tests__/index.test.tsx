@@ -46,7 +46,7 @@ const EditorComponent = ({ ...args }) => {
   );
 };
 
-describe('EditorCard component', () => {
+describe('<EditorCard /> component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const handlePublish = jest.fn();

@@ -21,7 +21,7 @@ const createDefaultComponent = (onPublish?: any) => {
   );
 };
 
-describe('<CommentInput> Component', () => {
+describe('<CommentInput /> Component', () => {
   let componentWrapper = create(<></>);
   beforeEach(() => {
     act(() => {

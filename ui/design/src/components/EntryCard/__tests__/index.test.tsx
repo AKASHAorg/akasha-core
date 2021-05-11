@@ -15,7 +15,7 @@ import {
   bookmarkedLabel,
 } from '../../../utils/dummy-data';
 
-describe('EntryCard component', () => {
+describe('<EntryCard /> component', () => {
   it('renders correctly', () => {
     render(
       wrapWithTheme(

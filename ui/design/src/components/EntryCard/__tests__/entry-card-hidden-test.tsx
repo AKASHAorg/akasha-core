@@ -1,19 +1,43 @@
 import * as React from 'react';
-// import { create } from 'react-test-renderer';
-import { render } from '@testing-library/react';
+import { act, cleanup } from '@testing-library/react';
 
 import { EntryCardHidden } from '../entry-card-hidden';
-import { wrapWithTheme } from '../../../test-utils';
+import { customRender, wrapWithTheme } from '../../../test-utils';
 
-describe('EntryCardHidden component', () => {
+describe('<EntryCardHidden /> Component', () => {
+  let componentWrapper = customRender(<></>, {});
+
+  beforeEach(() => {
+    act(() => {
+      componentWrapper = customRender(
+        wrapWithTheme(
+          <EntryCardHidden
+            awaitingModerationLabel={'You have reported this post. It is awaiting moderation.'}
+            ctaLabel={'See it anyway'}
+          />,
+        ),
+        {},
+      );
+    });
+  });
+
+  afterEach(() => {
+    act(() => {
+      componentWrapper.unmount();
+    });
+    cleanup();
+  });
+
   it('renders correctly', () => {
-    render(
-      wrapWithTheme(
-        <EntryCardHidden
-          awaitingModerationLabel={'You have reported this post. It is awaiting moderation.'}
-          ctaLabel={'See it anyway'}
-        />,
-      ),
-    );
+    expect(componentWrapper).toBeDefined();
+  });
+
+  it('has correct labels', () => {
+    const { getByText } = componentWrapper;
+    const pendingLabel = getByText(/You have reported/i);
+    const ctaLabel = getByText(/See it/i);
+
+    expect(pendingLabel).toBeDefined();
+    expect(ctaLabel).toBeDefined();
   });
 });
