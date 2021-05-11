@@ -22,11 +22,13 @@
   <link rel="manifest" href="/manifest.json" />
   <link rel="stylesheet" href="/fonts/inter.css" />
   <title>Ethereum World</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.development.js" integrity="sha256-QoQkvFHtz5oCOcl2oGlRo0NnSv5iAC8rMtEUDx31wCQ=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.development.js" integrity="sha256-SxURW871LR4j9t5iZ7x9lieLlmxT4XsmJKUSeaLe3wE=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/rxjs@7.0.0/dist/bundles/rxjs.umd.js" integrity="sha256-8JCR9nq7f+IC+Z4T1HwaD+CYwg2qQZ/deU2ru6c3GZE=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/single-spa@5.9.2/lib/umd/single-spa.dev.js" integrity="sha256-zyEEWyxCaY/W3+KtX8Pkxg4UpKRZ5Z6oJXl1bFuNypo=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/single-spa-react@4.1.1/lib/umd/single-spa-react.js" integrity="sha256-TKbNjLv70kgk0Eg8lq/VN2dferty85AYQOTpumh8OC0=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/system.js"
     integrity="sha512-Ch/Rs9YsR/h/dztJqbpJE5g82yXqpeQSAzewezXCeIc2tBcb5kdpDfFJvxJfSpOljP4mjjGhk+XU+kWx2pHvXA=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/amd.js"
-    integrity="sha512-XuSVveSde1UkQKc8He1NO+7CxiYAac7Fej1avrqJvnr+bdiw3CSohzwv1aOJE2gm3GvxpXbKOaF2Yb6RXoq86Q=="
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/named-exports.js"
     integrity="sha512-WsJXbzVd2QyFkUOXkEHgVgMGFK7aWw4t8x3BkLs7iR1e4/2fw5WGTy1oY84nkCKuTrz5e+qLETCZIvsj5m0KBQ=="
@@ -37,14 +39,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/dynamic-import-maps.js"
     integrity="sha512-0WAfcuqF28kxThUzrlVMA143QmXZPv4POmP4mG90ksP3/qv0oN24l69sW5WNiIRbXe3IcQa37bmN9Z9AbiigiQ=="
     crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/amd.js"
+          integrity="sha512-XuSVveSde1UkQKc8He1NO+7CxiYAac7Fej1avrqJvnr+bdiw3CSohzwv1aOJE2gm3GvxpXbKOaF2Yb6RXoq86Q=="
+          crossorigin="anonymous"></script>
   <meta name="importmap-type" content="systemjs-importmap" />
 
   <script type="systemjs-importmap" src="/importmap.dev.json"></script>
-
-  <link rel="preload" href="https://unpkg.com/react@17.0.2/umd/react.development.js" as="script" crossorigin>
-  </link>
-  <link rel="preload" href="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" as="script" crossorigin>
-  </link>
   <style>
     html,
     body,

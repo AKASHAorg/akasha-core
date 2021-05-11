@@ -20,9 +20,7 @@ module.exports = Object.assign(baseConfig, {
       ],
     }),
   ]),
-  externals: {
-    ...baseConfig.externals,
-  },
+  externals: baseConfig.externals,
   devServer: {
     contentBase: path.join(__dirname, 'public'),
     publicPath: '/',

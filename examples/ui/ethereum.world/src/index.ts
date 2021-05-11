@@ -7,10 +7,7 @@ import {
 console.time('AppLoader:firstMount');
 
 (async function bootstrap(System) {
-  await System.import('single-spa');
-  // await System.import('single-spa-react');
-  await System.import('rxjs');
-  // await System.import('@akashaproject/design-system');
+  await System.import('@akashaproject/design-system');
   // example for loading from import map
   const sidebarWidget = await System.import('@widget/sidebar');
   const { default: sdkInit } = await System.import('@akashaproject/sdk');
