@@ -4,11 +4,13 @@ import styled from 'styled-components';
 import Icon from '../Icon';
 import { StyledAnchor } from '../TextInputIconForm/styles';
 import { StyledCloseDiv } from './styled-editor-box';
+import { ImageElement } from './custom-types';
 
 const StyledImg = styled.img`
   display: block;
   max-width: 100%;
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
+  position: absolute;
 `;
 
 const StyledMention = styled.span`
@@ -20,9 +22,23 @@ const DisabledSpan = styled.span`
   color: ${props => props.theme.colors.secondaryText};
 `;
 
-const ImageElement = ({ attributes, children, element, handleDeleteImage }: any) => {
+const ImageElement = ({
+  attributes,
+  children,
+  element,
+  handleDeleteImage,
+  handleClickImage,
+}: any) => {
   return (
-    <div {...attributes}>
+    <div
+      {...attributes}
+      onClick={ev => {
+        handleClickImage(element);
+        ev.stopPropagation();
+        ev.preventDefault();
+        return false;
+      }}
+    >
       <div
         role="img"
         aria-label={element.url}
@@ -40,12 +56,9 @@ const ImageElement = ({ attributes, children, element, handleDeleteImage }: any)
             <Icon type="close" clickable={true} />
           </StyledCloseDiv>
         )}
-        <StyledImg
-          src={element.url}
-          style={{
-            position: 'absolute',
-          }}
-        />
+        <picture>
+          <StyledImg src={element.url} />
+        </picture>
       </div>
       {children}
     </div>
@@ -60,9 +73,11 @@ const MentionElement = (props: any) => {
     <StyledMention
       {...attributes}
       contentEditable={false}
-      onClick={ev => {
+      onClick={(ev: Event) => {
         handleMentionClick(element.pubKey);
         ev.stopPropagation();
+        ev.preventDefault();
+        return false;
       }}
     >
       {displayedMention}
@@ -76,7 +91,7 @@ const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
     <StyledMention
       {...attributes}
       contentEditable={false}
-      onClick={ev => {
+      onClick={(ev: Event) => {
         handleTagClick(element.name);
         ev.stopPropagation();
       }}
@@ -96,7 +111,7 @@ const LinkElement = ({ attributes, children, element, handleLinkClick }: any) =>
       size="large"
       target="_blank"
       rel="noopener noreferrer"
-      onClick={ev => {
+      onClick={(ev: Event) => {
         if (new URL(element.url).origin === window.location.origin) {
           handleLinkClick(element.url);
           ev.stopPropagation();
@@ -117,13 +132,18 @@ const renderElement = (
   handleMentionClick?: (pubKey: string) => void,
   handleTagClick?: (name: string) => void,
   handleLinkClick?: (url: string) => void,
-  handleDeleteImage?: (element: any) => void,
+  handleDeleteImage?: ((element: ImageElement) => void) | null,
+  handleClickImage?: (element: ImageElement) => void,
 ) => {
   switch (props.element.type) {
-    case 'quote':
-      return <blockquote {...props.attributes}>{props.children}</blockquote>;
     case 'image':
-      return <ImageElement handleDeleteImage={handleDeleteImage} {...props} />;
+      return (
+        <ImageElement
+          handleDeleteImage={handleDeleteImage}
+          handleClickImage={handleClickImage}
+          {...props}
+        />
+      );
     case 'mention':
       return <MentionElement handleMentionClick={handleMentionClick} {...props} />;
     case 'tag':

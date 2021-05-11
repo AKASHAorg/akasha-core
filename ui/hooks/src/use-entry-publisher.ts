@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IMetadata } from '@akashaproject/design-system/lib/components/Editor/editor-box';
+import { IMetadata } from '@akashaproject/design-system/lib/components/Editor';
 
 export interface IPendingEntry {
   localId: string;

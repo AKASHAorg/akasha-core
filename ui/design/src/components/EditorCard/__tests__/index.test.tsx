@@ -4,7 +4,7 @@ import * as React from 'react';
 import { render } from '@testing-library/react';
 
 import EditorCard from '../';
-import { editorDefaultValue } from '../../Editor';
+import { editorDefaultValue } from '../../Editor/initialValue';
 import { wrapWithTheme } from '../../../test-utils';
 import { USERNAMES, TAGS } from '../../../utils/dummy-data';
 
