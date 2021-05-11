@@ -74,7 +74,7 @@ describe('<BoxFormCard /> Component', () => {
     expect(nameInputPlaceholder).toBeDefined();
   });
 
-  it('renders action buttons', async () => {
+  it('renders action buttons', () => {
     const { getAllByRole } = componentWrapper;
     const cancelButton = getAllByRole('button', { name: 'Cancel' });
     const saveButton = getAllByRole('button', { name: 'Save' });
