@@ -23,7 +23,7 @@ class ModerationAdminAPI extends DataSource {
 
   /**
    * Get data for a moderator.
-   * @param address the ETH address of the moderator
+   * @param address The ETH address of the moderator
    * @returns Moderator
    */
   async getModerator(ethAddress: string) {
@@ -39,7 +39,7 @@ class ModerationAdminAPI extends DataSource {
 
   /**
    * Check if the given user is a moderator.
-   * @param ethAddress the ETH address of the moderator
+   * @param ethAddress The ETH address of the moderator
    * @returns boolean
    */
   async isModerator(ethAddress: string) {
@@ -51,7 +51,7 @@ class ModerationAdminAPI extends DataSource {
 
   /**
    * Check if the given user is an admin.
-   * @param ethAddress the ETH address of the moderator
+   * @param ethAddress The ETH address of the moderator
    * @returns boolean
    */
   async isAdmin(ethAddress: string) {
@@ -63,9 +63,9 @@ class ModerationAdminAPI extends DataSource {
 
   /**
    * Update moderator data (admin/active).
-   * @param ethAddress the ETH address of the moderator
-   * @param admin boolean for the admin status
-   * @param active boolean for the active status
+   * @param ethAddress The ETH address of the moderator
+   * @param admin A boolean flag for the admin status
+   * @param active A boolean flag for the active status
    */
   async updateModerator(ethAddress: string, admin: boolean, active: boolean) {
     const db: Client = await getAppDB();
