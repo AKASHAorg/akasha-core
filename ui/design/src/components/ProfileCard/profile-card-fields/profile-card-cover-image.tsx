@@ -49,6 +49,7 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
       }}
       pad="none"
       round={{ corner: 'top', size: 'xsmall' }}
+      data-testid="profile-card-cover-image"
     >
       {/* disable sharing for v.01 */}
       {false && !editable && (

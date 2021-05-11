@@ -58,7 +58,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
             <ContentList
               {...props}
               ethAddress={loginState.ethAddress}
-              slotId={layout.app.modalSlotId}
+              slotId={layout.modalSlotId}
             />
           </Route>
           <Route path={routes[UNAUTHENTICATED]}>
@@ -78,7 +78,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
       </Router>
       <LoginModal
         showModal={loginModalState}
-        slotId={layout.app.modalSlotId}
+        slotId={layout.modalSlotId}
         onLogin={handleLogin}
         onModalClose={hideLoginModal}
         titleLabel={t('Connect a wallet')}

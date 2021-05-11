@@ -135,8 +135,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         break;
       case ItemTypes.COMMENT:
         /* Navigate to parent post because we don't have the comment page yet */
-        const parentId = postsState.postsData[details.entryId].postId;
-        url = `/social-app/post/${parentId}`;
+        url = `/social-app/post/${postsState.postsData[details.entryId].postId}`;
         break;
       default:
         break;
@@ -185,7 +184,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.app.modalSlotId}>
+      <ModalRenderer slotId={props.layout.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -256,7 +255,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         onLoginModalOpen={showLoginModal}
         totalItems={postsState.totalItems}
         profilePubKey={loginState.pubKey}
-        modalSlotId={props.layout.app.modalSlotId}
+        modalSlotId={props.layout.modalSlotId}
         loggedProfile={loggedProfileData}
         onRepostPublish={handleRepostPublish}
         contentClickable={true}

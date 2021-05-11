@@ -32,7 +32,7 @@ const ListViewport: React.FC<IListViewportProps> = props => {
         .map((_v, i) => `${PLACEHOLDER_KEY}-${i}`);
     }
     return [];
-  }, [renderSlice.length]);
+  }, [renderSlice.length, loadLimit, usePlaceholders]);
 
   return (
     <>

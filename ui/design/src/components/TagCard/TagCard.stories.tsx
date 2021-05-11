@@ -1,10 +1,10 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 
-import TagCard from '.';
-import { TagDetailCard } from './tag-detail-card';
-import { TagProfileCard } from './tag-profile-card';
-import { TagSearchCard } from './tag-search-card';
+import TagCard, { ITagCard } from '.';
+import { TagDetailCard, ITagDetailCard } from './tag-detail-card';
+import { TagProfileCard, ITagProfileCard } from './tag-profile-card';
+import { TagSearchCard, ITagSearchCard } from './tag-search-card';
 
 import ViewportSizeProvider from '../Providers/viewport-dimension';
 
@@ -20,7 +20,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: ITagCard) => (
   <Grommet theme={lightTheme}>
     <ViewportSizeProvider>
       <TagCard {...args} />
@@ -28,7 +28,7 @@ const Template = (args: any) => (
   </Grommet>
 );
 
-const TemplateDetail = (args: any) => (
+const TemplateDetail = (args: ITagDetailCard) => (
   <Grommet theme={lightTheme}>
     <ViewportSizeProvider>
       <TagDetailCard {...args} />
@@ -36,7 +36,7 @@ const TemplateDetail = (args: any) => (
   </Grommet>
 );
 
-const TemplateProfile = (args: any) => (
+const TemplateProfile = (args: ITagProfileCard) => (
   <Grommet theme={lightTheme}>
     <ViewportSizeProvider>
       <TagProfileCard {...args} />
@@ -44,7 +44,7 @@ const TemplateProfile = (args: any) => (
   </Grommet>
 );
 
-const TemplateSearch = (args: any) => (
+const TemplateSearch = (args: ITagSearchCard) => (
   <Grommet theme={lightTheme}>
     <ViewportSizeProvider>
       <TagSearchCard {...args} />
@@ -80,4 +80,5 @@ BaseTagSearchCard.args = {
   subscribeLabel: 'subscribe',
   subscribedLabel: 'subscribed',
   unsubscribeLabel: 'unsubscribe',
+  tagAnchorLink: '/social-app/tags',
 };

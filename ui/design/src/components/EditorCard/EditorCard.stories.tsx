@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import EditorCard from '.';
+import EditorCard, { IEditorCard } from '.';
 
 import { editorDefaultValue } from '../Editor';
 
@@ -52,10 +53,14 @@ export default {
     avatar: { control: 'text' },
     ethAddress: { control: 'text' },
     withMeter: { control: 'boolean' },
+    getTags: { action: 'clicked get tags' },
+    onPublish: { action: 'clicked publish' },
+    getMentions: { action: 'clicked get mentions' },
+    handleNavigateBack: { action: 'clicked navigate back' },
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: IEditorCard) => (
   <Grommet theme={lightTheme}>
     <Box fill={true} align="center" justify="center">
       <Box

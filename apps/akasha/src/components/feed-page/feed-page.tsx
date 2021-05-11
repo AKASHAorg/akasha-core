@@ -11,7 +11,7 @@ import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
-import { application as loginWidget } from '@akashaproject/ui-widget-login/lib/bootstrap';
+import { application as loginWidget } from '@akashaproject/ui-widget-login/lib';
 import Parcel from 'single-spa-react/parcel';
 import { constants, useBookmarks, useErrors, useMentions } from '@akashaproject/ui-awf-hooks';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
@@ -203,7 +203,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.app.modalSlotId}>
+      <ModalRenderer slotId={props.layout.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -248,7 +248,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         )}
       </ModalRenderer>
       <EditorModal
-        slotId={props.layout.app.modalSlotId}
+        slotId={props.layout.modalSlotId}
         avatar={loggedProfileData.avatar}
         showModal={editorModalOpen}
         ethAddress={loginState.ethAddress as any}

@@ -1,12 +1,12 @@
 import '@testing-library/jest-dom/extend-expect';
-import { cleanup, waitForElement } from '@testing-library/react';
+import { cleanup, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { act, create, ReactTestRenderer } from 'react-test-renderer';
 import { customRender, delay, wrapWithTheme } from '../../../test-utils';
 import Avatar, { getAvatarFromSeed } from '../';
 import AvatarImage from '../avatar-image';
 
-describe('<Avatar /> component', () => {
+describe('<Avatar /> Component', () => {
   let componentWrapper: ReactTestRenderer = create(<></>);
   beforeEach(() => {
     act(() => {
@@ -34,8 +34,7 @@ describe('<Avatar /> component', () => {
     await delay();
     const avatarImageRoot = avatarRoot.findByType(AvatarImage);
     const { image } = avatarImageRoot.props;
-    const src = image.read();
-    expect(src).toBeDefined();
+    expect(image).toBeDefined();
   });
 
   it('should generate SAME placeholder name for a given Eth Address (with guest={true})', async () => {
@@ -52,7 +51,7 @@ describe('<Avatar /> component', () => {
       <Avatar src={src} ethAddress={'0x01230123450012312'} />,
       {},
     );
-    const image = await waitForElement(() => findByTestId('avatar-image'));
+    const image = await waitFor(() => findByTestId('avatar-image'));
     expect(image.getAttribute('src')).toEqual(src);
   });
 });
