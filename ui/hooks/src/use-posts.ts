@@ -66,7 +66,7 @@ export interface UsePostsProps {
   postsService: any;
   ipfsService: any;
   onError: (error: IAkashaError) => void;
-  logger?: {};
+  logger?: unknown;
 }
 
 export interface PostsState {
@@ -129,7 +129,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       // console.log(payload.offset, postsState.nextCommentIndex, 'offset, nextIdx');
       const ipfsSettingsCall = ipfsService.getSettings({});
       const calls = combineLatest([ipfsSettingsCall, commentsCall]);
-      const sub = calls.subscribe((responses: [any, any]) => {
+      const sub = calls.subscribe((responses: any[]) => {
         const [ipfsResp, commentsResp] = responses;
         const { data } = commentsResp;
         const { nextIndex, results, total }: GetEntriesResponse['data']['posts'] = data.getComments;
@@ -193,7 +193,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         ...prev,
         fetchingPosts: prev.fetchingPosts.concat([postId]),
       }));
-      getEntryCall.subscribe(async (responses: [any, any]) => {
+      getEntryCall.subscribe(async (responses: any[]) => {
         const [ipfsResp, entryResp] = responses;
         const ipfsGateway = ipfsResp.data;
         const entry = entryResp.data?.getPost;
@@ -267,7 +267,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         ...prev,
         fetchingComments: prev.fetchingComments.concat([commentId]),
       }));
-      calls.subscribe((responses: [any, any]) => {
+      calls.subscribe((responses: any[]) => {
         const [ipfsResp, commentResp] = responses;
         const comment = commentResp.data?.getComment;
         if (comment) {
@@ -291,7 +291,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       }));
       const ipfsSettingsCall = ipfsService.getSettings({});
       const calls = combineLatest([ipfsSettingsCall, entriesCall]);
-      calls.subscribe(async (responses: [any, any]) => {
+      calls.subscribe(async (responses: any[]) => {
         const [ipfsResp, entriesResp] = responses;
         const ipfsGateway = ipfsResp.data;
         const { data }: GetEntriesResponse = entriesResp;
@@ -503,7 +503,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       const userPostsCall = postsService.entries.entriesByAuthor(req);
       const ipfsGatewayCall = ipfsService.getSettings({});
 
-      combineLatest([ipfsGatewayCall, userPostsCall]).subscribe(async (responses: [any, any]) => {
+      combineLatest([ipfsGatewayCall, userPostsCall]).subscribe(async (responses: any[]) => {
         const [ipfsGatewayResp, userPostsResp] = responses;
         const {
           results,
@@ -601,7 +601,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       const tagPostsCall = postsService.entries.entriesByTag(req);
       const ipfsGatewayCall = ipfsService.getSettings({});
 
-      combineLatest([ipfsGatewayCall, tagPostsCall]).subscribe(async (responses: [any, any]) => {
+      combineLatest([ipfsGatewayCall, tagPostsCall]).subscribe(async (responses: any[]) => {
         const [ipfsGatewayResp, tagPostsResp] = responses;
         const {
           results,
