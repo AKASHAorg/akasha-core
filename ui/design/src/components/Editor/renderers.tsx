@@ -71,9 +71,11 @@ const MentionElement = (props: any) => {
     <StyledMention
       {...attributes}
       contentEditable={false}
-      onClick={ev => {
+      onClick={(ev: Event) => {
         handleMentionClick(element.pubKey);
         ev.stopPropagation();
+        ev.preventDefault();
+        return false;
       }}
     >
       {displayedMention}
@@ -87,7 +89,7 @@ const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
     <StyledMention
       {...attributes}
       contentEditable={false}
-      onClick={ev => {
+      onClick={(ev: Event) => {
         handleTagClick(element.name);
         ev.stopPropagation();
       }}
@@ -107,7 +109,7 @@ const LinkElement = ({ attributes, children, element, handleLinkClick }: any) =>
       size="large"
       target="_blank"
       rel="noopener noreferrer"
-      onClick={ev => {
+      onClick={(ev: Event) => {
         if (new URL(element.url).origin === window.location.origin) {
           handleLinkClick(element.url);
           ev.stopPropagation();
