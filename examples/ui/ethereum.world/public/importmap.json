@@ -1,10 +1,5 @@
 {
   "imports": {
-    "react": "https://unpkg.com/react@17.0.2/umd/react.production.min.js",
-    "react-dom": "https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js",
-    "single-spa": "https://unpkg.com/single-spa@5.9.2/lib/system/single-spa.min.js",
-    "rxjs": "https://cdn.jsdelivr.net/npm/@esm-bundle/rxjs@6.5.5/system/rxjs.min.js",
-    "rxjs/operators": "https://cdn.jsdelivr.net/npm/@esm-bundle/rxjs@6.5.5/system/rxjs-operators.min.js",
     "@akashaproject/sdk": "/akasha.sdk.js",
     "@akashaproject/design-system": "/design/index.js",
     "@widget/sidebar": "/widgets/sidebar/index.js",
