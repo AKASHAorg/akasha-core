@@ -35,6 +35,8 @@ const ImageElement = ({
       onClick={ev => {
         handleClickImage(element);
         ev.stopPropagation();
+        ev.preventDefault();
+        return false;
       }}
     >
       <div

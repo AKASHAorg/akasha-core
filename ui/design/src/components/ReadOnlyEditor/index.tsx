@@ -44,14 +44,17 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
   const renderImageOverlay = () => (
     <Portal>
       <ModalContainer
-        onModalClose={closeImageOverlay}
         animation={{
           type: 'fadeIn',
           duration: 250,
           delay: 0,
         }}
       >
-        <StyledOverlay>
+        <StyledOverlay
+          onClick={(ev: React.SyntheticEvent) => {
+            ev.stopPropagation();
+          }}
+        >
           <StyledCloseDiv onClick={closeImageOverlay}>
             <Icon type="close" clickable={true} />
           </StyledCloseDiv>
