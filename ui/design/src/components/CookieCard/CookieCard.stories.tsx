@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import CookieWidgetCard from '.';
+import CookieWidgetCard, { ICookieWidgetCard } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -9,12 +9,12 @@ export default {
   title: 'Cards/CookieWidgetCard',
   component: CookieWidgetCard,
   argTypes: {
-    onClickOnlyEssential: { action: 'clicked subscribe' },
-    handleReport: { action: 'clicked report' },
+    onClickAcceptAll: { action: 'clicked accept all' },
+    onClickOnlyEssential: { action: 'clicked accept only essential' },
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: ICookieWidgetCard) => (
   <Grommet theme={lightTheme}>
     <Box width="30%" pad="none" align="center">
       <CookieWidgetCard {...args} />

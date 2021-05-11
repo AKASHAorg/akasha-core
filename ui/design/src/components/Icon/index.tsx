@@ -218,6 +218,7 @@ const StyledRefDiv = styled.div`
 
 const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
   const Component = (icons as any)[props.type];
+  const { primaryColor, accentColor, clickable, ...other } = props;
   if (!Component) {
     // tslint:disable-next-line no-console
     console.error('There is no such icon', props.type);
@@ -226,7 +227,7 @@ const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
   const iconClass = classNames('icon', props.className);
   return (
     <StyledRefDiv ref={ref} style={props.wrapperStyle}>
-      <Component className={iconClass} {...props} />
+      <Component className={iconClass} {...other} />
     </StyledRefDiv>
   );
 });

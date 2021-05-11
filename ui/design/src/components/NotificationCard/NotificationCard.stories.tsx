@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 
-import NotificationsCard from '.';
+import NotificationsCard, { INotificationsCard } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -16,7 +16,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: INotificationsCard) => (
   <Grommet theme={lightTheme}>
     <NotificationsCard {...args} />
   </Grommet>

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import ProfileCard from '.';
+import ProfileCard, { IProfileCardProps } from '.';
 import { ProfileSearchCard } from './profile-search-card';
-import { ProfileWidgetCard } from './profile-widget-card';
-import { ProfileMiniCard } from './profile-mini-card';
+import { ProfileWidgetCard, IProfileWidgetCard } from './profile-widget-card';
+import { ProfileMiniCard, IProfileMiniCard } from './profile-mini-card';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 import {
@@ -33,7 +33,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: IProfileCardProps) => (
   <Grommet theme={lightTheme}>
     <Box align="center" width="50%" pad={{ top: '40px' }}>
       <ProfileCard {...args} />
@@ -41,7 +41,7 @@ const Template = (args: any) => (
   </Grommet>
 );
 
-const TemplateSearch = (args: any) => (
+const TemplateSearch = (args: IProfileWidgetCard) => (
   <Grommet theme={lightTheme}>
     <Box align="center" width="50%" pad={{ top: '40px' }}>
       <ProfileSearchCard {...args} />
@@ -49,7 +49,7 @@ const TemplateSearch = (args: any) => (
   </Grommet>
 );
 
-const TemplateWidget = (args: any) => (
+const TemplateWidget = (args: IProfileWidgetCard) => (
   <Grommet theme={lightTheme}>
     <Box align="center" width="30%" pad={{ top: '40px' }}>
       <ProfileWidgetCard {...args} />
@@ -57,7 +57,7 @@ const TemplateWidget = (args: any) => (
   </Grommet>
 );
 
-const TemplateMini = (args: any) => (
+const TemplateMini = (args: IProfileMiniCard) => (
   <Grommet theme={lightTheme}>
     <Box align="center" width="30%" pad={{ top: '40px' }}>
       <ProfileMiniCard {...args} />

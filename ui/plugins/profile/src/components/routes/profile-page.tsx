@@ -133,8 +133,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         break;
       case ItemTypes.COMMENT:
         /* Navigate to parent post because we don't have the comment page yet */
-        const parentId = postsState.postsData[details.entryId].postId;
-        url = `/social-app/post/${parentId}`;
+        url = `/social-app/post/${postsState.postsData[details.entryId].postId}`;
         break;
       default:
         break;
@@ -189,7 +188,7 @@ const ProfilePage = (props: ProfilePageProps) => {
           {t("{{profileUsername}}'s Page", { profileUsername: profileUserName })} | Ethereum World
         </title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.app.modalSlotId}>
+      <ModalRenderer slotId={props.layout.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -266,7 +265,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         onLoginModalOpen={handleLoginModalOpen}
         totalItems={postsState.totalItems}
         profilePubKey={pubKey}
-        modalSlotId={props.layout.app.modalSlotId}
+        modalSlotId={props.layout.modalSlotId}
         loggedProfile={loggedProfileData}
         onRepostPublish={handleRepostPublish}
         contentClickable={true}

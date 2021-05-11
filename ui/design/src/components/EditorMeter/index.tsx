@@ -13,7 +13,7 @@ export interface IEditorMeter {
 const EditorMeter: React.FC<IEditorMeter> = props => {
   const { counter, maxValue } = props;
   const remainingChars = maxValue - counter;
-  let displayCounter = null;
+  let displayCounter: null | number = null;
   let displayColor = 'accentText';
   if (remainingChars >= 0) {
     displayColor = 'accentText';

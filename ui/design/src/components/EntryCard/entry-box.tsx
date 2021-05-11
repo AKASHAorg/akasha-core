@@ -267,7 +267,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                 }}
                 ethAddress={entryData.author?.ethAddress}
                 ref={profileRef}
-                bold={true}
                 // onMouseEnter={() => setProfileDropOpen(true)}
                 // onMouseLeave={() => setProfileDropOpen(false)}
               />

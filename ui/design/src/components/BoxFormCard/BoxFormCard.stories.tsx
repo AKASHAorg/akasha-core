@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 
-import BoxFormCard from '.';
+import BoxFormCard, { IBoxFormCardProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -29,7 +29,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: IBoxFormCardProps) => (
   <Grommet theme={lightTheme}>
     <BoxFormCard {...args} />
   </Grommet>

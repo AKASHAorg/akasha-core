@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- DEV HTML FILE -->
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self' 'unsafe-inline' 'unsafe-eval' cloudflare.com *.cloudflare.com unpkg.com *.akasha.network *.ethereum.world *.walletconnect.org *.infura.io https://* wss://*; img-src https: data: blob:" />
+  <meta name="viewport"
+    content="width=device-width,viewport-fit=cover,initial-scale=1,user-scalable=0,maximum-scale=1" />
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#000000" />
+  <link rel="shortcut icon" href="/icons/icon-48x48.png" />
+  <link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png" />
+  <link rel="apple-touch-icon" sizes="256x256" href="/icons/icon-256x256.png" />
+  <link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png" />
+  <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="/fonts/inter.css" />
+  <title>Ethereum World</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/system.js"
+    integrity="sha512-Ch/Rs9YsR/h/dztJqbpJE5g82yXqpeQSAzewezXCeIc2tBcb5kdpDfFJvxJfSpOljP4mjjGhk+XU+kWx2pHvXA=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/amd.js"
+    integrity="sha512-XuSVveSde1UkQKc8He1NO+7CxiYAac7Fej1avrqJvnr+bdiw3CSohzwv1aOJE2gm3GvxpXbKOaF2Yb6RXoq86Q=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/named-exports.js"
+    integrity="sha512-WsJXbzVd2QyFkUOXkEHgVgMGFK7aWw4t8x3BkLs7iR1e4/2fw5WGTy1oY84nkCKuTrz5e+qLETCZIvsj5m0KBQ=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/use-default.js"
+    integrity="sha512-H3Nthybs/3kHDHCy1xHJ+1o8jTYvHB31gYduc1oDd4TMw4N9dZyrTadAnp2BG0bl/Tfm4A/xV/jYhpf7DbXTIA=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/dynamic-import-maps.js"
+    integrity="sha512-0WAfcuqF28kxThUzrlVMA143QmXZPv4POmP4mG90ksP3/qv0oN24l69sW5WNiIRbXe3IcQa37bmN9Z9AbiigiQ=="
+    crossorigin="anonymous"></script>
+  <meta name="importmap-type" content="systemjs-importmap" />
+
+  <script type="systemjs-importmap" src="/importmap.dev.json"></script>
+
+  <link rel="preload" href="https://unpkg.com/react@17.0.2/umd/react.development.js" as="script" crossorigin>
+  </link>
+  <link rel="preload" href="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" as="script" crossorigin>
+  </link>
+  <style>
+    html,
+    body,
+    #root {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('/sw.js')
+          .then(registration => {
+            console.log('SW registered: ', registration);
+          })
+          .catch(registrationError => {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
+    }
+  </script>
+  <script type="module" src="/main.js"></script>
+</body>
+
+</html>

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
@@ -5,7 +6,7 @@ import SwitchCard from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
-interface SwitchCardComponent {
+export interface ISwitchCardComponent {
   count: number;
   countLabel: string;
   buttonLabels: string[];
@@ -13,7 +14,7 @@ interface SwitchCardComponent {
   onIconClick: () => void;
 }
 
-const SwitchCardComponent: React.FC<SwitchCardComponent> = props => {
+const SwitchCardComponent: React.FC<ISwitchCardComponent> = props => {
   const { count, countLabel, buttonLabels, buttonValues, onIconClick } = props;
   const [activeButton, setActiveButton] = React.useState<string>('All');
 
@@ -47,7 +48,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: ISwitchCardComponent) => (
   <Grommet theme={lightTheme}>
     <Box align="center" pad={{ top: '40px' }} width="582px">
       <SwitchCardComponent {...args} />
@@ -59,7 +60,6 @@ export const BaseSwitchCard = Template.bind({});
 
 BaseSwitchCard.args = {
   count: 1276,
-  hasIcon: true,
   countLabel: 'results',
   buttonLabels: ['All', 'Posts', 'Topics', 'People'],
   buttonValues: ['All', 'Posts', 'Topics', 'People'],

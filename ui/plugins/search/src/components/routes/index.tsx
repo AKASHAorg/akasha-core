@@ -80,7 +80,7 @@ const Routes: React.FC<RootComponentProps> = props => {
       </Box>
       <LoginModal
         showModal={modalState[MODAL_NAMES.LOGIN]}
-        slotId={props.layout.app.modalSlotId}
+        slotId={props.layout.modalSlotId}
         onLogin={loginActions.login}
         onModalClose={hideLoginModal}
         titleLabel={t('Connect a wallet')}

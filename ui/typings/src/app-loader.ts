@@ -11,9 +11,9 @@ export interface IPluginConfig {
 
 export interface ILoaderConfig {
   rootNodeId: string;
-  layout: IWidgetEntry;
-  rootLoadedApp: IPluginEntry;
-  System: any;
+  layout: IWidget;
+  rootLoadedApp: IPlugin;
+  System: unknown;
 }
 
 export interface IWidgetConfig {
@@ -47,10 +47,10 @@ export interface II18nConfig {
 export type IPlugin = Application;
 
 export interface ISingleSpaLifecycle {
-  bootstrap: (props: any) => Promise<void>;
-  mount: (props: any) => Promise<void>;
-  unmount: (props: any) => Promise<void>;
-  update?: (props: any) => Promise<void>;
+  bootstrap: (props: unknown) => Promise<void>;
+  mount: (props: unknown) => Promise<void>;
+  unmount: (props: unknown) => Promise<void>;
+  update?: (props: unknown) => Promise<void>;
 }
 
 export interface IScriptSrc {
@@ -72,6 +72,8 @@ export interface IWidget {
    * the path on which the widget will load
    */
   basePath?: string;
+  sidebarSlotId?: string;
+  modalSlotId?: string;
 }
 
 export enum MenuItemType {

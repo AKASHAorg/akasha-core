@@ -88,6 +88,7 @@ const config = {
   mode: process.env.NODE_ENV || 'development',
   externals: [
     {
+      'single-spa': 'single-spa',
       'single-spa-react': 'singleSpaReact',
       rxjs: 'rxjs',
     },

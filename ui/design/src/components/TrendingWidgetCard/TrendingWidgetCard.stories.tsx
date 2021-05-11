@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import TrendingWidgetCard from '.';
+import TrendingWidgetCard, { ITrendingWidgetCardProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 import { trendingProfilesData, trendingTagsData } from '../../utils/dummy-data';
@@ -19,7 +19,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: ITrendingWidgetCardProps) => (
   <Grommet theme={lightTheme}>
     <Box width="30%" pad="none" align="center">
       <TrendingWidgetCard {...args} />

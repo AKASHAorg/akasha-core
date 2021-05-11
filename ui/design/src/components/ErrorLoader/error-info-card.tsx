@@ -17,7 +17,7 @@ export const ErrorInfoCard = ({
   children: (
     messages: React.ReactElement | null,
     isCritical: boolean,
-    errors?: {},
+    errors?: Record<string, unknown>[],
   ) => React.ReactElement;
 }) => {
   const errorArr =

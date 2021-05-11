@@ -329,7 +329,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       <Helmet>
         <title>Post | Ethereum World</title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.app.modalSlotId}>
+      <ModalRenderer slotId={props.layout.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -371,9 +371,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             />
           </ToastProvider>
         )}
-        {editorModalOpen && props.layout.app.modalSlotId && (
+        {editorModalOpen && props.layout.modalSlotId && (
           <EditorModal
-            slotId={props.layout.app.modalSlotId}
+            slotId={props.layout.modalSlotId}
             avatar={loggedProfileData.avatar}
             showModal={editorModalOpen}
             ethAddress={loggedProfileData.ethAddress}

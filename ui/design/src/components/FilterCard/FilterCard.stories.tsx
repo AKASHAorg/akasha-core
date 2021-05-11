@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import FilterCard from '.';
+import FilterCard, { IFilterCard } from '.';
 
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import ViewportSizeProvider from '../Providers/viewport-dimension';
@@ -19,7 +19,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: IFilterCard) => (
   <Grommet theme={lightTheme}>
     <Box align="center" width="30%" pad={{ top: '40px' }} height="600px">
       <ViewportSizeProvider>
