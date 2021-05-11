@@ -26,6 +26,13 @@ const StyledOverlay = styled.div`
   background-color: ${props => props.theme.colors.darkGrey};
 `;
 
+/**
+ * loads a read-only version of slate
+ * @param content - slate content to be rendered
+ * @param handleMentionClick - click handler for mentions in the content
+ * @param handleTagClick - click handler for tags in the content
+ * @param handleLinkClick - click handler for links in the content, will open external links in new tab
+ */
 const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
   const { content, handleMentionClick, handleTagClick, handleLinkClick } = props;
 
@@ -36,11 +43,17 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
     setImageOverlayOpen(false);
   };
 
+  /**
+   * initialise the editor with required plugins to parse content
+   */
   const editor = React.useMemo(
     () => withLinks(withTags(withMentions(withReact(withImages(createEditor()))))),
     [],
   );
 
+  /**
+   * renders the full screen image modal that is triggered on image click
+   */
   const renderImageOverlay = () => (
     <Portal>
       <ModalContainer
@@ -52,6 +65,9 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
       >
         <StyledOverlay
           onClick={(ev: React.SyntheticEvent) => {
+            /**
+             * prevents click bubbling to parent so the user doesn't get redirected
+             */
             ev.stopPropagation();
           }}
         >
@@ -68,6 +84,9 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
     </Portal>
   );
 
+  /**
+   * opens the fullscreen image modal and shows the clicked upon image in it
+   */
   const handleClickImage = (element: ImageElement) => {
     setImgUrl(element.url);
     setImageOverlayOpen(true);
@@ -79,12 +98,19 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
         editor={editor}
         value={content}
         onChange={() => {
+          /**
+           * it is a read only editor
+           */
           return;
         }}
       >
         <Editable
           readOnly={true}
           renderElement={(renderProps: RenderElementProps) =>
+            /**
+             * pass the handlers for the various content elements in slate
+             * pass null for handleDeleteImage because that is only supported when editing content
+             */
             renderElement(
               renderProps,
               handleMentionClick,
