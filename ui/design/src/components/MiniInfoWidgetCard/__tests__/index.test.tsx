@@ -1,13 +1,13 @@
 import * as React from 'react';
 // import { create } from 'react-test-renderer';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 
 import MiniInfoWidgetCard from '../';
 import { wrapWithTheme } from '../../../test-utils';
 
 describe('MiniInfoWidgetCard component', () => {
-  it('renders correctly', () => {
-    render(
+  it('renders correctly', async () => {
+    const miniInfo = render(
       wrapWithTheme(
         <MiniInfoWidgetCard
           titleLabel={'Example title'}
@@ -17,5 +17,6 @@ describe('MiniInfoWidgetCard component', () => {
         />,
       ),
     );
+    await waitFor(() => expect(miniInfo).toBeDefined());
   });
 });

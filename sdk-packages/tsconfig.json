@@ -1,17 +1,22 @@
 {
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./build",
+    "resolveJsonModule": true,
+    "composite": true
+  },
   "files": [],
   "references": [
-    {
-      "path": "common"
-    },
-    {
-      "path": "core"
-    },
-    {
-      "path": "runtime"
-    },
-    {
-      "path": "db"
-    }
+    { "path": "./akasha" },
+    { "path": "./app-loader" },
+    { "path": "./auth"},
+    { "path": "./common"},
+    { "path": "./core" },
+    { "path": "./db" },
+    { "path": "./posts" },
+    { "path": "./profiles" },
+    { "path": "./registry" },
+    { "path": "./runtime" }
   ]
 }

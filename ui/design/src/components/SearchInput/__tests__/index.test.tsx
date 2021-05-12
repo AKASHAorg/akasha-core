@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom/extend-expect';
 import { cleanup, fireEvent } from '@testing-library/react';
 import * as React from 'react';
 import { act, create } from 'react-test-renderer';
@@ -56,9 +55,7 @@ describe('<DropSearchInput /> Component', () => {
     });
   });
   afterEach(() => {
-    act(() => {
-      componentWrapper.unmount();
-    });
+    act(() => componentWrapper.unmount());
     cleanup();
   });
   it('should mount without errors', () => {

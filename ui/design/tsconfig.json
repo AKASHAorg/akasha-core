@@ -6,6 +6,5 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
-  "references": [],
   "include": ["./src/**/*"]
 }
