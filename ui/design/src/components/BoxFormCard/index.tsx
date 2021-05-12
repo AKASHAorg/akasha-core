@@ -195,8 +195,8 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const closeCoverImagePopover = () => {
     setCoverImagePopoverOpen(false);
   };
-
-  const handleImageInsert = (imageKey: string) => (src: string | File, isUrl: boolean) => {
+  // @Todo: update this after ts-jest migration to ESM
+  const handleImageInsert = (imageKey: string) => (src: any, isUrl: boolean) => {
     if (isUrl) {
       handleFormFieldChange({ [imageKey]: { src, isUrl, preview: src } });
     } else {
