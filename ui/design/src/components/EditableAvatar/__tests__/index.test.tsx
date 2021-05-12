@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom/extend-expect';
 import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { act, create, ReactTestRenderer } from 'react-test-renderer';
@@ -23,9 +22,7 @@ describe('<EditableAvatar /> Component', () => {
 
   afterEach(() => {
     (window as WindowWithFileReader).FileReader = originalFileReader;
-    act(() => {
-      componentWrapper.unmount();
-    });
+    act(() => componentWrapper.unmount());
     cleanup();
   });
 

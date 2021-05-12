@@ -1,14 +1,14 @@
 import * as React from 'react';
 // import { create } from 'react-test-renderer';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 
 import TrendingWidgetCard from '../';
 import { wrapWithTheme } from '../../../test-utils';
 import { trendingProfilesData, trendingTagsData } from '../../../utils/dummy-data';
 
 describe('TrendingWidgetCard component', () => {
-  it('renders correctly', () => {
-    render(
+  it('renders correctly', async () => {
+    const trendingWidget = render(
       wrapWithTheme(
         <TrendingWidgetCard
           titleLabel={'Trending Right Now'}
@@ -29,5 +29,6 @@ describe('TrendingWidgetCard component', () => {
         />,
       ),
     );
+    await waitFor(() => expect(trendingWidget).toBeDefined());
   });
 });

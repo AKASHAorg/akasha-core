@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom/extend-expect';
 import { cleanup } from '@testing-library/react';
 import * as React from 'react';
 import { act, create, ReactTestRenderer } from 'react-test-renderer';
@@ -28,9 +27,7 @@ describe('<Topbar /> Component', () => {
     });
   });
   afterEach(() => {
-    act(() => {
-      componentWrapper.unmount();
-    });
+    act(() => componentWrapper.unmount());
     cleanup();
   });
 

@@ -6,21 +6,21 @@ module.exports = {
   verbose: true,
   bail: true,
   testEnvironment: 'node',
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/js-with-babel-esm',
   collectCoverage: true,
-  setupFiles: ['<rootDir>/jest.setup.js'],
-  testPathIgnorePatterns: ['<rootDir>/node_modules', '<rootDir>/__tests__/__mocks__', '<rootDir>/lib', '<rootDir>/dist'],
-  coverageReporters: ['text-summary'],
-  moduleFileExtensions: [
-    "ts",
-    "tsx",
-    "js",
-    "jsx",
-    "json",
-    "node"
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules',
+    '<rootDir>/__tests__/__mocks__',
+    '<rootDir>/lib',
+    '<rootDir>/dist',
   ],
-  unmockedModulePathPatterns: [
-    "lodash",
-    "core-js",
-  ]
+  coverageReporters: ['text-summary'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  unmockedModulePathPatterns: ['lodash', 'core-js'],
+  globals: {
+    'ts-jest': {
+      useESM: true,
+    },
+  },
 };
