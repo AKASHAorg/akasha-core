@@ -7,7 +7,7 @@ export interface IEditorPlaceholder {
   avatar?: string;
   ethAddress: string | null;
   placeholderLabel?: string;
-  onClick?: any;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
   style?: React.CSSProperties;
 }
 

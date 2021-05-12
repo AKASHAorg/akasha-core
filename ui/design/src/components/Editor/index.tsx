@@ -1,27 +1,41 @@
 import { Box } from 'grommet';
 import React, { useState, useRef, useMemo, useCallback, useEffect } from 'react';
-import { createEditor, Editor, Range, Transforms, Node, Text as SlateText, Element } from 'slate';
+import {
+  createEditor,
+  Editor,
+  Range,
+  Transforms,
+  Text as SlateText,
+  Element,
+  Descendant,
+} from 'slate';
 import { withHistory } from 'slate-history';
 import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 import Avatar from '../Avatar';
 import { IEntryData } from '../EntryCard/entry-box';
 import Icon from '../Icon';
 import EmojiPopover from '../EmojiPopover';
-import { EmbedBox } from './embed-box';
+import EmbedBox from '../EmbedBox';
 import { CustomEditor } from './helpers';
 import { withMentions, withImages, withTags, withLinks } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
 import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
-import { ImageUpload } from './image-upload';
+import { ImageData, ImageUpload } from './image-upload';
 import Button from '../Button';
 import { MentionPopover } from './mention-popover';
-import { EditorMeter } from './editor-meter';
+import { TagPopover } from './tag-popover';
+import EditorMeter from '../EditorMeter';
 import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
+import { useAndroidPlugin } from 'slate-android-plugin';
 
 const MAX_LENGTH = 280;
 
+/**
+ * @param uploadRequest - upload a file and returns a promise that resolves to an array
+ * @param editorState - the state of the editor is controlled from the parent component
+ */
 export interface IEditorBox {
   avatar?: string;
   ethAddress: string | null;
@@ -29,7 +43,7 @@ export interface IEditorBox {
   placeholderLabel?: string;
   uploadFailedLabel?: string;
   uploadingImageLabel?: string;
-  onPublish: any;
+  onPublish: (publishData: IPublishData) => void;
   embedEntryData?: IEntryData;
   minHeight?: string;
   withMeter?: boolean;
@@ -45,12 +59,18 @@ export interface IEditorBox {
     coverImage: string;
   }[];
   tags?: { name: string; totalPosts: number }[];
-  // upload an URL or a file and returns a promise that resolves to an array
   uploadRequest?: (data: string | File, isUrl?: boolean) => any;
   publishingApp?: string;
-  editorState: any;
-  setEditorState: any;
-  ref?: React.Ref<any>;
+  editorState: Descendant[];
+  setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
+  ref?: React.Ref<unknown>;
+}
+
+export interface IPublishData {
+  metadata: IMetadata;
+  content: Descendant[];
+  textContent: string;
+  author: string | null;
 }
 
 export interface IMetadata {
@@ -99,6 +119,16 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const [emojiPopoverOpen, setEmojiPopoverOpen] = useState(false);
 
+  /**
+   * display only 3 results in the tag and mention popovers
+   */
+  const slicedTags = tags.slice(0, 3);
+  const slicedMentions = mentions.slice(0, 3);
+
+  /**
+   * this is needed to check if any popover is open from the parent component
+   * if there are more popovers added their state should also be exposed here
+   */
   React.useImperativeHandle(
     ref,
     () => ({
@@ -109,11 +139,19 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     [emojiPopoverOpen],
   );
 
-  const editor = useMemo(
-    () => withLinks(withTags(withMentions(withHistory(withReact(withImages(createEditor())))))),
-    [],
+  /**
+   * initialise editor with all the required plugins
+   */
+  const editor = useAndroidPlugin(
+    useMemo(
+      () => withLinks(withTags(withMentions(withImages(withHistory(withReact(createEditor())))))),
+      [],
+    ),
   );
 
+  /**
+   * position the mention and tag popovers based on the matching text range
+   */
   useEffect(() => {
     if (mentionTargetRange && mentions && mentions.length > 0) {
       const el = mentionPopoverRef.current;
@@ -135,8 +173,13 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     }
   }, [mentions, tags, editor, index, mentionTargetRange, tagTargetRange, editorState]);
 
+  /**
+   * creates the object for publishing and resets the editor state after
+   * metadata contains tags, mentions, quote, the publishing app and the version of the document
+   * todo version should be passed as a prop
+   */
   const handlePublish = () => {
-    const content: any = editorState;
+    const content = editorState;
     const metadata: IMetadata = {
       app: publishingApp,
       quote: embedEntryData?.entryId,
@@ -145,52 +188,68 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       version: 1,
     };
 
-    (function getMetadata(node: any) {
-      if (node.type === 'mention') {
-        metadata.mentions.push(node.pubKey as string);
+    /**
+     * wrap content in object to make recursive getMetadata work
+     * breaks slate typing
+     */
+    const initContent: { children: Descendant[] } = { children: content };
+    (function getMetadata(node: Descendant | { children: Descendant[] }) {
+      if (Element.isElement(node) && node.type === 'mention') {
+        metadata.mentions.push(node.pubKey);
       }
-      if (node.type === 'tag') {
-        metadata.tags.push(node.name as string);
+      if (Element.isElement(node) && node.type === 'tag') {
+        metadata.tags.push(node.name);
       }
-      if (node.children) {
-        node.children.map((n: any) => getMetadata(n));
+      if (Element.isElement(node) && node.children) {
+        node.children.map((n: Descendant) => getMetadata(n));
       }
-    })({ children: content });
+    })(initContent);
     const textContent: string = serializeToPlainText({ children: content });
     const data = { metadata, content, textContent, author: ethAddress };
     onPublish(data);
     setEditorState(editorDefaultValue);
   };
 
-  const handleChange = (value: Node[]) => {
+  /**
+   *  computes the text length
+   *  sets the editor state
+   *  handles selection for mentions and tags
+   */
+  const handleChange = (value: Descendant[]) => {
     let imageCounter = 0;
     let textLength = 0;
 
-    (function computeLength(nodeArr: any) {
+    /**
+     * include tags and mentions in the text length
+     * keeps track of the number of images in the content
+     */
+    (function computeLength(nodeArr: Descendant[]) {
       if (nodeArr.length) {
-        nodeArr.map((node: any) => {
+        nodeArr.map((node: Descendant) => {
           if (SlateText.isText(node)) {
             textLength += node.text.length;
           }
-          if (node.type === 'tag' && node.name?.length) {
+          if (Element.isElement(node) && node.type === 'tag' && node.name?.length) {
             textLength += node.name?.length;
           }
-          if (node.type === 'image') {
+          if (Element.isElement(node) && node.type === 'image') {
             imageCounter++;
           }
-          if (node.children) {
+          if (Element.isElement(node) && node.children) {
             computeLength(node.children);
           }
         });
       }
     })(value);
 
+    /** disable publishing if no images/text or text too long */
     if ((textLength > 0 || imageCounter !== 0) && textLength <= MAX_LENGTH) {
       setPublishDisabled(false);
     } else if ((textLength === 0 && imageCounter === 0) || textLength > MAX_LENGTH) {
       setPublishDisabled(true);
     }
 
+    /** limits to only 1 image*/
     if (imageCounter === 0) {
       setImageUploadDisabled(false);
     } else if (imageCounter > 0) {
@@ -205,6 +264,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
     const { selection } = editor;
 
+    /**
+     * handles text matching for tags and mentions
+     */
     if (selection && Range.isCollapsed(selection)) {
       const [start] = Range.edges(selection);
       const wordBefore = Editor.before(editor, start, { unit: 'word' });
@@ -212,7 +274,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       const beforeRange = before && Editor.range(editor, before, start);
       const beforeText = beforeRange && Editor.string(editor, beforeRange);
       const beforeMentionMatch = beforeText && beforeText.match(/^@(\w+)$/);
-      // todo: proper matching /^#([a-z0-9]*)(\-?|.?)([a-z0-9]*)$/
+      // @todo: proper matching /^#([a-z0-9]*)(\-?|.?)([a-z0-9]*)$/
       const beforeTagMatch = beforeText && beforeText.match(/^#(\w+)$/);
       const after = Editor.after(editor, start);
       const afterRange = Editor.range(editor, start, after);
@@ -224,7 +286,14 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         getMentions(beforeMentionMatch[1]);
         setIndex(0);
         return;
+      } else {
+        setMentionTargetRange(null);
       }
+
+      /**
+       * creates the target range for tags
+       * setCreateTag is used for creating new tags from the matched text
+       */
       if (beforeTagMatch && afterMatch && beforeRange) {
         const tagName = beforeTagMatch[1];
         // .concat(beforeTagMatch[2], beforeTagMatch[3]);
@@ -233,31 +302,36 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         setCreateTag(tagName);
         setIndex(0);
         return;
+      } else {
+        setTagTargetRange(null);
       }
     }
-
-    setMentionTargetRange(null);
-    setTagTargetRange(null);
   };
 
+  /**
+   * key handler for the mention popover
+   * inserts the mention on tab, enter or space keypress
+   */
   const selectMention = (event: KeyboardEvent, mentionRange: Range) => {
     switch (event.key) {
-      case 'ArrowDown':
+      case 'ArrowDown': {
         event.preventDefault();
-        const prevIndex = index >= mentions.length - 1 ? 0 : index + 1;
+        const prevIndex = index >= slicedMentions.length - 1 ? 0 : index + 1;
         setIndex(prevIndex);
         break;
-      case 'ArrowUp':
+      }
+      case 'ArrowUp': {
         event.preventDefault();
-        const nextIndex = index <= 0 ? mentions.length - 1 : index - 1;
+        const nextIndex = index <= 0 ? slicedMentions.length - 1 : index - 1;
         setIndex(nextIndex);
         break;
+      }
       case 'Tab':
       case 'Enter':
       case ' ':
         event.preventDefault();
         Transforms.select(editor, mentionRange);
-        CustomEditor.insertMention(editor, mentions[index]);
+        CustomEditor.insertMention(editor, slicedMentions[index]);
         setMentionTargetRange(null);
         break;
       case 'Escape':
@@ -267,23 +341,31 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     }
   };
 
+  /**
+   * key handler for the tag popover
+   * inserts the tag on tab, enter keypress
+   * if the user is still on the first position of the popover, on space keypress creates a  new tag
+   * this handles new tag creation when we have tags matching the typed chars
+   */
   const selectTag = (event: KeyboardEvent, tagRange: Range) => {
     switch (event.key) {
-      case 'ArrowDown':
+      case 'ArrowDown': {
         event.preventDefault();
-        const prevIndex = index >= tags.length - 1 ? 0 : index + 1;
+        const prevIndex = index >= slicedTags.length - 1 ? 0 : index + 1;
         setIndex(prevIndex);
         break;
-      case 'ArrowUp':
+      }
+      case 'ArrowUp': {
         event.preventDefault();
-        const nextIndex = index <= 0 ? tags.length - 1 : index - 1;
+        const nextIndex = index <= 0 ? slicedTags.length - 1 : index - 1;
         setIndex(nextIndex);
         break;
+      }
       case 'Tab':
       case 'Enter':
         event.preventDefault();
         Transforms.select(editor, tagRange);
-        CustomEditor.insertTag(editor, tags[index]);
+        CustomEditor.insertTag(editor, slicedTags[index]);
         setTagTargetRange(null);
         break;
       case ' ':
@@ -294,7 +376,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         } else {
           event.preventDefault();
           Transforms.select(editor, tagRange);
-          CustomEditor.insertTag(editor, tags[index]);
+          CustomEditor.insertTag(editor, slicedTags[index]);
         }
         setTagTargetRange(null);
         break;
@@ -312,6 +394,10 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       }
       if (tagTargetRange && tags.length > 0) {
         selectTag(event, tagTargetRange);
+        /**
+         * handles new tag creation when there are no matches for the typed chars
+         * user can create a new tag by pressing tab, enter or space
+         */
       } else if (tagTargetRange && [9, 13, 32].includes(event.keyCode) && createTag.length > 1) {
         Transforms.select(editor, tagTargetRange);
         CustomEditor.insertTag(editor, { name: createTag, totalPosts: 0 });
@@ -329,6 +415,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     setEmojiPopoverOpen(false);
   };
 
+  /**
+   * used for inserting mentions when clicking on popover
+   */
   const handleInsertMention = (mentionIndex: number) => {
     if (mentionTargetRange && mentions.length > 0) {
       Transforms.select(editor, mentionTargetRange);
@@ -337,6 +426,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     }
   };
 
+  /**
+   * used for inserting tags when clicking on popover
+   */
   const handleInsertTag = (tagIndex: number) => {
     if (tagTargetRange && tags.length > 0) {
       Transforms.select(editor, tagTargetRange);
@@ -349,31 +441,21 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     CustomEditor.insertText(editor, emojiCode);
   };
 
-  const mentionsNames = mentions.map(mention => {
-    return mention.userName || mention.name || mention.ethAddress;
-  });
-  const tagsNames = tags.map(tag => tag.name);
-
   // image insertion
 
   const [uploading, setUploading] = React.useState(false);
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 
-  const handleInsertImageLink = (data: {
-    src: string;
-    size: {
-      width: string;
-      height: string;
-      naturalWidth: string;
-      naturalHeight: string;
-    };
-  }) => {
+  const handleInsertImageLink = (data: ImageData) => {
     if (!data.src || !data.size) {
       return;
     }
     CustomEditor.insertImage(editor, data.src, data.size);
   };
 
+  /**
+   * disable uploading media if there is a picture uploading or there is one already inserted
+   */
   const handleMediaClick = () => {
     if (uploadInputRef.current && !uploading && !imageUploadDisabled) {
       uploadInputRef.current.click();
@@ -418,20 +500,22 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 renderLeaf={renderLeaf}
                 onKeyDown={onKeyDown}
               />
-              {mentionTargetRange && mentionsNames.length > 0 && (
+              {mentionTargetRange && mentions.length > 0 && (
                 <MentionPopover
                   handleSelect={handleInsertMention}
                   ref={mentionPopoverRef}
-                  values={mentionsNames}
+                  values={slicedMentions}
                   currentIndex={index}
+                  setIndex={setIndex}
                 />
               )}
               {tagTargetRange && tags.length > 0 && (
-                <MentionPopover
+                <TagPopover
                   handleSelect={handleInsertTag}
                   ref={mentionPopoverRef}
-                  values={tagsNames}
+                  values={slicedTags}
                   currentIndex={index}
+                  setIndex={setIndex}
                 />
               )}
             </Slate>

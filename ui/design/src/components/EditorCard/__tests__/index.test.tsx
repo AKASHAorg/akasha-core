@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { act, cleanup } from '@testing-library/react';
 
 import EditorCard from '../';
-import { editorDefaultValue } from '../../Editor';
+import { editorDefaultValue } from '../../Editor/initialValue';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 import { USERNAMES, TAGS } from '../../../utils/dummy-data';
 import userEvent from '@testing-library/user-event';
