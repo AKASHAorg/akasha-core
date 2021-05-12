@@ -17,14 +17,13 @@ interface AppRoutesProps {
   onError: (err: IAkashaError) => void;
 }
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
-  const { sdkModules, globalChannel, logger, layout, onError, rxjsOperators } = props;
+  const { sdkModules, globalChannel, logger, layout, onError } = props;
 
   const { t } = useTranslation();
 
   const [errorState, errorActions] = useErrors({ logger });
 
   const [loginState, loginActions] = useLoginState({
-    rxjsOperators,
     globalChannel: globalChannel,
     onError: errorActions.createError,
     authService: sdkModules.auth.authService,
@@ -36,7 +35,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     profileService: sdkModules.profiles.profileService,
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
-    rxjsOperators: props.rxjsOperators,
     globalChannel: props.globalChannel,
   });
 

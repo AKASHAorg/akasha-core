@@ -7,7 +7,6 @@ import {
   globalChannelMock,
   getSDKMocks,
   act,
-  genMockOp,
 } from '@akashaproject/ui-awf-testing-utils';
 import { ReplaySubject } from 'rxjs';
 
@@ -38,9 +37,6 @@ describe('<TopbarComponent />', () => {
       globalChannel={globalChannelMock}
       logger={{}}
       sdkModules={sdkMocks}
-      rxjsOperators={{
-        filter: genMockOp({ channelInfo: { method: 'test', servicePath: ['PROFILE_STORE'] } }),
-      }}
     />
   );
   beforeEach(() => {

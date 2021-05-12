@@ -21,10 +21,6 @@ describe('<BookmarksPage /> component', () => {
       isMobile={false}
       mountParcel={() => {}}
       singleSpa={{}}
-      rxjsOperators={{
-        filter: (cb: (payload: any) => boolean) =>
-          cb({ channelInfo: { method: 'test', servicePath: ['PROFILE_STORE'] } }),
-      }}
     />
   );
   beforeEach(() => {

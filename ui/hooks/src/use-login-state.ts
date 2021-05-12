@@ -5,6 +5,7 @@ import * as React from 'react';
 import useGlobalLogin from './use-global-login';
 import { IAkashaError, EthProviders } from '@akashaproject/ui-awf-typings';
 import { race } from 'rxjs';
+import { filter, takeLast } from 'rxjs/operators';
 import { createErrorHandler } from './utils/error-handler';
 
 export interface UseLoginProps {
@@ -18,7 +19,6 @@ export interface UseLoginProps {
   authService: any;
   profileService: any;
   ipfsService: any;
-  rxjsOperators: any;
 }
 export interface UseLoginState {
   /* logged in user's ethAddress */
@@ -42,7 +42,7 @@ export interface UseLoginActions {
 }
 
 const useLoginState = (props: UseLoginProps): [UseLoginState, UseLoginActions] => {
-  const { globalChannel, onError, authService, rxjsOperators } = props;
+  const { globalChannel, onError, authService } = props;
   const [loginState, setLoginState] = React.useState<UseLoginState>({
     ethAddress: null,
     pubKey: null,
@@ -53,7 +53,6 @@ const useLoginState = (props: UseLoginProps): [UseLoginState, UseLoginActions] =
   // this will also reset profile data
   useGlobalLogin({
     globalChannel,
-    rxjsOperators,
     onLogin: payload =>
       setLoginState(prev => ({
         ...prev,
@@ -115,8 +114,8 @@ const useLoginState = (props: UseLoginProps): [UseLoginState, UseLoginActions] =
         });
         // handle the case where signIn was triggered from another place
         const globalCall = globalChannel.pipe(
-          rxjsOperators.filter((response: any) => response.channelInfo.method === 'signIn'),
-          rxjsOperators.takeLast(1),
+          filter((response: any) => response.channelInfo.method === 'signIn'),
+          takeLast(1),
         );
         race(call, globalCall).subscribe((response: any) => {
           const { pubKey, ethAddress } = response.data;

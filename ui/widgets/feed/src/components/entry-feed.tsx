@@ -16,12 +16,11 @@ import { uploadMediaToTextile } from '../utils/media-utils';
 const { VirtualList, ErrorInfoCard, ErrorLoader, EditorModal } = DS;
 
 const EntryFeed = (props: IFeedWidgetProps) => {
-  const { errors, sdkModules, globalChannel, rxjsOperators } = props;
+  const { errors, sdkModules, globalChannel } = props;
   const [errorState, errorActions] = useErrors({ logger: props.logger });
   const { t, i18n } = useTranslation('ui-widget-feed');
 
   const [loginState] = useLoginState({
-    rxjsOperators,
     profileService: sdkModules.profiles.profileService,
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
@@ -33,7 +32,6 @@ const EntryFeed = (props: IFeedWidgetProps) => {
   const [showEditor, setShowEditor] = React.useState<boolean>(false);
 
   const [followedProfiles, followActions] = useFollow({
-    rxjsOperators,
     globalChannel: globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,

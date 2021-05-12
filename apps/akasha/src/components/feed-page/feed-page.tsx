@@ -66,7 +66,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     sdkModules,
     logger,
     globalChannel,
-    rxjsOperators,
   } = props;
 
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
@@ -303,7 +302,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             sdkModules={sdkModules}
             logger={logger}
             globalChannel={globalChannel}
-            rxjsOperators={rxjsOperators}
             bookmarkState={bookmarkState}
             ethAddress={loginState.ethAddress}
             locale={locale}
@@ -327,7 +325,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           sdkModules,
           logger,
           globalChannel,
-          rxjsOperators,
           isMobile,
           feedItems: postsState.postIds,
           loggedEthAddress: loginState.ethAddress,

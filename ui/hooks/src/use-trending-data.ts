@@ -55,10 +55,8 @@ const useTrendingData = (
   const [trendingState, dispatch] = React.useReducer(trendingStateReducer, initialTrendingState);
 
   React.useEffect(() => {
-    let tagsSub: Subscription | undefined;
-    let profilesSub: Subscription | undefined;
     const trendingTagsCall = sdkModules.posts.tags.getTrending(null);
-    tagsSub = trendingTagsCall.subscribe((resp: any) => {
+    const tagsSub: Subscription | undefined = trendingTagsCall.subscribe((resp: any) => {
       if (resp.data.searchTags) {
         actions.setTrendingTags(resp.data.searchTags);
       }
@@ -67,7 +65,7 @@ const useTrendingData = (
     const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings(null);
     const trendingProfilesCall = sdkModules.profiles.profileService.getTrending(null);
     const getTrendingProfiles = combineLatest([ipfsGatewayCall, trendingProfilesCall]);
-    profilesSub = getTrendingProfiles.subscribe((resp: any) => {
+    const profilesSub: Subscription | undefined = getTrendingProfiles.subscribe((resp: any) => {
       const ipfsGateway = resp[0].data;
       if (resp[1].data.searchProfiles) {
         const profiles = resp[1].data.searchProfiles.map((profile: any) => {

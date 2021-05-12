@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { createErrorHandler } from './utils/error-handler';
+import { filter } from 'rxjs/operators';
 
 export interface UseFollowActions {
   isFollowing: (loggedEthAddress: string, followEthAddress: string) => void;
@@ -12,12 +13,11 @@ export interface UseFollowProps {
   onError?: (error: IAkashaError) => void;
   profileService: any;
   globalChannel: any;
-  rxjsOperators: any;
 }
 
 /* A hook with follow, unfollow and isFollowing functionality */
 export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] => {
-  const { onError, profileService, globalChannel, rxjsOperators } = props;
+  const { onError, profileService, globalChannel } = props;
   const [isFollowingState, setIsFollowingState] = React.useState<string[]>([]);
 
   const handleSubscribe = (payload: any) => {
@@ -33,7 +33,7 @@ export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] =
   // this is used to sync following state between different components using the hook
   React.useEffect(() => {
     const call = globalChannel.pipe(
-      rxjsOperators.filter((payload: any) => {
+      filter((payload: any) => {
         return (
           (payload.channelInfo.method === 'follow' || payload.channelInfo.method === 'unFollow') &&
           payload.channelInfo.servicePath.includes('PROFILE_STORE')

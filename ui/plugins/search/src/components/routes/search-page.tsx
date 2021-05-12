@@ -41,7 +41,7 @@ const {
 interface SearchPageProps
   extends Pick<
     RootComponentProps,
-    'sdkModules' | 'globalChannel' | 'logger' | 'rxjsOperators' | 'singleSpa' | 'layout'
+    'sdkModules' | 'globalChannel' | 'logger' | 'singleSpa' | 'layout'
   > {
   onError?: (err: Error) => void;
   loginState: UseLoginState;
@@ -57,7 +57,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     logger,
     singleSpa,
     globalChannel,
-    rxjsOperators,
     loginState,
     loggedProfileData,
     modalState,
@@ -99,7 +98,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   });
 
   const [followedProfiles, followActions] = useFollow({
-    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
@@ -108,7 +106,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   });
 
   const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
-    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,

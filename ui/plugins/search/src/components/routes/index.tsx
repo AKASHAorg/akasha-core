@@ -14,7 +14,6 @@ const Routes: React.FC<RootComponentProps> = props => {
   const [errorState, errorActions] = useErrors({ logger: props.logger });
 
   const [loginState, loginActions] = useLoginState({
-    rxjsOperators: props.rxjsOperators,
     globalChannel: props.globalChannel,
     authService: props.sdkModules.auth.authService,
     profileService: props.sdkModules.profiles.profileService,
@@ -68,7 +67,6 @@ const Routes: React.FC<RootComponentProps> = props => {
               sdkModules={props.sdkModules}
               singleSpa={props.singleSpa}
               globalChannel={props.globalChannel}
-              rxjsOperators={props.rxjsOperators}
               modalState={modalState}
               modalStateActions={modalStateActions}
               showLoginModal={showLoginModal}

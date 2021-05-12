@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { forkJoin, from, timer } from 'rxjs';
+import { filter, switchMap, exhaustMap } from 'rxjs/operators';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import {
   IProfileData,
@@ -44,7 +45,6 @@ export interface UseProfileProps {
   profileService: any;
   postsService?: any;
   ensService?: any;
-  rxjsOperators?: any;
   globalChannel: any;
   logger?: any;
 }
@@ -83,10 +83,10 @@ export const useProfile = (
   });
 
   React.useEffect(() => {
-    if (globalChannel && props.rxjsOperators) {
+    if (globalChannel) {
       globalChannel
         .pipe(
-          props.rxjsOperators.filter((payload: any) => {
+          filter((payload: any) => {
             return (
               payload.channelInfo.method === 'makeDefaultProvider' &&
               payload.channelInfo.servicePath.includes('PROFILE_STORE')
@@ -310,7 +310,7 @@ export const useProfile = (
               ]);
             }
             const makeDefault = profileService.makeDefaultProvider(providers);
-            const call = addProvider.pipe(props.rxjsOperators.switchMap(() => makeDefault));
+            const call = addProvider.pipe(switchMap(() => makeDefault));
             call.subscribe(() => {
               const updatedFields: { [key: string]: any } = providers
                 .map(provider => {
@@ -378,7 +378,7 @@ export const useProfile = (
       }
 
       const makeDefault = profileService.makeDefaultProvider([providerData]);
-      const call = addProvider.pipe(props.rxjsOperators.exhaustMap(() => makeDefault));
+      const call = addProvider.pipe(exhaustMap(() => makeDefault));
       call.subscribe(() => {
         actions.updateProfile({
           default: [
@@ -457,7 +457,7 @@ export const useProfile = (
        */
       if (profile.providers?.length === 0 && profile.userName) {
         const call = timer(2000).pipe(
-          props.rxjsOperators.switchMap(() =>
+          switchMap(() =>
             props.profileService.addProfileProvider({
               property: ProfileProviderProperties.USERNAME,
               value: profile.userName,

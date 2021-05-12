@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { getMediaUrl } from './utils/media-utils';
 import { forkJoin } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { createErrorHandler } from './utils/error-handler';
 
 export interface UseNotificationsActions {
@@ -13,7 +14,6 @@ export interface UseNotificationsActions {
 export interface UseNotificationsProps {
   onError?: (error: IAkashaError) => void;
   globalChannel: any;
-  rxjsOperators: any;
   authService: any;
   ipfsService: any;
   profileService: any;
@@ -30,7 +30,7 @@ export interface UseNotificationsState {
 export const useNotifications = (
   props: UseNotificationsProps,
 ): [UseNotificationsState, UseNotificationsActions] => {
-  const { onError, globalChannel, rxjsOperators, authService, ipfsService, profileService } = props;
+  const { onError, globalChannel, authService, ipfsService, profileService } = props;
   const [notificationsState, setNotificationsState] = React.useState<UseNotificationsState>({
     notifications: [],
     isFetching: true,
@@ -67,7 +67,7 @@ export const useNotifications = (
   // this is used to sync notification state between different components using the hook
   React.useEffect(() => {
     const callMarkAsRead = globalChannel.pipe(
-      rxjsOperators.filter((payload: any) => {
+      filter((payload: any) => {
         return (
           payload.channelInfo.method === 'markMessageAsRead' &&
           payload.channelInfo.servicePath.includes('AUTH_SERVICE')
@@ -80,7 +80,7 @@ export const useNotifications = (
     );
 
     const callHasNewNotifs = globalChannel.pipe(
-      rxjsOperators.filter((payload: any) => {
+      filter((payload: any) => {
         return (
           payload.channelInfo.method === 'hasNewNotifications' &&
           payload.channelInfo.servicePath.includes('AUTH_SERVICE')

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { createErrorHandler } from './utils/error-handler';
+import { filter } from 'rxjs/operators';
 
 export interface UseTagSubscribeActions {
   isSubscribedToTag: (tagName: string) => void;
@@ -12,14 +13,13 @@ export interface UseTagSubscribeProps {
   onError?: (error: IAkashaError) => void;
   profileService: any;
   globalChannel: any;
-  rxjsOperators: any;
 }
 
 /* A hook with toggle tag subscription, get tag subscriptions and isSubscribedToTag functionality */
 export const useTagSubscribe = (
   props: UseTagSubscribeProps,
 ): [string[], UseTagSubscribeActions] => {
-  const { onError, profileService, globalChannel, rxjsOperators } = props;
+  const { onError, profileService, globalChannel } = props;
   const [tagSubscriptionState, setTagSubscriptionState] = React.useState<string[]>([]);
 
   const handleSubscribe = (payload: any) => {
@@ -34,7 +34,7 @@ export const useTagSubscribe = (
   // this is used to sync tag subscription state between different components using the hook
   React.useEffect(() => {
     const call = globalChannel.pipe(
-      rxjsOperators.filter((payload: any) => {
+      filter((payload: any) => {
         return (
           payload.channelInfo.method === 'toggleTagSubscription' &&
           payload.channelInfo.servicePath.includes('PROFILE_STORE')

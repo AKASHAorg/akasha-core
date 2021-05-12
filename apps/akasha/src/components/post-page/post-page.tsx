@@ -60,7 +60,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const {
     sdkModules,
     globalChannel,
-    rxjsOperators,
     flagged,
     reportModalOpen,
     setFlagged,
@@ -107,7 +106,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     profileService: props.sdkModules.profiles.profileService,
     ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
-    rxjsOperators: props.rxjsOperators,
     globalChannel: props.globalChannel,
   });
 
@@ -123,7 +121,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   });
 
   const [followedProfiles, followActions] = useFollow({
-    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
@@ -522,7 +519,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                     sdkModules={sdkModules}
                     logger={logger}
                     globalChannel={globalChannel}
-                    rxjsOperators={rxjsOperators}
                     bookmarkState={bookmarkState}
                     ethAddress={loginState.ethAddress}
                     locale={locale}
@@ -541,7 +537,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                 customEntities={getPendingComments({
                   logger,
                   globalChannel,
-                  rxjsOperators,
                   locale,
                   isMobile,
                   sdkModules,

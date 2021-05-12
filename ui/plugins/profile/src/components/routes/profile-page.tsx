@@ -42,7 +42,6 @@ const ProfilePage = (props: ProfilePageProps) => {
     setFlagged,
     showLoginModal,
     setReportModalOpen,
-    rxjsOperators,
   } = props;
   const location = useLocation();
 
@@ -59,7 +58,6 @@ const ProfilePage = (props: ProfilePageProps) => {
     ipfsService: props.sdkModules.commons.ipfsService,
     profileService: props.sdkModules.profiles.profileService,
     ensService: props.sdkModules.registry.ens,
-    rxjsOperators: props.rxjsOperators,
     globalChannel: props.globalChannel,
     logger: props.logger,
   });
@@ -259,7 +257,6 @@ const ProfilePage = (props: ProfilePageProps) => {
         sdkModules={props.sdkModules}
         layout={props.layout}
         globalChannel={props.globalChannel}
-        rxjsOperators={rxjsOperators}
         ethAddress={loggedEthAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
