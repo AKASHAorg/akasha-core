@@ -1,19 +1,20 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
-import { EntryCardHidden } from '../entry-card-hidden';
+import ErrorLoader from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
-describe('<EntryCardHidden /> Component', () => {
+describe('<ErrorLoader /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
         wrapWithTheme(
-          <EntryCardHidden
-            awaitingModerationLabel={'You have reported this post. It is awaiting moderation.'}
-            ctaLabel={'See it anyway'}
+          <ErrorLoader
+            type="no-login"
+            title="No Ethereum address detected"
+            details="You need to login or allow access to your current Ethereum address in your Web3 Ethereum client like MetaMask, and then reload, please."
           />,
         ),
         {},
@@ -30,12 +31,12 @@ describe('<EntryCardHidden /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('has correct labels', () => {
+  it('renders correct title and detail', () => {
     const { getByText } = componentWrapper;
-    const pendingLabel = getByText(/You have reported/i);
-    const ctaLabel = getByText(/See it/i);
+    const title = getByText(/No Ethereum address detected/i);
+    const details = getByText(/No Ethereum /i);
 
-    expect(pendingLabel).toBeDefined();
-    expect(ctaLabel).toBeDefined();
+    expect(title).toBeDefined();
+    expect(details).toBeDefined();
   });
 });

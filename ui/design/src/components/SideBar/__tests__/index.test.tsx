@@ -22,9 +22,7 @@ describe('<Sidebar /> component', () => {
   });
 
   afterEach(() => {
-    act(() => {
-      componentWrapper.unmount();
-    });
+    act(() => componentWrapper.unmount());
     cleanup();
   });
 

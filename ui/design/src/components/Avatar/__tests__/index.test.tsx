@@ -14,9 +14,7 @@ describe('<Avatar /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => {
-      componentWrapper.unmount();
-    });
+    act(() => componentWrapper.unmount());
     cleanup();
   });
 

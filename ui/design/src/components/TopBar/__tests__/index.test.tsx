@@ -27,9 +27,7 @@ describe('<Topbar /> Component', () => {
     });
   });
   afterEach(() => {
-    act(() => {
-      componentWrapper.unmount();
-    });
+    act(() => componentWrapper.unmount());
     cleanup();
   });
 

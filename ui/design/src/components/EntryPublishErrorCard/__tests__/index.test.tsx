@@ -1,21 +1,16 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
-import { EntryCardHidden } from '../entry-card-hidden';
+import EntryPyblishErrorCard from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
-describe('<EntryCardHidden /> Component', () => {
+describe('<EntryPyblishErrorCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        wrapWithTheme(
-          <EntryCardHidden
-            awaitingModerationLabel={'You have reported this post. It is awaiting moderation.'}
-            ctaLabel={'See it anyway'}
-          />,
-        ),
+        wrapWithTheme(<EntryPyblishErrorCard isCard={true} message="Sorry, an error occured!" />),
         {},
       );
     });
@@ -30,12 +25,10 @@ describe('<EntryCardHidden /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('has correct labels', () => {
+  it('renders correct message', () => {
     const { getByText } = componentWrapper;
-    const pendingLabel = getByText(/You have reported/i);
-    const ctaLabel = getByText(/See it/i);
+    const message = getByText(/Sorry, an error occured!/i);
 
-    expect(pendingLabel).toBeDefined();
-    expect(ctaLabel).toBeDefined();
+    expect(message).toBeDefined();
   });
 });

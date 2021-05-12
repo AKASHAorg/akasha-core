@@ -5,7 +5,7 @@ import { isMobileOnly } from 'react-device-detect';
 import Button from '../Button';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
 import EditorCard, { IEditorCard } from '../EditorCard';
-import { editorDefaultValue } from '../Editor';
+import { editorDefaultValue } from '../Editor/initialValue';
 import { ModalContainer } from '../LoginModal/fullscreen-modal-container';
 import { ModalRenderer } from '../LoginModal/modal-renderer';
 

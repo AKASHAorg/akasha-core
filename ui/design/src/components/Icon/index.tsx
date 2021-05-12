@@ -208,6 +208,7 @@ export interface IconProps extends CommonInterface<any> {
   size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   disabled?: boolean;
   wrapperStyle?: React.CSSProperties;
+  testId?: string;
 }
 
 const StyledRefDiv = styled.div`
@@ -218,7 +219,7 @@ const StyledRefDiv = styled.div`
 
 const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
   const Component = (icons as any)[props.type];
-  const { primaryColor, accentColor, clickable, ...other } = props;
+  const { primaryColor, accentColor, clickable, testId, ...other } = props;
   if (!Component) {
     // tslint:disable-next-line no-console
     console.error('There is no such icon', props.type);
@@ -227,7 +228,7 @@ const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
   const iconClass = classNames('icon', props.className);
   return (
     <StyledRefDiv ref={ref} style={props.wrapperStyle}>
-      <Component className={iconClass} {...other} />
+      <Component className={iconClass} data-testid={testId} {...other} />
     </StyledRefDiv>
   );
 });

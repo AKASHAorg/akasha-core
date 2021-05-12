@@ -17,7 +17,8 @@ import { StyledAnchor } from './basic-card-box';
 import Icon from '../Icon';
 import MobileListModal from '../MobileListModal';
 import ProfileAvatarButton from '../ProfileAvatarButton';
-import { EmbedBox, ReadOnlyEditor } from '../Editor/index';
+import EmbedBox from '../EmbedBox';
+import ReadOnlyEditor from '../ReadOnlyEditor';
 import ViewportSizeProvider from '../Providers/viewport-dimension';
 
 import { formatRelativeTime, ILocale } from '../../utils/time';
@@ -96,7 +97,7 @@ export interface IEntryBoxProps {
   awaitingModerationLabel?: string;
   moderatedContentLabel?: string;
   ctaLabel?: string;
-  handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
+  handleFlipCard?: (entry: IEntryData, isQuote: boolean) => () => void;
   isModerated?: boolean;
   scrollHiddenContent?: boolean;
 }
@@ -237,7 +238,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           flex={{ shrink: 0 }}
         >
           <StyledAnchor
-            onClick={e => {
+            onClick={(e: React.SyntheticEvent) => {
               e.preventDefault();
               return false;
             }}

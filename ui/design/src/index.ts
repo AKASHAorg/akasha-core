@@ -82,7 +82,9 @@ import AreaChart from './components/AreaChart';
 import LineChart from './components/LineChart';
 import ResponsiveChart from './components/ResponsiveChart';
 
-import { EditorBox, EditorMeter, editorDefaultValue } from './components/Editor';
+import EditorBox from './components/Editor';
+import { editorDefaultValue } from './components/Editor/initialValue';
+import EditorMeter from './components/EditorMeter';
 
 import HorizontalDivider from './components/HorizontalDivider';
 
@@ -104,9 +106,8 @@ import EditorModal from './components/EditorModal';
 import ShareModal from './components/ShareModal';
 import { StyledLayer } from './components/ListModal/styled-modal';
 import LoginModal from './components/LoginModal';
-import { EthProviderListModal } from './components/LoginModal/eth-provider-list-modal';
-import { EthProviderModal } from './components/LoginModal/eth-provider-modal';
-import { EthProviderListModal } from './components/LoginModal/eth-provider-list-modal';
+import EthProviderModal from './components/LoginModal/eth-provider-modal';
+import EthProviderListModal from './components/LoginModal/eth-provider-list-modal';
 import { ModalContainer } from './components/LoginModal/fullscreen-modal-container';
 import { ModalRenderer } from './components/LoginModal/modal-renderer';
 import MobileListModal from './components/MobileListModal';
@@ -123,7 +124,8 @@ import NotificationsPopover from './components/NotificationsPopover';
 import SelectPopover from './components/SelectPopover';
 
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
-import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
+import TextIcon from './components/TextIcon';
+import SubtitleTextIcon from './components/SubtitleTextIcon';
 import VirtualList from './components/VirtualList';
 import type { Helmet as HelmetType } from '@types/react-helmet';
 import Helmet from 'react-helmet';
