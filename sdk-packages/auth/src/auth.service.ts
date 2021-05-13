@@ -136,6 +136,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
         // until there is a consistent way of detecting previous sessions and initiate disconnect
         // localStorage.clear();
         log.info('using wc bridge');
+        localStorage.removeItem('walletconnect');
       }
     }
     try {
