@@ -43,4 +43,4 @@ export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props
   );
 });
 
-MentionPopover.displayName = 'Mention Popover';
+MentionPopover.displayName = 'MentionPopover';
