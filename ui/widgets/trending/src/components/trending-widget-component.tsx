@@ -102,7 +102,6 @@ const TrendingWidgetComponent: React.FC<TrendingWidgetComponentProps> = props =>
     loginState.ethAddress,
     loginState.ready,
     loginState.waitForAuth,
-    tagSubscriptionActions,
   ]);
 
   const handleTagClick = (tagName: string) => {

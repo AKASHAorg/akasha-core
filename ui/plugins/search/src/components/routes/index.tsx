@@ -41,7 +41,7 @@ const Routes: React.FC<RootComponentProps> = props => {
     if (errorState && Object.keys(errorState).length) {
       const txt = Object.keys(errorState)
         .filter(key => key.split('.')[0] === 'useLoginState')
-        .map(k => errorState![k])
+        .map(k => errorState[k])
         .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
       return txt;
     }

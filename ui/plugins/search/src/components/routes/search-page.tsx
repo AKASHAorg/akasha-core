@@ -435,8 +435,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               </Box>
             ))}
           {(activeButton === buttonValues[0] || activeButton === buttonValues[3]) &&
-            searchState.entries.slice(0, 4).map((entryData: any) => (
-              <Box key={entryData.entyId} pad={{ bottom: 'medium' }}>
+            searchState.entries.slice(0, 4).map((entryData: any, index: number) => (
+              <Box key={index} pad={{ bottom: 'medium' }}>
                 {entryData.delisted ? (
                   <EntryCardHidden
                     moderatedContentLabel={t('This content has been moderated')}

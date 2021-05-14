@@ -42,7 +42,7 @@ const feedStateReducer = (state: IFeedState, action: IFeedAction) => {
   switch (action.type) {
     case 'LOAD_FEED_START':
       return { ...state, isFeedLoading: true };
-    case 'SET_FEED_ITEMS':
+    case 'SET_FEED_ITEMS': {
       const { reverse, items, nextItemId } = action.payload;
       if (reverse) {
         const feedItems = [...items, ...state.feedItems.slice()];
@@ -59,6 +59,7 @@ const feedStateReducer = (state: IFeedState, action: IFeedAction) => {
         feedItems: state.feedItems.concat(action.payload.items),
         isFeedLoading: false,
       };
+    }
     case 'SET_FEED_ITEM_DATA':
       return {
         ...state,
