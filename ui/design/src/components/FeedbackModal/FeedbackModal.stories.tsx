@@ -13,7 +13,7 @@ export default {
   component: FeedbackModal,
   argTypes: {
     titleLabel: { control: 'text' },
-    subTitleLabel: { control: 'text' },
+    subtitleLabel: { control: 'text' },
     openAnIssueLabel: { control: 'text' },
     emailUsLabel: { control: 'text' },
     footerTextLabel: { control: 'text' },
@@ -60,7 +60,7 @@ export const BaseFeedbackModal = Template.bind({});
 
 BaseFeedbackModal.args = {
   titleLabel: "We'd love to hear your feedback!",
-  subTitleLabel: 'If you find any bugs or problems, please let us know',
+  subtitleLabel: 'If you find any bugs or problems, please let us know',
   openAnIssueLabel: 'Open an Issue',
   emailUsLabel: 'Email Us',
   footerTextLabel:

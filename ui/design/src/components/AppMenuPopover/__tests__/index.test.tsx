@@ -1,12 +1,12 @@
 import * as React from 'react';
+import { Box } from 'grommet';
 import { act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import AppMenuPopover from '../';
+import AppMenuPopover from '../index';
+import Icon from '../../Icon';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 import { installedAppsData } from '../../../utils/dummy-data';
-import { Box } from 'grommet';
-import Icon from '../../Icon';
 
 const BaseComponent = () => {
   const iconRef = React.useRef<HTMLDivElement>(null);

@@ -34,9 +34,17 @@ describe('<ErrorLoader /> Component', () => {
   it('renders correct title and detail', () => {
     const { getByText } = componentWrapper;
     const title = getByText(/No Ethereum address detected/i);
-    const details = getByText(/No Ethereum /i);
+    const details = getByText(/You need /i);
 
     expect(title).toBeDefined();
     expect(details).toBeDefined();
+  });
+
+  it('renders an image with correct src', () => {
+    const { getByRole } = componentWrapper;
+    const image = getByRole('img');
+
+    expect(image).toBeDefined();
+    expect(image).toHaveAttribute('src', '/images/general-error.png');
   });
 });
