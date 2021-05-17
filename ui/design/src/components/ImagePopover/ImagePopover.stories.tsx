@@ -12,7 +12,7 @@ export default {
   title: 'Popovers/ImagePopover',
   component: ImagePopover,
   argTypes: {
-    dropZoneLabel: { control: 'text' },
+    dropzoneLabel: { control: 'text' },
     uploadImageLabel: { control: 'text' },
     uploadingImageLabel: { control: 'text' },
     byUrlLabel: { control: 'text' },
@@ -78,7 +78,7 @@ const TemplateForm = (args: IFormImagePopover) => {
 export const BaseImagePopover = Template.bind({});
 
 BaseImagePopover.args = {
-  dropZoneLabel: 'Drop an image or click to upload an image from your computer',
+  dropzoneLabel: 'Drop an image or click to upload an image from your computer',
   uploadImageLabel: 'Upload Image',
   uploadingImageLabel: 'Uploading image',
   byUrlLabel: 'By Url',

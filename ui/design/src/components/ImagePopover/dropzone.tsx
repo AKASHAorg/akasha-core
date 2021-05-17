@@ -6,10 +6,11 @@ export interface IDropzone {
   onDrop: (acceptedFiles: File[]) => void;
   accept: string;
   dropzoneLabel?: string;
+  testId?: string;
 }
 
 export const Dropzone: React.FC<IDropzone> = props => {
-  const { onDrop, accept, dropzoneLabel } = props;
+  const { onDrop, accept, dropzoneLabel, testId } = props;
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept,
@@ -21,7 +22,7 @@ export const Dropzone: React.FC<IDropzone> = props => {
       <StyledText size="medium" color="secondaryText">
         {dropzoneLabel}
       </StyledText>
-      <StyledImageInput {...getInputProps()} />
+      <StyledImageInput {...getInputProps()} data-testid={testId} />
     </StyledInputDiv>
   );
 };
