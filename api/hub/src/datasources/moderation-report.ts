@@ -24,6 +24,16 @@ class ModerationReportAPI extends DataSource {
   }
 
   /**
+  * Get the name of the key for report cache.
+  * @param contentID - The content identifier
+  * @param author - The author of that report
+  * @returns The key as a string
+  */
+  getReportCacheKey(contentID: string, author: string) {
+    return `${this.collection}:contentID${contentID}:author${author}`;
+  }
+
+  /**
    * Count total number of reports.
    * @param contentID - The content identifier
    * @returns The number of reports as an integer
@@ -81,6 +91,10 @@ class ModerationReportAPI extends DataSource {
    * @returns A ModerationReport object
    */
   async getReport(contentID: string, author: string) {
+    const reportCache = this.getReportCacheKey(contentID, author);
+    if (await queryCache.has(reportCache)) {
+      return queryCache.get(reportCache);
+    }
     const db: Client = await getAppDB();
     const query = new Where('contentID').eq(contentID).and('author').eq(author);
     const reports = await db.find<ModerationReport>(this.dbID, this.collection, query);
@@ -197,6 +211,9 @@ class ModerationReportAPI extends DataSource {
       logger.warn(`report by ${author} for contentID ${contentID} could not be created`);
       throw new Error('report could not be created');
     }
+    // cache the report
+    const reportCache = this.getReportCacheKey(contentID, author);
+    await queryCache.set(reportCache, report);
 
     // invalidate counters cache
     const decisionsAPI = new ModerationDecisionAPI({

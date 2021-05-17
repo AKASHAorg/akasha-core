@@ -298,6 +298,18 @@ api.post('/moderation/decisions/moderated', async (ctx: koa.Context, next: () =>
 });
 
 /**
+ * Get a public log of all content that has been moderated, for transparency purposes.
+ */
+api.post('/moderation/decisions/log', async (ctx: koa.Context, next: () => Promise<any>) => {
+  const req = ctx?.request.body;
+  ctx.body = await dataSources.decisionsAPI.publicLog(req.offset, req.limit);
+  ctx.set('Content-Type', 'application/json');
+  ctx.status = 200;
+
+  await next();
+});
+
+/**
  * Add a new moderator.
  */
 api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Promise<any>) => {

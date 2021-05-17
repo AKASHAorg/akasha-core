@@ -34,6 +34,15 @@ class ModerationDecisionAPI extends DataSource {
   }
 
   /**
+   * Get the name of the key for moderated decisions cache.
+   * @param contentID - The content identifier
+   * @returns The key as a string
+   */
+  getModeratedDecisionCacheKey(contentID: string) {
+    return `${this.collection}:moderated:contentID${contentID}`;
+  }
+
+  /**
    * Get the name of the key for counters cache
    * @returns The key as a string
   */
@@ -100,16 +109,52 @@ class ModerationDecisionAPI extends DataSource {
   }
 
   /**
+   * Compiles a special list of all moderated content to be used for the public transparency log.
+   * @param offset - Offset by number of records
+   * @param limit - Limit number of records returned
+   * @returns A list of objects with minimal info about the moderated content
+   */
+  async publicLog(offset?: number, limit?: number) {
+    const list = [];
+    const db: Client = await getAppDB();
+    const query = new Where('moderated').eq(true)
+      .skipNum(offset || 0)
+      .limitTo(limit || 10)
+      .orderByDesc('moderatedDate');
+    const decisions = await db.find<ModerationDecision>(this.dbID, this.collection, query);
+    for (const record of decisions) {
+      const decision = await this.getFinalDecision(record.contentID);
+
+      list.push({
+        contentID: decision.contentID,
+        contentType: decision.contentType,
+        moderatedDate: decision.moderatedDate,
+        moderator: decision.moderator,
+        delisted: decision.delisted,
+        reasons: decision.reasons,
+        explanation: decision.explanation,
+      });
+    }
+
+    return list;
+  }
+
+  /**
    * Get a single decision based on the provided content identifier.
    * @param contentID - The content identifier
    * @returns A ModerationDecision object
    */
   async getDecision(contentID: string) {
+    const decisionCache = this.getDecisionCacheKey(contentID);
+    if (await queryCache.has(decisionCache)) {
+      return queryCache.get(decisionCache);
+    }
     const db: Client = await getAppDB();
     const query = new Where('contentID').eq(contentID);
     const decisions = await db.find<ModerationDecision>(this.dbID, this.collection, query);
     if (decisions.length) {
       decisions[0].explanation = decodeString(decisions[0].explanation);
+      await queryCache.set(decisionCache, decisions[0]);
       return decisions[0];
     }
     logger.warn(`moderation decision not found for contentID: ${contentID} `);
@@ -123,7 +168,7 @@ class ModerationDecisionAPI extends DataSource {
    * @returns An object with all the relevant data
    */
   async getFinalDecision(contentID: string) {
-    const decisionCache = this.getDecisionCacheKey(contentID);
+    const decisionCache = this.getModeratedDecisionCacheKey(contentID);
     if (await queryCache.has(decisionCache)) {
       return queryCache.get(decisionCache);
     }
@@ -179,6 +224,7 @@ class ModerationDecisionAPI extends DataSource {
 
     await db.save(this.dbID, this.collection, [decision]);
     await queryCache.del(this.getDecisionCacheKey(contentID));
+    await queryCache.del(this.getModeratedDecisionCacheKey(contentID));
     await queryCache.del(this.getCountersCacheKey());
   }
 }
