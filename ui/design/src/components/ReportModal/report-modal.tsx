@@ -32,7 +32,7 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   user?: string;
   contentType?: string;
   baseUrl?: string;
-  signData: (data: object | string) => any;
+  signData: (data: Record<string, unknown> | string) => any;
 }
 
 const ReportModal: React.FC<IReportModalProps> = props => {
