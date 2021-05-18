@@ -41,6 +41,14 @@ describe('<FeedbackModal /> Component', () => {
     act(() => {
       componentWrapper = customRender(wrapWithTheme(<BaseComponent />), {});
     });
+
+    /* this block of code is specific to modals and popovers
+      that will be rendered after an icon is clicked */
+
+    const { getByTestId } = componentWrapper;
+    const icon = getByTestId('eye-icon');
+    // perform click action to reveal modal
+    userEvent.click(icon);
   });
 
   afterEach(() => {
@@ -53,13 +61,7 @@ describe('<FeedbackModal /> Component', () => {
   });
 
   it('renders modal when clicked', () => {
-    const { getByTestId, getByText } = componentWrapper;
-    const icon = getByTestId('eye-icon');
-    expect(icon).toBeDefined();
-
-    // perform click action to reveal modal
-    userEvent.click(icon);
-
+    const { getByText } = componentWrapper;
     const modalTitle = getByText(/We'd love /);
     const modalSubtitle = getByText(/If you find /);
 
@@ -68,18 +70,12 @@ describe('<FeedbackModal /> Component', () => {
   });
 
   it('has two buttons in the modal', () => {
-    const { getByTestId, getByRole } = componentWrapper;
-    const icon = getByTestId('eye-icon');
-    expect(icon).toBeDefined();
-
-    // perform click action to reveal modal
-    userEvent.click(icon);
+    const { getByRole } = componentWrapper;
 
     const openAnIssueButton = getByRole('button', { name: 'Open an Issue' });
     const emailUsButton = getByRole('button', { name: 'Email Us' });
 
     expect(openAnIssueButton).toBeDefined();
-    expect(emailUsButton).toBeDefined();
     expect(emailUsButton).toBeDefined();
   });
 });

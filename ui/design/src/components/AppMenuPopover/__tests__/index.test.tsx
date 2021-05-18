@@ -38,6 +38,14 @@ describe('<AppMenuPopover /> Component', () => {
     act(() => {
       componentWrapper = customRender(wrapWithTheme(<BaseComponent />), {});
     });
+
+    /* this block of code is specific to modals and popovers
+      that will be rendered after an icon is clicked */
+
+    const { getByTestId } = componentWrapper;
+    const icon = getByTestId('eye-icon');
+    // perform click action to reveal popover
+    userEvent.click(icon);
   });
 
   afterEach(() => {
@@ -50,12 +58,7 @@ describe('<AppMenuPopover /> Component', () => {
   });
 
   it('renders popover when clicked', () => {
-    const { getByTestId, getByText } = componentWrapper;
-    const icon = getByTestId('eye-icon');
-    expect(icon).toBeDefined();
-
-    // perform click action to reveal popover
-    userEvent.click(icon);
+    const { getByText } = componentWrapper;
 
     const popoverTitle = getByText(installedAppsData[0].label);
     const ENS = getByText(installedAppsData[1].label);

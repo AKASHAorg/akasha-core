@@ -61,6 +61,14 @@ describe('<MobileListModal /> Component', () => {
         {},
       );
     });
+
+    /* this block of code is specific to modals and popovers
+      that will be rendered after an icon is clicked */
+
+    const { getByTestId } = componentWrapper;
+    const icon = getByTestId('eye-icon');
+    // perform click action to reveal modal
+    userEvent.click(icon);
   });
 
   afterEach(() => {
@@ -73,12 +81,7 @@ describe('<MobileListModal /> Component', () => {
   });
 
   it('renders modal when clicked', () => {
-    const { getByText, getByTestId } = componentWrapper;
-    const icon = getByTestId('eye-icon');
-    expect(icon).toBeDefined();
-
-    // perform click action to reveal modal
-    userEvent.click(icon);
+    const { getByText } = componentWrapper;
 
     const repostButton = getByText('Repost');
 
@@ -86,12 +89,7 @@ describe('<MobileListModal /> Component', () => {
   });
 
   it('can call handlers on the list items', () => {
-    const { getByText, getByTestId } = componentWrapper;
-    const icon = getByTestId('eye-icon');
-    expect(icon).toBeDefined();
-
-    // perform click action to reveal modal
-    userEvent.click(icon);
+    const { getByText } = componentWrapper;
 
     const repostButton = getByText('Repost');
     const repostWithCommentButton = getByText('Repost with comment');

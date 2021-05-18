@@ -33,6 +33,14 @@ describe('<EmojiPopover /> Component', () => {
     act(() => {
       componentWrapper = customRender(wrapWithTheme(<BaseComponent />), {});
     });
+
+    /* this block of code is specific to modals and popovers
+      that will be rendered after an icon is clicked */
+
+    const { getByTestId } = componentWrapper;
+    const icon = getByTestId('eye-icon');
+    // perform click action to reveal popover
+    userEvent.click(icon);
   });
 
   afterEach(() => {
@@ -45,28 +53,16 @@ describe('<EmojiPopover /> Component', () => {
   });
 
   it('renders popover when clicked', () => {
-    const { getByTestId, getByText } = componentWrapper;
+    const { getByText } = componentWrapper;
 
-    const icon = getByTestId('eye-icon');
-    expect(icon).toBeDefined();
-
-    // perform click action to reveal popover
-    userEvent.click(icon);
-
-    const emojiGroup = getByText(/Smileys & People/i);
-    expect(emojiGroup).toBeDefined();
+    const emojiGroupLabel = getByText(/Smileys & People/i);
+    expect(emojiGroupLabel).toBeDefined();
   });
 
   it('popover has the  happy emoji', () => {
-    const { getByTestId, getByText } = componentWrapper;
+    const { getByText } = componentWrapper;
 
-    const icon = getByTestId('eye-icon');
-    expect(icon).toBeDefined();
-
-    // perform click action to reveal popover
-    userEvent.click(icon);
-
-    const emojiGroup = getByText(/😀/i);
-    expect(emojiGroup).toBeDefined();
+    const happyEmoji = getByText(/😀/i);
+    expect(happyEmoji).toBeDefined();
   });
 });

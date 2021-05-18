@@ -45,6 +45,14 @@ describe('<ImagePopover /> Component', () => {
     act(() => {
       componentWrapper = customRender(wrapWithTheme(<BaseComponent />), {});
     });
+
+    /* this block of code is specific to modals and popovers
+      that will be rendered after an icon is clicked */
+
+    const { getByTestId } = componentWrapper;
+    const icon = getByTestId('eye-icon');
+    // perform click action to reveal popover
+    userEvent.click(icon);
   });
 
   afterEach(() => {
@@ -57,12 +65,7 @@ describe('<ImagePopover /> Component', () => {
   });
 
   it('renders popover when clicked', () => {
-    const { getByTestId, getByText } = componentWrapper;
-    const icon = getByTestId('eye-icon');
-    expect(icon).toBeDefined();
-
-    // perform click action to reveal popover
-    userEvent.click(icon);
+    const { getByText } = componentWrapper;
 
     const uploadImageLabel = getByText('Upload Image');
 
@@ -70,13 +73,7 @@ describe('<ImagePopover /> Component', () => {
   });
 
   it('can switch between upload types in the popover', () => {
-    const { getByTestId, getByRole } = componentWrapper;
-
-    const icon = getByTestId('eye-icon');
-    expect(icon).toBeDefined();
-
-    // perform click action to reveal popover
-    userEvent.click(icon);
+    const { getByRole } = componentWrapper;
 
     const uploadByUrlTab = getByRole('tab', { name: 'By Url' });
     userEvent.click(uploadByUrlTab);
@@ -89,12 +86,6 @@ describe('<ImagePopover /> Component', () => {
 
   it.skip('can upload file', () => {
     const { getByTestId } = componentWrapper;
-
-    const icon = getByTestId('eye-icon');
-    expect(icon).toBeDefined();
-
-    // perform click action to reveal popover
-    userEvent.click(icon);
 
     // create a file
     const file = new File(['drflynn'], 'drflynn.png', { type: 'image/png' });

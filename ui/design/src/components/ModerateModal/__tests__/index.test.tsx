@@ -52,6 +52,14 @@ describe('<ModerateModal /> Component', () => {
     act(() => {
       componentWrapper = customRender(wrapWithTheme(<BaseComponent />), {});
     });
+
+    /* this block of code is specific to modals and popovers
+      that will be rendered after an icon is clicked */
+
+    const { getByTestId } = componentWrapper;
+    const icon = getByTestId('eye-icon');
+    // perform click action to reveal modal
+    userEvent.click(icon);
   });
 
   afterEach(() => {
@@ -64,33 +72,21 @@ describe('<ModerateModal /> Component', () => {
   });
 
   it('has correct title', () => {
-    const { getByText, getByTestId } = componentWrapper;
-    const icon = getByTestId('eye-icon');
-    expect(icon).toBeDefined();
-    // perform click action to reveal modal
-    userEvent.click(icon);
+    const { getByText } = componentWrapper;
 
     const modalTitle = getByText('Make a Decision');
     expect(modalTitle).toBeDefined();
   });
 
   it('has two radio options', () => {
-    const { getByTestId, getAllByRole } = componentWrapper;
-    const icon = getByTestId('eye-icon');
-    expect(icon).toBeDefined();
-    // perform click action to reveal modal
-    userEvent.click(icon);
+    const { getAllByRole } = componentWrapper;
 
     const options = getAllByRole('radio');
     expect(options).toHaveLength(2);
   });
 
   it('can select radio option', () => {
-    const { getByTestId, getByRole } = componentWrapper;
-    const icon = getByTestId('eye-icon');
-    expect(icon).toBeDefined();
-    // perform click action to reveal modal
-    userEvent.click(icon);
+    const { getByRole } = componentWrapper;
 
     // target the radio options
     const delistOption = getByRole('radio', { name: 'Delist' });
@@ -109,11 +105,7 @@ describe('<ModerateModal /> Component', () => {
   });
 
   it('can type into the input field', () => {
-    const { getByTestId, getByRole } = componentWrapper;
-    const icon = getByTestId('eye-icon');
-    expect(icon).toBeDefined();
-    // perform click action to reveal modal
-    userEvent.click(icon);
+    const { getByRole } = componentWrapper;
 
     const input = getByRole('textbox');
     expect(input).toBeDefined();
@@ -134,11 +126,7 @@ describe('<ModerateModal /> Component', () => {
   });
 
   it('has two buttons', () => {
-    const { getByTestId, getAllByRole } = componentWrapper;
-    const icon = getByTestId('eye-icon');
-    expect(icon).toBeDefined();
-    // perform click action to reveal modal
-    userEvent.click(icon);
+    const { getAllByRole } = componentWrapper;
 
     const buttons = getAllByRole('button');
     expect(buttons).toHaveLength(2);
