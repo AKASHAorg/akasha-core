@@ -1,21 +1,21 @@
 import React from 'react';
 import { Box } from 'grommet';
 import { act, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import FeedbackModal from '../';
 import Icon from '../../Icon';
 import { customRender, wrapWithTheme } from '../../../test-utils';
-import userEvent from '@testing-library/user-event';
 
 const BaseComponent = () => {
   const iconRef = React.useRef<HTMLDivElement>(null);
-  const [menuOpen, setMenuOpen] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
   return (
     <Box width="medium" pad={{ top: 'large' }}>
       <div ref={iconRef}>
-        <Icon type="eye" testId="eye-icon" onClick={() => setMenuOpen(true)} />
+        <Icon type="eye" testId="eye-icon" onClick={() => setModalOpen(true)} />
       </div>
-      {iconRef?.current && menuOpen && (
+      {iconRef?.current && modalOpen && (
         <FeedbackModal
           titleLabel="We'd love to hear your feedback!"
           subtitleLabel="If you find any bugs or problems please let us know"
@@ -57,7 +57,7 @@ describe('<FeedbackModal /> Component', () => {
     const icon = getByTestId('eye-icon');
     expect(icon).toBeDefined();
 
-    // perform click action to reveal popover
+    // perform click action to reveal modal
     userEvent.click(icon);
 
     const modalTitle = getByText(/We'd love /);
@@ -72,7 +72,7 @@ describe('<FeedbackModal /> Component', () => {
     const icon = getByTestId('eye-icon');
     expect(icon).toBeDefined();
 
-    // perform click action to reveal popover
+    // perform click action to reveal modal
     userEvent.click(icon);
 
     const openAnIssueButton = getByRole('button', { name: 'Open an Issue' });
