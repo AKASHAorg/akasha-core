@@ -1,65 +1,50 @@
 import React from 'react';
-import { Box } from 'grommet';
 import { ToastProvider } from 'react-toast-notifications';
 import { act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import ModerateModal from '../';
-import Icon from '../../Icon';
-import { customRender, wrapWithTheme } from '../../../test-utils';
 
-const BaseComponent = () => {
-  const iconRef = React.useRef<HTMLDivElement>(null);
-  const [modalOpen, setModalOpen] = React.useState(false);
-  return (
-    <Box width="medium" pad={{ top: 'large' }}>
-      <div ref={iconRef}>
-        <Icon type="eye" testId="eye-icon" onClick={() => setModalOpen(true)} />
-      </div>
-      {iconRef?.current && modalOpen && (
-        <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-          <ModerateModal
-            titleLabel="Make a Decision"
-            altTitleLabel="Review a Decision"
-            contentType="post"
-            decisionLabel="Decision"
-            optionLabels={['Delist', 'Keep']}
-            optionValues={['Delist', 'Keep']}
-            descriptionLabel="Evaluation"
-            descriptionPlaceholder="Please explain the reason(s)"
-            footerText1Label="If you are unsure, you can refer to our"
-            footerLink1Label="Code of Conduct"
-            footerUrl1="/legal/code-of-conduct"
-            cancelLabel="Cancel"
-            user="0x003410490050000320006570034567114572000"
-            contentId="01f50jfyy4pzg1fedt3ge2jnvh"
-            baseUrl=""
-            isReview={false}
-            closeModal={() => setModalOpen(false)}
-            onModalClose={() => setModalOpen(false)}
-            signData={jest.fn()}
-          />
-        </ToastProvider>
-      )}
-    </Box>
-  );
-};
+import { customRender, wrapWithTheme } from '../../../test-utils';
 
 describe('<ModerateModal /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
+  const handleCloseModal = jest.fn();
+  const handleOnModalClose = jest.fn();
+  const handleSignData = jest.fn();
+
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(wrapWithTheme(<BaseComponent />), {});
+      componentWrapper = customRender(
+        wrapWithTheme(
+          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
+            <ModerateModal
+              titleLabel="Make a Decision"
+              altTitleLabel="Review a Decision"
+              contentType="post"
+              decisionLabel="Decision"
+              optionLabels={['Delist', 'Keep']}
+              optionValues={['Delist', 'Keep']}
+              descriptionLabel="Evaluation"
+              descriptionPlaceholder="Please explain the reason(s)"
+              footerText1Label="If you are unsure, you can refer to our"
+              footerLink1Label="Code of Conduct"
+              footerUrl1="/legal/code-of-conduct"
+              cancelLabel="Cancel"
+              user="0x003410490050000320006570034567114572000"
+              contentId="01f50jfyy4pzg1fedt3ge2jnvh"
+              baseUrl=""
+              isReview={false}
+              closeModal={handleCloseModal}
+              onModalClose={handleOnModalClose}
+              signData={handleSignData}
+            />
+          </ToastProvider>,
+        ),
+        {},
+      );
     });
-
-    /* this block of code is specific to modals and popovers
-      that will be rendered after an icon is clicked */
-
-    const { getByTestId } = componentWrapper;
-    const icon = getByTestId('eye-icon');
-    // perform click action to reveal modal
-    userEvent.click(icon);
   });
 
   afterEach(() => {

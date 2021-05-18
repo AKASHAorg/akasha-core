@@ -1,74 +1,38 @@
 import React from 'react';
-import { Box } from 'grommet';
 import { act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import MobileListModal from '../';
-import Icon from '../../Icon';
+
 import { customRender, wrapWithTheme } from '../../../test-utils';
-
-const BaseComponent = (args: { handleRepost: () => void; handleRepostWithComment: () => void }) => {
-  const iconRef = React.useRef<HTMLDivElement>(null);
-  const [modalOpen, setModalOpen] = React.useState(false);
-
-  const menuItems = [
-    {
-      label: 'Repost',
-      icon: 'transfer',
-      handler: (e: React.MouseEvent) => {
-        e.stopPropagation();
-        args.handleRepost();
-      },
-    },
-    {
-      label: 'Repost with comment',
-      icon: 'edit',
-      handler: (e: React.MouseEvent) => {
-        e.stopPropagation();
-        args.handleRepostWithComment();
-      },
-    },
-  ];
-
-  return (
-    <Box width="medium" pad={{ top: 'large' }}>
-      <div ref={iconRef}>
-        <Icon type="eye" testId="eye-icon" onClick={() => setModalOpen(true)} />
-      </div>
-      const menuItems = [
-      {iconRef?.current && modalOpen && (
-        <MobileListModal menuItems={menuItems} closeModal={() => setModalOpen(false)} />
-      )}
-    </Box>
-  );
-};
 
 describe('<MobileListModal /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const handleRepost = jest.fn();
   const handleRepostWithComment = jest.fn();
+  const handleCloseModal = jest.fn();
+
+  const menuItems = [
+    {
+      label: 'Repost',
+      icon: 'transfer',
+      handler: handleRepost,
+    },
+    {
+      label: 'Repost with comment',
+      icon: 'edit',
+      handler: handleRepostWithComment,
+    },
+  ];
 
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        wrapWithTheme(
-          <BaseComponent
-            handleRepost={handleRepost}
-            handleRepostWithComment={handleRepostWithComment}
-          />,
-        ),
+        wrapWithTheme(<MobileListModal menuItems={menuItems} closeModal={handleCloseModal} />),
         {},
       );
     });
-
-    /* this block of code is specific to modals and popovers
-      that will be rendered after an icon is clicked */
-
-    const { getByTestId } = componentWrapper;
-    const icon = getByTestId('eye-icon');
-    // perform click action to reveal modal
-    userEvent.click(icon);
   });
 
   afterEach(() => {

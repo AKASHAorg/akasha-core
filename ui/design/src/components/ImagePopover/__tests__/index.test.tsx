@@ -1,58 +1,42 @@
 import * as React from 'react';
-import { Box } from 'grommet';
 import { act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import ImagePopover from '../index';
-import Icon from '../../Icon';
+import ImagePopover from '../';
+
 import { customRender, wrapWithTheme } from '../../../test-utils';
-
-const BaseComponent = () => {
-  const iconRef = React.useRef<HTMLDivElement>(null);
-  const [menuOpen, setMenuOpen] = React.useState(false);
-
-  //   const handleInsertImage = jest.fn();
-  //   const handleUploadRequest = jest.fn();
-
-  return (
-    <Box width="medium" pad={{ top: 'large' }}>
-      <div ref={iconRef}>
-        <Icon type="eye" testId="eye-icon" onClick={() => setMenuOpen(true)} />
-      </div>
-      {iconRef?.current && menuOpen && (
-        <ImagePopover
-          dropzoneLabel="Drop image to upload"
-          uploadImageLabel="Upload Image"
-          uploadingImageLabel="Uploading image"
-          byUrlLabel="By Url"
-          insertLabel="Insert"
-          uploadFailedLabel="Upload failed"
-          fetchImageFailedLabel="Fetch image failed"
-          target={iconRef.current}
-          closePopover={() => setMenuOpen(false)}
-          insertImage={() => null}
-          uploadRequest={() => null}
-        />
-      )}
-    </Box>
-  );
-};
 
 describe('<ImagePopover /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
+  const targetNode = document.createElement('div');
+  document.body.appendChild(targetNode);
+
+  const handleClosePopover = jest.fn();
+  const handleInsertImage = jest.fn();
+  const handleUploadRequest = jest.fn();
+
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(wrapWithTheme(<BaseComponent />), {});
+      componentWrapper = customRender(
+        wrapWithTheme(
+          <ImagePopover
+            dropzoneLabel="Drop image to upload"
+            uploadImageLabel="Upload Image"
+            uploadingImageLabel="Uploading image"
+            byUrlLabel="By Url"
+            insertLabel="Insert"
+            uploadFailedLabel="Upload failed"
+            fetchImageFailedLabel="Fetch image failed"
+            target={targetNode}
+            closePopover={handleClosePopover}
+            insertImage={handleInsertImage}
+            uploadRequest={handleUploadRequest}
+          />,
+        ),
+        {},
+      );
     });
-
-    /* this block of code is specific to modals and popovers
-      that will be rendered after an icon is clicked */
-
-    const { getByTestId } = componentWrapper;
-    const icon = getByTestId('eye-icon');
-    // perform click action to reveal popover
-    userEvent.click(icon);
   });
 
   afterEach(() => {
