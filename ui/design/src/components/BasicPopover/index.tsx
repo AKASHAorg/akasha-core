@@ -5,7 +5,7 @@ export interface IBasicPopover {
   className?: string;
   children: any;
   closePopover: () => void;
-  target: React.RefObject<any>;
+  target: HTMLElement;
   gap?: string;
 }
 
