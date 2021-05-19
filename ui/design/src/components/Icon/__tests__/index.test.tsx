@@ -1,15 +1,18 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
-import MdCard from '../';
+import Icon from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
-describe('<MdCard /> Component', () => {
+describe('<Icon /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(wrapWithTheme(<MdCard mdText="`**Hello**`" />), {});
+      componentWrapper = customRender(
+        wrapWithTheme(<Icon type="akasha" size="md" testId="akasha-icon" />),
+        {},
+      );
     });
   });
 
@@ -22,10 +25,9 @@ describe('<MdCard /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('has correct text', () => {
-    const { getByText } = componentWrapper;
-    const mdText = getByText(/Hello/i);
-
-    expect(mdText).toBeDefined();
+  it('receives the test-id passed in the props', () => {
+    const { getByTestId } = componentWrapper;
+    const icon = getByTestId('akasha-icon');
+    expect(icon).toBeDefined();
   });
 });

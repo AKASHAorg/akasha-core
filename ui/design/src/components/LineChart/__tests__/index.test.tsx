@@ -1,15 +1,26 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
-import MdCard from '../';
+import LineChart from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
+import { chartData } from '../../../utils/dummy-data';
 
-describe('<MdCard /> Component', () => {
+describe('<LineChart /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(wrapWithTheme(<MdCard mdText="`**Hello**`" />), {});
+      componentWrapper = customRender(
+        wrapWithTheme(
+          <LineChart
+            data={chartData}
+            margin={{ top: 16, bottom: 16, left: 40, right: 16 }}
+            height={165}
+            width={580}
+          />,
+        ),
+        {},
+      );
     });
   });
 
@@ -20,12 +31,5 @@ describe('<MdCard /> Component', () => {
 
   it('renders correctly', () => {
     expect(componentWrapper).toBeDefined();
-  });
-
-  it('has correct text', () => {
-    const { getByText } = componentWrapper;
-    const mdText = getByText(/Hello/i);
-
-    expect(mdText).toBeDefined();
   });
 });

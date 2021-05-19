@@ -35,11 +35,12 @@ export interface IModerateModalProps {
   user: string | null;
   contentId?: string;
   baseUrl: string;
+  // indicates if making a fresh or reviewing an existing decision
   isReview?: boolean;
   // fetch pending items on modalClose
   onModalClose: () => void;
   closeModal: () => void;
-  signData: (data: object | string) => any;
+  signData: (data: Record<string, unknown> | string) => any;
 }
 
 const ModerateModal: React.FC<IModerateModalProps> = props => {
@@ -98,7 +99,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     return closeModal();
   };
 
-  const handleModerate = (isDelisted: boolean = true) => () => {
+  const handleModerate = (isDelisted = true) => () => {
     setRequesting(true);
 
     // sign payload first before posting

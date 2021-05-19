@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
-import MdCard from '../';
+import ResponsiveChart from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
+import { chartData } from '../../../utils/dummy-data';
 
-describe('<MdCard /> Component', () => {
+describe('<ResponsiveChart /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(wrapWithTheme(<MdCard mdText="`**Hello**`" />), {});
+      componentWrapper = customRender(wrapWithTheme(<ResponsiveChart data={chartData} />), {});
     });
   });
 
@@ -20,12 +21,5 @@ describe('<MdCard /> Component', () => {
 
   it('renders correctly', () => {
     expect(componentWrapper).toBeDefined();
-  });
-
-  it('has correct text', () => {
-    const { getByText } = componentWrapper;
-    const mdText = getByText(/Hello/i);
-
-    expect(mdText).toBeDefined();
   });
 });

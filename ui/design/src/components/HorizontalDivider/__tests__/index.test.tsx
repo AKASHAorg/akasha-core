@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
-import MdCard from '../';
+import HorizontalDivider from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
-describe('<MdCard /> Component', () => {
+describe('<HorizontalDivider /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(wrapWithTheme(<MdCard mdText="`**Hello**`" />), {});
+      componentWrapper = customRender(wrapWithTheme(<HorizontalDivider />), {});
     });
   });
 
@@ -20,12 +20,5 @@ describe('<MdCard /> Component', () => {
 
   it('renders correctly', () => {
     expect(componentWrapper).toBeDefined();
-  });
-
-  it('has correct text', () => {
-    const { getByText } = componentWrapper;
-    const mdText = getByText(/Hello/i);
-
-    expect(mdText).toBeDefined();
   });
 });

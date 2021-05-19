@@ -45,7 +45,7 @@
     "test:ui:watch": "lerna exec --parallel --ignore @akashaproject/sdk-* --stream -- jest --watch",
     "test:apps": "lerna run test --scope @akashaproject/app-* --stream",
     "test:design-system": "lerna run test --scope @akashaproject/design-system --stream",
-    "test:design-system:watch": "lerna exec --parallel --scope @akashaproject/design-system --stream -- jest --watch",
+    "test:design-system:watch": "lerna run test:watch --scope @akashaproject/design-system --stream",
     "test:hooks": "lerna run test --scope @akashaproject/ui-awf-hooks --stream",
     "test:plugins": "lerna run test --scope @akashaproject/ui-plugin-* --stream",
     "test:widgets": "lerna run test --scope @akashaproject/ui-widget-* --stream",
