@@ -1,10 +1,10 @@
-import { ObservableCallResult } from './responses';
+import { ServiceCallResult } from './responses';
 
 export default interface ISettingsService {
   set(
     moduleName: string,
     value: Record<string, unknown> | [[string, unknown]],
-  ): ObservableCallResult<unknown>;
-  get(moduleName: string): ObservableCallResult<unknown>;
+  ): ServiceCallResult<unknown>;
+  get(moduleName: string): ServiceCallResult<unknown>;
   remove(moduleName: string): void;
 }

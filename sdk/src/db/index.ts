@@ -4,7 +4,7 @@ import { Collection, Database } from '@textile/threaddb';
 import settingsSchema from './settings.schema';
 import appSchema from './app.schema';
 import { createObservableStream, createObservableValue } from '../helpers/observable';
-import { ObservableCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
+import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
 
 export const availableCollections = Object.freeze({
   Settings: settingsSchema.name,
@@ -22,7 +22,12 @@ class DB implements DBService<Database, Collection> {
     this._db = new Database(name, settingsSchema, appSchema);
   }
 
-  public open(version = 1): ObservableCallResult<Database> {
+  /**
+   *
+   * @param version - number representing the db version
+   * @returns ServiceCallResult<Database>
+   */
+  public open(version = 1): ServiceCallResult<Database> {
     if (!this._opened) {
       this._opened = true;
       return createObservableStream<Database>(this._db.open(version));
@@ -30,20 +35,34 @@ class DB implements DBService<Database, Collection> {
     return createObservableValue<Database>(this._db);
   }
 
-  public getDb(): ObservableCallResult<Database> {
-    if (!this._opened) {
-      throw DB.NOT_OPENED_ERROR;
-    }
+  /**
+   * Get access to the local db
+   * @returns ServiceCallResult<Database>
+   */
+  public getDb(): ServiceCallResult<Database> {
+    this._ensureDbOpened();
     return createObservableValue<Database>(this._db);
   }
 
-  getCollection(
+  /**
+   * Get access to the db collection by name
+   * @param name - string representing the collection name
+   * @returns ServiceCallResult<Collection>
+   */
+  public getCollection(
     name: typeof availableCollections[keyof typeof availableCollections],
-  ): ObservableCallResult<Collection> {
+  ): ServiceCallResult<Collection> {
+    this._ensureDbOpened();
+    return createObservableValue<Collection>(this._db.collection(name));
+  }
+
+  /**
+   * Throws an error is the local db is not opened
+   */
+  private _ensureDbOpened() {
     if (!this._opened) {
       throw DB.NOT_OPENED_ERROR;
     }
-    return createObservableValue<Collection>(this._db.collection(name));
   }
 }
 

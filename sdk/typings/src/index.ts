@@ -5,4 +5,5 @@ export interface AwfSDK {
   services: Services;
   api: any; // @Todo
 }
-export { Services, TYPES };
+export { Services };
+export { TYPES };

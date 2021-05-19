@@ -4,13 +4,20 @@
   "private": true,
   "main": "lib/index.js",
   "dependencies": {
+    "@types/node": "14.14.45",
+    "@apollo/client": "3.3.18",
     "@akashaproject/sdk-typings": "*",
     "@textile/threaddb": "0.0.6",
-    "inversify": "5.0.5",
+    "@metamask/detect-provider": "1.2.0",
+    "@walletconnect/web3-provider": "1.4.1",
+    "ethers": "5.1.4",
+    "graphql-tag": "2.12.4",
+    "object-hash": "2.1.1",
+    "inversify": "5.1.1",
     "pino": "6.11.3",
     "quick-lru": "6.0.0",
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "6.6.7",
+    "reflect-metadata": "0.1.13",
+    "rxjs": "7.0.1",
     "workbox-core": "6.1.5",
     "workbox-cacheable-response": "^6.1.5",
     "workbox-expiration": "^6.1.5",
@@ -21,7 +28,7 @@
     "workbox-webpack-plugin": "^6.1.5"
   },
   "peerDependencies": {
-    "typescript": "4.1.3"
+    "typescript": "^4.2.4"
   },
   "scripts": {
     "tsc": "tsc --build",

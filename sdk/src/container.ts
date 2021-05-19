@@ -2,20 +2,19 @@ import { Container } from 'inversify';
 import { TYPES } from '@akashaproject/sdk-typings';
 import { Logging } from './logging';
 import { Gql } from './gql';
-import ILogService from '@akashaproject/sdk-typings/lib/interfaces/log';
-import ISettingsService from '@akashaproject/sdk-typings/lib/interfaces/settings';
 import { Settings } from './settings';
-import IStashService from '@akashaproject/sdk-typings/lib/interfaces/stash';
 import { Stash } from './stash';
 import { DB } from './db';
+import { Web3Connector } from './common/web3.connector';
 
 const diContainer = new Container({
   defaultScope: 'Singleton',
 });
 
-diContainer.bind<ILogService>(TYPES.Log).to(Logging);
+diContainer.bind<Logging>(TYPES.Log).to(Logging);
 diContainer.bind<Gql>(TYPES.Gql).to(Gql);
-diContainer.bind<ISettingsService>(TYPES.Settings).to(Settings);
-diContainer.bind<IStashService>(TYPES.Stash).to(Stash);
+diContainer.bind<Settings>(TYPES.Settings).to(Settings);
+diContainer.bind<Stash>(TYPES.Stash).to(Stash);
 diContainer.bind<DB>(TYPES.Db).to(DB);
+diContainer.bind<Web3Connector>(TYPES.Web3).to(Web3Connector);
 export default diContainer;

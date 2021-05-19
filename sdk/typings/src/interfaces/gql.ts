@@ -1,4 +1,4 @@
-import { ObservableCallResult } from './responses';
+import { ServiceCallResult } from './responses';
 
 // compatible with apollo-link gql request
 export interface IGqlOperation {
@@ -10,5 +10,5 @@ export interface IGqlOperation {
 }
 
 export default interface IGqlClient<Operation> {
-  run(operation: IGqlOperation): ObservableCallResult<Operation>;
+  run(operation: IGqlOperation): ServiceCallResult<Operation>;
 }

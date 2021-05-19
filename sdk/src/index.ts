@@ -1,17 +1,19 @@
 import { TYPES, AwfSDK } from '@akashaproject/sdk-typings';
 import container from './container';
-import ILogService from '@akashaproject/sdk-typings/lib/interfaces/log';
-import IStashService from '@akashaproject/sdk-typings/lib/interfaces/stash';
-import ISettingsService from '@akashaproject/sdk-typings/lib/interfaces/settings';
+import { Logging } from './logging';
+import { Settings } from './settings';
 import { Gql } from './gql';
 import { DB } from './db';
+import { Stash } from './stash';
+import { Web3Connector } from './common/web3.connector';
 
 export default function init(): AwfSDK {
-  const log = container.get<ILogService>(TYPES.Log);
+  const log = container.get<Logging>(TYPES.Log);
   const gql = container.get<Gql>(TYPES.Gql);
-  const stash = container.get<IStashService>(TYPES.Stash);
-  const settings = container.get<ISettingsService>(TYPES.Settings);
+  const stash = container.get<Stash>(TYPES.Stash);
+  const settings = container.get<Settings>(TYPES.Settings);
   const db = container.get<DB>(TYPES.Db);
+  const web3 = container.get<Web3Connector>(TYPES.Web3);
   return {
     services: {
       log,
@@ -19,6 +21,9 @@ export default function init(): AwfSDK {
       stash,
       settings,
       db,
+      common: {
+        web3,
+      },
     },
     api: null,
   };

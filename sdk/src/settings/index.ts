@@ -2,14 +2,18 @@ import { injectable, inject } from 'inversify';
 import ISettingsService from '@akashaproject/sdk-typings/lib/interfaces/settings';
 import { TYPES } from '@akashaproject/sdk-typings';
 import { availableCollections, DB } from '../db';
-import { exhaustMap, map, switchMap } from 'rxjs/operators';
+import { exhaustMap, switchMap } from 'rxjs/operators';
 import { createObservableStream } from '../helpers/observable';
-import { ObservableCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
+import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
 
 @injectable()
 class Settings implements ISettingsService {
   @inject(TYPES.Db) private _db: DB;
 
+  /**
+   * Returns the settings object for a specified service name
+   * @param service - The service name
+   */
   get(service: typeof availableCollections[keyof typeof availableCollections]) {
     return this._db.getCollection(availableCollections.Settings).pipe(
       switchMap(collection => {
@@ -21,11 +25,17 @@ class Settings implements ISettingsService {
     );
   }
 
-  set(service: string, options: [[string, unknown]]): ObservableCallResult<string[]> {
+  /**
+   *
+   * @param service - The service name
+   * @param options - Array of option pairs [optionName, value]
+   * @returns ServiceCallResult<string[]>
+   */
+  set(service: string, options: [[string, unknown]]): ServiceCallResult<string[]> {
     return this.get(service).pipe(
       exhaustMap(settings => {
         const objToSave = {
-          _id: settings.data?._id || '',
+          _id: settings?.data?._id || '',
           service: service,
           options: options,
         };

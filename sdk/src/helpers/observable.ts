@@ -1,11 +1,25 @@
-import { defer, from, of } from 'rxjs';
+import { asapScheduler, defer, from, of, scheduled, ObservableInput } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ObservableCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
+import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
 
-export const createObservableValue = <T>(val: T): ObservableCallResult<T> => {
-  return defer(() => of({ data: val }));
+/**
+ * Transform a single value response to an observable source
+ * @param val - Value to be transformed into observable source
+ */
+export const createObservableValue = <T>(val: T): ServiceCallResult<T> => {
+  return scheduled(
+    defer(() => of({ data: val })),
+    asapScheduler,
+  );
 };
 
-export const createObservableStream = <T>(val: T[] | Promise<T>): ObservableCallResult<T> => {
-  return defer(() => from(val).pipe(map(v => ({ data: v }))));
+/**
+ * Transform a stream of values into objects
+ * @param val - Iterable value to be transformed into observable source
+ */
+export const createObservableStream = <T>(val: ObservableInput<T>): ServiceCallResult<T> => {
+  return scheduled(
+    defer(() => from(val).pipe(map(v => ({ data: v })))),
+    asapScheduler,
+  );
 };
