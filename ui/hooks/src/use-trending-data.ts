@@ -56,31 +56,40 @@ const useTrendingData = (
 
   React.useEffect(() => {
     const trendingTagsCall = sdkModules.posts.tags.getTrending(null);
-    const tagsSub: Subscription | undefined = trendingTagsCall.subscribe((resp: any) => {
-      if (resp.data.searchTags) {
-        actions.setTrendingTags(resp.data.searchTags);
-      }
-    }, createErrorHandler('useTrendingData.getTrendingTags', false, onError));
+    const tagsSub: Subscription | undefined = trendingTagsCall.subscribe({
+      next: (resp: any) => {
+        if (resp.data.searchTags) {
+          actions.setTrendingTags(resp.data.searchTags);
+        }
+      },
+      error: createErrorHandler('useTrendingData.getTrendingTags', false, onError),
+    });
 
     const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings(null);
     const trendingProfilesCall = sdkModules.profiles.profileService.getTrending(null);
-    const getTrendingProfiles = combineLatest([ipfsGatewayCall, trendingProfilesCall]);
-    const profilesSub: Subscription | undefined = getTrendingProfiles.subscribe((resp: any) => {
-      const ipfsGateway = resp[0].data;
-      if (resp[1].data.searchProfiles) {
-        const profiles = resp[1].data.searchProfiles.map((profile: any) => {
-          const profileData = Object.assign({}, profile);
-          if (profile.avatar && !profile.avatar.startsWith(ipfsGateway)) {
-            const profileAvatarWithGateway = `${ipfsGateway}/${profile.avatar}`;
-            profileData.avatar = profileAvatarWithGateway;
-          }
-          // should replace with real data once we integrate follow functionality
-          profileData.followers = profileData.followers || 0;
-          return profileData;
-        });
-        actions.setTrendingProfiles(profiles);
-      }
-    }, createErrorHandler('useTrendingData.getTrendingProfiles', false, onError));
+    const getTrendingProfiles = combineLatest({
+      ipfsGatewayCall: ipfsGatewayCall,
+      trendingProfilesCall: trendingProfilesCall,
+    });
+    const profilesSub: Subscription | undefined = getTrendingProfiles.subscribe({
+      next: (resp: any) => {
+        const ipfsGateway = resp.ipfsGatewayCall.data;
+        if (resp.trendingProfilesCall.data.searchProfiles) {
+          const profiles = resp.trendingProfilesCall.data.searchProfiles.map((profile: any) => {
+            const profileData = Object.assign({}, profile);
+            if (profile.avatar && !profile.avatar.startsWith(ipfsGateway)) {
+              const profileAvatarWithGateway = `${ipfsGateway}/${profile.avatar}`;
+              profileData.avatar = profileAvatarWithGateway;
+            }
+            // should replace with real data once we integrate follow functionality
+            profileData.followers = profileData.followers || 0;
+            return profileData;
+          });
+          actions.setTrendingProfiles(profiles);
+        }
+      },
+      error: createErrorHandler('useTrendingData.getTrendingProfiles', false, onError),
+    });
     return () => {
       if (tagsSub) {
         tagsSub.unsubscribe();

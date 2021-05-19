@@ -79,13 +79,12 @@ const TrendingWidgetComponent: React.FC<TrendingWidgetComponentProps> = props =>
 
   React.useEffect(() => {
     if (loginState.ethAddress) {
-      trendingData.profiles.slice(0, 4).forEach(async (profile: { ethAddress: string }) => {
-        if (loginState.ethAddress && profile.ethAddress) {
-          followActions.isFollowing(loginState.ethAddress, profile.ethAddress);
-        }
-      });
+      const followEthAddressArr = trendingData.profiles
+        .slice(0, 4)
+        .map((profile: { ethAddress: string }) => profile.ethAddress);
+      followActions.isFollowingMultiple(loginState.ethAddress, followEthAddressArr);
     }
-  }, [trendingData, loginState.ethAddress, followActions]);
+  }, [trendingData, loginState.ethAddress]);
 
   React.useEffect(() => {
     if (loginState.waitForAuth && !loginState.ready) {

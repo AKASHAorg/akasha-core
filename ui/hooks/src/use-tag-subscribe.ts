@@ -137,67 +137,71 @@ export const useTagSubscribe = (
         );
       }),
     );
-    call.subscribe(
-      handleSubscribe,
-      createErrorHandler('useTagSubscribe.globalSubscribe', false, onError),
-    );
+    call.subscribe({
+      next: handleSubscribe,
+      error: createErrorHandler('useTagSubscribe.globalSubscribe', false, onError),
+    });
     return () => call.unsubscribe();
   }, []);
 
   React.useEffect(() => {
-    if (tagSubscriptionState?.isFetching) {
+    if (tagSubscriptionState.isFetching) {
       const call = profileService.getTagSubscriptions(null);
-      call.subscribe((resp: any) => {
-        dispatch({ type: 'GET_TAG_SUBSCRIPTIONS_SUCCESS', payload: resp.data });
-      }, createErrorHandler('useTagSubscribe.getTagSubscriptions', false, onError));
-      return () => {
-        call.unsubscribe;
-      };
+      const callSub = call.subscribe({
+        next: (resp: any) => {
+          dispatch({ type: 'GET_TAG_SUBSCRIPTIONS_SUCCESS', payload: resp.data });
+        },
+        error: createErrorHandler('useTagSubscribe.getTagSubscriptions', false, onError),
+      });
+      return () => callSub.unsubscribe();
     }
     return;
-  }, [tagSubscriptionState?.isFetching]);
+  }, [tagSubscriptionState.isFetching]);
 
   React.useEffect(() => {
-    const tagName = tagSubscriptionState?.isSubscribedToTagPayload;
+    const tagName = tagSubscriptionState.isSubscribedToTagPayload;
 
     if (tagName) {
       const call = profileService.isSubscribedToTag(tagName);
-      call.subscribe((resp: { data?: { isSubscribedToTag: boolean } }) => {
-        dispatch({
-          type: 'GET_IS_SUBSCRIBED_TO_TAG_SUCCESS',
-          payload: { isSubscribedToTag: resp.data?.isSubscribedToTag, tag: tagName },
-        });
-      }, createErrorHandler('useTagSubscribe.isSubscribedToTag', false, onError));
+      const callSub = call.subscribe({
+        next: (resp: { data?: { isSubscribedToTag: boolean } }) => {
+          dispatch({
+            type: 'GET_IS_SUBSCRIBED_TO_TAG_SUCCESS',
+            payload: { isSubscribedToTag: resp.data?.isSubscribedToTag, tag: tagName },
+          });
+        },
+        error: createErrorHandler('useTagSubscribe.isSubscribedToTag', false, onError),
+      });
       return () => {
-        call.unsubscribe;
+        callSub.unsubscribe();
       };
     }
     return;
-  }, [tagSubscriptionState?.isSubscribedToTagPayload]);
+  }, [tagSubscriptionState.isSubscribedToTagPayload]);
 
   React.useEffect(() => {
-    const tagName = tagSubscriptionState?.toggleTagSubscriptionPayload;
+    const tagName = tagSubscriptionState.toggleTagSubscriptionPayload;
 
     if (tagName) {
       const call = profileService.toggleTagSubscription(tagName);
-      call.subscribe((resp: any) => {
-        dispatch({
-          type: 'TOGGLE_TAG_SUBSCRIPTION_SUCCESS',
-          payload: { tagSubscribed: resp.data, tag: tagName },
-        });
-      }, createErrorHandler('useTagSubscribe.toggleTagSubscription', false, onError));
-      return () => {
-        call.unsubscribe;
-      };
+      const callSub = call.subscribe({
+        next: (resp: any) => {
+          dispatch({
+            type: 'TOGGLE_TAG_SUBSCRIPTION_SUCCESS',
+            payload: { tagSubscribed: resp.data, tag: tagName },
+          });
+        },
+        error: createErrorHandler('useTagSubscribe.toggleTagSubscription', false, onError),
+      });
+      return () => callSub.unsubscribe();
     }
     return;
-  }, [tagSubscriptionState?.toggleTagSubscriptionPayload]);
+  }, [tagSubscriptionState.toggleTagSubscriptionPayload]);
 
   const actions: UseTagSubscribeActions = {
     isSubscribedToTag(tagName) {
       dispatch({ type: 'GET_IS_SUBSCRIBED_TO_TAG', payload: tagName });
     },
-
     toggleTagSubscription(tagName) {
       dispatch({ type: 'TOGGLE_TAG_SUBSCRIPTION', payload: tagName });
     },
