@@ -48,7 +48,7 @@ describe('<ImagePopover /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('renders popover when clicked', () => {
+  it('has correct popover details', () => {
     const { getByText } = componentWrapper;
 
     const uploadImageLabel = getByText('Upload Image');

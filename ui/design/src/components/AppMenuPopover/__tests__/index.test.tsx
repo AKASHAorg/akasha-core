@@ -43,7 +43,7 @@ describe('<AppMenuPopover /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('renders popover when clicked', () => {
+  it('has correct popover details', () => {
     const { getByText } = componentWrapper;
 
     const popoverTitle = getByText(installedAppsData[0].label);
