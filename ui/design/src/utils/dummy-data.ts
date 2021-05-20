@@ -99,7 +99,7 @@ const installedAppsData: IMenuItem[] = [
 
 const profileData = {
   ethAddress: '0x003410490050000320006570034567114572000',
-  pubKey: 'abc123',
+  pubKey: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba',
   avatar: 'https://placebeard.it/480/480',
   coverImage: 'goldenrod',
   name: 'Gilbert The Bearded',
@@ -113,7 +113,9 @@ const profileData = {
   apps: '12',
   profileType: 'user',
   totalPosts: 235,
+  vnd: {},
   default: [],
+  providers: [],
 };
 
 const TAGS = [
