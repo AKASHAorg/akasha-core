@@ -1,25 +1,19 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
-import Sidebar from '..';
+import StackedAvatar from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
+import { userData } from '../../../utils/dummy-data';
 
-describe('<Sidebar /> Component', () => {
+describe('<StackedAvatar /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
-  const handleClickMenuItem = jest.fn();
+  const maxAvatars = 3;
 
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        wrapWithTheme(
-          <Sidebar
-            bodyMenuItems={[]}
-            footerMenuItems={[]}
-            allMenuItems={[]}
-            onClickMenuItem={handleClickMenuItem}
-          />,
-        ),
+        wrapWithTheme(<StackedAvatar userData={userData} maxAvatars={maxAvatars} />),
         {},
       );
     });
@@ -32,5 +26,12 @@ describe('<Sidebar /> Component', () => {
 
   it('renders correctly', () => {
     expect(componentWrapper).toBeDefined();
+  });
+
+  it('has specified max number of avatars', () => {
+    const { getAllByRole } = componentWrapper;
+
+    const avatars = getAllByRole('img');
+    expect(avatars.length).toEqual(maxAvatars);
   });
 });
