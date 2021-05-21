@@ -1,48 +1,69 @@
-/* eslint-disable react/prop-types */
 import * as React from 'react';
-// import { create } from 'react-test-renderer';
-import { render } from '@testing-library/react';
+import { act, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import SwitchCard from '../';
-import { ISwitchCardComponent } from '../SwitchCard.stories';
-import { wrapWithTheme } from '../../../test-utils';
+import { customRender, wrapWithTheme } from '../../../test-utils';
 
-const SwitchCardComponent: React.FC<ISwitchCardComponent> = props => {
-  const { count, countLabel, buttonLabels, buttonValues, onIconClick } = props;
-  const [activeButton, setActiveButton] = React.useState<string>('All');
+describe('<SwitchCard /> Component', () => {
+  let componentWrapper = customRender(<></>, {});
 
-  const onTabClick = (value: string) => {
-    setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
-  };
+  const handleIconClick = jest.fn();
+  const handleTabClick = jest.fn();
 
-  return (
-    <SwitchCard
-      count={count}
-      hasIcon={true}
-      countLabel={countLabel}
-      activeButton={activeButton}
-      buttonLabels={buttonLabels}
-      buttonValues={buttonValues}
-      hasMobileDesign={true}
-      onIconClick={onIconClick}
-      onTabClick={onTabClick}
-      loggedEthAddress={'0x000'}
-    />
-  );
-};
+  beforeEach(() => {
+    act(() => {
+      componentWrapper = customRender(
+        wrapWithTheme(
+          <SwitchCard
+            count={1276}
+            countLabel="results"
+            buttonLabels={['All', 'Posts', 'Topics', 'People']}
+            buttonValues={['All', 'Posts', 'Topics', 'People']}
+            hasIcon={true}
+            activeButton={'All'}
+            hasMobileDesign={true}
+            onIconClick={handleIconClick}
+            onTabClick={handleTabClick}
+            loggedEthAddress="0x000"
+          />,
+        ),
+        {},
+      );
+    });
+  });
 
-describe('SwitchCard component', () => {
+  afterEach(() => {
+    act(() => componentWrapper.unmount());
+    cleanup();
+  });
+
   it('renders correctly', () => {
-    render(
-      wrapWithTheme(
-        <SwitchCardComponent
-          count={1276}
-          countLabel={'results'}
-          buttonLabels={['All', 'Posts', 'Topics', 'People']}
-          buttonValues={['All', 'Posts', 'Topics', 'People']}
-          onIconClick={() => null}
-        />,
-      ),
-    );
+    expect(componentWrapper).toBeDefined();
+  });
+
+  it('has correct labels on the tabs', () => {
+    const { getByText } = componentWrapper;
+
+    const allTab = getByText('All');
+    const postsTab = getByText('Posts');
+    const topicsTab = getByText('Topics');
+    const peopleTab = getByText('People');
+
+    expect(allTab).toBeDefined();
+    expect(postsTab).toBeDefined();
+    expect(topicsTab).toBeDefined();
+    expect(peopleTab).toBeDefined();
+  });
+
+  it('calls handler when clicked', () => {
+    const { getByText } = componentWrapper;
+
+    const postsTab = getByText('Posts');
+    expect(handleTabClick).toBeCalledTimes(0);
+
+    userEvent.click(postsTab);
+
+    expect(handleTabClick).toBeCalledTimes(1);
   });
 });

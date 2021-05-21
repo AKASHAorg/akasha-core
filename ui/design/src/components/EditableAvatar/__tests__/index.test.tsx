@@ -1,49 +1,49 @@
-import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import * as React from 'react';
-import { act, create, ReactTestRenderer } from 'react-test-renderer';
-import { createFile, customRender, wrapWithTheme } from '../../../test-utils';
-import { MockFileReader, WindowWithFileReader } from '../../../test-utils/mocks';
+import { act, cleanup, fireEvent, waitFor } from '@testing-library/react';
+
 import EditableAvatar from '../';
+import { createFile, customRender, wrapWithTheme } from '../../../test-utils';
 
 describe('<EditableAvatar /> Component', () => {
-  let componentWrapper: ReactTestRenderer = create(<></>);
-  const originalFileReader = FileReader;
+  let componentWrapper = customRender(<></>, {});
+
+  const handleChange = jest.fn();
 
   beforeEach(() => {
-    (window as WindowWithFileReader).FileReader = MockFileReader;
     act(() => {
-      componentWrapper = create(
+      componentWrapper = customRender(
         wrapWithTheme(
-          <EditableAvatar onChange={jest.fn()} ethAddress={'0x1230am3421h3i14cvv21n4'} />,
+          <EditableAvatar ethAddress={'0x01230123450012312'} onChange={handleChange} />,
         ),
+        {},
       );
     });
   });
 
   afterEach(() => {
-    (window as WindowWithFileReader).FileReader = originalFileReader;
     act(() => componentWrapper.unmount());
     cleanup();
   });
 
+  it('renders correctly', () => {
+    expect(componentWrapper).toBeDefined();
+  });
+
   it('should have 1 input type file', async () => {
-    const { getAllByTestId } = customRender(
-      <EditableAvatar onChange={jest.fn()} ethAddress={'0x1230am3421h3i14cvv21n4'} />,
-      {},
-    );
+    const { getAllByTestId } = componentWrapper;
+
     const fileInput = await waitFor(() => getAllByTestId('avatar-file-input'));
+
     expect(fileInput).toHaveLength(1);
     expect(fileInput[0].getAttribute('type')).toEqual('file');
   });
 
   it('should trigger onChange event when input is changed', async () => {
-    const onChange = jest.fn();
-    const { findByTestId } = customRender(
-      <EditableAvatar onChange={onChange} ethAddress={'0x1230am3421h3i14cvv21n4'} />,
-      {},
-    );
+    const { findByTestId } = componentWrapper;
+
     const fileInput = await waitFor(() => findByTestId('avatar-file-input'));
+
     fireEvent.change(fileInput, { target: { file: createFile('test-file.png') } });
-    expect(onChange).toBeCalledTimes(1);
+    expect(handleChange).toBeCalledTimes(1);
   });
 });

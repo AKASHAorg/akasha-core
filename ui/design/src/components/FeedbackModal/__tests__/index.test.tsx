@@ -42,7 +42,7 @@ describe('<FeedbackModal /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('renders modal when clicked', () => {
+  it('has correct title and subtitle', () => {
     const { getByText } = componentWrapper;
     const modalTitle = getByText(/We'd love /);
     const modalSubtitle = getByText(/If you find /);

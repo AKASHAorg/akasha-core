@@ -38,7 +38,7 @@ describe('<EmojiPopover /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('renders popover when clicked', () => {
+  it('has correct popover details', () => {
     const { getByText } = componentWrapper;
 
     const emojiGroupLabel = getByText(/Smileys & People/i);

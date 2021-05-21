@@ -44,12 +44,14 @@ describe('<MobileListModal /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('renders modal when clicked', () => {
+  it('has correct list items', () => {
     const { getByText } = componentWrapper;
 
     const repostButton = getByText('Repost');
+    const repostWithCommentButton = getByText('Repost with comment');
 
     expect(repostButton).toBeDefined();
+    expect(repostWithCommentButton).toBeDefined();
   });
 
   it('can call handlers on the list items', () => {
