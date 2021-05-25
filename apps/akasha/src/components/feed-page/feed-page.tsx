@@ -16,7 +16,7 @@ import Parcel from 'single-spa-react/parcel';
 import { constants, useBookmarks, useErrors, useMentions } from '@akashaproject/ui-awf-hooks';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
-import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
 const {
   Box,
@@ -36,7 +36,7 @@ export interface FeedPageProps {
   logger: any;
   showLoginModal: () => void;
   loggedProfileData?: any;
-  loginState: UseLoginState;
+  loginState: ILoginState;
   flagged: string;
   reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;

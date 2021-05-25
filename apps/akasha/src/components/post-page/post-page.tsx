@@ -19,7 +19,7 @@ import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
 import routes, { POST } from '../../routes';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
 const {
   Box,
@@ -41,7 +41,7 @@ const {
 
 interface IPostPage {
   loggedProfileData?: any;
-  loginState: UseLoginState;
+  loginState: ILoginState;
   flagged: string;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
   reportModalOpen: boolean;

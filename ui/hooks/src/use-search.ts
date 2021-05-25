@@ -83,8 +83,8 @@ export const useSearch = (props: UseSearchProps): [ISearchState, UseSearchAction
   const { user, onError, logger, ipfsService, profileService, postsService } = props;
   const [searchResultsState, dispatch] = React.useReducer(SearchStateReducer, initialSearchState);
 
-  async function fetchSearchResults(isFetching: string) {
-    const searchResp = await profileService.globalSearch(isFetching).toPromise();
+  async function fetchSearchResults(searchQuery: string) {
+    const searchResp = await profileService.globalSearch(searchQuery).toPromise();
     const ipfsGatewayResp = await ipfsService.getSettings(null).toPromise();
 
     // get profiles data

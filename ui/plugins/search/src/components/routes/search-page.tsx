@@ -15,7 +15,7 @@ import {
   useMentions,
 } from '@akashaproject/ui-awf-hooks';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import {
   ModalState,
   ModalStateActions,
@@ -44,7 +44,7 @@ interface SearchPageProps
     'sdkModules' | 'globalChannel' | 'logger' | 'singleSpa' | 'layout'
   > {
   onError?: (err: Error) => void;
-  loginState: UseLoginState;
+  loginState: ILoginState;
   loggedProfileData: any;
   showLoginModal: () => void;
   modalState: ModalState;

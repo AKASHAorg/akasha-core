@@ -20,48 +20,116 @@ export interface UseNotificationsProps {
   loggedEthAddress?: string | null;
 }
 
-export interface UseNotificationsState {
+export interface INotificationsState {
   notifications: any[];
   isFetching: boolean;
   hasNewNotifications: boolean;
+  hasNewNotificationsQuery: boolean;
+  markAsReadQuery: string | number | null;
 }
+
+const initialNotificationsState: INotificationsState = {
+  notifications: [],
+  isFetching: false,
+  hasNewNotifications: false,
+  hasNewNotificationsQuery: false,
+  markAsReadQuery: null,
+};
+
+export type INotificationsAction =
+  | { type: 'GET_NOTIFICATIONS' }
+  | {
+      type: 'GET_NOTIFICATIONS_SUCCESS';
+      payload: any[];
+    }
+  | { type: 'MARK_MESSAGE_AS_READ'; payload: string | number }
+  | {
+      type: 'MARK_MESSAGE_AS_READ_SUCCESS';
+      payload: { data: boolean; messageId: string | number };
+    }
+  | { type: 'HAS_NEW_NOTIFICATIONS' }
+  | { type: 'HAS_NEW_NOTIFICATIONS_SUCCESS'; payload: boolean };
+
+const NotificationsStateReducer = (state: INotificationsState, action: INotificationsAction) => {
+  switch (action.type) {
+    case 'GET_NOTIFICATIONS':
+      return { ...state, isFetching: true };
+    case 'GET_NOTIFICATIONS_SUCCESS': {
+      return {
+        ...state,
+        isFetching: false,
+        notifications: action.payload,
+      };
+    }
+    case 'MARK_MESSAGE_AS_READ':
+      return { ...state, markAsReadQuery: action.payload };
+    case 'MARK_MESSAGE_AS_READ_SUCCESS':
+      if (action.payload) {
+        let readCounter = 0;
+        const readNotifs = state.notifications.map((notif: any) => {
+          if (notif.read) {
+            readCounter++;
+          }
+          if (notif.id === state.markAsReadQuery) {
+            return { ...notif, read: true };
+          }
+          return notif;
+        });
+        // check for new notifications when last notification gets read
+        if (readCounter >= state.notifications.length - 1) {
+          return {
+            ...state,
+            markAsReadQuery: null,
+            notifications: readNotifs,
+            hasNewNotificationsQuery: true,
+          };
+        }
+
+        return { ...state, markAsReadQuery: null, notifications: readNotifs };
+      }
+      return { ...state, markAsReadQuery: null };
+    case 'HAS_NEW_NOTIFICATIONS': {
+      return {
+        ...state,
+        hasNewNotificationsQuery: true,
+      };
+    }
+    case 'HAS_NEW_NOTIFICATIONS_SUCCESS': {
+      return {
+        ...state,
+        hasNewNotificationsQuery: false,
+        hasNewNotifications: action.payload,
+      };
+    }
+
+    default:
+      throw new Error('[UseNotificationsReducer] action is not defined!');
+  }
+};
 
 /* A hook to get notifications and mark them as read */
 export const useNotifications = (
   props: UseNotificationsProps,
-): [UseNotificationsState, UseNotificationsActions] => {
+): [INotificationsState, UseNotificationsActions] => {
   const { onError, globalChannel, authService, ipfsService, profileService } = props;
-  const [notificationsState, setNotificationsState] = React.useState<UseNotificationsState>({
-    notifications: [],
-    isFetching: true,
-    hasNewNotifications: false,
-  });
+  const [notificationsState, dispatch] = React.useReducer(
+    NotificationsStateReducer,
+    initialNotificationsState,
+  );
 
   const handleSubscribeMarkAsRead = (payload: any) => {
     const { data, channelInfo } = payload;
     if (data) {
-      setNotificationsState((prev: any) => {
-        return {
-          ...prev,
-          notifications: prev.notifications.map((notif: any) => {
-            if (notif.id === channelInfo.args) {
-              return { ...notif, read: true };
-            }
-            return notif;
-          }),
-        };
+      dispatch({
+        type: 'MARK_MESSAGE_AS_READ_SUCCESS',
+        payload: { data, messageId: channelInfo.args },
       });
     }
   };
 
   const handleSubscribeHasNewNotifs = (payload: any) => {
     const { data } = payload;
-    setNotificationsState((prev: any) => {
-      return {
-        ...prev,
-        hasNewNotifications: data,
-      };
-    });
+    dispatch({ type: 'HAS_NEW_NOTIFICATIONS_SUCCESS', payload: data });
   };
 
   // this is used to sync notification state between different components using the hook
@@ -74,10 +142,10 @@ export const useNotifications = (
         );
       }),
     );
-    callMarkAsRead.subscribe(
-      handleSubscribeMarkAsRead,
-      createErrorHandler('useNotifications.globalMarkAsRead', false, onError),
-    );
+    const callMarkAsReadSub = callMarkAsRead.subscribe({
+      next: handleSubscribeMarkAsRead,
+      error: createErrorHandler('useNotifications.globalMarkAsRead', false, onError),
+    });
 
     const callHasNewNotifs = globalChannel.pipe(
       filter((payload: any) => {
@@ -87,110 +155,117 @@ export const useNotifications = (
         );
       }),
     );
-    callHasNewNotifs.subscribe(
-      handleSubscribeHasNewNotifs,
-      createErrorHandler('useNotifications.globalHasNewNotifications', false, onError),
-    );
+    const callHasNewNotifsSub = callHasNewNotifs.subscribe({
+      next: handleSubscribeHasNewNotifs,
+      error: createErrorHandler('useNotifications.globalHasNewNotifications', false, onError),
+    });
     return () => {
-      callMarkAsRead.unsubscribe();
-      callHasNewNotifs.unsubscribe();
+      callMarkAsReadSub.unsubscribe();
+      callHasNewNotifsSub.unsubscribe();
     };
   }, []);
 
-  const actions: UseNotificationsActions = {
-    async getMessages() {
-      try {
-        const getMessagesCall = authService.getMessages(null);
-        const ipfsGatewayCall = ipfsService.getSettings(null);
-        const initialResp: any = await forkJoin([ipfsGatewayCall, getMessagesCall]).toPromise();
-        const getProfilesCalls = initialResp[1].data.map((message: any) => {
-          const pubKey = message.body.value.author || message.body.value.follower;
-          if (pubKey) {
-            return profileService.getProfile({ pubKey });
-          }
-        });
-        const profilesResp: any = await forkJoin(getProfilesCalls).toPromise();
-
-        const [gatewayResp, messagesResp] = initialResp;
-
-        let completeMessages: any = [];
-        profilesResp
-          ?.filter((res: any) => res.data)
-          .map((profileResp: any) => {
-            const { avatar, coverImage, ...other } = profileResp.data?.resolveProfile;
-            const images: { avatar: string | null; coverImage: string | null } = {
-              avatar: null,
-              coverImage: null,
-            };
-            if (avatar) {
-              images.avatar = getMediaUrl(gatewayResp.data, avatar);
-            }
-            if (coverImage) {
-              images.coverImage = getMediaUrl(gatewayResp.data, coverImage);
-            }
-            const profileData = { ...images, ...other };
-            completeMessages = messagesResp.data?.map((message: any) => {
-              if (message.body.value.author === profileData.pubKey) {
-                message.body.value.author = profileData;
-              }
-              if (message.body.value.follower === profileData.pubKey) {
-                message.body.value.follower = profileData;
-              }
-              return message;
-            });
-          });
-        setNotificationsState(prev => ({
-          ...prev,
-          isFetching: false,
-          notifications: completeMessages,
-        }));
-      } catch (ex) {
-        if (onError) {
-          onError({
-            errorKey: 'useNotifications.getMessages',
-            error: ex,
-            critical: false,
-          });
+  async function fetchNotifications() {
+    try {
+      const getMessagesCall = authService.getMessages(null);
+      const ipfsGatewayCall = ipfsService.getSettings(null);
+      const initialResp: any = await forkJoin([ipfsGatewayCall, getMessagesCall]).toPromise();
+      const getProfilesCalls = initialResp[1].data.map((message: any) => {
+        const pubKey = message.body.value.author || message.body.value.follower;
+        if (pubKey) {
+          return profileService.getProfile({ pubKey });
         }
+      });
+      const profilesResp: any = await forkJoin(getProfilesCalls).toPromise();
+
+      const [gatewayResp, messagesResp] = initialResp;
+
+      let completeMessages: any = [];
+      profilesResp
+        ?.filter((res: any) => res.data)
+        .map((profileResp: any) => {
+          const { avatar, coverImage, ...other } = profileResp.data?.resolveProfile;
+          const images: { avatar: string | null; coverImage: string | null } = {
+            avatar: null,
+            coverImage: null,
+          };
+          if (avatar) {
+            images.avatar = getMediaUrl(gatewayResp.data, avatar);
+          }
+          if (coverImage) {
+            images.coverImage = getMediaUrl(gatewayResp.data, coverImage);
+          }
+          const profileData = { ...images, ...other };
+          completeMessages = messagesResp.data?.map((message: any) => {
+            if (message.body.value.author === profileData.pubKey) {
+              message.body.value.author = profileData;
+            }
+            if (message.body.value.follower === profileData.pubKey) {
+              message.body.value.follower = profileData;
+            }
+            return message;
+          });
+        });
+      dispatch({ type: 'GET_NOTIFICATIONS_SUCCESS', payload: completeMessages });
+    } catch (ex) {
+      if (onError) {
+        onError({
+          errorKey: 'useNotifications.getMessages',
+          error: ex,
+          critical: false,
+        });
       }
+    }
+  }
+
+  React.useEffect(() => {
+    if (notificationsState.isFetching) {
+      fetchNotifications();
+    }
+    return;
+  }, [notificationsState.isFetching]);
+
+  React.useEffect(() => {
+    const payload = notificationsState.markAsReadQuery;
+    if (payload) {
+      const call = authService.markMessageAsRead(payload);
+      const callSub = call.subscribe({
+        next: (resp: any) => {
+          dispatch({
+            type: 'MARK_MESSAGE_AS_READ_SUCCESS',
+            payload: { data: resp.data, messageId: payload },
+          });
+        },
+        error: createErrorHandler('useNotifications.markMessageAsRead', false, onError),
+      });
+      return () => callSub.unsubscribe();
+    }
+    return;
+  }, [notificationsState.markAsReadQuery]);
+
+  React.useEffect(() => {
+    if (notificationsState?.hasNewNotificationsQuery) {
+      const call = authService.hasNewNotifications(null);
+      const callSub = call.subscribe({
+        next: (resp: any) => {
+          dispatch({ type: 'HAS_NEW_NOTIFICATIONS_SUCCESS', payload: resp.data });
+        },
+        error: createErrorHandler('useNotifications.hasNewNotifications', false, onError),
+      });
+      return () => callSub.unsubscribe();
+    }
+    return;
+  }, [notificationsState?.hasNewNotificationsQuery]);
+
+  const actions: UseNotificationsActions = {
+    getMessages() {
+      dispatch({ type: 'GET_NOTIFICATIONS' });
     },
     markMessageAsRead(messageId) {
-      const call = authService.markMessageAsRead(messageId);
-      call.subscribe((resp: any) => {
-        if (resp.data) {
-          let readCounter = 0;
-          const readNotifs = notificationsState.notifications.map((notif: any) => {
-            if (notif.read) {
-              readCounter++;
-            }
-            if (notif.id === messageId) {
-              return { ...notif, read: true };
-            }
-            return notif;
-          });
-          setNotificationsState((prev: any) => {
-            return {
-              ...prev,
-              notifications: readNotifs,
-            };
-          });
-          // check for new notifications when last notif gets read
-          if (readCounter >= notificationsState.notifications.length - 1) {
-            authService.hasNewNotifications(null).subscribe();
-          }
-        }
-      }, createErrorHandler('useNotifications.markMessageAsRead', false, onError));
+      dispatch({ type: 'MARK_MESSAGE_AS_READ', payload: messageId });
     },
     hasNewNotifications() {
-      const call = authService.hasNewNotifications(null);
-      call.subscribe((resp: any) => {
-        setNotificationsState((prev: any) => {
-          return {
-            ...prev,
-            hasNewNotifications: resp?.data,
-          };
-        });
-      }, createErrorHandler('useNotifications.hasNewNotifications', false, onError));
+      dispatch({ type: 'HAS_NEW_NOTIFICATIONS' });
     },
   };
 

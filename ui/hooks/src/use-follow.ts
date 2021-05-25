@@ -207,11 +207,11 @@ export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] =
         );
       }),
     );
-    call.subscribe({
+    const callSub = call.subscribe({
       next: handleSubscribe,
       error: createErrorHandler('useFollow.globalFollow', false, onError),
     });
-    return () => call.unsubscribe();
+    return () => callSub.unsubscribe();
   }, []);
 
   React.useEffect(() => {

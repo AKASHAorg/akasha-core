@@ -137,11 +137,11 @@ export const useTagSubscribe = (
         );
       }),
     );
-    call.subscribe({
+    const callSub = call.subscribe({
       next: handleSubscribe,
       error: createErrorHandler('useTagSubscribe.globalSubscribe', false, onError),
     });
-    return () => call.unsubscribe();
+    return () => callSub.unsubscribe();
   }, []);
 
   React.useEffect(() => {
