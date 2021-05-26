@@ -31,6 +31,8 @@
     "start:expose-feed-app": "lerna run start:expose --scope=@akashaproject/ethereum.world --stream",
     "build:feed-app": "lerna run --scope=@akashaproject/ethereum.world build",
     "start:translations-server": "npm run start --prefix scripts/translations-server",
+    "start:design-system:storybook": "lerna run storybook --scope @akashaproject/design-system --stream",
+    "build:storybook": "lerna run build-storybook --scope @akashaproject/design-system --stream",
     "start:only": "lerna run start --scope $AWF_PACKAGE --stream",
     "start:api": "docker-compose up -d",
     "stop:api": "docker-compose stop awf-api couchbase",
