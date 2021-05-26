@@ -222,7 +222,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     if (!(ev.target.files && ev.target.files[0])) {
       return;
     }
-    const file: any = ev.target.files[0];
+    const file: File = ev.target.files[0];
     handleImageInsert('avatar')(file, false);
   };
 
@@ -230,7 +230,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     if (!(ev.target.files && ev.target.files[0])) {
       return;
     }
-    const file: any = ev.target.files[0];
+    const file: File = ev.target.files[0];
     handleImageInsert('coverImage')(file, false);
   };
 
