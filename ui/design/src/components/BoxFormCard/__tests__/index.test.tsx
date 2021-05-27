@@ -29,7 +29,16 @@ describe('<BoxFormCard /> Component', () => {
             descriptionFieldPlaceholder={'Add a description about you here'}
             ethAddress={'0x003410499401674320006570047391024572456'}
             providerData={boxProviderData}
-            updateStatus={{ saving: false }}
+            updateStatus={{
+              saving: false,
+              uploadingAvatar: false,
+              uploadingCoverImage: false,
+              updateComplete: false,
+              isValidUsername: null,
+              isValidating: false,
+              notAllowed: false,
+              tooShort: false,
+            }}
             onSave={handleSave}
             onCancel={() => null}
           />,
