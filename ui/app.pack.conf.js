@@ -3,7 +3,7 @@ module.exports = {
     {
       '@akashaproject/design-system': '@akashaproject/design-system',
     },
-    function ({ context, request }, callback) {
+    function ({ request }, callback) {
       if (/^rxjs\/operators$/.test(request)) {
         return callback(null, ['rxjs', 'operators'], 'root');
       }

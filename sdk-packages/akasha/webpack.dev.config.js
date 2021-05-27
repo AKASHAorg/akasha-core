@@ -87,7 +87,7 @@ const config = {
   devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'inline-source-map',
   mode: process.env.NODE_ENV || 'development',
   externals: [
-    function ({ context, request }, callback) {
+    function ({ request }, callback) {
       if (/^rxjs\/operators$/.test(request)) {
         return callback(null, ['rxjs', 'operators'], 'root');
       }
