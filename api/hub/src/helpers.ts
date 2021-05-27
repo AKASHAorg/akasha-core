@@ -12,6 +12,7 @@ import winston from 'winston';
 import { normalize } from 'eth-ens-namehash';
 import { ethers, utils, providers } from 'ethers';
 import objHash from 'object-hash';
+import sendgrid from '@sendgrid/mail';
 
 export const getAPISig = async (minutes = 30) => {
   const expiration = new Date(Date.now() + 1000 * 60 * minutes);
@@ -207,6 +208,32 @@ export const sendAuthorNotification = async (
     return Promise.resolve(null);
   }
   return sendNotification(recipient, notification);
+};
+
+/**
+ * Send an email notification using SendGrid.
+ * @param to - Destination email address
+ * @param from - Source email address
+ * @param subject - Email subject
+ * @param text - Email body (text version)
+ * @param html - Email body (HTML version)
+ * @returns A promise that resolves upon sending the email
+ */
+export const sendEmailNotification = async (
+to: string,
+from: string,
+subject: string,
+text: string,
+html: string
+) => {
+  sendgrid.setApiKey(process.env.SENDGRID_API_KEY)
+  return sendgrid.send({
+    to,
+    from: from || process.env.SENDGRID_SENDER_EMAIL, // Change to the verified sender
+    subject,
+    text,
+    html
+  });
 };
 
 export const decodeString = (value: string) => {

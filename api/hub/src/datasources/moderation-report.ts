@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB, logger, decodeString, encodeString } from '../helpers';
+import { getAppDB, logger, decodeString, encodeString, sendEmailNotification } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { ModerationDecision, ModerationReport } from '../collections/interfaces';
 import ModerationDecisionAPI from './moderation-decision';
@@ -194,6 +194,26 @@ class ModerationReportAPI extends DataSource {
       if (!decisionID || !decisionID.length) {
         logger.warn(`pending decision could not be created for contentID ${contentID}`);
         // throw new Error('pending decision could not be created');
+      }
+      // send email notification to moderators
+      const text = `There is a new pending request for moderation.
+      Please visit the moderation app (https://akasha.ethereum.world/moderation-app/home)
+      to moderate this content.
+      \nThank you!`;
+      const html = `<p>There is a new pending request for moderation.
+      Please visit the <a href="https://akasha.ethereum.world/moderation-app/home">moderation app</a>
+      to moderate this content.</p>
+      <br>
+      <p>Thank you!</p>`;
+      try {
+        await sendEmailNotification(process.env.MODERATION_EMAIL,
+          process.env.MODERATION_EMAIL,
+          "New moderation request on Ethereum World",
+          text,
+          html
+        );
+      } catch (e) {
+        logger.warn(`Cound not send email notification to moderator list ${process.env.MODERATION_EMAIL}`);
       }
     }
 
