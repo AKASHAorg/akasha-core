@@ -16,7 +16,7 @@ export default {
 };
 
 const Template = (args: IEmojiPopover) => {
-  const iconRef: React.Ref<any> = React.useRef();
+  const iconRef = React.useRef<HTMLDivElement>(null);
   const [emojiOpen, setEmojiOpen] = React.useState(false);
   return (
     <Grommet theme={lightTheme}>
