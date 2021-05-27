@@ -20,6 +20,7 @@ describe('<EmojiPopover /> Component', () => {
         wrapWithTheme(
           <EmojiPopover
             target={targetNode}
+            emojiPlaceholderLabel="Search"
             closePopover={handleClosePopover}
             onClickEmoji={handleClickEmoji}
           />,

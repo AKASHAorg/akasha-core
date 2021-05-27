@@ -254,6 +254,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         ethAddress={loginState.ethAddress as any}
         postLabel={t('Publish')}
         placeholderLabel={t('Write something')}
+        emojiPlaceholderLabel={t('Search')}
         discardPostLabel={t('Discard Post')}
         discardPostInfoLabel={t(
           "You have not posted yet. If you leave now you'll discard your post.",

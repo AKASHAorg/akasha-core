@@ -380,6 +380,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             ethAddress={loggedProfileData.ethAddress}
             postLabel={t('Publish')}
             placeholderLabel={t('Write something')}
+            emojiPlaceholderLabel={t('Search')}
             discardPostLabel={t('Discard Post')}
             discardPostInfoLabel={t(
               "You have not posted yet. If you leave now you'll discard your post.",
@@ -484,6 +485,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             ethAddress={loginState.ethAddress}
             postLabel={t('Reply')}
             placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
+            emojiPlaceholderLabel={t('Search')}
             onPublish={handlePublishComment}
             getMentions={mentionsActions.getMentions}
             getTags={mentionsActions.getTags}

@@ -26,6 +26,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
     avatar,
     postLabel,
     placeholderLabel,
+    emojiPlaceholderLabel,
     discardPostLabel,
     discardPostInfoLabel,
     keepEditingLabel,
@@ -68,6 +69,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
               ethAddress={ethAddress}
               postLabel={postLabel}
               placeholderLabel={placeholderLabel}
+              emojiPlaceholderLabel={emojiPlaceholderLabel}
               onPublish={onPublish}
               handleNavigateBack={handleToggleShowCancel}
               getMentions={getMentions}

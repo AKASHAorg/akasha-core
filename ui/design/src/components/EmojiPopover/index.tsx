@@ -17,10 +17,11 @@ import {
 export interface IEmojiPopover extends Pick<IRenderEmojiProps, 'onClickEmoji' | 'closePopover'> {
   className?: string;
   target: HTMLElement;
+  emojiPlaceholderLabel?: string;
 }
 
 const EmojiPopover: React.FC<IEmojiPopover> = props => {
-  const { className, closePopover, target, onClickEmoji } = props;
+  const { className, target, emojiPlaceholderLabel, closePopover, onClickEmoji } = props;
 
   const [searchValue, setSearchValue] = React.useState('');
   const [hoveredEmoji, setHoveredEmoji] = React.useState({ emojiCode: '', emojiName: '' });
@@ -56,7 +57,7 @@ const EmojiPopover: React.FC<IEmojiPopover> = props => {
             plain={true}
             value={searchValue}
             onChange={handleSearchChange}
-            placeholder={'Search'}
+            placeholder={emojiPlaceholderLabel}
           />
         </StyledSearchBox>
       </StyledSearchContainer>
@@ -69,6 +70,10 @@ const EmojiPopover: React.FC<IEmojiPopover> = props => {
       </StyledFooter>
     </StyledEmojiDrop>
   );
+};
+
+EmojiPopover.defaultProps = {
+  emojiPlaceholderLabel: 'Search',
 };
 
 export default EmojiPopover;

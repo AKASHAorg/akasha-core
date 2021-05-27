@@ -39,3 +39,6 @@ const Template = (args: IEmojiPopover) => {
 };
 
 export const BaseEmojiPopover = Template.bind({});
+BaseEmojiPopover.args = {
+  emojiPlaceholderLabel: 'Search',
+};

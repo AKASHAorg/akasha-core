@@ -141,6 +141,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
               ethAddress={props.loggedProfile.ethAddress}
               postLabel={t('Publish')}
               placeholderLabel={t('Write something')}
+              emojiPlaceholderLabel={t('Search')}
               discardPostLabel={t('Discard Post')}
               discardPostInfoLabel={t(
                 "You have not posted yet. If you leave now you'll discard your post.",

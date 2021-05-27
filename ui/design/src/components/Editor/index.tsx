@@ -41,6 +41,7 @@ export interface IEditorBox {
   ethAddress: string | null;
   postLabel?: string;
   placeholderLabel?: string;
+  emojiPlaceholderLabel?: string;
   uploadFailedLabel?: string;
   uploadingImageLabel?: string;
   onPublish: (publishData: IPublishData) => void;
@@ -87,6 +88,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     ethAddress,
     postLabel,
     placeholderLabel,
+    emojiPlaceholderLabel,
     uploadFailedLabel,
     uploadingImageLabel,
     onPublish,
@@ -572,6 +574,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       </Box>
       {emojiPopoverOpen && emojiIconRef.current && (
         <EmojiPopover
+          emojiPlaceholderLabel={emojiPlaceholderLabel}
           target={emojiIconRef.current}
           closePopover={closeEmojiPicker}
           onClickEmoji={handleInsertEmoji}
