@@ -213,11 +213,7 @@ export const sendAuthorNotification = async (
 
 /**
  * Send an email notification using SendGrid.
- * @param to - Destination email address
- * @param from - Source email address
- * @param subject - Email subject
- * @param text - Email body (text version)
- * @param html - Email body (HTML version)
+ * @param email - Object containing the required data for sending the email
  * @returns A promise that resolves upon sending the email
  */
 export const sendEmailNotification = async (email) => {
