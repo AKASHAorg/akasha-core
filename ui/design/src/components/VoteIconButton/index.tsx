@@ -7,7 +7,7 @@ export interface IVoteIconProps {
   className?: string;
   voteType: 'upvote' | 'downvote';
   voteCount: number | string;
-  onClick: any;
+  onClick: () => void;
   voted?: boolean;
 }
 
