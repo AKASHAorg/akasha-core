@@ -468,7 +468,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
               user={loggedUserEthAddress ? loggedUserEthAddress : ''}
               contentId={profileState.ethAddress ? profileState.ethAddress : flagged}
               contentType="account"
-              baseUrl={`${constants.BASE_REPORT_URL}`}
+              baseUrl={constants.BASE_REPORT_URL}
               closeModal={closeReportModal}
               signData={sdkModules.auth.authService.signData}
             />
