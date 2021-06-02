@@ -13,7 +13,7 @@ import {
 } from './profile-card-fields/index';
 import { IProfileWidgetCard } from './profile-widget-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
-import ProfileEditMenuDropdown from './profile-card-edit-dropdown';
+import ProfileMenuDropdown from './profile-card-menu-dropdown';
 import styled from 'styled-components';
 import { truncateMiddle } from '../../utils/string-utils';
 import { isMobile } from 'react-device-detect';
@@ -138,13 +138,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const followingTitle = `${profileData.totalFollowing || 0} ${followingLabel}`;
 
   const [editable /* , setEditable */] = useState(false);
-  const [editMenuOpen, setEditMenuOpen] = React.useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(false);
   const [avatar, setAvatar] = useState(profileData.avatar);
   const [coverImage, setCoverImage] = useState(profileData.coverImage);
   const [description, setDescription] = useState(profileData.description);
   const [name, setName] = useState(profileData.name);
 
-  const editMenuRef: React.Ref<HTMLDivElement> = React.useRef(null);
+  const menuRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
   React.useEffect(() => {
     setAvatar(profileData.avatar);
@@ -171,12 +171,12 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const [descriptionPopoverOpen, setDescriptionPopoverOpen] = useState(false);
   const [namePopoverOpen, setNamePopoverOpen] = useState(false);
 
-  const toggleEditMenu = () => {
-    setEditMenuOpen(!editMenuOpen);
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
   };
 
-  const closeEditMenu = () => {
-    setEditMenuOpen(false);
+  const closeMenu = () => {
+    setMenuOpen(false);
   };
 
   const handleChangeAvatar = (provider: IProfileDataProvider) => {
@@ -271,14 +271,14 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             {!isMobile && canUserEdit && (
               <EditButton
                 iconType="editSimple"
-                ref={editMenuRef}
+                ref={menuRef}
                 label={editProfileLabel}
-                onClick={toggleEditMenu}
+                onClick={toggleMenu}
               />
             )}
-            {isMobile && loggedEthAddress === profileData.ethAddress && (
-              <Icon type="moreDark" onClick={toggleEditMenu} clickable={true} ref={editMenuRef} />
-            )}
+            {isMobile || (!isMobile && loggedEthAddress !== profileData.ethAddress) ? (
+              <Icon type="moreDark" onClick={toggleMenu} clickable={true} ref={menuRef} />
+            ) : null}
           </Box>
         </Box>
         <Box pad={{ bottom: 'medium' }} direction="row" alignContent="center" gap="medium">
@@ -314,43 +314,62 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           />
         </Box>
       </Box>
-      {!isMobile && editMenuOpen && editMenuRef.current && (
-        <ProfileEditMenuDropdown
-          target={editMenuRef.current}
-          onClose={closeEditMenu}
+      {!isMobile && menuOpen && menuRef.current && (
+        <ProfileMenuDropdown
+          target={menuRef.current}
+          onClose={closeMenu}
+          onReportClick={() => {
+            props.onEntryFlag();
+            closeMenu();
+          }}
           onUpdateClick={() => {
             props.onUpdateClick();
-            closeEditMenu();
+            closeMenu();
           }}
           onENSChangeClick={() => {
             props.onENSChangeClick();
-            closeEditMenu();
+            closeMenu();
           }}
           changeENSLabel={props.changeENSLabel}
           updateProfileLabel={props.updateProfileLabel}
+          flagAsLabel={props.flagAsLabel}
           hideENSButton={props.hideENSButton}
+          flaggable={props.flaggable}
         />
       )}
-      {isMobile && editMenuOpen && (
+      {isMobile && menuOpen && (
         <StyledDropAlt>
           <MobileListModal
-            closeModal={closeEditMenu}
-            menuItems={[
-              {
-                label: props.updateProfileLabel,
-                handler: () => {
-                  props.onUpdateClick();
-                  closeEditMenu();
-                },
-              },
-              {
-                label: props.changeENSLabel,
-                handler: () => {
-                  props.onENSChangeClick();
-                  closeEditMenu();
-                },
-              },
-            ]}
+            closeModal={closeMenu}
+            menuItems={
+              props.flaggable
+                ? [
+                    {
+                      label: props.flagAsLabel,
+                      icon: 'report',
+                      handler: () => {
+                        props.onEntryFlag();
+                        closeMenu();
+                      },
+                    },
+                  ]
+                : [
+                    {
+                      label: props.updateProfileLabel,
+                      handler: () => {
+                        props.onUpdateClick();
+                        closeMenu();
+                      },
+                    },
+                    {
+                      label: props.changeENSLabel,
+                      handler: () => {
+                        props.onENSChangeClick();
+                        closeMenu();
+                      },
+                    },
+                  ]
+            }
           />
         </StyledDropAlt>
       )}

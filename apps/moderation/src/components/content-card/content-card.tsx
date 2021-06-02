@@ -82,7 +82,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
         }
       });
     }
-    if (contentType === 'profile') {
+    if (contentType === 'account') {
       profileActions.getProfileData({ ethAddress: entryId });
     }
   }, [entryId]);
@@ -105,7 +105,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
         <Content
           isPending={isPending}
           locale={locale}
-          entryData={contentType === 'profile' ? profile : entryData}
+          entryData={contentType === 'account' ? profile : entryData}
           showExplanationsLabel={showExplanationsLabel}
           hideExplanationsLabel={hideExplanationsLabel}
           determinationLabel={determinationLabel}
