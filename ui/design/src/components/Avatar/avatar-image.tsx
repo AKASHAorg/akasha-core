@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const AvatarImage = (props: any) => {
+const AvatarImage = (props: { image: string }) => {
   const { image } = props;
   let avatar;
   // if (typeof image === 'object' && image.hasOwnProperty('read')) {

@@ -1,9 +1,10 @@
 import * as React from 'react';
+import { ReactNode } from 'react';
 import { StyledDrop } from '../NotificationsPopover/styled-notifications-popover';
 
 export interface IBasicPopover {
   className?: string;
-  children: any;
+  children: ReactNode;
   closePopover: () => void;
   target: HTMLElement;
   gap?: string;

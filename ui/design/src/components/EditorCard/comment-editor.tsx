@@ -12,6 +12,7 @@ const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>
     avatar,
     postLabel,
     placeholderLabel,
+    emojiPlaceholderLabel,
     onPublish,
     getMentions,
     getTags,
@@ -64,6 +65,7 @@ const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>
             ethAddress={ethAddress}
             postLabel={postLabel}
             placeholderLabel={placeholderLabel}
+            emojiPlaceholderLabel={emojiPlaceholderLabel}
             onPublish={handlePublish}
             getMentions={getMentions}
             getTags={getTags}

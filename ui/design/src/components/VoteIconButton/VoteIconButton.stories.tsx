@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 
-import VoteIconButton from '.';
+import VoteIconButton, { IVoteIconProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -9,18 +9,19 @@ export default {
   title: 'Buttons/VoteIconButton',
   component: VoteIconButton,
   argTypes: {
-    label: { control: 'text' },
     voteType: {
       control: {
         type: 'radio',
         options: ['upvote', 'downvote'],
       },
     },
+    voteCount: { control: 'number' },
     voted: { control: 'boolean' },
+    onClick: { action: 'button clicked' },
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: IVoteIconProps) => (
   <Grommet theme={lightTheme}>
     <VoteIconButton {...args} />
   </Grommet>
