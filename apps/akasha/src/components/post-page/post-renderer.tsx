@@ -143,7 +143,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     repostWithCommentLabel={t('Repost with comment')}
                     shareLabel={t('Share')}
                     copyLinkLabel={t('Copy Link')}
-                    flagAsLabel={t('Report Post')}
+                    flagAsLabel={t('Report Comment')}
                     loggedProfileEthAddress={ethAddress}
                     locale={props.locale}
                     bookmarkLabel={t('Save')}
