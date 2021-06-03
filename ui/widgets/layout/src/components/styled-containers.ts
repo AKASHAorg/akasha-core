@@ -55,8 +55,8 @@ export const ScrollableWidgetArea: any = styled.div`
 export const SidebarWrapper: any = styled(BaseContainer)<{ visible: boolean }>`
   z-index: 999;
   flex-grow: 1;
-  /* height: calc(100vh - ${TOPBAR_HEIGHT}rem); */
-  /* top: ${TOPBAR_HEIGHT}rem; */
+  max-height: calc(100vh - ${TOPBAR_HEIGHT}px);
+  top: ${TOPBAR_HEIGHT}px;
   position: sticky;
   @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
     ${props => {

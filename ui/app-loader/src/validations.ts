@@ -1,10 +1,10 @@
-import { IPlugin, IWidget } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IAppConfig, IWidgetConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-const validateServices = (services: any) => {
+const validateServices = (_services: unknown) => {
   return true;
 };
 
-export const validatePlugin = (plugin: IPlugin) => {
+export const validatePlugin = (plugin: IAppConfig) => {
   let isValid = true;
   if (Array.isArray(plugin.sdkModules)) {
     isValid = validateServices(plugin.sdkModules);
@@ -12,7 +12,7 @@ export const validatePlugin = (plugin: IPlugin) => {
   return isValid;
 };
 
-export const validateWidget = (widget: IWidget) => {
+export const validateWidget = (widget: IWidgetConfig) => {
   let isValid = true;
   if (Array.isArray(widget.sdkModules)) {
     isValid = validateServices(widget.sdkModules);

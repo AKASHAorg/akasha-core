@@ -3,6 +3,12 @@ import DS from '@akashaproject/design-system';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { I18nextProvider } from 'react-i18next';
 import AppRoutes from './app-routes';
+import i18n from 'i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import Backend from 'i18next-chained-backend';
+import Fetch from 'i18next-fetch-backend';
+import LocalStorageBackend from 'i18next-localstorage-backend';
+import { initReactI18next } from 'react-i18next';
 
 const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
 
@@ -38,7 +44,41 @@ export default class Application extends React.Component<RootComponentProps> {
     }
   }
   render() {
-    const { i18n } = this.props;
+    const { logger } = this.props;
+
+    i18n
+      .use(initReactI18next)
+      .use(Backend)
+      .use(LanguageDetector)
+      .use({
+        type: 'logger',
+        log: logger.info,
+        warn: logger.warn,
+        error: logger.error,
+      })
+      .init({
+        fallbackLng: 'en',
+        ns: ['akasha-app'],
+        saveMissing: false,
+        saveMissingTo: 'all',
+        load: 'languageOnly',
+        debug: true,
+        cleanCode: true,
+        keySeparator: false,
+        defaultNS: 'akasha-app',
+        backend: {
+          backends: [LocalStorageBackend, Fetch],
+          backendOptions: [
+            {
+              prefix: 'i18next_res_v0',
+              expirationTime: 24 * 60 * 60 * 1000,
+            },
+            {
+              loadPath: '/locales/{{lng}}/{{ns}}.json',
+            },
+          ],
+        },
+      });
 
     return (
       <Box width="100vw">
@@ -47,7 +87,7 @@ export default class Application extends React.Component<RootComponentProps> {
             settings={{ activeTheme: 'Light-Theme' }}
             availableThemes={[lightTheme, darkTheme]}
           >
-            <I18nextProvider i18n={i18n ? i18n : null}>
+            <I18nextProvider i18n={i18n}>
               <AppRoutes {...this.props} onError={this.handleError} />
             </I18nextProvider>
           </ThemeSelector>

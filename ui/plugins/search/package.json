@@ -45,8 +45,6 @@
     "single-spa-react": "4.1.1"
   },
   "devDependencies": {
-    "@types/i18next": "13.0.0",
-    "@types/react-i18next": "8.1.0",
     "@types/react-router": "5.1.8",
     "@types/react-router-dom": "5.1.6",
     "@types/react": "17.0.2",

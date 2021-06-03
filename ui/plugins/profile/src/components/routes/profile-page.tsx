@@ -46,6 +46,8 @@ const ProfilePage = (props: ProfilePageProps) => {
   } = props;
   const location = useLocation();
 
+  const { i18n } = useTranslation();
+
   let { pubKey } = useParams() as any;
   if (location.pathname.includes(menuRoute[MY_PROFILE])) {
     pubKey = loggedProfileData.pubKey;
@@ -188,7 +190,7 @@ const ProfilePage = (props: ProfilePageProps) => {
           {t("{{profileUsername}}'s Page", { profileUsername: profileUserName })} | Ethereum World
         </title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.modalSlotId}>
+      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -247,7 +249,7 @@ const ProfilePage = (props: ProfilePageProps) => {
       />
       <FeedWidget
         // pass i18n from props (the i18next instance, not the react one!)
-        i18n={props.i18n}
+        i18n={i18n}
         itemType={ItemTypes.ENTRY}
         logger={props.logger}
         loadMore={handleLoadMore}
@@ -257,7 +259,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         itemsData={postsState.postsData}
         errors={errorState}
         sdkModules={props.sdkModules}
-        layout={props.layout}
+        layout={props.layoutConfig}
         globalChannel={props.globalChannel}
         rxjsOperators={rxjsOperators}
         ethAddress={loggedEthAddress}
@@ -266,7 +268,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         onLoginModalOpen={handleLoginModalOpen}
         totalItems={postsState.totalItems}
         profilePubKey={pubKey}
-        modalSlotId={props.layout.modalSlotId}
+        modalSlotId={props.layoutConfig.modalSlotId}
         loggedProfile={loggedProfileData}
         onRepostPublish={handleRepostPublish}
         contentClickable={true}

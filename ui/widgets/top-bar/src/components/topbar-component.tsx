@@ -5,6 +5,7 @@ import {
   IMenuItem,
   EventTypes,
   MenuItemAreaType,
+  UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   useLoginState,
@@ -15,33 +16,31 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { useTranslation } from 'react-i18next';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { extensionPointsMap } from '../extension-points';
 
-const { lightTheme, Topbar, ThemeSelector, LoginModal, FeedbackModal, ModalRenderer } = DS;
+const {
+  lightTheme,
+  Topbar,
+  ThemeSelector,
+  LoginModal,
+  FeedbackModal,
+  ModalRenderer,
+  ExtensionPoint,
+} = DS;
 
-interface TopBarProps {
-  navigateToUrl: (url: string) => void;
-  toggleSidebar: (visible: boolean) => void;
-  getMenuItems: () => IMenuItem[];
-  loaderEvents: any;
-  modalSlotId: string;
-  globalChannel: any;
-  logger: any;
-  sdkModules: any;
-  rxjsOperators: any;
-}
-
-const TopbarComponent = (props: TopBarProps) => {
+const TopbarComponent = (props: RootComponentProps) => {
   const {
-    navigateToUrl,
+    singleSpa,
     getMenuItems,
-    loaderEvents,
-    toggleSidebar,
-    modalSlotId,
+    uiEvents,
+    layoutConfig,
     globalChannel,
     rxjsOperators,
     logger,
   } = props;
-
+  const { modalSlotId } = layoutConfig;
+  const { navigateToUrl } = singleSpa;
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
   const [suggestSignUp, setSuggestSignUp] = React.useState<boolean>(false);
   const [showSignUpModal, setshowSignUpModal] = React.useState<{
@@ -138,17 +137,22 @@ const TopbarComponent = (props: TopBarProps) => {
 
   React.useEffect(() => {
     const updateMenu = () => {
-      const menuItems = getMenuItems();
+      const menuItems = getMenuItems ? getMenuItems() : [];
       setCurrentMenu(menuItems);
     };
     updateMenu();
-    loaderEvents.subscribe((evMsg: EventTypes) => {
-      if (evMsg === EventTypes.AppInstall || evMsg === EventTypes.PluginInstall) {
-        updateMenu();
-      }
+    uiEvents.subscribe({
+      next: (eventData: UIEventData) => {
+        if (
+          eventData.event === EventTypes.AppInstall ||
+          eventData.event === EventTypes.PluginInstall
+        ) {
+          updateMenu();
+        }
+      },
     });
     return function cleanup() {
-      loaderEvents.unsubscribe();
+      uiEvents.unsubscribe();
     };
   }, []);
 
@@ -163,7 +167,7 @@ const TopbarComponent = (props: TopBarProps) => {
       loggedProfileData.isLoading !== undefined && loggedProfileData.isLoading;
     if (loginState.ethAddress && !isLoadingProfile) {
       if (!loggedProfileData.userName) {
-        return props.navigateToUrl('/profile/my-profile/update-info');
+        return props.singleSpa.navigateToUrl('/profile/my-profile/update-info');
       }
     }
   }, [loggedProfileData.isLoading, loginState.ethAddress]);
@@ -340,6 +344,24 @@ const TopbarComponent = (props: TopBarProps) => {
   const { t } = useTranslation();
   const location = useLocation();
 
+  const onExtMount = (name: string) => {
+    uiEvents.next({
+      event: EventTypes.ExtensionPointMount,
+      data: {
+        name,
+      },
+    });
+  };
+
+  const onExtUnmount = (name: string) => {
+    uiEvents.next({
+      event: EventTypes.ExtensionPointUnmount,
+      data: {
+        name,
+      },
+    });
+  };
+
   return (
     <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
       <Topbar
@@ -357,7 +379,6 @@ const TopbarComponent = (props: TopBarProps) => {
         versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
         onNavigation={handleNavigation}
         onSearch={handleSearch}
-        onSidebarToggle={toggleSidebar}
         quickAccessItems={sortedQuickAccessItems}
         searchAreaItem={searchAreaItem}
         otherAreaItems={otherAreaItems}
@@ -367,7 +388,14 @@ const TopbarComponent = (props: TopBarProps) => {
         onFeedbackClick={handleFeedbackModalShow}
         hasNewNotifications={notificationsState.hasNewNotifications}
         currentLocation={location?.pathname}
-      />
+      >
+        <ExtensionPoint
+          name={extensionPointsMap.QuickAccess}
+          shouldMount={!!loggedProfileData.ethAddress}
+          onMount={name => onExtMount(name)}
+          onUnmount={name => onExtUnmount(name)}
+        />
+      </Topbar>
       <ModalRenderer slotId={modalSlotId}>
         {modalState[MODAL_NAMES.FEEDBACK] && (
           <FeedbackModal

@@ -184,7 +184,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.modalSlotId}>
+      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -246,7 +246,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         itemsData={postsState.postsData}
         errors={errorState}
         sdkModules={props.sdkModules}
-        layout={props.layout}
+        layout={props.layoutConfig}
         globalChannel={props.globalChannel}
         rxjsOperators={rxjsOperators}
         ethAddress={loginState.ethAddress}
@@ -255,7 +255,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         onLoginModalOpen={showLoginModal}
         totalItems={postsState.totalItems}
         profilePubKey={loginState.pubKey}
-        modalSlotId={props.layout.modalSlotId}
+        modalSlotId={props.layoutConfig.modalSlotId}
         loggedProfile={loggedProfileData}
         onRepostPublish={handleRepostPublish}
         contentClickable={true}

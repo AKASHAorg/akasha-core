@@ -11,8 +11,8 @@ import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
-import { application as loginWidget } from '@akashaproject/ui-widget-login/lib';
-import Parcel from 'single-spa-react/parcel';
+// import { application as loginWidget } from '@akashaproject/ui-widget-login/lib';
+// import Parcel from 'single-spa-react/parcel';
 import { constants, useBookmarks, useErrors, useMentions } from '@akashaproject/ui-awf-hooks';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
@@ -203,7 +203,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.modalSlotId}>
+      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -248,7 +248,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         )}
       </ModalRenderer>
       <EditorModal
-        slotId={props.layout.modalSlotId}
+        slotId={props.layoutConfig.modalSlotId}
         avatar={loggedProfileData.avatar}
         showModal={editorModalOpen}
         ethAddress={loginState.ethAddress as any}
@@ -285,16 +285,16 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             />
           ) : (
             <>
-              <Parcel
+              {/* <Parcel
                 config={loginWidget.loadingFn}
                 wrapWith="div"
                 sdkModules={props.sdkModules}
                 logger={props.logger}
-                layout={props.layout}
+                layout={props.layoutConfig}
                 globalChannel={props.globalChannel}
                 i18n={props.i18n}
                 mountParcel={props.singleSpa.mountRootParcel}
-              />
+              /> */}
             </>
           )
         }

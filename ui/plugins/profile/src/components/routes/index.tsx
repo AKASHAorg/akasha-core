@@ -11,8 +11,7 @@ import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 const { Box, LoginModal, ViewportSizeProvider } = DS;
 
 const Routes: React.FC<RootComponentProps> = props => {
-  const { activeWhen, logger, rxjsOperators } = props;
-  const { path } = activeWhen;
+  const { logger, rxjsOperators } = props;
 
   const [errorState, errorActions] = useErrors({ logger });
 
@@ -83,7 +82,7 @@ const Routes: React.FC<RootComponentProps> = props => {
         <Box>
           <Switch>
             <Route path={`${rootRoute}/list`} render={() => <>A list of profiles</>} />
-            <Route path={[`${path}/:pubKey`, menuRoute[MY_PROFILE]]}>
+            <Route path={[`${rootRoute}/:pubKey`, menuRoute[MY_PROFILE]]}>
               <ProfilePage
                 {...props}
                 loggedEthAddress={loginState.ethAddress}
@@ -103,7 +102,7 @@ const Routes: React.FC<RootComponentProps> = props => {
         </Box>
         <LoginModal
           showModal={modalState[MODAL_NAMES.LOGIN]}
-          slotId={props.layout.modalSlotId}
+          slotId={props.layoutConfig.modalSlotId}
           onLogin={loginActions.login}
           onModalClose={hideLoginModal}
           titleLabel={t('Connect a wallet')}

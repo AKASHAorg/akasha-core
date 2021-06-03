@@ -1,14 +1,10 @@
 import DS from '@akashaproject/design-system';
-import { i18n as I18nType } from 'i18next';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { useLocation, BrowserRouter as Router } from 'react-router-dom';
-import {
-  IMenuItem,
-  EventTypes,
-  MenuItemAreaType,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { filter } from 'rxjs/operators';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const {
   responsiveBreakpoints,
@@ -19,30 +15,12 @@ const {
   ViewportSizeProvider,
   useViewportSize,
 } = DS;
-export interface IProps {
-  i18n: I18nType;
-  singleSpa: any;
-  globalChannel: any;
-  getMenuItems: () => any[];
-  events: any;
-  logger: any;
-}
 
-/**
- * This is the entry point of a plugin.
- * Here you can add react-router, react-redux, etc..
- *
- * @todo Add more documentation for this component
- *
- * @warning :: Root component for a plugin should always extend React.Component
- * @warning :: Always use default export
- */
-
-export default class SidebarWidget extends PureComponent<IProps> {
+export default class SidebarWidget extends PureComponent<RootComponentProps> {
   public state: { hasErrors: boolean; errorMessage: string; showSidebar: boolean };
   public hideSidebarEvent = new CustomEvent('layout:hideSidebar');
   private subscription: any;
-  constructor(props: IProps) {
+  constructor(props: RootComponentProps) {
     super(props);
     this.state = {
       hasErrors: false,
@@ -100,8 +78,8 @@ export default class SidebarWidget extends PureComponent<IProps> {
             <ViewportSizeProvider>
               <Menu
                 navigateToUrl={this.props.singleSpa.navigateToUrl}
-                getMenuItems={this.props.getMenuItems}
-                loaderEvents={this.props.events}
+                getMenuItems={() => []}
+                uiEvents={this.props.uiEvents}
                 sidebarVisible={this.state.showSidebar}
               />
             </ViewportSizeProvider>
@@ -125,38 +103,16 @@ const AppSidebar = styled(Sidebar)`
 interface MenuProps {
   navigateToUrl: (url: string) => void;
   getMenuItems: () => IMenuItem[];
-  loaderEvents: any;
+  uiEvents: any;
   sidebarVisible: boolean;
 }
 
 const Menu = (props: MenuProps) => {
-  const { navigateToUrl, getMenuItems, loaderEvents, sidebarVisible } = props;
+  const { navigateToUrl } = props;
 
   const currentLocation = useLocation();
 
   const { size } = useViewportSize();
-
-  const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
-
-  React.useEffect(() => {
-    const updateMenu = () => {
-      const menuItems = getMenuItems();
-      setCurrentMenu(menuItems);
-    };
-    updateMenu();
-    loaderEvents.subscribe((evMsg: EventTypes) => {
-      if (evMsg === EventTypes.AppInstall || evMsg === EventTypes.PluginInstall) {
-        updateMenu();
-      }
-    });
-    return function cleanup() {
-      loaderEvents.unsubscribe();
-    };
-  }, []);
-
-  // *how to obtain different sidebar menu sections
-  const body = currentMenu?.filter(menuItem => menuItem.area === MenuItemAreaType.AppArea);
-  const footer = currentMenu?.filter(menuItem => menuItem.area === MenuItemAreaType.BottomArea);
 
   const handleNavigation = (path: string) => {
     navigateToUrl(path);
@@ -168,16 +124,22 @@ const Menu = (props: MenuProps) => {
       settings={{ activeTheme: 'Light-Theme' }}
       style={{ height: '100%' }}
     >
-      {sidebarVisible && (
-        <AppSidebar
-          onClickMenuItem={handleNavigation}
-          allMenuItems={currentMenu}
-          bodyMenuItems={body}
-          footerMenuItems={footer}
-          currentRoute={currentLocation.pathname}
-          size={size}
-        />
-      )}
+      <AppSidebar
+        onClickMenuItem={handleNavigation}
+        allMenuItems={[]}
+        bodyMenuItems={[]}
+        footerMenuItems={[
+          {
+            name: 'App center',
+            index: 0,
+            label: 'Integration Center',
+            route: '/app-center',
+            subRoutes: [],
+          },
+        ]}
+        currentRoute={currentLocation.pathname}
+        size={size}
+      />
     </ThemeSelector>
   );
 };

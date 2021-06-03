@@ -438,7 +438,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
 
   return (
     <>
-      <ModalRenderer slotId={props.layout.modalSlotId}>
+      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
         {props.modalState.reportModal && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -489,7 +489,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
         )}
       </ModalRenderer>
       <Route path={`${menuRoute[MY_PROFILE]}/update-info`}>
-        <ModalRenderer slotId={props.layout.modalSlotId}>
+        <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
           {profileState.ethAddress && !profileUpdateStatus.updateComplete && (
             <ProfileForm
               titleLabel={profileState.userName ? t('Update Profile') : t('Create Profile')}
@@ -533,7 +533,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
         </ModalRenderer>
       </Route>
       <Route path={`${menuRoute[MY_PROFILE]}/update-ens`}>
-        <ModalRenderer slotId={props.layout.modalSlotId}>
+        <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
           {networkState.networkNotSupported && (
             <StyledLayer>
               <ErrorLoader

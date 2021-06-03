@@ -146,8 +146,8 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
                   <ErrorLoader
                     type="missing-saved-items"
                     title={t('Save what inspires you')}
-                    details={t(`You have not saved any posts yet\.
-                      Once you start doing so, they will be found here\.`)}
+                    details={t(`You have not saved any posts yet.
+                      Once you start doing so, they will be found here.`)}
                   />
                 )}
                 {!bookmarkState.isFetching && (

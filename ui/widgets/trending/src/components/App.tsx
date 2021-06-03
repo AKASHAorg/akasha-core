@@ -16,6 +16,8 @@ export interface ITrendingWidgetProps {
   rxjsOperators: any;
   layout: any;
   errors?: { [key: string]: IAkashaError };
+  installIntegration?: (name: string) => void;
+  uninstallIntegration?: (name: string) => void;
 }
 
 export default class TrendingWidgetRoot extends PureComponent<ITrendingWidgetProps> {

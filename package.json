@@ -19,7 +19,8 @@
     "pack:ui-design": "lerna run pack --scope @akashaproject/design-* --stream",
     "pack:ui-plugins": "lerna run pack --scope @akashaproject/ui-* --stream",
     "pack:ui-apps": "lerna run pack --scope @akashaproject/app-* --stream",
-    "pack:ui": "npm run tsc:ui && npm run pack:ui-design && npm run pack:ui-plugins && npm run pack:ui-apps",
+    "pack:app-loader": "lerna run pack --scope @akashaproject/ui-app-loader --stream",
+    "pack:ui": "npm run tsc:ui && npm run pack:ui-design && npm run pack:ui-plugins && npm run pack:ui-apps && npm run pack:app-loader",
     "pack:ui-apps:stats": "lerna run pack:stats --parallel --scope @akashaproject/* --stream",
     "pack:only": "lerna run pack --scope $AWF_PACKAGE --stream",
     "pack:watch": "lerna run pack:watch --scope $AWF_PACKAGE --stream",
@@ -50,6 +51,7 @@
     "test:plugins": "lerna run test --scope @akashaproject/ui-plugin-* --stream",
     "test:widgets": "lerna run test --scope @akashaproject/ui-widget-* --stream",
     "test:ui": "lerna run test --scope @akashaproject/ui-* --scope @akashaproject/design-* --scope @akashaproject/app-* --stream",
+    "test:app-loader": "lerna run test --scope @akashaproject/ui-app-loader --stream",
     "dev:server": "lerna run dev:server --stream"
   },
   "devDependencies": {

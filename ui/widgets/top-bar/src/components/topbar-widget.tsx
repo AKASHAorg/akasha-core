@@ -7,16 +7,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 const { lightTheme, ThemeSelector } = DS;
 
-/**
- * This is the entry point of a plugin.
- * Here you can add react-router, react-redux, etc..
- *
- * @todo Add more documentation for this component
- *
- * @warning :: Root component for a plugin should always extend React.Component
- * @warning :: Always use default export
- */
-
 export default class TopbarWidget extends PureComponent<RootComponentProps> {
   public state: {
     hasErrors: boolean;
@@ -71,17 +61,7 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
         <Suspense fallback={<>...</>}>
           <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
             <Router>
-              <TopbarComponent
-                navigateToUrl={this.props.singleSpa.navigateToUrl}
-                toggleSidebar={this.toggleSidebar}
-                getMenuItems={this.props.getMenuItems}
-                loaderEvents={this.props.events}
-                modalSlotId={this.props.layout.modalSlotId}
-                globalChannel={this.props.globalChannel}
-                rxjsOperators={this.props.rxjsOperators}
-                logger={this.props.logger}
-                sdkModules={this.props.sdkModules}
-              />
+              <TopbarComponent getMenuItems={this.props.getMenuItems} {...this.props} />
             </Router>
           </ThemeSelector>
         </Suspense>
