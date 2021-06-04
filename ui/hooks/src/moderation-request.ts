@@ -76,7 +76,7 @@ export default {
         url: `${BASE_DECISION_URL}/pending`,
       });
 
-      const modResponse = response.map(
+      const modResponse = response.results.map(
         (
           { contentType: type, contentID, reasons, reportedBy, reportedDate, reports }: any,
           idx: number,
@@ -118,7 +118,7 @@ export default {
         },
       });
 
-      const modResponse = [...delistedItems, ...keptItems].map(
+      const modResponse = [...delistedItems.results, ...keptItems.results].map(
         (
           {
             contentType: type,
