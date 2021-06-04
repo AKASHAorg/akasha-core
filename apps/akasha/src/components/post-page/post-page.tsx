@@ -311,7 +311,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   if (!postsState.delistedItems.includes(postId) && postsState.reportedItems.includes(postId)) {
     return (
       <EntryCardHidden
-        awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
+        awaitingModerationLabel={t('You have reported this content. It is awaiting moderation.')}
         ctaLabel={t('See it anyway')}
         handleFlipCard={handleFlipCard(entryData, false)}
       />
