@@ -58,9 +58,6 @@ class ModerationAdminAPI extends DataSource {
    * @returns True/false whether the user is a moderator
    */
   async isModerator(ethAddress: string) {
-    // const db: Client = await getAppDB();
-    // const query = new Where('ethAddress').eq(ethAddress).and('active').eq(true);
-    // const results = await db.find<Moderator>(this.dbID, this.collection, query);
     const moderator = await this.getModerator(ethAddress);
     return moderator.active ? true : false;
   }
@@ -71,9 +68,6 @@ class ModerationAdminAPI extends DataSource {
    * @returns True/false whether the user is an admin
    */
   async isAdmin(ethAddress: string) {
-    // const db: Client = await getAppDB();
-    // const query = new Where('ethAddress').eq(ethAddress).and('active').eq(true).and('admin').eq(true);
-    // const results = await db.find<Moderator>(this.dbID, this.collection, query);
     const moderator = await this.getModerator(ethAddress);
     return moderator.active && moderator.admin ? true : false;
   }
