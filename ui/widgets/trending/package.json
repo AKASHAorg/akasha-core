@@ -36,10 +36,9 @@
     "@akashaproject/sdk-common": "*",
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/sdk-posts": "*",
-    "@types/i18next": "13.0.0",
-    "@types/react-i18next": "8.1.0",
     "single-spa-react": "4.1.1",
-    "react-i18next": "^11.7.3"
+    "react-i18next": "11.10.0",
+    "i18next": "20.3.1"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",

@@ -63,14 +63,14 @@ class App extends PureComponent<RootComponentProps> {
       })
       .init({
         fallbackLng: 'en',
-        ns: ['akasha-app'],
+        ns: ['profile'],
         saveMissing: false,
         saveMissingTo: 'all',
         load: 'languageOnly',
         debug: true,
         cleanCode: true,
         keySeparator: false,
-        defaultNS: 'akasha-app',
+        defaultNS: 'profile',
         backend: {
           backends: [LocalStorageBackend, Fetch],
           backendOptions: [

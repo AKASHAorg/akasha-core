@@ -4,7 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import EntryFeed from './entry-feed';
 import ProfileFeed from './profile-feed';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
-import { i18n } from 'i18next';
+import i18n from 'i18next';
 import { IContentClickDetails } from '@akashaproject/design-system/src/components/EntryCard/entry-box';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
@@ -18,7 +18,7 @@ export const enum ItemTypes {
 
 export interface IFeedWidgetProps {
   logger: any;
-  i18n: i18n;
+  i18n: typeof i18n;
   virtualListRef?: any;
   globalChannel?: any;
   sdkModules: any;

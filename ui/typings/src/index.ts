@@ -1,5 +1,5 @@
 import * as AppLoaderTypes from './app-loader';
-
+import i18n from 'i18next';
 export interface IAkashaError {
   errorKey: string;
   error: Error;
@@ -15,7 +15,7 @@ export interface RootComponentProps {
   activeWhen?: { path: string };
   domElement: HTMLElement;
   uiEvents: any;
-  i18n?: any;
+  i18n?: typeof i18n;
   getMenuItems?: () => any;
   globalChannel: any;
   isMobile: boolean;
