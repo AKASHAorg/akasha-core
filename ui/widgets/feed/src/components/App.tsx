@@ -44,7 +44,7 @@ export interface IFeedWidgetProps {
   loggedProfile?: any;
   onRepostPublish?: (entryData: any, embeddedEntry: any) => void;
   contentClickable?: boolean;
-  onReport: (entryId: string, user?: string | null) => void;
+  onEntryFlag: (entryId: string, contentType: string) => () => void;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
 }
 

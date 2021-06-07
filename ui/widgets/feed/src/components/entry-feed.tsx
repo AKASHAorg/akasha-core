@@ -182,11 +182,11 @@ const EntryFeed = (props: IFeedWidgetProps) => {
                   onBookmark={handleBookmark}
                   onNavigate={props.onNavigate}
                   singleSpaNavigate={props.singleSpaNavigate}
-                  onReport={props.onReport}
+                  onFlag={props.onEntryFlag}
                   onRepost={handleRepost}
                   contentClickable={props.contentClickable}
                   awaitingModerationLabel={t(
-                    'You have reported this post. It is awaiting moderation.',
+                    'You have reported this content. It is awaiting moderation.',
                   )}
                   moderatedContentLabel={t('This content has been moderated')}
                   ctaLabel={t('See it anyway')}

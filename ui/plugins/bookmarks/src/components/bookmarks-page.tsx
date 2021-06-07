@@ -174,7 +174,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
                         disableReposting={true}
                         sharePostUrl={`${window.location.origin}/social-app/post/`}
                         awaitingModerationLabel={t(
-                          'You have reported this post. It is awaiting moderation.',
+                          'You have reported this content. It is awaiting moderation.',
                         )}
                         moderatedContentLabel={t('This content has been moderated')}
                         ctaLabel={t('See it anyway')}

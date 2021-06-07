@@ -76,7 +76,7 @@ export interface IEntryBoxProps {
   onEntryBookmark?: (entryId: string, isBookmarked?: boolean) => void;
   onClickAvatar?: React.MouseEventHandler<HTMLDivElement>;
   onRepost?: (withComment: boolean, entryData: IEntryData) => void;
-  onEntryFlag?: (entryId?: string) => void;
+  onEntryFlag?: (entryId?: string, contentType?: string) => void;
   // follow related
   handleFollowAuthor?: (profileEthAddress: string) => void;
   handleUnfollowAuthor?: (profileEthAddress: string) => void;
@@ -208,7 +208,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const handleEntryFlag = () => {
     if (onEntryFlag) {
-      onEntryFlag(entryData.entryId);
+      onEntryFlag();
     }
   };
 

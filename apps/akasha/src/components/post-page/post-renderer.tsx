@@ -20,7 +20,7 @@ export interface PostRendererProps {
   onBookmark: (entryId: string) => void;
   onNavigate: (details: any) => void;
   onLinkCopy?: () => void;
-  onFlag: (entryId: string) => () => void;
+  onFlag: (entryId: string, contentType: string) => () => void;
   onRepost: (withComment: boolean, entryData: any) => void;
   sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
@@ -98,7 +98,7 @@ const PostRenderer = (props: PostRendererProps) => {
   if (itemData.reported) {
     return (
       <EntryCardHidden
-        awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
+        awaitingModerationLabel={t('You have reported this content. It is awaiting moderation.')}
         moderatedContentLabel={t('This content has been moderated')}
         ctaLabel={t('See it anyway')}
         handleFlipCard={handleFlipCard && handleFlipCard(itemData, false)}
@@ -151,7 +151,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     profileAnchorLink={'/profile'}
                     repliesAnchorLink={routes[POST]}
                     onRepost={props.onRepost}
-                    onEntryFlag={props.onFlag(itemData.entryId)}
+                    onEntryFlag={props.onFlag(itemData.entryId, 'comment')}
                     handleFollowAuthor={handleFollow}
                     handleUnfollowAuthor={handleUnfollow}
                     isFollowingAuthor={isFollowing}
