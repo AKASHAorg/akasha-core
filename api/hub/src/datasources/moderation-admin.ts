@@ -2,6 +2,7 @@ import { DataSource } from 'apollo-datasource';
 import { getAppDB, logger } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { Moderator } from '../collections/interfaces';
+import { queryCache } from '../storage/cache';
 
 /**
  * The ModerationAdminAPI class handles all the interactions between the admin
@@ -22,15 +23,29 @@ class ModerationAdminAPI extends DataSource {
   }
 
   /**
+   * Get the name of the key for moderators cache.
+   * @param ethAddress - The moderator's ETH address
+   * @returns The key as a string
+   */
+   getModeratorCacheKey(ethAddress: string) {
+    return `${this.collection}:ethAddress${ethAddress}`;
+  }
+
+  /**
    * Get data for a moderator.
    * @param address - The ETH address of the moderator
    * @returns A Moderator object
    */
   async getModerator(ethAddress: string) {
+    const moderatorCache = this.getModeratorCacheKey(ethAddress);
+    if (await queryCache.has(moderatorCache)) {
+      return await queryCache.get(moderatorCache);
+    }
     const db: Client = await getAppDB();
     const query = new Where('ethAddress').eq(ethAddress);
     const results = await db.find<Moderator>(this.dbID, this.collection, query);
     if (results.length) {
+      await queryCache.set(moderatorCache, results[0]);
       return results[0];
     }
     logger.warn(`could not find moderator with address ${ethAddress}`);
@@ -43,10 +58,8 @@ class ModerationAdminAPI extends DataSource {
    * @returns True/false whether the user is a moderator
    */
   async isModerator(ethAddress: string) {
-    const db: Client = await getAppDB();
-    const query = new Where('ethAddress').eq(ethAddress).and('active').eq(true);
-    const results = await db.find<Moderator>(this.dbID, this.collection, query);
-    return results.length > 0 ? true : false;
+    const moderator = await this.getModerator(ethAddress);
+    return moderator.active;
   }
 
   /**
@@ -55,10 +68,8 @@ class ModerationAdminAPI extends DataSource {
    * @returns True/false whether the user is an admin
    */
   async isAdmin(ethAddress: string) {
-    const db: Client = await getAppDB();
-    const query = new Where('ethAddress').eq(ethAddress).and('active').eq(true).and('admin').eq(true);
-    const results = await db.find<Moderator>(this.dbID, this.collection, query);
-    return results.length > 0 ? true : false;
+    const moderator = await this.getModerator(ethAddress);
+    return moderator.active && moderator.admin;
   }
 
   /**
@@ -68,6 +79,7 @@ class ModerationAdminAPI extends DataSource {
    * @param active - A boolean flag for the active status
    */
   async updateModerator(ethAddress: string, admin: boolean, active: boolean) {
+    const moderatorCache = this.getModeratorCacheKey(ethAddress);
     const db: Client = await getAppDB();
     // check if moderator already exists
     const exists = await this.isModerator(ethAddress);
@@ -76,7 +88,9 @@ class ModerationAdminAPI extends DataSource {
       moderator = await this.getModerator(ethAddress);
       moderator.admin = admin;
       moderator.active = active;
-      return db.save(this.dbID, this.collection, [moderator]);
+      await db.save(this.dbID, this.collection, [moderator]);
+      await queryCache.set(moderatorCache, moderator);
+      return;
     }
     moderator = {
       ethAddress,
@@ -86,6 +100,7 @@ class ModerationAdminAPI extends DataSource {
       creationDate: new Date().getTime(),
     };
     await db.create(this.dbID, this.collection, [moderator]);
+    await queryCache.set(moderatorCache, moderator);
   }
 }
 

@@ -242,7 +242,9 @@ class ModerationReportAPI extends DataSource {
       dbID: this.dbID,
       collection: 'ModerationDecisions',
     });
+    // clear cache
     await queryCache.del(decisionsAPI.getCountersCacheKey());
+    await queryCache.del(decisionsAPI.getPendingListCacheKey());
   }
 }
 
