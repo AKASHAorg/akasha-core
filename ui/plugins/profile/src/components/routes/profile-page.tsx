@@ -4,11 +4,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { constants, useErrors, usePosts, useProfile } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
-import {
-  ModalState,
-  ModalStateActions,
-  MODAL_NAMES,
-} from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
+import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
 import { ILoadItemsPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
@@ -26,10 +22,13 @@ export interface ProfilePageProps extends RootComponentProps {
   loginActions: UseLoginActions;
   loggedProfileData: any;
   flagged: string;
+  flaggedContentType: string;
   reportModalOpen: boolean;
   showLoginModal: () => void;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setFlaggedContentType: React.Dispatch<React.SetStateAction<string>>;
+  setReportModalOpen: () => void;
+  closeReportModal: () => void;
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
@@ -38,10 +37,13 @@ const ProfilePage = (props: ProfilePageProps) => {
     loginActions,
     loggedProfileData,
     flagged,
+    flaggedContentType,
     reportModalOpen,
-    setFlagged,
     showLoginModal,
+    setFlagged,
+    setFlaggedContentType,
     setReportModalOpen,
+    closeReportModal,
     rxjsOperators,
   } = props;
   const location = useLocation();
@@ -141,10 +143,6 @@ const ProfilePage = (props: ProfilePageProps) => {
     props.singleSpa.navigateToUrl(url);
   };
 
-  const handleLoginModalOpen = () => {
-    props.modalActions.show(MODAL_NAMES.LOGIN);
-  };
-
   const handleRepostPublish = (entryData: any, embedEntry: any) => {
     postsActions.optimisticPublishPost(entryData, loggedProfileData, embedEntry, true);
   };
@@ -159,14 +157,10 @@ const ProfilePage = (props: ProfilePageProps) => {
     return pubKey;
   }, [profileState, pubKey]);
 
-  const handleEntryFlag = (entryId: string, user?: string | null) => {
-    if (!user) {
-      // setting entryId to state first, if not logged in
-      setFlagged(entryId);
-      return showLoginModal();
-    }
+  const handleEntryFlag = (entryId: string, contentType: string) => () => {
     setFlagged(entryId);
-    setReportModalOpen(true);
+    setFlaggedContentType(contentType);
+    setReportModalOpen();
   };
 
   const handleFlipCard = (entry: any, isQuote: boolean) => () => {
@@ -192,7 +186,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
-              titleLabel={t('Report a post')}
+              titleLabel={t(`Report ${flaggedContentType}`)}
               successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
@@ -223,12 +217,10 @@ const ProfilePage = (props: ProfilePageProps) => {
               closeLabel={t('Close')}
               user={loggedEthAddress ? loggedEthAddress : ''}
               contentId={flagged}
-              contentType="post"
+              contentType={flaggedContentType}
               baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
-              closeModal={() => {
-                setReportModalOpen(false);
-              }}
+              closeModal={closeReportModal}
               signData={props.sdkModules.auth.authService.signData}
             />
           </ToastProvider>
@@ -263,14 +255,14 @@ const ProfilePage = (props: ProfilePageProps) => {
         ethAddress={loggedEthAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
-        onLoginModalOpen={handleLoginModalOpen}
+        onLoginModalOpen={showLoginModal}
         totalItems={postsState.totalItems}
         profilePubKey={pubKey}
         modalSlotId={props.layout.modalSlotId}
         loggedProfile={loggedProfileData}
         onRepostPublish={handleRepostPublish}
         contentClickable={true}
-        onReport={handleEntryFlag}
+        onEntryFlag={handleEntryFlag}
         handleFlipCard={handleFlipCard}
       />
     </Box>

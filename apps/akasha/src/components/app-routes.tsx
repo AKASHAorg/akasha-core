@@ -55,6 +55,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   });
 
   const [flagged, setFlagged] = React.useState('');
+  const [flaggedContentType, setFlaggedContentType] = React.useState('');
 
   const showLoginModal = () => {
     modalStateActions.show(MODAL_NAMES.LOGIN);
@@ -119,8 +120,10 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               loggedProfileData={loginProfile}
               loginState={loginState}
               flagged={flagged}
+              flaggedContentType={flaggedContentType}
               reportModalOpen={modalState.report}
               setFlagged={setFlagged}
+              setFlaggedContentType={setFlaggedContentType}
               setReportModalOpen={showReportModal}
               closeReportModal={hideReportModal}
               editorModalOpen={modalState.editor}
@@ -136,8 +139,10 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               loggedProfileData={loginProfile}
               loginState={loginState}
               flagged={flagged}
+              flaggedContentType={flaggedContentType}
               reportModalOpen={modalState.report}
               setFlagged={setFlagged}
+              setFlaggedContentType={setFlaggedContentType}
               setReportModalOpen={showReportModal}
               closeReportModal={hideReportModal}
               editorModalOpen={modalState.editor}
@@ -155,8 +160,10 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               loggedProfileData={loginProfile}
               loginState={loginState}
               flagged={flagged}
+              flaggedContentType={flaggedContentType}
               reportModalOpen={modalState.report}
               setFlagged={setFlagged}
+              setFlaggedContentType={setFlaggedContentType}
               setReportModalOpen={showReportModal}
               closeReportModal={hideReportModal}
               showLoginModal={showLoginModal}

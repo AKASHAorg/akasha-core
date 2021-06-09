@@ -109,6 +109,6 @@ BaseEntryCard.args = {
 export const BaseEntryCardHidden = TemplateHidden.bind({});
 
 BaseEntryCardHidden.args = {
-  awaitingModerationLabel: 'You have reported this post. It is awaiting moderation.',
+  awaitingModerationLabel: 'You have reported this content. It is awaiting moderation.',
   ctaLabel: 'See it anyway',
 };
