@@ -59,7 +59,7 @@ class ModerationAdminAPI extends DataSource {
    */
   async isModerator(ethAddress: string) {
     const moderator = await this.getModerator(ethAddress);
-    return moderator.active ? true : false;
+    return moderator.active;
   }
 
   /**
@@ -69,7 +69,7 @@ class ModerationAdminAPI extends DataSource {
    */
   async isAdmin(ethAddress: string) {
     const moderator = await this.getModerator(ethAddress);
-    return moderator.active && moderator.admin ? true : false;
+    return moderator.active && moderator.admin;
   }
 
   /**

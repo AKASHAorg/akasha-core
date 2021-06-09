@@ -206,7 +206,7 @@ class ModerationDecisionAPI extends DataSource {
       const profileAPI = new ProfileAPI({ dbID: this.dbID, collection: 'Profiles' });
       const moderator = await profileAPI.getProfile(decision.moderator);
       decision = Object.assign({}, decision, { 
-        "moderatorProfile": moderator
+        moderatorProfile: moderator
       });
     }
     // add first report data
