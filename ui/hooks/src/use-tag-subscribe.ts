@@ -4,8 +4,19 @@ import { createErrorHandler } from './utils/error-handler';
 import { filter } from 'rxjs/operators';
 
 export interface UseTagSubscribeActions {
+  /**
+   * check if logged in user is subscribed to a tag
+   * @param tagName - name of tag to check
+   */
   isSubscribedToTag: (tagName: string) => void;
+  /**
+   * have current logged in user subscribe to a tag
+   * @param tagName - name of tag to subscribe to
+   */
   toggleTagSubscription: (tagName: string) => void;
+  /**
+   * get tag subscriptions for the current logged user
+   */
   getTagSubscriptions: () => void;
 }
 

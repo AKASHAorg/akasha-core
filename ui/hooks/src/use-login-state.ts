@@ -55,7 +55,7 @@ const initialLoginState: ILoginState = {
   logoutQuery: false,
 };
 
-export type IloginAction =
+export type ILoginAction =
   | { type: 'LOGIN'; payload: { selectedProvider: EthProviders; checkRegistered: boolean } }
   | { type: 'LOGIN_SUCCESS'; payload: { ethAddress: string; pubKey: string } }
   | { type: 'LOGOUT' }
@@ -64,7 +64,7 @@ export type IloginAction =
   | { type: 'READY'; payload: { ethAddress: string; pubKey: string } | null }
   | { type: 'LOAD_FROM_CACHE'; payload: { ethAddress: string; pubKey: string } };
 
-const loginStateReducer = (state: ILoginState, action: IloginAction) => {
+const loginStateReducer = (state: ILoginState, action: ILoginAction) => {
   switch (action.type) {
     case 'LOGIN':
       return { ...state, loginQuery: action.payload };

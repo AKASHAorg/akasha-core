@@ -6,6 +6,9 @@ export interface UseNetworkProps {
 }
 
 export interface UseNetworkActions {
+  /**
+   *  check if user is logged in on mainnet or a testnet
+   */
   checkNetwork: () => void;
 }
 

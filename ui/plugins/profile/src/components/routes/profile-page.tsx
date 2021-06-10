@@ -183,7 +183,8 @@ const ProfilePage = (props: ProfilePageProps) => {
     <Box fill="horizontal">
       <Helmet>
         <title>
-          {t("{{profileUsername}}'s Page", { profileUsername: profileUserName })} | Ethereum World
+          {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} | Ethereum
+          World
         </title>
       </Helmet>
       <ModalRenderer slotId={props.layout.modalSlotId}>

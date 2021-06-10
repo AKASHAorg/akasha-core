@@ -3,6 +3,10 @@ import { IAkashaError, LEGAL_DOCS } from '@akashaproject/ui-awf-typings';
 import { createErrorHandler } from './utils/error-handler';
 
 export interface UseLegalActions {
+  /**
+   *  fetch a specific legal document for ethereum world
+   *  @param doc - type of legal document to fetch
+   */
   getLegalDoc: (doc: LEGAL_DOCS) => void;
 }
 

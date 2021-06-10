@@ -1,13 +1,23 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { getMediaUrl } from './utils/media-utils';
-import { forkJoin } from 'rxjs';
+import { forkJoin, lastValueFrom } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { createErrorHandler } from './utils/error-handler';
 
 export interface UseNotificationsActions {
+  /**
+   * get current inbox messages of the user
+   */
   getMessages: () => void;
+  /**
+   * mark a message as read, does not delete from inbox
+   * @param messageId - id of the message
+   */
   markMessageAsRead: (messageId: string) => void;
+  /**
+   * check if there are new unread messages in the user's inbox
+   */
   hasNewNotifications: () => void;
 }
 
@@ -169,16 +179,14 @@ export const useNotifications = (
     try {
       const getMessagesCall = authService.getMessages(null);
       const ipfsGatewayCall = ipfsService.getSettings(null);
-      const initialResp: any = await forkJoin([ipfsGatewayCall, getMessagesCall]).toPromise();
-      const getProfilesCalls = initialResp[1].data.map((message: any) => {
+      const initialResp: any = await lastValueFrom(forkJoin({ ipfsGatewayCall, getMessagesCall }));
+      const getProfilesCalls = initialResp.getMessagesCall.data.map((message: any) => {
         const pubKey = message.body.value.author || message.body.value.follower;
         if (pubKey) {
           return profileService.getProfile({ pubKey });
         }
       });
-      const profilesResp: any = await forkJoin(getProfilesCalls).toPromise();
-
-      const [gatewayResp, messagesResp] = initialResp;
+      const profilesResp: any = await lastValueFrom(forkJoin(getProfilesCalls));
 
       let completeMessages: any = [];
       profilesResp
@@ -190,13 +198,13 @@ export const useNotifications = (
             coverImage: null,
           };
           if (avatar) {
-            images.avatar = getMediaUrl(gatewayResp.data, avatar);
+            images.avatar = getMediaUrl(initialResp.ipfsGatewayCall.data, avatar);
           }
           if (coverImage) {
-            images.coverImage = getMediaUrl(gatewayResp.data, coverImage);
+            images.coverImage = getMediaUrl(initialResp.ipfsGatewayCall.data, coverImage);
           }
           const profileData = { ...images, ...other };
-          completeMessages = messagesResp.data?.map((message: any) => {
+          completeMessages = initialResp.getMessagesCall.data?.map((message: any) => {
             if (message.body.value.author === profileData.pubKey) {
               message.body.value.author = profileData;
             }

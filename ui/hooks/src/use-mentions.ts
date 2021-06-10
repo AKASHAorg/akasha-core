@@ -3,7 +3,13 @@ import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { createErrorHandler } from './utils/error-handler';
 
 export interface UseMentionsActions {
+  /**
+   *  search for tags by user input query
+   */
   getTags: (query: string) => void;
+  /**
+   *  search for mentions by user input query
+   */
   getMentions: (query: string) => void;
 }
 
@@ -73,7 +79,7 @@ export const useMentions = (props: UseMentionsProps): [IMentionsState, UseMentio
 
   React.useEffect(() => {
     if (mentionsState.tagQuery) {
-      const tagsService = postsService.searchTags({ tagName: mentionsState.mentionQuery });
+      const tagsService = postsService.searchTags({ tagName: mentionsState.tagQuery });
       const tagsSub = tagsService.subscribe({
         next: (resp: any) => {
           dispatch({ type: 'GET_TAGS_SUCCESS', payload: resp.data.searchTags });

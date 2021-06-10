@@ -17,9 +17,21 @@ export interface UseEntryBookmarkProps {
 }
 
 export interface IBookmarkActions {
+  /**
+   *  fetch bookmarks for current logged user
+   */
   getBookmarks: () => void;
+  /**
+   *  bookmark a post
+   */
   bookmarkPost: (entryId: string) => void;
+  /**
+   *  bookmark a comment
+   */
   bookmarkComment: (entryId: string) => void;
+  /**
+   *  remove a bookmark
+   */
   removeBookmark: (entryId: string) => void;
 }
 

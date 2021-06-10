@@ -2,17 +2,28 @@ import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { combineLatest, Subscription } from 'rxjs';
 import { createErrorHandler } from './utils/error-handler';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export interface UseTrendingDataProps {
-  //   ethAddress: string | null;
   sdkModules: { [key: string]: any };
   logger?: any;
   onError: (err: IAkashaError) => void;
 }
 
+export interface ITrendingActions {
+  /**
+   *  get trending tags
+   */
+  setTrendingTags: (payload: any) => void;
+  /**
+   *  get trending profiles
+   */
+  setTrendingProfiles: (payload: any) => void;
+}
+
 interface ITrendingState {
   tags: { name: string; totalPosts: number }[];
-  profiles: any[];
+  profiles: IProfileData[];
 }
 
 export type ITrendingAction =
@@ -43,14 +54,12 @@ const trendingStateReducer = (state: ITrendingState, action: ITrendingAction) =>
   }
 };
 
-export interface ITrendingActions {
-  setTrendingTags: (payload: any) => void;
-  setTrendingProfiles: (payload: any) => void;
-}
-
 const useTrendingData = (
   props: UseTrendingDataProps,
-): [{ tags: any[]; profiles: any[] }, ITrendingActions] => {
+): [
+  { tags: { name: string; totalPosts: number }[]; profiles: IProfileData[] },
+  ITrendingActions,
+] => {
   const { sdkModules, onError } = props;
   const [trendingState, dispatch] = React.useReducer(trendingStateReducer, initialTrendingState);
 
