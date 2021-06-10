@@ -43,7 +43,9 @@ interface IPostPage {
   loggedProfileData?: any;
   loginState: ILoginState;
   flagged: string;
+  flaggedContentType: string;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
+  setFlaggedContentType: React.Dispatch<React.SetStateAction<string>>;
   reportModalOpen: boolean;
   setReportModalOpen: () => void;
   closeReportModal: () => void;
@@ -61,8 +63,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     sdkModules,
     globalChannel,
     flagged,
+    flaggedContentType,
     reportModalOpen,
     setFlagged,
+    setFlaggedContentType,
     setReportModalOpen,
     closeReportModal,
     editorModalOpen,
@@ -217,8 +221,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const handleCommentRepost = () => {
     // todo
   };
-  const handleEntryFlag = (entryId: string) => () => {
+
+  const handleEntryFlag = (entryId: string, contentType: string) => () => {
     setFlagged(entryId);
+    setFlaggedContentType(contentType);
     setReportModalOpen();
   };
 
@@ -308,7 +314,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   if (!postsState.delistedItems.includes(postId) && postsState.reportedItems.includes(postId)) {
     return (
       <EntryCardHidden
-        awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
+        awaitingModerationLabel={t('You have reported this content. It is awaiting moderation.')}
         ctaLabel={t('See it anyway')}
         handleFlipCard={handleFlipCard(entryData, false)}
       />
@@ -330,7 +336,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
-              titleLabel={t('Report a Post')}
+              titleLabel={t(`Report ${flaggedContentType}`)}
               successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
@@ -361,7 +367,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               closeLabel={t('Close')}
               user={loginState.ethAddress ? loginState.ethAddress : ''}
               contentId={flagged}
-              contentType="post"
+              contentType={flaggedContentType}
               baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
@@ -377,6 +383,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             ethAddress={loggedProfileData.ethAddress}
             postLabel={t('Publish')}
             placeholderLabel={t('Write something')}
+            emojiPlaceholderLabel={t('Search')}
             discardPostLabel={t('Discard Post')}
             discardPostInfoLabel={t(
               "You have not posted yet. If you leave now you'll discard your post.",
@@ -446,7 +453,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       profileAnchorLink={'/profile'}
                       repliesAnchorLink={routes[POST]}
                       onRepost={handleRepost}
-                      onEntryFlag={handleEntryFlag(entryData.entryId)}
+                      onEntryFlag={handleEntryFlag(entryData.entryId, 'post')}
                       handleFollowAuthor={handleFollow}
                       handleUnfollowAuthor={handleUnfollow}
                       isFollowingAuthor={isFollowing}
@@ -455,7 +462,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       onMentionClick={handleMentionClick}
                       onTagClick={handleTagClick}
                       awaitingModerationLabel={t(
-                        'You have reported this post. It is awaiting moderation.',
+                        'You have reported this content. It is awaiting moderation.',
                       )}
                       moderatedContentLabel={t('This content has been moderated')}
                       ctaLabel={t('See it anyway')}
@@ -481,6 +488,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             ethAddress={loginState.ethAddress}
             postLabel={t('Reply')}
             placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
+            emojiPlaceholderLabel={t('Search')}
             onPublish={handlePublishComment}
             getMentions={mentionsActions.getMentions}
             getTags={mentionsActions.getTags}

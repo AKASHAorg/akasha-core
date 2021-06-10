@@ -100,7 +100,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
             />
           </Box>
           <Box direction="row" align="center">
-            <StyledText color={'secondaryText'} size="small" margin={{ bottom: 'xsmall' }}>
+            <StyledText color="secondaryText" size="small" margin={{ bottom: 'xsmall' }}>
               {nameLabel}
             </StyledText>
           </Box>

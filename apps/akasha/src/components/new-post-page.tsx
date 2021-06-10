@@ -74,6 +74,7 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
             handleNavigateBack={handleBackNavigation}
             postLabel={t('Publish')}
             placeholderLabel={t('Share your thoughts')}
+            emojiPlaceholderLabel={t('Search')}
             getMentions={handleGetMentions}
             getTags={handleGetTags}
             // mentions={mentions}

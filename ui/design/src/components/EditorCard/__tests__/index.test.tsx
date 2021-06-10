@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
-// import { create } from 'react-test-renderer';
-import { render } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { act, cleanup } from '@testing-library/react';
 
 import EditorCard from '../';
 import { editorDefaultValue } from '../../Editor/initialValue';
-import { wrapWithTheme } from '../../../test-utils';
+import { customRender, wrapWithTheme } from '../../../test-utils';
 import { USERNAMES, TAGS } from '../../../utils/dummy-data';
+import userEvent from '@testing-library/user-event';
 
 const EditorComponent = ({ ...args }) => {
   const [mentionsState, setMentionsState] = React.useState('');
@@ -39,22 +40,52 @@ const EditorComponent = ({ ...args }) => {
       getTags={getTags}
       getMentions={getMentions}
       setEditorState={setEditorState}
-      onPublish={() => null}
+      onPublish={args.handlePublish}
       handleNavigateBack={() => null}
     />
   );
 };
 
-describe('EditorCard component', () => {
+describe('<EditorCard /> component', () => {
+  let componentWrapper = customRender(<></>, {});
+
+  const handlePublish = jest.fn();
+
+  beforeEach(() => {
+    act(() => {
+      componentWrapper = customRender(
+        wrapWithTheme(
+          <EditorComponent
+            avatar={'https://www.stevensegallery.com/360/360'}
+            ethAddress={'0x003410499401674320006570047391024572000'}
+            withMeter={true}
+            handlePublish={handlePublish}
+          />,
+        ),
+        {},
+      );
+    });
+  });
+
+  afterEach(() => {
+    act(() => componentWrapper.unmount());
+    cleanup();
+  });
+
   it('renders correctly', () => {
-    render(
-      wrapWithTheme(
-        <EditorComponent
-          avatar={'https://www.stevensegallery.com/360/360'}
-          ethAddress={'0x003410499401674320006570047391024572000'}
-          withMeter={true}
-        />,
-      ),
-    );
+    expect(componentWrapper).toBeDefined();
+  });
+
+  it('has correct title', () => {
+    const { getAllByText } = componentWrapper;
+    const title = getAllByText(/new post/i);
+    expect(title).toBeDefined();
+  });
+
+  it('has post button initially disabled', () => {
+    const { getByRole } = componentWrapper;
+    const postButton = getByRole('button', { name: 'Post' });
+    userEvent.click(postButton);
+    expect(postButton).toHaveProperty('disabled', true);
   });
 });

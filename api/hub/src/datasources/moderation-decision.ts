@@ -34,11 +34,36 @@ class ModerationDecisionAPI extends DataSource {
   }
 
   /**
+   * Get the name of the key for moderated decisions cache.
+   * @param contentID - The content identifier
+   * @returns The key as a string
+   */
+  getModeratedDecisionCacheKey(contentID: string) {
+    return `${this.collection}:moderated:contentID${contentID}`;
+  }
+
+  /**
    * Get the name of the key for counters cache
    * @returns The key as a string
   */
   getCountersCacheKey() {
     return `${this.collection}:counters`;
+  }
+
+  /**
+   * Get the name of the key for list of pending items cache
+   * @returns The key as a string
+  */
+  getPendingListCacheKey() {
+    return `${this.collection}:pending`;
+  }
+
+  /**
+   * Get the name of the key for list of moderated items cache
+   * @returns The key as a string
+  */
+  getModeratedListCacheKey() {
+    return `${this.collection}:moderated`;
   }
 
   /**
@@ -82,20 +107,63 @@ class ModerationDecisionAPI extends DataSource {
    * List decisions based on provided status (i.e. pending/moderated).
    * @param delisted - Whether it should check for delisted items or not
    * @param moderated - Whether it should check for moderated or not (i.e. pending)
-   * @param offset - Offset by number of records
+   * @param offset - Offset from the provided identifier
    * @param limit - Limit number of records returned
    * @returns A list of ModerationDecision objects
    */
-  async listDecisions(delisted: boolean, moderated: boolean, offset?: number, limit?: number) {
+  async listDecisions(delisted: boolean, moderated: boolean, offset?: string, limit?: number) {
     const db: Client = await getAppDB();
-    const query = new Where('delisted')
-      .eq(delisted)
-      .and('moderated')
-      .eq(moderated)
+    let list: ModerationDecision[];
+    const listType = moderated ? this.getModeratedListCacheKey() : this.getPendingListCacheKey();
+    if (await queryCache.has(listType)) {
+      list = await queryCache.get(listType);
+    } else {
+      const query = moderated ? new Where('moderated').eq(true).orderByDesc('moderatedDate') :
+      {
+        sort: { desc: true, fieldPath: 'creationDate' },
+      }
+      list = await db.find<ModerationDecision>(this.dbID, this.collection, query);
+      await queryCache.set(listType, list);
+    }
+    list = list.filter(item => item.delisted === delisted && item.moderated === moderated);
+    const offsetIndex = offset ? list.findIndex(item => item._id === offset) : 0;
+    let endIndex = (limit || 10) + offsetIndex;
+    if (list.length <= endIndex) {
+      endIndex = undefined;
+    }
+    const results = list.slice(offsetIndex, endIndex);
+    const nextIndex = endIndex ? list[endIndex]._id : null;
+    return { results: results, nextIndex: nextIndex, total: list.length };
+  }
+
+  /**
+   * Compiles a special list of all moderated content to be used for the public transparency log.
+   * @param offset - Offset by number of records
+   * @param limit - Limit number of records returned
+   * @returns A list of objects with minimal info about the moderated content
+   */
+  async publicLog(offset?: number, limit?: number) {
+    const list = [];
+    const db: Client = await getAppDB();
+    const query = new Where('moderated').eq(true)
       .skipNum(offset || 0)
       .limitTo(limit || 10)
-      .orderByDesc(moderated ? 'moderatedDate' : 'creationDate');
-    const list = await db.find<ModerationDecision>(this.dbID, this.collection, query);
+      .orderByDesc('moderatedDate');
+    const decisions = await db.find<ModerationDecision>(this.dbID, this.collection, query);
+    for (const record of decisions) {
+      const decision = await this.getFinalDecision(record.contentID);
+
+      list.push({
+        contentID: decision.contentID,
+        contentType: decision.contentType,
+        moderatedDate: decision.moderatedDate,
+        moderator: decision.moderator,
+        delisted: decision.delisted,
+        reasons: decision.reasons,
+        explanation: decision.explanation,
+      });
+    }
+
     return list;
   }
 
@@ -105,11 +173,16 @@ class ModerationDecisionAPI extends DataSource {
    * @returns A ModerationDecision object
    */
   async getDecision(contentID: string) {
+    const decisionCache = this.getDecisionCacheKey(contentID);
+    if (await queryCache.has(decisionCache)) {
+      return queryCache.get(decisionCache);
+    }
     const db: Client = await getAppDB();
     const query = new Where('contentID').eq(contentID);
     const decisions = await db.find<ModerationDecision>(this.dbID, this.collection, query);
     if (decisions.length) {
       decisions[0].explanation = decodeString(decisions[0].explanation);
+      await queryCache.set(decisionCache, decisions[0]);
       return decisions[0];
     }
     logger.warn(`moderation decision not found for contentID: ${contentID} `);
@@ -123,7 +196,7 @@ class ModerationDecisionAPI extends DataSource {
    * @returns An object with all the relevant data
    */
   async getFinalDecision(contentID: string) {
-    const decisionCache = this.getDecisionCacheKey(contentID);
+    const decisionCache = this.getModeratedDecisionCacheKey(contentID);
     if (await queryCache.has(decisionCache)) {
       return queryCache.get(decisionCache);
     }
@@ -132,7 +205,9 @@ class ModerationDecisionAPI extends DataSource {
     if (decision.moderator) {
       const profileAPI = new ProfileAPI({ dbID: this.dbID, collection: 'Profiles' });
       const moderator = await profileAPI.getProfile(decision.moderator);
-      decision = Object.assign({}, decision, moderator);
+      decision = Object.assign({}, decision, { 
+        moderatorProfile: moderator
+      });
     }
     // add first report data
     const reportingAPI = new ModerationReportAPI({
@@ -179,7 +254,10 @@ class ModerationDecisionAPI extends DataSource {
 
     await db.save(this.dbID, this.collection, [decision]);
     await queryCache.del(this.getDecisionCacheKey(contentID));
+    await queryCache.del(this.getModeratedDecisionCacheKey(contentID));
     await queryCache.del(this.getCountersCacheKey());
+    await queryCache.del(this.getModeratedListCacheKey());
+    await queryCache.del(this.getPendingListCacheKey());
   }
 }
 

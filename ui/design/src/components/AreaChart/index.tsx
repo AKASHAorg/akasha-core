@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Group } from '@vx/group';
 import { curveLinear } from '@vx/curve';
-import { scaleTime, scaleLinear } from '@vx/scale';
+import { scaleTime, scaleLinear, TimeDomain } from '@vx/scale';
 import { AreaClosed, LinePath } from '@vx/shape';
 import { extent, max } from 'd3-array';
 import { useTooltip, TooltipWithBounds, defaultStyles } from '@vx/tooltip';
@@ -46,12 +46,12 @@ const AreaChart: React.FC<IAreaChart> = props => {
 
   // define scales
   const xScale = React.useMemo(
-    () => scaleTime({ range: [0, xMax], domain: extent(data, getX) as any }),
+    () => scaleTime({ range: [0, xMax], domain: extent(data, getX) as TimeDomain }),
     [xMax],
   );
 
   const yScale = React.useMemo(
-    () => scaleLinear({ range: [yMax, 0], domain: [0, max(data, getY)] as any, nice: true }),
+    () => scaleLinear({ range: [yMax, 0], domain: [0, max(data, getY)] as TimeDomain, nice: true }),
     [yMax],
   );
 

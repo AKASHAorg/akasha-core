@@ -8,6 +8,13 @@ import lightTheme from '../../styles/themes/light/light-theme';
 export default {
   title: 'Input/SearchInput',
   component: SearchInput,
+  argTypes: {
+    inputValue: { control: 'text' },
+    cancelLabel: { control: 'text' },
+    placeholderLabel: { control: 'text' },
+    onChange: { action: 'input changed' },
+    handleCancel: { action: 'canceled' },
+  },
 };
 
 const Template = (args: ISearchInput) => {

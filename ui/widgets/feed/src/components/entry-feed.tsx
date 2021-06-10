@@ -139,6 +139,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
               ethAddress={props.loggedProfile.ethAddress}
               postLabel={t('Publish')}
               placeholderLabel={t('Write something')}
+              emojiPlaceholderLabel={t('Search')}
               discardPostLabel={t('Discard Post')}
               discardPostInfoLabel={t(
                 "You have not posted yet. If you leave now you'll discard your post.",
@@ -179,11 +180,11 @@ const EntryFeed = (props: IFeedWidgetProps) => {
                   onBookmark={handleBookmark}
                   onNavigate={props.onNavigate}
                   singleSpaNavigate={props.singleSpaNavigate}
-                  onReport={props.onReport}
+                  onFlag={props.onEntryFlag}
                   onRepost={handleRepost}
                   contentClickable={props.contentClickable}
                   awaitingModerationLabel={t(
-                    'You have reported this post. It is awaiting moderation.',
+                    'You have reported this content. It is awaiting moderation.',
                   )}
                   moderatedContentLabel={t('This content has been moderated')}
                   ctaLabel={t('See it anyway')}

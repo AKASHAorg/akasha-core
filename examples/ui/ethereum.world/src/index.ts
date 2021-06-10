@@ -15,7 +15,9 @@ console.time('AppLoader:firstMount');
   const topbarWidget = await System.import('@widget/topbar');
 
   const AKASHAApp = await System.import('@app/AKASHA');
+  const moderationApp = await System.import('@app/moderation');
   const profilePlugin = await System.import('@plugins/profile');
+  const bookmarksPlugin = await System.import('@plugins/bookmarks');
   const searchPlugin = await System.import('@plugins/search');
 
   const appConfig = {
@@ -28,9 +30,15 @@ console.time('AppLoader:firstMount');
     System: System,
   };
 
-  const registeredPlugins: IAppEntry[] = [
+  const registeredApps: IAppEntry[] = [
     {
       app: AKASHAApp.application,
+      config: {
+        area: MenuItemAreaType.AppArea,
+      },
+    },
+    {
+      app: moderationApp.application,
       config: {
         area: MenuItemAreaType.AppArea,
       },
@@ -53,7 +61,7 @@ console.time('AppLoader:firstMount');
 
   const world = await sdkInit({
     config: appConfig,
-    initialApps: { plugins: registeredPlugins, widgets: registeredWidgets },
+    initialApps: { apps: registeredApps, widgets: registeredWidgets },
   });
 
   // tslint:disable-next-line:no-console
@@ -68,6 +76,12 @@ console.time('AppLoader:firstMount');
   });
   world.appLoader.registerPlugin({
     app: profilePlugin.application,
+    config: {
+      area: MenuItemAreaType.QuickAccessArea,
+    },
+  });
+  world.appLoader.registerPlugin({
+    app: bookmarksPlugin.application,
     config: {
       area: MenuItemAreaType.QuickAccessArea,
     },

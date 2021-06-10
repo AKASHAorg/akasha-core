@@ -56,8 +56,8 @@ export const BaseDropSearchInput = Template.bind({});
 BaseDropSearchInput.args = {
   dataSource: suggestionsFromSpace,
   placeholder: 'Search something...',
-  resultsLabe: 'See all results',
-  appsLabe: 'Apps',
-  tagsLabe: 'Tags',
-  usersLabe: 'Users',
+  resultsLabel: 'See all results',
+  appsLabel: 'Apps',
+  tagsLabel: 'Tags',
+  usersLabel: 'Users',
 };

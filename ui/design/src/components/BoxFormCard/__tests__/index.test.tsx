@@ -29,7 +29,16 @@ describe('<BoxFormCard /> Component', () => {
             descriptionFieldPlaceholder={'Add a description about you here'}
             ethAddress={'0x003410499401674320006570047391024572456'}
             providerData={boxProviderData}
-            updateStatus={{ saving: false }}
+            updateStatus={{
+              saving: false,
+              uploadingAvatar: false,
+              uploadingCoverImage: false,
+              updateComplete: false,
+              isValidUsername: null,
+              isValidating: false,
+              notAllowed: false,
+              tooShort: false,
+            }}
             onSave={handleSave}
             onCancel={() => null}
           />,
@@ -40,9 +49,7 @@ describe('<BoxFormCard /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => {
-      componentWrapper.unmount();
-    });
+    act(() => componentWrapper.unmount());
     cleanup();
   });
 
@@ -74,7 +81,7 @@ describe('<BoxFormCard /> Component', () => {
     expect(nameInputPlaceholder).toBeDefined();
   });
 
-  it('renders action buttons', async () => {
+  it('renders action buttons', () => {
     const { getAllByRole } = componentWrapper;
     const cancelButton = getAllByRole('button', { name: 'Cancel' });
     const saveButton = getAllByRole('button', { name: 'Save' });
@@ -86,7 +93,6 @@ describe('<BoxFormCard /> Component', () => {
     const { getAllByRole } = componentWrapper;
     const saveButton = getAllByRole('button', { name: 'Save' });
     fireEvent.click(saveButton[0]);
-    // should never be called since it is disabled
-    expect(handleSave).toHaveBeenCalledTimes(0);
+    expect(saveButton[0]).toHaveProperty('disabled', true);
   });
 });

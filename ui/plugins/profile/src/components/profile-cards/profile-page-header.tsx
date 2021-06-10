@@ -12,6 +12,7 @@ import {
   useENSRegistration,
   useErrors,
   useNetworkState,
+  constants,
 } from '@akashaproject/ui-awf-hooks';
 import {
   ENSOptionTypes,
@@ -30,13 +31,6 @@ import {
   IProfileData,
   IProfileProvider,
 } from '@akashaproject/ui-awf-typings/lib/profile';
-
-const BASE_URL =
-  process.env.NODE_ENV === 'production'
-    ? 'https://moderation.ethereum.world'
-    : 'https://moderation.akasha.network';
-
-export const BASE_REPORT_URL = `${BASE_URL}/reports/new`;
 
 const {
   styled,
@@ -132,6 +126,8 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
   } = props;
 
   const [flagged, setFlagged] = React.useState('');
+  const [flaggedContentType, setFlaggedContentType] = React.useState('');
+
   const [isRegistration, setIsRegistration] = React.useState<boolean>(false);
 
   const location = useLocation();
@@ -295,8 +291,9 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
     }
   };
 
-  const handleEntryFlag = (entryId: string) => () => {
+  const handleEntryFlag = (entryId: string, contentType: string) => () => {
     setFlagged(entryId);
+    setFlaggedContentType(contentType);
     props.modalActions.showAfterLogin('reportModal');
   };
 
@@ -439,7 +436,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
         {props.modalState.reportModal && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
-              titleLabel={t('Report a Profile')}
+              titleLabel={t(`Report ${flaggedContentType}`)}
               successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
@@ -470,8 +467,8 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
               closeLabel={t('Close')}
               user={loggedUserEthAddress ? loggedUserEthAddress : ''}
               contentId={profileState.ethAddress ? profileState.ethAddress : flagged}
-              contentType="profile"
-              baseUrl={BASE_REPORT_URL}
+              contentType={flaggedContentType}
+              baseUrl={constants.BASE_REPORT_URL}
               closeModal={closeReportModal}
               signData={sdkModules.auth.authService.signData}
             />
@@ -616,9 +613,11 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
         saveChangesLabel={t('Save changes')}
         canUserEdit={loggedUserEthAddress === profileState.ethAddress}
         flaggable={loggedUserEthAddress !== profileState.ethAddress}
-        // uncomment this to enable report profile
-        // flagAsLabel={t('Report Profile')}
-        onEntryFlag={handleEntryFlag(profileState.ethAddress ? profileState.ethAddress : '')}
+        flagAsLabel={t('Report account')}
+        onEntryFlag={handleEntryFlag(
+          profileState.ethAddress ? profileState.ethAddress : '',
+          'account',
+        )}
         onUpdateClick={showUpdateProfileModal}
         onENSChangeClick={showEnsModal}
         changeENSLabel={

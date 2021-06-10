@@ -1,48 +1,41 @@
 import * as React from 'react';
-import { act, cleanup, fireEvent } from '@testing-library/react';
+import { act, cleanup } from '@testing-library/react';
 
-import AppMenuPopover from '../';
+import AppMenuPopover from '../index';
+
 import { customRender, wrapWithTheme } from '../../../test-utils';
 import { installedAppsData } from '../../../utils/dummy-data';
-import { Box } from 'grommet';
-import Icon from '../../Icon';
-
-const BaseComponent = () => {
-  const iconRef = React.useRef<HTMLDivElement>(null);
-  const [menuOpen, setMenuOpen] = React.useState(false);
-  return (
-    <Box width="medium" pad={{ top: 'large' }}>
-      <div ref={iconRef} data-testid="icon-wrapper">
-        <Icon type="eye" onClick={() => setMenuOpen(true)} />
-      </div>
-      {iconRef?.current && menuOpen && (
-        <AppMenuPopover
-          menuItem={{
-            ...installedAppsData[0],
-            subRoutes: [installedAppsData[1], installedAppsData[2], installedAppsData[3]],
-          }}
-          target={iconRef.current}
-          closePopover={() => setMenuOpen(false)}
-          onClickMenuItem={() => null}
-        />
-      )}
-    </Box>
-  );
-};
 
 describe('<AppMenuPopover /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
+  const targetNode = document.createElement('div');
+  document.body.appendChild(targetNode);
+
+  const handleClosePopover = jest.fn();
+  const handleClickMenuItem = jest.fn();
+
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(wrapWithTheme(<BaseComponent />), {});
+      componentWrapper = customRender(
+        wrapWithTheme(
+          <AppMenuPopover
+            menuItem={{
+              ...installedAppsData[0],
+              subRoutes: [installedAppsData[1], installedAppsData[2], installedAppsData[3]],
+            }}
+            target={targetNode}
+            closePopover={handleClosePopover}
+            onClickMenuItem={handleClickMenuItem}
+          />,
+        ),
+        {},
+      );
     });
   });
 
   afterEach(() => {
-    act(() => {
-      componentWrapper.unmount();
-    });
+    act(() => componentWrapper.unmount());
     cleanup();
   });
 
@@ -50,19 +43,13 @@ describe('<AppMenuPopover /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('renders popover when clicked', () => {
-    const { getByTestId, findByText } = componentWrapper;
-    const icon = getByTestId('icon-wrapper');
-    expect(icon).toBeDefined();
+  it('has correct popover details', () => {
+    const { getByText } = componentWrapper;
 
-    // perform click action to reveal popover
-    fireEvent.click(icon);
-
-    // using findByText which returns a Promise
-    const popoverTitle = findByText(/AKASHA feed/i);
-    const ENS = findByText(installedAppsData[1].label);
-    const ThreeBox = findByText(installedAppsData[1].label);
-    const Profile = findByText(installedAppsData[1].label);
+    const popoverTitle = getByText(installedAppsData[0].label);
+    const ENS = getByText(installedAppsData[1].label);
+    const ThreeBox = getByText(installedAppsData[2].label);
+    const Profile = getByText(installedAppsData[3].label);
 
     expect(popoverTitle).toBeDefined();
     expect(ENS).toBeDefined();

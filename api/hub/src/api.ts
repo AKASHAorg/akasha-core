@@ -260,12 +260,16 @@ api.post('/moderation/decisions/pending', async (ctx: koa.Context, next: () => P
     req.limit,
   );
   const list = [];
-  for (const decision of decisions) {
+  for (const decision of decisions.results) {
     // get the full data for each decision
     list.push(await dataSources.decisionsAPI.getFinalDecision(decision.contentID));
   }
   ctx.set('Content-Type', 'application/json');
-  ctx.body = list;
+  ctx.body = {
+    results: list,
+    nextIndex: decisions.nextIndex,
+    total: decisions.total,
+  };
   ctx.status = 200;
   await next();
 });
@@ -286,14 +290,30 @@ api.post('/moderation/decisions/moderated', async (ctx: koa.Context, next: () =>
       req.limit,
     );
     const list = [];
-    for (const decision of decisions) {
+    for (const decision of decisions.results) {
       // get the full data for each decision
       list.push(await dataSources.decisionsAPI.getFinalDecision(decision.contentID));
     }
     ctx.set('Content-Type', 'application/json');
-    ctx.body = list;
+    ctx.body = {
+      results: list,
+      nextIndex: decisions.nextIndex,
+      total: decisions.total,
+    };
     ctx.status = 200;
   }
+  await next();
+});
+
+/**
+ * Get a public log of all content that has been moderated, for transparency purposes.
+ */
+api.post('/moderation/decisions/log', async (ctx: koa.Context, next: () => Promise<any>) => {
+  const req = ctx?.request.body;
+  ctx.body = await dataSources.decisionsAPI.publicLog(req.offset, req.limit);
+  ctx.set('Content-Type', 'application/json');
+  ctx.status = 200;
+
   await next();
 });
 

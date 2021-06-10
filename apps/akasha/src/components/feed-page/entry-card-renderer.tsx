@@ -20,7 +20,7 @@ export interface IEntryCardRendererProps {
   onBookmark: (entryId: string) => void;
   onNavigate: (details: any) => void;
   onLinkCopy?: () => void;
-  onFlag?: (entryId: string) => () => void;
+  onFlag?: (entryId: string, contentType: string) => () => void;
   onRepost: (withComment: boolean, entryData: any) => void;
   sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
@@ -153,7 +153,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   profileAnchorLink={'/profile'}
                   repliesAnchorLink={routes[POST]}
                   onRepost={props.onRepost}
-                  onEntryFlag={props.onFlag && props.onFlag(itemData.entryId)}
+                  onEntryFlag={props.onFlag && props.onFlag(itemData.entryId, 'post')}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
                   isFollowingAuthor={isFollowing}

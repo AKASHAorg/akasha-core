@@ -1,42 +1,47 @@
-import '@testing-library/jest-dom/extend-expect';
-import { cleanup } from '@testing-library/react';
 import * as React from 'react';
-import { act, create, ReactTestRenderer } from 'react-test-renderer';
-import { wrapWithTheme } from '../../../test-utils';
-import Topbar from '../';
+import { act, cleanup } from '@testing-library/react';
+
+import Topbar from '..';
+import { customRender, wrapWithTheme } from '../../../test-utils';
 
 describe('<Topbar /> Component', () => {
-  let componentWrapper: ReactTestRenderer = create(<></>);
+  let componentWrapper = customRender(<></>, {});
+
+  const handleNavigation = jest.fn();
+  const handleSearch = jest.fn();
+  const handleLogin = jest.fn();
+  const handleSignup = jest.fn();
+  const handleLogout = jest.fn();
+  const handleFeedback = jest.fn();
+
   beforeEach(() => {
     act(() => {
-      componentWrapper = create(
+      componentWrapper = customRender(
         wrapWithTheme(
           <Topbar
-            onNavigation={jest.fn()}
-            onSearch={jest.fn()}
-            brandLabel={'test'}
+            onNavigation={handleNavigation}
+            onSearch={handleSearch}
+            brandLabel="test"
             searchAreaItem={undefined}
             quickAccessItems={[]}
-            onLoginClick={() => null}
-            onSignUpClick={() => null}
-            onLogout={() => null}
-            onFeedbackClick={() => null}
-            currentLocation={''}
+            onLoginClick={handleLogin}
+            onSignUpClick={handleSignup}
+            onLogout={handleLogout}
+            onFeedbackClick={handleFeedback}
+            currentLocation=""
           />,
         ),
+        {},
       );
     });
   });
+
   afterEach(() => {
-    act(() => {
-      componentWrapper.unmount();
-    });
+    act(() => componentWrapper.unmount());
     cleanup();
   });
 
-  it('should mount', () => {
-    const root = componentWrapper.root;
-    const topbarComp = root.findByType(Topbar);
-    expect(topbarComp).toBeDefined();
+  it('renders correctly', () => {
+    expect(componentWrapper).toBeDefined();
   });
 });

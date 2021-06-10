@@ -34,7 +34,7 @@ describe('<EntryCardRenderer /> component', () => {
       followedProfiles={[]}
       onFollow={jest.fn()}
       onUnfollow={jest.fn()}
-      onReport={jest.fn()}
+      onEntryFlag={jest.fn()}
       singleSpaNavigate={jest.fn}
     />
   );

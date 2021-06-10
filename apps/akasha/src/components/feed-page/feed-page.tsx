@@ -38,8 +38,10 @@ export interface FeedPageProps {
   loggedProfileData?: any;
   loginState: ILoginState;
   flagged: string;
+  flaggedContentType: string;
   reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
+  setFlaggedContentType: React.Dispatch<React.SetStateAction<string>>;
   setReportModalOpen: () => void;
   closeReportModal: () => void;
   editorModalOpen: boolean;
@@ -52,8 +54,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const {
     isMobile,
     flagged,
+    flaggedContentType,
     reportModalOpen,
     setFlagged,
+    setFlaggedContentType,
     setReportModalOpen,
     closeReportModal,
     editorModalOpen,
@@ -155,8 +159,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     setEditorModalOpen();
   };
 
-  const handleEntryFlag = (entryId: string) => () => {
+  const handleEntryFlag = (entryId: string, contentType: string) => () => {
     setFlagged(entryId);
+    setFlaggedContentType(contentType);
     setReportModalOpen();
   };
 
@@ -206,7 +211,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
-              titleLabel={t('Report a Post')}
+              titleLabel={t(`Report ${flaggedContentType}`)}
               successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
@@ -237,7 +242,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               closeLabel={t('Close')}
               user={loginState.ethAddress ? loginState.ethAddress : ''}
               contentId={flagged}
-              contentType="post"
+              contentType={flaggedContentType}
               baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
@@ -253,6 +258,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         ethAddress={loginState.ethAddress as any}
         postLabel={t('Publish')}
         placeholderLabel={t('Write something')}
+        emojiPlaceholderLabel={t('Search')}
         discardPostLabel={t('Discard Post')}
         discardPostInfoLabel={t(
           "You have not posted yet. If you leave now you'll discard your post.",
@@ -315,7 +321,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             onMentionClick={handleMentionClick}
             onTagClick={handleTagClick}
             contentClickable={true}
-            awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
+            awaitingModerationLabel={t(
+              'You have reported this content. It is awaiting moderation.',
+            )}
             moderatedContentLabel={t('This content has been moderated')}
             ctaLabel={t('See it anyway')}
             handleFlipCard={handleFlipCard}

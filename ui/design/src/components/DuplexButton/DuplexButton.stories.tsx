@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 
-import DuplexButton from '.';
+import DuplexButton, { IDuplexButtonProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -16,7 +16,7 @@ export default {
   },
 };
 
-const Template = (args: any) => {
+const Template = (args: IDuplexButtonProps) => {
   const [active, setActive] = React.useState(false);
   const handleClick = () => {
     if (!active) {
