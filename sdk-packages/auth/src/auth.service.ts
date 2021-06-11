@@ -134,7 +134,9 @@ const service: AkashaService = (invoke, log, globalChannel) => {
       if (currentProvider === EthProviders.WalletConnect) {
         // @Todo: track https://github.com/WalletConnect/walletconnect-monorepo/issues/444
         // until there is a consistent way of detecting previous sessions and initiate disconnect
-        localStorage.clear();
+        // localStorage.clear();
+        log.info('using wc bridge');
+        localStorage.removeItem('walletconnect');
       }
     }
     try {
