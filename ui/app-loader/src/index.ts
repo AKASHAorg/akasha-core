@@ -462,7 +462,6 @@ export default class AppLoader {
       singleSpa: singleSpa,
       isMobile: this.isMobile,
       globalChannel: this.sdk.globalChannel,
-      rxjsOperators: rxjsOperators,
       layoutConfig: { ...layoutParams },
       logger: this.logger.child({ module: this.layoutConfig.name }),
       sdkModules: getSDKDependencies(this.layoutConfig, this.sdk),

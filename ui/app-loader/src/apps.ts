@@ -9,7 +9,6 @@ import {
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import BaseIntegration, { BaseIntegrationClassOptions } from './base-integration';
 import * as singleSpa from 'single-spa';
-import * as rxjsOperators from 'rxjs/operators';
 import { getNameFromDef, getSDKDependencies, navigateToModal } from './utils';
 import pino from 'pino';
 
@@ -177,7 +176,6 @@ class Apps extends BaseIntegration {
         customProps: {
           domElementGetter: () => this.getDomElement(appConfig, appName, 'app'),
           sdkModules: deps,
-          rxjsOperators: rxjsOperators,
           uiEvents: this.uiEvents,
           logger: this.baseLogger.child({ module: appName }),
           installIntegration: (name: string, version?: string) => {

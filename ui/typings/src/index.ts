@@ -30,7 +30,6 @@ export interface RootComponentProps {
   installIntegration?: (name: string) => void;
   uninstallIntegration?: (name: string) => void;
   navigateToModal: (opts: AppLoaderTypes.ModalNavigationOptions) => void;
-  unmountSelf: () => void;
 }
 
 export enum LogoTypeSource {

@@ -8,7 +8,6 @@ import * as singleSpa from 'single-spa';
 import { IntegrationModule } from './apps';
 import BaseIntegration, { BaseIntegrationClassOptions } from './base-integration';
 import { getSDKDependencies, navigateToModal } from './utils';
-import * as rxjsOperators from 'rxjs/operators';
 import pino from 'pino';
 
 class Widgets extends BaseIntegration {
@@ -87,7 +86,6 @@ class Widgets extends BaseIntegration {
       layoutConfig: { ...otherLayoutProps },
       domElement: wrapperNode,
       sdkModules: dependencies,
-      rxjsOperators: rxjsOperators,
       globalChannel: this.sdk.globalChannel,
       uiEvents: this.uiEvents,
       isMobile: this.isMobile,
