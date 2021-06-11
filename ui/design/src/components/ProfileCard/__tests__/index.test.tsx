@@ -1,76 +1,66 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import * as React from 'react';
-import { act, create } from 'react-test-renderer';
+import { act, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+import ProfileCard from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
-import ProfileCard from '..';
 
-const mockProfileData = {
-  ethAddress: '0x003410490050000320006570034567114572000',
-  pubKey: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba',
-  avatar: 'https://placebeard.it/480/480',
-  coverImage: 'goldenrod',
-  name: 'Gilbert The Bearded',
-  userName: '@gilbert',
-  description:
-    'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
-  followers: '15',
-  following: '1876',
-  apps: '12',
-  profileType: 'user',
-  vnd: {},
-  default: [],
-  providers: [],
-};
+import {
+  aboutMeLabel,
+  cancelLabel,
+  changeCoverImageLabel,
+  editProfileLabel,
+  followersLabel,
+  followingLabel,
+  postsLabel,
+  profileData,
+  profileProvidersData,
+  saveChangesLabel,
+  shareProfileLabel,
+} from '../../../utils/dummy-data';
 
-const createBaseComponent = (props: any) => (
-  <ProfileCard
-    handleShareClick={() => null}
-    loggedEthAddress={null}
-    profileData={mockProfileData}
-    onClickFollowers={props.onClickFollowers}
-    onClickFollowing={props.onClickFollowing}
-    onClickPosts={props.onClickPosts}
-    onChangeProfileData={props.onChangeProfileData}
-    descriptionLabel="Description"
-    followingLabel="Followings"
-    followersLabel="Followers"
-    postsLabel="Posts"
-    shareProfileLabel="Share"
-    editProfileLabel="Edit"
-    cancelLabel="Cancel"
-    saveChangesLabel="Save Changes"
-    flagAsLabel="Report Profile"
-    changeCoverImageLabel="Change Cover Image"
-    flaggable={true}
-    onEntryFlag={() => null}
-    getProfileProvidersData={props.getProfileProvidersData}
-    updateProfileLabel="Update Profile"
-    changeENSLabel="Update Ethereum Name"
-    onENSChangeClick={() => {
-      /* not empty block */
-    }}
-    onUpdateClick={() => {
-      /* not an empty block */
-    }}
-    hideENSButton={false}
-  />
-);
+describe('<ProfileCard /> Component', () => {
+  let componentWrapper = customRender(<></>, {});
 
-describe('<ProfileCard /> Component, (read mode)', () => {
-  let componentWrapper = create(<></>);
+  const handleClickFollowers = jest.fn();
+  const handleClickFollowing = jest.fn();
+  const handleClickPosts = jest.fn();
+  const handleClickProfileData = jest.fn();
+  const handleEntryFlag = jest.fn();
+  const handleGetProfileProvidersData = jest.fn();
+  const handleUpdateClick = jest.fn();
+  const handleENSChangeClick = jest.fn();
+  const handleShareClick = jest.fn();
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = create(
+      componentWrapper = customRender(
         wrapWithTheme(
-          createBaseComponent({
-            onClickFollowers: () => null,
-            onClickFollowing: () => null,
-            onClickPosts: () => null,
-            onChangeProfileData: () => null,
-          }),
+          <ProfileCard
+            profileData={profileData}
+            descriptionLabel={aboutMeLabel}
+            followingLabel={followingLabel}
+            followersLabel={followersLabel}
+            postsLabel={postsLabel}
+            shareProfileLabel={shareProfileLabel}
+            editProfileLabel={editProfileLabel}
+            profileProvidersData={profileProvidersData}
+            changeCoverImageLabel={changeCoverImageLabel}
+            cancelLabel={cancelLabel}
+            saveChangesLabel={saveChangesLabel}
+            flaggable={true}
+            onClickFollowers={handleClickFollowers}
+            onClickFollowing={handleClickFollowing}
+            onClickPosts={handleClickPosts}
+            onChangeProfileData={handleClickProfileData}
+            onEntryFlag={handleEntryFlag}
+            getProfileProvidersData={handleGetProfileProvidersData}
+            onUpdateClick={handleUpdateClick}
+            onENSChangeClick={handleENSChangeClick}
+            handleShareClick={handleShareClick}
+          />,
         ),
+        {},
       );
     });
   });
@@ -80,57 +70,56 @@ describe('<ProfileCard /> Component, (read mode)', () => {
     cleanup();
   });
 
-  it('should mount without errors', () => {
-    const root = componentWrapper.root;
-    const profileCardComp = root.findByType(ProfileCard);
-    expect(profileCardComp).toBeDefined();
+  it('renders correctly', () => {
+    expect(componentWrapper).toBeDefined();
   });
 
-  it('should have one cover image, that is not editable', async () => {
-    const { getAllByTestId } = customRender(createBaseComponent({}), {});
-    const coverImages = await waitFor(() => getAllByTestId('profile-card-cover-image'));
-    expect(coverImages).toHaveLength(1);
-    // expect(coverImages[0]).not.toHaveAttribute('type', 'file');
+  it('has correct author name', () => {
+    const { getByText } = componentWrapper;
+    const authorName = getByText(/Gilbert The Bearded/i);
+
+    expect(authorName).toBeDefined();
   });
 
-  it('should have an avatar, that is not editable', async () => {
-    const { getAllByTestId } = customRender(createBaseComponent({}), {});
-    const avatarImages = await waitFor(() => getAllByTestId('avatar-image'));
-    expect(avatarImages).toHaveLength(1);
+  it('has a cover image', () => {
+    const { getByTestId } = componentWrapper;
+    const coverImage = getByTestId('profile-card-cover-image');
+
+    expect(coverImage).toBeDefined();
   });
 
-  it('should have followings and followers and posts buttons', async () => {
-    const { findByTestId } = customRender(createBaseComponent({}), {});
+  it('has an avatar', () => {
+    const { getByTestId } = componentWrapper;
+    const avatarImage = getByTestId('avatar-image');
 
-    const followingButton = await waitFor(() => findByTestId('following-button'));
-    const followersButton = await waitFor(() => findByTestId('followers-button'));
-    const postsButton = await waitFor(() => findByTestId('posts-button'));
-    expect(followingButton).toBeDefined();
+    expect(avatarImage).toBeDefined();
+    expect(avatarImage).toHaveAttribute('src', 'https://placebeard.it/480/480');
+  });
+
+  it('has followings, followers, posts buttons', () => {
+    const { getByTestId } = componentWrapper;
+    const followersButton = getByTestId('followers-button');
+    const followingButton = getByTestId('following-button');
+    const postsButton = getByTestId('posts-button');
+
     expect(followersButton).toBeDefined();
+    expect(followingButton).toBeDefined();
     expect(postsButton).toBeDefined();
   });
 
-  it('should call following and followers and posts button handlers', async () => {
-    const onClickFollowersHandler = jest.fn();
-    const onClickFollowingHandler = jest.fn();
-    const onClickPostsHandler = jest.fn();
+  it('calls handlers on followings, followers, posts buttons', () => {
+    const { getByTestId } = componentWrapper;
+    const followersButton = getByTestId('followers-button');
+    const followingButton = getByTestId('following-button');
+    const postsButton = getByTestId('posts-button');
 
-    const { findByTestId } = customRender(
-      createBaseComponent({
-        onClickFollowers: onClickFollowersHandler,
-        onClickFollowing: onClickFollowingHandler,
-        onClickPosts: onClickPostsHandler,
-      }),
-      {},
-    );
-    const followingButton = await waitFor(() => findByTestId('following-button'));
-    const followersButton = await waitFor(() => findByTestId('followers-button'));
-    const postsButton = await waitFor(() => findByTestId('posts-button'));
-    fireEvent.click(followingButton);
-    fireEvent.click(followersButton);
-    fireEvent.click(postsButton);
-    expect(onClickFollowingHandler).toBeCalledTimes(1);
-    expect(onClickFollowersHandler).toBeCalledTimes(1);
-    expect(onClickPostsHandler).toBeCalledTimes(1);
+    // test click actions
+    userEvent.click(followersButton);
+    userEvent.click(followingButton);
+    userEvent.click(postsButton);
+
+    expect(handleClickFollowers).toBeCalledTimes(1);
+    expect(handleClickFollowing).toBeCalledTimes(1);
+    expect(handleClickPosts).toBeCalledTimes(1);
   });
 });

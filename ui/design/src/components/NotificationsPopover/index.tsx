@@ -8,7 +8,7 @@ export interface INotificationsPopover {
   className?: string;
   onClickNotification: () => void;
   dataSource: INotification[];
-  target: React.RefObject<any>;
+  target: HTMLElement;
   closePopover: () => void;
 }
 

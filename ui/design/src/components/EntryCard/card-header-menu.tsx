@@ -4,7 +4,7 @@ import TextIcon from '../TextIcon';
 import { Box, ThemeContext } from 'grommet';
 
 export interface ICardHeaderMenuProps {
-  target: {};
+  target: HTMLDivElement;
   onMenuClose: () => void;
   flagAsLabel?: string;
   onFlag: () => void;

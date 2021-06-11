@@ -29,6 +29,7 @@
     "build": "tsc --build",
     "pretest": "tsc -m commonjs",
     "test": "jest",
+    "test:watch": "jest --watch",
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
@@ -120,7 +121,8 @@
     "slate": "0.62.0",
     "slate-history": "0.62.0",
     "slate-react": "0.62.0",
-    "slate-android-plugin": "0.0.4"
+    "slate-android-plugin": "0.0.4",
+    "ts-jest": "27.0.0-next.12"
   },
   "peerDependencies": {
     "react": "17.0.2",

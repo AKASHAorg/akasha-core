@@ -1,12 +1,31 @@
 import * as React from 'react';
-// import { create } from 'react-test-renderer';
-import { render } from '@testing-library/react';
+import { act, cleanup } from '@testing-library/react';
 
 import MdCard from '../';
-import { wrapWithTheme } from '../../../test-utils';
+import { customRender, wrapWithTheme } from '../../../test-utils';
 
-describe('MdCard component', () => {
+describe('<MdCard /> Component', () => {
+  let componentWrapper = customRender(<></>, {});
+
+  beforeEach(() => {
+    act(() => {
+      componentWrapper = customRender(wrapWithTheme(<MdCard mdText="`**Hello**`" />), {});
+    });
+  });
+
+  afterEach(() => {
+    act(() => componentWrapper.unmount());
+    cleanup();
+  });
+
   it('renders correctly', () => {
-    render(wrapWithTheme(<MdCard mdText={`**Hello**`} />));
+    expect(componentWrapper).toBeDefined();
+  });
+
+  it('has correct text', () => {
+    const { getByText } = componentWrapper;
+    const mdText = getByText(/Hello/i);
+
+    expect(mdText).toBeDefined();
   });
 });

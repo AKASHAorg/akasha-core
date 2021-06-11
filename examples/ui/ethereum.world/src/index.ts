@@ -18,6 +18,7 @@ console.time('AppLoader:firstMount');
   const AKASHAApp = await System.import('@app/AKASHA');
   const moderationApp = await System.import('@app/moderation');
   const profilePlugin = await System.import('@plugins/profile');
+  const bookmarksPlugin = await System.import('@plugins/bookmarks');
   const searchPlugin = await System.import('@plugins/search');
 
   const appConfig = {
@@ -76,6 +77,12 @@ console.time('AppLoader:firstMount');
   });
   world.appLoader.registerPlugin({
     app: profilePlugin.application,
+    config: {
+      area: MenuItemAreaType.QuickAccessArea,
+    },
+  });
+  world.appLoader.registerPlugin({
+    app: bookmarksPlugin.application,
     config: {
       area: MenuItemAreaType.QuickAccessArea,
     },

@@ -72,6 +72,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [flagged, setFlagged] = React.useState('');
+  const [flaggedContentType, setFlaggedContentType] = React.useState('');
 
   const [, errorActions] = useErrors({ logger });
 
@@ -202,8 +203,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     return bookmarkActions.bookmarkPost(entryId);
   };
 
-  const handleEntryFlag = (entryId: string) => {
+  const handleEntryFlag = (entryId: string, contentType: string) => () => {
     setFlagged(entryId);
+    setFlaggedContentType(contentType);
 
     modalStateActions.showAfterLogin(MODAL_NAMES.REPORT);
   };
@@ -301,7 +303,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         {modalState.report && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
-              titleLabel={t('Report a Post')}
+              titleLabel={t(`Report ${flaggedContentType}`)}
               successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
@@ -332,7 +334,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               closeLabel={t('Close')}
               user={loginState.ethAddress ? loginState.ethAddress : ''}
               contentId={flagged}
-              contentType="post"
+              contentType={flaggedContentType}
               baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={hideReportModal}
@@ -348,6 +350,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             ethAddress={loginState.ethAddress}
             postLabel={t('Publish')}
             placeholderLabel={t('Write something')}
+            emojiPlaceholderLabel={t('Search')}
             discardPostLabel={t('Discard Post')}
             discardPostInfoLabel={t(
               "You have not posted yet. If you leave now you'll discard your post.",
@@ -448,7 +451,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 ) : entryData.reported ? (
                   <EntryCardHidden
                     awaitingModerationLabel={t(
-                      'You have reported this post. It is awaiting moderation.',
+                      'You have reported this content. It is awaiting moderation.',
                     )}
                     ctaLabel={t('See it anyway')}
                     handleFlipCard={handleFlipCard && handleFlipCard(entryData, false)}
@@ -479,7 +482,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     profileAnchorLink={'/profile'}
                     repliesAnchorLink={'/social-app/post'}
                     onRepost={handleRepost}
-                    onEntryFlag={handleEntryFlag}
+                    onEntryFlag={handleEntryFlag(entryData.entryId, 'post')}
                     handleFollowAuthor={() => handleFollowProfile(entryData.author.ethAddress)}
                     handleUnfollowAuthor={() => handleUnfollowProfile(entryData.author.ethAddress)}
                     isFollowingAuthor={followedProfiles.includes(entryData.author)}
@@ -512,7 +515,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   repostWithCommentLabel={t('Repost with comment')}
                   shareLabel={t('Share')}
                   copyLinkLabel={t('Copy Link')}
-                  flagAsLabel={t('Report Post')}
+                  flagAsLabel={t('Report Comment')}
                   loggedProfileEthAddress={loginState.ethAddress}
                   locale={locale || 'en'}
                   style={{ height: 'auto' }}
@@ -521,7 +524,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   profileAnchorLink={'/profile'}
                   repliesAnchorLink={'/social-app/post'}
                   onRepost={() => null}
-                  onEntryFlag={handleEntryFlag}
+                  onEntryFlag={handleEntryFlag(commentData.entryId, 'comment')}
                   handleFollowAuthor={() => handleFollowProfile(commentData.author.ethAddress)}
                   handleUnfollowAuthor={() => handleUnfollowProfile(commentData.author.ethAddress)}
                   isFollowingAuthor={followedProfiles.includes(commentData.author)}

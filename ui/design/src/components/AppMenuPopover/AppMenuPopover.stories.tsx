@@ -17,7 +17,7 @@ export default {
 };
 
 const Template = (args: IAppMenuPopover) => {
-  const iconRef: React.Ref<any> = React.useRef();
+  const iconRef = React.useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = React.useState(false);
   return (
     <Grommet theme={lightTheme}>

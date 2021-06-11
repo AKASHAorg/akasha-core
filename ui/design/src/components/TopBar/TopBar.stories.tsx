@@ -3,7 +3,7 @@ import { Grommet } from 'grommet';
 
 import { MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-import Topbar from '.';
+import Topbar, { ITopbarProps } from '.';
 import ViewportSizeProvider from '../Providers/viewport-dimension';
 
 import lightTheme from '../../styles/themes/light/light-theme';
@@ -30,7 +30,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: ITopbarProps) => (
   <Grommet theme={lightTheme}>
     <ViewportSizeProvider>
       <Topbar {...args} />

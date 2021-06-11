@@ -15,7 +15,7 @@ export default {
 
 const Template = (args: any) => (
   <Grommet theme={lightTheme}>
-    <PlainButton {...args} />
+    <PlainButton {...args}>{args.children} </PlainButton>
   </Grommet>
 );
 
@@ -23,4 +23,5 @@ export const BasePlainButton = Template.bind({});
 BasePlainButton.args = {
   label: 'Plain button',
   color: '#000',
+  children: <></>,
 };

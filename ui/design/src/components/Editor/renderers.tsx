@@ -22,7 +22,7 @@ const DisabledSpan = styled.span`
   color: ${props => props.theme.colors.secondaryText};
 `;
 
-const ImageElement = ({
+const ImgElement = ({
   attributes,
   children,
   element,
@@ -138,7 +138,7 @@ const renderElement = (
   switch (props.element.type) {
     case 'image':
       return (
-        <ImageElement
+        <ImgElement
           handleDeleteImage={handleDeleteImage}
           handleClickImage={handleClickImage}
           {...props}
