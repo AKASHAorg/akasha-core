@@ -15,7 +15,7 @@ import {
   useMentions,
 } from '@akashaproject/ui-awf-hooks';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import {
   ModalState,
   ModalStateActions,
@@ -41,10 +41,10 @@ const {
 interface SearchPageProps
   extends Pick<
     RootComponentProps,
-    'sdkModules' | 'globalChannel' | 'logger' | 'rxjsOperators' | 'singleSpa' | 'layout'
+    'sdkModules' | 'globalChannel' | 'logger' | 'singleSpa' | 'layout'
   > {
   onError?: (err: Error) => void;
-  loginState: UseLoginState;
+  loginState: ILoginState;
   loggedProfileData: any;
   showLoginModal: () => void;
   modalState: ModalState;
@@ -57,7 +57,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     logger,
     singleSpa,
     globalChannel,
-    rxjsOperators,
     loginState,
     loggedProfileData,
     modalState,
@@ -100,7 +99,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   });
 
   const [followedProfiles, followActions] = useFollow({
-    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
@@ -109,7 +107,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   });
 
   const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
-    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
@@ -441,8 +438,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               </Box>
             ))}
           {(activeButton === buttonValues[0] || activeButton === buttonValues[3]) &&
-            searchState.entries.slice(0, 4).map((entryData: any) => (
-              <Box key={entryData.entyId} pad={{ bottom: 'medium' }}>
+            searchState.entries.slice(0, 4).map((entryData: any, index: number) => (
+              <Box key={index} pad={{ bottom: 'medium' }}>
                 {entryData.delisted ? (
                   <EntryCardHidden
                     moderatedContentLabel={t('This content has been moderated')}

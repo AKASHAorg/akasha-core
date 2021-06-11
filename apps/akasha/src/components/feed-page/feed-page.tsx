@@ -16,7 +16,7 @@ import Parcel from 'single-spa-react/parcel';
 import { constants, useBookmarks, useErrors, useMentions } from '@akashaproject/ui-awf-hooks';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
-import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
 const {
   Box,
@@ -36,7 +36,7 @@ export interface FeedPageProps {
   logger: any;
   showLoginModal: () => void;
   loggedProfileData?: any;
-  loginState: UseLoginState;
+  loginState: ILoginState;
   flagged: string;
   flaggedContentType: string;
   reportModalOpen: boolean;
@@ -70,7 +70,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     sdkModules,
     logger,
     globalChannel,
-    rxjsOperators,
   } = props;
 
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
@@ -309,7 +308,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             sdkModules={sdkModules}
             logger={logger}
             globalChannel={globalChannel}
-            rxjsOperators={rxjsOperators}
             bookmarkState={bookmarkState}
             ethAddress={loginState.ethAddress}
             locale={locale}
@@ -335,7 +333,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           sdkModules,
           logger,
           globalChannel,
-          rxjsOperators,
           isMobile,
           feedItems: postsState.postIds,
           loggedEthAddress: loginState.ethAddress,

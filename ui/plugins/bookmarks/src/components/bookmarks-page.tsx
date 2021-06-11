@@ -27,13 +27,12 @@ type BookmarksPageProps = Omit<
 >;
 
 const BookmarksPage: React.FC<BookmarksPageProps> = props => {
-  const { globalChannel, sdkModules, singleSpa, logger, rxjsOperators } = props;
+  const { globalChannel, sdkModules, singleSpa, logger } = props;
   const { t } = useTranslation();
 
   const [errorState, errorActions] = useErrors({ logger });
 
   const [loginState] = useLoginState({
-    rxjsOperators,
     globalChannel: globalChannel,
     onError: errorActions.createError,
     authService: sdkModules.auth.authService,
@@ -161,7 +160,6 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
                         globalChannel={globalChannel}
                         sdkModules={sdkModules}
                         singleSpa={singleSpa}
-                        rxjsOperators={rxjsOperators}
                         bookmarkState={bookmarkState}
                         ethAddress={loginState.ethAddress}
                         onBookmark={handleBookmarkClick}

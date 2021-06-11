@@ -39,7 +39,7 @@
     "path-to-regexp": "^6.2.0"
   },
   "peerDependencies": {
-    "rxjs": "^6.6.7"
+    "rxjs": "7.0.0"
   },
   "files": [
     "lib",
