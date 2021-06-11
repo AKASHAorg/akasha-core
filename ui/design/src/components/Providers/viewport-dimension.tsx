@@ -29,11 +29,15 @@ const ViewportSizeProvider = ({ children }: IViewportDimProps) => {
 
   React.useEffect(() => {
     const onResize = () => {
-      setDimensions({
-        width: document.body.getClientRects()[0].width,
-        height: document.body.getClientRects()[0].height,
-      });
-      setSize(getSizeByWidth(document.body.getClientRects()[0].width));
+      if (document && document.body.getBoundingClientRect) {
+        const width = document.body.getBoundingClientRect().width;
+        const height = document.body.getBoundingClientRect().height;
+        setDimensions({
+          width: width,
+          height: height,
+        });
+        setSize(getSizeByWidth(width));
+      }
     };
     window.addEventListener('resize', onResize);
     onResize();

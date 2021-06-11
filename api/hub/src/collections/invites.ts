@@ -1,7 +1,7 @@
 import { Client, ThreadID } from '@textile/hub';
 
 const schema = {
-  title: 'Tag',
+  title: 'Invite',
   type: 'object',
   required: ['_id', 'name'],
   properties: {

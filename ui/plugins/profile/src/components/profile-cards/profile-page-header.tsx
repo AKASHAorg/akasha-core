@@ -12,11 +12,12 @@ import {
   useENSRegistration,
   useErrors,
   useNetworkState,
+  constants,
 } from '@akashaproject/ui-awf-hooks';
 import {
   ENSOptionTypes,
   EnsFormOption,
-} from '@akashaproject/design-system/lib/components/Cards/form-cards/ens-form-card';
+} from '@akashaproject/design-system/lib/components/EnsFormCard';
 import menuRoute, { rootRoute, MY_PROFILE } from '../../routes';
 import {
   ProfileUpdateStatus,
@@ -30,13 +31,6 @@ import {
   IProfileData,
   IProfileProvider,
 } from '@akashaproject/ui-awf-typings/lib/profile';
-
-const BASE_URL =
-  process.env.NODE_ENV === 'production'
-    ? 'https://moderation.ethereum.world'
-    : 'https://moderation.akasha.network';
-
-export const BASE_FLAG_URL = `${BASE_URL}/flags`;
 
 const {
   styled,
@@ -104,12 +98,27 @@ const ENSForm = styled(EnsFormCard)`
   }
 `;
 
-export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps) => {
+type ProfilePageCardProps = IProfileHeaderProps &
+  Omit<
+    RootComponentProps,
+    | 'domElement'
+    | 'events'
+    | 'getMenuItems'
+    | 'i18n'
+    | 'isMobile'
+    | 'activeWhen'
+    | 'i18nConfig'
+    | 'mountParcel'
+    | 'name'
+    | 'rootNodeId'
+    | 'unmountSelf'
+  >;
+
+export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
   const {
     profileState,
     loggedUserEthAddress,
     sdkModules,
-    rxjsOperators,
     logger,
     profileId,
     globalChannel,
@@ -117,13 +126,14 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   } = props;
 
   const [flagged, setFlagged] = React.useState('');
+  const [flaggedContentType, setFlaggedContentType] = React.useState('');
+
   const [isRegistration, setIsRegistration] = React.useState<boolean>(false);
 
   const location = useLocation();
 
   const { t } = useTranslation();
   const [followedProfiles, followActions] = useFollow({
-    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
@@ -138,7 +148,6 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     ethAddress: props.loggedUserEthAddress,
     ensService: sdkModules.registry.ens,
     onError: ensErrorActions.createError,
-    rxjsOperators: props.rxjsOperators,
   });
 
   const [networkState, networkActions] = useNetworkState({
@@ -196,7 +205,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
   }, [JSON.stringify(profileState)]);
 
   const ensFormOptions: EnsFormOption[] = React.useMemo(() => {
-    const options = [];
+    const options: EnsFormOption[] = [];
 
     const hasEnsSubdomainAvail = userNameType.available.includes(
       UsernameTypes.AKASHA_ENS_SUBDOMAIN,
@@ -282,8 +291,9 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
     }
   };
 
-  const handleEntryFlag = (entryId: string) => () => {
+  const handleEntryFlag = (entryId: string, contentType: string) => () => {
     setFlagged(entryId);
+    setFlaggedContentType(contentType);
     props.modalActions.showAfterLogin('reportModal');
   };
 
@@ -422,11 +432,11 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
 
   return (
     <>
-      <ModalRenderer slotId={props.layout.app.modalSlotId}>
+      <ModalRenderer slotId={props.layout.modalSlotId}>
         {props.modalState.reportModal && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
-              titleLabel={t('Report a Profile')}
+              titleLabel={t(`Report ${flaggedContentType}`)}
               successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
@@ -457,9 +467,10 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
               closeLabel={t('Close')}
               user={loggedUserEthAddress ? loggedUserEthAddress : ''}
               contentId={profileState.ethAddress ? profileState.ethAddress : flagged}
-              contentType="profile"
-              baseUrl={BASE_FLAG_URL}
+              contentType={flaggedContentType}
+              baseUrl={constants.BASE_REPORT_URL}
               closeModal={closeReportModal}
+              signData={sdkModules.auth.authService.signData}
             />
           </ToastProvider>
         )}
@@ -472,7 +483,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         )}
       </ModalRenderer>
       <Route path={`${menuRoute[MY_PROFILE]}/update-info`}>
-        <ModalRenderer slotId={props.layout.app.modalSlotId}>
+        <ModalRenderer slotId={props.layout.modalSlotId}>
           {profileState.ethAddress && !profileUpdateStatus.updateComplete && (
             <ProfileForm
               titleLabel={profileState.userName ? t('Update Profile') : t('Create Profile')}
@@ -516,7 +527,7 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         </ModalRenderer>
       </Route>
       <Route path={`${menuRoute[MY_PROFILE]}/update-ens`}>
-        <ModalRenderer slotId={props.layout.app.modalSlotId}>
+        <ModalRenderer slotId={props.layout.modalSlotId}>
           {networkState.networkNotSupported && (
             <StyledLayer>
               <ErrorLoader
@@ -602,9 +613,11 @@ export const ProfilePageCard = (props: IProfileHeaderProps & RootComponentProps)
         saveChangesLabel={t('Save changes')}
         canUserEdit={loggedUserEthAddress === profileState.ethAddress}
         flaggable={loggedUserEthAddress !== profileState.ethAddress}
-        // uncomment this to enable report profile
-        // flagAsLabel={t('Report Profile')}
-        onEntryFlag={handleEntryFlag(profileState.ethAddress ? profileState.ethAddress : '')}
+        flagAsLabel={t('Report account')}
+        onEntryFlag={handleEntryFlag(
+          profileState.ethAddress ? profileState.ethAddress : '',
+          'account',
+        )}
         onUpdateClick={showUpdateProfileModal}
         onENSChangeClick={showEnsModal}
         changeENSLabel={

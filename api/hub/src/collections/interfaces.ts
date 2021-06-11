@@ -49,3 +49,40 @@ export interface Comment {
   postId: string;
   replyTo: string;
 }
+
+export interface Invite {
+  _id: string;
+  name: string;
+  updateDate: number;
+  used: boolean;
+}
+
+export interface Moderator {
+  _id: string;
+  creationDate: number;
+  ethAddress: string;
+  admin: boolean;
+  active: boolean;
+}
+
+export interface ModerationReport {
+  _id: string;
+  creationDate: number;
+  contentType: string;
+  contentID: string;
+  author: string;
+  reason: string;
+  explanation?: string;
+}
+
+export interface ModerationDecision {
+  _id: string;
+  creationDate: number;
+  contentType: string;
+  contentID: string;
+  moderator?: string;
+  moderatedDate?: number;
+  explanation?: string;
+  delisted: boolean;
+  moderated: boolean;
+}

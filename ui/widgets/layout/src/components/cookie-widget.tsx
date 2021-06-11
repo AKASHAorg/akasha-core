@@ -1,9 +1,8 @@
-import React from 'react';
-import { Translation } from 'react-i18next';
-
 import DS from '@akashaproject/design-system';
 import { useAnalytics } from '@akashaproject/ui-awf-hooks';
 import { CookieConsentTypes } from '@akashaproject/ui-awf-hooks/lib/use-analytics';
+import React from 'react';
+import { Translation } from 'react-i18next';
 
 const { CookieWidgetCard, Text } = DS;
 

@@ -76,9 +76,8 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
                 toggleSidebar={this.toggleSidebar}
                 getMenuItems={this.props.getMenuItems}
                 loaderEvents={this.props.events}
-                modalSlotId={this.props.layout.app.modalSlotId}
+                modalSlotId={this.props.layout.modalSlotId}
                 globalChannel={this.props.globalChannel}
-                rxjsOperators={this.props.rxjsOperators}
                 logger={this.props.logger}
                 sdkModules={this.props.sdkModules}
               />

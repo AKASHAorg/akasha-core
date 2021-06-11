@@ -3,6 +3,7 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
 
 const { Helmet, EditorCard, ErrorLoader, Box, Button, editorDefaultValue } = DS;
 
@@ -28,7 +29,8 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
 
   const { t } = useTranslation();
 
-  const handlePostPublish = (_ethAddress: string, _content: any) => {
+  const handlePostPublish = (data: PublishPostData) => {
+    return data;
     // todo
   };
 
@@ -72,6 +74,7 @@ const NewPostPage: React.FC<NewPostPageProps> = props => {
             handleNavigateBack={handleBackNavigation}
             postLabel={t('Publish')}
             placeholderLabel={t('Share your thoughts')}
+            emojiPlaceholderLabel={t('Search')}
             getMentions={handleGetMentions}
             getTags={handleGetTags}
             // mentions={mentions}

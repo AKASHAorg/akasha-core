@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/src/utils/time';
-import { IContentClickDetails } from '@akashaproject/design-system/src/components/Cards/entry-cards/entry-box';
+import { IContentClickDetails } from '@akashaproject/design-system/src/components/EntryCard/entry-box';
 import { useTranslation } from 'react-i18next';
 import { ItemTypes } from './App';
 
@@ -21,7 +21,7 @@ export interface IEntryRenderer {
   onFollow: (ethAddress: string) => void;
   onUnfollow: (ethAddress: string) => void;
   onBookmark: (isBookmarked: boolean, entryId: string) => void;
-  onReport: (entryId?: string, reporterEthAddress?: string | null) => void;
+  onFlag?: (entryId: string, contentType: string, reporterEthAddress?: string | null) => () => void;
   onRepost: (withComment: boolean, entryData: any) => void;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   singleSpaNavigate: (url: string) => void;
@@ -46,7 +46,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     onFollow,
     onUnfollow,
     onBookmark,
-    onReport,
+    onFlag,
     onNavigate,
     singleSpaNavigate,
     checkIsFollowing,
@@ -100,9 +100,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
     });
   };
 
-  const handleEntryFlag = (entryId: string) => {
-    onReport(entryId, props.ethAddress);
-  };
 
   const handleNavigation = (details: IContentClickDetails) => {
     onNavigate(props.itemType, details);
@@ -178,13 +175,13 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   flagAsLabel={t('Report Post')}
                   loggedProfileEthAddress={ethAddress}
                   locale={locale || 'en'}
-                  style={{ height: 'auto', ...style }}
+                  style={{ height: 'auto', ...(style as React.CSSProperties) }}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
                   profileAnchorLink={'/profile'}
                   repliesAnchorLink={'/social-app/post'}
                   onRepost={onRepost}
-                  onEntryFlag={handleEntryFlag}
+                  onEntryFlag={onFlag && onFlag(itemData.entryId, 'post')}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
                   isFollowingAuthor={isFollowing}

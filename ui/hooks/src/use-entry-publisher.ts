@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IMetadata } from '@akashaproject/design-system/lib/components/Editor/editor-box';
+import { IMetadata } from '@akashaproject/design-system/lib/components/Editor';
 
 export interface IPendingEntry {
   localId: string;
@@ -64,25 +64,21 @@ const useEntryPublisher = (props: IEntryPublisherProps): [IPendingEntry[], IPend
     if (pendingEntries.length && ethAddress) {
       pendingEntries.forEach(async (entryObj, index) => {
         switch (entryObj.step) {
-          case 'PUBLISH_START':
-            try {
-              const resp = await addToIPFS(entryObj);
-              const pending = pendingEntries.slice();
-              pending.splice(index, 1, { ...resp.data, step: 'IPFS_ADDED' });
-              setPendingEntries(pending);
-              onStep(ethAddress, entryObj);
-              return;
-            } catch (err) {
-              throw err;
-            }
-          case 'IPFS_ADDED':
-            try {
-              const resp = await publishEntry(entryObj);
-              onPublishComplete(ethAddress as string, resp.data);
-              return;
-            } catch (err) {
-              throw err;
-            }
+          case 'PUBLISH_START': {
+            const resp = await addToIPFS(entryObj);
+            const pending = pendingEntries.slice();
+            pending.splice(index, 1, { ...resp.data, step: 'IPFS_ADDED' });
+            setPendingEntries(pending);
+            onStep(ethAddress, entryObj);
+            return;
+          }
+
+          case 'IPFS_ADDED': {
+            const resp = await publishEntry(entryObj);
+            onPublishComplete(ethAddress as string, resp.data);
+            return;
+          }
+
           default:
             break;
         }

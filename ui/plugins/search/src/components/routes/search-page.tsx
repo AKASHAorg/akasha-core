@@ -15,7 +15,7 @@ import {
   useMentions,
 } from '@akashaproject/ui-awf-hooks';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import {
   ModalState,
   ModalStateActions,
@@ -38,27 +38,25 @@ const {
   ModalRenderer,
 } = DS;
 
-interface SearchPageProps {
+interface SearchPageProps
+  extends Pick<
+    RootComponentProps,
+    'sdkModules' | 'globalChannel' | 'logger' | 'singleSpa' | 'layout'
+  > {
   onError?: (err: Error) => void;
-  sdkModules: any;
-  logger: any;
-  globalChannel: any;
-  rxjsOperators: any;
-  singleSpa: any;
-  loginState: UseLoginState;
+  loginState: ILoginState;
   loggedProfileData: any;
   showLoginModal: () => void;
   modalState: ModalState;
   modalStateActions: ModalStateActions;
 }
 
-const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
+const SearchPage: React.FC<SearchPageProps> = props => {
   const {
     sdkModules,
     logger,
     singleSpa,
     globalChannel,
-    rxjsOperators,
     loginState,
     loggedProfileData,
     modalState,
@@ -69,9 +67,11 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 
   const { t, i18n } = useTranslation();
+
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [flagged, setFlagged] = React.useState('');
+  const [flaggedContentType, setFlaggedContentType] = React.useState('');
 
   const [, errorActions] = useErrors({ logger });
 
@@ -99,7 +99,6 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
   });
 
   const [followedProfiles, followActions] = useFollow({
-    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
@@ -108,7 +107,6 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
   });
 
   const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
-    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
@@ -202,8 +200,9 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
     return bookmarkActions.bookmarkPost(entryId);
   };
 
-  const handleEntryFlag = (entryId: string) => {
+  const handleEntryFlag = (entryId: string, contentType: string) => () => {
     setFlagged(entryId);
+    setFlaggedContentType(contentType);
 
     modalStateActions.showAfterLogin(MODAL_NAMES.REPORT);
   };
@@ -297,11 +296,11 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
 
   return (
     <Box fill="horizontal">
-      <ModalRenderer slotId={props.layout.app.modalSlotId}>
+      <ModalRenderer slotId={props.layout.modalSlotId}>
         {modalState.report && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
-              titleLabel={t('Report a Post')}
+              titleLabel={t(`Report ${flaggedContentType}`)}
               successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
@@ -332,21 +331,23 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
               closeLabel={t('Close')}
               user={loginState.ethAddress ? loginState.ethAddress : ''}
               contentId={flagged}
-              contentType="post"
-              baseUrl={constants.BASE_FLAG_URL}
+              contentType={flaggedContentType}
+              baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={hideReportModal}
+              signData={sdkModules.auth.authService.signData}
             />
           </ToastProvider>
         )}
-        {modalState.editor && props.layout.app.modalSlotId && (
+        {modalState.editor && props.layout.modalSlotId && (
           <EditorModal
-            slotId={props.layout.app.modalSlotId}
+            slotId={props.layout.modalSlotId}
             avatar={loggedProfileData.avatar}
             showModal={modalState.editor}
             ethAddress={loginState.ethAddress}
             postLabel={t('Publish')}
             placeholderLabel={t('Write something')}
+            emojiPlaceholderLabel={t('Search')}
             discardPostLabel={t('Discard Post')}
             discardPostInfoLabel={t(
               "You have not posted yet. If you leave now you'll discard your post.",
@@ -437,8 +438,8 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
               </Box>
             ))}
           {(activeButton === buttonValues[0] || activeButton === buttonValues[3]) &&
-            searchState.entries.slice(0, 4).map((entryData: any) => (
-              <Box key={entryData.entyId} pad={{ bottom: 'medium' }}>
+            searchState.entries.slice(0, 4).map((entryData: any, index: number) => (
+              <Box key={index} pad={{ bottom: 'medium' }}>
                 {entryData.delisted ? (
                   <EntryCardHidden
                     moderatedContentLabel={t('This content has been moderated')}
@@ -447,7 +448,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                 ) : entryData.reported ? (
                   <EntryCardHidden
                     awaitingModerationLabel={t(
-                      'You have reported this post. It is awaiting moderation.',
+                      'You have reported this content. It is awaiting moderation.',
                     )}
                     ctaLabel={t('See it anyway')}
                     handleFlipCard={handleFlipCard && handleFlipCard(entryData, false)}
@@ -478,7 +479,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                     profileAnchorLink={'/profile'}
                     repliesAnchorLink={'/social-app/post'}
                     onRepost={handleRepost}
-                    onEntryFlag={handleEntryFlag}
+                    onEntryFlag={handleEntryFlag(entryData.entryId, 'post')}
                     handleFollowAuthor={() => handleFollowProfile(entryData.author.ethAddress)}
                     handleUnfollowAuthor={() => handleUnfollowProfile(entryData.author.ethAddress)}
                     isFollowingAuthor={followedProfiles.includes(entryData.author)}
@@ -511,7 +512,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                   repostWithCommentLabel={t('Repost with comment')}
                   shareLabel={t('Share')}
                   copyLinkLabel={t('Copy Link')}
-                  flagAsLabel={t('Report Post')}
+                  flagAsLabel={t('Report Comment')}
                   loggedProfileEthAddress={loginState.ethAddress}
                   locale={locale || 'en'}
                   style={{ height: 'auto' }}
@@ -520,7 +521,7 @@ const SearchPage: React.FC<SearchPageProps & RootComponentProps> = props => {
                   profileAnchorLink={'/profile'}
                   repliesAnchorLink={'/social-app/post'}
                   onRepost={() => null}
-                  onEntryFlag={handleEntryFlag}
+                  onEntryFlag={handleEntryFlag(commentData.entryId, 'comment')}
                   handleFollowAuthor={() => handleFollowProfile(commentData.author.ethAddress)}
                   handleUnfollowAuthor={() => handleUnfollowProfile(commentData.author.ethAddress)}
                   isFollowingAuthor={followedProfiles.includes(commentData.author)}

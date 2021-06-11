@@ -87,9 +87,20 @@ const config = {
   devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'inline-source-map',
   mode: process.env.NODE_ENV || 'development',
   externals: [
-    {
-      'single-spa-react': 'singleSpaReact',
-      rxjs: 'rxjs',
+    function ({ request }, callback) {
+      if (/^rxjs\/operators$/.test(request)) {
+        return callback(null, ['rxjs', 'operators'], 'root');
+      }
+      if (/^rxjs$/.test(request)) {
+        return callback(null, 'rxjs', 'root');
+      }
+      if (/^single-spa-react$/.test(request)) {
+        return callback(null, 'singleSpaReact', 'root');
+      }
+      if (/^single-spa$/.test(request)) {
+        return callback(null, 'singleSpa', 'root');
+      }
+      callback();
     },
   ],
 };

@@ -16,7 +16,8 @@ import {
 
 import pino from 'pino';
 import { BehaviorSubject } from 'rxjs';
-import * as rxjsOperators from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
+
 import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
 import TranslationManager from './i18n';
@@ -134,9 +135,7 @@ export default class AppLoader implements IAppLoader {
     });
     if (this.globalChannel) {
       const loginEvent = this.globalChannel.pipe(
-        rxjsOperators.filter(
-          (ev: { channelInfo: any; data: any }) => ev?.channelInfo?.method === 'signIn',
-        ),
+        filter((ev: { channelInfo: any; data: any }) => ev?.channelInfo?.method === 'signIn'),
       );
       loginEvent.subscribe(e => {
         const doc = this.channels.db.apps.getInstalled({});
@@ -267,7 +266,6 @@ export default class AppLoader implements IAppLoader {
       domElement: domEl,
       i18n: i18nInstance,
       sdkModules: dependencies,
-      rxjsOperators: rxjsOperators,
       globalChannel: this.globalChannel,
       getMenuItems: () => this.getMenuItems(),
       events: this.events,
@@ -313,12 +311,11 @@ export default class AppLoader implements IAppLoader {
         ...this.config,
         ...integration.config,
         activeWhen: integration.app.activeWhen,
-        domElementGetter: () => document.getElementById(this.config.layout.app.pluginSlotId),
+        domElementGetter: () => document.getElementById(this.config.layout.pluginSlotId),
         i18n: this.translationManager.getInstance(integrationId),
         i18nConfig: integration.app.i18nConfig,
         logger: this.appLogger.child({ plugin: integrationId }),
         sdkModules: dependencies,
-        rxjsOperators: rxjsOperators,
         globalChannel: this.globalChannel,
         events: this.events,
         isMobile: this.isMobile,
@@ -366,7 +363,7 @@ export default class AppLoader implements IAppLoader {
     const matchedPlugins = this.getPluginsForLocation(window.location);
     if (window.location.pathname === '/' && matchedPlugins.length === 0) {
       if (this.config.rootLoadedApp) {
-        singleSpa.navigateToUrl(this.config.rootLoadedApp.app.activeWhen.path);
+        singleSpa.navigateToUrl(this.config.rootLoadedApp.activeWhen.path);
       } else {
         this.appLogger.error('There is no rootLoadedApp set. Nothing to render!');
       }
@@ -383,8 +380,9 @@ export default class AppLoader implements IAppLoader {
     const mountedApps = this.getPluginsForLocation(window.location);
     let matchedApps = [];
     if (mountedApps.length === 0 && window.location.pathname === '/') {
+      console.log(this.config, '<<< config');
       if (this.config.rootLoadedApp) {
-        singleSpa.navigateToUrl(this.config.rootLoadedApp.app.activeWhen.path);
+        singleSpa.navigateToUrl(this.config.rootLoadedApp.activeWhen.path);
       } else {
         this.appLogger.error('There is no rootLoadedApp set. Nothing to render!');
       }
@@ -438,7 +436,7 @@ export default class AppLoader implements IAppLoader {
     }
     this.fourOhFourTimeout = setTimeout(() => {
       if (!currentPlugins.length) {
-        const pluginsNode = document.getElementById(this.config.layout.app.pluginSlotId);
+        const pluginsNode = document.getElementById(this.config.layout.pluginSlotId);
         // create a 404 page and return it instead of a plugin
         const FourOhFourNode: ChildNode = fourOhFour;
         if (pluginsNode) {
@@ -532,7 +530,7 @@ export default class AppLoader implements IAppLoader {
             this.createHtmlElements(
               widgetListForPath.map((w: IWidget) => this.getIdFromName(w.name)),
               'div',
-              this.config.layout.app.widgetSlotId,
+              this.config.layout.widgetSlotId,
             ).then(() => {
               widgetListForPath.forEach(async (widget: IWidget, index: number) => {
                 this.currentlyMountedWidgets.push({
@@ -604,7 +602,7 @@ export default class AppLoader implements IAppLoader {
       Object.keys(widgets).forEach(widgetRoute => {
         const configuredWidgets = widgets[widgetRoute].map(wd => ({
           app: wd,
-          config: { slot: this.config.layout.app.widgetSlotId },
+          config: { slot: this.config.layout.widgetSlotId },
         }));
         this.widgets.app[integrationId] = {
           [widgetRoute]: configuredWidgets,
@@ -624,7 +622,7 @@ export default class AppLoader implements IAppLoader {
       throw new Error('[@akashaproject/sdk-ui-plugin-loader]: root node element not found!');
     }
 
-    const { loadingFn, ...otherProps } = this.config.layout.app;
+    const { loadingFn, ...otherProps } = this.config.layout;
     try {
       await new Promise(async resolve => {
         const pProps = {

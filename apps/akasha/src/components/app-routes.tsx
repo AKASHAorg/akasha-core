@@ -17,14 +17,13 @@ interface AppRoutesProps {
   onError: (err: IAkashaError) => void;
 }
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
-  const { sdkModules, globalChannel, logger, layout, onError, rxjsOperators } = props;
+  const { sdkModules, globalChannel, logger, layout, onError } = props;
 
   const { t } = useTranslation();
 
   const [errorState, errorActions] = useErrors({ logger });
 
   const [loginState, loginActions] = useLoginState({
-    rxjsOperators,
     globalChannel: globalChannel,
     onError: errorActions.createError,
     authService: sdkModules.auth.authService,
@@ -36,7 +35,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     profileService: sdkModules.profiles.profileService,
     ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
-    rxjsOperators: props.rxjsOperators,
     globalChannel: props.globalChannel,
   });
 
@@ -55,6 +53,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   });
 
   const [flagged, setFlagged] = React.useState('');
+  const [flaggedContentType, setFlaggedContentType] = React.useState('');
 
   const showLoginModal = () => {
     modalStateActions.show(MODAL_NAMES.LOGIN);
@@ -119,8 +118,10 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               loggedProfileData={loginProfile}
               loginState={loginState}
               flagged={flagged}
+              flaggedContentType={flaggedContentType}
               reportModalOpen={modalState.report}
               setFlagged={setFlagged}
+              setFlaggedContentType={setFlaggedContentType}
               setReportModalOpen={showReportModal}
               closeReportModal={hideReportModal}
               editorModalOpen={modalState.editor}
@@ -136,8 +137,10 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               loggedProfileData={loginProfile}
               loginState={loginState}
               flagged={flagged}
+              flaggedContentType={flaggedContentType}
               reportModalOpen={modalState.report}
               setFlagged={setFlagged}
+              setFlaggedContentType={setFlaggedContentType}
               setReportModalOpen={showReportModal}
               closeReportModal={hideReportModal}
               editorModalOpen={modalState.editor}
@@ -155,8 +158,10 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               loggedProfileData={loginProfile}
               loginState={loginState}
               flagged={flagged}
+              flaggedContentType={flaggedContentType}
               reportModalOpen={modalState.report}
               setFlagged={setFlagged}
+              setFlaggedContentType={setFlaggedContentType}
               setReportModalOpen={showReportModal}
               closeReportModal={hideReportModal}
               showLoginModal={showLoginModal}
@@ -173,7 +178,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
       </Router>
       <LoginModal
         showModal={modalState.login}
-        slotId={layout.app.modalSlotId}
+        slotId={layout.modalSlotId}
         onLogin={handleLogin}
         onModalClose={hideLoginModal}
         titleLabel={t('Connect a wallet')}

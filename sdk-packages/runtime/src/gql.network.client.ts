@@ -25,7 +25,7 @@ export const gqlStash = new Stash({
   max: 640,
   maxAge: 1000 * 20, // 20s
 });
-export const runGQL = async (operation: GqlOperation, saveCache: boolean = false) => {
+export const runGQL = async (operation: GqlOperation, saveCache = false) => {
   const opHash = hash(operation, { algorithm: 'sha1', unorderedObjects: false });
   if (gqlStash.entries.has(opHash)) {
     return gqlStash.get(opHash);
