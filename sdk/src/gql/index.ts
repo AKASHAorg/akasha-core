@@ -1,12 +1,12 @@
 import { inject, injectable } from 'inversify';
-import IGqlClient, { IGqlOperation } from '@akashaproject/sdk-typings/lib/interfaces/gql';
+import IGqlClient from '@akashaproject/sdk-typings/lib/interfaces/gql';
 import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
 import { ApolloLink, HttpLink, gql, GraphQLRequest } from '@apollo/client';
 
 import hash from 'object-hash';
 import { TYPES } from '@akashaproject/sdk-typings';
-import { IQuickLRU, Stash } from '../stash';
-import { createObservableStream, createObservableValue } from '../helpers/observable';
+import Stash, { IQuickLRU } from '../stash';
+import { createObservableStreamGql, createObservableValue } from '../helpers/observable';
 import { tap } from 'rxjs/operators';
 
 export interface GqlOperation {
@@ -19,13 +19,14 @@ export interface GqlOperation {
 
 @injectable()
 class Gql implements IGqlClient<unknown> {
-  @inject(TYPES.Stash) private _stash: Stash;
+  private _stash: Stash;
 
   readonly _link: HttpLink;
   private _gqlStash: IQuickLRU;
 
   // create Apollo link object and initialize the stash
-  public constructor() {
+  public constructor(@inject(TYPES.Stash) stash: Stash) {
+    this._stash = stash;
     this._link = new HttpLink({ uri: process.env.GRAPHQL_URI || '/graphql' });
     // create the cache stash for the gql client
     this._stash
@@ -42,15 +43,14 @@ class Gql implements IGqlClient<unknown> {
    * @param saveCache - Cache the result
    * @returns ServiceCallResult<Record<string, T>>
    */
-  run<T>(operation: IGqlOperation, saveCache = false): ServiceCallResult<T> {
+  run<T>(operation: GraphQLRequest, saveCache = false): ServiceCallResult<T> {
     const opHash = hash(operation, { algorithm: 'sha1', unorderedObjects: false });
     if (this._gqlStash.has(opHash)) {
       return createObservableValue<T>(this._gqlStash.get(opHash));
     }
-    const tOperation = this.makeOperation(operation);
-    const obs = createObservableStream<T>(ApolloLink.execute(this._link, tOperation));
+    const obs = createObservableStreamGql<T>(ApolloLink.execute(this._link, operation));
     if (saveCache) {
-      obs.pipe(tap({ next: value => this._gqlStash.set(opHash, value) }));
+      obs.pipe(tap({ next: value => this._gqlStash.set(opHash, value.data) }));
     }
 
     return obs;
@@ -77,6 +77,10 @@ class Gql implements IGqlClient<unknown> {
   getCache(): IQuickLRU {
     return this._gqlStash;
   }
+
+  clearCache() {
+    return this._gqlStash.clear();
+  }
 }
 
-export { Gql };
+export default Gql;

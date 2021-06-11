@@ -18,4 +18,4 @@ class Stash implements IStashService<IQuickLRU> {
   }
 }
 
-export { Stash };
+export default Stash;

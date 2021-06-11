@@ -1,10 +1,11 @@
 import { injectable, inject } from 'inversify';
 import ISettingsService from '@akashaproject/sdk-typings/lib/interfaces/settings';
 import { TYPES } from '@akashaproject/sdk-typings';
-import { availableCollections, DB } from '../db';
+import DB, { availableCollections } from '../db';
 import { exhaustMap, switchMap } from 'rxjs/operators';
 import { createObservableStream } from '../helpers/observable';
 import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
+import { lastValueFrom } from 'rxjs';
 
 @injectable()
 class Settings implements ISettingsService {
@@ -14,7 +15,7 @@ class Settings implements ISettingsService {
    * Returns the settings object for a specified service name
    * @param service - The service name
    */
-  get(service: typeof availableCollections[keyof typeof availableCollections]) {
+  get(service: string) {
     return this._db.getCollection(availableCollections.Settings).pipe(
       switchMap(collection => {
         // this does not play well with threaddb typings
@@ -36,7 +37,7 @@ class Settings implements ISettingsService {
       exhaustMap(settings => {
         const objToSave = {
           _id: settings?.data?._id || '',
-          service: service,
+          serviceName: service,
           options: options,
         };
         return this._db.getCollection(availableCollections.Settings).pipe(
@@ -47,8 +48,15 @@ class Settings implements ISettingsService {
       }),
     );
   }
-  remove(moduleName: string): void {
-    throw new Error('Method not implemented.');
+
+  async remove(serviceName: string): Promise<void> {
+    const collection = await lastValueFrom(this._db.getCollection(availableCollections.Settings));
+    const query: unknown = { serviceName: { $eq: serviceName } };
+    const doc = await collection.data.findOne(query);
+    if (doc._id) {
+      return await collection.data.delete(doc._id);
+    }
   }
 }
-export { Settings };
+
+export default Settings;

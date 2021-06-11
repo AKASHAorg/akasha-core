@@ -11,6 +11,7 @@ console.time('AppLoader:firstMount');
   // example for loading from import map
   const sidebarWidget = await System.import('@widget/sidebar');
   const { default: sdkInit } = await System.import('@akashaproject/sdk');
+  console.log('sdkInit', sdkInit);
   const layout = await System.import('@widget/layout');
   const topbarWidget = await System.import('@widget/topbar');
 

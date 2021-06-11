@@ -1,8 +1,6 @@
 import { injectable } from 'inversify';
 import ILogService, { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
 import pino from 'pino';
-import { createObservableValue } from '../helpers/observable';
 
 @injectable()
 class Logging implements ILogService {
@@ -14,12 +12,11 @@ class Logging implements ILogService {
   /**
    *
    * @param nameSpace - Logger name attribute
-   * @returns ServiceCallResult<ILogger>
+   * @returns ILogger
    */
-  create(nameSpace?: string): ServiceCallResult<ILogger> {
-    const log: ILogger = this._appLogger.child({ module: nameSpace });
-    return createObservableValue<ILogger>(log);
+  create(nameSpace?: string): ILogger {
+    return this._appLogger.child({ module: nameSpace });
   }
 }
 
-export { Logging };
+export default Logging;

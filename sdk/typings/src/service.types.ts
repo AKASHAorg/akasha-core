@@ -5,6 +5,8 @@ const TYPES = {
   Settings: Symbol.for('awf-Settings'),
   Db: Symbol.for('awf-Db'),
   Web3: Symbol.for('awf-Web3'),
+  EventBus: Symbol.for('awf-EventBus'),
+  Auth: Symbol.for('awf-AUTH'),
 };
 
 export default TYPES;

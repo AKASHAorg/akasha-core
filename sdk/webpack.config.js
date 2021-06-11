@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 // const HtmlWebpackPlugin = require("html-webpack-plugin");
 const name = require('./package.json').name;
+const Dotenv = require('dotenv-webpack');
 
 const { InjectManifest } = require('workbox-webpack-plugin');
 
@@ -61,17 +62,7 @@ const config = {
     },
   },
   plugins: [
-    new webpack.EnvironmentPlugin({
-      GRAPHQL_URI: process.env.GRAPHQL_URI || 'https://staging-api.ethereum.world/graphql',
-      NODE_ENV: process.env.NODE_ENV || 'development',
-      INVITATION_ENDPOINT:
-        process.env.INVITATION_ENDPOINT || 'https://staging-api.ethereum.world/api/validate-token',
-      AUTH_ENDPOINT: process.env.AUTH_ENDPOINT || 'wss://staging-api.ethereum.world/ws/userauth',
-      INFURA_ID: process.env.INFURA_ID || '',
-      BUCKET_VERSION: process.env.BUCKET_VERSION || '',
-      EWA_MAILSENDER:
-        process.env.EWA_MAILSENDER || 'bbaareicas3jf76tu4dt2cwmif2wshx2yfekfwu4jc2y2bmzrmcol76zaai',
-    }),
+    new Dotenv({ safe: true }),
     new webpack.ProgressPlugin({
       entries: true,
       modules: true,
@@ -92,9 +83,20 @@ const config = {
   devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'inline-source-map',
   mode: process.env.NODE_ENV || 'development',
   externals: [
-    {
-      'single-spa-react': 'singleSpaReact',
-      rxjs: 'rxjs',
+    function ({ request }, callback) {
+      if (/^rxjs\/operators$/.test(request)) {
+        return callback(null, ['rxjs', 'operators'], 'root');
+      }
+      if (/^rxjs$/.test(request)) {
+        return callback(null, 'rxjs', 'root');
+      }
+      if (/^single-spa-react$/.test(request)) {
+        return callback(null, 'singleSpaReact', 'root');
+      }
+      if (/^single-spa$/.test(request)) {
+        return callback(null, 'singleSpa', 'root');
+      }
+      callback();
     },
   ],
 };

@@ -4,15 +4,17 @@ import { EthProviders, IWeb3Connector } from '@akashaproject/sdk-typings/lib/int
 import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { TYPES } from '@akashaproject/sdk-typings';
-import { Logging } from '../logging';
+import Logging from '../logging';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import OpenLogin from '@toruslabs/openlogin';
 
 @injectable()
-export class Web3Connector
+export default class Web3Connector
   implements IWeb3Connector<ethers.providers.BaseProvider | ethers.providers.Web3Provider> {
-  @inject(TYPES.Log) _logFactory: Logging;
+  _logFactory: Logging;
   _log: ILogger;
   _web3Instance: ethers.providers.BaseProvider | ethers.providers.Web3Provider;
+  _wallet: ethers.Wallet;
   // only rinkeby network is supported atm
   readonly network = 'rinkeby';
   // mapping for network name and ids
@@ -27,10 +29,9 @@ export class Web3Connector
   /**
    *
    */
-  constructor() {
-    this._logFactory.create('Web3Connector').subscribe({
-      next: l => (this._log = l.data),
-    });
+  constructor(@inject(TYPES.Log) logFactory: Logging) {
+    this._logFactory = logFactory;
+    this._log = this._logFactory.create('Web3Connector');
   }
 
   /**
@@ -66,6 +67,9 @@ export class Web3Connector
    */
   async signMessage(message: string) {
     const normalizedMessage = ethers.utils.toUtf8Bytes(message);
+    if (this._wallet instanceof ethers.Wallet) {
+      return this._wallet.signMessage(message);
+    }
     if (this._web3Instance instanceof ethers.providers.Web3Provider) {
       const signer = await this._web3Instance.getSigner();
       const address = await signer.getAddress();
@@ -77,6 +81,16 @@ export class Web3Connector
     throw new Error('Must provider a signer!');
   }
 
+  async getSigner() {
+    if (this._wallet instanceof ethers.Wallet) {
+      return Promise.resolve(this._wallet);
+    }
+    if (this._web3Instance instanceof ethers.providers.Web3Provider) {
+      this._web3Instance.getSigner();
+    }
+    throw new Error('Must provider a signer!');
+  }
+
   /**
    * @returns the current eth address that is connected to the provider
    */
@@ -84,6 +98,9 @@ export class Web3Connector
     if (this._web3Instance instanceof ethers.providers.Web3Provider) {
       const signer = await this._web3Instance.getSigner();
       return signer.getAddress();
+    }
+    if (this._wallet instanceof ethers.Wallet) {
+      return this._wallet.getAddress();
     }
     return null;
   }
@@ -111,6 +128,13 @@ export class Web3Connector
 
     if (provider === EthProviders.FallbackProvider) {
       return ethers.getDefaultProvider(this.network, { infura: process.env.INFURA_ID });
+    }
+
+    if (provider === EthProviders.Torus) {
+      const openLogin = await this._getTorusProvider();
+      const provider = ethers.getDefaultProvider(this.network, { infura: process.env.INFURA_ID });
+      this._wallet = new ethers.Wallet(openLogin.privKey, provider);
+      return provider;
     }
 
     if (provider === EthProviders.Web3Injected) {
@@ -148,6 +172,23 @@ export class Web3Connector
     provider.on('accountsChanged', refreshPage);
     provider.on('chainChanged', refreshPage);
     return provider;
+  }
+
+  /**
+   * Connects to Torus and retrieves private key
+   * @returns OpenLogin instance
+   */
+  private async _getTorusProvider() {
+    const openLogin = new OpenLogin({
+      clientId: process.env.TORUS_PROJECT,
+      network: 'testnet',
+      uxMode: 'popup',
+    });
+    await openLogin.init();
+    if (!openLogin.privKey) {
+      await openLogin.login();
+    }
+    return openLogin;
   }
 
   /**

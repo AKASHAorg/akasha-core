@@ -8,5 +8,5 @@ export interface ILogger {
 }
 
 export default interface ILogService {
-  create(nameSpace?: string): ServiceCallResult<ILogger>;
+  create(nameSpace?: string): ILogger;
 }

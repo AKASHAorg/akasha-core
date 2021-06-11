@@ -14,12 +14,19 @@ export const availableCollections = Object.freeze({
 @injectable()
 class DB implements DBService<Database, Collection> {
   private _dbName: string;
-  private readonly _db: Database;
+  private _db: Database;
   private _opened = false;
   private static NOT_OPENED_ERROR = new Error('Database is closed, must call open() first');
-  constructor(name: string) {
+
+  /**
+   * Create a new DB instance
+   * @param name
+   * @returns Database
+   */
+  public create(name: string) {
     this._dbName = name;
     this._db = new Database(name, settingsSchema, appSchema);
+    return this._db;
   }
 
   /**
@@ -28,6 +35,10 @@ class DB implements DBService<Database, Collection> {
    * @returns ServiceCallResult<Database>
    */
   public open(version = 1): ServiceCallResult<Database> {
+    if (!this._db) {
+      throw new Error('Must call `DB:create` first');
+    }
+
     if (!this._opened) {
       this._opened = true;
       return createObservableStream<Database>(this._db.open(version));
@@ -66,4 +77,4 @@ class DB implements DBService<Database, Collection> {
   }
 }
 
-export { DB };
+export default DB;

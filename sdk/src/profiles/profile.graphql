@@ -1,0 +1,86 @@
+fragment DataProviderFragment on DataProvider{
+  provider
+  property
+  value
+}
+
+fragment UserProfileFragment on UserProfile{
+  pubKey
+  name
+  userName
+  avatar
+  coverImage
+  description
+  ethAddress
+  totalPosts
+  totalFollowers
+  totalFollowing
+}
+
+mutation AddProfileProvider($data: [DataProviderInput]) {
+  addProfileProvider(data: $data)
+}
+
+mutation MakeDefaultProvider($data: [DataProviderInput]) {
+  makeDefaultProvider(data: $data)
+}
+
+
+mutation RegisterUsername($name: String!) {
+  registerUserName(name: $name)
+}
+
+query ResolveProfile($pubKey: String!) {
+  resolveProfile(pubKey: $pubKey) {
+    ...UserProfileFragment
+    providers{
+    ...DataProviderFragment
+    }
+    default{
+    ...DataProviderFragment
+    }
+  }
+}
+
+query GetProfile($ethAddress: String!) {
+  getProfile(ethAddress: $ethAddress) {
+    ...UserProfileFragment
+    providers{
+    ...DataProviderFragment
+    }
+    default{
+    ...DataProviderFragment
+    }
+  }
+}
+
+mutation Follow($ethAddress: String!) {
+  follow(ethAddress: $ethAddress)
+}
+
+mutation UnFollow($ethAddress: String!) {
+  unFollow(ethAddress: $ethAddress)
+}
+
+query IsFollowing($follower: String!, $following: String!) {
+  isFollowing(follower: $follower, following: $following)
+}
+
+mutation SaveMetaData($data: DataProviderInput) {
+  saveMetaData(data: $data)
+}
+
+query SearchProfiles($name: String!) {
+  searchProfiles(name: $name) {
+    ...UserProfileFragment
+  }
+}
+
+query GlobalSearch($keyword: String!) {
+  globalSearch(keyword: $keyword){
+    posts{id}
+    profiles{id}
+    tags{id name totalPosts}
+    comments{id}
+  }
+}

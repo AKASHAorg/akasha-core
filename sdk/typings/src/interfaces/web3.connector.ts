@@ -5,6 +5,7 @@ export enum EthProviders {
   Web3Injected,
   WalletConnect,
   FallbackProvider,
+  Torus,
 }
 
 export interface IWeb3Connector<T> {
