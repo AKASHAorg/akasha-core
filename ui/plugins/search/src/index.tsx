@@ -23,7 +23,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     return pathToActiveWhen(rootRoute)(location);
   },
   loadingFn: () => import('./components'),
-  mountsIn: opts.layoutConfig.pluginSlotId,
+  mountsIn: opts.layoutConfig?.pluginSlotId,
   name: 'ui-plugin-search',
   sdkModules: [
     { module: commons },

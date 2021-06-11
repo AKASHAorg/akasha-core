@@ -11,5 +11,5 @@ export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig =
   name: 'ui-widget-sidebar',
   sdkModules: [],
   title: 'Ethereum World',
-  mountsIn: opts.layoutConfig.sidebarSlotId,
+  mountsIn: opts.layoutConfig?.sidebarSlotId,
 });

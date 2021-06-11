@@ -14,7 +14,7 @@ import { moduleName as posts } from '@akashaproject/sdk-posts/lib/constants';
 export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig = opts => ({
   loadingFn: () => import('./components'),
   name: 'ui-widget-trending',
-  mountsIn: opts.layoutConfig.rootWidgetSlotId,
+  mountsIn: opts.layoutConfig?.rootWidgetSlotId,
   sdkModules: [
     { module: authModule },
     { module: commonModule },

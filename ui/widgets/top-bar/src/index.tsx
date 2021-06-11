@@ -13,7 +13,7 @@ export const register: (
   opts: IntegrationRegistrationOptions,
 ) => IWidgetConfig = registrationOpts => {
   return {
-    mountsIn: registrationOpts.layoutConfig.topbarSlotId,
+    mountsIn: registrationOpts.layoutConfig?.topbarSlotId,
     loadingFn: () => import('./components'),
     name: 'ui-widget-topbar',
     tags: ['topbar'],

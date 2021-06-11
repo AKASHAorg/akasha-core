@@ -26,6 +26,9 @@
   "dependencies": {
     "i18next": "20.3.1"
   },
+  "devDependencies": {
+    "rxjs": "7.1.0"
+  },
   "files": [
     "lib"
   ]

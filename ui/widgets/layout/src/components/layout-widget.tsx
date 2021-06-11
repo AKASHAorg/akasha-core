@@ -12,6 +12,12 @@ import CookieWidget from './cookie-widget';
 import { EventTypes, UIEventData } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { Subscription } from 'rxjs';
+import i18next from 'i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import Backend from 'i18next-chained-backend';
+import Fetch from 'i18next-fetch-backend';
+import LocalStorageBackend from 'i18next-localstorage-backend';
+import { initReactI18next } from 'react-i18next';
 
 const {
   Box,
@@ -62,11 +68,16 @@ class LayoutWidget extends PureComponent<RootComponentProps, LayoutWidgetState> 
   };
 
   public componentDidMount() {
+    // TODO: move these through event bus
     window.addEventListener('layout:showSidebar', this.showSidebar);
     window.addEventListener('layout:hideSidebar', this.hideSidebar);
+
     this.uiEventsSub = this.props.uiEvents.subscribe({
       next: (eventInfo: UIEventData) => {
         if (eventInfo.event === EventTypes.ModalMountRequest && eventInfo.data) {
+          if (this.state.modals.some(modal => modal.name === eventInfo.data?.name)) {
+            return;
+          }
           this.setState(prev => ({
             ...prev,
             modals: prev.modals.concat([eventInfo.data as NonNullable<UIEventData['data']>]),
@@ -127,6 +138,7 @@ class LayoutWidget extends PureComponent<RootComponentProps, LayoutWidgetState> 
     });
   };
   public render() {
+    const { logger, layoutConfig } = this.props;
     const {
       sidebarSlotId,
       topbarSlotId,
@@ -134,7 +146,7 @@ class LayoutWidget extends PureComponent<RootComponentProps, LayoutWidgetState> 
       rootWidgetSlotId,
       widgetSlotId,
       modalSlotId,
-    } = this.props.layoutConfig;
+    } = layoutConfig;
     const { showSidebar } = this.state;
 
     if (this.state.hasErrors) {
@@ -149,6 +161,40 @@ class LayoutWidget extends PureComponent<RootComponentProps, LayoutWidgetState> 
     }
 
     const sidebarVisible = Boolean(showSidebar);
+
+    i18next
+      .use(initReactI18next)
+      .use(Backend)
+      .use(LanguageDetector)
+      .use({
+        type: 'logger',
+        log: logger.info,
+        warn: logger.warn,
+        error: logger.error,
+      })
+      .init({
+        fallbackLng: 'en',
+        ns: ['ui-widget-layout'],
+        saveMissing: false,
+        saveMissingTo: 'all',
+        load: 'languageOnly',
+        debug: true,
+        cleanCode: true,
+        keySeparator: false,
+        defaultNS: 'ui-widget-layout',
+        backend: {
+          backends: [LocalStorageBackend, Fetch],
+          backendOptions: [
+            {
+              prefix: 'i18next_res_v0',
+              expirationTime: 24 * 60 * 60 * 1000,
+            },
+            {
+              loadPath: '/locales/{{lng}}/{{ns}}.json',
+            },
+          ],
+        },
+      });
 
     return (
       <Box className="container" fill="horizontal">

@@ -1,14 +1,13 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider, initReactI18next } from 'react-i18next';
 import AppRoutes from './app-routes';
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
-import { initReactI18next } from 'react-i18next';
 
 const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
 

@@ -144,8 +144,8 @@ const TopbarComponent = (props: RootComponentProps) => {
     uiEvents.subscribe({
       next: (eventData: UIEventData) => {
         if (
-          eventData.event === EventTypes.AppInstall ||
-          eventData.event === EventTypes.PluginInstall
+          eventData.event === EventTypes.InstallIntegration ||
+          eventData.event === EventTypes.UninstallIntegration
         ) {
           updateMenu();
         }

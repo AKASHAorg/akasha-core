@@ -14,7 +14,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   activeWhen: (location, pathToActiveWhen) => {
     return pathToActiveWhen(rootRoute)(location);
   },
-  mountsIn: opts.layoutConfig.pluginSlotId,
+  mountsIn: opts.layoutConfig?.pluginSlotId,
   routes: {
     rootRoute,
   },

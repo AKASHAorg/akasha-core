@@ -46,8 +46,6 @@ const ProfilePage = (props: ProfilePageProps) => {
   } = props;
   const location = useLocation();
 
-  const { i18n } = useTranslation();
-
   let { pubKey } = useParams() as any;
   if (location.pathname.includes(menuRoute[MY_PROFILE])) {
     pubKey = loggedProfileData.pubKey;
@@ -248,8 +246,6 @@ const ProfilePage = (props: ProfilePageProps) => {
         loginActions={loginActions}
       />
       <FeedWidget
-        // pass i18n from props (the i18next instance, not the react one!)
-        i18n={i18n}
         itemType={ItemTypes.ENTRY}
         logger={props.logger}
         loadMore={handleLoadMore}

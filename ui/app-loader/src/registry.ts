@@ -11,9 +11,9 @@ import { WidgetRegistryInfo, AppRegistryInfo } from '@akashaproject/ui-awf-typin
  */
 export const getIntegrationInfos = (
   integrations: { name: string; version: string }[],
-): Promise<(WidgetRegistryInfo | AppRegistryInfo)[]> => {
-  // get integration infos from somewhere
-  const resp: (WidgetRegistryInfo | AppRegistryInfo)[] = integrations
+): Promise<(AppRegistryInfo | WidgetRegistryInfo)[]> => {
+  let resp = undefined;
+  resp = integrations
     .map(integration => {
       if (integrationsData[integration.name]) {
         if (integration.version === 'latest') {
@@ -30,7 +30,24 @@ export const getIntegrationInfos = (
       }
       return null;
     })
-    .filter(i => i !== null);
+    .filter(i => i !== null) as (AppRegistryInfo | WidgetRegistryInfo)[];
 
   return Promise.resolve(resp);
+};
+
+export const getIntegrationInfo = (integrationDef: { name: string; version: string }) => {
+  if (integrationsData[integrationDef.name]) {
+    const registryIntegration = integrationsData[integrationDef.name];
+    if (integrationDef.version === 'latest') {
+      return Promise.resolve({
+        ...registryIntegration,
+        src: registryIntegration.versions[registryIntegration.lastVersion],
+      });
+    }
+    return Promise.resolve({
+      ...registryIntegration,
+      src: registryIntegration.version[integrationDef.version],
+    });
+  }
+  return Promise.resolve(undefined);
 };

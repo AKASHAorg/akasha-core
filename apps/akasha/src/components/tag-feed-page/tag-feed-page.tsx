@@ -42,7 +42,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { tagName } = useParams<{ tagName: string }>();
 
   const [tagData, setTagData] = React.useState<ITag | null>(null);
-
   React.useEffect(() => {
     if (tagName) {
       const tagsService = sdkModules.posts.tags.getTag({
@@ -235,8 +234,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         handleUnsubscribeTag={handleTagUnsubscribe}
       />
       <FeedWidget
-        // pass i18n from props (the i18next instance, not the react one!)
-        i18n={props.i18n}
         itemType={ItemTypes.ENTRY}
         logger={props.logger}
         loadMore={handleLoadMore}

@@ -12,15 +12,17 @@ import {
   IWidgetConfig,
 } from '@akashaproject/ui-awf-typings/src/app-loader';
 
-const findTopbar = (integrations: IntegrationRegistrationOptions['integrations']) => {
-  const topbarConf = Object.entries(integrations.modules).find(intConf => {
+const findTopbarQuickAccess = (integrations: IntegrationRegistrationOptions['integrations']) => {
+  if (!integrations) {
+    return null;
+  }
+  const topbarConf = Object.entries(integrations.configs).find(intConf => {
     const [, config] = intConf as [string, IAppConfig | IWidgetConfig];
     if (config.tags && config.tags.includes('topbar')) {
       return true;
     }
     return false;
   });
-  console.log(topbarConf);
   if (topbarConf) {
     const [, config] = topbarConf as [string, IAppConfig | IWidgetConfig];
     if (config.extensions) {
@@ -40,7 +42,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     return pathToActiveWhen(rootRoute)(location);
   },
   loadingFn: () => import('./components'),
-  mountsIn: opts.layoutConfig.pluginSlotId,
+  mountsIn: opts.layoutConfig?.pluginSlotId,
   name: 'ui-plugin-bookmarks',
   widgets: {
     [rootRoute]: [TrendingWidget],
@@ -50,7 +52,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   extends: [
     {
-      mountsIn: findTopbar(opts.integrations),
+      mountsIn: mountOptions => findTopbarQuickAccess(mountOptions.integrations),
       loadingFn: () => import('./bookmarks-topbar-button'),
     },
   ],

@@ -20,10 +20,8 @@ export type ActivityFn = (
 ) => boolean;
 
 export interface UIEventData {
-  event: string;
-  data?: {
-    name: string;
-  };
+  event: EventTypes;
+  data?: { name: string; version?: string };
 }
 
 export interface ModalNavigationOptions {
@@ -37,10 +35,12 @@ export interface IntegrationRegistrationOptions {
   worldConfig: {
     title: string;
   };
-  layoutConfig: LayoutConfig;
-  integrations: {
-    info: (AppRegistryInfo | WidgetRegistryInfo)[];
-    modules: Record<string, IntegrationConfig>;
+  sdk: any;
+  uiEvents: any;
+  layoutConfig?: LayoutConfig;
+  integrations?: {
+    infos: (AppRegistryInfo | WidgetRegistryInfo)[];
+    configs: Record<string, IAppConfig | IWidgetConfig>;
   };
 }
 
@@ -78,8 +78,9 @@ export interface LayoutConfig {
 }
 
 export interface ExtensionPointDefinition {
-  mountsIn: string | null;
+  mountsIn: string | ((opts: IntegrationRegistrationOptions) => string | null) | null;
   loadingFn: () => Promise<ISingleSpaLifecycle>;
+  parentApp?: string;
 }
 
 export interface IAppConfig {
@@ -142,7 +143,7 @@ export interface IWidgetConfig {
 
   /**
    * Keywords that defines this widget.
-   * Useful for filtering through integrations
+   * Useful for filtering/finding integrations
    */
   tags?: string[];
   pluginSlotId?: string;
@@ -251,10 +252,8 @@ export interface IMenuList {
 
 export enum EventTypes {
   Instantiated = 'instantiated',
-  AppInstall = 'app-install',
-  PluginInstall = 'plugin-install',
-  WidgetInstall = 'widget-install',
-  AppOrPluginUninstall = 'app-plugin-uninstall',
+  InstallIntegration = 'install-integration',
+  UninstallIntegration = 'uninstall-integration',
   ExtensionPointMount = 'extension-point-mount',
   ExtensionPointMountRequest = 'extension-point-mount-request',
   ExtensionPointUnmount = 'extension-point-unmount',

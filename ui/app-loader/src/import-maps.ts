@@ -46,7 +46,6 @@ export const removeImports = () => {
 };
 
 export const writeImports = (importsMap: ImportMap, nodeId: string) => {
-  console.log('write imports...');
   const importmapsEl = document.querySelector(`script[type="${importMapType}"]`);
   const scriptEl = document.createElement('script');
   scriptEl.type = `${importMapType}`;

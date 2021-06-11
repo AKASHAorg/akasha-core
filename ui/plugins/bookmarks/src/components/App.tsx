@@ -47,14 +47,14 @@ class App extends PureComponent<RootComponentProps> {
       })
       .init({
         fallbackLng: 'en',
-        ns: ['bookmarks'],
+        ns: ['ui-plugin-bookmarks'],
         saveMissing: false,
         saveMissingTo: 'all',
         load: 'languageOnly',
         debug: true,
         cleanCode: true,
         keySeparator: false,
-        defaultNS: 'bookmarks',
+        defaultNS: 'ui-plugin-bookmarks',
         backend: {
           backends: [LocalStorageBackend, Fetch],
           backendOptions: [
