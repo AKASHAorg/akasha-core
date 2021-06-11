@@ -5,9 +5,4 @@ module.exports = {
   collectCoverage: true,
   setupFiles: ['./jest.setup.js'],
   coverageReporters: ['text-summary'],
-  globals: {
-    'ts-jest': {
-      tsConfig: './tsconfig.json',
-    },
-  },
 };

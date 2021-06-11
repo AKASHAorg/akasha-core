@@ -45,7 +45,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { tagName } = useParams<{ tagName: string }>();
 
   const [tagData, setTagData] = React.useState<ITag | null>(null);
-
   React.useEffect(() => {
     if (tagName) {
       const tagsService = sdkModules.posts.tags.getTag({
@@ -187,7 +186,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.modalSlotId}>
+      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -238,8 +237,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         handleUnsubscribeTag={handleTagUnsubscribe}
       />
       <FeedWidget
-        // pass i18n from props (the i18next instance, not the react one!)
-        i18n={props.i18n}
         itemType={ItemTypes.ENTRY}
         logger={props.logger}
         loadMore={handleLoadMore}
@@ -249,7 +246,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         itemsData={postsState.postsData}
         errors={errorState}
         sdkModules={props.sdkModules}
-        layout={props.layout}
+        layout={props.layoutConfig}
         globalChannel={props.globalChannel}
         ethAddress={loginState.ethAddress}
         onNavigate={handleNavigation}
@@ -257,7 +254,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         onLoginModalOpen={showLoginModal}
         totalItems={postsState.totalItems}
         profilePubKey={loginState.pubKey}
-        modalSlotId={props.layout.modalSlotId}
+        modalSlotId={props.layoutConfig.modalSlotId}
         loggedProfile={loggedProfileData}
         onRepostPublish={handleRepostPublish}
         contentClickable={true}

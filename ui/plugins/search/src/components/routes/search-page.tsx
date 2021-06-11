@@ -41,7 +41,7 @@ const {
 interface SearchPageProps
   extends Pick<
     RootComponentProps,
-    'sdkModules' | 'globalChannel' | 'logger' | 'singleSpa' | 'layout'
+    'sdkModules' | 'globalChannel' | 'logger' | 'rxjsOperators' | 'singleSpa' | 'layoutConfig'
   > {
   onError?: (err: Error) => void;
   loginState: ILoginState;
@@ -296,7 +296,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   return (
     <Box fill="horizontal">
-      <ModalRenderer slotId={props.layout.modalSlotId}>
+      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
         {modalState.report && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -339,9 +339,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             />
           </ToastProvider>
         )}
-        {modalState.editor && props.layout.modalSlotId && (
+        {modalState.editor && props.layoutConfig.modalSlotId && (
           <EditorModal
-            slotId={props.layout.modalSlotId}
+            slotId={props.layoutConfig.modalSlotId}
             avatar={loggedProfileData.avatar}
             showModal={modalState.editor}
             ethAddress={loginState.ethAddress}
