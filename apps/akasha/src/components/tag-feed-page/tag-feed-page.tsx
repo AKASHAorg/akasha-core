@@ -6,7 +6,7 @@ import { constants, usePosts, useTagSubscribe, useErrors } from '@akashaproject/
 import { useTranslation } from 'react-i18next';
 import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ITag } from '@akashaproject/design-system/lib/components/TrendingWidgetCard';
 
@@ -14,7 +14,7 @@ const { Box, ReportModal, ToastProvider, ModalRenderer, TagProfileCard, Helmet }
 
 interface ITagFeedPage {
   loggedProfileData?: any;
-  loginState: UseLoginState;
+  loginState: ILoginState;
   flagged: string;
   flaggedContentType: string;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
@@ -29,7 +29,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const {
     sdkModules,
     globalChannel,
-    rxjsOperators,
     flagged,
     flaggedContentType,
     reportModalOpen,
@@ -75,7 +74,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   });
 
   const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
-    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
@@ -253,7 +251,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         sdkModules={props.sdkModules}
         layout={props.layout}
         globalChannel={props.globalChannel}
-        rxjsOperators={rxjsOperators}
         ethAddress={loginState.ethAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}

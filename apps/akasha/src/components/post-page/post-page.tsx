@@ -19,7 +19,7 @@ import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
 import routes, { POST } from '../../routes';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
 const {
   Box,
@@ -41,7 +41,7 @@ const {
 
 interface IPostPage {
   loggedProfileData?: any;
-  loginState: UseLoginState;
+  loginState: ILoginState;
   flagged: string;
   flaggedContentType: string;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
@@ -62,7 +62,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const {
     sdkModules,
     globalChannel,
-    rxjsOperators,
     flagged,
     flaggedContentType,
     reportModalOpen,
@@ -111,7 +110,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     profileService: props.sdkModules.profiles.profileService,
     ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
-    rxjsOperators: props.rxjsOperators,
     globalChannel: props.globalChannel,
   });
 
@@ -127,7 +125,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   });
 
   const [followedProfiles, followActions] = useFollow({
-    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
@@ -530,7 +527,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                     sdkModules={sdkModules}
                     logger={logger}
                     globalChannel={globalChannel}
-                    rxjsOperators={rxjsOperators}
                     bookmarkState={bookmarkState}
                     ethAddress={loginState.ethAddress}
                     locale={locale}
@@ -549,7 +545,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                 customEntities={getPendingComments({
                   logger,
                   globalChannel,
-                  rxjsOperators,
                   locale,
                   isMobile,
                   sdkModules,

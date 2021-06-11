@@ -7,7 +7,6 @@ export interface IGetCustomEntitiesProps {
   sdkModules: any;
   logger: any;
   globalChannel: any;
-  rxjsOperators: any;
   isMobile: boolean;
   feedItems: string[];
   loggedEthAddress: string | null;
@@ -23,7 +22,6 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
     pendingComments = [],
     locale,
     sdkModules,
-    rxjsOperators,
     logger,
     globalChannel,
     contentClickable,
@@ -47,7 +45,6 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
                 sdkModules={sdkModules}
                 logger={logger}
                 globalChannel={globalChannel}
-                rxjsOperators={rxjsOperators}
                 ethAddress={loggedEthAddress}
                 key={`${entry.author.ethAddress}-${idx}-${key}`}
                 style={{ ...style, backgroundColor: '#4e71ff0f' }}

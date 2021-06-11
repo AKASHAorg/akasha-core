@@ -11,13 +11,12 @@ import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 const { Box, LoginModal, ViewportSizeProvider } = DS;
 
 const Routes: React.FC<RootComponentProps> = props => {
-  const { activeWhen, logger, rxjsOperators } = props;
+  const { activeWhen, logger } = props;
   const { path } = activeWhen;
 
   const [errorState, errorActions] = useErrors({ logger });
 
   const [loginState, loginActions] = useLoginState({
-    rxjsOperators,
     globalChannel: props.globalChannel,
     authService: props.sdkModules.auth.authService,
     profileService: props.sdkModules.profiles.profileService,
@@ -29,7 +28,6 @@ const Routes: React.FC<RootComponentProps> = props => {
     profileService: props.sdkModules.profiles.profileService,
     ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
-    rxjsOperators: props.rxjsOperators,
     globalChannel: props.globalChannel,
   });
 

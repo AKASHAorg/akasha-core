@@ -170,7 +170,7 @@ interface PendingEntry {
     userName?: string;
     name?: string;
   };
-  content: {};
+  content: Record<string, unknown>;
   ipfsLink?: string;
   entryId?: string;
   replies?: number;

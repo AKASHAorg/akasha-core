@@ -16,10 +16,6 @@ describe('< NotificationsPage /> component', () => {
     <NotificationsPage
       sdkModules={sdkMocks}
       globalChannel={globalChannelMock}
-      rxjsOperators={{
-        filter: (cb: (payload: any) => boolean) =>
-          cb({ channelInfo: { method: 'test', servicePath: ['PROFILE_STORE'] } }),
-      }}
       logger={{}}
       singleSpa={{}}
     />

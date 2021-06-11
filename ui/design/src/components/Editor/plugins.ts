@@ -1,4 +1,5 @@
 import { Editor } from 'slate';
+
 import isUrl from 'is-url';
 import { CustomEditor } from './helpers';
 

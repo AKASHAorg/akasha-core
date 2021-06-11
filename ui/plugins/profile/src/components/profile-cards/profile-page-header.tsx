@@ -119,7 +119,6 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
     profileState,
     loggedUserEthAddress,
     sdkModules,
-    rxjsOperators,
     logger,
     profileId,
     globalChannel,
@@ -135,7 +134,6 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
 
   const { t } = useTranslation();
   const [followedProfiles, followActions] = useFollow({
-    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
@@ -150,7 +148,6 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
     ethAddress: props.loggedUserEthAddress,
     ensService: sdkModules.registry.ens,
     onError: ensErrorActions.createError,
-    rxjsOperators: props.rxjsOperators,
   });
 
   const [networkState, networkActions] = useNetworkState({

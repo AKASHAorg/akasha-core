@@ -1,85 +1,353 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { createErrorHandler } from './utils/error-handler';
+import { filter } from 'rxjs/operators';
+import { forkJoin, Observable } from 'rxjs';
 
 export interface UseFollowActions {
-  isFollowing: (loggedEthAddress: string, followEthAddress: string) => void;
+  /**
+   * check if one ethAddress follows another
+   * @param followerEthAddress - ethAddress of profile that is the follower
+   * @param followingEthAddress - ethAddress of profile that is followed
+   */
+  isFollowing: (followerEthAddress: string, followingEthAddress: string) => void;
+  /**
+   * check if one ethAddress follows multiple other ethAddresses
+   * @param followerEthAddress - ethAddress of profile that is the follower
+   * @param followingEthAddressArr - array of ethAddresses of profile that are followed
+   */
+  isFollowingMultiple: (followerEthAddress: string, followingEthAddressArray: string[]) => void;
+  /**
+   * follow a profile
+   * @param followEthAddress - ethAddress of profile that the user wants to follow
+   */
   follow: (followEthAddress: string) => void;
-  unfollow: (followEthAddress: string) => void;
+  /**
+   * unfollow a profile
+   * @param unfollowEthAddress - ethAddress of profile that the user wants to unfollow
+   */
+  unfollow: (unfollowEthAddress: string) => void;
 }
 
 export interface UseFollowProps {
   onError?: (error: IAkashaError) => void;
   profileService: any;
   globalChannel: any;
-  rxjsOperators: any;
 }
+
+export interface IFollowState {
+  isFollowingQuery: {
+    followerEthAddress: string;
+    followingEthAddress: string;
+  } | null;
+  isFollowingMultipleQuery: {
+    followerEthAddress: string;
+    followingEthAddressArray: string[];
+  } | null;
+  followQuery: string | null;
+  unfollowQuery: string | null;
+  followedProfiles: string[];
+}
+
+const initialFollowState = {
+  isFollowingQuery: null,
+  isFollowingMultipleQuery: null,
+  followQuery: null,
+  unfollowQuery: null,
+  followedProfiles: [],
+};
+
+export type IFollowAction =
+  | {
+      type: 'IS_FOLLOWING';
+      payload: {
+        followerEthAddress: string;
+        followingEthAddress: string;
+      };
+    }
+  | {
+      type: 'IS_FOLLOWING_SUCCESS';
+      payload: {
+        isFollowing: boolean;
+        followingEthAddress: string;
+      };
+    }
+  | {
+      type: 'IS_FOLLOWING_MULTIPLE';
+      payload: {
+        followerEthAddress: string;
+        followingEthAddressArray: string[];
+      };
+    }
+  | {
+      type: 'IS_FOLLOWING_MULTIPLE_SUCCESS';
+      payload: string[];
+    }
+  | { type: 'FOLLOW'; payload: string }
+  | {
+      type: 'FOLLOW_SUCCESS';
+      payload: {
+        isFollowing: boolean;
+        followEthAddress: string;
+      };
+    }
+  | { type: 'UNFOLLOW'; payload: string }
+  | {
+      type: 'UNFOLLOW_SUCCESS';
+      payload: {
+        isUnfollowing: boolean;
+        unfollowEthAddress: string;
+      };
+    };
+
+const followStateReducer = (state: IFollowState, action: IFollowAction) => {
+  switch (action.type) {
+    case 'IS_FOLLOWING':
+      return { ...state, isFollowingQuery: action.payload };
+    case 'IS_FOLLOWING_SUCCESS': {
+      const { isFollowing, followingEthAddress } = action.payload;
+      if (isFollowing && !state.followedProfiles.includes(followingEthAddress)) {
+        return {
+          ...state,
+          isFollowingQuery: null,
+          followedProfiles: [...state.followedProfiles, followingEthAddress],
+        };
+      } else if (!isFollowing) {
+        const filteredProfiles = state.followedProfiles.filter(
+          profile => profile !== followingEthAddress,
+        );
+        return {
+          ...state,
+          isFollowingQuery: null,
+          followedProfiles: filteredProfiles,
+        };
+      }
+      return { ...state };
+    }
+    case 'IS_FOLLOWING_MULTIPLE':
+      return { ...state, isFollowingMultipleQuery: action.payload };
+    case 'IS_FOLLOWING_MULTIPLE_SUCCESS': {
+      const updatedFollowedProfiles = action.payload.filter(followedEthAddress => {
+        if (!state.followedProfiles.includes(followedEthAddress)) {
+          return followedEthAddress;
+        }
+        return;
+      });
+
+      return {
+        ...state,
+        isFollowingMultipleQuery: null,
+        followedProfiles: [...state.followedProfiles, ...updatedFollowedProfiles],
+      };
+    }
+    case 'FOLLOW':
+      return { ...state, followQuery: action.payload };
+    case 'FOLLOW_SUCCESS': {
+      const { isFollowing, followEthAddress } = action.payload;
+      if (isFollowing && !state.followedProfiles.includes(followEthAddress)) {
+        return {
+          ...state,
+          followQuery: null,
+          followedProfiles: [...state.followedProfiles, followEthAddress],
+        };
+      }
+      return { ...state };
+    }
+
+    case 'UNFOLLOW':
+      return { ...state, unfollowQuery: action.payload };
+    case 'UNFOLLOW_SUCCESS': {
+      const { isUnfollowing, unfollowEthAddress } = action.payload;
+      if (isUnfollowing) {
+        const filteredProfiles = state.followedProfiles.filter(
+          profile => profile !== unfollowEthAddress,
+        );
+        return {
+          ...state,
+          unfollowQuery: null,
+          followedProfiles: filteredProfiles,
+        };
+      }
+      return { ...state };
+    }
+
+    default:
+      throw new Error('[UseFollowReducer] action is not defined!');
+  }
+};
 
 /* A hook with follow, unfollow and isFollowing functionality */
 export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] => {
-  const { onError, profileService, globalChannel, rxjsOperators } = props;
-  const [isFollowingState, setIsFollowingState] = React.useState<string[]>([]);
+  const { onError, profileService, globalChannel } = props;
+  const [followingState, dispatch] = React.useReducer(followStateReducer, initialFollowState);
 
   const handleSubscribe = (payload: any) => {
     const { data, channelInfo } = payload;
-    if (data.follow && !isFollowingState.includes(channelInfo.args.ethAddress)) {
-      setIsFollowingState(prev => [...prev, channelInfo.args.ethAddress]);
+    if (data.follow) {
+      dispatch({
+        type: 'FOLLOW_SUCCESS',
+        payload: { followEthAddress: channelInfo.args.ethAddress, isFollowing: data.follow },
+      });
     }
     if (data.unFollow) {
-      setIsFollowingState(prev => prev.filter(profile => profile !== channelInfo.args.ethAddress));
+      dispatch({
+        type: 'UNFOLLOW_SUCCESS',
+        payload: { unfollowEthAddress: channelInfo.args.ethAddress, isUnfollowing: data.unFollow },
+      });
     }
   };
 
   // this is used to sync following state between different components using the hook
   React.useEffect(() => {
     const call = globalChannel.pipe(
-      rxjsOperators.filter((payload: any) => {
+      filter((payload: any) => {
         return (
           (payload.channelInfo.method === 'follow' || payload.channelInfo.method === 'unFollow') &&
           payload.channelInfo.servicePath.includes('PROFILE_STORE')
         );
       }),
     );
-    call.subscribe(handleSubscribe, createErrorHandler('useFollow.globalFollow', false, onError));
-    return () => call.unsubscribe();
+    const callSub = call.subscribe({
+      next: handleSubscribe,
+      error: createErrorHandler('useFollow.globalFollow', false, onError),
+    });
+    return () => callSub.unsubscribe();
   }, []);
 
-  const actions: UseFollowActions = {
-    isFollowing(loggedEthAddress, followEthAddress) {
+  React.useEffect(() => {
+    const payload = followingState.isFollowingQuery;
+    if (payload) {
       const call = profileService.isFollowing({
-        follower: loggedEthAddress,
-        following: followEthAddress,
+        follower: payload.followerEthAddress,
+        following: payload.followingEthAddress,
       });
-      call.subscribe((resp: { data: { isFollowing: boolean } }) => {
-        if (resp.data.isFollowing && !isFollowingState.includes(followEthAddress)) {
-          setIsFollowingState(prev => [...prev, followEthAddress]);
-        } else if (!resp.data.isFollowing && isFollowingState.includes(followEthAddress)) {
-          setIsFollowingState(prev => prev.filter(profile => profile !== followEthAddress));
-        }
-      }, createErrorHandler('useFollow.isFollowing', false, onError));
-    },
+      const callSub = call.subscribe({
+        next: (resp: {
+          data: { isFollowing: boolean; args: { follower: string; following: string } };
+        }) => {
+          dispatch({
+            type: 'IS_FOLLOWING_SUCCESS',
+            payload: {
+              isFollowing: resp.data.isFollowing,
+              followingEthAddress: payload.followingEthAddress,
+            },
+          });
+        },
+        error: createErrorHandler('useFollow.isFollowing', false, onError),
+      });
+      return () => {
+        callSub.unsubscribe();
+      };
+    }
+    return;
+  }, [followingState.isFollowingQuery]);
 
+  React.useEffect(() => {
+    const payload = followingState.isFollowingMultipleQuery;
+    if (payload) {
+      const getFollowedProfilesCalls: Observable<any>[] = payload.followingEthAddressArray.map(
+        (profile: string) => {
+          return profileService.isFollowing({
+            follower: payload.followerEthAddress,
+            following: profile,
+          });
+        },
+      );
+
+      const callSub = forkJoin(getFollowedProfilesCalls).subscribe({
+        next: (
+          callsResp: {
+            data: { isFollowing: boolean; args: { follower: string; following: string } };
+          }[],
+        ) => {
+          const followedProfiles = callsResp
+            .filter(resp => resp.data.isFollowing === true)
+            .map(resp => resp.data.args.following);
+          dispatch({
+            type: 'IS_FOLLOWING_MULTIPLE_SUCCESS',
+            payload: followedProfiles,
+          });
+        },
+        error: createErrorHandler('useFollow.isFollowing', false, onError),
+      });
+      return () => {
+        callSub.unsubscribe();
+      };
+    }
+    return;
+  }, [followingState.isFollowingMultipleQuery]);
+
+  React.useEffect(() => {
+    const payload = followingState.followQuery;
+    if (payload) {
+      const call = profileService.follow({ ethAddress: payload });
+
+      const callSub = call.subscribe({
+        next: (resp: { data: { follow: boolean } }) => {
+          dispatch({
+            type: 'FOLLOW_SUCCESS',
+            payload: { followEthAddress: payload, isFollowing: resp.data.follow },
+          });
+        },
+        error: createErrorHandler('useFollow.follow', false, onError),
+      });
+
+      dispatch({
+        type: 'FOLLOW_SUCCESS',
+        payload: { followEthAddress: payload, isFollowing: true },
+      });
+      return () => {
+        callSub.unsubscribe();
+      };
+    }
+    return;
+  }, [followingState.followQuery]);
+
+  React.useEffect(() => {
+    const payload = followingState.unfollowQuery;
+    if (payload) {
+      const call = profileService.unFollow({ ethAddress: payload });
+
+      const callSub = call.subscribe({
+        next: (resp: { data: { unFollow: boolean } }) => {
+          dispatch({
+            type: 'UNFOLLOW_SUCCESS',
+            payload: { unfollowEthAddress: payload, isUnfollowing: resp.data.unFollow },
+          });
+        },
+        error: createErrorHandler('useFollow.unfollow', false, onError),
+      });
+
+      dispatch({
+        type: 'UNFOLLOW_SUCCESS',
+        payload: { unfollowEthAddress: payload, isUnfollowing: true },
+      });
+      return () => {
+        callSub.unsubscribe();
+      };
+    }
+    return;
+  }, [followingState.unfollowQuery]);
+
+  const actions: UseFollowActions = {
+    isFollowing(followerEthAddress, followingEthAddress) {
+      dispatch({ type: 'IS_FOLLOWING', payload: { followerEthAddress, followingEthAddress } });
+    },
+    isFollowingMultiple(followerEthAddress, followingEthAddressArray) {
+      dispatch({
+        type: 'IS_FOLLOWING_MULTIPLE',
+        payload: { followerEthAddress, followingEthAddressArray },
+      });
+    },
     follow(followEthAddress) {
-      const call = profileService.follow({ ethAddress: followEthAddress });
-      setIsFollowingState(prev => [...prev, followEthAddress]);
-      call.subscribe((resp: any) => {
-        if (resp.data.follow && !isFollowingState.includes(followEthAddress)) {
-          setIsFollowingState(prev => [...prev, followEthAddress]);
-        }
-      }, createErrorHandler('useFollow.follow', false, onError));
+      dispatch({ type: 'FOLLOW', payload: followEthAddress });
     },
     unfollow(unfollowEthAddress) {
-      const call = profileService.unFollow({ ethAddress: unfollowEthAddress });
-      setIsFollowingState(prev => prev.filter(profile => profile !== unfollowEthAddress));
-      call.subscribe((resp: any) => {
-        if (resp.data.unFollow) {
-          setIsFollowingState(prev => prev.filter(profile => profile !== unfollowEthAddress));
-        }
-      }, createErrorHandler('useFollow.unfollow', false, onError));
+      dispatch({ type: 'UNFOLLOW', payload: unfollowEthAddress });
     },
   };
 
-  return [isFollowingState, actions];
+  return [followingState.followedProfiles, actions];
 };
 
 export default useFollow;

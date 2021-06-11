@@ -85,9 +85,6 @@ describe('<ProfilePageHeader />', () => {
         }}
         logger={{}}
         singleSpa={{}}
-        rxjsOperators={{
-          filter: genMockOp({ channelInfo: { method: 'test', servicePath: ['PROFILE_STORE'] } }),
-        }}
       />
     </Router>
   );

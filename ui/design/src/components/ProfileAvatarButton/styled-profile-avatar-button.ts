@@ -7,7 +7,11 @@ const StyledWrapperBox = styled(Box)`
 
 const StyledText = styled(Text)`
   font-size: 1rem;
-  font-weight: bold;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
   color: ${props => props.theme.colors.primaryText};
 `;
 

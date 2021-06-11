@@ -94,7 +94,6 @@ const CustomEditor = {
     ReactEditor.focus(editor);
     Transforms.move(editor);
   },
-
   deleteImage(editor: Editor, element: Element) {
     const path = ReactEditor.findPath(editor, element);
     Transforms.removeNodes(editor, {

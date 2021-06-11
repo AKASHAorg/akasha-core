@@ -16,7 +16,8 @@ import {
 
 import pino from 'pino';
 import { BehaviorSubject } from 'rxjs';
-import * as rxjsOperators from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
+
 import * as singleSpa from 'single-spa';
 import fourOhFour from './404';
 import TranslationManager from './i18n';
@@ -134,9 +135,7 @@ export default class AppLoader implements IAppLoader {
     });
     if (this.globalChannel) {
       const loginEvent = this.globalChannel.pipe(
-        rxjsOperators.filter(
-          (ev: { channelInfo: any; data: any }) => ev?.channelInfo?.method === 'signIn',
-        ),
+        filter((ev: { channelInfo: any; data: any }) => ev?.channelInfo?.method === 'signIn'),
       );
       loginEvent.subscribe(e => {
         const doc = this.channels.db.apps.getInstalled({});
@@ -267,7 +266,6 @@ export default class AppLoader implements IAppLoader {
       domElement: domEl,
       i18n: i18nInstance,
       sdkModules: dependencies,
-      rxjsOperators: rxjsOperators,
       globalChannel: this.globalChannel,
       getMenuItems: () => this.getMenuItems(),
       events: this.events,
@@ -318,7 +316,6 @@ export default class AppLoader implements IAppLoader {
         i18nConfig: integration.app.i18nConfig,
         logger: this.appLogger.child({ plugin: integrationId }),
         sdkModules: dependencies,
-        rxjsOperators: rxjsOperators,
         globalChannel: this.globalChannel,
         events: this.events,
         isMobile: this.isMobile,

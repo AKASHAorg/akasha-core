@@ -15,7 +15,16 @@ describe('<EntryCardRenderer /> component', () => {
   const mockEth = genEthAddress();
   const itemData = genPostData();
   const mockObs = from(['test']);
-  const globalChannel = { pipe: () => ({ subscribe: () => {}, unsubscribe: () => {} }) };
+  const globalChannel = {
+    pipe: () => ({
+      subscribe: () => {
+        return;
+      },
+      unsubscribe: () => {
+        return;
+      },
+    }),
+  };
 
   const Base = (
     <EntryCardRenderer
@@ -35,10 +44,6 @@ describe('<EntryCardRenderer /> component', () => {
       onFlag={jest.fn}
       onLinkCopy={jest.fn}
       sharePostUrl=""
-      rxjsOperators={{
-        filter: (cb: (payload: any) => boolean) =>
-          cb({ channelInfo: { method: 'test', servicePath: ['PROFILE_STORE'] } }),
-      }}
       singleSpaNavigate={jest.fn}
     />
   );
