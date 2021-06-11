@@ -19,7 +19,9 @@
   "scripts": {
     "build": "tsc --build",
     "tsc": "tsc --build",
-    "prepare": "npm run tsc"
+    "prepare": "npm run tsc",
+    "pretest": "tsc -m commonjs",
+    "test": "jest"
   },
   "files": [
     "lib"

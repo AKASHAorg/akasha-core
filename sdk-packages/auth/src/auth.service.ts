@@ -330,7 +330,7 @@ const service: AkashaService = (invoke, log, globalChannel) => {
     return true;
   };
 
-  const signData = async (data: object | string, base64Format: boolean = false) => {
+  const signData = async (data: object | string, base64Format = false) => {
     const session = await getSession();
     let serializedData;
     if (typeof data === 'object') {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box } from 'grommet';
-import { BasicCardBox } from '../../Cards';
+import { BasicCardBox } from '../../EntryCard/basic-card-box';
 import styled, { css } from 'styled-components';
 
 export interface IPlaceholderProps {

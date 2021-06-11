@@ -13,8 +13,7 @@
   "license": "AGPL-3.0",
   "main": "lib/index.js",
   "directories": {
-    "lib": "lib",
-    "test": "__tests__"
+    "lib": "lib"
   },
   "files": [
     "lib"
@@ -31,45 +30,37 @@
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../../ui/build/apps/akasha",
-    "watch": "nodemon"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "lib/*",
-      "dist/*"
-    ],
-    "exec": "npm run pack || exit 1",
-    "ext": "ts,tsx"
+    "watch": "webpack --config webpack.config.js --watch"
   },
   "bugs": {
     "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"
   },
   "dependencies": {
+    "@akashaproject/design-system": "*",
     "@akashaproject/sdk-auth": "*",
     "@akashaproject/sdk-common": "*",
     "@akashaproject/sdk-db": "*",
     "@akashaproject/sdk-posts": "*",
-    "@akashaproject/design-system": "*",
     "@akashaproject/sdk-profiles": "*",
     "@akashaproject/ui-awf-hooks": "*",
-    "@akashaproject/ui-widget-login": "*",
     "@akashaproject/ui-widget-feed": "*",
+    "@akashaproject/ui-widget-login": "*",
+    "@akashaproject/ui-awf-testing-utils": "*",
+    "@akashaproject/ui-widget-trending": "*",
     "react-i18next": "11.7.3",
     "react-router-dom": "5.2.0",
-    "single-spa-react": "4.0.0"
+    "single-spa-react": "4.1.1"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
-    "@types/react": "16.9.56",
-    "@types/react-dom": "16.9.9",
+    "@types/react": "17.0.2",
+    "@types/react-dom": "17.0.2",
     "@types/react-router-dom": "5.1.6",
-    "@types/react-test-renderer": "16.9.2",
-    "@types/single-spa-react": "3.0.1",
-    "nodemon": "2.0.6",
-    "@babel/core": "7.12.3"
+    "@types/react-test-renderer": "16.9.2"
   },
   "peerDependencies": {
-    "react": "16.14.0",
-    "react-dom": "16.14.0"
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "rxjs": "7.0.0"
   }
 }

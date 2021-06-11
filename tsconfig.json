@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "module": "esnext",
     "moduleResolution": "node",
@@ -19,5 +20,22 @@
     "skipLibCheck": true,
     "lib": ["es2019", "dom"]
   },
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "references": [
+    { "path": "./ui/design" },
+    { "path": "./ui/typings" },
+    { "path": "./ui/testing-utils"},
+    { "path": "./ui/hooks" },
+    { "path": "./ui/widgets/feed" },
+    { "path": "./ui/widgets/layout" },
+    { "path": "./ui/widgets/sidebar" },
+    { "path": "./ui/widgets/top-bar" },
+    { "path": "./ui/widgets/trending" },
+    { "path": "./ui/plugins/app-center" },
+    { "path": "./ui/plugins/bookmarks" },
+    { "path": "./ui/plugins/legal" },
+    { "path": "./ui/plugins/notifications" },
+    { "path": "./ui/plugins/profile" },
+    { "path": "./ui/plugins/search" }
+  ],
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx"]
 }

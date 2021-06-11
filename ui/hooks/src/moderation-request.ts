@@ -1,8 +1,12 @@
 import constants from './constants';
 
-const { BASE_FLAG_URL, BASE_STATUS_URL, BASE_DECISION_URL, BASE_MODERATOR_URL } = constants;
+const { BASE_REPORT_URL, BASE_STATUS_URL, BASE_DECISION_URL, BASE_MODERATOR_URL } = constants;
 
-const fetchRequest = async (props: { method: string; url: string; data?: object }) => {
+const fetchRequest = async (props: {
+  method: string;
+  url: string;
+  data?: Record<string, unknown>;
+}) => {
   const { method, url, data = {} } = props;
   const rheaders = new Headers();
   rheaders.append('Content-Type', 'application/json');
@@ -32,7 +36,7 @@ export default {
       return error;
     }
   },
-  checkStatus: async (isBatch: boolean, data: object, entryId?: string) => {
+  checkStatus: async (isBatch: boolean, data: Record<string, unknown>, entryId?: string) => {
     try {
       const response = await fetchRequest({
         method: 'POST',
@@ -61,7 +65,7 @@ export default {
     try {
       const response = await fetchRequest({
         method: 'POST',
-        url: `${BASE_FLAG_URL}/list/${entryId}`,
+        url: `${BASE_REPORT_URL}/list/${entryId}`,
       });
 
       return response;
@@ -76,16 +80,16 @@ export default {
         url: `${BASE_DECISION_URL}/pending`,
       });
 
-      const modResponse = response.map(
+      const modResponse = response.results.map(
         (
-          { contentType: type, contentId, reasons, reportedBy, reportedDate, reports }: any,
+          { contentType: type, contentID, reasons, reportedBy, reportedDate, reports }: any,
           idx: number,
         ) => {
           // formatting data to match labels already in use
           return {
             id: idx,
             type: type,
-            entryId: contentId,
+            entryId: contentID,
             reasons: reasons,
             reporter: reportedBy,
             count: reports - 1, // minus reporter, to get count of other users
@@ -118,11 +122,11 @@ export default {
         },
       });
 
-      const modResponse = [...delistedItems, ...keptItems].map(
+      const modResponse = [...delistedItems.results, ...keptItems.results].map(
         (
           {
             contentType: type,
-            contentId,
+            contentID,
             date,
             explanation,
             moderator,
@@ -138,7 +142,7 @@ export default {
           return {
             id: idx,
             type: type,
-            entryId: contentId,
+            entryId: contentID,
             reasons: reasons,
             description: explanation,
             reporter: reportedBy,

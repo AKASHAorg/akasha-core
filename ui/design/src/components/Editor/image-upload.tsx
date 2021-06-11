@@ -9,7 +9,7 @@ import {
   StyledImageInput,
 } from './styled-editor-box';
 
-import { Icon } from '../Icon/index';
+import Icon from '../Icon';
 
 export interface IImageUpload {
   // labels
@@ -17,20 +17,22 @@ export interface IImageUpload {
   uploadingImageLabel?: string;
   // parent state
   uploading: boolean;
-  setUploading: any;
+  setUploading: React.Dispatch<React.SetStateAction<boolean>>;
   // handlers
-  uploadRequest?: (data: string | File, isUrl?: boolean) => any;
-  handleInsertImage: (data: {
-    src: string;
-    size: {
-      width: string;
-      height: string;
-      naturalWidth: string;
-      naturalHeight: string;
-    };
-  }) => void;
+  uploadRequest?: (data: string | File, isUrl?: boolean) => { data?: ImageData; error?: Error };
+  handleInsertImage: (data: ImageData) => void;
   // ref for hidden input
   ref: React.Ref<HTMLInputElement>;
+}
+
+export interface ImageData {
+  src: string;
+  size: {
+    width: string;
+    height: string;
+    naturalWidth: string;
+    naturalHeight: string;
+  };
 }
 
 const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
@@ -105,9 +107,6 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
       )}
       {uploading && (
         <StyledUploadingDiv>
-          <StyledCloseDiv onClick={handleCancelUpload}>
-            <Icon type="close" clickable={true} />
-          </StyledCloseDiv>
           <Box direction="column" gap="medium" align="center" justify="center">
             <Icon type="loading" />
             <StyledText size="medium" color="accentText">
@@ -120,5 +119,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
     </>
   );
 });
+
+ImageUpload.displayName = 'ImageUpload';
 
 export { ImageUpload };

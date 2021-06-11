@@ -1,4 +1,4 @@
-import { DefaultTheme } from 'styled-components';
+import { DefaultTheme } from '../interfaces';
 import breakpoints from '../../responsive-breakpoints';
 import shapes from '../../shapes';
 import colors from '../light/colors-light';
@@ -12,5 +12,6 @@ export function createTheme(overrides?: object): DefaultTheme {
     breakpoints: breakpoints.global.breakpoints,
     ...overrides,
   };
+
   return createGrommetTheme(styles);
 }

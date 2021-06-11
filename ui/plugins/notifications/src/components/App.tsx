@@ -17,7 +17,6 @@ export interface IProps {
   globalChannel: any;
   logger: any;
   i18n?: any;
-  rxjsOperators: any;
 }
 
 class App extends PureComponent<IProps> {
@@ -55,7 +54,6 @@ class App extends PureComponent<IProps> {
                   sdkModules={this.props.sdkModules}
                   singleSpa={this.props.singleSpa}
                   globalChannel={this.props.globalChannel}
-                  rxjsOperators={this.props.rxjsOperators}
                 />
               </ViewportSizeProvider>
             </I18nextProvider>

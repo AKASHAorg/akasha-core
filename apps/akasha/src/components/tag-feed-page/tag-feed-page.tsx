@@ -6,17 +6,19 @@ import { constants, usePosts, useTagSubscribe, useErrors } from '@akashaproject/
 import { useTranslation } from 'react-i18next';
 import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
-import { ITag } from '@akashaproject/design-system/lib/components/Cards/widget-cards/trending-widget-card';
+import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
+import { ITag } from '@akashaproject/design-system/lib/components/TrendingWidgetCard';
 
 const { Box, ReportModal, ToastProvider, ModalRenderer, TagProfileCard, Helmet } = DS;
 
 interface ITagFeedPage {
   loggedProfileData?: any;
-  loginState: UseLoginState;
+  loginState: ILoginState;
   flagged: string;
+  flaggedContentType: string;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
+  setFlaggedContentType: React.Dispatch<React.SetStateAction<string>>;
   reportModalOpen: boolean;
   setReportModalOpen: () => void;
   closeReportModal: () => void;
@@ -27,10 +29,11 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const {
     sdkModules,
     globalChannel,
-    rxjsOperators,
     flagged,
+    flaggedContentType,
     reportModalOpen,
     setFlagged,
+    setFlaggedContentType,
     setReportModalOpen,
     closeReportModal,
     showLoginModal,
@@ -71,7 +74,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   });
 
   const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
-    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
@@ -135,8 +137,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         break;
       case ItemTypes.COMMENT:
         /* Navigate to parent post because we don't have the comment page yet */
-        const parentId = postsState.postsData[details.entryId].postId;
-        url = `/social-app/post/${parentId}`;
+        url = `/social-app/post/${postsState.postsData[details.entryId].postId}`;
         break;
       default:
         break;
@@ -148,8 +149,9 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     postsActions.optimisticPublishPost(entryData, loggedProfileData, embedEntry, true);
   };
 
-  const handleEntryFlag = (entryId: string) => {
+  const handleEntryFlag = (entryId: string, contentType: string) => () => {
     setFlagged(entryId);
+    setFlaggedContentType(contentType);
     setReportModalOpen();
   };
 
@@ -185,11 +187,11 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.app.modalSlotId}>
+      <ModalRenderer slotId={props.layout.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
-              titleLabel={t('Report a Post')}
+              titleLabel={t(`Report ${flaggedContentType}`)}
               successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
@@ -220,10 +222,11 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
               closeLabel={t('Close')}
               user={loginState.ethAddress ? loginState.ethAddress : ''}
               contentId={flagged}
-              contentType="post"
-              baseUrl={constants.BASE_FLAG_URL}
+              contentType={flaggedContentType}
+              baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
+              signData={sdkModules.auth.authService.signData}
             />
           </ToastProvider>
         )}
@@ -248,18 +251,17 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         sdkModules={props.sdkModules}
         layout={props.layout}
         globalChannel={props.globalChannel}
-        rxjsOperators={rxjsOperators}
         ethAddress={loginState.ethAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
         onLoginModalOpen={showLoginModal}
         totalItems={postsState.totalItems}
         profilePubKey={loginState.pubKey}
-        modalSlotId={props.layout.app.modalSlotId}
+        modalSlotId={props.layout.modalSlotId}
         loggedProfile={loggedProfileData}
         onRepostPublish={handleRepostPublish}
         contentClickable={true}
-        onReport={handleEntryFlag}
+        onEntryFlag={handleEntryFlag}
         handleFlipCard={handleFlipCard}
       />
     </Box>

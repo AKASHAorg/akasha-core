@@ -1,7 +1,6 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "module": "esnext",
     "lib": ["es6", "dom", "es2019"],
     "sourceMap": true,
     "allowJs": false,
@@ -16,7 +15,25 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "resolveJsonModule": false,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "composite": true
+  },
+  "references": [
+    { "path": "./design" },
+    { "path": "./typings" },
+    { "path": "./testing-utils"},
+    { "path": "./hooks" },
+    { "path": "./widgets/feed" },
+    { "path": "./widgets/layout" },
+    { "path": "./widgets/sidebar" },
+    { "path": "./widgets/top-bar" },
+    { "path": "./widgets/trending" },
+    { "path": "./plugins/app-center" },
+    { "path": "./plugins/bookmarks" },
+    { "path": "./plugins/legal" },
+    { "path": "./plugins/notifications" },
+    { "path": "./plugins/profile" },
+    { "path": "./plugins/search" }
+  ]
 }

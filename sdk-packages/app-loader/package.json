@@ -25,21 +25,21 @@
     "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333"
   },
   "dependencies": {
-    "i18next": "19.8.4",
-    "i18next-browser-languagedetector": "6.0.1",
+    "i18next": "20.2.1",
+    "i18next-browser-languagedetector": "6.1.0",
     "i18next-fetch-backend": "3.0.0",
-    "i18next-chained-backend": "2.0.1",
+    "i18next-chained-backend": "2.1.0",
     "i18next-localstorage-backend": "3.1.2",
     "ismobilejs": "1.1.1",
-    "pino": "6.7.0",
-    "single-spa": "5.8.2"
+    "pino": "6.11.3",
+    "single-spa": "5.9.2"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
     "path-to-regexp": "^6.2.0"
   },
   "peerDependencies": {
-    "rxjs": "^6.6.3"
+    "rxjs": "7.0.0"
   },
   "files": [
     "lib",

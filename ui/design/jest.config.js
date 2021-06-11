@@ -1,14 +1,8 @@
-// add extra config for jest
-module.exports = {
-    verbose: true,
-    roots: [
-        "<rootDir>/src"
-    ],
-    testMatch: [
-        "**/__tests__/**/*.+(ts|tsx)",
-        "**/?(*.)+(spec|test).+(ts|tsx)"
-    ],
-    transform: {
-        "^.+\\.(ts|tsx)$": "ts-jest"
-    },
-};
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const baseConfig = require('../../jest.config.base');
+
+module.exports = Object.assign(baseConfig, {
+  automock: false,
+  // preset: 'ts-jest',
+  testEnvironment: 'jsdom',
+});

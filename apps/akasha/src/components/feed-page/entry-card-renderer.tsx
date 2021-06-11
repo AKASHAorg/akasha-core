@@ -12,7 +12,6 @@ export interface IEntryCardRendererProps {
   sdkModules: any;
   logger: any;
   globalChannel: any;
-  rxjsOperators: any;
   itemId?: string;
   itemData?: any;
   isBookmarked?: boolean;
@@ -21,7 +20,7 @@ export interface IEntryCardRendererProps {
   onBookmark: (entryId: string) => void;
   onNavigate: (details: any) => void;
   onLinkCopy?: () => void;
-  onFlag?: (entryId: string) => () => void;
+  onFlag?: (entryId: string, contentType: string) => () => void;
   onRepost: (withComment: boolean, entryData: any) => void;
   sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
@@ -50,7 +49,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     sdkModules,
     logger,
     globalChannel,
-    rxjsOperators,
     contentClickable,
     hidePublishTime,
     moderatedContentLabel,
@@ -77,7 +75,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   const { t } = useTranslation();
 
   const [followedProfiles, followActions] = useFollow({
-    rxjsOperators,
     globalChannel,
     profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
@@ -156,7 +153,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   profileAnchorLink={'/profile'}
                   repliesAnchorLink={routes[POST]}
                   onRepost={props.onRepost}
-                  onEntryFlag={props.onFlag && props.onFlag(itemData.entryId)}
+                  onEntryFlag={props.onFlag && props.onFlag(itemData.entryId, 'post')}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
                   isFollowingAuthor={isFollowing}

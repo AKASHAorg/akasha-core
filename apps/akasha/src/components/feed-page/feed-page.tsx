@@ -11,12 +11,12 @@ import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
-import { application as loginWidget } from '@akashaproject/ui-widget-login/lib/bootstrap';
+import { application as loginWidget } from '@akashaproject/ui-widget-login/lib';
 import Parcel from 'single-spa-react/parcel';
 import { constants, useBookmarks, useErrors, useMentions } from '@akashaproject/ui-awf-hooks';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
-import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
 const {
   Box,
@@ -36,10 +36,12 @@ export interface FeedPageProps {
   logger: any;
   showLoginModal: () => void;
   loggedProfileData?: any;
-  loginState: UseLoginState;
+  loginState: ILoginState;
   flagged: string;
+  flaggedContentType: string;
   reportModalOpen: boolean;
   setFlagged: React.Dispatch<React.SetStateAction<string>>;
+  setFlaggedContentType: React.Dispatch<React.SetStateAction<string>>;
   setReportModalOpen: () => void;
   closeReportModal: () => void;
   editorModalOpen: boolean;
@@ -52,8 +54,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const {
     isMobile,
     flagged,
+    flaggedContentType,
     reportModalOpen,
     setFlagged,
+    setFlaggedContentType,
     setReportModalOpen,
     closeReportModal,
     editorModalOpen,
@@ -66,7 +70,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     sdkModules,
     logger,
     globalChannel,
-    rxjsOperators,
   } = props;
 
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
@@ -156,8 +159,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     setEditorModalOpen();
   };
 
-  const handleEntryFlag = (entryId: string) => () => {
+  const handleEntryFlag = (entryId: string, contentType: string) => () => {
     setFlagged(entryId);
+    setFlaggedContentType(contentType);
     setReportModalOpen();
   };
 
@@ -203,11 +207,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.app.modalSlotId}>
+      <ModalRenderer slotId={props.layout.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
-              titleLabel={t('Report a Post')}
+              titleLabel={t(`Report ${flaggedContentType}`)}
               successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
@@ -238,21 +242,23 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               closeLabel={t('Close')}
               user={loginState.ethAddress ? loginState.ethAddress : ''}
               contentId={flagged}
-              contentType="post"
-              baseUrl={constants.BASE_FLAG_URL}
+              contentType={flaggedContentType}
+              baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
+              signData={sdkModules.auth.authService.signData}
             />
           </ToastProvider>
         )}
       </ModalRenderer>
       <EditorModal
-        slotId={props.layout.app.modalSlotId}
+        slotId={props.layout.modalSlotId}
         avatar={loggedProfileData.avatar}
         showModal={editorModalOpen}
         ethAddress={loginState.ethAddress as any}
         postLabel={t('Publish')}
         placeholderLabel={t('Write something')}
+        emojiPlaceholderLabel={t('Search')}
         discardPostLabel={t('Discard Post')}
         discardPostInfoLabel={t(
           "You have not posted yet. If you leave now you'll discard your post.",
@@ -302,7 +308,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             sdkModules={sdkModules}
             logger={logger}
             globalChannel={globalChannel}
-            rxjsOperators={rxjsOperators}
             bookmarkState={bookmarkState}
             ethAddress={loginState.ethAddress}
             locale={locale}
@@ -316,7 +321,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             onMentionClick={handleMentionClick}
             onTagClick={handleTagClick}
             contentClickable={true}
-            awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
+            awaitingModerationLabel={t(
+              'You have reported this content. It is awaiting moderation.',
+            )}
             moderatedContentLabel={t('This content has been moderated')}
             ctaLabel={t('See it anyway')}
             handleFlipCard={handleFlipCard}
@@ -326,7 +333,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           sdkModules,
           logger,
           globalChannel,
-          rxjsOperators,
           isMobile,
           feedItems: postsState.postIds,
           loggedEthAddress: loginState.ethAddress,

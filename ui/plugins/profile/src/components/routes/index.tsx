@@ -11,13 +11,12 @@ import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 const { Box, LoginModal, ViewportSizeProvider } = DS;
 
 const Routes: React.FC<RootComponentProps> = props => {
-  const { activeWhen, logger, rxjsOperators } = props;
+  const { activeWhen, logger } = props;
   const { path } = activeWhen;
 
   const [errorState, errorActions] = useErrors({ logger });
 
   const [loginState, loginActions] = useLoginState({
-    rxjsOperators,
     globalChannel: props.globalChannel,
     authService: props.sdkModules.auth.authService,
     profileService: props.sdkModules.profiles.profileService,
@@ -29,23 +28,16 @@ const Routes: React.FC<RootComponentProps> = props => {
     profileService: props.sdkModules.profiles.profileService,
     ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
-    rxjsOperators: props.rxjsOperators,
     globalChannel: props.globalChannel,
   });
 
-  const [reportModalOpen, setReportModalOpen] = React.useState(false);
   const [flagged, setFlagged] = React.useState('');
-
-  const showLoginModal = () => {
-    modalStateActions.show(MODAL_NAMES.LOGIN);
-  };
+  const [flaggedContentType, setFlaggedContentType] = React.useState('');
 
   React.useEffect(() => {
-    if (loginState.ethAddress) {
-      hideLoginModal();
-      if (!!flagged.length) {
-        setReportModalOpen(true);
-      }
+    if (loginState.ethAddress && flagged.length) {
+      modalStateActions.hide(MODAL_NAMES.LOGIN);
+      modalStateActions.show(MODAL_NAMES.REPORT);
     }
   }, [loginState.ethAddress]);
 
@@ -56,7 +48,9 @@ const Routes: React.FC<RootComponentProps> = props => {
   }, [loginState.pubKey]);
 
   const [modalState, modalStateActions] = useModalState({
-    initialState: {},
+    initialState: {
+      reportModal: false,
+    },
     isLoggedIn: !!loginState.ethAddress,
   });
 
@@ -72,6 +66,18 @@ const Routes: React.FC<RootComponentProps> = props => {
     }
     return null;
   }, [errorState]);
+
+  const showLoginModal = () => {
+    modalStateActions.show(MODAL_NAMES.LOGIN);
+  };
+
+  const showReportModal = () => {
+    modalStateActions.showAfterLogin(MODAL_NAMES.REPORT);
+  };
+
+  const hideReportModal = () => {
+    modalStateActions.hide(MODAL_NAMES.REPORT);
+  };
 
   const hideLoginModal = () => {
     modalStateActions.hide(MODAL_NAMES.LOGIN);
@@ -92,10 +98,13 @@ const Routes: React.FC<RootComponentProps> = props => {
                 modalState={modalState}
                 loggedProfileData={loggedProfileData}
                 flagged={flagged}
-                reportModalOpen={reportModalOpen}
+                flaggedContentType={flaggedContentType}
+                reportModalOpen={modalState.report}
                 setFlagged={setFlagged}
+                setFlaggedContentType={setFlaggedContentType}
                 showLoginModal={showLoginModal}
-                setReportModalOpen={setReportModalOpen}
+                setReportModalOpen={showReportModal}
+                closeReportModal={hideReportModal}
               />
             </Route>
             <Route render={() => <div>{t('Oops, Profile not found!')}</div>} />
@@ -103,7 +112,7 @@ const Routes: React.FC<RootComponentProps> = props => {
         </Box>
         <LoginModal
           showModal={modalState[MODAL_NAMES.LOGIN]}
-          slotId={props.layout.app.modalSlotId}
+          slotId={props.layout.modalSlotId}
           onLogin={loginActions.login}
           onModalClose={hideLoginModal}
           titleLabel={t('Connect a wallet')}

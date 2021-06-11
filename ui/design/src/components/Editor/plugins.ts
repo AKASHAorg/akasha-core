@@ -1,5 +1,5 @@
 import { Editor } from 'slate';
-import { ReactEditor } from 'slate-react';
+
 import isUrl from 'is-url';
 import { CustomEditor } from './helpers';
 
@@ -13,7 +13,7 @@ const withImages = (editor: Editor) => {
   return editor;
 };
 
-const withMentions = (editor: Editor & ReactEditor) => {
+const withMentions = (editor: Editor) => {
   const { isInline, isVoid } = editor;
 
   editor.isInline = element => {
@@ -27,7 +27,7 @@ const withMentions = (editor: Editor & ReactEditor) => {
   return editor;
 };
 
-const withTags = (editor: Editor & ReactEditor) => {
+const withTags = (editor: Editor) => {
   const { isInline, isVoid } = editor;
 
   editor.isInline = element => {
@@ -41,7 +41,7 @@ const withTags = (editor: Editor & ReactEditor) => {
   return editor;
 };
 
-const withLinks = (editor: Editor & ReactEditor) => {
+const withLinks = (editor: Editor) => {
   const { insertData, insertText, isInline, isVoid } = editor;
 
   editor.isInline = element => {

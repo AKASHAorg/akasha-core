@@ -28,7 +28,7 @@ const CardRenderer = (props: IRenderItemProps) => {
     itemRect,
     updateRef,
     averageItemHeight,
-    itemIndex,
+    // itemIndex,
     // className,
     onItemUnmount,
   } = props;
@@ -79,15 +79,16 @@ const CardRenderer = (props: IRenderItemProps) => {
         onItemUnmount(itemId, itemRect);
       }
     }
-  }, [cardWrapperRef.current, isMounted.current, ftRender.current, itemRect]);
+  }, [itemRect, itemId, onItemUnmount, updateRef]);
 
   const shouldLoadData = itemRect && itemRect.canRender;
 
   return (
     <CardItemWrapper
-      data-itemid={itemId}
-      data-itemindex={itemIndex}
+      // data-itemid={itemId}
+      // data-itemindex={itemIndex}
       ref={cardWrapperRef}
+      key={itemId}
       style={{
         transform: `translateY(${itemRect ? itemRect.rect.getTop() : itemSpacing}px)`,
       }}

@@ -1,5 +1,7 @@
 *
 index.html
+!index.dev.html
+!importmap.dev.json
 !.gitignore
 !template-index.html
 !manifest.json
@@ -10,4 +12,3 @@ index.html
 !fonts/*
 !_redirects
 !robots.txt
-

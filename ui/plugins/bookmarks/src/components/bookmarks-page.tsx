@@ -13,15 +13,26 @@ import EntryCardRenderer from './entry-renderer';
 
 const { VirtualList, ErrorInfoCard, ErrorLoader, Spinner } = DS;
 
-const BookmarksPage = (props: RootComponentProps) => {
-  const { globalChannel, sdkModules, singleSpa, logger, rxjsOperators } = props;
+type BookmarksPageProps = Omit<
+  RootComponentProps,
+  | 'layout'
+  | 'getMenuItems'
+  | 'events'
+  | 'domElement'
+  | 'domElement'
+  | 'name'
+  | 'unmountSelf'
+  | 'activeWhen'
+  | 'rootNodeId'
+>;
 
+const BookmarksPage: React.FC<BookmarksPageProps> = props => {
+  const { globalChannel, sdkModules, singleSpa, logger } = props;
   const { t } = useTranslation();
 
   const [errorState, errorActions] = useErrors({ logger });
 
   const [loginState] = useLoginState({
-    rxjsOperators,
     globalChannel: globalChannel,
     onError: errorActions.createError,
     authService: sdkModules.auth.authService,
@@ -149,7 +160,6 @@ const BookmarksPage = (props: RootComponentProps) => {
                         globalChannel={globalChannel}
                         sdkModules={sdkModules}
                         singleSpa={singleSpa}
-                        rxjsOperators={rxjsOperators}
                         bookmarkState={bookmarkState}
                         ethAddress={loginState.ethAddress}
                         onBookmark={handleBookmarkClick}
@@ -162,7 +172,7 @@ const BookmarksPage = (props: RootComponentProps) => {
                         disableReposting={true}
                         sharePostUrl={`${window.location.origin}/social-app/post/`}
                         awaitingModerationLabel={t(
-                          'You have reported this post. It is awaiting moderation.',
+                          'You have reported this content. It is awaiting moderation.',
                         )}
                         moderatedContentLabel={t('This content has been moderated')}
                         ctaLabel={t('See it anyway')}
