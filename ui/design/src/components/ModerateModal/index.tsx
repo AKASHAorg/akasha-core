@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import ModerateModalComponent, { IModerateModalProps } from './moderate-modal';
 import ViewportSizeProvider from '../Providers/viewport-dimension';
 

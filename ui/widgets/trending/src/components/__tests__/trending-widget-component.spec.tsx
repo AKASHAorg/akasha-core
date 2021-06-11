@@ -20,9 +20,6 @@ describe('<TrendingWidgetComponent /> component', () => {
       sdkModules={sdkMocks}
       layout={{ app: { modalSlotId: '' } }}
       singleSpa={{}}
-      rxjsOperators={{
-        filter: genMockOp({ channelInfo: { method: 'test', servicePath: ['PROFILE_STORE'] } }),
-      }}
     />
   );
   beforeEach(() => {

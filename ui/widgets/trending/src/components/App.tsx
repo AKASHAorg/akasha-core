@@ -16,7 +16,6 @@ export interface ITrendingWidgetProps {
   singleSpa: any;
   globalChannel: any;
   sdkModules: any;
-  rxjsOperators: any;
   layout: any;
   errors?: { [key: string]: IAkashaError };
   installIntegration?: (name: string) => void;

@@ -1,39 +1,10 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
     "lib": ["dom"]
   },
-  "references": [
-    {
-      "path": "../runtime"
-    },
-    {
-      "path": "../core"
-    },
-    {
-      "path": "../common"
-    },
-    {
-      "path": "../db"
-    },
-    {
-      "path": "../auth"
-    },
-    {
-      "path": "../../ui/typings"
-    },
-    {
-      "path": "../profiles"
-    },
-    {
-      "path": "../registry"
-    },
-    {
-      "path": "../posts"
-    }
-  ],
   "include": ["./src"],
   "exclude": ["./src/sw.ts"]
 }

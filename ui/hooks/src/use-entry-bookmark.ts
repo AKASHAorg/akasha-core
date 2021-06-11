@@ -16,76 +16,179 @@ export interface UseEntryBookmarkProps {
   onError: (err: IAkashaError) => void;
 }
 
-export interface IBookmarkState {
-  bookmarks: { entryId: string; type: BookmarkTypes }[];
-  isFetching: boolean;
-}
 export interface IBookmarkActions {
+  /**
+   *  fetch bookmarks for current logged user
+   */
   getBookmarks: () => void;
+  /**
+   *  bookmark a post
+   */
   bookmarkPost: (entryId: string) => void;
+  /**
+   *  bookmark a comment
+   */
   bookmarkComment: (entryId: string) => void;
+  /**
+   *  remove a bookmark
+   */
   removeBookmark: (entryId: string) => void;
 }
 
+export interface IBookmarkState {
+  bookmarks: { entryId: string; type: BookmarkTypes }[];
+  isFetching: boolean;
+  bookmarkPostQuery: string | number | null;
+  bookmarkCommentQuery: string | number | null;
+  removeBookmarkQuery: string | number | null;
+}
+
+const initialBookmarkState: IBookmarkState = {
+  bookmarks: [],
+  isFetching: false,
+  bookmarkPostQuery: null,
+  bookmarkCommentQuery: null,
+  removeBookmarkQuery: null,
+};
+
+export type IBookmarkAction =
+  | { type: 'GET_BOOKMARKS' }
+  | {
+      type: 'GET_BOOKMARKS_SUCCESS';
+      payload: { services: any };
+    }
+  | { type: 'BOOKMARK_POST'; payload: string | number }
+  | {
+      type: 'BOOKMARK_POST_SUCCESS';
+      payload: { entryId: string; type: BookmarkTypes }[];
+    }
+  | { type: 'BOOKMARK_COMMENT'; payload: string | number }
+  | {
+      type: 'BOOKMARK_COMMENT_SUCCESS';
+      payload: { entryId: string; type: BookmarkTypes }[];
+    }
+  | { type: 'REMOVE_BOOKMARK'; payload: string | number }
+  | {
+      type: 'REMOVE_BOOKMARK_SUCCESS';
+      payload: { entryId: string; type: BookmarkTypes }[];
+    };
+
+const bookmarkStateReducer = (state: IBookmarkState, action: IBookmarkAction) => {
+  switch (action.type) {
+    case 'GET_BOOKMARKS':
+      return { ...state, isFetching: true };
+    case 'GET_BOOKMARKS_SUCCESS': {
+      const data = action.payload;
+      if (!data) {
+        return {
+          ...state,
+          isFetching: false,
+          bookmarks: [],
+        };
+      }
+      if (data && data.services) {
+        const bookmarkedEntries = data.services.findIndex(
+          (e: string[]) => e[0] === entriesBookmarks,
+        );
+        if (bookmarkedEntries !== -1) {
+          return {
+            ...state,
+            isFetching: false,
+            bookmarks: JSON.parse(data.services[bookmarkedEntries][1]),
+          };
+        }
+      }
+      return { ...state };
+    }
+
+    case 'BOOKMARK_POST':
+      return { ...state, bookmarkPostQuery: action.payload };
+    case 'BOOKMARK_POST_SUCCESS':
+      return { ...state, bookmarkPostQuery: null, bookmarks: action.payload };
+
+    case 'BOOKMARK_COMMENT':
+      return { ...state, bookmarkCommentQuery: action.payload };
+    case 'BOOKMARK_COMMENT_SUCCESS':
+      return { ...state, bookmarkCommentQuery: null, bookmarks: action.payload };
+
+    case 'REMOVE_BOOKMARK':
+      return { ...state, removeBookmarkQuery: action.payload };
+    case 'REMOVE_BOOKMARK_SUCCESS':
+      return { ...state, removeBookmarkQuery: null, bookmarks: action.payload };
+
+    default:
+      throw new Error('[UseBookmarkReducer] action is not defined!');
+  }
+};
+
 const useEntryBookmark = (props: UseEntryBookmarkProps): [IBookmarkState, IBookmarkActions] => {
   const { dbService, bmKey = BOOKMARKED_ENTRIES_KEY, onError } = props;
-  const [bookmarkState, setBookmarkState] = React.useState<IBookmarkState>({
-    bookmarks: [],
-    isFetching: true,
-  });
+  const [bookmarkState, dispatch] = React.useReducer(bookmarkStateReducer, initialBookmarkState);
 
-  const actions: IBookmarkActions = {
-    getBookmarks() {
+  React.useEffect(() => {
+    if (bookmarkState.isFetching) {
       const call = dbService.settingsAttachment.get({
         moduleName: bmKey,
       });
-      call.subscribe((resp: any) => {
-        const { data } = resp;
-        if (!data) {
-          return setBookmarkState({
-            bookmarks: [],
-            isFetching: false,
-          });
-        }
-        if (data && data.services) {
-          const bookmarkedEntries = data.services.findIndex(
-            (e: string[]) => e[0] === entriesBookmarks,
-          );
-          if (bookmarkedEntries !== -1) {
-            setBookmarkState({
-              bookmarks: JSON.parse(data.services[bookmarkedEntries][1]),
-              isFetching: false,
-            });
-          }
-        }
-      }, createErrorHandler('useEntryBookmark.getBookmarks'));
-    },
-    bookmarkPost(entryId) {
+      const callSub = call.subscribe({
+        next: (resp: any) => {
+          const { data } = resp;
+          dispatch({ type: 'GET_BOOKMARKS_SUCCESS', payload: data });
+        },
+        error: createErrorHandler('useEntryBookmark.getBookmarks'),
+      });
+      return () => callSub.unsubscribe();
+    }
+    return;
+  }, [bookmarkState.isFetching]);
+
+  React.useEffect(() => {
+    if (bookmarkState.bookmarkPostQuery) {
       const newBmks = bookmarkState.bookmarks.slice();
-      newBmks.unshift({ entryId, type: BookmarkTypes.POST });
+      newBmks.unshift({ entryId: bookmarkState.bookmarkPostQuery, type: BookmarkTypes.POST });
 
       const call = dbService.settingsAttachment.put({
         moduleName: bmKey,
         services: [[entriesBookmarks, JSON.stringify(newBmks)]],
       });
-      call.subscribe(async (_resp: any) => {
-        setBookmarkState(prev => ({ ...prev, bookmarks: newBmks }));
-      }, createErrorHandler('useEntryBookmark.addBookmark', false, onError));
-    },
-    bookmarkComment(commentId) {
+      const callSub = call.subscribe({
+        next: () => {
+          dispatch({ type: 'BOOKMARK_POST_SUCCESS', payload: newBmks });
+        },
+        error: createErrorHandler('useEntryBookmark.addBookmark', false, onError),
+      });
+      return () => callSub.unsubscribe();
+    }
+    return;
+  }, [bookmarkState.bookmarkPostQuery]);
+
+  React.useEffect(() => {
+    if (bookmarkState.bookmarkCommentQuery) {
       const newBmks = bookmarkState.bookmarks.slice();
-      newBmks.unshift({ entryId: commentId, type: BookmarkTypes.COMMENT });
+      newBmks.unshift({ entryId: bookmarkState.bookmarkCommentQuery, type: BookmarkTypes.COMMENT });
+
       const call = dbService.settingsAttachment.put({
         moduleName: bmKey,
         services: [[entriesBookmarks, JSON.stringify(newBmks)]],
       });
-      call.subscribe(async (_resp: any) => {
-        setBookmarkState(prev => ({ ...prev, bookmarks: newBmks }));
-      }, createErrorHandler('useEntryBookmark.addBookmark', false, onError));
-    },
-    removeBookmark(entryId) {
+      const callSub = call.subscribe({
+        next: () => {
+          dispatch({ type: 'BOOKMARK_COMMENT_SUCCESS', payload: newBmks });
+        },
+        error: createErrorHandler('useEntryBookmark.addBookmark', false, onError),
+      });
+      return () => callSub.unsubscribe();
+    }
+    return;
+  }, [bookmarkState.bookmarkCommentQuery]);
+
+  React.useEffect(() => {
+    if (bookmarkState.removeBookmarkQuery) {
       const bookmarks = bookmarkState.bookmarks.slice();
-      const bmIndex = bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId);
+      const bmIndex = bookmarkState.bookmarks.findIndex(
+        (bm: { entryId: string; type: BookmarkTypes }) =>
+          bm.entryId === bookmarkState.removeBookmarkQuery,
+      );
       if (bmIndex >= 0) {
         bookmarks.splice(bmIndex, 1);
       }
@@ -93,9 +196,29 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [IBookmarkState, IBookm
         moduleName: bmKey,
         services: [['entries-bookmarks', JSON.stringify(bookmarks)]],
       });
-      call.subscribe(async (_resp: any) => {
-        setBookmarkState(prev => ({ ...prev, bookmarks }));
-      }, createErrorHandler('useEntryBookmark.removeBookmark', false, onError));
+      const callSub = call.subscribe({
+        next: () => {
+          dispatch({ type: 'REMOVE_BOOKMARK_SUCCESS', payload: bookmarks });
+        },
+        error: createErrorHandler('useEntryBookmark.removeBookmark', false, onError),
+      });
+      return () => callSub.unsubscribe();
+    }
+    return;
+  }, [bookmarkState.removeBookmarkQuery]);
+
+  const actions: IBookmarkActions = {
+    getBookmarks() {
+      dispatch({ type: 'GET_BOOKMARKS' });
+    },
+    bookmarkPost(entryId) {
+      dispatch({ type: 'BOOKMARK_POST', payload: entryId });
+    },
+    bookmarkComment(commentId) {
+      dispatch({ type: 'BOOKMARK_COMMENT', payload: commentId });
+    },
+    removeBookmark(entryId) {
+      dispatch({ type: 'REMOVE_BOOKMARK', payload: entryId });
     },
   };
 

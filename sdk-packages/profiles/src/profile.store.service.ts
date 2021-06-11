@@ -221,7 +221,7 @@ const service: AkashaService = (invoke, log) => {
       operationName: 'IsFollowing',
     });
 
-    return result.data;
+    return { ...result.data, args: opt };
   };
   const saveMediaFile = async (data: {
     content: Buffer | ArrayBuffer | string | any;

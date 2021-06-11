@@ -1,9 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
-import { EditorBox } from '../Editor/index';
+import EditorBox, { IEditorBox } from '../Editor';
 import { Box, Text } from 'grommet';
 import Icon from '../Icon';
-import { IEditorBox } from '../Editor/editor-box';
 
 export interface IEditorCard extends IEditorBox {
   className?: string;
@@ -20,6 +19,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
     postLabel,
     newPostLabel,
     placeholderLabel,
+    emojiPlaceholderLabel,
     onPublish,
     handleNavigateBack,
     getMentions,
@@ -52,6 +52,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
         postLabel={postLabel}
         withMeter={true}
         placeholderLabel={placeholderLabel}
+        emojiPlaceholderLabel={emojiPlaceholderLabel}
         minHeight={'192px'}
         getMentions={getMentions}
         getTags={getTags}

@@ -1,4 +1,4 @@
-import { ObservableCallResult } from './responses';
+import { ServiceCallResult } from './responses';
 
 export interface ILogger {
   info(msg: string): void;
@@ -8,5 +8,5 @@ export interface ILogger {
 }
 
 export default interface ILogService {
-  create(nameSpace?: string): ObservableCallResult<ILogger>;
+  create(nameSpace?: string): ILogger;
 }

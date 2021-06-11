@@ -9,8 +9,16 @@ export default {
   title: 'Cards/TutorialWidgetCard',
   component: TutorialWidgetCard,
   argType: {
-    currentProgress: { control: 'text' },
-
+    currentProgress: { control: 'number' },
+    titleLabel: { control: 'text' },
+    subtitleLabel: { control: 'text' },
+    subtitleIcon: { control: 'text' },
+    infoLabel: { control: 'text' },
+    learnMoreLabel: { control: 'text' },
+    callToActionLabel: { control: 'text' },
+    seeVideoTutorialLabel: { control: 'text' },
+    handleLearnMore: { action: 'clicked learn more' },
+    handleCallToAction: { action: 'clicked' },
     handleSeeVideoTutorial: { action: 'clicked see video' },
     handleDismiss: { action: 'clicked dismiss' },
   },
@@ -30,11 +38,10 @@ BaseTutorialWidgetCard.args = {
   currentProgress: 0,
   titleLabel: 'Pick your ethereum name',
   subtitleLabel: 'Take your address to the next level',
+  subtitleIcon: 'iconEns',
   infoLabel:
     'Your human-friendly Ethereum name can be used also in wallets instead of your address',
-
-  subtitleIcon: 'iconEns',
-  seeVideoTutorialLabel: 'See video tutorial',
-  callToActionLabel: 'Go to app',
   learnMoreLabel: 'Learn more',
+  callToActionLabel: 'Go to app',
+  seeVideoTutorialLabel: 'See video tutorial',
 };

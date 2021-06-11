@@ -94,7 +94,6 @@ class Widget extends React.Component<RootComponentProps> {
                         sdkModules={this.props.sdkModules}
                         logger={this.props.logger}
                         singleSpa={this.props.singleSpa}
-                        rxjsOperators={this.props.rxjsOperators}
                         errors={this.state.errors}
                       />
                     )}

@@ -1,9 +1,11 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB, logger, decodeString, encodeString } from '../helpers';
+import { getAppDB, logger, decodeString, encodeString, sendEmailNotification } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { ModerationDecision, ModerationReport } from '../collections/interfaces';
 import ModerationDecisionAPI from './moderation-decision';
 import { queryCache } from '../storage/cache';
+
+const moderationAppURL = process.env.MODERATION_APP_URL;
 
 /**
  * The ModerationReportAPI class handles all the interactions between the reporting API
@@ -21,6 +23,16 @@ class ModerationReportAPI extends DataSource {
 
   async initialize(config) {
     this.context = config.context;
+  }
+
+  /**
+  * Get the name of the key for report cache.
+  * @param contentID - The content identifier
+  * @param author - The author of that report
+  * @returns The key as a string
+  */
+  getReportCacheKey(contentID: string, author: string) {
+    return `${this.collection}:contentID${contentID}:author${author}`;
   }
 
   /**
@@ -81,6 +93,10 @@ class ModerationReportAPI extends DataSource {
    * @returns A ModerationReport object
    */
   async getReport(contentID: string, author: string) {
+    const reportCache = this.getReportCacheKey(contentID, author);
+    if (await queryCache.has(reportCache)) {
+      return queryCache.get(reportCache);
+    }
     const db: Client = await getAppDB();
     const query = new Where('contentID').eq(contentID).and('author').eq(author);
     const reports = await db.find<ModerationReport>(this.dbID, this.collection, query);
@@ -181,6 +197,26 @@ class ModerationReportAPI extends DataSource {
         logger.warn(`pending decision could not be created for contentID ${contentID}`);
         // throw new Error('pending decision could not be created');
       }
+      // send email notification to moderators
+      const text = `There is a new pending request for moderation.
+      Please visit the moderation app (${moderationAppURL})
+      to moderate this content.
+      \nThank you!`;
+      const html = `<p>There is a new pending request for moderation.
+      Please visit the <a href="${moderationAppURL}">moderation app</a>
+      to moderate this content.</p>
+      <br>
+      <p>Thank you!</p>`;
+      const msg = {
+        to: process.env.MODERATION_EMAIL,
+        from: process.env.MODERATION_EMAIL,
+        subject: "New moderation request on Ethereum World",
+        text,
+        html
+      };
+      sendEmailNotification(msg).catch(e => {
+        logger.warn(`Cound not send email notification to moderator list ${process.env.MODERATION_EMAIL}`);
+      });
     }
 
     const report: ModerationReport = {
@@ -197,13 +233,18 @@ class ModerationReportAPI extends DataSource {
       logger.warn(`report by ${author} for contentID ${contentID} could not be created`);
       throw new Error('report could not be created');
     }
+    // cache the report
+    const reportCache = this.getReportCacheKey(contentID, author);
+    await queryCache.set(reportCache, report);
 
     // invalidate counters cache
     const decisionsAPI = new ModerationDecisionAPI({
       dbID: this.dbID,
       collection: 'ModerationDecisions',
     });
+    // clear cache
     await queryCache.del(decisionsAPI.getCountersCacheKey());
+    await queryCache.del(decisionsAPI.getPendingListCacheKey());
   }
 }
 

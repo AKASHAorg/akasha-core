@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { IEditorBox } from '../Editor/editor-box';
 import { Box } from 'grommet';
 import { EditorPlaceholder } from './editor-placeholder';
-import { EditorBox, editorDefaultValue } from '../Editor/index';
+import EditorBox, { IEditorBox, IPublishData } from '../Editor';
+import { editorDefaultValue } from '../Editor/initialValue';
 import { useOnClickAway } from '../../utils/clickAway';
 import isEqual from 'lodash.isequal';
 
@@ -12,6 +12,7 @@ const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>
     avatar,
     postLabel,
     placeholderLabel,
+    emojiPlaceholderLabel,
     onPublish,
     getMentions,
     getTags,
@@ -22,8 +23,8 @@ const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>
 
   const [showEditor, setShowEditor] = React.useState(false);
   const [editorState, setEditorState] = React.useState(editorDefaultValue);
-  const wrapperRef: React.RefObject<any> = React.useRef();
-  const editorRef: React.RefObject<any> = React.useRef();
+  const wrapperRef: React.RefObject<HTMLDivElement> = React.useRef(null);
+  const editorRef: React.RefObject<any> = React.useRef(null);
 
   const handleClickAway = () => {
     if (
@@ -34,14 +35,14 @@ const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>
       setShowEditor(false);
     }
   };
-  const handlePublish = (data: any) => {
+  const handlePublish = (data: IPublishData) => {
     onPublish(data);
     setShowEditor(false);
   };
 
   useOnClickAway(wrapperRef, handleClickAway);
 
-  const handleToggleEditor = (ev: any) => {
+  const handleToggleEditor = (ev: React.SyntheticEvent) => {
     ev.stopPropagation();
     setShowEditor(!showEditor);
   };
@@ -64,6 +65,7 @@ const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>
             ethAddress={ethAddress}
             postLabel={postLabel}
             placeholderLabel={placeholderLabel}
+            emojiPlaceholderLabel={emojiPlaceholderLabel}
             onPublish={handlePublish}
             getMentions={getMentions}
             getTags={getTags}

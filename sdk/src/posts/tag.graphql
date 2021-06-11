@@ -1,0 +1,33 @@
+
+fragment TagFields on Tag{
+  name
+  creationDate
+}
+
+query GetTag($name: String!) {
+  getTag(name: $name) {
+    ...TagFields
+  }
+}
+
+query GetTags($offset: String, $limit: Int) {
+  tags(offset: $offset, limit: $limit) {
+    results{
+      ...TagFields
+    }
+    nextIndex
+    total
+  }
+}
+
+query SearchTags($name: String!) {
+  searchTags(name: $name){
+    name
+    totalPosts
+  }
+}
+
+
+mutation CreateTag($name: String!) {
+  createTag(name: $name)
+}

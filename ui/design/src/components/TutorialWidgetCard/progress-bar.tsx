@@ -6,7 +6,6 @@ import {
   StyledTimeline,
   StyledNodesBox,
 } from './styled-progress';
-// import { Box } from 'grommet';
 
 export interface IProgressBar {
   // a number from 0 to 6

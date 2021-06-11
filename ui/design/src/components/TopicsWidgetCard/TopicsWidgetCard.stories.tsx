@@ -10,6 +10,7 @@ export default {
   title: 'Cards/TopicsWidgetCard',
   component: TopicsWidgetCard,
   argType: {
+    label: { control: 'text' },
     labelColor: { control: 'color' },
     onClick: { action: 'clicked' },
     onTopicClick: { action: 'clicked topic' },

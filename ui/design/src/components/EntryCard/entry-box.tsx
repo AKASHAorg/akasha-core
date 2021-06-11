@@ -17,7 +17,8 @@ import { StyledAnchor } from './basic-card-box';
 import Icon from '../Icon';
 import MobileListModal from '../MobileListModal';
 import ProfileAvatarButton from '../ProfileAvatarButton';
-import { EmbedBox, ReadOnlyEditor } from '../Editor/index';
+import EmbedBox from '../EmbedBox';
+import ReadOnlyEditor from '../ReadOnlyEditor';
 import ViewportSizeProvider from '../Providers/viewport-dimension';
 
 import { formatRelativeTime, ILocale } from '../../utils/time';
@@ -75,7 +76,7 @@ export interface IEntryBoxProps {
   onEntryBookmark?: (entryId: string, isBookmarked?: boolean) => void;
   onClickAvatar?: React.MouseEventHandler<HTMLDivElement>;
   onRepost?: (withComment: boolean, entryData: IEntryData) => void;
-  onEntryFlag?: (entryId?: string) => void;
+  onEntryFlag?: (entryId?: string, contentType?: string) => void;
   // follow related
   handleFollowAuthor?: (profileEthAddress: string) => void;
   handleUnfollowAuthor?: (profileEthAddress: string) => void;
@@ -96,7 +97,7 @@ export interface IEntryBoxProps {
   awaitingModerationLabel?: string;
   moderatedContentLabel?: string;
   ctaLabel?: string;
-  handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
+  handleFlipCard?: (entry: IEntryData, isQuote: boolean) => () => void;
   isModerated?: boolean;
   scrollHiddenContent?: boolean;
 }
@@ -207,7 +208,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const handleEntryFlag = () => {
     if (onEntryFlag) {
-      onEntryFlag(entryData.entryId);
+      onEntryFlag();
     }
   };
 
@@ -237,7 +238,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           flex={{ shrink: 0 }}
         >
           <StyledAnchor
-            onClick={e => {
+            onClick={(e: React.SyntheticEvent) => {
               e.preventDefault();
               return false;
             }}

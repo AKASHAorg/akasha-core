@@ -1,37 +1,36 @@
-import '@testing-library/jest-dom/extend-expect';
-import { cleanup } from '@testing-library/react';
 import * as React from 'react';
-import { act, create, ReactTestRenderer } from 'react-test-renderer';
-import { wrapWithTheme } from '../../../test-utils';
-import Sidebar from '../';
+import { act, cleanup } from '@testing-library/react';
 
-describe('<Sidebar /> component', () => {
-  let componentWrapper: ReactTestRenderer = create(<></>);
+import Sidebar from '..';
+import { customRender, wrapWithTheme } from '../../../test-utils';
+
+describe('<Sidebar /> Component', () => {
+  let componentWrapper = customRender(<></>, {});
+
+  const handleClickMenuItem = jest.fn();
+
   beforeEach(() => {
     act(() => {
-      componentWrapper = create(
+      componentWrapper = customRender(
         wrapWithTheme(
           <Sidebar
             bodyMenuItems={[]}
             footerMenuItems={[]}
             allMenuItems={[]}
-            onClickMenuItem={jest.fn()}
+            onClickMenuItem={handleClickMenuItem}
           />,
         ),
+        {},
       );
     });
   });
 
   afterEach(() => {
-    act(() => {
-      componentWrapper.unmount();
-    });
+    act(() => componentWrapper.unmount());
     cleanup();
   });
 
-  it('should mount', () => {
-    const root = componentWrapper.root;
-    const sidebarComp = root.findByType(Sidebar);
-    expect(sidebarComp).toBeDefined();
+  it('renders correctly', () => {
+    expect(componentWrapper).toBeDefined();
   });
 });

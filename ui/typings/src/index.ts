@@ -27,10 +27,10 @@ export interface RootComponentProps {
     [key: string]: any;
   };
   singleSpa: any;
-  rxjsOperators?: unknown;
   installIntegration?: (name: string) => void;
   uninstallIntegration?: (name: string) => void;
   navigateToModal: (opts: AppLoaderTypes.ModalNavigationOptions) => void;
+  unmountSelf: () => void;
 }
 
 export enum LogoTypeSource {

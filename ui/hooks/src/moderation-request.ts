@@ -2,7 +2,11 @@ import constants from './constants';
 
 const { BASE_REPORT_URL, BASE_STATUS_URL, BASE_DECISION_URL, BASE_MODERATOR_URL } = constants;
 
-const fetchRequest = async (props: { method: string; url: string; data?: object }) => {
+const fetchRequest = async (props: {
+  method: string;
+  url: string;
+  data?: Record<string, unknown>;
+}) => {
   const { method, url, data = {} } = props;
   const rheaders = new Headers();
   rheaders.append('Content-Type', 'application/json');
@@ -32,7 +36,7 @@ export default {
       return error;
     }
   },
-  checkStatus: async (isBatch: boolean, data: object, entryId?: string) => {
+  checkStatus: async (isBatch: boolean, data: Record<string, unknown>, entryId?: string) => {
     try {
       const response = await fetchRequest({
         method: 'POST',
@@ -76,7 +80,7 @@ export default {
         url: `${BASE_DECISION_URL}/pending`,
       });
 
-      const modResponse = response.map(
+      const modResponse = response.results.map(
         (
           { contentType: type, contentID, reasons, reportedBy, reportedDate, reports }: any,
           idx: number,
@@ -118,7 +122,7 @@ export default {
         },
       });
 
-      const modResponse = [...delistedItems, ...keptItems].map(
+      const modResponse = [...delistedItems.results, ...keptItems.results].map(
         (
           {
             contentType: type,

@@ -26,7 +26,7 @@ export interface IProfileMenu {
   closePopover: () => void;
   onNavigation: (path: string) => void;
   onFeedbackClick: () => void;
-  onLogout?: any;
+  onLogout?: () => void;
 }
 
 const ProfileMenu: React.FC<IProfileMenu> = props => {

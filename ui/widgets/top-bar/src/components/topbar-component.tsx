@@ -30,15 +30,7 @@ const {
 } = DS;
 
 const TopbarComponent = (props: RootComponentProps) => {
-  const {
-    singleSpa,
-    getMenuItems,
-    uiEvents,
-    layoutConfig,
-    globalChannel,
-    rxjsOperators,
-    logger,
-  } = props;
+  const { singleSpa, getMenuItems, uiEvents, layoutConfig, globalChannel, logger } = props;
   const { modalSlotId } = layoutConfig;
   const { navigateToUrl } = singleSpa;
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
@@ -53,7 +45,6 @@ const TopbarComponent = (props: RootComponentProps) => {
   const [errorState, errorActions] = useErrors({ logger });
 
   const [loginState, loginActions] = useLoginState({
-    rxjsOperators,
     globalChannel,
     onError: errorActions.createError,
     ipfsService: props.sdkModules.commons.ipfsService,
@@ -87,11 +78,9 @@ const TopbarComponent = (props: RootComponentProps) => {
     profileService: props.sdkModules.profiles.profileService,
     ipfsService: props.sdkModules.commons.ipfsService,
     globalChannel: props.globalChannel,
-    rxjsOperators: props.rxjsOperators,
   });
 
   const [notificationsState, notificationActions] = useNotifications({
-    rxjsOperators,
     globalChannel,
     onError: err => logger.error(err),
     authService: props.sdkModules.auth.authService,
@@ -410,7 +399,7 @@ const TopbarComponent = (props: RootComponentProps) => {
             footerLinkText2Label={t('Discord')}
             openIssueLink={'https://github.com/AKASHAorg/akasha-world-framework/issues/new/choose'}
             emailUsLink={'mailto:feedback@ethereum.world'}
-            joinDiscordLink={'https://discord.gg/9PfgYGnB'}
+            joinDiscordLink={'https://discord.gg/A5wfg6ZCRt'}
             closeModal={handleFeedbackModalClose}
           />
         )}

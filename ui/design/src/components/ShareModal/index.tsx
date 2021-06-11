@@ -67,7 +67,7 @@ const ShareModal: React.FC<IShareModal> = props => {
         <Box direction="row" align="center" justify="center" gap="xsmall">
           {socialApps.map((app, index) => (
             <StyledShareSocialDiv key={index}>
-              <Icon type={app} onClick={() => onShareProfile(app)} color="white" />
+              <Icon type={app} onClick={() => onShareProfile(app)} color="white" testId={app} />
             </StyledShareSocialDiv>
           ))}
         </Box>

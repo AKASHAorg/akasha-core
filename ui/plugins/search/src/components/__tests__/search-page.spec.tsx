@@ -41,9 +41,6 @@ describe('<SearchPage />', () => {
       globalChannel={globalChannelMock}
       sdkModules={sdkMocks}
       logger={{}}
-      rxjsOperators={{
-        filter: genMockOp({ channelInfo: { method: 'test', servicePath: ['PROFILE_STORE'] } }),
-      }}
       singleSpa={{}}
       loginState={{
         ethAddress: mockUser.ethAddress,

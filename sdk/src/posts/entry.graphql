@@ -1,0 +1,176 @@
+fragment DataProviderFragment on DataProvider{
+  provider
+  property
+  value
+}
+
+fragment UserProfileFragment on UserProfile{
+  pubKey
+  name
+  userName
+  avatar
+  coverImage
+  description
+  ethAddress
+  totalPosts
+  totalFollowers
+  totalFollowing
+}
+
+query GetEntry($id: String!, $pubKey: String) {
+  getPost(id: $id, pubKey:$pubKey) {
+    content{
+      ...DataProviderFragment
+    }
+    author {
+      ...UserProfileFragment
+    }
+    title
+    type
+    _id
+    creationDate
+    tags
+    totalComments
+    quotedBy
+    quotedByAuthors{
+      ...UserProfileFragment
+    }
+    quotes{
+      content{
+        ...DataProviderFragment
+      }
+      author{
+        ...UserProfileFragment
+      }
+      title
+      type
+      _id
+      creationDate
+      tags
+    }
+  }
+}
+
+
+
+query GetEntries($offset: String, $limit: Int, $pubKey: String) {
+  posts(offset: $offset, limit: $limit, pubKey:$pubKey) {
+    results{
+      content{
+        ...DataProviderFragment
+      }
+      author{
+        ...UserProfileFragment
+      }
+      title
+      type
+      _id
+      creationDate
+      tags
+      totalComments
+      quotedBy
+      quotedByAuthors{
+        ...UserProfileFragment
+      }
+      quotes{
+        content{
+          ...DataProviderFragment
+        }
+        author{
+          ...UserProfileFragment
+        }
+        title
+        type
+        _id
+        creationDate
+        tags
+      }
+    }
+    nextIndex
+    total
+  }
+}
+
+
+mutation CreateEntry($content: [DataProviderInput!], $post: PostData) {
+  createPost(content: $content, post: $post)
+}
+
+
+query GetPostsByAuthor($author: String!, $offset: Int, $limit: Int, $pubKey: String) {
+  getPostsByAuthor(author: $author, offset: $offset, limit: $limit, pubKey:$pubKey) {
+    results{
+      content{
+        ...DataProviderFragment
+      }
+      author{
+        ...UserProfileFragment
+      }
+      title
+      type
+      _id
+      creationDate
+      tags
+      totalComments
+      quotedBy
+      quotedByAuthors{
+        ...UserProfileFragment
+      }
+      quotes{
+        content{
+          ...DataProviderFragment
+        }
+        author{
+          ...UserProfileFragment
+        }
+        title
+        type
+        _id
+        creationDate
+        tags
+      }
+    }
+    nextIndex
+    total
+  }
+}
+
+
+
+query GetPostsByTag($tag: String!, $offset: Int, $limit: Int, $pubKey: String) {
+  getPostsByTag(tag: $tag, offset: $offset, limit: $limit, pubKey:$pubKey) {
+    results{
+      content{
+        ...DataProviderFragment
+      }
+      author{
+        ...UserProfileFragment
+      }
+      title
+      type
+      _id
+      creationDate
+      tags
+      totalComments
+      quotedBy
+      quotedByAuthors{
+        ...UserProfileFragment
+      }
+      quotes{
+        content{
+          ...DataProviderFragment
+        }
+        author{
+          ...UserProfileFragment
+        }
+        title
+        type
+        _id
+        creationDate
+        tags
+      }
+    }
+    nextIndex
+    total
+  }
+}

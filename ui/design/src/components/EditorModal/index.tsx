@@ -5,7 +5,7 @@ import { isMobileOnly } from 'react-device-detect';
 import Button from '../Button';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
 import EditorCard, { IEditorCard } from '../EditorCard';
-import { editorDefaultValue } from '../Editor';
+import { editorDefaultValue } from '../Editor/initialValue';
 import { ModalContainer } from '../LoginModal/fullscreen-modal-container';
 import { ModalRenderer } from '../LoginModal/modal-renderer';
 
@@ -26,6 +26,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
     avatar,
     postLabel,
     placeholderLabel,
+    emojiPlaceholderLabel,
     discardPostLabel,
     discardPostInfoLabel,
     keepEditingLabel,
@@ -68,6 +69,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
               ethAddress={ethAddress}
               postLabel={postLabel}
               placeholderLabel={placeholderLabel}
+              emojiPlaceholderLabel={emojiPlaceholderLabel}
               onPublish={onPublish}
               handleNavigateBack={handleToggleShowCancel}
               getMentions={getMentions}

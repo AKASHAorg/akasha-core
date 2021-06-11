@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { createErrorHandler } from './utils/error-handler';
+import { filter } from 'rxjs/operators';
 
 /**
  * a hook that will fire an action when the signIn is called
@@ -15,11 +16,10 @@ export interface UseGlobalLoginProps {
   onError?: OnErrorHandler;
   waitForAuth?: (data: boolean) => void;
   onReady?: (data: { ethAddress: string; pubKey: string }) => void;
-  rxjsOperators: any;
 }
 
 const useGlobalLogin = (props: UseGlobalLoginProps): void => {
-  const { onError, rxjsOperators } = props;
+  const { onError } = props;
   const handleLoginSubscribe = (payload: any) => {
     const { data } = payload;
     props.onLogin(data);
@@ -31,7 +31,7 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
 
   React.useEffect(() => {
     const call = props.globalChannel.pipe(
-      rxjsOperators.filter((payload: any) => {
+      filter((payload: any) => {
         return (
           payload.channelInfo.method === 'signIn' &&
           payload.channelInfo.servicePath.includes('AUTH_SERVICE')
@@ -43,7 +43,7 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
   }, []);
   React.useEffect(() => {
     const waitForAuthCall = props.globalChannel.pipe(
-      rxjsOperators.filter((payload: any) => {
+      filter((payload: any) => {
         return (
           payload.channelInfo.method === 'waitForAuth' &&
           payload.channelInfo.servicePath.includes('AUTH_SERVICE')
@@ -62,7 +62,7 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
 
   React.useEffect(() => {
     const readyCall = props.globalChannel.pipe(
-      rxjsOperators.filter((payload: any) => {
+      filter((payload: any) => {
         return (
           payload.channelInfo.method === 'ready' &&
           payload.channelInfo.servicePath.includes('AUTH_SERVICE')
@@ -81,7 +81,7 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
 
   React.useEffect(() => {
     const logoutCall = props.globalChannel.pipe(
-      rxjsOperators.filter((payload: any) => {
+      filter((payload: any) => {
         return (
           payload.channelInfo.method === 'signOut' &&
           payload.channelInfo.servicePath.includes('AUTH_SERVICE')

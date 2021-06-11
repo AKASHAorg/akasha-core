@@ -26,7 +26,6 @@ export interface IFeedWidgetProps {
   virtualListRef?: any;
   globalChannel?: any;
   sdkModules: any;
-  rxjsOperators: any;
   layout: any;
   listHeader?: React.ReactElement;
   itemType: ItemTypes;
@@ -48,7 +47,7 @@ export interface IFeedWidgetProps {
   loggedProfile?: any;
   onRepostPublish?: (entryData: any, embeddedEntry: any) => void;
   contentClickable?: boolean;
-  onReport: (entryId: string, user?: string | null) => void;
+  onEntryFlag: (entryId: string, contentType: string) => () => void;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
 }
 

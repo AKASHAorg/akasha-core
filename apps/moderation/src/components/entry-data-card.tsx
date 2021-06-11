@@ -39,7 +39,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               isModerated={true}
             />
           )}
-          {contentType === 'profile' && (
+          {contentType === 'account' && (
             <ProfileCard
               flaggable={true}
               canUserEdit={false}

@@ -99,11 +99,11 @@ const installedAppsData: IMenuItem[] = [
 
 const profileData = {
   ethAddress: '0x003410490050000320006570034567114572000',
-  pubKey: 'abc123',
+  pubKey: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba',
   avatar: 'https://placebeard.it/480/480',
   coverImage: 'goldenrod',
   name: 'Gilbert The Bearded',
-  userName: '@gilbert',
+  userName: 'gilbert',
   ensName: 'gilbert.akasha.eth',
   description:
     'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
@@ -113,7 +113,9 @@ const profileData = {
   apps: '12',
   profileType: 'user',
   totalPosts: 235,
+  vnd: {},
   default: [],
+  providers: [],
 };
 
 const TAGS = [

@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 // import responsiveBreakpoints from '../../../styles/responsive-breakpoints';
@@ -9,7 +9,7 @@ import ViewportSizeProvider, { useViewportSize } from '../viewport-dimension';
 
 describe('ViewportSize', () => {
   let viewportSize: { dimensions: { width: number; height: number }; size: string };
-  beforeEach(() => {
+  beforeEach(async () => {
     const DummyComponent = () => {
       viewportSize = useViewportSize();
       return <></>;
@@ -19,7 +19,8 @@ describe('ViewportSize', () => {
         <DummyComponent />
       </ViewportSizeProvider>
     );
-    render(tree);
+    const treeR = render(tree);
+    await waitFor(() => expect(treeR).toBeDefined());
   });
   it('should react on window resize', () => {
     act(() => resizeWindow(250, 200));

@@ -23,6 +23,8 @@ module.exports = {
   plugins: ['react', '@typescript-eslint', 'react-hooks', 'eslint-plugin-tsdoc'],
   rules: {
     'tsdoc/syntax': 'warn',
+    'tsdoc-html-tag-missing-greater-than': 'off',
+    'tsdoc-escape-greater-than': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'react/prop-types': 'off',
     'react/display-name': 'off',

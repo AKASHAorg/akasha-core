@@ -1,24 +1,17 @@
-import { Box, FormField, Text, TextArea, TextInput } from 'grommet';
+import { Box } from 'grommet';
 import * as React from 'react';
 import { isMobile, isMobileOnly } from 'react-device-detect';
-import Button from '../Button';
-import Icon from '../Icon';
 import { StyledLayer } from '../ListModal/styled-modal';
-import { StyledImageInput } from '../ImagePopover/styled-form-image-popover';
 import { FormImagePopover } from '../ImagePopover/form-image-popover';
-import Spinner from '../Spinner';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
-import {
-  StyledAvatarDiv,
-  StyledAvatarOverlay,
-  StyledAvatarPlaceholderDiv,
-  StyledCoverImageDiv,
-  StyledCoverImageOverlay,
-  StyledCoverImagePlaceholderDiv,
-  StyledImage,
-  StyledText,
-  StyledTextInput,
-} from './styled-form-card';
+
+import { TitleSection } from './sections/TitleSection';
+import { AvatarSection } from './sections/AvatarSection';
+import { NameInputSection } from './sections/NameInputSection';
+import { UsernameInputSection } from './sections/UsernameInputSection';
+import { CoverImageSection } from './sections/CoverImageSection';
+import { DescriptionSection } from './sections/DescriptionSection';
+import { ActionButtonsSection } from './sections/ActionButtonsSection';
 
 export interface IBoxFormCardProps {
   className?: string;
@@ -40,9 +33,9 @@ export interface IBoxFormCardProps {
   descriptionFieldPlaceholder: string;
   ethAddress: string;
   providerData: IBoxData;
-  onSave: (data: any) => void;
+  onSave: (data: IFormValues) => void;
   onCancel?: () => void;
-  updateStatus: any;
+  updateStatus: ProfileUpdateStatus;
   usernameFieldInfo?: string;
   showUsername?: boolean;
   isValidatingUsername?: boolean;
@@ -50,6 +43,17 @@ export interface IBoxFormCardProps {
   usernameSuccess?: string;
   onUsernameChange?: (value: string) => void;
   onUsernameBlur?: (username: string) => void;
+}
+
+export interface ProfileUpdateStatus {
+  saving: boolean;
+  uploadingAvatar: boolean;
+  uploadingCoverImage: boolean;
+  updateComplete: boolean;
+  isValidating: boolean;
+  isValidUsername: boolean | null;
+  notAllowed: boolean;
+  tooShort: boolean;
 }
 
 export interface IImageSrc {
@@ -195,8 +199,8 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const closeCoverImagePopover = () => {
     setCoverImagePopoverOpen(false);
   };
-
-  const handleImageInsert = (imageKey: string) => (src: string | File, isUrl: boolean) => {
+  // @Todo: update this after ts-jest migration to ESM
+  const handleImageInsert = (imageKey: string) => (src: any, isUrl: boolean) => {
     if (isUrl) {
       handleFormFieldChange({ [imageKey]: { src, isUrl, preview: src } });
     } else {
@@ -222,7 +226,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     if (!(ev.target.files && ev.target.files[0])) {
       return;
     }
-    const file: any = ev.target.files[0];
+    const file: File = ev.target.files[0];
     handleImageInsert('avatar')(file, false);
   };
 
@@ -230,220 +234,74 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     if (!(ev.target.files && ev.target.files[0])) {
       return;
     }
-    const file: any = ev.target.files[0];
+    const file: File = ev.target.files[0];
     handleImageInsert('coverImage')(file, false);
-  };
-
-  const renderIcon = () => {
-    if (isValidatingUsername) {
-      return <Icon type="loading" />;
-    }
-    if (usernameError) {
-      return <Icon type="error" />;
-    }
-    if (usernameSuccess) {
-      return <Icon type="check" accentColor={true} />;
-    }
-    return;
   };
 
   return (
     <StyledLayer className={className}>
       <MainAreaCardBox style={{ height: isMobile ? '100%' : 'auto', overflowY: 'auto' }}>
         <Box direction="column" pad="medium" height={{ min: 'fit-content' }}>
-          <Box direction="column" pad="xsmall">
-            <Text
-              size="large"
-              textAlign="center"
-              style={{ userSelect: 'none', paddingBottom: '1.5em' }}
-            >
-              {titleLabel}
-            </Text>
-          </Box>
+          <TitleSection titleLabel={titleLabel} />
           <Box direction="column" pad="xsmall">
             <Box direction="row" justify="start">
-              <Box direction="column" flex={{ shrink: 0, grow: 1 }}>
-                <StyledText
-                  style={{ margin: '0.5rem', lineHeight: 2, userSelect: 'none' }}
-                  color="secondaryText"
-                  size="small"
-                  title={avatarLabel}
-                >
-                  {avatarLabel}
-                </StyledText>
-
-                {(!formValues.avatar || !formValues.avatar.preview) && (
-                  <StyledAvatarPlaceholderDiv
-                    onClick={handleAvatarClick}
-                    active={avatarPopoverOpen}
-                  >
-                    <StyledImageInput
-                      onChange={handleAvatarFileUpload}
-                      type="file"
-                      ref={avatarInputRef}
-                    />
-                    <Icon type="image" ref={avatarRef} />
-                  </StyledAvatarPlaceholderDiv>
-                )}
-                {formValues.avatar && formValues.avatar.preview && (
-                  <StyledAvatarDiv onClick={handleAvatarClick}>
-                    <StyledImage src={formValues.avatar.preview} fit="contain" />
-                    <StyledAvatarOverlay>
-                      <Icon type="editSimple" ref={avatarRef} />
-                    </StyledAvatarOverlay>
-                  </StyledAvatarDiv>
-                )}
-              </Box>
-              <Box
-                justify="start"
-                fill="horizontal"
-                flex={{ shrink: 1, grow: 1 }}
-                margin={{ left: '0.5em' }}
-              >
-                <FormField
-                  name="name"
-                  htmlFor="form-name-input"
-                  contentProps={{ margin: { left: '1em' } }}
-                  label={
-                    <StyledText
-                      size="small"
-                      color="secondaryText"
-                      style={{ verticalAlign: 'text-top', userSelect: 'none' }}
-                    >
-                      {nameLabel} <Text color="accent">*</Text>
-                    </StyledText>
-                  }
-                >
-                  <TextInput
-                    id="form-name-input"
-                    name="name"
-                    value={formValues.name}
-                    onChange={(ev: React.ChangeEvent<HTMLInputElement>) =>
-                      handleFormFieldChange({ name: ev.target.value })
-                    }
-                    placeholder={nameFieldPlaceholder}
-                    required={true}
-                    size="large"
-                    style={{
-                      width: '100%',
-                      padding: '1em 0',
-                    }}
-                  />
-                </FormField>
-              </Box>
-            </Box>
-            {showUsername && (
-              <Box pad={{ top: 'small' }} justify="start" fill="horizontal">
-                <Box direction="row" align="center">
-                  <StyledText
-                    size="small"
-                    margin={{ bottom: '0.5em', left: '0' }}
-                    color="secondaryText"
-                    style={{ userSelect: 'none' }}
-                  >
-                    {usernameLabel} <Text color="accent">*</Text>
-                  </StyledText>
-                </Box>
-                <FormField
-                  name="name"
-                  htmlFor="username-input"
-                  info={
-                    usernameError ? (
-                      <Text color="errorText" style={{ fontSize: '0.75em' }}>
-                        {usernameError}
-                      </Text>
-                    ) : (
-                      <Text color="secondaryText" style={{ fontSize: '0.6em' }}>
-                        {usernameFieldInfo}
-                      </Text>
-                    )
-                  }
-                >
-                  <Box justify="between" direction="row">
-                    <Box fill="horizontal" direction="row" align="center">
-                      {'@'}
-                      <StyledTextInput
-                        spellCheck={false}
-                        computedWidth={'100%'}
-                        id="username-input"
-                        required={true}
-                        value={formValues.userName}
-                        onChange={handleUsernameChange}
-                        placeholder={usernameFieldPlaceholder}
-                        onBlur={handleUsernameBlur}
-                      />
-                    </Box>
-                    {renderIcon()}
-                  </Box>
-                </FormField>
-              </Box>
-            )}
-            <StyledText color="secondaryText" size="small" margin={{ top: 'small' }}>
-              {coverImageLabel}
-            </StyledText>
-
-            {(!formValues.coverImage || !formValues.coverImage.preview) && (
-              <StyledCoverImagePlaceholderDiv
-                onClick={handleCoverImageClick}
-                active={coverImagePopoverOpen}
-              >
-                <StyledImageInput
-                  onChange={handleCoverFileUpload}
-                  type="file"
-                  ref={coverInputRef}
-                />
-                <Icon type="image" ref={coverImageRef} />
-              </StyledCoverImagePlaceholderDiv>
-            )}
-
-            {formValues.coverImage && formValues.coverImage.preview && (
-              <StyledCoverImageDiv onClick={handleCoverImageClick}>
-                <StyledCoverImageOverlay>
-                  <Icon type="editSimple" ref={coverImageRef} />
-                </StyledCoverImageOverlay>
-                <StyledImage src={formValues.coverImage.preview} fit="contain" />
-              </StyledCoverImageDiv>
-            )}
-            <Box direction="column" margin={{ top: 'small' }}>
-              <StyledText
-                size="small"
-                margin={{ bottom: '0.5em', left: '0' }}
-                color="secondaryText"
-                style={{ userSelect: 'none' }}
-              >
-                {descriptionLabel}
-              </StyledText>
-              <FormField name="description" htmlFor="form-description-textarea">
-                <TextArea
-                  resize="vertical"
-                  size="large"
-                  rows={3}
-                  style={{ padding: 0 }}
-                  id="form-description-textarea"
-                  name="description"
-                  value={formValues.description}
-                  onChange={ev => handleFormFieldChange({ description: ev.target.value })}
-                  placeholder={descriptionFieldPlaceholder}
-                />
-              </FormField>
-            </Box>
-            <Box direction="row" gap="xsmall" justify="end">
-              {!showUsername && <Button label={cancelLabel} onClick={handleRevert} />}
-              <Button
-                label={
-                  updateStatus.saving ? <Spinner style={{ padding: 0 }} size={15} /> : saveLabel
-                }
-                onClick={handleSave}
-                primary={true}
-                disabled={
-                  !formChanged ||
-                  (!formValues.userName && showUsername) ||
-                  !formValues.name ||
-                  isValidatingUsername ||
-                  !!usernameError
-                }
+              <AvatarSection
+                avatarLabel={avatarLabel}
+                formValues={formValues}
+                avatarPopoverOpen={avatarPopoverOpen}
+                avatarRef={avatarRef}
+                avatarInputRef={avatarInputRef}
+                handleAvatarClick={handleAvatarClick}
+                handleAvatarFileUpload={handleAvatarFileUpload}
+              />
+              <NameInputSection
+                nameLabel={nameLabel}
+                nameFieldPlaceholder={nameFieldPlaceholder}
+                formValues={formValues}
+                handleFormFieldChange={handleFormFieldChange}
               />
             </Box>
+            {showUsername && (
+              <UsernameInputSection
+                usernameLabel={usernameLabel}
+                usernameFieldInfo={usernameFieldInfo}
+                usernameFieldPlaceholder={usernameFieldPlaceholder}
+                isValidatingUsername={isValidatingUsername}
+                usernameError={usernameError}
+                usernameSuccess={usernameSuccess}
+                formValues={formValues}
+                handleUsernameChange={handleUsernameChange}
+                handleUsernameBlur={handleUsernameBlur}
+              />
+            )}
+
+            <CoverImageSection
+              coverImageLabel={coverImageLabel}
+              formValues={formValues}
+              coverImagePopoverOpen={coverImagePopoverOpen}
+              coverImageRef={coverImageRef}
+              coverInputRef={coverInputRef}
+              handleCoverImageClick={handleCoverImageClick}
+              handleCoverFileUpload={handleCoverFileUpload}
+            />
+            <DescriptionSection
+              descriptionLabel={descriptionLabel}
+              descriptionFieldPlaceholder={descriptionFieldPlaceholder}
+              formValues={formValues}
+              handleFormFieldChange={handleFormFieldChange}
+            />
+            <ActionButtonsSection
+              cancelLabel={cancelLabel}
+              saveLabel={saveLabel}
+              showUsername={showUsername}
+              formChanged={formChanged}
+              isValidatingUsername={isValidatingUsername}
+              usernameError={usernameError}
+              formValues={formValues}
+              updateStatus={updateStatus}
+              handleRevert={handleRevert}
+              handleSave={handleSave}
+            />
           </Box>
         </Box>
 

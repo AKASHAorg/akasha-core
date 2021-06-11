@@ -1,130 +1,70 @@
-import '@testing-library/jest-dom/extend-expect';
-import { cleanup, fireEvent } from '@testing-library/react';
 import * as React from 'react';
-import { act, create } from 'react-test-renderer';
-import DropSearchInput from '../../DropSearchInput';
+import { act, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+import SearchInput from '..';
 import { customRender, wrapWithTheme } from '../../../test-utils';
-const mockDataSource = {
-  users: [
-    {
-      name: 'Gilbert Carter',
-      imageUrl: 'https://placebeard.it/640/480',
-    },
-    {
-      name: 'Johan Gimli',
-      imageUrl: 'https://placebeard.it/640/480',
-    },
-  ],
-  tags: ['#gitcoin', '#gitcoinbounties'],
-  apps: [
-    {
-      name: 'GitCoin',
-      imageUrl: 'https://placebeard.it/640/480',
-    },
-  ],
-};
 
-const mockClassName = 'search-input-test-class';
-const mockPlaceholderStrings = {
-  placeholder: 'Search',
-  resultsLabel: 'Search results',
-  usersLabel: 'Users',
-  tagsLabel: 'Tags',
-  appsLabel: 'Apps',
-};
-const testSearchStr = 'Gi';
+describe('<SearchInput /> Component', () => {
+  let componentWrapper = customRender(<></>, {});
 
-const createBaseComponent = (props: any = {}) => {
-  return (
-    <DropSearchInput
-      getData={props.getDataHandler || jest.fn()}
-      className={mockClassName}
-      dataSource={mockDataSource}
-      {...mockPlaceholderStrings}
-      onClickApp={props.onClickAppHandler || jest.fn()}
-      onClickTag={props.onClickTagHandler || jest.fn()}
-      onClickUser={props.onClickUserhandler || jest.fn()}
-    />
-  );
-};
+  const handleInputChange = jest.fn();
+  const handleCancel = jest.fn();
 
-describe('<DropSearchInput /> Component', () => {
-  let componentWrapper = create(<></>);
   beforeEach(() => {
     act(() => {
-      componentWrapper = create(wrapWithTheme(createBaseComponent()));
+      componentWrapper = customRender(
+        wrapWithTheme(
+          <SearchInput
+            inputValue={'Gilbert'}
+            cancelLabel="x"
+            placeholderLabel="Search something here"
+            onChange={handleInputChange}
+            handleCancel={handleCancel}
+          />,
+        ),
+        {},
+      );
     });
   });
+
   afterEach(() => {
-    act(() => {
-      componentWrapper.unmount();
-    });
+    act(() => componentWrapper.unmount());
     cleanup();
   });
-  it('should mount without errors', () => {
-    const component = componentWrapper.root.findByType(DropSearchInput);
-    expect(component).toBeDefined();
-  });
-  it('should be customizable via className passed as prop', async () => {
-    const { container } = customRender(createBaseComponent(), {});
-    const rootNode = container.firstElementChild?.firstElementChild;
-    expect(rootNode?.classList.contains(mockClassName)).toBe(true);
+
+  it('renders correctly', () => {
+    expect(componentWrapper).toBeDefined();
   });
 
-  it('should call getData when input is changed', async () => {
-    const getDataHandler = jest.fn();
-    const { findByTestId } = customRender(createBaseComponent({ getDataHandler }), {});
-    const searchInputNode = await findByTestId('search-input');
-    fireEvent.change(searchInputNode, { target: { value: 'test search string' } });
-    expect(getDataHandler).toBeCalledTimes(1);
+  it('has correct placeholder', () => {
+    const { getByPlaceholderText } = componentWrapper;
+    const title = getByPlaceholderText('Search something here');
+
+    expect(title).toBeDefined();
   });
 
-  it.skip('should call getData with searchString and searchId: getData(searchString: string, activeTab: string, searchId: string);', async () => {
-    let getDataParams: any[] = [];
-    const getDataHandler = jest.fn((arg1, arg2, arg3) => {
-      getDataParams = [arg1, arg2, arg3];
-    });
-    const { findByTestId } = customRender(createBaseComponent({ getDataHandler }), {});
-    const searchInputNode = await findByTestId('search-input');
-    fireEvent.change(searchInputNode, { target: { value: testSearchStr } });
-    expect(getDataParams[0]).toStrictEqual(testSearchStr);
-    expect(getDataParams[1]).toBeDefined();
-    expect(getDataParams[2]).toBeDefined();
+  it('types into the input and triggers handler', async () => {
+    const { getByRole } = componentWrapper;
+    const input = getByRole('textbox');
+
+    // has initial value
+    expect(input).toHaveValue('Gilbert');
+    expect(handleInputChange).toBeCalledTimes(0);
+
+    // perform type action
+    userEvent.type(input, 'g');
+
+    expect(handleInputChange).toBeCalledTimes(1);
   });
-  it('should show search results dropdown when there are results', async () => {
-    const getDataHandler = jest.fn();
-    const { findByTestId } = customRender(createBaseComponent({ getDataHandler }), {});
-    const searchInputNode = await findByTestId('search-input');
-    fireEvent.change(searchInputNode, { target: { value: testSearchStr } });
-    const resultsDropdown = await findByTestId('search-results-dropdown');
-    expect(resultsDropdown).toBeDefined();
-  });
-  it('should show placeholder, resultsLabel, usersLabel, tagsLabel, appsLabel, props when passed', async () => {
-    const { findByPlaceholderText, findByText, findByTestId } = customRender(
-      createBaseComponent(),
-      {},
-    );
-    const searchInputNode = await findByTestId('search-input');
-    const placeholder = await findByPlaceholderText(mockPlaceholderStrings.placeholder);
-    fireEvent.change(searchInputNode, { target: { value: testSearchStr } });
-    const resultsLabel = await findByText(mockPlaceholderStrings.resultsLabel);
-    const usersLabel = await findByText(mockPlaceholderStrings.usersLabel);
-    const appsLabel = await findByText(mockPlaceholderStrings.appsLabel);
-    const tagsLabel = await findByText(mockPlaceholderStrings.tagsLabel);
-    expect(placeholder).toBeDefined();
-    expect(placeholder.nodeName === 'INPUT').toBe(true);
-    expect(resultsLabel).toBeDefined();
-    expect(usersLabel).toBeDefined();
-    expect(appsLabel).toBeDefined();
-    expect(tagsLabel).toBeDefined();
-  });
-  it.skip('should call onClickAppHandler', () => {
-    return;
-  });
-  it.skip('should call onClickTagHandler', () => {
-    return;
-  });
-  it.skip('should call onClickUserhandler', () => {
-    return;
+
+  it('calls handler when action is canceled', () => {
+    const { getByText } = componentWrapper;
+
+    const cancelLabel = getByText('x');
+
+    userEvent.click(cancelLabel);
+
+    expect(handleCancel).toBeCalledTimes(1);
   });
 });

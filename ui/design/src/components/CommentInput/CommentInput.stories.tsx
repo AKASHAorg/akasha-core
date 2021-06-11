@@ -11,7 +11,7 @@ export default {
   argTypes: {
     avatarImg: { control: 'text' },
     ethAddress: { control: 'text' },
-    placeholder: { control: 'text' },
+    placeholderLabel: { control: 'text' },
     publishLabel: { control: 'text' },
     onPublish: { action: 'published' },
   },
@@ -32,6 +32,6 @@ export const BaseCommentInput = Template.bind({});
 BaseCommentInput.args = {
   avatarImg: 'https://placebeard.it/640/480',
   ethAddress: '0x003410490050000320006570047391024572000',
-  placeholder: 'Write a comment',
+  placeholderLabel: 'Write a comment',
   publishLabel: 'Publish',
 };

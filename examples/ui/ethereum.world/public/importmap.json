@@ -1,0 +1,17 @@
+{
+  "imports": {
+    "@akashaproject/sdk": "/akasha.sdk.js",
+    "@akashaproject/design-system": "/design/index.js",
+    "@widget/sidebar": "/widgets/sidebar/index.js",
+    "@widget/layout": "/widgets/layout/index.js",
+    "@widget/topbar": "/widgets/topbar/index.js",
+    "@widget/login": "/widgets/login/index.js",
+    "@plugins/profile": "/plugins/profile/index.js",
+    "@plugins/bookmarks": "/plugins/bookmarks/index.js",
+    "@plugins/notifications": "/plugins/notifications//index.js",
+    "@plugins/app-center": "/plugins/app-center/index.js",
+    "@plugins/search": "/plugins/search/index.js",
+    "@app/AKASHA": "/apps/akasha/index.js",
+    "@app/moderation": "/apps/moderation/index.js"
+  }
+}

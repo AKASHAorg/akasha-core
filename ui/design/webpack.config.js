@@ -11,5 +11,6 @@ module.exports = Object.assign(baseConfig, {
     library: packageName.replace(/@/, '').replace(/\//, '__').replace(/-/, '_'),
     filename: 'index.js',
     publicPath: '/design/',
+    path: path.resolve(__dirname, 'dist'),
   }),
 });
