@@ -3,9 +3,10 @@ import { ILoaderConfig, ISdkConfig, LogLevels } from '@akashaproject/ui-awf-typi
 console.time('AppLoader:firstMount');
 
 (async function bootstrap(System) {
-  const { default: Loader } = await System.import('@akashaproject/app-loader');
   const { default: sdkInit } = await System.import('@akashaproject/sdk');
 
+  console.log('sdkInit', sdkInit);
+  const { default: Loader } = await System.import('@akashaproject/app-loader');
   const sdkConfig: ISdkConfig = {
     logLevel: LogLevels.DEBUG,
   };

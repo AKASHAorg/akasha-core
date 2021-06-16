@@ -29,7 +29,7 @@
     "quick-lru": "6.0.0",
     "ipfs-utils": "8.1.2",
     "reflect-metadata": "0.1.13",
-    "rxjs": "7.0.1",
+    "rxjs": "7.1.0",
     "workbox-core": "6.1.5",
     "workbox-cacheable-response": "^6.1.5",
     "workbox-expiration": "^6.1.5",

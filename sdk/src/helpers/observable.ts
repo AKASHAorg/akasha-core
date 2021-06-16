@@ -1,4 +1,4 @@
-import { asapScheduler, defer, from, of, scheduled, ObservableInput } from 'rxjs';
+import { asapScheduler, defer, from, of, scheduled, ObservableInput, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
 
@@ -58,3 +58,20 @@ export const createObservableStreamGql = <T>(val: ObservableInput<any>): Service
     asapScheduler,
   );
 };
+
+export function toPromise<R>(observable: any): Promise<R> {
+  let completed = false;
+  return new Promise<R>((resolve, reject) => {
+    observable.subscribe({
+      next: data => {
+        if (completed) {
+          console.warn(`Promise Wrapper does not support multiple results from Observable`);
+        } else {
+          completed = true;
+          resolve(data);
+        }
+      },
+      error: reject,
+    });
+  });
+}

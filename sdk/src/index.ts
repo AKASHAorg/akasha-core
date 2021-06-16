@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { TYPES, AwfSDK } from '@akashaproject/sdk-typings';
+import * as typings from '@akashaproject/sdk-typings';
 import container from './container';
 import Logging from './logging';
 import Settings from './settings';
@@ -45,6 +45,7 @@ export default function getSDK() {
 }
 
 export function init() {
+  const { TYPES } = typings;
   const log = container.get<Logging>(TYPES.Log);
   const gql = container.get<Gql>(TYPES.Gql);
   const stash = container.get<Stash>(TYPES.Stash);
@@ -80,3 +81,5 @@ export function init() {
     },
   };
 }
+
+export { typings };
