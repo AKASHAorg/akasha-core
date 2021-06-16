@@ -3,7 +3,8 @@ import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { createErrorHandler } from './utils/error-handler';
 import { filter } from 'rxjs/operators';
 import { forkJoin, Observable } from 'rxjs';
-import getSDK, { events } from '@akashaproject/awf-sdk';
+import getSDK from '@akashaproject/awf-sdk';
+import { events } from '@akashaproject/sdk-typings';
 
 export interface UseFollowActions {
   /**
@@ -204,7 +205,7 @@ export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] =
       filter(payload => {
         return (
           payload.event === events.PROFILE_EVENTS.FOLLOW ||
-          payload.event === events.PROFILE_EVENTS.FOLLOW
+          payload.event === events.PROFILE_EVENTS.UNFOLLOW
         );
       }),
     );
