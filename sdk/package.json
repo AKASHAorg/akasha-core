@@ -1,7 +1,7 @@
 {
   "name": "@akashaproject/awf-sdk",
-  "version": "1.0.0",
-  "private": true,
+  "version": "0.1.0",
+  "private": false,
   "main": "lib/index.js",
   "dependencies": {
     "@types/node": "14.14.45",
@@ -27,6 +27,7 @@
     "inversify": "5.1.1",
     "pino": "6.11.3",
     "quick-lru": "6.0.0",
+    "ipfs-utils": "8.1.2",
     "reflect-metadata": "0.1.13",
     "rxjs": "7.0.1",
     "workbox-core": "6.1.5",

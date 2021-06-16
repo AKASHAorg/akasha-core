@@ -5,12 +5,13 @@ import Gql from '../gql';
 import AWF_Auth from '../auth';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
-import { GetComment, GetComments, AddComment } from './comments.graphql';
+import { AddComment, GetComment, GetComments } from './comments.graphql';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { concatAll, map } from 'rxjs/operators';
+import { AWF_IComments } from '@akashaproject/sdk-typings/lib/interfaces/posts';
 
 @injectable()
-export default class AWF_Comments {
+export default class AWF_Comments implements AWF_IComments {
   private _log: ILogger;
   private _gql: Gql;
   private _auth: AWF_Auth;
@@ -33,7 +34,7 @@ export default class AWF_Comments {
    *
    * @param commentID
    */
-  public getComment(commentID: string) {
+  getComment(commentID: string) {
     return this._gql.run(
       {
         query: GetComment,
@@ -48,7 +49,7 @@ export default class AWF_Comments {
    *
    * @param opt
    */
-  public getComments(opt: { offset?: string; limit: number; postID: string }) {
+  getComments(opt: { offset?: string; limit: number; postID: string }) {
     return this._gql.run(
       {
         query: GetComments,
@@ -63,7 +64,7 @@ export default class AWF_Comments {
    *
    * @param opt
    */
-  public addComment(opt: {
+  addComment(opt: {
     data: DataProviderInput[];
     comment: { postID: string; replyTo?: string; tags?: string[]; mentions?: string[] };
   }) {

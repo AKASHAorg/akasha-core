@@ -15,9 +15,10 @@ import {
 import { from } from 'rxjs';
 import { concatAll, map } from 'rxjs/operators';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import { AWF_IEntry } from '@akashaproject/sdk-typings/lib/interfaces/posts';
 
 @injectable()
-export default class AWF_Entry {
+export default class AWF_Entry implements AWF_IEntry {
   private _log: ILogger;
   private _gql: Gql;
   private _auth: AWF_Auth;
@@ -42,7 +43,7 @@ export default class AWF_Entry {
    *
    * @param entryId
    */
-  public getEntry(entryId: string) {
+  getEntry(entryId: string) {
     return from(this._auth.getCurrentUser()).pipe(
       map(result =>
         this._gql.run(
@@ -62,7 +63,7 @@ export default class AWF_Entry {
    *
    * @param opt
    */
-  public getEntries(opt: { offset?: string; limit: number }) {
+  getEntries(opt: { offset?: string; limit: number }) {
     return from(this._auth.getCurrentUser()).pipe(
       map(result =>
         this._gql.run(
@@ -82,7 +83,7 @@ export default class AWF_Entry {
    *
    * @param opt
    */
-  public postEntry(opt: {
+  postEntry(opt: {
     data: DataProviderInput[];
     post: { title?: string; tags?: string[]; quotes?: string[] };
   }) {
@@ -109,7 +110,7 @@ export default class AWF_Entry {
       );
   }
 
-  public entriesByAuthor(opt: { pubKey: string; offset?: number; limit: number }) {
+  entriesByAuthor(opt: { pubKey: string; offset?: number; limit: number }) {
     return from(this._auth.getCurrentUser()).pipe(
       map(result =>
         this._gql.run(
@@ -134,7 +135,7 @@ export default class AWF_Entry {
    *
    * @param opt
    */
-  public entriesByTag(opt: { name: string; offset?: string; limit: number }) {
+  entriesByTag(opt: { name: string; offset?: string; limit: number }) {
     return from(this._auth.getCurrentUser()).pipe(
       map(result =>
         this._gql.run(

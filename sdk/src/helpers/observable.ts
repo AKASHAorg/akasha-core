@@ -3,6 +3,13 @@ import { map } from 'rxjs/operators';
 import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
 
 /**
+ * @param val
+ * @returns object with data attribute
+ */
+export const createFormattedValue = <T>(val: T): { data: T } => {
+  return { data: val };
+};
+/**
  * Transform a single value response to an observable source
  * @param val - Value to be transformed into observable source
  */

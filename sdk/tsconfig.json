@@ -8,7 +8,7 @@
     "resolveJsonModule": true,
     "types": ["reflect-metadata", "node"]
   },
-  "files": ["./src/registry/src/artifacts/ENS.json", "./src/registry/src/artifacts/AkashaRegistrar.json", "./src/registry/src/artifacts/ReverseRegistrar.json"],
+  "files": ["./src/contracts/artifacts/ENS.json", "./src/contracts/artifacts/AkashaRegistrar.json", "./src/contracts/artifacts/ReverseRegistrar.json"],
   "include": [
     "./src"
   ],

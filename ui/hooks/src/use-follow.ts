@@ -3,6 +3,7 @@ import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { createErrorHandler } from './utils/error-handler';
 import { filter } from 'rxjs/operators';
 import { forkJoin, Observable } from 'rxjs';
+import getSDK, { events } from '@akashaproject/awf-sdk';
 
 export interface UseFollowActions {
   /**
@@ -178,9 +179,9 @@ const followStateReducer = (state: IFollowState, action: IFollowAction) => {
 
 /* A hook with follow, unfollow and isFollowing functionality */
 export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] => {
-  const { onError, profileService, globalChannel } = props;
+  const { onError, profileService } = props;
   const [followingState, dispatch] = React.useReducer(followStateReducer, initialFollowState);
-
+  const sdk = getSDK();
   const handleSubscribe = (payload: any) => {
     const { data, channelInfo } = payload;
     if (data.follow) {
@@ -199,11 +200,11 @@ export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] =
 
   // this is used to sync following state between different components using the hook
   React.useEffect(() => {
-    const call = globalChannel.pipe(
-      filter((payload: any) => {
+    const call = sdk.api.globalChannel.pipe(
+      filter(payload => {
         return (
-          (payload.channelInfo.method === 'follow' || payload.channelInfo.method === 'unFollow') &&
-          payload.channelInfo.servicePath.includes('PROFILE_STORE')
+          payload.event === events.PROFILE_EVENTS.FOLLOW ||
+          payload.event === events.PROFILE_EVENTS.FOLLOW
         );
       }),
     );
@@ -217,7 +218,7 @@ export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] =
   React.useEffect(() => {
     const payload = followingState.isFollowingQuery;
     if (payload) {
-      const call = profileService.isFollowing({
+      const call = sdk.api.profile.isFollowing({
         follower: payload.followerEthAddress,
         following: payload.followingEthAddress,
       });

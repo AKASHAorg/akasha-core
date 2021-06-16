@@ -6,16 +6,16 @@ import Gql from '../gql';
 import AWF_Auth from '../auth';
 import {
   AddProfileProvider,
+  Follow,
+  GetProfile,
+  GlobalSearch,
+  IsFollowing,
   MakeDefaultProvider,
   RegisterUsername,
   ResolveProfile,
-  GetProfile,
-  Follow,
-  UnFollow,
-  IsFollowing,
   SaveMetaData,
   SearchProfiles,
-  GlobalSearch,
+  UnFollow,
 } from './profile.graphql';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
@@ -24,19 +24,20 @@ import { concatAll, map } from 'rxjs/operators';
 import { lastValueFrom, throwError } from 'rxjs';
 import { resizeImage } from '../helpers/img';
 import Settings from '../settings';
+import AWF_IProfile from '@akashaproject/sdk-typings/lib/interfaces/profile';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');
 
 @injectable()
-export default class AWF_Profile {
+export default class AWF_Profile implements AWF_IProfile {
   private readonly _web3: Web3Connector;
   private _log: ILogger;
   private _gql: Gql;
   private _auth: AWF_Auth;
   private _settings: Settings;
   public readonly TagSubscriptions = '@TagSubscriptions';
-  public readonly graphQLDocs = {
+  readonly graphQLDocs = {
     AddProfileProvider,
     MakeDefaultProvider,
     RegisterUsername,
@@ -66,7 +67,7 @@ export default class AWF_Profile {
    *
    * @param opt
    */
-  public addProfileProvider(opt: DataProviderInput[]) {
+  addProfileProvider(opt: DataProviderInput[]) {
     return this._auth.authenticateMutationData((opt as unknown) as Record<string, unknown>[]).pipe(
       map(res => {
         return this._gql.run({
@@ -89,7 +90,7 @@ export default class AWF_Profile {
    *
    * @param opt
    */
-  public makeDefaultProvider(opt: DataProviderInput[]) {
+  makeDefaultProvider(opt: DataProviderInput[]) {
     return this._auth.authenticateMutationData((opt as unknown) as Record<string, unknown>[]).pipe(
       map(res => {
         return this._gql.run({
@@ -112,7 +113,7 @@ export default class AWF_Profile {
    *
    * @param userName
    */
-  public registerUserName(userName: string) {
+  registerUserName(userName: string) {
     if (userName.length < 3) {
       return throwError(() => {
         return new Error('Subdomain must have at least 3 characters');
@@ -141,7 +142,7 @@ export default class AWF_Profile {
    *
    * @param opt
    */
-  public getProfile(opt: { fields?: string[]; ethAddress?: string; pubKey?: string }) {
+  getProfile(opt: { fields?: string[]; ethAddress?: string; pubKey?: string }) {
     let query, variables, operationName;
     if (opt.pubKey) {
       query = ResolveProfile;
@@ -170,7 +171,7 @@ export default class AWF_Profile {
    *
    * @param ethAddress
    */
-  public follow(ethAddress: string) {
+  follow(ethAddress: string) {
     return this._auth.authenticateMutationData(ethAddress).pipe(
       map(res => {
         this._gql.clearCache();
@@ -194,7 +195,7 @@ export default class AWF_Profile {
    *
    * @param ethAddress
    */
-  public unFollow(ethAddress: string) {
+  unFollow(ethAddress: string) {
     return this._auth.authenticateMutationData(ethAddress).pipe(
       map(res => {
         this._gql.clearCache();
@@ -218,7 +219,7 @@ export default class AWF_Profile {
    *
    * @param opt
    */
-  public isFollowing(opt: { follower: string; following: string }) {
+  isFollowing(opt: { follower: string; following: string }) {
     return this._gql.run(
       {
         query: IsFollowing,
@@ -233,7 +234,7 @@ export default class AWF_Profile {
    *
    * @param data
    */
-  public async saveMediaFile(data: {
+  async saveMediaFile(data: {
     content: Buffer | ArrayBuffer | string | any;
     isUrl?: boolean;
     name?: string;
@@ -316,7 +317,7 @@ export default class AWF_Profile {
    *
    * @param name
    */
-  public searchProfiles(name: string) {
+  searchProfiles(name: string) {
     return this._gql.run(
       {
         query: SearchProfiles,
@@ -330,7 +331,7 @@ export default class AWF_Profile {
   /**
    *
    */
-  public getTrending() {
+  getTrending() {
     return this.searchProfiles('');
   }
 
@@ -338,7 +339,7 @@ export default class AWF_Profile {
    *
    * @param tagName
    */
-  public toggleTagSubscription(tagName: string) {
+  toggleTagSubscription(tagName: string) {
     this._settings.get(this.TagSubscriptions).pipe(
       map((rec: any) => {
         if (!rec.data || !rec.data?._id) {
@@ -359,7 +360,7 @@ export default class AWF_Profile {
   /**
    *
    */
-  public getTagSubscriptions() {
+  getTagSubscriptions() {
     return this._settings.get(this.TagSubscriptions).pipe(
       map((rec: any) => {
         return rec.data.options;
@@ -371,7 +372,7 @@ export default class AWF_Profile {
    *
    * @param tagName
    */
-  public isSubscribedToTag(tagName: string) {
+  isSubscribedToTag(tagName: string) {
     return this.getTagSubscriptions().pipe(
       map(res => {
         if (!res || !res.length) {
@@ -390,7 +391,7 @@ export default class AWF_Profile {
    *
    * @param keyword
    */
-  public globalSearch(keyword: string) {
+  globalSearch(keyword: string) {
     return this._gql.run(
       {
         query: GlobalSearch,

@@ -4,12 +4,13 @@ import Web3Connector from '../common/web3.connector';
 import Logging from '../logging';
 import Gql from '../gql';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-import { GetTag, GetTags, SearchTags, CreateTag } from './tag.graphql';
+import { CreateTag, GetTag, GetTags, SearchTags } from './tag.graphql';
 import AWF_Auth from '../auth';
 import { concatAll, map } from 'rxjs/operators';
+import { AWF_ITags } from '@akashaproject/sdk-typings/lib/interfaces/posts';
 
 @injectable()
-export default class AWF_Tags {
+export default class AWF_Tags implements AWF_ITags {
   private readonly _web3: Web3Connector;
   private _log: ILogger;
   private _gql: Gql;
@@ -29,7 +30,7 @@ export default class AWF_Tags {
    *
    * @param tagName
    */
-  public getTag(tagName: string) {
+  getTag(tagName: string) {
     return this._gql.run<{ name: string }>(
       {
         query: GetTag,
@@ -44,7 +45,7 @@ export default class AWF_Tags {
    *
    * @param opt
    */
-  public getTags(opt: { offset?: string; limit: number }) {
+  getTags(opt: { offset?: string; limit: number }) {
     return this._gql.run(
       {
         query: GetTags,
@@ -59,7 +60,7 @@ export default class AWF_Tags {
    *
    * @param name
    */
-  public searchTags(name: string) {
+  searchTags(name: string) {
     return this._gql.run({
       query: SearchTags,
       variables: { name: name },
@@ -71,7 +72,7 @@ export default class AWF_Tags {
    *
    * @param tagName
    */
-  public createTag(tagName: string) {
+  createTag(tagName: string) {
     return this._auth.authenticateMutationData(tagName).pipe(
       map(res => {
         return this._gql.run({
@@ -93,7 +94,7 @@ export default class AWF_Tags {
   /**
    * Returns most recent used tags
    */
-  public getTrending() {
+  getTrending() {
     return this.searchTags('');
   }
 }
