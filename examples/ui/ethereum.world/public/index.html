@@ -24,7 +24,8 @@
   <script src="https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.production.min.js" integrity="sha256-Ipu/TQ50iCCVZBUsZyNJfxrDk0E2yhaEIz0vqI+kFG8=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.production.min.js" integrity="sha256-nbMykgB6tsOFJ7OdVmPpdqMFVk4ZsqWocT6issAPUF0=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/rxjs@7.0.0/dist/bundles/rxjs.umd.min.js" integrity="sha256-Wv8/hOXCG+iCkAwnQMpHiH78+hP5Lk+zslVRK2Cq6Dw=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/single-spa@5.9.2/lib/umd/single-spa.min.js" integrity="sha256-zHmziX9jyEhpnUOZb6iDiA0xFHA2d5SSqXqPCl91fCQ=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/single-spa@5.9.3/lib/umd/single-spa.min.js"
+    integrity="sha256-G1442ZjAn2fRKrCRUZJlS34+YaEP94xz0i8tXPpTBDI=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/single-spa-react@4.1.1/lib/umd/single-spa-react.js" integrity="sha256-TKbNjLv70kgk0Eg8lq/VN2dferty85AYQOTpumh8OC0=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/system.min.js"
     integrity="sha512-R1dzyrUOrbjCRxsRK7JRUVJA5yFEHQ9Ui/qcyon6QRbcVeSzz1SfHzqVuVZh9CPGiCftiJpeHOLz+uFcVNevYQ=="
@@ -32,15 +33,21 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/use-default.min.js"
     integrity="sha512-Ahpc6VqzcdPS1xTuBGdnw+l64Iz6KNXAy/4/1bBzAv6nTl+NK7mnYHMDtI8wAzd2PTV9GVNURwKf87y36eWZ+g=="
     crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/dynamic-import-maps.min.js"
-    integrity="sha512-kKfX9iNn9dwleItNCB6NjDD2wGBUkCeKMpFLMgxrUqXCq/nEN9/VKEPLy6k5xTZkkyJsAb81VqNW4E6zt59LPQ=="
-    crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/amd.min.js"
           integrity="sha512-fRfysEnVm90UgqFUsB+UlgnHK5vvSnsl64hxHaJJl4wE+P1sTwDUuQGmohtg/CSK60mY5A4elesW6UWQdLQsAg=="
           crossorigin="anonymous"></script>
   <meta name="importmap-type" content="systemjs-importmap" />
 
-  <script type="systemjs-importmap" src="/importmap.json"></script>
+  <script type="systemjs-importmap">
+        {
+          "imports": {
+            "@akashaproject/app-loader": "/app-loader/index.js",
+            "@akashaproject/sdk": "/akasha.sdk.js",
+            "@akashaproject/design-system": "/design/index.js"
+          }
+        }
+      </script>
+  <script type="systemjs-module" src="import:@akashaproject/design-system"></script>
 
   <style>
     html,
@@ -57,6 +64,20 @@
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
+  <template id="splash-screen-tpl">
+    <div id="splash-screen-root"
+      style="display: flex; flex-direction: column; align-items:center; justify-content: center; color: #808080; position: absolute; inset: 0;">
+      <img src="/icons/icon-144x144.png" alt="Loading" />
+      <h1 style="font-size: medium; font-weight: 400; font-family: system-ui;">Loading scripts. Please wait...</h1>
+    </div>
+  </template>
+  <template id="four-oh-four-tpl">
+    <div id="four-oh-four"
+      style="display: flex; flex-direction: column; align-items:center; justify-content: center; color: #808080; position: absolute; inset: 0;">
+      <h1 style="font-size: 5em">404</h1>
+      <p>The page you are looking for does not exist.</p>
+    </div>
+  </template>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -71,6 +92,7 @@
       });
     }
   </script>
+  <script src="/app-loader/index.js"></script>
   <script type="module" src="/main.js"></script>
 </body>
 

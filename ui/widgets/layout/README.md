@@ -1,5 +1,7 @@
 # Layout widget
 
+> Defines the various areas of the screen for mounting other widgets, apps and/or plugin
+
 ## Usage
 
 ```tsx

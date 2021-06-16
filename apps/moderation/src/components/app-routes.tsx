@@ -17,7 +17,7 @@ interface AppRoutesProps {
 }
 
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
-  const { sdkModules, globalChannel, layout, onError } = props;
+  const { sdkModules, globalChannel, layoutConfig, onError } = props;
 
   const [loginModalState, setLoginModalState] = React.useState(false);
 
@@ -57,7 +57,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
             <ContentList
               {...props}
               ethAddress={loginState.ethAddress}
-              slotId={layout.modalSlotId}
+              slotId={layoutConfig.modalSlotId}
             />
           </Route>
           <Route path={routes[UNAUTHENTICATED]}>
@@ -77,7 +77,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
       </Router>
       <LoginModal
         showModal={loginModalState}
-        slotId={layout.modalSlotId}
+        slotId={layoutConfig.modalSlotId}
         onLogin={handleLogin}
         onModalClose={hideLoginModal}
         titleLabel={t('Connect a wallet')}

@@ -15,7 +15,7 @@ module.exports = Object.assign(baseConfig, {
     new CopyPlugin({
       patterns: [
         { from: path.resolve(__dirname, '../../../ui/build') },
-        { from: path.resolve(__dirname, '../../../sdk-packages/akasha/dist') },
+        { from: path.resolve(__dirname, '../../../sdk/dist') },
         { from: path.resolve(__dirname, '../../../locales'), to: 'locales' },
       ],
     }),
@@ -25,7 +25,11 @@ module.exports = Object.assign(baseConfig, {
     contentBase: path.join(__dirname, 'public'),
     publicPath: '/',
     https: true,
-    index: 'index.dev.html',
+    // serve development versions of libs
+    // https://github.com/webpack/webpack-dev-server/issues/2540
+    staticOptions: {
+      index: 'index.dev.html',
+    },
     historyApiFallback: {
       index: 'index.dev.html',
     },

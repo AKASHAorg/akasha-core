@@ -1,34 +1,48 @@
-import { Application, LogoTypeSource } from '@akashaproject/ui-awf-typings';
-import { initReactI18next } from 'react-i18next';
-import routes, { rootRoute, MY_PROFILE } from './routes';
-import { Widget as TrendingWidget } from './components/widgets/trending-widget';
+import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
+import routes, { rootRoute } from './routes';
 import { moduleName as profilesModule } from '@akashaproject/sdk-profiles/lib/constants';
 import { moduleName as commonsModule } from '@akashaproject/sdk-common/lib/constants';
 import { moduleName as authModule } from '@akashaproject/sdk-auth/lib/constants';
 import { moduleName as registryModule } from '@akashaproject/sdk-registry/lib/constants';
 import { moduleName as postsModule } from '@akashaproject/sdk-posts/lib/constants';
 import { moduleName as dbModule } from '@akashaproject/sdk-db/lib/constants';
+import {
+  IAppConfig,
+  IntegrationRegistrationOptions,
+  IWidgetConfig,
+} from '@akashaproject/ui-awf-typings/src/app-loader';
+
+const findTopbarQuickAccess = (integrations: IntegrationRegistrationOptions['integrations']) => {
+  if (!integrations) {
+    return null;
+  }
+  const topbarConf = Object.entries(integrations.configs).find(intConf => {
+    const [, config] = intConf as [string, IAppConfig | IWidgetConfig];
+    if (config.tags && config.tags.includes('topbar')) {
+      return true;
+    }
+    return false;
+  });
+  if (topbarConf) {
+    const [, config] = topbarConf as [string, IAppConfig | IWidgetConfig];
+    if (config.extensions) {
+      return config.extensions.QuickAccess;
+    }
+    return null;
+  }
+  return null;
+};
+
 /**
  * All the plugins must export an object like this:
  */
-export const application: Application = {
+export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   // This is the root route in which the plugin will render.
   // Make sure to change it as it fits.
-  activeWhen: {
-    path: rootRoute,
+  activeWhen: (location, pathToActiveWhen) => {
+    return pathToActiveWhen(rootRoute)(location);
   },
-  // translation config
-  i18nConfig: {
-    // namespaces that this plugin requires.
-    // The ns is loaded automatically, you need to specify it only if changed
-    // Example: i have changed the name of this plugin and the created ns was the old plugin name,
-    // In this case I will preserve the old ns instead loading a possibly undefined ns.
-    loadNS: [],
-    // translation namespace. defaults to plugin.name
-    // ns: 'ui-plugin-events',
-    // i18next.use(arr[0]).use(arr[1]).use(arr[n])
-    use: [initReactI18next],
-  },
+  mountsIn: opts.layoutConfig?.pluginSlotId,
   loadingFn: () => import('./components'),
   name: 'ui-plugin-profile',
   sdkModules: [
@@ -42,10 +56,17 @@ export const application: Application = {
   title: 'Profile | Ethereum World',
   menuItems: routes,
   logo: { type: LogoTypeSource.AVATAR, value: '' },
-  widgets: {
-    [`${routes[MY_PROFILE]}`]: [TrendingWidget],
-    [`${routes[MY_PROFILE]}/:any?`]: [TrendingWidget],
-    [`${rootRoute}/:profileId`]: [TrendingWidget],
-    [`${rootRoute}/:profileId/:any?`]: [TrendingWidget],
+  extends: [
+    {
+      mountsIn: mountOptions => findTopbarQuickAccess(mountOptions.integrations),
+      loadingFn: () => import('./extensions/sign-in-buttons'),
+    },
+    {
+      mountsIn: 'signin',
+      loadingFn: () => import('./extensions/sign-in-modal'),
+    },
+  ],
+  routes: {
+    rootRoute,
   },
-};
+});

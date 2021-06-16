@@ -1,11 +1,12 @@
 # UI plugins
 
-> Description
+> An plugin is essentially an application that enriches the functionality of a much bigger (parent) application.
 
 ## Components
 
-- [App Center](./app-center/README.md)
-- [Feed](./feed/README.md)
+- [Integration Center](./app-center/README.md)
+- [Bookmarks](./bookmarks/README.md)
+- [Legal](./legal/README.md)
 - [Notifcations](./notifications/README.md)
 - [Profile](./profile/README.md)
 - [Search](./search/README.md)

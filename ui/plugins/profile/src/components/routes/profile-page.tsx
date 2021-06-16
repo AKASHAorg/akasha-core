@@ -181,7 +181,7 @@ const ProfilePage = (props: ProfilePageProps) => {
           World
         </title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.modalSlotId}>
+      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -237,8 +237,6 @@ const ProfilePage = (props: ProfilePageProps) => {
         loginActions={loginActions}
       />
       <FeedWidget
-        // pass i18n from props (the i18next instance, not the react one!)
-        i18n={props.i18n}
         itemType={ItemTypes.ENTRY}
         logger={props.logger}
         loadMore={handleLoadMore}
@@ -248,7 +246,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         itemsData={postsState.postsData}
         errors={errorState}
         sdkModules={props.sdkModules}
-        layout={props.layout}
+        layout={props.layoutConfig}
         globalChannel={props.globalChannel}
         ethAddress={loggedEthAddress}
         onNavigate={handleNavigation}
@@ -256,7 +254,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         onLoginModalOpen={showLoginModal}
         totalItems={postsState.totalItems}
         profilePubKey={pubKey}
-        modalSlotId={props.layout.modalSlotId}
+        modalSlotId={props.layoutConfig.modalSlotId}
         loggedProfile={loggedProfileData}
         onRepostPublish={handleRepostPublish}
         contentClickable={true}

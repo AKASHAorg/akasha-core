@@ -5,10 +5,15 @@
     "rootDir": "./src",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "types": ["reflect-metadata"]
+    "resolveJsonModule": true,
+    "types": ["reflect-metadata", "node"]
   },
+  "files": ["./src/contracts/artifacts/ENS.json", "./src/contracts/artifacts/AkashaRegistrar.json", "./src/contracts/artifacts/ReverseRegistrar.json"],
   "include": [
     "./src"
+  ],
+  "exclude": [
+    "./lib"
   ],
   "references": [
     {

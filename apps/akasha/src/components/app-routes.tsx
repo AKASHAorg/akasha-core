@@ -17,7 +17,7 @@ interface AppRoutesProps {
   onError: (err: IAkashaError) => void;
 }
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
-  const { sdkModules, globalChannel, logger, layout, onError } = props;
+  const { sdkModules, globalChannel, logger, layoutConfig, onError } = props;
 
   const { t } = useTranslation();
 
@@ -178,7 +178,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
       </Router>
       <LoginModal
         showModal={modalState.login}
-        slotId={layout.modalSlotId}
+        slotId={layoutConfig.modalSlotId}
         onLogin={handleLogin}
         onModalClose={hideLoginModal}
         titleLabel={t('Connect a wallet')}

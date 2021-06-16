@@ -54,7 +54,7 @@ export interface ITopbarProps {
   onLogout: any;
 }
 
-const Topbar = (props: ITopbarProps) => {
+const Topbar: React.FC<ITopbarProps> = props => {
   const {
     loggedProfileData,
     versionURL,
@@ -324,6 +324,7 @@ const Topbar = (props: ITopbarProps) => {
           justify="end"
         >
           {renderSearchArea()}
+          {props.children}
           {loggedProfileData?.ethAddress &&
             quickAccessItems &&
             quickAccessItems.map(renderPluginButton)}

@@ -1,21 +1,16 @@
 import DS from '@akashaproject/design-system';
 import React, { PureComponent, Suspense } from 'react';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import TopbarComponent from './topbar-component';
 import { BrowserRouter as Router } from 'react-router-dom';
+import i18next from 'i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import Backend from 'i18next-chained-backend';
+import Fetch from 'i18next-fetch-backend';
+import LocalStorageBackend from 'i18next-localstorage-backend';
 
 const { lightTheme, ThemeSelector } = DS;
-
-/**
- * This is the entry point of a plugin.
- * Here you can add react-router, react-redux, etc..
- *
- * @todo Add more documentation for this component
- *
- * @warning :: Root component for a plugin should always extend React.Component
- * @warning :: Always use default export
- */
 
 export default class TopbarWidget extends PureComponent<RootComponentProps> {
   public state: {
@@ -55,6 +50,8 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
     }
   };
   public render() {
+    const { logger } = this.props;
+
     if (this.state.hasErrors) {
       return (
         <div>
@@ -66,21 +63,46 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
       );
     }
 
+    i18next
+      .use(initReactI18next)
+      .use(Backend)
+      .use(LanguageDetector)
+      .use({
+        type: 'logger',
+        log: logger.info,
+        warn: logger.warn,
+        error: logger.error,
+      })
+      .init({
+        fallbackLng: 'en',
+        ns: ['ui-widget-topbar'],
+        saveMissing: false,
+        saveMissingTo: 'all',
+        load: 'languageOnly',
+        debug: true,
+        cleanCode: true,
+        keySeparator: false,
+        defaultNS: 'ui-widget-topbar',
+        backend: {
+          backends: [LocalStorageBackend, Fetch],
+          backendOptions: [
+            {
+              prefix: 'i18next_res_v0',
+              expirationTime: 24 * 60 * 60 * 1000,
+            },
+            {
+              loadPath: '/locales/{{lng}}/{{ns}}.json',
+            },
+          ],
+        },
+      });
+
     return (
-      <I18nextProvider i18n={this.props.i18n}>
+      <I18nextProvider i18n={i18next}>
         <Suspense fallback={<>...</>}>
           <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
             <Router>
-              <TopbarComponent
-                navigateToUrl={this.props.singleSpa.navigateToUrl}
-                toggleSidebar={this.toggleSidebar}
-                getMenuItems={this.props.getMenuItems}
-                loaderEvents={this.props.events}
-                modalSlotId={this.props.layout.modalSlotId}
-                globalChannel={this.props.globalChannel}
-                logger={this.props.logger}
-                sdkModules={this.props.sdkModules}
-              />
+              <TopbarComponent getMenuItems={this.props.getMenuItems} {...this.props} />
             </Router>
           </ThemeSelector>
         </Suspense>
