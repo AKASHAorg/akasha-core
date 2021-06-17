@@ -1,11 +1,11 @@
 import { inject, injectable } from 'inversify';
 import { ethers } from 'ethers';
-import { EthProviders, IWeb3Connector } from '@akashaproject/sdk-typings/lib/interfaces';
+import { EthProviders, IWeb3Connector } from '@akashaproject/sdk-typings/src/interfaces';
 import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaproject/sdk-typings/src/interfaces/log';
 import OpenLogin from '@toruslabs/openlogin';
 import { createObservableStream } from '../helpers/observable';
 

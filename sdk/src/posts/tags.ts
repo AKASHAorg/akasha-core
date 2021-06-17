@@ -3,12 +3,12 @@ import { TYPES } from '@akashaproject/sdk-typings';
 import Web3Connector from '../common/web3.connector';
 import Logging from '../logging';
 import Gql from '../gql';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaproject/sdk-typings/src/interfaces/log';
 import { CreateTag, GetTag, GetTags, SearchTags } from './tag.graphql';
 import AWF_Auth from '../auth';
 import { concatAll, map, tap } from 'rxjs/operators';
-import { AWF_ITags } from '@akashaproject/sdk-typings/lib/interfaces/posts';
-import { TAG_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
+import { AWF_ITags } from '@akashaproject/sdk-typings/src/interfaces/posts';
+import { TAG_EVENTS } from '@akashaproject/sdk-typings/src/interfaces/events';
 import EventBus from '../common/event-bus';
 
 @injectable()

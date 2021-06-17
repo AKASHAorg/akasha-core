@@ -2,10 +2,7 @@
   "name": "@akashaproject/sdk-typings",
   "version": "1.0.0",
   "private": true,
-  "main": "lib/index.js",
-  "directories": {
-    "lib": "lib"
-  },
+  "main": "src/index.js",
   "devDependencies": {
     "rxjs": "7.1.0",
     "typescript": "4.3.2"

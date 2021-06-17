@@ -75,7 +75,7 @@ const config = {
       process: ['process'],
     }),
     new InjectManifest({
-      swSrc: './lib/sw.js',
+      swSrc: './src/sw.js',
       swDest: 'sw.js',
       exclude: [/.*?/],
     }),

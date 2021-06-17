@@ -1,7 +1,7 @@
 import { BUCKET_THREAD_NAME, PROFILE_MEDIA_FILES } from './constants';
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaproject/sdk-typings/src/interfaces/log';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import {
@@ -19,14 +19,14 @@ import {
 } from './profile.graphql';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
-import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import { DataProviderInput } from '@akashaproject/sdk-typings/src/interfaces/common';
 import { concatAll, map, tap } from 'rxjs/operators';
 import { lastValueFrom, throwError } from 'rxjs';
 import { resizeImage } from '../helpers/img';
 import Settings from '../settings';
-import AWF_IProfile from '@akashaproject/sdk-typings/lib/interfaces/profile';
+import AWF_IProfile from '@akashaproject/sdk-typings/src/interfaces/profile';
 import EventBus from '../common/event-bus';
-import { PROFILE_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
+import { PROFILE_EVENTS } from '@akashaproject/sdk-typings/src/interfaces/events';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');

@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 import { inject, injectable } from 'inversify';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaproject/sdk-typings/src/interfaces/log';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import { TYPES } from '@akashaproject/sdk-typings';
@@ -13,9 +13,9 @@ import {
   GetPostsByTag,
 } from './entry.graphql';
 import { concatAll, map, tap } from 'rxjs/operators';
-import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
-import { AWF_IEntry } from '@akashaproject/sdk-typings/lib/interfaces/posts';
-import { COMMENTS_EVENTS, ENTRY_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
+import { DataProviderInput } from '@akashaproject/sdk-typings/src/interfaces/common';
+import { AWF_IEntry } from '@akashaproject/sdk-typings/src/interfaces/posts';
+import { COMMENTS_EVENTS, ENTRY_EVENTS } from '@akashaproject/sdk-typings/src/interfaces/events';
 import EventBus from '../common/event-bus';
 
 @injectable()
