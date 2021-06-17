@@ -7,14 +7,17 @@ import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
 import { AddComment, GetComment, GetComments } from './comments.graphql';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
-import { concatAll, map } from 'rxjs/operators';
+import { concatAll, map, tap } from 'rxjs/operators';
 import { AWF_IComments } from '@akashaproject/sdk-typings/lib/interfaces/posts';
+import { COMMENTS_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
+import EventBus from '../common/event-bus';
 
 @injectable()
 export default class AWF_Comments implements AWF_IComments {
   private _log: ILogger;
   private _gql: Gql;
   private _auth: AWF_Auth;
+  private _globalChannel: EventBus;
   public readonly graphQLDocs = {
     GetComment,
     GetComments,
@@ -24,10 +27,12 @@ export default class AWF_Comments implements AWF_IComments {
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Gql) gql: Gql,
     @inject(TYPES.Auth) auth: AWF_Auth,
+    @inject(TYPES.EventBus) globalChannel: EventBus,
   ) {
     this._log = log.create('AWF_Comments');
     this._gql = gql;
     this._auth = auth;
+    this._globalChannel = globalChannel;
   }
 
   /**
@@ -75,17 +80,28 @@ export default class AWF_Comments implements AWF_IComments {
       .authenticateMutationData((opt.data as unknown) as Record<string, unknown>[])
       .pipe(
         map(res => {
-          return this._gql.run({
-            query: AddComment,
-            variables: { content: opt.data, comment: opt.comment },
-            operationName: 'AddComment',
-            context: {
-              headers: {
-                Authorization: `Bearer ${res.token}`,
-                Signature: res.signedData.signature,
+          return this._gql
+            .run({
+              query: AddComment,
+              variables: { content: opt.data, comment: opt.comment },
+              operationName: 'AddComment',
+              context: {
+                headers: {
+                  Authorization: `Bearer ${res.token}`,
+                  Signature: res.signedData.data.signature,
+                },
               },
-            },
-          });
+            })
+            .pipe(
+              tap(ev => {
+                // @emits COMMENTS_EVENTS.CREATE
+                this._globalChannel.next({
+                  data: ev.data,
+                  event: COMMENTS_EVENTS.CREATE,
+                  args: opt,
+                });
+              }),
+            );
         }),
         concatAll(),
       );

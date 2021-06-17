@@ -2,6 +2,7 @@ import { PrivateKey, Identity, UserAuth } from '@textile/hub';
 import { authStatus } from './constants';
 import { ethers } from 'ethers';
 import Web3Connector from '../common/web3.connector';
+import { lastValueFrom } from 'rxjs';
 
 /**
  *
@@ -42,9 +43,9 @@ export const generatePrivateKey = async (
   signer: Web3Connector,
   sig: string,
 ): Promise<PrivateKey> => {
-  const ethAddress = await signer.getCurrentAddress();
+  const ethAddress = await lastValueFrom(signer.getCurrentAddress());
   const secret = ethers.utils.keccak256(sig);
-  const message = metamaskGen(ethAddress.toLowerCase(), secret, 'ethereum.world');
+  const message = metamaskGen(ethAddress.data.toLowerCase(), secret, 'ethereum.world');
   const signedText = await signer.signMessage(message);
   const hash = ethers.utils.keccak256(signedText);
   if (hash === null) {

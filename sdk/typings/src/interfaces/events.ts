@@ -14,3 +14,20 @@ export enum PROFILE_EVENTS {
   REGISTER_USERNAME = '#profile#RegisterUsername',
   TAG_SUBSCRIPTION = '#profile#TagSubscription',
 }
+
+export enum COMMENTS_EVENTS {
+  CREATE = '#comments#Create',
+}
+
+export enum ENTRY_EVENTS {
+  CREATE = '#entries#Create',
+}
+
+export enum TAG_EVENTS {
+  CREATE = '#tags#Create',
+}
+
+export enum ENS_EVENTS {
+  REGISTER = '#ens#Register',
+  CLAIM = '#ens#Claim',
+}

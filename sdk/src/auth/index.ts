@@ -13,7 +13,7 @@ import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@akashaproject/sdk-typings';
 import DB from '../db';
-import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
+import { AWF_IAuth, EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
 import Web3Connector from '../common/web3.connector';
 import EventBus from '../common/event-bus';
 import Logging from '../logging';
@@ -27,11 +27,11 @@ import { AUTH_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
 import hash from 'object-hash';
 import { Buffer } from 'buffer';
 import { PublicKey } from '@textile/threaddb';
-import { IAWF_Auth } from '@akashaproject/sdk-typings/lib/interfaces/auth';
 import { CurrentUser } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import { createObservableStream } from '../helpers/observable';
 
 @injectable()
-export default class AWF_Auth implements IAWF_Auth {
+export default class AWF_Auth implements AWF_IAuth {
   private identity: PrivateKey;
   private hubClient: Client;
   private hubUser: Users;
@@ -99,10 +99,10 @@ export default class AWF_Auth implements IAWF_Auth {
             sessionStorage.setItem(response?.identity?.key, response?.identity?.value);
             sessionStorage.setItem(this.currentUserKey, response[this.currentUserKey]);
             this.currentUser = null;
-            this.getCurrentUser().then(data => this._log.info('logged in'));
+            this._getCurrentUser().then(data => this._log.info('logged in'));
           }
         } else if (type === this.SIGN_OUT_EVENT && this.currentUser) {
-          this.signOut().then(_ => {
+          this._signOut().then(_ => {
             const response = {
               data: null,
               event: AUTH_EVENTS.SIGN_OUT,
@@ -138,11 +138,15 @@ export default class AWF_Auth implements IAWF_Auth {
     );
   }
 
+  signIn(args: { provider?: EthProviders; checkRegistered: boolean }) {
+    return createObservableStream(this._signIn(args));
+  }
+
   /**
    *
    * @param args
    */
-  async signIn(
+  private async _signIn(
     args: { provider?: EthProviders; checkRegistered: boolean } = {
       provider: EthProviders.Web3Injected,
       checkRegistered: true,
@@ -165,12 +169,12 @@ export default class AWF_Auth implements IAWF_Auth {
       await this._web3.connect(args.provider);
       await this._web3.checkCurrentNetwork();
       const endPoint = process.env.AUTH_ENDPOINT;
-      const address = await this._web3.getCurrentAddress();
+      const address = await lastValueFrom(this._web3.getCurrentAddress());
       if (args.checkRegistered) {
-        await lastValueFrom(this.checkIfSignedUp(address));
+        await lastValueFrom(this.checkIfSignedUp(address.data));
       }
       this._log.info(`using eth address ${address}`);
-      const sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
+      const sessKey = `@identity:${address.data.toLowerCase()}:${currentProvider}`;
       if (sessionStorage.getItem(sessKey)) {
         this.identity = PrivateKey.fromString(sessionStorage.getItem(sessKey));
       } else {
@@ -185,7 +189,7 @@ export default class AWF_Auth implements IAWF_Auth {
       this.buckClient = Buckets.withUserAuth(userAuth, { host: endPoint });
       this.tokenGenerator = loginWithChallenge(this.identity, this._web3);
       const pubKey = this.identity.public.toString();
-      this.currentUser = { pubKey, ethAddress: address };
+      this.currentUser = { pubKey, ethAddress: address.data };
     } catch (e) {
       sessionStorage.clear();
       this._log.error(e);
@@ -236,11 +240,20 @@ export default class AWF_Auth implements IAWF_Auth {
     });
     return Object.assign(this.currentUser, authStatus);
   }
-
   /**
    * Returns current session objects for textile
    */
-  async getSession() {
+  getSession() {
+    return createObservableStream<{
+      buck: Buckets;
+      identity: PrivateKey;
+      client: Client;
+      user: Users;
+      tokenGenerator: () => Promise<UserAuth>;
+    }>(this._getSession());
+  }
+
+  private async _getSession() {
     if (!sessionStorage.getItem(this.providerKey)) {
       throw new Error('No previous session found');
     }
@@ -261,7 +274,11 @@ export default class AWF_Auth implements IAWF_Auth {
   /**
    * Generate a textile access token
    */
-  async getToken() {
+  getToken() {
+    return createObservableStream<string>(this._getToken());
+  }
+
+  private async _getToken() {
     const session = await this.getSession();
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -277,7 +294,11 @@ export default class AWF_Auth implements IAWF_Auth {
    * Returns the currently logged in user object
    * It will try to login if there is a previous session detected
    */
-  async getCurrentUser(): Promise<null | CurrentUser> {
+  getCurrentUser() {
+    return createObservableStream(this._getCurrentUser());
+  }
+
+  private async _getCurrentUser(): Promise<null | CurrentUser> {
     if (this.currentUser) {
       return Promise.resolve(this.currentUser);
     }
@@ -300,13 +321,17 @@ export default class AWF_Auth implements IAWF_Auth {
         this._log.error(e);
       }
     }
-    return this.signIn({ provider: EthProviders.None, checkRegistered: false });
+    return this._signIn({ provider: EthProviders.None, checkRegistered: false });
   }
 
   /**
    * Destroy all the session objects
    */
-  async signOut() {
+  signOut() {
+    return createObservableStream<boolean>(this._signOut());
+  }
+
+  private async _signOut() {
     sessionStorage.clear();
     this.identity = null;
     this.hubClient = null;
@@ -326,11 +351,18 @@ export default class AWF_Auth implements IAWF_Auth {
    * @param data
    * @param base64Format
    */
-  async signData(
+  signData(
     data: Record<string, unknown> | string | Record<string, unknown>[],
     base64Format = false,
   ) {
-    const session = await this.getSession();
+    return createObservableStream(this._signData(data, base64Format));
+  }
+
+  private async _signData(
+    data: Record<string, unknown> | string | Record<string, unknown>[],
+    base64Format = false,
+  ) {
+    const session = await this._getSession();
     let serializedData;
     if (typeof data === 'object') {
       serializedData = hash(data);
@@ -347,7 +379,15 @@ export default class AWF_Auth implements IAWF_Auth {
    * Verify if a signature was made by a specific Public Key
    * @param args
    */
-  async verifySignature(args: {
+  verifySignature(args: {
+    pubKey: string;
+    data: Uint8Array | string | Record<string, unknown>;
+    signature: Uint8Array | string;
+  }) {
+    return createObservableStream(this._verifySignature(args));
+  }
+
+  private async _verifySignature(args: {
     pubKey: string;
     data: Uint8Array | string | Record<string, unknown>;
     signature: Uint8Array | string;
@@ -387,7 +427,17 @@ export default class AWF_Auth implements IAWF_Auth {
    * Allows decryption of privately sent messages to the current identity
    * @param message
    */
-  async decryptMessage(message) {
+  decryptMessage(message) {
+    return createObservableStream<{
+      body: string;
+      from: string;
+      readAt: number;
+      createdAt: number;
+      id: string;
+    }>(this._decryptMessage(message));
+  }
+
+  private async _decryptMessage(message) {
     const decryptedBody = await this.identity.decrypt(message.body);
     let body = new TextDecoder().decode(decryptedBody);
     try {
@@ -403,7 +453,13 @@ export default class AWF_Auth implements IAWF_Auth {
    * Returns all the inbox messages from Textile Users
    * @param args
    */
-  async getMessages(args: InboxListOptions) {
+  getMessages(args: InboxListOptions) {
+    return createObservableStream<
+      { body: string; from: string; readAt: number; createdAt: number; id: string }[]
+    >(this._getMessages(args));
+  }
+
+  private async _getMessages(args: InboxListOptions) {
     const limit = args?.limit || 50;
     const messages = await this.hubUser.listInboxMessages(
       Object.assign({}, { status: Status.UNREAD, limit: limit }, args),
@@ -427,7 +483,7 @@ export default class AWF_Auth implements IAWF_Auth {
       uniqueMessages.set(messageObj.id, messageObj);
     }
     for (const message of uniqueMessages.values()) {
-      const decryptedObj = await this.decryptMessage(message);
+      const decryptedObj = await this._decryptMessage(message);
       inbox.push(Object.assign({}, decryptedObj, { read: decryptedObj.readAt > 0 }));
     }
     uniqueMessages.clear();
@@ -438,36 +494,52 @@ export default class AWF_Auth implements IAWF_Auth {
    * Checks the Textile Users inbox and looks for specific
    * notification message type
    */
-  async hasNewNotifications() {
+  hasNewNotifications() {
+    return createObservableStream(this._hasNewNotifications());
+  }
+
+  private async _hasNewNotifications() {
     const limit = 1;
     const messages = await this.hubUser.listInboxMessages({ status: Status.UNREAD, limit: limit });
     const newMessage = messages.find(rec => rec.from === process.env.EWA_MAILSENDER);
     return !!newMessage;
   }
 
-  /**
-   *
-   * @param messageId
-   */
-  async markMessageAsRead(messageId: string) {
-    await this.hubUser.readInboxMessage(messageId);
-    return true;
+  markMessageAsRead(messageId: string) {
+    return createObservableStream(this._markMessageAsRead(messageId));
   }
 
   /**
    *
    * @param messageId
    */
-  async deleteMessage(messageId: string) {
+  private async _markMessageAsRead(messageId: string) {
+    await this.hubUser.readInboxMessage(messageId);
+    return true;
+  }
+
+  deleteMessage(messageId: string) {
+    return createObservableStream(this._deleteMessage(messageId));
+  }
+
+  /**
+   *
+   * @param messageId
+   */
+  private async _deleteMessage(messageId: string) {
     await this.hubUser.deleteInboxMessage(messageId);
     return true;
+  }
+
+  validateInvite(inviteCode: string) {
+    return createObservableStream(this._validateInvite(inviteCode));
   }
 
   /**
    *
    * @param inviteCode
    */
-  async validateInvite(inviteCode: string) {
+  private async _validateInvite(inviteCode: string) {
     const response = await fetch(`${process.env.INVITATION_ENDPOINT}/${inviteCode}`, {
       method: 'POST',
     });

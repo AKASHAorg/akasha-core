@@ -6,7 +6,7 @@ import type IStashService from './stash';
 import type { ServiceCallResult } from './responses';
 import type { IWeb3Connector } from './web3.connector';
 import { EthProviders } from './web3.connector';
-import type { IAWF_Auth } from './auth';
+import type AWF_IAuth from './auth';
 
 export { IDBService };
 export { ServiceCallResult };
@@ -16,4 +16,4 @@ export { ISettingsService };
 export { IStashService };
 export { EthProviders };
 export { IWeb3Connector };
-export { IAWF_Auth };
+export { AWF_IAuth };

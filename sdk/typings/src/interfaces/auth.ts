@@ -1,106 +1,69 @@
-import { EthProviders } from './web3.connector';
-import { InboxListOptions } from '@textile/hub';
+import { EthProviders } from './index';
+import { CurrentUser } from './common';
+import { Buckets, Client, InboxListOptions, PrivateKey, UserAuth, Users } from '@textile/hub';
 import { Observable } from 'rxjs';
 
-export interface IAWF_Auth {
+export default interface AWF_IAuth {
   /**
-   * Verifies if an ethereum address is already registered
-   * Throws an UserNotRegistered error for addresses that are not registered
-   * @param ethAddress
+   * enable key sync between opened tabs
    */
-  checkIfSignedUp(ethAddress: string): Observable<{ data: { errors?: never } }>;
+  enableSync(): void;
 
-  /**
-   *
-   * @param args
-   */
+  checkIfSignedUp(ethAddress: string): any;
+
   signIn(args: {
     provider?: EthProviders;
     checkRegistered: boolean;
-  }): Promise<{ pubKey: string; ethAddress: string; isNewUser?: boolean } & { isNewUser: boolean }>;
+  }): Observable<{ data: CurrentUser & { isNewUser: boolean } }>;
 
-  /**
-   * Returns current session objects for textile
-   */
-  getSession(): Promise<{
-    buck: any;
-    identity: any;
-    client: any;
-    user: any;
-    tokenGenerator: any;
+  getSession(): Observable<{
+    data: {
+      buck: Buckets;
+      identity: PrivateKey;
+      client: Client;
+      user: Users;
+      tokenGenerator: () => Promise<UserAuth>;
+    };
   }>;
 
-  /**
-   * Generate a textile access token
-   */
-  getToken(): Promise<any>;
+  getToken(): Observable<{ data: string }>;
 
-  /**
-   * Returns the currently logged in user object
-   * It will try to login if there is a previous session detected
-   */
-  getCurrentUser(): Promise<any>;
+  getCurrentUser(): Observable<{ data: CurrentUser | null }>;
 
-  /**
-   * Destroy all the session objects
-   */
-  signOut(): Promise<boolean>;
+  signOut(): Observable<{ data: boolean }>;
 
-  /**
-   * Sign data with the identity key
-   * @param data
-   * @param base64Format
-   */
   signData(
-    data: Record<string, unknown> | string,
+    data: Record<string, unknown> | string | Record<string, unknown>[],
     base64Format,
-  ): Promise<{ serializedData: any; signature: Uint8Array | string; pubKey: string }>;
+  ): Observable<{ data: { serializedData: any; signature: Uint8Array | string; pubKey: string } }>;
 
-  /**
-   * Verify if a signature was made by a specific Public Key
-   * @param args
-   */
   verifySignature(args: {
     pubKey: string;
     data: Uint8Array | string | Record<string, unknown>;
     signature: Uint8Array | string;
-  }): Promise<boolean>;
+  }): Observable<{ data: boolean }>;
 
-  /**
-   * Allows decryption of privately sent messages to the current identity
-   * @param message
-   */
+  authenticateMutationData(
+    data: Record<string, unknown> | string | Record<string, unknown>[],
+  ): Observable<{ signedData: unknown; token: unknown }>;
+
   decryptMessage(
     message,
-  ): Promise<{ createdAt: any; from: any; id: any; body: string; readAt: any }>;
+  ): Observable<{
+    data: { body: string; from: string; readAt: number; createdAt: number; id: string };
+  }>;
 
-  /**
-   * Returns all the inbox messages from Textile Users
-   * @param args
-   */
-  getMessages(args: InboxListOptions): Promise<any[]>;
+  getMessages(
+    args: InboxListOptions,
+  ): Observable<{
+    data: { body: string; from: string; readAt: number; createdAt: number; id: string }[];
+  }>;
 
-  /**
-   * Checks the Textile Users inbox and looks for specific
-   * notification message type
-   */
-  hasNewNotifications(): Promise<boolean>;
+  hasNewNotifications(): Observable<{ data: boolean }>;
 
-  /**
-   *
-   * @param messageId
-   */
-  markMessageAsRead(messageId: string): Promise<boolean>;
+  markMessageAsRead(messageId: string): Observable<{ data: boolean }>;
 
-  /**
-   *
-   * @param messageId
-   */
-  deleteMessage(messageId: string): Promise<boolean>;
+  deleteMessage(messageId: string): Observable<{ data: boolean }>;
 
-  /**
-   *
-   * @param inviteCode
-   */
-  validateInvite(inviteCode: string): Promise<boolean>;
+  validateInvite(inviteCode: string): Observable<{ data: boolean }>;
 }

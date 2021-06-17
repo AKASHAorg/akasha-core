@@ -1,7 +1,7 @@
 import TYPES from './service.types';
 import Services from './service.interfaces';
 import { Observable } from 'rxjs';
-import { IAWF_Auth } from './interfaces';
+import { AWF_IAuth } from './interfaces';
 import { AWF_IENS } from './interfaces/registry';
 import AWF_IProfile from './interfaces/profile';
 import { AWF_IComments, AWF_IEntry, AWF_ITags } from './interfaces/posts';
@@ -11,7 +11,7 @@ export interface AwfSDK {
   services: Services;
   api: {
     globalChannel: Observable<unknown>;
-    auth: IAWF_Auth;
+    auth: AWF_IAuth;
     ens: AWF_IENS;
     profile: AWF_IProfile;
     entries: AWF_IEntry;

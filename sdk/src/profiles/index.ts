@@ -20,7 +20,7 @@ import {
 import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
-import { concatAll, map, switchAll, switchMap, tap } from 'rxjs/operators';
+import { concatAll, map, tap } from 'rxjs/operators';
 import { lastValueFrom, throwError } from 'rxjs';
 import { resizeImage } from '../helpers/img';
 import Settings from '../settings';
@@ -83,7 +83,7 @@ export default class AWF_Profile implements AWF_IProfile {
             context: {
               headers: {
                 Authorization: `Bearer ${res.token}`,
-                Signature: res.signedData.signature,
+                Signature: res.signedData.data.signature,
               },
             },
           })
@@ -117,7 +117,7 @@ export default class AWF_Profile implements AWF_IProfile {
             context: {
               headers: {
                 Authorization: `Bearer ${res.token}`,
-                Signature: res.signedData.signature,
+                Signature: res.signedData.data.signature,
               },
             },
           })
@@ -157,7 +157,7 @@ export default class AWF_Profile implements AWF_IProfile {
             context: {
               headers: {
                 Authorization: `Bearer ${res.token}`,
-                Signature: res.signedData.signature,
+                Signature: res.signedData.data.signature,
               },
             },
           })
@@ -221,7 +221,7 @@ export default class AWF_Profile implements AWF_IProfile {
             context: {
               headers: {
                 Authorization: `Bearer ${res.token}`,
-                Signature: res.signedData.signature,
+                Signature: res.signedData.data.signature,
               },
             },
           })
@@ -256,7 +256,7 @@ export default class AWF_Profile implements AWF_IProfile {
             context: {
               headers: {
                 Authorization: `Bearer ${res.token}`,
-                Signature: res.signedData.signature,
+                Signature: res.signedData.data.signature,
               },
             },
           })
@@ -320,7 +320,8 @@ export default class AWF_Profile implements AWF_IProfile {
       file = data.content;
       path = data.name;
     }
-    const { buck } = await this._auth.getSession();
+    const sess = await lastValueFrom(this._auth.getSession());
+    const buck = sess.data.buck;
     const { root } = await buck.getOrCreate(PROFILE_MEDIA_FILES, {
       threadName: BUCKET_THREAD_NAME,
     });
@@ -361,7 +362,7 @@ export default class AWF_Profile implements AWF_IProfile {
             context: {
               headers: {
                 Authorization: `Bearer ${res.token}`,
-                Signature: res.signedData.signature,
+                Signature: res.signedData.data.signature,
               },
             },
           });

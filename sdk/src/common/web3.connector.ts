@@ -7,6 +7,7 @@ import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import OpenLogin from '@toruslabs/openlogin';
+import { createObservableStream } from '../helpers/observable';
 
 @injectable()
 export default class Web3Connector
@@ -94,7 +95,11 @@ export default class Web3Connector
   /**
    * @returns the current eth address that is connected to the provider
    */
-  async getCurrentAddress() {
+  getCurrentAddress() {
+    return createObservableStream(this._getCurrentAddress());
+  }
+
+  private async _getCurrentAddress() {
     if (this._web3Instance instanceof ethers.providers.Web3Provider) {
       const signer = await this._web3Instance.getSigner();
       return signer.getAddress();
@@ -105,10 +110,13 @@ export default class Web3Connector
     return null;
   }
 
+  checkCurrentNetwork() {
+    return createObservableStream(this._checkCurrentNetwork());
+  }
   /**
    * Ensures that the web3 provider is connected to the specified network
    */
-  async checkCurrentNetwork(): Promise<void> {
+  private async _checkCurrentNetwork(): Promise<void> {
     const network = await this._web3Instance.detectNetwork();
     if (network?.name !== this.network) {
       throw new Error(`Please change the ethereum network to ${this.network}!`);
