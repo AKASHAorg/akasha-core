@@ -8,9 +8,8 @@
     "resolveJsonModule": true,
     "types": ["reflect-metadata", "node"]
   },
-  "files": ["./src/contracts/artifacts/ENS.json", "./src/contracts/artifacts/AkashaRegistrar.json", "./src/contracts/artifacts/ReverseRegistrar.json"],
   "include": [
-    "./src"
+    "./src/**/*"
   ],
   "exclude": [
     "./lib"
@@ -19,5 +18,13 @@
     {
       "path": "./typings"
     }
-  ]
+  ],
+  "files": [
+    "./src/contracts/artifacts/ENS.json",
+    "./src/contracts/artifacts/AkashaRegistrar.json",
+    "./src/contracts/artifacts/ReverseRegistrar.json",
+    "./src/definitions/graphql.d.ts"
+  ],
+
+
 }

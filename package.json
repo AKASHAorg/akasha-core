@@ -24,7 +24,7 @@
     "pack:ui-apps:stats": "lerna run pack:stats --parallel --scope @akashaproject/* --stream",
     "pack:only": "lerna run pack --scope $AWF_PACKAGE --stream",
     "pack:watch": "lerna run pack:watch --scope $AWF_PACKAGE --stream",
-    "tsc:sdk": "lerna run tsc --scope @akashaproject/sdk --scope @akashaproject/sdk-*",
+    "tsc:sdk": "lerna run tsc --scope @akashaproject/awf-sdk",
     "tsc:ui": "lerna run tsc --scope @akashaproject/design-* --scope @akashaproject/ui-* --scope @akashaproject/app-*",
     "tsc:scripts": "lerna run tsc --scope @akashaproject/script-*",
     "script:dev-db": "lerna run start --scope @akashaproject/script-server-db --stream",
