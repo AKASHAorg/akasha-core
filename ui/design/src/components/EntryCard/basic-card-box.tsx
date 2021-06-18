@@ -2,14 +2,14 @@ import { Box, Anchor } from 'grommet';
 import * as React from 'react';
 import styled, { css } from 'styled-components';
 
-const StyledBox = styled(Box)<{ elevate?: string; isSelected?: boolean }>`
+const StyledBox = styled(Box)<{ isSelected?: boolean }>`
   background-color: ${props =>
     props.isSelected ? props.theme.colors.activeCardBackground : props.theme.colors.background};
 `;
 
 export interface IBasicCardBox {
   className?: string;
-  elevate?: string;
+  elevation?: string;
   callToAction?: boolean;
   dashedBorder?: boolean;
   darkBorder?: boolean;
@@ -17,6 +17,7 @@ export interface IBasicCardBox {
   rootNodeRef?: React.Ref<HTMLDivElement>;
   pad?: any;
   margin?: any;
+  noBorder?: boolean;
   noBorderRadius?: boolean;
   isSelected?: boolean;
 }
@@ -24,7 +25,7 @@ export interface IBasicCardBox {
 const BasicCardBox: React.FC<IBasicCardBox> = ({
   children,
   className,
-  elevate,
+  elevation,
   callToAction,
   dashedBorder,
   darkBorder,
@@ -32,18 +33,18 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
   rootNodeRef,
   pad,
   margin,
+  noBorder,
   noBorderRadius,
   isSelected,
 }) => (
   <StyledBox
     style={style}
     direction="column"
-    elevation="shadow"
+    elevation={elevation || 'shadow'}
     fill="horizontal"
     pad={pad || 'none'}
     margin={margin || 'none'}
     round={noBorderRadius ? false : 'xsmall'}
-    elevate={elevate}
     isSelected={isSelected}
     border={
       callToAction
@@ -66,6 +67,8 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
             size: 'xsmall',
             side: 'left',
           }
+        : noBorder
+        ? false
         : {
             color: 'border',
             size: 'xsmall',
