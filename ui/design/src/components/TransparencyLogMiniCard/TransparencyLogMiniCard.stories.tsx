@@ -36,7 +36,7 @@ BaseTransparencyLogMiniCard.args = {
   locale: 'en',
   title: 'Post Delisted',
   content:
-    'This post violates our Code fo Conduct by being offensive and harmful to others. This person is directly threatening a group of people',
+    'This post violates our Code of Conduct by being offensive and harmful to others. This person is directly threatening a group of people.',
   isSelected: true,
   isDelisted: true,
   moderatedTimestamp: '2021-06-14T16:48:00.000Z',
