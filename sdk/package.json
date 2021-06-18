@@ -2,7 +2,7 @@
   "name": "@akashaproject/awf-sdk",
   "version": "0.1.0",
   "private": false,
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "dependencies": {
     "@types/node": "14.14.45",
     "@apollo/client": "3.3.18",
@@ -29,7 +29,7 @@
     "quick-lru": "6.0.0",
     "ipfs-utils": "8.1.2",
     "reflect-metadata": "0.1.13",
-    "rxjs": "7.0.1",
+    "rxjs": "7.1.0",
     "workbox-core": "6.1.5",
     "workbox-cacheable-response": "^6.1.5",
     "workbox-expiration": "^6.1.5",

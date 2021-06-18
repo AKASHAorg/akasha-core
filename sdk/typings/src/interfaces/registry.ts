@@ -1,7 +1,9 @@
-export interface AWF_IENS {
-  registerName(name: string): Promise<unknown>;
+import { Observable } from 'rxjs';
 
-  claimName(name: string): Promise<unknown>;
+export interface AWF_IENS {
+  registerName(name: string): Observable<unknown>;
+
+  claimName(name: string): Observable<unknown>;
 
   userIsOwnerOf(name: string): Promise<boolean>;
 

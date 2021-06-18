@@ -12,6 +12,7 @@ const TYPES = {
   Entry: Symbol.for('awf-Entry'),
   Comment: Symbol.for('awf-Comment'),
   Tag: Symbol.for('awf-Tag'),
+  IPFS: Symbol.for('awf-IPFS'),
 };
 
 export default TYPES;

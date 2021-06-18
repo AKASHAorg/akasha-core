@@ -1,10 +1,10 @@
 import { injectable } from 'inversify';
-import DBService from '@akashaproject/sdk-typings/lib/interfaces/db';
+import DBService from '@akashaproject/sdk-typings/src/interfaces/db';
 import { Collection, Database } from '@textile/threaddb';
 import settingsSchema from './settings.schema';
 import appSchema from './app.schema';
 import { createObservableStream, createObservableValue } from '../helpers/observable';
-import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
+import { ServiceCallResult } from '@akashaproject/sdk-typings/src/interfaces';
 
 export const availableCollections = Object.freeze({
   Settings: settingsSchema.name,

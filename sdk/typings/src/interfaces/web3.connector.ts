@@ -1,4 +1,5 @@
 import ILogService, { ILogger } from './log';
+import { Observable } from 'rxjs';
 
 export enum EthProviders {
   None = 1,
@@ -28,7 +29,7 @@ export interface IWeb3Connector<T> {
 
   signMessage(message: string): Promise<any>;
 
-  getCurrentAddress(): Promise<string> | null;
+  getCurrentAddress(): Observable<{ data: string | null }>;
 
-  checkCurrentNetwork(): Promise<void>;
+  checkCurrentNetwork(): Observable<{ data: void }>;
 }

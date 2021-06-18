@@ -41,7 +41,7 @@ const {
 interface SearchPageProps
   extends Pick<
     RootComponentProps,
-    'sdkModules' | 'globalChannel' | 'logger' | 'rxjsOperators' | 'singleSpa' | 'layoutConfig'
+    'sdkModules' | 'globalChannel' | 'logger' | 'singleSpa' | 'layoutConfig'
   > {
   onError?: (err: Error) => void;
   loginState: ILoginState;

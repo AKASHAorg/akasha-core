@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { TYPES, AwfSDK } from '@akashaproject/sdk-typings';
+import * as typings from '@akashaproject/sdk-typings';
 import container from './container';
 import Logging from './logging';
 import Settings from './settings';
@@ -14,6 +14,7 @@ import AWF_ENS from './registry';
 import AWF_Entry from './posts/entry';
 import AWF_Comments from './posts/comments';
 import AWF_Tags from './posts/tags';
+import AWF_IpfsConnector from './common/ipfs.connector';
 
 let sdk: {
   services: {
@@ -24,6 +25,7 @@ let sdk: {
     db: DB;
     common: {
       web3: Web3Connector;
+      ipfs: AWF_IpfsConnector;
     };
   };
   api: {
@@ -45,6 +47,7 @@ export default function getSDK() {
 }
 
 export function init() {
+  const { TYPES } = typings;
   const log = container.get<Logging>(TYPES.Log);
   const gql = container.get<Gql>(TYPES.Gql);
   const stash = container.get<Stash>(TYPES.Stash);
@@ -58,6 +61,7 @@ export function init() {
   const entries = container.get<AWF_Entry>(TYPES.Entry);
   const comments = container.get<AWF_Comments>(TYPES.Comment);
   const tags = container.get<AWF_Tags>(TYPES.Tag);
+  const ipfs = container.get<AWF_IpfsConnector>(TYPES.IPFS);
   return {
     services: {
       log,
@@ -67,6 +71,7 @@ export function init() {
       db,
       common: {
         web3,
+        ipfs,
       },
     },
     api: {
@@ -80,3 +85,5 @@ export function init() {
     },
   };
 }
+
+export { typings };
