@@ -2,11 +2,9 @@ import { Box, Anchor } from 'grommet';
 import * as React from 'react';
 import styled, { css } from 'styled-components';
 
-const StyledBox = styled(Box)<{ elevate?: string }>`
-  background-color: ${props => {
-    // console.log(props, 'box props');
-    return props.theme.colors.background;
-  }};
+const StyledBox = styled(Box)<{ elevate?: string; isSelected?: boolean }>`
+  background-color: ${props =>
+    props.isSelected ? props.theme.colors.activeCardBackground : props.theme.colors.background};
 `;
 
 export interface IBasicCardBox {
@@ -20,6 +18,7 @@ export interface IBasicCardBox {
   pad?: any;
   margin?: any;
   noBorderRadius?: boolean;
+  isSelected?: boolean;
 }
 
 const BasicCardBox: React.FC<IBasicCardBox> = ({
@@ -34,6 +33,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
   pad,
   margin,
   noBorderRadius,
+  isSelected,
 }) => (
   <StyledBox
     style={style}
@@ -44,6 +44,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
     margin={margin || 'none'}
     round={noBorderRadius ? false : 'xsmall'}
     elevate={elevate}
+    isSelected={isSelected}
     border={
       callToAction
         ? {
@@ -58,6 +59,12 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
         ? {
             color: 'darkBorder',
             side: 'all',
+          }
+        : isSelected
+        ? {
+            color: 'accentText',
+            size: 'xsmall',
+            side: 'left',
           }
         : {
             color: 'border',
