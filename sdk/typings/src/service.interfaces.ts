@@ -4,6 +4,7 @@ import IStashService from './interfaces/stash';
 import ISettingsService from './interfaces/settings';
 import IDBService from './interfaces/db';
 import { IWeb3Connector } from './interfaces';
+import AWF_IIpfsConnector from './interfaces/ipfs.connector';
 
 export default interface IServices {
   gql: IGqlClient<unknown>;
@@ -13,5 +14,6 @@ export default interface IServices {
   db: IDBService<unknown, unknown>;
   common: {
     web3: IWeb3Connector<unknown>;
+    ipfs: AWF_IIpfsConnector;
   };
 }

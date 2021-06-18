@@ -506,7 +506,14 @@ export default class AWF_Auth implements AWF_IAuth {
   }
 
   markMessageAsRead(messageId: string) {
-    return createObservableStream(this._markMessageAsRead(messageId));
+    return createObservableStream(this._markMessageAsRead(messageId)).pipe(
+      tap(() => {
+        this._globalChannel.next({
+          data: { messageId },
+          event: AUTH_EVENTS.MARK_MSG_READ,
+        });
+      }),
+    );
   }
 
   /**

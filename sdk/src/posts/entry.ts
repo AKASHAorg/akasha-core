@@ -15,8 +15,12 @@ import {
 import { concatAll, map, tap } from 'rxjs/operators';
 import { DataProviderInput } from '@akashaproject/sdk-typings/src/interfaces/common';
 import { AWF_IEntry } from '@akashaproject/sdk-typings/src/interfaces/posts';
-import { COMMENTS_EVENTS, ENTRY_EVENTS } from '@akashaproject/sdk-typings/src/interfaces/events';
+import { ENTRY_EVENTS } from '@akashaproject/sdk-typings/src/interfaces/events';
 import EventBus from '../common/event-bus';
+import {
+  Post_Response,
+  PostsResult_Response,
+} from '@akashaproject/sdk-typings/src/interfaces/responses';
 
 @injectable()
 export default class AWF_Entry implements AWF_IEntry {
@@ -50,7 +54,7 @@ export default class AWF_Entry implements AWF_IEntry {
   getEntry(entryId: string) {
     return this._auth.getCurrentUser().pipe(
       map(result =>
-        this._gql.run(
+        this._gql.run<{ getPost: Post_Response }>(
           {
             query: GetEntry,
             variables: { id: entryId, pubKey: result?.data.pubKey },
@@ -70,7 +74,7 @@ export default class AWF_Entry implements AWF_IEntry {
   getEntries(opt: { offset?: string; limit: number }) {
     return this._auth.getCurrentUser().pipe(
       map(result =>
-        this._gql.run(
+        this._gql.run<{ posts: PostsResult_Response }>(
           {
             query: GetEntries,
             variables: { offset: opt.offset, limit: opt.limit, pubKey: result?.data.pubKey },
@@ -99,7 +103,7 @@ export default class AWF_Entry implements AWF_IEntry {
       .pipe(
         map(res => {
           return this._gql
-            .run({
+            .run<{ createPost: string }>({
               query: CreateEntry,
               variables: { content: opt.data, post: opt.post },
               operationName: 'CreateEntry',
@@ -128,7 +132,7 @@ export default class AWF_Entry implements AWF_IEntry {
   entriesByAuthor(opt: { pubKey: string; offset?: number; limit: number }) {
     return this._auth.getCurrentUser().pipe(
       map(result =>
-        this._gql.run(
+        this._gql.run<{ getPostsByAuthor: PostsResult_Response }>(
           {
             query: GetPostsByAuthor,
             variables: {
@@ -153,7 +157,7 @@ export default class AWF_Entry implements AWF_IEntry {
   entriesByTag(opt: { name: string; offset?: string; limit: number }) {
     return this._auth.getCurrentUser().pipe(
       map(result =>
-        this._gql.run(
+        this._gql.run<{ getPostsByTag: PostsResult_Response }>(
           {
             query: GetPostsByTag,
             variables: {

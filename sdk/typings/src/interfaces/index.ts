@@ -7,6 +7,7 @@ import type { ServiceCallResult } from './responses';
 import type { IWeb3Connector } from './web3.connector';
 import { EthProviders } from './web3.connector';
 import type AWF_IAuth from './auth';
+import type AWF_IIpfsConnector from './ipfs.connector';
 
 export { IDBService };
 export { ServiceCallResult };
@@ -17,3 +18,4 @@ export { IStashService };
 export { EthProviders };
 export { IWeb3Connector };
 export { AWF_IAuth };
+export { AWF_IIpfsConnector };

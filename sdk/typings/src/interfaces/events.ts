@@ -1,9 +1,10 @@
 export enum AUTH_EVENTS {
-  SIGN_IN = 'auth#signIn',
-  READY = 'auth#ready',
-  NEW_NOTIFICATIONS = 'auth#hasNewNotifications',
+  SIGN_IN = '#auth#signIn',
+  READY = '#auth#ready',
+  NEW_NOTIFICATIONS = '#auth#hasNewNotifications',
   SIGN_OUT = '#auth#signOut',
-  WAIT_FOR_AUTH = 'auth#waitForAuth',
+  WAIT_FOR_AUTH = '#auth#waitForAuth',
+  MARK_MSG_READ = '#auth#markMsgRead',
 }
 
 export enum PROFILE_EVENTS {

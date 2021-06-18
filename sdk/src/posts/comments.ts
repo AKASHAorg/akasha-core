@@ -11,6 +11,10 @@ import { concatAll, map, tap } from 'rxjs/operators';
 import { AWF_IComments } from '@akashaproject/sdk-typings/src/interfaces/posts';
 import { COMMENTS_EVENTS } from '@akashaproject/sdk-typings/src/interfaces/events';
 import EventBus from '../common/event-bus';
+import {
+  Comment_Response,
+  Comments_Response,
+} from '@akashaproject/sdk-typings/src/interfaces/responses';
 
 @injectable()
 export default class AWF_Comments implements AWF_IComments {
@@ -40,7 +44,7 @@ export default class AWF_Comments implements AWF_IComments {
    * @param commentID
    */
   getComment(commentID: string) {
-    return this._gql.run(
+    return this._gql.run<{ getComment: Comment_Response }>(
       {
         query: GetComment,
         variables: { commentID: commentID },
@@ -55,7 +59,7 @@ export default class AWF_Comments implements AWF_IComments {
    * @param opt
    */
   getComments(opt: { offset?: string; limit: number; postID: string }) {
-    return this._gql.run(
+    return this._gql.run<{ getComments: Comments_Response }>(
       {
         query: GetComments,
         variables: { offset: opt.offset, limit: opt.limit, postID: opt.postID },
@@ -81,7 +85,7 @@ export default class AWF_Comments implements AWF_IComments {
       .pipe(
         map(res => {
           return this._gql
-            .run({
+            .run<{ addComment: string }>({
               query: AddComment,
               variables: { content: opt.data, comment: opt.comment },
               operationName: 'AddComment',
