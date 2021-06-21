@@ -6,6 +6,8 @@ import { exhaustMap, switchMap } from 'rxjs/operators';
 import { createObservableStream } from '../helpers/observable';
 import { ServiceCallResult } from '@akashaproject/sdk-typings/src/interfaces';
 import { lastValueFrom } from 'rxjs';
+import { Collection } from '@textile/threaddb';
+import { SettingsSchema } from '../db/settings.schema';
 
 @injectable()
 class Settings implements ISettingsService {
@@ -17,7 +19,7 @@ class Settings implements ISettingsService {
    */
   get(service: string) {
     return this._db.getCollection(availableCollections.Settings).pipe(
-      switchMap(collection => {
+      switchMap((collection: { data: Collection<SettingsSchema> }) => {
         // this does not play well with threaddb typings
         const query: unknown = { serviceName: { $eq: service } };
         const doc = collection.data.findOne(query);

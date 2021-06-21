@@ -16,7 +16,7 @@ import { lastValueFrom } from 'rxjs';
 import { createObservableStream } from '../helpers/observable';
 import EventBus from '../common/event-bus';
 import { tap } from 'rxjs/operators';
-import { ENS_EVENTS, PROFILE_EVENTS } from '@akashaproject/sdk-typings/src/interfaces/events';
+import { ENS_EVENTS } from '@akashaproject/sdk-typings/src/interfaces/events';
 
 export const isEncodedLabelHash = hash => {
   return hash.startsWith('[') && hash.endsWith(']') && hash.length === 66;

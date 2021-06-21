@@ -14,6 +14,7 @@ import AWF_Entry from './posts/entry';
 import AWF_Comments from './posts/comments';
 import AWF_Tags from './posts/tags';
 import AWF_IpfsConnector from './common/ipfs.connector';
+import AppSettings from './settings/apps';
 const diContainer = new Container({
   defaultScope: 'Singleton',
 });
@@ -34,4 +35,5 @@ diContainer.bind<AWF_Entry>(TYPES.Entry).to(AWF_Entry);
 diContainer.bind<AWF_Comments>(TYPES.Comment).to(AWF_Comments);
 diContainer.bind<AWF_Tags>(TYPES.Tag).to(AWF_Tags);
 diContainer.bind<AWF_IpfsConnector>(TYPES.IPFS).to(AWF_IpfsConnector);
+diContainer.bind<AppSettings>(TYPES.AppSettings).to(AppSettings);
 export default diContainer;

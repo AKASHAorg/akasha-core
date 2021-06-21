@@ -4,6 +4,9 @@ module.exports = {
       '@akashaproject/design-system': '@akashaproject/design-system',
     },
     function ({ request }, callback) {
+      if (/^@akashaproject\/awf-sdk$/.test(request)) {
+        return callback(null, 'awfSDK', 'root');
+      }
       if (/^rxjs\/operators$/.test(request)) {
         return callback(null, ['rxjs', 'operators'], 'root');
       }

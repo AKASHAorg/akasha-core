@@ -18,9 +18,9 @@ export interface IntegrationModule {
 }
 
 class Apps extends BaseIntegration {
-  private appInfos: AppRegistryInfo[];
-  private appConfigs: Record<string, IAppConfig>;
-  private appModules: Record<string, IntegrationModule>;
+  private readonly appInfos: AppRegistryInfo[];
+  private readonly appConfigs: Record<string, IAppConfig>;
+  private readonly appModules: Record<string, IntegrationModule>;
   private logger: pino.Logger;
   constructor(opts: BaseIntegrationClassOptions) {
     super(opts);
