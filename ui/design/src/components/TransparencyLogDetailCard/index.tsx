@@ -50,7 +50,6 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
       elevation="none"
       noBorderRadius={true}
       noBorder={true}
-      // style={{ border: '0.1rem solid green' }}
     >
       <Box
         pad={{ bottom: 'large', right: 'medium' }}
@@ -59,7 +58,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
         <Text size="large" weight="bold" margin={{ top: 'small' }}>
           {reportedTimesLabel}
         </Text>
-        <StyledText margin={{ top: 'small' }} weight="normal" color="secondaryText" size="medium">
+        <StyledText margin={{ top: 'small' }} weight="normal" color="secondaryText" size="small">
           {reasonsLabel}
         </StyledText>
         <Box direction="row" wrap={true} align="center">
@@ -105,12 +104,12 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
             </Box>
           </Box>
           <Box pad={{ left: 'small' }} flex={{ shrink: 0 }}>
-            <Text size="small" color="secondaryText" style={{ textAlign: 'right' }}>
+            <Text color="secondaryText" style={{ textAlign: 'right' }}>
               {formatRelativeTime(moderatedTimestamp, locale)}
             </Text>
           </Box>
         </Box>
-        <StyledText margin={{ top: 'small' }} weight="normal" color="secondaryText" size="medium">
+        <StyledText margin={{ top: 'small' }} weight="normal" color="secondaryText" size="small">
           {explanationLabel}
         </StyledText>
         <Text size="large" margin={{ top: 'xsmall' }} style={{ letterSpacing: '0.025em' }}>
@@ -119,7 +118,6 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
       </Box>
       <Box
         direction="row"
-        // align="baseline"
         margin={{ top: 'large' }}
         pad={{ bottom: 'large', right: 'medium' }}
         onClick={onClickContactModerators}

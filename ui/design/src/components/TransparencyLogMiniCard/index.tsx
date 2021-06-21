@@ -56,7 +56,7 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
         </Box>
         <Box direction="row" justify="between" align="start">
           <Box>
-            <Text size="medium" margin={{ top: 'small' }} color="secondaryText">
+            <Text margin={{ top: 'small' }} color="secondaryText">
               {content.length > 95 ? `${content.substring(0, 95)}...` : content}
             </Text>
           </Box>
