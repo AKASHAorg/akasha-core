@@ -160,6 +160,7 @@ class ModerationDecisionAPI extends DataSource {
         moderator: decision.moderator,
         delisted: decision.delisted,
         reasons: decision.reasons,
+        reports: decision.reports,
         explanation: decision.explanation,
       });
     }
@@ -206,7 +207,12 @@ class ModerationDecisionAPI extends DataSource {
       const profileAPI = new ProfileAPI({ dbID: this.dbID, collection: 'Profiles' });
       const moderator = await profileAPI.getProfile(decision.moderator);
       decision = Object.assign({}, decision, { 
-        moderatorProfile: moderator
+        moderatorProfile: {
+          ethAddress: moderator.ethAddress,
+          name: moderator.name || "",
+          userName: moderator.userName || "",
+          avatar: moderator.avatar,
+        }
       });
     }
     // add first report data

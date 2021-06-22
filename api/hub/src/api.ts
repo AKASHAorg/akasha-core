@@ -7,6 +7,8 @@ import ProfileAPI from './datasources/profile';
 import ModerationReportAPI from './datasources/moderation-report';
 import ModerationDecisionAPI from './datasources/moderation-decision';
 import ModerationAdminAPI from './datasources/moderation-admin';
+import ModerationReasonAPI from './datasources/moderation-reasons';
+import { logger } from 'ethers';
 // import { Invite } from './collections/interfaces';
 
 export const promRegistry = new promClient.Registry();
@@ -22,9 +24,55 @@ const dataSources = {
   profileAPI: new ProfileAPI({ dbID, collection: 'Profiles' }),
   reportingAPI: new ModerationReportAPI({ dbID, collection: 'ModerationReports' }),
   decisionsAPI: new ModerationDecisionAPI({ dbID, collection: 'ModerationDecisions' }),
+  reasonsAPI: new ModerationReasonAPI({ dbID, collection: 'ModerationReasons' }),
   moderatorsAPI: new ModerationAdminAPI({ dbID, collection: 'Moderators' }),
 };
 
+/**
+ * Check to see if the user is part of the admins.
+ * @param request - The HTTP request object
+ * @param ctx - The Koa Context object
+ * @returns A boolean if the user is allowed, and the Koa Context object
+ */
+const isAdmin = async (request, ctx) => {
+  let ok = false;
+  ctx.status = 401;
+  if (request.secret === adminSecret) {
+    ok = true;
+  } else if (request.data.adminEthAddress) {
+    // check if the user is local (exists)
+    const profile = await dataSources.profileAPI.getProfile(request.data.adminEthAddress);
+    if (profile && profile.pubKey && request.data.signature) {
+      try {
+        // verify request signature (from client)
+        const verified = await verifyEd25519Sig({
+          pubKey: profile.pubKey,
+          data: request.data,
+          signature: request.signature,
+        });
+        // check is the user has admin rights to be able to add moderators
+        const isAdmin = await dataSources.moderatorsAPI.isAdmin(request.data.adminEthAddress);
+        if (!verified || !isAdmin) {
+          ctx.status = 403;
+        } else {
+          ok = true;
+          ctx.status = 200;
+        }
+      } catch (error) {
+        ctx.body = `Error trying to validate signature: ${error}`;
+        ctx.status = 500;
+      }
+    }
+  }
+  return {
+    ok,
+    ctx
+  }
+};
+
+/**
+ * Init router
+ */
 const api = new Router({
   prefix: '/api',
 });
@@ -99,27 +147,28 @@ api.post('/moderation/reports/new', async (ctx: koa.Context, next: () => Promise
     });
     if (!verified) {
       ctx.status = 403;
-    }
-    // check if the user has already reported this content identifier
-    const exists = await dataSources.reportingAPI.exists(report.contentId, report.data.user);
-    if (exists) {
-      ctx.status = 409;
-      ctx.body = `You have already reported this content.`;
     } else {
-      try {
-        // add report
-        await dataSources.reportingAPI.addReport(
-          'ModerationDecisions',
-          report.contentType,
-          report.contentId,
-          report.data.user,
-          report.data.reason,
-          report.data.explanation,
-        );
-        ctx.status = 201;
-      } catch (error) {
-        ctx.body = error;
-        ctx.status = 500;
+      // check if the user has already reported this content identifier
+      const exists = await dataSources.reportingAPI.exists(report.contentId, report.data.user);
+      if (exists) {
+        ctx.status = 409;
+        ctx.body = `You have already reported this content.`;
+      } else {
+        try {
+          // add report
+          await dataSources.reportingAPI.addReport(
+            'ModerationDecisions',
+            report.contentType,
+            report.contentId,
+            report.data.user,
+            report.data.reason,
+            report.data.explanation,
+          );
+          ctx.status = 201;
+        } catch (error) {
+          ctx.body = error;
+          ctx.status = 500;
+        }
       }
     }
   }
@@ -214,19 +263,20 @@ api.post('/moderation/decisions/moderate', async (ctx: koa.Context, next: () => 
     });
     if (!verified) {
       ctx.status = 403;
-    }
-    try {
-      // store moderation decision
-      await dataSources.decisionsAPI.makeDecision(
-        report.contentId,
-        report.data.moderator,
-        report.data.explanation,
-        report.data.delisted,
-      );
-      ctx.status = 200;
-    } catch (error) {
-      ctx.body = `Cannot moderate content! Error: ${error}`;
-      ctx.status = 500;
+    } else {
+      try {
+        // store moderation decision
+        await dataSources.decisionsAPI.makeDecision(
+          report.contentId,
+          report.data.moderator,
+          report.data.explanation,
+          report.data.delisted,
+        );
+        ctx.status = 200;
+      } catch (error) {
+        ctx.body = `Cannot moderate content! Error: ${error}`;
+        ctx.status = 500;
+      }
     }
   }
   await next();
@@ -325,37 +375,10 @@ api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Prom
   if (!request.data || !request.secret) {
     ctx.status = 400;
   } else {
-    let ok = false;
-    if (request.secret === adminSecret) {
-      ok = true;
-    } else {
-      // check if the user is local (exists)
-      const profile = await dataSources.profileAPI.getProfile(request.data.adminEthAddress);
-      if (!profile || !profile.pubKey || !request.data.signature) {
-        ctx.status = 401;
-      } else {
-        try {
-          // verify request signature (from client)
-          const verified = await verifyEd25519Sig({
-            pubKey: profile.pubKey,
-            data: request.data,
-            signature: request.signature,
-          });
-          // check is the user has admin rights to be able to add moderators
-          const isAdmin = await dataSources.moderatorsAPI.isAdmin(request.data.adminEthAddress);
-          if (!verified || !isAdmin) {
-            ctx.status = 403;
-          } else {
-            ok = true;
-          }
-        } catch (error) {
-          ctx.body = `Error trying to validate signature: ${error}`;
-          ctx.status = 500;
-        }
-      }
-    }
-    if (ok) {
-      try {
+    try {
+      let allowed = await isAdmin(request, ctx);
+      ctx = allowed.ctx;
+      if (allowed.ok) {
         // add the new moderator
         await dataSources.moderatorsAPI.updateModerator(
           request.data.ethAddress,
@@ -363,10 +386,10 @@ api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Prom
           request.data.active,
         );
         ctx.status = 200;
-      } catch (error) {
-        ctx.body = `Cannot add moderator! Error: ${error}`;
-        ctx.status = 500;
       }
+    } catch (error) {
+      ctx.body = `Cannot add moderator! Error: ${error}`;
+      ctx.status = 500;
     }
   }
   await next();
@@ -412,6 +435,98 @@ api.get(
     }
     await next();
   },
+);
+
+/**
+ * Get data for a given moderation reason.
+ */
+api.get(
+  '/moderation/reasons/:id',
+  async (ctx: koa.Context, next: () => Promise<any>) => {
+    const id = ctx?.params?.id;
+    if (!id) {
+      ctx.status = 400;
+      ctx.body = 'Missing "id" attribute from request.';
+    } else {
+      ctx.set('Content-Type', 'application/json');
+      ctx.body = await dataSources.reasonsAPI.getReason(id);
+      ctx.status = 200;
+    }
+    await next();
+  }
+);
+
+/**
+ * Get list of moderation reasons.
+ */
+ api.post(
+  '/moderation/reasons',
+  async (ctx: koa.Context, next: () => Promise<any>) => {
+    const request = ctx?.request.body;
+    ctx.set('Content-Type', 'application/json');
+    ctx.body = request && request.active ? await dataSources.reasonsAPI.listReasons(true) :
+    await dataSources.reasonsAPI.listReasons(false);
+    ctx.status = 200;
+  }
+);
+
+/**
+ * Add a new moderation reason.
+ */
+api.post(
+  '/moderation/reasons/new',
+  async (ctx: koa.Context, next: () => Promise<any>) => {
+    const request = ctx?.request.body;
+    if (!request.data.label && (!request.data.ethAddress || request.secret)) {
+      ctx.status = 400;
+      ctx.body = 'Missing "label" attribute from request.';
+    } else {
+      let allowed = await isAdmin(request, ctx);
+      ctx = allowed.ctx;
+      if (allowed.ok) {
+        try {
+          // add the new reason
+          await dataSources.reasonsAPI.updateReason(
+            request.data.label,
+            request.data.description,
+            request.data.active,
+          );
+          ctx.status = 200;
+        } catch (error) {
+          ctx.body = `Cannot add reason! Error: ${error}`;
+          ctx.status = 500;
+        }
+      }
+    }
+    await next();
+  }
+);
+
+api.delete(
+  '/moderation/reasons',
+  async (ctx: koa.Context, next: () => Promise<any>) => {
+    const request = ctx?.request.body;
+    if (!request.data.id) {
+      ctx.status = 400;
+      ctx.body = 'Missing "id" attribute from request.';
+    } else {
+      let allowed = await isAdmin(request, ctx);
+      ctx = allowed.ctx;
+      if (allowed.ok) {
+        try {
+          // delete reason
+          await dataSources.reasonsAPI.deleteReason(
+            request.data.id
+          );
+          ctx.status = 200;
+        } catch (error) {
+          ctx.body = `Cannot delete reason! Error: ${error}`;
+          ctx.status = 500;
+        }
+      }
+    }
+    await next();
+  }
 );
 
 export default api;

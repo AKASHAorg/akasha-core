@@ -27,7 +27,7 @@ class ModerationAdminAPI extends DataSource {
    * @param ethAddress - The moderator's ETH address
    * @returns The key as a string
    */
-   getModeratorCacheKey(ethAddress: string) {
+  getModeratorCacheKey(ethAddress: string) {
     return `${this.collection}:ethAddress${ethAddress}`;
   }
 

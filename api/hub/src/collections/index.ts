@@ -5,6 +5,7 @@ import * as Comments from './comments';
 import * as Invites from './invites';
 import * as ModerationReports from './moderation-reports';
 import * as ModerationDecisions from './moderation-decisions';
+import * as ModerationReasons from './moderation-reasons';
 import * as Moderators from './moderators';
 import { Client, ThreadID } from '@textile/hub';
 import { logger } from '../helpers';
@@ -48,6 +49,11 @@ export const initCollections = async (client: Client, threadID: ThreadID) => {
       await ModerationDecisions.newCollection(client, threadID);
     }
 
+    const reasonsDeployed = collections.find(d => d.name === 'ModerationReasons');
+    if (!reasonsDeployed) {
+      await ModerationReasons.newCollection(client, threadID);
+    }
+
     const moderatorsDeployed = collections.find(d => d.name === 'Moderators');
     if (!moderatorsDeployed) {
       await Moderators.newCollection(client, threadID);
@@ -65,5 +71,6 @@ export const updateCollections = async (client: Client, threadID: ThreadID) => {
   await Invites.updateCollection(client, threadID);
   await ModerationReports.updateCollection(client, threadID);
   await ModerationDecisions.updateCollection(client, threadID);
+  await ModerationReasons.updateCollection(client, threadID);
   await Moderators.updateCollection(client, threadID);
 };
