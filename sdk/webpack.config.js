@@ -62,7 +62,7 @@ const config = {
     },
   },
   plugins: [
-    new Dotenv({ safe: true }),
+    new Dotenv({ safe: process.env.NODE_ENV === 'production' }),
     new webpack.ProgressPlugin({
       entries: true,
       modules: true,
@@ -75,7 +75,7 @@ const config = {
       process: ['process'],
     }),
     new InjectManifest({
-      swSrc: './lib/sw.js',
+      swSrc: './src/sw.js',
       swDest: 'sw.js',
       exclude: [/.*?/],
     }),

@@ -1,10 +1,10 @@
 import { injectable, inject } from 'inversify';
-import ISettingsService from '@akashaproject/sdk-typings/lib/interfaces/settings';
+import ISettingsService from '@akashaproject/sdk-typings/src/interfaces/settings';
 import { TYPES } from '@akashaproject/sdk-typings';
 import DB, { availableCollections } from '../db';
 import { exhaustMap, switchMap } from 'rxjs/operators';
 import { createObservableStream } from '../helpers/observable';
-import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
+import { ServiceCallResult } from '@akashaproject/sdk-typings/src/interfaces';
 import { lastValueFrom } from 'rxjs';
 
 @injectable()

@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaproject/sdk-typings/src/interfaces/log';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Settings from '../settings';
@@ -11,7 +11,12 @@ import { ContractFactory } from 'ethers';
 import AkashaRegistrarABI from '../contracts/artifacts/AkashaRegistrar.json';
 import ReverseRegistrarABI from '../contracts/artifacts/ReverseRegistrar.json';
 import EnsABI from '../contracts/artifacts/ENS.json';
-import { AWF_IENS } from '@akashaproject/sdk-typings/lib/interfaces/registry';
+import { AWF_IENS } from '@akashaproject/sdk-typings/src/interfaces/registry';
+import { lastValueFrom } from 'rxjs';
+import { createObservableStream } from '../helpers/observable';
+import EventBus from '../common/event-bus';
+import { tap } from 'rxjs/operators';
+import { ENS_EVENTS, PROFILE_EVENTS } from '@akashaproject/sdk-typings/src/interfaces/events';
 
 export const isEncodedLabelHash = hash => {
   return hash.startsWith('[') && hash.endsWith(']') && hash.length === 66;
@@ -34,6 +39,7 @@ export default class AWF_ENS implements AWF_IENS {
   private _gql: Gql;
   private _auth: AWF_Auth;
   private _settings: Settings;
+  private _globalChannel: EventBus;
   private _chainChecked = false;
   private _AkashaRegistrarInstance;
   private _ReverseRegistrarInstance;
@@ -49,14 +55,29 @@ export default class AWF_ENS implements AWF_IENS {
     @inject(TYPES.Gql) gql: Gql,
     @inject(TYPES.Auth) auth: AWF_Auth,
     @inject(TYPES.Settings) settings: Settings,
+    @inject(TYPES.EventBus) globalChannel: EventBus,
   ) {
     this._log = log.create('AWF_ENS');
     this._gql = gql;
     this._auth = auth;
     this._settings = settings;
+    this._globalChannel = globalChannel;
   }
 
-  async registerName(name: string) {
+  registerName(name: string) {
+    return createObservableStream(this._registerName(name)).pipe(
+      tap(ev => {
+        // @emits ENS_EVENTS.REGISTER
+        this._globalChannel.next({
+          data: ev.data,
+          event: ENS_EVENTS.REGISTER,
+          args: { name },
+        });
+      }),
+    );
+  }
+
+  private async _registerName(name: string) {
     const validatedName = validateName(name);
     const available = await this.isAvailable(validatedName);
     if (!available) {
@@ -70,11 +91,24 @@ export default class AWF_ENS implements AWF_IENS {
       );
       await registerTx.wait();
     }
-    return this.claimName(validatedName);
+    return this._claimName(validatedName);
+  }
+
+  claimName(name: string) {
+    return createObservableStream(this._claimName(name)).pipe(
+      tap(ev => {
+        // @emits ENS_EVENTS.REGISTER
+        this._globalChannel.next({
+          data: ev.data,
+          event: ENS_EVENTS.CLAIM,
+          args: { name },
+        });
+      }),
+    );
   }
 
   // set the returned name for address lookup
-  async claimName(name: string) {
+  private async _claimName(name: string) {
     if (!this._ReverseRegistrarInstance) {
       await this.setupContracts();
     }
@@ -83,17 +117,17 @@ export default class AWF_ENS implements AWF_IENS {
   }
 
   async userIsOwnerOf(name: string) {
-    const curUser = await this._auth.getCurrentUser();
-    if (curUser?.ethAddress) {
+    const curUser = await lastValueFrom(this._auth.getCurrentUser());
+    if (curUser?.data.ethAddress) {
       const resolved = await this.resolveName(`${name}.akasha.eth`);
-      if (resolved === curUser.ethAddress) {
+      if (resolved === curUser.data.ethAddress) {
         return true;
       }
     }
     return false;
   }
 
-  async isAvailable(name: string) {
+  async isAvailable(name: string): Promise<boolean> {
     if (!this._AkashaRegistrarInstance) {
       await this.setupContracts();
     }

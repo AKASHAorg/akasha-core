@@ -1,7 +1,7 @@
 import { BUCKET_THREAD_NAME, PROFILE_MEDIA_FILES } from './constants';
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaproject/sdk-typings/src/interfaces/log';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import {
@@ -19,12 +19,19 @@ import {
 } from './profile.graphql';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
-import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
-import { concatAll, map } from 'rxjs/operators';
+import { DataProviderInput } from '@akashaproject/sdk-typings/src/interfaces/common';
+import { concatAll, map, tap } from 'rxjs/operators';
 import { lastValueFrom, throwError } from 'rxjs';
 import { resizeImage } from '../helpers/img';
 import Settings from '../settings';
-import AWF_IProfile from '@akashaproject/sdk-typings/lib/interfaces/profile';
+import AWF_IProfile from '@akashaproject/sdk-typings/src/interfaces/profile';
+import EventBus from '../common/event-bus';
+import { PROFILE_EVENTS } from '@akashaproject/sdk-typings/src/interfaces/events';
+import {
+  GlobalSearchResult,
+  UserProfile_Response,
+} from '@akashaproject/sdk-typings/src/interfaces/responses';
+import { createFormattedValue, createObservableValue } from '../helpers/observable';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');
@@ -36,6 +43,7 @@ export default class AWF_Profile implements AWF_IProfile {
   private _gql: Gql;
   private _auth: AWF_Auth;
   private _settings: Settings;
+  private _globalChannel: EventBus;
   public readonly TagSubscriptions = '@TagSubscriptions';
   readonly graphQLDocs = {
     AddProfileProvider,
@@ -56,31 +64,44 @@ export default class AWF_Profile implements AWF_IProfile {
     @inject(TYPES.Gql) gql: Gql,
     @inject(TYPES.Auth) auth: AWF_Auth,
     @inject(TYPES.Settings) settings: Settings,
+    @inject(TYPES.EventBus) globalChannel: EventBus,
   ) {
     this._log = log.create('AWF_Profile');
     this._gql = gql;
     this._auth = auth;
     this._settings = settings;
+    this._globalChannel = globalChannel;
   }
 
   /**
-   *
+   * Mutation request to add a profile provider to the profile object
    * @param opt
    */
   addProfileProvider(opt: DataProviderInput[]) {
     return this._auth.authenticateMutationData((opt as unknown) as Record<string, unknown>[]).pipe(
       map(res => {
-        return this._gql.run({
-          query: AddProfileProvider,
-          variables: { data: opt },
-          operationName: 'AddProfileProvider',
-          context: {
-            headers: {
-              Authorization: `Bearer ${res.token}`,
-              Signature: res.signedData.signature,
+        return this._gql
+          .run<{ addProfileProvider: string }>({
+            query: AddProfileProvider,
+            variables: { data: opt },
+            operationName: 'AddProfileProvider',
+            context: {
+              headers: {
+                Authorization: `Bearer ${res.token}`,
+                Signature: res.signedData.data.signature,
+              },
             },
-          },
-        });
+          })
+          .pipe(
+            tap(ev => {
+              // @emits PROFILE_EVENTS.ADD_PROVIDER
+              this._globalChannel.next({
+                data: ev.data,
+                event: PROFILE_EVENTS.ADD_PROVIDER,
+                args: opt,
+              });
+            }),
+          );
       }),
       concatAll(),
     );
@@ -93,17 +114,28 @@ export default class AWF_Profile implements AWF_IProfile {
   makeDefaultProvider(opt: DataProviderInput[]) {
     return this._auth.authenticateMutationData((opt as unknown) as Record<string, unknown>[]).pipe(
       map(res => {
-        return this._gql.run({
-          query: MakeDefaultProvider,
-          variables: { data: opt },
-          operationName: 'MakeDefaultProvider',
-          context: {
-            headers: {
-              Authorization: `Bearer ${res.token}`,
-              Signature: res.signedData.signature,
+        return this._gql
+          .run<{ makeDefaultProvider: string }>({
+            query: MakeDefaultProvider,
+            variables: { data: opt },
+            operationName: 'MakeDefaultProvider',
+            context: {
+              headers: {
+                Authorization: `Bearer ${res.token}`,
+                Signature: res.signedData.data.signature,
+              },
             },
-          },
-        });
+          })
+          .pipe(
+            tap(ev => {
+              // @emits PROFILE_EVENTS.DEFAULT_PROVIDER
+              this._globalChannel.next({
+                data: ev.data,
+                event: PROFILE_EVENTS.DEFAULT_PROVIDER,
+                args: opt,
+              });
+            }),
+          );
       }),
       concatAll(),
     );
@@ -122,17 +154,28 @@ export default class AWF_Profile implements AWF_IProfile {
 
     return this._auth.authenticateMutationData(userName).pipe(
       map(res => {
-        return this._gql.run({
-          query: RegisterUsername,
-          variables: { name: userName },
-          operationName: 'RegisterUsername',
-          context: {
-            headers: {
-              Authorization: `Bearer ${res.token}`,
-              Signature: res.signedData.signature,
+        return this._gql
+          .run<{ registerUserName: string }>({
+            query: RegisterUsername,
+            variables: { name: userName },
+            operationName: 'RegisterUsername',
+            context: {
+              headers: {
+                Authorization: `Bearer ${res.token}`,
+                Signature: res.signedData.data.signature,
+              },
             },
-          },
-        });
+          })
+          .pipe(
+            tap(ev => {
+              // @emits PROFILE_EVENTS.REGISTER_USERNAME
+              this._globalChannel.next({
+                data: ev.data,
+                event: PROFILE_EVENTS.REGISTER_USERNAME,
+                args: { userName },
+              });
+            }),
+          );
       }),
       concatAll(),
     );
@@ -142,7 +185,7 @@ export default class AWF_Profile implements AWF_IProfile {
    *
    * @param opt
    */
-  getProfile(opt: { fields?: string[]; ethAddress?: string; pubKey?: string }) {
+  getProfile(opt: { ethAddress?: string; pubKey?: string }) {
     let query, variables, operationName;
     if (opt.pubKey) {
       query = ResolveProfile;
@@ -157,7 +200,9 @@ export default class AWF_Profile implements AWF_IProfile {
         return new Error('Must provide ethAddress of pubKey value');
       });
     }
-    return this._gql.run(
+    return this._gql.run<
+      { getProfile: UserProfile_Response } | { resolveProfile: UserProfile_Response }
+    >(
       {
         query: query,
         variables: variables,
@@ -175,17 +220,28 @@ export default class AWF_Profile implements AWF_IProfile {
     return this._auth.authenticateMutationData(ethAddress).pipe(
       map(res => {
         this._gql.clearCache();
-        return this._gql.run({
-          query: Follow,
-          variables: { ethAddress: ethAddress },
-          operationName: 'Follow',
-          context: {
-            headers: {
-              Authorization: `Bearer ${res.token}`,
-              Signature: res.signedData.signature,
+        return this._gql
+          .run<{ follow: boolean }>({
+            query: Follow,
+            variables: { ethAddress: ethAddress },
+            operationName: 'Follow',
+            context: {
+              headers: {
+                Authorization: `Bearer ${res.token}`,
+                Signature: res.signedData.data.signature,
+              },
             },
-          },
-        });
+          })
+          .pipe(
+            tap(ev => {
+              // @emits PROFILE_EVENTS.FOLLOW
+              this._globalChannel.next({
+                data: ev.data,
+                event: PROFILE_EVENTS.FOLLOW,
+                args: { ethAddress },
+              });
+            }),
+          );
       }),
       concatAll(),
     );
@@ -199,17 +255,28 @@ export default class AWF_Profile implements AWF_IProfile {
     return this._auth.authenticateMutationData(ethAddress).pipe(
       map(res => {
         this._gql.clearCache();
-        return this._gql.run({
-          query: UnFollow,
-          variables: { ethAddress: ethAddress },
-          operationName: 'UnFollow',
-          context: {
-            headers: {
-              Authorization: `Bearer ${res.token}`,
-              Signature: res.signedData.signature,
+        return this._gql
+          .run<{ unFollow: boolean }>({
+            query: UnFollow,
+            variables: { ethAddress: ethAddress },
+            operationName: 'UnFollow',
+            context: {
+              headers: {
+                Authorization: `Bearer ${res.token}`,
+                Signature: res.signedData.data.signature,
+              },
             },
-          },
-        });
+          })
+          .pipe(
+            tap(ev => {
+              // @emits PROFILE_EVENTS.UNFOLLOW
+              this._globalChannel.next({
+                data: ev.data,
+                event: PROFILE_EVENTS.UNFOLLOW,
+                args: { ethAddress },
+              });
+            }),
+          );
       }),
       concatAll(),
     );
@@ -220,7 +287,7 @@ export default class AWF_Profile implements AWF_IProfile {
    * @param opt
    */
   isFollowing(opt: { follower: string; following: string }) {
-    return this._gql.run(
+    return this._gql.run<{ isFollowing: boolean }>(
       {
         query: IsFollowing,
         variables: { follower: opt.follower, following: opt.following },
@@ -260,7 +327,8 @@ export default class AWF_Profile implements AWF_IProfile {
       file = data.content;
       path = data.name;
     }
-    const { buck } = await this._auth.getSession();
+    const sess = await lastValueFrom(this._auth.getSession());
+    const buck = sess.data.buck;
     const { root } = await buck.getOrCreate(PROFILE_MEDIA_FILES, {
       threadName: BUCKET_THREAD_NAME,
     });
@@ -301,7 +369,7 @@ export default class AWF_Profile implements AWF_IProfile {
             context: {
               headers: {
                 Authorization: `Bearer ${res.token}`,
-                Signature: res.signedData.signature,
+                Signature: res.signedData.data.signature,
               },
             },
           });
@@ -318,7 +386,7 @@ export default class AWF_Profile implements AWF_IProfile {
    * @param name
    */
   searchProfiles(name: string) {
-    return this._gql.run(
+    return this._gql.run<{ searchProfiles: UserProfile_Response[] }>(
       {
         query: SearchProfiles,
         variables: { name: name },
@@ -340,18 +408,40 @@ export default class AWF_Profile implements AWF_IProfile {
    * @param tagName
    */
   toggleTagSubscription(tagName: string) {
-    this._settings.get(this.TagSubscriptions).pipe(
+    return this._settings.get(this.TagSubscriptions).pipe(
       map((rec: any) => {
+        const status = { sub: true };
         if (!rec.data || !rec.data?._id) {
-          return this._settings.set(this.TagSubscriptions, [[tagName, true]]);
+          return this._settings.set(this.TagSubscriptions, [[tagName, true]]).pipe(
+            map(() => {
+              // @emits PROFILE_EVENTS.TAG_SUBSCRIPTION
+              this._globalChannel.next({
+                data: status,
+                event: PROFILE_EVENTS.TAG_SUBSCRIPTION,
+                args: { tagName },
+              });
+              return status;
+            }),
+          );
         }
         const el = rec.data.options.find(r => r[0] === tagName);
         if (!el) {
           rec.data.options.push([tagName, true]);
         } else {
           el[1] = !el[1];
+          status.sub = el[1];
         }
-        return this._settings.set(this.TagSubscriptions, rec.data.options);
+        return this._settings.set(this.TagSubscriptions, rec.data.options).pipe(
+          map(() => {
+            // @emits PROFILE_EVENTS.TAG_SUBSCRIPTION
+            this._globalChannel.next({
+              data: status,
+              event: PROFILE_EVENTS.TAG_SUBSCRIPTION,
+              args: { tagName },
+            });
+            return status;
+          }),
+        );
       }),
       concatAll(),
     );
@@ -363,7 +453,7 @@ export default class AWF_Profile implements AWF_IProfile {
   getTagSubscriptions() {
     return this._settings.get(this.TagSubscriptions).pipe(
       map((rec: any) => {
-        return rec.data.options;
+        return createFormattedValue<string[]>(rec.data.options);
       }),
     );
   }
@@ -375,10 +465,10 @@ export default class AWF_Profile implements AWF_IProfile {
   isSubscribedToTag(tagName: string) {
     return this.getTagSubscriptions().pipe(
       map(res => {
-        if (!res || !res.length) {
+        if (!res || !res.data.length) {
           return false;
         }
-        const el = res.find(r => r[0] === tagName);
+        const el = res.data.find(r => r[0] === tagName);
         if (!el) {
           return false;
         }
@@ -392,7 +482,7 @@ export default class AWF_Profile implements AWF_IProfile {
    * @param keyword
    */
   globalSearch(keyword: string) {
-    return this._gql.run(
+    return this._gql.run<{ globalSearch: GlobalSearchResult }>(
       {
         query: GlobalSearch,
         variables: { keyword: keyword },
