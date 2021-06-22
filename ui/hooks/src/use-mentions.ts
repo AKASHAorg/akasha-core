@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { createErrorHandler } from './utils/error-handler';
+import getSDK from '@akashaproject/awf-sdk';
 
 export interface UseMentionsActions {
   /**
@@ -15,8 +16,6 @@ export interface UseMentionsActions {
 
 export interface UseMentionsProps {
   onError?: (error: IAkashaError) => void;
-  profileService: any;
-  postsService: any;
 }
 
 export interface IMentionsState {
@@ -74,12 +73,15 @@ const MentionStateReducer = (state: IMentionsState, action: IMentionsAction) => 
 
 /* A hook to query mentions and tags */
 export const useMentions = (props: UseMentionsProps): [IMentionsState, UseMentionsActions] => {
-  const { onError, profileService, postsService } = props;
+  const { onError } = props;
+
+  const sdk = getSDK();
+
   const [mentionsState, dispatch] = React.useReducer(MentionStateReducer, initialMentionState);
 
   React.useEffect(() => {
     if (mentionsState.tagQuery) {
-      const tagsService = postsService.searchTags({ tagName: mentionsState.tagQuery });
+      const tagsService = sdk.api.tags.searchTags(mentionsState.tagQuery);
       const tagsSub = tagsService.subscribe({
         next: (resp: any) => {
           dispatch({ type: 'GET_TAGS_SUCCESS', payload: resp.data.searchTags });
@@ -95,7 +97,7 @@ export const useMentions = (props: UseMentionsProps): [IMentionsState, UseMentio
 
   React.useEffect(() => {
     if (mentionsState.mentionQuery) {
-      const mentionsService = profileService.searchProfiles({ name: mentionsState.mentionQuery });
+      const mentionsService = sdk.api.profile.searchProfiles(mentionsState.mentionQuery);
       const mentionsSub = mentionsService.subscribe({
         next: (resp: any) => {
           dispatch({ type: 'GET_MENTIONS_SUCCESS', payload: resp.data.searchProfiles });

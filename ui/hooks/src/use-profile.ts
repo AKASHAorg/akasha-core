@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { forkJoin, from, Subscription, timer } from 'rxjs';
+import { forkJoin, from, Observable, Subscription, timer } from 'rxjs';
 import { filter, switchMap, exhaustMap } from 'rxjs/operators';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaproject/awf-sdk';
+import { events } from '@akashaproject/sdk-typings';
 import {
   IProfileData,
   IProfileProvider,
@@ -41,11 +43,6 @@ export interface UseProfileActions {
 
 export interface UseProfileProps {
   onError?: (error: IAkashaError) => void;
-  ipfsService: any;
-  profileService: any;
-  postsService?: any;
-  ensService?: any;
-  globalChannel: any;
   logger?: any;
 }
 
@@ -288,7 +285,10 @@ const profileStateReducer = (
 export const useProfile = (
   props: UseProfileProps,
 ): [IProfileState, UseProfileActions, ProfileUpdateStatus] => {
-  const { onError, ipfsService, profileService, postsService, globalChannel, logger } = props;
+  const { onError, logger } = props;
+
+  const sdk = getSDK();
+
   const [profile, dispatchProfile] = React.useReducer(profileStateReducer, initialProfileState);
   const [updateStatus, dispatchUpdateStatus] = React.useReducer(
     profileUpdateStatusReducer,
@@ -296,47 +296,40 @@ export const useProfile = (
   );
 
   React.useEffect(() => {
-    if (globalChannel) {
-      const sub = globalChannel
-        .pipe(
-          filter((payload: any) => {
-            return (
-              payload.channelInfo.method === 'makeDefaultProvider' &&
-              payload.channelInfo.servicePath.includes('PROFILE_STORE')
-            );
-          }),
-        )
-        .subscribe({
-          next: () => {
-            if (profile.pubKey) {
-              actions.getProfileData({ pubKey: profile.pubKey }, true);
-            }
-          },
-        });
-      return () => sub.unsubscribe();
-    }
-    return;
+    const sub = sdk.api.globalChannel
+      .pipe(
+        filter(payload => {
+          return payload.event === events.PROFILE_EVENTS.DEFAULT_PROVIDER;
+        }),
+      )
+      .subscribe({
+        next: () => {
+          if (profile.pubKey) {
+            actions.getProfileData({ pubKey: profile.pubKey }, true);
+          }
+        },
+      });
+    return () => sub.unsubscribe();
   }, [profile]);
 
   React.useEffect(() => {
     if (profile.getProfileDataQuery) {
-      const ipfsGatewayCall = ipfsService.getSettings(null);
-      const getProfileCall = profileService.getProfile(profile.getProfileDataQuery.payload);
-      const obs = forkJoin({ ipfsGatewayCall, getProfileCall });
-      const sub = obs.subscribe({
+      const ipfsGateway = sdk.services.common.ipfs.getSettings();
+      const getProfileCall = sdk.api.profile.getProfile(profile.getProfileDataQuery.payload);
+
+      const sub = getProfileCall.subscribe({
         next: (resp: any) => {
-          if (!resp.getProfileCall.data) {
+          if (!resp.data) {
             return;
           }
 
-          const { avatar, coverImage, ...other } =
-            resp.getProfileCall.data.getProfile || resp.getProfileCall.data.resolveProfile;
+          const { avatar, coverImage, ...other } = resp.data.getProfile || resp.data.resolveProfile;
           const images: { avatar?: string; coverImage?: string } = {};
           if (avatar) {
-            images.avatar = getMediaUrl(resp.ipfsGatewayCall.data, avatar);
+            images.avatar = getMediaUrl(ipfsGateway, avatar);
           }
           if (coverImage) {
-            images.coverImage = getMediaUrl(resp.ipfsGatewayCall.data, coverImage);
+            images.coverImage = getMediaUrl(ipfsGateway, coverImage);
           }
           dispatchProfile({ type: 'GET_PROFILE_DATA_SUCCESS', payload: { ...images, ...other } });
         },
@@ -351,14 +344,14 @@ export const useProfile = (
     const userName = updateStatus.validateUsernameQuery;
     if (userName) {
       if (/^([a-z0-9.](?![0-9.]$))+$/g.test(userName) && userName.length >= 3) {
-        const channel = props.ensService.isAvailable({ name: userName });
-        const sub = channel.subscribe({
-          next: (resp: any) => {
+        (async () => {
+          try {
+            const resp = await sdk.api.ens.isAvailable(userName);
             dispatchUpdateStatus({ type: 'VALIDATE_USERNAME_SUCCESS', payload: resp.data });
-          },
-          error: createErrorHandler('useProfile.validateUsername', false, props.onError),
-        });
-        return () => sub.unsubscribe();
+          } catch (error) {
+            createErrorHandler('useProfile.validateUsername', false, props.onError)(error);
+          }
+        })();
       } else if (userName.length < 3) {
         dispatchUpdateStatus({ type: 'VALIDATE_USERNAME_TOO_SHORT' });
       } else {
@@ -370,8 +363,8 @@ export const useProfile = (
 
   React.useEffect(() => {
     if (profile.getEntryAuthorQuery) {
-      const getEntryCall = postsService.entries.getEntry({ entryId: profile.getEntryAuthorQuery });
-      const ipfsGatewayCall = ipfsService.getSettings(null);
+      const getEntryCall = sdk.api.entries.getEntry(profile.getEntryAuthorQuery);
+      const ipfsGatewayCall = sdk.services.common.ipfs.getSettings();
       const sub = forkJoin({ getEntryCall, ipfsGatewayCall }).subscribe({
         next: (responses: any) => {
           if (!responses.getEntryCall.data) {
@@ -405,174 +398,158 @@ export const useProfile = (
         description,
         userName,
       } = updateStatus.optimisticUpdateQuery;
-      dispatchUpdateStatus({ type: 'SAVING' });
 
-      let avatarSave = from([null]);
-      if (avatar && avatar.src && avatar.preview !== profile.avatar) {
-        dispatchUpdateStatus({ type: 'UPLOADING_AVATAR' });
+      const ipfsGateway = sdk.services.common.ipfs.getSettings();
 
-        avatarSave = profileService.saveMediaFile({
-          isUrl: avatar.isUrl,
-          content: avatar.src,
-          name: ProfileProviderProperties.AVATAR,
-        });
-      }
-      let coverImageSave = from([null]);
-      if (coverImage && coverImage.src && coverImage.preview !== profile.coverImage) {
-        dispatchUpdateStatus({ type: 'UPLOADING_COVER_IMAGE' });
-
-        coverImageSave = profileService.saveMediaFile({
-          isUrl: coverImage.isUrl,
-          content: coverImage.src,
-          name: ProfileProviderProperties.COVER_IMAGE,
-        });
-      }
-      let userNameCall = from([null]);
-      if (userName && !profile.userName) {
-        userNameCall = profileService.registerUserName({ userName });
-      }
-      const ipfsSettings = ipfsService.getSettings(null);
-
-      let coverImageSaveSub: Subscription;
       let userNameSub: Subscription;
       let addProvidersSub: Subscription;
+      let avatarRes: any;
+      let coverImageRes: any;
 
-      /* Save avatar sequentially*/
-      const avatarSaveSub = avatarSave.subscribe({
-        next: (avatarRes: any) => {
-          dispatchUpdateStatus({ type: 'UPLOADING_AVATAR_SUCCESS' });
+      dispatchUpdateStatus({ type: 'SAVING' });
 
-          /* save cover image */
-          coverImageSaveSub = coverImageSave.subscribe({
-            next: (coverImageRes: any) => {
-              dispatchUpdateStatus({ type: 'UPLOADING_COVER_IMAGE_SUCCESS' });
+      (async () => {
+        if (avatar && avatar.src && avatar.preview !== profile.avatar) {
+          dispatchUpdateStatus({ type: 'UPLOADING_AVATAR' });
+          try {
+            avatarRes = await sdk.api.profile.saveMediaFile({
+              isUrl: avatar.isUrl,
+              content: avatar.src,
+              name: ProfileProviderProperties.AVATAR,
+            });
+            dispatchUpdateStatus({ type: 'UPLOADING_AVATAR_SUCCESS' });
+          } catch (error) {
+            createErrorHandler('useProfile.uploadAvatar', false, onError)(error);
+          }
+        }
 
-              /* register username and get ipfs gateway settings */
-              userNameSub = forkJoin([userNameCall, ipfsSettings]).subscribe({
-                next: (responses: any) => {
-                  const [userNameRes, ipfsSettingsRes] = responses;
+        if (coverImage && coverImage.src && coverImage.preview !== profile.coverImage) {
+          dispatchUpdateStatus({ type: 'UPLOADING_COVER_IMAGE' });
+          try {
+            coverImageRes = await sdk.api.profile.saveMediaFile({
+              isUrl: coverImage.isUrl,
+              content: coverImage.src,
+              name: ProfileProviderProperties.COVER_IMAGE,
+            });
+            dispatchUpdateStatus({ type: 'UPLOADING_COVER_IMAGE_SUCCESS' });
+          } catch (error) {
+            createErrorHandler('useProfile.uploadCoverImage', false, onError)(error);
+          }
+        }
 
-                  const ipfsGateway = ipfsSettingsRes.data;
+        if (userName && !profile.userName) {
+          const userNameCall = sdk.api.profile.registerUserName(userName);
+          userNameSub = userNameCall.subscribe({
+            next: (userNameRes: any) => {
+              const providers: any[] = [];
 
-                  const providers: any[] = [];
+              if (!avatarRes && avatar === null) {
+                providers.push({
+                  provider: ProfileProviders.EWA_BASIC,
+                  property: ProfileProviderProperties.AVATAR,
+                  value: '',
+                });
+              }
+              if (avatarRes && avatarRes.data) {
+                providers.push({
+                  provider: ProfileProviders.EWA_BASIC,
+                  property: ProfileProviderProperties.AVATAR,
+                  value: avatarRes.data.CID,
+                });
+              }
+              if (!coverImageRes && coverImage === null) {
+                providers.push({
+                  provider: ProfileProviders.EWA_BASIC,
+                  property: ProfileProviderProperties.COVER_IMAGE,
+                  value: '',
+                });
+              }
+              if (coverImageRes && coverImageRes.data) {
+                providers.push({
+                  provider: ProfileProviders.EWA_BASIC,
+                  property: ProfileProviderProperties.COVER_IMAGE,
+                  value: coverImageRes.data.CID,
+                });
+              }
+              if (description) {
+                providers.push({
+                  provider: ProfileProviders.EWA_BASIC,
+                  property: ProfileProviderProperties.DESCRIPTION,
+                  value: description,
+                });
+              }
+              if (name) {
+                providers.push({
+                  provider: ProfileProviders.EWA_BASIC,
+                  property: ProfileProviderProperties.NAME,
+                  value: name,
+                });
+              }
+              let addProvider: Observable<any> = from([null]);
+              if (userNameRes) {
+                providers.push({
+                  provider: ProfileProviders.EWA_BASIC,
+                  property: ProfileProviderProperties.USERNAME,
+                  value: userName,
+                });
+                addProvider = sdk.api.profile.addProfileProvider([
+                  {
+                    provider: ProfileProviders.EWA_BASIC,
+                    property: ProfileProviderProperties.USERNAME,
+                    value: userName,
+                  },
+                ]);
+              }
+              const makeDefault = sdk.api.profile.makeDefaultProvider(providers);
+              const call = addProvider.pipe(switchMap(() => makeDefault));
+              addProvidersSub = call.subscribe({
+                next: () => {
+                  const updatedFields: { [key: string]: any } = providers
+                    .map(provider => {
+                      if (
+                        (provider.property === ProfileProviderProperties.COVER_IMAGE ||
+                          provider.property === ProfileProviderProperties.AVATAR) &&
+                        !!provider.value
+                      ) {
+                        return {
+                          [provider.property]: `${ipfsGateway}/${provider.value}`,
+                        };
+                      }
+                      return { [provider.property]: provider.value };
+                    })
+                    .reduce((acc, curr) => Object.assign(acc, curr), {});
 
-                  if (!avatarRes && avatar === null) {
-                    providers.push({
-                      provider: ProfileProviders.EWA_BASIC,
-                      property: ProfileProviderProperties.AVATAR,
-                      value: '',
-                    });
-                  }
-                  if (avatarRes && avatarRes.data) {
-                    providers.push({
-                      provider: ProfileProviders.EWA_BASIC,
-                      property: ProfileProviderProperties.AVATAR,
-                      value: avatarRes.data.CID,
-                    });
-                  }
-                  if (!coverImageRes && coverImage === null) {
-                    providers.push({
-                      provider: ProfileProviders.EWA_BASIC,
-                      property: ProfileProviderProperties.COVER_IMAGE,
-                      value: '',
-                    });
-                  }
-                  if (coverImageRes && coverImageRes.data) {
-                    providers.push({
-                      provider: ProfileProviders.EWA_BASIC,
-                      property: ProfileProviderProperties.COVER_IMAGE,
-                      value: coverImageRes.data.CID,
-                    });
-                  }
-                  if (description) {
-                    providers.push({
-                      provider: ProfileProviders.EWA_BASIC,
-                      property: ProfileProviderProperties.DESCRIPTION,
-                      value: description,
-                    });
-                  }
-                  if (name) {
-                    providers.push({
-                      provider: ProfileProviders.EWA_BASIC,
-                      property: ProfileProviderProperties.NAME,
-                      value: name,
-                    });
-                  }
-                  let addProvider = from([null]);
-                  if (userNameRes) {
-                    providers.push({
-                      provider: ProfileProviders.EWA_BASIC,
-                      property: ProfileProviderProperties.USERNAME,
-                      value: userName,
-                    });
-                    addProvider = profileService.addProfileProvider([
+                  if (updatedFields.userName && !profile.userName) {
+                    updatedFields.providers = [
                       {
                         provider: ProfileProviders.EWA_BASIC,
                         property: ProfileProviderProperties.USERNAME,
-                        value: userName,
+                        value: updatedFields.userName,
                       },
-                    ]);
+                    ];
+                    updatedFields.default = [
+                      {
+                        provider: ProfileProviders.EWA_BASIC,
+                        property: ProfileProviderProperties.USERNAME,
+                        value: updatedFields.userName,
+                      },
+                    ];
                   }
-                  const makeDefault = profileService.makeDefaultProvider(providers);
-                  const call = addProvider.pipe(switchMap(() => makeDefault));
-                  addProvidersSub = call.subscribe({
-                    next: () => {
-                      const updatedFields: { [key: string]: any } = providers
-                        .map(provider => {
-                          if (
-                            (provider.property === ProfileProviderProperties.COVER_IMAGE ||
-                              provider.property === ProfileProviderProperties.AVATAR) &&
-                            !!provider.value
-                          ) {
-                            return {
-                              [provider.property]: `${ipfsGateway}/${provider.value}`,
-                            };
-                          }
-                          return { [provider.property]: provider.value };
-                        })
-                        .reduce((acc, curr) => Object.assign(acc, curr), {});
-
-                      if (updatedFields.userName && !profile.userName) {
-                        updatedFields.providers = [
-                          {
-                            provider: ProfileProviders.EWA_BASIC,
-                            property: ProfileProviderProperties.USERNAME,
-                            value: updatedFields.userName,
-                          },
-                        ];
-                        updatedFields.default = [
-                          {
-                            provider: ProfileProviders.EWA_BASIC,
-                            property: ProfileProviderProperties.USERNAME,
-                            value: updatedFields.userName,
-                          },
-                        ];
-                      }
-                      actions.updateProfile(updatedFields);
-                      dispatchUpdateStatus({ type: 'UPDATE_COMPLETE' });
-                    },
-                    error: createErrorHandler(
-                      'useProfile.optimisticUpdate.addProviders',
-                      false,
-                      onError,
-                    ),
-                  });
+                  actions.updateProfile(updatedFields);
+                  dispatchUpdateStatus({ type: 'UPDATE_COMPLETE' });
                 },
-                error: createErrorHandler('useProfile.registerUsername', false, onError),
+                error: createErrorHandler(
+                  'useProfile.optimisticUpdate.addProviders',
+                  false,
+                  onError,
+                ),
               });
             },
-            error: createErrorHandler('useProfile.uploadCoverImage', false, onError),
+            error: createErrorHandler('useProfile.registerUsername', false, onError),
           });
-        },
-        error: createErrorHandler('useProfile.uploadAvatar', false, onError),
-      });
+        }
+      })();
       return () => {
-        if (avatarSaveSub.unsubscribe) {
-          avatarSaveSub.unsubscribe();
-        }
-        if (coverImageSaveSub.unsubscribe) {
-          coverImageSaveSub.unsubscribe();
-        }
         if (userNameSub.unsubscribe) {
           userNameSub.unsubscribe();
         }
@@ -587,7 +564,7 @@ export const useProfile = (
   React.useEffect(() => {
     if (updateStatus.updateUsernameProviderQuery) {
       const { userName, provider } = updateStatus.updateUsernameProviderQuery;
-      let addProvider = from([null]);
+      let addProvider: Observable<any> = from([null]);
       const providerData = {
         provider,
         property: ProfileProviderProperties.USERNAME,
@@ -595,11 +572,11 @@ export const useProfile = (
       };
       if (profile.providers?.length) {
         if (!profile.providers.find((p: { provider: string }) => p.provider === provider)) {
-          addProvider = profileService.addProfileProvider(providerData);
+          addProvider = sdk.api.profile.addProfileProvider([providerData]);
         }
       }
 
-      const makeDefault = profileService.makeDefaultProvider([providerData]);
+      const makeDefault = sdk.api.profile.makeDefaultProvider([providerData]);
       const call = addProvider.pipe(exhaustMap(() => makeDefault));
       const sub = call.subscribe({
         next: () => {
@@ -626,14 +603,10 @@ export const useProfile = (
       dispatchProfile({ type: 'GET_PROFILE_DATA', payload: { payload, disableLoadingIndicator } });
     },
     validateUsername({ userName }) {
-      if (props.ensService) {
-        dispatchUpdateStatus({ type: 'VALIDATE_USERNAME', payload: userName });
-      }
+      dispatchUpdateStatus({ type: 'VALIDATE_USERNAME', payload: userName });
     },
     getEntryAuthor({ entryId }) {
-      if (postsService) {
-        dispatchProfile({ type: 'GET_ENTRY_AUTHOR', payload: entryId });
-      }
+      dispatchProfile({ type: 'GET_ENTRY_AUTHOR', payload: entryId });
     },
     updateProfile(fields) {
       dispatchProfile({ type: 'UPDATE_PROFILE', payload: fields });
@@ -668,7 +641,7 @@ export const useProfile = (
           property: ProfileProviderProperties.USERNAME,
           value: profile.userName,
         };
-        const call = props.profileService.makeDefaultProvider([defaultProvider]);
+        const call = sdk.api.profile.makeDefaultProvider([defaultProvider]);
         call.subscribe({
           error(err: Error) {
             if (logger) {
@@ -707,11 +680,13 @@ export const useProfile = (
       if (profile.providers?.length === 0 && profile.userName) {
         const call = timer(2000).pipe(
           switchMap(() =>
-            props.profileService.addProfileProvider({
-              property: ProfileProviderProperties.USERNAME,
-              value: profile.userName,
-              provider: ProfileProviders.EWA_BASIC,
-            }),
+            sdk.api.profile.addProfileProvider([
+              {
+                property: ProfileProviderProperties.USERNAME,
+                value: profile.userName,
+                provider: ProfileProviders.EWA_BASIC,
+              },
+            ]),
           ),
         );
         call.subscribe({

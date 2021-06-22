@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaproject/awf-sdk';
 import { combineLatest, Subscription } from 'rxjs';
 import { createErrorHandler } from './utils/error-handler';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export interface UseTrendingDataProps {
-  sdkModules: { [key: string]: any };
-  logger?: any;
   onError: (err: IAkashaError) => void;
 }
 
@@ -80,7 +79,10 @@ const useTrendingData = (
   { tags: { name: string; totalPosts: number }[]; profiles: IProfileData[] },
   ITrendingActions,
 ] => {
-  const { sdkModules, onError } = props;
+  const { onError } = props;
+
+  const sdk = getSDK();
+
   const [trendingState, dispatch] = React.useReducer(trendingStateReducer, initialTrendingState);
 
   React.useEffect(() => {
@@ -90,7 +92,7 @@ const useTrendingData = (
 
   React.useEffect(() => {
     if (trendingState.getTagsQuery) {
-      const trendingTagsCall = sdkModules.posts.tags.getTrending(null);
+      const trendingTagsCall = sdk.api.tags.getTrending();
       const tagsSub: Subscription | undefined = trendingTagsCall.subscribe({
         next: (resp: any) => {
           if (resp.data.searchTags) {
@@ -106,8 +108,8 @@ const useTrendingData = (
 
   React.useEffect(() => {
     if (trendingState.getProfilesQuery) {
-      const ipfsGatewayCall = sdkModules.commons.ipfsService.getSettings(null);
-      const trendingProfilesCall = sdkModules.profiles.profileService.getTrending(null);
+      const ipfsGatewayCall = sdk.services.common.ipfs.getSettings();
+      const trendingProfilesCall = sdk.api.profile.getTrending();
       const getTrendingProfiles = combineLatest({
         ipfsGatewayCall: ipfsGatewayCall,
         trendingProfilesCall: trendingProfilesCall,

@@ -33,8 +33,6 @@ export interface UseFollowActions {
 
 export interface UseFollowProps {
   onError?: (error: IAkashaError) => void;
-  profileService: any;
-  globalChannel: any;
 }
 
 export interface IFollowState {
@@ -180,9 +178,12 @@ const followStateReducer = (state: IFollowState, action: IFollowAction) => {
 
 /* A hook with follow, unfollow and isFollowing functionality */
 export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] => {
-  const { onError, profileService } = props;
+  const { onError } = props;
+
   const [followingState, dispatch] = React.useReducer(followStateReducer, initialFollowState);
+
   const sdk = getSDK();
+
   const handleSubscribe = (payload: any) => {
     const { data, channelInfo } = payload;
     if (data.follow) {
@@ -249,7 +250,7 @@ export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] =
     if (payload) {
       const getFollowedProfilesCalls: Observable<any>[] = payload.followingEthAddressArray.map(
         (profile: string) => {
-          return profileService.isFollowing({
+          return sdk.api.profile.isFollowing({
             follower: payload.followerEthAddress,
             following: profile,
           });
@@ -282,7 +283,7 @@ export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] =
   React.useEffect(() => {
     const payload = followingState.followQuery;
     if (payload) {
-      const call = profileService.follow({ ethAddress: payload });
+      const call = sdk.api.profile.follow(payload);
 
       const callSub = call.subscribe({
         next: (resp: { data: { follow: boolean } }) => {
@@ -308,7 +309,7 @@ export const useFollow = (props: UseFollowProps): [string[], UseFollowActions] =
   React.useEffect(() => {
     const payload = followingState.unfollowQuery;
     if (payload) {
-      const call = profileService.unFollow({ ethAddress: payload });
+      const call = sdk.api.profile.unFollow(payload);
 
       const callSub = call.subscribe({
         next: (resp: { data: { unFollow: boolean } }) => {

@@ -41,6 +41,10 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   React.useEffect(() => {
     if (loginState.pubKey) {
       loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
+      modalStateActions.hide(MODAL_NAMES.LOGIN);
+      if (flagged.length) {
+        modalStateActions.show(MODAL_NAMES.REPORT);
+      }
     }
   }, [loginState.pubKey]);
 
@@ -84,24 +88,11 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     loginActions.login(providerId);
   };
 
-  React.useEffect(() => {
-    if (loginState.pubKey) {
-      modalStateActions.hide(MODAL_NAMES.LOGIN);
-    }
-  }, [loginState.pubKey]);
-
-  React.useEffect(() => {
-    if (loginState.ethAddress && flagged.length) {
-      modalStateActions.hide(MODAL_NAMES.LOGIN);
-      modalStateActions.show(MODAL_NAMES.REPORT);
-    }
-  }, [loginState.ethAddress]);
-
   const loginErrors: string | null = React.useMemo(() => {
     if (errorState && Object.keys(errorState).length) {
       const txt = Object.keys(errorState)
         .filter(key => key.split('.')[0] === 'useLoginState')
-        .map(k => errorState![k])
+        .map(k => errorState[k])
         .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
       return txt;
     }

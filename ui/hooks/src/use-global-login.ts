@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createErrorHandler } from './utils/error-handler';
 import { filter } from 'rxjs/operators';
+import getSDK from '@akashaproject/awf-sdk';
 
 /**
  * a hook that will fire an action when the signIn is called
@@ -10,7 +11,6 @@ export type OnLogoutSuccessHandler = () => void;
 export type OnErrorHandler = (payload: { error: Error }) => void;
 
 export interface UseGlobalLoginProps {
-  globalChannel: any;
   onLogin: OnLoginSuccessHandler;
   onLogout: OnLogoutSuccessHandler;
   onError?: OnErrorHandler;
@@ -20,6 +20,9 @@ export interface UseGlobalLoginProps {
 
 const useGlobalLogin = (props: UseGlobalLoginProps): void => {
   const { onError } = props;
+
+  const sdk = getSDK();
+
   const handleLoginSubscribe = (payload: any) => {
     const { data } = payload;
     props.onLogin(data);
@@ -30,7 +33,7 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
   };
 
   React.useEffect(() => {
-    const call = props.globalChannel.pipe(
+    const call = sdk.api.globalChannel.pipe(
       filter((payload: any) => {
         return (
           payload.channelInfo.method === 'signIn' &&
@@ -38,11 +41,11 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
         );
       }),
     );
-    call.subscribe(handleLoginSubscribe, createErrorHandler('useGlobalLogin.login'));
-    return () => call.unsubscribe();
+    const sub = call.subscribe(handleLoginSubscribe, createErrorHandler('useGlobalLogin.login'));
+    return () => sub.unsubscribe();
   }, []);
   React.useEffect(() => {
-    const waitForAuthCall = props.globalChannel.pipe(
+    const waitForAuthCall = sdk.api.globalChannel.pipe(
       filter((payload: any) => {
         return (
           payload.channelInfo.method === 'waitForAuth' &&
@@ -51,17 +54,17 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
       }),
     );
 
-    waitForAuthCall.subscribe((payload: { data: boolean }) => {
+    const sub = waitForAuthCall.subscribe((payload: { data: boolean }) => {
       const { data } = payload;
       if (props.waitForAuth) {
         props.waitForAuth(data);
       }
     });
-    return () => waitForAuthCall.unsubscribe();
+    return () => sub.unsubscribe();
   }, []);
 
   React.useEffect(() => {
-    const readyCall = props.globalChannel.pipe(
+    const readyCall = sdk.api.globalChannel.pipe(
       filter((payload: any) => {
         return (
           payload.channelInfo.method === 'ready' &&
@@ -70,17 +73,17 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
       }),
     );
 
-    readyCall.subscribe((payload: { data: { ethAddress: string; pubKey: string } }) => {
+    const sub = readyCall.subscribe((payload: { data: { ethAddress: string; pubKey: string } }) => {
       const { data } = payload;
       if (props.onReady) {
         props.onReady(data);
       }
     });
-    return () => readyCall.unsubscribe();
+    return () => sub.unsubscribe();
   }, []);
 
   React.useEffect(() => {
-    const logoutCall = props.globalChannel.pipe(
+    const logoutCall = sdk.api.globalChannel.pipe(
       filter((payload: any) => {
         return (
           payload.channelInfo.method === 'signOut' &&
@@ -88,10 +91,11 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
         );
       }),
     );
-    logoutCall.subscribe(
+    const sub = logoutCall.subscribe(
       handleLogoutSubscribe,
       createErrorHandler('useGlobalLogin.logoutCall', false, onError),
     );
+    return () => sub.unsubscribe();
   }, []);
 };
 

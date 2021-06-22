@@ -1,4 +1,5 @@
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaproject/awf-sdk';
 import {
   ProfileProviderProperties,
   ProfileProviders,
@@ -9,8 +10,6 @@ import { switchMap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
 export interface UseENSRegistrationProps {
-  profileService: any;
-  ensService: any;
   ethAddress: string | null;
   onError?: (err: IAkashaError) => void;
 }
@@ -217,7 +216,10 @@ const ENSRegistrationStateReducer = (
 const useENSRegistration = (
   props: UseENSRegistrationProps,
 ): [UseENSRegistrationState, UseENSRegistrationActions] => {
-  const { profileService, ensService, ethAddress } = props;
+  const { ethAddress } = props;
+
+  const sdk = getSDK();
+
   const [registrationState, dispatch] = React.useReducer(
     ENSRegistrationStateReducer,
     initialENSRegistrationState,
@@ -237,48 +239,41 @@ const useENSRegistration = (
 
   React.useEffect(() => {
     if (registrationState.getENSByAddressQuery) {
-      const call = ensService.resolveAddress({
-        ethAddress: registrationState.getENSByAddressQuery,
-      });
-      const sub = call.subscribe({
-        next: (resp: any) => {
-          if (resp.data && resp.channelInfo.args.ethAddress === ethAddress) {
-            dispatch({ type: 'GET_ENS_BY_ADDRESS_SUCCESS', payload: resp.data });
+      (async () => {
+        try {
+          const resp = await sdk.api.ens.resolveAddress(registrationState.getENSByAddressQuery);
+          if (resp) {
+            dispatch({ type: 'GET_ENS_BY_ADDRESS_SUCCESS', payload: resp });
           }
-        },
-        error: (err: Error) => {
-          createErrorHandler('useEnsRegistration.getENSByAddress', false, props.onError)(err);
+        } catch (error) {
+          createErrorHandler('useEnsRegistration.getENSByAddress', false, props.onError)(error);
           dispatch({
             type: 'GET_ENS_BY_ADDRESS_ERROR',
-            payload: `Failed to get ENS name. ${err.message}`,
+            payload: `Failed to get ENS name. ${error.message}`,
           });
-        },
-      });
-      return () => sub.unsubscribe();
+        }
+      })();
     }
-    return;
   }, [registrationState.getENSByAddressQuery]);
 
   React.useEffect(() => {
     const userName = registrationState.registerQuery;
+    let userNameCallSub: Subscription;
     if (userName) {
-      const register = ensService.registerName({
-        name: `${userName.replace('@', '').replace('.akasha.eth', '')}`,
-      });
-      let userNameCallSub: Subscription;
-      const registerCallSub = register.subscribe({
-        next: () => {
-          const userNameCall = profileService.registerUserName({
-            userName: `${userName.replace('@', '').replace('.akasha.eth', '')}`,
-          });
-          const makeDefault = profileService.makeDefaultProvider([
+      (async () => {
+        try {
+          await sdk.api.ens.registerName(`${userName.replace('@', '').replace('.akasha.eth', '')}`);
+          const userNameCall = sdk.api.profile.registerUserName(
+            `${userName.replace('@', '').replace('.akasha.eth', '')}`,
+          );
+          const makeDefault = sdk.api.profile.makeDefaultProvider([
             {
               provider: ProfileProviders.ENS,
               property: ProfileProviderProperties.USERNAME,
               value: `${userName.replace('@', '')}`,
             },
           ]);
-          const addProvider = profileService.addProfileProvider([
+          const addProvider = sdk.api.profile.addProfileProvider([
             {
               provider: ProfileProviders.ENS,
               property: ProfileProviderProperties.USERNAME,
@@ -300,11 +295,12 @@ const useENSRegistration = (
                 props.onError,
               ),
             });
-        },
-        error: createErrorHandler('useEnsRegistration.registerName', false, props.onError),
-      });
+        } catch (error) {
+          createErrorHandler('useEnsRegistration.registerName', false, props.onError)(error);
+        }
+      })();
+
       return () => {
-        registerCallSub.unsubscribe();
         if (userNameCallSub.unsubscribe) {
           userNameCallSub.unsubscribe();
         }
@@ -315,34 +311,29 @@ const useENSRegistration = (
 
   React.useEffect(() => {
     if (registrationState.validateNameQuery) {
-      const channel = ensService.isAvailable({ name: registrationState.validateNameQuery });
-
-      const sub = channel.subscribe({
-        next: (resp: any) => {
-          dispatch({ type: 'VALIDATE_NAME_SUCCESS', payload: resp.data });
-        },
-        error: createErrorHandler('useEnsRegistration.validateName', false, props.onError),
-      });
-      return () => sub.unsubscribe();
+      (async () => {
+        try {
+          const resp = await sdk.api.ens.isAvailable(registrationState.validateNameQuery);
+          dispatch({ type: 'VALIDATE_NAME_SUCCESS', payload: resp });
+        } catch (error) {
+          createErrorHandler('useEnsRegistration.validateName', false, props.onError)(error);
+        }
+      })();
     }
-    return;
   }, [registrationState.validateNameQuery]);
 
   React.useEffect(() => {
     if (registrationState.claimQuery) {
-      const call = ensService.claimName({ name: registrationState.claimQuery });
-      const sub = call.subscribe({
-        next: () => {
+      (async () => {
+        try {
+          await sdk.api.ens.claimName(registrationState.claimQuery);
           dispatch({ type: 'CLAIM_SUCCESS' });
-        },
-        error: (err: Error) => {
-          createErrorHandler('useEnsRegistration.claim', false, props.onError)(err);
-          dispatch({ type: 'CLAIM_ERROR', payload: `ENS claim failed. ${err.message}` });
-        },
-      });
-      return () => sub.unsubscribe();
+        } catch (error) {
+          createErrorHandler('useEnsRegistration.claim', false, props.onError)(error);
+          dispatch({ type: 'CLAIM_ERROR', payload: `ENS claim failed. ${error.message}` });
+        }
+      })();
     }
-    return;
   }, [registrationState.claimQuery]);
 
   const actions: UseENSRegistrationActions = {

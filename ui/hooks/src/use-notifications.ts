@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaproject/awf-sdk';
+import { events } from '@akashaproject/sdk-typings';
 import { getMediaUrl } from './utils/media-utils';
 import { forkJoin, lastValueFrom } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -23,10 +25,6 @@ export interface UseNotificationsActions {
 
 export interface UseNotificationsProps {
   onError?: (error: IAkashaError) => void;
-  globalChannel: any;
-  authService: any;
-  ipfsService: any;
-  profileService: any;
   loggedEthAddress?: string | null;
 }
 
@@ -35,7 +33,7 @@ export interface INotificationsState {
   isFetching: boolean;
   hasNewNotifications: boolean;
   hasNewNotificationsQuery: boolean;
-  markAsReadQuery: string | number | null;
+  markAsReadQuery: string | null;
 }
 
 const initialNotificationsState: INotificationsState = {
@@ -52,10 +50,10 @@ export type INotificationsAction =
       type: 'GET_NOTIFICATIONS_SUCCESS';
       payload: any[];
     }
-  | { type: 'MARK_MESSAGE_AS_READ'; payload: string | number }
+  | { type: 'MARK_MESSAGE_AS_READ'; payload: string }
   | {
       type: 'MARK_MESSAGE_AS_READ_SUCCESS';
-      payload: { data: boolean; messageId: string | number };
+      payload: { data: boolean; messageId: string };
     }
   | { type: 'HAS_NEW_NOTIFICATIONS' }
   | { type: 'HAS_NEW_NOTIFICATIONS_SUCCESS'; payload: boolean };
@@ -121,7 +119,10 @@ const NotificationsStateReducer = (state: INotificationsState, action: INotifica
 export const useNotifications = (
   props: UseNotificationsProps,
 ): [INotificationsState, UseNotificationsActions] => {
-  const { onError, globalChannel, authService, ipfsService, profileService } = props;
+  const { onError } = props;
+
+  const sdk = getSDK();
+
   const [notificationsState, dispatch] = React.useReducer(
     NotificationsStateReducer,
     initialNotificationsState,
@@ -144,12 +145,9 @@ export const useNotifications = (
 
   // this is used to sync notification state between different components using the hook
   React.useEffect(() => {
-    const callMarkAsRead = globalChannel.pipe(
-      filter((payload: any) => {
-        return (
-          payload.channelInfo.method === 'markMessageAsRead' &&
-          payload.channelInfo.servicePath.includes('AUTH_SERVICE')
-        );
+    const callMarkAsRead = sdk.api.globalChannel.pipe(
+      filter(payload => {
+        return payload.event === events.AUTH_EVENTS.MARK_MESSAGE_AS_READ;
       }),
     );
     const callMarkAsReadSub = callMarkAsRead.subscribe({
@@ -157,12 +155,9 @@ export const useNotifications = (
       error: createErrorHandler('useNotifications.globalMarkAsRead', false, onError),
     });
 
-    const callHasNewNotifs = globalChannel.pipe(
-      filter((payload: any) => {
-        return (
-          payload.channelInfo.method === 'hasNewNotifications' &&
-          payload.channelInfo.servicePath.includes('AUTH_SERVICE')
-        );
+    const callHasNewNotifs = sdk.api.globalChannel.pipe(
+      filter(payload => {
+        return payload.event === events.AUTH_EVENTS.NEW_NOTIFICATIONS;
       }),
     );
     const callHasNewNotifsSub = callHasNewNotifs.subscribe({
@@ -177,13 +172,13 @@ export const useNotifications = (
 
   async function fetchNotifications() {
     try {
-      const getMessagesCall = authService.getMessages(null);
-      const ipfsGatewayCall = ipfsService.getSettings(null);
+      const getMessagesCall = sdk.api.auth.getMessages({});
+      const ipfsGatewayCall = sdk.services.common.ipfs.getSettings();
       const initialResp: any = await lastValueFrom(forkJoin({ ipfsGatewayCall, getMessagesCall }));
       const getProfilesCalls = initialResp.getMessagesCall.data.map((message: any) => {
         const pubKey = message.body.value.author || message.body.value.follower;
         if (pubKey) {
-          return profileService.getProfile({ pubKey });
+          return sdk.api.profile.getProfile({ pubKey });
         }
       });
       const profilesResp: any = await lastValueFrom(forkJoin(getProfilesCalls));
@@ -236,7 +231,7 @@ export const useNotifications = (
   React.useEffect(() => {
     const payload = notificationsState.markAsReadQuery;
     if (payload) {
-      const call = authService.markMessageAsRead(payload);
+      const call = sdk.api.auth.markMessageAsRead(payload);
       const callSub = call.subscribe({
         next: (resp: any) => {
           dispatch({
