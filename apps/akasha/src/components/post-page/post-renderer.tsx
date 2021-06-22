@@ -148,7 +148,7 @@ const PostRenderer = (props: PostRendererProps) => {
                     profileAnchorLink={'/profile'}
                     repliesAnchorLink={routes[POST]}
                     onRepost={props.onRepost}
-                    onEntryFlag={props.onFlag(itemData.entryId, 'comment')}
+                    onEntryFlag={props.onFlag(itemData.entryId, 'reply')}
                     handleFollowAuthor={handleFollow}
                     handleUnfollowAuthor={handleUnfollow}
                     isFollowingAuthor={isFollowing}
