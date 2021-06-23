@@ -1,6 +1,6 @@
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import routes, { rootRoute } from './routes';
-import { IAppConfig } from '@akashaproject/ui-awf-typings/src/app-loader';
+import { IAppConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { IntegrationRegistrationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({

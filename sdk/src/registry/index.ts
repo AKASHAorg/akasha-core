@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import { ILogger } from '@akashaproject/sdk-typings/src/interfaces/log';
+import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Settings from '../settings';
@@ -11,12 +11,12 @@ import { ContractFactory } from 'ethers';
 import AkashaRegistrarABI from '../contracts/artifacts/AkashaRegistrar.json';
 import ReverseRegistrarABI from '../contracts/artifacts/ReverseRegistrar.json';
 import EnsABI from '../contracts/artifacts/ENS.json';
-import { AWF_IENS } from '@akashaproject/sdk-typings/src/interfaces/registry';
+import { AWF_IENS } from '@akashaproject/sdk-typings/lib/interfaces/registry';
 import { lastValueFrom } from 'rxjs';
 import { createObservableStream } from '../helpers/observable';
 import EventBus from '../common/event-bus';
 import { tap } from 'rxjs/operators';
-import { ENS_EVENTS } from '@akashaproject/sdk-typings/src/interfaces/events';
+import { ENS_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
 
 export const isEncodedLabelHash = hash => {
   return hash.startsWith('[') && hash.endsWith(']') && hash.length === 66;

@@ -7,8 +7,8 @@ import { lastValueFrom, of } from 'rxjs';
 import { Collection } from '@textile/threaddb';
 import { AppsSchema } from '../db/app.schema';
 import Logging from '../logging/index';
-import { ILogger } from '@akashaproject/sdk-typings/src/interfaces/log';
-import { IAppSettings } from '@akashaproject/sdk-typings/src/interfaces/settings';
+import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { IAppSettings } from '@akashaproject/sdk-typings/lib/interfaces/settings';
 
 @injectable()
 class AppSettings implements IAppSettings {
