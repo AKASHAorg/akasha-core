@@ -163,12 +163,20 @@ class ModerationDecisionAPI extends DataSource {
     const moderated = [];
     for (const result of results) {
       const decision = await this.getFinalDecision(result.contentID);
+      // load moderator info
+      const profileAPI = new ProfileAPI({ dbID: this.dbID, collection: 'Profiles' });
+      const moderator = await profileAPI.getProfile(decision.moderator);
 
       moderated.push({
         contentID: decision.contentID,
         contentType: decision.contentType,
         moderatedDate: decision.moderatedDate,
-        moderator: decision.moderator,
+        moderator: {
+          ethAddress: moderator.ethAddress,
+          name: moderator.name || '',
+          userName: moderator.userName || '',
+          avatar: moderator.avatar,
+        },
         delisted: decision.delisted,
         reasons: decision.reasons,
         explanation: decision.explanation,
