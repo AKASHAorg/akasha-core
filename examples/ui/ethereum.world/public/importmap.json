@@ -1,6 +1,6 @@
 {
   "imports": {
-    "@akashaproject/sdk": "/akasha.sdk.js",
+    "@akashaproject/awf-sdk": "/akasha.sdk.js",
     "@akashaproject/design-system": "/design/index.js",
     "@widget/sidebar": "/widgets/sidebar/index.js",
     "@widget/layout": "/widgets/layout/index.js",

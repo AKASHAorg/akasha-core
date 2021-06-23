@@ -1,6 +1,6 @@
 import { asapScheduler, defer, from, of, scheduled, ObservableInput } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ServiceCallResult } from '@akashaproject/sdk-typings/src/interfaces';
+import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
 
 /**
  * @param val

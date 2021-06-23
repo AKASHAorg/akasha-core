@@ -18,6 +18,10 @@ export const schema: any = {
   },
 };
 
+export interface SettingsSchema {
+  serviceName: string;
+  options: string[][];
+}
 export default {
   name: 'SETTINGS',
   schema: schema,

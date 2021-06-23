@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
-import IGqlClient from '@akashaproject/sdk-typings/src/interfaces/gql';
-import { ServiceCallResult } from '@akashaproject/sdk-typings/src/interfaces';
+import IGqlClient from '@akashaproject/sdk-typings/lib/interfaces/gql';
+import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
 import { ApolloLink, HttpLink, gql, GraphQLRequest } from '@apollo/client';
 
 import hash from 'object-hash';

@@ -4,7 +4,9 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
-    "types": ["reflect-metadata", "node"]
+    "types": ["reflect-metadata", "node"],
+    "outDir": "./lib",
+    "rootDir": "./src"
   },
   "include": [
     "./src/**/*"
