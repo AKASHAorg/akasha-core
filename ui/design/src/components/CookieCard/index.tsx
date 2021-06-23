@@ -38,7 +38,7 @@ const CookieWidgetCard: React.FC<ICookieWidgetCard> = props => {
   } = props;
 
   return (
-    <BasicCardBox elevate="shadow" darkBorder={true} noBorderRadius={isMobileOnly}>
+    <BasicCardBox darkBorder={true} noBorderRadius={isMobileOnly}>
       <Box margin="1rem">
         <Text weight={600} textAlign="start" margin={{ bottom: 'medium' }} size="large">
           {titleLabel}
