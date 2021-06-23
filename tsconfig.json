@@ -35,7 +35,10 @@
     { "path": "./ui/plugins/legal" },
     { "path": "./ui/plugins/notifications" },
     { "path": "./ui/plugins/profile" },
-    { "path": "./ui/plugins/search" }
+    { "path": "./ui/plugins/search" },
+    { "path": "./sdk"},
+    {"path":  "./sdk/typings"}
   ],
-  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx"]
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx"],
+  "files": ["./sdk/src/definitions/graphql.d.ts"]
 }
