@@ -13,6 +13,7 @@ describe('<Topbar /> Component', () => {
   const handleSignup = jest.fn();
   const handleLogout = jest.fn();
   const handleFeedback = jest.fn();
+  const handleModerationClick = jest.fn();
 
   beforeEach(() => {
     act(() => {
@@ -28,6 +29,7 @@ describe('<Topbar /> Component', () => {
             onSignUpClick={handleSignup}
             onLogout={handleLogout}
             onFeedbackClick={handleFeedback}
+            onModerationClick={handleModerationClick}
             currentLocation=""
           />,
         ),

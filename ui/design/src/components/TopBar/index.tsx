@@ -41,12 +41,15 @@ export interface ITopbarProps {
   legalLabel?: string;
   feedbackLabel?: string;
   feedbackInfoLabel?: string;
+  moderationLabel?: string;
+  moderationInfoLabel?: string;
   legalCopyRightLabel?: string;
   // handlers
   onNavigation: (path: string) => void;
   onSidebarToggle?: (visibility: boolean) => void;
   onSearch: (inputValue: string) => void;
   onFeedbackClick: () => void;
+  onModerationClick: () => void;
   // external css
   className?: string;
   onLoginClick: () => void;
@@ -68,6 +71,8 @@ const Topbar: React.FC<ITopbarProps> = props => {
     legalLabel,
     feedbackLabel,
     feedbackInfoLabel,
+    moderationLabel,
+    moderationInfoLabel,
     legalCopyRightLabel,
     className,
     quickAccessItems,
@@ -79,6 +84,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     onLoginClick,
     onSignUpClick,
     onFeedbackClick,
+    onModerationClick,
     onLogout,
     hasNewNotifications,
   } = props;
@@ -378,11 +384,14 @@ const Topbar: React.FC<ITopbarProps> = props => {
           signOutLabel={signOutLabel}
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
+          moderationLabel={moderationLabel}
+          moderationInfoLabel={moderationInfoLabel}
           legalCopyRightLabel={legalCopyRightLabel}
           menuItems={dropItems}
           legalMenu={legalMenu}
           onLogout={onLogout}
           onFeedbackClick={onFeedbackClick}
+          onModerationClick={onModerationClick}
         />
       )}
       {menuDropOpen && !loggedProfileData?.ethAddress && (
@@ -394,8 +403,11 @@ const Topbar: React.FC<ITopbarProps> = props => {
           legalMenu={legalMenu}
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
+          moderationLabel={moderationLabel}
+          moderationInfoLabel={moderationInfoLabel}
           legalCopyRightLabel={legalCopyRightLabel}
           onFeedbackClick={onFeedbackClick}
+          onModerationClick={onModerationClick}
         />
       )}
     </TopbarWrapper>
@@ -412,6 +424,8 @@ Topbar.defaultProps = {
   legalLabel: 'Legal',
   feedbackLabel: 'Send Us Feedback',
   feedbackInfoLabel: 'Help us improve the experience!',
+  moderationLabel: 'Moderation History',
+  moderationInfoLabel: 'Help keep us accountable!',
 };
 
 export default Topbar;

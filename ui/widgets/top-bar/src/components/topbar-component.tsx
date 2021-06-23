@@ -317,6 +317,10 @@ const TopbarComponent = (props: RootComponentProps) => {
     modalStateActions.show(MODAL_NAMES.FEEDBACK);
   };
 
+  const handleModerationClick = () => {
+    navigateToUrl('/moderation-app/history');
+  };
+
   const handleSearch = (inputValue: string) => {
     const encodedSearchKey = encodeURIComponent(inputValue);
     if (searchAreaItem) {
@@ -357,6 +361,8 @@ const TopbarComponent = (props: RootComponentProps) => {
         legalLabel={t('Legal')}
         feedbackLabel={t('Send Us Feedback')}
         feedbackInfoLabel={t('Help us improve the experience!')}
+        moderationLabel={t('Moderation History')}
+        moderationInfoLabel={t('Help keep us accountable!')}
         legalCopyRightLabel={'© Ethereum World Association'}
         versionLabel="ALPHA"
         versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
@@ -369,6 +375,7 @@ const TopbarComponent = (props: RootComponentProps) => {
         onSignUpClick={handleSignUpClick}
         onLogout={handleLogout}
         onFeedbackClick={handleFeedbackModalShow}
+        onModerationClick={handleModerationClick}
         hasNewNotifications={notificationsState.hasNewNotifications}
         currentLocation={location?.pathname}
       >

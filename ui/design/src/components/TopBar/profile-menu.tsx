@@ -3,13 +3,14 @@ import { IProfileData } from '../ProfileCard/profile-widget-card';
 import * as React from 'react';
 import { Accordion, Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
+
 import TextIcon from '../TextIcon';
+import Icon, { IconType } from '../Icon';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { StyledDrop, StyledPopoverBox, StyledOverlay, StyledAccordionPanel } from './styled-topbar';
 import { ModalContainer } from '../LoginModal/fullscreen-modal-container';
 import { Portal } from '../Editor/helpers';
-import Icon from '../Icon';
 
 export interface IProfileMenu {
   loggedProfileData?: Partial<IProfileData>;
@@ -21,12 +22,21 @@ export interface IProfileMenu {
   signOutLabel?: string;
   feedbackLabel?: string;
   feedbackInfoLabel?: string;
+  moderationLabel?: string;
+  moderationInfoLabel?: string;
   legalCopyRightLabel?: string;
   // handlers
   closePopover: () => void;
   onNavigation: (path: string) => void;
   onFeedbackClick: () => void;
+  onModerationClick: () => void;
   onLogout?: () => void;
+}
+
+interface ISimilarMenu {
+  icon: IconType;
+  labels: (string | undefined)[];
+  handler: () => void;
 }
 
 const ProfileMenu: React.FC<IProfileMenu> = props => {
@@ -39,10 +49,13 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
     signOutLabel,
     feedbackLabel,
     feedbackInfoLabel,
+    moderationLabel,
+    moderationInfoLabel,
     legalCopyRightLabel,
     closePopover,
     onNavigation,
     onFeedbackClick,
+    onModerationClick,
     onLogout,
   } = props;
 
@@ -56,6 +69,13 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
   const handleFeedbackClick = () => {
     if (onFeedbackClick) {
       onFeedbackClick();
+    }
+    closePopover();
+  };
+
+  const handleModerationClick = () => {
+    if (onModerationClick) {
+      onModerationClick();
     }
     closePopover();
   };
@@ -87,6 +107,15 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
     return null;
   };
 
+  const similarMenu: ISimilarMenu[] = [
+    { icon: 'feedback', labels: [feedbackLabel, feedbackInfoLabel], handler: handleFeedbackClick },
+    {
+      icon: 'book',
+      labels: [moderationLabel, moderationInfoLabel],
+      handler: handleModerationClick,
+    },
+  ];
+
   const renderProfileMenu = () => (
     <Box pad="xsmall" direction="column" align="center">
       {loggedProfileData?.ethAddress &&
@@ -95,28 +124,30 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
             {renderAvatarMenuItem(menuItem)}
           </Box>
         ))}
-
-      <Box
-        border={{ style: 'solid', size: '1px', color: 'border', side: 'bottom' }}
-        justify="start"
-        fill="horizontal"
-      >
-        <StyledPopoverBox
-          pad="xsmall"
-          margin={{ vertical: 'xsmall' }}
-          align="start"
-          onClick={handleFeedbackClick}
-          responsive={false}
+      {similarMenu.map((menu, idx) => (
+        <Box
+          key={menu.icon + idx}
+          border={{ style: 'solid', size: '1px', color: 'border', side: 'bottom' }}
+          justify="start"
+          fill="horizontal"
         >
-          <SubtitleTextIcon
-            label={feedbackLabel}
-            subtitle={feedbackInfoLabel}
-            subtitleColor={'secondaryText'}
-            iconType="feedback"
-            iconSize={'1.250rem'}
-          />
-        </StyledPopoverBox>
-      </Box>
+          <StyledPopoverBox
+            pad="xsmall"
+            margin={{ vertical: 'xsmall' }}
+            align="start"
+            onClick={menu.handler}
+            responsive={false}
+          >
+            <SubtitleTextIcon
+              label={menu.labels[0]}
+              subtitle={menu.labels[1]}
+              subtitleColor={'secondaryText'}
+              iconType={menu.icon}
+              iconSize={'1.250rem'}
+            />
+          </StyledPopoverBox>
+        </Box>
+      ))}
       <Box
         border={
           loggedProfileData?.ethAddress
