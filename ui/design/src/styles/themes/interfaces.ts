@@ -30,4 +30,5 @@ export interface IColors {
   secondaryOpacity: string;
   shadow: string;
   disabledText: string;
+  activeCardBackground: string;
 }

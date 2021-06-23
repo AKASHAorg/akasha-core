@@ -521,7 +521,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   profileAnchorLink={'/profile'}
                   repliesAnchorLink={'/social-app/post'}
                   onRepost={() => null}
-                  onEntryFlag={handleEntryFlag(commentData.entryId, 'comment')}
+                  onEntryFlag={handleEntryFlag(commentData.entryId, 'reply')}
                   handleFollowAuthor={() => handleFollowProfile(commentData.author.ethAddress)}
                   handleUnfollowAuthor={() => handleUnfollowProfile(commentData.author.ethAddress)}
                   isFollowingAuthor={followedProfiles.includes(commentData.author)}
