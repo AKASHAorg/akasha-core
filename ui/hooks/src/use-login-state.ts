@@ -119,12 +119,16 @@ const useLoginState = (props: UseLoginProps): [ILoginState, UseLoginActions] => 
 
   React.useLayoutEffect(() => {
     // make an attempt to load the eth address from cache;
-    (async () => {
-      const getDeps = await sdk.api.auth.getCurrentUser();
-      if (getDeps) {
-        dispatch({ type: 'LOAD_FROM_CACHE', payload: getDeps });
-      }
-    })();
+
+    const getDepsCall = sdk.api.auth.getCurrentUser();
+    const sub = getDepsCall.subscribe({
+      next: resp => {
+        if (resp.data) {
+          dispatch({ type: 'LOAD_FROM_CACHE', payload: resp.data });
+        }
+      },
+    });
+    return () => sub.unsubscribe();
   }, []);
 
   React.useEffect(() => {
@@ -139,8 +143,8 @@ const useLoginState = (props: UseLoginProps): [ILoginState, UseLoginActions] => 
         takeLast(1),
       );
       const callSub = race(call, globalCall).subscribe({
-        next: (response: any) => {
-          dispatch({ type: 'LOGIN_SUCCESS', payload: response.data });
+        next: resp => {
+          dispatch({ type: 'LOGIN_SUCCESS', payload: resp.data as any });
         },
         error: createErrorHandler('useLoginState.login.subscription', false, onError),
       });

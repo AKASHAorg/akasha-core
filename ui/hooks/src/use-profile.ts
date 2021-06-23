@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { forkJoin, from, Observable, Subscription, timer } from 'rxjs';
+import { from, Observable, Subscription, timer } from 'rxjs';
 import { filter, switchMap, exhaustMap } from 'rxjs/operators';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import getSDK from '@akashaproject/awf-sdk';
@@ -314,11 +314,11 @@ export const useProfile = (
 
   React.useEffect(() => {
     if (profile.getProfileDataQuery) {
-      const ipfsGateway = sdk.services.common.ipfs.getSettings();
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
       const getProfileCall = sdk.api.profile.getProfile(profile.getProfileDataQuery.payload);
 
       const sub = getProfileCall.subscribe({
-        next: (resp: any) => {
+        next: resp => {
           if (!resp.data) {
             return;
           }
@@ -347,7 +347,7 @@ export const useProfile = (
         (async () => {
           try {
             const resp = await sdk.api.ens.isAvailable(userName);
-            dispatchUpdateStatus({ type: 'VALIDATE_USERNAME_SUCCESS', payload: resp.data });
+            dispatchUpdateStatus({ type: 'VALIDATE_USERNAME_SUCCESS', payload: resp });
           } catch (error) {
             createErrorHandler('useProfile.validateUsername', false, props.onError)(error);
           }
@@ -364,20 +364,20 @@ export const useProfile = (
   React.useEffect(() => {
     if (profile.getEntryAuthorQuery) {
       const getEntryCall = sdk.api.entries.getEntry(profile.getEntryAuthorQuery);
-      const ipfsGatewayCall = sdk.services.common.ipfs.getSettings();
-      const sub = forkJoin({ getEntryCall, ipfsGatewayCall }).subscribe({
-        next: (responses: any) => {
-          if (!responses.getEntryCall.data) {
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+      const sub = getEntryCall.subscribe({
+        next: resp => {
+          if (!resp.data) {
             return;
           }
-          const { getPost: entry } = responses.getEntryCall.data;
+          const { getPost: entry } = resp.data;
           if (entry && entry.author) {
             dispatchProfile({
               type: 'GET_ENTRY_AUTHOR_SUCCESS',
               payload: {
                 ...entry.author,
-                avatar: getMediaUrl(responses.ipfsGatewayCall.data, entry.author.avatar),
-                coverImage: getMediaUrl(responses.ipfsGatewayCall.data, entry.author.coverImage),
+                avatar: getMediaUrl(ipfsGateway, entry.author.avatar),
+                coverImage: getMediaUrl(ipfsGateway, entry.author.coverImage),
               },
             });
           }
@@ -399,7 +399,7 @@ export const useProfile = (
         userName,
       } = updateStatus.optimisticUpdateQuery;
 
-      const ipfsGateway = sdk.services.common.ipfs.getSettings();
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
       let userNameSub: Subscription;
       let addProvidersSub: Subscription;
@@ -440,7 +440,7 @@ export const useProfile = (
         if (userName && !profile.userName) {
           const userNameCall = sdk.api.profile.registerUserName(userName);
           userNameSub = userNameCall.subscribe({
-            next: (userNameRes: any) => {
+            next: userNameRes => {
               const providers: any[] = [];
 
               if (!avatarRes && avatar === null) {

@@ -241,9 +241,11 @@ const useENSRegistration = (
     if (registrationState.getENSByAddressQuery) {
       (async () => {
         try {
-          const resp = await sdk.api.ens.resolveAddress(registrationState.getENSByAddressQuery);
-          if (resp) {
-            dispatch({ type: 'GET_ENS_BY_ADDRESS_SUCCESS', payload: resp });
+          if (registrationState.getENSByAddressQuery) {
+            const resp = await sdk.api.ens.resolveAddress(registrationState.getENSByAddressQuery);
+            if (resp) {
+              dispatch({ type: 'GET_ENS_BY_ADDRESS_SUCCESS', payload: resp });
+            }
           }
         } catch (error) {
           createErrorHandler('useEnsRegistration.getENSByAddress', false, props.onError)(error);
@@ -313,8 +315,10 @@ const useENSRegistration = (
     if (registrationState.validateNameQuery) {
       (async () => {
         try {
-          const resp = await sdk.api.ens.isAvailable(registrationState.validateNameQuery);
-          dispatch({ type: 'VALIDATE_NAME_SUCCESS', payload: resp });
+          if (registrationState.validateNameQuery) {
+            const resp = await sdk.api.ens.isAvailable(registrationState.validateNameQuery);
+            dispatch({ type: 'VALIDATE_NAME_SUCCESS', payload: resp });
+          }
         } catch (error) {
           createErrorHandler('useEnsRegistration.validateName', false, props.onError)(error);
         }
@@ -326,8 +330,10 @@ const useENSRegistration = (
     if (registrationState.claimQuery) {
       (async () => {
         try {
-          await sdk.api.ens.claimName(registrationState.claimQuery);
-          dispatch({ type: 'CLAIM_SUCCESS' });
+          if (registrationState.claimQuery) {
+            await sdk.api.ens.claimName(registrationState.claimQuery);
+            dispatch({ type: 'CLAIM_SUCCESS' });
+          }
         } catch (error) {
           createErrorHandler('useEnsRegistration.claim', false, props.onError)(error);
           dispatch({ type: 'CLAIM_ERROR', payload: `ENS claim failed. ${error.message}` });

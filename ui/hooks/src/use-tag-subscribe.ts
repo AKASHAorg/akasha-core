@@ -145,7 +145,7 @@ export const useTagSubscribe = (
   React.useEffect(() => {
     const call = sdk.api.globalChannel.pipe(
       filter(payload => {
-        return payload.event === events.PROFILE_EVENTS.TOGGLE_TAG_SUBSCRIPTION;
+        return payload.event === events.PROFILE_EVENTS.TAG_SUBSCRIPTION;
       }),
     );
     const callSub = call.subscribe({
@@ -159,7 +159,7 @@ export const useTagSubscribe = (
     if (tagSubscriptionState.isFetching) {
       const call = sdk.api.profile.getTagSubscriptions();
       const callSub = call.subscribe({
-        next: (resp: any) => {
+        next: resp => {
           dispatch({ type: 'GET_TAG_SUBSCRIPTIONS_SUCCESS', payload: resp.data });
         },
         error: createErrorHandler('useTagSubscribe.getTagSubscriptions', false, onError),
@@ -175,10 +175,10 @@ export const useTagSubscribe = (
     if (tagName) {
       const call = sdk.api.profile.isSubscribedToTag(tagName);
       const callSub = call.subscribe({
-        next: (resp: { data?: { isSubscribedToTag: boolean } }) => {
+        next: resp => {
           dispatch({
             type: 'GET_IS_SUBSCRIBED_TO_TAG_SUCCESS',
-            payload: { isSubscribedToTag: resp.data?.isSubscribedToTag, tag: tagName },
+            payload: { isSubscribedToTag: !!resp, tag: tagName },
           });
         },
         error: createErrorHandler('useTagSubscribe.isSubscribedToTag', false, onError),
@@ -194,18 +194,21 @@ export const useTagSubscribe = (
     const tagName = tagSubscriptionState.toggleTagSubscriptionPayload;
 
     if (tagName) {
-      (async () => {
-        try {
-          const resp = await sdk.api.profile.toggleTagSubscription(tagName);
+      const call = sdk.api.profile.toggleTagSubscription(tagName);
+      const callSub = call.subscribe({
+        next: resp => {
           dispatch({
             type: 'TOGGLE_TAG_SUBSCRIPTION_SUCCESS',
-            payload: { tagSubscribed: resp, tag: tagName },
+            payload: { tagSubscribed: resp.sub, tag: tagName },
           });
-        } catch (error) {
-          createErrorHandler('useTagSubscribe.toggleTagSubscription', false, onError);
-        }
-      })();
+        },
+        error: createErrorHandler('useTagSubscribe.toggleTagSubscription', false, onError),
+      });
+      return () => {
+        callSub.unsubscribe();
+      };
     }
+    return;
   }, [tagSubscriptionState.toggleTagSubscriptionPayload]);
 
   const actions: UseTagSubscribeActions = {

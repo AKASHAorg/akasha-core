@@ -3,7 +3,6 @@ import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import getSDK from '@akashaproject/awf-sdk';
 import * as React from 'react';
-import { combineLatest } from 'rxjs';
 import moderationRequest from './moderation-request';
 import {
   buildPublishObject,
@@ -459,11 +458,6 @@ const postsStateReducer = (state: PostsState, action: IPostsAction) => {
   }
 };
 
-export interface GetEntriesResponse {
-  channelInfo: any;
-  data: { posts: { nextIndex: string; results: any[]; total: number } };
-}
-
 // tslint:disable:cyclomatic-complexity
 /* eslint-disable complexity */
 const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
@@ -474,16 +468,12 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
   React.useEffect(() => {
     if (postsState.isFetchingComments && postsState.getCommentsQuery) {
       const commentsCall = sdk.api.comments.getComments(postsState.getCommentsQuery);
-      const ipfsGateway = sdk.services.common.ipfs.getSettings();
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
       const sub = commentsCall.subscribe({
-        next: (commentsResp: any) => {
+        next: commentsResp => {
           const { data } = commentsResp;
-          const {
-            nextIndex,
-            results,
-            total,
-          }: GetEntriesResponse['data']['posts'] = data.getComments;
+          const { nextIndex, results, total } = data.getComments;
           const newIds: string[] = [];
           const comments = results
             .filter(excludeNonSlateContent)
@@ -510,10 +500,10 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       const status = postsState.getPostDataQuery.status;
       const postId = postsState.getPostDataQuery.postId;
       const entryCall = sdk.api.entries.getEntry(postId);
-      const ipfsGateway = sdk.services.common.ipfs.getSettings();
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
       const sub = entryCall.subscribe({
-        next: async (entryResp: any) => {
+        next: async entryResp => {
           const entry = entryResp.data?.getPost;
           if (entry) {
             const mappedEntry = mapEntry(
@@ -567,11 +557,10 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     if (postsState.getCommentQuery) {
       const commentId = postsState.getCommentQuery;
       const commentCall = sdk.api.comments.getComment(commentId);
-      const ipfsGateway = sdk.services.common.ipfs.getSettings();
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
       const sub = commentCall.subscribe({
-        next: (commentResp: any) => {
-          c;
+        next: commentResp => {
           const comment = commentResp.data?.getComment;
           if (comment) {
             const mappedComment = mapEntry(comment, ipfsGateway, logger);
@@ -598,11 +587,11 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         offset: payload.offset || nextIndex,
       });
 
-      const ipfsGateway = sdk.services.common.ipfs.getSettings();
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
       const sub = entriesCall.subscribe({
-        next: async (entriesResp: any) => {
-          const { data }: GetEntriesResponse = entriesResp;
+        next: async entriesResp => {
+          const { data } = entriesResp;
 
           const { nextIndex, results, total } = data.posts;
           const newIds: string[] = [];
@@ -683,7 +672,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       const { pendingId, pending, publishObj } = postsState.optimisticPublishCommentQuery;
       const publishCall = sdk.api.comments.addComment(publishObj);
       const sub = publishCall.subscribe({
-        next: (resp: any) => {
+        next: resp => {
           const commentId = resp.data?.addComment;
           if (!commentId) {
             return dispatch({ type: 'OPTIMISTIC_PUBLISH_COMMENT_ERROR', payload: pendingId });
@@ -703,7 +692,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
 
       const postEntryCall = sdk.api.entries.postEntry(publishObj);
       const sub = postEntryCall.subscribe({
-        next: (postingResp: any) => {
+        next: postingResp => {
           if (!postingResp.data?.createPost) {
             return dispatch({ type: 'OPTIMISTIC_PUBLISH_POST_ERROR', payload: pendingId });
           }
@@ -725,26 +714,18 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
   React.useEffect(() => {
     if (postsState.getUserPostsQuery) {
       const payload = postsState.getUserPostsQuery;
-      const req: any = {
+      const req = {
         ...payload,
       };
       if (typeof postsState.nextPostIndex === 'number') {
         req.offset = postsState.nextPostIndex;
       }
       const userPostsCall = sdk.api.entries.entriesByAuthor(req);
-      const ipfsGateway = sdk.services.common.ipfs.getSettings();
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
       const sub = userPostsCall.subscribe({
-        next: async (userPostsResp: any) => {
-          const {
-            results,
-            nextIndex,
-            total,
-          }: {
-            results: any[];
-            nextIndex: string;
-            total: number;
-          } = userPostsResp.data.getPostsByAuthor;
+        next: async userPostsResp => {
+          const { results, nextIndex, total } = userPostsResp.data.getPostsByAuthor;
 
           const newIds: string[] = [];
           const newQuoteIds: string[] = [];
@@ -827,26 +808,18 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
   React.useEffect(() => {
     if (postsState.getTagPostsQuery) {
       const payload = postsState.getTagPostsQuery;
-      const req: any = {
+      const req = {
         ...payload,
       };
       if (typeof postsState.nextPostIndex === 'number') {
         req.offset = postsState.nextPostIndex;
       }
       const tagPostsCall = sdk.api.entries.entriesByTag(req);
-      const ipfsGateway = sdk.services.common.ipfs.getSettings();
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
       const sub = tagPostsCall.subscribe({
-        next: async (tagPostsResp: any) => {
-          const {
-            results,
-            nextIndex,
-            total,
-          }: {
-            results: any[];
-            nextIndex: string;
-            total: number;
-          } = tagPostsResp.data.getPostsByTag;
+        next: async tagPostsResp => {
+          const { results, nextIndex, total } = tagPostsResp.data.getPostsByTag;
 
           const newIds: string[] = [];
           const newQuoteIds: string[] = [];

@@ -83,7 +83,7 @@ export const useMentions = (props: UseMentionsProps): [IMentionsState, UseMentio
     if (mentionsState.tagQuery) {
       const tagsService = sdk.api.tags.searchTags(mentionsState.tagQuery);
       const tagsSub = tagsService.subscribe({
-        next: (resp: any) => {
+        next: resp => {
           dispatch({ type: 'GET_TAGS_SUCCESS', payload: resp.data.searchTags });
         },
         error: createErrorHandler('useMentions.getTags', false, onError),
@@ -99,7 +99,7 @@ export const useMentions = (props: UseMentionsProps): [IMentionsState, UseMentio
     if (mentionsState.mentionQuery) {
       const mentionsService = sdk.api.profile.searchProfiles(mentionsState.mentionQuery);
       const mentionsSub = mentionsService.subscribe({
-        next: (resp: any) => {
+        next: resp => {
           dispatch({ type: 'GET_MENTIONS_SUCCESS', payload: resp.data.searchProfiles });
         },
         error: createErrorHandler('useMentions.getMentions', false, onError),

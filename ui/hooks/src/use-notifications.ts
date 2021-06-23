@@ -147,7 +147,7 @@ export const useNotifications = (
   React.useEffect(() => {
     const callMarkAsRead = sdk.api.globalChannel.pipe(
       filter(payload => {
-        return payload.event === events.AUTH_EVENTS.MARK_MESSAGE_AS_READ;
+        return payload.event === events.AUTH_EVENTS.MARK_MSG_READ;
       }),
     );
     const callMarkAsReadSub = callMarkAsRead.subscribe({
@@ -172,10 +172,10 @@ export const useNotifications = (
 
   async function fetchNotifications() {
     try {
-      const getMessagesCall = sdk.api.auth.getMessages({});
-      const ipfsGatewayCall = sdk.services.common.ipfs.getSettings();
-      const initialResp: any = await lastValueFrom(forkJoin({ ipfsGatewayCall, getMessagesCall }));
-      const getProfilesCalls = initialResp.getMessagesCall.data.map((message: any) => {
+      const getMessagesResp = await lastValueFrom(sdk.api.auth.getMessages({}));
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+
+      const getProfilesCalls = getMessagesResp.data.map(message => {
         const pubKey = message.body.value.author || message.body.value.follower;
         if (pubKey) {
           return sdk.api.profile.getProfile({ pubKey });
@@ -193,13 +193,13 @@ export const useNotifications = (
             coverImage: null,
           };
           if (avatar) {
-            images.avatar = getMediaUrl(initialResp.ipfsGatewayCall.data, avatar);
+            images.avatar = getMediaUrl(ipfsGateway, avatar);
           }
           if (coverImage) {
-            images.coverImage = getMediaUrl(initialResp.ipfsGatewayCall.data, coverImage);
+            images.coverImage = getMediaUrl(ipfsGateway, coverImage);
           }
           const profileData = { ...images, ...other };
-          completeMessages = initialResp.getMessagesCall.data?.map((message: any) => {
+          completeMessages = getMessagesResp.data?.map(message => {
             if (message.body.value.author === profileData.pubKey) {
               message.body.value.author = profileData;
             }
@@ -233,7 +233,7 @@ export const useNotifications = (
     if (payload) {
       const call = sdk.api.auth.markMessageAsRead(payload);
       const callSub = call.subscribe({
-        next: (resp: any) => {
+        next: resp => {
           dispatch({
             type: 'MARK_MESSAGE_AS_READ_SUCCESS',
             payload: { data: resp.data, messageId: payload },
@@ -248,9 +248,9 @@ export const useNotifications = (
 
   React.useEffect(() => {
     if (notificationsState?.hasNewNotificationsQuery) {
-      const call = authService.hasNewNotifications(null);
+      const call = sdk.api.auth.hasNewNotifications();
       const callSub = call.subscribe({
-        next: (resp: any) => {
+        next: resp => {
           dispatch({ type: 'HAS_NEW_NOTIFICATIONS_SUCCESS', payload: resp.data });
         },
         error: createErrorHandler('useNotifications.hasNewNotifications', false, onError),

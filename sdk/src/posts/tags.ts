@@ -71,7 +71,7 @@ export default class AWF_Tags implements AWF_ITags {
    * @param name
    */
   searchTags(name: string) {
-    return this._gql.run<{ searchTags: SearchTagsResult_Response }>({
+    return this._gql.run<{ searchTags: SearchTagsResult_Response[] }>({
       query: SearchTags,
       variables: { name: name },
       operationName: 'SearchTags',

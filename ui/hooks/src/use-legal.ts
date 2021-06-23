@@ -59,12 +59,15 @@ export const useLegal = (props: UseLegalProps): [string | null, UseLegalActions]
 
   React.useEffect(() => {
     if (legalDocsState.docQuery) {
-      const call = sdk.services.ipfs.getLegalDoc(legalDocsState.docQuery);
-      const callSub = call.subscribe((resp: any) => {
-        if (resp.data) {
-          dispatch({ type: 'GET_LEGAL_DOCS_SUCCESS', payload: resp.data });
-        }
-      }, createErrorHandler('useLegal.getLegalDoc', false, onError));
+      const call = sdk.services.common.ipfs.getLegalDoc(legalDocsState.docQuery);
+      const callSub = call.subscribe({
+        next: resp => {
+          if (resp.data) {
+            dispatch({ type: 'GET_LEGAL_DOCS_SUCCESS', payload: resp.data });
+          }
+        },
+        error: createErrorHandler('useLegal.getLegalDoc', false, onError),
+      });
       return () => {
         callSub.unsubscribe();
       };

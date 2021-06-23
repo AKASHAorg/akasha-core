@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import getSDK from '@akashaproject/awf-sdk';
-import { combineLatest, Subscription } from 'rxjs';
 import { createErrorHandler } from './utils/error-handler';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
@@ -93,8 +92,8 @@ const useTrendingData = (
   React.useEffect(() => {
     if (trendingState.getTagsQuery) {
       const trendingTagsCall = sdk.api.tags.getTrending();
-      const tagsSub: Subscription | undefined = trendingTagsCall.subscribe({
-        next: (resp: any) => {
+      const tagsSub = trendingTagsCall.subscribe({
+        next: resp => {
           if (resp.data.searchTags) {
             dispatch({ type: 'GET_TRENDING_TAGS_SUCCESS', payload: resp.data.searchTags });
           }
@@ -108,24 +107,20 @@ const useTrendingData = (
 
   React.useEffect(() => {
     if (trendingState.getProfilesQuery) {
-      const ipfsGatewayCall = sdk.services.common.ipfs.getSettings();
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
       const trendingProfilesCall = sdk.api.profile.getTrending();
-      const getTrendingProfiles = combineLatest({
-        ipfsGatewayCall: ipfsGatewayCall,
-        trendingProfilesCall: trendingProfilesCall,
-      });
-      const profilesSub: Subscription | undefined = getTrendingProfiles.subscribe({
-        next: (resp: any) => {
-          const ipfsGateway = resp.ipfsGatewayCall.data;
-          if (resp.trendingProfilesCall.data.searchProfiles) {
-            const profiles = resp.trendingProfilesCall.data.searchProfiles.map((profile: any) => {
+
+      const profilesSub = trendingProfilesCall.subscribe({
+        next: resp => {
+          if (resp.data.searchProfiles) {
+            const profiles = resp.data.searchProfiles.map(profile => {
               const profileData = Object.assign({}, profile);
               if (profile.avatar && !profile.avatar.startsWith(ipfsGateway)) {
                 const profileAvatarWithGateway = `${ipfsGateway}/${profile.avatar}`;
                 profileData.avatar = profileAvatarWithGateway;
               }
               // should replace with real data once we integrate follow functionality
-              profileData.followers = profileData.followers || 0;
+              profileData.totalFollowers = profileData.totalFollowers || 0;
               return profileData;
             });
             dispatch({ type: 'GET_TRENDING_PROFILES_SUCCESS', payload: profiles });

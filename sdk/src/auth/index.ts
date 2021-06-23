@@ -429,7 +429,7 @@ export default class AWF_Auth implements AWF_IAuth {
    */
   decryptMessage(message) {
     return createObservableStream<{
-      body: string;
+      body: Record<string, any>;
       from: string;
       readAt: number;
       createdAt: number;
@@ -439,9 +439,9 @@ export default class AWF_Auth implements AWF_IAuth {
 
   private async _decryptMessage(message) {
     const decryptedBody = await this.identity.decrypt(message.body);
-    let body = new TextDecoder().decode(decryptedBody);
+    let body;
     try {
-      body = JSON.parse(body);
+      body = JSON.parse(new TextDecoder().decode(decryptedBody));
     } catch (e) {
       this._log.warn(e);
     }
@@ -455,7 +455,13 @@ export default class AWF_Auth implements AWF_IAuth {
    */
   getMessages(args: InboxListOptions) {
     return createObservableStream<
-      { body: string; from: string; readAt: number; createdAt: number; id: string }[]
+      {
+        body: Record<string, any>;
+        from: string;
+        readAt: number;
+        createdAt: number;
+        id: string;
+      }[]
     >(this._getMessages(args));
   }
 

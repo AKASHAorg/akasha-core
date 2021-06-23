@@ -30,8 +30,6 @@ const {
 } = DS;
 
 export interface FeedPageProps {
-  globalChannel: any;
-  sdkModules: any;
   singleSpa: any;
   logger: any;
   showLoginModal: () => void;
@@ -67,9 +65,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     loggedProfileData,
     loginState,
     onError,
-    sdkModules,
     logger,
-    globalChannel,
   } = props;
 
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
@@ -79,21 +75,16 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
     onError,
-    dbService: sdkModules.db,
   });
   const [errorState, errorActions] = useErrors({ logger });
 
   const [postsState, postsActions] = usePosts({
     user: loginState.ethAddress,
-    postsService: sdkModules.posts,
-    ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
-    profileService: sdkModules.profiles.profileService,
-    postsService: sdkModules.posts.tags,
   });
 
   React.useEffect(() => {
@@ -174,10 +165,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   };
 
-  const onUploadRequest = uploadMediaToTextile(
-    sdkModules.profiles.profileService,
-    sdkModules.commons.ipfsService,
-  );
+  const onUploadRequest = uploadMediaToTextile;
 
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
@@ -305,9 +293,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         }
         itemCard={
           <EntryCardRenderer
-            sdkModules={sdkModules}
             logger={logger}
-            globalChannel={globalChannel}
             bookmarkState={bookmarkState}
             ethAddress={loginState.ethAddress}
             locale={locale}
@@ -330,9 +316,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           />
         }
         customEntities={getFeedCustomEntities({
-          sdkModules,
           logger,
-          globalChannel,
           isMobile,
           feedItems: postsState.postIds,
           loggedEthAddress: loginState.ethAddress,
