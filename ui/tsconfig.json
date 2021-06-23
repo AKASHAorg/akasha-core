@@ -6,34 +6,5 @@
     "allowJs": false,
     "jsx": "react",
     "declaration": true,
-    "moduleResolution": "node",
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "composite": true
-  },
-  "references": [
-    { "path": "./design" },
-    { "path": "./typings" },
-    { "path": "./testing-utils"},
-    { "path": "./hooks" },
-    { "path": "./widgets/feed" },
-    { "path": "./widgets/layout" },
-    { "path": "./widgets/sidebar" },
-    { "path": "./widgets/top-bar" },
-    { "path": "./widgets/trending" },
-    { "path": "./plugins/app-center" },
-    { "path": "./plugins/bookmarks" },
-    { "path": "./plugins/legal" },
-    { "path": "./plugins/notifications" },
-    { "path": "./plugins/profile" },
-    { "path": "./plugins/search" }
-  ]
+  }
 }
