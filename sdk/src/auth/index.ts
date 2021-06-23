@@ -439,9 +439,9 @@ export default class AWF_Auth implements AWF_IAuth {
 
   private async _decryptMessage(message) {
     const decryptedBody = await this.identity.decrypt(message.body);
-    let body = new TextDecoder().decode(decryptedBody);
+    let body;
     try {
-      body = JSON.parse(body);
+      body = JSON.parse(new TextDecoder().decode(decryptedBody));
     } catch (e) {
       this._log.warn(e);
     }
