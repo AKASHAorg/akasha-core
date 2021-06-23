@@ -8,6 +8,7 @@ import ModerationReportAPI from './datasources/moderation-report';
 import ModerationDecisionAPI from './datasources/moderation-decision';
 import ModerationAdminAPI from './datasources/moderation-admin';
 import ModerationReasonAPI from './datasources/moderation-reasons';
+import { logger } from 'ethers';
 // import { Invite } from './collections/interfaces';
 
 export const promRegistry = new promClient.Registry();
@@ -437,25 +438,6 @@ api.get(
 );
 
 /**
- * Get data for a given moderation reason.
- */
-api.get(
-  '/moderation/reasons/:id',
-  async (ctx: koa.Context, next: () => Promise<any>) => {
-    const id = ctx?.params?.id;
-    if (!id) {
-      ctx.status = 400;
-      ctx.body = 'Missing "id" attribute from request.';
-    } else {
-      ctx.set('Content-Type', 'application/json');
-      ctx.body = await dataSources.reasonsAPI.getReason(id);
-      ctx.status = 200;
-    }
-    await next();
-  }
-);
-
-/**
  * Get list of moderation reasons.
  */
  api.post(
@@ -501,6 +483,9 @@ api.post(
   }
 );
 
+/**
+ * Delete a moderation reason.
+ */
 api.delete(
   '/moderation/reasons',
   async (ctx: koa.Context, next: () => Promise<any>) => {
@@ -514,13 +499,19 @@ api.delete(
       if (allowed.ok) {
         try {
           // delete reason
-          await dataSources.reasonsAPI.deleteReason(
+          const existed = await dataSources.reasonsAPI.deleteReason(
             request.data.id
           );
           ctx.status = 200;
+          if (!existed) {
+            ctx.status = 404;
+          }
         } catch (error) {
-          ctx.body = `Cannot delete reason! Error: ${error}`;
           ctx.status = 500;
+          ctx.body = `Cannot delete reason! Error: ${error}`;
+          if (error.message.includes('instance not found')) {
+            ctx.status = 404;
+          }
         }
       }
     }

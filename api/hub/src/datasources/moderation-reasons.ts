@@ -98,6 +98,11 @@ class ModerationReasonAPI extends DataSource {
     return list;
   }
 
+  /**
+   * Delete a reason.
+   * @param id - The Textile identifier of the reason
+   * @returns True if the reason was deleted, or false if the reason ID was not found
+   */
   async deleteReason(id: string) {
     const db: Client = await getAppDB();
     const reason = await db.findByID<ModerationReason>(this.dbID, this.collection, id);
