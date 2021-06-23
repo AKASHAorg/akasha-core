@@ -61,7 +61,7 @@ const TransparencyLogBanner: React.FC<ITransparencyLogBannerProps> = props => {
   };
 
   return (
-    <MainAreaCardBox pad="medium" elevation="none" noBorderRadius={true} noBorder={true}>
+    <MainAreaCardBox pad="large" noBorderRadius={true}>
       <Box height={size} width={size} margin={{ bottom: 'small' }} alignSelf="center">
         <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
       </Box>
@@ -112,6 +112,7 @@ const TransparencyLogBanner: React.FC<ITransparencyLogBannerProps> = props => {
           wrap={true}
           align="center"
           justify="center"
+          margin={{ top: 'medium', bottom: 'xlarge' }}
           onClick={handleClickCodeOfConduct}
         >
           <Text color="accentText" margin={{ right: '0.25rem', bottom: '0.2rem' }}>

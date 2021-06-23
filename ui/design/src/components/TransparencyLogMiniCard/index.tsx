@@ -14,7 +14,8 @@ export interface ITransparencyLogMiniCardProps {
   moderatedTimestamp: string;
   moderatorAvatarUrl: string;
   moderatorEthAddress: string;
-  onClickAvatar: () => void;
+  onClickAvatar?: () => void;
+  onClickCard?: () => void;
 }
 
 const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props => {
@@ -28,10 +29,11 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
     moderatorAvatarUrl,
     moderatorEthAddress,
     onClickAvatar,
+    onClickCard,
   } = props;
   return (
-    <MainAreaCardBox pad="medium" noBorderRadius={true} isSelected={isSelected}>
-      <Box>
+    <MainAreaCardBox noBorderRadius={true} isSelected={isSelected}>
+      <Box pad="medium" onClick={onClickCard} style={{ cursor: 'pointer' }}>
         <Box direction="row" justify="between" align="center">
           <Box direction="row" align="center" pad={{ right: 'small' }}>
             <Box

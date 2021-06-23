@@ -45,12 +45,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
   } = props;
 
   return (
-    <MainAreaCardBox
-      pad={{ vertical: 'medium', left: 'medium' }}
-      elevation="none"
-      noBorderRadius={true}
-      noBorder={true}
-    >
+    <MainAreaCardBox pad={{ vertical: 'medium', left: 'medium' }} noBorderRadius={true}>
       <Box
         pad={{ bottom: 'large', right: 'medium' }}
         border={{ color: 'border', side: 'bottom', style: 'solid' }}

@@ -17,6 +17,7 @@ export default {
     moderatorAvatarUrl: { control: 'text' },
     moderatorEthAddress: { control: 'text' },
     onClickAvatar: { action: 'avatar clicked' },
+    onClickCard: { action: 'card clicked' },
   },
 };
 
