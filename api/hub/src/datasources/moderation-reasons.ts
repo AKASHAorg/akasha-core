@@ -28,36 +28,15 @@ class ModerationReasonAPI extends DataSource {
    * @returns The key as a string
    */
   getReasonCacheKey(label: string) {
-    return `${this.collection}:reason${label}`;
+    return `${this.collection}:reason:${label}`;
   }
 
   /**
    * Get the name of the key for a reasons list cache.
    * @returns The key as a string
    */
-   getReasonListCacheKey() {
-    return `${this.collection}:ModerationReasons`;
-  }
-
-  /**
-   * Get the data for a specific reason.
-   * @param label - The label of a given reason
-   * @returns The reason as a ModerationReason object
-   */
-   async getReason(label: string) {
-    const reasonCache = this.getReasonCacheKey(label);
-    if (await queryCache.has(reasonCache)) {
-      return await queryCache.get(reasonCache);
-    }
-    const db: Client = await getAppDB();
-    const query = new Where('label').eq(label);
-    const results = await db.find<ModerationReason>(this.dbID, this.collection, query);
-    if (results.length) {
-      await queryCache.set(reasonCache, results[0]);
-      return results[0];
-    }
-    logger.warn(`could not find reason with label ${label}`);
-    return undefined;
+   getReasonListCacheKey(active: boolean) {
+    return `${this.collection}:ModerationReasons:${active.toString()}`;
   }
 
   /**
@@ -69,30 +48,31 @@ class ModerationReasonAPI extends DataSource {
   async updateReason(label: string, description: string, active: boolean) {
     const reasonCache = this.getReasonCacheKey(label);
     const db: Client = await getAppDB();
-    label = encodeString(label);
-    description = encodeString(description);
 
      // check if reason already exists
     let reason: ModerationReason;
-    reason = await this.getReason(label);
-    if (reason) {
-      reason.label = label;
-      reason.description = description;
+    const query = new Where('label').eq(label);
+    const results = await db.find<ModerationReason>(this.dbID, this.collection, query);
+    if (results.length) {
+      reason = results[0];
+      reason.label = encodeString(label);
+      reason.description = encodeString(description);
       reason.active = active;
       await db.save(this.dbID, this.collection, [reason]);
     } else {
       reason = {
-        label,
-        description,
+        label: encodeString(label),
+        description: encodeString(description),
         active,
         _id: '',
         creationDate: new Date().getTime(),
       };
-      await db.create(this.dbID, this.collection, [reason]);
+      const id = await db.create(this.dbID, this.collection, [reason]);
+      reason._id = id[0];
     }
     await queryCache.set(reasonCache, reason);
     // clear cache for list of reasons
-    await queryCache.del(this.getReasonListCacheKey());
+    await queryCache.del(this.getReasonListCacheKey(active));
   }
 
   /**
@@ -101,7 +81,7 @@ class ModerationReasonAPI extends DataSource {
    * @returns A list of ModerationReason objects
    */
   async listReasons(active: boolean) {
-    const reasonsCache = this.getReasonListCacheKey();
+    const reasonsCache = this.getReasonListCacheKey(active);
     if (await queryCache.has(reasonsCache)) {
       return await queryCache.get(reasonsCache);
     }
@@ -120,8 +100,14 @@ class ModerationReasonAPI extends DataSource {
 
   async deleteReason(id: string) {
     const db: Client = await getAppDB();
-    await db.delete(this.dbID, this.collection, [id]);
-    await queryCache.del(this.getReasonListCacheKey());
+    const reason = await db.findByID<ModerationReason>(this.dbID, this.collection, id);
+    if (reason) {
+      await db.delete(this.dbID, this.collection, [id]);
+      await queryCache.del(this.getReasonCacheKey(reason.label));
+      await queryCache.del(this.getReasonListCacheKey(reason.active));
+      return true;
+    }
+    return false
   }
 }
 
