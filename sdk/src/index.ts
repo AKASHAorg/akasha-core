@@ -15,6 +15,7 @@ import AWF_Entry from './posts/entry';
 import AWF_Comments from './posts/comments';
 import AWF_Tags from './posts/tags';
 import AWF_IpfsConnector from './common/ipfs.connector';
+import AppSettings from './settings/apps';
 
 let sdk: {
   services: {
@@ -22,6 +23,7 @@ let sdk: {
     gql: Gql;
     stash: Stash;
     settings: Settings;
+    appSettings: AppSettings;
     db: DB;
     common: {
       web3: Web3Connector;
@@ -62,12 +64,14 @@ export function init() {
   const comments = container.get<AWF_Comments>(TYPES.Comment);
   const tags = container.get<AWF_Tags>(TYPES.Tag);
   const ipfs = container.get<AWF_IpfsConnector>(TYPES.IPFS);
+  const appSettings = container.get<AppSettings>(TYPES.AppSettings);
   return {
     services: {
       log,
       gql,
       stash,
       settings,
+      appSettings,
       db,
       common: {
         web3,

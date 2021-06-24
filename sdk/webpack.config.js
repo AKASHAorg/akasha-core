@@ -47,8 +47,8 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'akasha.sdk.js',
-    library: name.replace(/@/, '').replace(/\//, '__').replace(/-/, '_'),
-    libraryTarget: 'umd2',
+    library: 'awfSDK',
+    libraryTarget: 'umd',
     publicPath: '/',
   },
   target: ['web', 'es2017'],

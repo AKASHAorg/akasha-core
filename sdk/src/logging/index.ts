@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import ILogService, { ILogger } from '@akashaproject/sdk-typings/src/interfaces/log';
+import ILogService, { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import pino from 'pino';
 
 @injectable()

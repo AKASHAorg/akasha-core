@@ -21,6 +21,12 @@ export const schema: any = {
   },
 };
 
+export interface AppsSchema {
+  name: string;
+  source?: string;
+  info?: string[][];
+}
+
 export default {
   name: 'APPS',
   schema: schema,

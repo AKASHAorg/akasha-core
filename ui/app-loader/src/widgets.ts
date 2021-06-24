@@ -11,11 +11,11 @@ import { getSDKDependencies, navigateToModal } from './utils';
 import pino from 'pino';
 
 class Widgets extends BaseIntegration {
-  private widgetInfos: WidgetRegistryInfo[];
-  private widgetModules: Record<string, IntegrationModule>;
-  private widgetConfigs: Record<string, IWidgetConfig>;
-  private widgetParcels: Record<string, singleSpa.Parcel>;
-  private isMobile?: boolean;
+  private readonly widgetInfos: WidgetRegistryInfo[];
+  private readonly widgetModules: Record<string, IntegrationModule>;
+  private readonly widgetConfigs: Record<string, IWidgetConfig>;
+  private readonly widgetParcels: Record<string, singleSpa.Parcel>;
+  private readonly isMobile?: boolean;
   private logger: pino.Logger;
   constructor(opts: BaseIntegrationClassOptions) {
     super(opts);
@@ -34,8 +34,7 @@ class Widgets extends BaseIntegration {
   async import() {
     const importPromise = this.widgetInfos.map(async info => {
       try {
-        const mod = await System.import<IntegrationModule>(info.name);
-        this.widgetModules[info.name] = mod;
+        this.widgetModules[info.name] = await System.import<IntegrationModule>(info.name);
       } catch (err) {
         this.logger.error(`Cannot import module: ${info.name} => error: ${err}`);
         // do not throw errors since this error

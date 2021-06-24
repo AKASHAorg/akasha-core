@@ -4,7 +4,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
-    "types": ["reflect-metadata", "node"]
+    "types": ["reflect-metadata", "node"],
+    "typeRoots": [ "./src/definitions", "./node_modules/@types"]
   },
   "include": [
     "./src/**/*"
@@ -20,8 +21,7 @@
   "files": [
     "./src/contracts/artifacts/ENS.json",
     "./src/contracts/artifacts/AkashaRegistrar.json",
-    "./src/contracts/artifacts/ReverseRegistrar.json",
-    "./src/definitions/graphql.d.ts"
+    "./src/contracts/artifacts/ReverseRegistrar.json"
   ],
 
 

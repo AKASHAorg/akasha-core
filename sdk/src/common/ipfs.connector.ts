@@ -1,10 +1,10 @@
 import { inject, injectable } from 'inversify';
-import { ILogger } from '@akashaproject/sdk-typings/src/interfaces/log';
+import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import Logging from '../logging/index';
 import { TYPES } from '@akashaproject/sdk-typings';
-import { LEGAL_DOCS } from '@akashaproject/sdk-typings/src/interfaces/common';
+import { LEGAL_DOCS } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { createObservableStream } from '../helpers/observable';
-import AWF_IIpfsConnector from '@akashaproject/sdk-typings/src/interfaces/ipfs.connector';
+import AWF_IIpfsConnector from '@akashaproject/sdk-typings/lib/interfaces/ipfs.connector';
 
 @injectable()
 export default class AWF_IpfsConnector implements AWF_IIpfsConnector {

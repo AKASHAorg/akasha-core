@@ -122,10 +122,10 @@ const CardActions: React.FC<CardActionProps> = props => {
     if (
       isMobile &&
       winNavigator.share &&
-      winNavigator.canShare &&
-      winNavigator.canShare(shareData)
+      winNavigator?.canShare &&
+      winNavigator?.canShare(shareData)
     ) {
-      winNavigator.share(shareData);
+      winNavigator.share(shareData).catch(err => console.warn('share error', err));
       return;
     }
     setShareDropOpen(!shareDropOpen);

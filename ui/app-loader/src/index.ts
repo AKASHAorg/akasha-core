@@ -1,17 +1,17 @@
 import {
-  EventTypes,
-  ILoaderConfig,
-  ISdkConfig,
-  IntegrationConfig,
   AppOrWidgetDefinition,
+  AppRegistryInfo,
+  EventTypes,
+  ExtensionPointDefinition,
   IAppConfig,
+  ILoaderConfig,
+  IntegrationConfig,
+  ISdkConfig,
   IWidgetConfig,
   LayoutConfig,
-  AppRegistryInfo,
-  WidgetRegistryInfo,
-  UIEventData,
   ModalNavigationOptions,
-  ExtensionPointDefinition,
+  UIEventData,
+  WidgetRegistryInfo,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import * as rxjsOperators from 'rxjs/operators';
 import pino from 'pino';
@@ -32,6 +32,7 @@ import {
 import qs from 'qs';
 import Apps from './apps';
 import Widgets from './widgets';
+
 // import { pathToRegexp } from 'path-to-regexp';
 
 interface SingleSpaEventDetail {
@@ -67,7 +68,7 @@ export default class AppLoader {
   public layoutConfig?: LayoutConfig;
   private readonly isMobile: boolean;
   private extensionPoints: UIEventData['data'][];
-  private extensionParcels: Record<string, { id: string; parcel: singleSpa.Parcel }[]>;
+  private readonly extensionParcels: Record<string, { id: string; parcel: singleSpa.Parcel }[]>;
   private activeModal?: ModalNavigationOptions;
 
   private apps: Apps;
@@ -101,7 +102,7 @@ export default class AppLoader {
   }
 
   private watchEvents() {
-    this.uiEvents.subscribe(eventData => {
+    this.uiEvents.subscribe(async eventData => {
       if (typeof eventData === 'object' && eventData.event) {
         switch (eventData.event) {
           case EventTypes.ExtensionPointMount:
@@ -117,10 +118,10 @@ export default class AppLoader {
             this.onModalUnmount(eventData.data);
             break;
           case EventTypes.InstallIntegration:
-            this.installIntegration(eventData.data);
+            await this.installIntegration(eventData.data);
             break;
           case EventTypes.UninstallIntegration:
-            this.uninstallIntegration(eventData.data);
+            await this.uninstallIntegration(eventData.data);
             break;
           default:
             break;
@@ -261,7 +262,7 @@ export default class AppLoader {
     });
   }
 
-  public async onModalMount(modalData: UIEventData['data']) {
+  public onModalMount(modalData: UIEventData['data']) {
     this.loaderLogger.info('Modal mounted: %o', modalData);
 
     this.activeModal = modalData;
@@ -279,10 +280,12 @@ export default class AppLoader {
       modalData,
     );
     for (const [index, ext] of extToLoad.entries()) {
-      await this.mountExtensionPoint(ext, index);
+      this.mountExtensionPoint(ext, index)
+        .then(() => true)
+        .catch(err => this.loaderLogger.warn(err));
     }
   }
-  public async onModalUnmount(_modalData: UIEventData['data']) {
+  public onModalUnmount(_modalData: UIEventData['data']) {
     return;
   }
 
@@ -316,7 +319,7 @@ export default class AppLoader {
     });
   }
 
-  public async onExtensionPointMount(extensionData?: UIEventData['data']) {
+  public onExtensionPointMount(extensionData?: UIEventData['data']) {
     const layoutName = getNameFromDef(this.worldConfig.layout);
     if (!layoutName) {
       this.loaderLogger.warn(`Layout name is misconfigured!`);
@@ -344,12 +347,12 @@ export default class AppLoader {
         extensionData,
       );
       extToLoad.forEach((extension, index) => {
-        this.mountExtensionPoint(extension, index);
+        this.mountExtensionPoint(extension, index).catch(err => this.loaderLogger.warn(err));
       });
     }
   }
 
-  public async onExtensionPointUnmount(extensionData?: { name: string }) {
+  public onExtensionPointUnmount(extensionData?: { name: string }) {
     if (!extensionData || extensionData.name) {
       return;
     }
@@ -423,12 +426,11 @@ export default class AppLoader {
 
       const mod = await System.import(layoutInfo.name);
 
-      const reg = mod.register({
+      this.layoutConfig = mod.register({
         worldConfig: {
           title: this.worldConfig.title,
         },
       });
-      this.layoutConfig = reg;
       return this.layoutConfig;
     } catch (err) {
       this.loaderLogger.error(`Error importing layout! ${err}`);

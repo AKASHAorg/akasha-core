@@ -1,6 +1,6 @@
-import { LRUOptions } from '@akashaproject/sdk-typings/src/interfaces/stash';
+import { LRUOptions } from '@akashaproject/sdk-typings/lib/interfaces/stash';
 import { injectable } from 'inversify';
-import { IStashService, ServiceCallResult } from '@akashaproject/sdk-typings/src/interfaces';
+import { IStashService, ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
 import QuickLRU from 'quick-lru';
 import { createObservableValue } from '../helpers/observable';
 

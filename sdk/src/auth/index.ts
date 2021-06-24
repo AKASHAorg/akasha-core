@@ -13,21 +13,21 @@ import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@akashaproject/sdk-typings';
 import DB from '../db';
-import { AWF_IAuth, EthProviders } from '@akashaproject/sdk-typings/src/interfaces';
+import { AWF_IAuth, EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
 import Web3Connector from '../common/web3.connector';
 import EventBus from '../common/event-bus';
 import Logging from '../logging';
-import { ILogger } from '@akashaproject/sdk-typings/src/interfaces/log';
+import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import Settings from '../settings';
 
 import Gql from '../gql';
 import { map, tap } from 'rxjs/operators';
 import { forkJoin, from, lastValueFrom } from 'rxjs';
-import { AUTH_EVENTS } from '@akashaproject/sdk-typings/src/interfaces/events';
+import { AUTH_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
 import hash from 'object-hash';
 import { Buffer } from 'buffer';
 import { PublicKey } from '@textile/threaddb';
-import { CurrentUser } from '@akashaproject/sdk-typings/src/interfaces/common';
+import { CurrentUser } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { createObservableStream } from '../helpers/observable';
 
 @injectable()
