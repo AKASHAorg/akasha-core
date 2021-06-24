@@ -45,7 +45,7 @@ export const generatePrivateKey = async (
 ): Promise<PrivateKey> => {
   const ethAddress = await lastValueFrom(signer.getCurrentAddress());
   const secret = ethers.utils.keccak256(sig);
-  const message = metamaskGen(ethAddress.data.toLowerCase(), secret, 'ethereum.world');
+  const message = metamaskGen(ethAddress.data, secret, 'ethereum.world');
   const signedText = await signer.signMessage(message);
   const hash = ethers.utils.keccak256(signedText);
   if (hash === null) {
