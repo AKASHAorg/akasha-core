@@ -35,12 +35,9 @@
   },
   "dependencies": {
     "@akashaproject/design-system": "*",
-    "@akashaproject/sdk-auth": "*",
-    "@akashaproject/sdk-common": "*",
-    "@akashaproject/sdk-db": "*",
-    "@akashaproject/sdk-profiles": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/ui-awf-testing-utils": "*",
+    "@akashaproject/awf-sdk": "*",
     "moment": "^2.29.1",
     "react-i18next": "11.4.0",
     "react-router-dom": "5.1.2",

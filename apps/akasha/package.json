@@ -37,11 +37,7 @@
   },
   "dependencies": {
     "@akashaproject/design-system": "*",
-    "@akashaproject/sdk-auth": "*",
-    "@akashaproject/sdk-common": "*",
-    "@akashaproject/sdk-db": "*",
-    "@akashaproject/sdk-posts": "*",
-    "@akashaproject/sdk-profiles": "*",
+    "@akashaproject/awf-sdk": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/ui-widget-feed": "*",
     "@akashaproject/ui-widget-login": "*",

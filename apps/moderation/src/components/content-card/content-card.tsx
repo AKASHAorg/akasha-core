@@ -1,8 +1,7 @@
 import React from 'react';
-import { combineLatest } from 'rxjs';
 import DS from '@akashaproject/design-system';
 import { useProfile } from '@akashaproject/ui-awf-hooks';
-
+import getSDK from '@akashaproject/awf-sdk';
 import { IContentProps } from '../../interfaces';
 
 import Content from './content';
@@ -40,42 +39,35 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     reviewDecisionLabel,
   } = props;
 
+  const sdk = getSDK();
+
   const [entryData, setEntryData] = React.useState<any>(null);
+
   const [profile, profileActions] = useProfile({
     onError: error => {
       props.logger.error('[content-card.tsx]: useProfile err %j', error.error || '');
     },
-    ipfsService: props.sdkModules.commons.ipfsService,
-    profileService: props.sdkModules.profiles.profileService,
-    globalChannel: props.globalChannel,
   });
 
   const [reporterProfile, reporterProfileActions] = useProfile({
     onError: error => {
       props.logger.error('[content-card.tsx]: useProfile err %j', error.error || '');
     },
-    ipfsService: props.sdkModules.commons.ipfsService,
-    profileService: props.sdkModules.profiles.profileService,
-    globalChannel: props.globalChannel,
   });
 
   const [moderatorProfile, moderatorProfileActions] = useProfile({
     onError: error => {
       props.logger.error('[content-card.tsx]: useProfile err %j', error.error || '');
     },
-    ipfsService: props.sdkModules.commons.ipfsService,
-    profileService: props.sdkModules.profiles.profileService,
-    globalChannel: props.globalChannel,
   });
 
   React.useEffect(() => {
     if (contentType === 'post') {
-      const entryCall = props.sdkModules.posts.entries.getEntry({ entryId });
-      const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
-      const getEntryCall = combineLatest([ipfsGatewayCall, entryCall]);
-      getEntryCall.subscribe((resp: any) => {
-        const ipfsGateway = resp[0].data;
-        const entry = resp[1].data?.getPost;
+      const entryCall = sdk.api.entries.getEntry(entryId);
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+
+      entryCall.subscribe((resp: any) => {
+        const entry = resp.data?.getPost;
         if (entry) {
           const mappedEntry = mapEntry(entry, ipfsGateway);
           setEntryData(mappedEntry);
@@ -136,9 +128,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
           reviewDecisionLabel={reviewDecisionLabel}
           logger={props.logger}
           singleSpa={props.singleSpa}
-          sdkModules={props.sdkModules}
           handleButtonClick={props.handleButtonClick}
-          globalChannel={props.globalChannel}
         />
       </MainAreaCardBox>
     </Box>

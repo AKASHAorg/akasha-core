@@ -10,11 +10,10 @@ const { Box, Text } = DS;
 export interface IExplanationsBoxProps extends Omit<IExplanationsBoxEntryProps, 'entry'> {
   entryId: string;
   logger: any;
-  sdkModules: any;
 }
 
 const ExplanationsCard: React.FC<IExplanationsBoxProps> = props => {
-  const { entryId, reportedByLabel, forLabel, logger, sdkModules } = props;
+  const { entryId, reportedByLabel, forLabel, logger } = props;
 
   const [requesting, setRequesting] = React.useState<boolean>(false);
   const [flags, setFlags] = React.useState<any>([]);
@@ -47,8 +46,6 @@ const ExplanationsCard: React.FC<IExplanationsBoxProps> = props => {
               reportedByLabel={reportedByLabel}
               forLabel={forLabel}
               logger={logger}
-              sdkModules={sdkModules}
-              globalChannel={props.globalChannel}
             />
           ))}
         </Box>

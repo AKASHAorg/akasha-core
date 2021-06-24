@@ -14,8 +14,6 @@ const { ThemeSelector, lightTheme, darkTheme } = DS;
 export interface ITrendingWidgetProps {
   logger: any;
   singleSpa: any;
-  globalChannel: any;
-  sdkModules: any;
   layout: any;
   errors?: { [key: string]: IAkashaError };
   installIntegration?: (name: string) => void;

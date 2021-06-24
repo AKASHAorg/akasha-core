@@ -1,9 +1,4 @@
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
-import { moduleName as dbModule } from '@akashaproject/sdk-db/lib/constants';
-import { moduleName as auth } from '@akashaproject/sdk-auth/lib/constants';
-import { moduleName as posts } from '@akashaproject/sdk-posts/lib/constants';
-import { moduleName as commons } from '@akashaproject/sdk-common/lib/constants';
-import { moduleName as profiles } from '@akashaproject/sdk-profiles/lib/constants';
 import { rootRoute } from './routes';
 import { Widget as TrendingWidget } from './trending-widget';
 import {
@@ -55,13 +50,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       mountsIn: mountOptions => findTopbarQuickAccess(mountOptions.integrations),
       loadingFn: () => import('./bookmarks-topbar-button'),
     },
-  ],
-  sdkModules: [
-    { module: dbModule },
-    { module: auth },
-    { module: posts },
-    { module: commons },
-    { module: profiles },
   ],
   title: 'Bookmarks | Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'bookmark' },

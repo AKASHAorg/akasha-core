@@ -1,7 +1,4 @@
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
-import { moduleName as authModule } from '@akashaproject/sdk-auth/lib/constants';
-import { moduleName as profilesModule } from '@akashaproject/sdk-profiles/lib/constants';
-import { moduleName as commonModule } from '@akashaproject/sdk-common/lib/constants';
 import { rootRoute } from './routes';
 import { Widget as TrendingWidget } from './trending-widget';
 import { IAppConfig } from '@akashaproject/ui-awf-typings/src/app-loader';
@@ -20,7 +17,6 @@ export const register: () => IAppConfig = () => ({
   widgets: {
     [rootRoute]: [TrendingWidget],
   },
-  sdkModules: [{ module: commonModule }, { module: authModule }, { module: profilesModule }],
   title: 'Notifications | Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'notifications' },
   routes: {

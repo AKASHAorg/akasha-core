@@ -27,29 +27,22 @@ type BookmarksPageProps = Omit<
 >;
 
 const BookmarksPage: React.FC<BookmarksPageProps> = props => {
-  const { globalChannel, sdkModules, singleSpa, logger } = props;
+  const { singleSpa, logger } = props;
   const { t } = useTranslation();
 
   const [errorState, errorActions] = useErrors({ logger });
 
   const [loginState] = useLoginState({
-    globalChannel: globalChannel,
     onError: errorActions.createError,
-    authService: sdkModules.auth.authService,
-    ipfsService: sdkModules.commons.ipfsService,
-    profileService: sdkModules.profiles.profileService,
     onLogout: () => props.singleSpa.navigateToUrl('/'),
   });
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    dbService: sdkModules.db,
     onError: errorActions.createError,
   });
 
   const [postState, postActions] = usePosts({
     logger,
     user: loginState.ethAddress,
-    postsService: sdkModules.posts,
-    ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
   React.useEffect(() => {
@@ -157,8 +150,6 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
                     itemCard={
                       <EntryCardRenderer
                         logger={logger}
-                        globalChannel={globalChannel}
-                        sdkModules={sdkModules}
                         singleSpa={singleSpa}
                         bookmarkState={bookmarkState}
                         ethAddress={loginState.ethAddress}

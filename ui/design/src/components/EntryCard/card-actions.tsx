@@ -115,7 +115,7 @@ const CardActions: React.FC<CardActionProps> = props => {
 
   const handleShareOpen = () => {
     const winNavigator: Navigator & {
-      canShare?: (param: ShareData) => void;
+      canShare?: (param: ShareData) => boolean;
       share?: (data: ShareData) => Promise<void>;
     } = window.navigator;
 

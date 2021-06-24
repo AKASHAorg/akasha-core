@@ -7,6 +7,7 @@ import {
 } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaproject/awf-sdk';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
@@ -67,6 +68,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     onError,
     logger,
   } = props;
+
+  const sdk = getSDK();
 
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
 
@@ -234,7 +237,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
-              signData={sdkModules.auth.authService.signData}
+              signData={sdk.api.auth.signData}
             />
           </ToastProvider>
         )}

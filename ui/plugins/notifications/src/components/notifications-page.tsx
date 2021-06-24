@@ -9,35 +9,25 @@ const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard } = DS;
 
 interface AppRoutesProps {
   onError?: (err: Error) => void;
-  sdkModules: any;
   logger: any;
-  globalChannel: any;
   singleSpa: any;
 }
 
 const NotificationsPage: React.FC<AppRoutesProps> = props => {
-  const { sdkModules, logger, globalChannel, singleSpa } = props;
+  const { logger, singleSpa } = props;
 
   const { t } = useTranslation();
 
   const [loginState] = useLoginState({
-    globalChannel: globalChannel,
     onError: (err: IAkashaError) => {
       logger.error('useLoginState error %j', err);
     },
-    authService: sdkModules.auth.authService,
-    ipfsService: sdkModules.commons.ipfsService,
-    profileService: sdkModules.profiles.profileService,
   });
 
   const [notifErrors, notifErrorActions] = useErrorState({ logger });
 
   const [notificationsState, notificationsActions] = useNotifications({
     onError: notifErrorActions.createError,
-    globalChannel: globalChannel,
-    authService: sdkModules.auth.authService,
-    ipfsService: sdkModules.commons.ipfsService,
-    profileService: sdkModules.profiles.profileService,
     loggedEthAddress: loginState.ethAddress,
   });
 

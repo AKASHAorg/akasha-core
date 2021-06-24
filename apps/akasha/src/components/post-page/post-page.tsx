@@ -19,6 +19,7 @@ import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
 import routes, { POST } from '../../routes';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaproject/awf-sdk';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
 const {
@@ -80,21 +81,19 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     isMobile,
   } = props;
 
+  const sdk = getSDK();
+
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
   const [, errorActions] = useErrors({ logger });
 
   const [postsState, postsActions] = usePosts({
     user: loginState.ethAddress,
-    postsService: sdkModules.posts,
-    ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
-    profileService: sdkModules.profiles.profileService,
-    postsService: sdkModules.posts.tags,
   });
 
   const entryData = React.useMemo(() => {
@@ -107,10 +106,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [loginProfile, loginProfileActions] = useProfile({
-    profileService: props.sdkModules.profiles.profileService,
-    ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
-    globalChannel: props.globalChannel,
   });
 
   React.useEffect(() => {
@@ -120,13 +116,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   }, [loginState.pubKey]);
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    dbService: sdkModules.db,
     onError: errorActions.createError,
   });
 
   const [followedProfiles, followActions] = useFollow({
-    globalChannel,
-    profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
   });
 
@@ -277,10 +270,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   const handleSingleSpaNavigate = redirect(navigateToUrl, postsActions.resetPostIds);
 
-  const onUploadRequest = uploadMediaToTextile(
-    sdkModules.profiles.profileService,
-    sdkModules.commons.ipfsService,
-  );
+  const onUploadRequest = uploadMediaToTextile;
 
   const handleFlipCard = (entry: any, isQuote: boolean) => () => {
     // modify entry or its quote (if applicable)
@@ -371,7 +361,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
-              signData={sdkModules.auth.authService.signData}
+              signData={sdk.api.auth.signData}
             />
           </ToastProvider>
         )}
@@ -524,9 +514,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                 hasMoreItems={!!postsState.nextCommentIndex}
                 itemCard={
                   <PostRenderer
-                    sdkModules={sdkModules}
                     logger={logger}
-                    globalChannel={globalChannel}
                     bookmarkState={bookmarkState}
                     ethAddress={loginState.ethAddress}
                     locale={locale}
@@ -544,10 +532,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                 }
                 customEntities={getPendingComments({
                   logger,
-                  globalChannel,
                   locale,
                   isMobile,
-                  sdkModules,
                   feedItems: postsState.postIds,
                   loggedEthAddress: loginState.ethAddress,
                   pendingComments: postsState.pendingComments,

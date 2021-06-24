@@ -17,34 +17,25 @@ const { TrendingWidgetCard, ErrorInfoCard, ErrorLoader, LoginModal } = DS;
 type TrendingWidgetComponentProps = Omit<ITrendingWidgetProps, 'i18n'>;
 
 const TrendingWidgetComponent: React.FC<TrendingWidgetComponentProps> = props => {
-  const { globalChannel, sdkModules, logger, singleSpa, layout } = props;
+  const { logger, singleSpa, layout } = props;
 
   const { t } = useTranslation();
 
   const [errorState, errorActions] = useErrorState({ logger });
 
   const [trendingData] = useTrendingData({
-    sdkModules: sdkModules,
     onError: errorActions.createError,
   });
 
   const [loginState, loginActions] = useLoginState({
-    globalChannel: globalChannel,
     onError: errorActions.createError,
-    authService: sdkModules.auth.authService,
-    ipfsService: sdkModules.commons.ipfsService,
-    profileService: sdkModules.profiles.profileService,
   });
 
   const [followedProfiles, followActions] = useFollow({
-    globalChannel,
-    profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
   });
 
   const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
-    globalChannel,
-    profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
   });
 

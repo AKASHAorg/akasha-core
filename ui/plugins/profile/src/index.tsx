@@ -1,11 +1,5 @@
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import routes, { rootRoute } from './routes';
-import { moduleName as profilesModule } from '@akashaproject/sdk-profiles/lib/constants';
-import { moduleName as commonsModule } from '@akashaproject/sdk-common/lib/constants';
-import { moduleName as authModule } from '@akashaproject/sdk-auth/lib/constants';
-import { moduleName as registryModule } from '@akashaproject/sdk-registry/lib/constants';
-import { moduleName as postsModule } from '@akashaproject/sdk-posts/lib/constants';
-import { moduleName as dbModule } from '@akashaproject/sdk-db/lib/constants';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
@@ -45,14 +39,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   mountsIn: opts.layoutConfig?.pluginSlotId,
   loadingFn: () => import('./components'),
   name: 'ui-plugin-profile',
-  sdkModules: [
-    { module: profilesModule },
-    { module: commonsModule },
-    { module: authModule },
-    { module: registryModule },
-    { module: postsModule },
-    { module: dbModule },
-  ],
   title: 'Profile | Ethereum World',
   menuItems: routes,
   logo: { type: LogoTypeSource.AVATAR, value: '' },

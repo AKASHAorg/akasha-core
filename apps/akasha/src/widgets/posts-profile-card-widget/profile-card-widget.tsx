@@ -8,7 +8,7 @@ import { useProfile, useFollow, useLoginState } from '@akashaproject/ui-awf-hook
 const { Box, ProfileMiniCard } = DS;
 
 const ProfileCardWidget: React.FC<RootComponentProps> = props => {
-  const { sdkModules, logger, globalChannel } = props;
+  const { logger } = props;
 
   const { params } = useRouteMatch<{ postId: string }>();
   const { t } = useTranslation();
@@ -19,24 +19,14 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
         props.logger.error('profile-card-widget error %j %j', err);
       }
     },
-    ipfsService: props.sdkModules.commons.ipfsService,
-    profileService: props.sdkModules.profiles.profileService,
-    postsService: props.sdkModules.posts,
-    globalChannel: props.globalChannel,
   });
 
   const [loginState] = useLoginState({
-    globalChannel: props.globalChannel,
-    authService: props.sdkModules.auth.authService,
-    profileService: props.sdkModules.profiles.profileService,
-    ipfsService: props.sdkModules.commons.ipfsService,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);
     },
   });
   const [followedProfiles, followActions] = useFollow({
-    globalChannel,
-    profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);
     },

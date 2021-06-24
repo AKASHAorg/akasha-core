@@ -24,8 +24,6 @@ export const enum ItemTypes {
 export interface IFeedWidgetProps {
   logger: any;
   virtualListRef?: any;
-  globalChannel?: any;
-  sdkModules: any;
   layout: any;
   listHeader?: React.ReactElement;
   itemType: ItemTypes;
