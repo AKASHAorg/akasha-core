@@ -91,7 +91,7 @@ export default class AWF_Comments implements AWF_IComments {
               operationName: 'AddComment',
               context: {
                 headers: {
-                  Authorization: `Bearer ${res.token}`,
+                  Authorization: `Bearer ${res.token.data}`,
                   Signature: res.signedData.data.signature,
                 },
               },

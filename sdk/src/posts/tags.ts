@@ -92,7 +92,7 @@ export default class AWF_Tags implements AWF_ITags {
             operationName: 'CreateTag',
             context: {
               headers: {
-                Authorization: `Bearer ${res.token}`,
+                Authorization: `Bearer ${res.token.data}`,
                 Signature: res.signedData.data.signature,
               },
             },

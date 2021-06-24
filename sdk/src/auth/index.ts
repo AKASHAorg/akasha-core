@@ -279,10 +279,10 @@ export default class AWF_Auth implements AWF_IAuth {
   }
 
   private async _getToken() {
-    const session = await this.getSession();
+    const session = await lastValueFrom(this.getSession());
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const isExpired = session.client.context?.isExpired;
+    const isExpired = session.data.client.context?.isExpired;
     if (!isExpired && this.auth) {
       return this.auth.token;
     }
