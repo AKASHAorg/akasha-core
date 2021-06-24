@@ -25,7 +25,7 @@
     "pack:only": "lerna run pack --scope $AWF_PACKAGE --stream",
     "pack:watch": "lerna run pack:watch --scope $AWF_PACKAGE --stream",
     "tsc:sdk": "lerna run tsc --scope @akashaproject/awf-sdk",
-    "tsc:ui": "lerna run tsc --scope @akashaproject/design-* --scope @akashaproject/ui-* --scope @akashaproject/app-*",
+    "tsc:ui": "lerna run tsc --scope @akashaproject/ui-awf-hooks",
     "tsc:scripts": "lerna run tsc --scope @akashaproject/script-*",
     "script:dev-db": "lerna run start --scope @akashaproject/script-server-db --stream",
     "start:feed-app": "lerna run start --scope=@akashaproject/ethereum.world --stream",

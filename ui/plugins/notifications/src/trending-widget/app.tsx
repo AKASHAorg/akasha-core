@@ -90,8 +90,6 @@ class Widget extends React.Component<RootComponentProps> {
                     {!isCritical && (
                       <TrendingWidget
                         layout={this.props.layoutConfig}
-                        globalChannel={this.props.globalChannel}
-                        sdkModules={this.props.sdkModules}
                         logger={this.props.logger}
                         singleSpa={this.props.singleSpa}
                         errors={this.state.errors}

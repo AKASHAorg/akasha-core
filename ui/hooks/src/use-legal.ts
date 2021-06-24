@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { IAkashaError, LEGAL_DOCS } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaproject/awf-sdk';
 import { createErrorHandler } from './utils/error-handler';
 
 export interface UseLegalActions {
@@ -12,7 +13,6 @@ export interface UseLegalActions {
 
 export interface UseLegalProps {
   onError?: (error: IAkashaError) => void;
-  commonService: any;
 }
 
 export interface ILegalState {
@@ -51,17 +51,23 @@ const LegalStateReducer = (state: ILegalState, action: ILegalAction) => {
 
 /* A hook to access legal documents from the ipfsService */
 export const useLegal = (props: UseLegalProps): [string | null, UseLegalActions] => {
-  const { onError, commonService } = props;
+  const { onError } = props;
+
+  const sdk = getSDK();
+
   const [legalDocsState, dispatch] = React.useReducer(LegalStateReducer, initialLegalState);
 
   React.useEffect(() => {
     if (legalDocsState.docQuery) {
-      const call = commonService.ipfsService.getLegalDoc(legalDocsState.docQuery);
-      const callSub = call.subscribe((resp: any) => {
-        if (resp.data) {
-          dispatch({ type: 'GET_LEGAL_DOCS_SUCCESS', payload: resp.data });
-        }
-      }, createErrorHandler('useLegal.getLegalDoc', false, onError));
+      const call = sdk.services.common.ipfs.getLegalDoc(legalDocsState.docQuery);
+      const callSub = call.subscribe({
+        next: resp => {
+          if (resp.data) {
+            dispatch({ type: 'GET_LEGAL_DOCS_SUCCESS', payload: resp.data });
+          }
+        },
+        error: createErrorHandler('useLegal.getLegalDoc', false, onError),
+      });
       return () => {
         callSub.unsubscribe();
       };

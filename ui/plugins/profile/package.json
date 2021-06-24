@@ -31,13 +31,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "@akashaproject/sdk-auth": "*",
     "@akashaproject/design-system": "*",
-    "@akashaproject/sdk-profiles": "*",
-    "@akashaproject/sdk-common": "*",
-    "@akashaproject/sdk-posts": "*",
-    "@akashaproject/sdk-registry": "*",
-    "@akashaproject/sdk-db": "*",
+    "@akashaproject/awf-sdk": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/ui-widget-feed": "*",
     "@akashaproject/ui-widget-trending": "*",

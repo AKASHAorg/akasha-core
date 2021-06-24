@@ -57,7 +57,7 @@ export default class AWF_Entry implements AWF_IEntry {
         this._gql.run<{ getPost: Post_Response }>(
           {
             query: GetEntry,
-            variables: { id: entryId, pubKey: result?.data.pubKey },
+            variables: { id: entryId, pubKey: result?.data?.pubKey },
             operationName: 'GetEntry',
           },
           true,
@@ -77,7 +77,7 @@ export default class AWF_Entry implements AWF_IEntry {
         this._gql.run<{ posts: PostsResult_Response }>(
           {
             query: GetEntries,
-            variables: { offset: opt.offset, limit: opt.limit, pubKey: result?.data.pubKey },
+            variables: { offset: opt.offset, limit: opt.limit, pubKey: result?.data?.pubKey },
             operationName: 'GetEntries',
           },
           true,
@@ -139,7 +139,7 @@ export default class AWF_Entry implements AWF_IEntry {
               author: opt.pubKey,
               offset: opt.offset,
               limit: opt.limit,
-              pubKey: result?.data.pubKey,
+              pubKey: result?.data?.pubKey,
             },
             operationName: 'GetPostsByAuthor',
           },
@@ -164,7 +164,7 @@ export default class AWF_Entry implements AWF_IEntry {
               tag: opt.name,
               offset: opt.offset,
               limit: opt.limit,
-              pubKey: result?.data.pubKey,
+              pubKey: result?.data?.pubKey,
             },
             operationName: 'GetPostsByTag',
           },

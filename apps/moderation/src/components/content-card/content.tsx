@@ -83,8 +83,6 @@ const Content: React.FC<IContentProps> = props => {
           reportedByLabel={props.reportedByLabel}
           forLabel={props.forLabel}
           logger={props.logger}
-          sdkModules={props.sdkModules}
-          globalChannel={props.globalChannel}
         />
       )}
       <Box

@@ -32,7 +32,6 @@
     "@akashaproject/ui-awf-typings": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/design-system": "*",
-    "@akashaproject/sdk-common": "*",
     "@types/react-router": "5.1.8",
     "@types/react-router-dom": "5.1.6",
     "react-i18next": "11.3.1",

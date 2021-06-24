@@ -3,7 +3,6 @@ import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { useLocation, BrowserRouter as Router } from 'react-router-dom';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { filter } from 'rxjs/operators';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
@@ -43,10 +42,6 @@ export default class SidebarWidget extends PureComponent<RootComponentProps> {
     logger.error('an error has occurred %j %j', err, info);
   }
   componentDidMount() {
-    this.subscription = this.props.globalChannel
-      .pipe(filter((response: any) => response.channelInfo.method === 'signIn'))
-      .subscribe((response: any) => this.setState({ ethAddress: response.data.ethAddress }));
-
     window.addEventListener('layout:showSidebar', this.showSidebar);
     window.addEventListener('layout:hideSidebar', this.hideSidebar);
   }

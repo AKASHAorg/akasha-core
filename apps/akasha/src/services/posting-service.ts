@@ -72,7 +72,7 @@ interface PendingEntry {
     ethAddress: string;
     userName?: string;
   };
-  content: {};
+  content: Record<string, unknown>;
   ipfsLink?: string;
   entryId?: string;
   replies?: number;

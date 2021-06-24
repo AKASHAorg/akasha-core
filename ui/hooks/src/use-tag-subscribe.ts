@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaproject/awf-sdk';
+import { events } from '@akashaproject/sdk-typings';
 import { createErrorHandler } from './utils/error-handler';
 import { filter } from 'rxjs/operators';
 
@@ -22,8 +24,6 @@ export interface UseTagSubscribeActions {
 
 export interface UseTagSubscribeProps {
   onError?: (error: IAkashaError) => void;
-  profileService: any;
-  globalChannel: any;
 }
 
 interface ITagSubscriptionState {
@@ -124,7 +124,10 @@ const tagSubscriptionStateReducer = (
 export const useTagSubscribe = (
   props: UseTagSubscribeProps,
 ): [string[], UseTagSubscribeActions] => {
-  const { onError, profileService, globalChannel } = props;
+  const { onError } = props;
+
+  const sdk = getSDK();
+
   const [tagSubscriptionState, dispatch] = React.useReducer(
     tagSubscriptionStateReducer,
     initialTagSubscriptionState,
@@ -140,12 +143,9 @@ export const useTagSubscribe = (
 
   // this is used to sync tag subscription state between different components using the hook
   React.useEffect(() => {
-    const call = globalChannel.pipe(
-      filter((payload: any) => {
-        return (
-          payload.channelInfo.method === 'toggleTagSubscription' &&
-          payload.channelInfo.servicePath.includes('PROFILE_STORE')
-        );
+    const call = sdk.api.globalChannel.pipe(
+      filter(payload => {
+        return payload.event === events.PROFILE_EVENTS.TAG_SUBSCRIPTION;
       }),
     );
     const callSub = call.subscribe({
@@ -157,9 +157,9 @@ export const useTagSubscribe = (
 
   React.useEffect(() => {
     if (tagSubscriptionState.isFetching) {
-      const call = profileService.getTagSubscriptions(null);
+      const call = sdk.api.profile.getTagSubscriptions();
       const callSub = call.subscribe({
-        next: (resp: any) => {
+        next: resp => {
           dispatch({ type: 'GET_TAG_SUBSCRIPTIONS_SUCCESS', payload: resp.data });
         },
         error: createErrorHandler('useTagSubscribe.getTagSubscriptions', false, onError),
@@ -173,12 +173,12 @@ export const useTagSubscribe = (
     const tagName = tagSubscriptionState.isSubscribedToTagPayload;
 
     if (tagName) {
-      const call = profileService.isSubscribedToTag(tagName);
+      const call = sdk.api.profile.isSubscribedToTag(tagName);
       const callSub = call.subscribe({
-        next: (resp: { data?: { isSubscribedToTag: boolean } }) => {
+        next: resp => {
           dispatch({
             type: 'GET_IS_SUBSCRIBED_TO_TAG_SUCCESS',
-            payload: { isSubscribedToTag: resp.data?.isSubscribedToTag, tag: tagName },
+            payload: { isSubscribedToTag: !!resp, tag: tagName },
           });
         },
         error: createErrorHandler('useTagSubscribe.isSubscribedToTag', false, onError),
@@ -194,17 +194,19 @@ export const useTagSubscribe = (
     const tagName = tagSubscriptionState.toggleTagSubscriptionPayload;
 
     if (tagName) {
-      const call = profileService.toggleTagSubscription(tagName);
+      const call = sdk.api.profile.toggleTagSubscription(tagName);
       const callSub = call.subscribe({
-        next: (resp: any) => {
+        next: resp => {
           dispatch({
             type: 'TOGGLE_TAG_SUBSCRIPTION_SUCCESS',
-            payload: { tagSubscribed: resp.data, tag: tagName },
+            payload: { tagSubscribed: resp.sub, tag: tagName },
           });
         },
         error: createErrorHandler('useTagSubscribe.toggleTagSubscription', false, onError),
       });
-      return () => callSub.unsubscribe();
+      return () => {
+        callSub.unsubscribe();
+      };
     }
     return;
   }, [tagSubscriptionState.toggleTagSubscriptionPayload]);

@@ -1,9 +1,5 @@
 import React from 'react';
-
-export interface UseNetworkProps {
-  // channels.commons.web3Service
-  web3Service: any;
-}
+import getSDK from '@akashaproject/awf-sdk';
 
 export interface UseNetworkActions {
   /**
@@ -42,23 +38,22 @@ const networkStateReducer = (state: INetworkState, action: INetworkAction) => {
 };
 
 /* Note: Do not call checkNetwork automatically! Only after loginEthAddress detected */
-const useNetworkState = (props: UseNetworkProps): [INetworkState, UseNetworkActions] => {
+const useNetworkState = (): [INetworkState, UseNetworkActions] => {
+  const sdk = getSDK();
+
   const [state, dispatch] = React.useReducer(networkStateReducer, initialNetworkState);
 
   React.useEffect(() => {
     if (state.checkNetworkQuery) {
-      const checkNetCall = props.web3Service.checkCurrentNetwork({});
-      const checkNetCallSub = checkNetCall.subscribe({
-        next: () => {
+      (async () => {
+        try {
+          await sdk.services.common.web3.checkCurrentNetwork();
           dispatch({ type: 'CHECK_NETWORK_SUCCESS' });
-        },
-        error: () => {
+        } catch (error) {
           dispatch({ type: 'CHECK_NETWORK_ERROR' });
-        },
-      });
-      return () => checkNetCallSub.unsubscribe();
+        }
+      })();
     }
-    return;
   }, [state.checkNetworkQuery]);
 
   const actions = {

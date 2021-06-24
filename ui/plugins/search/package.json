@@ -33,11 +33,7 @@
   "dependencies": {
     "@akashaproject/ui-awf-typings": "*",
     "@akashaproject/design-system": "*",
-    "@akashaproject/sdk-auth": "*",
-    "@akashaproject/sdk-db": "*",
-    "@akashaproject/sdk-common": "*",
-    "@akashaproject/sdk-posts": "*",
-    "@akashaproject/sdk-profiles": "*",
+    "@akashaproject/awf-sdk": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/ui-widget-trending": "*",
     "react-i18next": "11.7.3",

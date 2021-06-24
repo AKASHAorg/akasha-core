@@ -3,6 +3,7 @@ import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { useParams } from 'react-router-dom';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaproject/awf-sdk';
 import { useTranslation } from 'react-i18next';
 import {
   constants,
@@ -53,16 +54,16 @@ interface SearchPageProps
 
 const SearchPage: React.FC<SearchPageProps> = props => {
   const {
-    sdkModules,
     logger,
     singleSpa,
-    globalChannel,
     loginState,
     loggedProfileData,
     modalState,
     modalStateActions,
     showLoginModal,
   } = props;
+
+  const sdk = getSDK();
 
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 
@@ -77,8 +78,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const [, postsActions] = usePosts({
     user: loginState.ethAddress,
-    postsService: sdkModules.posts,
-    ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
 
@@ -86,36 +85,26 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     onError: (err: IAkashaError) => {
       logger.error('useBookmark error %j', err);
     },
-    dbService: sdkModules.db,
   });
 
   const [searchState, searchActions] = useSearch({
     user: loginState.ethAddress,
     logger: logger,
-    postsService: sdkModules.posts,
-    ipfsService: sdkModules.commons.ipfsService,
-    profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
   });
 
   const [followedProfiles, followActions] = useFollow({
-    globalChannel,
-    profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);
     },
   });
 
   const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
-    globalChannel,
-    profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
   });
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
-    profileService: sdkModules.profiles.profileService,
-    postsService: sdkModules.posts.tags,
   });
 
   React.useEffect(() => {
@@ -220,10 +209,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     modalStateActions.hide(MODAL_NAMES.EDITOR);
   };
 
-  const onUploadRequest = uploadMediaToTextile(
-    sdkModules.profiles.profileService,
-    sdkModules.commons.ipfsService,
-  );
+  const onUploadRequest = uploadMediaToTextile;
 
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
 
@@ -335,7 +321,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={hideReportModal}
-              signData={sdkModules.auth.authService.signData}
+              signData={sdk.api.auth.signData}
             />
           </ToastProvider>
         )}

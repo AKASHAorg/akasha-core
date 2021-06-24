@@ -1,5 +1,3 @@
-import { moduleName as auth } from '@akashaproject/sdk-auth/lib/constants';
-import { moduleName as common } from '@akashaproject/sdk-common/lib/constants';
 import { IWidgetConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 /**
@@ -8,5 +6,4 @@ import { IWidgetConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
 export const register: () => IWidgetConfig = () => ({
   loadingFn: () => import('./components'),
   name: 'ui-widget-login',
-  sdkModules: [{ module: auth }, { module: common }],
 });

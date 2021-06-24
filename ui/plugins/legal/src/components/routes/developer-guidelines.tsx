@@ -7,14 +7,13 @@ import { RootComponentProps, LEGAL_DOCS } from '@akashaproject/ui-awf-typings';
 const { ErrorInfoCard, ErrorLoader, MdCard } = DS;
 
 const DeveloperGuidelinesPage = (props: RootComponentProps) => {
-  const { sdkModules, logger } = props;
+  const { logger } = props;
 
   const { t } = useTranslation();
 
   const [errorState, errorActions] = useErrors({ logger });
   const [legalDocsState, legalDocsActions] = useLegal({
     onError: errorActions.createError,
-    commonService: sdkModules.commons,
   });
 
   React.useEffect(() => {

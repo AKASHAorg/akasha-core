@@ -201,7 +201,7 @@ export default class AWF_Profile implements AWF_IProfile {
       });
     }
     return this._gql.run<
-      { getProfile: UserProfile_Response } | { resolveProfile: UserProfile_Response }
+      { getProfile?: UserProfile_Response } & { resolveProfile: UserProfile_Response }
     >(
       {
         query: query,

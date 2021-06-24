@@ -30,7 +30,7 @@ const {
 } = DS;
 
 const TopbarComponent = (props: RootComponentProps) => {
-  const { singleSpa, getMenuItems, uiEvents, layoutConfig, globalChannel, logger } = props;
+  const { singleSpa, getMenuItems, uiEvents, layoutConfig, logger } = props;
   const { modalSlotId } = layoutConfig;
   const { navigateToUrl } = singleSpa;
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
@@ -45,11 +45,7 @@ const TopbarComponent = (props: RootComponentProps) => {
   const [errorState, errorActions] = useErrors({ logger });
 
   const [loginState, loginActions] = useLoginState({
-    globalChannel,
     onError: errorActions.createError,
-    ipfsService: props.sdkModules.commons.ipfsService,
-    profileService: props.sdkModules.profiles.profileService,
-    authService: props.sdkModules.auth.authService,
   });
   const [inviteTokenForm, setinviteTokenForm] = React.useState<{
     submitted: boolean;
@@ -75,17 +71,11 @@ const TopbarComponent = (props: RootComponentProps) => {
   });
   const [loggedProfileData, loggedProfileActions] = useProfile({
     onError: err => logger.error(err),
-    profileService: props.sdkModules.profiles.profileService,
-    ipfsService: props.sdkModules.commons.ipfsService,
-    globalChannel: props.globalChannel,
   });
 
   const [notificationsState, notificationActions] = useNotifications({
-    globalChannel,
     onError: err => logger.error(err),
-    authService: props.sdkModules.auth.authService,
-    ipfsService: props.sdkModules.commons.ipfsService,
-    profileService: props.sdkModules.profiles.profileService,
+
     loggedEthAddress: loginState.ethAddress,
   });
 

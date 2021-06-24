@@ -7,6 +7,7 @@ import {
 } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaproject/awf-sdk';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
@@ -30,8 +31,6 @@ const {
 } = DS;
 
 export interface FeedPageProps {
-  globalChannel: any;
-  sdkModules: any;
   singleSpa: any;
   logger: any;
   showLoginModal: () => void;
@@ -67,10 +66,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     loggedProfileData,
     loginState,
     onError,
-    sdkModules,
     logger,
-    globalChannel,
   } = props;
+
+  const sdk = getSDK();
 
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
 
@@ -79,21 +78,16 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
     onError,
-    dbService: sdkModules.db,
   });
   const [errorState, errorActions] = useErrors({ logger });
 
   const [postsState, postsActions] = usePosts({
     user: loginState.ethAddress,
-    postsService: sdkModules.posts,
-    ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
-    profileService: sdkModules.profiles.profileService,
-    postsService: sdkModules.posts.tags,
   });
 
   React.useEffect(() => {
@@ -174,10 +168,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   };
 
-  const onUploadRequest = uploadMediaToTextile(
-    sdkModules.profiles.profileService,
-    sdkModules.commons.ipfsService,
-  );
+  const onUploadRequest = uploadMediaToTextile;
 
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
@@ -246,7 +237,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
-              signData={sdkModules.auth.authService.signData}
+              signData={sdk.api.auth.signData}
             />
           </ToastProvider>
         )}
@@ -305,9 +296,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         }
         itemCard={
           <EntryCardRenderer
-            sdkModules={sdkModules}
             logger={logger}
-            globalChannel={globalChannel}
             bookmarkState={bookmarkState}
             ethAddress={loginState.ethAddress}
             locale={locale}
@@ -330,9 +319,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           />
         }
         customEntities={getFeedCustomEntities({
-          sdkModules,
           logger,
-          globalChannel,
           isMobile,
           feedItems: postsState.postIds,
           loggedEthAddress: loginState.ethAddress,

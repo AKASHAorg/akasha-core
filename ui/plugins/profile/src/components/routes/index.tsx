@@ -16,18 +16,11 @@ const Routes: React.FC<RootComponentProps> = props => {
   const [errorState, errorActions] = useErrors({ logger });
 
   const [loginState, loginActions] = useLoginState({
-    globalChannel: props.globalChannel,
-    authService: props.sdkModules.auth.authService,
-    profileService: props.sdkModules.profiles.profileService,
-    ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
 
   const [loggedProfileData, loggedProfileActions] = useProfile({
-    profileService: props.sdkModules.profiles.profileService,
-    ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
-    globalChannel: props.globalChannel,
   });
 
   const [flagged, setFlagged] = React.useState('');
@@ -59,7 +52,7 @@ const Routes: React.FC<RootComponentProps> = props => {
     if (errorState && Object.keys(errorState).length) {
       const txt = Object.keys(errorState)
         .filter(key => key.split('.')[0] === 'useLoginState')
-        .map(k => errorState![k])
+        .map(k => errorState[k])
         .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
       return txt;
     }

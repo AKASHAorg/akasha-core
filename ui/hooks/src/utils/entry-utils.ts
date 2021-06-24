@@ -59,7 +59,7 @@ export const mapEntry = (
     quotedBy?: string[];
     quotedByAuthors?: any[];
     creationDate: string;
-    totalComments: string;
+    totalComments?: string;
     postId?: string;
     author: {
       CID?: string;
@@ -127,6 +127,8 @@ export const mapEntry = (
     });
   }
 
+  const totalComments = entry.totalComments ? +entry.totalComments : undefined;
+
   return {
     author: {
       CID: entry.author.CID,
@@ -149,7 +151,7 @@ export const mapEntry = (
     reposts: entry.quotedBy?.length,
     ipfsLink: entry._id,
     permalink: 'null',
-    replies: +entry.totalComments,
+    replies: totalComments,
     delisted: entry.delisted || false,
     reported: entry.reported || false,
     postId: entry.postId,

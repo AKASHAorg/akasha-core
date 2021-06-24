@@ -14,8 +14,6 @@ const { ThemeSelector, lightTheme, darkTheme } = DS;
 export interface ILoginWidgetProps {
   logger: any;
   i18n: any;
-  globalChannel?: any;
-  sdkModules: any;
   layout: any;
 }
 

@@ -33,12 +33,7 @@
   "dependencies": {
     "@akashaproject/ui-awf-typings": "*",
     "@akashaproject/design-system": "*",
-    "@akashaproject/sdk-db": "*",
-    "@akashaproject/sdk-auth": "*",
-    "@akashaproject/sdk-common": "*",
-    "@akashaproject/sdk-profiles": "*",
     "@akashaproject/ui-awf-hooks": "*",
-    "@akashaproject/sdk-posts": "*",
     "@akashaproject/ui-widget-trending": "*",
     "@types/react-router": "5.1.8",
     "@types/react-router-dom": "5.1.6",

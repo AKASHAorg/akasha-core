@@ -1,6 +1,3 @@
-import { moduleName as authModule } from '@akashaproject/sdk-auth/lib/constants';
-import { moduleName as profilesModule } from '@akashaproject/sdk-profiles/lib/constants';
-import { moduleName as commonModule } from '@akashaproject/sdk-common/lib/constants';
 import {
   IWidgetConfig,
   IntegrationRegistrationOptions,
@@ -17,7 +14,6 @@ export const register: (
     loadingFn: () => import('./components'),
     name: 'ui-widget-topbar',
     tags: ['topbar'],
-    sdkModules: [{ module: commonModule }, { module: authModule }, { module: profilesModule }],
     extensions: extensionPointsMap,
   };
 };

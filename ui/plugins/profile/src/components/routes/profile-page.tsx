@@ -4,6 +4,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { constants, useErrors, usePosts, useProfile } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
+import getSDK from '@akashaproject/awf-sdk';
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
@@ -45,6 +46,9 @@ const ProfilePage = (props: ProfilePageProps) => {
     setReportModalOpen,
     closeReportModal,
   } = props;
+
+  const sdk = getSDK();
+
   const location = useLocation();
 
   let { pubKey } = useParams() as any;
@@ -57,16 +61,10 @@ const ProfilePage = (props: ProfilePageProps) => {
 
   const [profileState, profileActions, profileUpdateStatus] = useProfile({
     onError: errorActions.createError,
-    ipfsService: props.sdkModules.commons.ipfsService,
-    profileService: props.sdkModules.profiles.profileService,
-    ensService: props.sdkModules.registry.ens,
-    globalChannel: props.globalChannel,
     logger: props.logger,
   });
 
   const [postsState, postsActions] = usePosts({
-    postsService: props.sdkModules.posts,
-    ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
     user: loggedEthAddress,
   });
@@ -220,7 +218,7 @@ const ProfilePage = (props: ProfilePageProps) => {
               baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
-              signData={props.sdkModules.auth.authService.signData}
+              signData={sdk.api.auth.signData}
             />
           </ToastProvider>
         )}
@@ -245,9 +243,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         itemIds={postsState.postIds}
         itemsData={postsState.postsData}
         errors={errorState}
-        sdkModules={props.sdkModules}
         layout={props.layoutConfig}
-        globalChannel={props.globalChannel}
         ethAddress={loggedEthAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}

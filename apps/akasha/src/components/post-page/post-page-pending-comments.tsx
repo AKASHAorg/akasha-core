@@ -4,9 +4,7 @@ import DS from '@akashaproject/design-system';
 
 const { EntryPublishErrorCard } = DS;
 export interface IGetCustomEntitiesProps {
-  sdkModules: any;
   logger: any;
-  globalChannel: any;
   isMobile: boolean;
   feedItems: string[];
   loggedEthAddress: string | null;
@@ -21,9 +19,7 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
     feedItems,
     pendingComments = [],
     locale,
-    sdkModules,
     logger,
-    globalChannel,
     contentClickable,
     loggedEthAddress,
   } = props;
@@ -42,9 +38,7 @@ export const getPendingComments = (props: IGetCustomEntitiesProps) => {
             {!entry.error && (
               <PostRenderer
                 hidePublishTime={true}
-                sdkModules={sdkModules}
                 logger={logger}
-                globalChannel={globalChannel}
                 ethAddress={loggedEthAddress}
                 key={`${entry.author.ethAddress}-${idx}-${key}`}
                 style={{ ...style, backgroundColor: '#4e71ff0f' }}

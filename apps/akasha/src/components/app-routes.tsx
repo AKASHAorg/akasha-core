@@ -17,30 +17,27 @@ interface AppRoutesProps {
   onError: (err: IAkashaError) => void;
 }
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
-  const { sdkModules, globalChannel, logger, layoutConfig, onError } = props;
+  const { logger, layoutConfig, onError } = props;
 
   const { t } = useTranslation();
 
   const [errorState, errorActions] = useErrors({ logger });
 
   const [loginState, loginActions] = useLoginState({
-    globalChannel: globalChannel,
     onError: errorActions.createError,
-    authService: sdkModules.auth.authService,
-    ipfsService: sdkModules.commons.ipfsService,
-    profileService: sdkModules.profiles.profileService,
   });
 
   const [loginProfile, loginProfileActions] = useProfile({
-    profileService: sdkModules.profiles.profileService,
-    ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
-    globalChannel: props.globalChannel,
   });
 
   React.useEffect(() => {
     if (loginState.pubKey) {
       loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
+      modalStateActions.hide(MODAL_NAMES.LOGIN);
+      if (flagged.length) {
+        modalStateActions.show(MODAL_NAMES.REPORT);
+      }
     }
   }, [loginState.pubKey]);
 
@@ -84,24 +81,11 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     loginActions.login(providerId);
   };
 
-  React.useEffect(() => {
-    if (loginState.pubKey) {
-      modalStateActions.hide(MODAL_NAMES.LOGIN);
-    }
-  }, [loginState.pubKey]);
-
-  React.useEffect(() => {
-    if (loginState.ethAddress && flagged.length) {
-      modalStateActions.hide(MODAL_NAMES.LOGIN);
-      modalStateActions.show(MODAL_NAMES.REPORT);
-    }
-  }, [loginState.ethAddress]);
-
   const loginErrors: string | null = React.useMemo(() => {
     if (errorState && Object.keys(errorState).length) {
       const txt = Object.keys(errorState)
         .filter(key => key.split('.')[0] === 'useLoginState')
-        .map(k => errorState![k])
+        .map(k => errorState[k])
         .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
       return txt;
     }

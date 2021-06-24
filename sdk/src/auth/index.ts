@@ -173,7 +173,7 @@ export default class AWF_Auth implements AWF_IAuth {
       if (args.checkRegistered) {
         await lastValueFrom(this.checkIfSignedUp(address.data));
       }
-      this._log.info(`using eth address ${address}`);
+      this._log.info(`using eth address ${address.data}`);
       const sessKey = `@identity:${address.data.toLowerCase()}:${currentProvider}`;
       if (sessionStorage.getItem(sessKey)) {
         this.identity = PrivateKey.fromString(sessionStorage.getItem(sessKey));
@@ -185,8 +185,8 @@ export default class AWF_Auth implements AWF_IAuth {
 
       const userAuth = loginWithChallenge(this.identity, this._web3);
       this.hubClient = Client.withUserAuth(userAuth, endPoint);
-      this.hubUser = Users.withUserAuth(userAuth, { host: endPoint });
-      this.buckClient = Buckets.withUserAuth(userAuth, { host: endPoint });
+      this.hubUser = Users.withUserAuth(userAuth);
+      this.buckClient = Buckets.withUserAuth(userAuth);
       this.tokenGenerator = loginWithChallenge(this.identity, this._web3);
       const pubKey = this.identity.public.toString();
       this.currentUser = { pubKey, ethAddress: address.data };
@@ -429,7 +429,7 @@ export default class AWF_Auth implements AWF_IAuth {
    */
   decryptMessage(message) {
     return createObservableStream<{
-      body: string;
+      body: Record<string, any>;
       from: string;
       readAt: number;
       createdAt: number;
@@ -455,7 +455,13 @@ export default class AWF_Auth implements AWF_IAuth {
    */
   getMessages(args: InboxListOptions) {
     return createObservableStream<
-      { body: string; from: string; readAt: number; createdAt: number; id: string }[]
+      {
+        body: Record<string, any>;
+        from: string;
+        readAt: number;
+        createdAt: number;
+        id: string;
+      }[]
     >(this._getMessages(args));
   }
 

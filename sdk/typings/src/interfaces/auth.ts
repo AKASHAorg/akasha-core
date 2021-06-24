@@ -50,13 +50,25 @@ export default interface AWF_IAuth {
   decryptMessage(
     message,
   ): Observable<{
-    data: { body: string; from: string; readAt: number; createdAt: number; id: string };
+    data: {
+      body: Record<string, any>;
+      from: string;
+      readAt: number;
+      createdAt: number;
+      id: string;
+    };
   }>;
 
   getMessages(
     args: InboxListOptions,
   ): Observable<{
-    data: { body: string; from: string; readAt: number; createdAt: number; id: string }[];
+    data: {
+      body: Record<string, any>;
+      from: string;
+      readAt: number;
+      createdAt: number;
+      id: string;
+    }[];
   }>;
 
   hasNewNotifications(): Observable<{ data: boolean }>;
