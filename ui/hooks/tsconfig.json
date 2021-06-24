@@ -4,6 +4,7 @@
   "exclude": ["node_modules", "**/*.spec.ts"],
   "compilerOptions": {
     "outDir": "./lib",
+    "rootDir": "./src",
     "allowJs": true
   }
 }

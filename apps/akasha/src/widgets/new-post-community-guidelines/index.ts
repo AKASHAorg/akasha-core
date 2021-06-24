@@ -1,4 +1,3 @@
-import { moduleName as common } from '@akashaproject/sdk-common/lib/constants';
 import { IWidgetConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 /**
@@ -12,5 +11,5 @@ export const Widget: IWidgetConfig = {
       './newpost-community-widget'
     ),
   name: 'ui-widget-newpost-community',
-  sdkModules: [{ module: common }],
+  sdkModules: [],
 };
