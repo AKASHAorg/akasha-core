@@ -166,7 +166,7 @@ export default class AWF_Auth implements AWF_IAuth {
       }
     }
     try {
-      await this._web3.connect(args.provider);
+      await this._web3.connect(currentProvider);
       await this._web3.checkCurrentNetwork();
       const endPoint = process.env.AUTH_ENDPOINT;
       const address = await lastValueFrom(this._web3.getCurrentAddress());
@@ -174,9 +174,9 @@ export default class AWF_Auth implements AWF_IAuth {
         await lastValueFrom(this.checkIfSignedUp(address.data));
       }
       this._log.info(`using eth address ${address.data}`);
-      const sessKey = `@identity:${address.data.toLowerCase()}:${currentProvider}`;
-      if (sessionStorage.getItem(sessKey)) {
-        this.identity = PrivateKey.fromString(sessionStorage.getItem(sessKey));
+      this.sessKey = `@identity:${address.data.toLowerCase()}:${currentProvider}`;
+      if (sessionStorage.getItem(this.sessKey)) {
+        this.identity = PrivateKey.fromString(sessionStorage.getItem(this.sessKey));
       } else {
         const sig = await this._web3.signMessage(AUTH_MESSAGE);
         await new Promise(res => setTimeout(res, 600));

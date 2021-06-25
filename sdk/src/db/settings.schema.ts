@@ -10,9 +10,6 @@ export const schema: any = {
       uniqueItems: true,
       items: {
         type: 'array',
-        items: {
-          type: 'string',
-        },
       },
     },
   },

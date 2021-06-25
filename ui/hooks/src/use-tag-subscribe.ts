@@ -37,7 +37,7 @@ export type ITagSubscriptionAction =
   | { type: 'GET_TAG_SUBSCRIPTIONS' }
   | {
       type: 'GET_TAG_SUBSCRIPTIONS_SUCCESS';
-      payload: string[];
+      payload: Record<string, boolean>;
     }
   | { type: 'GET_IS_SUBSCRIBED_TO_TAG'; payload: string }
   | {
@@ -78,13 +78,13 @@ const tagSubscriptionStateReducer = (
     case 'GET_IS_SUBSCRIBED_TO_TAG_SUCCESS': {
       const { isSubscribedToTag, tag } = action.payload;
 
-      if (isSubscribedToTag && !state.tags.includes(tag)) {
+      if (isSubscribedToTag && !state.tags.hasOwnProperty(tag)) {
         return {
           ...state,
           tags: [...state.tags, tag],
           isSubscribedToTagPayload: null,
         };
-      } else if (!isSubscribedToTag && state.tags.includes(tag)) {
+      } else if (!isSubscribedToTag && state.tags.hasOwnProperty(tag)) {
         const filteredTags = state.tags.filter(tagName => tagName !== tag);
         return {
           ...state,
@@ -178,7 +178,7 @@ export const useTagSubscribe = (
         next: resp => {
           dispatch({
             type: 'GET_IS_SUBSCRIBED_TO_TAG_SUCCESS',
-            payload: { isSubscribedToTag: !!resp, tag: tagName },
+            payload: { isSubscribedToTag: resp.data, tag: tagName },
           });
         },
         error: createErrorHandler('useTagSubscribe.isSubscribedToTag', false, onError),
@@ -222,8 +222,8 @@ export const useTagSubscribe = (
       dispatch({ type: 'GET_TAG_SUBSCRIPTIONS' });
     },
   };
-
-  return [tagSubscriptionState.tags, actions];
+  const subs = Object.entries(tagSubscriptionState.tags).filter(el => el[1]);
+  return [Object.keys(subs), actions];
 };
 
 export default useTagSubscribe;
