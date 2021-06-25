@@ -47,6 +47,7 @@ export default class AWF_Auth implements AWF_IAuth {
   private sessKey;
   private inboxWatcher;
   private currentUser: CurrentUser;
+  private _lockSignIn: boolean;
   private tokenGenerator: () => Promise<UserAuth>;
   public readonly waitForAuth = 'waitForAuth';
   public readonly providerKey = '@providerType';
@@ -152,6 +153,10 @@ export default class AWF_Auth implements AWF_IAuth {
       checkRegistered: true,
     },
   ): Promise<CurrentUser & { isNewUser: boolean }> {
+    if (this._lockSignIn) {
+      return;
+    }
+    this._lockSignIn = true;
     let currentProvider: number;
     if (args.provider === EthProviders.None) {
       if (!sessionStorage.getItem(this.providerKey)) {
@@ -238,6 +243,7 @@ export default class AWF_Auth implements AWF_IAuth {
       data: this.currentUser,
       event: AUTH_EVENTS.READY,
     });
+    this._lockSignIn = false;
     return Object.assign(this.currentUser, authStatus);
   }
   /**
@@ -305,7 +311,6 @@ export default class AWF_Auth implements AWF_IAuth {
     if (!sessionStorage.getItem(this.providerKey)) {
       return Promise.resolve(null);
     }
-
     const localUser = sessionStorage.getItem(this.currentUserKey);
     if (localUser) {
       this._globalChannel.next({

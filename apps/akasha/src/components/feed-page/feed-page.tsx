@@ -99,7 +99,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   React.useEffect(() => {
     if (loginState.currentUserCalled) {
       postsActions.resetPostIds();
-      if (loginState.ethAddress) {
+      if (loginState.ready) {
         bookmarkActions.getBookmarks();
       }
     }
