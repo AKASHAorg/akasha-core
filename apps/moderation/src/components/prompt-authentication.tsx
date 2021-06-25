@@ -9,11 +9,10 @@ export interface IPromptAuthenticationProps extends IPromptAuthorizationProps {
   buttonLabel?: string;
   ethAddress: string | null;
   singleSpa: any;
-  showLoginModal: () => void;
 }
 
 const PromptAuthentication: React.FC<IPromptAuthenticationProps> = props => {
-  const { titleLabel, subtitleLabel, buttonLabel, ethAddress, showLoginModal } = props;
+  const { titleLabel, subtitleLabel, ethAddress } = props;
 
   React.useEffect(() => {
     if (ethAddress) {
@@ -27,10 +26,10 @@ const PromptAuthentication: React.FC<IPromptAuthenticationProps> = props => {
       errorType={'no-authentication'}
       titleLabel={titleLabel}
       subtitleLabel={subtitleLabel}
-      buttonLabel={buttonLabel}
+      buttonLabel="Moderation history"
       textMarginBottom={true}
       hasButton={true}
-      showLoginModal={showLoginModal}
+      onClick={() => props.singleSpa.navigateToUrl('/moderation-app/history')}
     />
   );
 };
