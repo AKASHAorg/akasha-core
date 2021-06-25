@@ -86,3 +86,11 @@ export interface ModerationDecision {
   delisted: boolean;
   moderated: boolean;
 }
+
+export interface ModerationReason {
+  _id: string;
+  creationDate: number;
+  label: string;
+  description: string;
+  active: boolean;
+}
