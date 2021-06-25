@@ -74,6 +74,21 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
         }
       });
     }
+
+    // adding a list with comment as fallback for older contents
+    if (['reply', 'comment'].includes(contentType)) {
+      const entryCall = props.sdkModules.posts.comments.getComment({ commentID: entryId });
+      const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
+      const getEntryCall = combineLatest([ipfsGatewayCall, entryCall]);
+      getEntryCall.subscribe((resp: any) => {
+        const ipfsGateway = resp[0].data;
+        const entry = resp[1].data?.getComment;
+        if (entry) {
+          const mappedEntry = mapEntry(entry, ipfsGateway);
+          setEntryData(mappedEntry);
+        }
+      });
+    }
     if (contentType === 'account') {
       profileActions.getProfileData({ ethAddress: entryId });
     }
