@@ -66,10 +66,10 @@ const tagSubscriptionStateReducer = (
       return { ...state, isFetching: true };
     case 'GET_TAG_SUBSCRIPTIONS_SUCCESS': {
       const tags = action.payload;
-
+      const subs = Object.entries(tags).filter(el => el[1]);
       return {
         ...state,
-        tags: tags || [],
+        tags: Object.keys(subs) || [],
         isFetching: false,
       };
     }
@@ -78,13 +78,13 @@ const tagSubscriptionStateReducer = (
     case 'GET_IS_SUBSCRIBED_TO_TAG_SUCCESS': {
       const { isSubscribedToTag, tag } = action.payload;
 
-      if (isSubscribedToTag && !state.tags.hasOwnProperty(tag)) {
+      if (isSubscribedToTag && !state.tags.includes(tag)) {
         return {
           ...state,
           tags: [...state.tags, tag],
           isSubscribedToTagPayload: null,
         };
-      } else if (!isSubscribedToTag && state.tags.hasOwnProperty(tag)) {
+      } else if (!isSubscribedToTag && state.tags.includes(tag)) {
         const filteredTags = state.tags.filter(tagName => tagName !== tag);
         return {
           ...state,
@@ -222,8 +222,8 @@ export const useTagSubscribe = (
       dispatch({ type: 'GET_TAG_SUBSCRIPTIONS' });
     },
   };
-  const subs = Object.entries(tagSubscriptionState.tags).filter(el => el[1]);
-  return [Object.keys(subs), actions];
+
+  return [tagSubscriptionState.tags, actions];
 };
 
 export default useTagSubscribe;
