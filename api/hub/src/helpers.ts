@@ -231,8 +231,5 @@ export const decodeString = (value: string) => {
 };
 
 export const encodeString = (value: string) => {
-  if (Buffer.from(value, 'base64').toString('base64') !== value) {
-    return Buffer.from(value).toString('base64');
-  }
-  return value;
+  return value ? Buffer.from(value).toString('base64') : '';
 };

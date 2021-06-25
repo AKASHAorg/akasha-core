@@ -143,28 +143,47 @@ class ModerationDecisionAPI extends DataSource {
    * @returns A list of objects with minimal info about the moderated content
    */
   async publicLog(offset?: number, limit?: number) {
-    const list = [];
+    let list = [];
     const db: Client = await getAppDB();
-    const query = new Where('moderated').eq(true)
-      .skipNum(offset || 0)
-      .limitTo(limit || 10)
-      .orderByDesc('moderatedDate');
-    const decisions = await db.find<ModerationDecision>(this.dbID, this.collection, query);
-    for (const record of decisions) {
-      const decision = await this.getFinalDecision(record.contentID);
+    const cachedList = this.getModeratedListCacheKey();
+    if (await queryCache.has(cachedList)) {
+      list = await queryCache.get(cachedList);
+    } else {
+      const query = new Where('moderated').eq(true).orderByDesc('moderatedDate');
+      list = await db.find<ModerationDecision>(this.dbID, this.collection, query);
+      await queryCache.set(cachedList, list);
+    }
+    const offsetIndex = offset ? list.findIndex(item => item._id === offset) : 0;
+    let endIndex = (limit || 10) + offsetIndex;
+    if (list.length <= endIndex) {
+      endIndex = undefined;
+    }
+    const results = list.slice(offsetIndex, endIndex);
+    const nextIndex = endIndex ? list[endIndex]._id : null;
+    const moderated = [];
+    for (const result of results) {
+      const decision = await this.getFinalDecision(result.contentID);
+      // load moderator info
+      const profileAPI = new ProfileAPI({ dbID: this.dbID, collection: 'Profiles' });
+      const moderator = await profileAPI.getProfile(decision.moderator);
 
-      list.push({
+      moderated.push({
         contentID: decision.contentID,
         contentType: decision.contentType,
         moderatedDate: decision.moderatedDate,
-        moderator: decision.moderator,
+        moderator: {
+          ethAddress: moderator.ethAddress,
+          name: moderator.name || '',
+          userName: moderator.userName || '',
+          avatar: moderator.avatar,
+        },
         delisted: decision.delisted,
         reasons: decision.reasons,
         explanation: decision.explanation,
       });
     }
 
-    return list;
+    return { results: moderated, nextIndex: nextIndex, total: list.length };
   }
 
   /**
@@ -206,7 +225,12 @@ class ModerationDecisionAPI extends DataSource {
       const profileAPI = new ProfileAPI({ dbID: this.dbID, collection: 'Profiles' });
       const moderator = await profileAPI.getProfile(decision.moderator);
       decision = Object.assign({}, decision, { 
-        moderatorProfile: moderator
+        moderatorProfile: {
+          ethAddress: moderator.ethAddress,
+          name: moderator.name || "",
+          userName: moderator.userName || "",
+          avatar: moderator.avatar,
+        }
       });
     }
     // add first report data
