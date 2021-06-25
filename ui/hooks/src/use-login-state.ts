@@ -123,9 +123,7 @@ const useLoginState = (props: UseLoginProps): [ILoginState, UseLoginActions] => 
     const getDepsCall = sdk.api.auth.getCurrentUser();
     const sub = getDepsCall.subscribe({
       next: resp => {
-        if (resp.data) {
-          dispatch({ type: 'LOAD_FROM_CACHE', payload: resp.data });
-        }
+        dispatch({ type: 'LOAD_FROM_CACHE', payload: resp.data });
       },
     });
     return () => sub.unsubscribe();

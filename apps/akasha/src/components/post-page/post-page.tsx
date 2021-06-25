@@ -61,8 +61,6 @@ interface IPostPage {
 
 const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const {
-    sdkModules,
-    globalChannel,
     flagged,
     flaggedContentType,
     reportModalOpen,
