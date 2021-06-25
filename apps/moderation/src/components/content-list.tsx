@@ -39,7 +39,7 @@ interface IModeratedItem extends IPendingItem {
   evaluationDate: string;
 }
 
-interface ICount {
+export interface ICount {
   kept: number;
   pending: number;
   delisted: number;

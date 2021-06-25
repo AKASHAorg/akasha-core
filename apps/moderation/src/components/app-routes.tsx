@@ -5,10 +5,11 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import DS from '@akashaproject/design-system';
 import { useLoginState } from '@akashaproject/ui-awf-hooks';
 
-import routes, { HOME, UNAUTHENTICATED, rootRoute } from '../routes';
+import routes, { HOME, HISTORY, UNAUTHENTICATED, rootRoute } from '../routes';
 
 import ContentList from './content-list';
 import PromptAuthentication from './prompt-authentication';
+import TransparencyLog from './transparency-log';
 
 const { Box, LoginModal } = DS;
 
@@ -67,6 +68,9 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               singleSpa={props.singleSpa}
               showLoginModal={showLoginModal}
             />
+          </Route>
+          <Route path={routes[HISTORY]}>
+            <TransparencyLog ethAddress={loginState.ethAddress} {...props} />
           </Route>
           <Redirect exact={true} from={rootRoute} to={routes[HOME]} />
         </Switch>
