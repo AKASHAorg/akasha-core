@@ -453,7 +453,9 @@ export default class AWF_Profile implements AWF_IProfile {
   getTagSubscriptions() {
     return this._settings.get(this.TagSubscriptions).pipe(
       map((rec: any) => {
-        return createFormattedValue<string[]>(rec.data.options);
+        return createFormattedValue<Record<string, boolean>>(
+          Object.fromEntries(rec.data?.options ? rec.data?.options : []),
+        );
       }),
     );
   }
@@ -465,14 +467,14 @@ export default class AWF_Profile implements AWF_IProfile {
   isSubscribedToTag(tagName: string) {
     return this.getTagSubscriptions().pipe(
       map(res => {
-        if (!res || !res.data.length) {
-          return false;
+        if (!res || !res.data) {
+          return createFormattedValue<boolean>(false);
         }
-        const el = res.data.find(r => r[0] === tagName);
+        const el = res.data.hasOwnProperty(tagName);
         if (!el) {
-          return false;
+          return createFormattedValue<boolean>(false);
         }
-        return el[1];
+        return createFormattedValue<boolean>(res.data[tagName]);
       }),
     );
   }
