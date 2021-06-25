@@ -134,10 +134,10 @@ export const useTagSubscribe = (
   );
 
   const handleSubscribe = (payload: any) => {
-    const { data, channelInfo } = payload;
+    const { data, args } = payload;
     dispatch({
       type: 'TOGGLE_TAG_SUBSCRIPTION_SUCCESS',
-      payload: { tag: channelInfo.args, tagSubscribed: data },
+      payload: { tag: args, tagSubscribed: data },
     });
   };
 

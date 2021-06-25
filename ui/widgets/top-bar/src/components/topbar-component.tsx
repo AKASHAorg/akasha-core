@@ -17,6 +17,7 @@ import {
 import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaproject/awf-sdk';
 import { extensionPointsMap } from '../extension-points';
 
 const {
@@ -31,9 +32,14 @@ const {
 
 const TopbarComponent = (props: RootComponentProps) => {
   const { singleSpa, getMenuItems, uiEvents, layoutConfig, logger } = props;
+
+  const sdk = getSDK();
+
   const { modalSlotId } = layoutConfig;
   const { navigateToUrl } = singleSpa;
+
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
+
   const [suggestSignUp, setSuggestSignUp] = React.useState<boolean>(false);
   const [showSignUpModal, setshowSignUpModal] = React.useState<{
     inviteToken: string | null;
@@ -120,7 +126,7 @@ const TopbarComponent = (props: RootComponentProps) => {
       setCurrentMenu(menuItems);
     };
     updateMenu();
-    uiEvents.subscribe({
+    const sub = uiEvents.subscribe({
       next: (eventData: UIEventData) => {
         if (
           eventData.event === EventTypes.InstallIntegration ||
@@ -130,9 +136,7 @@ const TopbarComponent = (props: RootComponentProps) => {
         }
       },
     });
-    return function cleanup() {
-      uiEvents.unsubscribe();
-    };
+    return () => sub.unsubscribe();
   }, []);
 
   React.useEffect(() => {
@@ -245,7 +249,7 @@ const TopbarComponent = (props: RootComponentProps) => {
       hasError: false,
       errorMsg: '',
     });
-    props.sdkModules.auth.authService
+    sdk.api.auth
       .validateInvite(showSignUpModal.inviteToken)
       .toPromise()
       .then((_: any) => {
