@@ -109,7 +109,7 @@ export default class AWF_Entry implements AWF_IEntry {
               operationName: 'CreateEntry',
               context: {
                 headers: {
-                  Authorization: `Bearer ${res.token}`,
+                  Authorization: `Bearer ${res.token.data}`,
                   Signature: res.signedData.data.signature,
                 },
               },

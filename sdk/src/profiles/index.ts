@@ -87,7 +87,7 @@ export default class AWF_Profile implements AWF_IProfile {
             operationName: 'AddProfileProvider',
             context: {
               headers: {
-                Authorization: `Bearer ${res.token}`,
+                Authorization: `Bearer ${res.token.data}`,
                 Signature: res.signedData.data.signature,
               },
             },
@@ -121,7 +121,7 @@ export default class AWF_Profile implements AWF_IProfile {
             operationName: 'MakeDefaultProvider',
             context: {
               headers: {
-                Authorization: `Bearer ${res.token}`,
+                Authorization: `Bearer ${res.token.data}`,
                 Signature: res.signedData.data.signature,
               },
             },
@@ -161,7 +161,7 @@ export default class AWF_Profile implements AWF_IProfile {
             operationName: 'RegisterUsername',
             context: {
               headers: {
-                Authorization: `Bearer ${res.token}`,
+                Authorization: `Bearer ${res.token.data}`,
                 Signature: res.signedData.data.signature,
               },
             },
@@ -227,7 +227,7 @@ export default class AWF_Profile implements AWF_IProfile {
             operationName: 'Follow',
             context: {
               headers: {
-                Authorization: `Bearer ${res.token}`,
+                Authorization: `Bearer ${res.token.data}`,
                 Signature: res.signedData.data.signature,
               },
             },
@@ -262,7 +262,7 @@ export default class AWF_Profile implements AWF_IProfile {
             operationName: 'UnFollow',
             context: {
               headers: {
-                Authorization: `Bearer ${res.token}`,
+                Authorization: `Bearer ${res.token.data}`,
                 Signature: res.signedData.data.signature,
               },
             },
@@ -368,7 +368,7 @@ export default class AWF_Profile implements AWF_IProfile {
             operationName: 'SaveMetaData',
             context: {
               headers: {
-                Authorization: `Bearer ${res.token}`,
+                Authorization: `Bearer ${res.token.data}`,
                 Signature: res.signedData.data.signature,
               },
             },
