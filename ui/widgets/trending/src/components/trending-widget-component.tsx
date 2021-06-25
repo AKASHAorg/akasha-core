@@ -81,10 +81,7 @@ const TrendingWidgetComponent: React.FC<TrendingWidgetComponentProps> = props =>
     if (loginState.waitForAuth && !loginState.ready) {
       return;
     }
-    if (
-      (loginState.waitForAuth && loginState.ready) ||
-      (loginState.currentUserCalled && loginState.ethAddress)
-    ) {
+    if (loginState.ready) {
       tagSubscriptionActions.getTagSubscriptions();
     }
   }, [
