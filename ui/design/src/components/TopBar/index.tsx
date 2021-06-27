@@ -44,12 +44,17 @@ export interface ITopbarProps {
   moderationLabel?: string;
   moderationInfoLabel?: string;
   legalCopyRightLabel?: string;
+  // moderator tools
+  isModerator?: boolean;
+  dashboardLabel?: string;
+  dashboardInfoLabel?: string;
   // handlers
   onNavigation: (path: string) => void;
   onSidebarToggle?: (visibility: boolean) => void;
   onSearch: (inputValue: string) => void;
   onFeedbackClick: () => void;
   onModerationClick: () => void;
+  onDashboardClick: () => void;
   // external css
   className?: string;
   onLoginClick: () => void;
@@ -74,6 +79,9 @@ const Topbar: React.FC<ITopbarProps> = props => {
     moderationLabel,
     moderationInfoLabel,
     legalCopyRightLabel,
+    isModerator,
+    dashboardLabel,
+    dashboardInfoLabel,
     className,
     quickAccessItems,
     searchAreaItem,
@@ -85,6 +93,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     onSignUpClick,
     onFeedbackClick,
     onModerationClick,
+    onDashboardClick,
     onLogout,
     hasNewNotifications,
   } = props;
@@ -382,6 +391,9 @@ const Topbar: React.FC<ITopbarProps> = props => {
           loggedProfileData={loggedProfileData}
           legalLabel={legalLabel}
           signOutLabel={signOutLabel}
+          isModerator={isModerator}
+          dashboardLabel={dashboardLabel}
+          dashboardInfoLabel={dashboardInfoLabel}
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
           moderationLabel={moderationLabel}
@@ -392,6 +404,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           onLogout={onLogout}
           onFeedbackClick={onFeedbackClick}
           onModerationClick={onModerationClick}
+          onDashboardClick={onDashboardClick}
         />
       )}
       {menuDropOpen && !loggedProfileData?.ethAddress && (
@@ -401,6 +414,9 @@ const Topbar: React.FC<ITopbarProps> = props => {
           onNavigation={onNavigation}
           legalLabel={legalLabel}
           legalMenu={legalMenu}
+          isModerator={isModerator}
+          dashboardLabel={dashboardLabel}
+          dashboardInfoLabel={dashboardInfoLabel}
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
           moderationLabel={moderationLabel}
@@ -408,6 +424,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           legalCopyRightLabel={legalCopyRightLabel}
           onFeedbackClick={onFeedbackClick}
           onModerationClick={onModerationClick}
+          onDashboardClick={onDashboardClick}
         />
       )}
     </TopbarWrapper>

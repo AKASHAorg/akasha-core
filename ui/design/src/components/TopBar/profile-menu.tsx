@@ -25,11 +25,16 @@ export interface IProfileMenu {
   moderationLabel?: string;
   moderationInfoLabel?: string;
   legalCopyRightLabel?: string;
+  // moderator tools
+  isModerator?: boolean;
+  dashboardLabel?: string;
+  dashboardInfoLabel?: string;
   // handlers
   closePopover: () => void;
   onNavigation: (path: string) => void;
   onFeedbackClick: () => void;
   onModerationClick: () => void;
+  onDashboardClick: () => void;
   onLogout?: () => void;
 }
 
@@ -52,10 +57,14 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
     moderationLabel,
     moderationInfoLabel,
     legalCopyRightLabel,
+    isModerator,
+    dashboardLabel,
+    dashboardInfoLabel,
     closePopover,
     onNavigation,
     onFeedbackClick,
     onModerationClick,
+    onDashboardClick,
     onLogout,
   } = props;
 
@@ -124,6 +133,29 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
             {renderAvatarMenuItem(menuItem)}
           </Box>
         ))}
+      {isModerator && (
+        <Box
+          border={{ style: 'solid', size: '1px', color: 'border', side: 'bottom' }}
+          justify="start"
+          fill="horizontal"
+        >
+          <StyledPopoverBox
+            pad="xsmall"
+            margin={{ vertical: 'xsmall' }}
+            align="start"
+            onClick={onDashboardClick}
+            responsive={false}
+          >
+            <SubtitleTextIcon
+              label={dashboardLabel}
+              subtitle={dashboardInfoLabel}
+              subtitleColor={'secondaryText'}
+              iconType={'trendingApps'}
+              iconSize={'1.250rem'}
+            />
+          </StyledPopoverBox>
+        </Box>
+      )}
       {similarMenu.map((menu, idx) => (
         <Box
           key={menu.icon + idx}
