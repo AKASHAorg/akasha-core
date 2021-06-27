@@ -168,18 +168,7 @@ const ContentList: React.FC<IContentListProps> = props => {
     }
   };
 
-  if (ethAddress && !isAuthorised) {
-    return (
-      <PromptAuthorization
-        titleLabel={t('You must be an Ethereum World Moderator to access this page')}
-        subtitleLabel={t(
-          'The wallet you connected does not match a moderator account in our system. Please try again with the correct wallet.',
-        )}
-      />
-    );
-  }
-
-  return (
+  return isAuthorised ? (
     <Box>
       <ModalRenderer slotId={slotId}>
         {modalOpen && (
@@ -314,6 +303,13 @@ const ContentList: React.FC<IContentListProps> = props => {
               ))
           : renderNotFound('moderated'))}
     </Box>
+  ) : (
+    <PromptAuthorization
+      titleLabel={t('You must be an Ethereum World Moderator to access this page')}
+      subtitleLabel={t(
+        'The wallet you connected does not match a moderator account in our system. Please try again with the correct wallet.',
+      )}
+    />
   );
 };
 
