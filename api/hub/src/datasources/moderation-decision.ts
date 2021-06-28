@@ -179,6 +179,7 @@ class ModerationDecisionAPI extends DataSource {
         },
         delisted: decision.delisted,
         reasons: decision.reasons,
+        reports: decision.reports,
         explanation: decision.explanation,
       });
     }
