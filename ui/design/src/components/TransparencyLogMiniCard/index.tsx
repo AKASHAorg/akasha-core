@@ -43,7 +43,11 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
     onClickCard,
   } = props;
   return (
-    <MainAreaCardBox noBorderRadius={true} isSelected={isSelected}>
+    <MainAreaCardBox
+      noBorderRadius={true}
+      isSelected={isSelected}
+      style={{ minHeight: 'min-content' }} // allows cards to adjust in a y-scrollable container
+    >
       <Box pad="medium" onClick={onClickCard} style={{ cursor: 'pointer' }}>
         <Box direction="row" justify="between" align="center">
           <Box direction="row" align="center" pad={{ right: 'small' }}>

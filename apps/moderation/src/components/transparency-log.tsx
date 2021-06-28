@@ -117,7 +117,8 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         loggedEthAddress={ethAddress}
       />
       <Box direction="row">
-        <Box width="40%">
+        {/* setting height and overflow behaviour to make y-scrollable container */}
+        <Box width="40%" height="80vh" style={{ overflowY: 'scroll' }}>
           {requesting && (
             <Box pad="large">
               <Spinner />
