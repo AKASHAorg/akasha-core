@@ -32,6 +32,7 @@ interface ILogItem {
   };
   delisted: false;
   reasons: string[];
+  reports: number;
   explanation: string;
 }
 
@@ -69,10 +70,10 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     setRequesting(true);
     try {
       const response = await moderationRequest.getLog();
+      getStatusCount();
       if (response.results) {
         setLogItems(response.results);
       }
-      getStatusCount();
     } catch (error) {
       logger.error('[transparency-log.tsx]: fetchModerationLog err %j', error.message || '');
     } finally {
@@ -174,7 +175,9 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
                 baseAvatarUrl + selected.moderator.avatar || 'https://placebeard.it/360x360'
               }
               moderatorEthAddress={selected.moderator.ethAddress}
-              reportedTimesLabel={t(`Reported ${4} times`)}
+              reportedTimesLabel={t(
+                `Reported ${selected.reports > 1 ? `${selected.reports} times` : 'once'}`,
+              )}
               reasonsLabel={t(`${selected.reasons.length > 1 ? 'reasons' : 'reason'}`)}
               reasons={selected.reasons}
               explanationLabel={t('explanation')}
