@@ -132,6 +132,10 @@ import type { Helmet as HelmetType } from '@types/react-helmet';
 import Helmet from 'react-helmet';
 import Spinner from './components/Spinner';
 
+import TransparencyLogMiniCard from './components/TransparencyLogMiniCard';
+import TransparencyLogDetailCard from './components/TransparencyLogDetailCard';
+import TransparencyLogBanner from './components/TransparencyLogBanner';
+
 /* Utilities (these are not components) */
 import responsiveBreakpoints from './styles/responsive-breakpoints';
 import { formatImageSrc } from './utils/image-utils';
@@ -209,6 +213,9 @@ const exported = {
   ProfileCompletedModal,
   FeedbackModal,
   Spinner,
+  TransparencyLogMiniCard,
+  TransparencyLogDetailCard,
+  TransparencyLogBanner,
   ToastProvider,
   SelectPopover,
   SubtitleTextIcon,

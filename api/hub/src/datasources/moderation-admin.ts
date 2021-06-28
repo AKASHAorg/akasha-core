@@ -27,7 +27,7 @@ class ModerationAdminAPI extends DataSource {
    * @param ethAddress - The moderator's ETH address
    * @returns The key as a string
    */
-   getModeratorCacheKey(ethAddress: string) {
+  getModeratorCacheKey(ethAddress: string) {
     return `${this.collection}:ethAddress${ethAddress}`;
   }
 
@@ -59,7 +59,7 @@ class ModerationAdminAPI extends DataSource {
    */
   async isModerator(ethAddress: string) {
     const moderator = await this.getModerator(ethAddress);
-    return moderator.active;
+    return moderator && moderator.active;
   }
 
   /**
@@ -69,7 +69,7 @@ class ModerationAdminAPI extends DataSource {
    */
   async isAdmin(ethAddress: string) {
     const moderator = await this.getModerator(ethAddress);
-    return moderator.active && moderator.admin;
+    return moderator && moderator.active && moderator.admin;
   }
 
   /**
