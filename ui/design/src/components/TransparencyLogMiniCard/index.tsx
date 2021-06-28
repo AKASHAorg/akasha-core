@@ -20,7 +20,7 @@ export interface ITransparencyLogMiniCardProps {
 }
 
 const FadeoutTextBox = styled(Box)`
-  max-height: 3.5rem;
+  max-height: 3.2em;
   width: 100%;
   overflow: hidden;
   position: relative;
