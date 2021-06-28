@@ -72,7 +72,7 @@ const TransparencyLogBanner: React.FC<ITransparencyLogBannerProps> = props => {
         <StyledText size="large" margin={{ top: 'xsmall' }}>
           {content}
         </StyledText>
-        <Box direction="row" margin={{ vertical: 'xlarge', horizontal: 'auto' }}>
+        <Box direction="row" margin={{ vertical: 'xlarge', horizontal: 'auto' }} pad="0.15rem">
           <Meter
             type="circle"
             aria-label="meter"

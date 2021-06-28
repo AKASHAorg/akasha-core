@@ -1,4 +1,5 @@
 import * as React from 'react';
+import styled from 'styled-components';
 import { Box, Text } from 'grommet';
 
 import Avatar from '../Avatar';
@@ -17,6 +18,23 @@ export interface ITransparencyLogMiniCardProps {
   onClickAvatar?: () => void;
   onClickCard?: () => void;
 }
+
+const FadeoutTextBox = styled(Box)`
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  height: 3.5em;
+  ::after {
+    content: '';
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40%;
+    height: 1.5em;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
+  }
+`;
 
 const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props => {
   const {
@@ -57,11 +75,11 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
           </Box>
         </Box>
         <Box direction="row" justify="between" align="start">
-          <Box>
+          <FadeoutTextBox>
             <Text margin={{ top: 'small' }} color="secondaryText">
-              {content.length > 50 ? `${content.substring(0, 50)}...` : content}
+              {content}
             </Text>
-          </Box>
+          </FadeoutTextBox>
           <Box pad={{ left: 'small' }} flex={{ shrink: 0 }}>
             <Text
               size="small"
