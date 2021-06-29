@@ -36,20 +36,41 @@ interface ILogItem {
   explanation: string;
 }
 
+const DEFAULT_LIMIT = 10;
+
 const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const { ethAddress, logger } = props;
 
   const [logItems, setLogItems] = React.useState<ILogItem[]>([]);
+  const [nextIndex, setNextIndex] = React.useState<string | null>(null);
   const [requesting, setRequesting] = React.useState<boolean>(false);
   const [activeButton, setActiveButton] = React.useState<string>('All');
   const [count, setCount] = React.useState<ICount>({ kept: 0, pending: 0, delisted: 0 });
   const [selected, setSelected] = React.useState<ILogItem | null>(null);
 
   const { t } = useTranslation();
+  const listItemObserver = React.useRef<any>();
 
   React.useEffect(() => {
     fetchModerationLog();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const anchor = React.useCallback(
+    node => {
+      if (requesting) return;
+      if (listItemObserver.current) listItemObserver.current.disconnect();
+      listItemObserver.current = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && nextIndex !== null) {
+          // fetch more entries using nextIndex
+          fetchModerationLog(nextIndex);
+        }
+      });
+      if (node) listItemObserver.current.observe(node);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [requesting],
+  );
 
   const getStatusCount = async () => {
     setRequesting(true);
@@ -65,15 +86,19 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     }
   };
 
-  const fetchModerationLog = async () => {
+  const fetchModerationLog = async (offset?: string, limit?: number) => {
     // fetch log of moderated contents
     setRequesting(true);
     try {
-      const response = await moderationRequest.getLog();
+      const response = await moderationRequest.getLog({
+        offset,
+        limit: limit || DEFAULT_LIMIT,
+      });
       getStatusCount();
       if (response.results) {
-        setLogItems(response.results);
+        setLogItems([...logItems, ...response.results]);
       }
+      setNextIndex(response.nextIndex);
     } catch (error) {
       logger.error('[transparency-log.tsx]: fetchModerationLog err %j', error.message || '');
     } finally {
@@ -119,16 +144,10 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
       <Box direction="row">
         {/* setting height and overflow behaviour to make y-scrollable container */}
         <Box width="40%" height="80vh" style={{ overflowY: 'scroll' }}>
-          {requesting && (
-            <Box pad="large">
-              <Spinner />
-            </Box>
-          )}
           {!requesting && logItems.length < 1 && (
             <Text>{t('No moderated items found. Please check again later.')}</Text>
           )}
-          {!requesting &&
-            logItems.length > 0 &&
+          {logItems.length > 0 &&
             logItems
               .filter(el =>
                 activeButton === 'Kept'
@@ -158,6 +177,13 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
                   onClickCard={handleClickCard(el)}
                 />
               ))}
+          {requesting && (
+            <Box pad="large">
+              <Spinner />
+            </Box>
+          )}
+          {/* triggers intersection observer */}
+          <Box pad="xxsmall" ref={anchor} />
         </Box>
         <Box width="60%">
           {selected ? (
