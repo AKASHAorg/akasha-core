@@ -30,7 +30,9 @@
   ],
   "dependencies": {
     "@akashaproject/design-system": "*",
-    "rxjs": "7.0.0"
+    "@akashaproject/awf-sdk": "*",
+    "@akashaproject/sdk-typings": "*",
+    "rxjs": "7.1.0"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",

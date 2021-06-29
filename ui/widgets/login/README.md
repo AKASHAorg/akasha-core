@@ -1,3 +1,7 @@
+# Login widget
+
+> Prompts user's connection to appropriate web3 services for authentication purposes
+
 ## Usage
 
 ```tsx

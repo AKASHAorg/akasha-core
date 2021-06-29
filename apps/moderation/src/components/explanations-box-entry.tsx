@@ -9,8 +9,6 @@ export interface IExplanationsBoxEntryProps {
   reportedByLabel: string;
   forLabel: string;
   logger: any;
-  sdkModules: any;
-  globalChannel: any;
 }
 
 const ExplanationsCardEntry: React.FC<IExplanationsBoxEntryProps> = props => {
@@ -20,9 +18,6 @@ const ExplanationsCardEntry: React.FC<IExplanationsBoxEntryProps> = props => {
     onError: error => {
       props.logger.error('[explanations-box-entry.tsx]: useProfile err %j', error.error || '');
     },
-    ipfsService: props.sdkModules.commons.ipfsService,
-    profileService: props.sdkModules.profiles.profileService,
-    globalChannel: props.globalChannel,
   });
 
   React.useEffect(() => {

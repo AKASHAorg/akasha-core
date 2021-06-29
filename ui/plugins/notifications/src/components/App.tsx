@@ -13,8 +13,6 @@ export interface IProps {
 
   mountParcel: (config: any, props: any) => void;
   rootNodeId: string;
-  sdkModules: any;
-  globalChannel: any;
   logger: any;
   i18n?: any;
 }
@@ -49,12 +47,7 @@ class App extends PureComponent<IProps> {
           <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
             <I18nextProvider i18n={i18n ? i18n : null}>
               <ViewportSizeProvider>
-                <NotificationsPage
-                  logger={this.props.logger}
-                  sdkModules={this.props.sdkModules}
-                  singleSpa={this.props.singleSpa}
-                  globalChannel={this.props.globalChannel}
-                />
+                <NotificationsPage logger={this.props.logger} singleSpa={this.props.singleSpa} />
               </ViewportSizeProvider>
             </I18nextProvider>
           </ThemeSelector>

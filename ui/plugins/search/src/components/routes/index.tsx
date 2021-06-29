@@ -14,17 +14,11 @@ const Routes: React.FC<RootComponentProps> = props => {
   const [errorState, errorActions] = useErrors({ logger: props.logger });
 
   const [loginState, loginActions] = useLoginState({
-    globalChannel: props.globalChannel,
-    authService: props.sdkModules.auth.authService,
-    profileService: props.sdkModules.profiles.profileService,
-    ipfsService: props.sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
 
   const [loginProfile] = useProfile({
-    profileService: props.sdkModules.profiles.profileService,
-    ipfsService: props.sdkModules.commons.ipfsService,
-    globalChannel: props.globalChannel,
+    onError: errorActions.createError,
   });
 
   const [modalState, modalStateActions] = useModalState({
@@ -78,7 +72,7 @@ const Routes: React.FC<RootComponentProps> = props => {
       </Box>
       <LoginModal
         showModal={modalState[MODAL_NAMES.LOGIN]}
-        slotId={props.layout.modalSlotId}
+        slotId={props.layoutConfig.modalSlotId}
         onLogin={loginActions.login}
         onModalClose={hideLoginModal}
         titleLabel={t('Connect a wallet')}

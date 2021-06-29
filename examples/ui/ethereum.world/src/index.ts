@@ -1,103 +1,41 @@
-import {
-  IAppEntry,
-  IWidgetEntry,
-  MenuItemAreaType,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ILoaderConfig, ISdkConfig, LogLevels } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 console.time('AppLoader:firstMount');
 
 (async function bootstrap(System) {
-  await System.import('@akashaproject/design-system');
-  // example for loading from import map
-  const sidebarWidget = await System.import('@widget/sidebar');
-  const { default: sdkInit } = await System.import('@akashaproject/sdk');
-  const layout = await System.import('@widget/layout');
-  const topbarWidget = await System.import('@widget/topbar');
-
-  const AKASHAApp = await System.import('@app/AKASHA');
-  const moderationApp = await System.import('@app/moderation');
-  const profilePlugin = await System.import('@plugins/profile');
-  const bookmarksPlugin = await System.import('@plugins/bookmarks');
-  const searchPlugin = await System.import('@plugins/search');
-
-  const appConfig = {
-    // where to mount the ui
-    rootNodeId: 'root',
-    // main layout (shell)
-    layout: layout.application,
-    // define an app that will load at root '/' path
-    rootLoadedApp: AKASHAApp.application,
-    System: System,
+  const { default: Loader } = await System.import('@akashaproject/app-loader');
+  const { default: getSDK } = await System.import('@akashaproject/awf-sdk');
+  const sdkConfig: ISdkConfig = {
+    logLevel: LogLevels.DEBUG,
   };
 
-  const registeredApps: IAppEntry[] = [
-    {
-      app: AKASHAApp.application,
-      config: {
-        area: MenuItemAreaType.AppArea,
-      },
-    },
-    {
-      app: moderationApp.application,
-      config: {
-        area: MenuItemAreaType.AppArea,
-      },
-    },
-  ];
+  const loaderConfig: ILoaderConfig = {
+    title: 'Ethereum World',
+    // main layout (shell)
+    layout: '@akashaproject/ui-widget-layout',
+    // define an app that will load at root '/' path
+    homepageApp: '@akashaproject/app-akasha-integration',
+    // define pre-installed apps,
+    // homepageApp is always loaded by default
+    defaultApps: [
+      '@akashaproject/app-moderation-ewa',
+      '@akashaproject/app-search',
+      '@akashaproject/ui-plugin-app-center',
+      '@akashaproject/ui-plugin-profile',
+    ],
+    // pre-installed widgets;
+    // layout widget is always loaded by default
+    defaultWidgets: [
+      { name: '@akashaproject/ui-widget-topbar', version: '0.0.1' },
+      '@akashaproject/ui-widget-trending',
+      '@akashaproject/ui-widget-sidebar',
+    ],
+  };
 
-  const registeredWidgets: IWidgetEntry[] = [
-    {
-      app: sidebarWidget.application,
-      config: { slot: layout.application.sidebarSlotId },
-    },
-    {
-      app: topbarWidget.application,
-      config: { slot: layout.application.topbarSlotId },
-    },
-  ];
-
-  const appCenterPlugin = await System.import('@plugins/app-center');
-  const notificationsPlugin = await System.import('@plugins/notifications');
-
-  const world = await sdkInit({
-    config: appConfig,
-    initialApps: { apps: registeredApps, widgets: registeredWidgets },
-  });
+  const sdk = getSDK();
+  const loader = new Loader({ ...loaderConfig, ...sdkConfig }, sdk);
+  await loader.start();
 
   // tslint:disable-next-line:no-console
-  console.log('initial sdk instance', world);
-
-  // example loading an extra plugin after start
-  world.appLoader.registerPlugin({
-    app: notificationsPlugin.application,
-    config: {
-      area: MenuItemAreaType.QuickAccessArea,
-    },
-  });
-  world.appLoader.registerPlugin({
-    app: profilePlugin.application,
-    config: {
-      area: MenuItemAreaType.QuickAccessArea,
-    },
-  });
-  world.appLoader.registerPlugin({
-    app: bookmarksPlugin.application,
-    config: {
-      area: MenuItemAreaType.QuickAccessArea,
-    },
-  });
-  world.appLoader.registerPlugin({
-    app: searchPlugin.application,
-    config: {
-      area: MenuItemAreaType.SearchArea,
-    },
-  });
-  world.appLoader.registerPlugin({
-    app: appCenterPlugin.application,
-    config: {
-      area: MenuItemAreaType.BottomArea,
-    },
-  });
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-})(window.System);
+  console.log('initial sdk instance', sdk);
+})(globalThis.System);

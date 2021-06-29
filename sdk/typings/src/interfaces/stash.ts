@@ -1,23 +1,11 @@
-import { ObservableCallResult } from './responses';
+import { ServiceCallResult } from './responses';
 
 export interface LRUOptions {
   maxSize: number;
   maxAge: number;
 }
 
-export interface IStash {
-  get(key: string): unknown;
-
-  set(key: string, value: unknown): IStash;
-
-  peek(key: string): unknown;
-
-  delete(key: string): boolean;
-  // reset the cache
-  clear(): void;
-}
-
-export default interface IStashService {
+export default interface IStashService<IStash> {
   // returns a new lru-cache instance
-  create(args: LRUOptions): ObservableCallResult<IStash>;
+  create(args: LRUOptions): ServiceCallResult<IStash>;
 }

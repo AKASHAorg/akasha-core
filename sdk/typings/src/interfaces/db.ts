@@ -1,7 +1,7 @@
-import { ObservableCallResult } from './responses';
+import { ServiceCallResult } from './responses';
 
 export default interface IDBService<DB, Collection> {
-  open(version: number): ObservableCallResult<DB>;
-  getDb(): ObservableCallResult<DB>;
-  getCollection(name: string): ObservableCallResult<Collection>;
+  open(version: number): ServiceCallResult<DB>;
+  getDb(): ServiceCallResult<DB>;
+  getCollection(name: string): ServiceCallResult<Collection>;
 }

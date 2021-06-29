@@ -1,6 +1,5 @@
 import * as React from 'react';
 import EntryCardRenderer from '../feed-page/entry-card-renderer';
-import { from } from 'rxjs';
 
 import {
   RenderResult,
@@ -14,26 +13,11 @@ describe('<EntryCardRenderer /> component', () => {
   let renderResult: RenderResult;
   const mockEth = genEthAddress();
   const itemData = genPostData();
-  const mockObs = from(['test']);
-  const globalChannel = {
-    pipe: () => ({
-      subscribe: () => {
-        return;
-      },
-      unsubscribe: () => {
-        return;
-      },
-    }),
-  };
 
   const Base = (
     <EntryCardRenderer
-      sdkModules={{
-        profiles: { profileService: { isFollowing: () => mockObs } },
-      }}
       itemData={itemData}
       logger={{ log: console.log }}
-      globalChannel={globalChannel}
       ethAddress={mockEth}
       onBookmark={jest.fn}
       onAvatarClick={jest.fn}

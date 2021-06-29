@@ -13,13 +13,16 @@ export const schema: any = {
       uniqueItems: true,
       items: {
         type: 'array',
-        items: {
-          type: 'string',
-        },
       },
     },
   },
 };
+
+export interface AppsSchema {
+  name: string;
+  source?: string;
+  info?: string[][];
+}
 
 export default {
   name: 'APPS',

@@ -1,4 +1,5 @@
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaproject/awf-sdk';
 import * as React from 'react';
 import { createErrorHandler } from './utils/error-handler';
 
@@ -12,7 +13,6 @@ const entriesBookmarks = 'entries-bookmarks';
 
 export interface UseEntryBookmarkProps {
   bmKey?: string;
-  dbService: { [key: string]: any };
   onError: (err: IAkashaError) => void;
 }
 
@@ -55,7 +55,7 @@ export type IBookmarkAction =
   | { type: 'GET_BOOKMARKS' }
   | {
       type: 'GET_BOOKMARKS_SUCCESS';
-      payload: { services: any };
+      payload: any;
     }
   | { type: 'BOOKMARK_POST'; payload: string | number }
   | {
@@ -122,16 +122,17 @@ const bookmarkStateReducer = (state: IBookmarkState, action: IBookmarkAction) =>
 };
 
 const useEntryBookmark = (props: UseEntryBookmarkProps): [IBookmarkState, IBookmarkActions] => {
-  const { dbService, bmKey = BOOKMARKED_ENTRIES_KEY, onError } = props;
+  const { bmKey = BOOKMARKED_ENTRIES_KEY, onError } = props;
+
+  const sdk = getSDK();
+
   const [bookmarkState, dispatch] = React.useReducer(bookmarkStateReducer, initialBookmarkState);
 
   React.useEffect(() => {
     if (bookmarkState.isFetching) {
-      const call = dbService.settingsAttachment.get({
-        moduleName: bmKey,
-      });
+      const call = sdk.services.settings.get(bmKey);
       const callSub = call.subscribe({
-        next: (resp: any) => {
+        next: resp => {
           const { data } = resp;
           dispatch({ type: 'GET_BOOKMARKS_SUCCESS', payload: data });
         },
@@ -147,10 +148,7 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [IBookmarkState, IBookm
       const newBmks = bookmarkState.bookmarks.slice();
       newBmks.unshift({ entryId: bookmarkState.bookmarkPostQuery, type: BookmarkTypes.POST });
 
-      const call = dbService.settingsAttachment.put({
-        moduleName: bmKey,
-        services: [[entriesBookmarks, JSON.stringify(newBmks)]],
-      });
+      const call = sdk.services.settings.set(bmKey, [[entriesBookmarks, JSON.stringify(newBmks)]]);
       const callSub = call.subscribe({
         next: () => {
           dispatch({ type: 'BOOKMARK_POST_SUCCESS', payload: newBmks });
@@ -167,10 +165,7 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [IBookmarkState, IBookm
       const newBmks = bookmarkState.bookmarks.slice();
       newBmks.unshift({ entryId: bookmarkState.bookmarkCommentQuery, type: BookmarkTypes.COMMENT });
 
-      const call = dbService.settingsAttachment.put({
-        moduleName: bmKey,
-        services: [[entriesBookmarks, JSON.stringify(newBmks)]],
-      });
+      const call = sdk.services.settings.set(bmKey, [[entriesBookmarks, JSON.stringify(newBmks)]]);
       const callSub = call.subscribe({
         next: () => {
           dispatch({ type: 'BOOKMARK_COMMENT_SUCCESS', payload: newBmks });
@@ -192,10 +187,9 @@ const useEntryBookmark = (props: UseEntryBookmarkProps): [IBookmarkState, IBookm
       if (bmIndex >= 0) {
         bookmarks.splice(bmIndex, 1);
       }
-      const call = dbService.settingsAttachment.put({
-        moduleName: bmKey,
-        services: [['entries-bookmarks', JSON.stringify(bookmarks)]],
-      });
+      const call = sdk.services.settings.set(bmKey, [
+        ['entries-bookmarks', JSON.stringify(bookmarks)],
+      ]);
       const callSub = call.subscribe({
         next: () => {
           dispatch({ type: 'REMOVE_BOOKMARK_SUCCESS', payload: bookmarks });

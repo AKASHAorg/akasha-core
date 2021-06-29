@@ -1,4 +1,5 @@
-import { forkJoin } from 'rxjs';
+import { forkJoin, lastValueFrom } from 'rxjs';
+import getSDK from '@akashaproject/awf-sdk';
 
 export interface IConfig {
   quality?: number;
@@ -31,11 +32,9 @@ export const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {
   return ipfsUrl;
 };
 
-export const uploadMediaToTextile = (profileStore: any, ipfsSettings: any) => async (
-  data: any,
-  isUrl = false,
-) => {
-  const gatewayCall = ipfsSettings.getSettings({});
+export const uploadMediaToTextile = async (data: any, isUrl = false) => {
+  const sdk = getSDK();
+  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
   const uploadData: {
     isUrl: boolean;
     content: any;
@@ -59,11 +58,11 @@ export const uploadMediaToTextile = (profileStore: any, ipfsSettings: any) => as
   if (data.name) {
     uploadData.name = data.name;
   }
-  const uploadCall = profileStore.saveMediaFile(uploadData);
+
   try {
-    const res: any = await forkJoin([gatewayCall, uploadCall]).toPromise();
+    const res = await sdk.api.profile.saveMediaFile(uploadData);
     return {
-      data: { src: `${res[0].data}/${res[1].data?.CID}`, size: res[1].data?.size },
+      data: { src: `${ipfsGateway}/${res[1].data?.CID}`, size: res[1].data?.size },
     };
   } catch (error) {
     return {

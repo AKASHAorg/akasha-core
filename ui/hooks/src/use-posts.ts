@@ -1,9 +1,8 @@
 import { IEntryData } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import getSDK from '@akashaproject/awf-sdk';
 import * as React from 'react';
-import { combineLatest } from 'rxjs';
-
 import moderationRequest from './moderation-request';
 import {
   buildPublishObject,
@@ -15,8 +14,12 @@ import { createErrorHandler } from './utils/error-handler';
 
 export interface GetItemsPayload {
   start?: string;
-  offset?: string | number;
-  limit?: number;
+  offset?: string;
+  limit: number;
+}
+
+export interface GetCommentsPayload extends GetItemsPayload {
+  postID: string;
 }
 
 export interface Status {
@@ -64,7 +67,7 @@ export interface PostsActions {
    * request multiple comments
    * @param payload - can have start, limit and offset
    */
-  getComments: (payload: GetItemsPayload) => void;
+  getComments: (payload: GetCommentsPayload) => void;
   /**
    * request multiple posts from a user
    * @param payload - must have pubKey of the user ,optional limit and offset
@@ -99,8 +102,6 @@ export interface PostsActions {
 
 export interface UsePostsProps {
   user: string | null;
-  postsService: any;
-  ipfsService: any;
   onError: (error: IAkashaError) => void;
   logger?: unknown;
 }
@@ -113,9 +114,9 @@ export interface PostsState {
   /* posts/comments data */
   postsData: { [key: string]: any };
   /* next index of posts */
-  nextPostIndex: string | number | null;
+  nextPostIndex: string | null;
   /* next index of comments */
-  nextCommentIndex: string | number | null;
+  nextCommentIndex: string | null;
   isFetchingPosts: boolean;
   fetchingPosts: string[];
   isFetchingComments: boolean;
@@ -129,7 +130,7 @@ export interface PostsState {
   reportedItems: string[];
   // reducer related
   getCommentQuery: string | null;
-  getCommentsQuery: GetItemsPayload | null;
+  getCommentsQuery: GetCommentsPayload | null;
   getPostDataQuery: { status: Status; postId: string } | null;
   getPostsQuery: GetItemsPayload | null;
   optimisticPublishCommentQuery: { pendingId: string; pending: any; publishObj: any } | null;
@@ -172,15 +173,15 @@ export type IPostsAction =
   | { type: 'GET_POSTS'; payload: GetItemsPayload }
   | {
       type: 'GET_POSTS_SUCCESS';
-      payload: { nextIndex: string | number; posts: any; newIds: string[]; total: number };
+      payload: { nextIndex: string; posts: any; newIds: string[]; total: number };
     }
   | { type: 'RESET_POST_IDS' }
   | { type: 'GET_COMMENT'; payload: string }
   | { type: 'GET_COMMENT_SUCCESS'; payload: { comment: any; commentId: string } }
-  | { type: 'GET_COMMENTS'; payload: GetItemsPayload }
+  | { type: 'GET_COMMENTS'; payload: GetCommentsPayload }
   | {
       type: 'GET_COMMENTS_SUCCESS';
-      payload: { nextIndex: string | number; comments: any; newIds: string[]; total: number };
+      payload: { nextIndex: string; comments: any; newIds: string[]; total: number };
     }
   | {
       type: 'OPTIMISTIC_PUBLISH_COMMENT';
@@ -207,7 +208,7 @@ export type IPostsAction =
     }
   | {
       type: 'GET_USER_POSTS_SUCCESS';
-      payload: { nextIndex: string | number; posts: any; newIds: string[]; total: number };
+      payload: { nextIndex: string; posts: any; newIds: string[]; total: number };
     }
   | {
       type: 'GET_TAG_POSTS';
@@ -219,7 +220,7 @@ export type IPostsAction =
     }
   | {
       type: 'GET_TAG_POSTS_SUCCESS';
-      payload: { nextIndex: string | number; posts: any; newIds: string[]; total: number };
+      payload: { nextIndex: string; posts: any; newIds: string[]; total: number };
     }
   | { type: 'UPDATE_POSTS_STATE'; payload: any };
 
@@ -457,37 +458,28 @@ const postsStateReducer = (state: PostsState, action: IPostsAction) => {
   }
 };
 
-export interface GetEntriesResponse {
-  channelInfo: any;
-  data: { posts: { nextIndex: number; results: any[]; total: number } };
-}
-
 // tslint:disable:cyclomatic-complexity
 /* eslint-disable complexity */
 const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
-  const { user, postsService, ipfsService, logger, onError } = props;
+  const { user, logger, onError } = props;
+  const sdk = getSDK();
   const [postsState, dispatch] = React.useReducer(postsStateReducer, initialPostsState);
 
   React.useEffect(() => {
     if (postsState.isFetchingComments && postsState.getCommentsQuery) {
-      const commentsCall = postsService.comments.getComments(postsState.getCommentsQuery);
-      const ipfsSettingsCall = ipfsService.getSettings(null);
-      const calls = combineLatest([ipfsSettingsCall, commentsCall]);
-      const sub = calls.subscribe({
-        next: (responses: any[]) => {
-          const [ipfsResp, commentsResp] = responses;
+      const commentsCall = sdk.api.comments.getComments(postsState.getCommentsQuery);
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+
+      const sub = commentsCall.subscribe({
+        next: commentsResp => {
           const { data } = commentsResp;
-          const {
-            nextIndex,
-            results,
-            total,
-          }: GetEntriesResponse['data']['posts'] = data.getComments;
+          const { nextIndex, results, total } = data.getComments;
           const newIds: string[] = [];
           const comments = results
             .filter(excludeNonSlateContent)
             .map(entry => {
               newIds.push(entry._id);
-              return mapEntry(entry, ipfsResp.data);
+              return mapEntry(entry, ipfsGateway);
             })
             .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
 
@@ -507,16 +499,11 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     if (postsState.getPostDataQuery) {
       const status = postsState.getPostDataQuery.status;
       const postId = postsState.getPostDataQuery.postId;
-      const entryCall = postsService.entries.getEntry({
-        entryId: postId,
-      });
-      const ipfsGatewayCall = ipfsService.getSettings(null);
-      const getEntryCall = combineLatest([ipfsGatewayCall, entryCall]);
+      const entryCall = sdk.api.entries.getEntry(postId);
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
-      const sub = getEntryCall.subscribe({
-        next: async (responses: any[]) => {
-          const [ipfsResp, entryResp] = responses;
-          const ipfsGateway = ipfsResp.data;
+      const sub = entryCall.subscribe({
+        next: async entryResp => {
           const entry = entryResp.data?.getPost;
           if (entry) {
             const mappedEntry = mapEntry(
@@ -569,16 +556,14 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
   React.useEffect(() => {
     if (postsState.getCommentQuery) {
       const commentId = postsState.getCommentQuery;
-      const commentCall = postsService.comments.getComment({ commentID: commentId });
-      const ipfsGatewayCall = ipfsService.getSettings(null);
-      const calls = combineLatest([ipfsGatewayCall, commentCall]);
+      const commentCall = sdk.api.comments.getComment(commentId);
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
-      calls.subscribe({
-        next: (responses: any[]) => {
-          const [ipfsResp, commentResp] = responses;
+      const sub = commentCall.subscribe({
+        next: commentResp => {
           const comment = commentResp.data?.getComment;
           if (comment) {
-            const mappedComment = mapEntry(comment, ipfsResp.data, logger);
+            const mappedComment = mapEntry(comment, ipfsGateway, logger);
             dispatch({
               type: 'GET_COMMENT_SUCCESS',
               payload: { comment: mappedComment, commentId },
@@ -587,6 +572,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         },
         error: createErrorHandler('usePosts.getComment', false, onError),
       });
+      return () => sub.unsubscribe();
     }
     return;
   }, [postsState.getCommentQuery]);
@@ -594,18 +580,18 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
   React.useEffect(() => {
     if (postsState.getPostsQuery) {
       const payload = postsState.getPostsQuery;
-      const entriesCall = postsService.entries.getEntries({
+      // typecast from null to undefined
+      const nextIndex = postsState.nextPostIndex || undefined;
+      const entriesCall = sdk.api.entries.getEntries({
         ...payload,
-        offset: payload.offset || postsState.nextPostIndex,
+        offset: payload.offset || nextIndex,
       });
 
-      const ipfsSettingsCall = ipfsService.getSettings({});
-      const calls = combineLatest([ipfsSettingsCall, entriesCall]);
-      const sub = calls.subscribe({
-        next: async (responses: any[]) => {
-          const [ipfsResp, entriesResp] = responses;
-          const ipfsGateway = ipfsResp.data;
-          const { data }: GetEntriesResponse = entriesResp;
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+
+      const sub = entriesCall.subscribe({
+        next: async entriesResp => {
+          const { data } = entriesResp;
 
           const { nextIndex, results, total } = data.posts;
           const newIds: string[] = [];
@@ -684,9 +670,9 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
   React.useEffect(() => {
     if (postsState.optimisticPublishCommentQuery) {
       const { pendingId, pending, publishObj } = postsState.optimisticPublishCommentQuery;
-      const publishCall = postsService.comments.addComment(publishObj);
+      const publishCall = sdk.api.comments.addComment(publishObj);
       const sub = publishCall.subscribe({
-        next: (resp: any) => {
+        next: resp => {
           const commentId = resp.data?.addComment;
           if (!commentId) {
             return dispatch({ type: 'OPTIMISTIC_PUBLISH_COMMENT_ERROR', payload: pendingId });
@@ -704,9 +690,9 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     if (postsState.optimisticPublishPostQuery) {
       const { pendingId, pending, publishObj } = postsState.optimisticPublishPostQuery;
 
-      const postEntryCall = postsService.entries.postEntry(publishObj);
+      const postEntryCall = sdk.api.entries.postEntry(publishObj);
       const sub = postEntryCall.subscribe({
-        next: (postingResp: any) => {
+        next: postingResp => {
           if (!postingResp.data?.createPost) {
             return dispatch({ type: 'OPTIMISTIC_PUBLISH_POST_ERROR', payload: pendingId });
           }
@@ -728,29 +714,22 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
   React.useEffect(() => {
     if (postsState.getUserPostsQuery) {
       const payload = postsState.getUserPostsQuery;
-      const req: any = {
+      const req = {
         ...payload,
       };
       if (typeof postsState.nextPostIndex === 'number') {
         req.offset = postsState.nextPostIndex;
       }
-      const userPostsCall = postsService.entries.entriesByAuthor(req);
-      const ipfsGatewayCall = ipfsService.getSettings({});
+      const userPostsCall = sdk.api.entries.entriesByAuthor(req);
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
-      const sub = combineLatest([ipfsGatewayCall, userPostsCall]).subscribe({
-        next: async (responses: any[]) => {
-          const [ipfsGatewayResp, userPostsResp] = responses;
-          const {
-            results,
-            nextIndex,
-            total,
-          }: {
-            results: any[];
-            nextIndex: number;
-            total: number;
-          } = userPostsResp.data.getPostsByAuthor;
+      const sub = userPostsCall.subscribe({
+        next: async userPostsResp => {
+          const { results, nextIndex, total } = userPostsResp.data.getPostsByAuthor;
+
           const newIds: string[] = [];
           const newQuoteIds: string[] = [];
+
           const posts = results
             .filter(excludeNonSlateContent)
             .map(entry => {
@@ -759,7 +738,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
               if (entry.quotes?.length > 0 && newQuoteIds.indexOf(entry.quotes[0]._id) === -1) {
                 newQuoteIds.push(entry.quotes[0]._id);
               }
-              return mapEntry(entry, ipfsGatewayResp.data, logger);
+              return mapEntry(entry, ipfsGateway, logger);
             })
             .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
 
@@ -829,29 +808,22 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
   React.useEffect(() => {
     if (postsState.getTagPostsQuery) {
       const payload = postsState.getTagPostsQuery;
-      const req: any = {
+      const req = {
         ...payload,
       };
       if (typeof postsState.nextPostIndex === 'number') {
         req.offset = postsState.nextPostIndex;
       }
-      const tagPostsCall = postsService.entries.entriesByTag(req);
-      const ipfsGatewayCall = ipfsService.getSettings(null);
+      const tagPostsCall = sdk.api.entries.entriesByTag(req);
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
-      const sub = combineLatest([ipfsGatewayCall, tagPostsCall]).subscribe({
-        next: async (responses: any[]) => {
-          const [ipfsGatewayResp, tagPostsResp] = responses;
-          const {
-            results,
-            nextIndex,
-            total,
-          }: {
-            results: any[];
-            nextIndex: number;
-            total: number;
-          } = tagPostsResp.data.getPostsByTag;
+      const sub = tagPostsCall.subscribe({
+        next: async tagPostsResp => {
+          const { results, nextIndex, total } = tagPostsResp.data.getPostsByTag;
+
           const newIds: string[] = [];
           const newQuoteIds: string[] = [];
+
           const posts = results
             .filter(excludeNonSlateContent)
             .map(entry => {
@@ -860,7 +832,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
               if (entry.quotes?.length > 0 && newQuoteIds.indexOf(entry.quotes[0]._id) === -1) {
                 newQuoteIds.push(entry.quotes[0]._id);
               }
-              return mapEntry(entry, ipfsGatewayResp.data, logger);
+              return mapEntry(entry, ipfsGateway, logger);
             })
             .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
 
@@ -963,7 +935,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       }
       const { offset = postsState.nextCommentIndex, ...other } = payload;
 
-      const params: GetItemsPayload = { ...other };
+      const params: GetCommentsPayload = { ...other };
       if (offset) {
         params.offset = offset;
       }

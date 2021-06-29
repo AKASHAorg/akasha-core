@@ -4,16 +4,5 @@
     "outDir": "./lib",
     "rootDir": "./src"
   },
-  "references": [
-    {
-      "path": "../../sdk-packages/core"
-    },
-    {
-      "path": "../../sdk-packages/common"
-    },
-    {
-      "path": "../../sdk-packages/runtime"
-    }
-  ],
   "include": ["./src"]
 }

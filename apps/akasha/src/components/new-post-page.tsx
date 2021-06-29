@@ -8,8 +8,6 @@ import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
 const { Helmet, EditorCard, ErrorLoader, Box, Button, editorDefaultValue } = DS;
 
 interface NewPostPageProps {
-  globalChannel: any;
-  sdkModules: any;
   ethAddress: string | null;
   pubKey: string | null;
   logger: any;
@@ -18,14 +16,11 @@ interface NewPostPageProps {
 }
 
 const NewPostPage: React.FC<NewPostPageProps> = props => {
-  const { showLoginModal, sdkModules, ethAddress } = props;
+  const { showLoginModal, ethAddress } = props;
 
   const [editorState, setEditorState] = React.useState(editorDefaultValue);
 
-  const onUploadRequest = uploadMediaToTextile(
-    sdkModules.profiles.profileService,
-    sdkModules.commons.ipfsService,
-  );
+  const onUploadRequest = uploadMediaToTextile;
 
   const { t } = useTranslation();
 

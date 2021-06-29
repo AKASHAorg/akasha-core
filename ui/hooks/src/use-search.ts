@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { forkJoin, lastValueFrom } from 'rxjs';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
-
+import getSDK from '@akashaproject/awf-sdk';
 import { mapEntry } from './utils/entry-utils';
 import { getMediaUrl } from './utils/media-utils';
 import { createErrorHandler } from './utils/error-handler';
@@ -39,9 +39,6 @@ export interface UseSearchProps {
   user: string | null;
   onError: (error: IAkashaError) => void;
   logger: any;
-  ipfsService: any;
-  profileService: any;
-  postsService: any;
 }
 
 export type ISearchAction =
@@ -87,31 +84,34 @@ const SearchStateReducer = (state: ISearchState, action: ISearchAction) => {
 
 /* A hook to get search results and resolve the data within */
 export const useSearch = (props: UseSearchProps): [ISearchState, UseSearchActions] => {
-  const { user, onError, logger, ipfsService, profileService, postsService } = props;
+  const { user, onError, logger } = props;
+
+  const sdk = getSDK();
+
   const [searchResultsState, dispatch] = React.useReducer(SearchStateReducer, initialSearchState);
 
   async function fetchSearchResults(searchQuery: string) {
-    const searchResp: any = await lastValueFrom(profileService.globalSearch(searchQuery));
-    const ipfsGatewayResp: any = await lastValueFrom(ipfsService.getSettings(null));
+    const searchResp = await lastValueFrom(sdk.api.profile.globalSearch(searchQuery));
+    const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
     // get profiles data
     const getProfilesCalls = searchResp.data?.globalSearch?.profiles?.map(
       (profile: { id: string }) => {
-        return profileService.getProfile({ pubKey: profile.id });
+        return sdk.api.profile.getProfile({ pubKey: profile.id });
       },
     );
-    const profilesResp: any = await lastValueFrom(forkJoin(getProfilesCalls));
-    const completeProfiles = profilesResp?.map((profileResp: any) => {
-      const { avatar, coverImage, ...other } = profileResp.data?.resolveProfile;
+    const profilesResp = await lastValueFrom(forkJoin(getProfilesCalls));
+    const completeProfiles = profilesResp?.map(profileResp => {
+      const { avatar, coverImage, ...other } = profileResp.data.resolveProfile;
       const images: { avatar: string | null; coverImage: string | null } = {
         avatar: null,
         coverImage: null,
       };
       if (avatar) {
-        images.avatar = getMediaUrl(ipfsGatewayResp.data, avatar);
+        images.avatar = getMediaUrl(ipfsGateway, avatar);
       }
       if (coverImage) {
-        images.coverImage = getMediaUrl(ipfsGatewayResp.data, coverImage);
+        images.coverImage = getMediaUrl(ipfsGateway, coverImage);
       }
       const profileData = { ...images, ...other };
       return profileData;
@@ -119,15 +119,15 @@ export const useSearch = (props: UseSearchProps): [ISearchState, UseSearchAction
 
     // get posts data
     const getEntriesCalls = searchResp.data?.globalSearch?.posts?.map((entry: { id: string }) =>
-      postsService.entries.getEntry({ entryId: entry.id }),
+      sdk.api.entries.getEntry(entry.id),
     );
-    const entriesResp: any = await lastValueFrom(forkJoin(getEntriesCalls));
+    const entriesResp = await lastValueFrom(forkJoin(getEntriesCalls));
 
     const entryIds: string[] = [];
 
-    let completeEntries = entriesResp?.map((entryResp: any) => {
+    let completeEntries = entriesResp?.map(entryResp => {
       entryIds.push(entryResp.data?.getPost._id);
-      return mapEntry(entryResp.data?.getPost, ipfsGatewayResp.data, logger);
+      return mapEntry(entryResp.data?.getPost, ipfsGateway, logger);
     });
 
     try {
@@ -142,7 +142,7 @@ export const useSearch = (props: UseSearchProps): [ISearchState, UseSearchAction
         );
 
         // map through the completeEntries and update moderation props for each entry
-        completeEntries = completeEntries.map((entry: any) => ({
+        completeEntries = completeEntries.map(entry => ({
           ...entry,
           reported: statusObject[entry.entryId].moderated
             ? false
@@ -162,12 +162,12 @@ export const useSearch = (props: UseSearchProps): [ISearchState, UseSearchAction
 
     // get comments data
     const getCommentsCalls = searchResp.data?.globalSearch?.comments?.map(
-      (comment: { id: string }) => postsService.comments.getComment({ commentID: comment.id }),
+      (comment: { id: string }) => sdk.api.comments.getComment(comment.id),
     );
-    const commentsResp: any = await lastValueFrom(forkJoin(getCommentsCalls));
+    const commentsResp = await lastValueFrom(forkJoin(getCommentsCalls));
 
-    const completeComments = commentsResp?.map((commentResp: any) => {
-      return mapEntry(commentResp.data?.getComment, ipfsGatewayResp.data, logger);
+    const completeComments = commentsResp?.map(commentResp => {
+      return mapEntry(commentResp.data?.getComment, ipfsGateway, logger);
     });
 
     // get tags data
