@@ -11,41 +11,32 @@ import {
 import EntryRenderer from './entry-renderer';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/src/utils/time';
-import { uploadMediaToTextile } from '../utils/media-utils';
+import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 
 const { VirtualList, ErrorInfoCard, ErrorLoader, EditorModal } = DS;
 
 const EntryFeed = (props: IFeedWidgetProps) => {
-  const { errors, sdkModules, globalChannel } = props;
+  const { errors } = props;
   const [errorState, errorActions] = useErrors({ logger: props.logger });
   const { t, i18n } = useTranslation('ui-widget-feed');
 
   const [loginState] = useLoginState({
-    profileService: sdkModules.profiles.profileService,
-    ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
-    authService: sdkModules.auth.authService,
-    globalChannel: globalChannel,
   });
 
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
   const [showEditor, setShowEditor] = React.useState<boolean>(false);
 
   const [followedProfiles, followActions] = useFollow({
-    globalChannel: globalChannel,
-    profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
   });
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    dbService: sdkModules.db,
     onError: errorActions.createError,
   });
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
-    profileService: sdkModules.profiles.profileService,
-    postsService: sdkModules.posts.tags,
   });
 
   React.useEffect(() => {
@@ -88,10 +79,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
   };
   const locale: any = i18n.languages[0];
 
-  const onUploadRequest = uploadMediaToTextile(
-    sdkModules.profiles.profileService,
-    sdkModules.commons.ipfsService,
-  );
+  const onUploadRequest = uploadMediaToTextile;
 
   const handleToggleEditor = () => {
     setShowEditor(prev => !prev);

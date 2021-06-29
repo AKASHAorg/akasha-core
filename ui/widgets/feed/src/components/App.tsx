@@ -4,8 +4,13 @@ import { I18nextProvider } from 'react-i18next';
 import EntryFeed from './entry-feed';
 import ProfileFeed from './profile-feed';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
-import { i18n } from 'i18next';
+import i18next from 'i18next';
 import { IContentClickDetails } from '@akashaproject/design-system/src/components/EntryCard/entry-box';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import Backend from 'i18next-chained-backend';
+import Fetch from 'i18next-fetch-backend';
+import LocalStorageBackend from 'i18next-localstorage-backend';
+import { initReactI18next } from 'react-i18next';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
@@ -18,10 +23,7 @@ export const enum ItemTypes {
 
 export interface IFeedWidgetProps {
   logger: any;
-  i18n: i18n;
   virtualListRef?: any;
-  globalChannel?: any;
-  sdkModules: any;
   layout: any;
   listHeader?: React.ReactElement;
   itemType: ItemTypes;
@@ -64,15 +66,53 @@ export default class FeedWidgetRoot extends PureComponent<IFeedWidgetProps> {
       },
     });
   }
-  componentDidMount() {
-    if (this.props.i18n) {
-      this.props.i18n.loadNamespaces('ui-widget-feed');
-    }
-  }
+
+  // componentDidMount() {
+  // if (this.props.i18n) {
+  //   this.props.i18n.loadNamespaces('ui-widget-feed');
+  // }
+  // }
+
   public render() {
+    const { logger } = this.props;
+
+    i18next
+      .use(initReactI18next)
+      .use(Backend)
+      .use(LanguageDetector)
+      .use({
+        type: 'logger',
+        log: logger.info,
+        warn: logger.warn,
+        error: logger.error,
+      })
+      .init({
+        fallbackLng: 'en',
+        ns: ['feed-widget'],
+        saveMissing: false,
+        saveMissingTo: 'all',
+        load: 'languageOnly',
+        debug: true,
+        cleanCode: true,
+        keySeparator: false,
+        defaultNS: 'feed-widget',
+        backend: {
+          backends: [LocalStorageBackend, Fetch],
+          backendOptions: [
+            {
+              prefix: 'i18next_res_v0',
+              expirationTime: 24 * 60 * 60 * 1000,
+            },
+            {
+              loadPath: '/locales/{{lng}}/{{ns}}.json',
+            },
+          ],
+        },
+      });
+
     return (
       <React.Suspense fallback={<></>}>
-        <I18nextProvider i18n={this.props.i18n} defaultNS="ui-widget-feed">
+        <I18nextProvider i18n={i18next} defaultNS="ui-widget-feed">
           <ThemeSelector
             settings={{ activeTheme: 'Light-Theme' }}
             availableThemes={[lightTheme, darkTheme]}

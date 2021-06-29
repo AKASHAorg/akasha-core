@@ -9,9 +9,7 @@ import routes, { POST } from '../../routes';
 const { ErrorInfoCard, ErrorLoader, EntryCardHidden, EntryBox, Box, EntryCardLoading } = DS;
 
 export interface PostRendererProps {
-  sdkModules: any;
   logger: any;
-  globalChannel: any;
   itemId?: string;
   itemData?: any;
   locale: any;
@@ -39,9 +37,7 @@ const PostRenderer = (props: PostRendererProps) => {
     itemData,
     style,
     ethAddress,
-    sdkModules,
     logger,
-    globalChannel,
     contentClickable,
     bookmarkState,
     hidePublishTime,
@@ -53,8 +49,6 @@ const PostRenderer = (props: PostRendererProps) => {
   const { t } = useTranslation();
 
   const [followedProfiles, followActions] = useFollow({
-    globalChannel,
-    profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);
     },

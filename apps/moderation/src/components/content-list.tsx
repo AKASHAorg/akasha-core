@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { moderationRequest } from '@akashaproject/ui-awf-hooks';
-
+import getSDK from '@akashaproject/awf-sdk';
 import ContentTab from './content-tab';
 import ContentCard from './content-card/content-card';
 import PromptAuthorization from './prompt-authorization';
@@ -17,8 +17,6 @@ interface IContentListProps {
   ethAddress: string | null;
   logger: any;
   singleSpa: any;
-  sdkModules: any;
-  globalChannel: any;
 }
 
 interface IBaseItem {
@@ -48,7 +46,9 @@ interface ICount {
 }
 
 const ContentList: React.FC<IContentListProps> = props => {
-  const { slotId, ethAddress, logger, sdkModules } = props;
+  const { slotId, ethAddress, logger } = props;
+
+  const sdk = getSDK();
 
   const [pendingItems, setPendingItems] = React.useState<IPendingItem[]>([]);
   const [moderatedItems, setModeratedItems] = React.useState<IModeratedItem[]>([]);
@@ -209,7 +209,7 @@ const ContentList: React.FC<IContentListProps> = props => {
               closeModal={() => {
                 setModalOpen(false);
               }}
-              signData={sdkModules.auth.authService.signData}
+              signData={sdk.api.auth.signData}
             />
           </ToastProvider>
         )}
@@ -267,7 +267,6 @@ const ContentList: React.FC<IContentListProps> = props => {
                 reportedDateTime={pendingItem.entryDate}
                 makeADecisionLabel={t('Make a Decision')}
                 handleButtonClick={handleButtonClick}
-                globalChannel={props.globalChannel}
               />
             ))
           : renderNotFound('pending'))}
@@ -311,7 +310,6 @@ const ContentList: React.FC<IContentListProps> = props => {
                   evaluationDateTime={moderatedItem.evaluationDate}
                   reviewDecisionLabel={t('Review decision')}
                   handleButtonClick={handleButtonClick}
-                  globalChannel={props.globalChannel}
                 />
               ))
           : renderNotFound('moderated'))}

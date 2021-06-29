@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { ILoadItemsPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { constants, usePosts, useTagSubscribe, useErrors } from '@akashaproject/ui-awf-hooks';
+import getSDK from '@akashaproject/awf-sdk';
 import { useTranslation } from 'react-i18next';
 import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
@@ -27,8 +28,6 @@ interface ITagFeedPage {
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const {
-    sdkModules,
-    globalChannel,
     flagged,
     flaggedContentType,
     reportModalOpen,
@@ -42,17 +41,16 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     loginState,
   } = props;
 
+  const sdk = getSDK();
+
   const { tagName } = useParams<{ tagName: string }>();
 
   const [tagData, setTagData] = React.useState<ITag | null>(null);
 
   React.useEffect(() => {
     if (tagName) {
-      const tagsService = sdkModules.posts.tags.getTag({
-        tagName,
-        fields: ['name', 'posts', 'comments'],
-      });
-      tagsService.subscribe((resp: any) => {
+      const tagsService = sdk.api.tags.getTag(tagName);
+      const sub = tagsService.subscribe(resp => {
         if (resp.data?.getTag) {
           const tag = {
             name: resp.data.getTag.name,
@@ -61,6 +59,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
           setTagData(tag);
         }
       });
+      return () => sub.unsubscribe();
     }
   }, [tagName]);
 
@@ -68,14 +67,10 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
 
   const [postsState, postsActions] = usePosts({
     user: loginState.ethAddress,
-    postsService: sdkModules.posts,
-    ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
 
   const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
-    globalChannel,
-    profileService: sdkModules.profiles.profileService,
     onError: errorActions.createError,
   });
 
@@ -187,7 +182,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.modalSlotId}>
+      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -226,7 +221,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
               baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
-              signData={sdkModules.auth.authService.signData}
+              signData={sdk.api.auth.signData}
             />
           </ToastProvider>
         )}
@@ -238,8 +233,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         handleUnsubscribeTag={handleTagUnsubscribe}
       />
       <FeedWidget
-        // pass i18n from props (the i18next instance, not the react one!)
-        i18n={props.i18n}
         itemType={ItemTypes.ENTRY}
         logger={props.logger}
         loadMore={handleLoadMore}
@@ -248,16 +241,14 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         itemIds={postsState.postIds}
         itemsData={postsState.postsData}
         errors={errorState}
-        sdkModules={props.sdkModules}
-        layout={props.layout}
-        globalChannel={props.globalChannel}
+        layout={props.layoutConfig}
         ethAddress={loginState.ethAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
         onLoginModalOpen={showLoginModal}
         totalItems={postsState.totalItems}
         profilePubKey={loginState.pubKey}
-        modalSlotId={props.layout.modalSlotId}
+        modalSlotId={props.layoutConfig.modalSlotId}
         loggedProfile={loggedProfileData}
         onRepostPublish={handleRepostPublish}
         contentClickable={true}

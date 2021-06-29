@@ -31,15 +31,16 @@
   },
   "dependencies": {
     "@akashaproject/design-system": "*",
-    "@akashaproject/sdk-auth": "*",
-    "@akashaproject/sdk-profiles": "*",
-    "@akashaproject/sdk-common": "*",
     "@akashaproject/ui-awf-hooks": "*",
-    "@types/i18next": "13.0.0",
-    "@types/react-i18next": "8.1.0",
+    "@akashaproject/awf-sdk": "*",
     "single-spa-react": "4.1.1",
     "react-i18next": "11.7.3",
-    "react-router-dom": "5.2.0"
+    "react-router-dom": "5.2.0",
+    "i18next": "20.3.1",
+    "i18next-browser-languagedetector": "6.1.1",
+    "i18next-fetch-backend": "3.0.0",
+    "i18next-chained-backend": "3.0.2",
+    "i18next-localstorage-backend": "3.1.2"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
@@ -52,7 +53,7 @@
   "peerDependencies": {
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "rxjs": "7.0.0"
+    "rxjs": "7.1.0"
   },
   "files": [
     "lib"

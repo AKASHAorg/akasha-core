@@ -10,14 +10,15 @@ export const schema: any = {
       uniqueItems: true,
       items: {
         type: 'array',
-        items: {
-          type: 'string',
-        },
       },
     },
   },
 };
 
+export interface SettingsSchema {
+  serviceName: string;
+  options: string[][];
+}
 export default {
   name: 'SETTINGS',
   schema: schema,

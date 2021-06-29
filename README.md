@@ -89,18 +89,21 @@ where `<package-group>` can be one of `apps`, `widgets`, `plugins`, `design-syst
 ### UI workspace
 
 - [Design system](./ui/design/README.md)
-- [Plugins](./ui/plugins/Readme.md)
-- [Widgets](./ui/widgets/Readme.md)
+- [React hooks](./ui/hooks/README.md)
+- [Plugins](./ui/plugins/README.md)
+- [Widgets](./ui/widgets/README.md)
+- [Apps](./apps/README.md)
 
 ### Playground test-app
 
 This [workspace](./examples) contains examples of applications that showcase the usage of AWF.
 
 ### Scripts workspace
-
-- [Translations server](./scripts/translations-server)
 - [Development database server](./scripts/server-db)
 
+### Translations
+TODO: expand documentation
+- [Translations server](./scripts/translations-server)
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):

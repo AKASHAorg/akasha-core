@@ -12,22 +12,22 @@ const service: AkashaService = (invoke, log) => {
       pubKey: { $eq: identity.public.toString() },
     });
   };
-  const saveApp = async (args: { app: any; config?: any }) => {
+  const saveApp = async (args: { name: any; version: any }) => {
     const { db, identity } = await invoke(authServices[AUTH_SERVICE]).getSession();
     const Collection = db.collection(APPS_COLLECTION);
     const doc = await getInstalledApps();
     if (!doc) {
       return Collection.save({
         pubKey: identity.public.toString(),
-        apps: [{ name: args.app.name, source: args }],
+        apps: [{ name: args.name, version: args.version }],
       });
     }
     if (doc?.apps) {
-      const index = doc.apps.findIndex(e => e.name === args.app.name);
+      const index = doc.apps.findIndex(e => e.name === args.name);
       if (index === -1) {
         doc.apps.push(args);
       } else {
-        log.info(`${args.app.name} is already installed`);
+        log.info(`${args.name} is already installed`);
       }
     }
     return Collection.save(doc);

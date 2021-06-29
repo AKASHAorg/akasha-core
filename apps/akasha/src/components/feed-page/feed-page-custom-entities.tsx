@@ -4,9 +4,7 @@ import DS from '@akashaproject/design-system';
 
 const { EntryPublishErrorCard } = DS;
 export interface IGetCustomEntitiesProps {
-  sdkModules: any;
   logger: any;
-  globalChannel: any;
   isMobile: boolean;
   feedItems: string[];
   loggedEthAddress: string | null;
@@ -15,14 +13,7 @@ export interface IGetCustomEntitiesProps {
 }
 
 export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
-  const {
-    feedItems,
-    pendingEntries = [],
-    sdkModules,
-    logger,
-    globalChannel,
-    loggedEthAddress,
-  } = props;
+  const { feedItems, pendingEntries = [], logger, loggedEthAddress } = props;
 
   let customEntities: any = [];
 
@@ -39,9 +30,7 @@ export const getFeedCustomEntities = (props: IGetCustomEntitiesProps) => {
             {!entry.error && (
               <EntryCardRenderer
                 hidePublishTime={true}
-                sdkModules={sdkModules}
                 logger={logger}
-                globalChannel={globalChannel}
                 ethAddress={loggedEthAddress}
                 key={`${entry.author.ethAddress}-${idx}-${key}`}
                 style={{ ...style, backgroundColor: '#4e71ff0f' }}

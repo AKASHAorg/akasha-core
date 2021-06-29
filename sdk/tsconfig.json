@@ -1,18 +1,28 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib",
-    "rootDir": "./src",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "types": ["reflect-metadata"]
+    "resolveJsonModule": true,
+    "types": ["reflect-metadata", "node"],
+    "typeRoots": [ "./src/definitions", "./node_modules/@types"]
   },
   "include": [
-    "./src"
+    "./src/**/*"
+  ],
+  "exclude": [
+    "./lib"
   ],
   "references": [
     {
       "path": "./typings"
     }
-  ]
+  ],
+  "files": [
+    "./src/contracts/artifacts/ENS.json",
+    "./src/contracts/artifacts/AkashaRegistrar.json",
+    "./src/contracts/artifacts/ReverseRegistrar.json"
+  ],
+
+
 }

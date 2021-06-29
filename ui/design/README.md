@@ -2,10 +2,10 @@
 
 ## Available Scripts
 
-> Run tests
+> Run test
 
 ``` shell script
-$ npm run tests
+$ npm run test
 ```
 
 > Start the storybook dev

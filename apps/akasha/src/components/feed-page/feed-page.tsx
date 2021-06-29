@@ -7,12 +7,13 @@ import {
 } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaproject/awf-sdk';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
-import { application as loginWidget } from '@akashaproject/ui-widget-login/lib';
-import Parcel from 'single-spa-react/parcel';
+// import { application as loginWidget } from '@akashaproject/ui-widget-login/lib';
+// import Parcel from 'single-spa-react/parcel';
 import { constants, useBookmarks, useErrors, useMentions } from '@akashaproject/ui-awf-hooks';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
@@ -30,8 +31,6 @@ const {
 } = DS;
 
 export interface FeedPageProps {
-  globalChannel: any;
-  sdkModules: any;
   singleSpa: any;
   logger: any;
   showLoginModal: () => void;
@@ -67,10 +66,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     loggedProfileData,
     loginState,
     onError,
-    sdkModules,
     logger,
-    globalChannel,
   } = props;
+
+  const sdk = getSDK();
 
   const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
 
@@ -79,21 +78,16 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
     onError,
-    dbService: sdkModules.db,
   });
   const [errorState, errorActions] = useErrors({ logger });
 
   const [postsState, postsActions] = usePosts({
     user: loginState.ethAddress,
-    postsService: sdkModules.posts,
-    ipfsService: sdkModules.commons.ipfsService,
     onError: errorActions.createError,
   });
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
-    profileService: sdkModules.profiles.profileService,
-    postsService: sdkModules.posts.tags,
   });
 
   React.useEffect(() => {
@@ -105,7 +99,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   React.useEffect(() => {
     if (loginState.currentUserCalled) {
       postsActions.resetPostIds();
-      if (loginState.ethAddress) {
+      if (loginState.ready) {
         bookmarkActions.getBookmarks();
       }
     }
@@ -174,10 +168,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   };
 
-  const onUploadRequest = uploadMediaToTextile(
-    sdkModules.profiles.profileService,
-    sdkModules.commons.ipfsService,
-  );
+  const onUploadRequest = uploadMediaToTextile;
 
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
@@ -207,7 +198,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.modalSlotId}>
+      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
         {reportModalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -246,13 +237,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               baseUrl={constants.BASE_REPORT_URL}
               updateEntry={updateEntry}
               closeModal={closeReportModal}
-              signData={sdkModules.auth.authService.signData}
+              signData={sdk.api.auth.signData}
             />
           </ToastProvider>
         )}
       </ModalRenderer>
       <EditorModal
-        slotId={props.layout.modalSlotId}
+        slotId={props.layoutConfig.modalSlotId}
         avatar={loggedProfileData.avatar}
         showModal={editorModalOpen}
         ethAddress={loginState.ethAddress as any}
@@ -290,24 +281,22 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             />
           ) : (
             <>
-              <Parcel
+              {/* <Parcel
                 config={loginWidget.loadingFn}
                 wrapWith="div"
                 sdkModules={props.sdkModules}
                 logger={props.logger}
-                layout={props.layout}
+                layout={props.layoutConfig}
                 globalChannel={props.globalChannel}
                 i18n={props.i18n}
                 mountParcel={props.singleSpa.mountRootParcel}
-              />
+              /> */}
             </>
           )
         }
         itemCard={
           <EntryCardRenderer
-            sdkModules={sdkModules}
             logger={logger}
-            globalChannel={globalChannel}
             bookmarkState={bookmarkState}
             ethAddress={loginState.ethAddress}
             locale={locale}
@@ -330,9 +319,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           />
         }
         customEntities={getFeedCustomEntities({
-          sdkModules,
           logger,
-          globalChannel,
           isMobile,
           feedItems: postsState.postIds,
           loggedEthAddress: loginState.ethAddress,

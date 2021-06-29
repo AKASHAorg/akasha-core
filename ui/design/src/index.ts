@@ -103,6 +103,7 @@ import SearchInput from './components/SearchInput';
 import DropSearchInput from './components/DropSearchInput';
 
 import EditorModal from './components/EditorModal';
+import ExtensionPoint from './utils/extension-point';
 import ShareModal from './components/ShareModal';
 import { StyledLayer } from './components/ListModal/styled-modal';
 import LoginModal from './components/LoginModal';
@@ -173,6 +174,7 @@ const exported = {
   EditorBox,
   EditorMeter,
   editorDefaultValue,
+  ExtensionPoint,
   CommentEditor,
   EditorCard,
   EditorPlaceholder,

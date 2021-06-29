@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaproject/awf-sdk';
 import {
   ModalState,
   ModalStateActions,
@@ -115,15 +116,9 @@ type ProfilePageCardProps = IProfileHeaderProps &
   >;
 
 export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
-  const {
-    profileState,
-    loggedUserEthAddress,
-    sdkModules,
-    logger,
-    profileId,
-    globalChannel,
-    profileUpdateStatus,
-  } = props;
+  const { profileState, loggedUserEthAddress, logger, profileId, profileUpdateStatus } = props;
+
+  const sdk = getSDK();
 
   const [flagged, setFlagged] = React.useState('');
   const [flaggedContentType, setFlaggedContentType] = React.useState('');
@@ -134,8 +129,6 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
 
   const { t } = useTranslation();
   const [followedProfiles, followActions] = useFollow({
-    globalChannel,
-    profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);
     },
@@ -144,15 +137,11 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
   const [ensErrors, ensErrorActions] = useErrors({ logger: props.logger });
 
   const [ensState, ensActions] = useENSRegistration({
-    profileService: sdkModules.profiles.profileService,
     ethAddress: props.loggedUserEthAddress,
-    ensService: sdkModules.registry.ens,
     onError: ensErrorActions.createError,
   });
 
-  const [networkState, networkActions] = useNetworkState({
-    web3Service: sdkModules.commons.web3Service,
-  });
+  const [networkState, networkActions] = useNetworkState();
 
   React.useEffect(() => {
     if (profileUpdateStatus.updateComplete && !isRegistration) {
@@ -432,7 +421,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
 
   return (
     <>
-      <ModalRenderer slotId={props.layout.modalSlotId}>
+      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
         {props.modalState.reportModal && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal
@@ -470,7 +459,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
               contentType={flaggedContentType}
               baseUrl={constants.BASE_REPORT_URL}
               closeModal={closeReportModal}
-              signData={sdkModules.auth.authService.signData}
+              signData={sdk.api.auth.signData}
             />
           </ToastProvider>
         )}
@@ -483,7 +472,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
         )}
       </ModalRenderer>
       <Route path={`${menuRoute[MY_PROFILE]}/update-info`}>
-        <ModalRenderer slotId={props.layout.modalSlotId}>
+        <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
           {profileState.ethAddress && !profileUpdateStatus.updateComplete && (
             <ProfileForm
               titleLabel={profileState.userName ? t('Update Profile') : t('Create Profile')}
@@ -527,7 +516,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
         </ModalRenderer>
       </Route>
       <Route path={`${menuRoute[MY_PROFILE]}/update-ens`}>
-        <ModalRenderer slotId={props.layout.modalSlotId}>
+        <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
           {networkState.networkNotSupported && (
             <StyledLayer>
               <ErrorLoader

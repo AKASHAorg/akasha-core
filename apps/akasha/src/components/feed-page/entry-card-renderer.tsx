@@ -9,9 +9,7 @@ import routes, { POST } from '../../routes';
 const { ErrorInfoCard, ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading } = DS;
 
 export interface IEntryCardRendererProps {
-  sdkModules: any;
   logger: any;
-  globalChannel: any;
   itemId?: string;
   itemData?: any;
   isBookmarked?: boolean;
@@ -46,9 +44,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     bookmarkState,
     itemId,
     style,
-    sdkModules,
     logger,
-    globalChannel,
     contentClickable,
     hidePublishTime,
     moderatedContentLabel,
@@ -75,8 +71,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   const { t } = useTranslation();
 
   const [followedProfiles, followActions] = useFollow({
-    globalChannel,
-    profileService: sdkModules.profiles.profileService,
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);
     },
