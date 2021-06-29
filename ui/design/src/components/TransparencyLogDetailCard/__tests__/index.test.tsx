@@ -9,6 +9,8 @@ describe('<TransparencyLogDetailCard /> Component', () => {
 
   const reasons = ['Abusive or harmful to others', 'Violence'];
 
+  const handleClickViewItem = jest.fn();
+
   const handleClickAvatar = jest.fn();
 
   const handleClickContactModerators = jest.fn();
@@ -27,10 +29,12 @@ describe('<TransparencyLogDetailCard /> Component', () => {
             moderatorAvatarUrl="https://placebeard.it/360x360"
             moderatorEthAddress="0x003410490050000320006570034567114572000"
             reportedTimesLabel={`Reported ${4} times`}
+            viewItemLabel="View post"
             reasonsLabel={`${reasons.length > 1 ? 'reasons' : 'reason'}`}
             reasons={reasons}
             explanationLabel="explanation"
             contactModeratorsLabel="Contact the moderators"
+            onClickViewItem={handleClickViewItem}
             onClickAvatar={handleClickAvatar}
             onClickContactModerators={handleClickContactModerators}
           />,

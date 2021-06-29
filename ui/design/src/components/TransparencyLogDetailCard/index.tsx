@@ -14,10 +14,12 @@ export interface ITransparencyLogDetailCardProps
   extends Omit<ITransparencyLogMiniCardProps, 'isSelected'> {
   moderator: string;
   reportedTimesLabel: string;
+  viewItemLabel: string;
   reasonsLabel: string;
   reasons: string[];
   explanationLabel: string;
   contactModeratorsLabel: string;
+  onClickViewItem: () => void;
   onClickContactModerators: () => void;
 }
 
@@ -33,6 +35,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
     reasons,
     moderator,
     isDelisted,
+    viewItemLabel,
     reasonsLabel,
     explanationLabel,
     contactModeratorsLabel,
@@ -40,6 +43,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
     reportedTimesLabel,
     moderatedTimestamp,
     moderatorEthAddress,
+    onClickViewItem,
     onClickAvatar,
     onClickContactModerators,
   } = props;
@@ -50,9 +54,19 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
         pad={{ bottom: 'large', right: 'medium' }}
         border={{ color: 'border', side: 'bottom', style: 'solid' }}
       >
-        <Text size="large" weight="bold" margin={{ top: 'small' }}>
-          {reportedTimesLabel}
-        </Text>
+        <Box direction="row" margin={{ top: 'small' }} justify="between">
+          <Text size="large" weight="bold">
+            {reportedTimesLabel}
+          </Text>
+          {!isDelisted && (
+            <Box direction="row" onClick={onClickViewItem}>
+              <Icon type="quote" accentColor={true} clickable={true} />
+              <Text color="accentText" margin={{ left: '0.25rem' }}>
+                {viewItemLabel}
+              </Text>
+            </Box>
+          )}
+        </Box>
         <StyledText margin={{ top: 'small' }} weight="normal" color="secondaryText" size="small">
           {reasonsLabel}
         </StyledText>

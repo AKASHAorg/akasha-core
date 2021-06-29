@@ -70,7 +70,11 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
             />
           </Route>
           <Route path={routes[HISTORY]}>
-            <TransparencyLog ethAddress={loginState.ethAddress} {...props} />
+            <TransparencyLog
+              ethAddress={loginState.ethAddress}
+              logger={props.logger}
+              navigateToUrl={props.singleSpa.navigateToUrl}
+            />
           </Route>
           <Redirect exact={true} from={rootRoute} to={routes[HOME]} />
         </Switch>

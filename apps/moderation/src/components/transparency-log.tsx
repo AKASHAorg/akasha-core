@@ -18,6 +18,7 @@ const {
 export interface ITransparencyLogProps {
   ethAddress: string | null;
   logger: any;
+  navigateToUrl: (url: string) => void;
 }
 
 interface ILogItem {
@@ -36,10 +37,12 @@ interface ILogItem {
   explanation: string;
 }
 
+const BASE_SOCIAL_URL = '/social-app';
+const BASE_PROFILE_URL = '/profile';
 const DEFAULT_LIMIT = 10;
 
 const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
-  const { ethAddress, logger } = props;
+  const { ethAddress, logger, navigateToUrl } = props;
 
   const [logItems, setLogItems] = React.useState<ILogItem[]>([]);
   const [nextIndex, setNextIndex] = React.useState<string | null>(null);
@@ -108,6 +111,16 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
 
   const onTabClick = (value: string) => {
     setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
+  };
+
+  const handleClickViewItem = (contentType: string, contentID: string) => () => {
+    if (contentType === 'post') {
+      navigateToUrl(`${BASE_SOCIAL_URL}/post/${contentID}`);
+    } else if (contentType === 'reply' || contentType === 'comment') {
+      navigateToUrl(`${BASE_SOCIAL_URL}/reply/${contentID}`);
+    } else if (contentType === 'account') {
+      navigateToUrl(`${BASE_PROFILE_URL}/${contentID}`);
+    }
   };
 
   const handleClickAvatar = () => {
@@ -205,10 +218,12 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
               reportedTimesLabel={t(
                 `Reported ${selected.reports > 1 ? `${selected.reports} times` : 'once'}`,
               )}
+              viewItemLabel={t(`View ${selected.contentType}`)}
               reasonsLabel={t(`${selected.reasons.length > 1 ? 'reasons' : 'reason'}`)}
               reasons={selected.reasons}
               explanationLabel={t('explanation')}
               contactModeratorsLabel={t('Contact the moderators')}
+              onClickViewItem={handleClickViewItem(selected.contentType, selected.contentID)}
               onClickAvatar={handleClickAvatar}
               onClickContactModerators={handleClickContactModerators}
             />
