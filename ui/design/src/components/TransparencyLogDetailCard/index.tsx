@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 import styled from 'styled-components';
+import { isMobileOnly } from 'react-device-detect';
 
 import Icon from '../Icon';
 import Avatar from '../Avatar';
@@ -19,6 +20,7 @@ export interface ITransparencyLogDetailCardProps
   reasons: string[];
   explanationLabel: string;
   contactModeratorsLabel: string;
+  onClickArrowLeft: () => void;
   onClickViewItem: () => void;
   onClickContactModerators: () => void;
 }
@@ -43,17 +45,51 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
     reportedTimesLabel,
     moderatedTimestamp,
     moderatorEthAddress,
+    onClickArrowLeft,
     onClickViewItem,
     onClickAvatar,
     onClickContactModerators,
   } = props;
 
   return (
-    <MainAreaCardBox pad={{ vertical: 'medium', left: 'medium' }} noBorderRadius={true}>
+    <MainAreaCardBox
+      pad={{ vertical: 'medium', left: 'medium' }}
+      elevation={isMobileOnly ? 'none' : 'shadow'}
+      noBorderRadius={true}
+      noBorder={isMobileOnly}
+    >
       <Box
         pad={{ bottom: 'large', right: 'medium' }}
         border={{ color: 'border', side: 'bottom', style: 'solid' }}
       >
+        {isMobileOnly && (
+          <Box direction="row" margin={{ top: 'small', bottom: 'medium' }} align="start">
+            <Icon
+              type="arrowLeft"
+              color="secondaryText"
+              primaryColor={true}
+              clickable={true}
+              onClick={onClickArrowLeft}
+            />
+            <Box direction="row" align="center" margin="0 auto" pad={{ right: 'small' }}>
+              <Box
+                width="8px"
+                height="8px"
+                margin={{ right: 'small' }}
+                round="50%"
+                background={isDelisted ? 'red' : 'green'}
+              />
+              <Text weight={600} size="large">
+                {/* condition: title must always be three-word phrase for this component, pick the first two to show as heading on mobile */}
+                {title
+                  .split(' ')
+                  .slice(0, 2)
+                  .map(el => `${el.charAt(0).toUpperCase()}${el.substring(1)}`)
+                  .join(' ')}
+              </Text>
+            </Box>
+          </Box>
+        )}
         <Box direction="row" margin={{ top: 'small' }} justify="between">
           <Text size="large" weight="bold">
             {reportedTimesLabel}
@@ -101,7 +137,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
                 <Box
                   width="8px"
                   height="8px"
-                  margin={{ right: 'xxsmall' }}
+                  margin={{ right: 'xsmall' }}
                   round="50%"
                   background={isDelisted ? 'red' : 'green'}
                 />

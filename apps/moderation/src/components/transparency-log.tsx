@@ -113,6 +113,10 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
   };
 
+  const handleClickArrowLeft = () => {
+    /* TODO */
+  };
+
   const handleClickViewItem = (contentType: string, contentID: string) => () => {
     if (contentType === 'post') {
       navigateToUrl(`${BASE_SOCIAL_URL}/post/${contentID}`);
@@ -223,6 +227,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
               reasons={selected.reasons}
               explanationLabel={t('explanation')}
               contactModeratorsLabel={t('Contact the moderators')}
+              onClickArrowLeft={handleClickArrowLeft}
               onClickViewItem={handleClickViewItem(selected.contentType, selected.contentID)}
               onClickAvatar={handleClickAvatar}
               onClickContactModerators={handleClickContactModerators}

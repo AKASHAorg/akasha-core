@@ -9,6 +9,8 @@ describe('<TransparencyLogDetailCard /> Component', () => {
 
   const reasons = ['Abusive or harmful to others', 'Violence'];
 
+  const handleClickArrowLeft = jest.fn();
+
   const handleClickViewItem = jest.fn();
 
   const handleClickAvatar = jest.fn();
@@ -34,6 +36,7 @@ describe('<TransparencyLogDetailCard /> Component', () => {
             reasons={reasons}
             explanationLabel="explanation"
             contactModeratorsLabel="Contact the moderators"
+            onClickArrowLeft={handleClickArrowLeft}
             onClickViewItem={handleClickViewItem}
             onClickAvatar={handleClickAvatar}
             onClickContactModerators={handleClickContactModerators}
