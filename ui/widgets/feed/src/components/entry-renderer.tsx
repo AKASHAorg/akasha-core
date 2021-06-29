@@ -100,7 +100,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
     });
   };
 
-
   const handleNavigation = (details: IContentClickDetails) => {
     onNavigate(props.itemType, details);
   };
