@@ -1,10 +1,10 @@
 {
-  "name": "@akashaproject/ui-widget-login",
+  "name": "@akashaproject/ui-widget-login-cta",
   "version": "0.1.0",
-  "description": "AKASHA specific login widget",
+  "description": "AKASHA specific login call to action widget",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
-    "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)"
+    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)"
   ],
   "license": "MIT",
   "repository": {
@@ -22,8 +22,8 @@
     "prepare": "npm run tsc",
     "extract:translations": "i18next --config ./i18next-parser.config.js",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js --profile --json ../../stats/login.json",
-    "postpack": "copyfiles -f ./dist/* ../../build/widgets/login",
+    "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js --profile --json ../../stats/login-cta.json",
+    "postpack": "copyfiles -f ./dist/* ../../build/widgets/login-cta",
     "watch": "webpack --config webpack.config.js --watch",
     "pretest": "tsc -m commonjs",
     "test": "jest"
