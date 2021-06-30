@@ -19,6 +19,7 @@ import useLegal from './use-legal';
 import useNetworkState from './use-network-state';
 import useAnalytics from './use-analytics';
 import useMentions from './use-mentions';
+import useSignData from './use-sign-data';
 
 export {
   constants,
@@ -43,4 +44,5 @@ export {
   useNetworkState,
   useAnalytics,
   useMentions,
+  useSignData,
 };
