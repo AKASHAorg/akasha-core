@@ -8,6 +8,7 @@ import { ICount } from './content-list';
 const {
   Box,
   Text,
+  Icon,
   Spinner,
   SwitchCard,
   TransparencyLogBanner,
@@ -194,9 +195,15 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
                   onClickCard={handleClickCard(el)}
                 />
               ))}
-          {requesting && (
+          {requesting && logItems.length < 1 && (
             <Box pad="large">
               <Spinner />
+            </Box>
+          )}
+          {requesting && logItems.length > 0 && (
+            <Box pad="large" align="center">
+              <Icon type="loading" accentColor={true} clickable={false} />
+              <Text color="accentText">Loading more...</Text>
             </Box>
           )}
           {/* triggers intersection observer */}

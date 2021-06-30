@@ -19,7 +19,7 @@ export interface ITransparencyLogMiniCardProps {
   onClickCard?: () => void;
 }
 
-const FadeoutTextBox = styled(Box)`
+const ClampBox = styled(Box)`
   max-height: 3.2em;
   width: 100%;
   overflow: hidden;
@@ -72,11 +72,11 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
           </Box>
         </Box>
         <Box direction="row" justify="between" align="start">
-          <FadeoutTextBox>
+          <ClampBox>
             <Text margin={{ top: 'small' }} color="secondaryText">
               {content}
             </Text>
-          </FadeoutTextBox>
+          </ClampBox>
           <Box pad={{ left: 'small' }} flex={{ shrink: 0 }}>
             <Text
               size="small"
