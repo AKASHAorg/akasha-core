@@ -5,9 +5,9 @@ import { createErrorHandler } from './utils/error-handler';
 
 export interface UseSignDataActions {
   /**
-   *  sign data using the user's pubKey
+   *  sign data with the users private key
    *  @param data - data to be signed
-   *  @param base64Format - convert data to base64
+   *  @param base64Format - convert signature to base64
    */
   signData: (
     data: string | Record<string, unknown> | Record<string, unknown>[],
@@ -97,7 +97,7 @@ export const useSignData = (
             dispatch({ type: 'SIGN_DATA_SUCCESS', payload: resp.data });
           }
         },
-        error: createErrorHandler('useSignData.getLegalDoc', false, onError),
+        error: createErrorHandler('useSignData.signData', false, onError),
       });
       return () => {
         callSub.unsubscribe();
