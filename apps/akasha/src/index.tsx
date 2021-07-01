@@ -26,7 +26,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   routes: {
     rootRoute,
   },
-  menuItems: routes,
+  // menuItems: routes,
   title: 'Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
   // widgets: {

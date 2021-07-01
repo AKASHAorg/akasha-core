@@ -11,5 +11,4 @@ export const Widget: IWidgetConfig = {
       './newpost-wohoo-widget'
     ),
   name: 'ui-widget-newpost-wohoo',
-  sdkModules: [],
 };
