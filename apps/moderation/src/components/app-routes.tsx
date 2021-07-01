@@ -73,6 +73,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
             <TransparencyLog
               ethAddress={loginState.ethAddress}
               logger={props.logger}
+              isMobile={props.isMobile}
               navigateToUrl={props.singleSpa.navigateToUrl}
             />
           </Route>

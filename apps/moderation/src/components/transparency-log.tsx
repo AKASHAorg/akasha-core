@@ -19,6 +19,7 @@ const {
 export interface ITransparencyLogProps {
   ethAddress: string | null;
   logger: any;
+  isMobile: boolean;
   navigateToUrl: (url: string) => void;
 }
 
@@ -43,7 +44,7 @@ const BASE_PROFILE_URL = '/profile';
 const DEFAULT_LIMIT = 10;
 
 const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
-  const { ethAddress, logger, navigateToUrl } = props;
+  const { ethAddress, logger, navigateToUrl, isMobile } = props;
 
   const [logItems, setLogItems] = React.useState<ILogItem[]>([]);
   const [nextIndex, setNextIndex] = React.useState<string | null>(null);
@@ -115,7 +116,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   };
 
   const handleClickArrowLeft = () => {
-    /* TODO */
+    setSelected(null);
   };
 
   const handleClickViewItem = (contentType: string, contentID: string) => () => {
@@ -140,10 +141,68 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     selected?.contentID === el.contentID ? setSelected(null) : setSelected(el);
   };
 
-  const buttonValues = ['All', 'Kept', 'Delisted'];
-  const buttonLabels = [t('All'), t('Kept'), t('Delisted')];
+  const buttonValues = !isMobile
+    ? ['All', 'Kept', 'Delisted']
+    : ['All', 'Kept', 'Delisted', 'Stats'];
+  const buttonLabels = !isMobile
+    ? [t('All'), t('Kept'), t('Delisted')]
+    : [t('All'), t('Kept'), t('Delisted'), t('Stats')];
 
   const baseAvatarUrl = 'https://hub.textile.io/ipfs/';
+
+  const RenderDetailCard = (selected: ILogItem) => {
+    return (
+      <TransparencyLogDetailCard
+        locale="en"
+        title={t(
+          `${selected.contentType.charAt(0).toUpperCase()}${selected.contentType.substring(1)} ${
+            selected.delisted ? 'delisted by' : 'kept by'
+          }`,
+        )}
+        content={t(`${selected.explanation}`)}
+        isDelisted={selected.delisted}
+        moderator={selected.moderator.name}
+        moderatedTimestamp={selected.moderatedDate.toString()}
+        moderatorAvatarUrl={
+          baseAvatarUrl + selected.moderator.avatar || 'https://placebeard.it/360x360'
+        }
+        moderatorEthAddress={selected.moderator.ethAddress}
+        reportedTimesLabel={t(
+          `Reported ${selected.reports > 1 ? `${selected.reports} times` : 'once'}`,
+        )}
+        viewItemLabel={t(`View ${selected.contentType}`)}
+        reasonsLabel={t(`${selected.reasons.length > 1 ? 'reasons' : 'reason'}`)}
+        reasons={selected.reasons}
+        explanationLabel={t('explanation')}
+        contactModeratorsLabel={t('Contact the moderators')}
+        onClickArrowLeft={handleClickArrowLeft}
+        onClickViewItem={handleClickViewItem(selected.contentType, selected.contentID)}
+        onClickAvatar={handleClickAvatar}
+        onClickContactModerators={handleClickContactModerators}
+      />
+    );
+  };
+
+  const RenderBanner = () => {
+    return (
+      <TransparencyLogBanner
+        size="12.75rem"
+        assetName="moderation-history-illustration"
+        title={t('Moderation History')}
+        content={t(
+          'Here you will find the moderated posts, replies, and accounts of Ethereum World. We do not reveal any personal information of the author or submitter(s) to protect their privacy.',
+        )}
+        keptCount={count.kept}
+        keptCountLabel={t('kept')}
+        totalCountLabel={t('total')}
+        delistedCount={count.delisted}
+        delistedCountLabel={t('delisted')}
+        footerLabel={t('Visit our Code of Conduct to learn more about our moderation criteria')}
+        footerLinkLabel={t('Code of Conduct')}
+        footerLink="https://akasha.ethereum.world/legal/code-of-conduct"
+      />
+    );
+  };
 
   return (
     <Box>
@@ -158,48 +217,57 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         onTabClick={onTabClick}
         buttonsWrapperWidth={'40%'}
         loggedEthAddress={ethAddress}
+        hasMobileDesign={true} // adjusts to new design on mobile screens
       />
-      <Box direction="row">
+      <Box direction="row" margin={{ top: '-0.5rem' }}>
         {/* setting height and overflow behaviour to make y-scrollable container */}
-        <Box width="40%" height="80vh" style={{ overflowY: 'scroll' }}>
+        <Box
+          width={isMobile ? '100%' : '40%'}
+          height={isMobile ? '100vh' : '80vh'}
+          style={{ overflowY: 'scroll' }}
+        >
           {!requesting && logItems.length < 1 && (
             <Text>{t('No moderated items found. Please check again later.')}</Text>
           )}
           {logItems.length > 0 &&
-            logItems
-              .filter(el =>
-                activeButton === 'Kept'
-                  ? !el.delisted
-                  : activeButton === 'Delisted'
-                  ? el.delisted
-                  : el,
-              )
-              .map((el, idx) => (
-                <TransparencyLogMiniCard
-                  key={idx}
-                  locale="en"
-                  title={t(
-                    `${el.contentType.charAt(0).toUpperCase()}${el.contentType.substring(1)} ${
-                      el.delisted ? 'Delisted' : 'Kept'
-                    }`,
-                  )}
-                  content={t(`${el.explanation}`)}
-                  isSelected={el.contentID === selected?.contentID}
-                  isDelisted={el.delisted}
-                  moderatedTimestamp={el.moderatedDate.toString()}
-                  moderatorAvatarUrl={
-                    baseAvatarUrl + el.moderator.avatar || 'https://placebeard.it/360x360'
-                  }
-                  moderatorEthAddress={el.moderator.ethAddress}
-                  onClickAvatar={handleClickAvatar}
-                  onClickCard={handleClickCard(el)}
-                />
-              ))}
+            (activeButton === 'Stats'
+              ? RenderBanner()
+              : logItems
+                  .filter(el =>
+                    activeButton === 'Kept'
+                      ? !el.delisted
+                      : activeButton === 'Delisted'
+                      ? el.delisted
+                      : el,
+                  )
+                  .map((el, idx) => (
+                    <TransparencyLogMiniCard
+                      key={idx}
+                      locale="en"
+                      title={t(
+                        `${el.contentType.charAt(0).toUpperCase()}${el.contentType.substring(1)} ${
+                          el.delisted ? 'Delisted' : 'Kept'
+                        }`,
+                      )}
+                      content={t(`${el.explanation}`)}
+                      isSelected={el.contentID === selected?.contentID}
+                      isDelisted={el.delisted}
+                      moderatedTimestamp={el.moderatedDate.toString()}
+                      moderatorAvatarUrl={
+                        baseAvatarUrl + el.moderator.avatar || 'https://placebeard.it/360x360'
+                      }
+                      moderatorEthAddress={el.moderator.ethAddress}
+                      onClickAvatar={handleClickAvatar}
+                      onClickCard={handleClickCard(el)}
+                    />
+                  )))}
+          {/* fetch indicator for initial page load */}
           {requesting && logItems.length < 1 && (
             <Box pad="large">
               <Spinner />
             </Box>
           )}
+          {/* fetch indicator for load more on scroll */}
           {requesting && logItems.length > 0 && (
             <Box pad="large" align="center">
               <Icon type="loading" accentColor={true} clickable={false} />
@@ -209,57 +277,14 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
           {/* triggers intersection observer */}
           <Box pad="xxsmall" ref={anchor} />
         </Box>
-        <Box width="60%">
-          {selected ? (
-            <TransparencyLogDetailCard
-              locale="en"
-              title={t(
-                `${selected.contentType.charAt(0).toUpperCase()}${selected.contentType.substring(
-                  1,
-                )} ${selected.delisted ? 'delisted by' : 'kept by'}`,
-              )}
-              content={t(`${selected.explanation}`)}
-              isDelisted={selected.delisted}
-              moderator={selected.moderator.name}
-              moderatedTimestamp={selected.moderatedDate.toString()}
-              moderatorAvatarUrl={
-                baseAvatarUrl + selected.moderator.avatar || 'https://placebeard.it/360x360'
-              }
-              moderatorEthAddress={selected.moderator.ethAddress}
-              reportedTimesLabel={t(
-                `Reported ${selected.reports > 1 ? `${selected.reports} times` : 'once'}`,
-              )}
-              viewItemLabel={t(`View ${selected.contentType}`)}
-              reasonsLabel={t(`${selected.reasons.length > 1 ? 'reasons' : 'reason'}`)}
-              reasons={selected.reasons}
-              explanationLabel={t('explanation')}
-              contactModeratorsLabel={t('Contact the moderators')}
-              onClickArrowLeft={handleClickArrowLeft}
-              onClickViewItem={handleClickViewItem(selected.contentType, selected.contentID)}
-              onClickAvatar={handleClickAvatar}
-              onClickContactModerators={handleClickContactModerators}
-            />
-          ) : (
-            <TransparencyLogBanner
-              size="12.75rem"
-              assetName="moderation-history-illustration"
-              title={t('Moderation History')}
-              content={t(
-                'Here you will find the moderated posts, replies, and accounts of Ethereum World. We do not reveal any personal information of the author or submitter(s) to protect their privacy.',
-              )}
-              keptCount={count.kept}
-              keptCountLabel={t('kept')}
-              totalCountLabel={t('total')}
-              delistedCount={count.delisted}
-              delistedCountLabel={t('delisted')}
-              footerLabel={t(
-                'Visit our Code of Conduct to learn more about our moderation criteria',
-              )}
-              footerLinkLabel={t('Code of Conduct')}
-              footerLink="https://akasha.ethereum.world/legal/code-of-conduct"
-            />
-          )}
-        </Box>
+        {isMobile && selected && (
+          <Box width="100%" style={{ position: 'absolute', right: 0 }}>
+            {RenderDetailCard(selected)}
+          </Box>
+        )}
+        {!isMobile && (
+          <Box width="60%">{selected ? RenderDetailCard(selected) : RenderBanner()}</Box>
+        )}
       </Box>
     </Box>
   );
