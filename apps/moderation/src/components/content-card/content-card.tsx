@@ -77,12 +77,11 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
 
     // adding a list with comment as fallback for older contents
     if (['reply', 'comment'].includes(contentType)) {
-      const entryCall = props.sdkModules.posts.comments.getComment({ commentID: entryId });
-      const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
-      const getEntryCall = combineLatest([ipfsGatewayCall, entryCall]);
-      getEntryCall.subscribe((resp: any) => {
-        const ipfsGateway = resp[0].data;
-        const entry = resp[1].data?.getComment;
+      const entryCall = sdk.api.comments.getComment(entryId);
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+
+      entryCall.subscribe((resp: any) => {
+        const entry = resp.data?.getComment;
         if (entry) {
           const mappedEntry = mapEntry(entry, ipfsGateway);
           setEntryData(mappedEntry);
