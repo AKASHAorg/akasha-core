@@ -28,7 +28,8 @@
     "start": "webpack-dev-server --config ./webpack.config.js --port 8332",
     "watch": "webpack --config ./webpack.config.js --watch",
     "pretest": "tsc -m commonjs",
-    "test": "jest"
+    "test": "jest",
+    "clean": "tsc --build --clean"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",

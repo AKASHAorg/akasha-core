@@ -21,7 +21,8 @@
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
     "pretest": "tsc -m commonjs",
-    "test": "jest"
+    "test": "jest",
+    "clean": "tsc --build --clean"
   },
   "devDependencies": {
     "@akashaproject/design-system": "*",
