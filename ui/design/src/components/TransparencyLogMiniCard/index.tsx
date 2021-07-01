@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Box, Text } from 'grommet';
+import { isMobileOnly } from 'react-device-detect';
 
 import Avatar from '../Avatar';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
@@ -44,7 +45,9 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
   } = props;
   return (
     <MainAreaCardBox
+      elevation={isMobileOnly ? 'none' : 'shadow'}
       noBorderRadius={true}
+      bottomBorderOnly={isMobileOnly}
       isSelected={isSelected}
       style={{ minHeight: 'min-content' }} // allows cards to adjust in a y-scrollable container
     >

@@ -57,6 +57,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
       elevation={isMobileOnly ? 'none' : 'shadow'}
       noBorderRadius={true}
       noBorder={isMobileOnly}
+      style={{ ...(isMobileOnly && { height: '100vh' }) }} // fills the available height in absolute positioning for mobile
     >
       <Box
         pad={{ bottom: 'large', right: 'medium' }}
