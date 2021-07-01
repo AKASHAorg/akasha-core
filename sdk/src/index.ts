@@ -17,7 +17,7 @@ import AWF_Tags from './posts/tags';
 import AWF_IpfsConnector from './common/ipfs.connector';
 import AppSettings from './settings/apps';
 
-let sdk: {
+export interface AWF_SDK {
   services: {
     log: Logging;
     gql: Gql;
@@ -39,7 +39,9 @@ let sdk: {
     comments: AWF_Comments;
     tags: AWF_Tags;
   };
-} = undefined;
+}
+
+let sdk: AWF_SDK = undefined;
 
 export default function getSDK() {
   if (!sdk) {
@@ -48,7 +50,7 @@ export default function getSDK() {
   return sdk;
 }
 
-export function init() {
+export function init(): AWF_SDK {
   const { TYPES } = typings;
   const log = container.get<Logging>(TYPES.Log);
   const gql = container.get<Gql>(TYPES.Gql);
