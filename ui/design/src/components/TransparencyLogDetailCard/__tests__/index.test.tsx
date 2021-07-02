@@ -15,8 +15,6 @@ describe('<TransparencyLogDetailCard /> Component', () => {
 
   const handleClickAvatar = jest.fn();
 
-  const handleClickContactModerators = jest.fn();
-
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
@@ -36,10 +34,10 @@ describe('<TransparencyLogDetailCard /> Component', () => {
             reasons={reasons}
             explanationLabel="explanation"
             contactModeratorsLabel="Contact the moderators"
+            contactModeratorsLink="mailto:moderators@ethereum.world"
             onClickArrowLeft={handleClickArrowLeft}
             onClickViewItem={handleClickViewItem}
             onClickAvatar={handleClickAvatar}
-            onClickContactModerators={handleClickContactModerators}
           />,
         ),
         {},
@@ -68,13 +66,6 @@ describe('<TransparencyLogDetailCard /> Component', () => {
     const avatar = getByRole('img');
     fireEvent.click(avatar);
     expect(handleClickAvatar).toHaveBeenCalledTimes(1);
-  });
-
-  it.skip('triggers callback when cta is clicked', () => {
-    const { getByText } = componentWrapper;
-    const cta = getByText(/moderators/);
-    fireEvent.click(cta);
-    expect(handleClickContactModerators).toHaveBeenCalledTimes(1);
   });
 
   it.skip('renders correct number of reasons', () => {

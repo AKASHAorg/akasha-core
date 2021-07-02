@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Text } from 'grommet';
+import { Anchor, Box, Text } from 'grommet';
 import styled from 'styled-components';
 import { isMobileOnly } from 'react-device-detect';
 
@@ -20,9 +20,9 @@ export interface ITransparencyLogDetailCardProps
   reasons: string[];
   explanationLabel: string;
   contactModeratorsLabel: string;
+  contactModeratorsLink: string;
   onClickArrowLeft: () => void;
   onClickViewItem: () => void;
-  onClickContactModerators: () => void;
 }
 
 const StyledBox = styled(Box)`
@@ -41,6 +41,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
     reasonsLabel,
     explanationLabel,
     contactModeratorsLabel,
+    contactModeratorsLink,
     moderatorAvatarUrl,
     reportedTimesLabel,
     moderatedTimestamp,
@@ -48,7 +49,6 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
     onClickArrowLeft,
     onClickViewItem,
     onClickAvatar,
-    onClickContactModerators,
   } = props;
 
   return (
@@ -162,17 +162,18 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
           {content}
         </Text>
       </Box>
-      <Box
-        direction="row"
-        margin={{ top: 'large' }}
-        pad={{ bottom: 'large', right: 'medium' }}
-        onClick={onClickContactModerators}
-      >
-        <Icon type="feedback" accentColor={true} clickable={true} />
-        <Text color="accentText" margin={{ top: '0.25rem', left: '0.25rem' }}>
-          {contactModeratorsLabel}
-        </Text>
-      </Box>
+      <Anchor
+        href={contactModeratorsLink}
+        style={{ textDecoration: 'none' }}
+        label={
+          <Box direction="row" margin={{ top: 'large' }} pad={{ bottom: 'large', right: 'medium' }}>
+            <Icon type="feedback" accentColor={true} clickable={true} />
+            <Text color="accentText" margin={{ top: '0.15rem', left: '0.25rem' }} weight="normal">
+              {contactModeratorsLabel}
+            </Text>
+          </Box>
+        }
+      />
     </MainAreaCardBox>
   );
 };
