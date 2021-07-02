@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* Components */
 import {
   Box,
@@ -128,7 +127,6 @@ import ViewportSizeProvider, { useViewportSize } from './components/Providers/vi
 import TextIcon from './components/TextIcon';
 import SubtitleTextIcon from './components/SubtitleTextIcon';
 import VirtualList from './components/VirtualList';
-import type { Helmet as HelmetType } from '@types/react-helmet';
 import Helmet from 'react-helmet';
 import Spinner from './components/Spinner';
 
@@ -266,7 +264,7 @@ const exported = {
   MdCard,
   EntryPublishErrorCard,
   StyledLayer,
-  Helmet: Helmet as HelmetType,
+  Helmet: Helmet as any,
 };
 
 export default exported;

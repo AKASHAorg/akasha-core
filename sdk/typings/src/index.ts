@@ -7,7 +7,7 @@ import AWF_IProfile from './interfaces/profile';
 import { AWF_IComments, AWF_IEntry, AWF_ITags } from './interfaces/posts';
 import * as events from './interfaces/events';
 
-export interface AwfSDK {
+export interface IAwfSDK {
   services: Services;
   api: {
     globalChannel: Observable<unknown>;

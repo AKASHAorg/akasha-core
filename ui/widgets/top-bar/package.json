@@ -25,9 +25,10 @@
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js --profile --json ../../stats/top-bar.json",
     "postpack": "copyfiles -f ./dist/* ../../build/widgets/topbar",
-    "watch": "webpack --config webpack.config.js --watch",
+    "watch": "npm run pack -- --watch",
     "pretest": "tsc -m commonjs",
-    "test": "jest"
+    "test": "jest",
+    "clean": "tsc --build --clean"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",

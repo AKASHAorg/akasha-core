@@ -124,8 +124,8 @@ const TopbarComponent = (props: RootComponentProps) => {
 
   React.useEffect(() => {
     const updateMenu = () => {
-      const menuItems = getMenuItems ? getMenuItems() : [];
-      setCurrentMenu(menuItems);
+      const menuItems = getMenuItems ? getMenuItems() : { items: [] };
+      setCurrentMenu(menuItems.items);
     };
     updateMenu();
     const sub = uiEvents.subscribe({

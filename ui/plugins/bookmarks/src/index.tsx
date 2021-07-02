@@ -5,7 +5,8 @@ import {
   IAppConfig,
   IntegrationRegistrationOptions,
   IWidgetConfig,
-} from '@akashaproject/ui-awf-typings/src/app-loader';
+  MenuItemAreaType,
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const findTopbarQuickAccess = (integrations: IntegrationRegistrationOptions['integrations']) => {
   if (!integrations) {
@@ -52,5 +53,11 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     },
   ],
   title: 'Bookmarks | Ethereum World',
-  logo: { type: LogoTypeSource.ICON, value: 'bookmark' },
+  menuItems: {
+    label: 'Bookmarks',
+    route: rootRoute,
+    area: MenuItemAreaType.QuickAccessArea,
+    name: 'ui-plugin-bookmarks',
+    logo: { type: LogoTypeSource.ICON, value: 'bookmark' },
+  },
 });

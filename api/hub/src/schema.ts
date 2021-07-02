@@ -153,6 +153,8 @@ const typeDefs = gql`
     reportContent(report: ReportData, meta: ReportMeta): String
     moderateContent(decision: DecisionData, meta: DecisionMeta): Boolean
     updateModerator(moderator: ModeratorData): Boolean
+    editPost(content: [DataProviderInput!], post: PostData, id: String!): Boolean
+    editComment(content: [DataProviderInput!], comment: CommentData, id: String!): Boolean
   }
 
   type Tag {

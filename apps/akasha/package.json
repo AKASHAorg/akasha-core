@@ -30,7 +30,8 @@
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../../ui/build/apps/akasha",
-    "watch": "webpack --config webpack.config.js --watch"
+    "watch": "webpack --config webpack.config.js --watch",
+    "clean": "tsc --build --clean"
   },
   "bugs": {
     "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"

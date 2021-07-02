@@ -119,18 +119,93 @@ class CommentAPI extends DataSource {
 
   async getComment(commentId: string) {
     const db: Client = await getAppDB();
-    let comment;
+
     const commentCache = this.getCommentCacheKey(commentId);
     if (await queryCache.has(commentCache)) {
       return queryCache.get(commentCache);
     }
-    comment = await db.findByID<Comment>(this.dbID, this.collection, commentId);
+    const comment = await db.findByID<Comment>(this.dbID, this.collection, commentId);
     if (!comment) {
       logger.warn(`comment ${commentId} not found`);
       throw new Error(`Comment not found`);
     }
     await queryCache.set(commentCache, comment);
     return comment;
+  }
+
+  /**
+   * Update an existing comment
+   * @param author
+   * @param id
+   * @param content
+   * @param commentData
+   */
+  async editComment(
+    author: string,
+    id: string,
+    content: DataProvider[],
+    commentData: { postID: string; tags?: string; mentions?: string[]; replyTo?: string },
+  ) {
+    const db: Client = await getAppDB();
+    if (!author) {
+      throw new Error('Not authorized');
+    }
+
+    const post = await db.findByID<PostItem>(this.dbID, 'Posts', commentData.postID);
+    if (!post) {
+      throw new Error('This post does not exist.');
+    }
+
+    const currentComment = await db.findByID<Comment>(this.dbID, this.collection, id);
+    if (!currentComment?._id) {
+      return Promise.reject(`Comment with [id] ${id} was not found!`);
+    }
+
+    if (currentComment.postId !== commentData.postID) {
+      return Promise.reject('Post [id] mismatch!');
+    }
+
+    if (currentComment.author !== author) {
+      throw new Error('Not authorized');
+    }
+
+    currentComment.metaData = currentComment.metaData.concat(currentComment.content);
+    currentComment.content = Array.from(content);
+    let removedTags = [];
+    let addedTags = [];
+    if (commentData.tags) {
+      const newTags = Array.from(commentData.tags);
+      removedTags = currentComment.tags.filter(t => !newTags.includes(t));
+      addedTags = newTags.filter(t => !currentComment.tags.includes(t));
+      currentComment.tags = newTags;
+    }
+
+    currentComment.mentions = commentData.mentions
+      ? Array.from(commentData.mentions)
+      : commentData.mentions;
+    currentComment.updatedAt = new Date().getTime();
+    const textContent = currentComment.content.find(e => e.property === 'textContent');
+    if (Buffer.from(textContent.value, 'base64').toString('base64') !== textContent.value) {
+      textContent.value = Buffer.from(textContent.value).toString('base64');
+    }
+
+    searchIndex
+      .saveObject({
+        objectID: id,
+        author: currentComment.author,
+        tags: currentComment.tags,
+        category: 'comment',
+        creationDate: currentComment.creationDate,
+        postId: currentComment.postId,
+        content: textContent ? Buffer.from(textContent?.value, 'base64').toString() : '',
+      })
+      .then(() => logger.info(`index edited comment: ${id}`))
+      // tslint:disable-next-line:no-console
+      .catch(e => logger.error(e));
+    await db.save(this.dbID, this.collection, [currentComment]);
+    await queryCache.del(this.getCommentCacheKey(id));
+    await queryCache.del(this.getAllCommentsCacheKey(commentData.postID));
+    return { removedTags, addedTags };
   }
 }
 

@@ -11,5 +11,4 @@ export const Widget: IWidgetConfig = {
       './newpost-terms-widget'
     ),
   name: 'ui-widget-newpost-terms',
-  sdkModules: [],
 };

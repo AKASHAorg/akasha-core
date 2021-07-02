@@ -26,7 +26,8 @@
     "postpack": "copyfiles -f ./dist/* ../../build/widgets/login",
     "watch": "webpack --config webpack.config.js --watch",
     "pretest": "tsc -m commonjs",
-    "test": "jest"
+    "test": "jest",
+    "clean": "tsc --build --clean"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",

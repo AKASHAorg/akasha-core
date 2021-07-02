@@ -60,6 +60,7 @@
   "scripts": {
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
+    "clean": "tsc --build --clean",
     "build": "webpack --config webpack.config.js",
     "sc:test": "npx buidler --network development test",
     "sc:compile": "npx buidler compile",

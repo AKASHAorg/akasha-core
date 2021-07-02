@@ -1,6 +1,6 @@
 import DS from '@akashaproject/design-system';
 import React, { PureComponent, Suspense } from 'react';
-import { I18nextProvider, initReactI18next } from 'react-i18next';
+import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
 import { useLocation, BrowserRouter as Router } from 'react-router-dom';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
@@ -83,14 +83,14 @@ export default class SidebarWidget extends PureComponent<RootComponentProps> {
       })
       .init({
         fallbackLng: 'en',
-        ns: ['sidebar'],
+        ns: ['ui-widget-sidebar'],
         saveMissing: false,
         saveMissingTo: 'all',
         load: 'languageOnly',
         debug: true,
         cleanCode: true,
         keySeparator: false,
-        defaultNS: 'sidebar',
+        defaultNS: 'ui-widget-sidebar',
         backend: {
           backends: [LocalStorageBackend, Fetch],
           backendOptions: [
