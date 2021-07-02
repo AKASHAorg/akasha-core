@@ -7,6 +7,7 @@ import DS from '@akashaproject/design-system';
 import { useLoginState, useErrors, useModalState } from '@akashaproject/ui-awf-hooks';
 import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import getSDK from '@akashaproject/awf-sdk';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const { LoginModal } = DS;
 
@@ -223,10 +224,16 @@ const SignUpModal = (props: RootComponentProps) => {
   );
 };
 
+const Wrapped = (props: RootComponentProps) => (
+  <Router>
+    <SignUpModal {...props} />
+  </Router>
+);
+
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: SignUpModal,
+  rootComponent: Wrapped,
   errorBoundary: (err, errorInfo, props) => {
     if (props.logger) {
       props.logger('Error: %s; Info: %s', err, errorInfo);

@@ -6,6 +6,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const { LoginModal } = DS;
 
@@ -60,10 +61,16 @@ const SignInModal = (props: RootComponentProps) => {
   );
 };
 
+const Wrapped = (props: RootComponentProps) => (
+  <Router>
+    <SignInModal {...props} />
+  </Router>
+);
+
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: SignInModal,
+  rootComponent: Wrapped,
   errorBoundary: (err, errorInfo, props) => {
     if (props.logger) {
       props.logger('Error: %s; Info: %s', err, errorInfo);
