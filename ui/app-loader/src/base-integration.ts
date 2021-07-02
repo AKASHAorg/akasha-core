@@ -21,7 +21,7 @@ export interface BaseIntegrationClassOptions {
   uiEvents: BehaviorSubject<UIEventData>;
   worldConfig: ISdkConfig & ILoaderConfig;
   logger: pino.BaseLogger;
-  isMobile?: boolean;
+  isMobile: boolean;
   sdk: ReturnType<typeof getSDK>;
   addMenuItem: (menuItem: IMenuItem) => void;
   getMenuItems: () => IMenuList;
@@ -33,6 +33,7 @@ class BaseIntegration {
   public worldConfig: ISdkConfig & ILoaderConfig;
   public baseLogger: pino.BaseLogger;
   public sdk: ReturnType<typeof getSDK>;
+  public isMobile: boolean;
   public addMenuItem: (menuItem: IMenuItem) => void;
   public getMenuItems: () => IMenuList;
   constructor(opts: BaseIntegrationClassOptions) {
@@ -41,6 +42,7 @@ class BaseIntegration {
     this.worldConfig = opts.worldConfig;
     this.baseLogger = opts.logger;
     this.sdk = opts.sdk;
+    this.isMobile = opts.isMobile;
     this.addMenuItem = opts.addMenuItem;
     this.getMenuItems = opts.getMenuItems;
   }
