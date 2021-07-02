@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import getSDK from '@akashaproject/awf-sdk';
 import DS from '@akashaproject/design-system';
 import { moderationRequest } from '@akashaproject/ui-awf-hooks';
 
@@ -56,6 +57,10 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const { t } = useTranslation();
   const listItemObserver = React.useRef<any>();
 
+  const sdk = getSDK();
+
+  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+
   React.useEffect(() => {
     fetchModerationLog();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,7 +104,10 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         offset,
         limit: limit || DEFAULT_LIMIT,
       });
-      getStatusCount();
+      // check count only if fetching for the first time and offset is not yet defined
+      if (offset === undefined) {
+        getStatusCount();
+      }
       if (response.results) {
         setLogItems([...logItems, ...response.results]);
       }
@@ -133,10 +141,6 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     /* TODO */
   };
 
-  const handleClickContactModerators = () => {
-    /* TODO */
-  };
-
   const handleClickCard = (el: ILogItem) => () => {
     selected?.contentID === el.contentID ? setSelected(null) : setSelected(el);
   };
@@ -147,8 +151,6 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const buttonLabels = !isMobile
     ? [t('All'), t('Kept'), t('Delisted')]
     : [t('All'), t('Kept'), t('Delisted'), t('Stats')];
-
-  const baseAvatarUrl = 'https://hub.textile.io/ipfs/';
 
   const RenderDetailCard = (selected: ILogItem) => {
     return (
@@ -163,9 +165,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         isDelisted={selected.delisted}
         moderator={selected.moderator.name}
         moderatedTimestamp={selected.moderatedDate.toString()}
-        moderatorAvatarUrl={
-          baseAvatarUrl + selected.moderator.avatar || 'https://placebeard.it/360x360'
-        }
+        moderatorAvatarUrl={`${ipfsGateway}/${selected.moderator.avatar}`}
         moderatorEthAddress={selected.moderator.ethAddress}
         reportedTimesLabel={t(
           `Reported ${selected.reports > 1 ? `${selected.reports} times` : 'once'}`,
@@ -175,10 +175,10 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         reasons={selected.reasons}
         explanationLabel={t('explanation')}
         contactModeratorsLabel={t('Contact the moderators')}
+        contactModeratorsLink="mailto:moderators@ethereum.world"
         onClickArrowLeft={handleClickArrowLeft}
         onClickViewItem={handleClickViewItem(selected.contentType, selected.contentID)}
         onClickAvatar={handleClickAvatar}
-        onClickContactModerators={handleClickContactModerators}
       />
     );
   };
@@ -253,9 +253,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
                       isSelected={el.contentID === selected?.contentID}
                       isDelisted={el.delisted}
                       moderatedTimestamp={el.moderatedDate.toString()}
-                      moderatorAvatarUrl={
-                        baseAvatarUrl + el.moderator.avatar || 'https://placebeard.it/360x360'
-                      }
+                      moderatorAvatarUrl={`${ipfsGateway}/${el.moderator.avatar}`}
                       moderatorEthAddress={el.moderator.ethAddress}
                       onClickAvatar={handleClickAvatar}
                       onClickCard={handleClickCard(el)}
