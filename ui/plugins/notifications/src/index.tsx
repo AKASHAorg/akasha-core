@@ -1,6 +1,6 @@
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { rootRoute } from './routes';
-import { IAppConfig } from '@akashaproject/ui-awf-typings/src/app-loader';
+import { IAppConfig, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 /**
  * All the plugins must export an object like this:
@@ -14,8 +14,14 @@ export const register: () => IAppConfig = () => ({
   loadingFn: () => import('./components'),
   name: 'ui-plugin-notifications',
   title: 'Notifications | Ethereum World',
-  logo: { type: LogoTypeSource.ICON, value: 'notifications' },
   routes: {
     rootRoute,
+  },
+  menuItems: {
+    route: rootRoute,
+    label: 'Notifications',
+    name: 'ui-plugin-notifications',
+    area: MenuItemAreaType.QuickAccessArea,
+    logo: { type: LogoTypeSource.ICON, value: 'notifications' },
   },
 });

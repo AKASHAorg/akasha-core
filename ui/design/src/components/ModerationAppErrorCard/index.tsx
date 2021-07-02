@@ -15,7 +15,7 @@ export interface IModerationAppErrorCardProps {
   imageBoxHasMargin?: boolean;
   /* Path to public folder */
   publicImgPath?: string;
-  showLoginModal?: () => void;
+  onClick?: () => void;
 }
 
 const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => {
@@ -30,12 +30,12 @@ const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => 
     hasButton,
     imageBoxHasMargin,
     publicImgPath = '/images',
-    showLoginModal,
+    onClick,
   } = props;
 
   const handleClick = () => {
-    if (showLoginModal) {
-      showLoginModal();
+    if (onClick) {
+      onClick();
     }
   };
 

@@ -36,7 +36,8 @@
     "postpack": "copyfiles -f ./src/static/img/* ../build/images && copyfiles -f ./dist/* ../build/design/",
     "pack:watch": "nodemon",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "clean": "tsc --build --clean"
   },
   "nodemonConfig": {
     "ignore": [

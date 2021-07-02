@@ -96,6 +96,9 @@ mutation CreateEntry($content: [DataProviderInput!], $post: PostData) {
   createPost(content: $content, post: $post)
 }
 
+mutation EditEntry($content: [DataProviderInput!], $post: PostData, $id: String){
+  editPost(content: $content, post: $post, id: $id)
+}
 
 query GetPostsByAuthor($author: String!, $offset: Int, $limit: Int, $pubKey: String) {
   getPostsByAuthor(author: $author, offset: $offset, limit: $limit, pubKey:$pubKey) {

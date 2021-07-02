@@ -62,14 +62,14 @@ export default class TrendingWidgetRoot extends PureComponent<RootComponentProps
       })
       .init({
         fallbackLng: 'en',
-        ns: ['trending'],
+        ns: ['ui-widget-trending'],
         saveMissing: false,
         saveMissingTo: 'all',
         load: 'languageOnly',
         debug: true,
         cleanCode: true,
         keySeparator: false,
-        defaultNS: 'trending',
+        defaultNS: 'ui-widget-trending',
         backend: {
           backends: [LocalStorageBackend, Fetch],
           backendOptions: [

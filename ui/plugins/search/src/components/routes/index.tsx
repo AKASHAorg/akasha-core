@@ -39,9 +39,7 @@ const Routes: React.FC<RootComponentProps> = props => {
             <SearchPage
               {...props}
               logger={props.logger}
-              sdkModules={props.sdkModules}
               singleSpa={props.singleSpa}
-              globalChannel={props.globalChannel}
               modalState={modalState}
               modalStateActions={modalStateActions}
               showLoginModal={showLoginModal}

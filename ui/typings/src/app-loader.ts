@@ -35,9 +35,9 @@ export interface IntegrationRegistrationOptions {
   worldConfig: {
     title: string;
   };
-  sdk: any;
   uiEvents: any;
   layoutConfig?: LayoutConfig;
+  isMobile: boolean;
   integrations?: {
     infos: (AppRegistryInfo | WidgetRegistryInfo)[];
     configs: Record<string, IAppConfig | IWidgetConfig>;
@@ -101,7 +101,6 @@ export interface IAppConfig {
   };
   loadingFn: () => Promise<ISingleSpaLifecycle>;
   name: string;
-  sdkModules?: SDKdependency[];
   /**
    * A simple mapping of the extension points exposed by this widget
    */
@@ -122,8 +121,11 @@ export interface IAppConfig {
    * Used for page title
    */
   title: string;
-  menuItems?: { [p: string]: string };
-  logo?: LogoSourceType;
+  /**
+   * Only used for topbar.
+   * Warning: we may deprecate this property
+   */
+  menuItems?: IMenuItem;
 }
 
 export interface IWidgetConfig {
@@ -150,7 +152,6 @@ export interface IWidgetConfig {
   topbarSlotId?: string;
   widgetSlotId?: string;
   rootWidgetSlotId?: string;
-  sdkModules?: SDKdependency[];
   /**
    * the path on which the widget will load
    */
@@ -208,11 +209,6 @@ export interface ILoaderConfig {
   title: string;
 }
 
-export interface SDKdependency {
-  module: string;
-  services?: string[];
-}
-
 export interface ISingleSpaLifecycle {
   bootstrap: (props: unknown) => Promise<unknown>;
   mount: (props: unknown) => Promise<unknown>;
@@ -235,7 +231,7 @@ export enum MenuItemAreaType {
 }
 
 export interface IMenuItem {
-  index: number;
+  index?: number;
   label: string;
   route: string;
   type?: MenuItemType;

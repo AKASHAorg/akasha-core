@@ -103,6 +103,24 @@ class TagAPI extends DataSource {
     return await db.save(this.dbID, this.collection, [tag]);
   }
 
+  async removePostIndex(postID: string, tagName: string) {
+    const db: Client = await getAppDB();
+    const tag = await this.getTag(tagName);
+    const postIndex = tag.posts.indexOf(postID);
+    tag.posts.splice(postIndex, 1);
+    await queryCache.del(this.getTagCacheKey(tagName));
+    return await db.save(this.dbID, this.collection, [tag]);
+  }
+
+  async removeCommentIndex(commentID: string, tagName: string) {
+    const db: Client = await getAppDB();
+    const tag = await this.getTag(tagName);
+    const commentIndex = tag.comments.indexOf(commentID);
+    tag.posts.splice(commentIndex, 1);
+    await queryCache.del(this.getTagCacheKey(tagName));
+    return await db.save(this.dbID, this.collection, [tag]);
+  }
+
   async indexComment(commentsCollection: string, commentID: string, tagName: string) {
     const db: Client = await getAppDB();
     const postExists = await db.has(this.dbID, commentsCollection, [commentID]);

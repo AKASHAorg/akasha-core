@@ -109,7 +109,6 @@ const useTogglerWithClickAway = (
   React.useEffect(() => {
     const listener = (ev: Event) => {
       // tslint:disable-next-line:no-console
-      console.log('clicked away');
       const targetIsToggler = ev.target === togglerElemRef.current;
       const targetIsClickAway = ev.target === clickAwayElemRef.current;
       const targetIsTogglerDescendant = isDescendant(

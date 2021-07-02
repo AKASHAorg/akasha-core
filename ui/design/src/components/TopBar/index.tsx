@@ -41,12 +41,20 @@ export interface ITopbarProps {
   legalLabel?: string;
   feedbackLabel?: string;
   feedbackInfoLabel?: string;
+  moderationLabel?: string;
+  moderationInfoLabel?: string;
   legalCopyRightLabel?: string;
+  // moderator tools
+  isModerator?: boolean;
+  dashboardLabel?: string;
+  dashboardInfoLabel?: string;
   // handlers
   onNavigation: (path: string) => void;
   onSidebarToggle?: (visibility: boolean) => void;
   onSearch: (inputValue: string) => void;
   onFeedbackClick: () => void;
+  onModerationClick: () => void;
+  onDashboardClick: () => void;
   // external css
   className?: string;
   onLoginClick: () => void;
@@ -68,7 +76,12 @@ const Topbar: React.FC<ITopbarProps> = props => {
     legalLabel,
     feedbackLabel,
     feedbackInfoLabel,
+    moderationLabel,
+    moderationInfoLabel,
     legalCopyRightLabel,
+    isModerator,
+    dashboardLabel,
+    dashboardInfoLabel,
     className,
     quickAccessItems,
     searchAreaItem,
@@ -79,6 +92,8 @@ const Topbar: React.FC<ITopbarProps> = props => {
     onLoginClick,
     onSignUpClick,
     onFeedbackClick,
+    onModerationClick,
+    onDashboardClick,
     onLogout,
     hasNewNotifications,
   } = props;
@@ -376,13 +391,20 @@ const Topbar: React.FC<ITopbarProps> = props => {
           loggedProfileData={loggedProfileData}
           legalLabel={legalLabel}
           signOutLabel={signOutLabel}
+          isModerator={isModerator}
+          dashboardLabel={dashboardLabel}
+          dashboardInfoLabel={dashboardInfoLabel}
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
+          moderationLabel={moderationLabel}
+          moderationInfoLabel={moderationInfoLabel}
           legalCopyRightLabel={legalCopyRightLabel}
           menuItems={dropItems}
           legalMenu={legalMenu}
           onLogout={onLogout}
           onFeedbackClick={onFeedbackClick}
+          onModerationClick={onModerationClick}
+          onDashboardClick={onDashboardClick}
         />
       )}
       {menuDropOpen && !loggedProfileData?.ethAddress && (
@@ -392,10 +414,17 @@ const Topbar: React.FC<ITopbarProps> = props => {
           onNavigation={onNavigation}
           legalLabel={legalLabel}
           legalMenu={legalMenu}
+          isModerator={isModerator}
+          dashboardLabel={dashboardLabel}
+          dashboardInfoLabel={dashboardInfoLabel}
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
+          moderationLabel={moderationLabel}
+          moderationInfoLabel={moderationInfoLabel}
           legalCopyRightLabel={legalCopyRightLabel}
           onFeedbackClick={onFeedbackClick}
+          onModerationClick={onModerationClick}
+          onDashboardClick={onDashboardClick}
         />
       )}
     </TopbarWrapper>
@@ -412,6 +441,8 @@ Topbar.defaultProps = {
   legalLabel: 'Legal',
   feedbackLabel: 'Send Us Feedback',
   feedbackInfoLabel: 'Help us improve the experience!',
+  moderationLabel: 'Moderation History',
+  moderationInfoLabel: 'Help keep us accountable!',
 };
 
 export default Topbar;

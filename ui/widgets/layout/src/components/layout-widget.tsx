@@ -134,7 +134,7 @@ class LayoutWidget extends PureComponent<RootComponentProps, LayoutWidgetState> 
   public onModalNodeUnmount = (name: string) => {
     this.props.uiEvents.next({
       event: EventTypes.ModalUnmount,
-      data: this.state.modals.find(mod => mod.name === name),
+      data: { name },
     });
   };
   public render() {

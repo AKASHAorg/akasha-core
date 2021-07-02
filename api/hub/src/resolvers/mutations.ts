@@ -112,6 +112,41 @@ const mutations = {
     await queryCache.del(userIDCache);
     return postID[0];
   },
+  editPost: async (_, { content, post, id }, { dataSources, user, signature }) => {
+    if (!user) {
+      return Promise.reject('Must be authenticated!');
+    }
+    if (!id) {
+      return Promise.reject('Must provide a post [id]!');
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: content,
+      signature: signature,
+    });
+    if (!verified) {
+      logger.warn(`bad editPost sig`);
+      return Promise.reject(dataSigError);
+    }
+
+    const profile = await dataSources.profileAPI.resolveProfile(user.pubKey, true);
+    if (!profile.length) {
+      return Promise.reject('[Must be authenticated! Profile not found!]');
+    }
+    const result = await dataSources.postsAPI.editPost(user.pubKey, id, content, post);
+    if (result?.addedTags?.length) {
+      for (const tag of result.addedTags) {
+        await dataSources.tagsAPI.indexPost('Posts', id, tag);
+      }
+    }
+
+    if (result?.removedTags?.length) {
+      for (const tag of result.removedTags) {
+        await dataSources.tagsAPI.removePostIndex(id, tag);
+      }
+    }
+    return true;
+  },
   follow: async (_, { ethAddress }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
@@ -206,6 +241,43 @@ const mutations = {
     const postIDCache = dataSources.postsAPI.getPostCacheKey(comment.postID);
     await queryCache.del(postIDCache);
     return commentID[0];
+  },
+  editComment: async (_, { content, comment, id }, { dataSources, user, signature }) => {
+    if (!user) {
+      return Promise.reject('Must be authenticated!');
+    }
+    if (!id) {
+      return Promise.reject('Must provide a comment [id]!');
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: content,
+      signature: signature,
+    });
+    if (!verified) {
+      logger.warn(`bad addComment sig`);
+      return Promise.reject(dataSigError);
+    }
+    if (!comment.postID) {
+      return Promise.reject('Must provide a postID to the call!');
+    }
+    const postData = await dataSources.postsAPI.getRealPost(comment.postID);
+    if (!postData) {
+      return Promise.reject(`Post with [id] ${comment.postID} was not found!`);
+    }
+    const result = await dataSources.commentsAPI.editComment(user.pubKey, id, content, comment);
+    if (result?.addedTags?.length) {
+      for (const tag of result.addedTags) {
+        await dataSources.tagsAPI.indexComment('Comments', id, tag);
+      }
+    }
+
+    if (result?.removedTags?.length) {
+      for (const tag of result.removedTags) {
+        await dataSources.tagsAPI.removeCommentIndex(id, tag);
+      }
+    }
+    return true;
   },
 };
 export default mutations;

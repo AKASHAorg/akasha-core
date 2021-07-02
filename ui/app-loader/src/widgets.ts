@@ -7,7 +7,7 @@ import {
 import * as singleSpa from 'single-spa';
 import { IntegrationModule } from './apps';
 import BaseIntegration, { BaseIntegrationClassOptions } from './base-integration';
-import { getSDKDependencies, navigateToModal } from './utils';
+import { navigateToModal } from './utils';
 import pino from 'pino';
 
 class Widgets extends BaseIntegration {
@@ -15,7 +15,6 @@ class Widgets extends BaseIntegration {
   private readonly widgetModules: Record<string, IntegrationModule>;
   private readonly widgetConfigs: Record<string, IWidgetConfig>;
   private readonly widgetParcels: Record<string, singleSpa.Parcel>;
-  private readonly isMobile?: boolean;
   private logger: pino.Logger;
   constructor(opts: BaseIntegrationClassOptions) {
     super(opts);
@@ -24,7 +23,6 @@ class Widgets extends BaseIntegration {
     this.widgetConfigs = {};
     this.widgetParcels = {};
     this.layoutConfig = opts.layoutConfig;
-    this.isMobile = opts.isMobile;
     this.logger = opts.logger.child({ module: 'widgets-loader' });
   }
   add(integration: WidgetRegistryInfo) {
@@ -68,7 +66,6 @@ class Widgets extends BaseIntegration {
       this.logger.warn('Layout config is undefined!');
       return;
     }
-    const dependencies = getSDKDependencies(widgetConfig, this.sdk);
 
     const wrapperNode = this.getDomElement(widgetConfig, widgetName, 'widget');
 
@@ -84,14 +81,14 @@ class Widgets extends BaseIntegration {
       ...widgetConfig,
       layoutConfig: { ...otherLayoutProps },
       domElement: wrapperNode,
-      sdkModules: dependencies,
-      globalChannel: this.sdk.globalChannel,
+      globalChannel: this.sdk.api.globalChannel,
       uiEvents: this.uiEvents,
       isMobile: this.isMobile,
       logger: this.baseLogger.child({ module: widgetName }),
       // installIntegration: this.installIntegration.bind(this),
       // uninstallIntegration: this.uninstallIntegration.bind(this),
       navigateToModal: navigateToModal,
+      getMenuItems: this.getMenuItems,
     };
 
     const widgetParcel = singleSpa.mountRootParcel(widgetConfig.loadingFn, widgetProps);
@@ -106,10 +103,10 @@ class Widgets extends BaseIntegration {
         this.widgetConfigs[name] = (await widgetModule.register({
           layoutConfig: this.layoutConfig,
           uiEvents: this.uiEvents,
-          sdk: this.sdk,
           worldConfig: {
             title: this.worldConfig.title,
           },
+          isMobile: this.isMobile,
         })) as IWidgetConfig;
       } else {
         this.logger.warn(`Widget ${name} does not have a register() method exported!`);
@@ -152,7 +149,7 @@ class Widgets extends BaseIntegration {
 
     this.widgetModules[widgetInfo.name] = module;
     if (module.hasOwnProperty('install') && typeof module.install === 'function') {
-      await module.install(this.sdk);
+      await module.install({});
     }
     if (module.hasOwnProperty('register') && typeof module.register === 'function') {
       const widgetConfig = (await module.register({
@@ -160,8 +157,8 @@ class Widgets extends BaseIntegration {
         worldConfig: {
           title: this.worldConfig.title,
         },
-        sdk: this.sdk,
         uiEvents: this.uiEvents,
+        isMobile: this.isMobile,
       })) as IWidgetConfig;
       if (!widgetConfig) {
         return;
@@ -175,28 +172,26 @@ class Widgets extends BaseIntegration {
   public uninstall(info: WidgetRegistryInfo) {
     const idx = this.widgetInfos.findIndex(inf => inf.name === info.name);
     if (idx >= 0) {
-      const call = this.sdk.db.apps.remove({ name: info.name });
-      call.subscribe({
-        next: async (resp: { data: string[] | string }) => {
-          if (resp.data) {
-            delete this.widgetModules[info.name];
-
-            this.widgetInfos.splice(idx, 1);
-
-            if (this.widgetParcels[info.name]) {
-              const parcel = this.widgetParcels[info.name];
-              await parcel.unmount();
-            }
-            // if (this.extensionParcels.hasOwnProperty(name)) {
-            //   this.extensionParcels[name].forEach(async parcelData => {
-            //     await parcelData.parcel.unmount();
-            //   });
-            // }
-            this.logger.info(`app ${name} unloaded!`);
-          }
-        },
-        error: (err: Error) => this.logger.error(`Error uninstalling app: ${name}, ${err}`),
-      });
+      // const call = this.sdk.services.db.apps.remove({ name: info.name });
+      // call.subscribe({
+      //   next: async (resp: { data: string[] | string }) => {
+      //     if (resp.data) {
+      //       delete this.widgetModules[info.name];
+      //       this.widgetInfos.splice(idx, 1);
+      //       if (this.widgetParcels[info.name]) {
+      //         const parcel = this.widgetParcels[info.name];
+      //         await parcel.unmount();
+      //       }
+      //       // if (this.extensionParcels.hasOwnProperty(name)) {
+      //       //   this.extensionParcels[name].forEach(async parcelData => {
+      //       //     await parcelData.parcel.unmount();
+      //       //   });
+      //       // }å
+      //       this.logger.info(`app ${name} unloaded!`);
+      //     }
+      //   },
+      //   error: (err: Error) => this.logger.error(`Error uninstalling app: ${name}, ${err}`),
+      // });
     }
   }
   get configs() {

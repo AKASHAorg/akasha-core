@@ -5,7 +5,7 @@ import Gql from '../gql';
 import AWF_Auth from '../auth';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
-import { AddComment, GetComment, GetComments } from './comments.graphql';
+import { AddComment, GetComment, GetComments, EditComment } from './comments.graphql';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { concatAll, map, tap } from 'rxjs/operators';
 import { AWF_IComments } from '@akashaproject/sdk-typings/lib/interfaces/posts';
@@ -102,6 +102,49 @@ export default class AWF_Comments implements AWF_IComments {
                 this._globalChannel.next({
                   data: ev.data,
                   event: COMMENTS_EVENTS.CREATE,
+                  args: opt,
+                });
+              }),
+            );
+        }),
+        concatAll(),
+      );
+  }
+
+  /**
+   * Update an existing comment
+   * @param opt
+   */
+  editComment(opt: {
+    commentID: string;
+    data: DataProviderInput[];
+    comment: { postID: string; replyTo?: string; tags?: string[]; mentions?: string[] };
+  }) {
+    const textContent = opt.data.find(e => e.property === 'textContent');
+    textContent.value = Buffer.from(textContent.value).toString('base64');
+    this._gql.clearCache();
+    return this._auth
+      .authenticateMutationData((opt.data as unknown) as Record<string, unknown>[])
+      .pipe(
+        map(res => {
+          return this._gql
+            .run<{ editComment: boolean }>({
+              query: EditComment,
+              variables: { content: opt.data, comment: opt.comment, id: opt.commentID },
+              operationName: 'EditComment',
+              context: {
+                headers: {
+                  Authorization: `Bearer ${res.token.data}`,
+                  Signature: res.signedData.data.signature,
+                },
+              },
+            })
+            .pipe(
+              tap(ev => {
+                // @emits COMMENTS_EVENTS.EDIT
+                this._globalChannel.next({
+                  data: ev.data,
+                  event: COMMENTS_EVENTS.EDIT,
                   args: opt,
                 });
               }),
