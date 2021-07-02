@@ -96,7 +96,7 @@ describe('<ProfilePageHeader />', () => {
   it('should render an avatar', async () => {
     const avatarNode = await renderResult.findByTestId('avatar-image');
     const avatarSrc = avatarNode.getAttribute('src');
-    console.log(avatarSrc, '<<<< avatar src');
+    //console.log(avatarSrc, '<<<< avatar src');
     expect(avatarSrc).toEqual(mockUser.avatar);
   });
 });

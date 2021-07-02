@@ -4,7 +4,8 @@ import {
   IAppConfig,
   IntegrationRegistrationOptions,
   IWidgetConfig,
-} from '@akashaproject/ui-awf-typings/src/app-loader';
+  MenuItemAreaType,
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const findTopbarQuickAccess = (integrations: IntegrationRegistrationOptions['integrations']) => {
   if (!integrations) {
@@ -28,7 +29,7 @@ const findTopbarQuickAccess = (integrations: IntegrationRegistrationOptions['int
 };
 
 /**
- * All the plugins must export an object like this:
+ * All plugins must export an object like this:
  */
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   // This is the root route in which the plugin will render.
@@ -40,8 +41,19 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   loadingFn: () => import('./components'),
   name: 'ui-plugin-profile',
   title: 'Profile | Ethereum World',
-  menuItems: routes,
-  logo: { type: LogoTypeSource.AVATAR, value: '' },
+  menuItems: {
+    label: 'Profile',
+    name: 'ui-plugin-profile',
+    area: MenuItemAreaType.QuickAccessArea,
+    // routes,
+    logo: { type: LogoTypeSource.AVATAR, value: '' },
+    route: rootRoute,
+    subRoutes: Object.keys(routes).map((routeName, idx) => ({
+      index: idx,
+      label: routeName,
+      route: routes[routeName],
+    })),
+  },
   extends: [
     {
       mountsIn: mountOptions => findTopbarQuickAccess(mountOptions.integrations),

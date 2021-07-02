@@ -2,6 +2,8 @@ import {
   AppRegistryInfo,
   IAppConfig,
   ILoaderConfig,
+  IMenuItem,
+  IMenuList,
   ISdkConfig,
   IWidgetConfig,
   LayoutConfig,
@@ -12,14 +14,17 @@ import pino from 'pino';
 import * as singleSpa from 'single-spa';
 import { BehaviorSubject } from 'rxjs';
 import { createRootNode } from './utils';
+import getSDK from '@akashaproject/awf-sdk';
 
 export interface BaseIntegrationClassOptions {
   layoutConfig: LayoutConfig;
   uiEvents: BehaviorSubject<UIEventData>;
   worldConfig: ISdkConfig & ILoaderConfig;
   logger: pino.BaseLogger;
-  sdk: any;
   isMobile?: boolean;
+  sdk: ReturnType<typeof getSDK>;
+  addMenuItem: (menuItem: IMenuItem) => void;
+  getMenuItems: () => IMenuList;
 }
 
 class BaseIntegration {
@@ -27,13 +32,17 @@ class BaseIntegration {
   public uiEvents: BehaviorSubject<UIEventData>;
   public worldConfig: ISdkConfig & ILoaderConfig;
   public baseLogger: pino.BaseLogger;
-  public sdk: any;
+  public sdk: ReturnType<typeof getSDK>;
+  public addMenuItem: (menuItem: IMenuItem) => void;
+  public getMenuItems: () => IMenuList;
   constructor(opts: BaseIntegrationClassOptions) {
     this.layoutConfig = opts.layoutConfig;
     this.uiEvents = opts.uiEvents;
     this.worldConfig = opts.worldConfig;
     this.baseLogger = opts.logger;
     this.sdk = opts.sdk;
+    this.addMenuItem = opts.addMenuItem;
+    this.getMenuItems = opts.getMenuItems;
   }
   public getAppsForLocation(location: Location) {
     return singleSpa.checkActivityFunctions(location);

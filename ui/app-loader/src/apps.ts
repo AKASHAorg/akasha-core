@@ -5,11 +5,12 @@ import {
   IAppConfig,
   IntegrationRegistrationOptions,
   IWidgetConfig,
+  MenuItemType,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import BaseIntegration, { BaseIntegrationClassOptions } from './base-integration';
 import * as singleSpa from 'single-spa';
-import { getNameFromDef, getSDKDependencies, navigateToModal } from './utils';
+import { getNameFromDef, navigateToModal } from './utils';
 import pino from 'pino';
 
 export interface IntegrationModule {
@@ -60,11 +61,9 @@ class Apps extends BaseIntegration {
       if (appModule.hasOwnProperty('register') && typeof appModule.register === 'function') {
         this.appConfigs[name] = (await appModule.register({
           layoutConfig: this.layoutConfig,
-          // uiEvents: this.uiEvents,
           worldConfig: {
             title: this.worldConfig.title,
           },
-          sdk: this.sdk,
           uiEvents: this.uiEvents,
         })) as IAppConfig;
       } else {
@@ -166,8 +165,6 @@ class Apps extends BaseIntegration {
 
     this.logger.info(`registering app ${appName}`);
 
-    const deps = getSDKDependencies(appConfig, this.sdk);
-
     if (appConfig.mountsIn) {
       singleSpa.registerApplication({
         name: appName,
@@ -175,7 +172,6 @@ class Apps extends BaseIntegration {
         activeWhen: location => this.checkActivityFn(appConfig, location),
         customProps: {
           domElementGetter: () => this.getDomElement(appConfig, appName, 'app'),
-          sdkModules: deps,
           uiEvents: this.uiEvents,
           logger: this.baseLogger.child({ module: appName }),
           installIntegration: (name: string, version?: string) => {
@@ -185,9 +181,12 @@ class Apps extends BaseIntegration {
             this.uiEvents.next({ event: EventTypes.UninstallIntegration, data: { name } }),
           navigateToModal: navigateToModal,
           layoutConfig: this.layoutConfig,
-          globalChannel: this.sdk.globalChannel,
+          getMenuItems: this.getMenuItems,
         },
       });
+      if (appConfig.menuItems) {
+        this.addMenuItem(appConfig.menuItems);
+      }
     } else {
       this.logger.warn('Cannot mount %s since there is not mountsIn property defined!', appName);
     }
@@ -201,16 +200,14 @@ class Apps extends BaseIntegration {
     }
     this.appModules[appInfo.name] = module;
     if (module.hasOwnProperty('install') && typeof module.install === 'function') {
-      await module.install(this.sdk);
+      await module.install({});
     }
     if (module.hasOwnProperty('register') && typeof module.register === 'function') {
       const appConfig = (await module.register({
         layoutConfig: this.layoutConfig,
-        // uiEvents: this.uiEvents,
         worldConfig: {
           title: this.worldConfig.title,
         },
-        sdk: this.sdk,
         uiEvents: this.uiEvents,
       })) as IAppConfig;
       if (!appConfig) {
