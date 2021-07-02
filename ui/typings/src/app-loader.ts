@@ -37,6 +37,7 @@ export interface IntegrationRegistrationOptions {
   };
   uiEvents: any;
   layoutConfig?: LayoutConfig;
+  isMobile: boolean;
   integrations?: {
     infos: (AppRegistryInfo | WidgetRegistryInfo)[];
     configs: Record<string, IAppConfig | IWidgetConfig>;
