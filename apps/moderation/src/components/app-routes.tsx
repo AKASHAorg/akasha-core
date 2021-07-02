@@ -10,7 +10,7 @@ import routes, { HOME, UNAUTHENTICATED, rootRoute } from '../routes';
 import ContentList from './content-list';
 import PromptAuthentication from './prompt-authentication';
 
-const { Box, LoginModal } = DS;
+const { Box } = DS;
 
 interface AppRoutesProps {
   onError: (err: IAkashaError) => void;
@@ -19,31 +19,15 @@ interface AppRoutesProps {
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   const { layoutConfig, onError } = props;
 
-  const [loginModalState, setLoginModalState] = React.useState(false);
-
   const { t } = useTranslation();
 
-  const [loginState, loginActions] = useLoginState({
+  const [loginState] = useLoginState({
     onError: onError,
   });
 
   const showLoginModal = () => {
-    setLoginModalState(true);
+    props.navigateToModal({ name: 'login' });
   };
-
-  const hideLoginModal = () => {
-    setLoginModalState(false);
-  };
-
-  const handleLogin = (providerId: number) => {
-    loginActions.login(providerId);
-  };
-
-  React.useEffect(() => {
-    if (loginState.ethAddress) {
-      setLoginModalState(false);
-    }
-  }, [loginState.ethAddress]);
 
   return (
     <Box>
@@ -71,16 +55,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           <Redirect exact={true} from={rootRoute} to={routes[HOME]} />
         </Switch>
       </Router>
-      <LoginModal
-        showModal={loginModalState}
-        slotId={layoutConfig.modalSlotId}
-        onLogin={handleLogin}
-        onModalClose={hideLoginModal}
-        titleLabel={t('Connect a wallet')}
-        metamaskModalHeadline={t('Connecting')}
-        metamaskModalMessage={t('Please complete the process in your wallet')}
-        error={null}
-      />
     </Box>
   );
 };

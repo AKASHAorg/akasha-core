@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const SignInButtons = (props: RootComponentProps) => {
-
   return (
     <nav>
       <button onClick={() => props.navigateToModal({ name: 'signin' })}>Sign In</button>

@@ -48,8 +48,16 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       loadingFn: () => import('./extensions/sign-in-buttons'),
     },
     {
+      mountsIn: 'login',
+      loadingFn: () => import('./extensions/login-modal'),
+    },
+    {
       mountsIn: 'signin',
       loadingFn: () => import('./extensions/sign-in-modal'),
+    },
+    {
+      mountsIn: 'signup',
+      loadingFn: () => import('./extensions/sign-up-modal'),
     },
   ],
   routes: {

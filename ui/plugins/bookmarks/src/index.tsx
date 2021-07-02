@@ -1,6 +1,5 @@
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { rootRoute } from './routes';
-import { Widget as TrendingWidget } from './trending-widget';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
@@ -39,9 +38,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
   name: 'ui-plugin-bookmarks',
-  widgets: {
-    [rootRoute]: [TrendingWidget],
-  },
   routes: {
     rootRoute,
   },

@@ -1,14 +1,19 @@
 import * as React from 'react';
+import singleSpaReact from 'single-spa-react';
+import ReactDOM from 'react-dom';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useLoginState, useErrors, useModalState } from '@akashaproject/ui-awf-hooks';
 import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
+import getSDK from '@akashaproject/awf-sdk';
 
 const { LoginModal } = DS;
 
-const LoginWidget = (props: RootComponentProps) => {
+const SignUpModal = (props: RootComponentProps) => {
   const { t } = useTranslation();
+
+  const sdk = getSDK();
 
   const { logger } = props;
 
@@ -55,6 +60,10 @@ const LoginWidget = (props: RootComponentProps) => {
     checkedTermsValues: [],
     acceptedTerms: false,
   });
+
+  const handleLogin = (provider: 2 | 3) => {
+    loginActions.login(provider, !showSignUpModal?.status);
+  };
 
   const loginErrors: string | null = React.useMemo(() => {
     if (errorState && Object.keys(errorState).length) {
@@ -186,7 +195,7 @@ const LoginWidget = (props: RootComponentProps) => {
 
   return (
     <LoginModal
-      slotId={props.layout.modalSlotId}
+      slotId={props.layoutConfig.modalSlotId}
       onLogin={handleLogin}
       showSignUpModal={showSignUpModal}
       onInputTokenChange={onInputTokenChange}
@@ -197,7 +206,6 @@ const LoginWidget = (props: RootComponentProps) => {
       hasError={inviteTokenForm.hasError}
       errorMsg={inviteTokenForm.errorMsg}
       onModalClose={handleLoginModalClose}
-      showModal={modalState[MODAL_NAMES.LOGIN]}
       subtitleLabel={t('Please enter your invitation code')}
       headerLabel={t('Sign Up')}
       titleLabel={t('Connect a wallet')}
@@ -215,4 +223,20 @@ const LoginWidget = (props: RootComponentProps) => {
   );
 };
 
-export default LoginWidget;
+const reactLifecycles = singleSpaReact({
+  React,
+  ReactDOM,
+  rootComponent: SignUpModal,
+  errorBoundary: (err, errorInfo, props) => {
+    if (props.logger) {
+      props.logger('Error: %s; Info: %s', err, errorInfo);
+    }
+    return <div>!</div>;
+  },
+});
+
+export const bootstrap = reactLifecycles.bootstrap;
+
+export const mount = reactLifecycles.mount;
+
+export const unmount = reactLifecycles.unmount;

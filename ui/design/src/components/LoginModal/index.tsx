@@ -15,7 +15,6 @@ import ViewportSizeProvider, { useViewportSize } from '../Providers/viewport-dim
 export interface LoginModalProps {
   slotId: string;
   onLogin: (providerId: number) => void;
-  showModal: boolean;
   showSignUpModal?: {
     inviteToken: string | null;
     status: boolean;
@@ -59,7 +58,6 @@ const ETH_PROVIDERS = {
 
 const LoginModal: React.FC<LoginModalProps> = props => {
   const {
-    showModal,
     showSignUpModal,
     onModalClose,
     onLogin,
@@ -130,7 +128,7 @@ const LoginModal: React.FC<LoginModalProps> = props => {
   return (
     <ViewportSizeProvider>
       <ModalRenderer slotId={props.slotId}>
-        {showModal && !modalState.selectedProvider && (
+        {!modalState.selectedProvider && (
           <EthProviderListModal
             titleLabel={titleLabel}
             subtitleLabel={subtitleLabel}
@@ -166,7 +164,7 @@ const LoginModal: React.FC<LoginModalProps> = props => {
             waitForCheckTerms={waitForCheckTerms}
           />
         )}
-        {suggestSignUp && showModal && !showSignUpModal?.status && (
+        {suggestSignUp && !showSignUpModal?.status && (
           <ModalContainer onModalClose={handleProviderModalClose}>
             <ErrorLoader
               type="not-registered"
@@ -183,7 +181,7 @@ const LoginModal: React.FC<LoginModalProps> = props => {
             </ErrorLoader>
           </ModalContainer>
         )}
-        {showModal && !suggestSignUp && modalState.selectedProvider === METAMASK_PROVIDER && (
+        {!suggestSignUp && modalState.selectedProvider === METAMASK_PROVIDER && (
           <EthProviderModal
             illustration={
               <EthProviderModalIllustration providerIcon={<Icon type="metamask" size="lg" />} />
@@ -196,7 +194,7 @@ const LoginModal: React.FC<LoginModalProps> = props => {
             isMobile={size === 'small'}
           />
         )}
-        {showModal && !suggestSignUp && modalState.selectedProvider === WALLETCONNECT_PROVIDER && (
+        {!suggestSignUp && modalState.selectedProvider === WALLETCONNECT_PROVIDER && (
           <WalletConnectModalTrigger onLogin={handleWalletConnectLogin} />
         )}
       </ModalRenderer>
