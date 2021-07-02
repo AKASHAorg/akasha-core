@@ -16,16 +16,12 @@ export interface RootComponentProps {
   domElement: HTMLElement;
   uiEvents: any;
   i18n?: typeof i18n;
-  getMenuItems?: () => any;
-  globalChannel: any;
+  getMenuItems?: () => AppLoaderTypes.IMenuList;
   isMobile: boolean;
   layoutConfig: Omit<AppLoaderTypes.LayoutConfig, 'loadingFn' | 'mountsIn' | 'name' | 'title'>;
   logger: any;
   mountParcel: (parcel: unknown, config?: unknown) => unknown;
   name: string;
-  sdkModules: {
-    [key: string]: any;
-  };
   singleSpa: any;
   installIntegration?: (name: string) => void;
   uninstallIntegration?: (name: string) => void;

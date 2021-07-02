@@ -32,7 +32,8 @@
     "pino": "6.11.3",
     "single-spa": "5.9.2",
     "qs": "6.10.1",
-    "@akashaproject/ui-awf-typings": "*"
+    "@akashaproject/ui-awf-typings": "*",
+    "@akashaproject/awf-sdk": "*"
   },
   "devDependencies": {
     "@types/pino": "6.3.8",

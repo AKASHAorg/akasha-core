@@ -11,5 +11,4 @@ export const Widget: IWidgetConfig = {
       './newpost-community-widget'
     ),
   name: 'ui-widget-newpost-community',
-  sdkModules: [],
 };

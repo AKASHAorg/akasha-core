@@ -13,7 +13,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   mountsIn: opts.layoutConfig?.pluginSlotId,
   name: 'moderation-app',
   sdkModules: [],
-  menuItems: routes,
+  // menuItems: routes,
   title: 'Moderator Dashboard | Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'appModeration' },
   widgets: {},

@@ -12,7 +12,10 @@ import {
   ModalNavigationOptions,
   UIEventData,
   WidgetRegistryInfo,
+  IMenuList,
+  IMenuItem,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import getSDK from '@akashaproject/awf-sdk';
 import * as rxjsOperators from 'rxjs/operators';
 import pino from 'pino';
 import { BehaviorSubject } from 'rxjs';
@@ -22,18 +25,10 @@ import { getIntegrationInfo, getIntegrationInfos } from './registry';
 import { hideSplash, showSplash } from './splash-screen';
 import detectMobile from 'ismobilejs';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import {
-  createRootNode,
-  getNameFromDef,
-  getSDKDependencies,
-  navigateToModal,
-  toNormalDef,
-} from './utils';
+import { createRootNode, getNameFromDef, navigateToModal, toNormalDef } from './utils';
 import qs from 'qs';
 import Apps from './apps';
 import Widgets from './widgets';
-
-// import { pathToRegexp } from 'path-to-regexp';
 
 interface SingleSpaEventDetail {
   originalEvent: Event;
@@ -47,10 +42,6 @@ interface SingleSpaEventDetail {
   totalAppChanges: number;
 }
 
-interface SdkChannels {
-  [key: string]: Record<string, any>;
-}
-
 export default class AppLoader {
   public readonly uiEvents: BehaviorSubject<UIEventData>;
 
@@ -60,7 +51,8 @@ export default class AppLoader {
   private readonly worldConfig: ILoaderConfig & ISdkConfig;
   private readonly logger: pino.BaseLogger;
   private readonly loaderLogger: pino.Logger;
-  private readonly sdk;
+  private readonly sdk: ReturnType<typeof getSDK>;
+  private readonly menuItems: IMenuList;
   public integrations: {
     info: (AppRegistryInfo | WidgetRegistryInfo)[];
     modules: Record<string, IntegrationConfig>;
@@ -74,7 +66,7 @@ export default class AppLoader {
   private apps: Apps;
   private widgets: Widgets;
   // private extensions: Extensions;
-  constructor(worldConfig: ILoaderConfig & ISdkConfig, sdk: SdkChannels) {
+  constructor(worldConfig: ILoaderConfig & ISdkConfig, sdk: ReturnType<typeof getSDK>) {
     this.worldConfig = worldConfig;
     // root logger
     this.logger = pino({ browser: { asObject: true }, level: worldConfig.logLevel });
@@ -92,6 +84,8 @@ export default class AppLoader {
 
     this.extensionPoints = [];
     this.extensionParcels = {};
+
+    this.menuItems = { nextIndex: 1, items: [] };
   }
 
   private addSingleSpaEventListeners() {
@@ -129,12 +123,9 @@ export default class AppLoader {
       }
     });
 
-    if (this.sdk.globalChannel) {
-      const loginEvent = this.sdk.globalChannel.pipe(
-        rxjsOperators.filter(
-          (ev: { channelInfo: Record<string, unknown>; data: Record<string, unknown> }) =>
-            ev?.channelInfo?.method === 'signIn',
-        ),
+    if (this.sdk.api.globalChannel) {
+      const loginEvent = this.sdk.api.globalChannel.pipe(
+        rxjsOperators.filter(ev => ev?.event === 'signIn'),
       );
       loginEvent.subscribe({
         next: () => {
@@ -174,6 +165,8 @@ export default class AppLoader {
       uiEvents: this.uiEvents,
       logger: this.logger,
       sdk: this.sdk,
+      addMenuItem: this.addMenuItem.bind(this),
+      getMenuItems: this.getMenuItems.bind(this),
     });
 
     this.widgets = new Widgets({
@@ -182,6 +175,8 @@ export default class AppLoader {
       uiEvents: this.uiEvents,
       logger: this.logger,
       sdk: this.sdk,
+      addMenuItem: this.addMenuItem.bind(this),
+      getMenuItems: this.getMenuItems.bind(this),
     });
 
     integrationInfos.forEach(integration => {
@@ -204,9 +199,10 @@ export default class AppLoader {
     if (!this.sdk) {
       return;
     }
-    const doc = this.sdk.db.apps.getInstalled({});
+    const doc = this.sdk.services.appSettings.getAll();
+
     doc.subscribe({
-      next: async (resp: { data: { apps: AppOrWidgetDefinition[] } }) => {
+      next: async (resp: any) => {
         const { data } = resp;
         this.loaderLogger.info('currently installed apps %o', data.apps);
         if (!data.apps.length) {
@@ -285,8 +281,16 @@ export default class AppLoader {
         .catch(err => this.loaderLogger.warn(err));
     }
   }
-  public onModalUnmount(_modalData: UIEventData['data']) {
-    return;
+  public onModalUnmount(modalData: UIEventData['data']) {
+    if (this.activeModal.name === modalData.name) {
+      this.activeModal = undefined;
+    } else {
+      this.loaderLogger.error(
+        'Cannot unmount modal. Name mismatch: %s != %s',
+        modalData.name,
+        this.activeModal.name,
+      );
+    }
   }
 
   public filterExtensionsByMountPoint(
@@ -301,7 +305,6 @@ export default class AppLoader {
         mountPoint = ext.mountsIn({
           layoutConfig: this.layoutConfig,
           worldConfig: this.worldConfig,
-          sdk: this.sdk,
           uiEvents: this.uiEvents,
           integrations: {
             configs: integrationConfigs,
@@ -378,7 +381,6 @@ export default class AppLoader {
 
   // get registry info for multiple packages
   public async getPackageInfos(packages: AppOrWidgetDefinition[]) {
-    console.log(packages, '>>>> packs to get info');
     const regInfos = packages
       .map(def => {
         const normalized = toNormalDef(def);
@@ -463,10 +465,8 @@ export default class AppLoader {
       uiEvents: this.uiEvents,
       singleSpa: singleSpa,
       isMobile: this.isMobile,
-      globalChannel: this.sdk.globalChannel,
       layoutConfig: { ...layoutParams },
       logger: this.logger.child({ module: this.layoutConfig.name }),
-      sdkModules: getSDKDependencies(this.layoutConfig, this.sdk),
       mountParcel: singleSpa.mountRootParcel,
       name: this.layoutConfig.name,
       navigateToModal: navigateToModal,
@@ -494,26 +494,24 @@ export default class AppLoader {
     }
 
     await this.createImportMaps([info], info.name);
-    const call = this.sdk.db.apps.install({ name: info.name });
+    const call = this.sdk.services.appSettings.install({ name: info.name });
     call.subscribe({
-      next: async (resp: { data: string }) => {
-        if (resp.data) {
-          if (info.type === 'app') {
-            await this.apps.install(info);
-            const config = this.apps.configs[info.name];
-            if (!config) {
-              this.loaderLogger.warn(`Config not found or is not ready yet! App: ${info.name}`);
-            }
-            await this.mountExtension(config, info);
+      next: async _resp => {
+        if (info.type === 'app') {
+          await this.apps.install(info);
+          const config = this.apps.configs[info.name];
+          if (!config) {
+            this.loaderLogger.warn(`Config not found or is not ready yet! App: ${info.name}`);
           }
-          if (info.type === 'widget') {
-            await this.widgets.install(info);
-            const config = this.widgets.configs[info.name];
-            if (!config) {
-              this.loaderLogger.warn(`Config not found or is not ready yet! App: ${info.name}`);
-            }
-            await this.mountExtension(config, info);
+          await this.mountExtension(config, info);
+        }
+        if (info.type === 'widget') {
+          await this.widgets.install(info);
+          const config = this.widgets.configs[info.name];
+          if (!config) {
+            this.loaderLogger.warn(`Config not found or is not ready yet! App: ${info.name}`);
           }
+          await this.mountExtension(config, info);
         }
       },
       error: (err: Error) => {
@@ -532,7 +530,6 @@ export default class AppLoader {
           mountsIn = extension.mountsIn({
             layoutConfig: this.layoutConfig,
             worldConfig: this.worldConfig,
-            sdk: this.sdk,
             uiEvents: this.uiEvents,
             integrations: {
               configs: { ...this.apps.configs, ...this.widgets.configs },
@@ -567,20 +564,22 @@ export default class AppLoader {
       this.loaderLogger.info(`Cannot find package ${definition}`);
       return;
     }
-    const call = this.sdk.db.apps.remove({ name: info.name });
-    call.subscribe({
-      next: async (resp: { data: string[] | string }) => {
-        if (resp.data) {
-          if (info.type === 'app') {
-            this.apps.uninstall(info);
-          }
-          if (info.type === 'widget') {
-            this.widgets.uninstall(info);
-          }
-        }
-      },
-      error: (err: Error) => this.logger.error(`Error uninstalling app: ${name}, ${err}`),
-    });
+    await this.sdk.services.appSettings.uninstall(info.name);
+    if (info.type === 'app') {
+      this.apps.uninstall(info);
+    }
+    if (info.type === 'widget') {
+      this.widgets.uninstall(info);
+    }
+  }
+
+  public getMenuItems() {
+    return { ...this.menuItems };
+  }
+
+  public addMenuItem(menuItem: IMenuItem) {
+    this.menuItems.items.push({ ...menuItem, index: this.menuItems.nextIndex });
+    this.menuItems.nextIndex += 1;
   }
 
   private async mountExtensionPoint(extensionPoint: ExtensionPointDefinition, index: number) {
@@ -596,7 +595,6 @@ export default class AppLoader {
           infos: [...this.apps.infos, ...this.widgets.infos],
         },
         worldConfig: this.worldConfig,
-        sdk: this.sdk,
         uiEvents: this.uiEvents,
       });
     }
@@ -689,10 +687,10 @@ export default class AppLoader {
       });
     }
 
-    const integrationsToMount = this.getPluginsForLocation(window.location);
-    if (!integrationsToMount.length) {
-      return;
-    }
+    // const integrationsToMount = this.getPluginsForLocation(window.location);
+    // if (!integrationsToMount.length) {
+    //   return;
+    // }
   }
 
   private onAppChange(ev: CustomEvent<SingleSpaEventDetail>) {
