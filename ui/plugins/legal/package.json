@@ -26,7 +26,8 @@
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../../build/plugins/legal",
     "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333",
-    "watch": "webpack --config ./webpack.config.js --watch"
+    "watch": "webpack --config ./webpack.config.js --watch",
+    "clean": "tsc --build --clean"
   },
   "dependencies": {
     "@akashaproject/ui-awf-typings": "*",

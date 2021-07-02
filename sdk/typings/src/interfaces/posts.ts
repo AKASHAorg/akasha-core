@@ -23,6 +23,12 @@ export interface AWF_IEntry {
     post: { title?: string; tags?: string[]; quotes?: string[] };
   }): unknown;
 
+  editEntry(opt: {
+    entryID: string;
+    data: DataProviderInput[];
+    post: { title?: string; tags?: string[]; quotes?: string[] };
+  }): unknown;
+
   entriesByAuthor(opt: { pubKey: string; offset?: number; limit: number }): Observable<unknown>;
 
   /**
@@ -50,6 +56,12 @@ export interface AWF_IComments {
    * @param opt
    */
   addComment(opt: {
+    data: DataProviderInput[];
+    comment: { postID: string; replyTo?: string; tags?: string[]; mentions?: string[] };
+  }): unknown;
+
+  editComment(opt: {
+    commentID: string;
     data: DataProviderInput[];
     comment: { postID: string; replyTo?: string; tags?: string[]; mentions?: string[] };
   }): unknown;

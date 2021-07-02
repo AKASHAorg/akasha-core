@@ -11,6 +11,7 @@ import {
   GetEntry,
   GetPostsByAuthor,
   GetPostsByTag,
+  EditEntry,
 } from './entry.graphql';
 import { concatAll, map, tap } from 'rxjs/operators';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
@@ -120,6 +121,49 @@ export default class AWF_Entry implements AWF_IEntry {
                 this._globalChannel.next({
                   data: ev.data,
                   event: ENTRY_EVENTS.CREATE,
+                  args: opt,
+                });
+              }),
+            );
+        }),
+        concatAll(),
+      );
+  }
+
+  /**
+   * Update an existing entry
+   * @param opt
+   */
+  editEntry(opt: {
+    entryID: string;
+    data: DataProviderInput[];
+    post: { title?: string; tags?: string[]; quotes?: string[] };
+  }) {
+    const textContent = opt.data.find(e => e.property === 'textContent');
+    textContent.value = Buffer.from(textContent.value).toString('base64');
+    this._gql.clearCache();
+    return this._auth
+      .authenticateMutationData((opt.data as unknown) as Record<string, unknown>[])
+      .pipe(
+        map(res => {
+          return this._gql
+            .run<{ editPost: boolean }>({
+              query: EditEntry,
+              variables: { content: opt.data, post: opt.post, id: opt.entryID },
+              operationName: 'EditEntry',
+              context: {
+                headers: {
+                  Authorization: `Bearer ${res.token.data}`,
+                  Signature: res.signedData.data.signature,
+                },
+              },
+            })
+            .pipe(
+              tap(ev => {
+                // @emits ENTRY_EVENTS.EDIT
+                this._globalChannel.next({
+                  data: ev.data,
+                  event: ENTRY_EVENTS.EDIT,
                   args: opt,
                 });
               }),

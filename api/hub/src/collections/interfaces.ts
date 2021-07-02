@@ -16,6 +16,7 @@ export interface PostItem {
   _id: string;
   title?: string;
   creationDate: number;
+  updatedAt?: number;
   author: string;
   type: string;
   content: DataProvider[];
@@ -41,6 +42,7 @@ export interface Profile {
 export interface Comment {
   _id: string;
   creationDate: number;
+  updatedAt?: number;
   author: string;
   content: DataProvider[];
   tags: string[];

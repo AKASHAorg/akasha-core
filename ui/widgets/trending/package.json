@@ -27,7 +27,8 @@
     "postpack": "copyfiles -f ./dist/* ../../build/widgets/trending",
     "pretest": "tsc -m commonjs",
     "test": "jest",
-    "watch": "webpack --config webpack.config.js"
+    "watch": "webpack --config webpack.config.js",
+    "clean": "tsc --build --clean"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",
