@@ -257,6 +257,7 @@ class ModerationDecisionAPI extends DataSource {
    * @param moderator - The moderator user who made the final decision
    * @param explanation - Personal conclusion of the moderator
    * @param delisted - Outcome of the moderation action (delisted or kept)
+   * @reurns The ModerationDecision object
    */
   async makeDecision(contentID: string, moderator: string, explanation: string, delisted: boolean) {
     const db: Client = await getAppDB();
@@ -278,11 +279,15 @@ class ModerationDecisionAPI extends DataSource {
     decision.moderated = true;
 
     await db.save(this.dbID, this.collection, [decision]);
+
+    // handle caching
     await queryCache.del(this.getDecisionCacheKey(contentID));
     await queryCache.del(this.getModeratedDecisionCacheKey(contentID));
     await queryCache.del(this.getCountersCacheKey());
     await queryCache.del(this.getModeratedListCacheKey());
     await queryCache.del(this.getPendingListCacheKey());
+
+    return decision;
   }
 }
 

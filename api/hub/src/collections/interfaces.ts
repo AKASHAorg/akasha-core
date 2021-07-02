@@ -89,6 +89,15 @@ export interface ModerationDecision {
   moderated: boolean;
 }
 
+export interface ModerationAction {
+  _id: string;
+  contentID: string;
+  moderator: string;
+  moderatedDate: number;
+  explanation: string;
+  delisted: boolean;
+}
+
 export interface ModerationReason {
   _id: string;
   creationDate: number;

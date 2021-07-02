@@ -6,8 +6,10 @@ import promClient from 'prom-client';
 import ProfileAPI from './datasources/profile';
 import ModerationReportAPI from './datasources/moderation-report';
 import ModerationDecisionAPI from './datasources/moderation-decision';
+import ModerationActionAPI from './datasources/moderation-action';
 import ModerationAdminAPI from './datasources/moderation-admin';
 import ModerationReasonAPI from './datasources/moderation-reasons';
+import { ModerationAction } from './collections/interfaces';
 // import { Invite } from './collections/interfaces';
 
 export const promRegistry = new promClient.Registry();
@@ -23,6 +25,7 @@ const dataSources = {
   profileAPI: new ProfileAPI({ dbID, collection: 'Profiles' }),
   reportingAPI: new ModerationReportAPI({ dbID, collection: 'ModerationReports' }),
   decisionsAPI: new ModerationDecisionAPI({ dbID, collection: 'ModerationDecisions' }),
+  actionsAPI: new ModerationActionAPI({ dbID, collection: 'ModerationActions' }),
   reasonsAPI: new ModerationReasonAPI({ dbID, collection: 'ModerationReasons' }),
   moderatorsAPI: new ModerationAdminAPI({ dbID, collection: 'Moderators' }),
 };
@@ -265,12 +268,22 @@ api.post('/moderation/decisions/moderate', async (ctx: koa.Context, next: () => 
     } else {
       try {
         // store moderation decision
-        await dataSources.decisionsAPI.makeDecision(
+        const decision = await dataSources.decisionsAPI.makeDecision(
           report.contentId,
           report.data.moderator,
           report.data.explanation,
           report.data.delisted,
         );
+        // also store the action in the log
+        const action: ModerationAction = {
+          _id: '',
+          contentID: report.contentId,
+          moderator: report.data.moderator,
+          moderatedDate: decision.moderatedDate,
+          explanation: report.data.explanation,
+          delisted: report.data.delisted,
+        }
+        await dataSources.actionsAPI.addAction(action);
         ctx.status = 200;
       } catch (error) {
         ctx.body = `Cannot moderate content! Error: ${error}`;
@@ -360,6 +373,15 @@ api.post('/moderation/decisions/moderated', async (ctx: koa.Context, next: () =>
 api.post('/moderation/decisions/log', async (ctx: koa.Context, next: () => Promise<any>) => {
   const req = ctx?.request.body;
   ctx.body = await dataSources.decisionsAPI.publicLog(req.offset, req.limit);
+  ctx.set('Content-Type', 'application/json');
+  ctx.status = 200;
+
+  await next();
+});
+
+api.post('/moderation/decisions/actions', async (ctx: koa.Context, next: () => Promise<any>) => {
+  const req = ctx?.request.body;
+  ctx.body = await dataSources.actionsAPI.listActions(req.contentID, req.offset, req.limit);
   ctx.set('Content-Type', 'application/json');
   ctx.status = 200;
 
