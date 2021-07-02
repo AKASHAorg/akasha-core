@@ -73,6 +73,19 @@ export default {
       return error;
     }
   },
+  getLog: async (data?: { offset?: string; limit?: number }) => {
+    try {
+      const response = await fetchRequest({
+        method: 'POST',
+        url: `${BASE_DECISION_URL}/log`,
+        data,
+      });
+
+      return response;
+    } catch (error) {
+      return error;
+    }
+  },
   getAllPending: async () => {
     try {
       const response = await fetchRequest({

@@ -23,6 +23,7 @@ export type IconType =
   | 'arrowRight'
   | 'available'
   | 'bold'
+  | 'book'
   | 'bookmark'
   | 'calendar'
   | 'comments'
@@ -119,6 +120,7 @@ export const iconTypes: IconType[] = [
   'arrowRight',
   'available',
   'bold',
+  'book',
   'bookmark',
   'calendar',
   'comments',

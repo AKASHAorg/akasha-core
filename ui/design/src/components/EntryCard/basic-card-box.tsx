@@ -19,6 +19,7 @@ export interface IBasicCardBox {
   margin?: any;
   noBorder?: boolean;
   noBorderRadius?: boolean;
+  bottomBorderOnly?: boolean;
   isSelected?: boolean;
 }
 
@@ -35,6 +36,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
   margin,
   noBorder,
   noBorderRadius,
+  bottomBorderOnly,
   isSelected,
 }) => (
   <StyledBox
@@ -69,6 +71,8 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
           }
         : noBorder
         ? false
+        : bottomBorderOnly
+        ? { color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }
         : {
             color: 'border',
             size: 'xsmall',
