@@ -17,12 +17,15 @@ export default {
     moderatorAvatarUrl: { control: 'text' },
     moderatorEthAddress: { control: 'text' },
     reportedTimesLabel: { control: 'text' },
+    viewItemLabel: { control: 'text' },
     reasonsLabel: { control: 'text' },
     reasons: [{ control: 'text' }],
     explanationLabel: { control: 'text' },
     contactModeratorsLabel: { control: 'text' },
+    contactModeratorsLink: { control: 'text' },
+    onClickArrowLeft: { action: 'arrow left clicked' },
+    onClickViewItem: { action: 'view item clicked' },
     onClickAvatar: { action: 'avatar clicked' },
-    onClickContactModerators: { action: 'moderators contacted' },
   },
 };
 
@@ -51,8 +54,10 @@ BaseTransparencyLogDetailCard.args = {
   moderatorAvatarUrl: 'https://placebeard.it/360x360',
   moderatorEthAddress: ethAddress,
   reportedTimesLabel: `Reported ${4} times`,
+  viewItemLabel: 'View post',
   reasonsLabel: `${reasons.length > 1 ? 'reasons' : 'reason'}`,
   reasons: reasons,
   explanationLabel: 'explanation',
   contactModeratorsLabel: 'Contact the moderators',
+  contactModeratorsLink: 'mailto:moderators@ethereum.world',
 };

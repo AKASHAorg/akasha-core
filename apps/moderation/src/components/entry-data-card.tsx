@@ -25,7 +25,8 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
     <MainAreaCardBox>
       {entryData ? (
         <>
-          {contentType === 'post' && entryData && (
+          {/* for other contents (reply | comment, post) */}
+          {contentType !== 'account' && entryData && (
             <EntryCard
               entryData={entryData}
               repostsLabel={t('Reposts')}
