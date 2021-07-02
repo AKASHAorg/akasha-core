@@ -1,5 +1,7 @@
 import * as React from 'react';
+import styled from 'styled-components';
 import { Box, Text } from 'grommet';
+import { isMobileOnly } from 'react-device-detect';
 
 import Avatar from '../Avatar';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
@@ -18,6 +20,16 @@ export interface ITransparencyLogMiniCardProps {
   onClickCard?: () => void;
 }
 
+const ClampBox = styled(Box)`
+  max-height: 3.2em;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  ::before {
+    position: absolute;
+  }
+`;
+
 const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props => {
   const {
     locale,
@@ -32,7 +44,13 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
     onClickCard,
   } = props;
   return (
-    <MainAreaCardBox noBorderRadius={true} isSelected={isSelected}>
+    <MainAreaCardBox
+      elevation={isMobileOnly ? 'none' : 'shadow'}
+      noBorderRadius={true}
+      bottomBorderOnly={isMobileOnly}
+      isSelected={isSelected}
+      style={{ minHeight: 'min-content' }} // allows cards to adjust in a y-scrollable container
+    >
       <Box pad="medium" onClick={onClickCard} style={{ cursor: 'pointer' }}>
         <Box direction="row" justify="between" align="center">
           <Box direction="row" align="center" pad={{ right: 'small' }}>
@@ -57,11 +75,11 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
           </Box>
         </Box>
         <Box direction="row" justify="between" align="start">
-          <Box>
+          <ClampBox>
             <Text margin={{ top: 'small' }} color="secondaryText">
-              {content.length > 95 ? `${content.substring(0, 95)}...` : content}
+              {content}
             </Text>
-          </Box>
+          </ClampBox>
           <Box pad={{ left: 'small' }} flex={{ shrink: 0 }}>
             <Text
               size="small"
