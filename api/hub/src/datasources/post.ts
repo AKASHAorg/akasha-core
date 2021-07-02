@@ -155,6 +155,75 @@ class PostAPI extends DataSource {
     return postID;
   }
 
+  /**
+   * Update an existing post
+   * @param author
+   * @param id
+   * @param content
+   * @param opt
+   */
+  async editPost(
+    author: string,
+    id: string,
+    content: DataProvider[],
+    opt?: {
+      title?: string;
+      tags?: string[];
+      quotes?: string[];
+      type?: string;
+      mentions?: string[];
+    },
+  ) {
+    const db: Client = await getAppDB();
+    if (!author) {
+      throw new Error('Not authorized');
+    }
+    const currentPost = await db.findByID<PostItem>(this.dbID, this.collection, id);
+    if (!currentPost?._id) {
+      throw new Error(`Post id ${id} not found.`);
+    }
+
+    if (currentPost.author !== author) {
+      throw new Error('Not authorized');
+    }
+    currentPost.metaData = currentPost.metaData.concat(currentPost.content);
+    currentPost.content = Array.from(content);
+    currentPost.title = opt.title || currentPost.title;
+    let removedTags = [];
+    let addedTags = [];
+    if (opt.tags) {
+      const newTags = Array.from(opt.tags);
+      removedTags = currentPost.tags.filter(t => !newTags.includes(t));
+      addedTags = newTags.filter(t => !currentPost.tags.includes(t));
+      currentPost.tags = newTags;
+    }
+
+    currentPost.quotes = opt.quotes ? Array.from(opt.quotes) : currentPost.quotes;
+    currentPost.mentions = opt.mentions ? Array.from(opt.mentions) : opt.mentions;
+    currentPost.updatedAt = new Date().getTime();
+    const textContent = currentPost.content.find(e => e.property === 'textContent');
+    if (Buffer.from(textContent.value, 'base64').toString('base64') !== textContent.value) {
+      textContent.value = Buffer.from(textContent.value).toString('base64');
+    }
+    await db.save(this.dbID, this.collection, [currentPost]);
+    searchIndex
+      .saveObject({
+        objectID: id,
+        type: currentPost.type,
+        author: currentPost.author,
+        tags: currentPost.tags,
+        category: 'post',
+        creationDate: currentPost.creationDate,
+        content: textContent ? Buffer.from(textContent?.value, 'base64').toString() : '',
+        title: currentPost.title,
+      })
+      .then(_ => logger.info(`index edited post: ${id}`))
+      // tslint:disable-next-line:no-console
+      .catch(e => logger.error(e));
+    await queryCache.del(this.getPostCacheKey(id));
+    return { removedTags, addedTags };
+  }
+
   async triggerMentions(mentions: string[], postID, author) {
     const notification = {
       property: 'POST_MENTION',

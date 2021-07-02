@@ -55,3 +55,7 @@ query GetComments($offset: String, $limit: Int, $postID: String!) {
 mutation AddComment($content: [DataProviderInput!], $comment: CommentData) {
   addComment(content: $content, comment: $comment)
 }
+
+mutation EditComment($content: [DataProviderInput!], $comment: CommentData, $id: String!) {
+  editComment(content: $content, comment: $comment, id: $id)
+}

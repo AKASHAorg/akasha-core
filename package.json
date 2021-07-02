@@ -8,7 +8,7 @@
     "build:all": "lerna run tsc && npm run build:sdk && npm run pack:ui && npm run extract:translations",
     "build:sdk": "npm run tsc:sdk && lerna run build --scope @akashaproject/awf-sdk --stream",
     "build:ewa": "lerna run build:staging --scope @akashaproject/ethereum.world --stream",
-    "clean": "lerna clean",
+    "clean": "lerna run clean && lerna clean",
     "docs": "lerna run docs --scope @akashaproject/sdk --scope @akashaproject/sdk-common",
     "install:clean": "npm run clean && npm run build:all",
     "compile:sc": "lerna run compile:sc",
