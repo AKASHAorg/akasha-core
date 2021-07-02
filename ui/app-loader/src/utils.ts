@@ -1,7 +1,5 @@
 import {
   AppOrWidgetDefinition,
-  IAppConfig,
-  IWidgetConfig,
   ModalNavigationOptions,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import * as singleSpa from 'single-spa';
@@ -54,18 +52,6 @@ export const createRootNode = (
   wrapNode.id = `${nodeID}`;
   parent.appendChild(wrapNode);
   return wrapNode;
-};
-
-export const getSDKDependencies = (app: IAppConfig | IWidgetConfig, sdk: any) => {
-  const dependencies = {};
-  if (app.sdkModules && app.sdkModules.length && sdk) {
-    for (const dep of app.sdkModules) {
-      if (sdk.hasOwnProperty(dep.module)) {
-        Object.assign(dependencies, { [dep.module]: sdk[dep.module] });
-      }
-    }
-  }
-  return dependencies;
 };
 
 export const navigateToModal = (opts: ModalNavigationOptions) => {

@@ -40,10 +40,7 @@ const {
 } = DS;
 
 interface SearchPageProps
-  extends Pick<
-    RootComponentProps,
-    'sdkModules' | 'globalChannel' | 'logger' | 'singleSpa' | 'layoutConfig'
-  > {
+  extends Pick<RootComponentProps, 'logger' | 'singleSpa' | 'layoutConfig'> {
   onError?: (err: Error) => void;
   loginState: ILoginState;
   loggedProfileData: any;
