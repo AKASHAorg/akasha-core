@@ -59,3 +59,7 @@ mutation AddComment($content: [DataProviderInput!], $comment: CommentData) {
 mutation EditComment($content: [DataProviderInput!], $comment: CommentData, $id: String!) {
   editComment(content: $content, comment: $comment, id: $id)
 }
+
+mutation RemoveComment($id: String){
+  removeComment(id: $id)
+}

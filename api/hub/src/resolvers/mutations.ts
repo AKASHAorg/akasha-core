@@ -147,6 +147,30 @@ const mutations = {
     }
     return true;
   },
+  removePost: async (_, { id }, { dataSources, user, signature }) => {
+    if (!user) {
+      return Promise.reject('Must be authenticated!');
+    }
+    if (!id) {
+      return Promise.reject('Must provide a post [id]!');
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: id,
+      signature: signature,
+    });
+    if (!verified) {
+      logger.warn(`bad removePost sig`);
+      return Promise.reject(dataSigError);
+    }
+    const result = await dataSources.postsAPI.deletePost(user.pubKey, id);
+    if (result?.removedTags?.length) {
+      for (const tag of result.removedTags) {
+        await dataSources.tagsAPI.removePostIndex(id, tag);
+      }
+    }
+    return true;
+  },
   follow: async (_, { ethAddress }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
@@ -272,6 +296,31 @@ const mutations = {
       }
     }
 
+    if (result?.removedTags?.length) {
+      for (const tag of result.removedTags) {
+        await dataSources.tagsAPI.removeCommentIndex(id, tag);
+      }
+    }
+    return true;
+  },
+
+  removeComment: async (_, { id }, { dataSources, user, signature }) => {
+    if (!user) {
+      return Promise.reject('Must be authenticated!');
+    }
+    if (!id) {
+      return Promise.reject('Must provide a comment [id]!');
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: id,
+      signature: signature,
+    });
+    if (!verified) {
+      logger.warn(`bad removeComment sig`);
+      return Promise.reject(dataSigError);
+    }
+    const result = await dataSources.commentsAPI.deleteComment(user.pubKey, id);
     if (result?.removedTags?.length) {
       for (const tag of result.removedTags) {
         await dataSources.tagsAPI.removeCommentIndex(id, tag);

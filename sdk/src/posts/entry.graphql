@@ -100,6 +100,10 @@ mutation EditEntry($content: [DataProviderInput!], $post: PostData, $id: String)
   editPost(content: $content, post: $post, id: $id)
 }
 
+mutation RemoveEntry($id: String){
+  removePost(id: $id)
+}
+
 query GetPostsByAuthor($author: String!, $offset: Int, $limit: Int, $pubKey: String) {
   getPostsByAuthor(author: $author, offset: $offset, limit: $limit, pubKey:$pubKey) {
     results{
