@@ -36,6 +36,7 @@ const CardRenderer = (props: IRenderItemProps) => {
   const beforeEntities = customEntities.filter(
     entityObj => entityObj.position === 'before' && entityObj.itemId === itemId,
   );
+
   const afterEntities = customEntities.filter(
     entityObj => entityObj.position === 'after' && entityObj.itemId === itemId,
   );
@@ -85,8 +86,6 @@ const CardRenderer = (props: IRenderItemProps) => {
 
   return (
     <CardItemWrapper
-      // data-itemid={itemId}
-      // data-itemindex={itemIndex}
       ref={cardWrapperRef}
       key={itemId}
       style={{
@@ -96,18 +95,20 @@ const CardRenderer = (props: IRenderItemProps) => {
     >
       {beforeEntities.map((entityObj, idx) => {
         return entityObj.getComponent({
-          key: idx,
+          key: `${itemId}-${idx}`,
           style: { marginBottom: itemSpacing },
         });
       })}
 
       {!shouldLoadData && <EntryLoadingPlaceholder height={averageItemHeight} />}
       {!itemData && <EntryLoadingPlaceholder height={averageItemHeight} />}
-      {itemData && shouldLoadData && React.cloneElement(itemCard, { itemId, itemData })}
+      {itemData &&
+        shouldLoadData &&
+        React.cloneElement(itemCard, { itemId, itemData, key: itemId })}
 
       {afterEntities.map((entityObj, idx) => {
         return entityObj.getComponent({
-          key: idx,
+          key: `${itemId}-${idx}`,
           style: { marginTop: itemSpacing },
         });
       })}

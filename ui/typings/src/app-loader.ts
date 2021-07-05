@@ -17,6 +17,7 @@ export interface AppRegistryInfo extends IntegrationRegistryInfo {
 export type ActivityFn = (
   location: Location,
   pathToActiveWhen: (path: string, exact?: boolean) => (location: Location) => boolean,
+  layoutConfig?: LayoutConfig,
 ) => boolean;
 
 export interface UIEventData {
@@ -81,6 +82,7 @@ export interface ExtensionPointDefinition {
   mountsIn: string | ((opts: IntegrationRegistrationOptions) => string | null) | null;
   loadingFn: () => Promise<ISingleSpaLifecycle>;
   parentApp?: string;
+  activeWhen?: ActivityFn;
 }
 
 export interface IAppConfig {
