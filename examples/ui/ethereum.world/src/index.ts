@@ -28,7 +28,7 @@ console.time('AppLoader:firstMount');
     defaultWidgets: [
       { name: '@akashaproject/ui-widget-topbar', version: '0.0.1' },
       '@akashaproject/ui-widget-trending',
-      '@akashaproject/ui-widget-sidebar',
+      // '@akashaproject/ui-widget-sidebar',
     ],
   };
 

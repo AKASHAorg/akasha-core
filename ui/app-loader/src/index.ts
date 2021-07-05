@@ -303,6 +303,7 @@ export default class AppLoader {
   ) {
     return extensions.filter(ext => {
       let mountPoint;
+      let isActive = true;
       if (ext.mountsIn && typeof ext.mountsIn === 'function') {
         mountPoint = ext.mountsIn({
           layoutConfig: this.layoutConfig,
@@ -318,10 +319,13 @@ export default class AppLoader {
       if (ext.mountsIn && typeof ext.mountsIn === 'string') {
         mountPoint = ext.mountsIn;
       }
+      if (ext.hasOwnProperty('activeWhen') && typeof ext.activeWhen === 'function') {
+        isActive = ext.activeWhen(location, singleSpa.pathToActiveWhen, this.layoutConfig);
+      }
       if (!mountPoint) {
         return false;
       }
-      return mountPoint === extensionData?.name;
+      return mountPoint === extensionData?.name && isActive;
     });
   }
 
