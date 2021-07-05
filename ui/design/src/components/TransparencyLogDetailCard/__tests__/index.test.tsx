@@ -9,9 +9,11 @@ describe('<TransparencyLogDetailCard /> Component', () => {
 
   const reasons = ['Abusive or harmful to others', 'Violence'];
 
-  const handleClickAvatar = jest.fn();
+  const handleClickArrowLeft = jest.fn();
 
-  const handleClickContactModerators = jest.fn();
+  const handleClickViewItem = jest.fn();
+
+  const handleClickAvatar = jest.fn();
 
   beforeEach(() => {
     act(() => {
@@ -27,12 +29,15 @@ describe('<TransparencyLogDetailCard /> Component', () => {
             moderatorAvatarUrl="https://placebeard.it/360x360"
             moderatorEthAddress="0x003410490050000320006570034567114572000"
             reportedTimesLabel={`Reported ${4} times`}
+            viewItemLabel="View post"
             reasonsLabel={`${reasons.length > 1 ? 'reasons' : 'reason'}`}
             reasons={reasons}
             explanationLabel="explanation"
             contactModeratorsLabel="Contact the moderators"
+            contactModeratorsLink="mailto:moderators@ethereum.world"
+            onClickArrowLeft={handleClickArrowLeft}
+            onClickViewItem={handleClickViewItem}
             onClickAvatar={handleClickAvatar}
-            onClickContactModerators={handleClickContactModerators}
           />,
         ),
         {},
@@ -61,13 +66,6 @@ describe('<TransparencyLogDetailCard /> Component', () => {
     const avatar = getByRole('img');
     fireEvent.click(avatar);
     expect(handleClickAvatar).toHaveBeenCalledTimes(1);
-  });
-
-  it.skip('triggers callback when cta is clicked', () => {
-    const { getByText } = componentWrapper;
-    const cta = getByText(/moderators/);
-    fireEvent.click(cta);
-    expect(handleClickContactModerators).toHaveBeenCalledTimes(1);
   });
 
   it.skip('renders correct number of reasons', () => {

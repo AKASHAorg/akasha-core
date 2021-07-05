@@ -13,6 +13,7 @@ import {
   useNotifications,
   useProfile,
   useModalState,
+  moderationRequest,
 } from '@akashaproject/ui-awf-hooks';
 import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { useTranslation } from 'react-i18next';
@@ -75,6 +76,7 @@ const TopbarComponent = (props: RootComponentProps) => {
     checkedTermsValues: [],
     acceptedTerms: false,
   });
+  const [isModerator, setIsModerator] = React.useState(false);
   const [loggedProfileData, loggedProfileActions] = useProfile({
     onError: err => logger.error(err),
   });
@@ -149,6 +151,7 @@ const TopbarComponent = (props: RootComponentProps) => {
     const isLoadingProfile =
       loggedProfileData.isLoading !== undefined && loggedProfileData.isLoading;
     if (loginState.ethAddress && !isLoadingProfile) {
+      getModeratorStatus(loginState.ethAddress);
       if (!loggedProfileData.userName) {
         return props.singleSpa.navigateToUrl('/profile/my-profile/update-info');
       }
@@ -185,6 +188,17 @@ const TopbarComponent = (props: RootComponentProps) => {
   const otherAreaItems = currentMenu?.filter(
     menuItem => menuItem.area === MenuItemAreaType.OtherArea,
   );
+
+  const getModeratorStatus = async (loggedEthAddress: string) => {
+    try {
+      const response = await moderationRequest.checkModerator(loggedEthAddress);
+      if (response === 200) {
+        setIsModerator(true);
+      }
+    } catch (error) {
+      logger.error('[content-list.tsx]: getModeratorStatus err %j', error.message || '');
+    }
+  };
 
   const handleNavigation = (path: string) => {
     navigateToUrl(path);
@@ -317,6 +331,14 @@ const TopbarComponent = (props: RootComponentProps) => {
     modalStateActions.show(MODAL_NAMES.FEEDBACK);
   };
 
+  const handleModerationClick = () => {
+    navigateToUrl('/moderation-app/history');
+  };
+
+  const handleDashboardClick = () => {
+    navigateToUrl('/moderation-app/home');
+  };
+
   const handleSearch = (inputValue: string) => {
     const encodedSearchKey = encodeURIComponent(inputValue);
     if (searchAreaItem) {
@@ -355,8 +377,13 @@ const TopbarComponent = (props: RootComponentProps) => {
         signOutLabel={t('Sign Out')}
         searchBarLabel={t('Search profiles or topics')}
         legalLabel={t('Legal')}
+        isModerator={isModerator}
+        dashboardLabel={t('Moderator dashboard')}
+        dashboardInfoLabel={t('Help moderate items!')}
         feedbackLabel={t('Send Us Feedback')}
         feedbackInfoLabel={t('Help us improve the experience!')}
+        moderationLabel={t('Moderation History')}
+        moderationInfoLabel={t('Help keep us accountable!')}
         legalCopyRightLabel={'© Ethereum World Association'}
         versionLabel="ALPHA"
         versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
@@ -369,6 +396,8 @@ const TopbarComponent = (props: RootComponentProps) => {
         onSignUpClick={handleSignUpClick}
         onLogout={handleLogout}
         onFeedbackClick={handleFeedbackModalShow}
+        onModerationClick={handleModerationClick}
+        onDashboardClick={handleDashboardClick}
         hasNewNotifications={notificationsState.hasNewNotifications}
         currentLocation={location?.pathname}
       >

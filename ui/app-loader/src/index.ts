@@ -167,6 +167,7 @@ export default class AppLoader {
       sdk: this.sdk,
       addMenuItem: this.addMenuItem.bind(this),
       getMenuItems: this.getMenuItems.bind(this),
+      isMobile: this.isMobile,
     });
 
     this.widgets = new Widgets({
@@ -177,6 +178,7 @@ export default class AppLoader {
       sdk: this.sdk,
       addMenuItem: this.addMenuItem.bind(this),
       getMenuItems: this.getMenuItems.bind(this),
+      isMobile: this.isMobile,
     });
 
     integrationInfos.forEach(integration => {
@@ -301,6 +303,7 @@ export default class AppLoader {
   ) {
     return extensions.filter(ext => {
       let mountPoint;
+      let isActive = true;
       if (ext.mountsIn && typeof ext.mountsIn === 'function') {
         mountPoint = ext.mountsIn({
           layoutConfig: this.layoutConfig,
@@ -310,15 +313,19 @@ export default class AppLoader {
             configs: integrationConfigs,
             infos: integrationInfos,
           },
+          isMobile: this.isMobile,
         });
       }
       if (ext.mountsIn && typeof ext.mountsIn === 'string') {
         mountPoint = ext.mountsIn;
       }
+      if (ext.hasOwnProperty('activeWhen') && typeof ext.activeWhen === 'function') {
+        isActive = ext.activeWhen(location, singleSpa.pathToActiveWhen, this.layoutConfig);
+      }
       if (!mountPoint) {
         return false;
       }
-      return mountPoint === extensionData?.name;
+      return mountPoint === extensionData?.name && isActive;
     });
   }
 
@@ -535,6 +542,7 @@ export default class AppLoader {
               configs: { ...this.apps.configs, ...this.widgets.configs },
               infos: [...this.apps.infos, ...this.widgets.infos],
             },
+            isMobile: this.isMobile,
           });
         }
         if (!extension.parentApp) {
@@ -596,6 +604,7 @@ export default class AppLoader {
         },
         worldConfig: this.worldConfig,
         uiEvents: this.uiEvents,
+        isMobile: this.isMobile,
       });
     }
     if (!rootNode || !extensionPoint.mountsIn) {

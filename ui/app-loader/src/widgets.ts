@@ -15,7 +15,6 @@ class Widgets extends BaseIntegration {
   private readonly widgetModules: Record<string, IntegrationModule>;
   private readonly widgetConfigs: Record<string, IWidgetConfig>;
   private readonly widgetParcels: Record<string, singleSpa.Parcel>;
-  private readonly isMobile?: boolean;
   private logger: pino.Logger;
   constructor(opts: BaseIntegrationClassOptions) {
     super(opts);
@@ -24,7 +23,6 @@ class Widgets extends BaseIntegration {
     this.widgetConfigs = {};
     this.widgetParcels = {};
     this.layoutConfig = opts.layoutConfig;
-    this.isMobile = opts.isMobile;
     this.logger = opts.logger.child({ module: 'widgets-loader' });
   }
   add(integration: WidgetRegistryInfo) {
@@ -108,6 +106,7 @@ class Widgets extends BaseIntegration {
           worldConfig: {
             title: this.worldConfig.title,
           },
+          isMobile: this.isMobile,
         })) as IWidgetConfig;
       } else {
         this.logger.warn(`Widget ${name} does not have a register() method exported!`);
@@ -159,6 +158,7 @@ class Widgets extends BaseIntegration {
           title: this.worldConfig.title,
         },
         uiEvents: this.uiEvents,
+        isMobile: this.isMobile,
       })) as IWidgetConfig;
       if (!widgetConfig) {
         return;
