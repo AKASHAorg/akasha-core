@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-const { ModalRenderer, FeedbackModal, ThemeSelector, lightTheme, darkTheme } = DS;
+const { FeedbackModal, ThemeSelector, lightTheme, darkTheme } = DS;
 
 const FeedbackModalContainer = (props: RootComponentProps) => {
   const { t } = useTranslation();
@@ -18,23 +18,21 @@ const FeedbackModalContainer = (props: RootComponentProps) => {
   };
 
   return (
-    <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
-      <FeedbackModal
-        titleLabel={t("We'd love to hear your feedback!")}
-        subtitleLabel={t('If you find any bugs or problems, please let us know')}
-        openAnIssueLabel={t('Open an Issue')}
-        emailUsLabel={t('Email Us')}
-        footerTextLabel={t(
-          'Join our Discord channel to meet everyone, say "Hello!", provide feedback and share ideas.',
-        )}
-        footerLinkText1Label={t('Join in')}
-        footerLinkText2Label={t('Discord')}
-        openIssueLink={'https://github.com/AKASHAorg/akasha-world-framework/issues/new/choose'}
-        emailUsLink={'mailto:feedback@ethereum.world'}
-        joinDiscordLink={'https://discord.gg/A5wfg6ZCRt'}
-        closeModal={handleFeedbackModalClose}
-      />
-    </ModalRenderer>
+    <FeedbackModal
+      titleLabel={t("We'd love to hear your feedback!")}
+      subtitleLabel={t('If you find any bugs or problems, please let us know')}
+      openAnIssueLabel={t('Open an Issue')}
+      emailUsLabel={t('Email Us')}
+      footerTextLabel={t(
+        'Join our Discord channel to meet everyone, say "Hello!", provide feedback and share ideas.',
+      )}
+      footerLinkText1Label={t('Join in')}
+      footerLinkText2Label={t('Discord')}
+      openIssueLink={'https://github.com/AKASHAorg/akasha-world-framework/issues/new/choose'}
+      emailUsLink={'mailto:feedback@ethereum.world'}
+      joinDiscordLink={'https://discord.gg/A5wfg6ZCRt'}
+      closeModal={handleFeedbackModalClose}
+    />
   );
 };
 
