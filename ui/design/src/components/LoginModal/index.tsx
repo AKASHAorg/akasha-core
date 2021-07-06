@@ -8,7 +8,6 @@ import EthProviderModalIllustration from './eth-provider-modal-illustration';
 
 import Icon from '../Icon';
 import ErrorLoader from '../ErrorLoader';
-import { ModalRenderer } from './modal-renderer';
 import { ModalContainer } from './fullscreen-modal-container';
 import ViewportSizeProvider, { useViewportSize } from '../Providers/viewport-dimension';
 
@@ -127,7 +126,7 @@ const LoginModal: React.FC<LoginModalProps> = props => {
 
   return (
     <ViewportSizeProvider>
-      <ModalRenderer slotId={props.slotId}>
+      <>
         {!modalState.selectedProvider && (
           <EthProviderListModal
             titleLabel={titleLabel}
@@ -197,7 +196,7 @@ const LoginModal: React.FC<LoginModalProps> = props => {
         {!suggestSignUp && modalState.selectedProvider === WALLETCONNECT_PROVIDER && (
           <WalletConnectModalTrigger onLogin={handleWalletConnectLogin} />
         )}
-      </ModalRenderer>
+      </>
     </ViewportSizeProvider>
   );
 };

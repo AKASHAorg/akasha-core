@@ -7,16 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-const {
-  Box,
-  Button,
-  ModalContainer,
-  ModalRenderer,
-  ThemeSelector,
-  lightTheme,
-  darkTheme,
-  ModalCard,
-} = DS;
+const { Box, Button, ModalContainer, ThemeSelector, lightTheme, darkTheme, ModalCard } = DS;
 
 const LoginModal = (props: RootComponentProps) => {
   const { t } = useTranslation();
@@ -35,21 +26,19 @@ const LoginModal = (props: RootComponentProps) => {
   };
 
   return (
-    <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
-      <ModalContainer onModalClose={handleModalClose}>
-        <ModalCard>
-          <Box direction="row" align="center" gap="small" fill="horizontal">
-            <Button onClick={handleSignInClick} label={t('Sign In')} fill="horizontal" />
-            <Button
-              primary={true}
-              onClick={handleSignUpClick}
-              label={t('Sign Up')}
-              fill="horizontal"
-            />
-          </Box>
-        </ModalCard>
-      </ModalContainer>
-    </ModalRenderer>
+    <ModalContainer onModalClose={handleModalClose}>
+      <ModalCard>
+        <Box direction="row" align="center" gap="small" fill="horizontal">
+          <Button onClick={handleSignInClick} label={t('Sign In')} fill="horizontal" />
+          <Button
+            primary={true}
+            onClick={handleSignUpClick}
+            label={t('Sign Up')}
+            fill="horizontal"
+          />
+        </Box>
+      </ModalCard>
+    </ModalContainer>
   );
 };
 
