@@ -7,7 +7,16 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-const { Box, Button, ModalContainer, ModalRenderer } = DS;
+const {
+  Box,
+  Button,
+  ModalContainer,
+  ModalRenderer,
+  ThemeSelector,
+  lightTheme,
+  darkTheme,
+  ModalCard,
+} = DS;
 
 const LoginModal = (props: RootComponentProps) => {
   const { t } = useTranslation();
@@ -28,24 +37,31 @@ const LoginModal = (props: RootComponentProps) => {
   return (
     <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
       <ModalContainer onModalClose={handleModalClose}>
-        <Box direction="row" align="center" gap="small" fill="horizontal">
-          <Button onClick={handleSignInClick} label={t('Sign In')} fill="horizontal" />
-          <Button
-            primary={true}
-            onClick={handleSignUpClick}
-            label={t('Sign Up')}
-            fill="horizontal"
-          />
-        </Box>
+        <ModalCard>
+          <Box direction="row" align="center" gap="small" fill="horizontal">
+            <Button onClick={handleSignInClick} label={t('Sign In')} fill="horizontal" />
+            <Button
+              primary={true}
+              onClick={handleSignUpClick}
+              label={t('Sign Up')}
+              fill="horizontal"
+            />
+          </Box>
+        </ModalCard>
       </ModalContainer>
     </ModalRenderer>
   );
 };
 
 const Wrapped = (props: RootComponentProps) => (
-  <Router>
-    <LoginModal {...props} />
-  </Router>
+  <ThemeSelector
+    availableThemes={[lightTheme, darkTheme]}
+    settings={{ activeTheme: 'Light-Theme' }}
+  >
+    <Router>
+      <LoginModal {...props} />
+    </Router>
+  </ThemeSelector>
 );
 
 const reactLifecycles = singleSpaReact({

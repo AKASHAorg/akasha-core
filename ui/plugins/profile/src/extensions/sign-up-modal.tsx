@@ -3,16 +3,17 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useLoginState, useErrors, useModalState } from '@akashaproject/ui-awf-hooks';
-import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
+import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-const { LoginModal } = DS;
+const { LoginModal, ThemeSelector, lightTheme, darkTheme } = DS;
 
 const SignUpModal = (props: RootComponentProps) => {
   const { t } = useTranslation();
+  const location = useLocation();
 
   const sdk = getSDK();
 
@@ -30,13 +31,6 @@ const SignUpModal = (props: RootComponentProps) => {
 
   const [loginState, loginActions] = useLoginState({
     onError: errorActions.createError,
-  });
-
-  const [modalState, modalStateActions] = useModalState({
-    initialState: {
-      feedback: false,
-    },
-    isLoggedIn: !!loginState.ethAddress,
   });
 
   const [inviteTokenForm, setinviteTokenForm] = React.useState<{
@@ -83,10 +77,10 @@ const SignUpModal = (props: RootComponentProps) => {
   }, [errorState]);
 
   React.useEffect(() => {
-    if (loginState.ethAddress && modalState[MODAL_NAMES.LOGIN]) {
+    if (loginState.ethAddress) {
       setTimeout(() => handleLoginModalClose(), 500);
     }
-  }, [loginState.ethAddress, modalState[MODAL_NAMES.LOGIN]]);
+  }, [loginState.ethAddress]);
 
   const _handleModalClose = () => {
     setshowSignUpModal({
@@ -105,7 +99,6 @@ const SignUpModal = (props: RootComponentProps) => {
     if (showSignUpModal.inviteToken) {
       triggerInviteValidation();
     }
-    modalStateActions.show(MODAL_NAMES.LOGIN);
   };
 
   const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -189,7 +182,7 @@ const SignUpModal = (props: RootComponentProps) => {
   React.useEffect(activateAcceptButton, [termsState.checkedTermsValues]);
 
   const handleLoginModalClose = () => {
-    modalStateActions.hide(MODAL_NAMES.LOGIN);
+    props.singleSpa.navigateToUrl(location.pathname);
     _handleModalClose();
     errorActions.removeLoginErrors();
   };
@@ -225,9 +218,14 @@ const SignUpModal = (props: RootComponentProps) => {
 };
 
 const Wrapped = (props: RootComponentProps) => (
-  <Router>
-    <SignUpModal {...props} />
-  </Router>
+  <ThemeSelector
+    availableThemes={[lightTheme, darkTheme]}
+    settings={{ activeTheme: 'Light-Theme' }}
+  >
+    <Router>
+      <SignUpModal {...props} />
+    </Router>
+  </ThemeSelector>
 );
 
 const reactLifecycles = singleSpaReact({

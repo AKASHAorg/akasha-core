@@ -8,7 +8,7 @@ import { useLocation } from 'react-router-dom';
 import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-const { LoginModal } = DS;
+const { LoginModal, ThemeSelector, lightTheme, darkTheme } = DS;
 
 const SignInModal = (props: RootComponentProps) => {
   const { logger } = props;
@@ -62,9 +62,14 @@ const SignInModal = (props: RootComponentProps) => {
 };
 
 const Wrapped = (props: RootComponentProps) => (
-  <Router>
-    <SignInModal {...props} />
-  </Router>
+  <ThemeSelector
+    availableThemes={[lightTheme, darkTheme]}
+    settings={{ activeTheme: 'Light-Theme' }}
+  >
+    <Router>
+      <SignInModal {...props} />
+    </Router>
+  </ThemeSelector>
 );
 
 const reactLifecycles = singleSpaReact({

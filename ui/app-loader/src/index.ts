@@ -623,6 +623,7 @@ export default class AppLoader {
       singleSpa,
       extension: extensionPoint,
       navigateToModal: navigateToModal,
+      layoutConfig: this.layoutConfig,
     };
 
     const extensionParcel = singleSpa.mountRootParcel(extensionPoint.loadingFn, extensionProps);
