@@ -19,11 +19,13 @@ export enum PROFILE_EVENTS {
 export enum COMMENTS_EVENTS {
   CREATE = '#comments#Create',
   EDIT = '#comments#Edit',
+  REMOVE = '#comments#Remove',
 }
 
 export enum ENTRY_EVENTS {
   CREATE = '#entries#Create',
   EDIT = '#entries#Edit',
+  REMOVE = '#entries#Remove',
 }
 
 export enum TAG_EVENTS {
