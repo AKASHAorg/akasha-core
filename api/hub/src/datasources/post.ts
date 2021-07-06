@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB, logger, sendAuthorNotification } from '../helpers';
+import { EMPTY_KEY, getAppDB, logger, sendAuthorNotification } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
 import { DataProvider, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -222,6 +222,48 @@ class PostAPI extends DataSource {
       .catch(e => logger.error(e));
     await queryCache.del(this.getPostCacheKey(id));
     return { removedTags, addedTags };
+  }
+
+  /**
+   * Remove contents of a post
+   * @param author
+   * @param id
+   */
+  async deletePost(author: string, id: string) {
+    const db: Client = await getAppDB();
+    if (!author) {
+      throw new Error('Not authorized');
+    }
+    const currentPost = await db.findByID<PostItem>(this.dbID, this.collection, id);
+    if (!currentPost?._id) {
+      throw new Error(`Post id ${id} not found.`);
+    }
+
+    if (currentPost.author !== author) {
+      throw new Error('Not authorized');
+    }
+    currentPost.content = [
+      {
+        property: 'removed',
+        provider: this.graphqlPostsApi,
+        value: '1',
+      },
+    ];
+    currentPost.type = 'REMOVED';
+    currentPost.updatedAt = new Date().getTime();
+    currentPost.metaData = [];
+    const removedTags = Array.from(currentPost.tags);
+    currentPost.mentions = [];
+    currentPost.quotes = [];
+    currentPost.title = 'Removed';
+    currentPost.author = EMPTY_KEY;
+    searchIndex
+      .deleteObject(currentPost._id)
+      .then(() => logger.info(`removed post: ${id}`))
+      .catch(e => logger.error(e));
+    await queryCache.del(this.getPostCacheKey(id));
+    await db.save(this.dbID, this.collection, [currentPost]);
+    return { removedTags };
   }
 
   async triggerMentions(mentions: string[], postID, author) {

@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB, logger, sendAuthorNotification } from '../helpers';
+import { EMPTY_KEY, getAppDB, logger, sendAuthorNotification } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { DataProvider, Comment, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -206,6 +206,42 @@ class CommentAPI extends DataSource {
     await queryCache.del(this.getCommentCacheKey(id));
     await queryCache.del(this.getAllCommentsCacheKey(commentData.postID));
     return { removedTags, addedTags };
+  }
+
+  /**
+   * Remove contents of a comment
+   * @param author
+   * @param id
+   */
+  async deleteComment(author: string, id: string) {
+    const db: Client = await getAppDB();
+    if (!author) {
+      throw new Error('Not authorized');
+    }
+    const currentComment = await db.findByID<Comment>(this.dbID, this.collection, id);
+    if (!currentComment?._id) {
+      return Promise.reject(`Comment with [id] ${id} was not found!`);
+    }
+    currentComment.content = [
+      {
+        property: 'removed',
+        provider: this.graphqlCommentsApi,
+        value: '1',
+      },
+    ];
+    currentComment.updatedAt = new Date().getTime();
+    currentComment.metaData = [];
+    const removedTags = Array.from(currentComment.tags);
+    currentComment.mentions = [];
+    currentComment.author = EMPTY_KEY;
+    searchIndex
+      .deleteObject(currentComment._id)
+      .then(() => logger.info(`removed comment: ${id}`))
+      .catch(e => logger.error(e));
+    await queryCache.del(this.getCommentCacheKey(id));
+    await queryCache.del(this.getAllCommentsCacheKey(currentComment.postId));
+    await db.save(this.dbID, this.collection, [currentComment]);
+    return { removedTags };
   }
 }
 

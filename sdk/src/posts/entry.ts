@@ -12,6 +12,7 @@ import {
   GetPostsByAuthor,
   GetPostsByTag,
   EditEntry,
+  RemoveEntry,
 } from './entry.graphql';
 import { concatAll, map, tap } from 'rxjs/operators';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
@@ -35,7 +36,10 @@ export default class AWF_Entry implements AWF_IEntry {
     GetEntry,
     GetPostsByAuthor,
     GetPostsByTag,
+    EditEntry,
+    RemoveEntry,
   };
+
   constructor(
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Gql) gql: Gql,
@@ -215,6 +219,40 @@ export default class AWF_Entry implements AWF_IEntry {
           true,
         ),
       ),
+      concatAll(),
+    );
+  }
+
+  /**
+   * Remove an entry's content by ID
+   * @param entryID
+   */
+  removeEntry(entryID: string) {
+    return this._auth.authenticateMutationData(entryID).pipe(
+      map(res => {
+        return this._gql
+          .run<{ removePost: boolean }>({
+            query: RemoveEntry,
+            variables: { id: entryID },
+            operationName: 'RemoveEntry',
+            context: {
+              headers: {
+                Authorization: `Bearer ${res.token.data}`,
+                Signature: res.signedData.data.signature,
+              },
+            },
+          })
+          .pipe(
+            tap(ev => {
+              // @emits ENTRY_EVENTS.REMOVE
+              this._globalChannel.next({
+                data: ev.data,
+                event: ENTRY_EVENTS.REMOVE,
+                args: { entryID },
+              });
+            }),
+          );
+      }),
       concatAll(),
     );
   }

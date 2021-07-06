@@ -29,6 +29,8 @@ export interface AWF_IEntry {
     post: { title?: string; tags?: string[]; quotes?: string[] };
   }): unknown;
 
+  removeEntry(entryID: string): unknown;
+
   entriesByAuthor(opt: { pubKey: string; offset?: number; limit: number }): Observable<unknown>;
 
   /**
@@ -65,6 +67,8 @@ export interface AWF_IComments {
     data: DataProviderInput[];
     comment: { postID: string; replyTo?: string; tags?: string[]; mentions?: string[] };
   }): unknown;
+
+  removeComment(commentID: string): unknown;
 }
 
 export interface AWF_ITags {
