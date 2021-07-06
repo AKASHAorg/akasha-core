@@ -49,6 +49,7 @@ declare module '*/entry.graphql' {
   const GetPostsByTag: TypedQueryDocumentNode;
   const CreateEntry: DocumentNode;
   const EditEntry: DocumentNode;
+  const RemoveEntry: DocumentNode;
 
   export {
     DataProviderFragment,
@@ -59,6 +60,7 @@ declare module '*/entry.graphql' {
     GetPostsByTag,
     CreateEntry,
     EditEntry,
+    RemoveEntry,
   };
 }
 
@@ -70,6 +72,7 @@ declare module '*/comments.graphql' {
   const GetComments: TypedQueryDocumentNode;
   const AddComment: DocumentNode;
   const EditComment: DocumentNode;
+  const RemoveComment: DocumentNode;
 
   export {
     GetComment,
@@ -78,5 +81,6 @@ declare module '*/comments.graphql' {
     DataProviderFragment,
     UserProfileFragment,
     EditComment,
+    RemoveComment,
   };
 }
