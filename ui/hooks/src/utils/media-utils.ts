@@ -1,4 +1,3 @@
-import { forkJoin, lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 
 export interface IConfig {
@@ -62,7 +61,7 @@ export const uploadMediaToTextile = async (data: any, isUrl = false) => {
   try {
     const res = await sdk.api.profile.saveMediaFile(uploadData);
     return {
-      data: { src: `${ipfsGateway}/${res[1].data?.CID}`, size: res[1].data?.size },
+      data: { src: `${ipfsGateway}/${res?.CID}`, size: res?.size },
     };
   } catch (error) {
     return {
