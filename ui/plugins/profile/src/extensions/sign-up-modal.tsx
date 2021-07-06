@@ -9,9 +9,9 @@ import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-const { LoginModal, ThemeSelector, lightTheme, darkTheme } = DS;
+const { SignUpModal, ThemeSelector, lightTheme, darkTheme } = DS;
 
-const SignUpModal = (props: RootComponentProps) => {
+const SignUpModalContainer = (props: RootComponentProps) => {
   const { t } = useTranslation();
   const location = useLocation();
 
@@ -19,17 +19,10 @@ const SignUpModal = (props: RootComponentProps) => {
 
   const { logger } = props;
 
-  const [suggestSignUp, setSuggestSignUp] = React.useState<boolean>(false);
-  const [showSignUpModal, setshowSignUpModal] = React.useState<{
-    inviteToken: string | null;
-    status: boolean;
-  }>({
-    inviteToken: null,
-    status: false,
-  });
-  const [errorState, errorActions] = useErrors({ logger });
+  const [inviteToken, setInviteToken] = React.useState<string | null>(null);
+  const [, errorActions] = useErrors({ logger });
 
-  const [loginState, loginActions] = useLoginState({
+  const [loginState] = useLoginState({
     onError: errorActions.createError,
   });
 
@@ -56,26 +49,6 @@ const SignUpModal = (props: RootComponentProps) => {
     acceptedTerms: false,
   });
 
-  const handleLogin = (provider: 2 | 3) => {
-    loginActions.login(provider, !showSignUpModal?.status);
-  };
-
-  const loginErrors: string | null = React.useMemo(() => {
-    if (errorState && Object.keys(errorState).length) {
-      const txt = Object.keys(errorState)
-        .filter(key => key.split('.')[0] === 'useLoginState')
-        .map(k => {
-          if (errorState[k].error.name === 'UserNotRegistered') {
-            setSuggestSignUp(true);
-          }
-          return errorState[k];
-        })
-        .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
-      return txt;
-    }
-    return null;
-  }, [errorState]);
-
   React.useEffect(() => {
     if (loginState.ethAddress) {
       setTimeout(() => handleLoginModalClose(), 500);
@@ -83,22 +56,8 @@ const SignUpModal = (props: RootComponentProps) => {
   }, [loginState.ethAddress]);
 
   const _handleModalClose = () => {
-    setshowSignUpModal({
-      inviteToken: null,
-      status: false,
-    });
-    setSuggestSignUp(false);
+    setInviteToken(null);
     errorActions.removeLoginErrors();
-  };
-  const handleSignUpClick = () => {
-    const state = {
-      inviteToken: localStorage.getItem('@signUpToken'),
-      status: true,
-    };
-    setshowSignUpModal(state);
-    if (showSignUpModal.inviteToken) {
-      triggerInviteValidation();
-    }
   };
 
   const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,13 +68,10 @@ const SignUpModal = (props: RootComponentProps) => {
       hasError: false,
       errorMsg: '',
     });
-    setshowSignUpModal({
-      inviteToken: e.target.value,
-      status: true,
-    });
+    setInviteToken(e.target.value);
   };
   const triggerInviteValidation = () => {
-    if (showSignUpModal.inviteToken?.length && showSignUpModal.inviteToken.length === 24) {
+    if (inviteToken?.length && inviteToken?.length === 24) {
       checkIsValidToken();
     }
   };
@@ -128,7 +84,7 @@ const SignUpModal = (props: RootComponentProps) => {
       errorMsg: '',
     });
     sdk.api.auth
-      .validateInvite(showSignUpModal.inviteToken)
+      .validateInvite(inviteToken)
       .toPromise()
       .then((_: any) => {
         setinviteTokenForm({
@@ -149,10 +105,12 @@ const SignUpModal = (props: RootComponentProps) => {
         });
       });
   };
+
   const validateTokenFn = (e: any) => {
     e.preventDefault();
     checkIsValidToken();
   };
+
   const onCheckedTermsValues = (e: any) => {
     setTermsState(prevState => {
       return {
@@ -169,6 +127,7 @@ const SignUpModal = (props: RootComponentProps) => {
       };
     });
     localStorage.setItem('@acceptedTermsAndPrivacy', new Date().toISOString());
+    props.navigateToModal({ name: 'signin' });
   };
   const activateAcceptButton = () => {
     setTermsState(prevState => {
@@ -178,7 +137,10 @@ const SignUpModal = (props: RootComponentProps) => {
       };
     });
   };
-  React.useEffect(triggerInviteValidation, [showSignUpModal]);
+  React.useEffect(() => {
+    setInviteToken(localStorage.getItem('@signUpToken'));
+  }, []);
+  React.useEffect(triggerInviteValidation, [inviteToken]);
   React.useEffect(activateAcceptButton, [termsState.checkedTermsValues]);
 
   const handleLoginModalClose = () => {
@@ -188,12 +150,8 @@ const SignUpModal = (props: RootComponentProps) => {
   };
 
   return (
-    <LoginModal
-      slotId={props.layoutConfig.modalSlotId}
-      onLogin={handleLogin}
-      showSignUpModal={showSignUpModal}
-      onInputTokenChange={onInputTokenChange}
-      validateTokenFn={validateTokenFn}
+    <SignUpModal
+      inviteToken={inviteToken}
       submitted={inviteTokenForm.submitted}
       submitting={inviteTokenForm.submitting}
       success={inviteTokenForm.success}
@@ -202,17 +160,13 @@ const SignUpModal = (props: RootComponentProps) => {
       onModalClose={handleLoginModalClose}
       subtitleLabel={t('Please enter your invitation code')}
       headerLabel={t('Sign Up')}
-      titleLabel={t('Connect a wallet')}
-      metamaskModalHeadline={t('Connecting')}
-      metamaskModalMessage={t('Please complete the process in your wallet')}
-      error={loginErrors}
+      onChange={onInputTokenChange}
+      validateTokenFn={validateTokenFn}
       onAcceptTerms={onAcceptTerms}
       onCheckedTermsValues={onCheckedTermsValues}
       waitForCheckTerms={termsState.waitForCheckTerms}
       checkedTermsValues={termsState.checkedTermsValues}
       acceptedTerms={termsState.acceptedTerms}
-      suggestSignUp={suggestSignUp}
-      suggestedSignUpFn={handleSignUpClick}
     />
   );
 };
@@ -223,7 +177,7 @@ const Wrapped = (props: RootComponentProps) => (
     settings={{ activeTheme: 'Light-Theme' }}
   >
     <Router>
-      <SignUpModal {...props} />
+      <SignUpModalContainer {...props} />
     </Router>
   </ThemeSelector>
 );

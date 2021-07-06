@@ -1,46 +1,26 @@
 import * as React from 'react';
-import styled from 'styled-components';
 import { Box, Button, CheckBoxGroup, Text } from 'grommet';
 
-import { ModalContainer } from './fullscreen-modal-container';
+import { ModalContainer } from '../SignInModal/fullscreen-modal-container';
 
-import Icon from '../Icon';
 import LinkInput from '../TextInputIconForm';
 import { ModalCard } from '../EntryCard/basic-card-box';
 import { StyledDivider, StyledAnchor } from '../TextInputIconForm/styles';
 
-const WalletProviderButton = styled(Box)`
-  flex: 1;
-  cursor: pointer;
-  user-select: none;
-`;
-
-export interface IProviderInfo {
-  id: string;
-  logo: React.ReactElement | string;
-  title: string;
-  description: string;
-}
-const ProvidersListModal = (props: {
+const SignUpModal = (props: {
   onModalClose: () => void;
-  onProviderClick: (providerId: string) => void;
-  providers: IProviderInfo[];
-  showSignUp?: {
-    inviteToken: string | null;
-    status: boolean;
-  };
-  titleLabel: string;
+  inviteToken: string | null;
+  submitted?: boolean;
+  submitting?: boolean;
+  onChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
+  validateTokenFn?: (ev: any) => void;
   headerLabel?: string;
   subtitleLabel?: string;
   inputPlaceholder?: string;
-  submitted?: boolean;
-  submitting?: boolean;
   success?: boolean;
   hasError?: boolean;
   errorMsg?: string;
   acceptedTerms?: boolean;
-  onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
-  validateTokenFn?: (ev: any) => void;
   checkedTermsValues?: any;
   onCheckedTermsValues?: (ev: any) => void;
   waitForCheckTerms?: boolean;
@@ -50,7 +30,7 @@ const ProvidersListModal = (props: {
     <ModalContainer onModalClose={props.onModalClose}>
       <ModalCard>
         <Box width={{ max: '22rem', min: '30ch' }}>
-          {props?.showSignUp?.status && !props?.acceptedTerms && (
+          {!props?.acceptedTerms && (
             <>
               <Box align="center" justify="center" pad="small">
                 <Text weight="bold" textAlign={'center'} size="xlarge">
@@ -61,7 +41,7 @@ const ProvidersListModal = (props: {
                 <Text textAlign={'center'} size="large" color={'secondaryText'}>
                   {props.subtitleLabel}
                 </Text>
-                <LinkInput inputValue={props?.showSignUp?.inviteToken || ''} {...props} />
+                <LinkInput inputValue={props.inviteToken || ''} {...props} />
                 {props.errorMsg && props.hasError && (
                   <Text color={'status-critical'}>{props.errorMsg}</Text>
                 )}
@@ -130,41 +110,10 @@ const ProvidersListModal = (props: {
               )}
             </>
           )}
-          {(!props?.showSignUp?.status || (props?.success && props?.acceptedTerms)) && (
-            <>
-              <Box align="center" justify="center" pad="small">
-                <Text weight="bold" size="xlarge">
-                  {props.titleLabel}
-                </Text>
-              </Box>
-              <Box direction="column">
-                {props.providers.map(provider => (
-                  <WalletProviderButton
-                    direction="row"
-                    gap="small"
-                    align="center"
-                    justify="between"
-                    pad="small"
-                    margin="small"
-                    onClick={() => props.onProviderClick(provider.id)}
-                    key={provider.id}
-                    border={{ color: 'accent', side: 'all' }}
-                    round="xxsmall"
-                  >
-                    <Box>{provider.logo}</Box>
-                    <Box>
-                      <Text color="accentColor">{provider.description}</Text>
-                    </Box>
-                    <Icon type="arrowRight" size="xs" />
-                  </WalletProviderButton>
-                ))}
-              </Box>
-            </>
-          )}
         </Box>
       </ModalCard>
     </ModalContainer>
   );
 };
 
-export default ProvidersListModal;
+export default SignUpModal;

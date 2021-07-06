@@ -28,7 +28,7 @@ const LoginModal = (props: RootComponentProps) => {
   return (
     <ModalContainer onModalClose={handleModalClose}>
       <ModalCard>
-        <Box direction="row" align="center" gap="small" fill="horizontal">
+        <Box direction="row" align="center" gap="small" fill="horizontal" pad="xlarge">
           <Button onClick={handleSignInClick} label={t('Sign In')} fill="horizontal" />
           <Button
             primary={true}

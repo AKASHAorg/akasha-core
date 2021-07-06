@@ -8,13 +8,15 @@ import { useLocation } from 'react-router-dom';
 import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-const { LoginModal, ThemeSelector, lightTheme, darkTheme } = DS;
+const { SignInModal, ThemeSelector, lightTheme, darkTheme } = DS;
 
-const SignInModal = (props: RootComponentProps) => {
+const SignInModalContainer = (props: RootComponentProps) => {
   const { logger } = props;
 
   const { t } = useTranslation();
   const location = useLocation();
+
+  const [suggestSignUp, setSuggestSignUp] = React.useState<boolean>(false);
 
   const [errorState, errorActions] = useErrors({ logger });
 
@@ -36,7 +38,12 @@ const SignInModal = (props: RootComponentProps) => {
     if (errorState && Object.keys(errorState).length) {
       const txt = Object.keys(errorState)
         .filter(key => key.split('.')[0] === 'useLoginState')
-        .map(k => errorState[k])
+        .map(k => {
+          if (errorState[k].error.message === 'Profile not found') {
+            setSuggestSignUp(true);
+          }
+          return errorState[k];
+        })
         .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
       return txt;
     }
@@ -48,11 +55,16 @@ const SignInModal = (props: RootComponentProps) => {
     errorActions.removeLoginErrors();
   };
 
+  const handleSignUpClick = () => {
+    props.navigateToModal({ name: 'signup' });
+  };
+
   return (
-    <LoginModal
-      slotId={props.layoutConfig.modalSlotId}
+    <SignInModal
       onLogin={handleLogin}
       onModalClose={handleModalClose}
+      suggestSignUp={suggestSignUp}
+      suggestedSignUpFn={handleSignUpClick}
       titleLabel={t('Connect a wallet')}
       metamaskModalHeadline={t('Connecting')}
       metamaskModalMessage={t('Please complete the process in your wallet')}
@@ -67,7 +79,7 @@ const Wrapped = (props: RootComponentProps) => (
     settings={{ activeTheme: 'Light-Theme' }}
   >
     <Router>
-      <SignInModal {...props} />
+      <SignInModalContainer {...props} />
     </Router>
   </ThemeSelector>
 );

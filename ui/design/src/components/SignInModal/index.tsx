@@ -11,29 +11,12 @@ import ErrorLoader from '../ErrorLoader';
 import { ModalContainer } from './fullscreen-modal-container';
 import ViewportSizeProvider, { useViewportSize } from '../Providers/viewport-dimension';
 
-export interface LoginModalProps {
-  slotId: string;
+export interface SignInModalProps {
   onLogin: (providerId: number) => void;
-  showSignUpModal?: {
-    inviteToken: string | null;
-    status: boolean;
-  };
-  onInputTokenChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
-  validateTokenFn?: (ev: any) => void;
-  submitted?: boolean;
-  submitting?: boolean;
-  success?: boolean;
-  hasError?: boolean;
-  errorMsg?: string;
   onModalClose: () => void;
   titleLabel: string;
   subtitleLabel?: string;
   headerLabel?: string;
-  acceptedTerms?: boolean;
-  checkedTermsValues?: string[];
-  onAcceptTerms?: (ev: any) => void;
-  onCheckedTermsValues?: (ev: any) => void;
-  waitForCheckTerms?: boolean;
   suggestSignUp?: boolean;
   suggestedSignUpFn?: () => void;
   /**
@@ -55,28 +38,13 @@ const ETH_PROVIDERS = {
   [WALLETCONNECT_PROVIDER]: 3,
 };
 
-const LoginModal: React.FC<LoginModalProps> = props => {
+const SignInModal: React.FC<SignInModalProps> = props => {
   const {
-    showSignUpModal,
     onModalClose,
     onLogin,
     metamaskModalHeadline,
     metamaskModalMessage,
     titleLabel,
-    onInputTokenChange,
-    validateTokenFn,
-    submitted,
-    submitting,
-    success,
-    hasError,
-    errorMsg,
-    subtitleLabel,
-    headerLabel,
-    acceptedTerms,
-    checkedTermsValues,
-    onAcceptTerms,
-    onCheckedTermsValues,
-    waitForCheckTerms,
     suggestSignUp,
     suggestedSignUpFn,
   } = props;
@@ -130,19 +98,8 @@ const LoginModal: React.FC<LoginModalProps> = props => {
         {!modalState.selectedProvider && (
           <EthProviderListModal
             titleLabel={titleLabel}
-            subtitleLabel={subtitleLabel}
-            headerLabel={headerLabel}
             onProviderClick={handleProviderClick}
             onModalClose={handleProvidersModalClose}
-            showSignUp={showSignUpModal}
-            onChange={onInputTokenChange}
-            submitted={submitted}
-            submitting={submitting}
-            success={success}
-            hasError={hasError}
-            errorMsg={errorMsg}
-            acceptedTerms={acceptedTerms}
-            validateTokenFn={validateTokenFn}
             providers={[
               {
                 id: METAMASK_PROVIDER,
@@ -157,13 +114,9 @@ const LoginModal: React.FC<LoginModalProps> = props => {
                 description: 'Scan with WalletConnect',
               },
             ]}
-            checkedTermsValues={checkedTermsValues}
-            onAcceptTerms={onAcceptTerms}
-            onCheckedTermsValues={onCheckedTermsValues}
-            waitForCheckTerms={waitForCheckTerms}
           />
         )}
-        {suggestSignUp && !showSignUpModal?.status && (
+        {suggestSignUp && (
           <ModalContainer onModalClose={handleProviderModalClose}>
             <ErrorLoader
               type="not-registered"
@@ -224,4 +177,4 @@ const WalletConnectModalTrigger: React.FC<IWalletConnectModalProps> = props => {
   return <GlobalStyle />;
 };
 
-export default LoginModal;
+export default SignInModal;
