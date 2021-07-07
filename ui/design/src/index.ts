@@ -105,11 +105,12 @@ import EditorModal from './components/EditorModal';
 import ExtensionPoint from './utils/extension-point';
 import ShareModal from './components/ShareModal';
 import { StyledLayer } from './components/ListModal/styled-modal';
-import LoginModal from './components/LoginModal';
-import EthProviderModal from './components/LoginModal/eth-provider-modal';
-import EthProviderListModal from './components/LoginModal/eth-provider-list-modal';
-import { ModalContainer } from './components/LoginModal/fullscreen-modal-container';
-import { ModalRenderer } from './components/LoginModal/modal-renderer';
+import SignInModal from './components/SignInModal';
+import SignUpModal from './components/SignUpModal';
+import EthProviderModal from './components/SignInModal/eth-provider-modal';
+import EthProviderListModal from './components/SignInModal/eth-provider-list-modal';
+import { ModalContainer } from './components/SignInModal/fullscreen-modal-container';
+import { ModalRenderer } from './components/SignInModal/modal-renderer';
 import MobileListModal from './components/MobileListModal';
 import ModerateModal from './components/ModerateModal';
 import ReportModal from './components/ReportModal';
@@ -198,7 +199,8 @@ const exported = {
   iconTypes,
   IconButton,
   IconLink,
-  LoginModal,
+  SignInModal,
+  SignUpModal,
   ProfileAvatarButton,
   VoteIconButton,
   CommentInput,

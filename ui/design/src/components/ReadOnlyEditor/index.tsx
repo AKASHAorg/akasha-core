@@ -3,7 +3,7 @@ import { createEditor, Descendant } from 'slate';
 import { Slate, withReact, Editable, RenderElementProps } from 'slate-react';
 import { withMentions, withImages, withTags, withLinks } from '../Editor/plugins';
 import { renderElement, renderLeaf } from '../Editor/renderers';
-import { ModalContainer } from '../LoginModal/fullscreen-modal-container';
+import { ModalContainer } from '../SignInModal/fullscreen-modal-container';
 import { Portal } from '../Editor/helpers';
 import Icon from '../Icon';
 import styled from 'styled-components';

@@ -1,14 +1,11 @@
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { rootRoute } from './routes';
-// import { Widget as TrendingWidget } from './components/widgets/trending-widget';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
   MenuItemAreaType,
   MenuItemType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-
-// const searchRoute = `${rootRoute}/:postId`;
 
 /**
  * All the plugins must export an object like this:

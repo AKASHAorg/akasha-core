@@ -8,22 +8,19 @@ import FeedPage from './feed-page/feed-page';
 import PostPage from './post-page/post-page';
 import InvitePage from './post-page/invite-page';
 import TagFeedPage from './tag-feed-page/tag-feed-page';
-import { useTranslation } from 'react-i18next';
 import { useLoginState, useErrors, useProfile, useModalState } from '@akashaproject/ui-awf-hooks';
 import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
-const { Box, LoginModal } = DS;
+const { Box } = DS;
 interface AppRoutesProps {
   onError: (err: IAkashaError) => void;
 }
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
-  const { logger, layoutConfig, onError } = props;
+  const { logger, onError } = props;
 
-  const { t } = useTranslation();
+  const [, errorActions] = useErrors({ logger });
 
-  const [errorState, errorActions] = useErrors({ logger });
-
-  const [loginState, loginActions] = useLoginState({
+  const [loginState] = useLoginState({
     onError: errorActions.createError,
   });
 
@@ -53,12 +50,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   const [flaggedContentType, setFlaggedContentType] = React.useState('');
 
   const showLoginModal = () => {
-    modalStateActions.show(MODAL_NAMES.LOGIN);
-  };
-
-  const hideLoginModal = () => {
-    modalStateActions.hide(MODAL_NAMES.LOGIN);
-    errorActions.removeLoginErrors();
+    props.navigateToModal({ name: 'login' });
   };
 
   const showReportModal = () => {
@@ -76,21 +68,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   const hideEditorModal = () => {
     modalStateActions.hide(MODAL_NAMES.EDITOR);
   };
-
-  const handleLogin = (providerId: number) => {
-    loginActions.login(providerId);
-  };
-
-  const loginErrors: string | null = React.useMemo(() => {
-    if (errorState && Object.keys(errorState).length) {
-      const txt = Object.keys(errorState)
-        .filter(key => key.split('.')[0] === 'useLoginState')
-        .map(k => errorState[k])
-        .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
-      return txt;
-    }
-    return null;
-  }, [errorState]);
 
   return (
     <Box>
@@ -160,16 +137,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           <Redirect exact={true} from={rootRoute} to={routes[FEED]} />
         </Switch>
       </Router>
-      <LoginModal
-        showModal={modalState.login}
-        slotId={layoutConfig.modalSlotId}
-        onLogin={handleLogin}
-        onModalClose={hideLoginModal}
-        titleLabel={t('Connect a wallet')}
-        metamaskModalHeadline={t('Connecting')}
-        metamaskModalMessage={t('Please complete the process in your wallet')}
-        error={loginErrors}
-      />
     </Box>
   );
 };

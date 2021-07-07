@@ -1,4 +1,3 @@
-import { forkJoin, lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 
 export interface IConfig {

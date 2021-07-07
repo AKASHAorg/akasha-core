@@ -11,7 +11,7 @@ import ContentList from './content-list';
 import PromptAuthentication from './prompt-authentication';
 import TransparencyLog from './transparency-log';
 
-const { Box, LoginModal } = DS;
+const { Box } = DS;
 
 interface AppRoutesProps {
   onError: (err: IAkashaError) => void;
@@ -20,32 +20,11 @@ interface AppRoutesProps {
 const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   const { layoutConfig, onError } = props;
 
-  const [loginModalState, setLoginModalState] = React.useState(false);
-
   const { t } = useTranslation();
 
-  const [loginState, loginActions] = useLoginState({
+  const [loginState] = useLoginState({
     onError: onError,
   });
-
-  // now defunct, users may sign in from topbar instead
-  // const showLoginModal = () => {
-  //   setLoginModalState(true);
-  // };
-
-  const hideLoginModal = () => {
-    setLoginModalState(false);
-  };
-
-  const handleLogin = (providerId: number) => {
-    loginActions.login(providerId);
-  };
-
-  React.useEffect(() => {
-    if (loginState.ethAddress) {
-      setLoginModalState(false);
-    }
-  }, [loginState.ethAddress]);
 
   return (
     <Box>
@@ -80,16 +59,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           <Redirect exact={true} from={rootRoute} to={routes[HOME]} />
         </Switch>
       </Router>
-      <LoginModal
-        showModal={loginModalState}
-        slotId={layoutConfig.modalSlotId}
-        onLogin={handleLogin}
-        onModalClose={hideLoginModal}
-        titleLabel={t('Connect a wallet')}
-        metamaskModalHeadline={t('Connecting')}
-        metamaskModalMessage={t('Please complete the process in your wallet')}
-        error={null}
-      />
     </Box>
   );
 };

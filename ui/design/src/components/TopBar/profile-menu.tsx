@@ -9,7 +9,7 @@ import Icon, { IconType } from '../Icon';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { StyledDrop, StyledPopoverBox, StyledOverlay, StyledAccordionPanel } from './styled-topbar';
-import { ModalContainer } from '../LoginModal/fullscreen-modal-container';
+import { ModalContainer } from '../SignInModal/fullscreen-modal-container';
 import { Portal } from '../Editor/helpers';
 
 export interface IProfileMenu {

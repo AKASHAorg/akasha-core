@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { createErrorHandler } from './utils/error-handler';
 import getSDK from '@akashaproject/awf-sdk';
+import { getMediaUrl } from './utils/media-utils';
 
 export interface UseMentionsActions {
   /**
@@ -98,9 +99,25 @@ export const useMentions = (props: UseMentionsProps): [IMentionsState, UseMentio
   React.useEffect(() => {
     if (mentionsState.mentionQuery) {
       const mentionsService = sdk.api.profile.searchProfiles(mentionsState.mentionQuery);
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
       const mentionsSub = mentionsService.subscribe({
         next: resp => {
-          dispatch({ type: 'GET_MENTIONS_SUCCESS', payload: resp.data.searchProfiles });
+          const completeProfiles = resp.data.searchProfiles.map(profileResp => {
+            const { avatar, coverImage, ...other } = profileResp;
+            const images: { avatar: string | null; coverImage: string | null } = {
+              avatar: null,
+              coverImage: null,
+            };
+            if (avatar) {
+              images.avatar = getMediaUrl(ipfsGateway, avatar);
+            }
+            if (coverImage) {
+              images.coverImage = getMediaUrl(ipfsGateway, coverImage);
+            }
+            const profileData = { ...images, ...other };
+            return profileData;
+          });
+          dispatch({ type: 'GET_MENTIONS_SUCCESS', payload: completeProfiles });
         },
         error: createErrorHandler('useMentions.getMentions', false, onError),
       });
