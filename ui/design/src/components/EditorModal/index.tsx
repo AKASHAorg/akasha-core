@@ -6,8 +6,8 @@ import Button from '../Button';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
 import EditorCard, { IEditorCard } from '../EditorCard';
 import { editorDefaultValue } from '../Editor/initialValue';
-import { ModalContainer } from '../LoginModal/fullscreen-modal-container';
-import { ModalRenderer } from '../LoginModal/modal-renderer';
+import { ModalContainer } from '../SignInModal/fullscreen-modal-container';
+import { ModalRenderer } from '../SignInModal/modal-renderer';
 
 export interface IEditorModal extends Omit<IEditorCard, 'editorState' | 'setEditorState'> {
   slotId: string;

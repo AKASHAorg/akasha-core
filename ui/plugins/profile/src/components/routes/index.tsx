@@ -8,12 +8,12 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useLoginState, useModalState, useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
 import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
-const { Box, LoginModal, ViewportSizeProvider } = DS;
+const { Box, ViewportSizeProvider } = DS;
 
 const Routes: React.FC<RootComponentProps> = props => {
   const { logger } = props;
   // const { path } = activeWhen;
-  const [errorState, errorActions] = useErrors({ logger });
+  const [, errorActions] = useErrors({ logger });
 
   const [loginState, loginActions] = useLoginState({
     onError: errorActions.createError,
@@ -28,7 +28,6 @@ const Routes: React.FC<RootComponentProps> = props => {
 
   React.useEffect(() => {
     if (loginState.ethAddress && flagged.length) {
-      modalStateActions.hide(MODAL_NAMES.LOGIN);
       modalStateActions.show(MODAL_NAMES.REPORT);
     }
   }, [loginState.ethAddress]);
@@ -48,19 +47,8 @@ const Routes: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation();
 
-  const loginErrors: string | null = React.useMemo(() => {
-    if (errorState && Object.keys(errorState).length) {
-      const txt = Object.keys(errorState)
-        .filter(key => key.split('.')[0] === 'useLoginState')
-        .map(k => errorState[k])
-        .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
-      return txt;
-    }
-    return null;
-  }, [errorState]);
-
   const showLoginModal = () => {
-    modalStateActions.show(MODAL_NAMES.LOGIN);
+    props.navigateToModal({ name: 'login' });
   };
 
   const showReportModal = () => {
@@ -69,10 +57,6 @@ const Routes: React.FC<RootComponentProps> = props => {
 
   const hideReportModal = () => {
     modalStateActions.hide(MODAL_NAMES.REPORT);
-  };
-
-  const hideLoginModal = () => {
-    modalStateActions.hide(MODAL_NAMES.LOGIN);
   };
 
   return (
@@ -102,16 +86,6 @@ const Routes: React.FC<RootComponentProps> = props => {
             <Route render={() => <div>{t('Oops, Profile not found!')}</div>} />
           </Switch>
         </Box>
-        <LoginModal
-          showModal={modalState[MODAL_NAMES.LOGIN]}
-          slotId={props.layoutConfig.modalSlotId}
-          onLogin={loginActions.login}
-          onModalClose={hideLoginModal}
-          titleLabel={t('Connect a wallet')}
-          metamaskModalHeadline={t('Connecting')}
-          metamaskModalMessage={t('Please complete the process in your wallet')}
-          error={loginErrors}
-        />
       </Router>
     </ViewportSizeProvider>
   );

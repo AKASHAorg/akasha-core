@@ -4,16 +4,11 @@ import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import { useLoginState, useNotifications } from '@akashaproject/ui-awf-hooks';
 import useErrorState from '@akashaproject/ui-awf-hooks/lib/use-error-state';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard } = DS;
 
-interface AppRoutesProps {
-  onError?: (err: Error) => void;
-  logger: any;
-  singleSpa: any;
-}
-
-const NotificationsPage: React.FC<AppRoutesProps> = props => {
+const NotificationsPage: React.FC<RootComponentProps> = props => {
   const { logger, singleSpa } = props;
 
   const { t } = useTranslation();

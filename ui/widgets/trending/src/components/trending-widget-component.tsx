@@ -6,18 +6,14 @@ import {
   useLoginState,
   useFollow,
   useTagSubscribe,
-  useModalState,
 } from '@akashaproject/ui-awf-hooks';
-import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import useErrorState from '@akashaproject/ui-awf-hooks/lib/use-error-state';
-import { ITrendingWidgetProps } from './App';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
-const { TrendingWidgetCard, ErrorInfoCard, ErrorLoader, LoginModal } = DS;
+const { TrendingWidgetCard, ErrorInfoCard, ErrorLoader } = DS;
 
-type TrendingWidgetComponentProps = Omit<ITrendingWidgetProps, 'i18n'>;
-
-const TrendingWidgetComponent: React.FC<TrendingWidgetComponentProps> = props => {
-  const { logger, singleSpa, layout } = props;
+const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
+  const { logger, singleSpa } = props;
 
   const { t } = useTranslation();
 
@@ -27,7 +23,7 @@ const TrendingWidgetComponent: React.FC<TrendingWidgetComponentProps> = props =>
     onError: errorActions.createError,
   });
 
-  const [loginState, loginActions] = useLoginState({
+  const [loginState] = useLoginState({
     onError: errorActions.createError,
   });
 
@@ -39,33 +35,8 @@ const TrendingWidgetComponent: React.FC<TrendingWidgetComponentProps> = props =>
     onError: errorActions.createError,
   });
 
-  const [modalState, modalStateActions] = useModalState({
-    initialState: {},
-    isLoggedIn: !!loginState.ethAddress,
-  });
-
-  const loginErrors: string | null = React.useMemo(() => {
-    if (errorState && Object.keys(errorState).length) {
-      const txt = Object.keys(errorState)
-        .filter(key => key.split('.')[0] === 'useLoginState')
-        .map(k => errorState[k])
-        .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
-      return txt;
-    }
-    return null;
-  }, [errorState]);
-
   const showLoginModal = () => {
-    modalStateActions.show(MODAL_NAMES.LOGIN);
-  };
-
-  const hideLoginModal = () => {
-    modalStateActions.hide(MODAL_NAMES.LOGIN);
-    errorActions.removeLoginErrors();
-  };
-
-  const handleLogin = (providerId: number) => {
-    loginActions.login(providerId);
+    props.navigateToModal({ name: 'login' });
   };
 
   React.useEffect(() => {
@@ -168,16 +139,6 @@ const TrendingWidgetComponent: React.FC<TrendingWidgetComponentProps> = props =>
               loggedEthAddress={loginState.ethAddress}
             />
           )}
-          <LoginModal
-            showModal={modalState.login}
-            slotId={layout.modalSlotId}
-            onLogin={handleLogin}
-            onModalClose={hideLoginModal}
-            titleLabel={t('Connect a wallet')}
-            metamaskModalHeadline={t('Connecting')}
-            metamaskModalMessage={t('Please complete the process in your wallet')}
-            error={loginErrors}
-          />
         </>
       )}
     </ErrorInfoCard>
