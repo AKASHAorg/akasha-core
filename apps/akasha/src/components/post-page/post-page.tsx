@@ -329,20 +329,24 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
               optionLabels={[
-                t('Suspicious, deceptive, or spam'),
-                t('Abusive or harmful to others'),
-                t('Self-harm or suicide'),
-                t('Illegal'),
-                t('Nudity'),
-                t('Violence'),
+                t('Threats of violence and incitement'),
+                t('Hate speech, bullying and harassment'),
+                t('Sexual or human exploitation'),
+                t('Illegal or certain regulated goods or services'),
+                t('Impersonation'),
+                t('Spam and malicious links'),
+                t('Privacy and copyright infringement'),
+                t('Other'),
               ]}
               optionValues={[
-                'Suspicious, deceptive, or spam',
-                'Abusive or harmful to others',
-                'Self-harm or suicide',
-                'Illegal',
-                'Nudity',
-                'Violence',
+                'Threats of violence and incitement',
+                'Hate speech, bullying and harassment',
+                'Sexual or human exploitation',
+                'Illegal or certain regulated goods or services',
+                'Impersonation',
+                'Spam and malicious links',
+                'Privacy and copyright infringement',
+                'Other',
               ]}
               descriptionLabel={t('Explanation')}
               descriptionPlaceholder={t('Please explain your reason(s)')}
