@@ -5,7 +5,13 @@ import Gql from '../gql';
 import AWF_Auth from '../auth';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
-import { AddComment, GetComment, GetComments, EditComment } from './comments.graphql';
+import {
+  AddComment,
+  GetComment,
+  GetComments,
+  EditComment,
+  RemoveComment,
+} from './comments.graphql';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { concatAll, map, tap } from 'rxjs/operators';
 import { AWF_IComments } from '@akashaproject/sdk-typings/lib/interfaces/posts';
@@ -26,7 +32,10 @@ export default class AWF_Comments implements AWF_IComments {
     GetComment,
     GetComments,
     AddComment,
+    RemoveComment,
+    EditComment,
   };
+
   constructor(
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Gql) gql: Gql,
@@ -152,5 +161,39 @@ export default class AWF_Comments implements AWF_IComments {
         }),
         concatAll(),
       );
+  }
+
+  /**
+   * Remove a comment's data by ID
+   * @param commentID
+   */
+  removeComment(commentID: string) {
+    return this._auth.authenticateMutationData(commentID).pipe(
+      map(res => {
+        return this._gql
+          .run<{ removeComment: boolean }>({
+            query: RemoveComment,
+            variables: { id: commentID },
+            operationName: 'RemoveComment',
+            context: {
+              headers: {
+                Authorization: `Bearer ${res.token.data}`,
+                Signature: res.signedData.data.signature,
+              },
+            },
+          })
+          .pipe(
+            tap(ev => {
+              // @emits COMMENTS_EVENTS.REMOVE
+              this._globalChannel.next({
+                data: ev.data,
+                event: COMMENTS_EVENTS.REMOVE,
+                args: { commentID },
+              });
+            }),
+          );
+      }),
+      concatAll(),
+    );
   }
 }

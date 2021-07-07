@@ -155,6 +155,8 @@ const typeDefs = gql`
     updateModerator(moderator: ModeratorData): Boolean
     editPost(content: [DataProviderInput!], post: PostData, id: String!): Boolean
     editComment(content: [DataProviderInput!], comment: CommentData, id: String!): Boolean
+    removePost(id: String!): Boolean
+    removeComment(id: String!): Boolean
   }
 
   type Tag {
