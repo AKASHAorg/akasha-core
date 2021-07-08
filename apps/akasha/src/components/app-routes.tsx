@@ -78,13 +78,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               {...props}
               loggedProfileData={loginProfile}
               loginState={loginState}
-              flagged={flagged}
-              flaggedContentType={flaggedContentType}
-              reportModalOpen={modalState.report}
-              setFlagged={setFlagged}
-              setFlaggedContentType={setFlaggedContentType}
-              setReportModalOpen={showReportModal}
-              closeReportModal={hideReportModal}
               editorModalOpen={modalState.editor}
               setEditorModalOpen={showEditorModal}
               closeEditorModal={hideEditorModal}
@@ -97,13 +90,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               {...props}
               loggedProfileData={loginProfile}
               loginState={loginState}
-              flagged={flagged}
-              flaggedContentType={flaggedContentType}
-              reportModalOpen={modalState.report}
-              setFlagged={setFlagged}
-              setFlaggedContentType={setFlaggedContentType}
-              setReportModalOpen={showReportModal}
-              closeReportModal={hideReportModal}
               editorModalOpen={modalState.editor}
               setEditorModalOpen={showEditorModal}
               closeEditorModal={hideEditorModal}
@@ -118,13 +104,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               {...props}
               loggedProfileData={loginProfile}
               loginState={loginState}
-              flagged={flagged}
-              flaggedContentType={flaggedContentType}
-              reportModalOpen={modalState.report}
-              setFlagged={setFlagged}
-              setFlaggedContentType={setFlaggedContentType}
-              setReportModalOpen={showReportModal}
-              closeReportModal={hideReportModal}
               showLoginModal={showLoginModal}
             />
           </Route>
