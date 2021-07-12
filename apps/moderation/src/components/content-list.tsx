@@ -1,16 +1,15 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { moderationRequest } from '@akashaproject/ui-awf-hooks';
-import getSDK from '@akashaproject/awf-sdk';
 import ContentTab from './content-tab';
 import ContentCard from './content-card/content-card';
 import PromptAuthorization from './prompt-authorization';
 
-import { BASE_DECISION_URL } from '../services/constants';
-
-const { Box, Text, ModalRenderer, ToastProvider, ModerateModal, SwitchCard } = DS;
+const { Box, Text, SwitchCard } = DS;
 
 interface IContentListProps {
   slotId: string;
@@ -45,16 +44,11 @@ export interface ICount {
   delisted: number;
 }
 
-const ContentList: React.FC<IContentListProps> = props => {
-  const { slotId, ethAddress, logger } = props;
-
-  const sdk = getSDK();
+const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
+  const { ethAddress, logger } = props;
 
   const [pendingItems, setPendingItems] = React.useState<IPendingItem[]>([]);
   const [moderatedItems, setModeratedItems] = React.useState<IModeratedItem[]>([]);
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-  const [contentType, setContentType] = React.useState<string>('post');
-  const [flagged, setFlagged] = React.useState<string>('');
   const [isPending, setIsPending] = React.useState<boolean>(true);
   const [isDelisted, setIsDelisted] = React.useState<boolean>(true);
   const [requesting, setRequesting] = React.useState<boolean>(false);
@@ -62,6 +56,7 @@ const ContentList: React.FC<IContentListProps> = props => {
   const [isAuthorised, setIsAuthorised] = React.useState<boolean>(false);
   const [activeButton, setActiveButton] = React.useState<string>('Delisted');
 
+  const location = useLocation();
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
@@ -86,6 +81,18 @@ const ContentList: React.FC<IContentListProps> = props => {
       fetchModeratedContents();
     }
   }, [isPending, isAuthorised]);
+
+  React.useEffect(() => {
+    // listens to changes in location such as when returning from modal and updates current contents in view
+    if (location.search.length === 0) {
+      // trigger only when location has no search query
+      if (isPending) {
+        fetchPendingContents();
+      } else {
+        fetchModeratedContents();
+      }
+    }
+  }, [location]);
 
   const getModeratorStatus = async (loggedEthAddress: string) => {
     setRequesting(true);
@@ -141,10 +148,13 @@ const ContentList: React.FC<IContentListProps> = props => {
     }
   };
 
-  const handleButtonClick = (entryId: string, content: string) => {
-    setFlagged(entryId);
-    setModalOpen(true);
-    setContentType(content);
+  const handleButtonClick = (entryId: string, contentType: string) => {
+    props.navigateToModal({
+      name: 'moderate-modal',
+      status: isPending ? 'pending' : 'moderated',
+      entryId,
+      contentType,
+    });
   };
 
   const renderNotFound = (activeTab: string) => {
@@ -170,39 +180,6 @@ const ContentList: React.FC<IContentListProps> = props => {
 
   return isAuthorised ? (
     <Box>
-      <ModalRenderer slotId={slotId}>
-        {modalOpen && (
-          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <ModerateModal
-              titleLabel={t('Make a Decision')}
-              altTitleLabel={t('Review a Decision')}
-              contentType={contentType}
-              decisionLabel={t('Decision')}
-              optionLabels={[t('Delist'), t('Keep')]}
-              optionValues={['Delist', 'Keep']}
-              descriptionLabel={t('Evaluation')}
-              descriptionPlaceholder={t('Please explain the reason(s)')}
-              footerText1Label={t('If you are unsure, you can refer to our')}
-              footerLink1Label={t('Code of Conduct')}
-              footerUrl1={'/legal/code-of-conduct'}
-              cancelLabel={t('Cancel')}
-              user={ethAddress}
-              contentId={flagged}
-              baseUrl={BASE_DECISION_URL}
-              isReview={!isPending}
-              onModalClose={() => {
-                setModalOpen(false);
-                // on modal close, update current contents in view
-                isPending ? fetchPendingContents() : fetchModeratedContents();
-              }}
-              closeModal={() => {
-                setModalOpen(false);
-              }}
-              signData={sdk.api.auth.signData}
-            />
-          </ToastProvider>
-        )}
-      </ModalRenderer>
       <ContentTab
         isPending={isPending}
         pendingLabel={t('Pending')}
