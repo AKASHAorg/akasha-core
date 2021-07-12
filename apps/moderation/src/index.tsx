@@ -25,5 +25,9 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       mountsIn: 'report-modal',
       loadingFn: () => import('./extensions/report-modal'),
     },
+    {
+      mountsIn: 'moderate-modal',
+      loadingFn: () => import('./extensions/moderate-modal'),
+    },
   ],
 });
