@@ -14,7 +14,6 @@ export default {
   argTypes: {
     titleLabel: { control: 'text' },
     altTitleLabel: { control: 'text' },
-    contentType: { control: 'text' },
     decisionLabel: { control: 'text' },
     optionLabels: [{ control: 'text' }],
     optionValues: [{ control: 'text' }],
@@ -25,12 +24,9 @@ export default {
     footerUrl1: { control: 'text' },
     cancelLabel: { control: 'text' },
     user: { control: 'text' },
-    contentId: { control: 'text' },
-    baseUrl: { control: 'text' },
     isReview: { control: 'boolean' },
     closeModal: { action: 'modal closed' },
-    onModalClose: { action: 'on modal close' },
-    signData: { action: 'sign data' },
+    onModerate: { action: 'item moderated' },
   },
 };
 
@@ -48,12 +44,7 @@ const Template = (args: IModerateModalProps) => {
         />
         {modalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <ModerateModal
-              {...args}
-              closeModal={() => setModalOpen(false)}
-              onModalClose={() => setModalOpen(false)}
-              signData={() => null}
-            />
+            <ModerateModal {...args} closeModal={() => setModalOpen(false)} />
           </ToastProvider>
         )}
       </Box>
@@ -66,7 +57,6 @@ export const BaseModerateModal = Template.bind({});
 BaseModerateModal.args = {
   titleLabel: 'Make a Decision',
   altTitleLabel: 'Review a Decision',
-  contentType: 'post',
   decisionLabel: 'Decision',
   optionLabels: ['Delist', 'Keep'],
   optionValues: ['Delist', 'Keep'],
@@ -77,7 +67,6 @@ BaseModerateModal.args = {
   footerUrl1: '/legal/code-of-conduct',
   cancelLabel: 'Cancel',
   user: '0x003410490050000320006570034567114572000',
-  contentId: '01f50jfyy4pzg1fedt3ge2jnvh',
-  baseUrl: '',
+  requesting: false,
   isReview: false,
 };

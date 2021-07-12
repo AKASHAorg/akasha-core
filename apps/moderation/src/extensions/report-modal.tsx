@@ -20,6 +20,9 @@ const { ReportModal, ToastProvider, ThemeSelector, lightTheme, darkTheme } = DS;
 const ReportModalComponent = (props: RootComponentProps) => {
   const { logger, activeModal } = props;
 
+  const [requesting, setRequesting] = React.useState<boolean>(false);
+  const [success, setSuccess] = React.useState<boolean>(false);
+
   const [, errorActions] = useErrors({ logger });
 
   const [loginState] = useLoginState({
@@ -36,8 +39,6 @@ const ReportModalComponent = (props: RootComponentProps) => {
 
   const sdk = getSDK();
 
-  console.log(props);
-
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
   };
@@ -45,6 +46,46 @@ const ReportModalComponent = (props: RootComponentProps) => {
   const updateEntry = (entryId: string) => {
     const modifiedEntry = { ...postsState.postsData[entryId], reported: true };
     postsActions.updatePostsState(modifiedEntry);
+  };
+
+  const postData = async (url = '', data = {}) => {
+    const postURL = `${url}/new`;
+    const rheaders = new Headers();
+    rheaders.append('Content-Type', 'application/json');
+
+    const response = await fetch(postURL, {
+      method: 'POST',
+      headers: rheaders,
+      body: JSON.stringify(data),
+    });
+    return response.status;
+  };
+
+  const onReport = (dataToSign: Record<string, unknown>) => {
+    setRequesting(true);
+
+    sdk.api.auth.signData(dataToSign).subscribe(async (resp: any) => {
+      const data = {
+        data: dataToSign,
+        contentId: activeModal.entryId,
+        contentType: activeModal.contentType,
+        signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
+      };
+
+      postData(BASE_REPORT_URL, data)
+        .then(status => {
+          if (status === 409) {
+            throw new Error('This content has already been flagged by you');
+          } else if (status >= 400) {
+            throw new Error('Unable to process your request right now. Please try again later');
+          }
+          return setSuccess(true);
+        })
+        .catch(error => {
+          props.logger.error('[report-modal.tsx]: postData err %j', error.message || '');
+        })
+        .finally(() => setRequesting(false));
+    });
   };
 
   return (
@@ -86,10 +127,11 @@ const ReportModalComponent = (props: RootComponentProps) => {
         user={loginState.ethAddress ? loginState.ethAddress : ''}
         contentId={activeModal.entryId}
         contentType={activeModal.contentType}
-        baseUrl={BASE_REPORT_URL}
+        requesting={requesting}
+        success={success}
         updateEntry={updateEntry}
         closeModal={handleModalClose}
-        signData={sdk.api.auth.signData}
+        onReport={onReport}
       />
     </ToastProvider>
   );

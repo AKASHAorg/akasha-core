@@ -1,6 +1,5 @@
 import React from 'react';
 import { isMobileOnly } from 'react-device-detect';
-import { useToasts } from 'react-toast-notifications';
 import { Box, Text, FormField, RadioButtonGroup } from 'grommet';
 
 import Icon from '../Icon';
@@ -20,7 +19,6 @@ export interface IModerateModalProps {
   className?: string;
   titleLabel: string;
   altTitleLabel: string;
-  contentType: string;
 
   decisionLabel: string;
   optionLabels: string[];
@@ -33,14 +31,11 @@ export interface IModerateModalProps {
   footerUrl1: string;
   cancelLabel?: string;
   user: string | null;
-  contentId?: string;
-  baseUrl: string;
+  requesting: boolean;
   // indicates if making a fresh or reviewing an existing decision
   isReview?: boolean;
-  // fetch pending items on modalClose
-  onModalClose: () => void;
   closeModal: () => void;
-  signData: (data: Record<string, unknown> | string) => any;
+  onModerate: (data: Record<string, unknown>) => void;
 }
 
 const ModerateModal: React.FC<IModerateModalProps> = props => {
@@ -58,23 +53,18 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     footerUrl1,
     cancelLabel,
     user,
-    contentId,
-    baseUrl,
+    requesting,
     isReview,
-    onModalClose,
     closeModal,
-    signData,
+    onModerate,
   } = props;
 
   const [explanation, setExplanation] = React.useState('');
-  const [requesting, setRequesting] = React.useState(false);
   const [action, setAction] = React.useState('Delist');
   const [rows, setRows] = React.useState(1);
 
   const hiddenSpanRef = React.useRef<HTMLSpanElement>(null);
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
-
-  const { addToast } = useToasts();
 
   const {
     dimensions: { width },
@@ -100,52 +90,14 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
   };
 
   const handleModerate = (isDelisted = true) => () => {
-    setRequesting(true);
-
     // sign payload first before posting
     const dataToSign = {
       moderator: user,
       explanation: explanation.trim(),
       delisted: isDelisted,
     };
-    signData(dataToSign).subscribe(async (resp: any) => {
-      const data = {
-        contentId,
-        data: dataToSign,
-        signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
-      };
 
-      const postURL = `${baseUrl}/moderate`;
-      const rheaders = new Headers();
-      rheaders.append('Content-Type', 'application/json');
-      const { status } = await fetch(postURL, {
-        method: 'POST',
-        headers: rheaders,
-        body: JSON.stringify(data),
-      });
-
-      try {
-        if (status === 400) {
-          throw new Error('Bad request. Please try again later');
-        } else if (status === 403) {
-          throw new Error('You are not authorized to perform this operation');
-        } else if (status === 409) {
-          throw new Error('This content has already been moderated by you');
-        } else if (status === 500) {
-          throw new Error('Unable to process your request right now. Please try again later');
-        }
-
-        addToast('Content successfully moderated', {
-          appearance: 'success',
-        });
-        return onModalClose();
-      } catch (error) {
-        setRequesting(false);
-        return addToast(error.message, {
-          appearance: 'error',
-        });
-      }
-    });
+    onModerate(dataToSign);
   };
 
   return (
