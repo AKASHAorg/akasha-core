@@ -12,7 +12,7 @@ import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
-// import { application as loginWidget } from '@akashaproject/ui-widget-login/lib';
+// import { application as loginWidget } from '@akashaproject/ui-widget-login-cta/lib';
 // import Parcel from 'single-spa-react/parcel';
 import { constants, useBookmarks, useErrors, useMentions } from '@akashaproject/ui-awf-hooks';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
@@ -207,20 +207,24 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               successMessageLabel={t('We will investigate this post and take appropriate action.')}
               optionsTitleLabel={t('Please select a reason')}
               optionLabels={[
-                t('Suspicious, deceptive, or spam'),
-                t('Abusive or harmful to others'),
-                t('Self-harm or suicide'),
-                t('Illegal'),
-                t('Nudity'),
-                t('Violence'),
+                t('Threats of violence and incitement'),
+                t('Hate speech, bullying and harassment'),
+                t('Sexual or human exploitation'),
+                t('Illegal or certain regulated goods or services'),
+                t('Impersonation'),
+                t('Spam and malicious links'),
+                t('Privacy and copyright infringement'),
+                t('Other'),
               ]}
               optionValues={[
-                'Suspicious, deceptive, or spam',
-                'Abusive or harmful to others',
-                'Self-harm or suicide',
-                'Illegal',
-                'Nudity',
-                'Violence',
+                'Threats of violence and incitement',
+                'Hate speech, bullying and harassment',
+                'Sexual or human exploitation',
+                'Illegal or certain regulated goods or services',
+                'Impersonation',
+                'Spam and malicious links',
+                'Privacy and copyright infringement',
+                'Other',
               ]}
               descriptionLabel={t('Explanation')}
               descriptionPlaceholder={t('Please explain your reason(s)')}

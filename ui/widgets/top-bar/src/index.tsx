@@ -15,5 +15,11 @@ export const register: (
     name: 'ui-widget-topbar',
     tags: ['topbar'],
     extensions: extensionPointsMap,
+    extends: [
+      {
+        mountsIn: 'feedback',
+        loadingFn: () => import('./extensions/feedback-modal'),
+      },
+    ],
   };
 };

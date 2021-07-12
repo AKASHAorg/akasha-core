@@ -284,14 +284,16 @@ export default class AppLoader {
     }
   }
   public onModalUnmount(modalData: UIEventData['data']) {
-    if (this.activeModal.name === modalData.name) {
+    if (this.activeModal && this.activeModal.name === modalData.name) {
       this.activeModal = undefined;
-    } else {
+    } else if (this.activeModal && this.activeModal.name !== modalData.name) {
       this.loaderLogger.error(
         'Cannot unmount modal. Name mismatch: %s != %s',
         modalData.name,
         this.activeModal.name,
       );
+    } else {
+      this.loaderLogger.info('Modal already unmounted. Nothing to do!');
     }
   }
 
@@ -627,6 +629,7 @@ export default class AppLoader {
       singleSpa,
       extension: extensionPoint,
       navigateToModal: navigateToModal,
+      layoutConfig: this.layoutConfig,
     };
 
     const extensionParcel = singleSpa.mountRootParcel(extensionPoint.loadingFn, extensionProps);

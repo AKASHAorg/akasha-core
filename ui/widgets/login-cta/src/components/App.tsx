@@ -1,54 +1,42 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Suspense } from 'react';
 import DS from '@akashaproject/design-system';
+import WidgetErrorCard from './widget-error-card';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
-import TrendingWidgetComponent from './trending-widget-component';
+import LoginWidget from './login-cta-widget';
 import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
-export default class TrendingWidgetRoot extends PureComponent<RootComponentProps> {
-  public state: {
-    hasErrors: boolean;
-    errorMessage: string;
+export interface ILoginCTAWidgetProps {
+  logger: any;
+  i18n: any;
+  layout: any;
+}
+
+export default class LoginCTAWidgetRoot extends PureComponent<ILoginCTAWidgetProps> {
+  public state: { errors: any } = {
+    errors: {},
   };
-  constructor(props: RootComponentProps) {
-    super(props);
-    this.state = {
-      hasErrors: false,
-      errorMessage: '',
-    };
-  }
-  public componentDidCatch(err: Error, info: React.ErrorInfo) {
+  public componentDidCatch(error: Error, errorInfo: any) {
+    if (this.props.logger) {
+      this.props.logger.error('auth-widget error %j %j', error, errorInfo);
+    }
     this.setState({
-      hasErrors: true,
-      errorMessage: `${err.message} :: ${info.componentStack}`,
+      errors: {
+        'caught.critical': {
+          error: new Error(`${error} \n Additional info: \n ${errorInfo}`),
+          critical: false,
+        },
+      },
     });
-    const { logger } = this.props;
-    logger.error('an error has occurred %j %j', err, info);
   }
-  // componentDidMount() {
-  //   if (this.props.i18n) {
-  //     this.props.i18n.loadNamespaces('ui-widget-trending');
-  //   }
-  // }
+
   public render() {
     const { logger } = this.props;
-
-    if (this.state.hasErrors) {
-      return (
-        <div>
-          Oh no, something went wrong in trending-widget
-          <div>
-            <code>{this.state.errorMessage}</code>
-          </div>
-        </div>
-      );
-    }
 
     i18next
       .use(initReactI18next)
@@ -62,14 +50,14 @@ export default class TrendingWidgetRoot extends PureComponent<RootComponentProps
       })
       .init({
         fallbackLng: 'en',
-        ns: ['ui-widget-trending'],
+        ns: ['login'],
         saveMissing: false,
         saveMissingTo: 'all',
         load: 'languageOnly',
         debug: true,
         cleanCode: true,
         keySeparator: false,
-        defaultNS: 'ui-widget-trending',
+        defaultNS: 'login',
         backend: {
           backends: [LocalStorageBackend, Fetch],
           backendOptions: [
@@ -83,20 +71,21 @@ export default class TrendingWidgetRoot extends PureComponent<RootComponentProps
           ],
         },
       });
-
     return (
-      <React.Suspense fallback={<></>}>
-        <I18nextProvider i18n={i18next} defaultNS="ui-widget-trending">
+      <I18nextProvider i18n={i18next}>
+        <Suspense fallback={<>...</>}>
           <ThemeSelector
             settings={{ activeTheme: 'Light-Theme' }}
             availableThemes={[lightTheme, darkTheme]}
             style={{ height: '100%' }}
             plain={true}
           >
-            <TrendingWidgetComponent {...this.props} />
+            <WidgetErrorCard errors={this.state.errors}>
+              <LoginWidget />
+            </WidgetErrorCard>
           </ThemeSelector>
-        </I18nextProvider>
-      </React.Suspense>
+        </Suspense>
+      </I18nextProvider>
     );
   }
 }

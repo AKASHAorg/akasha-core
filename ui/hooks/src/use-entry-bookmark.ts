@@ -86,15 +86,15 @@ const bookmarkStateReducer = (state: IBookmarkState, action: IBookmarkAction) =>
           bookmarks: [],
         };
       }
-      if (data && data.services) {
-        const bookmarkedEntries = data.services.findIndex(
+      if (data && data.options) {
+        const bookmarkedEntries = data.options.findIndex(
           (e: string[]) => e[0] === entriesBookmarks,
         );
         if (bookmarkedEntries !== -1) {
           return {
             ...state,
             isFetching: false,
-            bookmarks: JSON.parse(data.services[bookmarkedEntries][1]),
+            bookmarks: JSON.parse(data.options[bookmarkedEntries][1]),
           };
         }
       }

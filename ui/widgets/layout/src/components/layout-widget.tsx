@@ -33,7 +33,7 @@ interface LayoutWidgetState {
   hasErrors: boolean;
   errorMessage: string;
   showSidebar?: boolean;
-  modals: NonNullable<UIEventData['data']>[];
+  activeModal: UIEventData['data'] | null;
 }
 
 class LayoutWidget extends PureComponent<RootComponentProps, LayoutWidgetState> {
@@ -46,7 +46,7 @@ class LayoutWidget extends PureComponent<RootComponentProps, LayoutWidgetState> 
     this.state = {
       hasErrors: false,
       errorMessage: '',
-      modals: [],
+      activeModal: null,
     };
   }
 
@@ -75,21 +75,20 @@ class LayoutWidget extends PureComponent<RootComponentProps, LayoutWidgetState> 
     this.uiEventsSub = this.props.uiEvents.subscribe({
       next: (eventInfo: UIEventData) => {
         if (eventInfo.event === EventTypes.ModalMountRequest && eventInfo.data) {
-          if (this.state.modals.some(modal => modal.name === eventInfo.data?.name)) {
-            return;
+          if (this.state.activeModal && this.state.activeModal.name !== eventInfo.data.name) {
+            this.onModalNodeUnmount(this.state.activeModal.name);
           }
+
           this.setState(prev => ({
             ...prev,
-            modals: prev.modals.concat([eventInfo.data as NonNullable<UIEventData['data']>]),
+            activeModal: eventInfo.data,
           }));
         }
         if (eventInfo.event === EventTypes.ModalUnmountRequest && eventInfo.data?.name) {
-          if (this.state.modals.find(mod => mod.name === eventInfo.data?.name)) {
-            this.setState(prev => ({
-              ...prev,
-              modals: prev.modals.filter(mod => mod.name !== eventInfo.data?.name),
-            }));
-          }
+          this.setState(prev => ({
+            ...prev,
+            activeModal: null,
+          }));
         }
       },
       error(err: Error) {
@@ -125,10 +124,10 @@ class LayoutWidget extends PureComponent<RootComponentProps, LayoutWidgetState> 
       },
     });
   };
-  public onModalNodeMount = (name: string) => {
+  public onModalNodeMount = (_name: string) => {
     this.props.uiEvents.next({
       event: EventTypes.ModalMount,
-      data: this.state.modals.find(modal => modal.name === name),
+      data: this.state.activeModal,
     });
   };
   public onModalNodeUnmount = (name: string) => {
@@ -249,14 +248,14 @@ class LayoutWidget extends PureComponent<RootComponentProps, LayoutWidgetState> 
                     </Box>
                   </MainAreaContainer>
                 </Box>
-                {this.state.modals.map(modalData => (
+                {this.state.activeModal && (
                   <ModalSlot
-                    key={modalData.name}
-                    name={modalData.name}
+                    key={this.state.activeModal.name}
+                    name={this.state.activeModal.name}
                     onMount={this.onModalNodeMount}
                     onUnmount={this.onModalNodeUnmount}
                   />
-                ))}
+                )}
                 <ModalSlot
                   name={modalSlotId}
                   onMount={this.onExtensionMount}
