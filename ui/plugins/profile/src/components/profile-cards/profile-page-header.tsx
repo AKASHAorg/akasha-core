@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
-import getSDK from '@akashaproject/awf-sdk';
 import {
   ModalState,
   ModalStateActions,
@@ -13,7 +12,6 @@ import {
   useENSRegistration,
   useErrors,
   useNetworkState,
-  constants,
 } from '@akashaproject/ui-awf-hooks';
 import {
   ENSOptionTypes,
@@ -37,8 +35,6 @@ const {
   styled,
   ProfileCard,
   ModalRenderer,
-  ToastProvider,
-  ReportModal,
   ShareModal,
   ProfileCompletedModal,
   BoxFormCard,
@@ -117,11 +113,6 @@ type ProfilePageCardProps = IProfileHeaderProps &
 
 export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
   const { profileState, loggedUserEthAddress, logger, profileId, profileUpdateStatus } = props;
-
-  const sdk = getSDK();
-
-  const [flagged, setFlagged] = React.useState('');
-  const [flaggedContentType, setFlaggedContentType] = React.useState('');
 
   const [isRegistration, setIsRegistration] = React.useState<boolean>(false);
 
@@ -281,13 +272,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
-    setFlagged(entryId);
-    setFlaggedContentType(contentType);
-    props.modalActions.showAfterLogin('reportModal');
-  };
-
-  const closeReportModal = () => {
-    props.modalActions.hide('reportModal');
+    props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
   const onProfileUpdateSubmit = (data: any) => {
@@ -422,51 +407,6 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
   return (
     <>
       <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
-        {props.modalState.reportModal && (
-          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <ReportModal
-              titleLabel={t(`Report ${flaggedContentType}`)}
-              successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
-              successMessageLabel={t('We will investigate this post and take appropriate action.')}
-              optionsTitleLabel={t('Please select a reason')}
-              optionLabels={[
-                t('Threats of violence and incitement'),
-                t('Hate speech, bullying and harassment'),
-                t('Sexual or human exploitation'),
-                t('Illegal or certain regulated goods or services'),
-                t('Impersonation'),
-                t('Spam and malicious links'),
-                t('Privacy and copyright infringement'),
-                t('Other'),
-              ]}
-              optionValues={[
-                'Threats of violence and incitement',
-                'Hate speech, bullying and harassment',
-                'Sexual or human exploitation',
-                'Illegal or certain regulated goods or services',
-                'Impersonation',
-                'Spam and malicious links',
-                'Privacy and copyright infringement',
-                'Other',
-              ]}
-              descriptionLabel={t('Explanation')}
-              descriptionPlaceholder={t('Please explain your reason(s)')}
-              footerText1Label={t('If you are unsure, you can refer to our ')}
-              footerLink1Label={t('Code of Conduct')}
-              footerUrl1={'/legal/code-of-conduct'}
-              cancelLabel={t('Cancel')}
-              reportLabel={t('Report')}
-              blockLabel={t('Block User')}
-              closeLabel={t('Close')}
-              user={loggedUserEthAddress ? loggedUserEthAddress : ''}
-              contentId={profileState.ethAddress ? profileState.ethAddress : flagged}
-              contentType={flaggedContentType}
-              baseUrl={constants.BASE_REPORT_URL}
-              closeModal={closeReportModal}
-              signData={sdk.api.auth.signData}
-            />
-          </ToastProvider>
-        )}
         {props.modalState.profileShare && (
           <ShareModal
             link={url}

@@ -4,9 +4,8 @@ import ReactDOM from 'react-dom';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
-import { BrowserRouter as Router } from 'react-router-dom';
 
 const { SignInModal, ThemeSelector, lightTheme, darkTheme } = DS;
 

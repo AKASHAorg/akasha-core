@@ -58,14 +58,14 @@ export default class Application extends React.Component<RootComponentProps> {
       })
       .init({
         fallbackLng: 'en',
-        ns: ['moderation-ewa'],
+        ns: ['moderation-app'],
         saveMissing: false,
         saveMissingTo: 'all',
         load: 'languageOnly',
         debug: true,
         cleanCode: true,
         keySeparator: false,
-        defaultNS: 'moderation-ewa',
+        defaultNS: 'moderation-app',
         backend: {
           backends: [LocalStorageBackend, Fetch],
           backendOptions: [

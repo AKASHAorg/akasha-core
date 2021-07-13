@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import {
-  constants,
   usePosts,
   useBookmarks,
   useMentions,
@@ -19,15 +18,12 @@ import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
 import routes, { POST } from '../../routes';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import getSDK from '@akashaproject/awf-sdk';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
 const {
   Box,
   MainAreaCardBox,
   EntryBox,
-  ReportModal,
-  ToastProvider,
   ModalRenderer,
   VirtualList,
   Helmet,
@@ -43,13 +39,6 @@ const {
 interface IPostPage {
   loggedProfileData?: any;
   loginState: ILoginState;
-  flagged: string;
-  flaggedContentType: string;
-  setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setFlaggedContentType: React.Dispatch<React.SetStateAction<string>>;
-  reportModalOpen: boolean;
-  setReportModalOpen: () => void;
-  closeReportModal: () => void;
   editorModalOpen: boolean;
   setEditorModalOpen: () => void;
   closeEditorModal: () => void;
@@ -61,13 +50,6 @@ interface IPostPage {
 
 const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const {
-    flagged,
-    flaggedContentType,
-    reportModalOpen,
-    setFlagged,
-    setFlaggedContentType,
-    setReportModalOpen,
-    closeReportModal,
     editorModalOpen,
     setEditorModalOpen,
     closeEditorModal,
@@ -78,8 +60,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     loginState,
     isMobile,
   } = props;
-
-  const sdk = getSDK();
 
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
@@ -214,9 +194,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
-    setFlagged(entryId);
-    setFlaggedContentType(contentType);
-    setReportModalOpen();
+    props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
   const handlePublishComment = async (data: {
@@ -278,11 +256,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     postsActions.updatePostsState(modifiedEntry);
   };
 
-  const updateEntry = (entryId: string) => {
-    const modifiedEntry = { ...postsState.postsData[entryId], reported: true };
-    postsActions.updatePostsState(modifiedEntry);
-  };
-
   const handleListFlipCard = (entry: any, isQuote: boolean) => () => {
     const modifiedEntry = isQuote
       ? { ...entry, quote: { ...entry.quote, reported: false } }
@@ -321,52 +294,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
         <title>Post | Ethereum World</title>
       </Helmet>
       <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
-        {reportModalOpen && (
-          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <ReportModal
-              titleLabel={t(`Report ${flaggedContentType}`)}
-              successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
-              successMessageLabel={t('We will investigate this post and take appropriate action.')}
-              optionsTitleLabel={t('Please select a reason')}
-              optionLabels={[
-                t('Threats of violence and incitement'),
-                t('Hate speech, bullying and harassment'),
-                t('Sexual or human exploitation'),
-                t('Illegal or certain regulated goods or services'),
-                t('Impersonation'),
-                t('Spam and malicious links'),
-                t('Privacy and copyright infringement'),
-                t('Other'),
-              ]}
-              optionValues={[
-                'Threats of violence and incitement',
-                'Hate speech, bullying and harassment',
-                'Sexual or human exploitation',
-                'Illegal or certain regulated goods or services',
-                'Impersonation',
-                'Spam and malicious links',
-                'Privacy and copyright infringement',
-                'Other',
-              ]}
-              descriptionLabel={t('Explanation')}
-              descriptionPlaceholder={t('Please explain your reason(s)')}
-              footerText1Label={t('If you are unsure, you can refer to our')}
-              footerLink1Label={t('Code of Conduct')}
-              footerUrl1={'/legal/code-of-conduct'}
-              cancelLabel={t('Cancel')}
-              reportLabel={t('Report')}
-              blockLabel={t('Block User')}
-              closeLabel={t('Close')}
-              user={loginState.ethAddress ? loginState.ethAddress : ''}
-              contentId={flagged}
-              contentType={flaggedContentType}
-              baseUrl={constants.BASE_REPORT_URL}
-              updateEntry={updateEntry}
-              closeModal={closeReportModal}
-              signData={sdk.api.auth.signData}
-            />
-          </ToastProvider>
-        )}
         {editorModalOpen && props.layoutConfig.modalSlotId && (
           <EditorModal
             slotId={props.layoutConfig.modalSlotId}

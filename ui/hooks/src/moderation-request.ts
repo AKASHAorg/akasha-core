@@ -1,4 +1,7 @@
+import getSDK from '@akashaproject/awf-sdk';
 import constants from './constants';
+
+const sdk = getSDK();
 
 const { BASE_REPORT_URL, BASE_STATUS_URL, BASE_DECISION_URL, BASE_MODERATOR_URL } = constants;
 
@@ -6,8 +9,9 @@ const fetchRequest = async (props: {
   method: string;
   url: string;
   data?: Record<string, unknown>;
+  statusOnly?: boolean;
 }) => {
-  const { method, url, data = {} } = props;
+  const { method, url, data = {}, statusOnly = false } = props;
   const rheaders = new Headers();
   rheaders.append('Content-Type', 'application/json');
 
@@ -17,7 +21,7 @@ const fetchRequest = async (props: {
     ...(method === ('POST' || 'PUT' || 'PATCH') && { body: JSON.stringify(data) }),
   });
 
-  if (method === 'HEAD') {
+  if (method === 'HEAD' || (method === 'POST' && statusOnly)) {
     return response.status;
   }
 
@@ -171,5 +175,49 @@ export default {
     } catch (error) {
       return error;
     }
+  },
+  modalClickHandler: async ({
+    dataToSign,
+    contentId,
+    contentType,
+    url,
+    modalName,
+    logger,
+    callback,
+    setRequesting,
+  }) => {
+    setRequesting(true);
+
+    sdk.api.auth.signData(dataToSign).subscribe(async (resp: any) => {
+      const data = {
+        contentId,
+        contentType,
+        data: dataToSign,
+        signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
+      };
+
+      fetchRequest({ url, data, method: 'POST', statusOnly: true })
+        .then(status => {
+          if (status === 409) {
+            throw new Error(
+              `This content has already been ${
+                modalName === 'report-modal' ? 'reported' : 'moderated'
+              } by you`,
+            );
+          } else if (status === 403) {
+            throw new Error('You are not authorized to perform this operation');
+          } else if (status === 400) {
+            throw new Error('Bad request. Please try again later');
+          } else if (status >= 400) {
+            throw new Error('Unable to process your request right now. Please try again later');
+          }
+
+          return modalName === 'report-modal' ? callback(true) : callback();
+        })
+        .catch(error =>
+          logger.error(`[${modalName}.tsx]: fetchRequest err %j`, error.message || ''),
+        )
+        .finally(() => setRequesting(false));
+    });
   },
 };
