@@ -61,14 +61,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     modalStateActions.hide(MODAL_NAMES.REPORT);
   };
 
-  const showEditorModal = () => {
-    modalStateActions.showAfterLogin(MODAL_NAMES.EDITOR);
-  };
-
-  const hideEditorModal = () => {
-    modalStateActions.hide(MODAL_NAMES.EDITOR);
-  };
-
   return (
     <Box>
       <Router>
@@ -85,9 +77,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               setFlaggedContentType={setFlaggedContentType}
               setReportModalOpen={showReportModal}
               closeReportModal={hideReportModal}
-              editorModalOpen={modalState.editor}
-              setEditorModalOpen={showEditorModal}
-              closeEditorModal={hideEditorModal}
               showLoginModal={showLoginModal}
               onError={onError}
             />
@@ -104,9 +93,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               setFlaggedContentType={setFlaggedContentType}
               setReportModalOpen={showReportModal}
               closeReportModal={hideReportModal}
-              editorModalOpen={modalState.editor}
-              setEditorModalOpen={showEditorModal}
-              closeEditorModal={hideEditorModal}
               showLoginModal={showLoginModal}
               navigateToUrl={props.singleSpa.navigateToUrl}
               isMobile={props.isMobile}

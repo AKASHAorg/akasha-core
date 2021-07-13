@@ -14,9 +14,7 @@ import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
 // import { application as loginWidget } from '@akashaproject/ui-widget-login-cta/lib';
 // import Parcel from 'single-spa-react/parcel';
-import { constants, useBookmarks, useErrors, useMentions } from '@akashaproject/ui-awf-hooks';
-import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
+import { constants, useBookmarks, useErrors, usePosts } from '@akashaproject/ui-awf-hooks';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
 const {
@@ -26,7 +24,6 @@ const {
   ReportModal,
   ToastProvider,
   ModalRenderer,
-  EditorModal,
   EditorPlaceholder,
 } = DS;
 
@@ -59,9 +56,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     setFlaggedContentType,
     setReportModalOpen,
     closeReportModal,
-    editorModalOpen,
-    setEditorModalOpen,
-    closeEditorModal,
     showLoginModal,
     loggedProfileData,
     loginState,
@@ -70,8 +64,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   } = props;
 
   const sdk = getSDK();
-
-  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -83,10 +75,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [postsState, postsActions] = usePosts({
     user: loginState.ethAddress,
-    onError: errorActions.createError,
-  });
-
-  const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
   });
 
@@ -148,9 +136,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
     return bookmarkActions.bookmarkPost(entryId);
   };
+
+  const handleShowEditor = () => {
+    props.navigateToModal({ name: 'editor' });
+  };
+
   const handleEntryRepost = (_withComment: boolean, entryData: any) => {
-    setCurrentEmbedEntry(entryData);
-    setEditorModalOpen();
+    props.navigateToModal({ name: 'editor', embedEntry: entryData });
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
@@ -159,27 +151,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     setReportModalOpen();
   };
 
-  const handleToggleEditor = () => {
-    setCurrentEmbedEntry(undefined);
-    if (editorModalOpen) {
-      closeEditorModal();
-    } else {
-      setEditorModalOpen();
-    }
-  };
-
-  const onUploadRequest = uploadMediaToTextile;
-
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
-
-  const handleEntryPublish = async (data: PublishPostData) => {
-    if (!loginState.ethAddress && !loginState.pubKey) {
-      showLoginModal();
-      return;
-    }
-    postsActions.optimisticPublishPost(data, loggedProfileData, currentEmbedEntry);
-    closeEditorModal();
-  };
 
   const handleFlipCard = (entry: any, isQuote: boolean) => () => {
     const modifiedEntry = isQuote
@@ -246,29 +218,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           </ToastProvider>
         )}
       </ModalRenderer>
-      <EditorModal
-        slotId={props.layoutConfig.modalSlotId}
-        avatar={loggedProfileData.avatar}
-        showModal={editorModalOpen}
-        ethAddress={loginState.ethAddress as any}
-        postLabel={t('Publish')}
-        placeholderLabel={t('Write something')}
-        emojiPlaceholderLabel={t('Search')}
-        discardPostLabel={t('Discard Post')}
-        discardPostInfoLabel={t(
-          "You have not posted yet. If you leave now you'll discard your post.",
-        )}
-        keepEditingLabel={t('Keep Editing')}
-        onPublish={handleEntryPublish}
-        handleNavigateBack={handleToggleEditor}
-        getMentions={mentionsActions.getMentions}
-        getTags={mentionsActions.getTags}
-        tags={mentionsState.tags}
-        mentions={mentionsState.mentions}
-        uploadRequest={onUploadRequest}
-        embedEntryData={currentEmbedEntry}
-        style={{ width: '36rem' }}
-      />
+
       <VirtualList
         items={postsState.postIds}
         itemsData={postsState.postsData}
@@ -280,7 +230,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           loginState.ethAddress ? (
             <EditorPlaceholder
               ethAddress={loginState.ethAddress}
-              onClick={handleToggleEditor}
+              onClick={handleShowEditor}
               avatar={loggedProfileData.avatar}
             />
           ) : (

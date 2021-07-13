@@ -3,7 +3,7 @@ import DS from '@akashaproject/design-system';
 import { I18nextProvider } from 'react-i18next';
 import EntryFeed from './entry-feed';
 import ProfileFeed from './profile-feed';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import i18next from 'i18next';
 import { IContentClickDetails } from '@akashaproject/design-system/src/components/EntryCard/entry-box';
 import LanguageDetector from 'i18next-browser-languagedetector';
@@ -21,8 +21,7 @@ export const enum ItemTypes {
   TAG,
 }
 
-export interface IFeedWidgetProps {
-  logger: any;
+export interface IFeedWidgetProps extends RootComponentProps {
   virtualListRef?: any;
   layout: any;
   listHeader?: React.ReactElement;

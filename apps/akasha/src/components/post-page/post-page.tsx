@@ -37,11 +37,9 @@ const {
   ErrorInfoCard,
   ErrorLoader,
   EntryCardLoading,
-  EditorModal,
 } = DS;
 
 interface IPostPage {
-  loggedProfileData?: any;
   loginState: ILoginState;
   flagged: string;
   flaggedContentType: string;
@@ -50,9 +48,6 @@ interface IPostPage {
   reportModalOpen: boolean;
   setReportModalOpen: () => void;
   closeReportModal: () => void;
-  editorModalOpen: boolean;
-  setEditorModalOpen: () => void;
-  closeEditorModal: () => void;
   showLoginModal: () => void;
   navigateToUrl: (path: string) => void;
   isMobile: boolean;
@@ -68,13 +63,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     setFlaggedContentType,
     setReportModalOpen,
     closeReportModal,
-    editorModalOpen,
-    setEditorModalOpen,
-    closeEditorModal,
     showLoginModal,
     logger,
     navigateToUrl,
-    loggedProfileData,
     loginState,
     isMobile,
   } = props;
@@ -238,30 +229,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     postsActions.optimisticPublishComment(data, postId, loginProfile);
   };
 
-  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
-
-  const handleRepost = (_withComment: boolean, entry: any) => {
-    setCurrentEmbedEntry(entry);
-    setEditorModalOpen();
-  };
-
-  const handleToggleEditor = () => {
-    setCurrentEmbedEntry(undefined);
-    if (editorModalOpen) {
-      closeEditorModal();
-    } else {
-      setEditorModalOpen();
-    }
-  };
-
-  const handleEntryPublish = (entry: any) => {
-    if (!loginState.ethAddress || !loginState.pubKey) {
-      showLoginModal();
-      return;
-    }
-
-    postsActions.optimisticPublishPost(entry, loggedProfileData, currentEmbedEntry, true);
-    closeEditorModal();
+  const handleRepost = (_withComment: boolean, entryData: any) => {
+    props.navigateToModal({ name: 'editor', embedEntry: entryData });
   };
 
   const handleNavigateToPost = redirectToPost(navigateToUrl, postId, postsActions.resetPostIds);
@@ -366,31 +335,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               signData={sdk.api.auth.signData}
             />
           </ToastProvider>
-        )}
-        {editorModalOpen && props.layoutConfig.modalSlotId && (
-          <EditorModal
-            slotId={props.layoutConfig.modalSlotId}
-            avatar={loggedProfileData.avatar}
-            showModal={editorModalOpen}
-            ethAddress={loggedProfileData.ethAddress}
-            postLabel={t('Publish')}
-            placeholderLabel={t('Write something')}
-            emojiPlaceholderLabel={t('Search')}
-            discardPostLabel={t('Discard Post')}
-            discardPostInfoLabel={t(
-              "You have not posted yet. If you leave now you'll discard your post.",
-            )}
-            keepEditingLabel={t('Keep Editing')}
-            onPublish={handleEntryPublish}
-            handleNavigateBack={handleToggleEditor}
-            getMentions={mentionsActions.getMentions}
-            getTags={mentionsActions.getTags}
-            tags={mentionsState.tags}
-            mentions={mentionsState.mentions}
-            uploadRequest={onUploadRequest}
-            embedEntryData={currentEmbedEntry}
-            style={{ width: '36rem' }}
-          />
         )}
       </ModalRenderer>
       <Box pad={{ bottom: 'small' }} border={{ side: 'bottom', size: '1px', color: 'border' }}>

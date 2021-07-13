@@ -11,11 +11,8 @@ import {
   useFollow,
   useSearch,
   useTagSubscribe,
-  usePosts,
   useErrors,
-  useMentions,
 } from '@akashaproject/ui-awf-hooks';
-import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import {
   ModalState,
@@ -30,7 +27,6 @@ const {
   Spinner,
   EntryCard,
   EntryCardHidden,
-  EditorModal,
   ProfileSearchCard,
   TagSearchCard,
   SwitchCard,
@@ -39,26 +35,16 @@ const {
   ModalRenderer,
 } = DS;
 
-interface SearchPageProps
-  extends Pick<RootComponentProps, 'logger' | 'singleSpa' | 'layoutConfig'> {
+interface SearchPageProps extends RootComponentProps {
   onError?: (err: Error) => void;
   loginState: ILoginState;
-  loggedProfileData: any;
   showLoginModal: () => void;
   modalState: ModalState;
   modalStateActions: ModalStateActions;
 }
 
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const {
-    logger,
-    singleSpa,
-    loginState,
-    loggedProfileData,
-    modalState,
-    modalStateActions,
-    showLoginModal,
-  } = props;
+  const { logger, singleSpa, loginState, modalState, modalStateActions, showLoginModal } = props;
 
   const sdk = getSDK();
 
@@ -72,11 +58,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const [flaggedContentType, setFlaggedContentType] = React.useState('');
 
   const [, errorActions] = useErrors({ logger });
-
-  const [, postsActions] = usePosts({
-    user: loginState.ethAddress,
-    onError: errorActions.createError,
-  });
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
     onError: (err: IAkashaError) => {
@@ -97,10 +78,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   });
 
   const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
-    onError: errorActions.createError,
-  });
-
-  const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
   });
 
@@ -198,40 +175,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   // repost related
-  const showEditorModal = () => {
-    modalStateActions.showAfterLogin(MODAL_NAMES.EDITOR);
-  };
-
-  const hideEditorModal = () => {
-    modalStateActions.hide(MODAL_NAMES.EDITOR);
-  };
-
-  const onUploadRequest = uploadMediaToTextile;
-
-  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
-
   const handleRepost = (_withComment: boolean, entryData: any) => {
-    setCurrentEmbedEntry(entryData);
-    showEditorModal();
-  };
-
-  const handleToggleEditor = () => {
-    setCurrentEmbedEntry(undefined);
-    if (modalState.editor) {
-      hideEditorModal();
-    } else {
-      showEditorModal();
-    }
-  };
-
-  const handleEntryPublish = (entryData: any) => {
-    if (!loginState.ethAddress || !loginState.pubKey) {
-      showLoginModal();
-      return;
-    }
-
-    postsActions.optimisticPublishPost(entryData, loggedProfileData, currentEmbedEntry, true);
-    hideEditorModal();
+    props.navigateToModal({ name: 'editor', embedEntry: entryData });
   };
 
   const handleFlipCard = (entry: any, isQuote: boolean) => () => {
@@ -325,31 +270,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               signData={sdk.api.auth.signData}
             />
           </ToastProvider>
-        )}
-        {modalState.editor && props.layoutConfig.modalSlotId && (
-          <EditorModal
-            slotId={props.layoutConfig.modalSlotId}
-            avatar={loggedProfileData.avatar}
-            showModal={modalState.editor}
-            ethAddress={loginState.ethAddress}
-            postLabel={t('Publish')}
-            placeholderLabel={t('Write something')}
-            emojiPlaceholderLabel={t('Search')}
-            discardPostLabel={t('Discard Post')}
-            discardPostInfoLabel={t(
-              "You have not posted yet. If you leave now you'll discard your post.",
-            )}
-            keepEditingLabel={t('Keep Editing')}
-            onPublish={handleEntryPublish}
-            handleNavigateBack={handleToggleEditor}
-            getMentions={mentionsActions.getMentions}
-            getTags={mentionsActions.getTags}
-            tags={mentionsState.tags}
-            mentions={mentionsState.mentions}
-            uploadRequest={onUploadRequest}
-            embedEntryData={currentEmbedEntry}
-            style={{ width: '36rem' }}
-          />
         )}
       </ModalRenderer>
 

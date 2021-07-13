@@ -29,6 +29,12 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   // menuItems: routes,
   title: 'Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
+  extends: [
+    {
+      mountsIn: 'editor',
+      loadingFn: () => import('./extensions/editor-modal'),
+    },
+  ],
   // widgets: {
   //   [userPostsRoute]: [ProfileCardWidget],
   //   [fullPostRoute]: [ProfileCardWidget, TrendingWidget],
