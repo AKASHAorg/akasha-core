@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { from, Observable, Subscription, timer } from 'rxjs';
 import { filter, switchMap, exhaustMap } from 'rxjs/operators';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import { IAkashaError, Awaited } from '@akashaproject/ui-awf-typings';
 import getSDK from '@akashaproject/awf-sdk';
 import { events } from '@akashaproject/sdk-typings';
 import {
@@ -403,8 +403,8 @@ export const useProfile = (
 
       let userNameSub: Subscription;
       let addProvidersSub: Subscription;
-      let avatarRes: any;
-      let coverImageRes: any;
+      let avatarRes: Awaited<ReturnType<typeof sdk.api.profile.saveMediaFile>>;
+      let coverImageRes: Awaited<ReturnType<typeof sdk.api.profile.saveMediaFile>>;
 
       dispatchUpdateStatus({ type: 'SAVING' });
 
@@ -450,11 +450,11 @@ export const useProfile = (
                   value: '',
                 });
               }
-              if (avatarRes && avatarRes.data) {
+              if (avatarRes && avatarRes.CID) {
                 providers.push({
                   provider: ProfileProviders.EWA_BASIC,
                   property: ProfileProviderProperties.AVATAR,
-                  value: avatarRes.data.CID,
+                  value: avatarRes.CID,
                 });
               }
               if (!coverImageRes && coverImage === null) {
@@ -464,11 +464,11 @@ export const useProfile = (
                   value: '',
                 });
               }
-              if (coverImageRes && coverImageRes.data) {
+              if (coverImageRes && coverImageRes.CID) {
                 providers.push({
                   provider: ProfileProviders.EWA_BASIC,
                   property: ProfileProviderProperties.COVER_IMAGE,
-                  value: coverImageRes.data.CID,
+                  value: coverImageRes.CID,
                 });
               }
               if (description) {

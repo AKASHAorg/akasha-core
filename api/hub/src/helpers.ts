@@ -16,6 +16,13 @@ import sendgrid from '@sendgrid/mail';
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
 export const EMPTY_KEY = 'baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+export const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
+
+export const EMPTY_PROFILE = {
+  _id: EMPTY_KEY,
+  ethAddress: EMPTY_ADDRESS,
+  pubKey: EMPTY_KEY,
+};
 
 export const getAPISig = async (minutes = 30) => {
   const expiration = new Date(Date.now() + 1000 * 60 * minutes);

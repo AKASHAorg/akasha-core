@@ -1,5 +1,12 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB, logger, sendNotification, validateName } from '../helpers';
+import {
+  EMPTY_KEY,
+  EMPTY_PROFILE,
+  getAppDB,
+  logger,
+  sendNotification,
+  validateName,
+} from '../helpers';
 import { ThreadID, Where, Client } from '@textile/hub';
 import { DataProvider, Profile } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -89,6 +96,9 @@ class ProfileAPI extends DataSource {
       });
       await queryCache.set(cacheKey, returnedObj);
       return returnedObj;
+    }
+    if (pubKey === EMPTY_KEY) {
+      return EMPTY_PROFILE;
     }
     logger.warn(`${pubKey} not registered`);
     throw NOT_FOUND_PROFILE;
