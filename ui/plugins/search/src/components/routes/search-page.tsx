@@ -3,10 +3,8 @@ import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { useParams } from 'react-router-dom';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import getSDK from '@akashaproject/awf-sdk';
 import { useTranslation } from 'react-i18next';
 import {
-  constants,
   useBookmarks,
   useFollow,
   useSearch,
@@ -14,11 +12,7 @@ import {
   useErrors,
 } from '@akashaproject/ui-awf-hooks';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import {
-  ModalState,
-  ModalStateActions,
-  MODAL_NAMES,
-} from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
+import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 
 const {
   Box,
@@ -30,9 +24,6 @@ const {
   ProfileSearchCard,
   TagSearchCard,
   SwitchCard,
-  ReportModal,
-  ToastProvider,
-  ModalRenderer,
 } = DS;
 
 interface SearchPageProps extends RootComponentProps {
@@ -46,16 +37,11 @@ interface SearchPageProps extends RootComponentProps {
 const SearchPage: React.FC<SearchPageProps> = props => {
   const { logger, singleSpa, loginState, modalState, modalStateActions, showLoginModal } = props;
 
-  const sdk = getSDK();
-
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 
   const { t, i18n } = useTranslation();
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
-
-  const [flagged, setFlagged] = React.useState('');
-  const [flaggedContentType, setFlaggedContentType] = React.useState('');
 
   const [, errorActions] = useErrors({ logger });
 
@@ -164,14 +150,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
-    setFlagged(entryId);
-    setFlaggedContentType(contentType);
-
-    modalStateActions.showAfterLogin(MODAL_NAMES.REPORT);
-  };
-
-  const hideReportModal = () => {
-    modalStateActions.hide(MODAL_NAMES.REPORT);
+    props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
   // repost related
@@ -184,16 +163,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     const modifiedEntry = isQuote
       ? { ...entry, quote: { ...entry.quote, reported: false } }
       : { ...entry, reported: false };
-    // update state
-    searchActions.updateSearchState(modifiedEntry);
-  };
-
-  const updateEntry = (entryId: string) => {
-    // find and modify the entry from state using the entryId
-    const modifiedEntry = {
-      ...searchState.entries.find((entry: any) => entry.entryId === entryId),
-      reported: true,
-    };
     // update state
     searchActions.updateSearchState(modifiedEntry);
   };
@@ -224,55 +193,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   return (
     <Box fill="horizontal">
-      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
-        {modalState.report && (
-          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <ReportModal
-              titleLabel={t(`Report ${flaggedContentType}`)}
-              successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
-              successMessageLabel={t('We will investigate this post and take appropriate action.')}
-              optionsTitleLabel={t('Please select a reason')}
-              optionLabels={[
-                t('Threats of violence and incitement'),
-                t('Hate speech, bullying and harassment'),
-                t('Sexual or human exploitation'),
-                t('Illegal or certain regulated goods or services'),
-                t('Impersonation'),
-                t('Spam and malicious links'),
-                t('Privacy and copyright infringement'),
-                t('Other'),
-              ]}
-              optionValues={[
-                'Threats of violence and incitement',
-                'Hate speech, bullying and harassment',
-                'Sexual or human exploitation',
-                'Illegal or certain regulated goods or services',
-                'Impersonation',
-                'Spam and malicious links',
-                'Privacy and copyright infringement',
-                'Other',
-              ]}
-              descriptionLabel={t('Explanation')}
-              descriptionPlaceholder={t('Please explain your reason(s)')}
-              footerText1Label={t('If you are unsure, you can refer to our')}
-              footerLink1Label={t('Code of Conduct')}
-              footerUrl1={'/legal/code-of-conduct'}
-              cancelLabel={t('Cancel')}
-              reportLabel={t('Report')}
-              blockLabel={t('Block User')}
-              closeLabel={t('Close')}
-              user={loginState.ethAddress ? loginState.ethAddress : ''}
-              contentId={flagged}
-              contentType={flaggedContentType}
-              baseUrl={constants.BASE_REPORT_URL}
-              updateEntry={updateEntry}
-              closeModal={hideReportModal}
-              signData={sdk.api.auth.signData}
-            />
-          </ToastProvider>
-        )}
-      </ModalRenderer>
-
       <SwitchCard
         count={searchCount}
         countLabel={t('Results')}

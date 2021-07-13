@@ -11,8 +11,7 @@ describe('<ModerateModal /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const handleCloseModal = jest.fn();
-  const handleOnModalClose = jest.fn();
-  const handleSignData = jest.fn();
+  const handleModerate = jest.fn();
 
   beforeEach(() => {
     act(() => {
@@ -22,7 +21,6 @@ describe('<ModerateModal /> Component', () => {
             <ModerateModal
               titleLabel="Make a Decision"
               altTitleLabel="Review a Decision"
-              contentType="post"
               decisionLabel="Decision"
               optionLabels={['Delist', 'Keep']}
               optionValues={['Delist', 'Keep']}
@@ -33,12 +31,10 @@ describe('<ModerateModal /> Component', () => {
               footerUrl1="/legal/code-of-conduct"
               cancelLabel="Cancel"
               user="0x003410490050000320006570034567114572000"
-              contentId="01f50jfyy4pzg1fedt3ge2jnvh"
-              baseUrl=""
+              requesting={false}
               isReview={false}
               closeModal={handleCloseModal}
-              onModalClose={handleOnModalClose}
-              signData={handleSignData}
+              onModerate={handleModerate}
             />
           </ToastProvider>,
         ),

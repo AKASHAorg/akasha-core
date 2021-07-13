@@ -70,13 +70,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               {...props}
               loggedProfileData={loginProfile}
               loginState={loginState}
-              flagged={flagged}
-              flaggedContentType={flaggedContentType}
-              reportModalOpen={modalState.report}
-              setFlagged={setFlagged}
-              setFlaggedContentType={setFlaggedContentType}
-              setReportModalOpen={showReportModal}
-              closeReportModal={hideReportModal}
               showLoginModal={showLoginModal}
               onError={onError}
             />
@@ -84,15 +77,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           <Route path={`${routes[POST]}/:postId`}>
             <PostPage
               {...props}
-              loggedProfileData={loginProfile}
               loginState={loginState}
-              flagged={flagged}
-              flaggedContentType={flaggedContentType}
-              reportModalOpen={modalState.report}
-              setFlagged={setFlagged}
-              setFlaggedContentType={setFlaggedContentType}
-              setReportModalOpen={showReportModal}
-              closeReportModal={hideReportModal}
               showLoginModal={showLoginModal}
               navigateToUrl={props.singleSpa.navigateToUrl}
               isMobile={props.isMobile}
@@ -104,13 +89,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               {...props}
               loggedProfileData={loginProfile}
               loginState={loginState}
-              flagged={flagged}
-              flaggedContentType={flaggedContentType}
-              reportModalOpen={modalState.report}
-              setFlagged={setFlagged}
-              setFlaggedContentType={setFlaggedContentType}
-              setReportModalOpen={showReportModal}
-              closeReportModal={hideReportModal}
               showLoginModal={showLoginModal}
             />
           </Route>

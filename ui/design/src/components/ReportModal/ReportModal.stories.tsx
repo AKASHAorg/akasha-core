@@ -27,6 +27,9 @@ export default {
     reportLabel: { control: 'text' },
     blockLabel: { control: 'text' },
     closeLabel: { control: 'text' },
+    requesting: { control: 'boolean' },
+    success: { control: 'boolean' },
+
     closeModal: { action: 'modal closed' },
   },
 };
@@ -85,4 +88,6 @@ BaseReportModal.args = {
   reportLabel: 'Report',
   blockLabel: 'Block User',
   closeLabel: 'Close',
+  requesting: false,
+  success: false,
 };
