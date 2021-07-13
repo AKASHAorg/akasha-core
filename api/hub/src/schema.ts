@@ -188,6 +188,7 @@ const typeDefs = gql`
     DEFAULT
     ARTICLE
     APP
+    REMOVED
   }
 
   type Post {

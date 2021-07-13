@@ -8,9 +8,12 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
 
+const queryClient = new QueryClient();
 export default class Application extends React.Component<RootComponentProps> {
   public state: { errors: any } = {
     errors: {},
@@ -80,18 +83,21 @@ export default class Application extends React.Component<RootComponentProps> {
       });
 
     return (
-      <Box width="100vw">
-        <React.Suspense fallback={<>Loading</>}>
-          <ThemeSelector
-            settings={{ activeTheme: 'Light-Theme' }}
-            availableThemes={[lightTheme, darkTheme]}
-          >
-            <I18nextProvider i18n={i18n}>
-              <AppRoutes {...this.props} onError={this.handleError} />
-            </I18nextProvider>
-          </ThemeSelector>
-        </React.Suspense>
-      </Box>
+      <QueryClientProvider client={queryClient}>
+        <Box width="100vw">
+          <React.Suspense fallback={<>Loading</>}>
+            <ThemeSelector
+              settings={{ activeTheme: 'Light-Theme' }}
+              availableThemes={[lightTheme, darkTheme]}
+            >
+              <I18nextProvider i18n={i18n}>
+                <AppRoutes {...this.props} onError={this.handleError} />
+              </I18nextProvider>
+            </ThemeSelector>
+          </React.Suspense>
+        </Box>
+        <ReactQueryDevtools position={'bottom-right'} />
+      </QueryClientProvider>
     );
   }
 }

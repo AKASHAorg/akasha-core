@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { EMPTY_KEY, getAppDB, logger, sendAuthorNotification } from '../helpers';
+import { getAppDB, logger, sendAuthorNotification } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
 import { DataProvider, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -256,7 +256,6 @@ class PostAPI extends DataSource {
     currentPost.mentions = [];
     currentPost.quotes = [];
     currentPost.title = 'Removed';
-    currentPost.author = EMPTY_KEY;
     searchIndex
       .deleteObject(currentPost._id)
       .then(() => logger.info(`removed post: ${id}`))

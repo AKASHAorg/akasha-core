@@ -33,7 +33,8 @@
     "@akashaproject/design-system": "*",
     "@akashaproject/awf-sdk": "*",
     "@akashaproject/sdk-typings": "*",
-    "rxjs": "7.1.0"
+    "rxjs": "7.1.0",
+    "react-query": "3.18.1"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",

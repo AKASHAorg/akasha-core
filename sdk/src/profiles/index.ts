@@ -347,6 +347,18 @@ export default class AWF_Profile implements AWF_IProfile {
     });
     const buckPath = `ewa/${path}/${resized.size.width}x${resized.size.height}`;
     const bufferImage: ArrayBuffer = await resized.image.arrayBuffer();
+    this._log.info(buckPath);
+    try {
+      const currentPath = await buck.listPath(root.key, buckPath);
+      if (currentPath) {
+        for await (const remaining of buck.pullPath(root.key, buckPath)) {
+          this._log.info('chunk ' + remaining.length.toString());
+        }
+      }
+    } catch (e) {
+      this._log.info(e?.message);
+    }
+
     const upload = await buck.pushPath(root.key, buckPath, {
       path: buckPath,
       content: new Uint8Array(bufferImage),
@@ -357,7 +369,6 @@ export default class AWF_Profile implements AWF_IProfile {
       provider: PROFILE_MEDIA_FILES,
       value: cid,
     };
-
     await lastValueFrom(
       this._auth.authenticateMutationData((dataFinal as unknown) as Record<string, unknown>[]).pipe(
         map(res => {
