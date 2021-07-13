@@ -11,6 +11,11 @@ import {
   mapEntry,
 } from './utils/entry-utils';
 import { createErrorHandler } from './utils/error-handler';
+import { useInfiniteQuery } from 'react-query';
+import { lastValueFrom } from 'rxjs';
+import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+
+//import { useQueryStream } from './helpers';
 
 export interface GetItemsPayload {
   start?: string;
@@ -103,7 +108,7 @@ export interface PostsActions {
 export interface UsePostsProps {
   user: string | null;
   onError: (error: IAkashaError) => void;
-  logger?: unknown;
+  logger?: ILogger;
 }
 
 export interface PostsState {
@@ -464,7 +469,42 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
   const { user, logger, onError } = props;
   const sdk = getSDK();
   const [postsState, dispatch] = React.useReducer(postsStateReducer, initialPostsState);
+  // example of using query stream
+  // const queryResult = useQueryStream(
+  //   ['Entries', postsState.getPostsQuery],
+  //   () => {
+  //     const payload = postsState.getPostsQuery;
+  //     // typecast from null to undefined
+  //     const nextIndex = postsState.nextPostIndex || undefined;
+  //     return sdk.api.entries.getEntries({
+  //       ...payload,
+  //       offset: payload.offset || nextIndex,
+  //     });
+  //   },
+  //   { enabled: !!postsState.getPostsQuery },
+  //   logger,
+  // );
 
+  const infiniteQ = useInfiniteQuery(
+    'Entries',
+    async () => {
+      const payload = postsState.getPostsQuery;
+      const nextIndex = postsState.nextPostIndex || payload.offset || undefined;
+      return lastValueFrom(
+        sdk.api.entries.getEntries({
+          ...payload,
+          offset: nextIndex,
+        }),
+      );
+    },
+    {
+      getNextPageParam: (lastPage, allPages) =>
+        lastPage.data.posts.nextIndex || postsState.getPostsQuery.offset,
+      enabled: !!postsState.getPostsQuery,
+    },
+  );
+
+  console.log('infiniteQ', infiniteQ);
   React.useEffect(() => {
     if (postsState.isFetchingComments && postsState.getCommentsQuery) {
       const commentsCall = sdk.api.comments.getComments(postsState.getCommentsQuery);

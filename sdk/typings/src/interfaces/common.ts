@@ -8,6 +8,7 @@ export interface CurrentUser {
   pubKey: string;
   ethAddress: string;
   isNewUser?: boolean;
+  filAddress?: string;
 }
 
 export enum LEGAL_DOCS {

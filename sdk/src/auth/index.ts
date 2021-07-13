@@ -7,6 +7,7 @@ import {
   Status,
   UserAuth,
   Users,
+  Filecoin,
 } from '@textile/hub';
 import { GetProfile } from '../profiles/profile.graphql';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
@@ -36,6 +37,7 @@ export default class AWF_Auth implements AWF_IAuth {
   private hubClient: Client;
   private hubUser: Users;
   private buckClient: Buckets;
+  private fil: Filecoin;
   private auth: UserAuth;
   private _db: DB;
   private readonly _web3: Web3Connector;
@@ -192,6 +194,7 @@ export default class AWF_Auth implements AWF_IAuth {
       this.hubClient = Client.withUserAuth(userAuth, endPoint);
       this.hubUser = Users.withUserAuth(userAuth);
       this.buckClient = Buckets.withUserAuth(userAuth);
+      this.fil = Filecoin.withUserAuth(userAuth);
       this.tokenGenerator = loginWithChallenge(this.identity, this._web3);
       const pubKey = this.identity.public.toString();
       this.currentUser = { pubKey, ethAddress: address.data };
@@ -202,7 +205,6 @@ export default class AWF_Auth implements AWF_IAuth {
     }
     this.auth = await this.tokenGenerator();
     await this.hubUser.getToken(this.identity);
-
     await this.hubUser.setupMailbox();
     const mailboxID = await this.hubUser.getMailboxID();
     this.inboxWatcher = await this.hubUser.watchInbox(mailboxID, ev => {
@@ -213,6 +215,8 @@ export default class AWF_Auth implements AWF_IAuth {
         });
       }
     });
+    await this.fil.getToken(this.identity);
+    const [filAddress] = await this.fil.addresses();
     sessionStorage.setItem(this.providerKey, currentProvider.toString());
     sessionStorage.setItem(this.sessKey, this.identity.toString());
     sessionStorage.setItem(this.currentUserKey, JSON.stringify(this.currentUser));
@@ -244,7 +248,7 @@ export default class AWF_Auth implements AWF_IAuth {
       event: AUTH_EVENTS.READY,
     });
     this._lockSignIn = false;
-    return Object.assign(this.currentUser, authStatus);
+    return Object.assign(this.currentUser, authStatus, { filAddress: filAddress?.address });
   }
   /**
    * Returns current session objects for textile
