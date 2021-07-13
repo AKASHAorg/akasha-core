@@ -8,6 +8,7 @@ import DS from '@akashaproject/design-system';
 import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { lastValueFrom } from 'rxjs';
 
 const { SignUpModal, ThemeSelector, lightTheme, darkTheme } = DS;
 
@@ -51,7 +52,7 @@ const SignUpModalContainer = (props: RootComponentProps) => {
 
   React.useEffect(() => {
     if (loginState.ethAddress) {
-      setTimeout(() => handleLoginModalClose(), 500);
+      setTimeout(() => handleSignUpModalClose(), 500);
     }
   }, [loginState.ethAddress]);
 
@@ -83,10 +84,8 @@ const SignUpModalContainer = (props: RootComponentProps) => {
       hasError: false,
       errorMsg: '',
     });
-    sdk.api.auth
-      .validateInvite(inviteToken)
-      .toPromise()
-      .then((_: any) => {
+    lastValueFrom(sdk.api.auth.validateInvite(inviteToken))
+      .then(() => {
         setinviteTokenForm({
           submitted: true,
           submitting: false,
@@ -143,7 +142,7 @@ const SignUpModalContainer = (props: RootComponentProps) => {
   React.useEffect(triggerInviteValidation, [inviteToken]);
   React.useEffect(activateAcceptButton, [termsState.checkedTermsValues]);
 
-  const handleLoginModalClose = () => {
+  const handleSignUpModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
     _handleModalClose();
     errorActions.removeLoginErrors();
@@ -157,7 +156,7 @@ const SignUpModalContainer = (props: RootComponentProps) => {
       success={inviteTokenForm.success}
       hasError={inviteTokenForm.hasError}
       errorMsg={inviteTokenForm.errorMsg}
-      onModalClose={handleLoginModalClose}
+      onModalClose={handleSignUpModalClose}
       subtitleLabel={t('Please enter your invitation code')}
       headerLabel={t('Sign Up')}
       onChange={onInputTokenChange}

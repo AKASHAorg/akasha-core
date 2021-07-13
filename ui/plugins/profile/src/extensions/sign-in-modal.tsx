@@ -13,6 +13,8 @@ const { SignInModal, ThemeSelector, lightTheme, darkTheme } = DS;
 const SignInModalContainer = (props: RootComponentProps) => {
   const { logger } = props;
 
+  const acceptedTerms = localStorage.getItem('@acceptedTermsAndPrivacy');
+
   const { t } = useTranslation();
   const location = useLocation();
 
@@ -31,7 +33,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
   }, [loginState.ethAddress]);
 
   const handleLogin = (providerId: number) => {
-    loginActions.login(providerId);
+    loginActions.login(providerId, !acceptedTerms);
   };
 
   const loginErrors: string | null = React.useMemo(() => {
@@ -39,7 +41,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
       const txt = Object.keys(errorState)
         .filter(key => key.split('.')[0] === 'useLoginState')
         .map(k => {
-          if (errorState[k].error.message === 'Profile not found') {
+          if (errorState[k].error.message === 'Profile not found' && !acceptedTerms) {
             setSuggestSignUp(true);
           }
           return errorState[k];
