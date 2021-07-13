@@ -2,7 +2,6 @@ import * as React from 'react';
 import i18next from 'i18next';
 import ReactDOM from 'react-dom';
 import Fetch from 'i18next-fetch-backend';
-import getSDK from '@akashaproject/awf-sdk';
 import singleSpaReact from 'single-spa-react';
 import DS from '@akashaproject/design-system';
 import Backend from 'i18next-chained-backend';
@@ -11,8 +10,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
-import { useLoginState, useErrors, usePosts } from '@akashaproject/ui-awf-hooks';
-
+import { useLoginState, useErrors, usePosts, moderationRequest } from '@akashaproject/ui-awf-hooks';
 import { BASE_REPORT_URL } from '../services/constants';
 
 const { ReportModal, ToastProvider, ThemeSelector, lightTheme, darkTheme } = DS;
@@ -37,8 +35,6 @@ const ReportModalComponent = (props: RootComponentProps) => {
   const { t } = useTranslation();
   const location = useLocation();
 
-  const sdk = getSDK();
-
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
   };
@@ -48,43 +44,16 @@ const ReportModalComponent = (props: RootComponentProps) => {
     postsActions.updatePostsState(modifiedEntry);
   };
 
-  const postData = async (url = '', data = {}) => {
-    const postURL = `${url}/new`;
-    const rheaders = new Headers();
-    rheaders.append('Content-Type', 'application/json');
-
-    const response = await fetch(postURL, {
-      method: 'POST',
-      headers: rheaders,
-      body: JSON.stringify(data),
-    });
-    return response.status;
-  };
-
   const onReport = (dataToSign: Record<string, unknown>) => {
-    setRequesting(true);
-
-    sdk.api.auth.signData(dataToSign).subscribe(async (resp: any) => {
-      const data = {
-        data: dataToSign,
-        contentId: activeModal.entryId,
-        contentType: activeModal.contentType,
-        signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
-      };
-
-      postData(BASE_REPORT_URL, data)
-        .then(status => {
-          if (status === 409) {
-            throw new Error('This content has already been flagged by you');
-          } else if (status >= 400) {
-            throw new Error('Unable to process your request right now. Please try again later');
-          }
-          return setSuccess(true);
-        })
-        .catch(error => {
-          props.logger.error('[report-modal.tsx]: postData err %j', error.message || '');
-        })
-        .finally(() => setRequesting(false));
+    moderationRequest.modalClickHandler({
+      dataToSign,
+      setRequesting,
+      contentId: activeModal.entryId,
+      contentType: activeModal.contentType,
+      url: `${BASE_REPORT_URL}/new`,
+      modalName: 'report-modal',
+      logger: props.logger,
+      callback: setSuccess,
     });
   };
 

@@ -2,7 +2,6 @@ import * as React from 'react';
 import i18next from 'i18next';
 import ReactDOM from 'react-dom';
 import Fetch from 'i18next-fetch-backend';
-import getSDK from '@akashaproject/awf-sdk';
 import singleSpaReact from 'single-spa-react';
 import DS from '@akashaproject/design-system';
 import Backend from 'i18next-chained-backend';
@@ -11,8 +10,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
-import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
-
+import { useLoginState, useErrors, moderationRequest } from '@akashaproject/ui-awf-hooks';
 import { BASE_DECISION_URL } from '../services/constants';
 
 const { ModerateModal, ToastProvider, ThemeSelector, lightTheme, darkTheme } = DS;
@@ -31,52 +29,20 @@ const ModerateModalComponent = (props: RootComponentProps) => {
   const { t } = useTranslation();
   const location = useLocation();
 
-  const sdk = getSDK();
-
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
   };
 
-  const postData = async (url = '', data = {}) => {
-    const postURL = `${url}/moderate`;
-    const rheaders = new Headers();
-    rheaders.append('Content-Type', 'application/json');
-
-    const response = await fetch(postURL, {
-      method: 'POST',
-      headers: rheaders,
-      body: JSON.stringify(data),
-    });
-    return response.status;
-  };
-
   const onModerate = (dataToSign: Record<string, unknown>) => {
-    setRequesting(true);
-    sdk.api.auth.signData(dataToSign).subscribe(async (resp: any) => {
-      const data = {
-        data: dataToSign,
-        contentId: activeModal.entryId,
-        contentType: activeModal.contentType,
-        signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
-      };
-
-      postData(BASE_DECISION_URL, data)
-        .then(status => {
-          if (status === 400) {
-            throw new Error('Bad request. Please try again later');
-          } else if (status === 403) {
-            throw new Error('You are not authorized to perform this operation');
-          } else if (status === 409) {
-            throw new Error('This content has already been moderated by you');
-          } else if (status === 500) {
-            throw new Error('Unable to process your request right now. Please try again later');
-          }
-          return handleModalClose();
-        })
-        .catch(error => {
-          props.logger.error('[moderate-modal.tsx]: postData err %j', error.message || '');
-        })
-        .finally(() => setRequesting(false));
+    moderationRequest.modalClickHandler({
+      dataToSign,
+      setRequesting,
+      contentId: activeModal.entryId,
+      contentType: activeModal.contentType,
+      url: `${BASE_DECISION_URL}/moderate`,
+      modalName: 'moderate-modal',
+      logger: props.logger,
+      callback: handleModalClose,
     });
   };
 
