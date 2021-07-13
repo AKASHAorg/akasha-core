@@ -98,6 +98,7 @@ export interface PostsActions {
   /* reset post ids (basically reset the list) */
   resetPostIds: () => void;
   updatePostsState: (updatedEntry: any) => void;
+  removePost: (postId: string) => void;
 }
 
 export interface UsePostsProps {
@@ -137,6 +138,7 @@ export interface PostsState {
   optimisticPublishPostQuery: { pendingId: string; pending: any; publishObj: any } | null;
   getUserPostsQuery: any | null;
   getTagPostsQuery: any | null;
+  deleteUserPostQuery?: string;
 }
 
 const initialPostsState: PostsState = {
@@ -222,7 +224,9 @@ export type IPostsAction =
       type: 'GET_TAG_POSTS_SUCCESS';
       payload: { nextIndex: string; posts: any; newIds: string[]; total: number };
     }
-  | { type: 'UPDATE_POSTS_STATE'; payload: any };
+  | { type: 'UPDATE_POSTS_STATE'; payload: any }
+  | { type: 'REMOVE_POST'; payload: string }
+  | { type: 'REMOVE_POST_SUCCESS'; payload: any };
 
 const postsStateReducer = (state: PostsState, action: IPostsAction) => {
   switch (action.type) {
@@ -452,7 +456,16 @@ const postsStateReducer = (state: PostsState, action: IPostsAction) => {
         reportedItems: state.reportedItems,
       };
     }
-
+    case 'REMOVE_POST':
+      return {
+        ...state,
+        deleteUserPostQuery: action.payload,
+      };
+    case 'REMOVE_POST_SUCCESS':
+      return {
+        ...state,
+        deleteUserPostQuery: null,
+      };
     default:
       throw new Error('[UsePostsReducer] action is not defined!');
   }
@@ -462,7 +475,7 @@ const postsStateReducer = (state: PostsState, action: IPostsAction) => {
 /* eslint-disable complexity */
 const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
   const { user, logger, onError } = props;
-  const sdk = getSDK();
+  const sdk = React.useMemo(getSDK, []);
   const [postsState, dispatch] = React.useReducer(postsStateReducer, initialPostsState);
 
   React.useEffect(() => {
@@ -575,7 +588,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       return () => sub.unsubscribe();
     }
     return;
-  }, [postsState.getCommentQuery]);
+  }, [postsState.getCommentQuery, sdk]);
 
   React.useEffect(() => {
     if (postsState.getPostsQuery) {
@@ -665,7 +678,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       return () => sub.unsubscribe();
     }
     return;
-  }, [postsState.getPostsQuery]);
+  }, [JSON.stringify(postsState.getPostsQuery)]);
 
   React.useEffect(() => {
     if (postsState.optimisticPublishCommentQuery) {
@@ -899,6 +912,27 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     return;
   }, [postsState.getTagPostsQuery]);
 
+  React.useEffect(() => {
+    if (!postsState.deleteUserPostQuery) {
+      return;
+    }
+    const call = sdk.api.entries.removeEntry(postsState.deleteUserPostQuery);
+    call.subscribe({
+      next: resp => {
+        const { data } = resp;
+        if (data.removePost) {
+          return dispatch({ type: 'REMOVE_POST_SUCCESS', payload: postsState.deleteUserPostQuery });
+        }
+        return onError({
+          errorKey: 'usePosts.removePost.response',
+          error: new Error(`Failed to remove entry with id: ${postsState.deleteUserPostQuery}`),
+          critical: false,
+        });
+      },
+      error: createErrorHandler('usePosts.removePost', false, onError),
+    });
+  }, [postsState.deleteUserPostQuery]);
+
   const actions: PostsActions = {
     getPost: async postId => {
       // check moderation status of post
@@ -992,6 +1026,9 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     },
     updatePostsState: (updatedEntry: any) => {
       dispatch({ type: 'UPDATE_POSTS_STATE', payload: updatedEntry });
+    },
+    removePost: postId => {
+      dispatch({ type: 'REMOVE_POST', payload: postId });
     },
   };
   return [postsState, actions];

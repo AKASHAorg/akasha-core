@@ -34,6 +34,8 @@ export interface IEntryCardRendererProps {
   awaitingModerationLabel?: string;
   ctaLabel?: string;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
+  onEntryRemove?: (entryId: string) => void;
+  removeEntryLabel?: string;
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
@@ -162,6 +164,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   ctaLabel={ctaLabel}
                   handleFlipCard={handleFlipCard}
                   disableActions={disableActions}
+                  onEntryRemove={props.onEntryRemove}
+                  removeEntryLabel={props.removeEntryLabel}
                 />
               )}
             </>

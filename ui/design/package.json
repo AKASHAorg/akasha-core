@@ -75,6 +75,7 @@
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
+    "@akashaproject/ui-awf-testing-utils": "*",
     "@storybook/addon-actions": "6.2.8",
     "@storybook/addon-essentials": "6.2.8",
     "@storybook/addon-links": "6.2.8",

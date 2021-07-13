@@ -29,10 +29,10 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   // menuItems: routes,
   title: 'Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
-  // widgets: {
-  //   [userPostsRoute]: [ProfileCardWidget],
-  //   [fullPostRoute]: [ProfileCardWidget, TrendingWidget],
-  //   [routes[FEED]]: [TrendingWidget],
-  //   [tagsPostsRoute]: [TrendingWidget],
-  // },
+  extends: [
+    {
+      mountsIn: 'entry-remove-confirmation',
+      loadingFn: () => import('./extensions/entry-remove-modal'),
+    },
+  ],
 });

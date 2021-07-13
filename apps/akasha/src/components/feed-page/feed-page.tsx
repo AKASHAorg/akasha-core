@@ -98,31 +98,23 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   React.useEffect(() => {
     if (loginState.currentUserCalled) {
-      postsActions.resetPostIds();
       if (loginState.ready) {
         bookmarkActions.getBookmarks();
       }
     }
   }, [JSON.stringify(loginState)]);
 
-  React.useEffect(() => {
-    if (
-      !postsState.postIds.length &&
-      !postsState.isFetchingPosts &&
-      postsState.totalItems === null
-    ) {
-      postsActions.getPosts({ limit: 5 });
-    }
-  }, [postsState.postIds.length, postsState.isFetchingPosts]);
-
-  const handleLoadMore = (payload: ILoadItemsPayload) => {
-    const req: { limit: number; offset?: string } = {
-      limit: payload.limit,
-    };
-    if (!postsState.isFetchingPosts && loginState.currentUserCalled) {
-      postsActions.getPosts(req);
-    }
-  };
+  const handleLoadMore = React.useCallback(
+    (payload: ILoadItemsPayload) => {
+      const req: { limit: number; offset?: string } = {
+        limit: payload.limit,
+      };
+      if (!postsState.isFetchingPosts && loginState.currentUserCalled) {
+        postsActions.getPosts(req);
+      }
+    },
+    [postsState.isFetchingPosts, loginState.currentUserCalled],
+  );
 
   const loadItemData = (payload: ILoadItemDataPayload) => {
     postsActions.getPost(payload.itemId);
@@ -192,7 +184,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     const modifiedEntry = { ...postsState.postsData[entryId], reported: true };
     postsActions.updatePostsState(modifiedEntry);
   };
-
+  const handleEntryRemove = (entryId: string) => {
+    props.navigateToModal({ name: 'entry-remove-confirmation', entryId });
+  };
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -270,8 +264,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         style={{ width: '36rem' }}
       />
       <VirtualList
-        items={postsState.postIds}
-        itemsData={postsState.postsData}
+        items={postsState.postIds.slice()}
+        itemsData={{ ...postsState.postsData }}
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
         hasMoreItems={!!postsState.nextPostIndex}
@@ -320,6 +314,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             moderatedContentLabel={t('This content has been moderated')}
             ctaLabel={t('See it anyway')}
             handleFlipCard={handleFlipCard}
+            onEntryRemove={handleEntryRemove}
+            removeEntryLabel={t('Delete Post')}
           />
         }
         customEntities={getFeedCustomEntities({
