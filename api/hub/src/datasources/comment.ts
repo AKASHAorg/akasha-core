@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { EMPTY_KEY, getAppDB, logger, sendAuthorNotification } from '../helpers';
+import { getAppDB, logger, sendAuthorNotification } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { DataProvider, Comment, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -233,7 +233,6 @@ class CommentAPI extends DataSource {
     currentComment.metaData = [];
     const removedTags = Array.from(currentComment.tags);
     currentComment.mentions = [];
-    currentComment.author = EMPTY_KEY;
     searchIndex
       .deleteObject(currentComment._id)
       .then(() => logger.info(`removed comment: ${id}`))

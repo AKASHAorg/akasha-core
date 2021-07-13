@@ -48,3 +48,5 @@ export enum LEGAL_DOCS {
   CODE_OF_CONDUCT = 'CodeOfConduct',
   APP_GUIDE = 'AppGuide',
 }
+
+export type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T;
