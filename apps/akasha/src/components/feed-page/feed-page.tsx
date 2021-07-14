@@ -19,6 +19,8 @@ import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/medi
 import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
+// import { useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+
 const {
   Box,
   Helmet,
@@ -81,6 +83,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   });
   const [errorState, errorActions] = useErrors({ logger });
 
+  // @Todo: replace this with useInfinitePosts()
   const [postsState, postsActions] = usePosts({
     user: loginState.ethAddress,
     onError: errorActions.createError,
@@ -115,6 +118,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   }, [postsState.postIds.length, postsState.isFetchingPosts]);
 
+  //@Todo: replace this with fetchNextPage() from useInfinitePosts object
   const handleLoadMore = (payload: ILoadItemsPayload) => {
     const req: { limit: number; offset?: string } = {
       limit: payload.limit,
