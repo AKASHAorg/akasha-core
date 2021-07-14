@@ -5,7 +5,7 @@ import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
-import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
 
 const { SignInModal, ThemeSelector, lightTheme, darkTheme } = DS;
 
@@ -75,20 +75,15 @@ const SignInModalContainer = (props: RootComponentProps) => {
 };
 
 const Wrapped = (props: RootComponentProps) => (
-  <ThemeSelector
-    availableThemes={[lightTheme, darkTheme]}
-    settings={{ activeTheme: 'Light-Theme' }}
-  >
-    <Router>
-      <SignInModalContainer {...props} />
-    </Router>
-  </ThemeSelector>
+  <Router>
+    <SignInModalContainer {...props} />
+  </Router>
 );
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Wrapped,
+  rootComponent: withProviders(Wrapped),
   errorBoundary: (err, errorInfo, props) => {
     if (props.logger) {
       props.logger('Error: %s; Info: %s', err, errorInfo);

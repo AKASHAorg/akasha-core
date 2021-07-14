@@ -22,7 +22,7 @@ export interface RootComponentProps {
   logger: any;
   activeModal?: {
     name: string;
-    [key: string]: string | undefined;
+    [key: string]: string | any | undefined;
   };
   mountParcel: (parcel: unknown, config?: unknown) => unknown;
   name: string;

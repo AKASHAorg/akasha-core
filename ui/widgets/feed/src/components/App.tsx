@@ -3,7 +3,7 @@ import DS from '@akashaproject/design-system';
 import { I18nextProvider } from 'react-i18next';
 import EntryFeed from './entry-feed';
 import ProfileFeed from './profile-feed';
-import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import i18next from 'i18next';
 import { IContentClickDetails } from '@akashaproject/design-system/src/components/EntryCard/entry-box';
 import LanguageDetector from 'i18next-browser-languagedetector';
@@ -21,7 +21,8 @@ export const enum ItemTypes {
   TAG,
 }
 
-export interface IFeedWidgetProps extends RootComponentProps {
+export interface IFeedWidgetProps {
+  logger: any;
   virtualListRef?: any;
   layout: any;
   listHeader?: React.ReactElement;
@@ -37,6 +38,7 @@ export interface IFeedWidgetProps extends RootComponentProps {
   profilePubKey: string | null;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   singleSpaNavigate: (url: string) => void;
+  navigateToModal: (props: any) => void;
   onLoginModalOpen: () => void;
   isFetching?: boolean;
   totalItems: number | null;

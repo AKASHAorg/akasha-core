@@ -1,4 +1,3 @@
-import DS from '@akashaproject/design-system';
 import React, { PureComponent, Suspense } from 'react';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
@@ -9,8 +8,6 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
-
-const { lightTheme, ThemeSelector } = DS;
 
 export default class TopbarWidget extends PureComponent<RootComponentProps> {
   public state: {
@@ -100,11 +97,9 @@ export default class TopbarWidget extends PureComponent<RootComponentProps> {
     return (
       <I18nextProvider i18n={i18next}>
         <Suspense fallback={<>...</>}>
-          <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
-            <Router>
-              <TopbarComponent getMenuItems={this.props.getMenuItems} {...this.props} />
-            </Router>
-          </ThemeSelector>
+          <Router>
+            <TopbarComponent getMenuItems={this.props.getMenuItems} {...this.props} />
+          </Router>
         </Suspense>
       </I18nextProvider>
     );

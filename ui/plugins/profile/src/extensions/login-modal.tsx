@@ -5,8 +5,9 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+import { withProviders } from '@akashaproject/ui-awf-hooks';
 
-const { Box, Button, ModalContainer, ThemeSelector, lightTheme, darkTheme, ModalCard } = DS;
+const { Box, Button, ModalContainer, ModalCard } = DS;
 
 const LoginModal = (props: RootComponentProps) => {
   const { t } = useTranslation();
@@ -48,20 +49,15 @@ const LoginModal = (props: RootComponentProps) => {
 };
 
 const Wrapped = (props: RootComponentProps) => (
-  <ThemeSelector
-    availableThemes={[lightTheme, darkTheme]}
-    settings={{ activeTheme: 'Light-Theme' }}
-  >
-    <Router>
-      <LoginModal {...props} />
-    </Router>
-  </ThemeSelector>
+  <Router>
+    <LoginModal {...props} />
+  </Router>
 );
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Wrapped,
+  rootComponent: withProviders(Wrapped),
   errorBoundary: (err, errorInfo, props) => {
     if (props.logger) {
       props.logger('Error: %s; Info: %s', err, errorInfo);

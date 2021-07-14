@@ -24,9 +24,6 @@ export interface FeedPageProps {
   showLoginModal: () => void;
   loggedProfileData?: any;
   loginState: ILoginState;
-  editorModalOpen: boolean;
-  setEditorModalOpen: () => void;
-  closeEditorModal: () => void;
   onError: (err: IAkashaError) => void;
 }
 

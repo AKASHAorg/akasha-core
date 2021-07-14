@@ -8,15 +8,23 @@ import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
-import { useMentions, useLoginState, useProfile, useErrors } from '@akashaproject/ui-awf-hooks';
+import {
+  useMentions,
+  useLoginState,
+  useProfile,
+  useErrors,
+  withProviders,
+} from '@akashaproject/ui-awf-hooks';
 
-const { EditorModal, ThemeSelector, lightTheme, darkTheme } = DS;
+const { EditorModal } = DS;
 
 const EditorModalContainer = (props: RootComponentProps) => {
+  const { logger } = props;
+
   const { t } = useTranslation();
   const location = useLocation();
 
-  const [, errorActions] = useErrors({ logger: props.logger });
+  const [, errorActions] = useErrors({ logger });
 
   const [loginState] = useLoginState({
     onError: errorActions.createError,
@@ -35,14 +43,8 @@ const EditorModalContainer = (props: RootComponentProps) => {
     onError: errorActions.createError,
   });
 
-  const onUploadRequest = uploadMediaToTextile;
-
   const handleEntryPublish = async (data: PublishPostData) => {
-    postsActions.optimisticPublishPost(
-      data,
-      loggedProfileData,
-      props.activeModal.currentEmbedEntry,
-    );
+    postsActions.optimisticPublishPost(data, loggedProfileData, props.activeModal.embedEntry);
     handleModalClose();
   };
 
@@ -68,28 +70,23 @@ const EditorModalContainer = (props: RootComponentProps) => {
       getTags={mentionsActions.getTags}
       tags={mentionsState.tags}
       mentions={mentionsState.mentions}
-      uploadRequest={onUploadRequest}
-      embedEntryData={props.activeModal.currentEmbedEntry}
+      uploadRequest={uploadMediaToTextile}
+      embedEntryData={props.activeModal.embedEntry}
       style={{ width: '36rem' }}
     />
   );
 };
 
 const Wrapped = (props: RootComponentProps) => (
-  <ThemeSelector
-    availableThemes={[lightTheme, darkTheme]}
-    settings={{ activeTheme: 'Light-Theme' }}
-  >
-    <Router>
-      <EditorModalContainer {...props} />
-    </Router>
-  </ThemeSelector>
+  <Router>
+    <EditorModalContainer {...props} />
+  </Router>
 );
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Wrapped,
+  rootComponent: withProviders(Wrapped),
   errorBoundary: (err, errorInfo, props) => {
     if (props.logger) {
       props.logger('Error: %s; Info: %s', err, errorInfo);
