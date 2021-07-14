@@ -3,11 +3,10 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
-import { BrowserRouter as Router } from 'react-router-dom';
 
 const { SignUpModal, ThemeSelector, lightTheme, darkTheme } = DS;
 

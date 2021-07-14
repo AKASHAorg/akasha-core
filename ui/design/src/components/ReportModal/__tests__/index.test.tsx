@@ -11,7 +11,7 @@ describe('<ReportModal /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const handleCloseModal = jest.fn();
-  const handleSignData = jest.fn();
+  const handleReport = jest.fn();
 
   beforeEach(() => {
     act(() => {
@@ -48,8 +48,10 @@ describe('<ReportModal /> Component', () => {
               reportLabel="Report"
               blockLabel="Block User"
               closeLabel="Close"
+              requesting={false}
+              success={false}
               closeModal={handleCloseModal}
-              signData={handleSignData}
+              onReport={handleReport}
             />
           </ToastProvider>,
         ),

@@ -4,8 +4,7 @@ import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 
 const { Box, Button, ModalContainer, ThemeSelector, lightTheme, darkTheme, ModalCard } = DS;
 
