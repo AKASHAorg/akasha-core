@@ -12,8 +12,11 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { useLoginState, useErrors, usePosts, moderationRequest } from '@akashaproject/ui-awf-hooks';
 import { BASE_REPORT_URL } from '../services/constants';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const { ReportModal, ToastProvider, ThemeSelector, lightTheme, darkTheme } = DS;
+
+const queryClient = new QueryClient();
 
 const ReportModalComponent = (props: RootComponentProps) => {
   const { logger, activeModal } = props;
@@ -58,51 +61,53 @@ const ReportModalComponent = (props: RootComponentProps) => {
   };
 
   return (
-    <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-      <ReportModal
-        titleLabel={t(`Report ${activeModal.contentType}`)}
-        successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
-        successMessageLabel={t('We will investigate this post and take appropriate action.')}
-        optionsTitleLabel={t('Please select a reason')}
-        optionLabels={[
-          t('Threats of violence and incitement'),
-          t('Hate speech, bullying and harassment'),
-          t('Sexual or human exploitation'),
-          t('Illegal or certain regulated goods or services'),
-          t('Impersonation'),
-          t('Spam and malicious links'),
-          t('Privacy and copyright infringement'),
-          t('Other'),
-        ]}
-        optionValues={[
-          'Threats of violence and incitement',
-          'Hate speech, bullying and harassment',
-          'Sexual or human exploitation',
-          'Illegal or certain regulated goods or services',
-          'Impersonation',
-          'Spam and malicious links',
-          'Privacy and copyright infringement',
-          'Other',
-        ]}
-        descriptionLabel={t('Explanation')}
-        descriptionPlaceholder={t('Please explain your reason(s)')}
-        footerText1Label={t('If you are unsure, you can refer to our')}
-        footerLink1Label={t('Code of Conduct')}
-        footerUrl1={'/legal/code-of-conduct'}
-        cancelLabel={t('Cancel')}
-        reportLabel={t('Report')}
-        blockLabel={t('Block User')}
-        closeLabel={t('Close')}
-        user={loginState.ethAddress ? loginState.ethAddress : ''}
-        contentId={activeModal.entryId}
-        contentType={activeModal.contentType}
-        requesting={requesting}
-        success={success}
-        updateEntry={updateEntry}
-        closeModal={handleModalClose}
-        onReport={onReport}
-      />
-    </ToastProvider>
+    <QueryClientProvider client={queryClient}>
+      <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
+        <ReportModal
+          titleLabel={t(`Report ${activeModal.contentType}`)}
+          successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
+          successMessageLabel={t('We will investigate this post and take appropriate action.')}
+          optionsTitleLabel={t('Please select a reason')}
+          optionLabels={[
+            t('Threats of violence and incitement'),
+            t('Hate speech, bullying and harassment'),
+            t('Sexual or human exploitation'),
+            t('Illegal or certain regulated goods or services'),
+            t('Impersonation'),
+            t('Spam and malicious links'),
+            t('Privacy and copyright infringement'),
+            t('Other'),
+          ]}
+          optionValues={[
+            'Threats of violence and incitement',
+            'Hate speech, bullying and harassment',
+            'Sexual or human exploitation',
+            'Illegal or certain regulated goods or services',
+            'Impersonation',
+            'Spam and malicious links',
+            'Privacy and copyright infringement',
+            'Other',
+          ]}
+          descriptionLabel={t('Explanation')}
+          descriptionPlaceholder={t('Please explain your reason(s)')}
+          footerText1Label={t('If you are unsure, you can refer to our')}
+          footerLink1Label={t('Code of Conduct')}
+          footerUrl1={'/legal/code-of-conduct'}
+          cancelLabel={t('Cancel')}
+          reportLabel={t('Report')}
+          blockLabel={t('Block User')}
+          closeLabel={t('Close')}
+          user={loginState.ethAddress ? loginState.ethAddress : ''}
+          contentId={activeModal.entryId}
+          contentType={activeModal.contentType}
+          requesting={requesting}
+          success={success}
+          updateEntry={updateEntry}
+          closeModal={handleModalClose}
+          onReport={onReport}
+        />
+      </ToastProvider>
+    </QueryClientProvider>
   );
 };
 
