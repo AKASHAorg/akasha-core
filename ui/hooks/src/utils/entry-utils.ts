@@ -73,6 +73,7 @@ export const mapEntry = (
       totalPosts?: number | string;
       totalFollowers?: number | string;
       totalFollowing?: number | string;
+      default: any;
     };
     delisted?: boolean;
     reported?: boolean;
@@ -81,7 +82,12 @@ export const mapEntry = (
   logger?: any,
 ) => {
   const slateContent = entry.content.find(elem => elem.property === PROPERTY_SLATE_CONTENT);
-  let content = null;
+  let content = [
+    {
+      type: 'paragraph',
+      children: [{ text: 'Deleted' }],
+    },
+  ];
   try {
     if (slateContent) {
       content = serializeBase64ToSlate(slateContent.value, logger);
@@ -142,6 +148,7 @@ export const mapEntry = (
       totalPosts: entry.author.totalPosts,
       totalFollowers: entry.author.totalFollowers,
       totalFollowing: entry.author.totalFollowing,
+      default: entry.author.default,
     },
     CID: entry.CID,
     content: contentWithMediaGateways,
