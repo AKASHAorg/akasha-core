@@ -6,7 +6,7 @@ import EntryLoadingPlaceholder from './placeholders/entry-card-placeholder';
 const CardItemWrapper = styled.div<{ yPos?: number; opacity: number }>`
   transition: opacity 0.3s ease-in-out;
   width: 100%;
-  position: absolute;
+  margin-bottom: 8px;
   opacity: ${props => props.opacity};
   &.vlist-item-exit {
     /* transform: translateY(${props => props.yPos}px); */
@@ -82,17 +82,10 @@ const CardRenderer = (props: IRenderItemProps) => {
     }
   }, [itemRect, itemId, onItemUnmount, updateRef]);
 
-  const shouldLoadData = itemRect && itemRect.canRender;
+  const shouldLoadData = (itemRect && itemRect.canRender) || true;
 
   return (
-    <CardItemWrapper
-      ref={cardWrapperRef}
-      key={itemId}
-      style={{
-        transform: `translateY(${itemRect ? itemRect.rect.getTop() : itemSpacing}px)`,
-      }}
-      opacity={itemRect ? 1 : 0.01}
-    >
+    <CardItemWrapper ref={cardWrapperRef} key={itemId} opacity={1}>
       {beforeEntities.map((entityObj, idx) => {
         return entityObj.getComponent({
           key: `${itemId}-${idx}`,

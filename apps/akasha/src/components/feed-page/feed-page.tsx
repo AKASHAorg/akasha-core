@@ -72,7 +72,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
     postsState.pages.forEach(el => el.results.forEach(el1 => list.push(el1._id)));
     return list;
-  }, [reqPosts.isSuccess]);
+  }, [reqPosts.isSuccess, reqPosts.isFetching]);
 
   const entriesData = React.useMemo(() => {
     const list = {};
@@ -83,7 +83,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       el.results.forEach(el1 => (list[el1._id] = mapEntry(el1, 'https://hub.textile.io/ipfs'))),
     );
     return list;
-  }, [reqPosts.isSuccess]);
+  }, [reqPosts.isSuccess, reqPosts.isFetching]);
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
@@ -115,14 +115,17 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   // }, [postsState.postIds.length, postsState.isFetchingPosts]);
 
   //@Todo: replace this with fetchNextPage() from useInfinitePosts object
-  const handleLoadMore = (_payload: ILoadItemsPayload) => {
-    // const req: { limit: number; offset?: string } = {
-    //   limit: payload.limit,
-    // };
-    if (!reqPosts.isFetching && loginState.currentUserCalled) {
-      reqPosts.fetchNextPage().then(d => console.log('fetched next page', d));
-    }
-  };
+  const handleLoadMore = React.useCallback(
+    (_payload: ILoadItemsPayload) => {
+      // const req: { limit: number; offset?: string } = {
+      //   limit: payload.limit,
+      // };
+      if (!reqPosts.isSuccess && loginState.currentUserCalled) {
+        reqPosts.fetchNextPage().then(d => console.log('fetched next page', d));
+      }
+    },
+    [reqPosts.isFetching],
+  );
 
   const loadItemData = (_payload: ILoadItemDataPayload) => {
     //postsActions.getPost(payload.itemId);
@@ -276,6 +279,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           pendingEntries: [],
         })}
       />
+      {reqPosts.isFetchingNextPage && (
+        <div style={{ position: 'fixed', top: '50%', left: '50%', backgroundColor: 'red' }}>
+          Fetching next page
+        </div>
+      )}
     </Box>
   );
 };

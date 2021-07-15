@@ -52,7 +52,8 @@
     "i18next-fetch-backend": "3.0.0",
     "i18next-chained-backend": "3.0.2",
     "i18next-localstorage-backend": "3.1.2",
-    "react-query": "3.18.1"
+    "react-query": "3.18.1",
+    "react-router-scroll-memory": "2.0.7"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",

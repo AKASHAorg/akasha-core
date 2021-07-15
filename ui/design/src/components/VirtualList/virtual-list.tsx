@@ -12,6 +12,8 @@ import {
   InsertPoint,
   updatePositions,
 } from './utils';
+import CardRenderer from './card-renderer';
+import useIntersectionObserver from './intersection-observer';
 
 export interface ScrollData {
   items: string[];
@@ -90,8 +92,8 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
   });
   const initialScrollData: ScrollData = {
     averageItemHeight,
-    items: [],
-    loadedIds: [],
+    items: items || [],
+    loadedIds: items || [],
     globalOffsetTop: 0,
   };
   // static data. will not trigger a rerender;
@@ -114,11 +116,11 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
       start: 0,
       end: items.length,
     });
-    window.scrollTo({ top: 0 });
+    // window.scrollTo({ top: 0 });
   };
 
   React.useLayoutEffect(() => {
-    if (!scrollData.current.items?.length) {
+    if (!items) {
       setIsLoading(true);
       loadMore({ limit: loadLimit });
     }
@@ -372,12 +374,17 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
       setUnmounting(prev => prev.concat(itemId));
     }
   };
-
+  const loadMoreButtonRef = React.useRef();
+  useIntersectionObserver({
+    target: loadMoreButtonRef,
+    onIntersect: () => loadMore({ limit: loadLimit }),
+    enabled: true,
+  });
   return (
     <div
       ref={rootContainerRef}
       style={{
-        height: itemPositions.listHeight + (isLoading ? 100 : 0),
+        height: 'auto',
         contain: 'layout',
         position: 'relative',
         transition: 'height 0.4s ease 0s',
@@ -387,25 +394,21 @@ const VirtualScroll = (props: IVirtualListProps, ref: any) => {
       {showNotificationPill &&
         getNotificationPill &&
         getNotificationPill({ styles: { marginTop: 8 } })}
-      <ListViewport
-        itemRects={itemPositions.rects}
-        itemsData={itemsData}
-        itemCard={itemCard}
-        listHeight={itemPositions.listHeight}
-        loadItemData={loadItemData}
-        itemSpacing={itemSpacing}
-        customEntities={customEntities}
-        isFetching={isLoading}
-        useItemDataLoader={useItemDataLoader}
-        renderSlice={getRenderSlice()}
-        itemIds={items}
-        updateRef={onRefUpdate}
-        averageItemHeight={scrollData.current.averageItemHeight}
-        listHeader={listHeader}
-        usePlaceholders={usePlaceholders}
-        loadLimit={loadLimit}
-        onItemUnmount={handleItemUnmount}
-      />
+      {items.map(id => (
+        <CardRenderer
+          itemId={id}
+          loadItemData={() => {
+            return props.itemsData[id];
+          }}
+          itemSpacing={8}
+          customEntities={[]}
+          itemCard={props.itemCard}
+          itemData={props.itemsData[id]}
+          averageItemHeight={200}
+          key={id}
+        />
+      ))}
+      <div ref={loadMoreButtonRef} />
     </div>
   );
 };
