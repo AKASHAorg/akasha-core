@@ -2,6 +2,7 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-q
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { mapEntry } from './utils/entry-utils';
+import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 
 // these can be used to with useQueryClient() to fetch data
 export const ENTRY_KEY = 'Entry';
@@ -49,6 +50,10 @@ export function usePost(postID: string) {
   });
 }
 
+export interface Publish_Options {
+  data: DataProviderInput[];
+  post: { title?: string; tags?: string[]; quotes?: string[] };
+}
 /**
  * Example:
  * ```
@@ -62,7 +67,7 @@ export function useDeletePost(postID: string) {
   return useMutation(postID => lastValueFrom(sdk.api.entries.removeEntry(postID)), {
     // When mutate is called:
     onMutate: async (postID: string) => {
-      await queryClient.cancelQueries('todos');
+      await queryClient.cancelQueries(ENTRY_KEY);
 
       // Snapshot the previous value
       const previousPost = queryClient.getQueryData([ENTRY_KEY, postID]);
@@ -82,4 +87,43 @@ export function useDeletePost(postID: string) {
       await queryClient.invalidateQueries(ENTRIES_KEY);
     },
   });
+}
+
+export function useCreatePost() {
+  const sdk = getSDK();
+  const queryClient = useQueryClient();
+
+  const pendingID = 'pending' + new Date().getTime();
+  return useMutation(
+    async (publishObj: Publish_Options) => {
+      const res = await lastValueFrom(sdk.api.entries.postEntry(publishObj));
+      return res?.data?.createPost;
+    },
+    {
+      onMutate: async (publishObj: {
+        data: DataProviderInput[];
+        post: { title?: string; tags?: string[]; quotes?: string[] };
+      }) => {
+        const optimisticEntry = Object.assign({}, publishObj, { isPublishing: true });
+        queryClient.setQueryData([ENTRY_KEY, pendingID], optimisticEntry);
+
+        return { optimisticEntry };
+      },
+      onError: (err, variables, context) => {
+        if (context?.optimisticEntry) {
+          queryClient.setQueryData(
+            [ENTRY_KEY, pendingID],
+            Object.assign({}, context.optimisticEntry, { hasErrored: true }),
+          );
+        }
+      },
+      onSuccess: async id => {
+        await queryClient.fetchQuery([ENTRY_KEY, id], () => getPost(id));
+      },
+      onSettled: async () => {
+        await queryClient.invalidateQueries([ENTRY_KEY, pendingID]);
+        await queryClient.invalidateQueries(ENTRIES_KEY);
+      },
+    },
+  );
 }
