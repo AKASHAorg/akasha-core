@@ -102,7 +102,7 @@ export const loginWithChallenge = (
               let acceptedTermsAndPrivacy;
               if (data.addressChallenge) {
                 addressChallenge = await signer.signMessage(data.addressChallenge);
-                ethAddress = await signer.getCurrentAddress();
+                ethAddress = (await lastValueFrom(signer.getCurrentAddress())).data;
                 authStatus.isNewUser = true;
                 signUpToken = localStorage.getItem('@signUpToken');
                 acceptedTermsAndPrivacy = localStorage.getItem('@acceptedTermsAndPrivacy');

@@ -9,7 +9,7 @@ import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
 
-const { Box, ThemeSelector, lightTheme, darkTheme } = DS;
+const { Box } = DS;
 
 class App extends PureComponent<RootComponentProps> {
   public state: { hasErrors: boolean };
@@ -73,12 +73,7 @@ class App extends PureComponent<RootComponentProps> {
       <Box width="100vw">
         <React.Suspense fallback={<></>}>
           <I18nextProvider i18n={i18next}>
-            <ThemeSelector
-              settings={{ activeTheme: 'Light-Theme' }}
-              availableThemes={[lightTheme, darkTheme]}
-            >
-              <Routes {...this.props} />
-            </ThemeSelector>
+            <Routes {...this.props} />
           </I18nextProvider>
         </React.Suspense>
       </Box>

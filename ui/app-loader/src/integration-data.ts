@@ -108,4 +108,22 @@ export const integrationsData = {
     },
     type: 'app',
   },
+  '@akashaproject/ui-plugin-notifications': {
+    name: '@akashaproject/ui-plugin-notifications',
+    lastVersion: '0.0.1',
+    description: 'Notifications App. Powered by AKASHA',
+    versions: {
+      '0.0.1': '/plugins/notifications/index.js',
+    },
+    type: 'app',
+  },
+  '@akashaproject/ui-plugin-legal': {
+    name: '@akashaproject/ui-plugin-legal',
+    lastVersion: '0.0.1',
+    description: 'Legal App. Powered by AKASHA',
+    versions: {
+      '0.0.1': '/plugins/legal/index.js',
+    },
+    type: 'app',
+  },
 };

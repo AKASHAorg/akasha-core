@@ -5,10 +5,11 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
+import { lastValueFrom } from 'rxjs';
 
-const { SignUpModal, ThemeSelector, lightTheme, darkTheme } = DS;
+const { SignUpModal } = DS;
 
 const SignUpModalContainer = (props: RootComponentProps) => {
   const { t } = useTranslation();
@@ -50,7 +51,7 @@ const SignUpModalContainer = (props: RootComponentProps) => {
 
   React.useEffect(() => {
     if (loginState.ethAddress) {
-      setTimeout(() => handleLoginModalClose(), 500);
+      setTimeout(() => handleSignUpModalClose(), 500);
     }
   }, [loginState.ethAddress]);
 
@@ -82,10 +83,8 @@ const SignUpModalContainer = (props: RootComponentProps) => {
       hasError: false,
       errorMsg: '',
     });
-    sdk.api.auth
-      .validateInvite(inviteToken)
-      .toPromise()
-      .then((_: any) => {
+    lastValueFrom(sdk.api.auth.validateInvite(inviteToken))
+      .then(() => {
         setinviteTokenForm({
           submitted: true,
           submitting: false,
@@ -142,7 +141,7 @@ const SignUpModalContainer = (props: RootComponentProps) => {
   React.useEffect(triggerInviteValidation, [inviteToken]);
   React.useEffect(activateAcceptButton, [termsState.checkedTermsValues]);
 
-  const handleLoginModalClose = () => {
+  const handleSignUpModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
     _handleModalClose();
     errorActions.removeLoginErrors();
@@ -156,7 +155,7 @@ const SignUpModalContainer = (props: RootComponentProps) => {
       success={inviteTokenForm.success}
       hasError={inviteTokenForm.hasError}
       errorMsg={inviteTokenForm.errorMsg}
-      onModalClose={handleLoginModalClose}
+      onModalClose={handleSignUpModalClose}
       subtitleLabel={t('Please enter your invitation code')}
       headerLabel={t('Sign Up')}
       onChange={onInputTokenChange}
@@ -171,20 +170,17 @@ const SignUpModalContainer = (props: RootComponentProps) => {
 };
 
 const Wrapped = (props: RootComponentProps) => (
-  <ThemeSelector
-    availableThemes={[lightTheme, darkTheme]}
-    settings={{ activeTheme: 'Light-Theme' }}
-  >
-    <Router>
+  <Router>
+    <React.Suspense fallback={<></>}>
       <SignUpModalContainer {...props} />
-    </Router>
-  </ThemeSelector>
+    </React.Suspense>
+  </Router>
 );
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Wrapped,
+  rootComponent: withProviders(Wrapped),
   errorBoundary: (err, errorInfo, props) => {
     if (props.logger) {
       props.logger('Error: %s; Info: %s', err, errorInfo);

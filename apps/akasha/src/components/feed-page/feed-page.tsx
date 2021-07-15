@@ -11,16 +11,16 @@ import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
-import { useBookmarks, useErrors, useMentions } from '@akashaproject/ui-awf-hooks';
-import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
+
+import { useBookmarks, useErrors } from '@akashaproject/ui-awf-hooks';
+
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import { useCreatePost, useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
-import { buildPublishObject, mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
 // import { useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 
-const { Box, Helmet, VirtualList, EditorModal, EditorPlaceholder } = DS;
+const { Box, Helmet, VirtualList, EditorPlaceholder } = DS;
 
 export interface FeedPageProps {
   singleSpa: any;
@@ -28,26 +28,11 @@ export interface FeedPageProps {
   showLoginModal: () => void;
   loggedProfileData?: any;
   loginState: ILoginState;
-  editorModalOpen: boolean;
-  setEditorModalOpen: () => void;
-  closeEditorModal: () => void;
   onError: (err: IAkashaError) => void;
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const {
-    isMobile,
-    editorModalOpen,
-    setEditorModalOpen,
-    closeEditorModal,
-    showLoginModal,
-    loggedProfileData,
-    loginState,
-    onError,
-    logger,
-  } = props;
-
-  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
+  const { isMobile, showLoginModal, loggedProfileData, loginState, onError, logger } = props;
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -55,7 +40,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [bookmarkState, bookmarkActions] = useBookmarks({
     onError,
   });
-  const [errorState, errorActions] = useErrors({ logger });
+  const [errorState] = useErrors({ logger });
 
   // @Todo: replace this with useInfinitePosts()
   // const [postsState, postsActions] = usePosts({
@@ -84,10 +69,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     );
     return list;
   }, [reqPosts.isSuccess]);
-
-  const [mentionsState, mentionsActions] = useMentions({
-    onError: errorActions.createError,
-  });
 
   React.useEffect(() => {
     if (Object.keys(errorState).length) {
@@ -148,39 +129,22 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
     return bookmarkActions.bookmarkPost(entryId);
   };
+
+  const handleShowEditor = () => {
+    props.navigateToModal({ name: 'editor' });
+  };
+
   const handleEntryRepost = (_withComment: boolean, entryData: any) => {
-    setCurrentEmbedEntry(entryData);
-    setEditorModalOpen();
+    props.navigateToModal({ name: 'editor', embedEntry: entryData });
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
-  const handleToggleEditor = () => {
-    setCurrentEmbedEntry(undefined);
-    if (editorModalOpen) {
-      closeEditorModal();
-    } else {
-      setEditorModalOpen();
-    }
-  };
-
-  const onUploadRequest = uploadMediaToTextile;
-
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
-  const publishPost = useCreatePost();
-  const handleEntryPublish = async (data: PublishPostData) => {
-    if (!loginState.ethAddress && !loginState.pubKey) {
-      showLoginModal();
-      return;
-    }
-    publishPost.mutate(buildPublishObject(data));
-    //postsActions.optimisticPublishPost(data, loggedProfileData, currentEmbedEntry);
-    closeEditorModal();
-  };
 
-  const handleFlipCard = (entry: any, isQuote: boolean) => () => {
+  const handleFlipCard = (_entry: any, _isQuote: boolean) => () => {
     // const modifiedEntry = isQuote
     //   ? { ...entry, quote: { ...entry.quote, reported: false } }
     //   : { ...entry, reported: false };
@@ -192,29 +156,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <EditorModal
-        slotId={props.layoutConfig.modalSlotId}
-        avatar={loggedProfileData.avatar}
-        showModal={editorModalOpen}
-        ethAddress={loginState.ethAddress as any}
-        postLabel={t('Publish')}
-        placeholderLabel={t('Write something')}
-        emojiPlaceholderLabel={t('Search')}
-        discardPostLabel={t('Discard Post')}
-        discardPostInfoLabel={t(
-          "You have not posted yet. If you leave now you'll discard your post.",
-        )}
-        keepEditingLabel={t('Keep Editing')}
-        onPublish={handleEntryPublish}
-        handleNavigateBack={handleToggleEditor}
-        getMentions={mentionsActions.getMentions}
-        getTags={mentionsActions.getTags}
-        tags={mentionsState.tags}
-        mentions={mentionsState.mentions}
-        uploadRequest={onUploadRequest}
-        embedEntryData={currentEmbedEntry}
-        style={{ width: '36rem' }}
-      />
       <VirtualList
         items={ids}
         itemsData={entriesData}
@@ -226,7 +167,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           loginState.ethAddress ? (
             <EditorPlaceholder
               ethAddress={loginState.ethAddress}
-              onClick={handleToggleEditor}
+              onClick={handleShowEditor}
               avatar={loggedProfileData.avatar}
             />
           ) : (

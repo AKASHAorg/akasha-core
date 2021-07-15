@@ -174,6 +174,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         ethAddress={loggedEthAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
+        navigateToModal={props.navigateToModal}
         onLoginModalOpen={showLoginModal}
         totalItems={postsState.totalItems}
         profilePubKey={pubKey}

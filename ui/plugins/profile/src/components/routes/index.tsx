@@ -7,7 +7,7 @@ import ProfilePage from './profile-page';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useLoginState, useModalState, useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
 
-const { Box, ViewportSizeProvider } = DS;
+const { Box } = DS;
 
 const Routes: React.FC<RootComponentProps> = props => {
   const { logger } = props;
@@ -42,27 +42,25 @@ const Routes: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <ViewportSizeProvider>
-      <Router>
-        <Box>
-          <Switch>
-            <Route path={`${rootRoute}/list`} render={() => <>A list of profiles</>} />
-            <Route path={[`${rootRoute}/:pubKey`, menuRoute[MY_PROFILE]]}>
-              <ProfilePage
-                {...props}
-                loggedEthAddress={loginState.ethAddress}
-                loginActions={loginActions}
-                modalActions={modalStateActions}
-                modalState={modalState}
-                loggedProfileData={loggedProfileData}
-                showLoginModal={showLoginModal}
-              />
-            </Route>
-            <Route render={() => <div>{t('Oops, Profile not found!')}</div>} />
-          </Switch>
-        </Box>
-      </Router>
-    </ViewportSizeProvider>
+    <Router>
+      <Box>
+        <Switch>
+          <Route path={`${rootRoute}/list`} render={() => <>A list of profiles</>} />
+          <Route path={[`${rootRoute}/:pubKey`, menuRoute[MY_PROFILE]]}>
+            <ProfilePage
+              {...props}
+              loggedEthAddress={loginState.ethAddress}
+              loginActions={loginActions}
+              modalActions={modalStateActions}
+              modalState={modalState}
+              loggedProfileData={loggedProfileData}
+              showLoginModal={showLoginModal}
+            />
+          </Route>
+          <Route render={() => <div>{t('Oops, Profile not found!')}</div>} />
+        </Switch>
+      </Box>
+    </Router>
   );
 };
 

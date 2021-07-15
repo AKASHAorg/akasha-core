@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import Widget from './topbar-widget';
+import { withProviders } from '@akashaproject/ui-awf-hooks';
 
 /**
  * This is the plugin's lifecycle logic
@@ -11,7 +12,7 @@ import Widget from './topbar-widget';
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Widget,
+  rootComponent: withProviders(Widget),
 });
 
 export const bootstrap = reactLifecycles.bootstrap;
