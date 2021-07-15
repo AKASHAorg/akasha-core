@@ -478,7 +478,6 @@ const postsStateReducer = (state: PostsState, action: IPostsAction) => {
         deleteUserPostQuery: action.payload,
       };
     case 'REMOVE_POST_SUCCESS':
-      console.log('remove post success!', action.payload);
       return {
         ...state,
         postsData: {

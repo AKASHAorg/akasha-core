@@ -74,7 +74,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     }
 
     return false;
-  }, [bookmarkState]);
+  }, [bookmarkState, itemId]);
 
   const { t } = useTranslation('ui-widget-feed');
 
@@ -133,6 +133,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
   };
   const isFollowing = React.useMemo(() => followedProfiles.includes(itemData.author.ethAddress), [
     followedProfiles,
+    itemData.author.ethAddress,
   ]);
 
   if (itemData.reported) {
@@ -144,7 +145,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
       />
     );
   }
-  // console.log(itemData.type, itemData.author, '<<<<< item data!!');
   return (
     <ErrorInfoCard errors={{}}>
       {(errorMessages: any, hasCriticalErrors: boolean) => (
