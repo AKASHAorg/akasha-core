@@ -13,8 +13,12 @@ import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
 import { useBookmarks, useErrors, useMentions } from '@akashaproject/ui-awf-hooks';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
+import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { useCreatePost, useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { buildPublishObject, mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+
+// import { useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 
 const { Box, Helmet, VirtualList, EditorModal, EditorPlaceholder } = DS;
 
@@ -53,10 +57,33 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   });
   const [errorState, errorActions] = useErrors({ logger });
 
-  const [postsState, postsActions] = usePosts({
-    user: loginState.ethAddress,
-    onError: errorActions.createError,
-  });
+  // @Todo: replace this with useInfinitePosts()
+  // const [postsState, postsActions] = usePosts({
+  //   user: loginState.ethAddress,
+  //   onError: errorActions.createError,
+  // });
+
+  const reqPosts = useInfinitePosts(15);
+  const postsState = reqPosts.data;
+  const ids = React.useMemo(() => {
+    const list = [];
+    if (!reqPosts.isSuccess) {
+      return list;
+    }
+    postsState.pages.forEach(el => el.results.forEach(el1 => list.push(el1._id)));
+    return list;
+  }, [reqPosts.isSuccess]);
+
+  const entriesData = React.useMemo(() => {
+    const list = {};
+    if (!reqPosts.isSuccess) {
+      return list;
+    }
+    postsState.pages.forEach(el =>
+      el.results.forEach(el1 => (list[el1._id] = mapEntry(el1, 'https://hub.textile.io/ipfs'))),
+    );
+    return list;
+  }, [reqPosts.isSuccess]);
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
@@ -70,34 +97,35 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   React.useEffect(() => {
     if (loginState.currentUserCalled) {
-      postsActions.resetPostIds();
+      //postsActions.resetPostIds();
       if (loginState.ready) {
         bookmarkActions.getBookmarks();
       }
     }
   }, [JSON.stringify(loginState)]);
 
-  React.useEffect(() => {
-    if (
-      !postsState.postIds.length &&
-      !postsState.isFetchingPosts &&
-      postsState.totalItems === null
-    ) {
-      postsActions.getPosts({ limit: 5 });
-    }
-  }, [postsState.postIds.length, postsState.isFetchingPosts]);
+  // React.useEffect(() => {
+  //   if (
+  //     !postsState.postIds.length &&
+  //     !postsState.isFetchingPosts &&
+  //     postsState.totalItems === null
+  //   ) {
+  //     postsActions.getPosts({ limit: 5 });
+  //   }
+  // }, [postsState.postIds.length, postsState.isFetchingPosts]);
 
-  const handleLoadMore = (payload: ILoadItemsPayload) => {
-    const req: { limit: number; offset?: string } = {
-      limit: payload.limit,
-    };
-    if (!postsState.isFetchingPosts && loginState.currentUserCalled) {
-      postsActions.getPosts(req);
+  //@Todo: replace this with fetchNextPage() from useInfinitePosts object
+  const handleLoadMore = (_payload: ILoadItemsPayload) => {
+    // const req: { limit: number; offset?: string } = {
+    //   limit: payload.limit,
+    // };
+    if (!reqPosts.isFetching && loginState.currentUserCalled) {
+      reqPosts.fetchNextPage().then(d => console.log('fetched next page', d));
     }
   };
 
-  const loadItemData = (payload: ILoadItemDataPayload) => {
-    postsActions.getPost(payload.itemId);
+  const loadItemData = (_payload: ILoadItemDataPayload) => {
+    //postsActions.getPost(payload.itemId);
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorPubKey: string) => {
@@ -141,21 +169,22 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const onUploadRequest = uploadMediaToTextile;
 
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
-
+  const publishPost = useCreatePost();
   const handleEntryPublish = async (data: PublishPostData) => {
     if (!loginState.ethAddress && !loginState.pubKey) {
       showLoginModal();
       return;
     }
-    postsActions.optimisticPublishPost(data, loggedProfileData, currentEmbedEntry);
+    publishPost.mutate(buildPublishObject(data));
+    //postsActions.optimisticPublishPost(data, loggedProfileData, currentEmbedEntry);
     closeEditorModal();
   };
 
   const handleFlipCard = (entry: any, isQuote: boolean) => () => {
-    const modifiedEntry = isQuote
-      ? { ...entry, quote: { ...entry.quote, reported: false } }
-      : { ...entry, reported: false };
-    postsActions.updatePostsState(modifiedEntry);
+    // const modifiedEntry = isQuote
+    //   ? { ...entry, quote: { ...entry.quote, reported: false } }
+    //   : { ...entry, reported: false };
+    //postsActions.updatePostsState(modifiedEntry);
   };
 
   return (
@@ -187,11 +216,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         style={{ width: '36rem' }}
       />
       <VirtualList
-        items={postsState.postIds}
-        itemsData={postsState.postsData}
+        items={ids}
+        itemsData={entriesData}
         loadMore={handleLoadMore}
         loadItemData={loadItemData}
-        hasMoreItems={!!postsState.nextPostIndex}
+        hasMoreItems={!!reqPosts.hasNextPage}
         usePlaceholders={true}
         listHeader={
           loginState.ethAddress ? (
@@ -242,9 +271,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         customEntities={getFeedCustomEntities({
           logger,
           isMobile,
-          feedItems: postsState.postIds,
+          feedItems: ids,
           loggedEthAddress: loginState.ethAddress,
-          pendingEntries: postsState.pendingPosts,
+          pendingEntries: [],
         })}
       />
     </Box>
