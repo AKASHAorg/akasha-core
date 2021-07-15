@@ -19,6 +19,7 @@ import { getPendingComments } from './post-page-pending-comments';
 import routes, { POST } from '../../routes';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 
 const {
   Box,
@@ -64,7 +65,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
   const [, errorActions] = useErrors({ logger });
-
+  //@Todo: replace entryData with value from usePost
+  const postReq = usePost(postId);
+  const entryData = postReq.data;
   const [postsState, postsActions] = usePosts({
     user: loginState.ethAddress,
     onError: errorActions.createError,
@@ -74,12 +77,14 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     onError: errorActions.createError,
   });
 
-  const entryData = React.useMemo(() => {
-    if (postId && postsState.postsData[postId]) {
-      return postsState.postsData[postId];
-    }
-    return null;
-  }, [postId, postsState.postsData[postId]]);
+  //@Todo: remove this when usePost is used
+  //react-query caches automatically everything
+  // const entryData = React.useMemo(() => {
+  //   if (postId && postsState.postsData[postId]) {
+  //     return postsState.postsData[postId];
+  //   }
+  //   return null;
+  // }, [postId, postsState.postsData[postId]]);
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
@@ -147,13 +152,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   }, [postId, loginState.currentUserCalled, loginState.ethAddress]);
 
   const bookmarked = React.useMemo(() => {
-    if (
+    return (
       !bookmarkState.isFetching &&
       bookmarkState.bookmarks.findIndex(bm => bm.entryId === postId) >= 0
-    ) {
-      return true;
-    }
-    return false;
+    );
   }, [bookmarkState]);
 
   const handleMentionClick = (pubKey: string) => {
@@ -325,6 +327,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
           {(errorMessages, hasCriticalErrors) => (
             <>
               {hasCriticalErrors && (
+                // @Todo: replace this logic with (entryData.status === "error")
+                // the error message is on entryData.error.message
                 <ErrorLoader
                   type="script-error"
                   title={t('Sorry, there was an error loading this post')}
@@ -336,17 +340,21 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                 <ErrorLoader
                   type="script-error"
                   title={t('Loading the post failed')}
-                  details={t('An unexpected error occured! Please try to refresh the page')}
+                  details={t('An unexpected error occurred! Please try to refresh the page')}
                   devDetails={errorMessages}
                 />
               )}
               {!hasCriticalErrors && (
                 <>
-                  {!entryData && (
-                    <EntryCardLoading
-                      style={{ background: 'transparent', boxShadow: 'none', border: 0 }}
-                    />
-                  )}
+                  {
+                    // @Todo: replace this logic with (entryData.status === "loading")
+                    //
+                    postReq.isLoading && (
+                      <EntryCardLoading
+                        style={{ background: 'transparent', boxShadow: 'none', border: 0 }}
+                      />
+                    )
+                  }
                   {entryData && (
                     <EntryBox
                       isBookmarked={bookmarked}

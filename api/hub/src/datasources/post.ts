@@ -251,7 +251,6 @@ class PostAPI extends DataSource {
     ];
     currentPost.type = 'REMOVED';
     currentPost.updatedAt = new Date().getTime();
-    currentPost.metaData = [];
     const removedTags = Array.from(currentPost.tags);
     currentPost.mentions = [];
     currentPost.quotes = [];
