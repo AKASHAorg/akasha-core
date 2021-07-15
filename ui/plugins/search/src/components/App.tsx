@@ -9,7 +9,7 @@ import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
 
-const { Box, ViewportSizeProvider, Helmet } = DS;
+const { Box, Helmet } = DS;
 
 class App extends PureComponent<RootComponentProps> {
   public state: { hasErrors: boolean };
@@ -76,9 +76,7 @@ class App extends PureComponent<RootComponentProps> {
             <Helmet>
               <title>Search | Ethereum World</title>
             </Helmet>
-            <ViewportSizeProvider>
-              <Routes {...this.props} />
-            </ViewportSizeProvider>
+            <Routes {...this.props} />
           </I18nextProvider>
         </React.Suspense>
       </Box>

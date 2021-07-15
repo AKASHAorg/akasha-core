@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import usePosts, { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
+import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
 import {
   useMentions,
   useLoginState,
@@ -15,6 +15,8 @@ import {
   useErrors,
   withProviders,
 } from '@akashaproject/ui-awf-hooks';
+import { useCreatePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { buildPublishObject } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
 const { EditorModal } = DS;
 
@@ -34,19 +36,26 @@ const EditorModalContainer = (props: RootComponentProps) => {
     onError: errorActions.createError,
   });
 
-  const [, postsActions] = usePosts({
-    user: loginState.ethAddress,
-    onError: errorActions.createError,
-  });
+  // const [, postsActions] = usePosts({
+  //   user: loginState.ethAddress,
+  //   onError: errorActions.createError,
+  // });
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
   });
 
+  const publishPost = useCreatePost();
   const handleEntryPublish = async (data: PublishPostData) => {
-    postsActions.optimisticPublishPost(data, loggedProfileData, props.activeModal.embedEntry);
+    publishPost.mutate(buildPublishObject(data));
+    //postsActions.optimisticPublishPost(data, loggedProfileData, currentEmbedEntry);
     handleModalClose();
   };
+
+  // const handleEntryPublish = async (data: PublishPostData) => {
+  //   postsActions.optimisticPublishPost(data, loggedProfileData, props.activeModal.embedEntry);
+  //   handleModalClose();
+  // };
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
@@ -79,7 +88,9 @@ const EditorModalContainer = (props: RootComponentProps) => {
 
 const Wrapped = (props: RootComponentProps) => (
   <Router>
-    <EditorModalContainer {...props} />
+    <React.Suspense fallback={<></>}>
+      <EditorModalContainer {...props} />
+    </React.Suspense>
   </Router>
 );
 

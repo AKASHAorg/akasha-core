@@ -171,7 +171,9 @@ const SignUpModalContainer = (props: RootComponentProps) => {
 
 const Wrapped = (props: RootComponentProps) => (
   <Router>
-    <SignUpModalContainer {...props} />
+    <React.Suspense fallback={<></>}>
+      <SignUpModalContainer {...props} />
+    </React.Suspense>
   </Router>
 );
 

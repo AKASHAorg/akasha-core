@@ -4,7 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import NotificationsPage from './notifications-page';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
-const { Box, ViewportSizeProvider } = DS;
+const { Box } = DS;
 
 class App extends PureComponent<RootComponentProps> {
   public state: { hasErrors: boolean };
@@ -34,9 +34,7 @@ class App extends PureComponent<RootComponentProps> {
       <Box width="100vw">
         <React.Suspense fallback={<>Loading</>}>
           <I18nextProvider i18n={i18n ? i18n : null}>
-            <ViewportSizeProvider>
-              <NotificationsPage {...this.props} />
-            </ViewportSizeProvider>
+            <NotificationsPage {...this.props} />
           </I18nextProvider>
         </React.Suspense>
       </Box>

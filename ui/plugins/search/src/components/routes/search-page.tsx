@@ -35,7 +35,7 @@ interface SearchPageProps extends RootComponentProps {
 }
 
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const { logger, singleSpa, loginState, modalState, modalStateActions, showLoginModal } = props;
+  const { logger, singleSpa, loginState, showLoginModal } = props;
 
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 

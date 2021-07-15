@@ -12,13 +12,11 @@ import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
 
-import { useBookmarks, useErrors, usePosts } from '@akashaproject/ui-awf-hooks';
-
-import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
+import { useBookmarks, useErrors } from '@akashaproject/ui-awf-hooks';
 
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import { useCreatePost, useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
-import { buildPublishObject, mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
 // import { useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 
@@ -42,7 +40,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [bookmarkState, bookmarkActions] = useBookmarks({
     onError,
   });
-  const [errorState, errorActions] = useErrors({ logger });
+  const [errorState] = useErrors({ logger });
 
   // @Todo: replace this with useInfinitePosts()
   // const [postsState, postsActions] = usePosts({
@@ -146,18 +144,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
-  const publishPost = useCreatePost();
-  const handleEntryPublish = async (data: PublishPostData) => {
-    if (!loginState.ethAddress && !loginState.pubKey) {
-      showLoginModal();
-      return;
-    }
-    publishPost.mutate(buildPublishObject(data));
-    //postsActions.optimisticPublishPost(data, loggedProfileData, currentEmbedEntry);
-    closeEditorModal();
-  };
-
-  const handleFlipCard = (entry: any, isQuote: boolean) => () => {
+  const handleFlipCard = (_entry: any, _isQuote: boolean) => () => {
     // const modifiedEntry = isQuote
     //   ? { ...entry, quote: { ...entry.quote, reported: false } }
     //   : { ...entry, reported: false };

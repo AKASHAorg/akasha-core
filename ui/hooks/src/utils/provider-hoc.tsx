@@ -3,7 +3,7 @@ import DS from '@akashaproject/design-system';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
-const { ThemeSelector, lightTheme, darkTheme } = DS;
+const { ThemeSelector, lightTheme, darkTheme, ViewportSizeProvider } = DS;
 
 const queryClient = new QueryClient();
 
@@ -18,7 +18,9 @@ export default function withProviders<T>(WrappedComponent: React.ComponentType<T
             settings={{ activeTheme: 'Light-Theme' }}
             availableThemes={[lightTheme, darkTheme]}
           >
-            <WrappedComponent {...props} />
+            <ViewportSizeProvider>
+              <WrappedComponent {...props} />
+            </ViewportSizeProvider>
           </ThemeSelector>
           <ReactQueryDevtools position={'bottom-right'} />
         </QueryClientProvider>

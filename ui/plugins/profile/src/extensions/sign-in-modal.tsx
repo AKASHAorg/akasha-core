@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { useLoginState, useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
 
-const { SignInModal, ThemeSelector, lightTheme, darkTheme } = DS;
+const { SignInModal } = DS;
 
 const SignInModalContainer = (props: RootComponentProps) => {
   const { logger } = props;
@@ -76,7 +76,9 @@ const SignInModalContainer = (props: RootComponentProps) => {
 
 const Wrapped = (props: RootComponentProps) => (
   <Router>
-    <SignInModalContainer {...props} />
+    <React.Suspense fallback={<></>}>
+      <SignInModalContainer {...props} />
+    </React.Suspense>
   </Router>
 );
 

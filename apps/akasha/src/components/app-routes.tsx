@@ -8,8 +8,7 @@ import FeedPage from './feed-page/feed-page';
 import PostPage from './post-page/post-page';
 import InvitePage from './post-page/invite-page';
 import TagFeedPage from './tag-feed-page/tag-feed-page';
-import { useLoginState, useErrors, useProfile, useModalState } from '@akashaproject/ui-awf-hooks';
-import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
+import { useLoginState, useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
 
 const { Box } = DS;
 interface AppRoutesProps {
@@ -31,39 +30,16 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
   React.useEffect(() => {
     if (loginState.pubKey) {
       loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
-      modalStateActions.hide(MODAL_NAMES.LOGIN);
-      if (flagged.length) {
-        modalStateActions.show(MODAL_NAMES.REPORT);
-      }
     }
   }, [loginState.pubKey]);
-
-  const [modalState, modalStateActions] = useModalState({
-    initialState: {
-      reportModal: false,
-      editorModal: false,
-    },
-    isLoggedIn: !!loginState.ethAddress,
-  });
-
-  const [flagged, setFlagged] = React.useState('');
-  const [flaggedContentType, setFlaggedContentType] = React.useState('');
 
   const showLoginModal = () => {
     props.navigateToModal({ name: 'login' });
   };
 
-  const showReportModal = () => {
-    modalStateActions.showAfterLogin(MODAL_NAMES.REPORT);
-  };
-
-  const hideReportModal = () => {
-    modalStateActions.hide(MODAL_NAMES.REPORT);
-  };
-
   return (
-    <Box>
-      <Router>
+    <Router>
+      <Box>
         <Switch>
           <Route path={routes[FEED]}>
             <FeedPage
@@ -100,8 +76,8 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           </Route>
           <Redirect exact={true} from={rootRoute} to={routes[FEED]} />
         </Switch>
-      </Router>
-    </Box>
+      </Box>
+    </Router>
   );
 };
 

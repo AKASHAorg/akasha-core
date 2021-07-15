@@ -9,33 +9,31 @@ import CodeOfConduct from './code-of-conduct';
 import PrivacyPolicy from './privacy-policy';
 import DeveloperGuidelines from './developer-guidelines';
 
-const { Box, ViewportSizeProvider } = DS;
+const { Box } = DS;
 
 const Routes: React.FC<RootComponentProps> = props => {
   return (
-    <ViewportSizeProvider>
-      <Router>
-        <Box>
-          <Switch>
-            <Route path={route[TOS]}>
-              <TermsOfService {...props} />
-            </Route>
-            <Route path={route[TOU]}>
-              <TermsOfUse {...props} />
-            </Route>
-            <Route path={route[PP]}>
-              <PrivacyPolicy {...props} />
-            </Route>
-            <Route path={route[COC]}>
-              <CodeOfConduct {...props} />
-            </Route>
-            <Route path={route[DG]}>
-              <DeveloperGuidelines {...props} />
-            </Route>
-          </Switch>
-        </Box>
-      </Router>
-    </ViewportSizeProvider>
+    <Router>
+      <Box>
+        <Switch>
+          <Route path={route[TOS]}>
+            <TermsOfService {...props} />
+          </Route>
+          <Route path={route[TOU]}>
+            <TermsOfUse {...props} />
+          </Route>
+          <Route path={route[PP]}>
+            <PrivacyPolicy {...props} />
+          </Route>
+          <Route path={route[COC]}>
+            <CodeOfConduct {...props} />
+          </Route>
+          <Route path={route[DG]}>
+            <DeveloperGuidelines {...props} />
+          </Route>
+        </Switch>
+      </Box>
+    </Router>
   );
 };
 

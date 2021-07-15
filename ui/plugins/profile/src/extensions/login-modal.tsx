@@ -50,7 +50,9 @@ const LoginModal = (props: RootComponentProps) => {
 
 const Wrapped = (props: RootComponentProps) => (
   <Router>
-    <LoginModal {...props} />
+    <React.Suspense fallback={<></>}>
+      <LoginModal {...props} />
+    </React.Suspense>
   </Router>
 );
 
