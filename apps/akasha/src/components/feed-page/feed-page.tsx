@@ -104,20 +104,29 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   }, [JSON.stringify(loginState)]);
 
+  // start fetching posts after we have checked for login user
+  // and we missed the loadMore handler (missing handler means that currentUserCalled is false)
+  React.useEffect(() => {
+    if (!postsState.postIds.length && postsState.totalItems === null) {
+      postsActions.getPosts({ limit: 5 });
+    }
+  }, [postsState.postIds.length, postsState.totalItems, postsActions]);
+
   const handleLoadMore = React.useCallback(
     (payload: ILoadItemsPayload) => {
       const req: { limit: number; offset?: string } = {
         limit: payload.limit,
       };
-      if (!postsState.isFetchingPosts && loginState.currentUserCalled) {
+
+      if (loginState.currentUserCalled) {
         postsActions.getPosts(req);
       }
     },
-    [postsState.isFetchingPosts, loginState.currentUserCalled],
+    [loginState.currentUserCalled],
   );
 
-  const loadItemData = (payload: ILoadItemDataPayload) => {
-    postsActions.getPost(payload.itemId);
+  const loadItemData = (_payload: ILoadItemDataPayload) => {
+    // postsActions.getPost(payload.itemId);
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorPubKey: string) => {
@@ -184,9 +193,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     const modifiedEntry = { ...postsState.postsData[entryId], reported: true };
     postsActions.updatePostsState(modifiedEntry);
   };
+
   const handleEntryRemove = (entryId: string) => {
-    props.navigateToModal({ name: 'entry-remove-confirmation', entryId });
+    props.navigateToModal({ name: 'entry-remove-confirmation', entryType: 'Post', entryId });
   };
+
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -316,6 +327,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             handleFlipCard={handleFlipCard}
             onEntryRemove={handleEntryRemove}
             removeEntryLabel={t('Delete Post')}
+            removedByMeLabel={t('You deleted this post')}
+            removedByAuthorLabel={t('This post was deleted by its author')}
           />
         }
         customEntities={getFeedCustomEntities({

@@ -47,14 +47,14 @@ class App extends PureComponent<RootComponentProps> {
       })
       .init({
         fallbackLng: 'en',
-        ns: ['search'],
+        ns: ['ui-plugin-search'],
         saveMissing: false,
         saveMissingTo: 'all',
         load: 'languageOnly',
         debug: true,
         cleanCode: true,
         keySeparator: false,
-        defaultNS: 'search',
+        defaultNS: 'ui-plugin-search',
         backend: {
           backends: [LocalStorageBackend, Fetch],
           backendOptions: [

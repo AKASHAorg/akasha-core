@@ -32,6 +32,10 @@ export interface IEntryRenderer {
   awaitingModerationLabel?: string;
   ctaLabel?: string;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
+  onEntryRemove?: (entryId: string) => void;
+  removeEntryLabel?: string;
+  removedByMeLabel?: string;
+  removedByAuthorLabel?: string;
 }
 
 const EntryRenderer = (props: IEntryRenderer) => {
@@ -140,7 +144,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
       />
     );
   }
-
+  // console.log(itemData.type, itemData.author, '<<<<< item data!!');
   return (
     <ErrorInfoCard errors={{}}>
       {(errorMessages: any, hasCriticalErrors: boolean) => (
@@ -158,6 +162,9 @@ const EntryRenderer = (props: IEntryRenderer) => {
               {(!itemData || !itemData.author?.ethAddress) && <EntryCardLoading />}
               {itemData && itemData.author.ethAddress && (
                 <EntryCard
+                  isRemoved={
+                    itemData.content.length === 1 && itemData.content[0].property === 'removed'
+                  }
                   isBookmarked={isBookmarked}
                   entryData={itemData}
                   sharePostUrl={sharePostUrl}
@@ -193,6 +200,10 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   awaitingModerationLabel={awaitingModerationLabel}
                   ctaLabel={ctaLabel}
                   handleFlipCard={handleFlipCard}
+                  onEntryRemove={props.onEntryRemove}
+                  removeEntryLabel={props.removeEntryLabel}
+                  removedByMeLabel={props.removedByMeLabel}
+                  removedByAuthorLabel={props.removedByAuthorLabel}
                 />
               )}
             </>

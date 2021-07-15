@@ -30,6 +30,10 @@ export interface PostRendererProps {
   disableActions?: boolean;
   hidePublishTime?: boolean;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
+  onEntryRemove?: (entryId: string) => void;
+  removeEntryLabel?: string;
+  removedByMeLabel?: string;
+  removedByAuthorLabel?: string;
 }
 
 const PostRenderer = (props: PostRendererProps) => {
@@ -120,6 +124,9 @@ const PostRenderer = (props: PostRendererProps) => {
                 >
                   <EntryBox
                     isBookmarked={isBookmarked}
+                    isRemoved={
+                      itemData.content.length === 1 && itemData.content[0].property === 'removed'
+                    }
                     entryData={itemData}
                     sharePostLabel={t('Share Post')}
                     shareTextLabel={t('Share this post with your friends')}
@@ -154,6 +161,10 @@ const PostRenderer = (props: PostRendererProps) => {
                     hidePublishTime={hidePublishTime}
                     disableActions={disableActions}
                     hideActionButtons={true}
+                    onEntryRemove={props.onEntryRemove}
+                    removeEntryLabel={props.removeEntryLabel}
+                    removedByMeLabel={props.removedByMeLabel}
+                    removedByAuthorLabel={props.removedByAuthorLabel}
                   />
                 </Box>
               )}

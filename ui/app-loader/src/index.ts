@@ -479,6 +479,7 @@ export default class AppLoader {
       mountParcel: singleSpa.mountRootParcel,
       name: this.layoutConfig.name,
       navigateToModal: navigateToModal,
+      activeModal: this.activeModal,
     });
     return layoutParcel.mountPromise;
   }

@@ -60,6 +60,6 @@ mutation EditComment($content: [DataProviderInput!], $comment: CommentData, $id:
   editComment(content: $content, comment: $comment, id: $id)
 }
 
-mutation RemoveComment($id: String){
+mutation RemoveComment($id: String!) {
   removeComment(id: $id)
 }

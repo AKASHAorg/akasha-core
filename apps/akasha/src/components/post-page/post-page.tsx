@@ -160,9 +160,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     if (postId && loginState.currentUserCalled) {
       postsActions.getPost(postId);
       handleLoadMore({ limit: 5, postID: postId });
-      if (loginState.ethAddress) {
-        bookmarkActions.getBookmarks();
-      }
+      // if (loginState.ethAddress) {
+      //   bookmarkActions.getBookmarks();
+      // }
     }
   }, [postId, loginState.currentUserCalled, loginState.ethAddress]);
 
@@ -315,6 +315,20 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const entryAuthorName =
     entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
 
+  const handleCommentRemove = (commentId: string) => {
+    props.navigateToModal({
+      name: 'entry-remove-confirmation',
+      entryType: 'Comment',
+      entryId: commentId,
+    });
+  };
+  const handlePostRemove = (commentId: string) => {
+    props.navigateToModal({
+      name: 'entry-remove-confirmation',
+      entryType: 'Post',
+      entryId: commentId,
+    });
+  };
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
@@ -422,6 +436,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                   )}
                   {entryData && (
                     <EntryBox
+                      isRemoved={
+                        entryData.content.length === 1 &&
+                        entryData.content[0].property === 'removed'
+                      }
                       isBookmarked={bookmarked}
                       entryData={entryData}
                       sharePostLabel={t('Share Post')}
@@ -460,6 +478,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       ctaLabel={t('See it anyway')}
                       handleFlipCard={handleFlipCard}
                       scrollHiddenContent={true}
+                      onEntryRemove={handlePostRemove}
+                      removeEntryLabel={t('Delete Post')}
+                      removedByMeLabel={t('You deleted this post')}
+                      removedByAuthorLabel={t('This post was deleted by its author')}
                     />
                   )}
                 </>
@@ -530,6 +552,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                     onTagClick={handleTagClick}
                     singleSpaNavigate={handleSingleSpaNavigate}
                     handleFlipCard={handleListFlipCard}
+                    onEntryRemove={handleCommentRemove}
+                    removeEntryLabel={t('Delete Reply')}
+                    removedByMeLabel={t('You deleted this reply')}
+                    removedByAuthorLabel={t('This reply was deleted by its author')}
                   />
                 }
                 customEntities={getPendingComments({

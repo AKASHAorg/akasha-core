@@ -18,7 +18,6 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
   const handleClick = (handler: () => void) => () => {
     // hide menu dropdown when clicked
     handler();
-    console.log('handler executed!');
     return onMenuClose();
   };
 

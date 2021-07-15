@@ -1,3 +1,4 @@
+import { Box, Text } from 'grommet';
 import * as React from 'react';
 import Button from '../Button';
 import { ModalCard } from '../EntryCard/basic-card-box';
@@ -24,26 +25,43 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = props => {
   return (
     <ModalContainer onModalClose={props.onClose}>
       <ModalCard>
-        <div>{props.modalTitle}</div>
-        <div>{props.textDetails}</div>
-        <ErrorInfoCard errors={props.errors}>
-          {messages => {
-            if (messages) {
+        <Box pad="medium">
+          <Box direction="column" align="center">
+            <Text size="large" weight="bold" margin={{ bottom: 'medium' }}>
+              {props.modalTitle}
+            </Text>
+            <Text size="large" textAlign="center" margin={{ bottom: 'medium' }}>
+              {props.textDetails}
+            </Text>
+          </Box>
+          <ErrorInfoCard errors={props.errors}>
+            {messages => {
+              if (messages) {
+                return (
+                  <>
+                    <div>{messages}</div>
+                    <Button label={props.closeLabel} onClick={props.onClose} />
+                  </>
+                );
+              }
               return (
-                <>
-                  <div>{messages}</div>
-                  <Button label={props.closeLabel} onClick={props.onClose} />
-                </>
+                <Box direction="row" align="center" fill="horizontal" justify="center">
+                  <Button
+                    margin={{ right: 'small' }}
+                    label={props.cancelLabel}
+                    onClick={props.onClose}
+                  />
+                  <Button
+                    label={props.confirmLabel}
+                    color="red"
+                    primary={true}
+                    onClick={props.onConfirm}
+                  />
+                </Box>
               );
-            }
-            return (
-              <>
-                <Button label={props.cancelLabel} onClick={props.onClose} />
-                <Button label={props.confirmLabel} color="red" onClick={props.onConfirm} />
-              </>
-            );
-          }}
-        </ErrorInfoCard>
+            }}
+          </ErrorInfoCard>
+        </Box>
       </ModalCard>
     </ModalContainer>
   );

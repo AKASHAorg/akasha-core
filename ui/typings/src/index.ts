@@ -26,6 +26,7 @@ export interface RootComponentProps {
   installIntegration?: (name: string) => void;
   uninstallIntegration?: (name: string) => void;
   navigateToModal: (opts: AppLoaderTypes.ModalNavigationOptions) => void;
+  activeModal: AppLoaderTypes.ModalNavigationOptions;
 }
 
 export enum LogoTypeSource {

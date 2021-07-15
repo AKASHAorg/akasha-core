@@ -122,6 +122,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         hideActionButtons={hideActionButtons}
         removeEntryLabel={removeEntryLabel}
         onEntryRemove={onEntryRemove}
+        isRemoved={props.isRemoved}
       />
     </MainAreaCardBox>
   );

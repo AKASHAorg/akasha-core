@@ -38,6 +38,7 @@ export interface IEntryData {
   quote?: IEntryData;
   delisted?: boolean;
   reported?: boolean;
+  type?: string;
 }
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -102,6 +103,9 @@ export interface IEntryBoxProps {
   scrollHiddenContent?: boolean;
   removeEntryLabel?: string;
   onEntryRemove?: (entryId: string) => void;
+  removedByMeLabel?: string;
+  removedByAuthorLabel?: string;
+  isRemoved?: boolean;
 }
 
 const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
@@ -155,6 +159,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     scrollHiddenContent,
     onEntryRemove,
     removeEntryLabel,
+    removedByMeLabel = 'You deleted this post',
+    removedByAuthorLabel = 'This post was deleted by its author',
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -321,17 +327,19 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ref={akashaRef}
               clickable={false}
             />
-            <StyledIcon
-              type="moreDark"
-              onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
-                if (disableActions) {
-                  return;
-                }
-                toggleMenuDrop(ev);
-              }}
-              clickable={!disableActions}
-              ref={menuIconRef}
-            />
+            {entryData.type !== 'REMOVED' && (
+              <StyledIcon
+                type="moreDark"
+                onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
+                  if (disableActions) {
+                    return;
+                  }
+                  toggleMenuDrop(ev);
+                }}
+                clickable={!disableActions}
+                ref={menuIconRef}
+              />
+            )}
           </Box>
         </Box>
         {entryData.CID && akashaRef.current && displayCID && (
@@ -396,22 +404,42 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             />
           </StyledDropAlt>
         )}
-        <Box
-          pad={{ horizontal: 'medium' }}
-          height={{ max: '50rem' }}
-          overflow={scrollHiddenContent ? 'auto' : 'hidden'}
-          style={{ cursor: contentClickable ? 'pointer' : 'default' }}
-          onClick={() =>
-            !disableActions && contentClickable ? handleContentClick(entryData) : false
-          }
-        >
-          <ReadOnlyEditor
-            content={entryData.content}
-            handleMentionClick={onMentionClick}
-            handleTagClick={onTagClick}
-            handleLinkClick={singleSpaNavigate}
-          />
-        </Box>
+        {props.isRemoved && (
+          <Box pad={{ horizontal: 'medium' }} margin={{ vertical: 'small' }}>
+            <Box
+              pad="medium"
+              border={{ style: 'dashed', side: 'all', color: 'lightGrey' }}
+              round="xsmall"
+            >
+              <Box direction="row" align="center">
+                <Icon size="md" color="grey" type="trash" />
+                <Box margin={{ left: 'small' }}>
+                  {entryData.author.ethAddress === props.loggedProfileEthAddress
+                    ? `${removedByMeLabel}.`
+                    : `${removedByAuthorLabel}.`}
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        )}
+        {!props.isRemoved && (
+          <Box
+            pad={{ horizontal: 'medium' }}
+            height={{ max: '50rem' }}
+            overflow={scrollHiddenContent ? 'auto' : 'hidden'}
+            style={{ cursor: contentClickable ? 'pointer' : 'default' }}
+            onClick={() =>
+              !disableActions && contentClickable ? handleContentClick(entryData) : false
+            }
+          >
+            <ReadOnlyEditor
+              content={entryData.content}
+              handleMentionClick={onMentionClick}
+              handleTagClick={onTagClick}
+              handleLinkClick={singleSpaNavigate}
+            />
+          </Box>
+        )}
         {entryData.quote && !entryData.quote.delisted && !entryData.quote.reported && (
           <Box
             pad="medium"
