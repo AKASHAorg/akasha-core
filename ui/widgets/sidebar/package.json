@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@akashaproject/design-system": "*",
+    "@akashaproject/ui-awf-hooks": "*",
     "@types/react-router-dom": "5.1.6",
     "single-spa-react": "4.1.1",
     "react-i18next": "11.7.3",

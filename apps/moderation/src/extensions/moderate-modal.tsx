@@ -10,10 +10,15 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
-import { useLoginState, useErrors, moderationRequest } from '@akashaproject/ui-awf-hooks';
+import {
+  useLoginState,
+  useErrors,
+  moderationRequest,
+  withProviders,
+} from '@akashaproject/ui-awf-hooks';
 import { BASE_DECISION_URL } from '../services/constants';
 
-const { ModerateModal, ToastProvider, ThemeSelector, lightTheme, darkTheme } = DS;
+const { ModerateModal, ToastProvider } = DS;
 
 const ModerateModalComponent = (props: RootComponentProps) => {
   const { logger, activeModal } = props;
@@ -108,25 +113,20 @@ const Wrapped = (props: RootComponentProps) => {
     });
 
   return (
-    <ThemeSelector
-      availableThemes={[lightTheme, darkTheme]}
-      settings={{ activeTheme: 'Light-Theme' }}
-    >
-      <Router>
-        <React.Suspense fallback={<></>}>
-          <I18nextProvider i18n={i18next}>
-            <ModerateModalComponent {...props} />
-          </I18nextProvider>
-        </React.Suspense>
-      </Router>
-    </ThemeSelector>
+    <Router>
+      <React.Suspense fallback={<></>}>
+        <I18nextProvider i18n={i18next}>
+          <ModerateModalComponent {...props} />
+        </I18nextProvider>
+      </React.Suspense>
+    </Router>
   );
 };
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Wrapped,
+  rootComponent: withProviders(Wrapped),
   errorBoundary: (err, errorInfo, props) => {
     if (props.logger) {
       props.logger.error('Error: %s; Info: %s', err, errorInfo);
