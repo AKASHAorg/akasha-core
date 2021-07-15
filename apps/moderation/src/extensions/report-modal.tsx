@@ -16,6 +16,7 @@ import {
   usePosts,
   moderationRequest,
   withProviders,
+  useReasons,
 } from '@akashaproject/ui-awf-hooks';
 import { BASE_REPORT_URL } from '../services/constants';
 
@@ -38,8 +39,14 @@ const ReportModalComponent = (props: RootComponentProps) => {
     onError: errorActions.createError,
   });
 
+  const [reasons, reasonsActions] = useReasons({ onError: errorActions.createError });
+
   const { t } = useTranslation();
   const location = useLocation();
+
+  React.useEffect(() => {
+    reasonsActions.fetchReasons({ active: true });
+  }, []);
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
@@ -70,26 +77,8 @@ const ReportModalComponent = (props: RootComponentProps) => {
         successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
         successMessageLabel={t('We will investigate this post and take appropriate action.')}
         optionsTitleLabel={t('Please select a reason')}
-        optionLabels={[
-          t('Threats of violence and incitement'),
-          t('Hate speech, bullying and harassment'),
-          t('Sexual or human exploitation'),
-          t('Illegal or certain regulated goods or services'),
-          t('Impersonation'),
-          t('Spam and malicious links'),
-          t('Privacy and copyright infringement'),
-          t('Other'),
-        ]}
-        optionValues={[
-          'Threats of violence and incitement',
-          'Hate speech, bullying and harassment',
-          'Sexual or human exploitation',
-          'Illegal or certain regulated goods or services',
-          'Impersonation',
-          'Spam and malicious links',
-          'Privacy and copyright infringement',
-          'Other',
-        ]}
+        optionLabels={reasons.map((el: string) => t(el))}
+        optionValues={reasons}
         descriptionLabel={t('Explanation')}
         descriptionPlaceholder={t('Please explain your reason(s)')}
         footerText1Label={t('If you are unsure, you can refer to our')}
