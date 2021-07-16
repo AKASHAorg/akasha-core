@@ -15,6 +15,20 @@ const schema = {
     explanation: { type: 'string' },
     delisted: { type: 'boolean' },
     moderated: { type: 'boolean' },
+    actions: { 
+      type: 'array',
+      uniqueItems: true,
+      items: {
+        type: 'object',
+        required: ['moderatedDate', 'moderator', 'explanation', 'delisted'],
+        properties: {
+          moderator: { type: 'string' },
+          moderatedDate: { type: 'number' },
+          explanation: { type: 'string' },
+          delisted: { type: 'boolean' },
+        },
+      },
+    },
   },
 };
 

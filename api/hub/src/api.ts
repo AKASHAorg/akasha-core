@@ -379,12 +379,35 @@ api.post('/moderation/decisions/log', async (ctx: koa.Context, next: () => Promi
   await next();
 });
 
-api.post('/moderation/decisions/actions', async (ctx: koa.Context, next: () => Promise<any>) => {
+/** 
+ * Get a log of all moderation actions for a given content identifier.
+ */
+api.get('/moderation/decisions/actions/:contentId', async (ctx: koa.Context, next: () => Promise<any>) => {
   const req = ctx?.request.body;
-  ctx.body = await dataSources.actionsAPI.listActions(req.contentID, req.offset, req.limit);
-  ctx.set('Content-Type', 'application/json');
-  ctx.status = 200;
-
+  const contentID = ctx?.params?.contentId;
+  if (!contentID || !req.data || !req.signature) {
+    ctx.body = 'Missing "contentId" attribute from request.';
+    ctx.status = 400;
+  } else {
+    // check if the user is local (exists)
+    const profile = await dataSources.profileAPI.getProfile(req.data.moderator);
+    if (!profile.length || !req.data.signature) {
+      ctx.status = 401;
+    }
+    // verify request signature (from client)
+    const verified = await verifyEd25519Sig({
+      pubKey: profile.pubKey,
+      data: req.data,
+      signature: req.signature,
+    });
+    if (!verified) {
+      ctx.status = 403;
+    } else {
+      ctx.body = await dataSources.decisionsAPI.listActions(contentID);
+      ctx.set('Content-Type', 'application/json');
+      ctx.status = 200;
+    }
+  }
   await next();
 });
 

@@ -87,11 +87,10 @@ export interface ModerationDecision {
   explanation?: string;
   delisted: boolean;
   moderated: boolean;
+  actions: ModerationAction[];
 }
 
 export interface ModerationAction {
-  _id: string;
-  contentID: string;
   moderator: string;
   moderatedDate: number;
   explanation: string;
