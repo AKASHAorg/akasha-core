@@ -191,6 +191,7 @@ class ModerationReportAPI extends DataSource {
         contentID: contentID,
         delisted: false,
         moderated: false,
+        actions: [],
       };
       const decisionID = await db.create(this.dbID, decisionsCollection, [decision]);
       if (!decisionID || !decisionID.length) {
