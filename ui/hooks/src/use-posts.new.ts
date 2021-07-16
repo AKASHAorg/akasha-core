@@ -4,7 +4,7 @@ import getSDK from '@akashaproject/awf-sdk';
 import { mapEntry } from './utils/entry-utils';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 
-// these can be used to with useQueryClient() to fetch data
+// these can be used with useQueryClient() to fetch data
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
 
@@ -20,7 +20,7 @@ const getPosts = async (limit: number, offset?: string) => {
   return res.data.posts;
 };
 
-// hook for fetching data for a specific postID/entryID
+// hook for fetching feed data
 export function useInfinitePosts(limit: number, offset?: string) {
   return useInfiniteQuery(
     ENTRIES_KEY,
