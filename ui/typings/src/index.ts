@@ -20,10 +20,6 @@ export interface RootComponentProps {
   isMobile: boolean;
   layoutConfig: Omit<AppLoaderTypes.LayoutConfig, 'loadingFn' | 'mountsIn' | 'name' | 'title'>;
   logger: any;
-  activeModal?: {
-    name: string;
-    [key: string]: string | any | undefined;
-  };
   mountParcel: (parcel: unknown, config?: unknown) => unknown;
   name: string;
   singleSpa: any;
