@@ -71,7 +71,6 @@ export const updateCollections = async (client: Client, threadID: ThreadID) => {
   await Invites.updateCollection(client, threadID);
   await ModerationReports.updateCollection(client, threadID);
   await ModerationDecisions.updateCollection(client, threadID);
-  await ModerationActions.updateCollection(client, threadID);
   await ModerationReasons.updateCollection(client, threadID);
   await Moderators.updateCollection(client, threadID);
 };
