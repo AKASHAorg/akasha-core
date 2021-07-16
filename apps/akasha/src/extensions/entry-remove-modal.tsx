@@ -29,7 +29,7 @@ const EntryRemoveModal: React.FC<RootComponentProps> = props => {
   const [loginState] = useLoginState({
     onError: errorActions.createError,
   });
-  const [, postsActions] = usePosts({
+  const [postsState, postsActions] = usePosts({
     user: loginState.ethAddress,
     onError: errorActions.createError,
   });
@@ -114,7 +114,11 @@ const EntryRemoveModal: React.FC<RootComponentProps> = props => {
         </>
       }
       cancelLabel={t('Cancel')}
-      confirmLabel={t('Delete')}
+      confirmLabel={
+        postsState.deleteUserCommentQuery || postsState.deleteUserPostQuery
+          ? t('Deleting')
+          : t('Delete')
+      }
       errors={errorState}
     />
   );
