@@ -14,7 +14,7 @@ import { ProfileMiniCard } from '../ProfileCard/profile-mini-card';
 import { IProfileData } from '../ProfileCard/profile-widget-card';
 import { StyledAnchor } from './basic-card-box';
 
-import Icon from '../Icon';
+import Icon, { IconType } from '../Icon';
 import MobileListModal from '../MobileListModal';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import EmbedBox from '../EmbedBox';
@@ -38,6 +38,7 @@ export interface IEntryData {
   quote?: IEntryData;
   delisted?: boolean;
   reported?: boolean;
+  type?: string;
 }
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -100,6 +101,11 @@ export interface IEntryBoxProps {
   handleFlipCard?: (entry: IEntryData, isQuote: boolean) => () => void;
   isModerated?: boolean;
   scrollHiddenContent?: boolean;
+  removeEntryLabel?: string;
+  onEntryRemove?: (entryId: string) => void;
+  removedByMeLabel?: string;
+  removedByAuthorLabel?: string;
+  isRemoved?: boolean;
 }
 
 const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
@@ -151,6 +157,10 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     handleFlipCard,
     isModerated,
     scrollHiddenContent,
+    onEntryRemove,
+    removeEntryLabel,
+    removedByMeLabel = 'You deleted this post',
+    removedByAuthorLabel = 'This post was deleted by its author',
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -209,6 +219,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const handleEntryFlag = () => {
     if (onEntryFlag) {
       onEntryFlag();
+    }
+  };
+
+  const handleEntryRemove = () => {
+    if (onEntryRemove) {
+      onEntryRemove(props.entryData.entryId);
     }
   };
 
@@ -311,8 +327,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ref={akashaRef}
               clickable={false}
             />
-            {/* this condition hides the icon for logged user's own posts */}
-            {onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress) && (
+            {entryData.type !== 'REMOVED' && (
               <StyledIcon
                 type="moreDark"
                 onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
@@ -336,44 +351,95 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             CID={entryData.CID}
           />
         )}
-        {!isMobile && menuIconRef.current && menuDropOpen && onEntryFlag && (
+        {!isMobile && menuIconRef.current && menuDropOpen && (
           <CardHeaderMenuDropdown
             target={menuIconRef.current}
             onMenuClose={closeMenuDrop}
-            onFlag={handleEntryFlag}
-            flagAsLabel={flagAsLabel}
+            menuItems={[
+              ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress)
+                ? [
+                    {
+                      icon: 'report' as IconType,
+                      handler: handleEntryFlag,
+                      label: flagAsLabel,
+                    },
+                  ]
+                : []),
+              ...(entryData.author.ethAddress === loggedProfileEthAddress
+                ? [
+                    {
+                      icon: 'trash' as IconType,
+                      handler: handleEntryRemove,
+                      label: removeEntryLabel,
+                    },
+                  ]
+                : []),
+            ]}
           />
         )}
-        {isMobile && menuDropOpen && onEntryFlag && (
+        {isMobile && menuDropOpen && (
           <StyledDropAlt>
             <MobileListModal
               closeModal={closeMenuDrop}
               menuItems={[
-                {
-                  label: props.flagAsLabel,
-                  icon: 'report',
-                  handler: () => handleEntryFlag(),
-                },
+                ...(onEntryFlag
+                  ? [
+                      {
+                        label: props.flagAsLabel,
+                        icon: 'report',
+                        handler: handleEntryFlag,
+                      },
+                    ]
+                  : []),
+                ...(entryData.author.ethAddress === loggedProfileEthAddress
+                  ? [
+                      {
+                        icon: 'trash' as IconType,
+                        handler: handleEntryRemove,
+                        label: removeEntryLabel,
+                      },
+                    ]
+                  : []),
               ]}
             />
           </StyledDropAlt>
         )}
-        <Box
-          pad={{ horizontal: 'medium' }}
-          height={{ max: '50rem' }}
-          overflow={scrollHiddenContent ? 'auto' : 'hidden'}
-          style={{ cursor: contentClickable ? 'pointer' : 'default' }}
-          onClick={() =>
-            !disableActions && contentClickable ? handleContentClick(entryData) : false
-          }
-        >
-          <ReadOnlyEditor
-            content={entryData.content}
-            handleMentionClick={onMentionClick}
-            handleTagClick={onTagClick}
-            handleLinkClick={singleSpaNavigate}
-          />
-        </Box>
+        {props.isRemoved && (
+          <Box pad={{ horizontal: 'medium' }} margin={{ vertical: 'small' }}>
+            <Box
+              pad="medium"
+              border={{ style: 'dashed', side: 'all', color: 'lightGrey' }}
+              round="xsmall"
+            >
+              <Box direction="row" align="center">
+                <Icon size="md" color="grey" type="trash" />
+                <Box margin={{ left: 'small' }}>
+                  {entryData.author.ethAddress === props.loggedProfileEthAddress
+                    ? `${removedByMeLabel}.`
+                    : `${removedByAuthorLabel}.`}
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        )}
+        {!props.isRemoved && (
+          <Box
+            pad={{ horizontal: 'medium' }}
+            height={{ max: '50rem' }}
+            overflow={scrollHiddenContent ? 'auto' : 'hidden'}
+            style={{ cursor: contentClickable ? 'pointer' : 'default' }}
+            onClick={() =>
+              !disableActions && contentClickable ? handleContentClick(entryData) : false
+            }
+          >
+            <ReadOnlyEditor
+              content={entryData.content}
+              handleMentionClick={onMentionClick}
+              handleTagClick={onTagClick}
+              handleLinkClick={singleSpaNavigate}
+            />
+          </Box>
+        )}
         {entryData.quote && !entryData.quote.delisted && !entryData.quote.reported && (
           <Box
             pad="medium"

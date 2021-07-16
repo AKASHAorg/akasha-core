@@ -33,7 +33,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
       (loginState.waitForAuth && loginState.ready) ||
       (loginState.currentUserCalled && loginState.ethAddress)
     ) {
-      bookmarkActions.getBookmarks();
+      // bookmarkActions.getBookmarks();
     }
   }, [JSON.stringify(loginState)]);
 

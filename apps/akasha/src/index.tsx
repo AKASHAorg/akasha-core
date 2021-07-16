@@ -24,6 +24,10 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
   extends: [
     {
+      mountsIn: 'entry-remove-confirmation',
+      loadingFn: () => import('./extensions/entry-remove-modal'),
+    },
+    {
       mountsIn: 'editor',
       loadingFn: () => import('./extensions/editor-modal'),
     },

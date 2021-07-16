@@ -63,14 +63,14 @@ class App extends PureComponent<RootComponentProps> {
       })
       .init({
         fallbackLng: 'en',
-        ns: ['profile'],
+        ns: ['ui-plugin-profile'],
         saveMissing: false,
         saveMissingTo: 'all',
         load: 'languageOnly',
         debug: true,
         cleanCode: true,
         keySeparator: false,
-        defaultNS: 'profile',
+        defaultNS: 'ui-plugin-profile',
         backend: {
           backends: [LocalStorageBackend, Fetch],
           backendOptions: [

@@ -479,6 +479,7 @@ export default class AppLoader {
       mountParcel: singleSpa.mountRootParcel,
       name: this.layoutConfig.name,
       navigateToModal: navigateToModal,
+      activeModal: this.activeModal,
     });
     return layoutParcel.mountPromise;
   }
@@ -630,8 +631,10 @@ export default class AppLoader {
       extension: extensionPoint,
       navigateToModal: navigateToModal,
       layoutConfig: this.layoutConfig,
-      logger: this.logger.child({ module: rootNode }),
       activeModal: this.activeModal,
+      logger: this.logger.child({
+        module: `ext-${extensionPoint.parentApp}-${rootNode}-${index}`,
+      }),
     };
 
     const extensionParcel = singleSpa.mountRootParcel(extensionPoint.loadingFn, extensionProps);

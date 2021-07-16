@@ -47,7 +47,10 @@ export const serializeSlateToBase64 = (slateContent: any) => {
 };
 
 export const excludeNonSlateContent = (entry: any) => {
-  return entry.content.findIndex((elem: any) => elem.property === PROPERTY_SLATE_CONTENT) > -1;
+  return (
+    entry.content.findIndex((elem: any) => elem.property === PROPERTY_SLATE_CONTENT) > -1 ||
+    (entry.content.length === 1 && entry.content[0].property === 'removed')
+  );
 };
 
 export const mapEntry = (
@@ -61,6 +64,7 @@ export const mapEntry = (
     creationDate: string;
     totalComments?: string;
     postId?: string;
+    type?: any;
     author: {
       CID?: string;
       description: string;
@@ -105,15 +109,20 @@ export const mapEntry = (
       ];
     }
   }
-  const contentWithMediaGateways = content.map((node: any) => {
-    // in the slate content only the ipfs hash prepended with CID: is saved for the image urls
-    // like: CID:bafybeidywav2f4jezkpqe7ydkvhrvqxf3mp76aqzhpvlhp2zg6xapg5nr4
-    const nodeClone = Object.assign({}, node);
-    if (node.type === 'image' && node.url.startsWith(MEDIA_URL_PREFIX)) {
-      nodeClone.url = getMediaUrl(ipfsGateway, node.url.slice(4));
-    }
-    return nodeClone;
-  });
+  let contentWithMediaGateways;
+  if (entry.content.length === 1 && entry.content[0].property === 'removed') {
+    contentWithMediaGateways = entry.content;
+  } else {
+    contentWithMediaGateways = content.map((node: any) => {
+      // in the slate content only the ipfs hash prepended with CID: is saved for the image urls
+      // like: CID:bafybeidywav2f4jezkpqe7ydkvhrvqxf3mp76aqzhpvlhp2zg6xapg5nr4
+      const nodeClone = Object.assign({}, node);
+      if (node.type === 'image' && node.url.startsWith(MEDIA_URL_PREFIX)) {
+        nodeClone.url = getMediaUrl(ipfsGateway, node.url.slice(4));
+      }
+      return nodeClone;
+    });
+  }
 
   let quotedEntry: any;
   if (entry.quotes && entry.quotes[0]) {
@@ -164,6 +173,7 @@ export const mapEntry = (
     postId: entry.postId,
     quotedBy: entry.quotedBy,
     quotedByAuthors: quotedByAuthors,
+    type: entry.type,
   };
 };
 
