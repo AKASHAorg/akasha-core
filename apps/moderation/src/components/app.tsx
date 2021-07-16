@@ -10,7 +10,7 @@ import LocalStorageBackend from 'i18next-localstorage-backend';
 
 import AppRoutes from './app-routes';
 
-const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
+const { Box } = DS;
 
 export default class Application extends React.Component<RootComponentProps> {
   public state: { errors: any } = {
@@ -58,14 +58,14 @@ export default class Application extends React.Component<RootComponentProps> {
       })
       .init({
         fallbackLng: 'en',
-        ns: ['moderation-ewa'],
+        ns: ['moderation-app'],
         saveMissing: false,
         saveMissingTo: 'all',
         load: 'languageOnly',
         debug: true,
         cleanCode: true,
         keySeparator: false,
-        defaultNS: 'moderation-ewa',
+        defaultNS: 'moderation-app',
         backend: {
           backends: [LocalStorageBackend, Fetch],
           backendOptions: [
@@ -83,14 +83,9 @@ export default class Application extends React.Component<RootComponentProps> {
     return (
       <Box width="100vw">
         <React.Suspense fallback={<>Loading</>}>
-          <ThemeSelector
-            settings={{ activeTheme: 'Light-Theme' }}
-            availableThemes={[lightTheme, darkTheme]}
-          >
-            <I18nextProvider i18n={i18next}>
-              <AppRoutes {...this.props} onError={this.handleError} />
-            </I18nextProvider>
-          </ThemeSelector>
+          <I18nextProvider i18n={i18next}>
+            <AppRoutes {...this.props} onError={this.handleError} />
+          </I18nextProvider>
         </React.Suspense>
       </Box>
     );

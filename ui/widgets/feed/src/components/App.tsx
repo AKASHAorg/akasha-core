@@ -38,6 +38,7 @@ export interface IFeedWidgetProps {
   profilePubKey: string | null;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   singleSpaNavigate: (url: string) => void;
+  navigateToModal: (props: any) => void;
   onLoginModalOpen: () => void;
   isFetching?: boolean;
   totalItems: number | null;

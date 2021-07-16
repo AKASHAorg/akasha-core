@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { rootRoute } from '../../routes';
 import SearchPage from './search-page';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useLoginState, useModalState, useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useModalState, useErrors } from '@akashaproject/ui-awf-hooks';
 
 const { Box } = DS;
 
@@ -12,10 +12,6 @@ const Routes: React.FC<RootComponentProps> = props => {
   const [, errorActions] = useErrors({ logger: props.logger });
 
   const [loginState] = useLoginState({
-    onError: errorActions.createError,
-  });
-
-  const [loginProfile] = useProfile({
     onError: errorActions.createError,
   });
 
@@ -38,13 +34,10 @@ const Routes: React.FC<RootComponentProps> = props => {
           <Route path={`${rootRoute}/:searchKeyword`}>
             <SearchPage
               {...props}
-              logger={props.logger}
-              singleSpa={props.singleSpa}
               modalState={modalState}
               modalStateActions={modalStateActions}
               showLoginModal={showLoginModal}
               loginState={loginState}
-              loggedProfileData={loginProfile}
             />
           </Route>
         </Switch>

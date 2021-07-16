@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import {
-  constants,
   usePosts,
   useBookmarks,
   useMentions,
@@ -19,16 +18,13 @@ import PostRenderer from './post-renderer';
 import { getPendingComments } from './post-page-pending-comments';
 import routes, { POST } from '../../routes';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import getSDK from '@akashaproject/awf-sdk';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 
 const {
   Box,
   MainAreaCardBox,
   EntryBox,
-  ReportModal,
-  ToastProvider,
-  ModalRenderer,
   VirtualList,
   Helmet,
   CommentEditor,
@@ -37,22 +33,10 @@ const {
   ErrorInfoCard,
   ErrorLoader,
   EntryCardLoading,
-  EditorModal,
 } = DS;
 
 interface IPostPage {
-  loggedProfileData?: any;
   loginState: ILoginState;
-  flagged: string;
-  flaggedContentType: string;
-  setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setFlaggedContentType: React.Dispatch<React.SetStateAction<string>>;
-  reportModalOpen: boolean;
-  setReportModalOpen: () => void;
-  closeReportModal: () => void;
-  editorModalOpen: boolean;
-  setEditorModalOpen: () => void;
-  closeEditorModal: () => void;
   showLoginModal: () => void;
   navigateToUrl: (path: string) => void;
   isMobile: boolean;
@@ -60,31 +44,14 @@ interface IPostPage {
 }
 
 const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
-  const {
-    flagged,
-    flaggedContentType,
-    reportModalOpen,
-    setFlagged,
-    setFlaggedContentType,
-    setReportModalOpen,
-    closeReportModal,
-    editorModalOpen,
-    setEditorModalOpen,
-    closeEditorModal,
-    showLoginModal,
-    logger,
-    navigateToUrl,
-    loggedProfileData,
-    loginState,
-    isMobile,
-  } = props;
-
-  const sdk = getSDK();
+  const { showLoginModal, logger, navigateToUrl, loginState, isMobile } = props;
 
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
   const [, errorActions] = useErrors({ logger });
-
+  //@Todo: replace entryData with value from usePost
+  const postReq = usePost(postId);
+  const entryData = postReq.data;
   const [postsState, postsActions] = usePosts({
     user: loginState.ethAddress,
     onError: errorActions.createError,
@@ -94,12 +61,14 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     onError: errorActions.createError,
   });
 
-  const entryData = React.useMemo(() => {
-    if (postId && postsState.postsData[postId]) {
-      return postsState.postsData[postId];
-    }
-    return null;
-  }, [postId, postsState.postsData[postId]]);
+  //@Todo: remove this when usePost is used
+  //react-query caches automatically everything
+  // const entryData = React.useMemo(() => {
+  //   if (postId && postsState.postsData[postId]) {
+  //     return postsState.postsData[postId];
+  //   }
+  //   return null;
+  // }, [postId, postsState.postsData[postId]]);
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
@@ -167,13 +136,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   }, [postId, loginState.currentUserCalled, loginState.ethAddress]);
 
   const bookmarked = React.useMemo(() => {
-    if (
+    return (
       !bookmarkState.isFetching &&
       bookmarkState.bookmarks.findIndex(bm => bm.entryId === postId) >= 0
-    ) {
-      return true;
-    }
-    return false;
+    );
   }, [bookmarkState]);
 
   const handleMentionClick = (pubKey: string) => {
@@ -214,9 +180,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
-    setFlagged(entryId);
-    setFlaggedContentType(contentType);
-    setReportModalOpen();
+    props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
   const handlePublishComment = async (data: {
@@ -238,30 +202,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     postsActions.optimisticPublishComment(data, postId, loginProfile);
   };
 
-  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
-
-  const handleRepost = (_withComment: boolean, entry: any) => {
-    setCurrentEmbedEntry(entry);
-    setEditorModalOpen();
-  };
-
-  const handleToggleEditor = () => {
-    setCurrentEmbedEntry(undefined);
-    if (editorModalOpen) {
-      closeEditorModal();
-    } else {
-      setEditorModalOpen();
-    }
-  };
-
-  const handleEntryPublish = (entry: any) => {
-    if (!loginState.ethAddress || !loginState.pubKey) {
-      showLoginModal();
-      return;
-    }
-
-    postsActions.optimisticPublishPost(entry, loggedProfileData, currentEmbedEntry, true);
-    closeEditorModal();
+  const handleRepost = (_withComment: boolean, entryData: any) => {
+    props.navigateToModal({ name: 'editor', embedEntry: entryData });
   };
 
   const handleNavigateToPost = redirectToPost(navigateToUrl, postId, postsActions.resetPostIds);
@@ -275,11 +217,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     const modifiedEntry = isQuote
       ? { ...entry, quote: { ...entry.quote, reported: false } }
       : { ...entry, reported: false };
-    postsActions.updatePostsState(modifiedEntry);
-  };
-
-  const updateEntry = (entryId: string) => {
-    const modifiedEntry = { ...postsState.postsData[entryId], reported: true };
     postsActions.updatePostsState(modifiedEntry);
   };
 
@@ -334,84 +271,13 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       <Helmet>
         <title>Post | Ethereum World</title>
       </Helmet>
-      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
-        {reportModalOpen && (
-          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <ReportModal
-              titleLabel={t(`Report ${flaggedContentType}`)}
-              successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
-              successMessageLabel={t('We will investigate this post and take appropriate action.')}
-              optionsTitleLabel={t('Please select a reason')}
-              optionLabels={[
-                t('Threats of violence and incitement'),
-                t('Hate speech, bullying and harassment'),
-                t('Sexual or human exploitation'),
-                t('Illegal or certain regulated goods or services'),
-                t('Impersonation'),
-                t('Spam and malicious links'),
-                t('Privacy and copyright infringement'),
-                t('Other'),
-              ]}
-              optionValues={[
-                'Threats of violence and incitement',
-                'Hate speech, bullying and harassment',
-                'Sexual or human exploitation',
-                'Illegal or certain regulated goods or services',
-                'Impersonation',
-                'Spam and malicious links',
-                'Privacy and copyright infringement',
-                'Other',
-              ]}
-              descriptionLabel={t('Explanation')}
-              descriptionPlaceholder={t('Please explain your reason(s)')}
-              footerText1Label={t('If you are unsure, you can refer to our')}
-              footerLink1Label={t('Code of Conduct')}
-              footerUrl1={'/legal/code-of-conduct'}
-              cancelLabel={t('Cancel')}
-              reportLabel={t('Report')}
-              blockLabel={t('Block User')}
-              closeLabel={t('Close')}
-              user={loginState.ethAddress ? loginState.ethAddress : ''}
-              contentId={flagged}
-              contentType={flaggedContentType}
-              baseUrl={constants.BASE_REPORT_URL}
-              updateEntry={updateEntry}
-              closeModal={closeReportModal}
-              signData={sdk.api.auth.signData}
-            />
-          </ToastProvider>
-        )}
-        {editorModalOpen && props.layoutConfig.modalSlotId && (
-          <EditorModal
-            slotId={props.layoutConfig.modalSlotId}
-            avatar={loggedProfileData.avatar}
-            showModal={editorModalOpen}
-            ethAddress={loggedProfileData.ethAddress}
-            postLabel={t('Publish')}
-            placeholderLabel={t('Write something')}
-            emojiPlaceholderLabel={t('Search')}
-            discardPostLabel={t('Discard Post')}
-            discardPostInfoLabel={t(
-              "You have not posted yet. If you leave now you'll discard your post.",
-            )}
-            keepEditingLabel={t('Keep Editing')}
-            onPublish={handleEntryPublish}
-            handleNavigateBack={handleToggleEditor}
-            getMentions={mentionsActions.getMentions}
-            getTags={mentionsActions.getTags}
-            tags={mentionsState.tags}
-            mentions={mentionsState.mentions}
-            uploadRequest={onUploadRequest}
-            embedEntryData={currentEmbedEntry}
-            style={{ width: '36rem' }}
-          />
-        )}
-      </ModalRenderer>
       <Box pad={{ bottom: 'small' }} border={{ side: 'bottom', size: '1px', color: 'border' }}>
         <ErrorInfoCard errors={postErrors}>
           {(errorMessages, hasCriticalErrors) => (
             <>
               {hasCriticalErrors && (
+                // @Todo: replace this logic with (entryData.status === "error")
+                // the error message is on entryData.error.message
                 <ErrorLoader
                   type="script-error"
                   title={t('Sorry, there was an error loading this post')}
@@ -423,17 +289,21 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                 <ErrorLoader
                   type="script-error"
                   title={t('Loading the post failed')}
-                  details={t('An unexpected error occured! Please try to refresh the page')}
+                  details={t('An unexpected error occurred! Please try to refresh the page')}
                   devDetails={errorMessages}
                 />
               )}
               {!hasCriticalErrors && (
                 <>
-                  {!entryData && (
-                    <EntryCardLoading
-                      style={{ background: 'transparent', boxShadow: 'none', border: 0 }}
-                    />
-                  )}
+                  {
+                    // @Todo: replace this logic with (entryData.status === "loading")
+                    //
+                    postReq.isLoading && (
+                      <EntryCardLoading
+                        style={{ background: 'transparent', boxShadow: 'none', border: 0 }}
+                      />
+                    )
+                  }
                   {entryData && (
                     <EntryBox
                       isRemoved={

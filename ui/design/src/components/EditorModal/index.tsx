@@ -7,11 +7,8 @@ import { BasicCardBox } from '../EntryCard/basic-card-box';
 import EditorCard, { IEditorCard } from '../EditorCard';
 import { editorDefaultValue } from '../Editor/initialValue';
 import { ModalContainer } from '../SignInModal/fullscreen-modal-container';
-import { ModalRenderer } from '../SignInModal/modal-renderer';
 
 export interface IEditorModal extends Omit<IEditorCard, 'editorState' | 'setEditorState'> {
-  slotId: string;
-  showModal: boolean;
   // labels
   discardPostLabel?: string;
   discardPostInfoLabel?: string;
@@ -20,8 +17,6 @@ export interface IEditorModal extends Omit<IEditorCard, 'editorState' | 'setEdit
 
 const EditorModal: React.FC<IEditorModal> = props => {
   const {
-    slotId,
-    showModal,
     ethAddress,
     avatar,
     postLabel,
@@ -58,50 +53,40 @@ const EditorModal: React.FC<IEditorModal> = props => {
   };
 
   return (
-    <ModalRenderer slotId={slotId}>
-      {showModal && (
-        <ModalContainer
-          style={{ display: 'flex', justifyContent: isMobileOnly ? 'start' : 'center' }}
-        >
-          {!showCancel && (
-            <EditorCard
-              avatar={avatar}
-              ethAddress={ethAddress}
-              postLabel={postLabel}
-              placeholderLabel={placeholderLabel}
-              emojiPlaceholderLabel={emojiPlaceholderLabel}
-              onPublish={onPublish}
-              handleNavigateBack={handleToggleShowCancel}
-              getMentions={getMentions}
-              getTags={getTags}
-              mentions={mentions}
-              tags={tags}
-              uploadRequest={uploadRequest}
-              embedEntryData={embedEntryData}
-              style={{ width: '36rem' }}
-              editorState={editorState}
-              setEditorState={setEditorState}
-            />
-          )}
-          {showCancel && (
-            <BasicCardBox>
-              <Box pad="medium" align="center" gap="medium">
-                <Text weight="bold">{`${discardPostLabel}?`}</Text>
-                <Text color="secondaryText">{discardPostInfoLabel}</Text>
-                <Box direction="row" gap="medium">
-                  <Button onClick={handleCloseModal} label={discardPostLabel} />
-                  <Button
-                    onClick={handleToggleShowCancel}
-                    primary={true}
-                    label={keepEditingLabel}
-                  />
-                </Box>
-              </Box>
-            </BasicCardBox>
-          )}
-        </ModalContainer>
+    <ModalContainer style={{ display: 'flex', justifyContent: isMobileOnly ? 'start' : 'center' }}>
+      {!showCancel && (
+        <EditorCard
+          avatar={avatar}
+          ethAddress={ethAddress}
+          postLabel={postLabel}
+          placeholderLabel={placeholderLabel}
+          emojiPlaceholderLabel={emojiPlaceholderLabel}
+          onPublish={onPublish}
+          handleNavigateBack={handleToggleShowCancel}
+          getMentions={getMentions}
+          getTags={getTags}
+          mentions={mentions}
+          tags={tags}
+          uploadRequest={uploadRequest}
+          embedEntryData={embedEntryData}
+          style={{ width: '36rem' }}
+          editorState={editorState}
+          setEditorState={setEditorState}
+        />
       )}
-    </ModalRenderer>
+      {showCancel && (
+        <BasicCardBox>
+          <Box pad="medium" align="center" gap="medium">
+            <Text weight="bold">{`${discardPostLabel}?`}</Text>
+            <Text color="secondaryText">{discardPostInfoLabel}</Text>
+            <Box direction="row" gap="medium">
+              <Button onClick={handleCloseModal} label={discardPostLabel} />
+              <Button onClick={handleToggleShowCancel} primary={true} label={keepEditingLabel} />
+            </Box>
+          </Box>
+        </BasicCardBox>
+      )}
+    </ModalContainer>
   );
 };
 

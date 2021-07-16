@@ -8,9 +8,8 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
-import { QueryClient, QueryClientProvider } from 'react-query';
 
-const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
+const { Box } = DS;
 
 /**
  * This is the entry point of a plugin.
@@ -21,8 +20,6 @@ const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
  * @warning :: Root component for a plugin should always extend React.Component
  * @warning :: Always use default export
  */
-
-const queryClient = new QueryClient();
 
 class App extends PureComponent<RootComponentProps> {
   public state: { hasErrors: boolean };
@@ -89,20 +86,13 @@ class App extends PureComponent<RootComponentProps> {
       });
 
     return (
-      <QueryClientProvider client={queryClient}>
-        <Box width="100vw">
-          <React.Suspense fallback={<>Loading Profile</>}>
-            <I18nextProvider i18n={i18next}>
-              <ThemeSelector
-                availableThemes={[lightTheme, darkTheme]}
-                settings={{ activeTheme: 'Light-Theme' }}
-              >
-                <Routes {...this.props} />
-              </ThemeSelector>
-            </I18nextProvider>
-          </React.Suspense>
-        </Box>
-      </QueryClientProvider>
+      <Box width="100vw">
+        <React.Suspense fallback={<>Loading Profile</>}>
+          <I18nextProvider i18n={i18next}>
+            <Routes {...this.props} />
+          </I18nextProvider>
+        </React.Suspense>
+      </Box>
     );
   }
 }

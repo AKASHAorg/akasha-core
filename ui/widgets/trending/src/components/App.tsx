@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import DS from '@akashaproject/design-system';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import TrendingWidgetComponent from './trending-widget-component';
 import i18next from 'i18next';
@@ -8,8 +7,6 @@ import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-
-const { ThemeSelector, lightTheme, darkTheme } = DS;
 
 export default class TrendingWidgetRoot extends PureComponent<RootComponentProps> {
   public state: {
@@ -87,14 +84,7 @@ export default class TrendingWidgetRoot extends PureComponent<RootComponentProps
     return (
       <React.Suspense fallback={<></>}>
         <I18nextProvider i18n={i18next} defaultNS="ui-widget-trending">
-          <ThemeSelector
-            settings={{ activeTheme: 'Light-Theme' }}
-            availableThemes={[lightTheme, darkTheme]}
-            style={{ height: '100%' }}
-            plain={true}
-          >
-            <TrendingWidgetComponent {...this.props} />
-          </ThemeSelector>
+          <TrendingWidgetComponent {...this.props} />
         </I18nextProvider>
       </React.Suspense>
     );

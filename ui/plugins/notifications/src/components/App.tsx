@@ -4,7 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import NotificationsPage from './notifications-page';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
-const { Box, lightTheme, ThemeSelector, ViewportSizeProvider } = DS;
+const { Box } = DS;
 
 class App extends PureComponent<RootComponentProps> {
   public state: { hasErrors: boolean };
@@ -33,13 +33,9 @@ class App extends PureComponent<RootComponentProps> {
     return (
       <Box width="100vw">
         <React.Suspense fallback={<>Loading</>}>
-          <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
-            <I18nextProvider i18n={i18n ? i18n : null}>
-              <ViewportSizeProvider>
-                <NotificationsPage {...this.props} />
-              </ViewportSizeProvider>
-            </I18nextProvider>
-          </ThemeSelector>
+          <I18nextProvider i18n={i18n ? i18n : null}>
+            <NotificationsPage {...this.props} />
+          </I18nextProvider>
         </React.Suspense>
       </Box>
     );

@@ -1,6 +1,5 @@
 import React from 'react';
 import { isMobileOnly } from 'react-device-detect';
-import { useToasts } from 'react-toast-notifications';
 import { Box, Text, FormField, RadioButtonGroup } from 'grommet';
 
 import ReportSuccessModal, { IReportSuccessModalProps } from './report-success-modal';
@@ -31,8 +30,9 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   reportLabel?: string;
   user?: string;
   contentType?: string;
-  baseUrl?: string;
-  signData: (data: Record<string, unknown> | string) => any;
+  requesting: boolean;
+  success: boolean;
+  onReport: (data: Record<string, unknown>) => void;
 }
 
 const ReportModal: React.FC<IReportModalProps> = props => {
@@ -56,22 +56,19 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     user,
     contentId,
     contentType,
-    baseUrl,
+    requesting,
+    success,
     updateEntry,
     closeModal,
-    signData,
+    onReport,
   } = props;
 
   const [reason, setReason] = React.useState<string>('');
   const [explanation, setExplanation] = React.useState('');
-  const [requesting, setRequesting] = React.useState(false);
-  const [success, setSuccess] = React.useState(false);
   const [rows, setRows] = React.useState(1);
 
   const hiddenSpanRef = React.useRef<HTMLSpanElement>(null);
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
-
-  const { addToast } = useToasts();
 
   const {
     size,
@@ -97,26 +94,11 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     return closeModal();
   };
 
-  const postData = async (url = '', data = {}) => {
-    const postURL = `${url}/new`;
-    const rheaders = new Headers();
-    rheaders.append('Content-Type', 'application/json');
-
-    const response = await fetch(postURL, {
-      method: 'POST',
-      headers: rheaders,
-      body: JSON.stringify(data),
-    });
-    return response.status;
-  };
-
   const handleReport = () => {
     // hard check: makes sure contentType is specified
     if (!contentType || contentType?.length < 1) {
       return handleCancel();
     }
-
-    setRequesting(true);
 
     // sign payload first before posting
     const dataToSign = {
@@ -124,31 +106,8 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       explanation: explanation.trim(),
       reason: optionValues[optionLabels.indexOf(reason)],
     };
-    signData(dataToSign).subscribe(async (resp: any) => {
-      const data = {
-        contentId,
-        contentType,
-        data: dataToSign,
-        signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
-      };
 
-      postData(baseUrl, data)
-        .then(status => {
-          setRequesting(false);
-          if (status === 409) {
-            throw new Error('This content has already been flagged by you');
-          } else if (status >= 400) {
-            throw new Error('Unable to process your request right now. Please try again later');
-          }
-          return setSuccess(true);
-        })
-        .catch(error => {
-          setRequesting(false);
-          return addToast(error.message, {
-            appearance: 'error',
-          });
-        });
-    });
+    onReport(dataToSign);
   };
 
   if (success) {

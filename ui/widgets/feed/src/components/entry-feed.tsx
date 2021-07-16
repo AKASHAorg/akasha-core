@@ -1,19 +1,12 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { IFeedWidgetProps, ItemTypes } from './App';
-import {
-  useErrors,
-  useFollow,
-  useBookmarks,
-  useLoginState,
-  useMentions,
-} from '@akashaproject/ui-awf-hooks';
+import { useErrors, useFollow, useBookmarks, useLoginState } from '@akashaproject/ui-awf-hooks';
 import EntryRenderer from './entry-renderer';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/src/utils/time';
-import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 
-const { VirtualList, ErrorInfoCard, ErrorLoader, EditorModal } = DS;
+const { VirtualList, ErrorInfoCard, ErrorLoader } = DS;
 
 const EntryFeed = (props: IFeedWidgetProps) => {
   const { errors } = props;
@@ -24,18 +17,11 @@ const EntryFeed = (props: IFeedWidgetProps) => {
     onError: errorActions.createError,
   });
 
-  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
-  const [showEditor, setShowEditor] = React.useState<boolean>(false);
-
   const [followedProfiles, followActions] = useFollow({
     onError: errorActions.createError,
   });
 
   const [bookmarkState, bookmarkActions] = useBookmarks({
-    onError: errorActions.createError,
-  });
-
-  const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
   });
 
@@ -73,30 +59,11 @@ const EntryFeed = (props: IFeedWidgetProps) => {
     if (!props.loggedProfile.pubKey) {
       props.onLoginModalOpen();
     } else {
-      setCurrentEmbedEntry(entryData);
-      setShowEditor(true);
+      props.navigateToModal({ name: 'editor', embedEntry: entryData });
     }
   };
   const locale: any = i18n.languages[0];
 
-  const onUploadRequest = uploadMediaToTextile;
-
-  const handleToggleEditor = () => {
-    setShowEditor(prev => !prev);
-    setCurrentEmbedEntry(undefined);
-  };
-
-  const handleEntryPublish = (entryData: any) => {
-    if (!props.loggedProfile.ethAddress && !props.loggedProfile.pubKey) {
-      props.onLoginModalOpen();
-      return;
-    }
-
-    if (props.onRepostPublish) {
-      props.onRepostPublish(entryData, currentEmbedEntry);
-      setShowEditor(false);
-    }
-  };
   const hasMoreItems = React.useMemo(() => {
     if (props.totalItems && props.itemIds?.length) {
       return props.totalItems > props.itemIds.length;
@@ -117,31 +84,6 @@ const EntryFeed = (props: IFeedWidgetProps) => {
               type="script-error"
               title={t('There was an error loading the list')}
               details={messages}
-            />
-          )}
-          {showEditor && props.modalSlotId && (
-            <EditorModal
-              slotId={props.modalSlotId}
-              avatar={props.loggedProfile.avatar}
-              showModal={showEditor}
-              ethAddress={props.loggedProfile.ethAddress}
-              postLabel={t('Publish')}
-              placeholderLabel={t('Write something')}
-              emojiPlaceholderLabel={t('Search')}
-              discardPostLabel={t('Discard Post')}
-              discardPostInfoLabel={t(
-                "You have not posted yet. If you leave now you'll discard your post.",
-              )}
-              keepEditingLabel={t('Keep Editing')}
-              onPublish={handleEntryPublish}
-              handleNavigateBack={handleToggleEditor}
-              getMentions={mentionsActions.getMentions}
-              getTags={mentionsActions.getTags}
-              tags={mentionsState.tags}
-              mentions={mentionsState.mentions}
-              uploadRequest={onUploadRequest}
-              embedEntryData={currentEmbedEntry}
-              style={{ width: '36rem' }}
             />
           )}
           {!hasCriticalErrors && (

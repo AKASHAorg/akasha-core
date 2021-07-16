@@ -9,7 +9,7 @@ import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
 
-const { ThemeSelector, lightTheme, darkTheme, Box } = DS;
+const { Box } = DS;
 
 /**
  * This is the entry point of a plugin.
@@ -87,12 +87,7 @@ class App extends PureComponent<RootComponentProps> {
       <Box width="100vw">
         <React.Suspense fallback={<>Loading Legal</>}>
           <I18nextProvider i18n={i18next}>
-            <ThemeSelector
-              availableThemes={[lightTheme, darkTheme]}
-              settings={{ activeTheme: 'Light-Theme' }}
-            >
-              <Routes {...this.props} />
-            </ThemeSelector>
+            <Routes {...this.props} />
           </I18nextProvider>
         </React.Suspense>
       </Box>

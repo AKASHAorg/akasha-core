@@ -34,7 +34,7 @@ export interface IEntryData {
   entryId: string;
   author: IProfileData;
   quotedByAuthors?: ISocialData;
-  quotedBy?: string;
+  quotedBy?: string[];
   quote?: IEntryData;
   delisted?: boolean;
   reported?: boolean;

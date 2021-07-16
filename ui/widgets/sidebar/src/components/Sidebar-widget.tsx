@@ -1,7 +1,7 @@
 import DS from '@akashaproject/design-system';
 import React, { PureComponent, Suspense } from 'react';
-import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
-import { useLocation, BrowserRouter as Router } from 'react-router-dom';
+import { I18nextProvider, initReactI18next } from 'react-i18next';
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import i18next from 'i18next';
@@ -10,15 +10,7 @@ import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
 
-const {
-  responsiveBreakpoints,
-  styled,
-  lightTheme,
-  ThemeSelector,
-  Sidebar,
-  ViewportSizeProvider,
-  useViewportSize,
-} = DS;
+const { responsiveBreakpoints, styled, Sidebar, useViewportSize } = DS;
 
 export default class SidebarWidget extends PureComponent<RootComponentProps> {
   public state: { hasErrors: boolean; errorMessage: string; showSidebar: boolean };
@@ -108,14 +100,12 @@ export default class SidebarWidget extends PureComponent<RootComponentProps> {
       <Router>
         <I18nextProvider i18n={i18next}>
           <Suspense fallback={<>...</>}>
-            <ViewportSizeProvider>
-              <Menu
-                navigateToUrl={this.props.singleSpa.navigateToUrl}
-                getMenuItems={() => []}
-                uiEvents={this.props.uiEvents}
-                sidebarVisible={this.state.showSidebar}
-              />
-            </ViewportSizeProvider>
+            <Menu
+              navigateToUrl={this.props.singleSpa.navigateToUrl}
+              getMenuItems={() => []}
+              uiEvents={this.props.uiEvents}
+              sidebarVisible={this.state.showSidebar}
+            />
           </Suspense>
         </I18nextProvider>
       </Router>
@@ -152,27 +142,21 @@ const Menu = (props: MenuProps) => {
   };
 
   return (
-    <ThemeSelector
-      availableThemes={[lightTheme]}
-      settings={{ activeTheme: 'Light-Theme' }}
-      style={{ height: '100%' }}
-    >
-      <AppSidebar
-        onClickMenuItem={handleNavigation}
-        allMenuItems={[]}
-        bodyMenuItems={[]}
-        footerMenuItems={[
-          {
-            name: 'App center',
-            index: 0,
-            label: 'Integration Center',
-            route: '/app-center',
-            subRoutes: [],
-          },
-        ]}
-        currentRoute={currentLocation.pathname}
-        size={size}
-      />
-    </ThemeSelector>
+    <AppSidebar
+      onClickMenuItem={handleNavigation}
+      allMenuItems={[]}
+      bodyMenuItems={[]}
+      footerMenuItems={[
+        {
+          name: 'App center',
+          index: 0,
+          label: 'Integration Center',
+          route: '/app-center',
+          subRoutes: [],
+        },
+      ]}
+      currentRoute={currentLocation.pathname}
+      size={size}
+    />
   );
 };

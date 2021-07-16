@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { ILoadItemsPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
-import { constants, usePosts, useTagSubscribe, useErrors } from '@akashaproject/ui-awf-hooks';
+import { usePosts, useTagSubscribe, useErrors } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
 import { useTranslation } from 'react-i18next';
 import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
@@ -11,35 +11,16 @@ import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ITag } from '@akashaproject/design-system/lib/components/TrendingWidgetCard';
 
-const { Box, ReportModal, ToastProvider, ModalRenderer, TagProfileCard, Helmet } = DS;
+const { Box, TagProfileCard, Helmet } = DS;
 
 interface ITagFeedPage {
   loggedProfileData?: any;
   loginState: ILoginState;
-  flagged: string;
-  flaggedContentType: string;
-  setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setFlaggedContentType: React.Dispatch<React.SetStateAction<string>>;
-  reportModalOpen: boolean;
-  setReportModalOpen: () => void;
-  closeReportModal: () => void;
   showLoginModal: () => void;
 }
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
-  const {
-    flagged,
-    flaggedContentType,
-    reportModalOpen,
-    setFlagged,
-    setFlaggedContentType,
-    setReportModalOpen,
-    closeReportModal,
-    showLoginModal,
-    logger,
-    loggedProfileData,
-    loginState,
-  } = props;
+  const { showLoginModal, logger, loggedProfileData, loginState } = props;
 
   const sdk = getSDK();
 
@@ -145,20 +126,13 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
-    setFlagged(entryId);
-    setFlaggedContentType(contentType);
-    setReportModalOpen();
+    props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
   const handleFlipCard = (entry: any, isQuote: boolean) => () => {
     const modifiedEntry = isQuote
       ? { ...entry, quote: { ...entry.quote, reported: false } }
       : { ...entry, reported: false };
-    postsActions.updatePostsState(modifiedEntry);
-  };
-
-  const updateEntry = (entryId: string) => {
-    const modifiedEntry = { ...postsState.postsData[entryId], reported: true };
     postsActions.updatePostsState(modifiedEntry);
   };
 
@@ -182,54 +156,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
-        {reportModalOpen && (
-          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <ReportModal
-              titleLabel={t(`Report ${flaggedContentType}`)}
-              successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
-              successMessageLabel={t('We will investigate this post and take appropriate action.')}
-              optionsTitleLabel={t('Please select a reason')}
-              optionLabels={[
-                t('Threats of violence and incitement'),
-                t('Hate speech, bullying and harassment'),
-                t('Sexual or human exploitation'),
-                t('Illegal or certain regulated goods or services'),
-                t('Impersonation'),
-                t('Spam and malicious links'),
-                t('Privacy and copyright infringement'),
-                t('Other'),
-              ]}
-              optionValues={[
-                'Threats of violence and incitement',
-                'Hate speech, bullying and harassment',
-                'Sexual or human exploitation',
-                'Illegal or certain regulated goods or services',
-                'Impersonation',
-                'Spam and malicious links',
-                'Privacy and copyright infringement',
-                'Other',
-              ]}
-              descriptionLabel={t('Explanation')}
-              descriptionPlaceholder={t('Please explain your reason(s)')}
-              footerText1Label={t('If you are unsure, you can refer to our')}
-              footerLink1Label={t('Code of Conduct')}
-              footerUrl1={'/legal/code-of-conduct'}
-              cancelLabel={t('Cancel')}
-              reportLabel={t('Report')}
-              blockLabel={t('Block User')}
-              closeLabel={t('Close')}
-              user={loginState.ethAddress ? loginState.ethAddress : ''}
-              contentId={flagged}
-              contentType={flaggedContentType}
-              baseUrl={constants.BASE_REPORT_URL}
-              updateEntry={updateEntry}
-              closeModal={closeReportModal}
-              signData={sdk.api.auth.signData}
-            />
-          </ToastProvider>
-        )}
-      </ModalRenderer>
       <TagProfileCard
         tag={tagData}
         subscribedTags={tagSubscriptionState}
@@ -249,6 +175,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         ethAddress={loginState.ethAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
+        navigateToModal={props.navigateToModal}
         onLoginModalOpen={showLoginModal}
         totalItems={postsState.totalItems}
         profilePubKey={loginState.pubKey}

@@ -539,26 +539,6 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
   //   logger,
   // );
 
-  const infiniteQ = useInfiniteQuery(
-    'Entries',
-    async () => {
-      const payload = postsState.getPostsQuery;
-      const nextIndex = postsState.nextPostIndex || payload.offset || undefined;
-      return lastValueFrom(
-        sdk.api.entries.getEntries({
-          ...payload,
-          offset: nextIndex,
-        }),
-      );
-    },
-    {
-      getNextPageParam: (lastPage, allPages) =>
-        lastPage.data.posts.nextIndex || postsState.getPostsQuery.offset,
-      enabled: !!postsState.getPostsQuery,
-    },
-  );
-
-  console.log('infiniteQ', infiniteQ);
   React.useEffect(() => {
     if (postsState.isFetchingComments && postsState.getCommentsQuery) {
       const commentsCall = sdk.api.comments.getComments(postsState.getCommentsQuery);

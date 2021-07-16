@@ -4,14 +4,15 @@ import ReactDOM from 'react-dom';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
-import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+import { useLoginState, useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
 
-const { SignInModal, ThemeSelector, lightTheme, darkTheme } = DS;
+const { SignInModal } = DS;
 
 const SignInModalContainer = (props: RootComponentProps) => {
   const { logger } = props;
+
+  const acceptedTerms = localStorage.getItem('@acceptedTermsAndPrivacy');
 
   const { t } = useTranslation();
   const location = useLocation();
@@ -31,7 +32,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
   }, [loginState.ethAddress]);
 
   const handleLogin = (providerId: number) => {
-    loginActions.login(providerId);
+    loginActions.login(providerId, !acceptedTerms);
   };
 
   const loginErrors: string | null = React.useMemo(() => {
@@ -39,7 +40,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
       const txt = Object.keys(errorState)
         .filter(key => key.split('.')[0] === 'useLoginState')
         .map(k => {
-          if (errorState[k].error.message === 'Profile not found') {
+          if (errorState[k].error.message === 'Profile not found' && !acceptedTerms) {
             setSuggestSignUp(true);
           }
           return errorState[k];
@@ -74,20 +75,17 @@ const SignInModalContainer = (props: RootComponentProps) => {
 };
 
 const Wrapped = (props: RootComponentProps) => (
-  <ThemeSelector
-    availableThemes={[lightTheme, darkTheme]}
-    settings={{ activeTheme: 'Light-Theme' }}
-  >
-    <Router>
+  <Router>
+    <React.Suspense fallback={<></>}>
       <SignInModalContainer {...props} />
-    </Router>
-  </ThemeSelector>
+    </React.Suspense>
+  </Router>
 );
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Wrapped,
+  rootComponent: withProviders(Wrapped),
   errorBoundary: (err, errorInfo, props) => {
     if (props.logger) {
       props.logger('Error: %s; Info: %s', err, errorInfo);
