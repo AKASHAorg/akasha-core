@@ -1,6 +1,7 @@
 {
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "private": true,
+  "name": "AWF",
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "bootstrap:hoist": "lerna bootstrap --hoist",
@@ -52,7 +53,8 @@
     "test:widgets": "lerna run test --scope @akashaproject/ui-widget-* --stream",
     "test:ui": "lerna run test --scope @akashaproject/ui-* --scope @akashaproject/design-* --scope @akashaproject/app-* --stream",
     "test:app-loader": "lerna run test --scope @akashaproject/ui-app-loader --stream",
-    "dev:server": "lerna run dev:server --stream"
+    "dev:server": "lerna run dev:server --stream",
+    "docs:build": "typedoc --tsconfig tsconfig.typedoc.json --packages ."
   },
   "devDependencies": {
     "@babel/core": "7.12.13",
@@ -84,7 +86,7 @@
     "html-webpack-plugin": "5.0.0",
     "husky": "6.0.0",
     "i18next-parser": "3.6.0",
-    "jest": "27.0.0-next.9",
+    "jest": "27.0.6",
     "lerna": "4.0.0",
     "nodemon": "2.0.7",
     "prettier": "2.2.1",
@@ -96,20 +98,34 @@
     "rxjs": "7.1.0",
     "source-map-loader": "2.0.0",
     "styled-components": "5.2.1",
-    "ts-jest": "^27.0.2",
-    "ts-loader": "9.2.2",
-    "typedoc": "^0.20.36",
+    "ts-jest": "27.0.3",
+    "ts-loader": "9.2.3",
+    "typedoc": "0.21.4",
+    "typedoc-plugin-markdown": "3.10.3",
     "typescript": "4.3.5",
     "webpack": "5.20.1",
     "webpack-cli": "4.5.0",
     "webpack-dev-server": "3.11.2"
   },
   "workspaces": [
-    "sdk-packages/*",
-    "ui/**",
-    "scripts/*",
-    "examples/**",
-    "apps/*"
+    "sdk",
+    "ui/hooks",
+    "ui/design",
+    "ui/typings",
+    "ui/testing-utils",
+    "ui/hooks",
+    "ui/widgets/feed",
+    "ui/widgets/layout",
+    "ui/widgets/sidebar",
+    "ui/widgets/top-bar",
+    "ui/widgets/trending",
+    "ui/plugins/app-center",
+    "ui/plugins/bookmarks",
+    "ui/plugins/legal",
+    "ui/plugins/notifications",
+    "ui/plugins/profile",
+    "ui/plugins/search",
+    "sdk/typings"
   ],
   "engines": {
     "node": ">=12.13.0",
