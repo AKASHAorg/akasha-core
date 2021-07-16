@@ -265,7 +265,7 @@ api.post('/moderation/decisions/moderate', async (ctx: koa.Context, next: () => 
     } else {
       try {
         // store moderation decision
-        const decision = await dataSources.decisionsAPI.makeDecision(
+        await dataSources.decisionsAPI.makeDecision(
           report.contentId,
           report.data.moderator,
           report.data.explanation,
