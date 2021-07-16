@@ -47,18 +47,18 @@ const ProfilePage = (props: ProfilePageProps) => {
     user: loggedEthAddress,
   });
 
-  React.useEffect(() => {
-    // reset post ids and virtual list, if user logs in
-    if (loggedEthAddress) {
-      postsActions.resetPostIds();
-    }
-  }, [loggedEthAddress]);
+  // React.useEffect(() => {
+  //   // reset post ids and virtual list, if user logs in
+  //   if (loggedEthAddress) {
+  //     postsActions.resetPostIds();
+  //   }
+  // }, [loggedEthAddress]);
 
   React.useEffect(() => {
     if (pubKey) {
       profileActions.resetProfileData();
       profileActions.getProfileData({ pubKey });
-      postsActions.resetPostIds();
+      // postsActions.resetPostIds();
     }
   }, [pubKey]);
 
@@ -66,16 +66,16 @@ const ProfilePage = (props: ProfilePageProps) => {
    * Hook used in the /profile/my-profile route
    * because we don't have the /:pubkey url param
    */
-  React.useEffect(() => {
-    if (
-      loggedProfileData.pubKey &&
-      pubKey === loggedProfileData.pubKey &&
-      !postsState.postIds.length &&
-      !postsState.isFetchingPosts
-    ) {
-      postsActions.getUserPosts({ pubKey: loggedProfileData.pubKey, limit: 5 });
-    }
-  }, [loggedProfileData.pubKey, pubKey]);
+  // React.useEffect(() => {
+  //   if (
+  //     loggedProfileData.pubKey &&
+  //     pubKey === loggedProfileData.pubKey &&
+  //     !postsState.postIds.length &&
+  //     !postsState.isFetchingPosts
+  //   ) {
+  //     postsActions.getUserPosts({ pubKey: loggedProfileData.pubKey, limit: 5 });
+  //   }
+  // }, [loggedProfileData.pubKey, pubKey]);
 
   const { t } = useTranslation();
 
@@ -142,6 +142,10 @@ const ProfilePage = (props: ProfilePageProps) => {
     postsActions.updatePostsState(modifiedEntry);
   };
 
+  const handleEntryRemove = (entryId: string) => {
+    props.navigateToModal({ name: 'entry-remove-confirmation', entryId, entryType: 'Post' });
+  };
+
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -184,6 +188,10 @@ const ProfilePage = (props: ProfilePageProps) => {
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         handleFlipCard={handleFlipCard}
+        onEntryRemove={handleEntryRemove}
+        removeEntryLabel={t('Delete Post')}
+        removedByMeLabel={t('You deleted this post')}
+        removedByAuthorLabel={t('This post was deleted by its author')}
       />
     </Box>
   );

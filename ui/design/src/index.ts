@@ -116,6 +116,7 @@ import ModerateModal from './components/ModerateModal';
 import ReportModal from './components/ReportModal';
 import ProfileCompletedModal from './components/ProfileCompletedModal';
 import FeedbackModal from './components/FeedbackModal';
+import ConfirmationModal from './components/ConfirmationModal';
 
 import BookmarkPill from './components/BookmarkPill';
 import NewPostsPill from './components/NewPostsPill';
@@ -267,6 +268,7 @@ const exported = {
   EntryPublishErrorCard,
   StyledLayer,
   Helmet: Helmet as any,
+  ConfirmationModal,
 };
 
 export default exported;

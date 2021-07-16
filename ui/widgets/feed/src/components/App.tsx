@@ -48,6 +48,10 @@ export interface IFeedWidgetProps {
   contentClickable?: boolean;
   onEntryFlag: (entryId: string, contentType: string) => () => void;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
+  onEntryRemove?: (entryId: string) => void;
+  removeEntryLabel?: string;
+  removedByMeLabel?: string;
+  removedByAuthorLabel?: string;
 }
 
 export default class FeedWidgetRoot extends PureComponent<IFeedWidgetProps> {
@@ -68,12 +72,6 @@ export default class FeedWidgetRoot extends PureComponent<IFeedWidgetProps> {
     });
   }
 
-  // componentDidMount() {
-  // if (this.props.i18n) {
-  //   this.props.i18n.loadNamespaces('ui-widget-feed');
-  // }
-  // }
-
   public render() {
     const { logger } = this.props;
 
@@ -89,14 +87,14 @@ export default class FeedWidgetRoot extends PureComponent<IFeedWidgetProps> {
       })
       .init({
         fallbackLng: 'en',
-        ns: ['feed-widget'],
+        ns: ['ui-widget-feed'],
         saveMissing: false,
         saveMissingTo: 'all',
         load: 'languageOnly',
         debug: true,
         cleanCode: true,
         keySeparator: false,
-        defaultNS: 'feed-widget',
+        defaultNS: 'ui-widget-feed',
         backend: {
           backends: [LocalStorageBackend, Fetch],
           backendOptions: [
@@ -110,7 +108,6 @@ export default class FeedWidgetRoot extends PureComponent<IFeedWidgetProps> {
           ],
         },
       });
-
     return (
       <React.Suspense fallback={<></>}>
         <I18nextProvider i18n={i18next} defaultNS="ui-widget-feed">

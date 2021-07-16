@@ -60,14 +60,14 @@ class App extends PureComponent<RootComponentProps> {
       })
       .init({
         fallbackLng: 'en',
-        ns: ['app-center'],
+        ns: ['ui-plugin-app-center'],
         saveMissing: false,
         saveMissingTo: 'all',
         load: 'languageOnly',
         debug: true,
         cleanCode: true,
         keySeparator: false,
-        defaultNS: 'app-center',
+        defaultNS: 'ui-plugin-app-center',
         backend: {
           backends: [LocalStorageBackend, Fetch],
           backendOptions: [

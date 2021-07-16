@@ -126,6 +126,9 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
               {(!itemData || !itemData.author?.ethAddress) && <EntryCardLoading />}
               {itemData && itemData.author.ethAddress && (
                 <EntryCard
+                  isRemoved={
+                    itemData.content.length === 1 && itemData.content[0].property === 'removed'
+                  }
                   isBookmarked={isBookmarked}
                   entryData={itemData}
                   sharePostLabel={t('Share Post')}
