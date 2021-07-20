@@ -40,8 +40,7 @@ export default function createMetricsPlugin(register: Registry): ApolloServerPlu
 
   const responded = new Counter({
     name: 'graphql_queries_responded',
-    help:
-      'The amount of GraphQL queries that have been executed and been attempted to send to the client. This includes requests with errors.',
+    help: 'The amount of GraphQL queries that have been executed and been attempted to send to the client. This includes requests with errors.',
     labelNames: ['operationName', 'operation'],
     registers: [register],
   });
@@ -62,28 +61,28 @@ export default function createMetricsPlugin(register: Registry): ApolloServerPlu
   });
 
   return {
-    requestDidStart() {
+    async requestDidStart() {
       const end = captureCallDuration.startTimer();
       return {
-        parsingDidStart(parsingContext) {
+        async parsingDidStart(parsingContext) {
           parsed.inc({
             operationName: parsingContext.request.operationName || '',
             operation: parsingContext.operation?.operation,
           });
         },
-        validationDidStart(validationContext) {
+        async validationDidStart(validationContext) {
           validationStarted.inc({
             operationName: validationContext.request.operationName || '',
             operation: validationContext.operation?.operation,
           });
         },
-        didResolveOperation(resolveContext) {
+        async didResolveOperation(resolveContext) {
           resolved.inc({
             operationName: resolveContext.request.operationName || '',
             operation: resolveContext.operation.operation,
           });
         },
-        executionDidStart(executingContext) {
+        async executionDidStart(executingContext) {
           startedExecuting.inc({
             operationName: executingContext.request.operationName || '',
             operation: executingContext.operation.operation,
@@ -91,7 +90,7 @@ export default function createMetricsPlugin(register: Registry): ApolloServerPlu
           return {
             willResolveField({ source, args, context, info }) {
               const capture = resolverTime.startTimer();
-              return () => {
+              return async () => {
                 capture({
                   parentType: info.parentType.toString(),
                   fieldName: info.fieldName,
@@ -101,13 +100,13 @@ export default function createMetricsPlugin(register: Registry): ApolloServerPlu
             },
           };
         },
-        didEncounterErrors(errorContext) {
+        async didEncounterErrors(errorContext) {
           encounteredErrors.inc({
             operationName: errorContext.request.operationName || '',
             operation: errorContext.operation?.operation,
           });
         },
-        willSendResponse(responseContext) {
+        async willSendResponse(responseContext) {
           const labels = {
             operationName: responseContext.request.operationName || '',
             operation: responseContext.operation?.operation,

@@ -8,6 +8,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 const { Box } = DS;
 
@@ -86,6 +87,7 @@ export default class Application extends React.Component<RootComponentProps> {
             <AppRoutes {...this.props} onError={this.handleError} />
           </I18nextProvider>
         </React.Suspense>
+        <ReactQueryDevtools position={'bottom-right'} />
       </Box>
     );
   }

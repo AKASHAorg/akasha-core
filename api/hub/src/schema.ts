@@ -11,6 +11,11 @@ const typeDefs = gql`
     nextIndex: String
     total: Int
   }
+  type ProfilesResult {
+    results: [UserProfile!]
+    nextIndex: Int
+    total: Int
+  }
   type NewPostsResult {
     results: [Post!]
     nextIndex: Int
@@ -87,6 +92,8 @@ const typeDefs = gql`
     getComment(commentID: String!): Comment!
     getPostsByAuthor(author: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
     getPostsByTag(tag: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
+    getFollowers(pubKey: String!, limit: Int, offset: Int): ProfilesResult
+    getFollowing(pubKey: String!, limit: Int, offset: Int): ProfilesResult
   }
 
   input DataProviderInput {
