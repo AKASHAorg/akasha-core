@@ -282,6 +282,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   />
                 ) : (
                   <EntryCard
+                    isRemoved={
+                      entryData.content.length === 1 && entryData.content[0].property === 'removed'
+                    }
                     isBookmarked={
                       bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryData.entryId) >= 0
                     }
@@ -324,6 +327,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             searchState.comments.slice(0, 4).map((commentData: any, index: number) => (
               <Box key={index} pad={{ bottom: 'medium' }}>
                 <EntryCard
+                  isRemoved={
+                    commentData.content.length === 1 &&
+                    commentData.content[0].property === 'removed'
+                  }
                   isBookmarked={
                     bookmarkState.bookmarks.findIndex(bm => bm.entryId === commentData.entryId) >= 0
                   }

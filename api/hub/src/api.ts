@@ -366,6 +366,22 @@ api.post('/moderation/decisions/log', async (ctx: koa.Context, next: () => Promi
   await next();
 });
 
+/** 
+ * Get a log of all moderation actions for a given content identifier.
+ */
+api.get('/moderation/decisions/actions/:contentId', async (ctx: koa.Context, next: () => Promise<any>) => {
+  const contentID = ctx?.params?.contentId;
+  if (!contentID) {
+    ctx.body = 'Missing "contentId" attribute from request.';
+    ctx.status = 400;
+  } else {
+    ctx.body = await dataSources.decisionsAPI.listActions(contentID);
+    ctx.set('Content-Type', 'application/json');
+    ctx.status = 200;
+  }
+  await next();
+});
+
 /**
  * Add a new moderator.
  */

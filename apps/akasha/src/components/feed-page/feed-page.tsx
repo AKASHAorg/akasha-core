@@ -151,6 +151,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     //postsActions.updatePostsState(modifiedEntry);
   };
 
+  const handleEntryRemove = (entryId: string) => {
+    props.navigateToModal({ name: 'entry-remove-confirmation', entryType: 'Post', entryId });
+  };
+
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -207,6 +211,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             moderatedContentLabel={t('This content has been moderated')}
             ctaLabel={t('See it anyway')}
             handleFlipCard={handleFlipCard}
+            onEntryRemove={handleEntryRemove}
+            removeEntryLabel={t('Delete Post')}
+            removedByMeLabel={t('You deleted this post')}
+            removedByAuthorLabel={t('This post was deleted by its author')}
           />
         }
         customEntities={getFeedCustomEntities({

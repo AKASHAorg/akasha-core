@@ -14,6 +14,8 @@ import { createErrorHandler } from './utils/error-handler';
 import { useInfiniteQuery } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { filter } from 'rxjs/operators';
+import { events } from '../../../sdk/typings/lib';
 
 //import { useQueryStream } from './helpers';
 
@@ -103,6 +105,8 @@ export interface PostsActions {
   /* reset post ids (basically reset the list) */
   resetPostIds: () => void;
   updatePostsState: (updatedEntry: any) => void;
+  removePost: (postId: string) => void;
+  removeComment: (commentId: string) => void;
 }
 
 export interface UsePostsProps {
@@ -142,6 +146,8 @@ export interface PostsState {
   optimisticPublishPostQuery: { pendingId: string; pending: any; publishObj: any } | null;
   getUserPostsQuery: any | null;
   getTagPostsQuery: any | null;
+  deleteUserPostQuery?: string;
+  deleteUserCommentQuery?: string;
 }
 
 const initialPostsState: PostsState = {
@@ -227,7 +233,11 @@ export type IPostsAction =
       type: 'GET_TAG_POSTS_SUCCESS';
       payload: { nextIndex: string; posts: any; newIds: string[]; total: number };
     }
-  | { type: 'UPDATE_POSTS_STATE'; payload: any };
+  | { type: 'UPDATE_POSTS_STATE'; payload: any }
+  | { type: 'REMOVE_POST'; payload: string }
+  | { type: 'REMOVE_POST_SUCCESS'; payload: any }
+  | { type: 'REMOVE_COMMENT'; payload: string }
+  | { type: 'REMOVE_COMMENT_SUCCESS'; payload: any };
 
 const postsStateReducer = (state: PostsState, action: IPostsAction) => {
   switch (action.type) {
@@ -291,6 +301,9 @@ const postsStateReducer = (state: PostsState, action: IPostsAction) => {
       };
 
     case 'GET_COMMENTS':
+      if (state.isFetchingComments) {
+        return state;
+      }
       return {
         ...state,
         isFetchingComments: true,
@@ -311,12 +324,14 @@ const postsStateReducer = (state: PostsState, action: IPostsAction) => {
     }
 
     case 'GET_POSTS':
+      if (state.isFetchingPosts) {
+        return state;
+      }
       return {
         ...state,
         isFetchingPosts: true,
         getPostsQuery: action.payload,
       };
-
     case 'GET_POSTS_SUCCESS': {
       const { nextIndex, posts, newIds, total } = action.payload;
       return {
@@ -457,7 +472,40 @@ const postsStateReducer = (state: PostsState, action: IPostsAction) => {
         reportedItems: state.reportedItems,
       };
     }
-
+    case 'REMOVE_POST':
+      return {
+        ...state,
+        deleteUserPostQuery: action.payload,
+      };
+    case 'REMOVE_POST_SUCCESS':
+      return {
+        ...state,
+        postsData: {
+          ...state.postsData,
+          [action.payload]: {
+            ...state.postsData[action.payload],
+            content: [{ property: 'removed' }],
+          },
+        },
+        deleteUserPostQuery: null,
+      };
+    case 'REMOVE_COMMENT':
+      return {
+        ...state,
+        deleteUserCommentQuery: action.payload,
+      };
+    case 'REMOVE_COMMENT_SUCCESS':
+      return {
+        ...state,
+        postsData: {
+          ...state.postsData,
+          [action.payload]: {
+            ...state.postsData[action.payload],
+            content: [{ property: 'removed' }],
+          },
+        },
+        deleteUserCommentQuery: null,
+      };
     default:
       throw new Error('[UsePostsReducer] action is not defined!');
   }
@@ -466,8 +514,14 @@ const postsStateReducer = (state: PostsState, action: IPostsAction) => {
 // tslint:disable:cyclomatic-complexity
 /* eslint-disable complexity */
 const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
-  const { user, logger, onError } = props;
-  const sdk = getSDK();
+  const { user } = props;
+  const sdk = React.useMemo(getSDK, []);
+  const loggerRef = React.useRef(props.logger);
+  const onErrorRef = React.useRef(props.onError);
+
+  const logger = loggerRef.current;
+  const onError = onErrorRef.current;
+
   const [postsState, dispatch] = React.useReducer(postsStateReducer, initialPostsState);
   // example of using query stream
   // const queryResult = useQueryStream(
@@ -513,7 +567,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       return () => sub && sub.unsubscribe();
     }
     return;
-  }, [postsState.isFetchingComments, postsState.getCommentsQuery]);
+  }, [postsState.isFetchingComments, postsState.getCommentsQuery, sdk, onError, logger]);
 
   React.useEffect(() => {
     if (postsState.getPostDataQuery) {
@@ -571,7 +625,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       return () => sub.unsubscribe();
     }
     return;
-  }, [postsState.getPostDataQuery]);
+  }, [postsState.getPostDataQuery, sdk, logger, onError, user]);
 
   React.useEffect(() => {
     if (postsState.getCommentQuery) {
@@ -595,7 +649,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       return () => sub.unsubscribe();
     }
     return;
-  }, [postsState.getCommentQuery]);
+  }, [postsState.getCommentQuery, sdk, logger, onError]);
 
   React.useEffect(() => {
     if (postsState.getPostsQuery) {
@@ -685,7 +739,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       return () => sub.unsubscribe();
     }
     return;
-  }, [postsState.getPostsQuery]);
+  }, [logger, onError, sdk, postsState.getPostsQuery, postsState.nextPostIndex, user]);
 
   React.useEffect(() => {
     if (postsState.optimisticPublishCommentQuery) {
@@ -704,7 +758,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       return () => sub.unsubscribe();
     }
     return;
-  }, [postsState.optimisticPublishCommentQuery]);
+  }, [postsState.optimisticPublishCommentQuery, sdk, onError]);
 
   React.useEffect(() => {
     if (postsState.optimisticPublishPostQuery) {
@@ -729,7 +783,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       return () => sub.unsubscribe();
     }
     return;
-  }, [postsState.optimisticPublishPostQuery]);
+  }, [postsState.optimisticPublishPostQuery, sdk, onError]);
 
   React.useEffect(() => {
     if (postsState.getUserPostsQuery) {
@@ -749,7 +803,6 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
 
           const newIds: string[] = [];
           const newQuoteIds: string[] = [];
-
           const posts = results
             .filter(excludeNonSlateContent)
             .map(entry => {
@@ -823,7 +876,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       return () => sub.unsubscribe();
     }
     return;
-  }, [postsState.getUserPostsQuery]);
+  }, [postsState.getUserPostsQuery, sdk, onError, logger, user, postsState.nextPostIndex]);
 
   React.useEffect(() => {
     if (postsState.getTagPostsQuery) {
@@ -917,7 +970,88 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       return () => sub.unsubscribe();
     }
     return;
-  }, [postsState.getTagPostsQuery]);
+  }, [postsState.getTagPostsQuery, sdk, onError, logger, user, postsState.nextPostIndex]);
+
+  React.useEffect(() => {
+    if (!postsState.deleteUserPostQuery) {
+      return;
+    }
+    const call = sdk.api.entries.removeEntry(postsState.deleteUserPostQuery);
+    const sub = call.subscribe({
+      // next: resp => {
+      //   const { data } = resp;
+      //   if (data.removePost) {
+      //     dispatch({ type: 'REMOVE_POST_SUCCESS', payload: postsState.deleteUserPostQuery });
+      //   } else {
+      //     onError({
+      //       errorKey: 'usePosts.removePost.response',
+      //       error: new Error(`Failed to remove entry with id: ${postsState.deleteUserPostQuery}`),
+      //       critical: false,
+      //     });
+      //   }
+      // },
+      error: createErrorHandler('usePosts.removePost', false, onError),
+    });
+    return () => sub.unsubscribe();
+  }, [postsState.deleteUserPostQuery, onError, sdk]);
+
+  React.useEffect(() => {
+    if (!postsState.deleteUserCommentQuery) {
+      return;
+    }
+    const call = sdk.api.comments.removeComment(postsState.deleteUserCommentQuery);
+    const sub = call.subscribe({
+      next: resp => {
+        const { data } = resp;
+        if (data.removeComment) {
+          dispatch({ type: 'REMOVE_COMMENT_SUCCESS', payload: postsState.deleteUserCommentQuery });
+        } else {
+          onError({
+            errorKey: 'usePosts.removeComment.response',
+            error: new Error(
+              `Failed to remove entry with id: ${postsState.deleteUserCommentQuery}`,
+            ),
+            critical: false,
+          });
+        }
+      },
+      error: createErrorHandler('usePosts.removeComment', false, onError),
+    });
+    return () => sub.unsubscribe();
+  }, [postsState.deleteUserCommentQuery, sdk, onError]);
+
+  // a hook to sync the state with the delete actions
+
+  React.useEffect(() => {
+    const sub = sdk.api.globalChannel
+      .pipe(
+        filter(
+          payload =>
+            payload.event === events.ENTRY_EVENTS.REMOVE ||
+            payload.event === events.COMMENTS_EVENTS.REMOVE,
+        ),
+      )
+      .subscribe({
+        next: resp => {
+          if (resp.event === events.ENTRY_EVENTS.REMOVE) {
+            const data = resp.data as { removePost: boolean };
+            const args = resp.args as { entryID: string };
+            if (data.removePost) {
+              dispatch({ type: 'REMOVE_POST_SUCCESS', payload: args.entryID });
+            }
+          }
+          if (resp.event === events.COMMENTS_EVENTS.REMOVE) {
+            const data = resp.data as { removeComment: boolean };
+            const args = resp.args as { commentID: string };
+            if (data.removeComment) {
+              dispatch({ type: 'REMOVE_COMMENT_SUCCESS', payload: args.commentID });
+            }
+          }
+        },
+        error: createErrorHandler('usePosts.globalChannel.remove'),
+      });
+    return sub.unsubscribe;
+  }, [sdk]);
 
   const actions: PostsActions = {
     getPost: async postId => {
@@ -1012,6 +1146,12 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     },
     updatePostsState: (updatedEntry: any) => {
       dispatch({ type: 'UPDATE_POSTS_STATE', payload: updatedEntry });
+    },
+    removePost: postId => {
+      dispatch({ type: 'REMOVE_POST', payload: postId });
+    },
+    removeComment: commentId => {
+      dispatch({ type: 'REMOVE_COMMENT', payload: commentId });
     },
   };
   return [postsState, actions];

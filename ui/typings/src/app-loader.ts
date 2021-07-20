@@ -29,7 +29,7 @@ export interface ModalNavigationOptions {
   name: string;
   pubKey?: string;
   entryId?: string;
-  [key: string]: string | undefined;
+  [key: string]: string | any | undefined;
 }
 
 export interface IntegrationRegistrationOptions {
