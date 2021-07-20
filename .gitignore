@@ -39,3 +39,4 @@ release/
 lib
 dist
 *.d.ts
+docs
