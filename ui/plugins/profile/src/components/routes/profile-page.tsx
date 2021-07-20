@@ -9,6 +9,7 @@ import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state
 import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
 import { ILoadItemsPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
+// import { useFollowers } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 
 import { ProfilePageCard } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
@@ -30,6 +31,7 @@ const ProfilePage = (props: ProfilePageProps) => {
   const location = useLocation();
 
   let { pubKey } = useParams() as any;
+  // console.log('followers====', useFollowers(pubKey, 5));
   if (location.pathname.includes(menuRoute[MY_PROFILE])) {
     pubKey = loggedProfileData.pubKey;
   }
