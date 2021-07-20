@@ -12,6 +12,8 @@ declare module '*/profile.graphql' {
   const SaveMetaData: DocumentNode;
   const SearchProfiles: TypedQueryDocumentNode;
   const GlobalSearch: TypedQueryDocumentNode;
+  const GetFollowers: TypedQueryDocumentNode;
+  const GetFollowing: TypedQueryDocumentNode;
 
   export {
     AddProfileProvider,
@@ -25,6 +27,8 @@ declare module '*/profile.graphql' {
     SaveMetaData,
     SearchProfiles,
     GlobalSearch,
+    GetFollowers,
+    GetFollowing,
   };
 }
 

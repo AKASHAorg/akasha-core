@@ -57,6 +57,12 @@ export interface UserProfile_Response {
   totalFollowing: number;
 }
 
+export interface UserFollowers_Response {
+  results: [UserProfile_Response];
+  nextIndex: number;
+  total: number;
+}
+
 export interface Tag_Response {
   _id: string;
   name: string;

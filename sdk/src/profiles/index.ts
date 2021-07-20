@@ -16,6 +16,8 @@ import {
   SaveMetaData,
   SearchProfiles,
   UnFollow,
+  GetFollowers,
+  GetFollowing,
 } from './profile.graphql';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
@@ -29,6 +31,7 @@ import EventBus from '../common/event-bus';
 import { PROFILE_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
 import {
   GlobalSearchResult,
+  UserFollowers_Response,
   UserProfile_Response,
 } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 import { createFormattedValue, createObservableValue } from '../helpers/observable';
@@ -57,6 +60,8 @@ export default class AWF_Profile implements AWF_IProfile {
     SaveMetaData,
     SearchProfiles,
     GlobalSearch,
+    GetFollowers,
+    GetFollowing,
   };
 
   constructor(
@@ -78,7 +83,7 @@ export default class AWF_Profile implements AWF_IProfile {
    * @param opt
    */
   addProfileProvider(opt: DataProviderInput[]) {
-    return this._auth.authenticateMutationData((opt as unknown) as Record<string, unknown>[]).pipe(
+    return this._auth.authenticateMutationData(opt as unknown as Record<string, unknown>[]).pipe(
       map(res => {
         return this._gql
           .run<{ addProfileProvider: string }>({
@@ -112,7 +117,7 @@ export default class AWF_Profile implements AWF_IProfile {
    * @param opt
    */
   makeDefaultProvider(opt: DataProviderInput[]) {
-    return this._auth.authenticateMutationData((opt as unknown) as Record<string, unknown>[]).pipe(
+    return this._auth.authenticateMutationData(opt as unknown as Record<string, unknown>[]).pipe(
       map(res => {
         return this._gql
           .run<{ makeDefaultProvider: string }>({
@@ -370,7 +375,7 @@ export default class AWF_Profile implements AWF_IProfile {
       value: cid,
     };
     await lastValueFrom(
-      this._auth.authenticateMutationData((dataFinal as unknown) as Record<string, unknown>[]).pipe(
+      this._auth.authenticateMutationData(dataFinal as unknown as Record<string, unknown>[]).pipe(
         map(res => {
           this._gql.clearCache();
           return this._gql.run({
@@ -500,6 +505,40 @@ export default class AWF_Profile implements AWF_IProfile {
         query: GlobalSearch,
         variables: { keyword: keyword },
         operationName: 'GlobalSearch',
+      },
+      true,
+    );
+  }
+
+  /**
+   *
+   * @param pubKey
+   * @param limit
+   * @param offset
+   */
+  getFollowers(pubKey: string, limit: number, offset?: number) {
+    return this._gql.run<{ getFollowers: UserFollowers_Response }>(
+      {
+        query: GetFollowers,
+        variables: { pubKey, limit, offset },
+        operationName: 'GetFollowers',
+      },
+      true,
+    );
+  }
+
+  /**
+   *
+   * @param pubKey
+   * @param limit
+   * @param offset
+   */
+  getFollowing(pubKey: string, limit: number, offset?: number) {
+    return this._gql.run<{ getFollowing: UserFollowers_Response }>(
+      {
+        query: GetFollowing,
+        variables: { pubKey, limit, offset },
+        operationName: 'GetFollowing',
       },
       true,
     );
