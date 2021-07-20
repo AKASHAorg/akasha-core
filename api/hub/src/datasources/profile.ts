@@ -19,6 +19,8 @@ class ProfileAPI extends DataSource {
   private readonly collection: string;
   private context: any;
   private readonly dbID: ThreadID;
+  private readonly FOLLOWING_KEY = ':getFollowing:';
+  private readonly FOLLOWERS_KEY = ':getFollowers:';
   constructor({ collection, dbID }) {
     super();
     this.collection = collection;
@@ -214,7 +216,13 @@ class ProfileAPI extends DataSource {
 
     profile1.following.unshift(profile.pubKey);
     profile.followers.unshift(profile1.pubKey);
+
     await db.save(this.dbID, this.collection, [profile, profile1]);
+    const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${profile1.pubKey}`);
+    const followersKey = this.getCacheKey(`${this.FOLLOWERS_KEY}${profile.pubKey}`);
+
+    await queryCache.del(followingKey);
+    await queryCache.del(followersKey);
     await queryCache.del(this.getCacheKey(profile.pubKey));
     await queryCache.del(this.getCacheKey(profile1.pubKey));
     const notification = {
@@ -243,6 +251,12 @@ class ProfileAPI extends DataSource {
     profile1.following.splice(exists, 1);
     profile.followers.splice(exists1, 1);
     await db.save(this.dbID, this.collection, [profile, profile1]);
+
+    const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${profile1.pubKey}`);
+    const followersKey = this.getCacheKey(`${this.FOLLOWERS_KEY}${profile.pubKey}`);
+
+    await queryCache.del(followingKey);
+    await queryCache.del(followersKey);
     await queryCache.del(this.getCacheKey(profile.pubKey));
     await queryCache.del(this.getCacheKey(profile1.pubKey));
     return true;
@@ -290,6 +304,76 @@ class ProfileAPI extends DataSource {
   async updateProfile(updateProfile: any[]) {
     const db: Client = await getAppDB();
     return db.save(this.dbID, this.collection, updateProfile);
+  }
+
+  /**
+   * @param pubKey
+   * @param limit
+   * @param offset
+   */
+  async getFollowers(pubKey: string, limit = 5, offset = 0) {
+    const db: Client = await getAppDB();
+    const key = this.getCacheKey(`${this.FOLLOWERS_KEY}${pubKey}`);
+    const hasAllPostsCache = await queryCache.has(key);
+    let followers: string[];
+    if (!hasAllPostsCache) {
+      const query = new Where('pubKey').eq(pubKey);
+      const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
+      if (!profilesFound?.length) {
+        logger.warn(`${pubKey} not registered`);
+        throw NOT_REGISTERED;
+      }
+      await queryCache.set(key, profilesFound[0].followers);
+      followers = profilesFound[0].followers;
+    } else {
+      followers = await queryCache.get(key);
+    }
+    if (!followers?.length) {
+      return { results: [], nextIndex: undefined, total: 0 };
+    }
+    let nextIndex = limit + offset;
+    if (followers.length <= nextIndex) {
+      nextIndex = undefined;
+    }
+    console.log(followers);
+    const results = followers.slice(offset, nextIndex);
+    return { results: results, nextIndex: nextIndex, total: followers.length };
+  }
+
+  /**
+   *
+   * @param pubKey
+   * @param limit
+   * @param offset
+   */
+  async getFollowing(pubKey: string, limit = 5, offset = 0) {
+    const db: Client = await getAppDB();
+    const key = this.getCacheKey(`${this.FOLLOWING_KEY}${pubKey}`);
+    const hasAllPostsCache = await queryCache.has(key);
+    let following: string[];
+    if (!hasAllPostsCache) {
+      const query = new Where('pubKey').eq(pubKey);
+      const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
+      if (!profilesFound?.length) {
+        logger.warn(`${pubKey} not registered`);
+        throw NOT_REGISTERED;
+      }
+      await queryCache.set(key, profilesFound[0].following);
+      following = profilesFound[0].following;
+    } else {
+      following = await queryCache.get(key);
+    }
+    if (!following?.length) {
+      return { results: [], nextIndex: undefined, total: 0 };
+    }
+    console.log(following);
+    let nextIndex = limit + offset;
+    if (following.length <= nextIndex) {
+      nextIndex = undefined;
+    }
+
+    const results = following.slice(offset, nextIndex);
+    return { results: results, nextIndex: nextIndex, total: following.length };
   }
 }
 

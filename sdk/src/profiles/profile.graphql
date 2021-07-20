@@ -84,3 +84,19 @@ query GlobalSearch($keyword: String!) {
     comments{id}
   }
 }
+
+query GetFollowers($pubKey: String!, $limit: Int, $offset: Int){
+  getFollowers(pubKey: $pubKey, limit: $limit, offset: $offset){
+    results{...UserProfileFragment}
+    nextIndex
+    total
+  }
+}
+
+query GetFollowing($pubKey: String!, $limit: Int, $offset: Int){
+  getFollowing(pubKey: $pubKey, limit: $limit, offset: $offset){
+    results{...UserProfileFragment}
+    nextIndex
+    total
+  }
+}

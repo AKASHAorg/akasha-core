@@ -33,12 +33,12 @@
     "@akashaproject/design-system": "*",
     "@akashaproject/awf-sdk": "*",
     "@akashaproject/sdk-typings": "*",
-    "rxjs": "7.1.0",
-    "react-query": "3.18.1"
+    "rxjs": "7.2.0",
+    "react-query": "3.19.0"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
-    "@types/react": "17.0.2"
+    "@types/react": "17.0.14"
   },
   "peerDependencies": {
     "react": "17.0.2"
