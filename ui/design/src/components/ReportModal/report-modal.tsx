@@ -165,7 +165,15 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 *
               </Text>
             </StyledText>
-            <Box direction="column">
+            <Box direction={optionLabels.length < 1 ? 'row' : 'column'}>
+              {optionLabels.length < 1 && (
+                <>
+                  <Icon type="loading" accentColor={true} />
+                  <Text size="large" margin={{ left: 'small' }}>
+                    Fetching reasons...
+                  </Text>
+                </>
+              )}
               <RadioButtonGroup
                 gap="xxsmall"
                 name="reasons"
