@@ -6,8 +6,9 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { withProviders } from '@akashaproject/ui-awf-hooks';
 
-const { FeedbackModal, ThemeSelector, lightTheme, darkTheme } = DS;
+const { FeedbackModal } = DS;
 
 const FeedbackModalContainer = (props: RootComponentProps) => {
   const { t } = useTranslation();
@@ -37,20 +38,15 @@ const FeedbackModalContainer = (props: RootComponentProps) => {
 };
 
 const Wrapped = (props: RootComponentProps) => (
-  <ThemeSelector
-    availableThemes={[lightTheme, darkTheme]}
-    settings={{ activeTheme: 'Light-Theme' }}
-  >
-    <Router>
-      <FeedbackModalContainer {...props} />
-    </Router>
-  </ThemeSelector>
+  <Router>
+    <FeedbackModalContainer {...props} />
+  </Router>
 );
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Wrapped,
+  rootComponent: withProviders(Wrapped),
   errorBoundary: (err, errorInfo, props) => {
     if (props.logger) {
       props.logger('Error: %s; Info: %s', err, errorInfo);

@@ -50,14 +50,14 @@ export default class LoginCTAWidgetRoot extends PureComponent<ILoginCTAWidgetPro
       })
       .init({
         fallbackLng: 'en',
-        ns: ['login'],
+        ns: ['ui-widget-login-cta'],
         saveMissing: false,
         saveMissingTo: 'all',
         load: 'languageOnly',
         debug: true,
         cleanCode: true,
         keySeparator: false,
-        defaultNS: 'login',
+        defaultNS: 'ui-widget-login-cta',
         backend: {
           backends: [LocalStorageBackend, Fetch],
           backendOptions: [

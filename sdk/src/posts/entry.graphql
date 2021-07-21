@@ -100,7 +100,7 @@ mutation EditEntry($content: [DataProviderInput!], $post: PostData, $id: String)
   editPost(content: $content, post: $post, id: $id)
 }
 
-mutation RemoveEntry($id: String){
+mutation RemoveEntry($id: String!) {
   removePost(id: $id)
 }
 

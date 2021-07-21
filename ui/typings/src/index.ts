@@ -20,16 +20,13 @@ export interface RootComponentProps {
   isMobile: boolean;
   layoutConfig: Omit<AppLoaderTypes.LayoutConfig, 'loadingFn' | 'mountsIn' | 'name' | 'title'>;
   logger: any;
-  activeModal?: {
-    name: string;
-    [key: string]: string | undefined;
-  };
   mountParcel: (parcel: unknown, config?: unknown) => unknown;
   name: string;
   singleSpa: any;
   installIntegration?: (name: string) => void;
   uninstallIntegration?: (name: string) => void;
   navigateToModal: (opts: AppLoaderTypes.ModalNavigationOptions) => void;
+  activeModal: AppLoaderTypes.ModalNavigationOptions;
 }
 
 export enum LogoTypeSource {

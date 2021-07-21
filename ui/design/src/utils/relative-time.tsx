@@ -14,13 +14,17 @@ const RelativeTime: React.FC<IRelativeTime> = props => {
 
   const [relativeTime, setRelativeTime] = React.useState('');
 
-  let interval: ReturnType<typeof setInterval> | undefined;
+  // this fails if is set as ReturnType<typeof setInterval>
+  // it sees the result as number that is not assignable to type 'Timer'
+  let interval: any;
 
   React.useEffect(() => {
     parseRelativeTime(timestamp);
 
     if (!interval) {
       const timeDifference = Date.now() - timestamp;
+      // @Todo: this should be rewritten since the ref to the interval will be lost at each render
+      // this value should be inside useRef
       interval = setInterval(parseRelativeTime, determineIntervalDelay(timeDifference));
     }
     return () => {

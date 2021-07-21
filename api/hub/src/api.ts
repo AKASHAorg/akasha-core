@@ -65,8 +65,8 @@ const isAdmin = async (request, ctx) => {
   }
   return {
     ok,
-    ctx
-  }
+    ctx,
+  };
 };
 
 /**
@@ -129,7 +129,7 @@ api.post('/validate-token/:token', async (ctx: koa.Context, next: () => Promise<
  * Create a new moderation report.
  */
 api.post('/moderation/reports/new', async (ctx: koa.Context, next: () => Promise<any>) => {
-  const report = ctx?.request.body;
+  const report: any = ctx?.request.body;
   if (!report.data || !report.contentId || !report.contentType || !report.signature) {
     ctx.status = 400;
   } else {
@@ -196,7 +196,7 @@ api.post(
  * Check moderation status (reported/moderated/delisted)for a list of content identifiers.
  */
 api.post('/moderation/status', async (ctx: koa.Context, next: () => Promise<any>) => {
-  const body = ctx?.request.body;
+  const body: any = ctx?.request.body;
   const contentIDs = body.contentIds;
   if (!contentIDs) {
     ctx.status = 400;
@@ -245,7 +245,7 @@ api.get('/moderation/status/counters', async (ctx: koa.Context, next: () => Prom
  * Moderate content.
  */
 api.post('/moderation/decisions/moderate', async (ctx: koa.Context, next: () => Promise<any>) => {
-  const report = ctx?.request.body;
+  const report: any = ctx?.request.body;
   if (!report.data || !report.contentId || !report.signature) {
     ctx.status = 400;
   } else {
@@ -301,7 +301,7 @@ api.get('/moderation/decisions/:contentId', async (ctx: koa.Context, next: () =>
  * Get a list of pending moderation decisions.
  */
 api.post('/moderation/decisions/pending', async (ctx: koa.Context, next: () => Promise<any>) => {
-  const req = ctx?.request.body;
+  const req: any = ctx?.request.body;
   const decisions = await dataSources.decisionsAPI.listDecisions(
     false,
     false,
@@ -327,7 +327,7 @@ api.post('/moderation/decisions/pending', async (ctx: koa.Context, next: () => P
  * Get a list of all decisions that have been moderated.
  */
 api.post('/moderation/decisions/moderated', async (ctx: koa.Context, next: () => Promise<any>) => {
-  const req = ctx?.request.body;
+  const req: any = ctx?.request.body;
   if (req.delisted === undefined) {
     ctx.status = 400;
     ctx.body = 'Missing "delisted" attribute from request.';
@@ -358,7 +358,7 @@ api.post('/moderation/decisions/moderated', async (ctx: koa.Context, next: () =>
  * Get a public log of all content that has been moderated, for transparency purposes.
  */
 api.post('/moderation/decisions/log', async (ctx: koa.Context, next: () => Promise<any>) => {
-  const req = ctx?.request.body;
+  const req: any = ctx?.request.body;
   ctx.body = await dataSources.decisionsAPI.publicLog(req.offset, req.limit);
   ctx.set('Content-Type', 'application/json');
   ctx.status = 200;
@@ -367,15 +367,34 @@ api.post('/moderation/decisions/log', async (ctx: koa.Context, next: () => Promi
 });
 
 /**
+ * Get a log of all moderation actions for a given content identifier.
+ */
+api.get(
+  '/moderation/decisions/actions/:contentId',
+  async (ctx: koa.Context, next: () => Promise<any>) => {
+    const contentID = ctx?.params?.contentId;
+    if (!contentID) {
+      ctx.body = 'Missing "contentId" attribute from request.';
+      ctx.status = 400;
+    } else {
+      ctx.body = await dataSources.decisionsAPI.listActions(contentID);
+      ctx.set('Content-Type', 'application/json');
+      ctx.status = 200;
+    }
+    await next();
+  },
+);
+
+/**
  * Add a new moderator.
  */
 api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Promise<any>) => {
-  const request = ctx?.request.body;
+  const request: any = ctx?.request.body;
   if (!request.data || !request.secret) {
     ctx.status = 400;
   } else {
     try {
-      let allowed = await isAdmin(request, ctx);
+      const allowed = await isAdmin(request, ctx);
       ctx = allowed.ctx;
       if (allowed.ok) {
         // add the new moderator
@@ -439,83 +458,74 @@ api.get(
 /**
  * Get list of moderation reasons.
  */
- api.post(
-  '/moderation/reasons',
-  async (ctx: koa.Context, next: () => Promise<any>) => {
-    const request = ctx?.request.body;
-    ctx.set('Content-Type', 'application/json');
-    ctx.body = request && request.active ? await dataSources.reasonsAPI.listReasons(true) :
-    await dataSources.reasonsAPI.listReasons(false);
-    ctx.status = 200;
-  }
-);
+api.post('/moderation/reasons', async (ctx: koa.Context, next: () => Promise<any>) => {
+  const request: any = ctx?.request.body;
+  ctx.set('Content-Type', 'application/json');
+  ctx.body =
+    request && request.active
+      ? await dataSources.reasonsAPI.listReasons(true)
+      : await dataSources.reasonsAPI.listReasons(false);
+  ctx.status = 200;
+});
 
 /**
  * Add a new moderation reason.
  */
-api.post(
-  '/moderation/reasons/new',
-  async (ctx: koa.Context, next: () => Promise<any>) => {
-    const request = ctx?.request.body;
-    if (!request.data.label && (!request.data.ethAddress || request.secret)) {
-      ctx.status = 400;
-      ctx.body = 'Missing "label" attribute from request.';
-    } else {
-      let allowed = await isAdmin(request, ctx);
-      ctx = allowed.ctx;
-      if (allowed.ok) {
-        try {
-          // add the new reason
-          await dataSources.reasonsAPI.updateReason(
-            request.data.label,
-            request.data.description,
-            request.data.active,
-          );
-          ctx.status = 200;
-        } catch (error) {
-          ctx.body = `Cannot add reason! Error: ${error}`;
-          ctx.status = 500;
-        }
+api.post('/moderation/reasons/new', async (ctx: koa.Context, next: () => Promise<any>) => {
+  const request: any = ctx?.request.body;
+  if (!request.data.label && (!request.data.ethAddress || request.secret)) {
+    ctx.status = 400;
+    ctx.body = 'Missing "label" attribute from request.';
+  } else {
+    const allowed = await isAdmin(request, ctx);
+    ctx = allowed.ctx;
+    if (allowed.ok) {
+      try {
+        // add the new reason
+        await dataSources.reasonsAPI.updateReason(
+          request.data.label,
+          request.data.description,
+          request.data.active,
+        );
+        ctx.status = 200;
+      } catch (error) {
+        ctx.body = `Cannot add reason! Error: ${error}`;
+        ctx.status = 500;
       }
     }
-    await next();
   }
-);
+  await next();
+});
 
 /**
  * Delete a moderation reason.
  */
-api.delete(
-  '/moderation/reasons',
-  async (ctx: koa.Context, next: () => Promise<any>) => {
-    const request = ctx?.request.body;
-    if (!request.data.id) {
-      ctx.status = 400;
-      ctx.body = 'Missing "id" attribute from request.';
-    } else {
-      let allowed = await isAdmin(request, ctx);
-      ctx = allowed.ctx;
-      if (allowed.ok) {
-        try {
-          // delete reason
-          const existed = await dataSources.reasonsAPI.deleteReason(
-            request.data.id
-          );
-          ctx.status = 200;
-          if (!existed) {
-            ctx.status = 404;
-          }
-        } catch (error) {
-          ctx.status = 500;
-          ctx.body = `Cannot delete reason! Error: ${error}`;
-          if (error.message.includes('instance not found')) {
-            ctx.status = 404;
-          }
+api.delete('/moderation/reasons', async (ctx: koa.Context, next: () => Promise<any>) => {
+  const request: any = ctx?.request.body;
+  if (!request.data.id) {
+    ctx.status = 400;
+    ctx.body = 'Missing "id" attribute from request.';
+  } else {
+    const allowed = await isAdmin(request, ctx);
+    ctx = allowed.ctx;
+    if (allowed.ok) {
+      try {
+        // delete reason
+        const existed = await dataSources.reasonsAPI.deleteReason(request.data.id);
+        ctx.status = 200;
+        if (!existed) {
+          ctx.status = 404;
+        }
+      } catch (error) {
+        ctx.status = 500;
+        ctx.body = `Cannot delete reason! Error: ${error}`;
+        if (error.message.includes('instance not found')) {
+          ctx.status = 404;
         }
       }
     }
-    await next();
   }
-);
+  await next();
+});
 
 export default api;

@@ -9,7 +9,7 @@ import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
 
-const { Box, lightTheme, ThemeSelector, ViewportSizeProvider, Helmet } = DS;
+const { Box, Helmet } = DS;
 
 class App extends PureComponent<RootComponentProps> {
   public state: { hasErrors: boolean };
@@ -47,14 +47,14 @@ class App extends PureComponent<RootComponentProps> {
       })
       .init({
         fallbackLng: 'en',
-        ns: ['search'],
+        ns: ['ui-plugin-search'],
         saveMissing: false,
         saveMissingTo: 'all',
         load: 'languageOnly',
         debug: true,
         cleanCode: true,
         keySeparator: false,
-        defaultNS: 'search',
+        defaultNS: 'ui-plugin-search',
         backend: {
           backends: [LocalStorageBackend, Fetch],
           backendOptions: [
@@ -72,16 +72,12 @@ class App extends PureComponent<RootComponentProps> {
     return (
       <Box width="100vw">
         <React.Suspense fallback={<>Loading</>}>
-          <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
-            <I18nextProvider i18n={i18next}>
-              <Helmet>
-                <title>Search | Ethereum World</title>
-              </Helmet>
-              <ViewportSizeProvider>
-                <Routes {...this.props} />
-              </ViewportSizeProvider>
-            </I18nextProvider>
-          </ThemeSelector>
+          <I18nextProvider i18n={i18next}>
+            <Helmet>
+              <title>Search | Ethereum World</title>
+            </Helmet>
+            <Routes {...this.props} />
+          </I18nextProvider>
         </React.Suspense>
       </Box>
     );

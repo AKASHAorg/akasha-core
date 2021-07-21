@@ -22,6 +22,9 @@ console.time('AppLoader:firstMount');
       '@akashaproject/app-search',
       '@akashaproject/ui-plugin-app-center',
       '@akashaproject/ui-plugin-profile',
+      '@akashaproject/ui-plugin-notifications',
+      '@akashaproject/ui-plugin-legal',
+      '@akashaproject/ui-plugin-bookmarks',
     ],
     // pre-installed widgets;
     // layout widget is always loaded by default

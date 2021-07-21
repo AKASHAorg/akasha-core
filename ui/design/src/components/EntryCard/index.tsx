@@ -63,6 +63,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     scrollHiddenContent,
     disableActions,
     hideActionButtons,
+    removeEntryLabel,
+    onEntryRemove,
   } = props;
 
   return (
@@ -118,6 +120,9 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         scrollHiddenContent={scrollHiddenContent}
         disableActions={disableActions}
         hideActionButtons={hideActionButtons}
+        removeEntryLabel={removeEntryLabel}
+        onEntryRemove={onEntryRemove}
+        isRemoved={props.isRemoved}
       />
     </MainAreaCardBox>
   );

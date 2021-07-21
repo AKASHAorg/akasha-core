@@ -25,10 +25,10 @@
     "clean": "tsc --build --clean"
   },
   "dependencies": {
-    "i18next": "20.3.1"
+    "i18next": "20.3.3"
   },
   "devDependencies": {
-    "rxjs": "7.1.0"
+    "rxjs": "7.2.0"
   },
   "files": [
     "lib"

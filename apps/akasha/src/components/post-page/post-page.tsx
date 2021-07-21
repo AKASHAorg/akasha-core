@@ -25,7 +25,6 @@ const {
   Box,
   MainAreaCardBox,
   EntryBox,
-  ModalRenderer,
   VirtualList,
   Helmet,
   CommentEditor,
@@ -34,15 +33,10 @@ const {
   ErrorInfoCard,
   ErrorLoader,
   EntryCardLoading,
-  EditorModal,
 } = DS;
 
 interface IPostPage {
-  loggedProfileData?: any;
   loginState: ILoginState;
-  editorModalOpen: boolean;
-  setEditorModalOpen: () => void;
-  closeEditorModal: () => void;
   showLoginModal: () => void;
   navigateToUrl: (path: string) => void;
   isMobile: boolean;
@@ -50,17 +44,7 @@ interface IPostPage {
 }
 
 const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
-  const {
-    editorModalOpen,
-    setEditorModalOpen,
-    closeEditorModal,
-    showLoginModal,
-    logger,
-    navigateToUrl,
-    loggedProfileData,
-    loginState,
-    isMobile,
-  } = props;
+  const { showLoginModal, logger, navigateToUrl, loginState, isMobile } = props;
 
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
@@ -145,9 +129,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     if (postId && loginState.currentUserCalled) {
       postsActions.getPost(postId);
       handleLoadMore({ limit: 5, postID: postId });
-      if (loginState.ethAddress) {
-        bookmarkActions.getBookmarks();
-      }
+      // if (loginState.ethAddress) {
+      //   bookmarkActions.getBookmarks();
+      // }
     }
   }, [postId, loginState.currentUserCalled, loginState.ethAddress]);
 
@@ -218,30 +202,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     postsActions.optimisticPublishComment(data, postId, loginProfile);
   };
 
-  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
-
-  const handleRepost = (_withComment: boolean, entry: any) => {
-    setCurrentEmbedEntry(entry);
-    setEditorModalOpen();
-  };
-
-  const handleToggleEditor = () => {
-    setCurrentEmbedEntry(undefined);
-    if (editorModalOpen) {
-      closeEditorModal();
-    } else {
-      setEditorModalOpen();
-    }
-  };
-
-  const handleEntryPublish = (entry: any) => {
-    if (!loginState.ethAddress || !loginState.pubKey) {
-      showLoginModal();
-      return;
-    }
-
-    postsActions.optimisticPublishPost(entry, loggedProfileData, currentEmbedEntry, true);
-    closeEditorModal();
+  const handleRepost = (_withComment: boolean, entryData: any) => {
+    props.navigateToModal({ name: 'editor', embedEntry: entryData });
   };
 
   const handleNavigateToPost = redirectToPost(navigateToUrl, postId, postsActions.resetPostIds);
@@ -290,38 +252,25 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const entryAuthorName =
     entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
 
+  const handleCommentRemove = (commentId: string) => {
+    props.navigateToModal({
+      name: 'entry-remove-confirmation',
+      entryType: 'Comment',
+      entryId: commentId,
+    });
+  };
+  const handlePostRemove = (commentId: string) => {
+    props.navigateToModal({
+      name: 'entry-remove-confirmation',
+      entryType: 'Post',
+      entryId: commentId,
+    });
+  };
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
         <title>Post | Ethereum World</title>
       </Helmet>
-      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
-        {editorModalOpen && props.layoutConfig.modalSlotId && (
-          <EditorModal
-            slotId={props.layoutConfig.modalSlotId}
-            avatar={loggedProfileData.avatar}
-            showModal={editorModalOpen}
-            ethAddress={loggedProfileData.ethAddress}
-            postLabel={t('Publish')}
-            placeholderLabel={t('Write something')}
-            emojiPlaceholderLabel={t('Search')}
-            discardPostLabel={t('Discard Post')}
-            discardPostInfoLabel={t(
-              "You have not posted yet. If you leave now you'll discard your post.",
-            )}
-            keepEditingLabel={t('Keep Editing')}
-            onPublish={handleEntryPublish}
-            handleNavigateBack={handleToggleEditor}
-            getMentions={mentionsActions.getMentions}
-            getTags={mentionsActions.getTags}
-            tags={mentionsState.tags}
-            mentions={mentionsState.mentions}
-            uploadRequest={onUploadRequest}
-            embedEntryData={currentEmbedEntry}
-            style={{ width: '36rem' }}
-          />
-        )}
-      </ModalRenderer>
       <Box pad={{ bottom: 'small' }} border={{ side: 'bottom', size: '1px', color: 'border' }}>
         <ErrorInfoCard errors={postErrors}>
           {(errorMessages, hasCriticalErrors) => (
@@ -357,6 +306,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                   }
                   {entryData && (
                     <EntryBox
+                      isRemoved={
+                        entryData.content.length === 1 &&
+                        entryData.content[0].property === 'removed'
+                      }
                       isBookmarked={bookmarked}
                       entryData={entryData}
                       sharePostLabel={t('Share Post')}
@@ -395,6 +348,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       ctaLabel={t('See it anyway')}
                       handleFlipCard={handleFlipCard}
                       scrollHiddenContent={true}
+                      onEntryRemove={handlePostRemove}
+                      removeEntryLabel={t('Delete Post')}
+                      removedByMeLabel={t('You deleted this post')}
+                      removedByAuthorLabel={t('This post was deleted by its author')}
                     />
                   )}
                 </>
@@ -465,6 +422,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                     onTagClick={handleTagClick}
                     singleSpaNavigate={handleSingleSpaNavigate}
                     handleFlipCard={handleListFlipCard}
+                    onEntryRemove={handleCommentRemove}
+                    removeEntryLabel={t('Delete Reply')}
+                    removedByMeLabel={t('You deleted this reply')}
+                    removedByAuthorLabel={t('This reply was deleted by its author')}
                   />
                 }
                 customEntities={getPendingComments({
