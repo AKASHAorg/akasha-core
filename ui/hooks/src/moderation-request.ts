@@ -5,7 +5,7 @@ const sdk = getSDK();
 
 const { BASE_REPORT_URL, BASE_STATUS_URL, BASE_DECISION_URL, BASE_MODERATOR_URL } = constants;
 
-const fetchRequest = async (props: {
+export const fetchRequest = async (props: {
   method: string;
   url: string;
   data?: Record<string, unknown>;
