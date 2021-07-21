@@ -181,3 +181,29 @@ query GetPostsByTag($tag: String!, $offset: Int, $limit: Int, $pubKey: String) {
     total
   }
 }
+
+fragment VideoPreviewF on VideoPreview {
+  url
+  secureUrl
+  type
+  width
+  height
+}
+fragment LinkPreviewF on LinkPreview {
+  url
+  mediaType
+  contentType
+  favicons
+  videos {...VideoPreviewF}
+  title
+  siteName
+  description
+  images
+}
+
+query GetLinkPreview($link: String) {
+  getLinkPreview(link: $link){
+    ...LinkPreviewF
+  }
+}
+
