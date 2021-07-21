@@ -77,6 +77,25 @@ const typeDefs = gql`
     kept: Int
   }
 
+  type VideoPreview {
+    url: String
+    secureUrl: String
+    type: String
+    width: String
+    height: String
+  }
+  type LinkPreview {
+    url: String
+    mediaType: String
+    contentType: String
+    favicons: [String]
+    videos: [VideoPreview]
+    title: String
+    siteName: String
+    description: String
+    images: [String]
+  }
+
   type Query {
     getProfile(ethAddress: String!): UserProfile!
     resolveProfile(pubKey: String!): UserProfile!
@@ -94,6 +113,7 @@ const typeDefs = gql`
     getPostsByTag(tag: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
     getFollowers(pubKey: String!, limit: Int, offset: Int): ProfilesResult
     getFollowing(pubKey: String!, limit: Int, offset: Int): ProfilesResult
+    getLinkPreview(link: String!): LinkPreview
   }
 
   input DataProviderInput {
