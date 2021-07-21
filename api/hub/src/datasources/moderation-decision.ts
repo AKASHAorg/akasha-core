@@ -132,10 +132,12 @@ class ModerationDecisionAPI extends DataSource {
    */
   async listActions(contentID: string) {
     let decision = parse(stringify(await this.getDecision(contentID)));
-    decision.actions.forEach((element, index) => {
-      element.explanation = decodeString(element.explanation);
-      decision.actions[index] = element;
-    });
+    if (decision.actions && decision.actions.length) {
+      decision.actions.forEach((element, index) => {
+        element.explanation = decodeString(element.explanation);
+        decision.actions[index] = element;
+      });
+    }
     return decision;
   }
 

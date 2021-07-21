@@ -172,6 +172,25 @@ const query = {
     })();
     return results;
   },
+  getFollowers: async (_source, { limit, offset, pubKey }, { dataSources }) => {
+    const returned = await dataSources.profileAPI.getFollowers(pubKey, limit, offset);
+    returned.results = await Promise.all(
+      returned.results.map(_pubKey => {
+        return query.resolveProfile(_source, { pubKey: _pubKey }, { dataSources });
+      }),
+    );
+    return returned;
+  },
+
+  getFollowing: async (_source, { limit, offset, pubKey }, { dataSources }) => {
+    const returned = await dataSources.profileAPI.getFollowing(pubKey, limit, offset);
+    returned.results = await Promise.all(
+      returned.results.map(_pubKey => {
+        return query.resolveProfile(_source, { pubKey: _pubKey }, { dataSources });
+      }),
+    );
+    return returned;
+  },
 };
 
 export default query;
