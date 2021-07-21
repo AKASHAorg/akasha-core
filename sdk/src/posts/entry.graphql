@@ -201,7 +201,7 @@ fragment LinkPreviewF on LinkPreview {
   images
 }
 
-query GetLinkPreview($link: String) {
+query GetLinkPreview($link: String!) {
   getLinkPreview(link: $link){
     ...LinkPreviewF
   }
