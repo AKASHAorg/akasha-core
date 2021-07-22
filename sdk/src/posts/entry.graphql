@@ -68,7 +68,11 @@ query GetEntry($id: String!, $pubKey: String) {
 
 query GetEntries($offset: String, $limit: Int, $pubKey: String) {
   posts(offset: $offset, limit: $limit, pubKey:$pubKey) {
-   ...FeedResult
+    results{
+      ...PostResult
+    }
+    nextIndex
+    total
   }
 }
 
