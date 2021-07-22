@@ -331,10 +331,9 @@ class PostAPI extends DataSource {
 
   async getPostsByAuthor(pubKey: string, offset = 0, length = 10) {
     const result = await searchIndex.search(`${pubKey} `, {
-      facetFilters: ['category:post'],
+      facetFilters: ['category:post', `author:${pubKey}`],
       length: length,
       offset: offset,
-      restrictSearchableAttributes: ['author'],
       typoTolerance: false,
       distinct: true,
       attributesToRetrieve: ['objectID'],
@@ -386,6 +385,25 @@ class PostAPI extends DataSource {
       comments: acc.comment,
       profiles: acc.profile,
     };
+  }
+
+  async getPostsByAuthors(pubKeys: string[], offset = 0, length = 10) {
+    if (!pubKeys.length) {
+      return { results: [], nextIndex: null, total: 0 };
+    }
+    const authorsFacet: ReadonlyArray<string> = pubKeys.map(key => `author:${key}`);
+    const filter = ['category:post', authorsFacet];
+    const result = await searchIndex.search(``, {
+      facetFilters: filter as any, // lib typings need to be fixed
+      length: length,
+      offset: offset,
+      typoTolerance: false,
+      distinct: true,
+      attributesToRetrieve: ['objectID'],
+    });
+    const nextIndex = result?.hits?.length ? result.hits.length + offset : null;
+
+    return { results: result.hits, nextIndex: nextIndex, total: result.nbHits };
   }
 }
 

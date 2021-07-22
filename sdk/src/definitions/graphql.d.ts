@@ -52,6 +52,7 @@ declare module '*/entry.graphql' {
   const GetPostsByAuthor: TypedQueryDocumentNode;
   const GetPostsByTag: TypedQueryDocumentNode;
   const GetLinkPreview: TypedQueryDocumentNode;
+  const GetCustomFeed: TypedQueryDocumentNode;
   const CreateEntry: DocumentNode;
   const EditEntry: DocumentNode;
   const RemoveEntry: DocumentNode;
@@ -67,6 +68,7 @@ declare module '*/entry.graphql' {
     EditEntry,
     RemoveEntry,
     GetLinkPreview,
+    GetCustomFeed,
   };
 }
 

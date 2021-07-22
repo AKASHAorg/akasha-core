@@ -17,12 +17,28 @@ fragment UserProfileFragment on UserProfile{
   totalFollowing
 }
 
-query GetEntry($id: String!, $pubKey: String) {
-  getPost(id: $id, pubKey:$pubKey) {
+fragment PostResult on Post{
+  content{
+    ...DataProviderFragment
+  }
+  author{
+    ...UserProfileFragment
+  }
+  title
+  type
+  _id
+  creationDate
+  tags
+  totalComments
+  quotedBy
+  quotedByAuthors{
+    ...UserProfileFragment
+  }
+  quotes{
     content{
       ...DataProviderFragment
     }
-    author {
+    author{
       ...UserProfileFragment
     }
     title
@@ -30,24 +46,21 @@ query GetEntry($id: String!, $pubKey: String) {
     _id
     creationDate
     tags
-    totalComments
-    quotedBy
-    quotedByAuthors{
-      ...UserProfileFragment
-    }
-    quotes{
-      content{
-        ...DataProviderFragment
-      }
-      author{
-        ...UserProfileFragment
-      }
-      title
-      type
-      _id
-      creationDate
-      tags
-    }
+  }
+}
+
+fragment FeedResult on NewPostsResult{
+  results{
+    ...PostResult
+  }
+  nextIndex
+  total
+}
+
+
+query GetEntry($id: String!, $pubKey: String) {
+  getPost(id: $id, pubKey:$pubKey) {
+    ...PostResult
   }
 }
 
@@ -55,39 +68,7 @@ query GetEntry($id: String!, $pubKey: String) {
 
 query GetEntries($offset: String, $limit: Int, $pubKey: String) {
   posts(offset: $offset, limit: $limit, pubKey:$pubKey) {
-    results{
-      content{
-        ...DataProviderFragment
-      }
-      author{
-        ...UserProfileFragment
-      }
-      title
-      type
-      _id
-      creationDate
-      tags
-      totalComments
-      quotedBy
-      quotedByAuthors{
-        ...UserProfileFragment
-      }
-      quotes{
-        content{
-          ...DataProviderFragment
-        }
-        author{
-          ...UserProfileFragment
-        }
-        title
-        type
-        _id
-        creationDate
-        tags
-      }
-    }
-    nextIndex
-    total
+   ...FeedResult
   }
 }
 
@@ -106,39 +87,7 @@ mutation RemoveEntry($id: String!) {
 
 query GetPostsByAuthor($author: String!, $offset: Int, $limit: Int, $pubKey: String) {
   getPostsByAuthor(author: $author, offset: $offset, limit: $limit, pubKey:$pubKey) {
-    results{
-      content{
-        ...DataProviderFragment
-      }
-      author{
-        ...UserProfileFragment
-      }
-      title
-      type
-      _id
-      creationDate
-      tags
-      totalComments
-      quotedBy
-      quotedByAuthors{
-        ...UserProfileFragment
-      }
-      quotes{
-        content{
-          ...DataProviderFragment
-        }
-        author{
-          ...UserProfileFragment
-        }
-        title
-        type
-        _id
-        creationDate
-        tags
-      }
-    }
-    nextIndex
-    total
+    ...FeedResult
   }
 }
 
@@ -146,39 +95,7 @@ query GetPostsByAuthor($author: String!, $offset: Int, $limit: Int, $pubKey: Str
 
 query GetPostsByTag($tag: String!, $offset: Int, $limit: Int, $pubKey: String) {
   getPostsByTag(tag: $tag, offset: $offset, limit: $limit, pubKey:$pubKey) {
-    results{
-      content{
-        ...DataProviderFragment
-      }
-      author{
-        ...UserProfileFragment
-      }
-      title
-      type
-      _id
-      creationDate
-      tags
-      totalComments
-      quotedBy
-      quotedByAuthors{
-        ...UserProfileFragment
-      }
-      quotes{
-        content{
-          ...DataProviderFragment
-        }
-        author{
-          ...UserProfileFragment
-        }
-        title
-        type
-        _id
-        creationDate
-        tags
-      }
-    }
-    nextIndex
-    total
+    ...FeedResult
   }
 }
 
@@ -207,3 +124,8 @@ query GetLinkPreview($link: String!) {
   }
 }
 
+query GetCustomFeed($limit: Int, $offset: Int) {
+  getCustomFeed(limit: $limit, offset: $offset){
+    ...FeedResult
+  }
+}
