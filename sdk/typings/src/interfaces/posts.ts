@@ -38,6 +38,18 @@ export interface AWF_IEntry {
    * @param opt
    */
   entriesByTag(opt: { name: string; offset?: string; limit: number }): Observable<unknown>;
+
+  /**
+   *
+   * @param link
+   */
+  getLinkPreview(link: string): unknown;
+
+  /**
+   *
+   * @param opt
+   */
+  getFeedEntries(opt: { offset?: number; limit: number }): unknown;
 }
 
 export interface AWF_IComments {
