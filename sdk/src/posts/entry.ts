@@ -277,9 +277,9 @@ export default class AWF_Entry implements AWF_IEntry {
   }
 
   getFeedEntries(opt: { offset?: number; limit: number }) {
-    return this._auth.getCurrentUser().pipe(
-      map(result => {
-        if (!result) {
+    return this._auth.getToken().pipe(
+      map(token => {
+        if (!token) {
           throw new Error('Must be authenticated in order to access the personalized feed api.');
         }
         return this._gql.run<{ getCustomFeed: PostsResult_Response }>(
@@ -290,6 +290,11 @@ export default class AWF_Entry implements AWF_IEntry {
               limit: opt.limit,
             },
             operationName: 'GetCustomFeed',
+            context: {
+              headers: {
+                Authorization: `Bearer ${token.data}`,
+              },
+            },
           },
           true,
         );
