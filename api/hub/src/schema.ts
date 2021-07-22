@@ -114,6 +114,7 @@ const typeDefs = gql`
     getFollowers(pubKey: String!, limit: Int, offset: Int): ProfilesResult
     getFollowing(pubKey: String!, limit: Int, offset: Int): ProfilesResult
     getLinkPreview(link: String!): LinkPreview
+    getCustomFeed(limit: Int, offset: Int): NewPostsResult
   }
 
   input DataProviderInput {
