@@ -366,7 +366,6 @@ class ProfileAPI extends DataSource {
     if (!following?.length) {
       return { results: [], nextIndex: undefined, total: 0 };
     }
-    console.log(following);
     let nextIndex = limit + offset;
     if (following.length <= nextIndex) {
       nextIndex = undefined;
