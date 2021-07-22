@@ -282,7 +282,7 @@ export default class AWF_Entry implements AWF_IEntry {
         if (!result) {
           throw new Error('Must be authenticated in order to access the personalized feed api.');
         }
-        return this._gql.run<{ getPostsByAuthor: PostsResult_Response }>(
+        return this._gql.run<{ getCustomFeed: PostsResult_Response }>(
           {
             query: GetCustomFeed,
             variables: {
