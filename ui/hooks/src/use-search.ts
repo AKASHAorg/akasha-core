@@ -92,7 +92,6 @@ export const useSearch = (props: UseSearchProps): [ISearchState, UseSearchAction
 
   async function fetchSearchResults(searchQuery: string) {
     const searchResp = await lastValueFrom(sdk.api.profile.globalSearch(searchQuery));
-    const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
     // get profiles data
     const getProfilesCalls = searchResp.data?.globalSearch?.profiles?.map(
@@ -108,10 +107,10 @@ export const useSearch = (props: UseSearchProps): [ISearchState, UseSearchAction
         coverImage: null,
       };
       if (avatar) {
-        images.avatar = getMediaUrl(ipfsGateway, avatar);
+        images.avatar = getMediaUrl(avatar);
       }
       if (coverImage) {
-        images.coverImage = getMediaUrl(ipfsGateway, coverImage);
+        images.coverImage = getMediaUrl(coverImage);
       }
       const profileData = { ...images, ...other };
       return profileData;
@@ -127,7 +126,7 @@ export const useSearch = (props: UseSearchProps): [ISearchState, UseSearchAction
 
     let completeEntries = entriesResp?.map(entryResp => {
       entryIds.push(entryResp.data?.getPost._id);
-      return mapEntry(entryResp.data?.getPost, ipfsGateway, logger);
+      return mapEntry(entryResp.data?.getPost, logger);
     });
 
     try {
@@ -167,7 +166,7 @@ export const useSearch = (props: UseSearchProps): [ISearchState, UseSearchAction
     const commentsResp = await lastValueFrom(forkJoin(getCommentsCalls));
 
     const completeComments = commentsResp?.map(commentResp => {
-      return mapEntry(commentResp.data?.getComment, ipfsGateway, logger);
+      return mapEntry(commentResp.data?.getComment, logger);
     });
 
     // get tags data

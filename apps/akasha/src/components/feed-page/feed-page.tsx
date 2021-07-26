@@ -1,10 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import {
-  ILoadItemDataPayload,
-  ILoadItemsPayload,
-} from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
+
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
@@ -17,8 +14,6 @@ import { useBookmarks, useErrors } from '@akashaproject/ui-awf-hooks';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
-
-// import { useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 
 const { Box, Helmet, VirtualList, EditorPlaceholder } = DS;
 
@@ -42,12 +37,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   });
   const [errorState] = useErrors({ logger });
 
-  // @Todo: replace this with useInfinitePosts()
-  // const [postsState, postsActions] = usePosts({
-  //   user: loginState.ethAddress,
-  //   onError: errorActions.createError,
-  // });
-
   const reqPosts = useInfinitePosts(15);
   const postsState = reqPosts.data;
   const ids = React.useMemo(() => {
@@ -64,9 +53,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     if (!reqPosts.isSuccess) {
       return list;
     }
-    postsState.pages.forEach(el =>
-      el.results.forEach(el1 => (list[el1._id] = mapEntry(el1, 'https://hub.textile.io/ipfs'))),
-    );
+    postsState.pages.forEach(el => el.results.forEach(el1 => (list[el1._id] = mapEntry(el1))));
     return list;
   }, [reqPosts.isSuccess]);
 
@@ -85,27 +72,14 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   }, [JSON.stringify(loginState)]);
 
-  // React.useEffect(() => {
-  //   if (
-  //     !postsState.postIds.length &&
-  //     !postsState.isFetchingPosts &&
-  //     postsState.totalItems === null
-  //   ) {
-  //     postsActions.getPosts({ limit: 5 });
-  //   }
-  // }, [postsState.postIds.length, postsState.isFetchingPosts]);
-
   //@Todo: replace this with fetchNextPage() from useInfinitePosts object
-  const handleLoadMore = (_payload: ILoadItemsPayload) => {
-    // const req: { limit: number; offset?: string } = {
-    //   limit: payload.limit,
-    // };
+  const handleLoadMore = () => {
     if (!reqPosts.isFetching && loginState.currentUserCalled) {
       reqPosts.fetchNextPage().then(d => console.log('fetched next page', d));
     }
   };
 
-  const loadItemData = (_payload: ILoadItemDataPayload) => {
+  const loadItemData = () => {
     //postsActions.getPost(payload.itemId);
   };
 

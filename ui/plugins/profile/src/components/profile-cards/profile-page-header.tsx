@@ -7,12 +7,8 @@ import {
   ModalStateActions,
   MODAL_NAMES,
 } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
-import {
-  useFollow,
-  useENSRegistration,
-  useErrors,
-  useNetworkState,
-} from '@akashaproject/ui-awf-hooks';
+import { useFollow, useENSRegistration, useErrors } from '@akashaproject/ui-awf-hooks';
+import { useNetworkState } from '@akashaproject/ui-awf-hooks/lib/use-network-state.new';
 import {
   ENSOptionTypes,
   EnsFormOption,
@@ -132,7 +128,8 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
     onError: ensErrorActions.createError,
   });
 
-  const [networkState, networkActions] = useNetworkState();
+  const checkNetworkReq = useNetworkState(loggedUserEthAddress);
+  const networkState = checkNetworkReq.data;
 
   React.useEffect(() => {
     if (profileUpdateStatus.updateComplete && !isRegistration) {
@@ -166,9 +163,9 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
     ) {
       followActions.isFollowing(loggedUserEthAddress, profileState.ethAddress);
     }
-    if (loggedUserEthAddress) {
-      networkActions.checkNetwork();
-    }
+    // if (loggedUserEthAddress) {
+    //   networkActions.checkNetwork();
+    // }
   }, [loggedUserEthAddress, profileState.ethAddress]);
 
   const handleModalClose = () => {

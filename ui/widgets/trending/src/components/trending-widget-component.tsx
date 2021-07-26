@@ -1,12 +1,20 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
+import { useLoginState } from '@akashaproject/ui-awf-hooks';
 import {
-  useTrendingData,
-  useLoginState,
+  useTrendingTags,
+  useTrendingProfiles,
+} from '@akashaproject/ui-awf-hooks/lib/use-trending.new';
+import {
+  useTagSubscriptions,
+  useToggleTagSubscription,
+} from '@akashaproject/ui-awf-hooks/lib/use-tag-subscribe.new';
+import {
+  useIsFollowingMultiple,
   useFollow,
-  useTagSubscribe,
-} from '@akashaproject/ui-awf-hooks';
+  useUnfollow,
+} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 import useErrorState from '@akashaproject/ui-awf-hooks/lib/use-error-state';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
@@ -19,48 +27,55 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
 
   const [errorState, errorActions] = useErrorState({ logger });
 
-  const [trendingData] = useTrendingData({
-    onError: errorActions.createError,
-  });
-
   const [loginState] = useLoginState({
     onError: errorActions.createError,
   });
 
-  const [followedProfiles, followActions] = useFollow({
-    onError: errorActions.createError,
-  });
+  const trendingTagsReq = useTrendingTags();
+  const trendingTags = trendingTagsReq.data;
+  const trendingProfilesReq = useTrendingProfiles();
+  const trendingProfiles = trendingProfilesReq.data;
 
-  const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
-    onError: errorActions.createError,
-  });
+  const followEthAddressArr = trendingProfiles
+    .slice(0, 4)
+    .map((profile: { ethAddress: string }) => profile.ethAddress);
+
+  const isFollowingMultipleReq = useIsFollowingMultiple(loginState.ethAddress, followEthAddressArr);
+  const followedProfiles = isFollowingMultipleReq.data;
+
+  const tagSubscriptionsReq = useTagSubscriptions(loginState.ready?.ethAddress);
+  const tagSubscriptions = tagSubscriptionsReq.data;
+
+  const toggleTagSubscriptionReq = useToggleTagSubscription();
+  const followReq = useFollow();
+  const unfollowReq = useUnfollow();
 
   const showLoginModal = () => {
     props.navigateToModal({ name: 'login' });
   };
 
-  React.useEffect(() => {
-    if (loginState.ethAddress) {
-      const followEthAddressArr = trendingData.profiles
-        .slice(0, 4)
-        .map((profile: { ethAddress: string }) => profile.ethAddress);
-      followActions.isFollowingMultiple(loginState.ethAddress, followEthAddressArr);
-    }
-  }, [trendingData, loginState.ethAddress]);
+  // React.useEffect(() => {
+  //   if (loginState.ethAddress && trendingProfiles.length) {
+  //     const followEthAddressArr = trendingProfiles
+  //       .slice(0, 4)
+  //       .map((profile: { ethAddress: string }) => profile.ethAddress);
+  //     followActions.isFollowingMultiple(loginState.ethAddress, followEthAddressArr);
+  //   }
+  // }, [trendingProfiles, loginState.ethAddress]);
 
-  React.useEffect(() => {
-    if (loginState.waitForAuth && !loginState.ready) {
-      return;
-    }
-    if (loginState.ready) {
-      tagSubscriptionActions.getTagSubscriptions();
-    }
-  }, [
-    loginState.currentUserCalled,
-    loginState.ethAddress,
-    loginState.ready,
-    loginState.waitForAuth,
-  ]);
+  // React.useEffect(() => {
+  //   if (loginState.waitForAuth && !loginState.ready) {
+  //     return;
+  //   }
+  //   if (loginState.ready) {
+  //     tagSubscriptionActions.getTagSubscriptions();
+  //   }
+  // }, [
+  //   loginState.currentUserCalled,
+  //   loginState.ethAddress,
+  //   loginState.ready,
+  //   loginState.waitForAuth,
+  // ]);
 
   const handleTagClick = (tagName: string) => {
     singleSpa.navigateToUrl(`/social-app/tags/${tagName}`);
@@ -71,14 +86,14 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       showLoginModal();
       return;
     }
-    tagSubscriptionActions.toggleTagSubscription(tagName);
+    toggleTagSubscriptionReq.mutate(tagName);
   };
   const handleTagUnsubscribe = (tagName: string) => {
     if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
-    tagSubscriptionActions.toggleTagSubscription(tagName);
+    toggleTagSubscriptionReq.mutate(tagName);
   };
   const handleProfileClick = (pubKey: string) => {
     singleSpa.navigateToUrl(`/profile/${pubKey}`);
@@ -88,7 +103,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       showLoginModal();
       return;
     }
-    followActions.follow(ethAddress);
+    followReq.mutate(ethAddress);
   };
 
   const handleUnfollowProfile = (ethAddress: string) => {
@@ -96,7 +111,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       showLoginModal();
       return;
     }
-    followActions.unfollow(ethAddress);
+    unfollowReq.mutate(ethAddress);
   };
 
   return (
@@ -126,10 +141,10 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
               followingLabel={t('Following')}
               tagAnchorLink={'/social-app/tags'}
               profileAnchorLink={'/profile'}
-              tags={trendingData.tags}
-              profiles={trendingData.profiles}
+              tags={trendingTags}
+              profiles={trendingProfiles}
               followedProfiles={followedProfiles}
-              subscribedTags={tagSubscriptionState}
+              subscribedTags={tagSubscriptions}
               onClickTag={handleTagClick}
               handleSubscribeTag={handleTagSubscribe}
               handleUnsubscribeTag={handleTagUnsubscribe}
