@@ -40,6 +40,26 @@ export interface PostsResult_Response {
   total: number;
 }
 
+export interface VideoPreview_Response {
+  url: string;
+  secureUrl: string;
+  type: string;
+  width: string;
+  height: string;
+}
+
+export interface LinkPreview_Response {
+  url: string;
+  mediaType: string;
+  contentType: string;
+  favicons: [string];
+  videos: [VideoPreview_Response];
+  title: string;
+  siteName: string;
+  description: string;
+  images: [string];
+}
+
 export interface UserProfile_Response {
   _id: string;
   ethAddress: string;

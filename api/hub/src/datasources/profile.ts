@@ -335,7 +335,6 @@ class ProfileAPI extends DataSource {
     if (followers.length <= nextIndex) {
       nextIndex = undefined;
     }
-    console.log(followers);
     const results = followers.slice(offset, nextIndex);
     return { results: results, nextIndex: nextIndex, total: followers.length };
   }
@@ -366,7 +365,6 @@ class ProfileAPI extends DataSource {
     if (!following?.length) {
       return { results: [], nextIndex: undefined, total: 0 };
     }
-    console.log(following);
     let nextIndex = limit + offset;
     if (following.length <= nextIndex) {
       nextIndex = undefined;

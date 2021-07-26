@@ -13,6 +13,8 @@ import { normalize } from 'eth-ens-namehash';
 import { ethers, utils, providers } from 'ethers';
 import objHash from 'object-hash';
 import sendgrid from '@sendgrid/mail';
+import { fetch } from 'cross-fetch';
+import AbortController from 'node-abort-controller';
 
 if (process.env.SENDGRID_API_KEY) {
   sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
@@ -241,3 +243,18 @@ export const decodeString = (value: string) => {
 export const encodeString = (value: string) => {
   return value ? Buffer.from(value).toString('base64') : '';
 };
+
+export async function fetchWithTimeout(resource, options) {
+  const { timeout = 12000 } = options;
+
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+
+  const response = await fetch(resource, {
+    ...options,
+    signal: controller.signal,
+  });
+  clearTimeout(id);
+
+  return response;
+}
