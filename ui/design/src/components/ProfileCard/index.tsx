@@ -55,7 +55,9 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   changeCoverImageLabel?: string;
   cancelLabel?: string;
   saveChangesLabel?: string;
+  // reporting and moderation related labels
   flagAsLabel?: string;
+  blockLabel?: string;
   flaggable: boolean;
   onEntryFlag: () => void;
   getProfileProvidersData?: () => void;
@@ -318,6 +320,10 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         <ProfileMenuDropdown
           target={menuRef.current}
           onClose={closeMenu}
+          onBlockClick={() => {
+            /* @todo: replace with handler to block account */
+            closeMenu();
+          }}
           onReportClick={() => {
             props.onEntryFlag();
             closeMenu();
@@ -333,6 +339,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           changeENSLabel={props.changeENSLabel}
           updateProfileLabel={props.updateProfileLabel}
           flagAsLabel={props.flagAsLabel}
+          blockLabel={props.blockLabel}
           hideENSButton={props.hideENSButton}
           flaggable={props.flaggable}
         />

@@ -548,7 +548,8 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
         saveChangesLabel={t('Save changes')}
         canUserEdit={loggedUserEthAddress === profileState.ethAddress}
         flaggable={loggedUserEthAddress !== profileState.ethAddress}
-        flagAsLabel={t('Report account')}
+        flagAsLabel={t('Report')}
+        blockLabel={t('Block')}
         onEntryFlag={handleEntryFlag(
           profileState.ethAddress ? profileState.ethAddress : '',
           'account',

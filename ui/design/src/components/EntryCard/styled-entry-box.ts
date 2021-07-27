@@ -12,6 +12,7 @@ const StyledLayerElemDiv = styled.div`
 const StyledDrop = styled(Drop)`
   z-index: 10;
   position: fixed;
+  left: 823px;
   border: 1px solid ${props => props.theme.colors.border};
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
 `;

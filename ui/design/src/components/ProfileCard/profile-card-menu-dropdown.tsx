@@ -8,10 +8,12 @@ import TextIcon from '../TextIcon';
 interface IProfileEditMenuProps {
   target: HTMLDivElement;
   onClose: () => void;
+  onBlockClick: () => void;
   onReportClick: () => void;
   onUpdateClick: () => void;
   onENSChangeClick: () => void;
   flagAsLabel?: string;
+  blockLabel?: string;
   updateProfileLabel?: string;
   changeENSLabel?: string;
   hideENSButton?: boolean;
@@ -21,12 +23,13 @@ interface IProfileEditMenuProps {
 const MenuOption = styled(StyledSelectBox)`
   padding: 0.5em;
   &:hover {
-    background: transparent;
+    background: ${props => props.theme.colors.ultraLightBackground};
   }
 `;
 
 const ProfileMenuDropdown = (props: IProfileEditMenuProps) => {
-  const { flaggable, onClose, onENSChangeClick, onReportClick, onUpdateClick } = props;
+  const { flaggable, onClose, onENSChangeClick, onBlockClick, onReportClick, onUpdateClick } =
+    props;
 
   const theme: any = React.useContext(ThemeContext);
 
@@ -39,18 +42,30 @@ const ProfileMenuDropdown = (props: IProfileEditMenuProps) => {
       onEsc={onClose}
       style={{ padding: '0.65em 0.3em' }}
     >
-      <Box pad="xxsmall" width={{ min: '13rem' }}>
+      <Box pad="xxsmall" width="fit-content">
         {flaggable && (
-          <MenuOption>
-            <TextIcon
-              iconType="report"
-              label={props.flagAsLabel}
-              onClick={onReportClick}
-              color={theme.colors.errorText}
-              iconSize="xs"
-              fontSize="medium"
-            />
-          </MenuOption>
+          <>
+            <MenuOption>
+              <TextIcon
+                iconType="block"
+                label={props.blockLabel}
+                onClick={onBlockClick}
+                color={theme.colors.errorText}
+                iconSize="xs"
+                fontSize="medium"
+              />
+            </MenuOption>
+            <MenuOption>
+              <TextIcon
+                iconType="report"
+                label={props.flagAsLabel}
+                onClick={onReportClick}
+                color={theme.colors.errorText}
+                iconSize="xs"
+                fontSize="medium"
+              />
+            </MenuOption>
+          </>
         )}
         {!flaggable && (
           <>
