@@ -15,6 +15,7 @@ import arrowUp from './arrow-up';
 import arrowLeft from './arrow-left';
 import arrowRight from './arrow-right';
 import available from './available';
+import block from './block';
 import bold from './bold';
 import book from './book';
 import bookmark from './bookmark';
@@ -136,6 +137,7 @@ export {
   arrowRight,
   bookmark,
   book,
+  block,
   bold,
   comments,
   close,
