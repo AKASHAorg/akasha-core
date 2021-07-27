@@ -73,9 +73,11 @@ const ReportModalComponent = (props: RootComponentProps) => {
   return (
     <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
       <ReportModal
-        titleLabel={t(`Report ${activeModal.contentType}`)}
+        titleLabel={t(`Report ${activeModal.user}`)}
         successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
-        successMessageLabel={t('We will investigate this post and take appropriate action.')}
+        successMessageLabel={t(
+          `We will investigate this ${activeModal.contentType} and take appropriate action.`,
+        )}
         optionsTitleLabel={t('Please select a reason')}
         optionLabels={reasons.map((el: string) => t(el))}
         optionValues={reasons}
@@ -84,6 +86,9 @@ const ReportModalComponent = (props: RootComponentProps) => {
         footerText1Label={t('If you are unsure, you can refer to our')}
         footerLink1Label={t('Code of Conduct')}
         footerUrl1={'/legal/code-of-conduct'}
+        footerText2Label={t('and')}
+        footerLink2Label={t('Terms of Service')}
+        footerUrl2={'/legal/terms-of-service'}
         cancelLabel={t('Cancel')}
         reportLabel={t('Report')}
         blockLabel={t('Block User')}

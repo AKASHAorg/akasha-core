@@ -273,8 +273,8 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
     }
   };
 
-  const handleEntryFlag = (entryId: string, contentType: string) => () => {
-    props.navigateToModal({ name: 'report-modal', entryId, contentType });
+  const handleEntryFlag = (entryId: string, contentType: string, user: string) => () => {
+    props.navigateToModal({ name: 'report-modal', entryId, contentType, user });
   };
 
   const onProfileUpdateSubmit = (data: any) => {
@@ -553,6 +553,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
         onEntryFlag={handleEntryFlag(
           profileState.ethAddress ? profileState.ethAddress : '',
           'account',
+          profileState.name,
         )}
         onUpdateClick={showUpdateProfileModal}
         onENSChangeClick={showEnsModal}

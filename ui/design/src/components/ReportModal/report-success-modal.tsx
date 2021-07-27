@@ -2,8 +2,7 @@ import React from 'react';
 import { Box, Text } from 'grommet';
 
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
-import { StyledBox, ModalWrapper } from '../ListModal/styled-modal';
-import Button from '../Button';
+import { StyledBox, ModalWrapper, ModalButton } from '../ListModal/styled-modal';
 
 export interface IReportSuccessModalProps {
   className?: string;
@@ -26,18 +25,24 @@ const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
     successTitleLabel,
     successMessageLabel,
     contentId,
+    blockLabel,
     closeLabel,
     size,
     updateEntry,
     closeModal,
   } = props;
 
-  const handleModalClose = () => {
-    if (updateEntry && contentId) {
-      updateEntry(contentId);
-    }
-    closeModal();
-  };
+  const handleModalClose =
+    (blockUser = false) =>
+    () => {
+      if (blockUser) {
+        /* @todo: replace with handler to block account */
+      }
+      if (updateEntry && contentId) {
+        updateEntry(contentId);
+      }
+      closeModal();
+    };
 
   return (
     <ModalWrapper>
@@ -65,7 +70,13 @@ const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
               {successMessageLabel}
             </Text>
             <Box direction="row" margin={{ top: 'large' }} alignSelf="center">
-              <Button primary={true} label={closeLabel} onClick={handleModalClose} />
+              <ModalButton
+                label={blockLabel}
+                margin={{ right: '0.5rem' }}
+                disabled={true}
+                onClick={handleModalClose(true)}
+              />
+              <ModalButton primary={true} label={closeLabel} onClick={handleModalClose()} />
             </Box>
           </Box>
         </MainAreaCardBox>
