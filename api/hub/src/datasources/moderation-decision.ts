@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB, logger, encodeString, decodeString } from '../helpers';
+import { getAppDB, logger, encodeString, decodeString, sendAuthorNotification } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { ModerationDecision, ModerationAction } from '../collections/interfaces';
 import ProfileAPI from './profile';
@@ -306,7 +306,25 @@ class ModerationDecisionAPI extends DataSource {
     });
 
     await db.save(this.dbID, this.collection, [decision]);
-
+    // send notifications only when delisting
+    if (delisted) {
+      const profileAPI = new ProfileAPI({ dbID: this.dbID, collection: 'Profiles' });
+      const moderatorProfile = await profileAPI.getProfile(moderator);
+      let notificationType = 'MODERATED_POST';
+      if (decision.contentType === 'reply') {
+        notificationType = 'MODERATED_REPLY';
+      } else if (decision.contentType == 'account') {
+        notificationType = 'MODEREATED_ACCOUNT';
+      }
+      await sendAuthorNotification(moderatorProfile.pubKey, {
+        property: notificationType,
+        provider: 'awf.moderation.api',
+        value: {
+          author: moderatorProfile.pubKey,
+          moderatedID: contentID,
+        },
+      });
+    }
     // handle caching
     await queryCache.del(this.getDecisionCacheKey(contentID));
     await queryCache.del(this.getModeratedDecisionCacheKey(contentID));
