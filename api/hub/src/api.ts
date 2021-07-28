@@ -8,7 +8,6 @@ import ModerationReportAPI from './datasources/moderation-report';
 import ModerationDecisionAPI from './datasources/moderation-decision';
 import ModerationAdminAPI from './datasources/moderation-admin';
 import ModerationReasonAPI from './datasources/moderation-reasons';
-import { statSync } from 'fs';
 // import { Invite } from './collections/interfaces';
 
 export const promRegistry = new promClient.Registry();
