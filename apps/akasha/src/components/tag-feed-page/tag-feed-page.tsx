@@ -1,15 +1,19 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { ILoadItemsPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
-import { usePosts, useTagSubscribe, useErrors } from '@akashaproject/ui-awf-hooks';
+import { useErrors } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
-import { useTranslation } from 'react-i18next';
 import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ITag } from '@akashaproject/design-system/lib/components/TrendingWidgetCard';
+import { useInfinitePostsByTag } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import {
+  useTagSubscriptions,
+  useToggleTagSubscription,
+} from '@akashaproject/ui-awf-hooks/lib/use-tag-subscribe.new';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
 const { Box, TagProfileCard, Helmet } = DS;
 
@@ -44,58 +48,69 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     }
   }, [tagName]);
 
-  const [errorState, errorActions] = useErrors({ logger });
+  const [errorState] = useErrors({ logger });
 
-  const [postsState, postsActions] = usePosts({
-    user: loginState.ethAddress,
-    onError: errorActions.createError,
-  });
-
-  const [tagSubscriptionState, tagSubscriptionActions] = useTagSubscribe({
-    onError: errorActions.createError,
-  });
-
-  React.useEffect(() => {
-    // reset post ids and virtual list, if user logs in or tag changes
-    postsActions.resetPostIds();
-  }, [loginState.ethAddress, tagName]);
-
-  React.useEffect(() => {
-    if (loginState.waitForAuth && !loginState.ready) {
-      return;
+  const reqPosts = useInfinitePostsByTag(tagName, 15);
+  const postsState = reqPosts.data;
+  const ids = React.useMemo(() => {
+    const list = [];
+    if (!reqPosts.isSuccess) {
+      return list;
     }
-    if (
-      (loginState.waitForAuth && loginState.ready) ||
-      (loginState.currentUserCalled && loginState.ethAddress)
-    ) {
-      tagSubscriptionActions.getTagSubscriptions();
+    postsState.pages.forEach(el => el.results.forEach(el1 => list.push(el1._id)));
+    return list;
+  }, [reqPosts.isSuccess, postsState?.pages]);
+
+  const entriesData = React.useMemo(() => {
+    const list = {};
+    if (!reqPosts.isSuccess) {
+      return list;
     }
-  }, [JSON.stringify(loginState)]);
+    postsState.pages.forEach(el => el.results.forEach(el1 => (list[el1._id] = mapEntry(el1))));
+    return list;
+  }, [reqPosts.isSuccess, postsState?.pages]);
 
-  React.useEffect(() => {
-    // if post ids array is reset, get tag posts
-    if (
-      postsState.postIds.length === 0 &&
-      !postsState.isFetchingPosts &&
-      postsState.totalItems === null
-    ) {
-      postsActions.getTagPosts({ name: tagName, limit: 5 });
-    }
-  }, [postsState.postIds, postsState.isFetchingPosts]);
+  const tagSubscriptionsReq = useTagSubscriptions(loginState.ready?.ethAddress);
+  const tagSubscriptions = tagSubscriptionsReq.data;
 
-  const { t } = useTranslation();
+  const toggleTagSubscriptionReq = useToggleTagSubscription();
 
-  const handleLoadMore = (payload: ILoadItemsPayload) => {
-    const req: { limit: number; offset?: string } = {
-      limit: payload.limit,
-    };
-    if (!postsState.isFetchingPosts && tagName) {
-      postsActions.getTagPosts({ name: tagName, ...req });
+  // React.useEffect(() => {
+  //   // reset post ids and virtual list, if user logs in or tag changes
+  //   postsActions.resetPostIds();
+  // }, [loginState.ethAddress, tagName]);
+
+  // React.useEffect(() => {
+  //   if (loginState.waitForAuth && !loginState.ready) {
+  //     return;
+  //   }
+  //   if (
+  //     (loginState.waitForAuth && loginState.ready) ||
+  //     (loginState.currentUserCalled && loginState.ethAddress)
+  //   ) {
+  //     tagSubscriptionActions.getTagSubscriptions();
+  //   }
+  // }, [JSON.stringify(loginState)]);
+
+  // React.useEffect(() => {
+  //   // if post ids array is reset, get tag posts
+  //   if (
+  //     postsState.postIds.length === 0 &&
+  //     !postsState.isFetchingPosts &&
+  //     postsState.totalItems === null
+  //   ) {
+  //     postsActions.getTagPosts({ name: tagName, limit: 5 });
+  //   }
+  // }, [postsState.postIds, postsState.isFetchingPosts]);
+
+  const handleLoadMore = () => {
+    if (!reqPosts.isFetching && loginState.currentUserCalled) {
+      reqPosts.fetchNextPage().then(d => console.log('fetched next page', d));
     }
   };
 
-  const handleItemDataLoad = ({ itemId }: { itemId: string }) => {
-    postsActions.getPost(itemId);
+  const handleItemDataLoad = () => {
+    /* */
   };
 
   const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
@@ -106,14 +121,14 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         break;
       case ItemTypes.TAG:
         url = `/social-app/tags/${details.entryId}`;
-        postsActions.resetPostIds();
+        // postsActions.resetPostIds();
         break;
       case ItemTypes.ENTRY:
         url = `/social-app/post/${details.entryId}`;
         break;
       case ItemTypes.COMMENT:
         /* Navigate to parent post because we don't have the comment page yet */
-        url = `/social-app/post/${postsState.postsData[details.entryId].postId}`;
+        url = `/social-app/post/${entriesData[details.entryId].postId}`;
         break;
       default:
         break;
@@ -121,34 +136,27 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     props.singleSpa.navigateToUrl(url);
   };
 
-  const handleRepostPublish = (entryData: any, embedEntry: any) => {
-    postsActions.optimisticPublishPost(entryData, loggedProfileData, embedEntry, true);
-  };
+  // const handleRepostPublish = (entryData: any, embedEntry: any) => {
+  //   postsActions.optimisticPublishPost(entryData, loggedProfileData, embedEntry, true);
+  // };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
-  const handleFlipCard = (entry: any, isQuote: boolean) => () => {
-    const modifiedEntry = isQuote
-      ? { ...entry, quote: { ...entry.quote, reported: false } }
-      : { ...entry, reported: false };
-    postsActions.updatePostsState(modifiedEntry);
+  const handleFlipCard = (_entry: any, _isQuote: boolean) => () => {
+    // const modifiedEntry = isQuote
+    //   ? { ...entry, quote: { ...entry.quote, reported: false } }
+    //   : { ...entry, reported: false };
+    // postsActions.updatePostsState(modifiedEntry);
   };
 
-  const handleTagSubscribe = (name: string) => {
+  const handleTagSubscribe = (tagName: string) => {
     if (!loginState.ethAddress) {
       showLoginModal();
       return;
     }
-    tagSubscriptionActions.toggleTagSubscription(name);
-  };
-  const handleTagUnsubscribe = (name: string) => {
-    if (!loginState.ethAddress) {
-      showLoginModal();
-      return;
-    }
-    tagSubscriptionActions.toggleTagSubscription(name);
+    toggleTagSubscriptionReq.mutate(tagName);
   };
 
   return (
@@ -158,9 +166,9 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       </Helmet>
       <TagProfileCard
         tag={tagData}
-        subscribedTags={tagSubscriptionState}
+        subscribedTags={tagSubscriptions}
         handleSubscribeTag={handleTagSubscribe}
-        handleUnsubscribeTag={handleTagUnsubscribe}
+        handleUnsubscribeTag={handleTagSubscribe}
       />
       <FeedWidget
         itemType={ItemTypes.ENTRY}
@@ -168,20 +176,18 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         loadMore={handleLoadMore}
         loadItemData={handleItemDataLoad}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
-        itemIds={postsState.postIds}
-        itemsData={postsState.postsData}
+        itemIds={ids}
+        itemsData={entriesData}
         errors={errorState}
-        layout={props.layoutConfig}
         ethAddress={loginState.ethAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={showLoginModal}
-        totalItems={postsState.totalItems}
+        hasMoreItems={!!reqPosts.hasNextPage}
+        // totalItems={postsState.totalItems}
         profilePubKey={loginState.pubKey}
-        modalSlotId={props.layoutConfig.modalSlotId}
         loggedProfile={loggedProfileData}
-        onRepostPublish={handleRepostPublish}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         handleFlipCard={handleFlipCard}
