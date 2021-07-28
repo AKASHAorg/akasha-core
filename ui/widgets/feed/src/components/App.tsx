@@ -24,7 +24,6 @@ export const enum ItemTypes {
 export interface IFeedWidgetProps {
   logger: any;
   virtualListRef?: any;
-  layout: any;
   listHeader?: React.ReactElement;
   itemType: ItemTypes;
   loadMore: (payload: any) => void;
@@ -41,10 +40,9 @@ export interface IFeedWidgetProps {
   navigateToModal: (props: any) => void;
   onLoginModalOpen: () => void;
   isFetching?: boolean;
-  totalItems: number | null;
-  modalSlotId?: string;
+  hasMoreItems: boolean;
+  // totalItems: number | null;
   loggedProfile?: any;
-  onRepostPublish?: (entryData: any, embeddedEntry: any) => void;
   contentClickable?: boolean;
   onEntryFlag: (entryId: string, contentType: string) => () => void;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;

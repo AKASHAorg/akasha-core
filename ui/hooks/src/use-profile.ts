@@ -314,7 +314,6 @@ export const useProfile = (
 
   React.useEffect(() => {
     if (profile.getProfileDataQuery) {
-      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
       const getProfileCall = sdk.api.profile.getProfile(profile.getProfileDataQuery.payload);
 
       const sub = getProfileCall.subscribe({
@@ -326,10 +325,10 @@ export const useProfile = (
           const { avatar, coverImage, ...other } = resp.data.getProfile || resp.data.resolveProfile;
           const images: { avatar?: string; coverImage?: string } = {};
           if (avatar) {
-            images.avatar = getMediaUrl(ipfsGateway, avatar);
+            images.avatar = getMediaUrl(avatar);
           }
           if (coverImage) {
-            images.coverImage = getMediaUrl(ipfsGateway, coverImage);
+            images.coverImage = getMediaUrl(coverImage);
           }
           dispatchProfile({ type: 'GET_PROFILE_DATA_SUCCESS', payload: { ...images, ...other } });
         },
@@ -364,7 +363,6 @@ export const useProfile = (
   React.useEffect(() => {
     if (profile.getEntryAuthorQuery) {
       const getEntryCall = sdk.api.entries.getEntry(profile.getEntryAuthorQuery);
-      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
       const sub = getEntryCall.subscribe({
         next: resp => {
           if (!resp.data) {
@@ -376,8 +374,8 @@ export const useProfile = (
               type: 'GET_ENTRY_AUTHOR_SUCCESS',
               payload: {
                 ...entry.author,
-                avatar: getMediaUrl(ipfsGateway, entry.author.avatar),
-                coverImage: getMediaUrl(ipfsGateway, entry.author.coverImage),
+                avatar: getMediaUrl(entry.author.avatar),
+                coverImage: getMediaUrl(entry.author.coverImage),
               },
             });
           }
@@ -391,13 +389,8 @@ export const useProfile = (
 
   React.useEffect(() => {
     if (updateStatus.optimisticUpdateQuery) {
-      const {
-        avatar,
-        coverImage,
-        name,
-        description,
-        userName,
-      } = updateStatus.optimisticUpdateQuery;
+      const { avatar, coverImage, name, description, userName } =
+        updateStatus.optimisticUpdateQuery;
 
       const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 

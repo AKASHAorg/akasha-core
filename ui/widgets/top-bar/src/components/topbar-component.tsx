@@ -10,10 +10,10 @@ import {
 import {
   useLoginState,
   useErrors,
-  useNotifications,
   useProfile,
   moderationRequest,
 } from '@akashaproject/ui-awf-hooks';
+import { useCheckNewNotifications } from '@akashaproject/ui-awf-hooks/lib/use-notifications.new';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { extensionPointsMap } from '../extension-points';
@@ -39,17 +39,13 @@ const TopbarComponent = (props: RootComponentProps) => {
     onError: err => logger.error(err),
   });
 
-  const [notificationsState, notificationActions] = useNotifications({
-    onError: err => logger.error(err),
+  const checkNotifsReq = useCheckNewNotifications(loginState.ready?.ethAddress);
 
-    loggedEthAddress: loginState.ethAddress,
-  });
-
-  React.useEffect(() => {
-    if (loginState.ready?.ethAddress && loginState.ethAddress) {
-      notificationActions.hasNewNotifications();
-    }
-  }, [loginState.ready?.ethAddress, loginState.ethAddress]);
+  // React.useEffect(() => {
+  //   if (loginState.ready?.ethAddress && loginState.ethAddress) {
+  //     notificationActions.hasNewNotifications();
+  //   }
+  // }, [loginState.ready?.ethAddress, loginState.ethAddress]);
 
   React.useEffect(() => {
     if (loginState.pubKey) {
@@ -220,7 +216,7 @@ const TopbarComponent = (props: RootComponentProps) => {
         onFeedbackClick={handleFeedbackModalShow}
         onModerationClick={handleModerationClick}
         onDashboardClick={handleDashboardClick}
-        hasNewNotifications={notificationsState.hasNewNotifications}
+        hasNewNotifications={checkNotifsReq.data}
         currentLocation={location?.pathname}
       >
         <ExtensionPoint
