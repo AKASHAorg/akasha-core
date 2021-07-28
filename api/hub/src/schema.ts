@@ -185,6 +185,7 @@ const typeDefs = gql`
     editComment(content: [DataProviderInput!], comment: CommentData, id: String!): Boolean
     removePost(id: String!): Boolean
     removeComment(id: String!): Boolean
+    toggleInterestSub(sub: String!): Boolean
   }
 
   type Tag {
@@ -210,6 +211,7 @@ const typeDefs = gql`
     default: [DataProvider]
     totalFollowers: Int
     totalFollowing: Int
+    interests: [String]
   }
 
   enum PostType {
@@ -223,6 +225,7 @@ const typeDefs = gql`
     _id: ID!
     type: PostType!
     creationDate: String!
+    updatedAt: String
     author: UserProfile!
     title: String
     content: [DataProvider!]
@@ -237,6 +240,7 @@ const typeDefs = gql`
   type Comment {
     _id: ID!
     creationDate: String!
+    updatedAt: String
     author: UserProfile!
     content: [DataProvider!]
     mentions: [String]

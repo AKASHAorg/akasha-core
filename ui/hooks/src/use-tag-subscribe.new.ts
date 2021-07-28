@@ -7,10 +7,7 @@ export const TAG_SUBSCRIPTIONS_KEY = 'Tag_Subscriptions';
 const getTagSubscriptions = async () => {
   const sdk = getSDK();
   const res = await lastValueFrom(sdk.api.profile.getTagSubscriptions());
-  const subs = Object.entries(res.data)
-    .filter(el => el[1])
-    .map(el => el[0]);
-  return subs;
+  return res.data;
 };
 
 export function useTagSubscriptions(loggedEthAddress: string | null) {

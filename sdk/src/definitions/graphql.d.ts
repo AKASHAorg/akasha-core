@@ -10,6 +10,7 @@ declare module '*/profile.graphql' {
   const UnFollow: DocumentNode;
   const IsFollowing: TypedQueryDocumentNode;
   const SaveMetaData: DocumentNode;
+  const ToggleInterestSub: DocumentNode;
   const SearchProfiles: TypedQueryDocumentNode;
   const GlobalSearch: TypedQueryDocumentNode;
   const GetFollowers: TypedQueryDocumentNode;
@@ -29,6 +30,7 @@ declare module '*/profile.graphql' {
     GlobalSearch,
     GetFollowers,
     GetFollowing,
+    ToggleInterestSub,
   };
 }
 
