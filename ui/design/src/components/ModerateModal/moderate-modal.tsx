@@ -89,19 +89,21 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     return closeModal();
   };
 
-  const handleModerate = (isDelisted = true) => () => {
-    // sign payload first before posting
-    const dataToSign = {
-      moderator: user,
-      explanation: explanation.trim(),
-      delisted: isDelisted,
+  const handleModerate =
+    (isDelisted = true) =>
+    () => {
+      // sign payload first before posting
+      const dataToSign = {
+        moderator: user,
+        explanation: explanation.trim(),
+        delisted: isDelisted,
+      };
+
+      onModerate(dataToSign);
     };
 
-    onModerate(dataToSign);
-  };
-
   return (
-    <ModalWrapper isMobile={isMobileOnly}>
+    <ModalWrapper isTransparent={true} isMobile={isMobileOnly}>
       <StyledBox width={width > 800 ? '35%' : width > 500 ? '50%' : '100%'}>
         <MainAreaCardBox className={className}>
           <Box direction="column" pad="large">

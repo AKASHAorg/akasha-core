@@ -33,7 +33,7 @@ const MobileListModal: React.FC<IMobileListModal> = props => {
   const redIcons = ['report', 'trash'];
 
   return (
-    <ModalWrapper onClick={closeModal}>
+    <ModalWrapper isTransparent={true} onClick={closeModal}>
       <StyledBox>
         <Box align="center" round="small" margin={{ bottom: 'medium' }}>
           {menuItems.map((menuItem, index) => (
