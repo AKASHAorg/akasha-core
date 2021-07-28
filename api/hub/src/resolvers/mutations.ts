@@ -91,9 +91,8 @@ const mutations = {
       if (totalPostsIndex !== -1) {
         profileData.metaData[totalPostsIndex].value =
           +profileData.metaData[totalPostsIndex].value + 1;
-        profileData.metaData[totalPostsIndex].value = profileData.metaData[
-          totalPostsIndex
-        ].value.toString();
+        profileData.metaData[totalPostsIndex].value =
+          profileData.metaData[totalPostsIndex].value.toString();
       } else {
         profileData.metaData.push({
           provider: statsProvider,
@@ -246,9 +245,8 @@ const mutations = {
     if (totalCommentsIndex !== -1) {
       postData.metaData[totalCommentsIndex].value =
         +postData.metaData[totalCommentsIndex].value + 1;
-      postData.metaData[totalCommentsIndex].value = postData.metaData[
-        totalCommentsIndex
-      ].value.toString();
+      postData.metaData[totalCommentsIndex].value =
+        postData.metaData[totalCommentsIndex].value.toString();
     } else {
       postData.metaData.push({
         provider: statsProvider,
@@ -327,6 +325,24 @@ const mutations = {
       }
     }
     return true;
+  },
+  toggleInterestSub: async (_, { sub }, { dataSources, user, signature }) => {
+    if (!user) {
+      return Promise.reject('Must be authenticated!');
+    }
+    if (!sub) {
+      return Promise.reject('Must provide a tag to sub/unsub!');
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: { sub },
+      signature: signature,
+    });
+    if (!verified) {
+      logger.warn(`bad toggleInterestSub sig`);
+      return Promise.reject(dataSigError);
+    }
+    return dataSources.profileAPI.toggleInterestSub(user.pubKey, sub);
   },
 };
 export default mutations;
