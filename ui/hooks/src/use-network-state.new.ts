@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 
-export const NETWORK_STATE_KEY = 'Network State';
+export const NETWORK_STATE_KEY = 'Network_State';
 
 const checkNetworkState = async () => {
   const sdk = getSDK();

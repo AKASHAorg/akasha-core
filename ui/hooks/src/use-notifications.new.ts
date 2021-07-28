@@ -4,7 +4,7 @@ import getSDK from '@akashaproject/awf-sdk';
 import { getMediaUrl } from './utils/media-utils';
 
 export const NOTIFICATIONS_KEY = 'Notifications';
-export const HAS_NEW_NOTIFICATIONS_KEY = 'Has New Notifications';
+export const HAS_NEW_NOTIFICATIONS_KEY = 'Has_New_Notifications';
 
 const getNotifications = async () => {
   const sdk = getSDK();

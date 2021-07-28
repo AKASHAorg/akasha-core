@@ -3,8 +3,8 @@ import { lastValueFrom } from 'rxjs';
 import { getMediaUrl } from './utils/media-utils';
 import getSDK from '@akashaproject/awf-sdk';
 
-export const TRENDING_TAGS_KEY = 'Trending Tags';
-export const TRENDING_PROFILES_KEY = 'Trending Profiles';
+export const TRENDING_TAGS_KEY = 'Trending_Tags';
+export const TRENDING_PROFILES_KEY = 'Trending_Profiles';
 
 const getTrendingTags = async () => {
   const sdk = getSDK();

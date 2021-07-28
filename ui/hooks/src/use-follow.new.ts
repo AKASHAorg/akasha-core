@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom, forkJoin } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 
-export const FOLLOWED_PROFILES_KEY = 'Followed Profiles';
+export const FOLLOWED_PROFILES_KEY = 'Followed_Profiles';
 
 const getIsFollowingMultiple = async (followerEthAddress, followingEthAddressArray) => {
   const sdk = getSDK();

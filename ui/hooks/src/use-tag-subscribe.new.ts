@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 
-export const TAG_SUBSCRIPTIONS_KEY = 'Tag Subscriptions';
+export const TAG_SUBSCRIPTIONS_KEY = 'Tag_Subscriptions';
 
 const getTagSubscriptions = async () => {
   const sdk = getSDK();
