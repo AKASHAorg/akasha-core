@@ -22,6 +22,9 @@ export interface INotificationsCard {
   repostLabel?: string;
   replyLabel?: string;
   markAsReadLabel?: string;
+  moderatedPostLabel?: string;
+  moderatedReplyLabel?: string;
+  moderatedAccountLabel?: string;
   emptyTitle?: string;
   emptySubtitle?: string;
   // handlers
@@ -41,6 +44,9 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     mentionedCommentLabel,
     replyLabel,
     repostLabel,
+    moderatedPostLabel,
+    moderatedReplyLabel,
+    moderatedAccountLabel,
     markAsReadLabel,
     emptyTitle,
     emptySubtitle,
@@ -64,6 +70,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     const postID = Array.isArray(notif.body?.value?.postID)
       ? notif.body?.value?.postID[0]
       : notif.body?.value?.postID;
+    const moderatedID = notif.body?.value?.contentID;
     // use this when we have routing available for comments
     // const commentID = Array.isArray(notif.body?.value?.commentID)
     //   ? notif.body?.value?.commentID[0]
@@ -112,6 +119,34 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
           handleProfileClick(profileData.pubKey);
         };
         break;
+      case 'MODERATED_POST':
+        label = moderatedPostLabel;
+        clickHandler = () => {
+          handleMessageRead(notif.id);
+          if (moderatedID) {
+            handleEntryClick(moderatedID);
+          }
+        };
+        break;
+      case 'MODERATED_REPLY':
+        label = moderatedReplyLabel;
+        clickHandler = () => {
+          handleMessageRead(notif.id);
+          if (moderatedID) {
+            // need to change to the reply view page later
+            handleEntryClick(moderatedID);
+          }
+        };
+        break;
+      case 'MODERATED_ACCOUNT':
+          label = moderatedAccountLabel;
+          clickHandler = () => {
+            handleMessageRead(notif.id);
+            if (moderatedID) {
+              handleProfileClick(moderatedID);
+            }
+          };
+          break;
       default:
         label = '';
         break;
@@ -220,5 +255,8 @@ NotificationsCard.defaultProps = {
   followingLabel: 'is now following you',
   repostLabel: 'reposted your post',
   markAsReadLabel: 'Mark as read',
+  moderatedPostLabel: 'moderated your post',
+  moderatedReplyLabel: 'moderated your reply',
+  moderatedAccountLabel: 'suspended your account',
 };
 export default NotificationsCard;
