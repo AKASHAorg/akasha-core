@@ -7,6 +7,7 @@ import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 export default class TrendingWidgetRoot extends PureComponent<RootComponentProps> {
   public state: {
@@ -86,6 +87,7 @@ export default class TrendingWidgetRoot extends PureComponent<RootComponentProps
         <I18nextProvider i18n={i18next} defaultNS="ui-widget-trending">
           <TrendingWidgetComponent {...this.props} />
         </I18nextProvider>
+        <ReactQueryDevtools position={'bottom-right'} />
       </React.Suspense>
     );
   }

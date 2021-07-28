@@ -3,7 +3,12 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
-import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
+import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import Backend from 'i18next-chained-backend';
+import Fetch from 'i18next-fetch-backend';
+import LocalStorageBackend from 'i18next-localstorage-backend';
 import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
@@ -36,11 +41,6 @@ const EditorModalContainer = (props: RootComponentProps) => {
     onError: errorActions.createError,
   });
 
-  // const [, postsActions] = usePosts({
-  //   user: loginState.ethAddress,
-  //   onError: errorActions.createError,
-  // });
-
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
   });
@@ -48,14 +48,8 @@ const EditorModalContainer = (props: RootComponentProps) => {
   const publishPost = useCreatePost();
   const handleEntryPublish = async (data: PublishPostData) => {
     publishPost.mutate(buildPublishObject(data));
-    //postsActions.optimisticPublishPost(data, loggedProfileData, currentEmbedEntry);
     handleModalClose();
   };
-
-  // const handleEntryPublish = async (data: PublishPostData) => {
-  //   postsActions.optimisticPublishPost(data, loggedProfileData, props.activeModal.embedEntry);
-  //   handleModalClose();
-  // };
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
@@ -86,13 +80,51 @@ const EditorModalContainer = (props: RootComponentProps) => {
   );
 };
 
-const Wrapped = (props: RootComponentProps) => (
-  <Router>
-    <React.Suspense fallback={<></>}>
-      <EditorModalContainer {...props} />
-    </React.Suspense>
-  </Router>
-);
+const Wrapped = (props: RootComponentProps) => {
+  i18n
+    .use(initReactI18next)
+    .use(Backend)
+    .use(LanguageDetector)
+    .use({
+      type: 'logger',
+      log: props.logger.info,
+      warn: props.logger.warn,
+      error: props.logger.error,
+    })
+    .init({
+      fallbackLng: 'en',
+      ns: ['akasha-app'],
+      saveMissing: false,
+      saveMissingTo: 'all',
+      load: 'languageOnly',
+      debug: true,
+      cleanCode: true,
+      keySeparator: false,
+      defaultNS: 'akasha-app',
+      backend: {
+        backends: [LocalStorageBackend, Fetch],
+        backendOptions: [
+          {
+            prefix: 'i18next_res_v0',
+            expirationTime: 24 * 60 * 60 * 1000,
+          },
+          {
+            loadPath: '/locales/{{lng}}/{{ns}}.json',
+          },
+        ],
+      },
+    });
+
+  return (
+    <Router>
+      <React.Suspense fallback={<></>}>
+        <I18nextProvider i18n={i18n}>
+          <EditorModalContainer {...props} />
+        </I18nextProvider>
+      </React.Suspense>
+    </Router>
+  );
+};
 
 const reactLifecycles = singleSpaReact({
   React,

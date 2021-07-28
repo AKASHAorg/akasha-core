@@ -1,8 +1,6 @@
 import constants from './constants';
 import moderationRequest from './moderation-request';
 import useProfile from './use-profile';
-import useEntryPublisher from './use-entry-publisher';
-import useFeedReducer from './use-feed-reducer';
 import useBookmarks, { BookmarkTypes } from './use-entry-bookmark';
 import useGlobalLogin from './use-global-login';
 import useLoginState from './use-login-state';
@@ -27,8 +25,6 @@ export {
   constants,
   moderationRequest,
   useProfile,
-  useFeedReducer,
-  useEntryPublisher,
   useBookmarks,
   useGlobalLogin,
   useLoginState,

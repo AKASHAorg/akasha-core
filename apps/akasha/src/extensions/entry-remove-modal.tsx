@@ -3,21 +3,18 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
-import { useErrors, useLoginState, usePosts } from '@akashaproject/ui-awf-hooks';
+import { useErrors, useLoginState, usePosts, withProviders } from '@akashaproject/ui-awf-hooks';
 import i18n from 'i18next';
 import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
-import { QueryClientProvider, QueryClient } from 'react-query';
 import getSDK from '@akashaproject/awf-sdk';
 import { events } from '@akashaproject/awf-sdk/typings';
 import { filter } from 'rxjs/operators';
 
-const { ThemeSelector, lightTheme, darkTheme, ConfirmationModal } = DS;
-
-const queryClient = new QueryClient();
+const { ConfirmationModal } = DS;
 
 const EntryRemoveModal: React.FC<RootComponentProps> = props => {
   const { activeModal } = props;
@@ -159,25 +156,18 @@ const ModalWrapper: React.FC<RootComponentProps> = props => {
       },
     });
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeSelector
-        availableThemes={[lightTheme, darkTheme]}
-        settings={{ activeTheme: 'Light-Theme' }}
-      >
-        <React.Suspense fallback={'...'}>
-          <I18nextProvider i18n={i18n}>
-            <EntryRemoveModal {...props} />
-          </I18nextProvider>
-        </React.Suspense>
-      </ThemeSelector>
-    </QueryClientProvider>
+    <React.Suspense fallback={'...'}>
+      <I18nextProvider i18n={i18n}>
+        <EntryRemoveModal {...props} />
+      </I18nextProvider>
+    </React.Suspense>
   );
 };
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: ModalWrapper,
+  rootComponent: withProviders(ModalWrapper),
   errorBoundary: (err, errorInfo, props) => {
     if (props.logger) {
       props.logger.error('Error: %s; Info: %s', err, errorInfo);
