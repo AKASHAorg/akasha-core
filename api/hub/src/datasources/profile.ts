@@ -12,6 +12,8 @@ import { DataProvider, Profile } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 import { searchIndex } from './search-indexes';
 import { postsStats, statsProvider } from '../resolvers/constants';
+import { parse, stringify } from 'flatted';
+import objHash from 'object-hash';
 
 const NOT_FOUND_PROFILE = new Error('Profile not found');
 const NOT_REGISTERED = new Error('Must be registered first.');
@@ -80,7 +82,7 @@ class ProfileAPI extends DataSource {
         }
       }
 
-      const returnedObj = JSON.parse(JSON.stringify(profilesFound[0]));
+      const returnedObj = parse(stringify(profilesFound[0]));
       for (const provider of q) {
         Object.assign(returnedObj, {
           [provider.property]: provider.value,
@@ -95,6 +97,7 @@ class ProfileAPI extends DataSource {
         totalPosts,
         totalFollowers: profilesFound[0]?.followers?.length || 0,
         totalFollowing: profilesFound[0]?.following?.length || 0,
+        interests: profilesFound[0]?.interests || [],
       });
       await queryCache.set(cacheKey, returnedObj);
       return returnedObj;
@@ -372,6 +375,49 @@ class ProfileAPI extends DataSource {
 
     const results = following.slice(offset, nextIndex);
     return { results: results, nextIndex: nextIndex, total: following.length };
+  }
+
+  /**
+   *
+   * @param pubKey
+   * @param tagName
+   */
+  async toggleInterestSub(pubKey: string, tagName: string) {
+    const db: Client = await getAppDB();
+    const query = new Where('pubKey').eq(pubKey);
+    const [profile] = await db.find<Profile>(this.dbID, this.collection, query);
+    if (!profile) {
+      throw NOT_REGISTERED;
+    }
+    if (!profile?.interests || !profile.interests.length) {
+      profile.interests = [tagName];
+    } else {
+      const position = profile.interests.indexOf(tagName);
+      if (position === -1) {
+        profile.interests.unshift(tagName);
+      } else {
+        profile.interests.splice(position, 1);
+      }
+    }
+    const objID = objHash({ [profile._id]: tagName });
+    await db.save(this.dbID, this.collection, [profile]);
+    await queryCache.del(this.getCacheKey(pubKey));
+    const isSubscribed = profile.interests[0] === tagName;
+    if (isSubscribed) {
+      searchIndex
+        .saveObject({
+          objectID: objID,
+          category: 'interests',
+          tagName: tagName,
+          pubKey: profile.pubKey,
+        })
+        .then(_ => _)
+        .catch(e => console.error(e));
+    } else {
+      searchIndex.deleteObject(objID);
+    }
+
+    return isSubscribed;
   }
 }
 

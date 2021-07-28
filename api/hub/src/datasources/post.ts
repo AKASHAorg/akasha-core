@@ -2,6 +2,7 @@ import { DataSource } from 'apollo-datasource';
 import { getAppDB, logger, sendAuthorNotification } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
 import { DataProvider, PostItem } from '../collections/interfaces';
+import { parse, stringify } from 'flatted';
 import { queryCache } from '../storage/cache';
 import { searchIndex } from './search-indexes';
 
@@ -41,7 +42,7 @@ class PostAPI extends DataSource {
     const quotedBy = post?.metaData
       ?.filter(item => item.property === this.quotedByPost)
       ?.map(item => item.value);
-    const result = JSON.parse(JSON.stringify(Object.assign({}, post, { quotedBy })));
+    const result = parse(stringify(Object.assign({}, post, { quotedBy })));
     if (result?.quotes?.length && !stopIter) {
       result.quotes = await Promise.all(
         result.quotes.map(postID => this.getPost(postID, pubKey, true)),
