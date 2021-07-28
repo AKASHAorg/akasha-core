@@ -8,6 +8,7 @@ import ModerationReportAPI from './datasources/moderation-report';
 import ModerationDecisionAPI from './datasources/moderation-decision';
 import ModerationAdminAPI from './datasources/moderation-admin';
 import ModerationReasonAPI from './datasources/moderation-reasons';
+import { statSync } from 'fs';
 // import { Invite } from './collections/interfaces';
 
 export const promRegistry = new promClient.Registry();
@@ -208,6 +209,7 @@ api.post('/moderation/status', async (ctx: koa.Context, next: () => Promise<any>
         reported: false,
         moderated: false,
         delisted: false,
+        reason: '',
       };
       // get decision for the current contentID
       const decision = await dataSources.decisionsAPI.getDecision(contentID);
@@ -219,6 +221,7 @@ api.post('/moderation/status', async (ctx: koa.Context, next: () => Promise<any>
           const reported = await dataSources.reportingAPI.getReport(contentID, body.user);
           if (reported) {
             status.reported = true;
+            status.reason = reported.reason;
           }
         }
       }
