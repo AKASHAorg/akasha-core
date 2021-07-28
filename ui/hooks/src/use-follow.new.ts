@@ -47,7 +47,8 @@ export function useIsFollowingMultiple(
       return [...followedProfiles, ...filteredNewProfiles];
     },
     {
-      enabled: !!followerEthAddress,
+      initialData: [],
+      enabled: !!(followerEthAddress && followingEthAddressArray?.length),
       keepPreviousData: true,
     },
   );
@@ -71,7 +72,7 @@ export function useIsFollowing(followerEthAddress, followingEthAddress) {
     [FOLLOWED_PROFILES_KEY],
     async () => {
       const followedProfiles: string[] = queryClient.getQueryData([FOLLOWED_PROFILES_KEY]) || [];
-      let updatedFollowedProfiles = [];
+      let updatedFollowedProfiles = [...followedProfiles];
       const isFollowing = await getIsFollowing(followerEthAddress, followingEthAddress);
       if (isFollowing && !followedProfiles.includes(followingEthAddress)) {
         updatedFollowedProfiles = [...followedProfiles, followingEthAddress];
@@ -83,7 +84,8 @@ export function useIsFollowing(followerEthAddress, followingEthAddress) {
       return updatedFollowedProfiles;
     },
     {
-      enabled: !!followerEthAddress,
+      initialData: [],
+      enabled: !!(followerEthAddress && followingEthAddress),
       keepPreviousData: true,
     },
   );

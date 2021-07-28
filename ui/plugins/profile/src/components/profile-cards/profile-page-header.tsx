@@ -1,14 +1,19 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
-import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import {
   ModalState,
   ModalStateActions,
   MODAL_NAMES,
 } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
-import { useFollow, useENSRegistration, useErrors } from '@akashaproject/ui-awf-hooks';
+import { useENSRegistration, useErrors } from '@akashaproject/ui-awf-hooks';
 import { useNetworkState } from '@akashaproject/ui-awf-hooks/lib/use-network-state.new';
+import {
+  useIsFollowing,
+  useFollow,
+  useUnfollow,
+} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 import {
   ENSOptionTypes,
   EnsFormOption,
@@ -115,11 +120,6 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
   const location = useLocation();
 
   const { t } = useTranslation();
-  const [followedProfiles, followActions] = useFollow({
-    onError: (errorInfo: IAkashaError) => {
-      logger.error(errorInfo.error.message, errorInfo.errorKey);
-    },
-  });
 
   const [ensErrors, ensErrorActions] = useErrors({ logger: props.logger });
 
@@ -130,6 +130,11 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
 
   const checkNetworkReq = useNetworkState(loggedUserEthAddress);
   const networkState = checkNetworkReq.data;
+
+  const isFollowingMultipleReq = useIsFollowing(loggedUserEthAddress, profileState.ethAddress);
+  const followedProfiles = isFollowingMultipleReq.data;
+  const followReq = useFollow();
+  const unfollowReq = useUnfollow();
 
   React.useEffect(() => {
     if (profileUpdateStatus.updateComplete && !isRegistration) {
@@ -155,18 +160,18 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
     }
   }, [profileState.ethAddress, profileState.userName, profileUpdateStatus, location]);
 
-  React.useEffect(() => {
-    if (
-      loggedUserEthAddress &&
-      profileState.ethAddress &&
-      loggedUserEthAddress !== profileState.ethAddress
-    ) {
-      followActions.isFollowing(loggedUserEthAddress, profileState.ethAddress);
-    }
-    // if (loggedUserEthAddress) {
-    //   networkActions.checkNetwork();
-    // }
-  }, [loggedUserEthAddress, profileState.ethAddress]);
+  // React.useEffect(() => {
+  //   if (
+  //     loggedUserEthAddress &&
+  //     profileState.ethAddress &&
+  //     loggedUserEthAddress !== profileState.ethAddress
+  //   ) {
+  //     followActions.isFollowing(loggedUserEthAddress, profileState.ethAddress);
+  //   }
+  //   // if (loggedUserEthAddress) {
+  //   //   networkActions.checkNetwork();
+  //   // }
+  // }, [loggedUserEthAddress, profileState.ethAddress]);
 
   const handleModalClose = () => {
     setIsRegistration(false);
@@ -255,16 +260,16 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
 
   const handleFollow = () => {
     if (!loggedUserEthAddress) {
-      return props.modalActions.show(MODAL_NAMES.LOGIN);
+      return props.navigateToModal({ name: 'login-modal' });
     }
     if (profileState?.ethAddress) {
-      return followActions.follow(profileState.ethAddress);
+      followReq.mutate(profileState.ethAddress);
     }
   };
 
   const handleUnfollow = () => {
     if (profileState?.ethAddress) {
-      followActions.unfollow(profileState.ethAddress);
+      unfollowReq.mutate(profileState.ethAddress);
     }
   };
 

@@ -77,7 +77,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
             )}
             {!hasCriticalErrors && (
               <NotificationsCard
-                notifications={notificationsState.notifications}
+                notifications={notificationsState || []}
                 notificationsLabel={t('Notifications')}
                 followingLabel={t('is now following you')}
                 mentionedPostLabel={t('mentioned you in a post')}

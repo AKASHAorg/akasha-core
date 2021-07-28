@@ -9,10 +9,15 @@ import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
 
-import { useBookmarks, useErrors } from '@akashaproject/ui-awf-hooks';
+import { useErrors } from '@akashaproject/ui-awf-hooks';
 
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import {
+  useGetBookmarks,
+  useBookmarkPost,
+  useBookmarkDelete,
+} from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
 const { Box, Helmet, VirtualList, EditorPlaceholder } = DS;
@@ -27,14 +32,11 @@ export interface FeedPageProps {
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const { isMobile, showLoginModal, loggedProfileData, loginState, onError, logger } = props;
+  const { isMobile, showLoginModal, loggedProfileData, loginState, logger } = props;
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const [bookmarkState, bookmarkActions] = useBookmarks({
-    onError,
-  });
   const [errorState] = useErrors({ logger });
 
   const reqPosts = useInfinitePosts(15);
@@ -57,20 +59,25 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     return list;
   }, [reqPosts.isSuccess]);
 
+  const bookmarksReq = useGetBookmarks(loginState.ready?.ethAddress);
+  const bookmarks = bookmarksReq.data;
+  const addBookmark = useBookmarkPost();
+  const deleteBookmark = useBookmarkDelete();
+
   React.useEffect(() => {
     if (Object.keys(errorState).length) {
       logger.error(errorState);
     }
   }, [JSON.stringify(errorState)]);
 
-  React.useEffect(() => {
-    if (loginState.currentUserCalled) {
-      //postsActions.resetPostIds();
-      if (loginState.ready) {
-        bookmarkActions.getBookmarks();
-      }
-    }
-  }, [JSON.stringify(loginState)]);
+  // React.useEffect(() => {
+  //   if (loginState.currentUserCalled) {
+  //     //postsActions.resetPostIds();
+  //     if (loginState.ready) {
+  //       bookmarkActions.getBookmarks();
+  //     }
+  //   }
+  // }, [JSON.stringify(loginState)]);
 
   //@Todo: replace this with fetchNextPage() from useInfinitePosts object
   const handleLoadMore = () => {
@@ -98,10 +105,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     if (!loginState.pubKey) {
       return showLoginModal();
     }
-    if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
-      return bookmarkActions.removeBookmark(entryId);
+    if (bookmarks?.findIndex(bm => bm.entryId === entryId) >= 0) {
+      return deleteBookmark.mutate(entryId);
     }
-    return bookmarkActions.bookmarkPost(entryId);
+    return addBookmark.mutate(entryId);
   };
 
   const handleShowEditor = () => {
@@ -166,7 +173,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         itemCard={
           <EntryCardRenderer
             logger={logger}
-            bookmarkState={bookmarkState}
+            bookmarkState={bookmarksReq}
             ethAddress={loginState.ethAddress}
             locale={locale}
             onBookmark={handleEntryBookmark}

@@ -42,13 +42,12 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
 
   const isFollowingMultipleReq = useIsFollowingMultiple(loginState.ethAddress, followEthAddressArr);
   const followedProfiles = isFollowingMultipleReq.data;
+  const followReq = useFollow();
+  const unfollowReq = useUnfollow();
 
   const tagSubscriptionsReq = useTagSubscriptions(loginState.ready?.ethAddress);
   const tagSubscriptions = tagSubscriptionsReq.data;
-
   const toggleTagSubscriptionReq = useToggleTagSubscription();
-  const followReq = useFollow();
-  const unfollowReq = useUnfollow();
 
   const showLoginModal = () => {
     props.navigateToModal({ name: 'login' });
@@ -88,13 +87,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
     }
     toggleTagSubscriptionReq.mutate(tagName);
   };
-  const handleTagUnsubscribe = (tagName: string) => {
-    if (!loginState.ethAddress) {
-      showLoginModal();
-      return;
-    }
-    toggleTagSubscriptionReq.mutate(tagName);
-  };
+
   const handleProfileClick = (pubKey: string) => {
     singleSpa.navigateToUrl(`/profile/${pubKey}`);
   };
@@ -147,7 +140,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
               subscribedTags={tagSubscriptions}
               onClickTag={handleTagClick}
               handleSubscribeTag={handleTagSubscribe}
-              handleUnsubscribeTag={handleTagUnsubscribe}
+              handleUnsubscribeTag={handleTagSubscribe}
               onClickProfile={handleProfileClick}
               handleFollowProfile={handleFollowProfile}
               handleUnfollowProfile={handleUnfollowProfile}

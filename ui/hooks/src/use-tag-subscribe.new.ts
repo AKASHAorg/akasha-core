@@ -15,6 +15,7 @@ const getTagSubscriptions = async () => {
 
 export function useTagSubscriptions(loggedEthAddress: string | null) {
   return useQuery([TAG_SUBSCRIPTIONS_KEY], () => getTagSubscriptions(), {
+    initialData: [],
     enabled: !!loggedEthAddress,
     keepPreviousData: true,
   });
@@ -55,16 +56,14 @@ export function useToggleTagSubscription() {
         queryClient.setQueryData([TAG_SUBSCRIPTIONS_KEY], context.previousTagSubs);
       }
     },
-    // onSuccess: (data, variables, context) => {
+    // onSuccess: async (data, variables, context) => {
     //   const previousTagSubs: any = queryClient.getQueryData([TAG_SUBSCRIPTIONS_KEY]);
-    //   let newTagsSubs = [];
+    //   const res = await lastValueFrom(sdk.api.profile.getTagSubscriptions());
+    //   const subs = Object.entries(res.data)
+    //     .filter(el => el[1])
+    //     .map(el => el[0]);
 
-    //   if (data.sub && !previousTagSubs.includes(context.tagName)) {
-    //     newTagsSubs = [...previousTagSubs, context.tagName];
-    //   } else if (!data.sub && previousTagSubs.includes(context.tagName)) {
-    //     newTagsSubs = previousTagSubs.filter(tag => context.tagName !== tag);
-    //   }
-    //   queryClient.setQueryData([TAG_SUBSCRIPTIONS_KEY], newTagsSubs);
+    //   await queryClient.setQueryData([TAG_SUBSCRIPTIONS_KEY], subs);
     // },
     onSettled: async () => {
       await queryClient.invalidateQueries([TAG_SUBSCRIPTIONS_KEY]);
