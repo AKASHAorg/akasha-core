@@ -32,6 +32,10 @@ const StyledProfileDrop = styled(Drop)`
   border-radius: ${props => props.theme.shapes.borderRadius};
 `;
 
+const StyledBox: any = styled(Box)`
+  background-color: ${props => props.theme.colors.accentLight};
+`;
+
 const StyledSelectBox = styled(Box)`
   padding: ${props => `${props.theme.shapes.baseSpacing}px`};
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
@@ -54,6 +58,7 @@ export {
   StyledDrop,
   StyledDropAlt,
   StyledProfileDrop,
+  StyledBox,
   StyledSelectBox,
   StyledIcon,
 };

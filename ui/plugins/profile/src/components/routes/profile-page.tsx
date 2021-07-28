@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
+import { moderationRequest, useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
@@ -15,7 +15,7 @@ import menuRoute, { MY_PROFILE } from '../../routes';
 import { useInfinitePostsByAuthor } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
-const { Box, Helmet } = DS;
+const { Box, EntryCardHidden, Helmet } = DS;
 
 export interface ProfilePageProps extends RootComponentProps {
   modalActions: ModalStateActions;
@@ -29,7 +29,11 @@ export interface ProfilePageProps extends RootComponentProps {
 const ProfilePage = (props: ProfilePageProps) => {
   const { loggedEthAddress, loginActions, loggedProfileData, showLoginModal } = props;
 
+  const [showCard, setShowCard] = React.useState<boolean>(false);
+  const [reason, setReason] = React.useState<string>('');
+
   const location = useLocation();
+  const { t } = useTranslation();
 
   let { pubKey } = useParams() as any;
   // console.log('followers====', useFollowers(pubKey, 5));
@@ -80,6 +84,13 @@ const ProfilePage = (props: ProfilePageProps) => {
     }
   }, [pubKey]);
 
+  React.useEffect(() => {
+    if (profileState.ethAddress) {
+      checkAccountReportStatus(profileState.ethAddress);
+      return;
+    }
+  }, [profileState]);
+
   /**
    * Hook used in the /profile/my-profile route
    * because we don't have the /:pubkey url param
@@ -95,7 +106,25 @@ const ProfilePage = (props: ProfilePageProps) => {
   //   }
   // }, [loggedProfileData.pubKey, pubKey]);
 
-  const { t } = useTranslation();
+  const checkAccountReportStatus = async (profileEthAddress: string) => {
+    const response = await moderationRequest.checkStatus(true, {
+      user: loggedEthAddress,
+      contentIds: [profileEthAddress],
+    });
+    if (response) {
+      // the response array will have only one item
+      const { reported, moderated, reason } = response[0];
+      if (moderated) {
+        setShowCard(false);
+        return;
+      } else if (reported) {
+        setShowCard(true);
+        setReason(reason);
+        return;
+      }
+    }
+    return;
+  };
 
   const handleLoadMore = () => {
     if (!reqPosts.isFetching && pubKey) {
@@ -165,6 +194,14 @@ const ProfilePage = (props: ProfilePageProps) => {
           World
         </title>
       </Helmet>
+      {showCard && (
+        <EntryCardHidden
+          reportedAccount={true}
+          reason={reason}
+          headerTextLabel={t(`You reported this account for the following reason`)}
+          footerTextLabel={t('It is awaiting moderation.')}
+        />
+      )}
       <ProfilePageCard
         {...props}
         profileState={profileState}
