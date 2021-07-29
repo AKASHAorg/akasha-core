@@ -194,6 +194,8 @@ const typeDefs = gql`
     creationDate: String!
     posts: [String!]
     comments: [String!]
+    totalSubscribers: Int
+    totalPosts: Int
   }
 
   type UserProfile {
