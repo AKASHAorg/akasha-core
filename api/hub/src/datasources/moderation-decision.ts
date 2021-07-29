@@ -315,6 +315,8 @@ class ModerationDecisionAPI extends DataSource {
         notificationType = 'MODERATED_REPLY';
       } else if (decision.contentType == 'account') {
         notificationType = 'MODEREATED_ACCOUNT';
+        const account = await profileAPI.getProfile(contentID);
+        contentID = account.pubKey;
       }
       await sendAuthorNotification(moderatorProfile.pubKey, {
         property: notificationType,
