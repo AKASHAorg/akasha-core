@@ -42,6 +42,7 @@ import feedback from './feedback';
 import following from './following';
 import github from './github';
 import hashtag from './hashtag';
+import hashtagGray from './hashtag-gray';
 import heart from './heart';
 import home from './home';
 import hotTopics from './hot-topics';
@@ -147,6 +148,7 @@ export {
   email,
   emoji,
   hashtag,
+  hashtagGray,
   heart,
   home,
   hotTopics,

@@ -49,6 +49,7 @@ export type IconType =
   | 'following'
   | 'github'
   | 'hashtag'
+  | 'hashtagGray'
   | 'heart'
   | 'home'
   | 'hotTopics'
@@ -147,6 +148,7 @@ export const iconTypes: IconType[] = [
   'following',
   'github',
   'hashtag',
+  'hashtagGray',
   'heart',
   'home',
   'hotTopics',
