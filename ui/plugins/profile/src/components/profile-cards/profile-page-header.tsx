@@ -521,6 +521,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
         onClickFollowers={() => null}
         onClickFollowing={() => null}
         onClickPosts={() => null}
+        onClickInterests={() => null}
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
         handleShareClick={showShareModal}
@@ -540,6 +541,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
         followingLabel={t('Following')}
         followersLabel={t('Followers')}
         postsLabel={t('Posts')}
+        interestsLabel={t('Interests')}
         shareProfileLabel={t('Share')}
         editProfileLabel={t('Edit profile')}
         updateProfileLabel={t('Update profile')}
