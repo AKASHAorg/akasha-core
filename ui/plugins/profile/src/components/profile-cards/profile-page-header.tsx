@@ -463,7 +463,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
       </Route>
       <Route path={`${menuRoute[MY_PROFILE]}/update-ens`}>
         <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
-          {networkState.networkNotSupported && (
+          {networkState?.networkNotSupported && (
             <StyledLayer>
               <ErrorLoader
                 type={'network-not-supported'}
@@ -472,7 +472,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
               />
             </StyledLayer>
           )}
-          {!networkState.networkNotSupported && profileState.ethAddress && (
+          {!networkState?.networkNotSupported && profileState.ethAddress && (
             <ErrorInfoCard errors={ensErrors}>
               {(errorMessage, hasCriticalErrors) => (
                 <>
