@@ -461,9 +461,8 @@ export default class AWF_Profile implements AWF_IProfile {
    */
   getTagSubscriptions() {
     return this._auth.getCurrentUser().pipe(
-      map(res => this.getProfile({ pubKey: res.data.pubKey })),
+      map(res => this.getInterests(res.data.pubKey)),
       concatAll(),
-      map(d => createFormattedValue<string[]>(d.data.resolveProfile.interests)),
     );
   }
 
@@ -529,6 +528,18 @@ export default class AWF_Profile implements AWF_IProfile {
         operationName: 'GetFollowing',
       },
       true,
+    );
+  }
+
+  /**
+   * Retrieve subscription list
+   * @param pubKey
+   */
+  getInterests(pubKey: string) {
+    return this.getProfile({ pubKey: pubKey }).pipe(
+      map(response =>
+        createFormattedValue<string[]>(response.data?.resolveProfile?.interests || []),
+      ),
     );
   }
 }

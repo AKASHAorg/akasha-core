@@ -388,12 +388,13 @@ class PostAPI extends DataSource {
     };
   }
 
-  async getPostsByAuthors(pubKeys: string[], offset = 0, length = 10) {
-    if (!pubKeys.length) {
+  async getPostsByAuthorsAndTags(pubKeys: string[], interests: string[], offset = 0, length = 10) {
+    if (!pubKeys?.length && !interests?.length) {
       return { results: [], nextIndex: null, total: 0 };
     }
     const authorsFacet: ReadonlyArray<string> = pubKeys.map(key => `author:${key}`);
-    const filter = ['category:post', authorsFacet];
+    const tagsFacet: ReadonlyArray<string> = interests.map(key => `tags:${key}`);
+    const filter = ['category:post', authorsFacet.concat(tagsFacet)];
     const result = await searchIndex.search(``, {
       facetFilters: filter as any, // lib typings need to be fixed
       length: length,

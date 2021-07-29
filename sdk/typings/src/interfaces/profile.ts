@@ -126,4 +126,10 @@ export default interface AWF_IProfile {
    * @param offset
    */
   getFollowing(pubKey: string, limit: number, offset?: number): unknown;
+
+  /**
+   *
+   * @param pubKey
+   */
+  getInterests(pubKey: string): unknown;
 }

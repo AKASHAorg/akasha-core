@@ -238,8 +238,14 @@ const query = {
       return Promise.reject('Must be authenticated!');
     }
     const res = await dataSources.profileAPI.getFollowing(user.pubKey, 1000, 0);
+    const profile = await dataSources.profileAPI.resolveProfile(user.pubKey);
     const followingList: string[] = res.results;
-    const postsIDs = await dataSources.postsAPI.getPostsByAuthors(followingList, offset, limit);
+    const postsIDs = await dataSources.postsAPI.getPostsByAuthorsAndTags(
+      followingList || [],
+      profile?.interests || [],
+      offset,
+      limit,
+    );
     const posts = await Promise.all(
       postsIDs.results.map(post => {
         return query.getPost(_source, { pubKey: user.pubKey, id: post.objectID }, { dataSources });
