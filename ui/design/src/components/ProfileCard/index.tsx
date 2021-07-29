@@ -381,12 +381,20 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         />
       )}
       {isMobile && menuOpen && (
-        <StyledDropAlt>
+        <StyledDropAlt style={{ backgroundColor: 'transparent' }}>
           <MobileListModal
             closeModal={closeMenu}
             menuItems={
               props.flaggable
                 ? [
+                    {
+                      label: props.blockLabel,
+                      icon: 'block',
+                      handler: () => {
+                        /* @todo: replace with handler to block account */
+                        closeMenu();
+                      },
+                    },
                     {
                       label: props.flagAsLabel,
                       icon: 'report',

@@ -184,7 +184,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 </>
               )}
               <RadioButtonGroup
-                gap="xxsmall"
+                gap={isMobileOnly ? 'medium' : 'xxsmall'}
                 name="reasons"
                 options={optionLabels}
                 value={reason}

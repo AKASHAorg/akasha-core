@@ -30,7 +30,7 @@ const MobileListModal: React.FC<IMobileListModal> = props => {
 
   const theme: any = React.useContext(ThemeContext);
 
-  const redIcons = ['report', 'trash'];
+  const redIcons = ['report', 'trash', 'block'];
 
   return (
     <ModalWrapper isTransparent={true} onClick={closeModal}>
