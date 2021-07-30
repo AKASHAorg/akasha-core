@@ -8,7 +8,10 @@ export interface IConfig {
   mimeType?: string;
 }
 
-export const getMediaUrl = (ipfsGateway: string, hash?: string, data?: any) => {
+export const getMediaUrl = (hash?: string, data?: any) => {
+  const sdk = getSDK();
+  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+
   let ipfsUrl = '';
 
   if (hash && !data) {

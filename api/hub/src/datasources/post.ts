@@ -2,6 +2,7 @@ import { DataSource } from 'apollo-datasource';
 import { getAppDB, logger, sendAuthorNotification } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
 import { DataProvider, PostItem } from '../collections/interfaces';
+import { parse, stringify } from 'flatted';
 import { queryCache } from '../storage/cache';
 import { searchIndex } from './search-indexes';
 
@@ -41,7 +42,7 @@ class PostAPI extends DataSource {
     const quotedBy = post?.metaData
       ?.filter(item => item.property === this.quotedByPost)
       ?.map(item => item.value);
-    const result = JSON.parse(JSON.stringify(Object.assign({}, post, { quotedBy })));
+    const result = parse(stringify(Object.assign({}, post, { quotedBy })));
     if (result?.quotes?.length && !stopIter) {
       result.quotes = await Promise.all(
         result.quotes.map(postID => this.getPost(postID, pubKey, true)),
@@ -331,10 +332,9 @@ class PostAPI extends DataSource {
 
   async getPostsByAuthor(pubKey: string, offset = 0, length = 10) {
     const result = await searchIndex.search(`${pubKey} `, {
-      facetFilters: ['category:post'],
+      facetFilters: ['category:post', `author:${pubKey}`],
       length: length,
       offset: offset,
-      restrictSearchableAttributes: ['author'],
       typoTolerance: false,
       distinct: true,
       attributesToRetrieve: ['objectID'],
@@ -345,12 +345,10 @@ class PostAPI extends DataSource {
   }
 
   async getPostsByTag(tagName: string, offset = 0, length = 10) {
-    const result = await searchIndex.search(`${tagName} `, {
-      facetFilters: ['category:post'],
+    const result = await searchIndex.search(``, {
+      facetFilters: ['category:post', `tags:${tagName}`],
       length: length,
       offset: offset,
-      restrictSearchableAttributes: ['tags'],
-      typoTolerance: false,
       distinct: true,
       attributesToRetrieve: ['objectID'],
     });
@@ -386,6 +384,26 @@ class PostAPI extends DataSource {
       comments: acc.comment,
       profiles: acc.profile,
     };
+  }
+
+  async getPostsByAuthorsAndTags(pubKeys: string[], interests: string[], offset = 0, length = 10) {
+    if (!pubKeys?.length && !interests?.length) {
+      return { results: [], nextIndex: null, total: 0 };
+    }
+    const authorsFacet: ReadonlyArray<string> = pubKeys.map(key => `author:${key}`);
+    const tagsFacet: ReadonlyArray<string> = interests.map(key => `tags:${key}`);
+    const filter = ['category:post', authorsFacet.concat(tagsFacet)];
+    const result = await searchIndex.search(``, {
+      facetFilters: filter as any, // lib typings need to be fixed
+      length: length,
+      offset: offset,
+      typoTolerance: false,
+      distinct: true,
+      attributesToRetrieve: ['objectID'],
+    });
+    const nextIndex = result?.hits?.length ? result.hits.length + offset : null;
+
+    return { results: result.hits, nextIndex: nextIndex, total: result.nbHits };
   }
 }
 

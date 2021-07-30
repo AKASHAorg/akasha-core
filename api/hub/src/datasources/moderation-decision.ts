@@ -1,10 +1,11 @@
 import { DataSource } from 'apollo-datasource';
 import { getAppDB, logger, encodeString, decodeString } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
-import { ModerationDecision } from '../collections/interfaces';
+import { ModerationDecision, ModerationAction } from '../collections/interfaces';
 import ProfileAPI from './profile';
 import ModerationReportAPI from './moderation-report';
 import { queryCache } from '../storage/cache';
+import { parse, stringify } from 'flatted';
 
 /**
  * The ModerationDecisionAPI class handles all the interactions between the
@@ -102,6 +103,43 @@ class ModerationDecisionAPI extends DataSource {
     await queryCache.set(countersCache, counters);
     return counters;
   }
+  
+  /**
+   * Get a single decision based on the provided content identifier.
+   * @param contentID - The content identifier
+   * @returns A ModerationDecision object
+   */
+   async getDecision(contentID: string) {
+    const decisionCache = this.getDecisionCacheKey(contentID);
+    if (await queryCache.has(decisionCache)) {
+      return queryCache.get(decisionCache);
+    }
+    const db: Client = await getAppDB();
+    const query = new Where('contentID').eq(contentID);
+    const decisions = await db.find<ModerationDecision>(this.dbID, this.collection, query);
+    if (decisions.length) {
+      decisions[0].explanation = decodeString(decisions[0].explanation);
+      await queryCache.set(decisionCache, decisions[0]);
+      return decisions[0];
+    }
+    return undefined;
+  }
+
+  /**
+   * List the moderation actions log for each content identifier.
+   * @param contentID - The content identifier
+   * @returns A list of ModerationDecision objects
+   */
+  async listActions(contentID: string) {
+    let decision = parse(stringify(await this.getDecision(contentID)));
+    if (decision.actions && decision.actions.length) {
+      decision.actions.forEach((element, index) => {
+        element.explanation = decodeString(element.explanation);
+        decision.actions[index] = element;
+      });
+    }
+    return decision;
+  }
 
   /**
    * List decisions based on provided status (i.e. pending/moderated).
@@ -188,28 +226,6 @@ class ModerationDecisionAPI extends DataSource {
   }
 
   /**
-   * Get a single decision based on the provided content identifier.
-   * @param contentID - The content identifier
-   * @returns A ModerationDecision object
-   */
-  async getDecision(contentID: string) {
-    const decisionCache = this.getDecisionCacheKey(contentID);
-    if (await queryCache.has(decisionCache)) {
-      return queryCache.get(decisionCache);
-    }
-    const db: Client = await getAppDB();
-    const query = new Where('contentID').eq(contentID);
-    const decisions = await db.find<ModerationDecision>(this.dbID, this.collection, query);
-    if (decisions.length) {
-      decisions[0].explanation = decodeString(decisions[0].explanation);
-      await queryCache.set(decisionCache, decisions[0]);
-      return decisions[0];
-    }
-    logger.warn(`moderation decision not found for contentID: ${contentID} `);
-    return undefined;
-  }
-
-  /**
    * Aggregates data for a final decision. It contains profile data for moderator,
    * first report, number of total reports, and full list of reasons it was reported for.
    * @param contentID The content identifier
@@ -221,11 +237,13 @@ class ModerationDecisionAPI extends DataSource {
       return queryCache.get(decisionCache);
     }
     let decision = await this.getDecision(contentID);
+    // remove action log as it is not needed here
+    let { actions, ...finalDecision } = decision;
     // add moderator data
-    if (decision.moderator) {
+    if (finalDecision.moderator) {
       const profileAPI = new ProfileAPI({ dbID: this.dbID, collection: 'Profiles' });
-      const moderator = await profileAPI.getProfile(decision.moderator);
-      decision = Object.assign({}, decision, { 
+      const moderator = await profileAPI.getProfile(finalDecision.moderator);
+      finalDecision = Object.assign({}, finalDecision, { 
         moderatorProfile: {
           ethAddress: moderator.ethAddress,
           name: moderator.name || "",
@@ -246,9 +264,9 @@ class ModerationDecisionAPI extends DataSource {
     const reports = await reportingAPI.countReports(contentID);
     // add reasons
     const reasons = await reportingAPI.getReasons(contentID);
-    decision = Object.assign({}, decision, { reports, reportedBy, reportedDate, reasons });
-    await queryCache.set(decisionCache, decision);
-    return decision;
+    finalDecision = Object.assign({}, finalDecision, { reports, reportedBy, reportedDate, reasons });
+    await queryCache.set(decisionCache, finalDecision);
+    return finalDecision;
   }
 
   /**
@@ -257,6 +275,7 @@ class ModerationDecisionAPI extends DataSource {
    * @param moderator - The moderator user who made the final decision
    * @param explanation - Personal conclusion of the moderator
    * @param delisted - Outcome of the moderation action (delisted or kept)
+   * @reurns The ModerationDecision object
    */
   async makeDecision(contentID: string, moderator: string, explanation: string, delisted: boolean) {
     const db: Client = await getAppDB();
@@ -276,13 +295,26 @@ class ModerationDecisionAPI extends DataSource {
     decision.explanation = encodeString(explanation);
     decision.delisted = delisted;
     decision.moderated = true;
+    if (!decision.actions) {
+      decision.actions = [];
+    }
+    decision.actions.push({
+      moderator,
+      delisted,
+      moderatedDate: decision.moderatedDate,
+      explanation: decision.explanation,
+    });
 
     await db.save(this.dbID, this.collection, [decision]);
+
+    // handle caching
     await queryCache.del(this.getDecisionCacheKey(contentID));
     await queryCache.del(this.getModeratedDecisionCacheKey(contentID));
     await queryCache.del(this.getCountersCacheKey());
     await queryCache.del(this.getModeratedListCacheKey());
     await queryCache.del(this.getPendingListCacheKey());
+
+    return decision;
   }
 }
 

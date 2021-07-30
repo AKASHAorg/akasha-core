@@ -24,7 +24,9 @@
     "prepare": "npm run tsc",
     "pretest": "tsc -m commonjs",
     "test": "jest",
-    "clean": "tsc --build --clean"
+    "clean": "tsc --build --clean",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "postpack": "copyfiles -f ./dist/* ../build/hooks"
   },
   "files": [
     "lib"
@@ -33,12 +35,12 @@
     "@akashaproject/design-system": "*",
     "@akashaproject/awf-sdk": "*",
     "@akashaproject/sdk-typings": "*",
-    "rxjs": "7.1.0",
-    "react-query": "3.18.1"
+    "rxjs": "7.2.0",
+    "react-query": "3.19.0"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
-    "@types/react": "17.0.2"
+    "@types/react": "17.0.14"
   },
   "peerDependencies": {
     "react": "17.0.2"

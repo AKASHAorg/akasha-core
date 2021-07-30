@@ -1,10 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import {
-  ILoadItemDataPayload,
-  ILoadItemsPayload,
-} from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
+
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { getFeedCustomEntities } from './feed-page-custom-entities';
@@ -12,12 +9,16 @@ import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
 
-import { useBookmarks, useErrors } from '@akashaproject/ui-awf-hooks';
+import { useErrors } from '@akashaproject/ui-awf-hooks';
 
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
-
-// import { useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import {
+  useGetBookmarks,
+  useBookmarkPost,
+  useBookmarkDelete,
+} from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
 const { Box, Helmet, VirtualList, EditorPlaceholder } = DS;
 
@@ -31,21 +32,12 @@ export interface FeedPageProps {
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const { isMobile, showLoginModal, loggedProfileData, loginState, onError, logger } = props;
+  const { isMobile, showLoginModal, loggedProfileData, loginState, logger } = props;
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const [bookmarkState, bookmarkActions] = useBookmarks({
-    onError,
-  });
   const [errorState] = useErrors({ logger });
-
-  // @Todo: replace this with useInfinitePosts()
-  // const [postsState, postsActions] = usePosts({
-  //   user: loginState.ethAddress,
-  //   onError: errorActions.createError,
-  // });
 
   const reqPosts = useInfinitePosts(15);
   const postsState = reqPosts.data;
@@ -67,42 +59,34 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     return list;
   }, [reqPosts.data]);
 
+  const bookmarksReq = useGetBookmarks(loginState.ready?.ethAddress);
+  const bookmarks = bookmarksReq.data;
+  const addBookmark = useBookmarkPost();
+  const deleteBookmark = useBookmarkDelete();
+
   React.useEffect(() => {
     if (Object.keys(errorState).length) {
       logger.error(errorState);
     }
   }, [JSON.stringify(errorState)]);
 
-  React.useEffect(() => {
-    if (loginState.currentUserCalled) {
-      //postsActions.resetPostIds();
-      if (loginState.ready) {
-        bookmarkActions.getBookmarks();
-      }
-    }
-  }, [JSON.stringify(loginState)]);
-
   // React.useEffect(() => {
-  //   if (
-  //     !postsState.postIds.length &&
-  //     !postsState.isFetchingPosts &&
-  //     postsState.totalItems === null
-  //   ) {
-  //     postsActions.getPosts({ limit: 5 });
+  //   if (loginState.currentUserCalled) {
+  //     //postsActions.resetPostIds();
+  //     if (loginState.ready) {
+  //       bookmarkActions.getBookmarks();
+  //     }
   //   }
-  // }, [postsState.postIds.length, postsState.isFetchingPosts]);
+  // }, [JSON.stringify(loginState)]);
 
   //@Todo: replace this with fetchNextPage() from useInfinitePosts object
-  const handleLoadMore = (_payload: ILoadItemsPayload) => {
-    // const req: { limit: number; offset?: string } = {
-    //   limit: payload.limit,
-    // };
+  const handleLoadMore = () => {
     if (!reqPosts.isFetching && loginState.currentUserCalled) {
       reqPosts.fetchNextPage();
     }
   };
 
-  const loadItemData = (_payload: ILoadItemDataPayload) => {
+  const loadItemData = () => {
     //postsActions.getPost(payload.itemId);
   };
 
@@ -121,10 +105,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     if (!loginState.pubKey) {
       return showLoginModal();
     }
-    if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
-      return bookmarkActions.removeBookmark(entryId);
+    if (bookmarks?.findIndex(bm => bm.entryId === entryId) >= 0) {
+      return deleteBookmark.mutate(entryId);
     }
-    return bookmarkActions.bookmarkPost(entryId);
+    return addBookmark.mutate(entryId);
   };
 
   const handleShowEditor = () => {
@@ -189,7 +173,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         itemCard={
           <EntryCardRenderer
             logger={logger}
-            bookmarkState={bookmarkState}
+            bookmarkState={bookmarksReq}
             ethAddress={loginState.ethAddress}
             locale={locale}
             onBookmark={handleEntryBookmark}

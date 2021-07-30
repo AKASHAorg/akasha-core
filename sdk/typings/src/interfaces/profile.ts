@@ -110,4 +110,26 @@ export default interface AWF_IProfile {
    * @param keyword
    */
   globalSearch(keyword: string): unknown;
+
+  /**
+   *
+   * @param pubKey
+   * @param limit
+   * @param offset
+   */
+  getFollowers(pubKey: string, limit: number, offset?: number): unknown;
+
+  /**
+   *
+   * @param pubKey
+   * @param limit
+   * @param offset
+   */
+  getFollowing(pubKey: string, limit: number, offset?: number): unknown;
+
+  /**
+   *
+   * @param pubKey
+   */
+  getInterests(pubKey: string): unknown;
 }

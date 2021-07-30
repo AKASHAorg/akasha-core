@@ -13,6 +13,8 @@ import {
   GetPostsByTag,
   EditEntry,
   RemoveEntry,
+  GetLinkPreview,
+  GetCustomFeed,
 } from './entry.graphql';
 import { concatAll, map, tap } from 'rxjs/operators';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
@@ -20,6 +22,7 @@ import { AWF_IEntry } from '@akashaproject/sdk-typings/lib/interfaces/posts';
 import { ENTRY_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
 import EventBus from '../common/event-bus';
 import {
+  LinkPreview_Response,
   Post_Response,
   PostsResult_Response,
 } from '@akashaproject/sdk-typings/lib/interfaces/responses';
@@ -38,6 +41,8 @@ export default class AWF_Entry implements AWF_IEntry {
     GetPostsByTag,
     EditEntry,
     RemoveEntry,
+    GetLinkPreview,
+    GetCustomFeed,
   };
 
   constructor(
@@ -104,7 +109,7 @@ export default class AWF_Entry implements AWF_IEntry {
     textContent.value = Buffer.from(textContent.value).toString('base64');
     this._gql.clearCache();
     return this._auth
-      .authenticateMutationData((opt.data as unknown) as Record<string, unknown>[])
+      .authenticateMutationData(opt.data as unknown as Record<string, unknown>[])
       .pipe(
         map(res => {
           return this._gql
@@ -147,7 +152,7 @@ export default class AWF_Entry implements AWF_IEntry {
     textContent.value = Buffer.from(textContent.value).toString('base64');
     this._gql.clearCache();
     return this._auth
-      .authenticateMutationData((opt.data as unknown) as Record<string, unknown>[])
+      .authenticateMutationData(opt.data as unknown as Record<string, unknown>[])
       .pipe(
         map(res => {
           return this._gql
@@ -252,6 +257,47 @@ export default class AWF_Entry implements AWF_IEntry {
               });
             }),
           );
+      }),
+      concatAll(),
+    );
+  }
+
+  /**
+   * @param link
+   */
+  getLinkPreview(link: string) {
+    return this._gql.run<{ getLinkPreview: LinkPreview_Response }>(
+      {
+        query: GetLinkPreview,
+        variables: { link: link },
+        operationName: 'GetLinkPreview',
+      },
+      true,
+    );
+  }
+
+  getFeedEntries(opt: { offset?: number; limit: number }) {
+    return this._auth.getToken().pipe(
+      map(token => {
+        if (!token) {
+          throw new Error('Must be authenticated in order to access the personalized feed api.');
+        }
+        return this._gql.run<{ getCustomFeed: PostsResult_Response }>(
+          {
+            query: GetCustomFeed,
+            variables: {
+              offset: opt.offset,
+              limit: opt.limit,
+            },
+            operationName: 'GetCustomFeed',
+            context: {
+              headers: {
+                Authorization: `Bearer ${token.data}`,
+              },
+            },
+          },
+          true,
+        );
       }),
       concatAll(),
     );

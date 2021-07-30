@@ -13,7 +13,12 @@ import { normalize } from 'eth-ens-namehash';
 import { ethers, utils, providers } from 'ethers';
 import objHash from 'object-hash';
 import sendgrid from '@sendgrid/mail';
-sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+import { fetch } from 'cross-fetch';
+import AbortController from 'node-abort-controller';
+
+if (process.env.SENDGRID_API_KEY) {
+  sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+}
 
 export const EMPTY_KEY = 'baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
 export const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -118,7 +123,7 @@ export const setupDBCollections = async () => {
   return { threadID, client: appDB };
 };
 
-export const sendNotification = async (recipient: string, notificationObj: object) => {
+export const sendNotification = async (recipient: string, notificationObj: Record<string, any>) => {
   const ms = await getMailSender();
   const textEncoder = new TextEncoder();
   const encodedNotification = textEncoder.encode(JSON.stringify(notificationObj));
@@ -155,11 +160,7 @@ export const validateName = (name: string) => {
   const normalizedArray = nameArray.map(label => {
     return isEncodedLabelhash(label) ? label : normalize(label);
   });
-  try {
-    return normalizedArray.join('.');
-  } catch (e) {
-    throw e;
-  }
+  return normalizedArray.join('.');
 };
 
 const eip1271Abi = [
@@ -188,7 +189,7 @@ const encoder = new TextEncoder();
 // @Todo: Use the sdk lib for this
 export const verifyEd25519Sig = async (args: {
   pubKey: string;
-  data: Uint8Array | string | object;
+  data: Uint8Array | string | Record<string, unknown>;
   signature: Uint8Array | string;
 }) => {
   const pub = PublicKey.fromString(args.pubKey);
@@ -242,3 +243,18 @@ export const decodeString = (value: string) => {
 export const encodeString = (value: string) => {
   return value ? Buffer.from(value).toString('base64') : '';
 };
+
+export async function fetchWithTimeout(resource, options) {
+  const { timeout = 12000 } = options;
+
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+
+  const response = await fetch(resource, {
+    ...options,
+    signal: controller.signal,
+  });
+  clearTimeout(id);
+
+  return response;
+}

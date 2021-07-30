@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import {
-  usePosts,
   useBookmarks,
   useMentions,
   useProfile,
@@ -21,6 +19,13 @@ import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings'
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import {
+  useInfiniteComments,
+  useCreateComment,
+} from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
+// import { useTags, useMentions } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
+import { mapEntry, buildPublishObject } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
 
 const {
   Box,
@@ -30,7 +35,7 @@ const {
   Helmet,
   CommentEditor,
   EditorPlaceholder,
-  EntryCardHidden,
+  // EntryCardHidden,
   ErrorInfoCard,
   ErrorLoader,
   EntryCardLoading,
@@ -54,10 +59,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   //@Todo: replace entryData with value from usePost
   const postReq = usePost(postId, !!postId);
   const entryData = postReq.data;
-  const [postsState, postsActions] = usePosts({
-    user: loginState.ethAddress,
-    onError: errorActions.createError,
-  });
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
@@ -71,6 +72,26 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   //   }
   //   return null;
   // }, [postId, postsState.postsData[postId]]);
+
+  const reqComments = useInfiniteComments(15, postId);
+  const commentsState = reqComments.data;
+  const ids = React.useMemo(() => {
+    const list = [];
+    if (!reqComments.isSuccess) {
+      return list;
+    }
+    commentsState.pages.forEach(el => el.results.forEach(el1 => list.push(el1._id)));
+    return list;
+  }, [reqComments.isSuccess]);
+
+  const commentsData = React.useMemo(() => {
+    const list = {};
+    if (!reqComments.isSuccess) {
+      return list;
+    }
+    commentsState.pages.forEach(el => el.results.forEach(el1 => (list[el1._id] = mapEntry(el1))));
+    return list;
+  }, [reqComments.isSuccess]);
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
@@ -112,25 +133,21 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   const isFollowing = followedProfiles.includes(entryData?.author?.ethAddress);
 
-  const handleLoadMore = async (payload: any) => {
-    const req: { limit: number; offset?: string; postID: string } = {
-      limit: payload.limit,
-      postID: postId,
-    };
-    if (!postsState.isFetchingComments) {
-      postsActions.getComments(req);
+  const handleLoadMore = () => {
+    if (!reqComments.isFetching && loginState.currentUserCalled) {
+      reqComments.fetchNextPage().then(d => console.log('fetched next page', d));
     }
   };
 
-  const loadItemData = async (payload: ILoadItemDataPayload) => {
-    postsActions.getComment(payload.itemId);
+  const loadItemData = () => {
+    // postsActions.getComment(payload.itemId);
   };
 
   React.useEffect(() => {
     // this is used to initialise comments when navigating to other post ids
     if (postId && loginState.currentUserCalled) {
-      postsActions.getPost(postId);
-      handleLoadMore({ limit: 5, postID: postId });
+      // postsActions.getPost(postId);
+      handleLoadMore();
       // if (loginState.ethAddress) {
       //   bookmarkActions.getBookmarks();
       // }
@@ -185,48 +202,50 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
-  const handlePublishComment = async (data: {
-    metadata: {
-      app: string;
-      version: number;
-      quote?: string;
-      tags: string[];
-      mentions: string[];
-    };
-    author: string;
-    content: any;
-    textContent: any;
-  }) => {
-    if (!loginState.ethAddress) {
-      showLoginModal();
-      return;
-    }
-    postsActions.optimisticPublishComment(data, postId, loginProfile);
+  const publishComment = useCreateComment();
+  const handlePublishComment = async (data: PublishPostData) => {
+    publishComment.mutate(buildPublishObject(data, postId));
   };
+
+  // const handlePublishComment = async (data: {
+  //   metadata: {
+  //     app: string;
+  //     version: number;
+  //     quote?: string;
+  //     tags: string[];
+  //     mentions: string[];
+  //   };
+  //   author: string;
+  //   content: any;
+  //   textContent: any;
+  // }) => {
+  //   if (!loginState.ethAddress) {
+  //     showLoginModal();
+  //     return;
+  //   }
+  //   postsActions.optimisticPublishComment(data, postId, loginProfile);
+  // };
 
   const handleRepost = (_withComment: boolean, entryData: any) => {
     props.navigateToModal({ name: 'editor', embedEntry: entryData });
   };
 
-  const handleNavigateToPost = redirectToPost(navigateToUrl, postId, postsActions.resetPostIds);
+  const handleNavigateToPost = redirectToPost(
+    navigateToUrl,
+    postId /*, postsActions.resetPostIds*/,
+  );
 
-  const handleSingleSpaNavigate = redirect(navigateToUrl, postsActions.resetPostIds);
+  const handleSingleSpaNavigate = redirect(navigateToUrl /*postsActions.resetPostIds*/);
 
   const onUploadRequest = uploadMediaToTextile;
 
-  const handleFlipCard = (entry: any, isQuote: boolean) => () => {
+  // @TODO: replace with mutation
+  const handleFlipCard = (_entry: any, _isQuote: boolean) => () => {
     // modify entry or its quote (if applicable)
-    const modifiedEntry = isQuote
-      ? { ...entry, quote: { ...entry.quote, reported: false } }
-      : { ...entry, reported: false };
-    postsActions.updatePostsState(modifiedEntry);
-  };
-
-  const handleListFlipCard = (entry: any, isQuote: boolean) => () => {
-    const modifiedEntry = isQuote
-      ? { ...entry, quote: { ...entry.quote, reported: false } }
-      : { ...entry, reported: false };
-    postsActions.updatePostsState(modifiedEntry);
+    // const modifiedEntry = isQuote
+    //   ? { ...entry, quote: { ...entry.quote, reported: false } }
+    //   : { ...entry, reported: false };
+    // postsActions.updatePostsState(modifiedEntry);
   };
 
   const onEditPostButtonMount = (name: string) => {
@@ -243,24 +262,25 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     /* todo */
   };
 
-  if (postsState.delistedItems.includes(postId)) {
-    return (
-      <EntryCardHidden
-        moderatedContentLabel={t('This content has been moderated')}
-        isDelisted={true}
-      />
-    );
-  }
-
-  if (!postsState.delistedItems.includes(postId) && postsState.reportedItems.includes(postId)) {
-    return (
-      <EntryCardHidden
-        awaitingModerationLabel={t('You have reported this content. It is awaiting moderation.')}
-        ctaLabel={t('See it anyway')}
-        handleFlipCard={handleFlipCard(entryData, false)}
-      />
-    );
-  }
+  // @TODO replace with moderation react query integration
+  // if (postsState.delistedItems.includes(postId)) {
+  //   return (
+  //     <EntryCardHidden
+  //       moderatedContentLabel={t('This content has been moderated')}
+  //       isDelisted={true}
+  //     />
+  //   );
+  // }
+  // @TODO replace with moderation react query integration
+  // if (!postsState.delistedItems.includes(postId) && postsState.reportedItems.includes(postId)) {
+  //   return (
+  //     <EntryCardHidden
+  //       awaitingModerationLabel={t('You have reported this content. It is awaiting moderation.')}
+  //       ctaLabel={t('See it anyway')}
+  //       handleFlipCard={handleFlipCard(entryData, false)}
+  //     />
+  //   );
+  // }
 
   const postErrors = errorActions.getFilteredErrors('usePost.getPost');
   const commentErrors = errorActions.getFilteredErrors('usePosts.getComments');
@@ -428,11 +448,11 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
             )}
             {!hasCriticalErrors && (
               <VirtualList
-                items={postsState.commentIds}
-                itemsData={postsState.postsData}
+                items={ids}
+                itemsData={commentsData}
                 loadMore={handleLoadMore}
                 loadItemData={loadItemData}
-                hasMoreItems={!!postsState.nextCommentIndex}
+                hasMoreItems={!!reqComments.hasNextPage}
                 itemCard={
                   <PostRenderer
                     logger={logger}
@@ -448,7 +468,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                     onMentionClick={handleMentionClick}
                     onTagClick={handleTagClick}
                     singleSpaNavigate={handleSingleSpaNavigate}
-                    handleFlipCard={handleListFlipCard}
+                    handleFlipCard={handleFlipCard}
                     onEntryRemove={handleCommentRemove}
                     removeEntryLabel={t('Delete Reply')}
                     removedByMeLabel={t('You deleted this reply')}
@@ -459,9 +479,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                   logger,
                   locale,
                   isMobile,
-                  feedItems: postsState.postIds,
+                  feedItems: ids,
                   loggedEthAddress: loginState.ethAddress,
-                  pendingComments: postsState.pendingComments,
+                  pendingComments: [],
                 })}
               />
             )}

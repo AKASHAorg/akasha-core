@@ -12,6 +12,8 @@ import { DataProvider, Profile } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 import { searchIndex } from './search-indexes';
 import { postsStats, statsProvider } from '../resolvers/constants';
+import { parse, stringify } from 'flatted';
+import objHash from 'object-hash';
 
 const NOT_FOUND_PROFILE = new Error('Profile not found');
 const NOT_REGISTERED = new Error('Must be registered first.');
@@ -19,6 +21,8 @@ class ProfileAPI extends DataSource {
   private readonly collection: string;
   private context: any;
   private readonly dbID: ThreadID;
+  private readonly FOLLOWING_KEY = ':getFollowing:';
+  private readonly FOLLOWERS_KEY = ':getFollowers:';
   constructor({ collection, dbID }) {
     super();
     this.collection = collection;
@@ -78,7 +82,7 @@ class ProfileAPI extends DataSource {
         }
       }
 
-      const returnedObj = JSON.parse(JSON.stringify(profilesFound[0]));
+      const returnedObj = parse(stringify(profilesFound[0]));
       for (const provider of q) {
         Object.assign(returnedObj, {
           [provider.property]: provider.value,
@@ -93,6 +97,7 @@ class ProfileAPI extends DataSource {
         totalPosts,
         totalFollowers: profilesFound[0]?.followers?.length || 0,
         totalFollowing: profilesFound[0]?.following?.length || 0,
+        interests: profilesFound[0]?.interests || [],
       });
       await queryCache.set(cacheKey, returnedObj);
       return returnedObj;
@@ -214,7 +219,13 @@ class ProfileAPI extends DataSource {
 
     profile1.following.unshift(profile.pubKey);
     profile.followers.unshift(profile1.pubKey);
+
     await db.save(this.dbID, this.collection, [profile, profile1]);
+    const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${profile1.pubKey}`);
+    const followersKey = this.getCacheKey(`${this.FOLLOWERS_KEY}${profile.pubKey}`);
+
+    await queryCache.del(followingKey);
+    await queryCache.del(followersKey);
     await queryCache.del(this.getCacheKey(profile.pubKey));
     await queryCache.del(this.getCacheKey(profile1.pubKey));
     const notification = {
@@ -243,6 +254,12 @@ class ProfileAPI extends DataSource {
     profile1.following.splice(exists, 1);
     profile.followers.splice(exists1, 1);
     await db.save(this.dbID, this.collection, [profile, profile1]);
+
+    const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${profile1.pubKey}`);
+    const followersKey = this.getCacheKey(`${this.FOLLOWERS_KEY}${profile.pubKey}`);
+
+    await queryCache.del(followingKey);
+    await queryCache.del(followersKey);
     await queryCache.del(this.getCacheKey(profile.pubKey));
     await queryCache.del(this.getCacheKey(profile1.pubKey));
     return true;
@@ -290,6 +307,117 @@ class ProfileAPI extends DataSource {
   async updateProfile(updateProfile: any[]) {
     const db: Client = await getAppDB();
     return db.save(this.dbID, this.collection, updateProfile);
+  }
+
+  /**
+   * @param pubKey
+   * @param limit
+   * @param offset
+   */
+  async getFollowers(pubKey: string, limit = 5, offset = 0) {
+    const db: Client = await getAppDB();
+    const key = this.getCacheKey(`${this.FOLLOWERS_KEY}${pubKey}`);
+    const hasAllPostsCache = await queryCache.has(key);
+    let followers: string[];
+    if (!hasAllPostsCache) {
+      const query = new Where('pubKey').eq(pubKey);
+      const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
+      if (!profilesFound?.length) {
+        logger.warn(`${pubKey} not registered`);
+        throw NOT_REGISTERED;
+      }
+      await queryCache.set(key, profilesFound[0].followers);
+      followers = profilesFound[0].followers;
+    } else {
+      followers = await queryCache.get(key);
+    }
+    if (!followers?.length) {
+      return { results: [], nextIndex: undefined, total: 0 };
+    }
+    let nextIndex = limit + offset;
+    if (followers.length <= nextIndex) {
+      nextIndex = undefined;
+    }
+    const results = followers.slice(offset, nextIndex);
+    return { results: results, nextIndex: nextIndex, total: followers.length };
+  }
+
+  /**
+   *
+   * @param pubKey
+   * @param limit
+   * @param offset
+   */
+  async getFollowing(pubKey: string, limit = 5, offset = 0) {
+    const db: Client = await getAppDB();
+    const key = this.getCacheKey(`${this.FOLLOWING_KEY}${pubKey}`);
+    const hasAllPostsCache = await queryCache.has(key);
+    let following: string[];
+    if (!hasAllPostsCache) {
+      const query = new Where('pubKey').eq(pubKey);
+      const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
+      if (!profilesFound?.length) {
+        logger.warn(`${pubKey} not registered`);
+        throw NOT_REGISTERED;
+      }
+      await queryCache.set(key, profilesFound[0].following);
+      following = profilesFound[0].following;
+    } else {
+      following = await queryCache.get(key);
+    }
+    if (!following?.length) {
+      return { results: [], nextIndex: undefined, total: 0 };
+    }
+    let nextIndex = limit + offset;
+    if (following.length <= nextIndex) {
+      nextIndex = undefined;
+    }
+
+    const results = following.slice(offset, nextIndex);
+    return { results: results, nextIndex: nextIndex, total: following.length };
+  }
+
+  /**
+   *
+   * @param pubKey
+   * @param tagName
+   */
+  async toggleInterestSub(pubKey: string, tagName: string) {
+    const db: Client = await getAppDB();
+    const query = new Where('pubKey').eq(pubKey);
+    const [profile] = await db.find<Profile>(this.dbID, this.collection, query);
+    if (!profile) {
+      throw NOT_REGISTERED;
+    }
+    if (!profile?.interests || !profile.interests.length) {
+      profile.interests = [tagName];
+    } else {
+      const position = profile.interests.indexOf(tagName);
+      if (position === -1) {
+        profile.interests.unshift(tagName);
+      } else {
+        profile.interests.splice(position, 1);
+      }
+    }
+    const objID = objHash({ [profile._id]: tagName });
+    await db.save(this.dbID, this.collection, [profile]);
+    await queryCache.del(this.getCacheKey(pubKey));
+    const isSubscribed = profile.interests[0] === tagName;
+    if (isSubscribed) {
+      searchIndex
+        .saveObject({
+          objectID: objID,
+          category: 'interests',
+          tagName: tagName,
+          pubKey: profile.pubKey,
+        })
+        .then(_ => _)
+        .catch(e => console.error(e));
+    } else {
+      searchIndex.deleteObject(objID);
+    }
+
+    return isSubscribed;
   }
 }
 

@@ -65,15 +65,15 @@ const EntryFeed = (props: IFeedWidgetProps) => {
   };
   const locale: any = i18n.languages[0];
 
-  const hasMoreItems = React.useMemo(() => {
-    if (props.totalItems && props.itemIds?.length) {
-      return props.totalItems > props.itemIds.length;
-    }
-    // defaults to true,
-    // meaning that the list will try to fetch
-    // the first/next batch of items
-    return true;
-  }, [props.totalItems, props.itemIds?.length]);
+  // const hasMoreItems = React.useMemo(() => {
+  //   if (props.totalItems && props.itemIds?.length) {
+  //     return props.totalItems > props.itemIds.length;
+  //   }
+  //   // defaults to true,
+  //   // meaning that the list will try to fetch
+  //   // the first/next batch of items
+  //   return true;
+  // }, [props.totalItems, props.itemIds?.length]);
 
   return (
     <ErrorInfoCard errors={{ ...errors, ...errorState }}>
@@ -95,7 +95,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
               loadMore={props.loadMore}
               loadItemData={props.loadItemData}
               listHeader={props.listHeader}
-              hasMoreItems={hasMoreItems}
+              hasMoreItems={props.hasMoreItems}
               itemCard={
                 <EntryRenderer
                   pubKey={props.profilePubKey}

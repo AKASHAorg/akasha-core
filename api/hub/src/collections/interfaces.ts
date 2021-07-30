@@ -37,6 +37,7 @@ export interface Profile {
   followers?: string[];
   providers?: DataProvider[];
   metaData?: DataProvider[];
+  interests?: string[];
 }
 
 export interface Comment {
@@ -87,6 +88,14 @@ export interface ModerationDecision {
   explanation?: string;
   delisted: boolean;
   moderated: boolean;
+  actions: ModerationAction[];
+}
+
+export interface ModerationAction {
+  moderator: string;
+  moderatedDate: number;
+  explanation: string;
+  delisted: boolean;
 }
 
 export interface ModerationReason {

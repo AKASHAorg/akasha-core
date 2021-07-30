@@ -6,6 +6,7 @@ export type ServiceCallResult<T> = Observable<{ data: T }>;
 export interface Comment_Response {
   _id: string;
   creationDate: string;
+  updatedAt: string;
   author: UserProfile_Response;
   content: [DataProviderInput];
   mentions: [string];
@@ -23,6 +24,7 @@ export interface Post_Response {
   _id: string;
   type: PostType;
   creationDate: string;
+  updatedAt: string;
   author: UserProfile_Response;
   title: string;
   content: [DataProviderInput];
@@ -40,6 +42,26 @@ export interface PostsResult_Response {
   total: number;
 }
 
+export interface VideoPreview_Response {
+  url: string;
+  secureUrl: string;
+  type: string;
+  width: string;
+  height: string;
+}
+
+export interface LinkPreview_Response {
+  url: string;
+  mediaType: string;
+  contentType: string;
+  favicons: [string];
+  videos: [VideoPreview_Response];
+  title: string;
+  siteName: string;
+  description: string;
+  images: [string];
+}
+
 export interface UserProfile_Response {
   _id: string;
   ethAddress: string;
@@ -55,6 +77,13 @@ export interface UserProfile_Response {
   default: [DataProviderInput];
   totalFollowers: number;
   totalFollowing: number;
+  interests: string[];
+}
+
+export interface UserFollowers_Response {
+  results: [UserProfile_Response];
+  nextIndex: number;
+  total: number;
 }
 
 export interface Tag_Response {
@@ -63,6 +92,8 @@ export interface Tag_Response {
   creationDate: string;
   posts: [string];
   comments: [string];
+  totalSubscribers: number;
+  totalPosts: number;
 }
 
 export interface TagsResult_Response {

@@ -10,8 +10,11 @@ declare module '*/profile.graphql' {
   const UnFollow: DocumentNode;
   const IsFollowing: TypedQueryDocumentNode;
   const SaveMetaData: DocumentNode;
+  const ToggleInterestSub: DocumentNode;
   const SearchProfiles: TypedQueryDocumentNode;
   const GlobalSearch: TypedQueryDocumentNode;
+  const GetFollowers: TypedQueryDocumentNode;
+  const GetFollowing: TypedQueryDocumentNode;
 
   export {
     AddProfileProvider,
@@ -25,6 +28,9 @@ declare module '*/profile.graphql' {
     SaveMetaData,
     SearchProfiles,
     GlobalSearch,
+    GetFollowers,
+    GetFollowing,
+    ToggleInterestSub,
   };
 }
 
@@ -47,6 +53,8 @@ declare module '*/entry.graphql' {
   const GetEntries: TypedQueryDocumentNode;
   const GetPostsByAuthor: TypedQueryDocumentNode;
   const GetPostsByTag: TypedQueryDocumentNode;
+  const GetLinkPreview: TypedQueryDocumentNode;
+  const GetCustomFeed: TypedQueryDocumentNode;
   const CreateEntry: DocumentNode;
   const EditEntry: DocumentNode;
   const RemoveEntry: DocumentNode;
@@ -61,6 +69,8 @@ declare module '*/entry.graphql' {
     CreateEntry,
     EditEntry,
     RemoveEntry,
+    GetLinkPreview,
+    GetCustomFeed,
   };
 }
 

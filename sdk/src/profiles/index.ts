@@ -16,6 +16,9 @@ import {
   SaveMetaData,
   SearchProfiles,
   UnFollow,
+  GetFollowers,
+  GetFollowing,
+  ToggleInterestSub,
 } from './profile.graphql';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
@@ -29,6 +32,7 @@ import EventBus from '../common/event-bus';
 import { PROFILE_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
 import {
   GlobalSearchResult,
+  UserFollowers_Response,
   UserProfile_Response,
 } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 import { createFormattedValue, createObservableValue } from '../helpers/observable';
@@ -57,6 +61,9 @@ export default class AWF_Profile implements AWF_IProfile {
     SaveMetaData,
     SearchProfiles,
     GlobalSearch,
+    GetFollowers,
+    GetFollowing,
+    ToggleInterestSub,
   };
 
   constructor(
@@ -78,7 +85,7 @@ export default class AWF_Profile implements AWF_IProfile {
    * @param opt
    */
   addProfileProvider(opt: DataProviderInput[]) {
-    return this._auth.authenticateMutationData((opt as unknown) as Record<string, unknown>[]).pipe(
+    return this._auth.authenticateMutationData(opt as unknown as Record<string, unknown>[]).pipe(
       map(res => {
         return this._gql
           .run<{ addProfileProvider: string }>({
@@ -112,7 +119,7 @@ export default class AWF_Profile implements AWF_IProfile {
    * @param opt
    */
   makeDefaultProvider(opt: DataProviderInput[]) {
-    return this._auth.authenticateMutationData((opt as unknown) as Record<string, unknown>[]).pipe(
+    return this._auth.authenticateMutationData(opt as unknown as Record<string, unknown>[]).pipe(
       map(res => {
         return this._gql
           .run<{ makeDefaultProvider: string }>({
@@ -370,7 +377,7 @@ export default class AWF_Profile implements AWF_IProfile {
       value: cid,
     };
     await lastValueFrom(
-      this._auth.authenticateMutationData((dataFinal as unknown) as Record<string, unknown>[]).pipe(
+      this._auth.authenticateMutationData(dataFinal as unknown as Record<string, unknown>[]).pipe(
         map(res => {
           this._gql.clearCache();
           return this._gql.run({
@@ -419,40 +426,31 @@ export default class AWF_Profile implements AWF_IProfile {
    * @param tagName
    */
   toggleTagSubscription(tagName: string) {
-    return this._settings.get(this.TagSubscriptions).pipe(
-      map((rec: any) => {
-        const status = { sub: true };
-        if (!rec.data || !rec.data?._id) {
-          return this._settings.set(this.TagSubscriptions, [[tagName, true]]).pipe(
-            map(() => {
+    return this._auth.authenticateMutationData({ sub: tagName }).pipe(
+      map(res => {
+        this._gql.clearCache();
+        return this._gql
+          .run<{ toggleInterestSub: boolean }>({
+            query: ToggleInterestSub,
+            variables: { sub: tagName },
+            operationName: 'ToggleInterestSub',
+            context: {
+              headers: {
+                Authorization: `Bearer ${res.token.data}`,
+                Signature: res.signedData.data.signature,
+              },
+            },
+          })
+          .pipe(
+            tap(ev => {
               // @emits PROFILE_EVENTS.TAG_SUBSCRIPTION
               this._globalChannel.next({
-                data: status,
+                data: { status: ev.data },
                 event: PROFILE_EVENTS.TAG_SUBSCRIPTION,
                 args: { tagName },
               });
-              return status;
             }),
           );
-        }
-        const el = rec.data.options.find(r => r[0] === tagName);
-        if (!el) {
-          rec.data.options.push([tagName, true]);
-        } else {
-          el[1] = !el[1];
-          status.sub = el[1];
-        }
-        return this._settings.set(this.TagSubscriptions, rec.data.options).pipe(
-          map(() => {
-            // @emits PROFILE_EVENTS.TAG_SUBSCRIPTION
-            this._globalChannel.next({
-              data: status,
-              event: PROFILE_EVENTS.TAG_SUBSCRIPTION,
-              args: { tagName },
-            });
-            return status;
-          }),
-        );
       }),
       concatAll(),
     );
@@ -462,12 +460,9 @@ export default class AWF_Profile implements AWF_IProfile {
    *
    */
   getTagSubscriptions() {
-    return this._settings.get(this.TagSubscriptions).pipe(
-      map((rec: any) => {
-        return createFormattedValue<Record<string, boolean>>(
-          Object.fromEntries(rec.data?.options ? rec.data?.options : []),
-        );
-      }),
+    return this._auth.getCurrentUser().pipe(
+      map(res => this.getInterests(res.data.pubKey)),
+      concatAll(),
     );
   }
 
@@ -478,14 +473,11 @@ export default class AWF_Profile implements AWF_IProfile {
   isSubscribedToTag(tagName: string) {
     return this.getTagSubscriptions().pipe(
       map(res => {
-        if (!res || !res.data) {
+        if (!res || !res?.data?.length) {
           return createFormattedValue<boolean>(false);
         }
-        const el = res.data.hasOwnProperty(tagName);
-        if (!el) {
-          return createFormattedValue<boolean>(false);
-        }
-        return createFormattedValue<boolean>(res.data[tagName]);
+        const el = res.data.indexOf(tagName);
+        return createFormattedValue<boolean>(el !== -1);
       }),
     );
   }
@@ -502,6 +494,52 @@ export default class AWF_Profile implements AWF_IProfile {
         operationName: 'GlobalSearch',
       },
       true,
+    );
+  }
+
+  /**
+   *
+   * @param pubKey
+   * @param limit
+   * @param offset
+   */
+  getFollowers(pubKey: string, limit: number, offset?: number) {
+    return this._gql.run<{ getFollowers: UserFollowers_Response }>(
+      {
+        query: GetFollowers,
+        variables: { pubKey, limit, offset },
+        operationName: 'GetFollowers',
+      },
+      true,
+    );
+  }
+
+  /**
+   *
+   * @param pubKey
+   * @param limit
+   * @param offset
+   */
+  getFollowing(pubKey: string, limit: number, offset?: number) {
+    return this._gql.run<{ getFollowing: UserFollowers_Response }>(
+      {
+        query: GetFollowing,
+        variables: { pubKey, limit, offset },
+        operationName: 'GetFollowing',
+      },
+      true,
+    );
+  }
+
+  /**
+   * Retrieve subscription list
+   * @param pubKey
+   */
+  getInterests(pubKey: string) {
+    return this.getProfile({ pubKey: pubKey }).pipe(
+      map(response =>
+        createFormattedValue<string[]>(response.data?.resolveProfile?.interests || []),
+      ),
     );
   }
 }

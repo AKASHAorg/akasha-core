@@ -11,6 +11,11 @@ const typeDefs = gql`
     nextIndex: String
     total: Int
   }
+  type ProfilesResult {
+    results: [UserProfile!]
+    nextIndex: Int
+    total: Int
+  }
   type NewPostsResult {
     results: [Post!]
     nextIndex: Int
@@ -72,6 +77,25 @@ const typeDefs = gql`
     kept: Int
   }
 
+  type VideoPreview {
+    url: String
+    secureUrl: String
+    type: String
+    width: String
+    height: String
+  }
+  type LinkPreview {
+    url: String
+    mediaType: String
+    contentType: String
+    favicons: [String]
+    videos: [VideoPreview]
+    title: String
+    siteName: String
+    description: String
+    images: [String]
+  }
+
   type Query {
     getProfile(ethAddress: String!): UserProfile!
     resolveProfile(pubKey: String!): UserProfile!
@@ -87,6 +111,10 @@ const typeDefs = gql`
     getComment(commentID: String!): Comment!
     getPostsByAuthor(author: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
     getPostsByTag(tag: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
+    getFollowers(pubKey: String!, limit: Int, offset: Int): ProfilesResult
+    getFollowing(pubKey: String!, limit: Int, offset: Int): ProfilesResult
+    getLinkPreview(link: String!): LinkPreview
+    getCustomFeed(limit: Int, offset: Int): NewPostsResult
   }
 
   input DataProviderInput {
@@ -157,6 +185,7 @@ const typeDefs = gql`
     editComment(content: [DataProviderInput!], comment: CommentData, id: String!): Boolean
     removePost(id: String!): Boolean
     removeComment(id: String!): Boolean
+    toggleInterestSub(sub: String!): Boolean
   }
 
   type Tag {
@@ -165,6 +194,8 @@ const typeDefs = gql`
     creationDate: String!
     posts: [String!]
     comments: [String!]
+    totalSubscribers: Int
+    totalPosts: Int
   }
 
   type UserProfile {
@@ -182,6 +213,7 @@ const typeDefs = gql`
     default: [DataProvider]
     totalFollowers: Int
     totalFollowing: Int
+    interests: [String]
   }
 
   enum PostType {
@@ -195,6 +227,7 @@ const typeDefs = gql`
     _id: ID!
     type: PostType!
     creationDate: String!
+    updatedAt: String
     author: UserProfile!
     title: String
     content: [DataProvider!]
@@ -209,6 +242,7 @@ const typeDefs = gql`
   type Comment {
     _id: ID!
     creationDate: String!
+    updatedAt: String
     author: UserProfile!
     content: [DataProvider!]
     mentions: [String]

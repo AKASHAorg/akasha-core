@@ -1,5 +1,7 @@
-import { commentsStats, statsProvider } from './constants';
+import { getPreviewFromContent } from 'link-preview-js';
+import { commentsStats, REGEX_VALID_URL, statsProvider } from './constants';
 import { queryCache } from '../storage/cache';
+import { fetchWithTimeout } from '../helpers';
 
 const query = {
   getProfile: async (_source, { ethAddress }, { dataSources }) => {
@@ -171,6 +173,85 @@ const query = {
       return res;
     })();
     return results;
+  },
+  getFollowers: async (_source, { limit, offset, pubKey }, { dataSources }) => {
+    const returned = await dataSources.profileAPI.getFollowers(pubKey, limit, offset);
+    returned.results = await Promise.all(
+      returned.results.map(_pubKey => {
+        return query.resolveProfile(_source, { pubKey: _pubKey }, { dataSources });
+      }),
+    );
+    return returned;
+  },
+
+  getFollowing: async (_source, { limit, offset, pubKey }, { dataSources }) => {
+    const returned = await dataSources.profileAPI.getFollowing(pubKey, limit, offset);
+    returned.results = await Promise.all(
+      returned.results.map(_pubKey => {
+        return query.resolveProfile(_source, { pubKey: _pubKey }, { dataSources });
+      }),
+    );
+    return returned;
+  },
+  getLinkPreview: async (_source, { link }) => {
+    if (!link || typeof link !== `string`) {
+      throw new Error(`did not receive a valid url`);
+    }
+
+    const detectedUrl = link
+      .replace(/\n/g, ` `)
+      .split(` `)
+      .find(token => REGEX_VALID_URL.test(token));
+
+    if (!detectedUrl) {
+      throw new Error(`did not receive a valid url`);
+    }
+    const options = {
+      timeout: 12000,
+      redirect: 'follow',
+      headers: {
+        'user-agent': 'Twitterbot',
+      },
+    };
+    const response = await fetchWithTimeout(detectedUrl, options);
+    const headers = {};
+    response.headers.forEach((header, key) => {
+      headers[key] = header;
+    });
+    const normalizedResponse = {
+      url: response.url,
+      headers: headers,
+      data: await response.text(),
+    };
+    return getPreviewFromContent(normalizedResponse);
+  },
+  /**
+   * Returns posts made by the last 1000 accounts followed
+   * @param _source
+   * @param limit
+   * @param offset
+   * @param dataSources
+   * @param user
+   */
+  getCustomFeed: async (_source, { limit, offset }, { dataSources, user }) => {
+    if (!user?.pubKey) {
+      return Promise.reject('Must be authenticated!');
+    }
+    const res = await dataSources.profileAPI.getFollowing(user.pubKey, 1000, 0);
+    const profile = await dataSources.profileAPI.resolveProfile(user.pubKey);
+    const followingList: string[] = res.results;
+    const postsIDs = await dataSources.postsAPI.getPostsByAuthorsAndTags(
+      followingList || [],
+      profile?.interests || [],
+      offset,
+      limit,
+    );
+    const posts = await Promise.all(
+      postsIDs.results.map(post => {
+        return query.getPost(_source, { pubKey: user.pubKey, id: post.objectID }, { dataSources });
+      }),
+    );
+    return Object.assign({}, postsIDs, { results: posts });
   },
 };
 

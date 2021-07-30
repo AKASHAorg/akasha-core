@@ -3,7 +3,6 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useFollow } from '@akashaproject/ui-awf-hooks';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 import routes, { POST } from '../../routes';
 import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
@@ -33,7 +32,7 @@ export interface IEntryCardRendererProps {
   onMentionClick: (pubKey: string) => void;
   onTagClick: (name: string) => void;
   singleSpaNavigate: (url: string) => void;
-  bookmarkState?: IBookmarkState;
+  bookmarkState?: any;
   style?: React.CSSProperties;
   contentClickable?: boolean;
   disableActions?: boolean;
@@ -73,13 +72,13 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
       bookmarkState &&
       !bookmarkState.isFetching &&
       itemId &&
-      bookmarkState.bookmarks.findIndex(bm => bm.entryId === itemId) >= 0
+      bookmarkState.data?.findIndex(bm => bm.entryId === itemId) >= 0
     ) {
       return true;
     }
 
     return false;
-  }, [bookmarkState]);
+  }, [bookmarkState.data]);
 
   const { t } = useTranslation();
 

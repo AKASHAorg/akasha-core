@@ -11,6 +11,8 @@ import { filter } from 'rxjs/operators';
 // these can be used with useQueryClient() to fetch data
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
+export const ENTRIES_BY_TAG_KEY = 'EntriesByTag';
+export const ENTRIES_BY_AUTHOR_KEY = 'EntriesByAuthor';
 
 const getPosts = async (limit: number, offset?: string) => {
   const sdk = getSDK();
@@ -79,7 +81,61 @@ export function useInfinitePosts(limit: number, offset?: string) {
     ENTRIES_KEY,
     async ({ pageParam = offset }) => getPosts(limit, pageParam),
     {
-      getNextPageParam: (lastPage, _allPages) => lastPage.nextIndex,
+      getNextPageParam: lastPage => lastPage.nextIndex,
+      //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
+      enabled: !!(offset || limit),
+      keepPreviousData: true,
+    },
+  );
+}
+
+const getPostsByTag = async (name: string, limit: number, offset?: string) => {
+  const sdk = getSDK();
+  const res = await lastValueFrom(
+    sdk.api.entries.entriesByTag({
+      name: name,
+      limit: limit,
+      offset: offset,
+    }),
+  );
+  // @Todo: Remap this?
+  return res.data.getPostsByTag;
+};
+
+// hook for fetching feed data
+export function useInfinitePostsByTag(name: string, limit: number, offset?: string) {
+  return useInfiniteQuery(
+    [ENTRIES_BY_TAG_KEY, name],
+    async ({ pageParam = offset }) => getPostsByTag(name, limit, pageParam),
+    {
+      getNextPageParam: lastPage => lastPage.nextIndex,
+      //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
+      enabled: !!(offset || limit),
+      keepPreviousData: true,
+    },
+  );
+}
+
+const getPostsByAuthor = async (pubKey: string, limit: number, offset?: number) => {
+  const sdk = getSDK();
+  const res = await lastValueFrom(
+    sdk.api.entries.entriesByAuthor({
+      pubKey: pubKey,
+      limit: limit,
+      offset: offset,
+    }),
+  );
+  // @Todo: Remap this?
+  return res.data.getPostsByAuthor;
+};
+
+// hook for fetching feed data
+export function useInfinitePostsByAuthor(pubKey: string, limit: number, offset?: number) {
+  return useInfiniteQuery(
+    [ENTRIES_BY_AUTHOR_KEY, pubKey],
+    async ({ pageParam = offset }) => getPostsByAuthor(pubKey, limit, pageParam),
+    {
+      getNextPageParam: lastPage => lastPage.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit),
       keepPreviousData: true,
@@ -89,9 +145,9 @@ export function useInfinitePosts(limit: number, offset?: string) {
 
 const getPost = async postID => {
   const sdk = getSDK();
-  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
   const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
-  return mapEntry(res.data.getPost, ipfsGateway);
+  // remap the object props here
+  return mapEntry(res.data.getPost);
 };
 
 // hook for fetching data for a specific postID/entryID

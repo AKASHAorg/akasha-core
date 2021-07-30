@@ -24,23 +24,15 @@
   <title>Ethereum World</title>
   <script src="https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.development.js" integrity="sha256-QoQkvFHtz5oCOcl2oGlRo0NnSv5iAC8rMtEUDx31wCQ=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.development.js" integrity="sha256-SxURW871LR4j9t5iZ7x9lieLlmxT4XsmJKUSeaLe3wE=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/rxjs@7.0.0/dist/bundles/rxjs.umd.js" integrity="sha256-8JCR9nq7f+IC+Z4T1HwaD+CYwg2qQZ/deU2ru6c3GZE=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/rxjs@7.2.0/dist/bundles/rxjs.umd.js" integrity="sha256-FtKjzIamC1Ri4dovA+nCNARz2b9NTWShrSPb1/tL0i8=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/single-spa@5.9.3/lib/umd/single-spa.dev.js"
     integrity="sha256-dvzlK4VCLblOFYPoAehJ9OvIC2dhhGUMMZ6oH+sN9OY=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/single-spa-react@4.1.1/lib/umd/single-spa-react.js" integrity="sha256-TKbNjLv70kgk0Eg8lq/VN2dferty85AYQOTpumh8OC0=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/react-query@3.18.1/dist/react-query.development.js" integrity="sha256-y9S8CZ8F7CokusHyukhQu5cgPTe4I2LVh7JwL1Mw/aI=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/system.js"
-    integrity="sha512-Ch/Rs9YsR/h/dztJqbpJE5g82yXqpeQSAzewezXCeIc2tBcb5kdpDfFJvxJfSpOljP4mjjGhk+XU+kWx2pHvXA=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/named-exports.js"
-    integrity="sha512-WsJXbzVd2QyFkUOXkEHgVgMGFK7aWw4t8x3BkLs7iR1e4/2fw5WGTy1oY84nkCKuTrz5e+qLETCZIvsj5m0KBQ=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/use-default.js"
-    integrity="sha512-H3Nthybs/3kHDHCy1xHJ+1o8jTYvHB31gYduc1oDd4TMw4N9dZyrTadAnp2BG0bl/Tfm4A/xV/jYhpf7DbXTIA=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.7.1/extras/amd.js"
-    integrity="sha512-XuSVveSde1UkQKc8He1NO+7CxiYAac7Fej1avrqJvnr+bdiw3CSohzwv1aOJE2gm3GvxpXbKOaF2Yb6RXoq86Q=="
-    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/single-spa-react@4.2.1/lib/umd/single-spa-react.js" integrity="sha256-wAUWnFXzaHLDmf+ArIOaUPtVPRnhhZkUD/7y6VSzoEA=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-query@3.19.0/dist/react-query.development.js" integrity="sha256-BnDQ3mHMkH2attj/ROzvLVXA5CFZQnaOfFfvT6gzAOg=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.10.2/system.min.js" integrity="sha512-q8mW8h6inMCO7EwhzsalSSa2wxgUhZq7EYa37ZxIkqgrd/oOI5tO9+E42Hq+4zq3pSb6pkf+tJAXWckjxHdLZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.10.2/extras/named-exports.min.js" integrity="sha512-R1m4kK4v2B7kiU+dGztkBxEfMnJkPaQA+WNjSkIWq7+DYEuA1t/UguVwHKjh8SAUJV9yg6uarhA/weCCdV1r2Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.10.2/extras/use-default.min.js" integrity="sha512-Ahpc6VqzcdPS1xTuBGdnw+l64Iz6KNXAy/4/1bBzAv6nTl+NK7mnYHMDtI8wAzd2PTV9GVNURwKf87y36eWZ+g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.10.2/extras/amd.min.js" integrity="sha512-/0KxdJKPkpigBJORcOlZg98udDJp5tfYN3S7r5Mzf0IOLpyjPGOwI1R7KjPaxrVomfOtAiXNlwfIW7UzlwePhg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <meta name="importmap-type" content="systemjs-importmap" />
 
   <script type="systemjs-importmap">
@@ -48,7 +40,8 @@
         "imports": {
           "@akashaproject/app-loader": "/app-loader/index.js",
           "@akashaproject/awf-sdk": "/akasha.sdk.js",
-          "@akashaproject/design-system": "/design/index.js"
+          "@akashaproject/design-system": "/design/index.js",
+          "@akashaproject/ui-awf-hooks": "/hooks/index.js"
         }
       }
     </script>

@@ -6,6 +6,9 @@ module.exports = {
     {
       '@akashaproject/awf-sdk': '@akashaproject/awf-sdk',
     },
+    {
+      '@akashaproject/ui-awf-hooks': '@akashaproject/ui-awf-hooks',
+    },
     function ({ request }, callback) {
       if (/^rxjs\/operators$/.test(request)) {
         return callback(null, ['rxjs', 'operators'], 'root');
