@@ -208,6 +208,7 @@ api.post('/moderation/status', async (ctx: koa.Context, next: () => Promise<any>
         reported: false,
         moderated: false,
         delisted: false,
+        reason: '',
       };
       // get decision for the current contentID
       const decision = await dataSources.decisionsAPI.getDecision(contentID);
@@ -219,6 +220,7 @@ api.post('/moderation/status', async (ctx: koa.Context, next: () => Promise<any>
           const reported = await dataSources.reportingAPI.getReport(contentID, body.user);
           if (reported) {
             status.reported = true;
+            status.reason = reported.reason;
           }
         }
       }

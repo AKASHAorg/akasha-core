@@ -12,7 +12,7 @@ export default function withProviders<T>(WrappedComponent: React.ComponentType<T
   const ComponentWithProviders = props => {
     return (
       <>
-        <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryClient} contextSharing={true}>
           <ThemeSelector
             settings={{ activeTheme: 'Light-Theme' }}
             availableThemes={[lightTheme, darkTheme]}

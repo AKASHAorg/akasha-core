@@ -114,6 +114,7 @@ const typeDefs = gql`
     getFollowers(pubKey: String!, limit: Int, offset: Int): ProfilesResult
     getFollowing(pubKey: String!, limit: Int, offset: Int): ProfilesResult
     getLinkPreview(link: String!): LinkPreview
+    getCustomFeed(limit: Int, offset: Int): NewPostsResult
   }
 
   input DataProviderInput {
@@ -184,6 +185,7 @@ const typeDefs = gql`
     editComment(content: [DataProviderInput!], comment: CommentData, id: String!): Boolean
     removePost(id: String!): Boolean
     removeComment(id: String!): Boolean
+    toggleInterestSub(sub: String!): Boolean
   }
 
   type Tag {
@@ -192,6 +194,8 @@ const typeDefs = gql`
     creationDate: String!
     posts: [String!]
     comments: [String!]
+    totalSubscribers: Int
+    totalPosts: Int
   }
 
   type UserProfile {
@@ -209,6 +213,7 @@ const typeDefs = gql`
     default: [DataProvider]
     totalFollowers: Int
     totalFollowing: Int
+    interests: [String]
   }
 
   enum PostType {
@@ -222,6 +227,7 @@ const typeDefs = gql`
     _id: ID!
     type: PostType!
     creationDate: String!
+    updatedAt: String
     author: UserProfile!
     title: String
     content: [DataProvider!]
@@ -236,6 +242,7 @@ const typeDefs = gql`
   type Comment {
     _id: ID!
     creationDate: String!
+    updatedAt: String
     author: UserProfile!
     content: [DataProvider!]
     mentions: [String]

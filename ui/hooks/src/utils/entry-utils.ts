@@ -1,4 +1,5 @@
 import { getMediaUrl } from './media-utils';
+import getSDK from '@akashaproject/awf-sdk';
 
 export const MEDIA_URL_PREFIX = 'CID:';
 export const PROVIDER_AKASHA = 'AkashaApp';
@@ -82,9 +83,11 @@ export const mapEntry = (
     delisted?: boolean;
     reported?: boolean;
   },
-  ipfsGateway: any,
   logger?: any,
 ) => {
+  const sdk = getSDK();
+  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+
   const slateContent = entry.content.find(elem => elem.property === PROPERTY_SLATE_CONTENT);
   let content = [
     {
@@ -126,14 +129,14 @@ export const mapEntry = (
 
   let quotedEntry: any;
   if (entry.quotes && entry.quotes[0]) {
-    quotedEntry = mapEntry(entry.quotes[0], ipfsGateway, logger);
+    quotedEntry = mapEntry(entry.quotes[0], logger);
   }
   let quotedByAuthors;
   if (entry.quotedByAuthors && entry.quotedByAuthors.length > 0) {
     quotedByAuthors = entry.quotedByAuthors.map((author: any) => {
       let avatarWithGateway;
       if (author.avatar) {
-        avatarWithGateway = getMediaUrl(ipfsGateway, author.avatar);
+        avatarWithGateway = getMediaUrl(author.avatar);
       }
       return {
         ...author,
@@ -148,8 +151,8 @@ export const mapEntry = (
     author: {
       CID: entry.author.CID,
       description: entry.author.description,
-      avatar: getMediaUrl(ipfsGateway, entry.author.avatar),
-      coverImage: getMediaUrl(ipfsGateway, entry.author.coverImage),
+      avatar: getMediaUrl(entry.author.avatar),
+      coverImage: getMediaUrl(entry.author.coverImage),
       userName: entry.author.userName,
       name: entry.author.name,
       ethAddress: entry.author.ethAddress,

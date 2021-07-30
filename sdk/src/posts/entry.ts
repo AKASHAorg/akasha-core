@@ -14,6 +14,7 @@ import {
   EditEntry,
   RemoveEntry,
   GetLinkPreview,
+  GetCustomFeed,
 } from './entry.graphql';
 import { concatAll, map, tap } from 'rxjs/operators';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
@@ -41,6 +42,7 @@ export default class AWF_Entry implements AWF_IEntry {
     EditEntry,
     RemoveEntry,
     GetLinkPreview,
+    GetCustomFeed,
   };
 
   constructor(
@@ -271,6 +273,33 @@ export default class AWF_Entry implements AWF_IEntry {
         operationName: 'GetLinkPreview',
       },
       true,
+    );
+  }
+
+  getFeedEntries(opt: { offset?: number; limit: number }) {
+    return this._auth.getToken().pipe(
+      map(token => {
+        if (!token) {
+          throw new Error('Must be authenticated in order to access the personalized feed api.');
+        }
+        return this._gql.run<{ getCustomFeed: PostsResult_Response }>(
+          {
+            query: GetCustomFeed,
+            variables: {
+              offset: opt.offset,
+              limit: opt.limit,
+            },
+            operationName: 'GetCustomFeed',
+            context: {
+              headers: {
+                Authorization: `Bearer ${token.data}`,
+              },
+            },
+          },
+          true,
+        );
+      }),
+      concatAll(),
     );
   }
 }

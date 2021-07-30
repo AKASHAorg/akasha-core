@@ -99,7 +99,6 @@ export const useMentions = (props: UseMentionsProps): [IMentionsState, UseMentio
   React.useEffect(() => {
     if (mentionsState.mentionQuery) {
       const mentionsService = sdk.api.profile.searchProfiles(mentionsState.mentionQuery);
-      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
       const mentionsSub = mentionsService.subscribe({
         next: resp => {
           const completeProfiles = resp.data.searchProfiles.map(profileResp => {
@@ -109,10 +108,10 @@ export const useMentions = (props: UseMentionsProps): [IMentionsState, UseMentio
               coverImage: null,
             };
             if (avatar) {
-              images.avatar = getMediaUrl(ipfsGateway, avatar);
+              images.avatar = getMediaUrl(avatar);
             }
             if (coverImage) {
-              images.coverImage = getMediaUrl(ipfsGateway, coverImage);
+              images.coverImage = getMediaUrl(coverImage);
             }
             const profileData = { ...images, ...other };
             return profileData;

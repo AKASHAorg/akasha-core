@@ -37,6 +37,7 @@ export interface Profile {
   followers?: string[];
   providers?: DataProvider[];
   metaData?: DataProvider[];
+  interests?: string[];
 }
 
 export interface Comment {

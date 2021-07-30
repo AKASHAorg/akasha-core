@@ -2,17 +2,18 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useErrors, usePosts, useProfile } from '@akashaproject/ui-awf-hooks';
+import { useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
-import { ILoadItemsPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 // import { useFollowers } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 
 import { ProfilePageCard } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
+import { useInfinitePostsByAuthor } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
 const { Box, Helmet } = DS;
 
@@ -44,10 +45,25 @@ const ProfilePage = (props: ProfilePageProps) => {
     logger: props.logger,
   });
 
-  const [postsState, postsActions] = usePosts({
-    onError: errorActions.createError,
-    user: loggedEthAddress,
-  });
+  const reqPosts = useInfinitePostsByAuthor(pubKey, 15);
+  const postsState = reqPosts.data;
+  const ids = React.useMemo(() => {
+    const list = [];
+    if (!reqPosts.isSuccess) {
+      return list;
+    }
+    postsState.pages.forEach(el => el.results.forEach(el1 => list.push(el1._id)));
+    return list;
+  }, [reqPosts.isSuccess]);
+
+  const entriesData = React.useMemo(() => {
+    const list = {};
+    if (!reqPosts.isSuccess) {
+      return list;
+    }
+    postsState.pages.forEach(el => el.results.forEach(el1 => (list[el1._id] = mapEntry(el1))));
+    return list;
+  }, [reqPosts.isSuccess]);
 
   // React.useEffect(() => {
   //   // reset post ids and virtual list, if user logs in
@@ -81,17 +97,14 @@ const ProfilePage = (props: ProfilePageProps) => {
 
   const { t } = useTranslation();
 
-  const handleLoadMore = (payload: ILoadItemsPayload) => {
-    const req: { limit: number; offset?: string } = {
-      limit: payload.limit,
-    };
-    if (!postsState.isFetchingPosts && pubKey) {
-      postsActions.getUserPosts({ pubKey, ...req });
+  const handleLoadMore = () => {
+    if (!reqPosts.isFetching && pubKey) {
+      reqPosts.fetchNextPage().then(d => console.log('fetched next page', d));
     }
   };
 
   const handleItemDataLoad = ({ itemId }: { itemId: string }) => {
-    postsActions.getPost(itemId);
+    // postsActions.getPost(itemId);
   };
 
   const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
@@ -111,16 +124,12 @@ const ProfilePage = (props: ProfilePageProps) => {
         break;
       case ItemTypes.COMMENT:
         /* Navigate to parent post because we don't have the comment page yet */
-        url = `/social-app/post/${postsState.postsData[details.entryId].postId}`;
+        url = `/social-app/post/${entriesData[details.entryId].postId}`;
         break;
       default:
         break;
     }
     props.singleSpa.navigateToUrl(url);
-  };
-
-  const handleRepostPublish = (entryData: any, embedEntry: any) => {
-    postsActions.optimisticPublishPost(entryData, loggedProfileData, embedEntry, true);
   };
 
   const profileUserName = React.useMemo(() => {
@@ -137,11 +146,11 @@ const ProfilePage = (props: ProfilePageProps) => {
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
-  const handleFlipCard = (entry: any, isQuote: boolean) => () => {
-    const modifiedEntry = isQuote
-      ? { ...entry, quote: { ...entry.quote, reported: false } }
-      : { ...entry, reported: false };
-    postsActions.updatePostsState(modifiedEntry);
+  const handleFlipCard = (_entry: any, _isQuote: boolean) => () => {
+    // const modifiedEntry = isQuote
+    //   ? { ...entry, quote: { ...entry.quote, reported: false } }
+    //   : { ...entry, reported: false };
+    // postsActions.updatePostsState(modifiedEntry);
   };
 
   const handleEntryRemove = (entryId: string) => {
@@ -173,20 +182,18 @@ const ProfilePage = (props: ProfilePageProps) => {
         loadMore={handleLoadMore}
         loadItemData={handleItemDataLoad}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
-        itemIds={postsState.postIds}
-        itemsData={postsState.postsData}
+        itemIds={ids}
+        itemsData={entriesData}
         errors={errorState}
-        layout={props.layoutConfig}
         ethAddress={loggedEthAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={showLoginModal}
-        totalItems={postsState.totalItems}
+        // totalItems={postsState.totalItems}
+        hasMoreItems={!!reqPosts.hasNextPage}
         profilePubKey={pubKey}
-        modalSlotId={props.layoutConfig.modalSlotId}
         loggedProfile={loggedProfileData}
-        onRepostPublish={handleRepostPublish}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         handleFlipCard={handleFlipCard}

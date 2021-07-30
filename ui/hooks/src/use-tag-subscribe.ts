@@ -37,7 +37,7 @@ export type ITagSubscriptionAction =
   | { type: 'GET_TAG_SUBSCRIPTIONS' }
   | {
       type: 'GET_TAG_SUBSCRIPTIONS_SUCCESS';
-      payload: Record<string, boolean>;
+      payload: string[];
     }
   | { type: 'GET_IS_SUBSCRIBED_TO_TAG'; payload: string }
   | {
@@ -66,12 +66,9 @@ const tagSubscriptionStateReducer = (
       return { ...state, isFetching: true };
     case 'GET_TAG_SUBSCRIPTIONS_SUCCESS': {
       const tags = action.payload;
-      const subs = Object.entries(tags)
-        .filter(el => el[1])
-        .map(el => el[0]);
       return {
         ...state,
-        tags: subs || [],
+        tags: tags || [],
         isFetching: false,
       };
     }
@@ -201,7 +198,7 @@ export const useTagSubscribe = (
         next: resp => {
           dispatch({
             type: 'TOGGLE_TAG_SUBSCRIPTION_SUCCESS',
-            payload: { tagSubscribed: resp.sub, tag: tagName },
+            payload: { tagSubscribed: resp.data.toggleInterestSub, tag: tagName },
           });
         },
         error: createErrorHandler('useTagSubscribe.toggleTagSubscription', false, onError),

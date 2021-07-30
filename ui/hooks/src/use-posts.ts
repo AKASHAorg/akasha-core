@@ -11,13 +11,9 @@ import {
   mapEntry,
 } from './utils/entry-utils';
 import { createErrorHandler } from './utils/error-handler';
-import { useInfiniteQuery } from 'react-query';
-import { lastValueFrom } from 'rxjs';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { filter } from 'rxjs/operators';
 import { events } from '../../../sdk/typings/lib';
-
-//import { useQueryStream } from './helpers';
 
 export interface GetItemsPayload {
   start?: string;
@@ -574,7 +570,6 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       const status = postsState.getPostDataQuery.status;
       const postId = postsState.getPostDataQuery.postId;
       const entryCall = sdk.api.entries.getEntry(postId);
-      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
       const sub = entryCall.subscribe({
         next: async entryResp => {
@@ -586,7 +581,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
                 reported: status.moderated ? false : status.reported,
                 delisted: status.delisted,
               },
-              ipfsGateway,
+
               logger,
             );
 
@@ -631,13 +626,12 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     if (postsState.getCommentQuery) {
       const commentId = postsState.getCommentQuery;
       const commentCall = sdk.api.comments.getComment(commentId);
-      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
       const sub = commentCall.subscribe({
         next: commentResp => {
           const comment = commentResp.data?.getComment;
           if (comment) {
-            const mappedComment = mapEntry(comment, ipfsGateway, logger);
+            const mappedComment = mapEntry(comment, logger);
             dispatch({
               type: 'GET_COMMENT_SUCCESS',
               payload: { comment: mappedComment, commentId },
@@ -661,8 +655,6 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         offset: payload.offset || nextIndex,
       });
 
-      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
-
       const sub = entriesCall.subscribe({
         next: async entriesResp => {
           const { data } = entriesResp;
@@ -678,7 +670,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
               if (entry.quotes?.length > 0 && newQuoteIds.indexOf(entry.quotes[0]._id) === -1) {
                 newQuoteIds.push(entry.quotes[0]._id);
               }
-              return mapEntry(entry, ipfsGateway, logger);
+              return mapEntry(entry, logger);
             })
             .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
           try {
@@ -795,7 +787,6 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         req.offset = postsState.nextPostIndex;
       }
       const userPostsCall = sdk.api.entries.entriesByAuthor(req);
-      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
       const sub = userPostsCall.subscribe({
         next: async userPostsResp => {
@@ -811,7 +802,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
               if (entry.quotes?.length > 0 && newQuoteIds.indexOf(entry.quotes[0]._id) === -1) {
                 newQuoteIds.push(entry.quotes[0]._id);
               }
-              return mapEntry(entry, ipfsGateway, logger);
+              return mapEntry(entry, logger);
             })
             .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
 
@@ -888,7 +879,6 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
         req.offset = postsState.nextPostIndex;
       }
       const tagPostsCall = sdk.api.entries.entriesByTag(req);
-      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
       const sub = tagPostsCall.subscribe({
         next: async tagPostsResp => {
@@ -905,7 +895,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
               if (entry.quotes?.length > 0 && newQuoteIds.indexOf(entry.quotes[0]._id) === -1) {
                 newQuoteIds.push(entry.quotes[0]._id);
               }
-              return mapEntry(entry, ipfsGateway, logger);
+              return mapEntry(entry, logger);
             })
             .reduce((obj, post) => ({ ...obj, [post.entryId]: post }), {});
 

@@ -18,6 +18,7 @@ import {
   UnFollow,
   GetFollowers,
   GetFollowing,
+  ToggleInterestSub,
 } from './profile.graphql';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
@@ -62,6 +63,7 @@ export default class AWF_Profile implements AWF_IProfile {
     GlobalSearch,
     GetFollowers,
     GetFollowing,
+    ToggleInterestSub,
   };
 
   constructor(
@@ -424,40 +426,31 @@ export default class AWF_Profile implements AWF_IProfile {
    * @param tagName
    */
   toggleTagSubscription(tagName: string) {
-    return this._settings.get(this.TagSubscriptions).pipe(
-      map((rec: any) => {
-        const status = { sub: true };
-        if (!rec.data || !rec.data?._id) {
-          return this._settings.set(this.TagSubscriptions, [[tagName, true]]).pipe(
-            map(() => {
+    return this._auth.authenticateMutationData({ sub: tagName }).pipe(
+      map(res => {
+        this._gql.clearCache();
+        return this._gql
+          .run<{ toggleInterestSub: boolean }>({
+            query: ToggleInterestSub,
+            variables: { sub: tagName },
+            operationName: 'ToggleInterestSub',
+            context: {
+              headers: {
+                Authorization: `Bearer ${res.token.data}`,
+                Signature: res.signedData.data.signature,
+              },
+            },
+          })
+          .pipe(
+            tap(ev => {
               // @emits PROFILE_EVENTS.TAG_SUBSCRIPTION
               this._globalChannel.next({
-                data: status,
+                data: { status: ev.data },
                 event: PROFILE_EVENTS.TAG_SUBSCRIPTION,
                 args: { tagName },
               });
-              return status;
             }),
           );
-        }
-        const el = rec.data.options.find(r => r[0] === tagName);
-        if (!el) {
-          rec.data.options.push([tagName, true]);
-        } else {
-          el[1] = !el[1];
-          status.sub = el[1];
-        }
-        return this._settings.set(this.TagSubscriptions, rec.data.options).pipe(
-          map(() => {
-            // @emits PROFILE_EVENTS.TAG_SUBSCRIPTION
-            this._globalChannel.next({
-              data: status,
-              event: PROFILE_EVENTS.TAG_SUBSCRIPTION,
-              args: { tagName },
-            });
-            return status;
-          }),
-        );
       }),
       concatAll(),
     );
@@ -467,12 +460,9 @@ export default class AWF_Profile implements AWF_IProfile {
    *
    */
   getTagSubscriptions() {
-    return this._settings.get(this.TagSubscriptions).pipe(
-      map((rec: any) => {
-        return createFormattedValue<Record<string, boolean>>(
-          Object.fromEntries(rec.data?.options ? rec.data?.options : []),
-        );
-      }),
+    return this._auth.getCurrentUser().pipe(
+      map(res => this.getInterests(res.data.pubKey)),
+      concatAll(),
     );
   }
 
@@ -483,14 +473,11 @@ export default class AWF_Profile implements AWF_IProfile {
   isSubscribedToTag(tagName: string) {
     return this.getTagSubscriptions().pipe(
       map(res => {
-        if (!res || !res.data) {
+        if (!res || !res?.data?.length) {
           return createFormattedValue<boolean>(false);
         }
-        const el = res.data.hasOwnProperty(tagName);
-        if (!el) {
-          return createFormattedValue<boolean>(false);
-        }
-        return createFormattedValue<boolean>(res.data[tagName]);
+        const el = res.data.indexOf(tagName);
+        return createFormattedValue<boolean>(el !== -1);
       }),
     );
   }
@@ -541,6 +528,18 @@ export default class AWF_Profile implements AWF_IProfile {
         operationName: 'GetFollowing',
       },
       true,
+    );
+  }
+
+  /**
+   * Retrieve subscription list
+   * @param pubKey
+   */
+  getInterests(pubKey: string) {
+    return this.getProfile({ pubKey: pubKey }).pipe(
+      map(response =>
+        createFormattedValue<string[]>(response.data?.resolveProfile?.interests || []),
+      ),
     );
   }
 }

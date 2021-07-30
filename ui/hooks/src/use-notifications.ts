@@ -173,7 +173,6 @@ export const useNotifications = (
   async function fetchNotifications() {
     try {
       const getMessagesResp = await lastValueFrom(sdk.api.auth.getMessages({}));
-      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
       const getProfilesCalls = getMessagesResp.data.map(message => {
         const pubKey = message.body.value.author || message.body.value.follower;
@@ -193,10 +192,10 @@ export const useNotifications = (
             coverImage: null,
           };
           if (avatar) {
-            images.avatar = getMediaUrl(ipfsGateway, avatar);
+            images.avatar = getMediaUrl(avatar);
           }
           if (coverImage) {
-            images.coverImage = getMediaUrl(ipfsGateway, coverImage);
+            images.coverImage = getMediaUrl(coverImage);
           }
           const profileData = { ...images, ...other };
           completeMessages = getMessagesResp.data?.map(message => {
