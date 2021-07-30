@@ -2,6 +2,8 @@
 fragment TagFields on Tag{
   name
   creationDate
+  totalSubscribers
+  totalPosts
 }
 
 query GetTag($name: String!) {

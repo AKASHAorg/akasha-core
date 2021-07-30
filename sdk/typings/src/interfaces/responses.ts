@@ -92,6 +92,8 @@ export interface Tag_Response {
   creationDate: string;
   posts: [string];
   comments: [string];
+  totalSubscribers: number;
+  totalPosts: number;
 }
 
 export interface TagsResult_Response {
