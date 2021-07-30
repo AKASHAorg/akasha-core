@@ -12,7 +12,9 @@ export interface IEntryCardHiddenProps {
   isDelisted?: boolean;
   handleFlipCard?: any;
   // labels for reported account page
+  delistedAccount?: boolean;
   reportedAccount?: boolean;
+  ctaUrl?: string;
   reason?: string;
   headerTextLabel?: string;
   footerTextLabel?: string;
@@ -25,16 +27,22 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
     ctaLabel,
     isDelisted,
     handleFlipCard,
+    delistedAccount,
     reportedAccount,
+    ctaUrl,
     reason,
     headerTextLabel,
     footerTextLabel,
   } = props;
 
   return (
-    <MainAreaCardBox dashedBorder={true} margin={{ ...(reportedAccount && { bottom: 'xsmall' }) }}>
+    <MainAreaCardBox
+      dashedBorder={true}
+      redDashedBorder={delistedAccount}
+      margin={{ ...((reportedAccount || delistedAccount) && { bottom: 'xsmall' }) }}
+    >
       <Box direction="row" pad="medium" align="start">
-        <Icon type="error" size="md" accentColor={true} />
+        <Icon type={delistedAccount ? 'block' : 'error'} size="md" accentColor={!delistedAccount} />
         {reportedAccount && (
           <Text size="large" margin={{ left: 'medium' }}>
             {`${headerTextLabel}:`}
@@ -65,7 +73,10 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
                 style={{ cursor: 'pointer' }}
                 onClick={e => {
                   e.stopPropagation();
-                  handleFlipCard();
+                  // open call to action url if specified
+                  ctaUrl
+                    ? window.open(ctaUrl, ctaLabel, '_blank noopener noreferrer')
+                    : handleFlipCard();
                 }}
               >
                 {ctaLabel}

@@ -12,6 +12,7 @@ export interface IBasicCardBox {
   elevation?: string;
   callToAction?: boolean;
   dashedBorder?: boolean;
+  redDashedBorder?: boolean;
   darkBorder?: boolean;
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
@@ -29,6 +30,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
   elevation,
   callToAction,
   dashedBorder,
+  redDashedBorder,
   darkBorder,
   style,
   rootNodeRef,
@@ -57,7 +59,12 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
             side: 'all',
           }
         : dashedBorder
-        ? { color: 'secondaryText', size: 'xsmall', style: 'dashed', side: 'all' }
+        ? {
+            color: `${redDashedBorder ? 'errorText' : 'secondaryText'}`,
+            size: 'xsmall',
+            style: 'dashed',
+            side: 'all',
+          }
         : darkBorder
         ? {
             color: 'darkBorder',
