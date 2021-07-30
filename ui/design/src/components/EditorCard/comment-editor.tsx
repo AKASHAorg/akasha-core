@@ -6,7 +6,12 @@ import { editorDefaultValue } from '../Editor/initialValue';
 import { useOnClickAway } from '../../utils/clickAway';
 import isEqual from 'lodash.isequal';
 
-const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>> = props => {
+const CommentEditor: React.FC<
+  Omit<IEditorBox, 'editorState' | 'setEditorState'> & {
+    editorState?: IEditorBox['editorState'];
+    isShown?: boolean;
+  }
+> = props => {
   const {
     ethAddress,
     avatar,
@@ -19,10 +24,15 @@ const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>
     mentions,
     tags,
     uploadRequest,
+    editorState = editorDefaultValue,
+    isShown = false,
+    showCancelButton,
+    cancelButtonLabel,
+    onCancelClick,
   } = props;
 
-  const [showEditor, setShowEditor] = React.useState(false);
-  const [editorState, setEditorState] = React.useState(editorDefaultValue);
+  const [showEditor, setShowEditor] = React.useState(isShown);
+  const [contentState, setContentState] = React.useState(editorState);
   const wrapperRef: React.RefObject<HTMLDivElement> = React.useRef(null);
   const editorRef: React.RefObject<any> = React.useRef(null);
 
@@ -37,7 +47,9 @@ const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>
   };
   const handlePublish = (data: IPublishData) => {
     onPublish(data);
-    setShowEditor(false);
+    if (props.isShown) {
+      setShowEditor(false);
+    }
   };
 
   useOnClickAway(wrapperRef, handleClickAway);
@@ -73,8 +85,11 @@ const CommentEditor: React.FC<Omit<IEditorBox, 'editorState' | 'setEditorState'>
             tags={tags}
             uploadRequest={uploadRequest}
             withMeter={true}
-            editorState={editorState}
-            setEditorState={setEditorState}
+            editorState={contentState}
+            setEditorState={setContentState}
+            cancelButtonLabel={cancelButtonLabel}
+            onCancelClick={onCancelClick}
+            showCancelButton={showCancelButton}
           />
         </Box>
       )}

@@ -5,8 +5,9 @@ import { ILoadItemsPayload } from '@akashaproject/design-system/lib/components/V
 import { usePosts, useTagSubscribe, useErrors } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
 import { useTranslation } from 'react-i18next';
-import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
+import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ITag } from '@akashaproject/design-system/lib/components/TrendingWidgetCard';
@@ -185,6 +186,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         handleFlipCard={handleFlipCard}
+        uiEvents={props.uiEvents}
       />
     </Box>
   );

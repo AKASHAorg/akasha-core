@@ -2,11 +2,19 @@ import React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useFollow } from '@akashaproject/ui-awf-hooks';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 import routes, { POST } from '../../routes';
+import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-const { ErrorInfoCard, ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading } = DS;
+const {
+  ErrorInfoCard,
+  ErrorLoader,
+  EntryCard,
+  EntryCardHidden,
+  EntryCardLoading,
+  ExtensionPoint,
+} = DS;
 
 export interface IEntryCardRendererProps {
   logger: any;
@@ -38,6 +46,7 @@ export interface IEntryCardRendererProps {
   removeEntryLabel?: string;
   removedByMeLabel?: string;
   removedByAuthorLabel?: string;
+  uiEvents?: RootComponentProps['uiEvents'];
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
@@ -109,7 +118,19 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
       />
     );
   }
-
+  const onEditButtonMount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointMount,
+      data: {
+        name,
+        entryId: itemId,
+        entryType: ItemTypes.ENTRY,
+      },
+    });
+  };
+  const onEditButtonUnmount = () => {
+    /* todo */
+  };
   return (
     <ErrorInfoCard errors={{}}>
       {(errorMessages: any, hasCriticalErrors: boolean) => (
@@ -173,6 +194,15 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   removeEntryLabel={props.removeEntryLabel}
                   removedByMeLabel={props.removedByMeLabel}
                   removedByAuthorLabel={props.removedByAuthorLabel}
+                  headerMenuExt={
+                    ethAddress === itemData.author.ethAddress && (
+                      <ExtensionPoint
+                        name={`entry-card-edit-button_${itemId}`}
+                        onMount={onEditButtonMount}
+                        onUnmount={onEditButtonUnmount}
+                      />
+                    )
+                  }
                 />
               )}
             </>

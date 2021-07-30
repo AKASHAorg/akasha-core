@@ -3,15 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useErrors, usePosts, useProfile } from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
+import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { ILoadItemsPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 
 import { ProfilePageCard } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { Box, Helmet } = DS;
 
@@ -192,6 +193,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         removeEntryLabel={t('Delete Post')}
         removedByMeLabel={t('You deleted this post')}
         removedByAuthorLabel={t('This post was deleted by its author')}
+        uiEvents={props.uiEvents}
       />
     </Box>
   );

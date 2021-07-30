@@ -20,6 +20,7 @@ import routes, { POST } from '../../routes';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const {
   Box,
@@ -33,6 +34,7 @@ const {
   ErrorInfoCard,
   ErrorLoader,
   EntryCardLoading,
+  ExtensionPoint,
 } = DS;
 
 interface IPostPage {
@@ -50,7 +52,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const { t, i18n } = useTranslation();
   const [, errorActions] = useErrors({ logger });
   //@Todo: replace entryData with value from usePost
-  const postReq = usePost(postId);
+  const postReq = usePost(postId, !!postId);
   const entryData = postReq.data;
   const [postsState, postsActions] = usePosts({
     user: loginState.ethAddress,
@@ -227,6 +229,20 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     postsActions.updatePostsState(modifiedEntry);
   };
 
+  const onEditPostButtonMount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointMount,
+      data: {
+        name,
+        entryId: entryData.entryId,
+        entryType: ItemTypes.ENTRY,
+      },
+    });
+  };
+  const onEditPostButtonUnmount = () => {
+    /* todo */
+  };
+
   if (postsState.delistedItems.includes(postId)) {
     return (
       <EntryCardHidden
@@ -259,6 +275,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       entryId: commentId,
     });
   };
+
   const handlePostRemove = (commentId: string) => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
@@ -266,6 +283,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       entryId: commentId,
     });
   };
+
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
@@ -352,6 +370,15 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       removeEntryLabel={t('Delete Post')}
                       removedByMeLabel={t('You deleted this post')}
                       removedByAuthorLabel={t('This post was deleted by its author')}
+                      headerMenuExt={
+                        loginState.ethAddress === entryData.author.ethAddress && (
+                          <ExtensionPoint
+                            name={`entry-card-edit-button_${entryData.entryId}`}
+                            onMount={onEditPostButtonMount}
+                            onUnmount={onEditPostButtonUnmount}
+                          />
+                        )
+                      }
                     />
                   )}
                 </>

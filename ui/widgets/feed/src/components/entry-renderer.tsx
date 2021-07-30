@@ -4,9 +4,17 @@ import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/src/utils/time';
 import { IContentClickDetails } from '@akashaproject/design-system/src/components/EntryCard/entry-box';
 import { useTranslation } from 'react-i18next';
-import { ItemTypes } from './App';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-const { ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard, EntryCardHidden } = DS;
+const {
+  ErrorInfoCard,
+  ErrorLoader,
+  EntryCardLoading,
+  EntryCard,
+  EntryCardHidden,
+  ExtensionPoint,
+} = DS;
 
 export interface IEntryRenderer {
   itemId?: string;
@@ -36,6 +44,7 @@ export interface IEntryRenderer {
   removeEntryLabel?: string;
   removedByMeLabel?: string;
   removedByAuthorLabel?: string;
+  uiEvents: RootComponentProps['uiEvents'];
 }
 
 const EntryRenderer = (props: IEntryRenderer) => {
@@ -131,6 +140,21 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const handleEntryBookmark = (entryId: string) => {
     onBookmark(isBookmarked, entryId);
   };
+
+  const onEditButtonMount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointMount,
+      data: {
+        name,
+        entryId: itemId,
+      },
+    });
+  };
+
+  const onEditButtonUnmount = () => {
+    /* todo */
+  };
+
   const isFollowing = React.useMemo(() => followedProfiles.includes(itemData.author.ethAddress), [
     followedProfiles,
     itemData.author.ethAddress,
@@ -204,6 +228,15 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   removeEntryLabel={props.removeEntryLabel}
                   removedByMeLabel={props.removedByMeLabel}
                   removedByAuthorLabel={props.removedByAuthorLabel}
+                  headerMenuExt={
+                    ethAddress === itemData.author.ethAddress && (
+                      <ExtensionPoint
+                        name={`entry-card-edit-button_${itemId}`}
+                        onMount={onEditButtonMount}
+                        onUnmount={onEditButtonUnmount}
+                      />
+                    )
+                  }
                 />
               )}
             </>

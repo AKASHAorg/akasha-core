@@ -8,7 +8,7 @@ import EditorCard, { IEditorCard } from '../EditorCard';
 import { editorDefaultValue } from '../Editor/initialValue';
 import { ModalContainer } from '../SignInModal/fullscreen-modal-container';
 
-export interface IEditorModal extends Omit<IEditorCard, 'editorState' | 'setEditorState'> {
+export interface IEditorModal extends Omit<IEditorCard, 'setEditorState'> {
   // labels
   discardPostLabel?: string;
   discardPostInfoLabel?: string;
@@ -33,13 +33,14 @@ const EditorModal: React.FC<IEditorModal> = props => {
     tags,
     uploadRequest,
     embedEntryData,
+    editorState = editorDefaultValue,
   } = props;
 
   const [showCancel, setShowCancel] = React.useState(false);
-  const [editorState, setEditorState] = React.useState(editorDefaultValue);
+  const [contentState, setContentState] = React.useState(editorState);
 
   const handleToggleShowCancel = () => {
-    if (editorState === editorDefaultValue) {
+    if (contentState === editorDefaultValue) {
       handleNavigateBack();
     } else {
       setShowCancel(!showCancel);
@@ -48,7 +49,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
 
   const handleCloseModal = () => {
     setShowCancel(false);
-    setEditorState(editorDefaultValue);
+    setContentState(editorDefaultValue);
     handleNavigateBack();
   };
 
@@ -70,8 +71,8 @@ const EditorModal: React.FC<IEditorModal> = props => {
           uploadRequest={uploadRequest}
           embedEntryData={embedEntryData}
           style={{ width: '36rem' }}
-          editorState={editorState}
-          setEditorState={setEditorState}
+          editorState={contentState}
+          setEditorState={setContentState}
         />
       )}
       {showCancel && (
