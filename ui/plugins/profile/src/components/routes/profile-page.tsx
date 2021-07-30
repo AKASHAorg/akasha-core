@@ -15,7 +15,7 @@ import menuRoute, { MY_PROFILE } from '../../routes';
 import { useInfinitePostsByAuthor } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
-const { Box, EntryCardHidden, Helmet } = DS;
+const { Box, EntryCardHidden, Helmet, ProfileDelistedCard, Spinner } = DS;
 
 export interface ProfilePageProps extends RootComponentProps {
   modalActions: ModalStateActions;
@@ -29,6 +29,8 @@ export interface ProfilePageProps extends RootComponentProps {
 const ProfilePage = (props: ProfilePageProps) => {
   const { loggedEthAddress, loginActions, loggedProfileData, showLoginModal } = props;
 
+  const [requesting, setRequesting] = React.useState<boolean>(false);
+  const [isDelisted, setIsDelisted] = React.useState<boolean>(false);
   const [showCard, setShowCard] = React.useState<boolean>(false);
   const [reason, setReason] = React.useState<string>('');
 
@@ -107,23 +109,32 @@ const ProfilePage = (props: ProfilePageProps) => {
   // }, [loggedProfileData.pubKey, pubKey]);
 
   const checkAccountReportStatus = async (profileEthAddress: string) => {
-    const response = await moderationRequest.checkStatus(true, {
-      user: loggedEthAddress,
-      contentIds: [profileEthAddress],
-    });
-    if (response) {
-      // the response array will have only one item
-      const { reported, moderated, reason } = response[0];
-      if (moderated) {
-        setShowCard(false);
-        return;
-      } else if (reported) {
-        setShowCard(true);
-        setReason(reason);
-        return;
+    setRequesting(true);
+    try {
+      const response = await moderationRequest.checkStatus(true, {
+        user: loggedEthAddress,
+        contentIds: [profileEthAddress],
+      });
+      if (response) {
+        // the response array will have only one item
+        const { reported, moderated, delisted, reason } = response[0];
+        if (delisted) {
+          setIsDelisted(true);
+          return;
+        } else if (moderated) {
+          setShowCard(false);
+          return;
+        } else if (reported) {
+          setShowCard(true);
+          setReason(reason);
+          return;
+        }
       }
+    } catch (err) {
+      return;
+    } finally {
+      setRequesting(false);
     }
-    return;
   };
 
   const handleLoadMore = () => {
@@ -194,7 +205,8 @@ const ProfilePage = (props: ProfilePageProps) => {
           World
         </title>
       </Helmet>
-      {showCard && (
+      {requesting && <Spinner />}
+      {!requesting && showCard && (
         <EntryCardHidden
           reportedAccount={true}
           reason={reason}
@@ -202,43 +214,59 @@ const ProfilePage = (props: ProfilePageProps) => {
           footerTextLabel={t('It is awaiting moderation.')}
         />
       )}
-      <ProfilePageCard
-        {...props}
-        profileState={profileState}
-        profileActions={profileActions}
-        profileUpdateStatus={profileUpdateStatus}
-        profileId={pubKey}
-        loggedUserEthAddress={loggedEthAddress}
-        modalActions={props.modalActions}
-        modalState={props.modalState}
-        loginActions={loginActions}
-      />
-      <FeedWidget
-        itemType={ItemTypes.ENTRY}
-        logger={props.logger}
-        loadMore={handleLoadMore}
-        loadItemData={handleItemDataLoad}
-        getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
-        itemIds={ids}
-        itemsData={entriesData}
-        errors={errorState}
-        ethAddress={loggedEthAddress}
-        onNavigate={handleNavigation}
-        singleSpaNavigate={props.singleSpa.navigateToUrl}
-        navigateToModal={props.navigateToModal}
-        onLoginModalOpen={showLoginModal}
-        // totalItems={postsState.totalItems}
-        hasMoreItems={!!reqPosts.hasNextPage}
-        profilePubKey={pubKey}
-        loggedProfile={loggedProfileData}
-        contentClickable={true}
-        onEntryFlag={handleEntryFlag}
-        handleFlipCard={handleFlipCard}
-        onEntryRemove={handleEntryRemove}
-        removeEntryLabel={t('Delete Post')}
-        removedByMeLabel={t('You deleted this post')}
-        removedByAuthorLabel={t('This post was deleted by its author')}
-      />
+      {!requesting && isDelisted && (
+        <EntryCardHidden
+          isDelisted={isDelisted}
+          delistedAccount={isDelisted}
+          moderatedContentLabel={t('This account was suspended for violating the')}
+          ctaLabel={t('Code of Conduct')}
+          ctaUrl="/legal/code-of-conduct"
+        />
+      )}
+      {!requesting && isDelisted && (
+        <ProfileDelistedCard name={t('Suspended Account')} userName={profileState.userName || ''} />
+      )}
+      {!requesting && !isDelisted && (
+        <ProfilePageCard
+          {...props}
+          profileState={profileState}
+          profileActions={profileActions}
+          profileUpdateStatus={profileUpdateStatus}
+          profileId={pubKey}
+          loggedUserEthAddress={loggedEthAddress}
+          modalActions={props.modalActions}
+          modalState={props.modalState}
+          loginActions={loginActions}
+        />
+      )}
+      {!requesting && !isDelisted && (
+        <FeedWidget
+          itemType={ItemTypes.ENTRY}
+          logger={props.logger}
+          loadMore={handleLoadMore}
+          loadItemData={handleItemDataLoad}
+          getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
+          itemIds={ids}
+          itemsData={entriesData}
+          errors={errorState}
+          ethAddress={loggedEthAddress}
+          onNavigate={handleNavigation}
+          singleSpaNavigate={props.singleSpa.navigateToUrl}
+          navigateToModal={props.navigateToModal}
+          onLoginModalOpen={showLoginModal}
+          // totalItems={postsState.totalItems}
+          hasMoreItems={!!reqPosts.hasNextPage}
+          profilePubKey={pubKey}
+          loggedProfile={loggedProfileData}
+          contentClickable={true}
+          onEntryFlag={handleEntryFlag}
+          handleFlipCard={handleFlipCard}
+          onEntryRemove={handleEntryRemove}
+          removeEntryLabel={t('Delete Post')}
+          removedByMeLabel={t('You deleted this post')}
+          removedByAuthorLabel={t('This post was deleted by its author')}
+        />
+      )}
     </Box>
   );
 };
