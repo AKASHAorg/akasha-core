@@ -1,7 +1,8 @@
 import { DataSource } from 'apollo-datasource';
 import { getAppDB, logger, encodeString, decodeString, sendAuthorNotification } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
-import { ModerationDecision, ModerationAction } from '../collections/interfaces';
+import { ModerationDecision } from '../collections/interfaces';
+import PostsAPI from './post';
 import ProfileAPI from './profile';
 import ModerationReportAPI from './moderation-report';
 import { queryCache } from '../storage/cache';
@@ -203,7 +204,8 @@ class ModerationDecisionAPI extends DataSource {
       const decision = await this.getFinalDecision(result.contentID);
       // load moderator info
       const profileAPI = new ProfileAPI({ dbID: this.dbID, collection: 'Profiles' });
-      const moderator = await profileAPI.getProfile(decision.moderator);
+      const moderator = decision.moderator.startsWith('0x') ? 
+      await profileAPI.getProfile(decision.moderator) : await profileAPI.resolveProfile(decision.moderator);
 
       moderated.push({
         contentID: decision.contentID,
@@ -242,10 +244,12 @@ class ModerationDecisionAPI extends DataSource {
     // add moderator data
     if (finalDecision.moderator) {
       const profileAPI = new ProfileAPI({ dbID: this.dbID, collection: 'Profiles' });
-      const moderator = await profileAPI.getProfile(finalDecision.moderator);
+      const moderator = finalDecision.moderator.startsWith('0x') ? 
+      await profileAPI.getProfile(finalDecision.moderator) : await profileAPI.resolveProfile(finalDecision.moderator);
       finalDecision = Object.assign({}, finalDecision, { 
         moderatorProfile: {
           ethAddress: moderator.ethAddress,
+          pubKey: moderator.pubKey,
           name: moderator.name || "",
           userName: moderator.userName || "",
           avatar: moderator.avatar,
@@ -277,59 +281,77 @@ class ModerationDecisionAPI extends DataSource {
    * @param delisted - Outcome of the moderation action (delisted or kept)
    * @reurns The ModerationDecision object
    */
-  async makeDecision(contentID: string, moderator: string, explanation: string, delisted: boolean) {
+  async makeDecision(report: any, postsAPI: PostsAPI, profileAPI: ProfileAPI) {
     const db: Client = await getAppDB();
-    if (!moderator) {
+    if (!report.data.moderator) {
       throw new Error('Not authorized');
     }
+    // resolve moderator to pubKey if we got an ETH key
+    let moderator = report.data.moderator;
+    if (report.data.moderator.startsWith('0x')) {
+      const moderatorProfile = await profileAPI.getProfile(report.data.moderator);
+      moderator = moderatorProfile.pubKey;
+    }
+
     // load existing (i.e. pending) decision data
-    const decision = await this.getDecision(contentID);
+    const decision = await this.getDecision(report.contentId);
     if (!decision) {
-      const msg = `cannot moderate content that has not been reported -- contentID: ${contentID} `;
+      const msg = `cannot moderate content that has not been reported -- contentID: ${report.contentId} `;
       logger.warn(msg);
       return Promise.reject(msg);
     }
 
     decision.moderator = moderator;
     decision.moderatedDate = new Date().getTime();
-    decision.explanation = encodeString(explanation);
-    decision.delisted = delisted;
+    decision.explanation = encodeString(report.data.explanation);
+    decision.delisted = report.data.delisted;
     decision.moderated = true;
     if (!decision.actions) {
       decision.actions = [];
     }
     decision.actions.push({
       moderator,
-      delisted,
+      delisted: decision.delisted,
       moderatedDate: decision.moderatedDate,
       explanation: decision.explanation,
     });
 
     await db.save(this.dbID, this.collection, [decision]);
     // send notifications only when delisting
-    if (delisted) {
-      const profileAPI = new ProfileAPI({ dbID: this.dbID, collection: 'Profiles' });
-      const moderatorProfile = await profileAPI.getProfile(moderator);
+    if (decision.delisted) {
+      let destUser = '';
+      let contentID = report.contentId;
+      // get post author
+      if (decision.contentType === 'post' || decision.contentType === 'reply') {
+        const post = await postsAPI.getPost(contentID);
+        destUser = post.author;
+      }
       let notificationType = 'MODERATED_POST';
       if (decision.contentType === 'reply') {
         notificationType = 'MODERATED_REPLY';
       } else if (decision.contentType == 'account') {
-        notificationType = 'MODEREATED_ACCOUNT';
-        const account = await profileAPI.getProfile(contentID);
-        contentID = account.pubKey;
+        notificationType = 'MODERATED_ACCOUNT';
+        contentID = report.contentId;
+        destUser = report.contentId;
+        // backwards compatibility
+        if (report.contentId.startsWith('0x')) {
+          const account = await profileAPI.getProfile(report.contentId);
+          contentID = account.pubKey;
+          destUser = account.pubKey;
+        }
       }
-      await sendAuthorNotification(moderatorProfile.pubKey, {
+      await sendAuthorNotification(destUser, {
         property: notificationType,
         provider: 'awf.moderation.api',
         value: {
-          author: moderatorProfile.pubKey,
+          author: moderator,
           moderatedID: contentID,
         },
       });
     }
     // handle caching
-    await queryCache.del(this.getDecisionCacheKey(contentID));
-    await queryCache.del(this.getModeratedDecisionCacheKey(contentID));
+    await queryCache.del(this.getDecisionCacheKey(report.contentId));
+    await queryCache.del(this.getModeratedDecisionCacheKey(report.contentId));
     await queryCache.del(this.getCountersCacheKey());
     await queryCache.del(this.getModeratedListCacheKey());
     await queryCache.del(this.getPendingListCacheKey());
