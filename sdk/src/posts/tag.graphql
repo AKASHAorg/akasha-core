@@ -2,7 +2,6 @@
 fragment TagFields on Tag{
   name
   creationDate
-  totalSubscribers
   totalPosts
 }
 

@@ -92,7 +92,7 @@ export interface Tag_Response {
   creationDate: string;
   posts: [string];
   comments: [string];
-  totalSubscribers: number;
+  // totalSubscribers: number;
   totalPosts: number;
 }
 

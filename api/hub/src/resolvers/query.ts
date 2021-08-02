@@ -253,6 +253,11 @@ const query = {
     );
     return Object.assign({}, postsIDs, { results: posts });
   },
+
+  getInterests: async (_source, { pubKey }, { dataSources }) => {
+    const interests: string[] = await dataSources.profileAPI.getInterests(pubKey);
+    return Array.from(interests);
+  },
 };
 
 export default query;
