@@ -170,6 +170,11 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         reportedTimesLabel={t(
           `Reported ${selected.reports > 1 ? `${selected.reports} times` : 'once'}`,
         )}
+        viewItemLink={`${window.location.origin}${
+          selected.contentType === 'account'
+            ? `${BASE_PROFILE_URL}/${selected.contentID}`
+            : `${BASE_SOCIAL_URL}/${selected.contentType}/${selected.contentID}`
+        }`}
         viewItemLabel={t(`View ${selected.contentType}`)}
         reasonsLabel={t(`${selected.reasons.length > 1 ? 'reasons' : 'reason'}`)}
         reasons={selected.reasons}
