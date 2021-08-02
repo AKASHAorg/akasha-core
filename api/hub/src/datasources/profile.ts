@@ -97,7 +97,7 @@ class ProfileAPI extends DataSource {
         totalPosts,
         totalFollowers: profilesFound[0]?.followers?.length || 0,
         totalFollowing: profilesFound[0]?.following?.length || 0,
-        interests: profilesFound[0]?.interests || [],
+        totalInterests: profilesFound[0]?.interests?.length || 0,
       });
       await queryCache.set(cacheKey, returnedObj);
       return returnedObj;
@@ -418,6 +418,19 @@ class ProfileAPI extends DataSource {
     }
 
     return isSubscribed;
+  }
+
+  async getInterests(pubKey: string) {
+    const db: Client = await getAppDB();
+    const query = new Where('pubKey').eq(pubKey);
+    const [profile] = await db.find<Profile>(this.dbID, this.collection, query);
+    if (!profile) {
+      throw NOT_REGISTERED;
+    }
+    if (!profile?.interests || !profile.interests.length) {
+      return [];
+    }
+    return profile.interests;
   }
 }
 

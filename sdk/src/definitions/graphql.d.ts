@@ -15,6 +15,7 @@ declare module '*/profile.graphql' {
   const GlobalSearch: TypedQueryDocumentNode;
   const GetFollowers: TypedQueryDocumentNode;
   const GetFollowing: TypedQueryDocumentNode;
+  const GetInterests: TypedQueryDocumentNode;
 
   export {
     AddProfileProvider,
@@ -31,6 +32,7 @@ declare module '*/profile.graphql' {
     GetFollowers,
     GetFollowing,
     ToggleInterestSub,
+    GetInterests,
   };
 }
 
