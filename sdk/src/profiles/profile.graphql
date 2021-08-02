@@ -16,7 +16,6 @@ fragment UserProfileFragment on UserProfile{
   totalFollowers
   totalFollowing
   totalInterests
-  interests
 }
 
 mutation AddProfileProvider($data: [DataProviderInput]) {
