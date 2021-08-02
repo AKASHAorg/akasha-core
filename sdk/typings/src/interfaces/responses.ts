@@ -77,7 +77,7 @@ export interface UserProfile_Response {
   default: [DataProviderInput];
   totalFollowers: number;
   totalFollowing: number;
-  interests: string[];
+  totalInterests: number;
 }
 
 export interface UserFollowers_Response {
