@@ -15,6 +15,7 @@ fragment UserProfileFragment on UserProfile{
   totalPosts
   totalFollowers
   totalFollowing
+  totalInterests
   interests
 }
 
@@ -103,4 +104,8 @@ query GetFollowing($pubKey: String!, $limit: Int, $offset: Int){
     nextIndex
     total
   }
+}
+
+query GetInterests($pubKey:String!){
+  getInterests(pubKey: $pubKey)
 }

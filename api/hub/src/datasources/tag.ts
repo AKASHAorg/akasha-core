@@ -55,13 +55,12 @@ class TagAPI extends DataSource {
     const query = new Where('name').eq(formattedName);
     const tag = await db.find<Tag>(this.dbID, this.collection, query);
     if (tag.length) {
-      const searchFacet = await searchIndex.search(``, {
-        facetFilters: ['category:interests', `tagName:${name}`],
-        hitsPerPage: 20,
-        attributesToRetrieve: ['name'],
-      });
+      // const searchFacet = await searchIndex.search(``, {
+      //   facetFilters: ['category:interests', `tagName:${name}`],
+      //   hitsPerPage: 20,
+      //   attributesToRetrieve: ['name'],
+      // });
       const result = Object.assign({}, tag[0], {
-        totalSubscribers: searchFacet.nbHits,
         totalPosts: tag[0]?.posts?.length || 0,
         totalComments: tag[0]?.comments?.length || 0,
         posts: [],
