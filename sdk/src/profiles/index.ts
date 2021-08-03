@@ -19,6 +19,7 @@ import {
   GetFollowers,
   GetFollowing,
   ToggleInterestSub,
+  GetInterests,
 } from './profile.graphql';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
@@ -64,6 +65,7 @@ export default class AWF_Profile implements AWF_IProfile {
     GetFollowers,
     GetFollowing,
     ToggleInterestSub,
+    GetInterests,
   };
 
   constructor(
@@ -473,10 +475,10 @@ export default class AWF_Profile implements AWF_IProfile {
   isSubscribedToTag(tagName: string) {
     return this.getTagSubscriptions().pipe(
       map(res => {
-        if (!res || !res?.data?.length) {
+        if (!res || !res?.data?.getInterests?.length) {
           return createFormattedValue<boolean>(false);
         }
-        const el = res.data.indexOf(tagName);
+        const el = res.data.getInterests.indexOf(tagName);
         return createFormattedValue<boolean>(el !== -1);
       }),
     );
@@ -536,10 +538,13 @@ export default class AWF_Profile implements AWF_IProfile {
    * @param pubKey
    */
   getInterests(pubKey: string) {
-    return this.getProfile({ pubKey: pubKey }).pipe(
-      map(response =>
-        createFormattedValue<string[]>(response.data?.resolveProfile?.interests || []),
-      ),
+    return this._gql.run<{ getInterests: string[] }>(
+      {
+        query: GetInterests,
+        variables: { pubKey },
+        operationName: 'GetInterests',
+      },
+      true,
     );
   }
 }

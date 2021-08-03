@@ -159,7 +159,7 @@ export const useTagSubscribe = (
       const call = sdk.api.profile.getTagSubscriptions();
       const callSub = call.subscribe({
         next: resp => {
-          dispatch({ type: 'GET_TAG_SUBSCRIPTIONS_SUCCESS', payload: resp.data });
+          dispatch({ type: 'GET_TAG_SUBSCRIPTIONS_SUCCESS', payload: resp.data.getInterests });
         },
         error: createErrorHandler('useTagSubscribe.getTagSubscriptions', false, onError),
       });

@@ -6,6 +6,7 @@ import { getMediaUrl } from './utils/media-utils';
 export const FOLLOWERS_KEY = 'FOLLOWERS_KEY';
 export const FOLLOWING_KEY = 'FOLLOWING_KEY';
 export const PROFILE_KEY = 'PROFILE';
+export const INTERESTS_KEY = 'INTERESTS_KEY';
 
 const getProfileData = async (payload: { pubKey?: string; ethAddress?: string }) => {
   const sdk = getSDK();
@@ -73,4 +74,21 @@ export function useFollowing(pubKey: string, limit: number, offset?: number) {
       keepPreviousData: true,
     },
   );
+}
+
+const getInterests = async (pubKey: string) => {
+  const sdk = getSDK();
+  const res = await lastValueFrom(sdk.api.profile.getInterests(pubKey));
+  return res.data.getInterests;
+};
+
+/**
+ * Fetch the list of subscribed tags for a specific pub key
+ * @param pubKey
+ */
+export function useInterests(pubKey) {
+  return useQuery([INTERESTS_KEY, pubKey], () => getInterests(pubKey), {
+    enabled: !!pubKey,
+    keepPreviousData: true,
+  });
 }

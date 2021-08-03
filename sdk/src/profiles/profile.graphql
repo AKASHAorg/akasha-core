@@ -15,7 +15,7 @@ fragment UserProfileFragment on UserProfile{
   totalPosts
   totalFollowers
   totalFollowing
-  interests
+  totalInterests
 }
 
 mutation AddProfileProvider($data: [DataProviderInput]) {
@@ -103,4 +103,8 @@ query GetFollowing($pubKey: String!, $limit: Int, $offset: Int){
     nextIndex
     total
   }
+}
+
+query GetInterests($pubKey:String!){
+  getInterests(pubKey: $pubKey)
 }

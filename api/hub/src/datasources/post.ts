@@ -345,12 +345,10 @@ class PostAPI extends DataSource {
   }
 
   async getPostsByTag(tagName: string, offset = 0, length = 10) {
-    const result = await searchIndex.search(`${tagName} `, {
-      facetFilters: ['category:post'],
+    const result = await searchIndex.search(``, {
+      facetFilters: ['category:post', `tags:${tagName}`],
       length: length,
       offset: offset,
-      restrictSearchableAttributes: ['tags'],
-      typoTolerance: false,
       distinct: true,
       attributesToRetrieve: ['objectID'],
     });
