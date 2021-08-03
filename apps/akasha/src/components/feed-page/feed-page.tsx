@@ -153,7 +153,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             <EditorPlaceholder
               ethAddress={loginState.ethAddress}
               onClick={handleShowEditor}
-              avatar={loggedProfileData.avatar}
+              avatar={loggedProfileData?.avatar}
             />
           ) : (
             <>
