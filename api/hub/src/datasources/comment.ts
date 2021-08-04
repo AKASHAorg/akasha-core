@@ -170,6 +170,7 @@ class CommentAPI extends DataSource {
     }
 
     currentComment.metaData = currentComment.metaData.concat(currentComment.content);
+    currentComment.metaData = Array.from(new Set(currentComment.metaData));
     currentComment.content = Array.from(content);
     let removedTags = [];
     let addedTags = [];
