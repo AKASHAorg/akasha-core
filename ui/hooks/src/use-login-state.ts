@@ -103,9 +103,9 @@ const useLoginState = (props: UseLoginProps): [ILoginState, UseLoginActions] => 
 
   // this will also reset profile data
   useGlobalLogin({
-    onLogin: payload => dispatch({ type: 'LOGIN_SUCCESS', payload }),
+    onLogin: payload => payload && dispatch({ type: 'LOGIN_SUCCESS', payload }),
     waitForAuth: data => dispatch({ type: 'WAIT_AUTH', payload: data }),
-    onReady: data => dispatch({ type: 'READY', payload: data }),
+    onReady: data => data && dispatch({ type: 'READY', payload: data }),
     onLogout: () => {
       if (props.onLogout) {
         props.onLogout();
@@ -142,7 +142,9 @@ const useLoginState = (props: UseLoginProps): [ILoginState, UseLoginActions] => 
       );
       const callSub = race(call, globalCall).subscribe({
         next: resp => {
-          dispatch({ type: 'LOGIN_SUCCESS', payload: resp.data as any });
+          if (resp.data) {
+            dispatch({ type: 'LOGIN_SUCCESS', payload: resp.data as any });
+          }
         },
         error: createErrorHandler('useLoginState.login.subscription', false, onError),
       });
