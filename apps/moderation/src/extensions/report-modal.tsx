@@ -73,7 +73,11 @@ const ReportModalComponent = (props: RootComponentProps) => {
   return (
     <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
       <ReportModal
-        titleLabel={t(`Report ${activeModal.user}`)}
+        titleLabel={t(
+          `Report ${
+            activeModal.contentType === 'account' ? activeModal.user : activeModal.contentType
+          }`,
+        )}
         successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
         successMessageLabel={t(
           `We will investigate this ${activeModal.contentType} and take appropriate action.`,
