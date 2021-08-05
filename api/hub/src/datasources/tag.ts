@@ -39,7 +39,7 @@ class TagAPI extends DataSource {
     const results = [];
     for (const tag of tags) {
       const tagData = await this.getTag(tag);
-      results.push({ name: tag, totalPosts: tagData?.posts?.length || 0 });
+      results.push({ name: tag, totalPosts: tagData.totalPosts });
     }
     return results.sort((x, y) => y.totalPosts - x.totalPosts);
   }
