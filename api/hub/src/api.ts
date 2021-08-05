@@ -399,7 +399,7 @@ api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Prom
       if (allowed.ok) {
         // add the new moderator
         await dataSources.moderatorsAPI.updateModerator(
-          request.data.ethAddress,
+          request.data.user,
           request.data.admin,
           request.data.active,
         );
@@ -414,17 +414,16 @@ api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Prom
 });
 
 /**
- * Check if the given user (ETH address) is a moderator or not.
+ * Check if the given user is a moderator or not.
  */
 api.head(
-  '/moderation/moderators/:ethAddress',
+  '/moderation/moderators/status/:user',
   async (ctx: koa.Context, next: () => Promise<any>) => {
-    const ethAddress = ctx?.params?.ethAddress;
-    if (!ethAddress) {
+    const user = ctx?.params?.user;
+    if (!user) {
       ctx.status = 400;
-      ctx.body = 'Missing "ethAddress" attribute from request.';
     } else {
-      const isMod = await dataSources.moderatorsAPI.isModerator(ethAddress);
+      const isMod = await dataSources.moderatorsAPI.isModerator(user);
       ctx.status = isMod ? 200 : 404;
     }
     await next();
@@ -435,20 +434,19 @@ api.head(
  * Get data for a given moderator.
  */
 api.get(
-  '/moderation/moderators/:ethAddress',
+  '/moderation/moderators/:user',
   async (ctx: koa.Context, next: () => Promise<any>) => {
-    const ethAddress = ctx?.params?.ethAddress;
-    if (!ethAddress) {
+    const user = ctx?.params?.user;
+    if (!user) {
       ctx.status = 400;
-      ctx.body = 'Missing "ethAddress" attribute from request.';
     } else {
-      const isMod = await dataSources.moderatorsAPI.isModerator(ethAddress);
-      if (!isMod) {
-        ctx.status = 404;
-      } else {
-        ctx.set('Content-Type', 'application/json');
-        ctx.body = await dataSources.moderatorsAPI.getModerator(ethAddress);
+      ctx.set('Content-Type', 'application/json');
+      const moderator = await dataSources.moderatorsAPI.getModerator(user);
+      if (moderator) {
+        ctx.body = moderator;
         ctx.status = 200;
+      } else {
+        ctx.status = 404;
       }
     }
     await next();
@@ -473,7 +471,7 @@ api.post('/moderation/reasons', async (ctx: koa.Context, next: () => Promise<any
  */
 api.post('/moderation/reasons/new', async (ctx: koa.Context, next: () => Promise<any>) => {
   const request: any = ctx?.request.body;
-  if (!request.data.label && (!request.data.ethAddress || request.secret)) {
+  if (!request.data.label) {
     ctx.status = 400;
     ctx.body = 'Missing "label" attribute from request.';
   } else {
