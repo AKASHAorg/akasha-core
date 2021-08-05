@@ -1,13 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
+import { logError } from './utils/error-handler';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 export const TAG_SUBSCRIPTIONS_KEY = 'Tag_Subscriptions';
 
 const getTagSubscriptions = async () => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.profile.getTagSubscriptions());
-  return res.data.getInterests;
+  try {
+    const res = await lastValueFrom(sdk.api.profile.getTagSubscriptions());
+    return res.data.getInterests;
+  } catch (error) {
+    logError('useTagSubscribe.getTagSubs', error);
+  }
 };
 
 export function useTagSubscriptions(loggedEthAddress: string | null) {
@@ -20,8 +26,12 @@ export function useTagSubscriptions(loggedEthAddress: string | null) {
 
 const getIsSubscribedToTag = async (tagName: string) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.profile.isSubscribedToTag(tagName));
-  return res.data;
+  try {
+    const res = await lastValueFrom(sdk.api.profile.isSubscribedToTag(tagName));
+    return res.data;
+  } catch (error) {
+    logError('useTagSubscribe.getIsSubscribedToTag', error);
+  }
 };
 
 export function useIsSubscribedToTag(tagName: string, loggedEthAddress: string | null) {
@@ -52,6 +62,7 @@ export function useToggleTagSubscription() {
       if (context?.previousTagSubs) {
         queryClient.setQueryData([TAG_SUBSCRIPTIONS_KEY], context.previousTagSubs);
       }
+      logError('useTagSubscribe.toggleTagSub', err as IAkashaError);
     },
     // onSuccess: async (data, variables, context) => {
     //   const previousTagSubs: any = queryClient.getQueryData([TAG_SUBSCRIPTIONS_KEY]);

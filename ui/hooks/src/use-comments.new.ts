@@ -3,25 +3,28 @@ import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { mapEntry } from './utils/entry-utils';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import { logError } from './utils/error-handler';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
-// these can be used with useQueryClient() to fetch data
 export const COMMENT_KEY = 'Comment';
 export const COMMENTS_KEY = 'Comments';
 
 const getComments = async (limit: number, postID: string, offset?: string) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(
-    sdk.api.comments.getComments({
-      limit: limit,
-      offset: offset,
-      postID: postID,
-    }),
-  );
-  // @Todo: Remap this?
-  return res.data.getComments;
+  try {
+    const res = await lastValueFrom(
+      sdk.api.comments.getComments({
+        limit: limit,
+        offset: offset,
+        postID: postID,
+      }),
+    );
+    return res.data.getComments;
+  } catch (error) {
+    logError('useComments.getComments', error);
+  }
 };
 
-// hook for fetching feed data
 export function useInfiniteComments(limit: number, postID: string, offset?: string) {
   return useInfiniteQuery(
     [COMMENTS_KEY, postID],
@@ -37,10 +40,14 @@ export function useInfiniteComments(limit: number, postID: string, offset?: stri
 
 const getComment = async commentID => {
   const sdk = getSDK();
-  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
-  const res = await lastValueFrom(sdk.api.comments.getComment(commentID));
-  // remap the object props here
-  return mapEntry(res.data.getComment, ipfsGateway);
+  try {
+    const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+    const res = await lastValueFrom(sdk.api.comments.getComment(commentID));
+    // remap the object props here
+    return mapEntry(res.data.getComment, ipfsGateway);
+  } catch (error) {
+    logError('useComments.getComments', error);
+  }
 };
 
 // hook for fetching data for a specific commentID/entryID
@@ -55,14 +62,8 @@ export interface Publish_Options {
   data: DataProviderInput[];
   comment: { title?: string; tags?: string[]; postID: string };
 }
-/**
- * Example:
- * ```
- * const delPost = useDeletePost();
- * delPost.mutate("myEntryId");
- * ```
- */
-export function useDeletePost(commentID: string) {
+
+export function useDeleteComment(commentID: string) {
   const sdk = getSDK();
   const queryClient = useQueryClient();
   return useMutation(commentID => lastValueFrom(sdk.api.entries.removeEntry(commentID)), {
@@ -82,6 +83,7 @@ export function useDeletePost(commentID: string) {
       if (context?.previousPost) {
         queryClient.setQueryData([COMMENT_KEY, commentID], context.previousPost);
       }
+      logError('useComments.deleteComment', err as IAkashaError);
     },
     onSettled: async () => {
       await queryClient.invalidateQueries([COMMENT_KEY, commentID]);
@@ -117,6 +119,7 @@ export function useCreateComment() {
             Object.assign({}, context.optimisticComment, { hasErrored: true }),
           );
         }
+        logError('useComments.createComment', err as IAkashaError);
       },
       onSuccess: async id => {
         await queryClient.fetchQuery([COMMENT_KEY, id], () => getComment(id));

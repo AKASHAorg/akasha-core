@@ -7,12 +7,7 @@ import {
   MenuItemAreaType,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import {
-  useLoginState,
-  useErrors,
-  useProfile,
-  moderationRequest,
-} from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useErrors, moderationRequest } from '@akashaproject/ui-awf-hooks';
 import { useCheckNewNotifications } from '@akashaproject/ui-awf-hooks/lib/use-notifications.new';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { useTranslation } from 'react-i18next';
@@ -220,7 +215,7 @@ const TopbarComponent = (props: RootComponentProps) => {
       >
         <ExtensionPoint
           name={extensionPointsMap.QuickAccess}
-          shouldMount={!!loggedProfileData.ethAddress}
+          shouldMount={!!loggedProfileData?.ethAddress}
           onMount={name => onExtMount(name)}
           onUnmount={name => onExtUnmount(name)}
         />

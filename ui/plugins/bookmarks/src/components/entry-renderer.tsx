@@ -3,7 +3,7 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useFollow } from '@akashaproject/ui-awf-hooks';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
-import { BookmarkTypes, IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
+import { BookmarkTypes } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 
 const { ErrorInfoCard, ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading } = DS;
 
@@ -32,7 +32,7 @@ export interface IEntryCardRendererProps {
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (ethAddress: string) => void;
   onTagClick: (name: string) => void;
-  bookmarkState?: IBookmarkState;
+  bookmarkState?: any;
   style?: React.CSSProperties;
   contentClickable?: boolean;
   disableReposting?: boolean;
@@ -64,7 +64,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
       bookmarkState &&
       !bookmarkState.isFetching &&
       itemId &&
-      bookmarkState.bookmarks.findIndex(bm => bm.entryId === itemId) >= 0
+      bookmarkState.data.findIndex(bm => bm.entryId === itemId) >= 0
     ) {
       return true;
     }

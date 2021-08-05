@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
+import { logError } from './utils/error-handler';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 export enum BookmarkTypes {
   POST = 0,
@@ -12,8 +14,12 @@ const entriesBookmarks = 'entries-bookmarks';
 
 const getBookmarks = async () => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.services.settings.get(BOOKMARKED_ENTRIES_KEY));
-  return res.data;
+  try {
+    const res = await lastValueFrom(sdk.services.settings.get(BOOKMARKED_ENTRIES_KEY));
+    return res.data;
+  } catch (error) {
+    logError('useBookmarks.getBookmarks', error);
+  }
 };
 
 export function useGetBookmarks(loggedEthAddress) {
@@ -44,7 +50,8 @@ export function useBookmarkPost() {
   const queryClient = useQueryClient();
   return useMutation(
     (entryId: string) => {
-      const prevBmks: any[] = queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
+      const prevBmks: { entryId: string; type: BookmarkTypes }[] =
+        queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
       const newBmks = prevBmks.slice();
       newBmks.unshift({ entryId, type: BookmarkTypes.POST });
       return lastValueFrom(
@@ -57,7 +64,8 @@ export function useBookmarkPost() {
       onMutate: async (entryId: string) => {
         await queryClient.cancelQueries(BOOKMARKED_ENTRIES_KEY);
 
-        const prevBmks: any[] = queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]);
+        const prevBmks: { entryId: string; type: BookmarkTypes }[] =
+          queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
         const newBmks = prevBmks.slice();
         newBmks.unshift({ entryId, type: BookmarkTypes.POST });
         queryClient.setQueryData([BOOKMARKED_ENTRIES_KEY], newBmks);
@@ -67,6 +75,7 @@ export function useBookmarkPost() {
         if (context?.prevBmks) {
           queryClient.setQueryData([BOOKMARKED_ENTRIES_KEY], context.prevBmks);
         }
+        logError('useBookmarks.bookmarkPost', err as IAkashaError);
       },
       onSettled: async () => {
         await queryClient.invalidateQueries([BOOKMARKED_ENTRIES_KEY]);
@@ -80,7 +89,8 @@ export function useBookmarkComment() {
   const queryClient = useQueryClient();
   return useMutation(
     (entryId: string) => {
-      const prevBmks: any[] = queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
+      const prevBmks: { entryId: string; type: BookmarkTypes }[] =
+        queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
       const newBmks = prevBmks.slice();
       newBmks.unshift({ entryId, type: BookmarkTypes.COMMENT });
       return lastValueFrom(
@@ -93,7 +103,8 @@ export function useBookmarkComment() {
       onMutate: async (entryId: string) => {
         await queryClient.cancelQueries(BOOKMARKED_ENTRIES_KEY);
 
-        const prevBmks: any[] = queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]);
+        const prevBmks: { entryId: string; type: BookmarkTypes }[] =
+          queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
         const newBmks = prevBmks.slice();
         newBmks.unshift({ entryId, type: BookmarkTypes.COMMENT });
         queryClient.setQueryData([BOOKMARKED_ENTRIES_KEY], newBmks);
@@ -103,6 +114,7 @@ export function useBookmarkComment() {
         if (context?.prevBmks) {
           queryClient.setQueryData([BOOKMARKED_ENTRIES_KEY], context.prevBmks);
         }
+        logError('useBookmarks.bookmarkComment', err as IAkashaError);
       },
       onSettled: async () => {
         await queryClient.invalidateQueries([BOOKMARKED_ENTRIES_KEY]);
@@ -116,11 +128,10 @@ export function useBookmarkDelete() {
   const queryClient = useQueryClient();
   return useMutation(
     (entryId: string) => {
-      const prevBmks: any[] = queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
+      const prevBmks: { entryId: string; type: BookmarkTypes }[] =
+        queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
       const newBmks = prevBmks.slice();
-      const bmIndex = newBmks.findIndex(
-        (bm: { entryId: string; type: BookmarkTypes }) => bm.entryId === entryId,
-      );
+      const bmIndex = newBmks.findIndex(bm => bm.entryId === entryId);
       if (bmIndex >= 0) {
         newBmks.splice(bmIndex, 1);
       }
@@ -134,7 +145,8 @@ export function useBookmarkDelete() {
       onMutate: async (entryId: string) => {
         await queryClient.cancelQueries(BOOKMARKED_ENTRIES_KEY);
 
-        const prevBmks: any[] = queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]);
+        const prevBmks: { entryId: string; type: BookmarkTypes }[] =
+          queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
         const newBmks = prevBmks.slice();
         const bmIndex = newBmks.findIndex(
           (bm: { entryId: string; type: BookmarkTypes }) => bm.entryId === entryId,
@@ -149,6 +161,7 @@ export function useBookmarkDelete() {
         if (context?.prevBmks) {
           queryClient.setQueryData([BOOKMARKED_ENTRIES_KEY], context.prevBmks);
         }
+        logError('useBookmarks.bookmarkDelete', err as IAkashaError);
       },
       onSettled: async () => {
         await queryClient.invalidateQueries([BOOKMARKED_ENTRIES_KEY]);

@@ -131,8 +131,8 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
   const checkNetworkReq = useNetworkState(loggedUserEthAddress);
   const networkState = checkNetworkReq.data;
 
-  const isFollowingMultipleReq = useIsFollowing(loggedUserEthAddress, profileState.ethAddress);
-  const followedProfiles = isFollowingMultipleReq.data;
+  const isFollowingReq = useIsFollowing(loggedUserEthAddress, profileState.ethAddress);
+  const followedProfiles = isFollowingReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
