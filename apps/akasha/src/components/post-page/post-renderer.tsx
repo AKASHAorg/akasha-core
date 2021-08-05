@@ -70,7 +70,13 @@ const PostRenderer = (props: PostRendererProps) => {
     },
   });
   const postReq = useComment(props.itemId);
-  const itemData = React.useMemo(() => mapEntry(postReq.data), [postReq.data]);
+  const itemData = React.useMemo(() => {
+    if (postReq.status === 'success' && postReq.data) {
+      return mapEntry(postReq.data);
+    }
+    return undefined;
+  }, [postReq.data]);
+
   const editReq = useEditComment(itemData.entryId);
   const isBookmarked = React.useMemo(() => {
     if (
@@ -129,7 +135,7 @@ const PostRenderer = (props: PostRendererProps) => {
       />
     );
   }
-  console.log(itemData, '<<<<<<<<<<< item data');
+
   return (
     <ErrorInfoCard errors={{}}>
       {(errorMessages: any, hasCriticalErrors: boolean) => (
@@ -178,7 +184,7 @@ const PostRenderer = (props: PostRendererProps) => {
                       />
                     </Box>
                   )}
-                  {!isEditing && (
+                  {!isEditing && postReq.status === 'success' && (
                     <EntryBox
                       style={itemData.isPublishing ? { backgroundColor: '#4e71ff0f' } : {}}
                       isBookmarked={isBookmarked}

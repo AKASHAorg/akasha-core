@@ -60,7 +60,12 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const queryClient = useQueryClient();
   //@Todo: replace entryData with value from usePost
   const postReq = usePost(postId, !!postId);
-  const entryData = mapEntry(postReq.data);
+  const entryData = React.useMemo(() => {
+    if (postReq.status === 'success') {
+      return mapEntry(postReq.data);
+    }
+    return undefined;
+  }, [postReq.data]);
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
@@ -133,7 +138,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   const handleLoadMore = () => {
     if (!reqComments.isFetching && loginState.currentUserCalled) {
-      reqComments.fetchNextPage().then(d => console.log('fetched next page', d));
+      reqComments.fetchNextPage();
     }
   };
 
@@ -278,7 +283,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       entryId: commentId,
     });
   };
-  console.log(queryClient, 'query client');
+
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>

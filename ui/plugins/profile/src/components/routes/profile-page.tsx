@@ -35,7 +35,7 @@ const ProfilePage = (props: ProfilePageProps) => {
   const queryClient = useQueryClient();
 
   let { pubKey } = useParams() as any;
-  // console.log('followers====', useFollowers(pubKey, 5));
+
   if (location.pathname.includes(menuRoute[MY_PROFILE])) {
     pubKey = loggedProfileData.pubKey;
   }
@@ -98,7 +98,7 @@ const ProfilePage = (props: ProfilePageProps) => {
 
   const handleLoadMore = () => {
     if (!reqPosts.isFetching && pubKey) {
-      reqPosts.fetchNextPage().then(d => console.log('fetched next page', d));
+      reqPosts.fetchNextPage();
     }
   };
 

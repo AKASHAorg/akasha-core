@@ -73,25 +73,32 @@ export interface Publish_Options {
  * delPost.mutate("myEntryId");
  * ```
  */
-export function useDeletePost(commentID: string) {
+export function useDeleteComment(commentID: string) {
   const sdk = getSDK();
   const queryClient = useQueryClient();
   return useMutation(commentID => lastValueFrom(sdk.api.entries.removeEntry(commentID)), {
     // When mutate is called:
     onMutate: async (commentID: string) => {
-      await queryClient.cancelQueries(COMMENT_KEY);
-
       // Snapshot the previous value
-      const previousPost = queryClient.getQueryData([COMMENT_KEY, commentID]);
+      const previousComment: Comment_Response = queryClient.getQueryData([COMMENT_KEY, commentID]);
       // can add some optimistic updates here
       // ex: queryClient.setQueryData([COMMENT_KEY, commentID], {})
-
-      return { previousPost };
+      queryClient.setQueryData([COMMENT_KEY, commentID], {
+        ...previousComment,
+        content: [
+          {
+            property: 'removed',
+            provider: 'awf.graphql.comments.api',
+            value: '1',
+          },
+        ],
+      });
+      return { previousComment };
     },
     // If the mutation fails, use the context returned from onMutate to roll back
     onError: (err, variables, context) => {
-      if (context?.previousPost) {
-        queryClient.setQueryData([COMMENT_KEY, commentID], context.previousPost);
+      if (context?.previousComment) {
+        queryClient.setQueryData([COMMENT_KEY, commentID], context.previousComment);
       }
     },
     onSettled: async () => {

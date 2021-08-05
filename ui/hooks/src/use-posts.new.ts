@@ -157,10 +157,19 @@ export function useDeletePost(postID: string) {
       await queryClient.cancelQueries(ENTRY_KEY);
 
       // Snapshot the previous value
-      const previousPost = queryClient.getQueryData([ENTRY_KEY, postID]);
+      const previousPost: Post_Response = queryClient.getQueryData([ENTRY_KEY, postID]);
       // can add some optimistic updates here
       // ex: queryClient.setQueryData([ENTRY_KEY, postID], {})
-
+      queryClient.setQueryData([ENTRY_KEY, postID], {
+        ...previousPost,
+        content: [
+          {
+            property: 'removed',
+            provider: 'awf.graphql.comments.api',
+            value: '1',
+          },
+        ],
+      });
       return { previousPost };
     },
     // If the mutation fails, use the context returned from onMutate to roll back
@@ -171,7 +180,6 @@ export function useDeletePost(postID: string) {
     },
     onSettled: async () => {
       await queryClient.invalidateQueries([ENTRY_KEY, postID]);
-      await queryClient.invalidateQueries(ENTRIES_KEY);
     },
   });
 }
@@ -221,8 +229,10 @@ export const useEditPost = () => {
 
   return useMutation(
     async (editedPost: any) => {
-      console.log(editedPost, '<<<< edited post object');
-      const res = await lastValueFrom(sdk.api.entries.editEntry(editedPost));
+      const post = buildPublishObject(editedPost);
+      const res = await lastValueFrom(
+        sdk.api.entries.editEntry({ entryID: editedPost.entryID, ...post }),
+      );
       return res.data.editPost;
     },
     {
@@ -239,7 +249,7 @@ export const useEditPost = () => {
         return { editedPost };
       },
       onSuccess: async (data, vars) => {
-        await queryClient.invalidateQueries([ENTRY_KEY, vars.editedPost.entryID]);
+        await queryClient.invalidateQueries([ENTRY_KEY, vars.entryID]);
         await queryClient.fetchQuery([ENTRY_KEY, vars.entryID], () => getPost(vars.entryID));
       },
     },
