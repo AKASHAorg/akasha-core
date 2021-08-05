@@ -1,14 +1,20 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
+import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
-import { mapEntry } from './utils/entry-utils';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import { buildPublishObject } from './utils/entry-utils';
+import { Comment_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 
 // these can be used with useQueryClient() to fetch data
 export const COMMENT_KEY = 'Comment';
 export const COMMENTS_KEY = 'Comments';
 
-const getComments = async (limit: number, postID: string, offset?: string) => {
+const getComments = async (
+  queryClient: QueryClient,
+  limit: number,
+  postID: string,
+  offset?: string,
+) => {
   const sdk = getSDK();
   const res = await lastValueFrom(
     sdk.api.comments.getComments({
@@ -17,15 +23,21 @@ const getComments = async (limit: number, postID: string, offset?: string) => {
       postID: postID,
     }),
   );
-  // @Todo: Remap this?
-  return res.data.getComments;
+  return {
+    ...res.data.getComments,
+    results: res.data.getComments.results.map(comment => {
+      queryClient.setQueryData([COMMENT_KEY, comment._id], () => comment);
+      return comment._id;
+    }),
+  };
 };
 
 // hook for fetching feed data
 export function useInfiniteComments(limit: number, postID: string, offset?: string) {
+  const queryClient = useQueryClient();
   return useInfiniteQuery(
     [COMMENTS_KEY, postID],
-    async ({ pageParam = offset }) => getComments(limit, postID, pageParam),
+    async ({ pageParam = offset }) => getComments(queryClient, limit, postID, pageParam),
     {
       getNextPageParam: (lastPage, allPages) => lastPage.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
@@ -37,16 +49,15 @@ export function useInfiniteComments(limit: number, postID: string, offset?: stri
 
 const getComment = async commentID => {
   const sdk = getSDK();
-  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
   const res = await lastValueFrom(sdk.api.comments.getComment(commentID));
   // remap the object props here
-  return mapEntry(res.data.getComment, ipfsGateway);
+  return res.data.getComment;
 };
 
 // hook for fetching data for a specific commentID/entryID
-export function useComment(commentID: string) {
+export function useComment(commentID: string, enabler = true) {
   return useQuery([COMMENT_KEY, commentID], () => getComment(commentID), {
-    enabled: !!commentID,
+    enabled: !!commentID && enabler,
     keepPreviousData: true,
   });
 }
@@ -124,6 +135,50 @@ export function useCreateComment() {
       onSettled: async () => {
         await queryClient.invalidateQueries([COMMENT_KEY, pendingID]);
         await queryClient.invalidateQueries(COMMENTS_KEY);
+      },
+    },
+  );
+}
+
+// hook used for editing a comment
+export function useEditComment(commentID: string) {
+  const sdk = getSDK();
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    (comment: any) => {
+      const { postID, ...commentData } = comment;
+      const publishObj: Publish_Options = buildPublishObject(commentData, postID);
+      return lastValueFrom(sdk.api.comments.editComment({ commentID, ...publishObj }));
+    },
+    {
+      onMutate: async (comment: any) => {
+        queryClient.setQueryData([COMMENT_KEY, commentID], (current: Comment_Response) => {
+          const { data } = buildPublishObject(comment);
+          return {
+            ...current,
+            content: data,
+            isPublishing: true,
+          };
+        });
+
+        return { comment };
+      },
+      onError: (err, variables, context) => {
+        if (context?.comment) {
+          queryClient.setQueryData(
+            [COMMENT_KEY, commentID],
+            Object.assign({}, context.comment, { hasErrored: true }),
+          );
+        }
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries([COMMENT_KEY, commentID]);
+        await queryClient.fetchQuery([COMMENT_KEY, commentID], () => getComment(commentID));
+      },
+      onSettled: async () => {
+        await queryClient.invalidateQueries([COMMENT_KEY, commentID]);
+        // await queryClient.invalidateQueries(COMMENTS_KEY);
       },
     },
   );

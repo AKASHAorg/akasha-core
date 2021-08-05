@@ -9,12 +9,13 @@ import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ITag } from '@akashaproject/design-system/lib/components/TrendingWidgetCard';
-import { useInfinitePostsByTag } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { ENTRY_KEY, useInfinitePostsByTag } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
 } from '@akashaproject/ui-awf-hooks/lib/use-tag-subscribe.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { useQueryClient } from 'react-query';
 
 const { Box, TagProfileCard, Helmet } = DS;
 
@@ -32,6 +33,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { tagName } = useParams<{ tagName: string }>();
 
   const [tagData, setTagData] = React.useState<ITag | null>(null);
+  const queryClient = useQueryClient();
 
   React.useEffect(() => {
     if (tagName) {
@@ -58,7 +60,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     if (!reqPosts.isSuccess) {
       return list;
     }
-    postsState.pages.forEach(el => el.results.forEach(el1 => list.push(el1._id)));
+    postsState.pages.forEach(page => page.results.forEach(postId => list.push(postId)));
     return list;
   }, [reqPosts.isSuccess, postsState?.pages]);
 
@@ -67,7 +69,11 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     if (!reqPosts.isSuccess) {
       return list;
     }
-    postsState.pages.forEach(el => el.results.forEach(el1 => (list[el1._id] = mapEntry(el1))));
+    postsState.pages.forEach(page =>
+      page.results.forEach(
+        postId => (list[postId] = queryClient.getQueryData([ENTRY_KEY, postId])),
+      ),
+    );
     return list;
   }, [reqPosts.isSuccess, postsState?.pages]);
 

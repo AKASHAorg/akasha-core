@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
@@ -15,6 +15,7 @@ import menuRoute, { MY_PROFILE } from '../../routes';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { useInfinitePostsByAuthor } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { useQueryClient } from 'react-query';
 
 const { Box, Helmet } = DS;
 
@@ -31,6 +32,7 @@ const ProfilePage = (props: ProfilePageProps) => {
   const { loggedEthAddress, loginActions, loggedProfileData, showLoginModal } = props;
 
   const location = useLocation();
+  const queryClient = useQueryClient();
 
   let { pubKey } = useParams() as any;
   // console.log('followers====', useFollowers(pubKey, 5));
@@ -53,7 +55,7 @@ const ProfilePage = (props: ProfilePageProps) => {
     if (!reqPosts.isSuccess) {
       return list;
     }
-    postsState.pages.forEach(el => el.results.forEach(el1 => list.push(el1._id)));
+    postsState.pages.forEach(page => page.results.forEach(postId => list.push(postId)));
     return list;
   }, [reqPosts.isSuccess]);
 
@@ -62,22 +64,18 @@ const ProfilePage = (props: ProfilePageProps) => {
     if (!reqPosts.isSuccess) {
       return list;
     }
-    postsState.pages.forEach(el => el.results.forEach(el1 => (list[el1._id] = mapEntry(el1))));
+    postsState.pages.forEach(page =>
+      page.results.forEach(
+        postId => (list[postId] = mapEntry(queryClient.getQueryData(['Entry', postId]))),
+      ),
+    );
     return list;
   }, [reqPosts.isSuccess]);
-
-  // React.useEffect(() => {
-  //   // reset post ids and virtual list, if user logs in
-  //   if (loggedEthAddress) {
-  //     postsActions.resetPostIds();
-  //   }
-  // }, [loggedEthAddress]);
 
   React.useEffect(() => {
     if (pubKey) {
       profileActions.resetProfileData();
       profileActions.getProfileData({ pubKey });
-      // postsActions.resetPostIds();
     }
   }, [pubKey]);
 

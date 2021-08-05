@@ -5,6 +5,8 @@ import { useFollow } from '@akashaproject/ui-awf-hooks';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 import routes, { POST } from '../../routes';
+import { useComment, useEditComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
+import { mapEntry, buildPublishObject } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
 const {
   ErrorInfoCard,
@@ -49,7 +51,6 @@ export interface PostRendererProps {
 
 const PostRenderer = (props: PostRendererProps) => {
   const {
-    itemData,
     style,
     ethAddress,
     logger,
@@ -68,7 +69,9 @@ const PostRenderer = (props: PostRendererProps) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);
     },
   });
-
+  const postReq = useComment(props.itemId);
+  const itemData = React.useMemo(() => mapEntry(postReq.data), [postReq.data]);
+  const editReq = useEditComment(itemData.entryId);
   const isBookmarked = React.useMemo(() => {
     if (
       bookmarkState &&
@@ -108,8 +111,9 @@ const PostRenderer = (props: PostRendererProps) => {
     setIsEditing(false);
   };
 
-  const handleEditComment = () => {
+  const handleEditComment = (commentData: any) => {
     // save edited comment;
+    editReq.mutate({ ...commentData, postID: itemData.postId });
     setIsEditing(false);
   };
 
@@ -125,7 +129,7 @@ const PostRenderer = (props: PostRendererProps) => {
       />
     );
   }
-
+  console.log(itemData, '<<<<<<<<<<< item data');
   return (
     <ErrorInfoCard errors={{}}>
       {(errorMessages: any, hasCriticalErrors: boolean) => (
@@ -176,6 +180,7 @@ const PostRenderer = (props: PostRendererProps) => {
                   )}
                   {!isEditing && (
                     <EntryBox
+                      style={itemData.isPublishing ? { backgroundColor: '#4e71ff0f' } : {}}
                       isBookmarked={isBookmarked}
                       isRemoved={
                         itemData.content.length === 1 && itemData.content[0].property === 'removed'

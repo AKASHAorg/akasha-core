@@ -1,12 +1,9 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
+import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
-import { events } from '@akashaproject/sdk-typings';
-
-import { mapEntry } from './utils/entry-utils';
+import { buildPublishObject } from './utils/entry-utils';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
-import React from 'react';
-import { filter } from 'rxjs/operators';
+import { Post_Response } from '../../../sdk/typings/lib/interfaces/responses';
 
 // these can be used with useQueryClient() to fetch data
 export const ENTRY_KEY = 'Entry';
@@ -14,7 +11,7 @@ export const ENTRIES_KEY = 'Entries';
 export const ENTRIES_BY_TAG_KEY = 'EntriesByTag';
 export const ENTRIES_BY_AUTHOR_KEY = 'EntriesByAuthor';
 
-const getPosts = async (limit: number, offset?: string) => {
+const getPosts = async (queryClient: QueryClient, limit: number, offset?: string) => {
   const sdk = getSDK();
   const res = await lastValueFrom(
     sdk.api.entries.getEntries({
@@ -22,64 +19,23 @@ const getPosts = async (limit: number, offset?: string) => {
       offset: offset,
     }),
   );
-  // @Todo: Remap this?
-  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
-  const remapped = res.data.posts.results.map(entry => mapEntry(entry, ipfsGateway));
+
   return {
     ...res.data.posts,
-    results: remapped,
+    results: res.data.posts.results.map(post => {
+      queryClient.setQueryData([ENTRY_KEY, post._id], post);
+      return post._id;
+    }),
   };
-};
-
-const updatePages = (
-  pages: { results: ReturnType<typeof mapEntry>[]; nextIndex: string; total: number }[],
-  updatedEntry,
-) => {
-  pageLoop: for (const [idx, page] of pages.entries()) {
-    const results = page.results.slice();
-    for (const [entryIdx, result] of results.entries()) {
-      if (result.entryId === updatedEntry.entryId) {
-        results[entryIdx] = Object.assign({}, results[entryIdx], updatedEntry);
-        pages[idx] = Object.assign({}, pages[idx], { results });
-        break pageLoop;
-      }
-    }
-  }
-  return pages;
 };
 
 // hook for fetching feed data
 export function useInfinitePosts(limit: number, offset?: string) {
-  const sdk = getSDK();
   const queryClient = useQueryClient();
-  React.useEffect(() => {
-    const call = sdk.api.globalChannel
-      .pipe(
-        filter(payload => {
-          return payload.event === events.ENTRY_EVENTS.EDIT;
-        }),
-      )
-      .subscribe(async resp => {
-        const response = resp as { data: { editPost: boolean }; args: { entryID: string } };
-        if (response.data.editPost) {
-          const refetched = await getPost(response.args.entryID);
-          queryClient.setQueryData<{
-            pages: { results: any[]; nextIndex: string; total: number }[];
-            pageParams: unknown;
-          }>(ENTRIES_KEY, state => {
-            return {
-              pageParams: state.pageParams,
-              pages: updatePages(state.pages.slice(), refetched),
-            };
-          });
-        }
-      });
-    return call.unsubscribe;
-  }, []);
 
   return useInfiniteQuery(
     ENTRIES_KEY,
-    async ({ pageParam = offset }) => getPosts(limit, pageParam),
+    async ({ pageParam = offset }) => getPosts(queryClient, limit, pageParam),
     {
       getNextPageParam: lastPage => lastPage.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
@@ -89,7 +45,12 @@ export function useInfinitePosts(limit: number, offset?: string) {
   );
 }
 
-const getPostsByTag = async (name: string, limit: number, offset?: string) => {
+const getPostsByTag = async (
+  queryClient: QueryClient,
+  name: string,
+  limit: number,
+  offset?: string,
+) => {
   const sdk = getSDK();
   const res = await lastValueFrom(
     sdk.api.entries.entriesByTag({
@@ -98,15 +59,21 @@ const getPostsByTag = async (name: string, limit: number, offset?: string) => {
       offset: offset,
     }),
   );
-  // @Todo: Remap this?
-  return res.data.getPostsByTag;
+  return {
+    ...res.data.getPostsByTag,
+    results: res.data.getPostsByTag.results.map(post => {
+      queryClient.setQueryData([ENTRY_KEY, post._id], post);
+      return post._id;
+    }),
+  };
 };
 
 // hook for fetching feed data
 export function useInfinitePostsByTag(name: string, limit: number, offset?: string) {
+  const queryClient = useQueryClient();
   return useInfiniteQuery(
     [ENTRIES_BY_TAG_KEY, name],
-    async ({ pageParam = offset }) => getPostsByTag(name, limit, pageParam),
+    async ({ pageParam = offset }) => getPostsByTag(queryClient, name, limit, pageParam),
     {
       getNextPageParam: lastPage => lastPage.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
@@ -116,7 +83,12 @@ export function useInfinitePostsByTag(name: string, limit: number, offset?: stri
   );
 }
 
-const getPostsByAuthor = async (pubKey: string, limit: number, offset?: number) => {
+const getPostsByAuthor = async (
+  queryClient: QueryClient,
+  pubKey: string,
+  limit: number,
+  offset?: number,
+) => {
   const sdk = getSDK();
   const res = await lastValueFrom(
     sdk.api.entries.entriesByAuthor({
@@ -125,15 +97,22 @@ const getPostsByAuthor = async (pubKey: string, limit: number, offset?: number) 
       offset: offset,
     }),
   );
-  // @Todo: Remap this?
-  return res.data.getPostsByAuthor;
+
+  return {
+    ...res.data.getPostsByAuthor,
+    results: res.data.getPostsByAuthor.results.map(post => {
+      queryClient.setQueryData([ENTRY_KEY, post._id], post);
+      return post._id;
+    }),
+  };
 };
 
 // hook for fetching feed data
 export function useInfinitePostsByAuthor(pubKey: string, limit: number, offset?: number) {
+  const queryClient = useQueryClient();
   return useInfiniteQuery(
     [ENTRIES_BY_AUTHOR_KEY, pubKey],
-    async ({ pageParam = offset }) => getPostsByAuthor(pubKey, limit, pageParam),
+    async ({ pageParam = offset }) => getPostsByAuthor(queryClient, pubKey, limit, pageParam),
     {
       getNextPageParam: lastPage => lastPage.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
@@ -147,7 +126,7 @@ const getPost = async postID => {
   const sdk = getSDK();
   const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
   // remap the object props here
-  return mapEntry(res.data.getPost);
+  return res.data.getPost;
 };
 
 // hook for fetching data for a specific postID/entryID
@@ -236,26 +215,31 @@ export function useCreatePost() {
   );
 }
 
-export interface EditedPost extends Publish_Options {
-  entryID: string;
-}
-
 export const useEditPost = () => {
   const sdk = getSDK();
   const queryClient = useQueryClient();
 
   return useMutation(
-    async (editedPost: EditedPost) => {
+    async (editedPost: any) => {
+      console.log(editedPost, '<<<< edited post object');
       const res = await lastValueFrom(sdk.api.entries.editEntry(editedPost));
       return res.data.editPost;
     },
     {
-      onMutate: async published => {
-        const optimisticEntry = Object.assign(published, { isPublishing: true });
-        queryClient.setQueryData([ENTRY_KEY, published.entryID], optimisticEntry);
-        return { optimisticEntry };
+      onMutate: async editedPost => {
+        queryClient.setQueryData([ENTRY_KEY, editedPost.entryID], (current: Post_Response) => {
+          const { data } = buildPublishObject(editedPost);
+          return {
+            ...current,
+            content: data,
+            isPublishing: true,
+          };
+        });
+
+        return { editedPost };
       },
       onSuccess: async (data, vars) => {
+        await queryClient.invalidateQueries([ENTRY_KEY, vars.editedPost.entryID]);
         await queryClient.fetchQuery([ENTRY_KEY, vars.entryID], () => getPost(vars.entryID));
       },
     },

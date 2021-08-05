@@ -12,13 +12,13 @@ import routes, { POST } from '../../routes';
 import { useErrors } from '@akashaproject/ui-awf-hooks';
 
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import { useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { ENTRY_KEY, useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import {
   useGetBookmarks,
   useBookmarkPost,
   useBookmarkDelete,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
-import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { useQueryClient } from 'react-query';
 
 const { Box, Helmet, VirtualList, EditorPlaceholder } = DS;
 
@@ -37,6 +37,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
+  const queryClient = useQueryClient();
+
   const [errorState] = useErrors({ logger });
 
   const reqPosts = useInfinitePosts(15);
@@ -46,7 +48,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     if (!reqPosts.isSuccess) {
       return list;
     }
-    postsState.pages.forEach(el => el.results.forEach(el1 => list.push(el1.entryId)));
+    postsState.pages.forEach(page => page.results.forEach(postId => list.push(postId)));
     return list;
   }, [reqPosts.isSuccess]);
 
@@ -55,7 +57,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     if (!reqPosts.isSuccess) {
       return list;
     }
-    postsState.pages.forEach(el => el.results.forEach(el1 => (list[el1.entryId] = el1)));
+    postsState.pages.forEach(page =>
+      page.results.forEach(
+        postId => (list[postId] = queryClient.getQueryData([ENTRY_KEY, postId])),
+      ),
+    );
     return list;
   }, [reqPosts.data]);
 
@@ -101,6 +107,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleTagClick = (name: string) => {
     props.singleSpa.navigateToUrl(`/social-app/tags/${name}`);
   };
+
   const handleEntryBookmark = (entryId: string) => {
     if (!loginState.pubKey) {
       return showLoginModal();

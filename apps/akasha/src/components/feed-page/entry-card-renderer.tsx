@@ -5,15 +5,11 @@ import { useFollow } from '@akashaproject/ui-awf-hooks';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import routes, { POST } from '../../routes';
 import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
-const {
-  ErrorInfoCard,
-  ErrorLoader,
-  EntryCard,
-  EntryCardHidden,
-  EntryCardLoading,
-  ExtensionPoint,
-} = DS;
+const { ErrorInfoCard, ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading, ExtensionPoint } =
+  DS;
 
 export interface IEntryCardRendererProps {
   logger: any;
@@ -50,7 +46,6 @@ export interface IEntryCardRendererProps {
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   const {
-    itemData,
     ethAddress,
     locale,
     bookmarkState,
@@ -81,6 +76,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   }, [bookmarkState.data]);
 
   const { t } = useTranslation();
+  const postReq = usePost(itemId, !!itemId);
+  const itemData = React.useMemo(() => mapEntry(postReq.data), [postReq]);
 
   const [followedProfiles, followActions] = useFollow({
     onError: (errorInfo: IAkashaError) => {

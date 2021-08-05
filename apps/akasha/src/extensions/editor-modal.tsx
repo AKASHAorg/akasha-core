@@ -7,7 +7,7 @@ import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/medi
 import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
 import { useMentions, useLoginState, useProfile, withProviders } from '@akashaproject/ui-awf-hooks';
 import { useCreatePost, useEditPost, usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
-import { buildPublishObject } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { buildPublishObject, mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import i18n from 'i18next';
 import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
@@ -40,11 +40,13 @@ const EditorModalContainer = (props: RootComponentProps) => {
     [props.activeModal],
   );
 
-  const hasEmbed = React.useMemo(() => props.activeModal.hasOwnProperty('embedEntry'), [
-    props.activeModal,
-  ]);
+  const hasEmbed = React.useMemo(
+    () => props.activeModal.hasOwnProperty('embedEntry'),
+    [props.activeModal],
+  );
 
   const embeddedPost = usePost(props.activeModal.embedEntry, hasEmbed);
+  console.log(isEditing, 'is Editing?');
 
   const editingPost = usePost(props.activeModal.entryId, isEditing);
 
@@ -52,10 +54,27 @@ const EditorModalContainer = (props: RootComponentProps) => {
 
   const publishPost = useCreatePost();
 
+  console.log(editingPost, 'editingPost');
+  const entryData = React.useMemo(() => {
+    if (editingPost.status === 'success') {
+      return mapEntry(editingPost.data);
+    }
+    return undefined;
+  }, [editingPost.data]);
+
+  const embeddedEntryContent = React.useMemo(() => {
+    if (embeddedPost.status === 'success') {
+      return mapEntry(embeddedPost.data).content;
+    }
+    return undefined;
+  }, [embeddedPost.status, embeddedPost.data]);
+
+  console.log(editPost, 'editPost', publishPost, 'publishPost');
+
   const handleEntryPublish = React.useCallback(
     async (data: PublishPostData) => {
       if (isEditing) {
-        editPost.mutate({ entryID: props.activeModal.entryId, ...buildPublishObject(data) });
+        editPost.mutate({ entryID: props.activeModal.entryId, ...data });
       } else {
         publishPost.mutate(buildPublishObject(data));
       }
@@ -72,29 +91,33 @@ const EditorModalContainer = (props: RootComponentProps) => {
     return <>{t('Loading Editor')}</>;
   }
   return (
-    <EditorModal
-      titleLabel={isEditing ? t('Edit Post') : t('New Post')}
-      avatar={loggedProfileData.avatar}
-      ethAddress={loginState.ethAddress}
-      postLabel={t('Publish')}
-      placeholderLabel={t('Write something')}
-      emojiPlaceholderLabel={t('Search')}
-      discardPostLabel={t('Discard Post')}
-      discardPostInfoLabel={t(
-        "You have not posted yet. If you leave now you'll discard your post.",
+    <>
+      {(!editingPost.isLoading || !embeddedPost.isLoading) && (
+        <EditorModal
+          titleLabel={isEditing ? t('Edit Post') : t('New Post')}
+          avatar={loggedProfileData.avatar}
+          ethAddress={loginState.ethAddress}
+          postLabel={t('Publish')}
+          placeholderLabel={t('Write something')}
+          emojiPlaceholderLabel={t('Search')}
+          discardPostLabel={t('Discard Post')}
+          discardPostInfoLabel={t(
+            "You have not posted yet. If you leave now you'll discard your post.",
+          )}
+          keepEditingLabel={t('Keep Editing')}
+          onPublish={handleEntryPublish}
+          handleNavigateBack={handleModalClose}
+          getMentions={mentionsActions.getMentions}
+          getTags={mentionsActions.getTags}
+          tags={mentionsState.tags}
+          mentions={mentionsState.mentions}
+          uploadRequest={uploadMediaToTextile}
+          embedEntryData={embeddedEntryContent}
+          style={{ width: '36rem' }}
+          editorState={entryData.content}
+        />
       )}
-      keepEditingLabel={t('Keep Editing')}
-      onPublish={handleEntryPublish}
-      handleNavigateBack={handleModalClose}
-      getMentions={mentionsActions.getMentions}
-      getTags={mentionsActions.getTags}
-      tags={mentionsState.tags}
-      mentions={mentionsState.mentions}
-      uploadRequest={uploadMediaToTextile}
-      embedEntryData={embeddedPost.data?.content}
-      style={{ width: '36rem' }}
-      editorState={editingPost.data?.content}
-    />
+    </>
   );
 };
 

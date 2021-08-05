@@ -26,6 +26,7 @@ import {
 // import { useTags, useMentions } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
 import { mapEntry, buildPublishObject } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
+import { useQueryClient } from 'react-query';
 
 const {
   Box,
@@ -56,22 +57,14 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
   const [, errorActions] = useErrors({ logger });
+  const queryClient = useQueryClient();
   //@Todo: replace entryData with value from usePost
   const postReq = usePost(postId, !!postId);
-  const entryData = postReq.data;
+  const entryData = mapEntry(postReq.data);
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
   });
-
-  //@Todo: remove this when usePost is used
-  //react-query caches automatically everything
-  // const entryData = React.useMemo(() => {
-  //   if (postId && postsState.postsData[postId]) {
-  //     return postsState.postsData[postId];
-  //   }
-  //   return null;
-  // }, [postId, postsState.postsData[postId]]);
 
   const reqComments = useInfiniteComments(15, postId);
   const commentsState = reqComments.data;
@@ -80,18 +73,23 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     if (!reqComments.isSuccess) {
       return list;
     }
-    commentsState.pages.forEach(el => el.results.forEach(el1 => list.push(el1._id)));
+    commentsState.pages.forEach(page => page.results.forEach(commentId => list.push(commentId)));
     return list;
   }, [reqComments.isSuccess]);
 
+  // @TODO: Remove this when useComment is added in the post-renderer component
   const commentsData = React.useMemo(() => {
     const list = {};
     if (!reqComments.isSuccess) {
       return list;
     }
-    commentsState.pages.forEach(el => el.results.forEach(el1 => (list[el1._id] = mapEntry(el1))));
+    commentsState.pages.forEach(page =>
+      page.results.forEach(
+        commentId => (list[commentId] = mapEntry(queryClient.getQueryData(['Comment', commentId]))),
+      ),
+    );
     return list;
-  }, [reqComments.isSuccess]);
+  }, [queryClient, reqComments.isSuccess, commentsState?.pages]);
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
@@ -137,10 +135,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     if (!reqComments.isFetching && loginState.currentUserCalled) {
       reqComments.fetchNextPage().then(d => console.log('fetched next page', d));
     }
-  };
-
-  const loadItemData = () => {
-    // postsActions.getComment(payload.itemId);
   };
 
   React.useEffect(() => {
@@ -206,25 +200,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const handlePublishComment = async (data: PublishPostData) => {
     publishComment.mutate(buildPublishObject(data, postId));
   };
-
-  // const handlePublishComment = async (data: {
-  //   metadata: {
-  //     app: string;
-  //     version: number;
-  //     quote?: string;
-  //     tags: string[];
-  //     mentions: string[];
-  //   };
-  //   author: string;
-  //   content: any;
-  //   textContent: any;
-  // }) => {
-  //   if (!loginState.ethAddress) {
-  //     showLoginModal();
-  //     return;
-  //   }
-  //   postsActions.optimisticPublishComment(data, postId, loginProfile);
-  // };
 
   const handleRepost = (_withComment: boolean, entryData: any) => {
     props.navigateToModal({ name: 'editor', embedEntry: entryData });
@@ -303,7 +278,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       entryId: commentId,
     });
   };
-
+  console.log(queryClient, 'query client');
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
@@ -451,7 +426,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                 items={ids}
                 itemsData={commentsData}
                 loadMore={handleLoadMore}
-                loadItemData={loadItemData}
                 hasMoreItems={!!reqComments.hasNextPage}
                 itemCard={
                   <PostRenderer
