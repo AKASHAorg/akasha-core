@@ -188,6 +188,7 @@ class PostAPI extends DataSource {
       throw new Error('Not authorized');
     }
     currentPost.metaData = currentPost.metaData.concat(currentPost.content);
+    currentPost.metaData = Array.from(new Set(currentPost.metaData));
     currentPost.content = Array.from(content);
     currentPost.title = opt.title || currentPost.title;
     let removedTags = [];
