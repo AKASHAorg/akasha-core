@@ -1,13 +1,7 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import {
-  useBookmarks,
-  useMentions,
-  useProfile,
-  useFollow,
-  useErrors,
-} from '@akashaproject/ui-awf-hooks';
+import { useMentions, useErrors } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
@@ -22,6 +16,17 @@ import {
   useInfiniteComments,
   useCreateComment,
 } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
+import {
+  useGetBookmarks,
+  useBookmarkPost,
+  useBookmarkDelete,
+} from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
+import {
+  useIsFollowing,
+  useFollow,
+  useUnfollow,
+} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
+import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 // import { useTags, useMentions } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
 import { mapEntry, buildPublishObject } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
@@ -93,39 +98,43 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const [loginProfile, loginProfileActions] = useProfile({
-    onError: errorActions.createError,
-  });
+  const profileDataReq = useGetProfile(loginState.pubKey);
+  const loggedProfileData = profileDataReq.data;
 
-  React.useEffect(() => {
-    if (loginState.pubKey) {
-      loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
-    }
-  }, [loginState.pubKey]);
+  // React.useEffect(() => {
+  //   if (loginState.pubKey) {
+  //     loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
+  //   }
+  // }, [loginState.pubKey]);
 
-  const [bookmarkState, bookmarkActions] = useBookmarks({
-    onError: errorActions.createError,
-  });
+  const isFollowingMultipleReq = useIsFollowing(
+    loginState.ethAddress,
+    entryData?.author?.ethAddress,
+  );
+  const followedProfiles = isFollowingMultipleReq.data;
+  const followReq = useFollow();
+  const unfollowReq = useUnfollow();
 
-  const [followedProfiles, followActions] = useFollow({
-    onError: errorActions.createError,
-  });
+  const bookmarksReq = useGetBookmarks(loginState.ready?.ethAddress);
+  const bookmarks = bookmarksReq.data;
+  const addBookmark = useBookmarkPost();
+  const deleteBookmark = useBookmarkDelete();
 
-  React.useEffect(() => {
-    if (loginState.ethAddress && entryData?.author.ethAddress) {
-      followActions.isFollowing(loginState.ethAddress, entryData.author.ethAddress);
-    }
-  }, [loginState.ethAddress, entryData?.author.ethAddress]);
+  // React.useEffect(() => {
+  //   if (loginState.ethAddress && entryData?.author.ethAddress) {
+  //     followActions.isFollowing(loginState.ethAddress, entryData.author.ethAddress);
+  //   }
+  // }, [loginState.ethAddress, entryData?.author.ethAddress]);
 
   const handleFollow = () => {
     if (entryData?.author.ethAddress) {
-      followActions.follow(entryData?.author.ethAddress);
+      followReq.mutate(entryData?.author.ethAddress);
     }
   };
 
   const handleUnfollow = () => {
     if (entryData.author.ethAddress) {
-      followActions.unfollow(entryData?.author.ethAddress);
+      unfollowReq.mutate(entryData?.author.ethAddress);
     }
   };
 
@@ -153,11 +162,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   }, [postId, loginState.currentUserCalled, loginState.ethAddress]);
 
   const bookmarked = React.useMemo(() => {
-    return (
-      !bookmarkState.isFetching &&
-      bookmarkState.bookmarks.findIndex(bm => bm.entryId === postId) >= 0
-    );
-  }, [bookmarkState]);
+    return !bookmarksReq.isFetching && bookmarks.findIndex(bm => bm.entryId === postId) >= 0;
+  }, [bookmarks]);
 
   const handleMentionClick = (pubKey: string) => {
     navigateToUrl(`/profile/${pubKey}`);
@@ -176,20 +182,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     if (!loginState.ethAddress) {
       return showLoginModal();
     }
-    if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
-      return bookmarkActions.removeBookmark(entryId);
+    if (bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
+      return deleteBookmark.mutate(entryId);
     }
-    return bookmarkActions.bookmarkPost(entryId);
-  };
-
-  const handleCommentBookmark = (commentId: string) => {
-    if (!loginState.ethAddress) {
-      return showLoginModal();
-    }
-    if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === commentId) >= 0) {
-      return bookmarkActions.removeBookmark(commentId);
-    }
-    return bookmarkActions.bookmarkComment(commentId);
+    return addBookmark.mutate(entryId);
   };
 
   const handleCommentRepost = () => {
@@ -388,7 +384,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       {loginState.ethAddress && (
         <Box margin="medium">
           <CommentEditor
-            avatar={loginProfile.avatar}
+            avatar={loggedProfileData?.avatar}
             ethAddress={loginState.ethAddress}
             postLabel={t('Reply')}
             placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
@@ -429,10 +425,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                 itemCard={
                   <PostRenderer
                     logger={logger}
-                    bookmarkState={bookmarkState}
+                    bookmarkState={bookmarksReq}
                     ethAddress={loginState.ethAddress}
                     locale={locale}
-                    onBookmark={handleCommentBookmark}
+                    onBookmark={handleEntryBookmark}
                     onNavigate={handleNavigateToPost}
                     sharePostUrl={`${window.location.origin}${routes[POST]}/`}
                     onFlag={handleEntryFlag}

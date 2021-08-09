@@ -13,13 +13,8 @@ import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
-import {
-  useMentions,
-  useLoginState,
-  useProfile,
-  useErrors,
-  withProviders,
-} from '@akashaproject/ui-awf-hooks';
+import { useMentions, useLoginState, useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
+import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { useCreatePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { buildPublishObject } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
@@ -37,9 +32,8 @@ const EditorModalContainer = (props: RootComponentProps) => {
     onError: errorActions.createError,
   });
 
-  const [loggedProfileData] = useProfile({
-    onError: errorActions.createError,
-  });
+  const profileDataReq = useGetProfile(loginState.pubKey);
+  const loggedProfileData = profileDataReq.data;
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
@@ -57,7 +51,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
 
   return (
     <EditorModal
-      avatar={loggedProfileData.avatar}
+      avatar={loggedProfileData?.avatar}
       ethAddress={loginState.ethAddress}
       postLabel={t('Publish')}
       placeholderLabel={t('Write something')}
