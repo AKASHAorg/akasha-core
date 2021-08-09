@@ -65,6 +65,9 @@ export interface IEditorBox {
   editorState: Descendant[];
   setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
   ref?: React.Ref<unknown>;
+  showCancelButton?: boolean;
+  onCancelClick?: () => void;
+  cancelButtonLabel?: string;
 }
 
 export interface IPublishData {
@@ -103,6 +106,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     publishingApp = 'AkashaApp',
     editorState,
     setEditorState,
+    cancelButtonLabel,
+    onCancelClick,
+    showCancelButton,
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -112,7 +118,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const [mentionTargetRange, setMentionTargetRange] = useState<Range | null>(null);
   const [tagTargetRange, setTagTargetRange] = useState<Range | null>(null);
   const [index, setIndex] = useState(0);
-  const [createTag, setCreateTag] = React.useState('');
+  const [createTag, setCreateTag] = useState('');
 
   const [letterCount, setLetterCount] = useState(0);
 
@@ -563,9 +569,11 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
         <Box direction="row" gap="small" align="center">
           {withMeter && <EditorMeter counter={letterCount} maxValue={MAX_LENGTH} />}
+          {showCancelButton && (
+            <Button secondary={true} label={cancelButtonLabel} onClick={onCancelClick} />
+          )}
           <Button
             primary={true}
-            icon={<Icon type="send" color="white" />}
             label={postLabel}
             onClick={handlePublish}
             disabled={publishDisabled}

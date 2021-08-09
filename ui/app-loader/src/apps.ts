@@ -137,6 +137,7 @@ class Apps extends BaseIntegration {
         return acc;
       }, []);
   }
+  // load apps (only) that are mounting in this extension point
   onExtensionPointMount(extensionData?: UIEventData['data']) {
     const appsToLoad = this.filterAppsByMountPoint(this.appInfos, this.appConfigs, extensionData);
     appsToLoad.forEach(app => {

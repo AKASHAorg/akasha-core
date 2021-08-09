@@ -8,6 +8,7 @@ export interface ICardHeaderMenuProps {
   target: HTMLDivElement;
   onMenuClose: () => void;
   menuItems: ({ icon: IconType; label: string; handler: () => void } | null)[];
+  headerMenuExt?: React.ReactElement;
 }
 
 const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
@@ -29,7 +30,8 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
       onClickOutside={onMenuClose}
       onEsc={onMenuClose}
     >
-      <Box pad="xxsmall">
+      <Box pad="xxsmall" onClick={onMenuClose}>
+        {props.headerMenuExt}
         {menuItems.map((menuItem, idx) => {
           if (!menuItem) {
             return null;
