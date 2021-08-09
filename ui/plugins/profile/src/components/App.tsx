@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import Routes from './routes';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-chained-backend';
@@ -17,7 +17,6 @@ const { Box } = DS;
  *
  * @todo Add more documentation for this component
  *
- * @warning :: Root component for a plugin should always extend React.Component
  * @warning :: Always use default export
  */
 

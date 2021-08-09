@@ -14,6 +14,7 @@ import {
   WidgetRegistryInfo,
   IMenuList,
   IMenuItem,
+  EventDataTypes,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import getSDK from '@akashaproject/awf-sdk';
 import * as rxjsOperators from 'rxjs/operators';
@@ -59,7 +60,7 @@ export default class AppLoader {
   };
   public layoutConfig?: LayoutConfig;
   private readonly isMobile: boolean;
-  private extensionPoints: UIEventData['data'][];
+  private extensionPoints: Record<string, UIEventData['data'][]>;
   private readonly extensionParcels: Record<string, { id: string; parcel: singleSpa.Parcel }[]>;
   private activeModal?: ModalNavigationOptions;
 
@@ -82,7 +83,7 @@ export default class AppLoader {
     this.addSingleSpaEventListeners();
     this.watchEvents();
 
-    this.extensionPoints = [];
+    this.extensionPoints = {};
     this.extensionParcels = {};
 
     this.menuItems = { nextIndex: 1, items: [] };
@@ -270,7 +271,6 @@ export default class AppLoader {
     const widgetInfos = this.widgets.infos;
     const appExtensions = this.apps.getExtensions();
     const widgetExtensions = this.widgets.getExtensions();
-
     const extToLoad = this.filterExtensionsByMountPoint(
       [...appExtensions, ...widgetExtensions],
       { ...appConfigs, ...widgetConfigs },
@@ -278,7 +278,7 @@ export default class AppLoader {
       modalData,
     );
     for (const [index, ext] of extToLoad.entries()) {
-      this.mountExtensionPoint(ext, index)
+      this.mountExtensionPoint(ext, index, modalData)
         .then(() => true)
         .catch(err => this.loaderLogger.warn(err));
     }
@@ -298,12 +298,12 @@ export default class AppLoader {
   }
 
   public filterExtensionsByMountPoint(
-    extensions: ExtensionPointDefinition[],
+    appAndWidgetExtensions: ExtensionPointDefinition[],
     integrationConfigs: Record<string, IAppConfig | IWidgetConfig>,
     integrationInfos: (AppRegistryInfo | WidgetRegistryInfo)[],
     extensionData: UIEventData['data'],
   ) {
-    return extensions.filter(ext => {
+    return appAndWidgetExtensions.filter(ext => {
       let mountPoint;
       let isActive = true;
       if (ext.mountsIn && typeof ext.mountsIn === 'function') {
@@ -316,6 +316,7 @@ export default class AppLoader {
             infos: integrationInfos,
           },
           isMobile: this.isMobile,
+          extensionData,
         });
       }
       if (ext.mountsIn && typeof ext.mountsIn === 'string') {
@@ -339,8 +340,12 @@ export default class AppLoader {
     }
 
     if (extensionData) {
-      this.extensionPoints.push(extensionData);
-      // handle the main app and widgets
+      if (this.extensionPoints[extensionData.name]) {
+        this.extensionPoints[extensionData.name].push(extensionData);
+      } else {
+        this.extensionPoints[extensionData.name] = [extensionData];
+      }
+      // handle the apps and widgets that must be mounted in this extension point
       this.apps.onExtensionPointMount(extensionData);
       this.widgets.onExtensionPointMount(extensionData);
 
@@ -351,7 +356,7 @@ export default class AppLoader {
       const widgetInfos = this.widgets.infos;
       const appExtensions = this.apps.getExtensions();
       const widgetExtensions = this.widgets.getExtensions();
-
+      // load extensions that must be mounted in this extention point
       const extToLoad = this.filterExtensionsByMountPoint(
         [...appExtensions, ...widgetExtensions],
         { ...appConfigs, ...widgetConfigs },
@@ -359,7 +364,9 @@ export default class AppLoader {
         extensionData,
       );
       extToLoad.forEach((extension, index) => {
-        this.mountExtensionPoint(extension, index).catch(err => this.loaderLogger.warn(err));
+        this.mountExtensionPoint(extension, index, extensionData).catch(err =>
+          this.loaderLogger.warn(err),
+        );
       });
     }
   }
@@ -368,7 +375,7 @@ export default class AppLoader {
     if (!extensionData || extensionData.name) {
       return;
     }
-    const extPoint = this.extensionPoints.find(
+    const extPoint = this.extensionPoints[extensionData.name].find(
       extPoint => extPoint && extPoint.name === extensionData.name,
     );
     if (extPoint) {
@@ -507,22 +514,22 @@ export default class AppLoader {
     const call = this.sdk.services.appSettings.install({ name: info.name });
     call.subscribe({
       next: async _resp => {
+        let config;
         if (info.type === 'app') {
           await this.apps.install(info);
-          const config = this.apps.configs[info.name];
+          config = this.apps.configs[info.name];
           if (!config) {
             this.loaderLogger.warn(`Config not found or is not ready yet! App: ${info.name}`);
           }
-          await this.mountExtension(config, info);
         }
         if (info.type === 'widget') {
           await this.widgets.install(info);
-          const config = this.widgets.configs[info.name];
+          config = this.widgets.configs[info.name];
           if (!config) {
             this.loaderLogger.warn(`Config not found or is not ready yet! App: ${info.name}`);
           }
-          await this.mountExtension(config, info);
         }
+        await this.mountExtension(config, info);
       },
       error: (err: Error) => {
         this.logger.error(err);
@@ -535,24 +542,13 @@ export default class AppLoader {
   ) {
     if (config.extends && config.extends.length) {
       for (const [index, extension] of config.extends.entries()) {
-        let mountsIn = extension.mountsIn;
-        if (typeof extension.mountsIn === 'function') {
-          mountsIn = extension.mountsIn({
-            layoutConfig: this.layoutConfig,
-            worldConfig: this.worldConfig,
-            uiEvents: this.uiEvents,
-            integrations: {
-              configs: { ...this.apps.configs, ...this.widgets.configs },
-              infos: [...this.apps.infos, ...this.widgets.infos],
-            },
-            isMobile: this.isMobile,
-          });
-        }
         if (!extension.parentApp) {
           extension.parentApp = info.name;
         }
-        if (this.extensionPoints.some(ep => ep?.name === mountsIn)) {
-          await this.mountExtensionPoint(extension, index);
+        for (const extData of Object.entries(this.extensionPoints)
+          .map(([, extensions]) => extensions)
+          .flat()) {
+          await this.mountExtensionPoint(extension, index, extData);
         }
       }
     }
@@ -593,8 +589,13 @@ export default class AppLoader {
     this.menuItems.nextIndex += 1;
   }
 
-  private async mountExtensionPoint(extensionPoint: ExtensionPointDefinition, index: number) {
+  private async mountExtensionPoint(
+    extensionPoint: ExtensionPointDefinition,
+    index: number,
+    extensionData: EventDataTypes,
+  ) {
     let rootNode: string | null = null;
+
     if (typeof extensionPoint.mountsIn === 'string') {
       rootNode = extensionPoint.mountsIn;
     }
@@ -608,6 +609,7 @@ export default class AppLoader {
         worldConfig: this.worldConfig,
         uiEvents: this.uiEvents,
         isMobile: this.isMobile,
+        extensionData: extensionData,
       });
     }
     if (!rootNode || !extensionPoint.mountsIn) {
@@ -635,6 +637,7 @@ export default class AppLoader {
       logger: this.logger.child({
         module: `ext-${extensionPoint.parentApp}-${rootNode}-${index}`,
       }),
+      extensionData,
     };
 
     const extensionParcel = singleSpa.mountRootParcel(extensionPoint.loadingFn, extensionProps);

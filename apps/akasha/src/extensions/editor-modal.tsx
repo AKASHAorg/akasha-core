@@ -3,74 +3,109 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
+import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
+import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
+import { useMentions, useLoginState, withProviders } from '@akashaproject/ui-awf-hooks';
+import { useCreatePost, useEditPost, usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { buildPublishObject, mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import i18n from 'i18next';
 import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
-import { useLocation } from 'react-router-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
-import { useMentions, useLoginState, useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
-import { useCreatePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
-import { buildPublishObject } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
 const { EditorModal } = DS;
 
 const EditorModalContainer = (props: RootComponentProps) => {
-  const { logger } = props;
-
   const { t } = useTranslation();
-  const location = useLocation();
 
-  const [, errorActions] = useErrors({ logger });
-
-  const [loginState] = useLoginState({
-    onError: errorActions.createError,
-  });
+  const [loginState] = useLoginState({});
 
   const profileDataReq = useGetProfile(loginState.pubKey);
   const loggedProfileData = profileDataReq.data;
 
-  const [mentionsState, mentionsActions] = useMentions({
-    onError: errorActions.createError,
-  });
+  const [mentionsState, mentionsActions] = useMentions({});
+  const isEditing = React.useMemo(
+    () => props.activeModal.hasOwnProperty('entryId') && props.activeModal.action === 'edit',
+    [props.activeModal],
+  );
+
+  const hasEmbed = React.useMemo(
+    () => props.activeModal.hasOwnProperty('embedEntry'),
+    [props.activeModal],
+  );
+
+  const embeddedPost = usePost(props.activeModal.embedEntry, hasEmbed);
+
+  const editingPost = usePost(props.activeModal.entryId, isEditing);
+
+  const editPost = useEditPost();
 
   const publishPost = useCreatePost();
-  const handleEntryPublish = async (data: PublishPostData) => {
-    publishPost.mutate(buildPublishObject(data));
-    handleModalClose();
-  };
+
+  const entryData = React.useMemo(() => {
+    if (editingPost.status === 'success') {
+      return mapEntry(editingPost.data);
+    }
+    return undefined;
+  }, [editingPost.data, editingPost.status]);
+
+  const embeddedEntryContent = React.useMemo(() => {
+    if (embeddedPost.status === 'success') {
+      return mapEntry(embeddedPost.data).content;
+    }
+    return undefined;
+  }, [embeddedPost.status, embeddedPost.data]);
+
+  const handleEntryPublish = React.useCallback(
+    async (data: PublishPostData) => {
+      if (isEditing) {
+        editPost.mutate({ entryID: props.activeModal.entryId, ...data });
+      } else {
+        publishPost.mutate(buildPublishObject(data));
+      }
+      props.singleSpa.navigateToUrl(location.pathname);
+    },
+    [isEditing, props.activeModal, props.singleSpa, editPost, publishPost],
+  );
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
   };
 
+  if (isEditing && editingPost.isLoading) {
+    return <>{t('Loading Editor')}</>;
+  }
   return (
-    <EditorModal
-      avatar={loggedProfileData?.avatar}
-      ethAddress={loginState.ethAddress}
-      postLabel={t('Publish')}
-      placeholderLabel={t('Write something')}
-      emojiPlaceholderLabel={t('Search')}
-      discardPostLabel={t('Discard Post')}
-      discardPostInfoLabel={t(
-        "You have not posted yet. If you leave now you'll discard your post.",
+    <>
+      {(!editingPost.isLoading || !embeddedPost.isLoading) && (
+        <EditorModal
+          titleLabel={isEditing ? t('Edit Post') : t('New Post')}
+          avatar={loggedProfileData?.avatar}
+          ethAddress={loginState.ethAddress}
+          postLabel={t('Publish')}
+          placeholderLabel={t('Write something')}
+          emojiPlaceholderLabel={t('Search')}
+          discardPostLabel={t('Discard Post')}
+          discardPostInfoLabel={t(
+            "You have not posted yet. If you leave now you'll discard your post.",
+          )}
+          keepEditingLabel={t('Keep Editing')}
+          onPublish={handleEntryPublish}
+          handleNavigateBack={handleModalClose}
+          getMentions={mentionsActions.getMentions}
+          getTags={mentionsActions.getTags}
+          tags={mentionsState.tags}
+          mentions={mentionsState.mentions}
+          uploadRequest={uploadMediaToTextile}
+          embedEntryData={embeddedEntryContent}
+          style={{ width: '36rem' }}
+          editorState={entryData.content}
+        />
       )}
-      keepEditingLabel={t('Keep Editing')}
-      onPublish={handleEntryPublish}
-      handleNavigateBack={handleModalClose}
-      getMentions={mentionsActions.getMentions}
-      getTags={mentionsActions.getTags}
-      tags={mentionsState.tags}
-      mentions={mentionsState.mentions}
-      uploadRequest={uploadMediaToTextile}
-      embedEntryData={props.activeModal.embedEntry}
-      style={{ width: '36rem' }}
-    />
+    </>
   );
 };
 
@@ -108,15 +143,12 @@ const Wrapped = (props: RootComponentProps) => {
         ],
       },
     });
-
   return (
-    <Router>
-      <React.Suspense fallback={<></>}>
-        <I18nextProvider i18n={i18n}>
-          <EditorModalContainer {...props} />
-        </I18nextProvider>
-      </React.Suspense>
-    </Router>
+    <React.Suspense fallback={<>...</>}>
+      <I18nextProvider i18n={i18n}>
+        <EditorModalContainer {...props} />
+      </I18nextProvider>
+    </React.Suspense>
   );
 };
 
@@ -126,7 +158,7 @@ const reactLifecycles = singleSpaReact({
   rootComponent: withProviders(Wrapped),
   errorBoundary: (err, errorInfo, props) => {
     if (props.logger) {
-      props.logger('Error: %s; Info: %s', err, errorInfo);
+      props.logger.error('Error: %s; Info: %s', err, errorInfo);
     }
     return <div>!</div>;
   },

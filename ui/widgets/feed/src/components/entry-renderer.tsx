@@ -1,12 +1,17 @@
 import * as React from 'react';
 import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 import DS from '@akashaproject/design-system';
-import { ILocale } from '@akashaproject/design-system/src/utils/time';
-import { IContentClickDetails } from '@akashaproject/design-system/src/components/EntryCard/entry-box';
+import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { useTranslation } from 'react-i18next';
-import { ItemTypes } from './App';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { useComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
-const { ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard, EntryCardHidden } = DS;
+const { ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard, EntryCardHidden, ExtensionPoint } =
+  DS;
 
 export interface IEntryRenderer {
   itemId?: string;
@@ -36,11 +41,11 @@ export interface IEntryRenderer {
   removeEntryLabel?: string;
   removedByMeLabel?: string;
   removedByAuthorLabel?: string;
+  uiEvents: RootComponentProps['uiEvents'];
 }
 
 const EntryRenderer = (props: IEntryRenderer) => {
   const {
-    itemData,
     ethAddress,
     locale,
     bookmarkState,
@@ -77,6 +82,17 @@ const EntryRenderer = (props: IEntryRenderer) => {
   }, [bookmarkState, itemId]);
 
   const { t } = useTranslation('ui-widget-feed');
+
+  const postReq = usePost(itemId, props.itemType === ItemTypes.ENTRY);
+  const commentReq = useComment(itemId, props.itemType === ItemTypes.COMMENT);
+
+  const itemData = React.useMemo(() => {
+    if (props.itemType === ItemTypes.ENTRY) {
+      return mapEntry(postReq.data);
+    } else if (props.itemType === ItemTypes.COMMENT) {
+      return mapEntry(commentReq.data);
+    }
+  }, [postReq, commentReq, props.itemType]);
 
   React.useEffect(() => {
     if (ethAddress && itemData.author.ethAddress) {
@@ -131,10 +147,25 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const handleEntryBookmark = (entryId: string) => {
     onBookmark(isBookmarked, entryId);
   };
-  const isFollowing = React.useMemo(() => followedProfiles.includes(itemData.author.ethAddress), [
-    followedProfiles,
-    itemData.author.ethAddress,
-  ]);
+
+  const onEditButtonMount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointMount,
+      data: {
+        name,
+        entryId: itemId,
+      },
+    });
+  };
+
+  const onEditButtonUnmount = () => {
+    /* todo */
+  };
+
+  const isFollowing = React.useMemo(
+    () => followedProfiles.includes(itemData.author.ethAddress),
+    [followedProfiles, itemData.author.ethAddress],
+  );
 
   if (itemData.reported) {
     return (
@@ -204,6 +235,15 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   removeEntryLabel={props.removeEntryLabel}
                   removedByMeLabel={props.removedByMeLabel}
                   removedByAuthorLabel={props.removedByAuthorLabel}
+                  headerMenuExt={
+                    ethAddress === itemData.author.ethAddress && (
+                      <ExtensionPoint
+                        name={`entry-card-edit-button_${itemId}`}
+                        onMount={onEditButtonMount}
+                        onUnmount={onEditButtonUnmount}
+                      />
+                    )
+                  }
                 />
               )}
             </>

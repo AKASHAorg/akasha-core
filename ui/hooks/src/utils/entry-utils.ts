@@ -82,6 +82,7 @@ export const mapEntry = (
     };
     delisted?: boolean;
     reported?: boolean;
+    isPublishing?: boolean;
   },
   logger?: any,
 ) => {
@@ -177,6 +178,7 @@ export const mapEntry = (
     quotedBy: entry.quotedBy,
     quotedByAuthors: quotedByAuthors,
     type: entry.type,
+    isPublishing: entry.isPublishing,
   };
 };
 
