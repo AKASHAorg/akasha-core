@@ -12,8 +12,8 @@ export const getLogger = (name: string) => {
   return logger.get(name);
 };
 
-export const logError = (name: string, errorInfo: IAkashaError) => {
-  getLogger(name).error(errorInfo.error.message);
+export const logError = (name: string, errorInfo: Error) => {
+  getLogger(name).error(errorInfo.message);
 };
 
 export const createErrorHandler =

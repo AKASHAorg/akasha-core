@@ -62,7 +62,7 @@ export function useToggleTagSubscription() {
       if (context?.previousTagSubs) {
         queryClient.setQueryData([TAG_SUBSCRIPTIONS_KEY], context.previousTagSubs);
       }
-      logError('useTagSubscribe.toggleTagSub', err as IAkashaError);
+      logError('useTagSubscribe.toggleTagSub', err as Error);
     },
     // onSuccess: async (data, variables, context) => {
     //   const previousTagSubs: any = queryClient.getQueryData([TAG_SUBSCRIPTIONS_KEY]);

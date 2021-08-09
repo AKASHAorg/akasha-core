@@ -83,7 +83,7 @@ export function useDeleteComment(commentID: string) {
       if (context?.previousPost) {
         queryClient.setQueryData([COMMENT_KEY, commentID], context.previousPost);
       }
-      logError('useComments.deleteComment', err as IAkashaError);
+      logError('useComments.deleteComment', err as Error);
     },
     onSettled: async () => {
       await queryClient.invalidateQueries([COMMENT_KEY, commentID]);
@@ -119,7 +119,7 @@ export function useCreateComment() {
             Object.assign({}, context.optimisticComment, { hasErrored: true }),
           );
         }
-        logError('useComments.createComment', err as IAkashaError);
+        logError('useComments.createComment', err as Error);
       },
       onSuccess: async id => {
         await queryClient.fetchQuery([COMMENT_KEY, id], () => getComment(id));

@@ -84,7 +84,7 @@ export function useMarkAsRead() {
       if (context?.previousNotifs) {
         queryClient.setQueryData([NOTIFICATIONS_KEY], context.previousNotifs);
       }
-      logError('useNotifications.markAsRead', err as IAkashaError);
+      logError('useNotifications.markAsRead', err as Error);
     },
     onSettled: async () => {
       await queryClient.invalidateQueries([NOTIFICATIONS_KEY]);

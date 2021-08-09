@@ -75,7 +75,7 @@ export function useBookmarkPost() {
         if (context?.prevBmks) {
           queryClient.setQueryData([BOOKMARKED_ENTRIES_KEY], context.prevBmks);
         }
-        logError('useBookmarks.bookmarkPost', err as IAkashaError);
+        logError('useBookmarks.bookmarkPost', err as Error);
       },
       onSettled: async () => {
         await queryClient.invalidateQueries([BOOKMARKED_ENTRIES_KEY]);
@@ -114,7 +114,7 @@ export function useBookmarkComment() {
         if (context?.prevBmks) {
           queryClient.setQueryData([BOOKMARKED_ENTRIES_KEY], context.prevBmks);
         }
-        logError('useBookmarks.bookmarkComment', err as IAkashaError);
+        logError('useBookmarks.bookmarkComment', err as Error);
       },
       onSettled: async () => {
         await queryClient.invalidateQueries([BOOKMARKED_ENTRIES_KEY]);
@@ -161,7 +161,7 @@ export function useBookmarkDelete() {
         if (context?.prevBmks) {
           queryClient.setQueryData([BOOKMARKED_ENTRIES_KEY], context.prevBmks);
         }
-        logError('useBookmarks.bookmarkDelete', err as IAkashaError);
+        logError('useBookmarks.bookmarkDelete', err as Error);
       },
       onSettled: async () => {
         await queryClient.invalidateQueries([BOOKMARKED_ENTRIES_KEY]);

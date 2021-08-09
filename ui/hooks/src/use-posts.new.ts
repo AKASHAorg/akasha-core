@@ -4,7 +4,6 @@ import getSDK from '@akashaproject/awf-sdk';
 import { mapEntry } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
@@ -148,7 +147,7 @@ export function useDeletePost(postID: string) {
       if (context?.previousPost) {
         queryClient.setQueryData([ENTRY_KEY, postID], context.previousPost);
       }
-      logError('usePosts.deletePost', err as IAkashaError);
+      logError('usePosts.deletePost', err as Error);
     },
     onSettled: async () => {
       await queryClient.invalidateQueries([ENTRY_KEY, postID]);
@@ -184,7 +183,7 @@ export function useCreatePost() {
             Object.assign({}, context.optimisticEntry, { hasErrored: true }),
           );
         }
-        logError('usePosts.createPost', err as IAkashaError);
+        logError('usePosts.createPost', err as Error);
       },
       onSuccess: async id => {
         await queryClient.fetchQuery([ENTRY_KEY, id], () => getPost(id));

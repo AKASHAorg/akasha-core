@@ -122,7 +122,7 @@ export function useFollow() {
       if (context?.previousFollowedProfiles) {
         queryClient.setQueryData([FOLLOWED_PROFILES_KEY], context.previousFollowedProfiles);
       }
-      logError('useFollow.follow', err as IAkashaError);
+      logError('useFollow.follow', err as Error);
     },
     onSettled: async () => {
       await queryClient.invalidateQueries([FOLLOWED_PROFILES_KEY]);
@@ -152,7 +152,7 @@ export function useUnfollow() {
         if (context?.previousFollowedProfiles) {
           queryClient.setQueryData([FOLLOWED_PROFILES_KEY], context.previousFollowedProfiles);
         }
-        logError('useFollow.unfollow', err as IAkashaError);
+        logError('useFollow.unfollow', err as Error);
       },
       onSettled: async () => {
         await queryClient.invalidateQueries([FOLLOWED_PROFILES_KEY]);
