@@ -3,7 +3,6 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useFollow } from '@akashaproject/ui-awf-hooks';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
-import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 import routes, { POST } from '../../routes';
 import { useComment, useEditComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import { mapEntry, buildPublishObject } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
@@ -36,7 +35,7 @@ export interface PostRendererProps {
   onMentionClick: (pubKey: string) => void;
   onTagClick: (name: string) => void;
   singleSpaNavigate: (url: string) => void;
-  bookmarkState?: IBookmarkState;
+  bookmarkState?: any;
   style?: React.CSSProperties;
   contentClickable?: boolean;
   disableActions?: boolean;
@@ -83,12 +82,12 @@ const PostRenderer = (props: PostRendererProps) => {
       bookmarkState &&
       !bookmarkState.isFetching &&
       itemData.entryId &&
-      bookmarkState.bookmarks.findIndex(bm => bm.entryId === itemData.entryId) >= 0
+      bookmarkState.data?.findIndex(bm => bm.entryId === itemData.entryId) >= 0
     ) {
       return true;
     }
     return false;
-  }, [bookmarkState]);
+  }, [bookmarkState.data]);
 
   React.useEffect(() => {
     if (ethAddress && itemData.author.ethAddress) {

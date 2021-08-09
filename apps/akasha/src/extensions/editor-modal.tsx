@@ -5,7 +5,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
-import { useMentions, useLoginState, useProfile, withProviders } from '@akashaproject/ui-awf-hooks';
+import { useMentions, useLoginState, withProviders } from '@akashaproject/ui-awf-hooks';
 import { useCreatePost, useEditPost, usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { buildPublishObject, mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import i18n from 'i18next';
@@ -14,27 +14,19 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
+import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 
 const { EditorModal } = DS;
 
 const EditorModalContainer = (props: RootComponentProps) => {
-  const { logger } = props;
-
   const { t } = useTranslation();
 
-  // const [, errorActions] = useErrors({ logger });
+  const [loginState] = useLoginState({});
 
-  const [loginState] = useLoginState({
-    // onError: errorActions.createError,
-  });
+  const profileDataReq = useGetProfile(loginState.pubKey);
+  const loggedProfileData = profileDataReq.data;
 
-  const [loggedProfileData] = useProfile({
-    // onError: errorActions.createError,
-  });
-
-  const [mentionsState, mentionsActions] = useMentions({
-    // onError: errorActions.createError,
-  });
+  const [mentionsState, mentionsActions] = useMentions({});
   const isEditing = React.useMemo(
     () => props.activeModal.hasOwnProperty('entryId') && props.activeModal.action === 'edit',
     [props.activeModal],
@@ -46,7 +38,6 @@ const EditorModalContainer = (props: RootComponentProps) => {
   );
 
   const embeddedPost = usePost(props.activeModal.embedEntry, hasEmbed);
-  console.log(isEditing, 'is Editing?');
 
   const editingPost = usePost(props.activeModal.entryId, isEditing);
 
@@ -54,13 +45,12 @@ const EditorModalContainer = (props: RootComponentProps) => {
 
   const publishPost = useCreatePost();
 
-  console.log(editingPost, 'editingPost');
   const entryData = React.useMemo(() => {
     if (editingPost.status === 'success') {
       return mapEntry(editingPost.data);
     }
     return undefined;
-  }, [editingPost.data]);
+  }, [editingPost.data, editingPost.status]);
 
   const embeddedEntryContent = React.useMemo(() => {
     if (embeddedPost.status === 'success') {
@@ -68,8 +58,6 @@ const EditorModalContainer = (props: RootComponentProps) => {
     }
     return undefined;
   }, [embeddedPost.status, embeddedPost.data]);
-
-  console.log(editPost, 'editPost', publishPost, 'publishPost');
 
   const handleEntryPublish = React.useCallback(
     async (data: PublishPostData) => {
@@ -95,7 +83,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
       {(!editingPost.isLoading || !embeddedPost.isLoading) && (
         <EditorModal
           titleLabel={isEditing ? t('Edit Post') : t('New Post')}
-          avatar={loggedProfileData.avatar}
+          avatar={loggedProfileData?.avatar}
           ethAddress={loginState.ethAddress}
           postLabel={t('Publish')}
           placeholderLabel={t('Write something')}

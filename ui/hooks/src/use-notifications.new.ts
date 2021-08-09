@@ -2,49 +2,55 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom, forkJoin } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { getMediaUrl } from './utils/media-utils';
+import { logError } from './utils/error-handler';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 export const NOTIFICATIONS_KEY = 'Notifications';
 export const HAS_NEW_NOTIFICATIONS_KEY = 'Has_New_Notifications';
 
 const getNotifications = async () => {
   const sdk = getSDK();
-  const getMessagesResp = await lastValueFrom(sdk.api.auth.getMessages({}));
+  try {
+    const getMessagesResp = await lastValueFrom(sdk.api.auth.getMessages({}));
 
-  const getProfilesCalls = getMessagesResp.data.map(message => {
-    const pubKey = message.body.value.author || message.body.value.follower;
-    if (pubKey) {
-      return sdk.api.profile.getProfile({ pubKey });
-    }
-  });
-  const profilesResp: any = await lastValueFrom(forkJoin(getProfilesCalls));
-
-  let completeMessages: any = [];
-  profilesResp
-    ?.filter((res: any) => res.data)
-    .map((profileResp: any) => {
-      const { avatar, coverImage, ...other } = profileResp.data?.resolveProfile;
-      const images: { avatar: string | null; coverImage: string | null } = {
-        avatar: null,
-        coverImage: null,
-      };
-      if (avatar) {
-        images.avatar = getMediaUrl(avatar);
+    const getProfilesCalls = getMessagesResp.data.map(message => {
+      const pubKey = message.body.value.author || message.body.value.follower;
+      if (pubKey) {
+        return sdk.api.profile.getProfile({ pubKey });
       }
-      if (coverImage) {
-        images.coverImage = getMediaUrl(coverImage);
-      }
-      const profileData = { ...images, ...other };
-      completeMessages = getMessagesResp.data?.map(message => {
-        if (message.body.value.author === profileData.pubKey) {
-          message.body.value.author = profileData;
-        }
-        if (message.body.value.follower === profileData.pubKey) {
-          message.body.value.follower = profileData;
-        }
-        return message;
-      });
     });
-  return completeMessages;
+    const profilesResp = await lastValueFrom(forkJoin(getProfilesCalls));
+
+    let completeMessages: any = [];
+    profilesResp
+      ?.filter(res => res.data)
+      .map(profileResp => {
+        const { avatar, coverImage, ...other } = profileResp.data?.resolveProfile;
+        const images: { avatar: string | null; coverImage: string | null } = {
+          avatar: null,
+          coverImage: null,
+        };
+        if (avatar) {
+          images.avatar = getMediaUrl(avatar);
+        }
+        if (coverImage) {
+          images.coverImage = getMediaUrl(coverImage);
+        }
+        const profileData = { ...images, ...other };
+        completeMessages = getMessagesResp.data?.map(message => {
+          if (message.body.value.author === profileData.pubKey) {
+            message.body.value.author = profileData;
+          }
+          if (message.body.value.follower === profileData.pubKey) {
+            message.body.value.follower = profileData;
+          }
+          return message;
+        });
+      });
+    return completeMessages;
+  } catch (error) {
+    logError('useNotifications.getNotifications', error);
+  }
 };
 
 export function useFetchNotifications(loggedEthAddress: string) {
@@ -78,6 +84,7 @@ export function useMarkAsRead() {
       if (context?.previousNotifs) {
         queryClient.setQueryData([NOTIFICATIONS_KEY], context.previousNotifs);
       }
+      logError('useNotifications.markAsRead', err as Error);
     },
     onSettled: async () => {
       await queryClient.invalidateQueries([NOTIFICATIONS_KEY]);
@@ -87,8 +94,12 @@ export function useMarkAsRead() {
 
 const checkNewNotifications = async () => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.auth.hasNewNotifications());
-  return res.data;
+  try {
+    const res = await lastValueFrom(sdk.api.auth.hasNewNotifications());
+    return res.data;
+  } catch (error) {
+    logError('useNotifications.checkNewNotifications', error);
+  }
 };
 
 export function useCheckNewNotifications(loggedEthAddress: string) {

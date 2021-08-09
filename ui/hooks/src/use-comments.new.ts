@@ -4,8 +4,9 @@ import getSDK from '@akashaproject/awf-sdk';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { buildPublishObject } from './utils/entry-utils';
 import { Comment_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
+import { logError } from './utils/error-handler';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
-// these can be used with useQueryClient() to fetch data
 export const COMMENT_KEY = 'Comment';
 export const COMMENTS_KEY = 'Comments';
 
@@ -16,23 +17,26 @@ const getComments = async (
   offset?: string,
 ) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(
-    sdk.api.comments.getComments({
-      limit: limit,
-      offset: offset,
-      postID: postID,
-    }),
-  );
-  return {
-    ...res.data.getComments,
-    results: res.data.getComments.results.map(comment => {
-      queryClient.setQueryData([COMMENT_KEY, comment._id], () => comment);
-      return comment._id;
-    }),
-  };
+  try {
+    const res = await lastValueFrom(
+      sdk.api.comments.getComments({
+        limit: limit,
+        offset: offset,
+        postID: postID,
+      }),
+    );
+    return {
+      ...res.data.getComments,
+      results: res.data.getComments.results.map(comment => {
+        queryClient.setQueryData([COMMENT_KEY, comment._id], () => comment);
+        return comment._id;
+      }),
+    };
+  } catch (error) {
+    logError('useComments.getComments', error);
+  }
 };
 
-// hook for fetching feed data
 export function useInfiniteComments(limit: number, postID: string, offset?: string) {
   const queryClient = useQueryClient();
   return useInfiniteQuery(
@@ -49,9 +53,12 @@ export function useInfiniteComments(limit: number, postID: string, offset?: stri
 
 const getComment = async commentID => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.comments.getComment(commentID));
-  // remap the object props here
-  return res.data.getComment;
+  try {
+    const res = await lastValueFrom(sdk.api.comments.getComment(commentID));
+    return res.data.getComment;
+  } catch (error) {
+    logError('useComments.getComments', error);
+  }
 };
 
 // hook for fetching data for a specific commentID/entryID
@@ -66,13 +73,6 @@ export interface Publish_Options {
   data: DataProviderInput[];
   comment: { title?: string; tags?: string[]; postID: string };
 }
-/**
- * Example:
- * ```
- * const delPost = useDeletePost();
- * delPost.mutate("myEntryId");
- * ```
- */
 export function useDeleteComment(commentID: string) {
   const sdk = getSDK();
   const queryClient = useQueryClient();
@@ -100,6 +100,7 @@ export function useDeleteComment(commentID: string) {
       if (context?.previousComment) {
         queryClient.setQueryData([COMMENT_KEY, commentID], context.previousComment);
       }
+      logError('useComments.deleteComment', err as Error);
     },
     onSettled: async () => {
       await queryClient.invalidateQueries([COMMENT_KEY, commentID]);
@@ -135,6 +136,7 @@ export function useCreateComment() {
             Object.assign({}, context.optimisticComment, { hasErrored: true }),
           );
         }
+        logError('useComments.createComment', err as Error);
       },
       onSuccess: async id => {
         await queryClient.fetchQuery([COMMENT_KEY, id], () => getComment(id));

@@ -2,10 +2,10 @@ import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } 
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { buildPublishObject } from './utils/entry-utils';
+import { logError } from './utils/error-handler';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { Post_Response } from '../../../sdk/typings/lib/interfaces/responses';
 
-// these can be used with useQueryClient() to fetch data
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
 export const ENTRIES_BY_TAG_KEY = 'EntriesByTag';
@@ -13,20 +13,23 @@ export const ENTRIES_BY_AUTHOR_KEY = 'EntriesByAuthor';
 
 const getPosts = async (queryClient: QueryClient, limit: number, offset?: string) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(
-    sdk.api.entries.getEntries({
-      limit: limit,
-      offset: offset,
-    }),
-  );
-
-  return {
-    ...res.data.posts,
-    results: res.data.posts.results.map(post => {
-      queryClient.setQueryData([ENTRY_KEY, post._id], post);
-      return post._id;
-    }),
-  };
+  try {
+    const res = await lastValueFrom(
+      sdk.api.entries.getEntries({
+        limit: limit,
+        offset: offset,
+      }),
+    );
+    return {
+      ...res.data.posts,
+      results: res.data.posts.results.map(post => {
+        queryClient.setQueryData([ENTRY_KEY, post._id], post);
+        return post._id;
+      }),
+    };
+  } catch (error) {
+    logError('usePosts.getPosts', error);
+  }
 };
 
 // hook for fetching feed data
@@ -52,23 +55,26 @@ const getPostsByTag = async (
   offset?: string,
 ) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(
-    sdk.api.entries.entriesByTag({
-      name: name,
-      limit: limit,
-      offset: offset,
-    }),
-  );
-  return {
-    ...res.data.getPostsByTag,
-    results: res.data.getPostsByTag.results.map(post => {
-      queryClient.setQueryData([ENTRY_KEY, post._id], post);
-      return post._id;
-    }),
-  };
+  try {
+    const res = await lastValueFrom(
+      sdk.api.entries.entriesByTag({
+        name: name,
+        limit: limit,
+        offset: offset,
+      }),
+    );
+    return {
+      ...res.data.getPostsByTag,
+      results: res.data.getPostsByTag.results.map(post => {
+        queryClient.setQueryData([ENTRY_KEY, post._id], post);
+        return post._id;
+      }),
+    };
+  } catch (error) {
+    logError('usePosts.getPostsByTag', error);
+  }
 };
 
-// hook for fetching feed data
 export function useInfinitePostsByTag(name: string, limit: number, offset?: string) {
   const queryClient = useQueryClient();
   return useInfiniteQuery(
@@ -90,24 +96,26 @@ const getPostsByAuthor = async (
   offset?: number,
 ) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(
-    sdk.api.entries.entriesByAuthor({
-      pubKey: pubKey,
-      limit: limit,
-      offset: offset,
-    }),
-  );
-
-  return {
-    ...res.data.getPostsByAuthor,
-    results: res.data.getPostsByAuthor.results.map(post => {
-      queryClient.setQueryData([ENTRY_KEY, post._id], post);
-      return post._id;
-    }),
-  };
+  try {
+    const res = await lastValueFrom(
+      sdk.api.entries.entriesByAuthor({
+        pubKey: pubKey,
+        limit: limit,
+        offset: offset,
+      }),
+    );
+    return {
+      ...res.data.getPostsByAuthor,
+      results: res.data.getPostsByAuthor.results.map(post => {
+        queryClient.setQueryData([ENTRY_KEY, post._id], post);
+        return post._id;
+      }),
+    };
+  } catch (error) {
+    logError('usePosts.getPosts', error);
+  }
 };
 
-// hook for fetching feed data
 export function useInfinitePostsByAuthor(pubKey: string, limit: number, offset?: number) {
   const queryClient = useQueryClient();
   return useInfiniteQuery(
@@ -124,9 +132,13 @@ export function useInfinitePostsByAuthor(pubKey: string, limit: number, offset?:
 
 const getPost = async postID => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
-  // remap the object props here
-  return res.data.getPost;
+  try {
+    const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
+    // remap the object props here
+    return res.data.getPost;
+  } catch (error) {
+    logError('usePosts.getPost', error);
+  }
 };
 
 // hook for fetching data for a specific postID/entryID
@@ -177,6 +189,7 @@ export function useDeletePost(postID: string) {
       if (context?.previousPost) {
         queryClient.setQueryData([ENTRY_KEY, postID], context.previousPost);
       }
+      logError('usePosts.deletePost', err as Error);
     },
     onSettled: async () => {
       await queryClient.invalidateQueries([ENTRY_KEY, postID]);
@@ -211,6 +224,7 @@ export function useCreatePost() {
             Object.assign({}, context.optimisticEntry, { hasErrored: true }),
           );
         }
+        logError('usePosts.createPost', err as Error);
       },
       onSuccess: async id => {
         await queryClient.fetchQuery([ENTRY_KEY, id], () => getPost(id));

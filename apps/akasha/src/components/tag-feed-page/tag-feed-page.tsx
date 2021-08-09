@@ -40,11 +40,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       const tagsService = sdk.api.tags.getTag(tagName);
       const sub = tagsService.subscribe(resp => {
         if (resp.data?.getTag) {
-          const tag = {
-            name: resp.data.getTag.name,
-            totalPosts: resp.data.getTag.posts?.length,
-          };
-          setTagData(tag);
+          setTagData(resp.data.getTag);
         }
       });
       return () => sub.unsubscribe();
