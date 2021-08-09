@@ -28,6 +28,7 @@ import { CommentEditor } from './components/EditorCard/comment-editor';
 import { EditorPlaceholder } from './components/EditorCard/editor-placeholder';
 
 import EntryCard from './components/EntryCard';
+import EntryList from './components/EntryList';
 import { EntryBox } from './components/EntryCard/entry-box';
 import { EntryCardHidden } from './components/EntryCard/entry-card-hidden';
 import {
@@ -269,6 +270,7 @@ const exported = {
   StyledLayer,
   Helmet: Helmet as any,
   ConfirmationModal,
+  EntryList,
 };
 
 export default exported;

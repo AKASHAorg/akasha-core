@@ -20,7 +20,7 @@ import {
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
-const { Box, Helmet, VirtualList, EditorPlaceholder } = DS;
+const { Box, Helmet, VirtualList, EditorPlaceholder, EntryList } = DS;
 
 export interface FeedPageProps {
   singleSpa: any;
@@ -141,7 +141,39 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <VirtualList
+      <EntryList
+        pages={postsState.pages}
+        itemCard={
+          <EntryCardRenderer
+            logger={logger}
+            bookmarkState={bookmarksReq}
+            ethAddress={loginState.ethAddress}
+            locale={locale}
+            onBookmark={handleEntryBookmark}
+            onNavigate={handleNavigateToPost}
+            singleSpaNavigate={props.singleSpa.navigateToUrl}
+            onFlag={handleEntryFlag}
+            onRepost={handleEntryRepost}
+            sharePostUrl={`${window.location.origin}${routes[POST]}/`}
+            onAvatarClick={handleAvatarClick}
+            onMentionClick={handleMentionClick}
+            onTagClick={handleTagClick}
+            contentClickable={true}
+            awaitingModerationLabel={t(
+              'You have reported this content. It is awaiting moderation.',
+            )}
+            moderatedContentLabel={t('This content has been moderated')}
+            ctaLabel={t('See it anyway')}
+            handleFlipCard={handleFlipCard}
+            onEntryRemove={handleEntryRemove}
+            removeEntryLabel={t('Delete Post')}
+            removedByMeLabel={t('You deleted this post')}
+            removedByAuthorLabel={t('This post was deleted by its author')}
+          />
+        }
+        onLoadMore={handleLoadMore}
+      />
+      {/** <VirtualList
         items={ids}
         itemsData={entriesData}
         loadMore={handleLoadMore}
@@ -157,7 +189,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             />
           ) : (
             <>
-              {/* <Parcel
+              {<Parcel
                 config={loginWidget.loadingFn}
                 wrapWith="div"
                 sdkModules={props.sdkModules}
@@ -166,7 +198,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                 globalChannel={props.globalChannel}
                 i18n={props.i18n}
                 mountParcel={props.singleSpa.mountRootParcel}
-              /> */}
+              />}
             </>
           )
         }
@@ -205,7 +237,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           loggedEthAddress: loginState.ethAddress,
           pendingEntries: [],
         })}
-      />
+      /> */}
     </Box>
   );
 };
