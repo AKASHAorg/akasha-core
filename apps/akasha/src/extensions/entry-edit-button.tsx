@@ -28,7 +28,6 @@ const EntryEditButton: React.FC<RootComponentProps> = props => {
   };
 
   const entryTypeLabel = React.useMemo(() => {
-    console.log('entryType recheck');
     if (props.extensionData.entryType === ItemTypes.COMMENT) {
       return t('reply');
     }
