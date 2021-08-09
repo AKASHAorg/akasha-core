@@ -148,6 +148,8 @@ import lightTheme from './styles/themes/light';
 import { createTheme } from './styles/themes/utils/create-theme';
 import { ThemeSelector } from './styles/themes/utils/theme-selector';
 
+import { StyledSelectBox } from './components/EntryCard/styled-entry-box';
+
 /* Grommet utils */
 // @TODO: fix this export style...
 const exported = {
@@ -269,6 +271,7 @@ const exported = {
   StyledLayer,
   Helmet: Helmet as any,
   ConfirmationModal,
+  StyledSelectBox,
 };
 
 export default exported;

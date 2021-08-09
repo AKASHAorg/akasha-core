@@ -12,6 +12,7 @@ import routes, { POST } from '../../routes';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   useInfiniteComments,
   useCreateComment,
@@ -30,6 +31,7 @@ import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 // import { useTags, useMentions } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
 import { mapEntry, buildPublishObject } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
+import { useQueryClient } from 'react-query';
 
 const {
   Box,
@@ -43,6 +45,7 @@ const {
   ErrorInfoCard,
   ErrorLoader,
   EntryCardLoading,
+  ExtensionPoint,
 } = DS;
 
 interface IPostPage {
@@ -59,22 +62,19 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
   const [, errorActions] = useErrors({ logger });
-
-  const postReq = usePost(postId);
-  const entryData = postReq.data;
+  const queryClient = useQueryClient();
+  //@Todo: replace entryData with value from usePost
+  const postReq = usePost(postId, !!postId);
+  const entryData = React.useMemo(() => {
+    if (postReq.status === 'success') {
+      return mapEntry(postReq.data);
+    }
+    return undefined;
+  }, [postReq.data]);
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
   });
-
-  //@Todo: remove this when usePost is used
-  //react-query caches automatically everything
-  // const entryData = React.useMemo(() => {
-  //   if (postId && postsState.postsData[postId]) {
-  //     return postsState.postsData[postId];
-  //   }
-  //   return null;
-  // }, [postId, postsState.postsData[postId]]);
 
   const reqComments = useInfiniteComments(15, postId);
   const commentsState = reqComments.data;
@@ -83,18 +83,23 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     if (!reqComments.isSuccess) {
       return list;
     }
-    commentsState.pages.forEach(el => el.results.forEach(el1 => list.push(el1._id)));
+    commentsState.pages.forEach(page => page.results.forEach(commentId => list.push(commentId)));
     return list;
   }, [reqComments.isSuccess]);
 
+  // @TODO: Remove this when useComment is added in the post-renderer component
   const commentsData = React.useMemo(() => {
     const list = {};
     if (!reqComments.isSuccess) {
       return list;
     }
-    commentsState.pages.forEach(el => el.results.forEach(el1 => (list[el1._id] = mapEntry(el1))));
+    commentsState.pages.forEach(page =>
+      page.results.forEach(
+        commentId => (list[commentId] = mapEntry(queryClient.getQueryData(['Comment', commentId]))),
+      ),
+    );
     return list;
-  }, [reqComments.isSuccess]);
+  }, [queryClient, reqComments.isSuccess, commentsState?.pages]);
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
@@ -142,12 +147,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   const handleLoadMore = () => {
     if (!reqComments.isFetching && loginState.currentUserCalled) {
-      reqComments.fetchNextPage().then(d => console.log('fetched next page', d));
+      reqComments.fetchNextPage();
     }
-  };
-
-  const loadItemData = () => {
-    // postsActions.getComment(payload.itemId);
   };
 
   React.useEffect(() => {
@@ -201,25 +202,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     publishComment.mutate(buildPublishObject(data, postId));
   };
 
-  // const handlePublishComment = async (data: {
-  //   metadata: {
-  //     app: string;
-  //     version: number;
-  //     quote?: string;
-  //     tags: string[];
-  //     mentions: string[];
-  //   };
-  //   author: string;
-  //   content: any;
-  //   textContent: any;
-  // }) => {
-  //   if (!loginState.ethAddress) {
-  //     showLoginModal();
-  //     return;
-  //   }
-  //   postsActions.optimisticPublishComment(data, postId, loginProfile);
-  // };
-
   const handleRepost = (_withComment: boolean, entryData: any) => {
     props.navigateToModal({ name: 'editor', embedEntry: entryData });
   };
@@ -240,6 +222,20 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     //   ? { ...entry, quote: { ...entry.quote, reported: false } }
     //   : { ...entry, reported: false };
     // postsActions.updatePostsState(modifiedEntry);
+  };
+
+  const onEditPostButtonMount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointMount,
+      data: {
+        name,
+        entryId: entryData.entryId,
+        entryType: ItemTypes.ENTRY,
+      },
+    });
+  };
+  const onEditPostButtonUnmount = () => {
+    /* todo */
   };
 
   // @TODO replace with moderation react query integration
@@ -275,6 +271,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       entryId: commentId,
     });
   };
+
   const handlePostRemove = (commentId: string) => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
@@ -282,6 +279,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       entryId: commentId,
     });
   };
+
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
@@ -368,6 +366,15 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       removeEntryLabel={t('Delete Post')}
                       removedByMeLabel={t('You deleted this post')}
                       removedByAuthorLabel={t('This post was deleted by its author')}
+                      headerMenuExt={
+                        loginState.ethAddress === entryData.author.ethAddress && (
+                          <ExtensionPoint
+                            name={`entry-card-edit-button_${entryData.entryId}`}
+                            onMount={onEditPostButtonMount}
+                            onUnmount={onEditPostButtonUnmount}
+                          />
+                        )
+                      }
                     />
                   )}
                 </>
@@ -420,7 +427,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                 items={ids}
                 itemsData={commentsData}
                 loadMore={handleLoadMore}
-                loadItemData={loadItemData}
                 hasMoreItems={!!reqComments.hasNextPage}
                 itemCard={
                   <PostRenderer

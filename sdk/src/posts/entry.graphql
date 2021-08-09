@@ -82,7 +82,7 @@ mutation CreateEntry($content: [DataProviderInput!], $post: PostData) {
   createPost(content: $content, post: $post)
 }
 
-mutation EditEntry($content: [DataProviderInput!], $post: PostData, $id: String){
+mutation EditEntry($content: [DataProviderInput!], $post: PostData, $id: String!) {
   editPost(content: $content, post: $post, id: $id)
 }
 
