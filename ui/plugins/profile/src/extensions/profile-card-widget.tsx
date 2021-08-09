@@ -3,7 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
 import { useRouteMatch } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useProfile, useFollow, useLoginState } from '@akashaproject/ui-awf-hooks';
+import { useLoginState } from '@akashaproject/ui-awf-hooks';
+import { useGetEntryAuthor } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+import {
+  useIsFollowing,
+  useFollow,
+  useUnfollow,
+} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 
 const { Box, ProfileMiniCard } = DS;
 
@@ -13,50 +19,46 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   const { params } = useRouteMatch<{ postId: string }>();
   const { t } = useTranslation();
 
-  const [profileState, profileActions] = useProfile({
-    onError: err => {
-      if (props.logger) {
-        props.logger.error('profile-card-widget error %j %j', err);
-      }
-    },
-  });
-
   const [loginState] = useLoginState({
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);
     },
   });
-  const [followedProfiles, followActions] = useFollow({
-    onError: (errorInfo: IAkashaError) => {
-      logger.error(errorInfo.error.message, errorInfo.errorKey);
-    },
-  });
 
-  React.useEffect(() => {
-    if (params.postId) {
-      profileActions.getEntryAuthor({ entryId: params.postId });
-    }
-  }, [params.postId]);
+  const profileDataReq = useGetEntryAuthor(params.postId);
+  const profileData = profileDataReq.data;
 
-  React.useEffect(() => {
-    if (loginState.ethAddress && profileState.ethAddress) {
-      followActions.isFollowing(loginState.ethAddress, profileState.ethAddress);
-    }
-  }, [loginState.ethAddress, profileState.ethAddress]);
+  const isFollowingReq = useIsFollowing(loginState.ethAddress, profileData.ethAddress);
+  const followedProfiles = isFollowingReq.data;
+  const followReq = useFollow();
+  const unfollowReq = useUnfollow();
+
+  // React.useEffect(() => {
+  //   if (loginState.ethAddress && profileState.ethAddress) {
+  //     followActions.isFollowing(loginState.ethAddress, profileState.ethAddress);
+  //   }
+  // }, [loginState.ethAddress, profileState.ethAddress]);
 
   const handleFollow = () => {
-    if (profileState?.ethAddress) {
-      followActions.follow(profileState.ethAddress);
+    if (profileData?.ethAddress) {
+      followReq.mutate(profileData.ethAddress);
     }
   };
 
   const handleUnfollow = () => {
-    if (profileState?.ethAddress) {
-      followActions.unfollow(profileState.ethAddress);
+    if (profileData?.ethAddress) {
+      unfollowReq.mutate(profileData.ethAddress);
     }
   };
 
-  if (!profileState?.ethAddress) {
+  const isFollowing = React.useMemo(() => {
+    if (followedProfiles.includes(profileData?.ethAddress)) {
+      return true;
+    }
+    return false;
+  }, [followedProfiles, profileData.ethAddress]);
+
+  if (!profileData?.ethAddress) {
     return null;
   }
 
@@ -65,9 +67,9 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
       <ProfileMiniCard
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
-        isFollowing={followedProfiles.includes(profileState?.ethAddress)}
+        isFollowing={isFollowing}
         loggedEthAddress={loginState.ethAddress}
-        profileData={profileState as any}
+        profileData={profileData}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
         followingLabel={t('Following')}

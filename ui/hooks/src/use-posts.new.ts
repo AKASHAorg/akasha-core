@@ -2,9 +2,9 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-q
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { mapEntry } from './utils/entry-utils';
+import { logError } from './utils/error-handler';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 
-// these can be used with useQueryClient() to fetch data
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
 export const ENTRIES_BY_TAG_KEY = 'EntriesByTag';
@@ -12,14 +12,17 @@ export const ENTRIES_BY_AUTHOR_KEY = 'EntriesByAuthor';
 
 const getPosts = async (limit: number, offset?: string) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(
-    sdk.api.entries.getEntries({
-      limit: limit,
-      offset: offset,
-    }),
-  );
-  // @Todo: Remap this?
-  return res.data.posts;
+  try {
+    const res = await lastValueFrom(
+      sdk.api.entries.getEntries({
+        limit: limit,
+        offset: offset,
+      }),
+    );
+    return res.data.posts;
+  } catch (error) {
+    logError('usePosts.getPosts', error);
+  }
 };
 
 // hook for fetching feed data
@@ -38,18 +41,20 @@ export function useInfinitePosts(limit: number, offset?: string) {
 
 const getPostsByTag = async (name: string, limit: number, offset?: string) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(
-    sdk.api.entries.entriesByTag({
-      name: name,
-      limit: limit,
-      offset: offset,
-    }),
-  );
-  // @Todo: Remap this?
-  return res.data.getPostsByTag;
+  try {
+    const res = await lastValueFrom(
+      sdk.api.entries.entriesByTag({
+        name: name,
+        limit: limit,
+        offset: offset,
+      }),
+    );
+    return res.data.getPostsByTag;
+  } catch (error) {
+    logError('usePosts.getPostsByTag', error);
+  }
 };
 
-// hook for fetching feed data
 export function useInfinitePostsByTag(name: string, limit: number, offset?: string) {
   return useInfiniteQuery(
     [ENTRIES_BY_TAG_KEY, name],
@@ -65,18 +70,20 @@ export function useInfinitePostsByTag(name: string, limit: number, offset?: stri
 
 const getPostsByAuthor = async (pubKey: string, limit: number, offset?: number) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(
-    sdk.api.entries.entriesByAuthor({
-      pubKey: pubKey,
-      limit: limit,
-      offset: offset,
-    }),
-  );
-  // @Todo: Remap this?
-  return res.data.getPostsByAuthor;
+  try {
+    const res = await lastValueFrom(
+      sdk.api.entries.entriesByAuthor({
+        pubKey: pubKey,
+        limit: limit,
+        offset: offset,
+      }),
+    );
+    return res.data.getPostsByAuthor;
+  } catch (error) {
+    logError('usePosts.getPosts', error);
+  }
 };
 
-// hook for fetching feed data
 export function useInfinitePostsByAuthor(pubKey: string, limit: number, offset?: number) {
   return useInfiniteQuery(
     [ENTRIES_BY_AUTHOR_KEY, pubKey],
@@ -92,9 +99,13 @@ export function useInfinitePostsByAuthor(pubKey: string, limit: number, offset?:
 
 const getPost = async postID => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
-  // remap the object props here
-  return mapEntry(res.data.getPost);
+  try {
+    const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
+    // remap the object props here
+    return mapEntry(res.data.getPost);
+  } catch (error) {
+    logError('usePosts.getPost', error);
+  }
 };
 
 // hook for fetching data for a specific postID/entryID
@@ -136,6 +147,7 @@ export function useDeletePost(postID: string) {
       if (context?.previousPost) {
         queryClient.setQueryData([ENTRY_KEY, postID], context.previousPost);
       }
+      logError('usePosts.deletePost', err as Error);
     },
     onSettled: async () => {
       await queryClient.invalidateQueries([ENTRY_KEY, postID]);
@@ -171,6 +183,7 @@ export function useCreatePost() {
             Object.assign({}, context.optimisticEntry, { hasErrored: true }),
           );
         }
+        logError('usePosts.createPost', err as Error);
       },
       onSuccess: async id => {
         await queryClient.fetchQuery([ENTRY_KEY, id], () => getPost(id));

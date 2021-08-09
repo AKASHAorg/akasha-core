@@ -7,13 +7,9 @@ import {
   MenuItemAreaType,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import {
-  useLoginState,
-  useErrors,
-  useProfile,
-  moderationRequest,
-} from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useErrors, moderationRequest } from '@akashaproject/ui-awf-hooks';
 import { useCheckNewNotifications } from '@akashaproject/ui-awf-hooks/lib/use-notifications.new';
+import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { extensionPointsMap } from '../extension-points';
@@ -35,9 +31,8 @@ const TopbarComponent = (props: RootComponentProps) => {
 
   const [isModerator, setIsModerator] = React.useState(false);
 
-  const [loggedProfileData, loggedProfileActions] = useProfile({
-    onError: err => logger.error(err),
-  });
+  const profileDataReq = useGetProfile(loginState.pubKey);
+  const loggedProfileData = profileDataReq.data;
 
   const checkNotifsReq = useCheckNewNotifications(loginState.ready?.ethAddress);
 
@@ -47,11 +42,11 @@ const TopbarComponent = (props: RootComponentProps) => {
   //   }
   // }, [loginState.ready?.ethAddress, loginState.ethAddress]);
 
-  React.useEffect(() => {
-    if (loginState.pubKey) {
-      loggedProfileActions.getProfileData({ pubKey: loginState.pubKey });
-    }
-  }, [loginState.pubKey]);
+  // React.useEffect(() => {
+  //   if (loginState.pubKey) {
+  //     loggedProfileActions.getProfileData({ pubKey: loginState.pubKey });
+  //   }
+  // }, [loginState.pubKey]);
 
   React.useEffect(() => {
     const updateMenu = () => {
@@ -73,15 +68,14 @@ const TopbarComponent = (props: RootComponentProps) => {
   }, []);
 
   React.useEffect(() => {
-    const isLoadingProfile =
-      loggedProfileData.isLoading !== undefined && loggedProfileData.isLoading;
+    const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
     if (loginState.ethAddress && !isLoadingProfile) {
       getModeratorStatus(loginState.ethAddress);
       if (!loggedProfileData.userName) {
         return props.singleSpa.navigateToUrl('/profile/my-profile/update-info');
       }
     }
-  }, [loggedProfileData.isLoading, loginState.ethAddress]);
+  }, [profileDataReq.isLoading, loginState.ethAddress]);
 
   // *how to obtain different topbar menu sections
   const quickAccessItems = currentMenu?.filter(
@@ -221,7 +215,7 @@ const TopbarComponent = (props: RootComponentProps) => {
       >
         <ExtensionPoint
           name={extensionPointsMap.QuickAccess}
-          shouldMount={!!loggedProfileData.ethAddress}
+          shouldMount={!!loggedProfileData?.ethAddress}
           onMount={name => onExtMount(name)}
           onUnmount={name => onExtUnmount(name)}
         />
