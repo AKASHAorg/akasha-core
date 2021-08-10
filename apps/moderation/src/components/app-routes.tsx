@@ -34,6 +34,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
             <ContentList
               {...props}
               ethAddress={loginState.ethAddress}
+              pubKey={loginState.pubKey}
               slotId={layoutConfig.modalSlotId}
             />
           </Route>

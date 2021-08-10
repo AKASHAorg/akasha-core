@@ -14,6 +14,7 @@ const { Box, Text, SwitchCard } = DS;
 interface IContentListProps {
   slotId: string;
   ethAddress: string | null;
+  pubKey?: string;
   logger: any;
   singleSpa: any;
 }
@@ -45,7 +46,7 @@ export interface ICount {
 }
 
 const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
-  const { ethAddress, logger } = props;
+  const { ethAddress, pubKey, logger } = props;
 
   const [pendingItems, setPendingItems] = React.useState<IPendingItem[]>([]);
   const [moderatedItems, setModeratedItems] = React.useState<IModeratedItem[]>([]);
@@ -66,7 +67,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
       props.singleSpa.navigateToUrl('/moderation-app/unauthenticated');
     } else {
       // if authenticated, check authorisation status
-      getModeratorStatus(ethAddress);
+      getModeratorStatus(pubKey);
     }
   }, [ethAddress]);
 
@@ -94,10 +95,10 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
     }
   }, [location]);
 
-  const getModeratorStatus = async (loggedEthAddress: string) => {
+  const getModeratorStatus = async (loggedUserPubKey: string) => {
     setRequesting(true);
     try {
-      const response = await moderationRequest.checkModerator(loggedEthAddress);
+      const response = await moderationRequest.checkModerator(loggedUserPubKey);
       if (response === 200) {
         setIsAuthorised(true);
       }
