@@ -4,11 +4,10 @@ import { Moderator } from './interfaces';
 const schema = {
   title: 'Moderator',
   type: 'object',
-  required: ['_id', 'ethAddress', 'admin', 'active'],
+  required: ['_id', 'admin', 'active'],
   properties: {
     _id: { type: 'string' },
     creationDate: { type: 'number' },
-    ethAddress: { type: 'string' },
     admin: { type: 'boolean' },
     active: { type: 'boolean' },
   },
@@ -22,16 +21,8 @@ const readFilter = (reader: string, instance: Moderator) => {
   return instance;
 };
 
-const indexes = [
-  {
-    path: 'ethAddress',
-    unique: true,
-  },
-  {
-    path: 'creationDate',
-    unique: false,
-  },
-];
+const indexes = [];
+
 export function newCollection(client: Client, threadID: ThreadID) {
   return client.newCollection(threadID, {
     schema,

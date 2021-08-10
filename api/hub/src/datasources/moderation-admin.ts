@@ -1,6 +1,6 @@
 import { DataSource } from 'apollo-datasource';
 import { getAppDB, logger } from '../helpers';
-import { Client, ThreadID, Where } from '@textile/hub';
+import { Client, ThreadID } from '@textile/hub';
 import { Moderator } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 
@@ -24,83 +24,80 @@ class ModerationAdminAPI extends DataSource {
 
   /**
    * Get the name of the key for moderators cache.
-   * @param ethAddress - The moderator's ETH address
+   * @param user - The moderator user
    * @returns The key as a string
    */
-  getModeratorCacheKey(ethAddress: string) {
-    return `${this.collection}:ethAddress${ethAddress}`;
+  getModeratorCacheKey(user: string) {
+    return `${this.collection}:${user}`;
   }
 
   /**
    * Get data for a moderator.
-   * @param address - The ETH address of the moderator
+   * @param user - The moderator user for which we're getting data
    * @returns A Moderator object
    */
-  async getModerator(ethAddress: string) {
-    const moderatorCache = this.getModeratorCacheKey(ethAddress);
-    if (await queryCache.has(moderatorCache)) {
-      return await queryCache.get(moderatorCache);
+  async getModerator(user: string) {
+    const moderatorCacheKey = this.getModeratorCacheKey(user);
+    if (await queryCache.has(moderatorCacheKey)) {
+      return await queryCache.get(moderatorCacheKey);
     }
     const db: Client = await getAppDB();
-    const query = new Where('ethAddress').eq(ethAddress);
-    const results = await db.find<Moderator>(this.dbID, this.collection, query);
-    if (results.length) {
-      await queryCache.set(moderatorCache, results[0]);
-      return results[0];
+    try {
+      const moderator = await db.findByID<Moderator>(this.dbID, this.collection, user);
+      await queryCache.set(moderatorCacheKey, moderator);
+      return moderator;
+    } catch (err) {
+      logger.warn(`could not find moderator: ${user}`);
+      return undefined;
     }
-    logger.warn(`could not find moderator with address ${ethAddress}`);
-    return undefined;
   }
 
   /**
    * Check if the given user is a moderator.
-   * @param ethAddress - The ETH address of the moderator
+   * @param user - The user to check if is moderator
    * @returns True/false whether the user is a moderator
    */
-  async isModerator(ethAddress: string) {
-    const moderator = await this.getModerator(ethAddress);
+  async isModerator(user: string) {
+    const moderator = await this.getModerator(user);
     return moderator && moderator.active;
   }
 
   /**
    * Check if the given user is an admin.
-   * @param ethAddress - The ETH address of the moderator
+   * @param user - The user to check if is admin
    * @returns True/false whether the user is an admin
    */
-  async isAdmin(ethAddress: string) {
-    const moderator = await this.getModerator(ethAddress);
+  async isAdmin(user: string) {
+    const moderator = await this.getModerator(user);
     return moderator && moderator.active && moderator.admin;
   }
 
   /**
    * Update moderator data (admin/active).
-   * @param ethAddress - The ETH address of the moderator
+   * @param user - The moderator user
    * @param admin - A boolean flag for the admin status
    * @param active - A boolean flag for the active status
    */
-  async updateModerator(ethAddress: string, admin: boolean, active: boolean) {
-    const moderatorCache = this.getModeratorCacheKey(ethAddress);
+  async updateModerator(user: string, admin: boolean, active: boolean) {
+    const moderatorCacheKey = this.getModeratorCacheKey(user);
     const db: Client = await getAppDB();
     // check if moderator already exists
-    const exists = await this.isModerator(ethAddress);
-    let moderator: Moderator;
-    if (exists) {
-      moderator = await this.getModerator(ethAddress);
+    let moderator = await this.getModerator(user);
+    if (moderator) {
       moderator.admin = admin;
       moderator.active = active;
       await db.save(this.dbID, this.collection, [moderator]);
-      await queryCache.set(moderatorCache, moderator);
+      await queryCache.del(moderatorCacheKey);
       return;
     }
     moderator = {
-      ethAddress,
+      _id: user,
       admin,
       active,
-      _id: '',
       creationDate: new Date().getTime(),
     };
     await db.create(this.dbID, this.collection, [moderator]);
-    await queryCache.set(moderatorCache, moderator);
+    await queryCache.set(moderatorCacheKey, moderator);
   }
 }
 
