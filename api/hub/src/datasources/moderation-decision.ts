@@ -204,8 +204,7 @@ class ModerationDecisionAPI extends DataSource {
       const decision = await this.getFinalDecision(result.contentID);
       // load moderator info
       const profileAPI = new ProfileAPI({ dbID: this.dbID, collection: 'Profiles' });
-      const moderator = decision.moderator.startsWith('0x') ? 
-      await profileAPI.getProfile(decision.moderator) : await profileAPI.resolveProfile(decision.moderator);
+      const moderator = await profileAPI.resolveProfile(decision.moderator);
 
       moderated.push({
         contentID: decision.contentID,
