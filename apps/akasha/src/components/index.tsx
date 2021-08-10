@@ -3,16 +3,19 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import App from './app';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
-
-/**
- * This is the plugin's lifecycle logic
- * @todo add more docs!!
- */
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(App),
+  errorBoundary: (err, errInfo, props: RootComponentProps) => {
+    if (props.logger) {
+      props.logger.error(err);
+      props.logger.error(errInfo);
+    }
+    return <></>;
+  },
 });
 
 export const bootstrap = reactLifecycles.bootstrap;

@@ -22,7 +22,7 @@ export type ActivityFn = (
 
 export interface UIEventData {
   event: EventTypes;
-  data?: { name: string; version?: string };
+  data?: EventDataTypes;
 }
 
 export interface ModalNavigationOptions {
@@ -43,6 +43,7 @@ export interface IntegrationRegistrationOptions {
     infos: (AppRegistryInfo | WidgetRegistryInfo)[];
     configs: Record<string, IAppConfig | IWidgetConfig>;
   };
+  extensionData?: UIEventData['data'];
 }
 
 export interface LayoutConfig {
@@ -260,4 +261,18 @@ export enum EventTypes {
   ModalUnmountRequest = 'modal-unmount-request',
   ModalMount = 'modal-mount',
   ModalUnmount = 'modal-unmount',
+}
+
+export type EventDataTypes = {
+  name: string;
+  version?: string;
+  entryId?: string;
+  entryType?: ItemTypes;
+};
+
+export const enum ItemTypes {
+  ENTRY = 0,
+  PROFILE,
+  COMMENT,
+  TAG,
 }

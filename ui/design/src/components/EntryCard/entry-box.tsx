@@ -106,6 +106,7 @@ export interface IEntryBoxProps {
   removedByMeLabel?: string;
   removedByAuthorLabel?: string;
   isRemoved?: boolean;
+  headerMenuExt?: React.ReactElement;
 }
 
 const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
@@ -375,6 +376,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                   ]
                 : []),
             ]}
+            headerMenuExt={props.headerMenuExt}
           />
         )}
         {isMobile && menuDropOpen && (
