@@ -6,7 +6,7 @@ import Icon from '../Icon';
 
 export interface IEditorCard extends IEditorBox {
   className?: string;
-  newPostLabel?: string;
+  titleLabel?: string;
   style?: React.CSSProperties;
   handleNavigateBack: () => void;
 }
@@ -17,7 +17,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
     avatar,
     ethAddress,
     postLabel,
-    newPostLabel,
+    titleLabel,
     placeholderLabel,
     emojiPlaceholderLabel,
     onPublish,
@@ -42,7 +42,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
           primaryColor={true}
           size="xs"
         />
-        <Text size="large">{newPostLabel}</Text>
+        <Text size="large">{titleLabel}</Text>
         <Icon type="akasha" clickable={true} style={{ marginLeft: '2rem' }} />
       </Box>
       <EditorBox
@@ -68,7 +68,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
 };
 
 EditorCard.defaultProps = {
-  newPostLabel: 'New Post',
+  titleLabel: 'New Post',
 };
 
 export default EditorCard;

@@ -131,8 +131,8 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
   const checkNetworkReq = useNetworkState(loggedUserEthAddress);
   const networkState = checkNetworkReq.data;
 
-  const isFollowingMultipleReq = useIsFollowing(loggedUserEthAddress, profileState.ethAddress);
-  const followedProfiles = isFollowingMultipleReq.data;
+  const isFollowingReq = useIsFollowing(loggedUserEthAddress, profileState.ethAddress);
+  const followedProfiles = isFollowingReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
@@ -463,7 +463,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
       </Route>
       <Route path={`${menuRoute[MY_PROFILE]}/update-ens`}>
         <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
-          {networkState.networkNotSupported && (
+          {networkState?.networkNotSupported && (
             <StyledLayer>
               <ErrorLoader
                 type={'network-not-supported'}
@@ -472,7 +472,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
               />
             </StyledLayer>
           )}
-          {!networkState.networkNotSupported && profileState.ethAddress && (
+          {!networkState?.networkNotSupported && profileState.ethAddress && (
             <ErrorInfoCard errors={ensErrors}>
               {(errorMessage, hasCriticalErrors) => (
                 <>

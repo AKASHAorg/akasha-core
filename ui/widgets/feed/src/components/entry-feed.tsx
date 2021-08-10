@@ -1,10 +1,11 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { IFeedWidgetProps, ItemTypes } from './App';
+import { IFeedWidgetProps } from './App';
 import { useErrors, useFollow, useBookmarks, useLoginState } from '@akashaproject/ui-awf-hooks';
 import EntryRenderer from './entry-renderer';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/src/utils/time';
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { VirtualList, ErrorInfoCard, ErrorLoader } = DS;
 
@@ -119,6 +120,11 @@ const EntryFeed = (props: IFeedWidgetProps) => {
                   moderatedContentLabel={t('This content has been moderated')}
                   ctaLabel={t('See it anyway')}
                   handleFlipCard={props.handleFlipCard}
+                  onEntryRemove={props.onEntryRemove}
+                  removeEntryLabel={props.removeEntryLabel}
+                  removedByMeLabel={props.removedByMeLabel}
+                  removedByAuthorLabel={props.removedByAuthorLabel}
+                  uiEvents={props.uiEvents}
                 />
               }
             />

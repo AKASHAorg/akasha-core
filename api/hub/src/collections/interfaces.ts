@@ -37,6 +37,7 @@ export interface Profile {
   followers?: string[];
   providers?: DataProvider[];
   metaData?: DataProvider[];
+  interests?: string[];
 }
 
 export interface Comment {
@@ -62,7 +63,6 @@ export interface Invite {
 export interface Moderator {
   _id: string;
   creationDate: number;
-  ethAddress: string;
   admin: boolean;
   active: boolean;
 }

@@ -1,31 +1,47 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
+import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
-import { mapEntry } from './utils/entry-utils';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import { buildPublishObject } from './utils/entry-utils';
+import { Comment_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
+import { logError } from './utils/error-handler';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
-// these can be used with useQueryClient() to fetch data
 export const COMMENT_KEY = 'Comment';
 export const COMMENTS_KEY = 'Comments';
 
-const getComments = async (limit: number, postID: string, offset?: string) => {
+const getComments = async (
+  queryClient: QueryClient,
+  limit: number,
+  postID: string,
+  offset?: string,
+) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(
-    sdk.api.comments.getComments({
-      limit: limit,
-      offset: offset,
-      postID: postID,
-    }),
-  );
-  // @Todo: Remap this?
-  return res.data.getComments;
+  try {
+    const res = await lastValueFrom(
+      sdk.api.comments.getComments({
+        limit: limit,
+        offset: offset,
+        postID: postID,
+      }),
+    );
+    return {
+      ...res.data.getComments,
+      results: res.data.getComments.results.map(comment => {
+        queryClient.setQueryData([COMMENT_KEY, comment._id], () => comment);
+        return comment._id;
+      }),
+    };
+  } catch (error) {
+    logError('useComments.getComments', error);
+  }
 };
 
-// hook for fetching feed data
 export function useInfiniteComments(limit: number, postID: string, offset?: string) {
+  const queryClient = useQueryClient();
   return useInfiniteQuery(
     [COMMENTS_KEY, postID],
-    async ({ pageParam = offset }) => getComments(limit, postID, pageParam),
+    async ({ pageParam = offset }) => getComments(queryClient, limit, postID, pageParam),
     {
       getNextPageParam: (lastPage, allPages) => lastPage.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
@@ -37,16 +53,18 @@ export function useInfiniteComments(limit: number, postID: string, offset?: stri
 
 const getComment = async commentID => {
   const sdk = getSDK();
-  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
-  const res = await lastValueFrom(sdk.api.comments.getComment(commentID));
-  // remap the object props here
-  return mapEntry(res.data.getComment, ipfsGateway);
+  try {
+    const res = await lastValueFrom(sdk.api.comments.getComment(commentID));
+    return res.data.getComment;
+  } catch (error) {
+    logError('useComments.getComments', error);
+  }
 };
 
 // hook for fetching data for a specific commentID/entryID
-export function useComment(commentID: string) {
+export function useComment(commentID: string, enabler = true) {
   return useQuery([COMMENT_KEY, commentID], () => getComment(commentID), {
-    enabled: !!commentID,
+    enabled: !!commentID && enabler,
     keepPreviousData: true,
   });
 }
@@ -55,33 +73,34 @@ export interface Publish_Options {
   data: DataProviderInput[];
   comment: { title?: string; tags?: string[]; postID: string };
 }
-/**
- * Example:
- * ```
- * const delPost = useDeletePost();
- * delPost.mutate("myEntryId");
- * ```
- */
-export function useDeletePost(commentID: string) {
+export function useDeleteComment(commentID: string) {
   const sdk = getSDK();
   const queryClient = useQueryClient();
   return useMutation(commentID => lastValueFrom(sdk.api.entries.removeEntry(commentID)), {
     // When mutate is called:
     onMutate: async (commentID: string) => {
-      await queryClient.cancelQueries(COMMENT_KEY);
-
       // Snapshot the previous value
-      const previousPost = queryClient.getQueryData([COMMENT_KEY, commentID]);
+      const previousComment: Comment_Response = queryClient.getQueryData([COMMENT_KEY, commentID]);
       // can add some optimistic updates here
       // ex: queryClient.setQueryData([COMMENT_KEY, commentID], {})
-
-      return { previousPost };
+      queryClient.setQueryData([COMMENT_KEY, commentID], {
+        ...previousComment,
+        content: [
+          {
+            property: 'removed',
+            provider: 'awf.graphql.comments.api',
+            value: '1',
+          },
+        ],
+      });
+      return { previousComment };
     },
     // If the mutation fails, use the context returned from onMutate to roll back
     onError: (err, variables, context) => {
-      if (context?.previousPost) {
-        queryClient.setQueryData([COMMENT_KEY, commentID], context.previousPost);
+      if (context?.previousComment) {
+        queryClient.setQueryData([COMMENT_KEY, commentID], context.previousComment);
       }
+      logError('useComments.deleteComment', err as Error);
     },
     onSettled: async () => {
       await queryClient.invalidateQueries([COMMENT_KEY, commentID]);
@@ -117,6 +136,7 @@ export function useCreateComment() {
             Object.assign({}, context.optimisticComment, { hasErrored: true }),
           );
         }
+        logError('useComments.createComment', err as Error);
       },
       onSuccess: async id => {
         await queryClient.fetchQuery([COMMENT_KEY, id], () => getComment(id));
@@ -124,6 +144,50 @@ export function useCreateComment() {
       onSettled: async () => {
         await queryClient.invalidateQueries([COMMENT_KEY, pendingID]);
         await queryClient.invalidateQueries(COMMENTS_KEY);
+      },
+    },
+  );
+}
+
+// hook used for editing a comment
+export function useEditComment(commentID: string) {
+  const sdk = getSDK();
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    (comment: any) => {
+      const { postID, ...commentData } = comment;
+      const publishObj: Publish_Options = buildPublishObject(commentData, postID);
+      return lastValueFrom(sdk.api.comments.editComment({ commentID, ...publishObj }));
+    },
+    {
+      onMutate: async (comment: any) => {
+        queryClient.setQueryData([COMMENT_KEY, commentID], (current: Comment_Response) => {
+          const { data } = buildPublishObject(comment);
+          return {
+            ...current,
+            content: data,
+            isPublishing: true,
+          };
+        });
+
+        return { comment };
+      },
+      onError: (err, variables, context) => {
+        if (context?.comment) {
+          queryClient.setQueryData(
+            [COMMENT_KEY, commentID],
+            Object.assign({}, context.comment, { hasErrored: true }),
+          );
+        }
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries([COMMENT_KEY, commentID]);
+        await queryClient.fetchQuery([COMMENT_KEY, commentID], () => getComment(commentID));
+      },
+      onSettled: async () => {
+        await queryClient.invalidateQueries([COMMENT_KEY, commentID]);
+        // await queryClient.invalidateQueries(COMMENTS_KEY);
       },
     },
   );

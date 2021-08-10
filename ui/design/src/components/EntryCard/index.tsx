@@ -64,6 +64,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     disableActions,
     hideActionButtons,
     removeEntryLabel,
+    isRemoved,
     onEntryRemove,
   } = props;
 
@@ -78,7 +79,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           onClickUser={onMentionClick}
         />
       )}
-
       <EntryBox
         entryData={entryData}
         sharePostLabel={sharePostLabel}
@@ -122,7 +122,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         hideActionButtons={hideActionButtons}
         removeEntryLabel={removeEntryLabel}
         onEntryRemove={onEntryRemove}
-        isRemoved={props.isRemoved}
+        isRemoved={isRemoved}
+        headerMenuExt={props.headerMenuExt}
       />
     </MainAreaCardBox>
   );

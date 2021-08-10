@@ -56,5 +56,8 @@ BaseNotificationCard.args = {
   followingLabel: 'is now following you',
   mentionedPostLabel: 'mentioned you in a post',
   mentionedCommentLabel: 'mentioned you in a comment',
+  moderatedPostLabel: 'moderated your post',
+  moderatedReplyLabel: 'moderated your reply',
+  moderatedAccountLabel: 'suspended your account',
   emptySubtitle: "You don't have any new notifications!",
 };

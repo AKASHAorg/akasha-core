@@ -3,6 +3,7 @@ import koa from 'koa';
 import { ThreadID } from '@textile/hub';
 import { getAppDB, verifyEd25519Sig } from './helpers';
 import promClient from 'prom-client';
+import PostsAPI from './datasources/post';
 import ProfileAPI from './datasources/profile';
 import ModerationReportAPI from './datasources/moderation-report';
 import ModerationDecisionAPI from './datasources/moderation-decision';
@@ -20,6 +21,7 @@ const adminSecret = process.env.MODERATION_ADMIN_SECRET;
  */
 const dbID = ThreadID.fromString(process.env.AWF_THREADdb);
 const dataSources = {
+  postsAPI: new PostsAPI({ dbID, collection: 'Posts' }),
   profileAPI: new ProfileAPI({ dbID, collection: 'Profiles' }),
   reportingAPI: new ModerationReportAPI({ dbID, collection: 'ModerationReports' }),
   decisionsAPI: new ModerationDecisionAPI({ dbID, collection: 'ModerationDecisions' }),
@@ -38,29 +40,20 @@ const isAdmin = async (request, ctx) => {
   ctx.status = 401;
   if (request.secret === adminSecret) {
     ok = true;
-  } else if (request.data.adminEthAddress) {
-    // check if the user is local (exists)
-    const profile = await dataSources.profileAPI.getProfile(request.data.adminEthAddress);
-    if (profile && profile.pubKey && request.data.signature) {
-      try {
-        // verify request signature (from client)
-        const verified = await verifyEd25519Sig({
-          pubKey: profile.pubKey,
-          data: request.data,
-          signature: request.signature,
-        });
-        // check is the user has admin rights to be able to add moderators
-        const isAdmin = await dataSources.moderatorsAPI.isAdmin(request.data.adminEthAddress);
-        if (!verified || !isAdmin) {
-          ctx.status = 403;
-        } else {
-          ok = true;
-          ctx.status = 200;
-        }
-      } catch (error) {
-        ctx.body = `Error trying to validate signature: ${error}`;
-        ctx.status = 500;
-      }
+  } else if (request.data.admin) {
+    // verify request signature (from client)
+    const { verified, error } = await verifySignature(request.data.admin, request.data, request.signature);
+    if (!verified) {
+      ctx.status = error ? 401 : 403;
+    }
+    
+    // check is the user has admin rights to be able to add moderators
+    const isAdmin = await dataSources.moderatorsAPI.isAdmin(request.data.admin);
+    if (!verified || !isAdmin) {
+      ctx.status = 403;
+    } else {
+      ok = true;
+      ctx.status = 200;
     }
   }
   return {
@@ -68,6 +61,28 @@ const isAdmin = async (request, ctx) => {
     ctx,
   };
 };
+
+/**
+ * Verify the validity of the signature in the request.
+ * @param pubKey - The Textile public key of the user
+ * @param data - The data that was signed
+ * @param signature - The signature over the data
+ * @returns An object with a boolean that is true if the signature is good,
+ * and the Error in case of an error.
+ */
+const verifySignature = async (pubKey: string, data, signature: string) => {
+  let verified = false;
+  try {
+    // check if the user is local (registered)
+    const profile = await dataSources.profileAPI.resolveProfile(pubKey);
+    // verify request signature (from client)
+    verified = await verifyEd25519Sig({pubKey: profile.pubKey, data, signature});
+  } catch (error) {
+    // user is not local
+    return { verified, error };
+  }
+  return { verified, error: undefined };
+}
 
 /**
  * Init router
@@ -133,19 +148,11 @@ api.post('/moderation/reports/new', async (ctx: koa.Context, next: () => Promise
   if (!report.data || !report.contentId || !report.contentType || !report.signature) {
     ctx.status = 400;
   } else {
-    // check if the user is local (exists)
-    const profile = await dataSources.profileAPI.getProfile(report.data.user);
-    if (!profile.length || !report.data.signature) {
-      ctx.status = 401;
-    }
     // verify request signature (from client)
-    const verified = await verifyEd25519Sig({
-      pubKey: profile.pubKey,
-      data: report.data,
-      signature: report.signature,
-    });
+    const { verified, error } = await verifySignature(report.data.user, report.data, report.signature);
     if (!verified) {
-      ctx.status = 403;
+      ctx.body = error;
+      ctx.status = error ? 401 : 403;
     } else {
       // check if the user has already reported this content identifier
       const exists = await dataSources.reportingAPI.exists(report.contentId, report.data.user);
@@ -251,27 +258,18 @@ api.post('/moderation/decisions/moderate', async (ctx: koa.Context, next: () => 
   if (!report.data || !report.contentId || !report.signature) {
     ctx.status = 400;
   } else {
-    // check if the user is local (exists)
-    const profile = await dataSources.profileAPI.getProfile(report.data.moderator);
-    if (!profile.length || !report.data.signature) {
-      ctx.status = 401;
-    }
     // verify request signature (from client)
-    const verified = await verifyEd25519Sig({
-      pubKey: profile.pubKey,
-      data: report.data,
-      signature: report.signature,
-    });
+    const { verified, error } = await verifySignature(report.data.moderator, report.data, report.signature);
     if (!verified) {
-      ctx.status = 403;
+      ctx.body = error;
+      ctx.status = error ? 401 : 403;
     } else {
       try {
         // store moderation decision
         await dataSources.decisionsAPI.makeDecision(
-          report.contentId,
-          report.data.moderator,
-          report.data.explanation,
-          report.data.delisted,
+          report,
+          dataSources.postsAPI,
+          dataSources.profileAPI
         );
         ctx.status = 200;
       } catch (error) {
@@ -401,7 +399,7 @@ api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Prom
       if (allowed.ok) {
         // add the new moderator
         await dataSources.moderatorsAPI.updateModerator(
-          request.data.ethAddress,
+          request.data.user,
           request.data.admin,
           request.data.active,
         );
@@ -416,17 +414,16 @@ api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Prom
 });
 
 /**
- * Check if the given user (ETH address) is a moderator or not.
+ * Check if the given user is a moderator or not.
  */
 api.head(
-  '/moderation/moderators/:ethAddress',
+  '/moderation/moderators/status/:user',
   async (ctx: koa.Context, next: () => Promise<any>) => {
-    const ethAddress = ctx?.params?.ethAddress;
-    if (!ethAddress) {
+    const user = ctx?.params?.user;
+    if (!user) {
       ctx.status = 400;
-      ctx.body = 'Missing "ethAddress" attribute from request.';
     } else {
-      const isMod = await dataSources.moderatorsAPI.isModerator(ethAddress);
+      const isMod = await dataSources.moderatorsAPI.isModerator(user);
       ctx.status = isMod ? 200 : 404;
     }
     await next();
@@ -437,20 +434,19 @@ api.head(
  * Get data for a given moderator.
  */
 api.get(
-  '/moderation/moderators/:ethAddress',
+  '/moderation/moderators/:user',
   async (ctx: koa.Context, next: () => Promise<any>) => {
-    const ethAddress = ctx?.params?.ethAddress;
-    if (!ethAddress) {
+    const user = ctx?.params?.user;
+    if (!user) {
       ctx.status = 400;
-      ctx.body = 'Missing "ethAddress" attribute from request.';
     } else {
-      const isMod = await dataSources.moderatorsAPI.isModerator(ethAddress);
-      if (!isMod) {
-        ctx.status = 404;
-      } else {
-        ctx.set('Content-Type', 'application/json');
-        ctx.body = await dataSources.moderatorsAPI.getModerator(ethAddress);
+      ctx.set('Content-Type', 'application/json');
+      const moderator = await dataSources.moderatorsAPI.getModerator(user);
+      if (moderator) {
+        ctx.body = moderator;
         ctx.status = 200;
+      } else {
+        ctx.status = 404;
       }
     }
     await next();
@@ -475,7 +471,7 @@ api.post('/moderation/reasons', async (ctx: koa.Context, next: () => Promise<any
  */
 api.post('/moderation/reasons/new', async (ctx: koa.Context, next: () => Promise<any>) => {
   const request: any = ctx?.request.body;
-  if (!request.data.label && (!request.data.ethAddress || request.secret)) {
+  if (!request.data.label) {
     ctx.status = 400;
     ctx.body = 'Missing "label" attribute from request.';
   } else {

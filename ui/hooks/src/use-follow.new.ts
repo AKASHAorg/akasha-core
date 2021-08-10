@@ -1,26 +1,32 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom, forkJoin } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
+import { logError } from './utils/error-handler';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 export const FOLLOWED_PROFILES_KEY = 'Followed_Profiles';
 
 const getIsFollowingMultiple = async (followerEthAddress, followingEthAddressArray) => {
   const sdk = getSDK();
-  const getFollowedProfilesCalls = followingEthAddressArray.map((profile: string) => {
-    return sdk.api.profile.isFollowing({
-      follower: followerEthAddress,
-      following: profile,
+  try {
+    const getFollowedProfilesCalls = followingEthAddressArray.map((profile: string) => {
+      return sdk.api.profile.isFollowing({
+        follower: followerEthAddress,
+        following: profile,
+      });
     });
-  });
-  const res = await lastValueFrom(forkJoin(getFollowedProfilesCalls));
-  const followedProfiles: string[] = [];
-  followingEthAddressArray.map((profile, index) => {
-    if (res[index].data.isFollowing === true) {
-      followedProfiles.push(profile);
-    }
-  });
+    const res = await lastValueFrom(forkJoin(getFollowedProfilesCalls));
+    const followedProfiles: string[] = [];
+    followingEthAddressArray.map((profile, index) => {
+      if (res[index].data.isFollowing === true) {
+        followedProfiles.push(profile);
+      }
+    });
 
-  return followedProfiles;
+    return followedProfiles;
+  } catch (error) {
+    logError('useFollow.getIsFollowingMultiple', error);
+  }
 };
 
 export function useIsFollowingMultiple(
@@ -56,14 +62,18 @@ export function useIsFollowingMultiple(
 
 const getIsFollowing = async (followerEthAddress: string, followingEthAddress: string) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(
-    sdk.api.profile.isFollowing({
-      follower: followerEthAddress,
-      following: followingEthAddress,
-    }),
-  );
+  try {
+    const res = await lastValueFrom(
+      sdk.api.profile.isFollowing({
+        follower: followerEthAddress,
+        following: followingEthAddress,
+      }),
+    );
 
-  return res.data.isFollowing;
+    return res.data.isFollowing;
+  } catch (error) {
+    logError('useFollow.getIsFollowing', error);
+  }
 };
 
 export function useIsFollowing(followerEthAddress, followingEthAddress) {
@@ -112,6 +122,7 @@ export function useFollow() {
       if (context?.previousFollowedProfiles) {
         queryClient.setQueryData([FOLLOWED_PROFILES_KEY], context.previousFollowedProfiles);
       }
+      logError('useFollow.follow', err as Error);
     },
     onSettled: async () => {
       await queryClient.invalidateQueries([FOLLOWED_PROFILES_KEY]);
@@ -141,6 +152,7 @@ export function useUnfollow() {
         if (context?.previousFollowedProfiles) {
           queryClient.setQueryData([FOLLOWED_PROFILES_KEY], context.previousFollowedProfiles);
         }
+        logError('useFollow.unfollow', err as Error);
       },
       onSettled: async () => {
         await queryClient.invalidateQueries([FOLLOWED_PROFILES_KEY]);

@@ -2,6 +2,7 @@ import { DataSource } from 'apollo-datasource';
 import { getAppDB, logger, sendAuthorNotification } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
 import { DataProvider, PostItem } from '../collections/interfaces';
+import { parse, stringify } from 'flatted';
 import { queryCache } from '../storage/cache';
 import { searchIndex } from './search-indexes';
 
@@ -41,7 +42,7 @@ class PostAPI extends DataSource {
     const quotedBy = post?.metaData
       ?.filter(item => item.property === this.quotedByPost)
       ?.map(item => item.value);
-    const result = JSON.parse(JSON.stringify(Object.assign({}, post, { quotedBy })));
+    const result = parse(stringify(Object.assign({}, post, { quotedBy })));
     if (result?.quotes?.length && !stopIter) {
       result.quotes = await Promise.all(
         result.quotes.map(postID => this.getPost(postID, pubKey, true)),
@@ -187,6 +188,7 @@ class PostAPI extends DataSource {
       throw new Error('Not authorized');
     }
     currentPost.metaData = currentPost.metaData.concat(currentPost.content);
+    currentPost.metaData = Array.from(new Set(currentPost.metaData));
     currentPost.content = Array.from(content);
     currentPost.title = opt.title || currentPost.title;
     let removedTags = [];
@@ -344,12 +346,10 @@ class PostAPI extends DataSource {
   }
 
   async getPostsByTag(tagName: string, offset = 0, length = 10) {
-    const result = await searchIndex.search(`${tagName} `, {
-      facetFilters: ['category:post'],
+    const result = await searchIndex.search(``, {
+      facetFilters: ['category:post', `tags:${tagName}`],
       length: length,
       offset: offset,
-      restrictSearchableAttributes: ['tags'],
-      typoTolerance: false,
       distinct: true,
       attributesToRetrieve: ['objectID'],
     });
@@ -387,12 +387,13 @@ class PostAPI extends DataSource {
     };
   }
 
-  async getPostsByAuthors(pubKeys: string[], offset = 0, length = 10) {
-    if (!pubKeys.length) {
+  async getPostsByAuthorsAndTags(pubKeys: string[], interests: string[], offset = 0, length = 10) {
+    if (!pubKeys?.length && !interests?.length) {
       return { results: [], nextIndex: null, total: 0 };
     }
     const authorsFacet: ReadonlyArray<string> = pubKeys.map(key => `author:${key}`);
-    const filter = ['category:post', authorsFacet];
+    const tagsFacet: ReadonlyArray<string> = interests.map(key => `tags:${key}`);
+    const filter = ['category:post', authorsFacet.concat(tagsFacet)];
     const result = await searchIndex.search(``, {
       facetFilters: filter as any, // lib typings need to be fixed
       length: length,
