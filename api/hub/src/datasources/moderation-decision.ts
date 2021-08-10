@@ -243,8 +243,7 @@ class ModerationDecisionAPI extends DataSource {
     // add moderator data
     if (finalDecision.moderator) {
       const profileAPI = new ProfileAPI({ dbID: this.dbID, collection: 'Profiles' });
-      const moderator = finalDecision.moderator.startsWith('0x') ? 
-      await profileAPI.getProfile(finalDecision.moderator) : await profileAPI.resolveProfile(finalDecision.moderator);
+      const moderator = await profileAPI.resolveProfile(finalDecision.moderator);
       finalDecision = Object.assign({}, finalDecision, { 
         moderatorProfile: {
           ethAddress: moderator.ethAddress,
@@ -285,12 +284,6 @@ class ModerationDecisionAPI extends DataSource {
     if (!report.data.moderator) {
       throw new Error('Not authorized');
     }
-    // resolve moderator to pubKey if we got an ETH key
-    let moderator = report.data.moderator;
-    if (report.data.moderator.startsWith('0x')) {
-      const moderatorProfile = await profileAPI.getProfile(report.data.moderator);
-      moderator = moderatorProfile.pubKey;
-    }
 
     // load existing (i.e. pending) decision data
     const decision = await this.getDecision(report.contentId);
@@ -300,7 +293,7 @@ class ModerationDecisionAPI extends DataSource {
       return Promise.reject(msg);
     }
 
-    decision.moderator = moderator;
+    decision.moderator = report.data.moderator;
     decision.moderatedDate = new Date().getTime();
     decision.explanation = encodeString(report.data.explanation);
     decision.delisted = report.data.delisted;
@@ -309,7 +302,7 @@ class ModerationDecisionAPI extends DataSource {
       decision.actions = [];
     }
     decision.actions.push({
-      moderator,
+      moderator: report.data.moderator,
       delisted: decision.delisted,
       moderatedDate: decision.moderatedDate,
       explanation: decision.explanation,
@@ -319,10 +312,9 @@ class ModerationDecisionAPI extends DataSource {
     // send notifications only when delisting
     if (decision.delisted) {
       let destUser = '';
-      let contentID = report.contentId;
       // get post author
       if (decision.contentType === 'post' || decision.contentType === 'reply') {
-        const post = await postsAPI.getPost(contentID);
+        const post = await postsAPI.getPost(report.contentId);
         destUser = post.author;
       }
       let notificationType = 'MODERATED_POST';
@@ -330,21 +322,14 @@ class ModerationDecisionAPI extends DataSource {
         notificationType = 'MODERATED_REPLY';
       } else if (decision.contentType == 'account') {
         notificationType = 'MODERATED_ACCOUNT';
-        contentID = report.contentId;
         destUser = report.contentId;
-        // backwards compatibility
-        if (report.contentId.startsWith('0x')) {
-          const account = await profileAPI.getProfile(report.contentId);
-          contentID = account.pubKey;
-          destUser = account.pubKey;
-        }
       }
       await sendAuthorNotification(destUser, {
         property: notificationType,
         provider: 'awf.moderation.api',
         value: {
-          author: moderator,
-          moderatedID: contentID,
+          author: report.data.moderator,
+          moderatedID: report.contentId,
         },
       });
     }
