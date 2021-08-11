@@ -204,14 +204,16 @@ class ModerationDecisionAPI extends DataSource {
       const decision = await this.getFinalDecision(result.contentID);
       // load moderator info
       const profileAPI = new ProfileAPI({ dbID: this.dbID, collection: 'Profiles' });
-      const moderator = await profileAPI.resolveProfile(decision.moderator);
+      const moderator = decision.moderator.startsWith('0x') ? await profileAPI.getProfile(decision.moderator)
+        : await profileAPI.resolveProfile(decision.moderator);
 
       moderated.push({
         contentID: decision.contentID,
         contentType: decision.contentType,
         moderatedDate: decision.moderatedDate,
         moderator: {
-          ethAddress: moderator.ethAddress,
+          pubKey: moderator.pubKey,
+          ethAddress: moderator.ethAddress, // Deprecated, to be removed
           name: moderator.name || '',
           userName: moderator.userName || '',
           avatar: moderator.avatar,
@@ -243,10 +245,11 @@ class ModerationDecisionAPI extends DataSource {
     // add moderator data
     if (finalDecision.moderator) {
       const profileAPI = new ProfileAPI({ dbID: this.dbID, collection: 'Profiles' });
-      const moderator = await profileAPI.resolveProfile(finalDecision.moderator);
+      const moderator = finalDecision.moderator.startsWith('0x') ? await profileAPI.getProfile(finalDecision.moderator)
+        : await profileAPI.resolveProfile(finalDecision.moderator);
       finalDecision = Object.assign({}, finalDecision, { 
         moderatorProfile: {
-          ethAddress: moderator.ethAddress,
+          ethAddress: moderator.ethAddress, // Deprecated, to be removed
           pubKey: moderator.pubKey,
           name: moderator.name || "",
           userName: moderator.userName || "",
