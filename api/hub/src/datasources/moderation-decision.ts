@@ -7,7 +7,6 @@ import ProfileAPI from './profile';
 import ModerationReportAPI from './moderation-report';
 import { queryCache } from '../storage/cache';
 import { parse, stringify } from 'flatted';
-import { profile } from 'winston';
 
 /**
  * The ModerationDecisionAPI class handles all the interactions between the
