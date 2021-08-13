@@ -38,7 +38,6 @@
     "@algolia/logger-common": "4.10.3",
     "@algolia/logger-console": "4.10.3",
     "@koa/cors": "3.1.0",
-    "@sendgrid/mail": "^7.4.5",
     "@textile/hub": "6.2.0",
     "algoliasearch": "4.10.3",
     "apollo-server-cache-redis": "3.0.1",
