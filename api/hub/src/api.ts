@@ -154,26 +154,23 @@ api.post('/moderation/reports/new', async (ctx: koa.Context, next: () => Promise
       ctx.body = error;
       ctx.status = error ? 401 : 403;
     } else {
-      // check if the user has already reported this content identifier
-      const exists = await dataSources.reportingAPI.exists(report.contentId, report.data.user);
-      if (exists) {
-        ctx.status = 409;
-        ctx.body = `You have already reported this content.`;
-      } else {
-        try {
-          // add report
-          await dataSources.reportingAPI.addReport(
-            'ModerationDecisions',
-            report.contentType,
-            report.contentId,
-            report.data.user,
-            report.data.reason,
-            report.data.explanation,
-          );
-          ctx.status = 201;
-        } catch (error) {
-          ctx.body = error;
-          ctx.status = 500;
+      try {
+        // add report
+        await dataSources.reportingAPI.addReport(
+          'ModerationDecisions',
+          report.contentType,
+          report.contentId,
+          report.data.user,
+          report.data.reason,
+          report.data.explanation,
+        );
+        ctx.status = 201;
+      } catch (error) {
+        ctx.status = 500;
+        ctx.body = error;
+        if (error.status && error.status === 409) {
+          ctx.status = 409;
+          ctx.body = 'You cannot report this content twice.';
         }
       }
     }

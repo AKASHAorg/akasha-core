@@ -12,12 +12,15 @@ import winston from 'winston';
 import { normalize } from 'eth-ens-namehash';
 import { ethers, utils, providers } from 'ethers';
 import objHash from 'object-hash';
-import sendgrid from '@sendgrid/mail';
+import mailgun from 'mailgun-js';
 import { fetch } from 'cross-fetch';
 import AbortController from 'node-abort-controller';
 
-if (process.env.SENDGRID_API_KEY) {
-  sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+const MODERATION_APP_URL  = process.env.MODERATION_APP_URL;
+const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
+let mg: mailgun;
+if (process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN) {
+  mg = mailgun({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
 }
 
 export const EMPTY_KEY = 'baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
@@ -222,17 +225,24 @@ export const sendAuthorNotification = async (
 };
 
 /**
- * Send an email notification using SendGrid.
+ * Send an email notifications for moderation purposes.
  * @param email - Object containing the required data for sending the email
  * @returns A promise that resolves upon sending the email
  */
-export const sendEmailNotification = async email => {
-  return sendgrid.send({
-    to: email.to,
-    from: email.from || process.env.SENDGRID_SENDER_EMAIL,
-    subject: email.subject,
-    text: email.text,
-    html: email.html,
+export const sendEmailNotification = async () => {
+  logger.info('Sending email notification to moderators');
+  const data = {
+    from: "Moderation Notifications <postmaster@sandbox4cebf29e2f064b809e6edfd9dfc662c7.mailgun.org>",
+    to: MODERATION_EMAIL,
+    subject: "New moderation request",
+    text: `There is a new pending request for moderation. To moderate this content please visit the moderation app at:\n
+${MODERATION_APP_URL}
+\nThank you!`
+  };
+  mg.messages().send(data, function (error) {
+    if (error) {
+      logger.error(error);
+    }
   });
 };
 
