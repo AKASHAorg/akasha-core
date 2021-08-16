@@ -199,7 +199,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         hasMobileDesign={true}
         buttonLabels={buttonLabels}
         buttonValues={buttonValues}
-        loggedEthAddress={loginState.ethAddress}
+        loggedUser={loginState.pubKey}
       />
 
       {searchReq.isFetching && (

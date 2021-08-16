@@ -13,8 +13,7 @@ const { Box, Text, SwitchCard } = DS;
 
 interface IContentListProps {
   slotId: string;
-  ethAddress: string | null;
-  pubKey?: string;
+  user: string | null;
   logger: any;
   singleSpa: any;
 }
@@ -46,7 +45,7 @@ export interface ICount {
 }
 
 const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
-  const { ethAddress, pubKey, logger } = props;
+  const { user, logger } = props;
 
   const [pendingItems, setPendingItems] = React.useState<IPendingItem[]>([]);
   const [moderatedItems, setModeratedItems] = React.useState<IModeratedItem[]>([]);
@@ -62,14 +61,14 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   React.useEffect(() => {
-    if (!ethAddress) {
+    if (!user) {
       // if not authenticated, prompt to authenticate
       props.singleSpa.navigateToUrl('/moderation-app/unauthenticated');
     } else {
       // if authenticated, check authorisation status
-      getModeratorStatus(pubKey);
+      getModeratorStatus(user);
     }
-  }, [ethAddress]);
+  }, [user]);
 
   React.useEffect(() => {
     // if authorised,
@@ -95,10 +94,10 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
     }
   }, [location]);
 
-  const getModeratorStatus = async (loggedUserPubKey: string) => {
+  const getModeratorStatus = async (loggedUser: string) => {
     setRequesting(true);
     try {
-      const response = await moderationRequest.checkModerator(loggedUserPubKey);
+      const response = await moderationRequest.checkModerator(loggedUser);
       if (response === 200) {
         setIsAuthorised(true);
       }
@@ -199,7 +198,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
           buttonValues={buttonValues}
           onTabClick={onTabClick}
           buttonsWrapperWidth={'40%'}
-          loggedEthAddress={ethAddress}
+          loggedUser={user}
         />
       )}
       {requesting && <Text textAlign="center">Fetching items. Please wait...</Text>}

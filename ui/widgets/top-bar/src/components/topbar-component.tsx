@@ -109,9 +109,9 @@ const TopbarComponent = (props: RootComponentProps) => {
     menuItem => menuItem.area === MenuItemAreaType.OtherArea,
   );
 
-  const getModeratorStatus = async (loggedUserPubKey: string) => {
+  const getModeratorStatus = async (loggedUser: string) => {
     try {
-      const response = await moderationRequest.checkModerator(loggedUserPubKey);
+      const response = await moderationRequest.checkModerator(loggedUser);
       if (response === 200) {
         setIsModerator(true);
       }

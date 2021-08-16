@@ -29,11 +29,11 @@ export const fetchRequest = async (props: {
 };
 
 export default {
-  checkModerator: async (loggedUserPubKey: string) => {
+  checkModerator: async (loggedUser: string) => {
     try {
       const response = await fetchRequest({
         method: 'HEAD',
-        url: `${BASE_MODERATOR_URL}/${loggedUserPubKey}`,
+        url: `${BASE_MODERATOR_URL}/${loggedUser}`,
       });
       return response;
     } catch (error) {
