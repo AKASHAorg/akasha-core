@@ -115,7 +115,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     }
     toggleTagSubscriptionReq.mutate(tagName);
   };
-  console.log(reqPosts, '<<< req posts');
   return (
     <Box fill="horizontal">
       <Helmet>
