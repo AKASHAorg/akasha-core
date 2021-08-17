@@ -21,10 +21,9 @@ import {
   useBookmarkDelete,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 import { useQueryClient } from 'react-query';
-import { createPendingEntry } from '../../../../../ui/hooks/lib/utils/entry-utils';
-import EntryPublishErrorCard from '../../../../../ui/design/lib/components/EntryPublishErrorCard';
+import { createPendingEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
-const { Box, Helmet, EditorPlaceholder, EntryList, EntryCard } = DS;
+const { Box, Helmet, EditorPlaceholder, EntryList, EntryCard, EntryPublishErrorCard } = DS;
 
 export interface FeedPageProps {
   singleSpa: any;

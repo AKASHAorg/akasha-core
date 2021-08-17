@@ -5,7 +5,7 @@ import DS from '@akashaproject/design-system';
 import { useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
-import useLoginState, { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import useLoginState from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 // import { useFollowers } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
@@ -36,7 +36,7 @@ const ProfilePage = (props: ProfilePageProps) => {
 
   const publicKey = React.useMemo(() => {
     if (location.pathname.includes(menuRoute[MY_PROFILE])) {
-      if (loggedProfileData.pubKey) {
+      if (loggedProfileData && loggedProfileData.pubKey) {
         return loggedProfileData.pubKey;
       }
       return undefined;
