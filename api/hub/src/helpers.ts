@@ -18,6 +18,7 @@ import AbortController from 'node-abort-controller';
 
 const MODERATION_APP_URL  = process.env.MODERATION_APP_URL;
 const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
+const MODERATION_EMAIL_SOURCE = process.env.MAILGUN_EMAIL_SOURCE;
 let mailGun;
 if (process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN) {
   mailGun = mailgun({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
@@ -235,7 +236,7 @@ export const sendEmailNotification = async () => {
   }
   logger.info('Sending email notification to moderators');
   const data = {
-    from: "Moderation Notifications <postmaster@sandbox4cebf29e2f064b809e6edfd9dfc662c7.mailgun.org>",
+    from: `Moderation Notifications <${MODERATION_EMAIL_SOURCE}>`,
     to: MODERATION_EMAIL,
     subject: "New moderation request",
     text: `There is a new pending request for moderation. To moderate this content please visit the moderation app at:\n
