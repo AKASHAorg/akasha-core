@@ -3,17 +3,19 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
+import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 // import { useFollowers } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 
 import { ProfilePageCard } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { useInfinitePostsByAuthor } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { useQueryClient } from 'react-query';
 
 const { Box, Helmet } = DS;
 
@@ -30,9 +32,10 @@ const ProfilePage = (props: ProfilePageProps) => {
   const { loggedEthAddress, loginActions, loggedProfileData, showLoginModal } = props;
 
   const location = useLocation();
+  const queryClient = useQueryClient();
 
   let { pubKey } = useParams() as any;
-  // console.log('followers====', useFollowers(pubKey, 5));
+
   if (location.pathname.includes(menuRoute[MY_PROFILE])) {
     pubKey = loggedProfileData.pubKey;
   }
@@ -52,7 +55,7 @@ const ProfilePage = (props: ProfilePageProps) => {
     if (!reqPosts.isSuccess) {
       return list;
     }
-    postsState.pages.forEach(el => el.results.forEach(el1 => list.push(el1._id)));
+    postsState.pages.forEach(page => page.results.forEach(postId => list.push(postId)));
     return list;
   }, [reqPosts.isSuccess]);
 
@@ -61,22 +64,18 @@ const ProfilePage = (props: ProfilePageProps) => {
     if (!reqPosts.isSuccess) {
       return list;
     }
-    postsState.pages.forEach(el => el.results.forEach(el1 => (list[el1._id] = mapEntry(el1))));
+    postsState.pages.forEach(page =>
+      page.results.forEach(
+        postId => (list[postId] = mapEntry(queryClient.getQueryData(['Entry', postId]))),
+      ),
+    );
     return list;
   }, [reqPosts.isSuccess]);
-
-  // React.useEffect(() => {
-  //   // reset post ids and virtual list, if user logs in
-  //   if (loggedEthAddress) {
-  //     postsActions.resetPostIds();
-  //   }
-  // }, [loggedEthAddress]);
 
   React.useEffect(() => {
     if (pubKey) {
       profileActions.resetProfileData();
       profileActions.getProfileData({ pubKey });
-      // postsActions.resetPostIds();
     }
   }, [pubKey]);
 
@@ -99,7 +98,7 @@ const ProfilePage = (props: ProfilePageProps) => {
 
   const handleLoadMore = () => {
     if (!reqPosts.isFetching && pubKey) {
-      reqPosts.fetchNextPage().then(d => console.log('fetched next page', d));
+      reqPosts.fetchNextPage();
     }
   };
 
@@ -201,6 +200,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         removeEntryLabel={t('Delete Post')}
         removedByMeLabel={t('You deleted this post')}
         removedByAuthorLabel={t('This post was deleted by its author')}
+        uiEvents={props.uiEvents}
       />
     </Box>
   );

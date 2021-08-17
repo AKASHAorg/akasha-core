@@ -115,6 +115,7 @@ const typeDefs = gql`
     getFollowing(pubKey: String!, limit: Int, offset: Int): ProfilesResult
     getLinkPreview(link: String!): LinkPreview
     getCustomFeed(limit: Int, offset: Int): NewPostsResult
+    getInterests(pubKey: String!): [String]
   }
 
   input DataProviderInput {
@@ -194,7 +195,6 @@ const typeDefs = gql`
     creationDate: String!
     posts: [String!]
     comments: [String!]
-    totalSubscribers: Int
     totalPosts: Int
   }
 
@@ -213,7 +213,7 @@ const typeDefs = gql`
     default: [DataProvider]
     totalFollowers: Int
     totalFollowing: Int
-    interests: [String]
+    totalInterests: Int
   }
 
   enum PostType {

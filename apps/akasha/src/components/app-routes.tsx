@@ -8,7 +8,8 @@ import FeedPage from './feed-page/feed-page';
 import PostPage from './post-page/post-page';
 import InvitePage from './post-page/invite-page';
 import TagFeedPage from './tag-feed-page/tag-feed-page';
-import { useLoginState, useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
+import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 
 const { Box } = DS;
 interface AppRoutesProps {
@@ -23,15 +24,14 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
     onError: errorActions.createError,
   });
 
-  const [loginProfile, loginProfileActions] = useProfile({
-    onError: errorActions.createError,
-  });
+  const profileDataReq = useGetProfile(loginState.pubKey);
+  const loggedProfileData = profileDataReq.data;
 
-  React.useEffect(() => {
-    if (loginState.pubKey) {
-      loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
-    }
-  }, [loginState.pubKey]);
+  // React.useEffect(() => {
+  //   if (loginState.pubKey) {
+  //     loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
+  //   }
+  // }, [loginState.pubKey]);
 
   const showLoginModal = () => {
     props.navigateToModal({ name: 'login' });
@@ -44,7 +44,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           <Route path={routes[FEED]}>
             <FeedPage
               {...props}
-              loggedProfileData={loginProfile}
+              loggedProfileData={loggedProfileData}
               loginState={loginState}
               showLoginModal={showLoginModal}
               onError={onError}
@@ -63,7 +63,7 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           <Route path={`${routes[TAGS]}/:tagName`}>
             <TagFeedPage
               {...props}
-              loggedProfileData={loginProfile}
+              loggedProfileData={loggedProfileData}
               loginState={loginState}
               showLoginModal={showLoginModal}
             />
