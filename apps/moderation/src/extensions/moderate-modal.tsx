@@ -65,7 +65,7 @@ const ModerateModalComponent = (props: RootComponentProps) => {
         footerLink1Label={t('Code of Conduct')}
         footerUrl1={'/legal/code-of-conduct'}
         cancelLabel={t('Cancel')}
-        user={loginState.ethAddress ? loginState.ethAddress : ''}
+        user={loginState.pubKey ? loginState.pubKey : ''}
         requesting={requesting}
         isReview={activeModal.status !== 'pending'}
         closeModal={handleModalClose}

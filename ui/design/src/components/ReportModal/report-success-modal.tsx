@@ -70,12 +70,14 @@ const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
               {successMessageLabel}
             </Text>
             <Box direction="row" margin={{ top: 'large' }} alignSelf="center">
-              <ModalButton
+              {/* un-comment this to implement block user functionality */}
+
+              {/* <ModalButton
                 label={blockLabel}
                 margin={{ right: '0.5rem' }}
                 disabled={true}
                 onClick={handleModalClose(true)}
-              />
+              /> */}
               <ModalButton primary={true} label={closeLabel} onClick={handleModalClose()} />
             </Box>
           </Box>

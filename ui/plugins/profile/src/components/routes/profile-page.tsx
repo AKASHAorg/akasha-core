@@ -22,14 +22,17 @@ const { Box, EntryCardHidden, Helmet, ProfileDelistedCard, Spinner } = DS;
 export interface ProfilePageProps extends RootComponentProps {
   modalActions: ModalStateActions;
   modalState: ModalState;
-  loggedEthAddress: string | null;
+  loggedUser: {
+    ethAddress: string | null;
+    pubKey?: string | null;
+  };
   loginActions: UseLoginActions;
   loggedProfileData: any;
   showLoginModal: () => void;
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
-  const { loggedEthAddress, loginActions, loggedProfileData, showLoginModal } = props;
+  const { loggedUser, loginActions, loggedProfileData, showLoginModal } = props;
 
   const [requesting, setRequesting] = React.useState<boolean>(false);
   const [isDelisted, setIsDelisted] = React.useState<boolean>(false);
@@ -86,8 +89,8 @@ const ProfilePage = (props: ProfilePageProps) => {
   }, [pubKey]);
 
   React.useEffect(() => {
-    if (profileState.ethAddress) {
-      checkAccountReportStatus(profileState.ethAddress);
+    if (profileState.pubKey) {
+      checkAccountReportStatus(profileState.pubKey);
       return;
     }
   }, [profileState]);
@@ -107,12 +110,12 @@ const ProfilePage = (props: ProfilePageProps) => {
   //   }
   // }, [loggedProfileData.pubKey, pubKey]);
 
-  const checkAccountReportStatus = async (profileEthAddress: string) => {
+  const checkAccountReportStatus = async (user: string) => {
     setRequesting(true);
     try {
       const response = await moderationRequest.checkStatus(true, {
-        user: loggedEthAddress,
-        contentIds: [profileEthAddress],
+        user: loggedUser.pubKey,
+        contentIds: [user],
       });
       if (response) {
         // the response array will have only one item
@@ -232,7 +235,7 @@ const ProfilePage = (props: ProfilePageProps) => {
           profileActions={profileActions}
           profileUpdateStatus={profileUpdateStatus}
           profileId={pubKey}
-          loggedUserEthAddress={loggedEthAddress}
+          loggedUserEthAddress={loggedUser.ethAddress}
           modalActions={props.modalActions}
           modalState={props.modalState}
           loginActions={loginActions}
@@ -248,7 +251,7 @@ const ProfilePage = (props: ProfilePageProps) => {
           itemIds={ids}
           itemsData={entriesData}
           errors={errorState}
-          ethAddress={loggedEthAddress}
+          ethAddress={loggedUser.ethAddress}
           onNavigate={handleNavigation}
           singleSpaNavigate={props.singleSpa.navigateToUrl}
           navigateToModal={props.navigateToModal}

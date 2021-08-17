@@ -553,7 +553,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
         flagAsLabel={t('Report')}
         blockLabel={t('Block')}
         onEntryFlag={handleEntryFlag(
-          profileState.ethAddress ? profileState.ethAddress : '',
+          profileState.pubKey ? profileState.pubKey : '',
           'account',
           profileState.name,
         )}

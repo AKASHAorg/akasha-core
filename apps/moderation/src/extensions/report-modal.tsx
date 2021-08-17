@@ -97,7 +97,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
         reportLabel={t('Report')}
         blockLabel={t('Block User')}
         closeLabel={t('Close')}
-        user={loginState.ethAddress ? loginState.ethAddress : ''}
+        user={loginState.pubKey ? loginState.pubKey : ''}
         contentId={activeModal.entryId}
         contentType={activeModal.contentType}
         requesting={requesting}
