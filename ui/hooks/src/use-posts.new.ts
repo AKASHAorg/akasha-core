@@ -10,6 +10,25 @@ export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
 export const ENTRIES_BY_TAG_KEY = 'EntriesByTag';
 export const ENTRIES_BY_AUTHOR_KEY = 'EntriesByAuthor';
+export const CREATE_POST_MUTATION_KEY = 'CreatePost';
+
+export interface PublishPostData {
+  metadata: {
+    app: string;
+    version: number;
+    quote?: string;
+    tags: string[];
+    mentions: string[];
+  };
+  author: string;
+  content: any;
+  textContent: string;
+  pubKey: string;
+}
+export interface Publish_Options {
+  data: DataProviderInput[];
+  post: { title?: string; tags?: string[]; quotes?: string[] };
+}
 
 const getPosts = async (queryClient: QueryClient, limit: number, offset?: string) => {
   const sdk = getSDK();
@@ -116,15 +135,19 @@ const getPostsByAuthor = async (
   }
 };
 
-export function useInfinitePostsByAuthor(pubKey: string, limit: number, offset?: number) {
+export function useInfinitePostsByAuthor(
+  pubKey: string,
+  limit: number,
+  enabled = true,
+  offset?: number,
+) {
   const queryClient = useQueryClient();
   return useInfiniteQuery(
     [ENTRIES_BY_AUTHOR_KEY, pubKey],
     async ({ pageParam = offset }) => getPostsByAuthor(queryClient, pubKey, limit, pageParam),
     {
       getNextPageParam: lastPage => lastPage.nextIndex,
-      //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
-      enabled: !!(offset || limit),
+      enabled: enabled,
       keepPreviousData: true,
     },
   );
@@ -149,10 +172,6 @@ export function usePost(postID: string, enabler: boolean) {
   });
 }
 
-export interface Publish_Options {
-  data: DataProviderInput[];
-  post: { title?: string; tags?: string[]; quotes?: string[] };
-}
 /**
  * Example:
  * ```
@@ -166,23 +185,25 @@ export function useDeletePost(postID: string) {
   return useMutation(postID => lastValueFrom(sdk.api.entries.removeEntry(postID)), {
     // When mutate is called:
     onMutate: async (postID: string) => {
-      await queryClient.cancelQueries(ENTRY_KEY);
+      await queryClient.cancelQueries([ENTRY_KEY, postID]);
 
       // Snapshot the previous value
       const previousPost: Post_Response = queryClient.getQueryData([ENTRY_KEY, postID]);
-      // can add some optimistic updates here
-      // ex: queryClient.setQueryData([ENTRY_KEY, postID], {})
+
       queryClient.setQueryData([ENTRY_KEY, postID], {
         ...previousPost,
         content: [
           {
             property: 'removed',
-            provider: 'awf.graphql.comments.api',
+            provider: 'awf.graphql.posts.api',
             value: '1',
           },
         ],
       });
       return { previousPost };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries([ENTRY_KEY, postID]);
     },
     // If the mutation fails, use the context returned from onMutate to roll back
     onError: (err, variables, context) => {
@@ -203,36 +224,29 @@ export function useCreatePost() {
 
   const pendingID = 'pending' + new Date().getTime();
   return useMutation(
-    async (publishObj: Publish_Options) => {
-      const res = await lastValueFrom(sdk.api.entries.postEntry(publishObj));
+    async (publishObj: PublishPostData) => {
+      const post = buildPublishObject(publishObj);
+      const res = await lastValueFrom(sdk.api.entries.postEntry(post));
       return res?.data?.createPost;
     },
     {
-      onMutate: async (publishObj: {
-        data: DataProviderInput[];
-        post: { title?: string; tags?: string[]; quotes?: string[] };
-      }) => {
+      onMutate: async (publishObj: PublishPostData) => {
+        await queryClient.cancelQueries(ENTRIES_KEY);
+        await queryClient.cancelQueries([ENTRIES_BY_AUTHOR_KEY, publishObj.pubKey]);
         const optimisticEntry = Object.assign({}, publishObj, { isPublishing: true });
-        queryClient.setQueryData([ENTRY_KEY, pendingID], optimisticEntry);
 
-        return { optimisticEntry };
+        return { optimisticEntry, entryId: pendingID };
       },
-      onError: (err, variables, context) => {
-        if (context?.optimisticEntry) {
-          queryClient.setQueryData(
-            [ENTRY_KEY, pendingID],
-            Object.assign({}, context.optimisticEntry, { hasErrored: true }),
-          );
-        }
+      onError: err => {
         logError('usePosts.createPost', err as Error);
       },
       onSuccess: async id => {
         await queryClient.fetchQuery([ENTRY_KEY, id], () => getPost(id));
       },
       onSettled: async () => {
-        await queryClient.invalidateQueries([ENTRY_KEY, pendingID]);
         await queryClient.invalidateQueries(ENTRIES_KEY);
       },
+      mutationKey: CREATE_POST_MUTATION_KEY,
     },
   );
 }

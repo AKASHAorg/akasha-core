@@ -84,14 +84,14 @@ export interface SpinnerProps {
   style?: React.CSSProperties;
 }
 
-const Spinner: React.FC<SpinnerProps> = props => {
+const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>((props, ref) => {
   const { size = 50 } = props; // , speed = 1.2
   return (
-    <Wrapper minHeight={size} style={props.style}>
+    <Wrapper minHeight={size} style={props.style} ref={ref}>
       <StyledSpinner width={size} height={size} viewBox="0 0 66 66">
         <StyledCircle />
       </StyledSpinner>
     </Wrapper>
   );
-};
+});
 export default Spinner;

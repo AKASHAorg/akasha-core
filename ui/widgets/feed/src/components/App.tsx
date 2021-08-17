@@ -15,16 +15,16 @@ import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
+export interface EntryListPage {
+  results: string[];
+}
+
 export interface IFeedWidgetProps {
-  logger: any;
-  virtualListRef?: any;
-  listHeader?: React.ReactElement;
+  logger: typeof console;
+  pages: EntryListPage[];
   itemType: ItemTypes;
-  loadMore: (payload: any) => void;
-  loadItemData?: ({ itemId }: { itemId: string }) => void;
+  onLoadMore: () => void;
   getShareUrl?: (entryId: string) => string;
-  itemIds: string[];
-  itemsData: { [key: string]: any };
   errors: { [key: string]: IAkashaError };
   /* eth address of the logged in user */
   ethAddress: string | null;
@@ -33,9 +33,8 @@ export interface IFeedWidgetProps {
   singleSpaNavigate: (url: string) => void;
   navigateToModal: (props: any) => void;
   onLoginModalOpen: () => void;
-  isFetching?: boolean;
-  hasMoreItems: boolean;
-  // totalItems: number | null;
+  requestStatus: 'success' | 'loading' | 'error' | 'idle';
+  hasNextPage: boolean;
   loggedProfile?: any;
   contentClickable?: boolean;
   onEntryFlag: (entryId: string, contentType: string) => () => void;
@@ -45,6 +44,7 @@ export interface IFeedWidgetProps {
   removedByMeLabel?: string;
   removedByAuthorLabel?: string;
   uiEvents: RootComponentProps['uiEvents'];
+  itemSpacing?: number;
 }
 
 export default class FeedWidgetRoot extends PureComponent<IFeedWidgetProps> {

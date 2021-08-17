@@ -42,6 +42,7 @@ export interface IEntryRenderer {
   removedByMeLabel?: string;
   removedByAuthorLabel?: string;
   uiEvents: RootComponentProps['uiEvents'];
+  className?: string;
 }
 
 const EntryRenderer = (props: IEntryRenderer) => {
@@ -86,19 +87,33 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const postReq = usePost(itemId, props.itemType === ItemTypes.ENTRY);
   const commentReq = useComment(itemId, props.itemType === ItemTypes.COMMENT);
 
-  const itemData = React.useMemo(() => {
-    if (props.itemType === ItemTypes.ENTRY) {
+  const postData = React.useMemo(() => {
+    if (postReq.data && props.itemType === ItemTypes.ENTRY) {
       return mapEntry(postReq.data);
-    } else if (props.itemType === ItemTypes.COMMENT) {
+    }
+    return undefined;
+  }, [postReq.data, props.itemType]);
+
+  const commentData = React.useMemo(() => {
+    if (commentReq.data && props.itemType === ItemTypes.COMMENT) {
       return mapEntry(commentReq.data);
     }
-  }, [postReq, commentReq, props.itemType]);
+    return undefined;
+  }, [commentReq.data, props.itemType]);
+
+  const itemData = React.useMemo(() => {
+    if (props.itemType === ItemTypes.ENTRY) {
+      return postData;
+    } else if (props.itemType === ItemTypes.COMMENT) {
+      return commentData;
+    }
+  }, [postData, commentData, props.itemType]);
 
   React.useEffect(() => {
     if (ethAddress && itemData.author.ethAddress) {
       checkIsFollowing(ethAddress, itemData.author.ethAddress);
     }
-  }, [ethAddress, itemData.author.ethAddress]);
+  }, [ethAddress, itemData]);
 
   const handleFollow = () => {
     if (itemData.author.ethAddress) {
@@ -112,7 +127,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     }
   };
 
-  const handleAvatarClick = (_ev: React.MouseEvent<HTMLDivElement>) => {
+  const handleAvatarClick = () => {
     onNavigate(ItemTypes.PROFILE, {
       entryId: itemData.author.pubKey,
       authorEthAddress: itemData.author.ethAddress,
@@ -162,12 +177,14 @@ const EntryRenderer = (props: IEntryRenderer) => {
     /* todo */
   };
 
-  const isFollowing = React.useMemo(
-    () => followedProfiles.includes(itemData.author.ethAddress),
-    [followedProfiles, itemData.author.ethAddress],
-  );
+  const isFollowing = React.useMemo(() => {
+    if (itemData && itemData.author) {
+      return followedProfiles.includes(itemData.author.ethAddress);
+    }
+    return false;
+  }, [followedProfiles, itemData]);
 
-  if (itemData.reported) {
+  if (itemData && itemData.reported) {
     return (
       <EntryCardHidden
         awaitingModerationLabel={awaitingModerationLabel}
@@ -190,9 +207,12 @@ const EntryRenderer = (props: IEntryRenderer) => {
           )}
           {!hasCriticalErrors && (
             <>
-              {(!itemData || !itemData.author?.ethAddress) && <EntryCardLoading />}
+              {(postReq.status === 'loading' || commentReq.status === 'loading') && (
+                <EntryCardLoading />
+              )}
               {itemData && itemData.author.ethAddress && (
                 <EntryCard
+                  className={props.className}
                   isRemoved={
                     itemData.content.length === 1 && itemData.content[0].property === 'removed'
                   }
