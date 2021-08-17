@@ -84,6 +84,9 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
                 mentionedCommentLabel={t('mentioned you in a comment')}
                 replyLabel={t('replied to your post')}
                 repostLabel={t('reposted your post')}
+                moderatedPostLabel={t('moderated your post')}
+                moderatedReplyLabel={t('moderated your reply')}
+                moderatedAccountLabel={t('suspended your account')}
                 markAsReadLabel={t('Mark as read')}
                 emptyTitle={t('All clear')}
                 emptySubtitle={t("You don't have any new notifications!")}
