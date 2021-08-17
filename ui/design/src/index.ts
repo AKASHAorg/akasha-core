@@ -129,7 +129,7 @@ import SelectPopover from './components/SelectPopover';
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import TextIcon from './components/TextIcon';
 import SubtitleTextIcon from './components/SubtitleTextIcon';
-import VirtualList from './components/VirtualList';
+// import VirtualList from './components/VirtualList';
 import Helmet from 'react-helmet';
 import Spinner from './components/Spinner';
 
@@ -245,7 +245,7 @@ const exported = {
   createGlobalStyle,
   ViewportSizeProvider,
   useViewportSize,
-  VirtualList,
+  // VirtualList,
   isBase64,
   formatImageSrc,
   formatRelativeTime,

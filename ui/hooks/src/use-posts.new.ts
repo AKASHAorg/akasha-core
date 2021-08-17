@@ -103,7 +103,7 @@ export function useInfinitePostsByTag(name: string, limit: number, offset?: stri
       getNextPageParam: lastPage => lastPage.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit),
-      keepPreviousData: true,
+      // keepPreviousData: true,
     },
   );
 }

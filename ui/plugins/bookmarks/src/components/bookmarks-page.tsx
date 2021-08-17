@@ -9,7 +9,12 @@ import {
 import { useTranslation } from 'react-i18next';
 import EntryCardRenderer from './entry-renderer';
 
-const { VirtualList, ErrorInfoCard, ErrorLoader, Spinner } = DS;
+const {
+  //VirtualList,
+  ErrorInfoCard,
+  ErrorLoader,
+  Spinner,
+} = DS;
 
 type BookmarksPageProps = Omit<
   RootComponentProps,
@@ -144,36 +149,36 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
                       Once you start doing so, they will be found here.`)}
                   />
                 )}
-                {!bookmarksReq.isFetching && (
-                  <VirtualList
-                    items={bookmarks.map(bm => bm.entryId)}
-                    itemsData={postState.postsData}
-                    loadMore={() => false}
-                    itemCard={
-                      <EntryCardRenderer
-                        logger={logger}
-                        singleSpa={singleSpa}
-                        bookmarkState={bookmarksReq}
-                        ethAddress={loginState.ethAddress}
-                        onBookmark={handleBookmarkClick}
-                        onNavigate={handleNavigateToPost}
-                        onRepost={() => false}
-                        onAvatarClick={handleAvatarClick}
-                        onMentionClick={handleMentionClick}
-                        onTagClick={handleTagClick}
-                        contentClickable={true}
-                        disableReposting={true}
-                        sharePostUrl={`${window.location.origin}/social-app/post/`}
-                        awaitingModerationLabel={t(
-                          'You have reported this content. It is awaiting moderation.',
-                        )}
-                        moderatedContentLabel={t('This content has been moderated')}
-                        ctaLabel={t('See it anyway')}
-                        handleFlipCard={handleFlipCard}
-                      />
-                    }
-                  />
-                )}
+                {/*{!bookmarksReq.isFetching && (*/}
+                {/*  <VirtualList*/}
+                {/*    items={bookmarks.map(bm => bm.entryId)}*/}
+                {/*    itemsData={postState.postsData}*/}
+                {/*    loadMore={() => false}*/}
+                {/*    itemCard={*/}
+                {/*      <EntryCardRenderer*/}
+                {/*        logger={logger}*/}
+                {/*        singleSpa={singleSpa}*/}
+                {/*        bookmarkState={bookmarksReq}*/}
+                {/*        ethAddress={loginState.ethAddress}*/}
+                {/*        onBookmark={handleBookmarkClick}*/}
+                {/*        onNavigate={handleNavigateToPost}*/}
+                {/*        onRepost={() => false}*/}
+                {/*        onAvatarClick={handleAvatarClick}*/}
+                {/*        onMentionClick={handleMentionClick}*/}
+                {/*        onTagClick={handleTagClick}*/}
+                {/*        contentClickable={true}*/}
+                {/*        disableReposting={true}*/}
+                {/*        sharePostUrl={`${window.location.origin}/social-app/post/`}*/}
+                {/*        awaitingModerationLabel={t(*/}
+                {/*          'You have reported this content. It is awaiting moderation.',*/}
+                {/*        )}*/}
+                {/*        moderatedContentLabel={t('This content has been moderated')}*/}
+                {/*        ctaLabel={t('See it anyway')}*/}
+                {/*        handleFlipCard={handleFlipCard}*/}
+                {/*      />*/}
+                {/*    }*/}
+                {/*  />*/}
+                {/*)}*/}
               </>
             )}
           </>

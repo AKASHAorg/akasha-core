@@ -9,6 +9,9 @@ module.exports = {
     {
       '@akashaproject/ui-awf-hooks': '@akashaproject/ui-awf-hooks',
     },
+    {
+      '@akashaproject/ui-widget-feed': '@akashaproject/ui-widget-feed',
+    },
     function ({ request }, callback) {
       if (/^rxjs\/operators$/.test(request)) {
         return callback(null, ['rxjs', 'operators'], 'root');

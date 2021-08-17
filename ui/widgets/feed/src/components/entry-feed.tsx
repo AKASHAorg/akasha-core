@@ -55,7 +55,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
       props.navigateToModal({ name: 'editor', embedEntry: entryData });
     }
   };
-  const locale: any = i18n.languages[0];
+  const locale: any = 'en';
 
   return (
     <EntryList
