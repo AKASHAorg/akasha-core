@@ -18,9 +18,9 @@ import AbortController from 'node-abort-controller';
 
 const MODERATION_APP_URL  = process.env.MODERATION_APP_URL;
 const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
-let mg: mailgun;
+let mailGun;
 if (process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN) {
-  mg = mailgun({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
+  mailGun = mailgun({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
 }
 
 export const EMPTY_KEY = 'baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
@@ -230,6 +230,9 @@ export const sendAuthorNotification = async (
  * @returns A promise that resolves upon sending the email
  */
 export const sendEmailNotification = async () => {
+  if (!mailGun) {
+    return Promise.resolve();
+  }
   logger.info('Sending email notification to moderators');
   const data = {
     from: "Moderation Notifications <postmaster@sandbox4cebf29e2f064b809e6edfd9dfc662c7.mailgun.org>",
@@ -239,7 +242,7 @@ export const sendEmailNotification = async () => {
 ${MODERATION_APP_URL}
 \nThank you!`
   };
-  mg.messages().send(data, function (error) {
+  mailGun.messages().send(data, function (error) {
     if (error) {
       logger.error(error);
     }
