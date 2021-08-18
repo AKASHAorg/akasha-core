@@ -43,7 +43,7 @@ interface SearchPageProps extends RootComponentProps {
 }
 
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const { logger, singleSpa, loginState, showLoginModal } = props;
+  const { singleSpa, loginState, showLoginModal } = props;
 
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 
@@ -64,7 +64,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const searchReq = useSearch(decodeURIComponent(searchKeyword));
   const searchState = searchReq.data;
 
-  const followEthAddressArr = searchState.profiles.slice(0, 4).map(profile => profile.ethAddress);
+  const followEthAddressArr = searchState?.profiles?.slice(0, 4).map(profile => profile.ethAddress);
   const isFollowingMultipleReq = useIsFollowingMultiple(loginState.ethAddress, followEthAddressArr);
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
@@ -150,8 +150,13 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   // repost related
-  const handleRepost = (_withComment: boolean, entryData: any) => {
-    props.navigateToModal({ name: 'editor', embedEntry: entryData });
+  const handleRepost = (_withComment: boolean, entryId: any) => {
+    if (!loginState.ethAddress) {
+      showLoginModal();
+      return;
+    } else {
+      props.navigateToModal({ name: 'editor', embedEntry: entryId });
+    }
   };
 
   const handleFlipCard = (_entry: any, _isQuote: boolean) => () => {
@@ -164,10 +169,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const emptySearchState =
-    searchState.profiles.length === 0 &&
-    searchState.entries.length === 0 &&
-    searchState.comments.length === 0 &&
-    searchState.tags.length === 0;
+    searchState?.profiles.length === 0 &&
+    searchState?.entries.length === 0 &&
+    searchState?.comments.length === 0 &&
+    searchState?.tags.length === 0;
 
   const [activeButton, setActiveButton] = React.useState<string>('All');
   const buttonValues = ['All', 'People', 'Topics', 'Posts', 'Replies'];
@@ -181,11 +186,12 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     history.back();
   };
 
-  const searchCount =
-    searchState.profiles?.length +
-    searchState.entries?.length +
-    searchState.tags?.length +
-    searchState.comments?.length;
+  const searchCount = searchState
+    ? searchState.profiles?.length +
+      searchState.entries?.length +
+      searchState.tags?.length +
+      searchState.comments?.length
+    : 0;
 
   return (
     <Box fill="horizontal">
@@ -224,7 +230,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       {!searchReq.isFetching && !emptySearchState && (
         <Box>
           {(activeButton === buttonValues[0] || activeButton === buttonValues[1]) &&
-            searchState.profiles.slice(0, 4).map((profileData: any, index: number) => (
+            searchState?.profiles.slice(0, 4).map((profileData: any, index: number) => (
               <Box key={index} pad={{ bottom: 'medium' }}>
                 <ProfileSearchCard
                   handleFollow={() => handleFollowProfile(profileData.ethAddress)}
@@ -246,7 +252,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             ))}
 
           {(activeButton === buttonValues[0] || activeButton === buttonValues[2]) &&
-            searchState.tags.map((tag: any, index: number) => (
+            searchState?.tags.map((tag: any, index: number) => (
               <Box key={index} pad={{ bottom: 'medium' }}>
                 <TagSearchCard
                   tag={tag}
@@ -261,7 +267,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               </Box>
             ))}
           {(activeButton === buttonValues[0] || activeButton === buttonValues[3]) &&
-            searchState.entries.slice(0, 4).map((entryData: any, index: number) => (
+            searchState?.entries.slice(0, 4).map((entryData: any, index: number) => (
               <Box key={index} pad={{ bottom: 'medium' }}>
                 {entryData.delisted ? (
                   <EntryCardHidden
@@ -318,7 +324,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               </Box>
             ))}
           {(activeButton === buttonValues[0] || activeButton === buttonValues[4]) &&
-            searchState.comments.slice(0, 4).map((commentData: any, index: number) => (
+            searchState?.comments.slice(0, 4).map((commentData: any, index: number) => (
               <Box key={index} pad={{ bottom: 'medium' }}>
                 <EntryCard
                   isRemoved={

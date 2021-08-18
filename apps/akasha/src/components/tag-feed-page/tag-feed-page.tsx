@@ -100,10 +100,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     props.singleSpa.navigateToUrl(url);
   };
 
-  // const handleRepostPublish = (entryData: any, embedEntry: any) => {
-  //   postsActions.optimisticPublishPost(entryData, loggedProfileData, embedEntry, true);
-  // };
-
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };

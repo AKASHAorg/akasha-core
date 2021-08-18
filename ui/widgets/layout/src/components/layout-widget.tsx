@@ -230,7 +230,14 @@ class LayoutWidget extends PureComponent<RootComponentProps, LayoutWidgetState> 
                     <Box>
                       <WidgetContainer>
                         {!this.props.isMobile && (
-                          <CookieWidget style={{ position: 'absolute', bottom: 0 }} />
+                          <CookieWidget
+                            style={{
+                              position: 'absolute',
+                              bottom: 0,
+                              marginLeft: '1rem',
+                              minWidth: '21rem',
+                            }}
+                          />
                         )}
                         <ScrollableWidgetArea>
                           <WidgetSlot
