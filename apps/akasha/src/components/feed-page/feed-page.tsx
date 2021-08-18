@@ -96,6 +96,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     if (bookmarks?.findIndex(bm => bm.entryId === entryId) >= 0) {
       return deleteBookmark.mutate(entryId);
     }
+
     return addBookmark.mutate(entryId);
   };
 

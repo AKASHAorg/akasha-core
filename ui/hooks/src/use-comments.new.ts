@@ -77,20 +77,11 @@ const getComment = async (commentID): Promise<Comment_Response & { isPublishing?
 // hook for fetching data for a specific commentID/entryID
 export function useComment(commentID: string, enabler = true) {
   const queryClient = useQueryClient();
-  return useQuery(
-    [COMMENT_KEY, commentID],
-    () => {
-      const comment: any = queryClient.getQueryData([COMMENT_KEY, commentID]);
-      if (comment && comment.isPublishing) {
-        return comment;
-      }
-      return getComment(commentID);
-    },
-    {
-      enabled: !!commentID && enabler,
-      keepPreviousData: true,
-    },
-  );
+  return useQuery([COMMENT_KEY, commentID], () => getComment(commentID), {
+    enabled: !!commentID && enabler,
+    keepPreviousData: true,
+    initialData: () => queryClient.getQueryData([COMMENT_KEY, commentID]),
+  });
 }
 
 export interface Publish_Options {
@@ -148,24 +139,22 @@ export function useCreateComment() {
       onMutate: async (publishObj: PublishCommentData) => {
         await queryClient.cancelQueries([COMMENTS_KEY, publishObj.postID]);
 
-        const optimisticComment = Object.assign({}, publishObj, { isPublishing: true });
+        const optimisticComment = Object.assign({}, publishObj);
 
-        return { optimisticComment };
+        return { optimisticComment, entryId: pendingID };
       },
       onError: (err, variables, context) => {
         if (context?.optimisticComment) {
           return Promise.resolve({
-            optimisticComment: { ...context.optimisticComment, hasError: true },
+            optimisticComment: { ...context.optimisticComment },
           });
         }
         logError('useComments.createComment', err as Error);
       },
       onSuccess: async id => {
-        const comment = await queryClient.fetchQuery([COMMENT_KEY, id], () => getComment(id));
-        await queryClient.refetchQueries([COMMENT_KEY, comment.postId]);
+        await queryClient.fetchQuery([COMMENT_KEY, id], () => getComment(id));
       },
       onSettled: async () => {
-        await queryClient.removeQueries([COMMENT_KEY, pendingID]);
         await queryClient.invalidateQueries(COMMENTS_KEY);
       },
     },
