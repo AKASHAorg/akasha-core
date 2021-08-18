@@ -76,16 +76,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   }, [JSON.stringify(errorState)]);
 
-  // React.useEffect(() => {
-  //   if (loginState.currentUserCalled) {
-  //     //postsActions.resetPostIds();
-  //     if (loginState.ready) {
-  //       bookmarkActions.getBookmarks();
-  //     }
-  //   }
-  // }, [JSON.stringify(loginState)]);
-
-  //@Todo: replace this with fetchNextPage() from useInfinitePosts object
   const handleLoadMore = () => {
     if (!reqPosts.isFetching && loginState.currentUserCalled) {
       reqPosts.fetchNextPage();

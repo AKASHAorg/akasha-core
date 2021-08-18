@@ -78,34 +78,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
-  // React.useEffect(() => {
-  //   // reset post ids and virtual list, if user logs in or tag changes
-  //   postsActions.resetPostIds();
-  // }, [loginState.ethAddress, tagName]);
-
-  // React.useEffect(() => {
-  //   if (loginState.waitForAuth && !loginState.ready) {
-  //     return;
-  //   }
-  //   if (
-  //     (loginState.waitForAuth && loginState.ready) ||
-  //     (loginState.currentUserCalled && loginState.ethAddress)
-  //   ) {
-  //     tagSubscriptionActions.getTagSubscriptions();
-  //   }
-  // }, [JSON.stringify(loginState)]);
-
-  // React.useEffect(() => {
-  //   // if post ids array is reset, get tag posts
-  //   if (
-  //     postsState.postIds.length === 0 &&
-  //     !postsState.isFetchingPosts &&
-  //     postsState.totalItems === null
-  //   ) {
-  //     postsActions.getTagPosts({ name: tagName, limit: 5 });
-  //   }
-  // }, [postsState.postIds, postsState.isFetchingPosts]);
-
   const handleLoadMore = () => {
     if (!reqPosts.isFetching && loginState.currentUserCalled) {
       reqPosts.fetchNextPage().then(d => console.log('fetched next page', d));
@@ -138,10 +110,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     }
     props.singleSpa.navigateToUrl(url);
   };
-
-  // const handleRepostPublish = (entryData: any, embedEntry: any) => {
-  //   postsActions.optimisticPublishPost(entryData, loggedProfileData, embedEntry, true);
-  // };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
     props.navigateToModal({ name: 'report-modal', entryId, contentType });

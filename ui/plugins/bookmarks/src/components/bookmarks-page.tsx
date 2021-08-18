@@ -117,6 +117,15 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
 
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
+  const handleRepost = (_withComment: boolean, entryId: any) => {
+    if (!loginState.ethAddress) {
+      props.navigateToModal({ name: 'login' });
+      return;
+    } else {
+      props.navigateToModal({ name: 'editor', embedEntry: entryId });
+    }
+  };
+
   const handleFlipCard = (entry: any) => () => {
     const modifiedEntry = { ...entry, reported: false };
     postActions.updatePostsState(modifiedEntry);
@@ -157,7 +166,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
                         ethAddress={loginState.ethAddress}
                         onBookmark={handleBookmarkClick}
                         onNavigate={handleNavigateToPost}
-                        onRepost={() => false}
+                        onRepost={handleRepost}
                         onAvatarClick={handleAvatarClick}
                         onMentionClick={handleMentionClick}
                         onTagClick={handleTagClick}
