@@ -15,6 +15,7 @@ import {
   useToggleTagSubscription,
 } from '@akashaproject/ui-awf-hooks/lib/use-tag-subscribe.new';
 import { useQueryClient } from 'react-query';
+import { useTranslation } from 'react-i18next';
 
 const { Box, TagProfileCard, Helmet } = DS;
 
@@ -33,6 +34,8 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
 
   const [tagData, setTagData] = React.useState<ITag | null>(null);
   const queryClient = useQueryClient();
+
+  const { i18n } = useTranslation();
 
   React.useEffect(() => {
     if (tagName) {
@@ -148,6 +151,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         handleFlipCard={handleFlipCard}
         uiEvents={props.uiEvents}
         itemSpacing={8}
+        locale={i18n.languages[0]}
       />
     </Box>
   );

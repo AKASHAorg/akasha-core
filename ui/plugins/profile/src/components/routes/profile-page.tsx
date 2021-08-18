@@ -56,7 +56,7 @@ const ProfilePage = (props: ProfilePageProps) => {
   const [loginState] = useLoginState({});
   const reqPosts = useInfinitePostsByAuthor(publicKey, 15, loginState.currentUserCalled);
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const handleLoadMore = () => {
     if (!reqPosts.isLoading && reqPosts.hasNextPage && loginState.currentUserCalled) {
@@ -166,6 +166,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         removedByAuthorLabel={t('This post was deleted by its author')}
         uiEvents={props.uiEvents}
         itemSpacing={8}
+        locale={i18n.languages[0]}
       />
     </Box>
   );

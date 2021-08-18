@@ -4,13 +4,13 @@ import { IFeedWidgetProps } from './App';
 import { useFollow, useBookmarks } from '@akashaproject/ui-awf-hooks';
 import EntryRenderer from './entry-renderer';
 import { useTranslation } from 'react-i18next';
-import { ILocale } from '@akashaproject/design-system/src/utils/time';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
 const { EntryList } = DS;
 
 const EntryFeed = (props: IFeedWidgetProps) => {
-  const { t, i18n } = useTranslation('ui-widget-feed');
+  const { t } = useTranslation('ui-widget-feed');
 
   // const [loginState] = useLoginState({});
 
@@ -55,7 +55,6 @@ const EntryFeed = (props: IFeedWidgetProps) => {
       props.navigateToModal({ name: 'editor', embedEntry: entryData });
     }
   };
-  const locale: any = 'en';
 
   return (
     <EntryList
@@ -70,7 +69,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           ethAddress={props.ethAddress}
           itemType={props.itemType}
           sharePostUrl={`${window.location.origin}/social-app/post/`}
-          locale={locale as ILocale}
+          locale={props.locale as ILocale}
           bookmarkState={bookmarkState}
           followedProfiles={followedProfiles}
           checkIsFollowing={followActions.isFollowing}

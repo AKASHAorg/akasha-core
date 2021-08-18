@@ -1,17 +1,14 @@
 import React, { PureComponent } from 'react';
 import DS from '@akashaproject/design-system';
-import { I18nextProvider } from 'react-i18next';
+
 import EntryFeed from './entry-feed';
 import ProfileFeed from './profile-feed';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import i18next from 'i18next';
-import { IContentClickDetails } from '@akashaproject/design-system/src/components/EntryCard/entry-box';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import Backend from 'i18next-chained-backend';
-import Fetch from 'i18next-fetch-backend';
-import LocalStorageBackend from 'i18next-localstorage-backend';
-import { initReactI18next } from 'react-i18next';
+
+import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
+
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
@@ -45,6 +42,7 @@ export interface IFeedWidgetProps {
   removedByAuthorLabel?: string;
   uiEvents: RootComponentProps['uiEvents'];
   itemSpacing?: number;
+  locale: string;
 }
 
 export default class FeedWidgetRoot extends PureComponent<IFeedWidgetProps> {
