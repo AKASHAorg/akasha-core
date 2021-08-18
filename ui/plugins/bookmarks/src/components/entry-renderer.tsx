@@ -71,7 +71,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   const commentReq = useComment(itemId, type === BookmarkTypes.COMMENT);
 
   const itemData = React.useMemo(() => {
-    console.log(type, '<< bm type');
     if (type === BookmarkTypes.COMMENT && commentReq.status === 'success') {
       return mapEntry(commentReq.data);
     } else if (type === BookmarkTypes.POST && postReq.status === 'success') {
@@ -103,7 +102,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   //     />
   //   );
   // }
-  console.log(postReq, commentReq, '>> post and comment req');
   return (
     <>
       {(postReq.status === 'error' || commentReq.status === 'error') && (

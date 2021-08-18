@@ -124,7 +124,7 @@ const PostRenderer = (props: PostRendererProps) => {
     editReq.mutate({ ...commentData, postID: itemData.postId });
     setIsEditing(false);
   };
-  // console.log(editReq, 'edit request');
+
   const isFollowing = followedProfiles.includes(itemData.author.ethAddress);
 
   if (itemData.reported) {

@@ -81,7 +81,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   //   const modifiedEntry = { ...entry, reported: false };
   //   postActions.updatePostsState(modifiedEntry);
   // };
-  console.log(bookmarksReq, '<<<< bmReq');
+
   return (
     <>
       {bookmarksReq.status === 'error' && (
