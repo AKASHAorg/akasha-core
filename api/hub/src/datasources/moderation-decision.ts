@@ -258,15 +258,22 @@ class ModerationDecisionAPI extends DataSource {
     }
     // add first report data
     const first = await reportingAPI.getFirstReport(contentID);
-    first.author 
-    const reportedBy = { 
-    };
+    const reportedBy = first.author;
     const reportedDate = first.creationDate;
+    const author = await first.author.startsWith('0x') ? await profileAPI.getProfile(first.author)
+    : await profileAPI.resolveProfile(first.author);
+    const reportedByProfile = {
+      ethAddress: author.ethAddress, // Deprecated, to be removed
+      pubKey: author.pubKey,
+      name: author.name || "",
+      userName: author.userName || "",
+      avatar: author.avatar || "",
+    };
     // count reports
     const reports = await reportingAPI.countReports(contentID);
     // add reasons
     const reasons = await reportingAPI.getReasons(contentID);
-    finalDecision = Object.assign({}, finalDecision, { reports, reportedBy, reportedDate, reasons });
+    finalDecision = Object.assign({}, finalDecision, { reports, reportedBy, reportedDate, reportedByProfile, reasons });
     await queryCache.set(decisionCache, finalDecision);
     return finalDecision;
   }
