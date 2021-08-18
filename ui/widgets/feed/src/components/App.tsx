@@ -66,62 +66,20 @@ export default class FeedWidgetRoot extends PureComponent<IFeedWidgetProps> {
   }
 
   public render() {
-    const { logger } = this.props;
-
-    i18next
-      .use(initReactI18next)
-      .use(Backend)
-      .use(LanguageDetector)
-      .use({
-        type: 'logger',
-        log: logger.info,
-        warn: logger.warn,
-        error: logger.error,
-      })
-      .init({
-        fallbackLng: 'en',
-        ns: ['ui-widget-feed'],
-        saveMissing: false,
-        saveMissingTo: 'all',
-        load: 'languageOnly',
-        debug: true,
-        cleanCode: true,
-        keySeparator: false,
-        defaultNS: 'ui-widget-feed',
-        backend: {
-          backends: [LocalStorageBackend, Fetch],
-          backendOptions: [
-            {
-              prefix: 'i18next_res_v0',
-              expirationTime: 24 * 60 * 60 * 1000,
-            },
-            {
-              loadPath: '/locales/{{lng}}/{{ns}}.json',
-            },
-          ],
-        },
-      });
     return (
-      <React.Suspense fallback={<></>}>
-        <I18nextProvider i18n={i18next} defaultNS="ui-widget-feed">
-          <ThemeSelector
-            settings={{ activeTheme: 'Light-Theme' }}
-            availableThemes={[lightTheme, darkTheme]}
-            style={{ height: '100%' }}
-            plain={true}
-          >
-            {this.props.itemType === ItemTypes.ENTRY && (
-              <EntryFeed {...this.props} errors={{ ...this.state.errors, ...this.props.errors }} />
-            )}
-            {this.props.itemType === ItemTypes.PROFILE && (
-              <ProfileFeed
-                {...this.props}
-                errors={{ ...this.state.errors, ...this.props.errors }}
-              />
-            )}
-          </ThemeSelector>
-        </I18nextProvider>
-      </React.Suspense>
+      <ThemeSelector
+        settings={{ activeTheme: 'Light-Theme' }}
+        availableThemes={[lightTheme, darkTheme]}
+        style={{ height: '100%' }}
+        plain={true}
+      >
+        {this.props.itemType === ItemTypes.ENTRY && (
+          <EntryFeed {...this.props} errors={{ ...this.state.errors, ...this.props.errors }} />
+        )}
+        {this.props.itemType === ItemTypes.PROFILE && (
+          <ProfileFeed {...this.props} errors={{ ...this.state.errors, ...this.props.errors }} />
+        )}
+      </ThemeSelector>
     );
   }
 }
