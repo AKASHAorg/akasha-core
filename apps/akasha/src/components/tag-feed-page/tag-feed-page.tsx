@@ -17,13 +17,17 @@ import {
 import { useQueryClient } from 'react-query';
 import { useTranslation } from 'react-i18next';
 
-const { Box, TagProfileCard, Helmet } = DS;
+const { Box, TagProfileCard, Helmet, styled } = DS;
 
 interface ITagFeedPage {
   loggedProfileData?: any;
   loginState: ILoginState;
   showLoginModal: () => void;
 }
+
+const TagInfoCard = styled(TagProfileCard)`
+  margin-bottom: 0.5rem;
+`;
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { showLoginModal, logger, loggedProfileData, loginState } = props;
@@ -123,7 +127,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <TagProfileCard
+      <TagInfoCard
         tag={tagData}
         subscribedTags={tagSubscriptions}
         handleSubscribeTag={handleTagSubscribe}
