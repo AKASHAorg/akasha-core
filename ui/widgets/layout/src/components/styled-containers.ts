@@ -36,7 +36,8 @@ const TOPBAR_HEIGHT = 48;
 
 export const WidgetContainer: any = styled(BaseContainer)`
   position: sticky;
-  top: calc(${TOPBAR_HEIGHT}px + 0.5em);
+  top: ${TOPBAR_HEIGHT}px;
+  margin-top: 0.5rem;
 `;
 
 export const ScrollableWidgetArea: any = styled.div`
@@ -44,6 +45,7 @@ export const ScrollableWidgetArea: any = styled.div`
     &::-webkit-scrollbar {
       width: 0 !important;
     }
+    min-width: 22rem;
     @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
       overflow-y: auto;
       overflow-x: hidden;
