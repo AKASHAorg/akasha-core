@@ -169,7 +169,6 @@ export function usePost(postID: string, enabler: boolean) {
   const queryClient = useQueryClient();
   return useQuery([ENTRY_KEY, postID], () => getPost(postID), {
     enabled: !!postID && enabler,
-    initialData: () => queryClient.getQueryData([ENTRY_KEY, postID]),
     keepPreviousData: true,
   });
 }
