@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { logError } from './utils/error-handler';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 export enum BookmarkTypes {
   POST = 0,
@@ -40,7 +39,6 @@ export function useGetBookmarks(loggedEthAddress) {
     {
       initialData: [],
       enabled: !!loggedEthAddress,
-      keepPreviousData: true,
     },
   );
 }
@@ -49,14 +47,12 @@ export function useBookmarkPost() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
   return useMutation(
-    (entryId: string) => {
-      const prevBmks: { entryId: string; type: BookmarkTypes }[] =
+    (_entryId: string) => {
+      const bookmarks: { entryId: string; type: BookmarkTypes }[] =
         queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
-      const newBmks = prevBmks.slice();
-      newBmks.unshift({ entryId, type: BookmarkTypes.POST });
       return lastValueFrom(
         sdk.services.settings.set(BOOKMARKED_ENTRIES_KEY, [
-          [entriesBookmarks, JSON.stringify(newBmks)],
+          [entriesBookmarks, JSON.stringify(bookmarks)],
         ]),
       );
     },
@@ -88,14 +84,12 @@ export function useBookmarkComment() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
   return useMutation(
-    (entryId: string) => {
-      const prevBmks: { entryId: string; type: BookmarkTypes }[] =
+    (_entryId: string) => {
+      const bookmarks: { entryId: string; type: BookmarkTypes }[] =
         queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
-      const newBmks = prevBmks.slice();
-      newBmks.unshift({ entryId, type: BookmarkTypes.COMMENT });
       return lastValueFrom(
         sdk.services.settings.set(BOOKMARKED_ENTRIES_KEY, [
-          [entriesBookmarks, JSON.stringify(newBmks)],
+          [entriesBookmarks, JSON.stringify(bookmarks)],
         ]),
       );
     },
@@ -127,17 +121,13 @@ export function useBookmarkDelete() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
   return useMutation(
-    (entryId: string) => {
-      const prevBmks: { entryId: string; type: BookmarkTypes }[] =
+    (_entryId: string) => {
+      const bookmarks: { entryId: string; type: BookmarkTypes }[] =
         queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
-      const newBmks = prevBmks.slice();
-      const bmIndex = newBmks.findIndex(bm => bm.entryId === entryId);
-      if (bmIndex >= 0) {
-        newBmks.splice(bmIndex, 1);
-      }
+
       return lastValueFrom(
         sdk.services.settings.set(BOOKMARKED_ENTRIES_KEY, [
-          [entriesBookmarks, JSON.stringify(newBmks)],
+          [entriesBookmarks, JSON.stringify(bookmarks)],
         ]),
       );
     },

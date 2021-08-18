@@ -28,6 +28,7 @@ import { CommentEditor } from './components/EditorCard/comment-editor';
 import { EditorPlaceholder } from './components/EditorCard/editor-placeholder';
 
 import EntryCard from './components/EntryCard';
+import EntryList from './components/EntryList';
 import { EntryBox } from './components/EntryCard/entry-box';
 import { EntryCardHidden } from './components/EntryCard/entry-card-hidden';
 import {
@@ -129,7 +130,7 @@ import SelectPopover from './components/SelectPopover';
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import TextIcon from './components/TextIcon';
 import SubtitleTextIcon from './components/SubtitleTextIcon';
-import VirtualList from './components/VirtualList';
+// import VirtualList from './components/VirtualList';
 import Helmet from 'react-helmet';
 import Spinner from './components/Spinner';
 
@@ -246,7 +247,7 @@ const exported = {
   createGlobalStyle,
   ViewportSizeProvider,
   useViewportSize,
-  VirtualList,
+  // VirtualList,
   isBase64,
   formatImageSrc,
   formatRelativeTime,
@@ -273,6 +274,7 @@ const exported = {
   StyledLayer,
   Helmet: Helmet as any,
   ConfirmationModal,
+  EntryList,
   StyledSelectBox,
 };
 

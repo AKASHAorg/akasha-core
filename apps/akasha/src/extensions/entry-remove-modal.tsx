@@ -3,92 +3,42 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
-import { useErrors, useLoginState, usePosts, withProviders } from '@akashaproject/ui-awf-hooks';
+import { useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
 import i18n from 'i18next';
 import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-chained-backend';
 import Fetch from 'i18next-fetch-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
-import getSDK from '@akashaproject/awf-sdk';
-import { events } from '@akashaproject/awf-sdk/typings';
-import { filter } from 'rxjs/operators';
+import { useDeletePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { useDeleteComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { ConfirmationModal } = DS;
 
 const EntryRemoveModal: React.FC<RootComponentProps> = props => {
   const { activeModal } = props;
-  const sdk = React.useMemo(getSDK, []);
-  const [errorState, errorActions] = useErrors({
+  const [errorState] = useErrors({
     logger: props.logger,
   });
   const { t } = useTranslation();
-  const [loginState] = useLoginState({
-    onError: errorActions.createError,
-  });
-  const [postsState, postsActions] = usePosts({
-    user: loginState.ethAddress,
-    onError: errorActions.createError,
-  });
+
+  const postDeleteQuery = useDeletePost(activeModal.entryId);
+  const commentDeleteQuery = useDeleteComment(activeModal.entryId);
 
   const handleDeletePost = () => {
-    if (activeModal.entryType === 'Comment') {
-      return postsActions.removeComment(activeModal.entryId);
+    if (activeModal.entryType === ItemTypes.COMMENT) {
+      return commentDeleteQuery.mutate(activeModal.entryId);
     }
-    postsActions.removePost(activeModal.entryId);
+    postDeleteQuery.mutate(activeModal.entryId);
+    handleModalClose();
   };
-
-  React.useEffect(() => {
-    if (!sdk) {
-      return;
-    }
-    const sub = sdk.api.globalChannel
-      .pipe(
-        filter(
-          payload =>
-            payload.event === events.ENTRY_EVENTS.REMOVE ||
-            payload.event === events.COMMENTS_EVENTS.REMOVE,
-        ),
-      )
-      .subscribe({
-        next: resp => {
-          if (
-            typeof resp.data === 'object' &&
-            (resp.data.hasOwnProperty('removePost') || resp.data.hasOwnProperty('removeComment'))
-          ) {
-            const data = resp.data as { removePost?: boolean; removeComment: boolean };
-            const args = resp.args as { entryID?: string; commentID?: string };
-            if (
-              (data.removePost || data.removeComment) &&
-              (args.entryID === activeModal.entryId || args.commentID === activeModal.entryId)
-            ) {
-              if (!Object.keys(errorState).length) {
-                handleModalClose();
-              }
-            } else if (!data.removeComment && !data.removePost) {
-              errorActions.createError({
-                errorKey: 'entry-remove-modal.globalChannel',
-                error: new Error(t('Cannot delete this entry. Please try again later!')),
-                critical: false,
-              });
-            }
-          }
-        },
-        error: err =>
-          errorActions.createError({
-            errorKey: 'entry-remove-modal.globalChannel',
-            error: err,
-            critical: false,
-          }),
-      });
-    return sub.unsubscribe;
-  }, [sdk]);
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
   };
   const entryLabelText = React.useMemo(() => {
-    if (activeModal.entryType === 'Post') {
+    if (activeModal.entryType === ItemTypes.ENTRY) {
       return t('post');
     }
     return t('reply');
@@ -111,11 +61,7 @@ const EntryRemoveModal: React.FC<RootComponentProps> = props => {
         </>
       }
       cancelLabel={t('Cancel')}
-      confirmLabel={
-        postsState.deleteUserCommentQuery || postsState.deleteUserPostQuery
-          ? t('Deleting')
-          : t('Delete')
-      }
+      confirmLabel={t('Delete')}
       errors={errorState}
     />
   );

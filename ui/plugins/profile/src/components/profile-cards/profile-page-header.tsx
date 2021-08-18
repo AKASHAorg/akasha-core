@@ -23,7 +23,6 @@ import {
   ProfileUpdateStatus,
   UseProfileActions,
 } from '@akashaproject/ui-awf-hooks/lib/use-profile';
-import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { Route, useLocation } from 'react-router';
 import {
   ProfileProviders,
@@ -54,7 +53,6 @@ export interface IProfileHeaderProps {
   loggedUserEthAddress: string | null;
   modalState: ModalState;
   modalActions: ModalStateActions;
-  loginActions: UseLoginActions;
 }
 
 const ProfileForm = styled(BoxFormCard)`

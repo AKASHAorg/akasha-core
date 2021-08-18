@@ -5,10 +5,23 @@ import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/com
 import { buildPublishObject } from './utils/entry-utils';
 import { Comment_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 import { logError } from './utils/error-handler';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 export const COMMENT_KEY = 'Comment';
 export const COMMENTS_KEY = 'Comments';
+
+export interface PublishCommentData {
+  metadata: {
+    app: string;
+    version: number;
+    quote?: string;
+    tags: string[];
+    mentions: string[];
+  };
+  author: string;
+  content: any;
+  textContent: string;
+  postID: string;
+}
 
 const getComments = async (
   queryClient: QueryClient,
@@ -51,7 +64,7 @@ export function useInfiniteComments(limit: number, postID: string, offset?: stri
   );
 }
 
-const getComment = async commentID => {
+const getComment = async (commentID): Promise<Comment_Response & { isPublishing?: boolean }> => {
   const sdk = getSDK();
   try {
     const res = await lastValueFrom(sdk.api.comments.getComment(commentID));
@@ -63,9 +76,11 @@ const getComment = async commentID => {
 
 // hook for fetching data for a specific commentID/entryID
 export function useComment(commentID: string, enabler = true) {
+  const queryClient = useQueryClient();
   return useQuery([COMMENT_KEY, commentID], () => getComment(commentID), {
     enabled: !!commentID && enabler,
     keepPreviousData: true,
+    initialData: () => queryClient.getQueryData([COMMENT_KEY, commentID]),
   });
 }
 
@@ -115,26 +130,24 @@ export function useCreateComment() {
 
   const pendingID = 'pending' + new Date().getTime();
   return useMutation(
-    async (publishObj: Publish_Options) => {
-      const res = await lastValueFrom(sdk.api.comments.addComment(publishObj));
+    async (publishObj: PublishCommentData) => {
+      const comment = buildPublishObject(publishObj, publishObj.postID);
+      const res = await lastValueFrom(sdk.api.comments.addComment(comment));
       return res?.data?.addComment;
     },
     {
-      onMutate: async (publishObj: {
-        data: DataProviderInput[];
-        comment: { title?: string; tags?: string[]; quotes?: string[] };
-      }) => {
-        const optimisticComment = Object.assign({}, publishObj, { isPublishing: true });
-        queryClient.setQueryData([COMMENT_KEY, pendingID], optimisticComment);
+      onMutate: async (publishObj: PublishCommentData) => {
+        await queryClient.cancelQueries([COMMENTS_KEY, publishObj.postID]);
 
-        return { optimisticComment };
+        const optimisticComment = Object.assign({}, publishObj);
+
+        return { optimisticComment, entryId: pendingID };
       },
       onError: (err, variables, context) => {
         if (context?.optimisticComment) {
-          queryClient.setQueryData(
-            [COMMENT_KEY, pendingID],
-            Object.assign({}, context.optimisticComment, { hasErrored: true }),
-          );
+          return Promise.resolve({
+            optimisticComment: { ...context.optimisticComment },
+          });
         }
         logError('useComments.createComment', err as Error);
       },
@@ -142,7 +155,6 @@ export function useCreateComment() {
         await queryClient.fetchQuery([COMMENT_KEY, id], () => getComment(id));
       },
       onSettled: async () => {
-        await queryClient.invalidateQueries([COMMENT_KEY, pendingID]);
         await queryClient.invalidateQueries(COMMENTS_KEY);
       },
     },

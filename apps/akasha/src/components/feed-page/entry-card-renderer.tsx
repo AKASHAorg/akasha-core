@@ -77,7 +77,12 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const { t } = useTranslation();
   const postReq = usePost(itemId, !!itemId);
-  const itemData = React.useMemo(() => mapEntry(postReq.data), [postReq]);
+  const itemData = React.useMemo(() => {
+    if (postReq.data) {
+      return mapEntry(postReq.data);
+    }
+    return undefined;
+  }, [postReq.data]);
 
   const [followedProfiles, followActions] = useFollow({
     onError: (errorInfo: IAkashaError) => {
@@ -85,11 +90,11 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     },
   });
 
-  React.useEffect(() => {
-    if (ethAddress && itemData.author.ethAddress) {
-      followActions.isFollowing(ethAddress, itemData.author.ethAddress);
-    }
-  }, [ethAddress, itemData.author.ethAddress]);
+  // React.useEffect(() => {
+  //   if (ethAddress && itemData.author.ethAddress) {
+  //     followActions.isFollowing(ethAddress, itemData.author.ethAddress);
+  //   }
+  // }, [ethAddress, itemData.author.ethAddress]);
 
   const handleFollow = () => {
     if (itemData.author.ethAddress) {
