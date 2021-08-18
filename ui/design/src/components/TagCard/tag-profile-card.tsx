@@ -21,6 +21,7 @@ export interface ITagProfileCard {
   subscribeLabel?: string;
   unsubscribeLabel?: string;
   subscribedLabel?: string;
+  className?: string;
   // handlers
   handleSubscribeTag: (tagName: string) => void;
   handleUnsubscribeTag: (tagName: string) => void;
@@ -36,10 +37,11 @@ const TagProfileCard: React.FC<ITagProfileCard> = props => {
     subscribedLabel,
     unsubscribeLabel,
     mentionsLabel,
+    className,
   } = props;
 
   return (
-    <MainAreaCardBox>
+    <MainAreaCardBox className={className}>
       <Box
         height={isMobileOnly ? '5.6rem' : '9rem'}
         background={{
