@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { getFeedCustomEntities } from './feed-page-custom-entities';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
@@ -12,15 +11,19 @@ import routes, { POST } from '../../routes';
 import { useErrors } from '@akashaproject/ui-awf-hooks';
 
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import { ENTRY_KEY, useInfinitePosts } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import {
+  useInfinitePosts,
+  CREATE_POST_MUTATION_KEY,
+} from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import {
   useGetBookmarks,
   useBookmarkPost,
   useBookmarkDelete,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 import { useQueryClient } from 'react-query';
+import { createPendingEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
-const { Box, Helmet, VirtualList, EditorPlaceholder } = DS;
+const { Box, Helmet, EditorPlaceholder, EntryList, EntryCard, EntryPublishErrorCard } = DS;
 
 export interface FeedPageProps {
   singleSpa: any;
@@ -37,33 +40,17 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const queryClient = useQueryClient();
-
   const [errorState] = useErrors({ logger });
 
-  const reqPosts = useInfinitePosts(15);
-  const postsState = reqPosts.data;
-  const ids = React.useMemo(() => {
-    const list = [];
-    if (!reqPosts.isSuccess) {
-      return list;
-    }
-    postsState.pages.forEach(page => page.results.forEach(postId => list.push(postId)));
-    return list;
-  }, [reqPosts.isSuccess]);
+  const queryClient = useQueryClient();
 
-  const entriesData = React.useMemo(() => {
-    const list = {};
-    if (!reqPosts.isSuccess) {
-      return list;
-    }
-    postsState.pages.forEach(page =>
-      page.results.forEach(
-        postId => (list[postId] = queryClient.getQueryData([ENTRY_KEY, postId])),
-      ),
-    );
-    return list;
-  }, [reqPosts.data]);
+  const mutationCache = queryClient.getMutationCache();
+
+  const createPostMutation = mutationCache.find({
+    mutationKey: CREATE_POST_MUTATION_KEY,
+  });
+
+  const postsReq = useInfinitePosts(15);
 
   const bookmarksReq = useGetBookmarks(loginState.ready?.ethAddress);
   const bookmarks = bookmarksReq.data;
@@ -74,17 +61,21 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     if (Object.keys(errorState).length) {
       logger.error(errorState);
     }
-  }, [JSON.stringify(errorState)]);
+  }, [errorState, logger]);
 
-  const handleLoadMore = () => {
-    if (!reqPosts.isFetching && loginState.currentUserCalled) {
-      reqPosts.fetchNextPage();
+  //@Todo: replace this with fetchNextPage() from useInfinitePosts object
+  const handleLoadMore = React.useCallback(() => {
+    if (!postsReq.isLoading && postsReq.hasNextPage && loginState.currentUserCalled) {
+      postsReq.fetchNextPage();
     }
-  };
+  }, [postsReq, loginState.currentUserCalled]);
 
-  const loadItemData = () => {
-    //postsActions.getPost(payload.itemId);
-  };
+  const postPages = React.useMemo(() => {
+    if (postsReq.data) {
+      return postsReq.data.pages;
+    }
+    return [];
+  }, [postsReq.data]);
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorPubKey: string) => {
     props.singleSpa.navigateToUrl(`/profile/${authorPubKey}`);
@@ -105,6 +96,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     if (bookmarks?.findIndex(bm => bm.entryId === entryId) >= 0) {
       return deleteBookmark.mutate(entryId);
     }
+
     return addBookmark.mutate(entryId);
   };
 
@@ -138,37 +130,49 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <VirtualList
-        items={ids}
-        itemsData={entriesData}
-        loadMore={handleLoadMore}
-        loadItemData={loadItemData}
-        hasMoreItems={!!reqPosts.hasNextPage}
-        usePlaceholders={true}
-        listHeader={
-          loginState.ethAddress ? (
-            <EditorPlaceholder
-              ethAddress={loginState.ethAddress}
-              onClick={handleShowEditor}
-              avatar={loggedProfileData?.avatar}
-            />
-          ) : (
-            <>
-              {/* <Parcel
-                config={loginWidget.loadingFn}
-                wrapWith="div"
-                sdkModules={props.sdkModules}
-                logger={props.logger}
-                layout={props.layoutConfig}
-                globalChannel={props.globalChannel}
-                i18n={props.i18n}
-                mountParcel={props.singleSpa.mountRootParcel}
-              /> */}
-            </>
-          )
-        }
+      {loginState.ethAddress && (
+        <EditorPlaceholder
+          ethAddress={loginState.ethAddress}
+          onClick={handleShowEditor}
+          avatar={loggedProfileData?.avatar}
+          style={{ marginBottom: '0.5rem' }}
+        />
+      )}
+      {createPostMutation && createPostMutation.state.status === 'error' && (
+        <EntryPublishErrorCard message={t('Cannot publish this entry. Please try again later!')} />
+      )}
+      {createPostMutation && createPostMutation.state.status === 'loading' && (
+        <EntryCard
+          style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}
+          entryData={createPendingEntry(loggedProfileData, createPostMutation.state.variables)}
+          sharePostLabel={t('Share Post')}
+          shareTextLabel={t('Share this post with your friends')}
+          repliesLabel={t('Replies')}
+          repostsLabel={t('Reposts')}
+          repostLabel={t('Repost')}
+          repostWithCommentLabel={t('Repost with comment')}
+          shareLabel={t('Share')}
+          copyLinkLabel={t('Copy Link')}
+          flagAsLabel={t('Report Post')}
+          loggedProfileEthAddress={loggedProfileData.ethAddress}
+          locale={locale || 'en'}
+          bookmarkLabel={t('Save')}
+          bookmarkedLabel={t('Saved')}
+          profileAnchorLink={'/profile'}
+          repliesAnchorLink={routes[POST]}
+          contentClickable={false}
+          hidePublishTime={true}
+          disableActions={true}
+        />
+      )}
+      <EntryList
+        pages={postPages}
+        itemSpacing={8}
+        status={postsReq.status}
+        hasNextPage={postsReq.hasNextPage}
         itemCard={
           <EntryCardRenderer
+            uiEvents={props.uiEvents}
             logger={logger}
             bookmarkState={bookmarksReq}
             ethAddress={loginState.ethAddress}
@@ -193,16 +197,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             removeEntryLabel={t('Delete Post')}
             removedByMeLabel={t('You deleted this post')}
             removedByAuthorLabel={t('This post was deleted by its author')}
-            uiEvents={props.uiEvents}
           />
         }
-        customEntities={getFeedCustomEntities({
-          logger,
-          isMobile,
-          feedItems: ids,
-          loggedEthAddress: loginState.ethAddress,
-          pendingEntries: [],
-        })}
+        onLoadMore={handleLoadMore}
       />
     </Box>
   );

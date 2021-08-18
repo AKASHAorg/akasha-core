@@ -70,7 +70,10 @@ const PostRenderer = (props: PostRendererProps) => {
   });
   const postReq = useComment(props.itemId);
   const itemData = React.useMemo(() => {
-    if (postReq.status === 'success' && postReq.data) {
+    if (postReq.data) {
+      if (postReq.data.isPublishing) {
+        return postReq.data as unknown as ReturnType<typeof mapEntry>;
+      }
       return mapEntry(postReq.data);
     }
     return undefined;
@@ -149,7 +152,7 @@ const PostRenderer = (props: PostRendererProps) => {
           )}
           {!hasCriticalErrors && (
             <>
-              {(!itemData || !itemData.author?.ethAddress) && <EntryCardLoading />}
+              {(!itemData || !itemData.author) && <EntryCardLoading />}
               {itemData && itemData.author.ethAddress && (
                 <Box
                   pad={{ horizontal: 'medium' }}
@@ -183,7 +186,7 @@ const PostRenderer = (props: PostRendererProps) => {
                       />
                     </Box>
                   )}
-                  {!isEditing && postReq.status === 'success' && (
+                  {!isEditing && itemData && (
                     <EntryBox
                       style={itemData.isPublishing ? { backgroundColor: '#4e71ff0f' } : {}}
                       isBookmarked={isBookmarked}

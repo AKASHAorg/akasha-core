@@ -5,7 +5,7 @@ import DS from '@akashaproject/design-system';
 import { useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
-import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import useLoginState from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 // import { useFollowers } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
@@ -13,8 +13,7 @@ import { IContentClickDetails } from '@akashaproject/design-system/lib/component
 import { ProfilePageCard } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useInfinitePostsByAuthor } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
-import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { ENTRY_KEY, useInfinitePostsByAuthor } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useQueryClient } from 'react-query';
 
 const { Box, Helmet } = DS;
@@ -23,22 +22,28 @@ export interface ProfilePageProps extends RootComponentProps {
   modalActions: ModalStateActions;
   modalState: ModalState;
   loggedEthAddress: string | null;
-  loginActions: UseLoginActions;
   loggedProfileData: any;
   showLoginModal: () => void;
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
-  const { loggedEthAddress, loginActions, loggedProfileData, showLoginModal } = props;
+  const { loggedEthAddress, loggedProfileData, showLoginModal } = props;
 
   const location = useLocation();
   const queryClient = useQueryClient();
 
-  let { pubKey } = useParams() as any;
+  const { pubKey } = useParams<{ pubKey: string }>();
 
-  if (location.pathname.includes(menuRoute[MY_PROFILE])) {
-    pubKey = loggedProfileData.pubKey;
-  }
+  const publicKey = React.useMemo(() => {
+    if (location.pathname.includes(menuRoute[MY_PROFILE])) {
+      if (loggedProfileData && loggedProfileData.pubKey) {
+        return loggedProfileData.pubKey;
+      }
+      return undefined;
+    }
+    return pubKey;
+  }, [pubKey, loggedProfileData, location.pathname]);
+
   const [errorState, errorActions] = useErrors({
     logger: props.logger,
   });
@@ -48,62 +53,15 @@ const ProfilePage = (props: ProfilePageProps) => {
     logger: props.logger,
   });
 
-  const reqPosts = useInfinitePostsByAuthor(pubKey, 15);
-  const postsState = reqPosts.data;
-  const ids = React.useMemo(() => {
-    const list = [];
-    if (!reqPosts.isSuccess) {
-      return list;
-    }
-    postsState.pages.forEach(page => page.results.forEach(postId => list.push(postId)));
-    return list;
-  }, [reqPosts.isSuccess]);
+  const [loginState] = useLoginState({});
+  const reqPosts = useInfinitePostsByAuthor(publicKey, 15, loginState.currentUserCalled);
 
-  const entriesData = React.useMemo(() => {
-    const list = {};
-    if (!reqPosts.isSuccess) {
-      return list;
-    }
-    postsState.pages.forEach(page =>
-      page.results.forEach(
-        postId => (list[postId] = mapEntry(queryClient.getQueryData(['Entry', postId]))),
-      ),
-    );
-    return list;
-  }, [reqPosts.isSuccess]);
-
-  React.useEffect(() => {
-    if (pubKey) {
-      profileActions.resetProfileData();
-      profileActions.getProfileData({ pubKey });
-    }
-  }, [pubKey]);
-
-  /**
-   * Hook used in the /profile/my-profile route
-   * because we don't have the /:pubkey url param
-   */
-  // React.useEffect(() => {
-  //   if (
-  //     loggedProfileData.pubKey &&
-  //     pubKey === loggedProfileData.pubKey &&
-  //     !postsState.postIds.length &&
-  //     !postsState.isFetchingPosts
-  //   ) {
-  //     postsActions.getUserPosts({ pubKey: loggedProfileData.pubKey, limit: 5 });
-  //   }
-  // }, [loggedProfileData.pubKey, pubKey]);
-
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const handleLoadMore = () => {
-    if (!reqPosts.isFetching && pubKey) {
+    if (!reqPosts.isLoading && reqPosts.hasNextPage && loginState.currentUserCalled) {
       reqPosts.fetchNextPage();
     }
-  };
-
-  const handleItemDataLoad = ({ itemId }: { itemId: string }) => {
-    // postsActions.getPost(itemId);
   };
 
   const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
@@ -123,7 +81,9 @@ const ProfilePage = (props: ProfilePageProps) => {
         break;
       case ItemTypes.COMMENT:
         /* Navigate to parent post because we don't have the comment page yet */
-        url = `/social-app/post/${entriesData[details.entryId].postId}`;
+        url = `/social-app/post/${
+          queryClient.getQueryData<{ postId: string }>([ENTRY_KEY, details.entryId]).postId
+        }`;
         break;
       default:
         break;
@@ -140,6 +100,13 @@ const ProfilePage = (props: ProfilePageProps) => {
     }
     return pubKey;
   }, [profileState, pubKey]);
+
+  const postPages = React.useMemo(() => {
+    if (reqPosts.data) {
+      return reqPosts.data.pages;
+    }
+    return [];
+  }, [reqPosts.data]);
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
@@ -173,24 +140,21 @@ const ProfilePage = (props: ProfilePageProps) => {
         loggedUserEthAddress={loggedEthAddress}
         modalActions={props.modalActions}
         modalState={props.modalState}
-        loginActions={loginActions}
       />
       <FeedWidget
         itemType={ItemTypes.ENTRY}
         logger={props.logger}
-        loadMore={handleLoadMore}
-        loadItemData={handleItemDataLoad}
+        onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
-        itemIds={ids}
-        itemsData={entriesData}
+        pages={postPages}
+        requestStatus={reqPosts.status}
         errors={errorState}
         ethAddress={loggedEthAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={showLoginModal}
-        // totalItems={postsState.totalItems}
-        hasMoreItems={!!reqPosts.hasNextPage}
+        hasNextPage={reqPosts.hasNextPage}
         profilePubKey={pubKey}
         loggedProfile={loggedProfileData}
         contentClickable={true}
@@ -201,6 +165,8 @@ const ProfilePage = (props: ProfilePageProps) => {
         removedByMeLabel={t('You deleted this post')}
         removedByAuthorLabel={t('This post was deleted by its author')}
         uiEvents={props.uiEvents}
+        itemSpacing={8}
+        locale={i18n.languages[0]}
       />
     </Box>
   );

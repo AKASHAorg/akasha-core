@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useErrors } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
-import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
+import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/entry-feed';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
@@ -14,16 +14,20 @@ import {
   useTagSubscriptions,
   useToggleTagSubscription,
 } from '@akashaproject/ui-awf-hooks/lib/use-tag-subscribe.new';
-import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { useQueryClient } from 'react-query';
+import { useTranslation } from 'react-i18next';
 
-const { Box, TagProfileCard, Helmet } = DS;
+const { Box, TagProfileCard, Helmet, styled } = DS;
 
 interface ITagFeedPage {
   loggedProfileData?: any;
   loginState: ILoginState;
   showLoginModal: () => void;
 }
+
+const TagInfoCard = styled(TagProfileCard)`
+  margin-bottom: 0.5rem;
+`;
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { showLoginModal, logger, loggedProfileData, loginState } = props;
@@ -34,6 +38,8 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
 
   const [tagData, setTagData] = React.useState<ITag | null>(null);
   const queryClient = useQueryClient();
+
+  const { i18n } = useTranslation();
 
   React.useEffect(() => {
     if (tagName) {
@@ -50,43 +56,24 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const [errorState] = useErrors({ logger });
 
   const reqPosts = useInfinitePostsByTag(tagName, 15);
-  const postsState = reqPosts.data;
-  const ids = React.useMemo(() => {
-    const list = [];
-    if (!reqPosts.isSuccess) {
-      return list;
-    }
-    postsState.pages.forEach(page => page.results.forEach(postId => list.push(postId)));
-    return list;
-  }, [reqPosts.isSuccess, postsState?.pages]);
-
-  const entriesData = React.useMemo(() => {
-    const list = {};
-    if (!reqPosts.isSuccess) {
-      return list;
-    }
-    postsState.pages.forEach(page =>
-      page.results.forEach(
-        postId => (list[postId] = queryClient.getQueryData([ENTRY_KEY, postId])),
-      ),
-    );
-    return list;
-  }, [reqPosts.isSuccess, postsState?.pages]);
 
   const tagSubscriptionsReq = useTagSubscriptions(loginState.ready?.ethAddress);
   const tagSubscriptions = tagSubscriptionsReq.data;
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
-  const handleLoadMore = () => {
-    if (!reqPosts.isFetching && loginState.currentUserCalled) {
-      reqPosts.fetchNextPage().then(d => console.log('fetched next page', d));
+  const postPages = React.useMemo(() => {
+    if (reqPosts.data) {
+      return reqPosts.data.pages;
     }
-  };
+    return [];
+  }, [reqPosts.data]);
 
-  const handleItemDataLoad = () => {
-    /* */
-  };
+  const handleLoadMore = React.useCallback(() => {
+    if (!reqPosts.isLoading && reqPosts.hasNextPage && loginState.currentUserCalled) {
+      reqPosts.fetchNextPage();
+    }
+  }, [reqPosts, loginState.currentUserCalled]);
 
   const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
     let url;
@@ -103,7 +90,9 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         break;
       case ItemTypes.COMMENT:
         /* Navigate to parent post because we don't have the comment page yet */
-        url = `/social-app/post/${entriesData[details.entryId].postId}`;
+        url = `/social-app/post/${
+          queryClient.getQueryData<{ postId: string }>([ENTRY_KEY, details.entryId]).postId
+        }`;
         break;
       default:
         break;
@@ -129,13 +118,12 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     }
     toggleTagSubscriptionReq.mutate(tagName);
   };
-
   return (
     <Box fill="horizontal">
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <TagProfileCard
+      <TagInfoCard
         tag={tagData}
         subscribedTags={tagSubscriptions}
         handleSubscribeTag={handleTagSubscribe}
@@ -144,18 +132,17 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       <FeedWidget
         itemType={ItemTypes.ENTRY}
         logger={props.logger}
-        loadMore={handleLoadMore}
-        loadItemData={handleItemDataLoad}
+        onLoadMore={handleLoadMore}
+        pages={postPages}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
-        itemIds={ids}
-        itemsData={entriesData}
+        requestStatus={reqPosts.status}
         errors={errorState}
         ethAddress={loginState.ethAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={showLoginModal}
-        hasMoreItems={!!reqPosts.hasNextPage}
+        hasNextPage={reqPosts.hasNextPage}
         // totalItems={postsState.totalItems}
         profilePubKey={loginState.pubKey}
         loggedProfile={loggedProfileData}
@@ -163,6 +150,8 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         onEntryFlag={handleEntryFlag}
         handleFlipCard={handleFlipCard}
         uiEvents={props.uiEvents}
+        itemSpacing={8}
+        locale={i18n.languages[0]}
       />
     </Box>
   );

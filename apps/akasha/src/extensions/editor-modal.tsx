@@ -64,11 +64,11 @@ const EditorModalContainer = (props: RootComponentProps) => {
       if (isEditing) {
         editPost.mutate({ entryID: props.activeModal.entryId, ...data });
       } else {
-        publishPost.mutate(buildPublishObject(data));
+        publishPost.mutate({ ...data, pubKey: loggedProfileData.pubKey });
       }
       props.singleSpa.navigateToUrl(location.pathname);
     },
-    [isEditing, props.activeModal, props.singleSpa, editPost, publishPost],
+    [isEditing, props.activeModal, props.singleSpa, editPost, publishPost, loggedProfileData],
   );
 
   const handleModalClose = () => {
@@ -102,7 +102,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
           uploadRequest={uploadMediaToTextile}
           embedEntryData={embeddedEntryContent}
           style={{ width: '36rem' }}
-          editorState={entryData.content}
+          editorState={entryData?.content}
         />
       )}
     </>
