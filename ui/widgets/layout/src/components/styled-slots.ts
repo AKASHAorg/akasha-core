@@ -19,7 +19,7 @@ const BaseStyledSlot = styled(ExtensionPoint)`
 `;
 
 // eslint-disable-next-line prettier/prettier
-export const SidebarSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot) <{
+export const SidebarSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)<{
   visible: boolean;
 }>`
   flex-grow: 1;
@@ -57,7 +57,7 @@ export const PluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
 
 export const WidgetSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
   display: none;
-  margin-top: 0.5em;
+  margin-bottom: 0.5em;
   ${props => css`
     @media screen and (min-width: ${props.theme.breakpoints.small.value}px) {
       max-width: 30em;

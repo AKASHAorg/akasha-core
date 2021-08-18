@@ -73,7 +73,7 @@ const getSearch = async (searchQuery: string) => {
 
 export function useSearch(searchQuery: string) {
   return useQuery([SEARCH_KEY, searchQuery], () => getSearch(searchQuery), {
-    placeholderData: { profiles: [], entries: [], comments: [], tags: [] },
+    initialData: { profiles: [], entries: [], comments: [], tags: [] },
     keepPreviousData: true,
   });
 }

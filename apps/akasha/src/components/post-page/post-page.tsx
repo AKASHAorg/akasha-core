@@ -102,12 +102,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const addBookmark = useBookmarkPost();
   const deleteBookmark = useBookmarkDelete();
 
-  // React.useEffect(() => {
-  //   if (loginState.ethAddress && entryData?.author.ethAddress) {
-  //     followActions.isFollowing(loginState.ethAddress, entryData.author.ethAddress);
-  //   }
-  // }, [loginState.ethAddress, entryData?.author.ethAddress]);
-
   const handleFollow = () => {
     if (entryData?.author.ethAddress) {
       followReq.mutate(entryData?.author.ethAddress);
@@ -184,8 +178,13 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     publishComment.mutate({ ...data, postID: postId });
   };
 
-  const handleRepost = (_withComment: boolean, entryData: any) => {
-    props.navigateToModal({ name: 'editor', embedEntry: entryData });
+  const handleRepost = (_withComment: boolean, entryId: any) => {
+    if (!loginState.ethAddress) {
+      showLoginModal();
+      return;
+    } else {
+      props.navigateToModal({ name: 'editor', embedEntry: entryId });
+    }
   };
 
   const handleNavigateToPost = redirectToPost(

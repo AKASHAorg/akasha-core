@@ -76,7 +76,7 @@ export interface IEntryBoxProps {
   isBookmarked?: boolean;
   onEntryBookmark?: (entryId: string, isBookmarked?: boolean) => void;
   onClickAvatar?: React.MouseEventHandler<HTMLDivElement>;
-  onRepost?: (withComment: boolean, entryData: IEntryData) => void;
+  onRepost?: (withComment: boolean, entryId: string) => void;
   onEntryFlag?: (entryId?: string, contentType?: string) => void;
   // follow related
   handleFollowAuthor?: (profileEthAddress: string) => void;
@@ -189,7 +189,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const handleRepost = (withComment: boolean) => () => {
     if (onRepost) {
-      onRepost(withComment, entryData);
+      onRepost(withComment, entryData.entryId);
     }
   };
 
