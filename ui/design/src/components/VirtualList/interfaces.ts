@@ -30,7 +30,7 @@ export interface AnchorData {
 }
 export interface IVirtualListProps {
   items: string[];
-  itemsData: {};
+  itemsData: Record<string, any>;
   /* Boolean to load item data in a second call (loadItemData) - default: false */
   useItemDataLoader?: boolean;
   loadMore: (payload: ILoadItemsPayload) => void;

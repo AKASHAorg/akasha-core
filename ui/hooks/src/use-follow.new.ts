@@ -76,7 +76,7 @@ const getIsFollowing = async (followerEthAddress: string, followingEthAddress: s
   }
 };
 
-export function useIsFollowing(followerEthAddress, followingEthAddress) {
+export function useIsFollowing(followerEthAddress, followingEthAddress, enabled = true) {
   const queryClient = useQueryClient();
   return useQuery(
     [FOLLOWED_PROFILES_KEY],
@@ -95,7 +95,7 @@ export function useIsFollowing(followerEthAddress, followingEthAddress) {
     },
     {
       initialData: [],
-      enabled: !!(followerEthAddress && followingEthAddress),
+      enabled: !!(followerEthAddress && followingEthAddress) && enabled,
       keepPreviousData: true,
     },
   );

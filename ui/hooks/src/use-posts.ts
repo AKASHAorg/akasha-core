@@ -1088,18 +1088,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
     optimisticPublishComment: (commentData, postId, loggedProfile) => {
       const publishObj = buildPublishObject(commentData, postId);
       const pendingId = `${loggedProfile.ethAddress}-${postsState.pendingPosts.length}`;
-      const pending = createPendingEntry(
-        {
-          ethAddress: loggedProfile.ethAddress as string,
-          pubKey: loggedProfile.pubKey,
-          avatar: loggedProfile.avatar,
-          userName: loggedProfile.userName,
-          name: loggedProfile.name,
-          coverImage: loggedProfile.coverImage,
-          description: loggedProfile.description,
-        },
-        commentData,
-      );
+      const pending = createPendingEntry(loggedProfile, commentData);
       dispatch({ type: 'OPTIMISTIC_PUBLISH_COMMENT', payload: { pendingId, pending, publishObj } });
     },
     optimisticPublishPost: (postData, loggedProfile, currentEmbedEntry, disablePendingFeedback) => {
@@ -1107,20 +1096,7 @@ const usePosts = (props: UsePostsProps): [PostsState, PostsActions] => {
       const pendingId = `${loggedProfile.ethAddress}-${postsState.pendingPosts.length}`;
       let pending: any;
       if (!disablePendingFeedback) {
-        pending = createPendingEntry(
-          {
-            ethAddress: loggedProfile.ethAddress as string,
-            pubKey: loggedProfile.pubKey,
-            avatar: loggedProfile.avatar,
-            name: loggedProfile.name,
-            userName: loggedProfile.userName,
-            ensName: loggedProfile.ensName,
-            coverImage: loggedProfile.coverImage,
-            description: loggedProfile.description,
-          },
-          postData,
-          currentEmbedEntry,
-        );
+        pending = createPendingEntry(loggedProfile, postData, currentEmbedEntry);
 
         dispatch({
           type: 'OPTIMISTIC_PUBLISH_POST',
