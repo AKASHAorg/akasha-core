@@ -119,8 +119,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     props.navigateToModal({ name: 'entry-remove-confirmation', entryType: 'Post', entryId });
   };
 
-  console.log(createPostMutation, '<<<<<<<<<<<<< create post mutation');
-
   return (
     <Box fill="horizontal">
       <Helmet>

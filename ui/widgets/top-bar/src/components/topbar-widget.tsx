@@ -1,67 +1,18 @@
-import React, { PureComponent, Suspense } from 'react';
+import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import TopbarComponent from './topbar-component';
 import { BrowserRouter as Router } from 'react-router-dom';
 import i18next from '../i18n';
 
-export default class TopbarWidget extends PureComponent<RootComponentProps> {
-  public state: {
-    hasErrors: boolean;
-    errorMessage: string;
-  };
-  public showSidebarEvent = new CustomEvent('layout:showSidebar');
-  public hideSidebarEvent = new CustomEvent('layout:hideSidebar');
+const TopbarWidget = (props: RootComponentProps) => {
+  return (
+    <I18nextProvider i18n={i18next}>
+      <Router>
+        <TopbarComponent {...props} />
+      </Router>
+    </I18nextProvider>
+  );
+};
 
-  private subscription: any;
-  constructor(props: RootComponentProps) {
-    super(props);
-    this.state = {
-      hasErrors: false,
-      errorMessage: '',
-    };
-  }
-
-  componentWillUnmount() {
-    this.subscription.unsubscribe();
-  }
-
-  public componentDidCatch(err: Error, info: React.ErrorInfo) {
-    this.setState({
-      hasErrors: true,
-      errorMessage: `${err.message} :: ${info.componentStack}`,
-    });
-    const { logger } = this.props;
-    logger.error('an error has occurred %j %j', err, info);
-  }
-
-  public toggleSidebar = (visible: boolean) => {
-    if (visible) {
-      window.dispatchEvent(this.showSidebarEvent);
-    } else {
-      window.dispatchEvent(this.hideSidebarEvent);
-    }
-  };
-  public render() {
-    if (this.state.hasErrors) {
-      return (
-        <div>
-          Oh no, something went wrong in topbar-widget
-          <div>
-            <code>{this.state.errorMessage}</code>
-          </div>
-        </div>
-      );
-    }
-    console.log(i18next, '<<<< i18next instance');
-    return (
-      <I18nextProvider i18n={i18next}>
-        <Suspense fallback={<>...</>}>
-          <Router>
-            <TopbarComponent getMenuItems={this.props.getMenuItems} {...this.props} />
-          </Router>
-        </Suspense>
-      </I18nextProvider>
-    );
-  }
-}
+export default TopbarWidget;

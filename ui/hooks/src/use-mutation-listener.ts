@@ -17,7 +17,7 @@ export const useMutationListener = (mutationKey: MutationKey) => {
     mountedRef.current = true;
     const unsubscribe = mutationCache.subscribe(mutation => {
       if (mutation.options.mutationKey === mutationKey) {
-        setMutation(mutation);
+        setMutation(Object.assign({}, mutation));
       }
     });
     return () => {

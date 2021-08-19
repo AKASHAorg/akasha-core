@@ -5,17 +5,19 @@ import App from './app';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { setupI18next } from '../i18n';
+import DS from '@akashaproject/design-system';
+
+const { ErrorLoader } = DS;
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(App),
-  errorBoundary: (err, errInfo, props: RootComponentProps) => {
+  errorBoundary: (error, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
-      props.logger.error(err);
-      props.logger.error(errInfo);
+      props.logger.error(error, errorInfo);
     }
-    return <>Error in social-app</>;
+    return <ErrorLoader type="script-error" title="Error in akasha app" details={error.message} />;
   },
 });
 

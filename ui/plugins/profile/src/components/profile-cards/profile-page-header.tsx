@@ -7,7 +7,6 @@ import {
   ModalStateActions,
   MODAL_NAMES,
 } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
-import { useENSRegistration, useErrors } from '@akashaproject/ui-awf-hooks';
 import { useNetworkState } from '@akashaproject/ui-awf-hooks/lib/use-network-state.new';
 import {
   useIsFollowing,
@@ -110,7 +109,7 @@ type ProfilePageCardProps = IProfileHeaderProps &
     | 'unmountSelf'
   >;
 
-export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
+export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
   const { profileState, loggedUserEthAddress, logger, profileId, profileUpdateStatus } = props;
 
   const [isRegistration, setIsRegistration] = React.useState<boolean>(false);
@@ -119,12 +118,12 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
 
   const { t } = useTranslation();
 
-  const [ensErrors, ensErrorActions] = useErrors({ logger: props.logger });
+  // const [ensErrors, ensErrorActions] = useErrors({ logger: props.logger });
 
-  const [ensState, ensActions] = useENSRegistration({
-    ethAddress: props.loggedUserEthAddress,
-    onError: ensErrorActions.createError,
-  });
+  // const [ensState, ensActions] = useENSRegistration({
+  //   ethAddress: props.loggedUserEthAddress,
+  //   onError: ensErrorActions.createError,
+  // });
 
   const checkNetworkReq = useNetworkState(loggedUserEthAddress);
   const networkState = checkNetworkReq.data;
@@ -138,13 +137,13 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
     if (profileUpdateStatus.updateComplete && !isRegistration) {
       handleModalClose();
     }
-    if (ensState.status.registrationComplete) {
-      ensActions.resetRegistrationStatus();
-      props.profileActions.getProfileData({ pubKey: profileId });
-      props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
-      return;
-    }
-  }, [profileUpdateStatus.updateComplete, ensState.status.registrationComplete]);
+    // if (ensState.status.registrationComplete) {
+    //   ensActions.resetRegistrationStatus();
+    //   props.profileActions.getProfileData({ pubKey: profileId });
+    //   props.singleSpa.navigateToUrl(menuRoute[MY_PROFILE]);
+    //   return;
+    // }
+  }, [profileUpdateStatus.updateComplete]);
 
   React.useEffect(() => {
     if (
@@ -191,57 +190,57 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
       UsernameTypes.AKASHA_ENS_SUBDOMAIN,
     );
     const hasEnsDomainAvail = userNameType.available.includes(UsernameTypes.ENS_DOMAIN);
-    const detectedEns = ensState.userName;
+    // const detectedEns = ensState.userName;
     const currentDefault = userNameType.default;
 
     /**
      * Show akasha subdomain option if it's not using ens domain
      */
-    if (
-      hasEnsSubdomainAvail ||
-      detectedEns?.endsWith('.akasha.eth') ||
-      currentDefault?.provider === ProfileProviders.ENS ||
-      currentDefault?.provider === ProfileProviders.EWA_BASIC
-    ) {
-      options.push({
-        type: ENSOptionTypes.ENS_AKASHA_SUBDOMAIN,
-        label: userNameType.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN)
-          ? t('Display my AKASHA Ethereum name')
-          : t('Use an AKASHA-provided Ethereum name'),
-        value: `${profileState.userName}.akasha.eth`,
-        defaultChecked: !options.length,
-        textDetails: userNameType.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN) ? (
-          <></>
-        ) : (
-          <>
-            {t('Username Powered by')}{' '}
-            <Icon
-              type="appEns"
-              size="xs"
-              wrapperStyle={{ display: 'inline', verticalAlign: 'middle' }}
-            />{' '}
-            <strong>ENS</strong>.{' '}
-            {t('You will need to pay gas fees to register this Ethereum name.')}
-          </>
-        ),
-      });
-    }
+    // if (
+    //   hasEnsSubdomainAvail ||
+    //   detectedEns?.endsWith('.akasha.eth') ||
+    //   currentDefault?.provider === ProfileProviders.ENS ||
+    //   currentDefault?.provider === ProfileProviders.EWA_BASIC
+    // ) {
+    //   options.push({
+    //     type: ENSOptionTypes.ENS_AKASHA_SUBDOMAIN,
+    //     label: userNameType.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN)
+    //       ? t('Display my AKASHA Ethereum name')
+    //       : t('Use an AKASHA-provided Ethereum name'),
+    //     value: `${profileState.userName}.akasha.eth`,
+    //     defaultChecked: !options.length,
+    //     textDetails: userNameType.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN) ? (
+    //       <></>
+    //     ) : (
+    //       <>
+    //         {t('Username Powered by')}{' '}
+    //         <Icon
+    //           type="appEns"
+    //           size="xs"
+    //           wrapperStyle={{ display: 'inline', verticalAlign: 'middle' }}
+    //         />{' '}
+    //         <strong>ENS</strong>.{' '}
+    //         {t('You will need to pay gas fees to register this Ethereum name.')}
+    //       </>
+    //     ),
+    //   });
+    // }
     /**
      * Show ens domain options if we detect one and it's not already set
      */
-    if (
-      hasEnsDomainAvail ||
-      (!userNameType.default?.value.endsWith('.eth') &&
-        detectedEns &&
-        !detectedEns.endsWith('.akasha.eth'))
-    ) {
-      options.push({
-        type: ENSOptionTypes.BRING_YOUR_OWN_ENS,
-        label: t('Use my own Ethereum name'),
-        value: ensState.userName as string,
-        defaultChecked: !options.length,
-      });
-    }
+    // if (
+    //   hasEnsDomainAvail ||
+    //   (!userNameType.default?.value.endsWith('.eth') &&
+    //     detectedEns &&
+    //     !detectedEns.endsWith('.akasha.eth'))
+    // ) {
+    //   options.push({
+    //     type: ENSOptionTypes.BRING_YOUR_OWN_ENS,
+    //     label: t('Use my own Ethereum name'),
+    //     value: ensState.userName as string,
+    //     defaultChecked: !options.length,
+    //   });
+    // }
     /**
      * Show ethAddress option if the user aready have akasha subdomain or ens domain
      */
@@ -254,7 +253,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
       });
     }
     return options;
-  }, [profileState, ensState, userNameType]);
+  }, [profileState, userNameType]);
 
   const handleFollow = () => {
     if (!loggedUserEthAddress) {
@@ -300,7 +299,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
       selectedOption.value &&
       !userNameType.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN)
     ) {
-      return ensActions.register({ userName: selectedOption.value });
+      // return ensActions.register({ userName: selectedOption.value });
     }
     if (
       selectedOption.type === ENSOptionTypes.ENS_AKASHA_SUBDOMAIN &&
@@ -340,7 +339,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
   };
 
   const showEnsModal = () => {
-    ensActions.resetRegistrationStatus();
+    // ensActions.resetRegistrationStatus();
     props.singleSpa.navigateToUrl(`${menuRoute[MY_PROFILE]}/update-ens`);
   };
 
@@ -403,7 +402,6 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
   if (!profileState.ethAddress) {
     return null;
   }
-
   return (
     <>
       <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
@@ -471,7 +469,7 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
             </StyledLayer>
           )}
           {!networkState?.networkNotSupported && profileState.ethAddress && (
-            <ErrorInfoCard errors={ensErrors}>
+            <ErrorInfoCard errors={{}}>
               {(errorMessage, hasCriticalErrors) => (
                 <>
                   {!hasCriticalErrors && (
@@ -491,22 +489,8 @@ export const ProfilePageCard: React.FC<ProfilePageCardProps> = props => {
                       saveLabel={t('Save')}
                       onSave={onENSSubmit}
                       onCancel={closeEnsModal}
-                      saving={!!ensState.status.registering || !!profileUpdateStatus.saving}
-                      errorMessage={`
-                        ${ensState.errorMessage ? ensState.errorMessage : ''}
-                        ${
-                          errorMessage
-                            ? Object.keys(ensErrors).reduce(
-                                (str, errKey) =>
-                                  str.length
-                                    ? `${str}, ${ensErrors[errKey].error.message}`
-                                    : ensErrors[errKey].error.message,
-                                '',
-                              )
-                            : ''
-                        }
-                        `}
-                      registrationStatus={ensState.status}
+                      saving={false}
+                      errorMessage={``}
                     />
                   )}
                 </>

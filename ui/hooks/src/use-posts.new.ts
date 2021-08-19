@@ -123,6 +123,7 @@ const getPostsByAuthor = async (
         offset: offset,
       }),
     );
+    console.log(res, 'get posts by author');
     return {
       ...res.data.getPostsByAuthor,
       results: res.data.getPostsByAuthor.results.map(post => {
@@ -131,7 +132,8 @@ const getPostsByAuthor = async (
       }),
     };
   } catch (error) {
-    logError('usePosts.getPosts', error);
+    logError('usePosts.getPostsByAuthor', error);
+    throw error;
   }
 };
 
@@ -146,7 +148,7 @@ export function useInfinitePostsByAuthor(
     [ENTRIES_BY_AUTHOR_KEY, pubKey],
     async ({ pageParam = offset }) => getPostsByAuthor(queryClient, pubKey, limit, pageParam),
     {
-      getNextPageParam: lastPage => lastPage.nextIndex,
+      getNextPageParam: lastPage => !!lastPage && lastPage.nextIndex,
       enabled: enabled,
       keepPreviousData: true,
     },
@@ -166,7 +168,6 @@ const getPost = async postID => {
 
 // hook for fetching data for a specific postID/entryID
 export function usePost(postID: string, enabler: boolean) {
-  const queryClient = useQueryClient();
   return useQuery([ENTRY_KEY, postID], () => getPost(postID), {
     enabled: !!postID && enabler,
     keepPreviousData: true,

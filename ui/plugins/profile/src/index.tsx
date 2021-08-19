@@ -6,27 +6,6 @@ import {
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-// const findTopbarQuickAccess = (integrations: IntegrationRegistrationOptions['integrations']) => {
-//   if (!integrations) {
-//     return null;
-//   }
-//   const topbarConf = Object.entries(integrations.configs).find(intConf => {
-//     const [, config] = intConf as [string, IAppConfig | IWidgetConfig];
-//     if (config.tags && config.tags.includes('topbar')) {
-//       return true;
-//     }
-//     return false;
-//   });
-//   if (topbarConf) {
-//     const [, config] = topbarConf as [string, IAppConfig | IWidgetConfig];
-//     if (config.extensions) {
-//       return config.extensions.QuickAccess;
-//     }
-//     return null;
-//   }
-//   return null;
-// };
-
 /**
  * All plugins must export an object like this:
  */
@@ -54,10 +33,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     })),
   },
   extends: [
-    // {
-    //   mountsIn: mountOptions => findTopbarQuickAccess(mountOptions.integrations),
-    //   loadingFn: () => import('./extensions/sign-in-buttons'),
-    // },
     {
       mountsIn: 'login',
       loadingFn: () => import('./extensions/login-modal'),

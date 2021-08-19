@@ -44,7 +44,7 @@ export interface IFeedWidgetProps {
   locale: string;
 }
 
-const FeedWidgetRoot = (props: IFeedWidgetProps) => {
+const FeedWidgetRoot: React.FC<IFeedWidgetProps> = props => {
   return (
     <ThemeSelector
       settings={{ activeTheme: 'Light-Theme' }}

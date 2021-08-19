@@ -4,11 +4,20 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import { setupI18next } from '../i18n';
 import App from './App';
+import DS from '@akashaproject/design-system';
+
+const { ErrorLoader } = DS;
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: App,
+  errorBoundary: (error, errorInfo, props: RootComponentProps) => {
+    if (props.logger) {
+      props.logger.error(error, errorInfo);
+    }
+    return <ErrorLoader type="script-error" title="Error in feed widget" details={error.message} />;
+  },
 });
 
 export const bootstrap = (props: RootComponentProps) => {

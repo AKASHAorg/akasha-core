@@ -10,13 +10,13 @@ import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 // import { useFollowers } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 
-import { ProfilePageCard } from '../profile-cards/profile-page-header';
+import { ProfilePageHeader } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ENTRY_KEY, useInfinitePostsByAuthor } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useQueryClient } from 'react-query';
 
-const { Box, Helmet } = DS;
+const { Box, Helmet, ErrorLoader } = DS;
 
 export interface ProfilePageProps extends RootComponentProps {
   modalActions: ModalStateActions;
@@ -54,15 +54,15 @@ const ProfilePage = (props: ProfilePageProps) => {
   });
 
   const [loginState] = useLoginState({});
-  const reqPosts = useInfinitePostsByAuthor(publicKey, 15, loginState.currentUserCalled);
+  const reqPosts = useInfinitePostsByAuthor(publicKey, 15, !!publicKey);
 
   const { t, i18n } = useTranslation();
 
-  const handleLoadMore = () => {
+  const handleLoadMore = React.useCallback(() => {
     if (!reqPosts.isLoading && reqPosts.hasNextPage && loginState.currentUserCalled) {
       reqPosts.fetchNextPage();
     }
-  };
+  }, [reqPosts, loginState.currentUserCalled]);
 
   const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
     let url;
@@ -131,7 +131,7 @@ const ProfilePage = (props: ProfilePageProps) => {
           World
         </title>
       </Helmet>
-      <ProfilePageCard
+      <ProfilePageHeader
         {...props}
         profileState={profileState}
         profileActions={profileActions}
@@ -141,33 +141,43 @@ const ProfilePage = (props: ProfilePageProps) => {
         modalActions={props.modalActions}
         modalState={props.modalState}
       />
-      <FeedWidget
-        itemType={ItemTypes.ENTRY}
-        logger={props.logger}
-        onLoadMore={handleLoadMore}
-        getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
-        pages={postPages}
-        requestStatus={reqPosts.status}
-        errors={errorState}
-        ethAddress={loggedEthAddress}
-        onNavigate={handleNavigation}
-        singleSpaNavigate={props.singleSpa.navigateToUrl}
-        navigateToModal={props.navigateToModal}
-        onLoginModalOpen={showLoginModal}
-        hasNextPage={reqPosts.hasNextPage}
-        profilePubKey={pubKey}
-        loggedProfile={loggedProfileData}
-        contentClickable={true}
-        onEntryFlag={handleEntryFlag}
-        handleFlipCard={handleFlipCard}
-        onEntryRemove={handleEntryRemove}
-        removeEntryLabel={t('Delete Post')}
-        removedByMeLabel={t('You deleted this post')}
-        removedByAuthorLabel={t('This post was deleted by its author')}
-        uiEvents={props.uiEvents}
-        itemSpacing={8}
-        locale={i18n.languages[0]}
-      />
+      {reqPosts.status === 'error' && reqPosts.error && (
+        <ErrorLoader
+          type="script-error"
+          title="Cannot get posts for this profile"
+          details={(reqPosts.error as Error).message}
+        />
+      )}
+      {reqPosts.status === 'success' && !postPages && <div>There are no posts!</div>}
+      {reqPosts.status === 'success' && postPages && (
+        <FeedWidget
+          itemType={ItemTypes.ENTRY}
+          logger={props.logger}
+          onLoadMore={handleLoadMore}
+          getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
+          pages={postPages}
+          requestStatus={reqPosts.status}
+          errors={errorState}
+          ethAddress={loggedEthAddress}
+          onNavigate={handleNavigation}
+          singleSpaNavigate={props.singleSpa.navigateToUrl}
+          navigateToModal={props.navigateToModal}
+          onLoginModalOpen={showLoginModal}
+          hasNextPage={reqPosts.hasNextPage}
+          profilePubKey={pubKey}
+          loggedProfile={loggedProfileData}
+          contentClickable={true}
+          onEntryFlag={handleEntryFlag}
+          handleFlipCard={handleFlipCard}
+          onEntryRemove={handleEntryRemove}
+          removeEntryLabel={t('Delete Post')}
+          removedByMeLabel={t('You deleted this post')}
+          removedByAuthorLabel={t('This post was deleted by its author')}
+          uiEvents={props.uiEvents}
+          itemSpacing={8}
+          locale={i18n.languages[0]}
+        />
+      )}
     </Box>
   );
 };

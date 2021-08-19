@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
-import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { useLoginState, useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
 
 const { SignInModal } = DS;
@@ -12,10 +11,11 @@ const { SignInModal } = DS;
 const SignInModalContainer = (props: RootComponentProps) => {
   const { logger } = props;
 
-  const acceptedTerms = localStorage.getItem('@acceptedTermsAndPrivacy');
+  const acceptedTerms = React.useMemo(() => {
+    return localStorage.getItem('@acceptedTermsAndPrivacy');
+  }, []);
 
   const { t } = useTranslation();
-  const location = useLocation();
 
   const [suggestSignUp, setSuggestSignUp] = React.useState<boolean>(false);
 
@@ -74,13 +74,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
   );
 };
 
-const Wrapped = (props: RootComponentProps) => (
-  <Router>
-    <React.Suspense fallback={<></>}>
-      <SignInModalContainer {...props} />
-    </React.Suspense>
-  </Router>
-);
+const Wrapped = (props: RootComponentProps) => <SignInModalContainer {...props} />;
 
 const reactLifecycles = singleSpaReact({
   React,
@@ -88,7 +82,7 @@ const reactLifecycles = singleSpaReact({
   rootComponent: withProviders(Wrapped),
   errorBoundary: (err, errorInfo, props) => {
     if (props.logger) {
-      props.logger('Error: %s; Info: %s', err, errorInfo);
+      props.logger.error('Error: %s; Info: %s', err, errorInfo);
     }
     return <div>!</div>;
   },

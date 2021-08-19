@@ -7,6 +7,9 @@ import LocalStorageBackend from 'i18next-localstorage-backend';
 
 export const setupI18next = ({ logger, namespace }): Promise<void> => {
   return new Promise(resolve => {
+    if (i18next.isInitialized) {
+      return resolve();
+    }
     i18next
       .use(initReactI18next)
       .use(Backend)

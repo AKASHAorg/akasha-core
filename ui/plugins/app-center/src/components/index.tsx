@@ -1,27 +1,32 @@
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
-import App from './App';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { setupI18next } from '../i18n';
-import { RootComponentProps } from '../../../../typings/lib';
+import App from './App';
+import DS from '@akashaproject/design-system';
 
-/**
- * This is the plugin's lifecycle logic
- * @todo add more docs!!
- */
+const { ErrorLoader } = DS;
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: withProviders(App),
+  rootComponent: App,
+  errorBoundary: (error, errorInfo, props: RootComponentProps) => {
+    if (props.logger) {
+      props.logger.error(error, errorInfo);
+    }
+    return (
+      <ErrorLoader type="script-error" title="Error in app-center plugin" details={error.message} />
+    );
+  },
 });
 
 export const bootstrap = (props: RootComponentProps) => {
   return setupI18next({
     logger: props.logger,
     // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'ui-plugin-legal',
+    namespace: 'ui-plugin-app-center',
   });
 };
 
