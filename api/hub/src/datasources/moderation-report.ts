@@ -5,8 +5,6 @@ import { ModerationDecision, ModerationReport } from '../collections/interfaces'
 import ModerationDecisionAPI from './moderation-decision';
 import { queryCache } from '../storage/cache';
 
-const moderationAppURL = process.env.MODERATION_APP_URL;
-
 /**
  * The ModerationReportAPI class handles all the interactions between the reporting API
  * and the underlying storage layer.
@@ -175,7 +173,7 @@ class ModerationReportAPI extends DataSource {
 
     const exists = await this.exists(contentID, author);
     if (exists) {
-      return Promise.reject(`cannot report content ${contentID} twice as user ${author}`);
+      return Promise.reject({status: 409});
     }
 
     // we need to check if a pending decision was created for this post
@@ -197,27 +195,10 @@ class ModerationReportAPI extends DataSource {
       if (!decisionID || !decisionID.length) {
         logger.warn(`pending decision could not be created for contentID ${contentID}`);
         // throw new Error('pending decision could not be created');
+      } else {
+        // send email notification to moderators
+        await sendEmailNotification();
       }
-      // send email notification to moderators
-      const text = `There is a new pending request for moderation.
-      Please visit the moderation app (${moderationAppURL})
-      to moderate this content.
-      \nThank you!`;
-      const html = `<p>There is a new pending request for moderation.
-      Please visit the <a href="${moderationAppURL}">moderation app</a>
-      to moderate this content.</p>
-      <br>
-      <p>Thank you!</p>`;
-      const msg = {
-        to: process.env.MODERATION_EMAIL,
-        from: process.env.MODERATION_EMAIL,
-        subject: "New moderation request on Ethereum World",
-        text,
-        html
-      };
-      sendEmailNotification(msg).catch(e => {
-        logger.warn(`Cound not send email notification to moderator list ${process.env.MODERATION_EMAIL}`);
-      });
     }
 
     const report: ModerationReport = {

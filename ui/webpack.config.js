@@ -33,7 +33,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin({ verbose: true }),
     new webpack.EnvironmentPlugin({
-      MODERATION_API: process.env.MODERATION_API || 'https://staging-moderation.ethereum.world',
+      MODERATION_API: process.env.MODERATION_API || 'https://staging-api.ethereum.world',
       INFURA_ID: process.env.INFURA_ID || '',
       BUCKET_VERSION: process.env.BUCKET_VERSION || '',
       EWA_MAILSENDER: process.env.EWA_MAILSENDER || '',
