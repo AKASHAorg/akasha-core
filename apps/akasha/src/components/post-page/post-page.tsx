@@ -7,7 +7,6 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { redirect, redirectToPost } from '../../services/routing-service';
 import PostRenderer from './post-renderer';
-import { getPendingComments } from './post-page-pending-comments';
 import routes, { POST } from '../../routes';
 import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
@@ -29,7 +28,7 @@ import {
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 // import { useTags, useMentions } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
-import { mapEntry, buildPublishObject } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
 import { useQueryClient } from 'react-query';
 
@@ -37,7 +36,7 @@ const {
   Box,
   MainAreaCardBox,
   EntryBox,
-  VirtualList,
+  EntryList,
   Helmet,
   CommentEditor,
   EditorPlaceholder,
@@ -66,51 +65,29 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   //@Todo: replace entryData with value from usePost
   const postReq = usePost(postId, !!postId);
   const entryData = React.useMemo(() => {
-    if (postReq.status === 'success') {
+    if (postReq.data) {
       return mapEntry(postReq.data);
     }
     return undefined;
-  }, [postReq.data]);
+  }, [JSON.stringify(postReq.data)]);
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
   });
 
   const reqComments = useInfiniteComments(15, postId);
-  const commentsState = reqComments.data;
-  const ids = React.useMemo(() => {
-    const list = [];
-    if (!reqComments.isSuccess) {
-      return list;
-    }
-    commentsState.pages.forEach(page => page.results.forEach(commentId => list.push(commentId)));
-    return list;
-  }, [reqComments.isSuccess]);
 
-  // @TODO: Remove this when useComment is added in the post-renderer component
-  const commentsData = React.useMemo(() => {
-    const list = {};
-    if (!reqComments.isSuccess) {
-      return list;
+  const commentPages = React.useMemo(() => {
+    if (reqComments.data) {
+      return reqComments.data.pages;
     }
-    commentsState.pages.forEach(page =>
-      page.results.forEach(
-        commentId => (list[commentId] = mapEntry(queryClient.getQueryData(['Comment', commentId]))),
-      ),
-    );
-    return list;
-  }, [queryClient, reqComments.isSuccess, commentsState?.pages]);
+    return [];
+  }, [reqComments.data]);
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const profileDataReq = useGetProfile(loginState.pubKey);
   const loggedProfileData = profileDataReq.data;
-
-  // React.useEffect(() => {
-  //   if (loginState.pubKey) {
-  //     loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
-  //   }
-  // }, [loginState.pubKey]);
 
   const isFollowingMultipleReq = useIsFollowing(
     loginState.ethAddress,
@@ -124,12 +101,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const bookmarks = bookmarksReq.data;
   const addBookmark = useBookmarkPost();
   const deleteBookmark = useBookmarkDelete();
-
-  // React.useEffect(() => {
-  //   if (loginState.ethAddress && entryData?.author.ethAddress) {
-  //     followActions.isFollowing(loginState.ethAddress, entryData.author.ethAddress);
-  //   }
-  // }, [loginState.ethAddress, entryData?.author.ethAddress]);
 
   const handleFollow = () => {
     if (entryData?.author.ethAddress) {
@@ -146,21 +117,25 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const isFollowing = followedProfiles.includes(entryData?.author?.ethAddress);
 
   const handleLoadMore = () => {
-    if (!reqComments.isFetching && loginState.currentUserCalled) {
+    if (
+      reqComments.status === 'success' &&
+      reqComments.hasNextPage &&
+      loginState.currentUserCalled
+    ) {
       reqComments.fetchNextPage();
     }
   };
 
-  React.useEffect(() => {
-    // this is used to initialise comments when navigating to other post ids
-    if (postId && loginState.currentUserCalled) {
-      // postsActions.getPost(postId);
-      handleLoadMore();
-      // if (loginState.ethAddress) {
-      //   bookmarkActions.getBookmarks();
-      // }
-    }
-  }, [postId, loginState.currentUserCalled, loginState.ethAddress]);
+  // React.useEffect(() => {
+  //   // this is used to initialise comments when navigating to other post ids
+  //   if (postId && loginState.currentUserCalled) {
+  //     // postsActions.getPost(postId);
+  //     handleLoadMore();
+  //     // if (loginState.ethAddress) {
+  //     //   bookmarkActions.getBookmarks();
+  //     // }
+  //   }
+  // }, [postId, loginState.currentUserCalled, loginState.ethAddress]);
 
   const bookmarked = React.useMemo(() => {
     return !bookmarksReq.isFetching && bookmarks.findIndex(bm => bm.entryId === postId) >= 0;
@@ -198,12 +173,18 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   };
 
   const publishComment = useCreateComment();
+
   const handlePublishComment = async (data: PublishPostData) => {
-    publishComment.mutate(buildPublishObject(data, postId));
+    publishComment.mutate({ ...data, postID: postId });
   };
 
-  const handleRepost = (_withComment: boolean, entryData: any) => {
-    props.navigateToModal({ name: 'editor', embedEntry: entryData });
+  const handleRepost = (_withComment: boolean, entryId: any) => {
+    if (!loginState.ethAddress) {
+      showLoginModal();
+      return;
+    } else {
+      props.navigateToModal({ name: 'editor', embedEntry: entryId });
+    }
   };
 
   const handleNavigateToPost = redirectToPost(
@@ -422,12 +403,52 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                 details={t('An unexpected error occured! Please try to refresh the page')}
               />
             )}
+            {publishComment.isLoading && publishComment.variables.postID === postId && (
+              <Box
+                pad={{ horizontal: 'medium' }}
+                border={{ side: 'bottom', size: '1px', color: 'border' }}
+                style={{ backgroundColor: '#4e71ff0f' }}
+              >
+                <EntryBox
+                  isBookmarked={false}
+                  entryData={{
+                    ...publishComment.variables,
+                    author: loggedProfileData,
+                    ipfsLink: '',
+                    permalink: '',
+                    entryId: '',
+                  }}
+                  sharePostLabel={t('Share Post')}
+                  shareTextLabel={t('Share this post with your friends')}
+                  repliesLabel={t('Replies')}
+                  repostsLabel={t('Reposts')}
+                  repostLabel={t('Repost')}
+                  repostWithCommentLabel={t('Repost with comment')}
+                  shareLabel={t('Share')}
+                  copyLinkLabel={t('Copy Link')}
+                  flagAsLabel={t('Report Comment')}
+                  loggedProfileEthAddress={loggedProfileData.ethAddress}
+                  locale={'en'}
+                  bookmarkLabel={t('Save')}
+                  bookmarkedLabel={t('Saved')}
+                  profileAnchorLink={'/profile'}
+                  repliesAnchorLink={routes[POST]}
+                  handleFollowAuthor={handleFollow}
+                  handleUnfollowAuthor={handleUnfollow}
+                  isFollowingAuthor={isFollowing}
+                  contentClickable={false}
+                  hidePublishTime={true}
+                  disableActions={true}
+                  hideActionButtons={true}
+                />
+              </Box>
+            )}
             {!hasCriticalErrors && (
-              <VirtualList
-                items={ids}
-                itemsData={commentsData}
-                loadMore={handleLoadMore}
-                hasMoreItems={!!reqComments.hasNextPage}
+              <EntryList
+                pages={commentPages}
+                status={reqComments.status}
+                onLoadMore={handleLoadMore}
+                hasNextPage={reqComments.hasNextPage}
                 itemCard={
                   <PostRenderer
                     logger={logger}
@@ -450,14 +471,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                     removedByAuthorLabel={t('This reply was deleted by its author')}
                   />
                 }
-                customEntities={getPendingComments({
-                  logger,
-                  locale,
-                  isMobile,
-                  feedItems: ids,
-                  loggedEthAddress: loginState.ethAddress,
-                  pendingComments: [],
-                })}
               />
             )}
           </>

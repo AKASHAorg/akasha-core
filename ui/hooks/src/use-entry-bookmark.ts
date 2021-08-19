@@ -13,7 +13,7 @@ const entriesBookmarks = 'entries-bookmarks';
 
 export interface UseEntryBookmarkProps {
   bmKey?: string;
-  onError: (err: IAkashaError) => void;
+  onError?: (err: IAkashaError) => void;
 }
 
 export interface IBookmarkActions {

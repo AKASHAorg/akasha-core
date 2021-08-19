@@ -1,5 +1,6 @@
 import { getMediaUrl } from './media-utils';
 import getSDK from '@akashaproject/awf-sdk';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export const MEDIA_URL_PREFIX = 'CID:';
 export const PROVIDER_AKASHA = 'AkashaApp';
@@ -183,20 +184,11 @@ export const mapEntry = (
 };
 
 interface PendingEntry {
-  author: {
-    CID?: string;
-    avatar?: string;
-    coverImage?: string;
-    description?: string;
-    ensName?: string;
-    ethAddress: string;
-    pubKey: string;
-    userName?: string;
-    name?: string;
-  };
+  author: IProfileData;
   content: Record<string, unknown>;
-  ipfsLink?: string;
-  entryId?: string;
+  ipfsLink: string;
+  permalink: string;
+  entryId: string;
   replies?: number;
   reposts?: number;
   time: string;
@@ -204,7 +196,7 @@ interface PendingEntry {
 }
 
 export const createPendingEntry = (
-  author: PendingEntry['author'],
+  author: IProfileData,
   entryPublishData: any,
   quote?: any,
 ): PendingEntry => {
@@ -215,6 +207,9 @@ export const createPendingEntry = (
     replies: 0,
     reposts: 0,
     time: `${Date.now()}`,
+    permalink: '',
+    ipfsLink: '',
+    entryId: entryPublishData.entryId,
   };
 };
 

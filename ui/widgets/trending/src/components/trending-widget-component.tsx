@@ -32,9 +32,9 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   });
 
   const trendingTagsReq = useTrendingTags();
-  const trendingTags = trendingTagsReq.data;
+  const trendingTags = trendingTagsReq.data || [];
   const trendingProfilesReq = useTrendingProfiles();
-  const trendingProfiles = trendingProfilesReq.data;
+  const trendingProfiles = trendingProfilesReq.data || [];
 
   const followEthAddressArr = trendingProfiles
     .slice(0, 4)
@@ -52,29 +52,6 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const showLoginModal = () => {
     props.navigateToModal({ name: 'login' });
   };
-
-  // React.useEffect(() => {
-  //   if (loginState.ethAddress && trendingProfiles.length) {
-  //     const followEthAddressArr = trendingProfiles
-  //       .slice(0, 4)
-  //       .map((profile: { ethAddress: string }) => profile.ethAddress);
-  //     followActions.isFollowingMultiple(loginState.ethAddress, followEthAddressArr);
-  //   }
-  // }, [trendingProfiles, loginState.ethAddress]);
-
-  // React.useEffect(() => {
-  //   if (loginState.waitForAuth && !loginState.ready) {
-  //     return;
-  //   }
-  //   if (loginState.ready) {
-  //     tagSubscriptionActions.getTagSubscriptions();
-  //   }
-  // }, [
-  //   loginState.currentUserCalled,
-  //   loginState.ethAddress,
-  //   loginState.ready,
-  //   loginState.waitForAuth,
-  // ]);
 
   const handleTagClick = (tagName: string) => {
     singleSpa.navigateToUrl(`/social-app/tags/${tagName}`);

@@ -5,28 +5,14 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import menuRoute, { MY_PROFILE, rootRoute } from '../../routes';
 import ProfilePage from './profile-page';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useLoginState, useModalState, useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useModalState } from '@akashaproject/ui-awf-hooks';
+import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 
 const { Box } = DS;
 
 const Routes: React.FC<RootComponentProps> = props => {
-  const { logger } = props;
-  // const { path } = activeWhen;
-  const [, errorActions] = useErrors({ logger });
-
-  const [loginState, loginActions] = useLoginState({
-    onError: errorActions.createError,
-  });
-
-  const [loggedProfileData, loggedProfileActions] = useProfile({
-    onError: errorActions.createError,
-  });
-
-  React.useEffect(() => {
-    if (loginState.pubKey) {
-      loggedProfileActions.getProfileData({ pubKey: loginState.pubKey });
-    }
-  }, [loginState.pubKey]);
+  const [loginState] = useLoginState({});
+  const profileQuery = useGetProfile(loginState.pubKey);
 
   const [modalState, modalStateActions] = useModalState({
     initialState: {
@@ -50,10 +36,9 @@ const Routes: React.FC<RootComponentProps> = props => {
             <ProfilePage
               {...props}
               loggedEthAddress={loginState.ethAddress}
-              loginActions={loginActions}
               modalActions={modalStateActions}
               modalState={modalState}
-              loggedProfileData={loggedProfileData}
+              loggedProfileData={profileQuery.data}
               showLoginModal={showLoginModal}
             />
           </Route>
