@@ -6,17 +6,28 @@ import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { setupI18next } from '../i18n';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
+/**
+ * This is the plugin's lifecycle logic
+ * @todo add more docs!!
+ */
+
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(App),
+  errorBoundary: (error, errorInfo, props) => {
+    if (props.logger) {
+      props.logger.error(error, errorInfo);
+    }
+    return <>Error in profile-plugin</>;
+  },
 });
 
 export const bootstrap = (props: RootComponentProps) => {
   return setupI18next({
     logger: props.logger,
     // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'ui-widget-trending',
+    namespace: 'ui-plugin-profile',
   });
 };
 

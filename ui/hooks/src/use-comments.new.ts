@@ -9,6 +9,8 @@ import { logError } from './utils/error-handler';
 export const COMMENT_KEY = 'Comment';
 export const COMMENTS_KEY = 'Comments';
 
+export const PUBLISH_PENDING_KEY = 'PendingPublish_Comments';
+
 export interface PublishCommentData {
   metadata: {
     app: string;
@@ -157,6 +159,7 @@ export function useCreateComment() {
       onSettled: async () => {
         await queryClient.invalidateQueries(COMMENTS_KEY);
       },
+      mutationKey: PUBLISH_PENDING_KEY,
     },
   );
 }

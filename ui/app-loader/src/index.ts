@@ -424,9 +424,11 @@ export default class AppLoader {
 
     writeImports(newMap, scriptId);
 
-    await (System as typeof System & {
-      prepareImport: (doProcessScripts?: boolean) => Promise<void>;
-    }).prepareImport(true);
+    await (
+      System as typeof System & {
+        prepareImport: (doProcessScripts?: boolean) => Promise<void>;
+      }
+    ).prepareImport(true);
   }
 
   public async importLayoutConfig(integrationInfos: (AppRegistryInfo | WidgetRegistryInfo)[]) {

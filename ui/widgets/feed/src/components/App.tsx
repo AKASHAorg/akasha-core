@@ -8,7 +8,6 @@ import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings'
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
@@ -45,39 +44,18 @@ export interface IFeedWidgetProps {
   locale: string;
 }
 
-export default class FeedWidgetRoot extends PureComponent<IFeedWidgetProps> {
-  public state: { errors: any } = {
-    errors: this.props.errors,
-  };
-  public componentDidCatch(error: Error, errorInfo: any) {
-    if (this.props.logger) {
-      this.props.logger.error('feed-widget error %j %j', error, errorInfo);
-    }
-    this.setState({
-      errors: {
-        'feedWidget.app': {
-          error: new Error(`${error} \n Additional info: \n ${errorInfo}`),
-          critical: false,
-        },
-      },
-    });
-  }
+const FeedWidgetRoot = (props: IFeedWidgetProps) => {
+  return (
+    <ThemeSelector
+      settings={{ activeTheme: 'Light-Theme' }}
+      availableThemes={[lightTheme, darkTheme]}
+      style={{ height: '100%' }}
+      plain={true}
+    >
+      {props.itemType === ItemTypes.ENTRY && <EntryFeed {...props} />}
+      {props.itemType === ItemTypes.PROFILE && <ProfileFeed {...props} />}
+    </ThemeSelector>
+  );
+};
 
-  public render() {
-    return (
-      <ThemeSelector
-        settings={{ activeTheme: 'Light-Theme' }}
-        availableThemes={[lightTheme, darkTheme]}
-        style={{ height: '100%' }}
-        plain={true}
-      >
-        {this.props.itemType === ItemTypes.ENTRY && (
-          <EntryFeed {...this.props} errors={{ ...this.state.errors, ...this.props.errors }} />
-        )}
-        {this.props.itemType === ItemTypes.PROFILE && (
-          <ProfileFeed {...this.props} errors={{ ...this.state.errors, ...this.props.errors }} />
-        )}
-      </ThemeSelector>
-    );
-  }
-}
+export default FeedWidgetRoot;

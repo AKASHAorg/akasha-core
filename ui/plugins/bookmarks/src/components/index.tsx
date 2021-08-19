@@ -4,6 +4,7 @@ import singleSpaReact from 'single-spa-react';
 import App from './App';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { setupI18next } from '../i18n';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 /**
  * This is the plugin's lifecycle logic
@@ -22,10 +23,11 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = props => {
+export const bootstrap = (props: RootComponentProps) => {
   return setupI18next({
     logger: props.logger,
-    namespace: props.name.replace('@akashaproject/', ''),
+    // must be the same as the one in ../../i18next.parser.config.js
+    namespace: 'ui-plugin-bookmarks',
   });
 };
 

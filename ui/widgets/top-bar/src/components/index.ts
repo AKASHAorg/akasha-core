@@ -3,11 +3,8 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import Widget from './topbar-widget';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
-
-/**
- * This is the plugin's lifecycle logic
- * @todo add more docs!!
- */
+import { setupI18next } from '../i18n';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const reactLifecycles = singleSpaReact({
   React,
@@ -15,7 +12,13 @@ const reactLifecycles = singleSpaReact({
   rootComponent: withProviders(Widget),
 });
 
-export const bootstrap = reactLifecycles.bootstrap;
+export const bootstrap = (props: RootComponentProps) => {
+  return setupI18next({
+    logger: props.logger,
+    // must be the same as the one in ../../i18next.parser.config.js
+    namespace: 'ui-widget-topbar',
+  });
+};
 
 export const mount = reactLifecycles.mount;
 

@@ -20,7 +20,8 @@ import {
   useBookmarkPost,
   useBookmarkDelete,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
-import { useQueryClient } from 'react-query';
+
+import { useMutationListener } from '@akashaproject/ui-awf-hooks/lib/use-mutation-listener';
 import { createPendingEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
 const { Box, Helmet, EditorPlaceholder, EntryList, EntryCard, EntryPublishErrorCard } = DS;
@@ -31,7 +32,6 @@ export interface FeedPageProps {
   showLoginModal: () => void;
   loggedProfileData?: any;
   loginState: ILoginState;
-  onError: (err: IAkashaError) => void;
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
@@ -42,13 +42,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [errorState] = useErrors({ logger });
 
-  const queryClient = useQueryClient();
-
-  const mutationCache = queryClient.getMutationCache();
-
-  const createPostMutation = mutationCache.find({
-    mutationKey: CREATE_POST_MUTATION_KEY,
-  });
+  const createPostMutation = useMutationListener(CREATE_POST_MUTATION_KEY);
 
   const postsReq = useInfinitePosts(15);
 
@@ -124,6 +118,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleEntryRemove = (entryId: string) => {
     props.navigateToModal({ name: 'entry-remove-confirmation', entryType: 'Post', entryId });
   };
+
+  console.log(createPostMutation, '<<<<<<<<<<<<< create post mutation');
 
   return (
     <Box fill="horizontal">

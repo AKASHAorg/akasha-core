@@ -52,7 +52,6 @@ interface IPostPage {
   showLoginModal: () => void;
   navigateToUrl: (path: string) => void;
   isMobile: boolean;
-  onError: (err: IAkashaError) => void;
 }
 
 const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
@@ -61,7 +60,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
   const [, errorActions] = useErrors({ logger });
-  const queryClient = useQueryClient();
+
   //@Todo: replace entryData with value from usePost
   const postReq = usePost(postId, !!postId);
   const entryData = React.useMemo(() => {
@@ -69,7 +68,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       return mapEntry(postReq.data);
     }
     return undefined;
-  }, [JSON.stringify(postReq.data)]);
+  }, [postReq.data]);
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
@@ -139,7 +138,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   const bookmarked = React.useMemo(() => {
     return !bookmarksReq.isFetching && bookmarks.findIndex(bm => bm.entryId === postId) >= 0;
-  }, [bookmarks]);
+  }, [bookmarksReq.isFetching, bookmarks, postId]);
 
   const handleMentionClick = (pubKey: string) => {
     navigateToUrl(`/profile/${pubKey}`);
