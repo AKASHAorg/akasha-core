@@ -48,11 +48,11 @@ const EntryFeed = (props: IFeedWidgetProps) => {
       props.onLoginModalOpen();
     }
   };
-  const handleRepost = (_withComment: boolean, entryData: any) => {
+  const handleRepost = (_withComment: boolean, entryId: any) => {
     if (!props.loggedProfile.pubKey) {
       props.onLoginModalOpen();
     } else {
-      props.navigateToModal({ name: 'editor', embedEntry: entryData });
+      props.navigateToModal({ name: 'editor', embedEntry: entryId });
     }
   };
 
