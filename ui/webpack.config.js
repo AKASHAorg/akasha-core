@@ -38,6 +38,9 @@ module.exports = {
       BUCKET_VERSION: process.env.BUCKET_VERSION || '',
       EWA_MAILSENDER: process.env.EWA_MAILSENDER || '',
     }),
+    new webpack.DefinePlugin({
+      __DEV__: process.env.NODE_ENV !== 'production',
+    }),
     new webpack.AutomaticPrefetchPlugin(),
     // new webpack.ProgressPlugin({
     //   entries: true,

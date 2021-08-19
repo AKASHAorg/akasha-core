@@ -22,13 +22,15 @@ module.exports = Object.assign(baseConfig, {
   ]),
   externals: baseConfig.externals,
   devServer: {
-    contentBase: path.join(__dirname, 'public'),
-    publicPath: '/',
     https: true,
     // serve development versions of libs
     // https://github.com/webpack/webpack-dev-server/issues/2540
-    staticOptions: {
-      index: 'index.dev.html',
+    static: {
+      directory: path.join(__dirname, 'public'),
+      publicPath: '/',
+      staticOptions: {
+        index: 'index.dev.html',
+      },
     },
     historyApiFallback: {
       index: 'index.dev.html',

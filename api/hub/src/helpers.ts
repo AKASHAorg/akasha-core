@@ -14,7 +14,7 @@ import { ethers, utils, providers } from 'ethers';
 import objHash from 'object-hash';
 import sendgrid from '@sendgrid/mail';
 import { fetch } from 'cross-fetch';
-import AbortController from 'node-abort-controller';
+import { AbortController } from 'node-abort-controller';
 
 if (process.env.SENDGRID_API_KEY) {
   sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
