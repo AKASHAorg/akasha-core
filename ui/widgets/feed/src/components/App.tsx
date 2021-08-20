@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import DS from '@akashaproject/design-system';
 
 import EntryFeed from './entry-feed';
 import ProfileFeed from './profile-feed';
-import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 
@@ -21,7 +21,6 @@ export interface IFeedWidgetProps {
   itemType: ItemTypes;
   onLoadMore: () => void;
   getShareUrl?: (entryId: string) => string;
-  errors: { [key: string]: IAkashaError };
   /* eth address of the logged in user */
   ethAddress: string | null;
   profilePubKey: string | null;

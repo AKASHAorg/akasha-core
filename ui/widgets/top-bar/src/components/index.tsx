@@ -7,7 +7,7 @@ import { setupI18next } from '../i18n';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 
-const { ErrorLoader } = DS;
+const { ErrorLoader, ThemeSelector, lightTheme, darkTheme } = DS;
 
 const reactLifecycles = singleSpaReact<RootComponentProps>({
   React,
@@ -18,7 +18,12 @@ const reactLifecycles = singleSpaReact<RootComponentProps>({
       props.logger.error(error, errorInfo);
     }
     return (
-      <ErrorLoader type="script-error" title="Error in topbar widget" details={error.message} />
+      <ThemeSelector
+        availableThemes={[lightTheme, darkTheme]}
+        settings={{ activeTheme: 'LightTheme' }}
+      >
+        <ErrorLoader type="script-error" title="Error in topbar widget" details={error.message} />
+      </ThemeSelector>
     );
   },
 });

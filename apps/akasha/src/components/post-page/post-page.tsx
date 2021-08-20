@@ -137,7 +137,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   // }, [postId, loginState.currentUserCalled, loginState.ethAddress]);
 
   const bookmarked = React.useMemo(() => {
-    return !bookmarksReq.isFetching && bookmarks.findIndex(bm => bm.entryId === postId) >= 0;
+    return !bookmarksReq.isFetching && bookmarks?.findIndex(bm => bm.entryId === postId) >= 0;
   }, [bookmarksReq.isFetching, bookmarks, postId]);
 
   const handleMentionClick = (pubKey: string) => {

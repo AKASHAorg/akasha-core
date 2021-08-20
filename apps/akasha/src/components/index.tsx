@@ -7,7 +7,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { setupI18next } from '../i18n';
 import DS from '@akashaproject/design-system';
 
-const { ErrorLoader } = DS;
+const { ErrorLoader, ThemeSelector, lightTheme, darkTheme } = DS;
 
 const reactLifecycles = singleSpaReact({
   React,
@@ -17,7 +17,14 @@ const reactLifecycles = singleSpaReact({
     if (props.logger) {
       props.logger.error(error, errorInfo);
     }
-    return <ErrorLoader type="script-error" title="Error in akasha app" details={error.message} />;
+    return (
+      <ThemeSelector
+        availableThemes={[lightTheme, darkTheme]}
+        settings={{ activeTheme: 'LightTheme' }}
+      >
+        <ErrorLoader type="script-error" title="Error in akasha app" details={error.message} />;
+      </ThemeSelector>
+    );
   },
 });
 

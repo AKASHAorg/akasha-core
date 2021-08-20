@@ -30,7 +30,7 @@ const TagInfoCard = styled(TagProfileCard)`
 `;
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
-  const { showLoginModal, logger, loggedProfileData, loginState } = props;
+  const { showLoginModal, loggedProfileData, loginState } = props;
 
   const sdk = getSDK();
 
@@ -52,8 +52,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       return () => sub.unsubscribe();
     }
   }, [tagName]);
-
-  const [errorState] = useErrors({ logger });
 
   const reqPosts = useInfinitePostsByTag(tagName, 15);
 
@@ -136,7 +134,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         pages={postPages}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
         requestStatus={reqPosts.status}
-        errors={errorState}
         ethAddress={loginState.ethAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}

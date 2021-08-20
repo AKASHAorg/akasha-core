@@ -239,101 +239,99 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   };
 
   return (
-    <StyledLayer className={className}>
-      <MainAreaCardBox style={{ height: isMobile ? '100%' : 'auto', overflowY: 'auto' }}>
-        <Box direction="column" pad="medium" height={{ min: 'fit-content' }}>
-          <TitleSection titleLabel={titleLabel} />
-          <Box direction="column" pad="xsmall">
-            <Box direction="row" justify="start">
-              <AvatarSection
-                avatarLabel={avatarLabel}
-                formValues={formValues}
-                avatarPopoverOpen={avatarPopoverOpen}
-                avatarRef={avatarRef}
-                avatarInputRef={avatarInputRef}
-                handleAvatarClick={handleAvatarClick}
-                handleAvatarFileUpload={handleAvatarFileUpload}
-              />
-              <NameInputSection
-                nameLabel={nameLabel}
-                nameFieldPlaceholder={nameFieldPlaceholder}
-                formValues={formValues}
-                handleFormFieldChange={handleFormFieldChange}
-              />
-            </Box>
-            {showUsername && (
-              <UsernameInputSection
-                usernameLabel={usernameLabel}
-                usernameFieldInfo={usernameFieldInfo}
-                usernameFieldPlaceholder={usernameFieldPlaceholder}
-                isValidatingUsername={isValidatingUsername}
-                usernameError={usernameError}
-                usernameSuccess={usernameSuccess}
-                formValues={formValues}
-                handleUsernameChange={handleUsernameChange}
-                handleUsernameBlur={handleUsernameBlur}
-              />
-            )}
-
-            <CoverImageSection
-              coverImageLabel={coverImageLabel}
+    <MainAreaCardBox style={{ height: isMobile ? '100%' : 'auto', overflowY: 'auto' }}>
+      <Box direction="column" pad="medium" height={{ min: 'fit-content' }}>
+        <TitleSection titleLabel={titleLabel} />
+        <Box direction="column" pad="xsmall">
+          <Box direction="row" justify="start">
+            <AvatarSection
+              avatarLabel={avatarLabel}
               formValues={formValues}
-              coverImagePopoverOpen={coverImagePopoverOpen}
-              coverImageRef={coverImageRef}
-              coverInputRef={coverInputRef}
-              handleCoverImageClick={handleCoverImageClick}
-              handleCoverFileUpload={handleCoverFileUpload}
+              avatarPopoverOpen={avatarPopoverOpen}
+              avatarRef={avatarRef}
+              avatarInputRef={avatarInputRef}
+              handleAvatarClick={handleAvatarClick}
+              handleAvatarFileUpload={handleAvatarFileUpload}
             />
-            <DescriptionSection
-              descriptionLabel={descriptionLabel}
-              descriptionFieldPlaceholder={descriptionFieldPlaceholder}
+            <NameInputSection
+              nameLabel={nameLabel}
+              nameFieldPlaceholder={nameFieldPlaceholder}
               formValues={formValues}
               handleFormFieldChange={handleFormFieldChange}
             />
-            <ActionButtonsSection
-              cancelLabel={cancelLabel}
-              saveLabel={saveLabel}
-              showUsername={showUsername}
-              formChanged={formChanged}
+          </Box>
+          {showUsername && (
+            <UsernameInputSection
+              usernameLabel={usernameLabel}
+              usernameFieldInfo={usernameFieldInfo}
+              usernameFieldPlaceholder={usernameFieldPlaceholder}
               isValidatingUsername={isValidatingUsername}
               usernameError={usernameError}
+              usernameSuccess={usernameSuccess}
               formValues={formValues}
-              updateStatus={updateStatus}
-              handleRevert={handleRevert}
-              handleSave={handleSave}
+              handleUsernameChange={handleUsernameChange}
+              handleUsernameBlur={handleUsernameBlur}
             />
-          </Box>
+          )}
+
+          <CoverImageSection
+            coverImageLabel={coverImageLabel}
+            formValues={formValues}
+            coverImagePopoverOpen={coverImagePopoverOpen}
+            coverImageRef={coverImageRef}
+            coverInputRef={coverInputRef}
+            handleCoverImageClick={handleCoverImageClick}
+            handleCoverFileUpload={handleCoverFileUpload}
+          />
+          <DescriptionSection
+            descriptionLabel={descriptionLabel}
+            descriptionFieldPlaceholder={descriptionFieldPlaceholder}
+            formValues={formValues}
+            handleFormFieldChange={handleFormFieldChange}
+          />
+          <ActionButtonsSection
+            cancelLabel={cancelLabel}
+            saveLabel={saveLabel}
+            showUsername={showUsername}
+            formChanged={formChanged}
+            isValidatingUsername={isValidatingUsername}
+            usernameError={usernameError}
+            formValues={formValues}
+            updateStatus={updateStatus}
+            handleRevert={handleRevert}
+            handleSave={handleSave}
+          />
         </Box>
+      </Box>
 
-        {avatarPopoverOpen && avatarRef.current && formValues.avatar && (
-          <FormImagePopover
-            uploadLabel={uploadLabel}
-            urlLabel={urlLabel}
-            deleteLabel={deleteLabel}
-            target={avatarRef.current}
-            closePopover={closeAvatarPopover}
-            insertImage={handleImageInsert('avatar')}
-            currentImage={!!formValues.avatar}
-            onMobile={isMobileOnly}
-            handleDeleteImage={() => handleFormFieldChange({ avatar: null })}
-          />
-        )}
+      {avatarPopoverOpen && avatarRef.current && formValues.avatar && (
+        <FormImagePopover
+          uploadLabel={uploadLabel}
+          urlLabel={urlLabel}
+          deleteLabel={deleteLabel}
+          target={avatarRef.current}
+          closePopover={closeAvatarPopover}
+          insertImage={handleImageInsert('avatar')}
+          currentImage={!!formValues.avatar}
+          onMobile={isMobileOnly}
+          handleDeleteImage={() => handleFormFieldChange({ avatar: null })}
+        />
+      )}
 
-        {coverImagePopoverOpen && coverImageRef.current && formValues.coverImage && (
-          <FormImagePopover
-            uploadLabel={uploadLabel}
-            urlLabel={urlLabel}
-            deleteLabel={deleteLabel}
-            target={coverImageRef.current}
-            closePopover={closeCoverImagePopover}
-            insertImage={handleImageInsert('coverImage')}
-            currentImage={!!formValues.coverImage}
-            onMobile={isMobileOnly}
-            handleDeleteImage={() => handleFormFieldChange({ coverImage: null })}
-          />
-        )}
-      </MainAreaCardBox>
-    </StyledLayer>
+      {coverImagePopoverOpen && coverImageRef.current && formValues.coverImage && (
+        <FormImagePopover
+          uploadLabel={uploadLabel}
+          urlLabel={urlLabel}
+          deleteLabel={deleteLabel}
+          target={coverImageRef.current}
+          closePopover={closeCoverImagePopover}
+          insertImage={handleImageInsert('coverImage')}
+          currentImage={!!formValues.coverImage}
+          onMobile={isMobileOnly}
+          handleDeleteImage={() => handleFormFieldChange({ coverImage: null })}
+        />
+      )}
+    </MainAreaCardBox>
   );
 };
 

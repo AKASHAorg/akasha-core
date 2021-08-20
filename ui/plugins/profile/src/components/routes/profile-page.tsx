@@ -2,10 +2,9 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useErrors, useProfile } from '@akashaproject/ui-awf-hooks';
+import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
-import useLoginState from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import useLoginState, { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 // import { useFollowers } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
@@ -15,19 +14,18 @@ import menuRoute, { MY_PROFILE } from '../../routes';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ENTRY_KEY, useInfinitePostsByAuthor } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useQueryClient } from 'react-query';
+import { UserProfile_Response } from '@akashaproject/awf-sdk/typings/lib/interfaces/responses';
 
 const { Box, Helmet, ErrorLoader } = DS;
 
 export interface ProfilePageProps extends RootComponentProps {
-  modalActions: ModalStateActions;
-  modalState: ModalState;
-  loggedEthAddress: string | null;
-  loggedProfileData: any;
+  loggedProfileData: UserProfile_Response;
   showLoginModal: () => void;
+  loginState: ILoginState;
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
-  const { loggedEthAddress, loggedProfileData, showLoginModal } = props;
+  const { loggedProfileData, showLoginModal } = props;
 
   const location = useLocation();
   const queryClient = useQueryClient();
@@ -44,14 +42,8 @@ const ProfilePage = (props: ProfilePageProps) => {
     return pubKey;
   }, [pubKey, loggedProfileData, location.pathname]);
 
-  const [errorState, errorActions] = useErrors({
-    logger: props.logger,
-  });
-
-  const [profileState, profileActions, profileUpdateStatus] = useProfile({
-    onError: errorActions.createError,
-    logger: props.logger,
-  });
+  const profileDataQuery = useGetProfile(publicKey);
+  const profileState = profileDataQuery.data;
 
   const [loginState] = useLoginState({});
   const reqPosts = useInfinitePostsByAuthor(publicKey, 15, !!publicKey);
@@ -92,11 +84,8 @@ const ProfilePage = (props: ProfilePageProps) => {
   };
 
   const profileUserName = React.useMemo(() => {
-    if (profileState.name) {
+    if (profileState && profileState.name) {
       return profileState.name;
-    }
-    if (profileState.ensName) {
-      return profileState.ensName;
     }
     return pubKey;
   }, [profileState, pubKey]);
@@ -131,16 +120,15 @@ const ProfilePage = (props: ProfilePageProps) => {
           World
         </title>
       </Helmet>
-      <ProfilePageHeader
-        {...props}
-        profileState={profileState}
-        profileActions={profileActions}
-        profileUpdateStatus={profileUpdateStatus}
-        profileId={pubKey}
-        loggedUserEthAddress={loggedEthAddress}
-        modalActions={props.modalActions}
-        modalState={props.modalState}
-      />
+      {profileDataQuery.status === 'loading' && <></>}
+      {profileDataQuery.status === 'success' && (
+        <ProfilePageHeader
+          {...props}
+          profileState={profileState}
+          profileId={pubKey}
+          loggedUserEthAddress={loginState.ethAddress}
+        />
+      )}
       {reqPosts.status === 'error' && reqPosts.error && (
         <ErrorLoader
           type="script-error"
@@ -157,8 +145,7 @@ const ProfilePage = (props: ProfilePageProps) => {
           getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
           pages={postPages}
           requestStatus={reqPosts.status}
-          errors={errorState}
-          ethAddress={loggedEthAddress}
+          ethAddress={loginState.ethAddress}
           onNavigate={handleNavigation}
           singleSpaNavigate={props.singleSpa.navigateToUrl}
           navigateToModal={props.navigateToModal}
