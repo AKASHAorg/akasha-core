@@ -14,7 +14,7 @@ import { ethers, utils, providers } from 'ethers';
 import objHash from 'object-hash';
 import mailgun from 'mailgun-js';
 import { fetch } from 'cross-fetch';
-import AbortController from 'node-abort-controller';
+import { AbortController } from 'node-abort-controller';
 
 const MODERATION_APP_URL  = process.env.MODERATION_APP_URL;
 const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
