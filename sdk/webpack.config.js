@@ -63,6 +63,9 @@ const config = {
   },
   plugins: [
     new Dotenv({ safe: process.env.NODE_ENV === 'production', systemvars: true }),
+    new webpack.DefinePlugin({
+      __DEV__: process.env.NODE_ENV !== 'production',
+    }),
     new webpack.ProgressPlugin({
       entries: true,
       modules: true,
