@@ -257,10 +257,10 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       setPublishDisabled(true);
     }
 
-    /** limits to only 1 image*/
+    /** limits to only 10 images*/
     if (imageCounter === 0) {
       setImageUploadDisabled(false);
-    } else if (imageCounter > 0) {
+    } else if (imageCounter > 10) {
       setImageUploadDisabled(true);
     }
 
