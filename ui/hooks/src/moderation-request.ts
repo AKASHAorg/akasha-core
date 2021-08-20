@@ -10,12 +10,17 @@ export const fetchRequest = async (props: {
   url: string;
   data?: Record<string, unknown>;
   statusOnly?: boolean;
+  timeout?: number;
 }) => {
-  const { method, url, data = {}, statusOnly = false } = props;
+  const { method, url, data = {}, statusOnly = false, timeout = 12000 } = props;
   const rheaders = new Headers();
   rheaders.append('Content-Type', 'application/json');
 
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeout);
+
   const response = await fetch(url, {
+    signal: controller.signal,
     method: method,
     headers: rheaders,
     ...(method === ('POST' || 'PUT' || 'PATCH') && { body: JSON.stringify(data) }),
@@ -24,6 +29,8 @@ export const fetchRequest = async (props: {
   if (method === 'HEAD' || (method === 'POST' && statusOnly)) {
     return response.status;
   }
+
+  clearTimeout(timer);
 
   return response.json();
 };
