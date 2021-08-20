@@ -1,8 +1,6 @@
 import getSDK from '@akashaproject/awf-sdk';
 import constants from './constants';
 
-const sdk = getSDK();
-
 const { BASE_REPORT_URL, BASE_STATUS_URL, BASE_DECISION_URL, BASE_MODERATOR_URL } = constants;
 
 export const fetchRequest = async (props: {
@@ -194,6 +192,7 @@ export default {
     setRequesting,
   }) => {
     setRequesting(true);
+    const sdk = getSDK();
 
     sdk.api.auth.signData(dataToSign).subscribe(async (resp: any) => {
       const data = {
