@@ -28,9 +28,9 @@
     "@akashaproject/design-system": "*",
     "@akashaproject/ui-awf-typings": "*",
     "@types/react-router-dom": "5.1.8",
-    "react-i18next": "11.11.3",
+    "react-i18next": "11.11.4",
     "faker": "5.5.3",
-    "@types/faker": "5.5.7",
+    "@types/faker": "5.5.8",
     "react-router-dom": "5.2.0"
   },
   "files": [
