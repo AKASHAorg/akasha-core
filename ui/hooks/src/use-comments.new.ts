@@ -42,7 +42,6 @@ const getComments = async (
     return {
       ...res.data.getComments,
       results: res.data.getComments.results.map(comment => {
-        queryClient.setQueryData([COMMENT_KEY, comment._id], () => comment);
         return comment._id;
       }),
     };

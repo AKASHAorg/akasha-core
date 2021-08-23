@@ -43,7 +43,6 @@ const getPosts = async (queryClient: QueryClient, limit: number, offset?: string
     return {
       ...res.data.posts,
       results: res.data.posts.results.map(post => {
-        queryClient.setQueryData([ENTRY_KEY, post._id], post);
         return post._id;
       }),
     };
@@ -86,7 +85,6 @@ const getPostsByTag = async (
     return {
       ...res.data.getPostsByTag,
       results: res.data.getPostsByTag.results.map(post => {
-        queryClient.setQueryData([ENTRY_KEY, post._id], post);
         return post._id;
       }),
     };
@@ -127,7 +125,6 @@ const getPostsByAuthor = async (
     return {
       ...res.data.getPostsByAuthor,
       results: res.data.getPostsByAuthor.results.map(post => {
-        queryClient.setQueryData([ENTRY_KEY, post._id], post);
         return post._id;
       }),
     };
