@@ -101,7 +101,7 @@ export interface IEntryBoxProps {
   footerTextLabel?: string;
   moderatedContentLabel?: string;
   ctaLabel?: string;
-  handleFlipCard?: (entry: IEntryData, isQuote: boolean) => () => void;
+  handleFlipCard?: () => void;
   isModerated?: boolean;
   scrollHiddenContent?: boolean;
   removeEntryLabel?: string;
@@ -466,7 +466,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               headerTextLabel={headerTextLabel}
               footerTextLabel={footerTextLabel}
               ctaLabel={ctaLabel}
-              handleFlipCard={handleFlipCard && handleFlipCard(entryData, true)}
+              handleFlipCard={handleFlipCard}
             />
           </Box>
         )}

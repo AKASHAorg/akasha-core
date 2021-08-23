@@ -178,11 +178,8 @@ const ProfilePage = (props: ProfilePageProps) => {
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
-  const handleFlipCard = (_entry: any, _isQuote: boolean) => () => {
-    // const modifiedEntry = isQuote
-    //   ? { ...entry, quote: { ...entry.quote, reported: false } }
-    //   : { ...entry, reported: false };
-    // postsActions.updatePostsState(modifiedEntry);
+  const handleFlipCard = () => {
+    // @TODO
   };
 
   const handleEntryRemove = (entryId: string) => {

@@ -35,7 +35,7 @@ export interface IEntryRenderer {
   itemType: ItemTypes;
   moderatedContentLabel?: string;
   ctaLabel?: string;
-  handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
+  handleFlipCard?: () => void;
   onEntryRemove?: (entryId: string) => void;
   removeEntryLabel?: string;
   removedByMeLabel?: string;
@@ -183,12 +183,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
   }, [followedProfiles, itemData]);
 
   if (itemData && itemData.reported) {
-    return (
-      <EntryCardHidden
-        ctaLabel={ctaLabel}
-        handleFlipCard={handleFlipCard && handleFlipCard(itemData, false)}
-      />
-    );
+    return <EntryCardHidden ctaLabel={ctaLabel} handleFlipCard={handleFlipCard} />;
   }
   return (
     <ErrorInfoCard errors={{}}>

@@ -57,9 +57,12 @@ interface IPostPage {
 const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const { showLoginModal, logger, navigateToUrl, loginState, isMobile } = props;
 
+  const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
+
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
   const [, errorActions] = useErrors({ logger });
+
   //@Todo: replace entryData with value from usePost
   const postReq = usePost(postId, !!postId);
   const entryData = React.useMemo(() => {
@@ -68,6 +71,13 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     }
     return undefined;
   }, [JSON.stringify(postReq.data)]);
+
+  const isReported = React.useMemo(() => {
+    if (showAnyway) {
+      return false;
+    }
+    return postReq.status === 'success' && entryData.reported;
+  }, [entryData, showAnyway, postReq.status]);
 
   const [mentionsState, mentionsActions] = useMentions({
     onError: errorActions.createError,
@@ -194,8 +204,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   const onUploadRequest = uploadMediaToTextile;
 
-  const handleFlipCard = (_entry: any, _isQuote: boolean) => () => {
-    /* TODO: revert reported to false */
+  const handleFlipCard = () => {
+    setShowAnyway(true);
   };
 
   const onEditPostButtonMount = (name: string) => {
@@ -212,7 +222,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     /* todo */
   };
 
-  const postErrors = errorActions.getFilteredErrors('usePost.getPost');
   const commentErrors = errorActions.getFilteredErrors('usePosts.getComments');
 
   const entryAuthorName =
@@ -234,242 +243,216 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     });
   };
 
-  if (entryData && entryData.moderated && entryData.delisted) {
-    return (
-      <EntryCardHidden
-        moderatedContentLabel={t('This content has been moderated')}
-        isDelisted={true}
-      />
-    );
-  }
-  if (entryData && !entryData.moderated && entryData.reported) {
-    return (
-      <EntryCardHidden
-        reason={entryData.reason}
-        headerTextLabel={t(`You reported this post for the following reason`)}
-        footerTextLabel={t('It is awaiting moderation.')}
-        ctaLabel={t('See it anyway')}
-        handleFlipCard={handleFlipCard(entryData, false)}
-      />
-    );
-  }
-
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
         <title>Post | Ethereum World</title>
       </Helmet>
-      <Box pad={{ bottom: 'small' }} border={{ side: 'bottom', size: '1px', color: 'border' }}>
-        <ErrorInfoCard errors={postErrors}>
-          {(errorMessages, hasCriticalErrors) => (
-            <>
-              {hasCriticalErrors && (
-                // @Todo: replace this logic with (entryData.status === "error")
-                // the error message is on entryData.error.message
-                <ErrorLoader
-                  type="script-error"
-                  title={t('Sorry, there was an error loading this post')}
-                  details={t('We cannot recover from this error!')}
-                  devDetails={errorMessages}
-                />
-              )}
-              {errorMessages && !hasCriticalErrors && (
-                <ErrorLoader
-                  type="script-error"
-                  title={t('Loading the post failed')}
-                  details={t('An unexpected error occurred! Please try to refresh the page')}
-                  devDetails={errorMessages}
-                />
-              )}
-              {!hasCriticalErrors && (
-                <>
-                  {
-                    // @Todo: replace this logic with (entryData.status === "loading")
-                    //
-                    postReq.isLoading && (
-                      <EntryCardLoading
-                        style={{ background: 'transparent', boxShadow: 'none', border: 0 }}
-                      />
-                    )
-                  }
-                  {entryData && (
-                    <EntryBox
-                      isRemoved={
-                        entryData.content.length === 1 &&
-                        entryData.content[0].property === 'removed'
-                      }
-                      isBookmarked={bookmarked}
-                      entryData={entryData}
-                      sharePostLabel={t('Share Post')}
-                      shareTextLabel={t('Share this post with your friends')}
-                      sharePostUrl={`${window.location.origin}${routes[POST]}/`}
-                      onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                        handleAvatarClick(ev, entryData.author.pubKey)
-                      }
-                      onEntryBookmark={handleEntryBookmark}
-                      repliesLabel={t('Replies')}
-                      repostsLabel={t('Reposts')}
-                      repostLabel={t('Repost')}
-                      repostWithCommentLabel={t('Repost with comment')}
-                      shareLabel={t('Share')}
-                      copyLinkLabel={t('Copy Link')}
-                      flagAsLabel={t('Report Post')}
-                      loggedProfileEthAddress={loginState.ethAddress}
-                      locale={locale}
-                      bookmarkLabel={t('Save')}
-                      bookmarkedLabel={t('Saved')}
-                      profileAnchorLink={'/profile'}
-                      repliesAnchorLink={routes[POST]}
-                      onRepost={handleRepost}
-                      onEntryFlag={handleEntryFlag(entryData.entryId, 'post')}
-                      handleFollowAuthor={handleFollow}
-                      handleUnfollowAuthor={handleUnfollow}
-                      isFollowingAuthor={isFollowing}
-                      onContentClick={handleNavigateToPost}
-                      singleSpaNavigate={handleSingleSpaNavigate}
-                      onMentionClick={handleMentionClick}
-                      onTagClick={handleTagClick}
-                      moderatedContentLabel={t('This content has been moderated')}
-                      ctaLabel={t('See it anyway')}
-                      handleFlipCard={handleFlipCard}
-                      scrollHiddenContent={true}
-                      onEntryRemove={handlePostRemove}
-                      removeEntryLabel={t('Delete Post')}
-                      removedByMeLabel={t('You deleted this post')}
-                      removedByAuthorLabel={t('This post was deleted by its author')}
-                      headerMenuExt={
-                        loginState.ethAddress === entryData.author.ethAddress && (
-                          <ExtensionPoint
-                            name={`entry-card-edit-button_${entryData.entryId}`}
-                            onMount={onEditPostButtonMount}
-                            onUnmount={onEditPostButtonUnmount}
-                          />
-                        )
-                      }
-                    />
-                  )}
-                </>
-              )}
-            </>
+      {postReq.status === 'loading' && <EntryCardLoading />}
+      {postReq.status === 'error' && (
+        <ErrorLoader
+          type="script-error"
+          title={t('There was an error loading the entry')}
+          details={t('We cannot show this entry right now')}
+          devDetails={postReq.error}
+        />
+      )}
+      {postReq.status === 'success' && (
+        <>
+          {entryData.moderated && entryData.delisted && (
+            <EntryCardHidden
+              moderatedContentLabel={t('This content has been moderated')}
+              isDelisted={true}
+            />
           )}
-        </ErrorInfoCard>
-      </Box>
-      {!loginState.ethAddress && (
-        <Box margin="medium">
-          <EditorPlaceholder onClick={showLoginModal} ethAddress={null} />
-        </Box>
-      )}
-      {loginState.ethAddress && (
-        <Box margin="medium">
-          <CommentEditor
-            avatar={loggedProfileData?.avatar}
-            ethAddress={loginState.ethAddress}
-            postLabel={t('Reply')}
-            placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
-            emojiPlaceholderLabel={t('Search')}
-            onPublish={handlePublishComment}
-            getMentions={mentionsActions.getMentions}
-            getTags={mentionsActions.getTags}
-            tags={mentionsState.tags}
-            mentions={mentionsState.mentions}
-            uploadRequest={onUploadRequest}
-          />
-        </Box>
-      )}
-      <ErrorInfoCard errors={commentErrors}>
-        {(errorMessages, hasCriticalErrors) => (
-          <>
-            {hasCriticalErrors && (
-              <ErrorLoader
-                type="script-error"
-                title={t('A critical error occured when loading the list')}
-                details={t('Cannot fetch one or more comments!')}
-              />
-            )}
-            {!hasCriticalErrors && errorMessages && (
-              <ErrorLoader
-                type="script-error"
-                title={t('Loading the list of comments failed')}
-                details={t('An unexpected error occured! Please try to refresh the page')}
-              />
-            )}
-            {publishComment.isLoading && publishComment.variables.postID === postId && (
+          {!entryData.moderated && isReported && (
+            <EntryCardHidden
+              reason={entryData.reason}
+              headerTextLabel={t(`You reported this post for the following reason`)}
+              footerTextLabel={t('It is awaiting moderation.')}
+              ctaLabel={t('See it anyway')}
+              handleFlipCard={handleFlipCard}
+            />
+          )}
+          {!entryData.moderated && !isReported && (
+            <>
               <Box
-                pad={{ horizontal: 'medium' }}
+                pad={{ bottom: 'small' }}
                 border={{ side: 'bottom', size: '1px', color: 'border' }}
-                style={{ backgroundColor: '#4e71ff0f' }}
               >
                 <EntryBox
-                  isBookmarked={false}
-                  entryData={{
-                    ...publishComment.variables,
-                    author: loggedProfileData,
-                    ipfsLink: '',
-                    permalink: '',
-                    entryId: '',
-                  }}
+                  isRemoved={
+                    entryData.content.length === 1 && entryData.content[0].property === 'removed'
+                  }
+                  isBookmarked={bookmarked}
+                  entryData={entryData}
                   sharePostLabel={t('Share Post')}
                   shareTextLabel={t('Share this post with your friends')}
+                  sharePostUrl={`${window.location.origin}${routes[POST]}/`}
+                  onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
+                    handleAvatarClick(ev, entryData.author.pubKey)
+                  }
+                  onEntryBookmark={handleEntryBookmark}
                   repliesLabel={t('Replies')}
                   repostsLabel={t('Reposts')}
                   repostLabel={t('Repost')}
                   repostWithCommentLabel={t('Repost with comment')}
                   shareLabel={t('Share')}
                   copyLinkLabel={t('Copy Link')}
-                  flagAsLabel={t('Report Comment')}
-                  loggedProfileEthAddress={loggedProfileData.ethAddress}
-                  locale={'en'}
+                  flagAsLabel={t('Report Post')}
+                  loggedProfileEthAddress={loginState.ethAddress}
+                  locale={locale}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
                   profileAnchorLink={'/profile'}
                   repliesAnchorLink={routes[POST]}
+                  onRepost={handleRepost}
+                  onEntryFlag={handleEntryFlag(entryData.entryId, 'post')}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
                   isFollowingAuthor={isFollowing}
-                  contentClickable={false}
-                  hidePublishTime={true}
-                  disableActions={true}
-                  hideActionButtons={true}
+                  onContentClick={handleNavigateToPost}
+                  singleSpaNavigate={handleSingleSpaNavigate}
+                  onMentionClick={handleMentionClick}
+                  onTagClick={handleTagClick}
+                  moderatedContentLabel={t('This content has been moderated')}
+                  ctaLabel={t('See it anyway')}
+                  handleFlipCard={handleFlipCard}
+                  scrollHiddenContent={true}
+                  onEntryRemove={handlePostRemove}
+                  removeEntryLabel={t('Delete Post')}
+                  removedByMeLabel={t('You deleted this post')}
+                  removedByAuthorLabel={t('This post was deleted by its author')}
+                  headerMenuExt={
+                    loginState.ethAddress === entryData.author.ethAddress && (
+                      <ExtensionPoint
+                        name={`entry-card-edit-button_${entryData.entryId}`}
+                        onMount={onEditPostButtonMount}
+                        onUnmount={onEditPostButtonUnmount}
+                      />
+                    )
+                  }
                 />
               </Box>
-            )}
-            {!hasCriticalErrors && (
-              <EntryList
-                pages={commentPages}
-                status={reqComments.status}
-                onLoadMore={handleLoadMore}
-                hasNextPage={reqComments.hasNextPage}
-                itemCard={
-                  <PostRenderer
-                    logger={logger}
-                    bookmarkState={bookmarksReq}
+              {!loginState.ethAddress && (
+                <Box margin="medium">
+                  <EditorPlaceholder onClick={showLoginModal} ethAddress={null} />
+                </Box>
+              )}
+              {loginState.ethAddress && (
+                <Box margin="medium">
+                  <CommentEditor
+                    avatar={loggedProfileData?.avatar}
                     ethAddress={loginState.ethAddress}
-                    locale={locale}
-                    onBookmark={handleEntryBookmark}
-                    onNavigate={handleNavigateToPost}
-                    sharePostUrl={`${window.location.origin}${routes[POST]}/`}
-                    onFlag={handleEntryFlag}
-                    onRepost={handleCommentRepost}
-                    onAvatarClick={handleAvatarClick}
-                    onMentionClick={handleMentionClick}
-                    onTagClick={handleTagClick}
-                    singleSpaNavigate={handleSingleSpaNavigate}
-                    headerTextLabel={t(`You reported this reply for the following reason`)}
-                    footerTextLabel={t('It is awaiting moderation.')}
-                    moderatedContentLabel={t('This content has been moderated')}
-                    ctaLabel={t('See it anyway')}
-                    handleFlipCard={handleFlipCard}
-                    onEntryRemove={handleCommentRemove}
-                    removeEntryLabel={t('Delete Reply')}
-                    removedByMeLabel={t('You deleted this reply')}
-                    removedByAuthorLabel={t('This reply was deleted by its author')}
+                    postLabel={t('Reply')}
+                    placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
+                    emojiPlaceholderLabel={t('Search')}
+                    onPublish={handlePublishComment}
+                    getMentions={mentionsActions.getMentions}
+                    getTags={mentionsActions.getTags}
+                    tags={mentionsState.tags}
+                    mentions={mentionsState.mentions}
+                    uploadRequest={onUploadRequest}
                   />
-                }
-              />
-            )}
-          </>
-        )}
-      </ErrorInfoCard>
+                </Box>
+              )}
+              <ErrorInfoCard errors={commentErrors}>
+                {(errorMessages, hasCriticalErrors) => (
+                  <>
+                    {hasCriticalErrors && (
+                      <ErrorLoader
+                        type="script-error"
+                        title={t('A critical error occured when loading the list')}
+                        details={t('Cannot fetch one or more comments!')}
+                      />
+                    )}
+                    {!hasCriticalErrors && errorMessages && (
+                      <ErrorLoader
+                        type="script-error"
+                        title={t('Loading the list of comments failed')}
+                        details={t('An unexpected error occured! Please try to refresh the page')}
+                      />
+                    )}
+                    {publishComment.isLoading && publishComment.variables.postID === postId && (
+                      <Box
+                        pad={{ horizontal: 'medium' }}
+                        border={{ side: 'bottom', size: '1px', color: 'border' }}
+                        style={{ backgroundColor: '#4e71ff0f' }}
+                      >
+                        <EntryBox
+                          isBookmarked={false}
+                          entryData={{
+                            ...publishComment.variables,
+                            author: loggedProfileData,
+                            ipfsLink: '',
+                            permalink: '',
+                            entryId: '',
+                          }}
+                          sharePostLabel={t('Share Post')}
+                          shareTextLabel={t('Share this post with your friends')}
+                          repliesLabel={t('Replies')}
+                          repostsLabel={t('Reposts')}
+                          repostLabel={t('Repost')}
+                          repostWithCommentLabel={t('Repost with comment')}
+                          shareLabel={t('Share')}
+                          copyLinkLabel={t('Copy Link')}
+                          flagAsLabel={t('Report Comment')}
+                          loggedProfileEthAddress={loggedProfileData.ethAddress}
+                          locale={'en'}
+                          bookmarkLabel={t('Save')}
+                          bookmarkedLabel={t('Saved')}
+                          profileAnchorLink={'/profile'}
+                          repliesAnchorLink={routes[POST]}
+                          handleFollowAuthor={handleFollow}
+                          handleUnfollowAuthor={handleUnfollow}
+                          isFollowingAuthor={isFollowing}
+                          contentClickable={false}
+                          hidePublishTime={true}
+                          disableActions={true}
+                          hideActionButtons={true}
+                        />
+                      </Box>
+                    )}
+                    {!hasCriticalErrors && (
+                      <EntryList
+                        pages={commentPages}
+                        status={reqComments.status}
+                        onLoadMore={handleLoadMore}
+                        hasNextPage={reqComments.hasNextPage}
+                        itemCard={
+                          <PostRenderer
+                            logger={logger}
+                            bookmarkState={bookmarksReq}
+                            ethAddress={loginState.ethAddress}
+                            locale={locale}
+                            onBookmark={handleEntryBookmark}
+                            onNavigate={handleNavigateToPost}
+                            sharePostUrl={`${window.location.origin}${routes[POST]}/`}
+                            onFlag={handleEntryFlag}
+                            onRepost={handleCommentRepost}
+                            onAvatarClick={handleAvatarClick}
+                            onMentionClick={handleMentionClick}
+                            onTagClick={handleTagClick}
+                            singleSpaNavigate={handleSingleSpaNavigate}
+                            headerTextLabel={t(`You reported this reply for the following reason`)}
+                            footerTextLabel={t('It is awaiting moderation.')}
+                            moderatedContentLabel={t('This content has been moderated')}
+                            ctaLabel={t('See it anyway')}
+                            onEntryRemove={handleCommentRemove}
+                            removeEntryLabel={t('Delete Reply')}
+                            removedByMeLabel={t('You deleted this reply')}
+                            removedByAuthorLabel={t('This reply was deleted by its author')}
+                          />
+                        }
+                      />
+                    )}
+                  </>
+                )}
+              </ErrorInfoCard>
+            </>
+          )}
+        </>
+      )}
     </MainAreaCardBox>
   );
 };
