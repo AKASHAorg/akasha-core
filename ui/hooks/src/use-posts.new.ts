@@ -5,6 +5,7 @@ import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { Post_Response } from '../../../sdk/typings/lib/interfaces/responses';
+import moderationRequest from './moderation-request';
 
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
@@ -155,10 +156,19 @@ export function useInfinitePostsByAuthor(
 
 const getPost = async postID => {
   const sdk = getSDK();
+
+  const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+
   try {
+    // check entry's moderation status
+    const modStatus = await moderationRequest.checkStatus(true, {
+      user: user.data.pubKey,
+      contentIds: [postID],
+    });
     const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
     // remap the object props here
-    return res.data.getPost;
+
+    return { ...res.data.getPost, ...modStatus[0] };
   } catch (error) {
     logError('usePosts.getPost', error);
   }
@@ -166,7 +176,6 @@ const getPost = async postID => {
 
 // hook for fetching data for a specific postID/entryID
 export function usePost(postID: string, enabler: boolean) {
-  const queryClient = useQueryClient();
   return useQuery([ENTRY_KEY, postID], () => getPost(postID), {
     enabled: !!postID && enabler,
     keepPreviousData: true,

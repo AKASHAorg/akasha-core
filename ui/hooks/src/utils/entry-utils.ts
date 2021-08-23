@@ -83,6 +83,8 @@ export const mapEntry = (
     };
     delisted?: boolean;
     reported?: boolean;
+    moderated?: boolean;
+    reason?: string;
     isPublishing?: boolean;
   },
   logger?: any,
@@ -173,8 +175,10 @@ export const mapEntry = (
     ipfsLink: entry._id,
     permalink: 'null',
     replies: totalComments,
-    delisted: entry.delisted || false,
-    reported: entry.reported || false,
+    delisted: entry.delisted,
+    reported: entry.reported,
+    moderated: entry.moderated,
+    reason: entry.reason,
     postId: entry.postId,
     quotedBy: entry.quotedBy,
     quotedByAuthors: quotedByAuthors,
