@@ -33,10 +33,10 @@ export interface IEntryCardRendererProps {
   contentClickable?: boolean;
   disableActions?: boolean;
   hidePublishTime?: boolean;
+  headerTextLabel?: string;
+  footerTextLabel?: string;
   moderatedContentLabel?: string;
-  awaitingModerationLabel?: string;
   ctaLabel?: string;
-  handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
   onEntryRemove?: (entryId: string) => void;
   removeEntryLabel?: string;
   removedByMeLabel?: string;
@@ -54,10 +54,11 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     logger,
     contentClickable,
     hidePublishTime,
+    headerTextLabel,
+    footerTextLabel,
     moderatedContentLabel,
-    awaitingModerationLabel,
     ctaLabel,
-    handleFlipCard,
+    // handleFlipCard,
     disableActions,
     sharePostUrl,
   } = props;
@@ -77,6 +78,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const { t } = useTranslation();
   const postReq = usePost(itemId, !!itemId);
+
   const itemData = React.useMemo(() => {
     if (postReq.data) {
       return mapEntry(postReq.data);
@@ -110,15 +112,10 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const isFollowing = followedProfiles.includes(itemData.author.ethAddress);
 
-  if (itemData.reported) {
-    return (
-      <EntryCardHidden
-        awaitingModerationLabel={awaitingModerationLabel}
-        ctaLabel={ctaLabel}
-        handleFlipCard={handleFlipCard && handleFlipCard(itemData, false)}
-      />
-    );
-  }
+  const handleFlipCard = (_entry: any, _isQuote: boolean) => () => {
+    /* TODO: revert reported to false */
+  };
+
   const onEditButtonMount = (name: string) => {
     props.uiEvents.next({
       event: EventTypes.ExtensionPointMount,
@@ -129,9 +126,27 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
       },
     });
   };
+
   const onEditButtonUnmount = () => {
     /* todo */
   };
+
+  if (itemData.moderated && itemData.delisted) {
+    return <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />;
+  }
+
+  if (!itemData.moderated && itemData.reported) {
+    return (
+      <EntryCardHidden
+        reason={itemData.reason}
+        headerTextLabel={headerTextLabel}
+        footerTextLabel={footerTextLabel}
+        ctaLabel={ctaLabel}
+        handleFlipCard={handleFlipCard && handleFlipCard(itemData, false)}
+      />
+    );
+  }
+
   return (
     <ErrorInfoCard errors={{}}>
       {(errorMessages: any, hasCriticalErrors: boolean) => (
@@ -186,8 +201,9 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   singleSpaNavigate={props.singleSpaNavigate}
                   contentClickable={contentClickable}
                   hidePublishTime={hidePublishTime}
+                  headerTextLabel={headerTextLabel}
+                  footerTextLabel={footerTextLabel}
                   moderatedContentLabel={moderatedContentLabel}
-                  awaitingModerationLabel={awaitingModerationLabel}
                   ctaLabel={ctaLabel}
                   handleFlipCard={handleFlipCard}
                   disableActions={disableActions}
