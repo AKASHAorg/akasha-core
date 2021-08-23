@@ -40,6 +40,10 @@ export interface PostRendererProps {
   contentClickable?: boolean;
   disableActions?: boolean;
   hidePublishTime?: boolean;
+  headerTextLabel?: string;
+  footerTextLabel?: string;
+  moderatedContentLabel?: string;
+  ctaLabel?: string;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
   onEntryRemove?: (entryId: string) => void;
   removeEntryLabel?: string;
@@ -56,6 +60,10 @@ const PostRenderer = (props: PostRendererProps) => {
     contentClickable,
     bookmarkState,
     hidePublishTime,
+    headerTextLabel,
+    footerTextLabel,
+    moderatedContentLabel,
+    ctaLabel,
     handleFlipCard,
     disableActions,
     sharePostUrl,
@@ -127,12 +135,17 @@ const PostRenderer = (props: PostRendererProps) => {
 
   const isFollowing = followedProfiles.includes(itemData.author.ethAddress);
 
-  if (itemData.reported) {
+  if (itemData.moderated && itemData.delisted) {
+    return <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />;
+  }
+
+  if (itemData.moderated && itemData.reported) {
     return (
       <EntryCardHidden
-        awaitingModerationLabel={t('You have reported this content. It is awaiting moderation.')}
-        moderatedContentLabel={t('This content has been moderated')}
-        ctaLabel={t('See it anyway')}
+        reason={itemData.reason}
+        headerTextLabel={headerTextLabel}
+        footerTextLabel={footerTextLabel}
+        ctaLabel={ctaLabel}
         handleFlipCard={handleFlipCard && handleFlipCard(itemData, false)}
       />
     );

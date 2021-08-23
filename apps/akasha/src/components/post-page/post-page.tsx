@@ -30,7 +30,6 @@ import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 // import { useTags, useMentions } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
-import { useQueryClient } from 'react-query';
 
 const {
   Box,
@@ -40,7 +39,7 @@ const {
   Helmet,
   CommentEditor,
   EditorPlaceholder,
-  // EntryCardHidden,
+  EntryCardHidden,
   ErrorInfoCard,
   ErrorLoader,
   EntryCardLoading,
@@ -61,7 +60,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
   const [, errorActions] = useErrors({ logger });
-  const queryClient = useQueryClient();
   //@Todo: replace entryData with value from usePost
   const postReq = usePost(postId, !!postId);
   const entryData = React.useMemo(() => {
@@ -196,13 +194,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   const onUploadRequest = uploadMediaToTextile;
 
-  // @TODO: replace with mutation
   const handleFlipCard = (_entry: any, _isQuote: boolean) => () => {
-    // modify entry or its quote (if applicable)
-    // const modifiedEntry = isQuote
-    //   ? { ...entry, quote: { ...entry.quote, reported: false } }
-    //   : { ...entry, reported: false };
-    // postsActions.updatePostsState(modifiedEntry);
+    /* TODO: revert reported to false */
   };
 
   const onEditPostButtonMount = (name: string) => {
@@ -218,26 +211,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const onEditPostButtonUnmount = () => {
     /* todo */
   };
-
-  // @TODO replace with moderation react query integration
-  // if (postsState.delistedItems.includes(postId)) {
-  //   return (
-  //     <EntryCardHidden
-  //       moderatedContentLabel={t('This content has been moderated')}
-  //       isDelisted={true}
-  //     />
-  //   );
-  // }
-  // @TODO replace with moderation react query integration
-  // if (!postsState.delistedItems.includes(postId) && postsState.reportedItems.includes(postId)) {
-  //   return (
-  //     <EntryCardHidden
-  //       awaitingModerationLabel={t('You have reported this content. It is awaiting moderation.')}
-  //       ctaLabel={t('See it anyway')}
-  //       handleFlipCard={handleFlipCard(entryData, false)}
-  //     />
-  //   );
-  // }
 
   const postErrors = errorActions.getFilteredErrors('usePost.getPost');
   const commentErrors = errorActions.getFilteredErrors('usePosts.getComments');
@@ -260,6 +233,26 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       entryId: commentId,
     });
   };
+
+  if (entryData && entryData.moderated && entryData.delisted) {
+    return (
+      <EntryCardHidden
+        moderatedContentLabel={t('This content has been moderated')}
+        isDelisted={true}
+      />
+    );
+  }
+  if (entryData && !entryData.moderated && entryData.reported) {
+    return (
+      <EntryCardHidden
+        reason={entryData.reason}
+        headerTextLabel={t(`You reported this post for the following reason`)}
+        footerTextLabel={t('It is awaiting moderation.')}
+        ctaLabel={t('See it anyway')}
+        handleFlipCard={handleFlipCard(entryData, false)}
+      />
+    );
+  }
 
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
@@ -336,9 +329,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                       singleSpaNavigate={handleSingleSpaNavigate}
                       onMentionClick={handleMentionClick}
                       onTagClick={handleTagClick}
-                      awaitingModerationLabel={t(
-                        'You have reported this content. It is awaiting moderation.',
-                      )}
                       moderatedContentLabel={t('This content has been moderated')}
                       ctaLabel={t('See it anyway')}
                       handleFlipCard={handleFlipCard}
@@ -464,6 +454,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                     onMentionClick={handleMentionClick}
                     onTagClick={handleTagClick}
                     singleSpaNavigate={handleSingleSpaNavigate}
+                    headerTextLabel={t(`You reported this reply for the following reason`)}
+                    footerTextLabel={t('It is awaiting moderation.')}
+                    moderatedContentLabel={t('This content has been moderated')}
+                    ctaLabel={t('See it anyway')}
                     handleFlipCard={handleFlipCard}
                     onEntryRemove={handleCommentRemove}
                     removeEntryLabel={t('Delete Reply')}
