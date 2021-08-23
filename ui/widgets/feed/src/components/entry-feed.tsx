@@ -81,7 +81,6 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           onFlag={props.onEntryFlag}
           onRepost={handleRepost}
           contentClickable={props.contentClickable}
-          awaitingModerationLabel={t('You have reported this content. It is awaiting moderation.')}
           moderatedContentLabel={t('This content has been moderated')}
           ctaLabel={t('See it anyway')}
           handleFlipCard={props.handleFlipCard}

@@ -276,9 +276,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   />
                 ) : entryData.reported ? (
                   <EntryCardHidden
-                    awaitingModerationLabel={t(
-                      'You have reported this content. It is awaiting moderation.',
-                    )}
                     ctaLabel={t('See it anyway')}
                     handleFlipCard={handleFlipCard && handleFlipCard(entryData, false)}
                   />

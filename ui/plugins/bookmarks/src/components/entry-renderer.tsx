@@ -39,7 +39,6 @@ export interface IEntryCardRendererProps {
   contentClickable?: boolean;
   disableReposting?: boolean;
   moderatedContentLabel?: string;
-  awaitingModerationLabel?: string;
   ctaLabel?: string;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
 }

@@ -34,7 +34,6 @@ export interface IEntryRenderer {
   contentClickable?: boolean;
   itemType: ItemTypes;
   moderatedContentLabel?: string;
-  awaitingModerationLabel?: string;
   ctaLabel?: string;
   handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
   onEntryRemove?: (entryId: string) => void;
@@ -64,7 +63,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
     onRepost,
     contentClickable,
     moderatedContentLabel,
-    awaitingModerationLabel,
     ctaLabel,
     handleFlipCard,
   } = props;
@@ -187,7 +185,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
   if (itemData && itemData.reported) {
     return (
       <EntryCardHidden
-        awaitingModerationLabel={awaitingModerationLabel}
         ctaLabel={ctaLabel}
         handleFlipCard={handleFlipCard && handleFlipCard(itemData, false)}
       />
@@ -248,7 +245,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   singleSpaNavigate={singleSpaNavigate}
                   contentClickable={contentClickable}
                   moderatedContentLabel={moderatedContentLabel}
-                  awaitingModerationLabel={awaitingModerationLabel}
                   ctaLabel={ctaLabel}
                   handleFlipCard={handleFlipCard}
                   onEntryRemove={props.onEntryRemove}
