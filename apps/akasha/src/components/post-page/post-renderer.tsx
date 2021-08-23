@@ -139,7 +139,7 @@ const PostRenderer = (props: PostRendererProps) => {
     return <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />;
   }
 
-  if (itemData.moderated && itemData.reported) {
+  if (!itemData.moderated && itemData.reported) {
     return (
       <EntryCardHidden
         reason={itemData.reason}
