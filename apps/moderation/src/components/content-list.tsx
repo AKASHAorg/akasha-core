@@ -28,13 +28,23 @@ interface IBaseItem {
   entryDate: string;
 }
 
+interface IProfile {
+  avatar: string;
+  ethAddress: string;
+  pubKey: string;
+  name: string;
+  userName: string;
+}
+
 interface IPendingItem extends IBaseItem {
   reporter: string;
+  reporterProfile: IProfile;
 }
 
 interface IModeratedItem extends IPendingItem {
   delisted: boolean;
   moderator: string;
+  moderatorProfile: IProfile;
   evaluationDate: string;
 }
 
@@ -221,6 +231,9 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                 entryId={pendingItem.entryId}
                 reasons={pendingItem.reasons.map((el: string) => t(el))}
                 reporter={pendingItem.reporter}
+                reporterAvatar={pendingItem.reporterProfile.avatar}
+                reporterName={pendingItem.reporterProfile.name}
+                reporterENSName={pendingItem.reporterProfile.userName}
                 andLabel={t('and')}
                 otherReporters={
                   pendingItem.count
@@ -259,6 +272,9 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                   entryId={moderatedItem.entryId}
                   reasons={moderatedItem.reasons.map(el => t(el))}
                   reporter={moderatedItem.reporter}
+                  reporterAvatar={moderatedItem.reporterProfile.avatar}
+                  reporterName={moderatedItem.reporterProfile.name}
+                  reporterENSName={moderatedItem.reporterProfile.userName}
                   andLabel={t('and')}
                   otherReporters={
                     moderatedItem.count
@@ -271,6 +287,8 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                   reportedDateTime={moderatedItem.entryDate}
                   moderatorDecision={moderatedItem.description}
                   moderator={moderatedItem.moderator}
+                  moderatorName={moderatedItem.moderatorProfile.name}
+                  moderatorENSName={moderatedItem.moderatorProfile.userName}
                   moderatedByLabel={t('Moderated by')}
                   moderatedOnLabel={t('On')}
                   evaluationDateTime={moderatedItem.evaluationDate}

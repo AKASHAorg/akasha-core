@@ -96,6 +96,9 @@ export default {
     }
   },
   getAllPending: async () => {
+    const sdk = getSDK();
+    const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+
     try {
       const response = await fetchRequest({
         method: 'POST',
@@ -104,7 +107,15 @@ export default {
 
       const modResponse = response.results.map(
         (
-          { contentType: type, contentID, reasons, reportedBy, reportedDate, reports }: any,
+          {
+            contentType: type,
+            contentID,
+            reasons,
+            reportedBy,
+            reportedByProfile,
+            reportedDate,
+            reports,
+          }: any,
           idx: number,
         ) => {
           // formatting data to match labels already in use
@@ -114,6 +125,10 @@ export default {
             entryId: contentID,
             reasons: reasons,
             reporter: reportedBy,
+            reporterProfile: {
+              ...reportedByProfile,
+              avatar: `${ipfsGateway}/${reportedByProfile.avatar}`,
+            },
             count: reports - 1, // minus reporter, to get count of other users
             entryDate: reportedDate,
           };
@@ -125,6 +140,9 @@ export default {
     }
   },
   getAllModerated: async () => {
+    const sdk = getSDK();
+    const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+
     try {
       // fetch delisted items
       const delistedItems = await fetchRequest({
@@ -152,8 +170,10 @@ export default {
             date,
             explanation,
             moderator,
+            moderatorProfile,
             reasons,
             reportedBy,
+            reportedByProfile,
             reportedDate,
             reports,
             delisted,
@@ -168,8 +188,16 @@ export default {
             reasons: reasons,
             description: explanation,
             reporter: reportedBy,
+            reporterProfile: {
+              ...reportedByProfile,
+              avatar: `${ipfsGateway}/${reportedByProfile.avatar}`,
+            },
             count: reports - 1,
             moderator: moderator,
+            moderatorProfile: {
+              ...moderatorProfile,
+              avatar: `${ipfsGateway}/${reportedByProfile.avatar}`,
+            },
             entryDate: reportedDate,
             evaluationDate: date,
             delisted: delisted,
