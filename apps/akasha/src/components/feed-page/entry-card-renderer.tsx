@@ -90,7 +90,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     if (showAnyway) {
       return false;
     }
-    return postReq.status === 'success' && itemData.reported;
+    return postReq.status === 'success' && itemData?.reported;
   }, [itemData, showAnyway, postReq.status]);
 
   const [followedProfiles, followActions] = useFollow({
@@ -114,13 +114,13 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   // }, [ethAddress, itemData.author.ethAddress]);
 
   const handleFollow = () => {
-    if (itemData.author.ethAddress) {
+    if (itemData?.author.ethAddress) {
       followActions.follow(itemData.author.ethAddress);
     }
   };
 
   const handleUnfollow = () => {
-    if (itemData.author.ethAddress) {
+    if (itemData?.author.ethAddress) {
       followActions.unfollow(itemData.author.ethAddress);
     }
   };

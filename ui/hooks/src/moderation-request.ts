@@ -167,7 +167,7 @@ export default {
           {
             contentType: type,
             contentID,
-            date,
+            moderatedDate,
             explanation,
             moderator,
             moderatorProfile,
@@ -199,7 +199,7 @@ export default {
               avatar: `${ipfsGateway}/${reportedByProfile.avatar}`,
             },
             entryDate: reportedDate,
-            evaluationDate: date,
+            evaluationDate: moderatedDate,
             delisted: delisted,
           };
         },
