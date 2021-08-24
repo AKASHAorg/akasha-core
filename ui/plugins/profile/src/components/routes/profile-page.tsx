@@ -178,10 +178,6 @@ const ProfilePage = (props: ProfilePageProps) => {
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
-  const handleFlipCard = () => {
-    // @TODO
-  };
-
   const handleEntryRemove = (entryId: string) => {
     props.navigateToModal({ name: 'entry-remove-confirmation', entryId, entryType: 'Post' });
   };
@@ -199,7 +195,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         <EntryCardHidden
           reportedAccount={true}
           reason={reason}
-          headerTextLabel={t(`You reported this account for the following reason`)}
+          headerTextLabel={t('You reported this account for the following reason')}
           footerTextLabel={t('It is awaiting moderation.')}
         />
       )}
@@ -246,7 +242,6 @@ const ProfilePage = (props: ProfilePageProps) => {
           loggedProfile={loggedProfileData}
           contentClickable={true}
           onEntryFlag={handleEntryFlag}
-          handleFlipCard={handleFlipCard}
           onEntryRemove={handleEntryRemove}
           removeEntryLabel={t('Delete Post')}
           removedByMeLabel={t('You deleted this post')}

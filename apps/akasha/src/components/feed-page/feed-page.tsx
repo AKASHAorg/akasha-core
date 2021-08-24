@@ -180,7 +180,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             onMentionClick={handleMentionClick}
             onTagClick={handleTagClick}
             contentClickable={true}
-            headerTextLabel={t(`You reported this post for the following reason`)}
+            headerTextLabel={t('You reported this post for the following reason')}
             footerTextLabel={t('It is awaiting moderation.')}
             moderatedContentLabel={t('This content has been moderated')}
             ctaLabel={t('See it anyway')}

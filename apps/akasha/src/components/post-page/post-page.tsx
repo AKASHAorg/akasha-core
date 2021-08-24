@@ -268,7 +268,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
           {!entryData.moderated && isReported && (
             <EntryCardHidden
               reason={entryData.reason}
-              headerTextLabel={t(`You reported this post for the following reason`)}
+              headerTextLabel={t('You reported this post for the following reason')}
               footerTextLabel={t('It is awaiting moderation.')}
               ctaLabel={t('See it anyway')}
               handleFlipCard={handleFlipCard}
@@ -434,7 +434,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                             onMentionClick={handleMentionClick}
                             onTagClick={handleTagClick}
                             singleSpaNavigate={handleSingleSpaNavigate}
-                            headerTextLabel={t(`You reported this reply for the following reason`)}
+                            headerTextLabel={t('You reported this reply for the following reason')}
                             footerTextLabel={t('It is awaiting moderation.')}
                             moderatedContentLabel={t('This content has been moderated')}
                             ctaLabel={t('See it anyway')}

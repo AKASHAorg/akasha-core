@@ -81,9 +81,10 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           onFlag={props.onEntryFlag}
           onRepost={handleRepost}
           contentClickable={props.contentClickable}
+          headerTextLabel={t('You reported this post for the following reason')}
+          footerTextLabel={t('It is awaiting moderation.')}
           moderatedContentLabel={t('This content has been moderated')}
           ctaLabel={t('See it anyway')}
-          handleFlipCard={props.handleFlipCard}
           onEntryRemove={props.onEntryRemove}
           removeEntryLabel={props.removeEntryLabel}
           removedByMeLabel={props.removedByMeLabel}
