@@ -14,32 +14,18 @@ export interface IReportSuccessModalProps {
   // screen size passed by viewport provider
   size?: string;
   // @TODO: make prop required, and modify all instances appropriately
-  updateEntry?: (entryId: string) => void;
   closeModal: () => void;
   signData?: any;
 }
 
 const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
-  const {
-    className,
-    successTitleLabel,
-    successMessageLabel,
-    contentId,
-    blockLabel,
-    closeLabel,
-    size,
-    updateEntry,
-    closeModal,
-  } = props;
+  const { className, successTitleLabel, successMessageLabel, closeLabel, size, closeModal } = props;
 
   const handleModalClose =
     (blockUser = false) =>
     () => {
       if (blockUser) {
         /* @todo: replace with handler to block account */
-      }
-      if (updateEntry && contentId) {
-        updateEntry(contentId);
       }
       closeModal();
     };

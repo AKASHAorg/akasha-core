@@ -67,7 +67,6 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     contentType,
     requesting,
     success,
-    updateEntry,
     closeModal,
     onReport,
   } = props;
@@ -129,7 +128,6 @@ const ReportModal: React.FC<IReportModalProps> = props => {
         blockLabel={blockLabel}
         closeLabel={closeLabel}
         size={size}
-        updateEntry={updateEntry}
         closeModal={closeModal}
       />
     );

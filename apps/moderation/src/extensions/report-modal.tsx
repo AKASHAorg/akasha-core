@@ -52,11 +52,6 @@ const ReportModalComponent = (props: RootComponentProps) => {
     props.singleSpa.navigateToUrl(location.pathname);
   };
 
-  const updateEntry = (entryId: string) => {
-    const modifiedEntry = { ...postsState.postsData[entryId], reported: true };
-    postsActions.updatePostsState(modifiedEntry);
-  };
-
   const onReport = (dataToSign: Record<string, unknown>) => {
     moderationRequest.modalClickHandler({
       dataToSign,
@@ -102,7 +97,6 @@ const ReportModalComponent = (props: RootComponentProps) => {
         contentType={activeModal.contentType}
         requesting={requesting}
         success={success}
-        updateEntry={updateEntry}
         closeModal={handleModalClose}
         onReport={onReport}
       />
