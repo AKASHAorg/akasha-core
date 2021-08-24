@@ -127,7 +127,10 @@ export default {
             reporter: reportedBy,
             reporterProfile: {
               ...reportedByProfile,
-              avatar: `${ipfsGateway}/${reportedByProfile.avatar}`,
+              avatar:
+                reportedByProfile.avatar.length > 0
+                  ? `${ipfsGateway}/${reportedByProfile.avatar}`
+                  : null,
             },
             count: reports - 1, // minus reporter, to get count of other users
             entryDate: reportedDate,
@@ -190,13 +193,19 @@ export default {
             reporter: reportedBy,
             reporterProfile: {
               ...reportedByProfile,
-              avatar: `${ipfsGateway}/${reportedByProfile.avatar}`,
+              avatar:
+                reportedByProfile.avatar.length > 0
+                  ? `${ipfsGateway}/${reportedByProfile.avatar}`
+                  : null,
             },
             count: reports - 1,
             moderator: moderator,
             moderatorProfile: {
               ...moderatorProfile,
-              avatar: `${ipfsGateway}/${reportedByProfile.avatar}`,
+              avatar:
+                moderatorProfile.avatar.length > 0
+                  ? `${ipfsGateway}/${moderatorProfile.avatar}`
+                  : null,
             },
             entryDate: reportedDate,
             evaluationDate: moderatedDate,
