@@ -25,7 +25,8 @@
     "clean": "tsc --build --clean"
   },
   "dependencies": {
-    "i18next": "20.4.0"
+    "i18next": "20.4.0",
+    "@akashaproject/sdk-typings": "*"
   },
   "devDependencies": {
     "rxjs": "7.3.0"

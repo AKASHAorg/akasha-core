@@ -48,9 +48,9 @@ const EditorModalContainer = (props: RootComponentProps) => {
     return undefined;
   }, [editingPost.data, editingPost.status]);
 
-  const embeddedEntryContent = React.useMemo(() => {
+  const embedEntryData = React.useMemo(() => {
     if (embeddedPost.status === 'success') {
-      return mapEntry(embeddedPost.data).content;
+      return mapEntry(embeddedPost.data);
     }
     return undefined;
   }, [embeddedPost.status, embeddedPost.data]);
@@ -71,7 +71,10 @@ const EditorModalContainer = (props: RootComponentProps) => {
     props.singleSpa.navigateToUrl(location.pathname);
   };
 
-  if (isEditing && editingPost.isLoading) {
+  if (
+    (isEditing && editingPost.isLoading) ||
+    (props.activeModal.embedEntry && embeddedPost.isLoading)
+  ) {
     return <>{t('Loading Editor')}</>;
   }
   return (
@@ -96,7 +99,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
           tags={mentionsState.tags}
           mentions={mentionsState.mentions}
           uploadRequest={uploadMediaToTextile}
-          embedEntryData={embeddedEntryContent}
+          embedEntryData={embedEntryData}
           style={{ width: '36rem' }}
           editorState={entryData?.content}
         />

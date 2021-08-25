@@ -2,8 +2,6 @@ import * as React from 'react';
 import { Box, Text } from 'grommet';
 import styled from 'styled-components';
 import { isMobile } from 'react-device-detect';
-
-import { ISocialData } from './social-box';
 import CardHeaderMenuDropdown from './card-header-menu';
 import CardActions, { ServiceNames } from './card-actions';
 import CardHeaderAkashaDropdown from './card-header-akasha';
@@ -11,7 +9,6 @@ import { StyledDropAlt, StyledProfileDrop, StyledIcon } from './styled-entry-box
 
 import { EntryCardHidden } from './entry-card-hidden';
 import { ProfileMiniCard } from '../ProfileCard/profile-mini-card';
-import { IProfileData } from '../ProfileCard/profile-widget-card';
 import { StyledAnchor } from './basic-card-box';
 
 import Icon, { IconType } from '../Icon';
@@ -22,24 +19,8 @@ import ReadOnlyEditor from '../ReadOnlyEditor';
 import ViewportSizeProvider from '../Providers/viewport-dimension';
 
 import { formatRelativeTime, ILocale } from '../../utils/time';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 
-export interface IEntryData {
-  CID?: string;
-  content: any;
-  time?: string | number | Date;
-  replies?: number;
-  reposts?: number;
-  ipfsLink: string;
-  permalink: string;
-  entryId: string;
-  author: IProfileData;
-  quotedByAuthors?: ISocialData;
-  quotedBy?: string[];
-  quote?: IEntryData;
-  delisted?: boolean;
-  reported?: boolean;
-  type?: string;
-}
 export interface IContentClickDetails {
   authorEthAddress: string;
   entryId: string;

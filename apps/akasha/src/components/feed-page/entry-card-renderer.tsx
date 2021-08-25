@@ -138,6 +138,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   const onEditButtonUnmount = () => {
     /* todo */
   };
+  console.log(itemData);
   return (
     <ErrorInfoCard errors={{}}>
       {(errorMessages: any, hasCriticalErrors: boolean) => (

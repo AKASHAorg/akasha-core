@@ -9,6 +9,7 @@ import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loa
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 
 const { ErrorInfoCard, ErrorLoader, EntryCardLoading, EntryCard, EntryCardHidden, ExtensionPoint } =
   DS;
@@ -27,7 +28,7 @@ export interface IEntryRenderer {
   onUnfollow: (ethAddress: string) => void;
   onBookmark: (isBookmarked: boolean, entryId: string) => void;
   onFlag?: (entryId: string, contentType: string, reporterEthAddress?: string | null) => () => void;
-  onRepost: (withComment: boolean, entryData: any) => void;
+  onRepost: (withComment: boolean, entryData: IEntryData) => void;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   singleSpaNavigate: (url: string) => void;
   checkIsFollowing: (viewerEthAddress: string, targetEthAddress: string) => void;

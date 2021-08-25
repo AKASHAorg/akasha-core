@@ -4,7 +4,7 @@ import { isMobile } from 'react-device-detect';
 
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import TextIcon from '../TextIcon';
-import { IEntryData } from './entry-box';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import MobileListModal from '../MobileListModal';
 import styled from 'styled-components';
 

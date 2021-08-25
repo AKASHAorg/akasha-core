@@ -40,7 +40,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [errorState] = useErrors({ logger });
 
-  const createPostMutation = useMutationListener(CREATE_POST_MUTATION_KEY);
+  const createPostMutation =
+    useMutationListener<{ metadata: { quote?: string } }>(CREATE_POST_MUTATION_KEY);
 
   const postsReq = useInfinitePosts(15);
 
@@ -116,7 +117,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleEntryRemove = (entryId: string) => {
     props.navigateToModal({ name: 'entry-remove-confirmation', entryType: 'Post', entryId });
   };
-
+  console.log(createPostMutation, '<<<<< create post mutation');
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -136,7 +137,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       {createPostMutation && createPostMutation.state.status === 'loading' && (
         <EntryCard
           style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}
-          entryData={createPendingEntry(loggedProfileData, createPostMutation.state.variables)}
+          entryData={createPendingEntry(
+            loggedProfileData,
+            createPostMutation.state.variables,
+            createPostMutation.state.variables.metadata.quote,
+          )}
           sharePostLabel={t('Share Post')}
           shareTextLabel={t('Share this post with your friends')}
           repliesLabel={t('Replies')}

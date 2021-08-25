@@ -1,6 +1,11 @@
 import { getMediaUrl } from './media-utils';
 import getSDK from '@akashaproject/awf-sdk';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
+import {
+  Comment_Response,
+  Post_Response,
+} from '@akashaproject/sdk-typings/lib/interfaces/responses';
 
 export const MEDIA_URL_PREFIX = 'CID:';
 export const PROVIDER_AKASHA = 'AkashaApp';
@@ -55,38 +60,13 @@ export const excludeNonSlateContent = (entry: any) => {
   );
 };
 
-export const mapEntry = (
-  entry: {
-    content: { provider: string; property: string; value: string }[];
-    CID?: string;
-    _id: string;
-    quotes?: any[];
-    quotedBy?: string[];
-    quotedByAuthors?: any[];
-    creationDate: string;
-    totalComments?: string;
-    postId?: string;
-    type?: any;
-    author: {
-      CID?: string;
-      description?: string;
-      avatar?: string;
-      coverImage?: string;
-      userName?: string;
-      name?: string;
-      ethAddress: string;
-      pubKey: string;
-      totalPosts?: number | string;
-      totalFollowers?: number | string;
-      totalFollowing?: number | string;
-      default: any;
-    };
-    delisted?: boolean;
-    reported?: boolean;
-    isPublishing?: boolean;
-  },
-  logger?: any,
-) => {
+/**
+ * Remap entry data coming from a response to the format expected by EntryCard
+ * content -> from b64 to slate format
+ * profile images -> append ipfs gateway
+ * entry images -> append ipfs gateway
+ */
+export const mapEntry = (entry: Post_Response | Comment_Response, logger?: Console): IEntryData => {
   const sdk = getSDK();
   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
@@ -163,6 +143,7 @@ export const mapEntry = (
       totalFollowers: entry.author.totalFollowers,
       totalFollowing: entry.author.totalFollowing,
       default: entry.author.default,
+      providers: entry.author.providers,
     },
     CID: entry.CID,
     content: contentWithMediaGateways,

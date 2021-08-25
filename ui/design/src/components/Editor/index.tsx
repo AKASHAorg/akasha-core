@@ -12,7 +12,7 @@ import {
 import { withHistory } from 'slate-history';
 import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 import Avatar from '../Avatar';
-import { IEntryData } from '../EntryCard/entry-box';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import Icon from '../Icon';
 import EmojiPopover from '../EmojiPopover';
 import EmbedBox from '../EmbedBox';
@@ -80,7 +80,7 @@ export interface IPublishData {
 export interface IMetadata {
   app: string;
   version: number;
-  quote?: string;
+  quote?: IEntryData;
   tags: string[];
   mentions: string[];
 }
@@ -190,7 +190,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     const content = editorState;
     const metadata: IMetadata = {
       app: publishingApp,
-      quote: embedEntryData?.entryId,
+      quote: embedEntryData,
       tags: [],
       mentions: [],
       version: 1,

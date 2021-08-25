@@ -4,7 +4,8 @@ import getSDK from '@akashaproject/awf-sdk';
 import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
-import { Post_Response } from '../../../sdk/typings/lib/interfaces/responses';
+import { Post_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
+import { IEntryData } from '@akashaproject/ui-design/lib/components/EntryCard/entry-box';
 
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
@@ -16,7 +17,7 @@ export interface PublishPostData {
   metadata: {
     app: string;
     version: number;
-    quote?: string;
+    quote?: IEntryData;
     tags: string[];
     mentions: string[];
   };

@@ -1,7 +1,7 @@
 export interface IProfileProvider {
-  property: string;
-  provider: string;
-  value: any;
+  property: ProfileProviderProperties;
+  provider: ProfileProviders;
+  value: string;
 }
 
 export interface IProfileData {
@@ -18,8 +18,8 @@ export interface IProfileData {
   totalPosts?: string | number;
   totalFollowers?: string | number;
   totalFollowing?: string | number;
-  default: IProfileProvider[];
-  providers: IProfileProvider[];
+  default: DataProviderInput[];
+  providers: DataProviderInput[];
   apps?: string | number;
   profileType?: string;
   users?: string | number;
