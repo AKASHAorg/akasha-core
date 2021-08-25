@@ -15,7 +15,7 @@ import { ENTRY_KEY, useInfinitePostsByAuthor } from '@akashaproject/ui-awf-hooks
 import { useQueryClient } from 'react-query';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
-const { Box, Helmet, ErrorLoader } = DS;
+const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard } = DS;
 
 export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;
@@ -43,10 +43,15 @@ const ProfilePage = (props: ProfilePageProps) => {
     return pubKey;
   }, [pubKey, loggedProfileData, location.pathname]);
 
-  const profileDataQuery = useGetProfile(publicKey);
+  const [loginState] = useLoginState({});
+
+  const profileDataQuery = useGetProfile(
+    publicKey,
+    loginState.pubKey,
+    loginState.currentUserCalled,
+  );
   const profileState = profileDataQuery.data;
 
-  const [loginState] = useLoginState({});
   const reqPosts = useInfinitePostsByAuthor(
     publicKey,
     15,
@@ -124,47 +129,80 @@ const ProfilePage = (props: ProfilePageProps) => {
       </Helmet>
       {profileDataQuery.status === 'loading' && <></>}
       {profileDataQuery.status === 'success' && (
-        <ProfilePageHeader
-          {...props}
-          profileState={profileState}
-          profileId={pubKey}
-          loggedUserEthAddress={loginState.ethAddress}
-        />
-      )}
-      {reqPosts.status === 'error' && reqPosts.error && (
-        <ErrorLoader
-          type="script-error"
-          title="Cannot get posts for this profile"
-          details={(reqPosts.error as Error).message}
-        />
-      )}
-      {reqPosts.status === 'success' && !postPages && <div>There are no posts!</div>}
-      {reqPosts.status === 'success' && postPages && (
-        <FeedWidget
-          itemType={ItemTypes.ENTRY}
-          logger={props.logger}
-          onLoadMore={handleLoadMore}
-          getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
-          pages={postPages}
-          requestStatus={reqPosts.status}
-          ethAddress={loginState.ethAddress}
-          onNavigate={handleNavigation}
-          singleSpaNavigate={props.singleSpa.navigateToUrl}
-          navigateToModal={props.navigateToModal}
-          onLoginModalOpen={showLoginModal}
-          hasNextPage={reqPosts.hasNextPage}
-          profilePubKey={pubKey}
-          loggedProfile={loggedProfileData}
-          contentClickable={true}
-          onEntryFlag={handleEntryFlag}
-          onEntryRemove={handleEntryRemove}
-          removeEntryLabel={t('Delete Post')}
-          removedByMeLabel={t('You deleted this post')}
-          removedByAuthorLabel={t('This post was deleted by its author')}
-          uiEvents={props.uiEvents}
-          itemSpacing={8}
-          i18n={i18n}
-        />
+        <>
+          {profileState.moderated && profileState.delisted && (
+            <EntryCardHidden
+              isDelisted={profileState.delisted}
+              delistedAccount={profileState.delisted}
+              moderatedContentLabel={t('This account was suspended for violating the')}
+              ctaLabel={t('Code of Conduct')}
+              ctaUrl="/legal/code-of-conduct"
+            />
+          )}
+          {!profileState.moderated && profileState.reported && (
+            <EntryCardHidden
+              reportedAccount={profileState.reported}
+              reason={profileState.reason}
+              headerTextLabel={t(`You reported this account for the following reason`)}
+              footerTextLabel={t('It is awaiting moderation.')}
+            />
+          )}
+          {profileState.moderated && profileState.delisted ? (
+            <ProfileDelistedCard
+              name={t('Suspended Account')}
+              userName={profileState.userName || ''}
+            />
+          ) : (
+            <ProfilePageHeader
+              {...props}
+              profileState={profileState}
+              profileId={pubKey}
+              loggedUserEthAddress={loginState.ethAddress}
+            />
+          )}
+
+          {!profileState.moderated && !profileState.delisted && (
+            <>
+              {reqPosts.status === 'error' && reqPosts.error && (
+                <ErrorLoader
+                  type="script-error"
+                  title="Cannot get posts for this profile"
+                  details={(reqPosts.error as Error).message}
+                />
+              )}
+              {reqPosts.status === 'success' && !postPages && <div>There are no posts!</div>}
+              {reqPosts.status === 'success' && postPages && (
+                <FeedWidget
+                  itemType={ItemTypes.ENTRY}
+                  logger={props.logger}
+                  onLoadMore={handleLoadMore}
+                  getShareUrl={(itemId: string) =>
+                    `${window.location.origin}/social-app/post/${itemId}`
+                  }
+                  pages={postPages}
+                  requestStatus={reqPosts.status}
+                  ethAddress={loginState.ethAddress}
+                  onNavigate={handleNavigation}
+                  singleSpaNavigate={props.singleSpa.navigateToUrl}
+                  navigateToModal={props.navigateToModal}
+                  onLoginModalOpen={showLoginModal}
+                  hasNextPage={reqPosts.hasNextPage}
+                  profilePubKey={pubKey}
+                  loggedProfile={loggedProfileData}
+                  contentClickable={true}
+                  onEntryFlag={handleEntryFlag}
+                  onEntryRemove={handleEntryRemove}
+                  removeEntryLabel={t('Delete Post')}
+                  removedByMeLabel={t('You deleted this post')}
+                  removedByAuthorLabel={t('This post was deleted by its author')}
+                  uiEvents={props.uiEvents}
+                  itemSpacing={8}
+                  i18n={i18n}
+                />
+              )}
+            </>
+          )}
+        </>
       )}
     </Box>
   );
