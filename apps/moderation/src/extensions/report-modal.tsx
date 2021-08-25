@@ -1,6 +1,7 @@
 import * as React from 'react';
 import i18next from 'i18next';
 import ReactDOM from 'react-dom';
+import { useQueryClient } from 'react-query';
 import Fetch from 'i18next-fetch-backend';
 import singleSpaReact from 'single-spa-react';
 import DS from '@akashaproject/design-system';
@@ -8,12 +9,14 @@ import Backend from 'i18next-chained-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { ENTRY_KEY } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { PROFILE_KEY } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+import { COMMENT_KEY } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import {
   useLoginState,
   useErrors,
-  usePosts,
   moderationRequest,
   withProviders,
   useReasons,
@@ -34,15 +37,11 @@ const ReportModalComponent = (props: RootComponentProps) => {
     onError: errorActions.createError,
   });
 
-  const [postsState, postsActions] = usePosts({
-    user: loginState.ethAddress,
-    onError: errorActions.createError,
-  });
-
   const [reasons, reasonsActions] = useReasons({ onError: errorActions.createError });
 
   const { t } = useTranslation();
   const location = useLocation();
+  const queryClient = useQueryClient();
 
   React.useEffect(() => {
     reasonsActions.fetchReasons({ active: true });
@@ -50,6 +49,32 @@ const ReportModalComponent = (props: RootComponentProps) => {
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
+  };
+
+  const updateOnSuccess = (isSuccess: boolean) => {
+    // this method utilises react-query to update reported state depending on contentType
+    if (activeModal.contentType === 'post') {
+      queryClient.setQueryData<unknown>([ENTRY_KEY, activeModal.entryId], prev => ({
+        ...prev,
+        reported: true,
+        reason: reasons[0],
+      }));
+    }
+    if (activeModal.contentType === 'reply') {
+      queryClient.setQueryData<unknown>([COMMENT_KEY, activeModal.entryId], prev => ({
+        ...prev,
+        reported: true,
+        reason: reasons[0],
+      }));
+    }
+    if (activeModal.contentType === 'account') {
+      queryClient.setQueryData<unknown>([PROFILE_KEY, activeModal.entryId], prev => ({
+        ...prev,
+        reported: true,
+        reason: reasons[0],
+      }));
+    }
+    return setSuccess(isSuccess);
   };
 
   const onReport = (dataToSign: Record<string, unknown>) => {
@@ -61,7 +86,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
       url: `${BASE_REPORT_URL}/new`,
       modalName: 'report-modal',
       logger: props.logger,
-      callback: setSuccess,
+      callback: updateOnSuccess,
     });
   };
 
