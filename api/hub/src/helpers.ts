@@ -172,9 +172,7 @@ export const verifyEd25519Sig = async (args: {
 };
 
 export const sendNotification = async (recipient: string, notificationObj: Record<string, any>) => {
-  // we use a generic "middleware" worker.js file that will import our TS source code for this worker
-  const worker = new Worker(path.resolve(__dirname, './worker.js'), { workerData: {
-    path: './notifications.js',
+  const worker = new Worker(path.resolve(__dirname, './notifications.js'), { workerData: {
     recipient, 
     notificationObj 
   }});
