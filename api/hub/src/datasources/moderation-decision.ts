@@ -47,7 +47,7 @@ class ModerationDecisionAPI extends DataSource {
   /**
    * Get the name of the key for counters cache
    * @returns The key as a string
-  */
+   */
   getCountersCacheKey() {
     return `${this.collection}:counters`;
   }
@@ -55,7 +55,7 @@ class ModerationDecisionAPI extends DataSource {
   /**
    * Get the name of the key for list of pending items cache
    * @returns The key as a string
-  */
+   */
   getPendingListCacheKey() {
     return `${this.collection}:pending`;
   }
@@ -63,7 +63,7 @@ class ModerationDecisionAPI extends DataSource {
   /**
    * Get the name of the key for list of moderated items cache
    * @returns The key as a string
-  */
+   */
   getModeratedListCacheKey() {
     return `${this.collection}:moderated`;
   }
@@ -104,13 +104,13 @@ class ModerationDecisionAPI extends DataSource {
     await queryCache.set(countersCache, counters);
     return counters;
   }
-  
+
   /**
    * Get a single decision based on the provided content identifier.
    * @param contentID - The content identifier
    * @returns A ModerationDecision object
    */
-   async getDecision(contentID: string) {
+  async getDecision(contentID: string) {
     const decisionCache = this.getDecisionCacheKey(contentID);
     if (await queryCache.has(decisionCache)) {
       return queryCache.get(decisionCache);
@@ -132,7 +132,7 @@ class ModerationDecisionAPI extends DataSource {
    * @returns A list of ModerationDecision objects
    */
   async listActions(contentID: string) {
-    let decision = parse(stringify(await this.getDecision(contentID)));
+    const decision = parse(stringify(await this.getDecision(contentID)));
     if (decision.actions && decision.actions.length) {
       decision.actions.forEach((element, index) => {
         element.explanation = decodeString(element.explanation);
@@ -157,10 +157,11 @@ class ModerationDecisionAPI extends DataSource {
     if (await queryCache.has(listType)) {
       list = await queryCache.get(listType);
     } else {
-      const query = moderated ? new Where('moderated').eq(true).orderByDesc('moderatedDate') :
-      {
-        sort: { desc: true, fieldPath: 'creationDate' },
-      }
+      const query = moderated
+        ? new Where('moderated').eq(true).orderByDesc('moderatedDate')
+        : {
+            sort: { desc: true, fieldPath: 'creationDate' },
+          };
       list = await db.find<ModerationDecision>(this.dbID, this.collection, query);
       await queryCache.set(listType, list);
     }
@@ -181,7 +182,12 @@ class ModerationDecisionAPI extends DataSource {
    * @param limit - Limit number of records returned
    * @returns A list of objects with minimal info about the moderated content
    */
-  async publicLog(profileAPI: ProfileAPI, reportingAPI: ModerationReportAPI, offset?: number, limit?: number) {
+  async publicLog(
+    profileAPI: ProfileAPI,
+    reportingAPI: ModerationReportAPI,
+    offset?: number,
+    limit?: number,
+  ) {
     let list = [];
     const db: Client = await getAppDB();
     const cachedList = this.getModeratedListCacheKey();
@@ -203,7 +209,8 @@ class ModerationDecisionAPI extends DataSource {
     for (const result of results) {
       const decision = await this.getFinalDecision(result.contentID, profileAPI, reportingAPI);
       // load moderator info
-      const moderator = decision.moderator.startsWith('0x') ? await profileAPI.getProfile(decision.moderator)
+      const moderator = decision.moderator.startsWith('0x')
+        ? await profileAPI.getProfile(decision.moderator)
         : await profileAPI.resolveProfile(decision.moderator);
 
       moderated.push({
@@ -234,46 +241,58 @@ class ModerationDecisionAPI extends DataSource {
    * @param profileAPI - The profile data source API
    * @returns An object with all the relevant data
    */
-  async getFinalDecision(contentID: string, profileAPI: ProfileAPI, reportingAPI: ModerationReportAPI) {
+  async getFinalDecision(
+    contentID: string,
+    profileAPI: ProfileAPI,
+    reportingAPI: ModerationReportAPI,
+  ) {
     const decisionCache = this.getModeratedDecisionCacheKey(contentID);
     if (await queryCache.has(decisionCache)) {
       return queryCache.get(decisionCache);
     }
-    let decision = await this.getDecision(contentID);
+    const decision = await this.getDecision(contentID);
     // remove action log as it is not needed here
-    let { actions, ...finalDecision } = decision;
+    let { finalDecision } = decision;
     // add moderator data
     if (finalDecision.moderator) {
-      const moderator = finalDecision.moderator.startsWith('0x') ? await profileAPI.getProfile(finalDecision.moderator)
+      const moderator = finalDecision.moderator.startsWith('0x')
+        ? await profileAPI.getProfile(finalDecision.moderator)
         : await profileAPI.resolveProfile(finalDecision.moderator);
-      finalDecision = Object.assign({}, finalDecision, { 
+      finalDecision = Object.assign({}, finalDecision, {
         moderatorProfile: {
           ethAddress: moderator.ethAddress, // Deprecated, to be removed
           pubKey: moderator.pubKey,
-          name: moderator.name || "",
-          userName: moderator.userName || "",
-          avatar: moderator.avatar || "",
-        }
+          name: moderator.name || '',
+          userName: moderator.userName || '',
+          avatar: moderator.avatar || '',
+        },
       });
     }
     // add first report data
     const first = await reportingAPI.getFirstReport(contentID);
     const reportedBy = first.author;
     const reportedDate = first.creationDate;
-    const author = await first.author.startsWith('0x') ? await profileAPI.getProfile(first.author)
-    : await profileAPI.resolveProfile(first.author);
+    const author = (await first.author.startsWith('0x'))
+      ? await profileAPI.getProfile(first.author)
+      : await profileAPI.resolveProfile(first.author);
     const reportedByProfile = {
       ethAddress: author.ethAddress, // Deprecated, to be removed
       pubKey: author.pubKey,
-      name: author.name || "",
-      userName: author.userName || "",
-      avatar: author.avatar || "",
+      name: author.name || '',
+      userName: author.userName || '',
+      avatar: author.avatar || '',
     };
     // count reports
     const reports = await reportingAPI.countReports(contentID);
     // add reasons
     const reasons = await reportingAPI.getReasons(contentID);
-    finalDecision = Object.assign({}, finalDecision, { reports, reportedBy, reportedDate, reportedByProfile, reasons });
+    finalDecision = Object.assign({}, finalDecision, {
+      reports,
+      reportedBy,
+      reportedDate,
+      reportedByProfile,
+      reasons,
+    });
     await queryCache.set(decisionCache, finalDecision);
     return finalDecision;
   }
@@ -283,7 +302,7 @@ class ModerationDecisionAPI extends DataSource {
    * @param report - The object containing relevant data for the report
    * @param postsAPI - The posts data source API
    * @param delisted - Outcome of the moderation action (delisted or kept)
-   * @reurns The ModerationDecision object
+   * @returns The ModerationDecision object
    */
   async makeDecision(report: any, postsAPI: PostsAPI) {
     const db: Client = await getAppDB();

@@ -24,11 +24,11 @@ class ModerationReportAPI extends DataSource {
   }
 
   /**
-  * Get the name of the key for report cache.
-  * @param contentID - The content identifier
-  * @param author - The author of that report
-  * @returns The key as a string
-  */
+   * Get the name of the key for report cache.
+   * @param contentID - The content identifier
+   * @param author - The author of that report
+   * @returns The key as a string
+   */
   getReportCacheKey(contentID: string, author: string) {
     return `${this.collection}:contentID${contentID}:author${author}`;
   }
@@ -132,10 +132,9 @@ class ModerationReportAPI extends DataSource {
    * @returns A list of reasons as strings
    */
   async getReasons(contentID: string) {
-    let reports: ModerationReport[];
     const db: Client = await getAppDB();
     const query = new Where('contentID').eq(contentID);
-    reports = await db.find<ModerationReport>(this.dbID, this.collection, query);
+    const reports = await db.find<ModerationReport>(this.dbID, this.collection, query);
     const reasons = [];
     if (reports.length) {
       for (const report of reports) {
@@ -173,7 +172,7 @@ class ModerationReportAPI extends DataSource {
 
     const exists = await this.exists(contentID, author);
     if (exists) {
-      return Promise.reject({status: 409});
+      return Promise.reject({ status: 409 });
     }
 
     // we need to check if a pending decision was created for this post

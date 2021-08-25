@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { encodeString, decodeString, getAppDB, logger } from '../helpers';
+import { encodeString, decodeString, getAppDB } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
 import { ModerationReason } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -35,7 +35,7 @@ class ModerationReasonAPI extends DataSource {
    * Get the name of the key for a reasons list cache.
    * @returns The key as a string
    */
-   getReasonListCacheKey(active: boolean) {
+  getReasonListCacheKey(active: boolean) {
     return `${this.collection}:ModerationReasons:${active.toString()}`;
   }
 
@@ -49,7 +49,7 @@ class ModerationReasonAPI extends DataSource {
     const reasonCache = this.getReasonCacheKey(label);
     const db: Client = await getAppDB();
 
-     // check if reason already exists
+    // check if reason already exists
     let reason: ModerationReason;
     const query = new Where('label').eq(label);
     const results = await db.find<ModerationReason>(this.dbID, this.collection, query);
@@ -112,7 +112,7 @@ class ModerationReasonAPI extends DataSource {
       await queryCache.del(this.getReasonListCacheKey(reason.active));
       return true;
     }
-    return false
+    return false;
   }
 }
 
