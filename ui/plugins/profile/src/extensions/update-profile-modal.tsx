@@ -4,10 +4,16 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import singleSpaReact from 'single-spa-react';
 import { useLoginState, withProviders } from '@akashaproject/ui-awf-hooks';
 import DS from '@akashaproject/design-system';
-import { useGetProfile, useProfileUpdate } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+import {
+  useGetProfile,
+  useProfileUpdate,
+  FormProfileData,
+  UPDATE_PROFILE_STATUS,
+} from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { useUsernameValidation } from '@akashaproject/ui-awf-hooks/lib/use-username.new';
 import { useTranslation } from 'react-i18next';
-import { ProfileUpdateStatus } from '@akashaproject/design-system/lib/components/BoxFormCard';
+import { useQueryListener } from '@akashaproject/ui-awf-hooks/lib/use-query-listener';
+import { UpdateProfileStatus } from '@akashaproject/ui-awf-typings/lib/profile';
 
 const {
   ThemeSelector,
@@ -24,39 +30,57 @@ const {
 } = DS;
 
 const ProfileForm = styled(BoxFormCard)`
-  max-width: 100%;
-  max-height: 100vh;
+  width: 100vw;
+  height: 100vh;
   overflow: auto;
-  min-height: 100vh;
+  align-self: center;
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
-    max-width: 66%;
-    min-height: max-content;
+    max-width: 66vw;
   }
   @media screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
-    max-width: 50%;
-    min-height: max-content;
+    max-width: 50vw;
   }
   @media screen and (min-width: ${props => props.theme.breakpoints.xlarge.value}px) {
-    max-width: 33%;
-    min-height: max-content;
+    max-width: 33vw;
   }
 `;
 
 const UpdateProfileModal: React.FC<RootComponentProps> = props => {
   const [loginState] = useLoginState({});
   const [partialUsername, setPartialUsername] = React.useState<string>();
-  const profileDataQuery = useGetProfile(loginState.ready?.pubKey);
-  const profileUpdateQuery = useProfileUpdate(loginState.ready?.pubKey);
+  const profileDataQuery = useGetProfile(loginState.pubKey);
+  const profileUpdateMutation = useProfileUpdate(loginState.pubKey);
   const usernameValidationQuery = useUsernameValidation(partialUsername);
   const { t } = useTranslation();
+  const updateStatusKey = React.useMemo(
+    () => [UPDATE_PROFILE_STATUS, loginState.pubKey],
+    [loginState.pubKey],
+  );
+  const updateStatusQuery = useQueryListener<{
+    status: UpdateProfileStatus;
+    remainingFields: string[];
+  }>(updateStatusKey);
 
-  const onProfileUpdate = (profileData: any) => {
-    console.log(profileData, '<<< profile data to update');
+  const onModalClose = React.useMemo(
+    () => () => {
+      profileUpdateMutation.reset();
+      props.singleSpa.navigateToUrl(location.pathname);
+    },
+    [props.singleSpa, profileUpdateMutation],
+  );
+  React.useEffect(() => {
+    if (
+      updateStatusQuery?.data &&
+      updateStatusQuery.data.status === UpdateProfileStatus.UPDATE_COMPLETE
+    ) {
+      onModalClose();
+    }
+  }, [updateStatusQuery, onModalClose]);
+
+  const handleFormSubmit = (profileData: FormProfileData, changedFields: string[]) => {
+    profileUpdateMutation.mutate({ profileData, changedFields });
   };
 
-  const onModalClose = () => {
-    props.singleSpa.navigateToUrl(location.pathname);
-  };
   /**
    * validate username by setting the local state
    * validation hook will do the rest
@@ -65,21 +89,6 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
     setPartialUsername(userName);
   };
 
-  // compute a general update status
-  const updateStatus: ProfileUpdateStatus = React.useMemo(() => {
-    return {
-      isLoading: false,
-      isValidUsername: true,
-      isValidating: false,
-      saving: false,
-      uploadingAvatar: false,
-      uploadingCoverImage: false,
-      updateComplete: true,
-      notAllowed: false,
-      tooShort: false,
-    };
-  }, []);
-  console.log(usernameValidationQuery, '<<< username validation query');
   return (
     <ModalContainer>
       {profileDataQuery.status !== 'success' && (
@@ -110,13 +119,13 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
           descriptionFieldPlaceholder={t('Add a description about you here')}
           ethAddress={profileDataQuery.data.ethAddress}
           providerData={profileDataQuery.data}
-          onSave={onProfileUpdate}
+          onSave={handleFormSubmit}
           onCancel={onModalClose}
-          updateStatus={updateStatus}
+          updateStatus={updateStatusQuery.data?.status || UpdateProfileStatus.UPDATE_IDLE}
           showUsername={!profileDataQuery.data.userName}
           onUsernameChange={handleUsernameChange}
           onUsernameBlur={handleUsernameChange}
-          isValidatingUsername={usernameValidationQuery.status !== 'success'}
+          isValidatingUsername={usernameValidationQuery.status === 'loading'}
           // usernameSuccess={props.profileUpdateStatus.isValidUsername ? ' ' : undefined}
           usernameError={
             usernameValidationQuery.status === 'error'

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Box } from 'grommet';
 
-import { IFormValues, ProfileUpdateStatus } from '../';
+import { IFormValues } from '../';
 import Button from '../../Button';
 import Spinner from '../../Spinner';
+import { UpdateProfileStatus } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export interface IActionButtonsSectionProps {
   cancelLabel?: string;
@@ -13,7 +14,7 @@ export interface IActionButtonsSectionProps {
   isValidatingUsername?: boolean;
   usernameError?: string;
   formValues: IFormValues;
-  updateStatus: ProfileUpdateStatus;
+  updateStatus: UpdateProfileStatus;
   handleRevert: () => void;
   handleSave: () => void;
 }
@@ -31,11 +32,24 @@ const ActionButtonsSection: React.FC<IActionButtonsSectionProps> = props => {
     handleRevert,
     handleSave,
   } = props;
+
   return (
     <Box direction="row" gap="xsmall" justify="end">
-      {!showUsername && <Button label={cancelLabel} onClick={handleRevert} />}
+      {!showUsername && (
+        <Button
+          label={cancelLabel}
+          disabled={updateStatus > UpdateProfileStatus.UPDATE_IDLE}
+          onClick={handleRevert}
+        />
+      )}
       <Button
-        label={updateStatus.saving ? <Spinner style={{ padding: 0 }} size={15} /> : saveLabel}
+        label={
+          updateStatus > UpdateProfileStatus.UPDATE_IDLE ? (
+            <Spinner style={{ padding: 0 }} size={15} />
+          ) : (
+            saveLabel
+          )
+        }
         onClick={handleSave}
         primary={true}
         disabled={
@@ -43,7 +57,8 @@ const ActionButtonsSection: React.FC<IActionButtonsSectionProps> = props => {
           (!formValues.userName && showUsername) ||
           !formValues.name ||
           isValidatingUsername ||
-          !!usernameError
+          !!usernameError ||
+          updateStatus > UpdateProfileStatus.UPDATE_IDLE
         }
       />
     </Box>

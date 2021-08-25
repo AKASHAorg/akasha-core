@@ -1,13 +1,12 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
-
 import EntryFeed from './entry-feed';
 import ProfileFeed from './profile-feed';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '../i18n';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
@@ -40,20 +39,22 @@ export interface IFeedWidgetProps {
   removedByAuthorLabel?: string;
   uiEvents: RootComponentProps['uiEvents'];
   itemSpacing?: number;
-  locale: string;
+  i18n: typeof i18n;
 }
 
 const FeedWidgetRoot: React.FC<IFeedWidgetProps> = props => {
   return (
-    <ThemeSelector
-      settings={{ activeTheme: 'Light-Theme' }}
-      availableThemes={[lightTheme, darkTheme]}
-      style={{ height: '100%' }}
-      plain={true}
-    >
-      {props.itemType === ItemTypes.ENTRY && <EntryFeed {...props} />}
-      {props.itemType === ItemTypes.PROFILE && <ProfileFeed {...props} />}
-    </ThemeSelector>
+    <I18nextProvider i18n={props.i18n}>
+      <ThemeSelector
+        settings={{ activeTheme: 'Light-Theme' }}
+        availableThemes={[lightTheme, darkTheme]}
+        style={{ height: '100%' }}
+        plain={true}
+      >
+        {props.itemType === ItemTypes.ENTRY && <EntryFeed {...props} />}
+        {props.itemType === ItemTypes.PROFILE && <ProfileFeed {...props} />}
+      </ThemeSelector>
+    </I18nextProvider>
   );
 };
 

@@ -8,24 +8,25 @@ import useLoginState, { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 // import { useFollowers } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
-
 import { ProfilePageHeader } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ENTRY_KEY, useInfinitePostsByAuthor } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useQueryClient } from 'react-query';
-import { UserProfile_Response } from '@akashaproject/awf-sdk/typings/lib/interfaces/responses';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 const { Box, Helmet, ErrorLoader } = DS;
 
 export interface ProfilePageProps extends RootComponentProps {
-  loggedProfileData: UserProfile_Response;
+  loggedProfileData: IProfileData;
   showLoginModal: () => void;
   loginState: ILoginState;
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
+  const { t, i18n } = useTranslation();
   const { loggedProfileData, showLoginModal } = props;
+  const [erroredHooks, setErroredHooks] = React.useState([]);
 
   const location = useLocation();
   const queryClient = useQueryClient();
@@ -46,9 +47,17 @@ const ProfilePage = (props: ProfilePageProps) => {
   const profileState = profileDataQuery.data;
 
   const [loginState] = useLoginState({});
-  const reqPosts = useInfinitePostsByAuthor(publicKey, 15, !!publicKey);
+  const reqPosts = useInfinitePostsByAuthor(
+    publicKey,
+    15,
+    !!publicKey && !erroredHooks.includes('useInfinitePostsByAuthor'),
+  );
 
-  const { t, i18n } = useTranslation();
+  React.useEffect(() => {
+    if (reqPosts.status === 'error' && !erroredHooks.includes('useInfinitePostsByAuthor')) {
+      setErroredHooks(['useInfinitePostsByAuthor']);
+    }
+  }, [reqPosts, erroredHooks]);
 
   const handleLoadMore = React.useCallback(() => {
     if (!reqPosts.isLoading && reqPosts.hasNextPage && loginState.currentUserCalled) {
@@ -162,7 +171,7 @@ const ProfilePage = (props: ProfilePageProps) => {
           removedByAuthorLabel={t('This post was deleted by its author')}
           uiEvents={props.uiEvents}
           itemSpacing={8}
-          locale={i18n.languages[0]}
+          i18n={i18n}
         />
       )}
     </Box>

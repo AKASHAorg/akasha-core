@@ -71,10 +71,10 @@ const TopbarComponent = (props: RootComponentProps) => {
     const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
     if (loginState.ethAddress && !isLoadingProfile) {
       getModeratorStatus(loginState.ethAddress);
-      if (!loggedProfileData.userName) {
-        // return props.navigateToModal({
-        //   name: 'update-profile',
-        // });
+      if (loggedProfileData && !loggedProfileData.userName) {
+        return props.navigateToModal({
+          name: 'update-profile',
+        });
       }
     }
   }, [profileDataReq.isLoading, loginState.ethAddress, loggedProfileData]);

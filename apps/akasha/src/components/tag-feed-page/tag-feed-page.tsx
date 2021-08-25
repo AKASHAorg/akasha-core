@@ -31,16 +31,13 @@ const TagInfoCard = styled(TagProfileCard)`
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { showLoginModal, loggedProfileData, loginState } = props;
-
+  const { i18n } = useTranslation();
   const sdk = getSDK();
-
   const { tagName } = useParams<{ tagName: string }>();
-
   const [tagData, setTagData] = React.useState<ITag | null>(null);
   const queryClient = useQueryClient();
 
-  const { i18n } = useTranslation();
-
+  /* TODO: move to hooks */
   React.useEffect(() => {
     if (tagName) {
       const tagsService = sdk.api.tags.getTag(tagName);
@@ -148,7 +145,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         handleFlipCard={handleFlipCard}
         uiEvents={props.uiEvents}
         itemSpacing={8}
-        locale={i18n.languages[0]}
+        i18n={i18n}
       />
     </Box>
   );

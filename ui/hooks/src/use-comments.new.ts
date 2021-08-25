@@ -170,18 +170,17 @@ export function useEditComment(commentID: string) {
   const queryClient = useQueryClient();
 
   return useMutation(
-    (comment: any) => {
+    (comment: PublishCommentData) => {
       const { postID, ...commentData } = comment;
       const publishObj: Publish_Options = buildPublishObject(commentData, postID);
       return lastValueFrom(sdk.api.comments.editComment({ commentID, ...publishObj }));
     },
     {
-      onMutate: async (comment: any) => {
+      onMutate: async (comment: PublishCommentData) => {
         queryClient.setQueryData([COMMENT_KEY, commentID], (current: Comment_Response) => {
-          const { data } = buildPublishObject(comment);
           return {
             ...current,
-            content: data,
+            content: comment.content,
             isPublishing: true,
           };
         });

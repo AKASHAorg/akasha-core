@@ -3,13 +3,11 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
-
 import { useErrors } from '@akashaproject/ui-awf-hooks';
-
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import {
   useInfinitePosts,
@@ -21,7 +19,7 @@ import {
   useBookmarkDelete,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 
-import { useMutationListener } from '@akashaproject/ui-awf-hooks/lib/use-mutation-listener';
+import { useMutationListener } from '@akashaproject/ui-awf-hooks/lib/use-query-listener';
 import { createPendingEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
 const { Box, Helmet, EditorPlaceholder, EntryList, EntryCard, EntryPublishErrorCard } = DS;

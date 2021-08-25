@@ -123,7 +123,6 @@ const getPostsByAuthor = async (
         offset: offset,
       }),
     );
-    console.log(res, 'get posts by author');
     return {
       ...res.data.getPostsByAuthor,
       results: res.data.getPostsByAuthor.results.map(post => {

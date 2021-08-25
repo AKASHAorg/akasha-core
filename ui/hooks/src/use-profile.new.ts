@@ -1,9 +1,15 @@
-import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
+import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 import getSDK from '@akashaproject/awf-sdk';
 import { lastValueFrom } from 'rxjs';
 import { getMediaUrl } from './utils/media-utils';
 import { logError } from './utils/error-handler';
-import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import {
+  IProfileData,
+  ProfileProviderProperties,
+  ProfileProviders,
+  UpdateProfileStatus,
+} from '@akashaproject/ui-awf-typings/lib/profile';
+import { DataProviderInput } from '../../../sdk/typings/lib/interfaces/common';
 
 export const FOLLOWERS_KEY = 'FOLLOWERS';
 export const FOLLOWING_KEY = 'FOLLOWING';
@@ -11,12 +17,13 @@ export const PROFILE_KEY = 'PROFILE';
 export const ENTRY_AUTHOR_KEY = 'ENTRY_AUTHOR';
 export const INTERESTS_KEY = 'INTERESTS';
 export const UPDATE_PROFILE_DATA_KEY = 'UPDATE_PROFILE_DATA';
-export const SAVE_MEDIA_FILE_KEY = 'SAVE_MEDIA_FILE';
-export const REGISTER_USERNAME_KEY = 'REGISTER_USERNAME';
-export const MAKE_DEFAULT_PROVIDER_KEY = 'MAKE_DEFAULT_PROVIDER';
 export const ADD_PROFILE_PROVIDER_KEY = 'ADD_PROFILE_PROVIDER';
+export const UPDATE_PROFILE_STATUS = 'UPDATE_PROFILE_STATUS';
 
-const getProfileData = async (payload: { pubKey?: string; ethAddress?: string }) => {
+const getProfileData = async (payload: {
+  pubKey?: string;
+  ethAddress?: string;
+}): Promise<IProfileData> => {
   const sdk = getSDK();
   try {
     const res = await lastValueFrom(sdk.api.profile.getProfile(payload));
@@ -85,7 +92,7 @@ export function useFollowers(pubKey: string, limit: number, offset?: number) {
     [FOLLOWERS_KEY, pubKey],
     async ({ pageParam = offset }) => getFollowers(pubKey, limit, pageParam),
     {
-      getNextPageParam: (lastPage, allPages) => {
+      getNextPageParam: lastPage => {
         if (!lastPage.nextIndex) {
           return undefined;
         }
@@ -112,7 +119,7 @@ export function useFollowing(pubKey: string, limit: number, offset?: number) {
     [FOLLOWING_KEY, pubKey],
     async ({ pageParam = offset }) => getFollowing(pubKey, limit, pageParam),
     {
-      getNextPageParam: (lastPage, allPages) => {
+      getNextPageParam: lastPage => {
         if (!lastPage.nextIndex) {
           return undefined;
         }
@@ -136,7 +143,7 @@ const getInterests = async (pubKey: string) => {
 
 /**
  * Fetch the list of subscribed tags for a specific pub key
- * @param pubKey
+ * @param pubKey - the pub key of the user
  */
 export function useInterests(pubKey) {
   return useQuery([INTERESTS_KEY, pubKey], () => getInterests(pubKey), {
@@ -144,92 +151,8 @@ export function useInterests(pubKey) {
     keepPreviousData: true,
   });
 }
-const updateProfileData = async (profileData: any) => {
-  const sdk = getSDK();
-  try {
-    return Promise.resolve();
-  } catch (error) {
-    logError('useProfile.updateProfileData', error);
-    throw error;
-  }
-};
 
-const makeDefaultProvider = async (provider: DataProviderInput[]) => {
-  const sdk = getSDK();
-  try {
-    return await lastValueFrom(sdk.api.profile.makeDefaultProvider(provider));
-  } catch (error) {
-    logError('useProfile.makeDefaultProvider', error);
-    throw error;
-  }
-};
-
-const addProfileProvider = async (provider: []) => {
-  const sdk = getSDK();
-  try {
-    return await lastValueFrom(sdk.api.profile.addProfileProvider(provider));
-  } catch (error) {
-    logError('useProfile.addProfileProvider', error);
-    throw error;
-  }
-};
-
-export function useAddProfileProvider(provider: DataProviderInput[]) {
-  return useMutation(addProfileProvider, {
-    onSuccess: async () => {
-      /* todo */
-    },
-    onError: async error => {
-      throw error;
-    },
-    mutationKey: ADD_PROFILE_PROVIDER_KEY,
-  });
-}
-
-export function useMakeDefaultProvider() {
-  return useMutation({
-    mutationFn: makeDefaultProvider,
-    onMutate: async provider => {
-      /* todo */
-    },
-    onSuccess: async () => {
-      /* todo */
-    },
-    onError: async error => {
-      throw error;
-    },
-    mutationKey: MAKE_DEFAULT_PROVIDER_KEY,
-  });
-}
-
-const registerUsername = async (username: string) => {
-  const sdk = getSDK();
-  try {
-    const res = await lastValueFrom(sdk.api.profile.registerUserName(username));
-    return res.data.registerUserName;
-  } catch (error) {
-    logError('useProfile.registerUsername', error);
-    throw error;
-  }
-};
-
-export function useUsernameRegistration() {
-  return useMutation(registerUsername, {
-    mutationFn: registerUsername,
-    onMutate: async username => {
-      /* todo */
-    },
-    onSuccess: async () => {
-      /* todo */
-    },
-    onError: async error => {
-      throw error;
-    },
-    mutationKey: REGISTER_USERNAME_KEY,
-  });
-}
-
-const saveFile = async ({
+const saveMediaFile = async ({
   isUrl,
   content,
   name,
@@ -248,18 +171,215 @@ const saveFile = async ({
   }
 };
 
-export function useSaveMediaFile() {
+export interface FormProfileData {
+  name?: string;
+  userName?: string;
+  description?: string;
+  avatar?: { src: string; isUrl: boolean } | null;
+  coverImage?: { src: string; isUrl: boolean } | null;
+  pubKey: string;
+  ethAddress: string;
+}
+interface UpdateProfileFormData {
+  profileData: FormProfileData;
+  changedFields: string[];
+}
+
+interface ProfileUpdateStatus {
+  status: UpdateProfileStatus;
+  remainingFields: string[];
+}
+
+const makeDefaultProvider = async (providers: DataProviderInput[]) => {
+  const sdk = getSDK();
+  try {
+    const makeDefaultRes = await lastValueFrom(sdk.api.profile.makeDefaultProvider(providers));
+    if (makeDefaultRes.hasOwnProperty('error')) {
+      throw new Error(makeDefaultRes['error']);
+    }
+    return makeDefaultRes;
+  } catch (error) {
+    logError('useProfile.makeDefaultProvider', error);
+    throw error;
+  }
+};
+
+const saveAvatar = async (avatar: { isUrl: boolean; src: string }, isRemoved: boolean) => {
+  try {
+    if (avatar && avatar.src) {
+      const res = await saveMediaFile({
+        isUrl: avatar.isUrl,
+        content: avatar.src,
+        name: ProfileProviderProperties.AVATAR,
+      });
+      return {
+        provider: ProfileProviders.EWA_BASIC,
+        property: ProfileProviderProperties.AVATAR,
+        value: res.CID,
+      };
+    } else if (isRemoved) {
+      return {
+        provider: ProfileProviders.EWA_BASIC,
+        property: ProfileProviderProperties.AVATAR,
+        value: '',
+      };
+    }
+  } catch (error) {
+    logError('useProfile.saveAvatar', error);
+    throw error;
+  }
+};
+
+const saveCoverImage = async (coverImage: { isUrl: boolean; src: string }, isRemoved: boolean) => {
+  try {
+    if (coverImage && coverImage.src) {
+      const res = await saveMediaFile({
+        isUrl: coverImage.isUrl,
+        content: coverImage.src,
+        name: ProfileProviderProperties.COVER_IMAGE,
+      });
+      return {
+        provider: ProfileProviders.EWA_BASIC,
+        property: ProfileProviderProperties.COVER_IMAGE,
+        value: res.CID,
+      };
+    } else if (isRemoved) {
+      return {
+        provider: ProfileProviders.EWA_BASIC,
+        property: ProfileProviderProperties.COVER_IMAGE,
+        value: '',
+      };
+    }
+  } catch (error) {
+    logError('useProfile.saveCoverImage', error);
+    throw error;
+  }
+};
+
+const saveUserName = async (userName: string) => {
+  const sdk = getSDK();
+  try {
+    const res = await lastValueFrom(sdk.api.profile.registerUserName(userName));
+    const userNameProvider = {
+      provider: ProfileProviders.EWA_BASIC,
+      property: ProfileProviderProperties.USERNAME,
+      value: userName,
+    };
+    const addProviderRes = await lastValueFrom(
+      sdk.api.profile.addProfileProvider([userNameProvider]),
+    );
+    if (res.hasOwnProperty('error')) {
+      throw new Error(res['error']);
+    }
+    if (addProviderRes.hasOwnProperty('error')) {
+      throw new Error(addProviderRes['error']);
+    }
+
+    return userNameProvider;
+  } catch (error) {
+    logError('useProfile.registerUsername', error);
+    throw error;
+  }
+};
+
+const completeProfileUpdate = async (pubKey: string, queryClient: QueryClient) => {
+  queryClient.setQueryData<ProfileUpdateStatus>([UPDATE_PROFILE_STATUS, pubKey], {
+    status: UpdateProfileStatus.UPDATE_COMPLETE,
+    remainingFields: [],
+  });
+};
+
+export function useProfileUpdate(pubKey: string) {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: saveFile,
-    onSuccess: async () => {
+    mutationFn: async () => await completeProfileUpdate(pubKey, queryClient),
+    onMutate: async (formData: UpdateProfileFormData) => {
+      const currentProfile = queryClient.getQueryData<IProfileData>([PROFILE_KEY, pubKey]);
+      const { profileData, changedFields } = formData;
+      queryClient.setQueryData<ProfileUpdateStatus>([UPDATE_PROFILE_STATUS, pubKey], {
+        status: UpdateProfileStatus.UPDATE_INITIATED,
+        remainingFields: changedFields,
+      });
+
+      const providers = [];
+      try {
+        if (changedFields.includes('avatar')) {
+          // save avatar
+          queryClient.setQueryData<ProfileUpdateStatus>([UPDATE_PROFILE_STATUS, pubKey], {
+            status: UpdateProfileStatus.UPLOADING_AVATAR,
+            remainingFields: changedFields,
+          });
+          providers.push(await saveAvatar(profileData.avatar, profileData.avatar === null));
+        }
+
+        if (changedFields.includes('coverImage')) {
+          queryClient.setQueryData<ProfileUpdateStatus>([UPDATE_PROFILE_STATUS, pubKey], {
+            status: UpdateProfileStatus.UPLOADING_COVER_IMAGE,
+            remainingFields: changedFields,
+          });
+          providers.push(
+            await saveCoverImage(profileData.coverImage, profileData.coverImage === null),
+          );
+        }
+        queryClient.setQueryData<ProfileUpdateStatus>([UPDATE_PROFILE_STATUS, pubKey], {
+          status: UpdateProfileStatus.UPDATE_IN_PROGRESS,
+          remainingFields: changedFields.filter(
+            field => field !== 'avatar' && field !== 'coverImage',
+          ),
+        });
+
+        if (changedFields.includes('userName')) {
+          providers.push(await saveUserName(profileData.userName));
+        }
+        if (changedFields.includes('name')) {
+          providers.push({
+            provider: ProfileProviders.EWA_BASIC,
+            property: ProfileProviderProperties.NAME,
+            value: profileData.name,
+          });
+        }
+        if (changedFields.includes('description')) {
+          providers.push({
+            provider: ProfileProviders.EWA_BASIC,
+            property: ProfileProviderProperties.DESCRIPTION,
+            value: profileData.description,
+          });
+        }
+
+        queryClient.setQueryData([UPDATE_PROFILE_STATUS, pubKey], {
+          status: UpdateProfileStatus.UPDATE_IN_PROGRESS,
+          remainingFields: [],
+        });
+
+        const makeDefaultRes = await makeDefaultProvider(providers);
+        if (makeDefaultRes.hasOwnProperty('error')) {
+          throw new Error(makeDefaultRes['error']);
+        }
+        return Promise.resolve({ currentProfile });
+      } catch (err) {
+        // do not throw error here, just log it
+        logError('useProfile.useProfileUpdate.onMutate', err);
+      }
+    },
+    onSuccess: async (providers, variables) => {
       /* todo */
+      queryClient.invalidateQueries([PROFILE_KEY, pubKey]);
+      queryClient.invalidateQueries([PROFILE_KEY, variables.profileData.ethAddress]);
+      queryClient.removeQueries({
+        queryKey: [UPDATE_PROFILE_STATUS, pubKey],
+      });
     },
-    onError: async error => {
-      throw error;
+    onError: async (error, vars, context: { currentProfile: IProfileData }) => {
+      queryClient.setQueryData([PROFILE_KEY, pubKey], context.currentProfile);
+      queryClient.removeQueries({
+        queryKey: [UPDATE_PROFILE_STATUS, pubKey],
+      });
+      logError(
+        'useProfile.useProfileUpdate.onError',
+        new Error(error instanceof Error ? error.message : (error as string)),
+      );
     },
-    onSettled: async () => {
-      /* todo */
-    },
-    mutationKey: SAVE_MEDIA_FILE_KEY,
+    mutationKey: UPDATE_PROFILE_DATA_KEY,
   });
 }

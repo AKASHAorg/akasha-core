@@ -8,7 +8,7 @@ import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/medi
 import { redirect, redirectToPost } from '../../services/routing-service';
 import PostRenderer from './post-renderer';
 import routes, { POST } from '../../routes';
-import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -30,7 +30,6 @@ import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 // import { useTags, useMentions } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
-import { useQueryClient } from 'react-query';
 
 const {
   Box,
@@ -259,7 +258,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       entryId: commentId,
     });
   };
-
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>

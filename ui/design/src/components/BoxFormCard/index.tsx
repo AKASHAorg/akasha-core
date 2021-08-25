@@ -1,7 +1,6 @@
 import { Box } from 'grommet';
 import * as React from 'react';
 import { isMobile, isMobileOnly } from 'react-device-detect';
-import { StyledLayer } from '../ListModal/styled-modal';
 import { FormImagePopover } from '../ImagePopover/form-image-popover';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 
@@ -12,6 +11,7 @@ import { UsernameInputSection } from './sections/UsernameInputSection';
 import { CoverImageSection } from './sections/CoverImageSection';
 import { DescriptionSection } from './sections/DescriptionSection';
 import { ActionButtonsSection } from './sections/ActionButtonsSection';
+import { UpdateProfileStatus } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export interface IBoxFormCardProps {
   className?: string;
@@ -33,9 +33,9 @@ export interface IBoxFormCardProps {
   descriptionFieldPlaceholder: string;
   ethAddress: string;
   providerData: IBoxData;
-  onSave: (data: IFormValues) => void;
+  onSave: (data: IFormValues, changedFields: string[]) => void;
   onCancel?: () => void;
-  updateStatus: ProfileUpdateStatus;
+  updateStatus: UpdateProfileStatus;
   usernameFieldInfo?: string;
   showUsername?: boolean;
   isValidatingUsername?: boolean;
@@ -43,17 +43,6 @@ export interface IBoxFormCardProps {
   usernameSuccess?: string;
   onUsernameChange?: (value: string) => void;
   onUsernameBlur?: (username: string) => void;
-}
-
-export interface ProfileUpdateStatus {
-  saving: boolean;
-  uploadingAvatar: boolean;
-  uploadingCoverImage: boolean;
-  updateComplete: boolean;
-  isValidating: boolean;
-  isValidUsername: boolean | null;
-  notAllowed: boolean;
-  tooShort: boolean;
 }
 
 export interface IImageSrc {
@@ -67,7 +56,10 @@ export interface IBoxData {
   coverImage?: string | IImageSrc;
   name?: string;
   description?: string;
-  default?: any[];
+  default?: { provider: string; property: string; value: string }[];
+  userName?: string;
+  ethAddress: string;
+  pubKey: string;
 }
 export interface IFormValues {
   avatar?: IImageSrc | null;
@@ -75,6 +67,8 @@ export interface IFormValues {
   name?: string;
   userName?: string;
   description?: string;
+  pubKey: string;
+  ethAddress: string;
 }
 
 const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
@@ -107,8 +101,16 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
 
   const [avatarPopoverOpen, setAvatarPopoverOpen] = React.useState(false);
   const [coverImagePopoverOpen, setCoverImagePopoverOpen] = React.useState(false);
-  const [formChanged, setFormChanged] = React.useState(false);
-  const [formValues, setFormValues] = React.useState<IFormValues>({});
+  const [fieldsToUpdate, setFieldsToUpdate] = React.useState<string[]>([]);
+  const [formValues, setFormValues] = React.useState<IFormValues>({
+    avatar: { src: '', prefix: null, isUrl: false },
+    coverImage: { src: '', prefix: null, isUrl: false },
+    userName: '',
+    description: '',
+    name: '',
+    pubKey: '',
+    ethAddress: '',
+  });
 
   // required for popovers
   const avatarRef: React.RefObject<HTMLDivElement> = React.useRef(null);
@@ -117,45 +119,51 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const avatarInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
   const coverInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 
+  // Update internal state based on providerData prop
   React.useEffect(() => {
-    const { avatar, coverImage, ...rest } = providerData;
-    const images: { avatar?: IImageSrc; coverImage?: IImageSrc } = {};
-    if (typeof avatar === 'string' && !formValues.hasOwnProperty('avatar')) {
-      images.avatar = { preview: avatar, src: null, prefix: null, isUrl: true };
-    } else if (
-      avatar &&
-      typeof avatar !== 'string' &&
-      avatar.src &&
-      !formValues.hasOwnProperty('avatar')
-    ) {
-      images.avatar = avatar;
-    }
-    if (typeof coverImage === 'string' && !formValues.hasOwnProperty('coverImage')) {
-      images.coverImage = { preview: coverImage, src: null, prefix: null, isUrl: true };
-    } else if (
-      coverImage &&
-      typeof coverImage !== 'string' &&
-      coverImage.src &&
-      !formValues.hasOwnProperty('coverImage')
-    ) {
-      images.coverImage = coverImage;
-    }
-    let userName: string | undefined = formValues.userName;
-    if (providerData && providerData.default) {
-      const provider = providerData.default.find(
-        p => p.property === 'userName' && p.provider === 'ewa.providers.basic',
-      );
-      if (provider && !formValues.userName) {
-        userName = provider.value;
+    const updatedFields = {};
+    for (const key in providerData) {
+      // transform null values to empty strings
+      if (!providerData[key]) {
+        updatedFields[key] = '';
+      } else {
+        updatedFields[key] = providerData[key];
+      }
+      if (key === 'avatar') {
+        if (providerData[key] && typeof providerData[key] === 'string') {
+          updatedFields[key] = {
+            preview: providerData[key],
+            prefix: '',
+            isUrl: true,
+          };
+        }
+      }
+      if (key === 'coverImage') {
+        if (providerData[key] && typeof providerData[key] === 'string') {
+          updatedFields[key] = {
+            preview: providerData[key],
+            prefix: '',
+            isUrl: true,
+          };
+        }
+      }
+      if (key === 'userName') {
+        if (providerData.userName) {
+          updatedFields[key] = providerData.userName;
+        } else if (providerData.default && providerData.default.length > 0) {
+          const userNameProvider = providerData.default.find(
+            p => p.property === 'userName' && p.provider === 'ewa.providers.basic',
+          );
+          updatedFields[key] = userNameProvider ? userNameProvider.value : '';
+        }
       }
     }
-    setFormValues(prevValues => ({
-      ...rest,
-      ...images,
-      ...prevValues,
-      userName,
-    }));
-  }, [JSON.stringify(providerData), JSON.stringify(formValues)]);
+    setFormValues({
+      ...updatedFields,
+      ethAddress: providerData.ethAddress,
+      pubKey: providerData.pubKey,
+    });
+  }, [providerData]);
 
   const handleAvatarClick = () => {
     const avatarInput = avatarInputRef.current;
@@ -174,23 +182,45 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   };
 
   const handleRevert = () => {
-    setFormValues({});
-    setFormChanged(false);
+    setFormValues({
+      avatar: { src: null, prefix: null, isUrl: false },
+      coverImage: { src: null, prefix: null, isUrl: false },
+      userName: providerData.userName,
+      description: providerData.description,
+      name: providerData.name,
+      pubKey: providerData.pubKey,
+      ethAddress: providerData.ethAddress,
+    });
     if (props.onCancel) {
       props.onCancel();
     }
   };
 
   const handleSave = () => {
-    onSave(formValues);
+    onSave(formValues, fieldsToUpdate);
   };
-  const handleFormFieldChange = (newValues: Record<string, unknown>) => {
-    setFormChanged(true);
-    setFormValues(oldValues => ({
-      ...oldValues,
-      ...newValues,
-    }));
-  };
+  const handleFormFieldChange = React.useCallback(
+    (newValues: Record<string, unknown>) => {
+      // setFormChanged(true);
+      for (const key in newValues) {
+        if (newValues[key] !== providerData[key]) {
+          setFieldsToUpdate(prev => {
+            if (prev.indexOf(key) === -1) {
+              return prev.concat(key);
+            }
+            return prev;
+          });
+        } else {
+          setFieldsToUpdate(prev => prev.filter(k => k !== key));
+        }
+      }
+      setFormValues(oldValues => ({
+        ...oldValues,
+        ...newValues,
+      }));
+    },
+    [providerData],
+  );
 
   const closeAvatarPopover = () => {
     setAvatarPopoverOpen(false);
@@ -200,7 +230,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     setCoverImagePopoverOpen(false);
   };
   // @Todo: update this after ts-jest migration to ESM
-  const handleImageInsert = (imageKey: string) => (src: any, isUrl: boolean) => {
+  const handleImageInsert = (imageKey: string) => (src: File | string, isUrl: boolean) => {
     if (isUrl) {
       handleFormFieldChange({ [imageKey]: { src, isUrl, preview: src } });
     } else {
@@ -239,7 +269,10 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   };
 
   return (
-    <MainAreaCardBox style={{ height: isMobile ? '100%' : 'auto', overflowY: 'auto' }}>
+    <MainAreaCardBox
+      style={{ height: isMobile ? '100%' : 'auto', overflowY: 'auto' }}
+      className={className}
+    >
       <Box direction="column" pad="medium" height={{ min: 'fit-content' }}>
         <TitleSection titleLabel={titleLabel} />
         <Box direction="column" pad="xsmall">
@@ -293,7 +326,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             cancelLabel={cancelLabel}
             saveLabel={saveLabel}
             showUsername={showUsername}
-            formChanged={formChanged}
+            formChanged={fieldsToUpdate.length > 0}
             isValidatingUsername={isValidatingUsername}
             usernameError={usernameError}
             formValues={formValues}

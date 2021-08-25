@@ -19,11 +19,14 @@ export const ModalContainer: React.FC<IModalContainerProps> = props => {
     <StyledModalWrapper fill={true} justify="center" align="center" style={props.style}>
       <Box
         style={{ zIndex: 10 }}
+        height="100vh"
+        justify="center"
+        align="center"
         animation={
           props.animation || {
-            type: 'slideDown',
+            type: 'fadeIn',
             duration: 250,
-            delay: 0,
+            delay: 50,
           }
         }
       >
