@@ -63,45 +63,37 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
         {!reportedAccount && (
           <Text size="large" margin={{ left: 'medium' }}>
             {isDelisted && moderatedContentLabel}
-            {!isDelisted && (
-              <>
-                {headerTextLabel && `${headerTextLabel}:`}
-                {reason.length > 0 && (
-                  <StyledBox
-                    width="fit-content"
-                    margin={{ bottom: '0.5rem' }}
-                    pad={{ horizontal: '0.2rem' }}
-                    round="0.125rem"
-                  >
-                    <Text
-                      as="span"
-                      color="accentText"
-                      style={{ fontSize: '1rem', fontWeight: 600 }}
-                    >
-                      {reason}
-                    </Text>
-                  </StyledBox>
-                )}
-                {footerTextLabel}
-                {ctaLabel && (
-                  <Text
-                    as="span"
-                    size="large"
-                    margin={{ left: '0.2rem' }}
-                    color="accentText"
-                    style={{ cursor: 'pointer' }}
-                    onClick={e => {
-                      e.stopPropagation();
-                      // open call to action url if specified
-                      ctaUrl
-                        ? window.open(ctaUrl, ctaLabel, '_blank noopener noreferrer')
-                        : handleFlipCard();
-                    }}
-                  >
-                    {ctaLabel}
-                  </Text>
-                )}
-              </>
+            {headerTextLabel && `${headerTextLabel}:`}
+            {reason && reason.length > 0 && (
+              <StyledBox
+                width="fit-content"
+                margin={{ bottom: '0.5rem' }}
+                pad={{ horizontal: '0.2rem' }}
+                round="0.125rem"
+              >
+                <Text as="span" color="accentText" style={{ fontSize: '1rem', fontWeight: 600 }}>
+                  {reason}
+                </Text>
+              </StyledBox>
+            )}
+            {footerTextLabel && footerTextLabel}
+            {ctaLabel && (
+              <Text
+                as="span"
+                size="large"
+                margin={{ left: '0.2rem' }}
+                color="accentText"
+                style={{ cursor: 'pointer' }}
+                onClick={e => {
+                  e.stopPropagation();
+                  // open call to action url if specified
+                  ctaUrl
+                    ? window.open(ctaUrl, ctaLabel, '_blank noopener noreferrer')
+                    : handleFlipCard();
+                }}
+              >
+                {ctaLabel}
+              </Text>
             )}
           </Text>
         )}

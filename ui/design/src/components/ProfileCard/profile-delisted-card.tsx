@@ -16,7 +16,7 @@ const ProfileDelistedCard: React.FC<IProfileDelistedCard> = props => {
   const { className, name, userName } = props;
 
   return (
-    <MainAreaCardBox className={className}>
+    <MainAreaCardBox className={className} margin={{ bottom: '0.5rem' }}>
       <Box
         height="9em"
         background={{
