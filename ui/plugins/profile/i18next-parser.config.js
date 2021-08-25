@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const baseConfig = require('../../i18next.parser.config');
-const ns = 'ui-plugin-profile';
+const package = require('./package.json');
+const ns = package.name.split('/')[1];
 
 module.exports = Object.assign(baseConfig, {
   defaultNamespace: ns,
   output: '../../../locales/$LOCALE/$NAMESPACE.json',
-  input: './src/components/**/*.{ts,tsx}',
+  input: ['./src/components/**/*.{ts,tsx}', './src/extensions/**/*.{ts,tsx}'],
 });

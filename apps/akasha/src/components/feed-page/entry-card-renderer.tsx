@@ -108,7 +108,13 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     }
   };
 
-  const isFollowing = followedProfiles.includes(itemData.author.ethAddress);
+  const isFollowing = React.useMemo(() => {
+    if (itemData.author.ethAddress) {
+      return followedProfiles.includes(itemData.author.ethAddress);
+    }
+    // defaults to false
+    return false;
+  }, [followedProfiles, itemData]);
 
   if (itemData.reported) {
     return (

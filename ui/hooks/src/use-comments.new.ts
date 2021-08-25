@@ -9,6 +9,8 @@ import { logError } from './utils/error-handler';
 export const COMMENT_KEY = 'Comment';
 export const COMMENTS_KEY = 'Comments';
 
+export const PUBLISH_PENDING_KEY = 'PendingPublish_Comments';
+
 export interface PublishCommentData {
   metadata: {
     app: string;
@@ -157,6 +159,7 @@ export function useCreateComment() {
       onSettled: async () => {
         await queryClient.invalidateQueries(COMMENTS_KEY);
       },
+      mutationKey: PUBLISH_PENDING_KEY,
     },
   );
 }
@@ -167,18 +170,17 @@ export function useEditComment(commentID: string) {
   const queryClient = useQueryClient();
 
   return useMutation(
-    (comment: any) => {
+    (comment: PublishCommentData) => {
       const { postID, ...commentData } = comment;
       const publishObj: Publish_Options = buildPublishObject(commentData, postID);
       return lastValueFrom(sdk.api.comments.editComment({ commentID, ...publishObj }));
     },
     {
-      onMutate: async (comment: any) => {
+      onMutate: async (comment: PublishCommentData) => {
         queryClient.setQueryData([COMMENT_KEY, commentID], (current: Comment_Response) => {
-          const { data } = buildPublishObject(comment);
           return {
             ...current,
-            content: data,
+            content: comment.content,
             isPublishing: true,
           };
         });
