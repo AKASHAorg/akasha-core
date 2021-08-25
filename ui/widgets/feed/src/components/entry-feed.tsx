@@ -10,25 +10,11 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 const { EntryList } = DS;
 
 const EntryFeed = (props: IFeedWidgetProps) => {
-  const { t } = useTranslation('ui-widget-feed');
-
-  // const [loginState] = useLoginState({});
+  const { t } = useTranslation();
 
   const [followedProfiles, followActions] = useFollow({});
 
   const [bookmarkState, bookmarkActions] = useBookmarks({});
-
-  // React.useEffect(() => {
-  //   if (loginState.waitForAuth && !loginState.ready) {
-  //     return;
-  //   }
-  //   if (
-  //     (loginState.waitForAuth && loginState.ready) ||
-  //     (loginState.currentUserCalled && loginState.ethAddress)
-  //   ) {
-  //     // bookmarkActions.getBookmarks();
-  //   }
-  // }, [JSON.stringify(loginState)]);
 
   const handleBookmark = (isBookmarked: boolean, entryId: string) => {
     if (props.loggedProfile.pubKey) {
@@ -69,7 +55,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           ethAddress={props.ethAddress}
           itemType={props.itemType}
           sharePostUrl={`${window.location.origin}/social-app/post/`}
-          locale={props.locale as ILocale}
+          locale={props.i18n.languages[0] as ILocale}
           bookmarkState={bookmarkState}
           followedProfiles={followedProfiles}
           checkIsFollowing={followActions.isFollowing}

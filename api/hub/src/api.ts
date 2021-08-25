@@ -42,11 +42,15 @@ const isAdmin = async (request, ctx) => {
     ok = true;
   } else if (request.data.admin) {
     // verify request signature (from client)
-    const { verified, error } = await verifySignature(request.data.admin, request.data, request.signature);
+    const { verified, error } = await verifySignature(
+      request.data.admin,
+      request.data,
+      request.signature,
+    );
     if (!verified) {
       ctx.status = error ? 401 : 403;
     }
-    
+
     // check is the user has admin rights to be able to add moderators
     const isAdmin = await dataSources.moderatorsAPI.isAdmin(request.data.admin);
     if (!verified || !isAdmin) {
@@ -76,13 +80,13 @@ const verifySignature = async (pubKey: string, data, signature: string) => {
     // check if the user is local (registered)
     const profile = await dataSources.profileAPI.resolveProfile(pubKey);
     // verify request signature (from client)
-    verified = await verifyEd25519Sig({pubKey: profile.pubKey, data, signature});
+    verified = await verifyEd25519Sig({ pubKey: profile.pubKey, data, signature });
   } catch (error) {
     // user is not local
     return { verified, error };
   }
   return { verified, error: undefined };
-}
+};
 
 /**
  * Init router
@@ -149,7 +153,11 @@ api.post('/moderation/reports/new', async (ctx: koa.Context, next: () => Promise
     ctx.status = 400;
   } else {
     // verify request signature (from client)
-    const { verified, error } = await verifySignature(report.data.user, report.data, report.signature);
+    const { verified, error } = await verifySignature(
+      report.data.user,
+      report.data,
+      report.signature,
+    );
     if (!verified) {
       ctx.body = error;
       ctx.status = error ? 401 : 403;
@@ -256,17 +264,18 @@ api.post('/moderation/decisions/moderate', async (ctx: koa.Context, next: () => 
     ctx.status = 400;
   } else {
     // verify request signature (from client)
-    const { verified, error } = await verifySignature(report.data.moderator, report.data, report.signature);
+    const { verified, error } = await verifySignature(
+      report.data.moderator,
+      report.data,
+      report.signature,
+    );
     if (!verified) {
       ctx.body = error;
       ctx.status = error ? 401 : 403;
     } else {
       try {
         // store moderation decision
-        await dataSources.decisionsAPI.makeDecision(
-          report,
-          dataSources.postsAPI
-        );
+        await dataSources.decisionsAPI.makeDecision(report, dataSources.postsAPI);
         ctx.status = 200;
       } catch (error) {
         ctx.body = `Cannot moderate content! Error: ${error}`;
@@ -287,9 +296,11 @@ api.get('/moderation/decisions/:contentId', async (ctx: koa.Context, next: () =>
     ctx.body = 'Missing "contentId" attribute from request.';
   } else {
     ctx.set('Content-Type', 'application/json');
-    ctx.body = await dataSources.decisionsAPI.getFinalDecision(contentID,
+    ctx.body = await dataSources.decisionsAPI.getFinalDecision(
+      contentID,
       dataSources.profileAPI,
-      dataSources.reportingAPI);
+      dataSources.reportingAPI,
+    );
     ctx.status = 200;
   }
   await next();
@@ -309,9 +320,13 @@ api.post('/moderation/decisions/pending', async (ctx: koa.Context, next: () => P
   const list = [];
   for (const decision of decisions.results) {
     // get the full data for each decision
-    list.push(await dataSources.decisionsAPI.getFinalDecision(decision.contentID,
-      dataSources.profileAPI,
-      dataSources.reportingAPI));
+    list.push(
+      await dataSources.decisionsAPI.getFinalDecision(
+        decision.contentID,
+        dataSources.profileAPI,
+        dataSources.reportingAPI,
+      ),
+    );
   }
   ctx.set('Content-Type', 'application/json');
   ctx.body = {
@@ -341,9 +356,13 @@ api.post('/moderation/decisions/moderated', async (ctx: koa.Context, next: () =>
     const list = [];
     for (const decision of decisions.results) {
       // get the full data for each decision
-      list.push(await dataSources.decisionsAPI.getFinalDecision(decision.contentID,
-        dataSources.profileAPI,
-        dataSources.reportingAPI));
+      list.push(
+        await dataSources.decisionsAPI.getFinalDecision(
+          decision.contentID,
+          dataSources.profileAPI,
+          dataSources.reportingAPI,
+        ),
+      );
     }
     ctx.set('Content-Type', 'application/json');
     ctx.body = {
@@ -361,10 +380,12 @@ api.post('/moderation/decisions/moderated', async (ctx: koa.Context, next: () =>
  */
 api.post('/moderation/decisions/log', async (ctx: koa.Context, next: () => Promise<any>) => {
   const req: any = ctx?.request.body;
-  ctx.body = await dataSources.decisionsAPI.publicLog(dataSources.profileAPI,
+  ctx.body = await dataSources.decisionsAPI.publicLog(
+    dataSources.profileAPI,
     dataSources.reportingAPI,
     req.offset,
-    req.limit);
+    req.limit,
+  );
   ctx.set('Content-Type', 'application/json');
   ctx.status = 200;
 
@@ -438,25 +459,22 @@ api.head(
 /**
  * Get data for a given moderator.
  */
-api.get(
-  '/moderation/moderators/:user',
-  async (ctx: koa.Context, next: () => Promise<any>) => {
-    const user = ctx?.params?.user;
-    if (!user) {
-      ctx.status = 400;
+api.get('/moderation/moderators/:user', async (ctx: koa.Context, next: () => Promise<any>) => {
+  const user = ctx?.params?.user;
+  if (!user) {
+    ctx.status = 400;
+  } else {
+    ctx.set('Content-Type', 'application/json');
+    const moderator = await dataSources.moderatorsAPI.getModerator(user);
+    if (moderator) {
+      ctx.body = moderator;
+      ctx.status = 200;
     } else {
-      ctx.set('Content-Type', 'application/json');
-      const moderator = await dataSources.moderatorsAPI.getModerator(user);
-      if (moderator) {
-        ctx.body = moderator;
-        ctx.status = 200;
-      } else {
-        ctx.status = 404;
-      }
+      ctx.status = 404;
     }
-    await next();
-  },
-);
+  }
+  await next();
+});
 
 /**
  * Get list of moderation reasons.

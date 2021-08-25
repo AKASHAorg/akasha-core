@@ -30,17 +30,14 @@ const TagInfoCard = styled(TagProfileCard)`
 `;
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
-  const { showLoginModal, logger, loggedProfileData, loginState } = props;
-
+  const { showLoginModal, loggedProfileData, loginState } = props;
+  const { i18n } = useTranslation();
   const sdk = getSDK();
-
   const { tagName } = useParams<{ tagName: string }>();
-
   const [tagData, setTagData] = React.useState<ITag | null>(null);
   const queryClient = useQueryClient();
 
-  const { i18n } = useTranslation();
-
+  /* TODO: move to hooks */
   React.useEffect(() => {
     if (tagName) {
       const tagsService = sdk.api.tags.getTag(tagName);
@@ -52,8 +49,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       return () => sub.unsubscribe();
     }
   }, [tagName]);
-
-  const [errorState] = useErrors({ logger });
 
   const reqPosts = useInfinitePostsByTag(tagName, 15);
 
@@ -129,7 +124,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         pages={postPages}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
         requestStatus={reqPosts.status}
-        errors={errorState}
         ethAddress={loginState.ethAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
@@ -143,7 +137,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         onEntryFlag={handleEntryFlag}
         uiEvents={props.uiEvents}
         itemSpacing={8}
-        locale={i18n.languages[0]}
+        i18n={i18n}
       />
     </Box>
   );

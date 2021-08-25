@@ -62,7 +62,7 @@ const reactLifecycles = singleSpaReact({
   rootComponent: withProviders(Wrapped),
   errorBoundary: (err, errorInfo, props) => {
     if (props.logger) {
-      props.logger('Error: %s; Info: %s', err, errorInfo);
+      props.logger.error('Error: %s; Info: %s', err, errorInfo);
     }
     return <div>!</div>;
   },

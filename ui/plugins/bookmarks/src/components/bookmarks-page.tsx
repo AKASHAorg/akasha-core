@@ -8,9 +8,8 @@ import {
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 import { useTranslation } from 'react-i18next';
 import EntryCardRenderer from './entry-renderer';
-import EntryList from '@akashaproject/design-system/lib/components/EntryList';
 
-const { ErrorLoader, Spinner } = DS;
+const { ErrorLoader, Spinner, EntryList } = DS;
 
 type BookmarksPageProps = Omit<
   RootComponentProps,

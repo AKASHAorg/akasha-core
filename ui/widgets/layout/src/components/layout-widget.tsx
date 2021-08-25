@@ -12,12 +12,8 @@ import CookieWidget from './cookie-widget';
 import { EventTypes, UIEventData } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { Subscription } from 'rxjs';
-import i18next from 'i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import Backend from 'i18next-chained-backend';
-import Fetch from 'i18next-fetch-backend';
-import LocalStorageBackend from 'i18next-localstorage-backend';
-import { initReactI18next } from 'react-i18next';
+import i18next from '../i18n';
+import { I18nextProvider } from 'react-i18next';
 
 const {
   Box,
@@ -161,119 +157,87 @@ class LayoutWidget extends PureComponent<RootComponentProps, LayoutWidgetState> 
 
     const sidebarVisible = Boolean(showSidebar);
 
-    i18next
-      .use(initReactI18next)
-      .use(Backend)
-      .use(LanguageDetector)
-      .use({
-        type: 'logger',
-        log: logger.info,
-        warn: logger.warn,
-        error: logger.error,
-      })
-      .init({
-        fallbackLng: 'en',
-        ns: ['ui-widget-layout'],
-        saveMissing: false,
-        saveMissingTo: 'all',
-        load: 'languageOnly',
-        debug: true,
-        cleanCode: true,
-        keySeparator: false,
-        defaultNS: 'ui-widget-layout',
-        backend: {
-          backends: [LocalStorageBackend, Fetch],
-          backendOptions: [
-            {
-              prefix: 'i18next_res_v0',
-              expirationTime: 24 * 60 * 60 * 1000,
-            },
-            {
-              loadPath: '/locales/{{lng}}/{{ns}}.json',
-            },
-          ],
-        },
-      });
-
     return (
-      <Box className="container" fill="horizontal">
-        <GlobalStyle theme={{ breakpoints: responsiveBreakpoints.global.breakpoints }} />
-        <Box className="container">
-          <ThemeSelector
-            availableThemes={[lightTheme]}
-            settings={{ activeTheme: 'Light-Theme' }}
-            style={{ display: 'flex' }}
-          >
-            <ViewportSizeProvider>
-              <Box className="container" fill="horizontal">
-                <TopbarSlot
-                  name={topbarSlotId}
-                  onMount={this.onExtensionMount}
-                  onUnmount={this.onExtensionUnmount}
-                />
-                <Box className="container" style={{ flexDirection: 'row' }}>
-                  <SidebarWrapper visible={sidebarVisible}>
-                    <SidebarSlot
-                      name={sidebarSlotId}
-                      onMount={this.onExtensionMount}
-                      onUnmount={this.onExtensionUnmount}
-                      className="container"
-                    />
-                  </SidebarWrapper>
-                  <MainAreaContainer sidebarVisible={sidebarVisible} className="container">
-                    <PluginSlot
-                      name={pluginSlotId}
-                      onMount={this.onExtensionMount}
-                      onUnmount={this.onExtensionUnmount}
-                      className="container"
-                    />
-                    <Box>
-                      <WidgetContainer>
-                        {!this.props.isMobile && (
-                          <CookieWidget
-                            style={{
-                              position: 'absolute',
-                              bottom: 0,
-                              marginLeft: '1rem',
-                              minWidth: '21rem',
-                            }}
-                          />
-                        )}
-                        <ScrollableWidgetArea>
-                          <WidgetSlot
-                            name={rootWidgetSlotId}
-                            onMount={this.onExtensionMount}
-                            onUnmount={this.onExtensionUnmount}
-                          />
-                          <WidgetSlot
-                            name={widgetSlotId}
-                            onMount={this.onExtensionMount}
-                            onUnmount={this.onExtensionUnmount}
-                          />
-                        </ScrollableWidgetArea>
-                      </WidgetContainer>
-                    </Box>
-                  </MainAreaContainer>
-                </Box>
-                {this.state.activeModal && (
-                  <ModalSlot
-                    key={this.state.activeModal.name}
-                    name={this.state.activeModal.name}
-                    onMount={this.onModalNodeMount}
-                    onUnmount={this.onModalNodeUnmount}
+      <I18nextProvider i18n={i18next}>
+        <Box className="container" fill="horizontal">
+          <GlobalStyle theme={{ breakpoints: responsiveBreakpoints.global.breakpoints }} />
+          <Box className="container">
+            <ThemeSelector
+              availableThemes={[lightTheme]}
+              settings={{ activeTheme: 'Light-Theme' }}
+              style={{ display: 'flex' }}
+            >
+              <ViewportSizeProvider>
+                <Box className="container" fill="horizontal">
+                  <TopbarSlot
+                    name={topbarSlotId}
+                    onMount={this.onExtensionMount}
+                    onUnmount={this.onExtensionUnmount}
                   />
-                )}
-                <ModalSlot
-                  name={modalSlotId}
-                  onMount={this.onExtensionMount}
-                  onUnmount={this.onExtensionUnmount}
-                />
-                {this.props.isMobile && <CookieWidget style={{ position: 'fixed', bottom: 0 }} />}
-              </Box>
-            </ViewportSizeProvider>
-          </ThemeSelector>
+                  <Box className="container" style={{ flexDirection: 'row' }}>
+                    <SidebarWrapper visible={sidebarVisible}>
+                      <SidebarSlot
+                        name={sidebarSlotId}
+                        onMount={this.onExtensionMount}
+                        onUnmount={this.onExtensionUnmount}
+                        className="container"
+                      />
+                    </SidebarWrapper>
+                    <MainAreaContainer sidebarVisible={sidebarVisible} className="container">
+                      <PluginSlot
+                        name={pluginSlotId}
+                        onMount={this.onExtensionMount}
+                        onUnmount={this.onExtensionUnmount}
+                        className="container"
+                      />
+                      <Box>
+                        <WidgetContainer>
+                          {!this.props.isMobile && (
+                            <CookieWidget
+                              style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                marginLeft: '1rem',
+                                minWidth: '21rem',
+                              }}
+                            />
+                          )}
+                          <ScrollableWidgetArea>
+                            <WidgetSlot
+                              name={rootWidgetSlotId}
+                              onMount={this.onExtensionMount}
+                              onUnmount={this.onExtensionUnmount}
+                            />
+                            <WidgetSlot
+                              name={widgetSlotId}
+                              onMount={this.onExtensionMount}
+                              onUnmount={this.onExtensionUnmount}
+                            />
+                          </ScrollableWidgetArea>
+                        </WidgetContainer>
+                      </Box>
+                    </MainAreaContainer>
+                  </Box>
+                  {this.state.activeModal && (
+                    <ModalSlot
+                      key={this.state.activeModal.name}
+                      name={this.state.activeModal.name}
+                      onMount={this.onModalNodeMount}
+                      onUnmount={this.onModalNodeUnmount}
+                    />
+                  )}
+                  <ModalSlot
+                    name={modalSlotId}
+                    onMount={this.onExtensionMount}
+                    onUnmount={this.onExtensionUnmount}
+                  />
+                  {this.props.isMobile && <CookieWidget style={{ position: 'fixed', bottom: 0 }} />}
+                </Box>
+              </ViewportSizeProvider>
+            </ThemeSelector>
+          </Box>
         </Box>
-      </Box>
+      </I18nextProvider>
     );
   }
 }

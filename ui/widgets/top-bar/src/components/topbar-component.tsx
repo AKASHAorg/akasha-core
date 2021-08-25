@@ -71,11 +71,13 @@ const TopbarComponent = (props: RootComponentProps) => {
     const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
     if (loginState.ethAddress && !isLoadingProfile) {
       getModeratorStatus(loginState.pubKey);
-      if (!loggedProfileData.userName) {
-        return props.singleSpa.navigateToUrl('/profile/my-profile/update-info');
+      if (loggedProfileData && !loggedProfileData.userName) {
+        return props.navigateToModal({
+          name: 'update-profile',
+        });
       }
     }
-  }, [profileDataReq.isLoading, loginState.ethAddress]);
+  }, [profileDataReq.isLoading, loginState.ethAddress, loggedProfileData]);
 
   // *how to obtain different topbar menu sections
   const quickAccessItems = currentMenu?.filter(

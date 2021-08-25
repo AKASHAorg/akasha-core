@@ -1,14 +1,12 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import DS from '@akashaproject/design-system';
-
 import EntryFeed from './entry-feed';
 import ProfileFeed from './profile-feed';
-import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
-
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '../i18n';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
@@ -22,7 +20,6 @@ export interface IFeedWidgetProps {
   itemType: ItemTypes;
   onLoadMore: () => void;
   getShareUrl?: (entryId: string) => string;
-  errors: { [key: string]: IAkashaError };
   /* eth address of the logged in user */
   ethAddress: string | null;
   profilePubKey: string | null;
@@ -41,42 +38,23 @@ export interface IFeedWidgetProps {
   removedByAuthorLabel?: string;
   uiEvents: RootComponentProps['uiEvents'];
   itemSpacing?: number;
-  locale: string;
+  i18n: typeof i18n;
 }
 
-export default class FeedWidgetRoot extends PureComponent<IFeedWidgetProps> {
-  public state: { errors: any } = {
-    errors: this.props.errors,
-  };
-  public componentDidCatch(error: Error, errorInfo: any) {
-    if (this.props.logger) {
-      this.props.logger.error('feed-widget error %j %j', error, errorInfo);
-    }
-    this.setState({
-      errors: {
-        'feedWidget.app': {
-          error: new Error(`${error} \n Additional info: \n ${errorInfo}`),
-          critical: false,
-        },
-      },
-    });
-  }
-
-  public render() {
-    return (
+const FeedWidgetRoot: React.FC<IFeedWidgetProps> = props => {
+  return (
+    <I18nextProvider i18n={props.i18n}>
       <ThemeSelector
         settings={{ activeTheme: 'Light-Theme' }}
         availableThemes={[lightTheme, darkTheme]}
         style={{ height: '100%' }}
         plain={true}
       >
-        {this.props.itemType === ItemTypes.ENTRY && (
-          <EntryFeed {...this.props} errors={{ ...this.state.errors, ...this.props.errors }} />
-        )}
-        {this.props.itemType === ItemTypes.PROFILE && (
-          <ProfileFeed {...this.props} errors={{ ...this.state.errors, ...this.props.errors }} />
-        )}
+        {props.itemType === ItemTypes.ENTRY && <EntryFeed {...props} />}
+        {props.itemType === ItemTypes.PROFILE && <ProfileFeed {...props} />}
       </ThemeSelector>
-    );
-  }
-}
+    </I18nextProvider>
+  );
+};
+
+export default FeedWidgetRoot;

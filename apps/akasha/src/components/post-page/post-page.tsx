@@ -8,7 +8,7 @@ import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/medi
 import { redirect, redirectToPost } from '../../services/routing-service';
 import PostRenderer from './post-renderer';
 import routes, { POST } from '../../routes';
-import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -51,7 +51,6 @@ interface IPostPage {
   showLoginModal: () => void;
   navigateToUrl: (path: string) => void;
   isMobile: boolean;
-  onError: (err: IAkashaError) => void;
 }
 
 const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
@@ -70,7 +69,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       return mapEntry(postReq.data);
     }
     return undefined;
-  }, [JSON.stringify(postReq.data)]);
+  }, [postReq.data]);
 
   const isReported = React.useMemo(() => {
     if (showAnyway) {
@@ -146,8 +145,8 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   // }, [postId, loginState.currentUserCalled, loginState.ethAddress]);
 
   const bookmarked = React.useMemo(() => {
-    return !bookmarksReq.isFetching && bookmarks.findIndex(bm => bm.entryId === postId) >= 0;
-  }, [bookmarks]);
+    return !bookmarksReq.isFetching && bookmarks?.findIndex(bm => bm.entryId === postId) >= 0;
+  }, [bookmarksReq.isFetching, bookmarks, postId]);
 
   const handleMentionClick = (pubKey: string) => {
     navigateToUrl(`/profile/${pubKey}`);
@@ -242,7 +241,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       entryId: commentId,
     });
   };
-
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>

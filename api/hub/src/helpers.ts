@@ -5,7 +5,6 @@ import {
   PrivateKey,
   PublicKey,
   createUserAuth,
-  Users,
 } from '@textile/hub';
 import { updateCollections, initCollections } from './collections';
 import winston from 'winston';
@@ -14,14 +13,16 @@ import { ethers, utils, providers } from 'ethers';
 import objHash from 'object-hash';
 import mailgun from 'mailgun-js';
 import { fetch } from 'cross-fetch';
+import path from 'path';
 import { AbortController } from 'node-abort-controller';
+import { Worker } from 'worker_threads';
 
-const MODERATION_APP_URL  = process.env.MODERATION_APP_URL;
+const MODERATION_APP_URL = process.env.MODERATION_APP_URL;
 const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
 const MODERATION_EMAIL_SOURCE = process.env.MAILGUN_EMAIL_SOURCE;
 let mailGun;
 if (process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN) {
-  mailGun = mailgun({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
+  mailGun = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN });
 }
 
 export const EMPTY_KEY = 'baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
@@ -57,7 +58,6 @@ export const newClientDB = async () => {
   return client;
 };
 const identity = () => PrivateKey.fromString(process.env.AWF_DBkey);
-const mailSenderIdentity = () => PrivateKey.fromString(process.env.AWF_MAILSENDER_KEY);
 let appDBClient;
 export const getAppDB = async () => {
   if (appDBClient) {
@@ -81,38 +81,6 @@ export const getAppDB = async () => {
   return client;
 };
 
-let mailSender;
-export const getMailSender = async () => {
-  if (mailSender) {
-    if (mailSender.api.context.isExpired) {
-      // tslint:disable-next-line:no-console
-      logger.info('==refreshing mail sender grpc session==');
-      mailSender = undefined;
-      return getMailSender();
-    }
-    return Promise.resolve(mailSender);
-  }
-  const api = Users.withUserAuth(
-    await createUserAuth(process.env.USER_GROUP_API_KEY, process.env.USER_GROUP_API_SECRET),
-    { debug: process.env.NODE_ENV !== 'production' },
-  );
-  const mailSenderID = mailSenderIdentity();
-  await api.getToken(mailSenderID);
-  await api.setupMailbox();
-  // const mailID = await api.getMailboxID();
-  // if (!mailID) {
-  //   await api.setupMailbox();
-  // }
-  mailSender = {
-    sendMessage: async (to: string, message: Uint8Array) => {
-      const toPubKey = PublicKey.fromString(to);
-      return await api.sendMessage(mailSenderID, toPubKey, message);
-    },
-    api: api,
-  };
-  return mailSender;
-};
-
 export const setupDBCollections = async () => {
   const appDB = await getAppDB();
   const threadID = process.env.AWF_THREADdb
@@ -125,19 +93,6 @@ export const setupDBCollections = async () => {
   await initCollections(appDB, threadID);
   await updateCollections(appDB, threadID);
   return { threadID, client: appDB };
-};
-
-export const sendNotification = async (recipient: string, notificationObj: Record<string, any>) => {
-  const ms = await getMailSender();
-  const textEncoder = new TextEncoder();
-  const encodedNotification = textEncoder.encode(JSON.stringify(notificationObj));
-  logger.info('sending notification');
-  try {
-    await ms.sendMessage(recipient, encodedNotification);
-  } catch (e) {
-    logger.warn('notification error');
-    logger.error(e);
-  }
 };
 
 export const logger = winston.createLogger({
@@ -215,6 +170,25 @@ export const verifyEd25519Sig = async (args: {
   return pub.verify(serializedData, sig);
 };
 
+export const sendNotification = async (recipient: string, notificationObj: Record<string, any>) => {
+  const worker = new Worker(path.resolve(__dirname, './notifications.js'), {
+    workerData: {
+      recipient,
+      notificationObj,
+    },
+  });
+  worker.on('message', msg => {
+    if (!msg) {
+      logger.info('Notification sent from worker');
+    } else {
+      logger.error(msg);
+    }
+  });
+  worker.on('error', error => {
+    logger.error(error);
+  });
+};
+
 export const sendAuthorNotification = async (
   recipient: string,
   notification: { property: string; provider: string; value: any },
@@ -238,10 +212,10 @@ export const sendEmailNotification = async () => {
   const data = {
     from: `Moderation Notifications <${MODERATION_EMAIL_SOURCE}>`,
     to: MODERATION_EMAIL,
-    subject: "New moderation request",
+    subject: 'New moderation request',
     text: `There is a new pending request for moderation. To moderate this content please visit the moderation app at:\n
 ${MODERATION_APP_URL}
-\nThank you!`
+\nThank you!`,
   };
   mailGun.messages().send(data, function (error) {
     if (error) {

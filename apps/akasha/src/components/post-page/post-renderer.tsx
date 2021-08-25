@@ -79,7 +79,10 @@ const PostRenderer = (props: PostRendererProps) => {
   const itemData = React.useMemo(() => {
     if (commentReq.data) {
       if (commentReq.data.isPublishing) {
-        return commentReq.data as unknown as ReturnType<typeof mapEntry>;
+        return {
+          ...mapEntry(commentReq.data),
+          content: commentReq.data.content,
+        };
       }
       return mapEntry(commentReq.data);
     }

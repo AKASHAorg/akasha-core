@@ -129,7 +129,8 @@ const getPostsByAuthor = async (
       }),
     };
   } catch (error) {
-    logError('usePosts.getPosts', error);
+    logError('usePosts.getPostsByAuthor', error);
+    throw error;
   }
 };
 
@@ -144,7 +145,7 @@ export function useInfinitePostsByAuthor(
     [ENTRIES_BY_AUTHOR_KEY, pubKey],
     async ({ pageParam = offset }) => getPostsByAuthor(queryClient, pubKey, limit, pageParam),
     {
-      getNextPageParam: lastPage => lastPage.nextIndex,
+      getNextPageParam: lastPage => !!lastPage && lastPage.nextIndex,
       enabled: enabled,
       keepPreviousData: true,
     },
