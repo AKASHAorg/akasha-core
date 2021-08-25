@@ -14,7 +14,9 @@ import { ethers, utils, providers } from 'ethers';
 import objHash from 'object-hash';
 import mailgun from 'mailgun-js';
 import { fetch } from 'cross-fetch';
+import path from 'path';
 import { AbortController } from 'node-abort-controller';
+import { Worker } from 'worker_threads';
 
 const MODERATION_APP_URL  = process.env.MODERATION_APP_URL;
 const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
@@ -57,7 +59,6 @@ export const newClientDB = async () => {
   return client;
 };
 const identity = () => PrivateKey.fromString(process.env.AWF_DBkey);
-const mailSenderIdentity = () => PrivateKey.fromString(process.env.AWF_MAILSENDER_KEY);
 let appDBClient;
 export const getAppDB = async () => {
   if (appDBClient) {
@@ -75,42 +76,10 @@ export const getAppDB = async () => {
     API,
     process.env.NODE_ENV !== 'production',
   );
-
+    
   await client.getToken(identity());
   appDBClient = client;
   return client;
-};
-
-let mailSender;
-export const getMailSender = async () => {
-  if (mailSender) {
-    if (mailSender.api.context.isExpired) {
-      // tslint:disable-next-line:no-console
-      logger.info('==refreshing mail sender grpc session==');
-      mailSender = undefined;
-      return getMailSender();
-    }
-    return Promise.resolve(mailSender);
-  }
-  const api = Users.withUserAuth(
-    await createUserAuth(process.env.USER_GROUP_API_KEY, process.env.USER_GROUP_API_SECRET),
-    { debug: process.env.NODE_ENV !== 'production' },
-  );
-  const mailSenderID = mailSenderIdentity();
-  await api.getToken(mailSenderID);
-  await api.setupMailbox();
-  // const mailID = await api.getMailboxID();
-  // if (!mailID) {
-  //   await api.setupMailbox();
-  // }
-  mailSender = {
-    sendMessage: async (to: string, message: Uint8Array) => {
-      const toPubKey = PublicKey.fromString(to);
-      return await api.sendMessage(mailSenderID, toPubKey, message);
-    },
-    api: api,
-  };
-  return mailSender;
 };
 
 export const setupDBCollections = async () => {
@@ -125,19 +94,6 @@ export const setupDBCollections = async () => {
   await initCollections(appDB, threadID);
   await updateCollections(appDB, threadID);
   return { threadID, client: appDB };
-};
-
-export const sendNotification = async (recipient: string, notificationObj: Record<string, any>) => {
-  const ms = await getMailSender();
-  const textEncoder = new TextEncoder();
-  const encodedNotification = textEncoder.encode(JSON.stringify(notificationObj));
-  logger.info('sending notification');
-  try {
-    await ms.sendMessage(recipient, encodedNotification);
-  } catch (e) {
-    logger.warn('notification error');
-    logger.error(e);
-  }
 };
 
 export const logger = winston.createLogger({
@@ -213,6 +169,23 @@ export const verifyEd25519Sig = async (args: {
   }
   serializedData = encoder.encode(serializedData);
   return pub.verify(serializedData, sig);
+};
+
+export const sendNotification = async (recipient: string, notificationObj: Record<string, any>) => {
+  const worker = new Worker(path.resolve(__dirname, './notifications.js'), { workerData: {
+    recipient, 
+    notificationObj 
+  }});
+  worker.on("message", msg => {
+    if (!msg) {
+      logger.info('Notification sent from worker');
+    } else {
+      logger.error(msg);  
+    }
+  });
+  worker.on("error", error => {
+    logger.error(error);
+  });
 };
 
 export const sendAuthorNotification = async (
