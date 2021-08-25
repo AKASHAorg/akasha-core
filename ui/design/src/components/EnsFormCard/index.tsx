@@ -84,86 +84,80 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
   }
 
   return (
-    <StyledLayer className={className} style={{ overflow: 'hidden' }}>
-      <MainAreaCardBox>
-        <Box direction="column" pad="large">
-          <Box direction="row" margin={{ top: 'xsmall', bottom: 'medium' }} align="start">
-            <Text weight="bold" margin="0 auto 1.5rem" size="large">
-              {titleLabel}
-            </Text>
-            <Icon
-              type="close"
-              color="secondaryText"
-              primaryColor={true}
-              clickable={true}
-              onClick={handleCancel}
+    <MainAreaCardBox className={className}>
+      <Box direction="column" pad="large">
+        <Box direction="row" margin={{ top: 'xsmall', bottom: 'medium' }} align="start">
+          <Text weight="bold" margin="0 auto 1.5rem" size="large">
+            {titleLabel}
+          </Text>
+          <Icon
+            type="close"
+            color="secondaryText"
+            primaryColor={true}
+            clickable={true}
+            onClick={handleCancel}
+          />
+        </Box>
+        <Box direction="row" align="center">
+          <StyledText color="secondaryText" size="small" margin={{ bottom: 'xsmall' }}>
+            {nameLabel}
+          </StyledText>
+        </Box>
+        <Box>
+          {props.options.map(option => (
+            <Box
+              key={`${option.type}`}
+              flex={true}
+              direction="column"
+              margin={{ bottom: '1.5rem' }}
+            >
+              <RadioButton
+                name={`${option.type}`}
+                disabled={option.disabled}
+                label={
+                  <Text size="large" weight="bold">
+                    {option.label}
+                  </Text>
+                }
+                checked={
+                  activeOption?.type === option.type ? true : !activeOption && option.defaultChecked
+                }
+                onChange={changeOption(option)}
+              />
+              {option.value && (
+                <Box margin={{ left: '1.75rem', top: 'xsmall' }}>
+                  <Text size="medium">{option.value}</Text>
+                </Box>
+              )}
+              {option.textDetails && (
+                <Box margin={{ left: '1.75em', top: 'xsmall' }}>
+                  <Text size="small" color="secondaryText">
+                    {option.textDetails}
+                  </Text>
+                </Box>
+              )}
+            </Box>
+          ))}
+        </Box>
+        <Box direction="row" gap="xsmall" justify="between" align="center">
+          <StyledErrorBox
+            direction="row"
+            style={{ fontSize: '0.67em', overflow: 'hidden', textOverflow: 'ellipsis' }}
+          >
+            {errorMessage && <>{errorMessage}</>}
+          </StyledErrorBox>
+          <Box direction="row">
+            <Button margin={{ right: '0.5rem' }} label={cancelLabel} onClick={handleCancel} />
+            <Button
+              label={props.saving ? <Spinner style={{ padding: 0 }} size={15} /> : saveButtonLabel}
+              onClick={handleSave}
+              disabled={(registrationStatus && registrationStatus.registering) || props.saving}
+              primary={true}
             />
           </Box>
-          <Box direction="row" align="center">
-            <StyledText color="secondaryText" size="small" margin={{ bottom: 'xsmall' }}>
-              {nameLabel}
-            </StyledText>
-          </Box>
-          <Box>
-            {props.options.map(option => (
-              <Box
-                key={`${option.type}`}
-                flex={true}
-                direction="column"
-                margin={{ bottom: '1.5rem' }}
-              >
-                <RadioButton
-                  name={`${option.type}`}
-                  disabled={option.disabled}
-                  label={
-                    <Text size="large" weight="bold">
-                      {option.label}
-                    </Text>
-                  }
-                  checked={
-                    activeOption?.type === option.type
-                      ? true
-                      : !activeOption && option.defaultChecked
-                  }
-                  onChange={changeOption(option)}
-                />
-                {option.value && (
-                  <Box margin={{ left: '1.75rem', top: 'xsmall' }}>
-                    <Text size="medium">{option.value}</Text>
-                  </Box>
-                )}
-                {option.textDetails && (
-                  <Box margin={{ left: '1.75em', top: 'xsmall' }}>
-                    <Text size="small" color="secondaryText">
-                      {option.textDetails}
-                    </Text>
-                  </Box>
-                )}
-              </Box>
-            ))}
-          </Box>
-          <Box direction="row" gap="xsmall" justify="between" align="center">
-            <StyledErrorBox
-              direction="row"
-              style={{ fontSize: '0.67em', overflow: 'hidden', textOverflow: 'ellipsis' }}
-            >
-              {errorMessage && <>{errorMessage}</>}
-            </StyledErrorBox>
-            <Box direction="row">
-              <Button margin={{ right: '0.5rem' }} label={cancelLabel} onClick={handleCancel} />
-              <Button
-                label={
-                  props.saving ? <Spinner style={{ padding: 0 }} size={15} /> : saveButtonLabel
-                }
-                onClick={handleSave}
-                disabled={(registrationStatus && registrationStatus.registering) || props.saving}
-                primary={true}
-              />
-            </Box>
-          </Box>
         </Box>
-      </MainAreaCardBox>
-    </StyledLayer>
+      </Box>
+    </MainAreaCardBox>
   );
 };
 export default EnsFormCard;

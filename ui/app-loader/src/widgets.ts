@@ -75,7 +75,6 @@ class Widgets extends BaseIntegration {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { loadingFn, title, mountsIn, ...otherLayoutProps } = this.layoutConfig;
-
     const widgetProps = {
       ...this.worldConfig,
       ...widgetConfig,

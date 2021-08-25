@@ -69,11 +69,11 @@ export const mapEntry = (
     type?: any;
     author: {
       CID?: string;
-      description: string;
-      avatar: string;
-      coverImage: string;
-      userName: string;
-      name: string;
+      description?: string;
+      avatar?: string;
+      coverImage?: string;
+      userName?: string;
+      name?: string;
       ethAddress: string;
       pubKey: string;
       totalPosts?: number | string;

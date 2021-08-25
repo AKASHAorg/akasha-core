@@ -44,3 +44,14 @@ export enum ProfileProviderProperties {
   NAME = 'name',
   USERNAME = 'userName',
 }
+
+export enum UpdateProfileStatus {
+  UPDATE_IDLE = 0,
+  UPDATE_INITIATED,
+  UPLOADING_AVATAR,
+  UPLOADING_COVER_IMAGE,
+  REGISTERING_USERNAME,
+  // generic status for when the profile update is in progress
+  UPDATE_IN_PROGRESS,
+  UPDATE_COMPLETE,
+}

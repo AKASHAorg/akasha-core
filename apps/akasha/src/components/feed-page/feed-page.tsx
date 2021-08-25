@@ -3,13 +3,11 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { redirectToPost } from '../../services/routing-service';
 import EntryCardRenderer from './entry-card-renderer';
 import routes, { POST } from '../../routes';
-
 import { useErrors } from '@akashaproject/ui-awf-hooks';
-
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import {
   useInfinitePosts,
@@ -20,7 +18,8 @@ import {
   useBookmarkPost,
   useBookmarkDelete,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
-import { useQueryClient } from 'react-query';
+
+import { useMutationListener } from '@akashaproject/ui-awf-hooks/lib/use-query-listener';
 import { createPendingEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
 const { Box, Helmet, EditorPlaceholder, EntryList, EntryCard, EntryPublishErrorCard } = DS;
@@ -31,7 +30,6 @@ export interface FeedPageProps {
   showLoginModal: () => void;
   loggedProfileData?: any;
   loginState: ILoginState;
-  onError: (err: IAkashaError) => void;
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
@@ -42,13 +40,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [errorState] = useErrors({ logger });
 
-  const queryClient = useQueryClient();
-
-  const mutationCache = queryClient.getMutationCache();
-
-  const createPostMutation = mutationCache.find({
-    mutationKey: CREATE_POST_MUTATION_KEY,
-  });
+  const createPostMutation = useMutationListener(CREATE_POST_MUTATION_KEY);
 
   const postsReq = useInfinitePosts(15);
 

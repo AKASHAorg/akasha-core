@@ -4,6 +4,7 @@ import { act, cleanup, fireEvent } from '@testing-library/react';
 import BoxFormCard from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 import { boxProviderData } from '../../../utils/dummy-data';
+import { UpdateProfileStatus } from '@akashaproject/ui-awf-typings/lib/profile';
 
 describe('<BoxFormCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
@@ -29,16 +30,7 @@ describe('<BoxFormCard /> Component', () => {
             descriptionFieldPlaceholder={'Add a description about you here'}
             ethAddress={'0x003410499401674320006570047391024572456'}
             providerData={boxProviderData}
-            updateStatus={{
-              saving: false,
-              uploadingAvatar: false,
-              uploadingCoverImage: false,
-              updateComplete: false,
-              isValidUsername: null,
-              isValidating: false,
-              notAllowed: false,
-              tooShort: false,
-            }}
+            updateStatus={UpdateProfileStatus.UPDATE_IDLE}
             onSave={handleSave}
             onCancel={() => null}
           />,

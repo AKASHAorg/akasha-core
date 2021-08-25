@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useLoginState } from '@akashaproject/ui-awf-hooks';
@@ -13,18 +13,12 @@ import TransparencyLog from './transparency-log';
 
 const { Box } = DS;
 
-interface AppRoutesProps {
-  onError: (err: IAkashaError) => void;
-}
-
-const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
-  const { layoutConfig, onError } = props;
+const AppRoutes: React.FC<RootComponentProps> = props => {
+  const { layoutConfig } = props;
 
   const { t } = useTranslation();
 
-  const [loginState] = useLoginState({
-    onError: onError,
-  });
+  const [loginState] = useLoginState({});
 
   return (
     <Box>

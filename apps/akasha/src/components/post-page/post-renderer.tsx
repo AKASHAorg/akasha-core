@@ -5,7 +5,7 @@ import { useFollow } from '@akashaproject/ui-awf-hooks';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import routes, { POST } from '../../routes';
 import { useComment, useEditComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
-import { mapEntry, buildPublishObject } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
 const {
   ErrorInfoCard,
@@ -72,7 +72,10 @@ const PostRenderer = (props: PostRendererProps) => {
   const itemData = React.useMemo(() => {
     if (postReq.data) {
       if (postReq.data.isPublishing) {
-        return postReq.data as unknown as ReturnType<typeof mapEntry>;
+        return {
+          ...mapEntry(postReq.data),
+          content: postReq.data.content,
+        };
       }
       return mapEntry(postReq.data);
     }
@@ -137,7 +140,6 @@ const PostRenderer = (props: PostRendererProps) => {
       />
     );
   }
-
   return (
     <ErrorInfoCard errors={{}}>
       {(errorMessages: any, hasCriticalErrors: boolean) => (

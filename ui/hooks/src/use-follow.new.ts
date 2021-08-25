@@ -95,7 +95,7 @@ export function useIsFollowing(followerEthAddress, followingEthAddress, enabled 
     },
     {
       initialData: [],
-      enabled: !!(followerEthAddress && followingEthAddress) && enabled,
+      enabled: !!followerEthAddress && !!followingEthAddress && enabled,
       keepPreviousData: true,
     },
   );
