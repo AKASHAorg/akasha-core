@@ -21,11 +21,11 @@ export const WEB3_PROVIDER = 'WEB3_PROVIDER';
 export const moduleName = 'commons';
 
 export const LEGAL_DOCS_SOURCE = {
-  [LEGAL_DOCS.TERMS_OF_USE]: 'QmRCzESzs57M83JNpvk6ZpDBbSxtMpm5Pz2Th7MiRpd2ZV',
-  [LEGAL_DOCS.TERMS_OF_SERVICE]: 'QmcvHEvprqZJmQa366svdWLL8dVkTRhxdcpzfGbmDL2bVE',
-  [LEGAL_DOCS.PRIVACY_POLICY]: 'QmRLbfaNNhjDz4dpYhhYFxkZDABJvivyCxX5VrRQeTDQ3Q',
-  [LEGAL_DOCS.CODE_OF_CONDUCT]: 'QmZGeXbYH2YPqHHCSDqtvzYpi91n1XfXgy8QY3Q377hcES',
-  [LEGAL_DOCS.APP_GUIDE]: 'QmNZGKJywWYTLiyYLzSeAdCva3jHZ2grV4Yz9cw2jpMhQQ',
+  [LEGAL_DOCS.TERMS_OF_USE]: 'bafkreie3pa22hfttuuier6rp6sm7nngfc5jgfjzre7wc5a2ww7z375fhwm',
+  [LEGAL_DOCS.TERMS_OF_SERVICE]: 'bafkreib5jg73c6bmbzkrokpusraiwwycnkypol3xh3uadsu7hhzefp6g2e',
+  [LEGAL_DOCS.PRIVACY_POLICY]: 'bafkreifjtbzuxwhhmmpq7c3xn74wbzog3robhsjyauvwtshh6zst2axlhm',
+  [LEGAL_DOCS.CODE_OF_CONDUCT]: 'bafkreie6ygpcmpckoxnb6rip62nxztntwu5k2oqmwfvxyubfppwimhype4',
+  [LEGAL_DOCS.APP_GUIDE]: 'bafkreidpkbwzpxupnnty4bua5w4n7ddiyugb2ermb2htkxczrw7okan3nu',
 };
 const servicePath = buildServicePath(moduleName);
 
