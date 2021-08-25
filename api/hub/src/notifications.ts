@@ -1,9 +1,4 @@
-import {
-  PrivateKey,
-  PublicKey,
-  createUserAuth,
-  Users,
-} from '@textile/hub';
+import { PrivateKey, PublicKey, createUserAuth, Users } from '@textile/hub';
 import { logger } from './helpers';
 import { parentPort, workerData } from 'worker_threads';
 
@@ -45,8 +40,10 @@ const sendMessage = async (recipient: string, notificationObj: Record<string, an
   return ms.sendMessage(recipient, encodedNotification);
 };
 
-sendMessage(workerData.recipient, workerData.notificationObj).then(() => {
-  parentPort.postMessage(undefined);
-}).catch( error => {
-  parentPort.postMessage(error);
-})
+sendMessage(workerData.recipient, workerData.notificationObj)
+  .then(() => {
+    parentPort.postMessage(undefined);
+  })
+  .catch(error => {
+    parentPort.postMessage(error);
+  });
