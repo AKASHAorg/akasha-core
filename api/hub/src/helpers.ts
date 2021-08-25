@@ -5,7 +5,6 @@ import {
   PrivateKey,
   PublicKey,
   createUserAuth,
-  Users,
 } from '@textile/hub';
 import { updateCollections, initCollections } from './collections';
 import winston from 'winston';
@@ -18,12 +17,12 @@ import path from 'path';
 import { AbortController } from 'node-abort-controller';
 import { Worker } from 'worker_threads';
 
-const MODERATION_APP_URL  = process.env.MODERATION_APP_URL;
+const MODERATION_APP_URL = process.env.MODERATION_APP_URL;
 const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
 const MODERATION_EMAIL_SOURCE = process.env.MAILGUN_EMAIL_SOURCE;
 let mailGun;
 if (process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN) {
-  mailGun = mailgun({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
+  mailGun = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN });
 }
 
 export const EMPTY_KEY = 'baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
@@ -76,7 +75,7 @@ export const getAppDB = async () => {
     API,
     process.env.NODE_ENV !== 'production',
   );
-    
+
   await client.getToken(identity());
   appDBClient = client;
   return client;
@@ -172,18 +171,20 @@ export const verifyEd25519Sig = async (args: {
 };
 
 export const sendNotification = async (recipient: string, notificationObj: Record<string, any>) => {
-  const worker = new Worker(path.resolve(__dirname, './notifications.js'), { workerData: {
-    recipient, 
-    notificationObj 
-  }});
-  worker.on("message", msg => {
+  const worker = new Worker(path.resolve(__dirname, './notifications.js'), {
+    workerData: {
+      recipient,
+      notificationObj,
+    },
+  });
+  worker.on('message', msg => {
     if (!msg) {
       logger.info('Notification sent from worker');
     } else {
-      logger.error(msg);  
+      logger.error(msg);
     }
   });
-  worker.on("error", error => {
+  worker.on('error', error => {
     logger.error(error);
   });
 };
@@ -211,10 +212,10 @@ export const sendEmailNotification = async () => {
   const data = {
     from: `Moderation Notifications <${MODERATION_EMAIL_SOURCE}>`,
     to: MODERATION_EMAIL,
-    subject: "New moderation request",
+    subject: 'New moderation request',
     text: `There is a new pending request for moderation. To moderate this content please visit the moderation app at:\n
 ${MODERATION_APP_URL}
-\nThank you!`
+\nThank you!`,
   };
   mailGun.messages().send(data, function (error) {
     if (error) {
