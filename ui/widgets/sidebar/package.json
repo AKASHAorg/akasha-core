@@ -34,10 +34,10 @@
     "@akashaproject/design-system": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@types/react-router-dom": "5.1.8",
-    "single-spa-react": "4.2.1",
-    "react-i18next": "11.11.3",
+    "single-spa-react": "4.3.1",
+    "react-i18next": "11.11.4",
     "react-router-dom": "5.2.0",
-    "i18next": "20.3.3",
+    "i18next": "20.4.0",
     "i18next-browser-languagedetector": "6.1.2",
     "i18next-fetch-backend": "3.0.0",
     "i18next-chained-backend": "3.0.2",
@@ -46,9 +46,9 @@
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
     "@akashaproject/ui-awf-testing-utils": "*",
-    "@types/react": "17.0.14",
+    "@types/react": "17.0.19",
     "@types/react-dom": "17.0.9",
-    "@types/styled-components": "5.1.11"
+    "@types/styled-components": "5.1.12"
   },
   "peerDependencies": {
     "react": "17.0.2",

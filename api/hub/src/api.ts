@@ -154,26 +154,23 @@ api.post('/moderation/reports/new', async (ctx: koa.Context, next: () => Promise
       ctx.body = error;
       ctx.status = error ? 401 : 403;
     } else {
-      // check if the user has already reported this content identifier
-      const exists = await dataSources.reportingAPI.exists(report.contentId, report.data.user);
-      if (exists) {
-        ctx.status = 409;
-        ctx.body = `You have already reported this content.`;
-      } else {
-        try {
-          // add report
-          await dataSources.reportingAPI.addReport(
-            'ModerationDecisions',
-            report.contentType,
-            report.contentId,
-            report.data.user,
-            report.data.reason,
-            report.data.explanation,
-          );
-          ctx.status = 201;
-        } catch (error) {
-          ctx.body = error;
-          ctx.status = 500;
+      try {
+        // add report
+        await dataSources.reportingAPI.addReport(
+          'ModerationDecisions',
+          report.contentType,
+          report.contentId,
+          report.data.user,
+          report.data.reason,
+          report.data.explanation,
+        );
+        ctx.status = 201;
+      } catch (error) {
+        ctx.status = 500;
+        ctx.body = error;
+        if (error.status && error.status === 409) {
+          ctx.status = 409;
+          ctx.body = 'You cannot report this content twice.';
         }
       }
     }
@@ -268,8 +265,7 @@ api.post('/moderation/decisions/moderate', async (ctx: koa.Context, next: () => 
         // store moderation decision
         await dataSources.decisionsAPI.makeDecision(
           report,
-          dataSources.postsAPI,
-          dataSources.profileAPI
+          dataSources.postsAPI
         );
         ctx.status = 200;
       } catch (error) {
@@ -291,7 +287,9 @@ api.get('/moderation/decisions/:contentId', async (ctx: koa.Context, next: () =>
     ctx.body = 'Missing "contentId" attribute from request.';
   } else {
     ctx.set('Content-Type', 'application/json');
-    ctx.body = await dataSources.decisionsAPI.getFinalDecision(contentID);
+    ctx.body = await dataSources.decisionsAPI.getFinalDecision(contentID,
+      dataSources.profileAPI,
+      dataSources.reportingAPI);
     ctx.status = 200;
   }
   await next();
@@ -311,7 +309,9 @@ api.post('/moderation/decisions/pending', async (ctx: koa.Context, next: () => P
   const list = [];
   for (const decision of decisions.results) {
     // get the full data for each decision
-    list.push(await dataSources.decisionsAPI.getFinalDecision(decision.contentID));
+    list.push(await dataSources.decisionsAPI.getFinalDecision(decision.contentID,
+      dataSources.profileAPI,
+      dataSources.reportingAPI));
   }
   ctx.set('Content-Type', 'application/json');
   ctx.body = {
@@ -341,7 +341,9 @@ api.post('/moderation/decisions/moderated', async (ctx: koa.Context, next: () =>
     const list = [];
     for (const decision of decisions.results) {
       // get the full data for each decision
-      list.push(await dataSources.decisionsAPI.getFinalDecision(decision.contentID));
+      list.push(await dataSources.decisionsAPI.getFinalDecision(decision.contentID,
+        dataSources.profileAPI,
+        dataSources.reportingAPI));
     }
     ctx.set('Content-Type', 'application/json');
     ctx.body = {
@@ -359,7 +361,10 @@ api.post('/moderation/decisions/moderated', async (ctx: koa.Context, next: () =>
  */
 api.post('/moderation/decisions/log', async (ctx: koa.Context, next: () => Promise<any>) => {
   const req: any = ctx?.request.body;
-  ctx.body = await dataSources.decisionsAPI.publicLog(req.offset, req.limit);
+  ctx.body = await dataSources.decisionsAPI.publicLog(dataSources.profileAPI,
+    dataSources.reportingAPI,
+    req.offset,
+    req.limit);
   ctx.set('Content-Type', 'application/json');
   ctx.status = 200;
 
