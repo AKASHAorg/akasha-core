@@ -74,7 +74,7 @@ const getComment = async (commentID): Promise<Comment_Response & { isPublishing?
   try {
     // check entry's moderation status
     const modStatus = await moderationRequest.checkStatus(true, {
-      user: user.data.pubKey,
+      user: user.data ? user.data.pubKey : '',
       contentIds: [commentID],
     });
     const res = await lastValueFrom(sdk.api.comments.getComment(commentID));

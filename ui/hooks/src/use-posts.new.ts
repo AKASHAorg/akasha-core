@@ -160,7 +160,7 @@ const getPost = async postID => {
   try {
     // check entry's moderation status
     const modStatus = await moderationRequest.checkStatus(true, {
-      user: user.data.pubKey,
+      user: user.data ? user.data.pubKey : '',
       contentIds: [postID],
     });
     const res = await lastValueFrom(sdk.api.entries.getEntry(postID));

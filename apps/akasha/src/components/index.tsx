@@ -22,7 +22,7 @@ const reactLifecycles = singleSpaReact({
         availableThemes={[lightTheme, darkTheme]}
         settings={{ activeTheme: 'LightTheme' }}
       >
-        <ErrorLoader type="script-error" title="Error in akasha app" details={error.message} />;
+        <ErrorLoader type="script-error" title="Error in akasha app" details={error.message} />
       </ThemeSelector>
     );
   },
