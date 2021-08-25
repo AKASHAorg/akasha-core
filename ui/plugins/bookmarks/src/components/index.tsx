@@ -4,28 +4,39 @@ import singleSpaReact from 'single-spa-react';
 import App from './App';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { setupI18next } from '../i18n';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import DS from '@akashaproject/design-system';
 
-/**
- * This is the plugin's lifecycle logic
- * @todo add more docs!!
- */
+const { ErrorLoader, ThemeSelector, darkTheme, lightTheme } = DS;
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(App),
-  errorBoundary: (err, errInfo, props) => {
+  errorBoundary: (error, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
-      props.logger.error(err, errInfo);
+      props.logger.error(error, errorInfo);
     }
-    return <></>;
+    return (
+      <ThemeSelector
+        availableThemes={[lightTheme, darkTheme]}
+        settings={{ activeTheme: 'LightTheme' }}
+      >
+        <ErrorLoader
+          type="script-error"
+          title="Error in bookmarks plugin"
+          details={error.message}
+        />
+      </ThemeSelector>
+    );
   },
 });
 
-export const bootstrap = props => {
+export const bootstrap = (props: RootComponentProps) => {
   return setupI18next({
     logger: props.logger,
-    namespace: props.name.replace('@akashaproject/', ''),
+    // must be the same as the one in ../../i18next.parser.config.js
+    namespace: 'ui-plugin-bookmarks',
   });
 };
 

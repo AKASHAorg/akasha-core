@@ -4,13 +4,9 @@ import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
-import i18n from 'i18next';
-import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import Backend from 'i18next-chained-backend';
-import Fetch from 'i18next-fetch-backend';
-import LocalStorageBackend from 'i18next-localstorage-backend';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import i18next, { setupI18next } from '../i18n';
 
 const { StyledSelectBox, TextIcon } = DS;
 
@@ -51,42 +47,9 @@ const EntryEditButton: React.FC<RootComponentProps> = props => {
 };
 
 const ModalWrapper: React.FC<RootComponentProps> = props => {
-  i18n
-    .use(initReactI18next)
-    .use(Backend)
-    .use(LanguageDetector)
-    .use({
-      type: 'logger',
-      log: props.logger.info,
-      warn: props.logger.warn,
-      error: props.logger.error,
-    })
-    .init({
-      fallbackLng: 'en',
-      ns: ['akasha-app'],
-      saveMissing: false,
-      saveMissingTo: 'all',
-      load: 'languageOnly',
-      debug: true,
-      cleanCode: true,
-      keySeparator: false,
-      defaultNS: 'akasha-app',
-      backend: {
-        backends: [LocalStorageBackend, Fetch],
-        backendOptions: [
-          {
-            prefix: 'i18next_res_v0',
-            expirationTime: 24 * 60 * 60 * 1000,
-          },
-          {
-            loadPath: '/locales/{{lng}}/{{ns}}.json',
-          },
-        ],
-      },
-    });
   return (
     <React.Suspense fallback={'...'}>
-      <I18nextProvider i18n={i18n}>
+      <I18nextProvider i18n={i18next}>
         <EntryEditButton {...props} />
       </I18nextProvider>
     </React.Suspense>
@@ -105,6 +68,12 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = reactLifecycles.bootstrap;
+export const bootstrap = (props: RootComponentProps) => {
+  return setupI18next({
+    logger: props.logger,
+    // must be the same as the one in ../../i18next.parser.config.js
+    namespace: 'app-akasha-integration',
+  });
+};
 export const mount = reactLifecycles.mount;
 export const unmount = reactLifecycles.unmount;

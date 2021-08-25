@@ -275,16 +275,44 @@ export default class AppLoader {
       [...appExtensions, ...widgetExtensions],
       { ...appConfigs, ...widgetConfigs },
       [...appInfos, ...widgetInfos],
-      modalData,
+      this.activeModal,
     );
     for (const [index, ext] of extToLoad.entries()) {
-      this.mountExtensionPoint(ext, index, modalData)
+      this.mountExtensionPoint(ext, index, this.activeModal)
         .then(() => true)
         .catch(err => this.loaderLogger.warn(err));
     }
   }
+  // iterate over all extension parcels and return parcel
+  private findParcel(name: string) {
+    for (const extName in this.extensionParcels) {
+      const parcels = this.extensionParcels[extName];
+      for (const parcel of parcels) {
+        if (parcel.id === name) {
+          return parcel;
+        }
+      }
+    }
+  }
   public onModalUnmount(modalData: UIEventData['data']) {
     if (this.activeModal && this.activeModal.name === modalData.name) {
+      const parcelData = this.findParcel(modalData.name);
+      this.loaderLogger.info(`Unmounting parcel: ${parcelData.id}`);
+      if (parcelData) {
+        parcelData.parcel
+          .unmount()
+          .then(() => {
+            for (const ext in this.extensionParcels) {
+              const parcels = this.extensionParcels[ext];
+              for (const parcel of parcels) {
+                if (parcel.id === parcelData.id) {
+                  this.extensionParcels[ext].splice(parcels.indexOf(parcel), 1);
+                }
+              }
+            }
+          })
+          .catch(err => this.loaderLogger.warn(err.message));
+      }
       this.activeModal = undefined;
     } else if (this.activeModal && this.activeModal.name !== modalData.name) {
       this.loaderLogger.error(
@@ -380,6 +408,10 @@ export default class AppLoader {
     );
     if (extPoint) {
       this.loaderLogger.info(`extension point is unmounting: ${extPoint}`);
+      const parcelData = this.findParcel(extPoint.name);
+      if (parcelData) {
+        parcelData.parcel.unmount();
+      }
     }
   }
 
@@ -424,9 +456,11 @@ export default class AppLoader {
 
     writeImports(newMap, scriptId);
 
-    await (System as typeof System & {
-      prepareImport: (doProcessScripts?: boolean) => Promise<void>;
-    }).prepareImport(true);
+    await (
+      System as typeof System & {
+        prepareImport: (doProcessScripts?: boolean) => Promise<void>;
+      }
+    ).prepareImport(true);
   }
 
   public async importLayoutConfig(integrationInfos: (AppRegistryInfo | WidgetRegistryInfo)[]) {
@@ -643,7 +677,7 @@ export default class AppLoader {
     const extensionParcel = singleSpa.mountRootParcel(extensionPoint.loadingFn, extensionProps);
 
     const parcelData = {
-      id: `${rootNode}-${index}`,
+      id: `${rootNode}`,
       parcel: extensionParcel,
     };
 
@@ -692,7 +726,7 @@ export default class AppLoader {
         searchObj.modal &&
         (!this.activeModal || this.activeModal.name !== searchObj.modal.name)
       ) {
-        this.loaderLogger.info(`Requesting modal mount ${searchObj.modal}`);
+        this.loaderLogger.info('Requesting modal mount %o', searchObj.modal);
         this.uiEvents.next({
           event: EventTypes.ModalMountRequest,
           data: searchObj.modal,
@@ -701,6 +735,7 @@ export default class AppLoader {
     }
 
     if (this.activeModal && !search.length) {
+      this.loaderLogger.info(`Unmounting modal ${this.activeModal.name}`);
       this.uiEvents.next({
         event: EventTypes.ModalUnmountRequest,
         data: this.activeModal,

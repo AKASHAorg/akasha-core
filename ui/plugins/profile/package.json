@@ -36,7 +36,6 @@
     "@akashaproject/awf-sdk": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/ui-widget-feed": "*",
-    "@akashaproject/ui-widget-trending": "*",
     "@types/react-router": "5.1.16",
     "@types/react-router-dom": "5.1.8",
     "react-i18next": "11.11.4",

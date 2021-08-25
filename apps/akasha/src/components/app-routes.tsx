@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 
@@ -12,11 +12,9 @@ import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 
 const { Box } = DS;
-interface AppRoutesProps {
-  onError: (err: IAkashaError) => void;
-}
-const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
-  const { logger, onError } = props;
+
+const AppRoutes: React.FC<RootComponentProps> = props => {
+  const { logger } = props;
 
   const [, errorActions] = useErrors({ logger });
 
@@ -26,12 +24,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
 
   const profileDataReq = useGetProfile(loginState.pubKey);
   const loggedProfileData = profileDataReq.data;
-
-  // React.useEffect(() => {
-  //   if (loginState.pubKey) {
-  //     loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
-  //   }
-  // }, [loginState.pubKey]);
 
   const showLoginModal = () => {
     props.navigateToModal({ name: 'login' });
@@ -47,7 +39,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               loggedProfileData={loggedProfileData}
               loginState={loginState}
               showLoginModal={showLoginModal}
-              onError={onError}
             />
           </Route>
           <Route path={`${routes[POST]}/:postId`}>
@@ -57,7 +48,6 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               showLoginModal={showLoginModal}
               navigateToUrl={props.singleSpa.navigateToUrl}
               isMobile={props.isMobile}
-              onError={onError}
             />
           </Route>
           <Route path={`${routes[TAGS]}/:tagName`}>
