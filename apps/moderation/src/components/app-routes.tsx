@@ -25,11 +25,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
       <Router>
         <Switch>
           <Route path={routes[HOME]}>
-            <ContentList
-              {...props}
-              ethAddress={loginState.ethAddress}
-              slotId={layoutConfig.modalSlotId}
-            />
+            <ContentList {...props} user={loginState.pubKey} slotId={layoutConfig.modalSlotId} />
           </Route>
           <Route path={routes[UNAUTHENTICATED]}>
             <PromptAuthentication
@@ -44,7 +40,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           </Route>
           <Route path={routes[HISTORY]}>
             <TransparencyLog
-              ethAddress={loginState.ethAddress}
+              user={loginState.pubKey}
               logger={props.logger}
               isMobile={props.isMobile}
               navigateToUrl={props.singleSpa.navigateToUrl}

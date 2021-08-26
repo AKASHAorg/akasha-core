@@ -70,7 +70,7 @@ const TopbarComponent = (props: RootComponentProps) => {
   React.useEffect(() => {
     const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
     if (loginState.ethAddress && !isLoadingProfile) {
-      getModeratorStatus(loginState.ethAddress);
+      getModeratorStatus(loginState.pubKey);
       if (loggedProfileData && !loggedProfileData.userName) {
         return props.navigateToModal({
           name: 'update-profile',
@@ -111,14 +111,14 @@ const TopbarComponent = (props: RootComponentProps) => {
     menuItem => menuItem.area === MenuItemAreaType.OtherArea,
   );
 
-  const getModeratorStatus = async (loggedEthAddress: string) => {
+  const getModeratorStatus = async (loggedUser: string) => {
     try {
-      const response = await moderationRequest.checkModerator(loggedEthAddress);
+      const response = await moderationRequest.checkModerator(loggedUser);
       if (response === 200) {
         setIsModerator(true);
       }
     } catch (error) {
-      logger.error('[content-list.tsx]: getModeratorStatus err %j', error.message || '');
+      logger.error('[topbar-component.tsx]: getModeratorStatus err %j', error.message || '');
     }
   };
 

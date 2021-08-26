@@ -40,6 +40,7 @@ export default {
     loggedProfileEthAddress: { control: 'text' },
     awaitingModerationLabel: { control: 'text' },
     ctaLabel: { control: 'text' },
+    ctaUrl: { control: 'text' },
     locale: {
       control: {
         type: 'radio',

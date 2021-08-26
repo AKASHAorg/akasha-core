@@ -38,6 +38,8 @@ export interface IEntryData {
   quote?: IEntryData;
   delisted?: boolean;
   reported?: boolean;
+  moderated?: boolean;
+  reason?: string;
   type?: string;
 }
 export interface IContentClickDetails {
@@ -95,10 +97,11 @@ export interface IEntryBoxProps {
   disableActions?: boolean;
   hideActionButtons?: boolean;
   hidePublishTime?: boolean;
-  awaitingModerationLabel?: string;
+  headerTextLabel?: string;
+  footerTextLabel?: string;
   moderatedContentLabel?: string;
   ctaLabel?: string;
-  handleFlipCard?: (entry: IEntryData, isQuote: boolean) => () => void;
+  handleFlipCard?: () => void;
   isModerated?: boolean;
   scrollHiddenContent?: boolean;
   removeEntryLabel?: string;
@@ -152,7 +155,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     disableActions,
     hideActionButtons,
     hidePublishTime,
-    awaitingModerationLabel,
+    headerTextLabel,
+    footerTextLabel,
     moderatedContentLabel,
     ctaLabel,
     handleFlipCard,
@@ -458,9 +462,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         {entryData.quote && !entryData.quote.delisted && entryData.quote.reported && (
           <Box pad="medium" onClick={() => null}>
             <EntryCardHidden
-              awaitingModerationLabel={awaitingModerationLabel}
+              reason={entryData.reason}
+              headerTextLabel={headerTextLabel}
+              footerTextLabel={footerTextLabel}
               ctaLabel={ctaLabel}
-              handleFlipCard={handleFlipCard && handleFlipCard(entryData, true)}
+              handleFlipCard={handleFlipCard}
             />
           </Box>
         )}

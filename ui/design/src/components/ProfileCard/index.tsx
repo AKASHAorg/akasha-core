@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
 import DuplexButton from '../DuplexButton';
-import Icon from '../Icon';
+import Icon, { IconType } from '../Icon';
 import TextIcon from '../TextIcon';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import {
@@ -16,7 +16,7 @@ import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 import ProfileMenuDropdown from './profile-card-menu-dropdown';
 import styled from 'styled-components';
 import { truncateMiddle } from '../../utils/string-utils';
-import { isMobile } from 'react-device-detect';
+import { isMobile, isMobileOnly } from 'react-device-detect';
 import MobileListModal from '../MobileListModal';
 import {
   IProfileProvider,
@@ -55,7 +55,9 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   changeCoverImageLabel?: string;
   cancelLabel?: string;
   saveChangesLabel?: string;
+  // reporting and moderation related labels
   flagAsLabel?: string;
+  blockLabel?: string;
   flaggable: boolean;
   onEntryFlag: () => void;
   getProfileProvidersData?: () => void;
@@ -68,6 +70,14 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   copyLabel?: string;
   copiedLabel?: string;
   userNameType?: { default?: IProfileProvider; available: UsernameTypes[] };
+}
+
+interface IStat {
+  iconType: IconType;
+  count: string;
+  label: string;
+  clickHandler: (event: React.SyntheticEvent<Element, Event>) => void;
+  dataTestId: string;
 }
 
 const EditButton = styled(TextIcon)`
@@ -92,7 +102,7 @@ const EditButton = styled(TextIcon)`
   }
 `;
 
-const StatIcon = styled(TextIcon)<{ isMobile?: boolean }>`
+const StatIconWrapper = styled(Box)<{ isMobile?: boolean }>`
   ${props => {
     if (props.isMobile) {
       return `
@@ -102,6 +112,7 @@ const StatIcon = styled(TextIcon)<{ isMobile?: boolean }>`
     }
     return `
       flex-direction: row;
+        align-items: center;
     `;
   }}
 `;
@@ -114,6 +125,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     loggedEthAddress,
     onClickFollowing,
     onClickFollowers,
+    onClickInterests,
     onClickPosts,
     handleFollow,
     handleUnfollow,
@@ -126,16 +138,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     followLabel,
     unfollowLabel,
     postsLabel,
+    interestsLabel,
     editProfileLabel,
     shareProfileLabel,
     changeCoverImageLabel,
     profileProvidersData,
     canUserEdit,
   } = props;
-
-  const postsTitle = `${profileData.totalPosts || 0} ${postsLabel}`;
-  const followersTitle = `${profileData.totalFollowers || 0} ${followersLabel}`;
-  const followingTitle = `${profileData.totalFollowing || 0} ${followingLabel}`;
 
   const [editable /* , setEditable */] = useState(false);
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -203,6 +212,37 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     setNamePopoverOpen(false);
   };
 
+  const stats: IStat[] = [
+    {
+      iconType: 'quote',
+      count: `${profileData.totalPosts || 0}`,
+      label: postsLabel,
+      clickHandler: onClickPosts,
+      dataTestId: 'posts-button',
+    },
+    {
+      iconType: 'following',
+      count: `${profileData.totalFollowers || 0}`,
+      label: followersLabel,
+      clickHandler: onClickFollowers,
+      dataTestId: 'followers-button',
+    },
+    {
+      iconType: 'following',
+      count: `${profileData.totalFollowing || 0}`,
+      label: followingLabel,
+      clickHandler: onClickFollowing,
+      dataTestId: 'following-button',
+    },
+    {
+      iconType: 'hashtagGray',
+      count: `0`,
+      label: interestsLabel,
+      clickHandler: onClickInterests,
+      dataTestId: 'interests-button',
+    },
+  ];
+
   return (
     <MainAreaCardBox className={className}>
       <ProfileCardCoverImage
@@ -256,13 +296,14 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           </Box>
           <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
             {loggedEthAddress !== profileData.ethAddress && (
-              <Box width="7rem">
+              // conditionally adjust width of wrapper containing duplex button
+              <Box width={isMobileOnly ? 'fit-content' : '7rem'}>
                 <DuplexButton
                   icon={<Icon type="following" />}
                   active={isFollowing}
-                  activeLabel={followingLabel}
-                  inactiveLabel={followLabel}
-                  activeHoverLabel={unfollowLabel}
+                  activeLabel={!isMobileOnly ? followingLabel : ''}
+                  inactiveLabel={!isMobileOnly ? followLabel : ''}
+                  activeHoverLabel={!isMobileOnly ? unfollowLabel : ''}
                   onClickActive={handleUnfollow}
                   onClickInactive={handleFollow}
                 />
@@ -281,43 +322,44 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             ) : null}
           </Box>
         </Box>
-        <Box pad={{ bottom: 'medium' }} direction="row" alignContent="center" gap="medium">
-          <StatIcon
-            iconType="quote"
-            iconBackground={true}
-            iconSize="xxs"
-            label={postsTitle}
-            onClick={onClickPosts}
-            fadedText={true}
-            datatestid="posts-button"
-            isMobile={isMobile}
-          />
-          <StatIcon
-            iconType="following"
-            iconBackground={true}
-            iconSize="xxs"
-            label={followersTitle}
-            onClick={onClickFollowers}
-            fadedText={true}
-            datatestid="followers-button"
-            isMobile={isMobile}
-          />
-          <StatIcon
-            iconType="following"
-            iconBackground={true}
-            iconSize="xxs"
-            label={followingTitle}
-            onClick={onClickFollowing}
-            fadedText={true}
-            datatestid="following-button"
-            isMobile={isMobile}
-          />
+        <Box
+          pad={{ bottom: 'small' }}
+          direction="row"
+          alignContent="center"
+          gap="medium"
+          justify={isMobileOnly ? 'between' : 'start'}
+        >
+          {stats.map((stat, id) => (
+            <StatIconWrapper key={stat.label + id} isMobile={isMobileOnly}>
+              <TextIcon
+                iconType={stat.iconType}
+                iconBackground={true}
+                iconSize="xxs"
+                label={stat.count}
+                onClick={stat.clickHandler}
+                datatestid={stat.dataTestId}
+              />
+              <Text
+                margin={{
+                  ...(isMobileOnly && { top: 'xxsmall' }),
+                  ...(!isMobileOnly && { left: 'xxsmall' }),
+                }}
+                color="secondaryText"
+              >
+                {stat.label}
+              </Text>
+            </StatIconWrapper>
+          ))}
         </Box>
       </Box>
       {!isMobile && menuOpen && menuRef.current && (
         <ProfileMenuDropdown
           target={menuRef.current}
           onClose={closeMenu}
+          onBlockClick={() => {
+            /* @todo: replace with handler to block account */
+            closeMenu();
+          }}
           onReportClick={() => {
             props.onEntryFlag();
             closeMenu();
@@ -333,17 +375,26 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           changeENSLabel={props.changeENSLabel}
           updateProfileLabel={props.updateProfileLabel}
           flagAsLabel={props.flagAsLabel}
+          blockLabel={props.blockLabel}
           hideENSButton={props.hideENSButton}
           flaggable={props.flaggable}
         />
       )}
       {isMobile && menuOpen && (
-        <StyledDropAlt>
+        <StyledDropAlt style={{ backgroundColor: 'transparent' }}>
           <MobileListModal
             closeModal={closeMenu}
             menuItems={
               props.flaggable
                 ? [
+                    {
+                      label: props.blockLabel,
+                      icon: 'block',
+                      handler: () => {
+                        /* @todo: replace with handler to block account */
+                        closeMenu();
+                      },
+                    },
                     {
                       label: props.flagAsLabel,
                       icon: 'report',

@@ -23,9 +23,15 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   optionValues: string[];
   descriptionLabel: string;
   descriptionPlaceholder: string;
+
+  // footer labels and links
   footerText1Label: string;
   footerLink1Label: string;
   footerUrl1: string;
+  footerText2Label: string;
+  footerLink2Label: string;
+  footerUrl2: string;
+
   cancelLabel?: string;
   reportLabel?: string;
   user?: string;
@@ -49,6 +55,9 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     footerText1Label,
     footerLink1Label,
     footerUrl1,
+    footerText2Label,
+    footerLink2Label,
+    footerUrl2,
     cancelLabel,
     reportLabel,
     blockLabel,
@@ -58,7 +67,6 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     contentType,
     requesting,
     success,
-    updateEntry,
     closeModal,
     onReport,
   } = props;
@@ -120,14 +128,13 @@ const ReportModal: React.FC<IReportModalProps> = props => {
         blockLabel={blockLabel}
         closeLabel={closeLabel}
         size={size}
-        updateEntry={updateEntry}
         closeModal={closeModal}
       />
     );
   }
 
   return (
-    <ModalWrapper isMobile={isMobileOnly}>
+    <ModalWrapper isTransparent={true} isMobile={isMobileOnly}>
       <StyledBox width={width > 800 ? '35%' : width > 500 ? '50%' : '100%'}>
         <MainAreaCardBox className={className}>
           <Box direction="column" pad="large">
@@ -175,7 +182,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 </>
               )}
               <RadioButtonGroup
-                gap="xxsmall"
+                gap={isMobileOnly ? 'medium' : 'xxsmall'}
                 name="reasons"
                 options={optionLabels}
                 value={reason}
@@ -218,6 +225,17 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                   }
                 >
                   {footerLink1Label}{' '}
+                </Text>
+                {footerText2Label}{' '}
+                <Text
+                  color="accentText"
+                  size="medium"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() =>
+                    window.open(footerUrl2, footerLink2Label, '_blank noopener noreferrer')
+                  }
+                >
+                  {footerLink2Label}{' '}
                 </Text>
               </Text>
             </Box>

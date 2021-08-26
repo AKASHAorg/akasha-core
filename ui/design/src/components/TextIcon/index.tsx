@@ -112,7 +112,7 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
         size={fontSize}
         accentColor={accentColor}
         wordBreak="break-word"
-        color={fadedText ? 'secondaryText' : 'primaryText'}
+        color={color ? color : fadedText ? 'secondaryText' : 'primaryText'}
         disabled={disabled}
         truncate={true}
       >

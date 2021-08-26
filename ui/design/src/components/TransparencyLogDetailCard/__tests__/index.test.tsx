@@ -29,6 +29,7 @@ describe('<TransparencyLogDetailCard /> Component', () => {
             moderatorAvatarUrl="https://placebeard.it/360x360"
             moderatorEthAddress="0x003410490050000320006570034567114572000"
             reportedTimesLabel={`Reported ${4} times`}
+            viewItemLink=""
             viewItemLabel="View post"
             reasonsLabel={`${reasons.length > 1 ? 'reasons' : 'reason'}`}
             reasons={reasons}
