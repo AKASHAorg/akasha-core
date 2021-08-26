@@ -2,8 +2,7 @@ import React from 'react';
 import { Box, Text } from 'grommet';
 
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
-import { StyledBox, ModalWrapper } from '../ListModal/styled-modal';
-import Button from '../Button';
+import { StyledBox, ModalWrapper, ModalButton } from '../ListModal/styled-modal';
 
 export interface IReportSuccessModalProps {
   className?: string;
@@ -15,32 +14,24 @@ export interface IReportSuccessModalProps {
   // screen size passed by viewport provider
   size?: string;
   // @TODO: make prop required, and modify all instances appropriately
-  updateEntry?: (entryId: string) => void;
   closeModal: () => void;
   signData?: any;
 }
 
 const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
-  const {
-    className,
-    successTitleLabel,
-    successMessageLabel,
-    contentId,
-    closeLabel,
-    size,
-    updateEntry,
-    closeModal,
-  } = props;
+  const { className, successTitleLabel, successMessageLabel, closeLabel, size, closeModal } = props;
 
-  const handleModalClose = () => {
-    if (updateEntry && contentId) {
-      updateEntry(contentId);
-    }
-    closeModal();
-  };
+  const handleModalClose =
+    (blockUser = false) =>
+    () => {
+      if (blockUser) {
+        /* @todo: replace with handler to block account */
+      }
+      closeModal();
+    };
 
   return (
-    <ModalWrapper>
+    <ModalWrapper isTransparent={true}>
       <StyledBox width={size === 'small' ? '90%' : '33%'}>
         <MainAreaCardBox className={className}>
           <Box direction="column" pad="large">
@@ -65,7 +56,15 @@ const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
               {successMessageLabel}
             </Text>
             <Box direction="row" margin={{ top: 'large' }} alignSelf="center">
-              <Button primary={true} label={closeLabel} onClick={handleModalClose} />
+              {/* un-comment this to implement block user functionality */}
+
+              {/* <ModalButton
+                label={blockLabel}
+                margin={{ right: '0.5rem' }}
+                disabled={true}
+                onClick={handleModalClose(true)}
+              /> */}
+              <ModalButton primary={true} label={closeLabel} onClick={handleModalClose()} />
             </Box>
           </Box>
         </MainAreaCardBox>

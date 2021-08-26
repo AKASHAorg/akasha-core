@@ -1,8 +1,6 @@
 import getSDK from '@akashaproject/awf-sdk';
 import constants from './constants';
 
-const sdk = getSDK();
-
 const { BASE_REPORT_URL, BASE_STATUS_URL, BASE_DECISION_URL, BASE_MODERATOR_URL } = constants;
 
 export const fetchRequest = async (props: {
@@ -36,11 +34,11 @@ export const fetchRequest = async (props: {
 };
 
 export default {
-  checkModerator: async (loggedUserEthAddress: string) => {
+  checkModerator: async (loggedUser: string) => {
     try {
       const response = await fetchRequest({
         method: 'HEAD',
-        url: `${BASE_MODERATOR_URL}/${loggedUserEthAddress}`,
+        url: `${BASE_MODERATOR_URL}/${loggedUser}`,
       });
       return response;
     } catch (error) {
@@ -98,6 +96,9 @@ export default {
     }
   },
   getAllPending: async () => {
+    const sdk = getSDK();
+    const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+
     try {
       const response = await fetchRequest({
         method: 'POST',
@@ -106,7 +107,15 @@ export default {
 
       const modResponse = response.results.map(
         (
-          { contentType: type, contentID, reasons, reportedBy, reportedDate, reports }: any,
+          {
+            contentType: type,
+            contentID,
+            reasons,
+            reportedBy,
+            reportedByProfile,
+            reportedDate,
+            reports,
+          }: any,
           idx: number,
         ) => {
           // formatting data to match labels already in use
@@ -116,6 +125,13 @@ export default {
             entryId: contentID,
             reasons: reasons,
             reporter: reportedBy,
+            reporterProfile: {
+              ...reportedByProfile,
+              avatar:
+                reportedByProfile.avatar.length > 0
+                  ? `${ipfsGateway}/${reportedByProfile.avatar}`
+                  : null,
+            },
             count: reports - 1, // minus reporter, to get count of other users
             entryDate: reportedDate,
           };
@@ -127,6 +143,9 @@ export default {
     }
   },
   getAllModerated: async () => {
+    const sdk = getSDK();
+    const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+
     try {
       // fetch delisted items
       const delistedItems = await fetchRequest({
@@ -151,11 +170,13 @@ export default {
           {
             contentType: type,
             contentID,
-            date,
+            moderatedDate,
             explanation,
             moderator,
+            moderatorProfile,
             reasons,
             reportedBy,
+            reportedByProfile,
             reportedDate,
             reports,
             delisted,
@@ -170,10 +191,24 @@ export default {
             reasons: reasons,
             description: explanation,
             reporter: reportedBy,
+            reporterProfile: {
+              ...reportedByProfile,
+              avatar:
+                reportedByProfile.avatar.length > 0
+                  ? `${ipfsGateway}/${reportedByProfile.avatar}`
+                  : null,
+            },
             count: reports - 1,
             moderator: moderator,
+            moderatorProfile: {
+              ...moderatorProfile,
+              avatar:
+                moderatorProfile.avatar.length > 0
+                  ? `${ipfsGateway}/${moderatorProfile.avatar}`
+                  : null,
+            },
             entryDate: reportedDate,
-            evaluationDate: date,
+            evaluationDate: moderatedDate,
             delisted: delisted,
           };
         },
@@ -194,6 +229,7 @@ export default {
     setRequesting,
   }) => {
     setRequesting(true);
+    const sdk = getSDK();
 
     sdk.api.auth.signData(dataToSign).subscribe(async (resp: any) => {
       const data = {

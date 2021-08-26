@@ -75,8 +75,8 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
     }
   };
 
-  const handleEntryFlag = (entryId: string, contentType: string) => () => {
-    props.navigateToModal({ name: 'report-modal', entryId, contentType });
+  const handleEntryFlag = (entryId: string, contentType: string, user: string) => () => {
+    props.navigateToModal({ name: 'report-modal', entryId, contentType, user });
   };
 
   const showUpdateProfileModal = () => {
@@ -97,6 +97,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
         onClickFollowers={() => null}
         onClickFollowing={() => null}
         onClickPosts={() => null}
+        onClickInterests={() => null}
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
         handleShareClick={showShareModal}
@@ -115,6 +116,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
         followingLabel={t('Following')}
         followersLabel={t('Followers')}
         postsLabel={t('Posts')}
+        interestsLabel={t('Interests')}
         shareProfileLabel={t('Share')}
         editProfileLabel={t('Edit profile')}
         updateProfileLabel={t('Update profile')}
@@ -123,10 +125,12 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
         saveChangesLabel={t('Save changes')}
         canUserEdit={loggedUserEthAddress === profileState.ethAddress}
         flaggable={loggedUserEthAddress !== profileState.ethAddress}
-        flagAsLabel={t('Report account')}
+        flagAsLabel={t('Report')}
+        blockLabel={t('Block')}
         onEntryFlag={handleEntryFlag(
-          profileState.ethAddress ? profileState.ethAddress : '',
+          profileState.pubKey ? profileState.pubKey : '',
           'account',
+          profileState.name,
         )}
         onUpdateClick={showUpdateProfileModal}
         onENSChangeClick={showEnsModal}

@@ -1,12 +1,12 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
-import { useProfile } from '@akashaproject/ui-awf-hooks';
-import getSDK from '@akashaproject/awf-sdk';
-import { IContentProps } from '../../interfaces';
+import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { useComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
+import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
 import Content from './content';
-
-import { mapEntry } from '../../services/posting-service';
+import { IContentProps } from '../../interfaces';
 
 const { Box, MainAreaCardBox } = DS;
 
@@ -27,11 +27,16 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     entryId,
     reasons,
     reporter,
+    reporterAvatar,
+    reporterENSName,
+    reporterName,
     otherReporters,
     reportedOnLabel,
     reportedDateTime,
     moderatorDecision,
     moderator,
+    moderatorName,
+    moderatorENSName,
     moderatedByLabel,
     moderatedOnLabel,
     evaluationDateTime,
@@ -39,71 +44,26 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     reviewDecisionLabel,
   } = props;
 
-  const sdk = getSDK();
+  const profileDataReq = useGetProfile(entryId);
+  const profile = profileDataReq.data;
 
-  const [entryData, setEntryData] = React.useState<any>(null);
+  const postReq = usePost(entryId, !!entryId);
+  const commentReq = useComment(entryId);
 
-  const [profile, profileActions] = useProfile({
-    onError: error => {
-      props.logger.error('[content-card.tsx]: useProfile err %j', error.error || '');
-    },
-  });
-
-  const [reporterProfile, reporterProfileActions] = useProfile({
-    onError: error => {
-      props.logger.error('[content-card.tsx]: useProfile err %j', error.error || '');
-    },
-  });
-
-  const [moderatorProfile, moderatorProfileActions] = useProfile({
-    onError: error => {
-      props.logger.error('[content-card.tsx]: useProfile err %j', error.error || '');
-    },
-  });
-
-  React.useEffect(() => {
+  const entryData = React.useMemo(() => {
     if (contentType === 'post') {
-      const entryCall = sdk.api.entries.getEntry(entryId);
-      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
-
-      entryCall.subscribe((resp: any) => {
-        const entry = resp.data?.getPost;
-        if (entry) {
-          const mappedEntry = mapEntry(entry, ipfsGateway);
-          setEntryData(mappedEntry);
-        }
-      });
+      if (postReq.data) {
+        return mapEntry(postReq.data);
+      }
+      return undefined;
     }
-
-    // adding a list with comment as fallback for older contents
     if (['reply', 'comment'].includes(contentType)) {
-      const entryCall = sdk.api.comments.getComment(entryId);
-      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
-
-      entryCall.subscribe((resp: any) => {
-        const entry = resp.data?.getComment;
-        if (entry) {
-          const mappedEntry = mapEntry(entry, ipfsGateway);
-          setEntryData(mappedEntry);
-        }
-      });
+      if (commentReq.data) {
+        return mapEntry(commentReq.data);
+      }
+      return undefined;
     }
-    if (contentType === 'account') {
-      profileActions.getProfileData({ ethAddress: entryId });
-    }
-  }, [entryId]);
-
-  React.useEffect(() => {
-    if (reporter) {
-      reporterProfileActions.getProfileData({ ethAddress: reporter });
-    }
-  }, [reporter]);
-
-  React.useEffect(() => {
-    if (moderator) {
-      moderatorProfileActions.getProfileData({ ethAddress: moderator });
-    }
-  }, [moderator]);
+  }, [postReq.data, commentReq.data]);
 
   return (
     <Box margin={{ bottom: '1rem' }}>
@@ -125,16 +85,16 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
           entryId={entryId}
           reasons={reasons}
           reporter={reporter}
-          reporterAvatar={reporterProfile.avatar}
-          reporterName={reporterProfile.name}
-          reporterENSName={reporterProfile.userName}
+          reporterAvatar={reporterAvatar}
+          reporterName={reporterName}
+          reporterENSName={reporterENSName}
           otherReporters={otherReporters}
           reportedOnLabel={reportedOnLabel}
           reportedDateTime={reportedDateTime}
           moderatorDecision={moderatorDecision}
           moderator={moderator}
-          moderatorName={moderatorProfile.name}
-          moderatorENSName={moderatorProfile.userName}
+          moderatorName={moderatorName}
+          moderatorENSName={moderatorENSName}
           moderatedByLabel={moderatedByLabel}
           moderatedOnLabel={moderatedOnLabel}
           evaluationDateTime={evaluationDateTime}

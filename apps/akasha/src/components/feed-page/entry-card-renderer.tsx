@@ -8,8 +8,7 @@ import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loa
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 
-const { ErrorInfoCard, ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading, ExtensionPoint } =
-  DS;
+const { ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading, ExtensionPoint } = DS;
 
 export interface IEntryCardRendererProps {
   logger: any;
@@ -33,10 +32,10 @@ export interface IEntryCardRendererProps {
   contentClickable?: boolean;
   disableActions?: boolean;
   hidePublishTime?: boolean;
+  headerTextLabel?: string;
+  footerTextLabel?: string;
   moderatedContentLabel?: string;
-  awaitingModerationLabel?: string;
   ctaLabel?: string;
-  handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
   onEntryRemove?: (entryId: string) => void;
   removeEntryLabel?: string;
   removedByMeLabel?: string;
@@ -54,13 +53,18 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     logger,
     contentClickable,
     hidePublishTime,
+    headerTextLabel,
+    footerTextLabel,
     moderatedContentLabel,
-    awaitingModerationLabel,
     ctaLabel,
-    handleFlipCard,
     disableActions,
     sharePostUrl,
   } = props;
+
+  const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
+
+  const { t } = useTranslation();
+  const postReq = usePost(itemId, !!itemId);
 
   const isBookmarked = React.useMemo(() => {
     if (
@@ -75,8 +79,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     return false;
   }, [bookmarkState.data]);
 
-  const { t } = useTranslation();
-  const postReq = usePost(itemId, !!itemId);
   const itemData = React.useMemo(() => {
     if (postReq.data) {
       return mapEntry(postReq.data);
@@ -84,11 +86,26 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     return undefined;
   }, [postReq.data]);
 
+  const isReported = React.useMemo(() => {
+    if (showAnyway) {
+      return false;
+    }
+    return postReq.status === 'success' && itemData?.reported;
+  }, [itemData, showAnyway, postReq.status]);
+
   const [followedProfiles, followActions] = useFollow({
     onError: (errorInfo: IAkashaError) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);
     },
   });
+
+  const isFollowing = React.useMemo(() => {
+    if (itemData?.author.ethAddress) {
+      return followedProfiles.includes(itemData.author.ethAddress);
+    }
+    // defaults to false
+    return false;
+  }, [followedProfiles, itemData]);
 
   // React.useEffect(() => {
   //   if (ethAddress && itemData.author.ethAddress) {
@@ -97,34 +114,21 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   // }, [ethAddress, itemData.author.ethAddress]);
 
   const handleFollow = () => {
-    if (itemData.author.ethAddress) {
+    if (itemData?.author.ethAddress) {
       followActions.follow(itemData.author.ethAddress);
     }
   };
 
   const handleUnfollow = () => {
-    if (itemData.author.ethAddress) {
+    if (itemData?.author.ethAddress) {
       followActions.unfollow(itemData.author.ethAddress);
     }
   };
 
-  const isFollowing = React.useMemo(() => {
-    if (itemData.author.ethAddress) {
-      return followedProfiles.includes(itemData.author.ethAddress);
-    }
-    // defaults to false
-    return false;
-  }, [followedProfiles, itemData]);
+  const handleFlipCard = () => {
+    setShowAnyway(true);
+  };
 
-  if (itemData.reported) {
-    return (
-      <EntryCardHidden
-        awaitingModerationLabel={awaitingModerationLabel}
-        ctaLabel={ctaLabel}
-        handleFlipCard={handleFlipCard && handleFlipCard(itemData, false)}
-      />
-    );
-  }
   const onEditButtonMount = (name: string) => {
     props.uiEvents.next({
       event: EventTypes.ExtensionPointMount,
@@ -135,88 +139,99 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
       },
     });
   };
+
   const onEditButtonUnmount = () => {
     /* todo */
   };
+
   return (
-    <ErrorInfoCard errors={{}}>
-      {(errorMessages: any, hasCriticalErrors: boolean) => (
+    <>
+      {postReq.status === 'loading' && <EntryCardLoading />}
+      {postReq.status === 'error' && (
+        <ErrorLoader
+          type="script-error"
+          title={t('There was an error loading the entry')}
+          details={t('We cannot show this entry right now')}
+          devDetails={postReq.error}
+        />
+      )}
+      {postReq.status === 'success' && (
         <>
-          {errorMessages && (
-            <ErrorLoader
-              type="script-error"
-              title={t('There was an error loading the entry')}
-              details={t('We cannot show this entry right now')}
-              devDetails={errorMessages}
+          {itemData.moderated && itemData.delisted && (
+            <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
+          )}
+          {!itemData.moderated && isReported && (
+            <EntryCardHidden
+              reason={itemData.reason}
+              headerTextLabel={headerTextLabel}
+              footerTextLabel={footerTextLabel}
+              ctaLabel={ctaLabel}
+              handleFlipCard={handleFlipCard}
             />
           )}
-          {!hasCriticalErrors && (
-            <>
-              {(!itemData || !itemData.author?.ethAddress) && <EntryCardLoading />}
-              {itemData && itemData.author.ethAddress && (
-                <EntryCard
-                  isRemoved={
-                    itemData.content.length === 1 && itemData.content[0].property === 'removed'
-                  }
-                  isBookmarked={isBookmarked}
-                  entryData={itemData}
-                  sharePostLabel={t('Share Post')}
-                  shareTextLabel={t('Share this post with your friends')}
-                  sharePostUrl={sharePostUrl}
-                  onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                    props.onAvatarClick(ev, itemData.author.pubKey)
-                  }
-                  onEntryBookmark={props.onBookmark}
-                  repliesLabel={t('Replies')}
-                  repostsLabel={t('Reposts')}
-                  repostLabel={t('Repost')}
-                  repostWithCommentLabel={t('Repost with comment')}
-                  shareLabel={t('Share')}
-                  copyLinkLabel={t('Copy Link')}
-                  flagAsLabel={t('Report Post')}
-                  loggedProfileEthAddress={ethAddress}
-                  locale={locale || 'en'}
-                  style={{ height: 'auto', ...style }}
-                  bookmarkLabel={t('Save')}
-                  bookmarkedLabel={t('Saved')}
-                  profileAnchorLink={'/profile'}
-                  repliesAnchorLink={routes[POST]}
-                  onRepost={props.onRepost}
-                  onEntryFlag={props.onFlag && props.onFlag(itemData.entryId, 'post')}
-                  handleFollowAuthor={handleFollow}
-                  handleUnfollowAuthor={handleUnfollow}
-                  isFollowingAuthor={isFollowing}
-                  onContentClick={props.onNavigate}
-                  onMentionClick={props.onMentionClick}
-                  onTagClick={props.onTagClick}
-                  singleSpaNavigate={props.singleSpaNavigate}
-                  contentClickable={contentClickable}
-                  hidePublishTime={hidePublishTime}
-                  moderatedContentLabel={moderatedContentLabel}
-                  awaitingModerationLabel={awaitingModerationLabel}
-                  ctaLabel={ctaLabel}
-                  handleFlipCard={handleFlipCard}
-                  disableActions={disableActions}
-                  onEntryRemove={props.onEntryRemove}
-                  removeEntryLabel={props.removeEntryLabel}
-                  removedByMeLabel={props.removedByMeLabel}
-                  removedByAuthorLabel={props.removedByAuthorLabel}
-                  headerMenuExt={
-                    ethAddress === itemData.author.ethAddress && (
-                      <ExtensionPoint
-                        name={`entry-card-edit-button_${itemId}`}
-                        onMount={onEditButtonMount}
-                        onUnmount={onEditButtonUnmount}
-                      />
-                    )
-                  }
-                />
-              )}
-            </>
+          {!itemData.moderated && !isReported && (
+            <EntryCard
+              isRemoved={
+                itemData.content.length === 1 && itemData.content[0].property === 'removed'
+              }
+              isBookmarked={isBookmarked}
+              entryData={itemData}
+              sharePostLabel={t('Share Post')}
+              shareTextLabel={t('Share this post with your friends')}
+              sharePostUrl={sharePostUrl}
+              onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
+                props.onAvatarClick(ev, itemData.author.pubKey)
+              }
+              onEntryBookmark={props.onBookmark}
+              repliesLabel={t('Replies')}
+              repostsLabel={t('Reposts')}
+              repostLabel={t('Repost')}
+              repostWithCommentLabel={t('Repost with comment')}
+              shareLabel={t('Share')}
+              copyLinkLabel={t('Copy Link')}
+              flagAsLabel={t('Report Post')}
+              loggedProfileEthAddress={ethAddress}
+              locale={locale || 'en'}
+              style={{ height: 'auto', ...style }}
+              bookmarkLabel={t('Save')}
+              bookmarkedLabel={t('Saved')}
+              profileAnchorLink={'/profile'}
+              repliesAnchorLink={routes[POST]}
+              onRepost={props.onRepost}
+              onEntryFlag={props.onFlag && props.onFlag(itemData.entryId, 'post')}
+              handleFollowAuthor={handleFollow}
+              handleUnfollowAuthor={handleUnfollow}
+              isFollowingAuthor={isFollowing}
+              onContentClick={props.onNavigate}
+              onMentionClick={props.onMentionClick}
+              onTagClick={props.onTagClick}
+              singleSpaNavigate={props.singleSpaNavigate}
+              contentClickable={contentClickable}
+              hidePublishTime={hidePublishTime}
+              headerTextLabel={headerTextLabel}
+              footerTextLabel={footerTextLabel}
+              moderatedContentLabel={moderatedContentLabel}
+              ctaLabel={ctaLabel}
+              handleFlipCard={handleFlipCard}
+              disableActions={disableActions}
+              onEntryRemove={props.onEntryRemove}
+              removeEntryLabel={props.removeEntryLabel}
+              removedByMeLabel={props.removedByMeLabel}
+              removedByAuthorLabel={props.removedByAuthorLabel}
+              headerMenuExt={
+                ethAddress === itemData.author.ethAddress && (
+                  <ExtensionPoint
+                    name={`entry-card-edit-button_${itemId}`}
+                    onMount={onEditButtonMount}
+                    onUnmount={onEditButtonUnmount}
+                  />
+                )
+              }
+            />
           )}
         </>
       )}
-    </ErrorInfoCard>
+    </>
   );
 };
 

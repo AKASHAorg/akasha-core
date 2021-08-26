@@ -41,12 +41,14 @@ export interface IProfileWidgetCard {
   onClickFollowers?: React.EventHandler<React.SyntheticEvent>;
   onClickFollowing?: React.EventHandler<React.SyntheticEvent>;
   onClickPosts?: React.EventHandler<React.SyntheticEvent>;
+  onClickInterests?: React.EventHandler<React.SyntheticEvent>;
   handleUnfollow?: React.EventHandler<React.SyntheticEvent>;
   handleFollow?: React.EventHandler<React.SyntheticEvent>;
   isFollowing?: boolean;
   profileData: ProfileDataType;
   descriptionLabel: string;
   postsLabel: string;
+  interestsLabel?: string;
   followingLabel: string;
   followersLabel: string;
   followLabel?: string;

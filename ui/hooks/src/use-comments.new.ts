@@ -5,6 +5,7 @@ import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/com
 import { buildPublishObject } from './utils/entry-utils';
 import { Comment_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 import { logError } from './utils/error-handler';
+import moderationRequest from './moderation-request';
 
 export const COMMENT_KEY = 'Comment';
 export const COMMENTS_KEY = 'Comments';
@@ -43,7 +44,6 @@ const getComments = async (
     return {
       ...res.data.getComments,
       results: res.data.getComments.results.map(comment => {
-        queryClient.setQueryData([COMMENT_KEY, comment._id], () => comment);
         return comment._id;
       }),
     };
@@ -68,9 +68,17 @@ export function useInfiniteComments(limit: number, postID: string, offset?: stri
 
 const getComment = async (commentID): Promise<Comment_Response & { isPublishing?: boolean }> => {
   const sdk = getSDK();
+
+  const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+
   try {
+    // check entry's moderation status
+    const modStatus = await moderationRequest.checkStatus(true, {
+      user: user.data ? user.data.pubKey : '',
+      contentIds: [commentID],
+    });
     const res = await lastValueFrom(sdk.api.comments.getComment(commentID));
-    return res.data.getComment;
+    return { ...res.data.getComment, ...modStatus[0] };
   } catch (error) {
     logError('useComments.getComments', error);
   }

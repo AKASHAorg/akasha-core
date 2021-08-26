@@ -12,7 +12,9 @@ describe('<EntryCardHidden /> Component', () => {
       componentWrapper = customRender(
         wrapWithTheme(
           <EntryCardHidden
-            awaitingModerationLabel={'You have reported this content. It is awaiting moderation.'}
+            headerTextLabel={'You reported this post for the following reason'}
+            footerTextLabel={'It is awaiting moderation.'}
+            reason={'Spam and malicious links'}
             ctaLabel={'See it anyway'}
           />,
         ),

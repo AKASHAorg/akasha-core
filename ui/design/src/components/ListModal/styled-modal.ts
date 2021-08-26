@@ -135,7 +135,7 @@ const ModalButton = styled(Button)<IOptionalButtonProps>`
   height: auto;
   border-width: 1px;
   font-size: ${props => (props.isMobile ? '0.9rem' : '0.8rem')};
-  padding: 0.3rem 0.7rem;
+  padding: ${props => (props.isMobile ? '0.75rem' : '0.3rem 0.7rem')};
   ${props => {
     if (props.isMobile) {
       return css`

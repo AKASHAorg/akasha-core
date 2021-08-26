@@ -5,6 +5,7 @@ import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { Post_Response } from '../../../sdk/typings/lib/interfaces/responses';
+import moderationRequest from './moderation-request';
 
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
@@ -42,7 +43,6 @@ const getPosts = async (queryClient: QueryClient, limit: number, offset?: string
     return {
       ...res.data.posts,
       results: res.data.posts.results.map(post => {
-        queryClient.setQueryData([ENTRY_KEY, post._id], post);
         return post._id;
       }),
     };
@@ -85,7 +85,6 @@ const getPostsByTag = async (
     return {
       ...res.data.getPostsByTag,
       results: res.data.getPostsByTag.results.map(post => {
-        queryClient.setQueryData([ENTRY_KEY, post._id], post);
         return post._id;
       }),
     };
@@ -126,7 +125,6 @@ const getPostsByAuthor = async (
     return {
       ...res.data.getPostsByAuthor,
       results: res.data.getPostsByAuthor.results.map(post => {
-        queryClient.setQueryData([ENTRY_KEY, post._id], post);
         return post._id;
       }),
     };
@@ -156,10 +154,19 @@ export function useInfinitePostsByAuthor(
 
 const getPost = async postID => {
   const sdk = getSDK();
+
+  const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+
   try {
+    // check entry's moderation status
+    const modStatus = await moderationRequest.checkStatus(true, {
+      user: user.data ? user.data.pubKey : '',
+      contentIds: [postID],
+    });
     const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
     // remap the object props here
-    return res.data.getPost;
+
+    return { ...res.data.getPost, ...modStatus[0] };
   } catch (error) {
     logError('usePosts.getPost', error);
   }

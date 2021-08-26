@@ -25,7 +25,7 @@ describe('<SwitchCard /> Component', () => {
             hasMobileDesign={true}
             onIconClick={handleIconClick}
             onTabClick={handleTabClick}
-            loggedEthAddress="0x000"
+            loggedUser="0x000"
           />,
         ),
         {},

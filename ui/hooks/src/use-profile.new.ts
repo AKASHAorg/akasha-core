@@ -1,6 +1,8 @@
 import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 import getSDK from '@akashaproject/awf-sdk';
 import { lastValueFrom } from 'rxjs';
+
+import moderationRequest from './moderation-request';
 import { getMediaUrl } from './utils/media-utils';
 import { logError } from './utils/error-handler';
 import {
@@ -21,11 +23,18 @@ export const ADD_PROFILE_PROVIDER_KEY = 'ADD_PROFILE_PROVIDER';
 export const UPDATE_PROFILE_STATUS = 'UPDATE_PROFILE_STATUS';
 
 const getProfileData = async (payload: {
-  pubKey?: string;
-  ethAddress?: string;
+  pubKey: string;
+  loggedUser?: string;
 }): Promise<IProfileData> => {
   const sdk = getSDK();
+
   try {
+    // check entry's moderation status
+    const modStatus = await moderationRequest.checkStatus(true, {
+      user: payload.loggedUser,
+      contentIds: [payload.pubKey],
+    });
+
     const res = await lastValueFrom(sdk.api.profile.getProfile(payload));
     const { avatar, coverImage, ...other } = res.data.getProfile || res.data.resolveProfile;
     const images: { avatar: string; coverImage: string } = {
@@ -38,16 +47,16 @@ const getProfileData = async (payload: {
     if (coverImage) {
       images.coverImage = getMediaUrl(coverImage);
     }
-    return { ...images, ...other };
+
+    return { ...images, ...other, ...modStatus[0] };
   } catch (error) {
     logError('useProfile.getProfileData', error);
   }
 };
 
-export function useGetProfile(pubKey?: string, ethAddress?: string) {
-  const secondKey = pubKey || ethAddress;
-  return useQuery([PROFILE_KEY, secondKey], () => getProfileData({ pubKey, ethAddress }), {
-    enabled: !!(pubKey || ethAddress),
+export function useGetProfile(pubKey: string, loggedUser?: string, enabler = true) {
+  return useQuery([PROFILE_KEY, pubKey], () => getProfileData({ pubKey, loggedUser }), {
+    enabled: !!(pubKey && enabler),
     keepPreviousData: true,
   });
 }

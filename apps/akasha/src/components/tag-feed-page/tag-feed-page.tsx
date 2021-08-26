@@ -99,13 +99,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
-  const handleFlipCard = (_entry: any, _isQuote: boolean) => () => {
-    // const modifiedEntry = isQuote
-    //   ? { ...entry, quote: { ...entry.quote, reported: false } }
-    //   : { ...entry, reported: false };
-    // postsActions.updatePostsState(modifiedEntry);
-  };
-
   const handleTagSubscribe = (tagName: string) => {
     if (!loginState.ethAddress) {
       showLoginModal();
@@ -142,7 +135,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         loggedProfile={loggedProfileData}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
-        handleFlipCard={handleFlipCard}
         uiEvents={props.uiEvents}
         itemSpacing={8}
         i18n={i18n}

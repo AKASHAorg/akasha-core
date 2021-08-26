@@ -32,7 +32,6 @@ export interface IFeedWidgetProps {
   loggedProfile?: any;
   contentClickable?: boolean;
   onEntryFlag: (entryId: string, contentType: string) => () => void;
-  handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
   onEntryRemove?: (entryId: string) => void;
   removeEntryLabel?: string;
   removedByMeLabel?: string;
