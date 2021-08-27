@@ -24,7 +24,7 @@ const ProfileCompletedModal: React.FC<IProfileCompletedModalProps> = props => {
   } = props;
 
   return (
-    <ModalWrapper>
+    <ModalWrapper isTransparent={true}>
       <ContentWrapper width={isMobileOnly ? '95%' : '22rem'}>
         <Box width="100%" margin={{ bottom: 'small' }} alignSelf="center">
           <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />

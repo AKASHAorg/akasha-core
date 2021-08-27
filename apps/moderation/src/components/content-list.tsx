@@ -13,7 +13,7 @@ const { Box, Text, SwitchCard } = DS;
 
 interface IContentListProps {
   slotId: string;
-  ethAddress: string | null;
+  user: string | null;
   logger: any;
   singleSpa: any;
 }
@@ -28,13 +28,23 @@ interface IBaseItem {
   entryDate: string;
 }
 
+interface IProfile {
+  avatar: string;
+  ethAddress: string;
+  pubKey: string;
+  name: string;
+  userName: string;
+}
+
 interface IPendingItem extends IBaseItem {
   reporter: string;
+  reporterProfile: IProfile;
 }
 
 interface IModeratedItem extends IPendingItem {
   delisted: boolean;
   moderator: string;
+  moderatorProfile: IProfile;
   evaluationDate: string;
 }
 
@@ -45,7 +55,7 @@ export interface ICount {
 }
 
 const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
-  const { ethAddress, logger } = props;
+  const { user, logger } = props;
 
   const [pendingItems, setPendingItems] = React.useState<IPendingItem[]>([]);
   const [moderatedItems, setModeratedItems] = React.useState<IModeratedItem[]>([]);
@@ -61,14 +71,14 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   React.useEffect(() => {
-    if (!ethAddress) {
+    if (!user) {
       // if not authenticated, prompt to authenticate
       props.singleSpa.navigateToUrl('/moderation-app/unauthenticated');
     } else {
       // if authenticated, check authorisation status
-      getModeratorStatus(ethAddress);
+      getModeratorStatus(user);
     }
-  }, [ethAddress]);
+  }, [user]);
 
   React.useEffect(() => {
     // if authorised,
@@ -94,10 +104,10 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
     }
   }, [location]);
 
-  const getModeratorStatus = async (loggedEthAddress: string) => {
+  const getModeratorStatus = async (loggedUser: string) => {
     setRequesting(true);
     try {
-      const response = await moderationRequest.checkModerator(loggedEthAddress);
+      const response = await moderationRequest.checkModerator(loggedUser);
       if (response === 200) {
         setIsAuthorised(true);
       }
@@ -198,7 +208,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
           buttonValues={buttonValues}
           onTabClick={onTabClick}
           buttonsWrapperWidth={'40%'}
-          loggedEthAddress={ethAddress}
+          loggedUser={user}
         />
       )}
       {requesting && <Text textAlign="center">Fetching items. Please wait...</Text>}
@@ -221,6 +231,9 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                 entryId={pendingItem.entryId}
                 reasons={pendingItem.reasons.map((el: string) => t(el))}
                 reporter={pendingItem.reporter}
+                reporterAvatar={pendingItem.reporterProfile.avatar}
+                reporterName={pendingItem.reporterProfile.name}
+                reporterENSName={pendingItem.reporterProfile.userName}
                 andLabel={t('and')}
                 otherReporters={
                   pendingItem.count
@@ -259,6 +272,9 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                   entryId={moderatedItem.entryId}
                   reasons={moderatedItem.reasons.map(el => t(el))}
                   reporter={moderatedItem.reporter}
+                  reporterAvatar={moderatedItem.reporterProfile.avatar}
+                  reporterName={moderatedItem.reporterProfile.name}
+                  reporterENSName={moderatedItem.reporterProfile.userName}
                   andLabel={t('and')}
                   otherReporters={
                     moderatedItem.count
@@ -271,6 +287,8 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                   reportedDateTime={moderatedItem.entryDate}
                   moderatorDecision={moderatedItem.description}
                   moderator={moderatedItem.moderator}
+                  moderatorName={moderatedItem.moderatorProfile.name}
+                  moderatorENSName={moderatedItem.moderatorProfile.userName}
                   moderatedByLabel={t('Moderated by')}
                   moderatedOnLabel={t('On')}
                   evaluationDateTime={moderatedItem.evaluationDate}

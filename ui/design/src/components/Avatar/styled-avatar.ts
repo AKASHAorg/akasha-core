@@ -18,7 +18,7 @@ export interface AvatarProps {
   isClickable: boolean;
   margin?: MarginInterface;
   backgroundColor?: string;
-  border?: 'sm' | 'md' | 'lg';
+  border?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 }
 
 const StyledAvatar = styled.div<AvatarProps>`
@@ -46,6 +46,16 @@ const StyledAvatar = styled.div<AvatarProps>`
       case 'lg':
         return css`
           border: 4px solid ${props.theme.colors.white};
+        `;
+
+      case 'xl':
+        return css`
+          border: 8px solid ${props.theme.colors.white};
+        `;
+
+      case 'xxl':
+        return css`
+          border: 16px solid ${props.theme.colors.white};
         `;
 
       default:

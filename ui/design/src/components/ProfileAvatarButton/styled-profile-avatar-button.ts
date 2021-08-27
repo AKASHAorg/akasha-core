@@ -11,7 +11,6 @@ const StyledText = styled(Text)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-weight: 600;
   color: ${props => props.theme.colors.primaryText};
 `;
 

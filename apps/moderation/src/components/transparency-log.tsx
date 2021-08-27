@@ -18,7 +18,7 @@ const {
 } = DS;
 
 export interface ITransparencyLogProps {
-  ethAddress: string | null;
+  user: string | null;
   logger: any;
   isMobile: boolean;
   navigateToUrl: (url: string) => void;
@@ -45,7 +45,7 @@ const BASE_PROFILE_URL = '/profile';
 const DEFAULT_LIMIT = 10;
 
 const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
-  const { ethAddress, logger, navigateToUrl, isMobile } = props;
+  const { user, logger, navigateToUrl, isMobile } = props;
 
   const [logItems, setLogItems] = React.useState<ILogItem[]>([]);
   const [nextIndex, setNextIndex] = React.useState<string | null>(null);
@@ -170,6 +170,11 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         reportedTimesLabel={t(
           `Reported ${selected.reports > 1 ? `${selected.reports} times` : 'once'}`,
         )}
+        viewItemLink={`${window.location.origin}${
+          selected.contentType === 'account'
+            ? `${BASE_PROFILE_URL}/${selected.contentID}`
+            : `${BASE_SOCIAL_URL}/${selected.contentType}/${selected.contentID}`
+        }`}
         viewItemLabel={t(`View ${selected.contentType}`)}
         reasonsLabel={t(`${selected.reasons.length > 1 ? 'reasons' : 'reason'}`)}
         reasons={selected.reasons}
@@ -216,7 +221,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         buttonValues={buttonValues}
         onTabClick={onTabClick}
         buttonsWrapperWidth={'40%'}
-        loggedEthAddress={ethAddress}
+        loggedUser={user}
         hasMobileDesign={true} // adjusts to new design on mobile screens
       />
       <Box direction="row" margin={{ top: '-0.5rem' }}>

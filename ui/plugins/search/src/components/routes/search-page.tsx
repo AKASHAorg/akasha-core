@@ -159,13 +159,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     }
   };
 
-  const handleFlipCard = (_entry: any, _isQuote: boolean) => () => {
-    // modify the entry
-    // const modifiedEntry = isQuote
-    //   ? { ...entry, quote: { ...entry.quote, reported: false } }
-    //   : { ...entry, reported: false };
-    // // update state
-    // searchActions.updateSearchState(modifiedEntry);
+  const handleFlipCard = () => {
+    // @TODO
   };
 
   const emptySearchState =
@@ -205,7 +200,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         hasMobileDesign={true}
         buttonLabels={buttonLabels}
         buttonValues={buttonValues}
-        loggedEthAddress={loginState.ethAddress}
+        loggedUser={loginState.pubKey}
       />
 
       {searchReq.isFetching && (
@@ -275,13 +270,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     isDelisted={true}
                   />
                 ) : entryData.reported ? (
-                  <EntryCardHidden
-                    awaitingModerationLabel={t(
-                      'You have reported this content. It is awaiting moderation.',
-                    )}
-                    ctaLabel={t('See it anyway')}
-                    handleFlipCard={handleFlipCard && handleFlipCard(entryData, false)}
-                  />
+                  <EntryCardHidden ctaLabel={t('See it anyway')} handleFlipCard={handleFlipCard} />
                 ) : (
                   <EntryCard
                     isRemoved={

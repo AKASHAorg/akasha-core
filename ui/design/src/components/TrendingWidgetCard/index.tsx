@@ -109,7 +109,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
               ))}
             {tags.length !== 0 &&
               tags.slice(0, 4).map((tag, index) => (
-                <Box key={index} direction="row" justify="between" align="center">
+                <Box key={index} direction="row" justify="between">
                   <StyledAnchor
                     onClick={e => {
                       e.preventDefault();
@@ -118,14 +118,16 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                     weight="normal"
                     href={`${tagAnchorLink}/${tag.name}`}
                     label={
-                      <SubtitleTextIcon
-                        onClick={() => onClickTag(tag.name)}
-                        label={`#${tag.name}`}
-                        subtitle={`Used in ${tag.totalPosts} posts`}
-                        labelSize="large"
-                        gap="xxsmall"
-                        maxWidth="10rem"
-                      />
+                      <Box width="11rem" pad="none" align="start">
+                        <SubtitleTextIcon
+                          onClick={() => onClickTag(tag.name)}
+                          label={`#${tag.name}`}
+                          subtitle={`Used in ${tag.totalPosts} posts`}
+                          labelSize="large"
+                          gap="xxsmall"
+                          maxWidth="10rem"
+                        />
+                      </Box>
                     }
                   />
                   <Box width="7rem">

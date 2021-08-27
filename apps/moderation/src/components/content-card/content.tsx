@@ -47,7 +47,7 @@ const Content: React.FC<IContentProps> = props => {
         }${props.contentType.slice(1)} ${props.reportedLabel}  ${props.forLabel}`}</Text>
 
         {props.reasons.map((reason, idx) => (
-          <>
+          <React.Fragment key={idx}>
             {/* show 'and' at the appropriate position, if more than one reason */}
             {props.reasons.length > 1 && idx === props.reasons.length - 1 && (
               <Text margin={{ left: '0.2rem', bottom: '0.2rem' }} style={textStyle}>
@@ -55,7 +55,6 @@ const Content: React.FC<IContentProps> = props => {
               </Text>
             )}
             <StyledBox
-              key={idx}
               margin={{ left: '0.2rem', bottom: '0.2rem' }}
               pad={{ horizontal: '0.2rem' }}
               round={'0.125rem'}
@@ -64,7 +63,7 @@ const Content: React.FC<IContentProps> = props => {
                 {reason}
               </Text>
             </StyledBox>
-          </>
+          </React.Fragment>
         ))}
       </Box>
 

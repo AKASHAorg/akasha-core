@@ -7,6 +7,7 @@ import { IReportModalProps } from './report-modal';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 import Icon from '../Icon';
+import ReportSuccessModal, { IReportSuccessModalProps } from './report-success-modal';
 
 export default {
   title: 'Modals/ReportModal',
@@ -23,6 +24,9 @@ export default {
     footerText1Label: { control: 'text' },
     footerLink1Label: { control: 'text' },
     footerUrl1: { control: 'text' },
+    footerText2Label: { control: 'text' },
+    footerLink2Label: { control: 'text' },
+    footerUrl2: { control: 'text' },
     cancelLabel: { control: 'text' },
     reportLabel: { control: 'text' },
     blockLabel: { control: 'text' },
@@ -49,6 +53,28 @@ const Template = (args: IReportModalProps) => {
         {modalOpen && (
           <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
             <ReportModal {...args} closeModal={() => setModalOpen(false)} />
+          </ToastProvider>
+        )}
+      </Box>
+    </Grommet>
+  );
+};
+
+const Template2 = (args: IReportSuccessModalProps) => {
+  const [modalOpen, setModalOpen] = React.useState(false);
+
+  return (
+    <Grommet theme={lightTheme}>
+      <Box fill={true} justify="center" align="center">
+        <Icon
+          type="eye"
+          onClick={() => {
+            setModalOpen(true);
+          }}
+        />
+        {modalOpen && (
+          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
+            <ReportSuccessModal {...args} closeModal={() => setModalOpen(false)} />
           </ToastProvider>
         )}
       </Box>
@@ -83,11 +109,23 @@ BaseReportModal.args = {
   descriptionPlaceholder: 'Please explain your reason(s)',
   footerText1Label: 'If you are unsure, you can refer to our',
   footerLink1Label: 'Code of Conduct',
-  footerUrl1: 'https://ethereum.world/code-of-conduct',
+  footerUrl1: 'https://akasha.ethereum.world/legal/code-of-conduct',
+  footerText2Label: 'and',
+  footerLink2Label: 'Terms of Service',
+  footerUrl2: 'https://akasha.ethereum.world/legal/terms-of-service',
   cancelLabel: 'Cancel',
   reportLabel: 'Report',
   blockLabel: 'Block User',
   closeLabel: 'Close',
   requesting: false,
   success: false,
+};
+
+export const BaseReportSuccessModal = Template2.bind({});
+
+BaseReportSuccessModal.args = {
+  successTitleLabel: 'Thank you for helping us keep Ethereum World safe! 🙌',
+  successMessageLabel: 'We will investigate this post and take appropriate action.',
+  blockLabel: 'Block User',
+  closeLabel: 'Close',
 };

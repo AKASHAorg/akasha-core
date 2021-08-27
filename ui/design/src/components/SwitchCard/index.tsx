@@ -10,7 +10,7 @@ import { BasicCardBox } from '../EntryCard/basic-card-box';
 
 export interface ISwitchCard {
   count?: number;
-  loggedEthAddress: string | null;
+  loggedUser: string | null;
   hasIcon?: boolean;
   countLabel?: string;
   activeButton: string;
@@ -52,7 +52,7 @@ const StickyBox = styled(Box)<{ userSignedIn: boolean }>`
 const SwitchCard: React.FC<ISwitchCard> = props => {
   const {
     count,
-    loggedEthAddress,
+    loggedUser,
     activeButton,
     hasIcon = false,
     countLabel,
@@ -119,7 +119,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
         </BasicCardBox>
       )}
       {isMobileOnly && hasMobileDesign && (
-        <StickyBox userSignedIn={!!loggedEthAddress} direction="row" margin={{ bottom: 'medium' }}>
+        <StickyBox userSignedIn={!!loggedUser} direction="row" margin={{ bottom: 'medium' }}>
           {buttonLabels.map((el, idx) => (
             <Box
               key={idx}

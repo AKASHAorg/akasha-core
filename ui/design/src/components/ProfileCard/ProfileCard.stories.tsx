@@ -5,6 +5,7 @@ import ProfileCard, { IProfileCardProps } from '.';
 import { ProfileSearchCard } from './profile-search-card';
 import { ProfileWidgetCard, IProfileWidgetCard } from './profile-widget-card';
 import { ProfileMiniCard, IProfileMiniCard } from './profile-mini-card';
+import { ProfileDelistedCard, IProfileDelistedCard } from './profile-delisted-card';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 import {
@@ -37,6 +38,14 @@ const Template = (args: IProfileCardProps) => (
   <Grommet theme={lightTheme}>
     <Box align="center" width="50%" pad={{ top: '40px' }}>
       <ProfileCard {...args} />
+    </Box>
+  </Grommet>
+);
+
+const TemplateDelisted = (args: IProfileDelistedCard) => (
+  <Grommet theme={lightTheme}>
+    <Box align="center" width="50%" pad={{ top: '40px' }}>
+      <ProfileDelistedCard {...args} />
     </Box>
   </Grommet>
 );
@@ -79,6 +88,13 @@ BaseProfileCard.args = {
   changeCoverImageLabel: changeCoverImageLabel,
   cancelLabel: cancelLabel,
   saveChangesLabel: saveChangesLabel,
+};
+
+export const BaseProfileDelistedCard = TemplateDelisted.bind({});
+
+BaseProfileDelistedCard.args = {
+  name: '(Suspended Account)',
+  userName: '@username',
 };
 
 export const BaseProfileSearchCard = TemplateSearch.bind({});

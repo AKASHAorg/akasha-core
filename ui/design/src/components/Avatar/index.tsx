@@ -14,7 +14,8 @@ export interface AvatarProps extends CommonInterface<HTMLDivElement> {
   alt?: string;
   margin?: MarginInterface;
   backgroundColor?: string;
-  border?: 'sm' | 'md' | 'lg';
+  border?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+  faded?: boolean;
   size?: AvatarSize;
   publicImgPath?: string;
 }
@@ -50,6 +51,7 @@ const Avatar: React.FC<AvatarProps> = props => {
     size = 'md',
     margin,
     border,
+    faded,
     active,
     ethAddress = '0x0000000000000000000000000000000',
     publicImgPath = '/images',
@@ -74,7 +76,7 @@ const Avatar: React.FC<AvatarProps> = props => {
       border={border}
     >
       <React.Suspense fallback={<></>}>
-        <AvatarImage image={avatarImage} />
+        <AvatarImage image={avatarImage} faded={faded} />
       </React.Suspense>
       {active && <ActiveOverlay />}
     </StyledAvatar>

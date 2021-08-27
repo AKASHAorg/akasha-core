@@ -24,6 +24,11 @@ export interface IProfileData {
   profileType?: string;
   users?: string | number;
   actions?: string;
+  contentId?: string;
+  reported?: boolean;
+  delisted?: boolean;
+  moderated?: boolean;
+  reason?: string;
 }
 
 export enum UsernameTypes {

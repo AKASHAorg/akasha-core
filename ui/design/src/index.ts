@@ -46,6 +46,7 @@ import NotificationsCard from './components/NotificationCard';
 import CustomizeFeedCard from './components/OnboardingCard';
 
 import ProfileCard from './components/ProfileCard';
+import { ProfileDelistedCard } from './components/ProfileCard/profile-delisted-card';
 import { ProfileSearchCard } from './components/ProfileCard/profile-search-card';
 import { ProfileWidgetCard } from './components/ProfileCard/profile-widget-card';
 import { ProfileMiniCard } from './components/ProfileCard/profile-mini-card';
@@ -190,6 +191,7 @@ const exported = {
   EnsFormCard,
   MiniInfoWidgetCard,
   ProfileCard,
+  ProfileDelistedCard,
   ProfileSearchCard,
   ProfileWidgetCard,
   ProfileMiniCard,

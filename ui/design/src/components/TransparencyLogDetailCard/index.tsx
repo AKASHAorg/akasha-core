@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Anchor, Box, Text } from 'grommet';
+import { Box, Text } from 'grommet';
 import styled from 'styled-components';
 import { isMobileOnly } from 'react-device-detect';
 
 import Icon from '../Icon';
 import Avatar from '../Avatar';
-import { MainAreaCardBox } from '../EntryCard/basic-card-box';
+import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import { ITransparencyLogMiniCardProps } from '../TransparencyLogMiniCard';
 
 import { StyledText } from '../ListModal/styled-modal';
@@ -16,6 +16,7 @@ export interface ITransparencyLogDetailCardProps
   moderator: string;
   reportedTimesLabel: string;
   viewItemLabel: string;
+  viewItemLink: string;
   reasonsLabel: string;
   reasons: string[];
   explanationLabel: string;
@@ -37,6 +38,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
     reasons,
     moderator,
     isDelisted,
+    viewItemLink,
     viewItemLabel,
     reasonsLabel,
     explanationLabel,
@@ -50,6 +52,11 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
     onClickViewItem,
     onClickAvatar,
   } = props;
+
+  const handleClickViewItem = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    return onClickViewItem();
+  };
 
   return (
     <MainAreaCardBox
@@ -96,12 +103,23 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
             {reportedTimesLabel}
           </Text>
           {!isDelisted && (
-            <Box direction="row" onClick={onClickViewItem}>
-              <Icon type="quote" accentColor={true} clickable={true} />
-              <Text color="accentText" margin={{ left: '0.25rem' }}>
-                {viewItemLabel}
-              </Text>
-            </Box>
+            <StyledAnchor
+              href={viewItemLink}
+              onClick={handleClickViewItem}
+              label={
+                <Box direction="row">
+                  <Icon type="quote" accentColor={true} clickable={true} />
+                  <Text
+                    color="accentText"
+                    size="medium"
+                    weight="normal"
+                    margin={{ left: '0.25rem' }}
+                  >
+                    {viewItemLabel}
+                  </Text>
+                </Box>
+              }
+            />
           )}
         </Box>
         <StyledText margin={{ top: 'small' }} weight="normal" color="secondaryText" size="small">
@@ -162,7 +180,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
           {content}
         </Text>
       </Box>
-      <Anchor
+      <StyledAnchor
         href={contactModeratorsLink}
         style={{ textDecoration: 'none' }}
         label={

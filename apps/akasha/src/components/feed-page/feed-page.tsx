@@ -107,13 +107,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
-  const handleFlipCard = (_entry: any, _isQuote: boolean) => () => {
-    // const modifiedEntry = isQuote
-    //   ? { ...entry, quote: { ...entry.quote, reported: false } }
-    //   : { ...entry, reported: false };
-    //postsActions.updatePostsState(modifiedEntry);
-  };
-
   const handleEntryRemove = (entryId: string) => {
     props.navigateToModal({ name: 'entry-remove-confirmation', entryType: 'Post', entryId });
   };
@@ -184,12 +177,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             onMentionClick={handleMentionClick}
             onTagClick={handleTagClick}
             contentClickable={true}
-            awaitingModerationLabel={t(
-              'You have reported this content. It is awaiting moderation.',
-            )}
+            headerTextLabel={t('You reported this post for the following reason')}
+            footerTextLabel={t('It is awaiting moderation.')}
             moderatedContentLabel={t('This content has been moderated')}
             ctaLabel={t('See it anyway')}
-            handleFlipCard={handleFlipCard}
             onEntryRemove={handleEntryRemove}
             removeEntryLabel={t('Delete Post')}
             removedByMeLabel={t('You deleted this post')}
