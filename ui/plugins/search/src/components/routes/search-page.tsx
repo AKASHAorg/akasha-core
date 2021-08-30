@@ -62,7 +62,11 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
-  const searchReq = useSearch(decodeURIComponent(searchKeyword));
+  const searchReq = useSearch(
+    decodeURIComponent(searchKeyword),
+    loginState.pubKey,
+    loginState.currentUserCalled,
+  );
   const searchState = searchReq.data;
 
   const followEthAddressArr = searchState?.profiles?.slice(0, 4).map(profile => profile.ethAddress);
