@@ -1,26 +1,29 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
 import DS from '@akashaproject/design-system';
 import { useMentions, useErrors } from '@akashaproject/ui-awf-hooks';
-import { useTranslation } from 'react-i18next';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import { redirect, redirectToPost } from '../../services/routing-service';
+
 import PostRenderer from './post-renderer';
+
 import routes, { POST } from '../../routes';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { redirect, redirectToPost } from '../../services/routing-service';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import {
-  useInfiniteComments,
-  useCreateComment,
-} from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import {
   useGetBookmarks,
   useBookmarkPost,
   useBookmarkDelete,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
+import {
+  useInfiniteComments,
+  useCreateComment,
+} from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import {
   useIsFollowing,
   useFollow,
@@ -30,6 +33,7 @@ import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 // import { useTags, useMentions } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
+import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const {
   Box,
@@ -48,7 +52,7 @@ const {
 
 interface IPostPage {
   loginState: ILoginState;
-  showLoginModal: () => void;
+  showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
   navigateToUrl: (path: string) => void;
   isMobile: boolean;
 }
@@ -176,6 +180,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
+    if (!loginState.pubKey) {
+      return showLoginModal({ name: 'report-modal', entryId, contentType });
+    }
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
@@ -241,6 +248,11 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
       entryId: commentId,
     });
   };
+
+  const handlePlaceholderClick = () => {
+    showLoginModal();
+  };
+
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
@@ -334,7 +346,7 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
               </Box>
               {!loginState.ethAddress && (
                 <Box margin="medium">
-                  <EditorPlaceholder onClick={showLoginModal} ethAddress={null} />
+                  <EditorPlaceholder onClick={handlePlaceholderClick} ethAddress={null} />
                 </Box>
               )}
               {loginState.ethAddress && (

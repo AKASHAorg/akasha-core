@@ -7,6 +7,7 @@ import ProfilePage from './profile-page';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useLoginState } from '@akashaproject/ui-awf-hooks';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { Box } = DS;
 
@@ -16,8 +17,8 @@ const Routes: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation();
 
-  const showLoginModal = () => {
-    props.navigateToModal({ name: 'login' });
+  const showLoginModal = (redirectTo?: ModalNavigationOptions) => {
+    props.navigateToModal({ name: 'login', redirectTo });
   };
 
   return (

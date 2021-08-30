@@ -21,6 +21,7 @@ import {
 import { useSearch } from '@akashaproject/ui-awf-hooks/lib/use-search.new';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
+import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const {
   Box,
@@ -37,7 +38,7 @@ const {
 interface SearchPageProps extends RootComponentProps {
   onError?: (err: Error) => void;
   loginState: ILoginState;
-  showLoginModal: () => void;
+  showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
   modalState: ModalState;
   modalStateActions: ModalStateActions;
 }
@@ -146,6 +147,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
+    if (!loginState.pubKey) {
+      return showLoginModal({ name: 'report-modal', entryId, contentType });
+    }
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
@@ -276,7 +280,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     isRemoved={
                       entryData.content.length === 1 && entryData.content[0].property === 'removed'
                     }
-                    isBookmarked={bookmarks.findIndex(bm => bm.entryId === entryData.entryId) >= 0}
+                    isBookmarked={bookmarks?.findIndex(bm => bm.entryId === entryData.entryId) >= 0}
                     entryData={entryData}
                     sharePostLabel={t('Share Post')}
                     shareTextLabel={t('Share this post with your friends')}
@@ -320,7 +324,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     commentData.content.length === 1 &&
                     commentData.content[0].property === 'removed'
                   }
-                  isBookmarked={bookmarks.findIndex(bm => bm.entryId === commentData.entryId) >= 0}
+                  isBookmarked={bookmarks?.findIndex(bm => bm.entryId === commentData.entryId) >= 0}
                   entryData={commentData}
                   sharePostLabel={t('Share Post')}
                   shareTextLabel={t('Share this post with your friends')}
