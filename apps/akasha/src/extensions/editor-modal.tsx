@@ -4,25 +4,39 @@ import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
-import { useMentions, useLoginState, withProviders } from '@akashaproject/ui-awf-hooks';
+import { useLoginState, withProviders } from '@akashaproject/ui-awf-hooks';
 import { useCreatePost, useEditPost, usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { useTagSearch } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
+import { useMentionSearch } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import i18next, { setupI18next } from '../i18n';
 
-const { EditorModal } = DS;
+const {
+  EditorModal,
+  ModalContainer,
+  ModalCard,
+  Spinner,
+  ThemeSelector,
+  ErrorLoader,
+  lightTheme,
+  darkTheme,
+} = DS;
 
 const EditorModalContainer = (props: RootComponentProps) => {
   const { t } = useTranslation();
 
   const [loginState] = useLoginState({});
+  const [mentionQuery, setMentionQuery] = React.useState(null);
+  const [tagQuery, setTagQuery] = React.useState(null);
+  const mentionSearch = useMentionSearch(mentionQuery);
+  const tagSearch = useTagSearch(tagQuery);
 
   const profileDataReq = useGetProfile(loginState.pubKey);
-  const loggedProfileData = profileDataReq.data;
 
-  const [mentionsState, mentionsActions] = useMentions({});
+  // const [mentionsState, mentionsActions] = useMentions({});
   const isEditing = React.useMemo(
     () => props.activeModal.hasOwnProperty('entryId') && props.activeModal.action === 'edit',
     [props.activeModal],
@@ -48,59 +62,88 @@ const EditorModalContainer = (props: RootComponentProps) => {
     return undefined;
   }, [editingPost.data, editingPost.status]);
 
-  const embeddedEntryContent = React.useMemo(() => {
+  const embedEntryData = React.useMemo(() => {
     if (embeddedPost.status === 'success') {
-      return mapEntry(embeddedPost.data).content;
+      return mapEntry(embeddedPost.data);
     }
     return undefined;
   }, [embeddedPost.status, embeddedPost.data]);
 
   const handleEntryPublish = React.useCallback(
-    async (data: PublishPostData) => {
+    (data: IPublishData) => {
+      if (!profileDataReq.data) {
+        return;
+      }
       if (isEditing) {
         editPost.mutate({ entryID: props.activeModal.entryId, ...data });
       } else {
-        publishPost.mutate({ ...data, pubKey: loggedProfileData.pubKey });
+        publishPost.mutate({ ...data, pubKey: profileDataReq.data.pubKey });
       }
       props.singleSpa.navigateToUrl(location.pathname);
     },
-    [isEditing, props.activeModal, props.singleSpa, editPost, publishPost, loggedProfileData],
+    [isEditing, props.activeModal, props.singleSpa, editPost, publishPost, profileDataReq.data],
   );
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
   };
 
-  if (isEditing && editingPost.isLoading) {
+  const handleMentionQueryChange = (query: string) => {
+    setMentionQuery(query);
+  };
+
+  const handleTagQueryChange = (query: string) => {
+    setTagQuery(query);
+  };
+
+  if (
+    (isEditing && editingPost.isLoading) ||
+    (props.activeModal.embedEntry && embeddedPost.isLoading)
+  ) {
     return <>{t('Loading Editor')}</>;
   }
   return (
     <>
-      {(!editingPost.isLoading || !embeddedPost.isLoading) && (
-        <EditorModal
-          titleLabel={isEditing ? t('Edit Post') : t('New Post')}
-          avatar={loggedProfileData?.avatar}
-          ethAddress={loginState.ethAddress}
-          postLabel={t('Publish')}
-          placeholderLabel={t('Write something')}
-          emojiPlaceholderLabel={t('Search')}
-          discardPostLabel={t('Discard Post')}
-          discardPostInfoLabel={t(
-            "You have not posted yet. If you leave now you'll discard your post.",
-          )}
-          keepEditingLabel={t('Keep Editing')}
-          onPublish={handleEntryPublish}
-          handleNavigateBack={handleModalClose}
-          getMentions={mentionsActions.getMentions}
-          getTags={mentionsActions.getTags}
-          tags={mentionsState.tags}
-          mentions={mentionsState.mentions}
-          uploadRequest={uploadMediaToTextile}
-          embedEntryData={embeddedEntryContent}
-          style={{ width: '36rem' }}
-          editorState={entryData?.content}
-        />
+      {profileDataReq.status === 'error' && <>Error occured</>}
+      {embeddedPost.status === 'error' && <>Error loading embedded content..</>}
+      {editingPost.status === 'error' && <>Error loading post</>}
+
+      {(profileDataReq.status === 'loading' ||
+        embeddedPost.status === 'loading' ||
+        editingPost.status === 'loading') && (
+        <ModalContainer>
+          <ModalCard>
+            <Spinner />
+          </ModalCard>
+        </ModalContainer>
       )}
+
+      {(!editingPost.isLoading || !embeddedPost.isLoading) &&
+        profileDataReq.status === 'success' && (
+          <EditorModal
+            titleLabel={isEditing ? t('Edit Post') : t('New Post')}
+            avatar={profileDataReq.data?.avatar}
+            ethAddress={loginState.ethAddress}
+            postLabel={t('Publish')}
+            placeholderLabel={t('Write something')}
+            emojiPlaceholderLabel={t('Search')}
+            discardPostLabel={t('Discard Post')}
+            discardPostInfoLabel={t(
+              "You have not posted yet. If you leave now you'll discard your post.",
+            )}
+            keepEditingLabel={t('Keep Editing')}
+            onPublish={handleEntryPublish}
+            handleNavigateBack={handleModalClose}
+            getMentions={handleMentionQueryChange}
+            getTags={handleTagQueryChange}
+            tags={tagSearch.data}
+            mentions={mentionSearch.data}
+            uploadRequest={uploadMediaToTextile}
+            embedEntryData={embedEntryData}
+            style={{ width: '36rem' }}
+            editorState={entryData?.content}
+          />
+        )}
     </>
   );
 };
@@ -119,9 +162,19 @@ const reactLifecycles = singleSpaReact({
   rootComponent: withProviders(Wrapped),
   errorBoundary: (err, errorInfo, props) => {
     if (props.logger) {
-      props.logger.error('Error: %s; Info: %s', err, errorInfo);
+      props.logger.error('Error: %o; Info: %s', err, errorInfo);
     }
-    return <div>!</div>;
+
+    return (
+      <ThemeSelector
+        availableThemes={[lightTheme, darkTheme]}
+        settings={{ activeTheme: 'LightTheme' }}
+      >
+        <ModalContainer>
+          <ErrorLoader type="script-error" title="Error in editor modal" details={err.message} />
+        </ModalContainer>
+      </ThemeSelector>
+    );
   },
 });
 

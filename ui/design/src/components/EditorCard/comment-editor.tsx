@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Box } from 'grommet';
 import { EditorPlaceholder } from './editor-placeholder';
-import EditorBox, { IEditorBox, IPublishData } from '../Editor';
+import EditorBox, { IEditorBox } from '../Editor';
 import { editorDefaultValue } from '../Editor/initialValue';
 import { useOnClickAway } from '../../utils/clickAway';
 import isEqual from 'lodash.isequal';
+import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 
 const CommentEditor: React.FC<
   Omit<IEditorBox, 'editorState' | 'setEditorState'> & {

@@ -2,7 +2,7 @@ import { Box } from 'grommet';
 import * as React from 'react';
 import styled from 'styled-components';
 import ProfileAvatarButton from '../ProfileAvatarButton';
-import { IEntryData } from '../EntryCard/entry-box';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import ReadOnlyEditor from '../ReadOnlyEditor';
 
 const StyledBox = styled(Box)`

@@ -9,27 +9,22 @@ import {
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
-} from '@akashaproject/ui-awf-hooks/lib/use-tag-subscribe.new';
+} from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
 import {
   useIsFollowingMultiple,
   useFollow,
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
-import useErrorState from '@akashaproject/ui-awf-hooks/lib/use-error-state';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
-const { TrendingWidgetCard, ErrorInfoCard, ErrorLoader } = DS;
+const { TrendingWidgetCard, ErrorLoader } = DS;
 
 const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
-  const { logger, singleSpa } = props;
+  const { singleSpa } = props;
 
   const { t } = useTranslation();
 
-  const [errorState, errorActions] = useErrorState({ logger });
-
-  const [loginState] = useLoginState({
-    onError: errorActions.createError,
-  });
+  const [loginState] = useLoginState({});
 
   const trendingTagsReq = useTrendingTags();
   const trendingTags = trendingTagsReq.data || [];
@@ -85,48 +80,41 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <ErrorInfoCard errors={errorState}>
-      {(errMessages, hasCriticalErrors) => (
-        <>
-          {(hasCriticalErrors || errMessages) && (
-            <ErrorLoader
-              type="script-error"
-              title={t('Oops, this widget has an error')}
-              details={
-                hasCriticalErrors
-                  ? t('An issue prevented this widget to be displayed')
-                  : t('Some functionality of this widget may not work properly')
-              }
-              devDetails={errMessages}
-            />
-          )}
-          {!hasCriticalErrors && !errMessages && (
-            <TrendingWidgetCard
-              titleLabel={t('Trending Right Now')}
-              topicsLabel={t('Topics')}
-              profilesLabel={t('People')}
-              followLabel={t('Follow')}
-              unfollowLabel={t('Unfollow')}
-              followersLabel={t('Followers')}
-              followingLabel={t('Following')}
-              tagAnchorLink={'/social-app/tags'}
-              profileAnchorLink={'/profile'}
-              tags={trendingTags}
-              profiles={trendingProfiles}
-              followedProfiles={followedProfiles}
-              subscribedTags={tagSubscriptions}
-              onClickTag={handleTagClick}
-              handleSubscribeTag={handleTagSubscribe}
-              handleUnsubscribeTag={handleTagSubscribe}
-              onClickProfile={handleProfileClick}
-              handleFollowProfile={handleFollowProfile}
-              handleUnfollowProfile={handleUnfollowProfile}
-              loggedEthAddress={loginState.ethAddress}
-            />
-          )}
-        </>
+    <>
+      {(trendingTagsReq.isError || trendingProfilesReq.isError) && (
+        <ErrorLoader
+          type="script-error"
+          title={t('Oops, this widget has an error')}
+          details={
+            trendingTagsReq.isError
+              ? t('Cannot load trending topics')
+              : t('Cannot load trending profiles')
+          }
+        />
       )}
-    </ErrorInfoCard>
+      <TrendingWidgetCard
+        titleLabel={t('Trending Right Now')}
+        topicsLabel={t('Topics')}
+        profilesLabel={t('People')}
+        followLabel={t('Follow')}
+        unfollowLabel={t('Unfollow')}
+        followersLabel={t('Followers')}
+        followingLabel={t('Following')}
+        tagAnchorLink={'/social-app/tags'}
+        profileAnchorLink={'/profile'}
+        tags={trendingTags}
+        profiles={trendingProfiles}
+        followedProfiles={followedProfiles}
+        subscribedTags={tagSubscriptions}
+        onClickTag={handleTagClick}
+        handleSubscribeTag={handleTagSubscribe}
+        handleUnsubscribeTag={handleTagSubscribe}
+        onClickProfile={handleProfileClick}
+        handleFollowProfile={handleFollowProfile}
+        handleUnfollowProfile={handleUnfollowProfile}
+        loggedEthAddress={loginState.ethAddress}
+      />
+    </>
   );
 };
 
