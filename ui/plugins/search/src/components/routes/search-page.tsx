@@ -46,6 +46,8 @@ interface SearchPageProps extends RootComponentProps {
 const SearchPage: React.FC<SearchPageProps> = props => {
   const { singleSpa, loginState, showLoginModal } = props;
 
+  const [reportedItems, setReportedItems] = React.useState<string[]>([]);
+
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 
   const { t, i18n } = useTranslation();
@@ -74,6 +76,23 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
+
+  React.useEffect(() => {
+    // this effect sets reported items to state
+    if (searchReq.status === 'success') {
+      searchState.entries.map(entry => {
+        if (entry.reported) {
+          setReportedItems(prev => [...prev, entry.entryId]);
+        }
+      });
+
+      searchState.comments.map(comment => {
+        if (comment.reported) {
+          setReportedItems(prev => [...prev, comment.entryId]);
+        }
+      });
+    }
+  }, [searchReq.status, searchState]);
 
   // React.useEffect(() => {
   //   if (loginState.currentUserCalled) {
@@ -167,8 +186,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     }
   };
 
-  const handleFlipCard = () => {
-    // @TODO
+  const handleFlipCard = (entryId: string) => {
+    setReportedItems(prev => prev.filter(el => el !== entryId));
   };
 
   const emptySearchState =
@@ -272,14 +291,22 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           {(activeButton === buttonValues[0] || activeButton === buttonValues[3]) &&
             searchState?.entries.slice(0, 4).map((entryData: any, index: number) => (
               <Box key={index} pad={{ bottom: 'medium' }}>
-                {entryData.delisted ? (
+                {entryData.moderated && entryData.delisted && (
                   <EntryCardHidden
                     moderatedContentLabel={t('This content has been moderated')}
                     isDelisted={true}
                   />
-                ) : entryData.reported ? (
-                  <EntryCardHidden ctaLabel={t('See it anyway')} handleFlipCard={handleFlipCard} />
-                ) : (
+                )}
+                {!entryData.moderated && reportedItems.includes(entryData.entryId) && (
+                  <EntryCardHidden
+                    reason={entryData.reason}
+                    headerTextLabel={t('You reported this post for the following reason')}
+                    footerTextLabel={t('It is awaiting moderation.')}
+                    ctaLabel={t('See it anyway')}
+                    handleFlipCard={() => handleFlipCard(entryData.entryId)}
+                  />
+                )}
+                {!reportedItems.includes(entryData.entryId) && (
                   <EntryCard
                     isRemoved={
                       entryData.content.length === 1 && entryData.content[0].property === 'removed'
@@ -315,7 +342,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     onTagClick={handleTagClick}
                     singleSpaNavigate={singleSpa.navigateToUrl}
                     contentClickable={true}
-                    handleFlipCard={handleFlipCard}
+                    handleFlipCard={() => handleFlipCard(entryData.entryId)}
                   />
                 )}
               </Box>
@@ -323,44 +350,65 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           {(activeButton === buttonValues[0] || activeButton === buttonValues[4]) &&
             searchState?.comments.slice(0, 4).map((commentData: any, index: number) => (
               <Box key={index} pad={{ bottom: 'medium' }}>
-                <EntryCard
-                  isRemoved={
-                    commentData.content.length === 1 &&
-                    commentData.content[0].property === 'removed'
-                  }
-                  isBookmarked={bookmarks?.findIndex(bm => bm.entryId === commentData.entryId) >= 0}
-                  entryData={commentData}
-                  sharePostLabel={t('Share Post')}
-                  shareTextLabel={t('Share this post with your friends')}
-                  sharePostUrl={'https://ethereum.world'}
-                  onClickAvatar={() => handleProfileClick(commentData.author.pubKey)}
-                  onEntryBookmark={handleEntryBookmark}
-                  repliesLabel={t('Replies')}
-                  repostsLabel={t('Reposts')}
-                  repostLabel={t('Repost')}
-                  repostWithCommentLabel={t('Repost with comment')}
-                  shareLabel={t('Share')}
-                  copyLinkLabel={t('Copy Link')}
-                  flagAsLabel={t('Report Comment')}
-                  loggedProfileEthAddress={loginState.ethAddress}
-                  locale={locale || 'en'}
-                  style={{ height: 'auto' }}
-                  bookmarkLabel={t('Save')}
-                  bookmarkedLabel={t('Saved')}
-                  profileAnchorLink={'/profile'}
-                  repliesAnchorLink={'/social-app/post'}
-                  onRepost={() => null}
-                  onEntryFlag={handleEntryFlag(commentData.entryId, 'reply')}
-                  handleFollowAuthor={() => handleFollowProfile(commentData.author.ethAddress)}
-                  handleUnfollowAuthor={() => handleUnfollowProfile(commentData.author.ethAddress)}
-                  isFollowingAuthor={followedProfiles.includes(commentData.author)}
-                  onContentClick={() => handlePostClick(commentData.postId)}
-                  onMentionClick={handleProfileClick}
-                  onTagClick={handleTagClick}
-                  singleSpaNavigate={singleSpa.navigateToUrl}
-                  contentClickable={true}
-                  handleFlipCard={handleFlipCard}
-                />
+                {commentData.moderated && commentData.delisted && (
+                  <EntryCardHidden
+                    moderatedContentLabel={t('This content has been moderated')}
+                    isDelisted={true}
+                  />
+                )}
+                {!commentData.moderated && reportedItems.includes(commentData.entryId) && (
+                  <EntryCardHidden
+                    reason={commentData.reason}
+                    headerTextLabel={t('You reported this reply for the following reason')}
+                    footerTextLabel={t('It is awaiting moderation.')}
+                    ctaLabel={t('See it anyway')}
+                    handleFlipCard={() => handleFlipCard(commentData.entryId)}
+                  />
+                )}
+                {!reportedItems.includes(commentData.entryId) && (
+                  <EntryCard
+                    isRemoved={
+                      commentData.content.length === 1 &&
+                      commentData.content[0].property === 'removed'
+                    }
+                    isBookmarked={
+                      bookmarks?.findIndex(bm => bm.entryId === commentData.entryId) >= 0
+                    }
+                    entryData={commentData}
+                    sharePostLabel={t('Share Post')}
+                    shareTextLabel={t('Share this post with your friends')}
+                    sharePostUrl={'https://ethereum.world'}
+                    onClickAvatar={() => handleProfileClick(commentData.author.pubKey)}
+                    onEntryBookmark={handleEntryBookmark}
+                    repliesLabel={t('Replies')}
+                    repostsLabel={t('Reposts')}
+                    repostLabel={t('Repost')}
+                    repostWithCommentLabel={t('Repost with comment')}
+                    shareLabel={t('Share')}
+                    copyLinkLabel={t('Copy Link')}
+                    flagAsLabel={t('Report Comment')}
+                    loggedProfileEthAddress={loginState.ethAddress}
+                    locale={locale || 'en'}
+                    style={{ height: 'auto' }}
+                    bookmarkLabel={t('Save')}
+                    bookmarkedLabel={t('Saved')}
+                    profileAnchorLink={'/profile'}
+                    repliesAnchorLink={'/social-app/post'}
+                    onRepost={() => null}
+                    onEntryFlag={handleEntryFlag(commentData.entryId, 'reply')}
+                    handleFollowAuthor={() => handleFollowProfile(commentData.author.ethAddress)}
+                    handleUnfollowAuthor={() =>
+                      handleUnfollowProfile(commentData.author.ethAddress)
+                    }
+                    isFollowingAuthor={followedProfiles.includes(commentData.author)}
+                    onContentClick={() => handlePostClick(commentData.postId)}
+                    onMentionClick={handleProfileClick}
+                    onTagClick={handleTagClick}
+                    singleSpaNavigate={singleSpa.navigateToUrl}
+                    contentClickable={true}
+                    handleFlipCard={() => handleFlipCard(commentData.entryId)}
+                  />
+                )}
               </Box>
             ))}
         </Box>
