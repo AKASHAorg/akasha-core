@@ -1,12 +1,9 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { redirectToPost } from '../../services/routing-service';
-import EntryCardRenderer from './entry-card-renderer';
-import routes, { POST } from '../../routes';
+import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { useErrors } from '@akashaproject/ui-awf-hooks';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import {
@@ -21,27 +18,29 @@ import {
 
 import { useMutationListener } from '@akashaproject/ui-awf-hooks/lib/use-query-listener';
 import { createPendingEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import routes, { POST } from '../../routes';
+import { redirectToPost } from '../../services/routing-service';
+import EntryCardRenderer from './entry-card-renderer';
 
 const { Box, Helmet, EditorPlaceholder, EntryList, EntryCard, EntryPublishErrorCard } = DS;
 
 export interface FeedPageProps {
-  singleSpa: any;
-  logger: any;
   showLoginModal: () => void;
-  loggedProfileData?: any;
+  loggedProfileData?: IProfileData;
   loginState: ILoginState;
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const { isMobile, showLoginModal, loggedProfileData, loginState, logger } = props;
+  const { showLoginModal, loggedProfileData, loginState, logger } = props;
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [errorState] = useErrors({ logger });
 
-  const createPostMutation =
-    useMutationListener<{ metadata: { quote?: string } }>(CREATE_POST_MUTATION_KEY);
+  const createPostMutation = useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
   const postsReq = useInfinitePosts(15);
 
@@ -108,9 +107,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
   const handleEntryRemove = (entryId: string) => {
-    props.navigateToModal({ name: 'entry-remove-confirmation', entryType: 'Post', entryId });
+    props.navigateToModal({
+      name: 'entry-remove-confirmation',
+      entryType: ItemTypes.ENTRY,
+      entryId,
+    });
   };
-  console.log(createPostMutation, '<<<<< create post mutation');
+
   return (
     <Box fill="horizontal">
       <Helmet>

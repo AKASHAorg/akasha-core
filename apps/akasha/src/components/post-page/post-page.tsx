@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useMentions, useErrors } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import { redirect, redirectToPost } from '../../services/routing-service';
 import PostRenderer from './post-renderer';
-import routes, { POST } from '../../routes';
+import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
@@ -27,9 +25,11 @@ import {
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
-// import { useTags, useMentions } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
+import { useMentionSearch } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
+import { useTagSearch } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
-import { PublishPostData } from '@akashaproject/ui-awf-hooks/lib/use-posts';
+import { redirect, redirectToPost } from '../../services/routing-service';
+import routes, { POST } from '../../routes';
 
 const {
   Box,
@@ -40,29 +40,25 @@ const {
   CommentEditor,
   EditorPlaceholder,
   EntryCardHidden,
-  ErrorInfoCard,
   ErrorLoader,
   EntryCardLoading,
   ExtensionPoint,
 } = DS;
 
-interface IPostPage {
+interface IPostPageProps {
   loginState: ILoginState;
   showLoginModal: () => void;
   navigateToUrl: (path: string) => void;
-  isMobile: boolean;
 }
 
-const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
-  const { showLoginModal, logger, navigateToUrl, loginState, isMobile } = props;
+const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
+  const { showLoginModal, logger, navigateToUrl, loginState } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
 
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
-  const [, errorActions] = useErrors({ logger });
 
-  //@Todo: replace entryData with value from usePost
   const postReq = usePost(postId, !!postId);
   const entryData = React.useMemo(() => {
     if (postReq.data) {
@@ -77,10 +73,10 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     }
     return postReq.status === 'success' && entryData.reported;
   }, [entryData, showAnyway, postReq.status]);
-
-  const [mentionsState, mentionsActions] = useMentions({
-    onError: errorActions.createError,
-  });
+  const [mentionQuery, setMentionQuery] = React.useState(null);
+  const [tagQuery, setTagQuery] = React.useState(null);
+  const mentionQueryReq = useMentionSearch(mentionQuery);
+  const tagQueryReq = useTagSearch(tagQuery);
 
   const reqComments = useInfiniteComments(15, postId);
 
@@ -133,17 +129,6 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     }
   };
 
-  // React.useEffect(() => {
-  //   // this is used to initialise comments when navigating to other post ids
-  //   if (postId && loginState.currentUserCalled) {
-  //     // postsActions.getPost(postId);
-  //     handleLoadMore();
-  //     // if (loginState.ethAddress) {
-  //     //   bookmarkActions.getBookmarks();
-  //     // }
-  //   }
-  // }, [postId, loginState.currentUserCalled, loginState.ethAddress]);
-
   const bookmarked = React.useMemo(() => {
     return !bookmarksReq.isFetching && bookmarks?.findIndex(bm => bm.entryId === postId) >= 0;
   }, [bookmarksReq.isFetching, bookmarks, postId]);
@@ -181,11 +166,11 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
 
   const publishComment = useCreateComment();
 
-  const handlePublishComment = async (data: PublishPostData) => {
+  const handlePublishComment = async (data: IPublishData) => {
     publishComment.mutate({ ...data, postID: postId });
   };
 
-  const handleRepost = (_withComment: boolean, entryId: any) => {
+  const handleRepost = (_withComment: boolean, entryId: string) => {
     if (!loginState.ethAddress) {
       showLoginModal();
       return;
@@ -194,14 +179,9 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     }
   };
 
-  const handleNavigateToPost = redirectToPost(
-    navigateToUrl,
-    postId /*, postsActions.resetPostIds*/,
-  );
+  const handleNavigateToPost = redirectToPost(navigateToUrl, postId);
 
-  const handleSingleSpaNavigate = redirect(navigateToUrl /*postsActions.resetPostIds*/);
-
-  const onUploadRequest = uploadMediaToTextile;
+  const handleSingleSpaNavigate = redirect(navigateToUrl);
 
   const handleFlipCard = () => {
     setShowAnyway(true);
@@ -221,15 +201,13 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     /* todo */
   };
 
-  const commentErrors = errorActions.getFilteredErrors('usePosts.getComments');
-
   const entryAuthorName =
     entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
 
   const handleCommentRemove = (commentId: string) => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
-      entryType: 'Comment',
+      entryType: ItemTypes.COMMENT,
       entryId: commentId,
     });
   };
@@ -237,9 +215,15 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
   const handlePostRemove = (commentId: string) => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
-      entryType: 'Post',
+      entryType: ItemTypes.ENTRY,
       entryId: commentId,
     });
+  };
+  const handleMentionQueryChange = (query: string) => {
+    setMentionQuery(query);
+  };
+  const handleTagQueryChange = (query: string) => {
+    setTagQuery(query);
   };
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
@@ -346,107 +330,85 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
                     placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
                     emojiPlaceholderLabel={t('Search')}
                     onPublish={handlePublishComment}
-                    getMentions={mentionsActions.getMentions}
-                    getTags={mentionsActions.getTags}
-                    tags={mentionsState.tags}
-                    mentions={mentionsState.mentions}
-                    uploadRequest={onUploadRequest}
+                    getMentions={handleMentionQueryChange}
+                    getTags={handleTagQueryChange}
+                    tags={tagQueryReq.data}
+                    mentions={mentionQueryReq.data}
+                    uploadRequest={uploadMediaToTextile}
                   />
                 </Box>
               )}
-              <ErrorInfoCard errors={commentErrors}>
-                {(errorMessages, hasCriticalErrors) => (
-                  <>
-                    {hasCriticalErrors && (
-                      <ErrorLoader
-                        type="script-error"
-                        title={t('A critical error occured when loading the list')}
-                        details={t('Cannot fetch one or more comments!')}
-                      />
-                    )}
-                    {!hasCriticalErrors && errorMessages && (
-                      <ErrorLoader
-                        type="script-error"
-                        title={t('Loading the list of comments failed')}
-                        details={t('An unexpected error occured! Please try to refresh the page')}
-                      />
-                    )}
-                    {publishComment.isLoading && publishComment.variables.postID === postId && (
-                      <Box
-                        pad={{ horizontal: 'medium' }}
-                        border={{ side: 'bottom', size: '1px', color: 'border' }}
-                        style={{ backgroundColor: '#4e71ff0f' }}
-                      >
-                        <EntryBox
-                          isBookmarked={false}
-                          entryData={{
-                            ...publishComment.variables,
-                            author: loggedProfileData,
-                            ipfsLink: '',
-                            permalink: '',
-                            entryId: '',
-                          }}
-                          sharePostLabel={t('Share Post')}
-                          shareTextLabel={t('Share this post with your friends')}
-                          repliesLabel={t('Replies')}
-                          repostsLabel={t('Reposts')}
-                          repostLabel={t('Repost')}
-                          repostWithCommentLabel={t('Repost with comment')}
-                          shareLabel={t('Share')}
-                          copyLinkLabel={t('Copy Link')}
-                          flagAsLabel={t('Report Comment')}
-                          loggedProfileEthAddress={loggedProfileData.ethAddress}
-                          locale={'en'}
-                          bookmarkLabel={t('Save')}
-                          bookmarkedLabel={t('Saved')}
-                          profileAnchorLink={'/profile'}
-                          repliesAnchorLink={routes[POST]}
-                          handleFollowAuthor={handleFollow}
-                          handleUnfollowAuthor={handleUnfollow}
-                          isFollowingAuthor={isFollowing}
-                          contentClickable={false}
-                          hidePublishTime={true}
-                          disableActions={true}
-                          hideActionButtons={true}
-                        />
-                      </Box>
-                    )}
-                    {!hasCriticalErrors && (
-                      <EntryList
-                        pages={commentPages}
-                        status={reqComments.status}
-                        onLoadMore={handleLoadMore}
-                        hasNextPage={reqComments.hasNextPage}
-                        itemCard={
-                          <PostRenderer
-                            logger={logger}
-                            bookmarkState={bookmarksReq}
-                            ethAddress={loginState.ethAddress}
-                            locale={locale}
-                            onBookmark={handleEntryBookmark}
-                            onNavigate={handleNavigateToPost}
-                            sharePostUrl={`${window.location.origin}${routes[POST]}/`}
-                            onFlag={handleEntryFlag}
-                            onRepost={handleCommentRepost}
-                            onAvatarClick={handleAvatarClick}
-                            onMentionClick={handleMentionClick}
-                            onTagClick={handleTagClick}
-                            singleSpaNavigate={handleSingleSpaNavigate}
-                            headerTextLabel={t('You reported this reply for the following reason')}
-                            footerTextLabel={t('It is awaiting moderation.')}
-                            moderatedContentLabel={t('This content has been moderated')}
-                            ctaLabel={t('See it anyway')}
-                            onEntryRemove={handleCommentRemove}
-                            removeEntryLabel={t('Delete Reply')}
-                            removedByMeLabel={t('You deleted this reply')}
-                            removedByAuthorLabel={t('This reply was deleted by its author')}
-                          />
-                        }
-                      />
-                    )}
-                  </>
-                )}
-              </ErrorInfoCard>
+              {publishComment.isLoading && publishComment.variables.postID === postId && (
+                <Box
+                  pad={{ horizontal: 'medium' }}
+                  border={{ side: 'bottom', size: '1px', color: 'border' }}
+                  style={{ backgroundColor: '#4e71ff0f' }}
+                >
+                  <EntryBox
+                    isBookmarked={false}
+                    entryData={{
+                      ...publishComment.variables,
+                      author: loggedProfileData,
+                      ipfsLink: '',
+                      permalink: '',
+                      entryId: '',
+                    }}
+                    sharePostLabel={t('Share Post')}
+                    shareTextLabel={t('Share this post with your friends')}
+                    repliesLabel={t('Replies')}
+                    repostsLabel={t('Reposts')}
+                    repostLabel={t('Repost')}
+                    repostWithCommentLabel={t('Repost with comment')}
+                    shareLabel={t('Share')}
+                    copyLinkLabel={t('Copy Link')}
+                    flagAsLabel={t('Report Comment')}
+                    loggedProfileEthAddress={loggedProfileData.ethAddress}
+                    locale={'en'}
+                    bookmarkLabel={t('Save')}
+                    bookmarkedLabel={t('Saved')}
+                    profileAnchorLink={'/profile'}
+                    repliesAnchorLink={routes[POST]}
+                    handleFollowAuthor={handleFollow}
+                    handleUnfollowAuthor={handleUnfollow}
+                    isFollowingAuthor={isFollowing}
+                    contentClickable={false}
+                    hidePublishTime={true}
+                    disableActions={true}
+                    hideActionButtons={true}
+                  />
+                </Box>
+              )}
+              <EntryList
+                pages={commentPages}
+                status={reqComments.status}
+                onLoadMore={handleLoadMore}
+                hasNextPage={reqComments.hasNextPage}
+                itemCard={
+                  <PostRenderer
+                    logger={logger}
+                    bookmarkState={bookmarksReq}
+                    ethAddress={loginState.ethAddress}
+                    locale={locale}
+                    onBookmark={handleEntryBookmark}
+                    onNavigate={handleNavigateToPost}
+                    sharePostUrl={`${window.location.origin}${routes[POST]}/`}
+                    onFlag={handleEntryFlag}
+                    onRepost={handleCommentRepost}
+                    onAvatarClick={handleAvatarClick}
+                    onMentionClick={handleMentionClick}
+                    onTagClick={handleTagClick}
+                    singleSpaNavigate={handleSingleSpaNavigate}
+                    headerTextLabel={t('You reported this reply for the following reason')}
+                    footerTextLabel={t('It is awaiting moderation.')}
+                    moderatedContentLabel={t('This content has been moderated')}
+                    ctaLabel={t('See it anyway')}
+                    onEntryRemove={handleCommentRemove}
+                    removeEntryLabel={t('Delete Reply')}
+                    removedByMeLabel={t('You deleted this reply')}
+                    removedByAuthorLabel={t('This reply was deleted by its author')}
+                  />
+                }
+              />
             </>
           )}
         </>

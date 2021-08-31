@@ -5,7 +5,7 @@ import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { Post_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
-import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
+import { IPublishData, PostResponse } from '@akashaproject/ui-awf-typings/lib/entry';
 import moderationRequest from './moderation-request';
 
 export const ENTRY_KEY = 'Entry';
@@ -14,19 +14,6 @@ export const ENTRIES_BY_TAG_KEY = 'EntriesByTag';
 export const ENTRIES_BY_AUTHOR_KEY = 'EntriesByAuthor';
 export const CREATE_POST_MUTATION_KEY = 'CreatePost';
 
-export interface PublishPostData {
-  metadata: {
-    app: string;
-    version: number;
-    quote?: IEntryData;
-    tags: string[];
-    mentions: string[];
-  };
-  author: string;
-  content: any;
-  textContent: string;
-  pubKey: string;
-}
 export interface Publish_Options {
   data: DataProviderInput[];
   post: { title?: string; tags?: string[]; quotes?: string[] };
@@ -165,11 +152,10 @@ const getPost = async postID => {
       contentIds: [postID],
     });
     const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
-    // remap the object props here
-
     return { ...res.data.getPost, ...modStatus[0] };
   } catch (error) {
     logError('usePosts.getPost', error);
+    throw error;
   }
 };
 
@@ -233,13 +219,13 @@ export function useCreatePost() {
 
   const pendingID = 'pending' + new Date().getTime();
   return useMutation(
-    async (publishObj: PublishPostData) => {
+    async (publishObj: IPublishData) => {
       const post = buildPublishObject(publishObj);
       const res = await lastValueFrom(sdk.api.entries.postEntry(post));
       return res?.data?.createPost;
     },
     {
-      onMutate: async (publishObj: PublishPostData) => {
+      onMutate: async (publishObj: IPublishData) => {
         await queryClient.cancelQueries(ENTRIES_KEY);
         await queryClient.cancelQueries([ENTRIES_BY_AUTHOR_KEY, publishObj.pubKey]);
         const optimisticEntry = Object.assign({}, publishObj, { isPublishing: true });
@@ -274,7 +260,7 @@ export const useEditPost = () => {
     },
     {
       onMutate: async editedPost => {
-        queryClient.setQueryData([ENTRY_KEY, editedPost.entryID], (current: Post_Response) => {
+        queryClient.setQueryData([ENTRY_KEY, editedPost.entryID], (current: PostResponse) => {
           const { data } = buildPublishObject(editedPost);
           return {
             ...current,

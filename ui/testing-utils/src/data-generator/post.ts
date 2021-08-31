@@ -52,8 +52,7 @@ const genSlatePost = () => {
         children: [{ text: '3rd line', type: 'text' }],
       },
       {
-        url:
-          'https://hub.textile.io/ipfs/bafkreidketqm2q5xuxvtezegtu7hchc2a6bdlazpxftdudczngkrht674i',
+        url: 'https://hub.textile.io/ipfs/bafkreidketqm2q5xuxvtezegtu7hchc2a6bdlazpxftdudczngkrht674i',
         size: {
           width: 640,
           height: 426,

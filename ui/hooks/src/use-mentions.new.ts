@@ -3,21 +3,7 @@ import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { getMediaUrl } from './utils/media-utils';
 
-export const TAGS_KEY = 'Tags';
-export const MENTIONS_KEY = 'Mentions';
-
-const getTags = async tagName => {
-  const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.tags.searchTags(tagName));
-  return res;
-};
-
-export function useTags(tagName: string) {
-  return useQuery([TAGS_KEY, tagName], () => getTags(tagName), {
-    enabled: !!tagName,
-    keepPreviousData: true,
-  });
-}
+export const MENTION_SEARCH_KEY = 'MENTION_SEARCH_KEY';
 
 const getMentions = async mention => {
   const sdk = getSDK();
@@ -40,8 +26,8 @@ const getMentions = async mention => {
   return completeProfiles;
 };
 
-export function useMentions(mention: string) {
-  return useQuery([MENTIONS_KEY, mention], () => getMentions(mention), {
+export function useMentionSearch(mention: string) {
+  return useQuery([MENTION_SEARCH_KEY, mention], () => getMentions(mention), {
     enabled: !!mention,
     keepPreviousData: true,
   });

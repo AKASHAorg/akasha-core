@@ -6,7 +6,7 @@ import useGlobalLogin from './use-global-login';
 import useLoginState from './use-login-state';
 import useModalState from './use-modal-state';
 import useENSRegistration from './use-ens-registration';
-import usePosts from './use-posts';
+// import usePosts from './use-posts';
 import useErrors from './use-error-state';
 import useTrendingData from './use-trending-data';
 import useFollow from './use-follow';
@@ -30,7 +30,7 @@ export {
   useLoginState,
   useModalState,
   useENSRegistration,
-  usePosts,
+  // usePosts,
   useErrors,
   useTrendingData,
   useFollow,

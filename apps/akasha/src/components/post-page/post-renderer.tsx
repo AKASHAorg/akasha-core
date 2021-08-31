@@ -2,10 +2,14 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useFollow } from '@akashaproject/ui-awf-hooks';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
-import routes, { POST } from '../../routes';
+import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useComment, useEditComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
+import { useMentionSearch } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
+import { useTagSearch } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
+import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
+import routes, { POST } from '../../routes';
 
 const {
   ErrorLoader,
@@ -19,9 +23,9 @@ const {
 } = DS;
 
 export interface PostRendererProps {
-  logger: any;
+  logger: RootComponentProps['logger'];
   itemId?: string;
-  itemData?: any;
+  itemData?: IEntryData;
   locale: any;
   ethAddress: string | null;
   onBookmark: (entryId: string) => void;
@@ -75,15 +79,13 @@ const PostRenderer = (props: PostRendererProps) => {
       logger.error(errorInfo.error.message, errorInfo.errorKey);
     },
   });
+  const [mentionQuery, setMentionQuery] = React.useState(null);
+  const [tagQuery, setTagQuery] = React.useState(null);
+  const mentionSearch = useMentionSearch(mentionQuery);
+  const tagSearch = useTagSearch(tagQuery);
   const commentReq = useComment(props.itemId);
   const itemData = React.useMemo(() => {
     if (commentReq.data) {
-      if (commentReq.data.isPublishing) {
-        return {
-          ...mapEntry(commentReq.data),
-          content: commentReq.data.content,
-        };
-      }
       return mapEntry(commentReq.data);
     }
     return undefined;
@@ -154,6 +156,14 @@ const PostRenderer = (props: PostRendererProps) => {
     setShowAnyway(true);
   };
 
+  const handleTagQueryChange = (query: string) => {
+    setTagQuery(query);
+  };
+
+  const handleMentionQueryChange = (query: string) => {
+    setMentionQuery(query);
+  };
+
   return (
     <>
       {commentReq.status === 'loading' && <EntryCardLoading />}
@@ -193,17 +203,11 @@ const PostRenderer = (props: PostRendererProps) => {
                     postLabel={t('Save')}
                     emojiPlaceholderLabel={t('Search')}
                     onPublish={handleEditComment}
-                    getMentions={() => {
-                      /*  */
-                    }}
-                    getTags={() => {
-                      /*  */
-                    }}
-                    tags={[]}
-                    mentions={[]}
-                    uploadRequest={() => {
-                      /*  */
-                    }}
+                    getMentions={handleMentionQueryChange}
+                    getTags={handleTagQueryChange}
+                    tags={tagSearch.data}
+                    mentions={mentionSearch.data}
+                    uploadRequest={uploadMediaToTextile}
                     editorState={itemData.content}
                     isShown={true}
                     showCancelButton={true}
@@ -213,58 +217,62 @@ const PostRenderer = (props: PostRendererProps) => {
                 </Box>
               )}
               {!isEditing && itemData && (
-                <EntryBox
+                <Box
+                  border={{ side: 'bottom', size: '1px', color: 'border' }}
                   style={itemData.isPublishing ? { backgroundColor: '#4e71ff0f' } : {}}
-                  isBookmarked={isBookmarked}
-                  isRemoved={
-                    itemData.content.length === 1 && itemData.content[0].property === 'removed'
-                  }
-                  entryData={itemData}
-                  sharePostLabel={t('Share Post')}
-                  shareTextLabel={t('Share this post with your friends')}
-                  sharePostUrl={sharePostUrl}
-                  onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                    props.onAvatarClick(ev, itemData.author.pubKey)
-                  }
-                  onEntryBookmark={props.onBookmark}
-                  repliesLabel={t('Replies')}
-                  repostsLabel={t('Reposts')}
-                  repostLabel={t('Repost')}
-                  repostWithCommentLabel={t('Repost with comment')}
-                  shareLabel={t('Share')}
-                  copyLinkLabel={t('Copy Link')}
-                  flagAsLabel={t('Report Comment')}
-                  loggedProfileEthAddress={ethAddress}
-                  locale={props.locale}
-                  bookmarkLabel={t('Save')}
-                  bookmarkedLabel={t('Saved')}
-                  profileAnchorLink={'/profile'}
-                  repliesAnchorLink={routes[POST]}
-                  onRepost={props.onRepost}
-                  onEntryFlag={props.onFlag(itemData.entryId, 'reply')}
-                  handleFollowAuthor={handleFollow}
-                  handleUnfollowAuthor={handleUnfollow}
-                  isFollowingAuthor={isFollowing}
-                  onContentClick={props.onNavigate}
-                  contentClickable={contentClickable}
-                  onMentionClick={props.onMentionClick}
-                  onTagClick={props.onTagClick}
-                  singleSpaNavigate={props.singleSpaNavigate}
-                  hidePublishTime={hidePublishTime}
-                  disableActions={disableActions}
-                  hideActionButtons={true}
-                  onEntryRemove={props.onEntryRemove}
-                  removeEntryLabel={props.removeEntryLabel}
-                  removedByMeLabel={props.removedByMeLabel}
-                  removedByAuthorLabel={props.removedByAuthorLabel}
-                  headerMenuExt={
-                    props.ethAddress === itemData.author.ethAddress && (
-                      <StyledSelectBox onClick={handleEditClick}>
-                        <TextIcon label={t('Edit Reply')} iconType="edit" />
-                      </StyledSelectBox>
-                    )
-                  }
-                />
+                >
+                  <EntryBox
+                    isBookmarked={isBookmarked}
+                    isRemoved={
+                      itemData.content.length === 1 && itemData.content[0].property === 'removed'
+                    }
+                    entryData={itemData}
+                    sharePostLabel={t('Share Post')}
+                    shareTextLabel={t('Share this post with your friends')}
+                    sharePostUrl={sharePostUrl}
+                    onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
+                      props.onAvatarClick(ev, itemData.author.pubKey)
+                    }
+                    onEntryBookmark={props.onBookmark}
+                    repliesLabel={t('Replies')}
+                    repostsLabel={t('Reposts')}
+                    repostLabel={t('Repost')}
+                    repostWithCommentLabel={t('Repost with comment')}
+                    shareLabel={t('Share')}
+                    copyLinkLabel={t('Copy Link')}
+                    flagAsLabel={t('Report Comment')}
+                    loggedProfileEthAddress={ethAddress}
+                    locale={props.locale}
+                    bookmarkLabel={t('Save')}
+                    bookmarkedLabel={t('Saved')}
+                    profileAnchorLink={'/profile'}
+                    repliesAnchorLink={routes[POST]}
+                    onRepost={props.onRepost}
+                    onEntryFlag={props.onFlag(itemData.entryId, 'reply')}
+                    handleFollowAuthor={handleFollow}
+                    handleUnfollowAuthor={handleUnfollow}
+                    isFollowingAuthor={isFollowing}
+                    onContentClick={props.onNavigate}
+                    contentClickable={contentClickable}
+                    onMentionClick={props.onMentionClick}
+                    onTagClick={props.onTagClick}
+                    singleSpaNavigate={props.singleSpaNavigate}
+                    hidePublishTime={hidePublishTime}
+                    disableActions={disableActions}
+                    hideActionButtons={true}
+                    onEntryRemove={props.onEntryRemove}
+                    removeEntryLabel={props.removeEntryLabel}
+                    removedByMeLabel={props.removedByMeLabel}
+                    removedByAuthorLabel={props.removedByAuthorLabel}
+                    headerMenuExt={
+                      props.ethAddress === itemData.author.ethAddress && (
+                        <StyledSelectBox onClick={handleEditClick}>
+                          <TextIcon label={t('Edit Reply')} iconType="edit" />
+                        </StyledSelectBox>
+                      )
+                    }
+                  />
+                </Box>
               )}
             </Box>
           )}
