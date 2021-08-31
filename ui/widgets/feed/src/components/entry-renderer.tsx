@@ -26,7 +26,7 @@ export interface IEntryRenderer {
   onUnfollow: (ethAddress: string) => void;
   onBookmark: (isBookmarked: boolean, entryId: string) => void;
   onFlag?: (entryId: string, contentType: string, reporterEthAddress?: string | null) => () => void;
-  onRepost: (withComment: boolean, entryData: any) => void;
+  onRepost: (withComment: boolean, entryId: string) => void;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   singleSpaNavigate: (url: string) => void;
   checkIsFollowing: (viewerEthAddress: string, targetEthAddress: string) => void;

@@ -7,21 +7,24 @@ import routes, { POST } from '../../routes';
 import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
+import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 
 const { ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading, ExtensionPoint } = DS;
 
 export interface IEntryCardRendererProps {
-  logger: any;
+  logger: RootComponentProps['logger'];
   itemId?: string;
-  itemData?: any;
+  itemData?: IEntryData;
   isBookmarked?: boolean;
-  locale?: any;
+  locale?: ILocale;
   ethAddress: string | null;
   onBookmark: (entryId: string) => void;
-  onNavigate: (details: any) => void;
+  onNavigate: (details: IContentClickDetails) => void;
   onLinkCopy?: () => void;
   onFlag?: (entryId: string, contentType: string) => () => void;
-  onRepost: (withComment: boolean, entryData: any) => void;
+  onRepost: (withComment: boolean, entryId: string) => void;
   sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (pubKey: string) => void;
@@ -77,7 +80,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     }
 
     return false;
-  }, [bookmarkState.data]);
+  }, [bookmarkState, itemId]);
 
   const itemData = React.useMemo(() => {
     if (postReq.data) {
@@ -140,8 +143,15 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     });
   };
 
-  const onEditButtonUnmount = () => {
-    /* todo */
+  const onEditButtonUnmount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointMount,
+      data: {
+        name,
+        entryId: itemId,
+        entryType: ItemTypes.ENTRY,
+      },
+    });
   };
 
   return (

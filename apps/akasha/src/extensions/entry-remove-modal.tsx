@@ -10,10 +10,10 @@ import { useDeleteComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.n
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import i18next, { setupI18next } from '../i18n';
 
-const { ConfirmationModal } = DS;
+const { ConfirmationModal, ThemeSelector, lightTheme, darkTheme, ModalContainer, ErrorLoader } = DS;
 
 const EntryRemoveModal: React.FC<RootComponentProps> = props => {
-  const { activeModal } = props;
+  const { activeModal, logger } = props;
   const [errorState] = useErrors({
     logger: props.logger,
   });
@@ -22,17 +22,26 @@ const EntryRemoveModal: React.FC<RootComponentProps> = props => {
   const postDeleteQuery = useDeletePost(activeModal.entryId);
   const commentDeleteQuery = useDeleteComment(activeModal.entryId);
 
-  const handleDeletePost = () => {
-    if (activeModal.entryType === ItemTypes.COMMENT) {
-      return commentDeleteQuery.mutate(activeModal.entryId);
-    }
-    postDeleteQuery.mutate(activeModal.entryId);
-    handleModalClose();
-  };
-
-  const handleModalClose = () => {
+  const handleModalClose = React.useCallback(() => {
     props.singleSpa.navigateToUrl(location.pathname);
-  };
+  }, [props.singleSpa]);
+
+  const handleDeletePost = React.useCallback(() => {
+    if (activeModal && activeModal.entryType) {
+      const entryType = parseInt(activeModal.entryType, 10);
+      if (entryType === ItemTypes.COMMENT) {
+        commentDeleteQuery.mutate(activeModal.entryId);
+      } else if (entryType === ItemTypes.ENTRY) {
+        postDeleteQuery.mutate(activeModal.entryId);
+      } else {
+        logger.error('entryType is undefined!');
+      }
+    } else {
+      logger.error('property entryType is undefined!');
+    }
+    handleModalClose();
+  }, [activeModal, commentDeleteQuery, postDeleteQuery, handleModalClose, logger]);
+
   const entryLabelText = React.useMemo(() => {
     if (activeModal.entryType === ItemTypes.ENTRY) {
       return t('post');
@@ -79,7 +88,16 @@ const reactLifecycles = singleSpaReact({
     if (props.logger) {
       props.logger.error('Error: %s; Info: %s', err, errorInfo);
     }
-    return <div>!</div>;
+    return (
+      <ThemeSelector
+        availableThemes={[lightTheme, darkTheme]}
+        settings={{ activeTheme: 'LightTheme' }}
+      >
+        <ModalContainer>
+          <ErrorLoader type="script-error" title="Error in editor modal" details={err.message} />
+        </ModalContainer>
+      </ThemeSelector>
+    );
   },
 });
 
