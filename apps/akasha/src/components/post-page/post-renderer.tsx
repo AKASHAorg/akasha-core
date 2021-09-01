@@ -189,7 +189,7 @@ const PostRenderer = (props: PostRendererProps) => {
               handleFlipCard={handleFlipCard}
             />
           )}
-          {!itemData.moderated && !isReported && (
+          {!isReported && (
             <Box
               pad={{ horizontal: 'medium' }}
               border={{ side: 'bottom', size: '1px', color: 'border' }}

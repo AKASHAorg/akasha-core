@@ -221,7 +221,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               handleFlipCard={handleFlipCard}
             />
           )}
-          {!itemData.moderated && !isReported && (
+          {!isReported && (
             <EntryCard
               className={props.className}
               isRemoved={

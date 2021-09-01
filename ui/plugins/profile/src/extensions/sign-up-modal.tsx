@@ -51,9 +51,13 @@ const SignUpModalContainer = (props: RootComponentProps) => {
 
   React.useEffect(() => {
     if (loginState.ethAddress) {
-      setTimeout(() => handleSignUpModalClose(), 500);
+      if (props.activeModal.hasOwnProperty('redirectTo')) {
+        props.navigateToModal(props.activeModal.redirectTo);
+      } else {
+        setTimeout(() => handleSignUpModalClose(), 500);
+      }
     }
-  }, [loginState.ethAddress]);
+  }, [loginState.ethAddress, props.activeModal, props.navigateToModal]);
 
   const _handleModalClose = () => {
     setInviteToken(null);
@@ -125,7 +129,7 @@ const SignUpModalContainer = (props: RootComponentProps) => {
       };
     });
     localStorage.setItem('@acceptedTermsAndPrivacy', new Date().toISOString());
-    props.navigateToModal({ name: 'signin' });
+    props.navigateToModal({ name: 'signin', redirectTo: props.activeModal.redirectTo });
   };
   const activateAcceptButton = () => {
     setTermsState(prevState => {

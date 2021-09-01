@@ -1,33 +1,39 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
+
+import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { useErrors } from '@akashaproject/ui-awf-hooks';
-import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import {
-  useInfinitePosts,
-  CREATE_POST_MUTATION_KEY,
-} from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import {
   useGetBookmarks,
   useBookmarkPost,
   useBookmarkDelete,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
+import {
+  useInfinitePosts,
+  CREATE_POST_MUTATION_KEY,
+} from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 
 import { useMutationListener } from '@akashaproject/ui-awf-hooks/lib/use-query-listener';
 import { createPendingEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+
+import EntryCardRenderer from './entry-card-renderer';
+
 import routes, { POST } from '../../routes';
 import { redirectToPost } from '../../services/routing-service';
-import EntryCardRenderer from './entry-card-renderer';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { Box, Helmet, EditorPlaceholder, EntryList, EntryCard, EntryPublishErrorCard } = DS;
 
 export interface FeedPageProps {
-  showLoginModal: () => void;
+  singleSpa: any;
+  logger: any;
+  showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
   loggedProfileData?: IProfileData;
   loginState: ILoginState;
 }
@@ -101,6 +107,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
+    if (!loginState.pubKey) {
+      return showLoginModal({ name: 'report-modal', entryId, contentType });
+    }
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
