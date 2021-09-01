@@ -14,12 +14,13 @@ import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ENTRY_KEY, useInfinitePostsByAuthor } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useQueryClient } from 'react-query';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard } = DS;
 
 export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;
-  showLoginModal: () => void;
+  showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
   loginState: ILoginState;
 }
 
@@ -112,6 +113,9 @@ const ProfilePage = (props: ProfilePageProps) => {
   }, [reqPosts.data]);
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
+    if (!loginState.pubKey) {
+      return showLoginModal({ name: 'report-modal', entryId, contentType });
+    }
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 

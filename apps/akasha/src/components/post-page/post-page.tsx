@@ -1,24 +1,26 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
-import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
+
+import DS from '@akashaproject/design-system';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import PostRenderer from './post-renderer';
+
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import PostRenderer from './post-renderer';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import {
-  useInfiniteComments,
-  useCreateComment,
-} from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import {
   useGetBookmarks,
   useBookmarkPost,
   useBookmarkDelete,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
+import {
+  useInfiniteComments,
+  useCreateComment,
+} from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import {
   useIsFollowing,
   useFollow,
@@ -28,6 +30,7 @@ import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { useMentionSearch } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
 import { useTagSearch } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { redirect, redirectToPost } from '../../services/routing-service';
 import routes, { POST } from '../../routes';
 
@@ -47,7 +50,7 @@ const {
 
 interface IPostPageProps {
   loginState: ILoginState;
-  showLoginModal: () => void;
+  showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
   navigateToUrl: (path: string) => void;
 }
 
@@ -161,6 +164,9 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
+    if (!loginState.pubKey) {
+      return showLoginModal({ name: 'report-modal', entryId, contentType });
+    }
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
@@ -219,6 +225,11 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
       entryId: commentId,
     });
   };
+
+  const handlePlaceholderClick = () => {
+    showLoginModal();
+  };
+
   const handleMentionQueryChange = (query: string) => {
     setMentionQuery(query);
   };
@@ -318,7 +329,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
               </Box>
               {!loginState.ethAddress && (
                 <Box margin="medium">
-                  <EditorPlaceholder onClick={showLoginModal} ethAddress={null} />
+                  <EditorPlaceholder onClick={handlePlaceholderClick} ethAddress={null} />
                 </Box>
               )}
               {loginState.ethAddress && (

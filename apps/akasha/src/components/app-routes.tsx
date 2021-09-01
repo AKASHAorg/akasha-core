@@ -1,15 +1,18 @@
 import * as React from 'react';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import DS from '@akashaproject/design-system';
 
-import routes, { FEED, rootRoute, POST, REPLY, TAGS, INVITE } from '../routes';
+import DS from '@akashaproject/design-system';
+import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+
 import FeedPage from './feed-page/feed-page';
 import PostPage from './post-page/post-page';
 import InvitePage from './post-page/invite-page';
 import TagFeedPage from './tag-feed-page/tag-feed-page';
-import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
-import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+
+import routes, { FEED, rootRoute, POST, REPLY, TAGS, INVITE } from '../routes';
 
 const { Box } = DS;
 
@@ -25,8 +28,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const profileDataReq = useGetProfile(loginState.pubKey);
   const loggedProfileData = profileDataReq.data;
 
-  const showLoginModal = () => {
-    props.navigateToModal({ name: 'login' });
+  const showLoginModal = (redirectTo?: ModalNavigationOptions) => {
+    props.navigateToModal({ name: 'login', redirectTo });
   };
 
   return (

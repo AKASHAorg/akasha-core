@@ -18,11 +18,11 @@ const LoginModal = (props: RootComponentProps) => {
   };
 
   const handleSignInClick = () => {
-    props.navigateToModal({ name: 'signin' });
+    props.navigateToModal({ name: 'signin', redirectTo: props.activeModal.redirectTo });
   };
 
   const handleSignUpClick = () => {
-    props.navigateToModal({ name: 'signup' });
+    props.navigateToModal({ name: 'signup', redirectTo: props.activeModal.redirectTo });
   };
 
   return (

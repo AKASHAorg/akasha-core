@@ -27,9 +27,13 @@ const SignInModalContainer = (props: RootComponentProps) => {
 
   React.useEffect(() => {
     if (loginState.ethAddress) {
-      handleModalClose();
+      if (props.activeModal.hasOwnProperty('redirectTo')) {
+        props.navigateToModal(props.activeModal.redirectTo);
+      } else {
+        handleModalClose();
+      }
     }
-  }, [loginState.ethAddress]);
+  }, [loginState.ethAddress, props.activeModal, props.navigateToModal]);
 
   const handleLogin = (providerId: number) => {
     loginActions.login(providerId, !acceptedTerms);
@@ -57,7 +61,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
   };
 
   const handleSignUpClick = () => {
-    props.navigateToModal({ name: 'signup' });
+    props.navigateToModal({ name: 'signup', redirectTo: props.activeModal.redirectTo });
   };
 
   return (

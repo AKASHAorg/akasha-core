@@ -4,7 +4,7 @@ import DS from '@akashaproject/design-system';
 import getSDK from '@akashaproject/awf-sdk';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/entry-feed';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ITag } from '@akashaproject/design-system/lib/components/TrendingWidgetCard';
@@ -23,7 +23,7 @@ const { Box, TagProfileCard, Helmet, styled, ErrorLoader } = DS;
 interface ITagFeedPage {
   loggedProfileData?: IProfileData;
   loginState: ILoginState;
-  showLoginModal: () => void;
+  showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
 }
 
 const TagInfoCard = styled(TagProfileCard)`
@@ -83,6 +83,9 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
+    if (!loginState.pubKey) {
+      return showLoginModal({ name: 'report-modal', entryId, contentType });
+    }
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
