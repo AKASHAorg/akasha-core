@@ -7,11 +7,8 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 
-import PostRenderer from './post-renderer';
-
-import routes, { POST } from '../../routes';
-import { redirect, redirectToPost } from '../../services/routing-service';
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
+import PostRenderer from './post-renderer';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -34,6 +31,8 @@ import { useMentionSearch } from '@akashaproject/ui-awf-hooks/lib/use-mentions.n
 import { useTagSearch } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { redirect, redirectToPost } from '../../services/routing-service';
+import routes, { POST } from '../../routes';
 
 const {
   Box,
