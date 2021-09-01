@@ -396,7 +396,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 hasNextPage={reqComments.hasNextPage}
                 itemCard={
                   <PostRenderer
-                    logger={logger}
                     bookmarkState={bookmarksReq}
                     ethAddress={loginState.ethAddress}
                     locale={locale}

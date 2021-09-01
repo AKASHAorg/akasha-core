@@ -67,18 +67,6 @@ const TopbarComponent = (props: RootComponentProps) => {
     return () => sub.unsubscribe();
   }, []);
 
-  React.useEffect(() => {
-    const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
-    if (loginState.ethAddress && !isLoadingProfile) {
-      getModeratorStatus(loginState.pubKey);
-      if (loggedProfileData && !loggedProfileData.userName) {
-        return props.navigateToModal({
-          name: 'update-profile',
-        });
-      }
-    }
-  }, [profileDataReq.isLoading, loginState.ethAddress, loggedProfileData]);
-
   // *how to obtain different topbar menu sections
   const quickAccessItems = currentMenu?.filter(
     menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,
@@ -111,16 +99,38 @@ const TopbarComponent = (props: RootComponentProps) => {
     menuItem => menuItem.area === MenuItemAreaType.OtherArea,
   );
 
-  const getModeratorStatus = async (loggedUser: string) => {
-    try {
-      const response = await moderationRequest.checkModerator(loggedUser);
-      if (response === 200) {
-        setIsModerator(true);
+  const getModeratorStatus = React.useCallback(
+    async (loggedUser: string) => {
+      try {
+        const response = await moderationRequest.checkModerator(loggedUser);
+        if (response === 200) {
+          setIsModerator(true);
+        }
+      } catch (error) {
+        logger.error(`[topbar-component.tsx]: getModeratorStatus err ${error.message || ''}`);
       }
-    } catch (error) {
-      logger.error('[topbar-component.tsx]: getModeratorStatus err %j', error.message || '');
+    },
+    [logger],
+  );
+
+  React.useEffect(() => {
+    const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
+    if (loginState.ethAddress && !isLoadingProfile) {
+      getModeratorStatus(loginState.pubKey);
+      if (loggedProfileData && !loggedProfileData.userName) {
+        return props.navigateToModal({
+          name: 'update-profile',
+        });
+      }
     }
-  };
+  }, [
+    profileDataReq.isLoading,
+    loginState.ethAddress,
+    loggedProfileData,
+    loginState.pubKey,
+    getModeratorStatus,
+    props,
+  ]);
 
   const handleNavigation = (path: string) => {
     navigateToUrl(path);

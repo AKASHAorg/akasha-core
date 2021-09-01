@@ -5,16 +5,17 @@ import singleSpaReact from 'single-spa-react';
 import { setupI18next } from '../i18n';
 import LayoutWidget from './layout-widget';
 import DS from '@akashaproject/design-system';
+import { withProviders } from '@akashaproject/ui-awf-hooks';
 
 const { ErrorLoader, ThemeSelector, lightTheme, darkTheme } = DS;
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: LayoutWidget,
+  rootComponent: withProviders(LayoutWidget),
   errorBoundary: (error, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
-      props.logger.error(error, errorInfo);
+      props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
       <ThemeSelector

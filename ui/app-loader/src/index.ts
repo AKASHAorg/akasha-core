@@ -18,7 +18,6 @@ import {
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import getSDK from '@akashaproject/awf-sdk';
 import * as rxjsOperators from 'rxjs/operators';
-import pino from 'pino';
 import { BehaviorSubject } from 'rxjs';
 import * as singleSpa from 'single-spa';
 import { createImportMap, getCurrentImportMaps, writeImports } from './import-maps';
@@ -30,6 +29,8 @@ import { createRootNode, getNameFromDef, navigateToModal, toNormalDef } from './
 import qs from 'qs';
 import Apps from './apps';
 import Widgets from './widgets';
+import { IAwfSDK } from '@akashaproject/sdk-typings';
+import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 
 interface SingleSpaEventDetail {
   originalEvent: Event;
@@ -50,9 +51,9 @@ export default class AppLoader {
    * World configuration object. Used to set necessary endpoints, default loaded apps and widgets.
    */
   private readonly worldConfig: ILoaderConfig & ISdkConfig;
-  private readonly logger: pino.BaseLogger;
-  private readonly loaderLogger: pino.Logger;
-  private readonly sdk: ReturnType<typeof getSDK>;
+  private readonly logger: ILogger;
+  private readonly loaderLogger: ILogger;
+  private readonly sdk: IAwfSDK;
   private readonly menuItems: IMenuList;
   public integrations: {
     info: (AppRegistryInfo | WidgetRegistryInfo)[];
@@ -66,13 +67,10 @@ export default class AppLoader {
 
   private apps: Apps;
   private widgets: Widgets;
-  // private extensions: Extensions;
+
   constructor(worldConfig: ILoaderConfig & ISdkConfig, sdk: ReturnType<typeof getSDK>) {
     this.worldConfig = worldConfig;
-    // root logger
-    this.logger = pino({ browser: { asObject: true }, level: worldConfig.logLevel });
-    // logger specific to this module
-    this.loaderLogger = this.logger.child({ module: 'app-loader' });
+    this.loaderLogger = sdk.services.log.create('app-loader');
 
     this.sdk = sdk;
     this.isMobile = detectMobile().phone || detectMobile().tablet;
@@ -126,7 +124,7 @@ export default class AppLoader {
 
     if (this.sdk.api.globalChannel) {
       const loginEvent = this.sdk.api.globalChannel.pipe(
-        rxjsOperators.filter(ev => ev?.event === 'signIn'),
+        rxjsOperators.filter(ev => ev && ev.hasOwnProperty('event') && ev['event'] === 'signIn'),
       );
       loginEvent.subscribe({
         next: () => {
@@ -164,7 +162,6 @@ export default class AppLoader {
       layoutConfig: layoutConfig,
       worldConfig: this.worldConfig,
       uiEvents: this.uiEvents,
-      logger: this.logger,
       sdk: this.sdk,
       addMenuItem: this.addMenuItem.bind(this),
       getMenuItems: this.getMenuItems.bind(this),
@@ -175,7 +172,6 @@ export default class AppLoader {
       layoutConfig: layoutConfig,
       worldConfig: this.worldConfig,
       uiEvents: this.uiEvents,
-      logger: this.logger,
       sdk: this.sdk,
       addMenuItem: this.addMenuItem.bind(this),
       getMenuItems: this.getMenuItems.bind(this),
@@ -205,13 +201,12 @@ export default class AppLoader {
     const doc = this.sdk.services.appSettings.getAll();
 
     doc.subscribe({
-      next: async (resp: any) => {
-        const { data } = resp;
-        this.loaderLogger.info('currently installed apps %o', data.apps);
-        if (!data.apps.length) {
+      next: async ({ data }) => {
+        this.loaderLogger.info(`currently installed apps ${JSON.stringify(data)}`);
+        if (!data.length) {
           return;
         }
-        const infos = await this.getPackageInfos(data.apps);
+        const infos = await this.getPackageInfos(data);
         const appInfos = this.apps.infos;
         const widgetInfos = this.widgets.infos;
         const userAppsToLoad = infos.filter(
@@ -249,20 +244,20 @@ export default class AppLoader {
           const widgetConfig = this.widgets.configs[info.name];
           const config = appConfig || widgetConfig;
           if (!config) {
-            this.loaderLogger.warn('Config not found for app: %s', info.name);
+            this.loaderLogger.warn(`Config not found for app: ${info.name}`);
             continue;
           }
           await this.mountExtension(config, info);
         }
       },
       error: (err: Error) => {
-        this.loaderLogger.error(`Failed to get user installed apps. Error: ${err}`);
+        this.loaderLogger.error(`Failed to get user installed apps. Error: ${err.message}`);
       },
     });
   }
 
   public onModalMount(modalData: UIEventData['data']) {
-    this.loaderLogger.info('Modal mounted: %o', modalData);
+    this.loaderLogger.info(`Modal mounted: ${JSON.stringify(modalData)}`);
 
     this.activeModal = modalData;
     const appConfigs = this.apps.configs;
@@ -316,9 +311,7 @@ export default class AppLoader {
       this.activeModal = undefined;
     } else if (this.activeModal && this.activeModal.name !== modalData.name) {
       this.loaderLogger.error(
-        'Cannot unmount modal. Name mismatch: %s != %s',
-        modalData.name,
-        this.activeModal.name,
+        `Cannot unmount modal. Name mismatch: ${modalData.name} != ${this.activeModal.name}`,
       );
     } else {
       this.loaderLogger.info('Modal already unmounted. Nothing to do!');
@@ -516,7 +509,7 @@ export default class AppLoader {
       singleSpa: singleSpa,
       isMobile: this.isMobile,
       layoutConfig: { ...layoutParams },
-      logger: this.logger.child({ module: this.layoutConfig.name }),
+      logger: this.sdk.services.log.create(this.layoutConfig.name),
       mountParcel: singleSpa.mountRootParcel,
       name: this.layoutConfig.name,
       navigateToModal: navigateToModal,
@@ -547,7 +540,7 @@ export default class AppLoader {
     await this.createImportMaps([info], info.name);
     const call = this.sdk.services.appSettings.install({ name: info.name });
     call.subscribe({
-      next: async _resp => {
+      next: async () => {
         let config;
         if (info.type === 'app') {
           await this.apps.install(info);
@@ -566,7 +559,7 @@ export default class AppLoader {
         await this.mountExtension(config, info);
       },
       error: (err: Error) => {
-        this.logger.error(err);
+        this.loaderLogger.error(`Cannot install app: ${info.name}. Error: ${err.message}`);
       },
     });
   }
@@ -668,9 +661,7 @@ export default class AppLoader {
       navigateToModal: navigateToModal,
       layoutConfig: this.layoutConfig,
       activeModal: this.activeModal,
-      logger: this.logger.child({
-        module: `ext-${extensionPoint.parentApp}-${rootNode}-${index}`,
-      }),
+      logger: this.sdk.services.log.create(`ext-${extensionPoint.parentApp}-${rootNode}-${index}`),
       extensionData,
     };
 
@@ -726,7 +717,7 @@ export default class AppLoader {
         searchObj.modal &&
         (!this.activeModal || this.activeModal.name !== searchObj.modal.name)
       ) {
-        this.loaderLogger.info('Requesting modal mount %o', searchObj.modal);
+        this.loaderLogger.info(`Requesting modal mount ${searchObj.modal}`);
         this.uiEvents.next({
           event: EventTypes.ModalMountRequest,
           data: searchObj.modal,
@@ -749,7 +740,7 @@ export default class AppLoader {
   }
 
   private onAppChange(ev: CustomEvent<SingleSpaEventDetail>) {
-    this.loaderLogger.info(`single-spa:app-change %j`, ev.detail);
+    this.loaderLogger.info(`single-spa:app-change ${ev.detail}`);
   }
   private getPluginsForLocation(location: Location) {
     return singleSpa.checkActivityFunctions(location);

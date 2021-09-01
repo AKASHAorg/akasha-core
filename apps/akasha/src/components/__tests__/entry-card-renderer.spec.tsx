@@ -17,7 +17,6 @@ describe('<EntryCardRenderer /> component', () => {
   const Base = (
     <EntryCardRenderer
       itemData={itemData}
-      logger={{ log: console.log }}
       ethAddress={mockEth}
       onBookmark={jest.fn}
       onAvatarClick={jest.fn}
