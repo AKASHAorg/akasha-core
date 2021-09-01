@@ -14,14 +14,14 @@ import { Mutation } from 'react-query/types/core/mutation';
  * @returns Mutation | undefined
  */
 
-export const useMutationListener = (mutationKey: MutationKey) => {
-  const [mutation, setMutation] = React.useState<Mutation>();
+export const useMutationListener = <TVars>(mutationKey: MutationKey) => {
+  const [mutation, setMutation] = React.useState<Mutation<unknown, unknown, TVars>>();
   const queryClient = useQueryClient();
   const mutationCache = queryClient.getMutationCache();
   React.useEffect(() => {
     const unsubscribe = mutationCache.subscribe(mutation => {
       if (mutation.options.mutationKey === mutationKey) {
-        setMutation(Object.assign({}, mutation));
+        setMutation(Object.assign({}, mutation as unknown as Mutation<unknown, unknown, TVars>));
       }
     });
     return () => {

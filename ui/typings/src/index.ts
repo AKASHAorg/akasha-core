@@ -1,4 +1,5 @@
 import * as AppLoaderTypes from './app-loader';
+
 import i18n from 'i18next';
 export interface IAkashaError {
   errorKey: string;

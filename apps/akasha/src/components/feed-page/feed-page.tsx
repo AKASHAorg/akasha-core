@@ -2,9 +2,10 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
-import { useErrors } from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
+import { useErrors } from '@akashaproject/ui-awf-hooks';
 import {
   useGetBookmarks,
   useBookmarkPost,
@@ -24,6 +25,8 @@ import EntryCardRenderer from './entry-card-renderer';
 
 import routes, { POST } from '../../routes';
 import { redirectToPost } from '../../services/routing-service';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { Box, Helmet, EditorPlaceholder, EntryList, EntryCard, EntryPublishErrorCard } = DS;
 
@@ -31,19 +34,19 @@ export interface FeedPageProps {
   singleSpa: any;
   logger: any;
   showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
-  loggedProfileData?: any;
+  loggedProfileData?: IProfileData;
   loginState: ILoginState;
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const { isMobile, showLoginModal, loggedProfileData, loginState, logger } = props;
+  const { showLoginModal, loggedProfileData, loginState, logger } = props;
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const [errorState] = useErrors({ logger });
 
-  const createPostMutation = useMutationListener(CREATE_POST_MUTATION_KEY);
+  const createPostMutation = useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
   const postsReq = useInfinitePosts(15);
 
@@ -113,7 +116,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
   const handleEntryRemove = (entryId: string) => {
-    props.navigateToModal({ name: 'entry-remove-confirmation', entryType: 'Post', entryId });
+    props.navigateToModal({
+      name: 'entry-remove-confirmation',
+      entryType: ItemTypes.ENTRY,
+      entryId,
+    });
   };
 
   return (
@@ -135,7 +142,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       {createPostMutation && createPostMutation.state.status === 'loading' && (
         <EntryCard
           style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}
-          entryData={createPendingEntry(loggedProfileData, createPostMutation.state.variables)}
+          entryData={createPendingEntry(
+            loggedProfileData,
+            createPostMutation.state.variables,
+            createPostMutation.state.variables.metadata.quote,
+          )}
           sharePostLabel={t('Share Post')}
           shareTextLabel={t('Share this post with your friends')}
           repliesLabel={t('Replies')}

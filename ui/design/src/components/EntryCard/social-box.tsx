@@ -1,16 +1,14 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
-import { IProfileData } from '../ProfileCard/profile-widget-card';
 import Avatar from '../Avatar';
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { truncateMiddle } from '../../utils/string-utils';
 import IconLink from '../IconLink';
 import styled from 'styled-components';
-
-export type ISocialData = IProfileData[];
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export interface ISocialBox {
-  socialData: ISocialData;
+  socialData: IProfileData[];
   onClickUser?: (ethAddress: string) => void;
   // labels
   repostedThisLabel?: string;

@@ -12,14 +12,16 @@ import { ENTRY_KEY, useInfinitePostsByTag } from '@akashaproject/ui-awf-hooks/li
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
-} from '@akashaproject/ui-awf-hooks/lib/use-tag-subscribe.new';
+  useGetTag,
+} from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
 import { useQueryClient } from 'react-query';
 import { useTranslation } from 'react-i18next';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
-const { Box, TagProfileCard, Helmet, styled } = DS;
+const { Box, TagProfileCard, Helmet, styled, ErrorLoader } = DS;
 
 interface ITagFeedPage {
-  loggedProfileData?: any;
+  loggedProfileData?: IProfileData;
   loginState: ILoginState;
   showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
 }
@@ -30,24 +32,10 @@ const TagInfoCard = styled(TagProfileCard)`
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { showLoginModal, loggedProfileData, loginState } = props;
-  const { i18n } = useTranslation();
-  const sdk = getSDK();
+  const { t, i18n } = useTranslation();
   const { tagName } = useParams<{ tagName: string }>();
-  const [tagData, setTagData] = React.useState<ITag | null>(null);
   const queryClient = useQueryClient();
-
-  /* TODO: move to hooks */
-  React.useEffect(() => {
-    if (tagName) {
-      const tagsService = sdk.api.tags.getTag(tagName);
-      const sub = tagsService.subscribe(resp => {
-        if (resp.data?.getTag) {
-          setTagData(resp.data.getTag);
-        }
-      });
-      return () => sub.unsubscribe();
-    }
-  }, [tagName]);
+  const getTagQuery = useGetTag(tagName);
 
   const reqPosts = useInfinitePostsByTag(tagName, 15);
 
@@ -113,12 +101,22 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      <TagInfoCard
-        tag={tagData}
-        subscribedTags={tagSubscriptions}
-        handleSubscribeTag={handleTagSubscribe}
-        handleUnsubscribeTag={handleTagSubscribe}
-      />
+      {getTagQuery.status === 'loading' && <></>}
+      {getTagQuery.status === 'error' && (
+        <ErrorLoader
+          type="script-error"
+          title={t('Error loading tag data')}
+          details={getTagQuery.error}
+        />
+      )}
+      {getTagQuery.status === 'success' && (
+        <TagInfoCard
+          tag={getTagQuery.data}
+          subscribedTags={tagSubscriptions}
+          handleSubscribeTag={handleTagSubscribe}
+          handleUnsubscribeTag={handleTagSubscribe}
+        />
+      )}
       <FeedWidget
         itemType={ItemTypes.ENTRY}
         logger={props.logger}
@@ -132,7 +130,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={showLoginModal}
         hasNextPage={reqPosts.hasNextPage}
-        // totalItems={postsState.totalItems}
         profilePubKey={loginState.pubKey}
         loggedProfile={loggedProfileData}
         contentClickable={true}

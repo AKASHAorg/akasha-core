@@ -2,29 +2,15 @@ import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } 
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
-import { buildPublishObject } from './utils/entry-utils';
-import { Comment_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
+import { buildPublishObject, CommentPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import moderationRequest from './moderation-request';
+import { IPublishData, CommentResponse } from '@akashaproject/ui-awf-typings/lib/entry';
 
 export const COMMENT_KEY = 'Comment';
 export const COMMENTS_KEY = 'Comments';
 
 export const PUBLISH_PENDING_KEY = 'PendingPublish_Comments';
-
-export interface PublishCommentData {
-  metadata: {
-    app: string;
-    version: number;
-    quote?: string;
-    tags: string[];
-    mentions: string[];
-  };
-  author: string;
-  content: any;
-  textContent: string;
-  postID: string;
-}
 
 const getComments = async (
   queryClient: QueryClient,
@@ -66,7 +52,7 @@ export function useInfiniteComments(limit: number, postID: string, offset?: stri
   );
 }
 
-const getComment = async (commentID): Promise<Comment_Response & { isPublishing?: boolean }> => {
+const getComment = async (commentID): Promise<CommentResponse> => {
   const sdk = getSDK();
 
   const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
@@ -98,14 +84,25 @@ export interface Publish_Options {
   data: DataProviderInput[];
   comment: { title?: string; tags?: string[]; postID: string };
 }
-export function useDeleteComment(commentID: string) {
+
+const deleteComment = async (commentId: string) => {
   const sdk = getSDK();
+  const resp = await lastValueFrom(sdk.api.comments.removeComment(commentId));
+  if (resp.hasOwnProperty('error')) {
+    throw new Error(resp['error']);
+  }
+  if (resp.data.removeComment) {
+    return resp.data.removeComment;
+  }
+  throw new Error('Cannot delete this comment. Please try again later.');
+};
+export function useDeleteComment(commentID: string) {
   const queryClient = useQueryClient();
-  return useMutation(commentID => lastValueFrom(sdk.api.entries.removeEntry(commentID)), {
+  return useMutation((commentID: string) => deleteComment(commentID), {
     // When mutate is called:
     onMutate: async (commentID: string) => {
       // Snapshot the previous value
-      const previousComment: Comment_Response = queryClient.getQueryData([COMMENT_KEY, commentID]);
+      const previousComment: CommentResponse = queryClient.getQueryData([COMMENT_KEY, commentID]);
       // can add some optimistic updates here
       // ex: queryClient.setQueryData([COMMENT_KEY, commentID], {})
       queryClient.setQueryData([COMMENT_KEY, commentID], {
@@ -140,13 +137,13 @@ export function useCreateComment() {
 
   const pendingID = 'pending' + new Date().getTime();
   return useMutation(
-    async (publishObj: PublishCommentData) => {
+    async (publishObj: IPublishData & { postID: string }) => {
       const comment = buildPublishObject(publishObj, publishObj.postID);
       const res = await lastValueFrom(sdk.api.comments.addComment(comment));
       return res?.data?.addComment;
     },
     {
-      onMutate: async (publishObj: PublishCommentData) => {
+      onMutate: async (publishObj: IPublishData & { postID: string }) => {
         await queryClient.cancelQueries([COMMENTS_KEY, publishObj.postID]);
 
         const optimisticComment = Object.assign({}, publishObj);
@@ -178,24 +175,27 @@ export function useEditComment(commentID: string) {
   const queryClient = useQueryClient();
 
   return useMutation(
-    (comment: PublishCommentData) => {
+    (comment: IPublishData & { postID: string }) => {
       const { postID, ...commentData } = comment;
-      const publishObj: Publish_Options = buildPublishObject(commentData, postID);
-      return lastValueFrom(sdk.api.comments.editComment({ commentID, ...publishObj }));
+      const publishObj = buildPublishObject(commentData, postID);
+      return lastValueFrom(
+        sdk.api.comments.editComment({ commentID, ...Object.assign({}, publishObj) }),
+      );
     },
     {
-      onMutate: async (comment: PublishCommentData) => {
-        queryClient.setQueryData([COMMENT_KEY, commentID], (current: Comment_Response) => {
+      onMutate: async (comment: IPublishData & { postID: string }) => {
+        queryClient.setQueryData<CommentResponse>([COMMENT_KEY, commentID], current => {
+          const commentPublishObj = buildPublishObject(comment, comment.postID);
           return {
             ...current,
-            content: comment.content,
+            content: commentPublishObj.data,
             isPublishing: true,
           };
         });
 
         return { comment };
       },
-      onError: (err, variables, context) => {
+      onError: (_err, _variables, context) => {
         if (context?.comment) {
           queryClient.setQueryData(
             [COMMENT_KEY, commentID],

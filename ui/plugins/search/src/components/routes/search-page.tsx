@@ -12,7 +12,7 @@ import {
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
-} from '@akashaproject/ui-awf-hooks/lib/use-tag-subscribe.new';
+} from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
 import {
   useIsFollowingMultiple,
   useFollow,

@@ -9,6 +9,8 @@ const genUser = (ethAddress?: string, userName?: string) => {
     name: faker.fake('{{name.firstName}} {{name.lastName}}'),
     pubKey: faker.datatype.uuid(),
     userName: userName || faker.internet.userName(),
+    default: [],
+    providers: [],
   };
 };
 
