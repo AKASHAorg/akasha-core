@@ -649,7 +649,7 @@ export default class AppLoader {
     if (!node) {
       return;
     }
-    const wrapperNode = createRootNode(node, extensionPoint.parentApp as string, 'extension');
+    const wrapperNode = createRootNode(node, extensionPoint.parentApp, 'extension');
     if (!wrapperNode) {
       return;
     }
@@ -717,7 +717,7 @@ export default class AppLoader {
         searchObj.modal &&
         (!this.activeModal || this.activeModal.name !== searchObj.modal.name)
       ) {
-        this.loaderLogger.info(`Requesting modal mount ${searchObj.modal}`);
+        this.loaderLogger.info(`Requesting modal mount ${JSON.stringify(searchObj.modal)}`);
         this.uiEvents.next({
           event: EventTypes.ModalMountRequest,
           data: searchObj.modal,
@@ -740,7 +740,7 @@ export default class AppLoader {
   }
 
   private onAppChange(ev: CustomEvent<SingleSpaEventDetail>) {
-    this.loaderLogger.info(`single-spa:app-change ${ev.detail}`);
+    this.loaderLogger.info(`single-spa:app-change ${JSON.stringify(ev.detail)}`);
   }
   private getPluginsForLocation(location: Location) {
     return singleSpa.checkActivityFunctions(location);

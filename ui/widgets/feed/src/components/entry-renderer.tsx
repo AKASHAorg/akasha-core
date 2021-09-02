@@ -116,11 +116,11 @@ const EntryRenderer = (props: IEntryRenderer) => {
     return (postReq.status === 'success' || commentReq.status === 'success') && itemData?.reported;
   }, [itemData, showAnyway, postReq.status, commentReq.status]);
 
-  React.useEffect(() => {
-    if (ethAddress && itemData?.author.ethAddress) {
-      checkIsFollowing(ethAddress, itemData.author.ethAddress);
-    }
-  }, [checkIsFollowing, ethAddress, itemData]);
+  // React.useEffect(() => {
+  //   if (ethAddress && itemData?.author.ethAddress) {
+  //     checkIsFollowing(ethAddress, itemData.author.ethAddress);
+  //   }
+  // }, [checkIsFollowing, ethAddress, itemData]);
 
   const handleFollow = () => {
     if (itemData?.author.ethAddress) {

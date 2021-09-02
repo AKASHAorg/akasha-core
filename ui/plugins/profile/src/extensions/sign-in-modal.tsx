@@ -5,6 +5,7 @@ import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import { useLoginState, useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
+import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { SignInModal } = DS;
 
@@ -25,15 +26,26 @@ const SignInModalContainer = (props: RootComponentProps) => {
     onError: errorActions.createError,
   });
 
+  const handleModalClose = React.useCallback(() => {
+    props.singleSpa.navigateToUrl(location.pathname);
+  }, [props.singleSpa]);
+
   React.useEffect(() => {
     if (loginState.ethAddress) {
-      if (props.activeModal.hasOwnProperty('redirectTo')) {
-        props.navigateToModal(props.activeModal.redirectTo);
+      if (
+        props.activeModal.hasOwnProperty('redirectTo') &&
+        typeof props.activeModal.redirectTo === 'object'
+      ) {
+        const navigationOptions = props.activeModal.redirectTo;
+        if (navigationOptions.hasOwnProperty('name')) {
+          // after the validations above it is safe to pass it as ModalNavigationOptions type
+          props.navigateToModal(navigationOptions as ModalNavigationOptions);
+        }
       } else {
-        handleModalClose();
+        setTimeout(() => handleModalClose(), 500);
       }
     }
-  }, [loginState.ethAddress, props.activeModal, props.navigateToModal]);
+  }, [loginState.ethAddress, props, props.navigateToModal, handleModalClose]);
 
   const handleLogin = (providerId: number) => {
     loginActions.login(providerId, !acceptedTerms);
@@ -53,12 +65,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
       return txt;
     }
     return null;
-  }, [errorState]);
-
-  const handleModalClose = () => {
-    props.singleSpa.navigateToUrl(location.pathname);
-    errorActions.removeLoginErrors();
-  };
+  }, [acceptedTerms, errorState]);
 
   const handleSignUpClick = () => {
     props.navigateToModal({ name: 'signup', redirectTo: props.activeModal.redirectTo });

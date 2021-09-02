@@ -113,73 +113,78 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
             settings={{ activeTheme: 'Light-Theme' }}
             style={{ display: 'flex' }}
           >
-            <ViewportSizeProvider>
-              <Box className="container" fill="horizontal">
-                <TopbarSlot
-                  name={props.layoutConfig.topbarSlotId}
-                  onMount={handleExtensionMount}
-                  onUnmount={handleExtensionUnmount}
-                />
-                <Box className="container" style={{ flexDirection: 'row' }}>
-                  <SidebarWrapper visible={showSidebar}>
-                    <SidebarSlot
-                      name={props.layoutConfig.sidebarSlotId}
-                      onMount={handleExtensionMount}
-                      onUnmount={handleExtensionUnmount}
-                      className="container"
-                    />
-                  </SidebarWrapper>
-                  <MainAreaContainer sidebarVisible={showSidebar} className="container">
-                    <PluginSlot
-                      name={props.layoutConfig.pluginSlotId}
-                      onMount={handleExtensionMount}
-                      onUnmount={handleExtensionUnmount}
-                      className="container"
-                    />
-                    <Box>
-                      <WidgetContainer>
-                        {!props.isMobile && (
-                          <CookieWidget
-                            style={{
-                              position: 'absolute',
-                              bottom: 0,
-                              marginLeft: '1rem',
-                              minWidth: '21rem',
-                            }}
-                          />
-                        )}
-                        <ScrollableWidgetArea>
-                          <WidgetSlot
-                            name={props.layoutConfig.rootWidgetSlotId}
-                            onMount={handleExtensionMount}
-                            onUnmount={handleExtensionUnmount}
-                          />
-                          <WidgetSlot
-                            name={props.layoutConfig.widgetSlotId}
-                            onMount={handleExtensionMount}
-                            onUnmount={handleExtensionUnmount}
-                          />
-                        </ScrollableWidgetArea>
-                      </WidgetContainer>
-                    </Box>
-                  </MainAreaContainer>
-                </Box>
-                {activeModal && (
-                  <ModalSlot
-                    key={activeModal.name}
-                    name={activeModal.name}
-                    onMount={handleModalNodeMount}
-                    onUnmount={handleModalNodeUnmount}
+            <Box className="container" fill="horizontal">
+              <TopbarSlot
+                name={props.layoutConfig.topbarSlotId}
+                onMount={handleExtensionMount}
+                onUnmount={handleExtensionUnmount}
+                style={{ width: '100vw' }}
+              />
+              <Box
+                className="container"
+                fill="horizontal"
+                justify="around"
+                style={{ flexDirection: 'row', alignItems: 'stretch' }}
+              >
+                <SidebarWrapper visible={showSidebar}>
+                  <Box width={{ width: '100%' }} />
+                  <SidebarSlot
+                    name={props.layoutConfig.sidebarSlotId}
+                    onMount={handleExtensionMount}
+                    onUnmount={handleExtensionUnmount}
+                    // className="container"
                   />
-                )}
-                <ModalSlot
-                  name={props.layoutConfig.modalSlotId}
-                  onMount={handleExtensionMount}
-                  onUnmount={handleExtensionUnmount}
-                />
-                {props.isMobile && <CookieWidget style={{ position: 'fixed', bottom: 0 }} />}
+                </SidebarWrapper>
+                <MainAreaContainer sidebarVisible={showSidebar} className="container">
+                  <PluginSlot
+                    name={props.layoutConfig.pluginSlotId}
+                    onMount={handleExtensionMount}
+                    onUnmount={handleExtensionUnmount}
+                    className="container"
+                  />
+                  <Box>
+                    <WidgetContainer>
+                      {!props.isMobile && (
+                        <CookieWidget
+                          style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            marginLeft: '1rem',
+                            minWidth: '21rem',
+                          }}
+                        />
+                      )}
+                      <ScrollableWidgetArea>
+                        <WidgetSlot
+                          name={props.layoutConfig.rootWidgetSlotId}
+                          onMount={handleExtensionMount}
+                          onUnmount={handleExtensionUnmount}
+                        />
+                        <WidgetSlot
+                          name={props.layoutConfig.widgetSlotId}
+                          onMount={handleExtensionMount}
+                          onUnmount={handleExtensionUnmount}
+                        />
+                      </ScrollableWidgetArea>
+                    </WidgetContainer>
+                  </Box>
+                </MainAreaContainer>
               </Box>
-            </ViewportSizeProvider>
+              {activeModal && (
+                <ModalSlot
+                  key={activeModal.name}
+                  name={activeModal.name}
+                  onMount={handleModalNodeMount}
+                  onUnmount={handleModalNodeUnmount}
+                />
+              )}
+              <ModalSlot
+                name={props.layoutConfig.modalSlotId}
+                onMount={handleExtensionMount}
+                onUnmount={handleExtensionUnmount}
+              />
+              {props.isMobile && <CookieWidget style={{ position: 'fixed', bottom: 0 }} />}
+            </Box>
           </ThemeSelector>
         </Box>
       </Box>
