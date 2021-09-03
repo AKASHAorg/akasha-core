@@ -7,6 +7,8 @@ import i18next from '../i18n';
 
 const { Box } = DS;
 
+// @TODO: convert to function component
+
 class App extends PureComponent<RootComponentProps> {
   public state: { hasErrors: boolean };
 
@@ -17,12 +19,12 @@ class App extends PureComponent<RootComponentProps> {
     };
   }
 
-  public componentDidCatch(err: Error, info: React.ErrorInfo) {
+  public componentDidCatch(err: Error) {
     this.setState({
       hasErrors: true,
     });
     const { logger } = this.props;
-    logger.error(err, info);
+    logger.error(`${JSON.stringify(err)}`);
   }
   public render() {
     if (this.state.hasErrors) {

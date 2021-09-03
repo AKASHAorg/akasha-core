@@ -2,7 +2,7 @@ import React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useFollow } from '@akashaproject/ui-awf-hooks';
-import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import routes, { POST } from '../../routes';
 import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
@@ -14,7 +14,6 @@ import { IContentClickDetails } from '@akashaproject/design-system/lib/component
 const { ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading, ExtensionPoint } = DS;
 
 export interface IEntryCardRendererProps {
-  logger: RootComponentProps['logger'];
   itemId?: string;
   itemData?: IEntryData;
   isBookmarked?: boolean;
@@ -53,7 +52,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     bookmarkState,
     itemId,
     style,
-    logger,
     contentClickable,
     hidePublishTime,
     headerTextLabel,
@@ -96,11 +94,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     return postReq.status === 'success' && itemData?.reported;
   }, [itemData, showAnyway, postReq.status]);
 
-  const [followedProfiles, followActions] = useFollow({
-    onError: (errorInfo: IAkashaError) => {
-      logger.error(errorInfo.error.message, errorInfo.errorKey);
-    },
-  });
+  const [followedProfiles, followActions] = useFollow({});
 
   const isFollowing = React.useMemo(() => {
     if (itemData?.author.ethAddress) {

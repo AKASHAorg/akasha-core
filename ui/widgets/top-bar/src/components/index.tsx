@@ -15,7 +15,7 @@ const reactLifecycles = singleSpaReact<RootComponentProps>({
   rootComponent: withProviders(Widget),
   errorBoundary: (error, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
-      props.logger.error(error, errorInfo);
+      props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
       <ThemeSelector

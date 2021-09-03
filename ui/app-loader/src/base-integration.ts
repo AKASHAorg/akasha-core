@@ -10,19 +10,18 @@ import {
   UIEventData,
   WidgetRegistryInfo,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import pino from 'pino';
 import * as singleSpa from 'single-spa';
 import { BehaviorSubject } from 'rxjs';
 import { createRootNode } from './utils';
-import getSDK from '@akashaproject/awf-sdk';
+import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { IAwfSDK } from '@akashaproject/sdk-typings';
 
 export interface BaseIntegrationClassOptions {
   layoutConfig: LayoutConfig;
   uiEvents: BehaviorSubject<UIEventData>;
   worldConfig: ISdkConfig & ILoaderConfig;
-  logger: pino.BaseLogger;
   isMobile: boolean;
-  sdk: ReturnType<typeof getSDK>;
+  sdk: IAwfSDK;
   addMenuItem: (menuItem: IMenuItem) => void;
   getMenuItems: () => IMenuList;
 }
@@ -31,20 +30,20 @@ class BaseIntegration {
   public layoutConfig: LayoutConfig;
   public uiEvents: BehaviorSubject<UIEventData>;
   public worldConfig: ISdkConfig & ILoaderConfig;
-  public baseLogger: pino.BaseLogger;
-  public sdk: ReturnType<typeof getSDK>;
+  public sdk: IAwfSDK;
   public isMobile: boolean;
   public addMenuItem: (menuItem: IMenuItem) => void;
   public getMenuItems: () => IMenuList;
+  public logger: ILogger;
   constructor(opts: BaseIntegrationClassOptions) {
     this.layoutConfig = opts.layoutConfig;
     this.uiEvents = opts.uiEvents;
     this.worldConfig = opts.worldConfig;
-    this.baseLogger = opts.logger;
     this.sdk = opts.sdk;
     this.isMobile = opts.isMobile;
     this.addMenuItem = opts.addMenuItem;
     this.getMenuItems = opts.getMenuItems;
+    this.logger = this.sdk.services.log.create('app-loader.base-integration');
   }
   public getAppsForLocation(location: Location) {
     return singleSpa.checkActivityFunctions(location);
@@ -101,15 +100,11 @@ class BaseIntegration {
   ) {
     const domNode = document.getElementById(integrationConfig.mountsIn || '');
     if (!domNode) {
-      return this.baseLogger
-        .child({ module: 'base-integration' })
-        .warn(`Node ${domNode} is undefined! App: ${name}`);
+      return this.logger.warn(`Node ${domNode} is undefined! App: ${name}`);
     }
     const rootNode = createRootNode(domNode, name, idPrefix);
     if (!rootNode) {
-      return this.baseLogger
-        .child({ module: 'base-integration' })
-        .warn(`Node ${rootNode} cannot be created! App: ${name}`);
+      return this.logger.warn(`Node ${rootNode} cannot be created! App: ${name}`);
     }
     return rootNode;
   }

@@ -21,9 +21,18 @@ export interface CommentResponse extends Comment_Response {
   isPublishing?: boolean;
 }
 
+export interface RemovedEntryContent {
+  property?: 'removed';
+}
+
+export interface ImageNode {
+  url?: string;
+  type?: string;
+}
+
 export interface IEntryData {
   CID?: string;
-  content: any;
+  content: (Descendant & ImageNode & RemovedEntryContent)[];
   time?: string | number | Date;
   replies?: number;
   reposts?: number;

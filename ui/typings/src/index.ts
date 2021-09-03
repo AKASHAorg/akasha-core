@@ -1,3 +1,6 @@
+import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { BehaviorSubject } from 'rxjs';
+import singleSpa from 'single-spa';
 import * as AppLoaderTypes from './app-loader';
 
 import i18n from 'i18next';
@@ -15,15 +18,15 @@ export interface LogoSourceType {
 export interface RootComponentProps {
   activeWhen?: { path: string };
   domElement: HTMLElement;
-  uiEvents: any;
+  uiEvents: BehaviorSubject<AppLoaderTypes.UIEventData>;
   i18n?: typeof i18n;
   getMenuItems?: () => AppLoaderTypes.IMenuList;
   isMobile: boolean;
   layoutConfig: Omit<AppLoaderTypes.LayoutConfig, 'loadingFn' | 'mountsIn' | 'name' | 'title'>;
-  logger: any;
+  logger: ILogger;
   mountParcel: (parcel: unknown, config?: unknown) => unknown;
   name: string;
-  singleSpa: any;
+  singleSpa: typeof singleSpa;
   installIntegration?: (name: string) => void;
   uninstallIntegration?: (name: string) => void;
   navigateToModal: (opts: AppLoaderTypes.ModalNavigationOptions) => void;

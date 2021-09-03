@@ -1,26 +1,22 @@
 import * as React from 'react';
 import BookmarksPage from '../bookmarks-page';
-import {
-  RenderResult,
-  renderWithAllProviders,
-  globalChannelMock,
-  getSDKMocks,
-  act,
-} from '@akashaproject/ui-awf-testing-utils';
+import { RenderResult, renderWithAllProviders, act } from '@akashaproject/ui-awf-testing-utils';
 
 describe('<BookmarksPage /> component', () => {
   let renderResult: RenderResult;
-  const sdkMocks = getSDKMocks({});
   const Base = (
     <BookmarksPage
-      sdkModules={sdkMocks}
-      globalChannel={globalChannelMock}
-      i18n={{}}
-      i18nConfig={{}}
-      logger={{}}
+      i18n={null}
+      logger={null}
       isMobile={false}
-      mountParcel={() => {}}
-      singleSpa={{}}
+      activeModal={null}
+      navigateToModal={jest.fn()}
+      uiEvents={null}
+      layoutConfig={null}
+      mountParcel={() => {
+        /*  */
+      }}
+      singleSpa={null}
     />
   );
   beforeEach(() => {

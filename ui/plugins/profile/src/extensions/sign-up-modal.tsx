@@ -3,17 +3,17 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
-import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useLoginState, useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
 import { lastValueFrom } from 'rxjs';
+import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { SignUpModal } = DS;
 
 const SignUpModalContainer = (props: RootComponentProps) => {
   const { t } = useTranslation();
-  const location = useLocation();
 
   const sdk = getSDK();
 
@@ -49,19 +49,31 @@ const SignUpModalContainer = (props: RootComponentProps) => {
     acceptedTerms: false,
   });
 
+  const handleSignUpModalClose = React.useCallback(() => {
+    props.singleSpa.navigateToUrl(location.pathname);
+    _handleModalClose();
+    errorActions.removeLoginErrors();
+  }, []);
+
   React.useEffect(() => {
     if (loginState.ethAddress) {
-      if (props.activeModal.hasOwnProperty('redirectTo')) {
-        props.navigateToModal(props.activeModal.redirectTo);
+      if (
+        props.activeModal.hasOwnProperty('redirectTo') &&
+        typeof props.activeModal.redirectTo === 'object'
+      ) {
+        const navigationOptions = props.activeModal.redirectTo;
+        if (navigationOptions.hasOwnProperty('name')) {
+          // after the validations above it is safe to pass it as ModalNavigationOptions type
+          props.navigateToModal(navigationOptions as ModalNavigationOptions);
+        }
       } else {
         setTimeout(() => handleSignUpModalClose(), 500);
       }
     }
-  }, [loginState.ethAddress, props.activeModal, props.navigateToModal]);
+  }, [loginState.ethAddress, props, props.navigateToModal, handleSignUpModalClose]);
 
   const _handleModalClose = () => {
     setInviteToken(null);
-    errorActions.removeLoginErrors();
   };
 
   const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,12 +120,12 @@ const SignUpModalContainer = (props: RootComponentProps) => {
       });
   };
 
-  const validateTokenFn = (e: any) => {
+  const validateTokenFn = (e: MouseEvent) => {
     e.preventDefault();
     checkIsValidToken();
   };
 
-  const onCheckedTermsValues = (e: any) => {
+  const onCheckedTermsValues = (e: { value: string[] }) => {
     setTermsState(prevState => {
       return {
         ...prevState,
@@ -121,7 +133,7 @@ const SignUpModalContainer = (props: RootComponentProps) => {
       };
     });
   };
-  const onAcceptTerms = (_: any) => {
+  const onAcceptTerms = () => {
     setTermsState(prevState => {
       return {
         ...prevState,
@@ -144,12 +156,6 @@ const SignUpModalContainer = (props: RootComponentProps) => {
   }, []);
   React.useEffect(triggerInviteValidation, [inviteToken]);
   React.useEffect(activateAcceptButton, [termsState.checkedTermsValues]);
-
-  const handleSignUpModalClose = () => {
-    props.singleSpa.navigateToUrl(location.pathname);
-    _handleModalClose();
-    errorActions.removeLoginErrors();
-  };
 
   return (
     <SignUpModal
@@ -185,9 +191,9 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props) => {
+  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
-      props.logger.error('Error: %s; Info: %s', err, errorInfo);
+      props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
     return <div>!</div>;
   },

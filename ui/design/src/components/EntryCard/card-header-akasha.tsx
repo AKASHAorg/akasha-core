@@ -4,7 +4,7 @@ import TextIcon from '../TextIcon';
 import { Box, Text } from 'grommet';
 
 export interface ICardHeaderAkashaProps {
-  target: {};
+  target: HTMLElement;
   onMenuClose: () => void;
   CID: string;
   CIDLabel?: string;
