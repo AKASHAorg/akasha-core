@@ -46,8 +46,16 @@ const EditorModalContainer = (props: RootComponentProps) => {
     () => props.activeModal.hasOwnProperty('embedEntry'),
     [props.activeModal],
   );
+  const embedEntryId = React.useMemo(() => {
+    if (
+      props.activeModal.hasOwnProperty('embedEntry') &&
+      typeof props.activeModal.embedEntry === 'string'
+    ) {
+      return props.activeModal.embedEntry;
+    }
+  }, [props.activeModal]);
 
-  const embeddedPost = usePost(props.activeModal.embedEntry, hasEmbed);
+  const embeddedPost = usePost(embedEntryId, hasEmbed);
 
   const editingPost = usePost(props.activeModal.entryId, isEditing);
 
@@ -160,9 +168,9 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props) => {
+  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
-      props.logger.error('Error: %o; Info: %s', err, errorInfo);
+      props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
 
     return (

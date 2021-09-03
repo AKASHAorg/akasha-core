@@ -27,7 +27,7 @@ const EntryRemoveModal: React.FC<RootComponentProps> = props => {
   }, [props.singleSpa]);
 
   const handleDeletePost = React.useCallback(() => {
-    if (activeModal && activeModal.entryType) {
+    if (activeModal && activeModal.entryType && typeof activeModal.entryType === 'string') {
       const entryType = parseInt(activeModal.entryType, 10);
       if (entryType === ItemTypes.COMMENT) {
         commentDeleteQuery.mutate(activeModal.entryId);
@@ -84,9 +84,9 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(ModalWrapper),
-  errorBoundary: (err, errorInfo, props) => {
+  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
-      props.logger.error('Error: %s; Info: %s', err, errorInfo);
+      props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
     return (
       <ThemeSelector

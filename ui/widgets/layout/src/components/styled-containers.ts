@@ -1,8 +1,9 @@
 import DS from '@akashaproject/design-system';
+import React from 'react';
 
 const { css, styled } = DS;
 
-export const BaseContainer: any = styled.div`
+export const BaseContainer: React.FC<Record<string, unknown>> = styled.div`
   border: 0;
   box-sizing: border-box;
   display: flex;
@@ -17,30 +18,36 @@ export const BaseContainer: any = styled.div`
   z-index: 0;
 `;
 
-export const MainAreaContainer: any = styled(BaseContainer)`
-  flex-grow: 1;
-  flex-direction: column-reverse !important;
+export const MainAreaContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
+  /* flex-grow: 1; */
+  /* flex-direction: column-reverse !important; */
   max-width: 100%;
   margin-bottom: 0.5em;
-  ${props => css<any>`
-    @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
-      flex-direction: row !important;
-    }
+  height: 100%;
+  border: 0;
+  justify-content: flex-start;
+  flex-grow: 1;
+  flex-direction: row;
+  ${props => css`
     @media screen and (max-width: ${props.theme.breakpoints.small.value}px) {
       padding: 0 0.25rem;
+      flex-direction: column-reverse;
     }
   `}
 `;
 
 const TOPBAR_HEIGHT = 48;
 
-export const WidgetContainer: any = styled(BaseContainer)`
+export const WidgetContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
   position: sticky;
   top: ${TOPBAR_HEIGHT}px;
-  margin-top: 0.5rem;
+  flex-grow: 1;
+  max-height: calc(100vh - ${TOPBAR_HEIGHT}px);
 `;
 
-export const ScrollableWidgetArea: any = styled.div`
+export const ScrollableWidgetArea: React.FC<Record<string, unknown>> = styled.div`
+  flex-grow: 1;
+  margin-top: 0.5rem;
   ${props => css`
     &::-webkit-scrollbar {
       width: 0 !important;
@@ -49,24 +56,25 @@ export const ScrollableWidgetArea: any = styled.div`
     @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
       overflow-y: auto;
       overflow-x: hidden;
-      height: calc(100vh - ${TOPBAR_HEIGHT}px - 1em);
     }
   `}
 `;
 
-export const SidebarWrapper: any = styled(BaseContainer)<{ visible: boolean }>`
+export const SidebarWrapper: React.FC<Record<string, unknown>> = styled(BaseContainer)`
   z-index: 999;
   flex-grow: 1;
   max-height: calc(100vh - ${TOPBAR_HEIGHT}px);
   top: ${TOPBAR_HEIGHT}px;
   position: sticky;
+  flex-direction: column;
+  align-items: flex-end;
   @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
     ${props => {
       if (props.visible) {
         return css`
           position: fixed;
           /* top: ${TOPBAR_HEIGHT}rem; */
-          width: 90vw;
+          /* width: 90vw; */
           /* height: calc(100vh - ${TOPBAR_HEIGHT + 0.3}rem); */
         `;
       }

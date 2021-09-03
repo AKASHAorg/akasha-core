@@ -10,18 +10,16 @@ import {
 import BaseIntegration, { BaseIntegrationClassOptions } from './base-integration';
 import * as singleSpa from 'single-spa';
 import { getNameFromDef, navigateToModal } from './utils';
-import pino from 'pino';
 
 export interface IntegrationModule {
   register: (opts: IntegrationRegistrationOptions) => Promise<IAppConfig | IWidgetConfig>;
-  install?: (sdk: any) => Promise<void>;
+  install?: () => Promise<void>;
 }
 
 class Apps extends BaseIntegration {
   private readonly appInfos: AppRegistryInfo[];
   private readonly appConfigs: Record<string, IAppConfig>;
   private readonly appModules: Record<string, IntegrationModule>;
-  private logger: pino.Logger;
   constructor(opts: BaseIntegrationClassOptions) {
     super(opts);
     // registry infos
@@ -32,7 +30,7 @@ class Apps extends BaseIntegration {
 
     // the config object that is returned by module.register();
     this.appConfigs = {};
-    this.logger = opts.logger.child({ module: 'apps-loader' });
+    this.logger = opts.sdk.services.log.create('app-loader.apps');
   }
   add(appInfo: AppRegistryInfo) {
     // todo
@@ -174,7 +172,7 @@ class Apps extends BaseIntegration {
         customProps: {
           domElementGetter: () => this.getDomElement(appConfig, appName, 'app'),
           uiEvents: this.uiEvents,
-          logger: this.baseLogger.child({ module: appName }),
+          logger: this.sdk.services.log.create(appName),
           installIntegration: (name: string, version?: string) => {
             this.uiEvents.next({ event: EventTypes.InstallIntegration, data: { name, version } });
           },
@@ -190,7 +188,7 @@ class Apps extends BaseIntegration {
         this.addMenuItem(appConfig.menuItems);
       }
     } else {
-      this.logger.warn('Cannot mount %s since there is not mountsIn property defined!', appName);
+      this.logger.warn(`Cannot mount ${appName} since there is not mountsIn property defined!`);
     }
   }
 
@@ -202,7 +200,7 @@ class Apps extends BaseIntegration {
     }
     this.appModules[appInfo.name] = module;
     if (module.hasOwnProperty('install') && typeof module.install === 'function') {
-      await module.install({});
+      await module.install();
     }
     if (module.hasOwnProperty('register') && typeof module.register === 'function') {
       const appConfig = (await module.register({
