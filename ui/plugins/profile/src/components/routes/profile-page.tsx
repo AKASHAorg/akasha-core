@@ -159,7 +159,7 @@ const ProfilePage = (props: ProfilePageProps) => {
           ) : (
             <ProfilePageHeader
               {...props}
-              profileState={profileState}
+              profileData={profileState}
               profileId={pubKey}
               loggedUserEthAddress={loginState.ethAddress}
             />
