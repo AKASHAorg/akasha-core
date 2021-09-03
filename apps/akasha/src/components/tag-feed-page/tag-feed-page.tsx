@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import getSDK from '@akashaproject/awf-sdk';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/entry-feed';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { ITag } from '@akashaproject/design-system/lib/components/TrendingWidgetCard';
 import { ENTRY_KEY, useInfinitePostsByTag } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import {
   useTagSubscriptions,

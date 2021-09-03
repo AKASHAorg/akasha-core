@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useQueryClient } from 'react-query';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
@@ -6,11 +7,6 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { useErrors } from '@akashaproject/ui-awf-hooks';
-import {
-  useGetBookmarks,
-  useBookmarkPost,
-  useBookmarkDelete,
-} from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 import {
   useInfinitePosts,
   CREATE_POST_MUTATION_KEY,
@@ -20,15 +16,15 @@ import { useMutationListener } from '@akashaproject/ui-awf-hooks/lib/use-query-l
 import { createPendingEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-
-import EntryCardRenderer from './entry-card-renderer';
+import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/entry-feed';
+import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
+import { ENTRY_KEY } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 
 import routes, { POST } from '../../routes';
-import { redirectToPost } from '../../services/routing-service';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-const { Box, Helmet, EditorPlaceholder, EntryList, EntryCard, EntryPublishErrorCard } = DS;
+const { Box, Helmet, EditorPlaceholder, EntryCard, EntryPublishErrorCard } = DS;
 
 export interface FeedPageProps {
   singleSpa: any;
@@ -41,6 +37,7 @@ export interface FeedPageProps {
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { showLoginModal, loggedProfileData, loginState, logger } = props;
 
+  const queryClient = useQueryClient();
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
@@ -49,11 +46,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const createPostMutation = useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
   const postsReq = useInfinitePosts(15);
-
-  const bookmarksReq = useGetBookmarks(loginState.ready?.ethAddress);
-  const bookmarks = bookmarksReq.data;
-  const addBookmark = useBookmarkPost();
-  const deleteBookmark = useBookmarkDelete();
 
   React.useEffect(() => {
     if (Object.keys(errorState).length) {
@@ -75,35 +67,32 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     return [];
   }, [postsReq.data]);
 
-  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorPubKey: string) => {
-    props.singleSpa.navigateToUrl(`/profile/${authorPubKey}`);
-    ev.preventDefault();
-  };
-  const handleMentionClick = (profilePubKey: string) => {
-    props.singleSpa.navigateToUrl(`/profile/${profilePubKey}`);
-  };
-
-  const handleTagClick = (name: string) => {
-    props.singleSpa.navigateToUrl(`/social-app/tags/${name}`);
-  };
-
-  const handleEntryBookmark = (entryId: string) => {
-    if (!loginState.pubKey) {
-      return showLoginModal();
+  const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
+    let url;
+    switch (itemType) {
+      case ItemTypes.PROFILE:
+        url = `/profile/${details.entryId}`;
+        break;
+      case ItemTypes.TAG:
+        url = `/social-app/tags/${details.entryId}`;
+        break;
+      case ItemTypes.ENTRY:
+        url = `/social-app/post/${details.entryId}`;
+        break;
+      case ItemTypes.COMMENT:
+        /* Navigate to parent post because we don't have the comment page yet */
+        url = `/social-app/post/${
+          queryClient.getQueryData<{ postId: string }>([ENTRY_KEY, details.entryId]).postId
+        }`;
+        break;
+      default:
+        break;
     }
-    if (bookmarks?.findIndex(bm => bm.entryId === entryId) >= 0) {
-      return deleteBookmark.mutate(entryId);
-    }
-
-    return addBookmark.mutate(entryId);
+    props.singleSpa.navigateToUrl(url);
   };
 
   const handleShowEditor = () => {
     props.navigateToModal({ name: 'editor' });
-  };
-
-  const handleEntryRepost = (_withComment: boolean, entryData: any) => {
-    props.navigateToModal({ name: 'editor', embedEntry: entryData });
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
@@ -111,16 +100,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       return showLoginModal({ name: 'report-modal', entryId, contentType });
     }
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
-  };
-
-  const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
-
-  const handleEntryRemove = (entryId: string) => {
-    props.navigateToModal({
-      name: 'entry-remove-confirmation',
-      entryType: ItemTypes.ENTRY,
-      entryId,
-    });
   };
 
   return (
@@ -167,39 +146,26 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           disableActions={true}
         />
       )}
-      <EntryList
-        pages={postPages}
-        itemSpacing={8}
-        status={postsReq.status}
-        hasNextPage={postsReq.hasNextPage}
-        itemCard={
-          <EntryCardRenderer
-            uiEvents={props.uiEvents}
-            logger={logger}
-            bookmarkState={bookmarksReq}
-            ethAddress={loginState.ethAddress}
-            locale={locale}
-            onBookmark={handleEntryBookmark}
-            onNavigate={handleNavigateToPost}
-            singleSpaNavigate={props.singleSpa.navigateToUrl}
-            onFlag={handleEntryFlag}
-            onRepost={handleEntryRepost}
-            sharePostUrl={`${window.location.origin}${routes[POST]}/`}
-            onAvatarClick={handleAvatarClick}
-            onMentionClick={handleMentionClick}
-            onTagClick={handleTagClick}
-            contentClickable={true}
-            headerTextLabel={t('You reported this post for the following reason')}
-            footerTextLabel={t('It is awaiting moderation.')}
-            moderatedContentLabel={t('This content has been moderated')}
-            ctaLabel={t('See it anyway')}
-            onEntryRemove={handleEntryRemove}
-            removeEntryLabel={t('Delete Post')}
-            removedByMeLabel={t('You deleted this post')}
-            removedByAuthorLabel={t('This post was deleted by its author')}
-          />
-        }
+      <FeedWidget
+        itemType={ItemTypes.ENTRY}
+        logger={logger}
         onLoadMore={handleLoadMore}
+        pages={postPages}
+        getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
+        requestStatus={postsReq.status}
+        ethAddress={loginState.ethAddress}
+        onNavigate={handleNavigation}
+        singleSpaNavigate={props.singleSpa.navigateToUrl}
+        navigateToModal={props.navigateToModal}
+        onLoginModalOpen={showLoginModal}
+        hasNextPage={postsReq.hasNextPage}
+        profilePubKey={loginState.pubKey}
+        loggedProfile={loggedProfileData}
+        contentClickable={true}
+        onEntryFlag={handleEntryFlag}
+        uiEvents={props.uiEvents}
+        itemSpacing={8}
+        i18n={i18n}
       />
     </Box>
   );
