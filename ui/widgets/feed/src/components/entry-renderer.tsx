@@ -14,7 +14,6 @@ const { ErrorLoader, EntryCardLoading, EntryCard, EntryCardHidden, ExtensionPoin
 
 export interface IEntryRenderer {
   itemId?: string;
-  itemData?: any;
   sharePostUrl: string;
   ethAddress: string | null;
   pubKey: string | null;
@@ -117,11 +116,11 @@ const EntryRenderer = (props: IEntryRenderer) => {
     return (postReq.status === 'success' || commentReq.status === 'success') && itemData?.reported;
   }, [itemData, showAnyway, postReq.status, commentReq.status]);
 
-  React.useEffect(() => {
-    if (ethAddress && itemData?.author.ethAddress) {
-      checkIsFollowing(ethAddress, itemData.author.ethAddress);
-    }
-  }, [ethAddress, itemData]);
+  // React.useEffect(() => {
+  //   if (ethAddress && itemData?.author.ethAddress) {
+  //     checkIsFollowing(ethAddress, itemData.author.ethAddress);
+  //   }
+  // }, [checkIsFollowing, ethAddress, itemData]);
 
   const handleFollow = () => {
     if (itemData?.author.ethAddress) {

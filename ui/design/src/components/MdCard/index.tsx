@@ -15,7 +15,7 @@ const MdCard: React.FC<IMdCard> = props => {
   const renderContent = () => (
     <>
       {!mdText && <Spinner />}
-      {mdText && <ReactMarkdown plugins={[gfm]} children={mdText} />}
+      {mdText && <ReactMarkdown plugins={[gfm]}>{mdText}</ReactMarkdown>}
     </>
   );
   return (

@@ -15,6 +15,7 @@ import {
   bookmarkedLabel,
 } from '../../../utils/dummy-data';
 import userEvent from '@testing-library/user-event';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 
 describe('<EntryCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
@@ -28,7 +29,7 @@ describe('<EntryCard /> Component', () => {
           <EntryCard
             style={{ height: 'auto' }}
             isBookmarked={false}
-            entryData={entryData}
+            entryData={entryData as IEntryData}
             shareLabel={shareLabel}
             flagAsLabel={flagAsLabel}
             isFollowingAuthor={false}

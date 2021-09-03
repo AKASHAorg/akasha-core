@@ -7,6 +7,7 @@ import { IContentClickDetails } from '@akashaproject/design-system/lib/component
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../i18n';
+import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
@@ -15,7 +16,7 @@ export interface EntryListPage {
 }
 
 export interface IFeedWidgetProps {
-  logger: typeof console;
+  logger: ILogger;
   pages: EntryListPage[];
   itemType: ItemTypes;
   onLoadMore: () => void;

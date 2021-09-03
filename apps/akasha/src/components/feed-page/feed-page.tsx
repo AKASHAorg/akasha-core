@@ -5,7 +5,6 @@ import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
-import { useErrors } from '@akashaproject/ui-awf-hooks';
 import {
   useGetBookmarks,
   useBookmarkPost,
@@ -31,20 +30,16 @@ import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 const { Box, Helmet, EditorPlaceholder, EntryList, EntryCard, EntryPublishErrorCard } = DS;
 
 export interface FeedPageProps {
-  singleSpa: any;
-  logger: any;
   showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
   loggedProfileData?: IProfileData;
   loginState: ILoginState;
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const { showLoginModal, loggedProfileData, loginState, logger } = props;
+  const { showLoginModal, loggedProfileData, loginState } = props;
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
-
-  const [errorState] = useErrors({ logger });
 
   const createPostMutation = useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
@@ -54,12 +49,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const bookmarks = bookmarksReq.data;
   const addBookmark = useBookmarkPost();
   const deleteBookmark = useBookmarkDelete();
-
-  React.useEffect(() => {
-    if (Object.keys(errorState).length) {
-      logger.error(errorState);
-    }
-  }, [errorState, logger]);
 
   //@Todo: replace this with fetchNextPage() from useInfinitePosts object
   const handleLoadMore = React.useCallback(() => {
@@ -102,8 +91,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     props.navigateToModal({ name: 'editor' });
   };
 
-  const handleEntryRepost = (_withComment: boolean, entryData: any) => {
-    props.navigateToModal({ name: 'editor', embedEntry: entryData });
+  const handleEntryRepost = (_withComment: boolean, entryId: string) => {
+    props.navigateToModal({ name: 'editor', embedEntry: entryId });
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
@@ -175,7 +164,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         itemCard={
           <EntryCardRenderer
             uiEvents={props.uiEvents}
-            logger={logger}
             bookmarkState={bookmarksReq}
             ethAddress={loginState.ethAddress}
             locale={locale}
