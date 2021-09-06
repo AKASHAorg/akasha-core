@@ -14,8 +14,8 @@ import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   useGetBookmarks,
-  useBookmarkPost,
-  useBookmarkDelete,
+  useSaveBookmark,
+  useDeleteBookmark,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 import {
   useInfiniteComments,
@@ -105,8 +105,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const bookmarksReq = useGetBookmarks(loginState.ready?.ethAddress);
   const bookmarks = bookmarksReq.data;
-  const addBookmark = useBookmarkPost();
-  const deleteBookmark = useBookmarkDelete();
+  const addBookmark = useSaveBookmark();
+  const deleteBookmark = useDeleteBookmark();
 
   const handleFollow = () => {
     if (entryData?.author.ethAddress) {
@@ -149,14 +149,14 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     ev.preventDefault();
   };
 
-  const handleEntryBookmark = (entryId: string) => {
+  const handleEntryBookmark = (itemType: ItemTypes) => (entryId: string) => {
     if (!loginState.ethAddress) {
       return showLoginModal();
     }
     if (bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
       return deleteBookmark.mutate(entryId);
     }
-    return addBookmark.mutate(entryId);
+    return addBookmark.mutate({ entryId, itemType });
   };
 
   const handleCommentRepost = () => {
@@ -285,7 +285,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
                     handleAvatarClick(ev, entryData.author.pubKey)
                   }
-                  onEntryBookmark={handleEntryBookmark}
+                  onEntryBookmark={handleEntryBookmark(ItemTypes.ENTRY)}
                   repliesLabel={t('Replies')}
                   repostsLabel={t('Reposts')}
                   repostLabel={t('Repost')}
@@ -400,7 +400,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                     bookmarkState={bookmarksReq}
                     ethAddress={loginState.ethAddress}
                     locale={locale}
-                    onBookmark={handleEntryBookmark}
+                    onBookmark={handleEntryBookmark(ItemTypes.COMMENT)}
                     onNavigate={handleNavigateToPost}
                     sharePostUrl={`${window.location.origin}${routes[POST]}/`}
                     onFlag={handleEntryFlag}

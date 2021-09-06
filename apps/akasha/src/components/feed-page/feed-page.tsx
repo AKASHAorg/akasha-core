@@ -8,8 +8,8 @@ import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { useErrors } from '@akashaproject/ui-awf-hooks';
 import {
   useGetBookmarks,
-  useBookmarkPost,
-  useBookmarkDelete,
+  useSaveBookmark,
+  useDeleteBookmark,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 import {
   useInfinitePosts,
@@ -52,8 +52,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const bookmarksReq = useGetBookmarks(loginState.ready?.ethAddress);
   const bookmarks = bookmarksReq.data;
-  const addBookmark = useBookmarkPost();
-  const deleteBookmark = useBookmarkDelete();
+  const addBookmark = useSaveBookmark();
+  const deleteBookmark = useDeleteBookmark();
 
   React.useEffect(() => {
     if (Object.keys(errorState).length) {
@@ -87,7 +87,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     props.singleSpa.navigateToUrl(`/social-app/tags/${name}`);
   };
 
-  const handleEntryBookmark = (entryId: string) => {
+  const handleEntryBookmark = (itemType: ItemTypes) => (entryId: string) => {
     if (!loginState.pubKey) {
       return showLoginModal();
     }
@@ -95,15 +95,15 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       return deleteBookmark.mutate(entryId);
     }
 
-    return addBookmark.mutate(entryId);
+    return addBookmark.mutate({ entryId, itemType });
   };
 
   const handleShowEditor = () => {
     props.navigateToModal({ name: 'editor' });
   };
 
-  const handleEntryRepost = (_withComment: boolean, entryData: any) => {
-    props.navigateToModal({ name: 'editor', embedEntry: entryData });
+  const handleEntryRepost = (_withComment: boolean, embedEntryId: string) => {
+    props.navigateToModal({ name: 'editor', embedEntry: embedEntryId });
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
@@ -179,7 +179,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             bookmarkState={bookmarksReq}
             ethAddress={loginState.ethAddress}
             locale={locale}
-            onBookmark={handleEntryBookmark}
+            onBookmark={handleEntryBookmark(ItemTypes.ENTRY)}
             onNavigate={handleNavigateToPost}
             singleSpaNavigate={props.singleSpa.navigateToUrl}
             onFlag={handleEntryFlag}

@@ -236,7 +236,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     },
     {
       iconType: 'hashtagGray',
-      count: `0`,
+      count: `${profileData.totalInterests || 0}`,
       label: interestsLabel,
       clickHandler: onClickInterests,
       dataTestId: 'interests-button',
