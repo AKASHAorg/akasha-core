@@ -10,7 +10,6 @@ import useTrendingData from './use-trending-data';
 import useNotifications from './use-notifications';
 import useTagSubscribe from './use-tag-subscribe';
 import useSearch from './use-search';
-import useLegal from './use-legal';
 import useNetworkState from './use-network-state';
 import useAnalytics from './use-analytics';
 import useMentions from './use-mentions';
@@ -31,7 +30,6 @@ export {
   useNotifications,
   useTagSubscribe,
   useSearch,
-  useLegal,
   useNetworkState,
   useAnalytics,
   useMentions,
