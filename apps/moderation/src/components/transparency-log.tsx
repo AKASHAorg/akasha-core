@@ -65,7 +65,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         setCount(response);
       }
     } catch (error) {
-      logger.error('[transparency-log.tsx]: getStatusCount err %j', error.message || '');
+      logger.error(`[transparency-log.tsx]: getStatusCount err, ${JSON.stringify(error)}`);
     } finally {
       setRequesting(false);
     }
@@ -88,7 +88,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
       }
       setNextIndex(response.nextIndex);
     } catch (error) {
-      logger.error('[transparency-log.tsx]: fetchModerationLog err %j', error.message || '');
+      logger.error(`[transparency-log.tsx]: fetchModerationLog err, ${JSON.stringify(error)}`);
     } finally {
       setRequesting(false);
     }

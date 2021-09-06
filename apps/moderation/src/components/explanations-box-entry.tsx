@@ -16,7 +16,7 @@ const ExplanationsCardEntry: React.FC<IExplanationsBoxEntryProps> = props => {
 
   const [reporterProfileState, reporterProfileActions] = useProfile({
     onError: error => {
-      props.logger.error('[explanations-box-entry.tsx]: useProfile err %j', error.error || '');
+      props.logger.error(`[explanations-box-entry.tsx]: useProfile err, ${JSON.stringify(error)}`);
     },
   });
 

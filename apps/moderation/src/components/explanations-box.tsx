@@ -30,7 +30,7 @@ const ExplanationsCard: React.FC<IExplanationsBoxProps> = props => {
       setRequesting(false);
     } catch (error) {
       setRequesting(false);
-      logger.error('[explanations-box.tsx]: fetchContentFlags err %j', error.message || '');
+      logger.error(`[explanations-box.tsx]: fetchContentFlags err, ${JSON.stringify(error)}`);
     }
   };
 

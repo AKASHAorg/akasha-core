@@ -258,7 +258,7 @@ export default {
           return modalName === 'report-modal' ? callback(true, dataToSign.reason) : callback();
         })
         .catch(error =>
-          logger.error(`[${modalName}.tsx]: fetchRequest err %j`, error.message || ''),
+          logger.error(`[moderation-request.tsx]: fetchRequest err, ${JSON.stringify(error)}`),
         )
         .finally(() => setRequesting(false));
     });
