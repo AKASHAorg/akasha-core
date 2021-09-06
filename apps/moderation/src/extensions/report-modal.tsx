@@ -57,7 +57,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
     }
   }, [activeModal]);
 
-  const updateOnSuccess = (isSuccess: boolean, reason: string) => {
+  const updateOnSuccess = (reason: string) => {
     // this method utilises react-query to update reported state depending on contentType
     if (contentType === 'post') {
       queryClient.setQueryData<unknown>([ENTRY_KEY, activeModal.entryId], prev => ({
@@ -80,10 +80,10 @@ const ReportModalComponent = (props: RootComponentProps) => {
         reported: true,
       }));
     }
-    return setSuccess(isSuccess);
+    return setSuccess(true);
   };
 
-  const onReport = (dataToSign: Record<string, unknown>) => {
+  const onReport = (dataToSign: Record<string, string>) => {
     moderationRequest.modalClickHandler({
       dataToSign,
       setRequesting,
@@ -92,7 +92,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
       url: `${BASE_REPORT_URL}/new`,
       modalName: 'report-modal',
       logger: props.logger,
-      callback: updateOnSuccess,
+      callback: () => updateOnSuccess(dataToSign?.reason),
     });
   };
 
