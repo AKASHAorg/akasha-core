@@ -12,9 +12,9 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: App,
-  errorBoundary: (error, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (error, errorInfo, props) => {
     if (props.logger) {
-      props.logger.error(error, errorInfo);
+      props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
       <ThemeSelector

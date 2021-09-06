@@ -27,15 +27,13 @@ import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 const { Box, Helmet, EditorPlaceholder, EntryCard, EntryPublishErrorCard } = DS;
 
 export interface FeedPageProps {
-  singleSpa: any;
-  logger: any;
   showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
   loggedProfileData?: IProfileData;
   loginState: ILoginState;
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const { showLoginModal, loggedProfileData, loginState, logger } = props;
+  const { showLoginModal, logger, loggedProfileData, loginState } = props;
 
   const queryClient = useQueryClient();
   const { t, i18n } = useTranslation();
@@ -49,7 +47,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   React.useEffect(() => {
     if (Object.keys(errorState).length) {
-      logger.error(errorState);
+      logger.error(JSON.stringify(errorState));
     }
   }, [errorState, logger]);
 
@@ -102,6 +100,14 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     props.navigateToModal({ name: 'report-modal', entryId, contentType });
   };
 
+  const handleEntryRemove = (entryId: string) => {
+    props.navigateToModal({
+      name: 'entry-remove-confirmation',
+      entryType: ItemTypes.ENTRY,
+      entryId,
+    });
+  };
+
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -147,22 +153,26 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         />
       )}
       <FeedWidget
-        itemType={ItemTypes.ENTRY}
         logger={logger}
-        onLoadMore={handleLoadMore}
+        itemType={ItemTypes.ENTRY}
         pages={postPages}
+        onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
-        requestStatus={postsReq.status}
         ethAddress={loginState.ethAddress}
+        profilePubKey={loginState.pubKey}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={showLoginModal}
+        requestStatus={postsReq.status}
         hasNextPage={postsReq.hasNextPage}
-        profilePubKey={loginState.pubKey}
         loggedProfile={loggedProfileData}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
+        onEntryRemove={handleEntryRemove}
+        removeEntryLabel={t('Delete Post')}
+        removedByMeLabel={t('You deleted this post')}
+        removedByAuthorLabel={t('This post was deleted by its author')}
         uiEvents={props.uiEvents}
         itemSpacing={8}
         i18n={i18n}

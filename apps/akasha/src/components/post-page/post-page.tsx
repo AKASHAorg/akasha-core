@@ -414,21 +414,21 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 </Box>
               )}
               <FeedWidget
-                itemType={ItemTypes.COMMENT}
                 logger={logger}
-                onLoadMore={handleLoadMore}
                 pages={commentPages}
+                itemType={ItemTypes.COMMENT}
+                onLoadMore={handleLoadMore}
                 // getShareUrl={(itemId: string) =>
                 //   `${window.location.origin}/social-app/post/${itemId}`
                 // }
-                requestStatus={reqComments.status}
                 ethAddress={loginState.ethAddress}
+                profilePubKey={loginState.pubKey}
                 onNavigate={handleNavigation}
                 singleSpaNavigate={props.singleSpa.navigateToUrl}
                 navigateToModal={props.navigateToModal}
                 onLoginModalOpen={showLoginModal}
+                requestStatus={reqComments.status}
                 hasNextPage={reqComments.hasNextPage}
-                profilePubKey={loginState.pubKey}
                 loggedProfile={loggedProfileData}
                 contentClickable={true}
                 onEntryFlag={handleEntryFlag}

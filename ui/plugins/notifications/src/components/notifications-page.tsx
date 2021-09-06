@@ -1,6 +1,5 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import { useLoginState } from '@akashaproject/ui-awf-hooks';
 import {
@@ -17,11 +16,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation();
 
-  const [loginState] = useLoginState({
-    onError: (err: IAkashaError) => {
-      logger.error('useLoginState error %j', err);
-    },
-  });
+  const [loginState] = useLoginState({});
 
   const [notifErrors] = useErrorState({ logger });
 

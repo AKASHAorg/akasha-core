@@ -1,8 +1,9 @@
+import { BehaviorSubject } from 'rxjs';
 import { LogoSourceType } from './index';
 
 export interface IntegrationRegistryInfo {
   name: string;
-  version: string;
+  version?: string;
   description: string;
   src: string;
 }
@@ -29,14 +30,14 @@ export interface ModalNavigationOptions {
   name: string;
   pubKey?: string;
   entryId?: string;
-  [key: string]: string | any | undefined;
+  [key: string]: string | unknown | undefined;
 }
 
 export interface IntegrationRegistrationOptions {
   worldConfig: {
     title: string;
   };
-  uiEvents: any;
+  uiEvents: BehaviorSubject<UIEventData>;
   layoutConfig?: LayoutConfig;
   isMobile: boolean;
   integrations?: {
@@ -261,6 +262,8 @@ export enum EventTypes {
   ModalUnmountRequest = 'modal-unmount-request',
   ModalMount = 'modal-mount',
   ModalUnmount = 'modal-unmount',
+  ShowSidebar = 'show-sidebar',
+  HideSidebar = 'hide-sidebar',
 }
 
 export type EventDataTypes = {

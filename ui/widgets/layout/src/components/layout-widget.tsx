@@ -1,5 +1,5 @@
 import DS from '@akashaproject/design-system';
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { GlobalStyle } from './global-style';
 import {
   MainAreaContainer,
@@ -11,7 +11,6 @@ import { ModalSlot, PluginSlot, TopbarSlot, SidebarSlot, WidgetSlot } from './st
 import CookieWidget from './cookie-widget';
 import { EventTypes, UIEventData } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { Subscription } from 'rxjs';
 import i18next from '../i18n';
 import { I18nextProvider } from 'react-i18next';
 
@@ -25,221 +24,172 @@ const {
   // useViewportSize,
 } = DS;
 
-interface LayoutWidgetState {
-  hasErrors: boolean;
-  errorMessage: string;
-  showSidebar?: boolean;
-  activeModal: UIEventData['data'] | null;
-}
+const LayoutWidget: React.FC<RootComponentProps> = props => {
+  const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
+  const [showSidebar, setShowSidebar] = React.useState(false);
 
-class LayoutWidget extends PureComponent<RootComponentProps, LayoutWidgetState> {
-  public state: LayoutWidgetState;
-
-  public uiEventsSub?: Subscription;
-
-  constructor(props: RootComponentProps) {
-    super(props);
-    this.state = {
-      hasErrors: false,
-      errorMessage: '',
-      activeModal: null,
-    };
-  }
-
-  public componentDidCatch(err: Error, info: React.ErrorInfo) {
-    this.setState({
-      hasErrors: true,
-      errorMessage: `${err.message} :: ${info.componentStack}`,
-    });
-    // tslint:disable-next-line:no-console
-    console.error(err, info);
-  }
-
-  public showSidebar = () => {
-    this.setState({ showSidebar: true });
-  };
-
-  public hideSidebar = () => {
-    this.setState({ showSidebar: false });
-  };
-
-  public componentDidMount() {
-    // TODO: move these through event bus
-    window.addEventListener('layout:showSidebar', this.showSidebar);
-    window.addEventListener('layout:hideSidebar', this.hideSidebar);
-
-    this.uiEventsSub = this.props.uiEvents.subscribe({
-      next: (eventInfo: UIEventData) => {
-        if (eventInfo.event === EventTypes.ModalMountRequest && eventInfo.data) {
-          if (this.state.activeModal && this.state.activeModal.name !== eventInfo.data.name) {
-            this.onModalNodeUnmount(this.state.activeModal.name);
-          }
-
-          this.setState(prev => ({
-            ...prev,
-            activeModal: eventInfo.data,
-          }));
-        }
-        if (eventInfo.event === EventTypes.ModalUnmountRequest && eventInfo.data?.name) {
-          this.setState(prev => ({
-            ...prev,
-            activeModal: null,
-          }));
-        }
-      },
-      error(err: Error) {
-        this.setState({
-          hasErrors: true,
-          errorMessage: err.message,
-        });
-      },
-    });
-  }
-
-  public componentWillUnmount() {
-    window.removeEventListener('layout:showSidebar', this.showSidebar);
-    window.removeEventListener('layout:hideSidebar', this.hideSidebar);
-    if (this.uiEventsSub) {
-      this.uiEventsSub.unsubscribe();
-    }
-  }
-
-  public onExtensionMount = (name: string) => {
-    this.props.uiEvents.next({
+  const handleExtensionMount = (name: string) => {
+    props.uiEvents.next({
       event: EventTypes.ExtensionPointMount,
       data: {
         name,
       },
     });
   };
-  public onExtensionUnmount = (name: string) => {
-    this.props.uiEvents.next({
-      event: EventTypes.ExtensionPointUnmount,
-      data: {
-        name,
+
+  const handleExtensionUnmount = React.useCallback(
+    (name: string) => {
+      props.uiEvents.next({
+        event: EventTypes.ExtensionPointUnmount,
+        data: {
+          name,
+        },
+      });
+    },
+    [props.uiEvents],
+  );
+
+  /**
+   * Handler for modal mount events
+   * This event is only triggered when `navigateToModal` fn is called
+   */
+  const handleModalNodeMount = React.useCallback(() => {
+    props.uiEvents.next({
+      event: EventTypes.ModalMount,
+      data: activeModal,
+    });
+  }, [activeModal, props.uiEvents]);
+
+  const handleModalNodeUnmount = React.useCallback(
+    (name: string) => {
+      props.uiEvents.next({
+        event: EventTypes.ModalUnmount,
+        data: { name },
+      });
+    },
+    [props.uiEvents],
+  );
+
+  const handleSidebarShow = () => {
+    setShowSidebar(true);
+  };
+  const handleSidebarHide = () => {
+    setShowSidebar(false);
+  };
+  React.useEffect(() => {
+    const eventsSub = props.uiEvents.subscribe({
+      next: (eventInfo: UIEventData) => {
+        if (eventInfo.event === EventTypes.ModalMountRequest && eventInfo.data) {
+          if (activeModal && activeModal.name !== eventInfo.data.name) {
+            handleModalNodeUnmount(activeModal.name);
+          }
+          setActiveModal(eventInfo.data);
+        }
+        if (eventInfo.event === EventTypes.ModalUnmountRequest && eventInfo.data?.name) {
+          setActiveModal(null);
+        }
+        if (eventInfo.event === EventTypes.ShowSidebar) {
+          handleSidebarShow();
+        }
+        if (eventInfo.event === EventTypes.HideSidebar) {
+          handleSidebarHide();
+        }
       },
     });
-  };
-  public onModalNodeMount = (_name: string) => {
-    this.props.uiEvents.next({
-      event: EventTypes.ModalMount,
-      data: this.state.activeModal,
-    });
-  };
-  public onModalNodeUnmount = (name: string) => {
-    this.props.uiEvents.next({
-      event: EventTypes.ModalUnmount,
-      data: { name },
-    });
-  };
-  public render() {
-    const { logger, layoutConfig } = this.props;
-    const {
-      sidebarSlotId,
-      topbarSlotId,
-      pluginSlotId,
-      rootWidgetSlotId,
-      widgetSlotId,
-      modalSlotId,
-    } = layoutConfig;
-    const { showSidebar } = this.state;
+    return () => {
+      if (eventsSub) {
+        eventsSub.unsubscribe();
+      }
+    };
+  }, [activeModal, props.uiEvents, handleModalNodeUnmount]);
 
-    if (this.state.hasErrors) {
-      return (
-        <div>
-          Oh no, something went wrong in layout-widget
-          <div>
-            <code>{this.state.errorMessage}</code>
-          </div>
-        </div>
-      );
-    }
-
-    const sidebarVisible = Boolean(showSidebar);
-
-    return (
-      <I18nextProvider i18n={i18next}>
-        <Box className="container" fill="horizontal">
-          <GlobalStyle theme={{ breakpoints: responsiveBreakpoints.global.breakpoints }} />
-          <Box className="container">
-            <ThemeSelector
-              availableThemes={[lightTheme]}
-              settings={{ activeTheme: 'Light-Theme' }}
-              style={{ display: 'flex' }}
-            >
-              <ViewportSizeProvider>
-                <Box className="container" fill="horizontal">
-                  <TopbarSlot
-                    name={topbarSlotId}
-                    onMount={this.onExtensionMount}
-                    onUnmount={this.onExtensionUnmount}
+  return (
+    <I18nextProvider i18n={i18next}>
+      <Box className="container" fill="horizontal">
+        <GlobalStyle theme={{ breakpoints: responsiveBreakpoints.global.breakpoints }} />
+        <Box className="container">
+          <ThemeSelector
+            availableThemes={[lightTheme]}
+            settings={{ activeTheme: 'Light-Theme' }}
+            style={{ display: 'flex' }}
+          >
+            <Box className="container" fill="horizontal">
+              <TopbarSlot
+                name={props.layoutConfig.topbarSlotId}
+                onMount={handleExtensionMount}
+                onUnmount={handleExtensionUnmount}
+                style={{ width: '100vw' }}
+              />
+              <Box
+                className="container"
+                fill="horizontal"
+                justify="around"
+                style={{ flexDirection: 'row', alignItems: 'stretch' }}
+              >
+                <SidebarWrapper visible={showSidebar}>
+                  <Box width={{ width: '100%' }} />
+                  <SidebarSlot
+                    name={props.layoutConfig.sidebarSlotId}
+                    onMount={handleExtensionMount}
+                    onUnmount={handleExtensionUnmount}
+                    // className="container"
                   />
-                  <Box className="container" style={{ flexDirection: 'row' }}>
-                    <SidebarWrapper visible={sidebarVisible}>
-                      <SidebarSlot
-                        name={sidebarSlotId}
-                        onMount={this.onExtensionMount}
-                        onUnmount={this.onExtensionUnmount}
-                        className="container"
-                      />
-                    </SidebarWrapper>
-                    <MainAreaContainer sidebarVisible={sidebarVisible} className="container">
-                      <PluginSlot
-                        name={pluginSlotId}
-                        onMount={this.onExtensionMount}
-                        onUnmount={this.onExtensionUnmount}
-                        className="container"
-                      />
-                      <Box>
-                        <WidgetContainer>
-                          {!this.props.isMobile && (
-                            <CookieWidget
-                              style={{
-                                position: 'absolute',
-                                bottom: 0,
-                                marginLeft: '1rem',
-                                minWidth: '21rem',
-                              }}
-                            />
-                          )}
-                          <ScrollableWidgetArea>
-                            <WidgetSlot
-                              name={rootWidgetSlotId}
-                              onMount={this.onExtensionMount}
-                              onUnmount={this.onExtensionUnmount}
-                            />
-                            <WidgetSlot
-                              name={widgetSlotId}
-                              onMount={this.onExtensionMount}
-                              onUnmount={this.onExtensionUnmount}
-                            />
-                          </ScrollableWidgetArea>
-                        </WidgetContainer>
-                      </Box>
-                    </MainAreaContainer>
+                </SidebarWrapper>
+                <MainAreaContainer sidebarVisible={showSidebar} className="container">
+                  <PluginSlot
+                    name={props.layoutConfig.pluginSlotId}
+                    onMount={handleExtensionMount}
+                    onUnmount={handleExtensionUnmount}
+                    className="container"
+                  />
+                  <Box>
+                    <WidgetContainer>
+                      {!props.isMobile && (
+                        <CookieWidget
+                          style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            marginLeft: '1rem',
+                            minWidth: '21rem',
+                          }}
+                        />
+                      )}
+                      <ScrollableWidgetArea>
+                        <WidgetSlot
+                          name={props.layoutConfig.rootWidgetSlotId}
+                          onMount={handleExtensionMount}
+                          onUnmount={handleExtensionUnmount}
+                        />
+                        <WidgetSlot
+                          name={props.layoutConfig.widgetSlotId}
+                          onMount={handleExtensionMount}
+                          onUnmount={handleExtensionUnmount}
+                        />
+                      </ScrollableWidgetArea>
+                    </WidgetContainer>
                   </Box>
-                  {this.state.activeModal && (
-                    <ModalSlot
-                      key={this.state.activeModal.name}
-                      name={this.state.activeModal.name}
-                      onMount={this.onModalNodeMount}
-                      onUnmount={this.onModalNodeUnmount}
-                    />
-                  )}
-                  <ModalSlot
-                    name={modalSlotId}
-                    onMount={this.onExtensionMount}
-                    onUnmount={this.onExtensionUnmount}
-                  />
-                  {this.props.isMobile && <CookieWidget style={{ position: 'fixed', bottom: 0 }} />}
-                </Box>
-              </ViewportSizeProvider>
-            </ThemeSelector>
-          </Box>
+                </MainAreaContainer>
+              </Box>
+              {activeModal && (
+                <ModalSlot
+                  key={activeModal.name}
+                  name={activeModal.name}
+                  onMount={handleModalNodeMount}
+                  onUnmount={handleModalNodeUnmount}
+                />
+              )}
+              <ModalSlot
+                name={props.layoutConfig.modalSlotId}
+                onMount={handleExtensionMount}
+                onUnmount={handleExtensionUnmount}
+              />
+              {props.isMobile && <CookieWidget style={{ position: 'fixed', bottom: 0 }} />}
+            </Box>
+          </ThemeSelector>
         </Box>
-      </I18nextProvider>
-    );
-  }
-}
+      </Box>
+    </I18nextProvider>
+  );
+};
 
 export default LayoutWidget;

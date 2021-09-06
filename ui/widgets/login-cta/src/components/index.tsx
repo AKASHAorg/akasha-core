@@ -2,19 +2,20 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
+import { withProviders } from '@akashaproject/ui-awf-hooks';
+import DS from '@akashaproject/design-system';
 import { setupI18next } from '../i18n';
 import App from './App';
-import DS from '@akashaproject/design-system';
 
 const { ErrorLoader, ThemeSelector, darkTheme, lightTheme } = DS;
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: App,
+  rootComponent: withProviders(App),
   errorBoundary: (error, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
-      props.logger.error(error, errorInfo);
+      props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
       <ThemeSelector

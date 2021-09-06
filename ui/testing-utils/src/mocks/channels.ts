@@ -12,12 +12,12 @@ const globalChannelMock = {
 const mockObservable = of('test');
 
 export interface ChannelOverrides {
-  profileService?: {};
-  ipfsService?: {};
-  authService?: {};
-  ensService?: {};
-  web3Service?: {};
-  tagService?: {};
+  profileService?: Record<string, unknown>;
+  ipfsService?: Record<string, unknown>;
+  authService?: Record<string, unknown>;
+  ensService?: Record<string, unknown>;
+  web3Service?: Record<string, unknown>;
+  tagService?: Record<string, unknown>;
 }
 
 const getSDKMocks = (overrides: ChannelOverrides) => ({
