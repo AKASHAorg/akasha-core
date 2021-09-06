@@ -8,34 +8,29 @@ const BOOKMARKED_ENTRIES_KEY = 'AKASHA_APP_BOOKMARK_ENTRIES';
 const BOOKMARK_SAVE_KEY = 'BOOKMARK_SAVE';
 const entriesBookmarks = 'entries-bookmarks';
 
-const getBookmarks = async () => {
-  const sdk = getSDK();
-  try {
-    const res = await lastValueFrom(sdk.services.settings.get(BOOKMARKED_ENTRIES_KEY));
-    return res.data;
-  } catch (error) {
-    logError('useBookmarks.getBookmarks', error);
-  }
-};
-
-export function useGetBookmarks(loggedEthAddress) {
+export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
   return useQuery(
     [BOOKMARKED_ENTRIES_KEY],
     async () => {
-      const data = await getBookmarks();
-
-      if (data && data.options) {
-        const bookmarkedEntries = data.options.findIndex(
-          (e: string[]) => e[0] === entriesBookmarks,
-        );
-        if (bookmarkedEntries !== -1) {
-          return JSON.parse(data.options[bookmarkedEntries][1]);
+      const sdk = getSDK();
+      try {
+        const res = await lastValueFrom(sdk.services.settings.get(BOOKMARKED_ENTRIES_KEY));
+        if (res.data && res.data.options) {
+          const bookmarkedEntries = res.data.options.findIndex(
+            (e: string[]) => e[0] === entriesBookmarks,
+          );
+          if (bookmarkedEntries !== -1) {
+            return JSON.parse(res.data.options[bookmarkedEntries][1]);
+          }
         }
+      } catch (error) {
+        logError('useBookmarks.getBookmarks', error);
+        throw error;
       }
     },
     {
       initialData: [],
-      enabled: !!loggedEthAddress,
+      enabled: !!loggedEthAddress && enabler,
     },
   );
 }

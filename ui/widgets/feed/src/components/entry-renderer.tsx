@@ -72,6 +72,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     if (
       bookmarksQuery.status === 'success' &&
       itemId &&
+      Array.isArray(bookmarksQuery.data) &&
       bookmarksQuery.data.findIndex(bm => bm.entryId === itemId) >= 0
     ) {
       return true;
@@ -91,13 +92,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     if (props.itemType === ItemTypes.ENTRY && postReq.status === 'success') {
       return postReq.data.author;
     }
-  }, [
-    props.itemType,
-    commentReq.status,
-    commentReq.data.author,
-    postReq.status,
-    postReq.data.author,
-  ]);
+  }, [props.itemType, commentReq, postReq]);
 
   const followedProfilesReq = useIsFollowing(props.ethAddress, authorEthAddress);
 

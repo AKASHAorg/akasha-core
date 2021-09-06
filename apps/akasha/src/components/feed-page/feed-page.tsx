@@ -158,7 +158,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         pages={postPages}
         onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
-        ethAddress={loginState.ethAddress}
+        ethAddress={loginState.ready?.ethAddress}
         profilePubKey={loginState.pubKey}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}

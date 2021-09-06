@@ -15,7 +15,6 @@ const { EntryList } = DS;
 const EntryFeed = (props: IFeedWidgetProps) => {
   const { t } = useTranslation();
 
-  // const [bookmarkState, bookmarkActions] = useBookmarks({});
   const saveBookmarkQuery = useSaveBookmark();
   const delBookmarkQuery = useDeleteBookmark();
   const getBookmarksQuery = useGetBookmarks(props.ethAddress);
@@ -55,7 +54,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           itemType={props.itemType}
           sharePostUrl={`${window.location.origin}/social-app/post/`}
           locale={props.i18n.languages[0] as ILocale}
-          bookmarksQuery={getBookmarksQuery.data}
+          bookmarksQuery={getBookmarksQuery}
           onBookmark={handleBookmark}
           onNavigate={props.onNavigate}
           singleSpaNavigate={props.singleSpaNavigate}
