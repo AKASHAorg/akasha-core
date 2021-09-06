@@ -255,7 +255,7 @@ export default {
             throw new Error('Unable to process your request right now. Please try again later');
           }
 
-          return modalName === 'report-modal' ? callback(true) : callback();
+          return modalName === 'report-modal' ? callback(true, dataToSign.reason) : callback();
         })
         .catch(error =>
           logger.error(`[${modalName}.tsx]: fetchRequest err %j`, error.message || ''),

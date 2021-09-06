@@ -57,27 +57,27 @@ const ReportModalComponent = (props: RootComponentProps) => {
     }
   }, [activeModal]);
 
-  const updateOnSuccess = (isSuccess: boolean) => {
+  const updateOnSuccess = (isSuccess: boolean, reason: string) => {
     // this method utilises react-query to update reported state depending on contentType
     if (contentType === 'post') {
       queryClient.setQueryData<unknown>([ENTRY_KEY, activeModal.entryId], prev => ({
         ...prev,
+        reason,
         reported: true,
-        reason: reasons[0],
       }));
     }
     if (contentType === 'reply') {
       queryClient.setQueryData<unknown>([COMMENT_KEY, activeModal.entryId], prev => ({
         ...prev,
+        reason,
         reported: true,
-        reason: reasons[0],
       }));
     }
     if (contentType === 'account') {
       queryClient.setQueryData<unknown>([PROFILE_KEY, activeModal.entryId], prev => ({
         ...prev,
+        reason,
         reported: true,
-        reason: reasons[0],
       }));
     }
     return setSuccess(isSuccess);
