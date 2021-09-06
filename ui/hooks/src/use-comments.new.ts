@@ -19,6 +19,7 @@ const getComments = async (
   offset?: string,
 ) => {
   const sdk = getSDK();
+
   try {
     const res = await lastValueFrom(
       sdk.api.comments.getComments({

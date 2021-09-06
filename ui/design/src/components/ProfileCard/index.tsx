@@ -19,7 +19,7 @@ import { truncateMiddle } from '../../utils/string-utils';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import MobileListModal from '../MobileListModal';
 import {
-  IProfileProvider,
+  IProfileData,
   ProfileProviders,
   UsernameTypes,
 } from '@akashaproject/ui-awf-typings/lib/profile';
@@ -50,7 +50,7 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   profileProvidersData?: IProfileProvidersData;
   canUserEdit?: boolean;
   // @TODO fix this
-  onChangeProfileData?: (newProfileData: any) => void;
+  onChangeProfileData?: (newProfileData: IProfileData) => void;
   editProfileLabel?: string;
   changeCoverImageLabel?: string;
   cancelLabel?: string;
@@ -69,7 +69,10 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   hideENSButton?: boolean;
   copyLabel?: string;
   copiedLabel?: string;
-  userNameType?: { default?: IProfileProvider; available: UsernameTypes[] };
+  userNameType?: {
+    default?: { provider: string; property: string; value: string };
+    available: UsernameTypes[];
+  };
 }
 
 interface IStat {

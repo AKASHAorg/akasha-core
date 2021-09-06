@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
@@ -8,9 +9,10 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
-import PostRenderer from './post-renderer';
+import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/entry-feed';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
+import { ENTRY_KEY, usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   useGetBookmarks,
@@ -38,7 +40,6 @@ const {
   Box,
   MainAreaCardBox,
   EntryBox,
-  EntryList,
   Helmet,
   CommentEditor,
   EditorPlaceholder,
@@ -61,6 +62,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
+
+  const queryClient = useQueryClient();
 
   const postReq = usePost(postId, !!postId);
   const entryData = React.useMemo(() => {
@@ -132,6 +135,30 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     }
   };
 
+  const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
+    let url;
+    switch (itemType) {
+      case ItemTypes.PROFILE:
+        url = `/profile/${details.entryId}`;
+        break;
+      case ItemTypes.TAG:
+        url = `/social-app/tags/${details.entryId}`;
+        break;
+      case ItemTypes.ENTRY:
+        url = `/social-app/post/${details.entryId}`;
+        break;
+      case ItemTypes.COMMENT:
+        /* Navigate to parent post because we don't have the comment page yet */
+        url = `/social-app/post/${
+          queryClient.getQueryData<{ postId: string }>([ENTRY_KEY, details.entryId]).postId
+        }`;
+        break;
+      default:
+        break;
+    }
+    props.singleSpa.navigateToUrl(url);
+  };
+
   const bookmarked = React.useMemo(() => {
     return !bookmarksReq.isFetching && bookmarks?.findIndex(bm => bm.entryId === postId) >= 0;
   }, [bookmarksReq.isFetching, bookmarks, postId]);
@@ -157,10 +184,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
       return deleteBookmark.mutate(entryId);
     }
     return addBookmark.mutate({ entryId, itemType });
-  };
-
-  const handleCommentRepost = () => {
-    // todo
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
@@ -236,6 +259,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const handleTagQueryChange = (query: string) => {
     setTagQuery(query);
   };
+
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
@@ -389,36 +413,32 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   />
                 </Box>
               )}
-              <EntryList
+              <FeedWidget
+                logger={logger}
                 pages={commentPages}
-                status={reqComments.status}
+                itemType={ItemTypes.COMMENT}
                 onLoadMore={handleLoadMore}
-                hasNextPage={reqComments.hasNextPage}
-                itemCard={
-                  <PostRenderer
-                    logger={logger}
-                    bookmarkState={bookmarksReq}
-                    ethAddress={loginState.ethAddress}
-                    locale={locale}
-                    onBookmark={handleEntryBookmark(ItemTypes.COMMENT)}
-                    onNavigate={handleNavigateToPost}
-                    sharePostUrl={`${window.location.origin}${routes[POST]}/`}
-                    onFlag={handleEntryFlag}
-                    onRepost={handleCommentRepost}
-                    onAvatarClick={handleAvatarClick}
-                    onMentionClick={handleMentionClick}
-                    onTagClick={handleTagClick}
-                    singleSpaNavigate={handleSingleSpaNavigate}
-                    headerTextLabel={t('You reported this reply for the following reason')}
-                    footerTextLabel={t('It is awaiting moderation.')}
-                    moderatedContentLabel={t('This content has been moderated')}
-                    ctaLabel={t('See it anyway')}
-                    onEntryRemove={handleCommentRemove}
-                    removeEntryLabel={t('Delete Reply')}
-                    removedByMeLabel={t('You deleted this reply')}
-                    removedByAuthorLabel={t('This reply was deleted by its author')}
-                  />
+                getShareUrl={(itemId: string) =>
+                  `${window.location.origin}/social-app/post/${itemId}`
                 }
+                ethAddress={loginState.ethAddress}
+                profilePubKey={loginState.pubKey}
+                onNavigate={handleNavigation}
+                singleSpaNavigate={props.singleSpa.navigateToUrl}
+                navigateToModal={props.navigateToModal}
+                onLoginModalOpen={showLoginModal}
+                requestStatus={reqComments.status}
+                hasNextPage={reqComments.hasNextPage}
+                loggedProfile={loggedProfileData}
+                contentClickable={true}
+                onEntryFlag={handleEntryFlag}
+                onEntryRemove={handleCommentRemove}
+                removeEntryLabel={t('Delete Reply')}
+                removedByMeLabel={t('You deleted this reply')}
+                removedByAuthorLabel={t('This reply was deleted by its author')}
+                uiEvents={props.uiEvents}
+                itemSpacing={8}
+                i18n={i18n}
               />
             </>
           )}

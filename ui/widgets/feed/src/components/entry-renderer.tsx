@@ -19,7 +19,6 @@ const { ErrorLoader, EntryCardLoading, EntryCard, EntryCardHidden, ExtensionPoin
 
 export interface IEntryRenderer {
   itemId?: string;
-  itemData?: any;
   sharePostUrl: string;
   ethAddress: string | null;
   pubKey: string | null;
@@ -207,14 +206,29 @@ const EntryRenderer = (props: IEntryRenderer) => {
     setShowAnyway(true);
   };
 
+  const itemTypeName = React.useMemo(() => {
+    switch (props.itemType) {
+      case ItemTypes.ENTRY:
+        return t('post');
+      case ItemTypes.PROFILE:
+        return t('account');
+      case ItemTypes.COMMENT:
+        return t('reply');
+      case ItemTypes.TAG:
+        return t('tag');
+      default:
+        return t('unknown');
+    }
+  }, [t, props.itemType]);
+
   return (
     <>
       {(postReq.status === 'loading' || commentReq.status === 'loading') && <EntryCardLoading />}
       {(postReq.status === 'error' || commentReq.status === 'error') && (
         <ErrorLoader
           type="script-error"
-          title={t('There was an error loading the entry')}
-          details={t('We cannot show this entry right now')}
+          title={t(`There was an error loading the ${itemTypeName}`)}
+          details={t(`We cannot show this ${itemTypeName} now`)}
           devDetails={postReq.error}
         />
       )}
@@ -251,7 +265,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               repostWithCommentLabel={t('Repost with comment')}
               shareLabel={t('Share')}
               copyLinkLabel={t('Copy Link')}
-              flagAsLabel={t('Report Post')}
+              flagAsLabel={t(`Report ${itemTypeName}`)}
               loggedProfileEthAddress={ethAddress}
               locale={locale || 'en'}
               style={{ height: 'auto', ...(style as React.CSSProperties) }}
@@ -260,7 +274,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               profileAnchorLink={'/profile'}
               repliesAnchorLink={'/social-app/post'}
               onRepost={onRepost}
-              onEntryFlag={onFlag && onFlag(itemData.entryId, 'post')}
+              onEntryFlag={onFlag && onFlag(itemData.entryId, itemTypeName)}
               handleFollowAuthor={handleFollow}
               handleUnfollowAuthor={handleUnfollow}
               isFollowingAuthor={isFollowing}

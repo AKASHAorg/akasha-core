@@ -6,14 +6,18 @@ export interface MockFileReader {
 }
 
 export interface WindowWithFileReader extends Window {
-  FileReader: any;
+  FileReader: FileReader;
 }
 
 export class MockFileReader {
   // tslint:disable-next-line: no-empty
-  public onerror() {}
+  public onerror() {
+    /*  */
+  }
   // tslint:disable-next-line: no-empty
-  public onload() {}
+  public onload() {
+    /*  */
+  }
   public readAsDataURL() {
     this.result = 'test-file-content-result';
     this.onload();

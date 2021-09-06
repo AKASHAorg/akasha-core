@@ -14,14 +14,12 @@ import {
 const { Box, ProfileMiniCard } = DS;
 
 const ProfileCardWidget: React.FC<RootComponentProps> = props => {
-  const { logger } = props;
-
   const { params } = useRouteMatch<{ postId: string }>();
   const { t } = useTranslation();
 
   const [loginState] = useLoginState({
     onError: (errorInfo: IAkashaError) => {
-      logger.error(errorInfo.error.message, errorInfo.errorKey);
+      props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo.errorKey}`);
     },
   });
 

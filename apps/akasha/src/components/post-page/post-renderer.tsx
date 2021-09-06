@@ -2,7 +2,6 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useFollow } from '@akashaproject/ui-awf-hooks';
-import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useComment, useEditComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
@@ -23,7 +22,6 @@ const {
 } = DS;
 
 export interface PostRendererProps {
-  logger: RootComponentProps['logger'];
   itemId?: string;
   itemData?: IEntryData;
   locale: any;
@@ -58,7 +56,6 @@ const PostRenderer = (props: PostRendererProps) => {
   const {
     style,
     ethAddress,
-    logger,
     contentClickable,
     bookmarkState,
     hidePublishTime,
@@ -74,11 +71,7 @@ const PostRenderer = (props: PostRendererProps) => {
 
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = React.useState(false);
-  const [followedProfiles, followActions] = useFollow({
-    onError: (errorInfo: IAkashaError) => {
-      logger.error(errorInfo.error.message, errorInfo.errorKey);
-    },
-  });
+  const [followedProfiles, followActions] = useFollow({});
   const [mentionQuery, setMentionQuery] = React.useState(null);
   const [tagQuery, setTagQuery] = React.useState(null);
   const mentionSearch = useMentionSearch(mentionQuery);

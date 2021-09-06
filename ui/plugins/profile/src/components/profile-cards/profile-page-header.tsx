@@ -7,7 +7,8 @@ import {
   useFollow,
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
-import { IProfileData, IProfileProvider } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IProfileData, UsernameTypes } from '@akashaproject/ui-awf-typings/lib/profile';
+import { getUsernameTypes } from '../../utils/username-utils';
 
 const { ProfileCard, styled } = DS;
 
@@ -17,7 +18,7 @@ const ProfilePageCard = styled(ProfileCard)`
 
 export interface IProfileHeaderProps {
   profileId: string;
-  profileState: Partial<IProfileData & { isLoading: boolean }>;
+  profileData: IProfileData;
   loggedUserEthAddress: string | null;
 }
 
@@ -38,40 +39,33 @@ type ProfilePageCardProps = IProfileHeaderProps &
   >;
 
 export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
-  const { profileState, loggedUserEthAddress, profileId } = props;
+  const { profileData, loggedUserEthAddress, profileId } = props;
 
   const { t } = useTranslation();
 
-  const isFollowingReq = useIsFollowing(loggedUserEthAddress, profileState.ethAddress);
+  const isFollowingReq = useIsFollowing(loggedUserEthAddress, profileData.ethAddress);
   const followedProfiles = isFollowingReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
-  // React.useEffect(() => {
-  //   if (
-  //     loggedUserEthAddress &&
-  //     profileState.ethAddress &&
-  //     loggedUserEthAddress !== profileState.ethAddress
-  //   ) {
-  //     followActions.isFollowing(loggedUserEthAddress, profileState.ethAddress);
-  //   }
-  //   // if (loggedUserEthAddress) {
-  //   //   networkActions.checkNetwork();
-  //   // }
-  // }, [loggedUserEthAddress, profileState.ethAddress]);
+  const userNameTypes = React.useMemo(() => {
+    if (profileData) {
+      return getUsernameTypes(profileData);
+    }
+  }, [profileData]);
 
   const handleFollow = () => {
     if (!loggedUserEthAddress) {
       return props.navigateToModal({ name: 'login-modal', profileId });
     }
-    if (profileState?.ethAddress) {
-      followReq.mutate(profileState.ethAddress);
+    if (profileData?.ethAddress) {
+      followReq.mutate(profileData.ethAddress);
     }
   };
 
   const handleUnfollow = () => {
-    if (profileState?.ethAddress) {
-      unfollowReq.mutate(profileState.ethAddress);
+    if (profileData?.ethAddress) {
+      unfollowReq.mutate(profileData.ethAddress);
     }
   };
 
@@ -107,15 +101,9 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
         handleShareClick={showShareModal}
-        isFollowing={followedProfiles.includes(profileState.ethAddress)}
+        isFollowing={followedProfiles.includes(profileData.ethAddress)}
         loggedEthAddress={loggedUserEthAddress}
-        profileData={{
-          ...profileState,
-          ethAddress: profileState.ethAddress as string,
-          pubKey: profileState.pubKey as string,
-          providers: profileState.providers as IProfileProvider[],
-          default: profileState.default as IProfileProvider[],
-        }}
+        profileData={profileData}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
         descriptionLabel={t('About me')}
@@ -129,23 +117,23 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
         changeCoverImageLabel={t('Change cover image')}
         cancelLabel={t('Cancel')}
         saveChangesLabel={t('Save changes')}
-        canUserEdit={loggedUserEthAddress === profileState.ethAddress}
-        flaggable={loggedUserEthAddress !== profileState.ethAddress}
+        canUserEdit={loggedUserEthAddress === profileData.ethAddress}
+        flaggable={loggedUserEthAddress !== profileData.ethAddress}
         flagAsLabel={t('Report')}
         blockLabel={t('Block')}
+        userNameType={userNameTypes}
         onEntryFlag={handleEntryFlag(
-          profileState.pubKey ? profileState.pubKey : '',
+          profileData.pubKey ? profileData.pubKey : '',
           'account',
-          profileState.name,
+          profileData.name,
         )}
         onUpdateClick={showUpdateProfileModal}
         onENSChangeClick={showEnsModal}
         changeENSLabel={
-          t('Manage Ethereum name')
-          // userNameType.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN) ||
-          // userNameType.available.includes(UsernameTypes.ENS_DOMAIN)
-          //   ? t('Manage Ethereum name')
-          //   : t('Add an Ethereum name')
+          userNameTypes.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN) ||
+          userNameTypes.available.includes(UsernameTypes.ENS_DOMAIN)
+            ? t('Manage Ethereum name')
+            : t('Add an Ethereum name')
         }
         copyLabel={t('Copy to clipboard')}
         copiedLabel={t('Copied')}

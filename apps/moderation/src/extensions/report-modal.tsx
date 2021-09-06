@@ -51,23 +51,29 @@ const ReportModalComponent = (props: RootComponentProps) => {
     props.singleSpa.navigateToUrl(location.pathname);
   };
 
+  const contentType = React.useMemo(() => {
+    if (activeModal.hasOwnProperty('contentType') && typeof activeModal.contentType === 'string') {
+      return activeModal.contentType;
+    }
+  }, [activeModal]);
+
   const updateOnSuccess = (isSuccess: boolean) => {
     // this method utilises react-query to update reported state depending on contentType
-    if (activeModal.contentType === 'post') {
+    if (contentType === 'post') {
       queryClient.setQueryData<unknown>([ENTRY_KEY, activeModal.entryId], prev => ({
         ...prev,
         reported: true,
         reason: reasons[0],
       }));
     }
-    if (activeModal.contentType === 'reply') {
+    if (contentType === 'reply') {
       queryClient.setQueryData<unknown>([COMMENT_KEY, activeModal.entryId], prev => ({
         ...prev,
         reported: true,
         reason: reasons[0],
       }));
     }
-    if (activeModal.contentType === 'account') {
+    if (contentType === 'account') {
       queryClient.setQueryData<unknown>([PROFILE_KEY, activeModal.entryId], prev => ({
         ...prev,
         reported: true,
@@ -82,7 +88,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
       dataToSign,
       setRequesting,
       contentId: activeModal.entryId,
-      contentType: activeModal.contentType,
+      contentType: contentType,
       url: `${BASE_REPORT_URL}/new`,
       modalName: 'report-modal',
       logger: props.logger,
@@ -93,14 +99,10 @@ const ReportModalComponent = (props: RootComponentProps) => {
   return (
     <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
       <ReportModal
-        titleLabel={t(
-          `Report ${
-            activeModal.contentType === 'account' ? activeModal.user : activeModal.contentType
-          }`,
-        )}
+        titleLabel={t(`Report ${contentType === 'account' ? activeModal.user : contentType}`)}
         successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
         successMessageLabel={t(
-          `We will investigate this ${activeModal.contentType} and take appropriate action.`,
+          `We will investigate this ${contentType} and take appropriate action.`,
         )}
         optionsTitleLabel={t('Please select a reason')}
         optionLabels={reasons.map((el: string) => t(el))}
@@ -119,7 +121,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
         closeLabel={t('Close')}
         user={loginState.pubKey ? loginState.pubKey : ''}
         contentId={activeModal.entryId}
-        contentType={activeModal.contentType}
+        contentType={contentType}
         requesting={requesting}
         success={success}
         closeModal={handleModalClose}
@@ -181,9 +183,9 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props) => {
+  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
-      props.logger.error('Error: %s; Info: %s', err, errorInfo);
+      props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
     return <div>!</div>;
   },
