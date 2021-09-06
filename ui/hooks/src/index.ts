@@ -12,7 +12,6 @@ import useTagSubscribe from './use-tag-subscribe';
 import useSearch from './use-search';
 import useNetworkState from './use-network-state';
 import useAnalytics from './use-analytics';
-import useMentions from './use-mentions';
 import useSignData from './use-sign-data';
 import withProviders from './utils/provider-hoc';
 import useReasons from './use-reasons';
@@ -32,7 +31,6 @@ export {
   useSearch,
   useNetworkState,
   useAnalytics,
-  useMentions,
   useSignData,
   withProviders,
   useReasons,
