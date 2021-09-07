@@ -1,7 +1,22 @@
+import { lastValueFrom } from 'rxjs';
+import { useMutation, useQueryClient } from 'react-query';
 import getSDK from '@akashaproject/awf-sdk';
+
 import constants from './constants';
+import { COMMENT_KEY } from './use-comments.new';
+import { ENTRY_KEY } from './use-posts.new';
+import { PROFILE_KEY } from './use-profile.new';
+import { logError } from './utils/error-handler';
 
 const { BASE_REPORT_URL, BASE_STATUS_URL, BASE_DECISION_URL, BASE_MODERATOR_URL } = constants;
+
+export type UseModerationParam = {
+  dataToSign: { [key: string]: string };
+  contentId: string;
+  contentType: string;
+  url: string;
+  modalName: string;
+};
 
 export const fetchRequest = async (props: {
   method: string;
@@ -32,6 +47,72 @@ export const fetchRequest = async (props: {
 
   return response.json();
 };
+
+const handleModeration = async ({ dataToSign, contentId, contentType, url, modalName }) => {
+  const sdk = getSDK();
+
+  try {
+    const resp = await lastValueFrom(sdk.api.auth.signData(dataToSign));
+    const data = {
+      contentId,
+      contentType,
+      data: dataToSign,
+      signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
+    };
+
+    const status = await fetchRequest({ url, data, method: 'POST', statusOnly: true });
+    if (status === 409) {
+      throw new Error(
+        `This content has already been ${
+          modalName === 'report-modal' ? 'reported' : 'moderated'
+        } by you`,
+      );
+    } else if (status === 403) {
+      throw new Error('You are not authorized to perform this operation');
+    } else if (status === 400) {
+      throw new Error('Bad request. Please try again later');
+    } else if (status >= 400) {
+      throw new Error('Unable to process your request right now. Please try again later');
+    }
+    return status;
+  } catch (error) {
+    logError('[moderation-request.tsx]: handleModeration err', error);
+    throw error;
+  }
+};
+
+export function useModeration() {
+  const queryClient = useQueryClient();
+  return useMutation((param: UseModerationParam) => handleModeration(param), {
+    onSuccess: async (resp, variables) => {
+      switch (variables.contentType) {
+        case 'post':
+          queryClient.setQueryData<unknown>([ENTRY_KEY, variables.contentId], prev => ({
+            ...prev,
+            reason: variables.dataToSign.reason,
+            reported: true,
+          }));
+          break;
+        case 'reply':
+          queryClient.setQueryData<unknown>([COMMENT_KEY, variables.contentId], prev => ({
+            ...prev,
+            reason: variables.dataToSign.reason,
+            reported: true,
+          }));
+          break;
+        case 'account':
+          queryClient.setQueryData<unknown>([PROFILE_KEY, variables.contentId], prev => ({
+            ...prev,
+            reason: variables.dataToSign.reason,
+            reported: true,
+          }));
+          break;
+        default:
+          break;
+      }
+    },
+  });
+}
 
 export default {
   checkModerator: async (loggedUser: string) => {
@@ -217,50 +298,5 @@ export default {
     } catch (error) {
       return error;
     }
-  },
-  modalClickHandler: async ({
-    dataToSign,
-    contentId,
-    contentType,
-    url,
-    modalName,
-    logger,
-    callback,
-    setRequesting,
-  }) => {
-    setRequesting(true);
-    const sdk = getSDK();
-
-    sdk.api.auth.signData(dataToSign).subscribe(async (resp: any) => {
-      const data = {
-        contentId,
-        contentType,
-        data: dataToSign,
-        signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
-      };
-
-      fetchRequest({ url, data, method: 'POST', statusOnly: true })
-        .then(status => {
-          if (status === 409) {
-            throw new Error(
-              `This content has already been ${
-                modalName === 'report-modal' ? 'reported' : 'moderated'
-              } by you`,
-            );
-          } else if (status === 403) {
-            throw new Error('You are not authorized to perform this operation');
-          } else if (status === 400) {
-            throw new Error('Bad request. Please try again later');
-          } else if (status >= 400) {
-            throw new Error('Unable to process your request right now. Please try again later');
-          }
-
-          return callback();
-        })
-        .catch(error =>
-          logger.error(`[moderation-request.tsx]: fetchRequest err, ${JSON.stringify(error)}`),
-        )
-        .finally(() => setRequesting(false));
-    });
   },
 };

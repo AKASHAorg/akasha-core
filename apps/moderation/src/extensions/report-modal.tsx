@@ -1,7 +1,6 @@
 import * as React from 'react';
 import i18next from 'i18next';
 import ReactDOM from 'react-dom';
-import { useQueryClient } from 'react-query';
 import Fetch from 'i18next-fetch-backend';
 import singleSpaReact from 'single-spa-react';
 import DS from '@akashaproject/design-system';
@@ -9,27 +8,16 @@ import Backend from 'i18next-chained-backend';
 import LocalStorageBackend from 'i18next-localstorage-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
-import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { ENTRY_KEY } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
-import { PROFILE_KEY } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
-import { COMMENT_KEY } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
-import {
-  useLoginState,
-  useErrors,
-  moderationRequest,
-  withProviders,
-  useReasons,
-} from '@akashaproject/ui-awf-hooks';
+import { useLoginState, useErrors, withProviders, useReasons } from '@akashaproject/ui-awf-hooks';
 import { BASE_REPORT_URL } from '../services/constants';
+import { useModeration } from '@akashaproject/ui-awf-hooks/lib/moderation-request';
 
 const { ReportModal, ToastProvider } = DS;
 
 const ReportModalComponent = (props: RootComponentProps) => {
   const { logger, activeModal } = props;
-
-  const [requesting, setRequesting] = React.useState<boolean>(false);
-  const [success, setSuccess] = React.useState<boolean>(false);
 
   const [, errorActions] = useErrors({ logger });
 
@@ -40,12 +28,10 @@ const ReportModalComponent = (props: RootComponentProps) => {
   const [reasons, reasonsActions] = useReasons({ onError: errorActions.createError });
 
   const { t } = useTranslation();
-  const location = useLocation();
-  const queryClient = useQueryClient();
 
   React.useEffect(() => {
     reasonsActions.fetchReasons({ active: true });
-  }, []);
+  }, [reasonsActions]);
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
@@ -55,46 +41,23 @@ const ReportModalComponent = (props: RootComponentProps) => {
     if (activeModal.hasOwnProperty('contentType') && typeof activeModal.contentType === 'string') {
       return activeModal.contentType;
     }
-  }, [activeModal]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const updateOnSuccess = (reason: string) => {
-    // this method utilises react-query to update reported state depending on contentType
-    if (contentType === 'post') {
-      queryClient.setQueryData<unknown>([ENTRY_KEY, activeModal.entryId], prev => ({
-        ...prev,
-        reason,
-        reported: true,
-      }));
-    }
-    if (contentType === 'reply') {
-      queryClient.setQueryData<unknown>([COMMENT_KEY, activeModal.entryId], prev => ({
-        ...prev,
-        reason,
-        reported: true,
-      }));
-    }
-    if (contentType === 'account') {
-      queryClient.setQueryData<unknown>([PROFILE_KEY, activeModal.entryId], prev => ({
-        ...prev,
-        reason,
-        reported: true,
-      }));
-    }
-    return setSuccess(true);
-  };
+  const reportMutation = useModeration();
 
-  const onReport = (dataToSign: Record<string, string>) => {
-    moderationRequest.modalClickHandler({
-      dataToSign,
-      setRequesting,
-      contentId: activeModal.entryId,
-      contentType: contentType,
-      url: `${BASE_REPORT_URL}/new`,
-      modalName: 'report-modal',
-      logger: props.logger,
-      callback: () => updateOnSuccess(dataToSign?.reason),
-    });
-  };
+  const onReport = React.useCallback(
+    (dataToSign: Record<string, string>) =>
+      reportMutation.mutate({
+        dataToSign,
+        contentId: activeModal.entryId,
+        contentType: contentType,
+        url: `${BASE_REPORT_URL}/new`,
+        modalName: 'report-modal',
+      }),
+
+    [contentType, activeModal.entryId, reportMutation],
+  );
 
   return (
     <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
@@ -122,8 +85,8 @@ const ReportModalComponent = (props: RootComponentProps) => {
         user={loginState.pubKey ? loginState.pubKey : ''}
         contentId={activeModal.entryId}
         contentType={contentType}
-        requesting={requesting}
-        success={success}
+        requesting={reportMutation.status === 'loading'}
+        success={reportMutation.status === 'success'}
         closeModal={handleModalClose}
         onReport={onReport}
       />
