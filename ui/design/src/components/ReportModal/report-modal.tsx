@@ -96,16 +96,10 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     setExplanation(ev.currentTarget.value.replace(/  +/g, ' '));
   };
 
-  const handleCancel = () => {
-    setReason('');
-    setExplanation('');
-    return closeModal();
-  };
-
   const handleReport = () => {
     // hard check: makes sure contentType is specified
     if (!contentType || contentType?.length < 1) {
-      return handleCancel();
+      return closeModal();
     }
 
     // sign payload first before posting
@@ -244,7 +238,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 margin={{ right: '0.5rem' }}
                 label={cancelLabel}
                 isMobile={isMobileOnly}
-                onClick={handleCancel}
+                onClick={closeModal}
               />
               <ModalButton
                 primary={true}

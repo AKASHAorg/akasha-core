@@ -31,10 +31,6 @@ export interface IEntryRenderer {
   checkIsFollowing: (viewerEthAddress: string, targetEthAddress: string) => void;
   contentClickable?: boolean;
   itemType: ItemTypes;
-  headerTextLabel: string;
-  footerTextLabel: string;
-  moderatedContentLabel?: string;
-  ctaLabel?: string;
   onEntryRemove?: (entryId: string) => void;
   removeEntryLabel?: string;
   removedByMeLabel?: string;
@@ -57,14 +53,9 @@ const EntryRenderer = (props: IEntryRenderer) => {
     onFlag,
     onNavigate,
     singleSpaNavigate,
-    checkIsFollowing,
     sharePostUrl,
     onRepost,
     contentClickable,
-    headerTextLabel,
-    footerTextLabel,
-    moderatedContentLabel,
-    ctaLabel,
   } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
@@ -224,14 +215,17 @@ const EntryRenderer = (props: IEntryRenderer) => {
       {(postReq.status === 'success' || commentReq.status === 'success') && (
         <>
           {itemData.moderated && itemData.delisted && (
-            <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
+            <EntryCardHidden
+              moderatedContentLabel={t('This content has been moderated')}
+              isDelisted={true}
+            />
           )}
           {!itemData.moderated && isReported && (
             <EntryCardHidden
               reason={itemData.reason}
-              headerTextLabel={headerTextLabel}
-              footerTextLabel={footerTextLabel}
-              ctaLabel={ctaLabel}
+              headerTextLabel={t(`You reported this ${itemTypeName} for the following reason`)}
+              footerTextLabel={t('It is awaiting moderation.')}
+              ctaLabel={t('See it anyway')}
               handleFlipCard={handleFlipCard}
             />
           )}
@@ -272,8 +266,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
               onTagClick={handleTagClick}
               singleSpaNavigate={singleSpaNavigate}
               contentClickable={contentClickable}
-              moderatedContentLabel={moderatedContentLabel}
-              ctaLabel={ctaLabel}
+              moderatedContentLabel={t('This content has been moderated')}
+              ctaLabel={t('See it anyway')}
               handleFlipCard={handleFlipCard}
               onEntryRemove={props.onEntryRemove}
               removeEntryLabel={props.removeEntryLabel}
