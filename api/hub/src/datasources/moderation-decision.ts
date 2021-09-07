@@ -69,6 +69,64 @@ class ModerationDecisionAPI extends DataSource {
   }
 
   /**
+   * Return current moderation status for a list of given content IDs.
+   * @param user - The current user
+   * @param contentIDs - The list of content IDs to check
+   * @param decisionsAPI - The decisions API object
+   * @param reportingAPI - The reporting API object
+   * @returns A list of statuses for each content ID requested
+   */
+  async getModerationStatus(
+    user: string,
+    contentIDs: [string],
+    decisionsAPI: ModerationDecisionAPI,
+    reportingAPI: ModerationReportAPI,
+  ) {
+    const statuses = [];
+    for (const contentID of contentIDs) {
+      const status = {
+        contentId: contentID,
+        reported: false,
+        moderated: false,
+        delisted: false,
+        reason: '',
+      };
+      // get decision for the current contentID
+      const decision = await decisionsAPI.getDecision(contentID);
+      if (decision) {
+        status.moderated = decision.moderated;
+        status.delisted = decision.delisted;
+        // check if the current logged user has already reported this content
+        if (user) {
+          const reported = await reportingAPI.getReport(contentID, user);
+          if (reported) {
+            status.reported = true;
+            status.reason = reported.reason;
+          }
+        }
+      }
+      statuses.push(status);
+    }
+    return statuses;
+  }
+
+  /**
+   * List the moderation actions log for each content identifier.
+   * @param contentID - The content identifier
+   * @returns A list of ModerationDecision objects
+   */
+  async listActions(contentID: string) {
+    const decision = parse(stringify(await this.getDecision(contentID)));
+    if (decision.actions && decision.actions.length) {
+      decision.actions.forEach((element, index) => {
+        element.explanation = decodeString(element.explanation);
+        decision.actions[index] = element;
+      });
+    }
+    return decision;
+  }
+
+  /**
    * Count all decisions (pending, moderated and delisted, moderated and kept).
    * @returns An object with all three counters
    * @example Getting all counters
@@ -127,19 +185,30 @@ class ModerationDecisionAPI extends DataSource {
   }
 
   /**
-   * List the moderation actions log for each content identifier.
-   * @param contentID - The content identifier
-   * @returns A list of ModerationDecision objects
+   * Get a list of decisions based on their status (delisted and/or moderated).
+   * @param profileAPI - The profile data source API
+   * @param reportingAPI - The reporting data source API
+   * @param delisted - The delisted status (boolean)
+   * @param moderated - The moderated status (boolean)
+   * @param offset - The offset ID
+   * @param limit - The limit of results to return
+   * @returns A list of decisions
    */
-  async listActions(contentID: string) {
-    const decision = parse(stringify(await this.getDecision(contentID)));
-    if (decision.actions && decision.actions.length) {
-      decision.actions.forEach((element, index) => {
-        element.explanation = decodeString(element.explanation);
-        decision.actions[index] = element;
-      });
+  async getDecisions(
+    profileAPI: ProfileAPI,
+    reportingAPI: ModerationReportAPI,
+    delisted: boolean,
+    moderated: boolean,
+    offset?: string,
+    limit?: number,
+  ) {
+    const decisions = await this.listDecisions(delisted, moderated, offset, limit);
+    const list = [];
+    for (const decision of decisions.results) {
+      // get the full data for each decision
+      list.push(await this.getFinalDecision(decision.contentID, profileAPI, reportingAPI));
     }
-    return decision;
+    return { results: list, nextIndex: decisions.nextIndex, total: decisions.total };
   }
 
   /**
@@ -174,6 +243,71 @@ class ModerationDecisionAPI extends DataSource {
     const results = list.slice(offsetIndex, endIndex);
     const nextIndex = endIndex ? list[endIndex]._id : null;
     return { results: results, nextIndex: nextIndex, total: list.length };
+  }
+
+  /**
+   * Aggregates data for a final decision. It contains profile data for moderator,
+   * first report, number of total reports, and full list of reasons it was reported for.
+   * @param contentID - The content identifier
+   * @param profileAPI - The profile data source API
+   * @returns An object with all the relevant data
+   */
+  async getFinalDecision(
+    contentID: string,
+    profileAPI: ProfileAPI,
+    reportingAPI: ModerationReportAPI,
+  ) {
+    const decisionCache = this.getModeratedDecisionCacheKey(contentID);
+    if (await queryCache.has(decisionCache)) {
+      return queryCache.get(decisionCache);
+    }
+    let finalDecision = await this.getDecision(contentID);
+    // remove action log as it is not needed here
+    if (finalDecision.actions) {
+      delete finalDecision.actions;
+    }
+    // add moderator data
+    if (finalDecision.moderator && finalDecision.moderator.length) {
+      const moderator = finalDecision.moderator.startsWith('0x')
+        ? await profileAPI.getProfile(finalDecision.moderator)
+        : await profileAPI.resolveProfile(finalDecision.moderator);
+      finalDecision = Object.assign({}, finalDecision, {
+        moderatorProfile: {
+          ethAddress: moderator.ethAddress, // Deprecated, to be removed
+          pubKey: moderator.pubKey,
+          name: moderator.name || '',
+          userName: moderator.userName || '',
+          avatar: moderator.avatar || '',
+        },
+      });
+    }
+    // add first report data
+    const first = await reportingAPI.getFirstReport(contentID);
+    const reportedBy = first.author;
+    const reportedDate = first.creationDate;
+    const author = (await first.author.startsWith('0x'))
+      ? await profileAPI.getProfile(first.author)
+      : await profileAPI.resolveProfile(first.author);
+    const reportedByProfile = {
+      ethAddress: author.ethAddress, // Deprecated, to be removed
+      pubKey: author.pubKey,
+      name: author.name || '',
+      userName: author.userName || '',
+      avatar: author.avatar || '',
+    };
+    // count reports
+    const reports = await reportingAPI.countReports(contentID);
+    // add reasons
+    const reasons = await reportingAPI.getReasons(contentID);
+    finalDecision = Object.assign({}, finalDecision, {
+      reports,
+      reportedBy,
+      reportedDate,
+      reportedByProfile,
+      reasons,
+    });
+    await queryCache.set(decisionCache, finalDecision);
+    return finalDecision;
   }
 
   /**
@@ -232,69 +366,6 @@ class ModerationDecisionAPI extends DataSource {
     }
 
     return { results: moderated, nextIndex: nextIndex, total: list.length };
-  }
-
-  /**
-   * Aggregates data for a final decision. It contains profile data for moderator,
-   * first report, number of total reports, and full list of reasons it was reported for.
-   * @param contentID - The content identifier
-   * @param profileAPI - The profile data source API
-   * @returns An object with all the relevant data
-   */
-  async getFinalDecision(
-    contentID: string,
-    profileAPI: ProfileAPI,
-    reportingAPI: ModerationReportAPI,
-  ) {
-    const decisionCache = this.getModeratedDecisionCacheKey(contentID);
-    if (await queryCache.has(decisionCache)) {
-      return queryCache.get(decisionCache);
-    }
-    const decision = await this.getDecision(contentID);
-    // remove action log as it is not needed here
-    let { finalDecision } = decision;
-    // add moderator data
-    if (finalDecision.moderator) {
-      const moderator = finalDecision.moderator.startsWith('0x')
-        ? await profileAPI.getProfile(finalDecision.moderator)
-        : await profileAPI.resolveProfile(finalDecision.moderator);
-      finalDecision = Object.assign({}, finalDecision, {
-        moderatorProfile: {
-          ethAddress: moderator.ethAddress, // Deprecated, to be removed
-          pubKey: moderator.pubKey,
-          name: moderator.name || '',
-          userName: moderator.userName || '',
-          avatar: moderator.avatar || '',
-        },
-      });
-    }
-    // add first report data
-    const first = await reportingAPI.getFirstReport(contentID);
-    const reportedBy = first.author;
-    const reportedDate = first.creationDate;
-    const author = (await first.author.startsWith('0x'))
-      ? await profileAPI.getProfile(first.author)
-      : await profileAPI.resolveProfile(first.author);
-    const reportedByProfile = {
-      ethAddress: author.ethAddress, // Deprecated, to be removed
-      pubKey: author.pubKey,
-      name: author.name || '',
-      userName: author.userName || '',
-      avatar: author.avatar || '',
-    };
-    // count reports
-    const reports = await reportingAPI.countReports(contentID);
-    // add reasons
-    const reasons = await reportingAPI.getReasons(contentID);
-    finalDecision = Object.assign({}, finalDecision, {
-      reports,
-      reportedBy,
-      reportedDate,
-      reportedByProfile,
-      reasons,
-    });
-    await queryCache.set(decisionCache, finalDecision);
-    return finalDecision;
   }
 
   /**
