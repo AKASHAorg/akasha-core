@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "module": "esnext",
+    "module": "es2020",
     "moduleResolution": "node",
     "alwaysStrict": true,
     "declaration": true,
@@ -14,11 +14,11 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "target": "es2018",
+    "target": "es2020",
     "sourceMap": true,
     "pretty": true,
     "skipLibCheck": true,
-    "lib": ["es2019", "dom"]
+    "lib": ["es2020", "dom"]
   },
   "references": [
     { "path": "./ui/design" },
