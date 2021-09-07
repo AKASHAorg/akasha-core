@@ -271,6 +271,7 @@ class ModerationDecisionAPI extends DataSource {
       const moderator = finalDecision.moderator.startsWith('0x')
         ? await profileAPI.getProfile(finalDecision.moderator)
         : await profileAPI.resolveProfile(finalDecision.moderator);
+      finalDecision.moderator = moderator.pubKey;
       finalDecision = Object.assign({}, finalDecision, {
         moderatorProfile: {
           ethAddress: moderator.ethAddress, // Deprecated, to be removed
@@ -283,11 +284,11 @@ class ModerationDecisionAPI extends DataSource {
     }
     // add first report data
     const first = await reportingAPI.getFirstReport(contentID);
-    const reportedBy = first.author;
     const reportedDate = first.creationDate;
-    const author = (await first.author.startsWith('0x'))
+    const author = first.author.startsWith('0x')
       ? await profileAPI.getProfile(first.author)
       : await profileAPI.resolveProfile(first.author);
+    const reportedBy = author.pubKey;
     const reportedByProfile = {
       ethAddress: author.ethAddress, // Deprecated, to be removed
       pubKey: author.pubKey,
