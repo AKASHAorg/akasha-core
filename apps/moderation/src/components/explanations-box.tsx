@@ -1,5 +1,6 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
+import { ILogger } from '@akashaproject/awf-sdk/typings/lib/interfaces/log';
 
 import { moderationRequest } from '@akashaproject/ui-awf-hooks';
 
@@ -9,7 +10,7 @@ const { Box, Text } = DS;
 
 export interface IExplanationsBoxProps extends Omit<IExplanationsBoxEntryProps, 'entry'> {
   entryId: string;
-  logger: any;
+  logger: ILogger;
 }
 
 const ExplanationsCard: React.FC<IExplanationsBoxProps> = props => {
@@ -20,6 +21,7 @@ const ExplanationsCard: React.FC<IExplanationsBoxProps> = props => {
 
   React.useEffect(() => {
     fetchContentFlags();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchContentFlags = async () => {

@@ -143,9 +143,8 @@ export function useInfinitePostsByAuthor(
 const getPost = async postID => {
   const sdk = getSDK();
 
-  const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
-
   try {
+    const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
     // check entry's moderation status
     const modStatus = await moderationRequest.checkStatus(true, {
       user: user.data ? user.data.pubKey : '',
@@ -160,9 +159,11 @@ const getPost = async postID => {
 };
 
 // hook for fetching data for a specific postID/entryID
+
+// @TODO: convert to  usePost({postID, loggedUser, enabler=true}: payload) where payload = {postID: string, enabler: boolean, loggedUser: string}
 export function usePost(postID: string, enabler: boolean) {
   return useQuery([ENTRY_KEY, postID], () => getPost(postID), {
-    enabled: !!postID && enabler,
+    enabled: !!(postID && enabler),
     keepPreviousData: true,
   });
 }

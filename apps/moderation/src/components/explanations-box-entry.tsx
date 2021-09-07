@@ -1,14 +1,16 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
 import { useProfile } from '@akashaproject/ui-awf-hooks';
+import { ILogger } from '@akashaproject/awf-sdk/typings/lib/interfaces/log';
 
 const { Text } = DS;
 
 export interface IExplanationsBoxEntryProps {
+  // @TODO: add type
   entry: any;
   reportedByLabel: string;
   forLabel: string;
-  logger: any;
+  logger: ILogger;
 }
 
 const ExplanationsCardEntry: React.FC<IExplanationsBoxEntryProps> = props => {
@@ -22,6 +24,7 @@ const ExplanationsCardEntry: React.FC<IExplanationsBoxEntryProps> = props => {
 
   React.useEffect(() => {
     if (entry.author) {
+      // @TODO: replace ethAddress with pubkey
       reporterProfileActions.getProfileData({ ethAddress: entry.author });
     }
   }, [entry]);
