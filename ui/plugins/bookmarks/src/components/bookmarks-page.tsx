@@ -76,12 +76,12 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
 
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
-  const handleRepost = (_withComment: boolean, entryId: any) => {
+  const handleRepost = (_withComment: boolean, embedEntryId: string) => {
     if (!loginState.ethAddress) {
       props.navigateToModal({ name: 'login' });
       return;
     } else {
-      props.navigateToModal({ name: 'editor', embedEntry: entryId });
+      props.navigateToModal({ name: 'editor', embedEntry: embedEntryId });
     }
   };
 
