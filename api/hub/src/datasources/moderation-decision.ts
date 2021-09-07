@@ -271,8 +271,8 @@ class ModerationDecisionAPI extends DataSource {
       const moderator = finalDecision.moderator.startsWith('0x')
         ? await profileAPI.getProfile(finalDecision.moderator)
         : await profileAPI.resolveProfile(finalDecision.moderator);
-      finalDecision.moderator = moderator.pubKey;
       finalDecision = Object.assign({}, finalDecision, {
+        moderator: moderator.pubKey,
         moderatorProfile: {
           ethAddress: moderator.ethAddress, // Deprecated, to be removed
           pubKey: moderator.pubKey,
