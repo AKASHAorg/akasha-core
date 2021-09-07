@@ -42,8 +42,6 @@ interface SearchPageProps extends RootComponentProps {
   onError?: (err: Error) => void;
   loginState: ILoginState;
   showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
-  modalState: ModalState;
-  modalStateActions: ModalStateActions;
 }
 
 const SearchPage: React.FC<SearchPageProps> = props => {
