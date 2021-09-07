@@ -3,16 +3,18 @@ import { useTranslation } from 'react-i18next';
 import getSDK from '@akashaproject/awf-sdk';
 import DS from '@akashaproject/design-system';
 import { moderationRequest } from '@akashaproject/ui-awf-hooks';
+import { ILogger } from '@akashaproject/awf-sdk/typings/lib/interfaces/log';
 
 import { ICount } from './content-list';
 import Banner from './transparency-log/banner';
 import DetailCard, { ILogItem } from './transparency-log/detail-card';
 
-const { Box, Text, Icon, Spinner, SwitchCard, TransparencyLogMiniCard } = DS;
+const { Box, Text, Icon, Spinner, SwitchCard, TransparencyLogMiniCard, useIntersectionObserver } =
+  DS;
 
 export interface ITransparencyLogProps {
   user: string | null;
-  logger: any;
+  logger: ILogger;
   isMobile: boolean;
   navigateToUrl: (url: string) => void;
 }
@@ -30,32 +32,28 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const [selected, setSelected] = React.useState<ILogItem | null>(null);
 
   const { t } = useTranslation();
-  const listItemObserver = React.useRef<any>();
+
+  const elementRef = React.createRef<HTMLDivElement>();
 
   const sdk = getSDK();
+
+  useIntersectionObserver({
+    target: elementRef,
+    onIntersect: entries => {
+      if (entries[0].isIntersecting && nextIndex) {
+        // fetch more entries using nextIndex
+        fetchModerationLog(nextIndex);
+      }
+    },
+    threshold: 0,
+  });
 
   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
   React.useEffect(() => {
     fetchModerationLog();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const anchor = React.useCallback(
-    node => {
-      if (requesting) return;
-      if (listItemObserver.current) listItemObserver.current.disconnect();
-      listItemObserver.current = new IntersectionObserver(entries => {
-        if (entries[0].isIntersecting && nextIndex) {
-          // fetch more entries using nextIndex
-          fetchModerationLog(nextIndex);
-        }
-      });
-      if (node) listItemObserver.current.observe(node);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [requesting],
-  );
+  }, [nextIndex]);
 
   const getStatusCount = async () => {
     setRequesting(true);
@@ -188,7 +186,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
             </Box>
           )}
           {/* triggers intersection observer */}
-          <Box pad="xxsmall" ref={anchor} />
+          <Box pad="xxsmall" ref={elementRef} />
         </Box>
         {isMobile && selected && (
           <Box width="100%" style={{ position: 'absolute', right: 0 }}>
