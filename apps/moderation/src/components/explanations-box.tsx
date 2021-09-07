@@ -1,36 +1,41 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
+import { ILogger } from '@akashaproject/awf-sdk/typings/lib/interfaces/log';
 
 import { moderationRequest } from '@akashaproject/ui-awf-hooks';
 
-import ExplanationsCardEntry, { IExplanationsBoxEntryProps } from './explanations-box-entry';
+import ExplanationsBoxEntry, {
+  IExplanationsBoxEntryProps,
+  IFlagEntry,
+} from './explanations-box-entry';
 
 const { Box, Text } = DS;
 
-export interface IExplanationsBoxProps extends Omit<IExplanationsBoxEntryProps, 'entry'> {
+export interface IExplanationsBoxProps extends Omit<IExplanationsBoxEntryProps, 'flagEntry'> {
   entryId: string;
-  logger: any;
+  logger: ILogger;
 }
 
-const ExplanationsCard: React.FC<IExplanationsBoxProps> = props => {
+const ExplanationsBox: React.FC<IExplanationsBoxProps> = props => {
   const { entryId, reportedByLabel, forLabel, logger } = props;
 
   const [requesting, setRequesting] = React.useState<boolean>(false);
-  const [flags, setFlags] = React.useState<any>([]);
+  const [flagEntries, setFlagEntries] = React.useState<IFlagEntry[]>([]);
 
   React.useEffect(() => {
     fetchContentFlags();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchContentFlags = async () => {
     setRequesting(true);
     try {
       const response = await moderationRequest.getFlags(entryId);
-      setFlags(response);
+      setFlagEntries(response);
       setRequesting(false);
     } catch (error) {
       setRequesting(false);
-      logger.error('[explanations-box.tsx]: fetchContentFlags err %j', error.message || '');
+      logger.error(`[explanations-box.tsx]: fetchContentFlags err, ${JSON.stringify(error)}`);
     }
   };
 
@@ -39,10 +44,10 @@ const ExplanationsCard: React.FC<IExplanationsBoxProps> = props => {
       {requesting && <Text>Loading ...</Text>}
       {!requesting && (
         <Box>
-          {flags.map((flag: any, id: number) => (
-            <ExplanationsCardEntry
+          {flagEntries.map((flagEntry: IFlagEntry, id: number) => (
+            <ExplanationsBoxEntry
               key={id}
-              entry={flag}
+              flagEntry={flagEntry}
               reportedByLabel={reportedByLabel}
               forLabel={forLabel}
               logger={logger}
@@ -54,4 +59,4 @@ const ExplanationsCard: React.FC<IExplanationsBoxProps> = props => {
   );
 };
 
-export default ExplanationsCard;
+export default ExplanationsBox;

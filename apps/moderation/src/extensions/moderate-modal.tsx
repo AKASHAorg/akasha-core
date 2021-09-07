@@ -4,13 +4,9 @@ import singleSpaReact from 'single-spa-react';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { BrowserRouter as Router, useLocation } from 'react-router-dom';
-import {
-  useLoginState,
-  useErrors,
-  moderationRequest,
-  withProviders,
-} from '@akashaproject/ui-awf-hooks';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { useLoginState, useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
+import { useModeration } from '@akashaproject/ui-awf-hooks/lib/moderation-request';
 import { BASE_DECISION_URL } from '../services/constants';
 import i18n, { setupI18next } from '../i18n';
 
@@ -19,8 +15,6 @@ const { ModerateModal, ToastProvider } = DS;
 const ModerateModalComponent = (props: RootComponentProps) => {
   const { logger, activeModal } = props;
 
-  const [requesting, setRequesting] = React.useState<boolean>(false);
-
   const [, errorActions] = useErrors({ logger });
 
   const [loginState] = useLoginState({
@@ -28,24 +22,39 @@ const ModerateModalComponent = (props: RootComponentProps) => {
   });
 
   const { t } = useTranslation();
-  const location = useLocation();
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
   };
 
-  const onModerate = (dataToSign: Record<string, unknown>) => {
-    moderationRequest.modalClickHandler({
-      dataToSign,
-      setRequesting,
-      contentId: activeModal.entryId,
-      contentType: activeModal.contentType,
-      url: `${BASE_DECISION_URL}/moderate`,
-      modalName: 'moderate-modal',
-      logger: props.logger,
-      callback: handleModalClose,
-    });
-  };
+  const contentType = React.useMemo(() => {
+    if (activeModal.hasOwnProperty('contentType') && typeof activeModal.contentType === 'string') {
+      return activeModal.contentType;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const moderateMutation = useModeration();
+
+  const onModerate = React.useCallback(
+    (dataToSign: Record<string, string>) => {
+      moderateMutation.mutate({
+        dataToSign,
+        contentId: activeModal.entryId,
+        contentType: contentType,
+        url: `${BASE_DECISION_URL}/moderate`,
+        modalName: 'moderate-modal',
+      });
+    },
+    [contentType, activeModal.entryId, moderateMutation],
+  );
+
+  React.useEffect(() => {
+    if (moderateMutation.status === 'success') {
+      handleModalClose();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [moderateMutation]);
 
   return (
     <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
@@ -62,7 +71,7 @@ const ModerateModalComponent = (props: RootComponentProps) => {
         footerUrl1={'/legal/code-of-conduct'}
         cancelLabel={t('Cancel')}
         user={loginState.pubKey ? loginState.pubKey : ''}
-        requesting={requesting}
+        requesting={moderateMutation.status === 'loading'}
         isReview={activeModal.status !== 'pending'}
         closeModal={handleModalClose}
         onModerate={onModerate}

@@ -3,15 +3,12 @@ import DS from '@akashaproject/design-system';
 import { IFeedWidgetProps } from './App';
 import { useFollow, useBookmarks } from '@akashaproject/ui-awf-hooks';
 import EntryRenderer from './entry-renderer';
-import { useTranslation } from 'react-i18next';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
 const { EntryList } = DS;
 
 const EntryFeed = (props: IFeedWidgetProps) => {
-  const { t } = useTranslation();
-
   const [followedProfiles, followActions] = useFollow({});
 
   const [bookmarkState, bookmarkActions] = useBookmarks({});
@@ -34,7 +31,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
       props.onLoginModalOpen();
     }
   };
-  const handleRepost = (_withComment: boolean, entryId: any) => {
+  const handleRepost = (_withComment: boolean, entryId: string) => {
     if (!props.loggedProfile.pubKey) {
       props.onLoginModalOpen();
     } else {
@@ -67,10 +64,6 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           onFlag={props.onEntryFlag}
           onRepost={handleRepost}
           contentClickable={props.contentClickable}
-          headerTextLabel={t('You reported this post for the following reason')}
-          footerTextLabel={t('It is awaiting moderation.')}
-          moderatedContentLabel={t('This content has been moderated')}
-          ctaLabel={t('See it anyway')}
           onEntryRemove={props.onEntryRemove}
           removeEntryLabel={props.removeEntryLabel}
           removedByMeLabel={props.removedByMeLabel}

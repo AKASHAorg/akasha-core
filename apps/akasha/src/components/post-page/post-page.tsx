@@ -79,6 +79,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     }
     return postReq.status === 'success' && entryData.reported;
   }, [entryData, showAnyway, postReq.status]);
+
   const [mentionQuery, setMentionQuery] = React.useState(null);
   const [tagQuery, setTagQuery] = React.useState(null);
   const mentionQueryReq = useMentionSearch(mentionQuery);
