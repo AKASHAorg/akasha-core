@@ -7,7 +7,8 @@ export default function useIntersectionObserver({
   rootMargin = '0px',
   enabled = true,
 }) {
-  const cb = React.useCallback(onIntersect, [target]);
+  const cb = React.useCallback(onIntersect, [target, onIntersect]);
+
   React.useEffect(() => {
     if (!enabled) {
       return;
