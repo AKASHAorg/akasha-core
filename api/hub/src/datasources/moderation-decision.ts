@@ -261,7 +261,7 @@ class ModerationDecisionAPI extends DataSource {
     if (await queryCache.has(decisionCache)) {
       return queryCache.get(decisionCache);
     }
-    let finalDecision = await this.getDecision(contentID);
+    const finalDecision = await this.getDecision(contentID);
     // remove action log as it is not needed here
     if (finalDecision.actions) {
       delete finalDecision.actions;
@@ -271,7 +271,7 @@ class ModerationDecisionAPI extends DataSource {
       const moderator = finalDecision.moderator.startsWith('0x')
         ? await profileAPI.getProfile(finalDecision.moderator)
         : await profileAPI.resolveProfile(finalDecision.moderator);
-      finalDecision = Object.assign({}, finalDecision, {
+      Object.assign(finalDecision, {
         moderator: moderator.pubKey,
         moderatorProfile: {
           ethAddress: moderator.ethAddress, // Deprecated, to be removed
@@ -300,7 +300,7 @@ class ModerationDecisionAPI extends DataSource {
     const reports = await reportingAPI.countReports(contentID);
     // add reasons
     const reasons = await reportingAPI.getReasons(contentID);
-    finalDecision = Object.assign({}, finalDecision, {
+    Object.assign(finalDecision, {
       reports,
       reportedBy,
       reportedDate,
