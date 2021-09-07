@@ -20,11 +20,7 @@ import {
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 import { useSearch } from '@akashaproject/ui-awf-hooks/lib/use-search.new';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
-import { GlobalSearchResultTagItem } from '@akashaproject/awf-sdk/typings/lib/interfaces/responses';
-import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 
 const {
   Box,
@@ -224,7 +220,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       {!searchReq.isFetching && !emptySearchState && (
         <Box>
           {(activeButton === buttonValues[0] || activeButton === buttonValues[1]) &&
-            searchState?.profiles.slice(0, 4).map((profileData: IProfileData, index: number) => (
+            searchState?.profiles.slice(0, 4).map((profileData: any, index: number) => (
               <Box key={index} pad={{ bottom: 'medium' }}>
                 <ProfileSearchCard
                   handleFollow={() => handleFollowProfile(profileData.ethAddress)}
@@ -246,7 +242,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             ))}
 
           {(activeButton === buttonValues[0] || activeButton === buttonValues[2]) &&
-            searchState?.tags.map((tag: GlobalSearchResultTagItem, index: number) => (
+            searchState?.tags.map((tag: any, index: number) => (
               <Box key={index} pad={{ bottom: 'medium' }}>
                 <TagSearchCard
                   tag={tag}
@@ -261,7 +257,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               </Box>
             ))}
           {(activeButton === buttonValues[0] || activeButton === buttonValues[3]) &&
-            searchState?.entries.slice(0, 4).map((entryData: IEntryData, index: number) => (
+            searchState?.entries.slice(0, 4).map((entryData: any, index: number) => (
               <Box key={index} pad={{ bottom: 'medium' }}>
                 {entryData.moderated && entryData.delisted && (
                   <EntryCardHidden
@@ -308,7 +304,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     onEntryFlag={handleEntryFlag(entryData.entryId, 'post')}
                     handleFollowAuthor={() => handleFollowProfile(entryData.author.ethAddress)}
                     handleUnfollowAuthor={() => handleUnfollowProfile(entryData.author.ethAddress)}
-                    isFollowingAuthor={followedProfiles.includes(entryData.author.ethAddress)}
+                    isFollowingAuthor={followedProfiles.includes(entryData.author)}
                     onContentClick={() => handlePostClick(entryData.entryId)}
                     onMentionClick={handleProfileClick}
                     onTagClick={handleTagClick}
@@ -320,7 +316,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               </Box>
             ))}
           {(activeButton === buttonValues[0] || activeButton === buttonValues[4]) &&
-            searchState?.comments.slice(0, 4).map((commentData: IEntryData, index: number) => (
+            searchState?.comments.slice(0, 4).map((commentData: any, index: number) => (
               <Box key={index} pad={{ bottom: 'medium' }}>
                 {commentData.moderated && commentData.delisted && (
                   <EntryCardHidden
@@ -372,7 +368,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     handleUnfollowAuthor={() =>
                       handleUnfollowProfile(commentData.author.ethAddress)
                     }
-                    isFollowingAuthor={followedProfiles.includes(commentData.author.ethAddress)}
+                    isFollowingAuthor={followedProfiles.includes(commentData.author)}
                     onContentClick={() => handlePostClick(commentData.postId)}
                     onMentionClick={handleProfileClick}
                     onTagClick={handleTagClick}

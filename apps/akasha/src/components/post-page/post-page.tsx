@@ -9,7 +9,7 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
-import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/entry-feed';
+import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ENTRY_KEY, usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';

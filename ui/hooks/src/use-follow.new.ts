@@ -73,6 +73,7 @@ const getIsFollowing = async (followerEthAddress: string, followingEthAddress: s
     return res.data.isFollowing;
   } catch (error) {
     logError('useFollow.getIsFollowing', error);
+    throw error;
   }
 };
 

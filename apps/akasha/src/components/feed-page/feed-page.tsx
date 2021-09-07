@@ -16,7 +16,7 @@ import { useMutationListener } from '@akashaproject/ui-awf-hooks/lib/use-query-l
 import { createPendingEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/entry-feed';
+import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ENTRY_KEY } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 

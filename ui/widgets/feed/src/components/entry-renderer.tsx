@@ -79,10 +79,10 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const commentReq = useComment(itemId, props.itemType === ItemTypes.COMMENT);
   const authorEthAddress = React.useMemo(() => {
     if (props.itemType === ItemTypes.COMMENT && commentReq.status === 'success') {
-      return commentReq.data.author;
+      return commentReq.data.author.ethAddress;
     }
     if (props.itemType === ItemTypes.ENTRY && postReq.status === 'success') {
-      return postReq.data.author;
+      return postReq.data.author.ethAddress;
     }
   }, [props.itemType, commentReq, postReq]);
 
