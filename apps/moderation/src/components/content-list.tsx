@@ -112,7 +112,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
         setIsAuthorised(true);
       }
     } catch (error) {
-      logger.error('[content-list.tsx]: getModeratorStatus err %j', error.message || '');
+      logger.error(`[content-list.tsx]: getModeratorStatus err, ${JSON.stringify(error)}`);
     } finally {
       setRequesting(false);
     }
@@ -124,7 +124,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
       const response = await moderationRequest.getCount();
       setCount(response);
     } catch (error) {
-      logger.error('[content-list.tsx]: getStatusCount err %j', error.message || '');
+      logger.error(`[content-list.tsx]: getStatusCount err, ${JSON.stringify(error)}`);
     } finally {
       setRequesting(false);
     }
@@ -138,7 +138,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
       setPendingItems(modResponse);
       getStatusCount();
     } catch (error) {
-      logger.error('[content-list.tsx]: fetchPendingContents err %j', error.message || '');
+      logger.error(`[content-list.tsx]: fetchPendingContents err, ${JSON.stringify(error)}`);
     } finally {
       setRequesting(false);
     }
@@ -152,7 +152,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
       setModeratedItems(modResponse);
       getStatusCount();
     } catch (error) {
-      logger.error('[content-list.tsx]: fetchModeratedContents err %j', error.message || '');
+      logger.error(`[content-list.tsx]: fetchModeratedContents err, ${JSON.stringify(error)}`);
     } finally {
       setRequesting(false);
     }

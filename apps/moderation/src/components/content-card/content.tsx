@@ -5,7 +5,7 @@ import DS from '@akashaproject/design-system';
 import { IContentProps } from '../../interfaces';
 
 import EntryDataCard from '../entry-data-card';
-import ExplanationsCard from '../explanations-box';
+import ExplanationsBox from '../explanations-box';
 
 import { ContentCardButton, StyledBox } from '../styled';
 
@@ -77,7 +77,7 @@ const Content: React.FC<IContentProps> = props => {
         {showExplanations ? props.hideExplanationsLabel : props.showExplanationsLabel}
       </Text>
       {showExplanations && (
-        <ExplanationsCard
+        <ExplanationsBox
           entryId={props.entryId}
           reportedByLabel={props.reportedByLabel}
           forLabel={props.forLabel}
