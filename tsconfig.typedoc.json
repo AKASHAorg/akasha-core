@@ -17,6 +17,6 @@
     { "path": "./ui/plugins/profile" },
     { "path": "./ui/plugins/search" },
     { "path": "./sdk"},
-    {"path":  "./sdk/typings"}
+    { "path":  "./sdk/typings"}
   ]
 }
