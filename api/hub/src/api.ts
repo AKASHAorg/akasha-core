@@ -213,31 +213,12 @@ api.post('/moderation/status', async (ctx: koa.Context, next: () => Promise<any>
   if (!contentIDs) {
     ctx.status = 400;
   } else {
-    const statuses = [];
-    for (const contentID of contentIDs) {
-      const status = {
-        contentId: contentID,
-        reported: false,
-        moderated: false,
-        delisted: false,
-        reason: '',
-      };
-      // get decision for the current contentID
-      const decision = await dataSources.decisionsAPI.getDecision(contentID);
-      if (decision) {
-        status.moderated = decision.moderated;
-        status.delisted = decision.delisted;
-        // check if the current logged user has already reported this content
-        if (body.user) {
-          const reported = await dataSources.reportingAPI.getReport(contentID, body.user);
-          if (reported) {
-            status.reported = true;
-            status.reason = reported.reason;
-          }
-        }
-      }
-      statuses.push(status);
-    }
+    const statuses = await dataSources.decisionsAPI.getModerationStatus(
+      body.user,
+      contentIDs,
+      dataSources.decisionsAPI,
+      dataSources.reportingAPI,
+    );
     ctx.set('Content-Type', 'application/json');
     ctx.body = statuses;
     ctx.status = 200;
@@ -311,26 +292,17 @@ api.get('/moderation/decisions/:contentId', async (ctx: koa.Context, next: () =>
  */
 api.post('/moderation/decisions/pending', async (ctx: koa.Context, next: () => Promise<any>) => {
   const req: any = ctx?.request.body;
-  const decisions = await dataSources.decisionsAPI.listDecisions(
+  const decisions = await dataSources.decisionsAPI.getDecisions(
+    dataSources.profileAPI,
+    dataSources.reportingAPI,
     false,
     false,
     req.offset,
     req.limit,
   );
-  const list = [];
-  for (const decision of decisions.results) {
-    // get the full data for each decision
-    list.push(
-      await dataSources.decisionsAPI.getFinalDecision(
-        decision.contentID,
-        dataSources.profileAPI,
-        dataSources.reportingAPI,
-      ),
-    );
-  }
   ctx.set('Content-Type', 'application/json');
   ctx.body = {
-    results: list,
+    results: decisions.results,
     nextIndex: decisions.nextIndex,
     total: decisions.total,
   };
@@ -347,26 +319,17 @@ api.post('/moderation/decisions/moderated', async (ctx: koa.Context, next: () =>
     ctx.status = 400;
     ctx.body = 'Missing "delisted" attribute from request.';
   } else {
-    const decisions = await dataSources.decisionsAPI.listDecisions(
+    const decisions = await dataSources.decisionsAPI.getDecisions(
+      dataSources.profileAPI,
+      dataSources.reportingAPI,
       req.delisted,
       true,
       req.offset,
       req.limit,
     );
-    const list = [];
-    for (const decision of decisions.results) {
-      // get the full data for each decision
-      list.push(
-        await dataSources.decisionsAPI.getFinalDecision(
-          decision.contentID,
-          dataSources.profileAPI,
-          dataSources.reportingAPI,
-        ),
-      );
-    }
     ctx.set('Content-Type', 'application/json');
     ctx.body = {
-      results: list,
+      results: decisions.results,
       nextIndex: decisions.nextIndex,
       total: decisions.total,
     };
@@ -487,6 +450,7 @@ api.post('/moderation/reasons', async (ctx: koa.Context, next: () => Promise<any
       ? await dataSources.reasonsAPI.listReasons(true)
       : await dataSources.reasonsAPI.listReasons(false);
   ctx.status = 200;
+  await next();
 });
 
 /**
