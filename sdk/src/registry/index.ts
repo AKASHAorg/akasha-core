@@ -56,12 +56,14 @@ export default class AWF_ENS implements AWF_IENS {
     @inject(TYPES.Auth) auth: AWF_Auth,
     @inject(TYPES.Settings) settings: Settings,
     @inject(TYPES.EventBus) globalChannel: EventBus,
+    @inject(TYPES.Web3) web3: Web3Connector,
   ) {
     this._log = log.create('AWF_ENS');
     this._gql = gql;
     this._auth = auth;
     this._settings = settings;
     this._globalChannel = globalChannel;
+    this._web3 = web3;
   }
 
   registerName(name: string) {
@@ -150,7 +152,7 @@ export default class AWF_ENS implements AWF_IENS {
   }
 
   public async setupContracts() {
-    if (!this._chainChecked) {
+    if (!this._chainChecked && this._web3.provider) {
       await this._web3.checkCurrentNetwork();
       this._chainChecked = true;
     }
