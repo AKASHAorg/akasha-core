@@ -9,15 +9,15 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
-import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/entry-feed';
+import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ENTRY_KEY, usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   useGetBookmarks,
-  useBookmarkPost,
-  useBookmarkDelete,
+  useSaveBookmark,
+  useDeleteBookmark,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 import {
   useInfiniteComments,
@@ -109,8 +109,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const bookmarksReq = useGetBookmarks(loginState.ready?.ethAddress);
   const bookmarks = bookmarksReq.data;
-  const addBookmark = useBookmarkPost();
-  const deleteBookmark = useBookmarkDelete();
+  const addBookmark = useSaveBookmark();
+  const deleteBookmark = useDeleteBookmark();
 
   const handleFollow = () => {
     if (entryData?.author.ethAddress) {
@@ -177,14 +177,14 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     ev.preventDefault();
   };
 
-  const handleEntryBookmark = (entryId: string) => {
+  const handleEntryBookmark = (itemType: ItemTypes) => (entryId: string) => {
     if (!loginState.ethAddress) {
       return showLoginModal();
     }
     if (bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
       return deleteBookmark.mutate(entryId);
     }
-    return addBookmark.mutate(entryId);
+    return addBookmark.mutate({ entryId, itemType });
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
@@ -310,7 +310,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
                     handleAvatarClick(ev, entryData.author.pubKey)
                   }
-                  onEntryBookmark={handleEntryBookmark}
+                  onEntryBookmark={handleEntryBookmark(ItemTypes.ENTRY)}
                   repliesLabel={t('Replies')}
                   repostsLabel={t('Reposts')}
                   repostLabel={t('Repost')}
@@ -419,10 +419,10 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 pages={commentPages}
                 itemType={ItemTypes.COMMENT}
                 onLoadMore={handleLoadMore}
-                // getShareUrl={(itemId: string) =>
-                //   `${window.location.origin}/social-app/post/${itemId}`
-                // }
-                ethAddress={loginState.ethAddress}
+                getShareUrl={(itemId: string) =>
+                  `${window.location.origin}/social-app/post/${itemId}`
+                }
+                ethAddress={loginState.ready?.ethAddress}
                 profilePubKey={loginState.pubKey}
                 onNavigate={handleNavigation}
                 singleSpaNavigate={props.singleSpa.navigateToUrl}
