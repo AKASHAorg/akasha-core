@@ -346,7 +346,7 @@ export const useProfile = (
         (async () => {
           try {
             const resp = await sdk.api.ens.isAvailable(userName);
-            dispatchUpdateStatus({ type: 'VALIDATE_USERNAME_SUCCESS', payload: resp });
+            dispatchUpdateStatus({ type: 'VALIDATE_USERNAME_SUCCESS', payload: resp.data });
           } catch (error) {
             createErrorHandler('useProfile.validateUsername', false, props.onError)(error);
           }
