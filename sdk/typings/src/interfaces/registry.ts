@@ -5,7 +5,7 @@ export interface AWF_IENS {
 
   claimName(name: string): Observable<unknown>;
 
-  userIsOwnerOf(name: string): Promise<boolean>;
+  userIsOwnerOf(name: string): Promise<unknown>;
 
   isAvailable(name: string): Promise<unknown>;
 
