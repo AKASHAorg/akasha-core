@@ -81,7 +81,7 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
       const decodedContent = decodeb64SlateContent(slateContent.value, logger);
       content = decodedContent.map(node => {
         if (node.type === 'image' && node.url.startsWith(MEDIA_URL_PREFIX)) {
-          node.url = getMediaUrl(node.url);
+          node.url = getMediaUrl(node.url.replace(MEDIA_URL_PREFIX, ''));
         }
         return node;
       });

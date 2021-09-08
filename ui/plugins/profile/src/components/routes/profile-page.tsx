@@ -151,22 +151,20 @@ const ProfilePage = (props: ProfilePageProps) => {
               footerTextLabel={t('It is awaiting moderation.')}
             />
           )}
-          {profileState.moderated && profileState.delisted ? (
+          {profileState.moderated && profileState.delisted && (
             <ProfileDelistedCard
               name={t('Suspended Account')}
               userName={profileState.userName || ''}
             />
-          ) : (
-            <ProfilePageHeader
-              {...props}
-              profileData={profileState}
-              profileId={pubKey}
-              loggedUserEthAddress={loginState.ethAddress}
-            />
           )}
-
           {!profileState.moderated && !profileState.delisted && (
             <>
+              <ProfilePageHeader
+                {...props}
+                profileData={profileState}
+                profileId={pubKey}
+                loggedUserEthAddress={loginState.ethAddress}
+              />
               {reqPosts.status === 'error' && reqPosts.error && (
                 <ErrorLoader
                   type="script-error"
@@ -185,7 +183,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                   }
                   pages={postPages}
                   requestStatus={reqPosts.status}
-                  ethAddress={loginState.ethAddress}
+                  ethAddress={loginState.ready?.ethAddress}
                   onNavigate={handleNavigation}
                   singleSpaNavigate={props.singleSpa.navigateToUrl}
                   navigateToModal={props.navigateToModal}
