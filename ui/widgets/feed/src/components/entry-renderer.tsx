@@ -75,7 +75,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const { t } = useTranslation('ui-widget-feed');
 
-  const postReq = usePost(itemId, props.itemType === ItemTypes.ENTRY);
+  const postReq = usePost({ postId: itemId, enabler: props.itemType === ItemTypes.ENTRY });
   const commentReq = useComment(itemId, props.itemType === ItemTypes.COMMENT);
 
   const postData = React.useMemo(() => {

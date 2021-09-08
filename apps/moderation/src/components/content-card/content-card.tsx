@@ -47,7 +47,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
   const profileDataReq = useGetProfile(entryId);
   const profile = profileDataReq.data;
 
-  const postReq = usePost(entryId, !!entryId);
+  const postReq = usePost({ postId: entryId, enabler: !!entryId });
   const commentReq = useComment(entryId);
 
   const entryData = React.useMemo(() => {

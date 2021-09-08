@@ -1,9 +1,13 @@
+import singleSpa from 'single-spa';
+import { ILogger } from '@akashaproject/awf-sdk/typings/lib/interfaces/log';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
 export interface IContentProps {
   isPending: boolean;
   locale: ILocale;
-  entryData: any;
+  entryData: IEntryData | IProfileData;
 
   showExplanationsLabel: string;
   hideExplanationsLabel: string;
@@ -33,7 +37,7 @@ export interface IContentProps {
   evaluationDateTime?: string;
   makeADecisionLabel?: string;
   reviewDecisionLabel?: string;
-  logger: any;
-  singleSpa: any;
+  logger: ILogger;
+  singleSpa: typeof singleSpa;
   handleButtonClick: (param1: string, param2: string) => void;
 }

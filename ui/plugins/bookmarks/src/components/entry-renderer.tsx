@@ -66,7 +66,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     return undefined;
   }, [bookmarks, itemId]);
 
-  const postReq = usePost(itemId, type === BookmarkTypes.POST);
+  const postReq = usePost({ postId: itemId, enabler: type === BookmarkTypes.POST });
   const commentReq = useComment(itemId, type === BookmarkTypes.COMMENT);
 
   const itemData = React.useMemo(() => {

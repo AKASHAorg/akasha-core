@@ -65,7 +65,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
 
   const { t } = useTranslation();
-  const postReq = usePost(itemId, !!itemId);
+  const postReq = usePost({ postId: itemId, enabler: !!itemId });
 
   const isBookmarked = React.useMemo(() => {
     if (

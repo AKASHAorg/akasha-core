@@ -65,7 +65,11 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const queryClient = useQueryClient();
 
-  const postReq = usePost(postId, !!postId);
+  const postReq = usePost({
+    postId,
+    loggedUser: loginState.pubKey,
+    enabler: loginState.currentUserCalled,
+  });
   const entryData = React.useMemo(() => {
     if (postReq.data) {
       return mapEntry(postReq.data);
