@@ -4,7 +4,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useLoginState } from '@akashaproject/ui-awf-hooks';
 import {
   useGetBookmarks,
-  useBookmarkDelete,
+  useDeleteBookmark,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 import { useTranslation } from 'react-i18next';
 import EntryCardRenderer from './entry-renderer';
@@ -34,7 +34,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
 
   const bookmarksReq = useGetBookmarks(loginState.ready?.ethAddress);
   const bookmarks = bookmarksReq.data;
-  const deleteBookmark = useBookmarkDelete();
+  const deleteBookmark = useDeleteBookmark();
 
   const handleBookmarkClick = (entryId: string) => {
     if (bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
@@ -76,12 +76,12 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
 
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
-  const handleRepost = (_withComment: boolean, entryId: string) => {
+  const handleRepost = (_withComment: boolean, embedEntryId: string) => {
     if (!loginState.ethAddress) {
       props.navigateToModal({ name: 'login' });
       return;
     } else {
-      props.navigateToModal({ name: 'editor', embedEntry: entryId });
+      props.navigateToModal({ name: 'editor', embedEntry: embedEntryId });
     }
   };
 

@@ -6,8 +6,8 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import {
   useGetBookmarks,
-  useBookmarkPost,
-  useBookmarkDelete,
+  useSaveBookmark,
+  useDeleteBookmark,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 import {
   useTagSubscriptions,
@@ -20,8 +20,7 @@ import {
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 import { useSearch } from '@akashaproject/ui-awf-hooks/lib/use-search.new';
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import { ModalState, ModalStateActions } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
-import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const {
   Box,
@@ -39,8 +38,6 @@ interface SearchPageProps extends RootComponentProps {
   onError?: (err: Error) => void;
   loginState: ILoginState;
   showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
-  modalState: ModalState;
-  modalStateActions: ModalStateActions;
 }
 
 const SearchPage: React.FC<SearchPageProps> = props => {
@@ -56,8 +53,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const bookmarksReq = useGetBookmarks(loginState.ready?.ethAddress);
   const bookmarks = bookmarksReq.data;
-  const addBookmark = useBookmarkPost();
-  const deleteBookmark = useBookmarkDelete();
+  const addBookmark = useSaveBookmark();
+  const deleteBookmark = useDeleteBookmark();
 
   const tagSubscriptionsReq = useTagSubscriptions(loginState.ready?.ethAddress);
   const tagSubscriptionsState = tagSubscriptionsReq.data;
@@ -94,35 +91,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     }
   }, [searchReq.status, searchState]);
 
-  // React.useEffect(() => {
-  //   if (loginState.currentUserCalled) {
-  //     searchActions.search(decodeURIComponent(searchKeyword));
-  //   }
-  // }, [searchKeyword, loginState.currentUserCalled, loginState.ethAddress]);
-
-  // React.useEffect(() => {
-  //   if (loginState.waitForAuth && !loginState.ready) {
-  //     return;
-  //   }
-  //   if (
-  //     (loginState.waitForAuth && loginState.ready) ||
-  //     (loginState.currentUserCalled && loginState.ethAddress)
-  //   ) {
-  //     bookmarkActions.getBookmarks();
-  //     tagSubscriptionActions.getTagSubscriptions();
-  //   }
-  // }, [JSON.stringify(loginState)]);
-
-  // React.useEffect(() => {
-  //   if (loginState.ethAddress) {
-  //     searchState.profiles.slice(0, 4).forEach(async (profile: any) => {
-  //       if (loginState.ethAddress && profile.ethAddress) {
-  //         followActions.isFollowing(loginState.ethAddress, profile.ethAddress);
-  //       }
-  //     });
-  //   }
-  // }, [searchState, loginState.ethAddress]);
-
   const handleTagSubscribe = (tagName: string) => {
     if (!loginState.ethAddress) {
       showLoginModal();
@@ -158,7 +126,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     props.singleSpa.navigateToUrl(`/social-app/tags/${name}`);
   };
 
-  const handleEntryBookmark = (entryId: string) => {
+  const handleEntryBookmark = (itemType: ItemTypes) => (entryId: string) => {
     if (!loginState.ethAddress) {
       showLoginModal();
       return;
@@ -166,7 +134,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     if (bookmarks?.findIndex(bm => bm.entryId === entryId) >= 0) {
       return deleteBookmark.mutate(entryId);
     }
-    return addBookmark.mutate(entryId);
+    return addBookmark.mutate({ entryId, itemType });
   };
 
   const handleEntryFlag = (entryId: string, contentType: string) => () => {
@@ -177,7 +145,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   // repost related
-  const handleRepost = (_withComment: boolean, entryId: any) => {
+  const handleRepost = (_withComment: boolean, entryId: string) => {
     if (!loginState.ethAddress) {
       showLoginModal();
       return;
@@ -317,7 +285,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     shareTextLabel={t('Share this post with your friends')}
                     sharePostUrl={`${window.location.origin}/social-app/post/`}
                     onClickAvatar={() => handleProfileClick(entryData.author.pubKey)}
-                    onEntryBookmark={handleEntryBookmark}
+                    onEntryBookmark={handleEntryBookmark(ItemTypes.ENTRY)}
                     repliesLabel={t('Replies')}
                     repostsLabel={t('Reposts')}
                     repostLabel={t('Repost')}
@@ -379,7 +347,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     shareTextLabel={t('Share this post with your friends')}
                     sharePostUrl={'https://ethereum.world'}
                     onClickAvatar={() => handleProfileClick(commentData.author.pubKey)}
-                    onEntryBookmark={handleEntryBookmark}
+                    onEntryBookmark={handleEntryBookmark(ItemTypes.COMMENT)}
                     repliesLabel={t('Replies')}
                     repostsLabel={t('Reposts')}
                     repostLabel={t('Repost')}

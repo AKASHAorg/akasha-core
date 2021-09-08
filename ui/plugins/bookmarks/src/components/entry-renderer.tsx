@@ -2,10 +2,14 @@ import React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useIsFollowing } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
-import { BookmarkTypes } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
 const { ErrorLoader, EntryCard, /* EntryCardHidden, */ EntryCardLoading } = DS;
 
@@ -19,44 +23,33 @@ export interface NavigationDetails {
 }
 
 export interface IEntryCardRendererProps {
-  logger: any;
-  singleSpa: any;
+  logger: ILogger;
+  singleSpa: RootComponentProps['singleSpa'];
   itemId?: string;
-  itemData?: any;
+  itemData?: IEntryData;
   isBookmarked?: boolean;
-  locale?: any;
+  locale?: ILocale;
   ethAddress?: string | null;
   onBookmark: (entryId: string) => void;
   onNavigate: (details: NavigationDetails) => void;
   onLinkCopy?: () => void;
-  onRepost: (withComment: boolean, entryData: any) => void;
+  onRepost: (withComment: boolean, entryId: string) => void;
   sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (ethAddress: string) => void;
   onTagClick: (name: string) => void;
-  bookmarks?: { entryId: string; type: BookmarkTypes }[];
+  bookmarks?: { entryId: string; type: ItemTypes }[];
   style?: React.CSSProperties;
   contentClickable?: boolean;
   disableReposting?: boolean;
   moderatedContentLabel?: string;
   ctaLabel?: string;
-  handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
+  handleFlipCard?: (entry: IEntryData, isQuote: boolean) => () => void;
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
-  const {
-    ethAddress,
-    locale,
-    bookmarks,
-    itemId,
-    style,
-    contentClickable,
-    disableReposting,
-    // moderatedContentLabel,
-    // awaitingModerationLabel,
-    // ctaLabel,
-    // handleFlipCard,
-  } = props;
+  const { ethAddress, locale, bookmarks, itemId, style, contentClickable, disableReposting } =
+    props;
 
   const { t } = useTranslation();
   const type = React.useMemo(() => {
@@ -66,13 +59,13 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     return undefined;
   }, [bookmarks, itemId]);
 
-  const postReq = usePost({ postId: itemId, enabler: type === BookmarkTypes.POST });
-  const commentReq = useComment(itemId, type === BookmarkTypes.COMMENT);
+  const postReq = usePost({ postId: itemId, enabler: type === ItemTypes.ENTRY });
+  const commentReq = useComment(itemId, type === ItemTypes.COMMENT);
 
   const itemData = React.useMemo(() => {
-    if (type === BookmarkTypes.COMMENT && commentReq.status === 'success') {
+    if (type === ItemTypes.COMMENT && commentReq.status === 'success') {
       return mapEntry(commentReq.data);
-    } else if (type === BookmarkTypes.POST && postReq.status === 'success') {
+    } else if (type === ItemTypes.ENTRY && postReq.status === 'success') {
       return mapEntry(postReq.data);
     }
   }, [type, postReq.data, postReq.status, commentReq.data, commentReq.status]);
@@ -137,7 +130,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
               shareLabel={t('Share')}
               copyLinkLabel={t('Copy Link')}
               flagAsLabel={t('Report Post')}
-              loggedProfileEthAddress={ethAddress as any}
+              loggedProfileEthAddress={ethAddress}
               locale={locale || 'en'}
               style={{ height: 'auto', ...style }}
               bookmarkLabel={t('Save')}
@@ -153,7 +146,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   authorEthAddress: itemData.author.ethAddress,
                   entryId: itemData.entryId,
                   replyTo: {
-                    entryId: type === BookmarkTypes.COMMENT ? itemData.postId : null,
+                    entryId: type === ItemTypes.COMMENT ? itemData.postId : null,
                   },
                 });
               }}

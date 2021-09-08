@@ -11,7 +11,8 @@ import { createObservableStream } from '../helpers/observable';
 
 @injectable()
 export default class Web3Connector
-  implements IWeb3Connector<ethers.providers.BaseProvider | ethers.providers.Web3Provider> {
+  implements IWeb3Connector<ethers.providers.BaseProvider | ethers.providers.Web3Provider>
+{
   _logFactory: Logging;
   _log: ILogger;
   _web3Instance: ethers.providers.BaseProvider | ethers.providers.Web3Provider;
@@ -87,7 +88,7 @@ export default class Web3Connector
       return Promise.resolve(this._wallet);
     }
     if (this._web3Instance instanceof ethers.providers.Web3Provider) {
-      this._web3Instance.getSigner();
+      return this._web3Instance.getSigner();
     }
     throw new Error('Must provider a signer!');
   }

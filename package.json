@@ -53,7 +53,8 @@
     "test:ui": "lerna run test --scope @akashaproject/ui-* --scope @akashaproject/design-* --scope @akashaproject/app-* --stream",
     "test:app-loader": "lerna run test --scope @akashaproject/ui-app-loader --stream",
     "dev:server": "lerna run dev:server --stream",
-    "update:deps": "lerna exec -- npx --package npm-check-updates ncu -u"
+    "update:deps": "lerna exec -- npx --package npm-check-updates ncu -u",
+    "docs:build": "typedoc --tsconfig tsconfig.typedoc.json --packages ."
   },
   "devDependencies": {
     "@babel/core": "7.15.0",
@@ -99,18 +100,31 @@
     "styled-components": "5.3.0",
     "ts-jest": "^27.0.5",
     "ts-loader": "9.2.5",
-    "typedoc": "^0.21.6",
+    "typedoc": "0.21.9",
     "typescript": "4.3.5",
     "webpack": "5.51.1",
     "webpack-cli": "4.8.0",
     "webpack-dev-server": "4.0.0"
   },
   "workspaces": [
-    "sdk-packages/*",
-    "ui/**",
-    "scripts/*",
-    "examples/**",
-    "apps/*"
+    "sdk",
+    "ui/hooks",
+    "ui/design",
+    "ui/typings",
+    "ui/testing-utils",
+    "ui/hooks",
+    "ui/widgets/feed",
+    "ui/widgets/layout",
+    "ui/widgets/sidebar",
+    "ui/widgets/top-bar",
+    "ui/widgets/trending",
+    "ui/plugins/app-center",
+    "ui/plugins/bookmarks",
+    "ui/plugins/legal",
+    "ui/plugins/notifications",
+    "ui/plugins/profile",
+    "ui/plugins/search",
+    "sdk/typings"
   ],
   "engines": {
     "node": ">=12.13.0",
