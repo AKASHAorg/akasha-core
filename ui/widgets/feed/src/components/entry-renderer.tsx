@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
@@ -9,6 +8,12 @@ import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loa
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { useGetBookmarks } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
+import {
+  useFollow,
+  useUnfollow,
+  useIsFollowing,
+} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 
 const { ErrorLoader, EntryCardLoading, EntryCard, EntryCardHidden, ExtensionPoint } = DS;
 
@@ -18,17 +23,13 @@ export interface IEntryRenderer {
   ethAddress: string | null;
   pubKey: string | null;
   locale: ILocale;
-  bookmarkState: IBookmarkState;
+  bookmarksQuery: ReturnType<typeof useGetBookmarks>;
   style?: React.CSSProperties;
-  followedProfiles: string[];
-  onFollow: (ethAddress: string) => void;
-  onUnfollow: (ethAddress: string) => void;
   onBookmark: (isBookmarked: boolean, entryId: string) => void;
   onFlag?: (entryId: string, contentType: string, reporterEthAddress?: string | null) => () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   singleSpaNavigate: (url: string) => void;
-  checkIsFollowing: (viewerEthAddress: string, targetEthAddress: string) => void;
   contentClickable?: boolean;
   itemType: ItemTypes;
   onEntryRemove?: (entryId: string) => void;
@@ -43,12 +44,9 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const {
     ethAddress,
     locale,
-    bookmarkState,
+    bookmarksQuery,
     itemId,
     style,
-    followedProfiles,
-    onFollow,
-    onUnfollow,
     onBookmark,
     onFlag,
     onNavigate,
@@ -59,24 +57,36 @@ const EntryRenderer = (props: IEntryRenderer) => {
   } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
+  const followProfileQuery = useFollow();
+  const unfollowProfileQuery = useUnfollow();
 
   const isBookmarked = React.useMemo(() => {
     if (
-      bookmarkState &&
-      !bookmarkState.isFetching &&
+      bookmarksQuery.status === 'success' &&
       itemId &&
-      bookmarkState.bookmarks.findIndex(bm => bm.entryId === itemId) >= 0
+      Array.isArray(bookmarksQuery.data) &&
+      bookmarksQuery.data.findIndex(bm => bm.entryId === itemId) >= 0
     ) {
       return true;
     }
 
     return false;
-  }, [bookmarkState, itemId]);
+  }, [bookmarksQuery, itemId]);
 
   const { t } = useTranslation('ui-widget-feed');
 
   const postReq = usePost(itemId, props.itemType === ItemTypes.ENTRY);
   const commentReq = useComment(itemId, props.itemType === ItemTypes.COMMENT);
+  const authorEthAddress = React.useMemo(() => {
+    if (props.itemType === ItemTypes.COMMENT && commentReq.status === 'success') {
+      return commentReq.data.author.ethAddress;
+    }
+    if (props.itemType === ItemTypes.ENTRY && postReq.status === 'success') {
+      return postReq.data.author.ethAddress;
+    }
+  }, [props.itemType, commentReq, postReq]);
+
+  const followedProfilesReq = useIsFollowing(props.ethAddress, authorEthAddress);
 
   const postData = React.useMemo(() => {
     if (postReq.data && props.itemType === ItemTypes.ENTRY) {
@@ -91,6 +101,16 @@ const EntryRenderer = (props: IEntryRenderer) => {
     }
     return undefined;
   }, [commentReq.data, props.itemType]);
+
+  const isFollowing = React.useMemo(() => {
+    if (
+      followedProfilesReq.status === 'success' &&
+      followedProfilesReq.data.includes(authorEthAddress)
+    ) {
+      return true;
+    }
+    return false;
+  }, [authorEthAddress, followedProfilesReq.data, followedProfilesReq.status]);
 
   const itemData = React.useMemo(() => {
     if (props.itemType === ItemTypes.ENTRY) {
@@ -107,23 +127,17 @@ const EntryRenderer = (props: IEntryRenderer) => {
     return (postReq.status === 'success' || commentReq.status === 'success') && itemData?.reported;
   }, [itemData, showAnyway, postReq.status, commentReq.status]);
 
-  // React.useEffect(() => {
-  //   if (ethAddress && itemData?.author.ethAddress) {
-  //     checkIsFollowing(ethAddress, itemData.author.ethAddress);
-  //   }
-  // }, [checkIsFollowing, ethAddress, itemData]);
-
-  const handleFollow = () => {
-    if (itemData?.author.ethAddress) {
-      onFollow(itemData.author.ethAddress);
+  const handleFollow = React.useCallback(() => {
+    if (authorEthAddress) {
+      followProfileQuery.mutate(authorEthAddress);
     }
-  };
+  }, [followProfileQuery, authorEthAddress]);
 
-  const handleUnfollow = () => {
-    if (itemData?.author.ethAddress) {
-      onUnfollow(itemData.author.ethAddress);
+  const handleUnfollow = React.useCallback(() => {
+    if (authorEthAddress) {
+      unfollowProfileQuery.mutate(authorEthAddress);
     }
-  };
+  }, [unfollowProfileQuery, authorEthAddress]);
 
   const handleAvatarClick = () => {
     onNavigate(ItemTypes.PROFILE, {
@@ -174,13 +188,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const onEditButtonUnmount = () => {
     /* todo */
   };
-
-  const isFollowing = React.useMemo(() => {
-    if (itemData && itemData.author) {
-      return followedProfiles.includes(itemData.author.ethAddress);
-    }
-    return false;
-  }, [followedProfiles, itemData]);
 
   const handleFlipCard = () => {
     setShowAnyway(true);
