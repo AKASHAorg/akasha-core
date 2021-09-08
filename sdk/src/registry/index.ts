@@ -13,7 +13,7 @@ import ReverseRegistrarABI from '../contracts/artifacts/ReverseRegistrar.json';
 import EnsABI from '../contracts/artifacts/ENS.json';
 import { AWF_IENS } from '@akashaproject/sdk-typings/lib/interfaces/registry';
 import { lastValueFrom } from 'rxjs';
-import { createObservableStream } from '../helpers/observable';
+import { createFormattedValue, createObservableStream } from '../helpers/observable';
 import EventBus from '../common/event-bus';
 import { tap } from 'rxjs/operators';
 import { ENS_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
@@ -114,7 +114,7 @@ export default class AWF_ENS implements AWF_IENS {
     if (!this._ReverseRegistrarInstance) {
       await this.setupContracts();
     }
-    const validatedName = await validateName(name);
+    const validatedName = validateName(name);
     return this._ReverseRegistrarInstance.setName(`${validatedName}.akasha.eth`);
   }
 
@@ -122,33 +122,36 @@ export default class AWF_ENS implements AWF_IENS {
     const curUser = await lastValueFrom(this._auth.getCurrentUser());
     if (curUser?.data.ethAddress) {
       const resolved = await this.resolveName(`${name}.akasha.eth`);
-      if (resolved === curUser.data.ethAddress) {
-        return true;
+      if (resolved.data === curUser.data.ethAddress) {
+        return createFormattedValue(true);
       }
     }
-    return false;
+    return createFormattedValue(true);
   }
 
-  async isAvailable(name: string): Promise<boolean> {
+  async isAvailable(name: string) {
     if (!this._AkashaRegistrarInstance) {
       await this.setupContracts();
     }
     const isOwner = await this.userIsOwnerOf(name);
     if (isOwner) {
-      return true;
+      return createFormattedValue(true);
     }
-    return this._AkashaRegistrarInstance.isAvailable(name);
+    const result = await this._AkashaRegistrarInstance.isAvailable(name);
+    return createFormattedValue(result);
   }
 
   async resolveAddress(ethAddress: string) {
     if (!this._AkashaRegistrarInstance) {
       await this.setupContracts();
     }
-    return this._web3.provider.lookupAddress(ethAddress);
+    const address = await this._web3.provider.lookupAddress(ethAddress);
+    return createFormattedValue(address);
   }
 
   async resolveName(name: string) {
-    return this._web3.provider.resolveName(name);
+    const result = await this._web3.provider.resolveName(name);
+    return createFormattedValue(result);
   }
 
   public async setupContracts() {
