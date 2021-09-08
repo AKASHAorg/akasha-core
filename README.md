@@ -21,12 +21,12 @@
 - [Background](#background)
 - [Install](#install)
 - [Usage](#usage)
-    - [SDK](#sdk)
-        - [Package Components](#package-components)
-        - [Build](#build-the-sdk-package)
-    - [UI](#ui-workspace)
-    - [Examples](#playground-test-app)
-    - [Server Scripts](#scripts-workspace)
+  - [SDK](#sdk)
+    - [Package Components](#package-components)
+    - [Build](#build-the-sdk-package)
+  - [UI](#ui-workspace)
+  - [Examples](#playground-test-app)
+  - [Server Scripts](#scripts-workspace)
 - [Contributors](#contributors-)
 - [License](#license)
 
@@ -49,7 +49,20 @@ $ npm run bootstrap
 ## Usage
 
 For a definitive guide on all available scripts, check out [Scripts-Guide](./SCRIPTS-GUIDE.md)
-
+### Run
+For development purposes, from the root of this project:
+```shell script
+$ npm run start:feed-app
+```
+To watch for changes in dependent packages
+```shell script
+$ AWF_PACKAGE=<package-name> npm run pack:watch
+```
+To list all available package names for the above command
+```shell script
+$ npx lerna list
+```
+#
 This repository is split into four [lerna](https://github.com/lerna/lerna) workspaces:
 
 ### SDK
