@@ -283,7 +283,7 @@ const reactLifecycles = singleSpaReact({
   rootComponent: withProviders(UpdateENSModal),
   errorBoundary: (error, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
-      props.logger.error(error, errorInfo);
+      props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
       <ThemeSelector

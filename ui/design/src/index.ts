@@ -143,6 +143,7 @@ import responsiveBreakpoints from './styles/responsive-breakpoints';
 import { formatImageSrc } from './utils/image-utils';
 import { isBase64 } from './utils/string-utils';
 import { formatRelativeTime } from './utils/time';
+import useIntersectionObserver from './utils/intersection-observer';
 
 /* Themes and theme related utils */
 import darkTheme from './styles/themes/dark';
@@ -251,6 +252,7 @@ const exported = {
   isBase64,
   formatImageSrc,
   formatRelativeTime,
+  useIntersectionObserver,
   WidgetAreaCardBox,
   ModalCard,
   EthProviderListModal,

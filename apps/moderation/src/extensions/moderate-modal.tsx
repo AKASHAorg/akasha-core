@@ -1,29 +1,19 @@
 import * as React from 'react';
-import i18next from 'i18next';
 import ReactDOM from 'react-dom';
-import Fetch from 'i18next-fetch-backend';
 import singleSpaReact from 'single-spa-react';
 import DS from '@akashaproject/design-system';
-import Backend from 'i18next-chained-backend';
-import LocalStorageBackend from 'i18next-localstorage-backend';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { BrowserRouter as Router, useLocation } from 'react-router-dom';
-import {
-  useLoginState,
-  useErrors,
-  moderationRequest,
-  withProviders,
-} from '@akashaproject/ui-awf-hooks';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { useLoginState, useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
+import { useModeration } from '@akashaproject/ui-awf-hooks/lib/moderation-request';
 import { BASE_DECISION_URL } from '../services/constants';
+import i18n, { setupI18next } from '../i18n';
 
 const { ModerateModal, ToastProvider } = DS;
 
 const ModerateModalComponent = (props: RootComponentProps) => {
   const { logger, activeModal } = props;
-
-  const [requesting, setRequesting] = React.useState<boolean>(false);
 
   const [, errorActions] = useErrors({ logger });
 
@@ -32,24 +22,39 @@ const ModerateModalComponent = (props: RootComponentProps) => {
   });
 
   const { t } = useTranslation();
-  const location = useLocation();
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
   };
 
-  const onModerate = (dataToSign: Record<string, unknown>) => {
-    moderationRequest.modalClickHandler({
-      dataToSign,
-      setRequesting,
-      contentId: activeModal.entryId,
-      contentType: activeModal.contentType,
-      url: `${BASE_DECISION_URL}/moderate`,
-      modalName: 'moderate-modal',
-      logger: props.logger,
-      callback: handleModalClose,
-    });
-  };
+  const contentType = React.useMemo(() => {
+    if (activeModal.hasOwnProperty('contentType') && typeof activeModal.contentType === 'string') {
+      return activeModal.contentType;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const moderateMutation = useModeration();
+
+  const onModerate = React.useCallback(
+    (dataToSign: Record<string, string>) => {
+      moderateMutation.mutate({
+        dataToSign,
+        contentId: activeModal.entryId,
+        contentType: contentType,
+        url: `${BASE_DECISION_URL}/moderate`,
+        modalName: 'moderate-modal',
+      });
+    },
+    [contentType, activeModal.entryId, moderateMutation],
+  );
+
+  React.useEffect(() => {
+    if (moderateMutation.status === 'success') {
+      handleModalClose();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [moderateMutation]);
 
   return (
     <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
@@ -66,7 +71,7 @@ const ModerateModalComponent = (props: RootComponentProps) => {
         footerUrl1={'/legal/code-of-conduct'}
         cancelLabel={t('Cancel')}
         user={loginState.pubKey ? loginState.pubKey : ''}
-        requesting={requesting}
+        requesting={moderateMutation.status === 'loading'}
         isReview={activeModal.status !== 'pending'}
         closeModal={handleModalClose}
         onModerate={onModerate}
@@ -76,49 +81,11 @@ const ModerateModalComponent = (props: RootComponentProps) => {
 };
 
 const Wrapped = (props: RootComponentProps) => {
-  const { logger } = props;
-
-  i18next
-    .use(initReactI18next)
-    .use(Backend)
-    .use(LanguageDetector)
-    .use({
-      type: 'logger',
-      log: logger.info,
-      warn: logger.warn,
-      error: logger.error,
-    })
-    .init({
-      fallbackLng: 'en',
-      ns: ['moderation-app'],
-      saveMissing: false,
-      saveMissingTo: 'all',
-      load: 'languageOnly',
-      debug: true,
-      cleanCode: true,
-      keySeparator: false,
-      defaultNS: 'moderation-app',
-      backend: {
-        backends: [LocalStorageBackend, Fetch],
-        backendOptions: [
-          {
-            prefix: 'i18next_res_v0',
-            expirationTime: 24 * 60 * 60 * 1000,
-          },
-          {
-            loadPath: '/locales/{{lng}}/{{ns}}.json',
-          },
-        ],
-      },
-    });
-
   return (
     <Router>
-      <React.Suspense fallback={<></>}>
-        <I18nextProvider i18n={i18next}>
-          <ModerateModalComponent {...props} />
-        </I18nextProvider>
-      </React.Suspense>
+      <I18nextProvider i18n={i18n}>
+        <ModerateModalComponent {...props} />
+      </I18nextProvider>
     </Router>
   );
 };
@@ -127,15 +94,21 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props) => {
+  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
-      props.logger.error('Error: %s; Info: %s', err, errorInfo);
+      props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
     return <div>!</div>;
   },
 });
 
-export const bootstrap = reactLifecycles.bootstrap;
+export const bootstrap = (props: RootComponentProps) => {
+  return setupI18next({
+    logger: props.logger,
+    // must be the same as the one in ../../i18next.parser.config.js
+    namespace: 'app-moderation-ewa',
+  });
+};
 
 export const mount = reactLifecycles.mount;
 

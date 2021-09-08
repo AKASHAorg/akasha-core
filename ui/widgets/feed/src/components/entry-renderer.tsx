@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
@@ -9,33 +8,30 @@ import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loa
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { useGetBookmarks } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
+import {
+  useFollow,
+  useUnfollow,
+  useIsFollowing,
+} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 
 const { ErrorLoader, EntryCardLoading, EntryCard, EntryCardHidden, ExtensionPoint } = DS;
 
 export interface IEntryRenderer {
   itemId?: string;
-  itemData?: any;
   sharePostUrl: string;
   ethAddress: string | null;
   pubKey: string | null;
   locale: ILocale;
-  bookmarkState: IBookmarkState;
+  bookmarksQuery: ReturnType<typeof useGetBookmarks>;
   style?: React.CSSProperties;
-  followedProfiles: string[];
-  onFollow: (ethAddress: string) => void;
-  onUnfollow: (ethAddress: string) => void;
   onBookmark: (isBookmarked: boolean, entryId: string) => void;
   onFlag?: (entryId: string, contentType: string, reporterEthAddress?: string | null) => () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   singleSpaNavigate: (url: string) => void;
-  checkIsFollowing: (viewerEthAddress: string, targetEthAddress: string) => void;
   contentClickable?: boolean;
   itemType: ItemTypes;
-  headerTextLabel: string;
-  footerTextLabel: string;
-  moderatedContentLabel?: string;
-  ctaLabel?: string;
   onEntryRemove?: (entryId: string) => void;
   removeEntryLabel?: string;
   removedByMeLabel?: string;
@@ -48,45 +44,49 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const {
     ethAddress,
     locale,
-    bookmarkState,
+    bookmarksQuery,
     itemId,
     style,
-    followedProfiles,
-    onFollow,
-    onUnfollow,
     onBookmark,
     onFlag,
     onNavigate,
     singleSpaNavigate,
-    checkIsFollowing,
     sharePostUrl,
     onRepost,
     contentClickable,
-    headerTextLabel,
-    footerTextLabel,
-    moderatedContentLabel,
-    ctaLabel,
   } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
+  const followProfileQuery = useFollow();
+  const unfollowProfileQuery = useUnfollow();
 
   const isBookmarked = React.useMemo(() => {
     if (
-      bookmarkState &&
-      !bookmarkState.isFetching &&
+      bookmarksQuery.status === 'success' &&
       itemId &&
-      bookmarkState.bookmarks.findIndex(bm => bm.entryId === itemId) >= 0
+      Array.isArray(bookmarksQuery.data) &&
+      bookmarksQuery.data.findIndex(bm => bm.entryId === itemId) >= 0
     ) {
       return true;
     }
 
     return false;
-  }, [bookmarkState, itemId]);
+  }, [bookmarksQuery, itemId]);
 
   const { t } = useTranslation('ui-widget-feed');
 
   const postReq = usePost(itemId, props.itemType === ItemTypes.ENTRY);
   const commentReq = useComment(itemId, props.itemType === ItemTypes.COMMENT);
+  const authorEthAddress = React.useMemo(() => {
+    if (props.itemType === ItemTypes.COMMENT && commentReq.status === 'success') {
+      return commentReq.data.author.ethAddress;
+    }
+    if (props.itemType === ItemTypes.ENTRY && postReq.status === 'success') {
+      return postReq.data.author.ethAddress;
+    }
+  }, [props.itemType, commentReq, postReq]);
+
+  const followedProfilesReq = useIsFollowing(props.ethAddress, authorEthAddress);
 
   const postData = React.useMemo(() => {
     if (postReq.data && props.itemType === ItemTypes.ENTRY) {
@@ -101,6 +101,16 @@ const EntryRenderer = (props: IEntryRenderer) => {
     }
     return undefined;
   }, [commentReq.data, props.itemType]);
+
+  const isFollowing = React.useMemo(() => {
+    if (
+      followedProfilesReq.status === 'success' &&
+      followedProfilesReq.data.includes(authorEthAddress)
+    ) {
+      return true;
+    }
+    return false;
+  }, [authorEthAddress, followedProfilesReq.data, followedProfilesReq.status]);
 
   const itemData = React.useMemo(() => {
     if (props.itemType === ItemTypes.ENTRY) {
@@ -117,23 +127,17 @@ const EntryRenderer = (props: IEntryRenderer) => {
     return (postReq.status === 'success' || commentReq.status === 'success') && itemData?.reported;
   }, [itemData, showAnyway, postReq.status, commentReq.status]);
 
-  React.useEffect(() => {
-    if (ethAddress && itemData?.author.ethAddress) {
-      checkIsFollowing(ethAddress, itemData.author.ethAddress);
+  const handleFollow = React.useCallback(() => {
+    if (authorEthAddress) {
+      followProfileQuery.mutate(authorEthAddress);
     }
-  }, [ethAddress, itemData]);
+  }, [followProfileQuery, authorEthAddress]);
 
-  const handleFollow = () => {
-    if (itemData?.author.ethAddress) {
-      onFollow(itemData.author.ethAddress);
+  const handleUnfollow = React.useCallback(() => {
+    if (authorEthAddress) {
+      unfollowProfileQuery.mutate(authorEthAddress);
     }
-  };
-
-  const handleUnfollow = () => {
-    if (itemData?.author.ethAddress) {
-      onUnfollow(itemData.author.ethAddress);
-    }
-  };
+  }, [unfollowProfileQuery, authorEthAddress]);
 
   const handleAvatarClick = () => {
     onNavigate(ItemTypes.PROFILE, {
@@ -185,16 +189,24 @@ const EntryRenderer = (props: IEntryRenderer) => {
     /* todo */
   };
 
-  const isFollowing = React.useMemo(() => {
-    if (itemData && itemData.author) {
-      return followedProfiles.includes(itemData.author.ethAddress);
-    }
-    return false;
-  }, [followedProfiles, itemData]);
-
   const handleFlipCard = () => {
     setShowAnyway(true);
   };
+
+  const itemTypeName = React.useMemo(() => {
+    switch (props.itemType) {
+      case ItemTypes.ENTRY:
+        return t('post');
+      case ItemTypes.PROFILE:
+        return t('account');
+      case ItemTypes.COMMENT:
+        return t('reply');
+      case ItemTypes.TAG:
+        return t('tag');
+      default:
+        return t('unknown');
+    }
+  }, [t, props.itemType]);
 
   return (
     <>
@@ -202,22 +214,25 @@ const EntryRenderer = (props: IEntryRenderer) => {
       {(postReq.status === 'error' || commentReq.status === 'error') && (
         <ErrorLoader
           type="script-error"
-          title={t('There was an error loading the entry')}
-          details={t('We cannot show this entry right now')}
+          title={t(`There was an error loading the ${itemTypeName}`)}
+          details={t(`We cannot show this ${itemTypeName} now`)}
           devDetails={postReq.error}
         />
       )}
       {(postReq.status === 'success' || commentReq.status === 'success') && (
         <>
           {itemData.moderated && itemData.delisted && (
-            <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
+            <EntryCardHidden
+              moderatedContentLabel={t('This content has been moderated')}
+              isDelisted={true}
+            />
           )}
           {!itemData.moderated && isReported && (
             <EntryCardHidden
               reason={itemData.reason}
-              headerTextLabel={headerTextLabel}
-              footerTextLabel={footerTextLabel}
-              ctaLabel={ctaLabel}
+              headerTextLabel={t(`You reported this ${itemTypeName} for the following reason`)}
+              footerTextLabel={t('It is awaiting moderation.')}
+              ctaLabel={t('See it anyway')}
               handleFlipCard={handleFlipCard}
             />
           )}
@@ -240,7 +255,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               repostWithCommentLabel={t('Repost with comment')}
               shareLabel={t('Share')}
               copyLinkLabel={t('Copy Link')}
-              flagAsLabel={t('Report Post')}
+              flagAsLabel={t(`Report ${itemTypeName}`)}
               loggedProfileEthAddress={ethAddress}
               locale={locale || 'en'}
               style={{ height: 'auto', ...(style as React.CSSProperties) }}
@@ -249,7 +264,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               profileAnchorLink={'/profile'}
               repliesAnchorLink={'/social-app/post'}
               onRepost={onRepost}
-              onEntryFlag={onFlag && onFlag(itemData.entryId, 'post')}
+              onEntryFlag={onFlag && onFlag(itemData.entryId, itemTypeName)}
               handleFollowAuthor={handleFollow}
               handleUnfollowAuthor={handleUnfollow}
               isFollowingAuthor={isFollowing}
@@ -258,8 +273,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
               onTagClick={handleTagClick}
               singleSpaNavigate={singleSpaNavigate}
               contentClickable={contentClickable}
-              moderatedContentLabel={moderatedContentLabel}
-              ctaLabel={ctaLabel}
+              moderatedContentLabel={t('This content has been moderated')}
+              ctaLabel={t('See it anyway')}
               handleFlipCard={handleFlipCard}
               onEntryRemove={props.onEntryRemove}
               removeEntryLabel={props.removeEntryLabel}

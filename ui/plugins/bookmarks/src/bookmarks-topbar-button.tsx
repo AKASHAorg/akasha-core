@@ -14,7 +14,7 @@ const reactLifecycles = singleSpaReact({
   rootComponent: BookmarksTopbarButton,
   errorBoundary: (err, errorInfo, props) => {
     if (props.logger) {
-      props.logger('Error: %s; Info: %s', err, errorInfo);
+      props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
     return <div>!</div>;
   },

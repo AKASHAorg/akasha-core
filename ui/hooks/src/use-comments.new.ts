@@ -2,7 +2,7 @@ import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } 
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
-import { buildPublishObject, CommentPublishObject } from './utils/entry-utils';
+import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import moderationRequest from './moderation-request';
 import { IPublishData, CommentResponse } from '@akashaproject/ui-awf-typings/lib/entry';
@@ -19,6 +19,7 @@ const getComments = async (
   offset?: string,
 ) => {
   const sdk = getSDK();
+
   try {
     const res = await lastValueFrom(
       sdk.api.comments.getComments({
@@ -44,7 +45,7 @@ export function useInfiniteComments(limit: number, postID: string, offset?: stri
     [COMMENTS_KEY, postID],
     async ({ pageParam = offset }) => getComments(queryClient, limit, postID, pageParam),
     {
-      getNextPageParam: (lastPage, allPages) => lastPage.nextIndex,
+      getNextPageParam: lastPage => lastPage.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit),
       keepPreviousData: true,
@@ -55,9 +56,8 @@ export function useInfiniteComments(limit: number, postID: string, offset?: stri
 const getComment = async (commentID): Promise<CommentResponse> => {
   const sdk = getSDK();
 
-  const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
-
   try {
+    const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
     // check entry's moderation status
     const modStatus = await moderationRequest.checkStatus(true, {
       user: user.data ? user.data.pubKey : '',

@@ -8,14 +8,12 @@ import * as singleSpa from 'single-spa';
 import { IntegrationModule } from './apps';
 import BaseIntegration, { BaseIntegrationClassOptions } from './base-integration';
 import { navigateToModal } from './utils';
-import pino from 'pino';
 
 class Widgets extends BaseIntegration {
   private readonly widgetInfos: WidgetRegistryInfo[];
   private readonly widgetModules: Record<string, IntegrationModule>;
   private readonly widgetConfigs: Record<string, IWidgetConfig>;
   private readonly widgetParcels: Record<string, singleSpa.Parcel>;
-  private logger: pino.Logger;
   constructor(opts: BaseIntegrationClassOptions) {
     super(opts);
     this.widgetInfos = [];
@@ -23,7 +21,6 @@ class Widgets extends BaseIntegration {
     this.widgetConfigs = {};
     this.widgetParcels = {};
     this.layoutConfig = opts.layoutConfig;
-    this.logger = opts.logger.child({ module: 'widgets-loader' });
   }
   add(integration: WidgetRegistryInfo) {
     // todo
@@ -83,7 +80,7 @@ class Widgets extends BaseIntegration {
       globalChannel: this.sdk.api.globalChannel,
       uiEvents: this.uiEvents,
       isMobile: this.isMobile,
-      logger: this.baseLogger.child({ module: widgetName }),
+      logger: this.sdk.services.log.create(widgetName),
       // installIntegration: this.installIntegration.bind(this),
       // uninstallIntegration: this.uninstallIntegration.bind(this),
       navigateToModal: navigateToModal,
@@ -148,7 +145,7 @@ class Widgets extends BaseIntegration {
 
     this.widgetModules[widgetInfo.name] = module;
     if (module.hasOwnProperty('install') && typeof module.install === 'function') {
-      await module.install({});
+      await module.install();
     }
     if (module.hasOwnProperty('register') && typeof module.register === 'function') {
       const widgetConfig = (await module.register({

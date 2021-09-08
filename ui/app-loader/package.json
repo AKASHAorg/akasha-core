@@ -29,11 +29,11 @@
   },
   "dependencies": {
     "ismobilejs": "1.1.1",
-    "pino": "6.13.0",
     "single-spa": "5.9.3",
     "qs": "6.10.1",
     "@akashaproject/ui-awf-typings": "*",
-    "@akashaproject/awf-sdk": "*"
+    "@akashaproject/awf-sdk": "*",
+    "@akashaproject/sdk-typings": "*"
   },
   "devDependencies": {
     "@types/pino": "6.3.11",
