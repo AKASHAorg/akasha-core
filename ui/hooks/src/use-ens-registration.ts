@@ -244,7 +244,7 @@ const useENSRegistration = (
           if (registrationState.getENSByAddressQuery) {
             const resp = await sdk.api.ens.resolveAddress(registrationState.getENSByAddressQuery);
             if (resp) {
-              dispatch({ type: 'GET_ENS_BY_ADDRESS_SUCCESS', payload: resp });
+              dispatch({ type: 'GET_ENS_BY_ADDRESS_SUCCESS', payload: resp.data });
             }
           }
         } catch (error) {
@@ -317,7 +317,7 @@ const useENSRegistration = (
         try {
           if (registrationState.validateNameQuery) {
             const resp = await sdk.api.ens.isAvailable(registrationState.validateNameQuery);
-            dispatch({ type: 'VALIDATE_NAME_SUCCESS', payload: resp });
+            dispatch({ type: 'VALIDATE_NAME_SUCCESS', payload: resp.data });
           }
         } catch (error) {
           createErrorHandler('useEnsRegistration.validateName', false, props.onError)(error);

@@ -1,7 +1,7 @@
 import DS from '@akashaproject/design-system';
 import React from 'react';
 
-const { css, styled } = DS;
+const { css, styled, Box } = DS;
 
 export const BaseContainer: React.FC<Record<string, unknown>> = styled.div`
   border: 0;
@@ -19,7 +19,6 @@ export const BaseContainer: React.FC<Record<string, unknown>> = styled.div`
 `;
 
 export const MainAreaContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
-  /* flex-grow: 1; */
   /* flex-direction: column-reverse !important; */
   max-width: 100%;
   margin-bottom: 0.5em;
@@ -27,11 +26,10 @@ export const MainAreaContainer: React.FC<Record<string, unknown>> = styled(BaseC
   border: 0;
   justify-content: flex-start;
   flex-grow: 1;
-  flex-direction: row;
+  flex-direction: column;
   ${props => css`
     @media screen and (max-width: ${props.theme.breakpoints.small.value}px) {
       padding: 0 0.25rem;
-      flex-direction: column-reverse;
     }
   `}
 `;
@@ -45,9 +43,12 @@ export const WidgetContainer: React.FC<Record<string, unknown>> = styled(BaseCon
   max-height: calc(100vh - ${TOPBAR_HEIGHT}px);
 `;
 
+export const WidgetAreaContainer: React.FC<Record<string, unknown>> = styled(Box)``;
+
 export const ScrollableWidgetArea: React.FC<Record<string, unknown>> = styled.div`
   flex-grow: 1;
   margin-top: 0.5rem;
+  height: calc(100vh - ${TOPBAR_HEIGHT}px - 0.5em);
   ${props => css`
     &::-webkit-scrollbar {
       width: 0 !important;
