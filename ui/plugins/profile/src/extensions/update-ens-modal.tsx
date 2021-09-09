@@ -129,8 +129,8 @@ const getEnsFormOptions = usernameTypes => {
 
 const UpdateENSModal: React.FC<RootComponentProps> = props => {
   const [loginState] = useLoginState({});
-  const checkNetworkReq = useNetworkState(loginState.ready?.ethAddress);
-  const profileDataQuery = useGetProfile(loginState.ready?.pubKey);
+  const checkNetworkReq = useNetworkState(loginState.currentUserCalled);
+  const profileDataQuery = useGetProfile(loginState.pubKey);
   const updateUsernameProviderQuery = useUsernameProviderUpdate();
   const registerEnsQuery = useEnsRegistration();
   const { t } = useTranslation();
@@ -244,7 +244,7 @@ const UpdateENSModal: React.FC<RootComponentProps> = props => {
               <Box pad="medium" align="center">
                 <Text size="medium" color="grey">
                   {`${t('Your network is not supported')}. ${t(
-                    'Please switch to the Rinkeby netword and refresh the page',
+                    'Please switch to the Rinkeby network and refresh the page',
                   )}.`}
                 </Text>
               </Box>
