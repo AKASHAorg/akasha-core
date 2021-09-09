@@ -7,6 +7,11 @@ export enum AUTH_EVENTS {
   MARK_MSG_READ = '#auth#markMsgRead',
 }
 
+export enum WEB3_EVENTS {
+  CONNECTED = '#web3#connected',
+  DISCONNECTED = '#web3#disconnected',
+}
+
 export enum PROFILE_EVENTS {
   FOLLOW = '#profile#Follow',
   UNFOLLOW = '#profile#UnFollow',

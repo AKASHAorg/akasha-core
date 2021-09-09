@@ -8,6 +8,8 @@ import Logging from '../logging';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import OpenLogin from '@toruslabs/openlogin';
 import { createObservableStream } from '../helpers/observable';
+import EventBus from './event-bus';
+import { WEB3_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
 
 @injectable()
 export default class Web3Connector
@@ -16,6 +18,7 @@ export default class Web3Connector
   _logFactory: Logging;
   _log: ILogger;
   _web3Instance: ethers.providers.BaseProvider | ethers.providers.Web3Provider;
+  private _globalChannel: EventBus;
   _wallet: ethers.Wallet;
   // only rinkeby network is supported atm
   readonly network = 'rinkeby';
@@ -31,9 +34,13 @@ export default class Web3Connector
   /**
    *
    */
-  constructor(@inject(TYPES.Log) logFactory: Logging) {
+  constructor(
+    @inject(TYPES.Log) logFactory: Logging,
+    @inject(TYPES.EventBus) globalChannel: EventBus,
+  ) {
     this._logFactory = logFactory;
     this._log = this._logFactory.create('Web3Connector');
+    this._globalChannel = globalChannel;
   }
 
   /**
@@ -43,6 +50,10 @@ export default class Web3Connector
   async connect(provider: EthProviders = EthProviders.None): Promise<void> {
     this._log.info(`connecting to provider ${provider}`);
     this._web3Instance = await this._getProvider(provider);
+    this._globalChannel.next({
+      data: { provider },
+      event: WEB3_EVENTS.CONNECTED,
+    });
     this._log.info(`connected to provider ${provider}`);
   }
 
@@ -61,6 +72,10 @@ export default class Web3Connector
    */
   disconnect(): void {
     this._web3Instance = null;
+    this._globalChannel.next({
+      data: undefined,
+      event: WEB3_EVENTS.DISCONNECTED,
+    });
   }
 
   /**

@@ -28,9 +28,13 @@ class PostAPI extends DataSource {
     return `${this.collection}:postID${id}`;
   }
 
+  getInitialPostCacheKey(id) {
+    return `${this.collection}:postID${id}:initial`;
+  }
+
   async getPost(id: string, pubKey?: string, stopIter = false) {
     const db: Client = await getAppDB();
-    const cacheKey = this.getPostCacheKey(id);
+    const cacheKey = this.getInitialPostCacheKey(id);
     if (await queryCache.has(cacheKey)) {
       return queryCache.get(cacheKey);
     }
@@ -48,6 +52,7 @@ class PostAPI extends DataSource {
         result.quotes.map(postID => this.getPost(postID, pubKey, true)),
       );
     }
+    await queryCache.set(cacheKey, result);
     return result;
   }
   async getPosts(limit: number, offset: string, pubKey?: string) {
@@ -223,6 +228,7 @@ class PostAPI extends DataSource {
       // tslint:disable-next-line:no-console
       .catch(e => logger.error(e));
     await queryCache.del(this.getPostCacheKey(id));
+    await queryCache.del(this.getInitialPostCacheKey(id));
     return { removedTags, addedTags };
   }
 
@@ -262,6 +268,7 @@ class PostAPI extends DataSource {
       .then(() => logger.info(`removed post: ${id}`))
       .catch(e => logger.error(e));
     await queryCache.del(this.getPostCacheKey(id));
+    await queryCache.del(this.getInitialPostCacheKey(id));
     await db.save(this.dbID, this.collection, [currentPost]);
     return { removedTags };
   }
