@@ -46,6 +46,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     locale,
     bookmarksQuery,
     itemId,
+    itemType,
     style,
     onBookmark,
     onFlag,
@@ -181,6 +182,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
       data: {
         name,
         entryId: itemId,
+        entryType: itemType,
       },
     });
   };
