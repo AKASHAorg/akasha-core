@@ -119,7 +119,6 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
                 name={props.layoutConfig.topbarSlotId}
                 onMount={handleExtensionMount}
                 onUnmount={handleExtensionUnmount}
-                style={{ width: '100vw' }}
               />
               <Box
                 className="container"
