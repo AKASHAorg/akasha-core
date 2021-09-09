@@ -31,7 +31,8 @@ const ReportModalComponent = (props: RootComponentProps) => {
 
   React.useEffect(() => {
     reasonsActions.fetchReasons({ active: true });
-  }, [reasonsActions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
