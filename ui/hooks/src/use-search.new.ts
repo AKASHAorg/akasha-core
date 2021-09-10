@@ -70,10 +70,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
 
     const entriesModResp = await lastValueFrom(forkJoin(getEntriesModStatus), { defaultValue: [] });
 
-    const entryIds: string[] = [];
-
     const completeEntries = entriesResp?.map((entryResp, idx) => {
-      entryIds.push(entryResp.data?.getPost._id);
       return mapEntry({ ...entryResp.data?.getPost, ...entriesModResp[idx][0] });
     });
 
