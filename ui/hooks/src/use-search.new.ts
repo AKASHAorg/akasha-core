@@ -31,9 +31,11 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
         }),
     );
 
-    const profilesResp = await lastValueFrom(forkJoin(getProfilesCalls));
+    const profilesResp = await lastValueFrom(forkJoin(getProfilesCalls), { defaultValue: [] });
 
-    const profilesModResp = await lastValueFrom(forkJoin(getProfilesModStatus));
+    const profilesModResp = await lastValueFrom(forkJoin(getProfilesModStatus), {
+      defaultValue: [],
+    });
 
     const completeProfiles = profilesResp?.map((profileResp, idx) => {
       const { avatar, coverImage, ...other } = profileResp.data.resolveProfile;
@@ -64,9 +66,9 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
       }),
     );
 
-    const entriesResp = await lastValueFrom(forkJoin(getEntriesCalls));
+    const entriesResp = await lastValueFrom(forkJoin(getEntriesCalls), { defaultValue: [] });
 
-    const entriesModResp = await lastValueFrom(forkJoin(getEntriesModStatus));
+    const entriesModResp = await lastValueFrom(forkJoin(getEntriesModStatus), { defaultValue: [] });
 
     const entryIds: string[] = [];
 
@@ -89,9 +91,11 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
         }),
     );
 
-    const commentsResp = await lastValueFrom(forkJoin(getCommentsCalls));
+    const commentsResp = await lastValueFrom(forkJoin(getCommentsCalls), { defaultValue: [] });
 
-    const commentsModResp = await lastValueFrom(forkJoin(getCommentsModStatus));
+    const commentsModResp = await lastValueFrom(forkJoin(getCommentsModStatus), {
+      defaultValue: [],
+    });
 
     const completeComments = commentsResp?.map((commentResp, idx) => {
       return mapEntry({ ...commentResp.data?.getComment, ...commentsModResp[idx][0] });
