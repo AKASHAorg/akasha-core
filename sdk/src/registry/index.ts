@@ -126,7 +126,7 @@ export default class AWF_ENS implements AWF_IENS {
         return createFormattedValue(true);
       }
     }
-    return createFormattedValue(true);
+    return createFormattedValue(false);
   }
 
   async isAvailable(name: string) {
